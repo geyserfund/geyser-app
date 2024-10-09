@@ -36,32 +36,37 @@ const REWARD_CATEGORIES_QUERY = gql`
   }
 `
 
-const rewardFormSchema = yup.object().shape({
-  name: yup.string().required('Name is required').max(50, 'Name must be at most 50 characters long'),
-  description: yup.string().max(1200, 'Description must be at most 1200 characters long'),
-  shortDescription: yup.string().max(250, 'Short Description must be at most 250 characters long'),
-  cost: yup
-    .number()
-    .typeError('Price is required')
-    .required('Price is required')
-    .min(0.01, 'Price must be greater than 0'),
-  maxClaimable: yup
-    .number()
-    .nullable()
-    .transform((value) => (isNaN(value) ? null : value))
-    .min(0, 'Limited Edition must be greater than or equal to 0'),
-  images: yup.array().of(yup.string()).max(MAX_REWARD_IMAGES, `Maximum ${MAX_REWARD_IMAGES} images allowed`),
-  hasShipping: yup.boolean(),
-  isAddon: yup.boolean(),
-  isHidden: yup.boolean(),
-  category: yup.string().nullable(),
-  preOrder: yup.boolean(),
-  rewardCurrency: yup.string(),
-  estimatedAvailabilityDate: yup.date().nullable(),
-  estimatedDeliveryInWeeks: yup.number().nullable().min(0, 'Delivery time must be greater than or equal to 0'),
-  confirmationMessage: yup.string().max(500, 'Confirmation message must be at most 500 characters long'),
-  privateCommentPrompts: yup.array().of(yup.string()),
-})
+const rewardFormSchema = (soldAmount: number) =>
+  yup.object().shape({
+    name: yup.string().required('Name is required').max(50, 'Name must be at most 50 characters long'),
+    description: yup.string().max(1200, 'Description must be at most 1200 characters long'),
+    shortDescription: yup.string().max(250, 'Short Description must be at most 250 characters long'),
+    cost: yup
+      .number()
+      .typeError('Price is required')
+      .required('Price is required')
+      .min(0.01, 'Price must be greater than 0'),
+    maxClaimable: yup
+      .number()
+      .nullable()
+      .transform((value) => (isNaN(value) ? null : value))
+      .min(0, 'Limited Edition must be greater than or equal to 0')
+      .test('min-sold-amount', 'Limited edition must be at minimum the amount sold', function (value) {
+        return value !== null && value !== undefined && value >= soldAmount
+      })
+      .transform((value) => (value === null ? null : Math.round(value))),
+    images: yup.array().of(yup.string()).max(MAX_REWARD_IMAGES, `Maximum ${MAX_REWARD_IMAGES} images allowed`),
+    hasShipping: yup.boolean(),
+    isAddon: yup.boolean(),
+    isHidden: yup.boolean(),
+    category: yup.string().nullable(),
+    preOrder: yup.boolean(),
+    rewardCurrency: yup.string(),
+    estimatedAvailabilityDate: yup.date().nullable(),
+    estimatedDeliveryInWeeks: yup.number().nullable().min(0, 'Delivery time must be greater than or equal to 0'),
+    confirmationMessage: yup.string().max(500, 'Confirmation message must be at most 500 characters long'),
+    privateCommentPrompts: yup.array().of(yup.string()),
+  })
 
 type UseProjectRewardFormProps = {
   rewardId?: string
@@ -102,7 +107,7 @@ export const useProjectRewardForm = ({
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
   const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
-    resolver: yupResolver(rewardFormSchema),
+    resolver: yupResolver(rewardFormSchema(data?.getProjectReward?.sold || 0)),
     defaultValues: {
       name: data?.getProjectReward?.name || '',
       description: data?.getProjectReward?.description || '',
