@@ -5,7 +5,9 @@ import { Location, useLocation, useNavigate } from 'react-router-dom'
 
 import { FilterComponent } from '@/modules/discovery/filters/FilterComponent'
 import { EmailPromptModal } from '@/pages/auth/components/EmailPromptModal'
+import { NotificationPromptModal } from '@/pages/auth/components/NotificationPromptModal'
 import { useEmailPromptModal } from '@/pages/auth/hooks/useEmailPromptModal'
+import { useNotificationPromptModal } from '@/pages/auth/hooks/useNotificationPromptModal'
 import { discoveryPageCommonLayoutStyles } from '@/shared/styles/discoveryPageLayout'
 import { useMobileMode } from '@/utils'
 
@@ -32,6 +34,8 @@ export const PlatformNavBar = () => {
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
 
   const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
+
+  const { notificationPromptIsOpen, notificationPromptOnClose } = useNotificationPromptModal()
 
   const navigate = useNavigate()
 
@@ -125,6 +129,7 @@ export const PlatformNavBar = () => {
         {...loginModalAdditionalProps}
       />
       <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} />
+      <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
     </HStack>
   )
 }

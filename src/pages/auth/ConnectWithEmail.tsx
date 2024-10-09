@@ -11,6 +11,7 @@ import { useAuthContext } from '../../context'
 import { MfaAction, OtpResponseFragment } from '../../types'
 import { emailValidationSchema, useNotification } from '../../utils'
 import { VerifyYourEmail } from '../otp'
+import { useNotificationPromptModal } from './hooks/useNotificationPromptModal'
 
 interface ConnectWithEmailProps extends ButtonProps {
   onClose?: () => void
@@ -20,6 +21,8 @@ export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) =>
   const { isOpen, onClose: onModalClose, onOpen } = useDisclosure()
   const { isLoggedIn, queryCurrentUser } = useAuthContext()
   const { toast } = useNotification()
+
+  const { notificationPromptOnOpen } = useNotificationPromptModal()
 
   const authServiceEndPoint = getAuthEndPoint()
 
@@ -59,6 +62,7 @@ export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) =>
 
         if (response?.status === 'ok') {
           queryCurrentUser()
+          notificationPromptOnOpen()
         } else {
           toast({
             status: 'error',
@@ -87,7 +91,15 @@ export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) =>
     <>
       <VStack as={'form'} onSubmit={handleSubmit(handleClick)} w="full">
         <ControlledTextInput label={t('Email')} name="email" placeholder="example@email.com" control={control} />
-        <Button type="submit" variant="solid" colorScheme="primary1" w="100%" textDecoration={'none'} {...rest}>
+        <Button
+          size="lg"
+          type="submit"
+          variant="solid"
+          colorScheme="primary1"
+          w="100%"
+          textDecoration={'none'}
+          {...rest}
+        >
           {t('Continue with email')}
         </Button>
       </VStack>
