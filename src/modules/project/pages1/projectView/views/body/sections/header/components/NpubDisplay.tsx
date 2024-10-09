@@ -1,6 +1,9 @@
-import { ButtonProps, IconButton, Tooltip, useDisclosure } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiCopy } from 'react-icons/pi'
+
+import { Body } from '@/shared/components/typography'
 
 import { NostrIcon } from '../../../../../../../../../shared/components/icons'
 import { copyTextToClipboard } from '../../../../../../../../../utils'
@@ -13,7 +16,6 @@ interface NpubDisplayProps extends ButtonProps {
 export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
   const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
-  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const handleCopyPubkey = () => {
     copyTextToClipboard(npub)
@@ -24,26 +26,35 @@ export const NpubDisplay = ({ npub, iconOnly, ...rest }: NpubDisplayProps) => {
     setCopy(true)
     setTimeout(() => {
       setCopy(false)
-      onClose()
     }, 2000)
   }
 
   return (
-    <Tooltip label={copy ? t('Copied!') : t('Copy')} placement="top-start" closeOnClick={false} isOpen={isOpen}>
-      <IconButton
-        size="sm"
+    <HStack w="full">
+      <Button
+        size="md"
         aria-label="nostr-icon"
-        variant="soft"
-        colorScheme="primary1"
-        onMouseEnter={onOpen}
-        onMouseLeave={onClose}
-        _hover={{ bgColor: copy ? 'primary1.9' : undefined }}
-        icon={<NostrIcon height="16px" width="16px" />}
+        variant={copy ? 'solid' : 'soft'}
+        colorScheme="violet"
+        leftIcon={<NostrIcon height="18px" width="18px" />}
         onClick={handleOnCopy}
         {...rest}
       >
-        {}
-      </IconButton>
-    </Tooltip>
+        <Body size="md" medium isTruncated flex={1}>
+          {npub}
+        </Body>
+      </Button>
+      <Button
+        minWidth={24}
+        size="md"
+        variant="solid"
+        colorScheme="primary1"
+        rightIcon={<PiCopy />}
+        onClick={handleOnCopy}
+        isTruncated
+      >
+        {copy ? t('Copied') : t('Copy')}
+      </Button>
+    </HStack>
   )
 }
