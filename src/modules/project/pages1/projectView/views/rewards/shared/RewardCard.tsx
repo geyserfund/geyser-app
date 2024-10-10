@@ -3,10 +3,12 @@ import { MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { ImageWithReload } from '@/components/ui'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { ProjectRewardFragment, ProjectStatus, RewardCurrency } from '@/types'
@@ -57,10 +59,24 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
           height="100%"
         />
       )}
-
-      <Box borderColor={'neutral.700'} overflow={'none'} width="100%" position="relative">
-        <MediaCarousel links={reward.images} />
-      </Box>
+      {reward.images.length <= 1 ? (
+        <Box borderColor={'neutral.700'} overflow={'hidden'} width="100%" position="relative" paddingTop="75%">
+          <ImageWithReload
+            src={reward.images[0] || ''}
+            alt={reward.name}
+            width="100%"
+            height="100%"
+            objectFit="cover"
+            position="absolute"
+            top={0}
+            left={0}
+          />
+        </Box>
+      ) : (
+        <Box borderColor={'neutral.700'} overflow={'hidden'} width="100%" position="relative">
+          <MediaCarousel links={reward.images} aspectRatio={ImageCropAspectRatio.Reward} />
+        </Box>
+      )}
 
       <VStack padding={4} alignItems="start" flex={1}>
         <Body size="md" medium>
