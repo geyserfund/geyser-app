@@ -23,8 +23,6 @@ export type RewardCardProps = {
   isLaunch?: boolean
 } & CardLayoutProps
 
-const MAX_REWARD_DESCRIPTION_LENGTH_FOR_CARD = 160
-
 export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count = 0, ...rest }: RewardCardProps) => {
   const { t } = useTranslation()
   const { project, isProjectOwner } = useProjectAtom()
@@ -41,12 +39,6 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
       buyReward()
     }
   }
-
-  const description = reward?.description
-    ? reward?.description?.length > MAX_REWARD_DESCRIPTION_LENGTH_FOR_CARD
-      ? `${reward.description.slice(0, MAX_REWARD_DESCRIPTION_LENGTH_FOR_CARD)}...`
-      : reward.description
-    : ''
 
   const linkProps = noLink ? {} : { as: Link, to: getPath('projectRewardView', project?.name, reward.id) }
 
@@ -118,7 +110,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
           flex={1}
         >
           <Body size="sm" light>
-            {description}
+            {reward?.shortDescription}
           </Body>
           {/* <MarkdownField preview content={description} /> */}
         </Box>
