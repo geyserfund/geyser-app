@@ -97,6 +97,7 @@ export const PlatformNavBar = () => {
       {...(isPlatformRoutes && discoveryPageCommonLayoutStyles)}
       justifyContent={'center'}
       zIndex={9}
+      bgColor={'utils.pbg'}
     >
       <VStack
         paddingY={{ base: 5, lg: 8 }}
