@@ -93,7 +93,7 @@ export const ReceiveOneTimePassword = ({
     <VStack>
       <Image src={VerifyEmailImageUrl} alt="verify-email-image" w={200} h={200} alignSelf="center" />
 
-      <Body medium>
+      <Body light>
         {getDescription()} {t('Check your SPAM folder for the email.')}
       </Body>
       <form
@@ -102,8 +102,9 @@ export const ReceiveOneTimePassword = ({
           e.preventDefault()
           form.handleSubmit(handleReceiveOneTimePassword)(e)
         }}
+        style={{ width: '100%' }}
       >
-        <VStack spacing="10px">
+        <VStack spacing="10px" w="full">
           <ControlledTextInput
             required
             control={form.control}

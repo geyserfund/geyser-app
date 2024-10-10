@@ -29,7 +29,7 @@ export const VerifyOneTimePassword = ({
 }: VerifyOneTimePasswordProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
-  const { user, queryCurrentUser } = useAuthContext()
+  const { queryCurrentUser } = useAuthContext()
 
   const [otpCode, setOptCode] = useState('')
 
@@ -84,8 +84,8 @@ export const VerifyOneTimePassword = ({
   }
 
   const handleSendCodeAgain = () => {
-    if (user.email) {
-      handleSendOtpByEmail(user.email)
+    if (inputEmail) {
+      handleSendOtpByEmail(inputEmail)
       handleIntervalTimeLeft()
     }
   }
@@ -103,7 +103,7 @@ export const VerifyOneTimePassword = ({
       <VStack spacing={6}>
         <VStack w="full" alignItems="start">
           <Body medium>
-            {`${t('We sent you a sign-in code to')}: `}
+            {`${t('We sent you an OTP code to')}: `}
             <Body as="span" bold>
               {inputEmail}
             </Body>

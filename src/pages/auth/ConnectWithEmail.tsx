@@ -1,4 +1,4 @@
-import { Button, ButtonProps, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
@@ -10,15 +10,15 @@ import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { MfaAction, OtpResponseFragment } from '../../types'
 import { emailValidationSchema, useNotification } from '../../utils'
-import { VerifyYourEmail } from '../otp'
+import { VerifyYourEmailContent } from '../otp/VerifyYourEmailContent'
 import { useNotificationPromptModal } from './hooks/useNotificationPromptModal'
 
 interface ConnectWithEmailProps extends ButtonProps {
   onClose?: () => void
+  isOTPStarted?: (_: boolean) => void
 }
 
-export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) => {
-  const { isOpen, onClose: onModalClose, onOpen } = useDisclosure()
+export const ConnectWithEmail = ({ onClose, isOTPStarted, ...rest }: ConnectWithEmailProps) => {
   const { isLoggedIn, queryCurrentUser } = useAuthContext()
   const { toast } = useNotification()
 
@@ -36,14 +36,15 @@ export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) =>
 
   const handleClick = async (values: any) => {
     setInitEmail(values.email)
-    onOpen()
+    isOTPStarted?.(true)
   }
 
   useEffect(() => {
     if (isLoggedIn) {
-      onModalClose()
+      onClose?.()
+      isOTPStarted?.(false)
     }
-  }, [isLoggedIn, onModalClose])
+  }, [isLoggedIn, isOTPStarted, onClose])
 
   const handleLogin = async (otpCode: Number, otpData: OtpResponseFragment, email?: string) => {
     if (email) {
@@ -64,6 +65,8 @@ export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) =>
         if (response?.status === 'ok') {
           queryCurrentUser()
           notificationPromptOnOpen()
+          onClose?.()
+          isOTPStarted?.(false)
         } else {
           toast({
             status: 'error',
@@ -71,14 +74,7 @@ export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) =>
             description: 'Please try again',
           })
         }
-
-        if (onClose) {
-          onClose()
-        }
-
-        onModalClose()
       } catch (error) {
-        console.log('checking error', error)
         toast({
           status: 'error',
           title: 'Failed to login with email',
@@ -90,28 +86,25 @@ export const ConnectWithEmail = ({ onClose, ...rest }: ConnectWithEmailProps) =>
 
   return (
     <>
-      <VStack as={'form'} onSubmit={handleSubmit(handleClick)} w="full">
-        <ControlledTextInput label={t('Email')} name="email" placeholder="example@email.com" control={control} />
-        <Button
-          size="lg"
-          type="submit"
-          variant="solid"
-          colorScheme="primary1"
-          w="100%"
-          textDecoration={'none'}
-          {...rest}
-        >
-          {t('Continue with email')}
-        </Button>
-      </VStack>
-      {initEmail && (
-        <VerifyYourEmail
-          isOpen={isOpen}
-          onClose={onModalClose}
-          action={MfaAction.Login}
-          handleVerify={handleLogin}
-          initEmail={initEmail}
-        />
+      {initEmail ? (
+        <VStack w="full">
+          <VerifyYourEmailContent initEmail={initEmail} action={MfaAction.Login} handleVerify={handleLogin} />
+        </VStack>
+      ) : (
+        <VStack as={'form'} onSubmit={handleSubmit(handleClick)} w="full">
+          <ControlledTextInput label={t('Email')} name="email" placeholder="example@email.com" control={control} />
+          <Button
+            size="lg"
+            type="submit"
+            variant="solid"
+            colorScheme="primary1"
+            w="100%"
+            textDecoration={'none'}
+            {...rest}
+          >
+            {t('Continue with email')}
+          </Button>
+        </VStack>
       )}
     </>
   )

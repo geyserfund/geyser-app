@@ -48,17 +48,17 @@ export const LightningAddressModal = ({ name, npub, ...rest }: LightningAddressM
       >
         <VStack w="full" spacing={3}>
           <VStack w="full" alignItems={'start'} spacing={0}>
-            <Body size="sm">{t('A Lightning Address is an email-like identifier for receiving Bitcoin.')}</Body>
+            <Body>{t('A Lightning Address is an email-like identifier for receiving Bitcoin.')}</Body>
             <UnorderedList>
               <ListItem>
-                <Body size="sm">
+                <Body>
                   {t(
                     'Add this Lightning Address to your Nostr profile for this project to get “zapped” (tipped) directly by other users',
                   )}
                 </Body>
               </ListItem>
               <ListItem>
-                <Body size="sm">
+                <Body>
                   {t('Share your Geyser Lightning address with anyone, and they can fund you through it instantly.')}
                 </Body>
               </ListItem>
@@ -68,7 +68,7 @@ export const LightningAddressModal = ({ name, npub, ...rest }: LightningAddressM
         </VStack>
         {npub && (
           <VStack w="full" spacing={3}>
-            <Body size="sm">
+            <Body>
               {t(
                 "Nostr npub is your project's unique identifier on the censorship-resistant, decentralized Nostr social network.",
               )}

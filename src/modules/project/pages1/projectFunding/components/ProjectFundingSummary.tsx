@@ -67,7 +67,7 @@ export const ProjectFundingSummary = () => {
       transition={{ type: 'spring', stiffness: 900, damping: 40 }}
     >
       <HStack as={motion.div} layout w="full" justifyContent={'space-between'}>
-        <H2 size={{ base: 'lg', lg: '2xl' }} medium>
+        <H2 size={{ base: 'xl', lg: '3xl' }} medium>
           {t('Summary')}
         </H2>
         <Button

@@ -1,12 +1,14 @@
 import { useAtom } from 'jotai'
 
 import {
+  dontAskNotificationAgainAtom,
   isNotificationPromptAtomModalOpenAtom,
   notificationPromptAtomOnCloseActionAtom,
 } from '../state/notificationPromptAtom'
 
 export const useNotificationPromptModal = () => {
   const [notificationPromptIsOpen, setNotificationPromptIsOpen] = useAtom(isNotificationPromptAtomModalOpenAtom)
+  const [dontAskNotificationAgain, setDontAskNotificationAgain] = useAtom(dontAskNotificationAgainAtom)
   const [notificationPromptOnCloseAction, setNotificationPromptOnCloseAction] = useAtom(
     notificationPromptAtomOnCloseActionAtom,
   )
@@ -19,6 +21,8 @@ export const useNotificationPromptModal = () => {
 
   return {
     notificationPromptIsOpen,
+    dontAskNotificationAgain,
+    setDontAskNotificationAgain,
     notificationPromptOnOpen,
     notificationPromptOnClose,
     setNotificationPromptOnCloseAction,

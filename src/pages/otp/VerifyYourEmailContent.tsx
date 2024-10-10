@@ -1,10 +1,7 @@
-import { Box } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import Loader from '@/components/ui/Loader'
 
-import { Body1 } from '../../components/typography'
 import { useAuthContext } from '../../context'
 import { MfaAction, OtpResponseFragment, useSendOtpByEmailMutation } from '../../types'
 import { useNotification } from '../../utils'
@@ -25,7 +22,6 @@ export const VerifyYourEmailContent = ({
   otpSent,
   otpData: otp,
 }: VerifyYourEmailContentProps) => {
-  const { t } = useTranslation()
   const { toast } = useNotification()
   const { user } = useAuthContext()
 
@@ -74,30 +70,12 @@ export const VerifyYourEmailContent = ({
 
   return (
     <>
-      {user?.email && (
-        <Box
-          w="100%"
-          border="2px solid"
-          borderColor={'neutral.200'}
-          borderRadius="8px"
-          justifyContent="center"
-          px={4}
-          py={2}
-        >
-          <Body1 align="center" bold color="neutral.900">
-            {t('Email sent to ')}
-
-            {user?.email}
-          </Body1>
-        </Box>
-      )}
-
       {sentOtp && otpData ? (
         <VerifyOneTimePassword
           action={action}
           otp={otpData}
           handleSendOtpByEmail={handleSendOtpByEmail}
-          inputEmail={inputEmail}
+          inputEmail={inputEmail || user.email || ''}
           handleVerify={handleVerify}
         />
       ) : (

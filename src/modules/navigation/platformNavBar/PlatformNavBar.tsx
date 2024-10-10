@@ -35,7 +35,7 @@ export const PlatformNavBar = () => {
 
   const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
 
-  const { notificationPromptIsOpen, notificationPromptOnClose } = useNotificationPromptModal()
+  const { notificationPromptIsOpen, dontAskNotificationAgain, notificationPromptOnClose } = useNotificationPromptModal()
 
   const navigate = useNavigate()
 
@@ -97,6 +97,7 @@ export const PlatformNavBar = () => {
       {...(isPlatformRoutes && discoveryPageCommonLayoutStyles)}
       justifyContent={'center'}
       zIndex={9}
+      bgColor={'utils.pbg'}
     >
       <VStack
         paddingY={{ base: 5, lg: 8 }}
@@ -129,7 +130,9 @@ export const PlatformNavBar = () => {
         {...loginModalAdditionalProps}
       />
       <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} />
-      <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
+      {!dontAskNotificationAgain && (
+        <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
+      )}
     </HStack>
   )
 }
