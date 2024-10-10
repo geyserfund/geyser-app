@@ -35,7 +35,7 @@ export const PlatformNavBar = () => {
 
   const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
 
-  const { notificationPromptIsOpen, notificationPromptOnClose } = useNotificationPromptModal()
+  const { notificationPromptIsOpen, dontAskNotificationAgain, notificationPromptOnClose } = useNotificationPromptModal()
 
   const navigate = useNavigate()
 
@@ -130,7 +130,9 @@ export const PlatformNavBar = () => {
         {...loginModalAdditionalProps}
       />
       <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} />
-      <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
+      {!dontAskNotificationAgain && (
+        <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
+      )}
     </HStack>
   )
 }

@@ -13,6 +13,7 @@ import {
 import { useNotification } from '@/utils'
 
 import { EmailPromptModalUrl } from '../../../shared/constants'
+import { useNotificationPromptModal } from '../hooks/useNotificationPromptModal'
 
 type NotificationPromptModalProps = {
   onCloseAction?: () => void
@@ -20,10 +21,15 @@ type NotificationPromptModalProps = {
   isOpen: boolean
 }
 
+export const PRODUCT_UPDATES_NOTIFICATION_ID = 1
+export const PRODUCT_UPDATES_NOTIFICATION_TYPE = 'user.productUpdates'
+
 export const NotificationPromptModal = ({ onCloseAction, onClose, isOpen }: NotificationPromptModalProps) => {
   const { user } = useAuthContext()
   const { t } = useTranslation()
   const toast = useNotification()
+
+  const { setDontAskNotificationAgain } = useNotificationPromptModal()
 
   const [productUpdatesNotificationSetting, setProductUpdatesNotificationSetting] = useState<NotificationSettings>()
 
@@ -34,7 +40,7 @@ export const NotificationPromptModal = ({ onCloseAction, onClose, isOpen }: Noti
     },
     onCompleted(data) {
       const productUpdatesSetting = data?.userNotificationSettingsGet.userSettings.notificationSettings.find(
-        (setting: NotificationSettings) => setting.notificationType === 'user.productUpdates',
+        (setting: NotificationSettings) => setting.notificationType === PRODUCT_UPDATES_NOTIFICATION_TYPE,
       )
       setProductUpdatesNotificationSetting(productUpdatesSetting)
     },
@@ -42,16 +48,18 @@ export const NotificationPromptModal = ({ onCloseAction, onClose, isOpen }: Noti
 
   const [updateNotificationSetting] = useUserNotificationsSettingsUpdateMutation()
 
+  const handleClose = () => {
+    setDontAskNotificationAgain(true)
+    onClose()
+  }
+
   const updateProductUpdatesNotification = async () => {
-    const configId = productUpdatesNotificationSetting?.configurations.find(
-      (config) => config.name === 'is_enabled',
-    )?.id
-    if (!configId) return
+    if (productUpdatesNotificationSetting && productUpdatesNotificationSetting.isEnabled) return
 
     try {
       await updateNotificationSetting({
         variables: {
-          userNotificationConfigurationId: configId,
+          userNotificationConfigurationId: PRODUCT_UPDATES_NOTIFICATION_ID,
           value: 'true',
         },
       })
@@ -63,12 +71,12 @@ export const NotificationPromptModal = ({ onCloseAction, onClose, isOpen }: Noti
       })
     }
 
-    onClose()
+    handleClose()
   }
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} title={t('Stay informed')}>
+      <Modal isOpen={isOpen} onClose={handleClose} title={t('Stay informed')}>
         <VStack justifyContent="flex-start" alignItems="flex-start" w="100%" gap={4}>
           <Box w="100%" height="200px" display="flex" justifyContent="center" alignItems="center">
             <Image height="100%" src={EmailPromptModalUrl} alt="Email illustration" objectFit="contain" />
@@ -85,7 +93,7 @@ export const NotificationPromptModal = ({ onCloseAction, onClose, isOpen }: Noti
             <Button w="100%" variant="solid" colorScheme="primary1" onClick={updateProductUpdatesNotification}>
               {t('Yes, please send me updates')}
             </Button>
-            <Button w="100%" variant="outline" colorScheme="neutral1" onClick={onClose}>
+            <Button w="100%" variant="outline" colorScheme="neutral1" onClick={handleClose}>
               {t('No, no project updates')}
             </Button>
           </VStack>

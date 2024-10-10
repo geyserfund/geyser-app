@@ -106,6 +106,8 @@ const ConnectAccounts = ({
 export const AuthModal = (authModalProps: AuthModalProps) => {
   const { t } = useTranslation()
 
+  const [isOtpStarted, setIsOtpStarted] = useState(false)
+
   const {
     isOpen,
     onClose,
@@ -135,11 +137,17 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
     }
   }
 
-  const modalTitle = t(title || 'Sign in to Geyser')
+  const modalTitle = isOtpStarted ? t('Check your email') : title || t(title || 'Sign in to Geyser')
   const modalDescription = t(
     description ||
       'Connect your social account with the biggest social proof, allowing users to discover you and verify your reputation more easily',
   )
+
+  useEffect(() => {
+    return () => {
+      setIsOtpStarted(false)
+    }
+  }, [isOpen])
 
   return (
     <Modal
@@ -151,24 +159,28 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
       onOverlayClick={handlePrivateRouteModalClose}
       onEsc={handlePrivateRouteModalClose}
       title={modalTitle}
+      useInert={false}
     >
       <VStack w="full" justifyContent="center" paddingTop={3} alignItems="start" spacing={4}>
-        <ConnectWithEmail onClose={onClose} />
+        <ConnectWithEmail onClose={onClose} isOTPStarted={setIsOtpStarted} />
 
-        <VStack w="full" alignItems="start">
-          <Body medium>{t('Or use a social account')}</Body>
-          {modalDescription && <Body size="sm">{modalDescription}</Body>}
-        </VStack>
-
-        <ConnectAccounts
-          onClose={onClose}
-          showNostr={showNostr && window.nostr}
-          showTwitter={showTwitter}
-          showLightning={showLightning}
-          showFacebook={showFacebook}
-          showGoogle={showGoogle}
-          showGithub={showGithub}
-        />
+        {!isOtpStarted && (
+          <>
+            <VStack w="full" alignItems="start">
+              <Body medium>{t('Or use a social account')}</Body>
+              {modalDescription && <Body size="sm">{modalDescription}</Body>}
+            </VStack>
+            <ConnectAccounts
+              onClose={onClose}
+              showNostr={showNostr && window.nostr}
+              showTwitter={showTwitter}
+              showLightning={showLightning}
+              showFacebook={showFacebook}
+              showGoogle={showGoogle}
+              showGithub={showGithub}
+            />
+          </>
+        )}
       </VStack>
     </Modal>
   )
