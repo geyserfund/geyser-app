@@ -54,12 +54,15 @@ export const NotificationPromptModal = ({ onCloseAction, onClose, isOpen }: Noti
   }
 
   const updateProductUpdatesNotification = async () => {
-    if (productUpdatesNotificationSetting && productUpdatesNotificationSetting.isEnabled) return
+    const configId = productUpdatesNotificationSetting?.configurations.find(
+      (config) => config.name === 'is_enabled',
+    )?.id
+    if (!configId) return
 
     try {
       await updateNotificationSetting({
         variables: {
-          userNotificationConfigurationId: PRODUCT_UPDATES_NOTIFICATION_ID,
+          userNotificationConfigurationId: configId,
           value: 'true',
         },
       })
