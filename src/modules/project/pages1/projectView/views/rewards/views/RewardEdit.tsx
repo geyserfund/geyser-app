@@ -21,7 +21,7 @@ export const RewardEdit = () => {
       <ProjectRewardForm
         buttonText={t('Update Reward')}
         titleText={t('Edit Reward')}
-        createOrUpdate="update"
+        isUpdate={true}
         isLaunch={false}
         rewardId={rewardId}
       />

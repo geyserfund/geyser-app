@@ -42,7 +42,7 @@ export function ControlledSwitchInput({ switchPosition = 'right', ...props }: Pr
         />
         {switchPosition === 'left' && <>{label}</>}
         {props.error && (
-          <Body size="sm" fontWeight="400" color="secondary.red">
+          <Body size="sm" color="error.9">
             {props.error}
           </Body>
         )}

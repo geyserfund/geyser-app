@@ -27,7 +27,7 @@ export const ProjectCreationCreateReward = () => {
       <ProjectRewardForm
         buttonText={t('Save reward')}
         titleText={t('Create Reward')}
-        createOrUpdate="create"
+        isUpdate={false}
         defaultCategory={category}
         isLaunch={true}
       />

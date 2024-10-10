@@ -27,7 +27,7 @@ import { useProjectRewardForm } from '../hooks/useProjectRewardForm'
 type Props = {
   buttonText: string
   titleText: string
-  createOrUpdate?: 'create' | 'update'
+  isUpdate?: boolean
   isLaunch?: boolean
   defaultCategory?: string
   hideBackbutton?: boolean
@@ -39,7 +39,7 @@ const MAX_REWARD_IMAGES = 5
 export const ProjectRewardForm = ({
   buttonText,
   titleText,
-  createOrUpdate,
+  isUpdate,
   isLaunch = false,
   rewardId,
   defaultCategory,
@@ -64,7 +64,7 @@ export const ProjectRewardForm = ({
     utils,
   } = useProjectRewardForm({
     rewardId,
-    createOrUpdate: createOrUpdate || 'create',
+    isUpdate,
     isLaunch,
     defaultCategory,
   })

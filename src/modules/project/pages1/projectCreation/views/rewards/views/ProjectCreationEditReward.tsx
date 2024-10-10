@@ -27,7 +27,7 @@ export const ProjectCreationEditReward = () => {
         buttonText={t('Update Reward')}
         titleText={t('Edit Reward')}
         rewardId={params.rewardId}
-        createOrUpdate="update"
+        isUpdate={true}
         isLaunch={true}
       />
     </VStack>

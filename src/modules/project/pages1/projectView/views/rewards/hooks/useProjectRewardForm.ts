@@ -55,17 +55,12 @@ const rewardFormSchema = (soldAmount: number) =>
 
 type UseProjectRewardFormProps = {
   rewardId?: string
-  createOrUpdate: 'create' | 'update'
+  isUpdate?: boolean
   isLaunch?: boolean
   defaultCategory?: string
 }
 
-export const useProjectRewardForm = ({
-  rewardId,
-  createOrUpdate,
-  isLaunch,
-  defaultCategory,
-}: UseProjectRewardFormProps) => {
+export const useProjectRewardForm = ({ rewardId, isUpdate, isLaunch, defaultCategory }: UseProjectRewardFormProps) => {
   const navigate = useNavigate()
   const toast = useNotification()
 
@@ -130,7 +125,7 @@ export const useProjectRewardForm = ({
     })) || []
 
   useEffect(() => {
-    if (data?.getProjectReward && createOrUpdate === 'update') {
+    if (isUpdate) {
       reset({
         name: data?.getProjectReward?.name || '',
         description: data?.getProjectReward?.description || '',
@@ -150,7 +145,7 @@ export const useProjectRewardForm = ({
         rewardCurrency: projectCurrency,
       })
     }
-  }, [data?.getProjectReward, reset, projectCurrency, createOrUpdate])
+  }, [data?.getProjectReward, reset, projectCurrency, isUpdate])
 
   const onSubmit = (formData: FormValues) => {
     const commonData = {
@@ -171,7 +166,7 @@ export const useProjectRewardForm = ({
       confirmationMessage: formData.confirmationMessage,
     }
 
-    if (data?.getProjectReward && createOrUpdate === 'update') {
+    if (isUpdate) {
       const updateInput: UpdateProjectRewardInput = {
         projectRewardId: data?.getProjectReward?.id,
         ...commonData,
