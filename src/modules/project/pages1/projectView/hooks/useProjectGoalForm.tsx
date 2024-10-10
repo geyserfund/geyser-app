@@ -63,7 +63,7 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
   const navigate = useNavigate()
   const toast = useNotification()
 
-  const isBTC = goal?.currency === ProjectGoalCurrency.Btcsat
+  let isBTC = goal?.currency === ProjectGoalCurrency.Btcsat
   const amountContributed = isBTC ? goal?.amountContributed || 0 : (goal?.amountContributed || 0) / 100
 
   const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
@@ -109,6 +109,10 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
 
   const onSubmit = (formData: FormValues) => {
     try {
+      if (!goal) {
+        isBTC = formData.currency === ProjectGoalCurrency.Btcsat
+      }
+
       const trimmedTitle = typeof formData.title === 'string' ? formData.title.trim() : ''
       const targetAmount = isBTC ? formData.targetAmount : dollarsToCents(Number(formData.targetAmount))
 
