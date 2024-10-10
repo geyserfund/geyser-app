@@ -55,7 +55,7 @@ export const FundingDetailsPrivateCommentPrompt = () => {
       <TextArea
         data-testid="funding-private-comment-input"
         placeholder={t('Enter your message here...')}
-        fontSize="14px"
+        fontSize="16px"
         resize="none"
         value={privateComment}
         maxLength={280}
