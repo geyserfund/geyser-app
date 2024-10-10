@@ -1,6 +1,4 @@
 /* eslint-disable complexity */
-
-import { gql, useQuery } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { format } from 'date-fns'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
@@ -23,18 +21,13 @@ import {
   USDCents,
   useProjectRewardCurrencyUpdateMutation,
   useProjectRewardQuery,
+  useRewardCategoriesQuery,
 } from '@/types'
 import { useNotification } from '@/utils'
 
 type FormValues = Omit<ProjectRewardFragment, 'id' | 'sold'>
 
 const MAX_REWARD_IMAGES = 5
-
-const REWARD_CATEGORIES_QUERY = gql`
-  query Query {
-    projectRewardCategoriesGet
-  }
-`
 
 const rewardFormSchema = (soldAmount: number) =>
   yup.object().shape({
@@ -128,7 +121,7 @@ export const useProjectRewardForm = ({
   const enableSubmit = isDirty && isValid
 
   // Fetch reward categories
-  const { loading: isRewardCategoriesLoading, data: rewardCategoriesData } = useQuery(REWARD_CATEGORIES_QUERY)
+  const { loading: isRewardCategoriesLoading, data: rewardCategoriesData } = useRewardCategoriesQuery()
 
   const rewardCategories =
     rewardCategoriesData?.projectRewardCategoriesGet.map((category: string) => ({

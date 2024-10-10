@@ -6226,6 +6226,11 @@ export type ProjectRewardQuery = { __typename?: 'Query', getProjectReward: (
     & ProjectRewardFragment
   ) };
 
+export type RewardCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RewardCategoriesQuery = { __typename?: 'Query', projectRewardCategoriesGet: Array<string> };
+
 export type FundingTxStatusUpdatedSubscriptionVariables = Exact<{
   input?: InputMaybe<FundingTxStatusUpdatedInput>;
 }>;
@@ -12386,6 +12391,43 @@ export type ProjectRewardQueryHookResult = ReturnType<typeof useProjectRewardQue
 export type ProjectRewardLazyQueryHookResult = ReturnType<typeof useProjectRewardLazyQuery>;
 export type ProjectRewardSuspenseQueryHookResult = ReturnType<typeof useProjectRewardSuspenseQuery>;
 export type ProjectRewardQueryResult = Apollo.QueryResult<ProjectRewardQuery, ProjectRewardQueryVariables>;
+export const RewardCategoriesDocument = gql`
+    query RewardCategories {
+  projectRewardCategoriesGet
+}
+    `;
+
+/**
+ * __useRewardCategoriesQuery__
+ *
+ * To run a query within a React component, call `useRewardCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRewardCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRewardCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRewardCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<RewardCategoriesQuery, RewardCategoriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RewardCategoriesQuery, RewardCategoriesQueryVariables>(RewardCategoriesDocument, options);
+      }
+export function useRewardCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RewardCategoriesQuery, RewardCategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RewardCategoriesQuery, RewardCategoriesQueryVariables>(RewardCategoriesDocument, options);
+        }
+export function useRewardCategoriesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RewardCategoriesQuery, RewardCategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RewardCategoriesQuery, RewardCategoriesQueryVariables>(RewardCategoriesDocument, options);
+        }
+export type RewardCategoriesQueryHookResult = ReturnType<typeof useRewardCategoriesQuery>;
+export type RewardCategoriesLazyQueryHookResult = ReturnType<typeof useRewardCategoriesLazyQuery>;
+export type RewardCategoriesSuspenseQueryHookResult = ReturnType<typeof useRewardCategoriesSuspenseQuery>;
+export type RewardCategoriesQueryResult = Apollo.QueryResult<RewardCategoriesQuery, RewardCategoriesQueryVariables>;
 export const FundingTxStatusUpdatedDocument = gql`
     subscription FundingTxStatusUpdated($input: FundingTxStatusUpdatedInput) {
   fundingTxStatusUpdated(input: $input) {
