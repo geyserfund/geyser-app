@@ -42,7 +42,7 @@ export const FundingSuccess = () => {
         <Confetti gravity={0.07} numberOfPieces={250} />
         <VStack w="full" maxWidth="800px" alignItems="start" spacing={6}>
           <VStack w="full" alignItems="start">
-            <H1 size="2xl" bold>
+            <H1 size="3xl" bold>
               {t('Success')}!
             </H1>
             <SuccessImageComponent />

@@ -56,7 +56,7 @@ export const FundingDetailsUserComment = () => {
             pr={16}
             data-testid="funding-comment-input"
             placeholder={t('Leave a public message here.')}
-            fontSize="14px"
+            fontSize="16px"
             resize="none"
             value={comment}
             maxLength={280}
