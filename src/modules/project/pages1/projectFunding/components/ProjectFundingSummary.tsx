@@ -97,7 +97,7 @@ export const ProjectFundingSummary = () => {
               <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Private message')}: `}</Body>
               <Body size={{ base: 'sm', lg: 'md' }}>{formState.privateComment}</Body>
             </VStack>
-            <Divider />
+            <Divider my={2} />
           </>
         )}
 
