@@ -4947,7 +4947,7 @@ export type OrderItemFragment = { __typename?: 'OrderItem', quantity: number, un
 export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, createdAt: any, deliveredAt?: any | null, id: any, shippedAt?: any | null, status: string, totalInSats: number, updatedAt: any, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null } | null, items: Array<(
     { __typename?: 'OrderItem' }
     & OrderItemFragment
-  )>, fundingTx: { __typename?: 'FundingTx', id: any, amount: number, amountPaid: number, donationAmount: number, address?: string | null, email?: string | null, fundingType: FundingType, invoiceStatus: InvoiceStatus, isAnonymous: boolean, status: FundingStatus, uuid?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null } };
+  )>, fundingTx: { __typename?: 'FundingTx', id: any, amount: number, amountPaid: number, donationAmount: number, address?: string | null, email?: string | null, fundingType: FundingType, invoiceStatus: InvoiceStatus, isAnonymous: boolean, status: FundingStatus, uuid?: string | null, privateComment?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null } };
 
 export type FundingTxOrderFragment = { __typename?: 'FundingTx', id: any, invoiceStatus: InvoiceStatus, donationAmount: number, amountPaid: number, amount: number, email?: string | null, paidAt?: any | null, status: FundingStatus, invoiceId?: string | null, uuid?: string | null, affiliateFeeInSats?: number | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, externalId: string, accountType: string, public: boolean }> } | null }, order?: { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, items: Array<(
       { __typename?: 'OrderItem' }
@@ -6569,6 +6569,7 @@ export const OrderFragmentDoc = gql`
     isAnonymous
     status
     uuid
+    privateComment
   }
 }
     ${OrderItemFragmentDoc}`;

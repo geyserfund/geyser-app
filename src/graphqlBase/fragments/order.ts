@@ -50,6 +50,7 @@ export const FRAGMENT_ORDER = gql`
       isAnonymous
       status
       uuid
+      privateComment
     }
   }
 `

@@ -1,4 +1,4 @@
-import { HStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -158,6 +158,25 @@ export const RewardTable = ({
         key: 'dropdown',
         colSpan: 1,
         isMobile: true,
+      },
+      {
+        header: t('Private message'),
+        key: 'privateComment',
+        render(order: OrderFragment) {
+          return (
+            <>
+              {order.fundingTx.privateComment && (
+                <VStack alignItems="flex-start" spacing="0px" w="100%">
+                  <Body size="xs" medium>
+                    {t('Private message')}:
+                  </Body>
+                  <Body size="xs">{order.fundingTx.privateComment}</Body>
+                </VStack>
+              )}
+            </>
+          )
+        },
+        isAccordion: true,
       },
       {
         header: t('Reference code'),
