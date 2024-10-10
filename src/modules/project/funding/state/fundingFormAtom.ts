@@ -332,7 +332,7 @@ export const formattedFundingInputAtom = atom((get) => {
   const affiliates = get(projectAffiliateAtom)
   const affiliateId = getRefIdFromProjectAffiliates(affiliates, fundingProject?.name)
 
-  const { donationAmount, rewardsByIDAndCount, email, comment, media } = formState
+  const { donationAmount, rewardsByIDAndCount, email, comment, media, privateComment } = formState
 
   const anonymous = !user || !user.id
 
@@ -358,6 +358,7 @@ export const formattedFundingInputAtom = atom((get) => {
       ...(email && { email }),
       ...(media && { media }),
       ...(comment && { comment }),
+      ...(privateComment && { privateComment }),
     },
     orderInput: {
       bitcoinQuote: {
