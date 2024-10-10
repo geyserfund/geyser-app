@@ -37,6 +37,7 @@ export type FundFormType = {
   email: string
   media: string
   comment: string
+  privateComment: string
   rewardsByIDAndCount?: { [key: string]: number } | undefined
   rewardCurrency: RewardCurrency
   needsShipping: boolean
@@ -51,6 +52,7 @@ const initialState: FundFormType = {
   shippingCost: 0,
   totalAmount: 0,
   comment: '',
+  privateComment: '',
   email: '',
   media: '',
   rewardsByIDAndCount: undefined,
@@ -122,6 +124,17 @@ export const setResourceAtom = atom(
 export const fundingFormHasRewardsAtom = atom((get) => {
   const fundingFormState = get(fundingFormStateAtom)
   return fundingFormState.rewardsByIDAndCount && Object.keys(fundingFormState.rewardsByIDAndCount).length > 0
+})
+
+/* Boolean to check if the funding form has rewards that require a private comment */
+export const fundingFormHasRewardsThatRequirePrivateCommentAtom = atom((get) => {
+  const fundingFormState = get(fundingFormStateAtom)
+  const { rewards } = get(fundingProjectAtom)
+  const selectedRewards = rewards.filter(
+    (reward) => fundingFormState.rewardsByIDAndCount && fundingFormState.rewardsByIDAndCount[reward.id],
+  )
+
+  return selectedRewards.some((reward) => reward.privateCommentPrompts && reward.privateCommentPrompts.length > 0)
 })
 
 /** Reset funing form rewards to it's initial value */
@@ -254,7 +267,6 @@ export const isFundingInputAmountValidAtom = atom((get) => {
     }
   }
 
-  console.log('checking totalAmount', totalAmount)
   if (!isException && walletLimits?.max && totalAmount >= walletLimits.max) {
     return {
       title: `Amount above the project wallet limit: ${commaFormatted(walletLimits.max)} sats.`,
@@ -280,6 +292,8 @@ export const isFundingUserInfoValidAtom = atom((get) => {
 
   const hasSelectedRewards = get(fundingFormHasRewardsAtom)
 
+  const hasRewardsThatRequirePrivateComment = get(fundingFormHasRewardsThatRequirePrivateCommentAtom)
+
   if (hasSelectedRewards && !formState.email) {
     return {
       title: 'Email is required when purchasing a reward.',
@@ -292,6 +306,14 @@ export const isFundingUserInfoValidAtom = atom((get) => {
     return {
       title: 'A valid email is required.',
       description: 'Please enter a valid email.',
+      valid: false,
+    }
+  }
+
+  if (hasRewardsThatRequirePrivateComment && !formState.privateComment) {
+    return {
+      title: 'Private message is required.',
+      description: 'Please enter a private message.',
       valid: false,
     }
   }
@@ -310,7 +332,7 @@ export const formattedFundingInputAtom = atom((get) => {
   const affiliates = get(projectAffiliateAtom)
   const affiliateId = getRefIdFromProjectAffiliates(affiliates, fundingProject?.name)
 
-  const { donationAmount, rewardsByIDAndCount, email, comment, media } = formState
+  const { donationAmount, rewardsByIDAndCount, email, comment, media, privateComment } = formState
 
   const anonymous = !user || !user.id
 
@@ -336,6 +358,7 @@ export const formattedFundingInputAtom = atom((get) => {
       ...(email && { email }),
       ...(media && { media }),
       ...(comment && { comment }),
+      ...(privateComment && { privateComment }),
     },
     orderInput: {
       bitcoinQuote: {

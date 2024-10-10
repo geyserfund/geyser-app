@@ -5,6 +5,7 @@ export const FRAGMENT_PROJECT_REWARD = gql`
     id
     name
     description
+    shortDescription
     cost
     images
     deleted
@@ -19,5 +20,7 @@ export const FRAGMENT_PROJECT_REWARD = gql`
     preOrder
     estimatedAvailabilityDate
     estimatedDeliveryInWeeks
+    confirmationMessage
+    privateCommentPrompts
   }
 `

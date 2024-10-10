@@ -5,6 +5,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { getPath } from '@/shared/constants'
 
 import { FundingLayout } from '../../layouts/FundingLayout'
+import { FundingDetailsPrivateCommentPrompt } from './sections/FundingDetailsPrivateCommentPrompt'
 import { FundingDetailsBottomContent, FundingDetailsSideContent } from './sections/FundingDetailsSideContent'
 import { FundingDetailsUserComment } from './sections/FundingDetailsUserComment'
 import { FundingDetailsUserEmail } from './sections/FundingDetailsUserEmail'
@@ -27,6 +28,7 @@ export const FundingDetails = () => {
       containerProps={{ spacing: 6 }}
     >
       <FundingDetailsUserComment />
+      <FundingDetailsPrivateCommentPrompt />
       <FundingDetailsUserEmail />
     </FundingLayout>
   )

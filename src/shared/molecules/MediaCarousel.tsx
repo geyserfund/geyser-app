@@ -10,6 +10,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { AppTheme } from '@/context'
 
+import { ImageCropAspectRatio } from './ImageCropperModal'
 import { RenderImageOrVideo } from './RenderImageOrVideo'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
@@ -74,8 +75,15 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   },
 }))
 
-export const MediaCarousel = ({ links }: { links: string[] }) => {
+export const MediaCarousel = ({
+  links,
+  aspectRatio = ImageCropAspectRatio.Header,
+}: {
+  links: string[]
+  aspectRatio?: ImageCropAspectRatio
+}) => {
   const classes = useStyles()
+
   return (
     <Box w="100%" overflow="hidden">
       <Swiper
@@ -91,7 +99,7 @@ export const MediaCarousel = ({ links }: { links: string[] }) => {
         {links.map((link) => {
           return (
             <SwiperSlide key={link}>
-              <RenderImageOrVideo link={link} borderRadius={0} />
+              <RenderImageOrVideo link={link} borderRadius={0} aspectRatio={aspectRatio} />
             </SwiperSlide>
           )
         })}

@@ -19,3 +19,9 @@ export const QUERY_PROJECT_REWARD = gql`
     }
   }
 `
+
+export const QUERY_REWARD_CATEGORIES = gql`
+  query RewardCategories {
+    projectRewardCategoriesGet
+  }
+`

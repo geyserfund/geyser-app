@@ -1,6 +1,9 @@
 import { Input, InputGroup, InputProps, InputRightAddon } from '@chakra-ui/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useController, UseControllerProps } from 'react-hook-form'
+
+import { RewardCurrency } from '@/types'
+import { toInt } from '@/utils'
 
 import { FieldContainer } from '../form'
 import { Body } from '../typography'
@@ -16,12 +19,40 @@ type Props = UseControllerProps<any, any> &
     required?: boolean
     infoTooltip?: React.ReactNode
     size?: 'sm' | 'md' | 'lg'
-    displayValue?: string
+    currency: RewardCurrency
   }
 
-export function ControlledTextInput(props: Props) {
+export function ControlledAmountInput(props: Props) {
   const { field, formState } = useController(props)
+  const [formattedValue, setFormattedValue] = useState('')
+
+  useEffect(() => {
+    if (field.value) {
+      let initialValue = field.value
+      if (props.currency === RewardCurrency.Usdcent) {
+        initialValue = (initialValue / 100).toFixed(2)
+      }
+
+      setFormattedValue(initialValue.toString())
+    } else {
+      setFormattedValue('')
+    }
+  }, [field.value, props.currency])
+
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9.]/g, '')
+    let formattedAmount = value
+    if (props.currency === RewardCurrency.Usdcent) {
+      formattedAmount = parseFloat(value).toFixed(2)
+    } else {
+      formattedAmount = toInt(value).toFixed(0)
+    }
+
+    setFormattedValue(formattedAmount)
+    field.onChange(
+      props.currency === RewardCurrency.Usdcent ? toInt(parseFloat(formattedAmount) * 100) : toInt(formattedAmount),
+    )
+
     if (field?.onBlur) {
       field.onBlur()
     }
@@ -32,9 +63,8 @@ export function ControlledTextInput(props: Props) {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (field?.onChange) {
-      field.onChange(e)
-    }
+    const value = e.target.value.replace(/[^0-9.]/g, '')
+    setFormattedValue(value)
 
     if (props.onChange) {
       props.onChange(e)
@@ -73,7 +103,7 @@ export function ControlledTextInput(props: Props) {
           onBlur={handleBlur}
           onChange={handleChange}
           width={props.width || '100%'}
-          value={props.displayValue || field?.value || props.value || ''}
+          value={formattedValue}
           isInvalid={Boolean(error)}
           size={props.size || 'md'}
         />

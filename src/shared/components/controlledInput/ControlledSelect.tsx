@@ -2,6 +2,7 @@ import { InputGroup, Select } from '@chakra-ui/react'
 import { useController, UseControllerProps } from 'react-hook-form'
 
 import { FieldContainer } from '../form'
+import { Body } from '../typography'
 
 type Props = UseControllerProps<any, any> & {
   width?: string | number
@@ -21,13 +22,21 @@ export function ControlledSelect(props: Props) {
   const { field } = useController(props)
 
   return (
-    <FieldContainer title={props.label} subtitle={props.description} error={props.error}>
+    <FieldContainer
+      title={
+        <Body size="sm" medium>
+          {props.label}
+        </Body>
+      }
+      subtitle={props.description}
+      error={props.error}
+    >
       <InputGroup width={props.width || '100%'}>
         <Select
           {...field}
           size={props.size}
           onChange={(e) => {
-            field.onChange(e.target.value)
+            field.onChange(e)
             if (props.onChange) {
               props.onChange(e)
             }
@@ -43,7 +52,7 @@ export function ControlledSelect(props: Props) {
           placeholder={props.defaultValue ? undefined : props.placeholder}
           borderColor="neutral.200"
           borderRadius="8px"
-          borderWidth="2px"
+          borderWidth="1px"
         >
           {props.options.map((option) => (
             <option key={option.value} value={option.value}>
