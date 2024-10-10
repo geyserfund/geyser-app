@@ -166,7 +166,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
 
         {!isOtpStarted && (
           <>
-            <VStack w="full" alignItems="start">
+            <VStack w="full" alignItems="start" spacing={0}>
               <Body medium>{t('Or use a social account')}</Body>
               {modalDescription && <Body size="sm">{modalDescription}</Body>}
             </VStack>
