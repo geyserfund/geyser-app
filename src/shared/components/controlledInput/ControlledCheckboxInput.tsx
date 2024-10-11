@@ -1,10 +1,13 @@
-import { Checkbox, CheckboxProps, Text, VStack } from '@chakra-ui/react'
+import { Checkbox, CheckboxProps, VStack } from '@chakra-ui/react'
 import { useController, UseControllerProps } from 'react-hook-form'
+
+import { Body } from '../typography'
 
 type Props = UseControllerProps<any, any> &
   Omit<CheckboxProps, 'size'> & {
     label: string
     error?: string
+    defaultChecked?: boolean
   }
 
 export function ControlledCheckboxInput(props: Props) {
@@ -22,15 +25,15 @@ export function ControlledCheckboxInput(props: Props) {
 
   return (
     <VStack alignItems="flex-start" width="100%">
-      <Checkbox {...field} {...props} onChange={handleChange}>
-        <Text fontSize="14px" color="neutral.700">
+      <Checkbox {...field} {...props} onChange={handleChange} defaultChecked={props.defaultValue || false}>
+        <Body size="sm" color="neutral.700">
           {props.label}
-        </Text>
+        </Body>
       </Checkbox>
       {props.error && (
-        <Text fontSize="14px" fontWeight="400" color="secondary.red">
+        <Body size="sm" fontWeight="400" color="secondary.red">
           {props.error}
-        </Text>
+        </Body>
       )}
     </VStack>
   )

@@ -1,634 +1,456 @@
 /* eslint-disable complexity */
-import { gql, useQuery } from '@apollo/client'
-import { Button, Checkbox, HStack, IconButton, Select, Stack, Switch, Tooltip, VStack } from '@chakra-ui/react'
-import { useSetAtom } from 'jotai'
-import { DateTime } from 'luxon'
-import { useState } from 'react'
+import { Button, HStack, IconButton, Stack, Tooltip, VStack } from '@chakra-ui/react'
+import { Loader } from '@giphy/react-components'
 import { useTranslation } from 'react-i18next'
 import { BiInfoCircle } from 'react-icons/bi'
-import { PiCaretDown, PiCaretLeft, PiX } from 'react-icons/pi'
-import { useNavigate } from 'react-router-dom'
+import { PiArrowLeft, PiCaretDown, PiX } from 'react-icons/pi'
+import { Link, useNavigate } from 'react-router-dom'
 
-import { TextArea, TextInputBox, UploadBox } from '@/components/ui'
-import { useBTCConverter } from '@/helpers'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { rewardsAtom } from '@/modules/project/state/rewardsAtom'
+import { UploadBox } from '@/components/ui'
+import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
+import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+import { ControlledSelect, ControlledTextArea, ControlledTextInput } from '@/shared/components/controlledInput'
+import { ControlledAmountInput } from '@/shared/components/controlledInput/ControlledAmountInput'
+import { ControlledSwitchInput } from '@/shared/components/controlledInput/ControlledSwitchInput'
 import { FieldContainer } from '@/shared/components/form'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { dimensions, ProjectRewardValidations } from '@/shared/constants'
-import { useModal } from '@/shared/hooks'
-import { CalendarButton, CreatorEmailButton, FileUpload, ImageCrop } from '@/shared/molecules'
-import {
-  CreateProjectRewardInput,
-  ProjectRewardFragment,
-  RewardCurrency,
-  Satoshis,
-  UpdateProjectRewardInput,
-  USDCents,
-  useProjectRewardCurrencyUpdateMutation,
-} from '@/types'
-import { commaFormatted, isProjectAnException, toInt, useMobileMode, useNotification } from '@/utils'
+import { getPath } from '@/shared/constants'
+import { CalendarButton, CreatorEmailButton, FileUpload } from '@/shared/molecules'
+import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
+import { MediaControlWithReorder } from '@/shared/molecules/MediaControlWithReorder'
+import { PrivateCommentPrompt, RewardCurrency } from '@/types'
 
-import { UpdateCurrencyModal } from '../components'
+import { UpdateCurrencyModal } from '../components/UpdateCurrencyModal'
+import { useProjectRewardForm } from '../hooks/useProjectRewardForm'
 
 type Props = {
   buttonText: string
   titleText: string
-  rewardSave: Function
-  rewardSaving: boolean
-  rewardData: ProjectRewardFragment
-  createOrUpdate?: 'create' | 'update'
+  isUpdate?: boolean
   isLaunch?: boolean
+  defaultCategory?: string
   hideBackbutton?: boolean
+  rewardId?: string
 }
+
+const MAX_REWARD_IMAGES = 5
 
 export const ProjectRewardForm = ({
   buttonText,
   titleText,
-  rewardSave,
-  rewardSaving,
-  rewardData,
-  createOrUpdate = 'create',
+  isUpdate,
   isLaunch = false,
-  hideBackbutton = false,
+  rewardId,
+  defaultCategory,
 }: Props) => {
   const { t } = useTranslation()
-  const isMobile = useMobileMode()
-
-  const { project, partialUpdateProject, projectOwner } = useProjectAtom()
-  const setRewards = useSetAtom(rewardsAtom)
-
   const navigate = useNavigate()
-  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
-  const { toast } = useNotification()
+
+  const { hasRewards } = useRewardsAtom()
 
   const {
-    isOpen: isCurrencyChangeModalOpen,
-    onClose: closeCurrencyChangeModal,
-    onOpen: openCurrencyChangeModal,
-  } = useModal()
-
-  const projectCurrency = project?.rewardCurrency || RewardCurrency.Usdcent
-  const [rewardCurrency, setRewardCurrency] = useState<RewardCurrency>(projectCurrency)
-  const ownerEmail = projectOwner?.user?.email || ''
-
-  const [reward, setReward] = useState<ProjectRewardFragment>(rewardData)
-  const [originalReward, setOriginalReward] = useState<ProjectRewardFragment>(rewardData)
-
-  const [formCostValue, setFormCostValue] = useState(
-    reward.cost > 0 && project?.rewardCurrency === RewardCurrency.Usdcent
-      ? (reward.cost / 100).toFixed(2)
-      : reward.cost.toFixed(0) || '',
-  )
-  const [formError, setFormError] = useState<any>({})
-
-  const { loading: isRewardCategoriesLoading, data: rewardCategoriesData } = useQuery(gql`
-    query Query {
-      projectRewardCategoriesGet
-    }
-  `)
-
-  const getRewardCreationInputVariables = (): CreateProjectRewardInput => {
-    return {
-      projectId: project?.id,
-      cost: reward.cost,
-      description: reward.description,
-      images: reward.images || [],
-      name: reward.name,
-      maxClaimable: reward.maxClaimable || undefined,
-      hasShipping: reward.hasShipping,
-      isAddon: reward.isAddon,
-      isHidden: reward.isHidden,
-      category: reward.category || null,
-      preOrder: Boolean(reward.preOrder),
-      estimatedAvailabilityDate: reward.preOrder
-        ? reward.estimatedAvailabilityDate
-          ? reward.estimatedAvailabilityDate.valueOf()
-          : null
-        : null,
-      estimatedDeliveryInWeeks: reward.preOrder ? null : reward.estimatedDeliveryInWeeks || null,
-    }
-  }
-
-  const getRewardUpdateProjectRewardInputVariables = (): UpdateProjectRewardInput => {
-    return {
-      projectRewardId: reward.id,
-      cost: reward.cost,
-      description: reward.description,
-      images: reward.images || [],
-      name: reward.name,
-      maxClaimable: reward.maxClaimable || undefined,
-      hasShipping: reward.hasShipping,
-      isAddon: reward.isAddon,
-      isHidden: reward.isHidden,
-      category: reward.category || null,
-      preOrder: Boolean(reward.preOrder),
-      estimatedAvailabilityDate: reward.preOrder
-        ? reward.estimatedAvailabilityDate
-          ? reward.estimatedAvailabilityDate.valueOf()
-          : null
-        : null,
-      estimatedDeliveryInWeeks: reward.preOrder ? null : reward.estimatedDeliveryInWeeks || null,
-    }
-  }
-
-  const handleFormTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = event.target
-    if (name) {
-      setReward((current) => ({ ...current, [name]: value }))
-    }
-  }
-
-  const handleFormCalendarChange = (date: Date) => {
-    setReward((current) => ({ ...current, estimatedAvailabilityDate: date }))
-  }
-
-  const handleMaxClaimableAmountBlur = () => {
-    // set cost with the dollar value converted to cents
-    if (reward.maxClaimable && toInt(reward.maxClaimable) < reward.sold) {
-      setReward((current) => ({
-        ...current,
-        maxClaimable: reward.sold,
-      }))
-      setFormError({
-        ...formError,
-        maxClaimable: 'Limited edition must be at minimum the amount sold',
-      })
-    } else {
-      setReward((current) => ({
-        ...current,
-        maxClaimable: toInt(Math.round(reward.maxClaimable || 0)),
-      }))
-    }
-  }
-
-  const handleCostAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
-    setFormCostValue(value)
-  }
-
-  const handleCostAmountBlur = () => {
-    // Dollar value rounded to two decimal places, satoshis int
-    const costValue =
-      project?.rewardCurrency && project?.rewardCurrency === RewardCurrency.Usdcent
-        ? parseFloat(formCostValue).toFixed(2)
-        : toInt(formCostValue).toFixed(0)
-    setFormCostValue(costValue)
-
-    // set cost to the project reward type
-    setReward((current) => ({
-      ...current,
-      cost:
-        project?.rewardCurrency && project?.rewardCurrency === RewardCurrency.Usdcent
-          ? toInt(parseFloat(costValue) * 100)
-          : toInt(costValue),
-    }))
-  }
-
-  const handleUpload = (url: string) => {
-    setReward((current) => ({ ...current, images: [url] }))
-  }
-
-  const handleDeleteThumbnail = () => {
-    setReward((current) => ({ ...current, images: [] }))
-  }
-
-  const handleFormShippingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setReward((current) => ({ ...current, hasShipping: event.target.checked }))
-  }
-
-  const validateReward = () => {
-    const errors: any = {}
-    let isValid = true
-
-    if (!reward.name) {
-      errors.name = t('Name is a required field')
-      isValid = false
-    } else if (reward.name.length > ProjectRewardValidations.name.maxLength) {
-      errors.name = t('Name should be less than') + ` ${ProjectRewardValidations.name.maxLength} ` + t('characters')
-      isValid = false
-    }
-
-    if (reward.maxClaimable && reward.maxClaimable < 0) {
-      errors.maxClaimable = t(`Limited Edition must be greater than 0 if set.`)
-      isValid = false
-    }
-
-    if (!reward.cost || reward.cost <= 0) {
-      errors.cost = t(`Price must be greater than 0.`)
-      isValid = false
-    }
-
-    const isException = project && isProjectAnException(project?.name)
-
-    if (
-      !isException &&
-      (project?.rewardCurrency && project?.rewardCurrency === RewardCurrency.Usdcent
-        ? parseFloat(formCostValue) * 100
-        : getUSDAmount(toInt(formCostValue) as Satoshis)) > ProjectRewardValidations.cost.maxUSDCentsAmount
-    ) {
-      errors.cost =
-        t('Price must be less than') + ` $${commaFormatted(ProjectRewardValidations.cost.maxUSDCentsAmount / 100)}.`
-      isValid = false
-    }
-
-    if (reward.description && reward.description.length > ProjectRewardValidations.description.maxLength) {
-      errors.description =
-        t('Description should be less than') + ` ${ProjectRewardValidations.description.maxLength} ` + t('characters')
-      isValid = false
-    }
-
-    if (!isValid) {
-      setFormError(errors)
-    }
-
-    return isValid
-  }
-
-  const handleConfirmReward = () => {
-    const isValid = validateReward()
-
-    if (!isValid) {
-      return
-    }
-
-    rewardSave({
-      variables: {
-        input: reward.id > 0 ? getRewardUpdateProjectRewardInputVariables() : getRewardCreationInputVariables(),
-      },
-    })
-  }
-
-  const [updateProjectCurrencyMutation] = useProjectRewardCurrencyUpdateMutation({
-    onCompleted(data) {
-      // Update the project reward currency
-      partialUpdateProject({ rewardCurrency })
-
-      // Update the rewards
-      setRewards(data.projectRewardCurrencyUpdate)
-
-      // Update the rewardId to the new reward Id
-      const newReward = data.projectRewardCurrencyUpdate.find(
-        (newRewards) => newRewards.name === originalReward.name,
-      ) as ProjectRewardFragment
-
-      if (newReward) {
-        setReward((current) => ({
-          ...current,
-          id: newReward.id,
-          cost: newReward.cost,
-        }))
-
-        const newCostValue =
-          rewardCurrency === RewardCurrency.Usdcent ? (newReward.cost / 100).toFixed(2) : newReward.cost.toFixed(0)
-        setFormCostValue(newCostValue)
-
-        // Set the original reward for tracking updates
-        // @TODO: Do a shallow react router update so if the user refreshes it wont 404 the page
-        setOriginalReward((current) => ({ ...current, ...newReward }))
-      } else {
-        setFormCostValue(
-          rewardCurrency === RewardCurrency.Usdcent
-            ? getUSDAmount(toInt(formCostValue) as Satoshis).toFixed(2)
-            : getSatoshisFromUSDCents((parseFloat(formCostValue) * 100) as USDCents).toFixed(0),
-        )
-      }
-
-      // Close the modal
-      closeCurrencyChangeModal()
-
-      // Show the toast
-      toast({
-        title: 'Project updated successfully!',
-        status: 'success',
-      })
-    },
-    onError(error) {
-      setRewardCurrency(rewardCurrency === RewardCurrency.Usdcent ? RewardCurrency.Btcsat : RewardCurrency.Usdcent)
-      toast({
-        title: 'failed to update project',
-        description: `${error}`,
-        status: 'error',
-      })
-    },
+    control,
+    loading,
+    watch,
+    errors,
+    enableSubmit,
+    handleSubmit,
+    setValue,
+    project,
+    projectOwner,
+    currencyChangeModal,
+    rewardLoading,
+    utils,
+  } = useProjectRewardForm({
+    rewardId,
+    isUpdate,
+    isLaunch,
+    defaultCategory,
   })
 
-  const handleChangeProjectCurrency = () => {
-    updateProjectCurrencyMutation({
-      variables: {
-        input: {
-          projectId: Number(project?.id),
-          rewardCurrency,
-        },
-      },
-    })
-  }
+  const ownerEmail = projectOwner?.user?.email || ''
 
-  if ((!project || isRewardCategoriesLoading) && !isLaunch) {
+  const {
+    handleConfirmCurrencyChange,
+    handleCurrencySelectChange,
+    rewardCategories,
+    isRewardCategoriesLoading,
+    handleImageUpload,
+    handleDeleteImage,
+    formatEstimatedAvailabilityDate,
+    pendingCurrency,
+  } = utils
+
+  if (!project || isRewardCategoriesLoading) {
     return null
   }
 
+  if (rewardLoading) {
+    return <Loader />
+  }
+
   return (
-    <>
-      <CardLayout minWidth="100%" {...(isLaunch ? { border: 'none', h: '100%', padding: 0 } : {})} mobileDense>
-        <Stack direction={'row'} align={'center'}>
-          {!hideBackbutton && (
-            <IconButton
-              size="sm"
-              variant="outline"
-              colorScheme="neutral1"
-              aria-label="back-to-creation-rewards"
-              icon={<PiCaretLeft />}
-              color={'neutral.700'}
-              onClick={() => {
-                navigate(-1)
-              }}
-            />
-          )}
-          <Body size="lg" fontWeight={600}>
-            {t(titleText)}
-          </Body>
-        </Stack>
-
-        <Stack direction={{ base: 'column', lg: 'row' }}>
-          <FieldContainer title={t('Reward Name')}>
-            <TextInputBox
-              placeholder={'T-Shirt'}
-              value={reward.name}
-              name="name"
-              onChange={handleFormTextChange}
-              error={formError.name}
-            />
-          </FieldContainer>
-          <VStack spacing={1} alignItems="start" w="100%">
-            <HStack>
-              <Body wordBreak="keep-all" fontWeight={'normal'}>
-                {t('Limited Edition (skip if no limit)')}
-              </Body>
-              <Tooltip
-                label={t(
-                  'Limited Edition rewards cannot be edited after rewards have been purchased to ensure fairness for the first buyers. To change the amounts of Limited Edition rewards create a new reward.',
-                )}
-              >
-                <span>
-                  <BiInfoCircle />
-                </span>
-              </Tooltip>
-            </HStack>
-            <TextInputBox
-              placeholder={'100'}
-              value={reward.maxClaimable || ''}
-              name="maxClaimable"
-              onChange={handleFormTextChange}
-              onBlur={handleMaxClaimableAmountBlur}
-              error={formError.maxClaimable}
-              isDisabled={reward.sold > 0 && Boolean(createOrUpdate === 'update' && originalReward.maxClaimable)}
-              isReadOnly={reward.sold > 0 && Boolean(createOrUpdate === 'update' && originalReward.maxClaimable)}
-            />
-          </VStack>
-        </Stack>
-        <Stack direction={{ base: 'column', lg: 'row' }}>
-          <FieldContainer title={t('Currency')}>
-            <Select
-              value={rewardCurrency}
-              onChange={(event) => {
-                setRewardCurrency(event.target.value as RewardCurrency)
-                openCurrencyChangeModal()
-              }}
-            >
-              <option value={RewardCurrency.Btcsat}>{t('BTC (sats)')}</option>
-              <option value={RewardCurrency.Usdcent}>{t('USD ($)')}</option>
-            </Select>
-          </FieldContainer>
-          <FieldContainer
-            title={`${t('Price')} (${project?.rewardCurrency === RewardCurrency.Usdcent ? 'USD' : 'SATS'})`}
+    <form style={{ width: '100%' }} onSubmit={handleSubmit}>
+      {!isLaunch && (
+        <TopNavContainerBar>
+          <Button
+            as={Link}
+            to={hasRewards ? getPath('projectRewards', project?.name) : getPath('project', project?.name)}
+            size="lg"
+            variant="ghost"
+            colorScheme="neutral1"
+            leftIcon={<PiArrowLeft />}
           >
-            <TextInputBox
-              placeholder={'150'}
-              name="cost"
-              value={formCostValue}
-              isInvalid={formError.cost}
-              onChange={handleCostAmountChange}
-              onBlur={handleCostAmountBlur}
-              error={formError.cost}
-            />
-          </FieldContainer>
-        </Stack>
-        <Stack direction={{ base: 'column', lg: 'row' }}>
-          <FieldContainer title={t('Category')}>
-            <Select
-              value={reward.category || ''}
-              onChange={(event) => {
-                setReward((current) => ({
-                  ...current,
-                  category: event.target.value,
-                }))
-              }}
-            >
-              <option value="">{t('Select Category')}</option>
-              {rewardCategoriesData?.projectRewardCategoriesGet &&
-                rewardCategoriesData?.projectRewardCategoriesGet.map((category: string) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-            </Select>
-          </FieldContainer>
-        </Stack>
-        <Stack direction={{ base: 'column', lg: 'row' }}>
-          <FieldContainer title={t('Description')}>
-            <TextArea
-              placeholder={t('Describe the item you would like to sell')}
-              value={reward.description || ''}
-              name="description"
-              onChange={handleFormTextChange}
-              error={formError.description}
-            />
-          </FieldContainer>
-        </Stack>
-        <Stack direction={{ base: 'column' }}>
-          <FieldContainer title={t('Image')}>
-            <FileUpload
-              showcase
-              containerProps={{ w: '100%' }}
-              src={reward.images[0]}
-              onUploadComplete={handleUpload}
-              onDeleteClick={handleDeleteThumbnail}
-              childrenOnLoading={<UploadBox loading h={10} />}
-              imageCrop={ImageCrop.Reward}
-            >
-              <UploadBox h={10} title="Select an Image" />
-            </FileUpload>
-          </FieldContainer>
-          <HStack w={'100%'} justifyContent={'center'}>
-            <Body fontSize={'sm'} muted>
-              {t('The ideal image ratio is 16:9, such as 1600x900 pixels.')}
-            </Body>
-          </HStack>
-        </Stack>
-        <Stack direction={{ base: 'column', lg: 'row' }} my={4} gap={1}>
-          <VStack flex={1} alignItems={'start'}>
-            <HStack w={'100%'}>
-              <Body wordBreak="keep-all" fontWeight={500}>
-                {t('Pre-Order')}
-              </Body>
-              <Switch
-                isChecked={reward.preOrder}
-                size={'md'}
-                sx={{ '--switch-track-width': '2.4rem' }}
-                onChange={() => {
-                  setReward((current) => ({ ...current, preOrder: Boolean(!reward.preOrder) }))
-                }}
-              />
-            </HStack>
-            <Body fontWeight={400} pr={{ base: 0, lg: 2 }} maxWidth={'450px'}>
-              {t(
-                "For rewards that are still in development and not ready to ship, set them to 'Pre-order' to enable advance purchases by users.",
-              )}
-            </Body>
-          </VStack>
-          {reward.preOrder ? (
-            <FieldContainer title={t('Expected Availability Date')} boldTitle={true} flex={1}>
-              <div style={{ position: 'relative', width: '100%', zIndex: 1000 }}>
-                <CalendarButton
-                  onChange={handleFormCalendarChange}
-                  value={reward.estimatedAvailabilityDate}
-                  containerProps={{ w: '100%' }}
-                  showMonthYearPicker={true}
-                >
-                  <TextInputBox
-                    width="full"
-                    border="none"
-                    backgroundColor="transparent"
-                    value={
-                      reward.estimatedAvailabilityDate
-                        ? DateTime.fromJSDate(reward.estimatedAvailabilityDate).toFormat('yyyy LLL')
-                        : 'Select date'
-                    }
-                    rightIcon={
-                      reward.estimatedAvailabilityDate ? (
-                        <IconButton
-                          aria-label="clear-date"
-                          icon={<PiX />}
-                          variant="ghost"
-                          onClick={() => {
-                            setReward((current) => ({
-                              ...current,
-                              estimatedAvailabilityDate: undefined,
-                            }))
-                          }}
-                        />
-                      ) : (
-                        <PiCaretDown />
-                      )
-                    }
-                  />
-                </CalendarButton>
-              </div>
-              <Body fontWeight={400}>
-                {t("Use “Expected Availability Date' to set when your reward will be developed and available.")}
-              </Body>
-            </FieldContainer>
-          ) : (
-            <FieldContainer title={t('Delivery Time (Weeks)')} boldTitle={true}>
-              <TextInputBox
-                placeholder={'Enter number of weeks'}
-                name="estimatedDeliveryInWeeks"
-                value={
-                  reward.estimatedDeliveryInWeeks && reward.estimatedDeliveryInWeeks > 0
-                    ? reward.estimatedDeliveryInWeeks
-                    : undefined
-                }
-                isInvalid={formError.estimatedDeliveryInWeeks}
-                onChange={(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-                  const { value } = event.target
-                  setReward((current) => ({
-                    ...current,
-                    estimatedAvailabilityDate: null,
-                    estimatedDeliveryInWeeks: toInt(value),
-                  }))
-                }}
-                error={formError.estimatedDeliveryInWeeks}
-              />
-              <Body fontWeight={400}>
-                {t('Specify estimated delivery time for the reward from the moment it is ordered.')}
-              </Body>
-            </FieldContainer>
-          )}
-        </Stack>
-        <VStack spacing={4} w="100%" align={'flex-start'}>
-          <FieldContainer>
-            <Checkbox w="100%" isChecked={reward.hasShipping} onChange={handleFormShippingChange}>
-              <Body bold>{t('Ask for shipping address')}</Body>
-            </Checkbox>
-            {reward.hasShipping ? (
-              <VStack pl={2} spacing={2} borderLeft="2px solid" borderColor="primary.400" align={'flex-start'}>
-                <Body medium>
-                  {t(
-                    'To maintain their privacy, we ask reward buyers to email you their shipping details directly to your email. Make sure your email is up to date:',
-                  )}
-                </Body>
+            {hasRewards ? t('Back to rewards') : t('Back to project')}
+          </Button>
 
-                <CreatorEmailButton email={ownerEmail} />
-              </VStack>
-            ) : null}
-          </FieldContainer>
-        </VStack>
-        <Stack
-          {...(isLaunch
-            ? {
-                h: '100%',
-                w: '100%',
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }
-            : {})}
-          {...(isMobile && !isLaunch
-            ? { position: 'fixed', top: `${dimensions.topNavBar.mobile.height + 2}px`, right: `${12 + 2}px` }
-            : {})}
-          zIndex={4}
-        >
-          {isLaunch && (
-            <Button size="lg" variant="outline" colorScheme="neutral1" flexGrow={1} onClick={() => navigate(-1)}>
-              {t('Cancel')}
-            </Button>
-          )}
           <Button
             {...(isLaunch ? { flexGrow: 1 } : {})}
             size="lg"
             display={{ base: 'block' }}
             variant="solid"
             colorScheme="primary1"
-            onClick={handleConfirmReward}
-            isLoading={rewardSaving}
+            type="submit"
+            isLoading={loading}
+            isDisabled={!enableSubmit}
           >
             {buttonText}
           </Button>
-        </Stack>
+        </TopNavContainerBar>
+      )}
+      <CardLayout
+        minWidth="100%"
+        justifyContent="center"
+        alignItems="center"
+        bg={isLaunch ? 'transparent' : 'neutralAlpha.1'}
+        border={isLaunch ? 'none' : '1px solid'}
+        mobileDense
+      >
+        <VStack w={{ base: '100%', lg: isLaunch ? '100%' : '75%' }} alignItems="center" justifyContent="center">
+          <HStack w="100%">
+            <Body size="lg" fontWeight={600}>
+              {t(titleText)}
+            </Body>
+          </HStack>
+          <CardLayout w="100%" border={'none'} padding={0} mobileDense gap={6}>
+            <CardLayout>
+              <FieldContainer
+                title={t('Images')}
+                subtitle={t('Add one or multiple images to help showcase your reward')}
+              >
+                <MediaControlWithReorder
+                  links={watch('images')}
+                  updateLinks={(links) => setValue('images', links, { shouldDirty: true })}
+                  aspectRatio={ImageCropAspectRatio.Reward}
+                />
+                <Stack alignItems="start" direction={{ base: 'column', md: 'row' }} w={'full'} pt={4}>
+                  <FileUpload
+                    containerProps={{ flex: 1, w: { base: 'full', md: 'unset' } }}
+                    caption={t('For best fit, select horizontal 4:3 image. Image size limit: 10MB.')}
+                    onUploadComplete={handleImageUpload}
+                    onDeleteClick={handleDeleteImage}
+                    childrenOnLoading={<UploadBox loading h={{ base: '40px', lg: '64px' }} borderRadius="12px" />}
+                    imageCrop={ImageCropAspectRatio.Reward}
+                    isDisabled={watch('images').length >= MAX_REWARD_IMAGES}
+                  >
+                    <UploadBox
+                      h={{ base: '40px', lg: '64px' }}
+                      borderRadius="12px"
+                      flex={1}
+                      title={
+                        watch('images').length >= MAX_REWARD_IMAGES
+                          ? t('Max items reached')
+                          : watch('images').length > 0
+                          ? t('Upload additional image')
+                          : t('Upload image')
+                      }
+                      opacity={watch('images').length >= MAX_REWARD_IMAGES ? 0.5 : 1}
+                      titleProps={{ fontSize: 'lg', light: true }}
+                    />
+                  </FileUpload>
+                </Stack>
+              </FieldContainer>
+            </CardLayout>
+            <Stack direction={{ base: 'column', lg: 'row' }}>
+              <ControlledTextInput
+                label={t('Reward Name')}
+                name="name"
+                control={control}
+                placeholder={'T-Shirt'}
+                error={errors.name?.message}
+                size="sm"
+              />
+              <ControlledTextInput
+                label={t('Limited Edition (skip if no limit)')}
+                name="maxClaimable"
+                control={control}
+                placeholder={'100'}
+                error={errors.maxClaimable?.message}
+                isDisabled={utils.maxClaimableDisabled}
+                infoTooltip={
+                  <Tooltip
+                    label={t(
+                      'Limited Edition rewards cannot be edited after rewards have been purchased to ensure fairness for the first buyers. To change the amounts of Limited Edition rewards create a new reward.',
+                    )}
+                  >
+                    <span>
+                      <BiInfoCircle />
+                    </span>
+                  </Tooltip>
+                }
+                size="sm"
+              />
+            </Stack>
+            <Stack direction={{ base: 'column', lg: 'row' }}>
+              <ControlledSelect
+                label={t('Currency')}
+                name="rewardCurrency"
+                control={control}
+                options={[
+                  { label: t('BTC (sats)'), value: RewardCurrency.Btcsat },
+                  { label: t('USD ($)'), value: RewardCurrency.Usdcent },
+                ]}
+                onChange={handleCurrencySelectChange}
+                size="sm"
+              />
+              <ControlledAmountInput
+                label={`${t('Price')} (${watch('rewardCurrency') === RewardCurrency.Usdcent ? 'USD' : 'SATS'})`}
+                name="cost"
+                control={control}
+                placeholder={'0'}
+                error={errors.cost?.message}
+                size="sm"
+                currency={watch('rewardCurrency')}
+              />
+            </Stack>
+            <Stack direction={{ base: 'column', lg: 'row' }}>
+              <ControlledSelect
+                label={t('Category')}
+                name="category"
+                control={control}
+                options={rewardCategories}
+                placeholder={t('Select Category')}
+                size="sm"
+              />
+            </Stack>
+            <Stack direction={{ base: 'column', lg: 'row' }}>
+              <ControlledTextInput
+                label={t('Short Description')}
+                name="shortDescription"
+                control={control}
+                placeholder={t('Describe the item you would like to sell')}
+                error={errors.shortDescription?.message}
+                size="sm"
+              />
+            </Stack>
+            <Stack direction={{ base: 'column', lg: 'row' }}>
+              <ControlledTextArea
+                label={t('Description')}
+                name="description"
+                control={control}
+                placeholder={t('Describe the item you would like to sell')}
+                error={errors.description?.message}
+                resize="vertical"
+              />
+            </Stack>
+
+            <CardLayout padding={4} overflow="none">
+              <VStack alignItems={'flex-start'}>
+                <ControlledSwitchInput
+                  labelComponent={
+                    <Body size="md" medium>
+                      {t('Pre-Order')}
+                    </Body>
+                  }
+                  name="preOrder"
+                  control={control}
+                  defaultChecked={watch('preOrder')}
+                />
+
+                <Body size={'md'} light pr={{ base: 0, lg: 2 }}>
+                  {t(
+                    "For rewards that are still in development and not ready to ship, set them to 'Pre-order' to enable advance purchases by users.",
+                  )}
+                </Body>
+              </VStack>
+              {watch('preOrder') ? (
+                <VStack alignItems={'flex-start'}>
+                  <Body size={'sm'} medium>
+                    {t('Expected Availability Date')}
+                  </Body>
+                  <CalendarButton
+                    onChange={(value) => setValue('estimatedAvailabilityDate', value)}
+                    containerProps={{ w: '100%' }}
+                    showMonthYearPicker={true}
+                  >
+                    <ControlledTextInput
+                      name="estimatedAvailabilityDate"
+                      control={control}
+                      width="full"
+                      border="none"
+                      backgroundColor="transparent"
+                      displayValue={
+                        formatEstimatedAvailabilityDate(watch('estimatedAvailabilityDate')) || 'Select date'
+                      }
+                      rightAddon={
+                        watch('estimatedAvailabilityDate') ? (
+                          <IconButton
+                            aria-label="clear-date"
+                            icon={<PiX />}
+                            variant="ghost"
+                            onClick={() => {
+                              setValue('estimatedAvailabilityDate', undefined)
+                            }}
+                          />
+                        ) : (
+                          <PiCaretDown />
+                        )
+                      }
+                    />
+                  </CalendarButton>
+                  <Body size={'sm'} light>
+                    {t("Use “Expected Availability Date' to set when your reward will be developed and available.")}
+                  </Body>
+                </VStack>
+              ) : (
+                <VStack alignItems={'flex-start'}>
+                  <Body size={'sm'} medium>
+                    {t('Delivery Time (Weeks)')}
+                  </Body>
+                  <ControlledTextInput
+                    name="estimatedDeliveryInWeeks"
+                    control={control}
+                    placeholder={'Enter number of weeks'}
+                    error={errors.estimatedDeliveryInWeeks?.message}
+                    size="sm"
+                  />
+
+                  <Body size={'sm'} light>
+                    {t('Specify estimated delivery time for the reward from the moment it is ordered.')}
+                  </Body>
+                </VStack>
+              )}
+            </CardLayout>
+
+            <CardLayout padding={4} overflow="none">
+              <VStack alignItems={'flex-start'}>
+                <ControlledTextArea
+                  label={t('Confirmation Message')}
+                  name="confirmationMessage"
+                  description={t(
+                    'Set a custom message to thank contributors, provide important details, or share any additional information you’d like them to know after they claim the reward.',
+                  )}
+                  control={control}
+                  placeholder={t('Enter your message here...')}
+                  resize="vertical"
+                />
+              </VStack>
+            </CardLayout>
+
+            <CardLayout>
+              <VStack alignItems={'flex-start'}>
+                <Body size={'md'} medium>
+                  {t('Private comment')}
+                </Body>
+
+                <Body size={'md'} light>
+                  {t(
+                    'Contributors can always send you a private message with additional information. You can also select predefined options below to request specific details from them in the private message. If selected, the private comment becomes mandatory for the contributor.',
+                  )}
+                </Body>
+                <ControlledSwitchInput
+                  label={t('Ask contributors for Nostr public address (npub)')}
+                  name="privateCommentPrompts"
+                  control={control}
+                  switchPosition="left"
+                  isChecked={utils.isPromptChecked(PrivateCommentPrompt.NostrNpub)}
+                  onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.NostrNpub)}
+                />
+                <ControlledSwitchInput
+                  label={t(
+                    'Ask contributors to specify reward preferences or options based on your reward description',
+                  )}
+                  name="privateCommentPrompts"
+                  control={control}
+                  switchPosition="left"
+                  isChecked={utils.isPromptChecked(PrivateCommentPrompt.ProjectRewardSpecs)}
+                  onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.ProjectRewardSpecs)}
+                />
+              </VStack>
+            </CardLayout>
+
+            <CardLayout spacing={4} w="100%" align={'flex-start'}>
+              <VStack alignItems={'flex-start'}>
+                <ControlledSwitchInput label={t('Ask for shipping address')} name="hasShipping" control={control} />
+
+                <Body size={'md'} light pr={{ base: 0, lg: 2 }}>
+                  {t(
+                    "Enable this option to request the user's shipping address. This is necessary for delivering physical products directly to your supporters.",
+                  )}
+                </Body>
+              </VStack>
+
+              {watch('hasShipping') && (
+                <VStack pl={2} spacing={2} borderLeft="2px solid" borderColor="primary.400" align={'flex-start'}>
+                  <Body medium>
+                    {t(
+                      'Shipping addresses will be requested from the user at checkout and sent to this email address.',
+                    )}
+                  </Body>
+
+                  <CreatorEmailButton email={ownerEmail} />
+                </VStack>
+              )}
+            </CardLayout>
+            {isLaunch && (
+              <Stack
+                h="100%"
+                w="100%"
+                display="flex"
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="flex-end"
+                zIndex={4}
+              >
+                <Button size="lg" variant="outline" colorScheme="neutral1" flexGrow={1} onClick={() => navigate(-1)}>
+                  {t('Cancel')}
+                </Button>
+                <Button
+                  flexGrow={1}
+                  size="lg"
+                  display={{ base: 'block' }}
+                  variant="solid"
+                  colorScheme="primary1"
+                  type="submit"
+                  isLoading={loading}
+                  isDisabled={!enableSubmit}
+                >
+                  {buttonText}
+                </Button>
+              </Stack>
+            )}
+          </CardLayout>
+        </VStack>
       </CardLayout>
+
       <UpdateCurrencyModal
-        isOpen={isCurrencyChangeModalOpen}
-        onClose={() => {
-          setRewardCurrency(rewardCurrency === RewardCurrency.Usdcent ? RewardCurrency.Btcsat : RewardCurrency.Usdcent)
-          closeCurrencyChangeModal()
-        }}
+        isOpen={currencyChangeModal.isOpen}
+        onClose={currencyChangeModal.onClose}
         title={`${t('Are you sure you want to make the change?')}`}
-        confirm={handleChangeProjectCurrency}
+        confirm={handleConfirmCurrencyChange}
         description={`${t(
           'Please note that all reward prices will be automatically updated to reflect their equivalent value in SWITCH_TO_REWARD_CURRENCY, based on the current Bitcoin price in US Dollars. If you wish you can update prices individually for each reward on reward’s page.',
-        ).replace('SWITCH_TO_REWARD_CURRENCY', rewardCurrency === RewardCurrency.Usdcent ? 'USD' : 'Bitcoin')}`}
+        ).replace('SWITCH_TO_REWARD_CURRENCY', pendingCurrency === RewardCurrency.Usdcent ? 'USD' : 'Bitcoin')}`}
         warning={`${t(
           'You are about to switch the currency denomination for all your rewards from CURRENT_REWARD_CURRENCY to SWITCH_TO_REWARD_CURRENCY. ',
         )
-          .replace('SWITCH_TO_REWARD_CURRENCY', rewardCurrency === RewardCurrency.Usdcent ? 'USD($)' : 'Bitcoin(sats)')
+          .replace('SWITCH_TO_REWARD_CURRENCY', pendingCurrency === RewardCurrency.Usdcent ? 'USD($)' : 'Bitcoin(sats)')
           .replace(
             'CURRENT_REWARD_CURRENCY',
-            project?.rewardCurrency === RewardCurrency.Usdcent ? 'USD($)' : 'Bitcoin(sats)',
+            watch('rewardCurrency') === RewardCurrency.Usdcent ? 'USD($)' : 'Bitcoin(sats)',
           )}`}
       />
-    </>
+    </form>
   )
 }

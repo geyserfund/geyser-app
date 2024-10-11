@@ -5,6 +5,7 @@ export const defaultProjectReward: ProjectReward = {
   id: 0,
   name: '',
   description: '',
+  shortDescription: '',
   cost: 0,
   images: [],
   deleted: false,
@@ -19,4 +20,5 @@ export const defaultProjectReward: ProjectReward = {
   isAddon: false,
   isHidden: false,
   preOrder: true,
+  privateCommentPrompts: [],
 }

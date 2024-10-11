@@ -11,6 +11,8 @@ import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
 import { dimensions, getPath } from '@/shared/constants'
 import { MarkdownField } from '@/shared/markdown/MarkdownField'
+import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
+import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { RewardCurrency, Satoshis, USDCents, useProjectRewardQuery } from '@/types'
 import { useMobileMode } from '@/utils'
@@ -131,7 +133,7 @@ export const RewardView = () => {
               <HStack display={{ base: 'none', lg: 'flex' }}>{renderAmountComponent()}</HStack>
             </HStack>
           </VStack>
-          {reward.images[0] && (
+          {reward.images.length <= 1 ? (
             <Box overflow={'hidden'} width="100%" position="relative" paddingTop="75%" borderRadius={'8px'}>
               <ImageWithReload
                 src={reward.images[0] || ''}
@@ -144,6 +146,8 @@ export const RewardView = () => {
                 left={0}
               />
             </Box>
+          ) : (
+            <MediaCarousel links={reward.images} aspectRatio={ImageCropAspectRatio.Reward} />
           )}
           <HStack
             w="full"

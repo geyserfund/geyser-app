@@ -27,6 +27,8 @@ export const RenderImageOrVideo = forwardRef(
 
     const vimeoThumbnail = getVimeoThumbailFromLink(link)
 
+    const objectFit = enableDrag || aspectRatio === ImageCropAspectRatio.Reward ? 'cover' : 'contain'
+
     return (
       <Box
         ref={ref}
@@ -94,7 +96,7 @@ export const RenderImageOrVideo = forwardRef(
           <ImageWithReload
             width="100%"
             height="100%"
-            objectFit={enableDrag ? 'cover' : 'contain'}
+            objectFit={objectFit}
             src={isImage ? link : youtubeThumbnail || vimeoThumbnail || undefined}
           />
         ) : (

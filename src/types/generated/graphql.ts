@@ -289,6 +289,7 @@ export type CreateProjectInput = {
 
 export type CreateProjectRewardInput = {
   category?: InputMaybe<Scalars['String']['input']>;
+  confirmationMessage?: InputMaybe<Scalars['String']['input']>;
   /** Cost of the reward, currently only in USD cents */
   cost: Scalars['Int']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
@@ -301,7 +302,9 @@ export type CreateProjectRewardInput = {
   maxClaimable?: InputMaybe<Scalars['Int']['input']>;
   name: Scalars['String']['input'];
   preOrder?: InputMaybe<Scalars['Boolean']['input']>;
+  privateCommentPrompts: Array<PrivateCommentPrompt>;
   projectId: Scalars['BigInt']['input'];
+  shortDescription?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateWalletInput = {
@@ -545,6 +548,7 @@ export type FundingCreateFromPodcastKeysendInput = {
   externalId?: InputMaybe<Scalars['String']['input']>;
   externalUsername?: InputMaybe<Scalars['String']['input']>;
   paidAt: Scalars['Date']['input'];
+  privateComment?: InputMaybe<Scalars['String']['input']>;
   projectId: Scalars['BigInt']['input'];
 };
 
@@ -568,6 +572,7 @@ export type FundingMetadataInput = {
   comment?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   media?: InputMaybe<Scalars['String']['input']>;
+  privateComment?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum FundingMethod {
@@ -657,6 +662,7 @@ export type FundingTx = {
   order?: Maybe<Order>;
   paidAt?: Maybe<Scalars['Date']['output']>;
   paymentRequest?: Maybe<Scalars['String']['output']>;
+  privateComment?: Maybe<Scalars['String']['output']>;
   projectGoalId?: Maybe<Scalars['BigInt']['output']>;
   projectId: Scalars['BigInt']['output'];
   source: Scalars['String']['output'];
@@ -1729,6 +1735,11 @@ export type PaginationInput = {
   take?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export enum PrivateCommentPrompt {
+  NostrNpub = 'NOSTR_NPUB',
+  ProjectRewardSpecs = 'PROJECT_REWARD_SPECS'
+}
+
 export type ProfileNotificationSettings = {
   __typename?: 'ProfileNotificationSettings';
   creatorSettings: Array<CreatorNotificationSettings>;
@@ -2038,6 +2049,8 @@ export type ProjectReward = {
   __typename?: 'ProjectReward';
   /** Category of ProjectReward */
   category?: Maybe<Scalars['String']['output']>;
+  /** Confirmation message for the reward */
+  confirmationMessage?: Maybe<Scalars['String']['output']>;
   /** Cost of the reward, priced in USD cents. */
   cost: Scalars['Int']['output'];
   /** The date the creator created the reward */
@@ -2074,10 +2087,14 @@ export type ProjectReward = {
   name: Scalars['String']['output'];
   /** Boolean value to indicate whether this reward is in development or ready to ship */
   preOrder: Scalars['Boolean']['output'];
+  /** Private comment prompts for the reward */
+  privateCommentPrompts: Array<PrivateCommentPrompt>;
   /** Boolean value to indicate whether this reward requires shipping */
   project: Project;
   /** Currency in which the reward cost is stored. */
   rewardCurrency: RewardCurrency;
+  /** Short description of the reward. */
+  shortDescription?: Maybe<Scalars['String']['output']>;
   /** Number of times this Project Reward was sold. */
   sold: Scalars['Int']['output'];
   /** Tracks the stock of the reward */
@@ -2669,6 +2686,7 @@ export type UpdateProjectInput = {
 
 export type UpdateProjectRewardInput = {
   category?: InputMaybe<Scalars['String']['input']>;
+  confirmationMessage?: InputMaybe<Scalars['String']['input']>;
   /** Cost of the reward, priced in USD cents */
   cost?: InputMaybe<Scalars['Int']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
@@ -2681,7 +2699,9 @@ export type UpdateProjectRewardInput = {
   maxClaimable?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   preOrder?: InputMaybe<Scalars['Boolean']['input']>;
+  privateCommentPrompts?: InputMaybe<Array<PrivateCommentPrompt>>;
   projectRewardId: Scalars['BigInt']['input'];
+  shortDescription?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateUserInput = {
@@ -3199,6 +3219,7 @@ export type ResolversTypes = {
   PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>;
   PaginationCursor: ResolverTypeWrapper<PaginationCursor>;
   PaginationInput: PaginationInput;
+  PrivateCommentPrompt: PrivateCommentPrompt;
   ProfileNotificationSettings: ResolverTypeWrapper<ProfileNotificationSettings>;
   Project: ResolverTypeWrapper<Project>;
   ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>;
@@ -3894,6 +3915,7 @@ export type FundingTxResolvers<ContextType = any, ParentType extends ResolversPa
   order?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType>;
   paidAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   paymentRequest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  privateComment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   projectGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -4441,6 +4463,7 @@ export type ProjectRegionsGetResultResolvers<ContextType = any, ParentType exten
 
 export type ProjectRewardResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectReward'] = ResolversParentTypes['ProjectReward']> = {
   category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  confirmationMessage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -4457,8 +4480,10 @@ export type ProjectRewardResolvers<ContextType = any, ParentType extends Resolve
   maxClaimable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   preOrder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  privateCommentPrompts?: Resolver<Array<ResolversTypes['PrivateCommentPrompt']>, ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   rewardCurrency?: Resolver<ResolversTypes['RewardCurrency'], ParentType, ContextType>;
+  shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   stock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -4922,7 +4947,7 @@ export type OrderItemFragment = { __typename?: 'OrderItem', quantity: number, un
 export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, createdAt: any, deliveredAt?: any | null, id: any, shippedAt?: any | null, status: string, totalInSats: number, updatedAt: any, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null } | null, items: Array<(
     { __typename?: 'OrderItem' }
     & OrderItemFragment
-  )>, fundingTx: { __typename?: 'FundingTx', id: any, amount: number, amountPaid: number, donationAmount: number, address?: string | null, email?: string | null, fundingType: FundingType, invoiceStatus: InvoiceStatus, isAnonymous: boolean, status: FundingStatus, uuid?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null } };
+  )>, fundingTx: { __typename?: 'FundingTx', id: any, amount: number, amountPaid: number, donationAmount: number, address?: string | null, email?: string | null, fundingType: FundingType, invoiceStatus: InvoiceStatus, isAnonymous: boolean, status: FundingStatus, uuid?: string | null, privateComment?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null } };
 
 export type FundingTxOrderFragment = { __typename?: 'FundingTx', id: any, invoiceStatus: InvoiceStatus, donationAmount: number, amountPaid: number, amount: number, email?: string | null, paidAt?: any | null, status: FundingStatus, invoiceId?: string | null, uuid?: string | null, affiliateFeeInSats?: number | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, externalId: string, accountType: string, public: boolean }> } | null }, order?: { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, items: Array<(
       { __typename?: 'OrderItem' }
@@ -5671,7 +5696,7 @@ export type ProjectRewardSoldGraphStatsFragment = { __typename?: 'ProjectStats',
 
 export type ProjectFundingMethodStatsFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectFundingTxs?: { __typename?: 'ProjectFundingTxStats', methodSum?: Array<{ __typename?: 'FundingTxMethodSum', sum: number, method?: string | null } | null> | null } | null } | null };
 
-export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null };
+export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, name: string, description?: string | null, shortDescription?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null, confirmationMessage?: string | null, privateCommentPrompts: Array<PrivateCommentPrompt> };
 
 export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
 
@@ -6201,6 +6226,11 @@ export type ProjectRewardQuery = { __typename?: 'Query', getProjectReward: (
     & ProjectRewardFragment
   ) };
 
+export type RewardCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type RewardCategoriesQuery = { __typename?: 'Query', projectRewardCategoriesGet: Array<string> };
+
 export type FundingTxStatusUpdatedSubscriptionVariables = Exact<{
   input?: InputMaybe<FundingTxStatusUpdatedInput>;
 }>;
@@ -6544,6 +6574,7 @@ export const OrderFragmentDoc = gql`
     isAnonymous
     status
     uuid
+    privateComment
   }
 }
     ${OrderItemFragmentDoc}`;
@@ -7732,6 +7763,7 @@ export const ProjectRewardFragmentDoc = gql`
   id
   name
   description
+  shortDescription
   cost
   images
   deleted
@@ -7746,6 +7778,8 @@ export const ProjectRewardFragmentDoc = gql`
   preOrder
   estimatedAvailabilityDate
   estimatedDeliveryInWeeks
+  confirmationMessage
+  privateCommentPrompts
 }
     `;
 export const WalletContributionLimitsFragmentDoc = gql`
@@ -12357,6 +12391,43 @@ export type ProjectRewardQueryHookResult = ReturnType<typeof useProjectRewardQue
 export type ProjectRewardLazyQueryHookResult = ReturnType<typeof useProjectRewardLazyQuery>;
 export type ProjectRewardSuspenseQueryHookResult = ReturnType<typeof useProjectRewardSuspenseQuery>;
 export type ProjectRewardQueryResult = Apollo.QueryResult<ProjectRewardQuery, ProjectRewardQueryVariables>;
+export const RewardCategoriesDocument = gql`
+    query RewardCategories {
+  projectRewardCategoriesGet
+}
+    `;
+
+/**
+ * __useRewardCategoriesQuery__
+ *
+ * To run a query within a React component, call `useRewardCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRewardCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRewardCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRewardCategoriesQuery(baseOptions?: Apollo.QueryHookOptions<RewardCategoriesQuery, RewardCategoriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RewardCategoriesQuery, RewardCategoriesQueryVariables>(RewardCategoriesDocument, options);
+      }
+export function useRewardCategoriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RewardCategoriesQuery, RewardCategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RewardCategoriesQuery, RewardCategoriesQueryVariables>(RewardCategoriesDocument, options);
+        }
+export function useRewardCategoriesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<RewardCategoriesQuery, RewardCategoriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<RewardCategoriesQuery, RewardCategoriesQueryVariables>(RewardCategoriesDocument, options);
+        }
+export type RewardCategoriesQueryHookResult = ReturnType<typeof useRewardCategoriesQuery>;
+export type RewardCategoriesLazyQueryHookResult = ReturnType<typeof useRewardCategoriesLazyQuery>;
+export type RewardCategoriesSuspenseQueryHookResult = ReturnType<typeof useRewardCategoriesSuspenseQuery>;
+export type RewardCategoriesQueryResult = Apollo.QueryResult<RewardCategoriesQuery, RewardCategoriesQueryVariables>;
 export const FundingTxStatusUpdatedDocument = gql`
     subscription FundingTxStatusUpdated($input: FundingTxStatusUpdatedInput) {
   fundingTxStatusUpdated(input: $input) {
