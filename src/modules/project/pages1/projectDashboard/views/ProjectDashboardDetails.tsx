@@ -29,42 +29,47 @@ export const ProjectDashboardDetails = () => {
   })
 
   const onSubmit = async () => {
-    if (!project.location || !project.location.country || !project.location.country.code) {
-      toast.error({
-        title: 'Please select a region',
-        description: 'Project region is required to proceed',
-      })
-      setProjectFormError((prev) => ({ ...prev, location: 'Project region is required' }))
-      return
-    }
+    if (project.location) {
+      if (project.location.region !== 'Online' && (!project.location.country || !project.location.country.code)) {
+        toast.error({
+          title: 'Please select a region',
+          description: 'Project region is required to proceed',
+        })
+        setProjectFormError((prev) => ({ ...prev, location: 'Project region is required' }))
+        return
+      }
 
-    if (ProjectCountryCodesThatAreRestricted.includes(project.location.country.code)) {
-      toast.error({
-        title: 'Country not supported',
-        description: 'We are not able to support projects from this country',
-      })
-      setProjectFormError((prev) => ({ ...prev, location: 'Country not supported' }))
-      return
-    }
+      if (
+        project.location.country?.code &&
+        ProjectCountryCodesThatAreRestricted.includes(project.location.country.code)
+      ) {
+        toast.error({
+          title: 'Country not supported',
+          description: 'We are not able to support projects from this country',
+        })
+        setProjectFormError((prev) => ({ ...prev, location: 'Country not supported' }))
+        return
+      }
 
-    if (linkError.includes(true)) {
-      toast.warning({
-        title: 'failed to update project',
-        description: 'please enter a valid url for project links',
-      })
-      return
-    }
+      if (linkError.includes(true)) {
+        toast.warning({
+          title: 'failed to update project',
+          description: 'please enter a valid url for project links',
+        })
+        return
+      }
 
-    try {
-      await saveProject()
-      await saveTags()
-      toast.success({
-        title: 'Project updated successfully!',
-      })
-    } catch (error) {
-      toast.error({
-        title: 'failed to update project',
-      })
+      try {
+        await saveProject()
+        await saveTags()
+        toast.success({
+          title: 'Project updated successfully!',
+        })
+      } catch (error) {
+        toast.error({
+          title: 'failed to update project',
+        })
+      }
     }
   }
 
