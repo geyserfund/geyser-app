@@ -16,7 +16,7 @@ export const ConfirmationMessages = () => {
   const selectedRewards = rewards.filter((reward) => rewardsByIDAndCount && rewardsByIDAndCount[reward.id])
 
   const items = selectedRewards
-    .filter((reward) => reward.confirmationMessage)
+    .filter((reward) => reward.confirmationMessage && reward.confirmationMessage !== null)
     .map((reward) => ({
       rewardConfirmationMessage: reward.confirmationMessage,
     }))
@@ -56,7 +56,9 @@ const ConfirmationMessage = ({
           {t("Creator's message")}
         </Body>
       </HStack>
-      <Body size="sm">{rewardConfirmationMessage}</Body>
+      <Body size="sm" style={{ whiteSpace: 'pre-wrap' }}>
+        {rewardConfirmationMessage}
+      </Body>
     </VStack>
   )
 }
