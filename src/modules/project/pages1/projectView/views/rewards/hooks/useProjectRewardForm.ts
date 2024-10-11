@@ -29,7 +29,7 @@ type FormValues = Omit<ProjectRewardFragment, 'id' | 'sold'>
 
 const MAX_REWARD_IMAGES = 5
 
-const rewardFormSchema = (soldAmount: number) =>
+const rewardFormSchema = () =>
   yup.object().shape({
     name: yup.string().required('Name is required').max(50, 'Name must be at most 50 characters long'),
     description: yup.string().max(1200, 'Description must be at most 1200 characters long'),
@@ -89,7 +89,7 @@ export const useProjectRewardForm = ({ rewardId, isUpdate, isLaunch, defaultCate
   const soldAmount = data?.getProjectReward?.sold || 0
 
   const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
-    resolver: yupResolver(rewardFormSchema(soldAmount)),
+    resolver: yupResolver(rewardFormSchema()),
     defaultValues: {
       name: data?.getProjectReward?.name || '',
       description: data?.getProjectReward?.description || '',
