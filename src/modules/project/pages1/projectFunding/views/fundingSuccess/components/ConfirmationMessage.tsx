@@ -6,7 +6,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
 
-export const CreatorMessages = () => {
+export const ConfirmationMessages = () => {
   const { rewards } = useRewardsAtom()
 
   const {
@@ -18,26 +18,23 @@ export const CreatorMessages = () => {
   const items = selectedRewards
     .filter((reward) => reward.confirmationMessage)
     .map((reward) => ({
-      rewardName: reward.name,
-      rewardConfirmationMessage: 'Best reward ever!',
+      rewardConfirmationMessage: reward.confirmationMessage,
     }))
 
   if (items.length === 0) return null
 
   return (
     <VStack w="full">
-      {items.map((item) => (
-        <CreatorMessage key={item.rewardName} {...item} />
+      {items.map((item, index) => (
+        <ConfirmationMessage key={index} {...item} />
       ))}
     </VStack>
   )
 }
 
-const CreatorMessage = ({
-  rewardName,
+const ConfirmationMessage = ({
   rewardConfirmationMessage,
 }: {
-  rewardName: string
   rewardConfirmationMessage: string | null | undefined
 }) => {
   const { t } = useTranslation()

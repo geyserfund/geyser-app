@@ -14,7 +14,7 @@ import { FundingStatus } from '@/types'
 import { ProjectFundingSummary } from '../../components/ProjectFundingSummary'
 import { FundingLayout } from '../../layouts/FundingLayout'
 import { SuccessImageComponent } from './components'
-import { CreatorMessages } from './components/CreatorMessage'
+import { ConfirmationMessages } from './components/ConfirmationMessage'
 import { DownloadInvoice } from './components/DownloadInvoice'
 import { SafeToDeleteRefund } from './components/SafeToDeleteRefund'
 import { SendEmailToCreator } from './components/SendEmailToCreator'
@@ -50,7 +50,7 @@ export const FundingSuccess = () => {
           </VStack>
           <SendEmailToCreator />
           <SafeToDeleteRefund />
-          <CreatorMessages />
+          <ConfirmationMessages />
           <Divider />
           <ProjectFundingSummary />
           <DownloadInvoice project={project} fundingTxId={fundingTx.id} />
