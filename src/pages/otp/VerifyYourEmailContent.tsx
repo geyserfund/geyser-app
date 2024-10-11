@@ -1,11 +1,8 @@
-import { Box, Button, Image } from '@chakra-ui/react'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { BsArrowLeft } from 'react-icons/bs'
+import { useEffect, useState } from 'react'
 
-import { Body1 } from '../../components/typography'
+import Loader from '@/components/ui/Loader'
+
 import { useAuthContext } from '../../context'
-import { VerifyEmailImageUrl } from '../../shared/constants'
 import { MfaAction, OtpResponseFragment, useSendOtpByEmailMutation } from '../../types'
 import { useNotification } from '../../utils'
 import { ReceiveOneTimePassword, VerifyOneTimePassword } from './components'
@@ -14,16 +11,17 @@ export interface VerifyYourEmailContentProps {
   action: MfaAction
   otpSent?: boolean
   otpData?: OtpResponseFragment
+  initEmail?: string
   handleVerify?: (otpCode: number, otpData: OtpResponseFragment, email?: string) => void
 }
 
 export const VerifyYourEmailContent = ({
+  initEmail,
   action,
   handleVerify,
   otpSent,
   otpData: otp,
 }: VerifyYourEmailContentProps) => {
-  const { t } = useTranslation()
   const { toast } = useNotification()
   const { user } = useAuthContext()
 
@@ -31,7 +29,7 @@ export const VerifyYourEmailContent = ({
   const [otpData, setOtpData] = useState<OtpResponseFragment | undefined>(otp)
   const [inputEmail, setInputEmail] = useState('')
 
-  const [sendOtpByEmail] = useSendOtpByEmailMutation({
+  const [sendOtpByEmail, { loading }] = useSendOtpByEmailMutation({
     onError() {
       toast({
         status: 'error',
@@ -59,62 +57,25 @@ export const VerifyYourEmailContent = ({
     })
   }
 
-  const getDescription = () => {
-    if (action === MfaAction.ProjectWalletUpdate) {
-      return t('You can update your wallet securely by using the One Time Password sent to your verified email.')
+  useEffect(() => {
+    if (initEmail) {
+      setInputEmail(initEmail)
+      handleSendOtpByEmail(initEmail)
     }
+  }, [initEmail])
 
-    if (action === MfaAction.UserEmailUpdate) {
-      return t('You can update your email securely by using One Time Password sent to your last verfied email.')
-    }
-
-    return t(
-      'Backup your Geyser account and project with your email. This will ensure that you can always access Geyser (in case of social media censorship) and can securely update your project information.',
-    )
+  if (initEmail && loading) {
+    return <Loader />
   }
 
   return (
     <>
-      {sentOtp && (
-        <Button
-          variant="secondary"
-          size={{ base: 'sm', lg: 'md' }}
-          leftIcon={<BsArrowLeft fontSize="20px" />}
-          onClick={() => setSentOtp(false)}
-          alignSelf="start"
-        >
-          {'Back'}
-        </Button>
-      )}
-      <Image src={VerifyEmailImageUrl} alt="verify-email-image" w={200} h={200} alignSelf="center" />
-
-      <Box
-        w="100%"
-        border="2px solid"
-        borderColor={'neutral.200'}
-        borderRadius="8px"
-        justifyContent="center"
-        px={4}
-        py={2}
-      >
-        <Body1 align="center" bold color="neutral.900">
-          {t('Email sent to ')}
-
-          {user?.email}
-        </Body1>
-      </Box>
-
-      <Body1 semiBold>
-        {getDescription()} {t('Check your SPAM folder for the email.')}
-      </Body1>
-
-      <Body1 semiBold></Body1>
       {sentOtp && otpData ? (
         <VerifyOneTimePassword
           action={action}
           otp={otpData}
           handleSendOtpByEmail={handleSendOtpByEmail}
-          inputEmail={inputEmail}
+          inputEmail={inputEmail || user.email || ''}
           handleVerify={handleVerify}
         />
       ) : (
@@ -122,6 +83,7 @@ export const VerifyYourEmailContent = ({
           action={action}
           setInputEmail={setInputEmail}
           handleSendOtpByEmail={handleSendOtpByEmail}
+          loading={loading}
         />
       )}
     </>

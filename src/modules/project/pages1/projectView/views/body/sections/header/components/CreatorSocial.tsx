@@ -1,6 +1,7 @@
 import { Avatar, Button, HStack } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom'
 
+import { Body } from '@/shared/components/typography'
 import { getExternalAccountsButtons } from '@/shared/utils/user/getExternalAccountsButtons'
 
 import { getPath } from '../../../../../../../../../shared/constants'
@@ -29,7 +30,7 @@ export const CreatorSocial = () => {
         colorScheme="neutral1"
         leftIcon={<Avatar p={0} h="16px" w="16px" src={user.imageUrl || ''} />}
       >
-        {user.username}
+        <Body size="sm">{user.username}</Body>
       </Button>
 
       {accountButtonProps.map(({ icon, props, key }) => {

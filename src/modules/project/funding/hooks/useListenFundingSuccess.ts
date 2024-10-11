@@ -25,7 +25,7 @@ export const useListenFundingSuccess = () => {
 
   useEffect(() => {
     if (fundingTx && fundingTx.status === FundingStatus.Paid) {
-      navigate({ pathname: getPath('fundingSuccess', project.name), search: location.search })
+      navigate({ pathname: getPath('fundingSuccess', project.name), search: location.search }, { replace: true })
     }
   }, [fundingTx, navigate, project.name, location.search])
 

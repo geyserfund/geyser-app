@@ -4,6 +4,7 @@ import { FormEvent } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { FundingUserInfoError } from '@/modules/project/funding/state/fundingFormAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
 import { useNotification } from '@/utils'
@@ -31,12 +32,18 @@ export const FundingDetailsSummary = () => {
   const handleCheckoutButtonPressed = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    const { title, description, valid } = isFundingUserInfoValid
+    const { title, description, error, valid } = isFundingUserInfoValid
 
     if (valid) {
       navigate(getPath('fundingPayment', project.name))
-    } else {
+    } else if (error === FundingUserInfoError.EMAIL) {
       setErrorstate({ key: 'email', value: 'Email is a required field' })
+      toast.error({
+        title,
+        description,
+      })
+    } else if (error === FundingUserInfoError.PRIVATE_COMMENT) {
+      setErrorstate({ key: 'privateComment', value: 'Private message is a required field' })
       toast.error({
         title,
         description,

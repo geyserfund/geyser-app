@@ -11,3 +11,13 @@ export const fetchFeaturedProject = async () => {
     },
   }).then((response) => response.json())
 }
+
+export const fetchInfoBannerData = async () => {
+  return fetch(`${AIRTABLE_API}/Info%20Banner?view=Grid%20view`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
+      'Content-Type': 'application/json',
+    },
+  }).then((response) => response.json())
+}

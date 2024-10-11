@@ -1,10 +1,11 @@
-import { Button, VStack } from '@chakra-ui/react'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { Box, Button, HStack, Icon, Input, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiArrowClockwise } from 'react-icons/pi'
+import OtpInput from 'react-otp-input'
 
 import { Body } from '@/shared/components/typography'
 
-import { TextInputBox } from '../../../components/ui'
 import { useAuthContext } from '../../../context'
 import { MfaAction, OtpResponseFragment, useUserEmailVerifyMutation } from '../../../types'
 import { toInt, useNotification } from '../../../utils'
@@ -28,7 +29,7 @@ export const VerifyOneTimePassword = ({
 }: VerifyOneTimePasswordProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
-  const { user, queryCurrentUser } = useAuthContext()
+  const { queryCurrentUser } = useAuthContext()
 
   const [otpCode, setOptCode] = useState('')
 
@@ -65,12 +66,6 @@ export const VerifyOneTimePassword = ({
     },
   })
 
-  const handleOtpCodeInput = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value.length <= 6) {
-      setOptCode(event.target.value)
-    }
-  }
-
   const handleConfirm = () => {
     if (handleVerify) {
       handleVerify(toInt(otpCode), otp, inputEmail)
@@ -89,8 +84,8 @@ export const VerifyOneTimePassword = ({
   }
 
   const handleSendCodeAgain = () => {
-    if (user.email) {
-      handleSendOtpByEmail(user.email)
+    if (inputEmail) {
+      handleSendOtpByEmail(inputEmail)
       handleIntervalTimeLeft()
     }
   }
@@ -105,43 +100,53 @@ export const VerifyOneTimePassword = ({
 
   return (
     <>
-      <VStack spacing="10px">
-        <VStack spacing="10px" w="full">
-          <Body medium>{t('OTP input')}</Body>
-          <TextInputBox
-            size="lg"
-            placeholder="12123"
-            w="full"
-            fontWeight={700}
-            textAlign="center"
-            type="number"
-            value={otpCode}
-            onChange={handleOtpCodeInput}
-          />
+      <VStack spacing={6}>
+        <VStack w="full" alignItems="start">
+          <Body medium>
+            {`${t('We sent you an OTP code to')}: `}
+            <Body as="span" bold>
+              {inputEmail}
+            </Body>
+          </Body>
+          <Body>{t('Paste (or type) it below to continue.')}</Body>
         </VStack>
+        <OtpInput
+          value={otpCode}
+          onChange={setOptCode}
+          numInputs={6}
+          renderSeparator={<Box width="20px" />}
+          inputType="tel"
+          shouldAutoFocus
+          renderInput={(props) => (
+            <Input minWidth="40px" px={1} size="md" w="full" fontWeight={700} textAlign="center" {...props} />
+          )}
+        />
 
-        <VStack w="full" spacing="10px">
+        <HStack w="full" spacing="10px">
           <Button
-            w="full"
-            variant="outline"
+            flex={1}
+            variant="soft"
             colorScheme="neutral1"
+            size="lg"
             onClick={handleSendCodeAgain}
-            isDisabled={!user.email || timeLeft > 0}
+            isDisabled={!inputEmail || timeLeft > 0}
+            rightIcon={timeLeft > 0 ? undefined : <Icon as={PiArrowClockwise} />}
           >
-            {t('Send code again')}
-            {timeLeft > 0 && `( ${timeLeft}s )`}
+            {t('Resend code')}
+            {timeLeft > 0 && ` (${timeLeft}s)`}
           </Button>
           <Button
-            w="full"
+            flex={1}
             variant="solid"
             colorScheme="primary1"
+            size="lg"
             onClick={handleConfirm}
             isLoading={loading}
             isDisabled={!otpCode || otpCode.length !== 6}
           >
             {getButtonText()}
           </Button>
-        </VStack>
+        </HStack>
       </VStack>
     </>
   )

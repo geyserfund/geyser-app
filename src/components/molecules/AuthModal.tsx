@@ -1,10 +1,11 @@
-import { Box, Stack, Text } from '@chakra-ui/layout'
+import { Stack } from '@chakra-ui/layout'
 import { HStack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { ConnectWithEmail } from '@/pages/auth/ConnectWithEmail'
 import { Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 
@@ -18,14 +19,7 @@ import {
   TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS,
 } from '../../pages/auth/ConnectWithSocial'
 import { useRefreshAuthToken } from '../../pages/auth/useAuthToken'
-import {
-  hasFacebookAccount,
-  hasGithubAccount,
-  hasGoogleAccount,
-  hasNostrAccount,
-  hasTwitterAccount,
-  useMobileMode,
-} from '../../utils'
+import { hasFacebookAccount, hasGithubAccount, hasGoogleAccount, hasNostrAccount, hasTwitterAccount } from '../../utils'
 import { Caption } from '../typography'
 
 export type AuthModalAdditionalprops = {
@@ -75,26 +69,26 @@ const ConnectAccounts = ({
   }, [])
 
   return (
-    <VStack justifyContent="center" alignItems="center">
+    <VStack width="full" justifyContent="center" alignItems="center">
       <Stack width="100%" spacing="10px">
         {!hasNostrAccount(user) && showNostr && <ConnectWithNostr onClose={onClose} />}
         {!hasTwitterAccount(user) && showTwitter && (
           <ConnectWithSocial accountType={SocialAccountType.twitter} onClose={onClose} />
         )}
-        {!hasFacebookAccount(user) && showFacebook && (
-          <ConnectWithSocial accountType={SocialAccountType.facebook} onClose={onClose} />
-        )}
-        {/* <ConnectWithEmail onClose={onClose} /> */}
 
-        <Body size="sm">{t('More sign in options')}</Body>
         <HStack w="full" spacing="20px">
-          {!hasGoogleAccount(user) && showGoogle && (
-            <ConnectWithSocial accountType={SocialAccountType.google} onClose={onClose} isIconOnly flex={1} />
+          {!hasFacebookAccount(user) && showFacebook && (
+            <ConnectWithSocial accountType={SocialAccountType.facebook} onClose={onClose} flex={1} />
           )}
+          {!hasGoogleAccount(user) && showGoogle && (
+            <ConnectWithSocial accountType={SocialAccountType.google} onClose={onClose} flex={1} />
+          )}
+        </HStack>
 
-          {showLightning && <ConnectWithLightning flex={1} onClose={onClose} isIconOnly />}
+        <HStack w="full" spacing="20px">
+          {showLightning && <ConnectWithLightning flex={1} onClose={onClose} />}
           {!hasGithubAccount(user) && showGithub && (
-            <ConnectWithSocial flex={1} accountType={SocialAccountType.github} onClose={onClose} isIconOnly />
+            <ConnectWithSocial flex={1} accountType={SocialAccountType.github} onClose={onClose} />
           )}
         </HStack>
       </Stack>
@@ -111,7 +105,9 @@ const ConnectAccounts = ({
 
 export const AuthModal = (authModalProps: AuthModalProps) => {
   const { t } = useTranslation()
-  const isMobile = useMobileMode()
+
+  const [isOtpStarted, setIsOtpStarted] = useState(false)
+
   const {
     isOpen,
     onClose,
@@ -141,11 +137,17 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
     }
   }
 
-  const modalTitle = t(title || 'Sign in to Geyser')
+  const modalTitle = isOtpStarted ? t('Check your email') : title || t(title || 'Sign in to Geyser')
   const modalDescription = t(
     description ||
       'Connect your social account with the biggest social proof, allowing users to discover you and verify your reputation more easily',
   )
+
+  useEffect(() => {
+    return () => {
+      setIsOtpStarted(false)
+    }
+  }, [isOpen])
 
   return (
     <Modal
@@ -157,19 +159,29 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
       onOverlayClick={handlePrivateRouteModalClose}
       onEsc={handlePrivateRouteModalClose}
       title={modalTitle}
+      useInert={false}
     >
-      <Box justifyContent="center" alignItems="center" paddingTop={3}>
-        {modalDescription && <Text marginBottom={5}>{modalDescription}</Text>}
-        <ConnectAccounts
-          onClose={onClose}
-          showNostr={showNostr && !isMobile}
-          showTwitter={showTwitter}
-          showLightning={showLightning}
-          showFacebook={showFacebook}
-          showGoogle={showGoogle}
-          showGithub={showGithub}
-        />
-      </Box>
+      <VStack w="full" justifyContent="center" paddingTop={3} alignItems="start" spacing={4}>
+        <ConnectWithEmail onClose={onClose} isOTPStarted={setIsOtpStarted} />
+
+        {!isOtpStarted && (
+          <>
+            <VStack w="full" alignItems="start" spacing={0}>
+              <Body medium>{t('Or use a social account')}</Body>
+              {modalDescription && <Body size="sm">{modalDescription}</Body>}
+            </VStack>
+            <ConnectAccounts
+              onClose={onClose}
+              showNostr={showNostr && window.nostr}
+              showTwitter={showTwitter}
+              showLightning={showLightning}
+              showFacebook={showFacebook}
+              showGoogle={showGoogle}
+              showGithub={showGithub}
+            />
+          </>
+        )}
+      </VStack>
     </Modal>
   )
 }

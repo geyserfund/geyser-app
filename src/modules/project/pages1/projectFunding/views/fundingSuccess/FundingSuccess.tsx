@@ -14,6 +14,7 @@ import { FundingStatus } from '@/types'
 import { ProjectFundingSummary } from '../../components/ProjectFundingSummary'
 import { FundingLayout } from '../../layouts/FundingLayout'
 import { SuccessImageComponent } from './components'
+import { ConfirmationMessages } from './components/ConfirmationMessage'
 import { DownloadInvoice } from './components/DownloadInvoice'
 import { SafeToDeleteRefund } from './components/SafeToDeleteRefund'
 import { SendEmailToCreator } from './components/SendEmailToCreator'
@@ -42,13 +43,14 @@ export const FundingSuccess = () => {
         <Confetti gravity={0.07} numberOfPieces={250} />
         <VStack w="full" maxWidth="800px" alignItems="start" spacing={6}>
           <VStack w="full" alignItems="start">
-            <H1 size="2xl" bold>
+            <H1 size="3xl" bold>
               {t('Success')}!
             </H1>
             <SuccessImageComponent />
           </VStack>
           <SendEmailToCreator />
           <SafeToDeleteRefund />
+          <ConfirmationMessages />
           <Divider />
           <ProjectFundingSummary />
           <DownloadInvoice project={project} fundingTxId={fundingTx.id} />

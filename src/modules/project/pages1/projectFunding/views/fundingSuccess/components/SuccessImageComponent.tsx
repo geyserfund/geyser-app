@@ -6,6 +6,7 @@ import { PiCopy, PiShareFat } from 'react-icons/pi'
 
 import { useFundingFlowAtom } from '@/modules/project/funding/hooks/useFundingFlowAtom'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { CampaignContent, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { Body, H3 } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
@@ -30,6 +31,10 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
   const ref = useCallback((node: HTMLDivElement | null) => {
     setSuccessComponent(node)
   }, [])
+
+  const { getShareProjectUrl } = useProjectShare()
+
+  const projectShareUrl = getShareProjectUrl({ clickedFrom: CampaignContent.successScreen })
 
   if (!project) {
     return null
@@ -71,7 +76,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
     return ''
   }
 
-  const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${window.origin}/project/${project.name}`
+  const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${projectShareUrl}`
 
   return (
     <VStack w="full" spacing={6}>

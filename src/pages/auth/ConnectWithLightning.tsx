@@ -94,10 +94,10 @@ export const ConnectWithLightning = ({ onClose, isIconOnly, ...rest }: Omit<Conn
 
   const buttonProps = isIconOnly
     ? {
-        icon: <BoltSvgIcon boxSize={'16px'} />,
+        icon: <BoltSvgIcon boxSize={'16px'} color={'social.lightning'} />,
       }
     : {
-        leftIcon: <BoltSvgIcon boxSize={'16px'} />,
+        leftIcon: <BoltSvgIcon boxSize={'16px'} color={'social.lightning'} />,
       }
 
   return (
@@ -107,12 +107,11 @@ export const ConnectWithLightning = ({ onClose, isIconOnly, ...rest }: Omit<Conn
         size="lg"
         variant="outline"
         colorScheme="neutral1"
-        color={'social.lightning'}
         onClick={onModalOpen}
         {...buttonProps}
         {...rest}
       >
-        {!isIconOnly && t('Continue with Lightning')}
+        {!isIconOnly && t('Lightning')}
       </ButtonComponent>
       {/* To make sure the polling gets stopped, the component is demounted. */}
       {isModalOpen && <ConnectWithLightningModal isOpen={isModalOpen} onClose={handleClose} />}

@@ -14,21 +14,21 @@ export const SocialConfig: { [key in SocialAccountType]: SocialConfigType } = {
   github: {
     hasSocialAccount: (profile) => hasGithubAccount(profile),
     icon: PiGithubLogo,
-    label: 'Continue with Github',
+    label: 'Github',
   },
   google: {
     hasSocialAccount: (profile) => hasGoogleAccount(profile),
     icon: GoogleGLogoIcon,
-    label: 'Continue with Google',
+    label: 'Google',
   },
   twitter: {
     hasSocialAccount: (profile) => hasTwitterAccount(profile),
     icon: PiXLogo,
-    label: 'Continue with Twitter (X)',
+    label: 'Twitter (X)',
   },
   facebook: {
     hasSocialAccount: (profile) => hasFacebookAccount(profile),
     icon: PiFacebookLogo,
-    label: 'Continue with Facebook',
+    label: 'Facebook',
   },
 }

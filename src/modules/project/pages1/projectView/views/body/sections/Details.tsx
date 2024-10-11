@@ -99,7 +99,7 @@ export const Details = () => {
 
         <DetailLine title={t('Launched')}>
           <Body size="sm" medium dark>
-            {DateTime.fromMillis(Number(project.createdAt)).toFormat('dd LLL yyyy')}
+            {DateTime.fromMillis(Number(project.launchedAt)).toFormat('dd LLL yyyy')}
           </Body>
         </DetailLine>
       </CardLayout>
