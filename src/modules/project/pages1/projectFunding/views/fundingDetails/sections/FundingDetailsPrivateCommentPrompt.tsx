@@ -21,6 +21,8 @@ export const FundingDetailsPrivateCommentPrompt = () => {
   const {
     formState: { privateComment, rewardsByIDAndCount },
     setTarget,
+    setErrorstate,
+    fundingFormError,
   } = useFundingFormAtom()
 
   const selectedRewards = rewards.filter((reward) => rewardsByIDAndCount && rewardsByIDAndCount[reward.id])
@@ -29,6 +31,7 @@ export const FundingDetailsPrivateCommentPrompt = () => {
     new Set(selectedRewards.flatMap((reward) => reward.privateCommentPrompts || [])),
   )
 
+  console.log(fundingFormError)
   return (
     <CardLayout width="100%" mobileDense>
       <H1 size="2xl" bold>
@@ -63,6 +66,8 @@ export const FundingDetailsPrivateCommentPrompt = () => {
         name="privateComment"
         backgroundColor={'utils.pbg'}
         onChange={setTarget}
+        isInvalid={Boolean(fundingFormError.privateComment)}
+        onFocus={() => setErrorstate({ key: 'privateComment', value: '' })}
       />
     </CardLayout>
   )

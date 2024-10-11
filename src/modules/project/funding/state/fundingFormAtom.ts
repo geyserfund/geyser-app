@@ -24,6 +24,11 @@ import { fundingTxAtom, selectedGoalIdAtom } from './fundingTxAtom'
 
 export type FundingProject = Pick<ProjectState, 'id' | 'name' | 'rewardCurrency' | 'title' | 'owners'>
 
+export enum FundingUserInfoError {
+  EMAIL = 'email',
+  PRIVATE_COMMENT = 'privateComment',
+}
+
 export type FundingProjectState = FundingProject & {
   wallet?: ProjectPageWalletFragment
   rewards: ProjectRewardFragment[]
@@ -298,6 +303,7 @@ export const isFundingUserInfoValidAtom = atom((get) => {
     return {
       title: 'Email is required when purchasing a reward.',
       description: 'Please enter an email.',
+      error: FundingUserInfoError.EMAIL,
       valid: false,
     }
   }
@@ -306,6 +312,7 @@ export const isFundingUserInfoValidAtom = atom((get) => {
     return {
       title: 'A valid email is required.',
       description: 'Please enter a valid email.',
+      error: FundingUserInfoError.EMAIL,
       valid: false,
     }
   }
@@ -314,11 +321,12 @@ export const isFundingUserInfoValidAtom = atom((get) => {
     return {
       title: 'Private message is required.',
       description: 'Please enter a private message.',
+      error: FundingUserInfoError.PRIVATE_COMMENT,
       valid: false,
     }
   }
 
-  return { title: '', description: '', valid: true }
+  return { title: '', description: '', error: '', valid: true }
 })
 
 /** Formatted Funding Input data, for Fund Mutation */
