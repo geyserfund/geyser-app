@@ -343,6 +343,7 @@ export const ProjectRewardForm = ({
                   )}
                   control={control}
                   placeholder={t('Enter your message here...')}
+                  resize="vertical"
                 />
               </VStack>
             </CardLayout>
