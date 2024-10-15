@@ -266,7 +266,6 @@ export const ProjectRewardForm = ({
                   }
                   name="preOrder"
                   control={control}
-                  defaultChecked={watch('preOrder')}
                 />
 
                 <Body size={'md'} light pr={{ base: 0, lg: 2 }}>
