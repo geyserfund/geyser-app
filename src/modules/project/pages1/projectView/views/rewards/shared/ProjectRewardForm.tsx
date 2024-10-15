@@ -200,6 +200,7 @@ export const ProjectRewardForm = ({
                   </Tooltip>
                 }
                 size="sm"
+                numberOnly
               />
             </Stack>
             <Stack direction={{ base: 'column', lg: 'row' }}>

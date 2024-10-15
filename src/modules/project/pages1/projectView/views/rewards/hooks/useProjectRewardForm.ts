@@ -40,7 +40,6 @@ const rewardFormSchema = () =>
       .typeError('Price is required')
       .required('Price is required')
       .min(0.01, 'Price must be greater than 0'),
-    maxClaimable: yup.number().nullable(),
     images: yup.array().of(yup.string()).max(MAX_REWARD_IMAGES, `Maximum ${MAX_REWARD_IMAGES} images allowed`),
     hasShipping: yup.boolean(),
     isAddon: yup.boolean(),
