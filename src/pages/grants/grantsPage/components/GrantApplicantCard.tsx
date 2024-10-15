@@ -201,7 +201,6 @@ export const GrantApplicantCard = ({
   const { loginOnOpen } = useAuthModal()
 
   const classes = useStyles()
-  const projectLink = getPath('project', project.name)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const currentUserContribution =
@@ -297,14 +296,10 @@ export const GrantApplicantCard = ({
     }
   }
 
-  const handleCardClick = () => {
-    window.location.href = projectLink
-  }
-
   return (
     <Box position="relative">
       <CardLayout as="div" p={2} key={project.id} position="relative" zIndex={1} cursor="pointer">
-        <Box onClick={handleCardClick} display="flex">
+        <Box as={Link} to={getPath('project', project.name)} display="flex">
           <Box mr={3} height={{ base: '90px', lg: '144px' }}>
             <Box className={classNames(classes.image, isMobile ? classes.mobileImage : classes.desktopImage)}>
               <ImageWithReload

@@ -200,6 +200,7 @@ export const ProjectRewardForm = ({
                   </Tooltip>
                 }
                 size="sm"
+                numberOnly
               />
             </Stack>
             <Stack direction={{ base: 'column', lg: 'row' }}>
@@ -265,7 +266,6 @@ export const ProjectRewardForm = ({
                   }
                   name="preOrder"
                   control={control}
-                  defaultChecked={watch('preOrder')}
                 />
 
                 <Body size={'md'} light pr={{ base: 0, lg: 2 }}>

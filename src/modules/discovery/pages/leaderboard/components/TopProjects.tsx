@@ -1,7 +1,7 @@
 import { Box, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiLightning, PiUsers } from 'react-icons/pi'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
@@ -49,24 +49,17 @@ export const TopProjects = ({ period }: TopProjectsProps) => {
 const ProjectItem = ({ project, rank }: { project: GlobalProjectLeaderboardRow; rank: number }) => {
   const { t } = useTranslation()
 
-  const navigate = useNavigate()
-
   const { formatAmount } = useCurrencyFormatter()
 
   const formattedAmountContributed = formatAmount(project.contributionsTotal, 'BTCSAT')
   const formattedUsdAmount = formatAmount(project.contributionsTotalUsd, 'USD')
 
-  const projectUrl = getPath('project', project.projectName)
-
-  const handleClick = () => {
-    navigate(projectUrl)
-  }
-
   return (
     <HStack
       width="100%"
       spacing={4}
-      onClick={handleClick}
+      as={Link}
+      to={getPath('project', project.projectName)}
       _hover={{ backgroundColor: 'neutral1.3', cursor: 'pointer' }}
       py={1}
       px={4}
