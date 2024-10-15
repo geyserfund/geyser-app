@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography'
 import { __production__, __staging__ } from '@/shared/constants'
-import { getPath, GrantsFAQUrl, GrantsPageBannerNoiseGifUrl } from '@/shared/constants'
+import { getPath, GrantsPageBannerNoiseGifUrl } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { useGrantStatisticsQuery } from '@/types'
 import { getShortAmountLabel, useMobileMode } from '@/utils'
@@ -47,7 +47,7 @@ export const GrantsHeader = () => {
   ]
 
   const handleDonateToGeyser = () => {
-    navigate(getPath('projectFunding', GEYSER_PROJECT_NAME))
+    navigate(getPath('projectGoals', GEYSER_PROJECT_NAME))
   }
 
   const Direction = isMobile ? VStack : HStack
@@ -128,7 +128,7 @@ export const GrantsHeader = () => {
             )}
           </Box>
           <HStack w="100%" justifyContent="center">
-            <Link to={GrantsFAQUrl} target="_blank">
+            <Link to={getPath('project', GEYSER_PROJECT_NAME)} target="_blank">
               <Body
                 fontSize={{ base: 'md', lg: 'lg' }}
                 medium
