@@ -17,6 +17,7 @@ type Props = UseControllerProps<any, any> &
     infoTooltip?: React.ReactNode
     size?: 'sm' | 'md' | 'lg'
     displayValue?: string
+    fontSize?: string
   }
 
 export function ControlledTextInput(props: Props) {
@@ -76,6 +77,7 @@ export function ControlledTextInput(props: Props) {
           value={props.displayValue || field?.value || props.value || ''}
           isInvalid={Boolean(error)}
           size={props.size || 'md'}
+          fontSize={props.fontSize || 'md'}
         />
         {props.rightAddon && <InputRightAddon>{props.rightAddon}</InputRightAddon>}
       </InputGroup>
