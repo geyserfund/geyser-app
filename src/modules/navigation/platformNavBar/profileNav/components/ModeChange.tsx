@@ -5,27 +5,31 @@ import { useNavigate } from 'react-router'
 
 import { Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { languageFalgs, LanguageRequestUrl, languages } from '@/shared/constants'
-import { allTranslations } from '@/translations'
+import { languageFalgs, LanguageRequestUrl, languages, lng } from '@/shared/constants'
 import { ColorModeSwitcher } from '@/utils'
+
+const allTranslations = [
+  lng.ar,
+  lng.cz,
+  lng.de,
+  lng.el,
+  lng.en,
+  lng.es,
+  lng.fr,
+  lng.it,
+  lng.ja,
+  lng.pl,
+  lng.pt,
+  lng.sw,
+  lng.tr,
+  lng.zh,
+]
 
 export const ModeChange = () => {
   const { i18n, t } = useTranslation()
   const navigate = useNavigate()
 
   const { isOpen, onClose, onOpen } = useDisclosure()
-
-  const renderLanguages = Object.keys(allTranslations).map((key) => {
-    const translation = allTranslations[key as keyof typeof allTranslations]
-
-    const language = {
-      key,
-      translation,
-      disabled: false,
-    }
-
-    return language
-  })
 
   return (
     <>
@@ -37,28 +41,27 @@ export const ModeChange = () => {
       </HStack>
       <Modal isOpen={isOpen} onClose={onClose} size="xs" title={t('Select language')}>
         <VStack pb={5}>
-          {renderLanguages.map((lng) => (
-            <Tooltip key={lng.key} label={lng.disabled ? t('Coming soon') : ''}>
+          {allTranslations.map((lng) => (
+            <Tooltip key={lng} label={''}>
               <Button
                 variant="surface"
                 colorScheme="neutral1"
                 style={{
-                  fontWeight: i18n.resolvedLanguage === lng.key ? 'bold' : 'normal',
+                  fontWeight: i18n.resolvedLanguage === lng ? 'bold' : 'normal',
                 }}
                 type="submit"
                 onClick={() => {
-                  i18n.changeLanguage(lng.key)
+                  i18n.changeLanguage(lng)
                   navigate(0)
                   onClose()
                 }}
                 w={200}
                 textAlign={'start'}
-                isDisabled={lng.disabled}
               >
                 <HStack w="100%" alignItems="center">
-                  <Body pt={0.5}>{languageFalgs[lng.key]}</Body>
+                  <Body pt={0.5}>{languageFalgs[lng]}</Body>
 
-                  <Body>{languages[lng.key]}</Body>
+                  <Body>{languages[lng]}</Body>
                 </HStack>
               </Button>
             </Tooltip>

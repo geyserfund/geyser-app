@@ -23,7 +23,8 @@
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts"
+    "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts",
+    "language-dev": "node language/languageServer.js"
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",
@@ -178,7 +179,9 @@
     "eslint-plugin-storybook": "^0.8.0",
     "eslint-plugin-testing-library": "^5.10.0",
     "husky": "^8.0.3",
+    "i18next-http-backend": "^2.6.2",
     "jsdom": "^21.1.0",
+    "nodemon": "^3.1.7",
     "prettier": "^2.8.3",
     "sitemap": "^7.1.1",
     "storybook": "^8.0.4",
