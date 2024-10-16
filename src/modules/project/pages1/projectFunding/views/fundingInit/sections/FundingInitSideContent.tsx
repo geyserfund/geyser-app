@@ -9,6 +9,7 @@ import { getPath } from '@/shared/constants'
 import { useNotification } from '@/utils'
 
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
+import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
 
 export const FundingInitBottomContent = () => {
   return <FundingInitSummary />
@@ -16,7 +17,7 @@ export const FundingInitBottomContent = () => {
 
 export const FundingInitSideContent = () => {
   return (
-    <CardLayout w="full" h="full">
+    <CardLayout w="full" h="full" padding={0}>
       <FundingInitSummary />
     </CardLayout>
   )
@@ -43,14 +44,16 @@ export const FundingInitSummary = () => {
   }
 
   return (
-    <form style={{ width: '100%' }} onSubmit={handleCheckoutButtonPressed}>
-      <VStack width={'100%'} borderRadius={'md'} spacing={4} alignItems="start">
+    <form style={{ width: '100%', height: '100%', overflowY: 'visible' }} onSubmit={handleCheckoutButtonPressed}>
+      <FundingSummaryWrapper>
         <ProjectFundingSummary />
+      </FundingSummaryWrapper>
 
+      <FundingCheckoutWrapper>
         <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit">
           {t('Checkout')}
         </Button>
-      </VStack>
+      </FundingCheckoutWrapper>
     </form>
   )
 }
