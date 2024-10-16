@@ -33,6 +33,7 @@ export const FundingSuccess = () => {
 
   return (
     <FundingLayout
+      showBack={false}
       topNavBarRightContent={
         <Button size="lg" as={Link} to={getPath('project', project.name)} variant="soft" colorScheme={'neutral1'}>
           {t('Back to project')}
@@ -52,7 +53,7 @@ export const FundingSuccess = () => {
           <SafeToDeleteRefund />
           <ConfirmationMessages />
           <Divider />
-          <ProjectFundingSummary />
+          <ProjectFundingSummary disableCollapse />
           <DownloadInvoice project={project} fundingTxId={fundingTx.id} />
         </VStack>
       </CardLayout>

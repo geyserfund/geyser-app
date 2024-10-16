@@ -43,7 +43,7 @@ export const ProjectBody = () => {
       <VStack
         flex={1}
         w="full"
-        maxWidth={dimensions.project.leftMainContainer.width}
+        maxWidth={{ base: 'unset', lg: dimensions.project.leftMainContainer.width }}
         spacing={6}
         paddingBottom={{ base: 24, lg: 10 }}
       >

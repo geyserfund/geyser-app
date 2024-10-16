@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Button, Divider, HStack, useDisclosure, VStack } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +12,7 @@ import { useFundCalc } from '../../../../../helpers'
 import { toInt, useMobileMode } from '../../../../../utils'
 import { Badge } from './Badge'
 
-export const ProjectFundingSummary = () => {
+export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
   const { t } = useTranslation()
   const { project } = useProjectAtom()
 
@@ -49,16 +50,19 @@ export const ProjectFundingSummary = () => {
     .filter(Boolean)
     .join(', ')
 
-  const hasDetails = formState.donationAmount > 0 || numberOfRewardsSelected > 0 || getTotalAmount('dollar', name) >= 10
+  const hasDetails = disableCollapse
+    ? false
+    : formState.donationAmount > 0 || numberOfRewardsSelected > 0 || getTotalAmount('dollar', name) >= 10
 
-  const mobileDisplayStyle = { base: hasDetails && isMobileDetailsOpen ? 'flex' : 'none', lg: 'flex' }
+  const mobileDisplayStyle = disableCollapse
+    ? 'flex'
+    : { base: hasDetails && isMobileDetailsOpen ? 'flex' : 'none', lg: 'flex' }
 
   return (
     <motion.div
       layout
       style={{
         width: '100%',
-        overflow: 'hidden',
         alignItems: 'flex-start',
         display: 'flex',
         flexDirection: 'column',
