@@ -1,4 +1,4 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { FormEvent } from 'react'
 import { useNavigate } from 'react-router'

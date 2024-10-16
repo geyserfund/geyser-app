@@ -9,6 +9,7 @@ import { RightSideStickyLayout } from '@/modules/project/components/RightSideSti
 import { dimensions } from '@/shared/constants'
 
 type FundingLayoutProps = {
+  showBack?: boolean
   containerProps?: StackProps
   /** render component on the right side of the top nav bar */
   topNavBarRightContent?: React.ReactNode
@@ -21,6 +22,7 @@ type FundingLayoutProps = {
 }
 
 export const FundingLayout = ({
+  showBack = true,
   topNavBarRightContent,
   sideContent,
   containerProps,
@@ -34,15 +36,17 @@ export const FundingLayout = ({
     <VStack w="full">
       <TopNavContainerBar>
         <HStack>
-          <Button
-            onClick={() => navigate(-1)}
-            size="lg"
-            variant="ghost"
-            colorScheme="neutral1"
-            leftIcon={<PiArrowLeft />}
-          >
-            {t('Go back')}
-          </Button>
+          {showBack && (
+            <Button
+              onClick={() => navigate(-1)}
+              size="lg"
+              variant="ghost"
+              colorScheme="neutral1"
+              leftIcon={<PiArrowLeft />}
+            >
+              {t('Go back')}
+            </Button>
+          )}
         </HStack>
         {topNavBarRightContent}
       </TopNavContainerBar>
