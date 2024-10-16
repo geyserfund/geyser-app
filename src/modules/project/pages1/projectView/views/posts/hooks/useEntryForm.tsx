@@ -191,6 +191,19 @@ export const useEntryForm = (
     [isDirty, saveEntry, getValues, resetForm, toast],
   )
 
+  // TODO:  Update this once wired up with the backend
+  const postTypeOptions = [
+    { label: 'Reward Update', value: 'rewardUpdate' },
+    { label: 'Goal Update', value: 'goalUpdate' },
+    { label: 'Goal Reached', value: 'goalReached' },
+    { label: 'Announcement', value: 'announcement' },
+    { label: 'Behind-The-Scenes', value: 'behindTheScenes' },
+    { label: 'Feedback Request', value: 'feedbackRequest' },
+    { label: 'New Goal', value: 'newGoal' },
+    { label: 'New Reward', value: 'newReward' },
+    { label: 'Impact', value: 'impact' },
+  ]
+
   return {
     loading,
     saving: updateEntry.loading || createEntry.loading,
@@ -200,5 +213,6 @@ export const useEntryForm = (
     setValue,
     isDirty,
     watch,
+    postTypeOptions,
   }
 }

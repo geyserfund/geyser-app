@@ -1,10 +1,12 @@
 import { Box, Button, HStack, Input, Spinner, StackProps, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useCallback, useEffect, useState } from 'react'
-import { PiArrowLeft, PiImages } from 'react-icons/pi'
+import { useTranslation } from 'react-i18next'
+import { PiArrowLeft, PiCaretDown, PiImages, PiPlus } from 'react-icons/pi'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { ImageWithReload, TextArea } from '@/components/ui'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import Loader from '@/components/ui/Loader'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useEntriesAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -18,6 +20,7 @@ import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { Entry, EntryStatus } from '@/types'
 import { isActive, useCustomTheme, useNotification } from '@/utils'
 
+import { LinkGoalsAndRewardsModal } from '../components/LinkGoalsAndRewardsModal'
 import { useEntryForm } from '../hooks/useEntryForm'
 import { ProjectEntryEditor } from '../shared'
 import { entryTemplateForGrantApplicants } from '../utils/entryTemplate'
@@ -25,6 +28,7 @@ import { entryTemplateForGrantApplicants } from '../utils/entryTemplate'
 export const PostCreateEdit = () => {
   const navigate = useNavigate()
   const toast = useNotification()
+  const { t } = useTranslation()
 
   const confirmViewPostModal = useModal()
 
@@ -40,24 +44,27 @@ export const PostCreateEdit = () => {
 
   const [focusFlag, setFocusFlag] = useState('')
 
-  const { loading, saveEntry, saving, publishEntry, publishing, isDirty, setValue, watch } = useEntryForm(
-    project.id,
-    postId,
-    {
-      fetchPolicy: 'network-only',
-      onError() {
-        navigate(getPath('notFound'))
-      },
-      onCompleted(data) {
-        if (data.entry === null) {
+  const { loading, saveEntry, saving, publishEntry, publishing, isDirty, setValue, watch, postTypeOptions } =
+    useEntryForm(
+      project.id,
+      postId,
+      {
+        fetchPolicy: 'network-only',
+        onError() {
           navigate(getPath('notFound'))
-        }
+        },
+        onCompleted(data) {
+          if (data.entry === null) {
+            navigate(getPath('notFound'))
+          }
+        },
       },
-    },
-    entryTemplate,
-  )
+      entryTemplate,
+    )
 
   const entryForm = watch()
+
+  const useLinkGoalsAndRewardsModal = useModal()
 
   useEffect(() => {
     let number: any
@@ -255,6 +262,29 @@ export const PostCreateEdit = () => {
                   </FileUpload>
                 </Box>
 
+                <HStack px={'15px'}>
+                  <CustomSelect
+                    name="postType"
+                    options={postTypeOptions}
+                    placeholder="Post Type"
+                    onChange={handleInput}
+                    dropdownIndicator={<PiCaretDown />}
+                    width={'200px'}
+                    size="sm"
+                  />
+
+                  <Button
+                    size="md"
+                    variant={'surface'}
+                    bg="neutralAlpha.3"
+                    color="neutral1"
+                    rightIcon={<PiPlus fill="neutral1" />}
+                    onClick={useLinkGoalsAndRewardsModal.onOpen}
+                  >
+                    {t('Link Goals and Rewards')}
+                  </Button>
+                </HStack>
+
                 <VStack width="100%">
                   <Input
                     id={'entry-title-input'}
@@ -316,6 +346,7 @@ export const PostCreateEdit = () => {
           to: confirmViewPostModal.props.path,
         }}
       />
+      <LinkGoalsAndRewardsModal {...useLinkGoalsAndRewardsModal} />
     </>
   )
 }
