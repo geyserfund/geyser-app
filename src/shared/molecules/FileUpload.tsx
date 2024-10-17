@@ -93,6 +93,7 @@ export const FileUpload = ({
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxFiles: 1,
+    multiple: false,
     accept: { 'image/*': [] },
     disabled: isDisabled,
   })
