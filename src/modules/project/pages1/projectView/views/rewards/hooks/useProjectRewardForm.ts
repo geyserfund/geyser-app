@@ -1,6 +1,7 @@
 /* eslint-disable complexity */
 import { yupResolver } from '@hookform/resolvers/yup'
 import { format } from 'date-fns'
+import { DateTime } from 'luxon'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
@@ -160,7 +161,9 @@ export const useProjectRewardForm = ({ rewardId, isUpdate, isLaunch, defaultCate
       isHidden: formData.isHidden,
       category: formData.category,
       preOrder: formData.preOrder,
-      estimatedAvailabilityDate: formData.estimatedAvailabilityDate,
+      estimatedAvailabilityDate: formData.estimatedAvailabilityDate
+        ? DateTime.fromJSDate(formData.estimatedAvailabilityDate).toMillis()
+        : null,
       estimatedDeliveryInWeeks: formData.estimatedDeliveryInWeeks,
       privateCommentPrompts: formData.privateCommentPrompts,
       confirmationMessage: formData.confirmationMessage,
