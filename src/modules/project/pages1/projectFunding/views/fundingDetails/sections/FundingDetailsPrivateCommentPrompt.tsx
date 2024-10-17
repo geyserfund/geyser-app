@@ -10,6 +10,7 @@ import { PrivateCommentPrompt } from '@/types'
 
 const privateCommentPromptMap: Record<PrivateCommentPrompt, string> = {
   [PrivateCommentPrompt.NostrNpub]: t('Provide your Nostr public address (npub)'),
+  [PrivateCommentPrompt.LightningAddress]: t('Provide your Lightning Address for a full or partial refund'),
   [PrivateCommentPrompt.ProjectRewardSpecs]: t(
     'Specify your desired options for each reward, as mentioned on the rewards page.',
   ),
