@@ -1,12 +1,12 @@
 /* eslint-disable complexity */
 import { Button, HStack, IconButton, Stack, Tooltip, VStack } from '@chakra-ui/react'
-import { Loader } from '@giphy/react-components'
 import { useTranslation } from 'react-i18next'
 import { BiInfoCircle } from 'react-icons/bi'
 import { PiArrowLeft, PiCaretDown, PiX } from 'react-icons/pi'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { UploadBox } from '@/components/ui'
+import Loader from '@/components/ui/Loader'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ControlledSelect, ControlledTextArea, ControlledTextInput } from '@/shared/components/controlledInput'
@@ -265,6 +265,13 @@ export const ProjectRewardForm = ({
                   }
                   name="preOrder"
                   control={control}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setValue('estimatedDeliveryInWeeks', null, { shouldDirty: true })
+                    } else {
+                      setValue('estimatedAvailabilityDate', null, { shouldDirty: true })
+                    }
+                  }}
                   defaultChecked={watch('preOrder')}
                 />
 
@@ -280,7 +287,7 @@ export const ProjectRewardForm = ({
                     {t('Expected Availability Date')}
                   </Body>
                   <CalendarButton
-                    onChange={(value) => setValue('estimatedAvailabilityDate', value)}
+                    onChange={(value) => setValue('estimatedAvailabilityDate', value, { shouldDirty: true })}
                     containerProps={{ w: '100%' }}
                     showMonthYearPicker={true}
                   >
@@ -300,7 +307,7 @@ export const ProjectRewardForm = ({
                             icon={<PiX />}
                             variant="ghost"
                             onClick={() => {
-                              setValue('estimatedAvailabilityDate', undefined)
+                              setValue('estimatedAvailabilityDate', undefined, { shouldDirty: true })
                             }}
                           />
                         ) : (
