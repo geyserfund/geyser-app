@@ -12,6 +12,7 @@ const GRANT_CUSTOM_URL_TO_ID_MAP = {
   bcegrants: 8,
   bitcoin2024: 10,
   thailandbitcoinconference: 11,
+  bonlyconference: 12,
 } as {
   [key: string]: number
 }
