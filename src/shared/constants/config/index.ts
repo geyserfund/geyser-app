@@ -9,5 +9,6 @@ export {
   VITE_APP_FLODESK_API_KEY,
   VITE_APP_GEYSER_NOSTR_PUBKEY,
   VITE_APP_GIPHY_API_KEY,
+  VITE_APP_LNG_PORT,
 } from './env'
 export * from './routerPaths'
