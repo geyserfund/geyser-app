@@ -37,7 +37,6 @@ export function ControlledSwitchInput({ switchPosition = 'right', ...props }: Pr
           sx={{ '--switch-track-width': '2.4rem' }}
           size="md"
           value={field?.value || props.value || false}
-          isChecked={field?.value || props.value || false}
         />
         {switchPosition === 'left' && <>{label}</>}
         {props.error && (
