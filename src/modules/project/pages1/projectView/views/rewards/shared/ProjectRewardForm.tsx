@@ -266,6 +266,12 @@ export const ProjectRewardForm = ({
                   }
                   name="preOrder"
                   control={control}
+                  onChange={(e) => {
+                    setValue('preOrder', e.target.checked, { shouldDirty: true })
+                    setValue('estimatedAvailabilityDate', undefined, { shouldDirty: true })
+                    setValue('estimatedDeliveryInWeeks', undefined, { shouldDirty: true })
+                  }}
+                  isChecked={watch('preOrder')}
                 />
 
                 <Body size={'md'} light pr={{ base: 0, lg: 2 }}>
@@ -382,7 +388,12 @@ export const ProjectRewardForm = ({
 
             <CardLayout spacing={4} w="100%" align={'flex-start'}>
               <VStack alignItems={'flex-start'}>
-                <ControlledSwitchInput label={t('Ask for shipping address')} name="hasShipping" control={control} />
+                <ControlledSwitchInput
+                  label={t('Ask for shipping address')}
+                  name="hasShipping"
+                  control={control}
+                  isChecked={watch('hasShipping')}
+                />
 
                 <Body size={'md'} light pr={{ base: 0, lg: 2 }}>
                   {t(
