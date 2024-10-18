@@ -48,7 +48,6 @@ const rewardFormSchema = () =>
     category: yup.string().nullable(),
     preOrder: yup.boolean(),
     rewardCurrency: yup.string(),
-    estimatedAvailabilityDate: yup.date().nullable(),
     estimatedDeliveryInWeeks: yup.number().nullable().min(0, 'Delivery time must be greater than or equal to 0'),
     confirmationMessage: yup.string().max(500, 'Confirmation message must be at most 500 characters long'),
     privateCommentPrompts: yup.array().of(yup.string()),
