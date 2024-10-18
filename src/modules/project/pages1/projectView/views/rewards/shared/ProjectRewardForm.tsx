@@ -280,7 +280,7 @@ export const ProjectRewardForm = ({
                     {t('Expected Availability Date')}
                   </Body>
                   <CalendarButton
-                    onChange={(value) => setValue('estimatedAvailabilityDate', value)}
+                    onChange={(value) => setValue('estimatedAvailabilityDate', value, { shouldDirty: true })}
                     containerProps={{ w: '100%' }}
                     showMonthYearPicker={true}
                   >
