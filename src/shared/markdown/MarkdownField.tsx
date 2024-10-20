@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Box, HStack, IconButton, VStack } from '@chakra-ui/react'
-import { EditorComponent, Remirror, TableComponents, useCommands, useKeymap, useRemirror } from '@remirror/react'
+import { TableComponents } from '@remirror/extension-react-tables'
+import { EditorComponent, Remirror, useCommands, useKeymap, useRemirror } from '@remirror/react'
 import { ForwardedRef, useCallback } from 'react'
 import { Control } from 'react-hook-form'
 import { PiMarkdownLogo } from 'react-icons/pi'

@@ -34,6 +34,9 @@ const Container = styled(Box, {
     '& a': {
       textDecoration: 'underline',
     },
+    '& code': {
+      lineBreak: 'anywhere',
+    },
     width: '100%',
   },
 })
