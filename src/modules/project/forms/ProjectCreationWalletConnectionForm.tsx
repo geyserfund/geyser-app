@@ -65,7 +65,7 @@ const FeaturedWalletList = [
     name: 'Speed wallet',
     imageUrl: 'https://storage.googleapis.com/geyser-projects-media/platform/speedWalletLightmode.png',
     imageUrlDark: 'https://storage.googleapis.com/geyser-projects-media/platform/speedWalletDarkmode.png',
-    url: 'https://www.speed.app',
+    url: 'https://tinyurl.com/speed-wallet-platform',
     backgroundColor: 'transparent',
     padding: '9px',
   },
