@@ -1,5 +1,5 @@
 import { useCommands } from '@remirror/react'
-import { BiLink } from 'react-icons/bi'
+import { PiLink } from 'react-icons/pi'
 
 import { InsertLinkModal, MarkdownLink, useInsertLinkModal } from '../modals/InsertLinkModal'
 import { ToolbarCommandButton } from './ToolbarCommandButton'
@@ -16,7 +16,7 @@ export const LinkCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
   return (
     <>
       <ToolbarCommandButton name="link" label="Insert link" onClick={() => modal.onOpen()} isDisabled={isDisabled}>
-        <BiLink />
+        <PiLink fontSize="16px" />
       </ToolbarCommandButton>
       {modal.isOpen ? <InsertLinkModal {...modal} /> : null}
     </>

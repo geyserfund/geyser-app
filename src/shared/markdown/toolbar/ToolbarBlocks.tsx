@@ -1,32 +1,31 @@
 import { ButtonGroup } from '@chakra-ui/react'
-import { BiCode, BiListOl, BiListUl } from 'react-icons/bi'
-import { BsQuote } from 'react-icons/bs'
+import { PiCode, PiListBullets, PiListNumbers, PiQuotes } from 'react-icons/pi'
 
 import { ToolbarCommand } from '../commands/ToolbarCommand'
 
 export const ToolbarBlocks = ({ isDisabled }: { isDisabled?: boolean }) => {
   return (
-    <ButtonGroup isAttached py={1}>
+    <ButtonGroup padding={0} spacing={1}>
       <ToolbarCommand
         cmd="toggleBulletList"
         name="bulletList"
         label="Bullet List"
-        Icon={BiListUl}
+        Icon={PiListBullets}
         isDisabled={isDisabled}
       />
       <ToolbarCommand
         cmd="toggleOrderedList"
         name="orderedList"
         label="Ordered List"
-        Icon={BiListOl}
+        Icon={PiListNumbers}
         isDisabled={isDisabled}
       />
-      <ToolbarCommand cmd="toggleCode" name="code" label="Code" Icon={BiCode} isDisabled={isDisabled} />
+      <ToolbarCommand cmd="toggleCode" name="code" label="Code" Icon={PiCode} isDisabled={isDisabled} />
       <ToolbarCommand
         cmd="toggleBlockquote"
         name="blockquote"
         label="Block Quote"
-        Icon={BsQuote}
+        Icon={PiQuotes}
         isDisabled={isDisabled}
       />
     </ButtonGroup>
