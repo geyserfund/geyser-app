@@ -30,7 +30,7 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
       color: 'utils.text',
       borderRadius: '8px',
       height: '32px',
-      fontSize: '16px',
+      fontSize: { base: '12px', lg: '16px' },
       fontWeight: '400',
       paddingX: '12px',
       display: 'flex',

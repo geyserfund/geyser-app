@@ -262,24 +262,25 @@ export const PostCreateEdit = () => {
                   </FileUpload>
                 </Box>
 
-                <HStack px={'15px'}>
+                <HStack w="100%" px={'15px'}>
                   <CustomSelect
                     name="postType"
                     options={postTypeOptions}
                     placeholder="Post Type"
                     onChange={handleInput}
                     dropdownIndicator={<PiCaretDown />}
-                    width={'200px'}
-                    size="sm"
+                    width={{ base: '100%', lg: '200px' }}
+                    size={'sm'}
                   />
 
                   <Button
-                    size="md"
                     variant={'surface'}
                     bg="neutralAlpha.3"
                     color="neutral1"
+                    height={'30px'}
                     rightIcon={<PiPlus fill="neutral1" />}
                     onClick={useLinkGoalsAndRewardsModal.onOpen}
+                    width={{ base: '100%', lg: '200px' }}
                   >
                     {t('Link Goals and Rewards')}
                   </Button>
@@ -360,7 +361,7 @@ const ImageUploadUi = ({ isLoading, ...props }: ImageUploadUiProps) => {
   return (
     <HStack
       width="100%"
-      height="330px"
+      height="64px"
       borderRadius="8px"
       backgroundColor="neutral1.3"
       justifyContent="center"
