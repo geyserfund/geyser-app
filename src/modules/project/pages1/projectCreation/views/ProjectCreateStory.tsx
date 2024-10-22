@@ -69,11 +69,12 @@ export const ProjectCreateStory = () => {
 
   return (
     <ProjectCreateLayout
-      maxWidth="3xl"
+      maxWidth={dimensions.project.posts.view.maxWidth}
       continueButton={<FormContinueButton {...nextProps} flexGrow={1} />}
       onBackClick={onBackCLick}
       height="100%"
       title={<TitleWithProgressBar title={t('Story')} subtitle={t('Create a project')} index={3} length={5} />}
+      innerDesktopContainerProps={{ marginBottom: 20 }}
     >
       <ProjectStoryForm
         autoFocus

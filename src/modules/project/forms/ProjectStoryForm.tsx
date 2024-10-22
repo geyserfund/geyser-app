@@ -7,8 +7,7 @@ import { Body } from '@/shared/components/typography'
 import { MarkdownField, MarkdownFieldSkeleton } from '@/shared/markdown/MarkdownField'
 
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
-import { ProjectValidations } from '../../../shared/constants'
-import { useMobileMode } from '../../../utils'
+import { dimensions, ProjectValidations } from '../../../shared/constants'
 
 interface Props {
   autoFocus?: boolean
@@ -19,7 +18,6 @@ interface Props {
 
 export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolBarBottom }: Props) => {
   const { t } = useTranslation()
-  const isMobile = useMobileMode()
 
   const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
   const [isStoryLoading, setIsStoryLoading] = useState(false)
@@ -55,7 +53,10 @@ export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolBarBottom }: 
                 name="description"
                 flex
                 control={form.control}
-                stickyToolbar={isMobile ? toolBarBottom : undefined}
+                stickyToolbar={toolBarBottom}
+                enableRawMode
+                isFloatingToolbar
+                toolbarMaxWidth={dimensions.project.posts.view.maxWidth}
                 isEditorMode={isEditorMode}
                 toggleEditorMode={handleToggleEditorMode}
               />
