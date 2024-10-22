@@ -5,7 +5,7 @@ import { initReactI18next } from 'react-i18next'
 
 import { __development__, VITE_APP_LNG_PORT } from '@/shared/constants'
 
-const langugePostUrl = `http://localhost:${VITE_APP_LNG_PORT}/language/{{lng}}`
+const languagePostUrl = `http://localhost:${VITE_APP_LNG_PORT}/language/{{lng}}`
 
 i18next
   // detect user language
@@ -22,7 +22,7 @@ i18next
     saveMissing: Boolean(__development__),
     backend: {
       loadPath: '/language/translations/{{lng}}.json',
-      addPath: langugePostUrl,
+      addPath: languagePostUrl,
     },
   })
 
