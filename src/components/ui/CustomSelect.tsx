@@ -87,7 +87,7 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
       components={{ ...components, ...props.components }}
       menuPortalTarget={document.body}
       styles={{
-        menuPortal: (base) => ({ ...base, zIndex: 12 }),
+        menuPortal: (base) => ({ ...base, zIndex: 99999 }),
       }}
     />
   )

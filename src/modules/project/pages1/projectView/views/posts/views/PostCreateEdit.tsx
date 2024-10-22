@@ -33,6 +33,7 @@ import { Entry, EntryStatus } from '@/types'
 import { isActive, useCustomTheme, useNotification } from '@/utils'
 
 import { LinkGoalsAndRewardsModal } from '../components/LinkGoalsAndRewardsModal'
+import { SendViaEmailModal } from '../components/SendViaEmailModal'
 import { useEntryForm } from '../hooks/useEntryForm'
 import { ProjectEntryEditor } from '../shared'
 import { entryTemplateForGrantApplicants } from '../utils/entryTemplate'
@@ -41,6 +42,9 @@ export const PostCreateEdit = () => {
   const navigate = useNavigate()
   const toast = useNotification()
   const { t } = useTranslation()
+
+  // TODO: Update with appropriate value
+  const isPublished = true
 
   const confirmViewPostModal = useModal()
 
@@ -77,6 +81,7 @@ export const PostCreateEdit = () => {
   const entryForm = watch()
 
   const useLinkGoalsAndRewardsModal = useModal()
+  const useSendViaEmailModal = useModal()
 
   useEffect(() => {
     let number: any
@@ -192,6 +197,12 @@ export const PostCreateEdit = () => {
     navigate(pathToGo)
   }
 
+  // TODO: Update the following with proper value
+  const emailAlreadySent = false
+  const handleSendViaEmail = () => {
+    useSendViaEmailModal.onOpen()
+  }
+
   return (
     <>
       <VStack w="full" minHeight="full" paddingBottom={20}>
@@ -203,7 +214,8 @@ export const PostCreateEdit = () => {
             <Button size="lg" variant="soft" colorScheme="neutral1" onClick={handleSaveButtonClick}>
               {t(getSaveButtonText())}
             </Button>
-            {!isEntryPublished && (
+            {/* Change this before commiting */}
+            {isEntryPublished ? (
               <Tooltip label={!isActive(project.status) ? t('Cannot publish entry for inActive project') : ''}>
                 <Button
                   size="lg"
@@ -216,6 +228,16 @@ export const PostCreateEdit = () => {
                   {t('Publish')}
                 </Button>
               </Tooltip>
+            ) : (
+              <Button
+                size="lg"
+                variant="solid"
+                colorScheme="primary1"
+                onClick={handleSendViaEmail}
+                isDisabled={emailAlreadySent}
+              >
+                {t('Send via email')}
+              </Button>
             )}
           </HStack>
         </TopNavContainerBar>
@@ -303,6 +325,7 @@ export const PostCreateEdit = () => {
                   >
                     {t('Link Goals and Rewards')}
                   </Button>
+                  {/* TODO: Add logic to wire up with backend */}
                   <Tag colorScheme="yellow">
                     <TagLeftIcon as={PiHandbag} />
                     <TagLabel>{'Reward name'}</TagLabel>
@@ -375,6 +398,7 @@ export const PostCreateEdit = () => {
         }}
       />
       <LinkGoalsAndRewardsModal {...useLinkGoalsAndRewardsModal} />
+      <SendViaEmailModal {...useSendViaEmailModal} />
     </>
   )
 }
