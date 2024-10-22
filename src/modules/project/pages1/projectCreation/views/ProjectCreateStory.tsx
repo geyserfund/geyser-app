@@ -81,6 +81,9 @@ export const ProjectCreateStory = () => {
         form={form}
         isLoading={loading || !project}
         toolBarBottom={dimensions.bottomNavBar.desktopHeight + 'px'}
+        fieldContainerProps={{
+          subtitle: t('Write a more in-depth description of the project. You can also add images and videos.'),
+        }}
       />
     </ProjectCreateLayout>
   )

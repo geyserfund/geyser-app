@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { Body } from '@/shared/components/typography'
 import { MarkdownField, MarkdownFieldSkeleton } from '@/shared/markdown/MarkdownField'
 
-import { FieldContainer } from '../../../shared/components/form/FieldContainer'
+import { FieldContainer, FieldContainerProps } from '../../../shared/components/form/FieldContainer'
 import { dimensions, ProjectValidations } from '../../../shared/constants'
 
 interface Props {
@@ -14,9 +14,10 @@ interface Props {
   form: UseFormReturn<{ description: string }>
   isLoading?: boolean
   toolBarBottom?: string
+  fieldContainerProps?: FieldContainerProps
 }
 
-export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolBarBottom }: Props) => {
+export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolBarBottom, fieldContainerProps }: Props) => {
   const { t } = useTranslation()
 
   const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
@@ -36,12 +37,7 @@ export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolBarBottom }: 
   return (
     <FormProvider {...form}>
       <VStack width="100%" alignItems="flex-start" spacing={6} flexGrow={1} paddingBottom={{ base: 28, lg: 'unset' }}>
-        <FieldContainer
-          width="100%"
-          flexGrow={1}
-          subtitle={t('Write a more in-depth description of the project. You can also add images and videos.')}
-          paddingBottom={{ base: 28, lg: 10 }}
-        >
+        <FieldContainer width="100%" flexGrow={1} paddingBottom={{ base: 28, lg: 10 }} {...fieldContainerProps}>
           <Box width="100%" pt={3} flexGrow={1} display="flex" flexDirection="column">
             {isStoryLoading ? (
               <MarkdownFieldSkeleton />
