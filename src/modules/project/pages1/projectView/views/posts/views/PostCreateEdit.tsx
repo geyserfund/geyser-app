@@ -1,12 +1,24 @@
-import { Box, Button, HStack, Input, Spinner, StackProps, Tooltip, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  HStack,
+  Input,
+  Select,
+  Spinner,
+  StackProps,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
+  Tooltip,
+  VStack,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiArrowLeft, PiCaretDown, PiImages, PiPlus } from 'react-icons/pi'
+import { PiArrowLeft, PiFlagBannerFold, PiHandbag, PiImages, PiPlus } from 'react-icons/pi'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { ImageWithReload, TextArea } from '@/components/ui'
-import { CustomSelect } from '@/components/ui/CustomSelect'
 import Loader from '@/components/ui/Loader'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useEntriesAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -262,28 +274,43 @@ export const PostCreateEdit = () => {
                   </FileUpload>
                 </Box>
 
-                <HStack w="100%" px={'15px'}>
-                  <CustomSelect
+                <HStack w="100%" px={'15px'} flexWrap={'wrap'} spacing={2} alignItems={'flex-start'}>
+                  <Select
                     name="postType"
-                    options={postTypeOptions}
                     placeholder="Post Type"
                     onChange={handleInput}
-                    dropdownIndicator={<PiCaretDown />}
-                    width={{ base: '100%', lg: '200px' }}
+                    width={'auto'}
+                    height={'24px'}
+                    borderRadius={'8px'}
                     size={'sm'}
-                  />
+                  >
+                    {postTypeOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {' '}
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
 
                   <Button
+                    size={'sm'}
                     variant={'surface'}
                     bg="neutralAlpha.3"
                     color="neutral1"
-                    height={'30px'}
                     rightIcon={<PiPlus fill="neutral1" />}
                     onClick={useLinkGoalsAndRewardsModal.onOpen}
-                    width={{ base: '100%', lg: '200px' }}
+                    width={'auto'}
                   >
                     {t('Link Goals and Rewards')}
                   </Button>
+                  <Tag colorScheme="yellow">
+                    <TagLeftIcon as={PiHandbag} />
+                    <TagLabel>{'Reward name'}</TagLabel>
+                  </Tag>
+                  <Tag colorScheme="blue">
+                    <TagLeftIcon as={PiFlagBannerFold} />
+                    <TagLabel>{'Goal name'}</TagLabel>
+                  </Tag>
                 </HStack>
 
                 <VStack width="100%">
