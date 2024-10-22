@@ -29,6 +29,7 @@ export enum PathName {
   projectManageRewards = 'manage-rewards',
   projectCreateReward = 'create-reward',
   projectEditReward = 'edit-reward',
+  projectStoryEdit = 'story',
 
   refund = 'refund',
   refundInitiated = 'initiated',
@@ -60,7 +61,6 @@ export enum PathName {
   dashboardWallet = 'wallet',
   dashboardNotifications = 'notifications',
   dashboardSettings = 'settings',
-  dashboardStory = 'story',
   dashboardStatus = 'status',
   dashboardNostr = 'nostr',
   dashboardAffiliates = 'affiliate',
@@ -131,6 +131,7 @@ const pathsMap = {
   projectPosts: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectPosts}`,
   projectLeaderboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectLeaderboard}`,
   projectDashboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDashboard}`,
+  projectStoryEdit: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectStoryEdit}`,
 
   /** Project Rewards internal routes */
 
@@ -160,8 +161,6 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardInfo}`,
   dashboardDetails: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardDetails}`,
-  dashboardStory: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardStory}`,
   dashboardWallet: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardWallet}`,
   dashboardNostr: (projectName: string) =>

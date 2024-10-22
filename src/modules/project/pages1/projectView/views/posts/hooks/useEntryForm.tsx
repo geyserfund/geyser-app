@@ -18,7 +18,7 @@ import {
 } from '../../../../../../../types'
 import { toInt, useNotification } from '../../../../../../../utils'
 
-type EntryFormType = Pick<ProjectEntryViewFragment, 'id' | 'title' | 'description' | 'image' | 'content' | 'status'>
+type EntryFormType = Pick<ProjectEntryViewFragment, 'id' | 'title' | 'description' | 'image' | 'markdown' | 'status'>
 
 const schema = yup.object({
   title: yup.string().required('This is a required field'),
@@ -36,9 +36,9 @@ export const useEntryForm = (
 
   const { createEntry, updateEntry, publishEntry } = useProjectEntriesAPI()
 
-  const { formState, setValue, watch, getValues, reset } = useForm<EntryFormType>({
+  const { formState, setValue, watch, getValues, reset, control } = useForm<EntryFormType>({
     defaultValues: {
-      content: entryTemplate.content || '',
+      markdown: entryTemplate.markdown || '',
       description: entryTemplate.description || '',
       image: entryTemplate.image || '',
       title: entryTemplate.title || '',
@@ -51,7 +51,7 @@ export const useEntryForm = (
     reset({
       id: entry.id,
       status: entry.status,
-      content: entry.content,
+      markdown: entry.markdown,
       description: entry.description,
       image: entry.image,
       title: entry.title,
@@ -93,7 +93,7 @@ export const useEntryForm = (
 
       if (entryId || Boolean(entry?.id)) {
         const input: UpdateEntryInput = {
-          content: entry.content,
+          markdown: entry.markdown,
           description: entry.description,
           entryId: entryId || toInt(entry?.id),
           image: entry.image,
@@ -117,7 +117,7 @@ export const useEntryForm = (
       } else {
         const input: CreateEntryInput = {
           projectId: toInt(projectId),
-          content: entry.content,
+          markdown: entry.markdown,
           description: entry.description || '',
           image: entry.image,
           title: entry.title || '',
@@ -200,5 +200,6 @@ export const useEntryForm = (
     setValue,
     isDirty,
     watch,
+    control,
   }
 }

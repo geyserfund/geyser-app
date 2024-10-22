@@ -261,6 +261,7 @@ export type CreateEntryInput = {
   description: Scalars['String']['input'];
   /** Header image of the Entry. */
   image?: InputMaybe<Scalars['String']['input']>;
+  markdown?: InputMaybe<Scalars['String']['input']>;
   projectId: Scalars['BigInt']['input'];
   /** Title of the Entry. */
   title: Scalars['String']['input'];
@@ -416,6 +417,7 @@ export type Entry = {
   id: Scalars['BigInt']['output'];
   /** Header image of the Entry. */
   image?: Maybe<Scalars['String']['output']>;
+  markdown?: Maybe<Scalars['String']['output']>;
   /** Project within which the Entry was created. */
   project?: Maybe<Project>;
   publishedAt?: Maybe<Scalars['String']['output']>;
@@ -1736,6 +1738,7 @@ export type PaginationInput = {
 };
 
 export enum PrivateCommentPrompt {
+  LightningAddress = 'LIGHTNING_ADDRESS',
   NostrNpub = 'NOSTR_NPUB',
   ProjectRewardSpecs = 'PROJECT_REWARD_SPECS'
 }
@@ -2656,6 +2659,7 @@ export type UpdateEntryInput = {
   entryId: Scalars['BigInt']['input'];
   /** Header image of the Entry. */
   image?: InputMaybe<Scalars['String']['input']>;
+  markdown?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -3814,6 +3818,7 @@ export type EntryResolvers<ContextType = any, ParentType extends ResolversParent
   fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  markdown?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   project?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType>;
   publishedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['EntryStatus'], ParentType, ContextType>;
@@ -5633,7 +5638,7 @@ export type ProjectAffiliateLinkFragment = { __typename?: 'AffiliateLink', proje
 
 export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null };
 
-export type ProjectEntryViewFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null, content?: string | null };
+export type ProjectEntryViewFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null, content?: string | null, markdown?: string | null };
 
 export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, user?: (
     { __typename?: 'User' }
@@ -7379,6 +7384,7 @@ export const ProjectEntryViewFragmentDoc = gql`
   createdAt
   publishedAt
   content
+  markdown
 }
     `;
 export const UserAvatarFragmentDoc = gql`

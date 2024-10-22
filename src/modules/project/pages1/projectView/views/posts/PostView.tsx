@@ -20,8 +20,8 @@ import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 import { useProjectEntryLazyQuery } from '@/types'
 import { toInt, useNotification } from '@/utils'
 
+import { MarkdownField } from '../../../../../../shared/markdown/MarkdownField'
 import { PostEditMenu, PostShare } from './components'
-import { ProjectEntryEditor } from './shared'
 
 export const PostView = () => {
   const { project, isProjectOwner } = useProjectAtom()
@@ -148,7 +148,7 @@ export const PostView = () => {
               {entry.description}
             </Body>
 
-            {entry.content && (
+            {entry.markdown && (
               <Box
                 fontSize="16px"
                 color="utils.text"
@@ -160,13 +160,7 @@ export const PostView = () => {
                 }}
                 flex={1}
               >
-                <ProjectEntryEditor
-                  name="content"
-                  value={entry.content}
-                  isReadOnly
-                  noPadding
-                  placeholder={t('The description of the entry .....')}
-                />
+                <MarkdownField preview content={entry.markdown || ''} />
               </Box>
             )}
           </VStack>
