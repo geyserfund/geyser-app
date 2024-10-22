@@ -19,6 +19,7 @@ type Props = UseControllerProps<any, any> &
     required?: boolean
     infoTooltip?: React.ReactNode
     size?: 'sm' | 'md' | 'lg'
+    fontSize?: string
     currency: RewardCurrency
   }
 
@@ -106,6 +107,7 @@ export function ControlledAmountInput(props: Props) {
           value={formattedValue}
           isInvalid={Boolean(error)}
           size={props.size || 'md'}
+          fontSize={props.fontSize || 'md'}
         />
         {props.rightAddon && <InputRightAddon>{props.rightAddon}</InputRightAddon>}
       </InputGroup>

@@ -16,6 +16,7 @@ type Props = UseControllerProps<any, any> & {
   error?: React.ReactNode
   defaultValue?: string | null
   size?: 'sm' | 'md' | 'lg'
+  fontSize?: string
 }
 
 export function ControlledSelect(props: Props) {
@@ -53,6 +54,7 @@ export function ControlledSelect(props: Props) {
           borderColor="neutral.200"
           borderRadius="8px"
           borderWidth="1px"
+          fontSize={props.fontSize || 'md'}
         >
           {props.options.map((option) => (
             <option key={option.value} value={option.value}>
