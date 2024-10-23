@@ -43,9 +43,6 @@ export const PostCreateEdit = () => {
   const toast = useNotification()
   const { t } = useTranslation()
 
-  // TODO: Update with appropriate value
-  const isPublished = true
-
   const confirmViewPostModal = useModal()
 
   const { project, loading: projectLoading } = useProjectAtom()
