@@ -1,8 +1,7 @@
-import { Box, Button, Card, Checkbox, Divider, HStack, Select, Switch, VStack } from '@chakra-ui/react'
-import { ActionMeta, SingleValue } from 'chakra-react-select'
+import { Button, HStack, Switch, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiEnvelopeOpenFill, PiEnvelopeSimple } from 'react-icons/pi'
+import { PiEnvelopeSimple } from 'react-icons/pi'
 
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { CardLayout, Modal } from '@/shared/components/layouts'
@@ -33,7 +32,7 @@ export const SendViaEmailModal = ({ isOpen, onClose }: Props) => {
   ]
 
   const [sendTo, setSendTo] = useState<SendToOption | null>(null)
-  const [emailCount, setEmailCount] = useState<number>(0)
+  const [emailCount] = useState<number>(0)
 
   const handleInput = (e: any) => {
     setSendTo(e.value)
