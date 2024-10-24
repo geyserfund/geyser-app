@@ -20,6 +20,7 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { useState } from 'react'
 
+import { ImageCropAspectRatio } from './ImageCropperModal'
 import { RenderImageOrVideo, RenderImageOrVideoProps } from './RenderImageOrVideo'
 
 type MediaControlWithReorderProps = {
@@ -76,9 +77,18 @@ export const MediaControlWithReorder = ({ links, updateLinks, aspectRatio }: Med
 
   const selectedMedia = links[selectedIndex]
 
+  const selectedMediaWidth = aspectRatio === ImageCropAspectRatio.Reward ? 'auto' : 'full'
+
   return (
     <VStack w="full" overflowX="hidden">
-      {selectedMedia && <RenderImageOrVideo aspectRatio={aspectRatio} link={selectedMedia} onDelete={onDelete} />}
+      {selectedMedia && (
+        <RenderImageOrVideo
+          aspectRatio={aspectRatio}
+          link={selectedMedia}
+          onDelete={onDelete}
+          width={selectedMediaWidth}
+        />
+      )}
       <HStack w="full" overflowX="auto" py={2}>
         <DndContext
           sensors={sensors}
