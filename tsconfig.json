@@ -26,7 +26,7 @@
       "vite-plugin-pwa/client"
     ]
   },
-  "include": ["src"],
+  "include": ["src", "language/translations"],
   "exclude":["src/types/generated/graphql.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
