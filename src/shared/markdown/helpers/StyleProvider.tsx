@@ -34,6 +34,9 @@ const Container = styled(Box, {
     '& a': {
       textDecoration: 'underline',
     },
+    '& code': {
+      lineBreak: 'anywhere',
+    },
     width: '100%',
   },
 })
@@ -55,8 +58,13 @@ export const StyleProvider = ({ children, flex, display, ...rest }: { flex?: boo
         },
         secondary: colors.primary1[9],
         secondaryText: colors.utils.text,
-        border: colors.neutral1[6],
-        outline: colors.primary1[9],
+        border: 'transparent',
+        outline: 'none',
+        focus: {
+          outline: 'none',
+          border: 'none',
+          boxShadow: 'none',
+        },
       },
     }),
     [colors],
@@ -82,9 +90,11 @@ export const StyleProvider = ({ children, flex, display, ...rest }: { flex?: boo
               display: display || 'flex',
               flexDirection: 'column',
               flexGrow: 1,
+              '& p': {
+                color: 'utils.text',
+              },
               '& div.remirror-editor-wrapper': {
-                px: 1,
-                pt: '2px',
+                padding: 0,
                 m: 0,
               },
               '& div.remirror-theme': {
@@ -95,9 +105,10 @@ export const StyleProvider = ({ children, flex, display, ...rest }: { flex?: boo
                 display: 'flex',
                 flexDirection: 'column',
                 flexGrow: 1,
-                '& :focus': {
-                  boxShadow: `${colors.primary1[8]} 0px 0px 0px 1px !important`,
-                },
+              },
+              '& div.remirror-editor': {
+                padding: '0px !important',
+                overflowY: 'visible !important',
               },
               '& div.tableWrapper': {
                 padding: '10px',

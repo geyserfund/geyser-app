@@ -33,7 +33,7 @@ export const Story = () => {
           <MarkdownField preview content={project?.description} />
         </article>
         <HStack w="full" justifyContent={'end'}>
-          <CreatorEditButton as={Link} to={getPath('dashboardStory', project.name)} />
+          <CreatorEditButton as={Link} to={getPath('projectStoryEdit', project.name)} />
         </HStack>
       </CardLayout>
     </BodySectionLayout>

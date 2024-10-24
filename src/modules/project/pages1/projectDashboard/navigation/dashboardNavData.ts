@@ -1,7 +1,6 @@
 import {
   PiBag,
   PiBell,
-  PiBookOpenText,
   PiGear,
   PiInvoice,
   PiPlanet,
@@ -53,12 +52,6 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     path: 'dashboardInfo',
     type: DashboardType.settings,
     icon: PiPlanet,
-  },
-  {
-    label: 'Story',
-    path: 'dashboardStory',
-    type: DashboardType.settings,
-    icon: PiBookOpenText,
   },
   {
     label: 'Links & tags',

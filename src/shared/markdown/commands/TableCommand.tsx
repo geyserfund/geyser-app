@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { useCommands } from '@remirror/react'
 import { useState } from 'react'
-import { BsTable } from 'react-icons/bs'
+import { PiTable } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
 
@@ -58,7 +58,7 @@ export const TableCommand = ({ isDisabled }: TableCommandProps) => {
             onMouseOver={onOpen}
             onMouseLeave={onClose}
           >
-            <BsTable />
+            <PiTable fontSize="16px" />
           </ToolbarCommandButton>
         </PopoverTrigger>
         <PopoverContent maxWidth="170px" onMouseOver={onOpen} onMouseLeave={onClose}>

@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Input, Spinner, StackProps, Tooltip, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Input, Spinner, StackProps, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useCallback, useEffect, useState } from 'react'
 import { PiArrowLeft, PiImages } from 'react-icons/pi'
@@ -9,9 +9,10 @@ import Loader from '@/components/ui/Loader'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useEntriesAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
-import { Body, H1 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography'
 import { dimensions, getPath, ProjectEntryValidations } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
+import { MarkdownField } from '@/shared/markdown/MarkdownField'
 import { FileUpload } from '@/shared/molecules'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
@@ -19,7 +20,6 @@ import { Entry, EntryStatus } from '@/types'
 import { isActive, useCustomTheme, useNotification } from '@/utils'
 
 import { useEntryForm } from '../hooks/useEntryForm'
-import { ProjectEntryEditor } from '../shared'
 import { entryTemplateForGrantApplicants } from '../utils/entryTemplate'
 
 export const PostCreateEdit = () => {
@@ -40,7 +40,17 @@ export const PostCreateEdit = () => {
 
   const [focusFlag, setFocusFlag] = useState('')
 
-  const { loading, saveEntry, saving, publishEntry, publishing, isDirty, setValue, watch } = useEntryForm(
+  const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
+  const [isStoryLoading, setIsStoryLoading] = useState(false)
+  const handleToggleEditorMode = () => {
+    toggleEditorMode()
+    setIsStoryLoading(true)
+    setTimeout(() => {
+      setIsStoryLoading(false)
+    }, 1)
+  }
+
+  const { loading, saveEntry, saving, publishEntry, publishing, isDirty, setValue, watch, control } = useEntryForm(
     project.id,
     postId,
     {
@@ -82,10 +92,6 @@ export const PostCreateEdit = () => {
         })
       },
     })
-  }
-
-  const handleContentUpdate = (name: any, value: string) => {
-    setValue(name, value, { shouldDirty: true })
   }
 
   const handleInput = (event: any) => {
@@ -175,7 +181,7 @@ export const PostCreateEdit = () => {
 
   return (
     <>
-      <VStack w="full" minHeight="full" paddingBottom={20}>
+      <VStack as={'form'} w="full" height="full" paddingBottom={20}>
         <TopNavContainerBar>
           <Button size="lg" variant="ghost" colorScheme="neutral1" onClick={handleBackClick} leftIcon={<PiArrowLeft />}>
             {isEntryPublished ? t('Back to post') : hasEntries ? t('Back to posts') : t('Back to project')}
@@ -201,107 +207,114 @@ export const PostCreateEdit = () => {
           </HStack>
         </TopNavContainerBar>
 
-        <CardLayout noborder w="full" flex={1} spacing={3} dense alignItems="center" paddingTop={8}>
-          <VStack width="full" flex={1} maxWidth={dimensions.project.posts.view.maxWidth} alignItems="start">
-            <H1 size="2xl" bold>
-              {t('Write a post')}
-            </H1>
-            <CardLayout
-              padding={{ base: 0, lg: '9px' }}
-              w="full"
-              flex={1}
-              backgroundColor={'utils.surface'}
-              overflow="visible"
-            >
-              <VStack
-                spacing={3}
-                width="100%"
-                height="100%"
-                maxWidth="1080px"
-                display="flex"
-                flexDirection="column"
-                alignItems="flex-start"
+        <CardLayout
+          padding={0}
+          paddingY="24px"
+          w="full"
+          maxWidth={dimensions.project.posts.view.maxWidth}
+          alignItems="start"
+          backgroundColor="utils.pbg"
+          paddingTop={8}
+          flex={1}
+          height="full"
+          overflowY="auto"
+        >
+          <VStack
+            spacing={3}
+            width="100%"
+            height="100%"
+            maxWidth="1080px"
+            display="flex"
+            flexDirection="column"
+            alignItems="flex-start"
+          >
+            <Box width="100%" paddingX={6}>
+              <FileUpload
+                onUploadComplete={onImageUpload}
+                childrenOnLoading={<SkeletonLayout height="330px" width="100%" />}
+                imageCrop={ImageCropAspectRatio.Post}
               >
-                <Box marginTop="20px" width="100%" paddingX="15px">
-                  <FileUpload
-                    onUploadComplete={onImageUpload}
-                    childrenOnLoading={<SkeletonLayout height="330px" width="100%" />}
-                    imageCrop={ImageCropAspectRatio.Post}
-                  >
-                    <>
-                      {entryForm.image ? (
-                        <HStack
-                          width={'100%'}
-                          justifyContent="center"
-                          maxHeight="400px"
-                          borderRadius="8px"
-                          overflow="hidden"
-                          position="relative"
-                        >
-                          <ImageUploadUi
-                            position="absolute"
-                            left={0}
-                            top={0}
-                            opacity={0}
-                            _hover={{ opacity: 0.9 }}
-                            height="100%"
-                          />
-                          <ImageWithReload width="100%" objectFit="cover" src={entryForm.image} />
-                        </HStack>
-                      ) : (
-                        <ImageUploadUi />
-                      )}
-                    </>
-                  </FileUpload>
-                </Box>
+                <>
+                  {entryForm.image ? (
+                    <HStack
+                      width={'100%'}
+                      justifyContent="center"
+                      maxHeight="400px"
+                      borderRadius="8px"
+                      overflow="hidden"
+                      position="relative"
+                    >
+                      <ImageUploadUi
+                        position="absolute"
+                        left={0}
+                        top={0}
+                        opacity={0}
+                        _hover={{ opacity: 0.9 }}
+                        height="100%"
+                      />
+                      <ImageWithReload width="100%" objectFit="cover" src={entryForm.image} />
+                    </HStack>
+                  ) : (
+                    <ImageUploadUi />
+                  )}
+                </>
+              </FileUpload>
+            </Box>
 
-                <VStack width="100%">
-                  <Input
-                    id={'entry-title-input'}
-                    border="none"
-                    _focus={{ border: 'none' }}
-                    _focusVisible={{}}
-                    placeholder={t('Post Title')}
-                    color="utils.text"
-                    fontSize={'20px'}
-                    fontWeight={700}
-                    paddingX={'15px'}
-                    name="title"
-                    value={entryForm.title}
-                    onChange={handleInput}
-                    onKeyDown={handleKeyDown}
-                  />
+            <VStack width="100%">
+              <Input
+                id={'entry-title-input'}
+                border="none"
+                _focus={{ border: 'none' }}
+                _focusVisible={{}}
+                placeholder={t('Post Title')}
+                color="utils.text"
+                fontSize={'20px'}
+                fontWeight={700}
+                paddingX={6}
+                name="title"
+                value={entryForm.title}
+                onChange={handleInput}
+                onKeyDown={handleKeyDown}
+              />
 
-                  <TextArea
-                    id={'entry-description-input'}
-                    border="none"
-                    _focus={{ border: 'none' }}
-                    _focusVisible={{}}
-                    placeholder={t('The summary of the post')}
-                    color="utils.text"
-                    fontSize={'18px'}
-                    fontWeight={600}
-                    paddingX={'15px'}
-                    paddingY={0}
-                    name="description"
-                    minHeight={7}
-                    value={entryForm.description}
-                    onChange={handleInput}
-                    onKeyDown={handleKeyDown}
-                  />
-                </VStack>
+              <TextArea
+                id={'entry-description-input'}
+                border="none"
+                _focus={{ border: 'none' }}
+                _focusVisible={{}}
+                placeholder={t('The summary of the post')}
+                color="utils.text"
+                fontSize={'18px'}
+                fontWeight={600}
+                paddingX={6}
+                paddingY={0}
+                name="description"
+                minHeight={7}
+                value={entryForm.description}
+                onChange={handleInput}
+                onKeyDown={handleKeyDown}
+              />
+            </VStack>
 
-                <Box flex={1} width="100%">
-                  <ProjectEntryEditor
-                    name="content"
-                    handleChange={handleContentUpdate}
-                    value={entryForm.content as string}
-                    focusFlag={focusFlag}
-                    placeholder="The content of the post"
-                  />
-                </Box>
-              </VStack>
-            </CardLayout>
+            <Box flex={1} width="100%" paddingX={6}>
+              {isStoryLoading ? null : (
+                <MarkdownField
+                  initialContentReady={!loading}
+                  initialContent={() => entryForm.markdown || ''}
+                  content={entryForm.markdown || ''}
+                  name="markdown"
+                  flex
+                  control={control}
+                  isFloatingToolbar
+                  toolbarMaxWidth={dimensions.project.posts.view.maxWidth}
+                  enableRawMode
+                  autoFocus={Boolean(focusFlag)}
+                  isEditorMode={isEditorMode}
+                  toggleEditorMode={handleToggleEditorMode}
+                />
+              )}
+            </Box>
           </VStack>
         </CardLayout>
       </VStack>

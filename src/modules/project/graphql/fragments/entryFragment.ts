@@ -31,5 +31,6 @@ export const FRAGMENT_PROJECT_ENTRY_VIEW = gql`
     createdAt
     publishedAt
     content
+    markdown
   }
 `

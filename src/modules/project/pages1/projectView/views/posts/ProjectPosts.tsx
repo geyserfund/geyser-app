@@ -46,7 +46,7 @@ export const ProjectPosts = () => {
 
   return (
     <VStack w="full" spacing={8} paddingBottom={28}>
-      <CardLayout w="full" direction="row" justifyContent="center" mobileDense noborder>
+      <CardLayout w="full" direction="row" justifyContent="center" dense noborder>
         <VStack maxWidth={dimensions.project.posts.view.maxWidth} w="full" spacing={6}>
           <CreatorPostPageTopBar />
           <VStack w="full" spacing={4} alignItems={'start'}>

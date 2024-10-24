@@ -1,6 +1,6 @@
 import { useCommands } from '@remirror/react'
 import getVideoId from 'get-video-id'
-import { BsYoutube } from 'react-icons/bs'
+import { PiFilmStrip } from 'react-icons/pi'
 
 import { InsertVideoModal, MarkdownVideo, useInsertVideoModal } from '../modals/InsertVideoModal'
 import { ToolbarCommandButton } from './ToolbarCommandButton'
@@ -20,7 +20,7 @@ export const VideoCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
   return (
     <>
       <ToolbarCommandButton name="video" label="Insert video" onClick={() => modal.onOpen()} isDisabled={isDisabled}>
-        <BsYoutube />
+        <PiFilmStrip fontSize="16px" />
       </ToolbarCommandButton>
       {modal.isOpen ? <InsertVideoModal {...modal} /> : null}
     </>
