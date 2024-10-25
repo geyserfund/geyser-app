@@ -8,7 +8,7 @@ import { getPath } from '@/shared/constants'
 import { truthyFilter } from '@/utils/array'
 
 import { useEntriesAtom, useProjectAtom } from '../../../../../hooks/useProjectAtom'
-import { ProjectEntryCard } from '../../posts/shared'
+import { ProjectPostCard } from '../../posts/shared'
 import { BodySectionLayout } from '../components'
 
 export const Posts = forwardRef<HTMLDivElement>((_, ref) => {
@@ -39,7 +39,7 @@ export const Posts = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <BodySectionLayout ref={ref} title={t('Posts')}>
       {entriesToRender.map((entry) => {
-        return <ProjectEntryCard entry={entry} key={entry.id} />
+        return <ProjectPostCard post={entry} key={entry.id} />
       })}
       {hasMoreEntries && (
         <HStack w="full" justifyContent="center">

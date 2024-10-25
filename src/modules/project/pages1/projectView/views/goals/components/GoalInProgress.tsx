@@ -3,23 +3,31 @@ import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { useTranslation } from 'react-i18next'
 import { PiDotsSix, PiNotePencil, PiStarFill } from 'react-icons/pi'
 
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 
 import { Body } from '../../../../../../../shared/components/typography'
-import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
+import { ProjectGoalCurrency, ProjectGoalFragment } from '../../../../../../../types'
 import { useMobileMode } from '../../../../../../../utils'
 import { GoalContributeButton } from './GoalContributeButton'
 import { GoalTarget } from './GoalTarget'
 
 type Props = {
-  goal: ProjectGoal
+  goal: ProjectGoalFragment
   isEditing?: boolean
-  onOpenGoalModal: (goal: ProjectGoal) => void
+  onOpenGoalModal: (goal: ProjectGoalFragment) => void
   isPriorityGoal?: boolean
-  listeners: any
-}
+  listeners?: any
+} & CardLayoutProps
 
-export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, listeners, isPriorityGoal }: Props) => {
+export const GoalInProgress = ({
+  goal,
+  isEditing = false,
+  onOpenGoalModal,
+  listeners,
+  isPriorityGoal,
+  ...rest
+}: Props) => {
   const { t } = useTranslation()
 
   const isMobile = useMobileMode()
@@ -66,8 +74,8 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
   }
 
   return (
-    <HStack width="100%" gap={'10px'} background="utils.pbg">
-      {isEditing && (
+    <CardLayout dense noborder width="100%" gap={'10px'} background="utils.pbg" {...rest}>
+      {isEditing && listeners && (
         <VStack display="flex" height="100%" alignItems="center" justifyContent="flex-start" pt={1}>
           <DragHandle listeners={listeners} />
         </VStack>
@@ -152,7 +160,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
           </Box>
         </Stack>
       </VStack>
-    </HStack>
+    </CardLayout>
   )
 }
 

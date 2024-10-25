@@ -24,7 +24,7 @@ export const ToolbarCommand = ({ name, cmd, label, Icon, isDisabled }: ToolbarCo
       label={label}
       onClick={() => runCommand()}
     >
-      <Icon />
+      <Icon fontSize="16px" />
     </ToolbarCommandButton>
   )
 }

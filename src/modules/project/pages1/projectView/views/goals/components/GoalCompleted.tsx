@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next'
 import { PiCheckCircle } from 'react-icons/pi'
 
 import { Body } from '../../../../../../../shared/components/typography'
-import { ProjectGoal } from '../../../../../../../types'
+import { ProjectGoalFragment } from '../../../../../../../types'
 import { useCustomTheme } from '../../../../../../../utils'
 import { GoalTarget } from './GoalTarget'
 
 type Props = {
-  goal: ProjectGoal
+  goal: ProjectGoalFragment
 }
 
 export const GoalCompleted = ({ goal }: Props) => {

@@ -7,7 +7,7 @@ import * as yup from 'yup'
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 import { PathName } from '@/shared/constants'
 
-import { ProjectGoal, ProjectGoalCreateInput, ProjectGoalCurrency } from '../../../../../types'
+import { ProjectGoalCreateInput, ProjectGoalCurrency, ProjectGoalFragment } from '../../../../../types'
 import { dollarsToCents, useNotification } from '../../../../../utils'
 
 type FormValues = ProjectGoalCreateInput
@@ -54,7 +54,7 @@ const goalFormSchema = (amountContributed: number) =>
     .required()
 
 type UseProjectGoalFormProps = {
-  goal: ProjectGoal | null
+  goal: ProjectGoalFragment | null
   projectId: string
   onClose: () => void
 }

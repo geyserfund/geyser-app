@@ -21,4 +21,6 @@ export const defaultProjectReward: ProjectReward = {
   isHidden: false,
   preOrder: true,
   privateCommentPrompts: [],
+  posts: [],
+  soldOut: false,
 }

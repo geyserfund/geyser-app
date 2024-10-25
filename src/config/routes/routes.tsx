@@ -271,10 +271,24 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('projectGoalView', PathName.projectName, PathName.goalId),
+        async lazy() {
+          const ProjectGoals = await Project().then((m) => m.ProjectGoals)
+          return { Component: ProjectGoals }
+        },
+      },
+      {
         path: getPath('projectLeaderboard', PathName.projectName),
         async lazy() {
           const ProjectLeaderboard = await Project().then((m) => m.ProjectLeaderboard)
           return { Component: ProjectLeaderboard }
+        },
+      },
+      {
+        path: getPath('projectStoryEdit', PathName.projectName),
+        async lazy() {
+          const ProjectDashboardStory = await ProjectDashboard().then((m) => m.ProjectDashboardStory)
+          return { element: renderPrivateRoute(ProjectDashboardStory) }
         },
       },
       {
@@ -324,13 +338,6 @@ export const platformRoutes: RouteObject[] = [
             async lazy() {
               const ProjectDashboardDetails = await ProjectDashboard().then((m) => m.ProjectDashboardDetails)
               return { Component: ProjectDashboardDetails }
-            },
-          },
-          {
-            path: getPath('dashboardStory', PathName.projectName),
-            async lazy() {
-              const ProjectDashboardStory = await ProjectDashboard().then((m) => m.ProjectDashboardStory)
-              return { Component: ProjectDashboardStory }
             },
           },
           {

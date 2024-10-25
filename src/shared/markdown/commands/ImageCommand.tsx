@@ -1,5 +1,5 @@
 import { useCommands } from '@remirror/react'
-import { BiImageAdd } from 'react-icons/bi'
+import { PiImage } from 'react-icons/pi'
 
 import { InsertImageModal, MarkdownImage } from '../modals/InsertImageModal'
 import { useInsertLinkModal } from '../modals/InsertLinkModal'
@@ -24,7 +24,7 @@ export const ImageCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
   return (
     <>
       <ToolbarCommandButton name="image" label="Insert image" onClick={() => modal.onOpen()} isDisabled={isDisabled}>
-        <BiImageAdd />
+        <PiImage fontSize="16px" />
       </ToolbarCommandButton>
       {modal.isOpen ? <InsertImageModal {...modal} /> : null}
     </>
