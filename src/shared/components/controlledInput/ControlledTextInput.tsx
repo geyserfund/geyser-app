@@ -17,6 +17,8 @@ type Props = UseControllerProps<any, any> &
     infoTooltip?: React.ReactNode
     size?: 'sm' | 'md' | 'lg'
     displayValue?: string
+    fontSize?: string
+    numberOnly?: boolean
   }
 
 export function ControlledTextInput(props: Props) {
@@ -32,6 +34,11 @@ export function ControlledTextInput(props: Props) {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (props.numberOnly) {
+      const numericValue = e.target.value.replace(/[^0-9]/g, '')
+      e.target.value = numericValue
+    }
+
     if (field?.onChange) {
       field.onChange(e)
     }
@@ -76,6 +83,7 @@ export function ControlledTextInput(props: Props) {
           value={props.displayValue || field?.value || props.value || ''}
           isInvalid={Boolean(error)}
           size={props.size || 'md'}
+          fontSize={props.fontSize || 'md'}
         />
         {props.rightAddon && <InputRightAddon>{props.rightAddon}</InputRightAddon>}
       </InputGroup>
