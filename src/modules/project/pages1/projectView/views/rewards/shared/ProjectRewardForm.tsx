@@ -411,7 +411,14 @@ export const ProjectRewardForm = ({
               </VStack>
 
               {watch('hasShipping') && (
-                <VStack pl={2} spacing={2} borderLeft="2px solid" borderColor="primary.400" align={'flex-start'}>
+                <VStack
+                  pl={2}
+                  spacing={2}
+                  borderLeft="2px solid"
+                  borderColor="primary.400"
+                  align={'flex-start'}
+                  w="100%"
+                >
                   <Body medium>{t('Send your shipping address to the creator at the following email')}</Body>
 
                   <CreatorEmailButton email={ownerEmail} />
