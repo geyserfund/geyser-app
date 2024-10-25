@@ -1,3 +1,39 @@
+## [0.12.3](https://github.com/geyserfund/geyser-app/compare/v0.12.2...v0.12.3) (2024-10-25)
+
+
+### Features
+
+* add a new field for lightning address ([c017075](https://github.com/geyserfund/geyser-app/commit/c01707523a30ee7af2570235949267e799b26335))
+* changelogs ([ede4545](https://github.com/geyserfund/geyser-app/commit/ede45459cdde1ea05b28af91c8883c716bb0e041))
+* fee update ([ac2b595](https://github.com/geyserfund/geyser-app/commit/ac2b595c7368e7c17f08e789d7106211123dcb92))
+
+
+### Bug Fixes
+
+* add custom grant url and make thailand grant a voting grant ([f64cf01](https://github.com/geyserfund/geyser-app/commit/f64cf01b53a8a2b4fccc855f243e75a3495a5ad0))
+* allow grant applicant to be opened in new tab ([70a4ea2](https://github.com/geyserfund/geyser-app/commit/70a4ea2def9d5e6a5f405f1805d16ae8d3df3705))
+* avoid sending 0 instead of null ([3f1bb44](https://github.com/geyserfund/geyser-app/commit/3f1bb44c6782f1127a0d82be9c8d94eee379a562))
+* bug fix ([67e4402](https://github.com/geyserfund/geyser-app/commit/67e440256836fb2ad5a5c6cd973c4ee46bebe650))
+* cast max claimable to number ([370b018](https://github.com/geyserfund/geyser-app/commit/370b018448705d63239a26cb0b95a981bd3fd244))
+* copy change ([7b90286](https://github.com/geyserfund/geyser-app/commit/7b90286847fed3b92c9948ae058d00c9f38025a3))
+* datetime for reward availability ([07b67d9](https://github.com/geyserfund/geyser-app/commit/07b67d9d06ad0fee7451520cb8c32c228c5e0e68))
+* disable multiple file uploads from useDropzone ([27e5e95](https://github.com/geyserfund/geyser-app/commit/27e5e952c28d1051a3325144e87645c924837d78))
+* edge case where refreshing on funding details fails crashes the page ([9fccd96](https://github.com/geyserfund/geyser-app/commit/9fccd9627ae9d466b23592a89e997ea900d377fd))
+* featured redirects to project reward ([33f4447](https://github.com/geyserfund/geyser-app/commit/33f4447801ee9f70154adb5fd7d276d4d9c4e3ab))
+* full width for shipping section ([e2973a8](https://github.com/geyserfund/geyser-app/commit/e2973a8ad1d9dc65e86bfb841d51016e91d3929d))
+* funding success page ([8114460](https://github.com/geyserfund/geyser-app/commit/81144605f36316cd5a7b606af4e5a86800a9883a))
+* funding summary box styling fixes ([5d353e8](https://github.com/geyserfund/geyser-app/commit/5d353e866ef9dc4645f473569c34eeb07da00a5e))
+* geyser grants redirection links ([03fcdd0](https://github.com/geyserfund/geyser-app/commit/03fcdd052412c2bd4eb1a3157adaea75ec584eaf))
+* open new tab when clinking leadearboard project ([3101775](https://github.com/geyserfund/geyser-app/commit/3101775eff5167b2b2445ecf0458350fd63d13d0))
+* prevent elements from public message to hover over nav bar ([5844f2c](https://github.com/geyserfund/geyser-app/commit/5844f2c4a9f950bfe0db3673de21a1925c755d9d))
+* project body width issue ([2467847](https://github.com/geyserfund/geyser-app/commit/2467847fc57cd8da7f94e3a1401cd7cb250a47da))
+* proper use of chakra switch checked value ([48a2f60](https://github.com/geyserfund/geyser-app/commit/48a2f605ece49140c653c94ac4f22e9933b366f8))
+* remove max claimable validation and number only to controlled text ([3844d26](https://github.com/geyserfund/geyser-app/commit/3844d2686f73cdaec71f626372f9685d4a5d2f22))
+* remove unused var ([318f656](https://github.com/geyserfund/geyser-app/commit/318f656a11f6a31c997bf8ab06815184c935d827))
+* reward form eddgecases ([1b3f30f](https://github.com/geyserfund/geyser-app/commit/1b3f30fcf8a48a96acc1e88e2f336e4218805914))
+* reward image edit ([123132c](https://github.com/geyserfund/geyser-app/commit/123132cfcfc243b9d5c930b3ec99be6b5ea49f83))
+* set default font size to md ([fceeeac](https://github.com/geyserfund/geyser-app/commit/fceeeaced27a4814844a9125c31c3c223765a4f6))
+
 ## [0.12.2](https://github.com/geyserfund/geyser-app/compare/v0.12.1...v0.12.2) (2024-10-11)
 
 

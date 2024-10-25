@@ -200,6 +200,7 @@ export const ProjectRewardForm = ({
                   </Tooltip>
                 }
                 size="sm"
+                numberOnly
               />
             </Stack>
             <Stack direction={{ base: 'column', lg: 'row' }}>
@@ -266,11 +267,9 @@ export const ProjectRewardForm = ({
                   name="preOrder"
                   control={control}
                   onChange={(e) => {
-                    if (e.target.checked) {
-                      setValue('estimatedDeliveryInWeeks', null, { shouldDirty: true })
-                    } else {
-                      setValue('estimatedAvailabilityDate', null, { shouldDirty: true })
-                    }
+                    setValue('preOrder', e.target.checked, { shouldDirty: true })
+                    setValue('estimatedAvailabilityDate', undefined, { shouldDirty: true })
+                    setValue('estimatedDeliveryInWeeks', undefined, { shouldDirty: true })
                   }}
                   isChecked={watch('preOrder')}
                 />
@@ -375,6 +374,14 @@ export const ProjectRewardForm = ({
                   onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.NostrNpub)}
                 />
                 <ControlledSwitchInput
+                  label={t('Ask contributors for a lighting address in case of partial or full refund')}
+                  name="privateCommentPrompts"
+                  control={control}
+                  switchPosition="left"
+                  isChecked={utils.isPromptChecked(PrivateCommentPrompt.LightningAddress)}
+                  onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.LightningAddress)}
+                />
+                <ControlledSwitchInput
                   label={t(
                     'Ask contributors to specify reward preferences or options based on your reward description',
                   )}
@@ -404,12 +411,15 @@ export const ProjectRewardForm = ({
               </VStack>
 
               {watch('hasShipping') && (
-                <VStack pl={2} spacing={2} borderLeft="2px solid" borderColor="primary.400" align={'flex-start'}>
-                  <Body medium>
-                    {t(
-                      'Shipping addresses will be requested from the user at checkout and sent to this email address.',
-                    )}
-                  </Body>
+                <VStack
+                  pl={2}
+                  spacing={2}
+                  borderLeft="2px solid"
+                  borderColor="primary.400"
+                  align={'flex-start'}
+                  w="100%"
+                >
+                  <Body medium>{t('Send your shipping address to the creator at the following email')}</Body>
 
                   <CreatorEmailButton email={ownerEmail} />
                 </VStack>

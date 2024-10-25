@@ -1736,6 +1736,7 @@ export type PaginationInput = {
 };
 
 export enum PrivateCommentPrompt {
+  LightningAddress = 'LIGHTNING_ADDRESS',
   NostrNpub = 'NOSTR_NPUB',
   ProjectRewardSpecs = 'PROJECT_REWARD_SPECS'
 }

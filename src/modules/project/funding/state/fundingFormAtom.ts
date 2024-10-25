@@ -135,14 +135,10 @@ export const fundingFormHasRewardsAtom = atom((get) => {
 export const fundingFormHasRewardsThatRequirePrivateCommentAtom = atom((get) => {
   const fundingFormState = get(fundingFormStateAtom)
   const { rewards } = get(fundingProjectAtom)
-
-  if (!rewards) {
-    return false
-  }
-
-  const selectedRewards = rewards.filter(
-    (reward) => fundingFormState.rewardsByIDAndCount && fundingFormState.rewardsByIDAndCount[reward.id],
-  )
+  const selectedRewards =
+    rewards?.filter(
+      (reward) => fundingFormState.rewardsByIDAndCount && fundingFormState.rewardsByIDAndCount[reward.id],
+    ) || []
 
   return selectedRewards.some((reward) => reward.privateCommentPrompts && reward.privateCommentPrompts.length > 0)
 })

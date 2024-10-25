@@ -1,7 +1,6 @@
 /* eslint-disable complexity */
 import { yupResolver } from '@hookform/resolvers/yup'
 import { format } from 'date-fns'
-import { DateTime } from 'luxon'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
@@ -40,7 +39,6 @@ const rewardFormSchema = () =>
       .typeError('Price is required')
       .required('Price is required')
       .min(0.01, 'Price must be greater than 0'),
-    maxClaimable: yup.number().nullable(),
     images: yup.array().of(yup.string()).max(MAX_REWARD_IMAGES, `Maximum ${MAX_REWARD_IMAGES} images allowed`),
     hasShipping: yup.boolean(),
     isAddon: yup.boolean(),
@@ -57,10 +55,15 @@ type UseProjectRewardFormProps = {
   rewardId?: string
   isUpdate?: boolean
   isLaunch?: boolean
-  defaultCategory?: string
+  defaultCategory?: string | null
 }
 
-export const useProjectRewardForm = ({ rewardId, isUpdate, isLaunch, defaultCategory }: UseProjectRewardFormProps) => {
+export const useProjectRewardForm = ({
+  rewardId,
+  isUpdate,
+  isLaunch,
+  defaultCategory = null,
+}: UseProjectRewardFormProps) => {
   const navigate = useNavigate()
   const toast = useNotification()
 
@@ -153,16 +156,14 @@ export const useProjectRewardForm = ({ rewardId, isUpdate, isLaunch, defaultCate
       description: formData.description,
       shortDescription: formData.shortDescription,
       cost: formData.cost,
-      maxClaimable: formData.maxClaimable,
+      maxClaimable: formData.maxClaimable ? Number(formData.maxClaimable) : null,
       images: formData.images,
       hasShipping: formData.hasShipping,
       isAddon: formData.isAddon,
       isHidden: formData.isHidden,
-      category: formData.category,
+      category: formData.category || null,
       preOrder: formData.preOrder,
-      estimatedAvailabilityDate: formData.estimatedAvailabilityDate
-        ? DateTime.fromJSDate(formData.estimatedAvailabilityDate).toMillis()
-        : null,
+      estimatedAvailabilityDate: formData.estimatedAvailabilityDate?.valueOf(),
       estimatedDeliveryInWeeks: formData.estimatedDeliveryInWeeks,
       privateCommentPrompts: formData.privateCommentPrompts,
       confirmationMessage: formData.confirmationMessage,
