@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai'
 
-import { ProjectGoal } from '../../../../../types'
+import { ProjectGoalFragment } from '../../../../../types'
 import {
   currentGoalAtom,
   isGoalDeleteModalOpenAtom,
@@ -16,7 +16,7 @@ export const useGoalsModal = () => {
 
   const [currentGoal, setCurrentGoal] = useAtom(currentGoalAtom)
 
-  const onGoalModalOpen = (goal?: ProjectGoal) => {
+  const onGoalModalOpen = (goal?: ProjectGoalFragment) => {
     setCurrentGoal(goal || null)
     setIsGoalModalOpen(true)
   }

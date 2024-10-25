@@ -271,6 +271,13 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('projectGoalView', PathName.projectName, PathName.goalId),
+        async lazy() {
+          const ProjectGoals = await Project().then((m) => m.ProjectGoals)
+          return { Component: ProjectGoals }
+        },
+      },
+      {
         path: getPath('projectLeaderboard', PathName.projectName),
         async lazy() {
           const ProjectLeaderboard = await Project().then((m) => m.ProjectLeaderboard)

@@ -1,8 +1,8 @@
-import { Box, Button, HStack, Link as ChakraLink, SkeletonText, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, Icon, Link as ChakraLink, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
-import { PiArrowLeft, PiCopy, PiShareFat } from 'react-icons/pi'
+import { PiArrowLeft, PiCopy, PiEnvelope, PiFile, PiShareFat } from 'react-icons/pi'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
@@ -17,11 +17,13 @@ import { dimensions, getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { useProjectEntryLazyQuery } from '@/types'
+import { useProjectPostLazyQuery } from '@/types'
 import { toInt, useNotification } from '@/utils'
 
-import { MarkdownField } from '../../../../../../shared/markdown/MarkdownField'
-import { PostEditMenu, PostShare } from './components'
+import { MarkdownField } from '../../../../../../../../shared/markdown/MarkdownField'
+import { PostEditMenu, PostShare } from '../../components'
+import { postTypeOptions } from '../../utils/postTypeLabel'
+import { LinkedRewardsAndGoals } from './LinkedRewardsAndGoals'
 
 export const PostView = () => {
   const { project, isProjectOwner } = useProjectAtom()
@@ -32,20 +34,20 @@ export const PostView = () => {
 
   const [loading, setLoading] = useState(false)
 
-  const [queryEntry, { data }] = useProjectEntryLazyQuery({
+  const [queryPost, { data }] = useProjectPostLazyQuery({
     fetchPolicy: 'cache-first',
     variables: {
-      entryId: postId,
+      postId,
     },
   })
 
   useEffect(() => {
     if (postId) {
-      const handleEntryQuery = async () => {
+      const handlePostQuery = async () => {
         setLoading(true)
 
         try {
-          await queryEntry()
+          await queryPost()
         } catch {
           toast.error({
             title: t('Something went wrong'),
@@ -56,28 +58,28 @@ export const PostView = () => {
         setLoading(false)
       }
 
-      handleEntryQuery()
+      handlePostQuery()
     }
   }, [postId])
 
-  const entry = data?.entry
+  const post = data?.post
 
   if (loading) {
-    return <EntryViewSkeleton />
+    return <PostViewSkeleton />
   }
 
-  if (!entry) {
+  if (!post) {
     return null
   }
 
-  const onContributeClick = () => navigate(getPath('projectFunding', project?.name), { state: { entryId: entry.id } })
+  const onContributeClick = () => navigate(getPath('projectFunding', project?.name), { state: { postId: post.id } })
 
   return (
     <>
       <Head
-        title={entry?.title || ''}
-        description={entry?.description || ''}
-        image={entry?.image || project.thumbnailImage || ''}
+        title={post?.title || ''}
+        description={post?.description || ''}
+        image={post?.image || project.thumbnailImage || ''}
         type="article"
       />
 
@@ -94,13 +96,13 @@ export const PostView = () => {
             {t('All posts')}
           </Button>
           <HStack>
-            <PostShare entry={entry} />
+            <PostShare post={post} />
 
             {isProjectOwner ? (
               <PostEditMenu
                 size="lg"
                 display={{ base: 'none', lg: 'flex' }}
-                entry={entry}
+                post={post}
                 onDeleteComplete={() => navigate(getPath('projectPosts', project?.name))}
               />
             ) : (
@@ -120,11 +122,11 @@ export const PostView = () => {
 
         <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }} mobileDense>
           <VStack maxWidth={dimensions.project.posts.view.maxWidth} w="full" alignItems="start" spacing={6}>
-            {entry.image && (
+            {post.image && (
               <Box overflow={'hidden'} width="100%" position="relative" paddingTop="75%" borderRadius={'8px'}>
                 <ImageWithReload
-                  src={entry.image || ''}
-                  alt={entry.title}
+                  src={post.image || ''}
+                  alt={post.title}
                   width="100%"
                   height="100%"
                   objectFit="cover"
@@ -136,19 +138,31 @@ export const PostView = () => {
             )}
             <VStack w="full" spacing={3} alignItems="start">
               <H2 flex={1} size="2xl" bold>
-                {entry.title}
+                {post.title}
               </H2>
 
               <Body size="sm" medium light>
-                {entry.createdAt && DateTime.fromMillis(toInt(entry.createdAt)).toFormat(' dd LLLL, yyyy')}
+                {post.createdAt && DateTime.fromMillis(toInt(post.createdAt)).toFormat(' dd LLLL, yyyy')}
               </Body>
+              <HStack w="full">
+                <Badge variant="soft" colorScheme="neutral1" gap={2}>
+                  <Icon as={PiFile} />
+                  {postTypeOptions.find((option) => option.value === post.postType)?.label}
+                </Badge>
+                {post.sentByEmailAt && (
+                  <Badge variant="outline" colorScheme="neutral1" gap={2}>
+                    <Icon as={PiEnvelope} />
+                    {DateTime.fromMillis(post.sentByEmailAt).toFormat(' dd LLLL, yyyy')}
+                  </Badge>
+                )}
+              </HStack>
             </VStack>
 
             <Body size="md" bold dark>
-              {entry.description}
+              {post.description}
             </Body>
 
-            {entry.markdown && (
+            {post.markdown && (
               <Box
                 fontSize="16px"
                 color="utils.text"
@@ -160,14 +174,15 @@ export const PostView = () => {
                 }}
                 flex={1}
               >
-                <MarkdownField preview content={entry.markdown || ''} />
+                <MarkdownField preview content={post.markdown || ''} />
               </Box>
             )}
+            <LinkedRewardsAndGoals post={post} />
           </VStack>
         </CardLayout>
         <BottomNavBarContainer direction="column">
           {isProjectOwner ? (
-            <PostEditMenu size="lg" w="full" entry={entry} />
+            <PostEditMenu size="lg" w="full" post={post} />
           ) : (
             <Button size="lg" variant="solid" colorScheme="primary1" width="full" onClick={onContributeClick}>
               {t('Contribute')}
@@ -180,7 +195,7 @@ export const PostView = () => {
   )
 }
 
-export const EntryViewSkeleton = () => {
+export const PostViewSkeleton = () => {
   return (
     <VStack w="full" paddingBottom="120px">
       <TopNavContainerBar>
@@ -223,9 +238,9 @@ const PostJustPublishedModal = () => {
 
   const modalProps = useModal()
 
-  const entryLink = `${window.location.origin}${location.pathname}`
+  const postLink = `${window.location.origin}${location.pathname}`
 
-  const { onCopy, hasCopied } = useCopyToClipboard(entryLink)
+  const { onCopy, hasCopied } = useCopyToClipboard(postLink)
 
   useEffect(() => {
     if (location.state?.justPublished) {
@@ -247,7 +262,7 @@ const PostJustPublishedModal = () => {
       }}
       positiveButtonProps={{
         as: ChakraLink,
-        href: generateTwitterShareUrl(entryLink),
+        href: generateTwitterShareUrl(postLink),
         isExternal: true,
         children: t('Post on X'),
         onClick: modalProps.onClose,

@@ -1,26 +1,29 @@
-import { Box, Button, HStack, Input, Spinner, StackProps, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Input, Spinner, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useCallback, useEffect, useState } from 'react'
-import { PiArrowLeft, PiImages } from 'react-icons/pi'
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { PiArrowLeft, PiCaretDown, PiImages } from 'react-icons/pi'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { ImageWithReload, TextArea } from '@/components/ui'
+import { CustomSelect } from '@/components/ui/CustomSelect'
 import Loader from '@/components/ui/Loader'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
-import { useEntriesAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { usePostsAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { dimensions, getPath, ProjectEntryValidations } from '@/shared/constants'
+import { dimensions, getPath, ProjectPostValidations } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { MarkdownField } from '@/shared/markdown/MarkdownField'
 import { FileUpload } from '@/shared/molecules'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
-import { Entry, EntryStatus } from '@/types'
-import { isActive, useCustomTheme, useNotification } from '@/utils'
+import { PostStatus } from '@/types'
+import { useCustomTheme, useNotification } from '@/utils'
 
-import { useEntryForm } from '../hooks/useEntryForm'
-import { entryTemplateForGrantApplicants } from '../utils/entryTemplate'
+import { LinkGoalsAndRewardsModal } from '../components/LinkGoalsAndRewardsModal'
+import { PublishModal } from '../components/PublishModal'
+import { usePostForm } from '../hooks/usePostForm'
+import { postTypeOptions } from '../utils/postTypeLabel'
 
 export const PostCreateEdit = () => {
   const navigate = useNavigate()
@@ -30,13 +33,9 @@ export const PostCreateEdit = () => {
 
   const { project, loading: projectLoading } = useProjectAtom()
 
-  const { hasEntries } = useEntriesAtom()
+  const { hasPosts } = usePostsAtom()
 
   const { postId } = useParams<{ postId: string }>()
-
-  const location = useLocation()
-  const { state } = location as { state: { grantId: number } }
-  const entryTemplate = state?.grantId ? (entryTemplateForGrantApplicants as Entry) : undefined
 
   const [focusFlag, setFocusFlag] = useState('')
 
@@ -50,7 +49,7 @@ export const PostCreateEdit = () => {
     }, 1)
   }
 
-  const { loading, saveEntry, saving, publishEntry, publishing, isDirty, setValue, watch, control } = useEntryForm(
+  const { loading, savePost, saving, postPublish, publishing, isDirty, setValue, watch, control } = usePostForm(
     project.id,
     postId,
     {
@@ -59,33 +58,32 @@ export const PostCreateEdit = () => {
         navigate(getPath('notFound'))
       },
       onCompleted(data) {
-        if (data.entry === null) {
+        if (data.post === null) {
           navigate(getPath('notFound'))
         }
       },
     },
-    entryTemplate,
   )
 
-  const entryForm = watch()
+  const postForm = watch()
 
   useEffect(() => {
     let number: any
-    if (isDirty && entryForm.status !== EntryStatus.Published) {
+    if (isDirty && postForm.status !== PostStatus.Published) {
       number = setInterval(() => {
-        saveEntry()
+        savePost()
       }, 2000)
     }
 
-    if (entryForm.status === EntryStatus.Published) {
+    if (postForm.status === PostStatus.Published) {
       clearInterval(number)
     }
 
     return () => clearInterval(number)
-  }, [entryForm, isDirty, saveEntry])
+  }, [postForm, isDirty, savePost])
 
   const handleSaveButtonClick = () => {
-    saveEntry({
+    savePost({
       onCompleted() {
         toast.success({
           title: 'Post saved successfully!',
@@ -97,11 +95,11 @@ export const PostCreateEdit = () => {
   const handleInput = (event: any) => {
     const { name, value } = event.target
 
-    if (name === 'title' && value.length > ProjectEntryValidations.title.maxLength) {
+    if (name === 'title' && value.length > ProjectPostValidations.title.maxLength) {
       return
     }
 
-    if (name === 'description' && value.length > ProjectEntryValidations.description.maxLength) {
+    if (name === 'description' && value.length > ProjectPostValidations.description.maxLength) {
       return
     }
 
@@ -117,12 +115,12 @@ export const PostCreateEdit = () => {
       if (event.target.name === 'title') {
         if (event.key === 'ArrowDown' || event.key === 'Enter') {
           event.preventDefault()
-          document.getElementById('entry-description-input')?.focus()
+          document.getElementById('post-description-input')?.focus()
         }
       } else if (event.target.name === 'description') {
         if (event.key === 'ArrowUp') {
           event.preventDefault()
-          document.getElementById('entry-title-input')?.focus()
+          document.getElementById('post-title-input')?.focus()
         } else if (event.key === 'ArrowDown' || event.key === 'Tab' || event.key === 'Enter') {
           event.preventDefault()
           const newDate = new Date()
@@ -137,7 +135,7 @@ export const PostCreateEdit = () => {
       return 'Saving'
     }
 
-    if (entryForm.id) {
+    if (postForm.id) {
       if (isDirty) {
         return 'Save'
       }
@@ -148,26 +146,18 @@ export const PostCreateEdit = () => {
     return 'Save draft'
   }
 
-  const handlePublishEntry = () => {
-    publishEntry({
-      onCompleted() {
-        navigate(getPath('projectPostView', project.name, entryForm?.id), { state: { justPublished: true } })
-      },
-    })
-  }
-
   if (loading || projectLoading) {
     return <Loader />
   }
 
-  const isEntryPublished = entryForm?.status === EntryStatus.Published
+  const isPostPublished = postForm?.status === PostStatus.Published
 
   const postUrl = postId ? getPath('projectPostView', project.name, postId) : ''
 
   const handleBackClick = () => {
-    const pathToGo = isEntryPublished
+    const pathToGo = isPostPublished
       ? postUrl
-      : hasEntries
+      : hasPosts
       ? getPath('projectPosts', project?.name)
       : getPath('project', project?.name)
 
@@ -184,26 +174,13 @@ export const PostCreateEdit = () => {
       <VStack as={'form'} w="full" height="full" paddingBottom={20}>
         <TopNavContainerBar>
           <Button size="lg" variant="ghost" colorScheme="neutral1" onClick={handleBackClick} leftIcon={<PiArrowLeft />}>
-            {isEntryPublished ? t('Back to post') : hasEntries ? t('Back to posts') : t('Back to project')}
+            {isPostPublished ? t('Back to post') : hasPosts ? t('Back to posts') : t('Back to project')}
           </Button>
           <HStack>
             <Button size="lg" variant="soft" colorScheme="neutral1" onClick={handleSaveButtonClick}>
               {t(getSaveButtonText())}
             </Button>
-            {!isEntryPublished && (
-              <Tooltip label={!isActive(project.status) ? t('Cannot publish entry for inActive project') : ''}>
-                <Button
-                  size="lg"
-                  variant="solid"
-                  colorScheme="primary1"
-                  onClick={handlePublishEntry}
-                  isDisabled={!isActive(project.status)}
-                  isLoading={publishing}
-                >
-                  {t('Publish')}
-                </Button>
-              </Tooltip>
-            )}
+            <PublishModal post={postForm} postPublish={postPublish} publishing={publishing} />
           </HStack>
         </TopNavContainerBar>
 
@@ -235,7 +212,7 @@ export const PostCreateEdit = () => {
                 imageCrop={ImageCropAspectRatio.Post}
               >
                 <>
-                  {entryForm.image ? (
+                  {postForm.image ? (
                     <HStack
                       width={'100%'}
                       justifyContent="center"
@@ -252,7 +229,7 @@ export const PostCreateEdit = () => {
                         _hover={{ opacity: 0.9 }}
                         height="100%"
                       />
-                      <ImageWithReload width="100%" objectFit="cover" src={entryForm.image} />
+                      <ImageWithReload width="100%" objectFit="cover" src={postForm.image} />
                     </HStack>
                   ) : (
                     <ImageUploadUi />
@@ -261,9 +238,29 @@ export const PostCreateEdit = () => {
               </FileUpload>
             </Box>
 
+            <HStack px={'15px'}>
+              <CustomSelect
+                name="postType"
+                options={postTypeOptions}
+                placeholder="Post Type"
+                onChange={(e) => setValue('postType', e?.value, { shouldDirty: true })}
+                value={postForm.postType ? postTypeOptions.find((option) => option.value === postForm.postType) : null}
+                dropdownIndicator={<PiCaretDown />}
+                width={'200px'}
+                size="sm"
+              />
+
+              <LinkGoalsAndRewardsModal
+                postId={postForm.id}
+                setValue={setValue}
+                projectRewardUUIDs={postForm.projectRewardUUIDs}
+                projectGoalIds={postForm.projectGoalIds}
+              />
+            </HStack>
+
             <VStack width="100%">
               <Input
-                id={'entry-title-input'}
+                id={'post-title-input'}
                 border="none"
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
@@ -273,13 +270,13 @@ export const PostCreateEdit = () => {
                 fontWeight={700}
                 paddingX={6}
                 name="title"
-                value={entryForm.title}
+                value={postForm.title}
                 onChange={handleInput}
                 onKeyDown={handleKeyDown}
               />
 
               <TextArea
-                id={'entry-description-input'}
+                id={'post-description-input'}
                 border="none"
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
@@ -291,7 +288,7 @@ export const PostCreateEdit = () => {
                 paddingY={0}
                 name="description"
                 minHeight={7}
-                value={entryForm.description}
+                value={postForm.description}
                 onChange={handleInput}
                 onKeyDown={handleKeyDown}
               />
@@ -301,8 +298,8 @@ export const PostCreateEdit = () => {
               {isStoryLoading ? null : (
                 <MarkdownField
                   initialContentReady={!loading}
-                  initialContent={() => entryForm.markdown || ''}
-                  content={entryForm.markdown || ''}
+                  initialContent={() => postForm.markdown || ''}
+                  content={postForm.markdown || ''}
                   name="markdown"
                   flex
                   control={control}
@@ -320,8 +317,10 @@ export const PostCreateEdit = () => {
       </VStack>
       <AlertDialogue
         {...confirmViewPostModal}
-        title={t('Unsaved changes will be lost!')}
-        description={t('Are you sure you want to leave this screen?')}
+        title={t('Don’t Lose Your Progress')}
+        description={t(
+          'You’re about to leave. Consider saving your post as a draft to avoid losing your work and finish it later.',
+        )}
         hasCancel
         positiveButtonProps={{
           children: t('Continue'),
