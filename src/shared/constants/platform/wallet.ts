@@ -4,4 +4,4 @@ export enum WalletConnectDetails {
   LndConnectionDetailsPrivate = 'LndConnectionDetailsPrivate',
 }
 
-export const LIGHTNING_FEE_PERCENTAGE = 4
+export const LIGHTNING_FEE_PERCENTAGE = 5

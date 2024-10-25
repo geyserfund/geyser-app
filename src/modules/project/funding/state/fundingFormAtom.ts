@@ -42,7 +42,7 @@ export type FundFormType = {
   email: string
   media: string
   comment: string
-  privateComment: string
+  privateComment?: string
   rewardsByIDAndCount?: { [key: string]: number } | undefined
   rewardCurrency: RewardCurrency
   needsShipping: boolean
