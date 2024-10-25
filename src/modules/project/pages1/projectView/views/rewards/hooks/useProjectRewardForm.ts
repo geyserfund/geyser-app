@@ -156,7 +156,7 @@ export const useProjectRewardForm = ({
       description: formData.description,
       shortDescription: formData.shortDescription,
       cost: formData.cost,
-      maxClaimable: Number(formData.maxClaimable),
+      maxClaimable: formData.maxClaimable ? Number(formData.maxClaimable) : null,
       images: formData.images,
       hasShipping: formData.hasShipping,
       isAddon: formData.isAddon,
