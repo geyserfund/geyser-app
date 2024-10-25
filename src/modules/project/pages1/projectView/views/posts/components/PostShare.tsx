@@ -10,22 +10,22 @@ import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks'
 import { CopyButton } from '@/shared/molecules'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
-import { ProjectEntryFragment } from '@/types'
+import { ProjectPostFragment } from '@/types'
 
 import { CampaignContent } from '../../../hooks'
 import { usePostShare } from '../../../hooks/useProjectShare'
 import { ShareBanner } from '../../body/components'
 
 type PostShareProps = {
-  entry: ProjectEntryFragment
+  post: ProjectPostFragment
 } & ButtonProps
 
-export const PostShare = ({ entry, ...props }: PostShareProps) => {
+export const PostShare = ({ post, ...props }: PostShareProps) => {
   const { project } = useProjectAtom()
 
   const postShareModal = useModal()
 
-  const { getSharePostUrl } = usePostShare({ id: entry.id })
+  const { getSharePostUrl } = usePostShare({ id: post.id })
 
   const postRewardUrl = getSharePostUrl({ clickedFrom: CampaignContent.postShareButton })
 
@@ -61,8 +61,8 @@ export const PostShare = ({ entry, ...props }: PostShareProps) => {
         </Body>
         <ShareBanner
           aspectRatio={ImageCropAspectRatio.Post}
-          bannerImage={entry.image || project.thumbnailImage}
-          bannerText={entry.title}
+          bannerImage={post.image || project.thumbnailImage}
+          bannerText={post.title}
         />
         <HStack w="full" spacing={3}>
           <Button

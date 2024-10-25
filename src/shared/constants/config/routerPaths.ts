@@ -85,6 +85,7 @@ export enum PathName {
   userId = ':userId',
   entryId = ':entryId',
   postId = ':postId',
+  goalId = ':goalId',
   grantId = ':grantId',
 
   legalTerms = 'T&C',
@@ -127,6 +128,8 @@ const pathsMap = {
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
   projectDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}`,
   projectGoals: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectGoals}`,
+  projectGoalView: (projectName: string, goalId: string | number) =>
+    `/${PathName.project}/${projectName}/${PathName.projectGoals}/${goalId}`,
   projectRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
   projectPosts: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectPosts}`,
   projectLeaderboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectLeaderboard}`,

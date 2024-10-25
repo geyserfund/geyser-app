@@ -21,7 +21,7 @@ import { inProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
 import { getPath } from '@/shared/constants'
 
 import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
-import { ProjectGoal, useProjectGoalOrderingUpdateMutation } from '../../../../../../../types'
+import { ProjectGoalFragment, useProjectGoalOrderingUpdateMutation } from '../../../../../../../types'
 import { useGoalsAtom, useProjectAtom } from '../../../../../hooks/useProjectAtom'
 import { useGoalsModal } from '../../../hooks/useGoalsModal'
 import { useProjectDefaultGoal } from '../../body/hooks/useProjectDefaultGoal'
@@ -77,8 +77,8 @@ export const RenderGoals = () => {
     const { active, over } = event
 
     if (active.id !== over.id) {
-      const oldIndex = items?.findIndex((item: ProjectGoal) => item.id === active.id)
-      const newIndex = items?.findIndex((item: ProjectGoal) => item.id === over.id)
+      const oldIndex = items?.findIndex((item: ProjectGoalFragment) => item.id === active.id)
+      const newIndex = items?.findIndex((item: ProjectGoalFragment) => item.id === over.id)
 
       const newItems = arrayMove(items ?? [], oldIndex ?? 0, newIndex ?? 0)
 
@@ -98,7 +98,7 @@ export const RenderGoals = () => {
     setActiveId(null)
   }
 
-  const handleEditGoalModalOpen = (goal: ProjectGoal) => {
+  const handleEditGoalModalOpen = (goal: ProjectGoalFragment) => {
     onGoalModalOpen(goal)
   }
 
@@ -108,7 +108,7 @@ export const RenderGoals = () => {
 
   const renderCompletedGoals = () => {
     if (hasCompletedGoals) {
-      return completedGoals?.map((goal: ProjectGoal) => {
+      return completedGoals?.map((goal: ProjectGoalFragment) => {
         if (goal) {
           return <GoalCompleted key={goal.id} goal={goal} />
         }
@@ -160,7 +160,9 @@ export const RenderGoals = () => {
             </SortableContext>
             <DragOverlay>
               {activeId ? (
-                <PresentationalGoalItem goal={items?.find((item) => item.id === activeId) ?? ({} as ProjectGoal)} />
+                <PresentationalGoalItem
+                  goal={items?.find((item) => item.id === activeId) ?? ({} as ProjectGoalFragment)}
+                />
               ) : null}
             </DragOverlay>
           </DndContext>
@@ -182,9 +184,9 @@ const SortableItem = ({
   handleEditGoalModalOpen,
   isPriorityGoal,
 }: {
-  goal: ProjectGoal
+  goal: ProjectGoalFragment
   editMode: boolean
-  handleEditGoalModalOpen: (goal: ProjectGoal) => void
+  handleEditGoalModalOpen: (goal: ProjectGoalFragment) => void
   isPriorityGoal: boolean
 }) => {
   const { listeners, setNodeRef, transform, transition, attributes, isDragging } = useSortable({
@@ -223,7 +225,7 @@ const compareProjectGoalOrder = (initialOrder: any, currentOrder: any) => {
   return true
 }
 
-const PresentationalGoalItem = ({ goal }: { goal: ProjectGoal }) => {
+const PresentationalGoalItem = ({ goal }: { goal: ProjectGoalFragment }) => {
   const theme = useTheme()
   const boxShadowColor = theme.colors.neutral[0]
   return (

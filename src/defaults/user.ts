@@ -16,4 +16,5 @@ export const defaultUser: User = {
   badges: [],
   isEmailVerified: false,
   hasSocialAccount: false,
+  posts: [],
 }
