@@ -16,6 +16,8 @@ import { CardLayout } from '@/shared/components/layouts'
 import { H1 } from '@/shared/components/typography'
 import { useFollowProject } from '@/shared/hooks/graphqlState'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
+import { useUserEmailUpdateMutation } from '@/types'
+import { validEmail } from '@/utils'
 
 import { FieldContainer } from '../../../../../../../shared/components/form/FieldContainer'
 
@@ -31,26 +33,24 @@ export const FundingDetailsUserEmailAndUpdates = () => {
   const [followsProject, setFollowsProject] = useState(followedProjects.find((p) => p.id === project.id) !== undefined)
   const [subscribedToGeyserEmails, setSubscribedToGeyserEmails] = useState(false)
   const [showEmailComponent, setShowEmailComponent] = useState(false)
+  const [localEmail, setLocalEmail] = useState(user?.email || '')
   const { loadingUserNotificationSettings, getUserNotificationConfigValue, updateUserNotificationConfigValue } =
     useUserNotificationSettings(user.id)
 
   useEffect(() => {
-    const followsProject = followedProjects.find((p) => p.id === project.id) !== undefined
+    const followsProject = followedProjects.some((p) => p.id === project.id)
     setFollowsProject(followsProject)
-  }, [project.id, followedProjects])
 
-  useEffect(() => {
     const isSubscribedToGeyserEmails =
       getUserNotificationConfigValue(UserNotificationType.PRODUCT_UPDATES, UserConfigName.IS_ENABLED) === 'true'
     setSubscribedToGeyserEmails(isSubscribedToGeyserEmails)
-  }, [loadingUserNotificationSettings, getUserNotificationConfigValue])
 
-  useEffect(() => {
-    const show = !user?.email || !followsProject || !subscribedToGeyserEmails
+    const show = !user?.email || !followsProject || !isSubscribedToGeyserEmails
     setShowEmailComponent(show)
-  }, [user?.email, followsProject, subscribedToGeyserEmails])
+  }, [project.id, followedProjects, user?.email, getUserNotificationConfigValue, loadingUserNotificationSettings])
 
-  // TODO: Fire a user email update mutation once the user has entered their email
+  const [updateUserEmail] = useUserEmailUpdateMutation()
+
   const {
     formState: { email, needsShipping },
     hasSelectedRewards,
@@ -78,6 +78,14 @@ export const FundingDetailsUserEmailAndUpdates = () => {
     setUpdatedGeyserEmailsSetting(true)
   }
 
+  /*
+   Set the email from the user to the funding form. We do this because the input field
+   is not shown if the user already has an email.
+  */
+  useEffect(() => {
+    if (user?.email) setTarget({ target: { name: 'email', value: user.email } })
+  }, [user?.email, setTarget])
+
   return (
     <>
       {showEmailComponent && (
@@ -95,8 +103,25 @@ export const FundingDetailsUserEmailAndUpdates = () => {
                 type="email"
                 name="email"
                 placeholder="funderemail@gmail.com"
-                value={email}
-                onChange={setTarget}
+                value={localEmail}
+                onChange={(e) => {
+                  setLocalEmail(e.target.value)
+                  setTarget(e)
+                }}
+                onBlur={() => {
+                  console.log('localEmail', localEmail)
+                  console.log('email', email)
+
+                  if (localEmail && validEmail.test(localEmail)) {
+                    updateUserEmail({
+                      variables: {
+                        input: {
+                          email: localEmail,
+                        },
+                      },
+                    })
+                  }
+                }}
                 isInvalid={Boolean(fundingFormError.email)}
                 onFocus={() => setErrorstate({ key: 'email', value: '' })}
               />
