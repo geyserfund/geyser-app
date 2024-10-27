@@ -1,138 +1,42 @@
-import { useMutation } from '@apollo/client'
 import { HStack, Select, Skeleton, Switch, VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiStar } from 'react-icons/pi'
 
 import { ImageWithReload } from '@/components/ui'
-import { MUTATION_UPDATE_CREATOR_NOTIFICATIONS_SETTINGS } from '@/modules/profile/graphql/mutations/creatorNotificationMutation'
+import { useAuthContext } from '@/context'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { CreatorNotificationSettings } from '@/types'
-import { useNotification } from '@/utils'
 
 import { HorizontalFormField } from '../common/HorizontalFormField'
+import { useCreatorNotificationSettings } from '../hooks/useCreatorNotificationSettings'
+import { CreatorConfigName, CreatorNotificationType } from '../hooks/useUserNotificationSettings'
 
-enum NotificationType {
-  PROJECT_SUMMARY = 'creator.projectSummary',
-  GOAL_REACHED = 'creator.goalReached',
-  SALE_MADE = 'creator.saleMade',
-  CONTRIBUTION_RECEIVED = 'creator.contributionReceived',
-}
-
-enum ConfigName {
-  FREQUENCY = 'frequency',
-  IS_ENABLED = 'is_enabled',
-  THRESHOLD = 'threshold',
-}
-
-export const CreatorNotifications = ({
-  creatorNotificationSettings,
-}: {
-  creatorNotificationSettings: CreatorNotificationSettings[]
-}) => {
+export const CreatorNotifications = () => {
   const { t } = useTranslation()
-  const [settings, setSettings] = useState<CreatorNotificationSettings[]>(creatorNotificationSettings)
+  const { user } = useAuthContext()
+  const { project } = useProjectAtom()
 
-  useEffect(() => {
-    setSettings(creatorNotificationSettings)
-  }, [creatorNotificationSettings])
+  const {
+    creatorNotificationSettings: settings,
+    updateCreatorNotificationConfigValue,
+    getCreatorNotificationConfigValue,
+    loadingProjectCreatorNotificationSettings,
+  } = useCreatorNotificationSettings(user.id, project.id)
 
-  const [updateNotificationSetting] = useMutation(MUTATION_UPDATE_CREATOR_NOTIFICATIONS_SETTINGS)
-  const toast = useNotification()
-
-  const getConfigValue = (
-    creatorNotificationSettings: CreatorNotificationSettings,
-    type: NotificationType,
-    name: ConfigName,
-  ) => {
-    const setting = creatorNotificationSettings.notificationSettings.find((s) => s.notificationType === type)
-    return setting?.configurations.find((c) => c.name === name)?.value
-  }
-
-  const getConfigId = (
-    creatorNotificationSettings: CreatorNotificationSettings,
-    type: NotificationType,
-    name: ConfigName,
-  ) => {
-    const setting = creatorNotificationSettings.notificationSettings.find((s) => s.notificationType === type)
-    return setting?.configurations.find((c) => c.name === name)?.id
-  }
-
-  const updateSettingsMap = (
-    prevSettings: CreatorNotificationSettings[],
-    projectId: string,
-    type: NotificationType,
-    name: ConfigName,
-    newValue: string,
-  ) => {
-    return prevSettings.map((setting) => {
-      if (setting.project.id === projectId) {
-        return {
-          ...setting,
-          notificationSettings: setting.notificationSettings.map((notifSetting) => {
-            if (notifSetting.notificationType === type) {
-              return {
-                ...notifSetting,
-                configurations: notifSetting.configurations.map((config) =>
-                  config.name === name ? { ...config, value: newValue } : config,
-                ),
-              }
-            }
-
-            return notifSetting
-          }),
-        }
-      }
-
-      return setting
-    })
-  }
-
-  const updateConfigValue = async (
-    creatorNotificationSettings: CreatorNotificationSettings,
-    type: NotificationType,
-    name: ConfigName,
+  const handleUpdateConfigValue = async (
+    setting: CreatorNotificationSettings,
+    type: CreatorNotificationType,
+    name: CreatorConfigName,
     value: string,
   ) => {
-    const configId = getConfigId(creatorNotificationSettings, type, name)
-    if (!configId) return
-
-    // Optimistically update the UI
-    setSettings((prevSettings) =>
-      updateSettingsMap(prevSettings, creatorNotificationSettings.project.id, type, name, value),
-    )
-
+    const oldValue = getCreatorNotificationConfigValue(setting, type, name)
     try {
-      await updateNotificationSetting({
-        variables: {
-          creatorNotificationConfigurationId: configId,
-          value,
-        },
-      })
-
-      // Show success toast
-      toast.success({
-        title: 'Update successful',
-        description: 'Notification setting has been updated.',
-      })
+      await updateCreatorNotificationConfigValue(setting, type, name, value)
     } catch (error) {
-      // Revert the optimistic update
-      setSettings((prevSettings) =>
-        updateSettingsMap(
-          prevSettings,
-          creatorNotificationSettings.project.id,
-          type,
-          name,
-          getConfigValue(creatorNotificationSettings, type, name) || '',
-        ),
-      )
-
-      // Show error toast
-      toast.error({
-        title: 'Update failed',
-        description: 'Failed to update notification setting. Please try again.',
-      })
+      // If the update fails, revert to the old value
+      updateCreatorNotificationConfigValue(setting, type, name, oldValue || '')
     }
   }
 
@@ -141,124 +45,165 @@ export const CreatorNotifications = ({
       <Body size="md" medium>
         {t('Creator notifications')}
       </Body>
-      {settings.map((setting, index) => (
-        <CardLayout key={index} spacing={5}>
-          <VStack align="stretch">
-            <HStack>
-              {setting.project.image && (
-                <ImageWithReload
-                  src={setting.project.image}
-                  width={'28px'}
-                  height={'28px'}
-                  maxHeight="28px"
-                  alignSelf={'start'}
-                  borderRadius="6px"
-                  objectFit="cover"
+      {loadingProjectCreatorNotificationSettings && <CreatorNotificationsSkeleton />}
+      {settings &&
+        settings.map((setting, index) => (
+          <CardLayout key={index} spacing={5}>
+            <VStack align="stretch">
+              <HStack>
+                {setting.project.image && (
+                  <ImageWithReload
+                    src={setting.project.image}
+                    width={'28px'}
+                    height={'28px'}
+                    maxHeight="28px"
+                    alignSelf={'start'}
+                    borderRadius="6px"
+                    objectFit="cover"
+                  />
+                )}
+                <Body size="md" medium>
+                  {setting.project.title}
+                </Body>
+              </HStack>
+
+              <HorizontalFormField label="Creator summary email" htmlFor="creator-summary" icon={<PiStar />}>
+                <Select
+                  value={
+                    getCreatorNotificationConfigValue(
+                      setting,
+                      CreatorNotificationType.PROJECT_SUMMARY,
+                      CreatorConfigName.FREQUENCY,
+                    ) || ''
+                  }
+                  onChange={(e) =>
+                    handleUpdateConfigValue(
+                      setting,
+                      CreatorNotificationType.PROJECT_SUMMARY,
+                      CreatorConfigName.FREQUENCY,
+                      e.target.value,
+                    )
+                  }
+                  size="sm"
+                  placeholder="Select frequency"
+                  width="auto"
+                >
+                  <option value="weekly">Weekly</option>
+                  <option value="monthly">Monthly</option>
+                </Select>
+                <Switch
+                  id="creator-summary"
+                  isChecked={
+                    getCreatorNotificationConfigValue(
+                      setting,
+                      CreatorNotificationType.PROJECT_SUMMARY,
+                      CreatorConfigName.IS_ENABLED,
+                    ) === 'true'
+                  }
+                  onChange={(e) =>
+                    handleUpdateConfigValue(
+                      setting,
+                      CreatorNotificationType.PROJECT_SUMMARY,
+                      CreatorConfigName.IS_ENABLED,
+                      e.target.checked ? 'true' : 'false',
+                    )
+                  }
                 />
-              )}
-              <Body size="md" medium>
-                {setting.project.title}
+              </HorizontalFormField>
+              <Body size="sm" regular color="neutral1.10">
+                {t('Receive a monthly email about your project summary: stats, goal progress and, hot rewards.')}
               </Body>
-            </HStack>
 
-            <HorizontalFormField label="Creator summary email" htmlFor="creator-summary" icon={<PiStar />}>
-              <Select
-                value={getConfigValue(setting, NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY) || ''}
-                onChange={(e) =>
-                  updateConfigValue(setting, NotificationType.PROJECT_SUMMARY, ConfigName.FREQUENCY, e.target.value)
-                }
-                size="sm"
-                placeholder="Select frequency"
-                width="auto"
-              >
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
-              </Select>
-              <Switch
-                id="creator-summary"
-                isChecked={getConfigValue(setting, NotificationType.PROJECT_SUMMARY, ConfigName.IS_ENABLED) === 'true'}
-                onChange={(e) =>
-                  updateConfigValue(
-                    setting,
-                    NotificationType.PROJECT_SUMMARY,
-                    ConfigName.IS_ENABLED,
-                    e.target.checked ? 'true' : 'false',
-                  )
-                }
-              />
-            </HorizontalFormField>
-            <Body size="sm" regular color="neutral1.10">
-              {t('Receive a monthly email about your project summary: stats, goal progress and, hot rewards.')}
-            </Body>
+              <HorizontalFormField label="Goal Reached Email" htmlFor="goal-reached">
+                <Switch
+                  id="goal-reached"
+                  isChecked={
+                    getCreatorNotificationConfigValue(
+                      setting,
+                      CreatorNotificationType.GOAL_REACHED,
+                      CreatorConfigName.IS_ENABLED,
+                    ) === 'true'
+                  }
+                  onChange={(e) =>
+                    handleUpdateConfigValue(
+                      setting,
+                      CreatorNotificationType.GOAL_REACHED,
+                      CreatorConfigName.IS_ENABLED,
+                      e.target.checked ? 'true' : 'false',
+                    )
+                  }
+                />
+              </HorizontalFormField>
 
-            <HorizontalFormField label="Goal Reached Email" htmlFor="goal-reached">
-              <Switch
-                id="goal-reached"
-                isChecked={getConfigValue(setting, NotificationType.GOAL_REACHED, ConfigName.IS_ENABLED) === 'true'}
-                onChange={(e) =>
-                  updateConfigValue(
-                    setting,
-                    NotificationType.GOAL_REACHED,
-                    ConfigName.IS_ENABLED,
-                    e.target.checked ? 'true' : 'false',
-                  )
-                }
-              />
-            </HorizontalFormField>
+              <HorizontalFormField label="Sale Made" htmlFor="sale-made">
+                <Switch
+                  id="sale-made"
+                  isChecked={
+                    getCreatorNotificationConfigValue(
+                      setting,
+                      CreatorNotificationType.SALE_MADE,
+                      CreatorConfigName.IS_ENABLED,
+                    ) === 'true'
+                  }
+                  onChange={(e) =>
+                    handleUpdateConfigValue(
+                      setting,
+                      CreatorNotificationType.SALE_MADE,
+                      CreatorConfigName.IS_ENABLED,
+                      e.target.checked ? 'true' : 'false',
+                    )
+                  }
+                />
+              </HorizontalFormField>
 
-            <HorizontalFormField label="Sale Made" htmlFor="sale-made">
-              <Switch
-                id="sale-made"
-                isChecked={getConfigValue(setting, NotificationType.SALE_MADE, ConfigName.IS_ENABLED) === 'true'}
-                onChange={(e) =>
-                  updateConfigValue(
-                    setting,
-                    NotificationType.SALE_MADE,
-                    ConfigName.IS_ENABLED,
-                    e.target.checked ? 'true' : 'false',
-                  )
-                }
-              />
-            </HorizontalFormField>
-
-            <HorizontalFormField label="Contribution received" htmlFor="contribution-received">
-              <Select
-                value={getConfigValue(setting, NotificationType.CONTRIBUTION_RECEIVED, ConfigName.THRESHOLD) || ''}
-                onChange={(e) =>
-                  updateConfigValue(
-                    setting,
-                    NotificationType.CONTRIBUTION_RECEIVED,
-                    ConfigName.THRESHOLD,
-                    e.target.value,
-                  )
-                }
-                size="sm"
-                placeholder="Select threshold"
-                width="auto"
-              >
-                <option value="1"> {'> 1 USD'} </option>
-                <option value="100"> {'> 100 USD'} </option>
-                <option value="1000"> {'> 1 000 USD'} </option>
-                <option value="10000"> {'> 10 000 USD'} </option>
-              </Select>
-              <Switch
-                id="contribution-received"
-                isChecked={
-                  getConfigValue(setting, NotificationType.CONTRIBUTION_RECEIVED, ConfigName.IS_ENABLED) === 'true'
-                }
-                onChange={(e) =>
-                  updateConfigValue(
-                    setting,
-                    NotificationType.CONTRIBUTION_RECEIVED,
-                    ConfigName.IS_ENABLED,
-                    e.target.checked ? 'true' : 'false',
-                  )
-                }
-              />
-            </HorizontalFormField>
-          </VStack>
-        </CardLayout>
-      ))}
+              <HorizontalFormField label="Contribution received" htmlFor="contribution-received">
+                <Select
+                  value={
+                    getCreatorNotificationConfigValue(
+                      setting,
+                      CreatorNotificationType.CONTRIBUTION_RECEIVED,
+                      CreatorConfigName.THRESHOLD,
+                    ) || ''
+                  }
+                  onChange={(e) =>
+                    handleUpdateConfigValue(
+                      setting,
+                      CreatorNotificationType.CONTRIBUTION_RECEIVED,
+                      CreatorConfigName.THRESHOLD,
+                      e.target.value,
+                    )
+                  }
+                  size="sm"
+                  placeholder="Select threshold"
+                  width="auto"
+                >
+                  <option value="1"> {'> 1 USD'} </option>
+                  <option value="100"> {'> 100 USD'} </option>
+                  <option value="1000"> {'> 1 000 USD'} </option>
+                  <option value="10000"> {'> 10 000 USD'} </option>
+                </Select>
+                <Switch
+                  id="contribution-received"
+                  isChecked={
+                    getCreatorNotificationConfigValue(
+                      setting,
+                      CreatorNotificationType.CONTRIBUTION_RECEIVED,
+                      CreatorConfigName.IS_ENABLED,
+                    ) === 'true'
+                  }
+                  onChange={(e) =>
+                    handleUpdateConfigValue(
+                      setting,
+                      CreatorNotificationType.CONTRIBUTION_RECEIVED,
+                      CreatorConfigName.IS_ENABLED,
+                      e.target.checked ? 'true' : 'false',
+                    )
+                  }
+                />
+              </HorizontalFormField>
+            </VStack>
+          </CardLayout>
+        ))}
     </VStack>
   )
 }
