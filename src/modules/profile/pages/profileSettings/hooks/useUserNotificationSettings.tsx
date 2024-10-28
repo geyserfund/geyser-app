@@ -34,8 +34,6 @@ export const useUserNotificationSettings = (userId: string) => {
     {} as UserNotificationSettings,
   )
 
-  console.log('userNotificationSettings', userNotificationSettings)
-
   const { refetch: refetchUserNotificationSettings, loading: loadingUserNotificationSettings } =
     useProfileNotificationsSettingsQuery({
       variables: { userId },
@@ -82,6 +80,7 @@ export const useUserNotificationSettings = (userId: string) => {
 
   const updateUserNotificationConfigValue = async (type: UserNotificationType, name: UserConfigName, value: string) => {
     const configId = getUserNotificationConfigId(type, name)
+
     if (!configId) return
     // Optimistically update the UI
     setUserNotificationSettings((prevSettings) => {
