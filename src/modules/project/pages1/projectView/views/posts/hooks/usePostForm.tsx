@@ -62,7 +62,10 @@ export const usePostForm = (
       image: post.image,
       title: post.title,
       postType: post.postType || null,
-      projectGoalIds: post.projectGoals?.inProgress?.map((goal) => goal.id) || [],
+      projectGoalIds: [
+        ...(post.projectGoals?.inProgress?.map((goal) => goal.id) || []),
+        ...(post.projectGoals?.completed?.map((goal) => goal.id) || []),
+      ],
       projectRewardUUIDs: post.projectRewards.map((reward) => reward.uuid) || [],
     })
   }

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { UseFormSetValue } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { PiPlus } from 'react-icons/pi'
+import { useNavigate } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
@@ -11,10 +12,12 @@ import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI
 import { useGoalsAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Modal, SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { standardPadding } from '@/shared/styles'
 import { ProjectGoalsFragment, ProjectRewardFragment } from '@/types'
 
+import { useGoalsModal } from '../../../hooks'
 import { PostFormType } from '../hooks/usePostForm'
 
 type Props = {
@@ -22,12 +25,25 @@ type Props = {
   setValue: UseFormSetValue<PostFormType>
   projectRewardUUIDs: string[]
   projectGoalIds: any[]
+  projectName: string
 }
 
-export const LinkGoalsAndRewardsModal = ({ postId, setValue, projectRewardUUIDs, projectGoalIds }: Props) => {
+export const LinkGoalsAndRewardsModal = ({
+  postId,
+  setValue,
+  projectRewardUUIDs,
+  projectGoalIds,
+  projectName,
+}: Props) => {
   const { t } = useTranslation()
 
   const { isOpen, onClose, onOpen } = useModal()
+
+  const { queryProjectRewards } = useProjectRewardsAPI(true)
+  const { rewards } = useRewardsAtom()
+
+  const { queryInProgressGoals, queryCompletedGoals } = useProjectGoalsAPI(true)
+  const { inProgressGoals, completedGoals } = useGoalsAtom()
 
   const [existingProjectRewardUUIDs, setExistingProjectRewardUUIDs] = useState<string[]>(projectRewardUUIDs)
   const [existingProjectGoalIds, setExistingProjectGoalIds] = useState<number[]>(projectGoalIds)
@@ -52,10 +68,13 @@ export const LinkGoalsAndRewardsModal = ({ postId, setValue, projectRewardUUIDs,
 
   const totalLinks = existingProjectGoalIds.length + existingProjectRewardUUIDs.length
 
+  const hasGoals = inProgressGoals.length > 0 || completedGoals.length > 0
+  const hasRewards = rewards.length > 0
+
   return (
     <>
       <Button size="md" variant={'soft'} colorScheme="neutral1" rightIcon={<PiPlus />} onClick={onOpen}>
-        {t('Post links')}
+        {t('Linked goals and rewards')}
         {totalLinks ? <Body as="span" color="primary1.11" paddingLeft="3px">{` (${totalLinks})`}</Body> : null}
       </Button>
 
@@ -69,21 +88,50 @@ export const LinkGoalsAndRewardsModal = ({ postId, setValue, projectRewardUUIDs,
           paddingX: 0,
         }}
       >
-        <Body size="sm" paddingX={standardPadding}>
-          {t('Using links enables you to highlight a specific reward or goal, helping you direct people to it.')}
-        </Body>
-        <Rewards projectRewardUUIDs={existingProjectRewardUUIDs} updateRewardUUIDs={setExistingProjectRewardUUIDs} />
-        <Divider />
-        <Goals projectGoalIds={existingProjectGoalIds} updateGoalIds={setExistingProjectGoalIds} />
+        {!hasGoals && !hasRewards ? (
+          <NoGoalsAndRewards projectName={projectName} />
+        ) : (
+          <>
+            <Body size="sm" paddingX={standardPadding}>
+              {t('Using links enables you to highlight a specific reward or goal, helping you direct people to it.')}
+            </Body>
+            {hasRewards && (
+              <>
+                <Rewards
+                  projectRewardUUIDs={existingProjectRewardUUIDs}
+                  updateRewardUUIDs={setExistingProjectRewardUUIDs}
+                  queryProjectRewards={queryProjectRewards}
+                  rewards={rewards}
+                />
+                {hasGoals && (
+                  <HStack w="full" paddingX={standardPadding}>
+                    <Divider />
+                  </HStack>
+                )}
+              </>
+            )}
 
-        <HStack w="full" paddingX={standardPadding}>
-          <Button flex={1} variant="soft" colorScheme="neutral1" onClick={handleClose}>
-            {t('Cancel')}
-          </Button>
-          <Button flex={1} variant="solid" colorScheme="primary1" onClick={handleLink}>
-            {t('Link')}
-          </Button>
-        </HStack>
+            {hasGoals && (
+              <Goals
+                projectGoalIds={existingProjectGoalIds}
+                updateGoalIds={setExistingProjectGoalIds}
+                queryInProgressGoals={queryInProgressGoals}
+                queryCompletedGoals={queryCompletedGoals}
+                inProgressGoals={inProgressGoals}
+                completedGoals={completedGoals}
+              />
+            )}
+
+            <HStack w="full" paddingX={standardPadding}>
+              <Button flex={1} variant="soft" colorScheme="neutral1" onClick={handleClose}>
+                {t('Cancel')}
+              </Button>
+              <Button flex={1} variant="solid" colorScheme="primary1" onClick={handleLink}>
+                {t('Link')}
+              </Button>
+            </HStack>
+          </>
+        )}
       </Modal>
     </>
   )
@@ -92,14 +140,17 @@ export const LinkGoalsAndRewardsModal = ({ postId, setValue, projectRewardUUIDs,
 const Rewards = ({
   projectRewardUUIDs,
   updateRewardUUIDs,
+  queryProjectRewards,
+  rewards,
 }: {
   projectRewardUUIDs: string[]
   updateRewardUUIDs: (rewardIds: string[]) => void
+  queryProjectRewards: any
+  rewards: ProjectRewardFragment[]
 }) => {
   const { t } = useTranslation()
 
-  const { queryProjectRewards } = useProjectRewardsAPI(true)
-  const { rewards } = useRewardsAtom()
+  console.log('rewards', rewards)
 
   return (
     <VStack w="full" alignItems="flex-start">
@@ -126,7 +177,7 @@ const Rewards = ({
 const RewardItem = ({ reward }: { reward: ProjectRewardFragment }) => {
   return (
     <HStack spacing={2} w="full" justifyContent={'start'}>
-      <Checkbox value={reward.uuid}>
+      <Checkbox size="lg" value={reward.uuid}>
         <ImageWithReload
           src={reward.images[0]}
           alt={reward.name}
@@ -157,15 +208,19 @@ const RewardItemSkeleton = () => {
 const Goals = ({
   projectGoalIds,
   updateGoalIds,
+  queryInProgressGoals,
+  queryCompletedGoals,
+  inProgressGoals,
+  completedGoals,
 }: {
   projectGoalIds: any[]
   updateGoalIds: (goalIds: number[]) => void
+  queryInProgressGoals: any
+  queryCompletedGoals: any
+  inProgressGoals: ProjectGoalsFragment[]
+  completedGoals: ProjectGoalsFragment[]
 }) => {
   const { t } = useTranslation()
-
-  const { queryInProgressGoals } = useProjectGoalsAPI(true)
-
-  const { inProgressGoals } = useGoalsAtom()
 
   return (
     <VStack w="full" alignItems="flex-start">
@@ -173,13 +228,13 @@ const Goals = ({
         {t('Goals')}
       </Body>
       <VStack w="full" alignItems="start" paddingX={standardPadding} maxHeight={'200px'} overflowY={'auto'}>
-        {queryInProgressGoals.loading ? (
+        {queryInProgressGoals.loading || queryCompletedGoals.loading ? (
           [1, 2].map((i) => {
             return <RewardItemSkeleton key={i} />
           })
         ) : (
           <CheckboxGroup value={projectGoalIds} onChange={updateGoalIds}>
-            {inProgressGoals.map((goal) => (
+            {[...inProgressGoals, ...completedGoals].map((goal) => (
               <GoalItem key={goal.id} goal={goal} />
             ))}
           </CheckboxGroup>
@@ -192,7 +247,7 @@ const Goals = ({
 const GoalItem = ({ goal }: { goal: ProjectGoalsFragment }) => {
   return (
     <HStack w="full" spacing={2}>
-      <Checkbox value={goal.id}>
+      <Checkbox size="lg" value={goal.id}>
         {goal.emojiUnifiedCode && (
           <Box>
             <Emoji size={24} unified={goal.emojiUnifiedCode} emojiStyle={EmojiStyle.NATIVE} />
@@ -202,5 +257,37 @@ const GoalItem = ({ goal }: { goal: ProjectGoalsFragment }) => {
 
       <Body size="sm">{goal.title}</Body>
     </HStack>
+  )
+}
+
+const NoGoalsAndRewards = ({ projectName }: { projectName: string }) => {
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { onGoalModalOpen } = useGoalsModal()
+
+  const handleCreateReward = () => {
+    navigate(getPath('projectRewardCreate', projectName))
+  }
+
+  const handleCreateGoal = () => {
+    navigate(getPath('projectGoals', projectName))
+    onGoalModalOpen()
+  }
+
+  return (
+    <>
+      <Body size="sm" paddingX={standardPadding}>
+        {t('No goals or rewards found')}
+      </Body>
+
+      <HStack w="full" paddingX={standardPadding}>
+        <Button flex={1} variant="solid" colorScheme="primary1" onClick={handleCreateReward}>
+          {t('Create a reward')}
+        </Button>
+        <Button flex={1} variant="solid" colorScheme="primary1" onClick={handleCreateGoal}>
+          {t('Create a goal')}
+        </Button>
+      </HStack>
+    </>
   )
 }

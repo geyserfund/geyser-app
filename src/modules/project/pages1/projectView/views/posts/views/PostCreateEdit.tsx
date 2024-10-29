@@ -238,7 +238,7 @@ export const PostCreateEdit = () => {
               </FileUpload>
             </Box>
 
-            <HStack px={'15px'}>
+            <HStack px={6}>
               <CustomSelect
                 name="postType"
                 options={postTypeOptions}
