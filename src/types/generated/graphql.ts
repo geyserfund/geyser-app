@@ -8488,12 +8488,6 @@ export type ProjectTagCreateMutation = {
   tagCreate: { __typename?: 'Tag'; id: number; label: string }
 }
 
-export type UserCreateMutationVariables = Exact<{
-  input: UserCreateInput
-}>
-
-export type UserCreateMutation = { __typename?: 'Mutation'; userCreate: { __typename?: 'User' } & UserMeFragment }
-
 export type CreateWalletMutationVariables = Exact<{
   input: CreateWalletInput
 }>
@@ -15242,42 +15236,6 @@ export type ProjectTagCreateMutationOptions = Apollo.BaseMutationOptions<
   ProjectTagCreateMutation,
   ProjectTagCreateMutationVariables
 >
-export const UserCreateDocument = gql`
-  mutation UserCreate($input: UserCreateInput!) {
-    userCreate(input: $input) {
-      ...UserMe
-    }
-  }
-  ${UserMeFragmentDoc}
-`
-export type UserCreateMutationFn = Apollo.MutationFunction<UserCreateMutation, UserCreateMutationVariables>
-
-/**
- * __useUserCreateMutation__
- *
- * To run a mutation, you first call `useUserCreateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUserCreateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [userCreateMutation, { data, loading, error }] = useUserCreateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUserCreateMutation(
-  baseOptions?: Apollo.MutationHookOptions<UserCreateMutation, UserCreateMutationVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions }
-  return Apollo.useMutation<UserCreateMutation, UserCreateMutationVariables>(UserCreateDocument, options)
-}
-export type UserCreateMutationHookResult = ReturnType<typeof useUserCreateMutation>
-export type UserCreateMutationResult = Apollo.MutationResult<UserCreateMutation>
-export type UserCreateMutationOptions = Apollo.BaseMutationOptions<UserCreateMutation, UserCreateMutationVariables>
 export const CreateWalletDocument = gql`
   mutation CreateWallet($input: CreateWalletInput!) {
     walletCreate(input: $input) {
