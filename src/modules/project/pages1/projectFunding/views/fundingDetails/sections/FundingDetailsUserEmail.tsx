@@ -1,4 +1,4 @@
-import { FormErrorMessage, Input, InputGroup, InputRightElement, Switch, useToast } from '@chakra-ui/react'
+import { FormControl, FormErrorMessage, Input, InputGroup, InputRightElement, Switch } from '@chakra-ui/react'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -17,10 +17,9 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { useFollowedProjectsValue } from '@/pages/auth/state'
 import { CardLayout } from '@/shared/components/layouts'
 import { H1 } from '@/shared/components/typography'
-import { useFollowProject } from '@/shared/hooks/graphqlState'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
 import { lightModeColors } from '@/shared/styles'
-import { useUserCreateMutation, useUserEmailUpdateMutation } from '@/types'
+import { useUserEmailIsAvailableLazyQuery } from '@/types'
 import { validEmail } from '@/utils'
 
 import { FieldContainer } from '../../../../../../../shared/components/form/FieldContainer'
@@ -36,37 +35,26 @@ export const FundingDetailsUserEmailAndUpdates = () => {
   const { t } = useTranslation()
   const { user } = useAuthContext()
   const { project } = useProjectAtom()
-  const toast = useToast()
   const followedProjects = useFollowedProjectsValue()
 
-  const [followsProject, setFollowsProject] = useState(followedProjects.find((p) => p.id === project.id) !== undefined)
-  const [subscribedToGeyserEmails, setSubscribedToGeyserEmails] = useState(false)
-  const [showEmailComponent, setShowEmailComponent] = useState(
-    !user?.email || !followsProject || !subscribedToGeyserEmails,
-  )
-  const [localEmail, setLocalEmail] = useState(user?.email || '')
-  const [emailValidationState, setEmailValidationState] = useState(
-    localEmail ? EMAIL_VALIDATION_STATE.SUCCEEDED : EMAIL_VALIDATION_STATE.IDLE,
-  )
-  const [userId, setUserId] = useState(user?.id || 0)
+  const [followsProject] = useState(followedProjects.find((p) => p.id === project.id) !== undefined)
+  const [userId] = useState(user?.id || 0)
 
-  const [updatedSettings, setUpdatedSettings] = useState({
-    creatorEmail: false,
-    geyserEmails: false,
-    userEmail: false,
-  })
-  const { updateUserNotificationConfigValue } = useUserNotificationSettings(userId)
+  const { getUserNotificationConfigValue } = useUserNotificationSettings(userId)
+  const subscribedToGeyserEmails =
+    getUserNotificationConfigValue(UserNotificationType.PRODUCT_UPDATES, UserConfigName.IS_ENABLED) === 'true'
 
-  const [createUser, { loading: createUserLoading }] = useUserCreateMutation()
-  const [updateUserEmail, { loading: updateUserEmailLoading }] = useUserEmailUpdateMutation()
-  const { handleFollow, handleUnFollow, error: followHookError } = useFollowProject(project)
+  const [emailValidationState, setEmailValidationState] = useState(EMAIL_VALIDATION_STATE.IDLE)
 
-  useEffect(() => {
-    console.log('in SHOW useEffect', user?.email, followsProject, subscribedToGeyserEmails)
+  const showEmailComponent = !user?.email || !followsProject || !subscribedToGeyserEmails
 
-    const show = !user?.email || !followsProject || !subscribedToGeyserEmails
-    setShowEmailComponent(show)
-  }, [])
+  const {
+    formState: { needsShipping, followProject, subscribeToGeyserEmails, email },
+    hasSelectedRewards,
+    setTarget,
+    fundingFormError,
+    setErrorstate,
+  } = useFundingFormAtom()
 
   /*
    Set the email from the user to the funding form. We do this because the input field
@@ -76,25 +64,15 @@ export const FundingDetailsUserEmailAndUpdates = () => {
     if (user?.email) setTarget({ target: { name: 'email', value: user.email } })
   }, [])
 
-  const {
-    formState: { needsShipping },
-    hasSelectedRewards,
-    setTarget,
-    fundingFormError,
-    setErrorstate,
-  } = useFundingFormAtom()
-
-  const toggleCreatorEmails = (toggled: boolean) => {
-    if (toggled) handleFollow()
-    else handleUnFollow()
-
-    setFollowsProject(toggled)
-    setUpdatedSettings({ ...updatedSettings, creatorEmail: true })
-  }
+  const [isEmailAvailable, { loading: userEmailIsAvailableLoading }] = useUserEmailIsAvailableLazyQuery()
 
   const debouncedEmailValidation = useCallback(
     debounce(async (email: string) => {
-      if (!email) return Promise.resolve()
+      if (!email) {
+        setEmailValidationState(EMAIL_VALIDATION_STATE.IDLE)
+        setErrorstate({ key: 'email', value: '' })
+        return Promise.resolve()
+      }
 
       if (!validEmail.test(email)) {
         setErrorstate({ key: 'email', value: 'Please enter a valid email address.' })
@@ -102,71 +80,30 @@ export const FundingDetailsUserEmailAndUpdates = () => {
         return Promise.resolve()
       }
 
-      setUpdatedSettings({ ...updatedSettings, userEmail: true })
-
-      if (!user?.id) {
-        createUser({
-          variables: {
-            input: {
-              email,
-            },
-          },
-        })
-          .then((res) => {
-            setEmailValidationState(EMAIL_VALIDATION_STATE.SUCCEEDED)
-            setUserId(res.data?.userCreate.id || 0)
-          })
-          .catch((error) => {
+      isEmailAvailable({
+        variables: { email },
+      })
+        .then((res) => {
+          if (res.data?.userEmailIsAvailable) setEmailValidationState(EMAIL_VALIDATION_STATE.SUCCEEDED)
+          else {
             setEmailValidationState(EMAIL_VALIDATION_STATE.FAILED)
-            setErrorstate({ key: 'email', value: error.message })
-          })
-      } else {
-        updateUserEmail({
-          variables: {
-            input: {
-              email,
-            },
-          },
+            setErrorstate({
+              key: 'email',
+              value: 'This email is already in use, please log in with that email or enter a different one.',
+            })
+          }
         })
-          .then(() => {
-            setEmailValidationState(EMAIL_VALIDATION_STATE.SUCCEEDED)
-          })
-          .catch((error) => {
-            setEmailValidationState(EMAIL_VALIDATION_STATE.FAILED)
-            setErrorstate({ key: 'email', value: error.message })
-          })
-      }
-
+        .catch((error: Error) => {
+          setEmailValidationState(EMAIL_VALIDATION_STATE.FAILED)
+          setErrorstate({ key: 'email', value: error.message })
+        })
       return Promise.resolve()
     }, 1000),
     [],
   )
 
-  useEffect(() => {
-    if (followHookError) {
-      toast({
-        title: 'Error',
-        description: followHookError?.message,
-        status: 'error',
-      })
-      setFollowsProject((prev) => !prev)
-    }
-  }, [followHookError])
-
-  const toggleGeyserEmails = (toggled: boolean) => {
-    updateUserNotificationConfigValue(
-      UserNotificationType.PRODUCT_UPDATES,
-      UserConfigName.IS_ENABLED,
-      toggled ? 'true' : 'false',
-    )
-
-    setSubscribedToGeyserEmails(toggled)
-    console.log('SUBSCRIBED TO GEYSER EMAILS', subscribedToGeyserEmails)
-    setUpdatedSettings({ ...updatedSettings, geyserEmails: true })
-  }
-
   const renderEmailInputRightElement = () => {
-    if (createUserLoading || updateUserEmailLoading) return <Loader size="md"></Loader>
+    if (userEmailIsAvailableLoading) return <Loader size="md"></Loader>
 
     switch (emailValidationState) {
       case EMAIL_VALIDATION_STATE.IDLE:
@@ -189,22 +126,23 @@ export const FundingDetailsUserEmailAndUpdates = () => {
           <H1 size="2xl" bold>
             {t('Email and Updates')}
           </H1>
-          {!user?.email && (
-            <FieldContainer
-              title={`${t('Your email')} ${hasSelectedRewards ? '*' : ''}`}
-              subtitle={t('This email will be used by the seller to reach out to you.')}
-            >
+
+          <FieldContainer
+            title={`${t('Your email')} ${hasSelectedRewards ? '*' : ''}`}
+            subtitle={t('This email will be used by the seller to reach out to you.')}
+          >
+            <FormControl isInvalid={Boolean(fundingFormError.email)}>
               <InputGroup>
                 <Input
+                  disabled={Boolean(user?.email)}
                   required={hasSelectedRewards}
                   type="email"
                   name="email"
                   placeholder="funderemail@gmail.com"
-                  value={localEmail}
+                  value={email}
+                  inputMode="email"
                   onChange={(e) => {
-                    console.log('IN ON CHANGE', e.target.value)
-                    setLocalEmail(e.target.value)
-                    setTarget(e)
+                    setTarget({ target: { name: 'email', value: e.target.value } })
                     setEmailValidationState(EMAIL_VALIDATION_STATE.LOADING)
                     debouncedEmailValidation(e.target.value)
                   }}
@@ -213,9 +151,9 @@ export const FundingDetailsUserEmailAndUpdates = () => {
                 />
                 <InputRightElement>{renderEmailInputRightElement()}</InputRightElement>
               </InputGroup>
-              {fundingFormError.email}
-            </FieldContainer>
-          )}
+              {fundingFormError.email && <FormErrorMessage>{fundingFormError.email}</FormErrorMessage>}
+            </FormControl>
+          </FieldContainer>
           {needsShipping && (
             <Feedback
               variant={FeedBackVariant.WARNING}
@@ -224,33 +162,36 @@ export const FundingDetailsUserEmailAndUpdates = () => {
               )}
             />
           )}
-          {emailValidationState === EMAIL_VALIDATION_STATE.SUCCEEDED && (
-            <>
-              {!followsProject && (
-                <HorizontalFormField
-                  label="Receive direct creator emails. If you accept, you will receive updates directly from this project via email."
-                  htmlFor="creator-email-toggle"
-                >
-                  <Switch
-                    id="creator-email-toggle"
-                    isChecked={followsProject}
-                    onChange={(e) => toggleCreatorEmails(e.target.checked)}
-                  />
-                </HorizontalFormField>
-              )}
-              {!subscribedToGeyserEmails && (
-                <HorizontalFormField
-                  label="Subscribe to Geyser newsletter to discover new projects."
-                  htmlFor="geyser-email-toggle"
-                >
-                  <Switch
-                    id="geyser-email-toggle"
-                    isChecked={subscribedToGeyserEmails}
-                    onChange={(e) => toggleGeyserEmails(e.target.checked)}
-                  />
-                </HorizontalFormField>
-              )}
-            </>
+          {!followsProject && (
+            <HorizontalFormField
+              label="Receive direct creator emails. If you accept, you will receive updates directly from this project via email."
+              htmlFor="creator-email-toggle"
+            >
+              <Switch
+                id="creator-email-toggle"
+                isChecked={followProject}
+                onChange={(e) => {
+                  setTarget({ target: { name: 'followProject', value: e.target.checked } })
+                  console.log('Follow Project Toggle:', e.target.checked)
+                  console.log(
+                    'Current required state:',
+                    Boolean(hasSelectedRewards || followProject || subscribeToGeyserEmails),
+                  )
+                }}
+              />
+            </HorizontalFormField>
+          )}
+          {!subscribedToGeyserEmails && (
+            <HorizontalFormField
+              label="Subscribe to Geyser newsletter to discover new projects."
+              htmlFor="geyser-email-toggle"
+            >
+              <Switch
+                id="geyser-email-toggle"
+                isChecked={subscribeToGeyserEmails}
+                onChange={(e) => setTarget({ target: { name: 'subscribeToGeyserEmails', value: e.target.checked } })}
+              />
+            </HorizontalFormField>
           )}
         </CardLayout>
       )}

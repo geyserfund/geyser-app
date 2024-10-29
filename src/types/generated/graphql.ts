@@ -589,6 +589,7 @@ export type FundingMetadataInput = {
   followProject?: InputMaybe<Scalars['Boolean']['input']>
   media?: InputMaybe<Scalars['String']['input']>
   privateComment?: InputMaybe<Scalars['String']['input']>
+  subscribeToGeyserEmails?: InputMaybe<Scalars['Boolean']['input']>
 }
 
 export enum FundingMethod {
@@ -8520,6 +8521,12 @@ export type AffiliateLinksGetQuery = {
   affiliateLinksGet: Array<{ __typename?: 'AffiliateLink' } & ProjectAffiliateLinkFragment>
 }
 
+export type UserEmailIsAvailableQueryVariables = Exact<{
+  email: Scalars['String']['input']
+}>
+
+export type UserEmailIsAvailableQuery = { __typename?: 'Query'; userEmailIsAvailable: boolean }
+
 export type ProjectEntriesQueryVariables = Exact<{
   where: UniqueProjectQueryInput
   input?: InputMaybe<ProjectEntriesGetInput>
@@ -15403,6 +15410,63 @@ export type AffiliateLinksGetQueryHookResult = ReturnType<typeof useAffiliateLin
 export type AffiliateLinksGetLazyQueryHookResult = ReturnType<typeof useAffiliateLinksGetLazyQuery>
 export type AffiliateLinksGetSuspenseQueryHookResult = ReturnType<typeof useAffiliateLinksGetSuspenseQuery>
 export type AffiliateLinksGetQueryResult = Apollo.QueryResult<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>
+export const UserEmailIsAvailableDocument = gql`
+  query UserEmailIsAvailable($email: String!) {
+    userEmailIsAvailable(email: $email)
+  }
+`
+
+/**
+ * __useUserEmailIsAvailableQuery__
+ *
+ * To run a query within a React component, call `useUserEmailIsAvailableQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserEmailIsAvailableQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserEmailIsAvailableQuery({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useUserEmailIsAvailableQuery(
+  baseOptions: Apollo.QueryHookOptions<UserEmailIsAvailableQuery, UserEmailIsAvailableQueryVariables> &
+    ({ variables: UserEmailIsAvailableQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<UserEmailIsAvailableQuery, UserEmailIsAvailableQueryVariables>(
+    UserEmailIsAvailableDocument,
+    options,
+  )
+}
+export function useUserEmailIsAvailableLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserEmailIsAvailableQuery, UserEmailIsAvailableQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<UserEmailIsAvailableQuery, UserEmailIsAvailableQueryVariables>(
+    UserEmailIsAvailableDocument,
+    options,
+  )
+}
+export function useUserEmailIsAvailableSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<UserEmailIsAvailableQuery, UserEmailIsAvailableQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<UserEmailIsAvailableQuery, UserEmailIsAvailableQueryVariables>(
+    UserEmailIsAvailableDocument,
+    options,
+  )
+}
+export type UserEmailIsAvailableQueryHookResult = ReturnType<typeof useUserEmailIsAvailableQuery>
+export type UserEmailIsAvailableLazyQueryHookResult = ReturnType<typeof useUserEmailIsAvailableLazyQuery>
+export type UserEmailIsAvailableSuspenseQueryHookResult = ReturnType<typeof useUserEmailIsAvailableSuspenseQuery>
+export type UserEmailIsAvailableQueryResult = Apollo.QueryResult<
+  UserEmailIsAvailableQuery,
+  UserEmailIsAvailableQueryVariables
+>
 export const ProjectEntriesDocument = gql`
   query ProjectEntries($where: UniqueProjectQueryInput!, $input: ProjectEntriesGetInput) {
     projectGet(where: $where) {
