@@ -57,10 +57,24 @@ export const PublishModal = ({
   const [selectedRewards, setSelectedRewards] = useState<ProjectRewardFragment[]>([])
 
   const [postSendByEmail, { loading: postSendByEmailLoading }] = usePostSendByEmailMutation({
+    variables: {
+      input: {
+        postId: post.id,
+        emailSendOptions: {
+          segment: sendTo as EmailSubscriberSegment,
+          projectRewardUUIDs: selectedRewards.length > 0 ? selectedRewards.map((reward) => reward.uuid) : undefined,
+        },
+      },
+    },
     onCompleted(data) {
       publishModal.onClose()
       toast.success({
-        title: `Sending emails to ${data.postSendByEmail} users.`,
+        title: `Sending emails to ${data.postSendByEmail.recipientCount} users.`,
+      })
+    },
+    onError(error) {
+      toast.error({
+        title: error.message,
       })
     },
   })
@@ -82,12 +96,6 @@ export const PublishModal = ({
   })
 
   const handleInput = (e: any) => {
-    if (e.value === EmailSubscriberSegment.Followers) {
-      setEmailCount(12)
-    } else if (e.value === EmailSubscriberSegment.Contributors) {
-      setEmailCount(12)
-    }
-
     setSendTo(e.value)
   }
 
