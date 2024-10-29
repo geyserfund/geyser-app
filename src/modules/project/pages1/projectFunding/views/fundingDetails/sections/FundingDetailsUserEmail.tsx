@@ -60,11 +60,14 @@ export const FundingDetailsUserEmailAndUpdates = () => {
    Set the email from the user to the funding form. We do this because the input field
    is not shown if the user already has an email.
   */
+  console.log('USER', user)
   useEffect(() => {
     if (user?.email) setTarget({ target: { name: 'email', value: user.email } })
-  }, [])
+    else setTarget({ target: { name: 'email', value: '' } })
+  }, [user])
 
   const [isEmailAvailable, { loading: userEmailIsAvailableLoading }] = useUserEmailIsAvailableLazyQuery()
+  console.log('email', email)
 
   const debouncedEmailValidation = useCallback(
     debounce(async (email: string) => {
