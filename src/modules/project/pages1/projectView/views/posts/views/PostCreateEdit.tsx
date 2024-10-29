@@ -67,6 +67,8 @@ export const PostCreateEdit = () => {
 
   const postForm = watch()
 
+  console.log('postForm', postForm.projectGoalIds)
+
   useEffect(() => {
     let number: any
     if (isDirty && postForm.status !== PostStatus.Published) {
@@ -255,6 +257,7 @@ export const PostCreateEdit = () => {
                 setValue={setValue}
                 projectRewardUUIDs={postForm.projectRewardUUIDs}
                 projectGoalIds={postForm.projectGoalIds}
+                projectName={project.name}
               />
             </HStack>
 

@@ -30,8 +30,6 @@ export const LinkedRewardsAndGoals = ({ post }: { post: ProjectPostViewFragment 
           onOpenGoalModal={() => {}}
           backgroundColor="neutral1.1"
           hover
-          as={Link}
-          to={getPath('projectGoalView', project.name, goal.id)}
           w="full"
         />
       ))}
@@ -90,11 +88,11 @@ const RewardCardForPost = ({
       <Box height="148px" width="148px" overflow="hidden">
         <ImageWithReload width="100%" height="100%" src={reward.images[0]} alt={reward.name} />
       </Box>
-      <VStack flex={1} alignItems="start" spacing={2} p={4}>
-        <Body size="sm" bold>
+      <VStack flex={1} alignItems="start" spacing={0} p={4}>
+        <Body size="sm" medium>
           {reward.name}
         </Body>
-        <Body size="sm" light noOfLines={3} isTruncated>
+        <Body size="sm" light noOfLines={3}>
           {reward.shortDescription}
         </Body>
         {renderAmountComponent()}

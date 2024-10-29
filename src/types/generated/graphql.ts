@@ -7939,6 +7939,7 @@ export type ProjectPostViewFragment = {
   projectGoals: {
     __typename?: 'ProjectGoals'
     inProgress: Array<{ __typename?: 'ProjectGoal' } & ProjectGoalsFragment>
+    completed: Array<{ __typename?: 'ProjectGoal' } & ProjectGoalsFragment>
   }
 }
 
@@ -10175,6 +10176,9 @@ export const ProjectPostViewFragmentDoc = gql`
     }
     projectGoals {
       inProgress {
+        ...ProjectGoals
+      }
+      completed {
         ...ProjectGoals
       }
     }
