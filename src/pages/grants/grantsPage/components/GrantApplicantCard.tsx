@@ -251,6 +251,7 @@ export const GrantApplicantCard = ({
       return (
         <Button
           onClick={(e) => {
+            e.preventDefault()
             e.stopPropagation()
             loginOnOpen({
               title: t('Login to vote'),
@@ -279,6 +280,7 @@ export const GrantApplicantCard = ({
       return (
         <Button
           onClick={(e) => {
+            e.preventDefault()
             e.stopPropagation()
             onOpen()
           }}
