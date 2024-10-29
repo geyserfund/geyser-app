@@ -1,6 +1,6 @@
-import { Badge, Box, Button, HStack, SkeletonText, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, SkeletonText, Tag, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowLeft, PiEyeSlash } from 'react-icons/pi'
+import { PiArrowLeft, PiEyeSlash, PiFile } from 'react-icons/pi'
 import { Link, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
@@ -162,6 +162,12 @@ export const RewardView = () => {
           >
             <MarkdownField preview content={reward.description || ''} />
           </HStack>
+          <VStack w="full" spacing={2} alignItems="start">
+            <Body size="xl" bold>
+              {t('Reward Updates')}
+            </Body>
+            <RewardUpdates posts={reward.posts} />
+          </VStack>
         </VStack>
       </CardLayout>
       <BottomNavBarContainer direction="column">
@@ -178,6 +184,39 @@ export const RewardView = () => {
         )}
       </BottomNavBarContainer>
     </VStack>
+  )
+}
+
+const RewardUpdates = ({ posts }: { posts: any[] }) => {
+  return (
+    <HStack
+      w="full"
+      justifyContent="space-between"
+      border="1px solid"
+      borderColor="neutralAlpha.6"
+      borderRadius="8px"
+      p={1}
+    >
+      {posts.map((post) => (
+        <>
+          <HStack key={post.id}>
+            <Tag size="sm" variant="soft" bg="neutralAlpha.3">
+              <PiFile />
+              <Body size="sm" light pl={2}>
+                {t('Post type')}
+              </Body>
+            </Tag>
+            <Body size="md" medium>
+              {t('Post title')}
+            </Body>
+          </HStack>
+
+          <Body size="sm" light>
+            {t('date')}
+          </Body>
+        </>
+      ))}
+    </HStack>
   )
 }
 

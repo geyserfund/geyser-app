@@ -8108,6 +8108,14 @@ export type ProjectRewardFragment = {
   estimatedDeliveryInWeeks?: number | null
   confirmationMessage?: string | null
   privateCommentPrompts: Array<PrivateCommentPrompt>
+  posts: Array<{
+    __typename?: 'Post'
+    id: any
+    title: string
+    postType?: PostType | null
+    description: string
+    createdAt: string
+  }>
 }
 
 export type PostPageProjectRewardFragment = {
@@ -10410,6 +10418,13 @@ export const ProjectRewardFragmentDoc = gql`
     estimatedDeliveryInWeeks
     confirmationMessage
     privateCommentPrompts
+    posts {
+      id
+      title
+      postType
+      description
+      createdAt
+    }
   }
 `
 export const WalletContributionLimitsFragmentDoc = gql`
