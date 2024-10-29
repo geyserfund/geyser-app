@@ -67,8 +67,6 @@ export const PostCreateEdit = () => {
 
   const postForm = watch()
 
-  console.log('postForm', postForm.projectGoalIds)
-
   useEffect(() => {
     let number: any
     if (isDirty && postForm.status !== PostStatus.Published) {

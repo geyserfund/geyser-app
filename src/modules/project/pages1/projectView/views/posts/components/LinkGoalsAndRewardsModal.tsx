@@ -150,8 +150,6 @@ const Rewards = ({
 }) => {
   const { t } = useTranslation()
 
-  console.log('rewards', rewards)
-
   return (
     <VStack w="full" alignItems="flex-start">
       <Body size="md" medium paddingX={standardPadding}>
