@@ -220,7 +220,7 @@ export const PublishModal = ({
   return (
     <>
       {!isPostPublished && (
-        <Tooltip label={!isActive(project.status) ? t('Cannot publish post for inActive project') : ''}>
+        <Tooltip label={!isActive(project.status) ? t('Cannot publish post for inactive project') : ''}>
           <Button
             size="lg"
             variant="solid"
@@ -235,16 +235,18 @@ export const PublishModal = ({
       )}
 
       {canSendViaEmail && isPostPublished && (
-        <Button
-          size="lg"
-          variant="solid"
-          colorScheme="primary1"
-          onClick={publishModal.onOpen}
-          isDisabled={!isActive(project.status)}
-          isLoading={postSendByEmailLoading}
-        >
-          {t('Send via email')}
-        </Button>
+        <Tooltip label={!isActive(project.status) ? t('Cannot send post via email for inactive project') : ''}>
+          <Button
+            size="lg"
+            variant="solid"
+            colorScheme="primary1"
+            onClick={publishModal.onOpen}
+            isDisabled={!isActive(project.status)}
+            isLoading={postSendByEmailLoading}
+          >
+            {t('Send via email')}
+          </Button>
+        </Tooltip>
       )}
       <Modal
         {...publishModal}
