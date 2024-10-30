@@ -153,7 +153,7 @@ export const RewardView = () => {
           )}
           <CardLayout w={'full'} padding={3}>
             <VStack w={'full'} p={0}>
-              <Body size="sm" medium>
+              <Body size="md" medium>
                 {t(
                   'Engage your community, followers, contributors, and reward purchasers by sending them an update about your new reward via email.',
                 )}

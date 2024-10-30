@@ -32,7 +32,7 @@ export const dimensions = {
   project: {
     rewards: {
       view: {
-        maxWidth: 538,
+        maxWidth: 586,
       },
     },
     posts: {
