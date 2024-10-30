@@ -1,7 +1,7 @@
 import { Badge, Box, Button, HStack, SkeletonText, Tag, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiArrowLeft, PiEyeSlash, PiFile } from 'react-icons/pi'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
@@ -28,6 +28,8 @@ export const RewardView = () => {
   const isMobileMode = useMobileMode()
 
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
+
+  const navigate = useNavigate()
 
   const { loading, data } = useProjectRewardQuery({
     skip: !rewardId,
@@ -149,6 +151,27 @@ export const RewardView = () => {
           ) : (
             <MediaCarousel links={reward.images} aspectRatio={ImageCropAspectRatio.Reward} />
           )}
+          <CardLayout w={'full'} padding={3}>
+            <VStack w={'full'} p={0}>
+              <Body size="sm" medium>
+                {t(
+                  'Engage your community, followers, contributors, and reward purchasers by sending them an update about your new reward via email.',
+                )}
+              </Body>
+              <Button
+                w="full"
+                variant="solid"
+                size="lg"
+                colorScheme="primary1"
+                onClick={() => {
+                  navigate(getPath('projectPostCreate', project?.name))
+                }}
+              >
+                {' '}
+                {t('Write an update')}{' '}
+              </Button>
+            </VStack>
+          </CardLayout>
           <HStack
             w="full"
             justifyContent="start"
