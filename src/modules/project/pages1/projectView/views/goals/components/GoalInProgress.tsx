@@ -74,7 +74,7 @@ export const GoalInProgress = ({
   }
 
   return (
-    <CardLayout dense noborder width="100%" gap={'10px'} background="utils.pbg" {...rest}>
+    <CardLayout dense width="100%" gap={'10px'} background="utils.pbg" padding={6} {...rest}>
       {isEditing && listeners && (
         <VStack display="flex" height="100%" alignItems="center" justifyContent="flex-start" pt={1}>
           <DragHandle listeners={listeners} />

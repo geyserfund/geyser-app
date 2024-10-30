@@ -1,8 +1,10 @@
-import { Box, HStack, VStack } from '@chakra-ui/react'
+import { Box, HStack } from '@chakra-ui/react'
 import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 import { PiCheckCircle } from 'react-icons/pi'
+
+import { CardLayout } from '@/shared/components/layouts'
 
 import { Body } from '../../../../../../../shared/components/typography'
 import { ProjectGoalFragment } from '../../../../../../../types'
@@ -19,7 +21,7 @@ export const GoalCompleted = ({ goal }: Props) => {
   const { colors } = useCustomTheme()
 
   return (
-    <VStack display="flex" alignItems="flex-start" width="100%" height="100%" spacing={0}>
+    <CardLayout padding={6} display="flex" alignItems="flex-start" width="100%" height="100%" spacing={0}>
       <HStack w="full" justifyContent={'start'}>
         {goal.emojiUnifiedCode && (
           <Box display="flex" justifyContent="center" width="24px" height="34px">
@@ -48,6 +50,6 @@ export const GoalCompleted = ({ goal }: Props) => {
 
         <GoalTarget goal={goal} />
       </HStack>
-    </VStack>
+    </CardLayout>
   )
 }

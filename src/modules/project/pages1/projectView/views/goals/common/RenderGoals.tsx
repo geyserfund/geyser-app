@@ -14,10 +14,12 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 import { inProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
+import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 
 import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
@@ -28,6 +30,8 @@ import { useProjectDefaultGoal } from '../../body/hooks/useProjectDefaultGoal'
 import { GoalCompleted, GoalInProgress } from '../components'
 
 export const RenderGoals = () => {
+  const { t } = useTranslation()
+
   const { project, loading: projectLoading } = useProjectAtom()
 
   const navigate = useNavigate()
@@ -168,9 +172,11 @@ export const RenderGoals = () => {
           </DndContext>
         </VStack>
       )}
-      {hasCompletedGoals && hasInProgressGoals && <Divider borderColor="neutral1.6" />}
       {hasCompletedGoals && (
         <VStack alignItems="flex-start" gap={'20px'} width="100%">
+          <Body size="2xl" bold>
+            {t('Completed Goals')}
+          </Body>
           {renderCompletedGoals()}
         </VStack>
       )}
