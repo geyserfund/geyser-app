@@ -15,9 +15,10 @@ import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { RewardCurrency, Satoshis, USDCents, useProjectRewardQuery } from '@/types'
-import { useMobileMode } from '@/utils'
+import { getFormattedDate, useMobileMode } from '@/utils'
 
 import { useRewardBuy } from '../../hooks'
+import { postTypeOptions } from '../posts/utils/postTypeLabel'
 import { ProjectRewardShippingEstimate, RewardEditMenu } from './components'
 import { RewardShare } from './components/RewardShare'
 
@@ -203,16 +204,15 @@ const RewardUpdates = ({ posts }: { posts: any[] }) => {
             <Tag size="sm" variant="soft" bg="neutralAlpha.3">
               <PiFile />
               <Body size="sm" light pl={2}>
-                {t('Post type')}
+                {postTypeOptions.find((option) => option.value === post.postType)?.label}
               </Body>
             </Tag>
             <Body size="md" medium>
-              {t('Post title')}
+              {post.title}
             </Body>
           </HStack>
-
           <Body size="sm" light>
-            {t('date')}
+            {getFormattedDate(post.createdAt)}
           </Body>
         </>
       ))}
