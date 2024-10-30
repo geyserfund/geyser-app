@@ -38,7 +38,6 @@ export const useUserNotificationSettings = (userId: string) => {
     useProfileNotificationsSettingsQuery({
       variables: { userId },
       onCompleted(data) {
-        console.log('data', data)
         if (data?.userNotificationSettingsGet?.userSettings) {
           setUserNotificationSettings(data.userNotificationSettingsGet.userSettings)
         }
