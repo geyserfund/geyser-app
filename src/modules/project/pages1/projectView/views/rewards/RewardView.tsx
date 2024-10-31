@@ -1,6 +1,6 @@
-import { Badge, Box, Button, HStack, SkeletonText, Tag, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowLeft, PiEyeSlash, PiFile } from 'react-icons/pi'
+import { PiArrowLeft, PiEyeSlash } from 'react-icons/pi'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
@@ -15,10 +15,10 @@ import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { RewardCurrency, Satoshis, USDCents, useProjectRewardQuery } from '@/types'
-import { getFormattedDate, useMobileMode } from '@/utils'
+import { useMobileMode } from '@/utils'
 
+import { PostsUpdates } from '../../components/PostsUpdates'
 import { useRewardBuy } from '../../hooks'
-import { postTypeOptions } from '../posts/utils/postTypeLabel'
 import { ProjectRewardShippingEstimate, RewardEditMenu } from './components'
 import { RewardShare } from './components/RewardShare'
 
@@ -190,7 +190,7 @@ export const RewardView = () => {
             <Body size="xl" bold>
               {t('Reward Updates')}
             </Body>
-            <RewardUpdates posts={reward.posts} />
+            <PostsUpdates posts={reward.posts} />
           </VStack>
         </VStack>
       </CardLayout>
@@ -208,38 +208,6 @@ export const RewardView = () => {
         )}
       </BottomNavBarContainer>
     </VStack>
-  )
-}
-
-const RewardUpdates = ({ posts }: { posts: any[] }) => {
-  return (
-    <HStack
-      w="full"
-      justifyContent="space-between"
-      border="1px solid"
-      borderColor="neutralAlpha.6"
-      borderRadius="8px"
-      p={1}
-    >
-      {posts.map((post) => (
-        <>
-          <HStack key={post.id}>
-            <Tag size="sm" variant="soft" bg="neutralAlpha.3">
-              <PiFile />
-              <Body size="sm" light pl={2}>
-                {postTypeOptions.find((option) => option.value === post.postType)?.label}
-              </Body>
-            </Tag>
-            <Body size="md" medium>
-              {post.title}
-            </Body>
-          </HStack>
-          <Body size="sm" light>
-            {getFormattedDate(post.createdAt)}
-          </Body>
-        </>
-      ))}
-    </HStack>
   )
 }
 
