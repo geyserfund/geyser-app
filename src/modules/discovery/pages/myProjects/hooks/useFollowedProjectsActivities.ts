@@ -37,7 +37,6 @@ export const useFollowedProjectsActivities = () => {
 
   useMeProjectFollowsQuery({
     onCompleted(data) {
-      console.log('data', data)
       setFollowedProjects(data.me?.projectFollows as Project[])
     },
   })
