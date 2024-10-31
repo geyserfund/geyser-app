@@ -18,7 +18,7 @@ export const Goals = () => {
 
   return (
     <BodySectionLayout title={t('Goals')}>
-      <CardLayout w="full">
+      <CardLayout w="full" noborder padding={0}>
         <RenderGoals />
         {isProjectOwner && (
           <HStack w="full" justifyContent="end">

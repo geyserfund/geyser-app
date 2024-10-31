@@ -23,3 +23,19 @@ export const QUERY_PROJECT_COMPLETED_GOALS = gql`
     }
   }
 `
+
+export const QUERY_PROJECT_GOAL = gql`
+  ${FRAGMENT_PROJECT_GOALS}
+  query ProjectGoal($input: BigInt!) {
+    projectGoal(projectGoalId: $input) {
+      posts {
+        id
+        title
+        postType
+        description
+        createdAt
+      }
+      ...ProjectGoals
+    }
+  }
+`

@@ -588,6 +588,7 @@ export type FundingMetadataInput = {
   followProject?: InputMaybe<Scalars['Boolean']['input']>;
   media?: InputMaybe<Scalars['String']['input']>;
   privateComment?: InputMaybe<Scalars['String']['input']>;
+  subscribeToGeyserEmails?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export enum FundingMethod {
@@ -2507,6 +2508,7 @@ export type Query = {
   posts: Array<Post>;
   projectCountriesGet: Array<ProjectCountriesGetResult>;
   projectGet?: Maybe<Project>;
+  projectGoal: ProjectGoal;
   projectGoals: ProjectGoals;
   projectLeaderboardContributorsGet: Array<ProjectLeaderboardContributorsRow>;
   projectNotificationSettingsGet: CreatorNotificationSettings;
@@ -2664,6 +2666,11 @@ export type QueryPostsArgs = {
 
 export type QueryProjectGetArgs = {
   where: UniqueProjectQueryInput;
+};
+
+
+export type QueryProjectGoalArgs = {
+  projectGoalId: Scalars['BigInt']['input'];
 };
 
 
@@ -4920,6 +4927,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType, Partial<QueryPostsArgs>>;
   projectCountriesGet?: Resolver<Array<ResolversTypes['ProjectCountriesGetResult']>, ParentType, ContextType>;
   projectGet?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectGetArgs, 'where'>>;
+  projectGoal?: Resolver<ResolversTypes['ProjectGoal'], ParentType, ContextType, RequireFields<QueryProjectGoalArgs, 'projectGoalId'>>;
   projectGoals?: Resolver<ResolversTypes['ProjectGoals'], ParentType, ContextType, RequireFields<QueryProjectGoalsArgs, 'input'>>;
   projectLeaderboardContributorsGet?: Resolver<Array<ResolversTypes['ProjectLeaderboardContributorsRow']>, ParentType, ContextType, RequireFields<QueryProjectLeaderboardContributorsGetArgs, 'input'>>;
   projectNotificationSettingsGet?: Resolver<ResolversTypes['CreatorNotificationSettings'], ParentType, ContextType, RequireFields<QueryProjectNotificationSettingsGetArgs, 'projectId'>>;
@@ -6489,6 +6497,16 @@ export type ProjectCompletedGoalsQuery = { __typename?: 'Query', projectGoals: {
       { __typename?: 'ProjectGoal' }
       & ProjectGoalsFragment
     )> } };
+
+export type ProjectGoalQueryVariables = Exact<{
+  input: Scalars['BigInt']['input'];
+}>;
+
+
+export type ProjectGoalQuery = { __typename?: 'Query', projectGoal: (
+    { __typename?: 'ProjectGoal', posts: Array<{ __typename?: 'Post', id: any, title: string, postType?: PostType | null, description: string, createdAt: string }> }
+    & ProjectGoalsFragment
+  ) };
 
 export type ProjectPostsQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
@@ -12556,6 +12574,53 @@ export type ProjectCompletedGoalsQueryHookResult = ReturnType<typeof useProjectC
 export type ProjectCompletedGoalsLazyQueryHookResult = ReturnType<typeof useProjectCompletedGoalsLazyQuery>;
 export type ProjectCompletedGoalsSuspenseQueryHookResult = ReturnType<typeof useProjectCompletedGoalsSuspenseQuery>;
 export type ProjectCompletedGoalsQueryResult = Apollo.QueryResult<ProjectCompletedGoalsQuery, ProjectCompletedGoalsQueryVariables>;
+export const ProjectGoalDocument = gql`
+    query ProjectGoal($input: BigInt!) {
+  projectGoal(projectGoalId: $input) {
+    posts {
+      id
+      title
+      postType
+      description
+      createdAt
+    }
+    ...ProjectGoals
+  }
+}
+    ${ProjectGoalsFragmentDoc}`;
+
+/**
+ * __useProjectGoalQuery__
+ *
+ * To run a query within a React component, call `useProjectGoalQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectGoalQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectGoalQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectGoalQuery(baseOptions: Apollo.QueryHookOptions<ProjectGoalQuery, ProjectGoalQueryVariables> & ({ variables: ProjectGoalQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectGoalQuery, ProjectGoalQueryVariables>(ProjectGoalDocument, options);
+      }
+export function useProjectGoalLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectGoalQuery, ProjectGoalQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectGoalQuery, ProjectGoalQueryVariables>(ProjectGoalDocument, options);
+        }
+export function useProjectGoalSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectGoalQuery, ProjectGoalQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectGoalQuery, ProjectGoalQueryVariables>(ProjectGoalDocument, options);
+        }
+export type ProjectGoalQueryHookResult = ReturnType<typeof useProjectGoalQuery>;
+export type ProjectGoalLazyQueryHookResult = ReturnType<typeof useProjectGoalLazyQuery>;
+export type ProjectGoalSuspenseQueryHookResult = ReturnType<typeof useProjectGoalSuspenseQuery>;
+export type ProjectGoalQueryResult = Apollo.QueryResult<ProjectGoalQuery, ProjectGoalQueryVariables>;
 export const ProjectPostsDocument = gql`
     query ProjectPosts($where: UniqueProjectQueryInput!, $input: ProjectPostsGetInput) {
   projectGet(where: $where) {

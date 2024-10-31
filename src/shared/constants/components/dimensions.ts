@@ -40,6 +40,11 @@ export const dimensions = {
         maxWidth: 636,
       },
     },
+    goals: {
+      view: {
+        maxWidth: 586,
+      },
+    },
     dashboard: {
       menu: {
         width: 165,

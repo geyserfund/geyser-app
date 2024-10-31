@@ -144,6 +144,9 @@ export const RenderGoals = () => {
     <VStack width="100%" alignItems="flex-start" spacing={6}>
       {hasInProgressGoals && (
         <VStack alignItems="flex-start" spacing={4} width="100%">
+          <Body size="2xl" bold>
+            {t('Goals')}
+          </Body>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}

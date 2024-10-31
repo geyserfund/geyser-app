@@ -1,4 +1,5 @@
 import { Box, HStack, StackProps, VStack } from '@chakra-ui/react'
+import { Emoji } from 'emoji-picker-react'
 
 import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
@@ -8,9 +9,10 @@ type ShareBannerProps = {
   aspectRatio: number
   bannerImage?: Maybe<string>
   bannerText: string
+  emoji?: string
 } & StackProps
 
-export const ShareBanner = ({ aspectRatio, bannerImage, bannerText, ...rest }: ShareBannerProps) => {
+export const ShareBanner = ({ aspectRatio, bannerImage, bannerText, emoji, ...rest }: ShareBannerProps) => {
   return (
     <VStack w="100%" position="relative" borderRadius="8px" overflow="hidden" {...rest}>
       <Box aspectRatio={aspectRatio} w="100%" overflow={'hidden'}>
@@ -27,6 +29,7 @@ export const ShareBanner = ({ aspectRatio, bannerImage, bannerText, ...rest }: S
         justifyContent={'start'}
         zIndex={1}
       >
+        {emoji && <Emoji size={16} unified={emoji} />}
         <Body size="sm" medium color="utils.whiteContrast">
           {bannerText}
         </Body>

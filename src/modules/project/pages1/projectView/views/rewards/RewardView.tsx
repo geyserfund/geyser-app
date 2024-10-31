@@ -172,20 +172,22 @@ export const RewardView = () => {
               </Button>
             </VStack>
           </CardLayout>
-          <HStack
-            w="full"
-            justifyContent="start"
-            fontSize="16px"
-            color="utils.text"
-            sx={{
-              p: {
-                marginTop: '0px',
-              },
-            }}
-            flex={1}
-          >
-            <MarkdownField preview content={reward.description || ''} />
-          </HStack>
+          {reward?.description && (
+            <HStack
+              w="full"
+              justifyContent="start"
+              fontSize="16px"
+              color="utils.text"
+              sx={{
+                p: {
+                  marginTop: '0px',
+                },
+              }}
+              flex={1}
+            >
+              <MarkdownField preview content={reward.description || ''} />
+            </HStack>
+          )}
           <VStack w="full" spacing={2} alignItems="start">
             <Body size="xl" bold>
               {t('Reward Updates')}
