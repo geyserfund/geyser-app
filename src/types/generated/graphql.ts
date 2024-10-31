@@ -2324,7 +2324,9 @@ export type ProjectRewardsGroupedByRewardIdStatsProjectReward = {
   id: Scalars['BigInt']['output'];
   image?: Maybe<Scalars['String']['output']>;
   images?: Maybe<Scalars['String']['output']>;
+  maxClaimable: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  sold: Scalars['Int']['output'];
 };
 
 export type ProjectRewardsStats = {
@@ -4831,7 +4833,9 @@ export type ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<ContextTy
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   images?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  maxClaimable?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -5774,7 +5778,7 @@ export type LeaderboardGlobalProjectsQuery = { __typename?: 'Query', leaderboard
 
 export type FollowedProjectsActivitiesCountFragmentFragment = { __typename?: 'ProjectActivitiesCount', count: number, project: { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, title: string } };
 
-export type OrdersStatsFragmentFragment = { __typename?: 'OrdersStatsBase', projectRewards: { __typename?: 'ProjectRewardsStats', count: number }, projectRewardsGroupedByProjectRewardId: Array<{ __typename?: 'ProjectRewardsGroupedByRewardIdStats', count: number, projectReward: { __typename?: 'ProjectRewardsGroupedByRewardIdStatsProjectReward', id: any, name: string, image?: string | null } }> };
+export type OrdersStatsFragmentFragment = { __typename?: 'OrdersStatsBase', projectRewards: { __typename?: 'ProjectRewardsStats', count: number }, projectRewardsGroupedByProjectRewardId: Array<{ __typename?: 'ProjectRewardsGroupedByRewardIdStats', count: number, projectReward: { __typename?: 'ProjectRewardsGroupedByRewardIdStatsProjectReward', id: any, name: string, image?: string | null, sold: number, maxClaimable: number } }> };
 
 export type ProjectContributionsStatsFragment = { __typename?: 'ProjectContributionsStatsBase', contributions: { __typename?: 'ProjectContributionsStats', total: number, totalUsd: number } };
 
@@ -7558,6 +7562,8 @@ export const OrdersStatsFragmentFragmentDoc = gql`
       id
       name
       image
+      sold
+      maxClaimable
     }
   }
 }

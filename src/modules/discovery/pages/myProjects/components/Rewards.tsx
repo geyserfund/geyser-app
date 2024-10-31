@@ -1,10 +1,11 @@
-import { Box, Divider, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
+import { Box, Button, Divider, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiBag } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography'
 import { getPath, NoRewardsSoldUrl } from '@/shared/constants'
+import { useMobileMode } from '@/utils'
 
 import { Reward, useRewards } from '../hooks/useRewards'
 
@@ -30,7 +31,7 @@ export const Rewards = ({ projectId, projectName }: RewardsProps) => {
     >
       <Header rewardsSold={totalRewardsCount} />
       <Divider my={4} />
-      <RewardsList rewards={rewards} />
+      <RewardsList rewards={rewards} projectName={projectName} />
     </Box>
   )
 }
@@ -66,7 +67,7 @@ const Header = ({ rewardsSold }: { rewardsSold: number | undefined }) => {
   )
 }
 
-const RewardsList = ({ rewards }: { rewards: Reward[] }) => {
+const RewardsList = ({ rewards, projectName }: { rewards: Reward[]; projectName: string }) => {
   const noRewardsSold = rewards.length === 0
 
   if (noRewardsSold) {
@@ -80,30 +81,72 @@ const RewardsList = ({ rewards }: { rewards: Reward[] }) => {
   return (
     <VStack w="100%" align="stretch" spacing={0.5}>
       {rewards.map((reward) => (
-        <RewardItem key={reward.id} reward={reward} />
+        <RewardItem key={reward.id} reward={reward} projectName={projectName} />
       ))}
     </VStack>
   )
 }
 
-const RewardItem = ({ reward }: { reward: Reward }) => {
+const RewardItem = ({ reward, projectName }: { reward: Reward; projectName: string }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const isMobile = useMobileMode()
+
+  const { isSoldOut } = reward
+
+  const Direction = isMobile ? VStack : HStack
+
+  const soldOutStyle = {
+    bg: 'neutralAlpha.2',
+    borderRadius: '8px',
+    p: 2,
+  }
+
   return (
-    <HStack w="100%" justifyContent="flex-start">
-      {reward.image && <Image src={reward.image} borderRadius="lg" width="20px" height="20px" alt={reward.name} />}
-      <Body size="md" medium>
-        {reward.name}
-        <Body as="span" light>
-          {' '}
-          {t('sold')}{' '}
+    <Direction w="100%" justifyContent="space-between" {...(isSoldOut && soldOutStyle)}>
+      <HStack w="100%" justifyContent="flex-start">
+        {reward.image && <Image src={reward.image} borderRadius="lg" width="20px" height="20px" alt={reward.name} />}
+
+        <Body size="md" medium>
+          {reward.name}
+          {!isSoldOut ? (
+            <>
+              <Body as="span" light>
+                {' '}
+                {t('sold')}{' '}
+              </Body>
+              {reward.count}
+              <Body as="span" light>
+                {' '}
+                {reward.count > 1 ? t('times.') : t('time.')}
+              </Body>
+            </>
+          ) : (
+            <Body as="span" size="md" light>
+              {' '}
+              {t('sold out!')}
+            </Body>
+          )}
         </Body>
-        {reward.count}
-        <Body as="span" light>
-          {' '}
-          {reward.count > 1 ? t('times.') : t('time.')}
-        </Body>
-      </Body>
-    </HStack>
+      </HStack>
+
+      {isSoldOut && (
+        <Button
+          variant="surface"
+          size="sm"
+          colorScheme="primary1"
+          w={isMobile ? 'full' : 'auto'}
+          minWidth="150px"
+          onClick={(e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            navigate(`${getPath('projectPostCreate', projectName)}?rewardId=${reward.id}`)
+          }}
+        >
+          {t('Update your community')}
+        </Button>
+      )}
+    </Direction>
   )
 }
 

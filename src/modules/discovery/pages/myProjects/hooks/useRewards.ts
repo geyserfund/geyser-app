@@ -8,6 +8,7 @@ export type Reward = {
   name: string
   image: string | null
   count: number
+  isSoldOut: boolean
 }
 
 export const useRewards = (projectId: string) => {
@@ -31,6 +32,7 @@ export const useRewards = (projectId: string) => {
           name: reward.projectReward.name,
           image: reward.projectReward.image ?? null,
           count: reward.count,
+          isSoldOut: reward.projectReward.sold >= reward.projectReward.maxClaimable,
         })),
       )
     },

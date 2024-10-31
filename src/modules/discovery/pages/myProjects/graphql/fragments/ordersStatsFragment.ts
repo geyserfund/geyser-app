@@ -11,6 +11,8 @@ export const ORDERS_STATS_FRAGMENT = gql`
         id
         name
         image
+        sold
+        maxClaimable
       }
     }
   }

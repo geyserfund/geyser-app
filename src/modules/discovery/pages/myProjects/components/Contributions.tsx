@@ -252,6 +252,7 @@ const GoalStats = ({
           size="sm"
           colorScheme="primary1"
           w={isMobile ? 'full' : 'auto'}
+          minWidth="150px"
           onClick={(e) => {
             e.stopPropagation()
             e.preventDefault()
