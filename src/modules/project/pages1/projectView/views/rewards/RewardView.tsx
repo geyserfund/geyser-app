@@ -151,27 +151,29 @@ export const RewardView = () => {
           ) : (
             <MediaCarousel links={reward.images} aspectRatio={ImageCropAspectRatio.Reward} />
           )}
-          <CardLayout w={'full'} padding={3}>
-            <VStack w={'full'} p={0}>
-              <Body size="md" medium>
-                {t(
-                  'Engage your community, followers, contributors, and reward purchasers by sending them an update about your new reward via email.',
-                )}
-              </Body>
-              <Button
-                w="full"
-                variant="solid"
-                size="lg"
-                colorScheme="primary1"
-                onClick={() => {
-                  navigate(getPath('projectPostCreate', project?.name))
-                }}
-              >
-                {' '}
-                {t('Write an update')}{' '}
-              </Button>
-            </VStack>
-          </CardLayout>
+          {isProjectOwner && (
+            <CardLayout w={'full'} padding={3}>
+              <VStack w={'full'} p={0}>
+                <Body size="md" medium>
+                  {t(
+                    'Engage your community, followers, contributors, and reward purchasers by sending them an update about your new reward via email.',
+                  )}
+                </Body>
+                <Button
+                  w="full"
+                  variant="solid"
+                  size="lg"
+                  colorScheme="primary1"
+                  onClick={() => {
+                    navigate(`${getPath('projectPostCreate', project?.name)}?rewardId=${reward.uuid}`)
+                  }}
+                >
+                  {' '}
+                  {t('Write an update')}{' '}
+                </Button>
+              </VStack>
+            </CardLayout>
+          )}
           {reward?.description && (
             <HStack
               w="full"

@@ -27,12 +27,23 @@ const schema = yup.object({
   title: yup.string().required('This is a required field'),
 })
 
-export const usePostForm = (
-  projectId: number,
-  postId?: number | string,
-  options?: LazyQueryHookOptions<ProjectPostQuery, ProjectPostQueryVariables>,
-  postTemplate: ProjectPostViewFragment = {} as ProjectPostViewFragment,
-) => {
+interface UsePostFormProps {
+  projectId: number
+  postId?: number | string
+  options?: LazyQueryHookOptions<ProjectPostQuery, ProjectPostQueryVariables>
+  postTemplate?: ProjectPostViewFragment
+  linkedGoalId?: string
+  linkedRewardId?: string
+}
+
+export const usePostForm = ({
+  projectId,
+  postId,
+  options,
+  postTemplate = {} as ProjectPostViewFragment,
+  linkedGoalId,
+  linkedRewardId,
+}: UsePostFormProps) => {
   const toast = useNotification()
 
   const [loading, setLoading] = useState(Boolean(postId))
@@ -46,8 +57,8 @@ export const usePostForm = (
       image: postTemplate.image || '',
       title: postTemplate.title || '',
       postType: postTemplate.postType || null,
-      projectGoalIds: [],
-      projectRewardUUIDs: [],
+      projectGoalIds: linkedGoalId ? [linkedGoalId] : [],
+      projectRewardUUIDs: linkedRewardId ? [linkedRewardId] : [],
     },
     resolver: yupResolver(schema),
   })

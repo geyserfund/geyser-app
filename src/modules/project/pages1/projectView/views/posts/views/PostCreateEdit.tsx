@@ -2,7 +2,7 @@ import { Box, Button, HStack, Input, Spinner, StackProps, useDisclosure, VStack 
 import { t } from 'i18next'
 import { useCallback, useEffect, useState } from 'react'
 import { PiArrowLeft, PiCaretDown, PiImages } from 'react-icons/pi'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { ImageWithReload, TextArea } from '@/components/ui'
 import { CustomSelect } from '@/components/ui/CustomSelect'
@@ -37,6 +37,10 @@ export const PostCreateEdit = () => {
 
   const { postId } = useParams<{ postId: string }>()
 
+  const [searchParams] = useSearchParams()
+  const linkedGoalId = searchParams.get('goalId')
+  const linkedRewardId = searchParams.get('rewardId')
+
   const [focusFlag, setFocusFlag] = useState('')
 
   const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
@@ -49,10 +53,10 @@ export const PostCreateEdit = () => {
     }, 1)
   }
 
-  const { loading, savePost, saving, postPublish, publishing, isDirty, setValue, watch, control } = usePostForm(
-    project.id,
+  const { loading, savePost, saving, postPublish, publishing, isDirty, setValue, watch, control } = usePostForm({
+    projectId: project.id,
     postId,
-    {
+    options: {
       fetchPolicy: 'network-only',
       onError() {
         navigate(getPath('notFound'))
@@ -63,7 +67,9 @@ export const PostCreateEdit = () => {
         }
       },
     },
-  )
+    linkedGoalId: linkedGoalId ?? undefined,
+    linkedRewardId: linkedRewardId ?? undefined,
+  })
 
   const postForm = watch()
 

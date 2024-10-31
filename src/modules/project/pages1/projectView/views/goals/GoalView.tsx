@@ -91,7 +91,7 @@ export const GoalView = () => {
                   size="lg"
                   colorScheme="primary1"
                   onClick={() => {
-                    navigate(getPath('projectPostCreate', project?.name))
+                    navigate(`${getPath('projectPostCreate', project?.name)}?goalId=${goal.id}`)
                   }}
                 >
                   {t('Write an update')}
