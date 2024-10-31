@@ -9,7 +9,7 @@ import { Body } from '@/shared/components/typography'
 import { getPath, NoContributionImageUrl } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { ProjectGoalCurrency, ProjectGoalFragment, ProjectGoalStatus } from '@/types'
-import { commaFormatted } from '@/utils'
+import { commaFormatted, useMobileMode } from '@/utils'
 
 import { useProjectGoals } from '../hooks/useProjectGoals'
 import { useProjectStats } from '../hooks/useProjectStats'
@@ -229,10 +229,14 @@ const GoalStats = ({
   const satsAmount = formatSatsAmount(goal.amountContributed)
   const isCompleted = goal.status === ProjectGoalStatus.Completed
 
+  const isMobile = useMobileMode()
+
+  const Direction = isMobile ? VStack : HStack
+
   if (isCompleted) {
     return (
-      <HStack w="full" justifyContent={'space-between'}>
-        <HStack>
+      <Direction w="full" justifyContent={'space-between'} spacing={1}>
+        <HStack w="full" justifyContent={isMobile ? 'flex-end' : 'flex-start'}>
           <Body size="sm" muted medium>
             {t('Goal reached:')}{' '}
             <Body as="span" size="sm" dark>
@@ -247,6 +251,7 @@ const GoalStats = ({
           variant="surface"
           size="sm"
           colorScheme="primary1"
+          w={isMobile ? 'full' : 'auto'}
           onClick={(e) => {
             e.stopPropagation()
             e.preventDefault()
@@ -255,7 +260,7 @@ const GoalStats = ({
         >
           {t('Update your community')}
         </Button>
-      </HStack>
+      </Direction>
     )
   }
 
