@@ -2,7 +2,7 @@ import { Badge, Box, Button, HStack, Icon, Link as ChakraLink, SkeletonText, VSt
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
-import { PiArrowLeft, PiCopy, PiEnvelope, PiFile, PiShareFat } from 'react-icons/pi'
+import { PiArrowLeft, PiCopy, PiEnvelope, PiShareFat } from 'react-icons/pi'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
@@ -146,7 +146,7 @@ export const PostView = () => {
               </Body>
               <HStack w="full">
                 <Badge variant="soft" colorScheme="neutral1" gap={2}>
-                  <Icon as={PiFile} />
+                  <Icon as={postTypeOptions.find((option) => option.value === post.postType)?.icon} />
                   {postTypeOptions.find((option) => option.value === post.postType)?.label}
                 </Badge>
                 {post.sentByEmailAt && (

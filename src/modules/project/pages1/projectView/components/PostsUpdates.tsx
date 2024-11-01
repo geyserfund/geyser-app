@@ -37,7 +37,6 @@ export const PostsUpdates = ({ posts }: { posts: Pick<Post, 'id' | 'title' | 'cr
             <Body size="md" medium>
               {post.title}
             </Body>
-            /
           </HStack>
           <Body size="sm" light>
             {getFormattedDate(post.createdAt)}
