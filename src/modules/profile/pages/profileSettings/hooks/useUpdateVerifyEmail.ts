@@ -34,14 +34,19 @@ export const useUpdateVerifyEmail = () => {
   const [currentMfaAction, setCurrentMfaAction] = useState(MfaAction.UserEmailUpdate)
 
   const [sendOtpByEmail] = useSendOtpByEmailMutation({
-    onError() {
+    onError(error) {
       toast({
         status: 'error',
         title: 'Failed to generate OTP.',
-        description: 'Please try again',
+        description: error.message,
       })
     },
     onCompleted(data) {
+      toast({
+        status: 'info',
+        title: 'OTP Sent to the updated email',
+      })
+
       const otp = data.sendOTPByEmail
       if (otp) {
         setSentOtp(true)

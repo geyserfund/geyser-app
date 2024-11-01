@@ -64,11 +64,11 @@ export const UpdateVerifyEmail = () => {
             </VStack>
 
             {!user.isEmailVerified && !formState.isDirty && user.email ? (
-              <Button variant="outline" colorScheme="neutral1" onClick={handleVerifyEmailClick}>
+              <Button size="lg" variant="outline" colorScheme="neutral1" onClick={handleVerifyEmailClick}>
                 {t('Verify email')}
               </Button>
             ) : (
-              <Button variant="outline" colorScheme="neutral1" type="submit" isDisabled={!formState.isDirty}>
+              <Button size="lg" variant="outline" colorScheme="neutral1" type="submit" isDisabled={!formState.isDirty}>
                 {t('Update email')}
               </Button>
             )}
