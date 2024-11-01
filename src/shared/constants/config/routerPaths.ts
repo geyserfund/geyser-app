@@ -9,6 +9,7 @@ export enum PathName {
   activity = 'activity',
   activityGlobal = 'global',
   activityFollowed = 'followed',
+  merch = 'project/geyser/rewards',
 
   entry = 'entry',
 
@@ -113,6 +114,7 @@ const pathsMap = {
   discoveryActivityFollowed: () => `/${PathName.activity}/${PathName.activityFollowed}`,
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
+  discoveryMerch: () => `/${PathName.merch}`,
 
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
