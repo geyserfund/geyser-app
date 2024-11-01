@@ -23,6 +23,8 @@ export const Details = () => {
     return null
   }
 
+  console.log('project', project.launchedAt)
+
   return (
     <BodySectionLayout title={t('Project details')}>
       <CardLayout w="full" id={ID.project.details.container}>
@@ -96,12 +98,13 @@ export const Details = () => {
             </Wrap>
           </DetailLine>
         )}
-
-        <DetailLine title={t('Launched')}>
-          <Body size="sm" medium dark>
-            {DateTime.fromMillis(Number(project.launchedAt)).toFormat('dd LLL yyyy')}
-          </Body>
-        </DetailLine>
+        {project.launchedAt && (
+          <DetailLine title={t('Launched')}>
+            <Body size="sm" medium dark>
+              {DateTime.fromMillis(Number(project.launchedAt)).toFormat('dd LLL yyyy')}
+            </Body>
+          </DetailLine>
+        )}
       </CardLayout>
     </BodySectionLayout>
   )
