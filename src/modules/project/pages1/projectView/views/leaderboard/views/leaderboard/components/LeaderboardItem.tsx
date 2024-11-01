@@ -35,7 +35,7 @@ export const LeaderboardItem = ({ funder, rank, ...props }: LeaderboardItemProps
         paddingX={6}
         paddingY={2}
         _hover={{ backgroundColor: 'neutral1.3', cursor: 'pointer' }}
-        backgroundColor={isViewer ? 'indigo.3' : 'unset'}
+        backgroundColor={isViewer ? 'indigoAlpha.2' : 'unset'}
         onClick={funderContributionModal.onOpen}
         {...props}
       >
