@@ -121,9 +121,9 @@ export const usePostForm = ({
           postId: postId || toInt(post?.id),
           image: post.image,
           title: post.title,
-          postType: post.postType,
           projectGoalIds: post.projectGoalIds,
           projectRewardUUIDs: post.projectRewardUUIDs,
+          ...(post.postType && { postType: post.postType }),
         }
         await postUpdate.execute({
           variables: { input },

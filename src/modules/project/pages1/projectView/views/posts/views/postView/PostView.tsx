@@ -146,10 +146,12 @@ export const PostView = () => {
                 {post.createdAt && DateTime.fromMillis(toInt(post.createdAt)).toFormat(' dd LLLL, yyyy')}
               </Body>
               <HStack w="full">
-                <Badge variant="soft" colorScheme="neutral1" gap={2}>
-                  <Icon as={postTypeOptions.find((option) => option.value === post.postType)?.icon} />
-                  {postTypeOptions.find((option) => option.value === post.postType)?.label}
-                </Badge>
+                {post.postType && (
+                  <Badge variant="soft" colorScheme="neutral1" gap={2}>
+                    <Icon as={postTypeOptions.find((option) => option.value === post.postType)?.icon} />
+                    {postTypeOptions.find((option) => option.value === post.postType)?.label}
+                  </Badge>
+                )}
                 {post.sentByEmailAt && (
                   <Badge variant="outline" colorScheme="neutral1" gap={2}>
                     <Icon as={PiEnvelope} />
