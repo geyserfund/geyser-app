@@ -19,7 +19,7 @@ import { toInt, useNotification } from '../../../../../../../utils'
 
 export type PostFormType = Pick<
   ProjectPostViewFragment,
-  'id' | 'title' | 'description' | 'image' | 'markdown' | 'status' | 'postType'
+  'id' | 'title' | 'description' | 'image' | 'markdown' | 'status' | 'postType' | 'sentByEmailAt'
 > &
   Pick<PostCreateInput, 'projectGoalIds' | 'projectRewardUUIDs'>
 
@@ -59,6 +59,7 @@ export const usePostForm = ({
       postType: postTemplate.postType || null,
       projectGoalIds: linkedGoalId ? [linkedGoalId] : [],
       projectRewardUUIDs: linkedRewardUuid ? [linkedRewardUuid] : [],
+      sentByEmailAt: postTemplate.sentByEmailAt || null,
     },
     resolver: yupResolver(schema),
   })
@@ -73,6 +74,7 @@ export const usePostForm = ({
       image: post.image,
       title: post.title,
       postType: post.postType || null,
+      sentByEmailAt: post.sentByEmailAt || null,
       projectGoalIds: [
         ...(post.projectGoals?.inProgress?.map((goal) => goal.id) || []),
         ...(post.projectGoals?.completed?.map((goal) => goal.id) || []),

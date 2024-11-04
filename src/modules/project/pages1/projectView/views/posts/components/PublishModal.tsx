@@ -33,7 +33,6 @@ const sendToOptions = [
 
 export const PublishModal = ({
   post,
-
   postPublish,
   publishing,
 }: {
@@ -69,8 +68,11 @@ export const PublishModal = ({
     onCompleted(data) {
       publishModal.onClose()
       toast.success({
-        title: `Sending emails to ${data.postSendByEmail.recipientCount} users.`,
+        title: `Sent email to ${
+          data.postSendByEmail.recipientCount === 1 ? '1 user' : `${data.postSendByEmail.recipientCount} users`
+        }.`,
       })
+      post.sentByEmailAt = new Date().toISOString()
     },
     onError(error) {
       toast.error({
@@ -244,7 +246,7 @@ export const PublishModal = ({
         </Tooltip>
       )}
 
-      {canSendViaEmail && isPostPublished && (
+      {isPostPublished && (
         <Tooltip label={!isActive(project.status) ? t('Cannot send post via email for inactive project') : ''}>
           <Button
             size="lg"
@@ -299,6 +301,7 @@ export const PublishModal = ({
               colorScheme="primary1"
               onClick={() => postSendByEmail()}
               isDisabled={emailCount === 0}
+              isLoading={postSendByEmailLoading}
             >
               {t('Send via email')}
             </Button>
