@@ -252,8 +252,8 @@ const PostJustPublishedModal = () => {
   return (
     <AlertDialogue
       {...modalProps}
-      title={t('Post published')}
-      description={t('Your post is live! Don’t forget to share it on social media to maximize its reach.')}
+      title={t('Your post is live!')}
+      description={t('Don’t forget to share it on social media to maximize its reach.')}
       neutralButtonProps={{
         colorScheme: hasCopied ? 'primary1' : 'neutral1',
         children: t('Copy link'),

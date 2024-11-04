@@ -33,7 +33,7 @@ interface UsePostFormProps {
   options?: LazyQueryHookOptions<ProjectPostQuery, ProjectPostQueryVariables>
   postTemplate?: ProjectPostViewFragment
   linkedGoalId?: string
-  linkedRewardId?: string
+  linkedRewardUuid?: string
 }
 
 export const usePostForm = ({
@@ -42,7 +42,7 @@ export const usePostForm = ({
   options,
   postTemplate = {} as ProjectPostViewFragment,
   linkedGoalId,
-  linkedRewardId,
+  linkedRewardUuid,
 }: UsePostFormProps) => {
   const toast = useNotification()
 
@@ -58,7 +58,7 @@ export const usePostForm = ({
       title: postTemplate.title || '',
       postType: postTemplate.postType || null,
       projectGoalIds: linkedGoalId ? [linkedGoalId] : [],
-      projectRewardUUIDs: linkedRewardId ? [linkedRewardId] : [],
+      projectRewardUUIDs: linkedRewardUuid ? [linkedRewardUuid] : [],
     },
     resolver: yupResolver(schema),
   })

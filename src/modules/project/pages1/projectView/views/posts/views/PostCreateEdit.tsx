@@ -39,7 +39,7 @@ export const PostCreateEdit = () => {
 
   const [searchParams] = useSearchParams()
   const linkedGoalId = searchParams.get('goalId')
-  const linkedRewardId = searchParams.get('rewardId')
+  const linkedRewardUuid = searchParams.get('rewardUuid')
 
   const [focusFlag, setFocusFlag] = useState('')
 
@@ -68,7 +68,7 @@ export const PostCreateEdit = () => {
       },
     },
     linkedGoalId: linkedGoalId ?? undefined,
-    linkedRewardId: linkedRewardId ?? undefined,
+    linkedRewardUuid: linkedRewardUuid ?? undefined,
   })
 
   const postForm = watch()

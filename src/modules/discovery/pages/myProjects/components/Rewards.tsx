@@ -140,7 +140,7 @@ const RewardItem = ({ reward, projectName }: { reward: Reward; projectName: stri
           onClick={(e) => {
             e.stopPropagation()
             e.preventDefault()
-            navigate(`${getPath('projectPostCreate', projectName)}?rewardId=${reward.id}`)
+            navigate(`${getPath('projectPostCreate', projectName)}?rewardUuid=${reward.uuid}`)
           }}
         >
           {t('Update your community')}

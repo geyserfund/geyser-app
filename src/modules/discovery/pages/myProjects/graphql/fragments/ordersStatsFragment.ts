@@ -9,6 +9,7 @@ export const ORDERS_STATS_FRAGMENT = gql`
       count
       projectReward {
         id
+        uuid
         name
         image
         sold
