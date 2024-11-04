@@ -7321,7 +7321,14 @@ export type ActivityFeedFragmentFragment = {
           user?: { __typename?: 'User'; id: any; username: string; imageUrl?: string | null } | null
         }
       }
-    | { __typename?: 'Post' }
+    | {
+        __typename?: 'Post'
+        id: any
+        title: string
+        markdown?: string | null
+        entryDescription: string
+        entryImage?: string | null
+      }
     | { __typename?: 'Project'; id: any; title: string; name: string; thumbnailImage?: string | null }
     | {
         __typename?: 'ProjectGoal'
@@ -9636,6 +9643,13 @@ export const ActivityFeedFragmentFragmentDoc = gql`
         title
         entryDescription: description
         content
+        entryImage: image
+      }
+      ... on Post {
+        id
+        title
+        entryDescription: description
+        markdown
         entryImage: image
       }
       ... on FundingTx {
