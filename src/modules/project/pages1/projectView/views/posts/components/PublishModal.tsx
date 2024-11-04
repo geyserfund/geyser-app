@@ -154,6 +154,8 @@ export const PublishModal = ({
             options={sendToOptions}
             onChange={handleInput}
             width={'full'}
+            size="sm"
+            fontSize="sm"
           />
         </VStack>
 
@@ -274,9 +276,9 @@ export const PublishModal = ({
             <Body size="sm" medium>
               {t('Send post by email')}
             </Body>
-            <Body size="sm">
+            <Body size="sm" regular color="neutral1.11">
               {t(
-                'The Post title, subtitle, and image will be the only things visible in the email users receive. Make sure they’re attention-grabbing to encourage them to visit your Post.',
+                'The post title, subtitle, and image will be the only things visible in the email users receive. Make sure they’re attention-grabbing to encourage them to visit your post.',
               )}
             </Body>
           </VStack>

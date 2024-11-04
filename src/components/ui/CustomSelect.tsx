@@ -7,6 +7,7 @@ export interface CustomSelectProps<Option, IsMulti extends boolean = false>
   customChakraStyles?: ChakraStylesConfig<Option, IsMulti>
   dropdownIndicator?: React.ReactNode
   width?: ResponsiveValue<number | string>
+  fontSize?: string
 }
 
 export function CustomSelect<Option, IsMulti extends boolean = false>({
@@ -30,7 +31,7 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
       color: 'utils.text',
       borderRadius: '8px',
       height: '32px',
-      fontSize: '16px',
+      fontSize: props.fontSize || '16px',
       fontWeight: '400',
       paddingX: '12px',
       display: 'flex',
