@@ -23,8 +23,6 @@ export const Details = () => {
     return null
   }
 
-  console.log('project', project.launchedAt)
-
   return (
     <BodySectionLayout title={t('Project details')}>
       <CardLayout w="full" id={ID.project.details.container}>
