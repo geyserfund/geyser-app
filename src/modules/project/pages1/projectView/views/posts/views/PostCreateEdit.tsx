@@ -18,7 +18,7 @@ import { FileUpload } from '@/shared/molecules'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { PostStatus } from '@/types'
-import { useCustomTheme, useNotification } from '@/utils'
+import { useCustomTheme, useMobileMode, useNotification } from '@/utils'
 
 import { LinkGoalsAndRewardsModal } from '../components/LinkGoalsAndRewardsModal'
 import { PublishModal } from '../components/PublishModal'
@@ -28,7 +28,7 @@ import { postTypeOptions } from '../utils/postTypeLabel'
 export const PostCreateEdit = () => {
   const navigate = useNavigate()
   const toast = useNotification()
-
+  const isMobile = useMobileMode()
   const confirmViewPostModal = useModal()
 
   const { project, loading: projectLoading } = useProjectAtom()
@@ -243,27 +243,51 @@ export const PostCreateEdit = () => {
                 </>
               </FileUpload>
             </Box>
-
-            <HStack px={6}>
-              <CustomSelect
-                name="postType"
-                options={postTypeOptions}
-                placeholder="Post Type"
-                onChange={(e) => setValue('postType', e?.value, { shouldDirty: true })}
-                value={postForm.postType ? postTypeOptions.find((option) => option.value === postForm.postType) : null}
-                dropdownIndicator={<PiCaretDown />}
-                width={'200px'}
-                size="sm"
-              />
-
-              <LinkGoalsAndRewardsModal
-                postId={postForm.id}
-                setValue={setValue}
-                projectRewardUUIDs={postForm.projectRewardUUIDs}
-                projectGoalIds={postForm.projectGoalIds}
-                projectName={project.name}
-              />
-            </HStack>
+            {isMobile ? (
+              <VStack width="100%" alignItems="flex-start" paddingX={6}>
+                <CustomSelect
+                  name="postType"
+                  options={postTypeOptions}
+                  placeholder="Post Type"
+                  onChange={(e) => setValue('postType', e?.value, { shouldDirty: true })}
+                  value={
+                    postForm.postType ? postTypeOptions.find((option) => option.value === postForm.postType) : null
+                  }
+                  dropdownIndicator={<PiCaretDown />}
+                  width={'200px'}
+                  size="sm"
+                />
+                <LinkGoalsAndRewardsModal
+                  postId={postForm.id}
+                  setValue={setValue}
+                  projectRewardUUIDs={postForm.projectRewardUUIDs}
+                  projectGoalIds={postForm.projectGoalIds}
+                  projectName={project.name}
+                />
+              </VStack>
+            ) : (
+              <HStack px={6}>
+                <CustomSelect
+                  name="postType"
+                  options={postTypeOptions}
+                  placeholder="Post Type"
+                  onChange={(e) => setValue('postType', e?.value, { shouldDirty: true })}
+                  value={
+                    postForm.postType ? postTypeOptions.find((option) => option.value === postForm.postType) : null
+                  }
+                  dropdownIndicator={<PiCaretDown />}
+                  width={'200px'}
+                  size="sm"
+                />
+                <LinkGoalsAndRewardsModal
+                  postId={postForm.id}
+                  setValue={setValue}
+                  projectRewardUUIDs={postForm.projectRewardUUIDs}
+                  projectGoalIds={postForm.projectGoalIds}
+                  projectName={project.name}
+                />
+              </HStack>
+            )}
 
             <VStack width="100%">
               <Input
