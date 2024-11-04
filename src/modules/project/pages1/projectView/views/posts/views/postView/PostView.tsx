@@ -73,6 +73,7 @@ export const PostView = () => {
   }
 
   const onContributeClick = () => navigate(getPath('projectFunding', project?.name), { state: { postId: post.id } })
+  const showLinkedRewardsAndGoals = post.projectGoals.inProgress.length > 0 || post.projectRewards.length > 0
 
   return (
     <>
@@ -177,7 +178,7 @@ export const PostView = () => {
                 <MarkdownField preview content={post.markdown || ''} />
               </Box>
             )}
-            <LinkedRewardsAndGoals post={post} />
+            {showLinkedRewardsAndGoals && <LinkedRewardsAndGoals post={post} />}
           </VStack>
         </CardLayout>
         <BottomNavBarContainer direction="column">
