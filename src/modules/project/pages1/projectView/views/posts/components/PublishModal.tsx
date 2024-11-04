@@ -212,7 +212,7 @@ export const PublishModal = ({
         {sendTo !== null && (
           <Feedback variant={FeedBackVariant.INFO} icon={<PiEnvelopeSimple size="20px" />}>
             <Body size="sm">
-              {t('Email will be sent to')} <strong> {emailCount}</strong> {t('members')}
+              {t('Email will be sent to')} <strong> {emailCount}</strong> {t('members.')}
             </Body>
           </Feedback>
         )}
@@ -293,7 +293,13 @@ export const PublishModal = ({
             {t('Cancel')}
           </Button>
           {isPostPublished ? (
-            <Button flex={1} variant="solid" colorScheme="primary1" onClick={() => postSendByEmail()}>
+            <Button
+              flex={1}
+              variant="solid"
+              colorScheme="primary1"
+              onClick={() => postSendByEmail()}
+              isDisabled={emailCount === 0}
+            >
               {t('Send via email')}
             </Button>
           ) : (
