@@ -14,6 +14,7 @@ interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'
 export const ProjectDisplayBody = ({
   title,
   subtitle,
+  subtext,
   projects,
   onSeeAllClick,
   seeAllText,
@@ -22,11 +23,13 @@ export const ProjectDisplayBody = ({
     <ProjectRowLayout
       title={title}
       subtitle={subtitle}
+      subtext={subtext}
       width="100%"
       onSeeAllClick={onSeeAllClick}
       seeAllText={seeAllText}
       subtitleProps={{
         onClick: onSeeAllClick,
+        textDecoration: 'underline',
         _hover: { cursor: 'pointer' },
       }}
     >
