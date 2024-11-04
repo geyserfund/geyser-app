@@ -269,6 +269,7 @@ export const PostCreateEdit = () => {
               <Input
                 id={'post-title-input'}
                 border="none"
+                backgroundColor="transparent"
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
                 placeholder={t('Post Title')}
@@ -285,6 +286,7 @@ export const PostCreateEdit = () => {
               <TextArea
                 id={'post-description-input'}
                 border="none"
+                backgroundColor="transparent"
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
                 placeholder={t('The summary of the post')}
