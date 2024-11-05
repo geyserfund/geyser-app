@@ -12,6 +12,7 @@ import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { Body } from '../../../../../../../shared/components/typography'
 import { ProjectGoalCurrency, ProjectGoalFragment } from '../../../../../../../types'
 import { useMobileMode } from '../../../../../../../utils'
+import { CreatorEditButton } from '../../body/components'
 import { GoalContributeButton } from './GoalContributeButton'
 import { GoalTarget } from './GoalTarget'
 
@@ -147,17 +148,7 @@ export const GoalInProgress = ({
               )}
             </HStack>
 
-            {goalView && isProjectOwner && (
-              <Button
-                size="sm"
-                variant="outline"
-                colorScheme="neutral1"
-                leftIcon={<PiNotePencil />}
-                onClick={handleEditGoal}
-              >
-                {t('Edit')}
-              </Button>
-            )}
+            {goalView && isProjectOwner && <CreatorEditButton onClick={handleEditGoal} />}
           </HStack>
 
           {isEditing && isMobile && (
