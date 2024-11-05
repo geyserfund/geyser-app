@@ -39,7 +39,6 @@ const rewardFormSchema = () =>
       .typeError('Price is required')
       .required('Price is required')
       .min(0.01, 'Price must be greater than 0'),
-    maxClaimable: yup.number().nullable(),
     images: yup.array().of(yup.string()).max(MAX_REWARD_IMAGES, `Maximum ${MAX_REWARD_IMAGES} images allowed`),
     hasShipping: yup.boolean(),
     isAddon: yup.boolean(),
@@ -47,7 +46,6 @@ const rewardFormSchema = () =>
     category: yup.string().nullable(),
     preOrder: yup.boolean(),
     rewardCurrency: yup.string(),
-    estimatedAvailabilityDate: yup.date().nullable(),
     estimatedDeliveryInWeeks: yup.number().nullable().min(0, 'Delivery time must be greater than or equal to 0'),
     confirmationMessage: yup.string().max(500, 'Confirmation message must be at most 500 characters long'),
     privateCommentPrompts: yup.array().of(yup.string()),
@@ -57,10 +55,15 @@ type UseProjectRewardFormProps = {
   rewardId?: string
   isUpdate?: boolean
   isLaunch?: boolean
-  defaultCategory?: string
+  defaultCategory?: string | null
 }
 
-export const useProjectRewardForm = ({ rewardId, isUpdate, isLaunch, defaultCategory }: UseProjectRewardFormProps) => {
+export const useProjectRewardForm = ({
+  rewardId,
+  isUpdate,
+  isLaunch,
+  defaultCategory = null,
+}: UseProjectRewardFormProps) => {
   const navigate = useNavigate()
   const toast = useNotification()
 
@@ -153,14 +156,14 @@ export const useProjectRewardForm = ({ rewardId, isUpdate, isLaunch, defaultCate
       description: formData.description,
       shortDescription: formData.shortDescription,
       cost: formData.cost,
-      maxClaimable: formData.maxClaimable,
+      maxClaimable: formData.maxClaimable ? Number(formData.maxClaimable) : null,
       images: formData.images,
       hasShipping: formData.hasShipping,
       isAddon: formData.isAddon,
       isHidden: formData.isHidden,
-      category: formData.category,
+      category: formData.category || null,
       preOrder: formData.preOrder,
-      estimatedAvailabilityDate: formData.estimatedAvailabilityDate,
+      estimatedAvailabilityDate: formData.estimatedAvailabilityDate?.valueOf(),
       estimatedDeliveryInWeeks: formData.estimatedDeliveryInWeeks,
       privateCommentPrompts: formData.privateCommentPrompts,
       confirmationMessage: formData.confirmationMessage,

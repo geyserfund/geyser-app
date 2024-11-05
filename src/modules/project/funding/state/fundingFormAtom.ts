@@ -42,7 +42,7 @@ export type FundFormType = {
   email: string
   media: string
   comment: string
-  privateComment: string
+  privateComment?: string
   rewardsByIDAndCount?: { [key: string]: number } | undefined
   rewardCurrency: RewardCurrency
   needsShipping: boolean
@@ -135,9 +135,10 @@ export const fundingFormHasRewardsAtom = atom((get) => {
 export const fundingFormHasRewardsThatRequirePrivateCommentAtom = atom((get) => {
   const fundingFormState = get(fundingFormStateAtom)
   const { rewards } = get(fundingProjectAtom)
-  const selectedRewards = rewards.filter(
-    (reward) => fundingFormState.rewardsByIDAndCount && fundingFormState.rewardsByIDAndCount[reward.id],
-  )
+  const selectedRewards =
+    rewards?.filter(
+      (reward) => fundingFormState.rewardsByIDAndCount && fundingFormState.rewardsByIDAndCount[reward.id],
+    ) || []
 
   return selectedRewards.some((reward) => reward.privateCommentPrompts && reward.privateCommentPrompts.length > 0)
 })

@@ -4,21 +4,21 @@ import { PiNotePencil, PiTrash } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { DeleteConfirmModal } from '@/components/molecules'
-import { useProjectEntriesAPI } from '@/modules/project/API/useProjectEntriesAPI'
+import { useProjectPostsAPI } from '@/modules/project/API/useProjectPostsAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
-import { ProjectEntryFragment } from '@/types'
+import { ProjectPostFragment } from '@/types'
 import { useNotification } from '@/utils'
 
 import { CreatorEditButton } from '../../body/components'
 
 type PostEditMenuProps = {
-  entry: Pick<ProjectEntryFragment, 'id'>
+  post: Pick<ProjectPostFragment, 'id'>
   onDeleteComplete?: () => void
 } & ButtonProps
 
-export const PostEditMenu = ({ entry, onDeleteComplete, ...props }: PostEditMenuProps) => {
+export const PostEditMenu = ({ post, onDeleteComplete, ...props }: PostEditMenuProps) => {
   const { t } = useTranslation()
   const toast = useNotification()
 
@@ -26,25 +26,25 @@ export const PostEditMenu = ({ entry, onDeleteComplete, ...props }: PostEditMenu
 
   const { project, isProjectOwner } = useProjectAtom()
 
-  const deleteEntryModal = useModal()
+  const postDeleteModal = useModal()
 
-  const { deleteEntry } = useProjectEntriesAPI()
+  const { postDelete } = useProjectPostsAPI()
 
-  const handleDeleteEntry = () => {
-    deleteEntry.execute({
-      variables: { deleteEntryId: entry.id },
+  const handleDeletePost = () => {
+    postDelete.execute({
+      variables: { postDeleteId: post.id },
       onCompleted() {
         if (onDeleteComplete) {
           onDeleteComplete()
         }
 
         toast.success({
-          title: 'Successfully deleted entry!',
+          title: 'Successfully deleted post!',
         })
       },
       onError(error) {
         toast.error({
-          title: 'Failed to delete entry',
+          title: 'Failed to delete post',
           description: `${error}`,
         })
       },
@@ -72,7 +72,7 @@ export const PostEditMenu = ({ entry, onDeleteComplete, ...props }: PostEditMenu
           <MenuList p={2} zIndex="99" shadow="md">
             <MenuItem
               as={Link}
-              to={getPath('projectPostEdit', project.name, entry.id)}
+              to={getPath('projectPostEdit', project.name, post.id)}
               icon={<PiNotePencil fontSize={'16px'} />}
             >
               {t('Edit')}
@@ -82,9 +82,9 @@ export const PostEditMenu = ({ entry, onDeleteComplete, ...props }: PostEditMenu
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                deleteEntryModal.onOpen()
+                postDeleteModal.onOpen()
               }}
-              isDisabled={deleteEntry.loading}
+              isDisabled={postDelete.loading}
               color="error.11"
               _hover={{ color: 'utils.whiteContrast', backgroundColor: 'error.9' }}
             >
@@ -94,10 +94,10 @@ export const PostEditMenu = ({ entry, onDeleteComplete, ...props }: PostEditMenu
         </Portal>
       </Menu>
       <DeleteConfirmModal
-        {...deleteEntryModal}
+        {...postDeleteModal}
         title="Delete post"
         description="Are you sure you want to remove the post?"
-        confirm={handleDeleteEntry}
+        confirm={handleDeletePost}
       />
     </>
   )

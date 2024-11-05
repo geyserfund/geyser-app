@@ -1,12 +1,12 @@
 /* eslint-disable complexity */
 import { Button, HStack, IconButton, Stack, Tooltip, VStack } from '@chakra-ui/react'
-import { Loader } from '@giphy/react-components'
 import { useTranslation } from 'react-i18next'
 import { BiInfoCircle } from 'react-icons/bi'
 import { PiArrowLeft, PiCaretDown, PiX } from 'react-icons/pi'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { UploadBox } from '@/components/ui'
+import Loader from '@/components/ui/Loader'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ControlledSelect, ControlledTextArea, ControlledTextInput } from '@/shared/components/controlledInput'
@@ -200,6 +200,7 @@ export const ProjectRewardForm = ({
                   </Tooltip>
                 }
                 size="sm"
+                numberOnly
               />
             </Stack>
             <Stack direction={{ base: 'column', lg: 'row' }}>
@@ -265,7 +266,12 @@ export const ProjectRewardForm = ({
                   }
                   name="preOrder"
                   control={control}
-                  defaultChecked={watch('preOrder')}
+                  onChange={(e) => {
+                    setValue('preOrder', e.target.checked, { shouldDirty: true })
+                    setValue('estimatedAvailabilityDate', undefined, { shouldDirty: true })
+                    setValue('estimatedDeliveryInWeeks', undefined, { shouldDirty: true })
+                  }}
+                  isChecked={watch('preOrder')}
                 />
 
                 <Body size={'md'} light pr={{ base: 0, lg: 2 }}>
@@ -280,7 +286,7 @@ export const ProjectRewardForm = ({
                     {t('Expected Availability Date')}
                   </Body>
                   <CalendarButton
-                    onChange={(value) => setValue('estimatedAvailabilityDate', value)}
+                    onChange={(value) => setValue('estimatedAvailabilityDate', value, { shouldDirty: true })}
                     containerProps={{ w: '100%' }}
                     showMonthYearPicker={true}
                   >
@@ -300,7 +306,7 @@ export const ProjectRewardForm = ({
                             icon={<PiX />}
                             variant="ghost"
                             onClick={() => {
-                              setValue('estimatedAvailabilityDate', undefined)
+                              setValue('estimatedAvailabilityDate', undefined, { shouldDirty: true })
                             }}
                           />
                         ) : (
@@ -368,6 +374,14 @@ export const ProjectRewardForm = ({
                   onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.NostrNpub)}
                 />
                 <ControlledSwitchInput
+                  label={t('Ask contributors for a lighting address in case of partial or full refund')}
+                  name="privateCommentPrompts"
+                  control={control}
+                  switchPosition="left"
+                  isChecked={utils.isPromptChecked(PrivateCommentPrompt.LightningAddress)}
+                  onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.LightningAddress)}
+                />
+                <ControlledSwitchInput
                   label={t(
                     'Ask contributors to specify reward preferences or options based on your reward description',
                   )}
@@ -382,7 +396,12 @@ export const ProjectRewardForm = ({
 
             <CardLayout spacing={4} w="100%" align={'flex-start'}>
               <VStack alignItems={'flex-start'}>
-                <ControlledSwitchInput label={t('Ask for shipping address')} name="hasShipping" control={control} />
+                <ControlledSwitchInput
+                  label={t('Ask for shipping address')}
+                  name="hasShipping"
+                  control={control}
+                  isChecked={watch('hasShipping')}
+                />
 
                 <Body size={'md'} light pr={{ base: 0, lg: 2 }}>
                   {t(
@@ -392,12 +411,15 @@ export const ProjectRewardForm = ({
               </VStack>
 
               {watch('hasShipping') && (
-                <VStack pl={2} spacing={2} borderLeft="2px solid" borderColor="primary.400" align={'flex-start'}>
-                  <Body medium>
-                    {t(
-                      'Shipping addresses will be requested from the user at checkout and sent to this email address.',
-                    )}
-                  </Body>
+                <VStack
+                  pl={2}
+                  spacing={2}
+                  borderLeft="2px solid"
+                  borderColor="primary.400"
+                  align={'flex-start'}
+                  w="100%"
+                >
+                  <Body medium>{t('Send your shipping address to the creator at the following email')}</Body>
 
                   <CreatorEmailButton email={ownerEmail} />
                 </VStack>

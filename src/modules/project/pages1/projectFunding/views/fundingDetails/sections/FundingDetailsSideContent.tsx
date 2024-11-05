@@ -1,4 +1,4 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { FormEvent } from 'react'
 import { useNavigate } from 'react-router'
@@ -10,6 +10,7 @@ import { getPath } from '@/shared/constants'
 import { useNotification } from '@/utils'
 
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
+import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
 
 export const FundingDetailsBottomContent = () => {
   return <FundingDetailsSummary />
@@ -17,7 +18,7 @@ export const FundingDetailsBottomContent = () => {
 
 export const FundingDetailsSideContent = () => {
   return (
-    <CardLayout w="full" h="full">
+    <CardLayout w="full" h="full" padding={0}>
       <FundingDetailsSummary />
     </CardLayout>
   )
@@ -52,14 +53,16 @@ export const FundingDetailsSummary = () => {
   }
 
   return (
-    <form style={{ width: '100%' }} onSubmit={handleCheckoutButtonPressed}>
-      <VStack width={'100%'} borderRadius={'md'} spacing={4} alignItems="start">
+    <form style={{ width: '100%', height: '100%' }} onSubmit={handleCheckoutButtonPressed}>
+      <FundingSummaryWrapper>
         <ProjectFundingSummary />
+      </FundingSummaryWrapper>
 
+      <FundingCheckoutWrapper>
         <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit">
           {t('Checkout')}
         </Button>
-      </VStack>
+      </FundingCheckoutWrapper>
     </form>
   )
 }

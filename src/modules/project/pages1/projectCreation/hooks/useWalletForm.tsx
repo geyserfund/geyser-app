@@ -75,8 +75,8 @@ export type WalletForm = {
   limits: Limits
 }
 
-const DEFAULT_FEE_PERCENTAGE = 0.04
-const DEFAULT_LIGHTNING_FEE_PERCENTAGE = 0.04
+const DEFAULT_FEE_PERCENTAGE = 0.05
+const DEFAULT_LIGHTNING_FEE_PERCENTAGE = 0.05
 
 export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletForm => {
   const { toast } = useNotification()

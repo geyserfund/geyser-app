@@ -122,7 +122,6 @@ export const RewardView = () => {
                     </Box>
                   </Body>
                 )}
-
                 {reward.category && (
                   <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
                     {reward.category}

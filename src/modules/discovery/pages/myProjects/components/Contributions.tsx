@@ -9,7 +9,7 @@ import { useGoalsModal } from '@/modules/project/pages1/projectView/hooks'
 import { Body } from '@/shared/components/typography'
 import { getPath, NoContributionImageUrl } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
-import { ProjectGoal, ProjectGoalCurrency } from '@/types'
+import { ProjectGoalCurrency, ProjectGoalFragment } from '@/types'
 import { commaFormatted } from '@/utils'
 
 import { useProjectGoals } from '../hooks/useProjectGoals'
@@ -122,7 +122,13 @@ const Header = ({
   )
 }
 
-const Goals = ({ goals, noContributionsReceived }: { goals: ProjectGoal[]; noContributionsReceived: boolean }) => {
+const Goals = ({
+  goals,
+  noContributionsReceived,
+}: {
+  goals: ProjectGoalFragment[]
+  noContributionsReceived: boolean
+}) => {
   if (noContributionsReceived) {
     return (
       <VStack w="100%" align="center" spacing={0.5} px={4} py={8}>
@@ -140,7 +146,7 @@ const Goals = ({ goals, noContributionsReceived }: { goals: ProjectGoal[]; noCon
   )
 }
 
-const GoalItem = ({ goal }: { goal: ProjectGoal }) => {
+const GoalItem = ({ goal }: { goal: ProjectGoalFragment }) => {
   const percentage = (goal.amountContributed / goal.targetAmount) * 100
 
   return (
@@ -196,7 +202,7 @@ const GoalProgressBar = ({
   )
 }
 
-const GoalStats = ({ goal, percentage }: { goal: ProjectGoal; percentage: number }) => {
+const GoalStats = ({ goal, percentage }: { goal: ProjectGoalFragment; percentage: number }) => {
   const { t } = useTranslation()
   const { formatAmount, formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
   const formattedAmountContributed = formatAmount(goal.amountContributed, goal.currency)

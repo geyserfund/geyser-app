@@ -1,2 +1,1 @@
-export { ProjectEntryCard } from './ProjectEntryCard'
-export { ProjectEntryEditor } from './ProjectEntryEditor'
+export { ProjectPostCard } from './ProjectPostCard'

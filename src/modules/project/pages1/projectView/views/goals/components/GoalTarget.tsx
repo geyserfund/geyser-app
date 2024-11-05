@@ -4,11 +4,11 @@ import { PiCurrencyBtc, PiCurrencyDollar } from 'react-icons/pi'
 
 import { Body } from '../../../../../../../shared/components/typography'
 import { useCurrencyFormatter } from '../../../../../../../shared/utils/hooks/useCurrencyFormatter'
-import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
+import { ProjectGoalCurrency, ProjectGoalFragment } from '../../../../../../../types'
 import { useCustomTheme } from '../../../../../../../utils'
 
 type GoalTargetProps = {
-  goal: ProjectGoal
+  goal: ProjectGoalFragment
   of?: boolean
 }
 

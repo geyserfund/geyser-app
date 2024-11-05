@@ -90,7 +90,7 @@ export const FundingDetailsUserComment = () => {
           </Body>
           {isHoveringOverGIFButton && selectedGIF && <CloseIcon position="absolute" top="31px" right="29px" />}
 
-          <Box zIndex="10" position="absolute" left={2} top={2}>
+          <Box zIndex="2" position="absolute" left={2} top={2}>
             {isAnonymous || !user ? (
               <Tooltip shouldWrapChildren label={t('Funding anonymously. Click to login')}>
                 <AvatarElement borderRadius="50%" noLink onClick={() => loginOnOpen()} avatarOnly />
@@ -101,7 +101,7 @@ export const FundingDetailsUserComment = () => {
               </Tooltip>
             )}
           </Box>
-          <Box zIndex="10" position="absolute" right={2} top={2}>
+          <Box zIndex="2" position="absolute" right={2} top={2}>
             {selectedGIF ? (
               <Image
                 src={selectedGIF.images.preview_webp.url}

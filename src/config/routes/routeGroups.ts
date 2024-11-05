@@ -34,7 +34,6 @@ export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardAccounting', PathName.projectName),
   getPath('dashboardInfo', PathName.projectName),
   getPath('dashboardDetails', PathName.projectName),
-  getPath('dashboardStory', PathName.projectName),
   getPath('dashboardWallet', PathName.projectName),
   getPath('dashboardNostr', PathName.projectName),
   getPath('dashboardSettings', PathName.projectName),
@@ -71,6 +70,8 @@ export const projectPostCreatorRoutes = [
   getPath('projectPostCreate', PathName.projectName),
   getPath('projectPostEdit', PathName.projectName, PathName.postId),
 ]
+
+export const projectStoryCreatorRoutes = [getPath('projectStoryEdit', PathName.projectName)]
 
 export const projectFundingPaymentLightingRoutes = [getPath('fundingPaymentLightning', PathName.projectName)]
 
@@ -111,6 +112,7 @@ export const projectCreatorRoutes = [
   ...projectDashboardRoutes,
   ...projectRewardCreatorRoutes,
   ...projectPostCreatorRoutes,
+  ...projectStoryCreatorRoutes,
 ]
 
 export const grantRoutes = [getPath('grants'), getPath('grants', PathName.grantId)]

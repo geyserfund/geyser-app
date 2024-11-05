@@ -1,4 +1,4 @@
-export const ProjectEntryValidations = {
+export const ProjectPostValidations = {
   title: {
     maxLength: 60,
   },

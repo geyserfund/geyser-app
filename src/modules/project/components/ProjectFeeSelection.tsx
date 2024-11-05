@@ -14,6 +14,7 @@ enum FeeValues {
   ZeroPercent = 0.0,
   TwoPercent = 0.02,
   FourPercent = 0.04,
+  FivePercent = 0.05,
   SixPercent = 0.06,
   EightPercent = 0.08,
 }
@@ -22,6 +23,7 @@ const options = [
   { label: '0%', value: FeeValues.ZeroPercent },
   { label: '2%', value: FeeValues.TwoPercent },
   { label: '4%', value: FeeValues.FourPercent },
+  { label: '5%', value: FeeValues.FivePercent },
   { label: '6%', value: FeeValues.SixPercent },
   { label: '8%', value: FeeValues.EightPercent },
 ]
