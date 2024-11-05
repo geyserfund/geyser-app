@@ -9,6 +9,7 @@ import { useProjectPostsAPI } from '@/modules/project/API/useProjectPostsAPI'
 import { useUnsavedAlert } from '../../../../../../../shared/hooks/useUnsavedAlert'
 import {
   PostCreateInput,
+  PostType,
   PostUpdateInput,
   ProjectPostQuery,
   ProjectPostQueryVariables,
@@ -56,7 +57,11 @@ export const usePostForm = ({
       description: postTemplate.description || '',
       image: postTemplate.image || '',
       title: postTemplate.title || '',
-      postType: postTemplate.postType || null,
+      postType: linkedRewardUuid
+        ? PostType.RewardUpdate
+        : linkedGoalId
+        ? PostType.GoalUpdate
+        : postTemplate.postType || null,
       projectGoalIds: linkedGoalId ? [linkedGoalId] : [],
       projectRewardUUIDs: linkedRewardUuid ? [linkedRewardUuid] : [],
       sentByEmailAt: postTemplate.sentByEmailAt || null,
