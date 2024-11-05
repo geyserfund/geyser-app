@@ -31,27 +31,30 @@ export const ProjectRowLayout = ({
 }: ProjectRowLayoutProps) => {
   const { t } = useTranslation()
   return (
-    <VStack alignItems="start" spacing="5px" {...rest}>
-      <HStack width="100%" justifyContent="space-between">
-        {typeof title === 'string' || subtitle ? (
-          <H3 size="2xl" dark bold>
-            {title}{' '}
-            {subtitle && (
-              <Body as="span" color="primary1.11" paddingRight="4px" bold {...subtitleProps}>
-                {subtitle}
-              </Body>
-            )}
-          </H3>
-        ) : (
-          title
+    <VStack alignItems="start" spacing={2} {...rest}>
+      <VStack w="full" spacing={0} alignItems={'start'}>
+        <HStack width="100%" justifyContent="space-between">
+          {typeof title === 'string' || subtitle ? (
+            <H3 size="2xl" dark bold>
+              {title}{' '}
+              {subtitle && (
+                <Body as="span" color="primary1.11" paddingRight="4px" bold {...subtitleProps}>
+                  {subtitle}
+                </Body>
+              )}
+            </H3>
+          ) : (
+            title
+          )}
+          {rightContent}
+        </HStack>
+        {subtext && (
+          <Body as="span" color="neutralAlpha.11" regular>
+            {t(subtext)}
+          </Body>
         )}
-        {rightContent}
-      </HStack>
-      {subtext && (
-        <Body as="span" color="neutralAlpha.11" regular>
-          {t(subtext)}
-        </Body>
-      )}
+      </VStack>
+
       {children}
     </VStack>
   )
