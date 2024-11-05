@@ -11200,6 +11200,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cors@npm:^2.8.17":
+  version: 2.8.17
+  resolution: "@types/cors@npm:2.8.17"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/457364c28c89f3d9ed34800e1de5c6eaaf344d1bb39af122f013322a50bc606eb2aa6f63de4e41a7a08ba7ef454473926c94a830636723da45bf786df032696d
+  languageName: node
+  linkType: hard
+
 "@types/cross-spawn@npm:^6.0.2":
   version: 6.0.6
   resolution: "@types/cross-spawn@npm:6.0.6"
@@ -15074,6 +15083,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cross-fetch@npm:4.0.0":
+  version: 4.0.0
+  resolution: "cross-fetch@npm:4.0.0"
+  dependencies:
+    node-fetch: "npm:^2.6.12"
+  checksum: 10c0/386727dc4c6b044746086aced959ff21101abb85c43df5e1d151547ccb6f338f86dec3f28b9dbddfa8ff5b9ec8662ed2263ad4607a93b2dc354fb7fe3bbb898a
+  languageName: node
+  linkType: hard
+
 "cross-fetch@npm:^3.1.5":
   version: 3.1.5
   resolution: "cross-fetch@npm:3.1.5"
@@ -17990,6 +18008,7 @@ __metadata:
     "@testing-library/react": "npm:^13.4.0"
     "@testing-library/react-hooks": "npm:^8.0.1"
     "@testing-library/user-event": "npm:^14.4.3"
+    "@types/cors": "npm:^2.8.17"
     "@types/dompurify": "npm:^3.0.2"
     "@types/loadable__component": "npm:^5.13.4"
     "@types/luxon": "npm:^3.2.0"
@@ -18043,6 +18062,7 @@ __metadata:
     husky: "npm:^8.0.3"
     i18next: "npm:^23.1.0"
     i18next-browser-languagedetector: "npm:^7.0.2"
+    i18next-http-backend: "npm:^2.6.2"
     jotai: "npm:^2.8.3"
     jotai-effect: "npm:^1.0.0"
     jotai-scope: "npm:^0.6.0"
@@ -18088,6 +18108,7 @@ __metadata:
     storybook: "npm:^8.0.4"
     swiper: "npm:^11.1.14"
     tiny-secp256k1: "npm:^2.2.3"
+    ts-node: "npm:^10.9.2"
     turndown: "npm:^7.1.2"
     typescript: "npm:^5.5.2"
     vite: "npm:^4.3.9"
@@ -18799,6 +18820,15 @@ __metadata:
   dependencies:
     "@babel/runtime": "npm:^7.19.4"
   checksum: 10c0/a8c05288ca9bcdbb7cd69406c3577b82c790ef59cd4c8dcec7bb7ce1e19253a7e13e4099050683c35b357ebd1e366d9506b2a0bdf7b406f107f8d6f1b7bc55ee
+  languageName: node
+  linkType: hard
+
+"i18next-http-backend@npm:^2.6.2":
+  version: 2.6.2
+  resolution: "i18next-http-backend@npm:2.6.2"
+  dependencies:
+    cross-fetch: "npm:4.0.0"
+  checksum: 10c0/8ae0c57293f0ebf5e67d629e526b98cd2d396fd48b8be56cdcb9565c2e5b1a8e46b323055682f5c9425e27fd5012c59dac380ccec053353facb23e69f5271938
   languageName: node
   linkType: hard
 
@@ -21458,7 +21488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:^2.0.0":
+"node-fetch@npm:^2.0.0, node-fetch@npm:^2.6.12":
   version: 2.7.0
   resolution: "node-fetch@npm:2.7.0"
   dependencies:
@@ -26155,6 +26185,44 @@ __metadata:
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
   checksum: 10c0/95187932fb83f3901e22546bd2feeac7d2feb4f412f42ac3a595f049a23e8dcf70516dffb51866391228ea2dbcfaea039e250fb2bb334d48a86ab2b6aea0ae2d
+  languageName: node
+  linkType: hard
+
+"ts-node@npm:^10.9.2":
+  version: 10.9.2
+  resolution: "ts-node@npm:10.9.2"
+  dependencies:
+    "@cspotcode/source-map-support": "npm:^0.8.0"
+    "@tsconfig/node10": "npm:^1.0.7"
+    "@tsconfig/node12": "npm:^1.0.7"
+    "@tsconfig/node14": "npm:^1.0.0"
+    "@tsconfig/node16": "npm:^1.0.2"
+    acorn: "npm:^8.4.1"
+    acorn-walk: "npm:^8.1.1"
+    arg: "npm:^4.1.0"
+    create-require: "npm:^1.1.0"
+    diff: "npm:^4.0.1"
+    make-error: "npm:^1.1.1"
+    v8-compile-cache-lib: "npm:^3.0.1"
+    yn: "npm:3.1.1"
+  peerDependencies:
+    "@swc/core": ">=1.2.50"
+    "@swc/wasm": ">=1.2.50"
+    "@types/node": "*"
+    typescript: ">=2.7"
+  peerDependenciesMeta:
+    "@swc/core":
+      optional: true
+    "@swc/wasm":
+      optional: true
+  bin:
+    ts-node: dist/bin.js
+    ts-node-cwd: dist/bin-cwd.js
+    ts-node-esm: dist/bin-esm.js
+    ts-node-script: dist/bin-script.js
+    ts-node-transpile-only: dist/bin-transpile.js
+    ts-script: dist/bin-script-deprecated.js
+  checksum: 10c0/5f29938489f96982a25ba650b64218e83a3357d76f7bede80195c65ab44ad279c8357264639b7abdd5d7e75fc269a83daa0e9c62fd8637a3def67254ecc9ddc2
   languageName: node
   linkType: hard
 

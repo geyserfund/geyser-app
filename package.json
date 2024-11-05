@@ -23,7 +23,8 @@
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts"
+    "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts",
+    "dev:language": "ts-node language/languageServer.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",
@@ -145,6 +146,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/user-event": "^14.4.3",
+    "@types/cors": "^2.8.17",
     "@types/dompurify": "^3.0.2",
     "@types/loadable__component": "^5.13.4",
     "@types/luxon": "^3.2.0",
@@ -175,11 +177,13 @@
     "eslint-plugin-storybook": "^0.8.0",
     "eslint-plugin-testing-library": "^5.10.0",
     "husky": "^8.0.3",
+    "i18next-http-backend": "^2.6.2",
     "jsdom": "^21.1.0",
     "prettier": "^2.8.3",
     "sitemap": "^7.1.1",
     "storybook": "^8.0.4",
     "tiny-secp256k1": "^2.2.3",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.2",
     "vite": "^4.3.9",
     "vite-plugin-mkcert": "^1.11.0",
