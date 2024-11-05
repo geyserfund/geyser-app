@@ -151,7 +151,7 @@ export const RewardView = () => {
           ) : (
             <MediaCarousel links={reward.images} aspectRatio={ImageCropAspectRatio.Reward} />
           )}
-          {isProjectOwner && (
+          {isProjectOwner && !reward.isHidden && (
             <CardLayout w={'full'} padding={3}>
               <VStack w={'full'} p={0}>
                 <Body size="md" medium>
