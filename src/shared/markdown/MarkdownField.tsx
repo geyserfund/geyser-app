@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Box, HStack, IconButton, VStack } from '@chakra-ui/react'
 import { TableComponents } from '@remirror/extension-react-tables'
-import { EditorComponent, Remirror, useCommands, useKeymap, useRemirror } from '@remirror/react'
-import { ForwardedRef, useCallback } from 'react'
+import { EditorComponent, Remirror, useCommands, useKeymap, useRemirror, useRemirrorContext } from '@remirror/react'
+import { ForwardedRef, useCallback, useEffect } from 'react'
 import { Control } from 'react-hook-form'
 import { PiMarkdownLogo } from 'react-icons/pi'
 import {
@@ -289,18 +289,31 @@ export const MarkdownField = ({
         />
       )}
       <StyleProvider
+        id={'remirror-style-provider'}
         flex={flex}
         flexGrow={1}
         display={isEditorMode ? 'none' : undefined}
         minHeight={'120px'}
         paddingBottom={0}
       >
-        <EditorComponent />
+        <Editor focusEditor={autoFocus} />
         <TableComponents tableCellMenuProps={{ Component: TableCellMenuComponent }} />
       </StyleProvider>
       <SaveModule name={name} control={control} />
     </Remirror>
   )
+}
+
+const Editor = ({ focusEditor }: { focusEditor?: boolean }) => {
+  const { focus } = useRemirrorContext()
+
+  useEffect(() => {
+    if (focusEditor) {
+      focus()
+    }
+  }, [focusEditor, focus])
+
+  return <EditorComponent />
 }
 
 export const MarkdownFieldSkeleton = () => {
