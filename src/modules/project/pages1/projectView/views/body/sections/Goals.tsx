@@ -17,7 +17,7 @@ export const Goals = () => {
   const { onGoalModalOpen, isGoalinEditMode, setGoalInEditMode } = useGoalsModal()
 
   return (
-    <BodySectionLayout title={t('Goals')}>
+    <BodySectionLayout title={''}>
       <CardLayout w="full" noborder padding={0}>
         <RenderGoals />
         {isProjectOwner && (
