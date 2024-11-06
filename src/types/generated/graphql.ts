@@ -238,6 +238,7 @@ export type ConnectionDetails =
   | LightningAddressConnectionDetails
   | LndConnectionDetailsPrivate
   | LndConnectionDetailsPublic
+  | NwcConnectionDetailsPrivate
 
 export enum ContributionsSummaryPeriod {
   AllTime = 'ALL_TIME',
@@ -317,6 +318,7 @@ export type CreateWalletInput = {
   lightningAddressConnectionDetailsInput?: InputMaybe<LightningAddressConnectionDetailsCreateInput>
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsCreateInput>
   name?: InputMaybe<Scalars['String']['input']>
+  nwcConnectionDetailsInput?: InputMaybe<NwcConnectionDetailsCreateInput>
   resourceInput: WalletResourceInput
 }
 
@@ -1527,6 +1529,24 @@ export type MutationWalletUpdateArgs = {
 export type MutationResponse = {
   message?: Maybe<Scalars['String']['output']>
   success: Scalars['Boolean']['output']
+}
+
+export type NwcConnectionDetailsCreateInput = {
+  nwcUrl: Scalars['String']['input']
+}
+
+export type NwcConnectionDetailsPrivate = {
+  __typename?: 'NWCConnectionDetailsPrivate'
+  nwcUrl?: Maybe<Scalars['String']['output']>
+}
+
+export type NwcConnectionDetailsPublic = {
+  __typename?: 'NWCConnectionDetailsPublic'
+  nwcUrl?: Maybe<Scalars['String']['output']>
+}
+
+export type NwcConnectionDetailsUpdateInput = {
+  nwcUrl: Scalars['String']['input']
 }
 
 export type NostrKeys = {
@@ -2847,6 +2867,7 @@ export type UpdateWalletInput = {
   lightningAddressConnectionDetailsInput?: InputMaybe<LightningAddressConnectionDetailsUpdateInput>
   lndConnectionDetailsInput?: InputMaybe<LndConnectionDetailsUpdateInput>
   name?: InputMaybe<Scalars['String']['input']>
+  nwcConnectionDetailsInput?: InputMaybe<NwcConnectionDetailsUpdateInput>
   twoFAInput?: InputMaybe<TwoFaInput>
 }
 
@@ -3157,7 +3178,11 @@ export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
     | Project
     | ProjectGoal
     | ProjectReward
-  ConnectionDetails: LightningAddressConnectionDetails | LndConnectionDetailsPrivate | LndConnectionDetailsPublic
+  ConnectionDetails:
+    | LightningAddressConnectionDetails
+    | LndConnectionDetailsPrivate
+    | LndConnectionDetailsPublic
+    | NwcConnectionDetailsPrivate
   Grant: BoardVoteGrant | CommunityVoteGrant
   SourceResource: Entry | Project
 }
@@ -3346,6 +3371,10 @@ export type ResolversTypes = {
   Milestone: ResolverTypeWrapper<Milestone>
   Mutation: ResolverTypeWrapper<{}>
   MutationResponse: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['MutationResponse']>
+  NWCConnectionDetailsCreateInput: NwcConnectionDetailsCreateInput
+  NWCConnectionDetailsPrivate: ResolverTypeWrapper<NwcConnectionDetailsPrivate>
+  NWCConnectionDetailsPublic: ResolverTypeWrapper<NwcConnectionDetailsPublic>
+  NWCConnectionDetailsUpdateInput: NwcConnectionDetailsUpdateInput
   NostrKeys: ResolverTypeWrapper<NostrKeys>
   NostrPrivateKey: ResolverTypeWrapper<NostrPrivateKey>
   NostrPublicKey: ResolverTypeWrapper<NostrPublicKey>
@@ -3662,6 +3691,10 @@ export type ResolversParentTypes = {
   Milestone: Milestone
   Mutation: {}
   MutationResponse: ResolversInterfaceTypes<ResolversParentTypes>['MutationResponse']
+  NWCConnectionDetailsCreateInput: NwcConnectionDetailsCreateInput
+  NWCConnectionDetailsPrivate: NwcConnectionDetailsPrivate
+  NWCConnectionDetailsPublic: NwcConnectionDetailsPublic
+  NWCConnectionDetailsUpdateInput: NwcConnectionDetailsUpdateInput
   NostrKeys: NostrKeys
   NostrPrivateKey: NostrPrivateKey
   NostrPublicKey: NostrPublicKey
@@ -3999,7 +4032,10 @@ export type ConnectionDetailsResolvers<
   ParentType extends ResolversParentTypes['ConnectionDetails'] = ResolversParentTypes['ConnectionDetails'],
 > = {
   __resolveType: TypeResolveFn<
-    'LightningAddressConnectionDetails' | 'LndConnectionDetailsPrivate' | 'LndConnectionDetailsPublic',
+    | 'LightningAddressConnectionDetails'
+    | 'LndConnectionDetailsPrivate'
+    | 'LndConnectionDetailsPublic'
+    | 'NWCConnectionDetailsPrivate',
     ParentType,
     ContextType
   >
@@ -4852,6 +4888,22 @@ export type MutationResponseResolvers<
   >
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+}
+
+export type NwcConnectionDetailsPrivateResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NWCConnectionDetailsPrivate'] = ResolversParentTypes['NWCConnectionDetailsPrivate'],
+> = {
+  nwcUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type NwcConnectionDetailsPublicResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['NWCConnectionDetailsPublic'] = ResolversParentTypes['NWCConnectionDetailsPublic'],
+> = {
+  nwcUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
 export type NostrKeysResolvers<
@@ -5975,6 +6027,8 @@ export type Resolvers<ContextType = any> = {
   Milestone?: MilestoneResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
   MutationResponse?: MutationResponseResolvers<ContextType>
+  NWCConnectionDetailsPrivate?: NwcConnectionDetailsPrivateResolvers<ContextType>
+  NWCConnectionDetailsPublic?: NwcConnectionDetailsPublicResolvers<ContextType>
   NostrKeys?: NostrKeysResolvers<ContextType>
   NostrPrivateKey?: NostrPrivateKeyResolvers<ContextType>
   NostrPublicKey?: NostrPublicKeyResolvers<ContextType>
@@ -6638,6 +6692,7 @@ export type ProjectWalletFragment = {
         pubkey?: string | null
       }
     | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: string | null }
+    | { __typename?: 'NWCConnectionDetailsPrivate' }
 }
 
 export type WalletLimitsFragment = {
@@ -6758,6 +6813,7 @@ export type UpdateUserMutation = {
         | { __typename?: 'LightningAddressConnectionDetails'; lightningAddress: string }
         | { __typename?: 'LndConnectionDetailsPrivate' }
         | { __typename?: 'LndConnectionDetailsPublic' }
+        | { __typename?: 'NWCConnectionDetailsPrivate' }
     } | null
   }
 }
@@ -7176,9 +7232,6 @@ export type ProjectForLandingPageFragment = {
   __typename?: 'Project'
   id: any
   name: string
-  balance: number
-  balanceUsdCent: number
-  fundersCount?: number | null
   thumbnailImage?: string | null
   shortDescription?: string | null
   title: string
@@ -8208,6 +8261,7 @@ export type ProjectWalletConnectionDetailsFragment = {
         grpcPort: number
       }
     | { __typename?: 'LndConnectionDetailsPublic'; pubkey?: string | null }
+    | { __typename?: 'NWCConnectionDetailsPrivate'; nwcUrl?: string | null }
 }
 
 export type AffiliateLinkCreateMutationVariables = Exact<{
@@ -9458,9 +9512,6 @@ export const ProjectForLandingPageFragmentDoc = gql`
   fragment ProjectForLandingPage on Project {
     id
     name
-    balance
-    balanceUsdCent
-    fundersCount
     thumbnailImage
     shortDescription
     title
@@ -10531,6 +10582,9 @@ export const ProjectWalletConnectionDetailsFragmentDoc = gql`
         lndNodeType
         hostname
         grpcPort
+      }
+      ... on NWCConnectionDetailsPrivate {
+        nwcUrl
       }
     }
   }

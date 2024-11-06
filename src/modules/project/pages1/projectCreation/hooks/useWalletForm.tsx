@@ -28,6 +28,7 @@ interface useWalletFormProps {
 export enum ConnectionOption {
   LIGHTNING_ADDRESS = 'LIGHTNING_ADDRESS',
   PERSONAL_NODE = 'PERSONAL_NODE',
+  NWC = 'NWC',
 }
 
 export enum LNAddressEvaluationState {
@@ -54,6 +55,11 @@ export type NodeWalletForm = {
   onOpen: () => void
 }
 
+export type NWCWalletForm = {
+  value: string
+  setValue: (nostrWalletConnectURI: string) => void
+}
+
 export type Limits = {
   max?: Maybe<number>
   min?: Maybe<number>
@@ -63,6 +69,7 @@ export type WalletForm = {
   handleConfirm: () => void
   lightningAddress: LightingWalletForm
   node: NodeWalletForm
+  nwc: NWCWalletForm
   isFormDirty: () => boolean
   connectionOption: ConnectionOption
   setConnectionOption: (connectionOption: ConnectionOption) => void
@@ -91,6 +98,7 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
   const [nodeInput, setNode] = useState<TNodeInput | undefined>(undefined)
 
   const [lightningAddressFormValue, setLightningAddressFormValue] = useState('')
+  const [nostrWalletConnectURI, setNostrWalletConnectURI] = useState('')
 
   const [lightningAddressFormError, setLightningAddressFormError] = useState<string | null>(null)
   const [lnAddressEvaluationState, setLnAddressEvaluationState] = useState<LNAddressEvaluationState>(
@@ -99,16 +107,18 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
 
   const [connectionOption, setConnectionOption] = useState<ConnectionOption>(ConnectionOption.LIGHTNING_ADDRESS)
 
+  const connectionDetailsTypenameToConnectionOptionMap: Record<WalletConnectDetails, ConnectionOption> = {
+    [WalletConnectDetails.LndConnectionDetailsPrivate]: ConnectionOption.PERSONAL_NODE,
+    [WalletConnectDetails.LndConnectionDetailsPublic]: ConnectionOption.PERSONAL_NODE,
+    [WalletConnectDetails.NWCConnectionDetailsPrivate]: ConnectionOption.NWC,
+    [WalletConnectDetails.LightningAddressConnectionDetails]: ConnectionOption.LIGHTNING_ADDRESS,
+  }
+
   useEffect(() => {
-    if (walletConnectiondetails) {
-      if (
-        walletConnectiondetails.connectionDetails.__typename === WalletConnectDetails.LndConnectionDetailsPrivate ||
-        walletConnectiondetails.connectionDetails.__typename === WalletConnectDetails.LndConnectionDetailsPublic
-      ) {
-        setConnectionOption(ConnectionOption.PERSONAL_NODE)
-      } else {
-        setConnectionOption(ConnectionOption.LIGHTNING_ADDRESS)
-      }
+    if (walletConnectiondetails?.connectionDetails.__typename) {
+      setConnectionOption(
+        connectionDetailsTypenameToConnectionOptionMap[walletConnectiondetails.connectionDetails.__typename],
+      )
     }
   }, [walletConnectiondetails])
 
@@ -181,6 +191,8 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
           ...details,
         }))
         setFeePercentage(projectWallet.feePercentage || 0.0)
+      } else if (projectWallet.connectionDetails.__typename === WalletConnectDetails.NWCConnectionDetailsPrivate) {
+        setNostrWalletConnectURI(projectWallet.connectionDetails.nwcUrl || '')
       }
     }
   }, [projectWallet])
@@ -228,8 +240,22 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
       }
     }
 
+    if (connectionOption === ConnectionOption.NWC) {
+      if (!nostrWalletConnectURI) {
+        return null
+      }
+
+      return {
+        nwcConnectionDetailsInput: {
+          nwcUrl: nostrWalletConnectURI,
+        },
+        resourceInput,
+        feePercentage: DEFAULT_LIGHTNING_FEE_PERCENTAGE,
+      }
+    }
+
     return null
-  }, [project, nodeInput, connectionOption, lightningAddressFormValue, feePercentage])
+  }, [project, nodeInput, connectionOption, lightningAddressFormValue, nostrWalletConnectURI, feePercentage])
 
   const handleConfirm = useCallback(async () => {
     if (
@@ -318,11 +344,22 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
         return Boolean(nodeInput)
       }
 
+      if (connectionOption === ConnectionOption.NWC) {
+        if (projectWallet.connectionDetails.__typename === WalletConnectDetails.NWCConnectionDetailsPrivate) {
+          return (
+            Boolean(projectWallet?.connectionDetails?.nwcUrl) &&
+            projectWallet?.connectionDetails?.nwcUrl !== nostrWalletConnectURI
+          )
+        }
+
+        return Boolean(nostrWalletConnectURI)
+      }
+
       return false
     }
 
     return true
-  }, [connectionOption, lightningAddressFormValue, nodeInput, projectWallet, feePercentage])
+  }, [connectionOption, lightningAddressFormValue, nodeInput, nostrWalletConnectURI, projectWallet, feePercentage])
 
   const isLightningAddressInValid = useMemo(() => {
     if (
@@ -353,6 +390,10 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
       isOpen,
       onClose,
       onOpen,
+    },
+    nwc: {
+      value: nostrWalletConnectURI,
+      setValue: setNostrWalletConnectURI,
     },
     fee: {
       value: feePercentage,
