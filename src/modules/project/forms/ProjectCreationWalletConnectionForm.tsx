@@ -128,7 +128,6 @@ Props) => {
     return null
   }
 
-  console.log('connectionOption', connectionOption)
   const getAccordionIndex = () => {
     if (connectionOption === ConnectionOption.LIGHTNING_ADDRESS) {
       return 0

@@ -9,13 +9,13 @@ import NwcIconDark from './nwc-light-mode.svg'
 import ShareIcon from './shareico.svg'
 
 export {
-    LightningIcon,
-    LogoDark,
-    LogoDarkGreenImage,
-    LogoIcon,
-    LogoLight,
-    LogoPrimary,
-    NwcIconDark,
-    NwcIconLight,
-    ShareIcon,
+  LightningIcon,
+  LogoDark,
+  LogoDarkGreenImage,
+  LogoIcon,
+  LogoLight,
+  LogoPrimary,
+  NwcIconDark,
+  NwcIconLight,
+  ShareIcon,
 }
