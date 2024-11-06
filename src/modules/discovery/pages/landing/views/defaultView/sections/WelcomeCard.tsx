@@ -37,7 +37,9 @@ export const WelcomeCard = () => {
         {t('Welcome to Crowdfunding 2.0!')}
       </H1>
       <Body size="lg" medium color={lightModeColors.neutral1[11]}>
-        {t('Bring your ideas to life, whether it’s a creative project, social cause or innovative new product idea. ')}
+        {t(
+          'Bring great Bitcoin ideas to life on Geyser. Whether it’s a creative project, social cause or innovative new product around the world. We believe crowdfunding is how we can speed up Bitcoin Adoption around the world.',
+        )}
       </Body>
 
       <Button variant="solid" width={'200px'} colorScheme="primary1" as={Link} href={GeyserAboutUrl} isExternal>
