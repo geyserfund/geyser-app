@@ -69,10 +69,7 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
     return <Navigate to={getPath('project', params?.projectName)} />
   }
 
-  if (isProfileSettingsRoute && !isViewingOwnProfile && params?.userId) {
-    return <Navigate to={getPath('userProfile', params?.userId)} />
-  }
-
+  /** Items returned after anonymous, will ask users to login before trying to open the page. */
   if (isAnonymous) {
     return (
       <AuthModal
@@ -83,6 +80,10 @@ export const PrivateRoute = ({ children }: IPrivateRoute) => {
         onClose={onClose}
       />
     )
+  }
+
+  if (isProfileSettingsRoute && !isViewingOwnProfile && params?.userId) {
+    return <Navigate to={getPath('userProfile', params?.userId)} />
   }
 
   return <>{children}</>
