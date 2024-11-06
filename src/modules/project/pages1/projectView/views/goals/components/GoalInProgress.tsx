@@ -122,7 +122,7 @@ export const GoalInProgress = ({
                   <Emoji size={24} unified={goal.emojiUnifiedCode} emojiStyle={EmojiStyle.NATIVE} />
                 </Box>
               )}
-              <Body size="xl" medium dark>
+              <Body size="md" medium dark>
                 {goal.title}
               </Body>
               {isPriorityGoal && (
@@ -162,14 +162,14 @@ export const GoalInProgress = ({
             />
           )}
         </HStack>
-        <Body size="md" medium dark pt={1}>
+        <Body size="sm" medium dark pb={2}>
           {goal.description}
         </Body>
         <Stack flexDirection={{ base: 'column', lg: 'row' }} alignItems="center" width="100%" gap={{ base: 2, lg: 5 }}>
           <VStack width="100%">
             <GoalProgressBar width="100%" percentage={percentage} />
             <HStack w="full" justifyContent={'space-between'}>
-              <Body size="sm" dark>
+              <Body size="sm" dark bold>
                 {formattedAmountContributed}{' '}
                 <Body as="span" size="sm" muted>
                   {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}

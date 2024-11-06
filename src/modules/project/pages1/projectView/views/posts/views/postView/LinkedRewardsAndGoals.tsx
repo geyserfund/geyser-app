@@ -54,7 +54,7 @@ const RewardCardForPost = ({
   const renderAmountComponent = () => {
     if (rewardCurrency === RewardCurrency.Usdcent)
       return (
-        <Body bold dark>
+        <Body size="sm" bold dark>
           {`$${reward.cost / 100} `}
           <Box as="span" color={'neutral1.9'}>
             {`(${formatSatsAmount(reward.cost as USDCents)})`}
@@ -63,7 +63,7 @@ const RewardCardForPost = ({
       )
 
     return (
-      <Body bold dark>
+      <Body size="sm" bold dark>
         {`${reward.cost.toLocaleString()}`}
         <Box as="span" color={'neutral1.9'}>
           {' '}
@@ -89,7 +89,7 @@ const RewardCardForPost = ({
         <ImageWithReload width="100%" height="100%" src={reward.images[0]} alt={reward.name} />
       </Box>
       <VStack flex={1} alignItems="start" spacing={0} p={4}>
-        <Body size="sm" medium>
+        <Body size="md" medium>
           {reward.name}
         </Body>
         <Body size="sm" light noOfLines={3}>
