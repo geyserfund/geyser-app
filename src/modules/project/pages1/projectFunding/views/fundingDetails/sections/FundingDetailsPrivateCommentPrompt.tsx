@@ -31,8 +31,6 @@ export const FundingDetailsPrivateCommentPrompt = () => {
   const mergedPrivateCommentPrompts = Array.from(
     new Set(selectedRewards.flatMap((reward) => reward.privateCommentPrompts || [])),
   )
-
-  console.log(fundingFormError)
   return (
     <CardLayout width="100%" mobileDense>
       <H1 size="2xl" bold>

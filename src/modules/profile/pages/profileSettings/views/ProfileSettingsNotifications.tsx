@@ -1,34 +1,16 @@
 import { Divider, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
 
 import { Body } from '@/shared/components/typography'
-import { CreatorNotificationSettings, useProfileNotificationsSettingsQuery, UserNotificationSettings } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout'
-import { CreatorNotifications, CreatorNotificationsSkeleton } from '../components/CreatorNotifications'
+import { CreatorNotifications } from '../components/CreatorNotifications'
 import { FollowedProjectsList } from '../components/FollowedProjectsList'
 import { UserNotifications } from '../components/UserNotifications'
 
 export const ProfileSettingsNotifications = () => {
-  const { userId } = useParams()
   const isMobile = useMobileMode()
-  const [creatorNotificationSettings, setCreatorNotificationSettings] = useState<CreatorNotificationSettings[]>([])
-  const [userNotificationSettings, setUserNotificationSettings] = useState<UserNotificationSettings>()
-
-  const { refetch, loading } = useProfileNotificationsSettingsQuery({
-    variables: { userId },
-    onCompleted(data) {
-      setCreatorNotificationSettings(data?.userNotificationSettingsGet.creatorSettings || [])
-      setUserNotificationSettings(data?.userNotificationSettingsGet.userSettings || null)
-    },
-  })
-
-  useEffect(() => {
-    refetch()
-  }, [refetch])
 
   return (
     <ProfileSettingsLayout>
@@ -43,14 +25,10 @@ export const ProfileSettingsNotifications = () => {
             {t('Customize your profile and project notifications.')}
           </Body>
         </VStack>
-        {loading ? (
-          <CreatorNotificationsSkeleton />
-        ) : (
-          <CreatorNotifications creatorNotificationSettings={creatorNotificationSettings} />
-        )}
+        <CreatorNotifications />
         <Divider />
-        {userNotificationSettings && <UserNotifications userNotificationSettings={userNotificationSettings} />}
-        {!loading && <FollowedProjectsList />}
+        <UserNotifications />
+        <FollowedProjectsList />
       </VStack>
     </ProfileSettingsLayout>
   )
