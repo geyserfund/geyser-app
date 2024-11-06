@@ -215,7 +215,7 @@ export const MarkdownField = ({
       initialContent={initialContent?.()}
       hooks={hooks}
       placeholder={
-        'Traveling to 15 LATAM & CARICOM countries using Bitcoin, this journey aims to showcase the widespread adoption of Bitcoin through engaging travel vlogs. The main objectives include organizing Bitcoin meetups to raise awareness and demonstrate the benevolence of humanity.'
+        'Traveling to 15 LATAM & CARICOM countries using Bitcoin, this journey aims to showcase the widespread adoption of Bitcoin through engaging travel vlogs..'
       }
     >
       <VStack
