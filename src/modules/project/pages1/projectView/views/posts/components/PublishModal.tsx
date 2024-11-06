@@ -27,7 +27,7 @@ import { PostPublishProps } from '../hooks/usePostForm'
 import { RewardItem } from './RewardItem'
 
 const sendToOptions = [
-  { label: t('Followers'), value: EmailSubscriberSegment.Followers },
+  { label: t('Followers (Everyone)'), value: EmailSubscriberSegment.Followers },
   { label: t('Contributors'), value: EmailSubscriberSegment.Contributors },
   { label: t('Reward buyers'), value: EmailSubscriberSegment.RewardBuyers },
 ]
