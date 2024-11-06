@@ -53,9 +53,16 @@ export const ProjectPostCard = ({ post }: Props) => {
         )}
         <VStack w="full" p={{ base: 3, lg: 6 }} spacing={3} alignItems="start">
           <VStack w="full" spacing={2} alignItems="start">
-            <Body size="xl" medium dark>
-              {post.title}
-            </Body>
+            <HStack spacing={2}>
+              <Body size="xl" medium dark>
+                {post.title}
+              </Body>
+              {isDraft && (
+                <Badge variant="soft" colorScheme="neutral1">
+                  Draft
+                </Badge>
+              )}
+            </HStack>
             {post.postType && (
               <Badge variant="soft" colorScheme="neutral1" gap={2}>
                 <Icon as={postTypeOptions.find((option) => option.value === post.postType)?.icon} />

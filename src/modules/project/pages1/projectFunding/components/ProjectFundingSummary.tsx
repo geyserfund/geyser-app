@@ -127,16 +127,9 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
             </Body>
           </HStack>
         )}
-        {currentGoal && (
-          <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('To a goal')}: `}</Body>
-            <Body size={{ base: 'sm', lg: 'md' }}>{currentGoal?.title}</Body>
-          </HStack>
-        )}
-
         {numberOfRewardsSelected > 0 && (
           <VStack w="full" alignItems={'start'} spacing={1}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Items')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards')}: `}</Body>
             {items.map((item) => {
               return (
                 <HStack w="full" key={item?.label} alignItems="center">
@@ -159,7 +152,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
 
         {numberOfRewardsSelected > 0 && (
           <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards total')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
               {getRewardsAmount('sats')}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
@@ -169,6 +162,13 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
           </HStack>
         )}
       </VStack>
+
+      {currentGoal && (
+        <HStack>
+          <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('To a goal')}: `}</Body>
+          <Body size={{ base: 'sm', lg: 'md' }}>{currentGoal?.title}</Body>
+        </HStack>
+      )}
 
       <HStack as={motion.div} layout alignItems="start">
         <Body size={{ base: 'md', lg: 'xl' }} light>
