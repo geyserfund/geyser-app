@@ -66,7 +66,7 @@ export const ProjectCreateStart = () => {
             {t('Sell anything to reward your contributors')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectEntryUrl} alt="create project entry">
-            {t('Update your community by writing Entries')}
+            {t('Update your community by email')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectFeesUrl} alt="create project fees">
             {t(`Low ${LIGHTNING_FEE_PERCENTAGE}% fees and no fees for node-runners`)}

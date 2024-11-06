@@ -151,6 +151,11 @@ export const PublishModal = ({
   const sendEmailRender = () => {
     return (
       <>
+        <Body size="sm" regular color="neutral1.11">
+          {t(
+            'The post title, subtitle, and image will be the only things visible in the email users receive. Make sure they’re attention-grabbing to encourage them to visit your post.',
+              )}
+            </Body>
         <VStack w="full" alignItems="flex-start">
           <Body size={'sm'} medium>
             {' '}
@@ -282,11 +287,6 @@ export const PublishModal = ({
           <VStack flex={1} alignItems="start" spacing={0}>
             <Body size="sm" medium>
               {t('Send post by email')}
-            </Body>
-            <Body size="sm" regular color="neutral1.11">
-              {t(
-                'The post title, subtitle, and image will be the only things visible in the email users receive. Make sure they’re attention-grabbing to encourage them to visit your post.',
-              )}
             </Body>
           </VStack>
           <VStack justifyContent={'center'}>
