@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { Box, HStack, IconButton, VStack } from '@chakra-ui/react'
-import { EditorComponent, Remirror, TableComponents, useCommands, useKeymap, useRemirror } from '@remirror/react'
-import { ForwardedRef, useCallback } from 'react'
+import { TableComponents } from '@remirror/extension-react-tables'
+import { EditorComponent, Remirror, useCommands, useKeymap, useRemirror, useRemirrorContext } from '@remirror/react'
+import { ForwardedRef, useCallback, useEffect } from 'react'
 import { Control } from 'react-hook-form'
 import { PiMarkdownLogo } from 'react-icons/pi'
 import {
@@ -56,8 +57,11 @@ interface Props {
   control?: Control<any, any>
   flex?: boolean
   stickyToolbar?: string | number
+  enableRawMode?: boolean
   isEditorMode?: boolean
   toggleEditorMode?: () => void
+  isFloatingToolbar?: boolean
+  toolbarMaxWidth?: number | string
 }
 
 export const MarkdownField = ({
@@ -71,8 +75,11 @@ export const MarkdownField = ({
   control,
   flex,
   stickyToolbar,
+  enableRawMode,
   isEditorMode,
   toggleEditorMode,
+  isFloatingToolbar,
+  toolbarMaxWidth,
 }: Props) => {
   const isMobile = useMobileMode()
 
@@ -208,70 +215,105 @@ export const MarkdownField = ({
       initialContent={initialContent?.()}
       hooks={hooks}
       placeholder={
-        'Traveling to 15 LATAM & CARICOM countries using Bitcoin, this journey aims to showcase the widespread adoption of Bitcoin through engaging travel vlogs. The main objectives include organizing Bitcoin meetups to raise awareness and demonstrate the benevolence of humanity.'
+        'Traveling to 15 LATAM & CARICOM countries using Bitcoin, this journey aims to showcase the widespread adoption of Bitcoin through engaging travel vlogs..'
       }
     >
-      <VStack w="full" id="markdown-toolbar-wrapper">
+      <VStack
+        w="full"
+        id="markdown-toolbar-wrapper"
+        alignItems="center"
+        backgroundColor="utils.pbg"
+        {...(isFloatingToolbar &&
+          !isMobile && {
+            position: 'fixed',
+            zIndex: 2,
+            bottom: stickyToolbar ? `calc(${stickyToolbar} + 16px)` : '16px',
+            left: 0,
+          })}
+      >
         <Box
           width="full"
+          maxWidth={{ base: 'unset', lg: toolbarMaxWidth }}
           display="flex"
           justifyContent="space-between"
           alignItems="start"
           mb={2}
           gap={2}
+          border="1px solid"
+          borderRadius="6px"
+          borderColor="neutral1.6"
+          padding="10px"
+          background="utils.pbg"
           {...(isMobile && {
-            borderTop: '1px solid',
-            position: 'fixed',
-            background: 'utils.pbg',
             zIndex: 2,
+            borderLeftWidth: '0px',
+            borderRightWidth: '0px',
+            borderTopWidth: '1px',
+            borderTopStyle: 'solid',
+            borderRadius: '0px',
+            padding: '12px 12px 20px',
+            position: 'fixed',
             bottom: stickyToolbar || 0,
-            borderBottom: stickyToolbar ? '1px solid' : undefined,
-            borderColor: 'neutral1.6',
-            mb: 0,
-            padding: { base: '5px 12px 20px 12px', lg: 3 },
             overflowX: 'auto',
             overflowY: 'hidden',
+            marginBottom: '0px',
           })}
         >
           <MarkdownToolbar isDisabled={isEditorMode} />
-          <HStack mt={1} justifyContent={'center'}>
-            <IconButton
-              aria-label="Edit-markdown"
-              my={1}
-              variant={'surface'}
-              colorScheme={isEditorMode ? 'primary1' : 'neutral1'}
-              icon={<PiMarkdownLogo fontSize="25px" />}
-              onClick={toggleEditorMode}
-              padding="1"
-            />
+          <HStack justifyContent={'center'}>
+            {enableRawMode && (
+              <IconButton
+                aria-label="Edit-markdown"
+                variant={'surface'}
+                size="sm"
+                colorScheme={isEditorMode ? 'primary1' : 'neutral1'}
+                icon={<PiMarkdownLogo fontSize="16px" />}
+                onClick={toggleEditorMode}
+              />
+            )}
           </HStack>
         </Box>
       </VStack>
 
-      {isEditorMode && control && (
+      {enableRawMode && isEditorMode && control && (
         <ReactHookTextArea
-          name="description"
+          name={name || 'description'}
           control={control}
           value={content}
           height="100%"
-          minHeight="350px"
+          minHeight="120px"
+          border="none"
+          padding={0}
           formControlProps={{ height: '100%' }}
           fieldContainerProps={{ height: '100%' }}
         />
       )}
       <StyleProvider
+        id={'remirror-style-provider'}
         flex={flex}
         flexGrow={1}
         display={isEditorMode ? 'none' : undefined}
-        minHeight={'40vh'}
+        minHeight={'120px'}
         paddingBottom={0}
       >
-        <EditorComponent />
+        <Editor focusEditor={autoFocus} />
         <TableComponents tableCellMenuProps={{ Component: TableCellMenuComponent }} />
       </StyleProvider>
       <SaveModule name={name} control={control} />
     </Remirror>
   )
+}
+
+const Editor = ({ focusEditor }: { focusEditor?: boolean }) => {
+  const { focus } = useRemirrorContext()
+
+  useEffect(() => {
+    if (focusEditor) {
+      focus()
+    }
+  }, [focusEditor, focus])
+
+  return <EditorComponent />
 }
 
 export const MarkdownFieldSkeleton = () => {

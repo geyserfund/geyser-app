@@ -1,4 +1,4 @@
-import { HStack, Link } from '@chakra-ui/layout'
+import { HStack, Link } from '@chakra-ui/react'
 import { Avatar } from '@chakra-ui/react'
 import { ReactElement } from 'react'
 import { FaUserCircle } from 'react-icons/fa'

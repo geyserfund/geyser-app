@@ -3,7 +3,7 @@ import React from 'react'
 
 import { useMobileMode } from '../../utils'
 
-interface CustomTooltipProps extends Omit<TooltipProps, 'children' | 'label'> {
+interface CustomTooltipProps extends Omit<TooltipProps, 'children' | 'content'> {
   content: React.ReactNode
   children: React.ReactNode
 }

@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/layout'
+import { Box } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 

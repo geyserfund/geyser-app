@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai'
 import { useMemo, useState } from 'react'
 
-import { ProjectGoal, useProjectGoalsQuery } from '@/types'
+import { ProjectGoalFragment, useProjectGoalsQuery } from '@/types'
 import { useNotification } from '@/utils'
 
 import { periodAtom } from '../state/periodAtom'
@@ -10,7 +10,7 @@ export const useProjectGoals = (projectId: string) => {
   const period = useAtomValue(periodAtom)
 
   const { toast } = useNotification()
-  const [goals, setGoals] = useState<ProjectGoal[]>([])
+  const [goals, setGoals] = useState<ProjectGoalFragment[]>([])
 
   const dateRange = useMemo(() => {
     const oneWeekAgo = new Date()

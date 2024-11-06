@@ -8,6 +8,7 @@ import {
   projectPostCreatorRoutes,
   projectRewardCreatorRoutes,
   projectRoutes,
+  projectStoryCreatorRoutes,
   routeMatchForAtom,
 } from '../../../config/routes/routeGroups'
 import { getPath, PathName } from '../../../shared/constants'
@@ -21,6 +22,7 @@ export const isProjectRoutesAtom = atom(
     ...projectDashboardRoutes,
     ...projectPostCreatorRoutes,
     ...projectRewardCreatorRoutes,
+    ...projectStoryCreatorRoutes,
     ...projectFundingRoutes,
   ]),
 )

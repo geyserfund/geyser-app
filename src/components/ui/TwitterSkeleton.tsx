@@ -1,5 +1,5 @@
-import { Box } from '@chakra-ui/layout'
-import { SkeletonCircle, SkeletonText } from '@chakra-ui/skeleton'
+import { Box } from '@chakra-ui/react'
+import { SkeletonCircle, SkeletonText } from '@chakra-ui/react'
 
 export const TwitterSkeleton = () => {
   return (

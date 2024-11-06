@@ -1,10 +1,6 @@
 import { Box, HStack, Skeleton, VStack } from '@chakra-ui/react'
-import { PiLightning, PiUsers } from 'react-icons/pi'
 
 import { Body, H3 } from '@/shared/components/typography'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
-import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
-import { getShortAmountLabel, removeProjectAmountException } from '@/utils'
 
 import { ImageWithReload } from '../../../../../components/ui'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../shared/components/layouts'
@@ -17,10 +13,6 @@ export interface LandingCardBaseProps extends CardLayoutProps {
 }
 
 export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: LandingCardBaseProps) => {
-  const { formatAmount } = useCurrencyFormatter()
-
-  const dontShowAmount = removeProjectAmountException(project.name)
-
   return (
     <CardLayout
       hover
@@ -47,33 +39,15 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
         minWidth={{ base: '170px', lg: 'auto' }}
         padding={4}
         alignItems="start"
-        justifyContent="space-between"
         overflow="hidden"
         spacing={1}
       >
-        <H3 size="lg" medium flex={1} isTruncated width="100%">
+        <H3 size="lg" medium isTruncated width="100%">
           {project.title}
         </H3>
-
-        <HStack w="full" justifyContent={'start'} spacing={3}>
-          <HStack>
-            <PiUsers />
-            <Body size="sm" dark>
-              {project.fundersCount}
-            </Body>
-          </HStack>
-          {!dontShowAmount && (
-            <HStack>
-              <PiLightning />
-              <Body size="sm" dark>
-                {getShortAmountLabel(project.balance, true)}
-              </Body>
-              <Body size="sm" dark>
-                ({formatAmount(project.balanceUsdCent, FormatCurrencyType.Usdcent)})
-              </Body>
-            </HStack>
-          )}
-        </HStack>
+        <Body size="sm" dark noOfLines={2} isTruncated width="100%" wordBreak={'break-all'} whiteSpace={'normal'}>
+          {project.shortDescription}
+        </Body>
       </VStack>
     </CardLayout>
   )

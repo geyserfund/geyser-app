@@ -30,7 +30,7 @@ type FormValues = Omit<ProjectRewardFragment, 'id' | 'sold'>
 const MAX_REWARD_IMAGES = 5
 
 const rewardFormSchema = () =>
-  yup.object().shape({
+  yup.object({
     name: yup.string().required('Name is required').max(50, 'Name must be at most 50 characters long'),
     description: yup.string().max(1200, 'Description must be at most 1200 characters long'),
     shortDescription: yup.string().max(250, 'Short Description must be at most 250 characters long'),
@@ -49,7 +49,7 @@ const rewardFormSchema = () =>
     estimatedDeliveryInWeeks: yup.number().nullable().min(0, 'Delivery time must be greater than or equal to 0'),
     confirmationMessage: yup.string().max(500, 'Confirmation message must be at most 500 characters long'),
     privateCommentPrompts: yup.array().of(yup.string()),
-  })
+  }) as any
 
 type UseProjectRewardFormProps = {
   rewardId?: string

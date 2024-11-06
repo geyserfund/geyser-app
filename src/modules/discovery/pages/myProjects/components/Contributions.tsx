@@ -2,15 +2,14 @@ import { Box, BoxProps, Button, Divider, HStack, Image, Skeleton, Stack, VStack 
 import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { useTranslation } from 'react-i18next'
 import { PiCoins, PiFlagBannerFold } from 'react-icons/pi'
-import { useNavigate } from 'react-router'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { useGoalsModal } from '@/modules/project/pages1/projectView/hooks'
 import { Body } from '@/shared/components/typography'
 import { getPath, NoContributionImageUrl } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
-import { ProjectGoal, ProjectGoalCurrency } from '@/types'
-import { commaFormatted } from '@/utils'
+import { ProjectGoalCurrency, ProjectGoalFragment, ProjectGoalStatus } from '@/types'
+import { commaFormatted, useMobileMode } from '@/utils'
 
 import { useProjectGoals } from '../hooks/useProjectGoals'
 import { useProjectStats } from '../hooks/useProjectStats'
@@ -77,7 +76,7 @@ export const Contributions = ({ projectId, projectName }: ContributionsProps) =>
     >
       <Header total={total} totalUsd={totalUsd} noContributionsReceived={noContributionsReceived} noGoals={noGoals} />
       <Divider my={4} />
-      <Goals goals={goals} noContributionsReceived={noContributionsReceived} />
+      <Goals goals={goals} noContributionsReceived={noContributionsReceived} projectName={projectName} />
     </Box>
   )
 }
@@ -122,7 +121,15 @@ const Header = ({
   )
 }
 
-const Goals = ({ goals, noContributionsReceived }: { goals: ProjectGoal[]; noContributionsReceived: boolean }) => {
+const Goals = ({
+  goals,
+  noContributionsReceived,
+  projectName,
+}: {
+  goals: ProjectGoalFragment[]
+  noContributionsReceived: boolean
+  projectName: string
+}) => {
   if (noContributionsReceived) {
     return (
       <VStack w="100%" align="center" spacing={0.5} px={4} py={8}>
@@ -134,17 +141,24 @@ const Goals = ({ goals, noContributionsReceived }: { goals: ProjectGoal[]; noCon
   return (
     <VStack w="100%" align="stretch" spacing={0.5}>
       {goals.map((goal) => (
-        <GoalItem key={goal.id} goal={goal} />
+        <GoalItem key={goal.id} goal={goal} projectName={projectName} />
       ))}
     </VStack>
   )
 }
 
-const GoalItem = ({ goal }: { goal: ProjectGoal }) => {
+const GoalItem = ({ goal, projectName }: { goal: ProjectGoalFragment; projectName: string }) => {
   const percentage = (goal.amountContributed / goal.targetAmount) * 100
+  const isCompleted = goal.status === ProjectGoalStatus.Completed
+
+  const completedStyle = {
+    bg: 'neutralAlpha.2',
+    borderRadius: '8px',
+    p: 2,
+  }
 
   return (
-    <HStack width="100%" gap={'10px'} background="utils.pbg">
+    <HStack width="100%" gap={'10px'} background="utils.pbg" {...(isCompleted && completedStyle)}>
       <VStack display="flex" alignItems="flex-start" width="100%" height="100%" spacing={0}>
         <HStack
           display="flex"
@@ -167,7 +181,7 @@ const GoalItem = ({ goal }: { goal: ProjectGoal }) => {
         <Stack flexDirection={{ base: 'column', lg: 'row' }} alignItems="center" width="100%" gap={{ base: 2, lg: 5 }}>
           <VStack width="100%">
             <GoalProgressBar width="100%" percentage={percentage} />
-            <GoalStats goal={goal} percentage={percentage} />
+            <GoalStats goal={goal} projectName={projectName} percentage={percentage} />
           </VStack>
         </Stack>
       </VStack>
@@ -196,12 +210,60 @@ const GoalProgressBar = ({
   )
 }
 
-const GoalStats = ({ goal, percentage }: { goal: ProjectGoal; percentage: number }) => {
+const GoalStats = ({
+  goal,
+  projectName,
+  percentage,
+}: {
+  goal: ProjectGoalFragment
+  projectName: string
+  percentage: number
+}) => {
   const { t } = useTranslation()
+
+  const navigate = useNavigate()
+
   const { formatAmount, formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
   const formattedAmountContributed = formatAmount(goal.amountContributed, goal.currency)
   const usdAmount = formatUsdAmount(goal.amountContributed)
   const satsAmount = formatSatsAmount(goal.amountContributed)
+  const isCompleted = goal.status === ProjectGoalStatus.Completed
+
+  const isMobile = useMobileMode()
+
+  const Direction = isMobile ? VStack : HStack
+
+  if (isCompleted) {
+    return (
+      <Direction w="full" justifyContent={'space-between'} spacing={1}>
+        <HStack w="full" justifyContent={isMobile ? 'flex-end' : 'flex-start'}>
+          <Body size="sm" muted medium>
+            {t('Goal reached:')}{' '}
+            <Body as="span" size="sm" dark>
+              {formattedAmountContributed}
+            </Body>{' '}
+            <Body as="span" size="sm" muted>
+              {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}
+            </Body>
+          </Body>
+        </HStack>
+        <Button
+          variant="surface"
+          size="sm"
+          colorScheme="primary1"
+          w={isMobile ? 'full' : 'auto'}
+          minWidth="150px"
+          onClick={(e) => {
+            e.stopPropagation()
+            e.preventDefault()
+            navigate(`${getPath('projectPostCreate', projectName)}?goalId=${goal.id}`)
+          }}
+        >
+          {t('Update your community')}
+        </Button>
+      </Direction>
+    )
+  }
 
   return (
     <HStack w="full" justifyContent={'flex-end'}>

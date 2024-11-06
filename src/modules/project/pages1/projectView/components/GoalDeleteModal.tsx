@@ -1,9 +1,12 @@
 import { Button, HStack, Input, VStack } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Modal } from '@/shared/components/layouts'
+import { getPath } from '@/shared/constants'
 import { useNotification } from '@/utils'
 
 import { Body } from '../../../../../shared/components/typography'
@@ -12,6 +15,10 @@ import { useGoalsModal } from '../hooks/useGoalsModal'
 export const GoalDeleteModal = () => {
   const { t } = useTranslation()
   const toast = useNotification()
+
+  const { goalId } = useParams<{ goalId: string }>()
+  const navigate = useNavigate()
+  const { project } = useProjectAtom()
 
   const { currentGoal, isGoalDeleteModalOpen, onGoalDeleteModalClose } = useGoalsModal()
 
@@ -41,6 +48,9 @@ export const GoalDeleteModal = () => {
         })
         setInputValue('')
         onGoalDeleteModalClose()
+        if (goalId) {
+          navigate(getPath('projectGoals', project?.name))
+        }
       },
     }),
   ]

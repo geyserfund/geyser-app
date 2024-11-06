@@ -25,6 +25,13 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         content
         entryImage: image
       }
+      ... on Post {
+        id
+        title
+        entryDescription: description
+        markdown
+        entryImage: image
+      }
       ... on FundingTx {
         id
         amount

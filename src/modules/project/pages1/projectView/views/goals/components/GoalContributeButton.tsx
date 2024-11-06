@@ -12,9 +12,17 @@ import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 type GoalContributeButtonProps = ButtonProps & {
   projectGoalId: string
   isPriorityGoal?: boolean
+  isNavButton?: boolean
+  displayOnMobile?: boolean
 }
 
-export const GoalContributeButton = ({ projectGoalId, isPriorityGoal, ...props }: GoalContributeButtonProps) => {
+export const GoalContributeButton = ({
+  projectGoalId,
+  isPriorityGoal,
+  isNavButton,
+  displayOnMobile,
+  ...props
+}: GoalContributeButtonProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
 
@@ -27,7 +35,9 @@ export const GoalContributeButton = ({ projectGoalId, isPriorityGoal, ...props }
 
   const isFundingDisabled = !isActive(project.status)
 
-  const handleContributeClick = () => {
+  const handleContributeClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
     if (isPriorityGoal) {
       setSelectedGoalId(null)
     } else {
@@ -35,6 +45,23 @@ export const GoalContributeButton = ({ projectGoalId, isPriorityGoal, ...props }
     }
 
     navigate(getPath('projectFunding', project.name))
+  }
+
+  if (isNavButton) {
+    return (
+      <Button
+        variant="solid"
+        colorScheme="primary1"
+        size="lg"
+        width={{ base: '100%', lg: '160px' }}
+        display={{ base: displayOnMobile ? 'flex' : 'none', lg: 'flex' }}
+        onClick={handleContributeClick}
+        isDisabled={isFundingDisabled}
+        {...props}
+      >
+        {t('Contribute')}
+      </Button>
+    )
   }
 
   return (

@@ -96,12 +96,13 @@ export const Details = () => {
             </Wrap>
           </DetailLine>
         )}
-
-        <DetailLine title={t('Launched')}>
-          <Body size="sm" medium dark>
-            {DateTime.fromMillis(Number(project.launchedAt)).toFormat('dd LLL yyyy')}
-          </Body>
-        </DetailLine>
+        {project.launchedAt && (
+          <DetailLine title={t('Launched')}>
+            <Body size="sm" medium dark>
+              {DateTime.fromMillis(Number(project.launchedAt)).toFormat('dd LLL yyyy')}
+            </Body>
+          </DetailLine>
+        )}
       </CardLayout>
     </BodySectionLayout>
   )

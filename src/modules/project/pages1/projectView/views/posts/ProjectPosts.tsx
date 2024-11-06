@@ -1,39 +1,52 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context'
-import { useProjectEntriesAPI } from '@/modules/project/API/useProjectEntriesAPI'
-import { useEntriesAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useProjectPostsAPI } from '@/modules/project/API/useProjectPostsAPI'
+import { usePostsAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { H2 } from '@/shared/components/typography'
 import { dimensions, getPath } from '@/shared/constants'
+import { PostType } from '@/types'
 import { truthyFilter } from '@/utils/array'
 
 import { CreatorPostPageBottomBar, CreatorPostPageTopBar } from './components'
-import { ProjectEntryCard } from './shared'
+import { PostTypeFilterBar } from './components/PostTypeFilterBar'
+import { ProjectPostCard } from './shared'
+import { postTypeOptions } from './utils/postTypeLabel'
 
 export const ProjectPosts = () => {
   const { loading: userLoading } = useAuthContext()
   const { loading: projectLoading, project } = useProjectAtom()
   const navigate = useNavigate()
 
-  const { queryProjectEntries, queryUnpublishedProjectEntries } = useProjectEntriesAPI(true)
+  const [selectedPostType, setSelectedPostType] = useState<PostType | null>(null)
 
-  const { entries: publishedEntries, unpublishedEntries, hasEntries } = useEntriesAtom()
+  const { queryProjectPosts, queryUnpublishedProjectPosts } = useProjectPostsAPI(true)
 
-  const entries = [...publishedEntries, ...unpublishedEntries]
+  const { posts: publishedPosts, unpublishedPosts, hasPosts } = usePostsAtom()
 
-  const sortedEntries =
-    entries && entries.filter(truthyFilter).sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))
+  const posts = [...publishedPosts, ...unpublishedPosts]
 
-  const loading = userLoading || projectLoading || queryProjectEntries.loading || queryUnpublishedProjectEntries.loading
+  const sortedPosts =
+    posts && posts.filter(truthyFilter).sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))
+
+  const loading = userLoading || projectLoading || queryProjectPosts.loading || queryUnpublishedProjectPosts.loading
+
+  const filteredPosts = sortedPosts.filter((post) =>
+    selectedPostType === null ? true : post.postType === selectedPostType,
+  )
+
+  const availablePostTypes = postTypeOptions.filter((option) =>
+    sortedPosts.some((post) => post.postType === option.value),
+  )
 
   useEffect(() => {
     let number: any
 
-    if (!loading && !hasEntries) {
+    if (!loading && !hasPosts) {
       number = setInterval(() => {
         navigate(getPath('project', project.name))
       }, 500)
@@ -42,19 +55,24 @@ export const ProjectPosts = () => {
     return () => {
       clearInterval(number)
     }
-  }, [loading, hasEntries, navigate, project])
+  }, [loading, hasPosts, navigate, project])
 
   return (
     <VStack w="full" spacing={8} paddingBottom={28}>
-      <CardLayout w="full" direction="row" justifyContent="center" mobileDense noborder>
+      <CardLayout w="full" direction="row" justifyContent="center" dense noborder>
         <VStack maxWidth={dimensions.project.posts.view.maxWidth} w="full" spacing={6}>
           <CreatorPostPageTopBar />
           <VStack w="full" spacing={4} alignItems={'start'}>
             <H2 bold size="2xl" display={{ base: 'unset', lg: 'none' }}>
               {t('Posts')}
             </H2>
-            {sortedEntries.map((entry, index) => {
-              return <ProjectEntryCard entry={entry} key={entry.id} />
+            <PostTypeFilterBar
+              availablePostTypes={availablePostTypes}
+              selectedPostType={selectedPostType}
+              onFilterChange={setSelectedPostType}
+            />
+            {filteredPosts.map((entry, index) => {
+              return <ProjectPostCard post={entry} key={entry.id} />
             })}
           </VStack>
         </VStack>

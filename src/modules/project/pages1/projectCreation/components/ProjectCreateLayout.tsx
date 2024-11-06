@@ -1,4 +1,4 @@
-import { Box, Button, Container, ContainerProps, HStack, VStack } from '@chakra-ui/react'
+import { Box, Button, Container, ContainerProps, HStack, StackProps, VStack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiArrowLeft } from 'react-icons/pi'
@@ -13,6 +13,7 @@ interface ProjectCreateLayoutProps extends Omit<ContainerProps, 'children' | 'ti
   continueButton?: ReactNode
   isNestedProcess?: boolean
   onBackClick: () => void
+  innerDesktopContainerProps?: StackProps
 }
 
 const contentSx = {
@@ -25,6 +26,7 @@ export const ProjectCreateLayout = ({
   title,
   continueButton = null,
   isNestedProcess = false,
+  innerDesktopContainerProps,
   ...props
 }: ProjectCreateLayoutProps) => {
   const { t } = useTranslation()
@@ -57,7 +59,7 @@ export const ProjectCreateLayout = ({
           {content}
         </Box>
       ) : (
-        <CardLayout sx={contentSx} my={6} overflowY={'auto'} h="full">
+        <CardLayout sx={contentSx} my={6} overflowY={'auto'} h="full" {...innerDesktopContainerProps}>
           {content}
         </CardLayout>
       )}
@@ -67,7 +69,6 @@ export const ProjectCreateLayout = ({
           w="full"
           px={{ base: 3, lg: '0px' }}
           backgroundColor="utils.pbg"
-          maxWidth={{ base: 600, lg: 'none' }}
           bottom={{ base: '0px', lg: '-55px' }}
           borderTop={{ base: '1px solid', lg: 'none' }}
           paddingTop={3}

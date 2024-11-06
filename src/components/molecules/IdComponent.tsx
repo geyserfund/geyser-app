@@ -1,5 +1,4 @@
-import { Avatar } from '@chakra-ui/avatar'
-import { HStack, Text } from '@chakra-ui/layout'
+import { Avatar, HStack, Text } from '@chakra-ui/react'
 
 import { UserSkeleton } from '../ui'
 

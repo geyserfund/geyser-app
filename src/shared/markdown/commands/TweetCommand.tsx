@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react'
 import { useCommands } from '@remirror/react'
 import { useTranslation } from 'react-i18next'
-import { RiTwitterXLine } from 'react-icons/ri'
+import { PiXLogo } from 'react-icons/pi'
 
 import { useDarkMode, useNotification } from '../../../utils'
 import { InsertTwitterModal, MarkdownTwitter, useInsertTwitterModal } from '../modals/InsertTwitterModal'
@@ -60,7 +60,7 @@ export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
         onClick={() => modal.onOpen()}
         isDisabled={isDisabled}
       >
-        <RiTwitterXLine />
+        <PiXLogo fontSize="16px" />
       </ToolbarCommandButton>
       {modal.isOpen ? <InsertTwitterModal {...modal} /> : null}
       <Box

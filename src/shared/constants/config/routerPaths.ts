@@ -9,6 +9,7 @@ export enum PathName {
   activity = 'activity',
   activityGlobal = 'global',
   activityFollowed = 'followed',
+  merch = 'project/geyser/rewards',
 
   entry = 'entry',
 
@@ -29,6 +30,7 @@ export enum PathName {
   projectManageRewards = 'manage-rewards',
   projectCreateReward = 'create-reward',
   projectEditReward = 'edit-reward',
+  projectStoryEdit = 'story',
 
   refund = 'refund',
   refundInitiated = 'initiated',
@@ -60,7 +62,6 @@ export enum PathName {
   dashboardWallet = 'wallet',
   dashboardNotifications = 'notifications',
   dashboardSettings = 'settings',
-  dashboardStory = 'story',
   dashboardStatus = 'status',
   dashboardNostr = 'nostr',
   dashboardAffiliates = 'affiliate',
@@ -85,6 +86,7 @@ export enum PathName {
   userId = ':userId',
   entryId = ':entryId',
   postId = ':postId',
+  goalId = ':goalId',
   grantId = ':grantId',
 
   legalTerms = 'T&C',
@@ -112,6 +114,7 @@ const pathsMap = {
   discoveryActivityFollowed: () => `/${PathName.activity}/${PathName.activityFollowed}`,
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
+  discoveryMerch: () => `/${PathName.merch}`,
 
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
@@ -127,10 +130,13 @@ const pathsMap = {
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
   projectDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}`,
   projectGoals: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectGoals}`,
+  projectGoalView: (projectName: string, goalId: string | number) =>
+    `/${PathName.project}/${projectName}/${PathName.projectGoals}/${goalId}`,
   projectRewards: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}`,
   projectPosts: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectPosts}`,
   projectLeaderboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectLeaderboard}`,
   projectDashboard: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDashboard}`,
+  projectStoryEdit: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectStoryEdit}`,
 
   /** Project Rewards internal routes */
 
@@ -160,8 +166,6 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardInfo}`,
   dashboardDetails: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardDetails}`,
-  dashboardStory: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardStory}`,
   dashboardWallet: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardWallet}`,
   dashboardNostr: (projectName: string) =>

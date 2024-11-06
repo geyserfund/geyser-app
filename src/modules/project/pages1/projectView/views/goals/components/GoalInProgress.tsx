@@ -2,26 +2,40 @@ import { Box, BoxProps, Button, HStack, IconButton, Stack, Tooltip, VStack } fro
 import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { useTranslation } from 'react-i18next'
 import { PiDotsSix, PiNotePencil, PiStarFill } from 'react-icons/pi'
+import { Link } from 'react-router-dom'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts'
+import { getPath } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 
 import { Body } from '../../../../../../../shared/components/typography'
-import { ProjectGoal, ProjectGoalCurrency } from '../../../../../../../types'
+import { ProjectGoalCurrency, ProjectGoalFragment } from '../../../../../../../types'
 import { useMobileMode } from '../../../../../../../utils'
+import { CreatorEditButton } from '../../body/components'
 import { GoalContributeButton } from './GoalContributeButton'
 import { GoalTarget } from './GoalTarget'
 
 type Props = {
-  goal: ProjectGoal
+  goal: ProjectGoalFragment
   isEditing?: boolean
-  onOpenGoalModal: (goal: ProjectGoal) => void
+  onOpenGoalModal: (goal: ProjectGoalFragment) => void
   isPriorityGoal?: boolean
-  listeners: any
-}
+  listeners?: any
+  goalView?: boolean
+} & CardLayoutProps
 
-export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, listeners, isPriorityGoal }: Props) => {
+export const GoalInProgress = ({
+  goal,
+  isEditing = false,
+  onOpenGoalModal,
+  listeners,
+  isPriorityGoal,
+  goalView = false,
+  ...rest
+}: Props) => {
   const { t } = useTranslation()
-
+  const { project, isProjectOwner } = useProjectAtom()
   const isMobile = useMobileMode()
 
   const { formatAmount, formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
@@ -33,7 +47,7 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
   const satsAmount = formatSatsAmount(goal.amountContributed)
 
   const renderActionButton = () => {
-    if (!isEditing) {
+    if (!isEditing && !isProjectOwner) {
       return (
         <GoalContributeButton isPriorityGoal={isPriorityGoal} projectGoalId={goal.id}>
           {t('Contribute')}
@@ -61,54 +75,80 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
     }
   }
 
-  const handleEditGoal = () => {
+  const handleEditGoal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
     onOpenGoalModal(goal)
   }
 
   return (
-    <HStack width="100%" gap={'10px'} background="utils.pbg">
-      {isEditing && (
+    <CardLayout
+      dense
+      width="100%"
+      gap={'10px'}
+      background="utils.pbg"
+      padding={goalView ? 0 : 6}
+      noborder={goalView}
+      flexDirection="row"
+      {...rest}
+    >
+      {isEditing && listeners && (
         <VStack display="flex" height="100%" alignItems="center" justifyContent="flex-start" pt={1}>
           <DragHandle listeners={listeners} />
         </VStack>
       )}
-      <VStack display="flex" alignItems="flex-start" width="100%" height="100%" spacing={0}>
+      <VStack
+        {...(!goalView && !isEditing
+          ? {
+              as: Link,
+              to: getPath('projectGoalView', project?.name, goal.id),
+            }
+          : {})}
+        display="flex"
+        alignItems="flex-start"
+        width="100%"
+        height="100%"
+        spacing={0}
+      >
         <HStack
           display="flex"
           alignItems={'center'}
           justifyContent={{ base: 'space-between', lg: 'flex-start' }}
           width="100%"
         >
-          <HStack w="full" justifyContent={'start'} alignItems="start">
-            {goal.emojiUnifiedCode && (
-              <Box display="flex" justifyContent="center" width="24px" height="34px">
-                <Emoji size={24} unified={goal.emojiUnifiedCode} emojiStyle={EmojiStyle.NATIVE} />
-              </Box>
-            )}
-            <Body size="xl" medium dark>
-              {goal.title}
-            </Body>
-            {isPriorityGoal && (
-              <Tooltip
-                px={4}
-                py={2}
-                label={t(
-                  'This is the default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.',
-                )}
-              >
-                <HStack
-                  h="24px"
-                  w="24px"
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  borderRadius={'6px'}
-                  bg={'amber.3'}
-                  color="amber.11"
+          <HStack w="full" justifyContent={'space-between'} alignItems="start">
+            <HStack w="full" justifyContent={'start'} alignItems="center">
+              {goal.emojiUnifiedCode && (
+                <Box display="flex" justifyContent="center" width="24px" height="34px">
+                  <Emoji size={24} unified={goal.emojiUnifiedCode} emojiStyle={EmojiStyle.NATIVE} />
+                </Box>
+              )}
+              <Body size="md" medium dark>
+                {goal.title}
+              </Body>
+              {isPriorityGoal && (
+                <Tooltip
+                  px={4}
+                  py={2}
+                  label={t(
+                    'This is the default goal. Contributions will be directed here unless contributors decide to fund another goal. Once this goal is completed, the next goal in line will automatically become the default goal.',
+                  )}
                 >
-                  <PiStarFill />
-                </HStack>
-              </Tooltip>
-            )}
+                  <HStack
+                    h="24px"
+                    w="24px"
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    borderRadius={'6px'}
+                    bg={'amber.3'}
+                    color="amber.11"
+                  >
+                    <PiStarFill />
+                  </HStack>
+                </Tooltip>
+              )}
+            </HStack>
+
+            {goalView && isProjectOwner && <CreatorEditButton onClick={handleEditGoal} />}
           </HStack>
 
           {isEditing && isMobile && (
@@ -122,14 +162,14 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
             />
           )}
         </HStack>
-        <Body size="md" medium dark pt={1}>
+        <Body size="sm" medium dark pb={2}>
           {goal.description}
         </Body>
         <Stack flexDirection={{ base: 'column', lg: 'row' }} alignItems="center" width="100%" gap={{ base: 2, lg: 5 }}>
           <VStack width="100%">
             <GoalProgressBar width="100%" percentage={percentage} />
             <HStack w="full" justifyContent={'space-between'}>
-              <Body size="sm" dark>
+              <Body size="sm" dark bold>
                 {formattedAmountContributed}{' '}
                 <Body as="span" size="sm" muted>
                   {goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`}
@@ -139,20 +179,21 @@ export const GoalInProgress = ({ goal, isEditing = false, onOpenGoalModal, liste
               <GoalTarget goal={goal} of />
             </HStack>
           </VStack>
-
-          <Box
-            display="flex"
-            alignItems="start"
-            justifyContent={isEditing ? 'flex-end' : 'center'}
-            minWidth="100px"
-            height="100%"
-            width={{ base: '100%', lg: '192px' }}
-          >
-            {renderActionButton()}
-          </Box>
+          {!(isProjectOwner && !isEditing) && (
+            <Box
+              display="flex"
+              alignItems="start"
+              justifyContent={isEditing ? 'flex-end' : 'center'}
+              minWidth="100px"
+              height="100%"
+              width={{ base: '100%', lg: '192px' }}
+            >
+              {renderActionButton()}
+            </Box>
+          )}
         </Stack>
       </VStack>
-    </HStack>
+    </CardLayout>
   )
 }
 
