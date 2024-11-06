@@ -7236,6 +7236,9 @@ export type ProjectForLandingPageFragment = {
   shortDescription?: string | null
   title: string
   status?: ProjectStatus | null
+  fundersCount?: number | null
+  balance: number
+  balanceUsdCent: number
 }
 
 export type RewardForLandingPageFragment = {
@@ -9516,6 +9519,9 @@ export const ProjectForLandingPageFragmentDoc = gql`
     shortDescription
     title
     status
+    fundersCount
+    balance
+    balanceUsdCent
   }
 `
 export const FundingTxForLandingPageFragmentDoc = gql`

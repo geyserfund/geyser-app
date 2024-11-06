@@ -8,5 +8,8 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     shortDescription
     title
     status
+    fundersCount
+    balance
+    balanceUsdCent
   }
 `
