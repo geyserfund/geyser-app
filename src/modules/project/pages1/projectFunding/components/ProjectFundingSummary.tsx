@@ -164,12 +164,12 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
       </VStack>
 
       {currentGoal && (
-          <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('To a goal')}: `}</Body>
-            <Body size={{ base: 'sm', lg: 'md' }}>{currentGoal?.title}</Body>
-          </HStack>
-        )}
-        
+        <HStack>
+          <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('To a goal')}: `}</Body>
+          <Body size={{ base: 'sm', lg: 'md' }}>{currentGoal?.title}</Body>
+        </HStack>
+      )}
+
       <HStack as={motion.div} layout alignItems="start">
         <Body size={{ base: 'md', lg: 'xl' }} light>
           {`${t('Total')}: `}

@@ -154,8 +154,8 @@ export const PublishModal = ({
         <Body size="sm" regular color="neutral1.11">
           {t(
             'The post title, subtitle, and image will be the only things visible in the email users receive. Make sure they’re attention-grabbing to encourage them to visit your post.',
-              )}
-            </Body>
+          )}
+        </Body>
         <VStack w="full" alignItems="flex-start">
           <Body size={'sm'} medium>
             {' '}
