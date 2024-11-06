@@ -2,7 +2,7 @@ import { FormControl, FormErrorMessage, Input, InputGroup, InputRightElement, Sw
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
+import { PiCheckCircleFill, PiXCircleFill } from 'react-icons/pi'
 
 import Loader from '@/components/ui/Loader'
 import { useAuthContext } from '@/context'
@@ -112,9 +112,9 @@ export const FundingDetailsUserEmailAndUpdates = () => {
       case EMAIL_VALIDATION_STATE.LOADING:
         return <Loader size="md"></Loader>
       case EMAIL_VALIDATION_STATE.FAILED:
-        return <BsFillXCircleFill fill={lightModeColors.secondary.red} size="24px" />
+        return <PiXCircleFill fill={lightModeColors.secondary.red} size="24px" />
       case EMAIL_VALIDATION_STATE.SUCCEEDED:
-        return <BsFillCheckCircleFill fill={lightModeColors.primary[500]} size="24px" />
+        return <PiCheckCircleFill fill={lightModeColors.primary[500]} size="24px" />
       default:
         return null
     }
