@@ -14,7 +14,6 @@ import {
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
-import { log } from 'console'
 import { Trans, useTranslation } from 'react-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 import { PiGear } from 'react-icons/pi'
@@ -54,7 +53,6 @@ type Props = {
   setConnectionOption: (connectionOption: ConnectionOption) => void
   fee: WalletForm['fee']
   limits: Limits
-  // currentWallet?: ConnectionOption
 }
 
 const FeaturedWalletList = [
