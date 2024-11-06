@@ -165,7 +165,7 @@ export const RewardView = () => {
                   size="lg"
                   colorScheme="primary1"
                   onClick={() => {
-                    navigate(`${getPath('projectPostCreate', project?.name)}?rewardId=${reward.uuid}`)
+                    navigate(`${getPath('projectPostCreate', project?.name)}?rewardUuid=${reward.uuid}`)
                   }}
                 >
                   {' '}
