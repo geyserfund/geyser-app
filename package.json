@@ -152,6 +152,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/cors": "^2.8.17",
     "@types/dompurify": "^3.0.2",
+    "@types/express": "^5.0.0",
     "@types/loadable__component": "^5.13.4",
     "@types/luxon": "^3.2.0",
     "@types/node": "^18.11.18",
