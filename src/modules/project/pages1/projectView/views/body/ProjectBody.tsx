@@ -58,7 +58,7 @@ export const ProjectBody = () => {
         <Details />
       </VStack>
       <RightSideStickyLayout>
-        <ContributionSummary />
+        <ContributionSummary project={project} />
         <LeaderboardSummary />
       </RightSideStickyLayout>
 
