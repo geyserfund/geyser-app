@@ -67,7 +67,7 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
   const amountContributed = isBTC ? goal?.amountContributed || 0 : (goal?.amountContributed || 0) / 100
 
   const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
-    resolver: yupResolver(goalFormSchema(amountContributed)),
+    resolver: yupResolver(goalFormSchema(amountContributed)) as any,
     defaultValues: {
       title: '',
       description: '',

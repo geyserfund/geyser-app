@@ -1,5 +1,4 @@
-import { Button, ButtonProps } from '@chakra-ui/button'
-import { Box } from '@chakra-ui/layout'
+import { Box, Button, ButtonProps } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { forwardRef } from 'react'
 import { createUseStyles } from 'react-jss'

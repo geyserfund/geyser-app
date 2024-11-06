@@ -1,4 +1,4 @@
-import { IconButton, IconButtonProps } from '@chakra-ui/button'
+import { IconButton, IconButtonProps } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 
 export interface IconButtonComponentProps extends IconButtonProps {

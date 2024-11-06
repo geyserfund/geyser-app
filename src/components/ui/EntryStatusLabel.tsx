@@ -1,5 +1,4 @@
-import { Stack, StackDirection, Text } from '@chakra-ui/react'
-import { HTMLChakraProps } from '@chakra-ui/system'
+import { HTMLChakraProps, Stack, StackDirection, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { BsFillXCircleFill } from 'react-icons/bs'
 

@@ -66,7 +66,7 @@ export const usePostForm = ({
       projectRewardUUIDs: linkedRewardUuid ? [linkedRewardUuid] : [],
       sentByEmailAt: postTemplate.sentByEmailAt || null,
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
   })
   const { isDirty } = formState
 

@@ -1,4 +1,4 @@
-import { Box, BoxProps } from '@chakra-ui/layout'
+import { Box, BoxProps } from '@chakra-ui/react'
 import { useBreakpoint } from '@chakra-ui/media-query'
 import { Link } from 'react-router-dom'
 
