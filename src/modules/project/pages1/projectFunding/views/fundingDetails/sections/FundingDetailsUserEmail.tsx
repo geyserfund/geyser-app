@@ -104,7 +104,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
   )
 
   const renderEmailInputRightElement = () => {
-    if (userEmailIsAvailableLoading) return <Loader size="md"></Loader>
+    if (userEmailIsAvailableLoading) return <Loader />
 
     switch (emailValidationState) {
       case EMAIL_VALIDATION_STATE.IDLE:
