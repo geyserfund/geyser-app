@@ -49,6 +49,8 @@ export type FundFormType = {
   shippingDestination: ShippingDestination
   resourceId?: number
   resourceType?: FundingResourceType
+  followProject: boolean
+  subscribeToGeyserEmails: boolean
 }
 
 const initialState: FundFormType = {
@@ -60,6 +62,8 @@ const initialState: FundFormType = {
   privateComment: '',
   email: '',
   media: '',
+  followProject: false,
+  subscribeToGeyserEmails: false,
   rewardsByIDAndCount: undefined,
   rewardCurrency: RewardCurrency.Usdcent,
   needsShipping: false,
@@ -309,6 +313,15 @@ export const isFundingUserInfoValidAtom = atom((get) => {
     }
   }
 
+  if ((formState.followProject || formState.subscribeToGeyserEmails) && !formState.email) {
+    return {
+      title: 'Email is required when subscribing to updates.',
+      description: 'Please enter an email.',
+      error: FundingUserInfoError.EMAIL,
+      valid: false,
+    }
+  }
+
   if (hasSelectedRewards && !validateEmail(formState.email)) {
     return {
       title: 'A valid email is required.',
@@ -341,7 +354,16 @@ export const formattedFundingInputAtom = atom((get) => {
   const affiliates = get(projectAffiliateAtom)
   const affiliateId = getRefIdFromProjectAffiliates(affiliates, fundingProject?.name)
 
-  const { donationAmount, rewardsByIDAndCount, email, comment, media, privateComment } = formState
+  const {
+    donationAmount,
+    rewardsByIDAndCount,
+    email,
+    comment,
+    media,
+    privateComment,
+    followProject,
+    subscribeToGeyserEmails,
+  } = formState
 
   const anonymous = !user || !user.id
 
@@ -368,6 +390,8 @@ export const formattedFundingInputAtom = atom((get) => {
       ...(media && { media }),
       ...(comment && { comment }),
       ...(privateComment && { privateComment }),
+      ...(followProject && { followProject }),
+      ...(subscribeToGeyserEmails && { subscribeToGeyserEmails }),
     },
     orderInput: {
       bitcoinQuote: {

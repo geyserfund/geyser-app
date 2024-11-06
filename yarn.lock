@@ -7358,6 +7358,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cors@npm:^2.8.17":
+  version: 2.8.17
+  resolution: "@types/cors@npm:2.8.17"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/457364c28c89f3d9ed34800e1de5c6eaaf344d1bb39af122f013322a50bc606eb2aa6f63de4e41a7a08ba7ef454473926c94a830636723da45bf786df032696d
+  languageName: node
+  linkType: hard
+
 "@types/d3-array@npm:^3.0.3":
   version: 3.2.1
   resolution: "@types/d3-array@npm:3.2.1"
@@ -10816,6 +10825,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cross-fetch@npm:4.0.0":
+  version: 4.0.0
+  resolution: "cross-fetch@npm:4.0.0"
+  dependencies:
+    node-fetch: "npm:^2.6.12"
+  checksum: 10c0/386727dc4c6b044746086aced959ff21101abb85c43df5e1d151547ccb6f338f86dec3f28b9dbddfa8ff5b9ec8662ed2263ad4607a93b2dc354fb7fe3bbb898a
+  languageName: node
+  linkType: hard
+
 "cross-fetch@npm:^3.1.5":
   version: 3.1.8
   resolution: "cross-fetch@npm:3.1.8"
@@ -13546,6 +13564,7 @@ __metadata:
     "@testing-library/react": "npm:^13.4.0"
     "@testing-library/react-hooks": "npm:^8.0.1"
     "@testing-library/user-event": "npm:^14.4.3"
+    "@types/cors": "npm:^2.8.17"
     "@types/dompurify": "npm:^3.0.2"
     "@types/loadable__component": "npm:^5.13.4"
     "@types/luxon": "npm:^3.2.0"
@@ -13600,6 +13619,7 @@ __metadata:
     husky: "npm:^8.0.3"
     i18next: "npm:^23.1.0"
     i18next-browser-languagedetector: "npm:^7.0.2"
+    i18next-http-backend: "npm:^2.6.2"
     jotai: "npm:^2.8.3"
     jotai-effect: "npm:^1.0.0"
     jotai-scope: "npm:^0.6.0"
@@ -13645,6 +13665,7 @@ __metadata:
     storybook: "npm:^8.0.4"
     swiper: "npm:^11.1.14"
     tiny-secp256k1: "npm:^2.2.3"
+    ts-node: "npm:^10.9.2"
     turndown: "npm:^7.1.2"
     typescript: "npm:^5.5.2"
     vite: "npm:^4.3.9"
@@ -14275,6 +14296,15 @@ __metadata:
   dependencies:
     "@babel/runtime": "npm:^7.23.2"
   checksum: 10c0/44fa71af4efb4cd6cc8bfbbd3f3b2735159e17d8f4396346e4016c6dd0ecbcdd68f1ec17609fd0de8dd6754c3d847d6e7e03227c19c1879d4c265cb1918948bb
+  languageName: node
+  linkType: hard
+
+"i18next-http-backend@npm:^2.6.2":
+  version: 2.6.2
+  resolution: "i18next-http-backend@npm:2.6.2"
+  dependencies:
+    cross-fetch: "npm:4.0.0"
+  checksum: 10c0/8ae0c57293f0ebf5e67d629e526b98cd2d396fd48b8be56cdcb9565c2e5b1a8e46b323055682f5c9425e27fd5012c59dac380ccec053353facb23e69f5271938
   languageName: node
   linkType: hard
 
@@ -20974,7 +21004,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^10.8.1":
+"ts-node@npm:^10.8.1, ts-node@npm:^10.9.2":
   version: 10.9.2
   resolution: "ts-node@npm:10.9.2"
   dependencies:

@@ -8,7 +8,7 @@ import { FundingLayout } from '../../layouts/FundingLayout'
 import { FundingDetailsPrivateCommentPrompt } from './sections/FundingDetailsPrivateCommentPrompt'
 import { FundingDetailsBottomContent, FundingDetailsSideContent } from './sections/FundingDetailsSideContent'
 import { FundingDetailsUserComment } from './sections/FundingDetailsUserComment'
-import { FundingDetailsUserEmail } from './sections/FundingDetailsUserEmail'
+import { FundingDetailsUserEmailAndUpdates } from './sections/FundingDetailsUserEmail'
 
 export const FundingDetails = () => {
   const { project, isFundingInputAmountValid } = useFundingFormAtom()
@@ -27,9 +27,9 @@ export const FundingDetails = () => {
       bottomContent={<FundingDetailsBottomContent />}
       containerProps={{ spacing: 6 }}
     >
+      <FundingDetailsUserEmailAndUpdates />
       <FundingDetailsUserComment />
       <FundingDetailsPrivateCommentPrompt />
-      <FundingDetailsUserEmail />
     </FundingLayout>
   )
 }
