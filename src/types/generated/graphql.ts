@@ -5671,7 +5671,7 @@ export type ActivityCreatedSubscription = { __typename?: 'Subscription', activit
       & ProjectRewardForLandingPageFragment
     ) } };
 
-export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null };
+export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null };
 
 export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
@@ -7293,6 +7293,9 @@ export const ProjectForLandingPageFragmentDoc = gql`
     fragment ProjectForLandingPage on Project {
   id
   name
+  balance
+  balanceUsdCent
+  fundersCount
   thumbnailImage
   shortDescription
   title
