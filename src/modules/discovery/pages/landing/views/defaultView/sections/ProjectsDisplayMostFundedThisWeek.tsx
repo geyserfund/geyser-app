@@ -44,6 +44,19 @@ export const ProjectsDisplayMostFundedThisWeek = ({ tag }: ProjectDisplayProps) 
     (a, b) => allTags.findIndex((tag) => tag.id === a.tagId) - allTags.findIndex((tag) => tag.id === b.tagId),
   )
 
+  const tagToSubtextMap: Record<string, string> = {
+    education: 'Projects enabling financial literacy and Bitcoin education around the world.',
+    culture: 'Projects focused on surfacing Bitcoin Culture through films, music, and arts and more.',
+    humanitarian: 'Projects supporting humanitarian efforts around the world through Bitcoin.',
+    community: 'Projects bringing about community from meetups to circular economies.',
+    films: 'Projects exposing new stories through film and documentaries.',
+    nostr: 'Projects building or bringing about Nostr adoption around the world.',
+    'orange-pilling': 'Projects focused on spreading Bitcoin in a variety of ways.',
+    'open-source': 'Projects focused on open source development.',
+    events: 'Projects focused on bringing people together around events in IRL.',
+    media: 'Projects creating valuable content.',
+  }
+
   return (
     <>
       {projectByTagOrdered.map((projectByTag) => {
@@ -58,6 +71,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({ tag }: ProjectDisplayProps) 
             key={projectByTag.tagId}
             title={currentTag?.label ? t('Trending in') : ''}
             subtitle={currentTag?.label || t('Recent Projects')}
+            subtext={currentTag?.label ? tagToSubtextMap[currentTag.label] : undefined}
             projects={projects}
             onSeeAllClick={() => onSeeAllClick(projectByTag.tagId)}
           />

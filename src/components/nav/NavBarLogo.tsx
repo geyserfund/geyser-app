@@ -1,5 +1,5 @@
-import { Box, BoxProps } from '@chakra-ui/layout'
 import { useBreakpoint } from '@chakra-ui/media-query'
+import { Box, BoxProps } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { GeyserLogoNameIcon } from '../icons/svg'

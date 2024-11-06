@@ -1,4 +1,4 @@
-import { Box, HStack, Image, VStack } from '@chakra-ui/react'
+import { Badge, Box, HStack, Icon, Image, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
@@ -13,6 +13,7 @@ import { toInt } from '@/utils'
 import { PostShare } from '../components'
 import { PostEditMenu } from '../components/PostEditMenu'
 import { ProjectPostCardThumbnailPlaceholder } from '../components/ProjectPostCardThumbnailPlaceholder'
+import { postTypeOptions } from '../utils/postTypeLabel'
 
 type Props = {
   post: ProjectPostFragment
@@ -55,6 +56,12 @@ export const ProjectPostCard = ({ post }: Props) => {
             <Body size="xl" medium dark>
               {post.title}
             </Body>
+            {post.postType && (
+              <Badge variant="soft" colorScheme="neutral1" gap={2}>
+                <Icon as={postTypeOptions.find((option) => option.value === post.postType)?.icon} />
+                {postTypeOptions.find((option) => option.value === post.postType)?.label}
+              </Badge>
+            )}
             {post.publishedAt && (
               <Body size="sm" medium muted whiteSpace="nowrap">
                 {DateTime.fromMillis(toInt(post.publishedAt)).toFormat('dd LLL, yyyy')}

@@ -8,7 +8,9 @@ import { useProjectPostsAPI } from '@/modules/project/API/useProjectPostsAPI'
 
 import { useUnsavedAlert } from '../../../../../../../shared/hooks/useUnsavedAlert'
 import {
+  EmailSubscriberSegment,
   PostCreateInput,
+  PostType,
   PostUpdateInput,
   ProjectPostQuery,
   ProjectPostQueryVariables,
@@ -19,7 +21,7 @@ import { toInt, useNotification } from '../../../../../../../utils'
 
 export type PostFormType = Pick<
   ProjectPostViewFragment,
-  'id' | 'title' | 'description' | 'image' | 'markdown' | 'status' | 'postType'
+  'id' | 'title' | 'description' | 'image' | 'markdown' | 'status' | 'postType' | 'sentByEmailAt'
 > &
   Pick<PostCreateInput, 'projectGoalIds' | 'projectRewardUUIDs'>
 
@@ -27,12 +29,31 @@ const schema = yup.object({
   title: yup.string().required('This is a required field'),
 })
 
-export const usePostForm = (
-  projectId: number,
-  postId?: number | string,
-  options?: LazyQueryHookOptions<ProjectPostQuery, ProjectPostQueryVariables>,
-  postTemplate: ProjectPostViewFragment = {} as ProjectPostViewFragment,
-) => {
+export type PostPublishProps = {
+  emailSendOptions?: {
+    segment: EmailSubscriberSegment
+    projectRewardUUIDs?: string[]
+  }
+  onCompleted?: Function
+}
+
+interface UsePostFormProps {
+  projectId: number
+  postId?: number | string
+  options?: LazyQueryHookOptions<ProjectPostQuery, ProjectPostQueryVariables>
+  postTemplate?: ProjectPostViewFragment
+  linkedGoalId?: string
+  linkedRewardUuid?: string
+}
+
+export const usePostForm = ({
+  projectId,
+  postId,
+  options,
+  postTemplate = {} as ProjectPostViewFragment,
+  linkedGoalId,
+  linkedRewardUuid,
+}: UsePostFormProps) => {
   const toast = useNotification()
 
   const [loading, setLoading] = useState(Boolean(postId))
@@ -45,11 +66,16 @@ export const usePostForm = (
       description: postTemplate.description || '',
       image: postTemplate.image || '',
       title: postTemplate.title || '',
-      postType: postTemplate.postType || null,
-      projectGoalIds: [],
-      projectRewardUUIDs: [],
+      postType: linkedRewardUuid
+        ? PostType.RewardUpdate
+        : linkedGoalId
+        ? PostType.GoalUpdate
+        : postTemplate.postType || null,
+      projectGoalIds: linkedGoalId ? [linkedGoalId] : [],
+      projectRewardUUIDs: linkedRewardUuid ? [linkedRewardUuid] : [],
+      sentByEmailAt: postTemplate.sentByEmailAt || null,
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
   })
   const { isDirty } = formState
 
@@ -62,7 +88,11 @@ export const usePostForm = (
       image: post.image,
       title: post.title,
       postType: post.postType || null,
-      projectGoalIds: post.projectGoals?.inProgress?.map((goal) => goal.id) || [],
+      sentByEmailAt: post.sentByEmailAt || null,
+      projectGoalIds: [
+        ...(post.projectGoals?.inProgress?.map((goal) => goal.id) || []),
+        ...(post.projectGoals?.completed?.map((goal) => goal.id) || []),
+      ],
       projectRewardUUIDs: post.projectRewards.map((reward) => reward.uuid) || [],
     })
   }
@@ -107,9 +137,9 @@ export const usePostForm = (
           postId: postId || toInt(post?.id),
           image: post.image,
           title: post.title,
-          postType: post.postType,
           projectGoalIds: post.projectGoalIds,
           projectRewardUUIDs: post.projectRewardUUIDs,
+          ...(post.postType && { postType: post.postType }),
         }
         await postUpdate.execute({
           variables: { input },
@@ -156,7 +186,7 @@ export const usePostForm = (
   )
 
   const postPublishAfterValidation = useCallback(
-    async ({ onCompleted }: { onCompleted?: Function }) => {
+    async ({ emailSendOptions, onCompleted }: PostPublishProps) => {
       const post = getValues()
       if (!post.id) {
         toast.info({
@@ -177,6 +207,7 @@ export const usePostForm = (
             variables: {
               input: {
                 postId,
+                emailSendOptions,
               },
             },
             onCompleted(data) {

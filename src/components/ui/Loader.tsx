@@ -1,5 +1,5 @@
 import { Box, BoxProps } from '@chakra-ui/react'
-import { Spinner } from '@chakra-ui/spinner'
+import { Spinner } from '@chakra-ui/react'
 
 interface ILoader extends BoxProps {
   size?: string

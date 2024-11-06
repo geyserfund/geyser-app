@@ -2,7 +2,7 @@ import { Badge, Box, Button, HStack, Icon, Link as ChakraLink, SkeletonText, VSt
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
-import { PiArrowLeft, PiCopy, PiEnvelope, PiFile, PiShareFat } from 'react-icons/pi'
+import { PiArrowLeft, PiCopy, PiEnvelope, PiShareFat } from 'react-icons/pi'
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
@@ -73,6 +73,7 @@ export const PostView = () => {
   }
 
   const onContributeClick = () => navigate(getPath('projectFunding', project?.name), { state: { postId: post.id } })
+  const showLinkedRewardsAndGoals = post.projectGoals.inProgress.length > 0 || post.projectRewards.length > 0
 
   return (
     <>
@@ -145,10 +146,12 @@ export const PostView = () => {
                 {post.createdAt && DateTime.fromMillis(toInt(post.createdAt)).toFormat(' dd LLLL, yyyy')}
               </Body>
               <HStack w="full">
-                <Badge variant="soft" colorScheme="neutral1" gap={2}>
-                  <Icon as={PiFile} />
-                  {postTypeOptions.find((option) => option.value === post.postType)?.label}
-                </Badge>
+                {post.postType && (
+                  <Badge variant="soft" colorScheme="neutral1" gap={2}>
+                    <Icon as={postTypeOptions.find((option) => option.value === post.postType)?.icon} />
+                    {postTypeOptions.find((option) => option.value === post.postType)?.label}
+                  </Badge>
+                )}
                 {post.sentByEmailAt && (
                   <Badge variant="outline" colorScheme="neutral1" gap={2}>
                     <Icon as={PiEnvelope} />
@@ -177,7 +180,7 @@ export const PostView = () => {
                 <MarkdownField preview content={post.markdown || ''} />
               </Box>
             )}
-            <LinkedRewardsAndGoals post={post} />
+            {showLinkedRewardsAndGoals && <LinkedRewardsAndGoals post={post} />}
           </VStack>
         </CardLayout>
         <BottomNavBarContainer direction="column">
@@ -252,8 +255,8 @@ const PostJustPublishedModal = () => {
   return (
     <AlertDialogue
       {...modalProps}
-      title={t('Post published')}
-      description={t('Your post is live! Don’t forget to share it on social media to maximize its reach.')}
+      title={t('Your post is live!')}
+      description={t('Don’t forget to share it on social media to maximize its reach.')}
       neutralButtonProps={{
         colorScheme: hasCopied ? 'primary1' : 'neutral1',
         children: t('Copy link'),

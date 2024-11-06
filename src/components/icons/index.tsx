@@ -1,5 +1,5 @@
-import { Image } from '@chakra-ui/image'
-import { Box } from '@chakra-ui/layout'
+import { Image } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import { ImageProps } from '@chakra-ui/react'
 
 import {

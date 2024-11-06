@@ -30,8 +30,6 @@ export const LinkedRewardsAndGoals = ({ post }: { post: ProjectPostViewFragment 
           onOpenGoalModal={() => {}}
           backgroundColor="neutral1.1"
           hover
-          as={Link}
-          to={getPath('projectGoalView', project.name, goal.id)}
           w="full"
         />
       ))}
@@ -56,7 +54,7 @@ const RewardCardForPost = ({
   const renderAmountComponent = () => {
     if (rewardCurrency === RewardCurrency.Usdcent)
       return (
-        <Body bold dark>
+        <Body size="sm" bold dark>
           {`$${reward.cost / 100} `}
           <Box as="span" color={'neutral1.9'}>
             {`(${formatSatsAmount(reward.cost as USDCents)})`}
@@ -65,7 +63,7 @@ const RewardCardForPost = ({
       )
 
     return (
-      <Body bold dark>
+      <Body size="sm" bold dark>
         {`${reward.cost.toLocaleString()}`}
         <Box as="span" color={'neutral1.9'}>
           {' '}
@@ -90,11 +88,11 @@ const RewardCardForPost = ({
       <Box height="148px" width="148px" overflow="hidden">
         <ImageWithReload width="100%" height="100%" src={reward.images[0]} alt={reward.name} />
       </Box>
-      <VStack flex={1} alignItems="start" spacing={2} p={4}>
-        <Body size="sm" bold>
+      <VStack flex={1} alignItems="start" spacing={0} p={4}>
+        <Body size="md" medium>
           {reward.name}
         </Body>
-        <Body size="sm" light noOfLines={3} isTruncated>
+        <Body size="sm" light noOfLines={3}>
           {reward.shortDescription}
         </Body>
         {renderAmountComponent()}

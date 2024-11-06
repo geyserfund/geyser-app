@@ -130,7 +130,7 @@ export const useNostrBadges = (pubKey: string) => {
       eventToPublish.id = getEventHash(eventToPublish)
       eventToPublish.sig = await signEventToBeDeprecated(eventToPublish) // this is where you sign with private key replaccing pubkey
 
-      const pub = relay.publish(eventToPublish) // this is where you sign with private key replaccing pubkey
+      const pub: any = relay.publish(eventToPublish) // this is where you sign with private key replaccing pubkey
 
       pub.on('ok', () => {
         setClaiming(false)

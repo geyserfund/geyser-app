@@ -1,16 +1,18 @@
 /* eslint-disable complexity */
 import { Button, Divider, HStack, useDisclosure, VStack } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
+import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { PiCaretDown, PiCaretUp } from 'react-icons/pi'
 
+import { ImageWithReload } from '@/components/ui'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+import { selectedGoalIdAtom } from '@/modules/project/funding/state'
+import { useGoalsAtom, useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body, H2 } from '@/shared/components/typography'
 
 import { useFundCalc } from '../../../../../helpers'
 import { toInt, useMobileMode } from '../../../../../utils'
-import { Badge } from './Badge'
 
 export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
   const { t } = useTranslation()
@@ -19,6 +21,15 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
   const isMobileMode = useMobileMode()
 
   const { rewards } = useRewardsAtom()
+  const { inProgressGoals } = useGoalsAtom()
+  const projectGoalId = useAtomValue(selectedGoalIdAtom)
+
+  const currentGoal =
+    inProgressGoals.length > 0
+      ? projectGoalId
+        ? inProgressGoals.find((goal) => goal.id === projectGoalId)
+        : inProgressGoals[0]
+      : undefined
 
   const { formState, hasSelectedRewards } = useFundingFormAtom()
 
@@ -41,14 +52,14 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
       return {
         count,
         rewardName,
+        rewardImage: reward.images[0],
       }
     })
-    .map(({ count, rewardName }) => {
-      if (!count || count === 0) return ''
-      return `${rewardName} (x${count})`
+    .map(({ count, rewardName, rewardImage }) => {
+      if (!count || count === 0) return null
+      return { label: `${rewardName} (x${count})`, image: rewardImage }
     })
-    .filter(Boolean)
-    .join(', ')
+    .filter((val) => val)
 
   const hasDetails = disableCollapse
     ? false
@@ -116,6 +127,35 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
             </Body>
           </HStack>
         )}
+        {currentGoal && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('To a goal')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>{currentGoal?.title}</Body>
+          </HStack>
+        )}
+
+        {numberOfRewardsSelected > 0 && (
+          <VStack w="full" alignItems={'start'} spacing={1}>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Items')}: `}</Body>
+            {items.map((item) => {
+              return (
+                <HStack w="full" key={item?.label} alignItems="center">
+                  <ImageWithReload
+                    height="20px"
+                    width="20px"
+                    minWidth="20px"
+                    borderRadius="8px"
+                    src={item?.image}
+                    alt={item?.label}
+                  />
+                  <Body isTruncated size={{ base: 'sm', lg: 'md' }}>
+                    {item?.label}
+                  </Body>
+                </HStack>
+              )
+            })}
+          </VStack>
+        )}
 
         {numberOfRewardsSelected > 0 && (
           <HStack alignItems={'start'}>
@@ -126,24 +166,6 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
                 sats
               </Body>
             </Body>
-          </HStack>
-        )}
-
-        {numberOfRewardsSelected > 0 && (
-          <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Items')}: `}</Body>
-            <Body size={{ base: 'sm', lg: 'md' }}>{items}</Body>
-          </HStack>
-        )}
-
-        {getTotalAmount('dollar', name) >= 10 && (
-          <HStack display={mobileDisplayStyle}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Badge')}: `}</Body>
-            <Badge
-              donationAmountInDollars={getTotalAmount('dollar', name)}
-              height={{ base: '16px', lg: '20px' }}
-              width={{ base: '16px', lg: '20px' }}
-            />
           </HStack>
         )}
       </VStack>

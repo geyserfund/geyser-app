@@ -23,6 +23,13 @@ export const FRAGMENT_PROJECT_REWARD = gql`
     estimatedDeliveryInWeeks
     confirmationMessage
     privateCommentPrompts
+    posts {
+      id
+      title
+      postType
+      description
+      createdAt
+    }
   }
 `
 export const FRAGMENT_POST_PAGE_PROJECT_REWARD = gql`

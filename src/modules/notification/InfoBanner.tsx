@@ -8,6 +8,7 @@ import { GeyserLogoIcon } from '@/components/icons/svg/GeyserLogoIcon'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
+import { BrandCreamGradient } from '@/shared/styles/custom'
 
 import { InfoBannerHistoryDataAtom } from './InfoBannerAtom'
 
@@ -65,7 +66,7 @@ export const InfoBanner = () => {
   return (
     <Box position="fixed" bottom={20} left={{ base: 0, lg: 10 }} zIndex={10} paddingX={{ base: '10px', lg: 'unset' }}>
       <CardLayout
-        background={'linear-gradient(85deg, #C4FFF4 0%, #FFFBE7 100%), var(--Colors-Default-White, #FFF)'}
+        background={BrandCreamGradient}
         padding={5}
         position={'relative'}
         width={{ base: '100%', lg: '320px' }}

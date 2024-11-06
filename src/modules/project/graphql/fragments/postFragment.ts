@@ -44,6 +44,9 @@ export const FRAGMENT_PROJECT_POST_VIEW = gql`
       inProgress {
         ...ProjectGoals
       }
+      completed {
+        ...ProjectGoals
+      }
     }
   }
 `

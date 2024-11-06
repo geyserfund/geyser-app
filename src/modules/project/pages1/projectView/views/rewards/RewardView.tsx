@@ -1,7 +1,8 @@
+/* eslint-disable complexity */
 import { Badge, Box, Button, HStack, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiArrowLeft, PiEyeSlash } from 'react-icons/pi'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
@@ -17,6 +18,7 @@ import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { RewardCurrency, Satoshis, USDCents, useProjectRewardQuery } from '@/types'
 import { useMobileMode } from '@/utils'
 
+import { PostsUpdates } from '../../components/PostsUpdates'
 import { useRewardBuy } from '../../hooks'
 import { ProjectRewardShippingEstimate, RewardEditMenu } from './components'
 import { RewardShare } from './components/RewardShare'
@@ -27,6 +29,8 @@ export const RewardView = () => {
   const isMobileMode = useMobileMode()
 
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
+
+  const navigate = useNavigate()
 
   const { loading, data } = useProjectRewardQuery({
     skip: !rewardId,
@@ -148,20 +152,53 @@ export const RewardView = () => {
           ) : (
             <MediaCarousel links={reward.images} aspectRatio={ImageCropAspectRatio.Reward} />
           )}
-          <HStack
-            w="full"
-            justifyContent="start"
-            fontSize="16px"
-            color="utils.text"
-            sx={{
-              p: {
-                marginTop: '0px',
-              },
-            }}
-            flex={1}
-          >
-            <MarkdownField preview content={reward.description || ''} />
-          </HStack>
+          {isProjectOwner && !reward.isHidden && (
+            <CardLayout w={'full'} padding={3}>
+              <VStack w={'full'} p={0}>
+                <Body size="md" medium>
+                  {t(
+                    'Engage your community, followers, contributors, and reward purchasers by sending them an update about your new reward via email.',
+                  )}
+                </Body>
+                <Button
+                  w="full"
+                  variant="solid"
+                  size="lg"
+                  colorScheme="primary1"
+                  onClick={() => {
+                    navigate(`${getPath('projectPostCreate', project?.name)}?rewardUuid=${reward.uuid}`)
+                  }}
+                >
+                  {' '}
+                  {t('Write an update')}{' '}
+                </Button>
+              </VStack>
+            </CardLayout>
+          )}
+          {reward?.description && (
+            <HStack
+              w="full"
+              justifyContent="start"
+              fontSize="16px"
+              color="utils.text"
+              sx={{
+                p: {
+                  marginTop: '0px',
+                },
+              }}
+              flex={1}
+            >
+              <MarkdownField preview content={reward.description || ''} />
+            </HStack>
+          )}
+          {reward.posts.length > 0 && (
+            <VStack w="full" spacing={2} alignItems="start">
+              <Body size="xl" bold>
+                {t('Reward Updates')}
+              </Body>
+              <PostsUpdates posts={reward.posts} />
+            </VStack>
+          )}
         </VStack>
       </CardLayout>
       <BottomNavBarContainer direction="column">

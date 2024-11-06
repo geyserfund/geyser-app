@@ -23,22 +23,22 @@ import {
 } from '@/types'
 import { isActive, useNotification } from '@/utils'
 
+import { PostPublishProps } from '../hooks/usePostForm'
 import { RewardItem } from './RewardItem'
 
 const sendToOptions = [
-  { label: t('Followers'), value: EmailSubscriberSegment.Followers },
+  { label: t('Followers (Everyone)'), value: EmailSubscriberSegment.Followers },
   { label: t('Contributors'), value: EmailSubscriberSegment.Contributors },
   { label: t('Reward buyers'), value: EmailSubscriberSegment.RewardBuyers },
 ]
 
 export const PublishModal = ({
   post,
-
   postPublish,
   publishing,
 }: {
   post: Pick<ProjectPostFragment, 'id' | 'sentByEmailAt' | 'status'>
-  postPublish: ({ onCompleted }: { onCompleted?: Function }) => Promise<void>
+  postPublish: (_: PostPublishProps) => Promise<void>
   publishing: boolean
 }) => {
   const { project, isProjectOwner } = useProjectAtom()
@@ -57,10 +57,27 @@ export const PublishModal = ({
   const [selectedRewards, setSelectedRewards] = useState<ProjectRewardFragment[]>([])
 
   const [postSendByEmail, { loading: postSendByEmailLoading }] = usePostSendByEmailMutation({
+    variables: {
+      input: {
+        postId: post.id,
+        emailSendOptions: {
+          segment: sendTo as EmailSubscriberSegment,
+          projectRewardUUIDs: selectedRewards.length > 0 ? selectedRewards.map((reward) => reward.uuid) : undefined,
+        },
+      },
+    },
     onCompleted(data) {
       publishModal.onClose()
       toast.success({
-        title: `Sending emails to ${data.postSendByEmail} users.`,
+        title: `Sent email to ${
+          data.postSendByEmail.recipientCount === 1 ? '1 user' : `${data.postSendByEmail.recipientCount} users`
+        }.`,
+      })
+      post.sentByEmailAt = new Date().toISOString()
+    },
+    onError(error) {
+      toast.error({
+        title: error.message,
       })
     },
   })
@@ -82,12 +99,6 @@ export const PublishModal = ({
   })
 
   const handleInput = (e: any) => {
-    if (e.value === EmailSubscriberSegment.Followers) {
-      setEmailCount(12)
-    } else if (e.value === EmailSubscriberSegment.Contributors) {
-      setEmailCount(12)
-    }
-
     setSendTo(e.value)
   }
 
@@ -102,6 +113,10 @@ export const PublishModal = ({
 
   const handlePostPublish = async () => {
     postPublish({
+      emailSendOptions: {
+        segment: sendTo as EmailSubscriberSegment,
+        projectRewardUUIDs: selectedRewards.length > 0 ? selectedRewards.map((reward) => reward.uuid) : undefined,
+      },
       onCompleted() {
         navigate(getPath('projectPostView', project.name, post?.id), { state: { justPublished: true } })
       },
@@ -146,6 +161,8 @@ export const PublishModal = ({
             options={sendToOptions}
             onChange={handleInput}
             width={'full'}
+            size="sm"
+            fontSize="sm"
           />
         </VStack>
 
@@ -202,7 +219,7 @@ export const PublishModal = ({
         {sendTo !== null && (
           <Feedback variant={FeedBackVariant.INFO} icon={<PiEnvelopeSimple size="20px" />}>
             <Body size="sm">
-              {t('Email will be sent to')} <strong> {emailCount}</strong> {t('members')}
+              {t('Email will be sent to')} <strong> {emailCount}</strong> {t('members.')}
             </Body>
           </Feedback>
         )}
@@ -220,7 +237,7 @@ export const PublishModal = ({
   return (
     <>
       {!isPostPublished && (
-        <Tooltip label={!isActive(project.status) ? t('Cannot publish post for inActive project') : ''}>
+        <Tooltip label={!isActive(project.status) ? t('Cannot publish post for inactive project') : ''}>
           <Button
             size="lg"
             variant="solid"
@@ -234,17 +251,19 @@ export const PublishModal = ({
         </Tooltip>
       )}
 
-      {canSendViaEmail && isPostPublished && (
-        <Button
-          size="lg"
-          variant="solid"
-          colorScheme="primary1"
-          onClick={publishModal.onOpen}
-          isDisabled={!isActive(project.status)}
-          isLoading={postSendByEmailLoading}
-        >
-          {t('Send via email')}
-        </Button>
+      {isPostPublished && (
+        <Tooltip label={!isActive(project.status) ? t('Cannot send post via email for inactive project') : ''}>
+          <Button
+            size="lg"
+            variant="solid"
+            colorScheme="primary1"
+            onClick={publishModal.onOpen}
+            isDisabled={!isActive(project.status)}
+            isLoading={postSendByEmailLoading}
+          >
+            {t('Send via email')}
+          </Button>
+        </Tooltip>
       )}
       <Modal
         {...publishModal}
@@ -264,9 +283,9 @@ export const PublishModal = ({
             <Body size="sm" medium>
               {t('Send post by email')}
             </Body>
-            <Body size="sm">
+            <Body size="sm" regular color="neutral1.11">
               {t(
-                'The Post title, subtitle, and image will be the only things visible in the email users receive. Make sure they’re attention-grabbing to encourage them to visit your Post.',
+                'The post title, subtitle, and image will be the only things visible in the email users receive. Make sure they’re attention-grabbing to encourage them to visit your post.',
               )}
             </Body>
           </VStack>
@@ -281,7 +300,14 @@ export const PublishModal = ({
             {t('Cancel')}
           </Button>
           {isPostPublished ? (
-            <Button flex={1} variant="solid" colorScheme="primary1" onClick={() => postSendByEmail()}>
+            <Button
+              flex={1}
+              variant="solid"
+              colorScheme="primary1"
+              onClick={() => postSendByEmail()}
+              isDisabled={emailCount === 0}
+              isLoading={postSendByEmailLoading}
+            >
               {t('Send via email')}
             </Button>
           ) : (

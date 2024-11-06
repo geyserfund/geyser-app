@@ -27,6 +27,7 @@ export enum CampaignContent {
   projectShareQrBanner = 'project-share-qr-banner',
   rewardShareButton = 'reward-share-button',
   postShareButton = 'post-share-button',
+  goalShareButton = 'goal-share-button',
 }
 
 type getCampainParametersProps = {
@@ -142,4 +143,34 @@ export const usePostShare = ({ id }: Pick<ProjectEntryFragment, 'id'>) => {
   }
 
   return { getSharePostUrl, copyPostLinkToClipboard, copied }
+}
+
+/** This hook must be used inside ProjectProvider Context to share project goal links */
+export const useGoalShare = ({ id, name }: { id: string; name: string }) => {
+  const { project, isProjectOwner } = useProjectAtom()
+  const { isLoggedIn } = useAuthContext()
+  const [copied, setCopied] = useState(false)
+
+  const getShareGoalUrl = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
+    const campaignUrlSuffix = getProjectShareUrlSuffix({
+      creator: isProjectOwner,
+      isLoggedIn,
+      keyword: `${project?.name}-goal-${name}`,
+      clickedFrom,
+    })
+    return `${window.location.origin}${getPath('projectGoalView', project.name, `${id}`)}${campaignUrlSuffix}`
+  }
+
+  const copyGoalLinkToClipboard = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
+    const projectLink = getShareGoalUrl({ clickedFrom })
+
+    copyTextToClipboard(projectLink)
+
+    setCopied(true)
+    setTimeout(() => {
+      setCopied(false)
+    }, 2000)
+  }
+
+  return { getShareGoalUrl, copyGoalLinkToClipboard, copied }
 }

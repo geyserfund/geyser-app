@@ -1,5 +1,4 @@
-import { Box, HStack, Text } from '@chakra-ui/layout'
-import { HTMLChakraProps } from '@chakra-ui/system'
+import { Box, HStack, HTMLChakraProps, Text } from '@chakra-ui/react'
 
 import { ProjectState } from '@/modules/project/state/projectAtom'
 

@@ -273,8 +273,8 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('projectGoalView', PathName.projectName, PathName.goalId),
         async lazy() {
-          const ProjectGoals = await Project().then((m) => m.ProjectGoals)
-          return { Component: ProjectGoals }
+          const GoalView = await Project().then((m) => m.GoalView)
+          return { Component: GoalView }
         },
       },
       {

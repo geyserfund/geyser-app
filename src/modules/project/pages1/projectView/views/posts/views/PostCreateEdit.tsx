@@ -2,7 +2,7 @@ import { Box, Button, HStack, Input, Spinner, StackProps, useDisclosure, VStack 
 import { t } from 'i18next'
 import { useCallback, useEffect, useState } from 'react'
 import { PiArrowLeft, PiCaretDown, PiImages } from 'react-icons/pi'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 import { ImageWithReload, TextArea } from '@/components/ui'
 import { CustomSelect } from '@/components/ui/CustomSelect'
@@ -18,7 +18,7 @@ import { FileUpload } from '@/shared/molecules'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { PostStatus } from '@/types'
-import { useCustomTheme, useNotification } from '@/utils'
+import { useCustomTheme, useMobileMode, useNotification } from '@/utils'
 
 import { LinkGoalsAndRewardsModal } from '../components/LinkGoalsAndRewardsModal'
 import { PublishModal } from '../components/PublishModal'
@@ -28,7 +28,7 @@ import { postTypeOptions } from '../utils/postTypeLabel'
 export const PostCreateEdit = () => {
   const navigate = useNavigate()
   const toast = useNotification()
-
+  const isMobile = useMobileMode()
   const confirmViewPostModal = useModal()
 
   const { project, loading: projectLoading } = useProjectAtom()
@@ -37,7 +37,11 @@ export const PostCreateEdit = () => {
 
   const { postId } = useParams<{ postId: string }>()
 
-  const [focusFlag, setFocusFlag] = useState('')
+  const [searchParams] = useSearchParams()
+  const linkedGoalId = searchParams.get('goalId')
+  const linkedRewardUuid = searchParams.get('rewardUuid')
+
+  const [focusFlag, setFocusFlag] = useState(false)
 
   const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
   const [isStoryLoading, setIsStoryLoading] = useState(false)
@@ -49,10 +53,10 @@ export const PostCreateEdit = () => {
     }, 1)
   }
 
-  const { loading, savePost, saving, postPublish, publishing, isDirty, setValue, watch, control } = usePostForm(
-    project.id,
+  const { loading, savePost, saving, postPublish, publishing, isDirty, setValue, watch, control } = usePostForm({
+    projectId: project.id,
     postId,
-    {
+    options: {
       fetchPolicy: 'network-only',
       onError() {
         navigate(getPath('notFound'))
@@ -63,7 +67,9 @@ export const PostCreateEdit = () => {
         }
       },
     },
-  )
+    linkedGoalId: linkedGoalId ?? undefined,
+    linkedRewardUuid: linkedRewardUuid ?? undefined,
+  })
 
   const postForm = watch()
 
@@ -123,8 +129,10 @@ export const PostCreateEdit = () => {
           document.getElementById('post-title-input')?.focus()
         } else if (event.key === 'ArrowDown' || event.key === 'Tab' || event.key === 'Enter') {
           event.preventDefault()
-          const newDate = new Date()
-          setFocusFlag(newDate.toISOString())
+          setFocusFlag(true)
+          setTimeout(() => {
+            setFocusFlag(false)
+          }, 100)
         }
       }
     }
@@ -237,31 +245,57 @@ export const PostCreateEdit = () => {
                 </>
               </FileUpload>
             </Box>
-
-            <HStack px={'15px'}>
-              <CustomSelect
-                name="postType"
-                options={postTypeOptions}
-                placeholder="Post Type"
-                onChange={(e) => setValue('postType', e?.value, { shouldDirty: true })}
-                value={postForm.postType ? postTypeOptions.find((option) => option.value === postForm.postType) : null}
-                dropdownIndicator={<PiCaretDown />}
-                width={'200px'}
-                size="sm"
-              />
-
-              <LinkGoalsAndRewardsModal
-                postId={postForm.id}
-                setValue={setValue}
-                projectRewardUUIDs={postForm.projectRewardUUIDs}
-                projectGoalIds={postForm.projectGoalIds}
-              />
-            </HStack>
+            {isMobile ? (
+              <VStack width="100%" alignItems="flex-start" paddingX={6}>
+                <CustomSelect
+                  name="postType"
+                  options={postTypeOptions}
+                  placeholder="Post Type"
+                  onChange={(e) => setValue('postType', e?.value, { shouldDirty: true })}
+                  value={
+                    postForm.postType ? postTypeOptions.find((option) => option.value === postForm.postType) : null
+                  }
+                  dropdownIndicator={<PiCaretDown />}
+                  width={'200px'}
+                  size="sm"
+                />
+                <LinkGoalsAndRewardsModal
+                  postId={postForm.id}
+                  setValue={setValue}
+                  projectRewardUUIDs={postForm.projectRewardUUIDs}
+                  projectGoalIds={postForm.projectGoalIds}
+                  projectName={project.name}
+                />
+              </VStack>
+            ) : (
+              <HStack px={6}>
+                <CustomSelect
+                  name="postType"
+                  options={postTypeOptions}
+                  placeholder="Post Type"
+                  onChange={(e) => setValue('postType', e?.value, { shouldDirty: true })}
+                  value={
+                    postForm.postType ? postTypeOptions.find((option) => option.value === postForm.postType) : null
+                  }
+                  dropdownIndicator={<PiCaretDown />}
+                  width={'200px'}
+                  size="sm"
+                />
+                <LinkGoalsAndRewardsModal
+                  postId={postForm.id}
+                  setValue={setValue}
+                  projectRewardUUIDs={postForm.projectRewardUUIDs}
+                  projectGoalIds={postForm.projectGoalIds}
+                  projectName={project.name}
+                />
+              </HStack>
+            )}
 
             <VStack width="100%">
               <Input
                 id={'post-title-input'}
                 border="none"
+                backgroundColor="transparent"
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
                 placeholder={t('Post Title')}
@@ -278,6 +312,7 @@ export const PostCreateEdit = () => {
               <TextArea
                 id={'post-description-input'}
                 border="none"
+                backgroundColor="transparent"
                 _focus={{ border: 'none' }}
                 _focusVisible={{}}
                 placeholder={t('The summary of the post')}

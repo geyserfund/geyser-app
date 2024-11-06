@@ -25,9 +25,9 @@ export const GoalTarget = ({ goal, of }: GoalTargetProps) => {
 
   return (
     <HStack spacing={1}>
-      <Body size="sm" muted>
+      <Body size="sm" muted bold>
         {of ? ` ${t('of')}  ` : ''}
-        <Body as="span" size="sm" dark>
+        <Body as="span" size="sm" dark bold>
           {formattedTargetAmount}{' '}
         </Body>
         {goal.currency === ProjectGoalCurrency.Btcsat ? `(${targetUsdAmount})` : `(${targetSatsAmount})`}{' '}
