@@ -18,7 +18,9 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean }
   Int: { input: number; output: number }
   Float: { input: number; output: number }
+  /** Add BigInt functionality */
   BigInt: { input: any; output: any }
+  /** Date custom scalar type */
   Date: { input: any; output: any }
 }
 
@@ -866,6 +868,8 @@ export type GetFundingTxsInput = {
 
 export type GetFundingTxsOrderByInput = {
   createdAt: OrderByOptions
+  /** @deprecated Use createdAt instead. */
+  paidAt?: InputMaybe<OrderByOptions>
 }
 
 export type GetFundingTxsWhereInput = {
@@ -1877,7 +1881,7 @@ export type ProfileNotificationSettings = {
 
 export type Project = {
   __typename?: 'Project'
-  /** @deprecated No longer supported */
+  /** @deprecated Field no longer supported */
   ambassadors: Array<Ambassador>
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']['output']
@@ -1932,7 +1936,7 @@ export type Project = {
   rewardsCount?: Maybe<Scalars['Int']['output']>
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['String']['output']>
-  /** @deprecated No longer supported */
+  /** @deprecated Field no longer supported */
   sponsors: Array<Sponsor>
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>
@@ -2984,14 +2988,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isAmbassador: Scalars['Boolean']['output']
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']['output']
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isSponsor: Scalars['Boolean']['output']
   /** Project linked to the contributions. */
@@ -3166,45 +3170,12 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 ) => TResult | Promise<TResult>
 
 /** Mapping of union types */
-export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
+export type ResolversUnionTypes<RefType extends Record<string, unknown>> = {
   ActivityResource:
-    | (Omit<Entry, 'creator' | 'fundingTxs' | 'project'> & {
-        creator: _RefType['User']
-        fundingTxs: Array<_RefType['FundingTx']>
-        project?: Maybe<_RefType['Project']>
-      })
-    | (Omit<FundingTx, 'bitcoinQuote' | 'funder' | 'sourceResource'> & {
-        bitcoinQuote?: Maybe<_RefType['BitcoinQuote']>
-        funder: _RefType['Funder']
-        sourceResource?: Maybe<_RefType['SourceResource']>
-      })
-    | (Omit<Post, 'creator' | 'fundingTxs' | 'project'> & {
-        creator: _RefType['User']
-        fundingTxs: Array<_RefType['FundingTx']>
-        project?: Maybe<_RefType['Project']>
-      })
-    | (Omit<
-        Project,
-        | 'ambassadors'
-        | 'entries'
-        | 'followers'
-        | 'funders'
-        | 'fundingTxs'
-        | 'grantApplications'
-        | 'owners'
-        | 'sponsors'
-        | 'wallets'
-      > & {
-        ambassadors: Array<_RefType['Ambassador']>
-        entries: Array<_RefType['Entry']>
-        followers: Array<_RefType['User']>
-        funders: Array<_RefType['Funder']>
-        fundingTxs: Array<_RefType['FundingTx']>
-        grantApplications: Array<_RefType['GrantApplicant']>
-        owners: Array<_RefType['Owner']>
-        sponsors: Array<_RefType['Sponsor']>
-        wallets: Array<_RefType['Wallet']>
-      })
+    | Entry
+    | (Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<RefType['SourceResource']> })
+    | Post
+    | Project
     | ProjectGoal
     | ProjectReward
   ConnectionDetails:
@@ -3214,50 +3185,10 @@ export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
     | NwcConnectionDetailsPrivate
   Grant: BoardVoteGrant | CommunityVoteGrant
   SourceResource: Entry | Project
-    | (Omit<ProjectReward, 'project'> & { project: _RefType['Project'] })
-  ConnectionDetails: LightningAddressConnectionDetails | LndConnectionDetailsPrivate | LndConnectionDetailsPublic
-  Grant:
-    | (Omit<BoardVoteGrant, 'applicants' | 'boardMembers' | 'sponsors'> & {
-        applicants: Array<_RefType['GrantApplicant']>
-        boardMembers: Array<_RefType['GrantBoardMember']>
-        sponsors: Array<_RefType['Sponsor']>
-      })
-    | (Omit<CommunityVoteGrant, 'applicants' | 'sponsors'> & {
-        applicants: Array<_RefType['GrantApplicant']>
-        sponsors: Array<_RefType['Sponsor']>
-      })
-  SourceResource:
-    | (Omit<Entry, 'creator' | 'fundingTxs' | 'project'> & {
-        creator: _RefType['User']
-        fundingTxs: Array<_RefType['FundingTx']>
-        project?: Maybe<_RefType['Project']>
-      })
-    | (Omit<
-        Project,
-        | 'ambassadors'
-        | 'entries'
-        | 'followers'
-        | 'funders'
-        | 'fundingTxs'
-        | 'grantApplications'
-        | 'owners'
-        | 'sponsors'
-        | 'wallets'
-      > & {
-        ambassadors: Array<_RefType['Ambassador']>
-        entries: Array<_RefType['Entry']>
-        followers: Array<_RefType['User']>
-        funders: Array<_RefType['Funder']>
-        fundingTxs: Array<_RefType['FundingTx']>
-        grantApplications: Array<_RefType['GrantApplicant']>
-        owners: Array<_RefType['Owner']>
-        sponsors: Array<_RefType['Sponsor']>
-        wallets: Array<_RefType['Wallet']>
-      })
 }
 
 /** Mapping of interface types */
-export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
+export type ResolversInterfaceTypes<RefType extends Record<string, unknown>> = {
   GraphSumData: FunderRewardGraphSum | FundingTxAmountGraph
   LndConnectionDetails: never
   MutationResponse: DeleteUserResponse | ProjectDeleteResponse | ProjectGoalDeleteResponse
@@ -3267,15 +3198,8 @@ export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   ActivitiesCountGroupedByProjectInput: ActivitiesCountGroupedByProjectInput
-  ActivitiesGetResponse: ResolverTypeWrapper<
-    Omit<ActivitiesGetResponse, 'activities'> & { activities: Array<ResolversTypes['Activity']> }
-  >
-  Activity: ResolverTypeWrapper<
-    Omit<Activity, 'project' | 'resource'> & {
-      project: ResolversTypes['Project']
-      resource: ResolversTypes['ActivityResource']
-    }
-  >
+  ActivitiesGetResponse: ResolverTypeWrapper<ActivitiesGetResponse>
+  Activity: ResolverTypeWrapper<Omit<Activity, 'resource'> & { resource: ResolversTypes['ActivityResource'] }>
   ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput
   ActivityFeedName: ActivityFeedName
@@ -3288,7 +3212,7 @@ export type ResolversTypes = {
   AffiliateSalesStats: ResolverTypeWrapper<AffiliateSalesStats>
   AffiliateStats: ResolverTypeWrapper<AffiliateStats>
   AffiliateStatus: AffiliateStatus
-  Ambassador: ResolverTypeWrapper<Omit<Ambassador, 'user'> & { user: ResolversTypes['User'] }>
+  Ambassador: ResolverTypeWrapper<Ambassador>
   AmountSummary: ResolverTypeWrapper<AmountSummary>
   AnalyticsGroupByInterval: AnalyticsGroupByInterval
   Badge: ResolverTypeWrapper<Badge>
@@ -3298,20 +3222,9 @@ export type ResolversTypes = {
   BaseCurrency: BaseCurrency
   BigInt: ResolverTypeWrapper<Scalars['BigInt']['output']>
   BitcoinQuote: ResolverTypeWrapper<BitcoinQuote>
-  BoardVoteGrant: ResolverTypeWrapper<
-    Omit<BoardVoteGrant, 'applicants' | 'boardMembers' | 'sponsors'> & {
-      applicants: Array<ResolversTypes['GrantApplicant']>
-      boardMembers: Array<ResolversTypes['GrantBoardMember']>
-      sponsors: Array<ResolversTypes['Sponsor']>
-    }
-  >
+  BoardVoteGrant: ResolverTypeWrapper<BoardVoteGrant>
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>
-  CommunityVoteGrant: ResolverTypeWrapper<
-    Omit<CommunityVoteGrant, 'applicants' | 'sponsors'> & {
-      applicants: Array<ResolversTypes['GrantApplicant']>
-      sponsors: Array<ResolversTypes['Sponsor']>
-    }
-  >
+  CommunityVoteGrant: ResolverTypeWrapper<CommunityVoteGrant>
   CompetitionVoteGrantVoteSummary: ResolverTypeWrapper<CompetitionVoteGrantVoteSummary>
   ConnectionDetails: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ConnectionDetails']>
   ContributionsSummaryPeriod: ContributionsSummaryPeriod
@@ -3339,28 +3252,14 @@ export type ResolversTypes = {
   EmailSendOptionsInput: EmailSendOptionsInput
   EmailSubscriberSegment: EmailSubscriberSegment
   EmailVerifyInput: EmailVerifyInput
-  Entry: ResolverTypeWrapper<
-    Omit<Entry, 'creator' | 'fundingTxs' | 'project'> & {
-      creator: ResolversTypes['User']
-      fundingTxs: Array<ResolversTypes['FundingTx']>
-      project?: Maybe<ResolversTypes['Project']>
-    }
-  >
-  EntryPublishedSubscriptionResponse: ResolverTypeWrapper<
-    Omit<EntryPublishedSubscriptionResponse, 'entry'> & { entry: ResolversTypes['Entry'] }
-  >
+  Entry: ResolverTypeWrapper<Entry>
+  EntryPublishedSubscriptionResponse: ResolverTypeWrapper<EntryPublishedSubscriptionResponse>
   EntryStatus: EntryStatus
   EntryType: EntryType
   ExternalAccount: ResolverTypeWrapper<ExternalAccount>
   FileUploadInput: FileUploadInput
   Float: ResolverTypeWrapper<Scalars['Float']['output']>
-  Funder: ResolverTypeWrapper<
-    Omit<Funder, 'contributionsSummary' | 'fundingTxs' | 'user'> & {
-      contributionsSummary?: Maybe<ResolversTypes['ContributorContributionsSummary']>
-      fundingTxs: Array<ResolversTypes['FundingTx']>
-      user?: Maybe<ResolversTypes['User']>
-    }
-  >
+  Funder: ResolverTypeWrapper<Funder>
   FunderRewardGraphSum: ResolverTypeWrapper<FunderRewardGraphSum>
   FundingCancelInput: FundingCancelInput
   FundingCancelResponse: ResolverTypeWrapper<FundingCancelResponse>
@@ -3373,25 +3272,17 @@ export type ResolversTypes = {
   FundingInput: FundingInput
   FundingMetadataInput: FundingMetadataInput
   FundingMethod: FundingMethod
-  FundingMutationResponse: ResolverTypeWrapper<
-    Omit<FundingMutationResponse, 'fundingTx'> & { fundingTx?: Maybe<ResolversTypes['FundingTx']> }
-  >
+  FundingMutationResponse: ResolverTypeWrapper<FundingMutationResponse>
   FundingPendingInput: FundingPendingInput
   FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input
   FundingPendingOffChainInput: FundingPendingOffChainInput
   FundingPendingOnChainInput: FundingPendingOnChainInput
   FundingPendingResponse: ResolverTypeWrapper<FundingPendingResponse>
-  FundingQueryResponse: ResolverTypeWrapper<
-    Omit<FundingQueryResponse, 'fundingTx'> & { fundingTx?: Maybe<ResolversTypes['FundingTx']> }
-  >
+  FundingQueryResponse: ResolverTypeWrapper<FundingQueryResponse>
   FundingResourceType: FundingResourceType
   FundingStatus: FundingStatus
   FundingTx: ResolverTypeWrapper<
-    Omit<FundingTx, 'bitcoinQuote' | 'funder' | 'sourceResource'> & {
-      bitcoinQuote?: Maybe<ResolversTypes['BitcoinQuote']>
-      funder: ResolversTypes['Funder']
-      sourceResource?: Maybe<ResolversTypes['SourceResource']>
-    }
+    Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversTypes['SourceResource']> }
   >
   FundingTxAmountGraph: ResolverTypeWrapper<FundingTxAmountGraph>
   FundingTxEmailUpdateInput: FundingTxEmailUpdateInput
@@ -3401,12 +3292,8 @@ export type ResolversTypes = {
   FundingTxMethodCount: ResolverTypeWrapper<FundingTxMethodCount>
   FundingTxMethodSum: ResolverTypeWrapper<FundingTxMethodSum>
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
-  FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<
-    Omit<FundingTxStatusUpdatedSubscriptionResponse, 'fundingTx'> & { fundingTx: ResolversTypes['FundingTx'] }
-  >
-  FundingTxsGetResponse: ResolverTypeWrapper<
-    Omit<FundingTxsGetResponse, 'fundingTxs'> & { fundingTxs: Array<ResolversTypes['FundingTx']> }
-  >
+  FundingTxStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<FundingTxStatusUpdatedSubscriptionResponse>
+  FundingTxsGetResponse: ResolverTypeWrapper<FundingTxsGetResponse>
   FundingTxsWhereFundingStatus: FundingTxsWhereFundingStatus
   FundingType: FundingType
   FundinginvoiceCancel: ResolverTypeWrapper<FundinginvoiceCancel>
@@ -3441,16 +3328,8 @@ export type ResolversTypes = {
   GlobalContributorLeaderboardRow: ResolverTypeWrapper<GlobalContributorLeaderboardRow>
   GlobalProjectLeaderboardRow: ResolverTypeWrapper<GlobalProjectLeaderboardRow>
   Grant: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['Grant']>
-  GrantApplicant: ResolverTypeWrapper<
-    Omit<GrantApplicant, 'contributors' | 'grant' | 'project'> & {
-      contributors: Array<ResolversTypes['GrantApplicantContributor']>
-      grant: ResolversTypes['Grant']
-      project: ResolversTypes['Project']
-    }
-  >
-  GrantApplicantContributor: ResolverTypeWrapper<
-    Omit<GrantApplicantContributor, 'user'> & { user?: Maybe<ResolversTypes['User']> }
-  >
+  GrantApplicant: ResolverTypeWrapper<Omit<GrantApplicant, 'grant'> & { grant: ResolversTypes['Grant'] }>
+  GrantApplicantContributor: ResolverTypeWrapper<GrantApplicantContributor>
   GrantApplicantContributorInput: GrantApplicantContributorInput
   GrantApplicantContributorWhereInput: GrantApplicantContributorWhereInput
   GrantApplicantFunding: ResolverTypeWrapper<GrantApplicantFunding>
@@ -3461,7 +3340,7 @@ export type ResolversTypes = {
   GrantApplicantsGetWhereInput: GrantApplicantsGetWhereInput
   GrantApplicantsOrderByField: GrantApplicantsOrderByField
   GrantApplyInput: GrantApplyInput
-  GrantBoardMember: ResolverTypeWrapper<Omit<GrantBoardMember, 'user'> & { user: ResolversTypes['User'] }>
+  GrantBoardMember: ResolverTypeWrapper<GrantBoardMember>
   GrantGetInput: GrantGetInput
   GrantGetWhereInput: GrantGetWhereInput
   GrantStatistics: ResolverTypeWrapper<GrantStatistics>
@@ -3507,9 +3386,7 @@ export type ResolversTypes = {
   OTPResponse: ResolverTypeWrapper<OtpResponse>
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
   OnChainTxInput: OnChainTxInput
-  Order: ResolverTypeWrapper<
-    Omit<Order, 'fundingTx' | 'user'> & { fundingTx: ResolversTypes['FundingTx']; user?: Maybe<ResolversTypes['User']> }
-  >
+  Order: ResolverTypeWrapper<Order>
   OrderBitcoinQuoteInput: OrderBitcoinQuoteInput
   OrderByDirection: OrderByDirection
   OrderByOptions: OrderByOptions
@@ -3525,23 +3402,12 @@ export type ResolversTypes = {
   OrdersGetStatus: OrdersGetStatus
   OrdersGetWhereInput: OrdersGetWhereInput
   OrdersStatsBase: ResolverTypeWrapper<OrdersStatsBase>
-  Owner: ResolverTypeWrapper<Omit<Owner, 'user'> & { user: ResolversTypes['User'] }>
-  OwnerOf: ResolverTypeWrapper<
-    Omit<OwnerOf, 'owner' | 'project'> & {
-      owner?: Maybe<ResolversTypes['Owner']>
-      project?: Maybe<ResolversTypes['Project']>
-    }
-  >
+  Owner: ResolverTypeWrapper<Owner>
+  OwnerOf: ResolverTypeWrapper<OwnerOf>
   PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>
   PaginationCursor: ResolverTypeWrapper<PaginationCursor>
   PaginationInput: PaginationInput
-  Post: ResolverTypeWrapper<
-    Omit<Post, 'creator' | 'fundingTxs' | 'project'> & {
-      creator: ResolversTypes['User']
-      fundingTxs: Array<ResolversTypes['FundingTx']>
-      project?: Maybe<ResolversTypes['Project']>
-    }
-  >
+  Post: ResolverTypeWrapper<Post>
   PostCreateInput: PostCreateInput
   PostEmailSegmentSizeGetInput: PostEmailSegmentSizeGetInput
   PostGetInput: PostGetInput
@@ -3556,36 +3422,9 @@ export type ResolversTypes = {
   PostUpdateInput: PostUpdateInput
   PrivateCommentPrompt: PrivateCommentPrompt
   ProfileNotificationSettings: ResolverTypeWrapper<ProfileNotificationSettings>
-  Project: ResolverTypeWrapper<
-    Omit<
-      Project,
-      | 'ambassadors'
-      | 'entries'
-      | 'followers'
-      | 'funders'
-      | 'fundingTxs'
-      | 'grantApplications'
-      | 'owners'
-      | 'sponsors'
-      | 'wallets'
-    > & {
-      ambassadors: Array<ResolversTypes['Ambassador']>
-      entries: Array<ResolversTypes['Entry']>
-      followers: Array<ResolversTypes['User']>
-      funders: Array<ResolversTypes['Funder']>
-      fundingTxs: Array<ResolversTypes['FundingTx']>
-      grantApplications: Array<ResolversTypes['GrantApplicant']>
-      owners: Array<ResolversTypes['Owner']>
-      sponsors: Array<ResolversTypes['Sponsor']>
-      wallets: Array<ResolversTypes['Wallet']>
-    }
-  >
-  ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<
-    Omit<ProjectActivatedSubscriptionResponse, 'project'> & { project: ResolversTypes['Project'] }
-  >
-  ProjectActivitiesCount: ResolverTypeWrapper<
-    Omit<ProjectActivitiesCount, 'project'> & { project: ResolversTypes['Project'] }
-  >
+  Project: ResolverTypeWrapper<Project>
+  ProjectActivatedSubscriptionResponse: ResolverTypeWrapper<ProjectActivatedSubscriptionResponse>
+  ProjectActivitiesCount: ResolverTypeWrapper<ProjectActivitiesCount>
   ProjectContributionsGroupedByMethodStats: ResolverTypeWrapper<ProjectContributionsGroupedByMethodStats>
   ProjectContributionsStats: ResolverTypeWrapper<ProjectContributionsStats>
   ProjectContributionsStatsBase: ResolverTypeWrapper<ProjectContributionsStatsBase>
@@ -3612,20 +3451,16 @@ export type ResolversTypes = {
   ProjectGrantApplicationsWhereInputEnum: ProjectGrantApplicationsWhereInputEnum
   ProjectKeys: ResolverTypeWrapper<ProjectKeys>
   ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput
-  ProjectLeaderboardContributorsRow: ResolverTypeWrapper<
-    Omit<ProjectLeaderboardContributorsRow, 'user'> & { user?: Maybe<ResolversTypes['User']> }
-  >
+  ProjectLeaderboardContributorsRow: ResolverTypeWrapper<ProjectLeaderboardContributorsRow>
   ProjectLeaderboardPeriod: ProjectLeaderboardPeriod
   ProjectLinkMutationInput: ProjectLinkMutationInput
-  ProjectMostFunded: ResolverTypeWrapper<Omit<ProjectMostFunded, 'project'> & { project: ResolversTypes['Project'] }>
-  ProjectMostFundedByTag: ResolverTypeWrapper<
-    Omit<ProjectMostFundedByTag, 'projects'> & { projects: Array<ResolversTypes['ProjectMostFunded']> }
-  >
+  ProjectMostFunded: ResolverTypeWrapper<ProjectMostFunded>
+  ProjectMostFundedByTag: ResolverTypeWrapper<ProjectMostFundedByTag>
   ProjectPostsGetInput: ProjectPostsGetInput
   ProjectPostsGetWhereInput: ProjectPostsGetWhereInput
   ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>
-  ProjectReward: ResolverTypeWrapper<Omit<ProjectReward, 'project'> & { project: ResolversTypes['Project'] }>
+  ProjectReward: ResolverTypeWrapper<ProjectReward>
   ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate
   ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput
   ProjectRewardTrendingWeeklyGetRow: ResolverTypeWrapper<ProjectRewardTrendingWeeklyGetRow>
@@ -3647,9 +3482,7 @@ export type ResolversTypes = {
   ProjectsMostFundedByTagRange: ProjectsMostFundedByTagRange
   ProjectsOrderByField: ProjectsOrderByField
   ProjectsOrderByInput: ProjectsOrderByInput
-  ProjectsResponse: ResolverTypeWrapper<
-    Omit<ProjectsResponse, 'projects'> & { projects: Array<ResolversTypes['Project']> }
-  >
+  ProjectsResponse: ResolverTypeWrapper<ProjectsResponse>
   ProjectsSummary: ResolverTypeWrapper<ProjectsSummary>
   Query: ResolverTypeWrapper<{}>
   QuoteCurrency: QuoteCurrency
@@ -3660,7 +3493,7 @@ export type ResolversTypes = {
   ShippingDestination: ShippingDestination
   SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>
   SourceResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['SourceResource']>
-  Sponsor: ResolverTypeWrapper<Omit<Sponsor, 'user'> & { user?: Maybe<ResolversTypes['User']> }>
+  Sponsor: ResolverTypeWrapper<Sponsor>
   SponsorStatus: SponsorStatus
   StatsInterface: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['StatsInterface']>
   String: ResolverTypeWrapper<Scalars['String']['output']>
@@ -3681,17 +3514,7 @@ export type ResolversTypes = {
   UpdateUserInput: UpdateUserInput
   UpdateWalletInput: UpdateWalletInput
   UpdateWalletStateInput: UpdateWalletStateInput
-  User: ResolverTypeWrapper<
-    Omit<User, 'contributions' | 'entries' | 'fundingTxs' | 'ownerOf' | 'projectFollows' | 'projects' | 'wallet'> & {
-      contributions: Array<ResolversTypes['UserProjectContribution']>
-      entries: Array<ResolversTypes['Entry']>
-      fundingTxs: Array<ResolversTypes['FundingTx']>
-      ownerOf: Array<ResolversTypes['OwnerOf']>
-      projectFollows: Array<ResolversTypes['Project']>
-      projects: Array<ResolversTypes['Project']>
-      wallet?: Maybe<ResolversTypes['Wallet']>
-    }
-  >
+  User: ResolverTypeWrapper<User>
   UserBadge: ResolverTypeWrapper<UserBadge>
   UserBadgeStatus: UserBadgeStatus
   UserEmailUpdateInput: UserEmailUpdateInput
@@ -3701,12 +3524,7 @@ export type ResolversTypes = {
   UserNotificationSettings: ResolverTypeWrapper<UserNotificationSettings>
   UserPostsGetInput: UserPostsGetInput
   UserPostsGetWhereInput: UserPostsGetWhereInput
-  UserProjectContribution: ResolverTypeWrapper<
-    Omit<UserProjectContribution, 'funder' | 'project'> & {
-      funder?: Maybe<ResolversTypes['Funder']>
-      project: ResolversTypes['Project']
-    }
-  >
+  UserProjectContribution: ResolverTypeWrapper<UserProjectContribution>
   UserProjectsGetInput: UserProjectsGetInput
   UserProjectsGetWhereInput: UserProjectsGetWhereInput
   VotingSystem: VotingSystem
@@ -3728,13 +3546,8 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   ActivitiesCountGroupedByProjectInput: ActivitiesCountGroupedByProjectInput
-  ActivitiesGetResponse: Omit<ActivitiesGetResponse, 'activities'> & {
-    activities: Array<ResolversParentTypes['Activity']>
-  }
-  Activity: Omit<Activity, 'project' | 'resource'> & {
-    project: ResolversParentTypes['Project']
-    resource: ResolversParentTypes['ActivityResource']
-  }
+  ActivitiesGetResponse: ActivitiesGetResponse
+  Activity: Omit<Activity, 'resource'> & { resource: ResolversParentTypes['ActivityResource'] }
   ActivityCreatedSubscriptionInput: ActivityCreatedSubscriptionInput
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput
   ActivityResource: ResolversUnionTypes<ResolversParentTypes>['ActivityResource']
@@ -3744,7 +3557,7 @@ export type ResolversParentTypes = {
   AffiliatePayoutsStats: AffiliatePayoutsStats
   AffiliateSalesStats: AffiliateSalesStats
   AffiliateStats: AffiliateStats
-  Ambassador: Omit<Ambassador, 'user'> & { user: ResolversParentTypes['User'] }
+  Ambassador: Ambassador
   AmountSummary: AmountSummary
   Badge: Badge
   BadgeClaimInput: BadgeClaimInput
@@ -3752,16 +3565,9 @@ export type ResolversParentTypes = {
   BadgesGetWhereInput: BadgesGetWhereInput
   BigInt: Scalars['BigInt']['output']
   BitcoinQuote: BitcoinQuote
-  BoardVoteGrant: Omit<BoardVoteGrant, 'applicants' | 'boardMembers' | 'sponsors'> & {
-    applicants: Array<ResolversParentTypes['GrantApplicant']>
-    boardMembers: Array<ResolversParentTypes['GrantBoardMember']>
-    sponsors: Array<ResolversParentTypes['Sponsor']>
-  }
+  BoardVoteGrant: BoardVoteGrant
   Boolean: Scalars['Boolean']['output']
-  CommunityVoteGrant: Omit<CommunityVoteGrant, 'applicants' | 'sponsors'> & {
-    applicants: Array<ResolversParentTypes['GrantApplicant']>
-    sponsors: Array<ResolversParentTypes['Sponsor']>
-  }
+  CommunityVoteGrant: CommunityVoteGrant
   CompetitionVoteGrantVoteSummary: CompetitionVoteGrantVoteSummary
   ConnectionDetails: ResolversUnionTypes<ResolversParentTypes>['ConnectionDetails']
   ContributorContributionsSummary: ContributorContributionsSummary
@@ -3785,22 +3591,12 @@ export type ResolversParentTypes = {
   DeleteUserResponse: DeleteUserResponse
   EmailSendOptionsInput: EmailSendOptionsInput
   EmailVerifyInput: EmailVerifyInput
-  Entry: Omit<Entry, 'creator' | 'fundingTxs' | 'project'> & {
-    creator: ResolversParentTypes['User']
-    fundingTxs: Array<ResolversParentTypes['FundingTx']>
-    project?: Maybe<ResolversParentTypes['Project']>
-  }
-  EntryPublishedSubscriptionResponse: Omit<EntryPublishedSubscriptionResponse, 'entry'> & {
-    entry: ResolversParentTypes['Entry']
-  }
+  Entry: Entry
+  EntryPublishedSubscriptionResponse: EntryPublishedSubscriptionResponse
   ExternalAccount: ExternalAccount
   FileUploadInput: FileUploadInput
   Float: Scalars['Float']['output']
-  Funder: Omit<Funder, 'contributionsSummary' | 'fundingTxs' | 'user'> & {
-    contributionsSummary?: Maybe<ResolversParentTypes['ContributorContributionsSummary']>
-    fundingTxs: Array<ResolversParentTypes['FundingTx']>
-    user?: Maybe<ResolversParentTypes['User']>
-  }
+  Funder: Funder
   FunderRewardGraphSum: FunderRewardGraphSum
   FundingCancelInput: FundingCancelInput
   FundingCancelResponse: FundingCancelResponse
@@ -3812,22 +3608,14 @@ export type ResolversParentTypes = {
   FundingCreateFromPodcastKeysendInput: FundingCreateFromPodcastKeysendInput
   FundingInput: FundingInput
   FundingMetadataInput: FundingMetadataInput
-  FundingMutationResponse: Omit<FundingMutationResponse, 'fundingTx'> & {
-    fundingTx?: Maybe<ResolversParentTypes['FundingTx']>
-  }
+  FundingMutationResponse: FundingMutationResponse
   FundingPendingInput: FundingPendingInput
   FundingPendingOffChainBolt11Input: FundingPendingOffChainBolt11Input
   FundingPendingOffChainInput: FundingPendingOffChainInput
   FundingPendingOnChainInput: FundingPendingOnChainInput
   FundingPendingResponse: FundingPendingResponse
-  FundingQueryResponse: Omit<FundingQueryResponse, 'fundingTx'> & {
-    fundingTx?: Maybe<ResolversParentTypes['FundingTx']>
-  }
-  FundingTx: Omit<FundingTx, 'bitcoinQuote' | 'funder' | 'sourceResource'> & {
-    bitcoinQuote?: Maybe<ResolversParentTypes['BitcoinQuote']>
-    funder: ResolversParentTypes['Funder']
-    sourceResource?: Maybe<ResolversParentTypes['SourceResource']>
-  }
+  FundingQueryResponse: FundingQueryResponse
+  FundingTx: Omit<FundingTx, 'sourceResource'> & { sourceResource?: Maybe<ResolversParentTypes['SourceResource']> }
   FundingTxAmountGraph: FundingTxAmountGraph
   FundingTxEmailUpdateInput: FundingTxEmailUpdateInput
   FundingTxInvoiceSanctionCheckStatusGetInput: FundingTxInvoiceSanctionCheckStatusGetInput
@@ -3835,12 +3623,8 @@ export type ResolversParentTypes = {
   FundingTxMethodCount: FundingTxMethodCount
   FundingTxMethodSum: FundingTxMethodSum
   FundingTxStatusUpdatedInput: FundingTxStatusUpdatedInput
-  FundingTxStatusUpdatedSubscriptionResponse: Omit<FundingTxStatusUpdatedSubscriptionResponse, 'fundingTx'> & {
-    fundingTx: ResolversParentTypes['FundingTx']
-  }
-  FundingTxsGetResponse: Omit<FundingTxsGetResponse, 'fundingTxs'> & {
-    fundingTxs: Array<ResolversParentTypes['FundingTx']>
-  }
+  FundingTxStatusUpdatedSubscriptionResponse: FundingTxStatusUpdatedSubscriptionResponse
+  FundingTxsGetResponse: FundingTxsGetResponse
   FundinginvoiceCancel: FundinginvoiceCancel
   GenerateAffiliatePaymentRequestResponse: GenerateAffiliatePaymentRequestResponse
   GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput
@@ -3873,12 +3657,8 @@ export type ResolversParentTypes = {
   GlobalContributorLeaderboardRow: GlobalContributorLeaderboardRow
   GlobalProjectLeaderboardRow: GlobalProjectLeaderboardRow
   Grant: ResolversUnionTypes<ResolversParentTypes>['Grant']
-  GrantApplicant: Omit<GrantApplicant, 'contributors' | 'grant' | 'project'> & {
-    contributors: Array<ResolversParentTypes['GrantApplicantContributor']>
-    grant: ResolversParentTypes['Grant']
-    project: ResolversParentTypes['Project']
-  }
-  GrantApplicantContributor: Omit<GrantApplicantContributor, 'user'> & { user?: Maybe<ResolversParentTypes['User']> }
+  GrantApplicant: Omit<GrantApplicant, 'grant'> & { grant: ResolversParentTypes['Grant'] }
+  GrantApplicantContributor: GrantApplicantContributor
   GrantApplicantContributorInput: GrantApplicantContributorInput
   GrantApplicantContributorWhereInput: GrantApplicantContributorWhereInput
   GrantApplicantFunding: GrantApplicantFunding
@@ -3886,7 +3666,7 @@ export type ResolversParentTypes = {
   GrantApplicantsGetOrderByInput: GrantApplicantsGetOrderByInput
   GrantApplicantsGetWhereInput: GrantApplicantsGetWhereInput
   GrantApplyInput: GrantApplyInput
-  GrantBoardMember: Omit<GrantBoardMember, 'user'> & { user: ResolversParentTypes['User'] }
+  GrantBoardMember: GrantBoardMember
   GrantGetInput: GrantGetInput
   GrantGetWhereInput: GrantGetWhereInput
   GrantStatistics: GrantStatistics
@@ -3925,10 +3705,7 @@ export type ResolversParentTypes = {
   OTPResponse: OtpResponse
   OffsetBasedPaginationInput: OffsetBasedPaginationInput
   OnChainTxInput: OnChainTxInput
-  Order: Omit<Order, 'fundingTx' | 'user'> & {
-    fundingTx: ResolversParentTypes['FundingTx']
-    user?: Maybe<ResolversParentTypes['User']>
-  }
+  Order: Order
   OrderBitcoinQuoteInput: OrderBitcoinQuoteInput
   OrderFundingInput: OrderFundingInput
   OrderItem: OrderItem
@@ -3939,19 +3716,12 @@ export type ResolversParentTypes = {
   OrdersGetResponse: OrdersGetResponse
   OrdersGetWhereInput: OrdersGetWhereInput
   OrdersStatsBase: OrdersStatsBase
-  Owner: Omit<Owner, 'user'> & { user: ResolversParentTypes['User'] }
-  OwnerOf: Omit<OwnerOf, 'owner' | 'project'> & {
-    owner?: Maybe<ResolversParentTypes['Owner']>
-    project?: Maybe<ResolversParentTypes['Project']>
-  }
+  Owner: Owner
+  OwnerOf: OwnerOf
   PageViewCountGraph: PageViewCountGraph
   PaginationCursor: PaginationCursor
   PaginationInput: PaginationInput
-  Post: Omit<Post, 'creator' | 'fundingTxs' | 'project'> & {
-    creator: ResolversParentTypes['User']
-    fundingTxs: Array<ResolversParentTypes['FundingTx']>
-    project?: Maybe<ResolversParentTypes['Project']>
-  }
+  Post: Post
   PostCreateInput: PostCreateInput
   PostEmailSegmentSizeGetInput: PostEmailSegmentSizeGetInput
   PostGetInput: PostGetInput
@@ -3963,32 +3733,9 @@ export type ResolversParentTypes = {
   PostSendByEmailResponse: PostSendByEmailResponse
   PostUpdateInput: PostUpdateInput
   ProfileNotificationSettings: ProfileNotificationSettings
-  Project: Omit<
-    Project,
-    | 'ambassadors'
-    | 'entries'
-    | 'followers'
-    | 'funders'
-    | 'fundingTxs'
-    | 'grantApplications'
-    | 'owners'
-    | 'sponsors'
-    | 'wallets'
-  > & {
-    ambassadors: Array<ResolversParentTypes['Ambassador']>
-    entries: Array<ResolversParentTypes['Entry']>
-    followers: Array<ResolversParentTypes['User']>
-    funders: Array<ResolversParentTypes['Funder']>
-    fundingTxs: Array<ResolversParentTypes['FundingTx']>
-    grantApplications: Array<ResolversParentTypes['GrantApplicant']>
-    owners: Array<ResolversParentTypes['Owner']>
-    sponsors: Array<ResolversParentTypes['Sponsor']>
-    wallets: Array<ResolversParentTypes['Wallet']>
-  }
-  ProjectActivatedSubscriptionResponse: Omit<ProjectActivatedSubscriptionResponse, 'project'> & {
-    project: ResolversParentTypes['Project']
-  }
-  ProjectActivitiesCount: Omit<ProjectActivitiesCount, 'project'> & { project: ResolversParentTypes['Project'] }
+  Project: Project
+  ProjectActivatedSubscriptionResponse: ProjectActivatedSubscriptionResponse
+  ProjectActivitiesCount: ProjectActivitiesCount
   ProjectContributionsGroupedByMethodStats: ProjectContributionsGroupedByMethodStats
   ProjectContributionsStats: ProjectContributionsStats
   ProjectContributionsStatsBase: ProjectContributionsStatsBase
@@ -4011,19 +3758,15 @@ export type ResolversParentTypes = {
   ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput
   ProjectKeys: ProjectKeys
   ProjectLeaderboardContributorsGetInput: ProjectLeaderboardContributorsGetInput
-  ProjectLeaderboardContributorsRow: Omit<ProjectLeaderboardContributorsRow, 'user'> & {
-    user?: Maybe<ResolversParentTypes['User']>
-  }
+  ProjectLeaderboardContributorsRow: ProjectLeaderboardContributorsRow
   ProjectLinkMutationInput: ProjectLinkMutationInput
-  ProjectMostFunded: Omit<ProjectMostFunded, 'project'> & { project: ResolversParentTypes['Project'] }
-  ProjectMostFundedByTag: Omit<ProjectMostFundedByTag, 'projects'> & {
-    projects: Array<ResolversParentTypes['ProjectMostFunded']>
-  }
+  ProjectMostFunded: ProjectMostFunded
+  ProjectMostFundedByTag: ProjectMostFundedByTag
   ProjectPostsGetInput: ProjectPostsGetInput
   ProjectPostsGetWhereInput: ProjectPostsGetWhereInput
   ProjectPublishMutationInput: ProjectPublishMutationInput
   ProjectRegionsGetResult: ProjectRegionsGetResult
-  ProjectReward: Omit<ProjectReward, 'project'> & { project: ResolversParentTypes['Project'] }
+  ProjectReward: ProjectReward
   ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate
   ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput
   ProjectRewardTrendingWeeklyGetRow: ProjectRewardTrendingWeeklyGetRow
@@ -4041,14 +3784,14 @@ export type ResolversParentTypes = {
   ProjectsGetWhereInput: ProjectsGetWhereInput
   ProjectsMostFundedByTagInput: ProjectsMostFundedByTagInput
   ProjectsOrderByInput: ProjectsOrderByInput
-  ProjectsResponse: Omit<ProjectsResponse, 'projects'> & { projects: Array<ResolversParentTypes['Project']> }
+  ProjectsResponse: ProjectsResponse
   ProjectsSummary: ProjectsSummary
   Query: {}
   ResourceInput: ResourceInput
   SendOtpByEmailInput: SendOtpByEmailInput
   SignedUploadUrl: SignedUploadUrl
   SourceResource: ResolversUnionTypes<ResolversParentTypes>['SourceResource']
-  Sponsor: Omit<Sponsor, 'user'> & { user?: Maybe<ResolversParentTypes['User']> }
+  Sponsor: Sponsor
   StatsInterface: ResolversInterfaceTypes<ResolversParentTypes>['StatsInterface']
   String: Scalars['String']['output']
   Subscription: {}
@@ -4067,18 +3810,7 @@ export type ResolversParentTypes = {
   UpdateUserInput: UpdateUserInput
   UpdateWalletInput: UpdateWalletInput
   UpdateWalletStateInput: UpdateWalletStateInput
-  User: Omit<
-    User,
-    'contributions' | 'entries' | 'fundingTxs' | 'ownerOf' | 'projectFollows' | 'projects' | 'wallet'
-  > & {
-    contributions: Array<ResolversParentTypes['UserProjectContribution']>
-    entries: Array<ResolversParentTypes['Entry']>
-    fundingTxs: Array<ResolversParentTypes['FundingTx']>
-    ownerOf: Array<ResolversParentTypes['OwnerOf']>
-    projectFollows: Array<ResolversParentTypes['Project']>
-    projects: Array<ResolversParentTypes['Project']>
-    wallet?: Maybe<ResolversParentTypes['Wallet']>
-  }
+  User: User
   UserBadge: UserBadge
   UserEmailUpdateInput: UserEmailUpdateInput
   UserEntriesGetInput: UserEntriesGetInput
@@ -4087,10 +3819,7 @@ export type ResolversParentTypes = {
   UserNotificationSettings: UserNotificationSettings
   UserPostsGetInput: UserPostsGetInput
   UserPostsGetWhereInput: UserPostsGetWhereInput
-  UserProjectContribution: Omit<UserProjectContribution, 'funder' | 'project'> & {
-    funder?: Maybe<ResolversParentTypes['Funder']>
-    project: ResolversParentTypes['Project']
-  }
+  UserProjectContribution: UserProjectContribution
   UserProjectsGetInput: UserProjectsGetInput
   UserProjectsGetWhereInput: UserProjectsGetWhereInput
   Wallet: Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversParentTypes['ConnectionDetails'] }
@@ -7503,13 +7232,13 @@ export type ProjectForLandingPageFragment = {
   __typename?: 'Project'
   id: any
   name: string
+  balance: number
+  balanceUsdCent: number
+  fundersCount?: number | null
   thumbnailImage?: string | null
   shortDescription?: string | null
   title: string
   status?: ProjectStatus | null
-  fundersCount?: number | null
-  balance: number
-  balanceUsdCent: number
 }
 
 export type RewardForLandingPageFragment = {
@@ -9792,6 +9521,9 @@ export const ProjectForLandingPageFragmentDoc = gql`
   fragment ProjectForLandingPage on Project {
     id
     name
+    balance
+    balanceUsdCent
+    fundersCount
     thumbnailImage
     shortDescription
     title
@@ -11344,11 +11076,9 @@ export function useActivitiesForLandingPageLazyQuery(
 }
 
 export function useActivitiesForLandingPageSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ActivitiesForLandingPageQuery, ActivitiesForLandingPageQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ActivitiesForLandingPageQuery, ActivitiesForLandingPageQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ActivitiesForLandingPageQuery, ActivitiesForLandingPageQueryVariables>(
     ActivitiesForLandingPageDocument,
     options,
@@ -11404,9 +11134,9 @@ export function useBadgesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Bad
 }
 
 export function useBadgesSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<BadgesQuery, BadgesQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<BadgesQuery, BadgesQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<BadgesQuery, BadgesQueryVariables>(BadgesDocument, options)
 }
 
@@ -11469,9 +11199,9 @@ export function useUserBadgesLazyQuery(
 }
 
 export function useUserBadgesSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserBadgesQuery, UserBadgesQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<UserBadgesQuery, UserBadgesQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<UserBadgesQuery, UserBadgesQueryVariables>(UserBadgesDocument, options)
 }
 
@@ -11526,11 +11256,9 @@ export function useEntryForLandingPageLazyQuery(
 }
 
 export function useEntryForLandingPageSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<EntryForLandingPageQuery, EntryForLandingPageQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<EntryForLandingPageQuery, EntryForLandingPageQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<EntryForLandingPageQuery, EntryForLandingPageQueryVariables>(
     EntryForLandingPageDocument,
     options,
@@ -11610,9 +11338,9 @@ export function useEntryWithOwnersLazyQuery(
 }
 
 export function useEntryWithOwnersSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<EntryWithOwnersQuery, EntryWithOwnersQueryVariables>(EntryWithOwnersDocument, options)
 }
 
@@ -11661,9 +11389,9 @@ export function useSignedUploadUrlLazyQuery(
 }
 
 export function useSignedUploadUrlSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<SignedUploadUrlQuery, SignedUploadUrlQueryVariables>(SignedUploadUrlDocument, options)
 }
 
@@ -11719,11 +11447,9 @@ export function useFundingTxsForLandingPageLazyQuery(
 }
 
 export function useFundingTxsForLandingPageSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<FundingTxsForLandingPageQuery, FundingTxsForLandingPageQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<FundingTxsForLandingPageQuery, FundingTxsForLandingPageQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<FundingTxsForLandingPageQuery, FundingTxsForLandingPageQueryVariables>(
     FundingTxsForLandingPageDocument,
     options,
@@ -11789,11 +11515,12 @@ export function useFundingTxForUserContributionLazyQuery(
 }
 
 export function useFundingTxForUserContributionSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    FundingTxForUserContributionQuery,
+    FundingTxForUserContributionQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<FundingTxForUserContributionQuery, FundingTxForUserContributionQueryVariables>(
     FundingTxForUserContributionDocument,
     options,
@@ -11857,11 +11584,9 @@ export function useProjectDefaultGoalLazyQuery(
 }
 
 export function useProjectDefaultGoalSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectDefaultGoalQuery, ProjectDefaultGoalQueryVariables>(
     ProjectDefaultGoalDocument,
     options,
@@ -11922,9 +11647,9 @@ export function useProjectGoalsLazyQuery(
 }
 
 export function useProjectGoalsSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectGoalsQuery, ProjectGoalsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectGoalsQuery, ProjectGoalsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectGoalsQuery, ProjectGoalsQueryVariables>(ProjectGoalsDocument, options)
 }
 
@@ -11969,9 +11694,9 @@ export function useGrantsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Gra
 }
 
 export function useGrantsSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GrantsQuery, GrantsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GrantsQuery, GrantsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<GrantsQuery, GrantsQueryVariables>(GrantsDocument, options)
 }
 
@@ -12019,10 +11744,8 @@ export function useGrantLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Gran
   return Apollo.useLazyQuery<GrantQuery, GrantQueryVariables>(GrantDocument, options)
 }
 
-export function useGrantSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GrantQuery, GrantQueryVariables>,
-) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+export function useGrantSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GrantQuery, GrantQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<GrantQuery, GrantQueryVariables>(GrantDocument, options)
 }
 
@@ -12075,9 +11798,9 @@ export function useGrantStatisticsLazyQuery(
 }
 
 export function useGrantStatisticsSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options)
 }
 
@@ -12138,9 +11861,9 @@ export function useGrantGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<G
 }
 
 export function useGrantGetSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GrantGetQuery, GrantGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<GrantGetQuery, GrantGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<GrantGetQuery, GrantGetQueryVariables>(GrantGetDocument, options)
 }
 
@@ -12195,9 +11918,9 @@ export function useOrdersGetLazyQuery(
 }
 
 export function useOrdersGetSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<OrdersGetQuery, OrdersGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<OrdersGetQuery, OrdersGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<OrdersGetQuery, OrdersGetQueryVariables>(OrdersGetDocument, options)
 }
 
@@ -12254,11 +11977,9 @@ export function useFundingTxsOrderGetLazyQuery(
 }
 
 export function useFundingTxsOrderGetSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<FundingTxsOrderGetQuery, FundingTxsOrderGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<FundingTxsOrderGetQuery, FundingTxsOrderGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<FundingTxsOrderGetQuery, FundingTxsOrderGetQueryVariables>(
     FundingTxsOrderGetDocument,
     options,
@@ -12320,11 +12041,9 @@ export function useFundingTxsOrderCountGetLazyQuery(
 }
 
 export function useFundingTxsOrderCountGetSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<FundingTxsOrderCountGetQuery, FundingTxsOrderCountGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<FundingTxsOrderCountGetQuery, FundingTxsOrderCountGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<FundingTxsOrderCountGetQuery, FundingTxsOrderCountGetQueryVariables>(
     FundingTxsOrderCountGetDocument,
     options,
@@ -12383,11 +12102,9 @@ export function useProjectByNameOrIdLazyQuery(
 }
 
 export function useProjectByNameOrIdSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>(
     ProjectByNameOrIdDocument,
     options,
@@ -12438,9 +12155,9 @@ export function useProjectsSummaryLazyQuery(
 }
 
 export function useProjectsSummarySuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectsSummaryQuery, ProjectsSummaryQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectsSummaryQuery, ProjectsSummaryQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectsSummaryQuery, ProjectsSummaryQueryVariables>(ProjectsSummaryDocument, options)
 }
 
@@ -12489,9 +12206,9 @@ export function useProjectFundersLazyQuery(
 }
 
 export function useProjectFundersSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectFundersQuery, ProjectFundersQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectFundersQuery, ProjectFundersQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectFundersQuery, ProjectFundersQueryVariables>(ProjectFundersDocument, options)
 }
 
@@ -12540,11 +12257,9 @@ export function useProjectNostrKeysLazyQuery(
 }
 
 export function useProjectNostrKeysSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectNostrKeysQuery, ProjectNostrKeysQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectNostrKeysQuery, ProjectNostrKeysQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectNostrKeysQuery, ProjectNostrKeysQueryVariables>(
     ProjectNostrKeysDocument,
     options,
@@ -12589,10 +12304,8 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
   return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options)
 }
 
-export function useMeSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<MeQuery, MeQueryVariables>,
-) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+export function useMeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<MeQuery, MeQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<MeQuery, MeQueryVariables>(MeDocument, options)
 }
 
@@ -12645,11 +12358,9 @@ export function useMeProjectFollowsLazyQuery(
 }
 
 export function useMeProjectFollowsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<MeProjectFollowsQuery, MeProjectFollowsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<MeProjectFollowsQuery, MeProjectFollowsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<MeProjectFollowsQuery, MeProjectFollowsQueryVariables>(
     MeProjectFollowsDocument,
     options,
@@ -12710,11 +12421,9 @@ export function useLightningAddressVerifyLazyQuery(
 }
 
 export function useLightningAddressVerifySuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<LightningAddressVerifyQuery, LightningAddressVerifyQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<LightningAddressVerifyQuery, LightningAddressVerifyQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<LightningAddressVerifyQuery, LightningAddressVerifyQueryVariables>(
     LightningAddressVerifyDocument,
     options,
@@ -12773,9 +12482,9 @@ export function useWalletLimitLazyQuery(
 }
 
 export function useWalletLimitSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<WalletLimitQuery, WalletLimitQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<WalletLimitQuery, WalletLimitQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<WalletLimitQuery, WalletLimitQueryVariables>(WalletLimitDocument, options)
 }
 
@@ -12881,9 +12590,9 @@ export function useActivitiesGetLazyQuery(
 }
 
 export function useActivitiesGetSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ActivitiesGetQuery, ActivitiesGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ActivitiesGetQuery, ActivitiesGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ActivitiesGetQuery, ActivitiesGetQueryVariables>(ActivitiesGetDocument, options)
 }
 
@@ -12944,11 +12653,12 @@ export function useFeaturedProjectForLandingPageLazyQuery(
 }
 
 export function useFeaturedProjectForLandingPageSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<FeaturedProjectForLandingPageQuery, FeaturedProjectForLandingPageQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    FeaturedProjectForLandingPageQuery,
+    FeaturedProjectForLandingPageQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<FeaturedProjectForLandingPageQuery, FeaturedProjectForLandingPageQueryVariables>(
     FeaturedProjectForLandingPageDocument,
     options,
@@ -13018,11 +12728,9 @@ export function useProjectsMostFundedByTagLazyQuery(
 }
 
 export function useProjectsMostFundedByTagSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectsMostFundedByTagQuery, ProjectsMostFundedByTagQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectsMostFundedByTagQuery, ProjectsMostFundedByTagQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectsMostFundedByTagQuery, ProjectsMostFundedByTagQueryVariables>(
     ProjectsMostFundedByTagDocument,
     options,
@@ -13084,11 +12792,9 @@ export function useProjectsForLandingPageLazyQuery(
 }
 
 export function useProjectsForLandingPageSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectsForLandingPageQuery, ProjectsForLandingPageQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectsForLandingPageQuery, ProjectsForLandingPageQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectsForLandingPageQuery, ProjectsForLandingPageQueryVariables>(
     ProjectsForLandingPageDocument,
     options,
@@ -13156,14 +12862,12 @@ export function useProjectRewardsTrendingWeeklyGetLazyQuery(
 }
 
 export function useProjectRewardsTrendingWeeklyGetSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        ProjectRewardsTrendingWeeklyGetQuery,
-        ProjectRewardsTrendingWeeklyGetQueryVariables
-      >,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProjectRewardsTrendingWeeklyGetQuery,
+    ProjectRewardsTrendingWeeklyGetQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectRewardsTrendingWeeklyGetQuery, ProjectRewardsTrendingWeeklyGetQueryVariables>(
     ProjectRewardsTrendingWeeklyGetDocument,
     options,
@@ -13217,9 +12921,9 @@ export function useTagsGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ta
 }
 
 export function useTagsGetSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<TagsGetQuery, TagsGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<TagsGetQuery, TagsGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<TagsGetQuery, TagsGetQueryVariables>(TagsGetDocument, options)
 }
 
@@ -13275,11 +12979,9 @@ export function useProjectCountriesGetLazyQuery(
 }
 
 export function useProjectCountriesGetSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectCountriesGetQuery, ProjectCountriesGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectCountriesGetQuery, ProjectCountriesGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectCountriesGetQuery, ProjectCountriesGetQueryVariables>(
     ProjectCountriesGetDocument,
     options,
@@ -13335,11 +13037,9 @@ export function useProjectRegionsGetLazyQuery(
 }
 
 export function useProjectRegionsGetSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectRegionsGetQuery, ProjectRegionsGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectRegionsGetQuery, ProjectRegionsGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectRegionsGetQuery, ProjectRegionsGetQueryVariables>(
     ProjectRegionsGetDocument,
     options,
@@ -13392,11 +13092,9 @@ export function useTagsMostFundedGetLazyQuery(
 }
 
 export function useTagsMostFundedGetSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<TagsMostFundedGetQuery, TagsMostFundedGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<TagsMostFundedGetQuery, TagsMostFundedGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<TagsMostFundedGetQuery, TagsMostFundedGetQueryVariables>(
     TagsMostFundedGetDocument,
     options,
@@ -13457,9 +13155,9 @@ export function useActivityFeedLazyQuery(
 }
 
 export function useActivityFeedSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ActivityFeedQuery, ActivityFeedQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ActivityFeedQuery, ActivityFeedQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ActivityFeedQuery, ActivityFeedQueryVariables>(ActivityFeedDocument, options)
 }
 
@@ -13520,11 +13218,12 @@ export function useLeaderboardGlobalContributorsLazyQuery(
 }
 
 export function useLeaderboardGlobalContributorsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<LeaderboardGlobalContributorsQuery, LeaderboardGlobalContributorsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    LeaderboardGlobalContributorsQuery,
+    LeaderboardGlobalContributorsQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<LeaderboardGlobalContributorsQuery, LeaderboardGlobalContributorsQueryVariables>(
     LeaderboardGlobalContributorsDocument,
     options,
@@ -13589,11 +13288,12 @@ export function useLeaderboardGlobalProjectsLazyQuery(
 }
 
 export function useLeaderboardGlobalProjectsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<LeaderboardGlobalProjectsQuery, LeaderboardGlobalProjectsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    LeaderboardGlobalProjectsQuery,
+    LeaderboardGlobalProjectsQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<LeaderboardGlobalProjectsQuery, LeaderboardGlobalProjectsQueryVariables>(
     LeaderboardGlobalProjectsDocument,
     options,
@@ -13662,14 +13362,12 @@ export function useActivitiesCountGroupedByProjectLazyQuery(
 }
 
 export function useActivitiesCountGroupedByProjectSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        ActivitiesCountGroupedByProjectQuery,
-        ActivitiesCountGroupedByProjectQueryVariables
-      >,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ActivitiesCountGroupedByProjectQuery,
+    ActivitiesCountGroupedByProjectQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ActivitiesCountGroupedByProjectQuery, ActivitiesCountGroupedByProjectQueryVariables>(
     ActivitiesCountGroupedByProjectDocument,
     options,
@@ -13728,9 +13426,9 @@ export function useOrdersStatsGetLazyQuery(
 }
 
 export function useOrdersStatsGetSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<OrdersStatsGetQuery, OrdersStatsGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<OrdersStatsGetQuery, OrdersStatsGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<OrdersStatsGetQuery, OrdersStatsGetQueryVariables>(OrdersStatsGetDocument, options)
 }
 
@@ -13779,9 +13477,9 @@ export function useProjectStatsGetLazyQuery(
 }
 
 export function useProjectStatsGetSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>(ProjectStatsGetDocument, options)
 }
 
@@ -13945,11 +13643,12 @@ export function useProfileNotificationsSettingsLazyQuery(
 }
 
 export function useProfileNotificationsSettingsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProfileNotificationsSettingsQuery,
+    ProfileNotificationsSettingsQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProfileNotificationsSettingsQuery, ProfileNotificationsSettingsQueryVariables>(
     ProfileNotificationsSettingsDocument,
     options,
@@ -14014,11 +13713,12 @@ export function useUserNotificationsSettingsLazyQuery(
 }
 
 export function useUserNotificationsSettingsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    UserNotificationsSettingsQuery,
+    UserNotificationsSettingsQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<UserNotificationsSettingsQuery, UserNotificationsSettingsQueryVariables>(
     UserNotificationsSettingsDocument,
     options,
@@ -14084,11 +13784,12 @@ export function useProjectNotificationSettingsLazyQuery(
 }
 
 export function useProjectNotificationSettingsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProjectNotificationSettingsQuery,
+    ProjectNotificationSettingsQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>(
     ProjectNotificationSettingsDocument,
     options,
@@ -14148,11 +13849,9 @@ export function useUserForProfilePageLazyQuery(
 }
 
 export function useUserForProfilePageSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<UserForProfilePageQuery, UserForProfilePageQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<UserForProfilePageQuery, UserForProfilePageQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<UserForProfilePageQuery, UserForProfilePageQueryVariables>(
     UserForProfilePageDocument,
     options,
@@ -14217,11 +13916,9 @@ export function useUserProfileProjectsLazyQuery(
 }
 
 export function useUserProfileProjectsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<UserProfileProjectsQuery, UserProfileProjectsQueryVariables>(
     UserProfileProjectsDocument,
     options,
@@ -14284,11 +13981,9 @@ export function useUserFollowedProjectsLazyQuery(
 }
 
 export function useUserFollowedProjectsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>(
     UserFollowedProjectsDocument,
     options,
@@ -14351,11 +14046,9 @@ export function useUserProfileContributionsLazyQuery(
 }
 
 export function useUserProfileContributionsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<UserProfileContributionsQuery, UserProfileContributionsQueryVariables>(
     UserProfileContributionsDocument,
     options,
@@ -14417,11 +14110,9 @@ export function useUserProfileOrdersLazyQuery(
 }
 
 export function useUserProfileOrdersSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>(
     UserProfileOrdersDocument,
     options,
@@ -15986,11 +15677,9 @@ export function useAffiliateLinksGetLazyQuery(
 }
 
 export function useAffiliateLinksGetSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>(
     AffiliateLinksGetDocument,
     options,
@@ -16045,11 +15734,9 @@ export function useUserEmailIsAvailableLazyQuery(
 }
 
 export function useUserEmailIsAvailableSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<UserEmailIsAvailableQuery, UserEmailIsAvailableQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<UserEmailIsAvailableQuery, UserEmailIsAvailableQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<UserEmailIsAvailableQuery, UserEmailIsAvailableQueryVariables>(
     UserEmailIsAvailableDocument,
     options,
@@ -16108,9 +15795,9 @@ export function useProjectEntriesLazyQuery(
 }
 
 export function useProjectEntriesSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectEntriesQuery, ProjectEntriesQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectEntriesQuery, ProjectEntriesQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectEntriesQuery, ProjectEntriesQueryVariables>(ProjectEntriesDocument, options)
 }
 
@@ -16168,11 +15855,12 @@ export function useProjectUnplublishedEntriesLazyQuery(
 }
 
 export function useProjectUnplublishedEntriesSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProjectUnplublishedEntriesQuery,
+    ProjectUnplublishedEntriesQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectUnplublishedEntriesQuery, ProjectUnplublishedEntriesQueryVariables>(
     ProjectUnplublishedEntriesDocument,
     options,
@@ -16229,9 +15917,9 @@ export function useProjectEntryLazyQuery(
 }
 
 export function useProjectEntrySuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectEntryQuery, ProjectEntryQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectEntryQuery, ProjectEntryQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectEntryQuery, ProjectEntryQueryVariables>(ProjectEntryDocument, options)
 }
 
@@ -16283,11 +15971,9 @@ export function useProjectPageFundersLazyQuery(
 }
 
 export function useProjectPageFundersSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectPageFundersQuery, ProjectPageFundersQueryVariables>(
     ProjectPageFundersDocument,
     options,
@@ -16354,14 +16040,12 @@ export function useProjectLeaderboardContributorsGetLazyQuery(
 }
 
 export function useProjectLeaderboardContributorsGetSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        ProjectLeaderboardContributorsGetQuery,
-        ProjectLeaderboardContributorsGetQueryVariables
-      >,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProjectLeaderboardContributorsGetQuery,
+    ProjectLeaderboardContributorsGetQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<
     ProjectLeaderboardContributorsGetQuery,
     ProjectLeaderboardContributorsGetQueryVariables
@@ -16433,11 +16117,9 @@ export function useProjectUserContributorLazyQuery(
 }
 
 export function useProjectUserContributorSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>(
     ProjectUserContributorDocument,
     options,
@@ -16499,11 +16181,9 @@ export function useProjectPageFundingTxLazyQuery(
 }
 
 export function useProjectPageFundingTxSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectPageFundingTxQuery, ProjectPageFundingTxQueryVariables>(
     ProjectPageFundingTxDocument,
     options,
@@ -16564,11 +16244,12 @@ export function useFundingTxWithInvoiceStatusLazyQuery(
 }
 
 export function useFundingTxWithInvoiceStatusSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    FundingTxWithInvoiceStatusQuery,
+    FundingTxWithInvoiceStatusQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<FundingTxWithInvoiceStatusQuery, FundingTxWithInvoiceStatusQueryVariables>(
     FundingTxWithInvoiceStatusDocument,
     options,
@@ -16634,11 +16315,12 @@ export function useFundingTxForDownloadInvoiceLazyQuery(
 }
 
 export function useFundingTxForDownloadInvoiceSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    FundingTxForDownloadInvoiceQuery,
+    FundingTxForDownloadInvoiceQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<FundingTxForDownloadInvoiceQuery, FundingTxForDownloadInvoiceQueryVariables>(
     FundingTxForDownloadInvoiceDocument,
     options,
@@ -16703,11 +16385,9 @@ export function useProjectInProgressGoalsLazyQuery(
 }
 
 export function useProjectInProgressGoalsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectInProgressGoalsQuery, ProjectInProgressGoalsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectInProgressGoalsQuery, ProjectInProgressGoalsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectInProgressGoalsQuery, ProjectInProgressGoalsQueryVariables>(
     ProjectInProgressGoalsDocument,
     options,
@@ -16770,11 +16450,9 @@ export function useProjectCompletedGoalsLazyQuery(
 }
 
 export function useProjectCompletedGoalsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectCompletedGoalsQuery, ProjectCompletedGoalsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectCompletedGoalsQuery, ProjectCompletedGoalsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectCompletedGoalsQuery, ProjectCompletedGoalsQueryVariables>(
     ProjectCompletedGoalsDocument,
     options,
@@ -16836,9 +16514,9 @@ export function useProjectGoalLazyQuery(
 }
 
 export function useProjectGoalSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectGoalQuery, ProjectGoalQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectGoalQuery, ProjectGoalQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectGoalQuery, ProjectGoalQueryVariables>(ProjectGoalDocument, options)
 }
 
@@ -16891,9 +16569,9 @@ export function useProjectPostsLazyQuery(
 }
 
 export function useProjectPostsSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectPostsQuery, ProjectPostsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPostsQuery, ProjectPostsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectPostsQuery, ProjectPostsQueryVariables>(ProjectPostsDocument, options)
 }
 
@@ -16951,11 +16629,9 @@ export function useProjectUnplublishedPostsLazyQuery(
 }
 
 export function useProjectUnplublishedPostsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectUnplublishedPostsQuery, ProjectUnplublishedPostsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectUnplublishedPostsQuery, ProjectUnplublishedPostsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectUnplublishedPostsQuery, ProjectUnplublishedPostsQueryVariables>(
     ProjectUnplublishedPostsDocument,
     options,
@@ -17012,9 +16688,9 @@ export function useProjectPostLazyQuery(
 }
 
 export function useProjectPostSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectPostQuery, ProjectPostQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPostQuery, ProjectPostQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectPostQuery, ProjectPostQueryVariables>(ProjectPostDocument, options)
 }
 
@@ -17066,11 +16742,9 @@ export function usePostEmailSegmentSizeGetLazyQuery(
 }
 
 export function usePostEmailSegmentSizeGetSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<PostEmailSegmentSizeGetQuery, PostEmailSegmentSizeGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<PostEmailSegmentSizeGetQuery, PostEmailSegmentSizeGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<PostEmailSegmentSizeGetQuery, PostEmailSegmentSizeGetQueryVariables>(
     PostEmailSegmentSizeGetDocument,
     options,
@@ -17125,9 +16799,9 @@ export function useProjectPageBodyLazyQuery(
 }
 
 export function useProjectPageBodySuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectPageBodyQuery, ProjectPageBodyQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPageBodyQuery, ProjectPageBodyQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectPageBodyQuery, ProjectPageBodyQueryVariables>(ProjectPageBodyDocument, options)
 }
 
@@ -17179,11 +16853,9 @@ export function useProjectPageDetailsLazyQuery(
 }
 
 export function useProjectPageDetailsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectPageDetailsQuery, ProjectPageDetailsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPageDetailsQuery, ProjectPageDetailsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectPageDetailsQuery, ProjectPageDetailsQueryVariables>(
     ProjectPageDetailsDocument,
     options,
@@ -17247,11 +16919,9 @@ export function useProjectGrantApplicationsLazyQuery(
 }
 
 export function useProjectGrantApplicationsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectGrantApplicationsQuery, ProjectGrantApplicationsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectGrantApplicationsQuery, ProjectGrantApplicationsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectGrantApplicationsQuery, ProjectGrantApplicationsQueryVariables>(
     ProjectGrantApplicationsDocument,
     options,
@@ -17314,11 +16984,9 @@ export function useProjectPageHeaderSummaryLazyQuery(
 }
 
 export function useProjectPageHeaderSummarySuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectPageHeaderSummaryQuery, ProjectPageHeaderSummaryQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPageHeaderSummaryQuery, ProjectPageHeaderSummaryQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectPageHeaderSummaryQuery, ProjectPageHeaderSummaryQueryVariables>(
     ProjectPageHeaderSummaryDocument,
     options,
@@ -17380,11 +17048,9 @@ export function useProjectPageWalletsLazyQuery(
 }
 
 export function useProjectPageWalletsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectPageWalletsQuery, ProjectPageWalletsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectPageWalletsQuery, ProjectPageWalletsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectPageWalletsQuery, ProjectPageWalletsQueryVariables>(
     ProjectPageWalletsDocument,
     options,
@@ -17453,14 +17119,12 @@ export function useProjectWalletConnectionDetailsLazyQuery(
 }
 
 export function useProjectWalletConnectionDetailsSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        ProjectWalletConnectionDetailsQuery,
-        ProjectWalletConnectionDetailsQueryVariables
-      >,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProjectWalletConnectionDetailsQuery,
+    ProjectWalletConnectionDetailsQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectWalletConnectionDetailsQuery, ProjectWalletConnectionDetailsQueryVariables>(
     ProjectWalletConnectionDetailsDocument,
     options,
@@ -17525,11 +17189,9 @@ export function useProjectStatsGetInsightLazyQuery(
 }
 
 export function useProjectStatsGetInsightSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectStatsGetInsightQuery, ProjectStatsGetInsightQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectStatsGetInsightQuery, ProjectStatsGetInsightQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectStatsGetInsightQuery, ProjectStatsGetInsightQueryVariables>(
     ProjectStatsGetInsightDocument,
     options,
@@ -17590,11 +17252,9 @@ export function useProjectHistoryStatsGetLazyQuery(
 }
 
 export function useProjectHistoryStatsGetSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectHistoryStatsGetQuery, ProjectHistoryStatsGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectHistoryStatsGetQuery, ProjectHistoryStatsGetQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectHistoryStatsGetQuery, ProjectHistoryStatsGetQueryVariables>(
     ProjectHistoryStatsGetDocument,
     options,
@@ -17661,14 +17321,12 @@ export function useProjectRewardSoldGraphStatsGetLazyQuery(
 }
 
 export function useProjectRewardSoldGraphStatsGetSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<
-        ProjectRewardSoldGraphStatsGetQuery,
-        ProjectRewardSoldGraphStatsGetQueryVariables
-      >,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProjectRewardSoldGraphStatsGetQuery,
+    ProjectRewardSoldGraphStatsGetQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectRewardSoldGraphStatsGetQuery, ProjectRewardSoldGraphStatsGetQueryVariables>(
     ProjectRewardSoldGraphStatsGetDocument,
     options,
@@ -17736,11 +17394,12 @@ export function useProjectFundingMethodStatsGetLazyQuery(
 }
 
 export function useProjectFundingMethodStatsGetSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<ProjectFundingMethodStatsGetQuery, ProjectFundingMethodStatsGetQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ProjectFundingMethodStatsGetQuery,
+    ProjectFundingMethodStatsGetQueryVariables
+  >,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectFundingMethodStatsGetQuery, ProjectFundingMethodStatsGetQueryVariables>(
     ProjectFundingMethodStatsGetDocument,
     options,
@@ -17799,9 +17458,9 @@ export function useProjectRewardsLazyQuery(
 }
 
 export function useProjectRewardsSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRewardsQuery, ProjectRewardsQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectRewardsQuery, ProjectRewardsQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectRewardsQuery, ProjectRewardsQueryVariables>(ProjectRewardsDocument, options)
 }
 
@@ -17850,9 +17509,9 @@ export function useProjectRewardLazyQuery(
 }
 
 export function useProjectRewardSuspenseQuery(
-  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options)
 }
 
@@ -17896,11 +17555,9 @@ export function useRewardCategoriesLazyQuery(
 }
 
 export function useRewardCategoriesSuspenseQuery(
-  baseOptions?:
-    | Apollo.SkipToken
-    | Apollo.SuspenseQueryHookOptions<RewardCategoriesQuery, RewardCategoriesQueryVariables>,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<RewardCategoriesQuery, RewardCategoriesQueryVariables>,
 ) {
-  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  const options = { ...defaultOptions, ...baseOptions }
   return Apollo.useSuspenseQuery<RewardCategoriesQuery, RewardCategoriesQueryVariables>(
     RewardCategoriesDocument,
     options,
