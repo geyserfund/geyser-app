@@ -1,3 +1,41 @@
+## [0.14.0](https://github.com/geyserfund/geyser-app/compare/v0.13.0...v0.14.0) (2024-11-07)
+
+
+### Features
+
+* add nwc wallet option in project dashboard ([d606b90](https://github.com/geyserfund/geyser-app/commit/d606b901d868e3643d60cfc54321f5631d6ba249))
+* exclude amount for run with bitcoin ([1ad2b81](https://github.com/geyserfund/geyser-app/commit/1ad2b81a0cfb467af4d028823c71a0c2d5ab2347))
+
+
+### Bug Fixes
+
+* add missing import ([8cde298](https://github.com/geyserfund/geyser-app/commit/8cde298ccee515d4d5388d88b251fc808c4e9b6b))
+* broken type ([02ba414](https://github.com/geyserfund/geyser-app/commit/02ba41417a21e31743e740f6ba1ffe7cdfb519a8))
+* graphql generated types ([a3ab3dc](https://github.com/geyserfund/geyser-app/commit/a3ab3dc4d3a695ca50d8407476ffd426032489bc))
+* item labels string ([07337af](https://github.com/geyserfund/geyser-app/commit/07337af3f757efb5b8d3e11d426d3a68dee5f19f))
+* post deployment fixes ([5abe202](https://github.com/geyserfund/geyser-app/commit/5abe20270e6dcef3926bbc1a920e316199ef9274))
+* post deployment fixes ([7e146e2](https://github.com/geyserfund/geyser-app/commit/7e146e2868a8b024893d7c3f91762dea90c17ada))
+* post were static across projects ([4ef2dc4](https://github.com/geyserfund/geyser-app/commit/4ef2dc4742f9ba5b330026241d92679b7cd90575))
+* prevent default ([d3e4899](https://github.com/geyserfund/geyser-app/commit/d3e48995f480e0b4051c00d018bdcff403f3a453))
+* remove duplicate goal title ([f6fcf96](https://github.com/geyserfund/geyser-app/commit/f6fcf96f9a052b00fd3052de584fc3b0a4152f84))
+* remove extra navbar button on mobile ([15dc95d](https://github.com/geyserfund/geyser-app/commit/15dc95d0b7cd087da7d384db9bdbb3f0736d47cd))
+* stale import ([4a00189](https://github.com/geyserfund/geyser-app/commit/4a00189abb21e658af8045ec05954b124d88ef7c))
+* update alby hub assets ([27971be](https://github.com/geyserfund/geyser-app/commit/27971bec84ee965558773e89dbf96fc923b6000e))
+
+## [0.12.3](https://github.com/geyserfund/geyser-app/compare/v0.12.2...v0.12.3) (2024-10-25)
+
+
+### Features
+
+* change log and versioning ([bca17c1](https://github.com/geyserfund/geyser-app/commit/bca17c17248618a77ee1796bc6f4fd3101199b01))
+
+
+### Bug Fixes
+
+* remove blocking and unused validation ([44b5706](https://github.com/geyserfund/geyser-app/commit/44b57067fecf085e5969bffeb369c208e3eee9d3))
+* reward form swtich component fixes ([eda91ea](https://github.com/geyserfund/geyser-app/commit/eda91ea3e1a171599305e17855f9696bc895e936))
+* update promotion url ([bf5703b](https://github.com/geyserfund/geyser-app/commit/bf5703b464a5f132295444d670f8f6d440a2e6ff))
+
 ## [0.13.0](https://github.com/geyserfund/geyser-app/compare/v0.12.2...v0.13.0) (2024-11-06)
 
 
