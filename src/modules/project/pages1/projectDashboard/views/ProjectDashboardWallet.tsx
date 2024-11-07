@@ -9,7 +9,7 @@ import { Body } from '@/shared/components/typography'
 
 import { useAuthContext } from '../../../../../context'
 import { VerifyYourEmail } from '../../../../../pages/otp'
-import { getPath, GeyserEmailVerificationDocUrl, PathName, WalletConnectDetails } from '../../../../../shared/constants'
+import { getPath, GeyserEmailVerificationDocUrl, PathName } from '../../../../../shared/constants'
 import { MfaAction, OtpResponseFragment, ProjectStatus, UpdateWalletInput } from '../../../../../types'
 import { useCustomTheme, useNotification } from '../../../../../utils'
 import { ProjectCreationWalletConnectionForm } from '../../../pages1/projectCreation'
@@ -75,6 +75,7 @@ export const ProjectDashboardWallet = () => {
     connectionOption,
     lightningAddress,
     node,
+    nwc,
     setConnectionOption,
     createWalletInput,
     isLightningAddressInValid,
@@ -92,6 +93,7 @@ export const ProjectDashboardWallet = () => {
       name: createWalletInput?.name,
       lndConnectionDetailsInput: createWalletInput?.lndConnectionDetailsInput,
       lightningAddressConnectionDetailsInput: createWalletInput?.lightningAddressConnectionDetailsInput,
+      nwcConnectionDetailsInput: createWalletInput?.nwcConnectionDetailsInput,
       twoFAInput: {
         OTP: {
           otp,
@@ -127,12 +129,6 @@ export const ProjectDashboardWallet = () => {
   }
 
   const isReadOnly = !user.isEmailVerified && (!isEdit ? project?.status !== ProjectStatus.Draft : true)
-
-  const currentWallet = isEdit
-    ? walletConnectiondetails?.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails
-      ? ConnectionOption.LIGHTNING_ADDRESS
-      : ConnectionOption.PERSONAL_NODE
-    : undefined
 
   const SaveButton = (props: ButtonProps) => {
     return (
@@ -184,9 +180,9 @@ export const ProjectDashboardWallet = () => {
           <ProjectCreationWalletConnectionForm
             readOnly={isReadOnly}
             isEdit={isEdit}
-            currentWallet={currentWallet}
             lightningAddress={lightningAddress}
             node={node}
+            nwc={nwc}
             connectionOption={connectionOption}
             setConnectionOption={setConnectionOption}
             fee={fee}

@@ -13,6 +13,7 @@ import { Body, H2 } from '@/shared/components/typography'
 
 import { useFundCalc } from '../../../../../helpers'
 import { toInt, useMobileMode } from '../../../../../utils'
+import { Badge } from './Badge'
 
 export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
   const { t } = useTranslation()
@@ -159,6 +160,23 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
                 sats
               </Body>
             </Body>
+          </HStack>
+        )}
+        {numberOfRewardsSelected > 0 && (
+          <HStack alignItems={'start'}>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>{items.map((item) => item?.label).join(', ')}</Body>
+          </HStack>
+        )}
+
+        {getTotalAmount('dollar', name) >= 10 && (
+          <HStack display={mobileDisplayStyle}>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Badge')}: `}</Body>
+            <Badge
+              donationAmountInDollars={getTotalAmount('dollar', name)}
+              height={{ base: '16px', lg: '20px' }}
+              width={{ base: '16px', lg: '20px' }}
+            />
           </HStack>
         )}
       </VStack>
