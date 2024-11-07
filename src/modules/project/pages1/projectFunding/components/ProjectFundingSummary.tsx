@@ -13,6 +13,7 @@ import { Body, H2 } from '@/shared/components/typography'
 
 import { useFundCalc } from '../../../../../helpers'
 import { toInt, useMobileMode } from '../../../../../utils'
+import { Badge } from './Badge'
 
 export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
   const { t } = useTranslation()
