@@ -112,7 +112,6 @@ Props) => {
   const nodeInput = node.value
 
   const handleSelection = (expandedIndex: number) => {
-    console.log('expandedIndex', expandedIndex)
     if (expandedIndex === 0) {
       setConnectionOption(ConnectionOption.LIGHTNING_ADDRESS)
     } else if (expandedIndex === 1) {
