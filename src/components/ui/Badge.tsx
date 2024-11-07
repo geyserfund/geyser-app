@@ -1,4 +1,4 @@
-import { Box, HStack, Text, VStack } from '@chakra-ui/layout'
+import { Box, HStack, Text, VStack } from '@chakra-ui/react'
 import { useState } from 'react'
 
 export const Badge = ({ badge }: { badge: string }) => {

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { getCountDownDuration } from '../../utils'
 
 export const useCountdown = (endDate?: number) => {
-  const [duration, setDuration] = useState(Duration.fromObject({ hours: 0 }))
+  const [duration, setDuration] = useState<Duration<true> | Duration<false>>(Duration.fromObject({ hours: 0 }))
 
   const handleCountdown = useCallback(() => {
     setDuration(getCountDownDuration(endDate))

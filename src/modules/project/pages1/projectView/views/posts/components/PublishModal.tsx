@@ -23,10 +23,11 @@ import {
 } from '@/types'
 import { isActive, useNotification } from '@/utils'
 
+import { PostPublishProps } from '../hooks/usePostForm'
 import { RewardItem } from './RewardItem'
 
 const sendToOptions = [
-  { label: t('Followers'), value: EmailSubscriberSegment.Followers },
+  { label: t('Followers (Everyone)'), value: EmailSubscriberSegment.Followers },
   { label: t('Contributors'), value: EmailSubscriberSegment.Contributors },
   { label: t('Reward buyers'), value: EmailSubscriberSegment.RewardBuyers },
 ]
@@ -37,7 +38,7 @@ export const PublishModal = ({
   publishing,
 }: {
   post: Pick<ProjectPostFragment, 'id' | 'sentByEmailAt' | 'status'>
-  postPublish: ({ onCompleted }: { onCompleted?: Function }) => Promise<void>
+  postPublish: (_: PostPublishProps) => Promise<void>
   publishing: boolean
 }) => {
   const { project, isProjectOwner } = useProjectAtom()
@@ -112,6 +113,10 @@ export const PublishModal = ({
 
   const handlePostPublish = async () => {
     postPublish({
+      emailSendOptions: {
+        segment: sendTo as EmailSubscriberSegment,
+        projectRewardUUIDs: selectedRewards.length > 0 ? selectedRewards.map((reward) => reward.uuid) : undefined,
+      },
       onCompleted() {
         navigate(getPath('projectPostView', project.name, post?.id), { state: { justPublished: true } })
       },

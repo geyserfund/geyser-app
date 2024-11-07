@@ -63,6 +63,14 @@ const FeaturedWalletList = [
     url: 'https://tinyurl.com/walletofsatoshi',
     backgroundColor: 'transparent',
   },
+  {
+    name: 'Speed wallet',
+    imageUrl: 'https://storage.googleapis.com/geyser-projects-media/platform/speedWalletLightmode.png',
+    imageUrlDark: 'https://storage.googleapis.com/geyser-projects-media/platform/speedWalletDarkmode.png',
+    url: 'https://tinyurl.com/speed-wallet-platform',
+    backgroundColor: 'transparent',
+    padding: '9px',
+  },
 ]
 
 const FeaturedNWCWalletList = [
@@ -217,6 +225,7 @@ Props) => {
                         imageUrl={wallet.imageUrl}
                         imageUrlDark={wallet.imageUrlDark}
                         backgroundColor={wallet.backgroundColor}
+                        padding={wallet.padding}
                       />
                     )
                   })}
@@ -365,19 +374,21 @@ const RenderSponsorImage = ({
   imageUrlDark,
   height = '40px',
   backgroundColor,
+  padding,
 }: {
   url: string
   imageUrl: string
   imageUrlDark?: string
   height?: string
   backgroundColor?: string
+  padding?: string
 }) => {
   const image = useColorModeValue(imageUrl, imageUrlDark || imageUrl)
 
   return (
-    <Box backgroundColor={backgroundColor || 'utils.pbg'} borderRadius={'8px'}>
+    <Box backgroundColor={backgroundColor || 'utils.pbg'} borderRadius={'8px'} padding={padding} height={height}>
       <Link isExternal href={url}>
-        <Image src={image} height={height} />
+        <Image src={image} height="100%" />
       </Link>
     </Box>
   )

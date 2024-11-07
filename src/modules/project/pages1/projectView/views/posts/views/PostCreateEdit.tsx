@@ -41,7 +41,7 @@ export const PostCreateEdit = () => {
   const linkedGoalId = searchParams.get('goalId')
   const linkedRewardUuid = searchParams.get('rewardUuid')
 
-  const [focusFlag, setFocusFlag] = useState('')
+  const [focusFlag, setFocusFlag] = useState(false)
 
   const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
   const [isStoryLoading, setIsStoryLoading] = useState(false)
@@ -129,8 +129,10 @@ export const PostCreateEdit = () => {
           document.getElementById('post-title-input')?.focus()
         } else if (event.key === 'ArrowDown' || event.key === 'Tab' || event.key === 'Enter') {
           event.preventDefault()
-          const newDate = new Date()
-          setFocusFlag(newDate.toISOString())
+          setFocusFlag(true)
+          setTimeout(() => {
+            setFocusFlag(false)
+          }, 100)
         }
       }
     }

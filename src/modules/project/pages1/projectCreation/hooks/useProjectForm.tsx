@@ -58,7 +58,7 @@ export const useProjectForm = ({ isEdit, project }: UseProjectFormProps) => {
   const { user } = useAuthContext()
 
   const form = useForm<ProjectCreationVariables>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
     defaultValues: DEFAULT_VALUES,
     values: useMemo(() => {
       if (isEdit && project) {

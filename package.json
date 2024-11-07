@@ -1,7 +1,7 @@
 {
   "name": "geyser-app",
   "private": true,
-  "version": "0.12.2",
+  "version": "0.13.0",
   "scripts": {
     "dev": "vite",
     "dev:stage": "vite --mode staging",
@@ -23,7 +23,8 @@
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts"
+    "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts",
+    "dev:language": "ts-node language/languageServer.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",
@@ -31,6 +32,7 @@
     "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/media-query": "^3.3.0",
     "@chakra-ui/react": "^2.8.2",
+    "@chakra-ui/system": "^2.6.2",
     "@dnd-kit/core": "^6.1.0",
     "@dnd-kit/modifiers": "^7.0.0",
     "@dnd-kit/sortable": "^8.0.0",
@@ -126,6 +128,9 @@
     "@chromatic-com/storybook": "^1.2.25",
     "@commitlint/cli": "^17.4.2",
     "@commitlint/config-conventional": "^17.4.2",
+    "@eslint/compat": "^1.2.2",
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.14.0",
     "@graphql-codegen/cli": "5.0.2",
     "@graphql-codegen/client-preset": "4.2.5",
     "@graphql-codegen/typescript-operations": "^4.2.0",
@@ -145,7 +150,9 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/user-event": "^14.4.3",
+    "@types/cors": "^2.8.17",
     "@types/dompurify": "^3.0.2",
+    "@types/express": "^5.0.0",
     "@types/loadable__component": "^5.13.4",
     "@types/luxon": "^3.2.0",
     "@types/node": "^18.11.18",
@@ -174,12 +181,15 @@
     "eslint-plugin-simple-import-sort": "^9.0.0",
     "eslint-plugin-storybook": "^0.8.0",
     "eslint-plugin-testing-library": "^5.10.0",
+    "globals": "^15.12.0",
     "husky": "^8.0.3",
+    "i18next-http-backend": "^2.6.2",
     "jsdom": "^21.1.0",
     "prettier": "^2.8.3",
     "sitemap": "^7.1.1",
     "storybook": "^8.0.4",
     "tiny-secp256k1": "^2.2.3",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.2",
     "vite": "^4.3.9",
     "vite-plugin-mkcert": "^1.11.0",
@@ -188,6 +198,9 @@
     "vite-plugin-wasm": "^3.3.0",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^0.28.1"
+  },
+  "resolutions": {
+    "prosemirror-model": "1.22.2"
   },
   "main": "main.tsx",
   "author": "geyser",

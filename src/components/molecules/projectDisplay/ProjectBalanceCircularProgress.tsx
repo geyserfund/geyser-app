@@ -1,6 +1,6 @@
-import { Box } from '@chakra-ui/layout'
+import { Box } from '@chakra-ui/react'
 import { CircularProgress, HStack, Text } from '@chakra-ui/react'
-import { Stat, StatLabel, StatNumber } from '@chakra-ui/stat'
+import { Stat, StatLabel, StatNumber } from '@chakra-ui/react'
 import { useState } from 'react'
 import { IconBaseProps } from 'react-icons'
 import { BsCurrencyBitcoin } from 'react-icons/bs'

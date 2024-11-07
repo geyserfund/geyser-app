@@ -10,7 +10,7 @@ export const useFollowProject = (project: Pick<Project, 'id' | 'name' | 'title'>
 
   const setFollowedProjects = useSetAtom(followedProjectsAtom)
 
-  const [followProject, { loading: followLoading }] = useProjectFollowMutation({
+  const [followProject, { loading: followLoading, error: followError }] = useProjectFollowMutation({
     variables: {
       input: {
         projectId: toInt(project.id),
@@ -21,7 +21,7 @@ export const useFollowProject = (project: Pick<Project, 'id' | 'name' | 'title'>
     },
   })
 
-  const [unFollowProject, { loading: unfollowLoading }] = useProjectUnfollowMutation({
+  const [unFollowProject, { loading: unfollowLoading, error: unfollowError }] = useProjectUnfollowMutation({
     variables: {
       input: {
         projectId: toInt(project.id),
@@ -45,7 +45,7 @@ export const useFollowProject = (project: Pick<Project, 'id' | 'name' | 'title'>
       return
     }
 
-    followProject()
+    return followProject()
   }
 
   const handleUnFollow = (event?: React.MouseEvent<HTMLButtonElement>) => {
@@ -59,14 +59,18 @@ export const useFollowProject = (project: Pick<Project, 'id' | 'name' | 'title'>
       return
     }
 
-    unFollowProject()
+    return unFollowProject()
   }
 
   return {
     isFollowed,
     handleFollow,
     handleUnFollow,
+    loading: followLoading || unfollowLoading,
+    error: followError || unfollowError,
     followLoading,
     unfollowLoading,
+    followError,
+    unfollowError,
   }
 }

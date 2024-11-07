@@ -8,6 +8,7 @@ import { useProjectPostsAPI } from '@/modules/project/API/useProjectPostsAPI'
 
 import { useUnsavedAlert } from '../../../../../../../shared/hooks/useUnsavedAlert'
 import {
+  EmailSubscriberSegment,
   PostCreateInput,
   PostType,
   PostUpdateInput,
@@ -27,6 +28,14 @@ export type PostFormType = Pick<
 const schema = yup.object({
   title: yup.string().required('This is a required field'),
 })
+
+export type PostPublishProps = {
+  emailSendOptions?: {
+    segment: EmailSubscriberSegment
+    projectRewardUUIDs?: string[]
+  }
+  onCompleted?: Function
+}
 
 interface UsePostFormProps {
   projectId: number
@@ -66,7 +75,7 @@ export const usePostForm = ({
       projectRewardUUIDs: linkedRewardUuid ? [linkedRewardUuid] : [],
       sentByEmailAt: postTemplate.sentByEmailAt || null,
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
   })
   const { isDirty } = formState
 
@@ -177,7 +186,7 @@ export const usePostForm = ({
   )
 
   const postPublishAfterValidation = useCallback(
-    async ({ onCompleted }: { onCompleted?: Function }) => {
+    async ({ emailSendOptions, onCompleted }: PostPublishProps) => {
       const post = getValues()
       if (!post.id) {
         toast.info({
@@ -198,6 +207,7 @@ export const usePostForm = ({
             variables: {
               input: {
                 postId,
+                emailSendOptions,
               },
             },
             onCompleted(data) {

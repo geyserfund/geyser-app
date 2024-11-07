@@ -34,10 +34,12 @@ export const WelcomeCard = () => {
         right={2}
       />
       <H1 size={{ base: 'xl', xs: '2xl', sm: '3xl' }} bold color={lightModeColors.neutral1[11]}>
-        {t('Welcome to Crowdfunding 2.0!')}
+        {t('Welcome to the Bitcoin Crowdfunding Platform')}
       </H1>
-      <Body size="lg" medium color={lightModeColors.neutral1[11]}>
-        {t('Bring your ideas to life, whether it’s a creative project, social cause or innovative new product idea. ')}
+      <Body size="lg" medium color={lightModeColors.neutral1[11]} textAlign={'center'}>
+        {t(
+          'Bring great Bitcoin ideas to life on Geyser. Whether it’s a creative project, social cause or innovative new product around the world. We believe crowdfunding is how we can speed up Bitcoin Adoption.',
+        )}
       </Body>
 
       <Button variant="solid" width={'200px'} colorScheme="primary1" as={Link} href={GeyserAboutUrl} isExternal>

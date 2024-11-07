@@ -1,4 +1,4 @@
-import { Box, BoxProps } from '@chakra-ui/layout'
+import { Box, BoxProps } from '@chakra-ui/react'
 
 export type ICard = BoxProps
 

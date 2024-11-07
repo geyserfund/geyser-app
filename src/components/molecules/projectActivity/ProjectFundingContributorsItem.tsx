@@ -1,5 +1,4 @@
-import { Box, HStack } from '@chakra-ui/layout'
-import { HTMLChakraProps } from '@chakra-ui/system'
+import { Box, HStack, HTMLChakraProps } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { computeFunderBadges, getAvatarMetadata } from '../../../helpers'

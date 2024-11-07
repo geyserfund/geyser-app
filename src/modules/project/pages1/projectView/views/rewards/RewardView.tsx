@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Badge, Box, Button, HStack, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiArrowLeft, PiEyeSlash } from 'react-icons/pi'
@@ -165,7 +166,7 @@ export const RewardView = () => {
                   size="lg"
                   colorScheme="primary1"
                   onClick={() => {
-                    navigate(`${getPath('projectPostCreate', project?.name)}?rewardId=${reward.uuid}`)
+                    navigate(`${getPath('projectPostCreate', project?.name)}?rewardUuid=${reward.uuid}`)
                   }}
                 >
                   {' '}
@@ -190,12 +191,14 @@ export const RewardView = () => {
               <MarkdownField preview content={reward.description || ''} />
             </HStack>
           )}
-          <VStack w="full" spacing={2} alignItems="start">
-            <Body size="xl" bold>
-              {t('Reward Updates')}
-            </Body>
-            <PostsUpdates posts={reward.posts} />
-          </VStack>
+          {reward.posts.length > 0 && (
+            <VStack w="full" spacing={2} alignItems="start">
+              <Body size="xl" bold>
+                {t('Reward Updates')}
+              </Body>
+              <PostsUpdates posts={reward.posts} />
+            </VStack>
+          )}
         </VStack>
       </CardLayout>
       <BottomNavBarContainer direction="column">
