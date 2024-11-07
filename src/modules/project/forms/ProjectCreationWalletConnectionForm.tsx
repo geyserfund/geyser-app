@@ -69,7 +69,7 @@ const FeaturedNWCWalletList = [
   {
     name: 'Alby Hub',
     imageUrl: 'https://storage.googleapis.com/geyser-projects-media/platform/alby-hub-light.png',
-    imageUrlDark: 'https://storage.googleapis.com/geyser-projects-media/platform/alby-hub-dark-mode.png',
+    imageUrlDark: 'https://storage.googleapis.com/geyser-projects-media/platform/alby-hub-dark.png',
     url: 'https://albyhub.com/',
     backgroundColor: 'transparent',
   },
