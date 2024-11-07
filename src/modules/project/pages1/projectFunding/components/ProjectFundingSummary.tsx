@@ -165,7 +165,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
         {numberOfRewardsSelected > 0 && (
           <HStack alignItems={'start'}>
             <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards')}: `}</Body>
-            <Body size={{ base: 'sm', lg: 'md' }}>{items}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>{items.map((item) => item?.label).join(', ')}</Body>
           </HStack>
         )}
 
