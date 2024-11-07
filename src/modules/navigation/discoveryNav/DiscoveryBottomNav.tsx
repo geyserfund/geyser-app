@@ -18,6 +18,7 @@ export const DiscoveryBottomNav = () => {
   return (
     <BottomNavBarContainer spacing={1} w="full" marginX={0}>
       {discoveryNavItems.map((item) => {
+        if (!item.bottomNav) return null
         const activityDot =
           item.key === DiscoveryNavItemKey.MyProjects
             ? myProjectActivityDot
