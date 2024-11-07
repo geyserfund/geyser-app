@@ -168,6 +168,23 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
             </Body>
           </HStack>
         )}
+        {numberOfRewardsSelected > 0 && (
+          <HStack alignItems={'start'}>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>{items}</Body>
+          </HStack>
+        )}
+
+        {getTotalAmount('dollar', name) >= 10 && (
+          <HStack display={mobileDisplayStyle}>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Badge')}: `}</Body>
+            <Badge
+              donationAmountInDollars={getTotalAmount('dollar', name)}
+              height={{ base: '16px', lg: '20px' }}
+              width={{ base: '16px', lg: '20px' }}
+            />
+          </HStack>
+        )}
       </VStack>
 
       <HStack as={motion.div} layout alignItems="start">

@@ -56,6 +56,7 @@ export const ProjectCreationWalletConnectionPage = () => {
     connectionOption,
     lightningAddress,
     node,
+    nwc,
     setConnectionOption,
     fee,
     limits,
@@ -138,7 +139,7 @@ export const ProjectCreationWalletConnectionPage = () => {
         </Box>
       </VStack>
       <ProjectCreationWalletConnectionForm
-        {...{ connectionOption, lightningAddress, node, setConnectionOption, fee, limits }}
+        {...{ connectionOption, lightningAddress, node, setConnectionOption, fee, limits, nwc }}
       />
     </ProjectCreateLayout>
   )

@@ -51,6 +51,9 @@ export const FRAGMENT_PROJECT_WALLET_CONNECTION_DETAILS = gql`
         hostname
         grpcPort
       }
+      ... on NWCConnectionDetailsPrivate {
+        nwcUrl
+      }
     }
   }
 `

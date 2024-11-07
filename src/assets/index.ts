@@ -4,6 +4,18 @@ import LogoDark from './logo-dark.svg'
 import LogoDarkGreenImage from './logo-dark-green.svg'
 import LogoIcon from './logo-icon.svg'
 import LogoLight from './logo-light.svg'
+import NwcIconLight from './nwc-dark-mode.svg'
+import NwcIconDark from './nwc-light-mode.svg'
 import ShareIcon from './shareico.svg'
 
-export { LightningIcon, LogoDark, LogoDarkGreenImage, LogoIcon, LogoLight, LogoPrimary, ShareIcon }
+export {
+  LightningIcon,
+  LogoDark,
+  LogoDarkGreenImage,
+  LogoIcon,
+  LogoLight,
+  LogoPrimary,
+  NwcIconDark,
+  NwcIconLight,
+  ShareIcon,
+}
