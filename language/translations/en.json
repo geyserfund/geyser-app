@@ -1265,5 +1265,8 @@
   "Google": "Google",
   "Successfully deleted post!": "Successfully deleted post!",
   "Back to posts": "Back to posts",
-  "Failed to fetch featured project": "Failed to fetch featured project"
+  "Failed to fetch featured project": "Failed to fetch featured project",
+  "Post saved successfully!": "Post saved successfully!",
+  "failed to upload image": "failed to upload image",
+  "Contribute without login": "Contribute without login"
 }
