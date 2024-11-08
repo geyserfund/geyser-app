@@ -106,6 +106,13 @@ export const StyleProvider = ({ children, flex, display, ...rest }: { flex?: boo
                 flexDirection: 'column',
                 flexGrow: 1,
               },
+              '& div.remirror-image-loader': {
+                justifySelf: 'center',
+                height: '60px',
+                width: '60px',
+                borderTopWidth: '8px',
+                borderTopColor: 'primary1.9',
+              },
               '& div.remirror-editor': {
                 padding: '0px !important',
                 overflowY: 'visible !important',
