@@ -1,4 +1,4 @@
-import { VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router'
 import { useAuthContext } from '@/context'
 import { useProjectPostsAPI } from '@/modules/project/API/useProjectPostsAPI'
 import { usePostsAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { H2 } from '@/shared/components/typography'
 import { dimensions, getPath } from '@/shared/constants'
 import { PostType } from '@/types'
@@ -15,6 +15,7 @@ import { truthyFilter } from '@/utils/array'
 import { CreatorPostPageBottomBar, CreatorPostPageTopBar } from './components'
 import { PostTypeFilterBar } from './components/PostTypeFilterBar'
 import { ProjectPostCard } from './shared'
+import { ProjectPostCardSkeleton } from './shared/ProjectPostCard'
 import { postTypeOptions } from './utils/postTypeLabel'
 
 export const ProjectPosts = () => {
@@ -57,6 +58,10 @@ export const ProjectPosts = () => {
     }
   }, [loading, hasPosts, navigate, project])
 
+  if (loading) {
+    return <ProjectPostsSkeleton />
+  }
+
   return (
     <VStack w="full" spacing={8} paddingBottom={28}>
       <CardLayout w="full" direction="row" justifyContent="center" dense noborder>
@@ -74,6 +79,33 @@ export const ProjectPosts = () => {
             {filteredPosts.map((entry, index) => {
               return <ProjectPostCard post={entry} key={entry.id} />
             })}
+          </VStack>
+        </VStack>
+      </CardLayout>
+      <CreatorPostPageBottomBar />
+    </VStack>
+  )
+}
+
+const ProjectPostsSkeleton = () => {
+  return (
+    <VStack w="full" spacing={8} paddingBottom={28}>
+      <CardLayout w="full" direction="row" justifyContent="center" dense noborder>
+        <VStack maxWidth={dimensions.project.posts.view.maxWidth} w="full" spacing={6}>
+          <CreatorPostPageTopBar />
+          <VStack w="full" spacing={4} alignItems={'start'}>
+            <H2 bold size="2xl" display={{ base: 'unset', lg: 'none' }}>
+              {t('Posts')}
+            </H2>
+            <HStack justifyContent={'start'}>
+              {[1, 2].map((key) => {
+                return <SkeletonLayout key={key} width="150px" height="24px" />
+              })}
+            </HStack>
+            {[1, 2].map((key) => {
+              return <ProjectPostCardSkeleton key={key} />
+            })}
+            ProjectPostCardSkeleton
           </VStack>
         </VStack>
       </CardLayout>

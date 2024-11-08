@@ -1,6 +1,6 @@
 import { Box, Button, Checkbox, CheckboxGroup, Divider, HStack, VStack } from '@chakra-ui/react'
 import { Emoji, EmojiStyle } from 'emoji-picker-react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { UseFormSetValue } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { PiPlus } from 'react-icons/pi'
@@ -150,6 +150,16 @@ const Rewards = ({
 }) => {
   const { t } = useTranslation()
 
+  const sortedRewards = useMemo(() => {
+    return [...rewards].sort((a, b) => {
+      const aSelected = projectRewardUUIDs.includes(a.uuid)
+      const bSelected = projectRewardUUIDs.includes(b.uuid)
+      if (aSelected && !bSelected) return -1
+      if (!aSelected && bSelected) return 1
+      return 0
+    })
+  }, [])
+
   return (
     <VStack w="full" alignItems="flex-start">
       <Body size="md" medium paddingX={standardPadding}>
@@ -162,7 +172,7 @@ const Rewards = ({
           })
         ) : (
           <CheckboxGroup value={projectRewardUUIDs} onChange={updateRewardUUIDs}>
-            {rewards.map((reward) => (
+            {sortedRewards.map((reward) => (
               <RewardItem key={reward.id} reward={reward} />
             ))}
           </CheckboxGroup>
@@ -220,6 +230,16 @@ const Goals = ({
 }) => {
   const { t } = useTranslation()
 
+  const sortedGoals = useMemo(() => {
+    return [...inProgressGoals, ...completedGoals].sort((a, b) => {
+      const aSelected = projectGoalIds.includes(a.id)
+      const bSelected = projectGoalIds.includes(b.id)
+      if (aSelected && !bSelected) return -1
+      if (!aSelected && bSelected) return 1
+      return 0
+    })
+  }, [])
+
   return (
     <VStack w="full" alignItems="flex-start">
       <Body size="md" medium paddingX={standardPadding}>
@@ -232,7 +252,7 @@ const Goals = ({
           })
         ) : (
           <CheckboxGroup value={projectGoalIds} onChange={updateGoalIds}>
-            {[...inProgressGoals, ...completedGoals].map((goal) => (
+            {sortedGoals.map((goal) => (
               <GoalItem key={goal.id} goal={goal} />
             ))}
           </CheckboxGroup>

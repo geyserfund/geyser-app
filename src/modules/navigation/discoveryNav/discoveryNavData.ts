@@ -17,6 +17,7 @@ export type DiscoveryNavItem = {
   key: DiscoveryNavItemKey
   path: keyof PathsMap
   icon: IconType
+  bottomNav: boolean
 }
 
 export const discoveryNavItems: DiscoveryNavItem[] = [
@@ -25,35 +26,41 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Discover,
     path: 'discoveryLanding',
     icon: PiCompass,
+    bottomNav: true,
   },
   {
     label: 'My Projects',
     key: DiscoveryNavItemKey.MyProjects,
     path: 'discoveryMyProjects',
     icon: PiRocketLaunch,
+    bottomNav: true,
   },
   {
     label: 'Activity',
     key: DiscoveryNavItemKey.Activity,
     path: 'discoveryActivity',
     icon: PiWaveform,
+    bottomNav: true,
   },
   {
     label: 'Leaderboard',
     key: DiscoveryNavItemKey.Leaderboard,
     path: 'discoveryLeaderboard',
     icon: PiRanking,
+    bottomNav: true,
   },
   {
     label: 'Grants',
     key: DiscoveryNavItemKey.Grants,
     path: 'discoveryGrants',
     icon: PiTrophy,
+    bottomNav: true,
   },
   {
     label: 'Merch',
     key: DiscoveryNavItemKey.Merch,
     path: 'discoveryMerch',
     icon: PiTShirt,
+    bottomNav: false,
   },
 ]
