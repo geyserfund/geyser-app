@@ -34,17 +34,17 @@ export const FundingDetailsPrivateCommentPrompt = () => {
   return (
     <CardLayout width="100%" mobileDense>
       <H1 size="2xl" bold>
-        {t('Private message')}
+        {t('Private comments')}
       </H1>
       <Body size="md" light>
         {t(
-          'Send a private message to the creator with a thank you note, feedback, or special requests. Sometimes, if you don’t provide these creator won’t be able to send you your reward.',
+          'Send a private comment to the creator with a thank you note, feedback, or special requests. Sometimes, if you don’t provide these creator won’t be able to send you your reward.',
         )}
       </Body>
       {mergedPrivateCommentPrompts.length > 0 && (
         <>
           <Body size="md">
-            {t('The creator has requested the following information from you. Make sure you add in the message box:')}
+            {t('The creator has requested the following information from you. Make sure you add in the comment box:')}
           </Body>
 
           <UnorderedList>
@@ -56,7 +56,7 @@ export const FundingDetailsPrivateCommentPrompt = () => {
       )}
       <TextArea
         data-testid="funding-private-comment-input"
-        placeholder={t('Enter your message here...')}
+        placeholder={t('Enter your comment here...')}
         fontSize="16px"
         resize="none"
         value={privateComment}

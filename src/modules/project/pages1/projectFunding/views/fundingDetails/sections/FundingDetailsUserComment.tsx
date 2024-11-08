@@ -49,13 +49,13 @@ export const FundingDetailsUserComment = () => {
     <>
       <CardLayout mobileDense width="100%" position="relative">
         <H1 size="2xl" bold>
-          {t('Public message')}
+          {t('Public comment')}
         </H1>
         <Box width="100%" position="relative">
           <TextArea
             pr={16}
             data-testid="funding-comment-input"
-            placeholder={t('Leave a public message here.')}
+            placeholder={t('Leave a public comment here.')}
             fontSize="16px"
             resize="none"
             value={comment}
