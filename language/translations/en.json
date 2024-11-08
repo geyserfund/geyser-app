@@ -1248,5 +1248,16 @@
   "Select rewards": "Select rewards",
   "Email will be sent to": "Email will be sent to",
   "members.": "members.",
-  "Completed Goals": "Completed Goals"
+  "Completed Goals": "Completed Goals",
+  "Provide your Lightning Address for a full or partial refund": "Provide your Lightning Address for a full or partial refund",
+  "To a goal": "To a goal",
+  "Email and Updates": "Email and Updates",
+  "Rewards total": "Rewards total",
+  "Refresh Page": "Refresh Page",
+  "Follow Project and receive direct project updates to your email": "Follow Project and receive direct project updates to your email",
+  "See all badges": "See all badges",
+  "No projects": "No projects",
+  "Profile settings": "Profile settings",
+  "Disconnect twitter": "Disconnect twitter",
+  "Disconnect nostr": "Disconnect nostr"
 }

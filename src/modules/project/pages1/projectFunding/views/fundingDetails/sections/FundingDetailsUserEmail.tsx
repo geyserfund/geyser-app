@@ -13,7 +13,6 @@ import {
   useUserNotificationSettings,
 } from '@/modules/profile/pages/profileSettings/hooks/useUserNotificationSettings'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { useFollowedProjectsValue } from '@/pages/auth/state'
 import { CardLayout } from '@/shared/components/layouts'
 import { H1 } from '@/shared/components/typography'
@@ -34,8 +33,16 @@ const EMAIL_VALIDATION_STATE = {
 export const FundingDetailsUserEmailAndUpdates = () => {
   const { t } = useTranslation()
   const { user } = useAuthContext()
-  const { project } = useProjectAtom()
   const followedProjects = useFollowedProjectsValue()
+
+  const {
+    project,
+    formState: { needsShipping, followProject, subscribeToGeyserEmails, email },
+    hasSelectedRewards,
+    setTarget,
+    fundingFormError,
+    setErrorstate,
+  } = useFundingFormAtom()
 
   const [followsProject] = useState(followedProjects.find((p) => p.id === project.id) !== undefined)
   const [userId] = useState(user?.id || 0)
@@ -48,13 +55,9 @@ export const FundingDetailsUserEmailAndUpdates = () => {
 
   const showEmailComponent = !user?.email || !followsProject || !subscribedToGeyserEmails
 
-  const {
-    formState: { needsShipping, followProject, subscribeToGeyserEmails, email },
-    hasSelectedRewards,
-    setTarget,
-    fundingFormError,
-    setErrorstate,
-  } = useFundingFormAtom()
+  const descriptionCopy = hasSelectedRewards
+    ? t('This email will be used by the seller to reach out to you.')
+    : t('Follow Project and receive direct project updates to your email')
 
   /*
    Set the email from the user to the funding form. We do this because the input field
@@ -120,77 +123,72 @@ export const FundingDetailsUserEmailAndUpdates = () => {
     }
   }
 
-  return (
-    <>
-      {showEmailComponent && (
-        <CardLayout mobileDense width="100%" position="relative">
-          <H1 size="2xl" bold>
-            {t('Email and Updates')}
-          </H1>
+  if (!showEmailComponent) return null
 
-          <FieldContainer
-            title={`${t('Your email')} ${hasSelectedRewards ? '*' : ''}`}
-            subtitle={t('This email will be used by the seller to reach out to you.')}
-          >
-            <FormControl isInvalid={Boolean(fundingFormError.email)}>
-              <InputGroup>
-                <Input
-                  disabled={Boolean(user?.email)}
-                  required={hasSelectedRewards}
-                  type="email"
-                  name="email"
-                  placeholder="funderemail@gmail.com"
-                  value={email}
-                  inputMode="email"
-                  onChange={(e) => {
-                    setTarget({ target: { name: 'email', value: e.target.value } })
-                    setEmailValidationState(EMAIL_VALIDATION_STATE.LOADING)
-                    debouncedEmailValidation(e.target.value)
-                  }}
-                  isInvalid={Boolean(fundingFormError.email)}
-                  onFocus={() => setErrorstate({ key: 'email', value: '' })}
-                />
-                <InputRightElement>{renderEmailInputRightElement()}</InputRightElement>
-              </InputGroup>
-              {fundingFormError.email && <FormErrorMessage>{fundingFormError.email}</FormErrorMessage>}
-            </FormControl>
-          </FieldContainer>
-          {needsShipping && (
-            <Feedback
-              variant={FeedBackVariant.WARNING}
-              text={t(
-                'To receive the selected rewards, please send your shipping details to the creator’s email, which will be revealed in the success screen.',
-              )}
+  return (
+    <CardLayout mobileDense width="100%" position="relative">
+      <H1 size="2xl" bold>
+        {t('Email and Updates')}
+      </H1>
+
+      <FieldContainer title={`${t('Your email')} ${hasSelectedRewards ? '*' : ''}`} subtitle={descriptionCopy}>
+        <FormControl isInvalid={Boolean(fundingFormError.email)}>
+          <InputGroup>
+            <Input
+              disabled={Boolean(user?.email)}
+              required={hasSelectedRewards}
+              type="email"
+              name="email"
+              placeholder="funderemail@gmail.com"
+              value={email}
+              inputMode="email"
+              onChange={(e) => {
+                setTarget({ target: { name: 'email', value: e.target.value } })
+                setEmailValidationState(EMAIL_VALIDATION_STATE.LOADING)
+                debouncedEmailValidation(e.target.value)
+              }}
+              isInvalid={Boolean(fundingFormError.email)}
+              onFocus={() => setErrorstate({ key: 'email', value: '' })}
             />
+            <InputRightElement>{renderEmailInputRightElement()}</InputRightElement>
+          </InputGroup>
+          {fundingFormError.email && <FormErrorMessage>{fundingFormError.email}</FormErrorMessage>}
+        </FormControl>
+      </FieldContainer>
+      {needsShipping && (
+        <Feedback
+          variant={FeedBackVariant.WARNING}
+          text={t(
+            'To receive the selected rewards, please send your shipping details to the creator’s email, which will be revealed in the success screen.',
           )}
-          {!followsProject && (
-            <HorizontalFormField
-              label="Receive direct creator emails. If you accept, you will receive updates directly from this project via email."
-              htmlFor="creator-email-toggle"
-            >
-              <Switch
-                id="creator-email-toggle"
-                isChecked={followProject}
-                onChange={(e) => {
-                  setTarget({ target: { name: 'followProject', value: e.target.checked } })
-                }}
-              />
-            </HorizontalFormField>
-          )}
-          {!subscribedToGeyserEmails && (
-            <HorizontalFormField
-              label="Subscribe to Geyser newsletter to discover new projects."
-              htmlFor="geyser-email-toggle"
-            >
-              <Switch
-                id="geyser-email-toggle"
-                isChecked={subscribeToGeyserEmails}
-                onChange={(e) => setTarget({ target: { name: 'subscribeToGeyserEmails', value: e.target.checked } })}
-              />
-            </HorizontalFormField>
-          )}
-        </CardLayout>
+        />
       )}
-    </>
+      {!followsProject && (
+        <HorizontalFormField
+          label="Receive direct creator emails. If you accept, you will receive updates directly from this project via email."
+          htmlFor="creator-email-toggle"
+        >
+          <Switch
+            id="creator-email-toggle"
+            isChecked={followProject}
+            onChange={(e) => {
+              setTarget({ target: { name: 'followProject', value: e.target.checked } })
+            }}
+          />
+        </HorizontalFormField>
+      )}
+      {!subscribedToGeyserEmails && (
+        <HorizontalFormField
+          label="Subscribe to Geyser newsletter to discover new projects."
+          htmlFor="geyser-email-toggle"
+        >
+          <Switch
+            id="geyser-email-toggle"
+            isChecked={subscribeToGeyserEmails}
+            onChange={(e) => setTarget({ target: { name: 'subscribeToGeyserEmails', value: e.target.checked } })}
+          />
+        </HorizontalFormField>
+      )}
+    </CardLayout>
   )
 }
