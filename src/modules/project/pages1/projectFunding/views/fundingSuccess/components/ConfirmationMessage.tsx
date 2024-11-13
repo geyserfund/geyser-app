@@ -42,9 +42,9 @@ const ConfirmationMessage = ({
   return (
     <VStack
       alignItems="start"
-      bg="primaryAlpha.2"
+      bg="yellow.50"
       border="1px solid"
-      borderColor="primaryAlpha.6"
+      borderColor="yellow.200"
       p={4}
       borderRadius="md"
       w="full"

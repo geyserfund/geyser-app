@@ -1,9 +1,8 @@
-import { Avatar, Button, HStack, Image, Link, Tooltip, VStack } from '@chakra-ui/react'
-import * as htmlToImage from 'html-to-image'
-import { useCallback, useState } from 'react'
+import { Avatar, Button, HStack, IconButton, Link, Tooltip, useClipboard, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 
+import { AnonymousAvatar } from '@/components/ui/AnonymousAvatar'
 import { useFundingFlowAtom } from '@/modules/project/funding/hooks/useFundingFlowAtom'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
@@ -11,27 +10,20 @@ import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { Body, H3 } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import { Badge } from '@/types'
-import { useNotification } from '@/utils'
-
-import ContributionIcon from './ContributionIcon.svg'
 
 export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }) => {
   const { t } = useTranslation()
-  const toast = useNotification()
-  const [copied, setCopied] = useState(false)
-
-  const [successComponent, setSuccessComponent] = useState<HTMLDivElement | null>(null)
-
   const { project } = useProjectAtom()
 
   const { fundingInputAfterRequest } = useFundingFlowAtom()
 
   const user = fundingInputAfterRequest?.user
 
-  const ref = useCallback((node: HTMLDivElement | null) => {
-    setSuccessComponent(node)
-  }, [])
+  const heroLink = `https://geyser.fund/project/${project.name}/hero=${user?.username}`
+  const contributionCount = 10 // TODO: Get actual contribution count
+  const totalSats = 21212129 // TODO: Get actual sats amount
 
+  const { onCopy } = useClipboard(heroLink)
   const { getShareProjectUrl } = useProjectShare()
 
   const projectShareUrl = getShareProjectUrl({ clickedFrom: CampaignContent.successScreen })
@@ -40,118 +32,118 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
     return null
   }
 
-  const handleCopy = async () => {
-    try {
-      const dataUrl = await getDataUrl()
-      const base64Response = await fetch(dataUrl)
-      const blob = await base64Response.blob()
-      const items = { [blob.type]: blob }
-      const clipboardItem = new ClipboardItem(items)
-      await navigator.clipboard.write([clipboardItem])
-      setCopied(true)
-      setTimeout(() => {
-        setCopied(false)
-        toast.success({
-          title: 'Copied!',
-          description: 'Ready to paste into Social media posts',
-        })
-      }, 1000)
-    } catch {
-      toast.error({
-        title: 'Failed to download image',
-        description: 'Please try again',
-      })
-    }
-  }
-
-  const getDataUrl = async () => {
-    const element = successComponent
-    if (element) {
-      const dataUrl = await htmlToImage.toPng(element, {
-        style: { backgroundColor: 'primary.400', borderStyle: 'double' },
-      })
-      return dataUrl
-    }
-
-    return ''
-  }
-
   const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${projectShareUrl}`
 
   return (
     <VStack w="full" spacing={6}>
-      <HStack
+      <VStack
         id="successful-contribution-banner"
-        ref={ref}
         background={'linear-gradient(86deg, #00C7AD 0%, #00EED2 100%)'}
         padding="6%"
         w="full"
-        gap={'10%'}
+        spacing={4}
         justifyContent="center"
-        borderRadius="15px"
-        border="2px solid"
-        borderColor={lightModeColors.primary1[11]}
+        borderRadius={8}
+        border="1px solid"
+        borderColor="neutral1.7"
         aspectRatio={2.16}
+        pl={8}
+        pr={8}
       >
-        <Image src={ContributionIcon} height="100%"></Image>
-        <VStack alignItems={'flex-start'} gap={1}>
-          {user && user.id && (
-            <HStack>
-              <Avatar
-                src={user.imageUrl || ''}
-                height={{ base: '30px', md: '50px', lg: '60px' }}
-                width={{ base: '30px', md: '50px', lg: '60px' }}
-              />
-              <Body size={{ base: 'xl', md: '2xl', lg: '3xl' }} color="utils.whiteContrast">
-                {user.username}
-              </Body>
-            </HStack>
-          )}
-          <H3 size={{ base: 'xl', md: '3xl', lg: '4xl' }} color={lightModeColors.primary1[11]}>
+        {user && (
+          <HStack spacing={2}>
+            {user.imageUrl ? (
+              <Avatar src={user.imageUrl || ''} size="md" />
+            ) : (
+              <AnonymousAvatar seed={user.id} imageSize="48px" />
+            )}
+            <Body color="neutral1.11" size="2xl" medium>
+              {user.username}
+            </Body>
+          </HStack>
+        )}
+        <VStack spacing={1}>
+          <H3 color="neutral1.11" fontSize="3xl" regular>
             {t('Successfully contributed to')}
           </H3>
-          <H3 size={{ base: '2xl', md: '4xl', lg: '5xl' }} color={lightModeColors.primary1[12]} bold>
+          <H3 color="neutral1.12" bold fontSize="4xl">
             {project.title}
           </H3>
-          {currentBadge && (
-            <VStack w="full" spacing="0px">
-              <Image src={currentBadge.image} width="125px" />
-              <Body color="utils.whiteContrast" light>
-                {t('You won a Nostr badge!')}
-              </Body>
-            </VStack>
-          )}
         </VStack>
-      </HStack>
 
-      <HStack w="full" justifyContent="end">
-        <Tooltip w="100%" placement="top" label={copied ? t('copied') : t('copy')}>
+        <VStack spacing={2} w="full">
+          <Body color="neutral1.11" size="xl" regular pb={4}>
+            {t('Become an')}{' '}
+            <Tooltip label={t('Share your hero link to become a project ambassador')} placement="top">
+              <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline">
+                {t('Ambassador')}
+              </Body>
+            </Tooltip>{' '}
+            {t('for this project by spreading the word using your')}{' '}
+            <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
+              <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline">
+                {t('Hero link')}
+              </Body>
+            </Tooltip>
+            . {t('So far,')}{' '}
+            <Body as="span" color="neutral1.12">
+              {contributionCount}
+            </Body>{' '}
+            {t('people')} {t('have enabled')}{' '}
+            <Body as="span" color="neutral1.12">
+              {totalSats}
+            </Body>{' '}
+            {t('sats in contributions to this project.')}
+          </Body>
+
+          <HStack
+            h="40px"
+            w="full"
+            p={2}
+            bg="whiteAlpha.700"
+            borderRadius={10}
+            border="1px solid"
+            borderColor="neutral1.7"
+          >
+            <Body color="neutral1.12" flex={1}>
+              <strong>{t('Hero Link:')}</strong> {heroLink.replace('https://', '')}
+            </Body>
+            <IconButton aria-label="Copy hero link" icon={<PiCopy />} variant="ghost" size="md" onClick={onCopy} />
+          </HStack>
+        </VStack>
+        <HStack w="full" justifyContent="center" spacing={4}>
           <Button
             size="lg"
-            isActive={copied}
-            variant="outline"
-            colorScheme="neutral1"
-            aria-label="copy-success-image"
-            rightIcon={<PiCopy />}
-            onClick={handleCopy}
-            isLoading={successComponent === null}
+            variant="solid"
+            bg="whiteAlpha.800"
+            color="neutral1.11"
+            border="1px solid"
+            borderColor="neutral1.7"
+            borderRadius={8}
+            rightIcon={<PiShareFat />}
+            as={Link}
+            isExternal
+            href={generateTwitterShareUrl(twitterShareText)}
+            w="full"
+            _hover={{
+              bg: 'whiteAlpha.900',
+            }}
           >
-            {t('Copy Success image')}
+            {t('Share on X')}
           </Button>
-        </Tooltip>
-        <Button
-          size="lg"
-          variant="soft"
-          colorScheme="neutral1"
-          aria-label="post-success-to-twitter"
-          rightIcon={<PiShareFat />}
-          as={Link}
-          isExternal
-          href={generateTwitterShareUrl(twitterShareText)}
-        >
-          {t('Share on X')}
-        </Button>
-      </HStack>
+          <Button
+            size="lg"
+            variant="solid"
+            bg="blackAlpha.800"
+            color="white"
+            rightIcon={<PiCopy />}
+            onClick={onCopy}
+            w="full"
+          >
+            {t('Copy Hero link')}
+          </Button>
+        </HStack>
+      </VStack>
     </VStack>
   )
 }
