@@ -1,5 +1,5 @@
 import { IconType } from 'react-icons'
-import { PiCompass, PiRanking, PiRocketLaunch, PiTrophy, PiTShirt, PiWaveform } from 'react-icons/pi'
+import { PiCompass, PiCrown, PiRanking, PiRocketLaunch, PiTrophy, PiTShirt, PiWaveform } from 'react-icons/pi'
 
 import { PathsMap } from '@/shared/constants'
 
@@ -7,6 +7,7 @@ export enum DiscoveryNavItemKey {
   Discover = 'discover',
   MyProjects = 'myProjects',
   Activity = 'activity',
+  HallOfFame = 'hallOfFame',
   Leaderboard = 'leaderboard',
   Grants = 'grants',
   Merch = 'merch',
@@ -40,6 +41,13 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Activity,
     path: 'discoveryActivity',
     icon: PiWaveform,
+    bottomNav: true,
+  },
+  {
+    label: 'Hall of fame',
+    key: DiscoveryNavItemKey.HallOfFame,
+    path: 'discoveryHallOfFame',
+    icon: PiCrown,
     bottomNav: true,
   },
   {

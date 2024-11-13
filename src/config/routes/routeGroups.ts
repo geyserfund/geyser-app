@@ -128,6 +128,11 @@ export const discoveryRoutes = [
   getPath('discoveryLeaderboard'),
   getPath('discoveryGrants'),
   getPath('discoveryGrant', PathName.grantId),
+  getPath('discoveryHallOfFame'),
+  getPath('hallOfFameProjects'),
+  getPath('hallOfFameHeroesCreator'),
+  getPath('hallOfFameHeroesAmbassador'),
+  getPath('hallOfFameHeroesContributor'),
 ]
 
 export const profileSettingsRoutes = [

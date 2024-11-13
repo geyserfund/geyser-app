@@ -2,6 +2,12 @@ export enum PathName {
   projectDiscovery = 'discover',
   landingFeed = 'feed',
   leaderboard = 'leaderboard',
+  hallOfFame = 'halloffame',
+  projects = 'projects',
+  heroes = 'heroes',
+  ambassador = 'ambassador',
+  creator = 'creator',
+  contributor = 'contributor',
   grants = 'grants',
   grantsRoundOne = 'roundone',
   grantsRoundTwo = 'roundtwo',
@@ -9,6 +15,7 @@ export enum PathName {
   activity = 'activity',
   activityGlobal = 'global',
   activityFollowed = 'followed',
+
   merch = 'project/geyser/rewards',
 
   entry = 'entry',
@@ -115,6 +122,12 @@ const pathsMap = {
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
   discoveryMerch: () => `/${PathName.merch}`,
+
+  discoveryHallOfFame: () => `/${PathName.hallOfFame}`,
+  hallOfFameProjects: () => `/${PathName.hallOfFame}/${PathName.projects}`,
+  hallOfFameHeroesAmbassador: () => `/${PathName.hallOfFame}/${PathName.projects}/${PathName.ambassador}`,
+  hallOfFameHeroesCreator: () => `/${PathName.hallOfFame}/${PathName.projects}/${PathName.creator}`,
+  hallOfFameHeroesContributor: () => `/${PathName.hallOfFame}/${PathName.projects}/${PathName.contributor}`,
 
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,

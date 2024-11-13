@@ -227,6 +227,11 @@ export const DiamondUrl = 'https://storage.googleapis.com/geyser-projects-media/
 
 export const TelescopeUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/telescope.png'
 
+export const HallOfFameIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/hallOfFameIcon.png'
+
+export const HallOfFameAnimatedGifUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/halloffame-animated-gif.gif'
+
 // FUNDING FLOW ERRORS
 
 export const FundingErrorUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/errors/error.png'

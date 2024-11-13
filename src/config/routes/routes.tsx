@@ -25,6 +25,8 @@ const CreatorPost = () => import('../../modules/project/pages1/projectView/views
 
 const Discovery = () => import('../../modules/discovery')
 
+const HallOfFame = () => import('../../modules/discovery/pages/hallOfFame')
+
 const Refund = () => import('../../modules/project/pages1/projectFunding/views/refund')
 
 const ProfilePage = () => import('../../modules/profile')
@@ -571,6 +573,41 @@ export const platformRoutes: RouteObject[] = [
             },
           },
         ],
+      },
+      {
+        path: getPath('discoveryHallOfFame'),
+        async lazy() {
+          const HallOfFamePage = await HallOfFame().then((m) => m.HallOfFame)
+          return { Component: HallOfFamePage }
+        },
+      },
+      {
+        path: getPath('hallOfFameProjects'),
+        async lazy() {
+          const ProjectLeaderboard = await HallOfFame().then((m) => m.ProjectLeaderboard)
+          return { Component: ProjectLeaderboard }
+        },
+      },
+      {
+        path: getPath('hallOfFameHeroesAmbassador'),
+        async lazy() {
+          const Heroes = await HallOfFame().then((m) => m.Heroes)
+          return { Component: Heroes }
+        },
+      },
+      {
+        path: getPath('hallOfFameHeroesCreator'),
+        async lazy() {
+          const Heroes = await HallOfFame().then((m) => m.Heroes)
+          return { Component: Heroes }
+        },
+      },
+      {
+        path: getPath('hallOfFameHeroesContributor'),
+        async lazy() {
+          const Heroes = await HallOfFame().then((m) => m.Heroes)
+          return { Component: Heroes }
+        },
       },
       {
         path: getPath('discoveryLeaderboard'),

@@ -30,7 +30,7 @@ export const CardLayout = ({
     tabIndex: -1,
     overflow: 'hidden',
     backgroundColor: 'neutral1.1',
-    border: '1px solid',
+    border: noborder ? 'none' : '1px solid',
     transition: 'border-color 0.5s',
     boxShadow: 'none',
     as: rest.to ? Link : undefined,

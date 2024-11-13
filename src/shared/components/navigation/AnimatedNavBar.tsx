@@ -100,7 +100,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
     <HStack
       w="full"
       padding={'2px'}
-      background="neutral1.3"
+      background="neutralAlpha.3"
       borderRadius={'12px'}
       position="relative"
       zIndex={2}
@@ -138,7 +138,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
             isActive={isActive}
             length={items.length}
             onClick={() => handleClick(item, index)}
-            _hover={isActive ? {} : { backgroundColor: 'neutral1.5' }}
+            _hover={isActive ? {} : { backgroundColor: 'neutralAlpha.5' }}
             {...(item.isBordered
               ? {
                   border: '1px solid',

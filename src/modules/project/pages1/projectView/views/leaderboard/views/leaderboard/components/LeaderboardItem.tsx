@@ -1,11 +1,11 @@
-import { HStack, Image, SkeletonCircle, StackProps, VStack } from '@chakra-ui/react'
+import { HStack, SkeletonCircle, StackProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiChatCircle, PiLightning } from 'react-icons/pi'
 
 import { useAuthContext } from '@/context'
+import { RankMedal } from '@/shared/components/display/RankMedal'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { ProjectLeaderboardContributorsFragment } from '@/types'
 import { commaFormatted } from '@/utils'
@@ -89,19 +89,5 @@ export const LeaderboardItemSkeleton = () => {
         <SkeletonLayout height="16px" width="200px" />
       </VStack>
     </HStack>
-  )
-}
-
-const RankMedal = ({ rank }: { rank: number }) => {
-  const medalUrl = [GoldMedalUrl, SilverMedalUrl, BronzeMedalUrl]
-  const src = medalUrl[rank - 1]
-  if (src) {
-    return <Image src={src} alt={`Rank ${rank}`} boxSize="20px" />
-  }
-
-  return (
-    <Body size="xs" bold muted paddingX="6px">
-      {rank}
-    </Body>
   )
 }
