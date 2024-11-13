@@ -6,7 +6,6 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { Body } from '@/shared/components/typography'
 
-import { ShareBlock } from '../../../components'
 import { ProjectBannerView } from './views/ProjectBannerView'
 import { ProjectShareContribute } from './views/ProjectShareContribute'
 import { ProjectShareView } from './views/ProjectShareView'
