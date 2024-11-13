@@ -1,97 +1,95 @@
-import { Button, HStack, Spinner, VStack } from '@chakra-ui/react'
-import { useEffect, useRef, useState } from 'react'
+import { Button, Input, Link, useClipboard, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy } from 'react-icons/pi'
 
-import { LogoDark } from '@/assets'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CampaignContent, useCreateAndCopyImage, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
-import { GeyserShareImageUrl } from '@/shared/constants'
-import { validateImageUrl } from '@/shared/markdown/validations/image'
+import { useAuthContext } from '@/context'
+import { useAuthModal } from '@/pages/auth/hooks'
+import { Body } from '@/shared/components/typography'
 import { useNotification } from '@/utils'
 
-import { ProjectShareBanner } from '../components/ProjectShareBanner'
+interface ProjectShareViewProps {
+  heroCount?: number
+  satAmount?: number
+}
 
-export const ProjectShareView = () => {
+export const ProjectShareView = ({ heroCount = 10, satAmount = 1000000 }: ProjectShareViewProps) => {
   const { t } = useTranslation()
-
-  const { project } = useProjectAtom()
-
   const toast = useNotification()
+  const { isLoggedIn } = useAuthContext()
+  const { loginOnOpen } = useAuthModal()
 
-  const ref = useRef<HTMLDivElement>(null)
+  const heroId = 'hero'
+  const heroLink = `https://geyser.fund/project/geyser${isLoggedIn ? `&hero=${heroId}` : ''}`
+  const { onCopy, hasCopied } = useClipboard(heroLink)
 
-  const [generating, setGenerating] = useState(true)
-
-  useEffect(() => {
-    setTimeout(() => {
-      setGenerating(false)
-    }, 5000)
-  }, [])
-
-  const { handleGenerateAndCopy, copying } = useCreateAndCopyImage()
-
-  const handleCopy = async () => {
-    await handleGenerateAndCopy({
-      element: ref.current,
-      onSuccess() {
-        toast.success({
-          title: 'Copied!',
-          description: 'Ready to paste into Social media posts',
-        })
-      },
-      onError() {
-        toast.error({
-          title: 'Failed to download image',
-          description: 'Please try again',
-        })
-      },
+  const handleCopy = () => {
+    onCopy()
+    toast.success({
+      title: t('Copied!'),
+      description: t('Hero link copied to clipboard'),
     })
   }
 
-  const { getShareProjectUrl } = useProjectShare()
-
-  const projectUrl = getShareProjectUrl({ clickedFrom: CampaignContent.projectShareQrBanner })
-
-  const isImage = validateImageUrl(project.images[0])
-
   return (
-    <VStack
-      w="100%"
-      border="1px solid"
-      borderColor="neutral1.6"
-      background="neutral1.2"
-      borderRadius={8}
-      overflow={'hidden'}
-      position="relative"
-    >
-      <ProjectShareBanner
-        ref={ref}
-        bannerImage={isImage && project.images[0] ? project.images[0] : project.thumbnailImage || GeyserShareImageUrl}
-        qrCodeValue={projectUrl}
-        qrCodeText={t('View project')}
-        centerLogo={LogoDark}
-        banneText={project.title}
-      />
+    <VStack w="100%">
+      <VStack border="1px solid" borderColor="neutral1.6" borderRadius="md" width="100%" spacing={0}>
+        <VStack
+          bgGradient={isLoggedIn ? 'linear(to-r, primary1.4, indigo.3)' : 'linear(to-r, neutral1.4, neutral1.2)'}
+          p={4}
+          borderTopRadius="md"
+          width="100%"
+          spacing={2}
+        >
+          <Body size="md" textAlign="center">
+            {!heroCount ? (
+              <Body>
+                Be the first <strong>hero</strong> to spread the word and enable more <strong>contributions</strong> to
+                this project.
+              </Body>
+            ) : (
+              <Body>
+                Join the <strong>{heroCount}</strong> heroes that have spread the word and enabled{' '}
+                <strong>{satAmount?.toLocaleString()}</strong> sats in <strong>contributions</strong> to this project.
+              </Body>
+            )}
+          </Body>
+          {!isLoggedIn && (
+            <Body size="md" borderTop="1px solid" borderColor="neutral1.6" pt={2} mt={2} textAlign="center">
+              <Link
+                color="primary1.500"
+                onClick={(e) => {
+                  e.preventDefault()
+                  loginOnOpen()
+                }}
+              >
+                Sign in
+              </Link>{' '}
+              to get your Hero ID and track the impact of sharing
+            </Body>
+          )}
+        </VStack>
+        <VStack width="100%" p={3} bgColor="neutral1.2">
+          <Input
+            value={heroLink.replace('https://', '')}
+            readOnly
+            bg="white"
+            borderColor="neutral1.6"
+            _hover={{ borderColor: 'neutral1.8' }}
+          />
 
-      <HStack padding={3} width="100%">
-        {generating ? (
-          <Button variant="solid" colorScheme="neutral1" w="full" leftIcon={<Spinner size="sm" />}>
-            {t('Generating banner...')}
-          </Button>
-        ) : (
           <Button
             variant="solid"
             colorScheme="primary1"
             w="full"
             rightIcon={<PiCopy />}
-            isLoading={copying}
             onClick={handleCopy}
+            isDisabled={hasCopied}
+            fontSize="md"
           >
-            {t('Copy image')}
+            {t('Copy link')}
           </Button>
-        )}
-      </HStack>
+        </VStack>
+      </VStack>
     </VStack>
   )
 }

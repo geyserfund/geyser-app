@@ -7,24 +7,33 @@ import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNav
 import { Body } from '@/shared/components/typography'
 
 import { ShareBlock } from '../../../components'
+import { ProjectBannerView } from './views/ProjectBannerView'
 import { ProjectShareContribute } from './views/ProjectShareContribute'
 import { ProjectShareView } from './views/ProjectShareView'
 
-interface IQRModal {
+interface IProjectShareModal {
   isOpen: boolean
   onClose: () => void
   name: string
   projectId: string
   title: string
+  heroCount?: number
+  satAmount?: number
 }
 
 enum ProjectShareModalView {
   share = 'share',
-  contribute = 'contribute',
-  // embed = 'embed',
+  banner = 'banner',
+  lightning = 'lightning',
 }
 
-export const ProjectShareModal = ({ isOpen, onClose, name }: IQRModal) => {
+export const ProjectShareModal = ({
+  isOpen,
+  onClose,
+  name,
+  heroCount = 10,
+  satAmount = 21212129,
+}: IProjectShareModal) => {
   const { t } = useTranslation()
 
   const items = [
@@ -34,34 +43,42 @@ export const ProjectShareModal = ({ isOpen, onClose, name }: IQRModal) => {
       render: () => <ProjectShareView />,
     },
     {
-      name: t('Contribute'),
-      key: ProjectShareModalView.contribute,
+      name: t('Banner'),
+      key: ProjectShareModalView.banner,
+      render: () => <ProjectBannerView />,
+    },
+    {
+      name: t('Lightning'),
+      key: ProjectShareModalView.lightning,
       render: () => <ProjectShareContribute />,
     },
   ] as AnimatedNavBarItem[]
 
-  const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: ProjectShareModalView.share })
+  const { render, ...animatedNavBarProps } = useAnimatedNavBar({
+    items,
+    defaultView: ProjectShareModalView.share,
+  })
 
   return (
-    <>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size={'md'}
-        isCentered
-        title={t('Share')}
-        bodyProps={{
-          as: VStack,
-          gap: 3,
-        }}
-      >
-        <Body size="sm" dark>
-          {t('Share the project page to spread the word across the internet and social media.')}
-        </Body>
-        <AnimatedNavBar {...animatedNavBarProps} showLabel />
-        {render && render()}
-        <ShareBlock projectName={name} paddingTop={1} />
-      </Modal>
-    </>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size={'md'}
+      isCentered
+      title={t('Share')}
+      bodyProps={{
+        as: VStack,
+        gap: 3,
+        alignItems: 'stretch',
+      }}
+    >
+      <Body size="sm" dark>
+        {t('Spread the word across the internet and social media.')}
+      </Body>
+
+      <AnimatedNavBar {...animatedNavBarProps} showLabel />
+      {render && render()}
+      {/* <ShareBlock projectName={name} paddingTop={1} /> */}
+    </Modal>
   )
 }
