@@ -1,6 +1,6 @@
 import { Button, IconButton, Input, InputGroup, InputRightElement, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiCopy } from 'react-icons/pi'
+import { PiCopy, PiPaperPlaneTilt } from 'react-icons/pi'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useFundingTxAtom } from '@/modules/project/funding/state'
@@ -19,13 +19,10 @@ export const SendEmailToCreator = () => {
 
   return (
     <VStack w="full" spacing={1} alignItems={'start'}>
-      <Body size="2xl" bold>
-        {t('Send email to the creator')}
-      </Body>
       <Stack direction={{ base: 'column', lg: 'row' }} w="full">
         <VStack flex={1} spacing={1}>
           <InputGroup>
-            <Input value={fundingTx.creatorEmail} isDisabled />
+            <Input value={fundingTx.creatorEmail} isDisabled _disabled={{ color: 'neutral1.12' }} />
             <InputRightElement>
               <IconButton
                 variant="soft"
@@ -42,8 +39,17 @@ export const SendEmailToCreator = () => {
             )}
           </Body>
         </VStack>
-        <Button size="lg" variant="solid" colorScheme="primary1" width={{ base: 'full', lg: '210px' }}>
-          {t('Send email')}
+        <Button
+          variant="soft"
+          size="lg"
+          colorScheme="neutral1"
+          border="1px solid"
+          borderColor="neutral1.3"
+          width="40px"
+          height="40px"
+          bg="white"
+        >
+          <PiPaperPlaneTilt style={{ transform: 'rotate(45deg)' }} />
         </Button>
       </Stack>
     </VStack>
