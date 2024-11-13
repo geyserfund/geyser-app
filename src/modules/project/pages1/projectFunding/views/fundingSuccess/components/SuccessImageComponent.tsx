@@ -8,7 +8,6 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { Body, H3 } from '@/shared/components/typography'
-import { lightModeColors } from '@/shared/styles'
 import { Badge } from '@/types'
 
 export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }) => {
