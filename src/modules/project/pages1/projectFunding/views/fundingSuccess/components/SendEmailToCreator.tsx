@@ -49,7 +49,7 @@ export const SendEmailToCreator = () => {
           height="40px"
           bg="white"
         >
-          <PiPaperPlaneTilt style={{ transform: 'rotate(45deg)' }} />
+          <PiPaperPlaneTilt style={{ transform: 'rotate(45deg)' }} fontSize={20} />
         </Button>
       </Stack>
     </VStack>

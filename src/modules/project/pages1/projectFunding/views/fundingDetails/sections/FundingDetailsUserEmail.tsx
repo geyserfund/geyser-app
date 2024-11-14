@@ -165,7 +165,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
           )}
           {!followsProject && (
             <HorizontalFormField
-              label="Receive direct creator emails. If you accept, you will receive updates directly from this project via email."
+              label="Follow Project: receive this project’s updates directly by email."
               htmlFor="creator-email-toggle"
             >
               <Switch

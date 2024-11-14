@@ -34,6 +34,7 @@ export const FRAGMENT_USER_ME = gql`
   fragment UserMe on User {
     id
     username
+    heroId
     imageUrl
     email
     ranking

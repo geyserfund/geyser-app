@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 
 import { AnonymousAvatar } from '@/components/ui/AnonymousAvatar'
+import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
 import { useFundingFlowAtom } from '@/modules/project/funding/hooks/useFundingFlowAtom'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
@@ -18,7 +19,8 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
 
   const user = fundingInputAfterRequest?.user
 
-  const heroLink = `https://geyser.fund/project/${project.name}/hero=${user?.username}`
+  const heroLink = `https://geyser.fund/project/${project.name}/hero=${user?.heroId}`
+
   const contributionCount = 10 // TODO: Get actual contribution count
   const totalSats = 21212129 // TODO: Get actual sats amount
 
@@ -37,20 +39,23 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
     <VStack w="full" spacing={6}>
       <VStack
         id="successful-contribution-banner"
-        background={'linear-gradient(86deg, #00C7AD 0%, #00EED2 100%)'}
         padding="6%"
         w="full"
         spacing={4}
         justifyContent="center"
         borderRadius={8}
         border="1px solid"
-        borderColor="neutral1.7"
+        borderColor="neutral1.3"
         aspectRatio={2.16}
         pl={8}
         pr={8}
+        background={'linear-gradient(81deg, #B2FAEC -9.6%, #EDF2FE 109.2%)'}
+        backgroundColor="utils.pbg"
+        position="relative"
       >
+        <FlowingGifBackground />
         {user && (
-          <HStack spacing={2}>
+          <HStack spacing={2} zIndex={1}>
             {user.imageUrl ? (
               <Avatar src={user.imageUrl || ''} size="md" />
             ) : (
@@ -61,7 +66,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
             </Body>
           </HStack>
         )}
-        <VStack spacing={1}>
+        <VStack spacing={1} zIndex={1}>
           <H3 color="neutral1.11" fontSize="3xl" regular>
             {t('Successfully contributed to')}
           </H3>
@@ -70,19 +75,23 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
           </H3>
         </VStack>
 
-        <VStack spacing={2} w="full">
-          <Body color="neutral1.11" size="xl" regular pb={4}>
+        <VStack spacing={2} w="full" zIndex={1}>
+          <Body color="neutral1.11" size="xl" regular pb={4} textAlign="center">
             {t('Become an')}{' '}
             <Tooltip label={t('Share your hero link to become a project ambassador')} placement="top">
-              <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline">
-                {t('Ambassador')}
-              </Body>
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline">
+                  {t('Ambassador')}
+                </Body>
+              </span>
             </Tooltip>{' '}
             {t('for this project by spreading the word using your')}{' '}
             <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
-              <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline">
-                {t('Hero link')}
-              </Body>
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline">
+                  {t('Hero link')}
+                </Body>
+              </span>
             </Tooltip>
             . {t('So far,')}{' '}
             <Body as="span" color="neutral1.12">
@@ -90,7 +99,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
             </Body>{' '}
             {t('people')} {t('have enabled')}{' '}
             <Body as="span" color="neutral1.12">
-              {totalSats}
+              {totalSats.toLocaleString()}
             </Body>{' '}
             {t('sats in contributions to this project.')}
           </Body>
@@ -103,6 +112,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
             borderRadius={10}
             border="1px solid"
             borderColor="neutral1.7"
+            zIndex={1}
           >
             <Body color="neutral1.12" flex={1}>
               <strong>{t('Hero Link:')}</strong> {heroLink.replace('https://', '')}
@@ -110,7 +120,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
             <IconButton aria-label="Copy hero link" icon={<PiCopy />} variant="ghost" size="md" onClick={onCopy} />
           </HStack>
         </VStack>
-        <HStack w="full" justifyContent="center" spacing={4}>
+        <HStack w="full" justifyContent="center" spacing={4} zIndex={1}>
           <Button
             size="lg"
             variant="solid"
