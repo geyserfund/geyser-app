@@ -37,7 +37,7 @@ export const GeyserHeroes = () => {
 
   return (
     <VStack w="full">
-      <TitleWithPeriod title={t('Geyser Heroes')} period={period} handlePeriodChange={handlePeriodChange} />
+      <TitleWithPeriod title={t('Heroes')} period={period} handlePeriodChange={handlePeriodChange} />
       <Stack direction={{ base: 'column', lg: 'row' }} w="full" alignItems={'start'} spacing={4}>
         <HeroSectionWrapper title={t('Creators')} description="Lead initiatives and bring ideas to life.">
           <RenderHeroList period={period} data={contributors} loading={contributorsLoading} labels={HeroListLabels} />
@@ -51,7 +51,7 @@ export const GeyserHeroes = () => {
       </Stack>
       <HStack w="full" justifyContent="center" pt={1}>
         <Button as={Link} to={getPath('hallOfFameHeroesContributor')} variant="soft" colorScheme="neutral1">
-          {t('See all Geyser Heroes')}
+          {t('See all Heroes')}
         </Button>
       </HStack>
     </VStack>
