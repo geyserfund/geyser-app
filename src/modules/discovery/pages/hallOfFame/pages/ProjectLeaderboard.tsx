@@ -4,16 +4,24 @@ import { PiArrowLeft, PiShare } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
+import { CardLayout } from '@/shared/components/layouts'
 import { dimensions, getPath } from '@/shared/constants'
-import { discoveryPageCommonLayoutStyles } from '@/shared/styles/discoveryPageLayout'
 import { toPx } from '@/utils'
 
 import { IndividualHallOfFameTitle } from '../components/IndividualHallOfFameTitle'
+import { TopProjectLeaderboard } from '../components/TopProjectLeaderboard'
 
 export const ProjectLeaderboard = () => {
   return (
-    <VStack w="full" paddingBottom="80px">
-      <TopNavContainerBar {...discoveryPageCommonLayoutStyles}>
+    <VStack
+      w="full"
+      height={{ base: 'full', lg: `calc(100vh - ${toPx(dimensions.topNavBar.desktop.height + 40)})` }}
+      paddingTop={{
+        base: toPx(dimensions.projectNavBar.mobile.height),
+        lg: toPx(dimensions.projectNavBar.desktop.height),
+      }}
+    >
+      <TopNavContainerBar>
         <Button
           as={Link}
           to={getPath('discoveryHallOfFame')}
@@ -28,16 +36,10 @@ export const ProjectLeaderboard = () => {
           {t('Share')}
         </Button>
       </TopNavContainerBar>
-
-      <VStack
-        w="full"
-        paddingTop={{
-          base: toPx(dimensions.projectNavBar.mobile.height),
-          lg: toPx(dimensions.projectNavBar.desktop.height),
-        }}
-      >
-        <IndividualHallOfFameTitle title={t('Hall of Fame')} />
-      </VStack>
+      <CardLayout w="full" h="full" dense>
+        <IndividualHallOfFameTitle title={t('Hall of Fame')} noborder borderRadius={0} />
+        <TopProjectLeaderboard />
+      </CardLayout>
     </VStack>
   )
 }

@@ -69,13 +69,7 @@ export const Heroes = () => {
           {t('Share')}
         </Button>
       </TopNavContainerBar>
-      <CardLayout
-        w="full"
-        h="full"
-        dense
-
-        //  height={{ base: 'unset', lg: 'calc(100vh - 80px)' }}
-      >
+      <CardLayout w="full" h="full" dense>
         <IndividualHallOfFameTitle
           title={t('Hall of Fame')}
           description={t('Individuals whose contributions power projects on Geyser, impacting Bitcoin adoption.')}

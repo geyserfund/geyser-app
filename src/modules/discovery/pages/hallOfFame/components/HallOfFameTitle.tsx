@@ -8,7 +8,7 @@ import { HallOfFameIllustrationUrl } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
 import { commaFormatted, getBitcoinAmount, getShortAmountLabel } from '@/utils'
 
-import { useSummaryBannerStats } from '../../leaderboard/hooks'
+import { useSummaryBannerStats } from '../hooks'
 import { FlowingGifBackground } from './FlowingGifBackground'
 
 export const HallOfFameTitle = () => {

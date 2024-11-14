@@ -13,8 +13,8 @@ import { dimensions } from '@/shared/constants'
 import { LeaderboardPeriod } from '@/types'
 import { getBitcoinAmount, getShortAmountLabel, useMobileMode } from '@/utils'
 
+import { useSummaryBannerStats } from '../hallOfFame/hooks'
 import { TopContributors, TopProjects } from './components'
-import { useSummaryBannerStats } from './hooks'
 
 interface PeriodOption {
   value: LeaderboardPeriod
