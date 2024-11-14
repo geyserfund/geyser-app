@@ -81,7 +81,7 @@ const ProjectHeroDisplay = ({ project, index }: { project: GlobalProjectLeaderbo
                 'Raised <1>{{usdAmount}}</1> ({{satsAmount}} sats) with <3>{{numberOfContributions}}</3> contributions from <5>{{numberOfFunders}}</5> users'
               }
               values={{
-                usdAmount: formatAmount(project.contributionsTotalUsd, FormatCurrencyType.Usdcent),
+                usdAmount: formatAmount(project.contributionsTotalUsd, FormatCurrencyType.Usd),
                 satsAmount: getShortAmountLabel(project.contributionsTotal),
                 numberOfContributions: project.contributionsCount,
                 numberOfFunders: project.contributorsCount,

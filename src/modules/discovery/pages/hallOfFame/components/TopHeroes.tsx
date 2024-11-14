@@ -82,7 +82,13 @@ export const TopHeroes = ({ heroType }: { heroType: HeroType }) => {
   return (
     <VStack w="full" flex={1} overflowY={'auto'}>
       <TitleWithPeriod
-        title={t('Top Heroes')}
+        title={t(
+          heroType === HeroType.Contributors
+            ? 'Top Contributors'
+            : heroType === HeroType.Ambassadors
+            ? 'Top Ambassadors'
+            : 'Top Creators',
+        )}
         period={period}
         handlePeriodChange={handlePeriodChange}
         px={standardPadding}

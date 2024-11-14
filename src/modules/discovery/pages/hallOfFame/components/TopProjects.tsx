@@ -73,7 +73,7 @@ const ProjectHeroDisplay = ({ project, index }: { project: GlobalProjectLeaderbo
             {project.projectTitle}
           </Body>
           <Body size="sm" medium isTruncated>
-            {`${formatAmount(project.contributionsTotalUsd, FormatCurrencyType.Usdcent)} `}
+            {`${formatAmount(project.contributionsTotalUsd, FormatCurrencyType.Usd)} `}
             <Body as="span" light>{`(${getShortAmountLabel(project.contributionsTotal)} sats)`}</Body>
           </Body>
         </VStack>

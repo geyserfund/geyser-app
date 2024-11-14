@@ -39,13 +39,13 @@ export const GeyserHeroes = () => {
     <VStack w="full">
       <TitleWithPeriod title={t('Geyser Heroes')} period={period} handlePeriodChange={handlePeriodChange} />
       <Stack direction={{ base: 'column', lg: 'row' }} w="full" alignItems={'start'} spacing={4}>
-        <HeroSectionWrapper title={t('Creators')} description="Pioneer of groundbreaking projects">
+        <HeroSectionWrapper title={t('Creators')} description="Lead initiatives and bring ideas to life.">
           <RenderHeroList period={period} data={contributors} loading={contributorsLoading} labels={HeroListLabels} />
         </HeroSectionWrapper>
-        <HeroSectionWrapper title={t('Contributors')} description="Champion who empowers projects">
+        <HeroSectionWrapper title={t('Contributors')} description="Put their sats where their mouth is.">
           <RenderHeroList period={period} data={contributors} loading={contributorsLoading} labels={HeroListLabels} />
         </HeroSectionWrapper>
-        <HeroSectionWrapper title={t('Ambassadors')} description="Catalyst expanding project reach">
+        <HeroSectionWrapper title={t('Ambassadors')} description="Spread the word to help projects grow.">
           <RenderHeroList period={period} data={ambassadors} loading={ambassadorsLoading} labels={HeroListLabels} />
         </HeroSectionWrapper>
       </Stack>
@@ -118,7 +118,7 @@ const RenderHeroList = ({
                     {datum[labels?.username]}
                   </Body>
                   <Body size="xs" medium isTruncated>
-                    {`${formatAmount(datum[labels?.usdAmount], FormatCurrencyType.Usdcent)} `}
+                    {`${formatAmount(datum[labels?.usdAmount], FormatCurrencyType.Usd)} `}
                     <Body as="span" light>{`(${getShortAmountLabel(datum[labels?.amount])} sats)`}</Body>
                   </Body>
                 </VStack>
