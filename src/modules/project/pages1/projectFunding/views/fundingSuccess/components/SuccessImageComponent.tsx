@@ -11,9 +11,9 @@ import { CampaignContent, useProjectShare } from '@/modules/project/pages1/proje
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { useAuthModal } from '@/pages/auth/hooks'
 import { Body, H3 } from '@/shared/components/typography'
-import { Badge, useProjectAmbassadorStatsQuery } from '@/types'
+import { useProjectAmbassadorStatsQuery } from '@/types'
 
-export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }) => {
+export const SuccessImageComponent = () => {
   const { t } = useTranslation()
   const { project } = useProjectAtom()
   const { loginOnOpen } = useAuthModal()
@@ -22,8 +22,10 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
   const { fundingInputAfterRequest } = useFundingFlowAtom()
 
   const user = loggedInUser || fundingInputAfterRequest?.user
+  const heroId = user?.heroId
 
-  const heroLink = `https://geyser.fund/project/${project.name}${user?.heroId ? `&hero=${user?.heroId}` : ''}`
+  console.log('heroId', heroId)
+  const heroLink = `https://geyser.fund/project/${project.name}${heroId ? `&hero=${heroId}` : ''}`
 
   const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
   const ambassadorsCount = data?.projectGet?.ambassadors?.stats?.count
@@ -58,6 +60,45 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
     }
 
     return ''
+  }
+
+  const renderSignInPromptBody = () => {
+    if (!isLoggedIn) {
+      return (
+        <Body
+          size="xl"
+          pt={4}
+          pb={4}
+          textAlign="center"
+          color="neutral1.11"
+          borderTop="1px solid"
+          w="full"
+          borderColor="neutral1.11"
+        >
+          <Link
+            color="primary1.500"
+            textDecoration="underline"
+            onClick={(e) => {
+              e.preventDefault()
+              loginOnOpen()
+            }}
+          >
+            {t('Sign in')}
+          </Link>{' '}
+          {t('to get your custom')}{' '}
+          <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
+            <span style={{ position: 'relative', display: 'inline-block' }}>
+              <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
+                {t('Hero link')}
+              </Body>
+            </span>
+          </Tooltip>{' '}
+          {t('and track the impact of sharing.')}
+        </Body>
+      )
+    }
+
+    return null
   }
 
   const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${projectShareUrl}`
@@ -123,38 +164,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
             {'. '}
             {renderSharingStats()}
           </Body>
-          {!isLoggedIn && (
-            <Body
-              size="xl"
-              pt={4}
-              pb={4}
-              textAlign="center"
-              color="neutral1.11"
-              borderTop="1px solid"
-              w="full"
-              borderColor="neutral1.11"
-            >
-              <Link
-                color="primary1.500"
-                textDecoration="underline"
-                onClick={(e) => {
-                  e.preventDefault()
-                  loginOnOpen()
-                }}
-              >
-                {t('Sign in')}
-              </Link>{' '}
-              {t('to get your custom')}{' '}
-              <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
-                <span style={{ position: 'relative', display: 'inline-block' }}>
-                  <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
-                    {t('Hero link')}
-                  </Body>
-                </span>
-              </Tooltip>{' '}
-              {t('and track the impact of sharing.')}
-            </Body>
-          )}
+          {renderSignInPromptBody()}
           <HStack
             h="40px"
             w="full"
@@ -166,9 +176,15 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
             zIndex={1}
           >
             <Body color="neutral1.12" flex={1}>
-              <strong>{t('Hero Link:')}</strong> {heroLink.replace('https://', '')}
+              <strong>{heroId ? t('Hero Link:') : ''}</strong> {heroLink.replace('https://', '')}
             </Body>
-            <IconButton aria-label="Copy hero link" icon={<PiCopy />} variant="ghost" size="md" onClick={onCopy} />
+            <IconButton
+              aria-label={heroId ? 'Copy link' : 'Copy hero link'}
+              icon={<PiCopy />}
+              variant="ghost"
+              size="md"
+              onClick={onCopy}
+            />
           </HStack>
         </VStack>
         <HStack w="full" justifyContent="center" spacing={4} zIndex={1}>
@@ -200,7 +216,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
             onClick={onCopy}
             w="full"
           >
-            {t('Copy Hero link')}
+            {t(heroId ? 'Copy link' : 'Copy hero link')}
           </Button>
         </HStack>
       </VStack>

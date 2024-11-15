@@ -14,7 +14,7 @@ import { useNotification } from '@/utils'
 export const ProjectShareView = () => {
   const { t } = useTranslation()
   const toast = useNotification()
-  const { isLoggedIn } = useAuthContext()
+  const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
   const { project } = useProjectAtom()
   const { getShareProjectUrl } = useProjectShare()
@@ -23,8 +23,8 @@ export const ProjectShareView = () => {
   const projectShareUrl = getShareProjectUrl({ clickedFrom: CampaignContent.successScreen })
   const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${projectShareUrl}`
 
-  const heroId = 'hero'
-  const heroLink = `https://geyser.fund/project/geyser${isLoggedIn ? `&hero=${heroId}` : ''}`
+  const heroId = user?.heroId
+  const heroLink = `https://geyser.fund/project/geyser${heroId ? `&hero=${heroId}` : ''}`
   const { onCopy, hasCopied } = useClipboard(heroLink)
 
   const handleCopy = () => {
@@ -142,9 +142,15 @@ export const ProjectShareView = () => {
           zIndex={1}
         >
           <Body color="neutral1.12" flex={1}>
-            <strong>{t('Hero Link:')}</strong> {heroLink.replace('https://', '')}
+            <strong>{heroId ? t('Hero Link:') : ''}</strong> {heroLink.replace('https://', '')}
           </Body>
-          <IconButton aria-label="Copy hero link" icon={<PiCopy />} variant="ghost" size="md" onClick={onCopy} />
+          <IconButton
+            aria-label={heroId ? 'Copy link' : 'Copy hero link'}
+            icon={<PiCopy />}
+            variant="ghost"
+            size="md"
+            onClick={onCopy}
+          />
         </HStack>
         <HStack w="full" justifyContent="center" spacing={2}>
           <Button
