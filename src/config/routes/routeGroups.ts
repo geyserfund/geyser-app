@@ -10,11 +10,11 @@ export const routeMatchForAtom =
     /** arrray of route patterns you'd like to match with the current route */
     routes: string[],
   ) =>
-    (get: Getter) => {
-      const matchRoute = get(currentRouteAtom)
-      if (!matchRoute) return false
-      return routes.some((route) => route === matchRoute.path)
-    }
+  (get: Getter) => {
+    const matchRoute = get(currentRouteAtom)
+    if (!matchRoute) return false
+    return routes.some((route) => route === matchRoute.path)
+  }
 
 export const creatorProjectCreationRoutes = [
   getPath('launch'),
