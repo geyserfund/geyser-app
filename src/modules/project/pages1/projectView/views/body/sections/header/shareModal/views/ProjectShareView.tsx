@@ -1,4 +1,4 @@
-import { Button, HStack, Input, Link, Tooltip, useClipboard, VStack } from '@chakra-ui/react'
+import { Button, HStack, IconButton, Input, Link, Tooltip, useClipboard, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 
@@ -35,8 +35,30 @@ export const ProjectShareView = () => {
     })
   }
 
-  const heroCount = data?.projectGet?.ambassadors?.stats?.count
+  const ambassadorsCount = data?.projectGet?.ambassadors?.stats?.count
   const satAmount = data?.projectGet?.ambassadors?.stats?.contributionsSum
+
+  const renderSharingStats = () => {
+    if (ambassadorsCount) {
+      return (
+        <>
+          {t('So far, ')}
+          <Body as="span" color="neutral1.12">
+            {ambassadorsCount}
+          </Body>{' '}
+          <Body as="span" regular>
+            {t('ambassador' + (ambassadorsCount === 1 ? ' has' : 's have') + ' enabled')}
+          </Body>{' '}
+          <Body as="span" color="neutral1.12">
+            {satAmount.toLocaleString()}
+          </Body>{' '}
+          {t('sats in contributions to this project.')}
+        </>
+      )
+    }
+
+    return ''
+  }
 
   return (
     <VStack w="100%">
@@ -49,7 +71,7 @@ export const ProjectShareView = () => {
         spacing={2}
       >
         <Body size="md" textAlign="center">
-          {!heroCount ? (
+          {!ambassadorsCount ? (
             <Body>
               {t('Become the first project')}{' '}
               <Tooltip label={t('Share your hero link to become a project ambassador')} placement="top">
@@ -63,25 +85,24 @@ export const ProjectShareView = () => {
             </Body>
           ) : (
             <Body color="neutral1.12" size="md" regular textAlign="center">
-              <Body>
-                {t('Become an')}{' '}
-                <Tooltip label={t('Share your hero link to become a project ambassador')} placement="top">
-                  <span style={{ position: 'relative', display: 'inline-block' }}>
-                    <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
-                      {t('Ambassador')}
-                    </Body>
-                  </span>
-                </Tooltip>{' '}
-                {t('for this project by spreading the word using your')}{' '}
-                <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
-                  <span style={{ position: 'relative', display: 'inline-block' }}>
-                    <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
-                      {t('Hero link')}
-                    </Body>
-                  </span>
-                </Tooltip>
-                {'.'}
-              </Body>
+              {t('Become an')}{' '}
+              <Tooltip label={t('Share your hero link to become a project ambassador')} placement="top">
+                <span style={{ position: 'relative', display: 'inline-block' }}>
+                  <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
+                    {t('Ambassador')}
+                  </Body>
+                </span>
+              </Tooltip>{' '}
+              {t('for this project by spreading the word using your')}{' '}
+              <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
+                <span style={{ position: 'relative', display: 'inline-block' }}>
+                  <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
+                    {t('Hero link')}
+                  </Body>
+                </span>
+              </Tooltip>
+              {'. '}
+              {renderSharingStats()}
             </Body>
           )}
         </Body>
@@ -97,7 +118,7 @@ export const ProjectShareView = () => {
             >
               {t('Sign in')}
             </Link>{' '}
-            {t('to get your')}{' '}
+            {t('to get your custom')}{' '}
             <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
               <span style={{ position: 'relative', display: 'inline-block' }}>
                 <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
@@ -110,13 +131,21 @@ export const ProjectShareView = () => {
         )}
       </VStack>
       <VStack width="100%" p={3} bgColor="neutral1.2" borderRadius="md" border="1px solid" borderColor="neutral1.6">
-        <Input
-          value={heroLink.replace('https://', '')}
-          readOnly
-          bg="white"
-          borderColor="neutral1.6"
-          _hover={{ borderColor: 'neutral1.8' }}
-        />
+        <HStack
+          h="40px"
+          w="full"
+          p={2}
+          bg="whiteAlpha.700"
+          borderRadius={10}
+          border="1px solid"
+          borderColor="neutral1.7"
+          zIndex={1}
+        >
+          <Body color="neutral1.12" flex={1}>
+            <strong>{t('Hero Link:')}</strong> {heroLink.replace('https://', '')}
+          </Body>
+          <IconButton aria-label="Copy hero link" icon={<PiCopy />} variant="ghost" size="md" onClick={onCopy} />
+        </HStack>
         <HStack w="full" justifyContent="center" spacing={2}>
           <Button
             variant="solid"
@@ -147,57 +176,6 @@ export const ProjectShareView = () => {
           </Button>
         </HStack>
       </VStack>
-      {heroCount && (
-        <>
-          <Body
-            size="xs"
-            textAlign="left"
-            // border="1px solid"
-            // borderColor="neutral1.6"
-            // borderRadius="md"
-            pt={2}
-            pl={2}
-            pr={2}
-            // mb={1}
-            // background="linear-gradient(81deg, #B2FAEC -9.6%, #EDF2FE 109.2%)"
-          >
-            {t('So far,')}{' '}
-            <Body as="span" color="neutral1.12" bold>
-              {heroCount}
-            </Body>{' '}
-            {heroCount > 1 ? t('heroes') : t('hero')} {heroCount > 1 ? t('have enabled') : t('has enabled')}{' '}
-            <Body as="span" color="neutral1.12" bold>
-              {satAmount?.toLocaleString('en-US')}
-            </Body>
-            {t(' sats in contributions to this project.')}
-          </Body>
-        </>
-      )}
-      {/* </VStack> */}
-      {/* {heroCount && (
-        <Body
-          size="sm"
-          textAlign="center"
-          border="1px solid"
-          borderColor="neutral1.6"
-          borderRadius="md"
-          p={2}
-          mb={1}
-          background="linear-gradient(81deg, #B2FAEC -9.6%, #EDF2FE 109.2%)"
-        >
-          <>
-            {t('So far,')}{' '}
-            <Body as="span" color="neutral1.12" bold>
-              {heroCount}
-            </Body>{' '}
-            {heroCount > 1 ? t('heroes') : t('hero')} {heroCount > 1 ? t('have enabled') : t('has enabled')}{' '}
-            <Body as="span" color="neutral1.12" bold>
-              {satAmount?.toLocaleString('en-US')}
-            </Body>
-            {t(' sats in contributions to this project.')}
-          </>
-        </Body>
-      )} */}
     </VStack>
   )
 }

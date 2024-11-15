@@ -26,7 +26,7 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
   const heroLink = `https://geyser.fund/project/${project.name}${user?.heroId ? `&hero=${user?.heroId}` : ''}`
 
   const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
-  const contributionCount = data?.projectGet?.ambassadors?.stats?.count
+  const ambassadorsCount = data?.projectGet?.ambassadors?.stats?.count
   const totalSats = data?.projectGet?.ambassadors?.stats?.contributionsSum
 
   const { onCopy } = useClipboard(heroLink)
@@ -36,6 +36,28 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
 
   if (!project) {
     return null
+  }
+
+  const renderSharingStats = () => {
+    if (ambassadorsCount) {
+      return (
+        <>
+          {t('So far, ')}
+          <Body as="span" color="neutral1.12">
+            {ambassadorsCount}
+          </Body>{' '}
+          <Body as="span" regular>
+            {t('ambassador' + (ambassadorsCount === 1 ? ' has' : 's have') + ' enabled')}
+          </Body>{' '}
+          <Body as="span" color="neutral1.12">
+            {totalSats.toLocaleString()}
+          </Body>{' '}
+          {t('sats in contributions to this project.')}
+        </>
+      )
+    }
+
+    return ''
   }
 
   const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${projectShareUrl}`
@@ -98,15 +120,8 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
                 </Body>
               </span>
             </Tooltip>
-            . {t('So far,')}{' '}
-            <Body as="span" color="neutral1.12">
-              {contributionCount}
-            </Body>{' '}
-            {t('heroes')} {t('have enabled')}{' '}
-            <Body as="span" color="neutral1.12">
-              {totalSats.toLocaleString()}
-            </Body>{' '}
-            {t('sats in contributions to this project.')}
+            {'. '}
+            {renderSharingStats()}
           </Body>
           {!isLoggedIn && (
             <Body
