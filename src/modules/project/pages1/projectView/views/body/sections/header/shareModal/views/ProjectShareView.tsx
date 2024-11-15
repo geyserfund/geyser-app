@@ -1,6 +1,7 @@
 import { Button, HStack, IconButton, Link, Tooltip, useClipboard, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
+import Truncate from 'react-truncate-inside'
 
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -142,8 +143,9 @@ export const ProjectShareView = () => {
           zIndex={1}
         >
           <Body color="neutral1.12" flex={1}>
-            <strong>{heroId ? t('Hero Link:') : ''}</strong> {heroLink.replace('https://', '')}
+            <strong>{heroId ? t('Hero Link:') : ''}</strong>{' '}
           </Body>
+          <Truncate text={heroLink.replace('https://', '')} width={230} offset={20} />
           <IconButton
             aria-label={heroId ? 'Copy link' : 'Copy hero link'}
             icon={<PiCopy />}
