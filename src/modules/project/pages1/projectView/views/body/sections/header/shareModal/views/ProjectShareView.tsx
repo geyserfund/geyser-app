@@ -25,7 +25,7 @@ export const ProjectShareView = () => {
 
   const heroId = user?.heroId
   const heroLink = `https://geyser.fund/project/geyser${heroId ? `&hero=${heroId}` : ''}`
-  const { onCopy, hasCopied } = useClipboard(heroLink)
+  const { onCopy } = useClipboard(heroLink)
 
   const handleCopy = () => {
     onCopy()
@@ -149,7 +149,7 @@ export const ProjectShareView = () => {
             icon={<PiCopy />}
             variant="ghost"
             size="md"
-            onClick={onCopy}
+            onClick={handleCopy}
           />
         </HStack>
         <HStack w="full" justifyContent="center" spacing={2}>
@@ -175,7 +175,6 @@ export const ProjectShareView = () => {
             w="full"
             rightIcon={<PiCopy />}
             onClick={handleCopy}
-            isDisabled={hasCopied}
             fontSize="md"
           >
             {t('Copy link')}

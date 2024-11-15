@@ -12,6 +12,7 @@ import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { useAuthModal } from '@/pages/auth/hooks'
 import { Body, H3 } from '@/shared/components/typography'
 import { useProjectAmbassadorStatsQuery } from '@/types'
+import { useNotification } from '@/utils'
 
 export const SuccessImageComponent = () => {
   const { t } = useTranslation()
@@ -32,6 +33,16 @@ export const SuccessImageComponent = () => {
   const totalSats = data?.projectGet?.ambassadors?.stats?.contributionsSum
 
   const { onCopy } = useClipboard(heroLink)
+  const toast = useNotification()
+
+  const handleCopy = () => {
+    onCopy()
+    toast.success({
+      title: t('Copied!'),
+      description: t('Hero link copied to clipboard'),
+    })
+  }
+
   const { getShareProjectUrl } = useProjectShare()
 
   const projectShareUrl = getShareProjectUrl({ clickedFrom: CampaignContent.successScreen })
@@ -183,7 +194,7 @@ export const SuccessImageComponent = () => {
               icon={<PiCopy />}
               variant="ghost"
               size="md"
-              onClick={onCopy}
+              onClick={handleCopy}
             />
           </HStack>
         </VStack>
@@ -213,7 +224,7 @@ export const SuccessImageComponent = () => {
             bg="blackAlpha.800"
             color="white"
             rightIcon={<PiCopy />}
-            onClick={onCopy}
+            onClick={handleCopy}
             w="full"
           >
             {t(heroId ? 'Copy link' : 'Copy hero link')}
