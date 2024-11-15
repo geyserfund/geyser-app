@@ -11,7 +11,6 @@ export const defaultUser: UserMeFragment = {
   email: '',
   heroId: '',
   username: '',
-  heroId: '',
   imageUrl: '',
   isEmailVerified: false,
   externalAccounts: [],
