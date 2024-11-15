@@ -1,4 +1,4 @@
-import { Button, HStack, Stack, VStack } from '@chakra-ui/react'
+import { HStack, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
