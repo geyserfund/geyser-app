@@ -1,4 +1,4 @@
-import { Button, HStack, Icon, IconButton, Link, Tooltip, useClipboard, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, Link, Tooltip, useClipboard, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 import Truncate from 'react-truncate-inside'
