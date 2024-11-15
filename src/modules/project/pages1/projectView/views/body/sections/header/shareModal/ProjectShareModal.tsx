@@ -13,11 +13,8 @@ import { ProjectShareView } from './views/ProjectShareView'
 interface IProjectShareModal {
   isOpen: boolean
   onClose: () => void
-  name: string
   projectId: string
   title: string
-  heroCount?: number
-  satAmount?: number
 }
 
 enum ProjectShareModalView {
@@ -26,13 +23,7 @@ enum ProjectShareModalView {
   lightning = 'lightning',
 }
 
-export const ProjectShareModal = ({
-  isOpen,
-  onClose,
-  name,
-  heroCount = 10,
-  satAmount = 21212129,
-}: IProjectShareModal) => {
+export const ProjectShareModal = ({ isOpen, onClose }: IProjectShareModal) => {
   const { t } = useTranslation()
 
   const items = [
@@ -77,7 +68,6 @@ export const ProjectShareModal = ({
 
       <AnimatedNavBar {...animatedNavBarProps} showLabel />
       {render && render()}
-      {/* <ShareBlock projectName={name} paddingTop={1} /> */}
     </Modal>
   )
 }
