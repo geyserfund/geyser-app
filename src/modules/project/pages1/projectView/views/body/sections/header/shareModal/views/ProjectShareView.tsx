@@ -1,9 +1,10 @@
-import { Button, HStack, IconButton, Link, Tooltip, useClipboard, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, IconButton, Link, Tooltip, useClipboard, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 import Truncate from 'react-truncate-inside'
 
 import { useAuthContext } from '@/context'
+import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
@@ -22,7 +23,7 @@ export const ProjectShareView = () => {
   const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
 
   const projectShareUrl = getShareProjectUrl({ clickedFrom: CampaignContent.successScreen })
-  const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${projectShareUrl}`
+  const twitterShareText = `Help make this project happen! Check it out: ${projectShareUrl}`
 
   const heroId = user?.heroId
   const heroLink = `https://geyser.fund/project/geyser${heroId ? `&hero=${heroId}` : ''}`
@@ -63,17 +64,18 @@ export const ProjectShareView = () => {
 
   return (
     <VStack w="100%">
-      {/* <VStack border="1px solid" borderColor="neutral1.6" borderRadius="md" width="100%" spacing={2}> */}
       <VStack
-        bgGradient={isLoggedIn ? 'linear(to-r, primary1.4, indigo.3)' : 'linear(to-r, neutral1.6, neutral1.3)'}
+        bgGradient={'linear(to-r, primary1.4, indigo.3)'}
         p={4}
         borderRadius="md"
         width="100%"
         spacing={2}
+        position="relative"
       >
         <Body size="md" textAlign="center">
+          <FlowingGifBackground />
           {!ambassadorsCount ? (
-            <Body>
+            <Body zIndex={1}>
               {t('Become the first project')}{' '}
               <Tooltip
                 label={t(
@@ -90,7 +92,7 @@ export const ProjectShareView = () => {
               {t('by spreading the word and enabling more contributions to this project.')}
             </Body>
           ) : (
-            <Body color="neutral1.12" size="md" regular textAlign="center">
+            <Body zIndex={1} color="neutral1.12" size="md" regular textAlign="center">
               {t('Become an')}{' '}
               <Tooltip
                 label={t(
@@ -151,18 +153,17 @@ export const ProjectShareView = () => {
           border="1px solid"
           borderColor="neutral1.7"
           zIndex={1}
+          onClick={handleCopy}
+          cursor="pointer"
+          _hover={{
+            bg: 'whiteAlpha.800',
+          }}
         >
-          <Body color="neutral1.12" flex={1}>
-            <strong>{heroId ? t('Hero Link:') : ''}</strong>{' '}
+          <Body color="neutral1.12">
+            <strong>{heroId ? t('Hero Link:') : ''}</strong>
           </Body>
-          <Truncate text={heroLink.replace('https://', '')} width={230} offset={20} />
-          <IconButton
-            aria-label={heroId ? 'Copy link' : 'Copy hero link'}
-            icon={<PiCopy />}
-            variant="ghost"
-            size="md"
-            onClick={handleCopy}
-          />
+          <Truncate text={heroLink.replace('https://', '')} width={245} offset={20} />
+          <Icon as={PiCopy} color="neutral1.11" />
         </HStack>
         <HStack w="full" justifyContent="center" spacing={2}>
           <Button

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Modal } from '@/shared/components/layouts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
-import { Body } from '@/shared/components/typography'
 
 import { ProjectBannerView } from './views/ProjectBannerView'
 import { ProjectShareContribute } from './views/ProjectShareContribute'
@@ -55,17 +54,13 @@ export const ProjectShareModal = ({ isOpen, onClose }: IProjectShareModal) => {
       onClose={onClose}
       size={'md'}
       isCentered
-      title={t('Share')}
+      title={t('Spread the word')}
       bodyProps={{
         as: VStack,
         gap: 3,
         alignItems: 'stretch',
       }}
     >
-      <Body size="sm" dark>
-        {t('Spread the word across the internet and social media.')}
-      </Body>
-
       <AnimatedNavBar {...animatedNavBarProps} showLabel />
       {render && render()}
     </Modal>
