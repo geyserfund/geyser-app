@@ -18,6 +18,11 @@ import { HallOfFameHeroBackgroundGradient } from '../styles'
 export const Heroes = () => {
   const heroType = useAtomValue(heroTypeFromRoute)
 
+  const heroDescriptions = {
+    [HeroType.Contributors]: t('Those whose contributions power projects on Geyser, driving Bitcoin adoption.'),
+    [HeroType.Creators]: t('Those bringing the most successful projects to life.'),
+    [HeroType.Ambassadors]: t('Those spreading the word about valuable projects and enabling contributions to happen'),
+  }
   const items = [
     {
       name: t('Contributors'),
@@ -71,8 +76,8 @@ export const Heroes = () => {
       </TopNavContainerBar>
       <CardLayout w="full" h="full" dense>
         <IndividualHallOfFameTitle
-          title={t('Hall of Fame')}
-          description={t('Individuals whose contributions power projects on Geyser, impacting Bitcoin adoption.')}
+          title={t('Heroes Hall of Fame')}
+          description={heroDescriptions[heroType]}
           background={HallOfFameHeroBackgroundGradient[heroType]}
           noborder
           borderRadius={0}

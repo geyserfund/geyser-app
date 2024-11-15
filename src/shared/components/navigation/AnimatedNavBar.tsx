@@ -7,6 +7,7 @@ import {
   Skeleton,
   StackProps,
   Tooltip,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
@@ -174,6 +175,8 @@ const ProjectNavigationButton: ComponentWithAs<
   'button',
   ButtonProps & { to?: string; isActive: boolean; length: number }
 > = forwardRef(({ isActive, length, ...props }, ref) => {
+  const textColor = useColorModeValue('neutral1.12', 'neutral1.12')
+  console.log('textColor', textColor)
   return (
     <Button
       ref={ref}
@@ -181,7 +184,7 @@ const ProjectNavigationButton: ComponentWithAs<
       size={'lg'}
       variant="ghost"
       backgroundColor={'transparent'}
-      color={'neutral1.12'}
+      color={textColor}
       _disabled={{ color: 'neutral1.9' }}
       padding={0}
       {...props}

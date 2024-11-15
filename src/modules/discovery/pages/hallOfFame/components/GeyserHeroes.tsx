@@ -18,7 +18,7 @@ import { useTopAmbassadors } from '../hooks/useTopAmbassadors'
 import { StandardOption } from '../types'
 import { TitleWithPeriod } from './TitleWithPeriod'
 
-const MAX_HEROES = 6
+const MAX_HEROES = 5
 
 const HeroListLabels = { username: 'username', amount: 'contributionsTotal', usdAmount: 'contributionsTotalUsd' }
 
@@ -37,23 +37,23 @@ export const GeyserHeroes = () => {
 
   return (
     <VStack w="full">
-      <TitleWithPeriod title={t('Heroes')} period={period} handlePeriodChange={handlePeriodChange} />
+      <TitleWithPeriod
+        title={t('Top Heroes')}
+        period={period}
+        seeAllTo={getPath('hallOfFameHeroesContributor')}
+        handlePeriodChange={handlePeriodChange}
+      />
       <Stack direction={{ base: 'column', lg: 'row' }} w="full" alignItems={'start'} spacing={4}>
         <HeroSectionWrapper title={t('Creators')} description="Lead initiatives and bring ideas to life.">
           <RenderHeroList period={period} data={contributors} loading={contributorsLoading} labels={HeroListLabels} />
         </HeroSectionWrapper>
-        <HeroSectionWrapper title={t('Contributors')} description="Put their sats where their mouth is.">
+        <HeroSectionWrapper title={t('Contributors')} description="Power project ideas with their sats.">
           <RenderHeroList period={period} data={contributors} loading={contributorsLoading} labels={HeroListLabels} />
         </HeroSectionWrapper>
         <HeroSectionWrapper title={t('Ambassadors')} description="Spread the word to help projects grow.">
           <RenderHeroList period={period} data={ambassadors} loading={ambassadorsLoading} labels={HeroListLabels} />
         </HeroSectionWrapper>
       </Stack>
-      <HStack w="full" justifyContent="center" pt={1}>
-        <Button as={Link} to={getPath('hallOfFameHeroesContributor')} variant="soft" colorScheme="neutral1">
-          {t('See all Heroes')}
-        </Button>
-      </HStack>
     </VStack>
   )
 }
@@ -145,8 +145,7 @@ const HeroesListitemSkeleton = () => {
 
       <VStack w="full" overflow="hidden" flex={1} spacing={0.5} alignItems="start">
         <SkeletonLayout height="24px" width="100px" />
-
-        <SkeletonLayout height="22px" width="100px" />
+        <SkeletonLayout height="22px" width="50px" />
       </VStack>
     </HStack>
   )

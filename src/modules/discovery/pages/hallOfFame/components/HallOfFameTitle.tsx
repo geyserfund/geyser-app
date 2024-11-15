@@ -26,12 +26,7 @@ export const HallOfFameTitle = () => {
 
     return bannerItems.map((item, index) => (
       <>
-        <Body
-          key={index}
-          size={{ base: 'sm', lg: 'xl' }}
-          color={{ base: 'neutral1.11', lg: 'utils.text' }}
-          textAlign={'center'}
-        >
+        <Body key={index} size={{ base: 'sm', lg: 'xl' }} color="neutral1.10" textAlign={'center'}>
           {item.value} <Body as="span">{item.label}</Body>
         </Body>
         {index < bannerItems.length - 1 && <Icon as={PiDotOutline} />}

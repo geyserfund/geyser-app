@@ -1,4 +1,4 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -32,7 +32,12 @@ export const TopProjects = () => {
 
   return (
     <VStack w="full">
-      <TitleWithPeriod title={t('Top Projects')} period={period} handlePeriodChange={handlePeriodChange} />
+      <TitleWithPeriod
+        title={t('Top Projects')}
+        period={period}
+        handlePeriodChange={handlePeriodChange}
+        seeAllTo={getPath('hallOfFameProjects')}
+      />
       <CardLayout w="full" direction="row" flexWrap={'wrap'}>
         {loading
           ? [...Array(9).keys()].keys().map((key) => {
@@ -42,11 +47,6 @@ export const TopProjects = () => {
               return <ProjectHeroDisplay key={project.projectName} project={project} index={index} />
             })}
       </CardLayout>
-      <HStack w="full" justifyContent="center" pt={1}>
-        <Button as={Link} to={getPath('hallOfFameProjects')} variant="soft" colorScheme="neutral1">
-          {t('See all top projects')}
-        </Button>
-      </HStack>
     </VStack>
   )
 }
