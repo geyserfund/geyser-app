@@ -157,7 +157,12 @@ export const SuccessImageComponent = () => {
         <VStack spacing={2} w="full" zIndex={1}>
           <Body color="neutral1.11" size="xl" regular pb={4} textAlign="center">
             {t('Become an')}{' '}
-            <Tooltip label={t('Share your hero link to become a project ambassador')} placement="top">
+            <Tooltip
+              label={t(
+                'Someone who enables contributions towards projects by spreading the word using his/her unique Hero link',
+              )}
+              placement="top"
+            >
               <span style={{ position: 'relative', display: 'inline-block' }}>
                 <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline">
                   {t('Ambassador')}

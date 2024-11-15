@@ -75,7 +75,12 @@ export const ProjectShareView = () => {
           {!ambassadorsCount ? (
             <Body>
               {t('Become the first project')}{' '}
-              <Tooltip label={t('Share your hero link to become a project ambassador')} placement="top">
+              <Tooltip
+                label={t(
+                  'Someone who enables contributions towards projects by spreading the word using his/her unique Hero link',
+                )}
+                placement="top"
+              >
                 <span style={{ position: 'relative', display: 'inline-block' }}>
                   <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
                     {t('Ambassador')}
@@ -87,7 +92,12 @@ export const ProjectShareView = () => {
           ) : (
             <Body color="neutral1.12" size="md" regular textAlign="center">
               {t('Become an')}{' '}
-              <Tooltip label={t('Share your hero link to become a project ambassador')} placement="top">
+              <Tooltip
+                label={t(
+                  'Someone who enables contributions towards projects by spreading the word using his/her unique Hero link',
+                )}
+                placement="top"
+              >
                 <span style={{ position: 'relative', display: 'inline-block' }}>
                   <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
                     {t('Ambassador')}
