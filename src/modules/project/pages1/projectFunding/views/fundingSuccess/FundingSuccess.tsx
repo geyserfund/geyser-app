@@ -43,7 +43,7 @@ export const FundingSuccess = () => {
       }
     >
       <CardLayout mobileDense w="full" padding={{ base: 0, lg: 12 }} alignItems="center">
-        <Confetti gravity={0.07} numberOfPieces={250} />
+        <Confetti gravity={0.07} numberOfPieces={250} colors={['#B2FAEC', '#EDF2FE', '#00C3AD', '#007B6C']} />
         <VStack w="full" maxWidth="800px" alignItems="start" spacing={6}>
           <VStack w="full" alignItems="start">
             <SuccessImageComponent />

@@ -50,10 +50,15 @@ export enum PathName {
   launchProjectRewardsNew = 'rewards/new',
   launchProjectRewardsEdit = 'rewards/edit',
 
-  userProfile = 'profile',
-  userProfileSettings = 'settings',
-  userProfileSettingsGeneral = 'general',
-  userProfileSettingsNotifications = 'notifications',
+  userProfile = 'user',
+  userSettings = 'settings',
+  userSettingsGeneral = 'general',
+  userSettingsNotifications = 'notifications',
+
+  heroProfile = 'hero',
+  heroSettings = 'settings',
+  heroSettingsGeneral = 'general',
+  heroSettingsNotifications = 'notifications',
 
   preview = 'preview',
 
@@ -91,6 +96,7 @@ export enum PathName {
   projectName = ':projectName',
   rewardId = ':rewardId',
   userId = ':userId',
+  heroId = ':heroId',
   entryId = ':entryId',
   postId = ':postId',
   goalId = ':goalId',
@@ -246,14 +252,21 @@ const pathsMap = {
 
   projectLaunch: (projectName: string) => `/${PathName.project}/${projectName}/?launch`,
   projectLaunchDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}/?draft`,
-  /** User Profile Routes */
 
-  userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
-  userProfileSettings: (userID: string) => `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}`,
-  userProfileSettingsGeneral: (userID: string) =>
-    `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}/${PathName.userProfileSettingsGeneral}`,
-  userProfileSettingsNotifications: (userID: string) =>
-    `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}/${PathName.userProfileSettingsNotifications}`,
+  /** User Profile Routes */
+  userProfile: (userId: string) => `/${PathName.userProfile}/${userId}`,
+  userProfileSettings: (userId: string) => `/${PathName.userProfile}/${userId}/${PathName.userSettings}`,
+  userProfileSettingsGeneral: (userId: string) =>
+    `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsGeneral}`,
+  userProfileSettingsNotifications: (userId: string) =>
+    `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsNotifications}`,
+
+  heroProfile: (heroId: string) => `/${PathName.heroProfile}/${heroId}`,
+  heroProfileSettings: (heroId: string) => `/${PathName.heroProfile}/${heroId}/${PathName.heroSettings}`,
+  heroProfileSettingsGeneral: (heroId: string) =>
+    `/${PathName.heroProfile}/${heroId}/${PathName.heroSettings}/${PathName.heroSettingsGeneral}`,
+  heroProfileSettingsNotifications: (heroId: string) =>
+    `/${PathName.heroProfile}/${heroId}/${PathName.heroSettings}/${PathName.heroSettingsNotifications}`,
 
   badges: () => `/${PathName.badges}`,
 

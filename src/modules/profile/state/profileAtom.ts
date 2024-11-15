@@ -8,6 +8,7 @@ export const defaultUser: UserForProfilePageFragment = {
   bio: '',
   heroId: '',
   username: '',
+  heroId: '',
   imageUrl: '',
   ranking: 0,
   isEmailVerified: false,

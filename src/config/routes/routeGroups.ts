@@ -10,11 +10,11 @@ export const routeMatchForAtom =
     /** arrray of route patterns you'd like to match with the current route */
     routes: string[],
   ) =>
-  (get: Getter) => {
-    const matchRoute = get(currentRouteAtom)
-    if (!matchRoute) return false
-    return routes.some((route) => route === matchRoute.path)
-  }
+    (get: Getter) => {
+      const matchRoute = get(currentRouteAtom)
+      if (!matchRoute) return false
+      return routes.some((route) => route === matchRoute.path)
+    }
 
 export const creatorProjectCreationRoutes = [
   getPath('launch'),
@@ -141,6 +141,13 @@ export const profileSettingsRoutes = [
   getPath('userProfileSettingsNotifications', PathName.userId),
 ]
 
+export const heroProfileSettingsRoutes = [
+  getPath('heroProfileSettings', PathName.heroId),
+  getPath('heroProfileSettingsGeneral', PathName.heroId),
+  getPath('heroProfileSettingsNotifications', PathName.heroId),
+]
+
 export const profileRoutes = [getPath('userProfile', PathName.userId), ...profileSettingsRoutes]
+export const heroProfileRoutes = [getPath('heroProfile', PathName.heroId), ...heroProfileSettingsRoutes]
 
 export const fallBackRoutes = [getPath('notFound'), getPath('notAuthorized')]

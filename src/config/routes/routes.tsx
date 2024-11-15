@@ -130,6 +130,9 @@ export const platformRoutes: RouteObject[] = [
     ],
   },
 
+  /*
+    Deprecate for hero routes
+  */
   {
     path: getPath('userProfile', PathName.userId),
     async lazy() {
@@ -167,6 +170,55 @@ export const platformRoutes: RouteObject[] = [
           },
           {
             path: getPath('userProfileSettingsNotifications', PathName.userId),
+            async lazy() {
+              const ProfileSettingsNotifications = await ProfileSettingsIndex().then(
+                (m) => m.ProfileSettingsNotifications,
+              )
+              return { Component: ProfileSettingsNotifications }
+            },
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    path: getPath('heroProfile', PathName.heroId),
+    async lazy() {
+      const ProfileMain = await ProfilePage().then((m) => m.ProfileMain)
+      return { Component: ProfileMain }
+    },
+    children: [
+      {
+        index: true,
+        async lazy() {
+          const Profile = await ProfilePage().then((m) => m.Profile)
+          return { Component: Profile }
+        },
+      },
+      {
+        path: getPath('heroProfileSettings', PathName.heroId),
+        async lazy() {
+          const ProfileSettings = await ProfileSettingsIndex().then((m) => m.ProfileSettings)
+          return { element: renderPrivateRoute(ProfileSettings) }
+        },
+        children: [
+          {
+            index: true,
+            async lazy() {
+              const ProfileSettingsMain = await ProfileSettingsIndex().then((m) => m.ProfileSettingsMain)
+              return { Component: ProfileSettingsMain }
+            },
+          },
+          {
+            path: getPath('heroProfileSettingsGeneral', PathName.heroId),
+            async lazy() {
+              const ProfileSettingsGeneral = await ProfileSettingsIndex().then((m) => m.ProfileSettingsGeneral)
+              return { Component: ProfileSettingsGeneral }
+            },
+          },
+          {
+            path: getPath('heroProfileSettingsNotifications', PathName.heroId),
             async lazy() {
               const ProfileSettingsNotifications = await ProfileSettingsIndex().then(
                 (m) => m.ProfileSettingsNotifications,
