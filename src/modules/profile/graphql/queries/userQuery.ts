@@ -48,6 +48,36 @@ export const QUERY_USER_CONTRIBUTIONS = gql`
   }
 `
 
+export const QUERY_USER_HERO_STATS = gql`
+  query UserHeroStats($where: UserGetInput!) {
+    user(where: $where) {
+      heroStats {
+        ambassadorStats {
+          contributionsCount
+          contributionsTotalUsd
+          contributionsTotal
+          projectsCount
+          rank
+        }
+        contributorStats {
+          contributionsCount
+          contributionsTotalUsd
+          contributionsTotal
+          projectsCount
+          rank
+        }
+        creatorStats {
+          contributionsCount
+          contributionsTotalUsd
+          contributionsTotal
+          projectsCount
+          rank
+        }
+      }
+    }
+  }
+`
+
 export const QUERY_USER_PROFILE_ORDERS = gql`
   ${FRAGMENT_PROFILE_ORDER}
   query UserProfileOrders($where: UserGetInput!) {
