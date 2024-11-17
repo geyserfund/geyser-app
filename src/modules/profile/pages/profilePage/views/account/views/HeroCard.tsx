@@ -1,6 +1,6 @@
 import { Box, Center, Image, Text, VStack } from '@chakra-ui/react'
 
-import { HeroCardLayout, LogoDark } from '@/assets'
+import { HeroCardLayout } from '@/assets'
 
 import { UserHeroStats } from '../../../../../../../types'
 import { getShortAmountLabel } from '../../../../../../../utils'
