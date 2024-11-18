@@ -53,8 +53,9 @@ export const HeroCard = ({ user, stats }: { user: any; stats: UserHeroStats }) =
       <VStack spacing={4} align="stretch" alignItems="center" alignContent="center">
         <Box>
           <Text fontSize="md">
-            Enabled: {getShortAmountLabel(stats.ambassadorStats.contributionsTotal)} sats ($
-            {getShortAmountLabel(stats.ambassadorStats.contributionsTotalUsd)})
+            Enabled: {getShortAmountLabel(stats.ambassadorStats.contributionsTotal)} sats
+            {/* ($
+            {getShortAmountLabel(stats.ambassadorStats.contributionsTotalUsd)}) */}
           </Text>
           <Text fontSize="sm" color="blackAlpha.700">
             For {stats.ambassadorStats.projectsCount || 6} projects • Ranked {stats.ambassadorStats.rank}
@@ -63,8 +64,9 @@ export const HeroCard = ({ user, stats }: { user: any; stats: UserHeroStats }) =
 
         <Box>
           <Text fontSize="md">
-            Raised: {getShortAmountLabel(stats.creatorStats.contributionsTotal)} sats ($
-            {getShortAmountLabel(stats.creatorStats.contributionsTotalUsd)})
+            Raised: {getShortAmountLabel(stats.creatorStats.contributionsTotal)} sats
+            {/* ($
+            {getShortAmountLabel(stats.creatorStats.contributionsTotalUsd)}) */}
           </Text>
           <Text fontSize="sm" color="blackAlpha.700">
             On {stats.creatorStats.projectsCount} projects • Ranked {stats.creatorStats.rank}
@@ -73,8 +75,9 @@ export const HeroCard = ({ user, stats }: { user: any; stats: UserHeroStats }) =
 
         <Box>
           <Text fontSize="md">
-            Contributed: {getShortAmountLabel(stats.contributorStats.contributionsTotal)} sats ($
-            {getShortAmountLabel(stats.contributorStats.contributionsTotalUsd)})
+            Contributed: {getShortAmountLabel(stats.contributorStats.contributionsTotal)} sats
+            {/* ($
+            {getShortAmountLabel(stats.contributorStats.contributionsTotalUsd)}) */}
           </Text>
           <Text fontSize="sm" color="blackAlpha.700">
             To {stats.contributorStats.projectsCount} projects • Ranked {stats.contributorStats.rank}

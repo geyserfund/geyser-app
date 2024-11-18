@@ -5,70 +5,59 @@ import { useMemo } from 'react'
 
 import { CardLayout } from '@/shared/components/layouts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
-import { AnimatedTabBar } from '@/shared/components/navigation/AnimatedTabBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { dimensions } from '@/shared/constants'
 import { standardPadding } from '@/shared/styles'
 import { ProjectLeaderboardPeriod } from '@/types'
-import { useCustomTheme, useMobileMode } from '@/utils'
+import { useMobileMode } from '@/utils'
 
+import { Contributions } from '../contributions/Contributions'
+import { AmabassadorList } from './AmabassadorList'
 import { LeaderboardList } from './LeaderboardList'
 
 export const MAXIMUM_LEADERBOARD_ITEMS = 30
 
-export const Leaderboard = () => {
+enum LeaderboardView {
+  Contributors = 'Contributors',
+  Ambassadors = 'Ambassadors',
+  Contributions = 'Contributions',
+}
+
+export const Leaderboard = ({ period }: { period: ProjectLeaderboardPeriod }) => {
   const isMobile = useMobileMode()
-  const { colors } = useCustomTheme()
 
   const currentDateTime = DateTime.now()
 
-  const items: AnimatedNavBarItem[] = useMemo(
-    () => [
+  const items: AnimatedNavBarItem[] = useMemo(() => {
+    const list = [
       {
-        name: t('All time'),
-        key: ProjectLeaderboardPeriod.AllTime,
-        render: () => <LeaderboardList period={ProjectLeaderboardPeriod.AllTime} dateTime={currentDateTime} />,
+        name: t('Contributors'),
+        key: LeaderboardView.Contributors,
+        render: () => <LeaderboardList period={period} dateTime={currentDateTime} />,
       },
       {
-        name: t('Last month'),
-        key: ProjectLeaderboardPeriod.Month,
-        render: () => <LeaderboardList period={ProjectLeaderboardPeriod.Month} dateTime={currentDateTime} />,
+        name: t('Ambassadors'),
+        key: LeaderboardView.Ambassadors,
+        render: () => <AmabassadorList period={period} dateTime={currentDateTime} />,
       },
-      {
-        name: t('Last week'),
-        key: ProjectLeaderboardPeriod.Week,
-        render: () => <LeaderboardList period={ProjectLeaderboardPeriod.Week} dateTime={currentDateTime} />,
-      },
-    ],
-    [currentDateTime],
-  )
+    ]
 
-  const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: ProjectLeaderboardPeriod.AllTime })
+    if (isMobile) {
+      list.push({
+        name: t('Contributors'),
+        key: LeaderboardView.Contributions,
+        render: () => <Contributions />,
+      })
+    }
 
-  if (isMobile) {
-    return (
-      <VStack w="full">
-        <HStack
-          width="calc(100% - 24px)"
-          position="fixed"
-          top={`${dimensions.topNavBar.mobile.height + dimensions.projectNavBar.mobile.height * 2 - 5}px`}
-          backgroundColor={'utils.pbg'}
-          zIndex={1}
-          paddingTop={2}
-          paddingBottom={2}
-        >
-          <AnimatedTabBar {...animatedNavBarProps} activeTabColor={colors.utils.text} />
-        </HStack>
-        <VStack w="full" h="full" pt={`${dimensions.animatedNavBar.height.base + 8}px`}>
-          {render && render()}
-        </VStack>
-      </VStack>
-    )
-  }
+    return list
+  }, [currentDateTime, isMobile, period])
+
+  const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: LeaderboardView.Contributors })
 
   return (
-    <CardLayout dense w="full" paddingTop={standardPadding} flex={1}>
-      <HStack w="full" paddingX={standardPadding} position="absolute" top={standardPadding} paddingBottom={2}>
+    <CardLayout dense noMobileBorder w="full" paddingTop={standardPadding} flex={1}>
+      <HStack w="full" paddingX={{ base: 0, lg: 6 }} position="absolute" top={standardPadding} paddingBottom={2}>
         <AnimatedNavBar {...animatedNavBarProps} showLabel />
       </HStack>
       <VStack w="full" h="full" pt={`${dimensions.animatedNavBar.height.base + 8}px`}>

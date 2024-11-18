@@ -40,7 +40,7 @@ export const Summary = () => {
     const defaultStats: HeroStats = {
       contributionsCount: 0,
       contributionsTotal: 0,
-      contributionsTotalUsd: 0,
+      // contributionsTotalUsd: 0,
       projectsCount: 0,
       rank: 0,
     }
@@ -114,7 +114,7 @@ export const Summary = () => {
           Icon={PiLightning}
           value={
             <Body size="md" medium>
-              ${getShortAmountLabel(stats.contributorStats.contributionsTotalUsd).toLocaleLowerCase()}
+              {/* ${getShortAmountLabel(stats.contributorStats.contributionsTotalUsd).toLocaleLowerCase()} */}
               <Body as="span" size="md" medium light>
                 {' '}
                 ({getShortAmountLabel(stats.contributorStats.contributionsTotal)} sats)
@@ -135,7 +135,7 @@ export const Summary = () => {
           }}
           value={
             <Body size="md" medium>
-              ${getShortAmountLabel(stats.creatorStats.contributionsTotalUsd).toLocaleLowerCase()}
+              {/* ${getShortAmountLabel(stats.creatorStats.contributionsTotalUsd).toLocaleLowerCase()} */}
               <Body as="span" size="md" medium light>
                 {' '}
                 ({getShortAmountLabel(stats.creatorStats.contributionsTotal)} sats)
@@ -156,7 +156,7 @@ export const Summary = () => {
           Icon={PiMegaphone}
           value={
             <Body size="md" medium>
-              ${getShortAmountLabel(stats.ambassadorStats.contributionsTotalUsd).toLocaleLowerCase()}
+              {/* ${getShortAmountLabel(stats.ambassadorStats.contributionsTotalUsd).toLocaleLowerCase()} */}
               <Body as="span" size="md" medium light>
                 {' '}
                 ({getShortAmountLabel(stats.ambassadorStats.contributionsTotal)} sats)

@@ -1,4 +1,4 @@
-import { HStack, SkeletonCircle, StackProps, VStack } from '@chakra-ui/react'
+import { HStack, Icon, SkeletonCircle, StackProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiChatCircle, PiLightning } from 'react-icons/pi'
 
@@ -47,27 +47,33 @@ export const LeaderboardItem = ({ funder, rank, ...props }: LeaderboardItemProps
           </Body>
           <HStack spacing={2}>
             <Body size="sm">
-              {commaFormatted(funder.contributionsTotal)}{' '}
+              {`$${commaFormatted(funder.contributionsTotalUsd)}`}{' '}
               <Body as="span" size="sm" muted>
-                {`sats ($${commaFormatted(funder.contributionsTotalUsd)})`}
+                {`(${commaFormatted(funder.contributionsTotal)} sats)`}
               </Body>
             </Body>
 
             {funder.contributionsCount && funder.contributionsCount > 1 && (
-              <HStack spacing={0}>
-                <PiLightning fontSize={'12px'} />
+              <HStack spacing={1}>
+                <Body size="sm" muted display={{ base: 'none', lg: 'unset' }}>
+                  {t('with')}
+                </Body>
                 <Body size="sm" dark>
                   {funder.contributionsCount}
+                </Body>
+                <Icon as={PiLightning} display={{ base: 'unset', lg: 'none' }} fontSize={'12px'} />
+                <Body size="sm" muted display={{ base: 'none', lg: 'unset' }}>
+                  {t('contributions')}
                 </Body>
               </HStack>
             )}
 
             {funder.commentsCount && funder.commentsCount > 0 && (
               <HStack spacing={0}>
-                <PiChatCircle fontSize={'12px'} />
                 <Body size="sm" dark>
                   {funder.commentsCount}
                 </Body>
+                <PiChatCircle fontSize={'12px'} />
               </HStack>
             )}
           </HStack>

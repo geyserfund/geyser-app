@@ -54,21 +54,21 @@ export const QUERY_USER_HERO_STATS = gql`
       heroStats {
         ambassadorStats {
           contributionsCount
-          contributionsTotalUsd
+          # contributionsTotalUsd
           contributionsTotal
           projectsCount
           rank
         }
         contributorStats {
           contributionsCount
-          contributionsTotalUsd
+          # contributionsTotalUsd
           contributionsTotal
           projectsCount
           rank
         }
         creatorStats {
           contributionsCount
-          contributionsTotalUsd
+          # contributionsTotalUsd
           contributionsTotal
           projectsCount
           rank
