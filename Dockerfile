@@ -30,6 +30,7 @@ FROM dependencies AS build
 WORKDIR /usr/app
 COPY ./public ./public
 COPY ./src ./src
+copy ./language ./language
 COPY index.html tsconfig.json tsconfig.node.json vite.config.ts eslint.config.mjs .prettierrc ./
 
 ARG VITE_APP_API_ENDPOINT
