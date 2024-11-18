@@ -138,6 +138,7 @@ export type AmbassadorStats = HeroStats & {
   __typename?: 'AmbassadorStats'
   contributionsCount: Scalars['Int']['output']
   contributionsTotal: Scalars['Int']['output']
+  contributionsTotalUsd: Scalars['Float']['output']
   /** Number of projects shared by the User. */
   projectsCount: Scalars['Int']['output']
   rank: Scalars['Int']['output']
@@ -266,6 +267,7 @@ export type ContributorStats = HeroStats & {
   __typename?: 'ContributorStats'
   contributionsCount: Scalars['Int']['output']
   contributionsTotal: Scalars['Int']['output']
+  contributionsTotalUsd: Scalars['Float']['output']
   /** Number of projects contributed to by the User. */
   projectsCount: Scalars['Int']['output']
   rank: Scalars['Int']['output']
@@ -357,6 +359,7 @@ export type CreatorStats = HeroStats & {
   __typename?: 'CreatorStats'
   contributionsCount: Scalars['Int']['output']
   contributionsTotal: Scalars['Int']['output']
+  contributionsTotalUsd: Scalars['Float']['output']
   /** Number of projects created by the User. */
   projectsCount: Scalars['Int']['output']
   rank: Scalars['Int']['output']
@@ -1133,6 +1136,7 @@ export type GraphSumData = {
 export type HeroStats = {
   contributionsCount: Scalars['Int']['output']
   contributionsTotal: Scalars['Int']['output']
+  contributionsTotalUsd: Scalars['Float']['output']
   projectsCount: Scalars['Int']['output']
   rank: Scalars['Int']['output']
 }
@@ -4393,6 +4397,7 @@ export type AmbassadorStatsResolvers<
 > = {
   contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
   projectsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   rank?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
@@ -4528,6 +4533,7 @@ export type ContributorStatsResolvers<
 > = {
   contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
   projectsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   rank?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
@@ -4568,6 +4574,7 @@ export type CreatorStatsResolvers<
 > = {
   contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
   projectsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   rank?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
@@ -5009,6 +5016,7 @@ export type HeroStatsResolvers<
   __resolveType: TypeResolveFn<'AmbassadorStats' | 'ContributorStats' | 'CreatorStats', ParentType, ContextType>
   contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>
   projectsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   rank?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
 }
@@ -8449,6 +8457,44 @@ export type UserProfileContributionsQuery = {
   user: {
     __typename?: 'User'
     contributions: Array<{ __typename?: 'UserProjectContribution' } & UserProjectContributionsFragment>
+  }
+}
+
+export type UserHeroStatsQueryVariables = Exact<{
+  where: UserGetInput
+}>
+
+export type UserHeroStatsQuery = {
+  __typename?: 'Query'
+  user: {
+    __typename?: 'User'
+    heroStats: {
+      __typename?: 'UserHeroStats'
+      ambassadorStats: {
+        __typename?: 'AmbassadorStats'
+        contributionsCount: number
+        contributionsTotalUsd: number
+        contributionsTotal: number
+        projectsCount: number
+        rank: number
+      }
+      contributorStats: {
+        __typename?: 'ContributorStats'
+        contributionsCount: number
+        contributionsTotalUsd: number
+        contributionsTotal: number
+        projectsCount: number
+        rank: number
+      }
+      creatorStats: {
+        __typename?: 'CreatorStats'
+        contributionsCount: number
+        contributionsTotalUsd: number
+        contributionsTotal: number
+        projectsCount: number
+        rank: number
+      }
+    }
   }
 }
 
@@ -14959,6 +15005,78 @@ export type UserProfileContributionsQueryResult = Apollo.QueryResult<
   UserProfileContributionsQuery,
   UserProfileContributionsQueryVariables
 >
+export const UserHeroStatsDocument = gql`
+  query UserHeroStats($where: UserGetInput!) {
+    user(where: $where) {
+      heroStats {
+        ambassadorStats {
+          contributionsCount
+          contributionsTotalUsd
+          contributionsTotal
+          projectsCount
+          rank
+        }
+        contributorStats {
+          contributionsCount
+          contributionsTotalUsd
+          contributionsTotal
+          projectsCount
+          rank
+        }
+        creatorStats {
+          contributionsCount
+          contributionsTotalUsd
+          contributionsTotal
+          projectsCount
+          rank
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useUserHeroStatsQuery__
+ *
+ * To run a query within a React component, call `useUserHeroStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserHeroStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserHeroStatsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserHeroStatsQuery(
+  baseOptions: Apollo.QueryHookOptions<UserHeroStatsQuery, UserHeroStatsQueryVariables> &
+    ({ variables: UserHeroStatsQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<UserHeroStatsQuery, UserHeroStatsQueryVariables>(UserHeroStatsDocument, options)
+}
+
+export function useUserHeroStatsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserHeroStatsQuery, UserHeroStatsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<UserHeroStatsQuery, UserHeroStatsQueryVariables>(UserHeroStatsDocument, options)
+}
+
+export function useUserHeroStatsSuspenseQuery(
+  baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserHeroStatsQuery, UserHeroStatsQueryVariables>,
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<UserHeroStatsQuery, UserHeroStatsQueryVariables>(UserHeroStatsDocument, options)
+}
+
+export type UserHeroStatsQueryHookResult = ReturnType<typeof useUserHeroStatsQuery>
+export type UserHeroStatsLazyQueryHookResult = ReturnType<typeof useUserHeroStatsLazyQuery>
+export type UserHeroStatsSuspenseQueryHookResult = ReturnType<typeof useUserHeroStatsSuspenseQuery>
+export type UserHeroStatsQueryResult = Apollo.QueryResult<UserHeroStatsQuery, UserHeroStatsQueryVariables>
 export const UserProfileOrdersDocument = gql`
   query UserProfileOrders($where: UserGetInput!) {
     user(where: $where) {

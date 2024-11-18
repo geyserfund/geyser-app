@@ -47,9 +47,7 @@ export const AccountInfo = () => {
     accounts: userAccountToDisplay,
   })
 
-  if (isLoading) {
-    return <AccountInfoSkeleton />
-  }
+  if (isLoading) return <AccountInfoSkeleton />
 
   return (
     <VStack spacing={3}>
