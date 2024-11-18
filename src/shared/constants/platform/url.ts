@@ -232,6 +232,8 @@ export const HallOfFameIllustrationUrl = 'https://storage.googleapis.com/geyser-
 export const HallOfFameAnimatedGifUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/halloffame-animated-gif.gif'
 
+export const MegaphoneOutlineUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/microphone_outline.png'
+
 // FUNDING FLOW ERRORS
 
 export const FundingErrorUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/errors/error.png'

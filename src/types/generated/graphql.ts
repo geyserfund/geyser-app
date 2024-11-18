@@ -136,6 +136,7 @@ export type AmbassadorStats = HeroStats & {
   __typename?: 'AmbassadorStats';
   contributionsCount: Scalars['Int']['output'];
   contributionsTotal: Scalars['Int']['output'];
+  contributionsTotalUsd: Scalars['Float']['output'];
   /** Number of projects shared by the User. */
   projectsCount: Scalars['Int']['output'];
   rank: Scalars['Int']['output'];
@@ -262,6 +263,7 @@ export type ContributorStats = HeroStats & {
   __typename?: 'ContributorStats';
   contributionsCount: Scalars['Int']['output'];
   contributionsTotal: Scalars['Int']['output'];
+  contributionsTotalUsd: Scalars['Float']['output'];
   /** Number of projects contributed to by the User. */
   projectsCount: Scalars['Int']['output'];
   rank: Scalars['Int']['output'];
@@ -353,6 +355,7 @@ export type CreatorStats = HeroStats & {
   __typename?: 'CreatorStats';
   contributionsCount: Scalars['Int']['output'];
   contributionsTotal: Scalars['Int']['output'];
+  contributionsTotalUsd: Scalars['Float']['output'];
   /** Number of projects created by the User. */
   projectsCount: Scalars['Int']['output'];
   rank: Scalars['Int']['output'];
@@ -1130,6 +1133,7 @@ export type GraphSumData = {
 export type HeroStats = {
   contributionsCount: Scalars['Int']['output'];
   contributionsTotal: Scalars['Int']['output'];
+  contributionsTotalUsd: Scalars['Float']['output'];
   projectsCount: Scalars['Int']['output'];
   rank: Scalars['Int']['output'];
 };
@@ -2311,6 +2315,7 @@ export type ProjectLeaderboardAmbassadorsGetInput = {
 
 export type ProjectLeaderboardAmbassadorsRow = {
   __typename?: 'ProjectLeaderboardAmbassadorsRow';
+  contributionsCount: Scalars['Int']['output'];
   contributionsTotal: Scalars['Int']['output'];
   contributionsTotalUsd: Scalars['Float']['output'];
   projectsCount: Scalars['Int']['output'];
@@ -4165,6 +4170,7 @@ export type AmbassadorResolvers<ContextType = any, ParentType extends ResolversP
 export type AmbassadorStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['AmbassadorStats'] = ResolversParentTypes['AmbassadorStats']> = {
   contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   projectsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   rank?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -4256,6 +4262,7 @@ export type ContributorContributionsSummaryResolvers<ContextType = any, ParentTy
 export type ContributorStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributorStats'] = ResolversParentTypes['ContributorStats']> = {
   contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   projectsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   rank?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -4284,6 +4291,7 @@ export type CreatorNotificationSettingsProjectResolvers<ContextType = any, Paren
 export type CreatorStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['CreatorStats'] = ResolversParentTypes['CreatorStats']> = {
   contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   projectsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   rank?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -4601,6 +4609,7 @@ export type HeroStatsResolvers<ContextType = any, ParentType extends ResolversPa
   __resolveType: TypeResolveFn<'AmbassadorStats' | 'ContributorStats' | 'CreatorStats', ParentType, ContextType>;
   contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   projectsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   rank?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
 };
@@ -5058,6 +5067,7 @@ export type ProjectKeysResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type ProjectLeaderboardAmbassadorsRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectLeaderboardAmbassadorsRow'] = ResolversParentTypes['ProjectLeaderboardAmbassadorsRow']> = {
+  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   projectsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -6321,7 +6331,7 @@ export type UserHeroStatsQueryVariables = Exact<{
 }>;
 
 
-export type UserHeroStatsQuery = { __typename?: 'Query', user: { __typename?: 'User', heroStats: { __typename?: 'UserHeroStats', ambassadorStats: { __typename?: 'AmbassadorStats', contributionsCount: number, contributionsTotal: number, projectsCount: number, rank: number }, contributorStats: { __typename?: 'ContributorStats', contributionsCount: number, contributionsTotal: number, projectsCount: number, rank: number }, creatorStats: { __typename?: 'CreatorStats', contributionsCount: number, contributionsTotal: number, projectsCount: number, rank: number } } } };
+export type UserHeroStatsQuery = { __typename?: 'Query', user: { __typename?: 'User', heroStats: { __typename?: 'UserHeroStats', ambassadorStats: { __typename?: 'AmbassadorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, contributorStats: { __typename?: 'ContributorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, creatorStats: { __typename?: 'CreatorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number } } } };
 
 export type UserProfileOrdersQueryVariables = Exact<{
   where: UserGetInput;
@@ -11369,18 +11379,21 @@ export const UserHeroStatsDocument = gql`
     heroStats {
       ambassadorStats {
         contributionsCount
+        contributionsTotalUsd
         contributionsTotal
         projectsCount
         rank
       }
       contributorStats {
         contributionsCount
+        contributionsTotalUsd
         contributionsTotal
         projectsCount
         rank
       }
       creatorStats {
         contributionsCount
+        contributionsTotalUsd
         contributionsTotal
         projectsCount
         rank
