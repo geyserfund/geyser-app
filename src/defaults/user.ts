@@ -5,6 +5,7 @@ export const defaultUser: Omit<User, 'heroStats'> = {
   id: 0,
   email: '',
   username: '',
+  heroId: '',
   imageUrl: '',
   externalAccounts: [],
   contributions: [],

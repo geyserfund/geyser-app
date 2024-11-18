@@ -12,7 +12,7 @@ import { tableCellStyles } from './typeMaps'
 const Container = styled(Box, {
   baseStyle: {
     '& p, & iframe, & h1, & h2, & h3, & h4, & h5': {
-      mt: 4,
+      mt: 6,
     },
     '& table': {
       '& p': {
@@ -105,6 +105,13 @@ export const StyleProvider = ({ children, flex, display, ...rest }: { flex?: boo
                 display: 'flex',
                 flexDirection: 'column',
                 flexGrow: 1,
+              },
+              '& div.remirror-image-loader': {
+                justifySelf: 'center',
+                height: '60px',
+                width: '60px',
+                borderTopWidth: '8px',
+                borderTopColor: 'primary1.9',
               },
               '& div.remirror-editor': {
                 padding: '0px !important',

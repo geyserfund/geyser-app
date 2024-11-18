@@ -39,10 +39,18 @@ type getCampainParametersProps = {
   keyword: string
   /** The page the user clicked from */
   clickedFrom: CampaignContent
+  /** The heroId of the user */
+  heroId?: string | null
 }
 
 /** This function is for use outside of ProjectProvider Context */
-export const getProjectShareUrlSuffix = ({ creator, isLoggedIn, keyword, clickedFrom }: getCampainParametersProps) => {
+export const getProjectShareUrlSuffix = ({
+  creator,
+  isLoggedIn,
+  keyword,
+  clickedFrom,
+  heroId,
+}: getCampainParametersProps) => {
   const source = creator ? CampaignSource.creator : isLoggedIn ? CampaignSource.user : CampaignSource.visitor
 
   const campaignParameters = [
@@ -52,13 +60,16 @@ export const getProjectShareUrlSuffix = ({ creator, isLoggedIn, keyword, clicked
     { key: 'mtm_medium', value: 'geyser' },
     { key: 'mtm_content', value: clickedFrom },
   ]
+
+  if (heroId) campaignParameters.unshift({ key: 'hero', value: heroId })
+
   return '?' + campaignParameters.map(({ key, value }) => `${key}=${value}`).join('&')
 }
 
 /** This hook must be used inside ProjectProvider Context to share project links */
 export const useProjectShare = () => {
   const { project, isProjectOwner } = useProjectAtom()
-  const { isLoggedIn } = useAuthContext()
+  const { isLoggedIn, user } = useAuthContext()
   const [copied, setCopied] = useState(false)
 
   const getShareProjectUrl = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
@@ -67,6 +78,7 @@ export const useProjectShare = () => {
       isLoggedIn,
       keyword: project?.name || '',
       clickedFrom,
+      heroId: user?.heroId,
     })
     return `${window.location.origin}/project/${project?.name}${campaignUrlSuffix}`
   }

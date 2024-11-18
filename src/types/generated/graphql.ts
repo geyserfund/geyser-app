@@ -18,7 +18,9 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean }
   Int: { input: number; output: number }
   Float: { input: number; output: number }
+  /** Add BigInt functionality */
   BigInt: { input: any; output: any }
+  /** Date custom scalar type */
   Date: { input: any; output: any }
 }
 
@@ -128,7 +130,6 @@ export enum AffiliateStatus {
 
 export type Ambassador = {
   __typename?: 'Ambassador'
-  confirmed: Scalars['Boolean']['output']
   id: Scalars['BigInt']['output']
   user: User
 }
@@ -894,6 +895,8 @@ export type GetFundingTxsInput = {
 
 export type GetFundingTxsOrderByInput = {
   createdAt: OrderByOptions
+  /** @deprecated Use createdAt instead. */
+  paidAt?: InputMaybe<OrderByOptions>
 }
 
 export type GetFundingTxsWhereInput = {
@@ -1798,6 +1801,14 @@ export type OwnerOf = {
   project?: Maybe<Project>
 }
 
+export type PageInfo = {
+  __typename?: 'PageInfo'
+  endCursor?: Maybe<Scalars['String']['output']>
+  hasNextPage: Scalars['Boolean']['output']
+  hasPreviousPage: Scalars['Boolean']['output']
+  startCursor?: Maybe<Scalars['String']['output']>
+}
+
 export type PageViewCountGraph = {
   __typename?: 'PageViewCountGraph'
   dateTime: Scalars['Date']['output']
@@ -1946,8 +1957,7 @@ export type ProfileNotificationSettings = {
 
 export type Project = {
   __typename?: 'Project'
-  /** @deprecated No longer supported */
-  ambassadors: Array<Ambassador>
+  ambassadors: ProjectAmbassadorsConnection
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']['output']
   balanceUsdCent: Scalars['Int']['output']
@@ -2001,7 +2011,7 @@ export type Project = {
   rewardsCount?: Maybe<Scalars['Int']['output']>
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['String']['output']>
-  /** @deprecated No longer supported */
+  /** @deprecated Field no longer supported */
   sponsors: Array<Sponsor>
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>
@@ -2037,6 +2047,39 @@ export type ProjectActivitiesCount = {
   __typename?: 'ProjectActivitiesCount'
   count: Scalars['Int']['output']
   project: Project
+}
+
+/** Edge type for Project ambassadors */
+export type ProjectAmbassadorEdge = {
+  __typename?: 'ProjectAmbassadorEdge'
+  /** Cursor for pagination */
+  cursor: Scalars['String']['output']
+  /** The ambassador node */
+  node: Ambassador
+}
+
+export type ProjectAmbassadorsConnection = {
+  __typename?: 'ProjectAmbassadorsConnection'
+  /**
+   * List of ambassador edges
+   * @deprecated This field is not implemented yet and will always return an empty array
+   */
+  edges: Array<ProjectAmbassadorEdge>
+  /** Information about the pagination of ambassadors */
+  pageInfo: PageInfo
+  /** Aggregated data about ambassadors */
+  stats: ProjectAmbassadorsStats
+}
+
+/** Statistics about project ambassadors */
+export type ProjectAmbassadorsStats = {
+  __typename?: 'ProjectAmbassadorsStats'
+  /** Total number of contributions enabled by ambassadors */
+  contributionsCount: Scalars['Int']['output']
+  /** Total amount in satoshis enabled by ambassadors */
+  contributionsSum: Scalars['BigInt']['output']
+  /** Total number of ambassadors */
+  count: Scalars['Int']['output']
 }
 
 export type ProjectContributionsGroupedByMethodStats = StatsInterface & {
@@ -2366,7 +2409,7 @@ export type ProjectRewardsGroupedByRewardIdStatsProjectReward = {
   id: Scalars['BigInt']['output']
   image?: Maybe<Scalars['String']['output']>
   images?: Maybe<Scalars['String']['output']>
-  maxClaimable: Scalars['Int']['output']
+  maxClaimable?: Maybe<Scalars['Int']['output']>
   name: Scalars['String']['output']
   sold: Scalars['Int']['output']
   uuid: Scalars['String']['output']
@@ -2993,7 +3036,7 @@ export type User = {
   /** Returns a user's funding transactions accross all projects. */
   fundingTxs: Array<FundingTx>
   hasSocialAccount: Scalars['Boolean']['output']
-  heroId?: Maybe<Scalars['String']['output']>
+  heroId: Scalars['String']['output']
   heroStats: UserHeroStats
   id: Scalars['BigInt']['output']
   imageUrl?: Maybe<Scalars['String']['output']>
@@ -3093,14 +3136,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isAmbassador: Scalars['Boolean']['output']
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']['output']
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isSponsor: Scalars['Boolean']['output']
   /** Project linked to the contributions. */
@@ -3304,7 +3347,7 @@ export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
         | 'sponsors'
         | 'wallets'
       > & {
-        ambassadors: Array<_RefType['Ambassador']>
+        ambassadors: _RefType['ProjectAmbassadorsConnection']
         entries: Array<_RefType['Entry']>
         followers: Array<_RefType['User']>
         funders: Array<_RefType['Funder']>
@@ -3349,7 +3392,7 @@ export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
         | 'sponsors'
         | 'wallets'
       > & {
-        ambassadors: Array<_RefType['Ambassador']>
+        ambassadors: _RefType['ProjectAmbassadorsConnection']
         entries: Array<_RefType['Entry']>
         followers: Array<_RefType['User']>
         funders: Array<_RefType['Funder']>
@@ -3646,6 +3689,7 @@ export type ResolversTypes = {
       project?: Maybe<ResolversTypes['Project']>
     }
   >
+  PageInfo: ResolverTypeWrapper<PageInfo>
   PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>
   PaginationCursor: ResolverTypeWrapper<PaginationCursor>
   PaginationInput: PaginationInput
@@ -3683,7 +3727,7 @@ export type ResolversTypes = {
       | 'sponsors'
       | 'wallets'
     > & {
-      ambassadors: Array<ResolversTypes['Ambassador']>
+      ambassadors: ResolversTypes['ProjectAmbassadorsConnection']
       entries: Array<ResolversTypes['Entry']>
       followers: Array<ResolversTypes['User']>
       funders: Array<ResolversTypes['Funder']>
@@ -3700,6 +3744,13 @@ export type ResolversTypes = {
   ProjectActivitiesCount: ResolverTypeWrapper<
     Omit<ProjectActivitiesCount, 'project'> & { project: ResolversTypes['Project'] }
   >
+  ProjectAmbassadorEdge: ResolverTypeWrapper<
+    Omit<ProjectAmbassadorEdge, 'node'> & { node: ResolversTypes['Ambassador'] }
+  >
+  ProjectAmbassadorsConnection: ResolverTypeWrapper<
+    Omit<ProjectAmbassadorsConnection, 'edges'> & { edges: Array<ResolversTypes['ProjectAmbassadorEdge']> }
+  >
+  ProjectAmbassadorsStats: ResolverTypeWrapper<ProjectAmbassadorsStats>
   ProjectContributionsGroupedByMethodStats: ResolverTypeWrapper<ProjectContributionsGroupedByMethodStats>
   ProjectContributionsStats: ResolverTypeWrapper<ProjectContributionsStats>
   ProjectContributionsStatsBase: ResolverTypeWrapper<ProjectContributionsStatsBase>
@@ -4071,6 +4122,7 @@ export type ResolversParentTypes = {
     owner?: Maybe<ResolversParentTypes['Owner']>
     project?: Maybe<ResolversParentTypes['Project']>
   }
+  PageInfo: PageInfo
   PageViewCountGraph: PageViewCountGraph
   PaginationCursor: PaginationCursor
   PaginationInput: PaginationInput
@@ -4102,7 +4154,7 @@ export type ResolversParentTypes = {
     | 'sponsors'
     | 'wallets'
   > & {
-    ambassadors: Array<ResolversParentTypes['Ambassador']>
+    ambassadors: ResolversParentTypes['ProjectAmbassadorsConnection']
     entries: Array<ResolversParentTypes['Entry']>
     followers: Array<ResolversParentTypes['User']>
     funders: Array<ResolversParentTypes['Funder']>
@@ -4116,6 +4168,11 @@ export type ResolversParentTypes = {
     project: ResolversParentTypes['Project']
   }
   ProjectActivitiesCount: Omit<ProjectActivitiesCount, 'project'> & { project: ResolversParentTypes['Project'] }
+  ProjectAmbassadorEdge: Omit<ProjectAmbassadorEdge, 'node'> & { node: ResolversParentTypes['Ambassador'] }
+  ProjectAmbassadorsConnection: Omit<ProjectAmbassadorsConnection, 'edges'> & {
+    edges: Array<ResolversParentTypes['ProjectAmbassadorEdge']>
+  }
+  ProjectAmbassadorsStats: ProjectAmbassadorsStats
   ProjectContributionsGroupedByMethodStats: ProjectContributionsGroupedByMethodStats
   ProjectContributionsStats: ProjectContributionsStats
   ProjectContributionsStatsBase: ProjectContributionsStatsBase
@@ -4325,7 +4382,6 @@ export type AmbassadorResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Ambassador'] = ResolversParentTypes['Ambassador'],
 > = {
-  confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
@@ -5508,6 +5564,17 @@ export type OwnerOfResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
+export type PageInfoResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['PageInfo'] = ResolversParentTypes['PageInfo'],
+> = {
+  endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  hasPreviousPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  startCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
 export type PageViewCountGraphResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['PageViewCountGraph'] = ResolversParentTypes['PageViewCountGraph'],
@@ -5580,7 +5647,7 @@ export type ProjectResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project'],
 > = {
-  ambassadors?: Resolver<Array<ResolversTypes['Ambassador']>, ParentType, ContextType>
+  ambassadors?: Resolver<ResolversTypes['ProjectAmbassadorsConnection'], ParentType, ContextType>
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   balanceUsdCent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
@@ -5644,6 +5711,35 @@ export type ProjectActivitiesCountResolvers<
 > = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectAmbassadorEdgeResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectAmbassadorEdge'] = ResolversParentTypes['ProjectAmbassadorEdge'],
+> = {
+  cursor?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  node?: Resolver<ResolversTypes['Ambassador'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectAmbassadorsConnectionResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectAmbassadorsConnection'] = ResolversParentTypes['ProjectAmbassadorsConnection'],
+> = {
+  edges?: Resolver<Array<ResolversTypes['ProjectAmbassadorEdge']>, ParentType, ContextType>
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>
+  stats?: Resolver<ResolversTypes['ProjectAmbassadorsStats'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectAmbassadorsStatsResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectAmbassadorsStats'] = ResolversParentTypes['ProjectAmbassadorsStats'],
+> = {
+  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  contributionsSum?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -5895,7 +5991,7 @@ export type ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   images?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  maxClaimable?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  maxClaimable?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   uuid?: Resolver<ResolversTypes['String'], ParentType, ContextType>
@@ -6352,7 +6448,7 @@ export type UserResolvers<
   externalAccounts?: Resolver<Array<ResolversTypes['ExternalAccount']>, ParentType, ContextType>
   fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>
   hasSocialAccount?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
-  heroId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  heroId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   heroStats?: Resolver<ResolversTypes['UserHeroStats'], ParentType, ContextType>
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
@@ -6561,6 +6657,7 @@ export type Resolvers<ContextType = any> = {
   OrdersStatsBase?: OrdersStatsBaseResolvers<ContextType>
   Owner?: OwnerResolvers<ContextType>
   OwnerOf?: OwnerOfResolvers<ContextType>
+  PageInfo?: PageInfoResolvers<ContextType>
   PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>
   PaginationCursor?: PaginationCursorResolvers<ContextType>
   Post?: PostResolvers<ContextType>
@@ -6570,6 +6667,9 @@ export type Resolvers<ContextType = any> = {
   Project?: ProjectResolvers<ContextType>
   ProjectActivatedSubscriptionResponse?: ProjectActivatedSubscriptionResponseResolvers<ContextType>
   ProjectActivitiesCount?: ProjectActivitiesCountResolvers<ContextType>
+  ProjectAmbassadorEdge?: ProjectAmbassadorEdgeResolvers<ContextType>
+  ProjectAmbassadorsConnection?: ProjectAmbassadorsConnectionResolvers<ContextType>
+  ProjectAmbassadorsStats?: ProjectAmbassadorsStatsResolvers<ContextType>
   ProjectContributionsGroupedByMethodStats?: ProjectContributionsGroupedByMethodStatsResolvers<ContextType>
   ProjectContributionsStats?: ProjectContributionsStatsResolvers<ContextType>
   ProjectContributionsStatsBase?: ProjectContributionsStatsBaseResolvers<ContextType>
@@ -7156,6 +7256,7 @@ export type UserMeFragment = {
   __typename?: 'User'
   id: any
   username: string
+  heroId: string
   imageUrl?: string | null
   email?: string | null
   ranking?: any | null
@@ -8055,7 +8156,7 @@ export type OrdersStatsFragmentFragment = {
       name: string
       image?: string | null
       sold: number
-      maxClaimable: number
+      maxClaimable?: number | null
     }
   }>
 }
@@ -8251,6 +8352,7 @@ export type UserForProfilePageFragment = {
   __typename?: 'User'
   id: any
   bio?: string | null
+  heroId: string
   username: string
   imageUrl?: string | null
   ranking?: any | null
@@ -9158,6 +9260,26 @@ export type AffiliateLinksGetQuery = {
   affiliateLinksGet: Array<{ __typename?: 'AffiliateLink' } & ProjectAffiliateLinkFragment>
 }
 
+export type ProjectAmbassadorStatsQueryVariables = Exact<{
+  where: UniqueProjectQueryInput
+}>
+
+export type ProjectAmbassadorStatsQuery = {
+  __typename?: 'Query'
+  projectGet?: {
+    __typename?: 'Project'
+    ambassadors: {
+      __typename?: 'ProjectAmbassadorsConnection'
+      stats: {
+        __typename?: 'ProjectAmbassadorsStats'
+        contributionsCount: number
+        contributionsSum: any
+        count: number
+      }
+    }
+  } | null
+}
+
 export type UserEmailIsAvailableQueryVariables = Exact<{
   email: Scalars['String']['input']
 }>
@@ -9978,6 +10100,7 @@ export const UserMeFragmentDoc = gql`
   fragment UserMe on User {
     id
     username
+    heroId
     imageUrl
     email
     ranking
@@ -10602,6 +10725,7 @@ export const UserForProfilePageFragmentDoc = gql`
   fragment UserForProfilePage on User {
     id
     bio
+    heroId
     username
     imageUrl
     ranking
@@ -16465,6 +16589,76 @@ export type AffiliateLinksGetQueryHookResult = ReturnType<typeof useAffiliateLin
 export type AffiliateLinksGetLazyQueryHookResult = ReturnType<typeof useAffiliateLinksGetLazyQuery>
 export type AffiliateLinksGetSuspenseQueryHookResult = ReturnType<typeof useAffiliateLinksGetSuspenseQuery>
 export type AffiliateLinksGetQueryResult = Apollo.QueryResult<AffiliateLinksGetQuery, AffiliateLinksGetQueryVariables>
+export const ProjectAmbassadorStatsDocument = gql`
+  query ProjectAmbassadorStats($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      ambassadors {
+        stats {
+          contributionsCount
+          contributionsSum
+          count
+        }
+      }
+    }
+  }
+`
+
+/**
+ * __useProjectAmbassadorStatsQuery__
+ *
+ * To run a query within a React component, call `useProjectAmbassadorStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectAmbassadorStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectAmbassadorStatsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectAmbassadorStatsQuery(
+  baseOptions: Apollo.QueryHookOptions<ProjectAmbassadorStatsQuery, ProjectAmbassadorStatsQueryVariables> &
+    ({ variables: ProjectAmbassadorStatsQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectAmbassadorStatsQuery, ProjectAmbassadorStatsQueryVariables>(
+    ProjectAmbassadorStatsDocument,
+    options,
+  )
+}
+
+export function useProjectAmbassadorStatsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ProjectAmbassadorStatsQuery, ProjectAmbassadorStatsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProjectAmbassadorStatsQuery, ProjectAmbassadorStatsQueryVariables>(
+    ProjectAmbassadorStatsDocument,
+    options,
+  )
+}
+
+export function useProjectAmbassadorStatsSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<ProjectAmbassadorStatsQuery, ProjectAmbassadorStatsQueryVariables>,
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<ProjectAmbassadorStatsQuery, ProjectAmbassadorStatsQueryVariables>(
+    ProjectAmbassadorStatsDocument,
+    options,
+  )
+}
+
+export type ProjectAmbassadorStatsQueryHookResult = ReturnType<typeof useProjectAmbassadorStatsQuery>
+export type ProjectAmbassadorStatsLazyQueryHookResult = ReturnType<typeof useProjectAmbassadorStatsLazyQuery>
+export type ProjectAmbassadorStatsSuspenseQueryHookResult = ReturnType<typeof useProjectAmbassadorStatsSuspenseQuery>
+export type ProjectAmbassadorStatsQueryResult = Apollo.QueryResult<
+  ProjectAmbassadorStatsQuery,
+  ProjectAmbassadorStatsQueryVariables
+>
 export const UserEmailIsAvailableDocument = gql`
   query UserEmailIsAvailable($email: String!) {
     userEmailIsAvailable(email: $email)
