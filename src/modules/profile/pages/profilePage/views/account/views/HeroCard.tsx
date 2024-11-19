@@ -1,6 +1,8 @@
 import { Box, forwardRef, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useEffect, useState } from 'react'
 
+import { getBlockHeight } from '@/api'
 import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
 import {
@@ -15,7 +17,9 @@ import {
 import { fonts, lightModeColors } from '@/shared/styles'
 
 import { UserForProfilePageFragment, UserHeroStats } from '../../../../../../../types'
-import { getShortAmountLabel } from '../../../../../../../utils'
+import { commaFormatted, getShortAmountLabel, toInt } from '../../../../../../../utils'
+
+const DEFAULT_BLOCK_HEIGHT = 800345
 
 const heroBackgroundMap = {
   raisedEnabledContributed: HeroCardRaisedEnabledContributed,
@@ -29,6 +33,8 @@ const heroBackgroundMap = {
 
 export const HeroCard = forwardRef(
   ({ user, stats }: { user: UserForProfilePageFragment; stats: UserHeroStats }, ref) => {
+    const [blockHeight, setBlockHeight] = useState<number>(DEFAULT_BLOCK_HEIGHT)
+
     const amabassadorRank = stats.ambassadorStats.rank
     const creatorRank = stats.creatorStats.rank
     const contributorRank = stats.contributorStats.rank
@@ -71,6 +77,18 @@ export const HeroCard = forwardRef(
       }
     }
 
+    useEffect(() => {
+      const getBlockHeightInfo = async () => {
+        try {
+          const blockHeight = await getBlockHeight()
+          console.log('checking block height', blockHeight)
+          setBlockHeight(toInt(`${blockHeight}`))
+        } catch (error) {}
+      }
+
+      getBlockHeightInfo()
+    }, [])
+
     return (
       <VStack
         ref={ref}
@@ -95,7 +113,7 @@ export const HeroCard = forwardRef(
           paddingX="2"
           fontSize="xs"
         >
-          Block: 800,345
+          {`Block: ${commaFormatted(blockHeight)}`}
         </Body>
         <VStack>
           <VStack spacing="0" mt={4}>
