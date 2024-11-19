@@ -168,7 +168,7 @@ const HeroDisplay = ({
             numberOfProjects: data[labels.numberOfProjects],
           }}
         >
-          {'Raised '}
+          {'Enabled '}
           <Body as="span" medium dark>
             {'{{usdAmount}}'}
           </Body>
