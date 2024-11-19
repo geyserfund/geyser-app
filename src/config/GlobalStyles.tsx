@@ -9,7 +9,8 @@ const GlobalStyles = () => (
         @import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&display=swap');
 		    @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Livvic:wght@400;500;600;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Hubot+Sans:ital,wght@0,200..900;1,200..900&display=swap');
+
         
         @font-face {
             font-family: "Figtree", sans-serif;

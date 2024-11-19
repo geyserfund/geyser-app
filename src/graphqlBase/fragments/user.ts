@@ -70,6 +70,7 @@ export const FRAGMENT_FUNDER_WITH_USER = gql`
     user {
       id
       username
+      heroId
       hasSocialAccount
       externalAccounts {
         externalId

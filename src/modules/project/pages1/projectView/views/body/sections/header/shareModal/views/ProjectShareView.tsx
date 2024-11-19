@@ -22,7 +22,9 @@ export const ProjectShareView = () => {
   const twitterShareText = `Help make this project happen! Check it out: ${projectShareUrl}`
 
   const heroId = user?.heroId
-  const heroLink = `${window.origin || 'https://geyser.fund'}/project/${project.name}${heroId ? `?hero=${heroId}` : ''}`
+  const heroLink = `${window.location.origin || 'https://geyser.fund'}/project/${project.name}${
+    heroId ? `?hero=${heroId}` : ''
+  }`
 
   const ambassadorsCount = data?.projectGet?.ambassadors?.stats?.count
   const satAmount = data?.projectGet?.ambassadors?.stats?.contributionsSum

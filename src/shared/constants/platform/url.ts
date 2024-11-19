@@ -355,3 +355,18 @@ export const ExperienceImageUrl = 'https://storage.googleapis.com/geyser-project
 // Helpers
 export const EmailPromptModalUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/enter-email-illustration.png'
+
+// Hero Card Backgrounds
+export const HeroCardRaisedEnabledContributed =
+  'https://storage.googleapis.com/geyser-projects-media/hero/raised-enabled-contributed.png'
+export const HeroCardRaisedContributedEnabled =
+  'https://storage.googleapis.com/geyser-projects-media/hero/raised-contributed-enabled.png'
+export const HeroCardEnabledRaisedContributed =
+  'https://storage.googleapis.com/geyser-projects-media/hero/enabled-raised-contributed.png'
+export const HeroCardEnabledContributedRaised =
+  'https://storage.googleapis.com/geyser-projects-media/hero/enabled-contributed-raised.png'
+export const HeroCardEmpty = 'https://storage.googleapis.com/geyser-projects-media/hero/empty.png'
+export const HeroCardContributedEnabledRaised =
+  'https://storage.googleapis.com/geyser-projects-media/hero/contributed-enabled-raised.png'
+export const HeroCardContributedRaisedEnabled =
+  'https://storage.googleapis.com/geyser-projects-media/hero/contributed-raised%20-enabled.png'

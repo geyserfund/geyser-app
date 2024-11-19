@@ -1,20 +1,8 @@
-import {
-  Button,
-  HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
-import { PiIdentificationBadge, PiLightning, PiMegaphone, PiRocketLaunch } from 'react-icons/pi'
+import { PiLightning, PiMegaphone, PiRocketLaunch } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
 
@@ -22,11 +10,10 @@ import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { HeroStats, useUserHeroStatsQuery } from '../../../../../../../types'
 import { getShortAmountLabel } from '../../../../../../../utils'
 import { useUserProfileAtom } from '../../../../../state'
-import { HeroCard } from './HeroCard'
+import { HeroSection } from './HeroSection'
 
 export const Summary = () => {
   const { userProfile, isLoading: userProfileLoading } = useUserProfileAtom()
-  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const { data, loading } = useUserHeroStatsQuery({
     variables: {
@@ -64,47 +51,8 @@ export const Summary = () => {
       <Body size="xl" medium>
         {t('Hero Rank')}
       </Body>
-      <Button
-        variant="surface"
-        size="sm"
-        w="full"
-        leftIcon={<PiIdentificationBadge />}
-        alignContent="center"
-        colorScheme="primary1"
-        height="32px"
-        onClick={onOpen}
-      >
-        {t('Hero Card')}
-      </Button>
 
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
-        <ModalOverlay />
-        <ModalContent maxW="400px" borderRadius={12}>
-          <ModalHeader>{t('Hero Card')}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            {/* Hero card content goes here */}
-            <VStack spacing={4}>
-              <Body>
-                {t(
-                  'Hero cards are a summary of your activity in the Bitcoin space. You can share them with your friends as well as get a physical collectible copy on your doorstep!',
-                )}
-              </Body>
-              <HeroCard user={userProfile} stats={stats} />
-            </VStack>
-          </ModalBody>
-          <ModalFooter pt={2}>
-            <VStack spacing={2} w="100%">
-              <Button variant="outline" onClick={onClose} w="100%" h="40px">
-                {t('Buy physical card')}
-              </Button>
-              <Button colorScheme="primary1" onClick={onClose} w="100%" h="40px">
-                {t('Copy Card')}
-              </Button>
-            </VStack>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <HeroSection user={userProfile} stats={stats} />
 
       {renderSkeleton(
         <StatBody
