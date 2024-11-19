@@ -13740,6 +13740,7 @@ __metadata:
     react-icons: "npm:^5.2.1"
     react-jss: "npm:^10.9.2"
     react-otp-input: "npm:^3.1.1"
+    react-parallax-tilt: "npm:^1.7.257"
     react-player: "npm:^2.16.0"
     react-qr-code: "npm:^2.0.11"
     react-qrcode-logo: "npm:^3.0.0"
@@ -18649,6 +18650,16 @@ __metadata:
     react: ">=16.8.6 || ^17.0.0 || ^18.0.0"
     react-dom: ">=16.8.6 || ^17.0.0 || ^18.0.0"
   checksum: 10c0/0b8c7a1a9c49225c75ed3a91be71512c39761bcd1a6d1e6fdd3afadecade1e3b75dac53717dc72b513fcf4881686e6d498d4b6c1412472f8741c46da01d5a804
+  languageName: node
+  linkType: hard
+
+"react-parallax-tilt@npm:^1.7.257":
+  version: 1.7.257
+  resolution: "react-parallax-tilt@npm:1.7.257"
+  peerDependencies:
+    react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/c6c2c59581a06c313965516622f09b56f50d9205a604d67cac038e8f7fa77a1428249884d559b9b4e17e7d0a551e0320bc4fd8737dc724d01f2821c61a3a216e
   languageName: node
   linkType: hard
 

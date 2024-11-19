@@ -1,6 +1,7 @@
 import { Avatar, Box, forwardRef, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
+import Tilt from 'react-parallax-tilt'
 
 import { getBlockHeight } from '@/api'
 import { Body } from '@/shared/components/typography'
@@ -17,7 +18,6 @@ import { fonts, lightModeColors } from '@/shared/styles'
 
 import { UserForProfilePageFragment, UserHeroStats } from '../../../../../../../types'
 import { commaFormatted, getShortAmountLabel, toInt } from '../../../../../../../utils'
-
 const DEFAULT_BLOCK_HEIGHT = 800345
 
 const heroBackgroundMap = {
@@ -89,88 +89,90 @@ export const HeroCard = forwardRef(
     }, [])
 
     return (
-      <VStack
-        ref={ref}
-        w="330px"
-        h="430px"
-        py={10}
-        position="relative"
-        backgroundImage={`url(${getHeroBackground()})`}
-        backgroundSize="contain"
-        backgroundPosition="center"
-        backgroundRepeat="no-repeat"
-        color="blackAlpha.800"
-        justifyContent={'space-between'}
-        fontFamily={fonts.hubotSans}
-      >
-        <Body
-          as="span"
-          position="absolute"
-          top={'7px'}
-          backgroundColor="transparent"
-          color="white"
-          paddingX="2"
-          fontSize="xs"
+      <Tilt glareEnable glareMaxOpacity={0.3} tiltMaxAngleX={10} tiltMaxAngleY={10}>
+        <VStack
+          ref={ref}
+          w="330px"
+          h="430px"
+          py={10}
+          position="relative"
+          backgroundImage={`url(${getHeroBackground()})`}
+          backgroundSize="contain"
+          backgroundPosition="center"
+          backgroundRepeat="no-repeat"
+          color="blackAlpha.800"
+          justifyContent={'space-between'}
+          fontFamily={fonts.hubotSans}
         >
-          {`Block: ${commaFormatted(blockHeight)}`}
-        </Body>
-        <VStack>
-          <VStack spacing="0" mt={4}>
-            {/* User info */}
-            <Box w="80px" h="80px" borderRadius="full" overflow="hidden">
-              <Avatar src={user?.imageUrl || ''} w="100%" h="100%" objectFit="cover" />
-            </Box>
-            <Body fontSize="2xl" fontWeight="bold" color={lightModeColors.neutralAlpha[11]}>
-              {user?.username || 'Anonymous Hero'}
-            </Body>
+          <Body
+            as="span"
+            position="absolute"
+            top={'7px'}
+            backgroundColor="transparent"
+            color="white"
+            paddingX="2"
+            fontSize="xs"
+          >
+            {`Block: ${commaFormatted(blockHeight)}`}
+          </Body>
+          <VStack>
+            <VStack spacing="0" mt={4}>
+              {/* User info */}
+              <Box w="80px" h="80px" borderRadius="full" overflow="hidden">
+                <Avatar src={user?.imageUrl || ''} w="100%" h="100%" objectFit="cover" />
+              </Box>
+              <Body fontSize="2xl" fontWeight="bold" color={lightModeColors.neutralAlpha[11]}>
+                {user?.username || 'Anonymous Hero'}
+              </Body>
+            </VStack>
+          </VStack>
+
+          {/* Stats */}
+          <VStack spacing={4} align="stretch" alignItems="center" alignContent="center">
+            <VStack spacing={0} w="full">
+              <Body fontSize="lg" color={lightModeColors.neutralAlpha[11]}>
+                {t('Contributor Ranking')}:{' '}
+                <Body as="span" color={lightModeColors.neutralAlpha[12]}>
+                  {contributorRank}
+                </Body>
+              </Body>
+              <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
+                Contributed {getShortAmountLabel(stats.contributorStats.contributionsTotal)} sats ($
+                {getShortAmountLabel(Math.round(stats.contributorStats.contributionsTotalUsd))}) to{' '}
+                {stats.contributorStats.projectsCount} projects
+              </Body>
+            </VStack>
+
+            <VStack spacing={0} w="full">
+              <Body fontSize="lg" color={lightModeColors.neutralAlpha[11]}>
+                {t('Ambassador Ranking')}:{' '}
+                <Body as="span" color={lightModeColors.neutralAlpha[12]}>
+                  {amabassadorRank}
+                </Body>
+              </Body>
+              <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
+                Enabled {getShortAmountLabel(stats.ambassadorStats.contributionsTotal)} sats ($
+                {getShortAmountLabel(Math.round(stats.ambassadorStats.contributionsTotalUsd))}) to{' '}
+                {stats.ambassadorStats.projectsCount} projects
+              </Body>
+            </VStack>
+
+            <VStack spacing={0} w="full">
+              <Body fontSize="lg" color={lightModeColors.neutralAlpha[11]}>
+                {t('Creator Ranking')}:{' '}
+                <Body as="span" color={lightModeColors.neutralAlpha[12]}>
+                  {creatorRank}
+                </Body>
+              </Body>
+              <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
+                Raised {getShortAmountLabel(stats.creatorStats.contributionsTotal)} sats ($
+                {getShortAmountLabel(Math.round(stats.creatorStats.contributionsTotalUsd))}) to{' '}
+                {stats.creatorStats.projectsCount} projects
+              </Body>
+            </VStack>
           </VStack>
         </VStack>
-
-        {/* Stats */}
-        <VStack spacing={4} align="stretch" alignItems="center" alignContent="center">
-          <VStack spacing={0} w="full">
-            <Body fontSize="lg" color={lightModeColors.neutralAlpha[11]}>
-              {t('Contributor Ranking')}:{' '}
-              <Body as="span" color={lightModeColors.neutralAlpha[12]}>
-                {contributorRank}
-              </Body>
-            </Body>
-            <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
-              Contributed {getShortAmountLabel(stats.contributorStats.contributionsTotal)} sats ($
-              {getShortAmountLabel(Math.round(stats.contributorStats.contributionsTotalUsd))}) to{' '}
-              {stats.contributorStats.projectsCount} projects
-            </Body>
-          </VStack>
-
-          <VStack spacing={0} w="full">
-            <Body fontSize="lg" color={lightModeColors.neutralAlpha[11]}>
-              {t('Ambassador Ranking')}:{' '}
-              <Body as="span" color={lightModeColors.neutralAlpha[12]}>
-                {amabassadorRank}
-              </Body>
-            </Body>
-            <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
-              Enabled {getShortAmountLabel(stats.ambassadorStats.contributionsTotal)} sats ($
-              {getShortAmountLabel(Math.round(stats.ambassadorStats.contributionsTotalUsd))}) to{' '}
-              {stats.ambassadorStats.projectsCount} projects
-            </Body>
-          </VStack>
-
-          <VStack spacing={0} w="full">
-            <Body fontSize="lg" color={lightModeColors.neutralAlpha[11]}>
-              {t('Creator Ranking')}:{' '}
-              <Body as="span" color={lightModeColors.neutralAlpha[12]}>
-                {creatorRank}
-              </Body>
-            </Body>
-            <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
-              Raised {getShortAmountLabel(stats.creatorStats.contributionsTotal)} sats ($
-              {getShortAmountLabel(Math.round(stats.creatorStats.contributionsTotalUsd))}) to{' '}
-              {stats.creatorStats.projectsCount} projects
-            </Body>
-          </VStack>
-        </VStack>
-      </VStack>
+      </Tilt>
     )
   },
 )
