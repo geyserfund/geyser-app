@@ -1,4 +1,4 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useRef } from 'react'
 import { PiCopy, PiIdentificationBadge } from 'react-icons/pi'
@@ -13,7 +13,12 @@ import { useNotification } from '@/utils'
 
 import { HeroCard } from './HeroCard'
 
-export const HeroSection = ({ user, stats }: { user: UserForProfilePageFragment; stats: UserHeroStats }) => {
+type HeroSectionProps = {
+  user: UserForProfilePageFragment
+  stats: UserHeroStats
+} & ButtonProps
+
+export const HeroSection = ({ user, stats, ...rest }: HeroSectionProps) => {
   const heroCardModal = useModal()
   const toast = useNotification()
 
@@ -50,6 +55,7 @@ export const HeroSection = ({ user, stats }: { user: UserForProfilePageFragment;
         onClick={heroCardModal.onOpen}
         borderColor={HeroButtonBorderColor}
         background={HeroButtonGradient}
+        {...rest}
       >
         {t('Hero Card')}
       </Button>
