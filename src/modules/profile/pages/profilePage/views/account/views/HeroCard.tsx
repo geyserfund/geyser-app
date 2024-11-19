@@ -1,9 +1,8 @@
-import { Box, forwardRef, VStack } from '@chakra-ui/react'
+import { Avatar, Box, forwardRef, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
 import { getBlockHeight } from '@/api'
-import { ImageWithReload } from '@/components/ui'
 import { Body } from '@/shared/components/typography'
 import {
   HeroCardContributedEnabledRaised,
@@ -119,7 +118,7 @@ export const HeroCard = forwardRef(
           <VStack spacing="0" mt={4}>
             {/* User info */}
             <Box w="80px" h="80px" borderRadius="full" overflow="hidden">
-              <ImageWithReload src={user?.imageUrl} alt="Profile" w="100%" h="100%" objectFit="cover" />
+              <Avatar src={user?.imageUrl || ''} w="100%" h="100%" objectFit="cover" />
             </Box>
             <Body fontSize="2xl" fontWeight="bold" color={lightModeColors.neutralAlpha[11]}>
               {user?.username || 'Anonymous Hero'}
@@ -138,7 +137,7 @@ export const HeroCard = forwardRef(
             </Body>
             <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
               Contributed {getShortAmountLabel(stats.contributorStats.contributionsTotal)} sats ($
-              {getShortAmountLabel(stats.contributorStats.contributionsTotalUsd)}) to{' '}
+              {getShortAmountLabel(Math.round(stats.contributorStats.contributionsTotalUsd))}) to{' '}
               {stats.contributorStats.projectsCount} projects
             </Body>
           </VStack>
@@ -152,7 +151,7 @@ export const HeroCard = forwardRef(
             </Body>
             <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
               Enabled {getShortAmountLabel(stats.ambassadorStats.contributionsTotal)} sats ($
-              {getShortAmountLabel(stats.ambassadorStats.contributionsTotalUsd)}) to{' '}
+              {getShortAmountLabel(Math.round(stats.ambassadorStats.contributionsTotalUsd))}) to{' '}
               {stats.ambassadorStats.projectsCount} projects
             </Body>
           </VStack>
@@ -166,8 +165,8 @@ export const HeroCard = forwardRef(
             </Body>
             <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
               Raised {getShortAmountLabel(stats.creatorStats.contributionsTotal)} sats ($
-              {getShortAmountLabel(stats.creatorStats.contributionsTotalUsd)}) to {stats.creatorStats.projectsCount}{' '}
-              projects
+              {getShortAmountLabel(Math.round(stats.creatorStats.contributionsTotalUsd))}) to{' '}
+              {stats.creatorStats.projectsCount} projects
             </Body>
           </VStack>
         </VStack>

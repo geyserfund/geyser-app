@@ -1,4 +1,4 @@
-import { Button, HStack, Icon, Link, useClipboard, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, Link, useClipboard, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 import Truncate from 'react-truncate-inside'
@@ -60,14 +60,17 @@ export const ShareView = ({
           _hover={{
             bg: 'whiteAlpha.800',
           }}
+          overflow={'hidden'}
         >
-          <Body color="neutral1.12">
+          <Body color="neutral1.12" whiteSpace={'nowrap'}>
             <strong>{shareUrlLabel}</strong>
           </Body>
 
           <>
             {shareUrlLabel || shareUrl.replace('https://', '').length > 40 ? (
-              <Truncate text={shareUrl.replace('https://', '')} width={245} offset={20} />
+              <Box flex={1} overflow={'hidden'}>
+                <Truncate text={shareUrl.replace('https://', '')} offset={20} />
+              </Box>
             ) : (
               <Body color="neutral1.12">{shareUrl.replace('https://', '')}</Body>
             )}

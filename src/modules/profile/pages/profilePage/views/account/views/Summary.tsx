@@ -146,7 +146,7 @@ const StatBody = ({ title, Icon, value, subtitle, rank, rankPillProps }: StatBod
             pr={2}
             pl={2}
             medium
-          >{`#${rank}`}</Body>
+          >{`#${rank || 'N/A'}`}</Body>
         </HStack>
         {value}
         {subtitle && (

@@ -41,7 +41,7 @@ export const IndividualHallOfFameTitle = ({
         </H2>
 
         <Body size={{ base: 'lg', lg: 'xl' }} medium color={lightModeColors.neutral1[11]} textAlign={'center'}>
-          {description || t('Discover the top projects making a significant impact on Bitcoin’s mass adoption. ')}
+          {description || t('Discover the top projects making a significant impact on Bitcoin’s mass adoption')}
         </Body>
         {children}
       </VStack>

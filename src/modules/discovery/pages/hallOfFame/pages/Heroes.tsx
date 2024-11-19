@@ -25,8 +25,8 @@ export const Heroes = () => {
   const { user } = useAuthContext()
 
   const heroDescriptions = {
-    [HeroType.Contributors]: t('Those whose contributions power projects on Geyser, driving Bitcoin adoption.'),
-    [HeroType.Creators]: t('Those bringing the most successful projects to life.'),
+    [HeroType.Contributors]: t('Those whose contributions power projects on Geyser, driving Bitcoin adoption'),
+    [HeroType.Creators]: t('Those bringing the most successful projects to life'),
     [HeroType.Ambassadors]: t('Those spreading the word about valuable projects and enabling contributions to happen'),
   }
 
@@ -98,7 +98,7 @@ export const Heroes = () => {
           noborder
           borderRadius={0}
         >
-          <AnimatedNavBar marginTop="24px" showLabel {...animatedNavBarProps} />
+          <AnimatedNavBar marginTop="24px" showLabel disableColorMode {...animatedNavBarProps} />
         </IndividualHallOfFameTitle>
         <TopHeroes heroType={heroType} />
       </CardLayout>
