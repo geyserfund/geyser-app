@@ -8,7 +8,7 @@ export const NoAmbassadors = () => {
   const { t } = useTranslation()
   return (
     <VStack w="full" justifyContent="center" flex={1} padding={6}>
-      <Image src={MegaphoneOutlineUrl} height="222px" width="150px" />
+      <Image src={MegaphoneOutlineUrl} height="auto" width="200px" />
       <Body size="md" medium muted>
         {t('No contributions have been made to this project.')}
       </Body>

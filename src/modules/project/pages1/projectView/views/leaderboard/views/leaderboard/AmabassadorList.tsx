@@ -1,8 +1,10 @@
 import { StackProps, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { useEffect } from 'react'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { Body } from '@/shared/components/typography'
 import { ProjectLeaderboardPeriod, useProjectLeaderboardAmbassadorsGetQuery } from '@/types'
 
 import { NoAmbassadors } from '../../../body/sections/leaderboardSummary/components/NoAmbassadors'
@@ -52,6 +54,9 @@ export const AmabassadorList = ({ period, dateTime, ...props }: AmabassadorListP
 
   return (
     <VStack w="full" h="full" id={id} overflowY={{ base: undefined, lg: 'auto' }} {...props}>
+      <Body size="sm" light w={'full'} textAlign={'left'} paddingX={{ base: 0, lg: 6 }}>
+        {t('Individuals who spread the word about Geyser projects by sharing.')}
+      </Body>
       {ambassadors.map((ambassador, index) => {
         return (
           <AmbassadorItem

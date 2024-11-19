@@ -16,9 +16,10 @@ import { FunderContributionModal } from '../../../shared/FunderContributionModal
 type LeaderboardItemProps = {
   funder: ProjectLeaderboardContributorsFragment
   rank: number
+  hideLabel?: boolean
 } & StackProps
 
-export const LeaderboardItem = ({ funder, rank, ...props }: LeaderboardItemProps) => {
+export const LeaderboardItem = ({ funder, rank, hideLabel, ...props }: LeaderboardItemProps) => {
   const { t } = useTranslation()
 
   const { user } = useAuthContext()
@@ -54,17 +55,25 @@ export const LeaderboardItem = ({ funder, rank, ...props }: LeaderboardItemProps
             </Body>
 
             {funder.contributionsCount && funder.contributionsCount > 1 && (
-              <HStack spacing={1}>
-                <Body size="sm" muted display={{ base: 'none', lg: 'unset' }}>
-                  {t('with')}
-                </Body>
+              <HStack spacing={1} alignItems={'center'}>
+                {!hideLabel && (
+                  <Body size="sm" muted display={{ base: 'none', lg: 'unset' }}>
+                    {t('with')}
+                  </Body>
+                )}
                 <Body size="sm" dark>
                   {funder.contributionsCount}
                 </Body>
-                <Icon as={PiLightning} display={{ base: 'unset', lg: 'none' }} fontSize={'12px'} />
-                <Body size="sm" muted display={{ base: 'none', lg: 'unset' }}>
-                  {t('contributions')}
-                </Body>
+                <Icon
+                  as={PiLightning}
+                  display={hideLabel ? 'unset' : { base: 'unset', lg: 'none' }}
+                  fontSize={'12px'}
+                />
+                {!hideLabel && (
+                  <Body size="sm" muted display={{ base: 'none', lg: 'unset' }}>
+                    {t('contributions')}
+                  </Body>
+                )}
               </HStack>
             )}
 
