@@ -9,7 +9,7 @@ export const FAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9
 export const GuideUrl = 'https://guide.geyser.fund/'
 export const FeedbackUrl = 'https://geyser.steelsync.io/feedback'
 export const GeyserAboutUrl = 'https://about.geyser.fund'
-export const GeyserUpdatesUrl = 'https://about.geyser.fund/updates'
+export const GeyserManifestoUrl = 'https://about.geyser.fund/manifesto'
 export const GeyserSubscribeUrl = 'https://about.geyser.fund/subscribe'
 
 // Geyser footer Links
