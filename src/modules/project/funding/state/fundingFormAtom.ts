@@ -18,8 +18,10 @@ import {
 import { centsToDollars, commaFormatted, isProjectAnException, toInt, validateEmail } from '@/utils'
 
 import { projectAffiliateAtom } from '../../pages1/projectView/state/affiliateAtom'
+import { projectHeroAtom } from '../../pages1/projectView/state/heroAtom'
 import { ProjectState } from '../../state/projectAtom'
 import { getRefIdFromProjectAffiliates } from '../hooks/useProjectAffiliateWithProjectName'
+import { getHeroIdFromProjectHeroes } from '../hooks/useProjectHeroWithProjectName'
 import { fundingTxAtom, selectedGoalIdAtom } from './fundingTxAtom'
 
 export type FundingProject = Pick<ProjectState, 'id' | 'name' | 'rewardCurrency' | 'title' | 'owners'>
@@ -353,6 +355,8 @@ export const formattedFundingInputAtom = atom((get) => {
   const projectGoalId = get(selectedGoalIdAtom)
   const affiliates = get(projectAffiliateAtom)
   const affiliateId = getRefIdFromProjectAffiliates(affiliates, fundingProject?.name)
+  const projectHeroes = get(projectHeroAtom)
+  const heroId = getHeroIdFromProjectHeroes(projectHeroes, fundingProject?.name)
 
   const {
     donationAmount,
@@ -406,6 +410,7 @@ export const formattedFundingInputAtom = atom((get) => {
     },
     projectGoalId,
     affiliateId,
+    ambassadorHeroId: heroId,
   }
 
   return input
