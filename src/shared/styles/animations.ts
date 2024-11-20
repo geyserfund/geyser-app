@@ -260,3 +260,65 @@ export const slideUpBottomDynamic = (distance: number, time: number) => ({
     animation: `$slide-up-bottom-dynamic ${time}s cubic-bezier(0.550, 0.085, 0.680, 0.530) both`,
   },
 })
+
+export const flipInRight = {
+  '@-webkit-keyframes flip-in-ver-right': {
+    from: {
+      webkitTransform: 'rotateY(-80deg)',
+      transform: 'rotateY(-80deg)',
+      opacity: 0,
+    },
+    to: {
+      webkitTransform: 'rotateY(0)',
+      transform: 'rotateY(0)',
+      opacity: 1,
+    },
+  },
+  '@keyframes flip-in-ver-right': {
+    from: {
+      webkitTransform: 'rotateY(-80deg)',
+      transform: 'rotateY(-80deg)',
+      opacity: 0,
+    },
+    to: {
+      webkitTransform: 'rotateY(0)',
+      transform: 'rotateY(0)',
+      opacity: 1,
+    },
+  },
+  flipInVerticalRight: {
+    webkitAnimation: '$flip-in-ver-right 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+    animation: '$flip-in-ver-right 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+  },
+}
+
+export const flipOutRight = {
+  '@-webkit-keyframes flip-out-ver-right': {
+    from: {
+      webkitTransform: 'rotateY(0)',
+      transform: 'rotateY(0)',
+      opacity: 1,
+    },
+    to: {
+      webkitTransform: 'rotateY(70deg)',
+      transform: 'rotateY(70deg)',
+      opacity: 0,
+    },
+  },
+  '@keyframes flip-out-ver-right': {
+    from: {
+      webkitTransform: 'rotateY(0)',
+      transform: 'rotateY(0)',
+      opacity: 1,
+    },
+    to: {
+      webkitTransform: 'rotateY(70deg)',
+      transform: 'rotateY(70deg)',
+      opacity: 0,
+    },
+  },
+  flipOutVerticalRight: {
+    webkitAnimation: '$flip-out-ver-right 0.3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
+    animation: '$flip-out-ver-right 0.3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
+  },
+}

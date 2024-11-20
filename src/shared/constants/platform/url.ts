@@ -370,3 +370,4 @@ export const HeroCardContributedEnabledRaised =
   'https://storage.googleapis.com/geyser-projects-media/hero/contributed-enabled-raised.png'
 export const HeroCardContributedRaisedEnabled =
   'https://storage.googleapis.com/geyser-projects-media/hero/contributed-raised%20-enabled.png'
+export const HeroBackCard = 'https://storage.googleapis.com/geyser-projects-media/hero/hero-card-back.png'
