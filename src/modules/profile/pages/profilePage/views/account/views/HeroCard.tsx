@@ -44,11 +44,15 @@ export const HeroCard = forwardRef(
     const [blockHeight, setBlockHeight] = useState<number>(DEFAULT_BLOCK_HEIGHT)
     const { isOpen, onToggle } = useDisclosure()
     const { isOpen: tempOpen, onToggle: onTempToggle } = useDisclosure()
+    const { isOpen: postToggle, onToggle: onPostToggle } = useDisclosure()
 
     const handleToggle = () => {
       onTempToggle()
       setTimeout(() => {
         onToggle()
+        setTimeout(() => {
+          onPostToggle()
+        }, 300)
       }, 300)
     }
 
@@ -106,6 +110,8 @@ export const HeroCard = forwardRef(
       getBlockHeightInfo()
     }, [])
 
+    const animationDone = isOpen === tempOpen && postToggle === tempOpen
+
     return (
       <Tilt glareEnable glareMaxOpacity={0.3} tiltMaxAngleX={10} tiltMaxAngleY={10}>
         {isOpen ? (
@@ -113,7 +119,7 @@ export const HeroCard = forwardRef(
             ref={ref}
             w="330px"
             h="430px"
-            className={tempOpen ? classes.flipInVerticalRight : classes.flipOutVerticalRight}
+            className={animationDone ? '' : tempOpen ? classes.flipInVerticalRight : classes.flipOutVerticalRight}
             py={10}
             position="relative"
             backgroundImage={`url(${HeroBackCard})`}
@@ -128,7 +134,7 @@ export const HeroCard = forwardRef(
             ref={ref}
             w="330px"
             h="430px"
-            className={tempOpen ? classes.flipOutVerticalRight : classes.flipInVerticalRight}
+            className={animationDone ? '' : tempOpen ? classes.flipOutVerticalRight : classes.flipInVerticalRight}
             py={10}
             position="relative"
             backgroundImage={`url(${getHeroBackground()})`}
