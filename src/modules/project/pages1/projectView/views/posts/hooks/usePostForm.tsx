@@ -207,7 +207,7 @@ export const usePostForm = ({
             variables: {
               input: {
                 postId,
-                emailSendOptions,
+                emailSendOptions: emailSendOptions?.segment ? emailSendOptions : undefined,
               },
             },
             onCompleted(data) {
