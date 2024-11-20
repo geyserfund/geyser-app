@@ -101,7 +101,7 @@ const RenderHeroList = ({
             return (
               <HStack
                 as={Link}
-                to={getPath('userProfile', '123')}
+                to={getPath('userProfile', datum.userId)}
                 paddingX={4}
                 w="full"
                 flex={1}
