@@ -176,42 +176,48 @@ export const HeroCard = forwardRef(
                 <Body fontSize="lg" color={lightModeColors.neutralAlpha[11]}>
                   {t('Contributor Ranking')}:{' '}
                   <Body as="span" color={lightModeColors.neutralAlpha[12]}>
-                    {contributorRank}
+                    {contributorRank || '-'}
                   </Body>
                 </Body>
-                <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
-                  Contributed {getShortAmountLabel(stats.contributorStats.contributionsTotal)} sats ($
-                  {getShortAmountLabel(Math.round(stats.contributorStats.contributionsTotalUsd))}) to{' '}
-                  {stats.contributorStats.projectsCount} projects
-                </Body>
+                {contributorAmount && (
+                  <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
+                    Contributed {getShortAmountLabel(stats.contributorStats.contributionsTotal)} sats ($
+                    {getShortAmountLabel(Math.round(stats.contributorStats.contributionsTotalUsd))}) to{' '}
+                    {stats.contributorStats.projectsCount} projects
+                  </Body>
+                )}
               </VStack>
 
               <VStack spacing={0} w="full">
                 <Body fontSize="lg" color={lightModeColors.neutralAlpha[11]}>
                   {t('Ambassador Ranking')}:{' '}
                   <Body as="span" color={lightModeColors.neutralAlpha[12]}>
-                    {amabassadorRank}
+                    {amabassadorRank || '-'}
                   </Body>
                 </Body>
-                <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
-                  Enabled {getShortAmountLabel(stats.ambassadorStats.contributionsTotal)} sats ($
-                  {getShortAmountLabel(Math.round(stats.ambassadorStats.contributionsTotalUsd))}) to{' '}
-                  {stats.ambassadorStats.projectsCount} projects
-                </Body>
+                {ambassadorAmount && (
+                  <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
+                    Enabled {getShortAmountLabel(stats.ambassadorStats.contributionsTotal)} sats ($
+                    {getShortAmountLabel(Math.round(stats.ambassadorStats.contributionsTotalUsd))}) to{' '}
+                    {stats.ambassadorStats.projectsCount} projects
+                  </Body>
+                )}
               </VStack>
 
               <VStack spacing={0} w="full">
                 <Body fontSize="lg" color={lightModeColors.neutralAlpha[11]}>
                   {t('Creator Ranking')}:{' '}
                   <Body as="span" color={lightModeColors.neutralAlpha[12]}>
-                    {creatorRank}
+                    {creatorRank || '-'}
                   </Body>
                 </Body>
-                <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
-                  Raised {getShortAmountLabel(stats.creatorStats.contributionsTotal)} sats ($
-                  {getShortAmountLabel(Math.round(stats.creatorStats.contributionsTotalUsd))}) to{' '}
-                  {stats.creatorStats.projectsCount} projects
-                </Body>
+                {creatorAmount && (
+                  <Body fontSize="sm" color={lightModeColors.neutralAlpha[9]}>
+                    Raised {getShortAmountLabel(stats.creatorStats.contributionsTotal)} sats ($
+                    {getShortAmountLabel(Math.round(stats.creatorStats.contributionsTotalUsd))}) to{' '}
+                    {stats.creatorStats.projectsCount} projects
+                  </Body>
+                )}
               </VStack>
             </VStack>
           </VStack>
