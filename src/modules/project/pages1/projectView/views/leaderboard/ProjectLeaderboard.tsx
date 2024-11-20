@@ -38,7 +38,7 @@ export const ProjectLeaderboard = () => {
           </H1>
           <CustomSelect
             isSearchable={false}
-            width={{ base: 'full', sm: '200px' }}
+            width={{ base: 'full', xs: '180px' }}
             options={periodOptions}
             value={periodOptions.find((option) => option.value === period)}
             onChange={handlePeriodChange}

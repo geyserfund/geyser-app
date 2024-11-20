@@ -1,5 +1,6 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import _ from 'lodash'
 import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 
@@ -28,7 +29,7 @@ export const Leaderboard = ({ period }: { period: ProjectLeaderboardPeriod }) =>
 
   const currentDateTime = DateTime.now()
 
-  const items: AnimatedNavBarItem[] = useMemo(() => {
+  const navItems: AnimatedNavBarItem[] = useMemo(() => {
     const list = [
       {
         name: t('Contributors'),
@@ -44,7 +45,7 @@ export const Leaderboard = ({ period }: { period: ProjectLeaderboardPeriod }) =>
 
     if (isMobile) {
       list.push({
-        name: t('Contributors'),
+        name: t('Contributions'),
         key: LeaderboardView.Contributions,
         render: () => <Contributions />,
       })
@@ -53,12 +54,17 @@ export const Leaderboard = ({ period }: { period: ProjectLeaderboardPeriod }) =>
     return list
   }, [currentDateTime, isMobile, period])
 
-  const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: LeaderboardView.Contributors })
+  const { render, items, ...animatedNavBarProps } = useAnimatedNavBar({
+    items: navItems,
+    defaultView: LeaderboardView.Contributors,
+  })
+
+  const uniqItems = _.uniqBy(items, (data) => data.key)
 
   return (
     <CardLayout dense noMobileBorder w="full" paddingTop={standardPadding} flex={1}>
       <HStack w="full" paddingX={{ base: 0, lg: 6 }} position="absolute" top={standardPadding} paddingBottom={2}>
-        <AnimatedNavBar {...animatedNavBarProps} showLabel />
+        <AnimatedNavBar items={uniqItems} {...animatedNavBarProps} showLabel />
       </HStack>
       <VStack w="full" h="full" pt={`${dimensions.animatedNavBar.height.base + 8}px`}>
         {render && render()}
