@@ -27,7 +27,6 @@ export const SuccessImageComponent = () => {
   const user = loggedInUser || fundingInputAfterRequest?.user
   const heroId = user?.heroId
 
-  console.log('heroId', heroId)
   const heroLink = `https://geyser.fund/project/${project.name}${heroId ? `&hero=${heroId}` : ''}`
 
   const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
@@ -58,13 +57,13 @@ export const SuccessImageComponent = () => {
       return (
         <>
           {t('So far, ')}
-          <Body as="span" color="neutral1.12">
+          <Body as="span" color={lightModeColors.neutral1[12]}>
             {ambassadorsCount}
           </Body>{' '}
           <Body as="span" regular>
             {t('ambassador' + (ambassadorsCount === 1 ? ' has' : 's have') + ' enabled')}
           </Body>{' '}
-          <Body as="span" color="neutral1.12">
+          <Body as="span" color={lightModeColors.neutral1[12]}>
             {totalSats.toLocaleString()}
           </Body>{' '}
           {t('sats in contributions to this project.')}
@@ -83,10 +82,10 @@ export const SuccessImageComponent = () => {
           pt={4}
           pb={4}
           textAlign="center"
-          color="neutral1.11"
+          color={lightModeColors.neutral1[11]}
           borderTop="1px solid"
           w="full"
-          borderColor="neutral1.11"
+          borderColor={lightModeColors.neutral1[11]}
         >
           <Link
             color="primary1.500"
@@ -101,7 +100,13 @@ export const SuccessImageComponent = () => {
           {t('to get your custom')}{' '}
           <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
             <span style={{ position: 'relative', display: 'inline-block' }}>
-              <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
+              <Body
+                as="span"
+                color={lightModeColors.neutral1[12]}
+                textDecoration="underline dotted"
+                display="inline"
+                bold
+              >
                 {t('Hero link')}
               </Body>
             </span>
@@ -190,7 +195,7 @@ export const SuccessImageComponent = () => {
             bg="whiteAlpha.700"
             borderRadius={10}
             border="1px solid"
-            borderColor="neutral1.7"
+            borderColor={lightModeColors.neutral1[7]}
             zIndex={1}
           >
             <Body color={lightModeColors.neutral1[12]} flex={1}>

@@ -33,13 +33,13 @@ export const ProjectShareView = () => {
       return (
         <>
           {t('So far, ')}
-          <Body as="span" color="neutral1.12">
+          <Body as="span" color={lightModeColors.neutral1[12]}>
             {ambassadorsCount}
           </Body>{' '}
           <Body as="span" regular>
             {t('ambassador' + (ambassadorsCount === 1 ? ' has' : 's have') + ' enabled')}
           </Body>{' '}
-          <Body as="span" color="neutral1.12">
+          <Body as="span" color={lightModeColors.neutral1[12]}>
             {commaFormatted(satAmount)}
           </Body>{' '}
           {t('sats in contributions to this project.')}
