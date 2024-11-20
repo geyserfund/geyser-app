@@ -97,8 +97,6 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
 
     setIsLoadingMore(true)
 
-    console.log('fetchNext')
-
     await fetchMore({
       variables: {
         input: {
