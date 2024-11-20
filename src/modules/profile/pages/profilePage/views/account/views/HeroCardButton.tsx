@@ -5,7 +5,7 @@ import { PiIdentificationBadge } from 'react-icons/pi'
 
 import { useProfileSideNavAtom } from '@/modules/navigation/platformNavBar/profileNav/profileSideNavAtom'
 import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
-import { HeroButtonBorderColor, HeroButtonGradient } from '@/shared/styles/custom'
+import { HeroButtonBorderColor, HeroButtonGradient, HeroButtonGradientBright } from '@/shared/styles/custom'
 import { UserForProfilePageFragment, UserHeroStats } from '@/types'
 
 type HeroCardButtonProps = {
@@ -38,6 +38,7 @@ export const HeroCardButton = ({ user, stats, ...rest }: HeroCardButtonProps) =>
         onClick={handleHeroCardClick}
         borderColor={HeroButtonBorderColor}
         background={HeroButtonGradient}
+        _hover={{ background: HeroButtonGradientBright }}
         {...rest}
       >
         {t('Hero Card')}
