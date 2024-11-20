@@ -49,9 +49,9 @@ export const BadgesBody = () => {
 
   return (
     <>
-      {isEdit && showTopSection && (
+      {isEdit && showTopSection && hasBadgeNoNostrForOwn && (
         <VStack background="neutral1.3" borderRadius="8px" padding="5px 15px" width="fit-content" alignSelf="center">
-          {hasBadgeNoNostrForOwn && <Body light>{t('Login with Nostr to claim the badges you earned!')}</Body>}
+          <Body light>{t('Login with Nostr to claim the badges you earned!')}</Body>
         </VStack>
       )}
       {!hasBadge && (
