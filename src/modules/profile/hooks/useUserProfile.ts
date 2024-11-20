@@ -5,23 +5,29 @@ import { toInt, useNotification } from '@/utils'
 
 import { useAuthContext } from '../../../context'
 import { useUserForProfilePageQuery } from '../../../types'
-import { userProfileAtom, userProfileLoadingAtom, useViewingOwnProfileAtomValue } from '../state'
+import { defaultUser, userProfileAtom, userProfileLoadingAtom, useViewingOwnProfileAtomValue } from '../state'
 
-export const useUserProfile = (userId?: string) => {
+export const useUserProfile = ({ userId, heroId }: { userId?: string; heroId?: string }) => {
   const toast = useNotification()
 
   const isViewingOwnProfile = useViewingOwnProfileAtomValue()
   const [userProfile, setUserProfile] = useAtom(userProfileAtom)
+
   const [isLoading, setIsLoading] = useAtom(userProfileLoadingAtom)
   const { user: currentAppUser } = useAuthContext()
 
+  const whereVariable = userId ? { id: toInt(userId) } : { heroId }
+
+  useEffect(() => {
+    setIsLoading(true)
+    setUserProfile(defaultUser)
+  }, [userId, heroId, setIsLoading, setUserProfile])
+
   const { error } = useUserForProfilePageQuery({
     variables: {
-      where: {
-        id: toInt(userId),
-      },
+      where: whereVariable,
     },
-    skip: !userId,
+    skip: !userId && !heroId,
     onCompleted(data) {
       if (data.user) {
         setUserProfile(data.user)

@@ -128,6 +128,11 @@ export const discoveryRoutes = [
   getPath('discoveryLeaderboard'),
   getPath('discoveryGrants'),
   getPath('discoveryGrant', PathName.grantId),
+  getPath('discoveryHallOfFame'),
+  getPath('hallOfFameProjects'),
+  getPath('hallOfFameHeroesCreator'),
+  getPath('hallOfFameHeroesAmbassador'),
+  getPath('hallOfFameHeroesContributor'),
 ]
 
 export const profileSettingsRoutes = [
@@ -136,6 +141,13 @@ export const profileSettingsRoutes = [
   getPath('userProfileSettingsNotifications', PathName.userId),
 ]
 
+export const heroProfileSettingsRoutes = [
+  getPath('heroProfileSettings', PathName.heroId),
+  getPath('heroProfileSettingsGeneral', PathName.heroId),
+  getPath('heroProfileSettingsNotifications', PathName.heroId),
+]
+
 export const profileRoutes = [getPath('userProfile', PathName.userId), ...profileSettingsRoutes]
+export const heroProfileRoutes = [getPath('heroProfile', PathName.heroId), ...heroProfileSettingsRoutes]
 
 export const fallBackRoutes = [getPath('notFound'), getPath('notAuthorized')]

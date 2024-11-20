@@ -18,13 +18,7 @@ export const ShareProjectButton = () => {
       <Button variant="soft" colorScheme="neutral1" rightIcon={<PiShareFat />} onClick={onOpen}>
         {t('Share')}
       </Button>
-      <ProjectShareModal
-        isOpen={isOpen}
-        onClose={onClose}
-        name={project.name}
-        projectId={project.id}
-        title={project.title}
-      />
+      <ProjectShareModal isOpen={isOpen} onClose={onClose} projectId={project.id} title={project.title} />
     </>
   )
 }

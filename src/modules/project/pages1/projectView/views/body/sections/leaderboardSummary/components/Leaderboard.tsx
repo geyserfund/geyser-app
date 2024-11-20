@@ -49,10 +49,10 @@ export const Leaderboard = () => {
     <VStack spacing={0} w="full" flex={1} justifyContent={'space-between'} overflow={'hidden'}>
       <VStack spacing={0} w="full" flex={1} overflowY={'auto'}>
         {funders.map((funder, index) => {
-          return <LeaderboardItem funder={funder} rank={index + 1} key={funder.funderId} />
+          return <LeaderboardItem funder={funder} rank={index + 1} key={funder.funderId} hideLabel />
         })}
       </VStack>
-      {userContributor && <LeaderboardItem funder={userContributor} rank={userAllTimeRank || 0} />}
+      {userContributor && <LeaderboardItem funder={userContributor} rank={userAllTimeRank || 0} hideLabel />}
 
       <HStack w="full" justifyContent={'center'} spacing={1} paddingX={6} paddingTop={2}>
         <Button

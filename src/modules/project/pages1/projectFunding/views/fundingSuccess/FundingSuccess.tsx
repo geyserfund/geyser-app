@@ -6,9 +6,11 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useFundingTxAtom } from '@/modules/project/funding/state'
+import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
-import { H1 } from '@/shared/components/typography'
+import { H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { lightModeColors } from '@/shared/styles'
 import { FundingStatus } from '@/types'
 
 import { ProjectFundingSummary } from '../../components/ProjectFundingSummary'
@@ -22,6 +24,7 @@ import { SendEmailToCreator } from './components/SendEmailToCreator'
 export const FundingSuccess = () => {
   const { project } = useFundingFormAtom()
   const { fundingTx } = useFundingTxAtom()
+  const { rewards } = useRewardsAtom()
 
   const navigate = useNavigate()
 
@@ -41,17 +44,36 @@ export const FundingSuccess = () => {
       }
     >
       <CardLayout mobileDense w="full" padding={{ base: 0, lg: 12 }} alignItems="center">
-        <Confetti gravity={0.07} numberOfPieces={250} />
+        <Confetti
+          gravity={0.07}
+          numberOfPieces={250}
+          colors={[
+            lightModeColors.primary1[5],
+            lightModeColors.primary1[6],
+            lightModeColors.primary1[8],
+            lightModeColors.primary1[9],
+            lightModeColors.amber[6],
+            lightModeColors.amber[8],
+            lightModeColors.orange[6],
+            lightModeColors.orange[8],
+            lightModeColors.ruby[6],
+            lightModeColors.ruby[8],
+          ]}
+        />
         <VStack w="full" maxWidth="800px" alignItems="start" spacing={6}>
           <VStack w="full" alignItems="start">
-            <H1 size="3xl" bold>
-              {t('Success')}!
-            </H1>
             <SuccessImageComponent />
           </VStack>
-          <SendEmailToCreator />
+          {rewards.length > 0 && (
+            <VStack w="full" alignItems="start" spacing={6}>
+              <H2 size={{ base: 'xl', lg: '2xl' }} bold>
+                {t('Next Actions')}
+              </H2>
+              <ConfirmationMessages />
+              <SendEmailToCreator />
+            </VStack>
+          )}
           <SafeToDeleteRefund />
-          <ConfirmationMessages />
           <Divider />
           <ProjectFundingSummary disableCollapse />
           <DownloadInvoice project={project} fundingTxId={fundingTx.id} />

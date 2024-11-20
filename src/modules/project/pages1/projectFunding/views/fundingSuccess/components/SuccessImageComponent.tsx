@@ -1,36 +1,48 @@
-import { Avatar, Button, HStack, Image, Link, Tooltip, VStack } from '@chakra-ui/react'
-import * as htmlToImage from 'html-to-image'
-import { useCallback, useState } from 'react'
+import { Avatar, Button, HStack, IconButton, Link, Tooltip, useClipboard, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 
+import { AnonymousAvatar } from '@/components/ui/AnonymousAvatar'
+import { useAuthContext } from '@/context'
+import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
 import { useFundingFlowAtom } from '@/modules/project/funding/hooks/useFundingFlowAtom'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
+import { useAuthModal } from '@/pages/auth/hooks'
 import { Body, H3 } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
-import { Badge } from '@/types'
+import { SuccessImageBackgroundGradient } from '@/shared/styles/custom'
+import { useProjectAmbassadorStatsQuery } from '@/types'
 import { useNotification } from '@/utils'
 
-import ContributionIcon from './ContributionIcon.svg'
-
-export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }) => {
+export const SuccessImageComponent = () => {
   const { t } = useTranslation()
-  const toast = useNotification()
-  const [copied, setCopied] = useState(false)
-
-  const [successComponent, setSuccessComponent] = useState<HTMLDivElement | null>(null)
-
   const { project } = useProjectAtom()
+  const { loginOnOpen } = useAuthModal()
+  const { user: loggedInUser, isLoggedIn } = useAuthContext()
 
   const { fundingInputAfterRequest } = useFundingFlowAtom()
 
-  const user = fundingInputAfterRequest?.user
+  const user = loggedInUser || fundingInputAfterRequest?.user
+  const heroId = user?.heroId
 
-  const ref = useCallback((node: HTMLDivElement | null) => {
-    setSuccessComponent(node)
-  }, [])
+  const heroLink = `https://geyser.fund/project/${project.name}${heroId ? `&hero=${heroId}` : ''}`
+
+  const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
+  const ambassadorsCount = data?.projectGet?.ambassadors?.stats?.count
+  const totalSats = data?.projectGet?.ambassadors?.stats?.contributionsSum
+
+  const { onCopy } = useClipboard(heroLink)
+  const toast = useNotification()
+
+  const handleCopy = () => {
+    onCopy()
+    toast.success({
+      title: t('Copied!'),
+      description: t('Hero link copied to clipboard'),
+    })
+  }
 
   const { getShareProjectUrl } = useProjectShare()
 
@@ -40,118 +52,197 @@ export const SuccessImageComponent = ({ currentBadge }: { currentBadge?: Badge }
     return null
   }
 
-  const handleCopy = async () => {
-    try {
-      const dataUrl = await getDataUrl()
-      const base64Response = await fetch(dataUrl)
-      const blob = await base64Response.blob()
-      const items = { [blob.type]: blob }
-      const clipboardItem = new ClipboardItem(items)
-      await navigator.clipboard.write([clipboardItem])
-      setCopied(true)
-      setTimeout(() => {
-        setCopied(false)
-        toast.success({
-          title: 'Copied!',
-          description: 'Ready to paste into Social media posts',
-        })
-      }, 1000)
-    } catch {
-      toast.error({
-        title: 'Failed to download image',
-        description: 'Please try again',
-      })
-    }
-  }
-
-  const getDataUrl = async () => {
-    const element = successComponent
-    if (element) {
-      const dataUrl = await htmlToImage.toPng(element, {
-        style: { backgroundColor: 'primary.400', borderStyle: 'double' },
-      })
-      return dataUrl
+  const renderSharingStats = () => {
+    if (ambassadorsCount) {
+      return (
+        <>
+          {t('So far, ')}
+          <Body as="span" color={lightModeColors.neutral1[12]}>
+            {ambassadorsCount}
+          </Body>{' '}
+          <Body as="span" regular>
+            {t('ambassador' + (ambassadorsCount === 1 ? ' has' : 's have') + ' enabled')}
+          </Body>{' '}
+          <Body as="span" color={lightModeColors.neutral1[12]}>
+            {totalSats.toLocaleString()}
+          </Body>{' '}
+          {t('sats in contributions to this project.')}
+        </>
+      )
     }
 
     return ''
+  }
+
+  const renderSignInPromptBody = () => {
+    if (!isLoggedIn) {
+      return (
+        <Body
+          size="xl"
+          pt={4}
+          pb={4}
+          textAlign="center"
+          color={lightModeColors.neutral1[11]}
+          borderTop="1px solid"
+          w="full"
+          borderColor={lightModeColors.neutral1[11]}
+        >
+          <Link
+            color="primary1.500"
+            textDecoration="underline"
+            onClick={(e) => {
+              e.preventDefault()
+              loginOnOpen()
+            }}
+          >
+            {t('Sign in')}
+          </Link>{' '}
+          {t('to get your custom')}{' '}
+          <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
+            <span style={{ position: 'relative', display: 'inline-block' }}>
+              <Body
+                as="span"
+                color={lightModeColors.neutral1[12]}
+                textDecoration="underline dotted"
+                display="inline"
+                bold
+              >
+                {t('Hero link')}
+              </Body>
+            </span>
+          </Tooltip>{' '}
+          {t('and track the impact of sharing.')}
+        </Body>
+      )
+    }
+
+    return null
   }
 
   const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${projectShareUrl}`
 
   return (
     <VStack w="full" spacing={6}>
-      <HStack
+      <VStack
         id="successful-contribution-banner"
-        ref={ref}
-        background={'linear-gradient(86deg, #00C7AD 0%, #00EED2 100%)'}
         padding="6%"
         w="full"
-        gap={'10%'}
+        spacing={4}
         justifyContent="center"
-        borderRadius="15px"
-        border="2px solid"
-        borderColor={lightModeColors.primary1[11]}
+        borderRadius={8}
+        border="1px solid"
+        borderColor="neutral1.3"
         aspectRatio={2.16}
+        pl={8}
+        pr={8}
+        background={SuccessImageBackgroundGradient}
+        backgroundColor="utils.pbg"
+        position="relative"
       >
-        <Image src={ContributionIcon} height="100%"></Image>
-        <VStack alignItems={'flex-start'} gap={1}>
-          {user && user.id && (
-            <HStack>
-              <Avatar
-                src={user.imageUrl || ''}
-                height={{ base: '30px', md: '50px', lg: '60px' }}
-                width={{ base: '30px', md: '50px', lg: '60px' }}
-              />
-              <Body size={{ base: 'xl', md: '2xl', lg: '3xl' }} color="utils.whiteContrast">
-                {user.username}
-              </Body>
-            </HStack>
-          )}
-          <H3 size={{ base: 'xl', md: '3xl', lg: '4xl' }} color={lightModeColors.primary1[11]}>
+        <FlowingGifBackground />
+        {user && (
+          <HStack spacing={2} zIndex={1}>
+            {user.imageUrl ? (
+              <Avatar src={user.imageUrl || ''} size="md" />
+            ) : (
+              <AnonymousAvatar seed={user.id} imageSize="48px" />
+            )}
+            <Body color={lightModeColors.neutral1[11]} size="2xl" medium>
+              {user.username}
+            </Body>
+          </HStack>
+        )}
+        <VStack spacing={1} zIndex={1}>
+          <H3 color={lightModeColors.neutral1[11]} fontSize="3xl" regular>
             {t('Successfully contributed to')}
           </H3>
-          <H3 size={{ base: '2xl', md: '4xl', lg: '5xl' }} color={lightModeColors.primary1[12]} bold>
+          <H3 color={lightModeColors.neutral1[12]} bold fontSize="4xl">
             {project.title}
           </H3>
-          {currentBadge && (
-            <VStack w="full" spacing="0px">
-              <Image src={currentBadge.image} width="125px" />
-              <Body color="utils.whiteContrast" light>
-                {t('You won a Nostr badge!')}
-              </Body>
-            </VStack>
-          )}
         </VStack>
-      </HStack>
 
-      <HStack w="full" justifyContent="end">
-        <Tooltip w="100%" placement="top" label={copied ? t('copied') : t('copy')}>
+        <VStack spacing={2} w="full" zIndex={1}>
+          <Body color={lightModeColors.neutral1[11]} size="xl" regular pb={4} textAlign="center">
+            {t('Become an')}{' '}
+            <Tooltip
+              label={t(
+                'Someone who enables contributions towards projects by spreading the word using his/her unique Hero link',
+              )}
+              placement="top"
+            >
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                <Body as="span" color={lightModeColors.neutral1[12]} textDecoration="underline dotted" display="inline">
+                  {t('Ambassador')}
+                </Body>
+              </span>
+            </Tooltip>{' '}
+            {t('for this project by spreading the word using your')}{' '}
+            <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                <Body as="span" color={lightModeColors.neutral1[12]} textDecoration="underline dotted" display="inline">
+                  {t('Hero link')}
+                </Body>
+              </span>
+            </Tooltip>
+            {'. '}
+            {renderSharingStats()}
+          </Body>
+          {renderSignInPromptBody()}
+          <HStack
+            h="40px"
+            w="full"
+            p={2}
+            bg="whiteAlpha.700"
+            borderRadius={10}
+            border="1px solid"
+            borderColor={lightModeColors.neutral1[7]}
+            zIndex={1}
+          >
+            <Body color={lightModeColors.neutral1[12]} flex={1}>
+              <strong>{heroId ? t('Hero Link:') : ''}</strong> {heroLink.replace('https://', '')}
+            </Body>
+            <IconButton
+              aria-label={heroId ? 'Copy link' : 'Copy hero link'}
+              icon={<PiCopy />}
+              variant="ghost"
+              size="md"
+              onClick={handleCopy}
+            />
+          </HStack>
+        </VStack>
+        <HStack w="full" justifyContent="center" spacing={4} zIndex={1}>
           <Button
             size="lg"
-            isActive={copied}
-            variant="outline"
-            colorScheme="neutral1"
-            aria-label="copy-success-image"
+            variant="solid"
+            bg="whiteAlpha.800"
+            color={lightModeColors.neutral1[11]}
+            border="1px solid"
+            borderColor={lightModeColors.neutral1[7]}
+            borderRadius={8}
+            rightIcon={<PiShareFat />}
+            as={Link}
+            isExternal
+            href={generateTwitterShareUrl(twitterShareText)}
+            w="full"
+            _hover={{
+              bg: 'whiteAlpha.900',
+            }}
+          >
+            {t('Share on X')}
+          </Button>
+          <Button
+            size="lg"
+            variant="solid"
+            bg="blackAlpha.800"
+            color="white"
             rightIcon={<PiCopy />}
             onClick={handleCopy}
-            isLoading={successComponent === null}
+            w="full"
           >
-            {t('Copy Success image')}
+            {t(heroId ? 'Copy link' : 'Copy hero link')}
           </Button>
-        </Tooltip>
-        <Button
-          size="lg"
-          variant="soft"
-          colorScheme="neutral1"
-          aria-label="post-success-to-twitter"
-          rightIcon={<PiShareFat />}
-          as={Link}
-          isExternal
-          href={generateTwitterShareUrl(twitterShareText)}
-        >
-          {t('Share on X')}
-        </Button>
-      </HStack>
+        </HStack>
+      </VStack>
     </VStack>
   )
 }

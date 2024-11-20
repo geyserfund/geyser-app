@@ -19,7 +19,7 @@ export const ProfileSettings = () => {
     return params.userId
   }, [params])
 
-  const { error } = useUserProfile(userId)
+  const { error } = useUserProfile({ userId })
 
   const isMobile = useMobileMode()
 

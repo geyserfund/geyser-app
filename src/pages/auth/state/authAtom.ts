@@ -9,6 +9,7 @@ import { ExternalAccountType, SocialAccountType } from '../type'
 export const defaultUser: UserMeFragment = {
   id: 0,
   email: '',
+  heroId: '',
   username: '',
   imageUrl: '',
   isEmailVerified: false,

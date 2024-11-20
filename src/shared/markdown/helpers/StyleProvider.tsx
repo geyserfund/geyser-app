@@ -110,7 +110,7 @@ export const StyleProvider = ({ children, flex, display, ...rest }: { flex?: boo
                 justifySelf: 'center',
                 height: '60px',
                 width: '60px',
-                borderTopWidth: '8px',
+                borderTopWidth: '16px',
                 borderTopColor: 'primary1.9',
               },
               '& div.remirror-editor': {
