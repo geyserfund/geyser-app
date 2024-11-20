@@ -40,7 +40,7 @@ export const TopProjects = () => {
       />
       <CardLayout w="full" direction="row" flexWrap={'wrap'}>
         {loading
-          ? [...Array(9).keys()].keys().map((key) => {
+          ? [...Array(9).keys()].map((key) => {
               return <ProjectHeroDisplaySkeleton key={key} />
             })
           : projects.map((project, index) => {
