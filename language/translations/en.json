@@ -1272,9 +1272,9 @@
   "Your project is live and can receive contributions. Share your project to get more visibility.": "Your project is live and can receive contributions. Share your project to get more visibility.",
   "Your project is in review and therefore cannot receive contributions, and is not visible by the public.": "Your project is in review and therefore cannot receive contributions, and is not visible by the public.",
   "You project has been flagged for violating our Terms & Conditions. You should have received an email with further detail on how to proceed. Your project is currently not visible to the public.": "You project has been flagged for violating our Terms & Conditions. You should have received an email with further detail on how to proceed. Your project is currently not visible to the public.",
-  "Post saved successfully!": "Post saved successfully!",
-  "failed to upload image": "failed to upload image",
-  "Contribute without login": "Contribute without login",
+  "To a goal": "To a goal",
+  "Email and Updates": "Email and Updates",
+  "Rewards total": "Rewards total",
   "Follow Project and receive direct project updates to your email": "Follow Project and receive direct project updates to your email",
   "See all badges": "See all badges",
   "No projects": "No projects",
@@ -1315,7 +1315,6 @@
   "Receive One Time Password": "Receive One Time Password",
   "We sent you an OTP code to": "We sent you an OTP code to",
   "Paste (or type) it below to continue.": "Paste (or type) it below to continue.",
-  "Resend code": "Resend code",
   "No contributions have been made to this project.": "No contributions have been made to this project.",
   "Banner": "Banner",
   "Spread the word": "Spread the word",
@@ -1353,5 +1352,7 @@
   "Contributor Ranking": "Contributor Ranking",
   "Ambassador Ranking": "Ambassador Ranking",
   "Current month": "Current month",
-  "Current week": "Current week"
+  "Current week": "Current week",
+  "Resend code": "Resend code",
+  "Geyser Manifesto": "Geyser Manifesto"
 }

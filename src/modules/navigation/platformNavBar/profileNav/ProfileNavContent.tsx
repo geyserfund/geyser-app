@@ -25,8 +25,8 @@ import {
   getPath,
   GeyserAboutUrl,
   GeyserGithubUrl,
+  GeyserManifestoUrl,
   GeyserSubscribeUrl,
-  GeyserUpdatesUrl,
   GuideUrl,
 } from '@/shared/constants'
 import { HeroStats, useUserHeroStatsQuery } from '@/types'
@@ -132,8 +132,8 @@ export const ProfileNavContent = () => {
 
         <Divider borderColor="neutral1.6" />
 
-        <MenuItem as={ChakraLink} isExternal href={GeyserUpdatesUrl} _focusVisible={{}} gap={2}>
-          <Body size="md">{t('Geyser updates')}</Body>
+        <MenuItem as={ChakraLink} isExternal href={GeyserManifestoUrl} _focusVisible={{}} gap={2}>
+          <Body size="md">{t('Geyser Manifesto')}</Body>
           <PiArrowUpRight fontSize="18px" />
         </MenuItem>
         <MenuItem as={ChakraLink} isExternal href={GeyserSubscribeUrl} _focusVisible={{}} gap={2}>
