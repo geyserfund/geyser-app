@@ -1,4 +1,3 @@
-import HeroCardLayout from './hero-card-layout.png'
 import LightningIcon from './lightning.svg'
 import LogoPrimary from './logo-brand.svg'
 import LogoDark from './logo-dark.svg'
@@ -10,7 +9,6 @@ import NwcIconDark from './nwc-light-mode.svg'
 import ShareIcon from './shareico.svg'
 
 export {
-  HeroCardLayout,
   LightningIcon,
   LogoDark,
   LogoDarkGreenImage,
