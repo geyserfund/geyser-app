@@ -64,7 +64,7 @@ const initialState: FundFormType = {
   privateComment: '',
   email: '',
   media: '',
-  followProject: false,
+  followProject: true,
   subscribeToGeyserEmails: false,
   rewardsByIDAndCount: undefined,
   rewardCurrency: RewardCurrency.Usdcent,
