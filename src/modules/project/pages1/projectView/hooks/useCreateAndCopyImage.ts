@@ -18,6 +18,14 @@ export const useCreateAndCopyImage = () => {
     throw new Error('Element is not defined')
   }, [])
 
+  const getBlob = async (element: HTMLElement | null) => {
+    const dataUrl = await getDataUrl(element)
+
+    const base64Response = await fetch(dataUrl)
+
+    return base64Response.blob()
+  }
+
   /** Async function, Always invoke asynchronously for safari's sake */
   const handleGenerateAndCopy = useCallback(
     async ({
@@ -31,16 +39,8 @@ export const useCreateAndCopyImage = () => {
     }) => {
       setCopying(true)
       try {
-        const getBlob = async () => {
-          const dataUrl = await getDataUrl(element)
-
-          const base64Response = await fetch(dataUrl)
-
-          return base64Response.blob()
-        }
-
         const clipboardItem = new ClipboardItem({
-          'image/png': getBlob().then((result) => {
+          'image/png': getBlob(element).then((result) => {
             if (!result) {
               return new Promise(async (resolve) => {
                 resolve('')
@@ -64,5 +64,14 @@ export const useCreateAndCopyImage = () => {
     [getDataUrl],
   )
 
-  return { handleGenerateAndCopy, copying }
+  const getObjectUrl = async ({ element, onError = () => {} }: { element: HTMLElement | null; onError: Function }) => {
+    try {
+      const blob = await getBlob(element)
+      return URL.createObjectURL(blob)
+    } catch (error) {
+      onError()
+    }
+  }
+
+  return { handleGenerateAndCopy, copying, getObjectUrl }
 }
