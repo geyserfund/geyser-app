@@ -11,6 +11,8 @@ import { CampaignContent, useProjectShare } from '@/modules/project/pages1/proje
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { useAuthModal } from '@/pages/auth/hooks'
 import { Body, H3 } from '@/shared/components/typography'
+import { lightModeColors } from '@/shared/styles'
+import { SuccessImageBackgroundGradient } from '@/shared/styles/custom'
 import { useProjectAmbassadorStatsQuery } from '@/types'
 import { useNotification } from '@/utils'
 
@@ -128,7 +130,7 @@ export const SuccessImageComponent = () => {
         aspectRatio={2.16}
         pl={8}
         pr={8}
-        background={'linear-gradient(81deg, #B2FAEC -9.6%, #EDF2FE 109.2%)'}
+        background={SuccessImageBackgroundGradient}
         backgroundColor="utils.pbg"
         position="relative"
       >
@@ -140,22 +142,22 @@ export const SuccessImageComponent = () => {
             ) : (
               <AnonymousAvatar seed={user.id} imageSize="48px" />
             )}
-            <Body color="neutral1.11" size="2xl" medium>
+            <Body color={lightModeColors.neutral1[11]} size="2xl" medium>
               {user.username}
             </Body>
           </HStack>
         )}
         <VStack spacing={1} zIndex={1}>
-          <H3 color="neutral1.11" fontSize="3xl" regular>
+          <H3 color={lightModeColors.neutral1[11]} fontSize="3xl" regular>
             {t('Successfully contributed to')}
           </H3>
-          <H3 color="neutral1.12" bold fontSize="4xl">
+          <H3 color={lightModeColors.neutral1[12]} bold fontSize="4xl">
             {project.title}
           </H3>
         </VStack>
 
         <VStack spacing={2} w="full" zIndex={1}>
-          <Body color="neutral1.11" size="xl" regular pb={4} textAlign="center">
+          <Body color={lightModeColors.neutral1[11]} size="xl" regular pb={4} textAlign="center">
             {t('Become an')}{' '}
             <Tooltip
               label={t(
@@ -164,7 +166,7 @@ export const SuccessImageComponent = () => {
               placement="top"
             >
               <span style={{ position: 'relative', display: 'inline-block' }}>
-                <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline">
+                <Body as="span" color={lightModeColors.neutral1[12]} textDecoration="underline dotted" display="inline">
                   {t('Ambassador')}
                 </Body>
               </span>
@@ -172,7 +174,7 @@ export const SuccessImageComponent = () => {
             {t('for this project by spreading the word using your')}{' '}
             <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
               <span style={{ position: 'relative', display: 'inline-block' }}>
-                <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline">
+                <Body as="span" color={lightModeColors.neutral1[12]} textDecoration="underline dotted" display="inline">
                   {t('Hero link')}
                 </Body>
               </span>
@@ -191,7 +193,7 @@ export const SuccessImageComponent = () => {
             borderColor="neutral1.7"
             zIndex={1}
           >
-            <Body color="neutral1.12" flex={1}>
+            <Body color={lightModeColors.neutral1[12]} flex={1}>
               <strong>{heroId ? t('Hero Link:') : ''}</strong> {heroLink.replace('https://', '')}
             </Body>
             <IconButton
@@ -208,9 +210,9 @@ export const SuccessImageComponent = () => {
             size="lg"
             variant="solid"
             bg="whiteAlpha.800"
-            color="neutral1.11"
+            color={lightModeColors.neutral1[11]}
             border="1px solid"
-            borderColor="neutral1.7"
+            borderColor={lightModeColors.neutral1[7]}
             borderRadius={8}
             rightIcon={<PiShareFat />}
             as={Link}

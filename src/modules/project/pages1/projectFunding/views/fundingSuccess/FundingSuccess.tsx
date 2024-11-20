@@ -10,6 +10,7 @@ import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { lightModeColors } from '@/shared/styles'
 import { FundingStatus } from '@/types'
 
 import { ProjectFundingSummary } from '../../components/ProjectFundingSummary'
@@ -43,7 +44,22 @@ export const FundingSuccess = () => {
       }
     >
       <CardLayout mobileDense w="full" padding={{ base: 0, lg: 12 }} alignItems="center">
-        <Confetti gravity={0.07} numberOfPieces={250} colors={['#B2FAEC', '#EDF2FE', '#00C3AD', '#007B6C']} />
+        <Confetti
+          gravity={0.07}
+          numberOfPieces={250}
+          colors={[
+            lightModeColors.primary1[5],
+            lightModeColors.primary1[6],
+            lightModeColors.primary1[8],
+            lightModeColors.primary1[9],
+            lightModeColors.amber[6],
+            lightModeColors.amber[8],
+            lightModeColors.orange[6],
+            lightModeColors.orange[8],
+            lightModeColors.ruby[6],
+            lightModeColors.ruby[8],
+          ]}
+        />
         <VStack w="full" maxWidth="800px" alignItems="start" spacing={6}>
           <VStack w="full" alignItems="start">
             <SuccessImageComponent />

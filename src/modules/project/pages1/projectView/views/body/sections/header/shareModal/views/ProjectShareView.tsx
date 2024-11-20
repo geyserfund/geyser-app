@@ -1,30 +1,29 @@
-import { Link, Tooltip } from '@chakra-ui/react'
+import { Button, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { ShareView } from '@/components/molecules/ShareView'
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CampaignContent, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { useAuthModal } from '@/pages/auth/hooks'
 import { Body } from '@/shared/components/typography'
+import { lightModeColors } from '@/shared/styles'
 import { useProjectAmbassadorStatsQuery } from '@/types'
+import { commaFormatted } from '@/utils'
 
 export const ProjectShareView = () => {
   const { t } = useTranslation()
   const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
   const { project } = useProjectAtom()
-  const { getShareProjectUrl } = useProjectShare()
-  const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
 
-  const projectShareUrl = getShareProjectUrl({ clickedFrom: CampaignContent.successScreen })
-  const twitterShareText = `Help make this project happen! Check it out: ${projectShareUrl}`
+  const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
 
   const heroId = user?.heroId
   const heroLink = `${window.location.origin || 'https://geyser.fund'}/project/${project.name}${
     heroId ? `?hero=${heroId}` : ''
   }`
+  const twitterShareText = `Help make this project happen! Check it out: ${heroLink}`
 
   const ambassadorsCount = data?.projectGet?.ambassadors?.stats?.count
   const satAmount = data?.projectGet?.ambassadors?.stats?.contributionsSum
@@ -41,7 +40,7 @@ export const ProjectShareView = () => {
             {t('ambassador' + (ambassadorsCount === 1 ? ' has' : 's have') + ' enabled')}
           </Body>{' '}
           <Body as="span" color="neutral1.12">
-            {satAmount.toLocaleString()}
+            {commaFormatted(satAmount)}
           </Body>{' '}
           {t('sats in contributions to this project.')}
         </>
@@ -64,7 +63,13 @@ export const ProjectShareView = () => {
               placement="top"
             >
               <span style={{ position: 'relative', display: 'inline-block' }}>
-                <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
+                <Body
+                  as="span"
+                  color={lightModeColors.neutral1[12]}
+                  textDecoration="underline dotted"
+                  display="inline"
+                  bold
+                >
                   {t('Ambassador')}
                 </Body>
               </span>
@@ -72,7 +77,7 @@ export const ProjectShareView = () => {
             {t('by spreading the word and enabling more contributions to this project.')}
           </Body>
         ) : (
-          <Body zIndex={1} color="neutral1.12" size="md" regular textAlign="center">
+          <Body zIndex={1} color={lightModeColors.neutral1[12]} size="md" regular textAlign="center">
             {t('Become an')}{' '}
             <Tooltip
               label={t(
@@ -81,7 +86,13 @@ export const ProjectShareView = () => {
               placement="top"
             >
               <span style={{ position: 'relative', display: 'inline-block' }}>
-                <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
+                <Body
+                  as="span"
+                  color={lightModeColors.neutral1[12]}
+                  textDecoration="underline dotted"
+                  display="inline"
+                  bold
+                >
                   {t('Ambassador')}
                 </Body>
               </span>
@@ -89,7 +100,13 @@ export const ProjectShareView = () => {
             {t('for this project by spreading the word using your')}{' '}
             <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
               <span style={{ position: 'relative', display: 'inline-block' }}>
-                <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
+                <Body
+                  as="span"
+                  color={lightModeColors.neutral1[12]}
+                  textDecoration="underline dotted"
+                  display="inline"
+                  bold
+                >
                   {t('Hero link')}
                 </Body>
               </span>
@@ -100,20 +117,31 @@ export const ProjectShareView = () => {
         )}
         {!isLoggedIn && (
           <Body size="md" pt={1} textAlign="center">
-            <Link
-              color="primary1.500"
+            <Button
+              as="span"
+              variant="ghost"
+              color={lightModeColors.primary1[12]}
               textDecoration="underline"
-              onClick={(e) => {
-                e.preventDefault()
-                loginOnOpen()
-              }}
+              onClick={() => loginOnOpen()}
+              paddingX={0}
+              paddingBottom="1"
+              fontSize={'md'}
+              _hover={{ cursor: 'pointer' }}
+              _active={{}}
+              _focus={{}}
             >
               {t('Sign in')}
-            </Link>{' '}
+            </Button>{' '}
             {t('to get your custom')}{' '}
             <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
               <span style={{ position: 'relative', display: 'inline-block' }}>
-                <Body as="span" color="neutral1.12" textDecoration="underline dotted" display="inline" bold>
+                <Body
+                  as="span"
+                  color={lightModeColors.neutral1[12]}
+                  textDecoration="underline dotted"
+                  display="inline"
+                  bold
+                >
                   {t('Hero link')}
                 </Body>
               </span>

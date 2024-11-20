@@ -5,6 +5,7 @@ import Truncate from 'react-truncate-inside'
 
 import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
 import { Body } from '@/shared/components/typography'
+import { lightModeColors } from '@/shared/styles'
 import { useNotification } from '@/utils'
 
 export const ShareView = ({
@@ -33,14 +34,14 @@ export const ShareView = ({
   return (
     <VStack w="100%">
       <VStack
-        bgGradient={'linear(to-r, primary1.4, indigo.3)'}
+        bgGradient={`linear(to-r, ${lightModeColors.primary1[4]}, ${lightModeColors.indigo[3]})`}
         p={4}
         borderRadius="md"
         width="100%"
         spacing={2}
         position="relative"
       >
-        <Body size="md" textAlign="center">
+        <Body size="md" textAlign="center" color={lightModeColors.neutral1[11]}>
           <FlowingGifBackground />
           <Body zIndex={1}>{children}</Body>
         </Body>
@@ -50,15 +51,15 @@ export const ShareView = ({
           h="40px"
           w="full"
           p={2}
-          bg="whiteAlpha.700"
+          bg="neutral1.2"
           borderRadius={10}
           border="1px solid"
-          borderColor="neutral1.7"
+          borderColor="neutral1.6"
           zIndex={1}
           onClick={handleCopy}
           cursor="pointer"
           _hover={{
-            bg: 'whiteAlpha.800',
+            bg: 'neutral1.3',
           }}
           overflow={'hidden'}
         >
@@ -79,18 +80,14 @@ export const ShareView = ({
         </HStack>
         <HStack w="full" justifyContent="center" spacing={2}>
           <Button
-            variant="solid"
-            bg="neutral1.3"
-            color="neutral1.11"
+            variant="soft"
+            colorScheme="neutral1"
             borderRadius={8}
             rightIcon={<PiShareFat />}
             as={Link}
             isExternal
             href={shareOnXUrl}
             w="full"
-            _hover={{
-              bg: 'whiteAlpha.900',
-            }}
           >
             {t('Share on X')}
           </Button>
