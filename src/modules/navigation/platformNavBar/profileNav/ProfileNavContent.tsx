@@ -11,11 +11,13 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
+import { useMemo } from 'react'
 import { PiArrowUpRight } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
+import { HeroCardButton } from '@/modules/profile/pages/profilePage/views/account/views/HeroCardButton'
 import { Body } from '@/shared/components/typography'
 import {
   dimensions,
@@ -27,6 +29,7 @@ import {
   GeyserSubscribeUrl,
   GuideUrl,
 } from '@/shared/constants'
+import { HeroStats, useUserHeroStatsQuery } from '@/types'
 
 import { DiscoveryNavItemKey, discoveryNavItems } from '../../discoveryNav/discoveryNavData'
 import { ProfileNavUserInfo } from './components'
@@ -37,6 +40,30 @@ export const ProfileNavContent = () => {
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
   const followedActivityDot = useAtomValue(followedActivityDotAtom)
+
+  const { data, loading } = useUserHeroStatsQuery({
+    variables: {
+      where: {
+        id: user.id,
+      },
+    },
+  })
+
+  const stats = useMemo(() => {
+    const defaultStats: HeroStats = {
+      contributionsCount: 0,
+      contributionsTotal: 0,
+      contributionsTotalUsd: 0,
+      projectsCount: 0,
+      rank: 0,
+    }
+
+    return {
+      ambassadorStats: data?.user?.heroStats?.ambassadorStats ?? defaultStats,
+      contributorStats: data?.user?.heroStats?.contributorStats ?? defaultStats,
+      creatorStats: data?.user?.heroStats?.creatorStats ?? defaultStats,
+    }
+  }, [data])
 
   return (
     <VStack
@@ -50,15 +77,11 @@ export const ProfileNavContent = () => {
       <VStack w="full" spacing={4}>
         {user.id && (
           <>
-            <MenuItem
-              as={Link}
-              height="fit-content"
-              to={getPath('userProfile', user.id)}
-              // _hover={{}}
-              // _active={{}}
-            >
+            <MenuItem as={Link} height="fit-content" to={getPath('userProfile', user.id)}>
               <ProfileNavUserInfo user={user} />
             </MenuItem>
+
+            <HeroCardButton user={user} stats={stats} isDisabled={loading} />
 
             <Divider borderColor="neutral1.6" />
           </>

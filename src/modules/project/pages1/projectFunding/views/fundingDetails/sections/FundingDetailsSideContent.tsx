@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/react'
+import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { FormEvent } from 'react'
 import { useNavigate } from 'react-router'
@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { FundingUserInfoError } from '@/modules/project/funding/state/fundingFormAtom'
 import { CardLayout } from '@/shared/components/layouts'
+import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { useNotification } from '@/utils'
 
@@ -59,9 +60,14 @@ export const FundingDetailsSummary = () => {
       </FundingSummaryWrapper>
 
       <FundingCheckoutWrapper>
-        <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit">
-          {t('Checkout')}
-        </Button>
+        <VStack w="full">
+          <Body size="sm" light>
+            {t('By continuing to checkout you are accepting our T&Cs')}
+          </Body>
+          <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit">
+            {t('Checkout')}
+          </Button>
+        </VStack>
       </FundingCheckoutWrapper>
     </form>
   )

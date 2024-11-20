@@ -5,4 +5,5 @@ export const fonts = {
   mono: "'Courier Prime', monospace;",
   livvic: `'Livvic', sans-serif;`,
   roboto: "'Roboto', arial, sans-serif;",
+  hubotSans: "'Hubot Sans', sans-serif;",
 }

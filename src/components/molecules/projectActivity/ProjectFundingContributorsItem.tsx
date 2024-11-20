@@ -23,7 +23,7 @@ export const ProjectFundingContributorsItem = ({ contributor, project, ...rest }
   return (
     <Box
       as={Link}
-      to={contributor?.user?.id ? getPath('userProfile', contributor.user.id) : '/'}
+      to={contributor?.user?.heroId ? getPath('heroProfile', contributor.user.heroId) : '/'}
       style={{ textDecoration: 'none', width: '100%' }}
       px={1}
       py={3}

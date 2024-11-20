@@ -113,12 +113,12 @@ export const PublishModal = ({
 
   const handlePostPublish = async () => {
     postPublish({
-      ...(sendTo && {
-        emailSendOptions: {
-          segment: sendTo as EmailSubscriberSegment,
-          projectRewardUUIDs: selectedRewards.length > 0 ? selectedRewards.map((reward) => reward.uuid) : undefined,
-        },
-      }),
+      emailSendOptions: sendTo
+        ? {
+            segment: sendTo as EmailSubscriberSegment,
+            projectRewardUUIDs: selectedRewards.length > 0 ? selectedRewards.map((reward) => reward.uuid) : undefined,
+          }
+        : undefined,
       onCompleted() {
         navigate(getPath('projectPostView', project.name, post?.id), { state: { justPublished: true } })
       },

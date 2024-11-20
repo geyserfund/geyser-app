@@ -4,7 +4,7 @@ export const fundingAmountScreenIsVisible = () => {
 }
 
 export const commentScreenIsVisible = () => {
-  cy.get('h1').contains('Public message').should('be.visible')
+  cy.get('h1').contains('Public comment').should('be.visible')
 }
 
 export const lightningQrScreenIsVisible = () => {

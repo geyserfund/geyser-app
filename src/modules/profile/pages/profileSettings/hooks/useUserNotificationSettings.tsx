@@ -118,7 +118,6 @@ export const useUserNotificationSettings = (userId: string) => {
         return prevSettings
       })
 
-      console.log('error', error)
       // Show error toast
       toast.error({
         title: 'Update failed',

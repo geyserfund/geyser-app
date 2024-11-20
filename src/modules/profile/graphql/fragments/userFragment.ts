@@ -7,6 +7,7 @@ export const FRAGMENT_USER_FOR_PROFILE_PAGE = gql`
   fragment UserForProfilePage on User {
     id
     bio
+    heroId
     username
     imageUrl
     ranking

@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import { Button, Divider, HStack, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, HStack, useDisclosure, VStack } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +13,6 @@ import { Body, H2 } from '@/shared/components/typography'
 
 import { useFundCalc } from '../../../../../helpers'
 import { toInt, useMobileMode } from '../../../../../utils'
-import { Badge } from './Badge'
 
 export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
   const { t } = useTranslation()
@@ -83,7 +82,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
       transition={{ type: 'spring', stiffness: 900, damping: 40 }}
     >
       <HStack as={motion.div} layout w="full" justifyContent={'space-between'}>
-        <H2 size={{ base: 'xl', lg: '3xl' }} medium>
+        <H2 size={{ base: 'xl', lg: '2xl' }} bold>
           {t('Summary')}
         </H2>
         <Button
@@ -98,25 +97,6 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
         </Button>
       </HStack>
       <VStack w="full" alignItems="start" spacing={{ base: 0, lg: 3 }} display={mobileDisplayStyle}>
-        {formState.comment && (
-          <>
-            <VStack w="full" alignItems={'start'}>
-              <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Comment')}: `}</Body>
-              <Body size={{ base: 'sm', lg: 'md' }}>{formState.comment}</Body>
-            </VStack>
-            {!formState.privateComment && <Divider />}
-          </>
-        )}
-        {formState.privateComment && (
-          <>
-            <VStack w="full" alignItems={'start'}>
-              <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Private message')}: `}</Body>
-              <Body size={{ base: 'sm', lg: 'md' }}>{formState.privateComment}</Body>
-            </VStack>
-            <Divider my={2} />
-          </>
-        )}
-
         {formState.donationAmount && formState.donationAmount > 0 && (
           <HStack>
             <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Donation')}: `}</Body>
@@ -153,30 +133,13 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
 
         {numberOfRewardsSelected > 0 && (
           <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards total')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
-              {getRewardsAmount('sats')}{' '}
+              {getRewardsAmount('sats').toLocaleString()}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
                 sats
               </Body>
             </Body>
-          </HStack>
-        )}
-        {numberOfRewardsSelected > 0 && (
-          <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards')}: `}</Body>
-            <Body size={{ base: 'sm', lg: 'md' }}>{items.map((item) => item?.label).join(', ')}</Body>
-          </HStack>
-        )}
-
-        {getTotalAmount('dollar', name) >= 10 && (
-          <HStack display={mobileDisplayStyle}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Badge')}: `}</Body>
-            <Badge
-              donationAmountInDollars={getTotalAmount('dollar', name)}
-              height={{ base: '16px', lg: '20px' }}
-              width={{ base: '16px', lg: '20px' }}
-            />
           </HStack>
         )}
       </VStack>
