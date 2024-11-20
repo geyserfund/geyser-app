@@ -2,11 +2,13 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { Trans } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
 import { RankMedal } from '@/shared/components/display/RankMedal'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 import { standardPadding } from '@/shared/styles'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
@@ -222,7 +224,14 @@ const HeroDisplay = ({
   }
 
   return (
-    <HStack overflow={'hidden'} width="full" px={standardPadding}>
+    <HStack
+      as={Link}
+      to={getPath('userProfile', data.userId)}
+      overflow={'hidden'}
+      width="full"
+      px={standardPadding}
+      _hover={{ backgroundColor: 'neutral1.3', cursor: 'pointer' }}
+    >
       <HStack justifyContent={'start'} minWidth="32px">
         <RankMedal rank={rank} boxSize={'32px'} size="20px" />
       </HStack>
