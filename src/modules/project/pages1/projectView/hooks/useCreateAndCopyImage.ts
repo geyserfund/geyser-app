@@ -64,7 +64,7 @@ export const useCreateAndCopyImage = () => {
     [getDataUrl],
   )
 
-  const getObjectUrl = async ({ element, onError = () => {} }: { element: HTMLElement | null; onError: Function }) => {
+  const getObjectUrl = async ({ element, onError = () => {} }: { element: HTMLElement | null; onError?: Function }) => {
     try {
       const blob = await getBlob(element)
       return URL.createObjectURL(blob)

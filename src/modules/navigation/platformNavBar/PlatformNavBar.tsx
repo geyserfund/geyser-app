@@ -5,6 +5,7 @@ import { Location, useLocation, useNavigate } from 'react-router-dom'
 
 import { FilterComponent } from '@/modules/discovery/filters/FilterComponent'
 import { HeroCardModal } from '@/modules/profile/pages/profilePage/views/account/views/HeroCardModal'
+import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
 import { EmailPromptModal } from '@/pages/auth/components/EmailPromptModal'
 import { NotificationPromptModal } from '@/pages/auth/components/NotificationPromptModal'
 import { useEmailPromptModal } from '@/pages/auth/hooks/useEmailPromptModal'
@@ -27,6 +28,8 @@ import { ProfileNav } from './profileNav/ProfileNav'
 export const PlatformNavBar = () => {
   const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
+
+  const heroCard = useAtomValue(heroCardAtom)
 
   const isMobileMode = useMobileMode()
 
@@ -134,7 +137,7 @@ export const PlatformNavBar = () => {
       {!dontAskNotificationAgain && (
         <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
       )}
-      <HeroCardModal />
+      {heroCard?.isOpen && <HeroCardModal />}
     </HStack>
   )
 }

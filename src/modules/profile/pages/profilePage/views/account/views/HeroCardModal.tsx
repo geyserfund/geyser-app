@@ -51,12 +51,6 @@ export const HeroCardModal = () => {
     setTimeout(async () => {
       const url = await getObjectUrl({
         element: ref.current,
-        onError() {
-          toast.error({
-            title: 'Failed to download image',
-            description: 'Please try again',
-          })
-        },
       })
       if (url) {
         setDownloadUrl(url)

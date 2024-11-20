@@ -8,8 +8,6 @@ import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
 import { HeroButtonBorderColor, HeroButtonGradient } from '@/shared/styles/custom'
 import { UserForProfilePageFragment, UserHeroStats } from '@/types'
 
-import { HeroCardModal } from './HeroCardModal'
-
 type HeroCardButtonProps = {
   user: UserForProfilePageFragment
   stats: UserHeroStats
@@ -44,8 +42,6 @@ export const HeroCardButton = ({ user, stats, ...rest }: HeroCardButtonProps) =>
       >
         {t('Hero Card')}
       </Button>
-
-      <HeroCardModal />
     </>
   )
 }
