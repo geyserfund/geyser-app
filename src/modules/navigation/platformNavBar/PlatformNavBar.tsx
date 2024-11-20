@@ -4,6 +4,7 @@ import { useCallback, useEffect } from 'react'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 
 import { FilterComponent } from '@/modules/discovery/filters/FilterComponent'
+import { HeroCardModal } from '@/modules/profile/pages/profilePage/views/account/views/HeroCardModal'
 import { EmailPromptModal } from '@/pages/auth/components/EmailPromptModal'
 import { NotificationPromptModal } from '@/pages/auth/components/NotificationPromptModal'
 import { useEmailPromptModal } from '@/pages/auth/hooks/useEmailPromptModal'
@@ -133,6 +134,7 @@ export const PlatformNavBar = () => {
       {!dontAskNotificationAgain && (
         <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
       )}
+      <HeroCardModal />
     </HStack>
   )
 }

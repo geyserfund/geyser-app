@@ -10,7 +10,7 @@ import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { HeroStats, useUserHeroStatsQuery } from '../../../../../../../types'
 import { getShortAmountLabel } from '../../../../../../../utils'
 import { useUserProfileAtom } from '../../../../../state'
-import { HeroSection } from './HeroSection'
+import { HeroCardButton } from './HeroCardButton'
 
 export const Summary = () => {
   const { userProfile, isLoading: userProfileLoading } = useUserProfileAtom()
@@ -52,7 +52,7 @@ export const Summary = () => {
         {t('Hero Rank')}
       </Body>
 
-      <HeroSection user={userProfile} stats={stats} />
+      <HeroCardButton user={userProfile} stats={stats} />
 
       {renderSkeleton(
         <StatBody

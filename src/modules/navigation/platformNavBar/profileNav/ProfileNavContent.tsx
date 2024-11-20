@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
-import { HeroSection } from '@/modules/profile/pages/profilePage/views/account/views/HeroSection'
+import { HeroCardButton } from '@/modules/profile/pages/profilePage/views/account/views/HeroCardButton'
 import { Body } from '@/shared/components/typography'
 import {
   dimensions,
@@ -81,7 +81,7 @@ export const ProfileNavContent = () => {
               <ProfileNavUserInfo user={user} />
             </MenuItem>
 
-            <HeroSection user={user} stats={stats} isDisabled={loading} />
+            <HeroCardButton user={user} stats={stats} isDisabled={loading} />
 
             <Divider borderColor="neutral1.6" />
           </>
