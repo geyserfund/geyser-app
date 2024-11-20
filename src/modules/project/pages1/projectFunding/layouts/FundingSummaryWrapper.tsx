@@ -7,7 +7,7 @@ export const FundingSummaryWrapper: React.FC<PropsWithChildren<StackProps>> = ({
       paddingX={{ base: 0, lg: 6 }}
       paddingTop={{ base: 0, lg: 6 }}
       width={'100%'}
-      height={'calc(100% - 80px)'}
+      height={'calc(100% - 120px)'}
       overflowY={'auto'}
       borderRadius={'md'}
       spacing={4}
@@ -21,7 +21,7 @@ export const FundingSummaryWrapper: React.FC<PropsWithChildren<StackProps>> = ({
 
 export const FundingCheckoutWrapper: React.FC<PropsWithChildren<StackProps>> = ({ children, ...rest }) => {
   return (
-    <HStack w="full" padding={{ base: 0, lg: 6 }} {...rest}>
+    <HStack alignItems={'flex-end'} w="full" height="120px" padding={{ base: 0, lg: 6 }} {...rest}>
       {children}
     </HStack>
   )
