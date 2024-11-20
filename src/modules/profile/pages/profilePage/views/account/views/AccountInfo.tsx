@@ -15,9 +15,6 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
-import { useTranslation } from 'react-i18next'
-import { PiGear } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
 
 import { H1 } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks'
@@ -29,17 +26,12 @@ import { toInt, useNotification } from '@/utils'
 
 import { ConnectAccounts, ExternalAccountType } from '../../../../../../../pages/auth'
 import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
-import { getPath } from '../../../../../../../shared/constants'
-import { userProfileAtom, useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
+import { userProfileAtom, useUserProfileAtom } from '../../../../../state'
 import { RemoveExternalAccountModal } from '../../../components/RemoveExternalAccountModal'
 import { useAccountUnlink } from '../hooks/useAccountUnlink'
 
 export const AccountInfo = () => {
-  const { t } = useTranslation()
-
   const { userProfile, isLoading } = useUserProfileAtom()
-
-  const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
   const userAccountToDisplay = userProfile.externalAccounts
 
@@ -65,18 +57,6 @@ export const AccountInfo = () => {
           </HStack>
         </VStack>
       </HStack>
-      {isViewingOwnProfile && userProfile && (
-        <Button
-          as={Link}
-          to={getPath('userProfileSettings', userProfile.id)}
-          width="100%"
-          variant="soft"
-          colorScheme="neutral1"
-          leftIcon={<PiGear />}
-        >
-          {t('Profile settings')}
-        </Button>
-      )}
     </VStack>
   )
 }
