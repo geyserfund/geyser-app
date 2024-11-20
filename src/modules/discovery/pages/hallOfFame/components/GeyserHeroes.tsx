@@ -145,7 +145,7 @@ const HeroesListitemSkeleton = () => {
 
       <VStack w="full" overflow="hidden" flex={1} spacing={0.5} alignItems="start">
         <SkeletonLayout height="24px" width="100px" />
-        <SkeletonLayout height="22px" width="50px" />
+        <SkeletonLayout height="18px" width="50px" />
       </VStack>
     </HStack>
   )
