@@ -8,7 +8,7 @@ import { StandardOption } from '@/modules/discovery/pages/hallOfFame/types'
 import { H1 } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants'
 import { ProjectLeaderboardPeriod } from '@/types'
-import { useMobileMode } from '@/utils'
+import { toPx, useMobileMode } from '@/utils'
 
 import { Contributions, Leaderboard } from './views'
 
@@ -31,8 +31,18 @@ export const ProjectLeaderboard = () => {
 
   return (
     <HStack w="full" h="full" alignItems="start" spacing={dimensions.project.rightSideNav.gap} pb={6}>
-      <VStack h="full" flex={1} alignItems="start">
-        <HStack w="full" justifyContent={'space-between'}>
+      <VStack h="full" flex={1} alignItems="start" pt={{ base: '32px', lg: '0' }}>
+        <HStack
+          w="full"
+          justifyContent={'space-between'}
+          position={{ base: 'fixed', lg: 'relative' }}
+          top={{ base: toPx(dimensions.topNavBar.mobile.height + dimensions.projectNavBar.mobile.height), lg: 'unset' }}
+          left={{ base: 0, lg: 'unset' }}
+          paddingX={{ base: 3, lg: 0 }}
+          paddingY={{ base: 1, lg: 0 }}
+          zIndex={3}
+          backgroundColor="utils.pbg"
+        >
           <H1 size="2xl" bold dark>
             {t('Leaderboard')}
           </H1>

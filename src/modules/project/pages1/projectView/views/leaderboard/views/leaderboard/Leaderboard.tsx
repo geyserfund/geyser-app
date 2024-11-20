@@ -8,9 +8,8 @@ import { CardLayout } from '@/shared/components/layouts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { dimensions } from '@/shared/constants'
-import { standardPadding } from '@/shared/styles'
 import { ProjectLeaderboardPeriod } from '@/types'
-import { useMobileMode } from '@/utils'
+import { toPx, useMobileMode } from '@/utils'
 
 import { Contributions } from '../contributions/Contributions'
 import { AmabassadorList } from './AmabassadorList'
@@ -62,8 +61,18 @@ export const Leaderboard = ({ period }: { period: ProjectLeaderboardPeriod }) =>
   const uniqItems = _.uniqBy(items, (data) => data.key)
 
   return (
-    <CardLayout dense noMobileBorder w="full" paddingTop={standardPadding} flex={1}>
-      <HStack w="full" paddingX={{ base: 0, lg: 6 }} position="absolute" top={standardPadding} paddingBottom={2}>
+    <CardLayout dense noMobileBorder w="full" paddingTop={{ base: 6, lg: 6 }} flex={1}>
+      <HStack
+        w="full"
+        paddingX={{ base: 3, lg: 6 }}
+        position={{ base: 'fixed', lg: 'absolute' }}
+        top={{ base: toPx(dimensions.topNavBar.mobile.height + dimensions.projectNavBar.mobile.height + 40), lg: 6 }}
+        left={{ base: 0, lg: 'unset' }}
+        background="utils.pbg"
+        paddingBottom={2}
+        paddingTop={{ base: 3, lg: 0 }}
+        zIndex={3}
+      >
         <AnimatedNavBar items={uniqItems} {...animatedNavBarProps} showLabel />
       </HStack>
       <VStack w="full" h="full" pt={`${dimensions.animatedNavBar.height.base + 8}px`}>
