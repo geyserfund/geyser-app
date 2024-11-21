@@ -10,9 +10,9 @@ export const PrivacyPolicy = () => {
         <h1>Geyser Privacy Policy</h1>
         <p>Last updated: October 31, 2023</p>
         <p>
-          At Geyser Fund, accessible from geyser.fund, we highly prioritize the privacy of our visitors and users. This
-          Privacy Policy document contains types of information that is collected and recorded by Geyser Fund and how we
-          use it.
+          At Geyser, accessible from geyser.fund, we highly prioritize the privacy of our visitors and users. This
+          Privacy Policy document contains types of information that is collected and recorded by Geyser and how we use
+          it.
         </p>
         <p>
           If you have additional questions or require more information about our Privacy Policy, do not hesitate to
@@ -20,8 +20,8 @@ export const PrivacyPolicy = () => {
         </p>
         <p>
           This Privacy Policy applies only to our online activities and is valid for visitors to our website with
-          regards to the information that they shared and/or collect in Geyser Fund. This policy is not applicable to
-          any information collected offline or via channels other than this website.
+          regards to the information that they shared and/or collect in Geyser. This policy is not applicable to any
+          information collected offline or via channels other than this website.
         </p>
 
         <strong>Consent</strong>
@@ -77,8 +77,8 @@ export const PrivacyPolicy = () => {
 
         <strong>Log Files</strong>
         <p>
-          As a hosting company, Geyser Fund follows a standard procedure of using log files within the scope of its
-          hosting service analytics. The information collected by log files include:
+          As a hosting company, Geyser follows a standard procedure of using log files within the scope of its hosting
+          service analytics. The information collected by log files include:
         </p>
         <UnorderedList p={2}>
           <ListItem>internet protocol (IP) addresses,</ListItem>
@@ -101,10 +101,10 @@ export const PrivacyPolicy = () => {
 
         <strong>Cookies and Web Beacons</strong>
         <p>
-          Like any other website, Geyser Fund uses 'cookies'. These cookies are used to store information including
-          visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is
-          used to optimize the users' experience by customizing our web page content based on visitors' browser type
-          and/or other information.
+          Like any other website, Geyser uses 'cookies'. These cookies are used to store information including visitors'
+          preferences, and the pages on the website that the visitor accessed or visited. The information is used to
+          optimize the users' experience by customizing our web page content based on visitors' browser type and/or
+          other information.
         </p>
         <p>
           For more general information on cookies, please read{' '}
@@ -115,23 +115,21 @@ export const PrivacyPolicy = () => {
         </p>
 
         <strong>Advertising Partners Privacy Policies</strong>
-        <p>You may consult this list to find the Privacy Policy for each of the advertising partners of Geyser Fund.</p>
+        <p>You may consult this list to find the Privacy Policy for each of the advertising partners of Geyser.</p>
         <p>
           Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used
-          in their respective advertisements and links that appear on Geyser Fund, which are sent directly to users'
-          browser. They automatically receive your IP address when this occurs. These technologies are used to measure
-          the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on
+          in their respective advertisements and links that appear on Geyser, which are sent directly to users' browser.
+          They automatically receive your IP address when this occurs. These technologies are used to measure the
+          effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on
           websites that you visit.
         </p>
-        <p>
-          Note that Geyser Fund has no access to or control over these cookies that are used by third-party advertisers.
-        </p>
+        <p>Note that Geyser has no access to or control over these cookies that are used by third-party advertisers.</p>
 
         <strong>Third Party Privacy Policies</strong>
         <p>
-          Geyser Fund's Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to
-          consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may
-          include their practices and instructions about how to opt-out of certain options.
+          Geyser's Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult
+          the respective Privacy Policies of these third-party ad servers for more detailed information. It may include
+          their practices and instructions about how to opt-out of certain options.
         </p>
         <p>
           You can choose to disable cookies through your individual browser options. To know more detailed information
@@ -194,10 +192,9 @@ export const PrivacyPolicy = () => {
           guardians to observe, participate in, and/or monitor and guide their online activity.
         </p>
         <p>
-          Geyser Fund does not knowingly collect any Personal Identifiable Information from children under the age of
-          13. If you think that your child provided this kind of information on our website, we strongly encourage you
-          to contact us immediately and we will do our best efforts to promptly remove such information from our
-          records.
+          Geyser does not knowingly collect any Personal Identifiable Information from children under the age of 13. If
+          you think that your child provided this kind of information on our website, we strongly encourage you to
+          contact us immediately and we will do our best efforts to promptly remove such information from our records.
         </p>
       </VStack>
       <AppFooter />
