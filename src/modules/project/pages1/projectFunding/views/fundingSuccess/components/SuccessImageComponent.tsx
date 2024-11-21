@@ -152,8 +152,8 @@ export const SuccessImageComponent = () => {
             </Body>
           </HStack>
         )}
-        <VStack spacing={1} zIndex={1}>
-          <H3 color={lightModeColors.neutral1[11]} fontSize="3xl" regular>
+        <VStack w="full" spacing={1} zIndex={1}>
+          <H3 color={lightModeColors.neutral1[11]} fontSize="3xl" regular w="full" textAlign={'center'}>
             {t('Successfully contributed to')}
           </H3>
           <H3 color={lightModeColors.neutral1[12]} bold fontSize="4xl">
