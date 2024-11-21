@@ -78,9 +78,18 @@ const HeroSectionWrapper = ({
   return (
     <CardLayout w="full" flex={1} h="full" dense paddingY={4}>
       <VStack w="full" alignItems={'start'} paddingX={4}>
-        <Body size="xl" light bold>
-          {title}
-        </Body>
+        <Link
+          to={getPath(
+            `hallOfFameHeroes${
+              title === 'Creators' ? 'Creator' : title === 'Contributors' ? 'Contributor' : 'Ambassador'
+            }`,
+          )}
+          style={{ textDecoration: 'none' }}
+        >
+          <Body size="xl" light bold>
+            {title}
+          </Body>
+        </Link>
         <Body size="sm light">{description}</Body>
       </VStack>
       {children}
