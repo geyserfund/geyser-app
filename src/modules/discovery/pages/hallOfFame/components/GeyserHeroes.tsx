@@ -15,6 +15,7 @@ import { getShortAmountLabel } from '@/utils'
 
 import { useTopContributors } from '../hooks'
 import { useTopAmbassadors } from '../hooks/useTopAmbassadors'
+import { useTopCreators } from '../hooks/useTopCreators'
 import { StandardOption } from '../types'
 import { TitleWithPeriod } from './TitleWithPeriod'
 
@@ -35,6 +36,8 @@ export const GeyserHeroes = () => {
 
   const { ambassadors, loading: ambassadorsLoading } = useTopAmbassadors(period, MAX_HEROES)
 
+  const { creators, loading: creatorsLoading } = useTopCreators(period, MAX_HEROES)
+
   return (
     <VStack w="full">
       <TitleWithPeriod
@@ -45,7 +48,7 @@ export const GeyserHeroes = () => {
       />
       <Stack direction={{ base: 'column', lg: 'row' }} w="full" alignItems={'start'} spacing={4}>
         <HeroSectionWrapper title={t('Creators')} description="Lead initiatives and bring ideas to life.">
-          <RenderHeroList period={period} data={contributors} loading={contributorsLoading} labels={HeroListLabels} />
+          <RenderHeroList period={period} data={creators} loading={creatorsLoading} labels={HeroListLabels} />
         </HeroSectionWrapper>
         <HeroSectionWrapper title={t('Contributors')} description="Power project ideas with their sats.">
           <RenderHeroList period={period} data={contributors} loading={contributorsLoading} labels={HeroListLabels} />
