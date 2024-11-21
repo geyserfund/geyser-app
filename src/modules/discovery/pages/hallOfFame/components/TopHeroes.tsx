@@ -190,7 +190,7 @@ const HeroDisplay = ({
         <Trans
           i18nKey={'Raised <1>{{usdAmount}}</1> ({{satsAmount}} sats) across <3>{{numberOfProjects}}</3> projects'}
           values={{
-            usdAmount: formatAmount(data[labels.amountUsd], FormatCurrencyType.Usdcent),
+            usdAmount: formatAmount(data[labels.amountUsd], FormatCurrencyType.Usd),
             satsAmount: getShortAmountLabel(data[labels.amount]),
             numberOfProjects: data[labels.numberOfProjects],
           }}

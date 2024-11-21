@@ -7,6 +7,7 @@ import { RankMedal } from '@/shared/components/display/RankMedal'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter'
 import { ProjectLeaderboardAmbassadorsFragment } from '@/types'
 import { commaFormatted } from '@/utils'
 
@@ -21,7 +22,7 @@ export const AmbassadorItem = ({ ambassador, rank, ...props }: AmbassadorItemPro
   const { t } = useTranslation()
 
   const { user } = useAuthContext()
-
+  const { formatAmount } = useCurrencyFormatter()
   const isViewer = user.id ? user.id === ambassador.user?.id : false
 
   return (
@@ -45,7 +46,7 @@ export const AmbassadorItem = ({ ambassador, rank, ...props }: AmbassadorItemPro
           </Body>
           <HStack spacing={2}>
             <Body size="sm">
-              {`$${commaFormatted(ambassador.contributionsTotalUsd)}`}{' '}
+              {`${formatAmount(ambassador.contributionsTotalUsd, FormatCurrencyType.Usd)}`}{' '}
               <Body as="span" size="sm" muted>
                 {`(${commaFormatted(ambassador.contributionsTotal)} sats)`}
               </Body>

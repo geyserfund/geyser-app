@@ -7,6 +7,8 @@ import { RankMedal } from '@/shared/components/display/RankMedal'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
 import { ProjectLeaderboardContributorsFragment } from '@/types'
 import { commaFormatted } from '@/utils'
 
@@ -23,6 +25,7 @@ export const LeaderboardItem = ({ funder, rank, hideLabel, ...props }: Leaderboa
   const { t } = useTranslation()
 
   const { user } = useAuthContext()
+  const { formatAmount } = useCurrencyFormatter()
 
   const funderContributionModal = useModal()
 
@@ -48,7 +51,7 @@ export const LeaderboardItem = ({ funder, rank, hideLabel, ...props }: Leaderboa
           </Body>
           <HStack spacing={2}>
             <Body size="sm">
-              {`$${commaFormatted(funder.contributionsTotalUsd)}`}{' '}
+              {`${formatAmount(funder.contributionsTotalUsd, FormatCurrencyType.Usd)}`}{' '}
               <Body as="span" size="sm" muted>
                 {`(${commaFormatted(funder.contributionsTotal)} sats)`}
               </Body>
