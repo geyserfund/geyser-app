@@ -15,12 +15,18 @@ import { getShortAmountLabel } from '@/utils'
 
 import { useTopContributors } from '../hooks'
 import { useTopAmbassadors } from '../hooks/useTopAmbassadors'
+import { useTopCreators } from '../hooks/useTopCreators'
 import { StandardOption } from '../types'
 import { TitleWithPeriod } from './TitleWithPeriod'
 
 const MAX_HEROES = 5
 
-const HeroListLabels = { username: 'username', amount: 'contributionsTotal', usdAmount: 'contributionsTotalUsd' }
+const HeroListLabels = {
+  username: 'username',
+  userImageUrl: 'userImageUrl',
+  amount: 'contributionsTotal',
+  usdAmount: 'contributionsTotalUsd',
+}
 
 export const GeyserHeroes = () => {
   const [period, setPeriod] = useState<LeaderboardPeriod>(LeaderboardPeriod.Month)
@@ -35,6 +41,8 @@ export const GeyserHeroes = () => {
 
   const { ambassadors, loading: ambassadorsLoading } = useTopAmbassadors(period, MAX_HEROES)
 
+  const { creators, loading: creatorsLoading } = useTopCreators(period, MAX_HEROES)
+
   return (
     <VStack w="full">
       <TitleWithPeriod
@@ -45,7 +53,7 @@ export const GeyserHeroes = () => {
       />
       <Stack direction={{ base: 'column', lg: 'row' }} w="full" alignItems={'start'} spacing={4}>
         <HeroSectionWrapper title={t('Creators')} description="Lead initiatives and bring ideas to life.">
-          <RenderHeroList period={period} data={contributors} loading={contributorsLoading} labels={HeroListLabels} />
+          <RenderHeroList period={period} data={creators} loading={creatorsLoading} labels={HeroListLabels} />
         </HeroSectionWrapper>
         <HeroSectionWrapper title={t('Contributors')} description="Power project ideas with their sats.">
           <RenderHeroList period={period} data={contributors} loading={contributorsLoading} labels={HeroListLabels} />
@@ -89,7 +97,7 @@ const RenderHeroList = ({
   period: LeaderboardPeriod
   data: any[]
   loading?: boolean
-  labels: { username: string; amount: string; usdAmount: string }
+  labels: { username: string; userImageUrl: string; amount: string; usdAmount: string }
 }) => {
   const { formatAmount } = useCurrencyFormatter()
 
@@ -112,7 +120,7 @@ const RenderHeroList = ({
                 _hover={{ cursor: 'pointer', backgroundColor: 'neutral1.3' }}
               >
                 <RankMedal rank={index + 1} />
-                <ImageWithReload borderRadius={'50%'} height="40px" width="40px" src={''} />
+                <ImageWithReload borderRadius={'50%'} height="40px" width="40px" src={datum[labels?.userImageUrl]} />
                 <VStack w="full" overflow="hidden" flex={1} spacing={0} alignItems="start">
                   <Body w="full" bold isTruncated>
                     {datum[labels?.username]}

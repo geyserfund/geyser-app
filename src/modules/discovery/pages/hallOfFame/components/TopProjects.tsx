@@ -7,7 +7,7 @@ import { ImageWithReload } from '@/components/ui'
 import { RankMedal } from '@/shared/components/display/RankMedal'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
+import { getPath, getPathWithGeyserHero } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
 import { GlobalProjectLeaderboardRow, LeaderboardPeriod } from '@/types'
@@ -60,7 +60,7 @@ const ProjectHeroDisplay = ({ project, index }: { project: GlobalProjectLeaderbo
       </HStack>
       <HStack
         as={Link}
-        to={getPath('project', project.projectName)}
+        to={getPathWithGeyserHero('project', project.projectName)}
         flex={1}
         overflow={'hidden'}
         _hover={{ cursor: 'pointer', backgroundColor: 'neutral1.3' }}

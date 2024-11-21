@@ -52,7 +52,7 @@ export const Summary = () => {
         {t('Hero Rank')}
       </Body>
 
-      <HeroCardButton user={userProfile} stats={stats} />
+      <HeroCardButton user={userProfile} stats={stats} isLoading={loading} />
 
       {renderSkeleton(
         <StatBody

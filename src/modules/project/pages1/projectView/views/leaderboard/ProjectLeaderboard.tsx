@@ -13,15 +13,15 @@ import { toPx, useMobileMode } from '@/utils'
 import { Contributions, Leaderboard } from './views'
 
 export const periodOptions: StandardOption<ProjectLeaderboardPeriod>[] = [
-  { value: ProjectLeaderboardPeriod.Month, label: t('Current month') },
-  { value: ProjectLeaderboardPeriod.Week, label: t('Current week') },
   { value: ProjectLeaderboardPeriod.AllTime, label: t('All time') },
+  { value: ProjectLeaderboardPeriod.Month, label: t('This month') },
+  { value: ProjectLeaderboardPeriod.Week, label: t('This week') },
 ]
 
 export const ProjectLeaderboard = () => {
   const isMobile = useMobileMode()
 
-  const [period, setPeriod] = useState<ProjectLeaderboardPeriod>(ProjectLeaderboardPeriod.Month)
+  const [period, setPeriod] = useState<ProjectLeaderboardPeriod>(ProjectLeaderboardPeriod.AllTime)
 
   const handlePeriodChange = (selectedOption: StandardOption<ProjectLeaderboardPeriod> | null) => {
     if (selectedOption) {
@@ -48,7 +48,7 @@ export const ProjectLeaderboard = () => {
           </H1>
           <CustomSelect
             isSearchable={false}
-            width={{ base: 'full', xs: '180px' }}
+            width={{ base: 'full', xs: '135px' }}
             options={periodOptions}
             value={periodOptions.find((option) => option.value === period)}
             onChange={handlePeriodChange}
@@ -61,6 +61,11 @@ export const ProjectLeaderboard = () => {
                 ...provided,
                 height: '32px',
                 minHeight: '32px',
+              }),
+              valueContainer: (provided) => ({
+                ...provided,
+                paddingLeft: '10px',
+                paddingRight: 0,
               }),
             }}
           />

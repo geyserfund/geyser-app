@@ -8,7 +8,7 @@ import { ImageWithReload } from '@/components/ui'
 import { RankMedal } from '@/shared/components/display/RankMedal'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
+import { getPathWithGeyserHero } from '@/shared/constants'
 import { standardPadding } from '@/shared/styles'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
@@ -61,7 +61,7 @@ const ProjectHeroDisplay = ({ project, index }: { project: GlobalProjectLeaderbo
       width="full"
       px={standardPadding}
       as={Link}
-      to={getPath('project', project.projectName)}
+      to={getPathWithGeyserHero('project', project.projectName)}
       paddingX={{ base: 4, lg: 6 }}
       paddingY={2}
       _hover={{ cursor: 'pointer', backgroundColor: 'neutral1.3' }}

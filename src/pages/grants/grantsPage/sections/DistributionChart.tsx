@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { Body, H3 } from '@/shared/components/typography'
 
 import { CardLayout } from '../../../../shared/components/layouts'
-import { getPath } from '../../../../shared/constants'
+import { getPathWithGeyserHero } from '../../../../shared/constants'
 import { standardPadding } from '../../../../shared/styles'
 import { GrantApplicant, VotingSystem } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'
@@ -83,7 +83,7 @@ export const DistributionChart = ({
                 numberOfContributors={numberOfContributors}
                 isCompetitionVote={isCompetitionVote}
                 communityFundingAmount={communityFundingAmount}
-                to={showAll ? getPath('project', project.name) : undefined}
+                to={showAll ? getPathWithGeyserHero('project', project.name) : undefined}
                 votingSystem={votingSystem}
                 votes={votes}
               />

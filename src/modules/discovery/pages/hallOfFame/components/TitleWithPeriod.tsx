@@ -56,7 +56,7 @@ export const TitleWithPeriod = ({ title, period, seeAllTo, handlePeriodChange, .
         )}
         <CustomSelect
           isSearchable={false}
-          width={{ base: 'full', sm: '175px' }}
+          width={{ base: 'full', sm: '135px' }}
           options={periodOptions}
           value={periodOptions.find((option) => option.value === period)}
           onChange={handlePeriodChange}
@@ -69,6 +69,11 @@ export const TitleWithPeriod = ({ title, period, seeAllTo, handlePeriodChange, .
               ...provided,
               height: '32px',
               minHeight: '32px',
+            }),
+            valueContainer: (provided) => ({
+              ...provided,
+              paddingLeft: '10px',
+              paddingRight: 0,
             }),
           }}
         />

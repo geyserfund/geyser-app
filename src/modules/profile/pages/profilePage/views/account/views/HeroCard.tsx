@@ -70,32 +70,34 @@ export const HeroCard = forwardRef(
         stats.creatorStats.contributionsTotal > 0 ||
         stats.contributorStats.contributionsTotal > 0
       ) {
-        if (creatorAmount > ambassadorAmount && ambassadorAmount > contributorAmount) {
-          return heroBackgroundMap.raisedEnabledContributed
-        }
+        if (creatorAmount > ambassadorAmount && creatorAmount > contributorAmount) {
+          if (ambassadorAmount > contributorAmount) {
+            return heroBackgroundMap.raisedEnabledContributed
+          }
 
-        if (creatorAmount > contributorAmount && contributorAmount > ambassadorAmount) {
           return heroBackgroundMap.raisedContributedEnabled
         }
 
-        if (ambassadorAmount > creatorAmount && creatorAmount > contributorAmount) {
-          return heroBackgroundMap.enabledRaisedContributed
-        }
+        if (ambassadorAmount > creatorAmount && ambassadorAmount > contributorAmount) {
+          if (creatorAmount > contributorAmount) {
+            return heroBackgroundMap.enabledRaisedContributed
+          }
 
-        if (ambassadorAmount > contributorAmount && contributorAmount > creatorAmount) {
           return heroBackgroundMap.enabledContributedRaised
         }
 
-        if (contributorAmount > ambassadorAmount && ambassadorAmount > creatorAmount) {
+        if (contributorAmount > creatorAmount && contributorAmount > ambassadorAmount) {
+          if (creatorAmount > ambassadorAmount) {
+            return heroBackgroundMap.contributedRaisedEnabled
+          }
+
           return heroBackgroundMap.contributedEnabledRaised
         }
 
-        if (contributorAmount > creatorAmount && creatorAmount > ambassadorAmount) {
-          return heroBackgroundMap.contributedRaisedEnabled
-        }
-
-        return heroBackgroundMap.empty
+        return heroBackgroundMap.contributedEnabledRaised
       }
+
+      return heroBackgroundMap.empty
     }
 
     useEffect(() => {
@@ -113,7 +115,7 @@ export const HeroCard = forwardRef(
     const animationDone = isOpen === tempOpen && postToggle === tempOpen
 
     return (
-      <Tilt glareEnable glareMaxOpacity={0.3} tiltMaxAngleX={10} tiltMaxAngleY={10}>
+      <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10}>
         {isOpen ? (
           <VStack
             ref={ref}

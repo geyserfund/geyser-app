@@ -282,3 +282,11 @@ export const getPath = <TRoute extends keyof PathsMap>(route: TRoute, ...params:
 
   return pathCallback(...params)
 }
+
+export const getPathWithGeyserHero = <TRoute extends keyof PathsMap>(
+  route: TRoute,
+  ...params: Parameters<PathsMap[TRoute]>
+) => {
+  const link = getPath(route, ...params)
+  return `${link}?hero=geyser`
+}
