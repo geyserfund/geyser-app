@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { ImageWithReload } from '@/components/ui'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
+import { getPathWithGeyserHero } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import {
   Activity,
@@ -42,13 +42,13 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
     switch (activityType) {
       case ActivityType.ProjectGoalCreated:
       case ActivityType.ProjectGoalReached:
-        return getPath('projectGoals', project.name)
+        return getPathWithGeyserHero('projectGoals', project.name)
       case ActivityType.ProjectRewardCreated:
-        return getPath('projectRewardView', project.name, resource.id)
+        return getPathWithGeyserHero('projectRewardView', project.name, resource.id)
       case ActivityType.PostPublished:
-        return getPath('projectPostView', project.name, resource.id)
+        return getPathWithGeyserHero('projectPostView', project.name, resource.id)
       default:
-        return getPath('project', project.name)
+        return getPathWithGeyserHero('project', project.name)
     }
   }
 
@@ -118,7 +118,7 @@ const ProjectTitle = ({
   projectName: string
 }) => {
   return (
-    <HStack as={Link} to={getPath('project', projectName)}>
+    <HStack as={Link} to={getPathWithGeyserHero('project', projectName)}>
       {projectImage && (
         <Image width={'32px'} height={'32px'} borderRadius={'8px'} src={projectImage} objectFit="cover" />
       )}

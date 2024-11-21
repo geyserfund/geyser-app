@@ -9,7 +9,7 @@ import { standardPadding } from '@/shared/styles'
 import { commaFormatted } from '@/utils'
 
 import { ImageWithReload } from '../../../../../../../components/ui'
-import { getPath } from '../../../../../../../shared/constants'
+import { getPathWithGeyserHero } from '../../../../../../../shared/constants'
 import { useFeaturedProjectForLandingPageQuery } from '../../../../../../../types'
 import { FeatureAirtableData } from '../sections/Featured'
 
@@ -42,7 +42,7 @@ export const FeaturedProjectCard = ({ projectName, data }: { projectName: string
       padding="0px"
       borderRadius="8px"
       overflow="hidden"
-      onClick={() => navigate(getPath('project', projectName))}
+      onClick={() => navigate(getPathWithGeyserHero('project', projectName))}
       _hover={{ backgroundColor: 'neutral1.2', cursor: 'pointer' }}
     >
       <Box width={{ base: '100%', sm: '44%' }} height={{ base: '240px', sm: '100%' }} overflow="hidden">

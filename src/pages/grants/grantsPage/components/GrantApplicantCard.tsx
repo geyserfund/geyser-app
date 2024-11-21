@@ -12,7 +12,7 @@ import { VotingInfoModal } from '@/shared/molecules/VotingInfoModal'
 
 import { ImageWithReload } from '../../../../components/ui'
 import { CardLayout } from '../../../../shared/components/layouts'
-import { getPath } from '../../../../shared/constants'
+import { getPathWithGeyserHero } from '../../../../shared/constants'
 import {
   GrantApplicantContributor,
   GrantApplicantFunding,
@@ -236,7 +236,7 @@ export const GrantApplicantCard = ({
       return (
         <Button
           as={Link}
-          to={getPath('project', project.name)}
+          to={getPathWithGeyserHero('project', project.name)}
           size={'md'}
           variant={'primary'}
           zIndex={2}
@@ -301,7 +301,7 @@ export const GrantApplicantCard = ({
   return (
     <Box position="relative">
       <CardLayout as="div" p={2} key={project.id} position="relative" zIndex={1} cursor="pointer">
-        <Box as={Link} to={getPath('project', project.name)} display="flex">
+        <Box as={Link} to={getPathWithGeyserHero('project', project.name)} display="flex">
           <Box mr={3} height={{ base: '90px', lg: '144px' }}>
             <Box className={classNames(classes.image, isMobile ? classes.mobileImage : classes.desktopImage)}>
               <ImageWithReload

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { ImageWithReload } from '@/components/ui'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H3 } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
+import { getPathWithGeyserHero } from '@/shared/constants'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { RewardCurrency, RewardForLandingPageFragment } from '@/types'
@@ -21,7 +21,7 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
     <CardLayout
       hover
       as={Link}
-      to={getPath('projectRewardView', reward.project.name, reward.id)}
+      to={getPathWithGeyserHero('projectRewardView', reward.project.name, reward.id)}
       padding="0px"
       width={{ base: 'full', lg: 'auto' }}
       direction={{ base: 'row', lg: 'column' }}

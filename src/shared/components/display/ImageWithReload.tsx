@@ -23,6 +23,7 @@ export const ImageWithReload = ({ src = '', showError, defaultImage, empty, ...r
 
   const hasValidSource = Boolean(src)
   const [loading, setLoading] = useState<boolean>(true)
+  const [failedLoading, setFailedLoading] = useState<boolean>(false)
 
   useEffect(() => {
     componentRef.current = 0
@@ -39,6 +40,7 @@ export const ImageWithReload = ({ src = '', showError, defaultImage, empty, ...r
       }, BACKOFF ** componentRef.current * MILLISECONDS)
     } else {
       setLoading(false)
+      setFailedLoading(true)
       componentRef.current = 0
       if (showError) {
         toast({
@@ -64,6 +66,10 @@ export const ImageWithReload = ({ src = '', showError, defaultImage, empty, ...r
   }
 
   const renderSourceImage = () => {
+    if (failedLoading) {
+      return <DefaultImage grey {...rest} />
+    }
+
     return (
       <Image
         display={loading || !hasValidSource ? 'none' : undefined}
