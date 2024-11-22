@@ -6,7 +6,7 @@ import { useAuthContext } from '@/context'
 import { CardLayout } from '@/shared/components/layouts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
-import { dimensions } from '@/shared/constants'
+import { dimensions, ID } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../state'
@@ -104,6 +104,7 @@ export const ProfileTabs = () => {
         />
       </HStack>
       <VStack
+        id={ID.profile.tabScrollContainer}
         height="100%"
         width="full"
         overflowY="auto"

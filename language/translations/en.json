@@ -1366,5 +1366,14 @@
   "Hero link": "Hero link",
   "Share on X": "Share on X",
   "by spreading the word and enabling more contributions to this project.": "by spreading the word and enabling more contributions to this project.",
-  "No contributions have been enabled through sharing yet.": "No contributions have been enabled through sharing yet."
+  "No contributions have been enabled through sharing yet.": "No contributions have been enabled through sharing yet.",
+  "No Purchases made yet": "No Purchases made yet",
+  "Failed to fetch purchases": "Failed to fetch purchases",
+  "You must be logged in to query your orders.": "You must be logged in to query your orders.",
+  "Missing projectId in query input.": "Missing projectId in query input.",
+  "Failed to fetch": "Failed to fetch",
+  "No contributions made yet": "No contributions made yet",
+  "Order placed": "Order placed",
+  "Order number": "Order number",
+  "Unit price": "Unit price"
 }
