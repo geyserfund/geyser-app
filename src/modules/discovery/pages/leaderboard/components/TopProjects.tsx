@@ -10,7 +10,7 @@ import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { GlobalProjectLeaderboardRow, LeaderboardPeriod } from '@/types'
 
-import { useTopProjects } from '../hooks'
+import { useTopProjects } from '../../hallOfFame/hooks'
 import { ScrollableList } from './ScrollableList'
 
 interface TopProjectsProps {

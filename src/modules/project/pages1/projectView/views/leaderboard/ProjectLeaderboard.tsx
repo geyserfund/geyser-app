@@ -1,82 +1,85 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useState } from 'react'
+import { PiCalendarDots } from 'react-icons/pi'
 
-import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
-import { CardLayout } from '@/shared/components/layouts'
-import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
-import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
+import { CustomSelect } from '@/components/ui/CustomSelect'
+import { StandardOption } from '@/modules/discovery/pages/hallOfFame/types'
 import { H1 } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants'
-import { standardPadding } from '@/shared/styles'
-import { useMobileMode } from '@/utils'
+import { ProjectLeaderboardPeriod } from '@/types'
+import { toPx, useMobileMode } from '@/utils'
 
-import { ContributeButton } from '../body/components'
 import { Contributions, Leaderboard } from './views'
 
-enum LeaderboardView {
-  Leaderboard = 'Leaderboard',
-  Contributions = 'Contributions',
-}
+export const periodOptions: StandardOption<ProjectLeaderboardPeriod>[] = [
+  { value: ProjectLeaderboardPeriod.AllTime, label: t('All time') },
+  { value: ProjectLeaderboardPeriod.Month, label: t('This month') },
+  { value: ProjectLeaderboardPeriod.Week, label: t('This week') },
+]
 
 export const ProjectLeaderboard = () => {
   const isMobile = useMobileMode()
 
-  if (isMobile) {
-    return <ProjectLeaderboardMobile />
+  const [period, setPeriod] = useState<ProjectLeaderboardPeriod>(ProjectLeaderboardPeriod.AllTime)
+
+  const handlePeriodChange = (selectedOption: StandardOption<ProjectLeaderboardPeriod> | null) => {
+    if (selectedOption) {
+      setPeriod(selectedOption.value)
+    }
   }
 
   return (
     <HStack w="full" h="full" alignItems="start" spacing={dimensions.project.rightSideNav.gap} pb={6}>
-      <VStack h="full" flex={1} alignItems="start">
-        <H1 size="2xl" bold dark>
-          {t('Leaderboard')}
-        </H1>
-        <Leaderboard />
+      <VStack h="full" flex={1} alignItems="start" pt={{ base: '32px', lg: '0' }}>
+        <HStack
+          w="full"
+          justifyContent={'space-between'}
+          position={{ base: 'fixed', lg: 'relative' }}
+          top={{ base: toPx(dimensions.topNavBar.mobile.height + dimensions.projectNavBar.mobile.height), lg: 'unset' }}
+          left={{ base: 0, lg: 'unset' }}
+          paddingX={{ base: 3, lg: 0 }}
+          paddingY={{ base: 1, lg: 0 }}
+          zIndex={3}
+          backgroundColor="utils.pbg"
+        >
+          <H1 size="2xl" bold dark>
+            {t('Leaderboard')}
+          </H1>
+          <CustomSelect
+            isSearchable={false}
+            width={{ base: 'full', xs: '135px' }}
+            options={periodOptions}
+            value={periodOptions.find((option) => option.value === period)}
+            onChange={handlePeriodChange}
+            placeholder={t('Select period...')}
+            dropdownIndicator={<PiCalendarDots />}
+            dropdownIndicatorPosition="left"
+            fontSize="sm"
+            customChakraStyles={{
+              control: (provided) => ({
+                ...provided,
+                height: '32px',
+                minHeight: '32px',
+              }),
+              valueContainer: (provided) => ({
+                ...provided,
+                paddingLeft: '10px',
+                paddingRight: 0,
+              }),
+            }}
+          />
+        </HStack>
+        <Leaderboard period={period} />
       </VStack>
-      <VStack h="full" width="full" maxWidth={dimensions.project.rightSideNav.width} alignItems="start">
-        <H1 size="2xl" bold dark>
-          {t('Contributions')}
-        </H1>
-        <Contributions />
-      </VStack>
+      {!isMobile && (
+        <VStack h="full" width="full" maxWidth={dimensions.project.rightSideNav.width} alignItems="start">
+          <H1 size="2xl" bold dark>
+            {t('Contributions')}
+          </H1>
+          <Contributions />
+        </VStack>
+      )}
     </HStack>
-  )
-}
-
-const ProjectLeaderboardMobile = () => {
-  const items: AnimatedNavBarItem[] = [
-    {
-      name: t('Leaderboard'),
-      key: LeaderboardView.Leaderboard,
-      render: () => <Leaderboard />,
-    },
-    {
-      name: t('Contributions'),
-      key: LeaderboardView.Contributions,
-      render: () => <Contributions />,
-    },
-  ]
-
-  const { render, ...animatedNavBarProps } = useAnimatedNavBar({ items, defaultView: LeaderboardView.Leaderboard })
-
-  return (
-    <CardLayout dense noMobileBorder w="full" h="100%" paddingTop={standardPadding} marginBottom="120px">
-      <HStack
-        position="fixed"
-        width="calc(100% - 24px)"
-        top={`${dimensions.topNavBar.mobile.height + dimensions.projectNavBar.mobile.height - 1}px`}
-        paddingTop={2}
-        paddingBottom={1}
-        bg="utils.pbg"
-        paddingX={{ base: 0, lg: 6 }}
-        zIndex={1}
-      >
-        <AnimatedNavBar {...animatedNavBarProps} showLabel />
-      </HStack>
-      <VStack paddingTop={`${dimensions.projectNavBar.mobile.height}px`}>{render && render()}</VStack>
-      <BottomNavBarContainer>
-        <ContributeButton w="full" />
-      </BottomNavBarContainer>
-    </CardLayout>
   )
 }

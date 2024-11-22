@@ -9,7 +9,7 @@ import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants
 import { GlobalContributorLeaderboardRow, LeaderboardPeriod } from '@/types'
 import { commaFormatted } from '@/utils'
 
-import { useTopContributors } from '../hooks'
+import { useTopContributors } from '../../hallOfFame/hooks'
 import { ScrollableList } from './ScrollableList'
 
 interface TopContributorsProps {

@@ -2,6 +2,12 @@ export enum PathName {
   projectDiscovery = 'discover',
   landingFeed = 'feed',
   leaderboard = 'leaderboard',
+  hallOfFame = 'halloffame',
+  projects = 'projects',
+  heroes = 'heroes',
+  ambassador = 'ambassador',
+  creator = 'creator',
+  contributor = 'contributor',
   grants = 'grants',
   grantsRoundOne = 'roundone',
   grantsRoundTwo = 'roundtwo',
@@ -9,6 +15,7 @@ export enum PathName {
   activity = 'activity',
   activityGlobal = 'global',
   activityFollowed = 'followed',
+
   merch = 'project/geyser/rewards',
 
   entry = 'entry',
@@ -43,10 +50,15 @@ export enum PathName {
   launchProjectRewardsNew = 'rewards/new',
   launchProjectRewardsEdit = 'rewards/edit',
 
-  userProfile = 'profile',
-  userProfileSettings = 'settings',
-  userProfileSettingsGeneral = 'general',
-  userProfileSettingsNotifications = 'notifications',
+  userProfile = 'user',
+  userSettings = 'settings',
+  userSettingsGeneral = 'general',
+  userSettingsNotifications = 'notifications',
+
+  heroProfile = 'hero',
+  heroSettings = 'settings',
+  heroSettingsGeneral = 'general',
+  heroSettingsNotifications = 'notifications',
 
   preview = 'preview',
 
@@ -84,6 +96,7 @@ export enum PathName {
   projectName = ':projectName',
   rewardId = ':rewardId',
   userId = ':userId',
+  heroId = ':heroId',
   entryId = ':entryId',
   postId = ':postId',
   goalId = ':goalId',
@@ -115,6 +128,12 @@ const pathsMap = {
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
   discoveryMerch: () => `/${PathName.merch}`,
+
+  discoveryHallOfFame: () => `/${PathName.hallOfFame}`,
+  hallOfFameProjects: () => `/${PathName.hallOfFame}/${PathName.projects}`,
+  hallOfFameHeroesAmbassador: () => `/${PathName.hallOfFame}/${PathName.projects}/${PathName.ambassador}`,
+  hallOfFameHeroesCreator: () => `/${PathName.hallOfFame}/${PathName.projects}/${PathName.creator}`,
+  hallOfFameHeroesContributor: () => `/${PathName.hallOfFame}/${PathName.projects}/${PathName.contributor}`,
 
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
@@ -233,14 +252,21 @@ const pathsMap = {
 
   projectLaunch: (projectName: string) => `/${PathName.project}/${projectName}/?launch`,
   projectLaunchDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}/?draft`,
-  /** User Profile Routes */
 
-  userProfile: (userID: string) => `/${PathName.userProfile}/${userID}`,
-  userProfileSettings: (userID: string) => `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}`,
-  userProfileSettingsGeneral: (userID: string) =>
-    `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}/${PathName.userProfileSettingsGeneral}`,
-  userProfileSettingsNotifications: (userID: string) =>
-    `/${PathName.userProfile}/${userID}/${PathName.userProfileSettings}/${PathName.userProfileSettingsNotifications}`,
+  /** User Profile Routes */
+  userProfile: (userId: string) => `/${PathName.userProfile}/${userId}`,
+  userProfileSettings: (userId: string) => `/${PathName.userProfile}/${userId}/${PathName.userSettings}`,
+  userProfileSettingsGeneral: (userId: string) =>
+    `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsGeneral}`,
+  userProfileSettingsNotifications: (userId: string) =>
+    `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsNotifications}`,
+
+  heroProfile: (heroId: string) => `/${PathName.heroProfile}/${heroId}`,
+  heroProfileSettings: (heroId: string) => `/${PathName.heroProfile}/${heroId}/${PathName.heroSettings}`,
+  heroProfileSettingsGeneral: (heroId: string) =>
+    `/${PathName.heroProfile}/${heroId}/${PathName.heroSettings}/${PathName.heroSettingsGeneral}`,
+  heroProfileSettingsNotifications: (heroId: string) =>
+    `/${PathName.heroProfile}/${heroId}/${PathName.heroSettings}/${PathName.heroSettingsNotifications}`,
 
   badges: () => `/${PathName.badges}`,
 
@@ -255,4 +281,12 @@ export const getPath = <TRoute extends keyof PathsMap>(route: TRoute, ...params:
   const pathCallback: (...args: any[]) => string = pathsMap[route]
 
   return pathCallback(...params)
+}
+
+export const getPathWithGeyserHero = <TRoute extends keyof PathsMap>(
+  route: TRoute,
+  ...params: Parameters<PathsMap[TRoute]>
+) => {
+  const link = getPath(route, ...params)
+  return `${link}?hero=geyser`
 }

@@ -6,6 +6,7 @@ import { UserForProfilePageFragment } from '../../../types'
 export const defaultUser: UserForProfilePageFragment = {
   id: 0,
   bio: '',
+  heroId: '',
   username: '',
   imageUrl: '',
   ranking: 0,

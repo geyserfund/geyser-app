@@ -30,3 +30,10 @@ const getUsdQuote = async (): Promise<number> => {
 }
 
 export const fetchBitcoinRates = ({ currency: _ }: { currency: 'usd' }) => getUsdQuote()
+
+export const getBlockHeight = async (): Promise<number> => {
+  const response = await fetch('https://blockstream.info/api/blocks/tip/height')
+  const data = await response.json()
+
+  return data
+}

@@ -29,6 +29,18 @@ export const FRAGMENT_PROJECT_LEADERBOARD_CONTRIBUTORS = gql`
   }
 `
 
+export const FRAGMENT_PROJECT_LEADERBOARD_AMBASSADORS = gql`
+  ${FRAGMENT_USER_AVATAR}
+  fragment ProjectLeaderboardAmbassadors on ProjectLeaderboardAmbassadorsRow {
+    contributionsTotal
+    contributionsTotalUsd
+    projectsCount
+    user {
+      ...UserAvatar
+    }
+  }
+`
+
 export const FRAGMENT_PROJECT_USER_CONTRIBUTOR = gql`
   ${FRAGMENT_USER_AVATAR}
   fragment UserContributor on Funder {

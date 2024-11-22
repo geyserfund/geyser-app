@@ -9,7 +9,7 @@ export const FAQUrl = 'https://geyser.notion.site/Geyser-FAQs-310e7900fa904732b9
 export const GuideUrl = 'https://guide.geyser.fund/'
 export const FeedbackUrl = 'https://geyser.steelsync.io/feedback'
 export const GeyserAboutUrl = 'https://about.geyser.fund'
-export const GeyserUpdatesUrl = 'https://about.geyser.fund/updates'
+export const GeyserManifestoUrl = 'https://about.geyser.fund/manifesto'
 export const GeyserSubscribeUrl = 'https://about.geyser.fund/subscribe'
 
 // Geyser footer Links
@@ -227,6 +227,13 @@ export const DiamondUrl = 'https://storage.googleapis.com/geyser-projects-media/
 
 export const TelescopeUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/telescope.png'
 
+export const HallOfFameIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/hallOfFameIcon.png'
+
+export const HallOfFameAnimatedGifUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/halloffame-animated-gif.gif'
+
+export const MegaphoneOutlineUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/microphone_outline.png'
+
 // FUNDING FLOW ERRORS
 
 export const FundingErrorUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/errors/error.png'
@@ -348,3 +355,19 @@ export const ExperienceImageUrl = 'https://storage.googleapis.com/geyser-project
 // Helpers
 export const EmailPromptModalUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/enter-email-illustration.png'
+
+// Hero Card Backgrounds
+export const HeroCardRaisedEnabledContributed =
+  'https://storage.googleapis.com/geyser-projects-media/hero/raised-enabled-contributed.png'
+export const HeroCardRaisedContributedEnabled =
+  'https://storage.googleapis.com/geyser-projects-media/hero/raised-contributed-enabled.png'
+export const HeroCardEnabledRaisedContributed =
+  'https://storage.googleapis.com/geyser-projects-media/hero/enabled-raised-contributed.png'
+export const HeroCardEnabledContributedRaised =
+  'https://storage.googleapis.com/geyser-projects-media/hero/enabled-contributed-raised.png'
+export const HeroCardEmpty = 'https://storage.googleapis.com/geyser-projects-media/hero/empty.png'
+export const HeroCardContributedEnabledRaised =
+  'https://storage.googleapis.com/geyser-projects-media/hero/contributed-enabled-raised.png'
+export const HeroCardContributedRaisedEnabled =
+  'https://storage.googleapis.com/geyser-projects-media/hero/contributed-raised%20-enabled.png'
+export const HeroBackCard = 'https://storage.googleapis.com/geyser-projects-media/hero/hero-card-back.png'

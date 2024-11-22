@@ -8,12 +8,14 @@ export interface CustomSelectProps<Option, IsMulti extends boolean = false>
   dropdownIndicator?: React.ReactNode
   width?: ResponsiveValue<number | string>
   fontSize?: string
+  dropdownIndicatorPosition?: 'left' | 'right'
 }
 
 export function CustomSelect<Option, IsMulti extends boolean = false>({
   customChakraStyles,
   dropdownIndicator,
   width,
+  dropdownIndicatorPosition = 'right',
   ...props
 }: CustomSelectProps<Option, IsMulti>) {
   const chakraStyles: ChakraStylesConfig<Option, IsMulti> = {
@@ -64,6 +66,7 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
     control: (provided) => ({
       ...provided,
       borderColor: 'neutral1.6',
+      flexDirection: dropdownIndicatorPosition === 'left' ? 'row-reverse' : 'row',
       _hover: {
         borderColor: 'neutral1.7',
       },

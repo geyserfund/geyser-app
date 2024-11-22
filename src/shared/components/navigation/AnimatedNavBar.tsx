@@ -14,6 +14,8 @@ import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import { lightModeColors } from '@/shared/styles'
+
 import { toInt, useCustomTheme } from '../../../utils'
 import { SkeletonLayout } from '../layouts'
 
@@ -38,9 +40,18 @@ type AnimatedNavBarProps = {
   showLabel?: boolean
   showIcon?: boolean
   loading?: boolean
+  disableColorMode?: boolean
 } & StackProps
 
-export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loading, ...props }: AnimatedNavBarProps) => {
+export const AnimatedNavBar = ({
+  items,
+  showLabel,
+  showIcon,
+  activeIndex,
+  loading,
+  disableColorMode,
+  ...props
+}: AnimatedNavBarProps) => {
   const { t } = useTranslation()
 
   const navigate = useNavigate()
@@ -100,7 +111,7 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
     <HStack
       w="full"
       padding={'2px'}
-      background="neutral1.3"
+      background={disableColorMode ? lightModeColors.neutralAlpha[3] : 'neutralAlpha.3'}
       borderRadius={'12px'}
       position="relative"
       zIndex={2}
@@ -112,11 +123,11 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
             position: 'absolute',
             top: '2px',
             height: 'calc(100% - 4px)',
-            backgroundColor: colors.utils.pbg,
+            backgroundColor: disableColorMode ? lightModeColors.utils.pbg : colors.utils.pbg,
             zIndex: props.zIndex ? toInt(`${props.zIndex}`) + 1 : 3,
             borderRadius: '10px',
             border: '1px solid',
-            borderColor: colors.utils.text,
+            borderColor: disableColorMode ? lightModeColors.utils.text : colors.utils.text,
             opacity: currentActiveItem?.isDisabled ? 0 : 1,
             left: initialButtonProps.left,
             width: initialButtonProps.width,
@@ -138,14 +149,17 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
             isActive={isActive}
             length={items.length}
             onClick={() => handleClick(item, index)}
-            _hover={isActive ? {} : { backgroundColor: 'neutral1.5' }}
+            _hover={
+              isActive ? {} : { backgroundColor: disableColorMode ? lightModeColors.neutralAlpha[5] : 'neutralAlpha.5' }
+            }
             {...(item.isBordered
               ? {
                   border: '1px solid',
-                  borderColor: 'neutral1.7',
+                  borderColor: disableColorMode ? lightModeColors.neutral1[7] : 'neutral1.7',
                 }
               : {})}
             isDisabled={item.isDisabled}
+            disableColorMode={disableColorMode}
           >
             <Tooltip label={item.tooltipLabel}>
               <HStack
@@ -172,8 +186,8 @@ export const AnimatedNavBar = ({ items, showLabel, showIcon, activeIndex, loadin
 
 const ProjectNavigationButton: ComponentWithAs<
   'button',
-  ButtonProps & { to?: string; isActive: boolean; length: number }
-> = forwardRef(({ isActive, length, ...props }, ref) => {
+  ButtonProps & { to?: string; isActive: boolean; length: number; disableColorMode?: boolean }
+> = forwardRef(({ isActive, length, disableColorMode, ...props }, ref) => {
   return (
     <Button
       ref={ref}
@@ -181,8 +195,8 @@ const ProjectNavigationButton: ComponentWithAs<
       size={'lg'}
       variant="ghost"
       backgroundColor={'transparent'}
-      color={'neutral1.12'}
-      _disabled={{ color: 'neutral1.9' }}
+      color={disableColorMode ? lightModeColors.neutral1[12] : 'neutral1.12'}
+      _disabled={{ color: disableColorMode ? lightModeColors.neutral1[9] : 'neutral1.9' }}
       padding={0}
       {...props}
     />

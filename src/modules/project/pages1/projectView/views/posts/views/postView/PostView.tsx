@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Badge, Box, Button, HStack, Icon, Link as ChakraLink, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'

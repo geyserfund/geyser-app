@@ -34,6 +34,7 @@ export const FRAGMENT_USER_ME = gql`
   fragment UserMe on User {
     id
     username
+    heroId
     imageUrl
     email
     ranking
@@ -69,6 +70,7 @@ export const FRAGMENT_FUNDER_WITH_USER = gql`
     user {
       id
       username
+      heroId
       hasSocialAccount
       externalAccounts {
         externalId

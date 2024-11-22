@@ -8,7 +8,7 @@ import { Body, H2, H3 } from '@/shared/components/typography'
 
 import { ImageWithReload } from '../../../../components/ui'
 import { CardLayout } from '../../../../shared/components/layouts'
-import { getPath } from '../../../../shared/constants'
+import { getPathWithGeyserHero } from '../../../../shared/constants'
 import { lightModeColors } from '../../../../shared/styles'
 import { GrantApplicant } from '../../../../types'
 import { useMobileMode } from '../../../../utils'
@@ -43,7 +43,7 @@ export const PendingApplications = ({ applicants }: Props) => {
     <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
       <H3 size="lg">{t('Pending Applications')}</H3>
       {applicants.map(({ project }) => {
-        const projectLink = getPath('project', project.name)
+        const projectLink = getPathWithGeyserHero('project', project.name)
 
         return (
           <Link key={project.id} to={projectLink}>

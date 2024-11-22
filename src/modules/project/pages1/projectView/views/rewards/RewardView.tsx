@@ -5,6 +5,7 @@ import { PiArrowLeft, PiEyeSlash } from 'react-icons/pi'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
+import { Head } from '@/config/Head'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -76,145 +77,148 @@ export const RewardView = () => {
   }
 
   return (
-    <VStack w="full" paddingBottom="120px">
-      <TopNavContainerBar>
-        <Button
-          as={Link}
-          to={getPath('projectRewards', project?.name)}
-          size="lg"
-          variant="ghost"
-          colorScheme="neutral1"
-          leftIcon={<PiArrowLeft />}
-        >
-          {t('All rewards')}
-        </Button>
-        <RewardShare reward={reward} />
-      </TopNavContainerBar>
+    <>
+      <Head title={reward.name} description={reward.shortDescription || ''} image={reward.images[0]} />
+      <VStack w="full" paddingBottom="120px">
+        <TopNavContainerBar>
+          <Button
+            as={Link}
+            to={getPath('projectRewards', project?.name)}
+            size="lg"
+            variant="ghost"
+            colorScheme="neutral1"
+            leftIcon={<PiArrowLeft />}
+          >
+            {t('All rewards')}
+          </Button>
+          <RewardShare reward={reward} />
+        </TopNavContainerBar>
 
-      <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }}>
-        <VStack maxWidth={dimensions.project.rewards.view.maxWidth} w="full" spacing={6}>
-          <VStack w="full" spacing={3}>
-            <HStack w="full" alignItems="start" justifyContent="space-between">
-              <H2 flex={1} size="2xl" bold>
-                {reward.name}
-              </H2>
-              {!isMobileMode &&
-                (isProjectOwner ? (
-                  <HStack>
-                    {reward.isHidden && <HiddenRewardBadge />}
-                    <RewardEditMenu size="md" reward={reward} />
-                  </HStack>
-                ) : (
-                  <Button variant="solid" colorScheme="primary1" width="160px" onClick={buyReward}>
-                    {t('Buy')}
-                  </Button>
-                ))}
-            </HStack>
-            <HStack w="full" alignItems="center" justifyContent="space-between">
-              <HStack spacing={{ base: 2, lg: 3 }} alignItems="center">
-                <Body size="sm" medium muted>
-                  {t('Sold')}:{' '}
-                  <Box as="span" color="utils.text" fontWeight={700}>
-                    {reward.sold}
-                  </Box>
-                </Body>
-                {reward.maxClaimable && (
+        <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }}>
+          <VStack maxWidth={dimensions.project.rewards.view.maxWidth} w="full" spacing={6}>
+            <VStack w="full" spacing={3}>
+              <HStack w="full" alignItems="start" justifyContent="space-between">
+                <H2 flex={1} size="2xl" bold>
+                  {reward.name}
+                </H2>
+                {!isMobileMode &&
+                  (isProjectOwner ? (
+                    <HStack>
+                      {reward.isHidden && <HiddenRewardBadge />}
+                      <RewardEditMenu size="md" reward={reward} />
+                    </HStack>
+                  ) : (
+                    <Button variant="solid" colorScheme="primary1" width="160px" onClick={buyReward}>
+                      {t('Buy')}
+                    </Button>
+                  ))}
+              </HStack>
+              <HStack w="full" alignItems="center" justifyContent="space-between">
+                <HStack spacing={{ base: 2, lg: 3 }} alignItems="center">
                   <Body size="sm" medium muted>
-                    {t('Available')}:{' '}
+                    {t('Sold')}:{' '}
                     <Box as="span" color="utils.text" fontWeight={700}>
-                      {reward.maxClaimable - reward.sold - count > 0 ? reward.maxClaimable - reward.sold - count : 0}
+                      {reward.sold}
                     </Box>
                   </Body>
-                )}
-                {reward.category && (
-                  <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
-                    {reward.category}
-                  </Badge>
-                )}
-                <ProjectRewardShippingEstimate reward={reward} />
-              </HStack>
-              <HStack display={{ base: 'none', lg: 'flex' }}>{renderAmountComponent()}</HStack>
-            </HStack>
-          </VStack>
-          {reward.images.length <= 1 ? (
-            <Box overflow={'hidden'} width="100%" position="relative" paddingTop="75%" borderRadius={'8px'}>
-              <ImageWithReload
-                src={reward.images[0] || ''}
-                alt={reward.name}
-                width="100%"
-                height="100%"
-                objectFit="cover"
-                position="absolute"
-                top={0}
-                left={0}
-              />
-            </Box>
-          ) : (
-            <MediaCarousel links={reward.images} aspectRatio={ImageCropAspectRatio.Reward} />
-          )}
-          {isProjectOwner && !reward.isHidden && (
-            <CardLayout w={'full'} padding={3}>
-              <VStack w={'full'} p={0}>
-                <Body size="md" medium>
-                  {t(
-                    'Engage your community, followers, contributors, and reward purchasers by sending them an update about your new reward via email.',
+                  {reward.maxClaimable && (
+                    <Body size="sm" medium muted>
+                      {t('Available')}:{' '}
+                      <Box as="span" color="utils.text" fontWeight={700}>
+                        {reward.maxClaimable - reward.sold - count > 0 ? reward.maxClaimable - reward.sold - count : 0}
+                      </Box>
+                    </Body>
                   )}
-                </Body>
-                <Button
-                  w="full"
-                  variant="solid"
-                  size="lg"
-                  colorScheme="primary1"
-                  onClick={() => {
-                    navigate(`${getPath('projectPostCreate', project?.name)}?rewardUuid=${reward.uuid}`)
-                  }}
-                >
-                  {' '}
-                  {t('Write an update')}{' '}
-                </Button>
-              </VStack>
-            </CardLayout>
-          )}
-          {reward?.description && (
-            <HStack
-              w="full"
-              justifyContent="start"
-              fontSize="16px"
-              color="utils.text"
-              sx={{
-                p: {
-                  marginTop: '0px',
-                },
-              }}
-              flex={1}
-            >
-              <MarkdownField preview content={reward.description || ''} />
-            </HStack>
-          )}
-          {reward.posts.length > 0 && (
-            <VStack w="full" spacing={2} alignItems="start">
-              <Body size="xl" bold>
-                {t('Reward Updates')}
-              </Body>
-              <PostsUpdates posts={reward.posts} />
+                  {reward.category && (
+                    <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
+                      {reward.category}
+                    </Badge>
+                  )}
+                  <ProjectRewardShippingEstimate reward={reward} />
+                </HStack>
+                <HStack display={{ base: 'none', lg: 'flex' }}>{renderAmountComponent()}</HStack>
+              </HStack>
             </VStack>
+            {reward.images.length <= 1 ? (
+              <Box overflow={'hidden'} width="100%" position="relative" paddingTop="75%" borderRadius={'8px'}>
+                <ImageWithReload
+                  src={reward.images[0] || ''}
+                  alt={reward.name}
+                  width="100%"
+                  height="100%"
+                  objectFit="cover"
+                  position="absolute"
+                  top={0}
+                  left={0}
+                />
+              </Box>
+            ) : (
+              <MediaCarousel links={reward.images} aspectRatio={ImageCropAspectRatio.Reward} />
+            )}
+            {isProjectOwner && !reward.isHidden && (
+              <CardLayout w={'full'} padding={3}>
+                <VStack w={'full'} p={0}>
+                  <Body size="md" medium>
+                    {t(
+                      'Engage your community, followers, contributors, and reward purchasers by sending them an update about your new reward via email.',
+                    )}
+                  </Body>
+                  <Button
+                    w="full"
+                    variant="solid"
+                    size="lg"
+                    colorScheme="primary1"
+                    onClick={() => {
+                      navigate(`${getPath('projectPostCreate', project?.name)}?rewardUuid=${reward.uuid}`)
+                    }}
+                  >
+                    {' '}
+                    {t('Write an update')}{' '}
+                  </Button>
+                </VStack>
+              </CardLayout>
+            )}
+            {reward?.description && (
+              <HStack
+                w="full"
+                justifyContent="start"
+                fontSize="16px"
+                color="utils.text"
+                sx={{
+                  p: {
+                    marginTop: '0px',
+                  },
+                }}
+                flex={1}
+              >
+                <MarkdownField preview content={reward.description || ''} />
+              </HStack>
+            )}
+            {reward.posts.length > 0 && (
+              <VStack w="full" spacing={2} alignItems="start">
+                <Body size="xl" bold>
+                  {t('Reward Updates')}
+                </Body>
+                <PostsUpdates posts={reward.posts} />
+              </VStack>
+            )}
+          </VStack>
+        </CardLayout>
+        <BottomNavBarContainer direction="column">
+          <HStack justifyContent={'space-between'} flexWrap="wrap">
+            {renderAmountComponent()}
+            {reward.isHidden && <HiddenRewardBadge />}
+          </HStack>
+          {isProjectOwner ? (
+            <RewardEditMenu size="lg" w="full" reward={reward} />
+          ) : (
+            <Button size="lg" variant="solid" colorScheme="primary1" width="full" onClick={buyReward}>
+              {t('Buy')}
+            </Button>
           )}
-        </VStack>
-      </CardLayout>
-      <BottomNavBarContainer direction="column">
-        <HStack justifyContent={'space-between'} flexWrap="wrap">
-          {renderAmountComponent()}
-          {reward.isHidden && <HiddenRewardBadge />}
-        </HStack>
-        {isProjectOwner ? (
-          <RewardEditMenu size="lg" w="full" reward={reward} />
-        ) : (
-          <Button size="lg" variant="solid" colorScheme="primary1" width="full" onClick={buyReward}>
-            {t('Buy')}
-          </Button>
-        )}
-      </BottomNavBarContainer>
-    </VStack>
+        </BottomNavBarContainer>
+      </VStack>
+    </>
   )
 }
 

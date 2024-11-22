@@ -1,97 +1,165 @@
-import { Button, HStack, Spinner, VStack } from '@chakra-ui/react'
-import { useEffect, useRef, useState } from 'react'
+import { Button, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiCopy } from 'react-icons/pi'
 
-import { LogoDark } from '@/assets'
+import { ShareView } from '@/components/molecules/ShareView'
+import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CampaignContent, useCreateAndCopyImage, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
-import { GeyserShareImageUrl } from '@/shared/constants'
-import { validateImageUrl } from '@/shared/markdown/validations/image'
-import { useNotification } from '@/utils'
-
-import { ProjectShareBanner } from '../components/ProjectShareBanner'
+import { generateTwitterShareUrl } from '@/modules/project/utils'
+import { useAuthModal } from '@/pages/auth/hooks'
+import { Body } from '@/shared/components/typography'
+import { lightModeColors } from '@/shared/styles'
+import { useProjectAmbassadorStatsQuery } from '@/types'
+import { commaFormatted } from '@/utils'
 
 export const ProjectShareView = () => {
   const { t } = useTranslation()
-
+  const { user, isLoggedIn } = useAuthContext()
+  const { loginOnOpen } = useAuthModal()
   const { project } = useProjectAtom()
 
-  const toast = useNotification()
+  const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
 
-  const ref = useRef<HTMLDivElement>(null)
+  const heroId = user?.heroId
+  const heroLink = `${window.location.origin || 'https://geyser.fund'}/project/${project.name}${
+    heroId ? `?hero=${heroId}` : ''
+  }`
+  const twitterShareText = `Help make this project happen! Check it out: ${heroLink}`
 
-  const [generating, setGenerating] = useState(true)
+  const ambassadorsCount = data?.projectGet?.ambassadors?.stats?.count
+  const satAmount = data?.projectGet?.ambassadors?.stats?.contributionsSum
 
-  useEffect(() => {
-    setTimeout(() => {
-      setGenerating(false)
-    }, 5000)
-  }, [])
+  const renderSharingStats = () => {
+    if (ambassadorsCount) {
+      return (
+        <>
+          {t('So far, ')}
+          <Body as="span" color={lightModeColors.neutral1[12]}>
+            {ambassadorsCount}
+          </Body>{' '}
+          <Body as="span" regular>
+            {t('ambassador' + (ambassadorsCount === 1 ? ' has' : 's have') + ' enabled')}
+          </Body>{' '}
+          <Body as="span" color={lightModeColors.neutral1[12]}>
+            {commaFormatted(satAmount)}
+          </Body>{' '}
+          {t('sats in contributions to this project.')}
+        </>
+      )
+    }
 
-  const { handleGenerateAndCopy, copying } = useCreateAndCopyImage()
-
-  const handleCopy = async () => {
-    await handleGenerateAndCopy({
-      element: ref.current,
-      onSuccess() {
-        toast.success({
-          title: 'Copied!',
-          description: 'Ready to paste into Social media posts',
-        })
-      },
-      onError() {
-        toast.error({
-          title: 'Failed to download image',
-          description: 'Please try again',
-        })
-      },
-    })
+    return ''
   }
 
-  const { getShareProjectUrl } = useProjectShare()
-
-  const projectUrl = getShareProjectUrl({ clickedFrom: CampaignContent.projectShareQrBanner })
-
-  const isImage = validateImageUrl(project.images[0])
+  const renderAmbassadorCopy = () => {
+    return (
+      <Body>
+        {!ambassadorsCount ? (
+          <Body zIndex={1}>
+            {t('Become the first project')}{' '}
+            <Tooltip
+              label={t(
+                'Someone who enables contributions towards projects by spreading the word using his/her unique Hero link',
+              )}
+              placement="top"
+            >
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                <Body
+                  as="span"
+                  color={lightModeColors.neutral1[12]}
+                  textDecoration="underline dotted"
+                  display="inline"
+                  bold
+                >
+                  {t('Ambassador')}
+                </Body>
+              </span>
+            </Tooltip>{' '}
+            {t('by spreading the word and enabling more contributions to this project.')}
+          </Body>
+        ) : (
+          <Body zIndex={1} color={lightModeColors.neutral1[12]} size="md" regular textAlign="center">
+            {t('Become an')}{' '}
+            <Tooltip
+              label={t(
+                'Someone who enables contributions towards projects by spreading the word using his/her unique Hero link',
+              )}
+              placement="top"
+            >
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                <Body
+                  as="span"
+                  color={lightModeColors.neutral1[12]}
+                  textDecoration="underline dotted"
+                  display="inline"
+                  bold
+                >
+                  {t('Ambassador')}
+                </Body>
+              </span>
+            </Tooltip>{' '}
+            {t('for this project by spreading the word using your')}{' '}
+            <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                <Body
+                  as="span"
+                  color={lightModeColors.neutral1[12]}
+                  textDecoration="underline dotted"
+                  display="inline"
+                  bold
+                >
+                  {t('Hero link')}
+                </Body>
+              </span>
+            </Tooltip>
+            {'. '}
+            {renderSharingStats()}
+          </Body>
+        )}
+        {!isLoggedIn && (
+          <Body size="md" pt={1} textAlign="center">
+            <Button
+              as="span"
+              variant="ghost"
+              color={lightModeColors.primary1[12]}
+              textDecoration="underline"
+              onClick={() => loginOnOpen()}
+              paddingX={0}
+              paddingBottom="1"
+              fontSize={'md'}
+              _hover={{ cursor: 'pointer' }}
+              _active={{}}
+              _focus={{}}
+            >
+              {t('Sign in')}
+            </Button>{' '}
+            {t('to get your custom')}{' '}
+            <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
+              <span style={{ position: 'relative', display: 'inline-block' }}>
+                <Body
+                  as="span"
+                  color={lightModeColors.neutral1[12]}
+                  textDecoration="underline dotted"
+                  display="inline"
+                  bold
+                >
+                  {t('Hero link')}
+                </Body>
+              </span>
+            </Tooltip>{' '}
+            {t('and track the impact of sharing.')}
+          </Body>
+        )}
+      </Body>
+    )
+  }
 
   return (
-    <VStack
-      w="100%"
-      border="1px solid"
-      borderColor="neutral1.6"
-      background="neutral1.2"
-      borderRadius={8}
-      overflow={'hidden'}
-      position="relative"
+    <ShareView
+      shareOnXUrl={generateTwitterShareUrl(twitterShareText)}
+      shareUrl={heroLink}
+      shareUrlLabel={heroId ? t('Hero Link:') : ''}
     >
-      <ProjectShareBanner
-        ref={ref}
-        bannerImage={isImage && project.images[0] ? project.images[0] : project.thumbnailImage || GeyserShareImageUrl}
-        qrCodeValue={projectUrl}
-        qrCodeText={t('View project')}
-        centerLogo={LogoDark}
-        banneText={project.title}
-      />
-
-      <HStack padding={3} width="100%">
-        {generating ? (
-          <Button variant="solid" colorScheme="neutral1" w="full" leftIcon={<Spinner size="sm" />}>
-            {t('Generating banner...')}
-          </Button>
-        ) : (
-          <Button
-            variant="solid"
-            colorScheme="primary1"
-            w="full"
-            rightIcon={<PiCopy />}
-            isLoading={copying}
-            onClick={handleCopy}
-          >
-            {t('Copy image')}
-          </Button>
-        )}
-      </HStack>
-    </VStack>
+      {renderAmbassadorCopy()}
+    </ShareView>
   )
 }

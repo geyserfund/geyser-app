@@ -34,7 +34,9 @@ export const useRewards = (projectId: string) => {
           name: reward.projectReward.name,
           image: reward.projectReward.image ?? null,
           count: reward.count,
-          isSoldOut: reward.projectReward.sold >= reward.projectReward.maxClaimable,
+          isSoldOut: reward.projectReward.maxClaimable
+            ? reward.projectReward.sold >= reward.projectReward.maxClaimable
+            : false,
         })),
       )
     },

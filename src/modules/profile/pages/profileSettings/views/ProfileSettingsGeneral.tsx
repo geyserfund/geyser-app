@@ -14,7 +14,7 @@ export const ProfileSettingsGeneral = () => {
     return params.userId
   }, [params])
 
-  const { isLoading } = useUserProfile(userId)
+  const { isLoading } = useUserProfile({ userId })
 
   return (
     <ProfileSettingsLayout>
