@@ -17,6 +17,7 @@ import { useTopContributors } from '../hooks'
 import { useTopAmbassadors } from '../hooks/useTopAmbassadors'
 import { useTopCreators } from '../hooks/useTopCreators'
 import { StandardOption } from '../types'
+import { SponsorshipBanner } from './SponsorshipBanner'
 import { TitleWithPeriod } from './TitleWithPeriod'
 
 const MAX_HEROES = 5
@@ -51,6 +52,7 @@ export const GeyserHeroes = () => {
         seeAllTo={getPath('hallOfFameHeroesContributor')}
         handlePeriodChange={handlePeriodChange}
       />
+      <SponsorshipBanner />
       <Stack direction={{ base: 'column', lg: 'row' }} w="full" alignItems={'start'} spacing={4}>
         <HeroSectionWrapper title={t('Creators')} description="Lead initiatives and bring ideas to life.">
           <RenderHeroList period={period} data={creators} loading={creatorsLoading} labels={HeroListLabels} />
