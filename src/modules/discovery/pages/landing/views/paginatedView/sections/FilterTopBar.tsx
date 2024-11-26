@@ -5,6 +5,7 @@ import { PiMagnifyingGlass, PiMapPin, PiTag } from 'react-icons/pi'
 import { useFilterContext } from '@/context/filter'
 import { getStatusTypeButtonContent } from '@/modules/discovery/filters/status'
 import { SkeletonLayout } from '@/shared/components/layouts'
+import { Body } from '@/shared/components/typography'
 import { useProjectCountriesGetQuery, useTagsGetQuery } from '@/types'
 import { useCustomTheme } from '@/utils'
 
@@ -132,6 +133,10 @@ export const FilterTopBar = ({ isLoading, ...rest }: FilterTopBarProps) => {
     return (
       <HStack width="100%" justifyContent="start" alignItems="start" overflowY={'auto'} {...rest}>
         <Wrap>
+          <Body size="xl" bold>
+            {t('Most funded projects filtered by:')}
+          </Body>
+
           {viewFilterSearch}
           {viewFilterStatusType}
           {viewFilterTags}
