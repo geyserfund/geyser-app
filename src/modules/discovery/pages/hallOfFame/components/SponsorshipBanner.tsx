@@ -53,7 +53,7 @@ export const SponsorshipBanner = () => {
       padding={{ base: '12px', lg: '16px 24px' }}
       backgroundColor="neutral1.4"
     >
-      <Image src={data?.image} height="40px" width="40px" />
+      <Image src={data?.image} height="40px" width="40px" borderRadius="8px" />
       <Body size="xl" medium>
         {data?.text}{' '}
         <Body as="span">
