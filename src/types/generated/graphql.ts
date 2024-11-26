@@ -8598,7 +8598,7 @@ export type ContributorContributionsSummaryFragment = {
 export type ProjectFundingTxFragment = {
   __typename?: 'FundingTx'
   id: any
-  amountPaid: number
+  amount: number
   media?: string | null
   comment?: string | null
   paidAt?: any | null
@@ -8635,6 +8635,11 @@ export type FundingTxFragment = {
     user?: { __typename?: 'User'; id: any; username: string; imageUrl?: string | null } | null
   }
 }
+
+export type FundingTxForSubscriptionFragment = {
+  __typename?: 'FundingTx'
+  projectGoalId?: any | null
+} & FundingTxFragment
 
 export type FundingTxWithInvoiceStatusFragment = {
   __typename?: 'FundingTx'
@@ -9652,7 +9657,7 @@ export type FundingTxStatusUpdatedSubscription = {
   __typename?: 'Subscription'
   fundingTxStatusUpdated: {
     __typename?: 'FundingTxStatusUpdatedSubscriptionResponse'
-    fundingTx: { __typename?: 'FundingTx' } & FundingTxFragment
+    fundingTx: { __typename?: 'FundingTx' } & FundingTxForSubscriptionFragment
   }
 }
 
@@ -10914,7 +10919,7 @@ export const ContributorContributionsSummaryFragmentDoc = gql`
 export const ProjectFundingTxFragmentDoc = gql`
   fragment ProjectFundingTx on FundingTx {
     id
-    amountPaid
+    amount
     media
     comment
     paidAt
@@ -10966,6 +10971,13 @@ export const FundingTxFragmentDoc = gql`
       }
     }
   }
+`
+export const FundingTxForSubscriptionFragmentDoc = gql`
+  fragment FundingTxForSubscription on FundingTx {
+    ...FundingTx
+    projectGoalId
+  }
+  ${FundingTxFragmentDoc}
 `
 export const FundingTxWithInvoiceStatusFragmentDoc = gql`
   fragment FundingTxWithInvoiceStatus on FundingTx {
@@ -18801,11 +18813,11 @@ export const FundingTxStatusUpdatedDocument = gql`
   subscription FundingTxStatusUpdated($input: FundingTxStatusUpdatedInput) {
     fundingTxStatusUpdated(input: $input) {
       fundingTx {
-        ...FundingTx
+        ...FundingTxForSubscription
       }
     }
   }
-  ${FundingTxFragmentDoc}
+  ${FundingTxForSubscriptionFragmentDoc}
 `
 
 /**

@@ -6,7 +6,7 @@ export const FRAGMENT_PROJECT_FUNDING_TX = gql`
   ${FRAGMENT_USER_AVATAR}
   fragment ProjectFundingTx on FundingTx {
     id
-    amountPaid
+    amount
     media
     comment
     paidAt
@@ -59,6 +59,15 @@ export const FRAGMENT_FUNDING_TX = gql`
     }
   }
 `
+
+export const FRAGMENT_FUNDING_TX_FOR_SUBSCRIPTION = gql`
+  ${FRAGMENT_FUNDING_TX}
+  fragment FundingTxForSubscription on FundingTx {
+    ...FundingTx
+    projectGoalId
+  }
+`
+
 export const FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS = gql`
   fragment FundingTxWithInvoiceStatus on FundingTx {
     id

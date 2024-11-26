@@ -1,9 +1,35 @@
 import { atom } from 'jotai'
 
-import { ProjectGoalsFragment } from '../../../types'
+import { convertSatsToCents } from '@/utils'
+
+import { FundingTxForSubscriptionFragment, ProjectGoalCurrency, ProjectGoalsFragment } from '../../../types'
 
 /** In Progress goals for Project in context */
 export const inProgressGoalsAtom = atom<ProjectGoalsFragment[]>([])
+
+/** Add funding Tx to in progress goals */
+export const addFundingTxToInProgressGoalsAtom = atom(null, (get, set, payload: FundingTxForSubscriptionFragment) => {
+  const inProgressGoals = get(inProgressGoalsAtom)
+
+  set(
+    inProgressGoalsAtom,
+    inProgressGoals.map((goal) => {
+      if (goal.id === payload.projectGoalId) {
+        const additionalAmount =
+          goal.currency === ProjectGoalCurrency.Usdcent
+            ? convertSatsToCents({ sats: payload.amount, bitcoinQuote: payload.bitcoinQuote })
+            : payload.amount
+
+        return {
+          ...goal,
+          amountContributed: goal.amountContributed ? goal.amountContributed + additionalAmount : additionalAmount,
+        }
+      }
+
+      return goal
+    }),
+  )
+})
 
 /** Add or update in progress goals for Project in context */
 export const addUpdateInProgressGoalsAtom = atom(null, (get, set, payload: ProjectGoalsFragment) => {

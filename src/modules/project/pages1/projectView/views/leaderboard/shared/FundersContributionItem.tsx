@@ -12,11 +12,11 @@ export const FundersContributionItem = ({ contribution }: { contribution: Projec
       <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
         <HStack w="full" justifyContent={'space-between'}>
           <Body size="sm">
-            {commaFormatted(contribution.amountPaid)}{' '}
+            {commaFormatted(contribution.amount)}{' '}
             <Body as="span" size="sm" muted>
               sats{' '}
               {`(${convertSatsToUsdFormatted({
-                sats: contribution.amountPaid,
+                sats: contribution.amount,
                 bitcoinQuote: contribution.bitcoinQuote,
               })})`}
             </Body>
