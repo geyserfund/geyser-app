@@ -5,7 +5,11 @@ import { Link } from 'react-router-dom'
 
 import { getPath } from '@/shared/constants'
 
-export const CreateProjectButton = (props: ButtonProps) => {
+type CreateProjectButtonProps = {
+  iconOnly?: boolean
+} & ButtonProps
+
+export const CreateProjectButton = ({ iconOnly, ...props }: CreateProjectButtonProps) => {
   const { t } = useTranslation()
   return (
     <Button
@@ -14,10 +18,10 @@ export const CreateProjectButton = (props: ButtonProps) => {
       size="lg"
       variant="outline"
       colorScheme="primary1"
-      leftIcon={<PiRocketLaunch />}
+      leftIcon={iconOnly ? undefined : <PiRocketLaunch />}
       {...props}
     >
-      {t('Create project')}
+      {iconOnly ? <PiRocketLaunch /> : t('Create project')}
     </Button>
   )
 }

@@ -18,6 +18,7 @@ import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../pages/auth/hooks'
 import { dimensions } from '../../../shared/constants'
 import { BrandLogo, BrandLogoFull } from './components/BrandLogo'
+import { CreateProjectButton } from './components/CreateProjectButton'
 import { LoggedOutModal } from './components/LoggedOutModal'
 import { LoginButton } from './components/LoginButton'
 import { ProjectLogo } from './components/ProjectLogo'
@@ -116,6 +117,7 @@ export const PlatformNavBar = () => {
           {renderLeftSide()}
 
           <HStack position="relative">
+            {!isLoggedIn && <CreateProjectButton size={{ base: 'md', lg: 'lg' }} iconOnly={isMobileMode} />}
             {!isLoggedIn ? <LoginButton /> : <ProjectSelectMenu />}
             <ProfileNav />
           </HStack>
