@@ -27,7 +27,7 @@ export const SuccessImageComponent = () => {
   const user = loggedInUser || fundingInputAfterRequest?.user
   const heroId = user?.heroId
 
-  const heroLink = `https://geyser.fund/project/${project.name}${heroId ? `&hero=${heroId}` : ''}`
+  const heroLink = `https://geyser.fund/project/${project.name}${heroId ? `?hero=${heroId}` : ''}`
 
   const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
   const ambassadorsCount = data?.projectGet?.ambassadors?.stats?.count
