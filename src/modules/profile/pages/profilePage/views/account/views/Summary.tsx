@@ -16,6 +16,7 @@ export const Summary = () => {
   const { userProfile, isLoading: userProfileLoading } = useUserProfileAtom()
 
   const { data, loading } = useUserHeroStatsQuery({
+    skip: !userProfile.id,
     variables: {
       where: {
         id: userProfile.id,

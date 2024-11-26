@@ -131,9 +131,7 @@ const HeroDisplay = ({
     return (
       <Body size="sm" light isTruncated>
         <Trans
-          i18nKey={
-            'Contributed <1>{{usdAmount}}</1> ({{satsAmount}} sats) with <3>{{numberOfContributions}}</3> contributions to <5>{{numberOfProjects}}</5> projects'
-          }
+          i18nKey="Contributed <1>{{usdAmount}}</1> ({{satsAmount}} sats) with <3>{{numberOfContributions}}</3> contributions to <5>{{numberOfProjects}}</5> projects"
           values={{
             usdAmount: formatAmount(data[labels.amountUsd], FormatCurrencyType.Usd),
             satsAmount: getShortAmountLabel(data[labels.amount]),
@@ -163,7 +161,7 @@ const HeroDisplay = ({
     return (
       <Body size="sm" light isTruncated>
         <Trans
-          i18nKey={'Enabled <1>{{usdAmount}}</1> ({{satsAmount}} sats) across <3>{{numberOfProjects}}</3> projects'}
+          i18nKey="Enabled <1>{{usdAmount}}</1> ({{satsAmount}} sats) across <3>{{numberOfProjects}}</3> projects"
           values={{
             usdAmount: formatAmount(data[labels.amountUsd], FormatCurrencyType.Usd),
             satsAmount: getShortAmountLabel(data[labels.amount]),
@@ -188,7 +186,7 @@ const HeroDisplay = ({
     return (
       <Body size="sm" light isTruncated>
         <Trans
-          i18nKey={'Raised <1>{{usdAmount}}</1> ({{satsAmount}} sats) across <3>{{numberOfProjects}}</3> projects'}
+          i18nKey="Raised <1>{{usdAmount}}</1> ({{satsAmount}} sats) across <3>{{numberOfProjects}}</3> projects"
           values={{
             usdAmount: formatAmount(data[labels.amountUsd], FormatCurrencyType.Usd),
             satsAmount: getShortAmountLabel(data[labels.amount]),
