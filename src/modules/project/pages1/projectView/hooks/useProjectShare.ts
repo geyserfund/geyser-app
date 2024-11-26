@@ -100,8 +100,16 @@ export const useProjectShare = () => {
 /** This hook must be used inside ProjectProvider Context to share project rewardLinks links */
 export const useRewardShare = ({ id, name }: Pick<ProjectReward, 'id' | 'name'>) => {
   const { project, isProjectOwner } = useProjectAtom()
-  const { isLoggedIn } = useAuthContext()
+  const { isLoggedIn, user } = useAuthContext()
   const [copied, setCopied] = useState(false)
+
+  const getShareRewardUrlWithHeroId = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
+    if (user && user.heroId) {
+      return `${window.location.origin}${getPath('projectRewardView', project.name, `${id}`)}?hero=${user.heroId}`
+    }
+
+    return getShareRewardUrl({ clickedFrom })
+  }
 
   const getShareRewardUrl = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
     const campaignUrlSuffix = getProjectShareUrlSuffix({
@@ -124,14 +132,22 @@ export const useRewardShare = ({ id, name }: Pick<ProjectReward, 'id' | 'name'>)
     }, 2000)
   }
 
-  return { getShareRewardUrl, copyRewardLinkToClipboard, copied }
+  return { getShareRewardUrl, getShareRewardUrlWithHeroId, copyRewardLinkToClipboard, copied }
 }
 
 /** This hook must be used inside ProjectProvider Context to share project rpostLinks links */
 export const usePostShare = ({ id }: Pick<ProjectEntryFragment, 'id'>) => {
   const { project, isProjectOwner } = useProjectAtom()
-  const { isLoggedIn } = useAuthContext()
+  const { isLoggedIn, user } = useAuthContext()
   const [copied, setCopied] = useState(false)
+
+  const getSharePostUrlWithHeroId = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
+    if (user && user.heroId) {
+      return `${window.location.origin}${getPath('projectPostView', project.name, `${id}`)}?hero=${user.heroId}`
+    }
+
+    return getSharePostUrl({ clickedFrom })
+  }
 
   const getSharePostUrl = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
     const campaignUrlSuffix = getProjectShareUrlSuffix({
@@ -154,14 +170,22 @@ export const usePostShare = ({ id }: Pick<ProjectEntryFragment, 'id'>) => {
     }, 2000)
   }
 
-  return { getSharePostUrl, copyPostLinkToClipboard, copied }
+  return { getSharePostUrl, getSharePostUrlWithHeroId, copyPostLinkToClipboard, copied }
 }
 
 /** This hook must be used inside ProjectProvider Context to share project goal links */
 export const useGoalShare = ({ id, name }: { id: string; name: string }) => {
   const { project, isProjectOwner } = useProjectAtom()
-  const { isLoggedIn } = useAuthContext()
+  const { isLoggedIn, user } = useAuthContext()
   const [copied, setCopied] = useState(false)
+
+  const getShareGoalUrlWithHeroId = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
+    if (user && user.heroId) {
+      return `${window.location.origin}${getPath('projectGoalView', project.name, `${id}`)}?hero=${user.heroId}`
+    }
+
+    return getShareGoalUrl({ clickedFrom })
+  }
 
   const getShareGoalUrl = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
     const campaignUrlSuffix = getProjectShareUrlSuffix({
@@ -184,5 +208,5 @@ export const useGoalShare = ({ id, name }: { id: string; name: string }) => {
     }, 2000)
   }
 
-  return { getShareGoalUrl, copyGoalLinkToClipboard, copied }
+  return { getShareGoalUrl, getShareGoalUrlWithHeroId, copyGoalLinkToClipboard, copied }
 }

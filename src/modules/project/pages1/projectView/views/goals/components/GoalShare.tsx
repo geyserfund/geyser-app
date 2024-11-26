@@ -24,9 +24,9 @@ export const GoalShare = ({ goal, ...props }: GoalShareProps) => {
 
   const { project } = useProjectAtom()
 
-  const { getShareGoalUrl } = useGoalShare({ id: goal.id, name: goal.title })
+  const { getShareGoalUrlWithHeroId } = useGoalShare({ id: goal.id, name: goal.title })
 
-  const projectGoalUrl = getShareGoalUrl({ clickedFrom: CampaignContent.goalShareButton })
+  const projectGoalUrl = getShareGoalUrlWithHeroId({ clickedFrom: CampaignContent.goalShareButton })
 
   const twitterPostUrl = generateTwitterShareUrl(projectGoalUrl)
 
