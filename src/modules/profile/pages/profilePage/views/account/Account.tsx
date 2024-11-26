@@ -10,7 +10,6 @@ import { dimensions, getPath } from '@/shared/constants'
 import { AccountInfo } from './views/AccountInfo'
 import { Badges } from './views/badges'
 import { Summary } from './views/Summary'
-import { UserBio } from './views/UserBio'
 
 export const Account = () => {
   const { userProfile } = useUserProfileAtom()
@@ -26,7 +25,6 @@ export const Account = () => {
       spacing={6}
     >
       <AccountInfo />
-      <UserBio />
       {isViewingOwnProfile && userProfile && (
         <Button
           as={Link}

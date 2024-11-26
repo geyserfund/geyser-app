@@ -29,6 +29,7 @@ import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { userProfileAtom, useUserProfileAtom } from '../../../../../state'
 import { RemoveExternalAccountModal } from '../../../components/RemoveExternalAccountModal'
 import { useAccountUnlink } from '../hooks/useAccountUnlink'
+import { UserBio } from './UserBio'
 
 export const AccountInfo = () => {
   const { userProfile, isLoading } = useUserProfileAtom()
@@ -57,6 +58,7 @@ export const AccountInfo = () => {
           </HStack>
         </VStack>
       </HStack>
+      <UserBio />
     </VStack>
   )
 }
