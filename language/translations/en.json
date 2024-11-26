@@ -1372,5 +1372,19 @@
   "Hero link": "Hero link",
   "Share on X": "Share on X",
   "by spreading the word and enabling more contributions to this project.": "by spreading the word and enabling more contributions to this project.",
-  "No contributions have been enabled through sharing yet.": "No contributions have been enabled through sharing yet."
+  "No contributions have been enabled through sharing yet.": "No contributions have been enabled through sharing yet.",
+  "By continuing to checkout you are accepting our T&Cs": "By continuing to checkout you are accepting our T&Cs",
+  "Please refresh the page and try again": "Please refresh the page and try again",
+  "Something went wrong": "Something went wrong",
+  "An Error Occured": "An Error Occured",
+  "We've encountered an issue with the payment flow. This could be due to a third-party service or an internal system error. We apologize for this inconvenience and appreciate your patience as we work to resolve it.": "We've encountered an issue with the payment flow. This could be due to a third-party service or an internal system error. We apologize for this inconvenience and appreciate your patience as we work to resolve it.",
+  "What now?": "What now?",
+  "Some system errors are temporary. By clicking try again button you can reattempt the payment.": "Some system errors are temporary. By clicking try again button you can reattempt the payment.",
+  "If you keep experiencing this problem or need assistance, please don't hesitate to reach out to us for support.": "If you keep experiencing this problem or need assistance, please don't hesitate to reach out to us for support.",
+  "for this project by spreading the word using your": "for this project by spreading the word using your",
+  "Next Actions": "Next Actions",
+  "Become an": "Become an",
+  "Hero Link:": "Hero Link:",
+  "Send to new email": "Send to new email",
+  "Check your email ({{email}}) to receive notifications about transaction confirmation.": "Check your email ({{email}}) to receive notifications about transaction confirmation."
 }

@@ -9,10 +9,10 @@ import {
 } from '@/types'
 
 export const useUserContributorToCurrentProject = ({
-  funders = [],
+  contributors = [],
   period,
 }: {
-  funders?: ProjectLeaderboardContributorsFragment[]
+  contributors?: ProjectLeaderboardContributorsFragment[]
   period?: ContributionsSummaryPeriod
 } = {}) => {
   const { user } = useAuthContext()
@@ -21,12 +21,12 @@ export const useUserContributorToCurrentProject = ({
   const [skipIndividualUser, setSkipIndividualUser] = useState(true)
 
   useEffect(() => {
-    if (funders.length > 0 && user.id && !funders.some((funder) => funder?.user?.id === user.id)) {
+    if (contributors.length > 0 && user.id && !contributors.some((contributor) => contributor?.user?.id === user.id)) {
       setSkipIndividualUser(false)
     } else {
       setSkipIndividualUser(true)
     }
-  }, [funders, user.id])
+  }, [contributors, user.id])
 
   const {
     data,

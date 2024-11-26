@@ -10,7 +10,12 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.preferences.importModuleSpecifier": "shortest",
   "cSpell.words": [
+    "chakra",
     "ecpair",
-    "secp"
+    "funder",
+    "funders",
+    "luxon",
+    "secp",
+    "Usdcent"
   ],
 }

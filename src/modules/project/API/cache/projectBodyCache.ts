@@ -71,9 +71,11 @@ export const updateProjectBalanceCache = (
         },
       },
       data: {
-        ...existingProject.projectGet,
-        ...(balance && { balance }),
-        ...(balanceUsdCent && { balanceUsdCent }),
+        projectGet: {
+          ...existingProject.projectGet,
+          ...(balance && { balance }),
+          ...(balanceUsdCent && { balanceUsdCent }),
+        },
       },
     })
   }

@@ -23,6 +23,8 @@ export const Contributions = () => {
   const [contributions, setContributions] = useAtom(contributionsAtom)
 
   const { loading } = useProjectPageFundingTxQuery({
+    skip: !project.id,
+    fetchPolicy: 'network-only',
     variables: {
       input: {
         where: {
