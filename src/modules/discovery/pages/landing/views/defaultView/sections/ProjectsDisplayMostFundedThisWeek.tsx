@@ -55,6 +55,8 @@ export const ProjectsDisplayMostFundedThisWeek = ({ tag }: ProjectDisplayProps) 
     'open-source': 'Projects focused on open source development',
     events: 'Projects focused on bringing people together around events in IRL',
     media: 'Projects creating valuable content',
+    startup: 'New startup project ideas bootstrapping their ideas through community funding',
+    developers: 'Projects building valuable software solutions',
   }
 
   return (
