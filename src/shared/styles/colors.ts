@@ -213,6 +213,21 @@ export const overlayColors = {
   },
 }
 
+export const guardiansColors = {
+  warrior: {
+    text: '#7BA3E5',
+  },
+  knight: {
+    text: '#7A7DE5',
+  },
+  king: {
+    text: '#D99E36',
+  },
+  legend: {
+    text: '#59CCCA',
+  },
+}
+
 export const lightModeColors = {
   primary: primaryColorsLight,
   neutral: neutralColorsLight,
@@ -233,6 +248,8 @@ export const lightModeColors = {
   utils: utilColors.light,
   panel: panelColors.light,
   overlay: overlayColors.light,
+
+  guardians: { background: '#FFFFFF', ...guardiansColors },
 
   ...lightPalette,
 }
@@ -257,6 +274,8 @@ export const darkModeColors = {
   utils: utilColors.dark,
   panel: panelColors.dark,
   overlay: overlayColors.dark,
+
+  guardians: { background: '#211f1b', ...guardiansColors },
 
   ...darkPalette,
 }

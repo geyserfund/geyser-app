@@ -8,7 +8,7 @@ export const ProfileNavMenu = () => {
     <Menu placement="bottom-end" closeOnSelect={true} strategy="fixed">
       <MenuButton as={ProfileNavButton} />
       <Portal>
-        <MenuList p={0} zIndex="99" shadow="md">
+        <MenuList p={0} zIndex="99" shadow="md" maxHeight="calc(100vh - 100px)" overflowY="auto">
           <ProfileNavContent />
         </MenuList>
       </Portal>

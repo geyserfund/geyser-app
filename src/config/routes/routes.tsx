@@ -25,6 +25,8 @@ const CreatorPost = () => import('../../modules/project/pages1/projectView/views
 
 const Discovery = () => import('../../modules/discovery')
 
+const Guardians = () => import('../../modules/guardians')
+
 const HallOfFame = () => import('../../modules/discovery/pages/hallOfFame')
 
 const Refund = () => import('../../modules/project/pages1/projectFunding/views/refund')
@@ -641,6 +643,7 @@ export const platformRoutes: RouteObject[] = [
           return { Component: HallOfFamePage }
         },
       },
+
       {
         path: getPath('hallOfFameProjects'),
         async lazy() {
@@ -691,6 +694,14 @@ export const platformRoutes: RouteObject[] = [
         },
       },
     ],
+  },
+
+  {
+    path: getPath('guardians'),
+    async lazy() {
+      const GuardiansPage = await Guardians().then((m) => m.Guardians)
+      return { Component: GuardiansPage }
+    },
   },
 
   {

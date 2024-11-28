@@ -29,6 +29,8 @@ import {
   GeyserSubscribeUrl,
   GuideUrl,
 } from '@/shared/constants'
+import { GradientBorder } from '@/shared/molecules/GradientBorder'
+import { GuardiansButtonBackgroundGradient, GuardiansButtonBackgroundGradientBright } from '@/shared/styles/custom'
 import { HeroStats, useUserHeroStatsQuery } from '@/types'
 
 import { DiscoveryNavItemKey, discoveryNavItems } from '../../discoveryNav/discoveryNavData'
@@ -94,24 +96,38 @@ export const ProfileNavContent = () => {
                 : discoveryNav.key === DiscoveryNavItemKey.Activity
                 ? followedActivityDot
                 : false
+
+            const isGuardian = discoveryNav.key === DiscoveryNavItemKey.Guardians
+
             return (
-              <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)}>
-                <HStack position="relative">
-                  <discoveryNav.icon fontSize="18px" />
-                  <Body size="md">{discoveryNav.label}</Body>
-                  {activityDot ? (
-                    <Box
-                      position="absolute"
-                      top={2}
-                      right={'-4'}
-                      borderRadius="50%"
-                      backgroundColor="error.9"
-                      height="6px"
-                      width="6px"
-                    />
-                  ) : null}
-                </HStack>
-              </MenuItem>
+              <GradientBorder
+                key={discoveryNav.label}
+                enable={isGuardian}
+                gradientColor={GuardiansButtonBackgroundGradientBright}
+              >
+                <MenuItem
+                  key={discoveryNav.label}
+                  as={Link}
+                  to={getPath(discoveryNav.path)}
+                  background={isGuardian ? GuardiansButtonBackgroundGradient : ''}
+                >
+                  <HStack position="relative">
+                    <discoveryNav.icon fontSize="18px" />
+                    <Body size="md">{discoveryNav.label}</Body>
+                    {activityDot ? (
+                      <Box
+                        position="absolute"
+                        top={2}
+                        right={'-4'}
+                        borderRadius="50%"
+                        backgroundColor="error.9"
+                        height="6px"
+                        width="6px"
+                      />
+                    ) : null}
+                  </HStack>
+                </MenuItem>
+              </GradientBorder>
             )
           })}
         </VStack>

@@ -22,7 +22,12 @@ import { LoggedOutModal } from './components/LoggedOutModal'
 import { LoginButton } from './components/LoginButton'
 import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
-import { isDiscoveryRoutesAtom, shouldShowGeyserLogoAtom, shouldShowProjectLogoAtom } from './platformNavBarAtom'
+import {
+  isDiscoveryRoutesAtom,
+  shouldShowGeyserLogoAtom,
+  shouldShowProjectLogoAtom,
+  useIsGuardiansPage,
+} from './platformNavBarAtom'
 import { ProfileNav } from './profileNav/ProfileNav'
 
 export const PlatformNavBar = () => {
@@ -30,6 +35,8 @@ export const PlatformNavBar = () => {
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
 
   const heroCard = useAtomValue(heroCardAtom)
+
+  const isGuardiansPage = useIsGuardiansPage()
 
   const isMobileMode = useMobileMode()
 
@@ -101,14 +108,18 @@ export const PlatformNavBar = () => {
       {...(isPlatformRoutes && discoveryPageCommonLayoutStyles)}
       justifyContent={'center'}
       zIndex={9}
-      bgColor={'utils.pbg'}
+      bgColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
     >
       <VStack
         paddingY={{ base: 5, lg: 8 }}
         paddingX={{ base: 3, lg: 6 }}
-        maxWidth={{ base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 48 }}
+        maxWidth={
+          isGuardiansPage
+            ? dimensions.guardians.maxWidth
+            : { base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 48 }
+        }
         width="100%"
-        backgroundColor={'utils.pbg'}
+        backgroundColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
         justifySelf={'center'}
         spacing={4}
       >

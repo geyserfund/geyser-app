@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom'
 import { LogoDark, LogoLight } from '@/assets'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { dimensions, getPath, LogoNameDark, LogoNameLight } from '@/shared/constants'
+import { GradientBorder } from '@/shared/molecules/GradientBorder'
+import { GuardiansButtonBackgroundGradient, GuardiansButtonBackgroundGradientBright } from '@/shared/styles/custom'
 import { useMobileMode } from '@/utils'
 
 import { currentPlatformNavItemAtom } from './discoveryNavAtom'
@@ -78,66 +80,80 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
 
   const isTabletSize = useBreakpointValue({ xl: false, lg: true })
 
+  let backgroundColor
+
+  const isGuardians = item.key === DiscoveryNavItemKey.Guardians
+
+  if (isGuardians) {
+    backgroundColor = GuardiansButtonBackgroundGradient
+  }
+
   if (isTabletSize) {
     return (
+      <GradientBorder enable={isGuardians} gradientColor={GuardiansButtonBackgroundGradientBright}>
+        <Button
+          variant="menu"
+          colorScheme="primary1"
+          size="lg"
+          key={item.label}
+          width="50px"
+          height="50px"
+          as={Link}
+          paddingX={4}
+          to={getPath(item.path)}
+          isActive={isActive}
+          background={backgroundColor}
+          {...rest}
+        >
+          <>
+            <item.icon fontSize="18px" />
+            {activityDot ? (
+              <Box
+                position="absolute"
+                top={4}
+                right={1}
+                borderRadius="50%"
+                backgroundColor="error.9"
+                height="6px"
+                width="6px"
+              />
+            ) : null}
+          </>
+        </Button>
+      </GradientBorder>
+    )
+  }
+
+  return (
+    <GradientBorder enable={isGuardians} gradientColor={GuardiansButtonBackgroundGradientBright}>
       <Button
         variant="menu"
         colorScheme="primary1"
         size="lg"
+        width={'full'}
         key={item.label}
-        width="50px"
-        height="50px"
-        as={Link}
-        paddingX={4}
-        to={getPath(item.path)}
-        isActive={isActive}
-        {...rest}
-      >
-        <>
-          <item.icon fontSize="18px" />
-          {activityDot ? (
+        leftIcon={<item.icon fontSize="18px" />}
+        rightIcon={
+          activityDot ? (
             <Box
               position="absolute"
               top={4}
-              right={1}
+              right={2}
               borderRadius="50%"
               backgroundColor="error.9"
               height="6px"
               width="6px"
             />
-          ) : null}
-        </>
+          ) : undefined
+        }
+        as={Link}
+        to={getPath(item.path)}
+        isActive={isActive}
+        background={backgroundColor}
+        {...rest}
+      >
+        {t(item.label)}
       </Button>
-    )
-  }
-
-  return (
-    <Button
-      variant="menu"
-      colorScheme="primary1"
-      size="lg"
-      width={'full'}
-      key={item.label}
-      leftIcon={<item.icon fontSize="18px" />}
-      rightIcon={
-        activityDot ? (
-          <Box
-            position="absolute"
-            top={4}
-            right={2}
-            borderRadius="50%"
-            backgroundColor="error.9"
-            height="6px"
-            width="6px"
-          />
-        ) : undefined
-      }
-      as={Link}
-      to={getPath(item.path)}
-      isActive={isActive}
-      {...rest}
-    >
-      {t(item.label)}
-    </Button>
+    </GradientBorder>
   )
 }
