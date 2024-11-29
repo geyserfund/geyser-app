@@ -371,3 +371,27 @@ export const HeroCardContributedEnabledRaised =
 export const HeroCardContributedRaisedEnabled =
   'https://storage.googleapis.com/geyser-projects-media/hero/contributed-raised%20-enabled.png'
 export const HeroBackCard = 'https://storage.googleapis.com/geyser-projects-media/hero/hero-card-back.png'
+
+// GUARDIANS
+export const GuardiansDesktopBackgroundLightModeUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/desktop-white-cover.png'
+export const GuardiansDesktopBackgroundDarkModeUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/desktop-dark-cover.png'
+
+export const GuardiansMobileLightWarriorUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mobile-light-warrior.png'
+export const GuardiansMobileLightKnightUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mobile-light-knight.png'
+export const GuardiansMobileLightKingUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mobile-light-king.png'
+export const GuardiansMobileLightLegendUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mobile-light-legend.png'
+
+export const GuardiansMobileDarkWarriorUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mobile-dark-warrior.png'
+export const GuardiansMobileDarkKnightUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mobile-dark-knight.png'
+export const GuardiansMobileDarkKingUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mobile-dark-king.png'
+export const GuardiansMobileDarkLegendUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mobile-dark-legend.png'

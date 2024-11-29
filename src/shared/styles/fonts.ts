@@ -1,5 +1,7 @@
 export const fonts = {
   brand: '"Figtree", sans-serif;',
+  mazius: '"Mazius", sans-serif;',
+  ptSerif: "'PT Serif', serif",
   header: "'Red Hat Display', sans-serif",
   solway: "'Solway', serif",
   mono: "'Courier Prime', monospace;",

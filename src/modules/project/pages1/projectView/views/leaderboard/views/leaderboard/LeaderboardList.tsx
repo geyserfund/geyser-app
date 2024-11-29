@@ -1,8 +1,10 @@
 import { StackProps, VStack } from '@chakra-ui/react'
+import { useAtom } from 'jotai'
 import { DateTime } from 'luxon'
 import { useEffect } from 'react'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { ContributorsListFamily } from '@/modules/project/state/contributionsAtom'
 import { ProjectLeaderboardPeriod, useProjectLeaderboardContributorsGetQuery } from '@/types'
 
 import { NoContribution } from '../../../body/sections/leaderboardSummary/components/NoContribution'
@@ -18,7 +20,9 @@ type LeaderboardListProps = {
 export const LeaderboardList = ({ period, dateTime, ...props }: LeaderboardListProps) => {
   const { project } = useProjectAtom()
 
-  const { data, loading } = useProjectLeaderboardContributorsGetQuery({
+  const [contributors, setContributors] = useAtom(ContributorsListFamily({ period }))
+
+  const { loading } = useProjectLeaderboardContributorsGetQuery({
     skip: !project.id,
     variables: {
       input: {
@@ -27,9 +31,10 @@ export const LeaderboardList = ({ period, dateTime, ...props }: LeaderboardListP
         top: MAXIMUM_LEADERBOARD_ITEMS,
       },
     },
+    onCompleted(data) {
+      setContributors(data?.projectLeaderboardContributorsGet || [])
+    },
   })
-
-  const funders = data?.projectLeaderboardContributorsGet
 
   const id = 'leaderboard-scroll-container'
   const firstElementId = 'first-element-id'
@@ -46,18 +51,18 @@ export const LeaderboardList = ({ period, dateTime, ...props }: LeaderboardListP
     return <LeaderboardListSkeleton />
   }
 
-  if (!funders || funders?.length === 0) {
+  if (!contributors || contributors?.length === 0) {
     return <NoContribution />
   }
 
   return (
     <VStack w="full" h="full" id={id} overflowY={{ base: undefined, lg: 'auto' }} {...props}>
-      {funders.map((funder, index) => {
+      {contributors.map((contributor, index) => {
         return (
           <LeaderboardItem
             id={index === 0 ? firstElementId : undefined}
-            key={funder.funderId}
-            funder={funder}
+            key={contributor.funderId}
+            funder={contributor}
             rank={index + 1}
             paddingX={{ base: 0, lg: 6 }}
           />

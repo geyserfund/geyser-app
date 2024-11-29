@@ -46,11 +46,11 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
 
         <HStack spacing={2}>
           <Body size="sm">
-            {commaFormatted(contribution.amountPaid)}{' '}
+            {commaFormatted(contribution.amount)}{' '}
             <Body as="span" size="sm" muted>
               sats{' '}
               {`(${convertSatsToUsdFormatted({
-                sats: contribution.amountPaid,
+                sats: contribution.amount,
                 bitcoinQuote: contribution.bitcoinQuote,
               })})`}
             </Body>

@@ -3,6 +3,7 @@ export enum PathName {
   landingFeed = 'feed',
   leaderboard = 'leaderboard',
   hallOfFame = 'halloffame',
+  guardians = 'guardians',
   projects = 'projects',
   heroes = 'heroes',
   ambassador = 'ambassador',
@@ -128,6 +129,8 @@ const pathsMap = {
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
   discoveryMerch: () => `/${PathName.merch}`,
+
+  guardians: () => `/${PathName.guardians}`,
 
   discoveryHallOfFame: () => `/${PathName.hallOfFame}`,
   hallOfFameProjects: () => `/${PathName.hallOfFame}/${PathName.projects}`,

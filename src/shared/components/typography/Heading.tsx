@@ -34,6 +34,7 @@ export const H6 = (props: HeaderProps) => {
 export const BaseHeading = ({ thin, medium, bold, light, muted, size = 'md', ...rest }: HeaderProps) => {
   return (
     <Heading
+      fontFamily="inherit"
       fontWeight={getFontWeight({ thin, medium, bold })}
       color={getFontColor({ light, muted })}
       fontSize={size}
