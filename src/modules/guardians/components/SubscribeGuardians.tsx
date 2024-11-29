@@ -6,15 +6,27 @@ import { t } from 'i18next'
 import { useState } from 'react'
 
 import { createSubscriber } from '@/api/flodesk'
+import { useAuthContext } from '@/context'
 import { FieldContainer } from '@/shared/components/form'
 import { Body } from '@/shared/components/typography'
+import { useFollowProject } from '@/shared/hooks/graphqlState'
 import { fonts } from '@/shared/styles'
 import { useNotification, validateEmail } from '@/utils'
 
 const GuardiansSubscribeSegmentId = '67490199bf44afbcefaff2a0'
 
+const GeyserGuardiansProject = {
+  id: 2621,
+  name: 'geyserguardians',
+  title: 'Geyser Guardians',
+}
+
 export const SubscribeGuardians = () => {
   const toast = useNotification()
+
+  const { isLoggedIn } = useAuthContext()
+
+  const { handleFollow } = useFollowProject(GeyserGuardiansProject)
 
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -34,6 +46,9 @@ export const SubscribeGuardians = () => {
       const records = { email, segment_ids: [GuardiansSubscribeSegmentId] }
 
       await createSubscriber(records)
+      if (isLoggedIn) {
+        await handleFollow()
+      }
 
       setSubmitting(false)
       setSuccess(true)
