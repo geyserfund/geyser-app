@@ -187,7 +187,7 @@ export const slideOutLeft = {
 export const fadeOut = {
   '@-webkit-keyframes fade-out': {
     from: {
-      opacity: 0.5,
+      opacity: 1,
     },
     to: {
       opacity: 0,
@@ -195,7 +195,7 @@ export const fadeOut = {
   },
   '@keyframes fade-out': {
     from: {
-      opacity: 0.5,
+      opacity: 1,
     },
     to: {
       opacity: 0,
@@ -213,7 +213,7 @@ export const fadeIn = {
       opacity: 0,
     },
     to: {
-      opacity: 0.5,
+      opacity: 1,
     },
   },
   '@keyframes fade-in': {
@@ -221,7 +221,7 @@ export const fadeIn = {
       opacity: 0,
     },
     to: {
-      opacity: 0.5,
+      opacity: 1,
     },
   },
   fadeIn: {
@@ -328,7 +328,7 @@ export const SlideInFrontLeft = {
     from: {
       webkitTransform: `translateX(0)`,
       transform: `translateX(0)`,
-      opacity: 0.5,
+      opacity: 0.2,
     },
     to: {
       webkitTransform: `translateX(-48%)`,
@@ -340,7 +340,7 @@ export const SlideInFrontLeft = {
     from: {
       webkitTransform: `translateX(0)`,
       transform: `translateX(0)`,
-      opacity: 0.5,
+      opacity: 0.2,
     },
     to: {
       webkitTransform: `translateX(-48%)`,
@@ -359,7 +359,7 @@ export const SlideInFrontRight = {
     from: {
       webkitTransform: `translateX(0)`,
       transform: `translateX(0)`,
-      opacity: 0.5,
+      opacity: 0.2,
     },
     to: {
       webkitTransform: `translateX(48%)`,
@@ -371,7 +371,7 @@ export const SlideInFrontRight = {
     from: {
       webkitTransform: `translateX(0)`,
       transform: `translateX(0)`,
-      opacity: 0.5,
+      opacity: 0.2,
     },
     to: {
       webkitTransform: `translateX(48%)`,
@@ -390,10 +390,12 @@ export const SlideOutBackLeft = {
     from: {
       webkitTransform: `translateX(0)`,
       transform: `translateX(0)`,
+      opacity: 1,
     },
     to: {
       webkitTransform: `translateX(-48%)`,
       transform: `translateX(-48%)`,
+      opacity: 0.2,
     },
   },
   '@keyframes slide-out-back-left': {
@@ -405,7 +407,7 @@ export const SlideOutBackLeft = {
     to: {
       webkitTransform: `translateX(-48%)`,
       transform: `translateX(-48%)`,
-      opacity: 0.5,
+      opacity: 0.2,
     },
   },
   slideOutBackLeft: {
@@ -419,10 +421,12 @@ export const SlideOutBackRight = {
     from: {
       webkitTransform: `translateX(0)`,
       transform: `translateX(0)`,
+      opacity: 1,
     },
     to: {
       webkitTransform: `translateX(48%)`,
       transform: `translateX(48%)`,
+      opacity: 0.2,
     },
   },
   '@keyframes slide-out-back-right': {
@@ -434,11 +438,57 @@ export const SlideOutBackRight = {
     to: {
       webkitTransform: `translateX(48%)`,
       transform: `translateX(48%)`,
-      opacity: 0.5,
+      opacity: 0.2,
     },
   },
   slideOutBackRight: {
     webkitAnimation: '$slide-out-back-right 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
     animation: '$slide-out-back-right 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+  },
+}
+
+export const fadeOut20Percent = {
+  '@-webkit-keyframes fade-out-20-percent': {
+    from: {
+      opacity: 0.2,
+    },
+    to: {
+      opacity: 0,
+    },
+  },
+  '@keyframes fade-out-20-percent': {
+    from: {
+      opacity: 0.2,
+    },
+    to: {
+      opacity: 0,
+    },
+  },
+  fadeOut20Percent: {
+    webkitAnimation: '$fade-out-20-percent 0.2s ease-out both',
+    animation: '$fade-out-20-percent 0.2s ease-out both',
+  },
+}
+
+export const fadeIn20Percent = {
+  '@-webkit-keyframes fade-in-20-percent': {
+    from: {
+      opacity: 0,
+    },
+    to: {
+      opacity: 0.2,
+    },
+  },
+  '@keyframes fade-in-20-percent': {
+    from: {
+      opacity: 0,
+    },
+    to: {
+      opacity: 0.2,
+    },
+  },
+  fadeIn20Percent: {
+    webkitAnimation: '$fade-in-20-percent 0.2s ease-out both',
+    animation: '$fade-in-20-percent 0.2s ease-out both',
   },
 }

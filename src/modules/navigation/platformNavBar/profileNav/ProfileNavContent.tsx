@@ -110,6 +110,7 @@ export const ProfileNavContent = () => {
                   as={Link}
                   to={getPath(discoveryNav.path)}
                   background={isGuardian ? GuardiansButtonBackgroundGradient : ''}
+                  _hover={isGuardian ? {} : undefined}
                 >
                   <HStack position="relative">
                     <discoveryNav.icon fontSize="18px" />

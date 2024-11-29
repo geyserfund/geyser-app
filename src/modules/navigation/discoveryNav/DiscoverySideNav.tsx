@@ -80,12 +80,20 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
 
   const isTabletSize = useBreakpointValue({ xl: false, lg: true })
 
-  let backgroundColor
+  let buttonStyle: ButtonProps = {}
 
   const isGuardians = item.key === DiscoveryNavItemKey.Guardians
 
   if (isGuardians) {
-    backgroundColor = GuardiansButtonBackgroundGradient
+    buttonStyle = {
+      background: GuardiansButtonBackgroundGradient,
+      _hover: {},
+    }
+
+    if (isTabletSize) {
+      buttonStyle.width = '48px'
+      buttonStyle.height = '48px'
+    }
   }
 
   if (isTabletSize) {
@@ -102,7 +110,7 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
           paddingX={4}
           to={getPath(item.path)}
           isActive={isActive}
-          background={backgroundColor}
+          {...buttonStyle}
           {...rest}
         >
           <>
@@ -149,7 +157,7 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
         as={Link}
         to={getPath(item.path)}
         isActive={isActive}
-        background={backgroundColor}
+        {...buttonStyle}
         {...rest}
       >
         {t(item.label)}

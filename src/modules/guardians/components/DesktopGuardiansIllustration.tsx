@@ -95,25 +95,25 @@ export const DesktopGuardiansIllustration = () => {
         <VStack {...commonVStackProps} flex={32}>
           <Box {...getCommonBoxProps(Guardian.Warrior)} />
           <Body {...commonBodyProps} color="guardians.warrior.text">
-            Warrior
+            {'? ? ?'}
           </Body>
         </VStack>
         <VStack {...commonVStackProps} flex={36}>
           <Box {...getCommonBoxProps(Guardian.Knight)} />
           <Body {...commonBodyProps} color="guardians.knight.text">
-            Knight
+            {'? ? ?'}
           </Body>
         </VStack>
         <VStack {...commonVStackProps} flex={31}>
           <Box {...getCommonBoxProps(Guardian.King)} />
           <Body {...commonBodyProps} color="guardians.king.text">
-            King
+            {'? ? ?'}
           </Body>
         </VStack>
         <VStack {...commonVStackProps} flex={33}>
           <Box {...getCommonBoxProps(Guardian.Legend)} />
           <Body {...commonBodyProps} color="guardians.legend.text">
-            Legend
+            {'? ? ?'}
           </Body>
         </VStack>
       </HStack>

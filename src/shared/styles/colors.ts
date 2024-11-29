@@ -213,29 +213,36 @@ export const overlayColors = {
   },
 }
 
-export const guardiansBasicColors = {
+export const guardianLightColors = {
   warrior: {
-    text: '#7BA3E5',
+    text: '#2F4663',
   },
   knight: {
-    text: '#7A7DE5',
+    text: '#4A4C8F',
   },
   king: {
-    text: '#D99E36',
+    text: '#D08D02',
   },
   legend: {
-    text: '#59CCCA',
+    text: '#00807E ',
   },
-}
-
-export const guardianLightColors = {
-  ...guardiansBasicColors,
   background: '#FFFFFF',
   successText: '#007D6C',
 }
 
 export const guardianDarkColors = {
-  ...guardiansBasicColors,
+  warrior: {
+    text: '#6FA4EB',
+  },
+  knight: {
+    text: '#797DEC',
+  },
+  king: {
+    text: '#E39A00',
+  },
+  legend: {
+    text: '#00807E',
+  },
   background: '#211f1b',
   successText: '#00E0C3',
 }

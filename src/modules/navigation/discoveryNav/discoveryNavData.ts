@@ -1,5 +1,5 @@
 import { IconType } from 'react-icons'
-import { PiCastleTurret, PiCompass, PiCrown, PiRocketLaunch, PiTrophy, PiTShirt, PiWaveform } from 'react-icons/pi'
+import { PiCastleTurret, PiCompass, PiCrown, PiRocketLaunch, PiTrophy, PiWaveform } from 'react-icons/pi'
 
 import { PathsMap } from '@/shared/constants'
 
@@ -55,13 +55,6 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Grants,
     path: 'discoveryGrants',
     icon: PiTrophy,
-    bottomNav: false,
-  },
-  {
-    label: 'Merch',
-    key: DiscoveryNavItemKey.Merch,
-    path: 'discoveryMerch',
-    icon: PiTShirt,
     bottomNav: false,
   },
   {

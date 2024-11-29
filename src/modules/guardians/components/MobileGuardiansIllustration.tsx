@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { PiCaretLeft } from 'react-icons/pi'
 import { PiCaretRight } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
+import { useSwipeable } from 'react-swipeable'
 
 import { Body } from '@/shared/components/typography'
 import {
@@ -18,7 +19,9 @@ import {
 } from '@/shared/constants/platform/url'
 import {
   fadeIn,
+  fadeIn20Percent,
   fadeOut,
+  fadeOut20Percent,
   SlideInFrontLeft,
   SlideInFrontRight,
   SlideOutBackLeft,
@@ -51,6 +54,8 @@ const useStyles = createUseStyles({
   ...SlideInFrontRight,
   ...fadeOut,
   ...fadeIn,
+  ...fadeOut20Percent,
+  ...fadeIn20Percent,
   higherZIndex: {
     zIndex: 1,
   },
@@ -60,6 +65,15 @@ export const MobileGuardiansIllustration = () => {
   const image = useColorModeValue(images.light, images.dark)
 
   const classes = useStyles()
+
+  const handlers = useSwipeable({
+    onSwipedRight() {
+      goToPreviousGuardian()
+    },
+    onSwipedLeft() {
+      goToNextGuardian()
+    },
+  })
 
   const [preChange, setPreChange] = useState<Guardian>(Guardian.Warrior)
   const [secondChange, setSecondChange] = useState<Guardian>(Guardian.Warrior)
@@ -117,19 +131,19 @@ export const MobileGuardiansIllustration = () => {
   const currentGuardianImage = image[currentGuardian]
 
   return (
-    <VStack w="full" flex={1} position="relative" overflow="hidden" justifyContent="flex-end">
+    <VStack w="full" flex={1} position="relative" overflow="hidden" justifyContent="flex-end" {...handlers}>
       <Box
         className={classNames({
           [classes.slideInFrontRight]: secondChange === previousGuardian,
           [classes.higherZIndex]: secondChange === previousGuardian,
-          [classes.fadeOut]: preChange !== currentGuardian && preChange !== previousGuardian,
-          [classes.fadeIn]: preChange === currentGuardian && lastGuardian !== previousGuardian,
+          [classes.fadeOut20Percent]: preChange !== currentGuardian && preChange !== previousGuardian,
+          [classes.fadeIn20Percent]: preChange === currentGuardian && lastGuardian !== previousGuardian,
         })}
         w="100%"
         height="90%"
         position="absolute"
         bottom={-1}
-        opacity={0.5}
+        opacity={0.3}
         right={'48%'}
       >
         <Image h="full" w="full" objectFit="cover" objectPosition="top" src={previousGuardianImage} />
@@ -138,14 +152,14 @@ export const MobileGuardiansIllustration = () => {
         className={classNames({
           [classes.slideInFrontLeft]: secondChange === nextGuardian,
           [classes.higherZIndex]: secondChange === nextGuardian,
-          [classes.fadeOut]: preChange !== currentGuardian && preChange !== nextGuardian,
-          [classes.fadeIn]: preChange === currentGuardian && lastGuardian !== nextGuardian,
+          [classes.fadeOut20Percent]: preChange !== currentGuardian && preChange !== nextGuardian,
+          [classes.fadeIn20Percent]: preChange === currentGuardian && lastGuardian !== nextGuardian,
         })}
         w="100%"
         height="90%"
         position="absolute"
         bottom={-1}
-        opacity={0.5}
+        opacity={0.3}
         left={'48%'}
       >
         <Image h="full" w="full" objectFit="cover" objectPosition="top" src={nextGuardianImage} />
@@ -162,27 +176,36 @@ export const MobileGuardiansIllustration = () => {
       >
         <Image h="full" w="full" objectFit="cover" objectPosition="top" src={currentGuardianImage} />
       </Box>
-      <HStack zIndex="1" paddingBottom="30%">
+      <HStack zIndex="1" paddingBottom="5vh">
         <IconButton
           variant="ghost"
           size="xl"
           icon={<PiCaretLeft fontSize="24px" />}
           color={`guardians.${currentGuardian}.text`}
-          onClick={goToPreviousGuardian}
+          onClick={goToNextGuardian}
           aria-label="Previous Guardian"
           _hover={{}}
           _focus={{}}
           _active={{}}
         />
-        <Body size="3xl" color={`guardians.${currentGuardian}.text`} textTransform="uppercase">
-          {currentGuardian}
+        <Body
+          className={classNames({
+            [classes.fadeOut]: preChange !== currentGuardian,
+            [classes.fadeIn]: preChange === currentGuardian,
+          })}
+          size="3xl"
+          bold
+          color={`guardians.${currentGuardian}.text`}
+          textTransform="uppercase"
+        >
+          {'? ? ?'}
         </Body>
         <IconButton
           variant="ghost"
           size="xl"
           icon={<PiCaretRight fontSize="24px" />}
           color={`guardians.${currentGuardian}.text`}
-          onClick={goToNextGuardian}
+          onClick={goToPreviousGuardian}
           aria-label="Next Guardian"
           _hover={{}}
           _focus={{}}

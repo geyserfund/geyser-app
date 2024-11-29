@@ -32,9 +32,11 @@ export const Guardians = () => {
       }}
       h={'100vh'}
       backgroundColor={'guardians.background'}
+      overflow="hidden"
+      position="relative"
     >
-      <VStack zIndex={2} w="full" pt={{ base: 20, lg: 8 }} spacing={{ base: 0, lg: 6 }}>
-        <H1 fontWeight={400} fontSize={{ base: '32px', lg: '56px', xl: '72px' }}>
+      <VStack zIndex={2} w="full" pt={{ base: 20, lg: 6, xl: 4 }} spacing={{ base: 0, lg: 6 }} position="relative">
+        <H1 fontSize={{ base: '32px', md: '48px', lg: '56px', xl: '72px' }} fontWeight={{ base: 'bold', lg: 'normal' }}>
           {t('GEYSER GUARDIANS')}
         </H1>
         <VStack
@@ -44,13 +46,20 @@ export const Guardians = () => {
           px={{ base: 3, lg: 6 }}
           spacing={{ base: 3, lg: 8 }}
         >
-          <Body fontSize={{ base: '16px', lg: '28px', xl: '32px' }} textAlign={'center'}>
+          <Body
+            fontSize={{ base: '16px', md: '20px', lg: '24px', xl: '28px', '3xl': '32px' }}
+            textAlign={'center'}
+            lineHeight={'1.4'}
+          >
             {t(
               'Geyser’s mission is to push Bitcoin adoption forward. Geyser Guardians are the defenders of this mission.  Their bravery will be rewarded with rare artifacts. Their names shall be remembered in future epochs. Do you have what it takes to become a Geyser Guardian?',
             )}
           </Body>
-          <Body fontSize={{ base: '16px', lg: '28px', xl: '32px' }} textAlign={'center'}>
-            {t(`More will be revealed in ${days} days, ${hours} hours, ${toInt(seconds)} seconds.`)}
+          <Body fontSize={{ base: '16px', md: '20px', lg: '24px', xl: '28px', '3xl': '32px' }} textAlign={'center'}>
+            {t('More will be revealed in ')}
+            <Body as="span" bold>
+              {t(`${days} days, ${hours} hours, ${toInt(seconds)} seconds.`)}
+            </Body>
           </Body>
 
           <SubscribeGuardians />

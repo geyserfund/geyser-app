@@ -73,7 +73,7 @@ export const SubscribeGuardians = () => {
 
   return (
     <Stack direction={{ base: 'column', lg: 'row' }} w={'full'} maxWidth="816px" spacing="16px">
-      <FieldContainer error={error}>
+      <FieldContainer error={error} flex={1}>
         <Input
           height={{ base: '40px', lg: '56px', xl: '64px' }}
           fontSize={{ base: '16px', lg: '20px', xl: '24px' }}
@@ -84,16 +84,17 @@ export const SubscribeGuardians = () => {
       </FieldContainer>
       <Button
         height={{ base: '40px', lg: '56px', xl: '64px' }}
-        paddingX={5}
+        paddingX={6}
         variant="solid"
-        backgroundColor="gray.12"
+        backgroundColor="neutral1.12"
         color="gray.1"
         onClick={handleConfirm}
         isLoading={submitting}
+        fontFamily={fonts.ptSerif}
+        fontSize={{ base: '16px', md: '20px', lg: '24px', xl: '32px' }}
+        _hover={{ backgroundColor: 'neutral1.11' }}
       >
-        <Body size={{ base: '16px', lg: '20px', xl: '24px' }} fontFamily={fonts.ptSerif}>
-          {t('Await reveal')}
-        </Body>
+        {t('Sign me up')}
       </Button>
     </Stack>
   )
