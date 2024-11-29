@@ -1,4 +1,4 @@
-import { Box, BoxProps, HStack, Image, StackProps, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, HStack, Image, StackProps, useColorMode, useColorModeValue, VStack } from '@chakra-ui/react'
 import { useEffect, useRef, useState } from 'react'
 
 import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
@@ -18,6 +18,10 @@ export const DesktopGuardiansIllustration = () => {
 
   const gradient = useColorModeValue(GuardiansGradients.light, GuardiansGradients.dark)
 
+  const { colorMode } = useColorMode()
+
+  const isLightMode = colorMode === 'light'
+
   const imageRef = useRef<HTMLImageElement>(null)
 
   const [uiPosition, setUiPosition] = useState(0)
@@ -28,7 +32,7 @@ export const DesktopGuardiansIllustration = () => {
     if (imageRef.current) {
       const imageRect = imageRef.current.getBoundingClientRect()
       const imageHeight = imageRect.height
-      // Assuming 'x' is at 50% of the image height. Adjust this value as needed.
+
       const xPosition = imageRect.top + imageHeight * 0.5
 
       setGradientHeight(imageHeight * 0.5)
@@ -74,7 +78,7 @@ export const DesktopGuardiansIllustration = () => {
     pointerEvents: 'none',
     sx: {
       '.guardian-wrapper:hover &': {
-        opacity: 1,
+        opacity: 0.5,
         transition: 'opacity 0.3s ease-in-out',
       },
     },
@@ -106,28 +110,28 @@ export const DesktopGuardiansIllustration = () => {
       <HStack w="full" position="absolute" top={uiPosition} left={0} spacing={0} fontFamily={fonts.mazius}>
         <VStack {...commonVStackProps} flex={32}>
           <Box {...getCommonBoxProps(Guardian.Warrior)} />
-          <FlowingGifBackground {...commonFlowingGifProps} />
+          {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
           <Body {...commonBodyProps} color="guardians.warrior.text">
             {'? ? ?'}
           </Body>
         </VStack>
         <VStack {...commonVStackProps} flex={36}>
           <Box {...getCommonBoxProps(Guardian.Knight)} />
-          <FlowingGifBackground {...commonFlowingGifProps} />
+          {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
           <Body {...commonBodyProps} color="guardians.knight.text">
             {'? ? ?'}
           </Body>
         </VStack>
         <VStack {...commonVStackProps} flex={31}>
           <Box {...getCommonBoxProps(Guardian.King)} />
-          <FlowingGifBackground {...commonFlowingGifProps} />
+          {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
           <Body {...commonBodyProps} color="guardians.king.text">
             {'? ? ?'}
           </Body>
         </VStack>
         <VStack {...commonVStackProps} flex={33}>
           <Box {...getCommonBoxProps(Guardian.Legend)} />
-          <FlowingGifBackground {...commonFlowingGifProps} />
+          {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
           <Body {...commonBodyProps} color="guardians.legend.text">
             {'? ? ?'}
           </Body>
