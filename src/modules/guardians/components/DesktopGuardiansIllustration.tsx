@@ -10,8 +10,8 @@ import {
 import { fonts } from '@/shared/styles'
 import { toPx } from '@/utils'
 
-import { Guardian, GuardiansGradients } from '../style'
-
+import { GuardiansGradients } from '../style'
+import { Guardian } from '../types'
 export const DesktopGuardiansIllustration = () => {
   const image = useColorModeValue(GuardiansDesktopBackgroundLightModeUrl, GuardiansDesktopBackgroundDarkModeUrl)
 

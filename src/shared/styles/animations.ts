@@ -187,7 +187,7 @@ export const slideOutLeft = {
 export const fadeOut = {
   '@-webkit-keyframes fade-out': {
     from: {
-      opacity: 1,
+      opacity: 0.5,
     },
     to: {
       opacity: 0,
@@ -195,15 +195,15 @@ export const fadeOut = {
   },
   '@keyframes fade-out': {
     from: {
-      opacity: 1,
+      opacity: 0.5,
     },
     to: {
       opacity: 0,
     },
   },
   fadeOut: {
-    webkitAnimation: '$fade-out 0.5s ease-out both',
-    animation: '$fade-out 0.5s ease-out both',
+    webkitAnimation: '$fade-out 0.2s ease-out both',
+    animation: '$fade-out 0.2s ease-out both',
   },
 }
 
@@ -213,7 +213,7 @@ export const fadeIn = {
       opacity: 0,
     },
     to: {
-      opacity: 1,
+      opacity: 0.5,
     },
   },
   '@keyframes fade-in': {
@@ -221,12 +221,12 @@ export const fadeIn = {
       opacity: 0,
     },
     to: {
-      opacity: 1,
+      opacity: 0.5,
     },
   },
   fadeIn: {
-    webkitAnimation: '$fade-in 0.5s ease-out both',
-    animation: '$fade-in 0.5s ease-out both',
+    webkitAnimation: '$fade-in 0.2s ease-out both',
+    animation: '$fade-in 0.2s ease-out both',
   },
 }
 
@@ -320,5 +320,125 @@ export const flipOutRight = {
   flipOutVerticalRight: {
     webkitAnimation: '$flip-out-ver-right 0.3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
     animation: '$flip-out-ver-right 0.3s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
+  },
+}
+
+export const SlideInFrontLeft = {
+  '@-webkit-keyframes slide-in-front-left': {
+    from: {
+      webkitTransform: `translateX(0)`,
+      transform: `translateX(0)`,
+      opacity: 0.5,
+    },
+    to: {
+      webkitTransform: `translateX(-48%)`,
+      transform: `translateX(-48%)`,
+      opacity: 1,
+    },
+  },
+  '@keyframes slide-in-front-left': {
+    from: {
+      webkitTransform: `translateX(0)`,
+      transform: `translateX(0)`,
+      opacity: 0.5,
+    },
+    to: {
+      webkitTransform: `translateX(-48%)`,
+      transform: `translateX(-48%)`,
+      opacity: 1,
+    },
+  },
+  slideInFrontLeft: {
+    webkitAnimation: '$slide-in-front-left 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+    animation: '$slide-in-front-left 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+  },
+}
+
+export const SlideInFrontRight = {
+  '@-webkit-keyframes slide-in-front-right': {
+    from: {
+      webkitTransform: `translateX(0)`,
+      transform: `translateX(0)`,
+      opacity: 0.5,
+    },
+    to: {
+      webkitTransform: `translateX(48%)`,
+      transform: `translateX(48%)`,
+      opacity: 1,
+    },
+  },
+  '@keyframes slide-in-front-right': {
+    from: {
+      webkitTransform: `translateX(0)`,
+      transform: `translateX(0)`,
+      opacity: 0.5,
+    },
+    to: {
+      webkitTransform: `translateX(48%)`,
+      transform: `translateX(48%)`,
+      opacity: 1,
+    },
+  },
+  slideInFrontRight: {
+    webkitAnimation: '$slide-in-front-right 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+    animation: '$slide-in-front-right 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+  },
+}
+
+export const SlideOutBackLeft = {
+  '@-webkit-keyframes slide-out-back-left': {
+    from: {
+      webkitTransform: `translateX(0)`,
+      transform: `translateX(0)`,
+    },
+    to: {
+      webkitTransform: `translateX(-48%)`,
+      transform: `translateX(-48%)`,
+    },
+  },
+  '@keyframes slide-out-back-left': {
+    from: {
+      webkitTransform: `translateX(0)`,
+      transform: `translateX(0)`,
+      opacity: 1,
+    },
+    to: {
+      webkitTransform: `translateX(-48%)`,
+      transform: `translateX(-48%)`,
+      opacity: 0.5,
+    },
+  },
+  slideOutBackLeft: {
+    webkitAnimation: '$slide-out-back-left 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+    animation: '$slide-out-back-left 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+  },
+}
+
+export const SlideOutBackRight = {
+  '@-webkit-keyframes slide-out-back-right': {
+    from: {
+      webkitTransform: `translateX(0)`,
+      transform: `translateX(0)`,
+    },
+    to: {
+      webkitTransform: `translateX(48%)`,
+      transform: `translateX(48%)`,
+    },
+  },
+  '@keyframes slide-out-back-right': {
+    from: {
+      webkitTransform: `translateX(0)`,
+      transform: `translateX(0)`,
+      opacity: 1,
+    },
+    to: {
+      webkitTransform: `translateX(48%)`,
+      transform: `translateX(48%)`,
+      opacity: 0.5,
+    },
+  },
+  slideOutBackRight: {
+    webkitAnimation: '$slide-out-back-right 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+    animation: '$slide-out-back-right 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
   },
 }

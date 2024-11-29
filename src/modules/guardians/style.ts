@@ -1,39 +1,4 @@
-export enum Guardian {
-  Warrior = 'warrior',
-  Knight = 'knight',
-  King = 'king',
-  Legend = 'legend',
-}
-
-export const GuardianGradientStartPoints = {
-  light: {
-    [Guardian.Warrior]: '136, 128, 135, ',
-    [Guardian.Knight]: '175, 142, 191, ',
-    [Guardian.King]: '246, 204, 69, ',
-    [Guardian.Legend]: '83, 183, 163, ',
-  },
-  dark: {
-    [Guardian.Warrior]: '52, 69, 97, ',
-    [Guardian.Knight]: '74, 76, 139, ',
-    [Guardian.King]: '198, 144, 49, ',
-    [Guardian.Legend]: '55, 126, 125, ',
-  },
-}
-
-export const GuardianGradientEndPoints = {
-  light: {
-    [Guardian.Warrior]: '52, 69, 97, 0',
-    [Guardian.Knight]: '74, 76, 139, 0',
-    [Guardian.King]: '198, 144, 49, 0',
-    [Guardian.Legend]: '55, 126, 125, 0',
-  },
-  dark: {
-    [Guardian.Warrior]: '123, 163, 229, 0',
-    [Guardian.Knight]: '175, 142, 191, 0',
-    [Guardian.King]: '246, 204, 69, 0',
-    [Guardian.Legend]: '83, 183, 163, 0',
-  },
-}
+import { Guardian } from './types'
 
 export const GuardiansGradients = {
   light: {
