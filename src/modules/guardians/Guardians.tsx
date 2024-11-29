@@ -55,12 +55,25 @@ export const Guardians = () => {
               'Geyser’s mission is to push Bitcoin adoption forward. Geyser Guardians are the defenders of this mission.  Their bravery will be rewarded with rare artifacts. Their names shall be remembered in future epochs. Do you have what it takes to become a Geyser Guardian?',
             )}
           </Body>
-          <Body fontSize={{ base: '16px', md: '20px', lg: '24px', xl: '28px', '3xl': '32px' }} textAlign={'center'}>
-            {t('More will be revealed in ')}
-            <Body as="span" bold>
-              {t(`${days} days, ${hours} hours, ${toInt(seconds)} seconds.`)}
+          <VStack spacing={0} lineHeight={'1.4'}>
+            <Body
+              fontSize={{ base: '16px', md: '20px', lg: '24px', xl: '28px', '3xl': '32px' }}
+              textAlign={'center'}
+              lineHeight={'1.4'}
+            >
+              {t('Enter your email to be notified – the first 121 Guardians will get a special deal.')}
             </Body>
-          </Body>
+            <Body
+              fontSize={{ base: '16px', md: '20px', lg: '24px', xl: '28px', '3xl': '32px' }}
+              textAlign={'center'}
+              lineHeight={'1.4'}
+            >
+              {t('More will be revealed in ')}
+              <Body as="span" bold>
+                {t(`${days} days, ${hours} hours, ${toInt(seconds)} seconds.`)}
+              </Body>
+            </Body>
+          </VStack>
 
           <SubscribeGuardians />
         </VStack>
