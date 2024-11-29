@@ -31,6 +31,7 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
             as={Link}
             to={getPath('guardians')}
             size={{ base: 'md', lg: 'lg' }}
+            height={{ base: '30px', lg: '38px' }}
             variant="ghost"
             leftIcon={<PiCastleTurret fontSize={'24px'} />}
             background={GuardiansButtonBackgroundGradient}
@@ -45,6 +46,7 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
         variant="outline"
         border="1px solid"
         borderColor="neutral1.6"
+        backgroundColor="utils.pbg"
         _hover={{
           backgroundColor: 'neutral1.3',
           cursor: 'pointer',
