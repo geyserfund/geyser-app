@@ -3,7 +3,7 @@ import { Button, VStack } from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { Stack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { createSubscriber } from '@/api/flodesk'
 import { useAuthContext } from '@/context'
@@ -24,7 +24,7 @@ const GeyserGuardiansProject = {
 export const SubscribeGuardians = () => {
   const toast = useNotification()
 
-  const { isLoggedIn } = useAuthContext()
+  const { isLoggedIn, user } = useAuthContext()
 
   const { handleFollow } = useFollowProject(GeyserGuardiansProject)
 
@@ -32,6 +32,12 @@ export const SubscribeGuardians = () => {
   const [submitting, setSubmitting] = useState(false)
   const [success, setSuccess] = useState(false)
   const [email, setEmail] = useState('')
+
+  useEffect(() => {
+    if (user && user.email) {
+      setEmail(user.email)
+    }
+  }, [user])
 
   const handleConfirm = async () => {
     const res = validateEmail(email)
@@ -95,6 +101,7 @@ export const SubscribeGuardians = () => {
           placeholder="guardian@geyser.fund"
           value={email}
           onChange={handleChange}
+          isDisabled={Boolean(user?.email)}
         />
       </FieldContainer>
       <Button
