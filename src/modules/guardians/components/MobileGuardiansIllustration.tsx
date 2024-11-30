@@ -176,7 +176,7 @@ export const MobileGuardiansIllustration = () => {
       >
         <Image h="full" w="full" objectFit="cover" objectPosition="top" src={currentGuardianImage} />
       </Box>
-      <HStack zIndex="1" paddingBottom="5vh">
+      <HStack zIndex="1" paddingBottom="50px">
         <IconButton
           variant="ghost"
           size="xl"
