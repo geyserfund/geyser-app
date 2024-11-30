@@ -43,10 +43,12 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
         ref={ref}
         height={{ base: '40px', lg: '48px' }}
         width={{ base: '40px', lg: '48px' }}
+        minWidth={{ base: '40px', lg: '48px' }}
         variant="outline"
         border="1px solid"
         borderColor="neutral1.6"
         backgroundColor="utils.pbg"
+        zIndex={1}
         _hover={{
           backgroundColor: 'neutral1.3',
           cursor: 'pointer',
