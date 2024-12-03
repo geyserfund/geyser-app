@@ -1,4 +1,5 @@
 import { Box, BoxProps, HStack, Image, StackProps, useColorMode, useColorModeValue, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
 
 import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
@@ -112,28 +113,28 @@ export const DesktopGuardiansIllustration = () => {
           <Box {...getCommonBoxProps(Guardian.Warrior)} />
           {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
           <Body {...commonBodyProps} color="guardians.warrior.text">
-            {'? ? ?'}
+            {t('Warrior')}
           </Body>
         </VStack>
         <VStack {...commonVStackProps} flex={36}>
           <Box {...getCommonBoxProps(Guardian.Knight)} />
           {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
           <Body {...commonBodyProps} color="guardians.knight.text">
-            {'? ? ?'}
+            {t('Knight')}
           </Body>
         </VStack>
         <VStack {...commonVStackProps} flex={31}>
           <Box {...getCommonBoxProps(Guardian.King)} />
           {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
           <Body {...commonBodyProps} color="guardians.king.text">
-            {'? ? ?'}
+            {t('King')}
           </Body>
         </VStack>
         <VStack {...commonVStackProps} flex={33}>
           <Box {...getCommonBoxProps(Guardian.Legend)} />
           {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
           <Body {...commonBodyProps} color="guardians.legend.text">
-            {'? ? ?'}
+            {t('Legend')}
           </Body>
         </VStack>
       </HStack>
