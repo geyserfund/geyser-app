@@ -721,6 +721,14 @@ export const platformRoutes: RouteObject[] = [
   },
 
   {
+    path: getPath('manifesto'),
+    async lazy() {
+      const Manifesto = await Guardians().then((m) => m.Manifesto)
+      return { Component: Manifesto }
+    },
+  },
+
+  {
     path: '/auth/twitter',
     Component: ExternalAuthSuccess,
   },

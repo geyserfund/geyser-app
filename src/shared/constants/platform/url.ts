@@ -420,3 +420,16 @@ export const MysteryItemTshirtUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians/mystery-item-tshirt.png'
 export const MysteryItemJerseyUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians/myster-item-jersey.png'
+
+export const MysteryItemBlocksLightUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mystery-item-blocks-light.png'
+export const MysteryItemBookLightUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mystery-item-book-light.png'
+export const MysteryItemCardsLightUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mystery-item-cards-light.png'
+export const MysteryItemMinerLightUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mystery-item-miner-light.png'
+export const MysteryItemTshirtLightUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mystery-item-tshirt-light.png'
+export const MysteryItemJerseyLightUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/myster-item-jersey-light.png'

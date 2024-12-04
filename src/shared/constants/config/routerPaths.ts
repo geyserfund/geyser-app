@@ -17,6 +17,8 @@ export enum PathName {
   activityGlobal = 'global',
   activityFollowed = 'followed',
 
+  manifesto = 'manifesto',
+
   merch = 'project/geyser/rewards',
 
   entry = 'entry',
@@ -132,6 +134,8 @@ const pathsMap = {
 
   guardians: () => `/${PathName.guardians}`,
   guardiansCharacter: (characterId: string) => `/${PathName.guardians}/${characterId}`,
+
+  manifesto: () => `/${PathName.manifesto}`,
 
   discoveryHallOfFame: () => `/${PathName.hallOfFame}`,
   hallOfFameProjects: () => `/${PathName.hallOfFame}/${PathName.projects}`,

@@ -106,7 +106,7 @@ export const DesktopGuardiansIllustration = () => {
         ref={imageRef}
         zIndex={1}
         position="absolute"
-        bottom={-28}
+        bottom={-20}
         left={0}
         src={image}
         alt="Guardians"

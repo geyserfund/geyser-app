@@ -130,6 +130,8 @@ export const CharacterPage = () => {
   const guardianCopy = CharacterPageCopies[currentGuardian]
   const guardianColor = `guardians.${currentGuardian}.text`
 
+  const physicalItems = useColorModeValue(guardianCopy.physicalItems, guardianCopy.lightPhysicalItems)
+
   const renderImages = () => {
     return (
       <VStack
@@ -214,13 +216,13 @@ export const CharacterPage = () => {
           <IconButton
             {...iconButtonProps}
             aria-label="previous-guardian"
-            icon={<PiCaretLeft />}
+            icon={<PiCaretLeft fontSize="24px" />}
             onClick={goToPreviousGuardian}
           />
           <IconButton
             {...iconButtonProps}
             aria-label="next-guardian"
-            icon={<PiCaretRight />}
+            icon={<PiCaretRight fontSize="24px" />}
             onClick={goToNextGuardian}
           />
         </HStack>
@@ -247,11 +249,16 @@ export const CharacterPage = () => {
             </VStack>
 
             <Divider borderColor={'neutral1.3'} borderTopWidth="2px" />
-            <Stack w="full" direction={{ base: 'column', lg: 'row' }} spacing={{ base: 0, lg: 2 }}>
+            <Stack
+              w="full"
+              direction={{ base: 'column', lg: 'row' }}
+              spacing={{ base: 0, lg: 2 }}
+              alignItems={{ base: 'flex-start', lg: 'center' }}
+            >
               {guardianCopy.abilities.map((ability, index) => {
                 return (
                   <>
-                    <Body color={guardianColor} textTransform={{ base: 'uppercase', lg: 'unset' }}>
+                    <Body color={guardianColor} textTransform={'uppercase'}>
                       {ability}
                     </Body>
                     {index !== guardianCopy.abilities.length - 1 && !isMobileMode && (
@@ -272,14 +279,22 @@ export const CharacterPage = () => {
               })}
             </UnorderedList>
           </VStack>
-          {guardianCopy.physicalItems && (
+          {physicalItems && (
             <VStack w="full" alignItems="flex-start">
               <H2 size={{ base: '32px', lg: '24px' }} dark bold>
                 {t('Physical Items')}
               </H2>
-              <HStack height={{ base: '50px', lg: '115px' }} overflow="hidden">
-                {guardianCopy.physicalItems.map((item) => {
-                  return <Image src={item} key={item} height="full" width="auto" />
+              <HStack flexWrap="wrap">
+                {physicalItems.map((item) => {
+                  return (
+                    <Image
+                      src={item}
+                      key={item}
+                      maxHeight={{ base: '50px', lg: '100px' }}
+                      width="auto"
+                      objectFit="cover"
+                    />
+                  )
                 })}
               </HStack>
             </VStack>
@@ -316,7 +331,7 @@ const tiltProps: ReactParallaxTiltProps = {
 const iconButtonProps: IconButtonProps = {
   height: { base: '32px', lg: '56px', xl: '64px' },
   width: { base: '32px', lg: '56px', xl: '64px' },
-  variant: 'outline',
+  variant: 'surface',
   colorScheme: 'neutral1',
   borderRadius: 'full',
   'aria-label': 'guardian-switch',

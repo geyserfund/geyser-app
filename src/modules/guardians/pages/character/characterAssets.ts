@@ -9,11 +9,17 @@ import {
   KnightLargeLightUrl,
   LegendLargeDarkUrl,
   LegendLargeLightUrl,
+  MysteryItemBlocksLightUrl,
   MysteryItemBlocksUrl,
+  MysteryItemBookLightUrl,
   MysteryItemBookUrl,
+  MysteryItemCardsLightUrl,
   MysteryItemCardsUrl,
+  MysteryItemJerseyLightUrl,
   MysteryItemJerseyUrl,
+  MysteryItemMinerLightUrl,
   MysteryItemMinerUrl,
+  MysteryItemTshirtLightUrl,
   MysteryItemTshirtUrl,
   WarriorLargeDarkUrl,
   WarriorLargeLightUrl,
@@ -59,6 +65,7 @@ export const CharacterPageCopies: {
     digitalItems: string[]
     available?: number
     physicalItems?: string[]
+    lightPhysicalItems?: string[]
     discounts?: string
   }
 } = {
@@ -73,16 +80,17 @@ export const CharacterPageCopies: {
     title: 'KNIGHT',
     description:
       'As he ventures into the no-coiner lands, the Knight’s armour and broadsword protects him from any Fear, Uncertainty and Doubt thrown at him.',
-    abilities: ['FUD SLAYER', 'A bit of a psychopath'],
+    abilities: ['FUD SLAYER', 'FED DESTROYER'],
     digitalItems: ['Knight badge', 'Nostr card'],
     available: 2100,
     physicalItems: [MysteryItemCardsUrl, MysteryItemTshirtUrl, MysteryItemBlocksUrl],
+    lightPhysicalItems: [MysteryItemCardsLightUrl, MysteryItemTshirtLightUrl, MysteryItemBlocksLightUrl],
   },
   [Guardian.King]: {
     title: 'KING',
     description:
       'It’s a long road to hyper-bitcoinisation, and the King knows it. His experience is his strength in planning for the best strategies to push Bitcoin adoption forward.',
-    abilities: ['Strategic Bitcoin Conquerer', 'Low-Time Preference Leader'],
+    abilities: ['Strategic Bitcoin Conquerer', 'Circular Economies Enabler'],
     digitalItems: ['King badge', 'Nostr card'],
     available: 210,
     physicalItems: [
@@ -92,13 +100,20 @@ export const CharacterPageCopies: {
       MysteryItemBookUrl,
       MysteryItemJerseyUrl,
     ],
+    lightPhysicalItems: [
+      MysteryItemCardsLightUrl,
+      MysteryItemTshirtLightUrl,
+      MysteryItemBlocksLightUrl,
+      MysteryItemBookLightUrl,
+      MysteryItemJerseyLightUrl,
+    ],
     discounts: 'Discounts on tools and conferences, to be announced.',
   },
   [Guardian.Legend]: {
     title: 'LEGEND',
     description:
       'Little is known about the Legends. Their OpSec has kept them clear of curious three-letter agencies. Yet, tales of the Legends are as old as Bitcoin itself, and their influence on adoption continuous to be felt.',
-    abilities: ['Untraceable OpSec', 'Bitcoin Maximalist'],
+    abilities: ['Untraceable OpSec', 'Laser-Eyed Vision'],
     digitalItems: ['Legend badge', 'Nostr card'],
     available: 21,
     physicalItems: [
@@ -108,6 +123,14 @@ export const CharacterPageCopies: {
       MysteryItemBookUrl,
       MysteryItemJerseyUrl,
       MysteryItemMinerUrl,
+    ],
+    lightPhysicalItems: [
+      MysteryItemCardsLightUrl,
+      MysteryItemTshirtLightUrl,
+      MysteryItemBlocksLightUrl,
+      MysteryItemBookLightUrl,
+      MysteryItemJerseyLightUrl,
+      MysteryItemMinerLightUrl,
     ],
     discounts: 'Discounts on tools and conferences, to be announced.',
   },
