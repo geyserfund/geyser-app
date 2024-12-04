@@ -215,35 +215,36 @@ export const overlayColors = {
 
 export const guardianLightColors = {
   warrior: {
-    text: '#2F4663',
+    text: '#344561',
+    title: '#',
   },
   knight: {
     text: '#4A4C8F',
   },
   king: {
-    text: '#D08D02',
+    text: '#C69031',
   },
   legend: {
-    text: '#00807E ',
+    text: '#377E7D ',
   },
-  background: '#FFFFFF',
+  background: '#FDFDFC',
   successText: '#007D6C',
 }
 
 export const guardianDarkColors = {
   warrior: {
-    text: '#6FA4EB',
+    text: '#7BA3E5',
   },
   knight: {
-    text: '#797DEC',
+    text: '#7A7DE5',
   },
   king: {
-    text: '#E39A00',
+    text: '#D99E36',
   },
   legend: {
-    text: '#00807E',
+    text: '#59CCCA',
   },
-  background: '#211f1b',
+  background: '#21201C',
   successText: '#00E0C3',
 }
 

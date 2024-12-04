@@ -702,6 +702,22 @@ export const platformRoutes: RouteObject[] = [
       const GuardiansPage = await Guardians().then((m) => m.Guardians)
       return { Component: GuardiansPage }
     },
+    children: [
+      {
+        index: true,
+        async lazy() {
+          const GuardiansMainPage = await Guardians().then((m) => m.GuardiansMainPage)
+          return { Component: GuardiansMainPage }
+        },
+      },
+      {
+        path: getPath('guardiansCharacter', PathName.characterId),
+        async lazy() {
+          const CharacterPage = await Guardians().then((m) => m.CharacterPage)
+          return { Component: CharacterPage }
+        },
+      },
+    ],
   },
 
   {

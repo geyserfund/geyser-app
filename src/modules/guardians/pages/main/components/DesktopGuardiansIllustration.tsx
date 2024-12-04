@@ -1,10 +1,12 @@
 import { Box, BoxProps, HStack, Image, StackProps, useColorMode, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router'
 
 import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
 import { Body } from '@/shared/components/typography'
 import { BodyProps } from '@/shared/components/typography/Body'
+import { dimensions, getPath } from '@/shared/constants'
 import {
   GuardiansDesktopBackgroundDarkModeUrl,
   GuardiansDesktopBackgroundLightModeUrl,
@@ -12,9 +14,11 @@ import {
 import { fonts } from '@/shared/styles'
 import { toPx } from '@/utils'
 
-import { GuardiansGradients } from '../style'
-import { Guardian } from '../types'
+import { GuardiansGradients } from '../../../style'
+import { Guardian } from '../../../types'
 export const DesktopGuardiansIllustration = () => {
+  const navigate = useNavigate()
+
   const image = useColorModeValue(GuardiansDesktopBackgroundLightModeUrl, GuardiansDesktopBackgroundDarkModeUrl)
 
   const gradient = useColorModeValue(GuardiansGradients.light, GuardiansGradients.dark)
@@ -102,35 +106,57 @@ export const DesktopGuardiansIllustration = () => {
         ref={imageRef}
         zIndex={1}
         position="absolute"
-        bottom={-20}
+        bottom={-28}
         left={0}
         src={image}
         alt="Guardians"
         pointerEvents="none"
       />
-      <HStack w="full" position="absolute" top={uiPosition} left={0} spacing={0} fontFamily={fonts.mazius}>
-        <VStack {...commonVStackProps} flex={32}>
+      <HStack
+        w="full"
+        position="absolute"
+        top={{
+          base: toPx(uiPosition - dimensions.topNavBar.mobile.height),
+          lg: toPx(uiPosition - dimensions.topNavBar.desktop.height),
+        }}
+        left={0}
+        spacing={0}
+        fontFamily={fonts.mazius}
+      >
+        <VStack
+          {...commonVStackProps}
+          flex={32}
+          onClick={() => navigate(getPath('guardiansCharacter', Guardian.Warrior))}
+        >
           <Box {...getCommonBoxProps(Guardian.Warrior)} />
           {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
           <Body {...commonBodyProps} color="guardians.warrior.text">
             {t('Warrior')}
           </Body>
         </VStack>
-        <VStack {...commonVStackProps} flex={36}>
+        <VStack
+          {...commonVStackProps}
+          flex={36}
+          onClick={() => navigate(getPath('guardiansCharacter', Guardian.Knight))}
+        >
           <Box {...getCommonBoxProps(Guardian.Knight)} />
           {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
           <Body {...commonBodyProps} color="guardians.knight.text">
             {t('Knight')}
           </Body>
         </VStack>
-        <VStack {...commonVStackProps} flex={31}>
+        <VStack {...commonVStackProps} flex={31} onClick={() => navigate(getPath('guardiansCharacter', Guardian.King))}>
           <Box {...getCommonBoxProps(Guardian.King)} />
           {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
           <Body {...commonBodyProps} color="guardians.king.text">
             {t('King')}
           </Body>
         </VStack>
-        <VStack {...commonVStackProps} flex={33}>
+        <VStack
+          {...commonVStackProps}
+          flex={33}
+          onClick={() => navigate(getPath('guardiansCharacter', Guardian.Legend))}
+        >
           <Box {...getCommonBoxProps(Guardian.Legend)} />
           {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
           <Body {...commonBodyProps} color="guardians.legend.text">

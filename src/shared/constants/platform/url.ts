@@ -395,3 +395,28 @@ export const GuardiansMobileDarkKingUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians/mobile-dark-king.png'
 export const GuardiansMobileDarkLegendUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians/mobile-dark-legend.png'
+
+export const KingLargeDarkUrl = 'https://storage.googleapis.com/geyser-projects-media/guardians/king-large-dark.png'
+export const KingLargeLightUrl = 'https://storage.googleapis.com/geyser-projects-media/guardians/king-large-light.png'
+export const KnightLargeDarkUrl = 'https://storage.googleapis.com/geyser-projects-media/guardians/knight-large-dark.png'
+export const KnightLargeLightUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/knight-large-light.png'
+export const WarriorLargeDarkUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/warrior-large-dark.png'
+export const WarriorLargeLightUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/warrior-large-light.png'
+export const LegendLargeDarkUrl = 'https://storage.googleapis.com/geyser-projects-media/guardians/legend-large-dark.png'
+export const LegendLargeLightUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/legend-large-light.png'
+
+export const MysteryItemBlocksUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mystery-item-blocks.png'
+export const MysteryItemBookUrl = 'https://storage.googleapis.com/geyser-projects-media/guardians/mystery-item-book.png'
+export const MysteryItemCardsUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mystery-item-cards.png'
+export const MysteryItemMinerUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mystery-item-miner.png'
+export const MysteryItemTshirtUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/mystery-item-tshirt.png'
+export const MysteryItemJerseyUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians/myster-item-jersey.png'

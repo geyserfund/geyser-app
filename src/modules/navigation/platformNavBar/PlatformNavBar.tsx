@@ -127,7 +127,7 @@ export const PlatformNavBar = () => {
       {...(isPlatformRoutes && discoveryPageCommonLayoutStyles)}
       justifyContent={'center'}
       zIndex={9}
-      bgColor={isGuardiansPage ? (isMobileMode ? 'guardians.background' : 'transparent') : 'utils.pbg'}
+      bgColor={isGuardiansPage ? 'guardians.background' : 'utils.pbg'}
     >
       <VStack
         paddingY={{ base: 5, lg: 8 }}
@@ -138,7 +138,7 @@ export const PlatformNavBar = () => {
             : { base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 48 }
         }
         width="100%"
-        backgroundColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
+        backgroundColor={isGuardiansPage ? 'guardians.background' : 'utils.pbg'}
         justifySelf={'center'}
         spacing={4}
       >

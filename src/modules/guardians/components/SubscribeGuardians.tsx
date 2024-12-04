@@ -93,11 +93,11 @@ export const SubscribeGuardians = () => {
   }
 
   return (
-    <Stack direction={{ base: 'column', lg: 'row' }} w={'full'} maxWidth="816px" spacing="16px">
+    <Stack direction={{ base: 'column', lg: 'row' }} w={'full'} maxWidth="816px" spacing={{ base: '8px', lg: '16px' }}>
       <FieldContainer error={error} flex={1}>
         <Input
-          height={{ base: '40px', lg: '56px', xl: '64px' }}
-          fontSize={{ base: '16px', lg: '20px', xl: '24px' }}
+          height={{ base: '32px', md: '40px', lg: '52px', xl: '60px' }}
+          fontSize={{ base: '14px', md: '16px', lg: '20px', xl: '24px' }}
           placeholder="guardian@geyser.fund"
           value={email}
           onChange={handleChange}
@@ -105,7 +105,7 @@ export const SubscribeGuardians = () => {
         />
       </FieldContainer>
       <Button
-        height={{ base: '40px', lg: '56px', xl: '64px' }}
+        height={{ base: '32px', md: '40px', lg: '52px', xl: '60px' }}
         paddingX={6}
         variant="solid"
         backgroundColor="neutral1.12"
@@ -113,7 +113,7 @@ export const SubscribeGuardians = () => {
         onClick={handleConfirm}
         isLoading={submitting}
         fontFamily={fonts.ptSerif}
-        fontSize={{ base: '16px', md: '20px', lg: '24px', xl: '32px' }}
+        fontSize={{ base: '14px', md: '16px', lg: '20px', xl: '24px' }}
         _hover={{ backgroundColor: 'neutral1.11' }}
       >
         {t('Sign me up')}
