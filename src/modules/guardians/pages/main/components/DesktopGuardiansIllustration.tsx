@@ -106,12 +106,15 @@ export const DesktopGuardiansIllustration = () => {
         ref={imageRef}
         zIndex={1}
         position="absolute"
-        bottom={-20}
+        bottom={-10}
         left={0}
         src={image}
         alt="Guardians"
         pointerEvents="none"
       />
+      <Body fontSize={'xl'} textAlign={'center'} position="absolute" bottom={3} w="full">
+        {t('< Choose your character >')}
+      </Body>
       <HStack
         w="full"
         position="absolute"
