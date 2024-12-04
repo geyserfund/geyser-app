@@ -1,12 +1,14 @@
 import { Box, HStack, IconButton, Image, useColorModeValue, VStack } from '@chakra-ui/react'
 import classNames from 'classnames'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { PiCaretLeft } from 'react-icons/pi'
 import { PiCaretRight } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
+import { useNavigate } from 'react-router'
 import { useSwipeable } from 'react-swipeable'
 
 import { Body } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 import {
   GuardiansMobileDarkKingUrl,
   GuardiansMobileDarkKnightUrl,
@@ -27,8 +29,9 @@ import {
   SlideOutBackLeft,
   SlideOutBackRight,
 } from '@/shared/styles/animations'
+import { toPx } from '@/utils'
 
-import { Guardian } from '../types'
+import { Guardian } from '../../../types'
 
 const images = {
   light: {
@@ -45,7 +48,7 @@ const images = {
   },
 }
 
-const guardianIndex = [Guardian.Warrior, Guardian.Knight, Guardian.King, Guardian.Legend]
+export const guardianIndex = [Guardian.Warrior, Guardian.Knight, Guardian.King, Guardian.Legend]
 
 const useStyles = createUseStyles({
   ...SlideInFrontLeft,
@@ -63,6 +66,8 @@ const useStyles = createUseStyles({
 
 export const MobileGuardiansIllustration = () => {
   const image = useColorModeValue(images.light, images.dark)
+
+  const navigate = useNavigate()
 
   const classes = useStyles()
 
@@ -130,8 +135,39 @@ export const MobileGuardiansIllustration = () => {
   const previousGuardianImage = image[previousGuardian]
   const currentGuardianImage = image[currentGuardian]
 
+  const [guardianNameHeight, setGuardianNameHeight] = useState(0)
+
+  const imageRef = useRef<HTMLImageElement>(null)
+  const updateUIPosition = () => {
+    if (imageRef.current) {
+      const imageRect = imageRef.current.getBoundingClientRect()
+
+      const xPosition = (imageRect.bottom - imageRect.height) * 0.1
+
+      setGuardianNameHeight(xPosition)
+    }
+  }
+
+  useEffect(() => {
+    setTimeout(() => {
+      updateUIPosition()
+    }, 100)
+    window.addEventListener('resize', updateUIPosition)
+    return () => {
+      window.removeEventListener('resize', updateUIPosition)
+    }
+  }, [])
+
   return (
-    <VStack w="full" flex={1} position="relative" overflow="hidden" justifyContent="flex-end" {...handlers}>
+    <VStack
+      w="full"
+      flex={1}
+      position="relative"
+      overflow="hidden"
+      justifyContent="flex-end"
+      {...handlers}
+      onClick={() => navigate(getPath('guardiansCharacter', currentGuardian))}
+    >
       <Box
         className={classNames({
           [classes.slideInFrontRight]: secondChange === previousGuardian,
@@ -174,16 +210,16 @@ export const MobileGuardiansIllustration = () => {
         position="absolute"
         bottom={-1}
       >
-        <Image h="full" w="full" objectFit="cover" objectPosition="top" src={currentGuardianImage} />
+        <Image ref={imageRef} h="full" w="full" objectFit="cover" objectPosition="top" src={currentGuardianImage} />
       </Box>
-      <HStack zIndex="1" paddingBottom="50px">
+      <HStack zIndex="1" paddingBottom={toPx(guardianNameHeight)}>
         <IconButton
           variant="ghost"
           size="xl"
           icon={<PiCaretLeft fontSize="24px" />}
           color={`guardians.${currentGuardian}.text`}
-          onClick={goToNextGuardian}
           aria-label="Previous Guardian"
+          onClick={goToPreviousGuardian}
           _hover={{}}
           _focus={{}}
           _active={{}}
@@ -198,14 +234,14 @@ export const MobileGuardiansIllustration = () => {
           color={`guardians.${currentGuardian}.text`}
           textTransform="uppercase"
         >
-          {'? ? ?'}
+          {currentGuardian}
         </Body>
         <IconButton
           variant="ghost"
           size="xl"
           icon={<PiCaretRight fontSize="24px" />}
           color={`guardians.${currentGuardian}.text`}
-          onClick={goToPreviousGuardian}
+          onClick={goToNextGuardian}
           aria-label="Next Guardian"
           _hover={{}}
           _focus={{}}

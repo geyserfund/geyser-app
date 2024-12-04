@@ -1,3 +1,21 @@
+## [0.15.2](https://github.com/geyserfund/geyser-app/compare/v0.15.1...v0.15.2) (2024-12-04)
+
+
+### Features
+
+* create new character pages ([6108984](https://github.com/geyserfund/geyser-app/commit/610898445190d5023297e6929246464afd607b70))
+
+
+### Bug Fixes
+
+* add choose your character ([cf92013](https://github.com/geyserfund/geyser-app/commit/cf92013c6aa6436632db688bea89bf055dbf41b5))
+* adjust profile nav button and guardian text on mobile ([ebce32a](https://github.com/geyserfund/geyser-app/commit/ebce32a64409a862b7a879ede37d49d088b7b2e8))
+* background issue with feed top bar ([bdd35de](https://github.com/geyserfund/geyser-app/commit/bdd35de533a0d6024b39c02b4e56919b6caf611a))
+* first commit ([f59a108](https://github.com/geyserfund/geyser-app/commit/f59a1085e59b6b66344196713e482b61ff6fe3a8))
+* guardians page hover effect not working ([0661e46](https://github.com/geyserfund/geyser-app/commit/0661e46e071f37691098b85e5abc5b573ab2d0f5))
+* laast bit manifesto ([a18a01c](https://github.com/geyserfund/geyser-app/commit/a18a01ce2ee260d481a270c36f91ce05ed6848ca))
+* qa issues ([00f427a](https://github.com/geyserfund/geyser-app/commit/00f427a2aa282250f8f920afa821f9383b21582e))
+
 ## [0.15.1](https://github.com/geyserfund/geyser-app/compare/v0.15.0...v0.15.1) (2024-11-29)
 
 
