@@ -29,12 +29,11 @@ export const DesktopGuardiansIllustration = () => {
 
   const imageRef = useRef<HTMLImageElement>(null)
 
-  const [uiPosition, setUiPosition] = useState(0)
+  const [uiPosition, setUiPosition] = useState(window.innerHeight * 0.54)
 
-  const [gradientHeight, setGradientHeight] = useState(0)
+  const [gradientHeight, setGradientHeight] = useState(window.innerHeight * 0.54)
 
   const updateUIPosition = () => {
-    console.log('getting into updateUIPosition')
     if (imageRef.current) {
       const imageRect = imageRef.current.getBoundingClientRect()
       const imageHeight = imageRect.height
