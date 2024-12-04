@@ -66,6 +66,7 @@ export const Activity = () => {
         width="full"
         justifyContent="center"
         alignItems="center"
+        bg="utils.pbg"
         zIndex={2}
       >
         <AnimatedNavBar {...animatedNavBarProps} activeIndex={activeIndex} showIcon showLabel />

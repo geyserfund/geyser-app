@@ -34,6 +34,7 @@ export const DesktopGuardiansIllustration = () => {
   const [gradientHeight, setGradientHeight] = useState(0)
 
   const updateUIPosition = () => {
+    console.log('getting into updateUIPosition')
     if (imageRef.current) {
       const imageRect = imageRef.current.getBoundingClientRect()
       const imageHeight = imageRect.height
@@ -43,6 +44,10 @@ export const DesktopGuardiansIllustration = () => {
       setGradientHeight(imageHeight * 0.5)
 
       setUiPosition(xPosition)
+    } else {
+      setTimeout(() => {
+        updateUIPosition()
+      }, 100)
     }
   }
 
