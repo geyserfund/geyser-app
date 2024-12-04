@@ -150,8 +150,14 @@ export const heroProfileSettingsRoutes = [
 export const profileRoutes = [getPath('userProfile', PathName.userId), ...profileSettingsRoutes]
 export const heroProfileRoutes = [getPath('heroProfile', PathName.heroId), ...heroProfileSettingsRoutes]
 
-export const guardiansRoutes = [getPath('guardians'), getPath('guardiansCharacter', PathName.characterId)]
+export const guardiansRoutes = [
+  getPath('guardians'),
+  getPath('guardiansCharacter', PathName.characterId),
+  getPath('manifesto'),
+]
 
 export const guardianCharacterRoutes = [getPath('guardiansCharacter', PathName.characterId)]
+
+export const manifestoRoutes = [getPath('manifesto')]
 
 export const fallBackRoutes = [getPath('notFound'), getPath('notAuthorized')]

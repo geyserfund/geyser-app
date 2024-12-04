@@ -2,7 +2,7 @@ import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { Trans } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -16,6 +16,7 @@ import { MobileGuardiansIllustration } from './components/MobileGuardiansIllustr
 
 export const GuardiansMainPage = () => {
   const isMobile = useMobileMode()
+  const navigate = useNavigate()
 
   const endDate = DateTime.fromFormat('2024-12-18', 'yyyy-MM-dd').toMillis()
 
@@ -37,9 +38,17 @@ export const GuardiansMainPage = () => {
         <Body fontSize={textSize} textAlign={'center'} lineHeight={'1.4'}>
           <Trans i18nKey="Geyser’s <1>mission</1> is to push Bitcoin adoption forward. Geyser Guardians are the defenders of this mission. Their bravery will be rewarded with rare artifacts. Their names shall be remembered in future epochs, and soon, you can become one of them. Enter your email to be notified first–the first 121 Guardians will get a special deal.">
             {'Geyser’s '}
-            <Link to={getPath('manifesto')} color="primary1.11">
+
+            <Body
+              as="span"
+              color="primary1.11"
+              textDecoration={'underline'}
+              onClick={() => navigate(getPath('manifesto'))}
+              _hover={{ cursor: 'pointer' }}
+            >
               mission
-            </Link>
+            </Body>
+
             {
               ' is to push Bitcoin adoption forward. Geyser Guardians are the defenders of this mission. Their bravery will be rewarded with rare artifacts. Their names shall be remembered in future epochs, and soon, you can become one of them. Enter your email to be notified first–the first 121 Guardians will get a special deal.'
             }

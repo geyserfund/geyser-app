@@ -1,8 +1,8 @@
-import { Button, HStack, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, HStack, IconButton, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
-import { PiCopy, PiShareFat } from 'react-icons/pi'
+import { PiCopy, PiShareFat, PiX } from 'react-icons/pi'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 
 import { FilterComponent } from '@/modules/discovery/filters/FilterComponent'
@@ -30,6 +30,7 @@ import {
   shouldShowGeyserLogoAtom,
   shouldShowProjectLogoAtom,
   useIsGuardiansPage,
+  useIsManifestoPage,
 } from './platformNavBarAtom'
 import { ProfileNav } from './profileNav/ProfileNav'
 
@@ -42,6 +43,7 @@ export const PlatformNavBar = () => {
   const heroCard = useAtomValue(heroCardAtom)
 
   const isGuardiansPage = useIsGuardiansPage()
+  const isManifestoPage = useIsManifestoPage()
 
   const isMobileMode = useMobileMode()
 
@@ -119,6 +121,24 @@ export const PlatformNavBar = () => {
     )
   }
 
+  const CloseGoBackButton = () => {
+    return (
+      <IconButton
+        variant="outline"
+        colorScheme="neutral1"
+        size={{ base: 'md', lg: 'lg' }}
+        width={{ base: '40px', lg: '48px' }}
+        height={{ base: '40px', lg: '48px' }}
+        borderRadius="50% !important"
+        aria-label="go-back"
+        icon={<PiX fontSize={'24px'} />}
+        onClick={() => navigate(-1)}
+      >
+        Go Back
+      </IconButton>
+    )
+  }
+
   return (
     <HStack
       w="full"
@@ -145,10 +165,14 @@ export const PlatformNavBar = () => {
         <HStack w="100%" height={{ base: '40px', lg: '48px' }} justifyContent={'space-between'}>
           {renderLeftSide()}
 
-          <HStack position="relative">
-            {!isLoggedIn ? <LoginButton /> : isGuardiansPage ? <ShareGuardiansButton /> : <ProjectSelectMenu />}
-            <ProfileNav />
-          </HStack>
+          {isManifestoPage ? (
+            <CloseGoBackButton />
+          ) : (
+            <HStack position="relative">
+              {!isLoggedIn ? <LoginButton /> : isGuardiansPage ? <ShareGuardiansButton /> : <ProjectSelectMenu />}
+              <ProfileNav />
+            </HStack>
+          )}
         </HStack>
       </VStack>
 

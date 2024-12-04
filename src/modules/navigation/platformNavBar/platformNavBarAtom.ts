@@ -4,6 +4,7 @@ import {
   discoveryRoutes,
   guardianCharacterRoutes,
   guardiansRoutes,
+  manifestoRoutes,
   profileRoutes,
   projectDashboardRoutes,
   projectFundingRoutes,
@@ -91,3 +92,6 @@ export const useIsGuardiansPage = () => useAtomValue(guardiansRoutesAtom)
 
 const guardianCharacterRoutesAtom = atom(routeMatchForAtom(guardianCharacterRoutes))
 export const useIsGuardianCharacterPage = () => useAtomValue(guardianCharacterRoutesAtom)
+
+const manifestoRoutesAtom = atom(routeMatchForAtom(manifestoRoutes))
+export const useIsManifestoPage = () => useAtomValue(manifestoRoutesAtom)
