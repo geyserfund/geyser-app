@@ -44,6 +44,9 @@ export const DesktopGuardiansIllustration = () => {
 
       setUiPosition(xPosition)
     } else {
+      setGradientHeight(window.innerHeight * 0.54)
+      setUiPosition(window.innerHeight * 0.54)
+
       setTimeout(() => {
         updateUIPosition()
       }, 100)
