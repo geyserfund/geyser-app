@@ -178,12 +178,6 @@ export const Header = () => {
                 <Body size="md" medium light>
                   {`${t('Followers')}: ${project.followersCount}`}
                 </Body>
-                {isMobile && !hideProjectAmount && (
-                  <Body size="md" medium light>
-                    {`${t('Contributions')}: ${commaFormatted(project.balance)} sats`}
-                    <Body as="span">{` (${formatAmount(project.balanceUsdCent, 'USDCENT')})`}</Body>
-                  </Body>
-                )}
 
                 {subscribers && <Body size="md" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
               </HStack>
@@ -206,6 +200,30 @@ export const Header = () => {
             </HStack>
           </VStack>
         </Stack>
+        {isMobile && !hideProjectAmount && (
+          <VStack
+            w="full"
+            paddingX={3}
+            paddingY={2}
+            backgroundColor={'neutral1.3'}
+            borderTop="1px solid"
+            borderColor="neutral1.6"
+            justifyContent="center"
+            alignItems="center"
+            spacing={0}
+          >
+            <Body size="lg" bold>
+              {commaFormatted(project.balance)}
+              <Body as="span">{' sats'}</Body>
+            </Body>
+            <Body size="sm">
+              {`${formatAmount(project.balanceUsdCent, 'USDCENT')}`}{' '}
+              <Body as="span" light>
+                {t('contributed in total')}
+              </Body>
+            </Body>
+          </VStack>
+        )}
       </CardLayout>
     </>
   )

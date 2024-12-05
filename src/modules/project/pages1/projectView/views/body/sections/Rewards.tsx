@@ -55,7 +55,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
       {hasMoreRewards && (
         <HStack w="full" justifyContent="center">
           <Button as={Link} to={getPath('projectRewards', project.name)} variant="soft" colorScheme="neutral1">
-            {t('See all')}
+            {t('See all')} {`${rewards.length} rewards`}
           </Button>
         </HStack>
       )}
