@@ -6381,12 +6381,17 @@ export type UserContributorFragment = { __typename?: 'Funder', id: any, rank?: n
 
 export type ContributorContributionsSummaryFragment = { __typename?: 'ContributorContributionsSummary', contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number };
 
-export type ProjectFundingTxFragment = { __typename?: 'FundingTx', id: any, amountPaid: number, media?: string | null, comment?: string | null, paidAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, user?: (
+export type ProjectFundingTxFragment = { __typename?: 'FundingTx', id: any, amount: number, media?: string | null, comment?: string | null, paidAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, user?: (
       { __typename?: 'User' }
       & UserAvatarFragment
     ) | null } };
 
 export type FundingTxFragment = { __typename?: 'FundingTx', id: any, uuid?: string | null, invoiceId?: string | null, paymentRequest?: string | null, amount: number, status: FundingStatus, invoiceStatus: InvoiceStatus, comment?: string | null, media?: string | null, paidAt?: any | null, onChain: boolean, address?: string | null, source: string, method?: FundingMethod | null, projectId: any, creatorEmail?: string | null, createdAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, confirmedAt?: any | null, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } | null } };
+
+export type FundingTxForSubscriptionFragment = (
+  { __typename?: 'FundingTx', projectGoalId?: any | null }
+  & FundingTxFragment
+);
 
 export type FundingTxWithInvoiceStatusFragment = { __typename?: 'FundingTx', id: any, uuid?: string | null, invoiceId?: string | null, status: FundingStatus, onChain: boolean, invoiceStatus: InvoiceStatus, paymentRequest?: string | null, creatorEmail?: string | null };
 
@@ -7098,7 +7103,7 @@ export type FundingTxStatusUpdatedSubscriptionVariables = Exact<{
 
 export type FundingTxStatusUpdatedSubscription = { __typename?: 'Subscription', fundingTxStatusUpdated: { __typename?: 'FundingTxStatusUpdatedSubscriptionResponse', fundingTx: (
       { __typename?: 'FundingTx' }
-      & FundingTxFragment
+      & FundingTxForSubscriptionFragment
     ) } };
 
 export const EmailUpdateUserFragmentDoc = gql`
@@ -8338,7 +8343,7 @@ export const ContributorContributionsSummaryFragmentDoc = gql`
 export const ProjectFundingTxFragmentDoc = gql`
     fragment ProjectFundingTx on FundingTx {
   id
-  amountPaid
+  amount
   media
   comment
   paidAt
@@ -8390,6 +8395,12 @@ export const FundingTxFragmentDoc = gql`
   }
 }
     `;
+export const FundingTxForSubscriptionFragmentDoc = gql`
+    fragment FundingTxForSubscription on FundingTx {
+  ...FundingTx
+  projectGoalId
+}
+    ${FundingTxFragmentDoc}`;
 export const FundingTxWithInvoiceStatusFragmentDoc = gql`
     fragment FundingTxWithInvoiceStatus on FundingTx {
   id
@@ -14097,11 +14108,11 @@ export const FundingTxStatusUpdatedDocument = gql`
     subscription FundingTxStatusUpdated($input: FundingTxStatusUpdatedInput) {
   fundingTxStatusUpdated(input: $input) {
     fundingTx {
-      ...FundingTx
+      ...FundingTxForSubscription
     }
   }
 }
-    ${FundingTxFragmentDoc}`;
+    ${FundingTxForSubscriptionFragmentDoc}`;
 
 /**
  * __useFundingTxStatusUpdatedSubscription__

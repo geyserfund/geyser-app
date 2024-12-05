@@ -3,6 +3,7 @@ export enum PathName {
   landingFeed = 'feed',
   leaderboard = 'leaderboard',
   hallOfFame = 'halloffame',
+  guardians = 'guardians',
   projects = 'projects',
   heroes = 'heroes',
   ambassador = 'ambassador',
@@ -15,6 +16,8 @@ export enum PathName {
   activity = 'activity',
   activityGlobal = 'global',
   activityFollowed = 'followed',
+
+  manifesto = 'manifesto',
 
   merch = 'project/geyser/rewards',
 
@@ -101,7 +104,7 @@ export enum PathName {
   postId = ':postId',
   goalId = ':goalId',
   grantId = ':grantId',
-
+  characterId = ':characterId',
   legalTerms = 'T&C',
   legalPrivacy = 'Privacy',
 }
@@ -128,6 +131,11 @@ const pathsMap = {
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
   discoveryMerch: () => `/${PathName.merch}`,
+
+  guardians: () => `/${PathName.guardians}`,
+  guardiansCharacter: (characterId: string) => `/${PathName.guardians}/${characterId}`,
+
+  manifesto: () => `/${PathName.manifesto}`,
 
   discoveryHallOfFame: () => `/${PathName.hallOfFame}`,
   hallOfFameProjects: () => `/${PathName.hallOfFame}/${PathName.projects}`,

@@ -13,7 +13,7 @@ const Grants = () => import('../../modules/grants/Grants')
 
 const ProjectLaunch = () => import('../../modules/project/pages1/projectCreation')
 
-const Project = () => import('../../modules/project/pages1/projectView')
+const Project = () => import('../../modules/project')
 
 const ProjectDashboard = () => import('../../modules/project/pages1/projectDashboard')
 
@@ -24,6 +24,8 @@ const CreatorReward = () => import('../../modules/project/pages1/projectView/vie
 const CreatorPost = () => import('../../modules/project/pages1/projectView/views/posts/views')
 
 const Discovery = () => import('../../modules/discovery')
+
+const Guardians = () => import('../../modules/guardians')
 
 const HallOfFame = () => import('../../modules/discovery/pages/hallOfFame')
 
@@ -234,202 +236,210 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('project', PathName.projectName),
     async lazy() {
-      const ProjectView = await Project().then((m) => m.ProjectView)
-      return { Component: ProjectView }
+      const ProjectPage = await Project().then((m) => m.Project)
+      return { Component: ProjectPage }
     },
     children: [
       {
-        index: true,
+        path: getPath('project', PathName.projectName),
         async lazy() {
-          const ProjectBody = await Project().then((m) => m.ProjectBody)
-          return { Component: ProjectBody }
-        },
-      },
-      {
-        path: getPath('projectDraft', PathName.projectName),
-        async lazy() {
-          const ProjectBody = await Project().then((m) => m.ProjectBody)
-          return { Component: ProjectBody }
-        },
-      },
-      {
-        path: getPath('projectRewards', PathName.projectName),
-        async lazy() {
-          const ProjectRewards = await Project().then((m) => m.ProjectRewards)
-          return { Component: ProjectRewards }
-        },
-      },
-      {
-        path: getPath('projectRewardView', PathName.projectName, PathName.rewardId),
-        async lazy() {
-          const RewardView = await Project().then((m) => m.RewardView)
-          return { Component: RewardView }
-        },
-      },
-      {
-        path: getPath('projectRewardCreate', PathName.projectName),
-        async lazy() {
-          const CreateReward = await CreatorReward().then((m) => m.RewardCreate)
-          return {
-            element: renderPrivateRoute(CreateReward),
-          }
-        },
-      },
-      {
-        path: getPath('projectRewardEdit', PathName.projectName, PathName.rewardId),
-        async lazy() {
-          const EditReward = await CreatorReward().then((m) => m.RewardEdit)
-          return {
-            element: renderPrivateRoute(EditReward),
-          }
-        },
-      },
-      {
-        path: getPath('projectPosts', PathName.projectName),
-        async lazy() {
-          const ProjectPosts = await Project().then((m) => m.ProjectPosts)
-          return { Component: ProjectPosts }
-        },
-      },
-      {
-        path: getPath('projectPostView', PathName.projectName, PathName.postId),
-        async lazy() {
-          const PostView = await Project().then((m) => m.PostView)
-          return { Component: PostView }
-        },
-      },
-      {
-        path: getPath('projectPostCreate', PathName.projectName),
-        async lazy() {
-          const PostCreateEdit = await CreatorPost().then((m) => m.PostCreateEdit)
-          return {
-            element: renderPrivateRoute(PostCreateEdit),
-          }
-        },
-      },
-      {
-        path: getPath('projectPostEdit', PathName.projectName, PathName.postId),
-        async lazy() {
-          const PostCreateEdit = await CreatorPost().then((m) => m.PostCreateEdit)
-          return {
-            element: renderPrivateRoute(PostCreateEdit),
-          }
-        },
-      },
-
-      {
-        path: getPath('projectGoals', PathName.projectName),
-        async lazy() {
-          const ProjectGoals = await Project().then((m) => m.ProjectGoals)
-          return { Component: ProjectGoals }
-        },
-      },
-      {
-        path: getPath('projectGoalView', PathName.projectName, PathName.goalId),
-        async lazy() {
-          const GoalView = await Project().then((m) => m.GoalView)
-          return { Component: GoalView }
-        },
-      },
-      {
-        path: getPath('projectLeaderboard', PathName.projectName),
-        async lazy() {
-          const ProjectLeaderboard = await Project().then((m) => m.ProjectLeaderboard)
-          return { Component: ProjectLeaderboard }
-        },
-      },
-      {
-        path: getPath('projectStoryEdit', PathName.projectName),
-        async lazy() {
-          const ProjectDashboardStory = await ProjectDashboard().then((m) => m.ProjectDashboardStory)
-          return { element: renderPrivateRoute(ProjectDashboardStory) }
-        },
-      },
-      {
-        path: getPath('projectDashboard', PathName.projectName),
-        async lazy() {
-          const ProjectDashboardPage = await ProjectDashboard().then((m) => m.ProjectDashboard)
-          return { element: renderPrivateRoute(ProjectDashboardPage) }
+          const ProjectView = await Project().then((m) => m.ProjectView)
+          return { Component: ProjectView }
         },
         children: [
           {
             index: true,
             async lazy() {
-              const ProjectDashboardMain = await ProjectDashboard().then((m) => m.ProjectDashboardMain)
-              return { Component: ProjectDashboardMain }
+              const ProjectBody = await Project().then((m) => m.ProjectBody)
+              return { Component: ProjectBody }
             },
           },
           {
-            path: getPath('dashboardAccounting', PathName.projectName),
+            path: getPath('projectDraft', PathName.projectName),
             async lazy() {
-              const ProjectDashboardAccounting = await ProjectDashboard().then((m) => m.ProjectDashboardAccounting)
-              return { Component: ProjectDashboardAccounting }
+              const ProjectBody = await Project().then((m) => m.ProjectBody)
+              return { Component: ProjectBody }
             },
           },
           {
-            path: getPath('dashboardAnalytics', PathName.projectName),
+            path: getPath('projectRewards', PathName.projectName),
             async lazy() {
-              const ProjectDashboardAnalytics = await ProjectDashboard().then((m) => m.ProjectDashboardAnalytics)
-              return { Component: ProjectDashboardAnalytics }
+              const ProjectRewards = await Project().then((m) => m.ProjectRewards)
+              return { Component: ProjectRewards }
             },
           },
           {
-            path: getPath('dashboardSales', PathName.projectName),
+            path: getPath('projectRewardView', PathName.projectName, PathName.rewardId),
             async lazy() {
-              const ProjectDashboardSales = await ProjectDashboard().then((m) => m.ProjectDashboardSales)
-              return { Component: ProjectDashboardSales }
+              const RewardView = await Project().then((m) => m.RewardView)
+              return { Component: RewardView }
             },
           },
           {
-            path: getPath('dashboardInfo', PathName.projectName),
+            path: getPath('projectRewardCreate', PathName.projectName),
             async lazy() {
-              const ProjectDashboardInfo = await ProjectDashboard().then((m) => m.ProjectDashboardInfo)
-              return { Component: ProjectDashboardInfo }
+              const CreateReward = await CreatorReward().then((m) => m.RewardCreate)
+              return {
+                element: renderPrivateRoute(CreateReward),
+              }
             },
           },
           {
-            path: getPath('dashboardDetails', PathName.projectName),
+            path: getPath('projectRewardEdit', PathName.projectName, PathName.rewardId),
             async lazy() {
-              const ProjectDashboardDetails = await ProjectDashboard().then((m) => m.ProjectDashboardDetails)
-              return { Component: ProjectDashboardDetails }
+              const EditReward = await CreatorReward().then((m) => m.RewardEdit)
+              return {
+                element: renderPrivateRoute(EditReward),
+              }
             },
           },
           {
-            path: getPath('dashboardWallet', PathName.projectName),
+            path: getPath('projectPosts', PathName.projectName),
             async lazy() {
-              const ProjectDashboardWallet = await ProjectDashboard().then((m) => m.ProjectDashboardWallet)
-              return { Component: ProjectDashboardWallet }
+              const ProjectPosts = await Project().then((m) => m.ProjectPosts)
+              return { Component: ProjectPosts }
             },
           },
           {
-            path: getPath('dashboardNostr', PathName.projectName),
+            path: getPath('projectPostView', PathName.projectName, PathName.postId),
             async lazy() {
-              const ProjectDashboardNostr = await ProjectDashboard().then((m) => m.ProjectDashboardNostr)
-              return { Component: ProjectDashboardNostr }
+              const PostView = await Project().then((m) => m.PostView)
+              return { Component: PostView }
             },
           },
           {
-            path: getPath('dashboardNotifications', PathName.projectName),
+            path: getPath('projectPostCreate', PathName.projectName),
             async lazy() {
-              const ProjectDashboardNotifications = await ProjectDashboard().then(
-                (m) => m.ProjectDashboardNotifications,
-              )
-              return { Component: ProjectDashboardNotifications }
+              const PostCreateEdit = await CreatorPost().then((m) => m.PostCreateEdit)
+              return {
+                element: renderPrivateRoute(PostCreateEdit),
+              }
             },
           },
           {
-            path: getPath('dashboardSettings', PathName.projectName),
+            path: getPath('projectPostEdit', PathName.projectName, PathName.postId),
             async lazy() {
-              const ProjectDashboardSettings = await ProjectDashboard().then((m) => m.ProjectDashboardSettings)
-              return { Component: ProjectDashboardSettings }
+              const PostCreateEdit = await CreatorPost().then((m) => m.PostCreateEdit)
+              return {
+                element: renderPrivateRoute(PostCreateEdit),
+              }
             },
           },
           {
-            path: getPath('dashboardAffiliates', PathName.projectName),
+            path: getPath('projectGoals', PathName.projectName),
             async lazy() {
-              const ProjectDashboardAffiliates = await ProjectDashboard().then((m) => m.ProjectDashboardAffiliates)
-              return { Component: ProjectDashboardAffiliates }
+              const ProjectGoals = await Project().then((m) => m.ProjectGoals)
+              return { Component: ProjectGoals }
             },
+          },
+          {
+            path: getPath('projectGoalView', PathName.projectName, PathName.goalId),
+            async lazy() {
+              const GoalView = await Project().then((m) => m.GoalView)
+              return { Component: GoalView }
+            },
+          },
+          {
+            path: getPath('projectLeaderboard', PathName.projectName),
+            async lazy() {
+              const ProjectLeaderboard = await Project().then((m) => m.ProjectLeaderboard)
+              return { Component: ProjectLeaderboard }
+            },
+          },
+          {
+            path: getPath('projectStoryEdit', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardStory = await ProjectDashboard().then((m) => m.ProjectDashboardStory)
+              return { element: renderPrivateRoute(ProjectDashboardStory) }
+            },
+          },
+          {
+            path: getPath('projectDashboard', PathName.projectName),
+            async lazy() {
+              const ProjectDashboardPage = await ProjectDashboard().then((m) => m.ProjectDashboard)
+              return { element: renderPrivateRoute(ProjectDashboardPage) }
+            },
+            children: [
+              {
+                index: true,
+                async lazy() {
+                  const ProjectDashboardMain = await ProjectDashboard().then((m) => m.ProjectDashboardMain)
+                  return { Component: ProjectDashboardMain }
+                },
+              },
+              {
+                path: getPath('dashboardAccounting', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardAccounting = await ProjectDashboard().then((m) => m.ProjectDashboardAccounting)
+                  return { Component: ProjectDashboardAccounting }
+                },
+              },
+              {
+                path: getPath('dashboardAnalytics', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardAnalytics = await ProjectDashboard().then((m) => m.ProjectDashboardAnalytics)
+                  return { Component: ProjectDashboardAnalytics }
+                },
+              },
+              {
+                path: getPath('dashboardSales', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardSales = await ProjectDashboard().then((m) => m.ProjectDashboardSales)
+                  return { Component: ProjectDashboardSales }
+                },
+              },
+              {
+                path: getPath('dashboardInfo', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardInfo = await ProjectDashboard().then((m) => m.ProjectDashboardInfo)
+                  return { Component: ProjectDashboardInfo }
+                },
+              },
+              {
+                path: getPath('dashboardDetails', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardDetails = await ProjectDashboard().then((m) => m.ProjectDashboardDetails)
+                  return { Component: ProjectDashboardDetails }
+                },
+              },
+              {
+                path: getPath('dashboardWallet', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardWallet = await ProjectDashboard().then((m) => m.ProjectDashboardWallet)
+                  return { Component: ProjectDashboardWallet }
+                },
+              },
+              {
+                path: getPath('dashboardNostr', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardNostr = await ProjectDashboard().then((m) => m.ProjectDashboardNostr)
+                  return { Component: ProjectDashboardNostr }
+                },
+              },
+              {
+                path: getPath('dashboardNotifications', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardNotifications = await ProjectDashboard().then(
+                    (m) => m.ProjectDashboardNotifications,
+                  )
+                  return { Component: ProjectDashboardNotifications }
+                },
+              },
+              {
+                path: getPath('dashboardSettings', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardSettings = await ProjectDashboard().then((m) => m.ProjectDashboardSettings)
+                  return { Component: ProjectDashboardSettings }
+                },
+              },
+              {
+                path: getPath('dashboardAffiliates', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardAffiliates = await ProjectDashboard().then((m) => m.ProjectDashboardAffiliates)
+                  return { Component: ProjectDashboardAffiliates }
+                },
+              },
+            ],
           },
         ],
       },
@@ -633,6 +643,7 @@ export const platformRoutes: RouteObject[] = [
           return { Component: HallOfFamePage }
         },
       },
+
       {
         path: getPath('hallOfFameProjects'),
         async lazy() {
@@ -683,6 +694,38 @@ export const platformRoutes: RouteObject[] = [
         },
       },
     ],
+  },
+
+  {
+    path: getPath('guardians'),
+    async lazy() {
+      const GuardiansPage = await Guardians().then((m) => m.Guardians)
+      return { Component: GuardiansPage }
+    },
+    children: [
+      {
+        index: true,
+        async lazy() {
+          const GuardiansMainPage = await Guardians().then((m) => m.GuardiansMainPage)
+          return { Component: GuardiansMainPage }
+        },
+      },
+      {
+        path: getPath('guardiansCharacter', PathName.characterId),
+        async lazy() {
+          const CharacterPage = await Guardians().then((m) => m.CharacterPage)
+          return { Component: CharacterPage }
+        },
+      },
+    ],
+  },
+
+  {
+    path: getPath('manifesto'),
+    async lazy() {
+      const Manifesto = await Guardians().then((m) => m.Manifesto)
+      return { Component: Manifesto }
+    },
   },
 
   {

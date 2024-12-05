@@ -1,5 +1,6 @@
-import { ApolloCache } from '@apollo/client'
+import { ApolloCache, ApolloClient } from '@apollo/client'
 
+import { ProjectPageBodyQuery } from '@/types'
 import { toInt } from '@/utils'
 
 import { QUERY_PROJECT_PAGE_BODY } from '../../graphql/queries/projectQuery'
@@ -41,4 +42,41 @@ export const updateProjectItemCountCache = (
         : data?.projectGet,
     }),
   )
+}
+
+type ProjectBalanceUpdateInput = {
+  projectName: string
+  balance?: number | null
+  balanceUsdCent?: number | null
+}
+
+export const updateProjectBalanceCache = (
+  cache: ApolloCache<any> | ApolloClient<any>,
+  { projectName, balance, balanceUsdCent }: ProjectBalanceUpdateInput,
+) => {
+  const existingProject = cache.readQuery<ProjectPageBodyQuery>({
+    query: QUERY_PROJECT_PAGE_BODY,
+    variables: {
+      where: {
+        name: projectName,
+      },
+    },
+  })
+  if (existingProject) {
+    cache.writeQuery({
+      query: QUERY_PROJECT_PAGE_BODY,
+      variables: {
+        where: {
+          name: projectName,
+        },
+      },
+      data: {
+        projectGet: {
+          ...existingProject.projectGet,
+          ...(balance && { balance }),
+          ...(balanceUsdCent && { balanceUsdCent }),
+        },
+      },
+    })
+  }
 }

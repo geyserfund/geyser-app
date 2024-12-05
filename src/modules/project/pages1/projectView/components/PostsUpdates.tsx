@@ -1,4 +1,4 @@
-import { HStack, Tag, VStack } from '@chakra-ui/react'
+import { Badge, HStack, VStack } from '@chakra-ui/react'
 import { PiFile } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
@@ -28,13 +28,13 @@ export const PostsUpdates = ({ posts }: { posts: Pick<Post, 'id' | 'title' | 'cr
           justifyContent="space-between"
         >
           <HStack alignItems="center" justifyContent="flex-start">
-            <Tag size="sm" variant="soft" bg="neutralAlpha.3">
+            <Badge size="sm" variant="soft" colorScheme="neutral1">
               <PiFile />
-              <Body size="sm" light pl={2}>
+              <Body size="sm" light pl={2} whiteSpace="nowrap">
                 {postTypeOptions.find((option) => option.value === post.postType)?.label}
               </Body>
-            </Tag>
-            <Body size="md" medium>
+            </Badge>
+            <Body size="md" medium flex={1}>
               {post.title}
             </Body>
           </HStack>

@@ -13611,6 +13611,7 @@ __metadata:
     "@chakra-ui/media-query": "npm:^3.3.0"
     "@chakra-ui/react": "npm:^2.8.2"
     "@chakra-ui/storybook-addon": "npm:^5.1.0"
+    "@chakra-ui/styled-system": "npm:2.12.0"
     "@chakra-ui/system": "npm:^2.6.2"
     "@chromatic-com/storybook": "npm:^1.2.25"
     "@commitlint/cli": "npm:^17.4.2"

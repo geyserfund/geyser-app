@@ -10,7 +10,7 @@ export const LoginButton = (props: ButtonProps) => {
     <Button
       size={{ base: 'md', lg: 'lg' }}
       variant="outline"
-      colorScheme="primary1"
+      colorScheme="neutral1"
       onClick={() => loginOnOpen()}
       {...props}
     >

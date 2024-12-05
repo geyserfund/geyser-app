@@ -25,9 +25,9 @@ export const PostShare = ({ post, ...props }: PostShareProps) => {
 
   const postShareModal = useModal()
 
-  const { getSharePostUrl } = usePostShare({ id: post.id })
+  const { getSharePostUrlWithHeroId } = usePostShare({ id: post.id })
 
-  const postRewardUrl = getSharePostUrl({ clickedFrom: CampaignContent.postShareButton })
+  const postRewardUrl = getSharePostUrlWithHeroId({ clickedFrom: CampaignContent.postShareButton })
 
   const twitterPostUrl = generateTwitterShareUrl(postRewardUrl)
 

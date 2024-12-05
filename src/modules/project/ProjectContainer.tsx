@@ -4,10 +4,10 @@ import { Outlet } from 'react-router-dom'
 import { Head } from '@/config/Head'
 import { standardPadding } from '@/shared/styles'
 
-import { dimensions } from '../../../../shared/constants'
-import { useProjectAtom } from '../../hooks/useProjectAtom'
-import { ProjectNavigation } from '../../navigation/ProjectNavigation'
-import { GoalDeleteModal, GoalModal, ProjectCreateModal } from './components'
+import { dimensions } from '../../shared/constants'
+import { useProjectAtom } from './hooks/useProjectAtom'
+import { ProjectNavigation } from './navigation/ProjectNavigation'
+import { GoalDeleteModal, GoalModal, ProjectCreateModal } from './pages1/projectView/components'
 
 export const ProjectContainer = () => {
   const { project } = useProjectAtom()

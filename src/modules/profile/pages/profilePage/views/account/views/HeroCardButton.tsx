@@ -5,7 +5,13 @@ import { PiIdentificationBadge } from 'react-icons/pi'
 
 import { useProfileSideNavAtom } from '@/modules/navigation/platformNavBar/profileNav/profileSideNavAtom'
 import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
-import { HeroButtonBorderColor, HeroButtonGradient, HeroButtonGradientBright } from '@/shared/styles/custom'
+import { GradientBorder } from '@/shared/molecules/GradientBorder'
+import {
+  HeroButtonBorderColor,
+  HeroButtonGradient,
+  HeroButtonGradientBright,
+  HeroButtonGradientFull,
+} from '@/shared/styles/custom'
 import { UserForProfilePageFragment, UserHeroStats } from '@/types'
 
 type HeroCardButtonProps = {
@@ -28,7 +34,7 @@ export const HeroCardButton = ({ user, stats, ...rest }: HeroCardButtonProps) =>
   }
 
   return (
-    <>
+    <GradientBorder enable gradientColor={HeroButtonGradientFull}>
       <Button
         variant="ghost"
         w="full"
@@ -43,6 +49,6 @@ export const HeroCardButton = ({ user, stats, ...rest }: HeroCardButtonProps) =>
       >
         {t('Hero Card')}
       </Button>
-    </>
+    </GradientBorder>
   )
 }
