@@ -181,7 +181,7 @@ export const PlatformNavBar = () => {
         spacing={4}
       >
         <HStack w="100%" height={{ base: '40px', lg: '48px' }} justifyContent={'space-between'}>
-          <HStack height="full">
+          <HStack height="full" w="full">
             {isGuardianCharacterPage && <BackButton />}
             {renderLeftSide()}
           </HStack>
