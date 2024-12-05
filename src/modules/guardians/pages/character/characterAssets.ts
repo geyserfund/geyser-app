@@ -92,7 +92,7 @@ export const CharacterPageCopies: {
       'It’s a long road to hyper-bitcoinisation, and the King knows it. His experience is his strength in planning for the best strategies to push Bitcoin adoption forward.',
     abilities: ['Strategic Bitcoin Conquerer', 'Circular Economies Enabler'],
     digitalItems: ['King badge', 'Nostr card'],
-    available: 210,
+    available: 121,
     physicalItems: [
       MysteryItemCardsUrl,
       MysteryItemTshirtUrl,
