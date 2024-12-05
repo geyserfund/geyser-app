@@ -8,6 +8,7 @@ import { fetchFeaturedProject } from '@/api/airtable'
 import { getFeaturedProject, getPathWithGeyserHero } from '@/shared/constants'
 import { useNotification } from '@/utils'
 
+import { FeaturedDisplayCard } from '../components/FeaturedDisplayCard'
 import { FeaturedGrantCard } from '../components/FeaturedGrantCard'
 import { FeaturedCardSkeleton, FeaturedProjectCard } from '../components/FeaturedProjectCard'
 import { ProjectRowLayout } from '../components/ProjectRowLayout'
@@ -17,9 +18,11 @@ const GEYSER_GET_FEATURED_REWARD_ID = '5332'
 
 export type FeatureAirtableData = {
   Name: string
-  Type: 'project' | 'grant'
+  Type: 'project' | 'grant' | 'display'
   Featured_Comment: string
   Featured_Author?: string
+  imageUrl?: string
+  link?: string
 }
 
 export const Featured = () => {
@@ -51,6 +54,10 @@ export const Featured = () => {
   const renderFeatured = () => {
     if (loading) {
       return <FeaturedCardSkeleton />
+    }
+
+    if (data && data?.Type === 'display') {
+      return <FeaturedDisplayCard data={data} />
     }
 
     if (data && data?.Type === 'project') {

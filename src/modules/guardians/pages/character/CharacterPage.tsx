@@ -15,7 +15,7 @@ import {
 import classNames from 'classnames'
 import { motion } from 'framer-motion'
 import { t } from 'i18next'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { PiCaretLeft, PiCaretRight, PiDotOutline } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
 import Tilt, { ReactParallaxTiltProps } from 'react-parallax-tilt'
@@ -53,7 +53,7 @@ export const CharacterPage = () => {
   const guardianImagesMobile = useColorModeValue(GuardianImageMobileMode.light, GuardianImageMobileMode.dark)
   const guardianImages = isMobileMode ? guardianImagesMobile : guardianImagesDesktop
 
-  const goToNextGuardian = () => {
+  const goToNextGuardian = useCallback(() => {
     const currentIndex = guardianIndex.findIndex((guardians) => guardians.includes(currentGuardian))
     const nextIndex = currentIndex + 1
     let nextGuardian = guardianIndex[0] as Guardian
@@ -68,9 +68,9 @@ export const CharacterPage = () => {
       setCurrentGuardian(nextGuardian)
       navigate(getPath('guardiansCharacter', nextGuardian), { replace: true })
     }, 300)
-  }
+  }, [currentGuardian, navigate])
 
-  const goToPreviousGuardian = () => {
+  const goToPreviousGuardian = useCallback(() => {
     const currentIndex = guardianIndex.findIndex((guardians) => guardians.includes(currentGuardian))
     const previousIndex = currentIndex - 1
     let previousGuardian = guardianIndex[guardianIndex.length - 1] as Guardian
@@ -83,8 +83,25 @@ export const CharacterPage = () => {
     setPreChange(previousGuardian)
     setTimeout(() => {
       setCurrentGuardian(previousGuardian)
+      navigate(getPath('guardiansCharacter', previousGuardian), { replace: true })
     }, 300)
-  }
+  }, [currentGuardian, navigate])
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft') {
+        goToPreviousGuardian()
+      } else if (event.key === 'ArrowRight') {
+        goToNextGuardian()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [goToPreviousGuardian, goToNextGuardian])
 
   useEffect(() => {
     if (characterId) {
