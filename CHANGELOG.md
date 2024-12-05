@@ -1,3 +1,53 @@
+## [0.15.2](https://github.com/geyserfund/geyser-app/compare/v0.15.1...v0.15.2) (2024-12-04)
+
+
+### Features
+
+* create new character pages ([6108984](https://github.com/geyserfund/geyser-app/commit/610898445190d5023297e6929246464afd607b70))
+
+
+### Bug Fixes
+
+* add choose your character ([cf92013](https://github.com/geyserfund/geyser-app/commit/cf92013c6aa6436632db688bea89bf055dbf41b5))
+* adjust profile nav button and guardian text on mobile ([ebce32a](https://github.com/geyserfund/geyser-app/commit/ebce32a64409a862b7a879ede37d49d088b7b2e8))
+* background issue with feed top bar ([bdd35de](https://github.com/geyserfund/geyser-app/commit/bdd35de533a0d6024b39c02b4e56919b6caf611a))
+* first commit ([f59a108](https://github.com/geyserfund/geyser-app/commit/f59a1085e59b6b66344196713e482b61ff6fe3a8))
+* guardians page hover effect not working ([0661e46](https://github.com/geyserfund/geyser-app/commit/0661e46e071f37691098b85e5abc5b573ab2d0f5))
+* laast bit manifesto ([a18a01c](https://github.com/geyserfund/geyser-app/commit/a18a01ce2ee260d481a270c36f91ce05ed6848ca))
+* qa issues ([00f427a](https://github.com/geyserfund/geyser-app/commit/00f427a2aa282250f8f920afa821f9383b21582e))
+
+## [0.15.1](https://github.com/geyserfund/geyser-app/compare/v0.15.0...v0.15.1) (2024-11-29)
+
+
+### Features
+
+* add guardians illustration mobile view and subscribe logic ([31bfd12](https://github.com/geyserfund/geyser-app/commit/31bfd12b828d26478fc1c4c53bb4f724ef83d617))
+* add sponsorship banner ([2711c8d](https://github.com/geyserfund/geyser-app/commit/2711c8d4fb913417ab8d226408c7144490a6cffd))
+* create and add live subscription for the project main page ([5f8ec7d](https://github.com/geyserfund/geyser-app/commit/5f8ec7d07074c2506b07b71797d74cdfcbd5b4b1))
+* create guardians page for desktop ([1b09071](https://github.com/geyserfund/geyser-app/commit/1b09071f54b3bca713739065f28c3a8e99510f94))
+
+
+### Bug Fixes
+
+* add live contributions to contributions, contributors, goals ([f121851](https://github.com/geyserfund/geyser-app/commit/f12185128f148a72f5bf3dcde7a1699705980b5b))
+* add subscription ([904944c](https://github.com/geyserfund/geyser-app/commit/904944c4ab9f559231dfa2d9c5e09b64fa2dc1f6))
+* amount usd ([d1bf479](https://github.com/geyserfund/geyser-app/commit/d1bf479282783d4896bda8cefda7986d38f276c1))
+* auto add email if use has email ([97d8c2b](https://github.com/geyserfund/geyser-app/commit/97d8c2b51eb788d19e53e2eb3a8cac2888a22219))
+* disable gif effect for darkmode ([b7c54ce](https://github.com/geyserfund/geyser-app/commit/b7c54cec2d503f2bb72c9d9bc17ab459591f1828))
+* funding success ([09e65ba](https://github.com/geyserfund/geyser-app/commit/09e65ba80303ed24c468f5d7475a2c4856138c01))
+* hotfix hero link in success component ([b46af0e](https://github.com/geyserfund/geyser-app/commit/b46af0e5a3a902137845a9832150b637523d2f92))
+* minor changes ([12d18ca](https://github.com/geyserfund/geyser-app/commit/12d18ca85c9ce261417dec9d86bdb16dafcf5fb0))
+* post deployment fixes ([0d8df06](https://github.com/geyserfund/geyser-app/commit/0d8df06b429dacc740b8539e354a8e435cd2fda5))
+* post, goal and reward share urls to include heroID and rounded corner for sponsorship banner ([17829d3](https://github.com/geyserfund/geyser-app/commit/17829d3dfb231085894ffd91eaa2369df1595029))
+* project leaderboard amount formatting ([7a7feda](https://github.com/geyserfund/geyser-app/commit/7a7fedaf78ee316170d0c8f6274ca006ff99f356))
+* qa issues ([ab6396e](https://github.com/geyserfund/geyser-app/commit/ab6396e98bdaed750706f56267efc260edcf4f41))
+* remove project ids redirect ([ad26ac6](https://github.com/geyserfund/geyser-app/commit/ad26ac698984ed780d9466bd52b5e7a8e05637dd))
+* replace Geyser Fund with Geyser ([e9165df](https://github.com/geyserfund/geyser-app/commit/e9165df8c380036347d68956d02486e19dee345a))
+* sats to usd conversion for creators ([ff08929](https://github.com/geyserfund/geyser-app/commit/ff08929fb6a106e24f5a08c6f1682f0a56f8612b))
+* top heroes copy mismatch and skip userstats query when userProfile.id is missing ([2d83084](https://github.com/geyserfund/geyser-app/commit/2d83084f6acd6a7c6dccd855aa6eab20c9ca625f))
+* update copy ([53096c2](https://github.com/geyserfund/geyser-app/commit/53096c263a3db9599d037c36ecf504ac288cdac1))
+* use creators for hall of fame page ([4555a0d](https://github.com/geyserfund/geyser-app/commit/4555a0d8434d0ba2560e35c66aa4d251c8049486))
+
 ## [0.15.0](https://github.com/geyserfund/geyser-app/compare/v0.13.0...v0.15.0) (2024-11-20)
 
 

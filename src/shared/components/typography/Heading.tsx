@@ -2,7 +2,9 @@ import { Heading, HeadingProps } from '@chakra-ui/react'
 
 import { getFontColor, getFontWeight, TextColorProps, TextWeightProps } from './common'
 
-interface HeaderProps extends HeadingProps, TextWeightProps, TextColorProps {}
+interface HeaderProps extends HeadingProps, TextWeightProps, TextColorProps {
+  to?: string
+}
 
 /** H1 heading, default size: 4xl / 36px */
 export const H1 = (props: HeaderProps) => {
@@ -34,6 +36,7 @@ export const H6 = (props: HeaderProps) => {
 export const BaseHeading = ({ thin, medium, bold, light, muted, size = 'md', ...rest }: HeaderProps) => {
   return (
     <Heading
+      fontFamily="inherit"
       fontWeight={getFontWeight({ thin, medium, bold })}
       color={getFontColor({ light, muted })}
       fontSize={size}

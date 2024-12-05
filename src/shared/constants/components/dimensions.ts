@@ -89,6 +89,9 @@ export const dimensions = {
       },
     },
   },
+  guardians: {
+    maxWidth: '1920px',
+  },
 
   pullDownThreshold: 70,
   maxWidth: 1080,

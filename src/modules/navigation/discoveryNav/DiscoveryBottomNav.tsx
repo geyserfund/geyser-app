@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { getPath } from '@/shared/constants'
+import { GradientBorder } from '@/shared/molecules/GradientBorder'
+import { GuardiansButtonBackgroundGradient, GuardiansButtonBackgroundGradientBright } from '@/shared/styles/custom'
 
 import { BottomNavBarContainer } from '../components/bottomNav'
 import { currentPlatformNavItemAtom } from './discoveryNavAtom'
@@ -48,32 +50,52 @@ type DiscoveryBottomNavButtonProps = {
 const DiscoveryBottomNavButton = ({ item, currentNavItem, activityDot, ...rest }: DiscoveryBottomNavButtonProps) => {
   const isActive = currentNavItem?.path === item.path
 
+  const isGuardians = item.path === DiscoveryNavItemKey.Guardians
+
+  let buttonStyles: ButtonProps = {}
+
+  if (isGuardians) {
+    buttonStyles = {
+      background: GuardiansButtonBackgroundGradient,
+      width: 'full',
+    }
+  }
+
   return (
-    <Button
-      variant="menu"
-      colorScheme="primary1"
-      size="lg"
+    <GradientBorder
+      display="inline-flex"
       flex={1}
-      key={item.label}
-      as={Link}
-      paddingX={4}
-      to={getPath(item.path)}
-      isActive={isActive}
-      justifyContent={'center'}
-      {...rest}
+      internalContainerProps={{ flex: 1 }}
+      enable={isGuardians}
+      gradientColor={GuardiansButtonBackgroundGradientBright}
     >
-      <item.icon fontSize="24px" />
-      {activityDot ? (
-        <Box
-          position="absolute"
-          top={2}
-          right={2}
-          borderRadius="50%"
-          backgroundColor="error.9"
-          height="6px"
-          width="6px"
-        />
-      ) : null}
-    </Button>
+      <Button
+        variant="menu"
+        colorScheme="primary1"
+        size="lg"
+        flex={1}
+        key={item.label}
+        as={Link}
+        paddingX={4}
+        to={getPath(item.path)}
+        isActive={isActive}
+        justifyContent={'center'}
+        {...buttonStyles}
+        {...rest}
+      >
+        <item.icon fontSize="24px" />
+        {activityDot ? (
+          <Box
+            position="absolute"
+            top={2}
+            right={2}
+            borderRadius="50%"
+            backgroundColor="error.9"
+            height="6px"
+            width="6px"
+          />
+        ) : null}
+      </Button>
+    </GradientBorder>
   )
 }
