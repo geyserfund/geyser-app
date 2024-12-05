@@ -187,16 +187,11 @@ export const PlatformNavBar = () => {
             {renderLeftSide()}
           </HStack>
 
-          <HStack position="relative">
-            {!isLoggedIn && <CreateProjectButton size={{ base: 'md', lg: 'lg' }} iconOnly={isMobileMode} />}
-            {!isLoggedIn ? <LoginButton /> : <ProjectSelectMenu />}
-            <ProfileNav />
-          </HStack>
-
           {isManifestoPage ? (
             <CloseGoBackButton />
           ) : (
             <HStack position="relative">
+              {!isLoggedIn && <CreateProjectButton size={{ base: 'md', lg: 'lg' }} iconOnly={isMobileMode} />}
               {!isLoggedIn ? <LoginButton /> : isGuardiansPage ? <ShareGuardiansButton /> : <ProjectSelectMenu />}
               <ProfileNav />
             </HStack>
