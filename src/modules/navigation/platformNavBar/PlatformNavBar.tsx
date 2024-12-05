@@ -2,7 +2,7 @@ import { Button, HStack, IconButton, useDisclosure, VStack } from '@chakra-ui/re
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
-import { PiCopy, PiShareFat, PiX } from 'react-icons/pi'
+import { PiArrowLeft, PiCopy, PiShareFat, PiX } from 'react-icons/pi'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 
 import { FilterComponent } from '@/modules/discovery/filters/FilterComponent'
@@ -29,6 +29,7 @@ import {
   isDiscoveryRoutesAtom,
   shouldShowGeyserLogoAtom,
   shouldShowProjectLogoAtom,
+  useIsGuardianCharacterPage,
   useIsGuardiansPage,
   useIsManifestoPage,
 } from './platformNavBarAtom'
@@ -43,6 +44,7 @@ export const PlatformNavBar = () => {
   const heroCard = useAtomValue(heroCardAtom)
 
   const isGuardiansPage = useIsGuardiansPage()
+  const isGuardianCharacterPage = useIsGuardianCharacterPage()
   const isManifestoPage = useIsManifestoPage()
 
   const isMobileMode = useMobileMode()
@@ -128,14 +130,30 @@ export const PlatformNavBar = () => {
         colorScheme="neutral1"
         size={{ base: 'md', lg: 'lg' }}
         width={{ base: '40px', lg: '48px' }}
+        minWidth={{ base: '40px', lg: '48px' }}
         height={{ base: '40px', lg: '48px' }}
         borderRadius="50% !important"
         aria-label="go-back"
         icon={<PiX fontSize={'24px'} />}
         onClick={() => navigate(-1)}
-      >
-        Go Back
-      </IconButton>
+      />
+    )
+  }
+
+  const BackButton = () => {
+    return (
+      <IconButton
+        variant="outline"
+        colorScheme="neutral1"
+        size={{ base: 'sm', lg: 'md' }}
+        width={{ base: '32px', lg: '40px' }}
+        minWidth={{ base: '32px', lg: '40px' }}
+        height={{ base: '32px', lg: '40px' }}
+        borderRadius="50% !important"
+        aria-label="go-back"
+        icon={<PiArrowLeft fontSize={'24px'} />}
+        onClick={() => navigate(-1)}
+      />
     )
   }
 
@@ -163,7 +181,10 @@ export const PlatformNavBar = () => {
         spacing={4}
       >
         <HStack w="100%" height={{ base: '40px', lg: '48px' }} justifyContent={'space-between'}>
-          {renderLeftSide()}
+          <HStack height="full">
+            {isGuardianCharacterPage && <BackButton />}
+            {renderLeftSide()}
+          </HStack>
 
           {isManifestoPage ? (
             <CloseGoBackButton />
