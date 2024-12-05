@@ -1,9 +1,12 @@
-import { Stack, StackProps } from '@chakra-ui/react'
+import { LinkProps as ChakraLinkProps, Stack, StackProps } from '@chakra-ui/react'
 import { Link, LinkProps } from 'react-router-dom'
 
 import { useMobileMode } from '../../../utils'
 
-export interface CardLayoutProps extends StackProps, Partial<Pick<LinkProps, 'to'>> {
+export interface CardLayoutProps
+  extends StackProps,
+    Partial<Pick<LinkProps, 'to'>>,
+    Partial<Pick<ChakraLinkProps, 'href'>> {
   noborder?: boolean
   noMobileBorder?: boolean
   mobileDense?: boolean

@@ -1,4 +1,14 @@
-import { Box, BoxProps, HStack, Image, StackProps, useColorMode, useColorModeValue, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  BoxProps,
+  HStack,
+  Image,
+  StackProps,
+  useBreakpointValue,
+  useColorMode,
+  useColorModeValue,
+  VStack,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -12,26 +22,29 @@ import {
   GuardiansDesktopBackgroundLightModeUrl,
 } from '@/shared/constants/platform/url'
 import { fonts } from '@/shared/styles'
-import { toPx } from '@/utils'
+import { toPx, useMobileMode } from '@/utils'
 
 import { GuardiansGradients } from '../../../style'
 import { Guardian } from '../../../types'
 export const DesktopGuardiansIllustration = () => {
   const navigate = useNavigate()
 
+  const value = useBreakpointValue({ lg: '50%', xl: '40%' })
+
   const image = useColorModeValue(GuardiansDesktopBackgroundLightModeUrl, GuardiansDesktopBackgroundDarkModeUrl)
 
   const gradient = useColorModeValue(GuardiansGradients.light, GuardiansGradients.dark)
 
+  const isMobileMode = useMobileMode()
   const { colorMode } = useColorMode()
 
   const isLightMode = colorMode === 'light'
 
   const imageRef = useRef<HTMLImageElement>(null)
 
-  const [uiPosition, setUiPosition] = useState(window.innerHeight * 0.54)
+  const [uiPosition, setUiPosition] = useState('')
 
-  const [gradientHeight, setGradientHeight] = useState(window.innerHeight * 0.54)
+  const [gradientHeight, setGradientHeight] = useState('50vh')
 
   const updateUIPosition = () => {
     if (imageRef.current) {
@@ -40,13 +53,13 @@ export const DesktopGuardiansIllustration = () => {
 
       const xPosition = imageRect.top + imageHeight * 0.5
 
-      setGradientHeight(imageHeight * 0.5)
+      const uiPositionCalculated = isMobileMode
+        ? xPosition - dimensions.topNavBar.mobile.height
+        : xPosition - dimensions.topNavBar.desktop.height
 
-      setUiPosition(xPosition)
+      setGradientHeight(toPx(imageHeight * 0.5))
+      setUiPosition(toPx(uiPositionCalculated))
     } else {
-      setGradientHeight(window.innerHeight * 0.54)
-      setUiPosition(window.innerHeight * 0.54)
-
       setTimeout(() => {
         updateUIPosition()
       }, 100)
@@ -79,14 +92,16 @@ export const DesktopGuardiansIllustration = () => {
   const commonVStackProps: StackProps = {
     position: 'relative',
     justifyContent: 'center',
-    height: toPx(gradientHeight),
+    height: gradientHeight,
+    background: 'guardians.background',
     className: 'guardian-wrapper',
   }
 
   const commonBodyProps: BodyProps = {
     size: textSize,
     opacity: 0,
-    paddingTop: '10%',
+    position: 'absolute',
+    bottom: uiPosition ? '30%' : { lg: '20%', xl: '10%', '3xl': '20%' },
     pointerEvents: 'none',
     sx: {
       '.guardian-wrapper:hover &': {
@@ -119,20 +134,10 @@ export const DesktopGuardiansIllustration = () => {
         alt="Guardians"
         pointerEvents="none"
       />
-      <Body fontSize={'xl'} textAlign={'center'} position="absolute" bottom={3} w="full">
+      <Body fontSize={'xl'} textAlign={'center'} position="absolute" bottom={3} w="full" zIndex={1}>
         {t('< Choose your character >')}
       </Body>
-      <HStack
-        w="full"
-        position="absolute"
-        top={{
-          base: toPx(uiPosition - dimensions.topNavBar.mobile.height),
-          lg: toPx(uiPosition - dimensions.topNavBar.desktop.height),
-        }}
-        left={0}
-        spacing={0}
-        fontFamily={fonts.mazius}
-      >
+      <HStack w="full" position="absolute" top={uiPosition || value} left={0} spacing={0} fontFamily={fonts.mazius}>
         <VStack
           {...commonVStackProps}
           flex={32}
