@@ -14,9 +14,9 @@ export const ClosedGrants = ({ closedGrants }: { closedGrants: Grant[] }) => {
   }
 
   return (
-    <VStack mt={10} w="100%" alignItems="flex-start">
-      <Body size="2xl" bold>
-        {t('Past Grants')}
+    <VStack w="100%" alignItems="flex-start">
+      <Body size={'2xl'} bold>
+        {t('Closed Grants')}
       </Body>
       {closedGrants.map((grant) => (
         <SmallGrantCard key={grant.id} grant={grant} showBanner />
