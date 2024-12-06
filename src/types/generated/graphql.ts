@@ -147,6 +147,11 @@ export enum AmountCurrency {
   Usdcent = 'USDCENT',
 }
 
+export enum AmountCurrency {
+  Btcsat = 'BTCSAT',
+  Usdcent = 'USDCENT',
+}
+
 export type AmountSummary = {
   __typename?: 'AmountSummary'
   donationAmount: Scalars['Int']['output']
@@ -1172,6 +1177,13 @@ export enum GrantType {
 export type GraphSumData = {
   dateTime: Scalars['Date']['output']
   sum: Scalars['Int']['output']
+}
+
+export enum GuardianType {
+  King = 'KING',
+  Knight = 'KNIGHT',
+  Legend = 'LEGEND',
+  Warrior = 'WARRIOR',
 }
 
 export enum GuardianType {
@@ -3033,6 +3045,10 @@ export enum SubscriptionCurrencyType {
   Usdcent = 'USDCENT',
 }
 
+export enum SubscriptionCurrencyType {
+  Usdcent = 'USDCENT',
+}
+
 export type Swap = {
   __typename?: 'Swap'
   json: Scalars['String']['output']
@@ -3305,14 +3321,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isAmbassador: Scalars['Boolean']['output']
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']['output']
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isSponsor: Scalars['Boolean']['output']
   /** Project linked to the contributions. */
