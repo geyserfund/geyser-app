@@ -6909,6 +6909,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stripe/react-stripe-js@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@stripe/react-stripe-js@npm:3.0.0"
+  dependencies:
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    "@stripe/stripe-js": ^1.44.1 || ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/863b434f28a700432312a12116873f63ff26fa1ed11e025af59cba5eed940f9c8f226768dc05b237b17836fc50d1f956b749124488e8c33146499d08fc9783f9
+  languageName: node
+  linkType: hard
+
+"@stripe/stripe-js@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "@stripe/stripe-js@npm:5.2.0"
+  checksum: 10c0/1afcf68a3a37f0337f26c3180dae4ea12f957c386a70395ace3d453d7687258d1abed0e1131e9875665ad8c796646e0bbd7af390d683ad60516f2a128ff9c484
+  languageName: node
+  linkType: hard
+
 "@surma/rollup-plugin-off-main-thread@npm:^2.2.3":
   version: 2.2.3
   resolution: "@surma/rollup-plugin-off-main-thread@npm:2.2.3"
@@ -13653,6 +13673,8 @@ __metadata:
     "@storybook/react-vite": "npm:^8.0.4"
     "@storybook/test": "npm:^8.0.4"
     "@storybook/types": "npm:^8.0.4"
+    "@stripe/react-stripe-js": "npm:^3.0.0"
+    "@stripe/stripe-js": "npm:^5.2.0"
     "@testing-library/jest-dom": "npm:^5.16.5"
     "@testing-library/react": "npm:^13.4.0"
     "@testing-library/react-hooks": "npm:^8.0.1"

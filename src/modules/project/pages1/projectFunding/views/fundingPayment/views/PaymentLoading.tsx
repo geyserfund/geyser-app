@@ -22,7 +22,16 @@ export const PaymentLoading = () => {
     if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid) {
       requestFundingFromContext((data) => {
         const fundingId = data.fund.fundingTx?.uuid
-        if (fundingId) {
+
+        if (fundingId && data.fund.fundingTx?.isSubscription) {
+          navigate(
+            {
+              pathname: getPath('fundingSubscription', project.name),
+              search: `?transactionId=${fundingId}`,
+            },
+            { replace: true },
+          )
+        } else if (fundingId) {
           navigate(
             {
               pathname: getPath('fundingPaymentLightning', project.name),

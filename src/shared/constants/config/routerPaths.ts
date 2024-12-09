@@ -83,10 +83,13 @@ export enum PathName {
 
   projectFunding = 'funding',
   fundingDetails = 'details',
+  fundingSubscription = 'subscription',
   fundingPayment = 'payment',
+  fundingStart = 'start',
   fundingPaymentFailed = 'failed',
   fundingPaymentLightning = 'lightning',
   fundingPaymentOnchain = 'onchain',
+  fundingPaymentCard = 'card',
   fundingPaymentOnchainQR = 'qr',
   fundingPaymentOnchainProcessing = 'processing',
   fundingPaymentOnchainRefund = 'refund',
@@ -209,22 +212,31 @@ const pathsMap = {
   projectFunding: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectFunding}`,
   fundingDetails: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingDetails}`,
+
+  fundingStart: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}`,
+
+  fundingSubscription: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingSubscription}`,
+
   fundingPayment: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}`,
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}`,
   fundingPaymentFailed: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentFailed} `,
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentFailed} `,
   fundingPaymentLightning: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentLightning}`,
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentLightning}`,
+  fundingPaymentCard: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentCard}`,
   fundingPaymentOnchain: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}`,
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}`,
   fundingPaymentOnchainQR: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainQR}`,
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainQR}`,
   fundingPaymentOnchainProcessing: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainProcessing}`,
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainProcessing}`,
   fundingPaymentOnchainRefund: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainRefund}`,
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainRefund}`,
   fundingPaymentOnchainRefundInitiated: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainRefund}/${PathName.fundingPaymentOnchainRefundInitiated}`,
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainRefund}/${PathName.fundingPaymentOnchainRefundInitiated}`,
   fundingSuccess: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingSuccess}`,
 

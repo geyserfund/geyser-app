@@ -37,7 +37,7 @@ export const FundingDetailsSummary = () => {
     const { title, description, error, valid } = isFundingUserInfoValid
 
     if (valid) {
-      navigate(getPath('fundingPayment', project.name))
+      navigate(getPath('fundingStart', project.name))
     } else if (error === FundingUserInfoError.EMAIL) {
       setErrorstate({ key: 'email', value: 'Email is a required field' })
       toast.error({

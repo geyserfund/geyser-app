@@ -42,6 +42,8 @@ export const FRAGMENT_FUNDING_TX = gql`
     projectId
     creatorEmail
     createdAt
+    stripeClientSecret
+    isSubscription
     bitcoinQuote {
       quote
       quoteCurrency

@@ -3,7 +3,7 @@ import { FundFormType } from '@/modules/project/funding/state/fundingFormAtom'
 import { useBtcContext } from '../context/btc'
 import { __production__ } from '../shared/constants'
 import { Satoshis, USDCents } from '../types'
-import { RewardCurrency } from '../types/generated/graphql'
+import { RewardCurrency, SubscriptionCurrencyType } from '../types/generated/graphql'
 import { hasShipping } from '../utils'
 import { useBTCConverter } from './useBTCConverter'
 
@@ -13,7 +13,7 @@ const internationalShippingCost = __production__ ? 60 : 0.06
 export const useFundCalc = (
   state: Pick<
     FundFormType,
-    'rewardCurrency' | 'rewardsCost' | 'donationAmount' | 'shippingDestination' | 'rewardsByIDAndCount'
+    'rewardCurrency' | 'rewardsCost' | 'donationAmount' | 'shippingDestination' | 'rewardsByIDAndCount' | 'subscription'
   >,
 ) => {
   const { btcRate } = useBtcContext()
@@ -37,6 +37,24 @@ export const useFundCalc = (
     return parseFloat(Number(rewardsDollarCost).toFixed(2))
   }
 
+  const getSubscriptionAmount = (type: 'sats' | 'dollar') => {
+    if (type === 'sats') {
+      const subscriptionCost =
+        state.subscription?.currency === SubscriptionCurrencyType.Usdcent
+          ? getSatoshisFromUSDCents(state.subscription.cost as USDCents)
+          : state.subscription.cost
+
+      return subscriptionCost
+    }
+
+    const rewardsDollarCost =
+      state.rewardCurrency === RewardCurrency.Usdcent
+        ? state.rewardsCost / 100
+        : getUSDAmount(state.rewardsCost as Satoshis)
+
+    return parseFloat(Number(rewardsDollarCost).toFixed(2))
+  }
+
   const getTotalAmount = (type: 'sats' | 'dollar', projectName = '') => {
     const shippingAmount = hasShipping(projectName) ? getShippingCost() : 0
 
@@ -46,7 +64,12 @@ export const useFundCalc = (
           ? getSatoshisFromUSDCents(state.rewardsCost as USDCents)
           : state.rewardsCost
 
-      return Math.round(rewardsCost) + state.donationAmount + shippingAmount
+      const subscriptionCost =
+        state.subscription?.currency === SubscriptionCurrencyType.Usdcent
+          ? getSatoshisFromUSDCents(state.subscription.cost as USDCents)
+          : state.subscription.cost
+
+      return Math.round(rewardsCost) + state.donationAmount + Math.round(subscriptionCost) + shippingAmount
     }
 
     const donationDollarAmount = Math.round(getUSDAmount((state.donationAmount + shippingAmount) as Satoshis))
@@ -56,7 +79,12 @@ export const useFundCalc = (
         ? state.rewardsCost / 100
         : getUSDAmount(state.rewardsCost as Satoshis)
 
-    return parseFloat((donationDollarAmount + rewardsDollarCost).toFixed(2))
+    const subscriptionDollarCost =
+      state.subscription?.currency === SubscriptionCurrencyType.Usdcent
+        ? state.subscription.cost / 100
+        : getUSDAmount(state.subscription.cost as Satoshis)
+
+    return parseFloat((donationDollarAmount + rewardsDollarCost + subscriptionDollarCost).toFixed(2))
   }
 
   const getShippingCost = () => {
@@ -79,6 +107,7 @@ export const useFundCalc = (
     getTotalAmount,
     getShippingCost,
     getRewardsAmount,
+    getSubscriptionAmount,
     getRewardsQuantity,
     btcRate,
   }

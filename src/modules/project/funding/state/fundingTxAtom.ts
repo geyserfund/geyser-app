@@ -16,6 +16,7 @@ const initialFunding: Omit<FundingTxFragment, 'funder' | 'amountPaid'> = {
   media: '',
   paidAt: '',
   onChain: false,
+  isSubscription: false,
   source: '',
 }
 

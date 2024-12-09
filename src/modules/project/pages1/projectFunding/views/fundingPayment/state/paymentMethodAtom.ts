@@ -6,11 +6,12 @@ import {
   projectFundingPaymentOnchainStartedRoutes,
   routeMatchForAtom,
 } from '@/config/routes/routeGroups'
-import { fundingFormStateAtom, fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom'
+import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom'
 
 export enum PaymentMethods {
   lightning = 'LIGHTNING',
   onChain = 'ONCHAIN',
+  card = 'CARD',
 }
 
 export const paymentMethodAtom = atom((get) => {
@@ -30,10 +31,15 @@ export const isOnchainMethodAtom = atom(routeMatchForAtom(projectFundingPaymentO
 
 export const isOnchainMethodStartedAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainStartedRoutes))
 
-const listOfProjectsThatHaveStripePayment = []
+const listOfProjectsThatHaveStripePayment = ['geyser', 'test18']
 
-export const hasCardPaymentMethodAtom = atom((get) => {
+export const hasStripePaymentMethodAtom = atom((get) => {
   const project = get(fundingProjectAtom)
+  if (listOfProjectsThatHaveStripePayment.includes(project.name)) {
+    return true
+  }
+
+  return false
 })
 
 export const useIsLightingMethodAtom = () => useAtomValue(isLightingMethodAtom)

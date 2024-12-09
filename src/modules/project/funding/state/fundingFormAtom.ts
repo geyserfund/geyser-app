@@ -10,10 +10,13 @@ import {
   OrderItemType,
   ProjectPageWalletFragment,
   ProjectRewardFragment,
+  ProjectSubscriptionPlansFragment,
   QuoteCurrency,
   RewardCurrency,
   ShippingDestination,
+  SubscriptionCurrencyType,
   UserMeFragment,
+  UserSubscriptionInterval,
 } from '@/types'
 import { centsToDollars, commaFormatted, isProjectAnException, toInt, validateEmail } from '@/utils'
 
@@ -34,6 +37,7 @@ export enum FundingUserInfoError {
 export type FundingProjectState = FundingProject & {
   wallet?: ProjectPageWalletFragment
   rewards: ProjectRewardFragment[]
+  subscriptions?: ProjectSubscriptionPlansFragment[]
 }
 
 export type FundFormType = {
@@ -53,6 +57,13 @@ export type FundFormType = {
   resourceType?: FundingResourceType
   followProject: boolean
   subscribeToGeyserEmails: boolean
+  subscription: {
+    cost: number
+    subscriptionId?: number
+    currency?: SubscriptionCurrencyType
+    intervalType: UserSubscriptionInterval
+    name?: string
+  }
 }
 
 const initialState: FundFormType = {
@@ -67,6 +78,13 @@ const initialState: FundFormType = {
   followProject: true,
   subscribeToGeyserEmails: false,
   rewardsByIDAndCount: undefined,
+  subscription: {
+    cost: 0,
+    subscriptionId: undefined,
+    currency: SubscriptionCurrencyType.Usdcent,
+    intervalType: UserSubscriptionInterval.Monthly,
+    name: '',
+  },
   rewardCurrency: RewardCurrency.Usdcent,
   needsShipping: false,
   shippingDestination: ShippingDestination.National,
@@ -155,6 +173,8 @@ export const resetFundingFormRewardsAtom = atom(null, (get, set) => {
     ...current,
     rewardsByIDAndCount: {},
     rewardsCost: 0,
+    subscriptionId: undefined,
+    subscriptionCost: 0,
     totalAmount: current.donationAmount,
     needsShipping: false,
   }))
@@ -223,6 +243,51 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
       rewardCurrency: project.rewardCurrency ? project.rewardCurrency : current.rewardCurrency,
     }))
   }
+})
+
+/** Update subscription in the funding flow */
+export const updateFundingFormSubscriptionAtom = atom(null, (get, set, { id }: { id: number }) => {
+  const { subscriptions } = get(fundingProjectAtom)
+  const usdRate = get(usdRateAtom)
+
+  set(fundingFormStateAtom, (current) => {
+    let subscriptionCost = 0
+    let subscriptionCostInSatoshi = 0
+
+    if (subscriptions) {
+      const subscription = subscriptions.find((subscription) => toInt(subscription.id) === id)
+
+      if (subscription && subscription.id) {
+        const { cost } = subscription
+
+        subscriptionCost = cost
+
+        if (subscription.currency === SubscriptionCurrencyType.Usdcent) {
+          subscriptionCostInSatoshi = Math.round((centsToDollars(cost) / usdRate) * SATOSHIS_IN_BTC)
+        } else {
+          subscriptionCostInSatoshi = cost
+        }
+      }
+
+      console.log('subscriptionCostInSatoshi', subscriptionCostInSatoshi)
+      console.log('subscriptionCost', subscriptionCost)
+      console.log('id', id)
+
+      return {
+        ...current,
+        subscription: {
+          cost: subscriptionCost,
+          subscriptionId: id,
+          intervalType: subscription?.intervalType || UserSubscriptionInterval.Monthly,
+          name: subscription?.name,
+          currency: subscription?.currency,
+        },
+        totalAmount: subscriptionCostInSatoshi + current.donationAmount,
+      }
+    }
+
+    return current
+  })
 })
 
 /** Check if the  funding Amount is enough for onChain payments */
@@ -367,6 +432,7 @@ export const formattedFundingInputAtom = atom((get) => {
     privateComment,
     followProject,
     subscribeToGeyserEmails,
+    subscription,
   } = formState
 
   const anonymous = !user || !user.id
@@ -382,6 +448,14 @@ export const formattedFundingInputAtom = atom((get) => {
           quantity: rewardQuantity,
         })
       }
+    })
+  }
+
+  if (subscription && subscription.cost) {
+    orderItemInputs.push({
+      itemId: toInt(subscription.subscriptionId),
+      itemType: OrderItemType.ProjectSubscriptionPlan,
+      quantity: 1,
     })
   }
 
@@ -411,6 +485,10 @@ export const formattedFundingInputAtom = atom((get) => {
     projectGoalId,
     affiliateId,
     ambassadorHeroId: heroId,
+    stripeCheckoutSessionInput: {
+      successUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
+      cancelUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/cancel`,
+    },
   }
 
   return input

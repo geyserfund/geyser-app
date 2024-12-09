@@ -7,6 +7,7 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { PathName } from '@/shared/constants'
 
 import {
+  hasStripePaymentMethodAtom,
   isOnchainMethodAtom,
   isOnchainMethodStartedAtom,
   paymentMethodAtom,
@@ -20,27 +21,40 @@ export const PaymentMethodSelection = () => {
 
   const paymentMethod = useAtomValue(paymentMethodAtom)
   const isOnchainMethodStarted = useAtomValue(isOnchainMethodStartedAtom)
+  const hasStripePaymentOption = useAtomValue(hasStripePaymentMethodAtom)
 
-  const items: AnimatedNavBarItem[] = useMemo(
-    () => [
-      {
-        name: t('Lightning'),
-        key: PaymentMethods.lightning,
-        path: PathName.fundingPaymentLightning,
+  const items: AnimatedNavBarItem[] = useMemo(() => {
+    const navBarItems = [] as AnimatedNavBarItem[]
+
+    if (hasStripePaymentOption) {
+      navBarItems.push({
+        name: t('Card'),
+        key: PaymentMethods.card,
+        path: PathName.fundingPaymentCard,
         isDisabled: isOnchainMethodStarted || Boolean(!paymentMethod),
         disableClick: isOnchainMethodStarted,
-      },
-      {
-        name: t('Onchain'),
-        key: PaymentMethods.onChain,
-        path: isOnchainMethodStarted ? '' : PathName.fundingPaymentOnchain,
-        isDisabled: Boolean(onChainAmountWarning) || Boolean(!paymentMethod),
-        tooltipLabel: onChainAmountWarning || undefined,
-        disableClick: isOnchainMethodStarted,
-      },
-    ],
-    [onChainAmountWarning, isOnchainMethodStarted, paymentMethod],
-  )
+      })
+    }
+
+    navBarItems.push({
+      name: t('Lightning'),
+      key: PaymentMethods.lightning,
+      path: PathName.fundingPaymentLightning,
+      isDisabled: isOnchainMethodStarted || Boolean(!paymentMethod),
+      disableClick: isOnchainMethodStarted,
+    })
+
+    navBarItems.push({
+      name: t('Onchain'),
+      key: PaymentMethods.onChain,
+      path: isOnchainMethodStarted ? '' : PathName.fundingPaymentOnchain,
+      isDisabled: Boolean(onChainAmountWarning) || Boolean(!paymentMethod),
+      tooltipLabel: onChainAmountWarning || undefined,
+      disableClick: isOnchainMethodStarted,
+    })
+
+    return navBarItems
+  }, [onChainAmountWarning, isOnchainMethodStarted, hasStripePaymentOption, paymentMethod])
 
   const activeButtonIndex = useMemo(() => {
     const currentItem = items.find((item) =>
