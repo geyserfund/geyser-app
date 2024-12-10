@@ -179,6 +179,15 @@ export const platformRoutes: RouteObject[] = [
               return { Component: ProfileSettingsNotifications }
             },
           },
+          {
+            path: getPath('userProfileSettingsSubscriptions', PathName.userId),
+            async lazy() {
+              const ProfileSettingsSubscriptions = await ProfileSettingsIndex().then(
+                (m) => m.ProfileSettingsSubscriptions,
+              )
+              return { Component: ProfileSettingsSubscriptions }
+            },
+          },
         ],
       },
     ],
@@ -226,6 +235,15 @@ export const platformRoutes: RouteObject[] = [
                 (m) => m.ProfileSettingsNotifications,
               )
               return { Component: ProfileSettingsNotifications }
+            },
+          },
+          {
+            path: getPath('heroProfileSettingsSubscriptions', PathName.heroId),
+            async lazy() {
+              const ProfileSettingsSubscriptions = await ProfileSettingsIndex().then(
+                (m) => m.ProfileSettingsSubscriptions,
+              )
+              return { Component: ProfileSettingsSubscriptions }
             },
           },
         ],

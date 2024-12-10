@@ -57,11 +57,13 @@ export enum PathName {
   userSettings = 'settings',
   userSettingsGeneral = 'general',
   userSettingsNotifications = 'notifications',
+  userSettingsSubscriptions = 'subscriptions',
 
   heroProfile = 'hero',
   heroSettings = 'settings',
   heroSettingsGeneral = 'general',
   heroSettingsNotifications = 'notifications',
+  heroSettingsSubscriptions = 'subscriptions',
 
   preview = 'preview',
 
@@ -280,6 +282,8 @@ const pathsMap = {
     `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsGeneral}`,
   userProfileSettingsNotifications: (userId: string) =>
     `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsNotifications}`,
+  userProfileSettingsSubscriptions: (userId: string) =>
+    `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsSubscriptions}`,
 
   heroProfile: (heroId: string) => `/${PathName.heroProfile}/${heroId}`,
   heroProfileSettings: (heroId: string) => `/${PathName.heroProfile}/${heroId}/${PathName.heroSettings}`,
@@ -287,6 +291,8 @@ const pathsMap = {
     `/${PathName.heroProfile}/${heroId}/${PathName.heroSettings}/${PathName.heroSettingsGeneral}`,
   heroProfileSettingsNotifications: (heroId: string) =>
     `/${PathName.heroProfile}/${heroId}/${PathName.heroSettings}/${PathName.heroSettingsNotifications}`,
+  heroProfileSettingsSubscriptions: (heroId: string) =>
+    `/${PathName.heroProfile}/${heroId}/${PathName.heroSettings}/${PathName.heroSettingsSubscriptions}`,
 
   badges: () => `/${PathName.badges}`,
 
