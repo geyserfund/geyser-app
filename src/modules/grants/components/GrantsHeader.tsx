@@ -1,204 +1,110 @@
-import { Box, Button, HStack, Image, Link as ChakraLink, Skeleton, VStack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
-import { PiCoins, PiTrophy } from 'react-icons/pi'
-import { useNavigate } from 'react-router'
-import { Link } from 'react-router-dom'
+import { HStack, Icon, Image, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
+import {
+  PiDotOutline,
+  // PiTrophy
+} from 'react-icons/pi'
 
-import { Body } from '@/shared/components/typography'
-import { __production__, __staging__ } from '@/shared/constants'
-import { getPath, GrantsPageBannerNoiseGifUrl } from '@/shared/constants'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
+import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
+import { Body, H2 } from '@/shared/components/typography'
+import { __production__, __staging__, HallOfFameIllustrationUrl } from '@/shared/constants'
+import { lightModeColors } from '@/shared/styles'
 import { useGrantStatisticsQuery } from '@/types'
-import { getShortAmountLabel, useMobileMode } from '@/utils'
+import { getShortAmountLabel } from '@/utils'
 
-const GEYSER_PROJECT_NAME = __staging__ ? 'geyser2' : __production__ ? 'grants' : 'geyser2'
-const AIRTABLE_CREATE_GRANT_URL = 'https://airtable.com/appyM7XlNIWVypuP5/pagLMhHSSQVlKe0Dw/form'
+// const GEYSER_PROJECT_NAME = __staging__ ? 'geyser2' : __production__ ? 'grants' : 'geyser2'
 
 export const GrantsHeader = () => {
-  const { t } = useTranslation()
-
-  const navigate = useNavigate()
-
-  const isMobile = useMobileMode()
-
   const { data, loading } = useGrantStatisticsQuery()
 
-  const { formatUsdAmount } = useCurrencyFormatter(true)
-
   const grantedAmount = data?.grantStatistics.grants?.amountFunded || 0
-  const grantedAmountUsd = formatUsdAmount(grantedAmount)
-
   const distributedAmount = data?.grantStatistics.grants?.amountGranted || 0
-  const distributedAmountUsd = formatUsdAmount(distributedAmount)
 
-  const items = [
-    {
-      label: t('Granted'),
-      value: getShortAmountLabel(grantedAmount),
-      suffix: 'Sats',
-      usdValue: grantedAmountUsd,
-    },
-    {
-      label: t('Distributed'),
-      value: getShortAmountLabel(distributedAmount),
-      suffix: 'Sats',
-      usdValue: distributedAmountUsd,
-    },
+  const bannerItems = [
+    { label: 'granted', value: getShortAmountLabel(grantedAmount) },
+    { label: 'distributed', value: `${getShortAmountLabel(distributedAmount)}` },
   ]
 
-  const handleDonateToGeyser = () => {
-    navigate(getPath('projectGoals', GEYSER_PROJECT_NAME))
+  const padding = { base: 4, lg: '6' }
+
+  const renderPlatformStats = () => {
+    if (loading) return <ProjectStatSkeleton />
+
+    return bannerItems.map((item, index) => (
+      <>
+        <Body key={index} size={{ base: 'sm', lg: 'xl' }} color="neutral1.10" textAlign={'center'}>
+          {item.value} <Body as="span">{item.label}</Body>
+        </Body>
+        {index < bannerItems.length - 1 && <Icon as={PiDotOutline} />}
+      </>
+    ))
   }
 
-  const Direction = isMobile ? VStack : HStack
-  const Column = isMobile ? VStack : HStack
-
   return (
-    <>
-      <Box position="relative" w="100%">
-        <VStack
-          w="100%"
-          spacing={0}
-          border="1px solid"
-          borderColor="neutralAlpha.6"
-          borderTopRightRadius="8px"
-          borderTopLeftRadius="8px"
-          bg={'primaryAlpha.10'}
-          p={4}
-        >
-          <Image
-            src={GrantsPageBannerNoiseGifUrl}
-            position="absolute"
-            top={0}
-            left={0}
-            right={0}
-            bottom={0}
-            w="100%"
-            h="100%"
-            objectFit="cover"
-            opacity={0.25}
-            zIndex={1}
-            draggable={false}
-            borderTopRadius="8px"
-          />
-          <Body size={{ base: '3xl', lg: '4xl' }} bold zIndex={2}>
+    <CardLayout
+      w="full"
+      dense
+      spacing={{ base: 4, lg: 6 }}
+      background="linear-gradient(81deg, #FFFBE7 -9.6%, #C4FFF4 109.2%)"
+      position="relative"
+      backgroundColor="utils.pbg"
+      alignItems={{ base: 'start', lg: 'center' }}
+    >
+      <FlowingGifBackground />
+
+      <HStack
+        w="full"
+        spacing={{ base: 4, lg: 6 }}
+        paddingX={padding}
+        paddingTop={padding}
+        paddingBottom={{ base: 0, lg: 6 }}
+      >
+        <Image
+          src={HallOfFameIllustrationUrl}
+          alt="Geyser Grants"
+          width={{ base: '95px', lg: '130px' }}
+          height="auto"
+          objectFit={'contain'}
+          zIndex={1}
+        />
+        <VStack w="full" alignItems={'start'} spacing={{ base: 2, lg: 0 }} zIndex={1}>
+          <H2 size={{ base: 'xl', lg: '3xl' }} bold color={lightModeColors.utils.text}>
             {t('Geyser Grants')}
-          </Body>
-          <VStack spacing={0}>
-            <Body size={{ base: 'md', lg: 'xl' }} regular zIndex={2} textAlign="center">
-              {t('Funding educators, creatives and builders doing Bitcoin-only projects on Geyser.')}
-            </Body>
-            <Body size={{ base: 'md', lg: 'xl' }} regular zIndex={2} textAlign="center">
-              {t('Funded by bitcoiners who want to change the world.')}
-            </Body>
-          </VStack>
-        </VStack>
-      </Box>
-      <Box position="relative" w="100%">
-        <VStack
-          width="full"
-          border="1px solid"
-          justifyContent="center"
-          borderColor="neutralAlpha.6"
-          p={6}
-          borderBottomRadius="8px"
-          mt={-0.25}
-          borderTop={'none'}
-          zIndex={0}
-        >
-          <Box width="100%" justifyContent="center">
-            {items && (
-              <Column
-                w={{ base: '100%', lg: 'auto' }}
-                spacing={{ base: 2, lg: 6 }}
-                alignItems="center"
-                justifyContent="center"
-              >
-                {items.map((item, index) => (
-                  <BannerItem
-                    key={index}
-                    label={item.label}
-                    value={item.value}
-                    suffix={item.suffix}
-                    usdValue={item.usdValue}
-                    loading={loading}
-                  />
-                ))}
-              </Column>
+          </H2>
+
+          <Body size={{ base: 'sm', lg: 'xl' }} medium color={lightModeColors.neutral1[11]}>
+            {t(
+              'Grants for educators, creatives and builders pushing Bitcoin adoption further. Help fund the next round of grants now!',
             )}
-          </Box>
-          <HStack w="100%" justifyContent="center">
-            <Link to={getPath('project', GEYSER_PROJECT_NAME)} target="_blank">
-              <Body
-                fontSize={{ base: 'md', lg: 'lg' }}
-                medium
-                color="primaryAlpha.11"
-                style={{ textDecoration: 'underline' }}
-              >
-                {t('Learn more about Geyser Grants')}
-              </Body>
-            </Link>
+          </Body>
+          <HStack w="full" display={{ base: 'none', lg: 'flex' }} color={lightModeColors.utils.text}>
+            {renderPlatformStats()}
           </HStack>
-          <Direction mt={3} justifyContent="space-between" w="100%">
-            <Button
-              w="100%"
-              size="lg"
-              variant="solid"
-              colorScheme="primary1"
-              rightIcon={<PiCoins size={18} />}
-              onClick={handleDonateToGeyser}
-            >
-              {t('Donate to Geyser Grants')}
-            </Button>
-            <Button
-              as={ChakraLink}
-              href={AIRTABLE_CREATE_GRANT_URL}
-              isExternal
-              w="100%"
-              size="lg"
-              variant="solid"
-              colorScheme="yellow"
-              textColor="utils.blackContrast"
-              rightIcon={<PiTrophy size={18} />}
-            >
-              {t('Create a grant')}
-            </Button>
-          </Direction>
         </VStack>
-      </Box>
-    </>
+      </HStack>
+      <HStack
+        paddingX={padding}
+        paddingY={2}
+        alignItems={'center'}
+        justifyContent={'center'}
+        w="full"
+        display={{ base: 'flex', lg: 'none' }}
+        backgroundColor="neutralAlpha.3"
+      >
+        {renderPlatformStats()}
+      </HStack>
+    </CardLayout>
   )
 }
 
-const BannerItem = ({
-  label,
-  value,
-  loading,
-  suffix,
-  usdValue,
-}: {
-  label: string
-  value: string
-  loading: boolean
-  suffix?: string
-  usdValue?: string
-}) => {
-  return (
-    <HStack>
-      <Body fontSize={{ base: 'xl', lg: '3xl' }} muted medium>
-        {label}:
-      </Body>
-      <Body fontSize={{ base: 'xl', lg: '3xl' }} color="neutral1.12" bold>
-        {loading ? <Skeleton height="20px" width="40px" /> : value}
-      </Body>
-      {suffix && (
-        <Body fontSize={{ base: 'xl', lg: '3xl' }} muted medium>
-          {suffix}
-        </Body>
-      )}
-      <Body fontSize={{ base: 'xl', lg: '3xl' }} muted medium>
-        ({usdValue})
-      </Body>
-    </HStack>
-  )
+const ProjectStatSkeleton = () => {
+  return [1, 2, 3].map((key) => {
+    return (
+      <>
+        <SkeletonLayout height="24px" />
+        {key < 3 && <Icon as={PiDotOutline} size="xl" />}
+      </>
+    )
+  })
 }

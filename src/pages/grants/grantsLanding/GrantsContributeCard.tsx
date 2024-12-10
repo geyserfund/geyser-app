@@ -1,11 +1,9 @@
-import { useQuery } from '@apollo/client'
 import { Box, Link, Stack, Text, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { QUERY_GRANT_STATISTICS } from '../../../graphqlBase/queries/grant'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../shared/components/layouts'
 import { useAnimatedClipboard } from '../../../shared/hooks/useAnimatedClipboard'
-import { GrantStatistics } from '../../../types'
+import { useGrantStatisticsQuery } from '../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../utils'
 import { ListText } from '../components/ListText'
 import { CONTRIBUTION_ADDRESS } from '../constants'
@@ -16,7 +14,7 @@ export const GrantsContributeCard = (props: CardLayoutProps) => {
 
   const [handleCopyAddress, hasCopied] = useAnimatedClipboard(CONTRIBUTION_ADDRESS)
 
-  const { data, loading } = useQuery<{ grantStatistics: GrantStatistics }>(QUERY_GRANT_STATISTICS)
+  const { data, loading } = useGrantStatisticsQuery()
 
   const grantContributions = data?.grantStatistics.grants?.amountFunded || 0
   const grantDistributed = data?.grantStatistics.grants?.amountGranted || 0
