@@ -1,12 +1,12 @@
 import { Box, BoxProps, Button, HStack, Icon, Link as ChakraLink, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiDotOutline } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { ContributeButton } from '@/modules/project/pages1/projectView/views/body/components'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
-import { __development__ } from '@/shared/constants'
+import { __development__, getPath } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { ProjectGoal, useGrantProjectQuery, useGrantStatisticsQuery, useProjectInProgressGoalsQuery } from '@/types'
 import { useMobileMode } from '@/utils'
@@ -92,6 +92,8 @@ const GrantGoalCardSkeleton = () => {
 }
 
 export const GrantSubscriptionSection: React.FC = () => {
+  const navigate = useNavigate()
+
   const isMobile = useMobileMode()
   const isSubscribed = false // Replace with actual subscription state
 
@@ -121,7 +123,14 @@ export const GrantSubscriptionSection: React.FC = () => {
   const grantGoals = data?.projectGoals.inProgress || []
 
   const handleSubscribe = (grantGoal: string) => {
-    // TODO: Implement subscription logic
+    navigate(
+      { pathname: getPath('projectFunding', 'grants'), search: `?isSub=true` },
+      {
+        state: {
+          projectGoalId: grantGoal,
+        },
+      },
+    )
   }
 
   return (

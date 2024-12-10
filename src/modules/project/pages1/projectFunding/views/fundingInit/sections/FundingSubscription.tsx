@@ -1,11 +1,16 @@
 import { HStack, Radio, RadioGroup, VStack } from '@chakra-ui/react'
 import { Loader } from '@giphy/react-components'
 import { t } from 'i18next'
+import { useSetAtom } from 'jotai'
+import { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { selectedGoalIdAtom } from '@/modules/project/funding/state/fundingTxAtom'
 import { useSubscriptionBuy } from '@/modules/project/pages1/projectView/hooks/useSubscriptionBuy'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 import { SubscriptionCurrencyType, UserSubscriptionInterval } from '@/types'
 import { centsToDollars } from '@/utils'
 
@@ -16,8 +21,17 @@ export const PaymentIntervalLabelMap = {
   [UserSubscriptionInterval.Quarterly]: 'quarter',
 }
 
+interface LocationState {
+  projectGoalId: string
+}
+
 export const FundingSubscription = () => {
   const { project, formState } = useFundingFormAtom()
+  const setSelectedGoalId = useSetAtom(selectedGoalIdAtom)
+
+  const location = useLocation()
+  const navigate = useNavigate()
+  const { projectGoalId } = (location.state as LocationState) || {}
 
   const { subscriptions } = project
 
@@ -26,6 +40,13 @@ export const FundingSubscription = () => {
   const handleSubscriptionChange = (id: string) => {
     addSubscriptionToBasket(id)
   }
+
+  useEffect(() => {
+    if (projectGoalId) {
+      setSelectedGoalId(projectGoalId)
+      navigate(getPath('projectFunding', project.name))
+    }
+  }, [projectGoalId, project.name, setSelectedGoalId])
 
   const currentSubscriptionId = formState.subscription?.subscriptionId?.toString()
 
