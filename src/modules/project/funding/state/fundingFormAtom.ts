@@ -61,7 +61,7 @@ export type FundFormType = {
     cost: number
     subscriptionId?: number
     currency?: SubscriptionCurrencyType
-    intervalType: UserSubscriptionInterval
+    interval: UserSubscriptionInterval
     name?: string
   }
 }
@@ -82,7 +82,7 @@ const initialState: FundFormType = {
     cost: 0,
     subscriptionId: undefined,
     currency: SubscriptionCurrencyType.Usdcent,
-    intervalType: UserSubscriptionInterval.Monthly,
+    interval: UserSubscriptionInterval.Monthly,
     name: '',
   },
   rewardCurrency: RewardCurrency.Usdcent,
@@ -153,6 +153,11 @@ export const setResourceAtom = atom(
 export const fundingFormHasRewardsAtom = atom((get) => {
   const fundingFormState = get(fundingFormStateAtom)
   return fundingFormState.rewardsByIDAndCount && Object.keys(fundingFormState.rewardsByIDAndCount).length > 0
+})
+
+export const fundingFormHasSubscriptionAtom = atom((get) => {
+  const fundingFormState = get(fundingFormStateAtom)
+  return fundingFormState.subscription && fundingFormState.subscription.cost > 0
 })
 
 /* Boolean to check if the funding form has rewards that require a private comment */
@@ -278,7 +283,7 @@ export const updateFundingFormSubscriptionAtom = atom(null, (get, set, { id }: {
         subscription: {
           cost: subscriptionCost,
           subscriptionId: id,
-          intervalType: subscription?.intervalType || UserSubscriptionInterval.Monthly,
+          interval: subscription?.interval || UserSubscriptionInterval.Monthly,
           name: subscription?.name,
           currency: subscription?.currency,
         },
@@ -369,11 +374,22 @@ export const isFundingUserInfoValidAtom = atom((get) => {
 
   const hasSelectedRewards = get(fundingFormHasRewardsAtom)
 
+  const hasSubscription = get(fundingFormHasSubscriptionAtom)
+
   const hasRewardsThatRequirePrivateComment = get(fundingFormHasRewardsThatRequirePrivateCommentAtom)
 
   if (hasSelectedRewards && !formState.email) {
     return {
       title: 'Email is required when purchasing a reward.',
+      description: 'Please enter an email.',
+      error: FundingUserInfoError.EMAIL,
+      valid: false,
+    }
+  }
+
+  if (hasSubscription && !formState.email) {
+    return {
+      title: 'Email is required when subscribing to a project.',
       description: 'Please enter an email.',
       error: FundingUserInfoError.EMAIL,
       valid: false,
@@ -486,8 +502,7 @@ export const formattedFundingInputAtom = atom((get) => {
     affiliateId,
     ambassadorHeroId: heroId,
     stripeCheckoutSessionInput: {
-      successUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
-      cancelUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/cancel`,
+      returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
     },
   }
 

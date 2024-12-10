@@ -118,7 +118,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
               {`${centsToDollars(formState.subscription.cost)}`}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
                 {`${formState.subscription.currency === SubscriptionCurrencyType.Usdcent ? '$' : ' sats'} / ${
-                  PaymentIntervalLabelMap[formState.subscription.intervalType]
+                  PaymentIntervalLabelMap[formState.subscription.interval]
                 }`}
               </Body>
             </Body>

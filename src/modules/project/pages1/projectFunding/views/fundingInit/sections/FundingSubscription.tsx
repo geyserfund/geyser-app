@@ -63,7 +63,7 @@ export const FundingSubscription = () => {
                       <Body size="sm">{sub.name}</Body>
                       <Body size="sm" light>{`${centsToDollars(sub.cost)}${
                         sub.currency === SubscriptionCurrencyType.Usdcent ? '$' : ' sats'
-                      } / ${PaymentIntervalLabelMap[sub.intervalType]}`}</Body>
+                      } / ${PaymentIntervalLabelMap[sub.interval]}`}</Body>
                     </VStack>
                   </Radio>
                 </HStack>

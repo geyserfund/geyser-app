@@ -15,7 +15,7 @@ export const FRAGMENT_PROJECT_SUBSCRIPTION_PLANS = gql`
     description
     id
     name
-    intervalType
+    interval
     projectId
   }
 `

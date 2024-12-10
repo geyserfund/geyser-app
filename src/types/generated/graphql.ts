@@ -1422,9 +1422,9 @@ export type Mutation = {
   userEmailUpdate: User;
   userEmailVerify: Scalars['Boolean']['output'];
   userNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
-  userSubscriptionCreate: Subscription;
-  userSubscriptionPause: Subscription;
-  userSubscriptionUpdate: Subscription;
+  userSubscriptionCancel: UserSubscription;
+  userSubscriptionCreate: UserSubscription;
+  userSubscriptionUpdate: UserSubscription;
   walletCreate: Wallet;
   walletDelete: Scalars['Boolean']['output'];
   /** This operation is currently not supported. */
@@ -1715,13 +1715,13 @@ export type MutationUserNotificationConfigurationValueUpdateArgs = {
 };
 
 
-export type MutationUserSubscriptionCreateArgs = {
-  input: CreateUserSubscriptionInput;
+export type MutationUserSubscriptionCancelArgs = {
+  id: Scalars['BigInt']['input'];
 };
 
 
-export type MutationUserSubscriptionPauseArgs = {
-  id: Scalars['BigInt']['input'];
+export type MutationUserSubscriptionCreateArgs = {
+  input: CreateUserSubscriptionInput;
 };
 
 
@@ -2639,7 +2639,7 @@ export type ProjectSubscriptionPlan = {
   currency: SubscriptionCurrencyType;
   description?: Maybe<Scalars['String']['output']>;
   id: Scalars['BigInt']['output'];
-  intervalType: UserSubscriptionInterval;
+  interval: UserSubscriptionInterval;
   name: Scalars['String']['output'];
   projectId: Scalars['BigInt']['output'];
   updatedAt: Scalars['Date']['output'];
@@ -3121,8 +3121,7 @@ export type StatsInterface = {
 };
 
 export type StripeCheckoutSessionInput = {
-  cancelUrl: Scalars['String']['input'];
-  successUrl: Scalars['String']['input'];
+  returnUrl: Scalars['String']['input'];
 };
 
 export type Subscription = {
@@ -3452,7 +3451,7 @@ export type UserSubscription = {
   createdAt: Scalars['Date']['output'];
   id: Scalars['BigInt']['output'];
   nextBillingDate: Scalars['Date']['output'];
-  projectSubscriptionPlanId: Scalars['BigInt']['output'];
+  projectSubscriptionPlan: ProjectSubscriptionPlan;
   startDate: Scalars['Date']['output'];
   status: UserSubscriptionStatus;
   updatedAt: Scalars['Date']['output'];
@@ -5008,9 +5007,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   userEmailUpdate?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUserEmailUpdateArgs, 'input'>>;
   userEmailVerify?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUserEmailVerifyArgs, 'input'>>;
   userNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUserNotificationConfigurationValueUpdateArgs, 'userNotificationConfigurationId' | 'value'>>;
-  userSubscriptionCreate?: Resolver<ResolversTypes['Subscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionCreateArgs, 'input'>>;
-  userSubscriptionPause?: Resolver<ResolversTypes['Subscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionPauseArgs, 'id'>>;
-  userSubscriptionUpdate?: Resolver<ResolversTypes['Subscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionUpdateArgs, 'input'>>;
+  userSubscriptionCancel?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionCancelArgs, 'id'>>;
+  userSubscriptionCreate?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionCreateArgs, 'input'>>;
+  userSubscriptionUpdate?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionUpdateArgs, 'input'>>;
   walletCreate?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationWalletCreateArgs, 'input'>>;
   walletDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationWalletDeleteArgs, 'id'>>;
   walletUpdate?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationWalletUpdateArgs, 'input'>>;
@@ -5491,7 +5490,7 @@ export type ProjectSubscriptionPlanResolvers<ContextType = any, ParentType exten
   currency?: Resolver<ResolversTypes['SubscriptionCurrencyType'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  intervalType?: Resolver<ResolversTypes['UserSubscriptionInterval'], ParentType, ContextType>;
+  interval?: Resolver<ResolversTypes['UserSubscriptionInterval'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -5718,7 +5717,7 @@ export type UserSubscriptionResolvers<ContextType = any, ParentType extends Reso
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   nextBillingDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  projectSubscriptionPlanId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  projectSubscriptionPlan?: Resolver<ResolversTypes['ProjectSubscriptionPlan'], ParentType, ContextType>;
   startDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['UserSubscriptionStatus'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -6740,7 +6739,7 @@ export type ProjectGrantApplicantFragment = { __typename?: 'GrantApplicant', id:
 
 export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', stripe: boolean } };
 
-export type ProjectSubscriptionPlansFragment = { __typename?: 'ProjectSubscriptionPlan', cost: number, currency: SubscriptionCurrencyType, description?: string | null, id: any, name: string, intervalType: UserSubscriptionInterval, projectId: any };
+export type ProjectSubscriptionPlansFragment = { __typename?: 'ProjectSubscriptionPlan', cost: number, currency: SubscriptionCurrencyType, description?: string | null, id: any, name: string, interval: UserSubscriptionInterval, projectId: any };
 
 export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
 
@@ -8824,7 +8823,7 @@ export const ProjectSubscriptionPlansFragmentDoc = gql`
   description
   id
   name
-  intervalType
+  interval
   projectId
 }
     `;
