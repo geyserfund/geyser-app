@@ -1,19 +1,17 @@
 import { HStack, Icon, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import {
-  PiDotOutline,
-  // PiTrophy
-} from 'react-icons/pi'
+import { PiDotOutline } from 'react-icons/pi'
+import { Link } from 'react-router-dom'
 
 import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
-import { __production__, __staging__, HallOfFameIllustrationUrl } from '@/shared/constants'
+import { __production__, __staging__, getPath, HallOfFameIllustrationUrl } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
 import { useGrantStatisticsQuery } from '@/types'
 import { getShortAmountLabel } from '@/utils'
 
-// const GEYSER_PROJECT_NAME = __staging__ ? 'geyser2' : __production__ ? 'grants' : 'geyser2'
+const GEYSER_PROJECT_NAME = 'grants'
 
 export const GrantsHeader = () => {
   const { data, loading } = useGrantStatisticsQuery()
@@ -75,8 +73,13 @@ export const GrantsHeader = () => {
 
           <Body size={{ base: 'sm', lg: 'xl' }} medium color={lightModeColors.neutral1[11]}>
             {t(
-              'Grants for educators, creatives and builders pushing Bitcoin adoption further. Help fund the next round of grants now!',
+              'Grants for educators, creatives and builders pushing Bitcoin adoption further. Help fund the next round of grants now! ',
             )}
+            <Link to={getPath('project', GEYSER_PROJECT_NAME)}>
+              <Body as="span" fontSize={{ base: 'sm', lg: 'xl' }} medium style={{ textDecoration: 'underline' }}>
+                {t('Learn more about Geyser Grants.')}
+              </Body>
+            </Link>
           </Body>
           <HStack w="full" display={{ base: 'none', lg: 'flex' }} color={lightModeColors.utils.text}>
             {renderPlatformStats()}
