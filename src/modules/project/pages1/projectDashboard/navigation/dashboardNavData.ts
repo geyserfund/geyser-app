@@ -1,6 +1,7 @@
 import {
   PiBag,
   PiBell,
+  PiBookOpen,
   PiGear,
   PiInvoice,
   PiPlanet,
@@ -58,6 +59,12 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     path: 'dashboardDetails',
     type: DashboardType.settings,
     icon: PiShapes,
+  },
+  {
+    label: 'Story',
+    path: 'projectStoryEdit',
+    type: DashboardType.settings,
+    icon: PiBookOpen,
   },
   {
     label: 'Connect wallet',

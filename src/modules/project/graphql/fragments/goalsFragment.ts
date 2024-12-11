@@ -10,6 +10,7 @@ export const FRAGMENT_PROJECT_GOALS = gql`
     status
     projectId
     amountContributed
+    progress
     createdAt
     updatedAt
     completedAt

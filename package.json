@@ -1,7 +1,7 @@
 {
   "name": "geyser-app",
   "private": true,
-  "version": "0.15.2",
+  "version": "0.16.0",
   "scripts": {
     "dev": "vite",
     "dev:stage": "vite --mode staging",
@@ -52,6 +52,8 @@
     "@remirror/react-components": "^3.0.1",
     "@remirror/react-editors": "^2.0.1",
     "@sentry/react": "^7.50.0",
+    "@stripe/react-stripe-js": "^3.0.0",
+    "@stripe/stripe-js": "^5.2.0",
     "@types/yup": "^0.32.0",
     "@vulpemventures/secp256k1-zkp": "^3.2.1",
     "bech32": "^2.0.0",

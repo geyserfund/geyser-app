@@ -44,7 +44,7 @@ export const Posts = forwardRef<HTMLDivElement>((_, ref) => {
       {hasMoreEntries && (
         <HStack w="full" justifyContent="center">
           <Button variant="soft" colorScheme="neutral1" as={Link} to={getPath('projectPosts', project.name)}>
-            {t('See all')}
+            {t('See all')} {`${entries.length} posts`}
           </Button>
         </HStack>
       )}

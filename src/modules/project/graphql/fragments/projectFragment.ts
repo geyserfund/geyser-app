@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_PAYMENT_METHODS } from './paymentMethodsFragment'
 import { FRAGMENT_PROJECT_PAGE_CREATOR } from './userFragment'
 
 export const FRAGMENT_PROJECT_LOCATION = gql`
@@ -27,6 +28,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
   ${FRAGMENT_PROJECT_PAGE_CREATOR}
   ${FRAGMENT_PROJECT_LOCATION}
   ${FRAGMENT_PROJECT_KEYS}
+  ${FRAGMENT_PROJECT_PAYMENT_METHODS}
   fragment ProjectPageBody on Project {
     id
     name
@@ -54,6 +56,9 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
       user {
         ...ProjectPageCreator
       }
+    }
+    paymentMethods {
+      ...ProjectPaymentMethods
     }
   }
 `

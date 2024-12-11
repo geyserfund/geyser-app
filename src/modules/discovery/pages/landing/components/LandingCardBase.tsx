@@ -1,6 +1,7 @@
 import { Box, HStack, Skeleton, VStack } from '@chakra-ui/react'
 
 import { Body, H3 } from '@/shared/components/typography'
+import { isInactive } from '@/utils'
 
 import { ImageWithReload } from '../../../../../components/ui'
 import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../shared/components/layouts'
@@ -13,6 +14,7 @@ export interface LandingCardBaseProps extends CardLayoutProps {
 }
 
 export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: LandingCardBaseProps) => {
+  const inActive = isInactive(project.status)
   return (
     <CardLayout
       hover
@@ -21,8 +23,20 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
       direction={{ base: 'row', lg: 'column' }}
       spacing={0}
       flex={{ base: 'unset', lg: 1 }}
+      position="relative"
       {...rest}
     >
+      {inActive && (
+        <Box
+          backgroundColor={'utils.pbg'}
+          opacity={0.5}
+          zIndex="1"
+          pointerEvents={'none'}
+          position="absolute"
+          width="100%"
+          height="100%"
+        />
+      )}
       <Box width={{ base: '96px', lg: 'auto' }} height={{ base: '96px', lg: 'auto' }}>
         <ImageWithReload
           width="100%"

@@ -14,6 +14,7 @@ import {
   setFundFormTargetAtom,
   setResourceAtom,
   updateFundingFormRewardAtom,
+  updateFundingFormSubscriptionAtom,
 } from '../state/fundingFormAtom'
 
 export const useFundingFormAtom = () => {
@@ -43,6 +44,8 @@ export const useFundingFormAtom = () => {
 
   const updateReward = useSetAtom(updateFundingFormRewardAtom)
 
+  const updateSubscription = useSetAtom(updateFundingFormSubscriptionAtom)
+
   const resetForm = useSetAtom(resetFundingFormRewardsAtom)
 
   return {
@@ -58,6 +61,7 @@ export const useFundingFormAtom = () => {
     setState,
     setResource,
     updateReward,
+    updateSubscription,
     resetForm,
     resetRewards,
   }

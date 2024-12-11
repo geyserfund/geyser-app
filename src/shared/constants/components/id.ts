@@ -49,6 +49,7 @@ export const ID = {
   profile: {
     tabs: 'user-profile-tab-container',
     tabList: 'user-profile-tab-List',
+    tabScrollContainer: 'user-profile-tab-scroll-container',
   },
   entry: {
     editEntryScrollContainer: 'edit-entry-scroll-container',

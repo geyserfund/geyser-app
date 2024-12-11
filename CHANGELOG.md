@@ -1,3 +1,45 @@
+## [0.16.0](https://github.com/geyserfund/geyser-app/compare/v0.15.2...v0.16.0) (2024-12-11)
+
+
+### Features
+
+* add Create Project button for visitors, resolves GYS-9080 ([84ec3a3](https://github.com/geyserfund/geyser-app/commit/84ec3a33b50fee0ee103d0bcf0172735a8642386))
+* add learn more in grants header ([54e3a78](https://github.com/geyserfund/geyser-app/commit/54e3a7894ec7fc583ec065c40bdf7feb9a92516e))
+* grant subscription management ([af99343](https://github.com/geyserfund/geyser-app/commit/af99343e48fad67eea667296e48ea43ad01badd1))
+* implement new Grants page design + subs ([e4b72e9](https://github.com/geyserfund/geyser-app/commit/e4b72e9df55b85606bfd01bf69cf7055564a721a))
+* implement new Grants page design + subs ([7b45545](https://github.com/geyserfund/geyser-app/commit/7b455453ddbbd29302309de2f89fc9115802244c))
+* implement subscription functionality in funding flow ([68041bc](https://github.com/geyserfund/geyser-app/commit/68041bce4e0dbc6a2a6dd456c8d4eec5d8e83762))
+* inactive projects should show transparent overlay, resolves GYS-9074 ([b62da2a](https://github.com/geyserfund/geyser-app/commit/b62da2aaaac61b8e1e7060d235137026ea7fd820))
+* see all copy update for rewards and posts, resolves GYS-9098 ([0789d58](https://github.com/geyserfund/geyser-app/commit/0789d5832fd826fe91dc41ff24c52965dec67709))
+* update Project Funded design on mobile, resolves GYS-8701 ([d91f79e](https://github.com/geyserfund/geyser-app/commit/d91f79e64c8a0b9956ab1051927f0bd52c5366d6))
+
+
+### Bug Fixes
+
+* add back button ([79dda05](https://github.com/geyserfund/geyser-app/commit/79dda0588148e6a04d767148a61b4ae83e9fb104))
+* add feature display card and fix guardians issue ([6e53197](https://github.com/geyserfund/geyser-app/commit/6e5319710d9a7113d36f07f450d629cc587f5790))
+* add manual fallback incase of image ref value failure ([b12554f](https://github.com/geyserfund/geyser-app/commit/b12554fd8182cde9eea640026c84dd4592c51b14))
+* add most funded projects title to paginated view, resolves GYS-8773 ([c6c209b](https://github.com/geyserfund/geyser-app/commit/c6c209bf7dcc327585a40346b19980e11199773f))
+* add story to dashboard settings ([28394a5](https://github.com/geyserfund/geyser-app/commit/28394a5b6d5c317953f803f2fa9e362a71eff9f8))
+* add sub cancelation confirmation modal ([99e2dc4](https://github.com/geyserfund/geyser-app/commit/99e2dc45c4fcde895e2b289742bf8da8102c4b0b))
+* deployment env vars ([b0d546d](https://github.com/geyserfund/geyser-app/commit/b0d546d9670b975296642293b3a4acba3506bb3d))
+* desktop guardians image click issue ([e76e86e](https://github.com/geyserfund/geyser-app/commit/e76e86eb443400fa353434169b5685079fd205e7))
+* final details ([975918f](https://github.com/geyserfund/geyser-app/commit/975918f00e8d14836e6255a6476db1cbaad300f3))
+* geyser isSub is being redirected ([fab1888](https://github.com/geyserfund/geyser-app/commit/fab18885d9e57c326ae84e4158fc70c690f3c5f6))
+* grants to use subscription ([41646d9](https://github.com/geyserfund/geyser-app/commit/41646d9e76d10a2da3dc53670baf8023dd17ae14))
+* king available numbers ([f80484d](https://github.com/geyserfund/geyser-app/commit/f80484d43445e54af0e91f2c5d7eddcdc19b4ea5))
+* make box the same size ([870f476](https://github.com/geyserfund/geyser-app/commit/870f476d37c5ea71a63781c5a6ce21f139797927))
+* merge conflict issue ([c9fefad](https://github.com/geyserfund/geyser-app/commit/c9fefada1a9d997920414148de025918f92f64bd))
+* move user bio inside account info ([3c3c55f](https://github.com/geyserfund/geyser-app/commit/3c3c55f006baf3480c0bce58998a6db3bd3acf01))
+* payment page ([1279cd4](https://github.com/geyserfund/geyser-app/commit/1279cd4cd3053032e35f163543a90ec4bb579a51))
+* post type pill in reward updates ([16b9a43](https://github.com/geyserfund/geyser-app/commit/16b9a43a247ece925bf67e3278ec373707f88841))
+* showing goal information when subscribing to grants ([218d738](https://github.com/geyserfund/geyser-app/commit/218d738a05ffb18dca99de47d9c897f332af7b79))
+* subscription confirmation and contribution button fix ([28f6f68](https://github.com/geyserfund/geyser-app/commit/28f6f68d63086cae9f5cd4d7edbaea9d24c3bf53))
+* update the query to have pagination ([45cfc4d](https://github.com/geyserfund/geyser-app/commit/45cfc4d44330c0aae7047d716dc35b8140b9f032))
+* update to accomodate changes ([3a07fbd](https://github.com/geyserfund/geyser-app/commit/3a07fbdebdc10d70dd4309895ba84eff679474a6))
+* use funding payment method for showing card option ([3c2ae5d](https://github.com/geyserfund/geyser-app/commit/3c2ae5d52dd0736b75e1f7f2910a754e333aa7fa))
+* wip ([d94d822](https://github.com/geyserfund/geyser-app/commit/d94d822cbcf7873ecbddadd04e19a8d06cf10e90))
+
 ## [0.15.2](https://github.com/geyserfund/geyser-app/compare/v0.15.1...v0.15.2) (2024-12-04)
 
 

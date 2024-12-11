@@ -13,6 +13,7 @@ import {
   useUserNotificationSettings,
 } from '@/modules/profile/pages/profileSettings/hooks/useUserNotificationSettings'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { useAuthModal } from '@/pages/auth/hooks'
 import { useFollowedProjectsValue } from '@/pages/auth/state'
 import { CardLayout } from '@/shared/components/layouts'
 import { H1 } from '@/shared/components/typography'
@@ -33,6 +34,7 @@ const EMAIL_VALIDATION_STATE = {
 export const FundingDetailsUserEmailAndUpdates = () => {
   const { t } = useTranslation()
   const { user } = useAuthContext()
+  const { loginOnOpen } = useAuthModal()
   const followedProjects = useFollowedProjectsValue()
 
   const {
@@ -40,6 +42,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
     formState: { needsShipping, followProject, subscribeToGeyserEmails, email },
     hasSelectedRewards,
     setTarget,
+    setState,
     fundingFormError,
     setErrorstate,
   } = useFundingFormAtom()
@@ -55,17 +58,19 @@ export const FundingDetailsUserEmailAndUpdates = () => {
 
   const showEmailComponent = !user?.email || !followsProject || !subscribedToGeyserEmails
 
-  const descriptionCopy = hasSelectedRewards
-    ? t('This email will be used by the seller to reach out to you.')
-    : t('Follow Project and receive direct project updates to your email')
-
   /*
    Set the email from the user to the funding form. We do this because the input field
    is not shown if the user already has an email.
   */
   useEffect(() => {
-    if (user?.email) setTarget({ target: { name: 'email', value: user.email } })
-    else setTarget({ target: { name: 'email', value: '' } })
+    if (user?.email) setState('email', user.email)
+    else setState('email', '')
+
+    if (user?.id) {
+      setState('followProject', true)
+    } else {
+      setState('followProject', false)
+    }
   }, [user])
 
   const [isEmailAvailable, { loading: userEmailIsAvailableLoading }] = useUserEmailIsAvailableLazyQuery()
@@ -131,7 +136,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
         {t('Email and Updates')}
       </H1>
 
-      <FieldContainer title={`${t('Your email')} ${hasSelectedRewards ? '*' : ''}`} subtitle={descriptionCopy}>
+      <FieldContainer>
         <FormControl isInvalid={Boolean(fundingFormError.email)}>
           <InputGroup>
             <Input
@@ -172,7 +177,11 @@ export const FundingDetailsUserEmailAndUpdates = () => {
             id="creator-email-toggle"
             isChecked={followProject}
             onChange={(e) => {
-              setTarget({ target: { name: 'followProject', value: e.target.checked } })
+              if (user.id) {
+                setState('followProject', e.target.checked)
+              } else {
+                loginOnOpen()
+              }
             }}
           />
         </HorizontalFormField>
@@ -185,7 +194,13 @@ export const FundingDetailsUserEmailAndUpdates = () => {
           <Switch
             id="geyser-email-toggle"
             isChecked={subscribeToGeyserEmails}
-            onChange={(e) => setTarget({ target: { name: 'subscribeToGeyserEmails', value: e.target.checked } })}
+            onChange={(e) => {
+              if (user.id) {
+                setState('subscribeToGeyserEmails', e.target.checked)
+              } else {
+                loginOnOpen()
+              }
+            }}
           />
         </HorizontalFormField>
       )}

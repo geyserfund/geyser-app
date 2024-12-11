@@ -10,9 +10,11 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import { useGoalsAtom, useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body, H2 } from '@/shared/components/typography'
+import { SubscriptionCurrencyType } from '@/types/generated/graphql'
 
 import { useFundCalc } from '../../../../../helpers'
-import { toInt, useMobileMode } from '../../../../../utils'
+import { centsToDollars, toInt, useMobileMode } from '../../../../../utils'
+import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
 
 export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
   const { t } = useTranslation()
@@ -104,6 +106,20 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
               {`${formState.donationAmount.toLocaleString()} `}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
                 sats
+              </Body>
+            </Body>
+          </HStack>
+        )}
+
+        {formState.subscription && formState.subscription.cost > 0 && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Subscription')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>
+              {`${centsToDollars(formState.subscription.cost)}`}
+              <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
+                {`${formState.subscription.currency === SubscriptionCurrencyType.Usdcent ? '$' : ' sats'} / ${
+                  PaymentIntervalLabelMap[formState.subscription.interval]
+                }`}
               </Body>
             </Body>
           </HStack>

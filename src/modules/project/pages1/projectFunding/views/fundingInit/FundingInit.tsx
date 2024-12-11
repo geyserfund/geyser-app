@@ -9,17 +9,20 @@ import { FundingLayout } from '../../layouts/FundingLayout'
 import { DonationInput } from './sections/DonationInput'
 import { FundingInitRewards } from './sections/FundingInitRewards'
 import { FundingInitBottomContent, FundingInitSideContent } from './sections/FundingInitSideContent'
+import { FundingSubscription } from './sections/FundingSubscription'
 
 export const FundingInit = () => {
   const { setResource } = useFundingFormAtom()
 
   const location = useLocation()
+  const queryParams = new URLSearchParams(location.search)
+  const isSub = queryParams.get('isSub') === 'true'
   const navigate = useNavigate()
 
   useEffect(() => {
     if (location.state && location.state.entryId) {
       setResource({ resourceId: location.state.entryId, resourceType: FundingResourceType.Entry })
-      navigate(location.pathname, { state: null })
+      navigate({ pathname: location.pathname, search: location.search }, { state: null, replace: true })
     }
   }, [location, setResource, navigate])
 
@@ -29,10 +32,18 @@ export const FundingInit = () => {
       bottomContent={<FundingInitBottomContent />}
       containerProps={{ spacing: 6 }}
     >
-      <CardLayout w="full" spacing={1}>
-        <DonationInput />
-      </CardLayout>
-      <FundingInitRewards />
+      {isSub ? (
+        <>
+          <FundingSubscription />
+        </>
+      ) : (
+        <>
+          <CardLayout w="full" spacing={1}>
+            <DonationInput />
+          </CardLayout>
+          <FundingInitRewards />
+        </>
+      )}
     </FundingLayout>
   )
 }

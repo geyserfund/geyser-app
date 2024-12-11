@@ -42,6 +42,9 @@ export const FRAGMENT_FUNDING_TX = gql`
     projectId
     creatorEmail
     createdAt
+    stripeClientSecret
+    isAnonymous
+    isSubscription
     bitcoinQuote {
       quote
       quoteCurrency
@@ -79,6 +82,7 @@ export const FRAGMENT_FUNDING_TX_WITH_INVOICE_STATUS = gql`
     invoiceStatus
     paymentRequest
     creatorEmail
+    isAnonymous
   }
 `
 

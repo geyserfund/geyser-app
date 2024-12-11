@@ -11,6 +11,10 @@ export const QUERY_GRANT_STATISTICS = gql`
       applicants {
         countFunded
       }
+      grantGuardiansFunding {
+        contributedTotal
+        contributorsCount
+      }
     }
   }
 `
