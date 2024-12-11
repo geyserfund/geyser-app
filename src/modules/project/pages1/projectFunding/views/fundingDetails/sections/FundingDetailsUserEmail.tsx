@@ -58,10 +58,6 @@ export const FundingDetailsUserEmailAndUpdates = () => {
 
   const showEmailComponent = !user?.email || !followsProject || !subscribedToGeyserEmails
 
-  const descriptionCopy = hasSelectedRewards
-    ? t('This email will be used by the seller to reach out to you.')
-    : t('Follow Project and receive direct project updates to your email')
-
   /*
    Set the email from the user to the funding form. We do this because the input field
    is not shown if the user already has an email.
@@ -140,7 +136,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
         {t('Email and Updates')}
       </H1>
 
-      <FieldContainer title={`${t('Your email')} ${hasSelectedRewards ? '*' : ''}`} subtitle={descriptionCopy}>
+      <FieldContainer>
         <FormControl isInvalid={Boolean(fundingFormError.email)}>
           <InputGroup>
             <Input

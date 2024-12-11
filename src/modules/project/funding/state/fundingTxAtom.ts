@@ -18,6 +18,7 @@ const initialFunding: Omit<FundingTxFragment, 'funder' | 'amountPaid'> = {
   onChain: false,
   isSubscription: false,
   source: '',
+  isAnonymous: false,
 }
 
 export enum ConfirmationMethod {

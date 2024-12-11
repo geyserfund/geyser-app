@@ -6,9 +6,8 @@ import { Link, useNavigate } from 'react-router-dom'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useFundingTxAtom } from '@/modules/project/funding/state'
-import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
-import { H2 } from '@/shared/components/typography'
+import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
 import { FundingStatus } from '@/types'
@@ -22,9 +21,8 @@ import { SafeToDeleteRefund } from './components/SafeToDeleteRefund'
 import { SendEmailToCreator } from './components/SendEmailToCreator'
 
 export const FundingSuccess = () => {
-  const { project } = useFundingFormAtom()
+  const { project, formState } = useFundingFormAtom()
   const { fundingTx } = useFundingTxAtom()
-  const { rewards } = useRewardsAtom()
 
   const navigate = useNavigate()
 
@@ -64,13 +62,25 @@ export const FundingSuccess = () => {
           <VStack w="full" alignItems="start">
             <SuccessImageComponent />
           </VStack>
-          {rewards.length > 0 && (
+          {formState.rewardsCost > 0 && (
             <VStack w="full" alignItems="start" spacing={6}>
               <H2 size={{ base: 'xl', lg: '2xl' }} bold>
                 {t('Next Actions')}
               </H2>
               <ConfirmationMessages />
               <SendEmailToCreator />
+            </VStack>
+          )}
+          {formState.subscription.cost > 0 && (
+            <VStack w="full" alignItems="start" spacing={6}>
+              <H2 size={{ base: 'xl', lg: '2xl' }} bold>
+                {t('Manage Subscription')}
+              </H2>
+              <Body size="sm" light>
+                {fundingTx.isAnonymous
+                  ? t('To manage your subscription in the future, please login to stripe with your provided email.')
+                  : t('Please check your profile to manage your subscription.')}
+              </Body>
             </VStack>
           )}
           <SafeToDeleteRefund />
