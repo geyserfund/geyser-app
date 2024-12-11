@@ -12,6 +12,7 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { Box, Card, CardBody, Stack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useState } from 'react'
 
 import { useAuthContext } from '@/context'
@@ -81,7 +82,7 @@ const ActiveSubscriptionCard = (props: ActiveSubscriptionCardProps) => {
                 <SubscriptionDetail label="Interval:" value={formattedInterval} />
               </Stack>
               <Button variant="outline" colorScheme="neutral1" size="sm" onClick={() => setIsOpen(true)}>
-                Cancel
+                {t('Cancel')}
               </Button>
             </Stack>
           </Box>
@@ -94,14 +95,15 @@ const ActiveSubscriptionCard = (props: ActiveSubscriptionCardProps) => {
           <ModalCloseButton />
           <ModalBody w="full" fontSize="sm">
             <Body>
-              Are you sure you want to cancel your subscription to &quot;{userSubscription.projectSubscriptionPlan.name}
-              &quot;?
+              {` ${t('Are you sure you want to cancel your subscription to')} ${
+                userSubscription.projectSubscriptionPlan.name
+              } ?`}
             </Body>
           </ModalBody>
 
           <ModalFooter gap={3} w="full">
             <Button size="lg" w="full" variant="soft" colorScheme="neutral1" onClick={() => setIsOpen(false)}>
-              Nevermind
+              {t('Nevermind')}
             </Button>
             <Button
               w="full"
@@ -112,7 +114,7 @@ const ActiveSubscriptionCard = (props: ActiveSubscriptionCardProps) => {
                 setIsOpen(false)
               }}
             >
-              Yes, cancel the subscription
+              {t('Yes, cancel the subscription')}
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -154,7 +156,7 @@ const CanceledSubscriptionCard = (userSubscription: UserSubscriptionFragment) =>
                 <SubscriptionDetail label="Interval:" value={formattedInterval} />
               </Stack>
               <Button variant="outline" colorScheme="neutral1" size="sm" onClick={() => {}}>
-                Re-new
+                {t('Re-new')}
               </Button>
             </Stack>
           </Box>
@@ -225,7 +227,7 @@ export const ProfileSettingsSubscriptions = () => {
       <Box>
         <Body size="2xl">Manage your subscriptions</Body>
         <Body size="sm" color="neutralAlpha.11" regular>
-          View, adjust, and manage all your subscriptions.
+          {t('View, adjust, and manage all your subscriptions.')}
         </Body>
       </Box>
 
@@ -252,7 +254,7 @@ export const ProfileSettingsSubscriptions = () => {
         <Stack spacing={8}>
           <Box>
             <Body size="md" mb={2}>
-              Active subscriptions
+              {t('Active subscriptions')}
             </Body>
             {activeSubscriptions?.length && activeSubscriptions?.length > 0 ? (
               <Stack spacing={4}>
@@ -275,7 +277,7 @@ export const ProfileSettingsSubscriptions = () => {
                     justifyContent="center"
                     h="full"
                   >
-                    You don&apos;t have any active subscriptions.
+                    {t("You don't have any active subscriptions.")}
                   </Body>
                 </CardBody>
               </Card>
@@ -284,7 +286,7 @@ export const ProfileSettingsSubscriptions = () => {
 
           <Box>
             <Body size="md" mb={2}>
-              Canceled subscriptions
+              {t('Canceled subscriptions')}
             </Body>
             {canceledSubscriptions?.length && canceledSubscriptions?.length > 0 ? (
               <Stack spacing={4}>
@@ -303,7 +305,7 @@ export const ProfileSettingsSubscriptions = () => {
                     justifyContent="center"
                     h="full"
                   >
-                    You don&apos;t have any paused subscriptions.
+                    {t("You don't have any paused subscriptions.")}
                   </Body>
                 </CardBody>
               </Card>
