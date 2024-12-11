@@ -9,6 +9,7 @@ import {
   ProjectSubscriptionPlansFragment,
   WalletLimitsFragment,
 } from '../../../types'
+import { useProjectGoalsAPI } from '../API/useProjectGoalsAPI'
 import { useProjectRewardsAPI } from '../API/useProjectRewardsAPI'
 import { useProjectSubscriptionsAPI } from '../API/useProjectSubscriptionsAPI'
 import { useResetFundingFlow } from '../funding/hooks/useResetFundingFlow'
@@ -71,6 +72,7 @@ export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({
   /** Initialize rewards if they have not been initialized yet */
   useProjectRewardsAPI(true)
   useProjectSubscriptionsAPI(true)
+  useProjectGoalsAPI(true)
 
   const project = useAtomValue(projectAtom)
   const wallet = useAtomValue(walletAtom)
