@@ -507,8 +507,8 @@ export const platformRoutes: RouteObject[] = [
               {
                 path: getPath('fundingPayment', PathName.projectName),
                 async lazy() {
-                  const Subscription = await ProjectFunding().then((m) => m.Subscription)
-                  return { Component: Subscription }
+                  const Payment = await ProjectFunding().then((m) => m.Payment)
+                  return { Component: Payment }
                 },
                 children: [
                   {
