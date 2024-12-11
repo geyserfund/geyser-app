@@ -1,5 +1,18 @@
-import { Button, Flex, HStack, useToast } from '@chakra-ui/react'
+import {
+  Button,
+  Flex,
+  HStack,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useToast,
+} from '@chakra-ui/react'
 import { Box, Card, CardBody, Stack } from '@chakra-ui/react'
+import { useState } from 'react'
 
 import { useAuthContext } from '@/context'
 import { SkeletonLayout } from '@/shared/components/layouts'
@@ -35,6 +48,7 @@ interface ActiveSubscriptionCardProps {
 const ActiveSubscriptionCard = (props: ActiveSubscriptionCardProps) => {
   const { userSubscription, handleCancelUserSubscription } = props
   const { formatAmount } = useCurrencyFormatter()
+  const [isOpen, setIsOpen] = useState(false)
 
   const formattedStartDate = new Date(Number(userSubscription.startDate)).toLocaleDateString()
   const formattedNextBillingDate = new Date(Number(userSubscription.nextBillingDate)).toLocaleDateString()
@@ -66,18 +80,43 @@ const ActiveSubscriptionCard = (props: ActiveSubscriptionCardProps) => {
                 <SubscriptionDetail label="Amount:" value={formattedAmount} />
                 <SubscriptionDetail label="Interval:" value={formattedInterval} />
               </Stack>
-              <Button
-                variant="outline"
-                colorScheme="neutral1"
-                size="sm"
-                onClick={() => handleCancelUserSubscription(userSubscription.id)}
-              >
+              <Button variant="outline" colorScheme="neutral1" size="sm" onClick={() => setIsOpen(true)}>
                 Cancel
               </Button>
             </Stack>
           </Box>
         </Flex>
       </CardBody>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} isCentered>
+        <ModalOverlay />
+        <ModalContent borderRadius={12} maxW="600px">
+          <ModalHeader fontSize="md">Cancel subscription</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody w="full" fontSize="sm">
+            <Body>
+              Are you sure you want to cancel your subscription to &quot;{userSubscription.projectSubscriptionPlan.name}
+              &quot;?
+            </Body>
+          </ModalBody>
+
+          <ModalFooter gap={3} w="full">
+            <Button size="lg" w="full" variant="soft" colorScheme="neutral1" onClick={() => setIsOpen(false)}>
+              Nevermind
+            </Button>
+            <Button
+              w="full"
+              size="lg"
+              colorScheme="primary1"
+              onClick={() => {
+                handleCancelUserSubscription(userSubscription.id)
+                setIsOpen(false)
+              }}
+            >
+              Yes, cancel the subscription
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Card>
   )
 }
