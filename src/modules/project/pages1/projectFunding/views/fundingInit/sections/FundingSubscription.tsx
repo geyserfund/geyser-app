@@ -57,13 +57,12 @@ export const FundingSubscription = () => {
 
       {subscriptions ? (
         <RadioGroup defaultValue={currentSubscriptionId} onChange={handleSubscriptionChange}>
-          <HStack spacing={5} direction="row">
+          <HStack spacing={5} direction="row" alignItems="stretch">
             {subscriptions.map((sub) => {
               return (
                 <HStack
                   key={sub.id}
                   w="full"
-                  h="full"
                   justifyContent="space-between"
                   border="1px solid"
                   borderColor={'neutral1.6'}
