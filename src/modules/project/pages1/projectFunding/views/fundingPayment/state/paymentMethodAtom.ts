@@ -31,11 +31,10 @@ export const isOnchainMethodAtom = atom(routeMatchForAtom(projectFundingPaymentO
 
 export const isOnchainMethodStartedAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainStartedRoutes))
 
-const listOfProjectsThatHaveStripePayment = ['geyser', 'test18']
-
 export const hasStripePaymentMethodAtom = atom((get) => {
   const project = get(fundingProjectAtom)
-  if (listOfProjectsThatHaveStripePayment.includes(project.name)) {
+
+  if (project.paymentMethods.fiat.stripe) {
     return true
   }
 

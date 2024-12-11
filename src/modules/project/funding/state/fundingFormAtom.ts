@@ -27,7 +27,10 @@ import { getRefIdFromProjectAffiliates } from '../hooks/useProjectAffiliateWithP
 import { getHeroIdFromProjectHeroes } from '../hooks/useProjectHeroWithProjectName'
 import { fundingTxAtom, selectedGoalIdAtom } from './fundingTxAtom'
 
-export type FundingProject = Pick<ProjectState, 'id' | 'name' | 'rewardCurrency' | 'title' | 'owners'>
+export type FundingProject = Pick<
+  ProjectState,
+  'id' | 'name' | 'rewardCurrency' | 'title' | 'owners' | 'paymentMethods'
+>
 
 export enum FundingUserInfoError {
   EMAIL = 'email',
