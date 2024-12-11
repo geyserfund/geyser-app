@@ -60,7 +60,7 @@ export const useFundingAPI = () => {
           })
         }
 
-        if (hasBolt11 && hasWebLN && webln) {
+        if (hasBolt11 && hasWebLN && webln && !data.fund.fundingTx?.isSubscription) {
           startWebLNFlow(data.fund.fundingTx).catch(() => {
             toast.error({
               title: 'Something went wrong',

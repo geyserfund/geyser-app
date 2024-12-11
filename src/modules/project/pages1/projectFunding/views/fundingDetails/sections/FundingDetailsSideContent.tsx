@@ -98,14 +98,14 @@ export const FundingDetailsSummary = () => {
               warningModal.onClose()
               loginOnOpen()
             },
-            children: t('login'),
+            children: t('Login'),
           }}
           neutralButtonProps={{
             onClick() {
               warningModal.onClose()
               handleGoNext()
             },
-            children: t('continue'),
+            children: t('Continue'),
           }}
         >
           <Body size="sm" light>
