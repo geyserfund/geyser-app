@@ -3,7 +3,6 @@ import { t } from 'i18next'
 import { PiDotOutline } from 'react-icons/pi'
 import { Link, useNavigate } from 'react-router-dom'
 
-import { ContributeButton } from '@/modules/project/pages1/projectView/views/body/components'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
 import { __development__, getPath } from '@/shared/constants'
@@ -204,7 +203,14 @@ export const GrantSubscriptionSection: React.FC = () => {
       <CardLayout p={6}>
         <HStack justify="space-between">
           <Body>{t('Or simply donate with a one-off contribution towards the Grants')}</Body>
-          <ContributeButton />
+          <Button
+            size="lg"
+            variant="solid"
+            colorScheme="primary1"
+            onClick={() => navigate(getPath('projectFunding', 'grants'))}
+          >
+            {t('Contribute')}
+          </Button>
         </HStack>
       </CardLayout>
 

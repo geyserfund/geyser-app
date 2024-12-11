@@ -1,12 +1,14 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
+import { useListenFundingSuccess } from '@/modules/project/funding/hooks/useListenFundingSuccess'
 import { Body, H1 } from '@/shared/components/typography'
 
 import { ReachOutForHelpButton } from './components/ReachOutForHelpButton'
 import { PaymentCard } from './views/PaymentCard'
 
 export const Subscription = () => {
+  useListenFundingSuccess()
   return (
     <>
       <VStack flex={1} w="full" alignItems="start">

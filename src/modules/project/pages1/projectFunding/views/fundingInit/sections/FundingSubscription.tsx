@@ -63,6 +63,7 @@ export const FundingSubscription = () => {
                 <HStack
                   key={sub.id}
                   w="full"
+                  h="full"
                   justifyContent="space-between"
                   border="1px solid"
                   borderColor={'neutral1.6'}
