@@ -22,7 +22,7 @@ export const FundingInit = () => {
   useEffect(() => {
     if (location.state && location.state.entryId) {
       setResource({ resourceId: location.state.entryId, resourceType: FundingResourceType.Entry })
-      navigate(location.pathname, { state: null })
+      navigate({ pathname: location.pathname, search: location.search }, { state: null, replace: true })
     }
   }, [location, setResource, navigate])
 

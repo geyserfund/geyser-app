@@ -10,7 +10,6 @@ import { selectedGoalIdAtom } from '@/modules/project/funding/state/fundingTxAto
 import { useSubscriptionBuy } from '@/modules/project/pages1/projectView/hooks/useSubscriptionBuy'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
 import { SubscriptionCurrencyType, UserSubscriptionInterval } from '@/types'
 import { centsToDollars } from '@/utils'
 
@@ -44,7 +43,7 @@ export const FundingSubscription = () => {
   useEffect(() => {
     if (projectGoalId) {
       setSelectedGoalId(projectGoalId)
-      navigate(getPath('projectFunding', project.name))
+      navigate({ pathname: location.pathname, search: location.search }, { replace: true })
     }
   }, [projectGoalId, project.name, setSelectedGoalId])
 
