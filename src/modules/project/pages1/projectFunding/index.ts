@@ -1,7 +1,10 @@
 import { ProjectFunding } from './ProjectFunding'
 import { FundingDetails } from './views/fundingDetails/FundingDetails'
 import { FundingInit } from './views/fundingInit/FundingInit'
-import { FundingPayment } from './views/fundingPayment/FundingPayment'
+import { Funding } from './views/fundingPayment/Funding'
+import { Payment } from './views/fundingPayment/Payment'
+import { Subscription } from './views/fundingPayment/Subscription'
+import { PaymentCard } from './views/fundingPayment/views/PaymentCard'
 import { PaymentFailed } from './views/fundingPayment/views/paymentFailed/PaymentFailed'
 import { PaymentLightning } from './views/fundingPayment/views/PaymentLightning'
 import { PaymentLoading } from './views/fundingPayment/views/PaymentLoading'
@@ -14,10 +17,12 @@ import { PaymentOnChainRefundInitiated } from './views/fundingPayment/views/paym
 import { FundingSuccess } from './views/fundingSuccess/FundingSuccess'
 
 export {
+  Funding,
   FundingDetails,
   FundingInit,
-  FundingPayment,
   FundingSuccess,
+  Payment,
+  PaymentCard,
   PaymentFailed,
   PaymentLightning,
   PaymentLoading,
@@ -28,4 +33,5 @@ export {
   PaymentOnChainRefund,
   PaymentOnChainRefundInitiated,
   ProjectFunding,
+  Subscription,
 }

@@ -18,6 +18,7 @@ import { goalsAtomReset } from './goalsAtom'
 import { postsAtomReset } from './postsAtom'
 import { projectFormAtomReset } from './projectFormAtom'
 import { rewardsAtomReset } from './rewardsAtom'
+import { subscriptionAtomReset } from './subscriptionAtom'
 import { walletAtomReset } from './walletAtom'
 
 export type ProjectState = ProjectPageBodyFragment &
@@ -111,6 +112,7 @@ export const useProjectReset = () => {
   const affiliateReset = useSetAtom(affiliateAtomReset)
   const rewardReset = useSetAtom(resetRewardsAtom)
   const postReset = useSetAtom(postsAtomReset)
+  const subscriptionReset = useSetAtom(subscriptionAtomReset)
 
   const resetProject = useCallback(() => {
     console.log('=================================')
@@ -127,6 +129,7 @@ export const useProjectReset = () => {
     affiliateReset()
     rewardReset()
     postReset()
+    subscriptionReset()
   }, [
     contributionsReset,
     entriesReset,
@@ -138,6 +141,7 @@ export const useProjectReset = () => {
     affiliateReset,
     rewardReset,
     postReset,
+    subscriptionReset,
   ])
 
   return resetProject

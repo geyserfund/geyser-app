@@ -29,21 +29,6 @@ export const QUERY_GRANT = gql`
   }
 `
 
-export const QUERY_GRANT_STATISTICS = gql`
-  query GrantStatistics {
-    grantStatistics {
-      grants {
-        amountFunded
-        amountGranted
-        count
-      }
-      applicants {
-        countFunded
-      }
-    }
-  }
-`
-
 export const QUERY_GRANT_GET = gql`
   query GrantGet($input: GrantGetInput!) {
     grant(input: $input) {

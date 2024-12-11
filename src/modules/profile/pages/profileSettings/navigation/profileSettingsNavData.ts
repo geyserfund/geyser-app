@@ -1,10 +1,11 @@
 export enum ProfileSettingsType {
   general = 'general',
   notifications = 'notifications',
+  subscriptions = 'subscriptions',
 }
 
 import { IconType } from 'react-icons'
-import { PiBell, PiUser } from 'react-icons/pi'
+import { PiBell, PiRepeat, PiUser } from 'react-icons/pi'
 
 import { PathsMap } from '@/shared/constants'
 
@@ -28,5 +29,11 @@ export const profileSettingsItems: ProfileSettingsItem[] = [
     path: 'userProfileSettingsNotifications',
     type: ProfileSettingsType.notifications,
     icon: PiBell,
+  },
+  {
+    label: 'Subscriptions',
+    path: 'userProfileSettingsSubscriptions',
+    type: ProfileSettingsType.subscriptions,
+    icon: PiRepeat,
   },
 ]

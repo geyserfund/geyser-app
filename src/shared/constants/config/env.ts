@@ -49,10 +49,15 @@ if (!import.meta.env.VITE_APP_LNG_PORT) {
   console.warn('Missing VITE_APP_LNG_PORT from environment variables')
 }
 
+if (!import.meta.env.VITE_APP_STRIPE_API_KEY) {
+  console.warn('Missing VITE_APP_STRIPE_API_KEY from environment variables')
+}
+
 export const {
   VITE_APP_FLODESK_API_KEY,
   VITE_APP_GIPHY_API_KEY,
   VITE_APP_GEYSER_NOSTR_PUBKEY,
   VITE_APP_AIR_TABLE_KEY,
   VITE_APP_LNG_PORT,
+  VITE_APP_STRIPE_API_KEY,
 } = import.meta.env

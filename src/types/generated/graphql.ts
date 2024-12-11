@@ -142,6 +142,11 @@ export type AmbassadorStats = HeroStats & {
   rank: Scalars['Int']['output'];
 };
 
+export enum AmountCurrency {
+  Btcsat = 'BTCSAT',
+  Usdcent = 'USDCENT'
+}
+
 export type AmountSummary = {
   __typename?: 'AmountSummary';
   donationAmount: Scalars['Int']['output'];
@@ -184,6 +189,12 @@ export type BadgesGetWhereInput = {
 export enum BaseCurrency {
   Btc = 'BTC'
 }
+
+export type BitcoinPaymentMethods = {
+  __typename?: 'BitcoinPaymentMethods';
+  lightning: LightningPaymentMethods;
+  onChain: OnChainPaymentMethods;
+};
 
 export type BitcoinQuote = {
   __typename?: 'BitcoinQuote';
@@ -326,6 +337,20 @@ export type CreateProjectRewardInput = {
   privateCommentPrompts: Array<PrivateCommentPrompt>;
   projectId: Scalars['BigInt']['input'];
   shortDescription?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateProjectSubscriptionPlanInput = {
+  amount: Scalars['Int']['input'];
+  currency: SubscriptionCurrencyType;
+  description?: InputMaybe<Scalars['String']['input']>;
+  intervalType: UserSubscriptionInterval;
+  name: Scalars['String']['input'];
+  projectId: Scalars['BigInt']['input'];
+};
+
+export type CreateUserSubscriptionInput = {
+  projectSubscriptionPlanId: Scalars['BigInt']['input'];
+  userId: Scalars['BigInt']['input'];
 };
 
 export type CreateWalletInput = {
@@ -496,6 +521,13 @@ export type ExternalAccount = {
   public: Scalars['Boolean']['output'];
 };
 
+export type FiatPaymentMethods = {
+  __typename?: 'FiatPaymentMethods';
+  banxa: Scalars['Boolean']['output'];
+  enabled: Scalars['Boolean']['output'];
+  stripe: Scalars['Boolean']['output'];
+};
+
 export type FileUploadInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   /** MIME type of the file. Currently only supports image types. */
@@ -549,6 +581,7 @@ export type FundingCancelInput = {
   failureReason?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['BigInt']['input']>;
   invoiceId?: InputMaybe<Scalars['String']['input']>;
+  uuid?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type FundingCancelResponse = {
@@ -559,9 +592,11 @@ export type FundingCancelResponse = {
 
 export type FundingConfirmInput = {
   amount: Scalars['Int']['input'];
+  amountCurrency: AmountCurrency;
   offChain?: InputMaybe<FundingConfirmOffChainInput>;
   onChain?: InputMaybe<FundingConfirmOnChainInput>;
   paidAt: Scalars['Date']['input'];
+  uuid?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type FundingConfirmOffChainBolt11Input = {
@@ -610,6 +645,7 @@ export type FundingInput = {
   projectId: Scalars['BigInt']['input'];
   /** The resource from which the funding transaction is being created. */
   sourceResourceInput: ResourceInput;
+  stripeCheckoutSessionInput?: InputMaybe<StripeCheckoutSessionInput>;
   swapPublicKey?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -702,6 +738,7 @@ export type FundingTx = {
   invoiceId?: Maybe<Scalars['String']['output']>;
   invoiceStatus: InvoiceStatus;
   isAnonymous: Scalars['Boolean']['output'];
+  isSubscription: Scalars['Boolean']['output'];
   media?: Maybe<Scalars['String']['output']>;
   method?: Maybe<FundingMethod>;
   onChain: Scalars['Boolean']['output'];
@@ -715,6 +752,7 @@ export type FundingTx = {
   source: Scalars['String']['output'];
   sourceResource?: Maybe<SourceResource>;
   status: FundingStatus;
+  stripeClientSecret?: Maybe<Scalars['String']['output']>;
   /** Private reference code viewable only by the Funder and the ProjectOwner related to this FundingTx */
   uuid?: Maybe<Scalars['String']['output']>;
 };
@@ -1083,10 +1121,17 @@ export type GrantGetWhereInput = {
   id: Scalars['BigInt']['input'];
 };
 
+export type GrantGuardiansFunding = {
+  __typename?: 'GrantGuardiansFunding';
+  contributedTotal: Scalars['BigInt']['output'];
+  contributorsCount: Scalars['BigInt']['output'];
+};
+
 export type GrantStatistics = {
   __typename?: 'GrantStatistics';
   /** Statistic about the grant applicants */
   applicants?: Maybe<GrantStatisticsApplicant>;
+  grantGuardiansFunding: GrantGuardiansFunding;
   /** Statistic about the grants */
   grants?: Maybe<GrantStatisticsGrant>;
 };
@@ -1129,6 +1174,13 @@ export type GraphSumData = {
   dateTime: Scalars['Date']['output'];
   sum: Scalars['Int']['output'];
 };
+
+export enum GuardianType {
+  King = 'KING',
+  Knight = 'KNIGHT',
+  Legend = 'LEGEND',
+  Warrior = 'WARRIOR'
+}
 
 export type HeroStats = {
   contributionsCount: Scalars['Int']['output'];
@@ -1201,6 +1253,11 @@ export type LightningAddressVerifyResponse = {
   limits?: Maybe<LightningAddressContributionLimits>;
   reason?: Maybe<Scalars['String']['output']>;
   valid: Scalars['Boolean']['output'];
+};
+
+export type LightningPaymentMethods = {
+  __typename?: 'LightningPaymentMethods';
+  bolt11: Scalars['Boolean']['output'];
 };
 
 export type LndConnectionDetails = {
@@ -1340,6 +1397,9 @@ export type Mutation = {
   projectRewardDelete: Scalars['Boolean']['output'];
   projectRewardUpdate: ProjectReward;
   projectStatusUpdate: Project;
+  projectSubscriptionPlanCreate: ProjectSubscriptionPlan;
+  projectSubscriptionPlanDelete: Scalars['Boolean']['output'];
+  projectSubscriptionPlanUpdate: ProjectSubscriptionPlan;
   projectTagAdd: Array<Tag>;
   projectTagRemove: Array<Tag>;
   projectUnfollow: Scalars['Boolean']['output'];
@@ -1362,6 +1422,9 @@ export type Mutation = {
   userEmailUpdate: User;
   userEmailVerify: Scalars['Boolean']['output'];
   userNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
+  userSubscriptionCancel: UserSubscription;
+  userSubscriptionCreate: UserSubscription;
+  userSubscriptionUpdate: UserSubscription;
   walletCreate: Wallet;
   walletDelete: Scalars['Boolean']['output'];
   /** This operation is currently not supported. */
@@ -1561,6 +1624,21 @@ export type MutationProjectStatusUpdateArgs = {
 };
 
 
+export type MutationProjectSubscriptionPlanCreateArgs = {
+  input: CreateProjectSubscriptionPlanInput;
+};
+
+
+export type MutationProjectSubscriptionPlanDeleteArgs = {
+  id: Scalars['BigInt']['input'];
+};
+
+
+export type MutationProjectSubscriptionPlanUpdateArgs = {
+  input: UpdateProjectSubscriptionPlanInput;
+};
+
+
 export type MutationProjectTagAddArgs = {
   input: ProjectTagMutationInput;
 };
@@ -1634,6 +1712,21 @@ export type MutationUserEmailVerifyArgs = {
 export type MutationUserNotificationConfigurationValueUpdateArgs = {
   userNotificationConfigurationId: Scalars['BigInt']['input'];
   value: Scalars['String']['input'];
+};
+
+
+export type MutationUserSubscriptionCancelArgs = {
+  id: Scalars['BigInt']['input'];
+};
+
+
+export type MutationUserSubscriptionCreateArgs = {
+  input: CreateUserSubscriptionInput;
+};
+
+
+export type MutationUserSubscriptionUpdateArgs = {
+  input: UpdateUserSubscriptionInput;
 };
 
 
@@ -1737,6 +1830,12 @@ export type OffsetBasedPaginationInput = {
   take?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type OnChainPaymentMethods = {
+  __typename?: 'OnChainPaymentMethods';
+  boltzSwap: Scalars['Boolean']['output'];
+  native: Scalars['Boolean']['output'];
+};
+
 export type OnChainTxInput = {
   id: Scalars['String']['input'];
 };
@@ -1796,7 +1895,8 @@ export type OrderItemInput = {
 };
 
 export enum OrderItemType {
-  ProjectReward = 'PROJECT_REWARD'
+  ProjectReward = 'PROJECT_REWARD',
+  ProjectSubscriptionPlan = 'PROJECT_SUBSCRIPTION_PLAN'
 }
 
 export type OrderStatusUpdateInput = {
@@ -1882,6 +1982,12 @@ export type PaginationCursor = {
 export type PaginationInput = {
   cursor?: InputMaybe<CursorInput>;
   take?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type PaymentMethods = {
+  __typename?: 'PaymentMethods';
+  bitcoin: BitcoinPaymentMethods;
+  fiat: FiatPaymentMethods;
 };
 
 export type Post = {
@@ -2056,6 +2162,7 @@ export type Project = {
   /** Unique name for the project. Used for the project URL and lightning address. */
   name: Scalars['String']['output'];
   owners: Array<Owner>;
+  paymentMethods: PaymentMethods;
   /**
    * By default, returns all the posts of a project, both published and unpublished but not deleted.
    * To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
@@ -2073,6 +2180,7 @@ export type Project = {
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
   status?: Maybe<ProjectStatus>;
+  subscribersCount?: Maybe<Scalars['Int']['output']>;
   tags: Array<Tag>;
   thumbnailImage?: Maybe<Scalars['String']['output']>;
   /** Public title of the project. */
@@ -2233,6 +2341,7 @@ export type ProjectGoal = {
   hasReceivedContribution: Scalars['Boolean']['output'];
   id: Scalars['BigInt']['output'];
   posts: Array<Post>;
+  progress: Scalars['Float']['output'];
   projectId: Scalars['BigInt']['output'];
   status: ProjectGoalStatus;
   targetAmount: Scalars['Int']['output'];
@@ -2523,6 +2632,27 @@ export type ProjectStatusUpdate = {
   status: ProjectStatus;
 };
 
+export type ProjectSubscriptionPlan = {
+  __typename?: 'ProjectSubscriptionPlan';
+  cost: Scalars['Int']['output'];
+  createdAt: Scalars['Date']['output'];
+  currency: SubscriptionCurrencyType;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['BigInt']['output'];
+  interval: UserSubscriptionInterval;
+  name: Scalars['String']['output'];
+  projectId: Scalars['BigInt']['output'];
+  updatedAt: Scalars['Date']['output'];
+};
+
+export type ProjectSubscriptionPlansInput = {
+  where: ProjectSubscriptionPlansWhereInput;
+};
+
+export type ProjectSubscriptionPlansWhereInput = {
+  projectId: Scalars['BigInt']['input'];
+};
+
 export type ProjectTagMutationInput = {
   projectId: Scalars['BigInt']['input'];
   tagId: Scalars['Int']['input'];
@@ -2669,6 +2799,8 @@ export type Query = {
   projectRewardsGet: Array<ProjectReward>;
   projectRewardsTrendingWeeklyGet: Array<ProjectRewardTrendingWeeklyGetRow>;
   projectStatsGet: ProjectStats;
+  projectSubscriptionPlan?: Maybe<ProjectSubscriptionPlan>;
+  projectSubscriptionPlans: Array<ProjectSubscriptionPlan>;
   /** By default, returns a list of all active projects. */
   projectsGet: ProjectsResponse;
   projectsMostFundedByTag: Array<ProjectMostFundedByTag>;
@@ -2682,6 +2814,8 @@ export type Query = {
   userBadges: Array<UserBadge>;
   userEmailIsAvailable: Scalars['Boolean']['output'];
   userNotificationSettingsGet: ProfileNotificationSettings;
+  userSubscription?: Maybe<UserSubscription>;
+  userSubscriptions: Array<UserSubscription>;
 };
 
 
@@ -2866,6 +3000,16 @@ export type QueryProjectStatsGetArgs = {
 };
 
 
+export type QueryProjectSubscriptionPlanArgs = {
+  id: Scalars['BigInt']['input'];
+};
+
+
+export type QueryProjectSubscriptionPlansArgs = {
+  input: ProjectSubscriptionPlansInput;
+};
+
+
 export type QueryProjectsGetArgs = {
   input?: InputMaybe<ProjectsGetQueryInput>;
 };
@@ -2898,6 +3042,16 @@ export type QueryUserEmailIsAvailableArgs = {
 
 export type QueryUserNotificationSettingsGetArgs = {
   userId: Scalars['BigInt']['input'];
+};
+
+
+export type QueryUserSubscriptionArgs = {
+  id: Scalars['BigInt']['input'];
+};
+
+
+export type QueryUserSubscriptionsArgs = {
+  input: UserSubscriptionsInput;
 };
 
 export enum QuoteCurrency {
@@ -2966,6 +3120,10 @@ export type StatsInterface = {
   totalUsd: Scalars['Float']['output'];
 };
 
+export type StripeCheckoutSessionInput = {
+  returnUrl: Scalars['String']['input'];
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   _?: Maybe<Scalars['Boolean']['output']>;
@@ -2985,6 +3143,10 @@ export type SubscriptionActivityCreatedArgs = {
 export type SubscriptionFundingTxStatusUpdatedArgs = {
   input?: InputMaybe<FundingTxStatusUpdatedInput>;
 };
+
+export enum SubscriptionCurrencyType {
+  Usdcent = 'USDCENT'
+}
 
 export type Swap = {
   __typename?: 'Swap';
@@ -3097,11 +3259,26 @@ export type UpdateProjectRewardInput = {
   shortDescription?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateProjectSubscriptionPlanInput = {
+  amount?: InputMaybe<Scalars['Int']['input']>;
+  currency?: InputMaybe<SubscriptionCurrencyType>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['BigInt']['input'];
+  intervalType?: InputMaybe<UserSubscriptionInterval>;
+  isHidden?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UpdateUserInput = {
   bio?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['BigInt']['input'];
   imageUrl?: InputMaybe<Scalars['String']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateUserSubscriptionInput = {
+  id: Scalars['BigInt']['input'];
+  status?: InputMaybe<UserSubscriptionStatus>;
 };
 
 export type UpdateWalletInput = {
@@ -3141,6 +3318,7 @@ export type User = {
   externalAccounts: Array<ExternalAccount>;
   /** Returns a user's funding transactions accross all projects. */
   fundingTxs: Array<FundingTx>;
+  guardian?: Maybe<GuardianType>;
   hasSocialAccount: Scalars['Boolean']['output'];
   heroId: Scalars['String']['output'];
   heroStats: UserHeroStats;
@@ -3265,6 +3443,39 @@ export type UserProjectsGetInput = {
 
 export type UserProjectsGetWhereInput = {
   status?: InputMaybe<ProjectStatus>;
+};
+
+export type UserSubscription = {
+  __typename?: 'UserSubscription';
+  canceledAt?: Maybe<Scalars['Date']['output']>;
+  createdAt: Scalars['Date']['output'];
+  id: Scalars['BigInt']['output'];
+  nextBillingDate: Scalars['Date']['output'];
+  projectSubscriptionPlan: ProjectSubscriptionPlan;
+  startDate: Scalars['Date']['output'];
+  status: UserSubscriptionStatus;
+  updatedAt: Scalars['Date']['output'];
+};
+
+export enum UserSubscriptionInterval {
+  Monthly = 'MONTHLY',
+  Quarterly = 'QUARTERLY',
+  Weekly = 'WEEKLY',
+  Yearly = 'YEARLY'
+}
+
+export enum UserSubscriptionStatus {
+  Active = 'ACTIVE',
+  Canceled = 'CANCELED',
+  Paused = 'PAUSED'
+}
+
+export type UserSubscriptionsInput = {
+  where: UserSubscriptionsWhereInput;
+};
+
+export type UserSubscriptionsWhereInput = {
+  userId: Scalars['BigInt']['input'];
 };
 
 export enum VotingSystem {
@@ -3459,6 +3670,7 @@ export type ResolversTypes = {
   AffiliateStatus: AffiliateStatus;
   Ambassador: ResolverTypeWrapper<Omit<Ambassador, 'user'> & { user: ResolversTypes['User'] }>;
   AmbassadorStats: ResolverTypeWrapper<AmbassadorStats>;
+  AmountCurrency: AmountCurrency;
   AmountSummary: ResolverTypeWrapper<AmountSummary>;
   AnalyticsGroupByInterval: AnalyticsGroupByInterval;
   Badge: ResolverTypeWrapper<Badge>;
@@ -3467,6 +3679,7 @@ export type ResolversTypes = {
   BadgesGetWhereInput: BadgesGetWhereInput;
   BaseCurrency: BaseCurrency;
   BigInt: ResolverTypeWrapper<Scalars['BigInt']['output']>;
+  BitcoinPaymentMethods: ResolverTypeWrapper<BitcoinPaymentMethods>;
   BitcoinQuote: ResolverTypeWrapper<BitcoinQuote>;
   BoardVoteGrant: ResolverTypeWrapper<Omit<BoardVoteGrant, 'applicants' | 'boardMembers' | 'sponsors'> & { applicants: Array<ResolversTypes['GrantApplicant']>, boardMembers: Array<ResolversTypes['GrantBoardMember']>, sponsors: Array<ResolversTypes['Sponsor']> }>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
@@ -3480,6 +3693,8 @@ export type ResolversTypes = {
   CreateEntryInput: CreateEntryInput;
   CreateProjectInput: CreateProjectInput;
   CreateProjectRewardInput: CreateProjectRewardInput;
+  CreateProjectSubscriptionPlanInput: CreateProjectSubscriptionPlanInput;
+  CreateUserSubscriptionInput: CreateUserSubscriptionInput;
   CreateWalletInput: CreateWalletInput;
   CreatorNotificationSettings: ResolverTypeWrapper<CreatorNotificationSettings>;
   CreatorNotificationSettingsProject: ResolverTypeWrapper<CreatorNotificationSettingsProject>;
@@ -3505,6 +3720,7 @@ export type ResolversTypes = {
   EntryStatus: EntryStatus;
   EntryType: EntryType;
   ExternalAccount: ResolverTypeWrapper<ExternalAccount>;
+  FiatPaymentMethods: ResolverTypeWrapper<FiatPaymentMethods>;
   FileUploadInput: FileUploadInput;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   Funder: ResolverTypeWrapper<Omit<Funder, 'contributionsSummary' | 'fundingTxs' | 'user'> & { contributionsSummary?: Maybe<ResolversTypes['ContributorContributionsSummary']>, fundingTxs: Array<ResolversTypes['FundingTx']>, user?: Maybe<ResolversTypes['User']> }>;
@@ -3591,6 +3807,7 @@ export type ResolversTypes = {
   GrantBoardMember: ResolverTypeWrapper<Omit<GrantBoardMember, 'user'> & { user: ResolversTypes['User'] }>;
   GrantGetInput: GrantGetInput;
   GrantGetWhereInput: GrantGetWhereInput;
+  GrantGuardiansFunding: ResolverTypeWrapper<GrantGuardiansFunding>;
   GrantStatistics: ResolverTypeWrapper<GrantStatistics>;
   GrantStatisticsApplicant: ResolverTypeWrapper<GrantStatisticsApplicant>;
   GrantStatisticsGrant: ResolverTypeWrapper<GrantStatisticsGrant>;
@@ -3598,6 +3815,7 @@ export type ResolversTypes = {
   GrantStatusEnum: GrantStatusEnum;
   GrantType: GrantType;
   GraphSumData: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['GraphSumData']>;
+  GuardianType: GuardianType;
   HeroStats: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['HeroStats']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   InvoiceStatus: InvoiceStatus;
@@ -3611,6 +3829,7 @@ export type ResolversTypes = {
   LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
   LightningAddressContributionLimits: ResolverTypeWrapper<LightningAddressContributionLimits>;
   LightningAddressVerifyResponse: ResolverTypeWrapper<LightningAddressVerifyResponse>;
+  LightningPaymentMethods: ResolverTypeWrapper<LightningPaymentMethods>;
   LndConnectionDetails: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['LndConnectionDetails']>;
   LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
   LndConnectionDetailsPrivate: ResolverTypeWrapper<LndConnectionDetailsPrivate>;
@@ -3636,6 +3855,7 @@ export type ResolversTypes = {
   OTPLoginInput: OtpLoginInput;
   OTPResponse: ResolverTypeWrapper<OtpResponse>;
   OffsetBasedPaginationInput: OffsetBasedPaginationInput;
+  OnChainPaymentMethods: ResolverTypeWrapper<OnChainPaymentMethods>;
   OnChainTxInput: OnChainTxInput;
   Order: ResolverTypeWrapper<Omit<Order, 'fundingTx' | 'user'> & { fundingTx: ResolversTypes['FundingTx'], user?: Maybe<ResolversTypes['User']> }>;
   OrderBitcoinQuoteInput: OrderBitcoinQuoteInput;
@@ -3659,6 +3879,7 @@ export type ResolversTypes = {
   PageViewCountGraph: ResolverTypeWrapper<PageViewCountGraph>;
   PaginationCursor: ResolverTypeWrapper<PaginationCursor>;
   PaginationInput: PaginationInput;
+  PaymentMethods: ResolverTypeWrapper<PaymentMethods>;
   Post: ResolverTypeWrapper<Omit<Post, 'creator' | 'fundingTxs' | 'project'> & { creator: ResolversTypes['User'], fundingTxs: Array<ResolversTypes['FundingTx']>, project?: Maybe<ResolversTypes['Project']> }>;
   PostCreateInput: PostCreateInput;
   PostEmailSegmentSizeGetInput: PostEmailSegmentSizeGetInput;
@@ -3729,6 +3950,9 @@ export type ResolversTypes = {
   ProjectStatsBase: ResolverTypeWrapper<ProjectStatsBase>;
   ProjectStatus: ProjectStatus;
   ProjectStatusUpdate: ProjectStatusUpdate;
+  ProjectSubscriptionPlan: ResolverTypeWrapper<ProjectSubscriptionPlan>;
+  ProjectSubscriptionPlansInput: ProjectSubscriptionPlansInput;
+  ProjectSubscriptionPlansWhereInput: ProjectSubscriptionPlansWhereInput;
   ProjectTagMutationInput: ProjectTagMutationInput;
   ProjectType: ProjectType;
   ProjectViewBaseStats: ResolverTypeWrapper<ProjectViewBaseStats>;
@@ -3754,7 +3978,9 @@ export type ResolversTypes = {
   SponsorStatus: SponsorStatus;
   StatsInterface: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['StatsInterface']>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  StripeCheckoutSessionInput: StripeCheckoutSessionInput;
   Subscription: ResolverTypeWrapper<{}>;
+  SubscriptionCurrencyType: SubscriptionCurrencyType;
   Swap: ResolverTypeWrapper<Swap>;
   TOTPInput: TotpInput;
   Tag: ResolverTypeWrapper<Tag>;
@@ -3768,7 +3994,9 @@ export type ResolversTypes = {
   UpdateEntryInput: UpdateEntryInput;
   UpdateProjectInput: UpdateProjectInput;
   UpdateProjectRewardInput: UpdateProjectRewardInput;
+  UpdateProjectSubscriptionPlanInput: UpdateProjectSubscriptionPlanInput;
   UpdateUserInput: UpdateUserInput;
+  UpdateUserSubscriptionInput: UpdateUserSubscriptionInput;
   UpdateWalletInput: UpdateWalletInput;
   UpdateWalletStateInput: UpdateWalletStateInput;
   User: ResolverTypeWrapper<Omit<User, 'contributions' | 'entries' | 'fundingTxs' | 'ownerOf' | 'projectFollows' | 'projects' | 'wallet'> & { contributions: Array<ResolversTypes['UserProjectContribution']>, entries: Array<ResolversTypes['Entry']>, fundingTxs: Array<ResolversTypes['FundingTx']>, ownerOf: Array<ResolversTypes['OwnerOf']>, projectFollows: Array<ResolversTypes['Project']>, projects: Array<ResolversTypes['Project']>, wallet?: Maybe<ResolversTypes['Wallet']> }>;
@@ -3785,6 +4013,11 @@ export type ResolversTypes = {
   UserProjectContribution: ResolverTypeWrapper<Omit<UserProjectContribution, 'funder' | 'project'> & { funder?: Maybe<ResolversTypes['Funder']>, project: ResolversTypes['Project'] }>;
   UserProjectsGetInput: UserProjectsGetInput;
   UserProjectsGetWhereInput: UserProjectsGetWhereInput;
+  UserSubscription: ResolverTypeWrapper<UserSubscription>;
+  UserSubscriptionInterval: UserSubscriptionInterval;
+  UserSubscriptionStatus: UserSubscriptionStatus;
+  UserSubscriptionsInput: UserSubscriptionsInput;
+  UserSubscriptionsWhereInput: UserSubscriptionsWhereInput;
   VotingSystem: VotingSystem;
   Wallet: ResolverTypeWrapper<Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversTypes['ConnectionDetails'] }>;
   WalletContributionLimits: ResolverTypeWrapper<WalletContributionLimits>;
@@ -3821,6 +4054,7 @@ export type ResolversParentTypes = {
   BadgesGetInput: BadgesGetInput;
   BadgesGetWhereInput: BadgesGetWhereInput;
   BigInt: Scalars['BigInt']['output'];
+  BitcoinPaymentMethods: BitcoinPaymentMethods;
   BitcoinQuote: BitcoinQuote;
   BoardVoteGrant: Omit<BoardVoteGrant, 'applicants' | 'boardMembers' | 'sponsors'> & { applicants: Array<ResolversParentTypes['GrantApplicant']>, boardMembers: Array<ResolversParentTypes['GrantBoardMember']>, sponsors: Array<ResolversParentTypes['Sponsor']> };
   Boolean: Scalars['Boolean']['output'];
@@ -3833,6 +4067,8 @@ export type ResolversParentTypes = {
   CreateEntryInput: CreateEntryInput;
   CreateProjectInput: CreateProjectInput;
   CreateProjectRewardInput: CreateProjectRewardInput;
+  CreateProjectSubscriptionPlanInput: CreateProjectSubscriptionPlanInput;
+  CreateUserSubscriptionInput: CreateUserSubscriptionInput;
   CreateWalletInput: CreateWalletInput;
   CreatorNotificationSettings: CreatorNotificationSettings;
   CreatorNotificationSettingsProject: CreatorNotificationSettingsProject;
@@ -3853,6 +4089,7 @@ export type ResolversParentTypes = {
   Entry: Omit<Entry, 'creator' | 'fundingTxs' | 'project'> & { creator: ResolversParentTypes['User'], fundingTxs: Array<ResolversParentTypes['FundingTx']>, project?: Maybe<ResolversParentTypes['Project']> };
   EntryPublishedSubscriptionResponse: Omit<EntryPublishedSubscriptionResponse, 'entry'> & { entry: ResolversParentTypes['Entry'] };
   ExternalAccount: ExternalAccount;
+  FiatPaymentMethods: FiatPaymentMethods;
   FileUploadInput: FileUploadInput;
   Float: Scalars['Float']['output'];
   Funder: Omit<Funder, 'contributionsSummary' | 'fundingTxs' | 'user'> & { contributionsSummary?: Maybe<ResolversParentTypes['ContributorContributionsSummary']>, fundingTxs: Array<ResolversParentTypes['FundingTx']>, user?: Maybe<ResolversParentTypes['User']> };
@@ -3930,6 +4167,7 @@ export type ResolversParentTypes = {
   GrantBoardMember: Omit<GrantBoardMember, 'user'> & { user: ResolversParentTypes['User'] };
   GrantGetInput: GrantGetInput;
   GrantGetWhereInput: GrantGetWhereInput;
+  GrantGuardiansFunding: GrantGuardiansFunding;
   GrantStatistics: GrantStatistics;
   GrantStatisticsApplicant: GrantStatisticsApplicant;
   GrantStatisticsGrant: GrantStatisticsGrant;
@@ -3946,6 +4184,7 @@ export type ResolversParentTypes = {
   LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
   LightningAddressContributionLimits: LightningAddressContributionLimits;
   LightningAddressVerifyResponse: LightningAddressVerifyResponse;
+  LightningPaymentMethods: LightningPaymentMethods;
   LndConnectionDetails: ResolversInterfaceTypes<ResolversParentTypes>['LndConnectionDetails'];
   LndConnectionDetailsCreateInput: LndConnectionDetailsCreateInput;
   LndConnectionDetailsPrivate: LndConnectionDetailsPrivate;
@@ -3968,6 +4207,7 @@ export type ResolversParentTypes = {
   OTPLoginInput: OtpLoginInput;
   OTPResponse: OtpResponse;
   OffsetBasedPaginationInput: OffsetBasedPaginationInput;
+  OnChainPaymentMethods: OnChainPaymentMethods;
   OnChainTxInput: OnChainTxInput;
   Order: Omit<Order, 'fundingTx' | 'user'> & { fundingTx: ResolversParentTypes['FundingTx'], user?: Maybe<ResolversParentTypes['User']> };
   OrderBitcoinQuoteInput: OrderBitcoinQuoteInput;
@@ -3986,6 +4226,7 @@ export type ResolversParentTypes = {
   PageViewCountGraph: PageViewCountGraph;
   PaginationCursor: PaginationCursor;
   PaginationInput: PaginationInput;
+  PaymentMethods: PaymentMethods;
   Post: Omit<Post, 'creator' | 'fundingTxs' | 'project'> & { creator: ResolversParentTypes['User'], fundingTxs: Array<ResolversParentTypes['FundingTx']>, project?: Maybe<ResolversParentTypes['Project']> };
   PostCreateInput: PostCreateInput;
   PostEmailSegmentSizeGetInput: PostEmailSegmentSizeGetInput;
@@ -4047,6 +4288,9 @@ export type ResolversParentTypes = {
   ProjectStats: ProjectStats;
   ProjectStatsBase: ProjectStatsBase;
   ProjectStatusUpdate: ProjectStatusUpdate;
+  ProjectSubscriptionPlan: ProjectSubscriptionPlan;
+  ProjectSubscriptionPlansInput: ProjectSubscriptionPlansInput;
+  ProjectSubscriptionPlansWhereInput: ProjectSubscriptionPlansWhereInput;
   ProjectTagMutationInput: ProjectTagMutationInput;
   ProjectViewBaseStats: ProjectViewBaseStats;
   ProjectViewStats: ProjectViewStats;
@@ -4064,6 +4308,7 @@ export type ResolversParentTypes = {
   Sponsor: Omit<Sponsor, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
   StatsInterface: ResolversInterfaceTypes<ResolversParentTypes>['StatsInterface'];
   String: Scalars['String']['output'];
+  StripeCheckoutSessionInput: StripeCheckoutSessionInput;
   Subscription: {};
   Swap: Swap;
   TOTPInput: TotpInput;
@@ -4077,7 +4322,9 @@ export type ResolversParentTypes = {
   UpdateEntryInput: UpdateEntryInput;
   UpdateProjectInput: UpdateProjectInput;
   UpdateProjectRewardInput: UpdateProjectRewardInput;
+  UpdateProjectSubscriptionPlanInput: UpdateProjectSubscriptionPlanInput;
   UpdateUserInput: UpdateUserInput;
+  UpdateUserSubscriptionInput: UpdateUserSubscriptionInput;
   UpdateWalletInput: UpdateWalletInput;
   UpdateWalletStateInput: UpdateWalletStateInput;
   User: Omit<User, 'contributions' | 'entries' | 'fundingTxs' | 'ownerOf' | 'projectFollows' | 'projects' | 'wallet'> & { contributions: Array<ResolversParentTypes['UserProjectContribution']>, entries: Array<ResolversParentTypes['Entry']>, fundingTxs: Array<ResolversParentTypes['FundingTx']>, ownerOf: Array<ResolversParentTypes['OwnerOf']>, projectFollows: Array<ResolversParentTypes['Project']>, projects: Array<ResolversParentTypes['Project']>, wallet?: Maybe<ResolversParentTypes['Wallet']> };
@@ -4093,6 +4340,9 @@ export type ResolversParentTypes = {
   UserProjectContribution: Omit<UserProjectContribution, 'funder' | 'project'> & { funder?: Maybe<ResolversParentTypes['Funder']>, project: ResolversParentTypes['Project'] };
   UserProjectsGetInput: UserProjectsGetInput;
   UserProjectsGetWhereInput: UserProjectsGetWhereInput;
+  UserSubscription: UserSubscription;
+  UserSubscriptionsInput: UserSubscriptionsInput;
+  UserSubscriptionsWhereInput: UserSubscriptionsWhereInput;
   Wallet: Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversParentTypes['ConnectionDetails'] };
   WalletContributionLimits: WalletContributionLimits;
   WalletLimits: WalletLimits;
@@ -4198,6 +4448,12 @@ export type BadgeResolvers<ContextType = any, ParentType extends ResolversParent
 export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
   name: 'BigInt';
 }
+
+export type BitcoinPaymentMethodsResolvers<ContextType = any, ParentType extends ResolversParentTypes['BitcoinPaymentMethods'] = ResolversParentTypes['BitcoinPaymentMethods']> = {
+  lightning?: Resolver<ResolversTypes['LightningPaymentMethods'], ParentType, ContextType>;
+  onChain?: Resolver<ResolversTypes['OnChainPaymentMethods'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type BitcoinQuoteResolvers<ContextType = any, ParentType extends ResolversParentTypes['BitcoinQuote'] = ResolversParentTypes['BitcoinQuote']> = {
   quote?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
@@ -4362,6 +4618,13 @@ export type ExternalAccountResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type FiatPaymentMethodsResolvers<ContextType = any, ParentType extends ResolversParentTypes['FiatPaymentMethods'] = ResolversParentTypes['FiatPaymentMethods']> = {
+  banxa?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  enabled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  stripe?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type FunderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Funder'] = ResolversParentTypes['Funder']> = {
   amountFunded?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   confirmed?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -4433,6 +4696,7 @@ export type FundingTxResolvers<ContextType = any, ParentType extends ResolversPa
   invoiceId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   invoiceStatus?: Resolver<ResolversTypes['InvoiceStatus'], ParentType, ContextType>;
   isAnonymous?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isSubscription?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   media?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   method?: Resolver<Maybe<ResolversTypes['FundingMethod']>, ParentType, ContextType>;
   onChain?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -4446,6 +4710,7 @@ export type FundingTxResolvers<ContextType = any, ParentType extends ResolversPa
   source?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   sourceResource?: Resolver<Maybe<ResolversTypes['SourceResource']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['FundingStatus'], ParentType, ContextType>;
+  stripeClientSecret?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   uuid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -4574,8 +4839,15 @@ export type GrantBoardMemberResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GrantGuardiansFundingResolvers<ContextType = any, ParentType extends ResolversParentTypes['GrantGuardiansFunding'] = ResolversParentTypes['GrantGuardiansFunding']> = {
+  contributedTotal?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  contributorsCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type GrantStatisticsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GrantStatistics'] = ResolversParentTypes['GrantStatistics']> = {
   applicants?: Resolver<Maybe<ResolversTypes['GrantStatisticsApplicant']>, ParentType, ContextType>;
+  grantGuardiansFunding?: Resolver<ResolversTypes['GrantGuardiansFunding'], ParentType, ContextType>;
   grants?: Resolver<Maybe<ResolversTypes['GrantStatisticsGrant']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -4629,6 +4901,11 @@ export type LightningAddressVerifyResponseResolvers<ContextType = any, ParentTyp
   limits?: Resolver<Maybe<ResolversTypes['LightningAddressContributionLimits']>, ParentType, ContextType>;
   reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   valid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LightningPaymentMethodsResolvers<ContextType = any, ParentType extends ResolversParentTypes['LightningPaymentMethods'] = ResolversParentTypes['LightningPaymentMethods']> = {
+  bolt11?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4711,6 +4988,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectRewardDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectRewardDeleteArgs, 'input'>>;
   projectRewardUpdate?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationProjectRewardUpdateArgs, 'input'>>;
   projectStatusUpdate?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectStatusUpdateArgs, 'input'>>;
+  projectSubscriptionPlanCreate?: Resolver<ResolversTypes['ProjectSubscriptionPlan'], ParentType, ContextType, RequireFields<MutationProjectSubscriptionPlanCreateArgs, 'input'>>;
+  projectSubscriptionPlanDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectSubscriptionPlanDeleteArgs, 'id'>>;
+  projectSubscriptionPlanUpdate?: Resolver<ResolversTypes['ProjectSubscriptionPlan'], ParentType, ContextType, RequireFields<MutationProjectSubscriptionPlanUpdateArgs, 'input'>>;
   projectTagAdd?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType, RequireFields<MutationProjectTagAddArgs, 'input'>>;
   projectTagRemove?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType, RequireFields<MutationProjectTagRemoveArgs, 'input'>>;
   projectUnfollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectUnfollowArgs, 'input'>>;
@@ -4727,6 +5007,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   userEmailUpdate?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUserEmailUpdateArgs, 'input'>>;
   userEmailVerify?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUserEmailVerifyArgs, 'input'>>;
   userNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUserNotificationConfigurationValueUpdateArgs, 'userNotificationConfigurationId' | 'value'>>;
+  userSubscriptionCancel?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionCancelArgs, 'id'>>;
+  userSubscriptionCreate?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionCreateArgs, 'input'>>;
+  userSubscriptionUpdate?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionUpdateArgs, 'input'>>;
   walletCreate?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationWalletCreateArgs, 'input'>>;
   walletDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationWalletDeleteArgs, 'id'>>;
   walletUpdate?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationWalletUpdateArgs, 'input'>>;
@@ -4787,6 +5070,12 @@ export type NotificationSettingsResolvers<ContextType = any, ParentType extends 
 export type OtpResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['OTPResponse'] = ResolversParentTypes['OTPResponse']> = {
   expiresAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   otpVerificationToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type OnChainPaymentMethodsResolvers<ContextType = any, ParentType extends ResolversParentTypes['OnChainPaymentMethods'] = ResolversParentTypes['OnChainPaymentMethods']> = {
+  boltzSwap?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  native?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4857,6 +5146,12 @@ export type PaginationCursorResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PaymentMethodsResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentMethods'] = ResolversParentTypes['PaymentMethods']> = {
+  bitcoin?: Resolver<ResolversTypes['BitcoinPaymentMethods'], ParentType, ContextType>;
+  fiat?: Resolver<ResolversTypes['FiatPaymentMethods'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
   amountFunded?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -4923,6 +5218,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   milestones?: Resolver<Array<ResolversTypes['Milestone']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>;
+  paymentMethods?: Resolver<ResolversTypes['PaymentMethods'], ParentType, ContextType>;
   posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType, Partial<ProjectPostsArgs>>;
   rewardBuyersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>;
@@ -4932,6 +5228,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>;
   statistics?: Resolver<Maybe<ResolversTypes['ProjectStatistics']>, ParentType, ContextType>;
   status?: Resolver<Maybe<ResolversTypes['ProjectStatus']>, ParentType, ContextType>;
+  subscribersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
   thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -5041,6 +5338,7 @@ export type ProjectGoalResolvers<ContextType = any, ParentType extends Resolvers
   hasReceivedContribution?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType>;
+  progress?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ProjectGoalStatus'], ParentType, ContextType>;
   targetAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -5186,6 +5484,19 @@ export type ProjectStatsBaseResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProjectSubscriptionPlanResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectSubscriptionPlan'] = ResolversParentTypes['ProjectSubscriptionPlan']> = {
+  cost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  currency?: Resolver<ResolversTypes['SubscriptionCurrencyType'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  interval?: Resolver<ResolversTypes['UserSubscriptionInterval'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ProjectViewBaseStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectViewBaseStats'] = ResolversParentTypes['ProjectViewBaseStats']> = {
   value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   viewCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -5262,6 +5573,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectRewardsGet?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<QueryProjectRewardsGetArgs, 'input'>>;
   projectRewardsTrendingWeeklyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingWeeklyGetRow']>, ParentType, ContextType>;
   projectStatsGet?: Resolver<ResolversTypes['ProjectStats'], ParentType, ContextType, RequireFields<QueryProjectStatsGetArgs, 'input'>>;
+  projectSubscriptionPlan?: Resolver<Maybe<ResolversTypes['ProjectSubscriptionPlan']>, ParentType, ContextType, RequireFields<QueryProjectSubscriptionPlanArgs, 'id'>>;
+  projectSubscriptionPlans?: Resolver<Array<ResolversTypes['ProjectSubscriptionPlan']>, ParentType, ContextType, RequireFields<QueryProjectSubscriptionPlansArgs, 'input'>>;
   projectsGet?: Resolver<ResolversTypes['ProjectsResponse'], ParentType, ContextType, Partial<QueryProjectsGetArgs>>;
   projectsMostFundedByTag?: Resolver<Array<ResolversTypes['ProjectMostFundedByTag']>, ParentType, ContextType, RequireFields<QueryProjectsMostFundedByTagArgs, 'input'>>;
   projectsSummary?: Resolver<ResolversTypes['ProjectsSummary'], ParentType, ContextType>;
@@ -5273,6 +5586,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   userBadges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgesArgs, 'input'>>;
   userEmailIsAvailable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryUserEmailIsAvailableArgs, 'email'>>;
   userNotificationSettingsGet?: Resolver<ResolversTypes['ProfileNotificationSettings'], ParentType, ContextType, RequireFields<QueryUserNotificationSettingsGetArgs, 'userId'>>;
+  userSubscription?: Resolver<Maybe<ResolversTypes['UserSubscription']>, ParentType, ContextType, RequireFields<QueryUserSubscriptionArgs, 'id'>>;
+  userSubscriptions?: Resolver<Array<ResolversTypes['UserSubscription']>, ParentType, ContextType, RequireFields<QueryUserSubscriptionsArgs, 'input'>>;
 };
 
 export type SignedUploadUrlResolvers<ContextType = any, ParentType extends ResolversParentTypes['SignedUploadUrl'] = ResolversParentTypes['SignedUploadUrl']> = {
@@ -5345,6 +5660,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<UserEntriesArgs>>;
   externalAccounts?: Resolver<Array<ResolversTypes['ExternalAccount']>, ParentType, ContextType>;
   fundingTxs?: Resolver<Array<ResolversTypes['FundingTx']>, ParentType, ContextType>;
+  guardian?: Resolver<Maybe<ResolversTypes['GuardianType']>, ParentType, ContextType>;
   hasSocialAccount?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   heroId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   heroStats?: Resolver<ResolversTypes['UserHeroStats'], ParentType, ContextType>;
@@ -5393,6 +5709,18 @@ export type UserProjectContributionResolvers<ContextType = any, ParentType exten
   isFunder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isSponsor?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserSubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserSubscription'] = ResolversParentTypes['UserSubscription']> = {
+  canceledAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  nextBillingDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  projectSubscriptionPlan?: Resolver<ResolversTypes['ProjectSubscriptionPlan'], ParentType, ContextType>;
+  startDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['UserSubscriptionStatus'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -5451,6 +5779,7 @@ export type Resolvers<ContextType = any> = {
   AmountSummary?: AmountSummaryResolvers<ContextType>;
   Badge?: BadgeResolvers<ContextType>;
   BigInt?: GraphQLScalarType;
+  BitcoinPaymentMethods?: BitcoinPaymentMethodsResolvers<ContextType>;
   BitcoinQuote?: BitcoinQuoteResolvers<ContextType>;
   BoardVoteGrant?: BoardVoteGrantResolvers<ContextType>;
   CommunityVoteGrant?: CommunityVoteGrantResolvers<ContextType>;
@@ -5470,6 +5799,7 @@ export type Resolvers<ContextType = any> = {
   Entry?: EntryResolvers<ContextType>;
   EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>;
   ExternalAccount?: ExternalAccountResolvers<ContextType>;
+  FiatPaymentMethods?: FiatPaymentMethodsResolvers<ContextType>;
   Funder?: FunderResolvers<ContextType>;
   FunderRewardGraphSum?: FunderRewardGraphSumResolvers<ContextType>;
   FundingCancelResponse?: FundingCancelResponseResolvers<ContextType>;
@@ -5495,6 +5825,7 @@ export type Resolvers<ContextType = any> = {
   GrantApplicantContributor?: GrantApplicantContributorResolvers<ContextType>;
   GrantApplicantFunding?: GrantApplicantFundingResolvers<ContextType>;
   GrantBoardMember?: GrantBoardMemberResolvers<ContextType>;
+  GrantGuardiansFunding?: GrantGuardiansFundingResolvers<ContextType>;
   GrantStatistics?: GrantStatisticsResolvers<ContextType>;
   GrantStatisticsApplicant?: GrantStatisticsApplicantResolvers<ContextType>;
   GrantStatisticsGrant?: GrantStatisticsGrantResolvers<ContextType>;
@@ -5504,6 +5835,7 @@ export type Resolvers<ContextType = any> = {
   LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;
   LightningAddressContributionLimits?: LightningAddressContributionLimitsResolvers<ContextType>;
   LightningAddressVerifyResponse?: LightningAddressVerifyResponseResolvers<ContextType>;
+  LightningPaymentMethods?: LightningPaymentMethodsResolvers<ContextType>;
   LndConnectionDetails?: LndConnectionDetailsResolvers<ContextType>;
   LndConnectionDetailsPrivate?: LndConnectionDetailsPrivateResolvers<ContextType>;
   LndConnectionDetailsPublic?: LndConnectionDetailsPublicResolvers<ContextType>;
@@ -5519,6 +5851,7 @@ export type Resolvers<ContextType = any> = {
   NotificationConfiguration?: NotificationConfigurationResolvers<ContextType>;
   NotificationSettings?: NotificationSettingsResolvers<ContextType>;
   OTPResponse?: OtpResponseResolvers<ContextType>;
+  OnChainPaymentMethods?: OnChainPaymentMethodsResolvers<ContextType>;
   Order?: OrderResolvers<ContextType>;
   OrderItem?: OrderItemResolvers<ContextType>;
   OrdersGetResponse?: OrdersGetResponseResolvers<ContextType>;
@@ -5528,6 +5861,7 @@ export type Resolvers<ContextType = any> = {
   PageInfo?: PageInfoResolvers<ContextType>;
   PageViewCountGraph?: PageViewCountGraphResolvers<ContextType>;
   PaginationCursor?: PaginationCursorResolvers<ContextType>;
+  PaymentMethods?: PaymentMethodsResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
   PostPublishedSubscriptionResponse?: PostPublishedSubscriptionResponseResolvers<ContextType>;
   PostSendByEmailResponse?: PostSendByEmailResponseResolvers<ContextType>;
@@ -5564,6 +5898,7 @@ export type Resolvers<ContextType = any> = {
   ProjectStatistics?: ProjectStatisticsResolvers<ContextType>;
   ProjectStats?: ProjectStatsResolvers<ContextType>;
   ProjectStatsBase?: ProjectStatsBaseResolvers<ContextType>;
+  ProjectSubscriptionPlan?: ProjectSubscriptionPlanResolvers<ContextType>;
   ProjectViewBaseStats?: ProjectViewBaseStatsResolvers<ContextType>;
   ProjectViewStats?: ProjectViewStatsResolvers<ContextType>;
   ProjectsResponse?: ProjectsResponseResolvers<ContextType>;
@@ -5583,6 +5918,7 @@ export type Resolvers<ContextType = any> = {
   UserHeroStats?: UserHeroStatsResolvers<ContextType>;
   UserNotificationSettings?: UserNotificationSettingsResolvers<ContextType>;
   UserProjectContribution?: UserProjectContributionResolvers<ContextType>;
+  UserSubscription?: UserSubscriptionResolvers<ContextType>;
   Wallet?: WalletResolvers<ContextType>;
   WalletContributionLimits?: WalletContributionLimitsResolvers<ContextType>;
   WalletLimits?: WalletLimitsResolvers<ContextType>;
@@ -5884,11 +6220,6 @@ export type GrantQuery = { __typename?: 'Query', grant: (
     & CommunityVoteGrantFragmentFragment
   ) };
 
-export type GrantStatisticsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GrantStatisticsQuery = { __typename?: 'Query', grantStatistics: { __typename?: 'GrantStatistics', grants?: { __typename?: 'GrantStatisticsGrant', amountFunded: number, amountGranted: number, count: number } | null, applicants?: { __typename?: 'GrantStatisticsApplicant', countFunded: number } | null } };
-
 export type GrantGetQueryVariables = Exact<{
   input: GrantGetInput;
 }>;
@@ -6186,6 +6517,18 @@ export type ProjectStatsGetQuery = { __typename?: 'Query', projectStatsGet: (
     & ProjectStatsFragment
   ) };
 
+export type GrantProjectQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type GrantProjectQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', subscribersCount?: number | null } | null };
+
+export type GrantStatisticsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GrantStatisticsQuery = { __typename?: 'Query', grantStatistics: { __typename?: 'GrantStatistics', grants?: { __typename?: 'GrantStatisticsGrant', amountFunded: number, amountGranted: number, count: number } | null, applicants?: { __typename?: 'GrantStatisticsApplicant', countFunded: number } | null, grantGuardiansFunding: { __typename?: 'GrantGuardiansFunding', contributedTotal: any, contributorsCount: any } } };
+
 export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
 
 export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, fundingTxs: Array<{ __typename?: 'FundingTx', amountPaid: number, comment?: string | null, media?: string | null, paidAt?: any | null, onChain: boolean, bitcoinQuote?: (
@@ -6239,6 +6582,18 @@ export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: s
     { __typename?: 'ExternalAccount' }
     & ExternalAccountFragment
   )> };
+
+export type UserSubscriptionFragment = { __typename?: 'UserSubscription', canceledAt?: any | null, createdAt: any, id: any, nextBillingDate: any, startDate: any, status: UserSubscriptionStatus, updatedAt: any, projectSubscriptionPlan: { __typename?: 'ProjectSubscriptionPlan', id: any, projectId: any, name: string, cost: number, interval: UserSubscriptionInterval, currency: SubscriptionCurrencyType } };
+
+export type CancelUserSubscriptionMutationVariables = Exact<{
+  id: Scalars['BigInt']['input'];
+}>;
+
+
+export type CancelUserSubscriptionMutation = { __typename?: 'Mutation', userSubscriptionCancel: (
+    { __typename?: 'UserSubscription' }
+    & UserSubscriptionFragment
+  ) };
 
 export type CreatorNotificationsSettingsUpdateMutationVariables = Exact<{
   creatorNotificationConfigurationId: Scalars['BigInt']['input'];
@@ -6353,6 +6708,16 @@ export type UserProfileOrdersQuery = { __typename?: 'Query', user: { __typename?
       & ProfileOrderFragment
     )> | null } };
 
+export type UserSubscriptionsQueryVariables = Exact<{
+  input: UserSubscriptionsInput;
+}>;
+
+
+export type UserSubscriptionsQuery = { __typename?: 'Query', userSubscriptions: Array<(
+    { __typename?: 'UserSubscription' }
+    & UserSubscriptionFragment
+  )> };
+
 export type ProjectAffiliateLinkFragment = { __typename?: 'AffiliateLink', projectId: any, label?: string | null, id: any, email: string, disabledAt?: any | null, createdAt: any, disabled?: boolean | null, affiliateId?: string | null, lightningAddress: string, affiliateFeePercentage: number, stats?: { __typename?: 'AffiliateStats', sales: { __typename?: 'AffiliateSalesStats', total: number, count: number } } | null };
 
 export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null };
@@ -6386,20 +6751,24 @@ export type ProjectFundingTxFragment = { __typename?: 'FundingTx', id: any, amou
       & UserAvatarFragment
     ) | null } };
 
-export type FundingTxFragment = { __typename?: 'FundingTx', id: any, uuid?: string | null, invoiceId?: string | null, paymentRequest?: string | null, amount: number, status: FundingStatus, invoiceStatus: InvoiceStatus, comment?: string | null, media?: string | null, paidAt?: any | null, onChain: boolean, address?: string | null, source: string, method?: FundingMethod | null, projectId: any, creatorEmail?: string | null, createdAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, confirmedAt?: any | null, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } | null } };
+export type FundingTxFragment = { __typename?: 'FundingTx', id: any, uuid?: string | null, invoiceId?: string | null, paymentRequest?: string | null, amount: number, status: FundingStatus, invoiceStatus: InvoiceStatus, comment?: string | null, media?: string | null, paidAt?: any | null, onChain: boolean, address?: string | null, source: string, method?: FundingMethod | null, projectId: any, creatorEmail?: string | null, createdAt?: any | null, stripeClientSecret?: string | null, isAnonymous: boolean, isSubscription: boolean, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, confirmedAt?: any | null, user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } | null } };
 
 export type FundingTxForSubscriptionFragment = (
   { __typename?: 'FundingTx', projectGoalId?: any | null }
   & FundingTxFragment
 );
 
-export type FundingTxWithInvoiceStatusFragment = { __typename?: 'FundingTx', id: any, uuid?: string | null, invoiceId?: string | null, status: FundingStatus, onChain: boolean, invoiceStatus: InvoiceStatus, paymentRequest?: string | null, creatorEmail?: string | null };
+export type FundingTxWithInvoiceStatusFragment = { __typename?: 'FundingTx', id: any, uuid?: string | null, invoiceId?: string | null, status: FundingStatus, onChain: boolean, invoiceStatus: InvoiceStatus, paymentRequest?: string | null, creatorEmail?: string | null, isAnonymous: boolean };
 
 export type FundingTxForDownloadInvoiceFragment = { __typename?: 'FundingTx', id: any, donationAmount: number, amountPaid: number, uuid?: string | null, projectId: any, paidAt?: any | null, createdAt?: any | null, status: FundingStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null };
 
-export type ProjectGoalsFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, createdAt: any, updatedAt: any, completedAt?: any | null, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
+export type ProjectGoalsFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, progress: number, createdAt: any, updatedAt: any, completedAt?: any | null, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
 
 export type ProjectGrantApplicantFragment = { __typename?: 'GrantApplicant', id: any, status: GrantApplicantStatus, grant: { __typename?: 'BoardVoteGrant' } | { __typename?: 'CommunityVoteGrant', id: any, votingSystem: VotingSystem, type: GrantType, name: string, title: string, status: GrantStatusEnum } };
+
+export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', stripe: boolean } };
+
+export type ProjectSubscriptionPlansFragment = { __typename?: 'ProjectSubscriptionPlan', cost: number, currency: SubscriptionCurrencyType, description?: string | null, id: any, name: string, interval: UserSubscriptionInterval, projectId: any };
 
 export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
 
@@ -6424,7 +6793,10 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
   ), owners: Array<{ __typename?: 'Owner', id: any, user: (
       { __typename?: 'User' }
       & ProjectPageCreatorFragment
-    ) }> };
+    ) }>, paymentMethods: (
+    { __typename?: 'PaymentMethods' }
+    & ProjectPaymentMethodsFragment
+  ) };
 
 export type ProjectPageDetailsFragment = { __typename?: 'Project', id: any, name: string, links: Array<string>, location?: (
     { __typename?: 'Location' }
@@ -7070,6 +7442,16 @@ export type ProjectFundingMethodStatsGetQuery = { __typename?: 'Query', projectS
     { __typename?: 'ProjectStats' }
     & ProjectFundingMethodStatsFragment
   ) };
+
+export type ProjectSubscriptionPlansQueryVariables = Exact<{
+  input: ProjectSubscriptionPlansInput;
+}>;
+
+
+export type ProjectSubscriptionPlansQuery = { __typename?: 'Query', projectSubscriptionPlans: Array<(
+    { __typename?: 'ProjectSubscriptionPlan' }
+    & ProjectSubscriptionPlansFragment
+  )> };
 
 export type ProjectRewardsQueryVariables = Exact<{
   input: GetProjectRewardInput;
@@ -8234,6 +8616,25 @@ export const UserForProfilePageFragmentDoc = gql`
   }
 }
     ${ExternalAccountFragmentDoc}`;
+export const UserSubscriptionFragmentDoc = gql`
+    fragment UserSubscription on UserSubscription {
+  canceledAt
+  createdAt
+  id
+  nextBillingDate
+  startDate
+  status
+  updatedAt
+  projectSubscriptionPlan {
+    id
+    projectId
+    name
+    cost
+    interval
+    currency
+  }
+}
+    `;
 export const ProjectAffiliateLinkFragmentDoc = gql`
     fragment ProjectAffiliateLink on AffiliateLink {
   projectId
@@ -8378,6 +8779,9 @@ export const FundingTxFragmentDoc = gql`
   projectId
   creatorEmail
   createdAt
+  stripeClientSecret
+  isAnonymous
+  isSubscription
   bitcoinQuote {
     quote
     quoteCurrency
@@ -8412,6 +8816,7 @@ export const FundingTxWithInvoiceStatusFragmentDoc = gql`
   invoiceStatus
   paymentRequest
   creatorEmail
+  isAnonymous
 }
     `;
 export const FundingTxForDownloadInvoiceFragmentDoc = gql`
@@ -8461,6 +8866,17 @@ export const ProjectGrantApplicantFragmentDoc = gql`
   }
 }
     `;
+export const ProjectSubscriptionPlansFragmentDoc = gql`
+    fragment ProjectSubscriptionPlans on ProjectSubscriptionPlan {
+  cost
+  currency
+  description
+  id
+  name
+  interval
+  projectId
+}
+    `;
 export const ProjectPostFragmentDoc = gql`
     fragment ProjectPost on Post {
   id
@@ -8496,6 +8912,7 @@ export const ProjectGoalsFragmentDoc = gql`
   status
   projectId
   amountContributed
+  progress
   createdAt
   updatedAt
   completedAt
@@ -8556,6 +8973,13 @@ export const ProjectPageCreatorFragmentDoc = gql`
   }
 }
     `;
+export const ProjectPaymentMethodsFragmentDoc = gql`
+    fragment ProjectPaymentMethods on PaymentMethods {
+  fiat {
+    stripe
+  }
+}
+    `;
 export const ProjectPageBodyFragmentDoc = gql`
     fragment ProjectPageBody on Project {
   id
@@ -8585,9 +9009,13 @@ export const ProjectPageBodyFragmentDoc = gql`
       ...ProjectPageCreator
     }
   }
+  paymentMethods {
+    ...ProjectPaymentMethods
+  }
 }
     ${ProjectKeysFragmentDoc}
-${ProjectPageCreatorFragmentDoc}`;
+${ProjectPageCreatorFragmentDoc}
+${ProjectPaymentMethodsFragmentDoc}`;
 export const ProjectLocationFragmentDoc = gql`
     fragment ProjectLocation on Location {
   country {
@@ -9711,52 +10139,6 @@ export type GrantQueryHookResult = ReturnType<typeof useGrantQuery>;
 export type GrantLazyQueryHookResult = ReturnType<typeof useGrantLazyQuery>;
 export type GrantSuspenseQueryHookResult = ReturnType<typeof useGrantSuspenseQuery>;
 export type GrantQueryResult = Apollo.QueryResult<GrantQuery, GrantQueryVariables>;
-export const GrantStatisticsDocument = gql`
-    query GrantStatistics {
-  grantStatistics {
-    grants {
-      amountFunded
-      amountGranted
-      count
-    }
-    applicants {
-      countFunded
-    }
-  }
-}
-    `;
-
-/**
- * __useGrantStatisticsQuery__
- *
- * To run a query within a React component, call `useGrantStatisticsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGrantStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGrantStatisticsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGrantStatisticsQuery(baseOptions?: Apollo.QueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options);
-      }
-export function useGrantStatisticsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options);
-        }
-export function useGrantStatisticsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options);
-        }
-export type GrantStatisticsQueryHookResult = ReturnType<typeof useGrantStatisticsQuery>;
-export type GrantStatisticsLazyQueryHookResult = ReturnType<typeof useGrantStatisticsLazyQuery>;
-export type GrantStatisticsSuspenseQueryHookResult = ReturnType<typeof useGrantStatisticsSuspenseQuery>;
-export type GrantStatisticsQueryResult = Apollo.QueryResult<GrantStatisticsQuery, GrantStatisticsQueryVariables>;
 export const GrantGetDocument = gql`
     query GrantGet($input: GrantGetInput!) {
   grant(input: $input) {
@@ -11037,6 +11419,129 @@ export type ProjectStatsGetQueryHookResult = ReturnType<typeof useProjectStatsGe
 export type ProjectStatsGetLazyQueryHookResult = ReturnType<typeof useProjectStatsGetLazyQuery>;
 export type ProjectStatsGetSuspenseQueryHookResult = ReturnType<typeof useProjectStatsGetSuspenseQuery>;
 export type ProjectStatsGetQueryResult = Apollo.QueryResult<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>;
+export const GrantProjectDocument = gql`
+    query GrantProject($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    subscribersCount
+  }
+}
+    `;
+
+/**
+ * __useGrantProjectQuery__
+ *
+ * To run a query within a React component, call `useGrantProjectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGrantProjectQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGrantProjectQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGrantProjectQuery(baseOptions: Apollo.QueryHookOptions<GrantProjectQuery, GrantProjectQueryVariables> & ({ variables: GrantProjectQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GrantProjectQuery, GrantProjectQueryVariables>(GrantProjectDocument, options);
+      }
+export function useGrantProjectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GrantProjectQuery, GrantProjectQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GrantProjectQuery, GrantProjectQueryVariables>(GrantProjectDocument, options);
+        }
+export function useGrantProjectSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GrantProjectQuery, GrantProjectQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GrantProjectQuery, GrantProjectQueryVariables>(GrantProjectDocument, options);
+        }
+export type GrantProjectQueryHookResult = ReturnType<typeof useGrantProjectQuery>;
+export type GrantProjectLazyQueryHookResult = ReturnType<typeof useGrantProjectLazyQuery>;
+export type GrantProjectSuspenseQueryHookResult = ReturnType<typeof useGrantProjectSuspenseQuery>;
+export type GrantProjectQueryResult = Apollo.QueryResult<GrantProjectQuery, GrantProjectQueryVariables>;
+export const GrantStatisticsDocument = gql`
+    query GrantStatistics {
+  grantStatistics {
+    grants {
+      amountFunded
+      amountGranted
+      count
+    }
+    applicants {
+      countFunded
+    }
+    grantGuardiansFunding {
+      contributedTotal
+      contributorsCount
+    }
+  }
+}
+    `;
+
+/**
+ * __useGrantStatisticsQuery__
+ *
+ * To run a query within a React component, call `useGrantStatisticsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGrantStatisticsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGrantStatisticsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGrantStatisticsQuery(baseOptions?: Apollo.QueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options);
+      }
+export function useGrantStatisticsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options);
+        }
+export function useGrantStatisticsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GrantStatisticsQuery, GrantStatisticsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GrantStatisticsQuery, GrantStatisticsQueryVariables>(GrantStatisticsDocument, options);
+        }
+export type GrantStatisticsQueryHookResult = ReturnType<typeof useGrantStatisticsQuery>;
+export type GrantStatisticsLazyQueryHookResult = ReturnType<typeof useGrantStatisticsLazyQuery>;
+export type GrantStatisticsSuspenseQueryHookResult = ReturnType<typeof useGrantStatisticsSuspenseQuery>;
+export type GrantStatisticsQueryResult = Apollo.QueryResult<GrantStatisticsQuery, GrantStatisticsQueryVariables>;
+export const CancelUserSubscriptionDocument = gql`
+    mutation CancelUserSubscription($id: BigInt!) {
+  userSubscriptionCancel(id: $id) {
+    ...UserSubscription
+  }
+}
+    ${UserSubscriptionFragmentDoc}`;
+export type CancelUserSubscriptionMutationFn = Apollo.MutationFunction<CancelUserSubscriptionMutation, CancelUserSubscriptionMutationVariables>;
+
+/**
+ * __useCancelUserSubscriptionMutation__
+ *
+ * To run a mutation, you first call `useCancelUserSubscriptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCancelUserSubscriptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [cancelUserSubscriptionMutation, { data, loading, error }] = useCancelUserSubscriptionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCancelUserSubscriptionMutation(baseOptions?: Apollo.MutationHookOptions<CancelUserSubscriptionMutation, CancelUserSubscriptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CancelUserSubscriptionMutation, CancelUserSubscriptionMutationVariables>(CancelUserSubscriptionDocument, options);
+      }
+export type CancelUserSubscriptionMutationHookResult = ReturnType<typeof useCancelUserSubscriptionMutation>;
+export type CancelUserSubscriptionMutationResult = Apollo.MutationResult<CancelUserSubscriptionMutation>;
+export type CancelUserSubscriptionMutationOptions = Apollo.BaseMutationOptions<CancelUserSubscriptionMutation, CancelUserSubscriptionMutationVariables>;
 export const CreatorNotificationsSettingsUpdateDocument = gql`
     mutation CreatorNotificationsSettingsUpdate($creatorNotificationConfigurationId: BigInt!, $value: String!) {
   creatorNotificationConfigurationValueUpdate(
@@ -11548,6 +12053,46 @@ export type UserProfileOrdersQueryHookResult = ReturnType<typeof useUserProfileO
 export type UserProfileOrdersLazyQueryHookResult = ReturnType<typeof useUserProfileOrdersLazyQuery>;
 export type UserProfileOrdersSuspenseQueryHookResult = ReturnType<typeof useUserProfileOrdersSuspenseQuery>;
 export type UserProfileOrdersQueryResult = Apollo.QueryResult<UserProfileOrdersQuery, UserProfileOrdersQueryVariables>;
+export const UserSubscriptionsDocument = gql`
+    query UserSubscriptions($input: UserSubscriptionsInput!) {
+  userSubscriptions(input: $input) {
+    ...UserSubscription
+  }
+}
+    ${UserSubscriptionFragmentDoc}`;
+
+/**
+ * __useUserSubscriptionsQuery__
+ *
+ * To run a query within a React component, call `useUserSubscriptionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserSubscriptionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserSubscriptionsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUserSubscriptionsQuery(baseOptions: Apollo.QueryHookOptions<UserSubscriptionsQuery, UserSubscriptionsQueryVariables> & ({ variables: UserSubscriptionsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserSubscriptionsQuery, UserSubscriptionsQueryVariables>(UserSubscriptionsDocument, options);
+      }
+export function useUserSubscriptionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserSubscriptionsQuery, UserSubscriptionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserSubscriptionsQuery, UserSubscriptionsQueryVariables>(UserSubscriptionsDocument, options);
+        }
+export function useUserSubscriptionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserSubscriptionsQuery, UserSubscriptionsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserSubscriptionsQuery, UserSubscriptionsQueryVariables>(UserSubscriptionsDocument, options);
+        }
+export type UserSubscriptionsQueryHookResult = ReturnType<typeof useUserSubscriptionsQuery>;
+export type UserSubscriptionsLazyQueryHookResult = ReturnType<typeof useUserSubscriptionsLazyQuery>;
+export type UserSubscriptionsSuspenseQueryHookResult = ReturnType<typeof useUserSubscriptionsSuspenseQuery>;
+export type UserSubscriptionsQueryResult = Apollo.QueryResult<UserSubscriptionsQuery, UserSubscriptionsQueryVariables>;
 export const AffiliateLinkCreateDocument = gql`
     mutation AffiliateLinkCreate($input: AffiliateLinkCreateInput!) {
   affiliateLinkCreate(input: $input) {
@@ -13987,6 +14532,46 @@ export type ProjectFundingMethodStatsGetQueryHookResult = ReturnType<typeof useP
 export type ProjectFundingMethodStatsGetLazyQueryHookResult = ReturnType<typeof useProjectFundingMethodStatsGetLazyQuery>;
 export type ProjectFundingMethodStatsGetSuspenseQueryHookResult = ReturnType<typeof useProjectFundingMethodStatsGetSuspenseQuery>;
 export type ProjectFundingMethodStatsGetQueryResult = Apollo.QueryResult<ProjectFundingMethodStatsGetQuery, ProjectFundingMethodStatsGetQueryVariables>;
+export const ProjectSubscriptionPlansDocument = gql`
+    query ProjectSubscriptionPlans($input: ProjectSubscriptionPlansInput!) {
+  projectSubscriptionPlans(input: $input) {
+    ...ProjectSubscriptionPlans
+  }
+}
+    ${ProjectSubscriptionPlansFragmentDoc}`;
+
+/**
+ * __useProjectSubscriptionPlansQuery__
+ *
+ * To run a query within a React component, call `useProjectSubscriptionPlansQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectSubscriptionPlansQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectSubscriptionPlansQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectSubscriptionPlansQuery(baseOptions: Apollo.QueryHookOptions<ProjectSubscriptionPlansQuery, ProjectSubscriptionPlansQueryVariables> & ({ variables: ProjectSubscriptionPlansQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectSubscriptionPlansQuery, ProjectSubscriptionPlansQueryVariables>(ProjectSubscriptionPlansDocument, options);
+      }
+export function useProjectSubscriptionPlansLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectSubscriptionPlansQuery, ProjectSubscriptionPlansQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectSubscriptionPlansQuery, ProjectSubscriptionPlansQueryVariables>(ProjectSubscriptionPlansDocument, options);
+        }
+export function useProjectSubscriptionPlansSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectSubscriptionPlansQuery, ProjectSubscriptionPlansQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectSubscriptionPlansQuery, ProjectSubscriptionPlansQueryVariables>(ProjectSubscriptionPlansDocument, options);
+        }
+export type ProjectSubscriptionPlansQueryHookResult = ReturnType<typeof useProjectSubscriptionPlansQuery>;
+export type ProjectSubscriptionPlansLazyQueryHookResult = ReturnType<typeof useProjectSubscriptionPlansLazyQuery>;
+export type ProjectSubscriptionPlansSuspenseQueryHookResult = ReturnType<typeof useProjectSubscriptionPlansSuspenseQuery>;
+export type ProjectSubscriptionPlansQueryResult = Apollo.QueryResult<ProjectSubscriptionPlansQuery, ProjectSubscriptionPlansQueryVariables>;
 export const ProjectRewardsDocument = gql`
     query ProjectRewards($input: GetProjectRewardInput!) {
   projectRewardsGet(input: $input) {

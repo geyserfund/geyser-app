@@ -179,6 +179,15 @@ export const platformRoutes: RouteObject[] = [
               return { Component: ProfileSettingsNotifications }
             },
           },
+          {
+            path: getPath('userProfileSettingsSubscriptions', PathName.userId),
+            async lazy() {
+              const ProfileSettingsSubscriptions = await ProfileSettingsIndex().then(
+                (m) => m.ProfileSettingsSubscriptions,
+              )
+              return { Component: ProfileSettingsSubscriptions }
+            },
+          },
         ],
       },
     ],
@@ -226,6 +235,15 @@ export const platformRoutes: RouteObject[] = [
                 (m) => m.ProfileSettingsNotifications,
               )
               return { Component: ProfileSettingsNotifications }
+            },
+          },
+          {
+            path: getPath('heroProfileSettingsSubscriptions', PathName.heroId),
+            async lazy() {
+              const ProfileSettingsSubscriptions = await ProfileSettingsIndex().then(
+                (m) => m.ProfileSettingsSubscriptions,
+              )
+              return { Component: ProfileSettingsSubscriptions }
             },
           },
         ],
@@ -465,10 +483,10 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
-            path: getPath('fundingPayment', PathName.projectName),
+            path: getPath('fundingStart', PathName.projectName),
             async lazy() {
-              const FundingPayment = await ProjectFunding().then((m) => m.FundingPayment)
-              return { Component: FundingPayment }
+              const Funding = await ProjectFunding().then((m) => m.Funding)
+              return { Component: Funding }
             },
             children: [
               {
@@ -479,62 +497,88 @@ export const platformRoutes: RouteObject[] = [
                 },
               },
               {
-                path: getPath('fundingPaymentFailed', PathName.projectName),
+                path: getPath('fundingSubscription', PathName.projectName),
                 async lazy() {
-                  const FundingFailed = await ProjectFunding().then((m) => m.PaymentFailed)
-                  return { Component: FundingFailed }
+                  const Subscription = await ProjectFunding().then((m) => m.Subscription)
+                  return { Component: Subscription }
                 },
               },
+
               {
-                path: getPath('fundingPaymentLightning', PathName.projectName),
+                path: getPath('fundingPayment', PathName.projectName),
                 async lazy() {
-                  const PaymentLightning = await ProjectFunding().then((m) => m.PaymentLightning)
-                  return { Component: PaymentLightning }
-                },
-              },
-              {
-                path: getPath('fundingPaymentOnchain', PathName.projectName),
-                async lazy() {
-                  const PaymentOnchain = await ProjectFunding().then((m) => m.PaymentOnchain)
-                  return { Component: PaymentOnchain }
+                  const Payment = await ProjectFunding().then((m) => m.Payment)
+                  return { Component: Payment }
                 },
                 children: [
                   {
-                    index: true,
+                    path: getPath('fundingPaymentFailed', PathName.projectName),
                     async lazy() {
-                      const PaymentOnchainPrompt = await ProjectFunding().then((m) => m.PaymentOnchainPrompt)
-                      return { Component: PaymentOnchainPrompt }
+                      const FundingFailed = await ProjectFunding().then((m) => m.PaymentFailed)
+                      return { Component: FundingFailed }
                     },
                   },
                   {
-                    path: getPath('fundingPaymentOnchainQR', PathName.projectName),
+                    path: getPath('fundingPaymentLightning', PathName.projectName),
                     async lazy() {
-                      const PaymentOnchainQR = await ProjectFunding().then((m) => m.PaymentOnchainQR)
-                      return { Component: PaymentOnchainQR }
+                      const PaymentLightning = await ProjectFunding().then((m) => m.PaymentLightning)
+                      return { Component: PaymentLightning }
                     },
                   },
                   {
-                    path: getPath('fundingPaymentOnchainProcessing', PathName.projectName),
+                    path: getPath('fundingPaymentCard', PathName.projectName),
                     async lazy() {
-                      const PaymentOnchainProcessing = await ProjectFunding().then((m) => m.PaymentOnchainProcessing)
-                      return { Component: PaymentOnchainProcessing }
+                      const PaymentCard = await ProjectFunding().then((m) => m.PaymentCard)
+                      return { Component: PaymentCard }
                     },
                   },
                   {
-                    path: getPath('fundingPaymentOnchainRefund', PathName.projectName),
+                    path: getPath('fundingPaymentOnchain', PathName.projectName),
                     async lazy() {
-                      const PaymentOnChainRefund = await ProjectFunding().then((m) => m.PaymentOnChainRefund)
-                      return { Component: PaymentOnChainRefund }
+                      const PaymentOnchain = await ProjectFunding().then((m) => m.PaymentOnchain)
+                      return { Component: PaymentOnchain }
                     },
-                  },
-                  {
-                    path: getPath('fundingPaymentOnchainRefundInitiated', PathName.projectName),
-                    async lazy() {
-                      const PaymentOnChainRefundInitiated = await ProjectFunding().then(
-                        (m) => m.PaymentOnChainRefundInitiated,
-                      )
-                      return { Component: PaymentOnChainRefundInitiated }
-                    },
+                    children: [
+                      {
+                        index: true,
+                        async lazy() {
+                          const PaymentOnchainPrompt = await ProjectFunding().then((m) => m.PaymentOnchainPrompt)
+                          return { Component: PaymentOnchainPrompt }
+                        },
+                      },
+                      {
+                        path: getPath('fundingPaymentOnchainQR', PathName.projectName),
+                        async lazy() {
+                          const PaymentOnchainQR = await ProjectFunding().then((m) => m.PaymentOnchainQR)
+                          return { Component: PaymentOnchainQR }
+                        },
+                      },
+                      {
+                        path: getPath('fundingPaymentOnchainProcessing', PathName.projectName),
+                        async lazy() {
+                          const PaymentOnchainProcessing = await ProjectFunding().then(
+                            (m) => m.PaymentOnchainProcessing,
+                          )
+                          return { Component: PaymentOnchainProcessing }
+                        },
+                      },
+                      {
+                        path: getPath('fundingPaymentOnchainRefund', PathName.projectName),
+                        async lazy() {
+                          const PaymentOnChainRefund = await ProjectFunding().then((m) => m.PaymentOnChainRefund)
+                          return { Component: PaymentOnChainRefund }
+                        },
+                      },
+                      {
+                        path: getPath('fundingPaymentOnchainRefundInitiated', PathName.projectName),
+                        async lazy() {
+                          const PaymentOnChainRefundInitiated = await ProjectFunding().then(
+                            (m) => m.PaymentOnChainRefundInitiated,
+                          )
+                          return { Component: PaymentOnChainRefundInitiated }
+                        },
+                      },
+                    ],
                   },
                 ],
               },
