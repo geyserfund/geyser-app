@@ -72,7 +72,7 @@ const GrantGoalCard: React.FC<GrantGoalCardProps> = ({ goal, onSubscribe }) => {
         <VStack spacing={4} align="stretch">
           <GoalProgressBar width="100%" percentage={goal.progress} />
           <Body color="neutral1.11">
-            {amountContributed} ({goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`})
+            {amountContributed} ({goal.currency === ProjectGoalCurrency.Btcsat ? `${usdAmount}` : `${satsAmount}`})
           </Body>
           <Button onClick={onSubscribe} size="lg" variant="solid" colorScheme="primary1">
             {t('$5 / month')}
