@@ -7,7 +7,13 @@ import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
 import { __development__, getPath } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
-import { ProjectGoal, useGrantProjectQuery, useGrantStatisticsQuery, useProjectInProgressGoalsQuery } from '@/types'
+import {
+  ProjectGoal,
+  ProjectGoalCurrency,
+  useGrantProjectQuery,
+  useGrantStatisticsQuery,
+  useProjectInProgressGoalsQuery,
+} from '@/types'
 import { useMobileMode } from '@/utils'
 
 const GRANT_PROJECT_ID = __development__ ? '6' : '123'
@@ -50,8 +56,9 @@ const GoalProgressBar = ({
 }
 
 const GrantGoalCard: React.FC<GrantGoalCardProps> = ({ goal, onSubscribe }) => {
-  const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
+  const { formatUsdAmount, formatSatsAmount, formatAmount } = useCurrencyFormatter()
 
+  const amountContributed = formatAmount(goal.amountContributed, goal.currency)
   const usdAmount = formatUsdAmount(goal.amountContributed)
   const satsAmount = formatSatsAmount(goal.amountContributed)
 
@@ -65,7 +72,7 @@ const GrantGoalCard: React.FC<GrantGoalCardProps> = ({ goal, onSubscribe }) => {
         <VStack spacing={4} align="stretch">
           <GoalProgressBar width="100%" percentage={goal.progress} />
           <Body color="neutral1.11">
-            {usdAmount} ({satsAmount})
+            {amountContributed} ({goal.currency === ProjectGoalCurrency.Btcsat ? `(${usdAmount})` : `(${satsAmount})`})
           </Body>
           <Button onClick={onSubscribe} size="lg" variant="solid" colorScheme="primary1">
             {t('$5 / month')}
@@ -116,8 +123,6 @@ export const GrantSubscriptionSection: React.FC = () => {
   const totalSatsShared = grantStatisticsData?.grantStatistics.grantGuardiansFunding.contributedTotal
 
   const subscriberCount = grantProjectData?.projectGet?.subscribersCount
-
-  console.log('data', data)
 
   const grantGoals = data?.projectGoals.inProgress || []
 
