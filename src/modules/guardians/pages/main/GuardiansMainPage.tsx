@@ -18,7 +18,7 @@ export const GuardiansMainPage = () => {
   const textSize = { base: '14px', sm: '16px', md: '18px', lg: '20px', xl: '24px', '3xl': '28px' }
 
   return (
-    <VStack paddingBottom={{ base: '60px', lg: 24 }}>
+    <VStack paddingTop={{ base: 16, md: 20, lg: 6 }} paddingBottom={{ base: '60px', lg: 24 }}>
       <VStack
         w="full"
         zIndex={2}

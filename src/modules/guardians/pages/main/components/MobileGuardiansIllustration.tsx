@@ -196,6 +196,7 @@ export const MobileGuardiansIllustration = () => {
         // justifyContent="flex-end"
         {...handlers}
         onClick={() => navigate(getPath('guardiansCharacter', currentGuardian))}
+        _hover={{ cursor: 'pointer' }}
       >
         <Box
           className={classNames({
