@@ -1,6 +1,8 @@
+import { GuardianType } from '@/types'
+
 export enum Guardian {
-  Warrior = 'warrior',
-  Knight = 'knight',
-  King = 'king',
-  Legend = 'legend',
+  Warrior = GuardianType.Warrior,
+  Knight = GuardianType.Knight,
+  King = GuardianType.King,
+  Legend = GuardianType.Legend,
 }

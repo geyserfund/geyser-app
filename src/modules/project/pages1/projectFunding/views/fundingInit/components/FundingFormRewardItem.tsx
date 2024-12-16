@@ -24,17 +24,21 @@ interface IRewardItemProps {
 export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, readOnly }: IRewardItemProps) => {
   const { count, isAvailable, addRewardToBasket, removeRewardFromBasket } = useRewardBuy(reward)
 
-  const { project } = useFundingFormAtom()
+  const { project, formState } = useFundingFormAtom()
 
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   const location = useLocation()
 
   useEffect(() => {
-    if (location.state && location.state.rewardUUID === reward.uuid && isAvailable) {
+    if (
+      location.state &&
+      location.state.rewardUUID === reward.uuid &&
+      (formState.rewardsByIDAndCount ? formState.rewardsByIDAndCount[reward.uuid] === 0 : true)
+    ) {
       addRewardToBasket()
     }
-  }, [location.state, reward.uuid, addRewardToBasket, isAvailable])
+  }, [location, reward.uuid, addRewardToBasket, isAvailable, formState.rewardsByIDAndCount])
 
   if ((count > 0 && showOnSelected) || (showOnEmpty && count === 0)) {
     return (

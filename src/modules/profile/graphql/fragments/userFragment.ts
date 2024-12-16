@@ -11,6 +11,7 @@ export const FRAGMENT_USER_FOR_PROFILE_PAGE = gql`
     username
     imageUrl
     ranking
+    guardian
     isEmailVerified
     externalAccounts {
       ...ExternalAccount

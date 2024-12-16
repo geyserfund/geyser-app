@@ -1,24 +1,14 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import React, { createContext, PropsWithChildren, useContext, useEffect } from 'react'
 
-import {
-  FundingInput,
-  FundingTxFragment,
-  ProjectPageWalletFragment,
-  ProjectRewardFragment,
-  ProjectSubscriptionPlansFragment,
-  WalletLimitsFragment,
-} from '../../../types'
+import { FundingInput, FundingTxFragment, WalletLimitsFragment } from '../../../types'
 import { useProjectGoalsAPI } from '../API/useProjectGoalsAPI'
 import { useProjectRewardsAPI } from '../API/useProjectRewardsAPI'
 import { useProjectSubscriptionsAPI } from '../API/useProjectSubscriptionsAPI'
 import { useResetFundingFlow } from '../funding/hooks/useResetFundingFlow'
 import { FundingFlowGraphQLError } from '../funding/state'
-import { FundingProject, fundingProjectAtom, resetFundingFormAtom } from '../funding/state/fundingFormAtom'
+import { FundingProject, resetFundingFormAtom } from '../funding/state/fundingFormAtom'
 import { projectAtom, ProjectState } from '../state/projectAtom'
-import { rewardsAtom } from '../state/rewardsAtom'
-import { subscriptionsAtom } from '../state/subscriptionAtom'
-import { walletAtom } from '../state/walletAtom'
 
 type FundingContextProps = {
   fundingRequestErrored: Error | boolean
@@ -38,9 +28,6 @@ type FundingContextProps = {
 
 interface FundingProviderProps extends PropsWithChildren {
   project: FundingProject
-  wallet?: ProjectPageWalletFragment
-  rewards: ProjectRewardFragment[]
-  subscriptions?: ProjectSubscriptionPlansFragment[]
 }
 
 export const FundingContext = createContext<FundingContextProps>({} as FundingContextProps)
@@ -48,13 +35,11 @@ export const FundingContext = createContext<FundingContextProps>({} as FundingCo
 export const useFundingContext = () => useContext(FundingContext)
 
 // Used if the project context is not available
-export const FundingProvider = ({ children, project, wallet, rewards, subscriptions }: FundingProviderProps) => {
+export const FundingProvider = ({ children, project }: FundingProviderProps) => {
   const resetFundingForm = useSetAtom(resetFundingFormAtom)
   const resetFundingFlow = useResetFundingFlow()
-  const setFundingProject = useSetAtom(fundingProjectAtom)
 
   useEffect(() => {
-    setFundingProject({ ...project, wallet, rewards, subscriptions })
     return () => {
       console.log('==================================')
       console.log('========FUNDING FLOW RESET===========')
@@ -62,7 +47,7 @@ export const FundingProvider = ({ children, project, wallet, rewards, subscripti
       resetFundingFlow()
       resetFundingForm()
     }
-  }, [project, wallet, rewards, subscriptions, resetFundingFlow, resetFundingForm, setFundingProject])
+  }, [project, resetFundingFlow, resetFundingForm])
 
   return <>{children}</>
 }
@@ -75,13 +60,6 @@ export const FundingProviderWithProjectContext: React.FC<PropsWithChildren> = ({
   useProjectGoalsAPI(true)
 
   const project = useAtomValue(projectAtom)
-  const wallet = useAtomValue(walletAtom)
-  const rewards = useAtomValue(rewardsAtom)
-  const subscriptions = useAtomValue(subscriptionsAtom)
 
-  return (
-    <FundingProvider project={project} wallet={wallet} rewards={rewards} subscriptions={subscriptions}>
-      {children}
-    </FundingProvider>
-  )
+  return <FundingProvider project={project}>{children}</FundingProvider>
 }

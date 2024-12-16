@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { FundingResourceType } from '@/types'
 
@@ -13,6 +14,7 @@ import { FundingSubscription } from './sections/FundingSubscription'
 
 export const FundingInit = () => {
   const { setResource } = useFundingFormAtom()
+  const { loading } = useProjectAtom()
 
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
@@ -25,6 +27,10 @@ export const FundingInit = () => {
       navigate({ pathname: location.pathname, search: location.search }, { state: null, replace: true })
     }
   }, [location, setResource, navigate])
+
+  if (loading) {
+    return null
+  }
 
   return (
     <FundingLayout

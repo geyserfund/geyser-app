@@ -193,7 +193,6 @@ export const MobileGuardiansIllustration = () => {
         w="full"
         minHeight="60vh"
         position="relative"
-        // justifyContent="flex-end"
         {...handlers}
         onClick={() => navigate(getPath('guardiansCharacter', currentGuardian))}
         _hover={{ cursor: 'pointer' }}

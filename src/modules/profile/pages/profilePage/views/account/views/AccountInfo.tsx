@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Button,
   HStack,
   Popover,
@@ -16,6 +15,8 @@ import {
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 
+import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
+import { ProfileText } from '@/shared/components/display/ProfileText'
 import { H1 } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks'
 import {
@@ -45,18 +46,25 @@ export const AccountInfo = () => {
   return (
     <VStack spacing={3}>
       <HStack w="full" spacing={{ base: 2, lg: 3 }} alignItems={'start'}>
-        <Avatar src={`${userProfile.imageUrl}`} h="64px" w="64px" />
-        <VStack w="full" alignItems="start">
+        <ProfileAvatar
+          src={`${userProfile.imageUrl}`}
+          h="64px"
+          w="64px"
+          guardian={userProfile.guardian}
+          wrapperProps={{ padding: '3px' }}
+        />
+        <VStack w="full" alignItems="start" spacing={0}>
           <H1 size="2xl" bold>
             {userProfile.username}
           </H1>
-          <HStack w="full" justifyContent={'start'} flexWrap={'wrap'}>
-            {accountButtonProps.map((accountButton) => {
-              return <AccountInfoButton key={accountButton.key} accountInfoProps={accountButton} />
-            })}
-            <ConnectAccounts user={userProfile} />
-          </HStack>
+          <ProfileText guardian={userProfile.guardian} size="lg" />
         </VStack>
+      </HStack>
+      <HStack w="full" justifyContent={'start'} flexWrap={'wrap'}>
+        {accountButtonProps.map((accountButton) => {
+          return <AccountInfoButton key={accountButton.key} accountInfoProps={accountButton} />
+        })}
+        <ConnectAccounts user={userProfile} />
       </HStack>
       <UserBio />
     </VStack>
