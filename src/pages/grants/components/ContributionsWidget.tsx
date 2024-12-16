@@ -4,7 +4,7 @@ import { LiaVoteYeaSolid } from 'react-icons/lia'
 
 import { BadgeIcon, ContributionsIcon, TimerIcon } from '../../../components/icons'
 import { Countdown } from '../../../components/ui/Countdown'
-import { fonts, primaryColorsLight } from '../../../shared/styles'
+import { primaryColorsLight } from '../../../shared/styles'
 import { DistributionSystem, Maybe, Sponsor, VotingSystem } from '../../../types'
 import { SponsorList } from './SponsorList'
 import { WidgetItem } from './WidgetItem'
@@ -57,13 +57,11 @@ export const ContributionsWidget = ({
                 color: 'primary.500',
                 fontSize: '22px',
                 fontWeight: 700,
-                fontFamily: fonts.livvic,
               }}
               dividerProps={{
                 color: 'neutral.500',
                 fontSize: '26px',
                 fontWeight: 700,
-                fontFamily: fonts.livvic,
               }}
             />
           </WidgetItem>

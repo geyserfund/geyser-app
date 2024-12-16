@@ -1,6 +1,5 @@
 import { PropsWithChildren, ReactNode } from 'react'
 
-import { fonts } from '../../../shared/styles'
 import { ListText } from './ListText'
 
 export const WidgetItem = ({
@@ -19,7 +18,6 @@ export const WidgetItem = ({
         color: 'primary1.11',
         fontSize: '26px',
         fontWeight: 700,
-        fontFamily: fonts.livvic,
       }}
       subtitleProps={{
         fontStyle: 'normal',

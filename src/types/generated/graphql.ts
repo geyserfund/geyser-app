@@ -6529,6 +6529,18 @@ export type GrantStatisticsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GrantStatisticsQuery = { __typename?: 'Query', grantStatistics: { __typename?: 'GrantStatistics', grants?: { __typename?: 'GrantStatisticsGrant', amountFunded: number, amountGranted: number, count: number } | null, applicants?: { __typename?: 'GrantStatisticsApplicant', countFunded: number } | null, grantGuardiansFunding: { __typename?: 'GrantGuardiansFunding', contributedTotal: any, contributorsCount: any } } };
 
+export type GuardianProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, cost: number, maxClaimable?: number | null, sold: number, rewardCurrency: RewardCurrency, isHidden: boolean };
+
+export type GuardianProjectRewardsGetQueryVariables = Exact<{
+  input: GetProjectRewardInput;
+}>;
+
+
+export type GuardianProjectRewardsGetQuery = { __typename?: 'Query', projectRewardsGet: Array<(
+    { __typename?: 'ProjectReward' }
+    & GuardianProjectRewardFragment
+  )> };
+
 export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
 
 export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, fundingTxs: Array<{ __typename?: 'FundingTx', amountPaid: number, comment?: string | null, media?: string | null, paidAt?: any | null, onChain: boolean, bitcoinQuote?: (
@@ -8420,6 +8432,18 @@ export const ProjectStatsFragmentDoc = gql`
   }
 }
     ${ProjectContributionsStatsFragmentDoc}`;
+export const GuardianProjectRewardFragmentDoc = gql`
+    fragment GuardianProjectReward on ProjectReward {
+  id
+  uuid
+  name
+  cost
+  maxClaimable
+  sold
+  rewardCurrency
+  isHidden
+}
+    `;
 export const ProjectAvatarFragmentDoc = gql`
     fragment ProjectAvatar on Project {
   id
@@ -11509,6 +11533,46 @@ export type GrantStatisticsQueryHookResult = ReturnType<typeof useGrantStatistic
 export type GrantStatisticsLazyQueryHookResult = ReturnType<typeof useGrantStatisticsLazyQuery>;
 export type GrantStatisticsSuspenseQueryHookResult = ReturnType<typeof useGrantStatisticsSuspenseQuery>;
 export type GrantStatisticsQueryResult = Apollo.QueryResult<GrantStatisticsQuery, GrantStatisticsQueryVariables>;
+export const GuardianProjectRewardsGetDocument = gql`
+    query GuardianProjectRewardsGet($input: GetProjectRewardInput!) {
+  projectRewardsGet(input: $input) {
+    ...GuardianProjectReward
+  }
+}
+    ${GuardianProjectRewardFragmentDoc}`;
+
+/**
+ * __useGuardianProjectRewardsGetQuery__
+ *
+ * To run a query within a React component, call `useGuardianProjectRewardsGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGuardianProjectRewardsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGuardianProjectRewardsGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGuardianProjectRewardsGetQuery(baseOptions: Apollo.QueryHookOptions<GuardianProjectRewardsGetQuery, GuardianProjectRewardsGetQueryVariables> & ({ variables: GuardianProjectRewardsGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GuardianProjectRewardsGetQuery, GuardianProjectRewardsGetQueryVariables>(GuardianProjectRewardsGetDocument, options);
+      }
+export function useGuardianProjectRewardsGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GuardianProjectRewardsGetQuery, GuardianProjectRewardsGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GuardianProjectRewardsGetQuery, GuardianProjectRewardsGetQueryVariables>(GuardianProjectRewardsGetDocument, options);
+        }
+export function useGuardianProjectRewardsGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GuardianProjectRewardsGetQuery, GuardianProjectRewardsGetQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GuardianProjectRewardsGetQuery, GuardianProjectRewardsGetQueryVariables>(GuardianProjectRewardsGetDocument, options);
+        }
+export type GuardianProjectRewardsGetQueryHookResult = ReturnType<typeof useGuardianProjectRewardsGetQuery>;
+export type GuardianProjectRewardsGetLazyQueryHookResult = ReturnType<typeof useGuardianProjectRewardsGetLazyQuery>;
+export type GuardianProjectRewardsGetSuspenseQueryHookResult = ReturnType<typeof useGuardianProjectRewardsGetSuspenseQuery>;
+export type GuardianProjectRewardsGetQueryResult = Apollo.QueryResult<GuardianProjectRewardsGetQuery, GuardianProjectRewardsGetQueryVariables>;
 export const CancelUserSubscriptionDocument = gql`
     mutation CancelUserSubscription($id: BigInt!) {
   userSubscriptionCancel(id: $id) {

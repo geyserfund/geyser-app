@@ -433,3 +433,129 @@ export const MysteryItemTshirtLightUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians/mystery-item-tshirt-light.png'
 export const MysteryItemJerseyLightUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians/myster-item-jersey-light.png'
+
+// GUARDIANS SERIES ONE
+
+// Assets
+export const GuardiansSeriesOneBackground4kUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/guardians-background-4k.png'
+export const GuardiansSeriesOneBackgroundFullHDUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/guardians-background-fullhd.png'
+export const GuardiansSeriesOneBackgroundTabUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/guardians-background-tab.png'
+export const GuardiansSeriesOneBackgroundMobileUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/guardians-background-mobile.png'
+
+export const GuardiansSeriesOneOrnamentSeparatorUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/guardians-ornamental-separator.png'
+
+// Desktop
+export const KingCharacterPageDesktop =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/King-CharacterPage-Desktop.png'
+export const KingMainPageDesktop =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/King-MainPage-Desktop.png'
+export const KingMainPageGreyDesktop =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/King-MainPage-Gray-Desktop.png'
+
+export const KnightCharacterPageDesktop =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/Knight-CharacterPage-Desktop.png'
+export const KnightMainPageDesktop =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/Knight-MainPage-Desktop.png'
+export const KnightMainPageGreyDesktop =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/Knight-MainPage-Gray-Desktop.png'
+
+export const LegendCharacterPageDesktop =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/Legend-CharacterPage-Desktop.png'
+export const LegendMainPageDesktop =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/Legend-MainPage-Desktop.png'
+export const LegendMainPageGreyDesktop =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/Legend-MainPage-Gray-Desktop.png'
+
+export const WarriorCharacterPageDesktop =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/Warrior-CharacterPage-Desktop.png'
+export const WarriorMainPageDesktop =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/Warrior-MainPage-Desktop.png'
+export const WarriorMainPageGreyDesktop =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/Warrior-MainPage-Gray-Desktop.png'
+
+// Mobile
+
+export const KingCharacterPageMobile =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/King-CharacterPage-Mobile.png'
+export const KingMainPageMobile =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/King-MainPage-Mobile.png'
+export const KingMainPageGreyMobile =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/King-Gray-Mobile.png'
+
+export const KnightCharacterPageMobile =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/Knight-CharacterPage-Mobile.png'
+export const KnightMainPageMobile =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/Knight-MainPage-Mobile.png'
+export const KnightMainPageGreyMobile =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/Knight-Gray-Mobile.png'
+
+export const LegendCharacterPageMobile =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/Legend-CharacterPage-Mobile.png'
+export const LegendMainPageMobile =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/Legend-MainPage-Mobile.png'
+export const LegendMainPageGreyMobile =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/Legend-Gray-Mobile.png'
+
+export const WarriorCharacterPageMobile =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/Warrior-CharacterPage-Mobile.png'
+export const WarriorMainPageMobile =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/Warrior-MainPage-Mobile.png'
+export const WarriorMainPageGreyMobile =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/Warrior-Gray-Mobile.png'
+
+export const WarriorRaycastUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/Warrior_Raycast.png'
+export const KnightRaycastUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/Knight_Raycast.png'
+export const LegendRaycastUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/Legend_Raycast.png'
+export const KingRaycastUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/King_Raycast.png'
+
+// DIGITAL ITEMS
+
+export const WarriorNostrCardUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/digital/Warrior-Nostr-Card.png'
+export const WarriorJewelUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/digital/Warrior-Jewel.png'
+export const KnightNostrCardUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/digital/Knight-Nostr-Card.png'
+export const KnightJewelUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/digital/Knight-Jewel.png'
+export const KingNostrCardUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/digital/King-Nostr-Card.png'
+export const KingJewelUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/digital/King-Jewel.png'
+export const LegendNostrCardUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/digital/Legend-Nostr-Card.png'
+export const LegendJewelUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/digital/Legend-Jewel.png'
+
+// PHYSICAL ITEMS
+
+export const KnightTshirtUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Knight-Tshirt.png'
+export const KnightTradingCardUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Knight-Trading-Card.png'
+export const KingTshirtUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/King-Tshirt.png'
+export const KingTradingCardUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/King-Trading-Card.png'
+export const LegendTshirtUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Legend-Tshirt.png'
+export const LegendTradingCardUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Legend-Trading-Card.png'
+
+export const GuardiansBlackJerseyUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Guardians-Black-Jersey.png'
+export const GuardiansWhiteJerseyUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Guardians-White-Jersey.png'
+export const GuardiansStickersUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Guardians-Stickers.png'
+export const GuardiansZineUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Guardians-Zine.png'

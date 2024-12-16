@@ -118,6 +118,7 @@ export const PlatformNavBar = () => {
         size={{ base: 'md', lg: 'lg' }}
         rightIcon={hasCopied ? <PiCopy /> : <PiShareFat />}
         onClick={() => onCopy()}
+        backgroundColor={hasCopied ? undefined : 'utils.pbg'}
       >
         {hasCopied ? t('Copied') : t('Share')}
       </Button>
@@ -146,13 +147,15 @@ export const PlatformNavBar = () => {
       <IconButton
         variant="outline"
         colorScheme="neutral1"
-        size={{ base: 'sm', lg: 'md' }}
+        size={{ base: 'md', lg: 'lg' }}
         width={{ base: '32px', lg: '40px' }}
         minWidth={{ base: '32px', lg: '40px' }}
         height={{ base: '32px', lg: '40px' }}
+        paddingInlineStart={'4px !important'}
+        paddingInlineEnd={'4px !important'}
         borderRadius="50% !important"
         aria-label="go-back"
-        icon={<PiArrowLeft fontSize={'24px'} />}
+        icon={<PiArrowLeft fontSize={'16px'} />}
         onClick={() => navigate(-1)}
       />
     )
@@ -166,7 +169,7 @@ export const PlatformNavBar = () => {
       {...(isPlatformRoutes && discoveryPageCommonLayoutStyles)}
       justifyContent={'center'}
       zIndex={9}
-      bgColor={isGuardiansPage ? 'guardians.background' : 'utils.pbg'}
+      bgColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
     >
       <VStack
         paddingY={{ base: 5, lg: 8 }}
@@ -177,7 +180,7 @@ export const PlatformNavBar = () => {
             : { base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 48 }
         }
         width="100%"
-        backgroundColor={isGuardiansPage ? 'guardians.background' : 'utils.pbg'}
+        backgroundColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
         justifySelf={'center'}
         spacing={4}
       >
@@ -191,8 +194,16 @@ export const PlatformNavBar = () => {
             <CloseGoBackButton />
           ) : (
             <HStack position="relative">
-              {!isLoggedIn && <CreateProjectButton size={{ base: 'md', lg: 'lg' }} iconOnly={isMobileMode} />}
-              {!isLoggedIn ? <LoginButton /> : isGuardiansPage ? <ShareGuardiansButton /> : <ProjectSelectMenu />}
+              {isGuardiansPage ? (
+                <ShareGuardiansButton />
+              ) : !isLoggedIn ? (
+                <>
+                  <CreateProjectButton size={{ base: 'md', lg: 'lg' }} iconOnly={isMobileMode} />
+                  <LoginButton />
+                </>
+              ) : (
+                <ProjectSelectMenu />
+              )}
               <ProfileNav />
             </HStack>
           )}

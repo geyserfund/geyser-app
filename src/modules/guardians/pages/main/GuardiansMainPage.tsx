@@ -1,67 +1,126 @@
-import { VStack } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { DateTime } from 'luxon'
+import React from 'react'
 import { Trans } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
 
-import { Body } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
-import { useCountdown } from '@/shared/hooks/useCountdown'
+import { Body, H2 } from '@/shared/components/typography'
+import { dimensions } from '@/shared/constants/components/dimensions'
+import { VideoPlayer } from '@/shared/molecules/VideoPlayer'
 import { fonts } from '@/shared/styles'
-import { toInt, useMobileMode } from '@/utils'
+import { useMobileMode } from '@/utils'
 
-import { SubscribeGuardians } from '../../components/SubscribeGuardians'
 import { DesktopGuardiansIllustration } from './components/DesktopGuardiansIllustration'
 import { MobileGuardiansIllustration } from './components/MobileGuardiansIllustration'
 
 export const GuardiansMainPage = () => {
   const isMobile = useMobileMode()
-  const navigate = useNavigate()
-
-  const endDate = DateTime.fromFormat('2024-12-18', 'yyyy-MM-dd').toMillis()
-
-  const { days, hours, seconds } = useCountdown(endDate)
 
   const textSize = { base: '14px', sm: '16px', md: '18px', lg: '20px', xl: '24px', '3xl': '28px' }
 
   return (
-    <>
+    <VStack paddingBottom={{ base: '60px', lg: 24 }}>
       <VStack
         w="full"
         zIndex={2}
-        maxWidth="1448px"
-        fontFamily={fonts.mazius}
+        maxWidth={dimensions.guardians.textMaxWidth}
+        fontFamily={fonts.cormorant}
         px={{ base: 3, lg: 6 }}
         spacing={{ base: 2, md: 3, lg: 8 }}
-        paddingTop={{ base: '60px', lg: 0 }}
       >
-        <Body fontSize={textSize} textAlign={'center'} lineHeight={'1.4'}>
-          <Trans i18nKey="Geyser’s <1>mission</1> is to push Bitcoin adoption forward. Geyser Guardians are the defenders of this mission. Their bravery will be rewarded with rare artifacts. Their names shall be remembered in future epochs, and soon, you can become one of them. Enter your email to be notified first–the first 121 Guardians will get a special deal.">
-            {'Geyser’s '}
-
-            <Body
-              as="span"
-              color="primary1.11"
-              textDecoration={'underline'}
-              onClick={() => navigate(getPath('manifesto'))}
-              _hover={{ cursor: 'pointer' }}
-            >
-              mission
-            </Body>
-
-            {
-              ' is to push Bitcoin adoption forward. Geyser Guardians are the defenders of this mission. Their bravery will be rewarded with rare artifacts. Their names shall be remembered in future epochs, and soon, you can become one of them. Enter your email to be notified first–the first 121 Guardians will get a special deal.'
-            }
-          </Trans>{' '}
-          <Body as="span">{t('More will be revealed in')}</Body>{' '}
-          <Body as="span" bold>
-            {t(`${days} days, ${hours} hours, ${toInt(seconds)} seconds.`)}
-          </Body>
+        <Body fontSize={textSize} textAlign={'center'} medium light lineHeight={'1.2'}>
+          {t(
+            'In a world where nihilism and pessimism about the future prevail, Bitcoin brought us hope. Not just hope for a world built on sound money, but hope in the power of action to create meaningful change. The world is malleable, and individuals have the power to reshape it.',
+          )}
         </Body>
 
-        <SubscribeGuardians />
+        <VStack w="full" spacing={0}>
+          <Body size={{ base: '10px', sm: '12px', lg: '16px' }} light fontWeight={600} textTransform={'uppercase'}>
+            <Trans
+              i18nKey="The first {{count}} guardians get {{discount}} off. {{left}} left."
+              values={{ count: 121, discount: '10%', left: 21 }}
+            >
+              {'The first '}
+              <Body as="span" color="guardians.king.text">{`{{count}}`}</Body>
+              {' guardians get '}
+              <Body as="span" color="guardians.king.text">{`{{discount}}`}</Body>
+              {' off. '}
+              <Body as="span" color="guardians.king.text">{`{{left}}`}</Body>
+              {' left.'}
+            </Trans>
+          </Body>
+          <Body size={textSize} textTransform={'uppercase'} bold muted marginTop="-10px">
+            {t('CHOOSE YOUR CHARACTER:')}
+          </Body>
+        </VStack>
       </VStack>
       {isMobile ? <MobileGuardiansIllustration /> : <DesktopGuardiansIllustration />}
-    </>
+      <VStack
+        w="full"
+        h="full"
+        maxWidth={dimensions.guardians.textMaxWidth}
+        px={{ base: 3, lg: 6 }}
+        spacing={{ base: '32px', lg: '96px' }}
+      >
+        <VStack w="full">
+          <VStack w="full" spacing={0}>
+            <GuardianHeader>{t('Why Geyser')}</GuardianHeader>
+            <GuardianBody>{t('Words from creators on Geyser')}</GuardianBody>
+          </VStack>
+          <Box width="100%" borderRadius={'8px'} overflow={'hidden'}>
+            <VideoPlayer width="100%" height="100%" url={'https://www.youtube.com/watch?v=b40BxyZGW2I&t=828s'} />
+          </Box>
+        </VStack>
+
+        <VStack w="full" spacing={{ base: '16px', lg: '32px' }}>
+          <GuardianHeader>{t('Geyser Manifesto')}</GuardianHeader>
+
+          <VStack w="full" alignItems={'flex-start'} spacing={{ base: '16px', lg: '32px' }}>
+            <GuardianBody>
+              {t(
+                'In a world where nihilism and pessimism about the future prevail, Bitcoin brought us hope. Not just hope for a world built on sound money, but hope in the power of action to create meaningful change. The world is malleable, and individuals have the power to reshape it.',
+              )}
+            </GuardianBody>
+
+            <GuardianBody>
+              {t(
+                'The Cypherpunks understood this. They didn’t wait for permission—they built the tools of freedom. In 1993, the Cypherpunk Manifesto declared, “Cypherpunks write code.” In 2009, Satoshi Nakamoto released Bitcoin’s code. Bitcoin was born out of action and a will for change.',
+              )}
+            </GuardianBody>
+            <GuardianBody>
+              {t(
+                'The vision has always been to lay sound foundations for the digital era—moving away from the predetermined path of totalitarian control and censorship, and towards decentralization, openness, freedom, and self-sovereignty. To bring about unimaginable wealth and human flourishing.',
+              )}
+            </GuardianBody>
+            <GuardianBody>
+              {t(
+                'For Bitcoin’s sound principles to take hold in the world, change must happen at all layers of society. Developers, educators, writers, filmmakers, artists, and entire communities all have a role to play in building the Bitcoin world. No act is too small—small actions compound into global grassroots movements.',
+              )}
+            </GuardianBody>
+            <GuardianBody>
+              {t(
+                'Bitcoin is a peaceful revolution—but peaceful does not mean passive. It’s time to act. Are you a Bitcoiner? Then you are the protagonist of this story, and the tools are in your hands.',
+              )}
+            </GuardianBody>
+            <GuardianBody>{t('What will you do to help bring about Bitcoin adoption?')}</GuardianBody>
+          </VStack>
+        </VStack>
+      </VStack>
+    </VStack>
+  )
+}
+
+const GuardianHeader = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <H2 fontSize={{ base: '28px', md: '32px', lg: '56px', xl: '72px' }} fontWeight={600}>
+      {children}
+    </H2>
+  )
+}
+
+const GuardianBody = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Body fontSize={{ base: '16px', md: '18px', lg: '24px', '3xl': '28px' }} light medium>
+      {children}
+    </Body>
   )
 }

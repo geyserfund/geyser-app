@@ -91,6 +91,7 @@ export const dimensions = {
   },
   guardians: {
     maxWidth: '1920px',
+    textMaxWidth: '1200px',
   },
 
   pullDownThreshold: 70,
