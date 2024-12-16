@@ -2,16 +2,22 @@ import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { Trans } from 'react-i18next'
+import { useNavigate } from 'react-router'
 
 import { guardianRewardsAtom, guardianRewardsDiscountItemsAtom } from '@/modules/guardians/state/guardianRewards'
 import { Guardian } from '@/modules/guardians/types'
 import { Body, H2 } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 import { fonts } from '@/shared/styles'
 import { centsToDollars } from '@/utils'
 
 import { CharacterAssets } from '../characterAssets'
 
+const GUARDIANS_PROJECT_NAME = 'geyserguardians'
+
 export const GuardiansPrice = ({ currentGuardian }: { currentGuardian: Guardian }) => {
+  const navigate = useNavigate()
+
   const guardianRewards = useAtomValue(guardianRewardsAtom)
 
   const guardianRewardsDiscountItems = useAtomValue(guardianRewardsDiscountItemsAtom)
@@ -71,6 +77,11 @@ export const GuardiansPrice = ({ currentGuardian }: { currentGuardian: Guardian 
         backgroundColor={`guardians.${currentGuardian}.button`}
         fontFamily={fonts.cormorant}
         minWidth="256px"
+        onClick={() =>
+          navigate(getPath('projectFunding', GUARDIANS_PROJECT_NAME), {
+            state: { rewardUUID: discountRemains ? rewardUUIDs.discount : rewardUUIDs.main },
+          })
+        }
       >
         {`Become a ${guardianAsset.title}`}
       </Button>

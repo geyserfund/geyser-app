@@ -1,6 +1,8 @@
 import { Badge, Box, Button, HStack, IconButton, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useEffect } from 'react'
 import { PiMinus, PiPlus } from 'react-icons/pi'
+import { useLocation } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useRewardBuy } from '@/modules/project/pages1/projectView/hooks'
@@ -25,6 +27,14 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
   const { project } = useFundingFormAtom()
 
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
+
+  const location = useLocation()
+
+  useEffect(() => {
+    if (location.state && location.state.rewardUUID === reward.uuid && isAvailable) {
+      addRewardToBasket()
+    }
+  }, [location.state, reward.uuid, addRewardToBasket, isAvailable])
 
   if ((count > 0 && showOnSelected) || (showOnEmpty && count === 0)) {
     return (
