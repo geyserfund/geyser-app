@@ -562,3 +562,24 @@ export const GuardiansStickersUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Guardians-Stickers.png'
 export const GuardiansZineUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Guardians-Zine.png'
+
+// PARTNERS
+
+export const GuardianPartnerNoGoodUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-No-Good.png'
+export const GuardianPartnerBitcoinTradingCardsUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Bitcoin-Trading-Cards.png'
+export const GuardianPartnerHodlersUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Hodlers.png'
+export const GuardianPartnerBitaxeUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Bitaxe.png'
+export const GuardianPartnerSoloSatoshiUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Solo-Satoshi.png'
+export const GuardianPartnerAlbyUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Alby.png'
+export const GuardianPartnerOrangePillAppUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Orange-Pill-App.png'
+export const GuardianPartnerBTCPragueUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-BTC-Prague.png'
+export const GuardianPartnerPlanBForumUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Plan-B-Forum.png'

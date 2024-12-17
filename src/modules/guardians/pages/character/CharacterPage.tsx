@@ -18,6 +18,7 @@ import { Guardian } from '../../types'
 import { CharacterAssetItem, CharacterAssets } from './characterAssets'
 import { GuardiansPrice } from './components/GuardiansPrice'
 import { ImageBlock } from './components/ImageBlock'
+import { PartnerList } from './components/PartnerList'
 import { PerkWithImageList } from './components/PerkWithImageList'
 import { PerkWithList } from './components/PerkWithList'
 import { TitleBlock } from './components/TitleBlock'
@@ -128,23 +129,18 @@ export const CharacterPage = () => {
           transition={{ type: 'spring', stiffness: 900, damping: 40 }}
         >
           <TitleBlock currentGuardian={currentGuardian} />
-
           <GuardiansPrice currentGuardian={currentGuardian} />
-
           <PerkWithImageList
             title={t('Physical Items')}
             items={guardianAsset.physicalItems}
             extraText={t('Deliveries will begin in Q1 2025.')}
             onClick={handleClick}
           />
-
           <PerkWithImageList title={t('Digital Items')} items={guardianAsset.digitalItems} onClick={handleClick} />
-
           <PerkWithList title={t('Discounts')} items={guardianAsset.discounts} />
-
           <PerkWithList title={t('Experiences')} items={guardianAsset.experiences} />
-
           <PerkWithList title={t('Grants')} items={guardianAsset.grants} />
+          <PartnerList />
         </motion.div>
       </VStack>
       {itemsModal.isOpen && (

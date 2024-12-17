@@ -1,4 +1,4 @@
-import { Box, VStack } from '@chakra-ui/react'
+import { Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React from 'react'
 import { Trans } from 'react-i18next'
@@ -9,6 +9,7 @@ import { VideoPlayer } from '@/shared/molecules/VideoPlayer'
 import { fonts } from '@/shared/styles'
 import { useMobileMode } from '@/utils'
 
+import { PartnerUrls } from '../../data'
 import { DesktopGuardiansIllustration } from './components/DesktopGuardiansIllustration'
 import { MobileGuardiansIllustration } from './components/MobileGuardiansIllustration'
 
@@ -102,6 +103,26 @@ export const GuardiansMainPage = () => {
               )}
             </GuardianBody>
             <GuardianBody>{t('What will you do to help bring about Bitcoin adoption?')}</GuardianBody>
+          </VStack>
+        </VStack>
+        <VStack w="full" spacing={{ base: '16px', lg: '32px' }}>
+          <GuardianHeader>{t('Partners')}</GuardianHeader>
+          <VStack spacing={8}>
+            <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
+              {PartnerUrls.slice(0, 3).map((url, index) => (
+                <Image src={url} alt="Partner" width={'auto'} height={'72px'} objectFit={'cover'} key={url} />
+              ))}
+            </HStack>
+            <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
+              {PartnerUrls.slice(3, 5).map((url, index) => (
+                <Image src={url} alt="Partner" width={'auto'} height={'64px'} objectFit={'cover'} key={url} />
+              ))}
+            </HStack>
+            <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
+              {PartnerUrls.slice(5, 9).map((url, index) => (
+                <Image src={url} alt="Partner" width={'auto'} height={'32px'} objectFit={'cover'} key={url} />
+              ))}
+            </HStack>
           </VStack>
         </VStack>
       </VStack>
