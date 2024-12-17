@@ -116,7 +116,7 @@ export const ImageBlock = () => {
       }),
 
       maxHeight: { base: '440px', lg: '100%' },
-      height: 'auto',
+      height: 'full',
       objectFit: 'cover',
       objectPosition: 'top',
       width: 'auto',
@@ -167,7 +167,7 @@ export const ImageBlock = () => {
         justifyContent="flex-end"
         position="relative"
       >
-        <HStack maxHeight="full" position="relative" justifyContent="center" alignItems="flex-end">
+        <HStack height="full" maxHeight="full" position="relative" justifyContent="center" alignItems="flex-end">
           <Image {...getRaycastProps(Guardian.Knight)} />
           <Image {...getRaycastProps(Guardian.Legend)} />
           <Image {...getRaycastProps(Guardian.Warrior)} />

@@ -61,7 +61,7 @@ export const TitleBlock = ({ currentGuardian }: { currentGuardian: Guardian }) =
             t('Infinite army')
           )}
         </Body>
-        <Body size={{ base: 'md', lg: '2xl' }} medium>
+        <Body size={{ base: 'md', lg: '2xl' }} medium lineHeight={'1.2'}>
           {guardianAsset.description}
         </Body>
       </VStack>
@@ -86,6 +86,7 @@ export const TitleBlock = ({ currentGuardian }: { currentGuardian: Guardian }) =
           )
         })}
       </Stack>
+      <Divider borderColor={'neutral1.6'} />
     </VStack>
   )
 }

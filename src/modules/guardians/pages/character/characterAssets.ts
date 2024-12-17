@@ -147,8 +147,9 @@ export const GuardianImageMobileMode = {
   },
 }
 
-type Items = {
+export type CharacterAssetItem = {
   name: string
+  description: string[]
   url: string
 }
 
@@ -224,9 +225,9 @@ export type GuardianAsset = {
   title: string
   description: string
   abilities: string[]
-  digitalItems: Items[]
+  digitalItems: CharacterAssetItem[]
   available?: number
-  physicalItems?: Items[]
+  physicalItems?: CharacterAssetItem[]
   grants?: string[]
   discounts?: string[]
   experiences?: string[]
@@ -243,11 +244,15 @@ export const CharacterAssets: {
     abilities: ['Fearless Sat Stacker', 'Lightning Resolve'],
     digitalItems: [
       {
-        name: 'Nostr Badge',
+        name: 'Warior Nostr Badge',
+        description: [
+          'This Warrior badge will display next to your Geyser profile forever. It signals your support of Geyser and Bitcoin creators.',
+        ],
         url: WarriorNostrCardUrl,
       },
       {
-        name: 'Warrior Gem',
+        name: 'Warrior Profile Gem',
+        description: ['This Warrior card is a special digital item that is interoperable with Nostr. It’s unlimited.'],
         url: WarriorJewelUrl,
       },
     ],
@@ -257,30 +262,45 @@ export const CharacterAssets: {
   [Guardian.Knight]: {
     title: 'Knight',
     description:
-      'As he ventures into the no-coiner lands, the Knight’s armour and broadsword protects him from any Fear, Uncertainty and Doubt thrown at him.',
+      'As he ventures into the no-coiner lands, the Knight’s armor and broadsword protects him from any Fear, Uncertainty and Doubt tthrown at him. His broadsword has mythical powers. It energizes itself near natural energy sources like waterfalls and geysers, and unleashes lightning bolds towards its opponents.',
     abilities: ['FUD SLAYER', 'FED DESTROYER'],
     digitalItems: [
       {
-        name: 'Nostr Badge',
+        name: 'Knight Nostr Badge (2,100 only)',
+        description: [
+          'This Knight Card is a special digital item that is interoperable with Nostr. This card is a limited edition; there will only ever be 2,100.',
+        ],
         url: KnightNostrCardUrl,
       },
       {
-        name: 'Knight Gem',
+        name: 'Knight Profile Gem (2,100 only) ',
+        description: [
+          'This Knight badge will display next to your Geyser profile forever. It signals your support for Geyser and Bitcoin creators.',
+        ],
         url: KnightJewelUrl,
       },
     ],
     available: 2100,
     physicalItems: [
       {
-        name: 'T-Shirt',
+        name: 'Knight T-Shirt (2,100 only)',
+        description: [
+          'A high-quality T-shirt made from 100% organic cotton and limited to the number of Knights. High quality durable print. Designs created by NoGood.',
+        ],
         url: KnightTshirtUrl,
       },
       {
-        name: 'Trading Card',
+        name: 'Knight Trading Card (2,100 only)',
+        description: [
+          'A holographic Knight card designed and produced by the one and only BTC Trading Cards. The card comes in a simple foil cover. This is one of four Geyser Guardians Series 1 cards that will ever be produced.',
+        ],
         url: KnightTradingCardUrl,
       },
       {
-        name: 'Stickers',
+        name: 'Guardian Sticker pack',
+        description: [
+          'A holographic sticker pack featuring all Guardian characters, along with the Geyser and Geyser Guardians logos.',
+        ],
         url: GuardiansStickersUrl,
       },
     ],
@@ -291,38 +311,64 @@ export const CharacterAssets: {
   [Guardian.King]: {
     title: 'King',
     description:
-      'It’s a long road to hyper-bitcoinisation, and the King knows it. His experience is his strength in planning for the best strategies to push Bitcoin adoption forward.',
-    abilities: ['Strategic Bitcoin Conquerer', 'Circular Economies Enabler'],
+      'The King understands the long road to hyper-bitcoinization. Drinking from his enchanted chalice grants him foresight, allowing him to plan flawless strategies to advance Bitcoin adoption. With his golden crown and wise leadership, he inspires unity among Bitcoiners, guiding them toward a prosperous future.',
+    abilities: ['Strategic Bitcoin Conquerer', 'Low-Time Preference Leader'],
     digitalItems: [
       {
-        name: 'Nostr Badge',
+        name: 'King Nostr Badge (121 only)',
+        description: [
+          'This King Card is a special digital item that is interoperable with Nostr. It is a limited edition, with only 121 ever created.',
+        ],
         url: KingNostrCardUrl,
       },
       {
-        name: 'King Gem',
+        name: 'King Profile Gem (121 only)',
+        description: [
+          'This King badge will display next to your Geyser profile forever. It signals your support for Geyser and Bitcoin creators.',
+        ],
         url: KingJewelUrl,
       },
     ],
     available: 121,
     physicalItems: [
       {
-        name: 'T-Shirt',
+        name: 'King T-Shirt (121 only)',
+        description: [
+          'A high-quality T-shirt made from 100% organic cotton and limited to the number of Kings. Features a durable, high-quality print that will last for decades. Designs created by NoGood.',
+        ],
         url: KingTshirtUrl,
       },
       {
-        name: 'Trading Card',
+        name: 'King Trading Card (121 only)',
+        description: [
+          'A holographic collectible King card that comes in simple wrapping. The holographic effect doesn’t render in this image.',
+          'This limited edition card, with only 121 produced, is one of four Geyser Guardians Series 1 cards. It’s designed and produced by the one and only BTC Trading Cards.',
+        ],
         url: KingTradingCardUrl,
       },
       {
-        name: 'Zine',
+        name: 'The Guardians Zine',
+        description: [
+          'This Zine tells the full story and vision behind the Guardians. It explores the origins of the characters, their powers, and the hopeful world they are defending.',
+          'Finally, it ties everything together with Bitcoin, and the Geyser Manifesto.',
+          'The Zine also foreshadows what’s to come in the next Series of Geyser Guardians.',
+        ],
         url: GuardiansZineUrl,
       },
       {
-        name: 'Jersey',
+        name: 'King Jersey (121 only)',
+        description: [
+          'The King Jersey is a super high-quality item, made of 100% cotton, fully embroidered for lasting durability.',
+          'The design is sharp and stands out with bright turquoise lines on a black jersey. The back features the “Guardian” sign to maintain good OpSec while showcasing you are a guardian of Bitcoin Adoption!',
+          'Designed and produced by Hodlers Official.',
+        ],
         url: GuardiansBlackJerseyUrl,
       },
       {
-        name: 'Stickers',
+        name: 'Guardian Sticker pack',
+        description: [
+          'A holographic sticker pack featuring all Guardian characters, along with the Geyser and Geyser Guardians logos.',
+        ],
         url: GuardiansStickersUrl,
       },
     ],
@@ -333,42 +379,69 @@ export const CharacterAssets: {
   [Guardian.Legend]: {
     title: 'Legend',
     description:
-      'Little is known about the Legends. Their OpSec has kept them clear of curious three-letter agencies. Yet, tales of the Legends are as old as Bitcoin itself, and their influence on adoption continuous to be felt.',
+      'Shrouded in mystery, the Legend moves through the shadows, evading even the sharpest scrutiny. His laser-eyed vision cuts through the lies of governments and institutions, uncovering clarity and truth. Those who meet his gaze are forever transformed, ignited with an unshakable desire to pursue a freer, better future.',
     abilities: ['Untraceable OpSec', 'Laser-Eyed Vision'],
     digitalItems: [
       {
-        name: 'Nostr Badge',
+        name: 'Legend Nostr Badge (21 only)',
+        description: [
+          'This Legend Card is a special digital item that is interoperable with Nostr. It is a limited edition, with only 21 ever created.',
+        ],
         url: LegendNostrCardUrl,
       },
       {
-        name: 'Legend Gem',
+        name: 'Legend Profile Gem (21 only)',
+        description: [
+          'This Legend badge will display next to your Geyser profile forever. It signals your support for Geyser and Bitcoin creators.',
+        ],
         url: LegendJewelUrl,
       },
     ],
     available: 21,
     physicalItems: [
       {
-        name: 'T-Shirt',
+        name: 'Knight T-Shirt (21 only) ',
+        description: [
+          'A high-quality T-shirt made from 100% organic cotton and limited to the number of Legends. Features a durable, high-quality print that will last for decades. Designs created by NoGood.',
+        ],
         url: LegendTshirtUrl,
       },
       {
-        name: 'Trading Card',
+        name: 'Knight Trading Card (21 only)',
+        description: [
+          'A holographic collectible Legend card that comes in simple wrapping. The holographic effect doesn’t render in this image.',
+          'This limited edition card, with only 21 produced, is one of four Geyser Guardians Series 1 cards. It’s designed and produced by the one and only BTC Trading Cards.',
+        ],
         url: LegendTradingCardUrl,
       },
       {
-        name: 'Zine',
+        name: 'The GuardiansZine',
+        description: [
+          'This Zine tells the full story and vision behind the Guardians. It explores the origins of the characters, their powers, and the hopeful world they are defending.',
+          'Finally, it ties everything together with Bitcoin, and the Geyser Manifesto.',
+          'The Zine also foreshadows what’s to come in the next Series of Geyser Guardians.',
+        ],
         url: GuardiansZineUrl,
       },
       {
-        name: 'Jersey',
+        name: 'Legend Jersey (21 only)',
+        description: [
+          'The Legend Jersey is a super high-quality item, made of 100% cotton, fully embroidered for lasting durability.',
+          'The design is sharp and with an elite feel, with bright turquoise lines on a white jersey. The back features the “Guardian” sign to maintain good OpSec while showcasing you are a guardian of Bitcoin Adoption!',
+          'Designed and produced by Hodlers Official.',
+        ],
         url: GuardiansWhiteJerseyUrl,
       },
       {
-        name: 'BitAxe',
+        name: 'BitAxe Gamma with 3D Stand',
+        description: ['<WAITING FOR SPECS>'],
         url: MysteryItemMinerLightUrl,
       },
       {
-        name: 'Stickers',
+        name: 'Guardian Sticker pack',
+        description: [
+          'A holographic sticker pack featuring all Guardian characters, along with the Geyser and Geyser Guardians logos.',
+        ],
         url: GuardiansStickersUrl,
       },
     ],

@@ -3,10 +3,10 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 
-import { Box } from '@chakra-ui/react'
+import { Box, BoxProps } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
 import { Navigation, Pagination } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react'
 
 import { AppTheme } from '@/context'
 
@@ -78,9 +78,17 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
 export const MediaCarousel = ({
   links,
   aspectRatio = ImageCropAspectRatio.Header,
+  wrapperProps,
+  onSlideChange,
+  initialSlide,
+  swiperProps,
 }: {
   links: string[]
   aspectRatio?: ImageCropAspectRatio
+  wrapperProps?: Omit<BoxProps, 'aspectRatio'>
+  onSlideChange?: (index: number) => void
+  initialSlide?: number
+  swiperProps?: SwiperProps
 }) => {
   const classes = useStyles()
 
@@ -95,11 +103,16 @@ export const MediaCarousel = ({
         modules={[Pagination, Navigation]}
         spaceBetween={10}
         slidesPerView={1}
+        onSlideChange={(swiper) => {
+          onSlideChange?.(swiper.activeIndex)
+        }}
+        initialSlide={initialSlide}
+        {...swiperProps}
       >
         {links.map((link) => {
           return (
             <SwiperSlide key={link}>
-              <RenderImageOrVideo link={link} borderRadius={0} aspectRatio={aspectRatio} />
+              <RenderImageOrVideo link={link} borderRadius={0} aspectRatio={aspectRatio} {...wrapperProps} />
             </SwiperSlide>
           )
         })}

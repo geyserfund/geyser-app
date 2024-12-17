@@ -186,13 +186,28 @@ export const DesktopGuardiansIllustration = () => {
             )
           })}
         </HStack>
-        <Image
-          src={GuardiansSeriesOneOrnamentSeparatorUrl}
-          position="relative"
-          zIndex={13}
-          width="100%"
-          marginTop="-40px"
-        />
+        <Box position="relative" zIndex={13} marginTop="-40px">
+          <Box
+            height="100%"
+            width="100%"
+            position="absolute"
+            left="0"
+            top="0"
+            background="overlay.white.3"
+            zIndex={1}
+            pointerEvents="none"
+            backdropFilter="blur(4px)"
+            opacity={currentGuardian ? 1 : 0}
+            transition="opacity 0.3s ease-in-out"
+            sx={{
+              maskImage: `url(${GuardiansSeriesOneOrnamentSeparatorUrl})`,
+              maskSize: '100% 100%',
+              WebkitMaskImage: `url(${GuardiansSeriesOneOrnamentSeparatorUrl})`,
+              WebkitMaskSize: '100% 100%',
+            }}
+          />
+          <Image src={GuardiansSeriesOneOrnamentSeparatorUrl} position="relative" width="100%" objectFit="cover" />
+        </Box>
       </VStack>
     </>
   )
