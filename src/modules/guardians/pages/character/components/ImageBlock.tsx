@@ -33,7 +33,7 @@ export const ImageBlock = () => {
   const [currentGuardian, setCurrentGuardian] = useState<Guardian>(characterId as Guardian)
   const [preChange, setPreChange] = useState<Guardian>(characterId as Guardian)
 
-  const guardianImages = isMobileMode ? GuardianCharacter : GuardianCharacterMobile
+  const guardianImages = isMobileMode ? GuardianCharacterMobile : GuardianCharacter
 
   const goToNextGuardian = useCallback(() => {
     const currentIndex = guardianIndex.findIndex((guardians) => guardians.includes(currentGuardian))

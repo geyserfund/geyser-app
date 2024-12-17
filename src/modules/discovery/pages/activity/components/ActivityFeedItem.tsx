@@ -4,6 +4,8 @@ import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper, PiSparkle } from 're
 import { Link } from 'react-router-dom'
 
 import { ImageWithReload } from '@/components/ui'
+import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
+import { ProfileText } from '@/shared/components/display/ProfileText'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { getPathWithGeyserHero } from '@/shared/constants'
@@ -405,11 +407,13 @@ const ContributionInfo = ({ resource }: { resource: ActivityResource }) => {
 
     return (
       <HStack width="full" spacing={2} justifyContent="flex-start">
-        {user && user.imageUrl && <Image width={'40px'} height={'40px'} borderRadius={'full'} src={user.imageUrl} />}
+        {user && user.imageUrl && (
+          <ProfileAvatar width={'40px'} height={'40px'} src={user.imageUrl} guardian={user.guardian} />
+        )}
         <VStack alignItems="flex-start" justifyContent="center" spacing={0}>
-          <Body size="md" dark>
+          <ProfileText size="md" dark guardian={user?.guardian}>
             {user?.username}
-          </Body>
+          </ProfileText>
           <Body size="md" medium dark>
             {commaFormatted(resource.amount)} {' sats '}
             <Body as="span" size="md" muted>

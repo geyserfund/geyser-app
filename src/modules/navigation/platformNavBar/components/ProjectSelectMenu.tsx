@@ -30,7 +30,13 @@ export const ProjectSelectMenu = () => {
 
   return (
     <Menu size={'lg'} closeOnSelect placement="bottom-end">
-      <MenuButton as={Button} size={{ base: 'md', lg: 'lg' }} variant="outline" colorScheme="neutral1">
+      <MenuButton
+        as={Button}
+        size={{ base: 'md', lg: 'lg' }}
+        variant="outline"
+        colorScheme="neutral1"
+        minWidth={'135px !important'}
+      >
         {t('Select project')}
       </MenuButton>
       <Portal>

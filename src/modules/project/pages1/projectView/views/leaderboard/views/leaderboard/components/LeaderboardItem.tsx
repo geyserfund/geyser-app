@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiChatCircle, PiLightning } from 'react-icons/pi'
 
 import { useAuthContext } from '@/context'
+import { ProfileText } from '@/shared/components/display/ProfileText'
 import { RankMedal } from '@/shared/components/display/RankMedal'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
@@ -46,9 +47,9 @@ export const LeaderboardItem = ({ funder, rank, hideLabel, ...props }: Leaderboa
         <RankMedal rank={rank} />
         <UserAvatar user={funder.user} id={funder.funderId} />
         <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
-          <Body size="sm" bold dark>
+          <ProfileText guardian={funder.user?.guardian} size="sm" bold dark>
             {funder.user?.username || t('Anonymous')}
-          </Body>
+          </ProfileText>
           <HStack spacing={2}>
             <Body size="sm">
               {`${formatAmount(funder.contributionsTotalUsd, FormatCurrencyType.Usd)}`}{' '}

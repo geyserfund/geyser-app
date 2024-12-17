@@ -596,6 +596,7 @@ export type FundingConfirmInput = {
   offChain?: InputMaybe<FundingConfirmOffChainInput>;
   onChain?: InputMaybe<FundingConfirmOnChainInput>;
   paidAt: Scalars['Date']['input'];
+  subscription?: InputMaybe<SubscriptionContributionConfirmationInput>;
   uuid?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1423,7 +1424,6 @@ export type Mutation = {
   userEmailVerify: Scalars['Boolean']['output'];
   userNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
   userSubscriptionCancel: UserSubscription;
-  userSubscriptionCreate: UserSubscription;
   userSubscriptionUpdate: UserSubscription;
   walletCreate: Wallet;
   walletDelete: Scalars['Boolean']['output'];
@@ -1717,11 +1717,6 @@ export type MutationUserNotificationConfigurationValueUpdateArgs = {
 
 export type MutationUserSubscriptionCancelArgs = {
   id: Scalars['BigInt']['input'];
-};
-
-
-export type MutationUserSubscriptionCreateArgs = {
-  input: CreateUserSubscriptionInput;
 };
 
 
@@ -3144,6 +3139,11 @@ export type SubscriptionFundingTxStatusUpdatedArgs = {
   input?: InputMaybe<FundingTxStatusUpdatedInput>;
 };
 
+export type SubscriptionContributionConfirmationInput = {
+  stripeSubscriptionId?: InputMaybe<Scalars['String']['input']>;
+  userSubscriptionUuid: Scalars['String']['input'];
+};
+
 export enum SubscriptionCurrencyType {
   Usdcent = 'USDCENT'
 }
@@ -3980,6 +3980,7 @@ export type ResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   StripeCheckoutSessionInput: StripeCheckoutSessionInput;
   Subscription: ResolverTypeWrapper<{}>;
+  SubscriptionContributionConfirmationInput: SubscriptionContributionConfirmationInput;
   SubscriptionCurrencyType: SubscriptionCurrencyType;
   Swap: ResolverTypeWrapper<Swap>;
   TOTPInput: TotpInput;
@@ -4310,6 +4311,7 @@ export type ResolversParentTypes = {
   String: Scalars['String']['output'];
   StripeCheckoutSessionInput: StripeCheckoutSessionInput;
   Subscription: {};
+  SubscriptionContributionConfirmationInput: SubscriptionContributionConfirmationInput;
   Swap: Swap;
   TOTPInput: TotpInput;
   Tag: Tag;
@@ -5008,7 +5010,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   userEmailVerify?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationUserEmailVerifyArgs, 'input'>>;
   userNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUserNotificationConfigurationValueUpdateArgs, 'userNotificationConfigurationId' | 'value'>>;
   userSubscriptionCancel?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionCancelArgs, 'id'>>;
-  userSubscriptionCreate?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionCreateArgs, 'input'>>;
   userSubscriptionUpdate?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionUpdateArgs, 'input'>>;
   walletCreate?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationWalletCreateArgs, 'input'>>;
   walletDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationWalletDeleteArgs, 'id'>>;
@@ -6414,7 +6415,7 @@ export type TagsMostFundedGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type TagsMostFundedGetQuery = { __typename?: 'Query', tagsMostFundedGet: Array<{ __typename?: 'TagsMostFundedGetResult', id: number, label: string }> };
 
-export type ActivityFeedFragmentFragment = { __typename?: 'Activity', activityType: string, createdAt: any, id: string, project: { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null }, resource: { __typename?: 'Entry', id: any, title: string, content?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'FundingTx', id: any, amount: number, projectId: any, isAnonymous: boolean, comment?: string | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null } | null } } | { __typename?: 'Post', id: any, title: string, markdown?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null } | { __typename?: 'ProjectGoal', currency: ProjectGoalCurrency, title: string, targetAmount: number, status: ProjectGoalStatus, goalDescription?: string | null } | { __typename?: 'ProjectReward', id: any, category?: string | null, cost: number, rewardCurrency: RewardCurrency, sold: number, stock?: number | null, projectRewardDescription?: string | null, projectRewardImage: Array<string> } };
+export type ActivityFeedFragmentFragment = { __typename?: 'Activity', activityType: string, createdAt: any, id: string, project: { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null }, resource: { __typename?: 'Entry', id: any, title: string, content?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'FundingTx', id: any, amount: number, projectId: any, isAnonymous: boolean, comment?: string | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, guardian?: GuardianType | null } | null } } | { __typename?: 'Post', id: any, title: string, markdown?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null } | { __typename?: 'ProjectGoal', currency: ProjectGoalCurrency, title: string, targetAmount: number, status: ProjectGoalStatus, goalDescription?: string | null } | { __typename?: 'ProjectReward', id: any, category?: string | null, cost: number, rewardCurrency: RewardCurrency, sold: number, stock?: number | null, projectRewardDescription?: string | null, projectRewardImage: Array<string> } };
 
 export type ActivityFeedQueryVariables = Exact<{
   input: GetActivitiesInput;
@@ -6833,7 +6834,7 @@ export type PostPageProjectRewardFragment = { __typename?: 'ProjectReward', id: 
 
 export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
 
-export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string };
+export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, guardian?: GuardianType | null };
 
 export type WalletContributionLimitsFragment = { __typename?: 'WalletContributionLimits', min?: number | null, max?: number | null, offChain?: { __typename?: 'WalletOffChainContributionLimits', min?: number | null, max?: number | null } | null, onChain?: { __typename?: 'WalletOnChainContributionLimits', min?: number | null, max?: number | null } | null };
 
@@ -8315,6 +8316,7 @@ export const ActivityFeedFragmentFragmentDoc = gql`
           id
           username
           imageUrl
+          guardian
         }
       }
     }
@@ -8716,6 +8718,7 @@ export const UserAvatarFragmentDoc = gql`
   id
   imageUrl
   username
+  guardian
 }
     `;
 export const ProjectFunderFragmentDoc = gql`

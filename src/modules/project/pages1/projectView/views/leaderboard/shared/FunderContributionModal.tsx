@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'
 
 import { ScrollInvoke } from '@/helpers'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { ProfileText } from '@/shared/components/display/ProfileText'
 import { Modal } from '@/shared/components/layouts'
-import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { usePaginationAtomHook } from '@/shared/hooks'
 import {
@@ -97,9 +97,9 @@ export const FunderContributionModal = ({ funder, ...props }: FunderContribution
         })}
       >
         <UserAvatar user={funder.user} id={funder.funderId} />
-        <Body size="sm" bold dark>
+        <ProfileText guardian={funder.user?.guardian} size="sm" bold dark>
           {funder.user?.username || t('Anonymous')}
-        </Body>
+        </ProfileText>
       </HStack>
 
       {isLoading ? (

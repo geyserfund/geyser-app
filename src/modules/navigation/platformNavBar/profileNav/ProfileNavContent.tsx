@@ -11,13 +11,11 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useMemo } from 'react'
 import { PiArrowUpRight } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
-import { HeroCardButton } from '@/modules/profile/pages/profilePage/views/account/views/HeroCardButton'
 import { Body } from '@/shared/components/typography'
 import {
   dimensions,
@@ -29,9 +27,6 @@ import {
   GeyserSubscribeUrl,
   GuideUrl,
 } from '@/shared/constants'
-import { GradientBorder } from '@/shared/molecules/GradientBorder'
-import { GuardiansButtonBackgroundGradient, GuardiansButtonBackgroundGradientBright } from '@/shared/styles/custom'
-import { HeroStats, useUserHeroStatsQuery } from '@/types'
 
 import { DiscoveryNavItemKey, discoveryNavItems } from '../../discoveryNav/discoveryNavData'
 import { ProfileNavUserInfo } from './components'
@@ -42,30 +37,6 @@ export const ProfileNavContent = () => {
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
   const followedActivityDot = useAtomValue(followedActivityDotAtom)
-
-  const { data, loading } = useUserHeroStatsQuery({
-    variables: {
-      where: {
-        id: user.id,
-      },
-    },
-  })
-
-  const stats = useMemo(() => {
-    const defaultStats: HeroStats = {
-      contributionsCount: 0,
-      contributionsTotal: 0,
-      contributionsTotalUsd: 0,
-      projectsCount: 0,
-      rank: 0,
-    }
-
-    return {
-      ambassadorStats: data?.user?.heroStats?.ambassadorStats ?? defaultStats,
-      contributorStats: data?.user?.heroStats?.contributorStats ?? defaultStats,
-      creatorStats: data?.user?.heroStats?.creatorStats ?? defaultStats,
-    }
-  }, [data])
 
   return (
     <VStack
@@ -83,8 +54,6 @@ export const ProfileNavContent = () => {
               <ProfileNavUserInfo user={user} />
             </MenuItem>
 
-            <HeroCardButton user={user} stats={stats} isDisabled={loading} />
-
             <Divider borderColor="neutral1.6" />
           </>
         )}
@@ -97,38 +66,24 @@ export const ProfileNavContent = () => {
                 ? followedActivityDot
                 : false
 
-            const isGuardian = discoveryNav.key === DiscoveryNavItemKey.Guardians
-
             return (
-              <GradientBorder
-                key={discoveryNav.label}
-                enable={isGuardian}
-                gradientColor={GuardiansButtonBackgroundGradientBright}
-              >
-                <MenuItem
-                  key={discoveryNav.label}
-                  as={Link}
-                  to={getPath(discoveryNav.path)}
-                  background={isGuardian ? GuardiansButtonBackgroundGradient : ''}
-                  _hover={isGuardian ? {} : undefined}
-                >
-                  <HStack position="relative">
-                    <discoveryNav.icon fontSize="18px" />
-                    <Body size="md">{discoveryNav.label}</Body>
-                    {activityDot ? (
-                      <Box
-                        position="absolute"
-                        top={2}
-                        right={'-4'}
-                        borderRadius="50%"
-                        backgroundColor="error.9"
-                        height="6px"
-                        width="6px"
-                      />
-                    ) : null}
-                  </HStack>
-                </MenuItem>
-              </GradientBorder>
+              <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)}>
+                <HStack position="relative">
+                  <discoveryNav.icon fontSize="18px" />
+                  <Body size="md">{discoveryNav.label}</Body>
+                  {activityDot ? (
+                    <Box
+                      position="absolute"
+                      top={2}
+                      right={'-4'}
+                      borderRadius="50%"
+                      backgroundColor="error.9"
+                      height="6px"
+                      width="6px"
+                    />
+                  ) : null}
+                </HStack>
+              </MenuItem>
             )
           })}
         </VStack>

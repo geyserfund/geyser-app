@@ -4,6 +4,8 @@ import { useMemo } from 'react'
 
 import { GuardianType } from '@/types'
 
+import { DefaultImage } from './DefaultImage'
+
 type ProfileAvatarProps = {
   guardian?: GuardianType | null
   wrapperProps?: BoxProps
@@ -15,12 +17,12 @@ export const ProfileAvatar = ({ guardian, wrapperProps, ...props }: ProfileAvata
       return guardianGradient[guardian]
     }
 
-    return 'transparent'
+    return 'neutral1.4'
   }, [guardian])
 
   return (
     <Box borderRadius="50%" padding="2px" background={backgroundColor} {...wrapperProps}>
-      <Avatar {...props} />
+      <Avatar borderRadius="50%" icon={<DefaultImage grey borderRadius="50%" {...props} />} {...props} />
     </Box>
   )
 }
