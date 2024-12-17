@@ -7,10 +7,11 @@ import { useNavigate, useParams } from 'react-router'
 import { dimensions, getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { fonts } from '@/shared/styles'
+import { GuardianType } from '@/types'
 import { toPx, useMobileMode } from '@/utils'
 
 import { MediaCarouselForItemsModal } from '../../../../shared/molecules/MediaCarouselForItems'
-import { Guardian } from '../../types'
+import { GuardianUsers } from '../main/components/GuardianUsers'
 import { CharacterAssetItem, CharacterAssets } from './characterAssets'
 import { GuardiansPrice } from './components/GuardiansPrice'
 import { ImageBlock } from './components/ImageBlock'
@@ -28,12 +29,12 @@ export const CharacterPage = () => {
 
   const isMobileMode = useMobileMode()
 
-  const [currentGuardian, setCurrentGuardian] = useState<Guardian>(characterId as Guardian)
+  const [currentGuardian, setCurrentGuardian] = useState<GuardianType>(characterId as GuardianType)
 
   useEffect(() => {
     if (characterId) {
-      if (Object.values(Guardian).includes(characterId as Guardian)) {
-        setCurrentGuardian(characterId as Guardian)
+      if (Object.values(GuardianType).includes(characterId as GuardianType)) {
+        setCurrentGuardian(characterId as GuardianType)
       } else {
         navigate(getPath('guardians'))
       }
@@ -111,6 +112,11 @@ export const CharacterPage = () => {
           <PerkWithList title={t('Discounts')} items={guardianAsset.discounts} />
           <PerkWithList title={t('Experiences')} items={guardianAsset.experiences} />
           <PerkWithList title={t('Grants')} items={guardianAsset.grants} />
+          <GuardianUsers
+            guardian={currentGuardian}
+            size="sm"
+            titleProps={{ fontSize: '32px', color: 'utils.text', fontWeight: 700 }}
+          />
           <PartnerList />
         </motion.div>
       </VStack>

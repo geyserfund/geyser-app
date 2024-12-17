@@ -10,8 +10,8 @@ import { BodyProps } from '@/shared/components/typography/Body'
 import { getPath } from '@/shared/constants'
 import { GuardiansSeriesOneOrnamentSeparatorUrl } from '@/shared/constants/platform/url'
 import { fadeIn, fadeOut, fonts, scaleDown, scaleUp } from '@/shared/styles'
+import { GuardianType } from '@/types'
 
-import { Guardian } from '../../../types'
 import { GuardianCharacter } from '../../character/characterAssets'
 
 const useStyles = createUseStyles({
@@ -29,9 +29,9 @@ export const DesktopGuardiansIllustration = () => {
 
   const classes = useStyles()
 
-  const [currentGuardian, setCurrentGuardian] = useState<Guardian | null>(null)
+  const [currentGuardian, setCurrentGuardian] = useState<GuardianType | null>(null)
 
-  const onMouseOver = (guardian: Guardian) => {
+  const onMouseOver = (guardian: GuardianType) => {
     setCurrentGuardian(guardian)
   }
 
@@ -42,28 +42,28 @@ export const DesktopGuardiansIllustration = () => {
   const guardiansList = useMemo(
     () => [
       {
-        guardian: Guardian.Warrior,
+        guardian: GuardianType.Warrior,
         text: t('Warrior'),
         width: '29%',
         marginLeft: '0',
         zIndex: currentGuardian ? 11 : 1,
       },
       {
-        guardian: Guardian.Knight,
+        guardian: GuardianType.Knight,
         text: t('Knight'),
         width: '32%',
         marginLeft: '-10%',
         zIndex: currentGuardian ? 12 : 2,
       },
       {
-        guardian: Guardian.King,
+        guardian: GuardianType.King,
         text: t('King'),
         width: '34%',
         marginLeft: '-10%',
         zIndex: currentGuardian ? 11 : 1,
       },
       {
-        guardian: Guardian.Legend,
+        guardian: GuardianType.Legend,
         text: t('Legend'),
         width: '35%',
         marginLeft: '-10%',
@@ -73,7 +73,7 @@ export const DesktopGuardiansIllustration = () => {
     [currentGuardian],
   )
 
-  const getCommonBoxProps = (guardian: Guardian) =>
+  const getCommonBoxProps = (guardian: GuardianType) =>
     ({
       h: 'full',
       width: 'auto',
@@ -89,14 +89,14 @@ export const DesktopGuardiansIllustration = () => {
       onMouseLeave: () => onMouseLeave(),
     } as BoxProps)
 
-  const getCommonImageProps = (guardian: Guardian): ImageProps => ({
+  const getCommonImageProps = (guardian: GuardianType): ImageProps => ({
     w: 'full',
     height: 'full',
     zIndex: 1,
     className: currentGuardian ? (guardian === currentGuardian ? '' : classes.fadeOut) : '',
   })
 
-  const getCommonRaycastProps = (guardian: Guardian) =>
+  const getCommonRaycastProps = (guardian: GuardianType) =>
     ({
       position: 'absolute',
       width: '65%',
@@ -109,7 +109,7 @@ export const DesktopGuardiansIllustration = () => {
       }),
     } as ImageProps)
 
-  const getCommonGreyProps = (guardian: Guardian) => {
+  const getCommonGreyProps = (guardian: GuardianType) => {
     return {
       opacity: 0,
       position: 'absolute',
@@ -122,7 +122,7 @@ export const DesktopGuardiansIllustration = () => {
     } as ImageProps
   }
 
-  const getGuardianTextProps = (guardian: Guardian) =>
+  const getGuardianTextProps = (guardian: GuardianType) =>
     ({
       position: 'absolute',
       top: '-10%',
@@ -143,7 +143,7 @@ export const DesktopGuardiansIllustration = () => {
       },
     } as BodyProps)
 
-  const handleClick = (guardian: Guardian) => {
+  const handleClick = (guardian: GuardianType) => {
     navigate(getPath('guardiansCharacter', guardian))
   }
 

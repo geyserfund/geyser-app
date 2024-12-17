@@ -5,17 +5,17 @@ import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 import { guardianRewardsAtom, guardianRewardsDiscountItemsAtom } from '@/modules/guardians/state/guardianRewards'
-import { Guardian } from '@/modules/guardians/types'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { fonts } from '@/shared/styles'
+import { GuardianType } from '@/types'
 import { centsToDollars } from '@/utils'
 
 import { CharacterAssets } from '../characterAssets'
 
 const GUARDIANS_PROJECT_NAME = 'geyserguardians'
 
-export const GuardiansPrice = ({ currentGuardian }: { currentGuardian: Guardian }) => {
+export const GuardiansPrice = ({ currentGuardian }: { currentGuardian: GuardianType }) => {
   const navigate = useNavigate()
 
   const guardianRewards = useAtomValue(guardianRewardsAtom)

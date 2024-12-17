@@ -4,13 +4,16 @@ import React from 'react'
 import { Trans } from 'react-i18next'
 
 import { Body, H2 } from '@/shared/components/typography'
+import { HeaderProps } from '@/shared/components/typography/Heading'
 import { dimensions } from '@/shared/constants/components/dimensions'
 import { VideoPlayer } from '@/shared/molecules/VideoPlayer'
 import { fonts } from '@/shared/styles'
+import { GuardianType } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { PartnerUrls } from '../../data'
 import { DesktopGuardiansIllustration } from './components/DesktopGuardiansIllustration'
+import { GuardianUsers } from './components/GuardianUsers'
 import { MobileGuardiansIllustration } from './components/MobileGuardiansIllustration'
 
 export const GuardiansMainPage = () => {
@@ -105,6 +108,12 @@ export const GuardiansMainPage = () => {
             <GuardianBody>{t('What will you do to help bring about Bitcoin adoption?')}</GuardianBody>
           </VStack>
         </VStack>
+
+        <GuardianUsers guardian={GuardianType.Legend} size="lg" />
+        <GuardianUsers guardian={GuardianType.King} size="md" />
+        <GuardianUsers guardian={GuardianType.Knight} size="sm" />
+        <GuardianUsers guardian={GuardianType.Warrior} size="sm" />
+
         <VStack w="full" spacing={{ base: '16px', lg: '32px' }}>
           <GuardianHeader>{t('Partners')}</GuardianHeader>
           <VStack spacing={8}>
@@ -130,15 +139,15 @@ export const GuardiansMainPage = () => {
   )
 }
 
-const GuardianHeader = ({ children }: { children: React.ReactNode }) => {
+export const GuardianHeader = ({ children, ...rest }: HeaderProps) => {
   return (
-    <H2 fontSize={{ base: '28px', md: '32px', lg: '56px', xl: '72px' }} fontWeight={600}>
+    <H2 fontSize={{ base: '28px', md: '32px', lg: '56px', xl: '72px' }} fontWeight={600} {...rest}>
       {children}
     </H2>
   )
 }
 
-const GuardianBody = ({ children }: { children: React.ReactNode }) => {
+export const GuardianBody = ({ children }: { children: React.ReactNode }) => {
   return (
     <Body fontSize={{ base: '16px', md: '18px', lg: '24px', '3xl': '28px' }} light medium>
       {children}

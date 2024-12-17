@@ -6,10 +6,10 @@ import { createUseStyles } from 'react-jss'
 import { useNavigate, useParams } from 'react-router'
 import { useSwipeable } from 'react-swipeable'
 
-import { Guardian } from '@/modules/guardians/types'
 import { H1 } from '@/shared/components/typography'
 import { getPath, GuardiansSeriesOneOrnamentSeparatorUrl } from '@/shared/constants'
 import { fadeIn, fadeOut, flipInRight, flipOutRight, scaleUp } from '@/shared/styles'
+import { GuardianType } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { guardianIndex } from '../../main/components/MobileGuardiansIllustration'
@@ -30,15 +30,15 @@ export const ImageBlock = () => {
 
   const classes = useStyles()
 
-  const [currentGuardian, setCurrentGuardian] = useState<Guardian>(characterId as Guardian)
-  const [preChange, setPreChange] = useState<Guardian>(characterId as Guardian)
+  const [currentGuardian, setCurrentGuardian] = useState<GuardianType>(characterId as GuardianType)
+  const [preChange, setPreChange] = useState<GuardianType>(characterId as GuardianType)
 
   const guardianImages = isMobileMode ? GuardianCharacterMobile : GuardianCharacter
 
   const goToNextGuardian = useCallback(() => {
     const currentIndex = guardianIndex.findIndex((guardians) => guardians.includes(currentGuardian))
     const nextIndex = currentIndex + 1
-    let nextGuardian = guardianIndex[0] as Guardian
+    let nextGuardian = guardianIndex[0] as GuardianType
     const nextIndexGuardian = guardianIndex[nextIndex]
     if (nextIndexGuardian) {
       nextGuardian = nextIndexGuardian
@@ -55,7 +55,7 @@ export const ImageBlock = () => {
   const goToPreviousGuardian = useCallback(() => {
     const currentIndex = guardianIndex.findIndex((guardians) => guardians.includes(currentGuardian))
     const previousIndex = currentIndex - 1
-    let previousGuardian = guardianIndex[guardianIndex.length - 1] as Guardian
+    let previousGuardian = guardianIndex[guardianIndex.length - 1] as GuardianType
     const previousIndexGuardian = guardianIndex[previousIndex]
     if (previousIndexGuardian) {
       previousGuardian = previousIndexGuardian
@@ -87,9 +87,9 @@ export const ImageBlock = () => {
 
   useEffect(() => {
     if (characterId) {
-      if (Object.values(Guardian).includes(characterId as Guardian)) {
-        setCurrentGuardian(characterId as Guardian)
-        setPreChange(characterId as Guardian)
+      if (Object.values(GuardianType).includes(characterId as GuardianType)) {
+        setCurrentGuardian(characterId as GuardianType)
+        setPreChange(characterId as GuardianType)
       } else {
         navigate(getPath('guardians'))
       }
@@ -108,7 +108,7 @@ export const ImageBlock = () => {
     },
   })
 
-  const getImageProps = (guardian: Guardian) => {
+  const getImageProps = (guardian: GuardianType) => {
     return {
       className: classNames({
         [classes.flipInVerticalRight]: preChange === guardian,
@@ -127,7 +127,7 @@ export const ImageBlock = () => {
     } as ImageProps
   }
 
-  const getRaycastProps = (guardian: Guardian) => {
+  const getRaycastProps = (guardian: GuardianType) => {
     return {
       className: classNames({
         [classes.scaleInVerBottom]: currentGuardian === guardian,
@@ -168,10 +168,10 @@ export const ImageBlock = () => {
         position="relative"
       >
         <HStack height="full" maxHeight="full" position="relative" justifyContent="center" alignItems="flex-end">
-          <Image {...getRaycastProps(Guardian.Knight)} />
-          <Image {...getRaycastProps(Guardian.Legend)} />
-          <Image {...getRaycastProps(Guardian.Warrior)} />
-          <Image {...getRaycastProps(Guardian.King)} />
+          <Image {...getRaycastProps(GuardianType.Knight)} />
+          <Image {...getRaycastProps(GuardianType.Legend)} />
+          <Image {...getRaycastProps(GuardianType.Warrior)} />
+          <Image {...getRaycastProps(GuardianType.King)} />
 
           <H1
             position="absolute"
@@ -212,13 +212,13 @@ export const ImageBlock = () => {
             />
           </HStack>
 
-          <Image {...getImageProps(Guardian.King)} />
+          <Image {...getImageProps(GuardianType.King)} />
 
-          <Image {...getImageProps(Guardian.Knight)} />
+          <Image {...getImageProps(GuardianType.Knight)} />
 
-          <Image {...getImageProps(Guardian.Legend)} />
+          <Image {...getImageProps(GuardianType.Legend)} />
 
-          <Image {...getImageProps(Guardian.Warrior)} />
+          <Image {...getImageProps(GuardianType.Warrior)} />
 
           <Image
             src={GuardiansSeriesOneOrnamentSeparatorUrl}

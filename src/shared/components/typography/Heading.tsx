@@ -2,7 +2,7 @@ import { Heading, HeadingProps } from '@chakra-ui/react'
 
 import { getFontColor, getFontWeight, TextColorProps, TextWeightProps } from './common'
 
-interface HeaderProps extends HeadingProps, TextWeightProps, TextColorProps {
+export interface HeaderProps extends HeadingProps, TextWeightProps, TextColorProps {
   to?: string
 }
 

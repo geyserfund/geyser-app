@@ -35,31 +35,30 @@ import {
   SlideOutBackLeft,
   SlideOutBackRight,
 } from '@/shared/styles/animations'
-
-import { Guardian } from '../../../types'
+import { GuardianType } from '@/types'
 
 const image = {
-  [Guardian.Warrior]: WarriorMainPageMobile,
-  [Guardian.Knight]: KnightMainPageMobile,
-  [Guardian.King]: KingMainPageMobile,
-  [Guardian.Legend]: LegendMainPageMobile,
+  [GuardianType.Warrior]: WarriorMainPageMobile,
+  [GuardianType.Knight]: KnightMainPageMobile,
+  [GuardianType.King]: KingMainPageMobile,
+  [GuardianType.Legend]: LegendMainPageMobile,
 }
 
 const imageGrey = {
-  [Guardian.Warrior]: WarriorMainPageGreyMobile,
-  [Guardian.Knight]: KnightMainPageGreyMobile,
-  [Guardian.King]: KingMainPageGreyMobile,
-  [Guardian.Legend]: LegendMainPageGreyMobile,
+  [GuardianType.Warrior]: WarriorMainPageGreyMobile,
+  [GuardianType.Knight]: KnightMainPageGreyMobile,
+  [GuardianType.King]: KingMainPageGreyMobile,
+  [GuardianType.Legend]: LegendMainPageGreyMobile,
 }
 
 const imageRaycast = {
-  [Guardian.Warrior]: WarriorRaycastUrl,
-  [Guardian.Knight]: KnightRaycastUrl,
-  [Guardian.King]: KingRaycastUrl,
-  [Guardian.Legend]: LegendRaycastUrl,
+  [GuardianType.Warrior]: WarriorRaycastUrl,
+  [GuardianType.Knight]: KnightRaycastUrl,
+  [GuardianType.King]: KingRaycastUrl,
+  [GuardianType.Legend]: LegendRaycastUrl,
 }
 
-export const guardianIndex = [Guardian.Warrior, Guardian.Knight, Guardian.King, Guardian.Legend]
+export const guardianIndex = [GuardianType.Warrior, GuardianType.Knight, GuardianType.King, GuardianType.Legend]
 
 const useStyles = createUseStyles({
   ...SlideInFrontLeft,
@@ -90,16 +89,16 @@ export const MobileGuardiansIllustration = () => {
     },
   })
 
-  const [preChange, setPreChange] = useState<Guardian>(Guardian.Warrior)
-  const [secondChange, setSecondChange] = useState<Guardian>(Guardian.Warrior)
+  const [preChange, setPreChange] = useState<GuardianType>(GuardianType.Warrior)
+  const [secondChange, setSecondChange] = useState<GuardianType>(GuardianType.Warrior)
 
-  const [currentGuardian, setCurrentGuardian] = useState<Guardian>(Guardian.Warrior)
-  const [lastGuardian, setLastGuardian] = useState<Guardian | null>(null)
+  const [currentGuardian, setCurrentGuardian] = useState<GuardianType>(GuardianType.Warrior)
+  const [lastGuardian, setLastGuardian] = useState<GuardianType | null>(null)
 
   const goToNextGuardian = () => {
     const currentIndex = guardianIndex.findIndex((guardians) => guardians.includes(currentGuardian))
     const nextIndex = currentIndex + 1
-    let nextGuardian = guardianIndex[0] as Guardian
+    let nextGuardian = guardianIndex[0] as GuardianType
     const nextIndexGuardian = guardianIndex[nextIndex]
     if (nextIndexGuardian) {
       nextGuardian = nextIndexGuardian
@@ -118,7 +117,7 @@ export const MobileGuardiansIllustration = () => {
   const goToPreviousGuardian = () => {
     const currentIndex = guardianIndex.findIndex((guardians) => guardians.includes(currentGuardian))
     const previousIndex = currentIndex - 1
-    let previousGuardian = guardianIndex[guardianIndex.length - 1] as Guardian
+    let previousGuardian = guardianIndex[guardianIndex.length - 1] as GuardianType
     const previousIndexGuardian = guardianIndex[previousIndex]
     if (previousIndexGuardian) {
       previousGuardian = previousIndexGuardian
@@ -138,8 +137,8 @@ export const MobileGuardiansIllustration = () => {
   const previousGuardianIndex = (guardianIndex.findIndex((guardians) => guardians.includes(currentGuardian)) - 1) % 4
   const finalPreviousGuardianIndex = previousGuardianIndex < 0 ? guardianIndex.length - 1 : previousGuardianIndex
 
-  const nextGuardian = guardianIndex[nextGuardianIndex] as Guardian
-  const previousGuardian = guardianIndex[finalPreviousGuardianIndex] as Guardian
+  const nextGuardian = guardianIndex[nextGuardianIndex] as GuardianType
+  const previousGuardian = guardianIndex[finalPreviousGuardianIndex] as GuardianType
 
   const nextGuardianImage = image[nextGuardian]
   const nextGuardianImageGrey = imageGrey[nextGuardian]

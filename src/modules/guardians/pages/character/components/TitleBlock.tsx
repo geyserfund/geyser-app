@@ -5,13 +5,13 @@ import { Trans } from 'react-i18next'
 import { PiDotOutline } from 'react-icons/pi'
 
 import { guardianRewardsAtom } from '@/modules/guardians/state/guardianRewards'
-import { Guardian } from '@/modules/guardians/types'
 import { Body, H1 } from '@/shared/components/typography'
+import { GuardianType } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { CharacterAssets } from '../characterAssets'
 
-export const TitleBlock = ({ currentGuardian }: { currentGuardian: Guardian }) => {
+export const TitleBlock = ({ currentGuardian }: { currentGuardian: GuardianType }) => {
   const isMobileMode = useMobileMode()
 
   const guardianAsset = CharacterAssets[currentGuardian]
