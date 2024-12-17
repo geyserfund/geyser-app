@@ -6,6 +6,8 @@ export const TOP_CREATORS_FRAGMENT = gql`
     contributionsTotalUsd
     projectsCount
     userId
+    heroId
+    guardianType
     userImageUrl
     username
   }

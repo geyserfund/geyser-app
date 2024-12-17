@@ -408,10 +408,10 @@ const ContributionInfo = ({ resource }: { resource: ActivityResource }) => {
     return (
       <HStack width="full" spacing={2} justifyContent="flex-start">
         {user && user.imageUrl && (
-          <ProfileAvatar width={'40px'} height={'40px'} src={user.imageUrl} guardian={user.guardian} />
+          <ProfileAvatar width={'40px'} height={'40px'} src={user.imageUrl} guardian={user.guardianType} />
         )}
         <VStack alignItems="flex-start" justifyContent="center" spacing={0}>
-          <ProfileText size="md" dark guardian={user?.guardian}>
+          <ProfileText size="md" dark guardian={user?.guardianType}>
             {user?.username}
           </ProfileText>
           <Body size="md" medium dark>

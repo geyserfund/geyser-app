@@ -27,6 +27,9 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
         opacity: 0.1,
       },
     },
+    '& .swiper-button-disabled': {
+      opacity: 0,
+    },
 
     '& .swiper-pagination-bullets-dynamic': {
       padding: '8px',
@@ -75,6 +78,8 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   },
 }))
 
+export type CarouselItem = string | React.ReactNode
+
 export const MediaCarousel = ({
   links,
   aspectRatio = ImageCropAspectRatio.Header,
@@ -83,7 +88,7 @@ export const MediaCarousel = ({
   initialSlide,
   swiperProps,
 }: {
-  links: string[]
+  links: CarouselItem[]
   aspectRatio?: ImageCropAspectRatio
   wrapperProps?: Omit<BoxProps, 'aspectRatio'>
   onSlideChange?: (index: number) => void
@@ -104,15 +109,19 @@ export const MediaCarousel = ({
         spaceBetween={10}
         slidesPerView={1}
         onSlideChange={(swiper) => {
-          onSlideChange?.(swiper.activeIndex)
+          onSlideChange?.(swiper.realIndex)
         }}
         initialSlide={initialSlide}
         {...swiperProps}
       >
-        {links.map((link) => {
+        {links.map((link, index) => {
           return (
-            <SwiperSlide key={link}>
-              <RenderImageOrVideo link={link} borderRadius={0} aspectRatio={aspectRatio} {...wrapperProps} />
+            <SwiperSlide key={index}>
+              {typeof link === 'string' ? (
+                <RenderImageOrVideo link={link} borderRadius={0} aspectRatio={aspectRatio} {...wrapperProps} />
+              ) : (
+                link
+              )}
             </SwiperSlide>
           )
         })}

@@ -6,8 +6,6 @@ import { PiArrowLeft, PiCopy, PiShareFat, PiX } from 'react-icons/pi'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 
 import { FilterComponent } from '@/modules/discovery/filters/FilterComponent'
-import { HeroCardModal } from '@/modules/profile/pages/profilePage/views/account/views/HeroCardModal'
-import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
 import { EmailPromptModal } from '@/pages/auth/components/EmailPromptModal'
 import { NotificationPromptModal } from '@/pages/auth/components/NotificationPromptModal'
 import { useEmailPromptModal } from '@/pages/auth/hooks/useEmailPromptModal'
@@ -41,8 +39,6 @@ export const PlatformNavBar = () => {
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
 
   const { onCopy, hasCopied } = useCopyToClipboard(`${window.location.origin}/${PathName.guardians}`)
-
-  const heroCard = useAtomValue(heroCardAtom)
 
   const isGuardiansPage = useIsGuardiansPage()
   const isGuardianCharacterPage = useIsGuardianCharacterPage()
@@ -225,7 +221,7 @@ export const PlatformNavBar = () => {
       {!dontAskNotificationAgain && (
         <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
       )}
-      {heroCard?.isOpen && <HeroCardModal />}
+      {/* {heroCard?.isOpen && <HeroCardModal />} */}
     </HStack>
   )
 }

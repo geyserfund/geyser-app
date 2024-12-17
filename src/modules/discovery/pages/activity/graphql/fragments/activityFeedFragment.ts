@@ -43,7 +43,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
             id
             username
             imageUrl
-            guardian
+            guardianType
           }
         }
       }

@@ -235,9 +235,15 @@ const HeroDisplay = ({
         <RankMedal rank={rank} boxSize={'32px'} size="20px" />
       </HStack>
 
-      <ProfileAvatar borderRadius={'50%'} height="64px" width="64px" src={data.userImageUrl} guardian={data.guardian} />
+      <ProfileAvatar
+        borderRadius={'50%'}
+        height="64px"
+        width="64px"
+        src={data.userImageUrl}
+        guardian={data.guardianType}
+      />
       <VStack w="full" overflow="hidden" flex={1} spacing={0} alignItems="start">
-        <ProfileText guardian={data.guardian} w="full" bold isTruncated>
+        <ProfileText guardian={data.guardianType} w="full" bold isTruncated>
           {data.username}
         </ProfileText>
         {renderDescription()}

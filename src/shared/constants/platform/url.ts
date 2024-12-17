@@ -372,6 +372,8 @@ export const HeroCardContributedRaisedEnabled =
   'https://storage.googleapis.com/geyser-projects-media/hero/contributed-raised%20-enabled.png'
 export const HeroBackCard = 'https://storage.googleapis.com/geyser-projects-media/hero/hero-card-back.png'
 
+export const GenericHeroCardUrl = 'https://storage.googleapis.com/geyser-projects-media/badge/generic-hero-card.png'
+
 // GUARDIANS
 export const GuardiansDesktopBackgroundLightModeUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians/desktop-white-cover.png'

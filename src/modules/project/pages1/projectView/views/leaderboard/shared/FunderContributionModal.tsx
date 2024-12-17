@@ -97,7 +97,7 @@ export const FunderContributionModal = ({ funder, ...props }: FunderContribution
         })}
       >
         <UserAvatar user={funder.user} id={funder.funderId} />
-        <ProfileText guardian={funder.user?.guardian} size="sm" bold dark>
+        <ProfileText guardian={funder.user?.guardianType} size="sm" bold dark>
           {funder.user?.username || t('Anonymous')}
         </ProfileText>
       </HStack>

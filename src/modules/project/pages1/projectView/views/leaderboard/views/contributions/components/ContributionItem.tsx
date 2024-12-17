@@ -39,7 +39,7 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
       <UserAvatar user={contribution.funder.user} id={contribution.funder.id} />
       <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
         <HStack w="full" justifyContent={'space-between'}>
-          <ProfileText guardian={contribution.funder.user?.guardian} size="sm" bold dark>
+          <ProfileText guardian={contribution.funder.user?.guardianType} size="sm" bold dark>
             {contribution.funder.user?.username || t('Anonymous')}
           </ProfileText>
           <TimeAgo date={contribution.paidAt} />

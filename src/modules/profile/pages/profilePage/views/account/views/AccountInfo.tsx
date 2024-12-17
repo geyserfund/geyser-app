@@ -1,6 +1,7 @@
 import {
   Button,
   HStack,
+  Image,
   Popover,
   PopoverArrow,
   PopoverBody,
@@ -14,10 +15,12 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
+import { Link } from 'react-router-dom'
 
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
 import { ProfileText } from '@/shared/components/display/ProfileText'
 import { H1 } from '@/shared/components/typography'
+import { getPath, GuardiansJewelUrl } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import {
   ExternalAccountButtonReturnType,
@@ -27,13 +30,15 @@ import { toInt, useNotification } from '@/utils'
 
 import { ConnectAccounts, ExternalAccountType } from '../../../../../../../pages/auth'
 import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
-import { userProfileAtom, useUserProfileAtom } from '../../../../../state'
+import { userProfileAtom, useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 import { RemoveExternalAccountModal } from '../../../components/RemoveExternalAccountModal'
 import { useAccountUnlink } from '../hooks/useAccountUnlink'
 import { UserBio } from './UserBio'
 
 export const AccountInfo = () => {
   const { userProfile, isLoading } = useUserProfileAtom()
+
+  const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
   const userAccountToDisplay = userProfile.externalAccounts
 
@@ -50,14 +55,28 @@ export const AccountInfo = () => {
           src={`${userProfile.imageUrl}`}
           h="64px"
           w="64px"
-          guardian={userProfile.guardian}
+          guardian={userProfile.guardianType}
           wrapperProps={{ padding: '3px' }}
         />
-        <VStack w="full" alignItems="start" spacing={0}>
+        <VStack w="full" h="full" alignItems="start" justifyContent={'center'} spacing={0}>
           <H1 size="2xl" bold>
             {userProfile.username}
           </H1>
-          <ProfileText guardian={userProfile.guardian} size="lg" />
+          {userProfile.guardianType ? (
+            <ProfileText guardian={userProfile.guardianType} size="lg" />
+          ) : (
+            isViewingOwnProfile && (
+              <Button
+                as={Link}
+                to={getPath('guardians')}
+                variant="outline"
+                size="sm"
+                rightIcon={<Image height="20px" width="20px" src={GuardiansJewelUrl} />}
+              >
+                {t('Become a guardian')}
+              </Button>
+            )
+          )}
         </VStack>
       </HStack>
       <HStack w="full" justifyContent={'start'} flexWrap={'wrap'}>

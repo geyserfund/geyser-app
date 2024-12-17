@@ -47,7 +47,7 @@ export const LeaderboardItem = ({ funder, rank, hideLabel, ...props }: Leaderboa
         <RankMedal rank={rank} />
         <UserAvatar user={funder.user} id={funder.funderId} />
         <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
-          <ProfileText guardian={funder.user?.guardian} size="sm" bold dark>
+          <ProfileText guardian={funder.user?.guardianType} size="sm" bold dark>
             {funder.user?.username || t('Anonymous')}
           </ProfileText>
           <HStack spacing={2}>

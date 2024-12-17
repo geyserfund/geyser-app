@@ -2,18 +2,14 @@ import { Stack, VStack } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
-import { createUseStyles } from 'react-jss'
 import { useNavigate, useParams } from 'react-router'
 
-import { AppTheme } from '@/context'
-import { Modal } from '@/shared/components/layouts'
-import { Body } from '@/shared/components/typography'
 import { dimensions, getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
-import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { fonts } from '@/shared/styles'
 import { toPx, useMobileMode } from '@/utils'
 
+import { MediaCarouselForItemsModal } from '../../../../shared/molecules/MediaCarouselForItems'
 import { Guardian } from '../../types'
 import { CharacterAssetItem, CharacterAssets } from './characterAssets'
 import { GuardiansPrice } from './components/GuardiansPrice'
@@ -23,39 +19,14 @@ import { PerkWithImageList } from './components/PerkWithImageList'
 import { PerkWithList } from './components/PerkWithList'
 import { TitleBlock } from './components/TitleBlock'
 
-const useStyles = createUseStyles((theme: AppTheme) => ({
-  currentClass: {
-    fontFamily: fonts.cormorant,
-    color: theme.colors.neutral1[9],
-    fontSize: '20px',
-    fontWeight: 500,
-  },
-  totalClass: {
-    fontFamily: fonts.cormorant,
-    color: theme.colors.neutral1[9],
-    fontSize: '20px',
-    fontWeight: 500,
-  },
-  ofClass: {
-    fontFamily: fonts.cormorant,
-    color: theme.colors.neutral1[9],
-    fontSize: '20px',
-    fontWeight: 500,
-  },
-}))
-
 export const CharacterPage = () => {
   const navigate = useNavigate()
 
-  const classes = useStyles()
-
-  const itemsModal = useModal()
+  const itemsModal = useModal<{ currentIndex: number }>()
 
   const { characterId } = useParams<{ characterId: string }>()
 
   const isMobileMode = useMobileMode()
-
-  const [currentIndex, setCurrentIndex] = useState<number>(0)
 
   const [currentGuardian, setCurrentGuardian] = useState<Guardian>(characterId as Guardian)
 
@@ -86,12 +57,12 @@ export const CharacterPage = () => {
       description: item.description,
     })) || []
 
+  const totalLinks = [...physicalItemLinks, ...digitalItemLinks]
   const totalItems = [...physicalItemData, ...digitalItemData]
 
   const handleClick = (item: CharacterAssetItem) => {
     const currentIndex = totalItems.findIndex((i) => i.name === item.name)
-    setCurrentIndex(currentIndex)
-    itemsModal.onOpen()
+    itemsModal.onOpen({ currentIndex })
   }
 
   return (
@@ -144,50 +115,7 @@ export const CharacterPage = () => {
         </motion.div>
       </VStack>
       {itemsModal.isOpen && (
-        <Modal {...itemsModal} size="lg" noClose isCentered={false}>
-          <MediaCarousel
-            links={[...physicalItemLinks, ...digitalItemLinks]}
-            onSlideChange={(index) => setCurrentIndex(index)}
-            wrapperProps={{
-              backgroundColor: 'transparent',
-              paddingBottom: '40px',
-              height: { base: '400px', lg: '800px' },
-            }}
-            initialSlide={currentIndex}
-            swiperProps={{
-              pagination: {
-                type: 'fraction',
-                renderFraction(currentClass, totalClass) {
-                  return (
-                    '<span class="' +
-                    classes.currentClass +
-                    '"></span>' +
-                    '<span class="' +
-                    classes.ofClass +
-                    '"></span>' +
-                    '<span class="' +
-                    classes.totalClass +
-                    '"></span>'
-                  )
-                },
-                formatFractionCurrent: (current) => `${current} of  `,
-                formatFractionTotal: (total) => total,
-                currentClass: classes.currentClass,
-                totalClass: classes.totalClass,
-              },
-            }}
-          />
-          <VStack w="full" fontFamily={fonts.cormorant} alignItems="flex-start">
-            <Body size="xl" bold>
-              {totalItems[currentIndex]?.name}
-            </Body>
-            {totalItems[currentIndex]?.description.map((item, index) => (
-              <Body medium key={index}>
-                {item}
-              </Body>
-            ))}
-          </VStack>
-        </Modal>
+        <MediaCarouselForItemsModal imageLinkList={totalLinks} dataList={totalItems} {...itemsModal} />
       )}
     </Stack>
   )

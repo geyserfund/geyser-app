@@ -27,7 +27,7 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
 
   const isGuardiansPage = useIsGuardiansPage()
 
-  const guardianData = guardianValues(user?.guardian)
+  const guardianData = guardianValues(user?.guardianType)
 
   return (
     <HStack position="relative" spacing={0}>
@@ -78,7 +78,7 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
           src={user.imageUrl || ''}
           height={{ base: '38px', lg: '46px' }}
           width={{ base: '38px', lg: '46px' }}
-          guardian={user.guardian}
+          guardian={user.guardianType}
           icon={
             user.id ? (
               <Icon as={PiUser} color="neutral1.11" fontSize={'24px'} />

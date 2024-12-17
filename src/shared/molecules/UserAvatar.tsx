@@ -14,7 +14,7 @@ export const UserAvatar = ({ id, user, ...props }: UserAvatarProps) => {
   if (user) {
     return (
       <ProfileAvatar
-        guardian={user.guardian}
+        guardian={user.guardianType}
         height="40px"
         width="40px"
         src={user.imageUrl || ''}

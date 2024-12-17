@@ -23,7 +23,7 @@ export const ProfileNavUserInfo = ({ user }: { user: UserMeFragment }) => {
           <Body w="full" fontSize="xl" lineHeight="1.2" bold isTruncated>
             {user.username}
           </Body>
-          {user.guardian && <ProfileText size="sm" guardian={user.guardian} />}
+          {user.guardianType && <ProfileText size="sm" guardian={user.guardianType} />}
         </VStack>
       </HStack>
       {loginMethod && (
@@ -33,8 +33,7 @@ export const ProfileNavUserInfo = ({ user }: { user: UserMeFragment }) => {
           width="full"
           colorScheme="neutral1"
           rightIcon={loginMethod ? <Icon height="16px" width="16px" /> : undefined}
-          color="inherit"
-          _hover={{}}
+          color="neutral1.12"
         >
           {t('Logged in with')}
         </Button>
