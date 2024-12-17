@@ -1,6 +1,5 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { DateTime } from 'luxon'
 import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -18,9 +17,7 @@ export const GuardiansMainPage = () => {
   const isMobile = useMobileMode()
   const navigate = useNavigate()
 
-  const endDate = DateTime.fromFormat('2024-12-18', 'yyyy-MM-dd').toMillis()
-
-  const { days, hours, seconds } = useCountdown(endDate)
+  const { days, hours, seconds } = useCountdown(1734548400000)
 
   const textSize = { base: '14px', sm: '16px', md: '18px', lg: '20px', xl: '24px', '3xl': '28px' }
 
