@@ -13,7 +13,7 @@ export const PartnerList = () => {
         <HStack w="full" alignItems="stretch" justifyContent="flex-start" flexWrap="wrap">
           <VStack spacing={8} w="full" alignItems="flex-start">
             <HStack flexWrap={'wrap'} spacing={8} justifyContent={'start'}>
-              {PartnerUrls.slice(0, 5).map((url, index) => (
+              {PartnerUrls.slice(0, 3).map((url, index) => (
                 <Image
                   src={url}
                   alt="Partner"
@@ -27,8 +27,16 @@ export const PartnerList = () => {
             </HStack>
 
             <HStack flexWrap={'wrap'} spacing={8} justifyContent={'start'}>
-              {PartnerUrls.slice(5, 9).map((url, index) => (
-                <Image src={url} alt="Partner" width={'auto'} height={'32px'} objectFit={'cover'} key={url} />
+              {PartnerUrls.slice(3, 7).map((url, index) => (
+                <Image
+                  src={url}
+                  alt="Partner"
+                  width={'auto'}
+                  height={'32px'}
+                  maxWidth={'150px'}
+                  objectFit={'contain'}
+                  key={url}
+                />
               ))}
             </HStack>
           </VStack>

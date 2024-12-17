@@ -511,13 +511,13 @@ export const WarriorMainPageGreyMobile =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/mobile/Warrior-Gray-Mobile.png'
 
 export const WarriorRaycastUrl =
-  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/Warrior_Raycast.png'
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/Warrior-Raycast.png'
 export const KnightRaycastUrl =
-  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/Knight_Raycast.png'
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/Knight-Raycast.png'
 export const LegendRaycastUrl =
-  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/Legend_Raycast.png'
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/Legend-Raycast.png'
 export const KingRaycastUrl =
-  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/King_Raycast.png'
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/King-Raycast.png'
 
 // DIGITAL ITEMS
 

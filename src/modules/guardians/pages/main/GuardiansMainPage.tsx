@@ -12,6 +12,7 @@ import { GuardianType } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { PartnerUrls } from '../../data'
+import { Copyright } from './components/Copyright'
 import { DesktopGuardiansIllustration } from './components/DesktopGuardiansIllustration'
 import { GuardianUsers } from './components/GuardianUsers'
 import { MobileGuardiansIllustration } from './components/MobileGuardiansIllustration'
@@ -74,7 +75,6 @@ export const GuardiansMainPage = () => {
             <VideoPlayer width="100%" height="100%" url={'https://www.youtube.com/watch?v=b40BxyZGW2I&t=828s'} />
           </Box>
         </VStack>
-
         <VStack w="full" spacing={{ base: '16px', lg: '32px' }}>
           <GuardianHeader>{t('Geyser Manifesto')}</GuardianHeader>
 
@@ -108,32 +108,43 @@ export const GuardiansMainPage = () => {
             <GuardianBody>{t('What will you do to help bring about Bitcoin adoption?')}</GuardianBody>
           </VStack>
         </VStack>
-
         <GuardianUsers guardian={GuardianType.Legend} size="lg" />
         <GuardianUsers guardian={GuardianType.King} size="md" />
         <GuardianUsers guardian={GuardianType.Knight} size="sm" />
         <GuardianUsers guardian={GuardianType.Warrior} size="sm" />
-
         <VStack w="full" spacing={{ base: '16px', lg: '32px' }}>
           <GuardianHeader>{t('Partners')}</GuardianHeader>
           <VStack spacing={8}>
             <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
               {PartnerUrls.slice(0, 3).map((url, index) => (
-                <Image src={url} alt="Partner" width={'auto'} height={'72px'} objectFit={'cover'} key={url} />
+                <Image
+                  src={url}
+                  alt="Partner"
+                  maxWidth="300px"
+                  width={'auto'}
+                  height={'72px'}
+                  objectFit={'contain'}
+                  key={url}
+                />
               ))}
             </HStack>
+
             <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
-              {PartnerUrls.slice(3, 5).map((url, index) => (
-                <Image src={url} alt="Partner" width={'auto'} height={'64px'} objectFit={'cover'} key={url} />
-              ))}
-            </HStack>
-            <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
-              {PartnerUrls.slice(5, 9).map((url, index) => (
-                <Image src={url} alt="Partner" width={'auto'} height={'32px'} objectFit={'cover'} key={url} />
+              {PartnerUrls.slice(3, 7).map((url, index) => (
+                <Image
+                  src={url}
+                  alt="Partner"
+                  maxWidth="150px"
+                  width={'auto'}
+                  height={'32px'}
+                  objectFit={'contain'}
+                  key={url}
+                />
               ))}
             </HStack>
           </VStack>
         </VStack>
+        <Copyright />
       </VStack>
     </VStack>
   )

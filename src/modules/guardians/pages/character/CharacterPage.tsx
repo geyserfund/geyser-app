@@ -11,6 +11,7 @@ import { GuardianType } from '@/types'
 import { toPx, useMobileMode } from '@/utils'
 
 import { MediaCarouselForItemsModal } from '../../../../shared/molecules/MediaCarouselForItems'
+import { Copyright } from '../main/components/Copyright'
 import { GuardianUsers } from '../main/components/GuardianUsers'
 import { CharacterAssetItem, CharacterAssets } from './characterAssets'
 import { GuardiansPrice } from './components/GuardiansPrice'
@@ -109,15 +110,17 @@ export const CharacterPage = () => {
             onClick={handleClick}
           />
           <PerkWithImageList title={t('Digital Items')} items={guardianAsset.digitalItems} onClick={handleClick} />
+          <PerkWithList title={t('Grants')} items={guardianAsset.grants} />
           <PerkWithList title={t('Discounts')} items={guardianAsset.discounts} />
           <PerkWithList title={t('Experiences')} items={guardianAsset.experiences} />
-          <PerkWithList title={t('Grants')} items={guardianAsset.grants} />
+
           <GuardianUsers
             guardian={currentGuardian}
             size="sm"
             titleProps={{ fontSize: '32px', color: 'utils.text', fontWeight: 700 }}
           />
           <PartnerList />
+          <Copyright />
         </motion.div>
       </VStack>
       {itemsModal.isOpen && (

@@ -1,8 +1,6 @@
 import {
   GuardianPartnerAlbyUrl,
-  GuardianPartnerBitaxeUrl,
   GuardianPartnerBitcoinTradingCardsUrl,
-  GuardianPartnerBTCPragueUrl,
   GuardianPartnerHodlersUrl,
   GuardianPartnerNoGoodUrl,
   GuardianPartnerOrangePillAppUrl,
@@ -14,10 +12,8 @@ export const PartnerUrls = [
   GuardianPartnerNoGoodUrl,
   GuardianPartnerBitcoinTradingCardsUrl,
   GuardianPartnerHodlersUrl,
-  GuardianPartnerBitaxeUrl,
   GuardianPartnerSoloSatoshiUrl,
   GuardianPartnerAlbyUrl,
   GuardianPartnerOrangePillAppUrl,
-  GuardianPartnerBTCPragueUrl,
   GuardianPartnerPlanBForumUrl,
 ]
