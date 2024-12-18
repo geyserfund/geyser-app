@@ -1,4 +1,5 @@
 import {
+  Box,
   FormControl,
   FormErrorMessage,
   FormHelperText,
@@ -9,7 +10,7 @@ import {
 } from '@chakra-ui/react'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { PiCheckCircleFill, PiXCircleFill } from 'react-icons/pi'
 
 import Loader from '@/components/ui/Loader'
@@ -41,7 +42,7 @@ const EMAIL_VALIDATION_STATE = {
 
 export const FundingDetailsUserEmailAndUpdates = () => {
   const { t } = useTranslation()
-  const { user } = useAuthContext()
+  const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
   const followedProjects = useFollowedProjectsValue()
 
@@ -184,6 +185,23 @@ export const FundingDetailsUserEmailAndUpdates = () => {
           </InputGroup>
           {fundingFormError.email && <FormErrorMessage>{fundingFormError.email}</FormErrorMessage>}
           {fundingFormWarning.email && <FormHelperText color="orange.9">{fundingFormWarning.email}</FormHelperText>}
+          {!fundingFormWarning.email && !fundingFormError.email && !isLoggedIn && (
+            <FormHelperText color="neutral1.11">
+              <Trans i18nKey="You're funding anonymously. <1>Sign in</1> to connect your contribution to your profile.">
+                {"You're funding anonymously. "}
+                <Box
+                  as="span"
+                  onClick={() => loginOnOpen()}
+                  color="primary.600"
+                  fontWeight="bold"
+                  _hover={{ cursor: 'pointer' }}
+                >
+                  Sign in
+                </Box>
+                {' to connect your profile to contribution'}
+              </Trans>
+            </FormHelperText>
+          )}
         </FormControl>
       </FieldContainer>
 

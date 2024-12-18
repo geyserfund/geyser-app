@@ -1,4 +1,4 @@
-import { Divider,  Icon, Stack, VStack } from '@chakra-ui/react'
+import { Divider, Icon, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { Trans } from 'react-i18next'

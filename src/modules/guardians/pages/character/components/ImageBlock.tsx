@@ -30,8 +30,8 @@ export const ImageBlock = ({ disableArrowKeys }: { disableArrowKeys?: boolean })
 
   const classes = useStyles()
 
-  const [currentGuardian, setCurrentGuardian] = useState<GuardianType>(characterId as GuardianType)
-  const [preChange, setPreChange] = useState<GuardianType>(characterId as GuardianType)
+  const [currentGuardian, setCurrentGuardian] = useState<GuardianType>(characterId?.toUpperCase() as GuardianType)
+  const [preChange, setPreChange] = useState<GuardianType>(characterId?.toUpperCase() as GuardianType)
 
   const guardianImages = isMobileMode ? GuardianCharacterMobile : GuardianCharacter
 
@@ -89,9 +89,9 @@ export const ImageBlock = ({ disableArrowKeys }: { disableArrowKeys?: boolean })
 
   useEffect(() => {
     if (characterId) {
-      if (Object.values(GuardianType).includes(characterId as GuardianType)) {
-        setCurrentGuardian(characterId as GuardianType)
-        setPreChange(characterId as GuardianType)
+      if (Object.values(GuardianType).includes(characterId.toUpperCase() as GuardianType)) {
+        setCurrentGuardian(characterId.toUpperCase() as GuardianType)
+        setPreChange(characterId.toUpperCase() as GuardianType)
       } else {
         navigate(getPath('guardians'))
       }

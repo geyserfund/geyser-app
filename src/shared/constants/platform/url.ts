@@ -593,3 +593,15 @@ export const GuardianPartnerBTCPragueUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-BTC-Prague.png'
 export const GuardianPartnerPlanBForumUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Plan-B-Forum.png'
+
+// SEO
+
+export const GuardiansSeoImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/Guardians.png'
+export const KingSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/King.png'
+export const KnightSeoImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/Knight.png'
+export const LegendSeoImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/Legend.png'
+export const WarriorSeoImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/Warrior.png'
