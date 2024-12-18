@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { Trans } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { ImageWithReload } from '@/components/ui'
+import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
+import { ProfileText } from '@/shared/components/display/ProfileText'
 import { RankMedal } from '@/shared/components/display/RankMedal'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
@@ -234,11 +235,17 @@ const HeroDisplay = ({
         <RankMedal rank={rank} boxSize={'32px'} size="20px" />
       </HStack>
 
-      <ImageWithReload borderRadius={'50%'} height="64px" width="64px" src={data.userImageUrl} />
+      <ProfileAvatar
+        borderRadius={'50%'}
+        height="64px"
+        width="64px"
+        src={data.userImageUrl}
+        guardian={data.guardianType}
+      />
       <VStack w="full" overflow="hidden" flex={1} spacing={0} alignItems="start">
-        <Body w="full" bold isTruncated>
+        <ProfileText guardian={data.guardianType} w="full" bold isTruncated>
           {data.username}
-        </Body>
+        </ProfileText>
         {renderDescription()}
       </VStack>
     </HStack>

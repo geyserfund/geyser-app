@@ -6,8 +6,6 @@ import { PiArrowLeft, PiCopy, PiShareFat, PiX } from 'react-icons/pi'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 
 import { FilterComponent } from '@/modules/discovery/filters/FilterComponent'
-import { HeroCardModal } from '@/modules/profile/pages/profilePage/views/account/views/HeroCardModal'
-import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
 import { EmailPromptModal } from '@/pages/auth/components/EmailPromptModal'
 import { NotificationPromptModal } from '@/pages/auth/components/NotificationPromptModal'
 import { useEmailPromptModal } from '@/pages/auth/hooks/useEmailPromptModal'
@@ -30,22 +28,18 @@ import {
   isDiscoveryRoutesAtom,
   shouldShowGeyserLogoAtom,
   shouldShowProjectLogoAtom,
-  useIsGuardianCharacterPage,
-  useIsGuardiansPage,
   useIsManifestoPage,
 } from './platformNavBarAtom'
 import { ProfileNav } from './profileNav/ProfileNav'
 
 export const PlatformNavBar = () => {
-  const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
+  const { isLoggedIn, logout, queryCurrentUser, user } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
 
-  const { onCopy, hasCopied } = useCopyToClipboard(`${window.location.origin}/${PathName.guardians}`)
+  const { onCopy, hasCopied } = useCopyToClipboard(
+    `${window.location.origin}/${PathName.guardians}${user.heroId ? `?hero=${user.heroId}` : ''}`,
+  )
 
-  const heroCard = useAtomValue(heroCardAtom)
-
-  const isGuardiansPage = useIsGuardiansPage()
-  const isGuardianCharacterPage = useIsGuardianCharacterPage()
   const isManifestoPage = useIsManifestoPage()
 
   const isMobileMode = useMobileMode()
@@ -66,6 +60,7 @@ export const PlatformNavBar = () => {
       refresh?: boolean
     }
   } = useLocation()
+  const isGuardiansPage = location.pathname.includes('/guardians')
 
   const { state } = location
 
@@ -118,6 +113,7 @@ export const PlatformNavBar = () => {
         size={{ base: 'md', lg: 'lg' }}
         rightIcon={hasCopied ? <PiCopy /> : <PiShareFat />}
         onClick={() => onCopy()}
+        backgroundColor={hasCopied ? undefined : 'utils.pbg'}
       >
         {hasCopied ? t('Copied') : t('Share')}
       </Button>
@@ -146,13 +142,16 @@ export const PlatformNavBar = () => {
       <IconButton
         variant="outline"
         colorScheme="neutral1"
-        size={{ base: 'sm', lg: 'md' }}
+        size={{ base: 'md', lg: 'lg' }}
         width={{ base: '32px', lg: '40px' }}
         minWidth={{ base: '32px', lg: '40px' }}
         height={{ base: '32px', lg: '40px' }}
+        paddingInlineStart={'4px !important'}
+        paddingInlineEnd={'4px !important'}
         borderRadius="50% !important"
+        backgroundColor="utils.pbg"
         aria-label="go-back"
-        icon={<PiArrowLeft fontSize={'24px'} />}
+        icon={<PiArrowLeft fontSize={'16px'} />}
         onClick={() => navigate(-1)}
       />
     )
@@ -166,7 +165,7 @@ export const PlatformNavBar = () => {
       {...(isPlatformRoutes && discoveryPageCommonLayoutStyles)}
       justifyContent={'center'}
       zIndex={9}
-      bgColor={isGuardiansPage ? 'guardians.background' : 'utils.pbg'}
+      bgColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
     >
       <VStack
         paddingY={{ base: 5, lg: 8 }}
@@ -177,13 +176,13 @@ export const PlatformNavBar = () => {
             : { base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 48 }
         }
         width="100%"
-        backgroundColor={isGuardiansPage ? 'guardians.background' : 'utils.pbg'}
+        backgroundColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
         justifySelf={'center'}
         spacing={4}
       >
         <HStack w="100%" height={{ base: '40px', lg: '48px' }} justifyContent={'space-between'}>
-          <HStack height="full" w="full">
-            {isGuardianCharacterPage && <BackButton />}
+          <HStack height="full" w="full" flex={1}>
+            {isGuardiansPage && <BackButton />}
             {renderLeftSide()}
           </HStack>
 
@@ -191,8 +190,16 @@ export const PlatformNavBar = () => {
             <CloseGoBackButton />
           ) : (
             <HStack position="relative">
-              {!isLoggedIn && <CreateProjectButton size={{ base: 'md', lg: 'lg' }} iconOnly={isMobileMode} />}
-              {!isLoggedIn ? <LoginButton /> : isGuardiansPage ? <ShareGuardiansButton /> : <ProjectSelectMenu />}
+              {isGuardiansPage ? (
+                <ShareGuardiansButton />
+              ) : !isLoggedIn ? (
+                <>
+                  <CreateProjectButton size={{ base: 'md', lg: 'lg' }} iconOnly={isMobileMode} />
+                  <LoginButton />
+                </>
+              ) : (
+                <ProjectSelectMenu />
+              )}
               <ProfileNav />
             </HStack>
           )}
@@ -214,7 +221,7 @@ export const PlatformNavBar = () => {
       {!dontAskNotificationAgain && (
         <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
       )}
-      {heroCard?.isOpen && <HeroCardModal />}
+      {/* {heroCard?.isOpen && <HeroCardModal />} */}
     </HStack>
   )
 }

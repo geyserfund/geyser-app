@@ -4,6 +4,7 @@ import {
   fundingFormErrorAtom,
   fundingFormHasRewardsAtom,
   fundingFormStateAtom,
+  fundingFormWarningAtom,
   fundingOnchainAmountWarningAtom,
   fundingProjectAtom,
   isFundingInputAmountValidAtom,
@@ -13,6 +14,7 @@ import {
   setFundFormStateAtom,
   setFundFormTargetAtom,
   setResourceAtom,
+  setWarningStateAtom,
   updateFundingFormRewardAtom,
   updateFundingFormSubscriptionAtom,
 } from '../state/fundingFormAtom'
@@ -32,7 +34,11 @@ export const useFundingFormAtom = () => {
 
   const fundingFormError = useAtomValue(fundingFormErrorAtom)
 
+  const fundingFormWarning = useAtomValue(fundingFormWarningAtom)
+
   const setErrorstate = useSetAtom(setErrorStateAtom)
+
+  const setWarningstate = useSetAtom(setWarningStateAtom)
 
   const setTarget = useSetAtom(setFundFormTargetAtom)
 
@@ -56,7 +62,9 @@ export const useFundingFormAtom = () => {
     isFundingInputAmountValid,
     isFundingUserInfoValid,
     fundingFormError,
+    fundingFormWarning,
     setErrorstate,
+    setWarningstate,
     setTarget,
     setState,
     setResource,

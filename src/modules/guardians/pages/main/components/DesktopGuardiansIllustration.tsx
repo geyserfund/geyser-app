@@ -1,184 +1,217 @@
-import {
-  Box,
-  BoxProps,
-  HStack,
-  Image,
-  StackProps,
-  useBreakpointValue,
-  useColorMode,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, BoxProps, HStack, Image, ImageProps, VStack } from '@chakra-ui/react'
+import classNames from 'classnames'
 import { t } from 'i18next'
-import { useEffect, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
+import { createUseStyles } from 'react-jss'
 import { useNavigate } from 'react-router'
 
-import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
 import { Body } from '@/shared/components/typography'
 import { BodyProps } from '@/shared/components/typography/Body'
-import { dimensions, getPath } from '@/shared/constants'
+import { getPath } from '@/shared/constants'
 import {
-  GuardiansDesktopBackgroundDarkModeUrl,
-  GuardiansDesktopBackgroundLightModeUrl,
+  GuardiansSeriesOneOrnamentSeparatorUrl,
+  GuardiansSeriesOrnamentTransaparentUrl,
 } from '@/shared/constants/platform/url'
-import { fonts } from '@/shared/styles'
-import { toPx, useMobileMode } from '@/utils'
+import { fadeIn, fadeOut, fonts, scaleDown, scaleUp } from '@/shared/styles'
+import { GuardianType } from '@/types'
 
-import { GuardiansGradients } from '../../../style'
-import { Guardian } from '../../../types'
+import { GuardianCharacter } from '../../character/characterAssets'
+
+const useStyles = createUseStyles({
+  ...fadeIn,
+  ...fadeOut,
+  ...scaleUp,
+  ...scaleDown,
+  hidden: {
+    opacity: 0,
+  },
+})
+
 export const DesktopGuardiansIllustration = () => {
   const navigate = useNavigate()
 
-  const value = useBreakpointValue({ lg: '50%', xl: '40%' })
+  const classes = useStyles()
 
-  const image = useColorModeValue(GuardiansDesktopBackgroundLightModeUrl, GuardiansDesktopBackgroundDarkModeUrl)
+  const [currentGuardian, setCurrentGuardian] = useState<GuardianType | null>(null)
 
-  const gradient = useColorModeValue(GuardiansGradients.light, GuardiansGradients.dark)
-
-  const isMobileMode = useMobileMode()
-  const { colorMode } = useColorMode()
-
-  const isLightMode = colorMode === 'light'
-
-  const imageRef = useRef<HTMLImageElement>(null)
-
-  const [uiPosition, setUiPosition] = useState('')
-
-  const [gradientHeight, setGradientHeight] = useState('50vh')
-
-  const updateUIPosition = () => {
-    if (imageRef.current) {
-      const imageRect = imageRef.current.getBoundingClientRect()
-      const imageHeight = imageRect.height
-
-      const xPosition = imageRect.top + imageHeight * 0.5
-
-      const uiPositionCalculated = isMobileMode
-        ? xPosition - dimensions.topNavBar.mobile.height
-        : xPosition - dimensions.topNavBar.desktop.height
-
-      setGradientHeight(toPx(imageHeight * 0.5))
-      setUiPosition(toPx(uiPositionCalculated))
-    } else {
-      setTimeout(() => {
-        updateUIPosition()
-      }, 100)
-    }
+  const onMouseOver = (guardian: GuardianType) => {
+    setCurrentGuardian(guardian)
   }
 
-  useEffect(() => {
-    setTimeout(() => {
-      updateUIPosition()
-    }, 100)
-    window.addEventListener('resize', updateUIPosition)
-    return () => {
-      window.removeEventListener('resize', updateUIPosition)
-    }
-  }, [])
+  const onMouseLeave = () => {
+    setCurrentGuardian(null)
+  }
 
-  const textSize = { lg: '40px', xl: '60px' }
+  const guardiansList = useMemo(
+    () => [
+      {
+        guardian: GuardianType.Warrior,
+        text: t('Warrior'),
+        width: '29%',
+        marginLeft: '0',
+        zIndex: currentGuardian ? 11 : 1,
+      },
+      {
+        guardian: GuardianType.Knight,
+        text: t('Knight'),
+        width: '32%',
+        marginLeft: '-10%',
+        zIndex: currentGuardian ? 12 : 2,
+      },
+      {
+        guardian: GuardianType.King,
+        text: t('King'),
+        width: '34%',
+        marginLeft: '-10%',
+        zIndex: currentGuardian ? 11 : 1,
+      },
+      {
+        guardian: GuardianType.Legend,
+        text: t('Legend'),
+        width: '35%',
+        marginLeft: '-10%',
+        zIndex: currentGuardian ? 12 : 2,
+      },
+    ],
+    [currentGuardian],
+  )
 
-  const getCommonBoxProps = (guardian: Guardian) =>
+  const getCommonBoxProps = (guardian: GuardianType) =>
     ({
-      w: 'full',
       h: 'full',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      background: gradient[guardian].dim,
-      _hover: { background: gradient[guardian].bright, cursor: 'pointer', filter: 'blur(5px)' },
+      width: 'auto',
+      maxHeight: '646px',
+      position: 'relative',
+      display: 'flex',
+      justifyContent: 'center',
+      className: `guardian-wrapper-${guardian}`,
+      _hover: {
+        cursor: 'pointer',
+      },
+      onMouseOver: () => onMouseOver(guardian),
+      onMouseLeave: () => onMouseLeave(),
     } as BoxProps)
 
-  const commonVStackProps: StackProps = {
-    position: 'relative',
-    justifyContent: 'center',
-    height: gradientHeight,
-    background: 'guardians.background',
-    className: 'guardian-wrapper',
+  const getCommonImageProps = (guardian: GuardianType): ImageProps => ({
+    w: 'full',
+    height: 'full',
+    zIndex: 1,
+    className: currentGuardian ? (guardian === currentGuardian ? '' : classes.fadeOut) : '',
+  })
+
+  const getCommonRaycastProps = (guardian: GuardianType) =>
+    ({
+      position: 'absolute',
+      width: '65%',
+      height: '110%',
+      bottom: 0,
+      zIndex: 0,
+      className: classNames({
+        [classes.scaleInVerBottom]: guardian === currentGuardian,
+        [classes.hidden]: guardian !== currentGuardian || !currentGuardian,
+      }),
+    } as ImageProps)
+
+  const getCommonGreyProps = (guardian: GuardianType) => {
+    return {
+      opacity: 0,
+      position: 'absolute',
+      height: 'full',
+      width: 'full',
+      objectFit: 'cover',
+      bottom: 0,
+      zIndex: 4,
+      className: currentGuardian ? (guardian === currentGuardian ? '' : classes.fadeIn) : '',
+    } as ImageProps
   }
 
-  const commonBodyProps: BodyProps = {
-    size: textSize,
-    opacity: 0,
-    position: 'absolute',
-    bottom: uiPosition ? '30%' : { lg: '20%', xl: '10%', '3xl': '20%' },
-    pointerEvents: 'none',
-    sx: {
-      '.guardian-wrapper:hover &': {
-        opacity: 0.5,
-        transition: 'opacity 0.3s ease-in-out',
+  const getGuardianTextProps = (guardian: GuardianType) =>
+    ({
+      position: 'absolute',
+      top: '-10%',
+      pointerEvents: 'none',
+      color: `guardians.${guardian}.text`,
+      width: 'full',
+      textAlign: 'center',
+      fontFamily: fonts.cormorant,
+      fontSize: { lg: '40px', xl: '48px', '3xl': '64px' },
+      fontWeight: 'bold',
+      textTransform: 'uppercase',
+      opacity: 0,
+      sx: {
+        [`.guardian-wrapper-${guardian}:hover &`]: {
+          opacity: 1,
+          transition: 'opacity 0.3s ease-in-out',
+        },
       },
-    },
-  }
+    } as BodyProps)
 
-  const commonFlowingGifProps: BoxProps = {
-    opacity: 0,
-    pointerEvents: 'none',
-    sx: {
-      '.guardian-wrapper:hover &': {
-        opacity: 0.5,
-        transition: 'opacity 0.3s ease-in-out',
-      },
-    },
+  const handleClick = (guardian: GuardianType) => {
+    navigate(getPath('guardiansCharacter', guardian))
   }
 
   return (
     <>
-      <Image
-        ref={imageRef}
-        zIndex={1}
-        position="absolute"
-        bottom={-10}
-        left={0}
-        src={image}
-        alt="Guardians"
+      <Box
+        height="100%"
+        width="100%"
+        position="fixed"
+        top="0"
+        left="0"
+        background="overlay.white.3"
+        zIndex={10}
         pointerEvents="none"
+        backdropFilter="blur(4px)"
+        opacity={currentGuardian ? 1 : 0}
+        transition="opacity 0.3s ease-in-out"
       />
-      <Body fontSize={'xl'} textAlign={'center'} position="absolute" bottom={3} w="full" zIndex={1}>
-        {t('< Choose your character >')}
-      </Body>
-      <HStack w="full" position="absolute" top={uiPosition || value} left={0} spacing={0} fontFamily={fonts.mazius}>
-        <VStack
-          {...commonVStackProps}
-          flex={32}
-          onClick={() => navigate(getPath('guardiansCharacter', Guardian.Warrior))}
-        >
-          <Box {...getCommonBoxProps(Guardian.Warrior)} />
-          {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
-          <Body {...commonBodyProps} color="guardians.warrior.text">
-            {t('Warrior')}
-          </Body>
-        </VStack>
-        <VStack
-          {...commonVStackProps}
-          flex={36}
-          onClick={() => navigate(getPath('guardiansCharacter', Guardian.Knight))}
-        >
-          <Box {...getCommonBoxProps(Guardian.Knight)} />
-          {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
-          <Body {...commonBodyProps} color="guardians.knight.text">
-            {t('Knight')}
-          </Body>
-        </VStack>
-        <VStack {...commonVStackProps} flex={31} onClick={() => navigate(getPath('guardiansCharacter', Guardian.King))}>
-          <Box {...getCommonBoxProps(Guardian.King)} />
-          {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
-          <Body {...commonBodyProps} color="guardians.king.text">
-            {t('King')}
-          </Body>
-        </VStack>
-        <VStack
-          {...commonVStackProps}
-          flex={33}
-          onClick={() => navigate(getPath('guardiansCharacter', Guardian.Legend))}
-        >
-          <Box {...getCommonBoxProps(Guardian.Legend)} />
-          {isLightMode && <FlowingGifBackground {...commonFlowingGifProps} />}
-          <Body {...commonBodyProps} color="guardians.legend.text">
-            {t('Legend')}
-          </Body>
-        </VStack>
-      </HStack>
+      <VStack w="full" spacing={0}>
+        <HStack w="full" h="full" overflow={'visible'} alignItems={'flex-end'} spacing={0} paddingTop="5%">
+          {guardiansList.map((guardian) => {
+            return (
+              <Box
+                key={guardian.guardian}
+                {...getCommonBoxProps(guardian.guardian)}
+                w={guardian.width}
+                h="full"
+                zIndex={guardian.zIndex}
+                marginLeft={guardian.marginLeft}
+                onClick={() => handleClick(guardian.guardian)}
+              >
+                <Image
+                  {...getCommonRaycastProps(guardian.guardian)}
+                  src={GuardianCharacter[guardian.guardian].raycast}
+                />
+                <Body {...getGuardianTextProps(guardian.guardian)}>{guardian.text}</Body>
+                <Image {...getCommonGreyProps(guardian.guardian)} src={GuardianCharacter[guardian.guardian].mainGrey} />
+                <Image {...getCommonImageProps(guardian.guardian)} src={GuardianCharacter[guardian.guardian].main} />
+              </Box>
+            )
+          })}
+        </HStack>
+        <Box position="relative" zIndex={13} marginTop="-40px">
+          <Box
+            height="100%"
+            width="100%"
+            position="absolute"
+            left="0"
+            top="0"
+            background="overlay.white.3"
+            zIndex={1}
+            pointerEvents="none"
+            backdropFilter="blur(4px)"
+            opacity={currentGuardian ? 1 : 0}
+            transition="opacity 0.3s ease-in-out"
+            sx={{
+              maskImage: `url(${GuardiansSeriesOrnamentTransaparentUrl})`,
+              maskSize: '100% 100%',
+              WebkitMaskImage: `url(${GuardiansSeriesOrnamentTransaparentUrl})`,
+              WebkitMaskSize: '100% 100%',
+            }}
+          />
+          <Image src={GuardiansSeriesOneOrnamentSeparatorUrl} position="relative" width="100%" objectFit="cover" />
+        </Box>
+      </VStack>
     </>
   )
 }

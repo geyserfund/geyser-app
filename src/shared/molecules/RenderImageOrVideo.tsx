@@ -98,6 +98,7 @@ export const RenderImageOrVideo = forwardRef(
             height="100%"
             objectFit={objectFit}
             src={isImage ? link : youtubeThumbnail || vimeoThumbnail || undefined}
+            userSelect={'none'}
           />
         ) : (
           <VideoPlayer url={link} />

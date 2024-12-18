@@ -11,14 +11,17 @@ interface BadgeItemProps {
   isClaimed?: boolean
   isEdit?: boolean
   claimABadge: (_: ClaimABadgeProps) => void
+  handleClick: (badge: UserBadge) => void
 }
 
-export const BadgeItem = ({ userBadge, isClaimed, isEdit, claimABadge }: BadgeItemProps) => {
+export const BadgeItem = ({ userBadge, isClaimed, isEdit, claimABadge, handleClick }: BadgeItemProps) => {
   const { t } = useTranslation()
   const { badge } = userBadge
 
   const [claiming, setClaiming] = useState(false)
-  const handleClick = () => {
+  const onClaim = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
     claimABadge({
       userBadgeId: userBadge.id,
       badgeId: badge.uniqueName,
@@ -28,10 +31,16 @@ export const BadgeItem = ({ userBadge, isClaimed, isEdit, claimABadge }: BadgeIt
   }
 
   return (
-    <VStack key={userBadge.id} overflow="hidden" spacing="0px" w="full">
+    <VStack
+      key={userBadge.id}
+      overflow="hidden"
+      w="full"
+      onClick={() => handleClick(userBadge)}
+      _hover={{ cursor: 'pointer' }}
+    >
       <Image width="auto" maxWidth="110px" src={badge.image} />
       {!isClaimed && isEdit && (
-        <ButtonComponent size="sm" primary onClick={handleClick} isLoading={claiming}>
+        <ButtonComponent size="sm" primary onClick={onClaim} isLoading={claiming}>
           {t('Claim')}
         </ButtonComponent>
       )}

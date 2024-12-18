@@ -22,7 +22,10 @@ import { centsToDollars, commaFormatted, isProjectAnException, toInt, validateEm
 
 import { projectAffiliateAtom } from '../../pages1/projectView/state/affiliateAtom'
 import { projectHeroAtom } from '../../pages1/projectView/state/heroAtom'
-import { ProjectState } from '../../state/projectAtom'
+import { projectAtom, ProjectState } from '../../state/projectAtom'
+import { rewardsAtom } from '../../state/rewardsAtom'
+import { subscriptionsAtom } from '../../state/subscriptionAtom'
+import { walletAtom } from '../../state/walletAtom'
 import { getRefIdFromProjectAffiliates } from '../hooks/useProjectAffiliateWithProjectName'
 import { getHeroIdFromProjectHeroes } from '../hooks/useProjectHeroWithProjectName'
 import { fundingTxAtom, selectedGoalIdAtom } from './fundingTxAtom'
@@ -101,13 +104,32 @@ export const fundingFormErrorAtom = atom<{ [key in keyof FundFormType]: string }
   {} as { [key in keyof FundFormType]: string },
 )
 
+/** Funding Form Warning */
+export const fundingFormWarningAtom = atom<{ [key in keyof FundFormType]: string }>(
+  {} as { [key in keyof FundFormType]: string },
+)
+
 /** Set the error state for the funding form */
 export const setErrorStateAtom = atom(null, (get, set, { key, value }: { key: keyof FundFormType; value: string }) => {
   set(fundingFormErrorAtom, (current) => ({ ...current, [key]: value }))
 })
 
+/** Set the warning state for the funding form */
+export const setWarningStateAtom = atom(
+  null,
+  (get, set, { key, value }: { key: keyof FundFormType; value: string }) => {
+    set(fundingFormWarningAtom, (current) => ({ ...current, [key]: value }))
+  },
+)
+
 /** Project that is to be funded via the current funding form */
-export const fundingProjectAtom = atom<FundingProjectState>({} as FundingProjectState)
+export const fundingProjectAtom = atom<FundingProjectState>((get) => {
+  const project = get(projectAtom)
+  const wallet = get(walletAtom)
+  const rewards = get(rewardsAtom)
+  const subscriptions = get(subscriptionsAtom)
+  return { ...project, wallet, rewards, subscriptions }
+})
 
 /**
  * Set funding form based on a HTML input event
@@ -523,6 +545,5 @@ export const setFundingInputAfterRequestAtom = atom(null, (get, set, input: Fund
 /** Reset Funding Form */
 export const resetFundingFormAtom = atom(null, (get, set) => {
   set(fundingFormStateAtom, initialState)
-  set(fundingProjectAtom, {} as FundingProjectState)
   set(fundingInputAfterRequestAtom, null)
 })

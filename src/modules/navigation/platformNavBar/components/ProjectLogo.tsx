@@ -6,11 +6,13 @@ import { ImageWithReload } from '@/components/ui'
 import { projectAtom } from '@/modules/project/state/projectAtom'
 import { getPath } from '@/shared/constants'
 
+export const GEYSER_GUARDIANS_PROJECT_NAME = 'geyserguardians'
+
 export const ProjectLogo = () => {
   const project = useAtomValue(projectAtom)
 
   return (
-    <Link to={getPath('project', project.name)}>
+    <Link to={project.name === GEYSER_GUARDIANS_PROJECT_NAME ? getPath('guardians') : getPath('project', project.name)}>
       <HStack>
         <ImageWithReload
           height={{ base: '40px', lg: '48px' }}

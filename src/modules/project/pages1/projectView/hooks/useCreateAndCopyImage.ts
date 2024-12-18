@@ -73,5 +73,5 @@ export const useCreateAndCopyImage = () => {
     }
   }
 
-  return { handleGenerateAndCopy, copying, getObjectUrl }
+  return { handleGenerateAndCopy, copying, getObjectUrl, getDataUrl }
 }

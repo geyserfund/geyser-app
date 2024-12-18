@@ -1,6 +1,8 @@
 import { Badge, Box, Button, HStack, IconButton, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useEffect } from 'react'
 import { PiMinus, PiPlus } from 'react-icons/pi'
+import { useLocation } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useRewardBuy } from '@/modules/project/pages1/projectView/hooks'
@@ -22,9 +24,21 @@ interface IRewardItemProps {
 export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, readOnly }: IRewardItemProps) => {
   const { count, isAvailable, addRewardToBasket, removeRewardFromBasket } = useRewardBuy(reward)
 
-  const { project } = useFundingFormAtom()
+  const { project, formState } = useFundingFormAtom()
 
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
+
+  const location = useLocation()
+
+  useEffect(() => {
+    if (
+      location.state &&
+      location.state.rewardUUID === reward.uuid &&
+      (formState.rewardsByIDAndCount ? formState.rewardsByIDAndCount[reward.uuid] === 0 : true)
+    ) {
+      addRewardToBasket()
+    }
+  }, [location, reward.uuid, addRewardToBasket, isAvailable, formState.rewardsByIDAndCount])
 
   if ((count > 0 && showOnSelected) || (showOnEmpty && count === 0)) {
     return (

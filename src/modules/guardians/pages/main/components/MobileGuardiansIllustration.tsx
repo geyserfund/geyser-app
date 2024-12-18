@@ -1,6 +1,6 @@
-import { Box, HStack, IconButton, Image, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, HStack, IconButton, Image, VStack } from '@chakra-ui/react'
 import classNames from 'classnames'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { PiCaretLeft } from 'react-icons/pi'
 import { PiCaretRight } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
@@ -10,45 +10,55 @@ import { useSwipeable } from 'react-swipeable'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import {
-  GuardiansMobileDarkKingUrl,
-  GuardiansMobileDarkKnightUrl,
-  GuardiansMobileDarkLegendUrl,
-  GuardiansMobileDarkWarriorUrl,
-  GuardiansMobileLightKingUrl,
-  GuardiansMobileLightKnightUrl,
-  GuardiansMobileLightLegendUrl,
-  GuardiansMobileLightWarriorUrl,
+  GuardiansSeriesOneOrnamentSeparatorUrl,
+  KingMainPageGreyMobile,
+  KingMainPageMobile,
+  KingRaycastUrl,
+  KnightMainPageGreyMobile,
+  KnightMainPageMobile,
+  KnightRaycastUrl,
+  LegendMainPageGreyMobile,
+  LegendMainPageMobile,
+  LegendRaycastUrl,
+  WarriorMainPageGreyMobile,
+  WarriorMainPageMobile,
+  WarriorRaycastUrl,
 } from '@/shared/constants/platform/url'
 import {
   fadeIn,
   fadeIn20Percent,
   fadeOut,
   fadeOut20Percent,
+  scaleUp,
   SlideInFrontLeft,
   SlideInFrontRight,
   SlideOutBackLeft,
   SlideOutBackRight,
 } from '@/shared/styles/animations'
-import { toPx } from '@/utils'
+import { GuardianType } from '@/types'
 
-import { Guardian } from '../../../types'
-
-const images = {
-  light: {
-    [Guardian.Warrior]: GuardiansMobileLightWarriorUrl,
-    [Guardian.Knight]: GuardiansMobileLightKnightUrl,
-    [Guardian.King]: GuardiansMobileLightKingUrl,
-    [Guardian.Legend]: GuardiansMobileLightLegendUrl,
-  },
-  dark: {
-    [Guardian.Warrior]: GuardiansMobileDarkWarriorUrl,
-    [Guardian.Knight]: GuardiansMobileDarkKnightUrl,
-    [Guardian.King]: GuardiansMobileDarkKingUrl,
-    [Guardian.Legend]: GuardiansMobileDarkLegendUrl,
-  },
+const image = {
+  [GuardianType.Warrior]: WarriorMainPageMobile,
+  [GuardianType.Knight]: KnightMainPageMobile,
+  [GuardianType.King]: KingMainPageMobile,
+  [GuardianType.Legend]: LegendMainPageMobile,
 }
 
-export const guardianIndex = [Guardian.Warrior, Guardian.Knight, Guardian.King, Guardian.Legend]
+const imageGrey = {
+  [GuardianType.Warrior]: WarriorMainPageGreyMobile,
+  [GuardianType.Knight]: KnightMainPageGreyMobile,
+  [GuardianType.King]: KingMainPageGreyMobile,
+  [GuardianType.Legend]: LegendMainPageGreyMobile,
+}
+
+const imageRaycast = {
+  [GuardianType.Warrior]: WarriorRaycastUrl,
+  [GuardianType.Knight]: KnightRaycastUrl,
+  [GuardianType.King]: KingRaycastUrl,
+  [GuardianType.Legend]: LegendRaycastUrl,
+}
+
+export const guardianIndex = [GuardianType.Warrior, GuardianType.Knight, GuardianType.King, GuardianType.Legend]
 
 const useStyles = createUseStyles({
   ...SlideInFrontLeft,
@@ -59,14 +69,13 @@ const useStyles = createUseStyles({
   ...fadeIn,
   ...fadeOut20Percent,
   ...fadeIn20Percent,
+  ...scaleUp,
   higherZIndex: {
-    zIndex: 1,
+    zIndex: 2,
   },
 })
 
 export const MobileGuardiansIllustration = () => {
-  const image = useColorModeValue(images.light, images.dark)
-
   const navigate = useNavigate()
 
   const classes = useStyles()
@@ -80,16 +89,16 @@ export const MobileGuardiansIllustration = () => {
     },
   })
 
-  const [preChange, setPreChange] = useState<Guardian>(Guardian.Warrior)
-  const [secondChange, setSecondChange] = useState<Guardian>(Guardian.Warrior)
+  const [preChange, setPreChange] = useState<GuardianType>(GuardianType.Warrior)
+  const [secondChange, setSecondChange] = useState<GuardianType>(GuardianType.Warrior)
 
-  const [currentGuardian, setCurrentGuardian] = useState<Guardian>(Guardian.Warrior)
-  const [lastGuardian, setLastGuardian] = useState<Guardian | null>(null)
+  const [currentGuardian, setCurrentGuardian] = useState<GuardianType>(GuardianType.Warrior)
+  const [lastGuardian, setLastGuardian] = useState<GuardianType | null>(null)
 
   const goToNextGuardian = () => {
     const currentIndex = guardianIndex.findIndex((guardians) => guardians.includes(currentGuardian))
     const nextIndex = currentIndex + 1
-    let nextGuardian = guardianIndex[0] as Guardian
+    let nextGuardian = guardianIndex[0] as GuardianType
     const nextIndexGuardian = guardianIndex[nextIndex]
     if (nextIndexGuardian) {
       nextGuardian = nextIndexGuardian
@@ -108,7 +117,7 @@ export const MobileGuardiansIllustration = () => {
   const goToPreviousGuardian = () => {
     const currentIndex = guardianIndex.findIndex((guardians) => guardians.includes(currentGuardian))
     const previousIndex = currentIndex - 1
-    let previousGuardian = guardianIndex[guardianIndex.length - 1] as Guardian
+    let previousGuardian = guardianIndex[guardianIndex.length - 1] as GuardianType
     const previousIndexGuardian = guardianIndex[previousIndex]
     if (previousIndexGuardian) {
       previousGuardian = previousIndexGuardian
@@ -128,91 +137,22 @@ export const MobileGuardiansIllustration = () => {
   const previousGuardianIndex = (guardianIndex.findIndex((guardians) => guardians.includes(currentGuardian)) - 1) % 4
   const finalPreviousGuardianIndex = previousGuardianIndex < 0 ? guardianIndex.length - 1 : previousGuardianIndex
 
-  const nextGuardian = guardianIndex[nextGuardianIndex] as Guardian
-  const previousGuardian = guardianIndex[finalPreviousGuardianIndex] as Guardian
+  const nextGuardian = guardianIndex[nextGuardianIndex] as GuardianType
+  const previousGuardian = guardianIndex[finalPreviousGuardianIndex] as GuardianType
 
   const nextGuardianImage = image[nextGuardian]
+  const nextGuardianImageGrey = imageGrey[nextGuardian]
+
   const previousGuardianImage = image[previousGuardian]
+  const previousGuardianImageGrey = imageGrey[previousGuardian]
+
   const currentGuardianImage = image[currentGuardian]
-
-  const [guardianNameHeight, setGuardianNameHeight] = useState(0)
-
-  const imageRef = useRef<HTMLImageElement>(null)
-  const updateUIPosition = () => {
-    if (imageRef.current) {
-      const imageRect = imageRef.current.getBoundingClientRect()
-
-      const xPosition = (imageRect.bottom - imageRect.height) * 0.1
-
-      setGuardianNameHeight(xPosition)
-    }
-  }
-
-  useEffect(() => {
-    setTimeout(() => {
-      updateUIPosition()
-    }, 100)
-    window.addEventListener('resize', updateUIPosition)
-    return () => {
-      window.removeEventListener('resize', updateUIPosition)
-    }
-  }, [])
+  const currentGuardianImageGrey = imageGrey[currentGuardian]
+  const currentGuardianImageRaycast = imageRaycast[currentGuardian]
 
   return (
-    <VStack
-      w="full"
-      flex={1}
-      position="relative"
-      overflow="hidden"
-      justifyContent="flex-end"
-      {...handlers}
-      onClick={() => navigate(getPath('guardiansCharacter', currentGuardian))}
-    >
-      <Box
-        className={classNames({
-          [classes.slideInFrontRight]: secondChange === previousGuardian,
-          [classes.higherZIndex]: secondChange === previousGuardian,
-          [classes.fadeOut20Percent]: preChange !== currentGuardian && preChange !== previousGuardian,
-          [classes.fadeIn20Percent]: preChange === currentGuardian && lastGuardian !== previousGuardian,
-        })}
-        w="100%"
-        height="90%"
-        position="absolute"
-        bottom={-1}
-        opacity={0.3}
-        right={'48%'}
-      >
-        <Image h="full" w="full" objectFit="cover" objectPosition="top" src={previousGuardianImage} />
-      </Box>
-      <Box
-        className={classNames({
-          [classes.slideInFrontLeft]: secondChange === nextGuardian,
-          [classes.higherZIndex]: secondChange === nextGuardian,
-          [classes.fadeOut20Percent]: preChange !== currentGuardian && preChange !== nextGuardian,
-          [classes.fadeIn20Percent]: preChange === currentGuardian && lastGuardian !== nextGuardian,
-        })}
-        w="100%"
-        height="90%"
-        position="absolute"
-        bottom={-1}
-        opacity={0.3}
-        left={'48%'}
-      >
-        <Image h="full" w="full" objectFit="cover" objectPosition="top" src={nextGuardianImage} />
-      </Box>
-      <Box
-        className={classNames({
-          [classes.slideOutBackLeft]: preChange === nextGuardian,
-          [classes.slideOutBackRight]: preChange === previousGuardian,
-        })}
-        w="100%"
-        height="90%"
-        position="absolute"
-        bottom={-1}
-      >
-        <Image ref={imageRef} h="full" w="full" objectFit="cover" objectPosition="top" src={currentGuardianImage} />
-      </Box>
-      <HStack zIndex="1" paddingBottom={toPx(guardianNameHeight)}>
+    <VStack w="full" padding={0} spacing={0}>
+      <HStack zIndex="2">
         <IconButton
           variant="ghost"
           size="xl"
@@ -233,6 +173,8 @@ export const MobileGuardiansIllustration = () => {
           bold
           color={`guardians.${currentGuardian}.text`}
           textTransform="uppercase"
+          onClick={() => navigate(getPath('guardiansCharacter', currentGuardian))}
+          _hover={{ cursor: 'pointer' }}
         >
           {currentGuardian}
         </Body>
@@ -248,6 +190,134 @@ export const MobileGuardiansIllustration = () => {
           _active={{}}
         />
       </HStack>
+      <VStack
+        w="full"
+        minHeight="60vh"
+        position="relative"
+        {...handlers}
+        onClick={() => navigate(getPath('guardiansCharacter', currentGuardian))}
+        _hover={{ cursor: 'pointer' }}
+      >
+        <Box
+          className={classNames({
+            [classes.slideInFrontRight]: secondChange === previousGuardian,
+            [classes.higherZIndex]: secondChange === previousGuardian,
+            [classes.fadeOut20Percent]: preChange !== currentGuardian && preChange !== previousGuardian,
+            [classes.fadeIn]: preChange === currentGuardian && lastGuardian !== previousGuardian,
+          })}
+          w="100%"
+          height="90%"
+          position="absolute"
+          bottom={-1}
+          zIndex={1}
+          opacity={1}
+          transition="opacity 0.2s ease-in-out"
+          right={'48%'}
+        >
+          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={previousGuardianImageGrey} />
+        </Box>
+        <Box
+          className={classNames({
+            [classes.slideInFrontRight]: secondChange === previousGuardian,
+            [classes.higherZIndex]: secondChange === previousGuardian,
+            [classes.fadeOut20Percent]: preChange !== currentGuardian && preChange !== previousGuardian,
+            [classes.fadeIn20Percent]: preChange === currentGuardian && lastGuardian !== previousGuardian,
+          })}
+          w="100%"
+          height="90%"
+          position="absolute"
+          bottom={-1}
+          opacity={0.3}
+          right={'48%'}
+        >
+          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={previousGuardianImage} />
+        </Box>
+
+        <Box
+          className={classNames({
+            [classes.slideInFrontLeft]: secondChange === nextGuardian,
+            [classes.higherZIndex]: secondChange === nextGuardian,
+            [classes.fadeOut20Percent]: preChange !== currentGuardian && preChange !== nextGuardian,
+            [classes.fadeIn]: preChange === currentGuardian && lastGuardian !== nextGuardian,
+          })}
+          w="100%"
+          height="90%"
+          position="absolute"
+          bottom={-1}
+          zIndex={1}
+          opacity={1}
+          transition="opacity 0.2s ease-in-out"
+          left={'48%'}
+        >
+          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={nextGuardianImageGrey} />
+        </Box>
+        <Box
+          className={classNames({
+            [classes.slideInFrontLeft]: secondChange === nextGuardian,
+            [classes.higherZIndex]: secondChange === nextGuardian,
+            [classes.fadeOut20Percent]: preChange !== currentGuardian && preChange !== nextGuardian,
+            [classes.fadeIn20Percent]: preChange === currentGuardian && lastGuardian !== nextGuardian,
+          })}
+          w="100%"
+          height="90%"
+          position="absolute"
+          bottom={-1}
+          opacity={0.3}
+          left={'48%'}
+        >
+          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={nextGuardianImage} />
+        </Box>
+
+        <Box
+          className={classNames({
+            [classes.slideOutBackLeft]: preChange === nextGuardian,
+            [classes.slideOutBackRight]: preChange === previousGuardian,
+          })}
+          w="100%"
+          height="90%"
+          position="absolute"
+          bottom={-1}
+          zIndex={1}
+        >
+          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={currentGuardianImageGrey} />
+        </Box>
+        <Box
+          className={classNames({
+            [classes.scaleInVerBottom]: preChange === currentGuardian,
+            [classes.fadeOut]: preChange !== currentGuardian,
+          })}
+          w="70%"
+          height="110%"
+          position="absolute"
+          bottom={-1}
+          zIndex={1}
+          pointerEvents="none"
+        >
+          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={currentGuardianImageRaycast} />
+        </Box>
+
+        <Box
+          className={classNames({
+            [classes.slideOutBackLeft]: preChange === nextGuardian,
+            [classes.slideOutBackRight]: preChange === previousGuardian,
+          })}
+          w="100%"
+          height="90%"
+          position="absolute"
+          bottom={-1}
+          zIndex={1}
+        >
+          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={currentGuardianImage} />
+        </Box>
+      </VStack>
+      <Image
+        src={GuardiansSeriesOneOrnamentSeparatorUrl}
+        position="relative"
+        zIndex={3}
+        height="100px"
+        objectFit="cover"
+        marginTop="-30px"
+      />
     </VStack>
   )
 }

@@ -1,3 +1,39 @@
+## [0.17.0](https://github.com/geyserfund/geyser-app/compare/v0.16.0...v0.17.0) (2024-12-18)
+
+
+### Features
+
+* add buy feature from the guardians page ([4f96f58](https://github.com/geyserfund/geyser-app/commit/4f96f58a2814bbe3f0c484fcb63d78c979347454))
+* add guardian users in main page and character pages ([3286ce5](https://github.com/geyserfund/geyser-app/commit/3286ce5656b45ab0fa5422252e5832fe746fe843))
+* add profile rings, text colors and gems along with gem modal ([506e0d9](https://github.com/geyserfund/geyser-app/commit/506e0d9f27e8388a466dd624b59ccaf179c1bb67))
+* add seo to guardians pages ([a9160fe](https://github.com/geyserfund/geyser-app/commit/a9160feb6b4b646e2a353c2f4dab6e0394d88ccd))
+* create designs for guardians main page and character page ([f6627f9](https://github.com/geyserfund/geyser-app/commit/f6627f9ff4695c881f21e6cdd30651245587b5f0))
+* create items modal ([c1ec7e4](https://github.com/geyserfund/geyser-app/commit/c1ec7e4e5189e0f582327ab69a71dea90a803bde))
+* profile page cards update ([f7edf68](https://github.com/geyserfund/geyser-app/commit/f7edf68f1688e86c786ad882ca499729afeb5840))
+
+
+### Bug Fixes
+
+* add "to life" ([4e823df](https://github.com/geyserfund/geyser-app/commit/4e823df978e9aa0bf46312244fb9edb4581b1822))
+* add back bitaxe ([fd564b3](https://github.com/geyserfund/geyser-app/commit/fd564b3600c5357264a9d56f12c71534fc3f1494))
+* add notice banner ([8dc4f4a](https://github.com/geyserfund/geyser-app/commit/8dc4f4a858aa560b1b08bb897c30e5e84dc008be))
+* add partners ([6630ad7](https://github.com/geyserfund/geyser-app/commit/6630ad7b80680da4348698bc0fa5a4dfdf5da2bf))
+* add tilt effect to the rest of the cards ([21b7684](https://github.com/geyserfund/geyser-app/commit/21b768431982d01900a728b237e456724236df1f))
+* capitalize buttons ([3be205e](https://github.com/geyserfund/geyser-app/commit/3be205ece1569ee48a0613d7e3a1731b0cc2c654))
+* character page and main page ([9ddf32b](https://github.com/geyserfund/geyser-app/commit/9ddf32b9efb248ed4e30855d449ebfe2e8e8333e))
+* copy updates and stuff ([5887b1c](https://github.com/geyserfund/geyser-app/commit/5887b1ce15218562e1fdfe6ecad115783f6aad96))
+* dont show webln when it is a subscription ([7a241c9](https://github.com/geyserfund/geyser-app/commit/7a241c9d47a212e8d6d6e3f07ae93fceda2fcc9a))
+* final qa fixes ([c16fbdd](https://github.com/geyserfund/geyser-app/commit/c16fbddf7cb25e51f2582cf601cabf0fb6bba90a))
+* funding flow fixes ([66ed7a3](https://github.com/geyserfund/geyser-app/commit/66ed7a34c164c3684c84a1f1cd3fa60f23cd188d))
+* issues with become guardian button and add profile icon in profile page ([0fa88bc](https://github.com/geyserfund/geyser-app/commit/0fa88bcb948a8d82833ad1f2736e6b1d344fef32))
+* main page and character page qa fixes ([4672921](https://github.com/geyserfund/geyser-app/commit/46729217898a2dae457a88b1214405757c0ba8d1))
+* make darkmode transition smoother ([85640d3](https://github.com/geyserfund/geyser-app/commit/85640d32cf8033d224de01e6bb6fef2d0105c1d1))
+* media carousel for enable keyboard buttons ([daed7e8](https://github.com/geyserfund/geyser-app/commit/daed7e885c02e133c4c7265510c9125e67d5190d))
+* platform navigation, profile icons and gems ([45644f5](https://github.com/geyserfund/geyser-app/commit/45644f5e759191d239c42fcdd6960870207ad41e))
+* style adjustments ([e274490](https://github.com/geyserfund/geyser-app/commit/e2744907c63dbc459ee1a9e2a6106c87787173b6))
+* update asset ([f0b1307](https://github.com/geyserfund/geyser-app/commit/f0b130768da47cbac713a82468c68427ac90cb53))
+* update private comment section in rewards creation and funding details ([8d29727](https://github.com/geyserfund/geyser-app/commit/8d297277241958e29361e318a1790bea6cfbb705))
+
 ## [0.16.0](https://github.com/geyserfund/geyser-app/compare/v0.15.2...v0.16.0) (2024-12-11)
 
 

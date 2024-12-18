@@ -492,3 +492,73 @@ export const fadeIn20Percent = {
     animation: '$fade-in-20-percent 0.2s ease-out both',
   },
 }
+
+export const scaleUp = {
+  '@-webkit-keyframes scaleInVerBottom': {
+    '0%': {
+      WebkitTransform: 'scaleY(0)',
+      transform: 'scaleY(0)',
+      WebkitTransformOrigin: '0% 100%',
+      transformOrigin: '0% 100%',
+    },
+    '100%': {
+      WebkitTransform: 'scaleY(1)',
+      transform: 'scaleY(1)',
+      WebkitTransformOrigin: '0% 100%',
+      transformOrigin: '0% 100%',
+    },
+  },
+  '@keyframes scaleInVerBottom': {
+    '0%': {
+      WebkitTransform: 'scaleY(0)',
+      transform: 'scaleY(0)',
+      WebkitTransformOrigin: '0% 100%',
+      transformOrigin: '0% 100%',
+    },
+    '100%': {
+      WebkitTransform: 'scaleY(1)',
+      transform: 'scaleY(1)',
+      WebkitTransformOrigin: '0% 100%',
+      transformOrigin: '0% 100%',
+    },
+  },
+  scaleInVerBottom: {
+    WebkitAnimation: '$scaleInVerBottom 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+    animation: '$scaleInVerBottom 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both',
+  },
+}
+
+export const scaleDown = {
+  '@-webkit-keyframes scaleOutVerBottom': {
+    '0%': {
+      WebkitTransform: 'scaleY(1)',
+      transform: 'scaleY(1)',
+      WebkitTransformOrigin: '0% 100%',
+      transformOrigin: '0% 100%',
+    },
+    '100%': {
+      WebkitTransform: 'scaleY(0)',
+      transform: 'scaleY(0)',
+      WebkitTransformOrigin: '0% 100%',
+      transformOrigin: '0% 100%',
+    },
+  },
+  '@keyframes scaleOutVerBottom': {
+    '0%': {
+      WebkitTransform: 'scaleY(1)',
+      transform: 'scaleY(1)',
+      WebkitTransformOrigin: '0% 100%',
+      transformOrigin: '0% 100%',
+    },
+    '100%': {
+      WebkitTransform: 'scaleY(0)',
+      transform: 'scaleY(0)',
+      WebkitTransformOrigin: '0% 100%',
+      transformOrigin: '0% 100%',
+    },
+  },
+  scaleOutVerBottom: {
+    WebkitAnimation: '$scaleOutVerBottom 0.2s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
+    animation: '$scaleOutVerBottom 0.2s cubic-bezier(0.550, 0.085, 0.680, 0.530) both',
+  },
+}

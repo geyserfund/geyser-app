@@ -22,6 +22,16 @@ export const fetchInfoBannerData = async () => {
   }).then((response) => response.json())
 }
 
+export const fetchNoticeBannerData = async () => {
+  return fetch(`${AIRTABLE_API}/Notice%20Banner?view=Grid%20view`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
+      'Content-Type': 'application/json',
+    },
+  }).then((response) => response.json())
+}
+
 export const fetchHeroSponsorshipBannerData = async () => {
   return fetch(`${AIRTABLE_API}/Hero%20Sponsorship%20Banner?view=Grid%20view`, {
     method: 'GET',
