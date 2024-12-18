@@ -34,6 +34,7 @@ import {
   KnightRaycastUrl,
   KnightTradingCardUrl,
   KnightTshirtUrl,
+  LegendBitaxeUrl,
   LegendCharacterPageDesktop,
   LegendCharacterPageMobile,
   LegendJewelUrl,
@@ -47,7 +48,6 @@ import {
   LegendRaycastUrl,
   LegendTradingCardUrl,
   LegendTshirtUrl,
-  MysteryItemMinerLightUrl,
   WarriorCharacterPageDesktop,
   WarriorCharacterPageMobile,
   WarriorJewelUrl,
@@ -264,7 +264,7 @@ export const CharacterAssets: {
     title: 'Knight',
     image: KnightCharacterPageDesktop,
     description:
-      'As he ventures into the no-coiner lands, the Knight’s armor and broadsword protects him from any Fear, Uncertainty and Doubt tthrown at him. His broadsword has mythical powers. It energizes itself near natural energy sources like waterfalls and geysers, and unleashes lightning bolds towards its opponents.',
+      'As he ventures into the no-coiner lands, the Knight’s armor and broadsword protects him from any Fear, Uncertainty and Doubt thrown at him. His broadsword has mythical powers. It energizes itself near natural energy sources like waterfalls and geysers, and unleashes lightning bolds towards its opponents.',
     abilities: ['FUD SLAYER', 'FED DESTROYER'],
     digitalItems: [
       {
@@ -342,7 +342,7 @@ export const CharacterAssets: {
         url: KingTshirtUrl,
       },
       {
-        name: 'Knight Trading Card: Limited Edition',
+        name: 'King Trading Card: Limited Edition',
         description: [
           'A holographic collectible King card that comes in simple wrapping. The holographic effect doesn’t render in this image.',
           'This limited edition card, with only 121 produced, is one of four Geyser Guardians Series 1 cards. It’s designed and produced by the one and only BTC Trading Cards.',
@@ -411,7 +411,7 @@ export const CharacterAssets: {
         url: LegendTshirtUrl,
       },
       {
-        name: 'Knight Trading Card: Limited Edition',
+        name: 'Legend Trading Card: Limited Edition',
         description: [
           'A holographic collectible Legend card that comes in simple wrapping. The holographic effect doesn’t render in this image.',
           'This limited edition card, with only 21 produced, is one of four Geyser Guardians Series 1 cards. It’s designed and produced by the one and only BTC Trading Cards.',
@@ -438,8 +438,11 @@ export const CharacterAssets: {
       },
       {
         name: 'BitAxe',
-        description: ['<WAITING FOR SPECS>'],
-        url: MysteryItemMinerLightUrl,
+        description: [
+          'BitAxe Gammas are at the zeitgeist of Bitcoin’s culture.',
+          'This custom-made Home miner includes: Bitaxe 601 Gamma, Legend print on the back of the PCB and a 3D-Printed stand.',
+        ],
+        url: LegendBitaxeUrl,
       },
       {
         name: 'Guardian Sticker Pack',
@@ -452,7 +455,8 @@ export const CharacterAssets: {
     discounts: [
       '50% OPA for the year',
       '50% Alby Hub for the year',
-      '20% off Bitcoin 2025, Plan B El Salvador conferences',
+      '20% off Bitcoin 2025',
+      '20% off Plan B El Salvador conferences',
       '10% off BTC Prague conference',
     ],
     experiences: ['Call with one Geyser creator of your choice'],

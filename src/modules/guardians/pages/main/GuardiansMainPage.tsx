@@ -23,6 +23,7 @@ export const GuardiansMainPage = () => {
   const isMobile = useMobileMode()
 
   const textSize = { base: '16px', sm: '18px', md: '20x', lg: '22px', xl: '24px', '3xl': '28px' }
+  const ctaTextSize = { base: '14px', sm: '20px', md: '22x', lg: '24px', xl: '28px', '3xl': '32px' }
 
   const guardianDiscountItems = useAtomValue(guardianRewardsDiscountItemsAtom)
 
@@ -34,9 +35,9 @@ export const GuardiansMainPage = () => {
         maxWidth={dimensions.guardians.textMaxWidth}
         fontFamily={fonts.cormorant}
         px={{ base: 3, lg: 6 }}
-        spacing={{ base: 2, md: 3, lg: 8 }}
+        spacing={{ base: 2, md: 3, lg: 6 }}
       >
-        <VStack w="full">
+        <VStack w="full" spacing={0}>
           <Body fontSize={textSize} textAlign={'center'} medium light lineHeight={'1.2'}>
             {t(
               'Bitcoin adoption still has a long way to go, and Bitcoin creators are working tirelessly to bring that vision. Geyser’s mission is to support these creators and empower them to push Bitcoin adoption forward. Geyser Guardians play a vital role in this mission. By becoming a Guardian, you directly fund creator grants and receive exclusive perks in return.',
@@ -62,8 +63,8 @@ export const GuardiansMainPage = () => {
               {' left.'}
             </Trans>
           </Body>
-          <Body size={textSize} textTransform={'uppercase'} bold muted marginTop={{ base: '-6px', lg: '-10px' }}>
-            {t('CHOOSE YOUR CHARACTER:')}
+          <Body size={ctaTextSize} textTransform={'uppercase'} bold light marginTop={{ base: '-6px', lg: '-10px' }}>
+            {t('Select a character to explore perks')}
           </Body>
         </VStack>
       </VStack>

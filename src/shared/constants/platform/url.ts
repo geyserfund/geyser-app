@@ -561,6 +561,8 @@ export const LegendTshirtUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Legend-Tshirt.png'
 export const LegendTradingCardUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Legend-Trading-Card.png'
+export const LegendBitaxeUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Legend-Bitaxe.png'
 
 export const GuardiansBlackJerseyUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/physical/Guardians-Black-Jersey.png'
