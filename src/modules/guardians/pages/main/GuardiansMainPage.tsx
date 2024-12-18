@@ -51,7 +51,7 @@ export const GuardiansMainPage = () => {
           <VStack w="full" spacing={0}>
             <Body fontSize={textSize} textAlign={'center'} medium light lineHeight={'1.2'}>
               {t(
-                'Bitcoin adoption still has a long way to go, and Bitcoin creators are working tirelessly to bring that vision. Geyser’s mission is to support these creators and empower them to push Bitcoin adoption forward. Geyser Guardians play a vital role in this mission. By becoming a Guardian, you directly fund creator grants and receive exclusive perks in return.',
+                'Bitcoin adoption still has a long way to go, and Bitcoin creators are working tirelessly to bring that vision to life. Geyser’s mission is to support these creators and empower them to push Bitcoin adoption forward. Geyser Guardians play a vital role in this mission. By becoming a Guardian, you directly fund creator grants and receive exclusive perks in return.',
               )}
             </Body>
             <Body fontSize={textSize} textAlign={'center'} medium light lineHeight={'1.2'}>
