@@ -366,6 +366,14 @@ export const ProjectRewardForm = ({
                   )}
                 </Body>
                 <ControlledSwitchInput
+                  label={t('Add your reward specifications (eg. T-shirt size)')}
+                  name="privateCommentPrompts"
+                  control={control}
+                  switchPosition="left"
+                  isChecked={utils.isPromptChecked(PrivateCommentPrompt.ProjectRewardSpecs)}
+                  onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.ProjectRewardSpecs)}
+                />
+                <ControlledSwitchInput
                   label={t('Ask contributors for Nostr public address (npub)')}
                   name="privateCommentPrompts"
                   control={control}
@@ -380,14 +388,6 @@ export const ProjectRewardForm = ({
                   switchPosition="left"
                   isChecked={utils.isPromptChecked(PrivateCommentPrompt.LightningAddress)}
                   onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.LightningAddress)}
-                />
-                <ControlledSwitchInput
-                  label={t('Add your reward specifications (eg. T-shirt size)')}
-                  name="privateCommentPrompts"
-                  control={control}
-                  switchPosition="left"
-                  isChecked={utils.isPromptChecked(PrivateCommentPrompt.ProjectRewardSpecs)}
-                  onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.ProjectRewardSpecs)}
                 />
               </VStack>
             </CardLayout>

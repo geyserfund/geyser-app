@@ -137,10 +137,10 @@ const RenderHeroList = ({
                   height="40px"
                   width="40px"
                   src={datum[labels?.userImageUrl]}
-                  guardian={datum.guardianType}
+                  guardian={datum.userGuardianType}
                 />
                 <VStack w="full" overflow="hidden" flex={1} spacing={0} alignItems="start">
-                  <ProfileText guardian={datum.guardianType} w="full" bold isTruncated>
+                  <ProfileText guardian={datum.userGuardianType} w="full" bold isTruncated>
                     {datum[labels?.username]}
                   </ProfileText>
                   <Body size="xs" medium isTruncated>

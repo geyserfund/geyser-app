@@ -6,8 +6,8 @@ export const TOP_AMBASSADORS_FRAGMENT = gql`
     contributionsTotalUsd
     projectsCount
     userId
-    heroId
-    guardianType
+    userHeroId
+    userGuardianType
     userImageUrl
     username
   }

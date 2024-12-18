@@ -1,6 +1,8 @@
 import { Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
+import { Trans } from 'react-i18next'
+import Tilt from 'react-parallax-tilt'
 import { Link } from 'react-router-dom'
 
 import {
@@ -80,8 +82,23 @@ export const ProfileText = ({ guardian, size = 'md', children, ...rest }: Profil
         )}
       </HStack>
 
-      <Modal title={t('Geyser Guardian')} {...guardianModal} bodyProps={{ as: VStack, backgroundColor: 'utils.pbg' }}>
-        <Image src={guardianAsset} height="400px" width="auto" objectFit="cover" />
+      <Modal title={`${text} Nostr Card`} {...guardianModal} bodyProps={{ as: VStack, backgroundColor: 'utils.pbg' }}>
+        <Body>
+          <Trans
+            i18nKey={
+              '<0>{{user}}</0> has chosen to become a Geyser Guardian to support our platform and help push Bitcoin adoption.'
+            }
+            values={{ user: children }}
+          >
+            <Body as="span" medium>
+              {'{{user}}'}
+            </Body>
+            {` has chosen to become a Geyser Guardian to support our platform and help push Bitcoin adoption.`}
+          </Trans>
+        </Body>
+        <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10}>
+          <Image src={guardianAsset} height="400px" width="auto" objectFit="cover" />
+        </Tilt>
         <GradientBorder enable gradientColor={GuardiansButtonBackgroundGradientBright}>
           <Button
             w="full"
