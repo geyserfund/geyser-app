@@ -5,7 +5,7 @@ import 'swiper/css/navigation'
 
 import { Box, BoxProps } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
-import { Navigation, Pagination } from 'swiper/modules'
+import { Keyboard, Navigation, Pagination } from 'swiper/modules'
 import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react'
 
 import { AppTheme } from '@/context'
@@ -101,11 +101,14 @@ export const MediaCarousel = ({
     <Box w="100%" overflow="hidden">
       <Swiper
         className={classes.swiper}
+        keyboard={{
+          enabled: true,
+        }}
         pagination={{
           dynamicBullets: true,
         }}
         navigation={{ enabled: true }}
-        modules={[Pagination, Navigation]}
+        modules={[Keyboard, Pagination, Navigation]}
         spaceBetween={10}
         slidesPerView={1}
         onSlideChange={(swiper) => {

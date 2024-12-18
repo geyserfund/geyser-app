@@ -179,7 +179,7 @@ export const MediaCarouselForCards = ({
           w="100%"
           rightIcon={<PiDownloadSimple />}
           isLoading={downloadLoading}
-          isDisabled={!downloadLoading && !downloadUrl}
+          isDisabled={!downloadUrl}
         >
           {t('Download')}
         </Button>
