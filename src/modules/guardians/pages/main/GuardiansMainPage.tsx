@@ -169,7 +169,7 @@ export const GuardiansMainPage = () => {
               </HStack>
 
               <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
-                {PartnerUrls.slice(3, 7).map((url, index) => (
+                {PartnerUrls.slice(3, 8).map((url, index) => (
                   <Image
                     src={url}
                     alt="Partner"

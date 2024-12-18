@@ -1,5 +1,6 @@
 import {
   GuardianPartnerAlbyUrl,
+  GuardianPartnerBitaxeUrl,
   GuardianPartnerBitcoinTradingCardsUrl,
   GuardianPartnerHodlersUrl,
   GuardianPartnerNoGoodUrl,
@@ -11,6 +12,7 @@ import {
 export const PartnerUrls = [
   GuardianPartnerNoGoodUrl,
   GuardianPartnerBitcoinTradingCardsUrl,
+  GuardianPartnerBitaxeUrl,
   GuardianPartnerHodlersUrl,
   GuardianPartnerSoloSatoshiUrl,
   GuardianPartnerAlbyUrl,
