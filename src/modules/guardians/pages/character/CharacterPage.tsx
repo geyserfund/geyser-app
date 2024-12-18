@@ -77,7 +77,7 @@ export const CharacterPage = () => {
       height={{ base: '100%', lg: `calc(100vh - ${toPx(dimensions.topNavBar.desktop.height)})` }}
     >
       <VStack flex={1}>
-        <ImageBlock />
+        <ImageBlock disableArrowKeys={itemsModal.isOpen} />
       </VStack>
       <VStack
         w="full"

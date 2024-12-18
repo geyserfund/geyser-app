@@ -23,7 +23,7 @@ const useStyles = createUseStyles({
   ...scaleUp,
 })
 
-export const ImageBlock = () => {
+export const ImageBlock = ({ disableArrowKeys }: { disableArrowKeys?: boolean }) => {
   const navigate = useNavigate()
   const { characterId } = useParams<{ characterId: string }>()
   const isMobileMode = useMobileMode()
@@ -78,12 +78,14 @@ export const ImageBlock = () => {
       }
     }
 
-    window.addEventListener('keydown', handleKeyPress)
+    if (!disableArrowKeys) {
+      window.addEventListener('keydown', handleKeyPress)
+    }
 
     return () => {
       window.removeEventListener('keydown', handleKeyPress)
     }
-  }, [goToPreviousGuardian, goToNextGuardian])
+  }, [goToPreviousGuardian, goToNextGuardian, disableArrowKeys])
 
   useEffect(() => {
     if (characterId) {

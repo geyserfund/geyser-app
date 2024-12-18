@@ -28,7 +28,6 @@ import {
   isDiscoveryRoutesAtom,
   shouldShowGeyserLogoAtom,
   shouldShowProjectLogoAtom,
-  useIsGuardianCharacterPage,
   useIsGuardiansPage,
   useIsManifestoPage,
 } from './platformNavBarAtom'
@@ -41,7 +40,7 @@ export const PlatformNavBar = () => {
   const { onCopy, hasCopied } = useCopyToClipboard(`${window.location.origin}/${PathName.guardians}`)
 
   const isGuardiansPage = useIsGuardiansPage()
-  const isGuardianCharacterPage = useIsGuardianCharacterPage()
+
   const isManifestoPage = useIsManifestoPage()
 
   const isMobileMode = useMobileMode()
@@ -182,7 +181,7 @@ export const PlatformNavBar = () => {
       >
         <HStack w="100%" height={{ base: '40px', lg: '48px' }} justifyContent={'space-between'}>
           <HStack height="full" w="full" flex={1}>
-            {isGuardianCharacterPage && <BackButton />}
+            {isGuardiansPage && <BackButton />}
             {renderLeftSide()}
           </HStack>
 

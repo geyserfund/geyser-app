@@ -17,45 +17,40 @@ import {
 import { GradientBorder } from '@/shared/molecules/GradientBorder'
 import { GuardianType } from '@/types'
 
-import { useIsGuardiansPage } from '../../platformNavBarAtom'
-
 export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) => {
   const { user } = useAuthContext()
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
   const followedActivityDot = useAtomValue(followedActivityDotAtom)
 
-  const isGuardiansPage = useIsGuardiansPage()
-
   const guardianData = guardianValues(user?.guardianType)
 
   return (
     <HStack position="relative" spacing={0}>
-      {!isGuardiansPage && (
-        <GradientBorder
-          enable={true}
-          gradientColor={guardianData.borderColor}
-          marginRight={{ base: '-16px', lg: '-20px' }}
-        >
-          <Button
-            as={Link}
-            to={guardianData.path}
-            size={{ base: 'md', lg: 'lg' }}
-            height={{ base: '30px', lg: '38px' }}
-            paddingInlineStart={{ base: '6px !important', lg: '8px !important' }}
-            variant="ghost"
-            leftIcon={
-              <Image
-                src={guardianData.jewel}
-                width={{ base: '20px', lg: '30px' }}
-                height={{ base: '20px', lg: '30px' }}
-              />
-            }
-            background={guardianData.background}
-            _hover={{}}
-          />
-        </GradientBorder>
-      )}
+      <GradientBorder
+        enable={true}
+        gradientColor={guardianData.borderColor}
+        marginRight={{ base: '-16px', lg: '-20px' }}
+      >
+        <Button
+          as={Link}
+          to={guardianData.path}
+          size={{ base: 'md', lg: 'lg' }}
+          height={{ base: '30px', lg: '38px' }}
+          paddingInlineStart={{ base: '6px !important', lg: '8px !important' }}
+          variant="ghost"
+          leftIcon={
+            <Image
+              src={guardianData.jewel}
+              width={{ base: '20px', lg: '30px' }}
+              height={{ base: '20px', lg: '30px' }}
+            />
+          }
+          background={guardianData.background}
+          _hover={{}}
+        />
+      </GradientBorder>
+
       <HStack
         ref={ref}
         height={{ base: '40px', lg: '46px' }}
