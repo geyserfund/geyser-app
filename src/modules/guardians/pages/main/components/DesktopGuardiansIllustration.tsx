@@ -8,7 +8,10 @@ import { useNavigate } from 'react-router'
 import { Body } from '@/shared/components/typography'
 import { BodyProps } from '@/shared/components/typography/Body'
 import { getPath } from '@/shared/constants'
-import { GuardiansSeriesOneOrnamentSeparatorUrl } from '@/shared/constants/platform/url'
+import {
+  GuardiansSeriesOneOrnamentSeparatorUrl,
+  GuardiansSeriesOrnamentTransaparentUrl,
+} from '@/shared/constants/platform/url'
 import { fadeIn, fadeOut, fonts, scaleDown, scaleUp } from '@/shared/styles'
 import { GuardianType } from '@/types'
 
@@ -200,9 +203,9 @@ export const DesktopGuardiansIllustration = () => {
             opacity={currentGuardian ? 1 : 0}
             transition="opacity 0.3s ease-in-out"
             sx={{
-              maskImage: `url(${GuardiansSeriesOneOrnamentSeparatorUrl})`,
+              maskImage: `url(${GuardiansSeriesOrnamentTransaparentUrl})`,
               maskSize: '100% 100%',
-              WebkitMaskImage: `url(${GuardiansSeriesOneOrnamentSeparatorUrl})`,
+              WebkitMaskImage: `url(${GuardiansSeriesOrnamentTransaparentUrl})`,
               WebkitMaskSize: '100% 100%',
             }}
           />
