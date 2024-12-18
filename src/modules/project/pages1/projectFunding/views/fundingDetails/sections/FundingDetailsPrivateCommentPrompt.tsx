@@ -1,4 +1,4 @@
-import { ListItem, UnorderedList } from '@chakra-ui/react'
+import { ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { TextArea } from '@/components/ui'
@@ -6,14 +6,13 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts'
 import { Body, H1 } from '@/shared/components/typography'
+import { Feedback, FeedBackVariant } from '@/shared/molecules'
 import { PrivateCommentPrompt } from '@/types'
 
 const privateCommentPromptMap: Record<PrivateCommentPrompt, string> = {
   [PrivateCommentPrompt.NostrNpub]: t('Provide your Nostr public address (npub)'),
   [PrivateCommentPrompt.LightningAddress]: t('Provide your Lightning Address for a full or partial refund'),
-  [PrivateCommentPrompt.ProjectRewardSpecs]: t(
-    'Specify your desired options for each reward, as mentioned on the rewards page.',
-  ),
+  [PrivateCommentPrompt.ProjectRewardSpecs]: t('Add your reward specifications (eg. T-shirt size)'),
 }
 
 export const FundingDetailsPrivateCommentPrompt = () => {
@@ -37,22 +36,20 @@ export const FundingDetailsPrivateCommentPrompt = () => {
         {t('Private comments')}
       </H1>
       <Body size="md" light>
-        {t(
-          'Send a private comment to the creator with a thank you note, feedback, or special requests. Sometimes, if you don’t provide these creator won’t be able to send you your reward.',
-        )}
+        {t('Leave a private message to the creator.')}
       </Body>
       {mergedPrivateCommentPrompts.length > 0 && (
-        <>
-          <Body size="md">
-            {t('The creator has requested the following information from you. Make sure you add in the comment box:')}
-          </Body>
+        <Feedback variant={FeedBackVariant.WARNING} title={t('Do not close this window')}>
+          <VStack alignItems="flex-start">
+            <Body size="md">{t('The creator has requested: ')}</Body>
 
-          <UnorderedList>
-            {mergedPrivateCommentPrompts.map((prompt) => (
-              <ListItem key={prompt}>{privateCommentPromptMap[prompt]}</ListItem>
-            ))}
-          </UnorderedList>
-        </>
+            <UnorderedList>
+              {mergedPrivateCommentPrompts.map((prompt) => (
+                <ListItem key={prompt}>{privateCommentPromptMap[prompt]}</ListItem>
+              ))}
+            </UnorderedList>
+          </VStack>
+        </Feedback>
       )}
       <TextArea
         data-testid="funding-private-comment-input"

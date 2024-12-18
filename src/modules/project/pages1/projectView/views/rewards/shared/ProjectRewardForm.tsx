@@ -382,9 +382,7 @@ export const ProjectRewardForm = ({
                   onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.LightningAddress)}
                 />
                 <ControlledSwitchInput
-                  label={t(
-                    'Ask contributors to specify reward preferences or options based on your reward description',
-                  )}
+                  label={t('Add your reward specifications (eg. T-shirt size)')}
                   name="privateCommentPrompts"
                   control={control}
                   switchPosition="left"
