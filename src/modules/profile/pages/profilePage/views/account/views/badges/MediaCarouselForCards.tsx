@@ -1,4 +1,4 @@
-import { Button, forwardRef, Image, ImageProps, Link, VStack } from '@chakra-ui/react'
+import { Button, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { PiCopy, PiDownloadSimple } from 'react-icons/pi'
@@ -14,6 +14,7 @@ import { fonts } from '@/shared/styles'
 import { useNotification } from '@/utils'
 
 import { HeroCardDisplay } from '../HeroCardDisplay'
+import { ImageComponentForCards } from './ImageComponentForCards'
 
 const useStyles = createUseStyles((theme: AppTheme) => ({
   currentClass: {
@@ -105,7 +106,7 @@ export const MediaCarouselForCards = ({
       ...imageLinkList.map((item, index) => {
         return (
           <RenderWithRef
-            Component={ImageComponentWithRef}
+            Component={ImageComponentForCards}
             currentIndex={currentIndex}
             index={index + 1}
             setRefElement={setRefElement}
@@ -186,14 +187,6 @@ export const MediaCarouselForCards = ({
     </Modal>
   )
 }
-
-const ImageComponentWithRef = forwardRef((props: ImageProps, ref) => {
-  return (
-    <VStack ref={ref} height="430px">
-      <Image height="full" {...props} />
-    </VStack>
-  )
-})
 
 export const RenderWithRef = ({
   Component,
