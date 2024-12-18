@@ -104,10 +104,23 @@ export const fundingFormErrorAtom = atom<{ [key in keyof FundFormType]: string }
   {} as { [key in keyof FundFormType]: string },
 )
 
+/** Funding Form Warning */
+export const fundingFormWarningAtom = atom<{ [key in keyof FundFormType]: string }>(
+  {} as { [key in keyof FundFormType]: string },
+)
+
 /** Set the error state for the funding form */
 export const setErrorStateAtom = atom(null, (get, set, { key, value }: { key: keyof FundFormType; value: string }) => {
   set(fundingFormErrorAtom, (current) => ({ ...current, [key]: value }))
 })
+
+/** Set the warning state for the funding form */
+export const setWarningStateAtom = atom(
+  null,
+  (get, set, { key, value }: { key: keyof FundFormType; value: string }) => {
+    set(fundingFormWarningAtom, (current) => ({ ...current, [key]: value }))
+  },
+)
 
 /** Project that is to be funded via the current funding form */
 export const fundingProjectAtom = atom<FundingProjectState>((get) => {
