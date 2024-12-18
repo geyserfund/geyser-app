@@ -1,5 +1,6 @@
 import { Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import React from 'react'
 import { Trans } from 'react-i18next'
 
@@ -12,6 +13,7 @@ import { GuardianType } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { PartnerUrls } from '../../data'
+import { guardianRewardsDiscountItemsAtom } from '../../state/guardianRewards'
 import { Copyright } from './components/Copyright'
 import { DesktopGuardiansIllustration } from './components/DesktopGuardiansIllustration'
 import { GuardianUsers } from './components/GuardianUsers'
@@ -20,7 +22,9 @@ import { MobileGuardiansIllustration } from './components/MobileGuardiansIllustr
 export const GuardiansMainPage = () => {
   const isMobile = useMobileMode()
 
-  const textSize = { base: '14px', sm: '16px', md: '18px', lg: '20px', xl: '24px', '3xl': '28px' }
+  const textSize = { base: '16px', sm: '18px', md: '20x', lg: '22px', xl: '24px', '3xl': '28px' }
+
+  const guardianDiscountItems = useAtomValue(guardianRewardsDiscountItemsAtom)
 
   return (
     <VStack paddingTop={{ base: 16, md: 20, lg: 6 }} paddingBottom={{ base: '60px', lg: 24 }}>
@@ -39,21 +43,21 @@ export const GuardiansMainPage = () => {
         </Body>
 
         <VStack w="full" spacing={0}>
-          <Body size={{ base: '10px', sm: '12px', lg: '16px' }} light fontWeight={600} textTransform={'uppercase'}>
+          <Body size={{ base: '12px', md: '14px', lg: '16px' }} light fontWeight={600} textTransform={'uppercase'}>
             <Trans
               i18nKey="The first {{count}} guardians get {{discount}} off. {{left}} left."
-              values={{ count: 121, discount: '10%', left: 21 }}
+              values={{ count: 121, discount: '10%', left: guardianDiscountItems }}
             >
               {'The first '}
-              <Body as="span" color="guardians.king.text">{`{{count}}`}</Body>
+              <Body as="span" color="guardians.LEGEND.text">{`{{count}}`}</Body>
               {' guardians get '}
-              <Body as="span" color="guardians.king.text">{`{{discount}}`}</Body>
+              <Body as="span" color="guardians.LEGEND.text">{`{{discount}}`}</Body>
               {' off. '}
-              <Body as="span" color="guardians.king.text">{`{{left}}`}</Body>
+              <Body as="span" color="guardians.LEGEND.text">{`{{left}}`}</Body>
               {' left.'}
             </Trans>
           </Body>
-          <Body size={textSize} textTransform={'uppercase'} bold muted marginTop="-10px">
+          <Body size={textSize} textTransform={'uppercase'} bold muted marginTop={{ base: '-6px', lg: '-10px' }}>
             {t('CHOOSE YOUR CHARACTER:')}
           </Body>
         </VStack>

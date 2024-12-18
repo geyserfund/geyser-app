@@ -1,8 +1,11 @@
-import { Box, HStack, useColorMode, VStack } from '@chakra-ui/react'
+import { Box, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import { Link, Outlet } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 
+import { addProjectHeroAtom } from '@/modules/project/pages1/projectView/state/heroAtom'
 import { Body, H1 } from '@/shared/components/typography'
 import {
   dimensions,
@@ -17,20 +20,24 @@ import { toPx } from '@/utils'
 
 import { useIsGuardianCharacterPage } from '../navigation/platformNavBar/platformNavBarAtom'
 import { useGuardianProjectRewards } from './hooks/useGuardianProjectRewards'
+const GEYSER_GUARDIANS_PROJECT_NAME = 'geyserguardians'
 
 export const Guardians = () => {
   const isGuardianCharacterPage = useIsGuardianCharacterPage()
-  const { colorMode, setColorMode } = useColorMode()
+
+  const [searchParams] = useSearchParams()
+
+  const addHeroId = useSetAtom(addProjectHeroAtom)
+  const heroId = searchParams.get('hero')
 
   useEffect(() => {
-    const initialColorMode = colorMode
-    setColorMode('light')
-    return () => {
-      if (initialColorMode) {
-        setColorMode(initialColorMode)
-      }
+    if (heroId) {
+      addHeroId({
+        projectName: GEYSER_GUARDIANS_PROJECT_NAME,
+        heroId,
+      })
     }
-  }, [colorMode, setColorMode])
+  }, [heroId, addHeroId])
 
   useGuardianProjectRewards()
 

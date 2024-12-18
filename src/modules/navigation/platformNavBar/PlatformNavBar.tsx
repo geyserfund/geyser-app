@@ -28,18 +28,17 @@ import {
   isDiscoveryRoutesAtom,
   shouldShowGeyserLogoAtom,
   shouldShowProjectLogoAtom,
-  useIsGuardiansPage,
   useIsManifestoPage,
 } from './platformNavBarAtom'
 import { ProfileNav } from './profileNav/ProfileNav'
 
 export const PlatformNavBar = () => {
-  const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
+  const { isLoggedIn, logout, queryCurrentUser, user } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
 
-  const { onCopy, hasCopied } = useCopyToClipboard(`${window.location.origin}/${PathName.guardians}`)
-
-  const isGuardiansPage = useIsGuardiansPage()
+  const { onCopy, hasCopied } = useCopyToClipboard(
+    `${window.location.origin}/${PathName.guardians}${user.heroId ? `?hero=${user.heroId}` : ''}`,
+  )
 
   const isManifestoPage = useIsManifestoPage()
 
@@ -61,6 +60,7 @@ export const PlatformNavBar = () => {
       refresh?: boolean
     }
   } = useLocation()
+  const isGuardiansPage = location.pathname.includes('/guardians')
 
   const { state } = location
 
