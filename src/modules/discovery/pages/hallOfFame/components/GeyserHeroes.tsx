@@ -3,7 +3,8 @@ import { t } from 'i18next'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { ImageWithReload } from '@/components/ui'
+import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
+import { ProfileText } from '@/shared/components/display/ProfileText'
 import { RankMedal } from '@/shared/components/display/RankMedal'
 import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
@@ -131,11 +132,17 @@ const RenderHeroList = ({
                 _hover={{ cursor: 'pointer', backgroundColor: 'neutral1.3' }}
               >
                 <RankMedal rank={index + 1} />
-                <ImageWithReload borderRadius={'50%'} height="40px" width="40px" src={datum[labels?.userImageUrl]} />
+                <ProfileAvatar
+                  borderRadius={'50%'}
+                  height="40px"
+                  width="40px"
+                  src={datum[labels?.userImageUrl]}
+                  guardian={datum.userGuardianType}
+                />
                 <VStack w="full" overflow="hidden" flex={1} spacing={0} alignItems="start">
-                  <Body w="full" bold isTruncated>
+                  <ProfileText guardian={datum.userGuardianType} w="full" bold isTruncated>
                     {datum[labels?.username]}
-                  </Body>
+                  </ProfileText>
                   <Body size="xs" medium isTruncated>
                     {`${formatAmount(datum[labels?.usdAmount], FormatCurrencyType.Usd)} `}
                     <Body as="span" light>{`(${getShortAmountLabel(datum[labels?.amount])} sats)`}</Body>

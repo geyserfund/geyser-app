@@ -1,19 +1,22 @@
 import { HStack, VStack } from '@chakra-ui/react'
-import { useMemo } from 'react'
+import { useSetAtom } from 'jotai'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
 import { PiLightning, PiMegaphone, PiRocketLaunch } from 'react-icons/pi'
 
+import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
 import { Body } from '@/shared/components/typography'
 
 import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { HeroStats, useUserHeroStatsQuery } from '../../../../../../../types'
 import { getShortAmountLabel } from '../../../../../../../utils'
 import { useUserProfileAtom } from '../../../../../state'
-import { HeroCardButton } from './HeroCardButton'
 
 export const Summary = () => {
   const { userProfile, isLoading: userProfileLoading } = useUserProfileAtom()
+
+  const setHeroCard = useSetAtom(heroCardAtom)
 
   const { data, loading } = useUserHeroStatsQuery({
     skip: !userProfile.id,
@@ -40,6 +43,14 @@ export const Summary = () => {
     }
   }, [data])
 
+  useEffect(() => {
+    setHeroCard({
+      user: userProfile,
+      stats,
+      isOpen: true,
+    })
+  }, [userProfile, stats, setHeroCard])
+
   const { t } = useTranslation()
 
   const renderSkeleton = (children: React.ReactNode) => {
@@ -52,8 +63,6 @@ export const Summary = () => {
       <Body size="xl" medium>
         {t('Hero Rank')}
       </Body>
-
-      <HeroCardButton user={userProfile} stats={stats} isLoading={loading} />
 
       {renderSkeleton(
         <StatBody

@@ -1,7 +1,16 @@
-import { FormControl, FormErrorMessage, Input, InputGroup, InputRightElement, Switch } from '@chakra-ui/react'
+import {
+  Box,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Switch,
+} from '@chakra-ui/react'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { PiCheckCircleFill, PiXCircleFill } from 'react-icons/pi'
 
 import Loader from '@/components/ui/Loader'
@@ -33,7 +42,7 @@ const EMAIL_VALIDATION_STATE = {
 
 export const FundingDetailsUserEmailAndUpdates = () => {
   const { t } = useTranslation()
-  const { user } = useAuthContext()
+  const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
   const followedProjects = useFollowedProjectsValue()
 
@@ -44,7 +53,9 @@ export const FundingDetailsUserEmailAndUpdates = () => {
     setTarget,
     setState,
     fundingFormError,
+    fundingFormWarning,
     setErrorstate,
+    setWarningstate,
   } = useFundingFormAtom()
 
   const [followsProject] = useState(followedProjects.find((p) => p.id === project.id) !== undefined)
@@ -80,11 +91,19 @@ export const FundingDetailsUserEmailAndUpdates = () => {
       if (!email) {
         setEmailValidationState(EMAIL_VALIDATION_STATE.IDLE)
         setErrorstate({ key: 'email', value: '' })
+        setWarningstate({
+          key: 'email',
+          value: '',
+        })
         return Promise.resolve()
       }
 
       if (!validEmail.test(email)) {
         setErrorstate({ key: 'email', value: 'Please enter a valid email address.' })
+        setWarningstate({
+          key: 'email',
+          value: '',
+        })
         setEmailValidationState(EMAIL_VALIDATION_STATE.FAILED)
         return Promise.resolve()
       }
@@ -93,18 +112,22 @@ export const FundingDetailsUserEmailAndUpdates = () => {
         variables: { email },
       })
         .then((res) => {
-          if (res.data?.userEmailIsAvailable) setEmailValidationState(EMAIL_VALIDATION_STATE.SUCCEEDED)
-          else {
-            setEmailValidationState(EMAIL_VALIDATION_STATE.FAILED)
-            setErrorstate({
+          setEmailValidationState(EMAIL_VALIDATION_STATE.SUCCEEDED)
+          setErrorstate({ key: 'email', value: '' })
+          if (!res.data?.userEmailIsAvailable) {
+            setWarningstate({
               key: 'email',
-              value: 'This email is already in use, please log in with that email or enter a different one.',
+              value: 'This email is associated with a user, did you forget to log in?',
             })
           }
         })
         .catch((error: Error) => {
           setEmailValidationState(EMAIL_VALIDATION_STATE.FAILED)
           setErrorstate({ key: 'email', value: error.message })
+          setWarningstate({
+            key: 'email',
+            value: '',
+          })
         })
       return Promise.resolve()
     }, 1000),
@@ -153,21 +176,35 @@ export const FundingDetailsUserEmailAndUpdates = () => {
                 debouncedEmailValidation(e.target.value)
               }}
               isInvalid={Boolean(fundingFormError.email)}
-              onFocus={() => setErrorstate({ key: 'email', value: '' })}
+              onFocus={() => {
+                setErrorstate({ key: 'email', value: '' })
+                setWarningstate({ key: 'email', value: '' })
+              }}
             />
             <InputRightElement>{renderEmailInputRightElement()}</InputRightElement>
           </InputGroup>
           {fundingFormError.email && <FormErrorMessage>{fundingFormError.email}</FormErrorMessage>}
+          {fundingFormWarning.email && <FormHelperText color="orange.9">{fundingFormWarning.email}</FormHelperText>}
+          {!fundingFormWarning.email && !fundingFormError.email && !isLoggedIn && (
+            <FormHelperText color="neutral1.11">
+              <Trans i18nKey="You're funding anonymously. <1>Sign in</1> to connect your contribution to your profile.">
+                {"You're funding anonymously. "}
+                <Box
+                  as="span"
+                  onClick={() => loginOnOpen()}
+                  color="primary.600"
+                  fontWeight="bold"
+                  _hover={{ cursor: 'pointer' }}
+                >
+                  Sign in
+                </Box>
+                {' to connect your profile to contribution'}
+              </Trans>
+            </FormHelperText>
+          )}
         </FormControl>
       </FieldContainer>
-      {needsShipping && (
-        <Feedback
-          variant={FeedBackVariant.WARNING}
-          text={t(
-            'To receive the selected rewards, please send your shipping details to the creator’s email, which will be revealed in the success screen.',
-          )}
-        />
-      )}
+
       {!followsProject && (
         <HorizontalFormField
           label="Follow Project: receive this project’s updates directly by email."
@@ -203,6 +240,15 @@ export const FundingDetailsUserEmailAndUpdates = () => {
             }}
           />
         </HorizontalFormField>
+      )}
+
+      {needsShipping && (
+        <Feedback
+          variant={FeedBackVariant.WARNING}
+          text={t(
+            'To receive the selected rewards, please send your shipping details to the creator’s email, which will be revealed in the success screen.',
+          )}
+        />
       )}
     </CardLayout>
   )

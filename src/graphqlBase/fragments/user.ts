@@ -35,6 +35,7 @@ export const FRAGMENT_USER_ME = gql`
     id
     username
     heroId
+    guardianType
     imageUrl
     email
     ranking

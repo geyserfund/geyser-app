@@ -1,4 +1,4 @@
-import { HStack, Image, SkeletonText, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { SkeletonText, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
@@ -7,7 +7,6 @@ import { toInt, useNotification } from '@/utils'
 
 import { ExternalAccountType } from '../../../../../../../../pages/auth'
 import { SkeletonLayout } from '../../../../../../../../shared/components/layouts'
-import { BadgesGroupUrl } from '../../../../../../../../shared/constants'
 import { useUserBadgesQuery } from '../../../../../../../../types'
 import { NostrBadges } from './NostrBadges'
 
@@ -39,40 +38,19 @@ export const BadgesBody = () => {
 
   const hasBadgeNoNostrForOwn = userBadges.length > 0 && !nostrId && isEdit
 
-  const showTopSection = hasBadgeNoNostrForOwn || userBadges.length === 0
-
-  const hasBadge = userBadges.length > 0
-
   if (userBadgeLoading) {
     return <BadgesBodySkeleton />
   }
 
   return (
     <>
-      {isEdit && showTopSection && hasBadgeNoNostrForOwn && (
+      {isEdit && hasBadgeNoNostrForOwn && (
         <VStack background="neutral1.3" borderRadius="8px" padding="5px 15px" width="fit-content" alignSelf="center">
           <Body light>{t('Login with Nostr to claim the badges you earned!')}</Body>
         </VStack>
       )}
-      {!hasBadge && (
-        <VStack
-          background="neutral1.3"
-          borderRadius="8px"
-          padding="5px 15px"
-          mt={6}
-          width="fit-content"
-          alignSelf="center"
-        >
-          <Body medium>{t('No Geyser badges')}</Body>
-        </VStack>
-      )}
-      {hasBadgeNoNostrForOwn && (
-        <HStack w="full" justifyContent="center">
-          <Image width="100%" alt="badges-group" src={BadgesGroupUrl} />
-        </HStack>
-      )}
 
-      {nostrId && <NostrBadges nostrId={nostrId} userBadges={userBadges} isEdit={isEdit} />}
+      <NostrBadges nostrId={nostrId} userBadges={userBadges} isEdit={isEdit} />
     </>
   )
 }

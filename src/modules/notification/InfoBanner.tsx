@@ -10,6 +10,7 @@ import { Body } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import { BrandCreamGradient } from '@/shared/styles/custom'
 
+import { useIsGuardiansPage } from '../navigation/platformNavBar/platformNavBarAtom'
 import { InfoBannerHistoryDataAtom } from './InfoBannerAtom'
 
 type AirtableInfoBannerData = {
@@ -26,6 +27,8 @@ export const InfoBanner = () => {
   const [loading, setLoading] = useState(true)
 
   const [data, setData] = useState<AirtableInfoBannerData>()
+
+  const isGuardiansPage = useIsGuardiansPage()
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -61,6 +64,10 @@ export const InfoBanner = () => {
         return [...current, data.id]
       })
     }
+  }
+
+  if (isGuardiansPage) {
+    return null
   }
 
   return (

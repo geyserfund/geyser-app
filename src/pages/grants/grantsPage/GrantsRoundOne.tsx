@@ -13,7 +13,6 @@ import {
   GrantsHero,
   WalletOfSatoshiUrl,
 } from '../../../shared/constants'
-import { fonts } from '../../../shared/styles'
 import { GrantApplicant, GrantStatusEnum } from '../../../types'
 import { useMediumScreen, useMobileMode } from '../../../utils'
 import { ApplyGrantCard } from '../components/ApplyGrantCard'
@@ -86,7 +85,6 @@ export const GrantsRoundOne = ({
             fontSize={'27px'}
             fontWeight="900"
             textAlign="center"
-            fontFamily={fonts.livvic}
             textShadow={' 0px 0px 25.7663px rgba(22, 232, 194, 0.11)'}
             color={'primary.500'}
           >

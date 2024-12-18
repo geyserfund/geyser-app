@@ -2,6 +2,7 @@ import { Box, HStack, Image, SkeletonCircle, SkeletonText, StackProps, VStack } 
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { ProfileText } from '@/shared/components/display/ProfileText'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -38,9 +39,9 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
       <UserAvatar user={contribution.funder.user} id={contribution.funder.id} />
       <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
         <HStack w="full" justifyContent={'space-between'}>
-          <Body size="sm" bold dark>
+          <ProfileText guardian={contribution.funder.user?.guardianType} size="sm" bold dark>
             {contribution.funder.user?.username || t('Anonymous')}
-          </Body>
+          </ProfileText>
           <TimeAgo date={contribution.paidAt} />
         </HStack>
 

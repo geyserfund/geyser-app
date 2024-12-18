@@ -3,10 +3,10 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/navigation'
 
-import { Box } from '@chakra-ui/react'
+import { Box, BoxProps } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
-import { Navigation, Pagination } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { Keyboard, Navigation, Pagination } from 'swiper/modules'
+import { Swiper, SwiperProps, SwiperSlide } from 'swiper/react'
 
 import { AppTheme } from '@/context'
 
@@ -26,6 +26,9 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
       '& .swiper-button-disabled': {
         opacity: 0.1,
       },
+    },
+    '& .swiper-button-disabled': {
+      opacity: 0,
     },
 
     '& .swiper-pagination-bullets-dynamic': {
@@ -75,12 +78,22 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   },
 }))
 
+export type CarouselItem = string | React.ReactNode
+
 export const MediaCarousel = ({
   links,
   aspectRatio = ImageCropAspectRatio.Header,
+  wrapperProps,
+  onSlideChange,
+  initialSlide,
+  swiperProps,
 }: {
-  links: string[]
+  links: CarouselItem[]
   aspectRatio?: ImageCropAspectRatio
+  wrapperProps?: Omit<BoxProps, 'aspectRatio'>
+  onSlideChange?: (index: number) => void
+  initialSlide?: number
+  swiperProps?: SwiperProps
 }) => {
   const classes = useStyles()
 
@@ -88,18 +101,30 @@ export const MediaCarousel = ({
     <Box w="100%" overflow="hidden">
       <Swiper
         className={classes.swiper}
+        keyboard={{
+          enabled: true,
+        }}
         pagination={{
           dynamicBullets: true,
         }}
         navigation={{ enabled: true }}
-        modules={[Pagination, Navigation]}
+        modules={[Keyboard, Pagination, Navigation]}
         spaceBetween={10}
         slidesPerView={1}
+        onSlideChange={(swiper) => {
+          onSlideChange?.(swiper.realIndex)
+        }}
+        initialSlide={initialSlide}
+        {...swiperProps}
       >
-        {links.map((link) => {
+        {links.map((link, index) => {
           return (
-            <SwiperSlide key={link}>
-              <RenderImageOrVideo link={link} borderRadius={0} aspectRatio={aspectRatio} />
+            <SwiperSlide key={index}>
+              {typeof link === 'string' ? (
+                <RenderImageOrVideo link={link} borderRadius={0} aspectRatio={aspectRatio} {...wrapperProps} />
+              ) : (
+                link
+              )}
             </SwiperSlide>
           )
         })}

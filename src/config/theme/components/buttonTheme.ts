@@ -346,7 +346,6 @@ export const buttonTheme: ComponentStyleConfig = {
       color: theme.colors.neutral[900],
       backgroundColor: theme.colors.neutral[0],
       textDecoration: 'none',
-      fontFamily: fonts.roboto,
       fontSize: '14px',
       padding: '12px',
       iconSpacing: '10px',

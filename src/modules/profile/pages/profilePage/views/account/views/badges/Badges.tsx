@@ -1,4 +1,4 @@
-import { Button, HStack, Link as ChakraLink, VStack } from '@chakra-ui/react'
+import { HStack, IconButton, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiArrowSquareOut } from 'react-icons/pi'
 
@@ -15,19 +15,18 @@ export const Badges = () => {
       <VStack w="full" alignItems={'start'}>
         <HStack w="full" justifyContent={'space-between'}>
           <Body size="xl" medium>
-            {t('Badges')}
+            {t('Achievements')}
           </Body>
-          <Button
+          <IconButton
+            aria-label="achievements"
             as={ChakraLink}
             href={getPath('badges')}
             isExternal
             size="sm"
             variant="soft"
             colorScheme="neutral1"
-            rightIcon={<PiArrowSquareOut />}
-          >
-            {t('See all badges')}
-          </Button>
+            icon={<PiArrowSquareOut />}
+          />
         </HStack>
         <BadgesBody />
       </VStack>

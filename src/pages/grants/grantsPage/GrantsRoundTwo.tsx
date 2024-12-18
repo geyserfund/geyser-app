@@ -90,7 +90,7 @@ export const GrantsRoundTwo = ({
                   <SatoshiIconTilted scale={1.4} />
                 </Box>
 
-                <Text fontWeight={'700'} fontSize={'36px'} fontFamily={fonts.livvic} textAlign="center">
+                <Text fontWeight={'700'} fontSize={'36px'} textAlign="center">
                   100 M
                 </Text>
                 <Text fontSize={'xs'} ml="1" fontWeight="800" color="neutral.400">
