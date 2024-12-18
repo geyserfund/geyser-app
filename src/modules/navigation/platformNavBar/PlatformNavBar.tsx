@@ -149,6 +149,7 @@ export const PlatformNavBar = () => {
         paddingInlineStart={'4px !important'}
         paddingInlineEnd={'4px !important'}
         borderRadius="50% !important"
+        backgroundColor="utils.pbg"
         aria-label="go-back"
         icon={<PiArrowLeft fontSize={'16px'} />}
         onClick={() => navigate(-1)}

@@ -9,6 +9,7 @@ import { useAuthContext } from './context'
 import { useActivityHook } from './modules/discovery/hooks/useActivityHook'
 import { PlatformNavBar } from './modules/navigation/platformNavBar/PlatformNavBar'
 import { InfoBanner } from './modules/notification/InfoBanner'
+import { NoticeBanner } from './modules/notification/NoticeBanner'
 import { LoadingPage } from './pages/loading'
 import { dimensions, ID } from './shared/constants'
 import { useLayoutAnimation } from './shared/hooks'
@@ -68,6 +69,7 @@ export const AppLayout = () => {
               <Outlet />
             </Box>
             <InfoBanner />
+            <NoticeBanner />
           </Box>
         </Box>
       </PullToRefresh>

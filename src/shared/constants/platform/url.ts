@@ -451,6 +451,9 @@ export const GuardiansSeriesOneBackgroundMobileUrl =
 export const GuardiansSeriesOneOrnamentSeparatorUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/guardians-ornamental-separator.png'
 
+export const GuardiansSeriesOneBannerImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/guardians-notice-image.png'
+
 // Desktop
 export const KingCharacterPageDesktop =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/desktop/King-CharacterPage-Desktop.png'
