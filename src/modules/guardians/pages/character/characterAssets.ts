@@ -245,7 +245,7 @@ export const CharacterAssets: {
     abilities: ['Fearless Sat Stacker', 'Lightning Resolve'],
     digitalItems: [
       {
-        name: 'Warior Nostr Badge',
+        name: 'Warrior Nostr Card',
         description: [
           'This Warrior badge will display next to your Geyser profile forever. It signals your support of Geyser and Bitcoin creators.',
         ],
@@ -268,14 +268,14 @@ export const CharacterAssets: {
     abilities: ['FUD SLAYER', 'FED DESTROYER'],
     digitalItems: [
       {
-        name: 'Knight Nostr Badge (2,100 only)',
+        name: 'Knight Nostr Card: Limited Edition',
         description: [
           'This Knight Card is a special digital item that is interoperable with Nostr. This card is a limited edition; there will only ever be 2,100.',
         ],
         url: KnightNostrCardUrl,
       },
       {
-        name: 'Knight Profile Gem (2,100 only) ',
+        name: 'Knight Profile Gem: Limited Edition',
         description: [
           'This Knight badge will display next to your Geyser profile forever. It signals your support for Geyser and Bitcoin creators.',
         ],
@@ -285,21 +285,21 @@ export const CharacterAssets: {
     available: 2100,
     physicalItems: [
       {
-        name: 'Knight T-Shirt (2,100 only)',
+        name: 'Knight T-Shirt: Limited Edition',
         description: [
           'A high-quality T-shirt made from 100% organic cotton and limited to the number of Knights. High quality durable print. Designs created by NoGood.',
         ],
         url: KnightTshirtUrl,
       },
       {
-        name: 'Knight Trading Card (2,100 only)',
+        name: 'Knight Trading Card: Limited Edition',
         description: [
           'A holographic Knight card designed and produced by the one and only BTC Trading Cards. The card comes in a simple foil cover. This is one of four Geyser Guardians Series 1 cards that will ever be produced.',
         ],
         url: KnightTradingCardUrl,
       },
       {
-        name: 'Guardian Sticker pack',
+        name: 'Guardian Sticker Pack',
         description: [
           'A holographic sticker pack featuring all Guardian characters, along with the Geyser and Geyser Guardians logos.',
         ],
@@ -318,14 +318,14 @@ export const CharacterAssets: {
     abilities: ['Strategic Bitcoin Conquerer', 'Low-Time Preference Leader'],
     digitalItems: [
       {
-        name: 'King Nostr Badge (121 only)',
+        name: 'King Nostr Card: Limited Edition',
         description: [
           'This King Card is a special digital item that is interoperable with Nostr. It is a limited edition, with only 121 ever created.',
         ],
         url: KingNostrCardUrl,
       },
       {
-        name: 'King Profile Gem (121 only)',
+        name: 'King Profile Gem: Limited Edition',
         description: [
           'This King badge will display next to your Geyser profile forever. It signals your support for Geyser and Bitcoin creators.',
         ],
@@ -335,14 +335,14 @@ export const CharacterAssets: {
     available: 121,
     physicalItems: [
       {
-        name: 'King T-Shirt (121 only)',
+        name: 'King T-Shirt: Limited Edition ',
         description: [
           'A high-quality T-shirt made from 100% organic cotton and limited to the number of Kings. Features a durable, high-quality print that will last for decades. Designs created by NoGood.',
         ],
         url: KingTshirtUrl,
       },
       {
-        name: 'King Trading Card (121 only)',
+        name: 'Knight Trading Card: Limited Edition',
         description: [
           'A holographic collectible King card that comes in simple wrapping. The holographic effect doesn’t render in this image.',
           'This limited edition card, with only 121 produced, is one of four Geyser Guardians Series 1 cards. It’s designed and produced by the one and only BTC Trading Cards.',
@@ -359,7 +359,7 @@ export const CharacterAssets: {
         url: GuardiansZineUrl,
       },
       {
-        name: 'King Jersey (121 only)',
+        name: 'King Jersey: Limited edition',
         description: [
           'The King Jersey is a super high-quality item, made of 100% cotton, fully embroidered for lasting durability.',
           'The design is sharp and stands out with bright turquoise lines on a black jersey. The back features the “Guardian” sign to maintain good OpSec while showcasing you are a guardian of Bitcoin Adoption!',
@@ -368,7 +368,7 @@ export const CharacterAssets: {
         url: GuardiansBlackJerseyUrl,
       },
       {
-        name: 'Guardian Sticker pack',
+        name: 'Guardian Sticker Pack',
         description: [
           'A holographic sticker pack featuring all Guardian characters, along with the Geyser and Geyser Guardians logos.',
         ],
@@ -387,14 +387,14 @@ export const CharacterAssets: {
     abilities: ['Untraceable OpSec', 'Laser-Eyed Vision'],
     digitalItems: [
       {
-        name: 'Legend Nostr Badge (21 only)',
+        name: 'Legend Nostr Card: Limited Edition',
         description: [
           'This Legend Card is a special digital item that is interoperable with Nostr. It is a limited edition, with only 21 ever created.',
         ],
         url: LegendNostrCardUrl,
       },
       {
-        name: 'Legend Profile Gem (21 only)',
+        name: 'Legend Profile Gem: Limited Edition',
         description: [
           'This Legend badge will display next to your Geyser profile forever. It signals your support for Geyser and Bitcoin creators.',
         ],
@@ -404,14 +404,14 @@ export const CharacterAssets: {
     available: 21,
     physicalItems: [
       {
-        name: 'Knight T-Shirt (21 only) ',
+        name: 'Legend T-Shirt: Limited Edition',
         description: [
           'A high-quality T-shirt made from 100% organic cotton and limited to the number of Legends. Features a durable, high-quality print that will last for decades. Designs created by NoGood.',
         ],
         url: LegendTshirtUrl,
       },
       {
-        name: 'Knight Trading Card (21 only)',
+        name: 'Knight Trading Card: Limited Edition',
         description: [
           'A holographic collectible Legend card that comes in simple wrapping. The holographic effect doesn’t render in this image.',
           'This limited edition card, with only 21 produced, is one of four Geyser Guardians Series 1 cards. It’s designed and produced by the one and only BTC Trading Cards.',
@@ -419,7 +419,7 @@ export const CharacterAssets: {
         url: LegendTradingCardUrl,
       },
       {
-        name: 'The GuardiansZine',
+        name: 'The Guardians Zine',
         description: [
           'This Zine tells the full story and vision behind the Guardians. It explores the origins of the characters, their powers, and the hopeful world they are defending.',
           'Finally, it ties everything together with Bitcoin, and the Geyser Manifesto.',
@@ -428,7 +428,7 @@ export const CharacterAssets: {
         url: GuardiansZineUrl,
       },
       {
-        name: 'Legend Jersey (21 only)',
+        name: 'Legend Jersey: Limited Edition',
         description: [
           'The Legend Jersey is a super high-quality item, made of 100% cotton, fully embroidered for lasting durability.',
           'The design is sharp and with an elite feel, with bright turquoise lines on a white jersey. The back features the “Guardian” sign to maintain good OpSec while showcasing you are a guardian of Bitcoin Adoption!',
@@ -437,12 +437,12 @@ export const CharacterAssets: {
         url: GuardiansWhiteJerseyUrl,
       },
       {
-        name: 'BitAxe Gamma with 3D Stand',
+        name: 'BitAxe',
         description: ['<WAITING FOR SPECS>'],
         url: MysteryItemMinerLightUrl,
       },
       {
-        name: 'Guardian Sticker pack',
+        name: 'Guardian Sticker Pack',
         description: [
           'A holographic sticker pack featuring all Guardian characters, along with the Geyser and Geyser Guardians logos.',
         ],

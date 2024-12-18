@@ -15,7 +15,13 @@ import { CharacterAssets } from '../characterAssets'
 
 const GUARDIANS_PROJECT_NAME = 'geyserguardians'
 
-export const GuardiansPrice = ({ currentGuardian }: { currentGuardian: GuardianType }) => {
+export const GuardiansPrice = ({
+  currentGuardian,
+  showOnlyButton,
+}: {
+  currentGuardian: GuardianType
+  showOnlyButton?: boolean
+}) => {
   const navigate = useNavigate()
 
   const guardianRewards = useAtomValue(guardianRewardsAtom)
@@ -38,39 +44,41 @@ export const GuardiansPrice = ({ currentGuardian }: { currentGuardian: GuardianT
 
   return (
     <>
-      <VStack w="full" alignItems="flex-start" spacing={3}>
-        <VStack w="full" alignItems="flex-start" spacing={0}>
-          <H2 size={{ base: '32px', lg: '32px' }} dark fontWeight={600}>
-            {t('Price')}: {discountRemains && <Body as="span" bold>{`$${centsToDollars(discountPrice)}`}</Body>}{' '}
-            <Body
-              as="span"
-              color={discountRemains ? 'utils.text' : 'neutral1.11'}
-              textDecoration={discountRemains ? 'line-through' : 'none'}
-            >
-              {`$${centsToDollars(mainPrice)}`}
+      <VStack w="full" alignItems={showOnlyButton ? 'center' : 'flex-start'} spacing={3}>
+        {!showOnlyButton && (
+          <VStack w="full" alignItems="flex-start" spacing={0}>
+            <H2 size={{ base: '32px', lg: '32px' }} dark fontWeight={600}>
+              {t('Price')}: {discountRemains && <Body as="span" bold>{`$${centsToDollars(discountPrice)}`}</Body>}{' '}
+              <Body
+                as="span"
+                color={discountRemains ? 'utils.text' : 'neutral1.11'}
+                textDecoration={discountRemains ? 'line-through' : 'none'}
+              >
+                {`$${centsToDollars(mainPrice)}`}
+              </Body>
+            </H2>
+            <Body fontWeight={600} textTransform="uppercase">
+              <Trans
+                i18nKey="The first <1>121</1> Guardians get <3>10%</3> OFF. <5>{{remainingDiscounts}}</5> left."
+                values={{ remainingDiscounts: guardianRewardsDiscountItems }}
+              >
+                {'The first '}
+                <Body as="span" color={`guardians.${currentGuardian}.text`}>
+                  {'121'}
+                </Body>
+                {' Guardians get '}
+                <Body as="span" color={`guardians.${currentGuardian}.text`}>
+                  {'10%'}
+                </Body>
+                {' OFF. '}
+                <Body as="span" color={`guardians.${currentGuardian}.text`}>
+                  {'{{remainingDiscounts}}'}
+                </Body>
+                {' left.'}
+              </Trans>
             </Body>
-          </H2>
-          <Body fontWeight={600} textTransform="uppercase">
-            <Trans
-              i18nKey="The first <1>121</1> Guardians get <3>10%</3> OFF. <5>{{remainingDiscounts}}</5> left."
-              values={{ remainingDiscounts: guardianRewardsDiscountItems }}
-            >
-              {'The first '}
-              <Body as="span" color={`guardians.${currentGuardian}.text`}>
-                {'121'}
-              </Body>
-              {' Guardians get '}
-              <Body as="span" color={`guardians.${currentGuardian}.text`}>
-                {'10%'}
-              </Body>
-              {' OFF. '}
-              <Body as="span" color={`guardians.${currentGuardian}.text`}>
-                {'{{remainingDiscounts}}'}
-              </Body>
-              {' left.'}
-            </Trans>
-          </Body>
-        </VStack>
+          </VStack>
+        )}
         <Button
           variant="solid"
           colorScheme="neutral1"
@@ -87,7 +95,7 @@ export const GuardiansPrice = ({ currentGuardian }: { currentGuardian: GuardianT
           {`Become a ${guardianAsset.title}`}
         </Button>
       </VStack>
-      <Divider borderColor={'neutral1.6'} />
+      {!showOnlyButton && <Divider borderColor={'neutral1.6'} />}
     </>
   )
 }

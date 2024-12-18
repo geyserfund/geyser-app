@@ -1,4 +1,4 @@
-import { Divider, Icon, Stack, VStack } from '@chakra-ui/react'
+import { Divider, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { Trans } from 'react-i18next'
@@ -67,12 +67,7 @@ export const TitleBlock = ({ currentGuardian }: { currentGuardian: GuardianType 
       </VStack>
 
       <Divider borderColor={'neutral1.6'} />
-      <Stack
-        w="full"
-        direction={{ base: 'column', lg: 'row' }}
-        spacing={{ base: 0, lg: 2 }}
-        alignItems={{ base: 'flex-start', lg: 'center' }}
-      >
+      <HStack w="full" spacing={2} alignItems={{ base: 'flex-start', lg: 'center' }} flexWrap="wrap">
         {guardianAsset.abilities.map((ability, index) => {
           return (
             <>
@@ -85,7 +80,7 @@ export const TitleBlock = ({ currentGuardian }: { currentGuardian: GuardianType 
             </>
           )
         })}
-      </Stack>
+      </HStack>
       <Divider borderColor={'neutral1.6'} />
     </VStack>
   )

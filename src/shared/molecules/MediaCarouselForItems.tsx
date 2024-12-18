@@ -33,11 +33,13 @@ const useStyles = createUseStyles((theme: AppTheme) => ({
 type MediaCarouselForItemsModalProps = {
   imageLinkList: string[]
   dataList: { name: string; description: string[] }[]
+  bottomContent?: React.ReactNode
 } & Omit<UseModalReturn<{ currentIndex: number }>, 'children'>
 
 export const MediaCarouselForItemsModal = ({
   imageLinkList,
   dataList,
+  bottomContent,
   ...modalProps
 }: MediaCarouselForItemsModalProps) => {
   const classes = useStyles()
@@ -92,6 +94,7 @@ export const MediaCarouselForItemsModal = ({
           </Body>
         ))}
       </VStack>
+      {bottomContent}
     </Modal>
   )
 }

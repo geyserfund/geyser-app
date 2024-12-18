@@ -173,6 +173,8 @@ export const MobileGuardiansIllustration = () => {
           bold
           color={`guardians.${currentGuardian}.text`}
           textTransform="uppercase"
+          onClick={() => navigate(getPath('guardiansCharacter', currentGuardian))}
+          _hover={{ cursor: 'pointer' }}
         >
           {currentGuardian}
         </Body>

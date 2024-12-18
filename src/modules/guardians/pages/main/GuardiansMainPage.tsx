@@ -1,10 +1,10 @@
-import { Box, HStack, Image, VStack } from '@chakra-ui/react'
+import { Box, HStack, Image, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import React from 'react'
 import { Trans } from 'react-i18next'
 
 import { Body, H2 } from '@/shared/components/typography'
+import { BodyProps } from '@/shared/components/typography/Body'
 import { HeaderProps } from '@/shared/components/typography/Heading'
 import { dimensions } from '@/shared/constants/components/dimensions'
 import { VideoPlayer } from '@/shared/molecules/VideoPlayer'
@@ -36,19 +36,24 @@ export const GuardiansMainPage = () => {
         px={{ base: 3, lg: 6 }}
         spacing={{ base: 2, md: 3, lg: 8 }}
       >
-        <Body fontSize={textSize} textAlign={'center'} medium light lineHeight={'1.2'}>
-          {t(
-            'In a world where nihilism and pessimism about the future prevail, Bitcoin brought us hope. Not just hope for a world built on sound money, but hope in the power of action to create meaningful change. The world is malleable, and individuals have the power to reshape it.',
-          )}
-        </Body>
+        <VStack w="full">
+          <Body fontSize={textSize} textAlign={'center'} medium light lineHeight={'1.2'}>
+            {t(
+              'Bitcoin adoption still has a long way to go, and Bitcoin creators are working tirelessly to bring that vision. Geyser’s mission is to support these creators and empower them to push Bitcoin adoption forward. Geyser Guardians play a vital role in this mission. By becoming a Guardian, you directly fund creator grants and receive exclusive perks in return.',
+            )}
+          </Body>
+          <Body fontSize={textSize} textAlign={'center'} medium light lineHeight={'1.2'}>
+            {t('Become a Guardian now!')}
+          </Body>
+        </VStack>
 
         <VStack w="full" spacing={0}>
           <Body size={{ base: '12px', md: '14px', lg: '16px' }} light fontWeight={600} textTransform={'uppercase'}>
             <Trans
-              i18nKey="The first {{count}} guardians get {{discount}} off. {{left}} left."
+              i18nKey="The next {{count}} guardians get {{discount}} off. {{left}} left."
               values={{ count: 121, discount: '10%', left: guardianDiscountItems }}
             >
-              {'The first '}
+              {'The next '}
               <Body as="span" color="guardians.LEGEND.text">{`{{count}}`}</Body>
               {' guardians get '}
               <Body as="span" color="guardians.LEGEND.text">{`{{discount}}`}</Body>
@@ -76,7 +81,7 @@ export const GuardiansMainPage = () => {
             <GuardianBody>{t('Words from creators on Geyser')}</GuardianBody>
           </VStack>
           <Box width="100%" borderRadius={'8px'} overflow={'hidden'}>
-            <VideoPlayer width="100%" height="100%" url={'https://www.youtube.com/watch?v=b40BxyZGW2I&t=828s'} />
+            <VideoPlayer width="100%" height="100%" url={'https://www.youtube.com/watch?v=SqNPogWpmAg'} />
           </Box>
         </VStack>
         <VStack w="full" spacing={{ base: '16px', lg: '32px' }}>
@@ -110,6 +115,24 @@ export const GuardiansMainPage = () => {
               )}
             </GuardianBody>
             <GuardianBody>{t('What will you do to help bring about Bitcoin adoption?')}</GuardianBody>
+
+            <VStack alignItems={'flex-start'}>
+              <GuardianBody medium>{t('- Geyser Team')}</GuardianBody>
+              <HStack>
+                <GuardianBody textDecoration={'underline'} medium as={Link} href={'https://twitter.com/metamick14'}>
+                  {t('Metamick')}
+                </GuardianBody>
+                <GuardianBody textDecoration={'underline'} medium as={Link} href={'https://x.com/steliosrammos'}>
+                  {t('Stelios')}
+                </GuardianBody>
+                <GuardianBody textDecoration={'underline'} medium as={Link} href={'https://x.com/sajald77'}>
+                  {t('Sajal')}
+                </GuardianBody>
+                <GuardianBody textDecoration={'underline'} medium as={Link} href={'https://primal.net/vladimir'}>
+                  {t('Vlad')}
+                </GuardianBody>
+              </HStack>
+            </VStack>
           </VStack>
         </VStack>
         <GuardianUsers guardian={GuardianType.Legend} size="lg" />
@@ -162,9 +185,9 @@ export const GuardianHeader = ({ children, ...rest }: HeaderProps) => {
   )
 }
 
-export const GuardianBody = ({ children }: { children: React.ReactNode }) => {
+export const GuardianBody = ({ children, ...props }: BodyProps) => {
   return (
-    <Body fontSize={{ base: '16px', md: '18px', lg: '24px', '3xl': '28px' }} light medium>
+    <Body fontSize={{ base: '16px', md: '18px', lg: '24px', '3xl': '28px' }} light medium {...props}>
       {children}
     </Body>
   )

@@ -124,7 +124,12 @@ export const CharacterPage = () => {
         </motion.div>
       </VStack>
       {itemsModal.isOpen && (
-        <MediaCarouselForItemsModal imageLinkList={totalLinks} dataList={totalItems} {...itemsModal} />
+        <MediaCarouselForItemsModal
+          imageLinkList={totalLinks}
+          dataList={totalItems}
+          {...itemsModal}
+          bottomContent={<GuardiansPrice currentGuardian={currentGuardian} showOnlyButton />}
+        />
       )}
     </Stack>
   )
