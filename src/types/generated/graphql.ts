@@ -6430,7 +6430,7 @@ export type ActivityCreatedSubscription = { __typename?: 'Subscription', activit
 
 export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null };
 
-export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
+export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
 export type ActivitiesGetQueryVariables = Exact<{
   input?: InputMaybe<GetActivitiesInput>;
@@ -8359,6 +8359,7 @@ export const FundingTxForUserContributionFragmentDoc = gql`
 export const RewardForLandingPageFragmentDoc = gql`
     fragment RewardForLandingPage on ProjectReward {
   id
+  uuid
   images
   cost
   name
