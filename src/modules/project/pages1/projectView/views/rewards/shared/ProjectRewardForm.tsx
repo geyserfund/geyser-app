@@ -348,6 +348,8 @@ export const ProjectRewardForm = ({
                     'Set a custom message to thank contributors, provide important details, or share any additional information you’d like them to know after they claim the reward.',
                   )}
                   control={control}
+                  error={errors.confirmationMessage?.message}
+                  isInvalid={Boolean(errors.confirmationMessage?.message)}
                   placeholder={t('Enter your message here...')}
                   resize="vertical"
                 />

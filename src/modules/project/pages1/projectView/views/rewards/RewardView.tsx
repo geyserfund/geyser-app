@@ -43,7 +43,7 @@ export const RewardView = () => {
 
   const reward = data?.getProjectReward
 
-  const { count, buyReward } = useRewardBuy(reward)
+  const { count, buyReward, isAvailable } = useRewardBuy(reward)
 
   if (loading) {
     return <RewardViewSkeleton />
@@ -212,7 +212,14 @@ export const RewardView = () => {
           {isProjectOwner ? (
             <RewardEditMenu size="lg" w="full" reward={reward} />
           ) : (
-            <Button size="lg" variant="solid" colorScheme="primary1" width="full" onClick={buyReward}>
+            <Button
+              size="lg"
+              variant="solid"
+              colorScheme="primary1"
+              width="full"
+              onClick={buyReward}
+              isDisabled={!isAvailable}
+            >
               {t('Buy')}
             </Button>
           )}

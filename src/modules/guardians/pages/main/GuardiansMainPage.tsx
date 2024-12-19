@@ -99,7 +99,7 @@ export const GuardiansMainPage = () => {
           <VStack w="full" spacing={{ base: '16px', lg: '32px' }}>
             <GuardianHeader>{t('Geyser Manifesto')}</GuardianHeader>
 
-            <VStack w="full" alignItems={'flex-start'} spacing={{ base: '16px', lg: '32px' }}>
+            <VStack w="full" maxWidth={'full'} alignItems={'flex-start'} spacing={{ base: '16px', lg: '32px' }}>
               <GuardianBody>
                 {t(
                   'In a world where nihilism and pessimism about the future prevail, Bitcoin brought us hope. Not just hope for a world built on sound money, but hope in the power of action to create meaningful change. The world is malleable, and individuals have the power to reshape it.',
@@ -200,7 +200,13 @@ export const GuardianHeader = ({ children, ...rest }: HeaderProps) => {
 
 export const GuardianBody = ({ children, ...props }: BodyProps) => {
   return (
-    <Body fontSize={{ base: '16px', md: '18px', lg: '24px', '3xl': '28px' }} light medium {...props}>
+    <Body
+      fontSize={{ base: '16px', md: '18px', lg: '24px', '3xl': '28px' }}
+      light
+      medium
+      wordBreak={'break-word'}
+      {...props}
+    >
       {children}
     </Body>
   )
