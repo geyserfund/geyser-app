@@ -15,6 +15,7 @@ import {
   GuardiansSeriesOneBackgroundMobileUrl,
   GuardiansSeriesOneBackgroundTabUrl,
 } from '@/shared/constants'
+import { useInitialColorModeEffect } from '@/shared/hooks/utils/useInitialColorMode'
 import { fonts } from '@/shared/styles'
 import { toPx } from '@/utils'
 
@@ -23,6 +24,8 @@ import { useGuardianProjectRewards } from './hooks/useGuardianProjectRewards'
 const GEYSER_GUARDIANS_PROJECT_NAME = 'geyserguardians'
 
 export const Guardians = () => {
+  useInitialColorModeEffect()
+
   const isGuardianCharacterPage = useIsGuardianCharacterPage()
 
   const [searchParams] = useSearchParams()
