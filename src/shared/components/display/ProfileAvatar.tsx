@@ -1,4 +1,4 @@
-import { Avatar, AvatarProps, BoxProps } from '@chakra-ui/react'
+import { Avatar, AvatarProps, BoxProps, ComponentWithAs } from '@chakra-ui/react'
 import { Box } from '@chakra-ui/react'
 import { useMemo } from 'react'
 
@@ -9,9 +9,13 @@ import { DefaultImage } from './DefaultImage'
 type ProfileAvatarProps = {
   guardian?: GuardianType | null
   wrapperProps?: BoxProps
-} & AvatarProps
+}
 
-export const ProfileAvatar = ({ guardian, wrapperProps, ...props }: ProfileAvatarProps) => {
+export const ProfileAvatar: ComponentWithAs<'span', AvatarProps & ProfileAvatarProps> = ({
+  guardian,
+  wrapperProps,
+  ...props
+}: ProfileAvatarProps) => {
   const backgroundColor = useMemo(() => {
     if (guardian) {
       return guardianGradient[guardian]

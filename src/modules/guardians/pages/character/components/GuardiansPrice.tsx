@@ -57,26 +57,28 @@ export const GuardiansPrice = ({
                 {`$${centsToDollars(mainPrice)}`}
               </Body>
             </H2>
-            <Body fontWeight={600} textTransform="uppercase">
-              <Trans
-                i18nKey="The first <1>121</1> Guardians get <3>10%</3> OFF. <5>{{remainingDiscounts}}</5> left."
-                values={{ remainingDiscounts: guardianRewardsDiscountItems }}
-              >
-                {'The first '}
-                <Body as="span" color={`guardians.${currentGuardian}.text`}>
-                  {'121'}
-                </Body>
-                {' Guardians get '}
-                <Body as="span" color={`guardians.${currentGuardian}.text`}>
-                  {'10%'}
-                </Body>
-                {' OFF. '}
-                <Body as="span" color={`guardians.${currentGuardian}.text`}>
-                  {'{{remainingDiscounts}}'}
-                </Body>
-                {' left.'}
-              </Trans>
-            </Body>
+            {discountRemains && (
+              <Body fontWeight={600} textTransform="uppercase">
+                <Trans
+                  i18nKey="The first <1>121</1> Guardians get <3>10%</3> OFF. <5>{{remainingDiscounts}}</5> left."
+                  values={{ remainingDiscounts: guardianRewardsDiscountItems }}
+                >
+                  {'The first '}
+                  <Body as="span" color={`guardians.${currentGuardian}.text`}>
+                    {'121'}
+                  </Body>
+                  {' Guardians get '}
+                  <Body as="span" color={`guardians.${currentGuardian}.text`}>
+                    {'10%'}
+                  </Body>
+                  {' OFF. '}
+                  <Body as="span" color={`guardians.${currentGuardian}.text`}>
+                    {'{{remainingDiscounts}}'}
+                  </Body>
+                  {' left.'}
+                </Trans>
+              </Body>
+            )}
           </VStack>
         )}
         <Button
