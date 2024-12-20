@@ -230,7 +230,14 @@ export const MobileGuardiansIllustration = () => {
           opacity={0.3}
           right={'48%'}
         >
-          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={previousGuardianImage} />
+          <Image
+            h="full"
+            w="full"
+            objectFit="cover"
+            objectPosition="top"
+            src={previousGuardianImage}
+            alt={`Geyser Guardians - ${previousGuardian}`}
+          />
         </Box>
 
         <Box
@@ -265,7 +272,14 @@ export const MobileGuardiansIllustration = () => {
           opacity={0.3}
           left={'48%'}
         >
-          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={nextGuardianImage} />
+          <Image
+            h="full"
+            w="full"
+            objectFit="cover"
+            objectPosition="top"
+            src={nextGuardianImage}
+            alt={`Geyser Guardians - ${nextGuardian}`}
+          />
         </Box>
 
         <Box
@@ -307,7 +321,14 @@ export const MobileGuardiansIllustration = () => {
           bottom={-1}
           zIndex={1}
         >
-          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={currentGuardianImage} />
+          <Image
+            h="full"
+            w="full"
+            objectFit="cover"
+            objectPosition="top"
+            src={currentGuardianImage}
+            alt={`Geyser Guardians - ${currentGuardian}`}
+          />
         </Box>
       </VStack>
       <Image
