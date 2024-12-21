@@ -84,8 +84,8 @@ export const GuardiansMainPage = () => {
           w="full"
           h="full"
           maxWidth={dimensions.guardians.textMaxWidth}
-          px={{ base: 3, lg: 6 }}
           spacing={{ base: '32px', lg: '96px' }}
+          px={{ base: 3, lg: 6 }}
         >
           <VStack w="full">
             <VStack w="full" spacing={0}>
@@ -96,7 +96,7 @@ export const GuardiansMainPage = () => {
               <VideoPlayer width="100%" height="100%" url={'https://www.youtube.com/watch?v=SqNPogWpmAg'} />
             </Box>
           </VStack>
-          <VStack w="full" spacing={{ base: '16px', lg: '32px' }}>
+          <VStack w="full" spacing={{ base: '16px', lg: '32px' }} px={{ base: 3, lg: 6 }}>
             <GuardianHeader>{t('Geyser Manifesto')}</GuardianHeader>
 
             <VStack w="full" maxWidth={'full'} alignItems={'flex-start'} spacing={{ base: '16px', lg: '32px' }}>
