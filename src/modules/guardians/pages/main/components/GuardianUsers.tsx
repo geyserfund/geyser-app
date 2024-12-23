@@ -47,7 +47,7 @@ export const GuardianUsers = ({
         <H2 fontSize={{ base: '28', lg: '48px' }} fontWeight={600} color={`guardians.${guardian}.text`} {...titleProps}>
           {guardianAsset.title}
         </H2>
-        <HStack spacing="10px" overflowX="hidden" flexWrap="wrap">
+        <HStack w="full" spacing="10px" overflowX="hidden" flexWrap="wrap">
           {users &&
             users.length > 0 &&
             users.map((user) => (
