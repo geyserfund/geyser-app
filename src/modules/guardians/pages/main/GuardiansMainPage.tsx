@@ -96,7 +96,7 @@ export const GuardiansMainPage = () => {
               <VideoPlayer width="100%" height="100%" url={'https://www.youtube.com/watch?v=SqNPogWpmAg'} />
             </Box>
           </VStack>
-          <VStack w="full" spacing={{ base: '16px', lg: '32px' }} px={{ base: 3, lg: 6 }}>
+          <VStack w="full" spacing={{ base: '16px', lg: '32px' }}>
             <GuardianHeader>{t('Geyser Manifesto')}</GuardianHeader>
 
             <VStack w="full" maxWidth={'full'} alignItems={'flex-start'} spacing={{ base: '16px', lg: '32px' }}>
@@ -200,13 +200,7 @@ export const GuardianHeader = ({ children, ...rest }: HeaderProps) => {
 
 export const GuardianBody = ({ children, ...props }: BodyProps) => {
   return (
-    <Body
-      fontSize={{ base: '16px', md: '18px', lg: '24px', '3xl': '28px' }}
-      light
-      medium
-      wordBreak={'break-word'}
-      {...props}
-    >
+    <Body fontSize={{ base: '16px', md: '18px', lg: '24px', '3xl': '28px' }} light medium {...props}>
       {children}
     </Body>
   )
