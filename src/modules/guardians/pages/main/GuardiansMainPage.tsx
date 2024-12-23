@@ -39,7 +39,7 @@ export const GuardiansMainPage = () => {
         image={GuardiansSeoImageUrl}
         type="article"
       />
-      <VStack paddingTop={{ base: 16, md: 20, lg: 6 }} paddingBottom={{ base: '60px', lg: 24 }}>
+      <VStack w="full" paddingTop={{ base: 16, md: 20, lg: 6 }} paddingBottom={{ base: '60px', lg: 24 }}>
         <VStack
           w="full"
           zIndex={2}
