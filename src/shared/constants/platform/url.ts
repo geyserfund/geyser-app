@@ -11,7 +11,7 @@ export const FeedbackUrl = 'https://geyser.steelsync.io/feedback'
 export const GeyserAboutUrl = 'https://about.geyser.fund'
 export const GeyserManifestoUrl = 'https://about.geyser.fund/manifesto'
 export const GeyserSubscribeUrl = 'https://about.geyser.fund/subscribe'
-
+export const GeyserPrivacyUrl = 'https://about.geyser.fund/Privacy'
 // Geyser footer Links
 
 export const GeyserTwitterUrl = 'https://twitter.com/geyserfund'
