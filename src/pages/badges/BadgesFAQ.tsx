@@ -2,6 +2,7 @@ import { Accordion, Link, Text } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
+
 import { AccordionButton } from './AccordionButton'
 import { AccordionItem } from './AccordionItem'
 import { AccordionPanel } from './AccordionPanel'

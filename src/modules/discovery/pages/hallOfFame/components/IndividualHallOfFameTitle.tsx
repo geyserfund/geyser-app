@@ -2,7 +2,7 @@ import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React from 'react'
 
-import { CardLayout,  CardLayoutProps} from '@/shared/components/layouts/CardLayout'
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 

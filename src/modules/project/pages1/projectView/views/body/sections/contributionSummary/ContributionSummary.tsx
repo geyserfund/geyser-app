@@ -2,6 +2,7 @@ import { HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakr
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
+
 import { ContributeButton } from '../../components'
 import { ProjectBalanceDisplay } from './components/ProjectBalanceDisplay'
 

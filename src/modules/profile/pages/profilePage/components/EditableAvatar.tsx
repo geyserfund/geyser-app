@@ -1,10 +1,10 @@
 import { Box } from '@chakra-ui/react'
 import { useState } from 'react'
 
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { FileUpload } from '@/shared/molecules'
 
 import { AddPictureIcon } from '../../../../../components/icons/svg/AddPictureIcon'
-import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import Loader from '../../../../../components/ui/Loader'
 import { getRandomOrb } from '../../../../../utils'
 

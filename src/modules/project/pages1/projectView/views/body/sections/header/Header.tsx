@@ -17,13 +17,13 @@ import { PiCaretDoubleDown } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { ProjectStatusBar } from '@/components/ui'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 
 import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H1 } from '../../../../../../../../shared/components/typography'
 import {
   dimensions,

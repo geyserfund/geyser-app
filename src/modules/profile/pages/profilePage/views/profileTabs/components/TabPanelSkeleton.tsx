@@ -1,4 +1,5 @@
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
+
 import { ProfileProjectCardSkeleton } from './ProfileProjectCard'
 
 export const TabPanelSkeleton = () => {

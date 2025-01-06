@@ -3,11 +3,11 @@ import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 
 import { getUSD } from '@/modules/project/pages1/projectDashboard/common'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 
-import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { getRewardShippingStatusBackgroundColor } from '../../../../../../../helpers/getProjectShippingStatusBackgroundColor'
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { RewardStatusLabel } from '../../../../../../../shared/constants'
 import { OrdersGetStatus, ProfileOrderFragment, ProjectAvatarFragment } from '../../../../../../../types'
 import { commaFormatted, toSmallImageUrl, useCustomTheme } from '../../../../../../../utils'

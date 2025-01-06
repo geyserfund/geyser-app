@@ -2,8 +2,8 @@ import { Heading, HStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { Link } from 'react-router-dom'
 
-import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { projectAtom } from '@/modules/project/state/projectAtom'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { getPath } from '@/shared/constants'
 
 export const GEYSER_GUARDIANS_PROJECT_NAME = 'geyserguardians'

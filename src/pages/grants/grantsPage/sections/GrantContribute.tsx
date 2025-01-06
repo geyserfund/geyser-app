@@ -1,8 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next'
 
-import { Body, H3 } from '@/shared/components/typography'
-
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { Body, H3 } from '@/shared/components/typography'
 
 export const GrantContribute = ({
   grantProjectName,

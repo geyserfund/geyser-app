@@ -1,13 +1,13 @@
 import { Box, Image, ListItem, Tag, UnorderedList, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H1, H3 } from '@/shared/components/typography'
 import { MarkdownField } from '@/shared/markdown/MarkdownField'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 
 import { StatusLabel } from '../../../../components/ui/StatusLabel'
 import { Tooltip } from '../../../../components/ui/Tooltip'
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { VideoPlayer } from '../../../../shared/molecules/VideoPlayer'
 import { DistributionSystem, Grant, GrantType, VotingSystem } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'

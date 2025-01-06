@@ -18,9 +18,10 @@ import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { PiWarningCircleFill } from 'react-icons/pi'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
+
 import { SubscribeIcon } from '../../../components/icons'
 import { BetaBox } from '../../../components/ui'
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '../../../shared/components/typography'
 import {
   FlashsubscribeUrl,

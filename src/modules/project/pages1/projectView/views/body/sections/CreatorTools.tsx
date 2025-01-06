@@ -1,4 +1,5 @@
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
+
 import { ProjectStatus } from '../../../../../../../types'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 import { CreatorButtons } from '../components/CreatorButtons'

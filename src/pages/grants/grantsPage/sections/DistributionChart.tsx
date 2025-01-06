@@ -2,9 +2,9 @@ import { Box, BoxProps, HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { getPathWithGeyserHero } from '../../../../shared/constants'
 import { standardPadding } from '../../../../shared/styles'
 import { GrantApplicant, VotingSystem } from '../../../../types'

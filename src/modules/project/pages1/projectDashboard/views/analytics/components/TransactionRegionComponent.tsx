@@ -1,7 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout,  CardLayoutProps} from '@/shared/components/layouts/CardLayout'
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { H3 } from '@/shared/components/typography'
 
 import { FundingRegionsPieChart } from '../elements'

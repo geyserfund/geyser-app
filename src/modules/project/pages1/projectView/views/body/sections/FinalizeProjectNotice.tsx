@@ -2,9 +2,9 @@ import { Button } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { getPath } from '../../../../../../../shared/constants'
 import { useProjectAtom, useWalletAtom } from '../../../../../hooks/useProjectAtom'
 

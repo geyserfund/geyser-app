@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next'
 import { TbWorld } from 'react-icons/tb'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body } from '@/shared/components/typography'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
 
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { useNotification } from '../../../../../../utils'
 import { DashboardLayout } from '../../common'
 import { ExportNostrKeysModal } from './components/ExportNostrKeysModal'
