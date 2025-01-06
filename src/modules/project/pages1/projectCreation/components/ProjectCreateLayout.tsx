@@ -3,7 +3,8 @@ import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiArrowLeft } from 'react-icons/pi'
 
-import { CardLayout } from '../../../../../shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
+
 import { dimensions } from '../../../../../shared/constants'
 import { useMobileMode } from '../../../../../utils'
 

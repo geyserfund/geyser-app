@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { Body, H3 } from '@/shared/components/typography'
 
-import { CardLayout } from '../../../../../../../shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { getPath } from '../../../../../../../shared/constants'
 import { useProjectAtom, useWalletAtom } from '../../../../../hooks/useProjectAtom'
 

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks'
 import { useProjectDeleteMutation } from '@/types'

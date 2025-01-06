@@ -5,7 +5,7 @@ import { useGrant } from '@/pages/grants/hooks/useGrant'
 import { Body, H2 } from '@/shared/components/typography'
 import { standardPadding } from '@/shared/styles'
 
-import { ImageWithReload } from '../../../../../../../components/ui'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { getPath } from '../../../../../../../shared/constants'
 import { FeaturedCardSkeleton } from './FeaturedProjectCard'
 

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Body, H2 } from '@/shared/components/typography'
 
-import { CardLayout, CardLayoutProps } from '../../../../../../../shared/components/layouts'
+import { CardLayout,  CardLayoutProps} from '@/shared/components/layouts/CardLayout'
 import { CreateAProjectButton } from '../../../components'
 
 export const CreateProject = (props: CardLayoutProps) => {

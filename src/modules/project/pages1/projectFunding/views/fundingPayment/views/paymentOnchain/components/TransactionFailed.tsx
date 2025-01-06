@@ -1,7 +1,7 @@
 import { Box, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { TransactionFailedImageUrl } from '@/shared/constants'
 

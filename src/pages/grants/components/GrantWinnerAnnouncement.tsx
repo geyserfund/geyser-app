@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { H3 } from '@/shared/components/typography'
 
-import { CardLayout, CardLayoutProps } from '../../../shared/components/layouts'
+import { CardLayout,  CardLayoutProps} from '@/shared/components/layouts/CardLayout'
 
 interface GrantWinnerAnnouncementProps extends CardLayoutProps {
   imageUrl: string

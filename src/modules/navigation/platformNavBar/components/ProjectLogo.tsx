@@ -2,7 +2,7 @@ import { Heading, HStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { Link } from 'react-router-dom'
 
-import { ImageWithReload } from '@/components/ui'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { projectAtom } from '@/modules/project/state/projectAtom'
 import { getPath } from '@/shared/constants'
 

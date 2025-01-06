@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { getPath } from '@/shared/constants'
 import { MarkdownField } from '@/shared/markdown/MarkdownField'
 
-import { CardLayout } from '../../../../../../../shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '../../../../../../../shared/components/typography'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 import { BodySectionLayout, CreatorEditButton } from '../components'

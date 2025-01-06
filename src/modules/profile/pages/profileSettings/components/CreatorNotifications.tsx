@@ -2,10 +2,10 @@ import { HStack, Select, Skeleton, Switch, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiStar } from 'react-icons/pi'
 
-import { ImageWithReload } from '@/components/ui'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { CreatorNotificationSettings } from '@/types'
 

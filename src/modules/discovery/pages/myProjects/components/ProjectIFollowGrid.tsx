@@ -2,7 +2,7 @@ import { Badge, Box, Grid, GridItem, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { ImageWithReload } from '@/components/ui'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { Project, ProjectStatus } from '@/types'

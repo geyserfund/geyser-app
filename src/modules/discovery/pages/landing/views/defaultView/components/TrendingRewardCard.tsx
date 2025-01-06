@@ -1,8 +1,9 @@
 import { Box, HStack, StackProps, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
-import { ImageWithReload } from '@/components/ui'
-import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPathWithGeyserHero } from '@/shared/constants'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'

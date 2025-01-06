@@ -22,7 +22,8 @@ import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 
 import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
-import { CardLayout, SkeletonLayout } from '../../../../../../../../shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H1 } from '../../../../../../../../shared/components/typography'
 import {
   dimensions,

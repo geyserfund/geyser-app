@@ -4,7 +4,7 @@ import { PiGear } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { dimensions, getPath } from '@/shared/constants'
 
 import { AccountInfo } from './views/AccountInfo'

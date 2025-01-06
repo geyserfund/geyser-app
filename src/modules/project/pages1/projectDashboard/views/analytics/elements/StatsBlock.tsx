@@ -1,7 +1,7 @@
 import { HStack } from '@chakra-ui/react'
 import { BsArrowDown, BsArrowUp } from 'react-icons/bs'
 
-import { CardLayout, CardLayoutProps } from '@/shared/components/layouts'
+import { CardLayout,  CardLayoutProps} from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { commaFormatted, useCustomTheme } from '@/utils'
 

@@ -8,7 +8,7 @@ import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/pro
 import { userOrdersAtom } from '@/modules/profile/state/ordersAtom'
 import { Body, H1 } from '@/shared/components/typography'
 import { ID, NoContributionImageUrl } from '@/shared/constants'
-import { usePaginationAtomHook } from '@/shared/hooks'
+import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHook'
 import { useMobileMode, useNotification } from '@/utils'
 
 import { ProfileOrderFragment, useUserOrdersGetQuery } from '../../../../../../../types'

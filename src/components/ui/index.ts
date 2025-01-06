@@ -1,4 +1,3 @@
-export { ImageWithReload } from '../../shared/components/display/ImageWithReload'
 export * from '../../shared/molecules/LinkableAvatar'
 export * from '../../shared/molecules/ProjectStatusLabel'
 export * from './AlertBox'

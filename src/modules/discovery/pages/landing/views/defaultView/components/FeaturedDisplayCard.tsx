@@ -1,10 +1,10 @@
 import { Box, Link, VStack } from '@chakra-ui/react'
 
-import { CardLayout } from '@/shared/components/layouts'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { standardPadding } from '@/shared/styles'
 
-import { ImageWithReload } from '../../../../../../../components/ui'
 import { FeatureAirtableData } from '../sections/Featured'
 
 export const FeaturedDisplayCard = ({ data }: { data: FeatureAirtableData }) => {

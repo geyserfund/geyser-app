@@ -2,7 +2,7 @@ import { SimpleGrid } from '@chakra-ui/react'
 
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 
-import { CardLayout } from '../../../../../../../shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { ID } from '../../../../../../../shared/constants'
 import { isActive } from '../../../../../../../utils'
 import { RewardCard } from '../../../../projectView/views/rewards/shared'

@@ -3,7 +3,7 @@ import React from 'react'
 
 import { H3 } from '@/shared/components/typography'
 
-import { CardLayout, CardLayoutProps } from '../../../../../shared/components/layouts'
+import { CardLayout,  CardLayoutProps} from '@/shared/components/layouts/CardLayout'
 import { useMobileMode } from '../../../../../utils'
 
 interface ProfileTabLayoutProps extends CardLayoutProps {

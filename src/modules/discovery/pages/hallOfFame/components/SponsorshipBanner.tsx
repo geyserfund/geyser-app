@@ -2,7 +2,7 @@ import { Image, Link } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { fetchHeroSponsorshipBannerData } from '@/api/airtable'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 
 type AirtableHeroSponsorshipBannerData = {

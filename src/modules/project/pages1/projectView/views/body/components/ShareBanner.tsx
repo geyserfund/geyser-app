@@ -1,7 +1,7 @@
 import { Box, HStack, StackProps, VStack } from '@chakra-ui/react'
 import { Emoji } from 'emoji-picker-react'
 
-import { ImageWithReload } from '@/components/ui'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body } from '@/shared/components/typography'
 import { Maybe } from '@/types'
 

@@ -5,8 +5,8 @@ import { Body, H3 } from '@/shared/components/typography'
 import { ProjectAvatarFragment, UserProjectFunderFragment } from '@/types'
 
 import { TransactionTime } from '../../../../../../../components/molecules'
-import { ImageWithReload } from '../../../../../../../components/ui'
-import { CardLayout } from '../../../../../../../shared/components/layouts'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { getPath } from '../../../../../../../shared/constants'
 import { commaFormatted, convertSatsToUsdFormatted, toSmallImageUrl } from '../../../../../../../utils'
 

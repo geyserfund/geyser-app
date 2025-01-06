@@ -4,7 +4,7 @@ import { PiArrowLeft, PiShare } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { dimensions, getPath } from '@/shared/constants'
 import { toPx } from '@/utils'
 

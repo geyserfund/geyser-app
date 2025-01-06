@@ -7,11 +7,11 @@ import { useLocation } from 'react-router'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useRewardBuy } from '@/modules/project/pages1/projectView/hooks'
 import { ProjectRewardShippingEstimate } from '@/modules/project/pages1/projectView/views/rewards/components'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 
-import { ImageWithReload } from '../../../../../../../components/ui'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { ProjectRewardFragment, RewardCurrency } from '../../../../../../../types'
 
 interface IRewardItemProps {

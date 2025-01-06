@@ -7,7 +7,7 @@ import { validateImageUrl } from '@/shared/markdown/validations/image'
 
 import { StatusLabel } from '../../../../components/ui/StatusLabel'
 import { Tooltip } from '../../../../components/ui/Tooltip'
-import { CardLayout } from '../../../../shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { VideoPlayer } from '../../../../shared/molecules/VideoPlayer'
 import { DistributionSystem, Grant, GrantType, VotingSystem } from '../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../utils'

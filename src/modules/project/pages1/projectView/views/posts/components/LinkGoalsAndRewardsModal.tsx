@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { PiPlus } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
-import { ImageWithReload } from '@/components/ui'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useGoalsAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'

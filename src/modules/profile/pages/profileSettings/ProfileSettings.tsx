@@ -7,7 +7,7 @@ import { Link, Outlet, useParams } from 'react-router-dom'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { dimensions, getPath } from '@/shared/constants'
 
-import { CardLayout } from '../../../../shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { useMobileMode } from '../../../../utils'
 import { ProfileError } from '../../components/ProfileError'
 import { useUserProfile } from '../../hooks/useUserProfile'

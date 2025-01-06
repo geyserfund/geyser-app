@@ -8,7 +8,7 @@ import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
 
-import { CardLayout } from '../../../../../../../shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { getPath, ID } from '../../../../../../../shared/constants'
 import { BodySectionLayout, ProjectLinks } from '../components'
 import { CreatorSocial } from './header/components/CreatorSocial'

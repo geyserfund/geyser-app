@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { Body, H2 } from '@/shared/components/typography'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
 
-import { CardLayout } from '../../../../../../shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { getPath } from '../../../../../../shared/constants'
 import { commaFormatted } from '../../../../../../utils'
 import { currentSwapIdAtom, swapAtom, SwapContributionInfo, useRefundFileValue } from '../../../../funding/state'

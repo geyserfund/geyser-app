@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiPlus } from 'react-icons/pi'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 
 import { useGoalsModal } from '../../../hooks'
 import { RenderGoals } from '../../goals/common/RenderGoals'

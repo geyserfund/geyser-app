@@ -1,7 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { useMobileMode } from '@/utils'
 
 import { DashboardMenuDesktop } from './navigation'

@@ -1,7 +1,9 @@
 import { Box, Link, Stack, Text, Tooltip } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../shared/components/layouts'
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
+
+import { SkeletonLayout } from '../../../shared/components/layouts'
 import { useAnimatedClipboard } from '../../../shared/hooks/useAnimatedClipboard'
 import { useGrantStatisticsQuery } from '../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../utils'
