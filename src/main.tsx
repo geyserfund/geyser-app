@@ -6,11 +6,9 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createRoutesFromChildren, matchRoutes, RouterProvider, useLocation, useNavigationType } from 'react-router-dom'
 
-
-import { __production__, __staging__ } from './shared/constants/index.ts'
 import GlobalStyles from './config/GlobalStyles.tsx'
 import { router } from './config/routes/index.ts'
-
+import { __production__, __staging__ } from './shared/constants/index.ts'
 
 const SENTRY_DSN = 'https://2355dca8304c4e32b35bf421d3cf4d87@o4504351883984896.ingest.sentry.io/4505088829292544'
 

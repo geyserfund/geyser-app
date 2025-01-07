@@ -1,8 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StylesConfig, Props } from 'react-select'
+import { Props, StylesConfig } from 'react-select'
 import Select from 'react-select'
-
 
 import { useCustomTheme } from '../../../../../../../utils'
 
