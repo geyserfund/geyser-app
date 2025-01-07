@@ -55,7 +55,8 @@ RUN rm -rf ./src
 FROM base AS production
 
 WORKDIR /usr/app
-COPY server.js package.json yarn.lock ./
+RUN ls 
+COPY package.json yarn.lock ./
 
 # Copy production dependencies over
 COPY --from=build /usr/app/prod_node_modules ./node_modules
