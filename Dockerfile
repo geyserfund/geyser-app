@@ -59,4 +59,4 @@ COPY --from=build /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/dist ./dist
 
 # RUN yarn global add serve
-CMD node -r dotenv/config server.ts
+CMD ts-node -r dotenv/config server.ts
