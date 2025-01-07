@@ -106,6 +106,7 @@
     "react-use-websocket": "^4.8.1",
     "recharts": "^2.12.7",
     "remirror": "^3.0.1",
+    "serve": "^14.2.0",
     "serve-handler": "^6.1.5",
     "swiper": "^11.1.14",
     "turndown": "^7.1.2",
