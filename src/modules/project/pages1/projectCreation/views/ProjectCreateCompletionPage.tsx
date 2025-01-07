@@ -6,10 +6,10 @@ import { useNavigate } from 'react-router-dom'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { ProjectState } from '@/modules/project/state/projectAtom'
+
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
-import Loader from '../../../../../components/ui/Loader'
+
 import { useAuthContext } from '../../../../../context'
 import { getPath } from '../../../../../shared/constants'
 import { useModal } from '../../../../../shared/hooks'
@@ -17,7 +17,11 @@ import { CreateWalletInput } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
 import { ProjectLaunchConfirmModal } from '../../../components/ProjectLaunchConfirmModal'
 import { ProjectCreateCompleted } from '../components/ProjectCreateCompleted'
-import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
+
+import Loader from '@/components/ui/Loader'
+import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
+import { ProjectState } from '@/modules/project/state/projectAtom.ts'
+
 
 interface ProjectCreateCompletionPageProps {
   project?: ProjectState

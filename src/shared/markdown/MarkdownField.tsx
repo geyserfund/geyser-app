@@ -36,12 +36,13 @@ import {
 import TurndownService from 'turndown'
 
 import { SkeletonLayout } from '../../shared/components/layouts'
-import { useSignedUpload } from '../../shared/hooks'
 import { useMobileMode } from '../../utils'
+
 import { ReactHookTextArea } from './components/ReactHookTextArea'
 import { TableCellMenuComponent } from './components/TableCellMenuComponent'
 import { FrameHandler, imageHandler, PreviewRenderer, SaveModule, StyleProvider } from './helpers'
 import { MarkdownToolbar } from './MarkdownToolbar'
+import { useSignedUpload } from '../hooks'
 
 const turndownService = new TurndownService()
 turndownService.keep(['iframe'])
