@@ -1,0 +1,23 @@
+{
+  "entry": [
+    "src/main.tsx",
+    "language/languageServer.ts",
+    "server.ts",
+    "storybook/**/*.tsx",
+    ".storybook/*.{ts,tsx}",
+    "cypress/**/*.ts"
+  ],
+  "project": [
+    "*.{ts,tsx,mjs,json,yml,yaml,md,mdx,js,jsx}",
+    "src/**/*.{ts,tsx}",
+    "language/**/*.ts",
+    "server.ts",
+    "storybook/**/*.tsx",
+    ".storybook/*.{ts,tsx}",
+    "cypress/**/*.ts",
+
+    "!src/types/generated/graphql.ts",
+    "!src/**/graphql/**/*.ts",
+    "!src/graphqlBase/**/*.ts"
+  ]
+}

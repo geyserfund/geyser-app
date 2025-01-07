@@ -1,4 +1,3 @@
-import { lng } from '../../src/shared/constants'
 import ArabicTranslations from './ar.json'
 import CzechTranslations from './cz.json'
 import GermanTranslations from './de.json'
@@ -13,6 +12,23 @@ import PortugueseTranslation from './pt.json'
 import SwahiliTranslations from './sw.json'
 import TurkishTranslations from './tr.json'
 import ChineseTranslations from './zh.json'
+
+const enum lng {
+  en = 'en',
+  es = 'es',
+  pt = 'pt',
+  de = 'de',
+  it = 'it',
+  el = 'el',
+  pl = 'pl',
+  fr = 'fr',
+  cz = 'cz',
+  zh = 'zh',
+  ar = 'ar',
+  sw = 'sw',
+  tr = 'tr',
+  ja = 'ja',
+}
 
 export const allTranslations = {
   [lng.ar]: ArabicTranslations,
