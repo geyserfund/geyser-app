@@ -45,6 +45,8 @@ ARG VITE_APP_LNG_PORT
 ARG VITE_APP_STRIPE_API_KEY
 RUN /bin/sh -c "printenv > .env && NODE_OPTIONS=--max-old-space-size=8192 yarn build"
 RUN /bin/sh -c "printenv > .env && yarn tsc server.ts"
+RUN ls 
+RUN pwd
 RUN rm -rf ./src
 
 ###########################
