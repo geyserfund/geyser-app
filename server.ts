@@ -1,7 +1,8 @@
-import cors from 'cors'
-import express from 'express'
-import prerender from 'prerender-node'
-import handler from 'serve-handler'
+/* eslint-disable @typescript-eslint/no-var-requires */
+const express = require('express')
+const handler = require('serve-handler')
+const prerender = require('prerender-node')
+const cors = require('cors')
 
 console.log(
   `ENV VAR CHECK:\n\tPORT: ${process.env.PORT}\nPRERENDER_TOKEN: not null -> ${Boolean(process.env.PRERENDER_TOKEN)}`,
