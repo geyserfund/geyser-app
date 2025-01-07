@@ -31,7 +31,7 @@ WORKDIR /usr/app
 COPY ./public ./public
 COPY ./src ./src
 copy ./language ./language
-COPY index.html tsconfig.json tsconfig.node.json vite.config.ts eslint.config.mjs .prettierrc ./
+COPY index.html tsconfig.json tsconfig.node.json vite.config.ts eslint.config.mjs .prettierrc server.ts ./
 
 ARG VITE_APP_API_ENDPOINT
 ARG VITE_APP_FLODESK_API_KEY
