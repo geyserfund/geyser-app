@@ -28,6 +28,10 @@ app.use(
 )
 
 app.use((request, response) => {
+  if (request.headers['cache-control'] === 'no-cache') {
+    response.setHeader('cache-control', 'no-cache')
+  }
+
   return handler(request, response, {
     public: './dist',
     rewrites: [{ source: '*', destination: '/index.html' }],
