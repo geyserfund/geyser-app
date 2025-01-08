@@ -35,6 +35,7 @@ export const WelcomeCard = () => {
       />
       <H1 size={{ base: 'xl', xs: '2xl', sm: '3xl' }} bold color={lightModeColors.neutral1[11]}>
         {t('Welcome to Bitcoin crowdfunding!')}
+        {'!!'}
       </H1>
       <Body size="lg" medium color={lightModeColors.neutral1[11]} textAlign={'center'}>
         {t(
