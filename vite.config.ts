@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import react from '@vitejs/plugin-react-swc'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
-import mkcert from 'vite-plugin-mkcert'
 import loadVersion from 'vite-plugin-package-version'
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 import topLevelAwait from 'vite-plugin-top-level-await'
@@ -123,9 +122,6 @@ export default defineConfig(({ command, mode }) => {
     wasm(),
     topLevelAwait(),
   ]
-  if (mode !== 'production') {
-    plugins.push(mkcert())
-  }
 
   return {
     plugins,
