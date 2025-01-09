@@ -20,7 +20,7 @@ RUN yarn set version berry
 
 # Create a layer for node_modules that can be cached
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
-    yarn install --immutable --inline-builds
+    yarn install --frozen-lockfile --inline-builds
 
 # Create separate production dependencies
 RUN cp -R node_modules prod_node_modules
