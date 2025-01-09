@@ -1,77 +1,53 @@
 steps:
-  # Pull cached images
-  - id: 'Pull Cache'
+  # Obtain cached images for Container Registry
+  # - id: "Caching (1/2) pull build image"
+  - id: 'Pull Cache: dependencies'
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies || true
-        docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true
+        docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies || true \
+        && docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true
 
-  # Build and cache dependencies
-  - id: 'Build Dependencies'
+  - id: 'Update Cached Dependencies Image'
     name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
     args:
-      - 'build'
-      - '--target'
-      - 'dependencies'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies'
-      - '--cache-from'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies'
-      - '--build-arg'
-      - 'BUILDKIT_INLINE_CACHE=1'
-      - '.'
+      - '-c'
+      - |
+        docker build \
+        --target dependencies \
+        -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies \
+        --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies . \
+        && \
+        docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies
 
-  # Build final image
-  - id: 'Build Production'
+  - id: 'Update Image: latest'
     name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
     args:
-      - 'build'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
-      - '-t'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest'
-      - '--cache-from'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies'
-      - '--cache-from'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest'
-      - '--build-arg'
-      - 'BUILDKIT_INLINE_CACHE=1'
-      - '--build-arg'
-      - 'VITE_APP_API_ENDPOINT=${_API_ENDPOINT}'
-      - '--build-arg'
-      - 'VITE_APP_BOLTZ_SWAP_DOMAIN=${_BOLTZ_SWAP_DOMAIN}'
-      - '--build-arg'
-      - 'VITE_APP_FLODESK_API_KEY=$$FLODESK_API_KEY'
-      - '--build-arg'
-      - 'VITE_APP_AIR_TABLE_KEY=$$AIR_TABLE_KEY'
-      - '--build-arg'
-      - 'VITE_APP_GIPHY_API_KEY=$$GIPHY_API_KEY'
-      - '--build-arg'
-      - 'VITE_APP_GEYSER_NOSTR_PUBKEY=$$GEYSER_NOSTR_PUBKEY'
-      - '--build-arg'
-      - 'VITE_APP_ENV=${_VITE_APP_ENV}'
-      - '--build-arg'
-      - 'VITE_APP_STRIPE_API_KEY=${_VITE_APP_STRIPE_API_KEY}'
-      - '.'
+      - '-c'
+      - |
+        docker build \
+        -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA \
+        -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
+        --build-arg VITE_APP_API_ENDPOINT=${_API_ENDPOINT} \
+        --build-arg VITE_APP_BOLTZ_SWAP_DOMAIN=${_BOLTZ_SWAP_DOMAIN} \
+        --build-arg VITE_APP_FLODESK_API_KEY=$$FLODESK_API_KEY \
+        --build-arg VITE_APP_AIR_TABLE_KEY=$$AIR_TABLE_KEY \
+        --build-arg VITE_APP_GIPHY_API_KEY=$$GIPHY_API_KEY \
+        --build-arg VITE_APP_GEYSER_NOSTR_PUBKEY=$$GEYSER_NOSTR_PUBKEY \
+        --build-arg VITE_APP_ENV=${_VITE_APP_ENV} \
+        --build-arg VITE_APP_STRIPE_API_KEY=${_VITE_APP_STRIPE_API_KEY} \
+        --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies \
+        --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest . \
+        && \
+        docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
+        && \
+        docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA
     secretEnv: ['FLODESK_API_KEY', 'GIPHY_API_KEY', 'GEYSER_NOSTR_PUBKEY', 'AIR_TABLE_KEY']
-
-  # Push images
-  - id: 'Push Images'
-    name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies'
-
-  - id: 'Push Latest'
-    name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest'
-
-  # Deploy to Cloud Run
+  # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -84,20 +60,10 @@ steps:
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
       - '--region'
       - 'us-central1'
-
-options:
-  logging: CLOUD_LOGGING_ONLY
-  dynamic_substitutions: true
-  env:
-    - 'DOCKER_BUILDKIT=1'
-
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies'
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest'
-
-timeout: 1800s
-
 availableSecrets:
   secretManager:
     - versionName: projects/$PROJECT_ID/secrets/flodesk-api-key/versions/1
@@ -108,3 +74,4 @@ availableSecrets:
       env: 'GEYSER_NOSTR_PUBKEY'
     - versionName: projects/$PROJECT_ID/secrets/airtable-api-key/versions/5
       env: 'AIR_TABLE_KEY'
+timeout: 1800s
