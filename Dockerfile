@@ -18,11 +18,12 @@ COPY .yarn .yarn
 # Set yarn version
 RUN yarn set version berry
 
-# Create a layer for node_modules that can be cached
+# Install ALL dependencies and create a production-only copy
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
+    yarn install && \
+    cp -R node_modules full_node_modules && \
     yarn workspaces focus -A --production && \
-    cp -R node_modules prod_node_modules && \
-    yarn install
+    cp -R node_modules prod_node_modules
 
 
 #####################
@@ -31,6 +32,10 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
 FROM dependencies AS build
 
 WORKDIR /usr/app
+
+# Restore full node_modules for build
+RUN rm -rf node_modules && \
+    mv full_node_modules node_modules
 
 # Copy source files
 COPY . .
@@ -51,7 +56,7 @@ ARG VITE_APP_STRIPE_API_KEY
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
     printenv > .env && \
     NODE_OPTIONS=--max-old-space-size=8192 yarn build && \
-    yarn exec tsc server.ts
+    yarn tsc server.ts
 
 # Clean up source files
 RUN rm -rf ./src
