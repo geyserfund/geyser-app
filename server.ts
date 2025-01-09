@@ -28,6 +28,10 @@ app.use(
 )
 
 app.use((request, response) => {
+  if (request.url.includes('sw.js')) {
+    request.setHeader('X-Custom-No-Cache', 'true')
+  }
+
   return handler(request, response, {
     public: './dist',
     rewrites: [{ source: '*', destination: '/index.html' }],
