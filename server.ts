@@ -37,11 +37,15 @@ app.use((request, response) => {
         headers: [
           {
             key: 'cache-control',
+            value: 'private, no-cache, no-store, must-revalidate, max-age=0',
+          },
+          {
+            key: 'pragma',
             value: 'no-cache',
           },
           {
-            key: 'cache',
-            value: 'no-store',
+            key: 'expires',
+            value: '0',
           },
         ],
       },
