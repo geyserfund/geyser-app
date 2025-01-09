@@ -53,7 +53,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
       dense
       w="full"
       overflow={'hidden'}
-      minHeight="400px"
+      minHeight="450px"
       spacing={0}
       position="relative"
       {...rest}
