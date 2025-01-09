@@ -24,7 +24,7 @@ export const LeaderboardSummary = () => {
   const { render, ...animatedNavbarProps } = useAnimatedNavBar({ items, defaultView: 'leaderboard' })
 
   return (
-    <CardLayout w="full" flex={1} dense py={6}>
+    <CardLayout w="full" flex={1} dense py={6} minHeight="320px">
       <HStack w="full" px={6}>
         <AnimatedNavBar {...animatedNavbarProps} showLabel />
       </HStack>

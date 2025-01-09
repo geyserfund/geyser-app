@@ -57,7 +57,10 @@ export const ProjectBody = () => {
         {project.goalsCount && <Goals />}
         <Details />
       </VStack>
-      <RightSideStickyLayout>
+      <RightSideStickyLayout
+        overflow="auto"
+        css={{ '&::-webkit-scrollbar': { display: 'none' }, msOverflowStyle: 'none', scrollbarWidth: 'none' }}
+      >
         <ContributionSummary />
         <LeaderboardSummary />
       </RightSideStickyLayout>
