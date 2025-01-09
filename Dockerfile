@@ -51,7 +51,7 @@ ARG VITE_APP_STRIPE_API_KEY
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
     printenv > .env && \
     NODE_OPTIONS=--max-old-space-size=8192 yarn build && \
-    yarn tsc server.ts
+    yarn exec tsc server.ts
 
 # Clean up source files
 RUN rm -rf ./src
