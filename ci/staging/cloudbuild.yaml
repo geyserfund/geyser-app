@@ -16,7 +16,7 @@ steps:
     args:
       - '-c'
       - |
-        docker build \
+        DOCKER_BUILDKIT=1 docker build \
         --target dependencies \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies \
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies . \
@@ -29,7 +29,7 @@ steps:
     args:
       - '-c'
       - |
-        docker build \
+        DOCKER_BUILDKIT=1 docker build \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
         --build-arg VITE_APP_API_ENDPOINT=${_API_ENDPOINT} \

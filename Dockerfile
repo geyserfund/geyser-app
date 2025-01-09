@@ -12,7 +12,9 @@ FROM base AS dependencies
 
 WORKDIR /usr/app
 
-RUN yarn set version berry
+# Mount cache for yarn
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
+    yarn set version berry
 
 # Install production packages
 COPY package.json yarn.lock .yarnrc.yml ./
@@ -43,11 +45,12 @@ ARG VITE_APP_AUTH_SERVICE_ENDPOINT
 ARG VITE_APP_BOLTZ_SWAP_DOMAIN
 ARG VITE_APP_LNG_PORT
 ARG VITE_APP_STRIPE_API_KEY
-RUN /bin/sh -c "printenv > .env && NODE_OPTIONS=--max-old-space-size=8192 yarn build"
-RUN /bin/sh -c "printenv > .env && yarn tsc server.ts"
-RUN ls 
-RUN pwd
-RUN rm -rf ./src
+# Combine commands to reduce layers and use build cache
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
+    printenv > .env \
+    && NODE_OPTIONS=--max-old-space-size=8192 yarn build \
+    && yarn tsc server.ts \
+    && rm -rf ./src
 
 ###########################
 # STEP 4: production image
@@ -63,4 +66,4 @@ COPY --from=build /usr/app/dist ./dist
 COPY --from=build /usr/app/server.js ./server.cjs
 
 # RUN yarn global add serve
-CMD node -r dotenv/config server.cjs
+CMD ["node", "-r", "dotenv/config", "server.cjs"]
