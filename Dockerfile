@@ -20,10 +20,10 @@ RUN yarn set version berry
 
 # Create a layer for node_modules that can be cached
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
-    yarn install --frozen-lockfile --inline-builds
+    yarn workspaces focus -A --production && \
+    cp -R node_modules prod_node_modules && \
+    yarn install
 
-# Create separate production dependencies
-RUN cp -R node_modules prod_node_modules
 
 #####################
 # STEP 3: build image
