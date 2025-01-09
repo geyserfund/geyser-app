@@ -28,10 +28,6 @@ app.use(
 )
 
 app.use((request, response) => {
-  if (request.url.includes('sw.js')) {
-    request.setHeader('X-Custom-No-Cache', 'true')
-  }
-
   return handler(request, response, {
     public: './dist',
     rewrites: [{ source: '*', destination: '/index.html' }],
@@ -41,11 +37,15 @@ app.use((request, response) => {
         headers: [
           {
             key: 'cache-control',
+            value: 'private, no-cache, no-store, must-revalidate, max-age=0',
+          },
+          {
+            key: 'pragma',
             value: 'no-cache',
           },
           {
-            key: 'cache',
-            value: 'no-store',
+            key: 'expires',
+            value: '0',
           },
         ],
       },
