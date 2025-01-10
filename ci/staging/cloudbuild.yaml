@@ -27,14 +27,12 @@ steps:
     args:
       - '-c'
       - |
-        DEP_HASH=$(cat /workspace/dep_hash.txt)
-        PREV_HASH=$(cat /workspace/prev_hash.txt)
-        if [ "$DEP_HASH" != "$PREV_HASH" ]; then
+        if [ "$(cat /workspace/dep_hash.txt)" != "$(cat /workspace/prev_hash.txt)" ]; then
           echo "Dependencies changed. Rebuilding..."
           DOCKER_BUILDKIT=1 docker build \
           --target dependencies \
           --build-arg BUILDKIT_INLINE_CACHE=1 \
-          --label dep_hash=$DEP_HASH \
+          --label dep_hash=$(cat /workspace/dep_hash.txt) \
           -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies \
           --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies . \
           && \
