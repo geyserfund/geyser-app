@@ -47,7 +47,13 @@ export const ProjectCreateStart = () => {
           {t('Create a new project')}
         </H1>
       }
-      continueButton={<FormContinueButton flexGrow={1} onClick={handleNext} isDisabled={!isLoggedIn} />}
+      continueButton={
+        <FormContinueButton
+          flexGrow={1}
+          onClick={handleNext}
+          isDisabled={!isLoggedIn || !userHasProjectCreatableAccounts}
+        />
+      }
       onBackClick={handleBack}
     >
       <VStack spacing={6} w="100%">

@@ -6,7 +6,7 @@ import { ProjectBalanceDisplay } from './components/ProjectBalanceDisplay'
 
 export const ContributionSummary = (props: StackProps) => {
   return (
-    <CardLayout w="100%" p={6} spacing={6} minHeight="262px" {...props}>
+    <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
       <ProjectBalanceDisplay />
 
       <HStack w="full">
