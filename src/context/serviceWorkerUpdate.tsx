@@ -29,7 +29,7 @@ export type ServiceWorkerUpdateProps = {
 
 export const ServiceWorkerUpdate = createContext<ServiceWorkerUpdateProps>(defaultContext)
 
-const REFETCH_SW_INTERVAL_MS = __production__ ? 5 * 60 * 1000 : 5 * 60 * 1000
+const REFETCH_SW_INTERVAL_MS = __production__ ? 2 * 60 * 1000 : 2 * 60 * 1000
 
 let defferedPrompt: any
 

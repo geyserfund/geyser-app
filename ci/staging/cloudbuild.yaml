@@ -10,18 +10,42 @@ steps:
         docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies || true \
         && docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true
 
+  - id: 'Check Dependencies Hash'
+    name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        # Generate hash of dependency files
+        CURRENT_HASH=$(cat package.json yarn.lock .yarnrc.yml | sha256sum | cut -d' ' -f1)
+        # Try to get previous hash from dependency image
+        PREV_HASH=$(docker inspect us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies --format='{{.Config.Labels.dep_hash}}' 2>/dev/null || echo "none")
+        # Export hashes for next steps
+        echo "$CURRENT_HASH" > /workspace/current_hash
+        echo "$PREV_HASH" > /workspace/prev_hash
+
+
   - id: 'Update Cached Dependencies Image'
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        DOCKER_BUILDKIT=1 docker build \
-        --target dependencies \
-        -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies \
-        --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies . \
-        && \
-        docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies
+        CURRENT_HASH=$(cat /workspace/current_hash)
+        PREV_HASH=$(cat /workspace/prev_hash)
+        if [ "$CURRENT_HASH" != "$PREV_HASH" ]; then
+          echo "Dependencies changed. Rebuilding..."
+          DOCKER_BUILDKIT=1 docker build \
+          --target dependencies \
+          --build-arg BUILDKIT_INLINE_CACHE=1 \
+          --label dep_hash=$CURRENT_HASH \
+          -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies \
+          --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies . \
+          && \
+          docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies
+        else
+          echo "Dependencies unchanged. Skipping rebuild."
+        fi
 
   - id: 'Update Image: latest'
     name: 'gcr.io/cloud-builders/docker'
@@ -32,6 +56,7 @@ steps:
         DOCKER_BUILDKIT=1 docker build \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
+        --build-arg BUILDKIT_INLINE_CACHE=1 \
         --build-arg VITE_APP_API_ENDPOINT=${_API_ENDPOINT} \
         --build-arg VITE_APP_BOLTZ_SWAP_DOMAIN=${_BOLTZ_SWAP_DOMAIN} \
         --build-arg VITE_APP_FLODESK_API_KEY=$$FLODESK_API_KEY \
