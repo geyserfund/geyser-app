@@ -51,7 +51,7 @@ export const FundingLayout = ({
         {topNavBarRightContent}
       </TopNavContainerBar>
       <HStack h="full" w="full" alignItems="start" spacing={dimensions.project.rightSideNav.gap}>
-        <VStack h="full" maxWidth="full" flex={1} paddingBottom={{ base: 40, lg: 10 }} {...containerProps}>
+        <VStack h="full" maxWidth="full" flex={1} paddingBottom={{ base: 72, lg: 10 }} {...containerProps}>
           {children}
         </VStack>
         {sideContent && <RightSideStickyLayout {...sideContainerProps}>{sideContent}</RightSideStickyLayout>}

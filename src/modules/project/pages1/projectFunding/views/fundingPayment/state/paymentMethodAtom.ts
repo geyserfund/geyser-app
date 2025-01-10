@@ -1,6 +1,7 @@
 import { atom, useAtomValue } from 'jotai'
 
 import {
+  projectFundingPaymentCardRoutes,
   projectFundingPaymentLightingRoutes,
   projectFundingPaymentOnchainRoutes,
   projectFundingPaymentOnchainStartedRoutes,
@@ -23,10 +24,15 @@ export const paymentMethodAtom = atom((get) => {
     return PaymentMethods.onChain
   }
 
+  if (get(isCardMethodAtom)) {
+    return PaymentMethods.card
+  }
+
   return undefined
 })
 
 export const isLightingMethodAtom = atom(routeMatchForAtom(projectFundingPaymentLightingRoutes))
+export const isCardMethodAtom = atom(routeMatchForAtom(projectFundingPaymentCardRoutes))
 export const isOnchainMethodAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainRoutes))
 
 export const isOnchainMethodStartedAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainStartedRoutes))

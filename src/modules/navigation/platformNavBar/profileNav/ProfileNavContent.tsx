@@ -24,6 +24,7 @@ import {
   GeyserAboutUrl,
   GeyserGithubUrl,
   GeyserManifestoUrl,
+  GeyserPrivacyUrl,
   GeyserSubscribeUrl,
   GuideUrl,
 } from '@/shared/constants'
@@ -116,7 +117,7 @@ export const ProfileNavContent = () => {
 
       <VStack w="full" spacing={4}>
         <Divider borderColor="neutral1.6" />
-        <HStack w="full" paddingX={2} spacing={0} justifyContent="space-between">
+        <HStack w="full" paddingX={0} spacing={0} justifyContent="space-between">
           <UserNavExternalButton as={ChakraLink} isExternal href={GuideUrl}>
             {t('Guide')}
           </UserNavExternalButton>
@@ -128,6 +129,9 @@ export const ProfileNavContent = () => {
           </UserNavExternalButton>
           <UserNavExternalButton as={ChakraLink} isExternal href={GeyserAboutUrl}>
             {t('About')}
+          </UserNavExternalButton>
+          <UserNavExternalButton as={ChakraLink} isExternal href={GeyserPrivacyUrl}>
+            {t('Privacy')}
           </UserNavExternalButton>
         </HStack>
         <Divider borderColor="neutral1.6" />

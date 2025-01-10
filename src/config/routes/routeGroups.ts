@@ -74,6 +74,7 @@ export const projectPostCreatorRoutes = [
 export const projectStoryCreatorRoutes = [getPath('projectStoryEdit', PathName.projectName)]
 
 export const projectFundingPaymentLightingRoutes = [getPath('fundingPaymentLightning', PathName.projectName)]
+export const projectFundingPaymentCardRoutes = [getPath('fundingPaymentCard', PathName.projectName)]
 
 export const projectFundingOnchainRefundRoutes = [
   getPath('fundingPaymentOnchainRefund', PathName.projectName),

@@ -133,9 +133,11 @@ export const FilterTopBar = ({ isLoading, ...rest }: FilterTopBarProps) => {
     return (
       <HStack width="100%" justifyContent="start" alignItems="start" overflowY={'auto'} {...rest}>
         <Wrap>
-          <Body size="xl" bold>
-            {t('Most funded projects filtered by:')}
-          </Body>
+          {!viewFilterSearch && (
+            <Body size="xl" bold>
+              {t('Most funded projects filtered by:')}
+            </Body>
+          )}
 
           {viewFilterSearch}
           {viewFilterStatusType}

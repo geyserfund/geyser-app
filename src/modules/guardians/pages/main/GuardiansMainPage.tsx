@@ -39,7 +39,7 @@ export const GuardiansMainPage = () => {
         image={GuardiansSeoImageUrl}
         type="article"
       />
-      <VStack paddingTop={{ base: 16, md: 20, lg: 6 }} paddingBottom={{ base: '60px', lg: 24 }}>
+      <VStack w="full" paddingTop={{ base: 16, md: 20, lg: 6 }} paddingBottom={{ base: '60px', lg: 24 }}>
         <VStack
           w="full"
           zIndex={2}
@@ -62,10 +62,10 @@ export const GuardiansMainPage = () => {
           <VStack w="full" spacing={0}>
             <Body size={{ base: '12px', md: '14px', lg: '16px' }} light fontWeight={600} textTransform={'uppercase'}>
               <Trans
-                i18nKey="The next {{count}} guardians get {{discount}} off. {{left}} left."
+                i18nKey="The first {{count}} guardians get {{discount}} off. {{left}} left."
                 values={{ count: 121, discount: '10%', left: guardianDiscountItems }}
               >
-                {'The next '}
+                {'The first '}
                 <Body as="span" color="guardians.LEGEND.text">{`{{count}}`}</Body>
                 {' guardians get '}
                 <Body as="span" color="guardians.LEGEND.text">{`{{discount}}`}</Body>
@@ -84,8 +84,8 @@ export const GuardiansMainPage = () => {
           w="full"
           h="full"
           maxWidth={dimensions.guardians.textMaxWidth}
-          px={{ base: 3, lg: 6 }}
           spacing={{ base: '32px', lg: '96px' }}
+          px={{ base: 3, lg: 6 }}
         >
           <VStack w="full">
             <VStack w="full" spacing={0}>
@@ -99,7 +99,7 @@ export const GuardiansMainPage = () => {
           <VStack w="full" spacing={{ base: '16px', lg: '32px' }}>
             <GuardianHeader>{t('Geyser Manifesto')}</GuardianHeader>
 
-            <VStack w="full" alignItems={'flex-start'} spacing={{ base: '16px', lg: '32px' }}>
+            <VStack w="full" maxWidth={'full'} alignItems={'flex-start'} spacing={{ base: '16px', lg: '32px' }}>
               <GuardianBody>
                 {t(
                   'In a world where nihilism and pessimism about the future prevail, Bitcoin brought us hope. Not just hope for a world built on sound money, but hope in the power of action to create meaningful change. The world is malleable, and individuals have the power to reshape it.',

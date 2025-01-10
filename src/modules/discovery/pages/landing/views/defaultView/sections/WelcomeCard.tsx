@@ -38,7 +38,7 @@ export const WelcomeCard = () => {
       </H1>
       <Body size="lg" medium color={lightModeColors.neutral1[11]} textAlign={'center'}>
         {t(
-          'Bring great Bitcoin ideas to life on Geyser. Whether it’s a creative project, social cause or innovative new product around the world. We believe crowdfunding is how we can speed up Bitcoin Adoption.',
+          'Bring your Bitcoin ideas to life with Geyser. Rally your community and the Bitcoin community to fund projects that push Bitcoin adoption forward.',
         )}
       </Body>
 

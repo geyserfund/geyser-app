@@ -1,14 +1,16 @@
 import { Box, HStack, StackProps, VStack } from '@chakra-ui/react'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 
+import { guardianRewardUUIDs } from '@/modules/guardians/pages/character/characterAssets'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H3 } from '@/shared/components/typography'
-import { getPathWithGeyserHero } from '@/shared/constants'
+import { getPath, getPathWithGeyserHero } from '@/shared/constants'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
-import { RewardCurrency, RewardForLandingPageFragment } from '@/types'
+import { GuardianType, RewardCurrency, RewardForLandingPageFragment } from '@/types'
 import { commaFormatted } from '@/utils'
 
 type TrendingRewardCardProps = {
@@ -18,11 +20,25 @@ type TrendingRewardCardProps = {
 export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps) => {
   const { formatSatsAmount, formatUsdAmount } = useCurrencyFormatter()
 
+  const guardian = useMemo(() => {
+    const guardian = Object.keys(guardianRewardUUIDs).find(
+      (key) =>
+        guardianRewardUUIDs[key as GuardianType].main === reward.uuid ||
+        guardianRewardUUIDs[key as GuardianType].discount === reward.uuid,
+    ) as GuardianType | undefined
+
+    return guardian
+  }, [reward])
+
   return (
     <CardLayout
       hover
       as={Link}
-      to={getPathWithGeyserHero('projectRewardView', reward.project.name, reward.id)}
+      to={
+        guardian
+          ? getPath('guardiansCharacter', guardian)
+          : getPathWithGeyserHero('projectRewardView', reward.project.name, reward.id)
+      }
       padding="0px"
       width={{ base: 'full', lg: 'auto' }}
       direction={{ base: 'row', lg: 'column' }}
