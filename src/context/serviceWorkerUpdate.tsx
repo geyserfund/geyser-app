@@ -41,6 +41,7 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
+    immediate: true,
     onRegisteredSW(swUrl, r) {
       if (r) {
         const refetch = async () => {
