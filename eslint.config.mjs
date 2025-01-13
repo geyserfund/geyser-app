@@ -107,6 +107,6 @@ export default [
       'no-undef': 'off',
       semi: 'off',
     },
-    ignores: ['commitlint.config.js', 'src/types/generated/graphql.ts'],
+    ignores: ['commitlint.config.js', 'src/types/generated/*'],
   },
 ]
