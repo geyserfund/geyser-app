@@ -19,9 +19,9 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
 # Install production packages
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn .yarn
-RUN yarn workspaces focus -A --production \
+RUN yarn workspaces focus @geyser-app/app --production \
     && cp -R node_modules prod_node_modules \
-    && yarn install 
+    && yarn workspaces focus @geyser-app/app 
 
 
 #####################

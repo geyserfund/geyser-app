@@ -1,0 +1,25 @@
+{
+    "name": "@geyser-app/storybook",
+    "version": "1.0.0",
+    "dependencies": {
+        "@geyser-app/app": "workspace:*"
+    },
+    "scripts": {
+        "storybook": "storybook dev -p 6006 --no-open",
+        "storybook:build": "storybook build"
+    },
+    "devDependencies": {
+        "@chakra-ui/storybook-addon": "^5.1.0",
+        "@chromatic-com/storybook": "^1.2.25",
+        "@storybook/addon-essentials": "^8.0.4",
+        "@storybook/addon-interactions": "^8.0.4",
+        "@storybook/addon-links": "^8.0.4",
+        "@storybook/addon-onboarding": "^8.0.4",
+        "@storybook/react": "^8.0.4",
+        "@storybook/react-vite": "^8.0.4",
+        "@storybook/test": "^8.0.4",
+        "@storybook/types": "^8.0.4",
+        "eslint-plugin-storybook": "^0.8.0",
+        "storybook": "^8.0.4"
+    }
+}

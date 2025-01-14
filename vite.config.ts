@@ -138,7 +138,7 @@ export default defineConfig(({ command, mode }) => {
     test: {
       globals: true,
       environment: 'jsdom',
-      setupFiles: './setupTests.ts',
+      // setupFiles: './setupTests.ts',
     },
     optimizeDeps: {
       include: ['ecpair', 'tiny-secp256k1'],
