@@ -6,9 +6,18 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createRoutesFromChildren, matchRoutes, RouterProvider, useLocation, useNavigationType } from 'react-router-dom'
 
+import packageJson from '../package.json'
 import GlobalStyles from './config/GlobalStyles.tsx'
 import { router } from './config/routes/index.ts'
 import { __production__, __staging__ } from './shared/constants/index.ts'
+
+// Declare global property to avoid TypeScript error
+declare global {
+  // eslint-disable-next-line no-var
+  var appVersion: string
+}
+
+global.appVersion = packageJson.version
 
 const SENTRY_DSN = 'https://2355dca8304c4e32b35bf421d3cf4d87@o4504351883984896.ingest.sentry.io/4505088829292544'
 

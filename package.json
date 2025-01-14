@@ -10,6 +10,8 @@
     "dev": "vite",
     "dev:stage": "vite --mode staging",
     "build": "tsc && vite build",
+    "generate-build-version": "node scripts/generate-build-version.js",
+    "prebuild": "yarn generate-build-version",
     "preview": "vite preview --port 3000",
     "test:e2e": "yarn workspace @geyser-app/testing test:e2e",
     "test:watch": "yarn workspace @geyser-app/testing test:watch",
@@ -30,7 +32,6 @@
     "storybook": "yarn workspace @geyser-app/storybook storybook",
     "storybook:build": "yarn workspace @geyser-app/storybook storybook:build",
     "knip": "knip"
-
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",
