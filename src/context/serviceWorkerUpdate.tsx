@@ -53,7 +53,10 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
               'X-Custom-No-Cache': 'true',
             },
           }).catch((error) => console.log('error', error))
-          console.log('checking service worker response', resp)
+
+          const body = await resp?.json()
+
+          console.log('checking service worker response', body)
           if (resp?.status === 200) await r.update()
         }
 

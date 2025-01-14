@@ -12,8 +12,9 @@ FROM base AS dependencies
 
 WORKDIR /usr/app
 
-# Set yarn version
-RUN yarn set version berry
+# Mount cache for yarn
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
+    yarn set version berry
 
 # Install production packages
 COPY package.json yarn.lock .yarnrc.yml ./
@@ -44,8 +45,9 @@ ARG VITE_APP_AUTH_SERVICE_ENDPOINT
 ARG VITE_APP_BOLTZ_SWAP_DOMAIN
 ARG VITE_APP_LNG_PORT
 ARG VITE_APP_STRIPE_API_KEY
-# Build the app and server.ts
-RUN printenv > .env \
+# Combine commands to reduce layers and use build cache
+RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
+    printenv > .env \
     && NODE_OPTIONS=--max-old-space-size=8192 yarn build \
     && yarn tsc server.ts \
     && rm -rf ./src
