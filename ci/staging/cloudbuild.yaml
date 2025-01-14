@@ -8,7 +8,10 @@ steps:
       - '-c'
       - |
         docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies || true \
-        && docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true
+        && docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true \
+        && echo "Image sizes:" \
+        && docker images us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies --format "{{.Repository}}:{{.Tag}} - {{.Size}}" \
+        && docker images us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest --format "{{.Repository}}:{{.Tag}} - {{.Size}}"
 
   - id: 'Check Dependencies Hash'
     name: 'gcr.io/cloud-builders/docker'
