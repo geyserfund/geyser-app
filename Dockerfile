@@ -20,9 +20,9 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn .yarn
 
-RUN yarn workspaces focus geyser-app --production --json \
+RUN yarn workspaces focus geyser-app --production \
     && cp -R node_modules prod_node_modules \
-    && yarn workspaces focus geyser-app --json
+    && yarn workspaces focus geyser-app --include devDependencies
 
 RUN echo "Showing node_modules contents:"
 RUN ls

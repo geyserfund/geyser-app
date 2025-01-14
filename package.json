@@ -27,9 +27,10 @@
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
     "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts",
     "dev:language": "ts-node language/languageServer.ts",
-    "knip": "knip",
     "storybook": "yarn workspace @geyser-app/storybook storybook",
-    "storybook:build": "yarn workspace @geyser-app/storybook storybook:build"
+    "storybook:build": "yarn workspace @geyser-app/storybook storybook:build",
+    "knip": "knip"
+
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",
