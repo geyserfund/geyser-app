@@ -4,9 +4,7 @@
   "version": "0.17.0",
   "type": "module",
   "workspaces": [
-    "packages/app",
-    "packages/storybook",
-    "packages/testing"
+    "packages/*"
   ],
   "scripts": {
     "dev": "vite",
