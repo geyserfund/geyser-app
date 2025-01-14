@@ -20,11 +20,6 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn .yarn
 
-# Create workspace directory structure
-RUN mkdir -p packages/app
-# Copy workspace package.json files
-COPY packages/app/package.json ./packages/app/
-
 RUN yarn workspaces focus geyser-app --production \
     && cp -R node_modules prod_node_modules \
     && yarn workspaces focus geyser-app 
