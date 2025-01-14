@@ -24,6 +24,13 @@ RUN yarn workspaces focus geyser-app --production --json \
     && cp -R node_modules prod_node_modules \
     && yarn workspaces focus geyser-app --json
 
+RUN echo "Showing node_modules contents:"
+RUN ls
+RUN echo "Showing prod_node_modules contents:"
+RUN cd prod_node_modules && ls
+RUN echo "Showing node_modules contents:"
+RUN cd node_modules && ls
+
 
 #####################
 # STEP 3: build image

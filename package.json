@@ -25,11 +25,11 @@
     "codegen": "graphql-codegen --config codegen.ts",
     "caddy:trust-ca": "bash ./scripts/trust-caddy-cert.sh",
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
-    "storybook": "yarn workspace @geyser-app/storybook storybook",
-    "storybook:build": "yarn workspace @geyser-app/storybook storybook:build",
     "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts",
     "dev:language": "ts-node language/languageServer.ts",
-    "knip": "knip"
+    "knip": "knip",
+    "storybook": "yarn workspace @geyser-app/storybook storybook",
+    "storybook:build": "yarn workspace @geyser-app/storybook storybook:build"
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",
