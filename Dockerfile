@@ -25,9 +25,9 @@ RUN mkdir -p packages/app
 # Copy workspace package.json files
 COPY packages/app/package.json ./packages/app/
 
-RUN yarn workspaces focus -A --production \
+RUN yarn workspaces focus geyser-app --production \
     && cp -R node_modules prod_node_modules \
-    && yarn install 
+    && yarn workspaces focus geyser-app 
 
 
 #####################

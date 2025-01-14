@@ -1,9 +1,6 @@
 {
     "name": "@geyser-app/storybook",
     "version": "1.0.0",
-    "dependencies": {
-        "@geyser-app/app": "workspace:*"
-    },
     "scripts": {
         "storybook": "storybook dev -p 6006 --no-open",
         "storybook:build": "storybook build"

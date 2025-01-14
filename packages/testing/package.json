@@ -1,9 +1,6 @@
 {
   "name": "@geyser-app/testing",
   "version": "1.0.0",
-  "dependencies": {
-    "@geyser-app/app": "workspace:*"
-  },
   "scripts": {
     "test:e2e": "yarn cypress run --e2e",
     "test:watch": "yarn cypress open"
