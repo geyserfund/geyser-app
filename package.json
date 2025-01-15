@@ -9,8 +9,6 @@
   "scripts": {
     "dev": "vite",
     "dev:stage": "vite --mode staging",
-    "generate-build-version": "node generateBuildVersion.js",
-    "prebuild": "yarn generate-build-version",
     "build": "tsc && vite build",
     "preview": "vite preview --port 3000",
     "test:e2e": "yarn workspace @geyser-app/testing test:e2e",

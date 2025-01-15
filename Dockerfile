@@ -33,7 +33,7 @@ WORKDIR /usr/app
 COPY ./public ./public
 COPY ./src ./src
 copy ./language ./language
-COPY index.html tsconfig.json tsconfig.node.json vite.config.ts eslint.config.mjs .prettierrc server.ts generateBuildVersion.js ./
+COPY index.html tsconfig.json tsconfig.node.json vite.config.ts eslint.config.mjs .prettierrc server.ts generateBuildVersion.cjs ./
 
 ARG VITE_APP_API_ENDPOINT
 ARG VITE_APP_FLODESK_API_KEY
@@ -50,6 +50,7 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
     printenv > .env \
     && NODE_OPTIONS=--max-old-space-size=8192 yarn build \
     && yarn tsc server.ts \
+    && node generateBuildVersion.cjs \
     && rm -rf ./src
 
 ###########################

@@ -1,6 +1,6 @@
-import fs from 'fs'
-
-import packageJson from './package.json'
+/* eslint-disable @typescript-eslint/no-var-requires */
+const fs = require('fs')
+const packageJson = require('./package.json')
 
 const appVersion = packageJson.version
 
