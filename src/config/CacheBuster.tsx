@@ -37,22 +37,10 @@ export const CacheBuster: React.FC<PropsWithChildren> = ({ children }) => {
   const refreshCacheAndReload = async () => {
     if (window.caches) {
       // Service worker cache should be cleared with caches.delete()
-      window.caches.keys().then(function (names) {
-        for (const name of names) caches.delete(name)
-      })
+      const keys = await window.caches.keys()
+      await Promise.all(keys.map((key) => window.caches.delete(key)))
     }
 
-    const url = window.location.href
-
-    await fetch(url, {
-      headers: {
-        Pragma: 'no-cache',
-        Expires: '-1',
-        'Cache-Control': 'no-cache',
-        'X-Custom-No-Cache': 'true',
-      },
-    })
-    window.location.href = url
     window.location.reload()
   }
 

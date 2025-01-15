@@ -18,11 +18,11 @@ export const App = () => {
   }, [])
 
   return (
-    <CacheBuster>
-      <Provider>
-        <ChakraProvider>
-          <ChakraThemeProvider>
-            <ServiceWorkerProvider>
+    <Provider>
+      <ChakraProvider>
+        <ChakraThemeProvider>
+          <ServiceWorkerProvider>
+            <CacheBuster>
               <ApolloProvider client={client}>
                 <AuthProvider>
                   <BtcProvider>
@@ -33,10 +33,10 @@ export const App = () => {
                   </BtcProvider>
                 </AuthProvider>
               </ApolloProvider>
-            </ServiceWorkerProvider>
-          </ChakraThemeProvider>
-        </ChakraProvider>
-      </Provider>
-    </CacheBuster>
+            </CacheBuster>
+          </ServiceWorkerProvider>
+        </ChakraThemeProvider>
+      </ChakraProvider>
+    </Provider>
   )
 }
