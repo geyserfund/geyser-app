@@ -2,6 +2,7 @@
 import { PropsWithChildren, useState } from 'react'
 import { useEffect } from 'react'
 
+import { LoadingPage } from '@/pages/loading/index.tsx'
 import { __development__ } from '@/shared/constants/index.ts'
 
 import packageJson from '../../package.json'
@@ -71,5 +72,5 @@ export const CacheBuster: React.FC<PropsWithChildren> = ({ children }) => {
     return <>{children}</>
   }
 
-  return <>{loading ? <div>Loading...</div> : children}</>
+  return <>{loading ? <LoadingPage /> : children}</>
 }

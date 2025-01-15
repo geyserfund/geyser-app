@@ -33,7 +33,7 @@ WORKDIR /usr/app
 COPY ./public ./public
 COPY ./src ./src
 copy ./language ./language
-COPY index.html tsconfig.json tsconfig.node.json vite.config.ts eslint.config.mjs .prettierrc server.ts generateBuildVersion.cjs ./
+COPY index.html tsconfig.json tsconfig.node.json vite.config.ts eslint.config.mjs .prettierrc server.ts ./
 
 ARG VITE_APP_API_ENDPOINT
 ARG VITE_APP_FLODESK_API_KEY
@@ -50,8 +50,10 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
     printenv > .env \
     && NODE_OPTIONS=--max-old-space-size=8192 yarn build \
     && yarn tsc server.ts \
-    && node generateBuildVersion.cjs \
     && rm -rf ./src
+
+# Generate version info in a separate stage
+RUN node generateBuildVersion.cjs
 
 ###########################
 # STEP 4: production image
@@ -59,12 +61,13 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
 FROM base AS production
 
 WORKDIR /usr/app
-COPY package.json yarn.lock ./
-
+COPY package.json yarn.lock generateBuildVersion.cjs./
+RUN node generateBuildVersion.cjs
+RUN ls
 # Copy production dependencies over
 COPY --from=build /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/dist ./dist
-COPY --from=build /usr/app/meta.json ./dist/meta.json
+COPY meta.json ./dist/meta.json
 COPY --from=build /usr/app/server.js ./server.cjs
 
 # RUN yarn global add serve
