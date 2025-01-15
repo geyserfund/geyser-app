@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import { client } from './config/apollo-client'
+import { CacheBuster } from './config/CacheBuster.tsx'
 import { Head } from './config/Head'
 import { configMatomo } from './config/matomo'
 import { AuthProvider, ChakraThemeProvider, ServiceWorkerProvider } from './context'
@@ -17,23 +18,25 @@ export const App = () => {
   }, [])
 
   return (
-    <Provider>
-      <ChakraProvider>
-        <ChakraThemeProvider>
-          <ServiceWorkerProvider>
-            <ApolloProvider client={client}>
-              <AuthProvider>
-                <BtcProvider>
-                  <FilterProvider>
-                    <Head />
-                    <Outlet />
-                  </FilterProvider>
-                </BtcProvider>
-              </AuthProvider>
-            </ApolloProvider>
-          </ServiceWorkerProvider>
-        </ChakraThemeProvider>
-      </ChakraProvider>
-    </Provider>
+    <CacheBuster>
+      <Provider>
+        <ChakraProvider>
+          <ChakraThemeProvider>
+            <ServiceWorkerProvider>
+              <ApolloProvider client={client}>
+                <AuthProvider>
+                  <BtcProvider>
+                    <FilterProvider>
+                      <Head />
+                      <Outlet />
+                    </FilterProvider>
+                  </BtcProvider>
+                </AuthProvider>
+              </ApolloProvider>
+            </ServiceWorkerProvider>
+          </ChakraThemeProvider>
+        </ChakraProvider>
+      </Provider>
+    </CacheBuster>
   )
 }
