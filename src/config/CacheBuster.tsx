@@ -34,7 +34,7 @@ const semverGreaterThan = (versionA: string, versionB: string) => {
 export const CacheBuster: React.FC<PropsWithChildren> = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
-  const refreshCacheAndReload = () => {
+  const refreshCacheAndReload = async () => {
     if (window.caches) {
       // Service worker cache should be cleared with caches.delete()
       window.caches.keys().then(function (names) {
@@ -42,12 +42,28 @@ export const CacheBuster: React.FC<PropsWithChildren> = ({ children }) => {
       })
     }
 
-    // delete browser cache and hard reload
+    const url = window.location.href
+
+    await fetch(url, {
+      headers: {
+        Pragma: 'no-cache',
+        Expires: '-1',
+        'Cache-Control': 'no-cache',
+        'X-Custom-No-Cache': 'true',
+      },
+    })
+    window.location.href = url
     window.location.reload()
   }
 
   useEffect(() => {
-    fetch('/meta.json')
+    fetch('/meta.json', {
+      headers: {
+        cache: 'no-store',
+        'cache-control': 'no-cache',
+        'X-Custom-No-Cache': 'true',
+      },
+    })
       .then((response) => response.json())
       .then((meta) => {
         console.log('checking meta', meta)
