@@ -53,6 +53,7 @@ steps:
         DOCKER_BUILDKIT=1 docker build \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
+        --target production \
         --build-arg BUILDKIT_INLINE_CACHE=1 \
         --build-arg VITE_APP_API_ENDPOINT=${_API_ENDPOINT} \
         --build-arg VITE_APP_BOLTZ_SWAP_DOMAIN=${_BOLTZ_SWAP_DOMAIN} \
