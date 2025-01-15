@@ -20,7 +20,7 @@ steps:
       - '-c'
       - |
         # Generate hash of dependency files
-        echo "$(cat yarn.lock .yarnrc.yml | sha256sum | cut -d' ' -f1)" > /workspace/dep_hash.txt
+        echo "$(cat package.json yarn.lock .yarnrc.yml | grep -v '"version":' | sha256sum | cut -d' ' -f1)" > /workspace/dep_hash.txt
         # Try to get previous hash from dependency image
         docker inspect us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies --format='{{index .Config.Labels "dep_hash"}}' > /workspace/prev_hash.txt 2>/dev/null || echo "none" > /workspace/prev_hash.txt
 
@@ -53,7 +53,6 @@ steps:
         DOCKER_BUILDKIT=1 docker build \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
-        --target production \
         --build-arg BUILDKIT_INLINE_CACHE=1 \
         --build-arg VITE_APP_API_ENDPOINT=${_API_ENDPOINT} \
         --build-arg VITE_APP_BOLTZ_SWAP_DOMAIN=${_BOLTZ_SWAP_DOMAIN} \
