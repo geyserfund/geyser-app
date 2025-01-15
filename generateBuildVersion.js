@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import packageJson from '../package.json'
+import packageJson from './package.json'
 
 const appVersion = packageJson.version
 
@@ -10,7 +10,7 @@ const jsonData = {
 
 const jsonContent = JSON.stringify(jsonData)
 
-fs.writeFile('../public/meta.json', jsonContent, 'utf8', function (err) {
+fs.writeFile('meta.json', jsonContent, 'utf8', function (err) {
   if (err) {
     console.log('An error occured while writing JSON Object to meta.json')
     return console.log(err)

@@ -2,6 +2,8 @@
 import { PropsWithChildren, useState } from 'react'
 import { useEffect } from 'react'
 
+import { __development__ } from '@/shared/constants/index.ts'
+
 import packageJson from '../../package.json'
 
 // Declare global property to avoid TypeScript error
@@ -64,6 +66,10 @@ export const CacheBuster: React.FC<PropsWithChildren> = ({ children }) => {
         }
       })
   }, [])
+
+  if (__development__) {
+    return <>{children}</>
+  }
 
   return <>{loading ? <div>Loading...</div> : children}</>
 }

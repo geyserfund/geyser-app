@@ -33,7 +33,7 @@ WORKDIR /usr/app
 COPY ./public ./public
 COPY ./src ./src
 copy ./language ./language
-COPY index.html tsconfig.json tsconfig.node.json vite.config.ts eslint.config.mjs .prettierrc server.ts ./
+COPY index.html tsconfig.json tsconfig.node.json vite.config.ts eslint.config.mjs .prettierrc server.ts generateBuildVersion.js ./
 
 ARG VITE_APP_API_ENDPOINT
 ARG VITE_APP_FLODESK_API_KEY
@@ -63,6 +63,7 @@ COPY package.json yarn.lock ./
 # Copy production dependencies over
 COPY --from=build /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/dist ./dist
+COPY --from=build /usr/app/meta.json ./dist/meta.json
 COPY --from=build /usr/app/server.js ./server.cjs
 
 # RUN yarn global add serve
