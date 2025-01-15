@@ -14,6 +14,8 @@ declare global {
 
 global.appVersion = packageJson.version
 
+const metaUrl = __development__ ? 'https://staging.geyser.app/meta.json' : '/meta.json'
+
 const semverGreaterThan = (versionA: string, versionB: string) => {
   const versionsA = versionA.split(/\./g)
 
@@ -45,7 +47,7 @@ export const CacheBuster: React.FC<PropsWithChildren> = ({ children }) => {
   }
 
   useEffect(() => {
-    fetch('/meta.json', {
+    fetch(metaUrl, {
       headers: {
         cache: 'no-store',
         'cache-control': 'no-cache',
@@ -71,9 +73,9 @@ export const CacheBuster: React.FC<PropsWithChildren> = ({ children }) => {
       })
   }, [])
 
-  if (__development__) {
-    return <>{children}</>
-  }
+  // if (__development__) {
+  //   return <>{children}</>
+  // }
 
   return <>{loading ? <div>Loading...</div> : children}</>
 }

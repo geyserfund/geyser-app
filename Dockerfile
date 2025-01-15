@@ -59,13 +59,12 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
 FROM base AS production
 
 WORKDIR /usr/app
-COPY package.json yarn.lock ./
 
 # Copy production dependencies over
-COPY --from=build /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/dist ./dist
 COPY --from=build /usr/app/meta.json ./dist/meta.json
 COPY --from=build /usr/app/server.js ./server.cjs
+COPY --from=build /usr/app/prod_node_modules ./node_modules
 
 # RUN yarn global add serve
 CMD ["node", "-r", "dotenv/config", "server.cjs"]
