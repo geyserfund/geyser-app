@@ -33,24 +33,7 @@ app.use((request, response) => {
     rewrites: [{ source: '*', destination: '/index.html' }],
     headers: [
       {
-        source: 'sw.js',
-        headers: [
-          {
-            key: 'cache-control',
-            value: 'private, no-cache, no-store, must-revalidate, max-age=0',
-          },
-          {
-            key: 'pragma',
-            value: 'no-cache',
-          },
-          {
-            key: 'expires',
-            value: '0',
-          },
-        ],
-      },
-      {
-        source: 'meta.json',
+        source: '{sw.js,meta.json}',
         headers: [
           {
             key: 'cache-control',

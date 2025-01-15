@@ -73,6 +73,10 @@ export const CacheBuster: React.FC<PropsWithChildren> = ({ children }) => {
           setLoading(false)
         }
       })
+      .catch((error) => {
+        console.error('Error fetching meta.json', error)
+        setLoading(false)
+      })
   }, [])
 
   if (__development__) {
