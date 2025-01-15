@@ -2,7 +2,6 @@
 import { PropsWithChildren, useState } from 'react'
 import { useEffect } from 'react'
 
-import { LoadingPage } from '@/pages/loading/index.tsx'
 import { __development__ } from '@/shared/constants/index.ts'
 
 import packageJson from '../../package.json'
@@ -48,14 +47,7 @@ export const CacheBuster: React.FC<PropsWithChildren> = ({ children }) => {
   }
 
   useEffect(() => {
-    fetch('/meta.json', {
-      cache: 'no-store',
-      headers: {
-        cache: 'no-store',
-        'cache-control': 'no-cache',
-        'X-Custom-No-Cache': 'true',
-      },
-    })
+    fetch('/meta.json')
       .then((response) => response.json())
       .then((meta) => {
         console.log('checking meta', meta)
@@ -79,5 +71,5 @@ export const CacheBuster: React.FC<PropsWithChildren> = ({ children }) => {
     return <>{children}</>
   }
 
-  return <>{loading ? <LoadingPage /> : children}</>
+  return <>{loading ? <div>Loading...</div> : children}</>
 }
