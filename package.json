@@ -26,7 +26,7 @@
     "caddy:trust-ca": "bash ./scripts/trust-caddy-cert.sh",
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
     "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts",
-    "dev:language": "ts-node language/languageServer.ts",
+    "dev:language": "tsx language/languageServer.ts",
     "storybook": "yarn workspace @geyser-app/storybook storybook",
     "storybook:build": "yarn workspace @geyser-app/storybook storybook:build",
     "knip": "knip"
@@ -161,7 +161,7 @@
     "prettier": "^2.8.3",
     "sitemap": "^7.1.1",
     "tiny-secp256k1": "^2.2.3",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vite": "^5.2.10",
     "vite-plugin-package-version": "^1.0.2",
