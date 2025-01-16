@@ -20,7 +20,7 @@ steps:
       - '-c'
       - |
         # Generate hash of dependency files
-        echo "$(cat package.json yarn.lock .yarnrc.yml | sha256sum | cut -d' ' -f1)" > /workspace/dep_hash.txt
+        echo "$(cat yarn.lock .yarnrc.yml | sha256sum | cut -d' ' -f1)" > /workspace/dep_hash.txt
         # Try to get previous hash from dependency image
         docker inspect us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies --format='{{index .Config.Labels "dep_hash"}}' > /workspace/prev_hash.txt 2>/dev/null || echo "none" > /workspace/prev_hash.txt
 
@@ -71,6 +71,7 @@ steps:
     secretEnv: ['FLODESK_API_KEY', 'GIPHY_API_KEY', 'GEYSER_NOSTR_PUBKEY', 'AIR_TABLE_KEY']
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    waitFor: ['Update Image: latest']
     entrypoint: gcloud
     args:
       - 'run'
@@ -82,6 +83,7 @@ steps:
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
       - '--region'
       - 'us-central1'
+      - '--no-download-image'
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies'
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
