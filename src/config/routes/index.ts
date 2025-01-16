@@ -1,4 +1,4 @@
-export { PrivateRoute, renderPrivateRoute } from './components/PrivateRoute'
+export { renderPrivateRoute } from './components/PrivateRoute'
 export { platformRoutes, router } from './routes'
 export { historyRouteAtom, historyRouteSetAtom } from './state/historyRouteAtom'
 export {

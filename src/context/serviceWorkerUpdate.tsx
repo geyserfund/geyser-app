@@ -19,7 +19,7 @@ export type ServiceWorkerUpdateProps = {
   handlePrompt: () => void
 }
 
-export const ServiceWorkerUpdate = createContext<ServiceWorkerUpdateProps>(defaultContext)
+const ServiceWorkerUpdate = createContext<ServiceWorkerUpdateProps>(defaultContext)
 
 const REFETCH_SW_INTERVAL_MS = __production__ ? 5 * 60 * 1000 : 5 * 60 * 1000
 

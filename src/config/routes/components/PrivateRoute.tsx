@@ -13,7 +13,7 @@ interface IPrivateRoute {
   children: React.ReactNode
 }
 
-export const PrivateRoute = ({ children }: IPrivateRoute) => {
+const PrivateRoute = ({ children }: IPrivateRoute) => {
   const { loading, user, isAnonymous } = useAuthContext()
 
   const params = useParams<{ projectId: string; projectName: string; userId: string }>()

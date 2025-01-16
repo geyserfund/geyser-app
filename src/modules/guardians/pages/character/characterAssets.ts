@@ -1,18 +1,12 @@
 import { __production__, __staging__ } from '@/shared/constants'
 import {
   GuardiansBlackJerseyUrl,
-  GuardiansMobileDarkKingUrl,
-  GuardiansMobileDarkKnightUrl,
-  GuardiansMobileDarkLegendUrl,
-  GuardiansMobileDarkWarriorUrl,
   GuardiansStickersUrl,
   GuardiansWhiteJerseyUrl,
   GuardiansZineUrl,
   KingCharacterPageDesktop,
   KingCharacterPageMobile,
   KingJewelUrl,
-  KingLargeDarkUrl,
-  KingLargeLightUrl,
   KingMainPageDesktop,
   KingMainPageGreyDesktop,
   KingMainPageGreyMobile,
@@ -24,8 +18,6 @@ import {
   KnightCharacterPageDesktop,
   KnightCharacterPageMobile,
   KnightJewelUrl,
-  KnightLargeDarkUrl,
-  KnightLargeLightUrl,
   KnightMainPageDesktop,
   KnightMainPageGreyDesktop,
   KnightMainPageGreyMobile,
@@ -38,8 +30,6 @@ import {
   LegendCharacterPageDesktop,
   LegendCharacterPageMobile,
   LegendJewelUrl,
-  LegendLargeDarkUrl,
-  LegendLargeLightUrl,
   LegendMainPageDesktop,
   LegendMainPageGreyDesktop,
   LegendMainPageGreyMobile,
@@ -51,8 +41,6 @@ import {
   WarriorCharacterPageDesktop,
   WarriorCharacterPageMobile,
   WarriorJewelUrl,
-  WarriorLargeDarkUrl,
-  WarriorLargeLightUrl,
   WarriorMainPageDesktop,
   WarriorMainPageGreyDesktop,
   WarriorMainPageGreyMobile,
@@ -113,36 +101,6 @@ export const GuardianCharacterMobile = {
     mainGrey: LegendMainPageGreyMobile,
     character: LegendCharacterPageMobile,
     raycast: LegendRaycastUrl,
-  },
-}
-
-export const GuardianImage = {
-  light: {
-    [GuardianType.King]: KingLargeLightUrl,
-    [GuardianType.Knight]: KnightLargeLightUrl,
-    [GuardianType.Warrior]: WarriorLargeLightUrl,
-    [GuardianType.Legend]: LegendLargeLightUrl,
-  },
-  dark: {
-    [GuardianType.King]: KingLargeDarkUrl,
-    [GuardianType.Knight]: KnightLargeDarkUrl,
-    [GuardianType.Warrior]: WarriorLargeDarkUrl,
-    [GuardianType.Legend]: LegendLargeDarkUrl,
-  },
-}
-
-export const GuardianImageMobileMode = {
-  light: {
-    [GuardianType.King]: KingLargeLightUrl,
-    [GuardianType.Knight]: KnightLargeLightUrl,
-    [GuardianType.Warrior]: WarriorLargeLightUrl,
-    [GuardianType.Legend]: LegendLargeLightUrl,
-  },
-  dark: {
-    [GuardianType.King]: GuardiansMobileDarkKingUrl,
-    [GuardianType.Knight]: GuardiansMobileDarkKnightUrl,
-    [GuardianType.Warrior]: GuardiansMobileDarkWarriorUrl,
-    [GuardianType.Legend]: GuardiansMobileDarkLegendUrl,
   },
 }
 

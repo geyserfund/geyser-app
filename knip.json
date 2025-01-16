@@ -4,12 +4,12 @@
     "language/languageServer.ts",
     "server.ts",
     "storybook/**/*.tsx",
-    ".storybook/*.{ts,tsx}",
-    "cypress/**/*.ts"
+    "packages/storybook/.storybook/*.{ts,tsx}",
+    "cypress/**/*.ts",
+    "eslint.config.mjs"
   ],
   "project": [
-    "*.{ts,tsx,mjs,json,yml,yaml,md,mdx,js,jsx}",
-    "src/**/*.{ts,tsx}",
+    "src/**/*.{ts,tsx,mjs,json,yml,yaml,md,mdx,js,jsx}",
     "language/**/*.ts",
     "server.ts",
     "storybook/**/*.tsx",

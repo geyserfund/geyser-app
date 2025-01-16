@@ -35,7 +35,7 @@ export const CreatorRewardPageBottomBar = () => {
   )
 }
 
-export const CreateRewardButtons = () => {
+const CreateRewardButtons = () => {
   const { project } = useProjectAtom()
   return (
     <>
