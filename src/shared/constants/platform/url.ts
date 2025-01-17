@@ -8,9 +8,13 @@ export const GeyserPrivacyUrl = 'https://about.geyser.fund/Privacy'
 
 export const GeyserTwitterUrl = 'https://twitter.com/geyserfund'
 export const GeyserTelegramUrl = 'https://t.me/geyserfund'
+export const GeyserMetamickTelegramUrl = 'https://t.me/Metamick14'
 export const GeyserPodcastUrl = 'https://fountain.fm/show/P5kWpoVIT7YGmPRenVN4'
 export const GeyserGithubUrl = 'https://github.com/geyserfund/geyser-app'
 export const GeyserHomepageUrl = 'https://geyser.fund/'
+
+export const GeyserPromotionPlaylistUrl =
+  'https://www.youtube.com/watch?v=acOPSyEsoqI&list=PLIDbic_KUMN1FDW2ipHkbUZxGyNgL2bJ7'
 
 export const AnalyticsUrl = 'https://simpleanalytics.com/geyser.fund'
 
@@ -399,7 +403,8 @@ export const GuardianPartnerOrangePillAppUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Orange-Pill-App.png'
 export const GuardianPartnerPlanBForumUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Plan-B-Forum.png'
-
+export const GuardianPartnerInitialCapitalUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/initial-capital-logo.png'
 // SEO
 
 export const GuardiansSeoImageUrl =
