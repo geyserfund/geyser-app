@@ -155,30 +155,34 @@ export const GuardiansMainPage = () => {
             <GuardianHeader>{t('Partners')}</GuardianHeader>
             <VStack spacing={8}>
               <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
-                {PartnerUrls.slice(0, 3).map((url, index) => (
-                  <Image
-                    src={url}
-                    alt="Partner"
-                    maxWidth="300px"
-                    width={'auto'}
-                    height={'72px'}
-                    objectFit={'contain'}
-                    key={url}
-                  />
+                {PartnerUrls.slice(0, 3).map((partner, index) => (
+                  <Link href={partner.link} isExternal key={partner.image}>
+                    <Image
+                      src={partner.image}
+                      alt="Partner"
+                      maxWidth="300px"
+                      width={'auto'}
+                      height={'72px'}
+                      objectFit={'contain'}
+                      key={partner.image}
+                    />
+                  </Link>
                 ))}
               </HStack>
 
               <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
-                {PartnerUrls.slice(3, 8).map((url, index) => (
-                  <Image
-                    src={url}
-                    alt="Partner"
-                    maxWidth="150px"
-                    width={'auto'}
-                    height={'32px'}
-                    objectFit={'contain'}
-                    key={url}
-                  />
+                {PartnerUrls.slice(3, 9).map((partner, index) => (
+                  <Link href={partner.link} isExternal key={partner.image}>
+                    <Image
+                      src={partner.image}
+                      alt="Partner"
+                      maxWidth="150px"
+                      width={'auto'}
+                      height={'32px'}
+                      objectFit={'contain'}
+                      key={partner.image}
+                    />
+                  </Link>
                 ))}
               </HStack>
             </VStack>
