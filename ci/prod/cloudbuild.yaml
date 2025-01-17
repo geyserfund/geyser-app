@@ -1,14 +1,28 @@
 steps:
   # Obtain cached images for Container Registry
   # - id: "Caching (1/2) pull build image"
-  - id: 'Pull Cache: build'
+  - id: 'Pull Cache: dependencies'
     name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
         docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies || true \
-        && docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true
+        && docker pull us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest || true \
+        && echo "Image sizes:" \
+        && docker images us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies --format "{{.Repository}}:{{.Tag}} - {{.Size}}" \
+        && docker images us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest --format "{{.Repository}}:{{.Tag}} - {{.Size}}"
+
+  - id: 'Check Dependencies Hash'
+    name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        # Generate hash of dependency files
+        echo "$(cat yarn.lock .yarnrc.yml | sha256sum | cut -d' ' -f1)" > /workspace/dep_hash.txt
+        # Try to get previous hash from dependency image
+        docker inspect us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies --format='{{index .Config.Labels "dep_hash"}}' > /workspace/prev_hash.txt 2>/dev/null || echo "none" > /workspace/prev_hash.txt
 
   - id: 'Update Cached Dependencies Image'
     name: 'gcr.io/cloud-builders/docker'
@@ -16,12 +30,19 @@ steps:
     args:
       - '-c'
       - |
-        docker build \
-        --target dependencies \
-        -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies \
-        --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies . \
-        && \
-        docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies
+        if [ "$(cat /workspace/dep_hash.txt)" != "$(cat /workspace/prev_hash.txt)" ]; then
+          echo "Dependencies changed. Rebuilding..."
+          DOCKER_BUILDKIT=1 docker build \
+          --target dependencies \
+          --build-arg BUILDKIT_INLINE_CACHE=1 \
+          --label dep_hash=$(cat /workspace/dep_hash.txt) \
+          -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies \
+          --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies . \
+          && \
+          docker push us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies
+        else
+          echo "Dependencies unchanged. Skipping rebuild."
+        fi
 
   - id: 'Update Image: latest'
     name: 'gcr.io/cloud-builders/docker'
@@ -29,9 +50,10 @@ steps:
     args:
       - '-c'
       - |
-        docker build \
+        DOCKER_BUILDKIT=1 docker build \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA \
         -t us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest \
+        --build-arg BUILDKIT_INLINE_CACHE=1 \
         --build-arg VITE_APP_API_ENDPOINT=${_API_ENDPOINT} \
         --build-arg VITE_APP_BOLTZ_SWAP_DOMAIN=${_BOLTZ_SWAP_DOMAIN} \
         --build-arg VITE_APP_AUTH_SERVICE_ENDPOINT=${_AUTH_SERVICE_ENDPOINT} \
