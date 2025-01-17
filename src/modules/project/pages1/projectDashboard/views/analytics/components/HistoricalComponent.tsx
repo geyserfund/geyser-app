@@ -11,8 +11,7 @@ import { useNotification } from '@/utils'
 
 import { HistoricalChart, HistoryDataType } from '../elements'
 import { getNameForDate } from '../helpers'
-import { useSelectionAtom } from '../insightsAtom'
-import { InsightsOptions } from './InsightsHeader'
+import { InsightsOptions, useSelectionAtom } from '../insightsAtom'
 
 export const HistoricalComponent = () => {
   const { t } = useTranslation()

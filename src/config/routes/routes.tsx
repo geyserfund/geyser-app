@@ -457,6 +457,13 @@ export const platformRoutes: RouteObject[] = [
                   return { Component: ProjectDashboardAffiliates }
                 },
               },
+              {
+                path: getPath('dashboardPromote', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardPromote = await ProjectDashboard().then((m) => m.ProjectDashboardPromote)
+                  return { Component: ProjectDashboardPromote }
+                },
+              },
             ],
           },
         ],

@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 
 import { AnalyticsGroupByInterval } from '@/types'
 
-import { InsightsOptions } from './components'
+import { InsightsOptions } from './insightsAtom.tsx'
 
 export const getNameForDate = (date: number, selectionOption: InsightsOptions) => {
   let name

@@ -13,8 +13,8 @@ import { FeaturedGrantCard } from '../components/FeaturedGrantCard'
 import { FeaturedCardSkeleton, FeaturedProjectCard } from '../components/FeaturedProjectCard'
 import { ProjectRowLayout } from '../components/ProjectRowLayout'
 
-const GEYSER_PROMOTIONS_PROJECT_NAME = 'geyserpromotions'
-const GEYSER_GET_FEATURED_REWARD_ID = '5332'
+export const GEYSER_PROMOTIONS_PROJECT_NAME = 'geyserpromotions'
+export const GEYSER_GET_FEATURED_REWARD_ID = '5332'
 
 export type FeatureAirtableData = {
   Name: string
