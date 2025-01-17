@@ -6,7 +6,7 @@ import { Trans, useTranslation } from 'react-i18next'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { GifModal } from '@/modules/project/pages1/projectView/views/body/components'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H1 } from '@/shared/components/typography'
 
 import { GifIcon } from '../../../../../../../components/icons'

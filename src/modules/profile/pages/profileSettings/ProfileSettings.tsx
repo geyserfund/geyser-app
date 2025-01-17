@@ -5,9 +5,9 @@ import { PiArrowLeft } from 'react-icons/pi'
 import { Link, Outlet, useParams } from 'react-router-dom'
 
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { dimensions, getPath } from '@/shared/constants'
 
-import { CardLayout } from '../../../../shared/components/layouts'
 import { useMobileMode } from '../../../../utils'
 import { ProfileError } from '../../components/ProfileError'
 import { useUserProfile } from '../../hooks/useUserProfile'

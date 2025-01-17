@@ -110,6 +110,7 @@ export const DesktopGuardiansIllustration = () => {
         [classes.scaleInVerBottom]: guardian === currentGuardian,
         [classes.hidden]: guardian !== currentGuardian || !currentGuardian,
       }),
+      alt: `Geyser Guardians - ${guardian}`,
     } as ImageProps)
 
   const getCommonGreyProps = (guardian: GuardianType) => {

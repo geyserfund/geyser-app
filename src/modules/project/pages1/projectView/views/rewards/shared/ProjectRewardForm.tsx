@@ -13,7 +13,7 @@ import { ControlledSelect, ControlledTextArea, ControlledTextInput } from '@/sha
 import { ControlledAmountInput } from '@/shared/components/controlledInput/ControlledAmountInput'
 import { ControlledSwitchInput } from '@/shared/components/controlledInput/ControlledSwitchInput'
 import { FieldContainer } from '@/shared/components/form'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { CalendarButton, CreatorEmailButton, FileUpload } from '@/shared/molecules'
@@ -348,6 +348,8 @@ export const ProjectRewardForm = ({
                     'Set a custom message to thank contributors, provide important details, or share any additional information you’d like them to know after they claim the reward.',
                   )}
                   control={control}
+                  error={errors.confirmationMessage?.message}
+                  isInvalid={Boolean(errors.confirmationMessage?.message)}
                   placeholder={t('Enter your message here...')}
                   resize="vertical"
                 />

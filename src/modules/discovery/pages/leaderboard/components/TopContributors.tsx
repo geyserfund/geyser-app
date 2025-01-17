@@ -2,7 +2,7 @@ import { Box, HStack, Image, Skeleton, SkeletonCircle, VStack } from '@chakra-ui
 import { PiLightning, PiRocketLaunch } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { ImageWithReload } from '@/components/ui'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants/platform/url'

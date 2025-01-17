@@ -1,7 +1,6 @@
 export * from './copy'
 export * from './currency'
 export * from './defaultViewTags'
-export * from './events'
 export * from './geyserFee'
 export * from './languages'
 export * from './metaTags'

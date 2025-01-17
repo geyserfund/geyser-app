@@ -15,6 +15,7 @@ import {
   GuardiansSeriesOneBackgroundMobileUrl,
   GuardiansSeriesOneBackgroundTabUrl,
 } from '@/shared/constants'
+import { useInitialColorModeEffect } from '@/shared/hooks/utils/useInitialColorMode'
 import { fonts } from '@/shared/styles'
 import { toPx } from '@/utils'
 
@@ -23,6 +24,8 @@ import { useGuardianProjectRewards } from './hooks/useGuardianProjectRewards'
 const GEYSER_GUARDIANS_PROJECT_NAME = 'geyserguardians'
 
 export const Guardians = () => {
+  useInitialColorModeEffect()
+
   const isGuardianCharacterPage = useIsGuardianCharacterPage()
 
   const [searchParams] = useSearchParams()
@@ -78,16 +81,16 @@ export const Guardians = () => {
             lg: `-${toPx(dimensions.topNavBar.desktop.height)}`,
           }}
         >
-          <H1
-            as={Link}
-            to={getPath('guardians')}
-            fontSize={{ base: '32px', md: '48px', lg: '56px', xl: '72px' }}
-            color={isGuardianCharacterPage ? 'neutral1.9' : 'utils.text'}
-            textAlign="center"
-            bold
-          >
-            {t('GEYSER GUARDIANS')}
-          </H1>
+          <Link to={getPath('guardians')}>
+            <H1
+              fontSize={{ base: '32px', md: '48px', lg: '56px', xl: '72px' }}
+              color={isGuardianCharacterPage ? 'neutral1.9' : 'utils.text'}
+              textAlign="center"
+              bold
+            >
+              {t('GEYSER GUARDIANS')}
+            </H1>
+          </Link>
           <Body
             fontSize={{ base: '16px', md: '20px', lg: '24px', xl: '28px' }}
             marginTop={{ base: '-8px', md: '-12px', lg: '-16px', xl: '-20px' }}

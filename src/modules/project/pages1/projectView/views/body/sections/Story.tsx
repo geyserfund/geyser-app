@@ -2,10 +2,10 @@ import { HStack, SkeletonText } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { getPath } from '@/shared/constants'
 import { MarkdownField } from '@/shared/markdown/MarkdownField'
 
-import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { Body } from '../../../../../../../shared/components/typography'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 import { BodySectionLayout, CreatorEditButton } from '../components'

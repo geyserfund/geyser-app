@@ -1,21 +1,28 @@
 import { useColorMode } from '@chakra-ui/react'
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
 
 let initialColorMode = ''
+let modeSet = false
 
 export const useInitialColorModeEffect = () => {
   const { colorMode, setColorMode } = useColorMode()
 
-  const location = useLocation()
-  const isGuardiansPage = location.pathname.includes('/guardians')
+  useEffect(() => {
+    if (!modeSet) {
+      modeSet = true
+      initialColorMode = colorMode
+    }
+
+    setColorMode('light')
+
+    return () => {
+      setColorMode(initialColorMode)
+    }
+  }, [colorMode, setColorMode])
 
   useEffect(() => {
-    if (isGuardiansPage && colorMode !== 'light') {
-      initialColorMode = 'dark'
-      setColorMode('light')
-    } else if (!isGuardiansPage && initialColorMode === 'dark') {
-      setColorMode('dark')
+    return () => {
+      modeSet = false
     }
-  }, [isGuardiansPage, colorMode, setColorMode])
+  }, [])
 }

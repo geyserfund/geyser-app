@@ -3,9 +3,9 @@ import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { H2 } from '@/shared/components/typography'
 
-import { CardLayout } from '../../../../../../shared/components/layouts'
 import { getPath } from '../../../../../../shared/constants'
 import { standardPadding } from '../../../../../../shared/styles'
 import { useRefundedSwapData } from '../../../../funding/state'

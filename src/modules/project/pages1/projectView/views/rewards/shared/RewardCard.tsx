@@ -3,9 +3,10 @@ import { MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { ImageWithReload } from '@/components/ui'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CardLayout, CardLayoutProps, SkeletonLayout } from '@/shared/components/layouts'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { SkeletonLayout } from '@/shared/components/layouts'
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
@@ -47,7 +48,17 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
   const isHidden = hidden || reward.isHidden
 
   return (
-    <CardLayout hover {...linkProps} dense w="full" overflow={'hidden'} spacing={0} position="relative" {...rest}>
+    <CardLayout
+      hover
+      {...linkProps}
+      dense
+      w="full"
+      overflow={'hidden'}
+      minHeight="450px"
+      spacing={0}
+      position="relative"
+      {...rest}
+    >
       {isHidden && (
         <Box
           backgroundColor={'utils.pbg'}

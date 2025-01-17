@@ -1,12 +1,14 @@
 import { HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 
-import { CardLayout, SkeletonLayout } from '../../../../../../../../shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
+
 import { ContributeButton } from '../../components'
 import { ProjectBalanceDisplay } from './components/ProjectBalanceDisplay'
 
 export const ContributionSummary = (props: StackProps) => {
   return (
-    <CardLayout w="100%" p={6} spacing={6} {...props}>
+    <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
       <ProjectBalanceDisplay />
 
       <HStack w="full">

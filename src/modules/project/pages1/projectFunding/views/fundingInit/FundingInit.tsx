@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { FundingResourceType } from '@/types'
 
 import { FundingLayout } from '../../layouts/FundingLayout'

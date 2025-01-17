@@ -4,7 +4,7 @@ import express, { Request, Response } from 'express'
 import fs from 'fs'
 import path from 'path'
 
-const filePath = path.resolve(__dirname, 'translations', 'en.json')
+const filePath = path.resolve(path.dirname(new URL(import.meta.url).pathname), 'translations', 'en.json')
 
 const PORT = process.env.VITE_APP_LNG_PORT
 const app = express()

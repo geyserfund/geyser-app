@@ -1,10 +1,9 @@
 import { VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
-
-import { CardLayoutProps } from '../../../../../../../shared/components/layouts'
 
 export const SafeToDeleteNotice = (props: CardLayoutProps) => {
   const { t } = useTranslation()

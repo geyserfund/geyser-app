@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai'
 import { useState } from 'react'
 
-import { usePaginationAtomHook } from '@/shared/hooks'
+import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHook'
 import { ActivityFeedFragmentFragment, ActivityFeedName, useActivityFeedQuery } from '@/types'
 
 import { activityFeedFollowedProjectsAtom, activityFeedGlobalAtom } from '../state/activityFeedAtom'

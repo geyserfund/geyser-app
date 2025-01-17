@@ -1,8 +1,10 @@
 import { HStack, VStack } from '@chakra-ui/react'
+import { Link } from 'react-router-dom'
 
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
 import { H2 } from '@/shared/components/typography'
 import { HeaderProps } from '@/shared/components/typography/Heading'
+import { getPath } from '@/shared/constants'
 import { GuardianType, useGuardianUsersGetQuery } from '@/types'
 
 import { CharacterAssets } from '../../character/characterAssets'
@@ -45,11 +47,13 @@ export const GuardianUsers = ({
         <H2 fontSize={{ base: '28', lg: '48px' }} fontWeight={600} color={`guardians.${guardian}.text`} {...titleProps}>
           {guardianAsset.title}
         </H2>
-        <HStack spacing="10px">
+        <HStack w="full" spacing="10px" overflowX="hidden" flexWrap="wrap">
           {users &&
             users.length > 0 &&
             users.map((user) => (
               <ProfileAvatar
+                as={Link}
+                to={getPath('heroProfile', user.heroId)}
                 width={{ base: heightWidthMobile, lg: heightWidthDesktop }}
                 height={{ base: heightWidthMobile, lg: heightWidthDesktop }}
                 guardian={guardian}

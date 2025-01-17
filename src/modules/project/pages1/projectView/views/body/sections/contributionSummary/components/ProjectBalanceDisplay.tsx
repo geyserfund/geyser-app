@@ -186,6 +186,7 @@ export function ProjectBalanceDisplay() {
       _hover={{
         cursor: hasGoal && hasTotalBalance ? 'pointer' : 'default',
       }}
+      minHeight="128px"
       {...handlers}
     >
       <VStack height={'128px'} justifyContent={'center'}>

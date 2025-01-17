@@ -5,7 +5,7 @@ import { atomWithStorage } from 'jotai/utils'
 import { PiX } from 'react-icons/pi'
 
 import { useAuthContext } from '@/context'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H1 } from '@/shared/components/typography'
 import { GeyserAboutUrl } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
@@ -35,10 +35,11 @@ export const WelcomeCard = () => {
       />
       <H1 size={{ base: 'xl', xs: '2xl', sm: '3xl' }} bold color={lightModeColors.neutral1[11]}>
         {t('Welcome to Bitcoin crowdfunding!')}
+        {'!!!v14'}
       </H1>
       <Body size="lg" medium color={lightModeColors.neutral1[11]} textAlign={'center'}>
         {t(
-          'Bring great Bitcoin ideas to life on Geyser. Whether it’s a creative project, social cause or innovative new product around the world. We believe crowdfunding is how we can speed up Bitcoin Adoption.',
+          'Bring your Bitcoin ideas to life with Geyser. Rally your community and the Bitcoin community to fund projects that push Bitcoin adoption forward.',
         )}
       </Body>
 

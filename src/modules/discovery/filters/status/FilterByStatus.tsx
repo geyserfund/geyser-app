@@ -3,7 +3,6 @@ import { IconProps } from '@chakra-ui/react'
 import { useFilterContext } from '@/context/filter'
 
 import { ProjectNavIcon, RewardGiftIcon } from '../../../../components/icons'
-import { projectTypes } from '../../../../shared/constants'
 import { ProjectStatus, ProjectType } from '../../../../types'
 import { StatusFilterBody } from './StatusFilterBody'
 
@@ -37,7 +36,7 @@ export type StatusTypeButton = {
 }
 
 export const getStatusTypeButtonContent = ({ status, type }: StatusAndType): StatusTypeButton => {
-  if (type && type === projectTypes.reward) {
+  if (type && type === ProjectType.Reward) {
     return {
       icon: RewardGiftIcon,
       text: 'Projects with perks',

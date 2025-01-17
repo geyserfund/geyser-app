@@ -4,7 +4,7 @@ import { FormEvent } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { useNotification } from '@/utils'

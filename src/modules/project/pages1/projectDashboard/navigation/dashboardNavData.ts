@@ -4,6 +4,7 @@ import {
   PiBookOpen,
   PiGear,
   PiInvoice,
+  PiMegaphone,
   PiPlanet,
   PiPlugs,
   PiProjectorScreenChart,
@@ -49,6 +50,18 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     icon: PiInvoice,
   },
   {
+    label: 'Promote',
+    path: 'dashboardPromote',
+    type: DashboardType.features,
+    icon: PiMegaphone,
+  },
+  {
+    label: 'Affiliates',
+    path: 'dashboardAffiliates',
+    type: DashboardType.features,
+    icon: PiUsersThree,
+  },
+  {
     label: 'Project Info',
     path: 'dashboardInfo',
     type: DashboardType.settings,
@@ -89,12 +102,6 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     path: 'dashboardSettings',
     type: DashboardType.settings,
     icon: PiGear,
-  },
-  {
-    label: 'Affiliates',
-    path: 'dashboardAffiliates',
-    type: DashboardType.features,
-    icon: PiUsersThree,
   },
 ]
 

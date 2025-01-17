@@ -5,7 +5,7 @@ import { PiDotsSix, PiNotePencil, PiStarFill } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CardLayout, CardLayoutProps } from '@/shared/components/layouts'
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { getPath } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 

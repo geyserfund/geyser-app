@@ -2,8 +2,7 @@ import { Select } from '@chakra-ui/react'
 import { ChangeEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { InsightsOptions } from '../components'
-import { useSelectionAtom } from '../insightsAtom'
+import { InsightsOptions, useSelectionAtom } from '../insightsAtom'
 
 export const InsightsOptionsSelect = () => {
   const { t } = useTranslation()

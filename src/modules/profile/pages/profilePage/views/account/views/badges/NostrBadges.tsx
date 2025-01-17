@@ -11,6 +11,8 @@ import { BadgeItem } from './BadgeItem'
 import { BadgesBodySkeleton } from './BadgesBody'
 import { MediaCarouselForCards } from './MediaCarouselForCards'
 
+const WARRIOR_BADGE_UNIQUE_NAME = 'Geyser-Guardian'
+
 export const NostrBadges = ({
   nostrId,
   userBadges,
@@ -20,6 +22,7 @@ export const NostrBadges = ({
   userBadges: UserBadge[]
   isEdit: boolean
 }) => {
+  const [warriorBadges, setWarriorBadges] = useState<UserBadge[]>([])
   const [claimedBadges, setClaimedBadges] = useState<UserBadge[]>([])
   const [unClaimedBadges, setUnClaimedBadges] = useState<UserBadge[]>([])
 
@@ -29,18 +32,31 @@ export const NostrBadges = ({
 
   useEffect(() => {
     if (userBadges.length > 0) {
+      const warriorBadges = userBadges.filter((userBadge) =>
+        userBadge.badge.uniqueName.includes(WARRIOR_BADGE_UNIQUE_NAME),
+      )
+
       const claimedBadges =
         (nostrBadgeIds.length > 0 &&
-          userBadges?.filter((userbadge) => nostrBadgeIds.includes(userbadge.badge.uniqueName))) ||
+          userBadges?.filter(
+            (userbadge) =>
+              nostrBadgeIds.includes(userbadge.badge.uniqueName) &&
+              !userbadge.badge.uniqueName.includes(WARRIOR_BADGE_UNIQUE_NAME),
+          )) ||
         []
 
       const unClaimedBadges =
         nostrBadgeIds.length > 0
-          ? userBadges?.filter((userbadge) => !nostrBadgeIds.includes(userbadge.badge.uniqueName)) || []
-          : userBadges
+          ? userBadges?.filter(
+              (userbadge) =>
+                !nostrBadgeIds.includes(userbadge.badge.uniqueName) &&
+                !userbadge.badge.uniqueName.includes(WARRIOR_BADGE_UNIQUE_NAME),
+            ) || []
+          : userBadges.filter((userBadge) => !userBadge.badge.uniqueName.includes(WARRIOR_BADGE_UNIQUE_NAME))
 
       setClaimedBadges(claimedBadges)
       setUnClaimedBadges(unClaimedBadges)
+      setWarriorBadges(warriorBadges)
     }
   }, [nostrBadgeIds, userBadges])
 
@@ -48,7 +64,14 @@ export const NostrBadges = ({
     return <BadgesBodySkeleton />
   }
 
-  const totalBadgeLinks = userBadges.map((userBadge) => userBadge.badge.image) || []
+  const totalBadgeLinks =
+    [...userBadges]
+      .sort((a, b) => {
+        if (a.badge.uniqueName.includes(WARRIOR_BADGE_UNIQUE_NAME)) return -1
+        if (b.badge.uniqueName.includes(WARRIOR_BADGE_UNIQUE_NAME)) return 1
+        return 0
+      })
+      .map((userBadge) => userBadge.badge.image) || []
 
   const handleClick = (badge: UserBadge) => {
     const currentIndex = (userBadges.findIndex((userBadge) => userBadge.id === badge.id) || 0) + 1
@@ -67,6 +90,14 @@ export const NostrBadges = ({
             <Image width="auto" maxWidth="110px" src={GenericHeroCardUrl} />
           </VStack>
         </WrapItem>
+
+        {warriorBadges.map((userBadge) => {
+          return (
+            <WrapItem key={userBadge.id}>
+              <BadgeItem userBadge={userBadge} claimABadge={claimABadge} handleClick={handleClick} />
+            </WrapItem>
+          )
+        })}
 
         {claimedBadges.map((userBadge) => {
           return (

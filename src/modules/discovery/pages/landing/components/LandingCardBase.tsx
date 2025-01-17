@@ -1,10 +1,11 @@
 import { Box, HStack, Skeleton, VStack } from '@chakra-ui/react'
 
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { isInactive } from '@/utils'
 
-import { ImageWithReload } from '../../../../../components/ui'
-import { CardLayout, CardLayoutProps, SkeletonLayout } from '../../../../../shared/components/layouts'
+import { SkeletonLayout } from '../../../../../shared/components/layouts'
 import { ProjectForLandingPageFragment } from '../../../../../types'
 
 export interface LandingCardBaseProps extends CardLayoutProps {

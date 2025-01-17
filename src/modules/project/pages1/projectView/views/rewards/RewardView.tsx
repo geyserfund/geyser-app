@@ -4,12 +4,13 @@ import { t } from 'i18next'
 import { PiArrowLeft, PiEyeSlash } from 'react-icons/pi'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
-import { ImageWithReload } from '@/components/ui'
 import { Head } from '@/config/Head'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CardLayout, SkeletonLayout } from '@/shared/components/layouts'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { dimensions, getPath } from '@/shared/constants'
 import { MarkdownField } from '@/shared/markdown/MarkdownField'
@@ -43,7 +44,7 @@ export const RewardView = () => {
 
   const reward = data?.getProjectReward
 
-  const { count, buyReward } = useRewardBuy(reward)
+  const { count, buyReward, isAvailable } = useRewardBuy(reward)
 
   if (loading) {
     return <RewardViewSkeleton />
@@ -212,7 +213,14 @@ export const RewardView = () => {
           {isProjectOwner ? (
             <RewardEditMenu size="lg" w="full" reward={reward} />
           ) : (
-            <Button size="lg" variant="solid" colorScheme="primary1" width="full" onClick={buyReward}>
+            <Button
+              size="lg"
+              variant="solid"
+              colorScheme="primary1"
+              width="full"
+              onClick={buyReward}
+              isDisabled={!isAvailable}
+            >
               {t('Buy')}
             </Button>
           )}

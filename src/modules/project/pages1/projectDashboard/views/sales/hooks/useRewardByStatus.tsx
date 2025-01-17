@@ -2,7 +2,8 @@ import { MutationHookOptions, QueryHookOptions } from '@apollo/client'
 import { useAtom, useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 
-import { usePaginationAtomHook } from '../../../../../../../shared/hooks'
+import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHook'
+
 import {
   Exact,
   OrderByDirection,

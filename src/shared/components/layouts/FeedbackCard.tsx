@@ -2,7 +2,7 @@ import { Divider, HStack } from '@chakra-ui/react'
 import React from 'react'
 import { BsExclamationSquareFill } from 'react-icons/bs'
 
-import { CardLayout, CardLayoutProps } from '@/shared/components/layouts'
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { H3 } from '@/shared/components/typography'
 
 type FeedbackCardVariants = 'primary' | 'warning' | 'neutral' | 'danger'

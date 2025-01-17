@@ -1,0 +1,12 @@
+{
+  "name": "@geyser-app/testing",
+  "version": "1.0.0",
+  "scripts": {
+    "test:e2e": "yarn cypress run --e2e",
+    "test:watch": "yarn cypress open"
+  },
+  "devDependencies": {
+    "cypress": "13.13.2",
+    "cypress-real-events": "^1.12.0"
+  }
+}

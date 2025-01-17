@@ -31,6 +31,25 @@ app.use((request, response) => {
   return handler(request, response, {
     public: './dist',
     rewrites: [{ source: '*', destination: '/index.html' }],
+    headers: [
+      {
+        source: '{sw.js, meta.json}',
+        headers: [
+          {
+            key: 'cache-control',
+            value: 'private, no-cache, no-store, must-revalidate, max-age=0',
+          },
+          {
+            key: 'pragma',
+            value: 'no-cache',
+          },
+          {
+            key: 'expires',
+            value: '0',
+          },
+        ],
+      },
+    ],
   })
 })
 

@@ -18,12 +18,12 @@ import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { BsCheckLg } from 'react-icons/bs'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 
 import { useAuthContext } from '../../../../context'
 import { MUTATION_APPLY_GRANT } from '../../../../graphqlBase/mutations'
 import { CreateAProjectButton } from '../../../../modules/profile/pages/profilePage/components'
-import { CardLayout } from '../../../../shared/components/layouts'
 import { LockedConnectAccountUrl } from '../../../../shared/constants'
 import { lightModeColors } from '../../../../shared/styles'
 import { Grant, GrantApplicant, GrantApplicantStatus, GrantApplyInput, Project } from '../../../../types'

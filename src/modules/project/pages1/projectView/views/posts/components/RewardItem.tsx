@@ -1,7 +1,7 @@
 import { HStack, StackProps } from '@chakra-ui/react'
 import React from 'react'
 
-import { ImageWithReload } from '@/components/ui'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body } from '@/shared/components/typography'
 
 type RewardItemProps = {

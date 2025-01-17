@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai'
 import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
-import { guardianRewardsAtom, guardianRewardsDiscountItemsAtom } from '@/modules/guardians/state/guardianRewards'
+import { guardianRewardsAtom } from '@/modules/guardians/state/guardianRewards'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { fonts } from '@/shared/styles'
@@ -26,8 +26,6 @@ export const GuardiansPrice = ({
 
   const guardianRewards = useAtomValue(guardianRewardsAtom)
 
-  const guardianRewardsDiscountItems = useAtomValue(guardianRewardsDiscountItemsAtom)
-
   const guardianAsset = CharacterAssets[currentGuardian]
 
   const { rewardUUIDs } = guardianAsset
@@ -39,8 +37,9 @@ export const GuardiansPrice = ({
 
   const mainPrice = guardianMainReward.cost
   const discountPrice = guardianDiscountReward.cost
-  const discountRemains =
-    guardianDiscountReward.maxClaimable && guardianDiscountReward.maxClaimable - guardianDiscountReward.sold > 0
+  const remainingDiscountItems =
+    (guardianDiscountReward.maxClaimable && guardianDiscountReward.maxClaimable - guardianDiscountReward.sold) || 0
+  const discountRemains = remainingDiscountItems > 0
 
   return (
     <>
@@ -57,26 +56,32 @@ export const GuardiansPrice = ({
                 {`$${centsToDollars(mainPrice)}`}
               </Body>
             </H2>
-            <Body fontWeight={600} textTransform="uppercase">
-              <Trans
-                i18nKey="The first <1>121</1> Guardians get <3>10%</3> OFF. <5>{{remainingDiscounts}}</5> left."
-                values={{ remainingDiscounts: guardianRewardsDiscountItems }}
-              >
-                {'The first '}
-                <Body as="span" color={`guardians.${currentGuardian}.text`}>
-                  {'121'}
-                </Body>
-                {' Guardians get '}
-                <Body as="span" color={`guardians.${currentGuardian}.text`}>
-                  {'10%'}
-                </Body>
-                {' OFF. '}
-                <Body as="span" color={`guardians.${currentGuardian}.text`}>
-                  {'{{remainingDiscounts}}'}
-                </Body>
-                {' left.'}
-              </Trans>
-            </Body>
+            {discountRemains && (
+              <Body fontWeight={600} textTransform="uppercase">
+                <Trans
+                  i18nKey="The first <1>{{discountItems}}</1> {{guardian}}s get <3>10%</3> OFF. <5>{{remainingDiscounts}}</5> left."
+                  values={{
+                    discountItems: guardianDiscountReward.maxClaimable,
+                    guardian: guardianAsset.title,
+                    remainingDiscounts: remainingDiscountItems,
+                  }}
+                >
+                  {'The first '}
+                  <Body as="span" color={`guardians.${currentGuardian}.text`}>
+                    {'{{discountItems}}'}
+                  </Body>
+                  {' {{guardian}}s get '}
+                  <Body as="span" color={`guardians.${currentGuardian}.text`}>
+                    {'10%'}
+                  </Body>
+                  {' OFF. '}
+                  <Body as="span" color={`guardians.${currentGuardian}.text`}>
+                    {'{{remainingDiscounts}}'}
+                  </Body>
+                  {' left.'}
+                </Trans>
+              </Body>
+            )}
           </VStack>
         )}
         <Button

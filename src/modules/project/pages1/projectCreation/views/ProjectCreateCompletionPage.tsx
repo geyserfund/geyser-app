@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next'
 import { PiRocketLaunch } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
+import Loader from '@/components/ui/Loader'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { ProjectState } from '@/modules/project/state/projectAtom'
+import { ProjectState } from '@/modules/project/state/projectAtom.ts'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
-import Loader from '../../../../../components/ui/Loader'
 import { useAuthContext } from '../../../../../context'
 import { getPath } from '../../../../../shared/constants'
 import { useModal } from '../../../../../shared/hooks'
@@ -17,7 +17,7 @@ import { CreateWalletInput } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
 import { ProjectLaunchConfirmModal } from '../../../components/ProjectLaunchConfirmModal'
 import { ProjectCreateCompleted } from '../components/ProjectCreateCompleted'
-import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
+import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
 
 interface ProjectCreateCompletionPageProps {
   project?: ProjectState

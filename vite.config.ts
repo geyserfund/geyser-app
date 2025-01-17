@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import react from '@vitejs/plugin-react-swc'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
-import mkcert from 'vite-plugin-mkcert'
 import loadVersion from 'vite-plugin-package-version'
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 import topLevelAwait from 'vite-plugin-top-level-await'
@@ -96,7 +95,7 @@ export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const server = {
     port: Number(env.PORT),
-    https: Boolean(env.HTTPS),
+    // https: Boolean(env.HTTPS),
     proxy: undefined,
     // open: env.DOCKER ? false : `http://dev.geyser.fund:${PORT}/`,
     watch: {
@@ -123,9 +122,6 @@ export default defineConfig(({ command, mode }) => {
     wasm(),
     topLevelAwait(),
   ]
-  if (mode !== 'production') {
-    plugins.push(mkcert())
-  }
 
   return {
     plugins,
@@ -136,13 +132,14 @@ export default defineConfig(({ command, mode }) => {
     },
     server,
     define: {
+      global: 'globalThis',
       'process.env': env,
       __APP_ENV__: env.APP_ENV,
     },
     test: {
       globals: true,
       environment: 'jsdom',
-      setupFiles: './setupTests.ts',
+      // setupFiles: './setupTests.ts',
     },
     optimizeDeps: {
       include: ['ecpair', 'tiny-secp256k1'],
