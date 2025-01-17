@@ -1503,5 +1503,10 @@
   "Get connected": "Get connected",
   "Note: We reserve the right to refuse offering this service if the product does not align with our mission.": "Note: We reserve the right to refuse offering this service if the product does not align with our mission.",
   "we can blast your project out to the right people that we know might be interested.": "we can blast your project out to the right people that we know might be interested.",
-  "The first {{count}} guardians get {{discount}} off. {{left}} left.": "The first {{count}} guardians get {{discount}} off. {{left}} left."
+  "The first {{count}} guardians get {{discount}} off. {{left}} left.": "The first {{count}} guardians get {{discount}} off. {{left}} left.",
+  "The first <1>{{discountItems}}</1> {{guardian}}s get <3>10%</3> OFF. <5>{{remainingDiscounts}}</5> left.": "The first <1>{{discountItems}}</1> {{guardian}}s get <3>10%</3> OFF. <5>{{remainingDiscounts}}</5> left.",
+  "Geyser Guardians - King": "Geyser Guardians - King",
+  "The King understands the long road to hyper-bitcoinization. Drinking from his enchanted chalice grants him foresight, allowing him to plan flawless strategies to advance Bitcoin adoption. With his golden crown and wise leadership, he inspires unity among Bitcoiners, guiding them toward a prosperous future.": "The King understands the long road to hyper-bitcoinization. Drinking from his enchanted chalice grants him foresight, allowing him to plan flawless strategies to advance Bitcoin adoption. With his golden crown and wise leadership, he inspires unity among Bitcoiners, guiding them toward a prosperous future.",
+  "Shrouded in mystery, the Legend moves through the shadows, evading even the sharpest scrutiny. His laser-eyed vision cuts through the lies of governments and institutions, uncovering clarity and truth. Those who meet his gaze are forever transformed, ignited with an unshakable desire to pursue a freer, better future.": "Shrouded in mystery, the Legend moves through the shadows, evading even the sharpest scrutiny. His laser-eyed vision cuts through the lies of governments and institutions, uncovering clarity and truth. Those who meet his gaze are forever transformed, ignited with an unshakable desire to pursue a freer, better future.",
+  "Geyser Guardians - Legend": "Geyser Guardians - Legend"
 }
