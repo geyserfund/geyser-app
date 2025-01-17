@@ -9,7 +9,11 @@ import {
 } from '@/modules/discovery/pages/landing/views/defaultView/sections/Featured.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { getPathWithGeyserHero, GeyserTelegramUrl } from '@/shared/constants/index.ts'
+import {
+  getPathWithGeyserHero,
+  GeyserMetamickTelegramUrl,
+  GeyserPromotionPlaylistUrl,
+} from '@/shared/constants/index.ts'
 
 import { DashboardLayout } from '../common/DashboardLayout.tsx'
 
@@ -27,7 +31,7 @@ export const ProjectDashboardPromote = () => {
         <HStack w="100%" justifyContent="space-between" spacing="20px">
           <Body flex={1} size="sm" light>
             {t(
-              'Letting people know about your project or campaign is the hardest and most important part. At Geyser we help showcase trending projects, we highlight new interesting ones in our Monthly email, and so much more. But if you’re looking for more, we provide the following plans to projects that align with our mission and we believe have potential.',
+              "Spreading the word about your project can be challenging, but Geyser is here to help by showcasing trending projects, highlighting new ones in our monthly email, and more. If you're looking for more, we also offer getting featured and receiving a Promotion boost.",
             )}
           </Body>
         </HStack>
@@ -57,7 +61,7 @@ export const ProjectDashboardPromote = () => {
           </HStack>
           <Body size="sm">
             {t(
-              'Get featured at the top of the Geyser Discovery page. Your project will stay highlighted for a full week for a small fee.',
+              'The Geyser Team will help you get setup for success through this bespoke package, which includes the following:',
             )}
           </Body>
           <Button
@@ -77,7 +81,7 @@ export const ProjectDashboardPromote = () => {
         <CardLayout w="full">
           <HStack w="full" justifyContent="space-between">
             <Body size="md" medium>
-              {t('Marketing Boost')}
+              {t('Promotion Boost')}
             </Body>
             <Body size="md" medium light>
               {t('Price on inquiry')}
@@ -86,16 +90,56 @@ export const ProjectDashboardPromote = () => {
           <VStack w="full" alignItems="flex-start">
             <Body size="sm">
               {t(
-                'Get featured at the top of the Geyser Discovery page. Your project will stay highlighted for a full week for a small fee.',
+                'The Geyser Team will help you get setup for success through this bespoke package, which includes the following:',
               )}
             </Body>
             <UnorderedList fontSize="14px">
-              <ListItem>{t('Marketing Strategy call')}</ListItem>
-              <ListItem>{t('Email reward buyers likely to be interested')}</ListItem>
-              <ListItem>{t('X promotion')}</ListItem>
-              <ListItem>{t('Featuring project in landing page')}</ListItem>
-              <ListItem>{t('Get on our podcast')}</ListItem>
-              <ListItem>{t('X-Space to discuss your project')}</ListItem>
+              <ListItem>
+                <Body as="span" medium>
+                  {t('Call with expert')}
+                </Body>
+                {': '}
+                {t(
+                  'based on your needs we can schedule a call to discuss product strategy, marketing strategy, content creation and distribution.',
+                )}
+              </ListItem>
+              <ListItem>
+                <Body as="span" medium>
+                  {t('Get connected')}
+                </Body>
+                {': '}
+                {t(
+                  "we'll connect you with the right people that will make your project into a success: be it podcasters, content creators, designers or more.",
+                )}
+              </ListItem>
+              <ListItem>
+                <Body as="span" medium>
+                  {t('Thorough report')}
+                </Body>
+                {': '}
+                {t(
+                  "we'll put together a summary sheet based on our conversation that you can take away with the key next steps and deliverables.",
+                )}
+              </ListItem>
+              <ListItem>
+                <Body as="span" medium>
+                  {t('Get your project featured')}
+                </Body>
+                {': '}
+                {t("We'll feature your project in our landing page for one week.")}
+              </ListItem>
+              <ListItem>
+                <Body as="span" medium>
+                  {t('Email campaign')}
+                </Body>
+                {': '}
+                {t('we can blast your project out to the right people that we know might be interested.')}
+              </ListItem>
+              <Body size="sm">
+                {t(
+                  'Note: We reserve the right to refuse offering this service if the product does not align with our mission.',
+                )}
+              </Body>
             </UnorderedList>
           </VStack>
 
@@ -114,7 +158,7 @@ export const ProjectDashboardPromote = () => {
             </Button>
             <Button
               as={ChakraLink}
-              href={GeyserTelegramUrl}
+              href={GeyserMetamickTelegramUrl}
               isExternal
               size="lg"
               flex={1}
@@ -127,7 +171,7 @@ export const ProjectDashboardPromote = () => {
           </HStack>
         </CardLayout>
 
-        <VStack w="full" alignItems="flex-start">
+        <VStack w="full" alignItems="flex-start" as={ChakraLink} href={GeyserPromotionPlaylistUrl} isExternal>
           <Body size="2xl" medium>
             {t('How to promote your project?')}
           </Body>
