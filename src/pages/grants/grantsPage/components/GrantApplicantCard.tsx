@@ -6,12 +6,12 @@ import { Link } from 'react-router-dom'
 
 import { ContributorsModal, useContributorsModal } from '@/modules/grants/components/ContributorsModal'
 import { useAuthModal } from '@/pages/auth/hooks'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { AvatarElement } from '@/shared/molecules/AvatarElement'
 import { VotingInfoModal } from '@/shared/molecules/VotingInfoModal'
 
-import { ImageWithReload } from '../../../../components/ui'
-import { CardLayout } from '../../../../shared/components/layouts'
 import { getPathWithGeyserHero } from '../../../../shared/constants'
 import {
   GrantApplicantContributor,

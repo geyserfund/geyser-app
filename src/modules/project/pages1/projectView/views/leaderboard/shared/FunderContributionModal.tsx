@@ -8,7 +8,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProfileText } from '@/shared/components/display/ProfileText'
 import { Modal } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
-import { usePaginationAtomHook } from '@/shared/hooks'
+import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHook'
 import {
   OrderByOptions,
   ProjectFundingTxFragment,

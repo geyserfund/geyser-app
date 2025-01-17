@@ -5,7 +5,7 @@ import { PiX } from 'react-icons/pi'
 
 import { fetchInfoBannerData } from '@/api/airtable'
 import { GeyserLogoIcon } from '@/components/icons/svg/GeyserLogoIcon'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import { BrandCreamGradient } from '@/shared/styles/custom'

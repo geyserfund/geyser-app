@@ -13,7 +13,7 @@ import { ControlledSelect, ControlledTextArea, ControlledTextInput } from '@/sha
 import { ControlledAmountInput } from '@/shared/components/controlledInput/ControlledAmountInput'
 import { ControlledSwitchInput } from '@/shared/components/controlledInput/ControlledSwitchInput'
 import { FieldContainer } from '@/shared/components/form'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { CalendarButton, CreatorEmailButton, FileUpload } from '@/shared/molecules'

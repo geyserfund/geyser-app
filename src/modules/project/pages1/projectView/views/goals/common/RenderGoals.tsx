@@ -19,10 +19,11 @@ import { useNavigate } from 'react-router'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 import { inProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 
-import { CardLayout, SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { ProjectGoalFragment, useProjectGoalOrderingUpdateMutation } from '../../../../../../../types'
 import { useGoalsAtom, useProjectAtom } from '../../../../../hooks/useProjectAtom'
 import { useGoalsModal } from '../../../hooks/useGoalsModal'

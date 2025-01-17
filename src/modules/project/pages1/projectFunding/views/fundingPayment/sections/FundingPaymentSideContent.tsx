@@ -1,6 +1,6 @@
 import { VStack } from '@chakra-ui/react'
 
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 

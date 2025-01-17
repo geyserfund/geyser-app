@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { getPath } from '@/shared/constants'
 
 export const CreatorRewardPageTopBar = () => {
@@ -35,7 +35,7 @@ export const CreatorRewardPageBottomBar = () => {
   )
 }
 
-export const CreateRewardButtons = () => {
+const CreateRewardButtons = () => {
   const { project } = useProjectAtom()
   return (
     <>

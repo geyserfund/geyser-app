@@ -1,12 +1,11 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { StylesConfig } from 'react-select'
+import { Props, StylesConfig } from 'react-select'
 import Select from 'react-select'
-import { StateManagerProps } from 'react-select/dist/declarations/src/useStateManager'
 
 import { useCustomTheme } from '../../../../../../../utils'
 
-export interface ShippingStatusSelectProps<T = any, S extends boolean = any> extends StateManagerProps<T, S, any> {
+export interface ShippingStatusSelectProps<T = any, S extends boolean = any> extends Props<T, S, any> {
   placeholder?: string
   backgroundColor?: string
   hoverBgColor?: string

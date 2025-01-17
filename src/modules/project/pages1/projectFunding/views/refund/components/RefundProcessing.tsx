@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next'
 
 import { TransactionProcessing } from '@/modules/project/pages1/projectFunding/views/fundingPayment/views/paymentOnchain/components'
+import { CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 
-import { CardLayoutProps } from '../../../../../../../shared/components/layouts'
 import { useRefundedSwapData } from '../../../../../funding/state'
 
 export const RefundProcessing = (props: CardLayoutProps) => {

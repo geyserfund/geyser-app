@@ -2,10 +2,10 @@ import { Box, Stack, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { useGrant } from '@/pages/grants/hooks/useGrant'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body, H2 } from '@/shared/components/typography'
 import { standardPadding } from '@/shared/styles'
 
-import { ImageWithReload } from '../../../../../../../components/ui'
 import { getPath } from '../../../../../../../shared/constants'
 import { FeaturedCardSkeleton } from './FeaturedProjectCard'
 

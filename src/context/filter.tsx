@@ -26,7 +26,7 @@ const defaultFilterContext = {
   clearFilter() {},
 }
 
-export const FilterContext = createContext<FilterState>(defaultFilterContext)
+const FilterContext = createContext<FilterState>(defaultFilterContext)
 
 export const useFilterContext = () => useContext(FilterContext)
 

@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2, H3 } from '@/shared/components/typography'
 
-import { ImageWithReload } from '../../../../components/ui'
-import { CardLayout } from '../../../../shared/components/layouts'
 import { getPathWithGeyserHero } from '../../../../shared/constants'
 import { lightModeColors } from '../../../../shared/styles'
 import { GrantApplicant } from '../../../../types'

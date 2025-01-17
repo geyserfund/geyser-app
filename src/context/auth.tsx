@@ -3,9 +3,28 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from 'react'
 
 import { getAuthEndPoint } from '../config/domain'
-import { defaultUser } from '../defaults'
 import { authUserAtom, followedProjectsAtom, isUserAProjectCreatorAtom } from '../pages/auth/state/authAtom'
-import { useMeLazyQuery, useMeProjectFollowsLazyQuery, UserMeFragment } from '../types'
+import { useMeLazyQuery, useMeProjectFollowsLazyQuery, User, UserMeFragment } from '../types'
+
+export const defaultUser: Omit<User, 'heroStats'> = {
+  __typename: 'User',
+  id: 0,
+  email: '',
+  username: '',
+  heroId: '',
+  imageUrl: '',
+  externalAccounts: [],
+  contributions: [],
+  ownerOf: [],
+  entries: [],
+  fundingTxs: [],
+  projects: [],
+  projectFollows: [],
+  badges: [],
+  isEmailVerified: false,
+  hasSocialAccount: false,
+  posts: [],
+}
 
 const defaultContext: AuthContextProps = {
   isLoggedIn: false,
@@ -44,7 +63,7 @@ type AuthContextProps = {
 
 const authServiceEndPoint = getAuthEndPoint()
 
-export const AuthContext = createContext<AuthContextProps>(defaultContext)
+const AuthContext = createContext<AuthContextProps>(defaultContext)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true)

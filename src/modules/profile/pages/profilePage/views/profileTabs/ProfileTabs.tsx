@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { PiBell, PiLightning, PiLockOpen, PiRocket, PiUser } from 'react-icons/pi'
 
 import { useAuthContext } from '@/context'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { dimensions, ID } from '@/shared/constants'

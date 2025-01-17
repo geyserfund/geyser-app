@@ -2,8 +2,6 @@ import { atom, useAtom } from 'jotai'
 
 import { ProjectViewBaseStats } from '@/types'
 
-import { InsightsOptions } from './components'
-
 type StatsInsightsAtom = {
   contributionSum: number
   prevContributionSum: number
@@ -19,6 +17,12 @@ type StatsInsightsAtom = {
   prevVisitorCount: number
   regions: ProjectViewBaseStats[]
   referrers: ProjectViewBaseStats[]
+}
+
+export enum InsightsOptions {
+  lastWeek = 'Last 7 days',
+  lastMonth = 'Last 30 days',
+  lastYear = 'Last 12 months',
 }
 
 export const selectionAtom = atom<InsightsOptions>(InsightsOptions.lastWeek)

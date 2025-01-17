@@ -3,8 +3,6 @@ export {
   LandingCardBase,
   LandingCardBaseSkeleton,
 } from '../../../modules/discovery/pages/landing/components/LandingCardBase'
-export type { CardLayoutProps } from './CardLayout'
-export { CardLayout } from './CardLayout'
 export { CardsStackLayout } from './CardsStackLayout'
 export type { CustomModalProps } from './Modal'
 export { Modal } from './Modal'

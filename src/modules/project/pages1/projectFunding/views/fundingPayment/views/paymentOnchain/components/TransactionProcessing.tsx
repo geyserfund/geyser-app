@@ -2,7 +2,7 @@ import { Box, Button, Image, Link, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiArrowUpRight } from 'react-icons/pi'
 
-import { CardLayout, CardLayoutProps } from '@/shared/components/layouts'
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { TransactionProcessingUrl } from '@/shared/constants'
 

@@ -3,7 +3,8 @@ import { Box, HStack, IconButton, StackProps, VStack } from '@chakra-ui/react'
 import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-import { ImageWithReload } from '../../components/ui'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+
 import { Body } from '../components/typography'
 import { useModal, useSignedUpload } from '../hooks'
 import { ImageCropAspectRatio, ImageCropperModal } from './ImageCropperModal'

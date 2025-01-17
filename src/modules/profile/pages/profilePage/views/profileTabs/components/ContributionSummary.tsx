@@ -1,12 +1,12 @@
 import { Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { ProjectAvatarFragment, UserProjectFunderFragment } from '@/types'
 
 import { TransactionTime } from '../../../../../../../components/molecules'
-import { ImageWithReload } from '../../../../../../../components/ui'
-import { CardLayout } from '../../../../../../../shared/components/layouts'
 import { getPath } from '../../../../../../../shared/constants'
 import { commaFormatted, convertSatsToUsdFormatted, toSmallImageUrl } from '../../../../../../../utils'
 

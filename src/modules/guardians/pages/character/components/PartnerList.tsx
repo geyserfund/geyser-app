@@ -1,4 +1,4 @@
-import { HStack, Image, VStack } from '@chakra-ui/react'
+import { HStack, Image, Link, VStack } from '@chakra-ui/react'
 
 import { PartnerUrls } from '@/modules/guardians/data'
 import { H2 } from '@/shared/components/typography'
@@ -13,30 +13,32 @@ export const PartnerList = () => {
         <HStack w="full" alignItems="stretch" justifyContent="flex-start" flexWrap="wrap">
           <VStack spacing={8} w="full" alignItems="flex-start">
             <HStack flexWrap={'wrap'} spacing={8} justifyContent={'start'}>
-              {PartnerUrls.slice(0, 3).map((url, index) => (
-                <Image
-                  src={url}
-                  alt="Partner"
-                  width={'auto'}
-                  height={'40px'}
-                  maxWidth={'200px'}
-                  objectFit={'contain'}
-                  key={url}
-                />
+              {PartnerUrls.slice(0, 3).map((partner, index) => (
+                <Link href={partner.link} isExternal key={partner.image}>
+                  <Image
+                    src={partner.image}
+                    alt="Partner"
+                    width={'auto'}
+                    height={'40px'}
+                    maxWidth={'200px'}
+                    objectFit={'contain'}
+                  />
+                </Link>
               ))}
             </HStack>
 
             <HStack flexWrap={'wrap'} spacing={8} justifyContent={'start'}>
-              {PartnerUrls.slice(3, 8).map((url, index) => (
-                <Image
-                  src={url}
-                  alt="Partner"
-                  width={'auto'}
-                  height={'32px'}
-                  maxWidth={'150px'}
-                  objectFit={'contain'}
-                  key={url}
-                />
+              {PartnerUrls.slice(3, 9).map((partner, index) => (
+                <Link href={partner.link} isExternal key={partner.image}>
+                  <Image
+                    src={partner.image}
+                    alt="Partner"
+                    width={'auto'}
+                    height={'32px'}
+                    maxWidth={'150px'}
+                    objectFit={'contain'}
+                  />
+                </Link>
               ))}
             </HStack>
           </VStack>

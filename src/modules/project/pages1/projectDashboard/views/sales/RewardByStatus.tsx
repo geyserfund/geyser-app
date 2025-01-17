@@ -1,7 +1,7 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
 import { RewardStatusLabel } from '@/shared/constants'

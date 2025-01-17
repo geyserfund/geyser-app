@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { CardLayout } from '@/shared/components/layouts'
+import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { useProjectRewardSoldGraphStatsGetLazyQuery } from '@/types'
 import { useNotification } from '@/utils'

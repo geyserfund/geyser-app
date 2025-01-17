@@ -27,7 +27,7 @@ interface IBtcContext {
 const A_MINUTE_IN_MILIS = 1000 * 60
 const RETRY_FETCH_BTC_RATE_AFTER_MILIS = 1000 * 5
 
-export const BtcContext = createContext<IBtcContext>(defaultContext)
+const BtcContext = createContext<IBtcContext>(defaultContext)
 
 export const BtcProvider = ({ children }: { children: React.ReactNode }) => {
   const [btcRate, setBtcRate] = useState(0)
