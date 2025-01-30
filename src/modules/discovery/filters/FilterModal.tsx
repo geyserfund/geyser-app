@@ -7,13 +7,13 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { standardPadding } from '@/shared/styles'
 
-import { FilterByRegion } from './region'
-import { FilterByStatus } from './status'
-import { FilterByTags } from './tag'
+import { FilterByCategory } from './category/FilterByCategory.tsx'
+import { FilterByRegion } from './region/FilterByRegion.tsx'
+import { FilterByStatus } from './status/FilterByStatus.tsx'
 
 enum FilterType {
   Region = 'Region',
-  Tags = 'Tags',
+  Category = 'Category',
   Type = 'Type',
 }
 
@@ -27,9 +27,9 @@ export const FilterModal = (props: Omit<ModalProps, 'children'>) => {
       render: () => <FilterByRegion />,
     },
     {
-      name: 'Tags',
-      key: FilterType.Tags,
-      render: () => <FilterByTags />,
+      name: 'Category',
+      key: FilterType.Category,
+      render: () => <FilterByCategory />,
     },
     {
       name: 'Type',

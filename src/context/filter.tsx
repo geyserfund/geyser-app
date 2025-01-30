@@ -8,6 +8,8 @@ import { toInt } from '@/utils'
 export type FilterType = {
   countryCode?: string
   region?: string
+  category?: string
+  subCategory?: string
   search?: string
   status?: ProjectStatus
   type?: ProjectType
@@ -106,6 +108,8 @@ const getFiltersFromUrlParams = (searchParams: URLSearchParams) => {
   const search = searchParams.get('search') || undefined
   const status = (searchParams.get('status') as ProjectStatus) || undefined
   const type = (searchParams.get('type') as ProjectType) || undefined
+  const category = searchParams.get('category') || undefined
+  const subCategory = searchParams.get('subCategory') || undefined
   const tagIds =
     searchParams
       .get('tagIds')
@@ -116,6 +120,8 @@ const getFiltersFromUrlParams = (searchParams: URLSearchParams) => {
   return {
     countryCode,
     region,
+    category,
+    subCategory,
     search,
     status,
     type,

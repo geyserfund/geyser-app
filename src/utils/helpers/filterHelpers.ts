@@ -4,7 +4,11 @@ import { checkKeyValueExists } from '../validations'
 
 export const checkIfRenderFilter = (filters: FilterType) => {
   if (
-    checkKeyValueExists(filters, ['countryCode', 'region', 'search', 'status', 'type'], 'any') ||
+    checkKeyValueExists(
+      filters,
+      ['countryCode', 'region', 'search', 'status', 'type', 'category', 'subCategory'],
+      'any',
+    ) ||
     (filters.tagIds && filters.tagIds.length > 0)
   ) {
     return true
