@@ -102,7 +102,7 @@ export const FilterTopBar = ({ isLoading, ...rest }: FilterTopBarProps) => {
         <TagComponent
           label={ProjectCategoryLabel[category] || ''}
           icon={<PiShareNetwork color={colors.neutral1[11]} />}
-          onClick={() => updateFilter({ region: undefined })}
+          onClick={() => updateFilter({ category: undefined })}
         />
       )
     }

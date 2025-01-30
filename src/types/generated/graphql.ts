@@ -1199,7 +1199,7 @@ export type GuardianUser = {
   __typename?: 'GuardianUser'
   guardianType: Scalars['String']['output']
   heroId: Scalars['String']['output']
-  imageUrl: Scalars['String']['output']
+  imageUrl?: Maybe<Scalars['String']['output']>
   userId: Scalars['BigInt']['output']
   username: Scalars['String']['output']
 }
@@ -2094,6 +2094,7 @@ export type Project = {
   balanceUsdCent: Scalars['Int']['output']
   /** Boolean flag to indicate if the project can be deleted. */
   canDelete: Scalars['Boolean']['output']
+  category?: Maybe<ProjectCategory>
   createdAt: Scalars['String']['output']
   defaultGoalId?: Maybe<Scalars['BigInt']['output']>
   /** Description of the project. */
@@ -2148,6 +2149,7 @@ export type Project = {
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>
   status?: Maybe<ProjectStatus>
+  subCategory?: Maybe<ProjectSubCategory>
   subscribersCount?: Maybe<Scalars['Int']['output']>
   tags: Array<Tag>
   thumbnailImage?: Maybe<Scalars['String']['output']>
@@ -2213,6 +2215,16 @@ export type ProjectAmbassadorsStats = {
   contributionsSum: Scalars['BigInt']['output']
   /** Total number of ambassadors */
   count: Scalars['Int']['output']
+}
+
+export enum ProjectCategory {
+  Advocacy = 'ADVOCACY',
+  Cause = 'CAUSE',
+  Community = 'COMMUNITY',
+  Culture = 'CULTURE',
+  Education = 'EDUCATION',
+  Other = 'OTHER',
+  Tool = 'TOOL',
 }
 
 export type ProjectContributionsGroupedByMethodStats = StatsInterface & {
@@ -2429,6 +2441,13 @@ export type ProjectMostFunded = {
   project: Project
 }
 
+export type ProjectMostFundedByCategory = {
+  __typename?: 'ProjectMostFundedByCategory'
+  category?: Maybe<Scalars['String']['output']>
+  projects: Array<ProjectMostFunded>
+  subCategory?: Maybe<Scalars['String']['output']>
+}
+
 export type ProjectMostFundedByTag = {
   __typename?: 'ProjectMostFundedByTag'
   projects: Array<ProjectMostFunded>
@@ -2597,6 +2616,34 @@ export type ProjectStatusUpdate = {
   status: ProjectStatus
 }
 
+export enum ProjectSubCategory {
+  App = 'APP',
+  Art = 'ART',
+  Book = 'BOOK',
+  CircularEconomy = 'CIRCULAR_ECONOMY',
+  Collectible = 'COLLECTIBLE',
+  ContentCreator = 'CONTENT_CREATOR',
+  Course = 'COURSE',
+  Event = 'EVENT',
+  Film = 'FILM',
+  Fundraiser = 'FUNDRAISER',
+  Game = 'GAME',
+  HackerSpace = 'HACKER_SPACE',
+  Hardware = 'HARDWARE',
+  Humanitarian = 'HUMANITARIAN',
+  Journalism = 'JOURNALISM',
+  LegalFund = 'LEGAL_FUND',
+  Lobby = 'LOBBY',
+  Medical = 'MEDICAL',
+  Meetup = 'MEETUP',
+  Music = 'MUSIC',
+  OsSoftware = 'OS_SOFTWARE',
+  Other = 'OTHER',
+  Podcast = 'PODCAST',
+  Promotion = 'PROMOTION',
+  Travel = 'TRAVEL',
+}
+
 export type ProjectSubscriptionPlan = {
   __typename?: 'ProjectSubscriptionPlan'
   cost: Scalars['Int']['output']
@@ -2664,6 +2711,7 @@ export type ProjectsGetQueryInput = {
 }
 
 export type ProjectsGetWhereInput = {
+  category?: InputMaybe<ProjectCategory>
   countryCode?: InputMaybe<Scalars['String']['input']>
   id?: InputMaybe<Scalars['BigInt']['input']>
   ids?: InputMaybe<Array<Scalars['BigInt']['input']>>
@@ -2672,8 +2720,20 @@ export type ProjectsGetWhereInput = {
   region?: InputMaybe<Scalars['String']['input']>
   search?: InputMaybe<Scalars['String']['input']>
   status?: InputMaybe<ProjectStatus>
+  subCategory?: InputMaybe<ProjectSubCategory>
   tagIds?: InputMaybe<Array<Scalars['Int']['input']>>
   type?: InputMaybe<ProjectType>
+}
+
+export type ProjectsMostFundedByCategoryInput = {
+  category?: InputMaybe<Scalars['String']['input']>
+  range: ProjectsMostFundedByCategoryRange
+  subCategory?: InputMaybe<Scalars['String']['input']>
+  take?: InputMaybe<Scalars['Int']['input']>
+}
+
+export enum ProjectsMostFundedByCategoryRange {
+  Week = 'WEEK',
 }
 
 export type ProjectsMostFundedByTagInput = {
@@ -2769,6 +2829,7 @@ export type Query = {
   projectSubscriptionPlans: Array<ProjectSubscriptionPlan>
   /** By default, returns a list of all active projects. */
   projectsGet: ProjectsResponse
+  projectsMostFundedByCategory: Array<ProjectMostFundedByCategory>
   projectsMostFundedByTag: Array<ProjectMostFundedByTag>
   /** Returns summary statistics of all projects, both current and past. */
   projectsSummary: ProjectsSummary
@@ -2943,6 +3004,10 @@ export type QueryProjectSubscriptionPlansArgs = {
 
 export type QueryProjectsGetArgs = {
   input?: InputMaybe<ProjectsGetQueryInput>
+}
+
+export type QueryProjectsMostFundedByCategoryArgs = {
+  input: ProjectsMostFundedByCategoryInput
 }
 
 export type QueryProjectsMostFundedByTagArgs = {
@@ -4009,6 +4074,7 @@ export type ResolversTypes = {
     Omit<ProjectAmbassadorsConnection, 'edges'> & { edges: Array<ResolversTypes['ProjectAmbassadorEdge']> }
   >
   ProjectAmbassadorsStats: ResolverTypeWrapper<ProjectAmbassadorsStats>
+  ProjectCategory: ProjectCategory
   ProjectContributionsGroupedByMethodStats: ResolverTypeWrapper<ProjectContributionsGroupedByMethodStats>
   ProjectContributionsStats: ResolverTypeWrapper<ProjectContributionsStats>
   ProjectContributionsStatsBase: ResolverTypeWrapper<ProjectContributionsStatsBase>
@@ -4045,6 +4111,9 @@ export type ResolversTypes = {
   ProjectLeaderboardPeriod: ProjectLeaderboardPeriod
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectMostFunded: ResolverTypeWrapper<Omit<ProjectMostFunded, 'project'> & { project: ResolversTypes['Project'] }>
+  ProjectMostFundedByCategory: ResolverTypeWrapper<
+    Omit<ProjectMostFundedByCategory, 'projects'> & { projects: Array<ResolversTypes['ProjectMostFunded']> }
+  >
   ProjectMostFundedByTag: ResolverTypeWrapper<
     Omit<ProjectMostFundedByTag, 'projects'> & { projects: Array<ResolversTypes['ProjectMostFunded']> }
   >
@@ -4064,6 +4133,7 @@ export type ResolversTypes = {
   ProjectStatsBase: ResolverTypeWrapper<ProjectStatsBase>
   ProjectStatus: ProjectStatus
   ProjectStatusUpdate: ProjectStatusUpdate
+  ProjectSubCategory: ProjectSubCategory
   ProjectSubscriptionPlan: ResolverTypeWrapper<ProjectSubscriptionPlan>
   ProjectSubscriptionPlansInput: ProjectSubscriptionPlansInput
   ProjectSubscriptionPlansWhereInput: ProjectSubscriptionPlansWhereInput
@@ -4073,6 +4143,8 @@ export type ResolversTypes = {
   ProjectViewStats: ResolverTypeWrapper<ProjectViewStats>
   ProjectsGetQueryInput: ProjectsGetQueryInput
   ProjectsGetWhereInput: ProjectsGetWhereInput
+  ProjectsMostFundedByCategoryInput: ProjectsMostFundedByCategoryInput
+  ProjectsMostFundedByCategoryRange: ProjectsMostFundedByCategoryRange
   ProjectsMostFundedByTagInput: ProjectsMostFundedByTagInput
   ProjectsMostFundedByTagRange: ProjectsMostFundedByTagRange
   ProjectsOrderByField: ProjectsOrderByField
@@ -4488,6 +4560,9 @@ export type ResolversParentTypes = {
   }
   ProjectLinkMutationInput: ProjectLinkMutationInput
   ProjectMostFunded: Omit<ProjectMostFunded, 'project'> & { project: ResolversParentTypes['Project'] }
+  ProjectMostFundedByCategory: Omit<ProjectMostFundedByCategory, 'projects'> & {
+    projects: Array<ResolversParentTypes['ProjectMostFunded']>
+  }
   ProjectMostFundedByTag: Omit<ProjectMostFundedByTag, 'projects'> & {
     projects: Array<ResolversParentTypes['ProjectMostFunded']>
   }
@@ -4514,6 +4589,7 @@ export type ResolversParentTypes = {
   ProjectViewStats: ProjectViewStats
   ProjectsGetQueryInput: ProjectsGetQueryInput
   ProjectsGetWhereInput: ProjectsGetWhereInput
+  ProjectsMostFundedByCategoryInput: ProjectsMostFundedByCategoryInput
   ProjectsMostFundedByTagInput: ProjectsMostFundedByTagInput
   ProjectsOrderByInput: ProjectsOrderByInput
   ProjectsResponse: Omit<ProjectsResponse, 'projects'> & { projects: Array<ResolversParentTypes['Project']> }
@@ -5352,7 +5428,7 @@ export type GuardianUserResolvers<
 > = {
   guardianType?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   heroId?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  imageUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
@@ -6072,6 +6148,7 @@ export type ProjectResolvers<
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   balanceUsdCent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  category?: Resolver<Maybe<ResolversTypes['ProjectCategory']>, ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
@@ -6110,6 +6187,7 @@ export type ProjectResolvers<
   sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>
   statistics?: Resolver<Maybe<ResolversTypes['ProjectStatistics']>, ParentType, ContextType>
   status?: Resolver<Maybe<ResolversTypes['ProjectStatus']>, ParentType, ContextType>
+  subCategory?: Resolver<Maybe<ResolversTypes['ProjectSubCategory']>, ParentType, ContextType>
   subscribersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>
   tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>
   thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
@@ -6334,6 +6412,16 @@ export type ProjectMostFundedResolvers<
   ParentType extends ResolversParentTypes['ProjectMostFunded'] = ResolversParentTypes['ProjectMostFunded'],
 > = {
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
+}
+
+export type ProjectMostFundedByCategoryResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['ProjectMostFundedByCategory'] = ResolversParentTypes['ProjectMostFundedByCategory'],
+> = {
+  category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  projects?: Resolver<Array<ResolversTypes['ProjectMostFunded']>, ParentType, ContextType>
+  subCategory?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>
 }
 
@@ -6738,6 +6826,12 @@ export type QueryResolvers<
     RequireFields<QueryProjectSubscriptionPlansArgs, 'input'>
   >
   projectsGet?: Resolver<ResolversTypes['ProjectsResponse'], ParentType, ContextType, Partial<QueryProjectsGetArgs>>
+  projectsMostFundedByCategory?: Resolver<
+    Array<ResolversTypes['ProjectMostFundedByCategory']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryProjectsMostFundedByCategoryArgs, 'input'>
+  >
   projectsMostFundedByTag?: Resolver<
     Array<ResolversTypes['ProjectMostFundedByTag']>,
     ParentType,
@@ -7182,6 +7276,7 @@ export type Resolvers<ContextType = any> = {
   ProjectLeaderboardAmbassadorsRow?: ProjectLeaderboardAmbassadorsRowResolvers<ContextType>
   ProjectLeaderboardContributorsRow?: ProjectLeaderboardContributorsRowResolvers<ContextType>
   ProjectMostFunded?: ProjectMostFundedResolvers<ContextType>
+  ProjectMostFundedByCategory?: ProjectMostFundedByCategoryResolvers<ContextType>
   ProjectMostFundedByTag?: ProjectMostFundedByTagResolvers<ContextType>
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>
   ProjectReward?: ProjectRewardResolvers<ContextType>
@@ -8408,6 +8503,23 @@ export type ProjectsMostFundedByTagQuery = {
   }>
 }
 
+export type ProjectsMostFundedByCategoryQueryVariables = Exact<{
+  input: ProjectsMostFundedByCategoryInput
+}>
+
+export type ProjectsMostFundedByCategoryQuery = {
+  __typename?: 'Query'
+  projectsMostFundedByCategory: Array<{
+    __typename?: 'ProjectMostFundedByCategory'
+    category?: string | null
+    subCategory?: string | null
+    projects: Array<{
+      __typename?: 'ProjectMostFunded'
+      project: { __typename?: 'Project' } & ProjectForLandingPageFragment
+    }>
+  }>
+}
+
 export type ProjectsForLandingPageQueryVariables = Exact<{
   input?: InputMaybe<ProjectsGetQueryInput>
 }>
@@ -8744,7 +8856,7 @@ export type GuardianUserFragment = {
   __typename?: 'GuardianUser'
   guardianType: string
   heroId: string
-  imageUrl: string
+  imageUrl?: string | null
   userId: any
   username: string
 }
@@ -14253,6 +14365,84 @@ export type ProjectsMostFundedByTagSuspenseQueryHookResult = ReturnType<typeof u
 export type ProjectsMostFundedByTagQueryResult = Apollo.QueryResult<
   ProjectsMostFundedByTagQuery,
   ProjectsMostFundedByTagQueryVariables
+>
+export const ProjectsMostFundedByCategoryDocument = gql`
+  query ProjectsMostFundedByCategory($input: ProjectsMostFundedByCategoryInput!) {
+    projectsMostFundedByCategory(input: $input) {
+      category
+      subCategory
+      projects {
+        project {
+          ...ProjectForLandingPage
+        }
+      }
+    }
+  }
+  ${ProjectForLandingPageFragmentDoc}
+`
+
+/**
+ * __useProjectsMostFundedByCategoryQuery__
+ *
+ * To run a query within a React component, call `useProjectsMostFundedByCategoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectsMostFundedByCategoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectsMostFundedByCategoryQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectsMostFundedByCategoryQuery(
+  baseOptions: Apollo.QueryHookOptions<ProjectsMostFundedByCategoryQuery, ProjectsMostFundedByCategoryQueryVariables> &
+    ({ variables: ProjectsMostFundedByCategoryQueryVariables; skip?: boolean } | { skip: boolean }),
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<ProjectsMostFundedByCategoryQuery, ProjectsMostFundedByCategoryQueryVariables>(
+    ProjectsMostFundedByCategoryDocument,
+    options,
+  )
+}
+
+export function useProjectsMostFundedByCategoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ProjectsMostFundedByCategoryQuery,
+    ProjectsMostFundedByCategoryQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<ProjectsMostFundedByCategoryQuery, ProjectsMostFundedByCategoryQueryVariables>(
+    ProjectsMostFundedByCategoryDocument,
+    options,
+  )
+}
+
+export function useProjectsMostFundedByCategorySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<ProjectsMostFundedByCategoryQuery, ProjectsMostFundedByCategoryQueryVariables>,
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<ProjectsMostFundedByCategoryQuery, ProjectsMostFundedByCategoryQueryVariables>(
+    ProjectsMostFundedByCategoryDocument,
+    options,
+  )
+}
+
+export type ProjectsMostFundedByCategoryQueryHookResult = ReturnType<typeof useProjectsMostFundedByCategoryQuery>
+export type ProjectsMostFundedByCategoryLazyQueryHookResult = ReturnType<
+  typeof useProjectsMostFundedByCategoryLazyQuery
+>
+export type ProjectsMostFundedByCategorySuspenseQueryHookResult = ReturnType<
+  typeof useProjectsMostFundedByCategorySuspenseQuery
+>
+export type ProjectsMostFundedByCategoryQueryResult = Apollo.QueryResult<
+  ProjectsMostFundedByCategoryQuery,
+  ProjectsMostFundedByCategoryQueryVariables
 >
 export const ProjectsForLandingPageDocument = gql`
   query ProjectsForLandingPage($input: ProjectsGetQueryInput) {
