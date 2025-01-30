@@ -36,7 +36,15 @@ export enum ProjectSubCategory {
   other = 'OTHER',
 }
 
-export const ProjectCategoryList = Object.values(ProjectCategory)
+export const ProjectCategoryList = [
+  ProjectCategory.education,
+  ProjectCategory.community,
+  ProjectCategory.culture,
+  ProjectCategory.advocacy,
+  ProjectCategory.tool,
+  ProjectCategory.cause,
+  ProjectCategory.other,
+]
 export const ProjectSubCategoryList = Object.values(ProjectSubCategory)
 
 export const ProjectSubCategoryMap = {

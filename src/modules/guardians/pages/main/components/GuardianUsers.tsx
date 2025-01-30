@@ -59,7 +59,7 @@ export const GuardianUsers = ({
                 guardian={guardian}
                 size={size}
                 key={user.userId}
-                src={user.imageUrl}
+                src={user.imageUrl || ''}
               />
             ))}
           {anonymousCount > 0 &&

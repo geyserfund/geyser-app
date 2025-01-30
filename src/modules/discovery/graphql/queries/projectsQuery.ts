@@ -25,6 +25,21 @@ export const QUERY_PROJECTS_MOST_FUNDED_OF_THE_WEEK = gql`
   }
 `
 
+export const QUERY_PROJECTS_MOST_FUNDED_OF_THE_WEEK_BY_CATEGORY = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectsMostFundedByCategory($input: ProjectsMostFundedByCategoryInput!) {
+    projectsMostFundedByCategory(input: $input) {
+      category
+      subCategory
+      projects {
+        project {
+          ...ProjectForLandingPage
+        }
+      }
+    }
+  }
+`
+
 export const QUERY_PROJECTS_FOR_LANDING_PAGE = gql`
   ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
   query ProjectsForLandingPage($input: ProjectsGetQueryInput) {
