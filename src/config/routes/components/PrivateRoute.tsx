@@ -34,7 +34,12 @@ const PrivateRoute = ({ children }: IPrivateRoute) => {
   }, [params.userId, user.id])
 
   const isUserCreatorEnabled: boolean = useMemo(() => {
-    return Boolean(user?.externalAccounts.find((account) => account.accountType !== ExternalAccountType.lightning))
+    return Boolean(
+      user?.externalAccounts.find(
+        (account) =>
+          account.accountType !== ExternalAccountType.lightning && account.accountType !== ExternalAccountType.google,
+      ),
+    )
   }, [user])
 
   useEffect(() => {
