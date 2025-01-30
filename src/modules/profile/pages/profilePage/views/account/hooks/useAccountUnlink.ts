@@ -46,7 +46,10 @@ export const useAccountUnlink = ({ accountId, accountType, mutationProps }: Acco
     if (
       user.ownerOf.length > 0 &&
       !userProfile.externalAccounts.find(
-        (ea) => ea.accountType !== accountType && ea.accountType !== ExternalAccountType.lightning,
+        (ea) =>
+          ea.accountType !== accountType &&
+          ea.accountType !== ExternalAccountType.lightning &&
+          ea.accountType !== ExternalAccountType.google,
       )
     ) {
       return false

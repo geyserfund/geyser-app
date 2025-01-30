@@ -36,7 +36,10 @@ export const ProjectCreateStart = () => {
   const handleNext = () => navigate(params.projectId ? `${getPath('launch')}/${params.projectId}` : getPath('launch'))
 
   const userHasProjectCreatableAccounts = Boolean(
-    user?.externalAccounts?.find((account) => account.accountType !== ExternalAccountType.lightning),
+    user?.externalAccounts?.find(
+      (account) =>
+        account.accountType !== ExternalAccountType.lightning && account.accountType !== ExternalAccountType.google,
+    ),
   )
   useRefreshAuthToken(!isLoggedIn || !userHasProjectCreatableAccounts)
 
@@ -98,7 +101,6 @@ export const ProjectCreateStart = () => {
               <ConnectWithSocial accountType={SocialAccountType.twitter} w="full" />
               {!isMobile && <ConnectWithNostr w="full" />}
               <ConnectWithSocial accountType={SocialAccountType.facebook} w="full" />
-              <ConnectWithSocial accountType={SocialAccountType.google} w="full" />
               {/* <ConnectWithLightning w="full" /> */}
               <ConnectWithSocial accountType={SocialAccountType.github} w="full" />
             </VStack>
