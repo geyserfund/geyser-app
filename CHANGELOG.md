@@ -1,3 +1,12 @@
+## [0.18.1](https://github.com/geyserfund/geyser-app/compare/v0.18.0...v0.18.1) (2025-01-30)
+
+
+### Bug Fixes
+
+* disable google as social login for creating projects ([2917786](https://github.com/geyserfund/geyser-app/commit/291778648dbac674e94b75ec7c4fbed1b4aa6205))
+* hide amount from btcisla ([77d7044](https://github.com/geyserfund/geyser-app/commit/77d704481c93bd2970e468350fea7f37418b0e21))
+* prod cloud build script ([8582826](https://github.com/geyserfund/geyser-app/commit/8582826f9565a5dce7437798e850ce7c5c12e836))
+
 ## [0.18.0](https://github.com/geyserfund/geyser-app/compare/v0.17.0...v0.18.0) (2025-01-17)
 
 
