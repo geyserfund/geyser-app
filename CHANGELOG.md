@@ -1,3 +1,21 @@
+## [0.18.2](https://github.com/geyserfund/geyser-app/compare/v0.18.0...v0.18.2) (2025-01-30)
+
+
+### Features
+
+* add category and subcategory to filters ([b6a3b4b](https://github.com/geyserfund/geyser-app/commit/b6a3b4b080f09b1e4e9ce93d25afdc4a63d7ed5a))
+
+
+### Bug Fixes
+
+* cannot unlink social account if last account is google ([523fb14](https://github.com/geyserfund/geyser-app/commit/523fb143f1c12857dbd94d0448fd54e1dd1f3cdd))
+* change twitter to x ([f5a2773](https://github.com/geyserfund/geyser-app/commit/f5a277358506b0ef56c1a17158f59a0b2b349c8b))
+* disable google as social login for creating projects ([2917786](https://github.com/geyserfund/geyser-app/commit/291778648dbac674e94b75ec7c4fbed1b4aa6205))
+* hide amount from btcisla ([77d7044](https://github.com/geyserfund/geyser-app/commit/77d704481c93bd2970e468350fea7f37418b0e21))
+* prod cloud build script ([8582826](https://github.com/geyserfund/geyser-app/commit/8582826f9565a5dce7437798e850ce7c5c12e836))
+* subcategories display ([5329732](https://github.com/geyserfund/geyser-app/commit/5329732bb23b9abaf8f88b8f89afb6d5c55d40f1))
+* update trending sections ([83e0d58](https://github.com/geyserfund/geyser-app/commit/83e0d583106228aa3dc278d82178b4953be8da85))
+
 ## [0.18.1](https://github.com/geyserfund/geyser-app/compare/v0.18.0...v0.18.1) (2025-01-30)
 
 
