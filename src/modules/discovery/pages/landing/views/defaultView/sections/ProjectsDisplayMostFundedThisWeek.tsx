@@ -5,6 +5,7 @@ import {
   ProjectCategory,
   ProjectCategoryLabel,
   ProjectSubCategory,
+  ProjectSubCategoryLabel,
 } from '@/shared/constants/platform/projectCategory.ts'
 
 import { ProjectsMostFundedByCategoryRange, useProjectsMostFundedByCategoryQuery } from '../../../../../../../types'
@@ -60,9 +61,13 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
         return (
           <ProjectDisplayBody
             key={projectByCategory.category}
-            title={projectByCategory.category ? t('Trending in') : ''}
+            title={projectByCategory.category || subCategory ? t('Trending in') : ''}
             subtitle={
-              projectByCategory.category ? ProjectCategoryLabel[projectByCategory.category] : t('Recent Projects')
+              category
+                ? ProjectCategoryLabel[category]
+                : subCategory
+                ? ProjectSubCategoryLabel[subCategory]
+                : t('Recent Projects')
             }
             projects={projects}
             onSeeAllClick={() =>

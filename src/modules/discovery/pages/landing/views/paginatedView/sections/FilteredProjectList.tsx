@@ -21,7 +21,7 @@ export const FilteredProjectList = ({ projects, error, loading }: FilteredProjec
 
     if (projects.length === 0) {
       return (
-        <GridItem colSpan={{ base: 1, xl: 3 }} overflow="hidden">
+        <GridItem colSpan={{ base: 1, lg: 4 }} overflow="hidden">
           <NoSearchResults />
         </GridItem>
       )

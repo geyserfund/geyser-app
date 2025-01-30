@@ -78,6 +78,7 @@ export const SubCategoriesBar = () => {
               _hover={{ cursor: 'pointer' }}
               onClick={() => handleSubCategoryClick(subCategory)}
               height="32px"
+              textTransform="lowercase"
             >
               {ProjectSubCategoryLabel[subCategory]}
             </Badge>
