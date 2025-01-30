@@ -38,7 +38,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           height="100%"
         />
       )}
-      <Box width={{ base: '96px', lg: 'auto' }} height={{ base: '96px', lg: 'auto' }}>
+      <Box width={{ base: '102px', lg: 'auto' }} height={{ base: '102px', lg: 'auto' }}>
         <ImageWithReload
           width="100%"
           height="100%"
