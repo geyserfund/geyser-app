@@ -1,11 +1,12 @@
 import { HStack, StackProps, Wrap } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiMagnifyingGlass, PiMapPin, PiTag } from 'react-icons/pi'
+import { PiMagnifyingGlass, PiMapPin, PiShareNetwork, PiTag, PiTreeStructure } from 'react-icons/pi'
 
 import { useFilterContext } from '@/context/filter'
 import { getStatusTypeButtonContent } from '@/modules/discovery/filters/status'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
+import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 import { useProjectCountriesGetQuery, useTagsGetQuery } from '@/types'
 import { useCustomTheme } from '@/utils'
 
@@ -22,7 +23,7 @@ export const FilterTopBar = ({ isLoading, ...rest }: FilterTopBarProps) => {
 
   const { filters, updateFilter } = useFilterContext()
 
-  const { tagIds = [], region, countryCode, search, type, status } = filters
+  const { tagIds = [], region, countryCode, search, type, status, category, subCategory } = filters
 
   const { loading: tagsLoading, data } = useTagsGetQuery()
 
@@ -85,6 +86,30 @@ export const FilterTopBar = ({ isLoading, ...rest }: FilterTopBarProps) => {
     return null
   }
 
+  const renderFilterCategory = () => {
+    if (subCategory) {
+      return (
+        <TagComponent
+          label={ProjectSubCategoryLabel[subCategory] || ''}
+          icon={<PiTreeStructure color={colors.neutral1[11]} />}
+          onClick={() => updateFilter({ subCategory: undefined })}
+        />
+      )
+    }
+
+    if (category) {
+      return (
+        <TagComponent
+          label={ProjectCategoryLabel[category] || ''}
+          icon={<PiShareNetwork color={colors.neutral1[11]} />}
+          onClick={() => updateFilter({ region: undefined })}
+        />
+      )
+    }
+
+    return null
+  }
+
   const renderFilterSearch = () => {
     if (!search) {
       return null
@@ -128,8 +153,9 @@ export const FilterTopBar = ({ isLoading, ...rest }: FilterTopBarProps) => {
   const viewFilterStatusType = renderFilterStatusType()
   const viewFilterTags = renderFilterTags()
   const viewFilterRegion = renderFilterRegion()
+  const viewFilterCategory = renderFilterCategory()
 
-  if (viewFilterSearch || viewFilterStatusType || viewFilterTags || viewFilterRegion) {
+  if (viewFilterSearch || viewFilterStatusType || viewFilterTags || viewFilterRegion || viewFilterCategory) {
     return (
       <HStack width="100%" justifyContent="start" alignItems="start" overflowY={'auto'} {...rest}>
         <Wrap>
@@ -143,6 +169,7 @@ export const FilterTopBar = ({ isLoading, ...rest }: FilterTopBarProps) => {
           {viewFilterStatusType}
           {viewFilterTags}
           {viewFilterRegion}
+          {viewFilterCategory}
         </Wrap>
       </HStack>
     )
