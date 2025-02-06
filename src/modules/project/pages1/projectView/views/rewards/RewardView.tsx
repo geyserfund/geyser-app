@@ -109,7 +109,13 @@ export const RewardView = () => {
                       <RewardEditMenu size="md" reward={reward} />
                     </HStack>
                   ) : (
-                    <Button variant="solid" colorScheme="primary1" width="160px" onClick={buyReward}>
+                    <Button
+                      variant="solid"
+                      colorScheme="primary1"
+                      width="160px"
+                      onClick={buyReward}
+                      isDisabled={!isAvailable}
+                    >
                       {t('Buy')}
                     </Button>
                   ))}
