@@ -63,7 +63,7 @@ export const AccountInfo = () => {
             {userProfile.username}
           </H1>
           {userProfile.guardianType ? (
-            <ProfileText guardian={userProfile.guardianType} size="lg" />
+            <ProfileText name={userProfile.username} guardian={userProfile.guardianType} size="lg" />
           ) : (
             isViewingOwnProfile && (
               <Button
