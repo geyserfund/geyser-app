@@ -7,7 +7,9 @@ import { CustomModalProps, Modal } from '../../shared/components/layouts'
 import { MfaAction } from '../../types'
 import { VerifyYourEmailContent, VerifyYourEmailContentProps } from './VerifyYourEmailContent'
 
-interface VerifyYourEmailProps extends VerifyYourEmailContentProps, Omit<CustomModalProps, 'children'> {
+interface VerifyYourEmailProps
+  extends Omit<VerifyYourEmailContentProps, 'onClose'>,
+    Omit<CustomModalProps, 'children'> {
   title?: string
 }
 
@@ -49,6 +51,7 @@ export const VerifyYourEmail = ({
       >
         <Stack w="100%" padding="10px" spacing="20px" maxWidth="500px">
           <VerifyYourEmailContent
+            onClose={rest.onClose}
             initEmail={initEmail}
             action={getAction()}
             handleVerify={handleVerify}
