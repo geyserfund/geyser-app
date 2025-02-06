@@ -26,7 +26,7 @@ export {
   JapaneseTranslations,
   PolishTranslations,
   PortugueseTranslation,
-  SlowakTranslations,
+  SlowakTranslation,
   SpanishTranslations,
   SwahiliTranslations,
   TurkishTranslations,
