@@ -1,6 +1,6 @@
 import { Box, Button, Image, ImageProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PropsWithChildren, useState } from 'react'
+import { PropsWithChildren } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { Body, H1, H3 } from '@/shared/components/typography'
