@@ -61,7 +61,7 @@ export const ProjectCreateStart = () => {
     >
       <VStack spacing={6} w="100%">
         <H3 size="lg" medium>
-          {t('Transform your ideas into real world projects backed by your community')}
+          {t('Transform your ideas into real world projects backed by your community')}, {t('with following features')}:
         </H3>
 
         <Box display="flex" justifyContent={{ base: 'space-around', lg: 'space-between' }} w="100%" flexWrap="wrap">
@@ -120,12 +120,11 @@ export const ProjectCreateStart = () => {
 }
 
 const ProjectInfoButton = ({ src, alt, children }: PropsWithChildren<Pick<ImageProps, 'src' | 'alt'>>) => {
-  const [isHover, setHover] = useState(false)
   return (
     <Button
       my={2}
       flexGrow={0}
-      variant="outline"
+      variant="soft"
       colorScheme="neutral1"
       height="160px"
       width="160px"
@@ -136,10 +135,8 @@ const ProjectInfoButton = ({ src, alt, children }: PropsWithChildren<Pick<ImageP
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
     >
-      <Image sx={isHover ? { transform: 'scale(1.2)' } : undefined} src={src} alt={alt} maxHeight="80px" />
+      <Image src={src} alt={alt} maxHeight="80px" />
       <Body size="xs" light whiteSpace="break-spaces">
         {children}
       </Body>
