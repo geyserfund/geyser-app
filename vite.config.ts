@@ -100,6 +100,7 @@ export default defineConfig(({ command, mode }) => {
     // open: env.DOCKER ? false : `http://dev.geyser.fund:${PORT}/`,
     watch: {
       usePolling: true,
+      ignored: ['language/**', '**/language/**', './language/**'],
     },
     host: true, // needed for the Docker Container port mapping to work
     strictPort: true,

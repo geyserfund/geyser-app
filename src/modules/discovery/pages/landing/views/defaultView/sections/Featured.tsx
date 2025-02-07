@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/react'
-import { t } from 'i18next'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PiStarFour } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router-dom'
 
@@ -27,6 +27,7 @@ export type FeatureAirtableData = {
 
 export const Featured = () => {
   const toast = useNotification()
+  const { t } = useTranslation()
 
   const [loading, setLoading] = useState(true)
 
@@ -87,7 +88,7 @@ export const Featured = () => {
 
   return (
     <>
-      <ProjectRowLayout title={t('Featured project')} rightContent={rightContent()} width="100%">
+      <ProjectRowLayout title={t('Featured Project')} rightContent={rightContent()} width="100%">
         {renderFeatured()}
       </ProjectRowLayout>
     </>
