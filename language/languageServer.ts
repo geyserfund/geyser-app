@@ -15,6 +15,11 @@ languageRouter.post('/en', (request: Request, response: Response) => {
 
   const key = Object.keys(requestBody)[0]
 
+  if (!key.trim()) {
+    response.status(400).send('Key cannot be empty')
+    return
+  }
+
   try {
     const existingTranslations = fs.readFileSync(filePath, 'utf-8')
     const translationJson = JSON.parse(existingTranslations)

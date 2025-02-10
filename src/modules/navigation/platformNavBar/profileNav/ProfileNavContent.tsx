@@ -71,7 +71,7 @@ export const ProfileNavContent = () => {
               <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)}>
                 <HStack position="relative">
                   <discoveryNav.icon fontSize="18px" />
-                  <Body size="md">{discoveryNav.label}</Body>
+                  <Body size="md">{t(discoveryNav.label)}</Body>
                   {activityDot ? (
                     <Box
                       position="absolute"
@@ -117,7 +117,7 @@ export const ProfileNavContent = () => {
 
       <VStack w="full" spacing={4}>
         <Divider borderColor="neutral1.6" />
-        <HStack w="full" paddingX={0} spacing={0} justifyContent="space-between">
+        <HStack w="full" paddingX={0} spacing={0} justifyContent="space-between" flexWrap="wrap">
           <UserNavExternalButton as={ChakraLink} isExternal href={GuideUrl}>
             {t('Guide')}
           </UserNavExternalButton>

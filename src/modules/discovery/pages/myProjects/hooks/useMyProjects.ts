@@ -14,13 +14,20 @@ const sortProjectsByActivity = (
   projects: ProjectForProfilePageFragment[],
   activities: ProjectActivitiesCount[],
 ): ProjectForProfilePageFragment[] => {
-  const activityMap = new Map(activities.map((a) => [a.project.id, a.count]))
-
-  return [...projects].sort((a, b) => {
-    const countA = activityMap.get(a.id) || 0
-    const countB = activityMap.get(b.id) || 0
-    return countB - countA
+  const activityMap = {} as Record<string, number>
+  activities.map((a) => {
+    activityMap[a.project.id] = a.count
   })
+
+  return [...projects]
+    .sort((a, b) => {
+      return b.balance - a.balance
+    })
+    .sort((a, b) => {
+      const countA = activityMap[a.id] || 0
+      const countB = activityMap[b.id] || 0
+      return countB - countA
+    })
 }
 
 export const useMyProjects = (userId: number) => {

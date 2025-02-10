@@ -11,6 +11,10 @@ const pwaOptions: Partial<VitePWAOptions> = {
   base: '/',
   injectRegister: 'inline',
   includeAssets: ['logo-brand.svg', 'sitemap.xml'],
+  strategies: 'generateSW',
+  injectManifest: {
+    injectionPoint: undefined,
+  },
   manifest: {
     start_url: '.',
     display: 'standalone',
@@ -70,6 +74,8 @@ const pwaOptions: Partial<VitePWAOptions> = {
     globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
     maximumFileSizeToCacheInBytes: 5242880,
     skipWaiting: true,
+    navigateFallback: 'index.html',
+    navigationPreload: true,
     runtimeCaching: [
       {
         urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -82,6 +88,17 @@ const pwaOptions: Partial<VitePWAOptions> = {
           },
           cacheableResponse: {
             statuses: [0, 200],
+          },
+        },
+      },
+      {
+        urlPattern: ({ request }) => request.mode === 'navigate',
+        handler: 'NetworkFirst',
+        options: {
+          cacheName: 'navigation-cache',
+          networkTimeoutSeconds: 5,
+          cacheableResponse: {
+            statuses: [200],
           },
         },
       },
@@ -100,6 +117,7 @@ export default defineConfig(({ command, mode }) => {
     // open: env.DOCKER ? false : `http://dev.geyser.fund:${PORT}/`,
     watch: {
       usePolling: true,
+      ignored: ['language/**', '**/language/**', './language/**'],
     },
     host: true, // needed for the Docker Container port mapping to work
     strictPort: true,
