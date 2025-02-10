@@ -1,3 +1,27 @@
+## [0.18.4](https://github.com/geyserfund/geyser-app/compare/v0.18.0...v0.18.4) (2025-02-10)
+
+
+### Features
+
+* add category and subcategory to filters ([b6a3b4b](https://github.com/geyserfund/geyser-app/commit/b6a3b4b080f09b1e4e9ce93d25afdc4a63d7ed5a))
+
+
+### Bug Fixes
+
+* add grant custom url ([1f2f216](https://github.com/geyserfund/geyser-app/commit/1f2f216a8f8db2caaba0eccce41e49954255c251))
+* add grant has voting ([ffa6838](https://github.com/geyserfund/geyser-app/commit/ffa6838f265466dea84f88b8e57712fdf2e0bd15))
+* cannot unlink social account if last account is google ([523fb14](https://github.com/geyserfund/geyser-app/commit/523fb143f1c12857dbd94d0448fd54e1dd1f3cdd))
+* change twitter to x ([f5a2773](https://github.com/geyserfund/geyser-app/commit/f5a277358506b0ef56c1a17158f59a0b2b349c8b))
+* copy change for grant board members title ([d8d284e](https://github.com/geyserfund/geyser-app/commit/d8d284e776adc6b504a4d86be7693ea2e4f83465))
+* disable google as social login for creating projects ([2917786](https://github.com/geyserfund/geyser-app/commit/291778648dbac674e94b75ec7c4fbed1b4aa6205))
+* hide amount from btcisla ([77d7044](https://github.com/geyserfund/geyser-app/commit/77d704481c93bd2970e468350fea7f37418b0e21))
+* language stuff ([dae48f4](https://github.com/geyserfund/geyser-app/commit/dae48f46ca0f63693e75d4478aacde211c4c8a21))
+* prod cloud build script ([8582826](https://github.com/geyserfund/geyser-app/commit/8582826f9565a5dce7437798e850ce7c5c12e836))
+* projects with activity should always show at the top, but they dont ([d523c72](https://github.com/geyserfund/geyser-app/commit/d523c721202a2b24c267008020b476d124222fd6))
+* subcategories display ([5329732](https://github.com/geyserfund/geyser-app/commit/5329732bb23b9abaf8f88b8f89afb6d5c55d40f1))
+* update trending sections ([83e0d58](https://github.com/geyserfund/geyser-app/commit/83e0d583106228aa3dc278d82178b4953be8da85))
+* vite config for service worker generation to have navigation fallback ([d3bdf89](https://github.com/geyserfund/geyser-app/commit/d3bdf8998fbf80195eee0cb89d9afe14bc910c27))
+
 ## [0.18.3](https://github.com/geyserfund/geyser-app/compare/v0.18.0...v0.18.3) (2025-02-07)
 
 
