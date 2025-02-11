@@ -1,3 +1,10 @@
+## [0.18.5](https://github.com/geyserfund/geyser-app/compare/v0.18.4...v0.18.5) (2025-02-11)
+
+
+### Bug Fixes
+
+* failed service worker redirection ([f0d1cb9](https://github.com/geyserfund/geyser-app/commit/f0d1cb91591be2effb2e4f853d4e0840972d3480))
+
 ## [0.18.4](https://github.com/geyserfund/geyser-app/compare/v0.18.0...v0.18.4) (2025-02-10)
 
 
