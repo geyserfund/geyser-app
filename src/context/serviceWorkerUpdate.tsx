@@ -42,13 +42,9 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
             },
           }).catch((error) => console.log('error', error))
 
-          const body = await resp?.json()
-
-          console.log('checking service worker response', body)
           if (resp?.status === 200) await r.update()
         }
 
-        refetch()
         setInterval(async () => {
           if (!(!r.installing && navigator)) return
 
