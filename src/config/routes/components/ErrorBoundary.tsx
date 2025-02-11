@@ -3,6 +3,8 @@ import { DateTime } from 'luxon'
 import { useEffect } from 'react'
 import { useRouteError } from 'react-router-dom'
 
+import { refreshCacheAndReload } from '@/config/CacheBuster.tsx'
+
 import { useServiceWorkerUpdate } from '../../../context'
 import { NotFoundPage } from '../../../pages/fallback'
 
@@ -49,7 +51,7 @@ export const ErrorBoundary = () => {
       if (!refreshed) {
         storeRateToLocalStorage()
         updateServiceWorker()
-        window.location.reload()
+        refreshCacheAndReload()
       } else {
         captureException(e, {
           tags: { 'Not Found Error - Repeated Asset': 'true' },
