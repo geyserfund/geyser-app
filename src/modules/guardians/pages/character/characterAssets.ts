@@ -204,14 +204,14 @@ export const CharacterAssets: {
     digitalItems: [
       {
         name: 'Warrior Nostr Card',
-        description: [
-          'This Warrior badge will display next to your Geyser profile forever. It signals your support of Geyser and Bitcoin creators.',
-        ],
+        description: ['This Warrior card is a special digital item that is interoperable with Nostr. It’s unlimited.'],
         url: WarriorNostrCardUrl,
       },
       {
         name: 'Warrior Profile Gem',
-        description: ['This Warrior card is a special digital item that is interoperable with Nostr. It’s unlimited.'],
+        description: [
+          'This Warrior badge will display next to your Geyser profile forever. It signals your support of Geyser and Bitcoin creators.',
+        ],
         url: WarriorJewelUrl,
       },
     ],
