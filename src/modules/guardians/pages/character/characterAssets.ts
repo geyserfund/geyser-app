@@ -186,7 +186,7 @@ export type GuardianAsset = {
   digitalItems: CharacterAssetItem[]
   available?: number
   physicalItems?: CharacterAssetItem[]
-  grants?: string[]
+  powers?: string[]
   discounts?: string[]
   experiences?: string[]
   rewardUUIDs: RewardUUIDs
@@ -215,7 +215,11 @@ export const CharacterAssets: {
         url: WarriorJewelUrl,
       },
     ],
-    grants: ['21% of purchase donated to Geyser Grants'],
+    powers: [
+      '21% of purchase donated to Geyser Grants',
+      "Ability to vote on the Project category, that receives the Guardian's Grant funds.",
+      'Access to exclusive Discord and Telegram Communities',
+    ],
     rewardUUIDs: guardianRewardUUIDs[GuardianType.Warrior],
   },
   [GuardianType.Knight]: {
@@ -265,7 +269,11 @@ export const CharacterAssets: {
       },
     ],
     discounts: ['25% OPA for the year', '25% Alby Hub for the year'],
-    grants: ['21% of purchase donated to Geyser Grants'],
+    powers: [
+      '21% of purchase donated to Geyser Grants',
+      "Ability to vote on the Project category, that receives the Guardian's Grant funds.",
+      'Access to exclusive Discord and Telegram Communities',
+    ],
     rewardUUIDs: guardianRewardUUIDs[GuardianType.Knight],
   },
   [GuardianType.King]: {
@@ -333,7 +341,11 @@ export const CharacterAssets: {
         url: GuardiansStickersUrl,
       },
     ],
-    grants: ['21% of purchase donated to Geyser Grants'],
+    powers: [
+      '21% of purchase donated to Geyser Grants',
+      "Ability to vote on the Project category, that receives the Guardian's Grant funds.",
+      'Access to exclusive Discord and Telegram Communities',
+    ],
     discounts: ['50% OPA for the year', '25% Alby Hub for the year'],
     rewardUUIDs: guardianRewardUUIDs[GuardianType.King],
   },
@@ -418,7 +430,11 @@ export const CharacterAssets: {
       '10% off BTC Prague conference',
     ],
     experiences: ['Call with one Geyser creator of your choice'],
-    grants: ['21% of purchase donated to Geyser Grants'],
+    powers: [
+      '21% of purchase donated to Geyser Grants',
+      "Ability to vote on the Project category, that receives the Guardian's Grant funds.",
+      'Access to exclusive Discord and Telegram Communities',
+    ],
     rewardUUIDs: guardianRewardUUIDs[GuardianType.Legend],
   },
 }

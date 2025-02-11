@@ -127,7 +127,7 @@ export const CharacterPage = () => {
               onClick={handleClick}
             />
             <PerkWithImageList title={t('Digital Items')} items={guardianAsset.digitalItems} onClick={handleClick} />
-            <PerkWithList title={t('Grants')} items={guardianAsset.grants} />
+            <PerkWithList title={t('Powers')} items={guardianAsset.powers} />
             <PerkWithList title={t('Discounts')} items={guardianAsset.discounts} />
             <PerkWithList title={t('Experiences')} items={guardianAsset.experiences} />
 
