@@ -216,6 +216,8 @@ export const buttonTheme: ComponentStyleConfig = {
       },
     }),
 
+    // DEPRECATED: DO NOT USE ANY BELOW HERE
+
     primary: ({ theme }: StyleFunctionProps) => ({
       backgroundColor: theme.colors.primary[400],
       border: 'none',
