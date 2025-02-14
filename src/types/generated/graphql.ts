@@ -3207,6 +3207,8 @@ export type UpdateEntryInput = {
 }
 
 export type UpdateProjectInput = {
+  /** Project category */
+  category?: InputMaybe<ProjectCategory>
   /** Project ISO3166 country code */
   countryCode?: InputMaybe<Scalars['String']['input']>
   /** Description of the project. */
@@ -3224,6 +3226,8 @@ export type UpdateProjectInput = {
   rewardCurrency?: InputMaybe<RewardCurrency>
   /** A short description of the project. */
   shortDescription?: InputMaybe<Scalars['String']['input']>
+  /** Project sub-category */
+  subCategory?: InputMaybe<ProjectSubCategory>
   /** Project thumbnail image. */
   thumbnailImage?: InputMaybe<Scalars['String']['input']>
   /** Public title of the project. */
@@ -9546,6 +9550,8 @@ export type ProjectPageDetailsFragment = {
   __typename?: 'Project'
   id: any
   name: string
+  category?: ProjectCategory | null
+  subCategory?: ProjectSubCategory | null
   links: Array<string>
   location?: ({ __typename?: 'Location' } & ProjectLocationFragment) | null
   tags: Array<{ __typename?: 'Tag'; id: number; label: string }>
@@ -9569,6 +9575,8 @@ export type ProjectUpdateFragment = {
   thumbnailImage?: string | null
   status?: ProjectStatus | null
   links: Array<string>
+  category?: ProjectCategory | null
+  subCategory?: ProjectSubCategory | null
   rewardCurrency?: RewardCurrency | null
   location?: {
     __typename?: 'Location'
@@ -12044,6 +12052,8 @@ export const ProjectPageDetailsFragmentDoc = gql`
   fragment ProjectPageDetails on Project {
     id
     name
+    category
+    subCategory
     links
     location {
       ...ProjectLocation
@@ -12080,6 +12090,8 @@ export const ProjectUpdateFragmentDoc = gql`
     }
     status
     links
+    category
+    subCategory
     rewardCurrency
   }
 `

@@ -3,6 +3,7 @@ import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
 import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI'
+import { SelectProjectCategory } from '@/modules/project/forms/ProjectCategory.tsx'
 import { ProjectLinks } from '@/modules/project/forms/ProjectLinks'
 import { ProjectRegion } from '@/modules/project/forms/ProjectRegion'
 import { ProjectTagsCreateEdit } from '@/modules/project/forms/ProjectTagsCreateEdit'
@@ -96,6 +97,12 @@ export const ProjectDashboardDetails = () => {
         width="full"
       >
         <VStack w="100%" spacing={6} flexGrow={1} px={{ base: 0, lg: 6 }}>
+          <SelectProjectCategory
+            category={project?.category}
+            subCategory={project?.subCategory}
+            updateProject={updateProject}
+          />
+
           <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
 
           <ProjectRegion location={project?.location} updateProject={updateProject} />

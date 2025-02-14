@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI'
+import { SelectProjectCategory } from '@/modules/project/forms/ProjectCategory.tsx'
 import { projectFormErrorAtom } from '@/modules/project/state/projectFormAtom'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
@@ -32,6 +33,24 @@ export const ProjectDetails = () => {
 
   const onSubmit = async () => {
     if (!project) {
+      return
+    }
+
+    if (!project.category) {
+      toast.error({
+        title: 'Please select a category',
+        description: 'Project category is required to proceed',
+      })
+      setProjectFormError((prev) => ({ ...prev, category: 'Project category is required' }))
+      return
+    }
+
+    if (!project.subCategory) {
+      toast.error({
+        title: 'Please select a subcategory',
+        description: 'Project subcategory is required to proceed',
+      })
+      setProjectFormError((prev) => ({ ...prev, subCategory: 'Project subcategory is required' }))
       return
     }
 
@@ -93,6 +112,11 @@ export const ProjectDetails = () => {
         title={<TitleWithProgressBar title={t('Links & tags')} subtitle={t('Create a project')} index={2} length={5} />}
       >
         <VStack spacing={6}>
+          <SelectProjectCategory
+            category={project?.category}
+            subCategory={project?.subCategory}
+            updateProject={updateProject}
+          />
           <ProjectLinks links={project?.links || []} setLinks={setLinks} linkError={linkError} />
           <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
 
