@@ -56,10 +56,10 @@ export const ProjectDetails = () => {
 
     if (!project.location || !project.location.country || !project.location.country.code) {
       toast.error({
-        title: 'Please select a region',
-        description: 'Project region is required to proceed',
+        title: 'Please select a country',
+        description: 'Project country is required to proceed',
       })
-      setProjectFormError((prev) => ({ ...prev, location: 'Project region is required' }))
+      setProjectFormError((prev) => ({ ...prev, location: 'Project country is required' }))
       return
     }
 

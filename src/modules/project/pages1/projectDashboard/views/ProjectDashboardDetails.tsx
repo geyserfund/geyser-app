@@ -30,13 +30,31 @@ export const ProjectDashboardDetails = () => {
   })
 
   const onSubmit = async () => {
+    if (!project.category) {
+      toast.error({
+        title: 'Please select a category',
+        description: 'Project category is required to proceed',
+      })
+      setProjectFormError((prev) => ({ ...prev, category: 'Project category is required' }))
+      return
+    }
+
+    if (!project.subCategory) {
+      toast.error({
+        title: 'Please select a sub-category',
+        description: 'Project sub-category is required to proceed',
+      })
+      setProjectFormError((prev) => ({ ...prev, subCategory: 'Project sub-category is required' }))
+      return
+    }
+
     if (project.location) {
-      if (project.location.region !== 'Online' && (!project.location.country || !project.location.country.code)) {
+      if (!project.location.country || !project.location.country.code) {
         toast.error({
-          title: 'Please select a region',
-          description: 'Project region is required to proceed',
+          title: 'Please select a country',
+          description: 'Project country is required to proceed',
         })
-        setProjectFormError((prev) => ({ ...prev, location: 'Project region is required' }))
+        setProjectFormError((prev) => ({ ...prev, location: 'Project country is required' }))
         return
       }
 
