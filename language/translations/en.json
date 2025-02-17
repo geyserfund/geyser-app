@@ -1532,5 +1532,7 @@
   "Project category is required to proceed": "Project category is required to proceed",
   "Please select a category": "Please select a category",
   "Project subcategory is required to proceed": "Project subcategory is required to proceed",
-  "Please select a subcategory": "Please select a subcategory"
+  "Please select a subcategory": "Please select a subcategory",
+  "Please select a country": "Please select a country",
+  "Project country is required to proceed": "Project country is required to proceed"
 }
