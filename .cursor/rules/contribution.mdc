@@ -18,6 +18,9 @@ Code Style and Structure
 - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
 - Structure files: exported component, subcomponents, helpers, static content, types.
 
+Component uses
+- Favour use of the components in the `src/shared/components` folder for when an existing component could be used.
+
 Naming Conventions
 - For component names, use Capitalized words.
 - Use camel case for directories, variables, constants, functions, etc. 
