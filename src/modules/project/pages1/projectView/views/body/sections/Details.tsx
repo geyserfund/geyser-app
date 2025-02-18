@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Badge, Button, HStack, Wrap } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { PropsWithChildren } from 'react'
@@ -8,6 +9,7 @@ import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
+import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 
 import { getPath, ID } from '../../../../../../../shared/constants'
 import { BodySectionLayout, ProjectLinks } from '../components'
@@ -33,6 +35,39 @@ export const Details = () => {
         {project.links && (
           <DetailLine title={t('Project links')} empty={!project?.links?.length}>
             <ProjectLinks links={project.links} />
+          </DetailLine>
+        )}
+
+        {(project.category || project.subCategory) && (
+          <DetailLine title={t('Category')} empty={!project.category}>
+            <Wrap>
+              {project.category && (
+                <Link
+                  key={project.category}
+                  to={getPath('landingPage')}
+                  state={{
+                    filter: { category: project.category },
+                  }}
+                >
+                  <Badge size="md" variant="soft" colorScheme={'neutral1'}>
+                    {ProjectCategoryLabel[project.category]}
+                  </Badge>
+                </Link>
+              )}
+              {project.subCategory && (
+                <Link
+                  key={project.subCategory}
+                  to={getPath('landingPage')}
+                  state={{
+                    filter: { subCategory: project.subCategory },
+                  }}
+                >
+                  <Badge size="md" variant="soft" colorScheme={'neutral1'}>
+                    {ProjectSubCategoryLabel[project.subCategory]}
+                  </Badge>
+                </Link>
+              )}
+            </Wrap>
           </DetailLine>
         )}
 
