@@ -7,11 +7,9 @@ import {
   Box,
   Button,
   HStack,
-  Image,
   InputGroup,
   InputRightElement,
   Link,
-  useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -42,6 +40,7 @@ import {
 } from '../pages1/projectCreation/hooks/useWalletForm'
 import { WalletLimitComponent } from '../pages1/projectDashboard/components/WalletLimitComponent'
 import { NodeAdditionModal } from './components/NodeAdditionModal'
+import { RenderSponsorImage } from './components/RenderSponsorImage.tsx'
 
 type Props = {
   readOnly?: boolean
@@ -55,31 +54,12 @@ type Props = {
   limits: Limits
 }
 
-const FeaturedWalletList = [
-  {
-    name: 'Wallet of Satoshi',
-    imageUrl: 'https://storage.googleapis.com/geyser-projects-media/platform/walletOfSatoshiLogoLight.png',
-    imageUrlDark: 'https://storage.googleapis.com/geyser-projects-media/platform/walletOfSatoshiLogoDark.png',
-    url: 'https://tinyurl.com/walletofsatoshi',
-    backgroundColor: 'transparent',
-  },
-  {
-    name: 'Speed wallet',
-    imageUrl: 'https://storage.googleapis.com/geyser-projects-media/platform/speedWalletLightmode.png',
-    imageUrlDark: 'https://storage.googleapis.com/geyser-projects-media/platform/speedWalletDarkmode.png',
-    url: 'https://tinyurl.com/speed-wallet-platform',
-    backgroundColor: 'transparent',
-    padding: '9px',
-  },
-]
-
 const FeaturedNWCWalletList = [
   {
     name: 'Alby Hub',
     imageUrl: 'https://storage.googleapis.com/geyser-projects-media/platform/alby-hub-light.png',
     imageUrlDark: 'https://storage.googleapis.com/geyser-projects-media/platform/alby-hub-dark.png',
     url: 'https://albyhub.com/',
-    backgroundColor: 'transparent',
   },
 ]
 
@@ -216,20 +196,6 @@ Props) => {
                 <Body size="sm" medium>
                   {t('Featured Wallets')}
                 </Body>
-                <HStack width={'full'} justifyContent={'flex-start'} spacing={'10px'} flexWrap="wrap">
-                  {FeaturedWalletList.map((wallet) => {
-                    return (
-                      <RenderSponsorImage
-                        key={wallet.name}
-                        url={wallet.url}
-                        imageUrl={wallet.imageUrl}
-                        imageUrlDark={wallet.imageUrlDark}
-                        backgroundColor={wallet.backgroundColor}
-                        padding={wallet.padding}
-                      />
-                    )
-                  })}
-                </HStack>
               </VStack>
             </WalletConnectionOptionInfoBox>
           </AccordionPanel>
@@ -352,7 +318,6 @@ Props) => {
                         url={wallet.url}
                         imageUrl={wallet.imageUrl}
                         imageUrlDark={wallet.imageUrlDark}
-                        backgroundColor={wallet.backgroundColor}
                       />
                     )
                   })}
@@ -365,32 +330,6 @@ Props) => {
 
       <NodeAdditionModal isOpen={node.isOpen} onClose={node.onClose} nodeInput={nodeInput} onSubmit={node.setValue} />
     </VStack>
-  )
-}
-
-const RenderSponsorImage = ({
-  url,
-  imageUrl,
-  imageUrlDark,
-  height = '40px',
-  backgroundColor,
-  padding,
-}: {
-  url: string
-  imageUrl: string
-  imageUrlDark?: string
-  height?: string
-  backgroundColor?: string
-  padding?: string
-}) => {
-  const image = useColorModeValue(imageUrl, imageUrlDark || imageUrl)
-
-  return (
-    <Box backgroundColor={backgroundColor || 'utils.pbg'} borderRadius={'8px'} padding={padding} height={height}>
-      <Link isExternal href={url}>
-        <Image src={image} height="100%" />
-      </Link>
-    </Box>
   )
 }
 
