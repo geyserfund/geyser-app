@@ -17,7 +17,7 @@ export const MiniProjectCard = ({ project, startAnimating, ...rest }: MiniProjec
   useEffect(() => {
     if (startAnimating) {
       const startTime = Date.now()
-      const duration = 20000 // 20 seconds
+      const duration = 15000 // 15 seconds
 
       const updateProgress = () => {
         const elapsed = Date.now() - startTime
@@ -39,18 +39,21 @@ export const MiniProjectCard = ({ project, startAnimating, ...rest }: MiniProjec
     <CardLayout
       direction="row"
       flex={1}
-      height="64px"
+      height="40px"
       alignItems="center"
       spacing="12px"
       padding="8px"
       position="relative"
       overflow="hidden"
+      noborder={!startAnimating}
+      backgroundColor={'neutralAlpha.3'}
+      _hover={{ cursor: 'pointer' }}
       {...rest}
     >
-      <Box width="48px" height="48px" borderRadius="8px" overflow="hidden">
+      <Box width="24px" height="24px" borderRadius="8px" overflow="hidden">
         <ImageWithReload height="full" width="full" src={project.thumbnailImage} objectFit="cover" />
       </Box>
-      <Body bold isTruncated>
+      <Body medium isTruncated>
         {project.title}
       </Body>
       {startAnimating && (
@@ -60,7 +63,7 @@ export const MiniProjectCard = ({ project, startAnimating, ...rest }: MiniProjec
           left={0}
           height="100%"
           width={`${progress}%`}
-          backgroundColor="neutralAlpha.3"
+          backgroundColor="neutralAlpha.6"
           transition="width 0.1s linear"
         />
       )}

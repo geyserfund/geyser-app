@@ -14,7 +14,7 @@ export const FeaturedProjectsCarousel = ({ projects }: FeaturedProjectsCarouselP
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % projects.length)
-    }, 20000) // 20 seconds interval
+    }, 15000) // 15 seconds interval
 
     return () => clearInterval(interval)
   }, [projects.length])
