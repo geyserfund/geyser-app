@@ -2841,6 +2841,7 @@ export type Query = {
   userBadge?: Maybe<UserBadge>
   userBadges: Array<UserBadge>
   userEmailIsAvailable: Scalars['Boolean']['output']
+  userIpCountry: Scalars['String']['output']
   userNotificationSettingsGet: ProfileNotificationSettings
   userSubscription?: Maybe<UserSubscription>
   userSubscriptions: Array<UserSubscription>
@@ -6867,6 +6868,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryUserEmailIsAvailableArgs, 'email'>
   >
+  userIpCountry?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   userNotificationSettingsGet?: Resolver<
     ResolversTypes['ProfileNotificationSettings'],
     ParentType,
@@ -10430,6 +10432,10 @@ export type ProjectRewardQuery = {
 export type RewardCategoriesQueryVariables = Exact<{ [key: string]: never }>
 
 export type RewardCategoriesQuery = { __typename?: 'Query'; projectRewardCategoriesGet: Array<string> }
+
+export type GetUserIpCountryQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetUserIpCountryQuery = { __typename?: 'Query'; userIpCountry: string }
 
 export type FundingTxStatusUpdatedSubscriptionVariables = Exact<{
   input?: InputMaybe<FundingTxStatusUpdatedInput>
@@ -20173,6 +20179,57 @@ export type RewardCategoriesQueryHookResult = ReturnType<typeof useRewardCategor
 export type RewardCategoriesLazyQueryHookResult = ReturnType<typeof useRewardCategoriesLazyQuery>
 export type RewardCategoriesSuspenseQueryHookResult = ReturnType<typeof useRewardCategoriesSuspenseQuery>
 export type RewardCategoriesQueryResult = Apollo.QueryResult<RewardCategoriesQuery, RewardCategoriesQueryVariables>
+export const GetUserIpCountryDocument = gql`
+  query GetUserIpCountry {
+    userIpCountry
+  }
+`
+
+/**
+ * __useGetUserIpCountryQuery__
+ *
+ * To run a query within a React component, call `useGetUserIpCountryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUserIpCountryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUserIpCountryQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetUserIpCountryQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetUserIpCountryQuery, GetUserIpCountryQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useQuery<GetUserIpCountryQuery, GetUserIpCountryQueryVariables>(GetUserIpCountryDocument, options)
+}
+
+export function useGetUserIpCountryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetUserIpCountryQuery, GetUserIpCountryQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions }
+  return Apollo.useLazyQuery<GetUserIpCountryQuery, GetUserIpCountryQueryVariables>(GetUserIpCountryDocument, options)
+}
+
+export function useGetUserIpCountrySuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetUserIpCountryQuery, GetUserIpCountryQueryVariables>,
+) {
+  const options = baseOptions === Apollo.skipToken ? baseOptions : { ...defaultOptions, ...baseOptions }
+  return Apollo.useSuspenseQuery<GetUserIpCountryQuery, GetUserIpCountryQueryVariables>(
+    GetUserIpCountryDocument,
+    options,
+  )
+}
+
+export type GetUserIpCountryQueryHookResult = ReturnType<typeof useGetUserIpCountryQuery>
+export type GetUserIpCountryLazyQueryHookResult = ReturnType<typeof useGetUserIpCountryLazyQuery>
+export type GetUserIpCountrySuspenseQueryHookResult = ReturnType<typeof useGetUserIpCountrySuspenseQuery>
+export type GetUserIpCountryQueryResult = Apollo.QueryResult<GetUserIpCountryQuery, GetUserIpCountryQueryVariables>
 export const FundingTxStatusUpdatedDocument = gql`
   subscription FundingTxStatusUpdated($input: FundingTxStatusUpdatedInput) {
     fundingTxStatusUpdated(input: $input) {
