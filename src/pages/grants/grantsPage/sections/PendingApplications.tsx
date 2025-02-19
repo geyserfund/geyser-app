@@ -75,7 +75,7 @@ export const PendingApplications = ({ applicants }: Props) => {
                 <Box display="flex" flexDirection="column" pt={1} flexGrow={1} gap={5}>
                   <HStack gap={2}>
                     <H2 size="2xl">{project.title}</H2>
-                    <Tag bg="warning.3">
+                    <Tag bg={lightModeColors.warning[3]}>
                       <Body size="xs" color={lightModeColors.utils.text}>
                         {t('APPLICATION PENDING')}
                       </Body>

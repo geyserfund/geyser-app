@@ -15,7 +15,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { BsCheckLg } from 'react-icons/bs'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
@@ -39,22 +39,16 @@ interface GrantProps {
 
 export const GrantApply = ({ grant, pendingApplicants }: GrantProps) => {
   const { t } = useTranslation()
+
   return (
     <CardLayout noMobileBorder w="full" p={{ base: '10px', lg: '20px' }} alignItems="center">
       <H3 size="lg" alignSelf="start">
         {t('Apply')}
       </H3>
       <Body alignSelf="start">
-        <Trans
-          values={{ title: grant.title }}
-          i18nKey={
-            'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow'
-          }
-        >
-          {
-            'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow'
-          }
-        </Trans>
+        {t(
+          'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow',
+        ).replace('{{title}}', grant.title)}
       </Body>
       <ApplyGrant grant={grant} pendingApplicants={pendingApplicants} />
     </CardLayout>
