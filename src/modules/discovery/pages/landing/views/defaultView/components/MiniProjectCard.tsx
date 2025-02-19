@@ -1,5 +1,4 @@
 import { Box } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
@@ -12,29 +11,6 @@ type MiniProjectCardProps = {
 } & CardLayoutProps
 
 export const MiniProjectCard = ({ project, startAnimating, ...rest }: MiniProjectCardProps) => {
-  const [progress, setProgress] = useState(0)
-
-  useEffect(() => {
-    if (startAnimating) {
-      const startTime = Date.now()
-      const duration = 15000 // 15 seconds
-
-      const updateProgress = () => {
-        const elapsed = Date.now() - startTime
-        const newProgress = Math.min((elapsed / duration) * 100, 100)
-        setProgress(newProgress)
-
-        if (newProgress < 100) {
-          requestAnimationFrame(updateProgress)
-        }
-      }
-
-      requestAnimationFrame(updateProgress)
-    } else {
-      setProgress(0)
-    }
-  }, [startAnimating])
-
   return (
     <CardLayout
       direction="row"
@@ -62,9 +38,15 @@ export const MiniProjectCard = ({ project, startAnimating, ...rest }: MiniProjec
           bottom={0}
           left={0}
           height="100%"
-          width={`${progress}%`}
+          width="100%"
           backgroundColor="neutralAlpha.6"
-          transition="width 0.1s linear"
+          sx={{
+            animation: startAnimating ? 'progress 15s linear forwards' : 'none',
+            '@keyframes progress': {
+              '0%': { transform: 'translateX(-100%)' },
+              '100%': { transform: 'translateX(0%)' },
+            },
+          }}
         />
       )}
     </CardLayout>

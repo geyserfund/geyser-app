@@ -40,6 +40,10 @@ export const FeaturedProjectCard = ({
   const project = response?.projectGet
 
   if (loading || !project) {
+    if (showMini) {
+      return null
+    }
+
     return <FeaturedCardSkeleton />
   }
 

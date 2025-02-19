@@ -27,10 +27,13 @@ export const FeaturedProjectsCarousel = ({ projects }: FeaturedProjectsCarouselP
             <Box
               key={project.Name}
               position="absolute"
+              top={0}
+              left={0}
               width="100%"
               opacity={index === currentIndex ? 1 : 0}
               transition="opacity 0.5s ease-in-out"
               pointerEvents={index === currentIndex ? 'auto' : 'none'}
+              zIndex={index === currentIndex ? 1 : 0}
             >
               <FeaturedProjectCard projectName={project.Name} data={project} />
             </Box>
