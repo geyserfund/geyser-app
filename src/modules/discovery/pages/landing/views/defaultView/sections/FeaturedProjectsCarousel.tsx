@@ -14,7 +14,7 @@ export const FeaturedProjectsCarousel = ({ projects }: FeaturedProjectsCarouselP
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % projects.length)
-    }, 15000) // 15 seconds interval
+    }, 10000) // 10 seconds interval
 
     return () => clearInterval(interval)
   }, [projects.length])
@@ -50,25 +50,21 @@ export const FeaturedProjectsCarousel = ({ projects }: FeaturedProjectsCarouselP
         )}
       </Box>
       <HStack w="full">
-        {projects
-          .map((_, i) => (i + currentIndex) % projects.length)
-          .filter((index) => index !== currentIndex)
-          .map((index) => {
-            const project = projects[index]
-            if (!project) {
-              return null
-            }
+        {projects.map((project, index) => {
+          if (!project) {
+            return null
+          }
 
-            return (
-              <FeaturedProjectCard
-                key={project.Name}
-                showMini
-                projectName={project.Name}
-                data={project}
-                startAnimating={index === (currentIndex + 1) % projects.length}
-              />
-            )
-          })}
+          return (
+            <FeaturedProjectCard
+              key={project.Name}
+              showMini
+              projectName={project.Name}
+              data={project}
+              startAnimating={index === currentIndex % projects.length}
+            />
+          )
+        })}
       </HStack>
     </VStack>
   )
