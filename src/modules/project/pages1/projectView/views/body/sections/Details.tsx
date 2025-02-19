@@ -9,7 +9,11 @@ import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
+import {
+  ProjectCategoryLabel,
+  ProjectSubCategoryLabel,
+  ProjectSubCategoryList,
+} from '@/shared/constants/platform/projectCategory.ts'
 
 import { getPath, ID } from '../../../../../../../shared/constants'
 import { BodySectionLayout, ProjectLinks } from '../components'
@@ -49,7 +53,13 @@ export const Details = () => {
                     filter: { category: project.category },
                   }}
                 >
-                  <Badge size="md" variant="soft" colorScheme={'neutral1'}>
+                  <Badge
+                    size="md"
+                    variant="soft"
+                    colorScheme={tagColorScheme(
+                      ProjectSubCategoryList.findIndex((subCategory) => subCategory === project.subCategory),
+                    )}
+                  >
                     {ProjectCategoryLabel[project.category]}
                   </Badge>
                 </Link>
@@ -62,33 +72,17 @@ export const Details = () => {
                     filter: { subCategory: project.subCategory },
                   }}
                 >
-                  <Badge size="md" variant="soft" colorScheme={'neutral1'}>
+                  <Badge
+                    size="md"
+                    variant="soft"
+                    colorScheme={tagColorScheme(
+                      ProjectSubCategoryList.findIndex((subCategory) => subCategory === project.subCategory),
+                    )}
+                  >
                     {ProjectSubCategoryLabel[project.subCategory]}
                   </Badge>
                 </Link>
               )}
-            </Wrap>
-          </DetailLine>
-        )}
-
-        {project.tags && (
-          <DetailLine title={t('Tags')} empty={!project.tags.length}>
-            <Wrap>
-              {project.tags.map((tag) => {
-                return (
-                  <Link
-                    key={tag.id}
-                    to={getPath('landingPage')}
-                    state={{
-                      filter: { tagIds: [tag.id] },
-                    }}
-                  >
-                    <Badge size="md" variant="soft" colorScheme={tagColorScheme(tag.id)}>
-                      {tag.label}
-                    </Badge>
-                  </Link>
-                )
-              })}
             </Wrap>
           </DetailLine>
         )}
