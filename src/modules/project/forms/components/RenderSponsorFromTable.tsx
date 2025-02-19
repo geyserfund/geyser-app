@@ -45,7 +45,7 @@ export const RenderSponsorFromTable = () => {
     if (userIpCountryData?.userIpCountry && totalWalletList.length > 0) {
       const filteredWallets = totalWalletList.filter(
         (wallet) =>
-          wallet.countryCode === userIpCountryData.userIpCountry || wallet.countryCode === GLOBAL_COUNTRY_CODE,
+          wallet.countryCode.includes(userIpCountryData.userIpCountry) || wallet.countryCode === GLOBAL_COUNTRY_CODE,
       )
       setFeaturedWalletList(filteredWallets)
     } else {

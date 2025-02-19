@@ -40,6 +40,7 @@ import {
 } from '../pages1/projectCreation/hooks/useWalletForm'
 import { WalletLimitComponent } from '../pages1/projectDashboard/components/WalletLimitComponent'
 import { NodeAdditionModal } from './components/NodeAdditionModal'
+import { RenderSponsorFromTable } from './components/RenderSponsorFromTable.tsx'
 import { RenderSponsorImage } from './components/RenderSponsorImage.tsx'
 
 type Props = {
@@ -196,6 +197,7 @@ Props) => {
                 <Body size="sm" medium>
                   {t('Featured Wallets')}
                 </Body>
+                <RenderSponsorFromTable />
               </VStack>
             </WalletConnectionOptionInfoBox>
           </AccordionPanel>
