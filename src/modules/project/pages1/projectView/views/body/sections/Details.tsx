@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Badge, Button, HStack, Wrap } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { PropsWithChildren } from 'react'
@@ -8,6 +9,11 @@ import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
+import {
+  ProjectCategoryLabel,
+  ProjectSubCategoryLabel,
+  ProjectSubCategoryList,
+} from '@/shared/constants/platform/projectCategory.ts'
 
 import { getPath, ID } from '../../../../../../../shared/constants'
 import { BodySectionLayout, ProjectLinks } from '../components'
@@ -36,24 +42,47 @@ export const Details = () => {
           </DetailLine>
         )}
 
-        {project.tags && (
-          <DetailLine title={t('Tags')} empty={!project.tags.length}>
+        {(project.category || project.subCategory) && (
+          <DetailLine title={t('Category')} empty={!project.category}>
             <Wrap>
-              {project.tags.map((tag) => {
-                return (
-                  <Link
-                    key={tag.id}
-                    to={getPath('landingPage')}
-                    state={{
-                      filter: { tagIds: [tag.id] },
-                    }}
+              {project.category && (
+                <Link
+                  key={project.category}
+                  to={getPath('landingPage')}
+                  state={{
+                    filter: { category: project.category },
+                  }}
+                >
+                  <Badge
+                    size="md"
+                    variant="soft"
+                    colorScheme={tagColorScheme(
+                      ProjectSubCategoryList.findIndex((subCategory) => subCategory === project.subCategory),
+                    )}
                   >
-                    <Badge size="md" variant="soft" colorScheme={tagColorScheme(tag.id)}>
-                      {tag.label}
-                    </Badge>
-                  </Link>
-                )
-              })}
+                    {ProjectCategoryLabel[project.category]}
+                  </Badge>
+                </Link>
+              )}
+              {project.subCategory && (
+                <Link
+                  key={project.subCategory}
+                  to={getPath('landingPage')}
+                  state={{
+                    filter: { subCategory: project.subCategory },
+                  }}
+                >
+                  <Badge
+                    size="md"
+                    variant="soft"
+                    colorScheme={tagColorScheme(
+                      ProjectSubCategoryList.findIndex((subCategory) => subCategory === project.subCategory),
+                    )}
+                  >
+                    {ProjectSubCategoryLabel[project.subCategory]}
+                  </Badge>
+                </Link>
+              )}
             </Wrap>
           </DetailLine>
         )}
