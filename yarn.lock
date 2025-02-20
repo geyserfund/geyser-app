@@ -12989,15 +12989,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fdir@npm:^6.4.2":
-  version: 6.4.2
-  resolution: "fdir@npm:6.4.2"
+"fdir@npm:^6.4.3":
+  version: 6.4.3
+  resolution: "fdir@npm:6.4.3"
   peerDependencies:
     picomatch: ^3 || ^4
   peerDependenciesMeta:
     picomatch:
       optional: true
-  checksum: 10c0/34829886f34a3ca4170eca7c7180ec4de51a3abb4d380344063c0ae2e289b11d2ba8b724afee974598c83027fea363ff598caf2b51bc4e6b1e0d8b80cc530573
+  checksum: 10c0/d13c10120e9625adf21d8d80481586200759928c19405a816b77dd28eaeb80e7c59c5def3e2941508045eb06d34eb47fad865ccc8bf98e6ab988bb0ed160fb6f
   languageName: node
   linkType: hard
 
@@ -13613,7 +13613,7 @@ __metadata:
     typescript: "npm:^5.7.2"
     vite: "npm:^5.2.10"
     vite-plugin-package-version: "npm:^1.0.2"
-    vite-plugin-pwa: "npm:^0.20.0"
+    vite-plugin-pwa: "npm:^0.21.1"
     vite-plugin-top-level-await: "npm:^1.4.4"
     vite-plugin-wasm: "npm:^3.4.1"
     vite-tsconfig-paths: "npm:^5.1.4"
@@ -20838,13 +20838,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tinyglobby@npm:^0.2.0":
-  version: 0.2.10
-  resolution: "tinyglobby@npm:0.2.10"
+"tinyglobby@npm:^0.2.10":
+  version: 0.2.12
+  resolution: "tinyglobby@npm:0.2.12"
   dependencies:
-    fdir: "npm:^6.4.2"
+    fdir: "npm:^6.4.3"
     picomatch: "npm:^4.0.2"
-  checksum: 10c0/ce946135d39b8c0e394e488ad59f4092e8c4ecd675ef1bcd4585c47de1b325e61ec6adfbfbe20c3c2bfa6fd674c5b06de2a2e65c433f752ae170aff11793e5ef
+  checksum: 10c0/7c9be4fd3625630e262dcb19015302aad3b4ba7fc620f269313e688f2161ea8724d6cb4444baab5ef2826eb6bed72647b169a33ec8eea37501832a2526ff540f
   languageName: node
   linkType: hard
 
@@ -21941,24 +21941,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-plugin-pwa@npm:^0.20.0":
-  version: 0.20.5
-  resolution: "vite-plugin-pwa@npm:0.20.5"
+"vite-plugin-pwa@npm:^0.21.1":
+  version: 0.21.1
+  resolution: "vite-plugin-pwa@npm:0.21.1"
   dependencies:
     debug: "npm:^4.3.6"
     pretty-bytes: "npm:^6.1.1"
-    tinyglobby: "npm:^0.2.0"
-    workbox-build: "npm:^7.1.0"
-    workbox-window: "npm:^7.1.0"
+    tinyglobby: "npm:^0.2.10"
+    workbox-build: "npm:^7.3.0"
+    workbox-window: "npm:^7.3.0"
   peerDependencies:
     "@vite-pwa/assets-generator": ^0.2.6
-    vite: ^3.1.0 || ^4.0.0 || ^5.0.0
-    workbox-build: ^7.1.0
-    workbox-window: ^7.1.0
+    vite: ^3.1.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
+    workbox-build: ^7.3.0
+    workbox-window: ^7.3.0
   peerDependenciesMeta:
     "@vite-pwa/assets-generator":
       optional: true
-  checksum: 10c0/b0b26fab553d758185608941652cccdf7a6365fa3c749120edc83e1173de8103bf948d2ed52a159eea6b3ffe08b983077b68e78593fb2bf0e307fc517dc09065
+  checksum: 10c0/ee9ccacd449fba21d8471d68002f0dcbdbaeae82ab9a851caad7aa0ac829ccb9f36b5fe9471da8c19135a1cb8e4cf17743615d758a13719368411db2834122c6
   languageName: node
   linkType: hard
 
@@ -22350,7 +22350,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workbox-build@npm:^7.1.0":
+"workbox-build@npm:^7.3.0":
   version: 7.3.0
   resolution: "workbox-build@npm:7.3.0"
   dependencies:
@@ -22511,7 +22511,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workbox-window@npm:7.3.0, workbox-window@npm:^7.1.0":
+"workbox-window@npm:7.3.0, workbox-window@npm:^7.1.0, workbox-window@npm:^7.3.0":
   version: 7.3.0
   resolution: "workbox-window@npm:7.3.0"
   dependencies:

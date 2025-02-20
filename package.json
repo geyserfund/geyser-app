@@ -165,7 +165,7 @@
     "typescript": "^5.7.2",
     "vite": "^5.2.10",
     "vite-plugin-package-version": "^1.0.2",
-    "vite-plugin-pwa": "^0.20.0",
+    "vite-plugin-pwa": "^0.21.1",
     "vite-plugin-top-level-await": "^1.4.4",
     "vite-plugin-wasm": "^3.4.1",
     "vite-tsconfig-paths": "^5.1.4",

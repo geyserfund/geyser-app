@@ -8,13 +8,9 @@ import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const pwaOptions: Partial<VitePWAOptions> = {
-  base: '/',
-  injectRegister: 'inline',
+  registerType: 'autoUpdate',
+  injectRegister: false,
   includeAssets: ['logo-brand.svg', 'sitemap.xml'],
-  strategies: 'generateSW',
-  injectManifest: {
-    injectionPoint: undefined,
-  },
   manifest: {
     start_url: '.',
     display: 'standalone',
@@ -71,11 +67,9 @@ const pwaOptions: Partial<VitePWAOptions> = {
     ],
   },
   workbox: {
-    globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-    maximumFileSizeToCacheInBytes: 5242880,
-    skipWaiting: true,
-    navigateFallback: 'index.html',
-    navigationPreload: true,
+    globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+    cleanupOutdatedCaches: true,
+    clientsClaim: true,
     runtimeCaching: [
       {
         urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -88,17 +82,6 @@ const pwaOptions: Partial<VitePWAOptions> = {
           },
           cacheableResponse: {
             statuses: [0, 200],
-          },
-        },
-      },
-      {
-        urlPattern: ({ request }) => request.mode === 'navigate',
-        handler: 'NetworkFirst',
-        options: {
-          cacheName: 'navigation-cache',
-          networkTimeoutSeconds: 5,
-          cacheableResponse: {
-            statuses: [200],
           },
         },
       },
