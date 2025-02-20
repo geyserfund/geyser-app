@@ -68,6 +68,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
   },
   workbox: {
     globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+    maximumFileSizeToCacheInBytes: 5242880,
     cleanupOutdatedCaches: true,
     clientsClaim: true,
     runtimeCaching: [
