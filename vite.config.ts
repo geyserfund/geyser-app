@@ -91,10 +91,9 @@ const pwaOptions: Partial<VitePWAOptions> = {
       },
       {
         urlPattern: ({ request }) => request.mode === 'navigate',
-        handler: 'NetworkFirst',
+        handler: 'StaleWhileRevalidate',
         options: {
           cacheName: 'navigation-cache',
-          networkTimeoutSeconds: 10,
           cacheableResponse: {
             statuses: [200],
           },
