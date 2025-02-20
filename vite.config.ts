@@ -74,8 +74,6 @@ const pwaOptions: Partial<VitePWAOptions> = {
     globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
     maximumFileSizeToCacheInBytes: 5242880,
     skipWaiting: true,
-    navigateFallback: 'index.html',
-    navigationPreload: true,
     runtimeCaching: [
       {
         urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -96,9 +94,12 @@ const pwaOptions: Partial<VitePWAOptions> = {
         handler: 'NetworkFirst',
         options: {
           cacheName: 'navigation-cache',
-          networkTimeoutSeconds: 5,
+          networkTimeoutSeconds: 10,
           cacheableResponse: {
             statuses: [200],
+          },
+          matchOptions: {
+            ignoreSearch: true,
           },
         },
       },
