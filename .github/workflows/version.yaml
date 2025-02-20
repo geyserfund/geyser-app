@@ -10,6 +10,11 @@ on:
 jobs:
   check-version:
     runs-on: ubuntu-latest
+    # Add permissions for status checks
+    permissions:
+      statuses: write
+      contents: read
+
     steps:
       - name: Checkout PR branch
         uses: actions/checkout@v4
@@ -31,15 +36,25 @@ jobs:
           MAIN_VERSION=$(jq -r .version package.json)
           echo "main_version=$MAIN_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Compare versions
-        run: |
-          if [ "${{ steps.pr_version.outputs.pr_version }}" == "${{ steps.main_version.outputs.main_version }}" ]; then
-            echo "Error: Version in package.json has not been updated"
-            echo "Main branch version: ${{ steps.main_version.outputs.main_version }}"
-            echo "PR version: ${{ steps.pr_version.outputs.pr_version }}"
-            exit 1
-          else
-            echo "Version has been updated successfully"
-            echo "Main branch version: ${{ steps.main_version.outputs.main_version }}"
-            echo "PR version: ${{ steps.pr_version.outputs.pr_version }}"
-          fi
+      - name: Create Status Check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prVersion = '${{ steps.pr_version.outputs.pr_version }}';
+            const mainVersion = '${{ steps.main_version.outputs.main_version }}';
+            const isVersionUpdated = prVersion !== mainVersion;
+            
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: isVersionUpdated ? 'success' : 'failure',
+              description: isVersionUpdated 
+                ? `Version updated from ${mainVersion} to ${prVersion}` 
+                : 'Version must be updated in package.json',
+              context: 'Version Check'
+            });
+            
+            if (!isVersionUpdated) {
+              core.setFailed('Version in package.json has not been updated');
+            }
