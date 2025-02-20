@@ -1,0 +1,45 @@
+name: Version Check
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'package.json'
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+
+      - name: Get PR version
+        id: pr_version
+        run: |
+          PR_VERSION=$(jq -r .version package.json)
+          echo "pr_version=$PR_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Get main version
+        id: main_version
+        run: |
+          MAIN_VERSION=$(jq -r .version package.json)
+          echo "main_version=$MAIN_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Compare versions
+        run: |
+          if [ "${{ steps.pr_version.outputs.pr_version }}" == "${{ steps.main_version.outputs.main_version }}" ]; then
+            echo "Error: Version in package.json has not been updated"
+            echo "Main branch version: ${{ steps.main_version.outputs.main_version }}"
+            echo "PR version: ${{ steps.pr_version.outputs.pr_version }}"
+            exit 1
+          else
+            echo "Version has been updated successfully"
+            echo "Main branch version: ${{ steps.main_version.outputs.main_version }}"
+            echo "PR version: ${{ steps.pr_version.outputs.pr_version }}"
+          fi
