@@ -3,8 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 import { PiCaretLeft, PiCaretRight } from 'react-icons/pi'
 
 import { useFilterContext } from '@/context/filter'
-import { ProjectSubCategoryLabel, ProjectSubCategoryList } from '@/shared/constants/platform/projectCategory.ts'
-import { ProjectSubCategory } from '@/types/index.ts'
+import {
+  ProjectSubCategory,
+  ProjectSubCategoryLabel,
+  ProjectSubCategoryList,
+} from '@/shared/constants/platform/projectCategory.ts'
 
 export const SubCategoriesBar = () => {
   const { updateFilter } = useFilterContext()

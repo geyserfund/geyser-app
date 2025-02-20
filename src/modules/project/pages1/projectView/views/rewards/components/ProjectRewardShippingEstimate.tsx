@@ -18,7 +18,7 @@ export const ProjectRewardShippingEstimate = ({ reward }: Props) => {
         const dateOfDelivery = DateTime.fromMillis(reward.estimatedAvailabilityDate).toFormat('LLL, yyyy')
 
         return {
-          text: `${t('Receive on')} ${dateOfDelivery}`,
+          text: `${t('Available on')} ${dateOfDelivery}`,
           colorScheme: 'orange',
         }
       }

@@ -1,4 +1,4 @@
-import { Button, Divider, HStack, VStack } from '@chakra-ui/react'
+import { Button, Divider, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect } from 'react'
 import Confetti from 'react-confetti'
@@ -67,10 +67,6 @@ export const FundingSuccess = () => {
               <H2 size={{ base: 'xl', lg: '2xl' }} bold>
                 {t('Next Actions')}
               </H2>
-              <HStack>
-                <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Reference code')}: `}</Body>
-                <Body size={{ base: 'sm', lg: 'md' }}>{`${fundingTx.uuid} `}</Body>
-              </HStack>
               <ConfirmationMessages />
               <SendEmailToCreator />
             </VStack>

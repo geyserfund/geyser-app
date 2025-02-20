@@ -1,4 +1,4 @@
-import { VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { SkeletonText, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
@@ -58,11 +58,12 @@ export const BadgesBody = () => {
 export const BadgesBodySkeleton = () => {
   return (
     <>
-      <Wrap spacingY="40px" w="full" paddingX={0} justify="center">
+      <Wrap spacingX="50px" spacingY="40px" w="full" paddingX={3} justify="center">
         {[1, 2, 3].map((value) => {
           return (
             <WrapItem key={value} display="flex" flexDirection="column" alignItems="center" paddingTop="20px">
-              <SkeletonLayout height="140px" width="109px" />
+              <SkeletonLayout height="70px" width="70px" transform="rotate(-45deg)" />
+              <SkeletonText borderRadius="8px" pt="30px" width="full" noOfLines={2} />
             </WrapItem>
           )
         })}

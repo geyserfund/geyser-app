@@ -186,7 +186,7 @@ export type GuardianAsset = {
   digitalItems: CharacterAssetItem[]
   available?: number
   physicalItems?: CharacterAssetItem[]
-  powers?: string[]
+  grants?: string[]
   discounts?: string[]
   experiences?: string[]
   rewardUUIDs: RewardUUIDs
@@ -204,22 +204,18 @@ export const CharacterAssets: {
     digitalItems: [
       {
         name: 'Warrior Nostr Card',
-        description: ['This Warrior card is a special digital item that is interoperable with Nostr. It’s unlimited.'],
+        description: [
+          'This Warrior badge will display next to your Geyser profile forever. It signals your support of Geyser and Bitcoin creators.',
+        ],
         url: WarriorNostrCardUrl,
       },
       {
         name: 'Warrior Profile Gem',
-        description: [
-          'This Warrior badge will display next to your Geyser profile forever. It signals your support of Geyser and Bitcoin creators.',
-        ],
+        description: ['This Warrior card is a special digital item that is interoperable with Nostr. It’s unlimited.'],
         url: WarriorJewelUrl,
       },
     ],
-    powers: [
-      '21% of purchase donated to Geyser Grants',
-      "Ability to vote on the Project category, that receives the Guardian's Grant funds.",
-      'Access to exclusive Discord and Telegram Communities',
-    ],
+    grants: ['21% of purchase donated to Geyser Grants'],
     rewardUUIDs: guardianRewardUUIDs[GuardianType.Warrior],
   },
   [GuardianType.Knight]: {
@@ -269,11 +265,7 @@ export const CharacterAssets: {
       },
     ],
     discounts: ['25% OPA for the year', '25% Alby Hub for the year'],
-    powers: [
-      '21% of purchase donated to Geyser Grants',
-      "Ability to vote on the Project category, that receives the Guardian's Grant funds.",
-      'Access to exclusive Discord and Telegram Communities',
-    ],
+    grants: ['21% of purchase donated to Geyser Grants'],
     rewardUUIDs: guardianRewardUUIDs[GuardianType.Knight],
   },
   [GuardianType.King]: {
@@ -341,11 +333,7 @@ export const CharacterAssets: {
         url: GuardiansStickersUrl,
       },
     ],
-    powers: [
-      '21% of purchase donated to Geyser Grants',
-      "Ability to vote on the Project category, that receives the Guardian's Grant funds.",
-      'Access to exclusive Discord and Telegram Communities',
-    ],
+    grants: ['21% of purchase donated to Geyser Grants'],
     discounts: ['50% OPA for the year', '25% Alby Hub for the year'],
     rewardUUIDs: guardianRewardUUIDs[GuardianType.King],
   },
@@ -430,11 +418,7 @@ export const CharacterAssets: {
       '10% off BTC Prague conference',
     ],
     experiences: ['Call with one Geyser creator of your choice'],
-    powers: [
-      '21% of purchase donated to Geyser Grants',
-      "Ability to vote on the Project category, that receives the Guardian's Grant funds.",
-      'Access to exclusive Discord and Telegram Communities',
-    ],
+    grants: ['21% of purchase donated to Geyser Grants'],
     rewardUUIDs: guardianRewardUUIDs[GuardianType.Legend],
   },
 }

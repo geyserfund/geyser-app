@@ -41,13 +41,3 @@ export const fetchHeroSponsorshipBannerData = async () => {
     },
   }).then((response) => response.json())
 }
-
-export const fetchFeaturedWalletsData = async () => {
-  return fetch(`${AIRTABLE_API}/Featured%20Wallets?view=Grid%20view`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
-      'Content-Type': 'application/json',
-    },
-  }).then((response) => response.json())
-}

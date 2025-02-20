@@ -3,7 +3,6 @@ import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
 import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI'
-import { SelectProjectCategory } from '@/modules/project/forms/ProjectCategory.tsx'
 import { ProjectLinks } from '@/modules/project/forms/ProjectLinks'
 import { ProjectRegion } from '@/modules/project/forms/ProjectRegion'
 import { ProjectTagsCreateEdit } from '@/modules/project/forms/ProjectTagsCreateEdit'
@@ -30,31 +29,13 @@ export const ProjectDashboardDetails = () => {
   })
 
   const onSubmit = async () => {
-    if (!project.category) {
-      toast.error({
-        title: 'Please select a category',
-        description: 'Project category is required to proceed',
-      })
-      setProjectFormError((prev) => ({ ...prev, category: 'Project category is required' }))
-      return
-    }
-
-    if (!project.subCategory) {
-      toast.error({
-        title: 'Please select a sub-category',
-        description: 'Project sub-category is required to proceed',
-      })
-      setProjectFormError((prev) => ({ ...prev, subCategory: 'Project sub-category is required' }))
-      return
-    }
-
     if (project.location) {
-      if (!project.location.country || !project.location.country.code) {
+      if (project.location.region !== 'Online' && (!project.location.country || !project.location.country.code)) {
         toast.error({
-          title: 'Please select a country',
-          description: 'Project country is required to proceed',
+          title: 'Please select a region',
+          description: 'Project region is required to proceed',
         })
-        setProjectFormError((prev) => ({ ...prev, location: 'Project country is required' }))
+        setProjectFormError((prev) => ({ ...prev, location: 'Project region is required' }))
         return
       }
 
@@ -115,12 +96,6 @@ export const ProjectDashboardDetails = () => {
         width="full"
       >
         <VStack w="100%" spacing={6} flexGrow={1} px={{ base: 0, lg: 6 }}>
-          <SelectProjectCategory
-            category={project?.category}
-            subCategory={project?.subCategory}
-            updateProject={updateProject}
-          />
-
           <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
 
           <ProjectRegion location={project?.location} updateProject={updateProject} />

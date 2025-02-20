@@ -60,13 +60,7 @@ export const GuardiansMainPage = () => {
           </VStack>
 
           <VStack w="full" spacing={0}>
-            <Body
-              size={{ base: '16px', md: '18px', lg: '20px' }}
-              light
-              fontWeight={700}
-              textTransform={'uppercase'}
-              color="error.9"
-            >
+            <Body size={{ base: '12px', md: '14px', lg: '16px' }} light fontWeight={600} textTransform={'uppercase'}>
               <Trans
                 i18nKey="The first {{count}} guardians get {{discount}} off. {{left}} left."
                 values={{ count: 121, discount: '10%', left: guardianDiscountItems }}

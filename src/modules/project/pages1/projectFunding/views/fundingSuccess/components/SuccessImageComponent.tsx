@@ -100,7 +100,13 @@ export const SuccessImageComponent = () => {
           {t('to get your custom')}{' '}
           <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
             <span style={{ position: 'relative', display: 'inline-block' }}>
-              <Body as="span" color={lightModeColors.neutral1[12]} display="inline">
+              <Body
+                as="span"
+                color={lightModeColors.neutral1[12]}
+                textDecoration="underline dotted"
+                display="inline"
+                bold
+              >
                 {t('Hero link')}
               </Body>
             </span>
@@ -183,10 +189,9 @@ export const SuccessImageComponent = () => {
           </Body>
           {renderSignInPromptBody()}
           <HStack
-            minHeight="40px"
+            h="40px"
             w="full"
-            px={2}
-            py={1}
+            p={2}
             bg="whiteAlpha.700"
             borderRadius={10}
             border="1px solid"
