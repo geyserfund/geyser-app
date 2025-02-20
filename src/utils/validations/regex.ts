@@ -11,6 +11,3 @@ export const validNumber = /^[0-9]*$/
 export const imageUrlRegex = /^https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp|svg)$/i
 export const youtubeUrlRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/i
 export const vimeoUrlRegex = /^(https?:\/\/)?(www\.)?(vimeo\.com)\/.+$/i
-
-export const noUrlRegex =
-  /^(?!.*(?:https?:\/\/|www\.|\.com|\.net|\.org|\.edu|\.gov|\.mil|\.uk|\.co|\.biz|\.info|\.name|\.io|\.app|\.ms)).*$/i

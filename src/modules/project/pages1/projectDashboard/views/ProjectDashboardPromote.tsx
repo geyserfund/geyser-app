@@ -56,7 +56,7 @@ export const ProjectDashboardPromote = () => {
               {t('Get Featured')}
             </Body>
             <Body size="md" medium light>
-              {t('$50 per week')}
+              {t('$50 per month')}
             </Body>
           </HStack>
           <Body size="sm">

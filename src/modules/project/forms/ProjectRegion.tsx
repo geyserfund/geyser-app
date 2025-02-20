@@ -11,10 +11,10 @@ import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Body } from '@/shared/components/typography'
 
 import { AppTheme } from '../../../context'
-import { QUERY_COUNTRIES } from '../../../graphqlBase/queries'
+import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphqlBase/queries'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { SkeletonLayout } from '../../../shared/components/layouts'
-import { Country, Location, Maybe, Project, ProjectCountriesGetResult } from '../../../types'
+import { Country, Location, Maybe, Project, ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../types'
 import { ProjectState } from '../state/projectAtom'
 import { projectFormErrorAtom } from '../state/projectFormAtom'
 
@@ -64,15 +64,24 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
     projectCountriesGet: ProjectCountriesGetResult[]
   }>(QUERY_COUNTRIES)
 
+  const { loading: regionsLoading, data: regions } = useQuery<{
+    projectRegionsGet: ProjectRegionsGetResult[]
+  }>(QUERY_REGION)
+
   useEffect(() => {
-    if (!countries) {
+    if (!countries || !regions) {
       return
     }
 
     const countryOptions = countries.projectCountriesGet.map((val) => val.country)
 
-    setOptions([...countryOptions])
-  }, [countries])
+    const regionOptions = regions.projectRegionsGet.map((val) => ({
+      name: val.region,
+      code: val.region,
+    }))
+
+    setOptions([...countryOptions, ...regionOptions])
+  }, [countries, regions])
 
   const handleChange = (value: SingleValue<Country>) => {
     if (value?.code === value?.name) {
@@ -104,7 +113,7 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
     })
   }
 
-  const isLoading = countriesLoading
+  const isLoading = countriesLoading || regionsLoading
 
   const displayLocation = location?.country?.name
     ? location?.region
@@ -114,8 +123,10 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
 
   return (
     <FieldContainer
-      title={`${t('Country')}*`}
-      subtitle={<span>{t('Get found more easily by putting your project on the map. Select a country')}</span>}
+      title={`${t('Region')}*`}
+      subtitle={
+        <span>{t('Get found more easily by putting your project on the map. Select a country or region')}</span>
+      }
       {...rest}
     >
       <VStack className={classes.tagContainer} spacing="10px">
@@ -127,7 +138,7 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
             className={classes.select}
             onChange={handleChange}
             name="tags"
-            placeholder={t('Select country')}
+            placeholder={t('Select region')}
             value={[]}
             isLoading={isLoading}
             options={options}

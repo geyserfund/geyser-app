@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   ActivityFeedName,
@@ -10,7 +10,7 @@ import {
 } from '@/types'
 import { useNotification } from '@/utils'
 
-export const sortProjectsByActivity = (
+const sortProjectsByActivity = (
   projects: ProjectForProfilePageFragment[],
   activities: ProjectActivitiesCount[],
 ): ProjectForProfilePageFragment[] => {
@@ -34,7 +34,6 @@ export const useMyProjects = (userId: number) => {
   const { toast } = useNotification()
 
   const [isLoading, setLoading] = useState(true)
-  const [_activeProjects, _setActiveProjects] = useState<ProjectForProfilePageFragment[]>([])
   const [activeProjects, setActiveProjects] = useState<ProjectForProfilePageFragment[]>([])
   const [inDraftProjects, setInDraftProjects] = useState<ProjectForProfilePageFragment[]>([])
   const [inReviewProjects, setInReviewProjects] = useState<ProjectForProfilePageFragment[]>([])
@@ -75,21 +74,15 @@ export const useMyProjects = (userId: number) => {
     },
     skip: !userId,
     onCompleted(data) {
-      const filteredActiveProjects =
-        data.user.ownerOf
-          ?.filter((val) => val?.project?.status === ProjectStatus.Active)
-          .map((val) => val.project)
-          .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? []
-      _setActiveProjects(filteredActiveProjects)
-      setActiveProjects(filteredActiveProjects)
-
-      // sortProjectsByActivity(
-      //   data.user.ownerOf
-      //     ?.filter((val) => val?.project?.status === ProjectStatus.Active)
-      //     .map((val) => val.project)
-      //     .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? [],
-      //   myProjectsActivities,
-      // )
+      setActiveProjects(
+        sortProjectsByActivity(
+          data.user.ownerOf
+            ?.filter((val) => val?.project?.status === ProjectStatus.Active)
+            .map((val) => val.project)
+            .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? [],
+          myProjectsActivities,
+        ),
+      )
       setInDraftProjects(
         data.user.ownerOf
           ?.filter((val) => val?.project?.status === ProjectStatus.Draft)
@@ -113,12 +106,6 @@ export const useMyProjects = (userId: number) => {
       setLoading(false)
     },
   })
-
-  useEffect(() => {
-    if (_activeProjects.length > 0 && myProjectsActivities.length > 0) {
-      setActiveProjects(sortProjectsByActivity(_activeProjects, myProjectsActivities))
-    }
-  }, [_activeProjects, myProjectsActivities])
 
   return {
     activeProjects,
