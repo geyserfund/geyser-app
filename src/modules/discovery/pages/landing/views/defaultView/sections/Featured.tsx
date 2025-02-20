@@ -111,7 +111,7 @@ export const Featured = () => {
 
   return (
     <>
-      <ProjectRowLayout title={t('Featured Project')} rightContent={rightContent()} width="100%">
+      <ProjectRowLayout title={t('Featured')} rightContent={rightContent()} width="100%">
         {renderFeatured()}
       </ProjectRowLayout>
     </>
