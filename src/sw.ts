@@ -2,8 +2,8 @@
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { clientsClaim } from 'workbox-core'
 import { ExpirationPlugin } from 'workbox-expiration'
-import { cleanupOutdatedCaches, createHandlerBoundToURL, precacheAndRoute } from 'workbox-precaching'
-import { NavigationRoute, registerRoute } from 'workbox-routing'
+import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
+import { registerRoute } from 'workbox-routing'
 import { CacheFirst } from 'workbox-strategies'
 
 declare let self: ServiceWorkerGlobalScope
@@ -14,12 +14,12 @@ precacheAndRoute(self.__WB_MANIFEST)
 // clean old assets
 cleanupOutdatedCaches()
 
-let allowlist: RegExp[] | undefined
+// let allowlist: RegExp[] | undefined
 // in dev mode, we disable precaching to avoid caching issues
-if (import.meta.env.DEV) allowlist = [/^\/$/]
+// if (import.meta.env.DEV) allowlist = [/^\/$/]
 
 // to allow work offline
-registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html'), { allowlist }))
+// registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html'), { allowlist }))
 
 self.skipWaiting()
 clientsClaim()
@@ -44,10 +44,24 @@ registerRoute(
 self.addEventListener('fetch', (event) => {
   if (event.request.mode === 'navigate') {
     event.respondWith(
-      fetch(event.request).catch(async () => {
-        const cachedResponse = await caches.match('index.html')
-        return cachedResponse || new Response('Not found', { status: 404 })
-      }),
+      fetch(event.request)
+        .then((response) => {
+          if (response.redirected) {
+            // Create a new response to avoid the redirect
+            return new Response(response.body, {
+              status: 200,
+              statusText: 'OK',
+              headers: response.headers,
+            })
+          }
+
+          return response
+        })
+        .catch(async () => {
+          const cache = await caches.open('navigation-cache')
+          const cachedResponse = await cache.match('index.html')
+          return cachedResponse || new Response('Not found', { status: 404 })
+        }),
     )
   }
 })
