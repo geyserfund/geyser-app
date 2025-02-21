@@ -45,7 +45,7 @@ export const VotingInfoModal = ({
             <Feedback variant={FeedBackVariant.SUCCESS} noIcon>
               <Body size="sm">
                 <Trans
-                  i18nKey="This project is seeking funding through the {{grantName}}To support the project with your vote, please log in with a linked social media account (Lightning accounts are not eligible for voting). You're welcome to contribute even without logging in, but it won't count as a vote."
+                  i18nKey="This project is seeking funding through the {{grantName}}. To support the project with your vote, please log in with a linked social media account (Lightning accounts are not eligible for voting). You're welcome to contribute even without logging in, but it won't count as a vote."
                   values={{ grantName }}
                 >
                   {'This project is seeking funding through the '}

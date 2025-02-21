@@ -41,7 +41,7 @@ export const MiniProjectCard = ({ project, startAnimating, ...rest }: MiniProjec
           width="100%"
           backgroundColor="neutralAlpha.6"
           sx={{
-            animation: startAnimating ? 'progress 15s linear forwards' : 'none',
+            animation: startAnimating ? 'progress 10s linear forwards' : 'none',
             '@keyframes progress': {
               '0%': { transform: 'translateX(-100%)' },
               '100%': { transform: 'translateX(0%)' },
