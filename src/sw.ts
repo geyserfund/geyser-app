@@ -40,28 +40,3 @@ registerRoute(
     ],
   }),
 )
-// Handle redirects properly
-self.addEventListener('fetch', (event) => {
-  if (event.request.mode === 'navigate') {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          if (response.redirected) {
-            // Create a new response to avoid the redirect
-            return new Response(response.body, {
-              status: 200,
-              statusText: 'OK',
-              headers: response.headers,
-            })
-          }
-
-          return response
-        })
-        .catch(async () => {
-          const cache = await caches.open('navigation-cache')
-          const cachedResponse = await cache.match('index.html')
-          return cachedResponse || new Response('Not found', { status: 404 })
-        }),
-    )
-  }
-})
