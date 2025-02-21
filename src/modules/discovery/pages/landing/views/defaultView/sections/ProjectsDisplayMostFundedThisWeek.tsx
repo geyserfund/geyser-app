@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next'
 
 import { useFilterContext } from '@/context/filter'
+import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
+
 import {
   ProjectCategory,
-  ProjectCategoryLabel,
+  ProjectsMostFundedByCategoryRange,
   ProjectSubCategory,
-  ProjectSubCategoryLabel,
-} from '@/shared/constants/platform/projectCategory.ts'
-
-import { ProjectsMostFundedByCategoryRange, useProjectsMostFundedByCategoryQuery } from '../../../../../../../types'
+  useProjectsMostFundedByCategoryQuery,
+} from '../../../../../../../types'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
 
 interface ProjectDisplayProps {

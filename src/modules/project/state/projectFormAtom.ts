@@ -35,6 +35,8 @@ export const diffProjectAtom = atom((get) => {
     'thumbnailImage',
     'title',
     'links',
+    'category',
+    'subCategory',
   ])
 })
 

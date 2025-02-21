@@ -12,9 +12,10 @@ import { FeaturedDisplayCard } from '../components/FeaturedDisplayCard'
 import { FeaturedGrantCard } from '../components/FeaturedGrantCard'
 import { FeaturedCardSkeleton, FeaturedProjectCard } from '../components/FeaturedProjectCard'
 import { ProjectRowLayout } from '../components/ProjectRowLayout'
+import { FeaturedProjectsCarousel } from './FeaturedProjectsCarousel'
 
 export const GEYSER_PROMOTIONS_PROJECT_NAME = 'geyserpromotions'
-export const GEYSER_GET_FEATURED_REWARD_ID = '5332'
+export const GEYSER_GET_FEATURED_REWARD_ID = '5331'
 
 export type FeatureAirtableData = {
   Name: string
@@ -24,6 +25,15 @@ export type FeatureAirtableData = {
   imageUrl?: string
   link?: string
 }
+export type FeaturedAirtableRecord = {
+  id: string
+  createdTime: string
+  fields: FeatureAirtableData
+}
+
+export type FeaturedAirtableResponse = {
+  records: FeaturedAirtableRecord[]
+}
 
 export const Featured = () => {
   const toast = useNotification()
@@ -32,11 +42,20 @@ export const Featured = () => {
   const [loading, setLoading] = useState(true)
 
   const [data, setData] = useState<FeatureAirtableData>()
+  const [featuredProjects, setFeaturedProjects] = useState<FeatureAirtableData[]>([])
 
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const response = await fetchFeaturedProject()
+        const response: FeaturedAirtableResponse = await fetchFeaturedProject()
+
+        console.log('checking response', response)
+
+        const projects = response.records.map((record) => record.fields).filter((project) => project.Type === 'project')
+
+        if (projects.length > 0) {
+          setFeaturedProjects(projects)
+        }
 
         const data = response?.records?.[0]?.fields
         if (data) {
@@ -55,6 +74,10 @@ export const Featured = () => {
   const renderFeatured = () => {
     if (loading) {
       return <FeaturedCardSkeleton />
+    }
+
+    if (featuredProjects.length > 1) {
+      return <FeaturedProjectsCarousel projects={featuredProjects} />
     }
 
     if (data && data?.Type === 'display') {
@@ -88,7 +111,7 @@ export const Featured = () => {
 
   return (
     <>
-      <ProjectRowLayout title={t('Featured Project')} rightContent={rightContent()} width="100%">
+      <ProjectRowLayout title={t('Featured')} rightContent={rightContent()} width="100%">
         {renderFeatured()}
       </ProjectRowLayout>
     </>

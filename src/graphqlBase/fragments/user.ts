@@ -8,6 +8,7 @@ export const FRAGMENT_EXTERNAL_ACCOUNT = gql`
     accountType
     externalUsername
     externalId
+    externalLink
     public
   }
 `

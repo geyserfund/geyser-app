@@ -18,6 +18,7 @@ interface VerifyOneTimePasswordProps {
   handleSendOtpByEmail(email: string): void
   handleVerify?: (otpCode: number, otpData: OtpResponseFragment, email?: string) => void
   inputEmail: string
+  onClose?: () => void
 }
 
 export const VerifyOneTimePassword = ({
@@ -26,6 +27,7 @@ export const VerifyOneTimePassword = ({
   handleSendOtpByEmail,
   handleVerify,
   inputEmail,
+  onClose,
 }: VerifyOneTimePasswordProps) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -63,6 +65,7 @@ export const VerifyOneTimePassword = ({
     onCompleted() {
       queryCurrentUser()
       toast({ status: 'success', title: 'Email verification successfull!' })
+      onClose?.()
     },
   })
 
