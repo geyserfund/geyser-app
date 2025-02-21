@@ -14,6 +14,9 @@ const pwaOptions: Partial<VitePWAOptions> = {
   registerType: 'autoUpdate',
   injectRegister: 'auto',
   includeAssets: ['logo-brand.svg', 'sitemap.xml'],
+  injectManifest: {
+    maximumFileSizeToCacheInBytes: 5242880,
+  },
   manifest: {
     start_url: '.',
     display: 'standalone',
@@ -71,38 +74,6 @@ const pwaOptions: Partial<VitePWAOptions> = {
   },
   workbox: {
     globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
-    maximumFileSizeToCacheInBytes: 5242880,
-    cleanupOutdatedCaches: true,
-    clientsClaim: true,
-    skipWaiting: true,
-    navigationPreload: true,
-    navigateFallback: 'index.html',
-    // Exclude API routes and other non-SPA routes from navigation fallback
-    navigateFallbackDenylist: [/^\/api\//],
-    runtimeCaching: [
-      {
-        urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-        handler: 'CacheFirst',
-        options: {
-          cacheName: 'google-fonts-cache',
-          expiration: {
-            maxEntries: 10,
-            maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-          },
-          cacheableResponse: {
-            statuses: [0, 200],
-          },
-        },
-      },
-      {
-        urlPattern: ({ request }) => request.mode === 'navigate',
-        handler: 'NetworkOnly', // Changed from NetworkFirst to NetworkOnly for Safari
-        options: {
-          cacheName: 'navigation-cache',
-          networkTimeoutSeconds: 5,
-        },
-      },
-    ],
   },
 }
 
