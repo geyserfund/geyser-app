@@ -1,4 +1,4 @@
-import { Button, HStack, IconButton, StackProps, useDisclosure, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { Button, HStack, IconButton, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
 import { chakraComponents, MenuListProps, MultiValue } from 'chakra-react-select'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -10,8 +10,7 @@ import { Body } from '@/shared/components/typography'
 
 import { AppTheme } from '../../../context'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
-import { Modal, SkeletonLayout } from '../../../shared/components/layouts'
-import { getListOfTags } from '../../../shared/constants'
+import { SkeletonLayout } from '../../../shared/components/layouts'
 import { Tag, TagsGetResult, useProjectTagCreateMutation, useTagsGetQuery } from '../../../types'
 import { useNotification } from '../../../utils'
 
@@ -54,7 +53,6 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
   const [inputValue, setInputValue] = useState('')
 
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { isOpen: infoIsOpen, onOpen: infoOnOpen, onClose: infoOnClose } = useDisclosure()
 
   const { loading } = useTagsGetQuery({
     onCompleted(data) {
@@ -156,18 +154,11 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
   const SubTitle = (
     <span>
       <Trans
-        i18nKey={
-          'Get discovered more easily by selecting up to {{MAX_TAGS_ALLOWED}} project tags. Make sure to select some of the tags that appear in the trending view.'
-        }
+        i18nKey={'Get discovered more easily by selecting up to {{MAX_TAGS_ALLOWED}} project tags.'}
         values={{ MAX_TAGS_ALLOWED }}
       >
-        {
-          'Get discovered more easily by selecting up to {{MAX_TAGS_ALLOWED}} project tags. Make sure to select some of the tags that appear in the trending view.'
-        }
+        {'Get discovered more easily by selecting up to {{MAX_TAGS_ALLOWED}} project tags.'}
       </Trans>{' '}
-      <Button variant="ghost" size="md" onClick={infoOnOpen}>
-        {t('See trending tags')}
-      </Button>
     </span>
   )
 
@@ -221,31 +212,6 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
           </HStack>
         </VStack>
       </FieldContainer>
-      <Modal
-        {...{
-          isOpen: infoIsOpen,
-          onOpen: infoOnOpen,
-          onClose: infoOnClose,
-        }}
-        title={t('Trending page tags')}
-      >
-        <VStack w="full">
-          <Body light medium>
-            {t('The trending page showcases the following list of general tags')}
-          </Body>
-          <Wrap>
-            {getListOfTags().map((tag) => {
-              return (
-                <WrapItem key={tag.label} backgroundColor="neutral1.2" borderRadius={'8px'} px="8px" py="3px">
-                  <Body medium dark>
-                    {tag.label}
-                  </Body>
-                </WrapItem>
-              )
-            })}
-          </Wrap>
-        </VStack>
-      </Modal>
     </>
   )
 }

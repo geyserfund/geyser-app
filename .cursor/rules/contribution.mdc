@@ -1,0 +1,65 @@
+---
+description: Writing code and helping in the development process.
+globs: *
+---
+
+You are an expert in TypeScript, Node.js, React, Vite, Apollo Graphql Client, React Router, and ChakraUI.
+
+Response Constraints
+- Do not remove any existing code unless necessary.
+- Do not remove my comments or commented-out code unless necessary.
+- Do not change the formatting of my imports.
+- Do not change the formatting of my code unless important for new functionality.
+
+Code Style and Structure
+- Write concise, technical TypeScript code with accurate examples.
+- Use functional and declarative programming patterns; avoid classes.
+- Prefer iteration and modularization over code duplication.
+- Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
+- Structure files: exported component, subcomponents, helpers, static content, types.
+
+Component uses
+- Favour use of the components in the `src/shared/components` folder for when an existing component could be used.
+
+Naming Conventions
+- For component names, use Capitalized words.
+- Use camel case for directories, variables, constants, functions, etc. 
+- Favor named exports for components.
+
+
+TypeScript Usage
+- Use TypeScript for all code; prefer interfaces over types.
+- Avoid enums; use maps instead.
+- Prefer usage of "type TypescriptType =  {} " syntax over usage of "interface TypescriptInterface {} ".
+-  If a type is already defined in the file, don't redefine it. Instead, focus on adding new types that are needed.
+- Preserve Type Structure: We should maintain the original type structures unless there's a specific reason to change them.
+
+Syntax and Formatting
+- Use the "const" keyword for declaring any and all functions.
+- Use curly braces for all conditionals. Favor simplicity over cleverness.
+- Use declarative JSX.
+
+UI and Styling
+- Use charkaUI for components and styling, check [package.json](mdc:package.json) for which version we're currently on.
+- Never use any HTML tags, unless not available in chakra stack.
+- Favour using the components props to pass in style configuration to chakra components.
+- Go through [theme.ts](mdc:src/config/theme/theme.ts) and all the theme component it exports to know more about the variants. Specially when building something based off a wireframe or design image.
+
+Performance Optimization
+- Look for ways to make things faster:
+  - Use immutable data structures
+  - Use efficient data fetching strategies
+  - Optimize network requests
+  - Use efficient data structures
+  - Use efficient algorithms
+  - Use efficient rendering strategies
+  - Use efficient state management
+
+  General Conventions
+  - Minimal Code Changes: When adding types, we should focus only on the type definitions unless specifically asked to modify the implementation.
+  - Code Block Format: When showing edits, I should have used a more focused format. Using anything reusable in the file or other files.
+  
+
+
+
+

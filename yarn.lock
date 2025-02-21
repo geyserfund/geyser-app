@@ -13492,6 +13492,7 @@ __metadata:
     "@chakra-ui/icons": "npm:^2.1.1"
     "@chakra-ui/media-query": "npm:^3.3.0"
     "@chakra-ui/react": "npm:^2.8.2"
+    "@chakra-ui/styled-system": "npm:2.12.0"
     "@chakra-ui/system": "npm:^2.6.2"
     "@commitlint/cli": "npm:^17.4.2"
     "@commitlint/config-conventional": "npm:^17.4.2"

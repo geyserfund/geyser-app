@@ -67,6 +67,8 @@ export const FRAGMENT_PROJECT_PAGE_DETAILS = gql`
   fragment ProjectPageDetails on Project {
     id
     name
+    category
+    subCategory
     links
     location {
       ...ProjectLocation
@@ -104,6 +106,8 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     }
     status
     links
+    category
+    subCategory
     rewardCurrency
   }
 `

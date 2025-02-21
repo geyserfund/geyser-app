@@ -92,6 +92,13 @@ export const getExternalAccountsButtons = ({
           icon: <PiFacebookLogo />,
           username: account.externalUsername,
           account,
+          ...(account.externalLink && {
+            props: {
+              as: Link,
+              isExternal: true,
+              href: account.externalLink,
+            },
+          }),
         })
       }
 
