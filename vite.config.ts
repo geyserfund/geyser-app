@@ -8,12 +8,14 @@ import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const pwaOptions: Partial<VitePWAOptions> = {
-  base: '/',
-  injectRegister: 'inline',
+  strategies: 'injectManifest',
+  srcDir: 'src',
+  filename: 'sw.ts',
+  registerType: 'autoUpdate',
+  injectRegister: 'auto',
   includeAssets: ['logo-brand.svg', 'sitemap.xml'],
-  strategies: 'generateSW',
   injectManifest: {
-    injectionPoint: undefined,
+    maximumFileSizeToCacheInBytes: 5242880,
   },
   manifest: {
     start_url: '.',
@@ -71,38 +73,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
     ],
   },
   workbox: {
-    globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-    maximumFileSizeToCacheInBytes: 5242880,
-    skipWaiting: true,
-    navigateFallback: 'index.html',
-    navigationPreload: true,
-    runtimeCaching: [
-      {
-        urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-        handler: 'CacheFirst',
-        options: {
-          cacheName: 'google-fonts-cache',
-          expiration: {
-            maxEntries: 10,
-            maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-          },
-          cacheableResponse: {
-            statuses: [0, 200],
-          },
-        },
-      },
-      {
-        urlPattern: ({ request }) => request.mode === 'navigate',
-        handler: 'NetworkFirst',
-        options: {
-          cacheName: 'navigation-cache',
-          networkTimeoutSeconds: 5,
-          cacheableResponse: {
-            statuses: [200],
-          },
-        },
-      },
-    ],
+    globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
   },
 }
 

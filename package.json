@@ -1,7 +1,7 @@
 {
   "name": "geyser-app",
   "private": true,
-  "version": "0.18.13",
+  "version": "0.18.27",
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -166,11 +166,14 @@
     "typescript": "^5.7.2",
     "vite": "^5.2.10",
     "vite-plugin-package-version": "^1.0.2",
-    "vite-plugin-pwa": "^0.20.0",
+    "vite-plugin-pwa": "^0.21.1",
     "vite-plugin-top-level-await": "^1.4.4",
     "vite-plugin-wasm": "^3.4.1",
     "vite-tsconfig-paths": "^5.1.4",
-    "workbox-core": "^7.1.0",
+    "workbox-core": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-routing": "^7.3.0",
+    "workbox-strategies": "^7.3.0",
     "workbox-window": "^7.1.0"
   },
   "resolutions": {
