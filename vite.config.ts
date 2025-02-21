@@ -9,7 +9,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 const pwaOptions: Partial<VitePWAOptions> = {
   registerType: 'autoUpdate',
-  injectRegister: false,
+  injectRegister: 'auto',
   includeAssets: ['logo-brand.svg', 'sitemap.xml'],
   manifest: {
     start_url: '.',
