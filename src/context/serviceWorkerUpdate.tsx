@@ -29,7 +29,6 @@ export const ServiceWorkerProvider = ({ children }: { children: React.ReactNode 
   const [canInstall, setCanInstall] = useState(false)
 
   const { updateServiceWorker } = useRegisterSW({
-    immediate: true,
     onRegisteredSW(swUrl, r) {
       if (r) {
         const refetch = async () => {
