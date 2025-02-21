@@ -13619,7 +13619,10 @@ __metadata:
     vite-tsconfig-paths: "npm:^5.1.4"
     webln: "npm:^0.3.2"
     websocket-polyfill: "npm:^0.0.3"
-    workbox-core: "npm:^7.1.0"
+    workbox-core: "npm:^7.3.0"
+    workbox-precaching: "npm:^7.3.0"
+    workbox-routing: "npm:^7.3.0"
+    workbox-strategies: "npm:^7.3.0"
     workbox-window: "npm:^7.1.0"
     yup: "npm:^1.1.1"
   languageName: unknown
@@ -22404,7 +22407,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workbox-core@npm:7.3.0, workbox-core@npm:^7.1.0":
+"workbox-core@npm:7.3.0, workbox-core@npm:^7.3.0":
   version: 7.3.0
   resolution: "workbox-core@npm:7.3.0"
   checksum: 10c0/b7dce640cd9665ed207f65f5b08a50e2e24e5599790c6ea4fec987539b9d2ef81765d8c5f94acfee3a8a45d5ade8e1a4ebd0b8847a1471302ef75a5b93c7bd04
@@ -22442,7 +22445,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workbox-precaching@npm:7.3.0":
+"workbox-precaching@npm:7.3.0, workbox-precaching@npm:^7.3.0":
   version: 7.3.0
   resolution: "workbox-precaching@npm:7.3.0"
   dependencies:
@@ -22476,7 +22479,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workbox-routing@npm:7.3.0":
+"workbox-routing@npm:7.3.0, workbox-routing@npm:^7.3.0":
   version: 7.3.0
   resolution: "workbox-routing@npm:7.3.0"
   dependencies:
@@ -22485,7 +22488,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"workbox-strategies@npm:7.3.0":
+"workbox-strategies@npm:7.3.0, workbox-strategies@npm:^7.3.0":
   version: 7.3.0
   resolution: "workbox-strategies@npm:7.3.0"
   dependencies:

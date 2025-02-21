@@ -8,6 +8,9 @@ import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const pwaOptions: Partial<VitePWAOptions> = {
+  strategies: 'injectManifest',
+  srcDir: 'src',
+  filename: 'sw.ts',
   registerType: 'autoUpdate',
   injectRegister: 'auto',
   includeAssets: ['logo-brand.svg', 'sitemap.xml'],
@@ -71,6 +74,11 @@ const pwaOptions: Partial<VitePWAOptions> = {
     maximumFileSizeToCacheInBytes: 5242880,
     cleanupOutdatedCaches: true,
     clientsClaim: true,
+    skipWaiting: true,
+    navigationPreload: true,
+    navigateFallback: 'index.html',
+    // Exclude API routes and other non-SPA routes from navigation fallback
+    navigateFallbackDenylist: [/^\/api\//],
     runtimeCaching: [
       {
         urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -84,6 +92,14 @@ const pwaOptions: Partial<VitePWAOptions> = {
           cacheableResponse: {
             statuses: [0, 200],
           },
+        },
+      },
+      {
+        urlPattern: ({ request }) => request.mode === 'navigate',
+        handler: 'NetworkOnly', // Changed from NetworkFirst to NetworkOnly for Safari
+        options: {
+          cacheName: 'navigation-cache',
+          networkTimeoutSeconds: 5,
         },
       },
     ],
