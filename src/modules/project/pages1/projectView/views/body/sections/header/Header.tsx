@@ -213,10 +213,12 @@ export const Header = () => {
             alignItems="center"
             spacing={0}
           >
-            <Body size="lg" bold>
-              {commaFormatted(project.balance)}
-              <Body as="span">{' sats'}</Body>
-            </Body>
+            {project.balance > 0 && (
+              <Body size="lg" bold>
+                {commaFormatted(project.balance)}
+                <Body as="span">{' sats'}</Body>
+              </Body>
+            )}
             <Body size="sm">
               {`${formatAmount(project.balanceUsdCent, 'USDCENT')}`}{' '}
               <Body as="span" light>

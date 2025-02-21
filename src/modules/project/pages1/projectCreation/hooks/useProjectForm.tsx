@@ -3,6 +3,8 @@ import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
+import { noUrlRegex } from '@/utils/index.ts'
+
 import { useAuthContext } from '../../../../../context'
 import { ProjectValidations } from '../../../../../shared/constants'
 import { ProjectPageBodyFragment } from '../../../../../types'
@@ -26,7 +28,8 @@ const schema = yup
       .max(
         ProjectValidations.shortDescription.maxLength,
         `Project objective should be shorter than ${ProjectValidations.shortDescription.maxLength} characters.`,
-      ),
+      )
+      .matches(noUrlRegex, 'Project short description cannot contain a URL'),
     name: yup
       .string()
       .required('Project name is a required field.')
@@ -37,14 +40,16 @@ const schema = yup
       .max(
         ProjectValidations.name.maxLength,
         `Project name should be between ${ProjectValidations.name.minLength} and ${ProjectValidations.name.maxLength} characters.`,
-      ),
+      )
+      .matches(noUrlRegex, 'Project name cannot contain a URL'),
     title: yup
       .string()
       .required('Title is a required field.')
       .max(
         ProjectValidations.title.maxLength,
         `Title should be shorter than ${ProjectValidations.title.maxLength} characters.`,
-      ),
+      )
+      .matches(noUrlRegex, 'Project title cannot contain a URL'),
     email: yup.string().email('Please enter a valid email address').required('Email address is a required field.'),
   })
   .required()
