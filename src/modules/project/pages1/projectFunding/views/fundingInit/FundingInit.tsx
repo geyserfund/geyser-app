@@ -12,6 +12,7 @@ import { FundingInitRewards } from './sections/FundingInitRewards'
 import { FundingInitBottomContent, FundingInitSideContent } from './sections/FundingInitSideContent'
 import { FundingSubscription } from './sections/FundingSubscription'
 
+/** FundingInit is the first page of funding flow, consisting of donation input and rewards selection or subscription selection */
 export const FundingInit = () => {
   const { setResource } = useFundingFormAtom()
   const { loading } = useProjectAtom()

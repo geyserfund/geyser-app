@@ -30,9 +30,9 @@ Naming Conventions
 TypeScript Usage
 - Use TypeScript for all code; prefer interfaces over types.
 - Avoid enums; use maps instead.
-- Prefer usage of "type TypescriptType =  {} " syntax over usage of "interface TypescriptInterface {} ".
 -  If a type is already defined in the file, don't redefine it. Instead, focus on adding new types that are needed.
 - Preserve Type Structure: We should maintain the original type structures unless there's a specific reason to change them.
+- Prefer "type" declarations over "interface" declaration.
 
 Syntax and Formatting
 - Use the "const" keyword for declaring any and all functions.
