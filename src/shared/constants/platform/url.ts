@@ -405,6 +405,8 @@ export const GuardianPartnerPlanBForumUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Plan-B-Forum.png'
 export const GuardianPartnerInitialCapitalUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/initial-capital-logo.png'
+export const GuardianPartnerRhinoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Rhino.png'
 // SEO
 
 export const GuardiansSeoImageUrl =
