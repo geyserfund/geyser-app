@@ -1,13 +1,25 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 
+import { useFundingTxAtom } from '@/modules/project/funding/state/fundingTxAtom.ts'
 import { Body, H1 } from '@/shared/components/typography'
+import { useSpeedWalletParams } from '@/shared/hooks/useSpeedWalletParams.tsx'
 
 import { ReachOutForHelpButton } from './components/ReachOutForHelpButton'
 import { PaymentMethodSelection } from './sections/PaymentMethodSelection'
 
 export const Payment = () => {
+  const { isSpeedWalletApp, sendSpeedWalletData } = useSpeedWalletParams()
+  const { fundingTx } = useFundingTxAtom()
+
+  useEffect(() => {
+    if (isSpeedWalletApp && fundingTx.paymentRequest && fundingTx.amount) {
+      sendSpeedWalletData({ invoice: fundingTx.paymentRequest, amount: fundingTx.amount })
+    }
+  }, [isSpeedWalletApp, sendSpeedWalletData, fundingTx])
+
   return (
     <>
       <VStack flex={1} w="full" alignItems="start">
