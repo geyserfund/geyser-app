@@ -7,6 +7,7 @@ import {
   GuardianPartnerNoGoodUrl,
   GuardianPartnerOrangePillAppUrl,
   GuardianPartnerPlanBForumUrl,
+  GuardianPartnerRhinoUrl,
   GuardianPartnerSoloSatoshiUrl,
 } from '@/shared/constants/platform/url'
 
@@ -20,4 +21,5 @@ export const PartnerUrls = [
   { image: GuardianPartnerOrangePillAppUrl, link: 'https://www.orangepillapp.com/' },
   { image: GuardianPartnerPlanBForumUrl, link: 'https://planb.sv/' },
   { image: GuardianPartnerInitialCapitalUrl, link: 'https://www.initialcapital.com/' },
+  { image: GuardianPartnerRhinoUrl, link: 'https://rhinobitcoin.com/' },
 ]

@@ -177,7 +177,23 @@ export const GuardiansMainPage = () => {
               </HStack>
 
               <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
-                {PartnerUrls.slice(3, 9).map((partner, index) => (
+                {PartnerUrls.slice(3, 8).map((partner, index) => (
+                  <Link href={partner.link} isExternal key={partner.image}>
+                    <Image
+                      src={partner.image}
+                      alt="Partner"
+                      maxWidth="150px"
+                      width={'auto'}
+                      height={'32px'}
+                      objectFit={'contain'}
+                      key={partner.image}
+                    />
+                  </Link>
+                ))}
+              </HStack>
+
+              <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
+                {PartnerUrls.slice(8, 10).map((partner, index) => (
                   <Link href={partner.link} isExternal key={partner.image}>
                     <Image
                       src={partner.image}
