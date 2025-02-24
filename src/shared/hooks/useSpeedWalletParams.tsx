@@ -58,10 +58,11 @@ export const useSpeedWalletParams = () => {
         currency: 'SATS',
         target_currency: 'SATS',
         deposit_address: invoice,
+        note: 'Payment for geyser via Speed Wallet',
       },
     }
 
-    const url = data
+    const url = JSON.stringify(data)
 
     if (window.Android) {
       window.Android.postMessage(url)
