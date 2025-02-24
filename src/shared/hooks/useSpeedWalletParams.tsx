@@ -61,7 +61,7 @@ export const useSpeedWalletParams = () => {
       },
     }
 
-    const url = JSON.stringify(data)
+    const url = data
 
     if (window.Android) {
       window.Android.postMessage(url)
