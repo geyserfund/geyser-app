@@ -1,3 +1,45 @@
+## [0.18.30](https://github.com/geyserfund/geyser-app/compare/v0.18.6...v0.18.30) (2025-02-24)
+
+
+### Features
+
+* add payment with speedwallet option ([fb9955a](https://github.com/geyserfund/geyser-app/commit/fb9955a9613782b5f26e9417ef54a5abb528bb88))
+
+
+### Bug Fixes
+
+* add a version check workflow that fails if version is same ([885a9f3](https://github.com/geyserfund/geyser-app/commit/885a9f3eef4b6afa9715077b63b284ae7ff7e3bb))
+* applcation pending and grant name display ([ead9874](https://github.com/geyserfund/geyser-app/commit/ead98741f7006125c16ea4599245e874b72ed29b))
+* copy change to see version issue being fixed ([5e1b193](https://github.com/geyserfund/geyser-app/commit/5e1b1939ba7c95f97f46fcb857a24199cddf3c2c))
+* copy update to test deployment ([7ea26a6](https://github.com/geyserfund/geyser-app/commit/7ea26a60518b1507257f21bfe54c34f37929d6d7))
+* disabled navigation preload, and handle navigation with network only ([ee47492](https://github.com/geyserfund/geyser-app/commit/ee4749289e73a7b14747e15f151634365ca7c466))
+* final check ([7cbd1d4](https://github.com/geyserfund/geyser-app/commit/7cbd1d40f8d05ebb1c9fae186e06347ca499444f))
+* final test ([d58463b](https://github.com/geyserfund/geyser-app/commit/d58463b039840c35d08cf78c83f8081046a8b96f))
+* fix custom sw.ts ([e8ab6db](https://github.com/geyserfund/geyser-app/commit/e8ab6db9c4c489c0f2e8cae5e4e28f617c4ae772))
+* go back to configuration before wednesday ([16aca58](https://github.com/geyserfund/geyser-app/commit/16aca583f44426c96c47ab3e4f15d0c0eef6b46d))
+* issue with build ([9cfd1e7](https://github.com/geyserfund/geyser-app/commit/9cfd1e75dc211970a39f10f5f93238578538a0f1))
+* manually inject service worker ([5900c08](https://github.com/geyserfund/geyser-app/commit/5900c087004873fc1b5afdc53834678a6c6172e7))
+* minor copy change ([24e0525](https://github.com/geyserfund/geyser-app/commit/24e0525e3998af4cbd19defb7bb46cf31b71a0a7))
+* minor copy change to check post deployment bug ([4f20c67](https://github.com/geyserfund/geyser-app/commit/4f20c675745c435236b4a7c8c7fa7cffabe4dd90))
+* new pwa version and updated config ([cade6fd](https://github.com/geyserfund/geyser-app/commit/cade6fd46383f2fe3dc76d5f36006820f8e178bc))
+* safari in app fix ([9ba26f4](https://github.com/geyserfund/geyser-app/commit/9ba26f479fc7dbb59fae76241904af561fd27299))
+* service worker ([5eb879a](https://github.com/geyserfund/geyser-app/commit/5eb879a447fd88d2c655e249c355f11c62322abb))
+* service worker issue ([568cbd1](https://github.com/geyserfund/geyser-app/commit/568cbd10eb63c66c2ec71603e624d28e99701640))
+* service worker to remove service worker redirections ([389c444](https://github.com/geyserfund/geyser-app/commit/389c444f035bcf94adec11af6aedd7ad43950c18))
+* show all projects on featured carousel ([4c65d8f](https://github.com/geyserfund/geyser-app/commit/4c65d8f05b4329313f0bf9a1de88c486540896aa))
+* test package.json ([1a7a7cd](https://github.com/geyserfund/geyser-app/commit/1a7a7cd334324fc0525bdda18d37d279015bdfb4))
+* test version ([6c39c56](https://github.com/geyserfund/geyser-app/commit/6c39c569fa3eeb24a4cf02e2f84d68b1b50ed804))
+* testing ([76869c3](https://github.com/geyserfund/geyser-app/commit/76869c36b3b7eeaf558c66987b9413014f454ee1))
+* testing pwa ([839c7af](https://github.com/geyserfund/geyser-app/commit/839c7afe1480ac22e41af8b03f295f01f86efb9c))
+* update link for promote section ([9c043f0](https://github.com/geyserfund/geyser-app/commit/9c043f02f6b6e4678f3b97dcbb81f132780d5046))
+* update package version ([bcf2ed1](https://github.com/geyserfund/geyser-app/commit/bcf2ed1914aee0df96ab2510014291906a89acb1))
+* update package version ([6ff9ae4](https://github.com/geyserfund/geyser-app/commit/6ff9ae4563e8aa2c089814c1442ab2ef6efcdb4c))
+
+
+### Reverts
+
+* Revert "Revert "PRODUCTION PUSH: 2025-feb-19: Wallet service, Featured Project improvements and Bug fixes"" ([a73b626](https://github.com/geyserfund/geyser-app/commit/a73b626e901baa40dea648573d505249fa199e2f))
+
 ## [0.18.6](https://github.com/geyserfund/geyser-app/compare/v0.18.5...v0.18.6) (2025-02-19)
 
 
