@@ -1,6 +1,6 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import { useFundingTxAtom } from '@/modules/project/funding/state/fundingTxAtom.ts'
@@ -11,8 +11,10 @@ import { ReachOutForHelpButton } from './components/ReachOutForHelpButton'
 import { PaymentMethodSelection } from './sections/PaymentMethodSelection'
 
 export const Payment = () => {
-  const { isSpeedWalletApp, sendSpeedWalletData } = useSpeedWalletParams()
+  const { isSpeedWalletApp, sendSpeedWalletData, walletParams } = useSpeedWalletParams()
   const { fundingTx } = useFundingTxAtom()
+
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
     if (isSpeedWalletApp && fundingTx.paymentRequest && fundingTx.amount) {
@@ -22,6 +24,12 @@ export const Payment = () => {
       })
     }
   }, [isSpeedWalletApp, sendSpeedWalletData, fundingTx])
+
+  useEffect(() => {
+    if (walletParams) {
+      setUrl(JSON.stringify(walletParams))
+    }
+  }, [walletParams])
 
   return (
     <>
@@ -41,6 +49,9 @@ export const Payment = () => {
           {t(
             'Geyser is not a store. It’s a way to bring creative projects to life using Bitcoin. Your donation will support a creative project that has yet to be developed. There’s a risk that, despite a creator’s best efforts, your reward will not be fulfilled, and we urge you to consider this risk prior to backing it. Geyser is not responsible for project claims or reward fulfillment.',
           )}
+        </Body>
+        <Body light size="xs">
+          {url}
         </Body>
       </VStack>
     </>
