@@ -6,6 +6,7 @@ import { Outlet } from 'react-router-dom'
 import { useFundingTxAtom } from '@/modules/project/funding/state/fundingTxAtom.ts'
 import { Body, H1 } from '@/shared/components/typography'
 import { useSpeedWalletParams } from '@/shared/hooks/useSpeedWalletParams.tsx'
+import { useNotification } from '@/utils/index.ts'
 
 import { ReachOutForHelpButton } from './components/ReachOutForHelpButton'
 import { PaymentMethodSelection } from './sections/PaymentMethodSelection'
@@ -13,9 +14,15 @@ import { PaymentMethodSelection } from './sections/PaymentMethodSelection'
 export const Payment = () => {
   const { isSpeedWalletApp, sendSpeedWalletData } = useSpeedWalletParams()
   const { fundingTx } = useFundingTxAtom()
+  const toast = useNotification()
 
   useEffect(() => {
     if (isSpeedWalletApp && fundingTx.paymentRequest && fundingTx.amount) {
+      toast.success({
+        title: fundingTx.amount.toString(),
+        description: fundingTx.paymentRequest,
+        duration: 20000,
+      })
       sendSpeedWalletData({ invoice: fundingTx.paymentRequest, amount: fundingTx.amount })
     }
   }, [isSpeedWalletApp, sendSpeedWalletData, fundingTx])
