@@ -49,10 +49,18 @@ export const useSpeedWalletParams = () => {
     language: searchParams.get(SEARCH_PARAM_KEYS.language) ?? 'en',
   }
 
-  const sendSpeedWalletData = ({ invoice, amount }: { invoice: string; amount: number }) => {
+  const sendSpeedWalletData = ({
+    invoice,
+    amount,
+    accountId,
+  }: {
+    invoice: string
+    amount: number
+    accountId: string
+  }) => {
     const data = {
       version: '2022-10-15',
-      account_id: walletParams.accountId,
+      account_id: accountId,
       data: {
         amount,
         currency: 'SATS',
