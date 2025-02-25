@@ -11,8 +11,11 @@ import { configMatomo } from './config/matomo'
 import { AuthProvider, ChakraThemeProvider, ServiceWorkerProvider } from './context'
 import { BtcProvider } from './context/btc'
 import { FilterProvider } from './context/filter'
+import { useInitiateSpeedWalletParams } from './shared/hooks/useInitiateSpeedWalletParams.tsx'
 
 export const App = () => {
+  useInitiateSpeedWalletParams()
+
   useEffect(() => {
     configMatomo()
   }, [])
