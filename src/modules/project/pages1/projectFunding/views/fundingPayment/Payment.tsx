@@ -16,7 +16,10 @@ export const Payment = () => {
 
   useEffect(() => {
     if (isSpeedWalletApp && fundingTx.paymentRequest && fundingTx.amount) {
-      sendSpeedWalletData({ invoice: fundingTx.paymentRequest, amount: fundingTx.amount })
+      sendSpeedWalletData({
+        invoice: fundingTx.paymentRequest,
+        amount: fundingTx.amount,
+      })
     }
   }, [isSpeedWalletApp, sendSpeedWalletData, fundingTx])
 

@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
-import { useSearchParams } from 'react-router-dom'
+import { useAtomValue } from 'jotai'
+
+import { isSpeedWalletAppAtom, speedWalletParamsAtom } from '../state/speedWalletParamsAtom.ts'
 
 declare global {
   interface Window {
@@ -16,43 +18,14 @@ declare global {
   }
 }
 
-type WalletParams = {
-  accountId: string
-  paymentAddress: string
-  balanceBtc: string
-  balanceUsdt: string
-  language: string
-}
-
-type SearchParamKeys = {
-  [K in keyof WalletParams]: string
-}
-
-const SEARCH_PARAM_KEYS: SearchParamKeys = {
-  accountId: 'acct',
-  paymentAddress: 'p_add',
-  balanceBtc: 'bal_btc',
-  balanceUsdt: 'bal_usdt',
-  language: 'lang',
-} as const
-
 export const useSpeedWalletParams = () => {
-  const [searchParams] = useSearchParams()
-
-  const isSpeedWalletApp = window.navigator.userAgent.includes('Speed Wallet')
-
-  const walletParams: WalletParams = {
-    accountId: searchParams.get(SEARCH_PARAM_KEYS.accountId) ?? '',
-    paymentAddress: searchParams.get(SEARCH_PARAM_KEYS.paymentAddress) ?? '',
-    balanceBtc: searchParams.get(SEARCH_PARAM_KEYS.balanceBtc) ?? '0',
-    balanceUsdt: searchParams.get(SEARCH_PARAM_KEYS.balanceUsdt) ?? '0',
-    language: searchParams.get(SEARCH_PARAM_KEYS.language) ?? 'en',
-  }
+  const isSpeedWalletApp = useAtomValue(isSpeedWalletAppAtom)
+  const walletParams = useAtomValue(speedWalletParamsAtom)
 
   const sendSpeedWalletData = ({ invoice, amount }: { invoice: string; amount: number }) => {
     const data = {
       version: '2022-10-15',
-      account_id: walletParams.accountId,
+      account_id: walletParams?.accountId,
       data: {
         amount,
         currency: 'SATS',
