@@ -1,6 +1,6 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import { useFundingTxAtom } from '@/modules/project/funding/state/fundingTxAtom.ts'
@@ -14,8 +14,6 @@ export const Payment = () => {
   const { isSpeedWalletApp, sendSpeedWalletData, walletParams } = useSpeedWalletParams()
   const { fundingTx } = useFundingTxAtom()
 
-  const [url, setUrl] = useState('')
-
   useEffect(() => {
     if (isSpeedWalletApp && fundingTx.paymentRequest && fundingTx.amount) {
       sendSpeedWalletData({
@@ -24,12 +22,6 @@ export const Payment = () => {
       })
     }
   }, [isSpeedWalletApp, sendSpeedWalletData, fundingTx])
-
-  useEffect(() => {
-    if (walletParams) {
-      setUrl(JSON.stringify(walletParams))
-    }
-  }, [walletParams])
 
   return (
     <>
@@ -51,7 +43,7 @@ export const Payment = () => {
           )}
         </Body>
         <Body light size="xs">
-          {url}
+          {JSON.stringify(walletParams)}
         </Body>
       </VStack>
     </>
