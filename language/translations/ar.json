@@ -683,6 +683,5 @@
   "Geyser takes custody of your private keys, therefore we don't recommend using these private keys for the non-custodial Nostr experience.": "يساعدك غيزر على حيازة مفاتيحك الخاصة، ومن ثم لا ننصح باستخدام هذه المفاتيح في تطبيقات نوستر غير الوصائية.",
   "Not all Geyser features are built on Nostr yet, therefore not all content you create on Geyser will interoperate with the rest of the Nostr Network.": "ليست جميع ميزات غيزر مبنية على نوستر، ومن ثم فلن يتوافق كل المحتوى الذي تنشئه على غيزر مع بقية شبكة نوستر.",
   "If you change your Geyser lightning address from other clients Geyser has no way to verify the Zaps being made from other clients, therefore, these Zaps won’t show up on Geyser.": "إذا غيرت عنوان البرق في غيزر من تطبيقات أخرى فلن يستطيع غيزر التحقق من الزابات الواصلة من التطبيقات الأخرى، ومن ثم فلن تظهر في غيزر.",
-  "Badge": "شارة",
-  "Use Entries to share updates and engage with your community in your own way Use Entries to share updates and engage with your community in your own way": "استعمل الإدخالات لتشارك تحديثاتك مع مجتمعك بطريقتك الخاصة استعمل الإدخالات لتشارك تحديثاتك مع مجتمعك بطريقتك الخاصة"
+  "Badge": "شارة"
 }
