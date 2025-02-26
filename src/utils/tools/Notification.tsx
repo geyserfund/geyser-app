@@ -2,7 +2,7 @@ import { useToast, UseToastOptions } from '@chakra-ui/react'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-type IndividualToastProps = { title: string; description?: string }
+type IndividualToastProps = { title: string; description?: string; duration?: number }
 
 export const useNotification = (options?: UseToastOptions | undefined) => {
   const { t } = useTranslation()
