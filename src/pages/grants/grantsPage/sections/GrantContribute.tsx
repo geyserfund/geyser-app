@@ -1,7 +1,10 @@
-import { Trans, useTranslation } from 'react-i18next'
+import { Button } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants/index.ts'
 
 export const GrantContribute = ({
   grantProjectName,
@@ -19,17 +22,20 @@ export const GrantContribute = ({
         {t('Contribute')}
       </H3>
       <Body>
-        <Trans
-          i18nKey={'Contribute directly to {{title}} Grant via QR code (lightning and onchain)'}
-          values={{ title: grantTitle }}
-        >
-          {'Contribute directly to {{title}} Grant via QR code (lightning and onchain)'}
-        </Trans>
+        {t('Contribute directly to {{title}} Grant via QR code (lightning and onchain)').replace(
+          '{{title}}',
+          grantTitle,
+        )}
         {'. '}
         {grantHasVoting
           ? t('Grant funds will be distributed based on community votes.')
           : t('Grant funds will be distributed by principled bitcoin board members.')}
       </Body>
+      {grantProjectName && (
+        <Button variant="solid" colorScheme="primary1" as={Link} to={getPath('fundingStart', grantProjectName)}>
+          {t('Contribute')}
+        </Button>
+      )}
     </CardLayout>
   )
 }

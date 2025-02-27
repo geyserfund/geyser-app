@@ -13,7 +13,9 @@ export const GrantWinnerAnnouncement = ({ imageUrl, linkUrl, ...rest }: GrantWin
   const { t } = useTranslation()
   return (
     <CardLayout backgroundColor="neutral.0" w="full" alignItems="center" spacing="20px" {...rest}>
-      <H3 size="lg">{t('See the winner announcement')}</H3>
+      <H3 size="lg" medium>
+        {t('See the winner announcement')}
+      </H3>
 
       <Image maxWidth="350px" alt="grant-3-announcement-url" src={imageUrl} />
 

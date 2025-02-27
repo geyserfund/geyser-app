@@ -41,7 +41,9 @@ export const PendingApplications = ({ applicants }: Props) => {
 
   return (
     <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
-      <H3 size="lg">{t('Pending Applications')}</H3>
+      <H3 size="lg" medium>
+        {t('Pending Applications')}
+      </H3>
       {applicants.map(({ project }) => {
         const projectLink = getPathWithGeyserHero('project', project.name)
 

@@ -42,7 +42,7 @@ export const GrantApply = ({ grant, pendingApplicants }: GrantProps) => {
 
   return (
     <CardLayout noMobileBorder w="full" p={{ base: '10px', lg: '20px' }} alignItems="center">
-      <H3 size="lg" alignSelf="start">
+      <H3 size="lg" alignSelf="start" medium>
         {t('Apply')}
       </H3>
       <Body alignSelf="start">

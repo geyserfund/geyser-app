@@ -65,7 +65,9 @@ export const DistributionChart = ({
 
   return (
     <CardLayout noMobileBorder p={standardPadding} w="full">
-      <H3 size="lg">{t('Leaderboard')}</H3>
+      <H3 size="lg" medium>
+        {t('Leaderboard')}
+      </H3>
       {percentages.length > 0 && (
         <Box py={2}>
           {displayedPercentages.map(
