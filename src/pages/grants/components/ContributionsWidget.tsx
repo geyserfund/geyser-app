@@ -54,12 +54,12 @@ export const ContributionsWidget = ({
             <Countdown
               endDate={endDateTimestamp}
               sectionProps={{
-                color: 'primary.500',
+                color: 'primary1.11',
                 fontSize: '22px',
                 fontWeight: 700,
               }}
               dividerProps={{
-                color: 'neutral.500',
+                color: 'neutral1.11',
                 fontSize: '26px',
                 fontWeight: 700,
               }}

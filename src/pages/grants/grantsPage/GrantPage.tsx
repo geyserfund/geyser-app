@@ -90,13 +90,11 @@ export const GrantPage = () => {
       return t('Vote for your favorite projects with your Sats!')
     }
 
-    const defaultTitle = 'Let the Sats flow to your favorite projects.'
-
     if (grantHasVoting) {
-      return `${defaultTitle} ${t('1 Sat = 1 vote.')}`
+      return `${t('Let the Sats flow to your favorite projects.')} ${t('1 Sat = 1 vote.')}`
     }
 
-    return defaultTitle
+    return 'Applicants'
   }
 
   const isBoardVoteGrant = (grant: Grant): grant is BoardVoteGrant => {
