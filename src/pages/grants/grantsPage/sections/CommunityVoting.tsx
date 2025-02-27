@@ -57,7 +57,9 @@ export const CommunityVoting = ({
   return (
     <>
       <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
-        <H3 size="lg">{t(title)}</H3>
+        <H3 size="lg" medium>
+          {t(title)}
+        </H3>
         {sortedApplicants.map(({ project, funding, contributors, contributorsCount, voteCount }) => {
           return (
             <GrantApplicantCard
