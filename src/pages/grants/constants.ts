@@ -51,4 +51,5 @@ export const GRANT_STATUS_COUNTDOWN_TITLES_NON_VOTE = {
 
 export const GrantProjectNameMap: { [key: string]: string } = {
   'grant-round-004': 'bitcoingaminggrant',
+  'grant-round-013': 'satsnfacts',
 }
