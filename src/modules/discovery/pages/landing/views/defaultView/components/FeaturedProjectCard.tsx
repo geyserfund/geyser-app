@@ -52,7 +52,8 @@ export const FeaturedProjectCard = ({
   if (showMini && project) {
     return (
       <MiniProjectCard
-        project={project}
+        imageUrl={project.thumbnailImage}
+        title={project.title}
         startAnimating={startAnimating}
         onClick={() => navigate(getPathWithGeyserHero('project', projectName))}
       />

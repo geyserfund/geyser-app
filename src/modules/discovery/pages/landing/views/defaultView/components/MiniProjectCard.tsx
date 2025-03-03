@@ -3,14 +3,14 @@ import { Box } from '@chakra-ui/react'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { ProjectForLandingPageFragment } from '@/types/index.ts'
 
 type MiniProjectCardProps = {
-  project: ProjectForLandingPageFragment
+  imageUrl?: string | null
+  title: string
   startAnimating?: boolean
 } & CardLayoutProps
 
-export const MiniProjectCard = ({ project, startAnimating, ...rest }: MiniProjectCardProps) => {
+export const MiniProjectCard = ({ imageUrl, title, startAnimating, ...rest }: MiniProjectCardProps) => {
   return (
     <CardLayout
       direction="row"
@@ -27,10 +27,10 @@ export const MiniProjectCard = ({ project, startAnimating, ...rest }: MiniProjec
       {...rest}
     >
       <Box width="24px" height="24px" borderRadius="8px" overflow="hidden">
-        <ImageWithReload height="full" width="full" src={project.thumbnailImage} objectFit="cover" />
+        <ImageWithReload height="full" width="full" src={imageUrl} objectFit="cover" />
       </Box>
       <Body medium isTruncated>
-        {project.title}
+        {title}
       </Body>
       {startAnimating && (
         <Box

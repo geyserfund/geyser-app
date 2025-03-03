@@ -42,19 +42,15 @@ export const Featured = () => {
   const [loading, setLoading] = useState(true)
 
   const [data, setData] = useState<FeatureAirtableData>()
-  const [featuredProjects, setFeaturedProjects] = useState<FeatureAirtableData[]>([])
+  const [allAirtableData, setAllAirtableData] = useState<FeatureAirtableData[]>([])
 
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
         const response: FeaturedAirtableResponse = await fetchFeaturedProject()
 
-        console.log('checking response', response)
-
-        const projects = response.records.map((record) => record.fields).filter((project) => project.Type === 'project')
-
-        if (projects.length > 0) {
-          setFeaturedProjects(projects)
+        if (response.records.length > 1) {
+          setAllAirtableData(response.records.map((record) => record.fields).filter((data) => data.Name !== ''))
         }
 
         const data = response?.records?.[0]?.fields
@@ -76,8 +72,8 @@ export const Featured = () => {
       return <FeaturedCardSkeleton />
     }
 
-    if (featuredProjects.length > 1) {
-      return <FeaturedProjectsCarousel projects={featuredProjects} />
+    if (allAirtableData.length > 1) {
+      return <FeaturedProjectsCarousel allAirtableData={allAirtableData} />
     }
 
     if (data && data?.Type === 'display') {

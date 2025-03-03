@@ -1,4 +1,4 @@
-import { Box, Stack, VStack } from '@chakra-ui/react'
+import { Box, Stack, StackProps, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
 import { useGrant } from '@/pages/grants/hooks/useGrant'
@@ -8,16 +8,31 @@ import { standardPadding } from '@/shared/styles'
 
 import { getPath } from '../../../../../../../shared/constants'
 import { FeaturedCardSkeleton } from './FeaturedProjectCard'
+import { MiniProjectCard } from './MiniProjectCard.tsx'
 
-interface Props {
+type Props = {
   grantId: string
-}
+  showMini?: boolean
+  startAnimating?: boolean
+} & StackProps
 
-export const FeaturedGrantCard = ({ grantId }: Props) => {
+export const FeaturedGrantCard = ({ grantId, showMini, startAnimating, ...rest }: Props) => {
   const { grant, loading } = useGrant(grantId)
 
   if (loading || !grant) {
     return <FeaturedCardSkeleton />
+  }
+
+  if (showMini) {
+    return (
+      <MiniProjectCard
+        imageUrl={grant.image}
+        title={grant.title}
+        startAnimating={startAnimating}
+        as={Link}
+        to={getPath('grants', grant.id)}
+      />
+    )
   }
 
   return (
@@ -25,7 +40,7 @@ export const FeaturedGrantCard = ({ grantId }: Props) => {
       as={Link}
       direction={{ base: 'column', sm: 'row' }}
       width="100%"
-      height={{ base: 'auto', sm: '245px' }}
+      height={{ base: 'auto', sm: '252px' }}
       alignItems="start"
       spacing="0px"
       padding="0px"
@@ -33,6 +48,7 @@ export const FeaturedGrantCard = ({ grantId }: Props) => {
       overflow="hidden"
       to={getPath('grants', grant.id)}
       _hover={{ backgroundColor: 'neutral1.2', cursor: 'pointer' }}
+      {...rest}
     >
       {grant.image && (
         <Box width={{ base: '100%', sm: '44%' }} height={{ base: '240px', sm: '100%' }} overflow="hidden">
