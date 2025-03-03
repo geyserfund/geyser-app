@@ -42,6 +42,11 @@ export const Project = () => {
         projectName,
         heroId,
       })
+
+      setSearchParams((params) => {
+        params.delete('hero')
+        return params
+      })
     }
 
     if (user && user.heroId) {
