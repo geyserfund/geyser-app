@@ -43,17 +43,23 @@ export const Project = () => {
         heroId,
       })
 
-      setSearchParams((params) => {
-        params.delete('hero')
-        return params
-      })
+      setSearchParams(
+        (params) => {
+          params.delete('hero')
+          return params
+        },
+        { replace: true },
+      )
     }
 
     if (user && user.heroId) {
-      setSearchParams((params) => {
-        params.set('hero', user.heroId)
-        return params
-      })
+      setSearchParams(
+        (params) => {
+          params.set('hero', user.heroId)
+          return params
+        },
+        { replace: true },
+      )
     }
   }, [projectName, heroId, addHeroId, currentProjectHero, user, searchParams, setSearchParams])
 
