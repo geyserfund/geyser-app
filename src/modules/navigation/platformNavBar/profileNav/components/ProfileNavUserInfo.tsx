@@ -23,7 +23,7 @@ export const ProfileNavUserInfo = ({ user }: { user: UserMeFragment }) => {
           <Body w="full" fontSize="xl" lineHeight="1.2" bold isTruncated>
             {user.username}
           </Body>
-          {user.guardianType && <ProfileText size="sm" guardian={user.guardianType} />}
+          {user.guardianType && <ProfileText size="sm" name={user.username} guardian={user.guardianType} />}
         </VStack>
       </HStack>
       {loginMethod && (

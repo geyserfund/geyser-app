@@ -7010,7 +7010,7 @@ export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uui
 
 export type PostPageProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, images: Array<string>, shortDescription?: string | null, cost: number };
 
-export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
+export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
 
 export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, guardianType?: GuardianType | null };
 
@@ -8947,6 +8947,7 @@ export const ProjectPageCreatorFragmentDoc = gql`
   imageUrl
   username
   email
+  guardianType
   externalAccounts {
     accountType
     externalUsername
