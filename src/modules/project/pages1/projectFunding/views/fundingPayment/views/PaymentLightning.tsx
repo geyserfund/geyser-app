@@ -1,9 +1,10 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { PiCopy } from 'react-icons/pi'
 
-import { useListenFundingSuccess } from '@/modules/project/funding/hooks/useListenFundingSuccess'
-import { useFundingTxAtom } from '@/modules/project/funding/state'
+import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess'
+import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 
 import { QRCodeComponent } from '../components/QRCodeComponent'
@@ -11,19 +12,19 @@ import { TotalAmountToPay } from '../components/TotalAmountToPay'
 import { WaitingForPayment } from '../components/WaitingForPayment'
 
 export const PaymentLightning = () => {
-  useListenFundingSuccess()
+  useListenFundingContributionSuccess()
 
-  const { fundingTx } = useFundingTxAtom()
+  const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
 
-  const { hasCopied, onCopy } = useCopyToClipboard(fundingTx.paymentRequest || '')
+  const { hasCopied, onCopy } = useCopyToClipboard(fundingPaymentDetails.lightning?.paymentRequest || '')
 
-  if (!fundingTx.paymentRequest) {
+  if (!fundingPaymentDetails.lightning?.paymentRequest) {
     return null
   }
 
   return (
     <VStack w="full">
-      <QRCodeComponent value={fundingTx.paymentRequest} onClick={onCopy} isColored={hasCopied} />
+      <QRCodeComponent value={fundingPaymentDetails.lightning.paymentRequest} onClick={onCopy} isColored={hasCopied} />
       <TotalAmountToPay />
       <VStack w="full" spacing={6} pt={4}>
         <WaitingForPayment />

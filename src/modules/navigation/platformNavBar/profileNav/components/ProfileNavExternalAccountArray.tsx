@@ -1,6 +1,6 @@
 import { HStack, IconButton } from '@chakra-ui/react'
 
-import { ExternalAccountType } from '@/pages/auth'
+import { ExternalAccountType } from '@/modules/auth'
 import { externalAccountIconMap } from '@/shared/constants/platform/externalAccountIcons'
 import { ExternalAccountFragment } from '@/types'
 

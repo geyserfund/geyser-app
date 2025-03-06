@@ -1,4 +1,4 @@
-import { atom, useAtomValue } from 'jotai'
+import { atom } from 'jotai'
 
 import {
   projectFundingPaymentCardRoutes,
@@ -46,5 +46,3 @@ export const hasStripePaymentMethodAtom = atom((get) => {
 
   return false
 })
-
-export const useIsLightingMethodAtom = () => useAtomValue(isLightingMethodAtom)

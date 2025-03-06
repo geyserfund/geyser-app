@@ -81,7 +81,6 @@ export enum PathName {
   dashboardSettings = 'settings',
   dashboardStatus = 'status',
   dashboardNostr = 'nostr',
-  dashboardAffiliates = 'affiliate',
   dashboardPromote = 'promote',
 
   projectFunding = 'funding',
@@ -114,10 +113,6 @@ export enum PathName {
   legalTerms = 'T&C',
   legalPrivacy = 'Privacy',
 }
-
-// @TODO: These definitions are currently a WIP.
-// (Getting them started as part of the changes for
-// https://geyserteam.atlassian.net/browse/GT-207.)
 
 export const AboutGeyserOrigin = 'https://about.geyser.fund'
 
@@ -207,8 +202,6 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardNotifications}`,
   dashboardSettings: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
-  dashboardAffiliates: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardAffiliates}`,
   dashboardPromote: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardPromote}`,
 

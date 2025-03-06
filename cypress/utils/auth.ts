@@ -33,7 +33,7 @@ export const loginWithNostr = () => {
               contributions: [],
               ownerOf: [],
               entries: [],
-              fundingTxs: [],
+              projectContributions: [],
               projects: [],
               projectFollows: [],
               badges: [],

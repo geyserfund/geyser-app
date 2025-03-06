@@ -3,10 +3,10 @@ import { Box, HStack, Image, SkeletonText, VStack } from '@chakra-ui/react'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { TimeAgo } from '@/shared/molecules/TimeAgo'
-import { ProjectFundingTxFragment } from '@/types'
+import { ProjectContributionFragment } from '@/types/index.ts'
 import { commaFormatted, convertSatsToUsdFormatted } from '@/utils'
 
-export const FundersContributionItem = ({ contribution }: { contribution: ProjectFundingTxFragment }) => {
+export const FundersContributionItem = ({ contribution }: { contribution: ProjectContributionFragment }) => {
   return (
     <HStack w="full" alignItems={'start'} spacing={1} key={contribution.id} paddingX={6} paddingY={2}>
       <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
@@ -21,7 +21,7 @@ export const FundersContributionItem = ({ contribution }: { contribution: Projec
               })})`}
             </Body>
           </Body>
-          <TimeAgo date={contribution.paidAt} />
+          <TimeAgo date={contribution.confirmedAt} />
         </HStack>
 
         {contribution.comment && (

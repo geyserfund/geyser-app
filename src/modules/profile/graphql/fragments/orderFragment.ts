@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_PROJECT_AVATAR } from '@/graphqlBase/fragments'
+import { FRAGMENT_PROJECT_AVATAR } from '@/modules/project/graphql/fragments/projectFragment.ts'
 
 export const FRAGMENT_PROFILE_ORDER_ITEM = gql`
   fragment ProfileOrderItem on OrderItem {
@@ -31,16 +31,14 @@ export const FRAGMENT_PROFILE_ORDER = gql`
     items {
       ...ProfileOrderItem
     }
-    fundingTx {
+    contribution {
       id
       bitcoinQuote {
         quote
         quoteCurrency
       }
-      amountPaid
       amount
       status
-      onChain
       sourceResource {
         ... on Project {
           ...ProjectAvatar

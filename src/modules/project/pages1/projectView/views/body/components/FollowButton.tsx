@@ -4,11 +4,11 @@ import { useAtomValue } from 'jotai'
 import { MouseEvent } from 'react'
 import { PiBell } from 'react-icons/pi'
 
-import { useEmailPromptModal } from '@/pages/auth/hooks/useEmailPromptModal'
-import { shouldPromptAtom } from '@/pages/auth/state/emailPromptAtom'
+import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
+import { shouldPromptAtom } from '@/modules/auth/state/emailPromptAtom'
 
 import { useAuthContext } from '../../../../../../../context'
-import { useAuthModal } from '../../../../../../../pages/auth/hooks'
+import { useAuthModal } from '../../../../../../../modules/auth/hooks'
 import { useFollowProject } from '../../../../../../../shared/hooks/graphqlState'
 import { Project } from '../../../../../../../types'
 

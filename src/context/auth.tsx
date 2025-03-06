@@ -2,8 +2,9 @@ import { ApolloError } from '@apollo/client'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from 'react'
 
+import { authUserAtom, followedProjectsAtom, isUserAProjectCreatorAtom } from '@/modules/auth/state/authAtom'
+
 import { getAuthEndPoint } from '../config/domain'
-import { authUserAtom, followedProjectsAtom, isUserAProjectCreatorAtom } from '../pages/auth/state/authAtom'
 import { useMeLazyQuery, useMeProjectFollowsLazyQuery, User, UserMeFragment } from '../types'
 
 export const defaultUser: Omit<User, 'heroStats'> = {
@@ -14,10 +15,10 @@ export const defaultUser: Omit<User, 'heroStats'> = {
   heroId: '',
   imageUrl: '',
   externalAccounts: [],
-  contributions: [],
+  projectContributions: [],
   ownerOf: [],
   entries: [],
-  fundingTxs: [],
+  contributions: [],
   projects: [],
   projectFollows: [],
   badges: [],

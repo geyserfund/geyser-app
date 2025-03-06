@@ -22,8 +22,8 @@ import {
   useUserNotificationSettings,
 } from '@/modules/profile/pages/profileSettings/hooks/useUserNotificationSettings'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useAuthModal } from '@/pages/auth/hooks'
-import { useFollowedProjectsValue } from '@/pages/auth/state'
+import { useAuthModal } from '@/modules/auth/hooks'
+import { useFollowedProjectsValue } from '@/modules/auth/state'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { H1 } from '@/shared/components/typography'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
