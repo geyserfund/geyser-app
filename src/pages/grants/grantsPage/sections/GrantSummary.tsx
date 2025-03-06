@@ -75,7 +75,7 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
 
   const votingSystemTooltipContent = () => {
     if (grant.type === GrantType.BoardVote) {
-      return null
+      return <Body>{t('The board evaluates all applications and decides the allocation of the funds collected.')}</Body>
     }
 
     if (grant?.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.OneToOne) {

@@ -1,31 +1,55 @@
 import { Box, HStack, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
+import { FeaturedDisplayCard } from '../components/FeaturedDisplayCard.tsx'
+import { FeaturedGrantCard } from '../components/FeaturedGrantCard.tsx'
 import { FeaturedProjectCard } from '../components/FeaturedProjectCard'
 import { FeatureAirtableData } from './Featured'
 
 type FeaturedProjectsCarouselProps = {
-  projects: FeatureAirtableData[]
+  allAirtableData: FeatureAirtableData[]
 }
 
-export const FeaturedProjectsCarousel = ({ projects }: FeaturedProjectsCarouselProps) => {
-  const [currentIndex, setCurrentIndex] = useState(() => Math.floor(Math.random() * projects.length))
+export const FeaturedProjectsCarousel = ({ allAirtableData }: FeaturedProjectsCarouselProps) => {
+  const [currentIndex, setCurrentIndex] = useState(() => Math.floor(Math.random() * allAirtableData.length))
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % projects.length)
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % allAirtableData.length)
     }, 10000) // 10 seconds interval
 
     return () => clearInterval(interval)
-  }, [projects.length])
+  }, [allAirtableData.length])
+
+  const renderFeaturedProjects = ({
+    data,
+    ...rest
+  }: {
+    data: FeatureAirtableData
+    showMini?: boolean
+    opacity?: number
+    startAnimating?: boolean
+  }) => {
+    if (data && data?.Type === 'display') {
+      return <FeaturedDisplayCard data={data} {...rest} />
+    }
+
+    if (data && data?.Type === 'project') {
+      return <FeaturedProjectCard projectName={data.Name} data={data} {...rest} />
+    }
+
+    if (data && data?.Type === 'grant') {
+      return <FeaturedGrantCard grantId={data.Name} {...rest} />
+    }
+  }
 
   return (
     <VStack w="full">
       <Box position="relative" width="100%">
-        {projects.map((project, index) => (
+        {allAirtableData.map((airtableData, index) => (
           <>
             <Box
-              key={project.Name}
+              key={airtableData.Name}
               position="absolute"
               top={0}
               left={0}
@@ -35,35 +59,24 @@ export const FeaturedProjectsCarousel = ({ projects }: FeaturedProjectsCarouselP
               pointerEvents={index === currentIndex ? 'auto' : 'none'}
               zIndex={index === currentIndex ? 1 : 0}
             >
-              <FeaturedProjectCard projectName={project.Name} data={project} />
+              {renderFeaturedProjects({ data: airtableData })}
             </Box>
           </>
         ))}
 
-        {projects[currentIndex] && (
-          <FeaturedProjectCard
-            projectName={projects[currentIndex].Name}
-            data={projects[currentIndex]}
-            opacity={0}
-            pointerEvents="none"
-          />
-        )}
+        {allAirtableData[currentIndex] && renderFeaturedProjects({ data: allAirtableData[currentIndex], opacity: 0 })}
       </Box>
       <HStack w="full">
-        {projects.map((project, index) => {
-          if (!project) {
+        {allAirtableData.map((airtableData, index) => {
+          if (!airtableData) {
             return null
           }
 
-          return (
-            <FeaturedProjectCard
-              key={project.Name}
-              showMini
-              projectName={project.Name}
-              data={project}
-              startAnimating={index === currentIndex % projects.length}
-            />
-          )
+          return renderFeaturedProjects({
+            data: airtableData,
+            showMini: true,
+            startAnimating: index === currentIndex % allAirtableData.length,
+          })
         })}
       </HStack>
     </VStack>
