@@ -78,7 +78,7 @@ export const ProjectRewardDenominationUpdate = () => {
   return (
     <form>
       <FieldContainer
-        title={t('Reward currency denominnation')}
+        title={t('Reward currency denomination')}
         subtitle={t(
           'Switch between USD and Bitcoin (Sats) for reward prices. This allows you to view and manage rewards in the currency that suits your preference.',
         )}

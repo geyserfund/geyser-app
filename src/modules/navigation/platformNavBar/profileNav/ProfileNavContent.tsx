@@ -94,7 +94,7 @@ export const ProfileNavContent = () => {
 
             <VStack spacing={2} w="full">
               <MenuItem as={Link} to={getPath('userProfileSettings', user.id)}>
-                <Body size="md">{t('Settings')}</Body>
+                <Body size="md">{t('Profile settings')}</Body>
               </MenuItem>
               <MenuItem onClick={logout}>
                 <Body size="md">{t('Sign Out')}</Body>

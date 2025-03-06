@@ -1,7 +1,7 @@
 import { Button, ButtonProps, HStack, Icon, Input, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
-import { PiClipboard } from 'react-icons/pi'
+import { PiClipboard, PiVideo, PiYoutubeLogo } from 'react-icons/pi'
 
 import { FieldContainer } from '@/shared/components/form'
 import { Modal } from '@/shared/components/layouts'
@@ -43,17 +43,17 @@ export const AdditionalUrlModal = ({ onAdd, ...rest }: AdditionalUrlModalProps) 
         backgroundColor="neutral1.3"
         justifyContent="center"
         onClick={additionalUrlModal.onOpen}
-        rightIcon={<Icon as={PiClipboard} fontSize="20px" />}
+        rightIcon={<Icon as={PiYoutubeLogo} fontSize="20px" />}
         {...rest}
       >
         <Body size="lg" light>
-          {t('Add external media')}
+          {t('Add external video')}
         </Body>
       </Button>
 
       <Modal
         {...additionalUrlModal}
-        title={t('Add external media')}
+        title={t('Add external video')}
         bodyProps={{
           as: VStack,
           gap: 4,

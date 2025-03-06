@@ -314,7 +314,7 @@ export const PublishModal = ({
               {t('Send via email')}
             </Button>
           ) : (
-            <Button flex={1} variant="solid" colorScheme="primary1" onClick={handlePostPublish}>
+            <Button flex={1} variant="solid" colorScheme="primary1" onClick={handlePostPublish} isLoading={publishing}>
               {t('Publish')}
             </Button>
           )}
