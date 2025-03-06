@@ -1,7 +1,7 @@
 import { Button, ButtonProps, HStack, Icon, Input, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
-import { PiClipboard, PiVideo, PiYoutubeLogo } from 'react-icons/pi'
+import { PiYoutubeLogo } from 'react-icons/pi'
 
 import { FieldContainer } from '@/shared/components/form'
 import { Modal } from '@/shared/components/layouts'
