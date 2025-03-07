@@ -4,7 +4,7 @@ import { DateTime } from 'luxon'
 import { ProjectState } from '@/modules/project/state/projectAtom'
 import { LIGHTNING_FEE_PERCENTAGE } from '@/shared/constants'
 import { lightModeColors, utilColors } from '@/shared/styles'
-import { FundingTxForDownloadInvoiceFragment } from '@/types'
+import { ContributionForDownloadInvoiceFragment } from '@/types/index.ts'
 
 const styles = StyleSheet.create({
   page: {
@@ -127,11 +127,11 @@ export const DownloadInvoicePDF = ({
   projectData,
   showFee,
 }: {
-  invoiceData: FundingTxForDownloadInvoiceFragment
+  invoiceData: ContributionForDownloadInvoiceFragment
   projectData: Pick<ProjectState, 'title'>
   showFee?: false
 }) => {
-  const datePaid = invoiceData.paidAt ? DateTime.fromMillis(invoiceData.paidAt).toFormat('LLLL d') : ''
+  const datePaid = invoiceData.confirmedAt ? DateTime.fromMillis(invoiceData.confirmedAt).toFormat('LLLL d') : ''
   const dateCreated = invoiceData.createdAt ? DateTime.fromMillis(invoiceData.createdAt).toFormat('LLLL d') : ''
   const totalAmountInSats = invoiceData.donationAmount + (invoiceData.order ? invoiceData.order.totalInSats : 0)
   const bitcoinQuote = invoiceData?.bitcoinQuote?.quote || 0

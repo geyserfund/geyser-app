@@ -26,8 +26,8 @@ import Loader from '../../../components/ui/Loader'
 import { GeyserLightningWalletGuideLink, LIGHTNING_FEE_PERCENTAGE } from '../../../shared/constants'
 import { lightModeColors } from '../../../shared/styles'
 import { LndNodeType } from '../../../types'
+import { NodeConnectionDetails } from '../components/NodeConnectionDetails.tsx'
 import { ProjectFeeSelection } from '../components/ProjectFeeSelection'
-import { WalletConnectionDetails } from '../components/WalletConnectionDetails'
 import { WalletConnectionOptionInfoBox } from '../pages1/projectCreation/components/WalletConnectionOptionInfoBox'
 import {
   ConnectionOption,
@@ -230,7 +230,7 @@ Props) => {
                     {t('Connect Your Node')}
                   </Button>
                   {nodeInput && (
-                    <WalletConnectionDetails
+                    <NodeConnectionDetails
                       projectWallet={{
                         connectionDetails: {
                           grpcPort: nodeInput.isVoltage ? 10009 : Number(nodeInput.grpc),

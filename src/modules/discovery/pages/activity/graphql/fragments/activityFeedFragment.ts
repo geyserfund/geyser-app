@@ -32,7 +32,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         markdown
         entryImage: image
       }
-      ... on FundingTx {
+      ... on Contribution {
         id
         amount
         projectId

@@ -28,7 +28,7 @@ import {
 } from '@/shared/utils/user/getExternalAccountsButtons'
 import { toInt, useNotification } from '@/utils'
 
-import { ConnectAccounts, ExternalAccountType } from '../../../../../../../pages/auth'
+import { ConnectAccounts, ExternalAccountType } from '../../../../../../../modules/auth'
 import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { userProfileAtom, useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 import { RemoveExternalAccountModal } from '../../../components/RemoveExternalAccountModal'

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useRefundFileValue } from '@/modules/project/funding/state'
 import { useNotification } from '@/utils'
 
-import { onChainRefundDownloadedAtom } from '../states'
+import { onChainRefundDownloadedAtom } from '../states/onChainStatus.ts'
 import { download, downloadJson, isIos } from '../utils/download'
 
 const REFUND_QR_FILE_NAME = 'refundFile'

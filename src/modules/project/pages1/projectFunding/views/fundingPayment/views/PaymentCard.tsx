@@ -2,12 +2,13 @@ import { VStack } from '@chakra-ui/react'
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { AppTheme } from '@/context'
-import { useListenFundingSuccess } from '@/modules/project/funding/hooks/useListenFundingSuccess'
-import { useFundingTxAtom } from '@/modules/project/funding/state'
+import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess'
+import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { Body } from '@/shared/components/typography'
 import { VITE_APP_STRIPE_API_KEY } from '@/shared/constants/config/env'
 
@@ -23,13 +24,13 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
 export const PaymentCard = () => {
   const classes = useStyles()
 
-  useListenFundingSuccess()
+  useListenFundingContributionSuccess()
 
   const [isCompleted, setIsCompleted] = useState(false)
 
-  const { fundingTx } = useFundingTxAtom()
+  const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
 
-  if (!fundingTx.stripeClientSecret) {
+  if (!fundingPaymentDetails.fiat?.stripeClientSecret) {
     return null
   }
 
@@ -38,7 +39,7 @@ export const PaymentCard = () => {
       <EmbeddedCheckoutProvider
         stripe={stripePromise}
         options={{
-          clientSecret: fundingTx.stripeClientSecret,
+          clientSecret: fundingPaymentDetails.fiat.stripeClientSecret,
           onComplete() {
             setIsCompleted(true)
           },

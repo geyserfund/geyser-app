@@ -6,10 +6,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Body, H1, H3 } from '@/shared/components/typography'
 
 import { useAuthContext } from '../../../../../context'
-import { ExternalAccountType, SocialAccountType } from '../../../../../pages/auth'
-import { ConnectWithNostr } from '../../../../../pages/auth/ConnectWithNostr'
-import { ConnectWithSocial } from '../../../../../pages/auth/ConnectWithSocial'
-import { useRefreshAuthToken } from '../../../../../pages/auth/useAuthToken'
+import { ExternalAccountType, SocialAccountType } from '../../../../../modules/auth'
+import { ConnectWithNostr } from '../../../../../modules/auth/ConnectWithNostr'
+import { ConnectWithSocial } from '../../../../../modules/auth/ConnectWithSocial'
+import { useRefreshAuthToken } from '../../../../../modules/auth/useAuthToken'
 import {
   getPath,
   LaunchProjectCoinsUrl,

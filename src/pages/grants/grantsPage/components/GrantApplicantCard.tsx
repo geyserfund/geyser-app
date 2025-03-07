@@ -5,7 +5,7 @@ import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
 import { ContributorsModal, useContributorsModal } from '@/modules/grants/components/ContributorsModal'
-import { useAuthModal } from '@/pages/auth/hooks'
+import { useAuthModal } from '@/modules/auth/hooks'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'

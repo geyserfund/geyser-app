@@ -2,6 +2,16 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_FOR_LANDING_PAGE } from '../fragments/projectFragment'
 
+export const QUERY_PROJECTS_SUMMARY = gql`
+  query ProjectsSummary {
+    projectsSummary {
+      fundedTotal
+      fundersCount
+      projectsCount
+    }
+  }
+`
+
 export const QUERY_FEATURED_PROJECT_FOR_LANDING_PAGE = gql`
   ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
   query FeaturedProjectForLandingPage($where: UniqueProjectQueryInput!) {

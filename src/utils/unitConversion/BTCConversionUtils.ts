@@ -9,7 +9,7 @@ export function convertToBTC(satoshis: Satoshis): number {
   return satoshis / SATOSHIS_IN_BTC
 }
 
-/** Converts sats to usd based on BitcoinQuote of a fundingTx */
+/** Converts sats to usd based on BitcoinQuote of a Contribution */
 export const convertSatsToUsd = ({ sats, bitcoinQuote }: { sats: number; bitcoinQuote?: BitcoinQuote | null }) => {
   if (bitcoinQuote && bitcoinQuote.quote) {
     const dollars = convertToBTC(sats as Satoshis) * bitcoinQuote.quote
@@ -20,7 +20,7 @@ export const convertSatsToUsd = ({ sats, bitcoinQuote }: { sats: number; bitcoin
   return 0
 }
 
-/** Converts sats to usd based on BitcoinQuote of a fundingTx, and comma formats */
+/** Converts sats to usd based on BitcoinQuote of a Contribution, and comma formats */
 export const convertSatsToUsdFormatted = ({
   sats,
   bitcoinQuote,
@@ -41,7 +41,7 @@ export const convertSatsToUsdFormatted = ({
   return `$0`
 }
 
-/** Converts sats to usdcents based on BitcoinQuote of a fundingTx */
+/** Converts sats to usdcents based on BitcoinQuote of a Contribution */
 export const convertSatsToCents = ({ sats, bitcoinQuote }: { sats: number; bitcoinQuote?: BitcoinQuote | null }) => {
   if (bitcoinQuote && bitcoinQuote.quote) {
     const dollars = convertToBTC(sats as Satoshis) * bitcoinQuote.quote

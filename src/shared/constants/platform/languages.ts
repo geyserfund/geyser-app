@@ -15,11 +15,6 @@ export enum lng {
   ja = 'ja',
 }
 
-/**
- * Unvailable lanaugaes are commented out, uncomment as they get available
- * TODO: add dynamic languae selection based on completion
- */
-
 export const languages = {
   [lng.en]: 'English',
   [lng.es]: 'Spanish',

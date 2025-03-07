@@ -1,13 +1,13 @@
 import { WebLNProvider } from 'webln'
 
-import { FundingTxFragment } from '../../../../types'
+import { ContributionLightningPaymentDetailsFragment } from '../../../../types'
 import { sha256 } from '../../../../utils'
 
 export const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
 
 export const { webln }: { webln: WebLNProvider } = window as any
 
-export const requestWebLNPayment = async (fundingTx: FundingTxFragment) => {
+export const requestWebLNPayment = async (paymentLightning: ContributionLightningPaymentDetailsFragment) => {
   if (!webln) {
     throw new Error('no provider')
   }
@@ -18,14 +18,14 @@ export const requestWebLNPayment = async (fundingTx: FundingTxFragment) => {
     throw new Error(WEBLN_ENABLE_ERROR)
   }
 
-  if (!fundingTx.paymentRequest) {
+  if (!paymentLightning.paymentRequest) {
     throw new Error('payment request not found')
   }
 
   let preimage = ''
 
   try {
-    const res = await webln.sendPayment(fundingTx.paymentRequest)
+    const res = await webln.sendPayment(paymentLightning.paymentRequest)
     preimage = res.preimage
   } catch (e) {
     throw new Error(WEBLN_ENABLE_ERROR)

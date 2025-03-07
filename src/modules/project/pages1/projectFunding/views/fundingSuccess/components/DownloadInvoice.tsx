@@ -6,25 +6,28 @@ import { PiDownloadSimple } from 'react-icons/pi'
 
 import { FundingProjectState } from '@/modules/project/funding/state/fundingFormAtom'
 
-import { FundingTxForDownloadInvoiceFragment, useFundingTxForDownloadInvoiceQuery } from '../../../../../../../types'
+import {
+  ContributionForDownloadInvoiceFragment,
+  useContributionForDownloadInvoiceGetQuery,
+} from '../../../../../../../types'
 import { toInt } from '../../../../../../../utils'
 import { DownloadInvoicePDF } from './DownloadInvoicePDF'
 
 export const DownloadInvoice = ({
   project,
-  fundingTxId,
+  contributionId,
   showFee,
 }: {
   project: FundingProjectState
-  fundingTxId: BigInt
+  contributionId: BigInt
   showFee?: false
 }) => {
-  const [invoiceData, setInvoiceData] = useState<FundingTxForDownloadInvoiceFragment | null>(null)
+  const [invoiceData, setInvoiceData] = useState<ContributionForDownloadInvoiceFragment | null>(null)
 
-  const transactionQuery = useFundingTxForDownloadInvoiceQuery({
-    variables: { fundingTxId: toInt(fundingTxId) },
+  const transactionQuery = useContributionForDownloadInvoiceGetQuery({
+    variables: { contributionId: toInt(contributionId) },
     onCompleted(data) {
-      setInvoiceData(data.fundingTx)
+      setInvoiceData(data.contribution)
     },
   })
 

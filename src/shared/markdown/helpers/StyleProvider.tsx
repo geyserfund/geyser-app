@@ -33,6 +33,7 @@ const Container = styled(Box, {
     },
     '& a': {
       textDecoration: 'underline',
+      fontWeight: '600',
     },
     '& code': {
       lineBreak: 'anywhere',

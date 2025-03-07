@@ -11,9 +11,9 @@ import { getPath } from '@/shared/constants'
 import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHook'
 import {
   OrderByOptions,
-  ProjectFundingTxFragment,
+  ProjectContributionFragment,
   ProjectLeaderboardContributorsFragment,
-  useProjectPageFundingTxQuery,
+  useProjectPageContributionsGetQuery,
 } from '@/types'
 
 import { UserAvatar } from '../../../../../../../shared/molecules/UserAvatar'
@@ -28,7 +28,7 @@ const MAXIMUM_USER_CONTRIBUTION_ITEMS = 20
 export const FunderContributionModal = ({ funder, ...props }: FunderContributionModalProps) => {
   const { project } = useProjectAtom()
 
-  const [contributions, setContributions] = useState<ProjectFundingTxFragment[]>([])
+  const [contributions, setContributions] = useState<ProjectContributionFragment[]>([])
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -41,7 +41,7 @@ export const FunderContributionModal = ({ funder, ...props }: FunderContribution
     createdAt: OrderByOptions.Desc,
   }
 
-  const { fetchMore } = useProjectPageFundingTxQuery({
+  const { fetchMore } = useProjectPageContributionsGetQuery({
     skip: !project.id || !funder.funderId,
     fetchPolicy: 'network-only',
     variables: {
@@ -54,7 +54,7 @@ export const FunderContributionModal = ({ funder, ...props }: FunderContribution
       },
     },
     onCompleted(data) {
-      handleDataUpdate(data.fundingTxsGet?.fundingTxs || [])
+      handleDataUpdate(data.contributionsGet?.contributions || [])
       setIsLoading(false)
     },
     onError(error) {
@@ -62,14 +62,15 @@ export const FunderContributionModal = ({ funder, ...props }: FunderContribution
     },
   })
 
-  const { handleDataUpdate, isLoadingMore, noMoreItems, fetchNext } = usePaginationAtomHook<ProjectFundingTxFragment>({
-    fetchMore,
-    queryName: ['fundingTxsGet', 'fundingTxs'],
-    itemLimit: MAXIMUM_USER_CONTRIBUTION_ITEMS,
-    where,
-    orderBy,
-    setData: setContributions,
-  })
+  const { handleDataUpdate, isLoadingMore, noMoreItems, fetchNext } =
+    usePaginationAtomHook<ProjectContributionFragment>({
+      fetchMore,
+      queryName: ['contributionsGet', 'contributions'],
+      itemLimit: MAXIMUM_USER_CONTRIBUTION_ITEMS,
+      where,
+      orderBy,
+      setData: setContributions,
+    })
 
   const id = 'user-contributions-modal-scroll-container'
 

@@ -1,6 +1,3 @@
-export * from '../modules/project/graphql/mutation/fundMutation'
+export * from '../modules/auth/graphql/queries/userQuery'
 export * from './mutations/user'
 export * from './queries/entries'
-export * from './queries/funding'
-export * from './queries/project'
-export * from './queries/user'

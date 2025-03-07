@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
 import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
-import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
+import { ExternalAuthSuccess, FailedAuth } from '../../modules/auth'
 import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../pages/fallback'
 import { __production__, getPath, PathName } from '../../shared/constants'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -448,13 +448,6 @@ export const platformRoutes: RouteObject[] = [
                 async lazy() {
                   const ProjectDashboardSettings = await ProjectDashboard().then((m) => m.ProjectDashboardSettings)
                   return { Component: ProjectDashboardSettings }
-                },
-              },
-              {
-                path: getPath('dashboardAffiliates', PathName.projectName),
-                async lazy() {
-                  const ProjectDashboardAffiliates = await ProjectDashboard().then((m) => m.ProjectDashboardAffiliates)
-                  return { Component: ProjectDashboardAffiliates }
                 },
               },
               {

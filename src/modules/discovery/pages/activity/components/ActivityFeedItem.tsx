@@ -37,7 +37,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
   const isGoalActivity =
     activityType === ActivityType.ProjectGoalCreated || activityType === ActivityType.ProjectGoalReached
   const isRewardActivity = activityType === ActivityType.ProjectRewardCreated
-  const isFundingTxActivity = activityType === ActivityType.ContributionConfirmed
+  const isContributionActivity = activityType === ActivityType.ContributionConfirmed
   const isPostActivity = activityType === ActivityType.PostPublished
 
   const activityPath = (activityType: string) => {
@@ -94,7 +94,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
       )}
       <VStack width="full" alignItems="flex-start" spacing={1}>
         {isPostActivity && <ActivityImage resource={resource} />}
-        {!isFundingTxActivity && !isProjectLaunchedActivity && <ActivityTitle resource={resource} />}
+        {!isContributionActivity && !isProjectLaunchedActivity && <ActivityTitle resource={resource} />}
         {isRewardActivity && <ActivityImage resource={resource} />}
         {isRewardActivity && <RewardsInfo reward={resource as ProjectReward} />}
         <ActivityDescription resource={resource} />
@@ -104,7 +104,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
             <GoalTargetAmount goal={resource as ProjectGoal} />
           </>
         )}
-        {isFundingTxActivity && <ContributionInfo resource={resource} />}
+        {isContributionActivity && <ContributionInfo resource={resource} />}
       </VStack>
     </CardLayout>
   )

@@ -1,22 +1,23 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { Link } from 'react-router-dom'
 
-import { useFundingFlowAtom } from '@/modules/project/funding/hooks/useFundingFlowAtom'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { fundingFlowErrorAtom } from '@/modules/project/funding/state/errorAtom.ts'
 import { ApolloErrors, getPath } from '@/shared/constants'
 import { commaFormatted } from '@/utils'
 
-import { FundingMaxLimit } from './components'
-import { FundingErrorOccured } from './components/FundingErrorOccured'
-import { FundingInactiveProject } from './components/FundingInactiveProject'
-import { FundingMinLimit } from './components/FundingMinLimit'
-import { FundingRewardsOutOfStock } from './components/FundingRewardsOutOfStock'
-import { FundingWalletUnreachable } from './components/FundingWalletUnreachable'
+import { FundingErrorOccured } from './components/FundingErrorOccured.tsx'
+import { FundingInactiveProject } from './components/FundingInactiveProject.tsx'
+import { FundingMaxLimit } from './components/FundingMaxLimit.tsx'
+import { FundingMinLimit } from './components/FundingMinLimit.tsx'
+import { FundingRewardsOutOfStock } from './components/FundingRewardsOutOfStock.tsx'
+import { FundingWalletUnreachable } from './components/FundingWalletUnreachable.tsx'
 
 export const PaymentFailed = () => {
   const { project } = useFundingFormAtom()
-  const { error } = useFundingFlowAtom()
+  const error = useAtomValue(fundingFlowErrorAtom)
 
   if (!error || !project) return null
 

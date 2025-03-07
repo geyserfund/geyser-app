@@ -1,7 +1,7 @@
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
-import { BitcoinQuote, Maybe } from '../../../../types'
+import { BitcoinQuote, ContributionOnChainSwapPaymentDetails, Maybe } from '../../../../types'
 import { keyPairAtom } from './keyPairAtom'
 
 export type SwapContributionInfo = {
@@ -42,18 +42,21 @@ export const currentSwapIdAtom = atom<string>('')
 /** Holds all of the swap refund files */
 export const swapAtom = atomWithStorage<SwapDataStructure>('swapArray', {})
 
-/** Parses swap json received with FundingTx and stores it in swapAtom, also sets currentSwapId */
-const swapParseAtom = atom(null, (get, set, swap: { json: string }, contributionInfo?: SwapContributionInfo) => {
-  const keys = get(keyPairAtom)
-  const swapData = get(swapAtom)
-  const refundFile = JSON.parse(swap.json)
-  refundFile.privateKey = keys?.privateKey?.toString('hex')
+/** Parses swap json received with Contribution and stores it in swapAtom, also sets currentSwapId */
+const swapParseAtom = atom(
+  null,
+  (get, set, swap: ContributionOnChainSwapPaymentDetails, contributionInfo?: SwapContributionInfo) => {
+    const keys = get(keyPairAtom)
+    const swapData = get(swapAtom)
+    const refundFile = JSON.parse(swap.swapJson)
+    refundFile.privateKey = keys?.privateKey?.toString('hex')
 
-  refundFile.contributionInfo = contributionInfo
+    refundFile.contributionInfo = contributionInfo
 
-  set(currentSwapIdAtom, refundFile.id) // Set the current id as current swap id
-  set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
-})
+    set(currentSwapIdAtom, refundFile.id) // Set the current id as current swap id
+    set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
+  },
+)
 
 /** Gets and sets an entry in swap atom based on currentSwapId */
 const currentSwapAtom = atom(

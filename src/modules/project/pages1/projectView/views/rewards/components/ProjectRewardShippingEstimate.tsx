@@ -3,10 +3,10 @@ import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ProjectReward, ProjectRewardForCreateUpdateFragment } from '../../../../../../../types'
+import { ProjectRewardFragment } from '@/types/index.ts'
 
 interface Props {
-  reward: ProjectRewardForCreateUpdateFragment | ProjectReward
+  reward: ProjectRewardFragment
 }
 
 export const ProjectRewardShippingEstimate = ({ reward }: Props) => {

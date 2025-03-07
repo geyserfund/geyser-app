@@ -12,7 +12,7 @@ import { FundingMethodsPieChart } from '../elements'
 import { getDateParams } from '../helpers'
 import { useSelectionAtom } from '../insightsAtom'
 
-type MethodSumType = {
+export type MethodSumType = {
   method: string
   sum: number
 }
@@ -29,16 +29,18 @@ export const TransactionMethodComponent = (props: CardLayoutProps) => {
   const [getProjectFundingMethodStats, { loading }] = useProjectFundingMethodStatsGetLazyQuery({
     onCompleted(data) {
       const stats = data.projectStatsGet
+
       const value: MethodSumType[] =
-        stats.current?.projectFundingTxs?.methodSum?.map((sum) => {
+        stats.current?.projectContributionsStats?.contributionsGroupedByMethod.map((contributionsGrouped) => {
           return {
-            method: sum?.method || '',
-            sum: sum?.sum || 0,
+            method: contributionsGrouped.method,
+            sum: contributionsGrouped.total,
           }
         }) || []
+
       setMethodSum(value)
     },
-    onError(error) {
+    onError() {
       toast({
         title: 'Error fetching project stats',
         description: 'Please refresh the page and try again.',

@@ -18,6 +18,9 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsCheckLg } from 'react-icons/bs'
 
+import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
+import { ConnectWithSocial } from '@/modules/auth/ConnectWithSocial.tsx'
+import { SocialAccountType } from '@/modules/auth/type.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 
@@ -28,9 +31,6 @@ import { LockedConnectAccountUrl } from '../../../../shared/constants'
 import { lightModeColors } from '../../../../shared/styles'
 import { Grant, GrantApplicant, GrantApplicantStatus, GrantApplyInput, Project } from '../../../../types'
 import { toInt, useCustomTheme, useNotification } from '../../../../utils'
-import { SocialAccountType } from '../../../auth'
-import { ConnectWithNostr } from '../../../auth/ConnectWithNostr'
-import { ConnectWithSocial } from '../../../auth/ConnectWithSocial'
 
 interface GrantProps {
   grant: Grant

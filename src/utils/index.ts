@@ -1,5 +1,4 @@
 export * from '../shared/utils/formatData/helperFunctions'
-export * from './formatData/aggregateTransactions'
 export * from './formatData/dateOperations'
 export * from './formatData/imageTools'
 export * from './formatData/sha256'

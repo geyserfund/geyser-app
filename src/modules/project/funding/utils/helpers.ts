@@ -1,10 +1,11 @@
 import { ECPairFactory } from 'ecpair'
 import * as ecc from 'tiny-secp256k1'
 
-import { FundingInput } from '../../../../types'
+import { ContributionCreateInput } from '@/types/index.ts'
+
 import { toInt } from '../../../../utils'
 
-export const validateFundingInput = (input: FundingInput) => {
+export const validateFundingInput = (input: ContributionCreateInput) => {
   let isValid = false
   let error = 'cannot initiate funding without amount'
 

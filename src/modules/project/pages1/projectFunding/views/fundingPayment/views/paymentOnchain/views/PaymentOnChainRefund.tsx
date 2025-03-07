@@ -1,5 +1,6 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import { PiHandCoins, PiWarning } from 'react-icons/pi'
 import { useLocation, useNavigate } from 'react-router'
@@ -15,7 +16,7 @@ import { RefundPolicyNote } from '../../../components/RefundPolicyNote'
 import { TransactionFailed } from '../components'
 import { ClaimRefundForm } from '../components/ClaimRefundForm'
 import { DownloadRefundButton } from '../components/DownloadRefundButton'
-import { useSetOnChainErrorValue } from '../states'
+import { onChainErrorAtom } from '../states/onChainErrror.ts'
 import { extractValuesFromError } from '../utils/parseError'
 
 export const PaymentOnChainRefund = () => {
@@ -24,7 +25,7 @@ export const PaymentOnChainRefund = () => {
 
   const { project } = useFundingFormAtom()
 
-  const onChainError = useSetOnChainErrorValue()
+  const onChainError = useAtomValue(onChainErrorAtom)
   const refundFile = useRefundFileValue()
 
   const errorMessage = useMemo(() => {

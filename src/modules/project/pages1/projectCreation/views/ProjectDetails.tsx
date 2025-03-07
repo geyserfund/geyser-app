@@ -117,10 +117,9 @@ export const ProjectDetails = () => {
             subCategory={project?.subCategory}
             updateProject={updateProject}
           />
+          <ProjectRegion location={project?.location} updateProject={updateProject} />
           <ProjectLinks links={project?.links || []} setLinks={setLinks} linkError={linkError} />
           <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
-
-          <ProjectRegion location={project?.location} updateProject={updateProject} />
         </VStack>
       </ProjectCreateLayout>
     </>

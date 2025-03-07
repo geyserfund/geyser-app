@@ -4,8 +4,8 @@ import { useSetAtom } from 'jotai'
 import { updateProjectBalanceCache } from '@/modules/project/API/cache/projectBodyCache'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { addContributionAtom, addContributorAtom } from '@/modules/project/state/contributionsAtom'
-import { addFundingTxToInProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
-import { useFundingTxStatusUpdatedSubscription } from '@/types'
+import { addContributionToInProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
+import { useProjectContributionSubscription } from '@/types/index.ts'
 import { convertSatsToCents, toInt } from '@/utils'
 
 export const useLiveContributions = () => {
@@ -15,11 +15,11 @@ export const useLiveContributions = () => {
 
   const addContribution = useSetAtom(addContributionAtom)
   const addContributor = useSetAtom(addContributorAtom)
-  const addFundingTxToInProgressGoals = useSetAtom(addFundingTxToInProgressGoalsAtom)
+  const addContributionToInProgressGoals = useSetAtom(addContributionToInProgressGoalsAtom)
 
   const skipSubscription = !project.id
 
-  useFundingTxStatusUpdatedSubscription({
+  useProjectContributionSubscription({
     variables: {
       input: {
         projectId: project.id || undefined,
@@ -27,19 +27,19 @@ export const useLiveContributions = () => {
     },
     skip: skipSubscription,
     onData(options) {
-      const fundingTx = options.data.data?.fundingTxStatusUpdated.fundingTx
+      const contribution = options.data.data?.contributionStatusUpdated.contribution
 
-      if (!fundingTx) return
+      if (!contribution) return
       const updateValues = {
-        balance: project.balance ? project.balance + toInt(fundingTx?.amount) : fundingTx?.amount,
+        balance: project.balance ? project.balance + toInt(contribution?.amount) : contribution?.amount,
         balanceUsdCent:
-          fundingTx?.amount && project.balanceUsdCent
+          contribution?.amount && project.balanceUsdCent
             ? project.balanceUsdCent +
-              convertSatsToCents({ sats: fundingTx?.amount, bitcoinQuote: fundingTx?.bitcoinQuote })
+              convertSatsToCents({ sats: contribution?.amount, bitcoinQuote: contribution?.bitcoinQuote })
             : 0,
-        fundingTxsCount: project.fundingTxsCount ? project.fundingTxsCount + 1 : 1,
+        contributionsCount: project.contributionsCount ? project.contributionsCount + 1 : 1,
         fundersCount:
-          project.fundersCount && !(fundingTx?.funder.timesFunded && fundingTx?.funder.timesFunded > 1)
+          project.fundersCount && !(contribution?.funder.timesFunded && contribution?.funder.timesFunded > 1)
             ? project.fundersCount + 1
             : project.fundersCount,
       }
@@ -49,9 +49,9 @@ export const useLiveContributions = () => {
 
       partialUpdateProject(updateValues)
 
-      addContribution(fundingTx)
-      addContributor(fundingTx)
-      addFundingTxToInProgressGoals(fundingTx)
+      addContribution(contribution)
+      addContributor(contribution)
+      addContributionToInProgressGoals(contribution)
     },
   })
 }

@@ -1,17 +1,19 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 
-import { useListenFundingSuccess } from '@/modules/project/funding/hooks/useListenFundingSuccess'
+import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess'
 import { Body } from '@/shared/components/typography'
 
-import { TransactionProcessing, UpdateFundingTxEmailAddress } from '../components'
+import { TransactionProcessing, UpdateFundingContributionEmailAddress } from '../components'
 import { DownloadRefundButton } from '../components/DownloadRefundButton'
-import { useSwapTransactionValue } from '../states/onChainTransaction'
+import { swapTransactionAtom } from '../states/onChainTransaction.ts'
 
 export const PaymentOnchainProcessing = () => {
-  useListenFundingSuccess()
+  useListenFundingContributionSuccess()
 
-  const swapTransaction = useSwapTransactionValue()
+  const swapTransaction = useAtomValue(swapTransactionAtom)
+
   return (
     <VStack w="full" spacing={6}>
       <TransactionProcessing
@@ -22,7 +24,7 @@ export const PaymentOnchainProcessing = () => {
         )}
         transactionId={swapTransaction.id}
       />
-      <UpdateFundingTxEmailAddress />
+      <UpdateFundingContributionEmailAddress />
       <VStack w="full" spacing={0} maxWidth="310px">
         <DownloadRefundButton variant="surface" colorScheme="primary1" size="lg" width="310px" />
         <Body size="xs" light>

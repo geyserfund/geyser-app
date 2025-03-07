@@ -1,4 +1,4 @@
-import { ExternalAccountType } from '../../pages/auth'
+import { ExternalAccountType } from '../../modules/auth'
 import { UserForProfilePageFragment, UserMeFragment } from '../../types/generated/graphql'
 
 type UserAccount = UserMeFragment | UserForProfilePageFragment

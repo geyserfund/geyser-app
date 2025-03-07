@@ -1,7 +1,8 @@
 import { HStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
-import { useFundingTxAtom } from '@/modules/project/funding/state'
+import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
 import { Body } from '@/shared/components/typography'
 
 import { useBTCConverter } from '../../../../../../../helpers'
@@ -13,20 +14,22 @@ export const TotalAmountToPay = () => {
   const { t } = useTranslation()
   const { getUSDAmount } = useBTCConverter()
 
-  const { fundingTx } = useFundingTxAtom()
+  const fundingContribution = useAtomValue(fundingContributionAtom)
 
   return (
     <HStack w="full" justifyContent="center">
       <Body light>{t(' Total to pay')}: </Body>
 
       <Body>
-        {`${commaFormatted(fundingTx.amount)} `}
+        {`${commaFormatted(fundingContribution.amount)} `}
 
         <Body as="span" light>
           sats
         </Body>
       </Body>
-      <Body light>{`($${commaFormatted(parseFloat(getUSDAmount(fundingTx.amount as Satoshis).toFixed(2)))})`}</Body>
+      <Body light>{`($${commaFormatted(
+        parseFloat(getUSDAmount(fundingContribution.amount as Satoshis).toFixed(2)),
+      )})`}</Body>
     </HStack>
   )
 }

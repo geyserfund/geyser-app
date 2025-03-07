@@ -20,9 +20,9 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
 
   const { backgroundColor } = getRewardShippingStatusBackgroundColor(order.status as OrdersGetStatus, colors)
 
-  const project = order.fundingTx.sourceResource as ProjectAvatarFragment
+  const project = order.contribution.sourceResource as ProjectAvatarFragment
 
-  const bitcoinPrice = order.fundingTx.bitcoinQuote?.quote || 0
+  const bitcoinPrice = order.contribution.bitcoinQuote?.quote || 0
   const usdPrice = getUSD(order.totalInSats, bitcoinPrice)
 
   return (

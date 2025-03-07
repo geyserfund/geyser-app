@@ -2,13 +2,13 @@ import { atom } from 'jotai'
 
 import { convertSatsToCents } from '@/utils'
 
-import { FundingTxForSubscriptionFragment, ProjectGoalCurrency, ProjectGoalsFragment } from '../../../types'
+import { ProjectContributionFragment, ProjectGoalCurrency, ProjectGoalsFragment } from '../../../types'
 
 /** In Progress goals for Project in context */
 export const inProgressGoalsAtom = atom<ProjectGoalsFragment[]>([])
 
-/** Add funding Tx to in progress goals */
-export const addFundingTxToInProgressGoalsAtom = atom(null, (get, set, payload: FundingTxForSubscriptionFragment) => {
+/** Add contribution to in progress goals */
+export const addContributionToInProgressGoalsAtom = atom(null, (get, set, payload: ProjectContributionFragment) => {
   const inProgressGoals = get(inProgressGoalsAtom)
 
   set(

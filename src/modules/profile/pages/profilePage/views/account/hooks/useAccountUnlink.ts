@@ -3,7 +3,7 @@ import { useAtom } from 'jotai'
 import { useMemo } from 'react'
 
 import { useAuthContext } from '../../../../../../../context'
-import { ExternalAccountType } from '../../../../../../../pages/auth'
+import { ExternalAccountType } from '../../../../../../../modules/auth'
 import { Exact, UnlinkExternalAccountMutation, useUnlinkExternalAccountMutation } from '../../../../../../../types'
 import { userProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 

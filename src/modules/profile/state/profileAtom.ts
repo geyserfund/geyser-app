@@ -1,6 +1,6 @@
 import { atom, useAtomValue } from 'jotai'
 
-import { authUserAtom } from '../../../pages/auth/state'
+import { authUserAtom } from '../../../modules/auth/state'
 import { UserForProfilePageFragment } from '../../../types'
 
 export const defaultUser: UserForProfilePageFragment = {

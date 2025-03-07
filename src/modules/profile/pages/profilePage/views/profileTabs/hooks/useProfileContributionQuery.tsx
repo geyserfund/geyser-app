@@ -16,7 +16,7 @@ export const useProfileContributionQuery = (userId: number) => {
     },
     skip: !userId,
     onCompleted(data) {
-      setContributions(data.user.contributions)
+      setContributions(data.user.projectContributions)
       setIsLoading(false)
     },
     onError(error) {

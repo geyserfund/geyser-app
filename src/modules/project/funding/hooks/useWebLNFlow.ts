@@ -2,8 +2,9 @@ import { useAtom } from 'jotai'
 import { useCallback } from 'react'
 import { RejectionError } from 'webln'
 
-import { FundingTxFragment } from '../../../../types'
-import { useNotification } from '../../../../utils'
+import { ContributionLightningPaymentDetailsFragment } from '@/types/index.ts'
+import { useNotification } from '@/utils/index.ts'
+
 import { weblnErrorAtom } from '../state/errorAtom'
 import { requestWebLNPayment, WEBLN_ENABLE_ERROR } from '../utils/requestWebLNPayment'
 
@@ -13,16 +14,16 @@ export const useWebLNFlow = () => {
   const [weblnErrored, setWebLNErrored] = useAtom(weblnErrorAtom)
 
   const startWebLNFlow = useCallback(
-    async (fundingTx: FundingTxFragment) => {
+    async (paymentLightning: ContributionLightningPaymentDetailsFragment) => {
       if (weblnErrored) {
         return
       }
 
       try {
-        const paymentHash = await requestWebLNPayment(fundingTx)
+        const paymentHash = await requestWebLNPayment(paymentLightning)
 
         // Check preimage
-        if (paymentHash === fundingTx.invoiceId) {
+        if (paymentHash === paymentLightning.lightningInvoiceId) {
           return true
         }
 

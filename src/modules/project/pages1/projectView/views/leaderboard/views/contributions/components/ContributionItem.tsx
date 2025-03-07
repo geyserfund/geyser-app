@@ -7,13 +7,13 @@ import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { TimeAgo } from '@/shared/molecules/TimeAgo'
-import { ProjectFundingTxFragment } from '@/types'
+import { ProjectContributionFragment } from '@/types/index.ts'
 import { commaFormatted, convertSatsToUsdFormatted } from '@/utils'
 
 import { UserAvatar } from '../../../../../../../../../shared/molecules/UserAvatar'
 
 type ContributionItemProps = {
-  contribution: ProjectFundingTxFragment
+  contribution: ProjectContributionFragment
 } & StackProps
 
 export const ContributionItem = ({ contribution, ...props }: ContributionItemProps) => {
@@ -42,7 +42,7 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
           <ProfileText guardian={contribution.funder.user?.guardianType} size="sm" bold dark>
             {contribution.funder.user?.username || t('Anonymous')}
           </ProfileText>
-          <TimeAgo date={contribution.paidAt} />
+          <TimeAgo date={contribution.confirmedAt} />
         </HStack>
 
         <HStack spacing={2}>

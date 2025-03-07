@@ -1,7 +1,7 @@
 import { useSetAtom } from 'jotai'
 import React from 'react'
 
-import { followedProjectsAtom, useFollowedProjectsValue } from '../../../pages/auth/state'
+import { followedProjectsAtom, useFollowedProjectsValue } from '../../../modules/auth/state'
 import { Project, useProjectFollowMutation, useProjectUnfollowMutation } from '../../../types'
 import { toInt } from '../../../utils'
 
