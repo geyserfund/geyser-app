@@ -48,7 +48,7 @@ export const resetFundingContributionAtom = atom(null, (_, set) => {
 export const fundingContributionStatusCheckAtom = atom(
   null,
   (get, set, fundingContribution: Partial<FundingContributionFragment>) => {
-    if (!fundingContribution || fundingContribution.status) {
+    if (!fundingContribution || !fundingContribution.status) {
       return
     }
 
