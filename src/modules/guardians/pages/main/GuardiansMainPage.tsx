@@ -1,4 +1,4 @@
-import { Box, HStack, Image, Link, VStack } from '@chakra-ui/react'
+import { Box, HStack, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { Trans } from 'react-i18next'
@@ -14,12 +14,14 @@ import { fonts } from '@/shared/styles'
 import { GuardianType } from '@/types'
 import { useMobileMode } from '@/utils'
 
-import { PartnerUrls } from '../../data'
 import { guardianRewardsDiscountItemsAtom } from '../../state/guardianRewards'
 import { Copyright } from './components/Copyright'
 import { DesktopGuardiansIllustration } from './components/DesktopGuardiansIllustration'
 import { GuardianUsers } from './components/GuardianUsers'
+import { Investors } from './components/Investors.tsx'
 import { MobileGuardiansIllustration } from './components/MobileGuardiansIllustration'
+import { Partners } from './components/Partners.tsx'
+import { Promotion } from './components/Promotion.tsx'
 
 export const GuardiansMainPage = () => {
   const isMobile = useMobileMode()
@@ -157,57 +159,14 @@ export const GuardiansMainPage = () => {
           <GuardianUsers guardian={GuardianType.King} size="md" />
           <GuardianUsers guardian={GuardianType.Knight} size="sm" />
           <GuardianUsers guardian={GuardianType.Warrior} size="sm" />
-          <VStack w="full" spacing={{ base: '16px', lg: '32px' }}>
+          <Promotion />
+          <VStack w="full" spacing={{ base: '16px', lg: '22px' }}>
+            <GuardianHeader>{t('Investors')}</GuardianHeader>
+            <Investors />
+          </VStack>
+          <VStack w="full" spacing={{ base: '16px', lg: '22px' }}>
             <GuardianHeader>{t('Partners')}</GuardianHeader>
-            <VStack spacing={8}>
-              <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
-                {PartnerUrls.slice(0, 3).map((partner, index) => (
-                  <Link href={partner.link} isExternal key={partner.image}>
-                    <Image
-                      src={partner.image}
-                      alt="Partner"
-                      maxWidth="300px"
-                      width={'auto'}
-                      height={'72px'}
-                      objectFit={'contain'}
-                      key={partner.image}
-                    />
-                  </Link>
-                ))}
-              </HStack>
-
-              <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
-                {PartnerUrls.slice(3, 8).map((partner, index) => (
-                  <Link href={partner.link} isExternal key={partner.image}>
-                    <Image
-                      src={partner.image}
-                      alt="Partner"
-                      maxWidth="150px"
-                      width={'auto'}
-                      height={'32px'}
-                      objectFit={'contain'}
-                      key={partner.image}
-                    />
-                  </Link>
-                ))}
-              </HStack>
-
-              <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
-                {PartnerUrls.slice(8, 10).map((partner, index) => (
-                  <Link href={partner.link} isExternal key={partner.image}>
-                    <Image
-                      src={partner.image}
-                      alt="Partner"
-                      maxWidth="150px"
-                      width={'auto'}
-                      height={'32px'}
-                      objectFit={'contain'}
-                      key={partner.image}
-                    />
-                  </Link>
-                ))}
-              </HStack>
-            </VStack>
+            <Partners />
           </VStack>
           <Copyright />
         </VStack>
