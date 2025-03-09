@@ -533,6 +533,13 @@ export const platformRoutes: RouteObject[] = [
                     },
                   },
                   {
+                    path: getPath('fundingPaymentFiatSwap', PathName.projectName),
+                    async lazy() {
+                      const PaymentFiatSwap = await ProjectFunding().then((m) => m.PaymentFiatSwap)
+                      return { Component: PaymentFiatSwap }
+                    },
+                  },
+                  {
                     path: getPath('fundingPaymentOnchain', PathName.projectName),
                     async lazy() {
                       const PaymentOnchain = await ProjectFunding().then((m) => m.PaymentOnchain)

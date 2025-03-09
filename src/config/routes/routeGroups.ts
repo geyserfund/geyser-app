@@ -92,6 +92,8 @@ export const projectFundingPaymentOnchainRoutes = [
   ...projectFundingPaymentOnchainStartedRoutes,
 ]
 
+export const projectFundingPaymentFiatSwapRoutes = [getPath('fundingPaymentFiatSwap', PathName.projectName)]
+
 export const projectFundingRoutes = [
   getPath('projectFunding', PathName.projectName),
   getPath('fundingDetails', PathName.projectName),

@@ -6,6 +6,7 @@ import { Payment } from './views/fundingPayment/Payment'
 import { Subscription } from './views/fundingPayment/Subscription'
 import { PaymentCard } from './views/fundingPayment/views/PaymentCard'
 import { PaymentFailed } from './views/fundingPayment/views/paymentFailed/PaymentFailed'
+import { PaymentFiatSwap } from './views/fundingPayment/views/PaymentFiatSwap.tsx'
 import { PaymentLightning } from './views/fundingPayment/views/PaymentLightning'
 import { PaymentLoading } from './views/fundingPayment/views/PaymentLoading'
 import { PaymentOnchain } from './views/fundingPayment/views/paymentOnchain/PaymentOnchain'
@@ -24,6 +25,7 @@ export {
   Payment,
   PaymentCard,
   PaymentFailed,
+  PaymentFiatSwap,
   PaymentLightning,
   PaymentLoading,
   PaymentOnchain,

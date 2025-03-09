@@ -37,6 +37,14 @@ export const PaymentMethodSelection = () => {
     }
 
     navBarItems.push({
+      name: t('Fiat Swap'),
+      key: PaymentMethods.fiatSwap,
+      path: PathName.fundingPaymentFiatSwap,
+      isDisabled: isOnchainMethodStarted || Boolean(!paymentMethod),
+      disableClick: isOnchainMethodStarted,
+    })
+
+    navBarItems.push({
       name: t('Lightning'),
       key: PaymentMethods.lightning,
       path: PathName.fundingPaymentLightning,
