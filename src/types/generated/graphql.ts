@@ -1960,7 +1960,7 @@ export enum PaymentCurrency {
 export type PaymentDetails = FiatSwapPaymentDetails | LightningPaymentDetails | OnChainSwapPaymentDetails;
 
 export type PaymentFailInput = {
-  failureReason: Scalars['String']['input'];
+  failureReason?: InputMaybe<Scalars['String']['input']>;
   invoiceId?: InputMaybe<Scalars['String']['input']>;
   uuid?: InputMaybe<Scalars['String']['input']>;
 };
@@ -7043,6 +7043,13 @@ export type ContributionEmailUpdateMutationVariables = Exact<{
 
 export type ContributionEmailUpdateMutation = { __typename?: 'Mutation', contributionEmailUpdate: { __typename?: 'Contribution', id: any, email?: string | null } };
 
+export type FundingFiatSwapPaymentCreateMutationVariables = Exact<{
+  input: ContributionPaymentsAddInput;
+}>;
+
+
+export type FundingFiatSwapPaymentCreateMutation = { __typename?: 'Mutation', contributionPaymentsAdd: { __typename?: 'ContributionPaymentsAddResponse', payments: { __typename?: 'ContributionPaymentsDetails', fiatSwap?: { __typename?: 'ContributionFiatSwapPaymentDetails', checkoutUrl: string } | null } } };
+
 export type DeleteEntryMutationVariables = Exact<{
   deleteEntryId: Scalars['BigInt']['input'];
 }>;
@@ -11686,6 +11693,43 @@ export function useContributionEmailUpdateMutation(baseOptions?: Apollo.Mutation
 export type ContributionEmailUpdateMutationHookResult = ReturnType<typeof useContributionEmailUpdateMutation>;
 export type ContributionEmailUpdateMutationResult = Apollo.MutationResult<ContributionEmailUpdateMutation>;
 export type ContributionEmailUpdateMutationOptions = Apollo.BaseMutationOptions<ContributionEmailUpdateMutation, ContributionEmailUpdateMutationVariables>;
+export const FundingFiatSwapPaymentCreateDocument = gql`
+    mutation FundingFiatSwapPaymentCreate($input: ContributionPaymentsAddInput!) {
+  contributionPaymentsAdd(input: $input) {
+    payments {
+      fiatSwap {
+        checkoutUrl
+      }
+    }
+  }
+}
+    `;
+export type FundingFiatSwapPaymentCreateMutationFn = Apollo.MutationFunction<FundingFiatSwapPaymentCreateMutation, FundingFiatSwapPaymentCreateMutationVariables>;
+
+/**
+ * __useFundingFiatSwapPaymentCreateMutation__
+ *
+ * To run a mutation, you first call `useFundingFiatSwapPaymentCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFundingFiatSwapPaymentCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fundingFiatSwapPaymentCreateMutation, { data, loading, error }] = useFundingFiatSwapPaymentCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFundingFiatSwapPaymentCreateMutation(baseOptions?: Apollo.MutationHookOptions<FundingFiatSwapPaymentCreateMutation, FundingFiatSwapPaymentCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FundingFiatSwapPaymentCreateMutation, FundingFiatSwapPaymentCreateMutationVariables>(FundingFiatSwapPaymentCreateDocument, options);
+      }
+export type FundingFiatSwapPaymentCreateMutationHookResult = ReturnType<typeof useFundingFiatSwapPaymentCreateMutation>;
+export type FundingFiatSwapPaymentCreateMutationResult = Apollo.MutationResult<FundingFiatSwapPaymentCreateMutation>;
+export type FundingFiatSwapPaymentCreateMutationOptions = Apollo.BaseMutationOptions<FundingFiatSwapPaymentCreateMutation, FundingFiatSwapPaymentCreateMutationVariables>;
 export const DeleteEntryDocument = gql`
     mutation DeleteEntry($deleteEntryId: BigInt!) {
   deleteEntry(id: $deleteEntryId) {

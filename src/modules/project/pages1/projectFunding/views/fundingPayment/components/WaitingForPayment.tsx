@@ -8,7 +8,7 @@ import { Caption } from '../../../../../../../components/typography'
 import Loader from '../../../../../../../components/ui/Loader'
 import { useMobileMode } from '../../../../../../../utils'
 
-export const WaitingForPayment = () => {
+export const WaitingForPayment = ({ title }: { title?: string }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
   return (
@@ -25,7 +25,7 @@ export const WaitingForPayment = () => {
           <PopoverContent>
             <PopoverArrow />
             <PopoverBody width="auto">
-              <Caption fontSize="12px">{t('Scan and pay invoice with bitcoin.')}</Caption>
+              <Caption fontSize="12px">{title || t('Scan and pay invoice with bitcoin.')}</Caption>
             </PopoverBody>
           </PopoverContent>
         </Popover>
