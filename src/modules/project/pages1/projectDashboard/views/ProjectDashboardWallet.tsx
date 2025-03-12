@@ -15,7 +15,8 @@ import { useCustomTheme, useNotification } from '../../../../../utils'
 import { ProjectCreationWalletConnectionForm } from '../../../pages1/projectCreation'
 import { ConnectionOption, useWalletForm } from '../../projectCreation/hooks/useWalletForm'
 import { DashboardLayout } from '../common'
-
+import { EnableFiatContributions } from '../components/EnableFiatContributions.tsx'
+import { WalletLimitsAndVerification } from '../components/WalletLimitsAndVerification'
 export const ProjectDashboardWallet = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -148,10 +149,15 @@ export const ProjectDashboardWallet = () => {
 
   return (
     <DashboardLayout
-      desktopTitle={t('Connect wallet')}
+      desktopTitle={t('Wallet')}
       mobileTopNavRightComponent={<SaveButton />}
       deskTopBottomComponent={<SaveButton w="full" />}
     >
+      <VStack spacing="20px">
+        <WalletLimitsAndVerification />
+        <EnableFiatContributions />
+      </VStack>
+
       <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }} alignItems={'start'}>
         <Body size="sm" light>
           <Trans

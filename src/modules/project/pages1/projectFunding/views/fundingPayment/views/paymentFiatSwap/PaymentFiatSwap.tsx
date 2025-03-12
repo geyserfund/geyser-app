@@ -16,7 +16,7 @@ import {
   fundingPaymentDetailsPartialUpdateAtom,
 } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
-import { Body, H1 } from '@/shared/components/typography/index.ts'
+import { Body } from '@/shared/components/typography/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { useFundingFiatSwapPaymentCreateMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
