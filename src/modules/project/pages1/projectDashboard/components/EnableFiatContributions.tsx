@@ -3,11 +3,10 @@ import { t } from 'i18next'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 
 export const EnableFiatContributions = () => {
   return (
-    <VStack alignItems={'start'} paddingX={standardPadding}>
+    <VStack alignItems={'start'} paddingX={{ base: 0, lg: 6 }}>
       <CardLayout padding={4}>
         <HStack w="full" justifyContent="space-between">
           <Body size="lg" medium>

@@ -5,7 +5,7 @@ import { PiCheckCircle, PiCheckCircleFill, PiEnvelope, PiIdentificationCard, PiP
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
-import { halfStandardPadding, standardPadding } from '@/shared/styles/reponsiveValues.ts'
+import { halfStandardPadding } from '@/shared/styles/reponsiveValues.ts'
 
 const MAX_LEVEL_1 = 1000000 // 10K $ in cents
 const MAX_LEVEL_2 = 10000000 // 100K $ in cents
@@ -31,7 +31,7 @@ export const WalletLimitsAndVerification = () => {
   const barColor = isLevel3 ? 'primary1.9' : isLevel1 ? level1Color : level2Color
 
   return (
-    <VStack paddingX={standardPadding}>
+    <VStack paddingX={{ base: 0, lg: 6 }}>
       <CardLayout width="100%">
         <VStack spacing={6} alignItems="flex-start" width="100%">
           <VStack spacing={1} alignItems="flex-start" width="100%">
