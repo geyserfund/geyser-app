@@ -30,21 +30,16 @@ export const ProjectDashboardDetails = () => {
   })
 
   const onSubmit = async () => {
-    if (!project.category) {
+    if (!project.subCategory || !project.category) {
       toast.error({
         title: 'Please select a category',
         description: 'Project category is required to proceed',
       })
-      setProjectFormError((prev) => ({ ...prev, category: 'Project category is required' }))
-      return
-    }
-
-    if (!project.subCategory) {
-      toast.error({
-        title: 'Please select a sub-category',
-        description: 'Project sub-category is required to proceed',
-      })
-      setProjectFormError((prev) => ({ ...prev, subCategory: 'Project sub-category is required' }))
+      setProjectFormError((prev) => ({
+        ...prev,
+        subCategory: 'Project category is required',
+        category: 'Project category is required',
+      }))
       return
     }
 
@@ -121,11 +116,11 @@ export const ProjectDashboardDetails = () => {
             updateProject={updateProject}
           />
 
-          <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
-
           <ProjectRegion location={project?.location} updateProject={updateProject} />
 
           <ProjectLinks links={(project?.links as string[]) || []} setLinks={setLinks} linkError={linkError} />
+
+          <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
         </VStack>
         <ProjectUnsavedModal {...unsavedModal} />
       </DashboardLayout>
