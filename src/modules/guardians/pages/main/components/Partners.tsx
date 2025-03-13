@@ -5,7 +5,7 @@ import { PartnerUrls } from '@/modules/guardians/data'
 
 import { GuardianBody } from '../GuardiansMainPage.tsx'
 
-const PartnerPromotionUrl = 'https://geyser.fund/project/geyserpromotions/rewards/view/6236?hero=geyser'
+const PartnerPromotionUrl = 'https://geyser.fund/project/geyserpromotions/rewards/view/6267?hero=geyser'
 
 export const Partners = () => {
   return (

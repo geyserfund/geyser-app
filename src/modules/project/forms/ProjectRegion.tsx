@@ -1,8 +1,7 @@
-import { HStack, IconButton, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
+import { StackProps, useDisclosure } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiX } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
 import { SingleValue } from 'react-select'
 
@@ -21,15 +20,6 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
     width: '100%',
     alignItems: 'flex-start',
     spacing: '5px',
-  },
-
-  tagContainer: {
-    width: '100%',
-    backgroundColor: colors.utils.pbg,
-    border: '1px solid',
-    borderColor: colors.neutral1[6],
-    borderRadius: '8px',
-    padding: '12px',
   },
 
   select: {
@@ -93,20 +83,7 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
     setProjectFormError((prev) => ({ ...prev, location: undefined }))
   }
 
-  const removeRegion = () => {
-    clearLocationError()
-    updateProject({
-      location: { region: '', country: { code: '', name: '' } },
-    })
-  }
-
   const isLoading = countriesLoading
-
-  const displayLocation = location?.country?.name
-    ? location?.region
-      ? `${location?.country?.name} ( ${location?.region} )`
-      : location?.country?.name
-    : location?.region || ''
 
   return (
     <FieldContainer
@@ -114,49 +91,29 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
       subtitle={<span>{t('Get found more easily by putting your project on the map. Select a country')}</span>}
       {...rest}
     >
-      <VStack className={classes.tagContainer} spacing="10px">
-        {isLoading ? (
-          <SkeletonLayout h="40px" />
-        ) : (
-          <CustomSelect<Country, false>
-            menuIsOpen={isOpen}
-            className={classes.select}
-            onChange={handleChange}
-            name="tags"
-            placeholder={t('Select country')}
-            value={[]}
-            isLoading={isLoading}
-            options={options}
-            getOptionLabel={(option: Country) => option.name}
-            getOptionValue={(option: Country) => option.code}
-            onInputChange={handleInputChange}
-            inputValue={inputValue}
-            onMenuOpen={onOpen}
-            onMenuClose={onClose}
-            isInvalid={Boolean(projectFormError.location)}
-            onFocus={clearLocationError}
-          />
-        )}
+      {isLoading ? (
+        <SkeletonLayout h="40px" />
+      ) : (
+        <CustomSelect<Country, false>
+          menuIsOpen={isOpen}
+          className={classes.select}
+          onChange={handleChange}
+          name="tags"
+          placeholder={t('Select country')}
+          value={location?.country}
+          isLoading={isLoading}
+          options={options}
+          getOptionLabel={(option: Country) => option.name}
+          getOptionValue={(option: Country) => option.code}
+          onInputChange={handleInputChange}
+          inputValue={inputValue}
+          onMenuOpen={onOpen}
+          onMenuClose={onClose}
+          isInvalid={Boolean(projectFormError.location)}
+          onFocus={clearLocationError}
+        />
+      )}
 
-        <HStack width="100%" spacing="10px" flexWrap={'wrap'}>
-          {displayLocation && (
-            <HStack borderRadius="4px" paddingLeft="8px" backgroundColor="neutral1.2">
-              <Body medium>{displayLocation}</Body>
-              <IconButton
-                variant="ghost"
-                _hover={{}}
-                _pressed={{}}
-                _active={{}}
-                size="xs"
-                borderRadius="8px"
-                aria-label="remove-region-close-icon"
-                onClick={removeRegion}
-                icon={<PiX />}
-              />
-            </HStack>
-          )}
-        </HStack>
-      </VStack>
       {projectFormError.location && (
         <Body size="xs" color="error.9" w="full" textAlign={'start'}>
           {projectFormError.location}
