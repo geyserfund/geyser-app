@@ -2,36 +2,40 @@ import { Box, Button, Flex, HStack, Icon, Stack, VStack } from '@chakra-ui/react
 import { t } from 'i18next'
 import { PiCheckCircle, PiCheckCircleFill, PiEnvelope, PiIdentificationCard, PiPhone } from 'react-icons/pi'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { useAuthContext } from '@/context/auth.tsx'
+import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { halfStandardPadding } from '@/shared/styles/reponsiveValues.ts'
+import { UserVerificationLevelInput } from '@/types/index.ts'
 
-const MAX_LEVEL_1 = 1000000 // 10K $ in cents
-const MAX_LEVEL_2 = 10000000 // 100K $ in cents
+import { useUserVerificationModal } from '../hooks/useUserVerificationModal.ts'
+import { useWalletLimitProgressData } from '../hooks/useWalletLimitProgressData.ts'
+import { UserVerificationModal } from './UserVerificationModal.tsx'
 
 /** Component that displays funding limits and verification options for the user */
 export const WalletLimitsAndVerification = () => {
-  const { project } = useProjectAtom()
+  const { percentage, barColor } = useWalletLimitProgressData()
 
-  const percentageInitial = (project.balanceUsdCent / MAX_LEVEL_2) * 100
+  const { user } = useAuthContext()
 
-  const isLevel1 = project.balanceUsdCent <= MAX_LEVEL_1
-  const isLevel3 = project.balanceUsdCent >= MAX_LEVEL_2
+  const { userVerificationModal, startVerification, userVerificationToken, generateVerificationTokenLoading } =
+    useUserVerificationModal()
 
-  const percentage = isLevel3
-    ? percentageInitial
-    : isLevel1
-    ? percentageInitial * 3
-    : 30 + ((project.balanceUsdCent - MAX_LEVEL_1) / (MAX_LEVEL_2 - MAX_LEVEL_1)) * 70
+  const isEmailVerified = user.complianceDetails.verifiedDetails.email?.verified
+  const isPhoneVerified = user.complianceDetails.verifiedDetails.phoneNumber?.verified
+  const isIdentityVerified = user.complianceDetails.verifiedDetails.identity?.verified
 
-  const level1Color = percentage >= 29 ? 'error.9' : percentage > 25 ? 'warning.9' : 'primary1.9'
-  const level2Color = percentage >= 99 ? 'error.9' : percentage > 90 ? 'warning.9' : 'primary1.9'
+  const handleGenerateVerificationTokenForPhone = () => {
+    startVerification(UserVerificationLevelInput.Level_2)
+  }
 
-  const barColor = isLevel3 ? 'primary1.9' : isLevel1 ? level1Color : level2Color
+  const handleGenerateVerificationTokenForIdentity = () => {
+    startVerification(UserVerificationLevelInput.Level_3)
+  }
 
   return (
-    <VStack paddingX={{ base: 0, lg: 6 }}>
+    <>
       <CardLayout width="100%">
         <VStack spacing={6} alignItems="flex-start" width="100%">
           <VStack spacing={1} alignItems="flex-start" width="100%">
@@ -94,7 +98,7 @@ export const WalletLimitsAndVerification = () => {
           {/* Verification Cards */}
           <Stack direction={{ base: 'column', md: 'row' }} spacing={4} width="100%">
             {/* Email Verification */}
-            <CardLayout flex="1" borderRadius="md" padding={halfStandardPadding}>
+            <CardLayout flex="1" borderRadius="md" padding={halfStandardPadding} justifyContent="space-between">
               <VStack spacing={4} alignItems="flex-start">
                 <HStack spacing={2}>
                   <Icon as={PiEnvelope} fontSize="20px" color="neutral1.11" />
@@ -110,19 +114,23 @@ export const WalletLimitsAndVerification = () => {
                     <Body size="sm">{t('Max $10k per contribution')}</Body>
                   </HStack>
                 </VStack>
-                <Flex justify="center" align="center" width="100%">
+              </VStack>
+              <Flex justify="center" align="center" width="100%">
+                {isEmailVerified ? (
                   <HStack spacing={1}>
                     <PiCheckCircleFill color="primary1.9" />
                     <Body fontWeight="medium" color="neutral1.11">
                       {t('Verified')}
                     </Body>
                   </HStack>
-                </Flex>
-              </VStack>
+                ) : (
+                  <UpdateVerifyEmail verifyButtonMode verifyButtonProps={{ size: 'md', width: '100%' }} />
+                )}
+              </Flex>
             </CardLayout>
 
             {/* Phone Verification */}
-            <CardLayout flex="1" borderRadius="md" padding={halfStandardPadding}>
+            <CardLayout flex="1" borderRadius="md" padding={halfStandardPadding} justifyContent="space-between">
               <VStack spacing={4} alignItems="flex-start">
                 <HStack spacing={2}>
                   <Icon as={PiPhone} fontSize="20px" color="neutral1.11" />
@@ -138,12 +146,27 @@ export const WalletLimitsAndVerification = () => {
                     <Body size="sm">{t('Max $10k per contribution')}</Body>
                   </HStack>
                 </VStack>
-                <Flex justify="center" align="center" width="100%">
-                  <Button variant="outline" size="md" width="full">
+              </VStack>
+              <Flex justify="center" align="center" width="100%">
+                {isPhoneVerified ? (
+                  <HStack spacing={1}>
+                    <PiCheckCircleFill color="primary1.9" />
+                    <Body fontWeight="medium" color="neutral1.11">
+                      {t('Verified')}
+                    </Body>
+                  </HStack>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="md"
+                    width="full"
+                    onClick={handleGenerateVerificationTokenForPhone}
+                    isLoading={generateVerificationTokenLoading}
+                  >
                     {t('Increase my limit')}
                   </Button>
-                </Flex>
-              </VStack>
+                )}
+              </Flex>
             </CardLayout>
 
             {/* Gov ID Verification */}
@@ -161,14 +184,35 @@ export const WalletLimitsAndVerification = () => {
                 </VStack>
               </VStack>
               <Flex justify="center" align="center" width="100%">
-                <Button colorScheme="primary1" size="md" width="full">
-                  {t('Go limitless')}
-                </Button>
+                {isIdentityVerified ? (
+                  <HStack spacing={1}>
+                    <PiCheckCircleFill color="primary1.9" />
+                    <Body fontWeight="medium" color="neutral1.11">
+                      {t('Verified')}
+                    </Body>
+                  </HStack>
+                ) : (
+                  <Button
+                    colorScheme="primary1"
+                    size="md"
+                    width="full"
+                    onClick={handleGenerateVerificationTokenForIdentity}
+                    isLoading={generateVerificationTokenLoading}
+                  >
+                    {t('Go limitless')}
+                  </Button>
+                )}
               </Flex>
             </CardLayout>
           </Stack>
         </VStack>
       </CardLayout>
-    </VStack>
+
+      <UserVerificationModal
+        userVerificationModal={userVerificationModal}
+        accessToken={userVerificationToken?.token || ''}
+        verificationLevel={userVerificationToken?.verificationLevel}
+      />
+    </>
   )
 }

@@ -16,6 +16,34 @@ export const defaultUser: UserMeFragment = {
   externalAccounts: [],
   ownerOf: [],
   hasSocialAccount: false,
+  complianceDetails: {
+    contributionLimits: {
+      daily: {
+        limit: 0,
+        reached: false,
+        remaining: 0,
+      },
+      monthly: {
+        limit: 0,
+        reached: false,
+        remaining: 0,
+      },
+    },
+    verifiedDetails: {
+      email: {
+        verified: false,
+        verifiedAt: null,
+      },
+      identity: {
+        verified: false,
+        verifiedAt: null,
+      },
+      phoneNumber: {
+        verified: false,
+        verifiedAt: null,
+      },
+    },
+  },
 }
 
 export const defaultLoginAdditionalProps: AuthModalAdditionalprops = {

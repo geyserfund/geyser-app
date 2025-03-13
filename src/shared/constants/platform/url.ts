@@ -149,6 +149,12 @@ export const HallOfFameAnimatedGifUrl =
 export const BecomeVerifiedCreatorIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/creator-verify-illustration.jpg'
 
+export const SuccessfullyVerifiedIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/successfully-verified.png'
+
+export const SuccessfullPhoneVerificationIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/successful-phone-verification.png'
+
 // FUNDING FLOW ERRORS
 
 export const FundingErrorUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/errors/error.png'

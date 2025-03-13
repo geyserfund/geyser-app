@@ -1,16 +1,19 @@
+import { Button, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 import { Dispatch, SetStateAction, useEffect } from 'react'
 
 import { ProjectState } from '@/modules/project/state/projectAtom.ts'
-import { Body } from '@/shared/components/typography/Body.tsx'
+import { AlertDialogue } from '@/shared/molecules/AlertDialogue.tsx'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar.tsx'
 import { useAuthContext } from '../../../../../context/index.ts'
-import { CreateWalletInput } from '../../../../../types/index.ts'
+import { CreateWalletInput, UserVerificationLevelInput } from '../../../../../types/index.ts'
+import { VerificationDetails } from '../../projectDashboard/components/VerificationDetails.tsx'
+import { SumSubVerification } from '../../projectDashboard/views/wallet/components/SumSubVerification.tsx'
+import { useUserVerificationModal } from '../../projectDashboard/views/wallet/hooks/useUserVerificationModal.ts'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
-import { whereToGoNextAtom } from '../states/nodeStatusAtom.ts'
-import { goToEmailVerificationAtom } from '../states/nodeStatusAtom.ts'
+import { goToIdentityVerificationAtom, isReadyForLaunchAtom, whereToGoNextAtom } from '../states/nodeStatusAtom.ts'
 
 interface ProjectCreationIdentityVerificationPageProps {
   project?: ProjectState
@@ -22,25 +25,37 @@ interface ProjectCreationIdentityVerificationPageProps {
 export const ProjectCreationIdentityVerificationPage = ({
   setReadyToLaunch,
 }: ProjectCreationIdentityVerificationPageProps) => {
-  const { user } = useAuthContext()
+  const { isOpen: isAlertDialogOpen, onOpen: onAlertDialogOpen, onClose: onAlertDialogClose } = useDisclosure()
 
-  const setGoToEmailVerification = useSetAtom(goToEmailVerificationAtom)
+  const { user } = useAuthContext()
+  const isIdentityVerified = user.complianceDetails.verifiedDetails.identity?.verified
+
+  const { startVerification, userVerificationModal, userVerificationToken, generateVerificationTokenLoading } =
+    useUserVerificationModal()
+
+  const setIsReadyForLaunch = useSetAtom(isReadyForLaunchAtom)
+  const setGoToIdentityVerification = useSetAtom(goToIdentityVerificationAtom)
   const whereToGoNext = useSetAtom(whereToGoNextAtom)
 
   const handleBackClick = () => {
-    setGoToEmailVerification(false)
+    setGoToIdentityVerification(false)
   }
 
   useEffect(() => {
-    if (user.isEmailVerified) {
+    if (isIdentityVerified) {
       whereToGoNext()
     }
-  }, [user, whereToGoNext])
+  }, [isIdentityVerified, whereToGoNext])
 
   return (
     <>
       <ProjectCreateLayout
         onBackClick={handleBackClick}
+        continueButton={
+          <Button flex={1} size="lg" variant="soft" colorScheme="neutral1" onClick={onAlertDialogOpen}>
+            {t('Skip')}
+          </Button>
+        }
         title={
           <TitleWithProgressBar
             hideSteps
@@ -51,8 +66,33 @@ export const ProjectCreationIdentityVerificationPage = ({
           />
         }
       >
-        <Body>{t('Please verify your identity to continue')}</Body>
+        {!userVerificationModal.isOpen ? (
+          <VerificationDetails
+            onLoading={generateVerificationTokenLoading}
+            onContinue={() => startVerification(UserVerificationLevelInput.Level_2)}
+          />
+        ) : (
+          <VStack w="full" paddingBottom="20px">
+            <SumSubVerification
+              accessToken={userVerificationToken?.token || ''}
+              onComplete={() => setIsReadyForLaunch(true)}
+            />
+          </VStack>
+        )}
       </ProjectCreateLayout>
+      <AlertDialogue
+        isOpen={isAlertDialogOpen}
+        onClose={onAlertDialogClose}
+        title={t('Are you sure?')}
+        description={t(
+          'Skipping the verification will disable fiat contributions. Contributors will still be able to fund your project with Bitcoin.',
+        )}
+        hasCancel
+        negativeButtonProps={{
+          children: t('Skip'),
+          onClick: () => setIsReadyForLaunch(true),
+        }}
+      />
     </>
   )
 }

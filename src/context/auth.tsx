@@ -5,9 +5,9 @@ import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEf
 import { authUserAtom, followedProjectsAtom, isUserAProjectCreatorAtom } from '@/modules/auth/state/authAtom'
 
 import { getAuthEndPoint } from '../config/domain'
-import { useMeLazyQuery, useMeProjectFollowsLazyQuery, User, UserMeFragment } from '../types'
+import { useMeLazyQuery, useMeProjectFollowsLazyQuery, UserMeFragment } from '../types'
 
-export const defaultUser: Omit<User, 'heroStats'> = {
+export const defaultUser: Omit<UserMeFragment, 'heroStats'> = {
   __typename: 'User',
   id: 0,
   email: '',
@@ -15,16 +15,37 @@ export const defaultUser: Omit<User, 'heroStats'> = {
   heroId: '',
   imageUrl: '',
   externalAccounts: [],
-  projectContributions: [],
   ownerOf: [],
-  entries: [],
-  contributions: [],
-  projects: [],
-  projectFollows: [],
-  badges: [],
   isEmailVerified: false,
   hasSocialAccount: false,
-  posts: [],
+  complianceDetails: {
+    contributionLimits: {
+      daily: {
+        limit: 0,
+        reached: false,
+        remaining: 0,
+      },
+      monthly: {
+        limit: 0,
+        reached: false,
+        remaining: 0,
+      },
+    },
+    verifiedDetails: {
+      email: {
+        verified: false,
+        verifiedAt: null,
+      },
+      identity: {
+        verified: false,
+        verifiedAt: null,
+      },
+      phoneNumber: {
+        verified: false,
+        verifiedAt: null,
+      },
+    },
+  },
 }
 
 const defaultContext: AuthContextProps = {

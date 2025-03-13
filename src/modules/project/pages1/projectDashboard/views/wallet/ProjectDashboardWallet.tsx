@@ -7,16 +7,24 @@ import { useProjectWalletAPI } from '@/modules/project/API/useProjectWalletAPI'
 import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
 
-import { useAuthContext } from '../../../../../context'
-import { VerifyYourEmail } from '../../../../../pages/otp'
-import { getPath, GeyserEmailVerificationDocUrl, PathName } from '../../../../../shared/constants'
-import { MfaAction, OtpResponseFragment, ProjectStatus, UpdateWalletInput } from '../../../../../types'
-import { useCustomTheme, useNotification } from '../../../../../utils'
-import { ProjectCreationWalletConnectionForm } from '../../../pages1/projectCreation'
-import { ConnectionOption, useWalletForm } from '../../projectCreation/hooks/useWalletForm'
-import { DashboardLayout } from '../common'
-import { EnableFiatContributions } from '../components/EnableFiatContributions.tsx'
-import { WalletLimitsAndVerification } from '../components/WalletLimitsAndVerification'
+import { useAuthContext } from '../../../../../../context/index.ts'
+import { VerifyYourEmail } from '../../../../../../pages/otp/index.ts'
+import { getPath, GeyserEmailVerificationDocUrl, PathName } from '../../../../../../shared/constants/index.ts'
+import {
+  MfaAction,
+  OtpResponseFragment,
+  ProjectStatus,
+  UpdateWalletInput,
+  UserVerificationLevelInput,
+} from '../../../../../../types/index.ts'
+import { useCustomTheme, useNotification } from '../../../../../../utils/index.ts'
+import { ConnectionOption, useWalletForm } from '../../../projectCreation/hooks/useWalletForm.tsx'
+import { ProjectCreationWalletConnectionForm } from '../../../projectCreation/index.ts'
+import { DashboardLayout } from '../../common/index.ts'
+import { EnableFiatContributions } from './components/EnableFiatContributions.tsx'
+import { UserVerificationModal } from './components/UserVerificationModal.tsx'
+import { WalletLimitsAndVerification } from './components/WalletLimitsAndVerification.tsx'
+import { useUserVerificationModal } from './hooks/useUserVerificationModal.ts'
 export const ProjectDashboardWallet = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -39,6 +47,17 @@ export const ProjectDashboardWallet = () => {
   useEffect(() => {
     queryProjectWalletConnectionDetails.execute()
   }, [])
+
+  const { userVerificationModal, startVerification, userVerificationToken } = useUserVerificationModal()
+
+  const isIdentityVerified = user.complianceDetails.verifiedDetails.identity?.verified
+
+  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isIdentityVerified) {
+      event.preventDefault()
+      startVerification(UserVerificationLevelInput.Level_3)
+    }
+  }
 
   const handleNext = () => {
     if (!project) return
@@ -155,7 +174,9 @@ export const ProjectDashboardWallet = () => {
     >
       <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }}>
         <WalletLimitsAndVerification />
-        <EnableFiatContributions />
+        <EnableFiatContributions
+          switchProps={{ isChecked: Boolean(isIdentityVerified), onChange: handleSwitchChange }}
+        />
       </VStack>
 
       <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }} alignItems={'start'}>
@@ -202,6 +223,10 @@ export const ProjectDashboardWallet = () => {
         onClose={emailVerifyOnClose}
         action={MfaAction.ProjectWalletUpdate}
         handleVerify={handleWalletUpdate}
+      />
+      <UserVerificationModal
+        userVerificationModal={userVerificationModal}
+        accessToken={userVerificationToken?.token || ''}
       />
     </DashboardLayout>
   )

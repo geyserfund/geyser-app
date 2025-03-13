@@ -8,6 +8,7 @@ import { ProjectState } from '@/modules/project/state/projectAtom.ts'
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
 import { useAuthContext } from '../../../../../context'
 import { CreateWalletInput } from '../../../../../types'
+import { FormContinueButton } from '../components/FormContinueButton.tsx'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
 import { whereToGoNextAtom } from '../states/nodeStatusAtom.ts'
 import { goToEmailVerificationAtom } from '../states/nodeStatusAtom.ts'
@@ -41,6 +42,7 @@ export const ProjectCreationEmailVerificationPage = ({
     <>
       <ProjectCreateLayout
         onBackClick={handleBackClick}
+        continueButton={<FormContinueButton onClick={() => {}} isDisabled={true} flexGrow={1} />}
         title={
           <TitleWithProgressBar
             hideSteps

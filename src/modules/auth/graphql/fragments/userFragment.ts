@@ -20,9 +20,41 @@ export const FRAGMENT_PROJECT_OWNER_USER = gql`
   }
 `
 
+export const FRAGMENT_USER_COMPLIANCE_DETAILS = gql`
+  fragment UserComplianceDetails on UserComplianceDetails {
+    contributionLimits {
+      daily {
+        limit
+        reached
+        remaining
+      }
+      monthly {
+        limit
+        reached
+        remaining
+      }
+    }
+    verifiedDetails {
+      email {
+        verified
+        verifiedAt
+      }
+      identity {
+        verified
+        verifiedAt
+      }
+      phoneNumber {
+        verified
+        verifiedAt
+      }
+    }
+  }
+`
+
 export const FRAGMENT_USER_ME = gql`
   ${FRAGMENT_EXTERNAL_ACCOUNT}
   ${FRAGMENT_PROJECT_FOR_OWNER}
+  ${FRAGMENT_USER_COMPLIANCE_DETAILS}
   fragment UserMe on User {
     id
     username
@@ -33,6 +65,9 @@ export const FRAGMENT_USER_ME = gql`
     ranking
     isEmailVerified
     hasSocialAccount
+    complianceDetails {
+      ...UserComplianceDetails
+    }
     externalAccounts {
       ...ExternalAccount
     }

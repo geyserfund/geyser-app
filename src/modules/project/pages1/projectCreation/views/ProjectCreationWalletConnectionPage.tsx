@@ -13,7 +13,7 @@ import TitleWithProgressBar from '../../../../../components/molecules/TitleWithP
 import { getPath } from '../../../../../shared/constants'
 import { CreateWalletInput } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
-import { EnableFiatContributions } from '../../projectDashboard/components/EnableFiatContributions.tsx'
+import { EnableFiatContributions } from '../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
 import { ProjectCreationWalletConnectionForm } from '..'
 import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
@@ -111,6 +111,17 @@ export const ProjectCreationWalletConnectionPage = () => {
     )
   }, [connectionOption, lightningAddress.value, createWalletInput, isLightningAddressInValid])
 
+  if (isReadyForLaunch) {
+    return (
+      <ProjectCreateCompletionPage
+        project={project}
+        createWalletInput={createWalletInput}
+        isSubmitEnabled={isSubmitEnabled}
+        setReadyToLaunch={setReadyForLaunch}
+      />
+    )
+  }
+
   if (goToEmailVerification) {
     return (
       <ProjectCreationEmailVerificationPage
@@ -125,17 +136,6 @@ export const ProjectCreationWalletConnectionPage = () => {
   if (goToIdentityVerification) {
     return (
       <ProjectCreationIdentityVerificationPage
-        project={project}
-        createWalletInput={createWalletInput}
-        isSubmitEnabled={isSubmitEnabled}
-        setReadyToLaunch={setReadyForLaunch}
-      />
-    )
-  }
-
-  if (isReadyForLaunch) {
-    return (
-      <ProjectCreateCompletionPage
         project={project}
         createWalletInput={createWalletInput}
         isSubmitEnabled={isSubmitEnabled}
