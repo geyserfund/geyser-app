@@ -41,6 +41,8 @@ export const ProjectSubCategoryMap = {
     ProjectSubCategory.Medical,
   ],
   [ProjectCategory.Other]: [ProjectSubCategory.Other],
+} as {
+  [key in ProjectCategory]: ProjectSubCategory[]
 }
 
 export const ProjectCategoryLabel = {
