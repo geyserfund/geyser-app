@@ -6,7 +6,6 @@ import { useAuthContext } from '@/context/auth.tsx'
 
 import { ProjectProvider } from './context'
 import { FundingProviderWithProjectContext } from './context/FundingProvider'
-import { addProjectAffiliateAtom } from './pages1/projectView/state/affiliateAtom'
 import { addProjectHeroAtom, projectHeroAtom } from './pages1/projectView/state/heroAtom'
 import { ProjectContainer } from './ProjectContainer'
 
@@ -18,23 +17,12 @@ export const Project = () => {
 
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const addRefferal = useSetAtom(addProjectAffiliateAtom)
   const addHeroId = useSetAtom(addProjectHeroAtom)
   const projectHeroes = useAtomValue(projectHeroAtom)
 
   const currentProjectHero = projectHeroes.find((r) => r.projectName === projectName)
 
-  const affiliateId = searchParams.get('refId')
   const heroId = searchParams.get('hero')
-
-  useEffect(() => {
-    if (affiliateId && projectName) {
-      addRefferal({
-        projectName,
-        refId: affiliateId,
-      })
-    }
-  }, [projectName, affiliateId, addRefferal])
 
   useEffect(() => {
     if (heroId && projectName && !currentProjectHero) {

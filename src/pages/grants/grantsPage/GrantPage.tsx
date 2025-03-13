@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link, useParams } from 'react-router-dom'
 
+import { Head } from '@/config/Head.tsx'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav/TopNavContainerBar'
 
 import Loader from '../../../components/ui/Loader'
@@ -115,6 +116,12 @@ export const GrantPage = () => {
 
   return (
     <>
+      <Head
+        title={grant.title || ''}
+        description={grant.shortDescription || ''}
+        image={grant.image || ''}
+        type="article"
+      />
       <TopNavContainerBar>
         <Button
           as={Link}

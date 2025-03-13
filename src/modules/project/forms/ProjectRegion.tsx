@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client'
 import { StackProps, useDisclosure } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
@@ -10,10 +9,9 @@ import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Body } from '@/shared/components/typography'
 
 import { AppTheme } from '../../../context'
-import { QUERY_COUNTRIES } from '../../../graphqlBase/queries'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { SkeletonLayout } from '../../../shared/components/layouts'
-import { Country, Location, Maybe, Project, ProjectCountriesGetResult } from '../../../types'
+import { Country, Location, Maybe, Project, useProjectCountriesGetQuery } from '../../../types'
 import { ProjectState } from '../state/projectAtom'
 import { projectFormErrorAtom } from '../state/projectFormAtom'
 
@@ -50,9 +48,7 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
 
   const [options, setOptions] = useState<Country[]>([])
 
-  const { loading: countriesLoading, data: countries } = useQuery<{
-    projectCountriesGet: ProjectCountriesGetResult[]
-  }>(QUERY_COUNTRIES)
+  const { loading: countriesLoading, data: countries } = useProjectCountriesGetQuery()
 
   useEffect(() => {
     if (!countries) {

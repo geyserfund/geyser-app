@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { useFollowedProjectsValue } from '@/pages/auth/state'
+import { useFollowedProjectsValue } from '@/modules/auth/state'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'

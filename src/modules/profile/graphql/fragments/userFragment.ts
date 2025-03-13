@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_EXTERNAL_ACCOUNT } from '@/graphqlBase/fragments'
+import { FRAGMENT_EXTERNAL_ACCOUNT } from '@/modules/auth/graphql/fragments/externalAccountFragment.ts'
 
 export const FRAGMENT_USER_FOR_PROFILE_PAGE = gql`
   ${FRAGMENT_EXTERNAL_ACCOUNT}

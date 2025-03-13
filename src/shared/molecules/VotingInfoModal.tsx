@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
-import { useAuthModal } from '@/pages/auth/hooks'
+import { useAuthModal } from '@/modules/auth/hooks'
 import { Project, VotingSystem } from '@/types'
 
 import { Modal } from '../components/layouts'

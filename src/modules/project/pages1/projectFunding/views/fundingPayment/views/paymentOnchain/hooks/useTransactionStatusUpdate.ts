@@ -4,7 +4,7 @@ import useWebSocket from 'react-use-websocket'
 
 import { __production__, BOLTZ_DOMAIN } from '@/shared/constants'
 
-import { OnChainErrorStatuses } from '../states'
+import { OnChainErrorStatuses } from '../states/onChainErrror.ts'
 
 const swapServiceWsEndpoint = `wss://${BOLTZ_DOMAIN}/v2/ws`
 

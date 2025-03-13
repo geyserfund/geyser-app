@@ -1,9 +1,9 @@
 import { atom, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
+import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
 import { toInt } from '@/utils'
 
-import { authUserAtom } from '../../../pages/auth/state'
 import {
   ProjectGrantApplicantFragment,
   ProjectHeaderSummaryFragment,
@@ -11,7 +11,6 @@ import {
   ProjectPageDetailsFragment,
 } from '../../../types'
 import { resetRewardsAtom } from '../pages1/projectDashboard/views/sales/state/rewardsAtom'
-import { affiliateAtomReset } from './affiliateAtom'
 import { contributionAtomReset } from './contributionsAtom'
 import { entriesAtomReset } from './entriesAtom'
 import { goalsAtomReset } from './goalsAtom'
@@ -109,7 +108,7 @@ export const useProjectReset = () => {
   const projectFormReset = useSetAtom(projectFormAtomReset)
   const rewardsReset = useSetAtom(rewardsAtomReset)
   const walletReset = useSetAtom(walletAtomReset)
-  const affiliateReset = useSetAtom(affiliateAtomReset)
+
   const rewardReset = useSetAtom(resetRewardsAtom)
   const postReset = useSetAtom(postsAtomReset)
   const subscriptionReset = useSetAtom(subscriptionAtomReset)
@@ -126,7 +125,7 @@ export const useProjectReset = () => {
     projectFormReset()
     rewardsReset()
     walletReset()
-    affiliateReset()
+
     rewardReset()
     postReset()
     subscriptionReset()
@@ -138,7 +137,7 @@ export const useProjectReset = () => {
     projectReset,
     rewardsReset,
     walletReset,
-    affiliateReset,
+
     rewardReset,
     postReset,
     subscriptionReset,

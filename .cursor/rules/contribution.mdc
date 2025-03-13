@@ -1,6 +1,7 @@
 ---
 description: Writing code and helping in the development process.
 globs: *
+alwaysApply: false
 ---
 
 You are an expert in TypeScript, Node.js, React, Vite, Apollo Graphql Client, React Router, and ChakraUI.
@@ -18,6 +19,15 @@ Code Style and Structure
 - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
 - Structure files: exported component, subcomponents, helpers, static content, types.
 
+Importing from files
+- While importing from another file, favour the shortest route, i.e relative if it is short, else absolute if that is shortest.
+- Absolute routes start with "@" which is the same as "src/"
+- While importing a file, add the extension of the file that it is exported from, for example: "@/api/airtable.ts"
+
+Export Conventions
+- Always favour named exports over default exports.
+
+
 Component uses
 - Favour use of the components in the `src/shared/components` folder for when an existing component could be used.
 
@@ -25,7 +35,6 @@ Naming Conventions
 - For component names, use Capitalized words.
 - Use camel case for directories, variables, constants, functions, etc. 
 - Favor named exports for components.
-
 
 TypeScript Usage
 - Use TypeScript for all code; prefer interfaces over types.
@@ -55,11 +64,56 @@ Performance Optimization
   - Use efficient rendering strategies
   - Use efficient state management
 
-  General Conventions
-  - Minimal Code Changes: When adding types, we should focus only on the type definitions unless specifically asked to modify the implementation.
-  - Code Block Format: When showing edits, I should have used a more focused format. Using anything reusable in the file or other files.
+# Component Creation Rules:
+
+## Import Specificity
+- Import components with their full file path including extension (e.g., '@/shared/components/typography/Body.tsx')
+- Import the prop types from the base component when extending functionality
+
+## Props Management
+- When creating wrapper components, reuse the prop types from the base component instead of creating custom types
+- Use `ComponentProps` pattern instead of creating custom interfaces when possible
+- Pass all props to the underlying component using spread operator (`{...props}`)
+
+## Export Conventions
+- Use named exports only (avoid default exports)
+- Keep export statements simple and avoid redundant exports
+
+## Component Documentation
+- Add a simple JSDoc comment above the component explaining its purpose
+- Keep documentation concise and focused on what the component does
+
+## Component Structure
+- Maintain the same styling properties (like 'light' and 'size') as found in the original usage
+- Position the cursor inside the component's content area to facilitate adding content
+
+## General Conventions
+- Minimal Code Changes: When adding types, we should focus only on the type definitions unless specifically asked to modify the implementation.
+- Code Block Format: When showing edits, I should have used a more focused format. Using anything reusable in the file or other files.
   
 
 
+# Comment Formatting Rule
 
+## Single-Line Comments
+- Use single-line TypeScript JSDoc comments for most documentation:
+  - Correct: `/** Helper function to get contribution date for sorting */`
+  - Incorrect: 
+    ```
+    /**
+     * Helper function to get contribution date for sorting
+     */
+    ```
+
+## Multi-Line Comments
+- Only use multi-line comments when absolutely necessary (e.g., complex explanations, param documentation)
+- For simple function/method descriptions, always use the single-line format
+
+## Formatting
+- Start with `/** ` (note the space after the asterisks)
+- End with ` */` (note the space before the asterisks)
+- For function descriptions, use the format: `/** [Function name]: does this */` or `/** [Purpose description] */`
+
+## Linting
+- Consider adding an ESLint rule to enforce this comment style across the codebase
 

@@ -4,7 +4,7 @@ import { RiTwitterXLine } from 'react-icons/ri'
 import { NostrIcon } from '@/shared/components/icons'
 
 import { BoltSvgIcon, FountainIcon } from '../../../components/icons'
-import { ExternalAccountType } from '../../../pages/auth'
+import { ExternalAccountType } from '../../../modules/auth'
 
 export const externalAccountIconMap = {
   [ExternalAccountType.github]: BsGithub,
