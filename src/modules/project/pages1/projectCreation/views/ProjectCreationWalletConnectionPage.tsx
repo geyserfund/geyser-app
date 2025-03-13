@@ -1,22 +1,34 @@
 import { Box, VStack } from '@chakra-ui/react'
-import { useMemo, useState } from 'react'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useProjectWalletAPI } from '@/modules/project/API/useProjectWalletAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
-import { Body1, Body2 } from '../../../../../components/typography'
 import { getPath } from '../../../../../shared/constants'
 import { CreateWalletInput } from '../../../../../types'
 import { useNotification } from '../../../../../utils'
+import { EnableFiatContributions } from '../../projectDashboard/components/EnableFiatContributions.tsx'
 import { ProjectCreationWalletConnectionForm } from '..'
 import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
 import { useLocationMandatoryRedirect } from '../hooks/useLocationMandatoryRedirect'
 import { ConnectionOption, useWalletForm } from '../hooks/useWalletForm'
+import {
+  fiatContributionAtom,
+  goToIdentityVerificationAtom,
+  isReadyForLaunchAtom,
+  whereToGoNextAtom,
+} from '../states/nodeStatusAtom.ts'
+import { goToEmailVerificationAtom } from '../states/nodeStatusAtom.ts'
 import { ProjectCreateCompletionPage } from './ProjectCreateCompletionPage'
+import { ProjectCreationEmailVerificationPage } from './ProjectCreationEmailVerificationPage.tsx'
+import { ProjectCreationIdentityVerificationPage } from './ProjectCreationIdentityVerificationPage.tsx'
 
 export const ProjectCreationWalletConnectionPage = () => {
   const { t } = useTranslation()
@@ -30,14 +42,20 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   useLocationMandatoryRedirect()
 
-  const [isReadyForLaunch, setReadyForLaunch] = useState(false)
+  const [fiatContributionEnabled, setFiatContributionEnabled] = useAtom(fiatContributionAtom)
+
+  const [isReadyForLaunch, setReadyForLaunch] = useAtom(isReadyForLaunchAtom)
+  const goToEmailVerification = useAtomValue(goToEmailVerificationAtom)
+  const goToIdentityVerification = useAtomValue(goToIdentityVerificationAtom)
+
+  const setWhereToGoNext = useSetAtom(whereToGoNextAtom)
 
   const handleNext = (createWalletInput: CreateWalletInput | null) => {
     if (createWalletInput) {
       createWallet.execute({
         variables: { input: createWalletInput },
         onCompleted() {
-          setReadyForLaunch(true)
+          setWhereToGoNext()
         },
         onError() {
           toast.error({
@@ -46,7 +64,7 @@ export const ProjectCreationWalletConnectionPage = () => {
         },
       })
     } else {
-      setReadyForLaunch(true)
+      setWhereToGoNext()
     }
   }
 
@@ -93,6 +111,28 @@ export const ProjectCreationWalletConnectionPage = () => {
     )
   }, [connectionOption, lightningAddress.value, createWalletInput, isLightningAddressInValid])
 
+  if (goToEmailVerification) {
+    return (
+      <ProjectCreationEmailVerificationPage
+        project={project}
+        createWalletInput={createWalletInput}
+        isSubmitEnabled={isSubmitEnabled}
+        setReadyToLaunch={setReadyForLaunch}
+      />
+    )
+  }
+
+  if (goToIdentityVerification) {
+    return (
+      <ProjectCreationIdentityVerificationPage
+        project={project}
+        createWalletInput={createWalletInput}
+        isSubmitEnabled={isSubmitEnabled}
+        setReadyToLaunch={setReadyForLaunch}
+      />
+    )
+  }
+
   if (isReadyForLaunch) {
     return (
       <ProjectCreateCompletionPage
@@ -119,12 +159,31 @@ export const ProjectCreationWalletConnectionPage = () => {
       }
       title={<TitleWithProgressBar title={t('Connect wallet')} subtitle={t('Create a project')} index={5} length={5} />}
     >
+      <VStack w="full" paddingBottom="20px">
+        <EnableFiatContributions
+          paddingX={0}
+          dense
+          noborder
+          disableImage
+          switchProps={{
+            isChecked: fiatContributionEnabled,
+            onChange: () => setFiatContributionEnabled(!fiatContributionEnabled),
+          }}
+        />
+        <Feedback
+          variant={FeedBackVariant.INFO}
+          title={t('Identity verification')}
+          text={t(
+            'You will need to verify your identity with a government ID to enable fiat contributions. Toggle that functionality off if you do not wish to complete the verification.',
+          )}
+        />
+      </VStack>
       <VStack w="full" alignItems="start" pb="20px">
-        <Body1 semiBold color="neutral.900">
-          {t('Lightning Address')}
-        </Body1>
+        <Body size="lg" medium>
+          {t('Lightning Address & Wallet')}
+        </Body>
         <Box>
-          <Body2 color="neutral.600" semiBold>
+          <Body size="sm" medium light>
             <Trans
               i18nKey={
                 'Your Geyser lightning address is <1>{{projectAddress}}</1>. All funds sent to this address will be instantly routed to the wallet you specify below.'
@@ -135,7 +194,7 @@ export const ProjectCreationWalletConnectionPage = () => {
               <Box as="span" color={'primary.600'}>{`{{projectAddress}}`}</Box>
               {`. All funds sent to this address will be instantly routed to the wallet you specify below.`}
             </Trans>
-          </Body2>
+          </Body>
         </Box>
       </VStack>
       <ProjectCreationWalletConnectionForm

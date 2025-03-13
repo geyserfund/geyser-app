@@ -153,7 +153,7 @@ export const ProjectDashboardWallet = () => {
       mobileTopNavRightComponent={<SaveButton />}
       deskTopBottomComponent={<SaveButton w="full" />}
     >
-      <VStack spacing="20px">
+      <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }}>
         <WalletLimitsAndVerification />
         <EnableFiatContributions />
       </VStack>
