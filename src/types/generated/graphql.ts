@@ -6900,7 +6900,7 @@ export type ProjectNotificationSettingsFragment = { __typename?: 'CreatorNotific
 export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: string | null, heroId: string, username: string, imageUrl?: string | null, ranking?: any | null, guardianType?: GuardianType | null, isEmailVerified: boolean, externalAccounts: Array<(
     { __typename?: 'ExternalAccount' }
     & ExternalAccountFragment
-  )> };
+  )>, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
 export type UserSubscriptionFragment = { __typename?: 'UserSubscription', canceledAt?: any | null, createdAt: any, id: any, nextBillingDate: any, startDate: any, status: UserSubscriptionStatus, updatedAt: any, projectSubscriptionPlan: { __typename?: 'ProjectSubscriptionPlan', id: any, projectId: any, name: string, cost: number, interval: UserSubscriptionInterval, currency: SubscriptionCurrencyType } };
 
@@ -7171,7 +7171,7 @@ export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uui
 
 export type PostPageProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, images: Array<string>, shortDescription?: string | null, cost: number };
 
-export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
+export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
 export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, guardianType?: GuardianType | null };
 
@@ -8669,6 +8669,22 @@ export const UserForProfilePageFragmentDoc = gql`
   externalAccounts {
     ...ExternalAccount
   }
+  complianceDetails {
+    verifiedDetails {
+      email {
+        verified
+        verifiedAt
+      }
+      identity {
+        verified
+        verifiedAt
+      }
+      phoneNumber {
+        verified
+        verifiedAt
+      }
+    }
+  }
 }
     ${ExternalAccountFragmentDoc}`;
 export const UserSubscriptionFragmentDoc = gql`
@@ -9168,6 +9184,22 @@ export const ProjectPageCreatorFragmentDoc = gql`
     externalId
     id
     public
+  }
+  complianceDetails {
+    verifiedDetails {
+      email {
+        verified
+        verifiedAt
+      }
+      identity {
+        verified
+        verifiedAt
+      }
+      phoneNumber {
+        verified
+        verifiedAt
+      }
+    }
   }
 }
     `;
