@@ -1666,5 +1666,6 @@
   "Identity": "Identity",
   "Verify your identity to contribute larger than $10k. This also removes any daily/monthly fiat contribution restrictions.": "Verify your identity to contribute larger than $10k. This also removes any daily/monthly fiat contribution restrictions.",
   "Verify your identity to contribute larger than $10k. This also removes any daily or monthly fiat contribution restrictions.": "Verify your identity to contribute larger than $10k. This also removes any daily or monthly fiat contribution restrictions.",
-  "Verify your identity to contribute larger than $10k. This also removes any daily or monthly restrictions on fiat contributions": "Verify your identity to contribute larger than $10k. This also removes any daily or monthly restrictions on fiat contributions"
+  "Verify your identity to contribute larger than $10k. This also removes any daily or monthly restrictions on fiat contributions": "Verify your identity to contribute larger than $10k. This also removes any daily or monthly restrictions on fiat contributions",
+  "<0>{{user}}</0> has chosen to become a Geyser Guardian to support our platform and help push Bitcoin adoption.": "<0>{{user}}</0> has chosen to become a Geyser Guardian to support our platform and help push Bitcoin adoption."
 }
