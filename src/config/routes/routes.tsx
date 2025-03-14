@@ -188,6 +188,15 @@ export const platformRoutes: RouteObject[] = [
               return { Component: ProfileSettingsSubscriptions }
             },
           },
+          {
+            path: getPath('userProfileSettingsVerifications', PathName.userId),
+            async lazy() {
+              const ProfileSettingsVerifications = await ProfileSettingsIndex().then(
+                (m) => m.ProfileSettingsVerifications,
+              )
+              return { Component: ProfileSettingsVerifications }
+            },
+          },
         ],
       },
     ],

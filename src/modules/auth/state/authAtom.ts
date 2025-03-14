@@ -3,7 +3,7 @@ import { atomWithStorage } from 'jotai/utils'
 
 import { AuthModalAdditionalprops } from '@/components/molecules'
 
-import { Project, UserMeFragment } from '../../../types'
+import { Project, UserMeFragment, UserVerificationLevel, UserVerificationStatus } from '../../../types'
 import { ExternalAccountType, SocialAccountType } from '../type'
 
 export const defaultUser: UserMeFragment = {
@@ -28,6 +28,11 @@ export const defaultUser: UserMeFragment = {
         reached: false,
         remaining: 0,
       },
+    },
+    currentVerificationLevel: {
+      level: UserVerificationLevel.Level_0,
+      status: UserVerificationStatus.Verified,
+      verifiedAt: null,
     },
     verifiedDetails: {
       email: {

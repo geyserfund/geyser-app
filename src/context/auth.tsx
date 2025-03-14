@@ -5,7 +5,13 @@ import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEf
 import { authUserAtom, followedProjectsAtom, isUserAProjectCreatorAtom } from '@/modules/auth/state/authAtom'
 
 import { getAuthEndPoint } from '../config/domain'
-import { useMeLazyQuery, useMeProjectFollowsLazyQuery, UserMeFragment } from '../types'
+import {
+  useMeLazyQuery,
+  useMeProjectFollowsLazyQuery,
+  UserMeFragment,
+  UserVerificationLevel,
+  UserVerificationStatus,
+} from '../types'
 
 export const defaultUser: Omit<UserMeFragment, 'heroStats'> = {
   __typename: 'User',
@@ -30,6 +36,11 @@ export const defaultUser: Omit<UserMeFragment, 'heroStats'> = {
         reached: false,
         remaining: 0,
       },
+    },
+    currentVerificationLevel: {
+      level: UserVerificationLevel.Level_0,
+      status: UserVerificationStatus.Verified,
+      verifiedAt: null,
     },
     verifiedDetails: {
       email: {

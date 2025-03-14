@@ -1,4 +1,5 @@
 import { VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useMemo } from 'react'
 import { useParams } from 'react-router'
 
@@ -17,7 +18,7 @@ export const ProfileSettingsGeneral = () => {
   const { isLoading } = useUserProfile({ userId })
 
   return (
-    <ProfileSettingsLayout>
+    <ProfileSettingsLayout desktopTitle={t('Profile information')}>
       <VStack w="100%" spacing={6} flexGrow={1} px={{ base: 0, lg: 6 }}>
         <ProfileForm isLoading={isLoading} />
       </VStack>

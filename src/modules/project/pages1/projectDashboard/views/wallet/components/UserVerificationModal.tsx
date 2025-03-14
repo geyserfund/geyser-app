@@ -129,7 +129,7 @@ const Level2SuccessMessage = ({ onClose, setTitle }: { onClose: () => void; setT
         <Button variant="outline" colorScheme="neutral1" onClick={onClose}>
           {t('Not now')}
         </Button>
-        <Button variant={'solid'} colorScheme="green" onClick={handleVerificationStart}>
+        <Button variant={'solid'} colorScheme="primary1" onClick={handleVerificationStart}>
           {t('Complete Identity Verification')}
         </Button>
       </HStack>

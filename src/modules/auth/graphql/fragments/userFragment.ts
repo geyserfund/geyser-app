@@ -34,6 +34,11 @@ export const FRAGMENT_USER_COMPLIANCE_DETAILS = gql`
         remaining
       }
     }
+    currentVerificationLevel {
+      level
+      status
+      verifiedAt
+    }
     verifiedDetails {
       email {
         verified

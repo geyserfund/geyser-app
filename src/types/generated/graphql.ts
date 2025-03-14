@@ -6594,7 +6594,7 @@ export type ProjectOwnerUserFragment = { __typename?: 'User', id: any, username:
     & ExternalAccountFragment
   )> };
 
-export type UserComplianceDetailsFragment = { __typename?: 'UserComplianceDetails', contributionLimits: { __typename?: 'UserContributionLimits', daily: { __typename?: 'UserContributionLimit', limit: number, reached: boolean, remaining: number }, monthly: { __typename?: 'UserContributionLimit', limit: number, reached: boolean, remaining: number } }, verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } };
+export type UserComplianceDetailsFragment = { __typename?: 'UserComplianceDetails', contributionLimits: { __typename?: 'UserContributionLimits', daily: { __typename?: 'UserContributionLimit', limit: number, reached: boolean, remaining: number }, monthly: { __typename?: 'UserContributionLimit', limit: number, reached: boolean, remaining: number } }, currentVerificationLevel: { __typename?: 'UserVerificationLevelStatus', level: UserVerificationLevel, status: UserVerificationStatus, verifiedAt?: any | null }, verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } };
 
 export type UserMeFragment = { __typename?: 'User', id: any, username: string, heroId: string, guardianType?: GuardianType | null, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, hasSocialAccount: boolean, complianceDetails: (
     { __typename?: 'UserComplianceDetails' }
@@ -8187,6 +8187,11 @@ export const UserComplianceDetailsFragmentDoc = gql`
       reached
       remaining
     }
+  }
+  currentVerificationLevel {
+    level
+    status
+    verifiedAt
   }
   verifiedDetails {
     email {
