@@ -32,6 +32,7 @@ export type AnimatedNavBarItem = {
   isDisabled?: boolean
   tooltipLabel?: string
   disableClick?: boolean
+  replacePath?: boolean
 }
 
 type AnimatedNavBarProps = {
@@ -86,7 +87,7 @@ export const AnimatedNavBar = ({
       return
     }
 
-    navigate({ pathname: item.path || '', search: location.search })
+    navigate({ pathname: item.path || '', search: location.search }, { replace: item.replacePath })
   }
 
   const measuredRef = useCallback((node: HTMLButtonElement | null, index: number) => {

@@ -27,6 +27,8 @@ import {
   useUserSubscriptionsQuery,
 } from '@/types/generated/graphql'
 
+import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout.tsx'
+
 const FormattedSubscriptionInterval: Record<UserSubscriptionInterval, string> = {
   [UserSubscriptionInterval.Monthly]: 'Monthly',
   [UserSubscriptionInterval.Yearly]: 'Yearly',
@@ -223,96 +225,95 @@ export const ProfileSettingsSubscriptions = () => {
   }
 
   return (
-    <Stack spacing={8} m={8} w="full">
-      <Box>
-        <Body size="2xl">Manage your subscriptions</Body>
+    <ProfileSettingsLayout desktopTitle={t('Subscriptions')}>
+      <Stack spacing={8} px={{ base: 0, lg: 6 }} w="full">
         <Body size="sm" color="neutralAlpha.11" regular>
           {t('View, adjust, and manage all your subscriptions.')}
         </Body>
-      </Box>
 
-      {loading ? (
-        <Stack spacing={8} m={8} w="full">
-          <Box>
-            <SkeletonLayout height="40px" width="300px" mb={2} />
-            <SkeletonLayout height="20px" width="400px" />
-          </Box>
+        {loading ? (
+          <Stack spacing={8} m={8} w="full">
+            <Box>
+              <SkeletonLayout height="40px" width="300px" mb={2} />
+              <SkeletonLayout height="20px" width="400px" />
+            </Box>
 
+            <Stack spacing={8}>
+              <Box>
+                <SkeletonLayout height="24px" width="200px" mb={2} />
+                <SkeletonLayout height="120px" borderRadius="xl" />
+              </Box>
+
+              <Box>
+                <SkeletonLayout height="24px" width="200px" mb={2} />
+                <SkeletonLayout height="120px" borderRadius="xl" />
+              </Box>
+            </Stack>
+          </Stack>
+        ) : (
           <Stack spacing={8}>
             <Box>
-              <SkeletonLayout height="24px" width="200px" mb={2} />
-              <SkeletonLayout height="120px" borderRadius="xl" />
+              <Body size="md" mb={2}>
+                {t('Active subscriptions')}
+              </Body>
+              {activeSubscriptions?.length && activeSubscriptions?.length > 0 ? (
+                <Stack spacing={4}>
+                  {activeSubscriptions.map((subscription: UserSubscriptionFragment) => (
+                    <ActiveSubscriptionCard
+                      key={subscription.id}
+                      userSubscription={subscription}
+                      handleCancelUserSubscription={handleCancelUserSubscription}
+                    />
+                  ))}
+                </Stack>
+              ) : (
+                <Card variant="outline" bg="neutralAlpha.1" borderColor="neutralAlpha.6" h="120px" borderRadius="xl">
+                  <CardBody>
+                    <Body
+                      color="neutralAlpha.11"
+                      textAlign="center"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      h="full"
+                    >
+                      {t("You don't have any active subscriptions.")}
+                    </Body>
+                  </CardBody>
+                </Card>
+              )}
             </Box>
 
             <Box>
-              <SkeletonLayout height="24px" width="200px" mb={2} />
-              <SkeletonLayout height="120px" borderRadius="xl" />
+              <Body size="md" mb={2}>
+                {t('Canceled subscriptions')}
+              </Body>
+              {canceledSubscriptions?.length && canceledSubscriptions?.length > 0 ? (
+                <Stack spacing={4}>
+                  {canceledSubscriptions.map((subscription: UserSubscriptionFragment) => (
+                    <CanceledSubscriptionCard key={subscription.id} {...subscription} />
+                  ))}
+                </Stack>
+              ) : (
+                <Card variant="outline" bg="neutralAlpha.3" borderColor="neutralAlpha.6" h="120px" borderRadius="xl">
+                  <CardBody>
+                    <Body
+                      color="neutralAlpha.11"
+                      textAlign="center"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      h="full"
+                    >
+                      {t("You don't have any paused subscriptions.")}
+                    </Body>
+                  </CardBody>
+                </Card>
+              )}
             </Box>
           </Stack>
-        </Stack>
-      ) : (
-        <Stack spacing={8}>
-          <Box>
-            <Body size="md" mb={2}>
-              {t('Active subscriptions')}
-            </Body>
-            {activeSubscriptions?.length && activeSubscriptions?.length > 0 ? (
-              <Stack spacing={4}>
-                {activeSubscriptions.map((subscription: UserSubscriptionFragment) => (
-                  <ActiveSubscriptionCard
-                    key={subscription.id}
-                    userSubscription={subscription}
-                    handleCancelUserSubscription={handleCancelUserSubscription}
-                  />
-                ))}
-              </Stack>
-            ) : (
-              <Card variant="outline" bg="neutralAlpha.1" borderColor="neutralAlpha.6" h="120px" borderRadius="xl">
-                <CardBody>
-                  <Body
-                    color="neutralAlpha.11"
-                    textAlign="center"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    h="full"
-                  >
-                    {t("You don't have any active subscriptions.")}
-                  </Body>
-                </CardBody>
-              </Card>
-            )}
-          </Box>
-
-          <Box>
-            <Body size="md" mb={2}>
-              {t('Canceled subscriptions')}
-            </Body>
-            {canceledSubscriptions?.length && canceledSubscriptions?.length > 0 ? (
-              <Stack spacing={4}>
-                {canceledSubscriptions.map((subscription: UserSubscriptionFragment) => (
-                  <CanceledSubscriptionCard key={subscription.id} {...subscription} />
-                ))}
-              </Stack>
-            ) : (
-              <Card variant="outline" bg="neutralAlpha.3" borderColor="neutralAlpha.6" h="120px" borderRadius="xl">
-                <CardBody>
-                  <Body
-                    color="neutralAlpha.11"
-                    textAlign="center"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    h="full"
-                  >
-                    {t("You don't have any paused subscriptions.")}
-                  </Body>
-                </CardBody>
-              </Card>
-            )}
-          </Box>
-        </Stack>
-      )}
-    </Stack>
+        )}
+      </Stack>
+    </ProfileSettingsLayout>
   )
 }

@@ -2,6 +2,7 @@ import { ApolloError } from '@apollo/client'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
+import { __development__ } from '@/shared/constants/index.ts'
 import { ContributionCreateInput, ContributionCreateMutation, useContributionCreateMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
@@ -72,7 +73,8 @@ export const useFundingAPI = () => {
           hasWebLN &&
           webln &&
           data.contributionCreate.payments.lightning &&
-          !data.contributionCreate.contribution.isSubscription
+          !data.contributionCreate.contribution.isSubscription &&
+          !__development__
         ) {
           startWebLNFlow(data.contributionCreate.payments.lightning).catch(() => {
             toast.error({

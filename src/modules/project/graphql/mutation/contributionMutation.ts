@@ -25,3 +25,15 @@ export const MUTATION_FUNDING_EMAIL_UPDATE = gql`
     }
   }
 `
+
+export const MUTATION_FUNDING_FIAT_SWAP_PAYMENT_CREATE = gql`
+  mutation FundingFiatSwapPaymentCreate($input: ContributionPaymentsAddInput!) {
+    contributionPaymentsAdd(input: $input) {
+      payments {
+        fiatSwap {
+          checkoutUrl
+        }
+      }
+    }
+  }
+`

@@ -1349,6 +1349,7 @@ export type Mutation = {
   userNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
   userSubscriptionCancel: UserSubscription;
   userSubscriptionUpdate: UserSubscription;
+  userVerificationTokenGenerate: UserVerificationTokenGenerateResponse;
   walletCreate: Wallet;
   walletDelete: Scalars['Boolean']['output'];
   /** This operation is currently not supported. */
@@ -1630,6 +1631,11 @@ export type MutationUserSubscriptionCancelArgs = {
 
 export type MutationUserSubscriptionUpdateArgs = {
   input: UpdateUserSubscriptionInput;
+};
+
+
+export type MutationUserVerificationTokenGenerateArgs = {
+  input: UserVerificationTokenGenerateInput;
 };
 
 
@@ -1960,7 +1966,7 @@ export enum PaymentCurrency {
 export type PaymentDetails = FiatSwapPaymentDetails | LightningPaymentDetails | OnChainSwapPaymentDetails;
 
 export type PaymentFailInput = {
-  failureReason: Scalars['String']['input'];
+  failureReason?: InputMaybe<Scalars['String']['input']>;
   invoiceId?: InputMaybe<Scalars['String']['input']>;
   uuid?: InputMaybe<Scalars['String']['input']>;
 };
@@ -2910,7 +2916,10 @@ export type Query = {
   getDashboardFunders: Array<Funder>;
   /** Returns all published entries (deprecated, use posts instead) */
   getEntries: Array<Entry>;
-  /** Returns the public key of the Lightning node linked to a project, if there is one. */
+  /**
+   * Returns the public key of the Lightning node linked to a project, if there is one.
+   * @deprecated No longer supported
+   */
   getProjectPubkey?: Maybe<Scalars['String']['output']>;
   getProjectReward: ProjectReward;
   getSignedUploadUrl: SignedUploadUrl;
@@ -2952,7 +2961,6 @@ export type Query = {
   projectsGet: ProjectsResponse;
   projectsMostFundedByCategory: Array<ProjectMostFundedByCategory>;
   projectsMostFundedByTag: Array<ProjectMostFundedByTag>;
-  /** Returns summary statistics of all projects, both current and past. */
   projectsSummary: ProjectsSummary;
   statusCheck: Scalars['Boolean']['output'];
   tagsGet: Array<TagsGetResult>;
@@ -3474,6 +3482,7 @@ export type User = {
   __typename?: 'User';
   badges: Array<UserBadge>;
   bio?: Maybe<Scalars['String']['output']>;
+  complianceDetails: UserComplianceDetails;
   /** Returns a user's contributions accross all projects. */
   contributions: Array<Contribution>;
   email?: Maybe<Scalars['String']['output']>;
@@ -3549,6 +3558,28 @@ export enum UserBadgeStatus {
   Accepted = 'ACCEPTED',
   Pending = 'PENDING'
 }
+
+export type UserComplianceDetails = {
+  __typename?: 'UserComplianceDetails';
+  contributionLimits: UserContributionLimits;
+  currentVerificationLevel: UserVerificationLevelStatus;
+  verificationLevels: Array<UserVerificationLevelStatus>;
+  verifiedDetails: UserVerifiedDetails;
+};
+
+export type UserContributionLimit = {
+  __typename?: 'UserContributionLimit';
+  limit: Scalars['Float']['output'];
+  nextReset: Scalars['Date']['output'];
+  reached: Scalars['Boolean']['output'];
+  remaining: Scalars['Float']['output'];
+};
+
+export type UserContributionLimits = {
+  __typename?: 'UserContributionLimits';
+  daily: UserContributionLimit;
+  monthly: UserContributionLimit;
+};
 
 export type UserEmailUpdateInput = {
   email: Scalars['String']['input'];
@@ -3649,6 +3680,55 @@ export type UserSubscriptionsInput = {
 
 export type UserSubscriptionsWhereInput = {
   userId: Scalars['BigInt']['input'];
+};
+
+export enum UserVerificationLevel {
+  Level_0 = 'LEVEL_0',
+  Level_1 = 'LEVEL_1',
+  Level_2 = 'LEVEL_2',
+  Level_3 = 'LEVEL_3'
+}
+
+export enum UserVerificationLevelInput {
+  Level_2 = 'LEVEL_2',
+  Level_3 = 'LEVEL_3'
+}
+
+export type UserVerificationLevelStatus = {
+  __typename?: 'UserVerificationLevelStatus';
+  level: UserVerificationLevel;
+  status: UserVerificationStatus;
+  verifiedAt?: Maybe<Scalars['Date']['output']>;
+};
+
+export enum UserVerificationStatus {
+  Pending = 'PENDING',
+  Rejected = 'REJECTED',
+  Unverified = 'UNVERIFIED',
+  Verified = 'VERIFIED'
+}
+
+export type UserVerificationTokenGenerateInput = {
+  verificationLevel: UserVerificationLevelInput;
+};
+
+export type UserVerificationTokenGenerateResponse = {
+  __typename?: 'UserVerificationTokenGenerateResponse';
+  token: Scalars['String']['output'];
+  verificationLevel: UserVerificationLevel;
+};
+
+export type UserVerifiedDetails = {
+  __typename?: 'UserVerifiedDetails';
+  email?: Maybe<VerificationResult>;
+  identity?: Maybe<VerificationResult>;
+  phoneNumber?: Maybe<VerificationResult>;
+};
+
+export type VerificationResult = {
+  __typename?: 'VerificationResult';
+  verified?: Maybe<Scalars['Boolean']['output']>;
+  verifiedAt?: Maybe<Scalars['Date']['output']>;
 };
 
 export enum VotingSystem {
@@ -4205,6 +4285,9 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<Omit<User, 'contributions' | 'entries' | 'ownerOf' | 'projectFollows' | 'projects' | 'wallet'> & { contributions: Array<ResolversTypes['Contribution']>, entries: Array<ResolversTypes['Entry']>, ownerOf: Array<ResolversTypes['OwnerOf']>, projectFollows: Array<ResolversTypes['Project']>, projects: Array<ResolversTypes['Project']>, wallet?: Maybe<ResolversTypes['Wallet']> }>;
   UserBadge: ResolverTypeWrapper<UserBadge>;
   UserBadgeStatus: UserBadgeStatus;
+  UserComplianceDetails: ResolverTypeWrapper<UserComplianceDetails>;
+  UserContributionLimit: ResolverTypeWrapper<UserContributionLimit>;
+  UserContributionLimits: ResolverTypeWrapper<UserContributionLimits>;
   UserEmailUpdateInput: UserEmailUpdateInput;
   UserEntriesGetInput: UserEntriesGetInput;
   UserEntriesGetWhereInput: UserEntriesGetWhereInput;
@@ -4221,6 +4304,14 @@ export type ResolversTypes = {
   UserSubscriptionStatus: UserSubscriptionStatus;
   UserSubscriptionsInput: UserSubscriptionsInput;
   UserSubscriptionsWhereInput: UserSubscriptionsWhereInput;
+  UserVerificationLevel: UserVerificationLevel;
+  UserVerificationLevelInput: UserVerificationLevelInput;
+  UserVerificationLevelStatus: ResolverTypeWrapper<UserVerificationLevelStatus>;
+  UserVerificationStatus: UserVerificationStatus;
+  UserVerificationTokenGenerateInput: UserVerificationTokenGenerateInput;
+  UserVerificationTokenGenerateResponse: ResolverTypeWrapper<UserVerificationTokenGenerateResponse>;
+  UserVerifiedDetails: ResolverTypeWrapper<UserVerifiedDetails>;
+  VerificationResult: ResolverTypeWrapper<VerificationResult>;
   VotingSystem: VotingSystem;
   Wallet: ResolverTypeWrapper<Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversTypes['ConnectionDetails'] }>;
   WalletContributionLimits: ResolverTypeWrapper<WalletContributionLimits>;
@@ -4553,6 +4644,9 @@ export type ResolversParentTypes = {
   UpdateWalletStateInput: UpdateWalletStateInput;
   User: Omit<User, 'contributions' | 'entries' | 'ownerOf' | 'projectFollows' | 'projects' | 'wallet'> & { contributions: Array<ResolversParentTypes['Contribution']>, entries: Array<ResolversParentTypes['Entry']>, ownerOf: Array<ResolversParentTypes['OwnerOf']>, projectFollows: Array<ResolversParentTypes['Project']>, projects: Array<ResolversParentTypes['Project']>, wallet?: Maybe<ResolversParentTypes['Wallet']> };
   UserBadge: UserBadge;
+  UserComplianceDetails: UserComplianceDetails;
+  UserContributionLimit: UserContributionLimit;
+  UserContributionLimits: UserContributionLimits;
   UserEmailUpdateInput: UserEmailUpdateInput;
   UserEntriesGetInput: UserEntriesGetInput;
   UserEntriesGetWhereInput: UserEntriesGetWhereInput;
@@ -4567,6 +4661,11 @@ export type ResolversParentTypes = {
   UserSubscription: UserSubscription;
   UserSubscriptionsInput: UserSubscriptionsInput;
   UserSubscriptionsWhereInput: UserSubscriptionsWhereInput;
+  UserVerificationLevelStatus: UserVerificationLevelStatus;
+  UserVerificationTokenGenerateInput: UserVerificationTokenGenerateInput;
+  UserVerificationTokenGenerateResponse: UserVerificationTokenGenerateResponse;
+  UserVerifiedDetails: UserVerifiedDetails;
+  VerificationResult: VerificationResult;
   Wallet: Omit<Wallet, 'connectionDetails'> & { connectionDetails: ResolversParentTypes['ConnectionDetails'] };
   WalletContributionLimits: WalletContributionLimits;
   WalletLimits: WalletLimits;
@@ -5214,6 +5313,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   userNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUserNotificationConfigurationValueUpdateArgs, 'userNotificationConfigurationId' | 'value'>>;
   userSubscriptionCancel?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionCancelArgs, 'id'>>;
   userSubscriptionUpdate?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionUpdateArgs, 'input'>>;
+  userVerificationTokenGenerate?: Resolver<ResolversTypes['UserVerificationTokenGenerateResponse'], ParentType, ContextType, RequireFields<MutationUserVerificationTokenGenerateArgs, 'input'>>;
   walletCreate?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationWalletCreateArgs, 'input'>>;
   walletDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationWalletDeleteArgs, 'id'>>;
   walletUpdate?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationWalletUpdateArgs, 'input'>>;
@@ -5967,6 +6067,7 @@ export type TagsMostFundedGetResultResolvers<ContextType = any, ParentType exten
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   badges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType>;
   bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  complianceDetails?: Resolver<ResolversTypes['UserComplianceDetails'], ParentType, ContextType>;
   contributions?: Resolver<Array<ResolversTypes['Contribution']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   emailVerifiedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
@@ -6003,6 +6104,28 @@ export type UserBadgeResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserComplianceDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserComplianceDetails'] = ResolversParentTypes['UserComplianceDetails']> = {
+  contributionLimits?: Resolver<ResolversTypes['UserContributionLimits'], ParentType, ContextType>;
+  currentVerificationLevel?: Resolver<ResolversTypes['UserVerificationLevelStatus'], ParentType, ContextType>;
+  verificationLevels?: Resolver<Array<ResolversTypes['UserVerificationLevelStatus']>, ParentType, ContextType>;
+  verifiedDetails?: Resolver<ResolversTypes['UserVerifiedDetails'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserContributionLimitResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserContributionLimit'] = ResolversParentTypes['UserContributionLimit']> = {
+  limit?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  nextReset?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  reached?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  remaining?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserContributionLimitsResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserContributionLimits'] = ResolversParentTypes['UserContributionLimits']> = {
+  daily?: Resolver<ResolversTypes['UserContributionLimit'], ParentType, ContextType>;
+  monthly?: Resolver<ResolversTypes['UserContributionLimit'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type UserHeroStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserHeroStats'] = ResolversParentTypes['UserHeroStats']> = {
   ambassadorStats?: Resolver<ResolversTypes['AmbassadorStats'], ParentType, ContextType>;
   contributorStats?: Resolver<ResolversTypes['ContributorStats'], ParentType, ContextType>;
@@ -6034,6 +6157,32 @@ export type UserSubscriptionResolvers<ContextType = any, ParentType extends Reso
   startDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['UserSubscriptionStatus'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserVerificationLevelStatusResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserVerificationLevelStatus'] = ResolversParentTypes['UserVerificationLevelStatus']> = {
+  level?: Resolver<ResolversTypes['UserVerificationLevel'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['UserVerificationStatus'], ParentType, ContextType>;
+  verifiedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserVerificationTokenGenerateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserVerificationTokenGenerateResponse'] = ResolversParentTypes['UserVerificationTokenGenerateResponse']> = {
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  verificationLevel?: Resolver<ResolversTypes['UserVerificationLevel'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserVerifiedDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserVerifiedDetails'] = ResolversParentTypes['UserVerifiedDetails']> = {
+  email?: Resolver<Maybe<ResolversTypes['VerificationResult']>, ParentType, ContextType>;
+  identity?: Resolver<Maybe<ResolversTypes['VerificationResult']>, ParentType, ContextType>;
+  phoneNumber?: Resolver<Maybe<ResolversTypes['VerificationResult']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type VerificationResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['VerificationResult'] = ResolversParentTypes['VerificationResult']> = {
+  verified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  verifiedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6240,10 +6389,17 @@ export type Resolvers<ContextType = any> = {
   TagsMostFundedGetResult?: TagsMostFundedGetResultResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserBadge?: UserBadgeResolvers<ContextType>;
+  UserComplianceDetails?: UserComplianceDetailsResolvers<ContextType>;
+  UserContributionLimit?: UserContributionLimitResolvers<ContextType>;
+  UserContributionLimits?: UserContributionLimitsResolvers<ContextType>;
   UserHeroStats?: UserHeroStatsResolvers<ContextType>;
   UserNotificationSettings?: UserNotificationSettingsResolvers<ContextType>;
   UserProjectContribution?: UserProjectContributionResolvers<ContextType>;
   UserSubscription?: UserSubscriptionResolvers<ContextType>;
+  UserVerificationLevelStatus?: UserVerificationLevelStatusResolvers<ContextType>;
+  UserVerificationTokenGenerateResponse?: UserVerificationTokenGenerateResponseResolvers<ContextType>;
+  UserVerifiedDetails?: UserVerifiedDetailsResolvers<ContextType>;
+  VerificationResult?: VerificationResultResolvers<ContextType>;
   Wallet?: WalletResolvers<ContextType>;
   WalletContributionLimits?: WalletContributionLimitsResolvers<ContextType>;
   WalletLimits?: WalletLimitsResolvers<ContextType>;
@@ -6438,7 +6594,12 @@ export type ProjectOwnerUserFragment = { __typename?: 'User', id: any, username:
     & ExternalAccountFragment
   )> };
 
-export type UserMeFragment = { __typename?: 'User', id: any, username: string, heroId: string, guardianType?: GuardianType | null, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, hasSocialAccount: boolean, externalAccounts: Array<(
+export type UserComplianceDetailsFragment = { __typename?: 'UserComplianceDetails', contributionLimits: { __typename?: 'UserContributionLimits', daily: { __typename?: 'UserContributionLimit', limit: number, reached: boolean, remaining: number }, monthly: { __typename?: 'UserContributionLimit', limit: number, reached: boolean, remaining: number } }, currentVerificationLevel: { __typename?: 'UserVerificationLevelStatus', level: UserVerificationLevel, status: UserVerificationStatus, verifiedAt?: any | null }, verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } };
+
+export type UserMeFragment = { __typename?: 'User', id: any, username: string, heroId: string, guardianType?: GuardianType | null, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, hasSocialAccount: boolean, complianceDetails: (
+    { __typename?: 'UserComplianceDetails' }
+    & UserComplianceDetailsFragment
+  ), externalAccounts: Array<(
     { __typename?: 'ExternalAccount' }
     & ExternalAccountFragment
   )>, ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
@@ -6739,7 +6900,7 @@ export type ProjectNotificationSettingsFragment = { __typename?: 'CreatorNotific
 export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: string | null, heroId: string, username: string, imageUrl?: string | null, ranking?: any | null, guardianType?: GuardianType | null, isEmailVerified: boolean, externalAccounts: Array<(
     { __typename?: 'ExternalAccount' }
     & ExternalAccountFragment
-  )> };
+  )>, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
 export type UserSubscriptionFragment = { __typename?: 'UserSubscription', canceledAt?: any | null, createdAt: any, id: any, nextBillingDate: any, startDate: any, status: UserSubscriptionStatus, updatedAt: any, projectSubscriptionPlan: { __typename?: 'ProjectSubscriptionPlan', id: any, projectId: any, name: string, cost: number, interval: UserSubscriptionInterval, currency: SubscriptionCurrencyType } };
 
@@ -7010,7 +7171,7 @@ export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uui
 
 export type PostPageProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, images: Array<string>, shortDescription?: string | null, cost: number };
 
-export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }> };
+export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
 export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, guardianType?: GuardianType | null };
 
@@ -7042,6 +7203,13 @@ export type ContributionEmailUpdateMutationVariables = Exact<{
 
 
 export type ContributionEmailUpdateMutation = { __typename?: 'Mutation', contributionEmailUpdate: { __typename?: 'Contribution', id: any, email?: string | null } };
+
+export type FundingFiatSwapPaymentCreateMutationVariables = Exact<{
+  input: ContributionPaymentsAddInput;
+}>;
+
+
+export type FundingFiatSwapPaymentCreateMutation = { __typename?: 'Mutation', contributionPaymentsAdd: { __typename?: 'ContributionPaymentsAddResponse', payments: { __typename?: 'ContributionPaymentsDetails', fiatSwap?: { __typename?: 'ContributionFiatSwapPaymentDetails', checkoutUrl: string } | null } } };
 
 export type DeleteEntryMutationVariables = Exact<{
   deleteEntryId: Scalars['BigInt']['input'];
@@ -7273,6 +7441,13 @@ export type ProjectTagCreateMutationVariables = Exact<{
 
 
 export type ProjectTagCreateMutation = { __typename?: 'Mutation', tagCreate: { __typename?: 'Tag', id: number, label: string } };
+
+export type UserVerificationTokenGenerateMutationVariables = Exact<{
+  input: UserVerificationTokenGenerateInput;
+}>;
+
+
+export type UserVerificationTokenGenerateMutation = { __typename?: 'Mutation', userVerificationTokenGenerate: { __typename?: 'UserVerificationTokenGenerateResponse', token: string, verificationLevel: UserVerificationLevel } };
 
 export type CreateWalletMutationVariables = Exact<{
   input: CreateWalletInput;
@@ -7999,6 +8174,41 @@ export const ProjectOwnerUserFragmentDoc = gql`
   hasSocialAccount
 }
     ${ExternalAccountFragmentDoc}`;
+export const UserComplianceDetailsFragmentDoc = gql`
+    fragment UserComplianceDetails on UserComplianceDetails {
+  contributionLimits {
+    daily {
+      limit
+      reached
+      remaining
+    }
+    monthly {
+      limit
+      reached
+      remaining
+    }
+  }
+  currentVerificationLevel {
+    level
+    status
+    verifiedAt
+  }
+  verifiedDetails {
+    email {
+      verified
+      verifiedAt
+    }
+    identity {
+      verified
+      verifiedAt
+    }
+    phoneNumber {
+      verified
+      verifiedAt
+    }
+  }
+}
+    `;
 export const ProjectForOwnerFragmentDoc = gql`
     fragment ProjectForOwner on Project {
   id
@@ -8021,6 +8231,9 @@ export const UserMeFragmentDoc = gql`
   ranking
   isEmailVerified
   hasSocialAccount
+  complianceDetails {
+    ...UserComplianceDetails
+  }
   externalAccounts {
     ...ExternalAccount
   }
@@ -8030,7 +8243,8 @@ export const UserMeFragmentDoc = gql`
     }
   }
 }
-    ${ExternalAccountFragmentDoc}
+    ${UserComplianceDetailsFragmentDoc}
+${ExternalAccountFragmentDoc}
 ${ProjectForOwnerFragmentDoc}`;
 export const ProjectForLandingPageFragmentDoc = gql`
     fragment ProjectForLandingPage on Project {
@@ -8454,6 +8668,22 @@ export const UserForProfilePageFragmentDoc = gql`
   isEmailVerified
   externalAccounts {
     ...ExternalAccount
+  }
+  complianceDetails {
+    verifiedDetails {
+      email {
+        verified
+        verifiedAt
+      }
+      identity {
+        verified
+        verifiedAt
+      }
+      phoneNumber {
+        verified
+        verifiedAt
+      }
+    }
   }
 }
     ${ExternalAccountFragmentDoc}`;
@@ -8954,6 +9184,22 @@ export const ProjectPageCreatorFragmentDoc = gql`
     externalId
     id
     public
+  }
+  complianceDetails {
+    verifiedDetails {
+      email {
+        verified
+        verifiedAt
+      }
+      identity {
+        verified
+        verifiedAt
+      }
+      phoneNumber {
+        verified
+        verifiedAt
+      }
+    }
   }
 }
     `;
@@ -11686,6 +11932,43 @@ export function useContributionEmailUpdateMutation(baseOptions?: Apollo.Mutation
 export type ContributionEmailUpdateMutationHookResult = ReturnType<typeof useContributionEmailUpdateMutation>;
 export type ContributionEmailUpdateMutationResult = Apollo.MutationResult<ContributionEmailUpdateMutation>;
 export type ContributionEmailUpdateMutationOptions = Apollo.BaseMutationOptions<ContributionEmailUpdateMutation, ContributionEmailUpdateMutationVariables>;
+export const FundingFiatSwapPaymentCreateDocument = gql`
+    mutation FundingFiatSwapPaymentCreate($input: ContributionPaymentsAddInput!) {
+  contributionPaymentsAdd(input: $input) {
+    payments {
+      fiatSwap {
+        checkoutUrl
+      }
+    }
+  }
+}
+    `;
+export type FundingFiatSwapPaymentCreateMutationFn = Apollo.MutationFunction<FundingFiatSwapPaymentCreateMutation, FundingFiatSwapPaymentCreateMutationVariables>;
+
+/**
+ * __useFundingFiatSwapPaymentCreateMutation__
+ *
+ * To run a mutation, you first call `useFundingFiatSwapPaymentCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFundingFiatSwapPaymentCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [fundingFiatSwapPaymentCreateMutation, { data, loading, error }] = useFundingFiatSwapPaymentCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useFundingFiatSwapPaymentCreateMutation(baseOptions?: Apollo.MutationHookOptions<FundingFiatSwapPaymentCreateMutation, FundingFiatSwapPaymentCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FundingFiatSwapPaymentCreateMutation, FundingFiatSwapPaymentCreateMutationVariables>(FundingFiatSwapPaymentCreateDocument, options);
+      }
+export type FundingFiatSwapPaymentCreateMutationHookResult = ReturnType<typeof useFundingFiatSwapPaymentCreateMutation>;
+export type FundingFiatSwapPaymentCreateMutationResult = Apollo.MutationResult<FundingFiatSwapPaymentCreateMutation>;
+export type FundingFiatSwapPaymentCreateMutationOptions = Apollo.BaseMutationOptions<FundingFiatSwapPaymentCreateMutation, FundingFiatSwapPaymentCreateMutationVariables>;
 export const DeleteEntryDocument = gql`
     mutation DeleteEntry($deleteEntryId: BigInt!) {
   deleteEntry(id: $deleteEntryId) {
@@ -12579,6 +12862,40 @@ export function useProjectTagCreateMutation(baseOptions?: Apollo.MutationHookOpt
 export type ProjectTagCreateMutationHookResult = ReturnType<typeof useProjectTagCreateMutation>;
 export type ProjectTagCreateMutationResult = Apollo.MutationResult<ProjectTagCreateMutation>;
 export type ProjectTagCreateMutationOptions = Apollo.BaseMutationOptions<ProjectTagCreateMutation, ProjectTagCreateMutationVariables>;
+export const UserVerificationTokenGenerateDocument = gql`
+    mutation UserVerificationTokenGenerate($input: UserVerificationTokenGenerateInput!) {
+  userVerificationTokenGenerate(input: $input) {
+    token
+    verificationLevel
+  }
+}
+    `;
+export type UserVerificationTokenGenerateMutationFn = Apollo.MutationFunction<UserVerificationTokenGenerateMutation, UserVerificationTokenGenerateMutationVariables>;
+
+/**
+ * __useUserVerificationTokenGenerateMutation__
+ *
+ * To run a mutation, you first call `useUserVerificationTokenGenerateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserVerificationTokenGenerateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userVerificationTokenGenerateMutation, { data, loading, error }] = useUserVerificationTokenGenerateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUserVerificationTokenGenerateMutation(baseOptions?: Apollo.MutationHookOptions<UserVerificationTokenGenerateMutation, UserVerificationTokenGenerateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserVerificationTokenGenerateMutation, UserVerificationTokenGenerateMutationVariables>(UserVerificationTokenGenerateDocument, options);
+      }
+export type UserVerificationTokenGenerateMutationHookResult = ReturnType<typeof useUserVerificationTokenGenerateMutation>;
+export type UserVerificationTokenGenerateMutationResult = Apollo.MutationResult<UserVerificationTokenGenerateMutation>;
+export type UserVerificationTokenGenerateMutationOptions = Apollo.BaseMutationOptions<UserVerificationTokenGenerateMutation, UserVerificationTokenGenerateMutationVariables>;
 export const CreateWalletDocument = gql`
     mutation CreateWallet($input: CreateWalletInput!) {
   walletCreate(input: $input) {

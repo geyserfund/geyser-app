@@ -8,9 +8,9 @@ import { ProjectDashboardInfo } from './views/ProjectDashboardInfo.tsx'
 import { ProjectDashboardNotifications } from './views/ProjectDashboardNotifications.tsx'
 import { ProjectDashboardPromote } from './views/ProjectDashboardPromote.tsx'
 import { ProjectDashboardStory } from './views/ProjectDashboardStory.tsx'
-import { ProjectDashboardWallet } from './views/ProjectDashboardWallet.tsx'
 import { ProjectDashboardSales } from './views/sales/ProjectDashboardSales.tsx'
 import { ProjectDashboardSettings } from './views/settings/ProjectDashboardSettings.tsx'
+import { ProjectDashboardWallet } from './views/wallet/ProjectDashboardWallet.tsx'
 
 export {
   ProjectDashboard,

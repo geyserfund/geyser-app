@@ -188,6 +188,15 @@ export const platformRoutes: RouteObject[] = [
               return { Component: ProfileSettingsSubscriptions }
             },
           },
+          {
+            path: getPath('userProfileSettingsVerifications', PathName.userId),
+            async lazy() {
+              const ProfileSettingsVerifications = await ProfileSettingsIndex().then(
+                (m) => m.ProfileSettingsVerifications,
+              )
+              return { Component: ProfileSettingsVerifications }
+            },
+          },
         ],
       },
     ],
@@ -530,6 +539,13 @@ export const platformRoutes: RouteObject[] = [
                     async lazy() {
                       const PaymentCard = await ProjectFunding().then((m) => m.PaymentCard)
                       return { Component: PaymentCard }
+                    },
+                  },
+                  {
+                    path: getPath('fundingPaymentFiatSwap', PathName.projectName),
+                    async lazy() {
+                      const PaymentFiatSwap = await ProjectFunding().then((m) => m.PaymentFiatSwap)
+                      return { Component: PaymentFiatSwap }
                     },
                   },
                   {

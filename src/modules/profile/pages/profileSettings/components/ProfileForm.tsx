@@ -10,7 +10,6 @@ import { useUserProfileAtom } from '../../../state'
 import { EditableAvatar } from '../../profilePage/components'
 import { useEditProfile } from '../hooks/useEditProfile'
 import { DeleteUserProfile } from './DeleteUserProfile'
-import { UpdateVerifyEmail } from './UpdateVerifyEmail'
 
 export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
   const { t } = useTranslation()
@@ -53,7 +52,6 @@ export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
       <form style={{ width: '100%' }} onSubmit={onSubmit}>
         <VStack spacing="30px" w="full">
           <VStack w="full" align="start" gap={3}>
-            <H3 size="lg">{t('Profile information')}</H3>
             <HStack w="full" alignItems={'start'} spacing="20px">
               <EditableAvatar onUploadImage={onUploadImage} userId={user.id} imageUrl={imageUrl} />
 
@@ -81,7 +79,7 @@ export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
           </Button>
         </VStack>
       </form>
-      <UpdateVerifyEmail />
+
       <DeleteUserProfile />
     </>
   )
@@ -108,7 +106,6 @@ export const ProfileFormSkeleton = () => {
         </VStack>
       </VStack>
 
-      <UpdateVerifyEmail />
       <DeleteUserProfile />
 
       <SkeletonLayout height="40px" />

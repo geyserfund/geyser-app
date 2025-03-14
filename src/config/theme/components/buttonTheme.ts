@@ -20,6 +20,7 @@ export const buttonTheme: ComponentStyleConfig = {
     xs: {
       height: '20px',
       minWidth: '20px',
+      minW: '20px',
       paddingX: '4px',
       borderRadius: '5px',
       fontSize: '12px',

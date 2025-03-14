@@ -20,6 +20,7 @@ import {
   Rewards,
   Story,
 } from './sections'
+import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
 
 export const ProjectBody = () => {
   const { project, loading } = useProjectAtom()
@@ -48,6 +49,8 @@ export const ProjectBody = () => {
         paddingBottom={{ base: 24, lg: 10 }}
       >
         <FinalizeProjectNotice />
+        <CreatorVerificationNotice />
+
         <Header />
         <CreatorTools />
         <Story />
