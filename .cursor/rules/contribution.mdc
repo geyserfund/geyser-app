@@ -26,7 +26,7 @@ Internationalization (i18n)
 Importing from files
 - While importing from another file, favour the shortest route, i.e relative if it is short, else absolute if that is shortest.
 - Absolute routes start with "@" which is the same as "src/"
-- While importing a file, add the extension of the file that it is exported from, for example: "@/api/airtable.ts"
+- Always add the extension of the file that a component or function is imported from, for example: "@/api/airtable.ts"
 
 Export Conventions
 - Always favour named exports over default exports.

@@ -1713,5 +1713,10 @@
   "Your project has almost reached your funding limit of $10k. Complete phone-verification to continue raising up to $100k.": "Your project has almost reached your funding limit of $10k. Complete phone-verification to continue raising up to $100k.",
   "Your project has almost reached your funding limit of $100k. Complete identity-verification to continue raising above $100k.": "Your project has almost reached your funding limit of $100k. Complete identity-verification to continue raising above $100k.",
   "Please try again, once the creator has removed the funding limits.": "Please try again, once the creator has removed the funding limits.",
-  "This project has reached its Funding limit": "This project has reached its Funding limit"
+  "This project has reached its Funding limit": "This project has reached its Funding limit",
+  "Products": "Products",
+  "Search project": "Search project",
+  "Trending products on Geyser this month": "Trending products on Geyser this month",
+  "Cannot read properties of null (reading '0')": "Cannot read properties of null (reading '0')",
+  "Failed to fetch project rewards": "Failed to fetch project rewards"
 }

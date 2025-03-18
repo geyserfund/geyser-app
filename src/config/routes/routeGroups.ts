@@ -125,6 +125,7 @@ export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath(
 export const discoveryRoutes = [
   getPath('discoveryLanding'),
   getPath('discoveryMyProjects'),
+  getPath('discoveryProducts'),
   getPath('discoveryActivity'),
   getPath('discoveryActivityFollowed'),
   getPath('discoveryActivityGlobal'),

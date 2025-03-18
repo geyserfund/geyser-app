@@ -674,6 +674,13 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('discoveryProducts'),
+        async lazy() {
+          const Products = await Discovery().then((m) => m.Products)
+          return { Component: Products }
+        },
+      },
+      {
         path: getPath('discoveryActivity'),
         async lazy() {
           const Activity = await Discovery().then((m) => m.Activity)

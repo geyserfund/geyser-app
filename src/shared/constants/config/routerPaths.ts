@@ -14,6 +14,7 @@ export enum PathName {
   grantsRoundTwo = 'roundtwo',
   myProjects = 'my-projects',
   activity = 'activity',
+  products = 'products',
   activityGlobal = 'global',
   activityFollowed = 'followed',
 
@@ -129,6 +130,7 @@ const pathsMap = {
   discoveryLanding: () => '/',
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,
   discoveryMyProjects: () => `/${PathName.myProjects}`,
+  discoveryProducts: () => `/${PathName.products}`,
   discoveryActivity: () => `/${PathName.activity}`,
   discoveryActivityGlobal: () => `/${PathName.activity}/${PathName.activityGlobal}`,
   discoveryActivityFollowed: () => `/${PathName.activity}/${PathName.activityFollowed}`,
