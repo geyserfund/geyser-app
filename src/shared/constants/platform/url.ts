@@ -239,6 +239,8 @@ export const ArtworkImageUrl = 'https://storage.googleapis.com/geyser-projects-m
 export const PhysicalProductImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/reward-templates/physical-product.png'
 export const ExperienceImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/experience.png'
+export const EnableFiatContributionsImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/enable-fiat-illustartion.png'
 
 // Helpers
 export const EmailPromptModalUrl =

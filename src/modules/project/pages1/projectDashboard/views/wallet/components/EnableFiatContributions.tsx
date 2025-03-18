@@ -3,6 +3,7 @@ import { t } from 'i18next'
 
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { EnableFiatContributionsImageUrl } from '@/shared/constants/index.ts'
 
 type EnableFiatContributionsProps = CardLayoutProps & {
   disableImage?: boolean
@@ -18,9 +19,9 @@ export const EnableFiatContributions = ({ disableImage, switchProps, ...props }:
         </Body>
         <Switch size="lg" {...switchProps} />
       </HStack>
-      <HStack flexDirection={{ base: 'column', lg: 'row' }} spacing={8}>
+      <HStack flexDirection={{ base: 'column', lg: 'row' }} spacing={4}>
         {!disableImage && (
-          <Image maxWidth={{ base: '100%', lg: '160px' }} borderRadius="4px" src={'https://picsum.photos/160/70'} />
+          <Image maxWidth={{ base: '100%', lg: '160px' }} borderRadius="4px" src={EnableFiatContributionsImageUrl} />
         )}
         <VStack alignItems={'start'}>
           <Body size="sm" light>

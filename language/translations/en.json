@@ -1722,5 +1722,7 @@
   "No trending products found": "No trending products found",
   "Failed to fetch recent products": "Failed to fetch recent products",
   "Failed to fetch project goals": "Failed to fetch project goals",
-"time.": "time."
+  "time.": "time.",
+  "Configure Wallet": "Configure Wallet",
+  "Connect Wallet": "Connect Wallet"
 }

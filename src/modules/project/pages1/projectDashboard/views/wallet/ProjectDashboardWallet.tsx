@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Link, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, Link, useDisclosure, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Link as ReactLink } from 'react-router-dom'
 
@@ -173,6 +173,11 @@ export const ProjectDashboardWallet = () => {
           switchProps={{ isChecked: Boolean(isIdentityVerified), onChange: handleSwitchChange }}
         />
       </VStack>
+      <HStack w="full" paddingX={{ base: 0, lg: 6 }} paddingTop={4}>
+        <Body size="xl" medium>
+          {t('Configure Wallet')}
+        </Body>
+      </HStack>
 
       <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }} alignItems={'start'}>
         <Body size="sm" light>
