@@ -2681,6 +2681,12 @@ export type ProjectRewardCurrencyUpdateRewardsInput = {
   rewardId: Scalars['BigInt']['input'];
 };
 
+export type ProjectRewardTrendingMonthlyGetRow = {
+  __typename?: 'ProjectRewardTrendingMonthlyGetRow';
+  count: Scalars['Int']['output'];
+  projectReward: ProjectReward;
+};
+
 export type ProjectRewardTrendingWeeklyGetRow = {
   __typename?: 'ProjectRewardTrendingWeeklyGetRow';
   count: Scalars['Int']['output'];
@@ -2958,6 +2964,7 @@ export type Query = {
   projectRegionsGet: Array<ProjectRegionsGetResult>;
   projectRewardCategoriesGet: Array<Scalars['String']['output']>;
   projectRewardsGet: Array<ProjectReward>;
+  projectRewardsTrendingMonthlyGet: Array<ProjectRewardTrendingMonthlyGetRow>;
   projectRewardsTrendingWeeklyGet: Array<ProjectRewardTrendingWeeklyGetRow>;
   projectStatsGet: ProjectStats;
   projectSubscriptionPlan?: Maybe<ProjectSubscriptionPlan>;
@@ -4230,6 +4237,7 @@ export type ResolversTypes = {
   ProjectReward: ResolverTypeWrapper<Omit<ProjectReward, 'project'> & { project: ResolversTypes['Project'] }>;
   ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
   ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput;
+  ProjectRewardTrendingMonthlyGetRow: ResolverTypeWrapper<ProjectRewardTrendingMonthlyGetRow>;
   ProjectRewardTrendingWeeklyGetRow: ResolverTypeWrapper<ProjectRewardTrendingWeeklyGetRow>;
   ProjectRewardsGroupedByRewardIdStats: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStats>;
   ProjectRewardsGroupedByRewardIdStatsProjectReward: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStatsProjectReward>;
@@ -4604,6 +4612,7 @@ export type ResolversParentTypes = {
   ProjectReward: Omit<ProjectReward, 'project'> & { project: ResolversParentTypes['Project'] };
   ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
   ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput;
+  ProjectRewardTrendingMonthlyGetRow: ProjectRewardTrendingMonthlyGetRow;
   ProjectRewardTrendingWeeklyGetRow: ProjectRewardTrendingWeeklyGetRow;
   ProjectRewardsGroupedByRewardIdStats: ProjectRewardsGroupedByRewardIdStats;
   ProjectRewardsGroupedByRewardIdStatsProjectReward: ProjectRewardsGroupedByRewardIdStatsProjectReward;
@@ -5854,6 +5863,12 @@ export type ProjectRewardResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProjectRewardTrendingMonthlyGetRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardTrendingMonthlyGetRow'] = ResolversParentTypes['ProjectRewardTrendingMonthlyGetRow']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  projectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ProjectRewardTrendingWeeklyGetRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardTrendingWeeklyGetRow'] = ResolversParentTypes['ProjectRewardTrendingWeeklyGetRow']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   projectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>;
@@ -5992,6 +6007,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectRegionsGet?: Resolver<Array<ResolversTypes['ProjectRegionsGetResult']>, ParentType, ContextType>;
   projectRewardCategoriesGet?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   projectRewardsGet?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<QueryProjectRewardsGetArgs, 'input'>>;
+  projectRewardsTrendingMonthlyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingMonthlyGetRow']>, ParentType, ContextType>;
   projectRewardsTrendingWeeklyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingWeeklyGetRow']>, ParentType, ContextType>;
   projectStatsGet?: Resolver<ResolversTypes['ProjectStats'], ParentType, ContextType, RequireFields<QueryProjectStatsGetArgs, 'input'>>;
   projectSubscriptionPlan?: Resolver<Maybe<ResolversTypes['ProjectSubscriptionPlan']>, ParentType, ContextType, RequireFields<QueryProjectSubscriptionPlanArgs, 'id'>>;
@@ -6375,6 +6391,7 @@ export type Resolvers<ContextType = any> = {
   ProjectMostFundedByTag?: ProjectMostFundedByTagResolvers<ContextType>;
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>;
   ProjectReward?: ProjectRewardResolvers<ContextType>;
+  ProjectRewardTrendingMonthlyGetRow?: ProjectRewardTrendingMonthlyGetRowResolvers<ContextType>;
   ProjectRewardTrendingWeeklyGetRow?: ProjectRewardTrendingWeeklyGetRowResolvers<ContextType>;
   ProjectRewardsGroupedByRewardIdStats?: ProjectRewardsGroupedByRewardIdStatsResolvers<ContextType>;
   ProjectRewardsGroupedByRewardIdStatsProjectReward?: ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<ContextType>;
@@ -6690,6 +6707,14 @@ export type ProjectRewardsTrendingWeeklyGetQueryVariables = Exact<{ [key: string
 
 
 export type ProjectRewardsTrendingWeeklyGetQuery = { __typename?: 'Query', projectRewardsTrendingWeeklyGet: Array<{ __typename?: 'ProjectRewardTrendingWeeklyGetRow', count: number, projectReward: (
+      { __typename?: 'ProjectReward' }
+      & RewardForLandingPageFragment
+    ) }> };
+
+export type ProjectRewardsTrendingMonthlyGetQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProjectRewardsTrendingMonthlyGetQuery = { __typename?: 'Query', projectRewardsTrendingMonthlyGet: Array<{ __typename?: 'ProjectRewardTrendingMonthlyGetRow', count: number, projectReward: (
       { __typename?: 'ProjectReward' }
       & RewardForLandingPageFragment
     ) }> };
@@ -10664,6 +10689,48 @@ export type ProjectRewardsTrendingWeeklyGetQueryHookResult = ReturnType<typeof u
 export type ProjectRewardsTrendingWeeklyGetLazyQueryHookResult = ReturnType<typeof useProjectRewardsTrendingWeeklyGetLazyQuery>;
 export type ProjectRewardsTrendingWeeklyGetSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsTrendingWeeklyGetSuspenseQuery>;
 export type ProjectRewardsTrendingWeeklyGetQueryResult = Apollo.QueryResult<ProjectRewardsTrendingWeeklyGetQuery, ProjectRewardsTrendingWeeklyGetQueryVariables>;
+export const ProjectRewardsTrendingMonthlyGetDocument = gql`
+    query ProjectRewardsTrendingMonthlyGet {
+  projectRewardsTrendingMonthlyGet {
+    count
+    projectReward {
+      ...RewardForLandingPage
+    }
+  }
+}
+    ${RewardForLandingPageFragmentDoc}`;
+
+/**
+ * __useProjectRewardsTrendingMonthlyGetQuery__
+ *
+ * To run a query within a React component, call `useProjectRewardsTrendingMonthlyGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardsTrendingMonthlyGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectRewardsTrendingMonthlyGetQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useProjectRewardsTrendingMonthlyGetQuery(baseOptions?: Apollo.QueryHookOptions<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>(ProjectRewardsTrendingMonthlyGetDocument, options);
+      }
+export function useProjectRewardsTrendingMonthlyGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>(ProjectRewardsTrendingMonthlyGetDocument, options);
+        }
+export function useProjectRewardsTrendingMonthlyGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>(ProjectRewardsTrendingMonthlyGetDocument, options);
+        }
+export type ProjectRewardsTrendingMonthlyGetQueryHookResult = ReturnType<typeof useProjectRewardsTrendingMonthlyGetQuery>;
+export type ProjectRewardsTrendingMonthlyGetLazyQueryHookResult = ReturnType<typeof useProjectRewardsTrendingMonthlyGetLazyQuery>;
+export type ProjectRewardsTrendingMonthlyGetSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsTrendingMonthlyGetSuspenseQuery>;
+export type ProjectRewardsTrendingMonthlyGetQueryResult = Apollo.QueryResult<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>;
 export const TagsGetDocument = gql`
     query TagsGet {
   tagsGet {

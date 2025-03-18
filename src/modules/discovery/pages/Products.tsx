@@ -2,8 +2,10 @@ import { GridItem, HStack, Icon, SimpleGrid, Stack, VStack } from '@chakra-ui/re
 import { t } from 'i18next'
 import { PiFire } from 'react-icons/pi'
 
+import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
-import { useProjectRewardsTrendingWeeklyGetQuery } from '@/types/index.ts'
+import { useProjectRewardsTrendingMonthlyGetQuery } from '@/types/index.ts'
+import { useNotification } from '@/utils/index.ts'
 
 import {
   TrendingRewardCard,
@@ -11,15 +13,15 @@ import {
 } from './landing/views/defaultView/components/TrendingRewardCard.tsx'
 
 export const Products = () => {
-  const { data, loading } = useProjectRewardsTrendingWeeklyGetQuery({
+  const toast = useNotification()
+  const { data, loading } = useProjectRewardsTrendingMonthlyGetQuery({
     fetchPolicy: 'network-only',
+    onError(error) {
+      toast.error({ title: t('Failed to fetch recent products') })
+    },
   })
 
-  const rewards = data?.projectRewardsTrendingWeeklyGet || []
-
-  if (rewards.length === 0) {
-    return null
-  }
+  const rewards = data?.projectRewardsTrendingMonthlyGet || []
 
   return (
     <VStack w="full" spacing={6}>
@@ -31,7 +33,7 @@ export const Products = () => {
       </HStack>
       {loading ? (
         <TrendingRewardsSkeleton />
-      ) : (
+      ) : rewards.length > 0 ? (
         <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacing={4}>
           {rewards.map((reward) => {
             return (
@@ -41,6 +43,8 @@ export const Products = () => {
             )
           })}
         </SimpleGrid>
+      ) : (
+        <Body>{t('No trending products found')}</Body>
       )}
     </VStack>
   )

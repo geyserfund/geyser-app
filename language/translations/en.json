@@ -1718,5 +1718,7 @@
   "Search project": "Search project",
   "Trending products on Geyser this month": "Trending products on Geyser this month",
   "Cannot read properties of null (reading '0')": "Cannot read properties of null (reading '0')",
-  "Failed to fetch project rewards": "Failed to fetch project rewards"
+  "Failed to fetch project rewards": "Failed to fetch project rewards",
+  "No trending products found": "No trending products found",
+  "Failed to fetch recent products": "Failed to fetch recent products"
 }
