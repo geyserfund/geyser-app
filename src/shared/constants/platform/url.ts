@@ -25,6 +25,8 @@ export const AnonymousAvatarBaseUrl = 'https://storage.googleapis.com/geyser-pro
 // LAUNCH PROJECT URLS
 export const LaunchProjectCoinsUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-coins.webp'
+export const LaunchProjectPaymentMethodsUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/payment-methods.png'
 export const LaunchProjectEntryUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-entry.webp'
 export const LaunchProjectFeesUrl =

@@ -7,6 +7,9 @@ import { updateComplianceStatusForUserAtom } from '@/modules/auth/state/authAtom
 import { UserVerificationLevel } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
+const SUM_SUB_LEVEL_2 = 'phone-verification-only'
+const SUM_SUB_LEVEL_3 = 'id-and-phone-verification'
+
 export const SumSubVerification = ({
   accessToken,
   onComplete,
@@ -29,8 +32,14 @@ export const SumSubVerification = ({
     })
   }
 
-  const handleMessage = (props: string) => {
-    if (props.includes('idCheck.onStepCompleted')) {
+  const handleMessage = (props: string, data: any) => {
+    const levelName = verificationLevel === UserVerificationLevel.Level_2 ? SUM_SUB_LEVEL_2 : SUM_SUB_LEVEL_3
+
+    if (
+      props.includes('idCheck.onApplicantStatusChanged') &&
+      data.reviewResult.reviewAnswer === 'GREEN' &&
+      data.levelName === levelName
+    ) {
       toast.success({ title: 'Verification Successful' })
       const level = verificationLevel === UserVerificationLevel.Level_2 ? 'phoneNumber' : 'identity'
       updateComplianceStatusForUser({

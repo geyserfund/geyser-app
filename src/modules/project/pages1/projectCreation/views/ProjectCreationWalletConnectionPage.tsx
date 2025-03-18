@@ -5,7 +5,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useProjectWalletAPI } from '@/modules/project/API/useProjectWalletAPI'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 
@@ -38,6 +38,7 @@ export const ProjectCreationWalletConnectionPage = () => {
   const params = useParams<{ projectId: string }>()
 
   const { project, loading } = useProjectAtom()
+  const { wallet } = useWalletAtom()
   const { createWallet } = useProjectWalletAPI()
 
   useLocationMandatoryRedirect()
@@ -132,6 +133,11 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   const isContinueButtonLoading = lightningAddress.evaluating || loading || createWallet.loading
 
+  const isWalletIncomplete = !isFormDirty() && !wallet?.id
+
+  console.log('checking isWalletIncomplete', wallet)
+  console.log('checking isLightningAddressInValid', isLightningAddressInValid)
+
   return (
     <ProjectCreateLayout
       onBackClick={handleBackClick}
@@ -139,11 +145,13 @@ export const ProjectCreationWalletConnectionPage = () => {
         <FormContinueButton
           onClick={handleConfirm}
           isLoading={isContinueButtonLoading}
-          isDisabled={!isFormDirty() || isLightningAddressInValid}
+          isDisabled={isWalletIncomplete || isLightningAddressInValid}
           flexGrow={1}
         />
       }
-      title={<TitleWithProgressBar title={t('Connect wallet')} subtitle={t('Create a project')} index={5} length={5} />}
+      title={
+        <TitleWithProgressBar title={t('Configure wallet')} subtitle={t('Create a project')} index={5} length={5} />
+      }
     >
       <VStack w="full" paddingBottom="20px">
         <EnableFiatContributions

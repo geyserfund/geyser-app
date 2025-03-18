@@ -42,11 +42,7 @@ export const ProjectDashboardWallet = () => {
 
   const walletLimits = wallet?.limits
 
-  const { createWallet, updateWallet, queryProjectWallet, queryProjectWalletConnectionDetails } = useProjectWalletAPI()
-
-  useEffect(() => {
-    queryProjectWalletConnectionDetails.execute()
-  }, [])
+  const { createWallet, updateWallet, queryProjectWallet } = useProjectWalletAPI()
 
   const { userVerificationModal, startVerification, userVerificationToken } = useUserVerificationModal()
 

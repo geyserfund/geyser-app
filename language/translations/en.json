@@ -1698,5 +1698,17 @@
   "Earn a \"Verified Creator\" badge, increase your limits and enable flat contributions on your project.": "Earn a \"Verified Creator\" badge, increase your limits and enable flat contributions on your project.",
   "Verify Now": "Verify Now",
   "Creator Verification": "Creator Verification",
-  "ApolloError: you must be logged in to update a project": "ApolloError: you must be logged in to update a project"
+  "ApolloError: you must be logged in to update a project": "ApolloError: you must be logged in to update a project",
+  "Bitcoin, Lightning or Fiat (20+ payment methods)": "Bitcoin, Lightning or Fiat (20+ payment methods)",
+  "Receive funds instantly, in your Bitcoin wallet.": "Receive funds instantly, in your Bitcoin wallet.",
+  "Receive funds instantly, in your Bitcoin wallet": "Receive funds instantly, in your Bitcoin wallet",
+  "ApolloError: Project with name somethinghere already exists": "ApolloError: Project with name somethinghere already exists",
+  "Configure wallet": "Configure wallet",
+  "We could not validate this as a working Lightning Address: lightning address not found, are you sure it exists?": "We could not validate this as a working Lightning Address: lightning address not found, are you sure it exists?",
+  "Wallet limits": "Wallet limits",
+  "Minimum Receivable Limit": "Minimum Receivable Limit",
+  "Reaching out to your wallet provider, as they might provide an option to increase these limits.": "Reaching out to your wallet provider, as they might provide an option to increase these limits.",
+  "These limits are established at the discretion of your Lightning wallet provider. To increase them consider:": "These limits are established at the discretion of your Lightning wallet provider. To increase them consider:",
+  "Maximum Receivable Limit": "Maximum Receivable Limit",
+  "We could not validate this as a working Lightning Address: unknown error": "We could not validate this as a working Lightning Address: unknown error"
 }

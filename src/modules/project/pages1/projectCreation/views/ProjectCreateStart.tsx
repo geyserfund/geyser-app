@@ -16,6 +16,7 @@ import {
   LaunchProjectEntryUrl,
   LaunchProjectFeesUrl,
   LaunchProjectGiftUrl,
+  LaunchProjectPaymentMethodsUrl,
   LaunchProjectWorldUrl,
   LIGHTNING_FEE_PERCENTAGE,
 } from '../../../../../shared/constants'
@@ -67,7 +68,7 @@ export const ProjectCreateStart = () => {
           <ProjectInfoButton src={LaunchProjectWorldUrl} alt="create project world">
             {t('Raise funds from anywhere in the world')}
           </ProjectInfoButton>
-          <ProjectInfoButton src={LaunchProjectCoinsUrl} alt="create project lightning">
+          <ProjectInfoButton src={LaunchProjectPaymentMethodsUrl} alt="create project lightning">
             {t('Bitcoin, Lightning or Fiat (20+ payment methods)')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectGiftUrl} alt="create project gift">
@@ -80,7 +81,7 @@ export const ProjectCreateStart = () => {
             {t(`Low ${LIGHTNING_FEE_PERCENTAGE}% fees and no fees for node-runners`)}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectCoinsUrl} alt="create project key">
-            {t('Receive funds instantly, in your Bitcoin wallet.')}
+            {t('Receive funds instantly, in your Bitcoin wallet')}
           </ProjectInfoButton>
         </Box>
 

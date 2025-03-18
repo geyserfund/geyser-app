@@ -1,6 +1,7 @@
 import { useDisclosure } from '@chakra-ui/react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import { useProjectWalletAPI } from '@/modules/project/API/useProjectWalletAPI.ts'
 import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom'
 
 import { WalletConnectDetails } from '../../../../../shared/constants'
@@ -89,6 +90,7 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
   const { toast } = useNotification()
 
   const { project } = useProjectAtom()
+  const { queryProjectWalletConnectionDetails } = useProjectWalletAPI(true)
   const { wallet, walletConnectiondetails } = useWalletAtom()
 
   const projectWallet = useMemo(() => ({ ...wallet, ...walletConnectiondetails }), [wallet, walletConnectiondetails])
@@ -113,6 +115,10 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
     [WalletConnectDetails.NWCConnectionDetailsPrivate]: ConnectionOption.NWC,
     [WalletConnectDetails.LightningAddressConnectionDetails]: ConnectionOption.LIGHTNING_ADDRESS,
   }
+
+  useEffect(() => {
+    queryProjectWalletConnectionDetails.execute()
+  }, [])
 
   useEffect(() => {
     if (walletConnectiondetails?.connectionDetails.__typename) {
@@ -256,8 +262,6 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
 
     return null
   }, [project, nodeInput, connectionOption, lightningAddressFormValue, nostrWalletConnectURI, feePercentage])
-
-  console.log('checking inside useWalletFOrm', connectionOption)
 
   const handleConfirm = useCallback(async () => {
     if (
