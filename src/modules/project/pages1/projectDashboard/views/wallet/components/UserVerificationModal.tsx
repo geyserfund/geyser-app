@@ -62,7 +62,9 @@ export const UserVerificationModal = ({
       return <Level2SuccessMessage onClose={handleClose} setTitle={setTitle} />
     }
 
-    return <SumSubVerification accessToken={accessToken} onComplete={handleComplete} />
+    return (
+      <SumSubVerification accessToken={accessToken} onComplete={handleComplete} verificationLevel={verificationLevel} />
+    )
   }
 
   return (
@@ -96,7 +98,13 @@ const Level2SuccessMessage = ({ onClose, setTitle }: { onClose: () => void; setT
   }
 
   if (userVerificationModal.isOpen) {
-    return <SumSubVerification accessToken={userVerificationToken?.token || ''} onComplete={handleComplete} />
+    return (
+      <SumSubVerification
+        accessToken={userVerificationToken?.token || ''}
+        onComplete={handleComplete}
+        verificationLevel={UserVerificationLevel.Level_3}
+      />
+    )
   }
 
   return (

@@ -257,6 +257,8 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
     return null
   }, [project, nodeInput, connectionOption, lightningAddressFormValue, nostrWalletConnectURI, feePercentage])
 
+  console.log('checking inside useWalletFOrm', connectionOption)
+
   const handleConfirm = useCallback(async () => {
     if (
       connectionOption === ConnectionOption.LIGHTNING_ADDRESS &&

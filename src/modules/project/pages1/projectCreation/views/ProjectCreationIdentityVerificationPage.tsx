@@ -1,30 +1,20 @@
 import { Button, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { useEffect } from 'react'
 
-import { ProjectState } from '@/modules/project/state/projectAtom.ts'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue.tsx'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar.tsx'
 import { useAuthContext } from '../../../../../context/index.ts'
-import { CreateWalletInput, UserVerificationLevelInput } from '../../../../../types/index.ts'
+import { UserVerificationLevelInput } from '../../../../../types/index.ts'
 import { VerificationDetails } from '../../projectDashboard/components/VerificationDetails.tsx'
 import { SumSubVerification } from '../../projectDashboard/views/wallet/components/SumSubVerification.tsx'
 import { useUserVerificationModal } from '../../projectDashboard/views/wallet/hooks/useUserVerificationModal.ts'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
 import { goToIdentityVerificationAtom, isReadyForLaunchAtom, whereToGoNextAtom } from '../states/nodeStatusAtom.ts'
 
-interface ProjectCreationIdentityVerificationPageProps {
-  project?: ProjectState
-  createWalletInput: CreateWalletInput | null
-  isSubmitEnabled: boolean
-  setReadyToLaunch: Dispatch<SetStateAction<boolean>>
-}
-
-export const ProjectCreationIdentityVerificationPage = ({
-  setReadyToLaunch,
-}: ProjectCreationIdentityVerificationPageProps) => {
+export const ProjectCreationIdentityVerificationPage = () => {
   const { isOpen: isAlertDialogOpen, onOpen: onAlertDialogOpen, onClose: onAlertDialogClose } = useDisclosure()
 
   const { user } = useAuthContext()
@@ -76,6 +66,7 @@ export const ProjectCreationIdentityVerificationPage = ({
             <SumSubVerification
               accessToken={userVerificationToken?.token || ''}
               onComplete={() => setIsReadyForLaunch(true)}
+              verificationLevel={userVerificationToken?.verificationLevel}
             />
           </VStack>
         )}

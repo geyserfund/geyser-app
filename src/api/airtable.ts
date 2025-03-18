@@ -51,3 +51,22 @@ export const fetchFeaturedWalletsData = async () => {
     },
   }).then((response) => response.json())
 }
+
+export const postNudgeCreatorData = async (data: {
+  projectName: string
+  creatorName: string
+  contributorName: string
+}) => {
+  const sendData = {
+    records: [{ fields: data }],
+  }
+
+  return fetch(`${AIRTABLE_API}/NudgeCreator`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(sendData),
+  }).then((response) => response.json())
+}

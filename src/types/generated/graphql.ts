@@ -2394,6 +2394,11 @@ export enum ProjectContributionsStatsGraphDataStatType {
   Sum = 'SUM'
 }
 
+export type ProjectCountriesGetInput = {
+  category?: InputMaybe<ProjectCategory>;
+  subCategory?: InputMaybe<ProjectSubCategory>;
+};
+
 export type ProjectCountriesGetResult = {
   __typename?: 'ProjectCountriesGetResult';
   count: Scalars['Int']['output'];
@@ -3121,6 +3126,11 @@ export type QueryPostsArgs = {
 };
 
 
+export type QueryProjectCountriesGetArgs = {
+  input?: InputMaybe<ProjectCountriesGetInput>;
+};
+
+
 export type QueryProjectGetArgs = {
   where: UniqueProjectQueryInput;
 };
@@ -3577,7 +3587,6 @@ export type UserContributionLimit = {
 
 export type UserContributionLimits = {
   __typename?: 'UserContributionLimits';
-  daily: UserContributionLimit;
   monthly: UserContributionLimit;
 };
 
@@ -4183,6 +4192,7 @@ export type ResolversTypes = {
   ProjectContributionsStatsGraphData: ResolverTypeWrapper<ProjectContributionsStatsGraphData>;
   ProjectContributionsStatsGraphDataAmount: ResolverTypeWrapper<ProjectContributionsStatsGraphDataAmount>;
   ProjectContributionsStatsGraphDataStatType: ProjectContributionsStatsGraphDataStatType;
+  ProjectCountriesGetInput: ProjectCountriesGetInput;
   ProjectCountriesGetResult: ResolverTypeWrapper<ProjectCountriesGetResult>;
   ProjectDeleteResponse: ResolverTypeWrapper<ProjectDeleteResponse>;
   ProjectEntriesGetInput: ProjectEntriesGetInput;
@@ -4561,6 +4571,7 @@ export type ResolversParentTypes = {
   ProjectContributionsStatsBase: ProjectContributionsStatsBase;
   ProjectContributionsStatsGraphData: ProjectContributionsStatsGraphData;
   ProjectContributionsStatsGraphDataAmount: ProjectContributionsStatsGraphDataAmount;
+  ProjectCountriesGetInput: ProjectCountriesGetInput;
   ProjectCountriesGetResult: ProjectCountriesGetResult;
   ProjectDeleteResponse: ProjectDeleteResponse;
   ProjectEntriesGetInput: ProjectEntriesGetInput;
@@ -5971,7 +5982,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'id'>>;
   postEmailSegmentSizeGet?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<QueryPostEmailSegmentSizeGetArgs, 'input'>>;
   posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType, Partial<QueryPostsArgs>>;
-  projectCountriesGet?: Resolver<Array<ResolversTypes['ProjectCountriesGetResult']>, ParentType, ContextType>;
+  projectCountriesGet?: Resolver<Array<ResolversTypes['ProjectCountriesGetResult']>, ParentType, ContextType, Partial<QueryProjectCountriesGetArgs>>;
   projectGet?: Resolver<Maybe<ResolversTypes['Project']>, ParentType, ContextType, RequireFields<QueryProjectGetArgs, 'where'>>;
   projectGoal?: Resolver<ResolversTypes['ProjectGoal'], ParentType, ContextType, RequireFields<QueryProjectGoalArgs, 'projectGoalId'>>;
   projectGoals?: Resolver<ResolversTypes['ProjectGoals'], ParentType, ContextType, RequireFields<QueryProjectGoalsArgs, 'input'>>;
@@ -6121,7 +6132,6 @@ export type UserContributionLimitResolvers<ContextType = any, ParentType extends
 };
 
 export type UserContributionLimitsResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserContributionLimits'] = ResolversParentTypes['UserContributionLimits']> = {
-  daily?: Resolver<ResolversTypes['UserContributionLimit'], ParentType, ContextType>;
   monthly?: Resolver<ResolversTypes['UserContributionLimit'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -6594,7 +6604,7 @@ export type ProjectOwnerUserFragment = { __typename?: 'User', id: any, username:
     & ExternalAccountFragment
   )> };
 
-export type UserComplianceDetailsFragment = { __typename?: 'UserComplianceDetails', contributionLimits: { __typename?: 'UserContributionLimits', daily: { __typename?: 'UserContributionLimit', limit: number, reached: boolean, remaining: number }, monthly: { __typename?: 'UserContributionLimit', limit: number, reached: boolean, remaining: number } }, currentVerificationLevel: { __typename?: 'UserVerificationLevelStatus', level: UserVerificationLevel, status: UserVerificationStatus, verifiedAt?: any | null }, verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } };
+export type UserComplianceDetailsFragment = { __typename?: 'UserComplianceDetails', contributionLimits: { __typename?: 'UserContributionLimits', monthly: { __typename?: 'UserContributionLimit', limit: number, reached: boolean, remaining: number } }, currentVerificationLevel: { __typename?: 'UserVerificationLevelStatus', level: UserVerificationLevel, status: UserVerificationStatus, verifiedAt?: any | null }, verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } };
 
 export type UserMeFragment = { __typename?: 'User', id: any, username: string, heroId: string, guardianType?: GuardianType | null, imageUrl?: string | null, email?: string | null, ranking?: any | null, isEmailVerified: boolean, hasSocialAccount: boolean, complianceDetails: (
     { __typename?: 'UserComplianceDetails' }
@@ -8177,11 +8187,6 @@ export const ProjectOwnerUserFragmentDoc = gql`
 export const UserComplianceDetailsFragmentDoc = gql`
     fragment UserComplianceDetails on UserComplianceDetails {
   contributionLimits {
-    daily {
-      limit
-      reached
-      remaining
-    }
     monthly {
       limit
       reached

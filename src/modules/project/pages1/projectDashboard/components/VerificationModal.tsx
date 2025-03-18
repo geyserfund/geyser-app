@@ -33,6 +33,7 @@ export const VerificationModal = ({ onContinue, ...props }: VerificationModalPro
       ) : (
         <SumSubVerification
           accessToken={userVerificationToken?.token || ''}
+          verificationLevel={userVerificationToken?.verificationLevel}
           onComplete={() => {
             userVerificationModal.onClose()
             props.onClose()

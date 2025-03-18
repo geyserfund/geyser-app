@@ -1,13 +1,25 @@
 import { useColorMode } from '@chakra-ui/react'
 import SumsubWebSdk from '@sumsub/websdk-react'
+import { useSetAtom } from 'jotai'
+import { DateTime } from 'luxon'
 
-import { useAuthContext } from '@/context/auth.tsx'
+import { updateComplianceStatusForUserAtom } from '@/modules/auth/state/authAtom.ts'
+import { UserVerificationLevel } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
-export const SumSubVerification = ({ accessToken, onComplete }: { accessToken: string; onComplete: () => void }) => {
+export const SumSubVerification = ({
+  accessToken,
+  onComplete,
+  verificationLevel,
+}: {
+  accessToken: string
+  onComplete: () => void
+  verificationLevel?: UserVerificationLevel
+}) => {
   const toast = useNotification()
-  const { queryCurrentUser } = useAuthContext()
   const { colorMode } = useColorMode()
+
+  const updateComplianceStatusForUser = useSetAtom(updateComplianceStatusForUserAtom)
 
   const handleError = (error: any) => {
     console.log(error)
@@ -20,7 +32,13 @@ export const SumSubVerification = ({ accessToken, onComplete }: { accessToken: s
   const handleMessage = (props: string) => {
     if (props.includes('idCheck.onStepCompleted')) {
       toast.success({ title: 'Verification Successful' })
-      queryCurrentUser()
+      const level = verificationLevel === UserVerificationLevel.Level_2 ? 'phoneNumber' : 'identity'
+      updateComplianceStatusForUser({
+        [level]: {
+          verified: true,
+          verifiedAt: DateTime.now().toMillis(),
+        },
+      })
       onComplete()
     }
   }

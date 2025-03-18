@@ -50,6 +50,7 @@ TypeScript Usage
 -  If a type is already defined in the file, don't redefine it. Instead, focus on adding new types that are needed.
 - Preserve Type Structure: We shouin the original type structures unless there's a specific reason to change them.
 - Prefer "type" declarations over "interface" declaration.
+- Look at [graphql.ts](mdc:src/types/generated/graphql.ts) for all the type knowledge. Do not suggest auto-complete with keys that don't exist.
 
 Syntax and Formatting
 - Use the "const" keyword for declaring any and all functions.

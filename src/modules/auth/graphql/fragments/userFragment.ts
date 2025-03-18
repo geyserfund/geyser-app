@@ -23,11 +23,6 @@ export const FRAGMENT_PROJECT_OWNER_USER = gql`
 export const FRAGMENT_USER_COMPLIANCE_DETAILS = gql`
   fragment UserComplianceDetails on UserComplianceDetails {
     contributionLimits {
-      daily {
-        limit
-        reached
-        remaining
-      }
       monthly {
         limit
         reached

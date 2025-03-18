@@ -39,9 +39,13 @@ export type FundingProjectState = FundingProject & {
 
 export type FundFormType = {
   donationAmount: number
+  donationAmountUsdCent: number
   rewardsCost: number
+  rewardsCostInSatoshi: number
+  rewardsCostInUsdCent: number
   shippingCost: number
   totalAmount: number
+  totalAmountUsdCent: number
   email: string
   media: string
   comment: string
@@ -65,9 +69,13 @@ export type FundFormType = {
 
 const initialState: FundFormType = {
   donationAmount: 0,
+  donationAmountUsdCent: 0,
   rewardsCost: 0,
+  rewardsCostInSatoshi: 0,
+  rewardsCostInUsdCent: 0,
   shippingCost: 0,
   totalAmount: 0,
+  totalAmountUsdCent: 0,
   comment: '',
   privateComment: '',
   email: '',
@@ -142,7 +150,16 @@ export const setFundFormStateAtom = atom(null, (get, set, name: string, value: a
     set(fundingFormStateAtom, (current) => ({
       ...current,
       donationAmount: value,
-      totalAmount: value + current.rewardsCost + current.shippingCost,
+      totalAmount: value + current.rewardsCostInSatoshi + current.shippingCost,
+    }))
+    return
+  }
+
+  if (name === 'donationAmountUsdCent') {
+    set(fundingFormStateAtom, (current) => ({
+      ...current,
+      donationAmountUsdCent: value,
+      totalAmountUsdCent: value + current.rewardsCostInUsdCent + current.shippingCost,
     }))
     return
   }
@@ -219,6 +236,7 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
     let rewardsCost = 0
     let rewardsCostInSatoshi = 0
     let needsShipping = false
+    let rewardsCostInUsdCent = 0
 
     if (rewards) {
       Object.keys(newRewardsCountInfo).forEach((rewardID: string) => {
@@ -241,8 +259,10 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
           rewardsCost += cost * rewardMultiplier
 
           if (project.rewardCurrency === RewardCurrency.Btcsat) {
-            rewardsCostInSatoshi += cost * rewardMultiplier
+            rewardsCostInSatoshi += rewardsCost
+            rewardsCostInUsdCent += Math.round((centsToDollars(cost) / usdRate) * rewardMultiplier)
           } else {
+            rewardsCostInUsdCent = rewardsCost
             rewardsCostInSatoshi += Math.round((centsToDollars(cost) / usdRate) * rewardMultiplier * SATOSHIS_IN_BTC)
           }
         }
@@ -254,7 +274,10 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
       rewardsByIDAndCount: newRewardsCountInfo,
       rewardsCost,
       needsShipping,
+      rewardsCostInSatoshi,
+      rewardsCostInUsdCent,
       totalAmount: rewardsCostInSatoshi + current.donationAmount + current.shippingCost,
+      totalAmountUsdCent: rewardsCostInUsdCent + current.donationAmountUsdCent + current.shippingCost,
     }
   })
 
@@ -337,6 +360,41 @@ export const fundingOnchainAmountWarningAtom = atom((get) => {
       return `The amount you are trying to send is too low for on-chain payments. Only payments over ${commaFormatted(
         onChain.min,
       )} sats can be sent on-chain.`
+    }
+  }
+
+  return ''
+})
+
+const BANXA_MAX_AMOUNT_CENT = 1500000 // 15,000 USD in cents
+const BANXA_MIN_AMOUNT_CENT = 3000 //   30 USD in cents
+
+/** Check if the  funding Amount is enough for fiat swap payments */
+export const fundingFiatSwapAmountWarningAtom = atom((get) => {
+  const formState = get(fundingFormStateAtom)
+  const fundingPaymentDetails = get(fundingPaymentDetailsAtom)
+
+  const { totalAmountUsdCent } = formState
+
+  if (!fundingPaymentDetails.fiatSwap?.checkoutUrl) {
+    return `Something went wrong with the fiat swap payment, please try using Lightning or try again`
+  }
+
+  if (totalAmountUsdCent) {
+    if (!totalAmountUsdCent) {
+      return ''
+    }
+
+    if (totalAmountUsdCent > BANXA_MAX_AMOUNT_CENT) {
+      return `The amount you are trying to send is too high for fiat swap payments. Only payments below $${commaFormatted(
+        15000,
+      )} can be sent via fiat swap.`
+    }
+
+    if (totalAmountUsdCent < BANXA_MIN_AMOUNT_CENT) {
+      return `The amount you are trying to send is too low for fiat swap payments. Only payments over $${commaFormatted(
+        30,
+      )} can be sent via fiat swap.`
     }
   }
 

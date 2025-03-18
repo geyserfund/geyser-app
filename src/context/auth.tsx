@@ -26,11 +26,6 @@ export const defaultUser: Omit<UserMeFragment, 'heroStats'> = {
   hasSocialAccount: false,
   complianceDetails: {
     contributionLimits: {
-      daily: {
-        limit: 0,
-        reached: false,
-        remaining: 0,
-      },
       monthly: {
         limit: 0,
         reached: false,

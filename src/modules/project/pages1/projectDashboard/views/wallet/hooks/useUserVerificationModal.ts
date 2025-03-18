@@ -15,7 +15,7 @@ export const useUserVerificationModal = () => {
 
   const userVerificationModal = useModal()
 
-  const startVerification = async (verificationLevel: UserVerificationLevelInput) => {
+  const startVerification = async (verificationLevel?: UserVerificationLevelInput) => {
     await generateVerificationToken({
       variables: {
         input: { verificationLevel: verificationLevel || UserVerificationLevelInput.Level_3 },

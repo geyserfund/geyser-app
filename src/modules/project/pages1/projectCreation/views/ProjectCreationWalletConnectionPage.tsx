@@ -123,25 +123,11 @@ export const ProjectCreationWalletConnectionPage = () => {
   }
 
   if (goToEmailVerification) {
-    return (
-      <ProjectCreationEmailVerificationPage
-        project={project}
-        createWalletInput={createWalletInput}
-        isSubmitEnabled={isSubmitEnabled}
-        setReadyToLaunch={setReadyForLaunch}
-      />
-    )
+    return <ProjectCreationEmailVerificationPage />
   }
 
   if (goToIdentityVerification) {
-    return (
-      <ProjectCreationIdentityVerificationPage
-        project={project}
-        createWalletInput={createWalletInput}
-        isSubmitEnabled={isSubmitEnabled}
-        setReadyToLaunch={setReadyForLaunch}
-      />
-    )
+    return <ProjectCreationIdentityVerificationPage />
   }
 
   const isContinueButtonLoading = lightningAddress.evaluating || loading || createWallet.loading

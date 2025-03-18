@@ -15,10 +15,21 @@ import {
 } from '../state/paymentMethodAtom'
 
 export const PaymentMethodSelection = () => {
-  const { onChainAmountWarning } = useFundingFormAtom()
+  const { onChainAmountWarning, fiatSwapAmountWarning } = useFundingFormAtom()
 
   const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
-  const userId = fundingInputAfterRequest?.user?.id
+  const user = fundingInputAfterRequest?.user
+  const userId = user?.id
+
+  const userLimitReached = !user?.complianceDetails.verifiedDetails.identity?.verified
+    ? user?.complianceDetails.contributionLimits.monthly.reached
+    : false
+
+  const fiatLimitMessage = user?.complianceDetails.contributionLimits.monthly.reached
+    ? t(
+        "You've reached your monthly fiat contribution Limit. Please verify your identity to remove all restrictions or wait for 30 days.",
+      )
+    : ''
 
   const paymentMethod = useAtomValue(paymentMethodAtom)
   const isOnchainMethodStarted = useAtomValue(isOnchainMethodStartedAtom)
@@ -39,16 +50,16 @@ export const PaymentMethodSelection = () => {
     }
 
     navBarItems.push({
-      name: t('Fiat*'),
+      name: t('Fiat'),
       key: PaymentMethods.fiatSwap,
       path: PathName.fundingPaymentFiatSwap,
       isDisabled: isOnchainMethodStarted || Boolean(!paymentMethod) || !userId,
-      disableClick: isOnchainMethodStarted,
+      disableClick: isOnchainMethodStarted || userLimitReached || Boolean(fiatSwapAmountWarning),
       tooltipLabel: !userId
         ? t('Please login to use fiat payment')
-        : t(
-            'First time using fiat on Geyser? A quick one-time identity verification is required to comply with regulations.',
-          ),
+        : userLimitReached
+        ? fiatLimitMessage
+        : fiatSwapAmountWarning,
       replacePath: true,
     })
 
@@ -72,7 +83,16 @@ export const PaymentMethodSelection = () => {
     })
 
     return navBarItems
-  }, [onChainAmountWarning, isOnchainMethodStarted, hasStripePaymentOption, paymentMethod, userId])
+  }, [
+    onChainAmountWarning,
+    isOnchainMethodStarted,
+    hasStripePaymentOption,
+    paymentMethod,
+    userId,
+    fiatLimitMessage,
+    fiatSwapAmountWarning,
+    userLimitReached,
+  ])
 
   const activeButtonIndex = useMemo(() => {
     const currentItem = items.find((item) => item.key === paymentMethod)

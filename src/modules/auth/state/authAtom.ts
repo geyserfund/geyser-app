@@ -3,7 +3,13 @@ import { atomWithStorage } from 'jotai/utils'
 
 import { AuthModalAdditionalprops } from '@/components/molecules'
 
-import { Project, UserMeFragment, UserVerificationLevel, UserVerificationStatus } from '../../../types'
+import {
+  Project,
+  UserComplianceDetailsFragment,
+  UserMeFragment,
+  UserVerificationLevel,
+  UserVerificationStatus,
+} from '../../../types'
 import { ExternalAccountType, SocialAccountType } from '../type'
 
 export const defaultUser: UserMeFragment = {
@@ -18,11 +24,6 @@ export const defaultUser: UserMeFragment = {
   hasSocialAccount: false,
   complianceDetails: {
     contributionLimits: {
-      daily: {
-        limit: 0,
-        reached: false,
-        remaining: 0,
-      },
       monthly: {
         limit: 0,
         reached: false,
@@ -89,3 +90,17 @@ export const resetLoginModalAdditionalPropsAtom = atom(null, (_get, set) => {
 
 /** Login method used by the current User */
 export const loginMethodAtom = atomWithStorage<ExternalAccountType | SocialAccountType | ''>('loginMethod', '')
+
+export const updateComplianceStatusForUserAtom = atom(
+  null,
+  (get, set, update: Partial<UserComplianceDetailsFragment['verifiedDetails']>) => {
+    const user = get(authUserAtom)
+    set(authUserAtom, {
+      ...user,
+      complianceDetails: {
+        ...user.complianceDetails,
+        verifiedDetails: { ...user.complianceDetails.verifiedDetails, ...update },
+      },
+    })
+  },
+)
