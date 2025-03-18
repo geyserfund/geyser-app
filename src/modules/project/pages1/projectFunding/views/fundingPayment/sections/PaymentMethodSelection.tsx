@@ -53,7 +53,7 @@ export const PaymentMethodSelection = () => {
       name: t('Fiat'),
       key: PaymentMethods.fiatSwap,
       path: PathName.fundingPaymentFiatSwap,
-      isDisabled: isOnchainMethodStarted || Boolean(!paymentMethod) || !userId,
+      isDisabled: isOnchainMethodStarted || Boolean(!paymentMethod) || Boolean(fiatSwapAmountWarning) || !userId,
       disableClick: isOnchainMethodStarted || userLimitReached || Boolean(fiatSwapAmountWarning),
       tooltipLabel: !userId
         ? t('Please login to use fiat payment')

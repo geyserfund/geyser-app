@@ -339,10 +339,6 @@ export const fundingOnchainAmountWarningAtom = atom((get) => {
   const { totalAmount } = formState
   const walletLimits = fundingProjectState.wallet?.limits?.contribution
 
-  if (!fundingPaymentDetails.onChainSwap?.address) {
-    return `Something went wrong with the onChain payment, please try using Lightning or try again`
-  }
-
   if (totalAmount && walletLimits) {
     const { onChain } = walletLimits
 
@@ -363,6 +359,10 @@ export const fundingOnchainAmountWarningAtom = atom((get) => {
     }
   }
 
+  if (!fundingPaymentDetails.onChainSwap?.address) {
+    return `Something went wrong with the onChain payment, please try using Lightning or try again`
+  }
+
   return ''
 })
 
@@ -372,13 +372,8 @@ const BANXA_MIN_AMOUNT_CENT = 3000 //   30 USD in cents
 /** Check if the  funding Amount is enough for fiat swap payments */
 export const fundingFiatSwapAmountWarningAtom = atom((get) => {
   const formState = get(fundingFormStateAtom)
-  const fundingPaymentDetails = get(fundingPaymentDetailsAtom)
 
   const { totalAmountUsdCent } = formState
-
-  if (!fundingPaymentDetails.fiatSwap?.checkoutUrl) {
-    return `Something went wrong with the fiat swap payment, please try using Lightning or try again`
-  }
 
   if (totalAmountUsdCent) {
     if (!totalAmountUsdCent) {
