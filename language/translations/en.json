@@ -1694,5 +1694,9 @@
   "Please, complete verification to increase funding limit": "Please, complete verification to increase funding limit",
   "Collapse": "Collapse",
   "Meanwhile, please try other payment methods": "Meanwhile, please try other payment methods",
-  "Creator will be notified shortly": "Creator will be notified shortly"
+  "Creator will be notified shortly": "Creator will be notified shortly",
+  "Earn a \"Verified Creator\" badge, increase your limits and enable flat contributions on your project.": "Earn a \"Verified Creator\" badge, increase your limits and enable flat contributions on your project.",
+  "Verify Now": "Verify Now",
+  "Creator Verification": "Creator Verification",
+  "ApolloError: you must be logged in to update a project": "ApolloError: you must be logged in to update a project"
 }

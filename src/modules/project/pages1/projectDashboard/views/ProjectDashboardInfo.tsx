@@ -102,7 +102,7 @@ export const ProjectDashboardInfo = () => {
       deskTopBottomComponent={<SaveButton w="full" />}
       desktopTitle={t('Project info')}
       width="full"
-      overflowX="hidden"
+      overflow="hidden"
     >
       <BecomeVerifiedCreator />
 
