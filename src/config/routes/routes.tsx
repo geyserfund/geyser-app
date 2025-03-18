@@ -1,5 +1,7 @@
 import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
+import { ActivityDirection } from '@/modules/discovery/pages/activity/components/ActivityDirection.tsx'
+
 import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
 import { ExternalAuthSuccess, FailedAuth } from '../../modules/auth'
@@ -689,7 +691,7 @@ export const platformRoutes: RouteObject[] = [
         children: [
           {
             index: true,
-            element: <Navigate to={getPath('discoveryActivityFollowed')} replace />,
+            element: <ActivityDirection />,
           },
           {
             path: getPath('discoveryActivityFollowed'),
@@ -702,7 +704,7 @@ export const platformRoutes: RouteObject[] = [
             path: getPath('discoveryActivityGlobal'),
             async lazy() {
               const GlobalFeed = await Discovery().then((m) => m.GlobalFeed)
-              return { element: renderPrivateRoute(GlobalFeed) }
+              return { Component: GlobalFeed }
             },
           },
         ],
