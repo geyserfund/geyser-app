@@ -1,4 +1,5 @@
 import { useDisclosure } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useProjectWalletAPI } from '@/modules/project/API/useProjectWalletAPI.ts'
@@ -279,8 +280,8 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
 
     if (isEdit && !createWalletInput) {
       toast({
-        title: 'failed to create project wallet',
-        description: 'please provide valid wallet details',
+        title: t('failed to create project wallet'),
+        description: t('please provide valid wallet details'),
         status: 'error',
       })
       return

@@ -55,7 +55,7 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
   const handleToastError = useCallback(
     (reason?: string) => {
       toast({
-        title: 'Something went wrong.',
+        title: t('Something went wrong.'),
         description: `${t('The authentication request failed.')} ${reason}.`,
         status: 'error',
       })

@@ -41,7 +41,7 @@ export const FilterByTags = ({ mobile }: FilterByTagsProps) => {
       if (isDisabled) {
         toast({
           status: 'info',
-          title: 'cannot select more than 3 tags',
+          title: t('cannot select more than 3 tags'),
         })
         return
       }

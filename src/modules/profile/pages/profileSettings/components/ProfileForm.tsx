@@ -32,8 +32,8 @@ export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
       onCompleted(data, clientOptions) {
         toast({
           status: 'success',
-          title: 'Profile updated',
-          description: 'Your profile has been updated.',
+          title: t('Profile updated'),
+          description: t('Your profile has been updated.'),
         })
       },
     },

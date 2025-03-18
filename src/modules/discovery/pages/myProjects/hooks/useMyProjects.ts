@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 
 import {
@@ -107,7 +108,7 @@ export const useMyProjects = (userId: number) => {
     onError(error) {
       toast({
         status: 'error',
-        title: 'Failed to fetch projects',
+        title: t('Failed to fetch projects'),
         description: `${error.message}`,
       })
       setLoading(false)

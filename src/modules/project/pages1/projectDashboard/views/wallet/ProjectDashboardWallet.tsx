@@ -62,7 +62,7 @@ export const ProjectDashboardWallet = () => {
         variables: { input: createWalletInput },
         onError() {
           toast({
-            title: 'Error creating wallet',
+            title: t('Error creating wallet'),
             status: 'error',
           })
         },
@@ -70,7 +70,7 @@ export const ProjectDashboardWallet = () => {
           queryProjectWallet.execute()
           toast({
             status: 'success',
-            title: 'Wallet created successfully!',
+            title: t('Wallet created successfully!'),
           })
         },
       })
@@ -130,14 +130,14 @@ export const ProjectDashboardWallet = () => {
         emailVerifyOnClose()
         toast({
           status: 'success',
-          title: 'Wallet updated successfully!',
+          title: t('Wallet updated successfully!'),
         })
       },
       onError() {
         toast({
           status: 'error',
-          title: 'Failed to update wallet.',
-          description: 'Please try again',
+          title: t('Failed to update wallet.'),
+          description: t('Please try again'),
         })
       },
     })

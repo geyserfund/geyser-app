@@ -64,8 +64,8 @@ export const HistoricalComponent = () => {
     },
     onError(error) {
       toast({
-        title: 'Error fetching project stats',
-        description: 'Please refresh the page and try again.',
+        title: t('Error fetching project stats'),
+        description: t('Please refresh the page and try again.'),
         status: 'error',
       })
     },

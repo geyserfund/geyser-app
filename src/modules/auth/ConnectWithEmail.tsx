@@ -70,15 +70,15 @@ export const ConnectWithEmail = ({ onClose, isOTPStarted, ...rest }: ConnectWith
         } else {
           toast({
             status: 'error',
-            title: 'Failed to login with email',
-            description: 'Please try again',
+            title: t('Failed to login with email'),
+            description: t('Please try again'),
           })
         }
       } catch (error) {
         toast({
           status: 'error',
-          title: 'Failed to login with email',
-          description: 'Please try again',
+          title: t('Failed to login with email'),
+          description: t('Please try again'),
         })
       }
     }

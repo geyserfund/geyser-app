@@ -1,12 +1,9 @@
 import { useToast, UseToastOptions } from '@chakra-ui/react'
 import { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
 
 type IndividualToastProps = { title: string; description?: string; duration?: number }
 
 export const useNotification = (options?: UseToastOptions | undefined) => {
-  const { t } = useTranslation()
-
   const toast = useToast({
     duration: 3000,
     isClosable: true,
@@ -23,11 +20,11 @@ export const useNotification = (options?: UseToastOptions | undefined) => {
     (input: UseToastOptions & { description?: string; title: string }) => {
       toast({
         ...input,
-        description: t(input.description || ''),
-        title: t(input.title),
+        description: input.description || '',
+        title: input.title,
       })
     },
-    [toast, t],
+    [toast],
   )
   const unexpected = useCallback(() => {
     invokeToast({

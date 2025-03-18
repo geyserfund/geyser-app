@@ -185,7 +185,7 @@ export const ProfileSettingsSubscriptions = () => {
   const [cancelUserSubscription] = useCancelUserSubscriptionMutation({
     onError(error) {
       toast({
-        title: 'Error canceling subscription',
+        title: t('Error canceling subscription'),
         description: error.message,
         status: 'error',
         duration: 3000,
@@ -194,7 +194,7 @@ export const ProfileSettingsSubscriptions = () => {
     },
     onCompleted() {
       toast({
-        title: 'Subscription canceled',
+        title: t('Subscription canceled'),
         status: 'success',
         duration: 3000,
         isClosable: true,

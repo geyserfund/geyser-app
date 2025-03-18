@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useState } from 'react'
 
 import { UserProjectContributionsFragment, useUserProfileContributionsQuery } from '../../../../../../../types'
@@ -22,7 +23,7 @@ export const useProfileContributionQuery = (userId: number) => {
     onError(error) {
       toast({
         status: 'error',
-        title: 'Failed to fetch contributions',
+        title: t('Failed to fetch contributions'),
         description: `${error.message}`,
       })
       setIsLoading(false)

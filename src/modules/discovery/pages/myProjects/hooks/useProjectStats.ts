@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useMemo, useState } from 'react'
 
 import { useProjectStatsGetQuery } from '@/types'
@@ -41,7 +42,7 @@ export const useProjectStats = (projectId: string) => {
     onError(error) {
       toast({
         status: 'error',
-        title: 'Failed to fetch project stats',
+        title: t('Failed to fetch project stats'),
         description: `${error.message}`,
       })
       return null
