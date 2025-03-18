@@ -37,8 +37,6 @@ export const ProjectBody = () => {
     }
   }, [project?.status, location.pathname, navigate, project?.name, loading])
 
-  // const projectDetails = useProjectDetails(project)
-
   return (
     <Stack w="full" spacing={dimensions.project.rightSideNav.gap} direction={{ base: 'column', lg: 'row' }}>
       <VStack

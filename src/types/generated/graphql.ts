@@ -7703,6 +7703,13 @@ export type ProjectByNameOrIdQuery = { __typename?: 'Query', projectGet?: (
     & ProjectFragment
   ) | null };
 
+export type ProjectByNameForNameCheckQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type ProjectByNameForNameCheckQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, name: string } | null };
+
 export type ProjectNostrKeysQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
 }>;
@@ -13894,6 +13901,47 @@ export type ProjectByNameOrIdQueryHookResult = ReturnType<typeof useProjectByNam
 export type ProjectByNameOrIdLazyQueryHookResult = ReturnType<typeof useProjectByNameOrIdLazyQuery>;
 export type ProjectByNameOrIdSuspenseQueryHookResult = ReturnType<typeof useProjectByNameOrIdSuspenseQuery>;
 export type ProjectByNameOrIdQueryResult = Apollo.QueryResult<ProjectByNameOrIdQuery, ProjectByNameOrIdQueryVariables>;
+export const ProjectByNameForNameCheckDocument = gql`
+    query ProjectByNameForNameCheck($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useProjectByNameForNameCheckQuery__
+ *
+ * To run a query within a React component, call `useProjectByNameForNameCheckQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectByNameForNameCheckQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectByNameForNameCheckQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectByNameForNameCheckQuery(baseOptions: Apollo.QueryHookOptions<ProjectByNameForNameCheckQuery, ProjectByNameForNameCheckQueryVariables> & ({ variables: ProjectByNameForNameCheckQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectByNameForNameCheckQuery, ProjectByNameForNameCheckQueryVariables>(ProjectByNameForNameCheckDocument, options);
+      }
+export function useProjectByNameForNameCheckLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectByNameForNameCheckQuery, ProjectByNameForNameCheckQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectByNameForNameCheckQuery, ProjectByNameForNameCheckQueryVariables>(ProjectByNameForNameCheckDocument, options);
+        }
+export function useProjectByNameForNameCheckSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectByNameForNameCheckQuery, ProjectByNameForNameCheckQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectByNameForNameCheckQuery, ProjectByNameForNameCheckQueryVariables>(ProjectByNameForNameCheckDocument, options);
+        }
+export type ProjectByNameForNameCheckQueryHookResult = ReturnType<typeof useProjectByNameForNameCheckQuery>;
+export type ProjectByNameForNameCheckLazyQueryHookResult = ReturnType<typeof useProjectByNameForNameCheckLazyQuery>;
+export type ProjectByNameForNameCheckSuspenseQueryHookResult = ReturnType<typeof useProjectByNameForNameCheckSuspenseQuery>;
+export type ProjectByNameForNameCheckQueryResult = Apollo.QueryResult<ProjectByNameForNameCheckQuery, ProjectByNameForNameCheckQueryVariables>;
 export const ProjectNostrKeysDocument = gql`
     query ProjectNostrKeys($where: UniqueProjectQueryInput!) {
   projectGet(where: $where) {

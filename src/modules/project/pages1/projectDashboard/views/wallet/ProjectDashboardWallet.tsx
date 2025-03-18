@@ -1,5 +1,4 @@
 import { Button, ButtonProps, Link, useDisclosure, VStack } from '@chakra-ui/react'
-import { useEffect } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Link as ReactLink } from 'react-router-dom'
 

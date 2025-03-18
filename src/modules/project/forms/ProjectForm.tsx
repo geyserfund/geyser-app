@@ -14,7 +14,7 @@ import { ProjectValidations } from '../../../shared/constants'
 import { useDebounce } from '../../../shared/hooks'
 import { ImageCropAspectRatio } from '../../../shared/molecules/ImageCropperModal'
 import { MediaControlWithReorder } from '../../../shared/molecules/MediaControlWithReorder'
-import { useProjectByNameOrIdLazyQuery } from '../../../types'
+import { useProjectByNameForNameCheckLazyQuery } from '../../../types'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
 import { ProjectCreationVariables } from '../pages1/projectCreation/types'
 import { AdditionalUrlModal } from './components/AdditionalUrlModal'
@@ -34,7 +34,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
   const { formState, setValue, watch, setError, control, clearErrors } = form
 
-  const [getProject] = useProjectByNameOrIdLazyQuery({
+  const [getProject] = useProjectByNameForNameCheckLazyQuery({
     onCompleted(data) {
       if (data && data.projectGet && data.projectGet.id && data.projectGet.name !== formState.defaultValues?.name) {
         setError('name', {
@@ -60,7 +60,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   }, [getProject, watch])
 
   const projectName = watch('name')
-  const debouncedProjectName = useDebounce(projectName, 300)
+  const debouncedProjectName = useDebounce(projectName, 500)
 
   useEffect(() => {
     if (debouncedProjectName) {

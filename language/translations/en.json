@@ -1611,9 +1611,8 @@
   "Contributors will be able to spend fiat through their credit card, or local payment method, while you always receive Bitcoin on Lightning.": "Contributors will be able to spend fiat through their credit card, or local payment method, while you always receive Bitcoin on Lightning.",
   "Verification requires only a government-issued ID and takes less than 2 minutes through our secure, trusted partner.": "Verification requires only a government-issued ID and takes less than 2 minutes through our secure, trusted partner.",
   "Creator Verification allows you to unlock certain functionalities for all your projects on the platform:": "Creator Verification allows you to unlock certain functionalities for all your projects on the platform:",
-  "A \"Verified Creator\" badge.": "A \"Verified Creator\" badge.",
-  "Helping you build trust with potential contributors.": "Helping you build trust with potential contributors.",
-  "Turn ON fiat contributions.": "Turn ON fiat contributions.",
+  "A \"Verified Creator\" badge": "A \"Verified Creator\" badge",
+  "To help you build trust with potential contributors.": "To help you build trust with potential contributors.",
   "Skipping the verification will disable fiat contributions. Contributors will still be able to fund your project with Bitcoin.": "Skipping the verification will disable fiat contributions. Contributors will still be able to fund your project with Bitcoin.",
   "Become a guardian": "Become a guardian",
   "Verify your phone number": "Verify your phone number",
@@ -1710,5 +1709,9 @@
   "Reaching out to your wallet provider, as they might provide an option to increase these limits.": "Reaching out to your wallet provider, as they might provide an option to increase these limits.",
   "These limits are established at the discretion of your Lightning wallet provider. To increase them consider:": "These limits are established at the discretion of your Lightning wallet provider. To increase them consider:",
   "Maximum Receivable Limit": "Maximum Receivable Limit",
-  "We could not validate this as a working Lightning Address: unknown error": "We could not validate this as a working Lightning Address: unknown error"
+  "We could not validate this as a working Lightning Address: unknown error": "We could not validate this as a working Lightning Address: unknown error",
+  "Your project has almost reached your funding limit of $10k. Complete phone-verification to continue raising up to $100k.": "Your project has almost reached your funding limit of $10k. Complete phone-verification to continue raising up to $100k.",
+  "Your project has almost reached your funding limit of $100k. Complete identity-verification to continue raising above $100k.": "Your project has almost reached your funding limit of $100k. Complete identity-verification to continue raising above $100k.",
+  "Please try again, once the creator has removed the funding limits.": "Please try again, once the creator has removed the funding limits.",
+  "This project has reached its Funding limit": "This project has reached its Funding limit"
 }

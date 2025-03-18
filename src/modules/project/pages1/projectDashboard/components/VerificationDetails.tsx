@@ -17,7 +17,7 @@ export const VerificationDetails = ({ onContinue, onLoading }: { onContinue: () 
       <UnorderedList>
         <ListItem>
           <Body as={'span'} bold>
-            {t('Turn ON fiat contributions.')}
+            {t('Enable fiat contributions')}:{' '}
           </Body>
           {t(
             'Contributors will be able to spend fiat through their credit card, or local payment method, while you always receive Bitcoin on Lightning.',
@@ -25,9 +25,9 @@ export const VerificationDetails = ({ onContinue, onLoading }: { onContinue: () 
         </ListItem>
         <ListItem>
           <Body as={'span'} bold>
-            {t('A "Verified Creator" badge.')}
+            {t('A "Verified Creator" badge')}:{' '}
           </Body>
-          {t('Helping you build trust with potential contributors.')}
+          {t('To help you build trust with potential contributors.')}
         </ListItem>
       </UnorderedList>
       <Body>
