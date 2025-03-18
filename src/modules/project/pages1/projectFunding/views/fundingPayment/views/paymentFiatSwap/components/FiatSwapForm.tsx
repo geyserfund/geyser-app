@@ -7,8 +7,10 @@ import { PiMoneyWavy } from 'react-icons/pi'
 
 import { CustomSelect } from '@/components/ui/CustomSelect.tsx'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
+import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
+import { getPath } from '@/shared/constants/index.ts'
 import { useFundingFiatSwapPaymentCreateMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
@@ -20,6 +22,7 @@ export const FiatSwapForm: React.FC = () => {
   const toast = useNotification()
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
+  const project = useAtomValue(fundingProjectAtom)
   const updateFundingPaymentDetails = useSetAtom(fundingPaymentDetailsPartialUpdateAtom)
   const setFiatSwapStatus = useSetAtom(fiatSwapStatusAtom)
 
@@ -44,7 +47,7 @@ export const FiatSwapForm: React.FC = () => {
               create: true,
               banxa: {
                 fiatCurrency: selectedCurrency?.value || '',
-                returnUrl: `${window.location.origin}/project/${fundingContribution.projectId}/funding/start/payment/fiat-swap?transactionId=${fundingContribution.uuid}`,
+                returnUrl: `${window.location.origin}${getPath('fundingCallback', project.name)}`,
               },
             },
           },

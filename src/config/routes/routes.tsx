@@ -601,6 +601,10 @@ export const platformRoutes: RouteObject[] = [
             ],
           },
           {
+            path: getPath('fundingCallback', PathName.projectName),
+            Component: ExternalAuthSuccess,
+          },
+          {
             path: getPath('fundingSuccess', PathName.projectName),
             async lazy() {
               const FundingSuccess = await ProjectFunding().then((m) => m.FundingSuccess)
