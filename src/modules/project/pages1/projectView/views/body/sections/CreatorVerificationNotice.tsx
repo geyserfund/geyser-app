@@ -5,10 +5,7 @@ import { PiX } from 'react-icons/pi'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground.tsx'
-import {
-  UserVerifiedBadge,
-  VerifiedBadge,
-} from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
+import { VerifiedBadge } from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
 import { UserVerificationModal } from '@/modules/project/pages1/projectDashboard/views/wallet/components/UserVerificationModal.tsx'
 import { useUserVerificationModal } from '@/modules/project/pages1/projectDashboard/views/wallet/hooks/useUserVerificationModal.ts'
