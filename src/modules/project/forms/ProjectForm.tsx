@@ -46,25 +46,27 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
     },
   })
 
-  const handleProjectFetch = useCallback(() => {
-    const projectName = watch('name')
-    if (projectName && projectName.length >= MIN_LENGTH_TO_QUERY_PROJECT) {
-      getProject({
-        variables: {
-          where: {
-            name: projectName,
+  const handleProjectFetch = useCallback(
+    (projectName: string) => {
+      if (projectName && projectName.length >= MIN_LENGTH_TO_QUERY_PROJECT) {
+        getProject({
+          variables: {
+            where: {
+              name: projectName,
+            },
           },
-        },
-      })
-    }
-  }, [getProject, watch])
+        })
+      }
+    },
+    [getProject],
+  )
 
   const projectName = watch('name')
   const debouncedProjectName = useDebounce(projectName, 500)
 
   useEffect(() => {
     if (debouncedProjectName) {
-      handleProjectFetch()
+      handleProjectFetch(debouncedProjectName)
     }
   }, [debouncedProjectName, handleProjectFetch])
 

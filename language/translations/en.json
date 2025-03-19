@@ -1724,5 +1724,6 @@
   "Failed to fetch project goals": "Failed to fetch project goals",
   "time.": "time.",
   "Configure Wallet": "Configure Wallet",
-  "Connect Wallet": "Connect Wallet"
+  "Connect Wallet": "Connect Wallet",
+  "Project objective is a required field.": "Project objective is a required field."
 }
