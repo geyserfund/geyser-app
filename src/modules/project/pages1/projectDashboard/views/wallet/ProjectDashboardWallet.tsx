@@ -1,5 +1,4 @@
-import { Button, ButtonProps, Link, useDisclosure, VStack } from '@chakra-ui/react'
-import { useEffect } from 'react'
+import { Button, ButtonProps, HStack, Link, useDisclosure, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Link as ReactLink } from 'react-router-dom'
 
@@ -7,15 +6,24 @@ import { useProjectWalletAPI } from '@/modules/project/API/useProjectWalletAPI'
 import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
 
-import { useAuthContext } from '../../../../../context'
-import { VerifyYourEmail } from '../../../../../pages/otp'
-import { getPath, GeyserEmailVerificationDocUrl, PathName } from '../../../../../shared/constants'
-import { MfaAction, OtpResponseFragment, ProjectStatus, UpdateWalletInput } from '../../../../../types'
-import { useCustomTheme, useNotification } from '../../../../../utils'
-import { ProjectCreationWalletConnectionForm } from '../../../pages1/projectCreation'
-import { ConnectionOption, useWalletForm } from '../../projectCreation/hooks/useWalletForm'
-import { DashboardLayout } from '../common'
-
+import { useAuthContext } from '../../../../../../context/index.ts'
+import { VerifyYourEmail } from '../../../../../../pages/otp/index.ts'
+import { getPath, GeyserEmailVerificationDocUrl, PathName } from '../../../../../../shared/constants/index.ts'
+import {
+  MfaAction,
+  OtpResponseFragment,
+  ProjectStatus,
+  UpdateWalletInput,
+  UserVerificationLevelInput,
+} from '../../../../../../types/index.ts'
+import { useCustomTheme, useNotification } from '../../../../../../utils/index.ts'
+import { ConnectionOption, useWalletForm } from '../../../projectCreation/hooks/useWalletForm.tsx'
+import { ProjectCreationWalletConnectionForm } from '../../../projectCreation/index.ts'
+import { DashboardLayout } from '../../common/index.ts'
+import { EnableFiatContributions } from './components/EnableFiatContributions.tsx'
+import { UserVerificationModal } from './components/UserVerificationModal.tsx'
+import { WalletLimitsAndVerification } from './components/WalletLimitsAndVerification.tsx'
+import { useUserVerificationModal } from './hooks/useUserVerificationModal.ts'
 export const ProjectDashboardWallet = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -33,11 +41,18 @@ export const ProjectDashboardWallet = () => {
 
   const walletLimits = wallet?.limits
 
-  const { createWallet, updateWallet, queryProjectWallet, queryProjectWalletConnectionDetails } = useProjectWalletAPI()
+  const { createWallet, updateWallet, queryProjectWallet } = useProjectWalletAPI()
 
-  useEffect(() => {
-    queryProjectWalletConnectionDetails.execute()
-  }, [])
+  const { userVerificationModal, startVerification, userVerificationToken } = useUserVerificationModal()
+
+  const isIdentityVerified = user.complianceDetails.verifiedDetails.identity?.verified
+
+  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!isIdentityVerified) {
+      event.preventDefault()
+      startVerification(UserVerificationLevelInput.Level_3)
+    }
+  }
 
   const handleNext = () => {
     if (!project) return
@@ -47,7 +62,7 @@ export const ProjectDashboardWallet = () => {
         variables: { input: createWalletInput },
         onError() {
           toast({
-            title: 'Error creating wallet',
+            title: t('Error creating wallet'),
             status: 'error',
           })
         },
@@ -55,7 +70,7 @@ export const ProjectDashboardWallet = () => {
           queryProjectWallet.execute()
           toast({
             status: 'success',
-            title: 'Wallet created successfully!',
+            title: t('Wallet created successfully!'),
           })
         },
       })
@@ -115,14 +130,14 @@ export const ProjectDashboardWallet = () => {
         emailVerifyOnClose()
         toast({
           status: 'success',
-          title: 'Wallet updated successfully!',
+          title: t('Wallet updated successfully!'),
         })
       },
       onError() {
         toast({
           status: 'error',
-          title: 'Failed to update wallet.',
-          description: 'Please try again',
+          title: t('Failed to update wallet.'),
+          description: t('Please try again'),
         })
       },
     })
@@ -148,10 +163,23 @@ export const ProjectDashboardWallet = () => {
 
   return (
     <DashboardLayout
-      desktopTitle={t('Connect wallet')}
+      desktopTitle={t('Wallet')}
       mobileTopNavRightComponent={<SaveButton />}
       deskTopBottomComponent={<SaveButton w="full" />}
     >
+      <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }}>
+        <WalletLimitsAndVerification />
+        <EnableFiatContributions
+          isIdentityVerified={Boolean(isIdentityVerified)}
+          switchProps={{ isChecked: Boolean(isIdentityVerified), onChange: handleSwitchChange }}
+        />
+      </VStack>
+      <HStack w="full" paddingX={{ base: 0, lg: 6 }} paddingTop={4}>
+        <Body size="xl" medium>
+          {t('Configure Wallet')}
+        </Body>
+      </HStack>
+
       <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }} alignItems={'start'}>
         <Body size="sm" light>
           <Trans
@@ -196,6 +224,10 @@ export const ProjectDashboardWallet = () => {
         onClose={emailVerifyOnClose}
         action={MfaAction.ProjectWalletUpdate}
         handleVerify={handleWalletUpdate}
+      />
+      <UserVerificationModal
+        userVerificationModal={userVerificationModal}
+        accessToken={userVerificationToken?.token || ''}
       />
     </DashboardLayout>
   )

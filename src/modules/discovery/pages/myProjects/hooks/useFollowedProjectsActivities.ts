@@ -57,6 +57,7 @@ export const useFollowedProjectsActivities = () => {
           count: activityCount ? activityCount.count : 0,
         }
       })
+      .filter((project) => project?.project && project.project.status === ProjectStatus.Active)
       .sort(sortByActiveAndCount)
   }, [followedProjects, followedProjectsActivities])
 

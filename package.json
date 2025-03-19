@@ -57,6 +57,7 @@
     "@sentry/react": "^7.50.0",
     "@stripe/react-stripe-js": "^3.0.0",
     "@stripe/stripe-js": "^5.2.0",
+    "@sumsub/websdk-react": "^2.3.13",
     "@types/yup": "^0.32.0",
     "@vulpemventures/secp256k1-zkp": "^3.2.1",
     "bech32": "^2.0.0",

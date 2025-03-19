@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -22,7 +23,7 @@ export const useProjectTagsState = () => {
   const [addTag, { loading: addTagLoading }] = useProjectTagAddMutation({
     onError() {
       toast({
-        title: 'failed to add tag',
+        title: t('failed to add tag'),
         status: 'error',
       })
     },
@@ -38,7 +39,7 @@ export const useProjectTagsState = () => {
   const [removeTag, { loading: removeTagLoading }] = useProjectTagRemoveMutation({
     onError() {
       toast({
-        title: 'failed to remove tag',
+        title: t('failed to remove tag'),
         status: 'error',
       })
     },

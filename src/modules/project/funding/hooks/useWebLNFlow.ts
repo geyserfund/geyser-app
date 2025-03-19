@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import { useCallback } from 'react'
 import { RejectionError } from 'webln'
@@ -48,8 +49,8 @@ export const useWebLNFlow = () => {
 
         if (error.constructor === RejectionError || error.message === 'User rejected') {
           toast({
-            title: 'Requested operation declined',
-            description: 'Please use the invoice instead.',
+            title: t('Requested operation declined'),
+            description: t('Please use the invoice instead.'),
             status: 'info',
           })
           return false
@@ -60,8 +61,8 @@ export const useWebLNFlow = () => {
         }
 
         toast({
-          title: 'Oops! Something went wrong with WebLN.',
-          description: 'Please copy the invoice manually instead.',
+          title: t('Oops! Something went wrong with WebLN.'),
+          description: t('Please copy the invoice manually instead.'),
           status: 'error',
         })
 

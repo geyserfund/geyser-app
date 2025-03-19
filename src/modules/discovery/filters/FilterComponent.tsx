@@ -54,7 +54,7 @@ export const FilterComponent = () => {
           <InputLeftElement color="neutral1.11">
             <PiMagnifyingGlass />
           </InputLeftElement>
-          <Input ref={inputRef} placeholder={t('Search')} value={search} onChange={handleSearchUpdate} />
+          <Input ref={inputRef} placeholder={t('Search project')} value={search} onChange={handleSearchUpdate} />
           <InputRightElement minWidth={{ base: '46px', lg: '86px' }}>
             <Button variant="ghost" colorScheme="neutral1" onClick={filterModal.onOpen} gap={2}>
               <PiSlidersHorizontal />

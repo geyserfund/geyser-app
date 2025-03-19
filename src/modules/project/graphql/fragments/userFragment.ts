@@ -14,6 +14,22 @@ export const FRAGMENT_PROJECT_PAGE_CREATOR = gql`
       id
       public
     }
+    complianceDetails {
+      verifiedDetails {
+        email {
+          verified
+          verifiedAt
+        }
+        identity {
+          verified
+          verifiedAt
+        }
+        phoneNumber {
+          verified
+          verifiedAt
+        }
+      }
+    }
   }
 `
 

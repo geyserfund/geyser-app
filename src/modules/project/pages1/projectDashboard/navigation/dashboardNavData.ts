@@ -73,7 +73,7 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     icon: PiBookOpen,
   },
   {
-    label: 'Connect wallet',
+    label: 'Wallet',
     path: 'dashboardWallet',
     type: DashboardType.settings,
     icon: PiWallet,

@@ -150,8 +150,8 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
 
       if (error.constructor === RejectionError || error.message === 'User rejected') {
         toast({
-          title: 'Requested operation declined',
-          description: 'Please use the invoice instead.',
+          title: t('Requested operation declined'),
+          description: t('Please use the invoice instead.'),
           status: 'info',
         })
         return false
@@ -162,8 +162,8 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
       }
 
       toast({
-        title: 'Oops! Something went wrong with WebLN.',
-        description: 'Please copy the invoice manually instead.',
+        title: t('Oops! Something went wrong with WebLN.'),
+        description: t('Please copy the invoice manually instead.'),
         status: 'error',
       })
       return false
@@ -183,8 +183,8 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
       .catch((err) => {
         toast({
           status: 'error',
-          title: 'Something went wrong.',
-          description: 'Please try again',
+          title: t('Something went wrong.'),
+          description: t('Please try again'),
         })
       })
   }
@@ -230,8 +230,8 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
         .catch((err) => {
           clearInterval(id)
           toast({
-            title: 'Something went wrong',
-            description: `The authentication request failed: ${err.message}.`,
+            title: t('Something went wrong'),
+            description: `${t('The authentication request failed:')} ${err.message}.`,
             status: 'error',
           })
         })

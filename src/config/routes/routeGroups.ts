@@ -92,6 +92,8 @@ export const projectFundingPaymentOnchainRoutes = [
   ...projectFundingPaymentOnchainStartedRoutes,
 ]
 
+export const projectFundingPaymentFiatSwapRoutes = [getPath('fundingPaymentFiatSwap', PathName.projectName)]
+
 export const projectFundingRoutes = [
   getPath('projectFunding', PathName.projectName),
   getPath('fundingDetails', PathName.projectName),
@@ -123,6 +125,7 @@ export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath(
 export const discoveryRoutes = [
   getPath('discoveryLanding'),
   getPath('discoveryMyProjects'),
+  getPath('discoveryProducts'),
   getPath('discoveryActivity'),
   getPath('discoveryActivityFollowed'),
   getPath('discoveryActivityGlobal'),

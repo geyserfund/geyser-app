@@ -25,6 +25,8 @@ export const AnonymousAvatarBaseUrl = 'https://storage.googleapis.com/geyser-pro
 // LAUNCH PROJECT URLS
 export const LaunchProjectCoinsUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-coins.webp'
+export const LaunchProjectPaymentMethodsUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/payment-methods.png'
 export const LaunchProjectEntryUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-entry.webp'
 export const LaunchProjectFeesUrl =
@@ -146,6 +148,18 @@ export const HallOfFameIllustrationUrl = 'https://storage.googleapis.com/geyser-
 export const HallOfFameAnimatedGifUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/halloffame-animated-gif.gif'
 
+export const BecomeVerifiedCreatorIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/creator-verify-illustration.jpg'
+
+export const SuccessfullyVerifiedIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/successfully-verified.png'
+
+export const SuccessfullPhoneVerificationIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/successful-phone-verification.png'
+
+export const DollarToBitcoinIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/dollar-to-bitcoin-illustration.png'
+
 // FUNDING FLOW ERRORS
 
 export const FundingErrorUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/errors/error.png'
@@ -228,6 +242,8 @@ export const ArtworkImageUrl = 'https://storage.googleapis.com/geyser-projects-m
 export const PhysicalProductImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/reward-templates/physical-product.png'
 export const ExperienceImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/experience.png'
+export const EnableFiatContributionsImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/enable-fiat-illustartion.png'
 
 // Helpers
 export const EmailPromptModalUrl =

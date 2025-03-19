@@ -16,5 +16,21 @@ export const FRAGMENT_USER_FOR_PROFILE_PAGE = gql`
     externalAccounts {
       ...ExternalAccount
     }
+    complianceDetails {
+      verifiedDetails {
+        email {
+          verified
+          verifiedAt
+        }
+        identity {
+          verified
+          verifiedAt
+        }
+        phoneNumber {
+          verified
+          verifiedAt
+        }
+      }
+    }
   }
 `

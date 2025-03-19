@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useState } from 'react'
 
 import { useOrdersStatsGetQuery } from '@/types'
@@ -43,7 +44,7 @@ export const useRewards = (projectId: string) => {
     onError(error) {
       toast({
         status: 'error',
-        title: 'Failed to fetch project rewards',
+        title: t('Failed to fetch project rewards'),
         description: `${error.message}`,
       })
     },

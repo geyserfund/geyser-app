@@ -36,11 +36,11 @@ export const GrantPage = () => {
     if (error) {
       toast({
         status: 'error',
-        title: 'Something went wrong.',
-        description: 'Please refresh the page and try again.',
+        title: t('Something went wrong.'),
+        description: t('Please refresh the page and try again.'),
       })
     }
-  }, [error, toast])
+  }, [error, toast, t])
 
   if (loading || !grant) {
     return <Loader paddingTop="20px" />

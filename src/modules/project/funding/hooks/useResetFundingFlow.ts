@@ -1,6 +1,7 @@
 import { useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
+import { resetFiatSwapStatusAtom } from '../../pages1/projectFunding/views/fundingPayment/views/paymentFiatSwap/fiatSwapStatus.ts'
 import { onChainRefundDownloadedAtom } from '../../pages1/projectFunding/views/fundingPayment/views/paymentOnchain/states/onChainStatus.ts'
 import {
   currentSwapIdAtom,
@@ -34,6 +35,8 @@ export const useResetFundingFlow = () => {
 
   const stopPollingAndSubscription = useSetAtom(stopPollingAndSubscriptionAtom)
 
+  const resetFiatSwapStatus = useSetAtom(resetFiatSwapStatusAtom)
+
   const resetFundingFlow = useCallback(() => {
     setFundingRequestErrored(false)
     setInvoiceRefreshErrored(false)
@@ -51,6 +54,7 @@ export const useResetFundingFlow = () => {
     stopPollingAndSubscription()
 
     setProjectGoalId(null)
+    resetFiatSwapStatus()
   }, [
     setFundingRequestErrored,
     setInvoiceRefreshErrored,
@@ -63,6 +67,7 @@ export const useResetFundingFlow = () => {
     clearRefundedSwapData,
     stopPollingAndSubscription,
     setProjectGoalId,
+    resetFiatSwapStatus,
   ])
 
   return resetFundingFlow

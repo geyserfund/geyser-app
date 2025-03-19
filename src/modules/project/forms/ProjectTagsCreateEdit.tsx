@@ -64,7 +64,7 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
     onError() {
       toast({
         status: 'error',
-        title: 'failed to create new tag',
+        title: t('failed to create new tag'),
       })
     },
     onCompleted(data) {
@@ -106,7 +106,7 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
     if (inputValue.length < TAG_MIN_LENGTH || inputValue.length > TAG_MAX_LENGTH) {
       toast({
         status: 'error',
-        title: 'failed to create tag',
+        title: t('failed to create tag'),
         description: `${t('tag length must be between')} ${TAG_MIN_LENGTH} ${t('and')} ${TAG_MAX_LENGTH}`,
       })
       return

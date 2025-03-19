@@ -66,8 +66,8 @@ export const InsightsStatsComponent = () => {
     },
     onError() {
       toast({
-        title: 'Error fetching project stats',
-        description: 'Please refresh the page and try again.',
+        title: t('Error fetching project stats'),
+        description: t('Please refresh the page and try again.'),
         status: 'error',
       })
     },

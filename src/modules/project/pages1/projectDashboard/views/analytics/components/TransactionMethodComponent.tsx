@@ -42,8 +42,8 @@ export const TransactionMethodComponent = (props: CardLayoutProps) => {
     },
     onError() {
       toast({
-        title: 'Error fetching project stats',
-        description: 'Please refresh the page and try again.',
+        title: t('Error fetching project stats'),
+        description: t('Please refresh the page and try again.'),
         status: 'error',
       })
     },

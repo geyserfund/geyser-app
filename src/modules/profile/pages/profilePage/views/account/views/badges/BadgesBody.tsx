@@ -24,8 +24,8 @@ export const BadgesBody = () => {
     variables: { input: { where: { userId: toInt(userProfile.id) } } },
     onError() {
       toast({
-        title: 'Error fetching badges',
-        description: 'Please refresh the page and try again.',
+        title: t('Error fetching badges'),
+        description: t('Please refresh the page and try again.'),
         status: 'error',
       })
     },

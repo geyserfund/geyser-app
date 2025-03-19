@@ -1,4 +1,5 @@
 import { Buffer } from 'buffer'
+import { t } from 'i18next'
 import { getEventHash } from 'nostr-tools'
 import { useState } from 'react'
 
@@ -66,8 +67,8 @@ export const useNostrExtensonLogin = () => {
   const throwErrorToast = (description?: string) => {
     toast({
       status: 'error',
-      title: 'Something went wrong.',
-      description: description || 'Please try again',
+      title: t('Something went wrong.'),
+      description: description || t('Please try again'),
     })
   }
 

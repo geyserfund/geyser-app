@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { FormEvent } from 'react'
 import { useNavigate } from 'react-router'
 
+import { useAuthContext } from '@/context/auth.tsx'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
@@ -11,6 +12,9 @@ import { useNotification } from '@/utils'
 
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
+import { CompleteVerificationToIncreaseFunding } from '../components/CompleteVerificationToIncreaseFunding.tsx'
+
+const MAX_DONATION_AMOUNT = 1000000 // 10,000 USD in cents
 
 export const FundingInitBottomContent = () => {
   return <FundingInitSummary />
@@ -28,7 +32,9 @@ export const FundingInitSummary = () => {
   const navigate = useNavigate()
   const toast = useNotification()
 
-  const { isFundingInputAmountValid, project } = useFundingFormAtom()
+  const { user } = useAuthContext()
+
+  const { isFundingInputAmountValid, project, formState } = useFundingFormAtom()
 
   const handleCheckoutButtonPressed = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -44,18 +50,29 @@ export const FundingInitSummary = () => {
     }
   }
 
+  const isFundingAmountTooHigh = formState.donationAmountUsdCent > MAX_DONATION_AMOUNT
+
+  const showCompleteVerification = isFundingAmountTooHigh && !user.complianceDetails.verifiedDetails?.identity?.verified
+
   return (
     <form style={{ width: '100%', height: '100%', overflowY: 'visible' }} onSubmit={handleCheckoutButtonPressed}>
       <FundingSummaryWrapper>
         <ProjectFundingSummary />
+        {showCompleteVerification && <CompleteVerificationToIncreaseFunding />}
       </FundingSummaryWrapper>
-
       <FundingCheckoutWrapper>
         <VStack w="full">
           <Body size="sm" light>
             {t('By continuing to checkout you are accepting our T&Cs')}
           </Body>
-          <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit">
+          <Button
+            size="lg"
+            w="full"
+            variant="solid"
+            colorScheme="primary1"
+            type="submit"
+            isDisabled={showCompleteVerification}
+          >
             {t('Checkout')}
           </Button>
         </VStack>
