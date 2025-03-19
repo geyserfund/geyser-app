@@ -1,14 +1,14 @@
-import { Button, HStack, Image, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { PiUserCircleCheck } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { BecomeVerifiedCreatorIllustrationUrl } from '@/shared/constants/index.ts'
 
 export const VerificationDetails = ({ onContinue, onLoading }: { onContinue: () => void; onLoading: boolean }) => {
   return (
     <VStack w="full" gap={4}>
       <HStack justifyContent="center" w="full">
-        <Image maxHeight="250px" src={BecomeVerifiedCreatorIllustrationUrl} alt="Become Verified Creator" />
+        <Icon as={PiUserCircleCheck} fontSize="150px" />
       </HStack>
 
       <Body>
@@ -25,7 +25,7 @@ export const VerificationDetails = ({ onContinue, onLoading }: { onContinue: () 
         </ListItem>
         <ListItem>
           <Body as={'span'} bold>
-            {t('A "Verified Creator" badge')}:{' '}
+            {t('A verified creator badge')}:{' '}
           </Body>
           {t('To help you build trust with potential contributors.')}
         </ListItem>

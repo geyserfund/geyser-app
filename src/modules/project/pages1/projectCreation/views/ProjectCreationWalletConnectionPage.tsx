@@ -153,25 +153,6 @@ export const ProjectCreationWalletConnectionPage = () => {
         <TitleWithProgressBar title={t('Configure wallet')} subtitle={t('Create a project')} index={5} length={5} />
       }
     >
-      <VStack w="full" paddingBottom="20px">
-        <EnableFiatContributions
-          paddingX={0}
-          dense
-          noborder
-          disableImage
-          switchProps={{
-            isChecked: fiatContributionEnabled,
-            onChange: () => setFiatContributionEnabled(!fiatContributionEnabled),
-          }}
-        />
-        <Feedback
-          variant={FeedBackVariant.INFO}
-          title={t('Identity verification')}
-          text={t(
-            'You will need to verify your identity with a government ID to enable fiat contributions. Toggle that functionality off if you do not wish to complete the verification.',
-          )}
-        />
-      </VStack>
       <VStack w="full" alignItems="start" pb="20px">
         <Body size="lg" medium>
           {t('Lightning Address & Wallet')}
@@ -194,6 +175,26 @@ export const ProjectCreationWalletConnectionPage = () => {
       <ProjectCreationWalletConnectionForm
         {...{ connectionOption, lightningAddress, node, setConnectionOption, fee, limits, nwc }}
       />
+
+      <VStack w="full" paddingTop="20px">
+        <EnableFiatContributions
+          paddingX={0}
+          dense
+          noborder
+          disableImage
+          switchProps={{
+            isChecked: fiatContributionEnabled,
+            onChange: () => setFiatContributionEnabled(!fiatContributionEnabled),
+          }}
+        />
+        <Feedback
+          variant={FeedBackVariant.INFO}
+          title={t('Identity verification')}
+          text={t(
+            'You will need to verify your identity with a government ID to enable fiat contributions. Toggle that functionality off if you do not wish to complete the verification.',
+          )}
+        />
+      </VStack>
     </ProjectCreateLayout>
   )
 }

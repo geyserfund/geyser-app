@@ -59,7 +59,7 @@ export const ProjectCreationIdentityVerificationPage = () => {
         {!userVerificationModal.isOpen ? (
           <VerificationDetails
             onLoading={generateVerificationTokenLoading}
-            onContinue={() => startVerification(UserVerificationLevelInput.Level_2)}
+            onContinue={() => startVerification(UserVerificationLevelInput.Level_3)}
           />
         ) : (
           <VStack w="full" paddingBottom="20px">
