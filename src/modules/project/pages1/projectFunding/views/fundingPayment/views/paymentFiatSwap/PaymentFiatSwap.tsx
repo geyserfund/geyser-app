@@ -11,7 +11,6 @@ import { FiatSwapAwaitingPayment } from './components/FiatSwapAwaitingPayment.ts
 import { FiatSwapContributorNotVerified } from './components/FiatSwapContributorNotVerified.tsx'
 import { FiatSwapForm } from './components/FiatSwapForm.tsx'
 import { FiatSwapOwnerNotVerified } from './components/FiatSwapOwnerNotVerified.tsx'
-import { RedirectionNotice } from './components/RedirectionNotice.tsx'
 import { FiatSwapStatus, fiatSwapStatusAtom } from './fiatSwapStatus.ts'
 
 export const PaymentFiatSwap = () => {
@@ -52,7 +51,6 @@ export const PaymentFiatSwap = () => {
   return (
     <VStack w="full" spacing={6}>
       {renderFiatSwapPayment()}
-      <RedirectionNotice />
       {isProjectOwnerVerified && <FiatSwapContributorNotVerified />}
     </VStack>
   )
