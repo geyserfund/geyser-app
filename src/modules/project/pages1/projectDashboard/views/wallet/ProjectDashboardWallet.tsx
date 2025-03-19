@@ -47,9 +47,8 @@ export const ProjectDashboardWallet = () => {
 
   const isIdentityVerified = user.complianceDetails.verifiedDetails.identity?.verified
 
-  const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSwitchChange = () => {
     if (!isIdentityVerified) {
-      event.preventDefault()
       startVerification(UserVerificationLevelInput.Level_3)
     }
   }
@@ -171,7 +170,7 @@ export const ProjectDashboardWallet = () => {
         <WalletLimitsAndVerification />
         <EnableFiatContributions
           isIdentityVerified={Boolean(isIdentityVerified)}
-          switchProps={{ isChecked: Boolean(isIdentityVerified), onChange: handleSwitchChange }}
+          buttonProps={{ onClick: () => handleSwitchChange() }}
         />
       </VStack>
       <HStack w="full" paddingX={{ base: 0, lg: 6 }} paddingTop={4}>

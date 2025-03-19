@@ -56,7 +56,7 @@ export const FundingInitSummary = () => {
 
   return (
     <form style={{ width: '100%', height: '100%', overflowY: 'visible' }} onSubmit={handleCheckoutButtonPressed}>
-      <FundingSummaryWrapper>
+      <FundingSummaryWrapper justifyContent="space-between">
         <ProjectFundingSummary />
         {showCompleteVerification && <CompleteVerificationToIncreaseFunding />}
       </FundingSummaryWrapper>

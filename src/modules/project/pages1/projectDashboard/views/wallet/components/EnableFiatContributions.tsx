@@ -1,4 +1,4 @@
-import { HStack, Image, Switch, SwitchProps, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, Image, Switch, SwitchProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { VerifiedBadge } from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
@@ -9,11 +9,13 @@ import { DollarToBitcoinIllustrationUrl } from '@/shared/constants/index.ts'
 type EnableFiatContributionsProps = CardLayoutProps & {
   disableImage?: boolean
   switchProps?: SwitchProps
+  buttonProps?: ButtonProps
   isIdentityVerified?: boolean
 }
 
 export const EnableFiatContributions = ({
   disableImage,
+  buttonProps,
   switchProps,
   isIdentityVerified,
   ...props
@@ -31,6 +33,10 @@ export const EnableFiatContributions = ({
               {t('Enabled')}
             </Body>
           </HStack>
+        ) : buttonProps ? (
+          <Button size="lg" variant="solid" colorScheme="primary1" {...buttonProps}>
+            {t('Enable')}
+          </Button>
         ) : (
           <Switch size="lg" {...switchProps} />
         )}

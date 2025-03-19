@@ -1,6 +1,7 @@
-import { Box, Button, Flex, VStack } from '@chakra-ui/react'
+import { Box, Button, Flex, HStack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { VerifiedBadge } from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks/useModal.tsx'
@@ -21,9 +22,13 @@ export const BecomeVerifiedCreator = () => {
         <CardLayout borderRadius="md" boxShadow="sm" width="100%" padding={4} background={BrandCreamGradient}>
           <Flex justifyContent="space-between" alignItems="center">
             <Box>
-              <Body bold color={lightModeColors.neutral1[12]}>
-                {t('Become a Verified Creator')}
-              </Body>
+              <HStack>
+                <Body bold color={lightModeColors.neutral1[12]}>
+                  {t('Become a Verified Creator')}
+                </Body>
+                <VerifiedBadge />
+              </HStack>
+
               <Body size="sm" color={lightModeColors.neutral1[10]}>
                 {t(
                   'Earn a "Verified Creator" badge, increase your limits and enable flat contributions on your project.',
