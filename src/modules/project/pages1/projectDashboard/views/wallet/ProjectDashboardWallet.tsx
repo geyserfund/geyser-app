@@ -169,11 +169,10 @@ export const ProjectDashboardWallet = () => {
     >
       <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }}>
         <WalletLimitsAndVerification />
-        {!isIdentityVerified && (
-          <EnableFiatContributions
-            switchProps={{ isChecked: Boolean(isIdentityVerified), onChange: handleSwitchChange }}
-          />
-        )}
+        <EnableFiatContributions
+          isIdentityVerified={Boolean(isIdentityVerified)}
+          switchProps={{ isChecked: Boolean(isIdentityVerified), onChange: handleSwitchChange }}
+        />
       </VStack>
       <HStack w="full" paddingX={{ base: 0, lg: 6 }} paddingTop={4}>
         <Body size="xl" medium>

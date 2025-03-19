@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
+import { useAuthContext } from '@/context/auth.tsx'
 import { useProjectWalletAPI } from '@/modules/project/API/useProjectWalletAPI'
 import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -36,6 +37,8 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
+
+  const { user } = useAuthContext()
 
   const { project, loading } = useProjectAtom()
   const { wallet } = useWalletAtom()
@@ -182,6 +185,7 @@ export const ProjectCreationWalletConnectionPage = () => {
           dense
           noborder
           disableImage
+          isIdentityVerified={Boolean(user.complianceDetails.verifiedDetails.identity?.verified)}
           switchProps={{
             isChecked: fiatContributionEnabled,
             onChange: () => setFiatContributionEnabled(!fiatContributionEnabled),

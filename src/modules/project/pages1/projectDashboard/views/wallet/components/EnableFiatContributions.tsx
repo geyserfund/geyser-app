@@ -1,6 +1,7 @@
 import { HStack, Image, Switch, SwitchProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
+import { VerifiedBadge } from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { DollarToBitcoinIllustrationUrl } from '@/shared/constants/index.ts'
@@ -8,16 +9,31 @@ import { DollarToBitcoinIllustrationUrl } from '@/shared/constants/index.ts'
 type EnableFiatContributionsProps = CardLayoutProps & {
   disableImage?: boolean
   switchProps?: SwitchProps
+  isIdentityVerified?: boolean
 }
 
-export const EnableFiatContributions = ({ disableImage, switchProps, ...props }: EnableFiatContributionsProps) => {
+export const EnableFiatContributions = ({
+  disableImage,
+  switchProps,
+  isIdentityVerified,
+  ...props
+}: EnableFiatContributionsProps) => {
   return (
     <CardLayout padding={4} {...props}>
       <HStack w="full" justifyContent="space-between">
         <Body size="lg" medium>
           {t('Enable fiat contributions')}
         </Body>
-        <Switch size="lg" {...switchProps} />
+        {isIdentityVerified ? (
+          <HStack>
+            <VerifiedBadge />
+            <Body size="sm" color="primary1.9">
+              {t('Enabled')}
+            </Body>
+          </HStack>
+        ) : (
+          <Switch size="lg" {...switchProps} />
+        )}
       </HStack>
       <HStack flexDirection={{ base: 'column', lg: 'row' }} spacing={4}>
         {!disableImage && (
