@@ -7,7 +7,7 @@ import { useUserVerificationModal } from '@/modules/project/pages1/projectDashbo
 import { Body, H3 } from '@/shared/components/typography'
 import { UserVerificationLevelInput } from '@/types/index.ts'
 
-import { VerifiedBadge } from '../../profilePage/views/account/views/badges/VerifiedBadge.tsx'
+import { UserVerifiedBadge } from '../../profilePage/views/account/views/badges/VerifiedBadge.tsx'
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout'
 import { UpdateVerifyEmail } from '../components/UpdateVerifyEmail.tsx'
 
@@ -42,7 +42,7 @@ const IdentityVerification = () => {
         </VStack>
         {isVerified ? (
           <HStack border="1px solid" borderColor="neutral1.6" px={4} py={1} borderRadius="8px">
-            <VerifiedBadge user={user} fontSize="20px" />
+            <UserVerifiedBadge user={user} fontSize="20px" />
             <Body>{t('Verified')}</Body>
           </HStack>
         ) : (

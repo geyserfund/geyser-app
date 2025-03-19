@@ -5,6 +5,10 @@ import { PiX } from 'react-icons/pi'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground.tsx'
+import {
+  UserVerifiedBadge,
+  VerifiedBadge,
+} from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
 import { UserVerificationModal } from '@/modules/project/pages1/projectDashboard/views/wallet/components/UserVerificationModal.tsx'
 import { useUserVerificationModal } from '@/modules/project/pages1/projectDashboard/views/wallet/hooks/useUserVerificationModal.ts'
@@ -109,7 +113,7 @@ const VerificationOnHoldNotice = () => {
         </VStack>
         <VStack justifyContent="flex-end" h="full">
           <Button
-            variant="outline"
+            variant="ghost"
             colorScheme="orange"
             isLoading={generateVerificationTokenLoading}
             onClick={() => {
@@ -209,7 +213,7 @@ const AlmostReachedLimitNotice = () => {
       <CardLayout as={HStack} width="100%" background="amber.3" borderColor="amber.6" flexDirection="row">
         <IconButton
           position="absolute"
-          variant="outline"
+          variant="ghost"
           right="5px"
           top="5px"
           size="xs"
@@ -269,7 +273,7 @@ const BecomeVerifiedNotice = () => {
         <FlowingGifBackground />
         <IconButton
           position="absolute"
-          variant="outline"
+          variant="ghost"
           right="5px"
           top="5px"
           size="xs"
@@ -280,11 +284,15 @@ const BecomeVerifiedNotice = () => {
           }}
         />
         <VStack flex={1} spacing={0} alignItems="start">
-          <Body bold color={lightModeColors.neutral1[12]}>
-            {t('Become a Verified Creator')}
-          </Body>
+          <HStack>
+            <VerifiedBadge fontSize="20px" />
+            <Body bold color={lightModeColors.neutral1[12]}>
+              {t('Become a Verified Creator')}
+            </Body>
+          </HStack>
+
           <Body size="sm" color={lightModeColors.neutral1[10]}>
-            {t('Earn a "Verified Creator" badge and enable fiat contributions by verifying your identity.')}
+            {t('Earn a verified creator badge and enable fiat contributions by verifying your identity.')}
           </Body>
         </VStack>
         <VStack justifyContent="flex-end" h="full">

@@ -33,7 +33,7 @@ import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { userProfileAtom, useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 import { RemoveExternalAccountModal } from '../../../components/RemoveExternalAccountModal'
 import { useAccountUnlink } from '../hooks/useAccountUnlink'
-import { VerifiedBadge } from './badges/VerifiedBadge.tsx'
+import { UserVerifiedBadge } from './badges/VerifiedBadge.tsx'
 import { UserBio } from './UserBio'
 
 export const AccountInfo = () => {
@@ -64,7 +64,7 @@ export const AccountInfo = () => {
             <H1 size="2xl" bold>
               {userProfile.username}
             </H1>
-            <VerifiedBadge user={userProfile} fontSize="2xl" />
+            <UserVerifiedBadge user={userProfile} fontSize="2xl" />
           </HStack>
 
           {userProfile.guardianType ? (

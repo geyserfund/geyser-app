@@ -381,15 +381,15 @@ export const fundingFiatSwapAmountWarningAtom = atom((get) => {
     }
 
     if (totalAmountUsdCent > BANXA_MAX_AMOUNT_CENT) {
-      return `The amount you are trying to send is too high for fiat swap payments. Only payments below $${commaFormatted(
+      return `The amount you are trying to send is too high for fiat payments. Only payments below $${commaFormatted(
         15000,
-      )} can be sent via fiat swap.`
+      )} can be sent via fiat.`
     }
 
     if (totalAmountUsdCent < BANXA_MIN_AMOUNT_CENT) {
-      return `The amount you are trying to send is too low for fiat swap payments. Only payments over $${commaFormatted(
+      return `The amount you are trying to send is too low for fiat payments. Only payments over $${commaFormatted(
         30,
-      )} can be sent via fiat swap.`
+      )} can be sent via fiat.`
     }
   }
 
