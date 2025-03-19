@@ -17,6 +17,7 @@ import {
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { lightModeColors } from '@/shared/styles/colors.ts'
+import { BrandCreamGradient } from '@/shared/styles/custom.ts'
 import { UserVerificationLevel, UserVerificationLevelInput, UserVerificationStatus } from '@/types/index.ts'
 
 import {
@@ -263,7 +264,7 @@ const BecomeVerifiedNotice = () => {
         as={HStack}
         width="100%"
         flexDirection="row"
-        background="linear-gradient(81deg, #FFFBE7 -9.6%, #C4FFF4 109.2%)"
+        background={BrandCreamGradient}
         position="relative"
         backgroundColor="utils.pbg"
       >
@@ -282,10 +283,10 @@ const BecomeVerifiedNotice = () => {
         />
         <VStack flex={1} spacing={0} alignItems="start">
           <HStack>
-            <VerifiedBadge fontSize="20px" />
             <Body bold color={lightModeColors.neutral1[12]}>
               {t('Become a Verified Creator')}
             </Body>
+            <VerifiedBadge fontSize="20px" />
           </HStack>
 
           <Body size="sm" color={lightModeColors.neutral1[10]}>
@@ -295,7 +296,7 @@ const BecomeVerifiedNotice = () => {
         <VStack justifyContent="flex-end" h="full">
           <Button
             variant="solid"
-            colorScheme="neutral1"
+            colorScheme="primary1"
             isLoading={generateVerificationTokenLoading}
             onClick={() => {
               startVerification(UserVerificationLevelInput.Level_3)

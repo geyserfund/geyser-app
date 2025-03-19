@@ -1,9 +1,20 @@
+/* eslint-disable complexity */
 import { Box, Button, Flex, HStack, Icon, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiCheckCircle, PiCheckCircleFill, PiEnvelope, PiIdentificationCard, PiPhone } from 'react-icons/pi'
+import { useAtomValue } from 'jotai'
+import {
+  PiCheckCircle,
+  PiCheckCircleFill,
+  PiEnvelope,
+  PiIdentificationCard,
+  PiPhone,
+  PiWarningFill,
+} from 'react-icons/pi'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
+import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
+import { hasProjectFundingLimitAlmostReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { halfStandardPadding } from '@/shared/styles/reponsiveValues.ts'
@@ -25,6 +36,34 @@ export const WalletLimitsAndVerification = () => {
   const isEmailVerified = user.complianceDetails.verifiedDetails.email?.verified
   const isPhoneVerified = user.complianceDetails.verifiedDetails.phoneNumber?.verified
   const isIdentityVerified = user.complianceDetails.verifiedDetails.identity?.verified
+
+  const hasFundingLimitReached = useAtomValue(hasProjectFundingLimitReachedAtom)
+  const hasFundingLimitAlmostReached = useAtomValue(hasProjectFundingLimitAlmostReachedAtom)
+
+  const isLevel2 = isEmailVerified && !isPhoneVerified && (hasFundingLimitReached || hasFundingLimitAlmostReached)
+  const isLevel3 =
+    isEmailVerified &&
+    isPhoneVerified &&
+    !isIdentityVerified &&
+    (hasFundingLimitReached || hasFundingLimitAlmostReached)
+
+  const level2BorderColor =
+    isLevel2 && hasFundingLimitReached
+      ? 'orange.9'
+      : isLevel2 && hasFundingLimitAlmostReached
+      ? 'warning.9'
+      : 'neutral1.6'
+  const level3BorderColor =
+    isLevel3 && hasFundingLimitReached
+      ? 'orange.9'
+      : isLevel3 && hasFundingLimitAlmostReached
+      ? 'warning.9'
+      : 'neutral1.6'
+
+  const level2ColorScheme =
+    isLevel2 && hasFundingLimitReached ? 'orange' : isLevel2 && hasFundingLimitAlmostReached ? 'warning' : 'neutral1'
+  const level3ColorScheme =
+    isLevel3 && hasFundingLimitReached ? 'orange' : isLevel3 && hasFundingLimitAlmostReached ? 'warning' : 'primary1'
 
   const handleGenerateVerificationTokenForPhone = () => {
     startVerification(UserVerificationLevelInput.Level_2)
@@ -130,11 +169,18 @@ export const WalletLimitsAndVerification = () => {
             </CardLayout>
 
             {/* Phone Verification */}
-            <CardLayout flex="1" borderRadius="md" padding={halfStandardPadding} justifyContent="space-between">
+            <CardLayout
+              flex="1"
+              borderRadius="md"
+              padding={halfStandardPadding}
+              justifyContent="space-between"
+              borderColor={level2BorderColor}
+            >
               <VStack spacing={4} alignItems="flex-start">
                 <HStack spacing={2}>
                   <Icon as={PiPhone} fontSize="20px" color="neutral1.11" />
                   <Body bold>{t('Phone Verification')}</Body>
+                  {isLevel2 && <Icon as={PiWarningFill} fontSize="20px" color={level2BorderColor} />}
                 </HStack>
                 <VStack alignItems="flex-start" spacing={1}>
                   <HStack>
@@ -157,7 +203,8 @@ export const WalletLimitsAndVerification = () => {
                   </HStack>
                 ) : (
                   <Button
-                    variant="outline"
+                    variant="solid"
+                    colorScheme={level2ColorScheme}
                     size="md"
                     width="full"
                     onClick={handleGenerateVerificationTokenForPhone}
@@ -170,11 +217,18 @@ export const WalletLimitsAndVerification = () => {
             </CardLayout>
 
             {/* Gov ID Verification */}
-            <CardLayout flex="1" borderRadius="md" padding={halfStandardPadding} justifyContent="space-between">
+            <CardLayout
+              flex="1"
+              borderRadius="md"
+              padding={halfStandardPadding}
+              justifyContent="space-between"
+              borderColor={level3BorderColor}
+            >
               <VStack spacing={4} alignItems="flex-start">
                 <HStack spacing={2}>
                   <Icon as={PiIdentificationCard} fontSize="20px" color="neutral1.11" />
                   <Body bold>{t('Gov ID')}</Body>
+                  {isLevel3 && <Icon as={PiWarningFill} fontSize="20px" color={level3BorderColor} />}
                 </HStack>
                 <VStack alignItems="flex-start" spacing={1}>
                   <HStack>
@@ -193,7 +247,7 @@ export const WalletLimitsAndVerification = () => {
                   </HStack>
                 ) : (
                   <Button
-                    colorScheme="primary1"
+                    colorScheme={level3ColorScheme}
                     size="md"
                     width="full"
                     onClick={handleGenerateVerificationTokenForIdentity}

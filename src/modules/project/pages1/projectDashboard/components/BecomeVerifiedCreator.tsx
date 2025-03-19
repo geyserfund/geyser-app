@@ -30,7 +30,7 @@ export const BecomeVerifiedCreator = () => {
                 )}
               </Body>
             </Box>
-            <Button variant="outline" colorScheme="primary1" onClick={verifyIntroModal.onOpen}>
+            <Button variant="solid" colorScheme="primary1" onClick={verifyIntroModal.onOpen}>
               {t('Verify Now')}
             </Button>
           </Flex>

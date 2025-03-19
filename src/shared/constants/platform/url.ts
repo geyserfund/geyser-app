@@ -157,6 +157,9 @@ export const SuccessfullyVerifiedIllustrationUrl =
 export const SuccessfullPhoneVerificationIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/successful-phone-verification.png'
 
+export const DollarToBitcoinIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/dollar-to-bitcoin-illustration.png'
+
 // FUNDING FLOW ERRORS
 
 export const FundingErrorUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/errors/error.png'

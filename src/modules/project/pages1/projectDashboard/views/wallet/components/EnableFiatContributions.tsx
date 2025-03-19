@@ -3,7 +3,7 @@ import { t } from 'i18next'
 
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { EnableFiatContributionsImageUrl } from '@/shared/constants/index.ts'
+import { DollarToBitcoinIllustrationUrl } from '@/shared/constants/index.ts'
 
 type EnableFiatContributionsProps = CardLayoutProps & {
   disableImage?: boolean
@@ -21,7 +21,7 @@ export const EnableFiatContributions = ({ disableImage, switchProps, ...props }:
       </HStack>
       <HStack flexDirection={{ base: 'column', lg: 'row' }} spacing={4}>
         {!disableImage && (
-          <Image maxWidth={{ base: '100%', lg: '160px' }} borderRadius="4px" src={EnableFiatContributionsImageUrl} />
+          <Image maxWidth={{ base: '100%', lg: '160px' }} borderRadius="4px" src={DollarToBitcoinIllustrationUrl} />
         )}
         <VStack alignItems={'start'}>
           <Body size="sm" light>

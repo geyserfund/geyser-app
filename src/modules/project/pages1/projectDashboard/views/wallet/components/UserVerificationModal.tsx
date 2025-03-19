@@ -1,13 +1,10 @@
-import { Button, HStack, Image, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
+import { PiCheckSquareOffset, PiSealCheck } from 'react-icons/pi'
 
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/index.ts'
-import {
-  SuccessfullPhoneVerificationIllustrationUrl,
-  SuccessfullyVerifiedIllustrationUrl,
-} from '@/shared/constants/platform/url.ts'
 import { UseModalReturn } from '@/shared/hooks/useModal.tsx'
 import { UserVerificationLevel, UserVerificationLevelInput } from '@/types/index.ts'
 
@@ -110,7 +107,7 @@ const Level2SuccessMessage = ({ onClose, setTitle }: { onClose: () => void; setT
   return (
     <VStack spacing={6} w="full" align="flex-start" p={4}>
       <HStack w="full" justifyContent="center">
-        <Image maxHeight="200px" src={SuccessfullPhoneVerificationIllustrationUrl} alt="Successfully verified" />
+        <Icon as={PiCheckSquareOffset} fontSize="150px" color="primary1.9" />
       </HStack>
       <VStack align="flex-start">
         <Body medium>{t('You have successfully completed the phone verification.')}</Body>
@@ -147,9 +144,9 @@ const Level2SuccessMessage = ({ onClose, setTitle }: { onClose: () => void; setT
 
 const Level3SuccessMessage = ({ onClose }: { onClose: () => void }) => {
   return (
-    <VStack spacing={8} w="full" align="flex-start" p={4}>
+    <VStack spacing={8} w="full" align="flex-start" px={4}>
       <HStack w="full" justifyContent="center">
-        <Image maxHeight="200px" src={SuccessfullyVerifiedIllustrationUrl} alt="Successfully verified" />
+        <Icon as={PiSealCheck} fontSize="150px" color="primary1.9" />
       </HStack>
       <VStack align="flex-start">
         <Body medium>{t('You have successfully completed the document verification!')}</Body>

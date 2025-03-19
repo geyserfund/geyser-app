@@ -27,7 +27,7 @@ export const useWalletLimitProgressData = () => {
     ? percentageInitial * 3
     : 30 + ((project.balanceUsdCent - MAX_LEVEL_1) / (MAX_LEVEL_2 - MAX_LEVEL_1)) * 70
 
-  const barColor = hasFundingLimitReached ? 'error.9' : hasFundingLimitAlmostReached ? 'warning.9' : 'primary1.9'
+  const barColor = hasFundingLimitReached ? 'orange.9' : hasFundingLimitAlmostReached ? 'warning.9' : 'primary1.9'
 
   return {
     percentage,
