@@ -18,10 +18,8 @@ export const RedirectionNotice = () => {
       title={t('Waiting for payment to be confirmed')}
     >
       <VStack w="full" alignItems="start">
-        <Body size="lg" bold>
-          {t('Redirection Notice')}
-        </Body>
-        <Body>
+        <Body medium>{t('Redirection Notice')}</Body>
+        <Body size="sm">
           <Trans i18nextKey="You should be redirected to a new tab to complete your payment. If the page hasn't opened automatically, please open it by <1>clicking here.</1>">
             {
               "You should be redirected to a new tab to complete your payment. If the page hasn't opened automatically, please open it by"
