@@ -35,7 +35,7 @@ const IdentityVerification = () => {
         <VStack w="full" alignItems="start">
           <H3 size="lg">{t('Identity')}</H3>
           <Body size="sm">
-            {t('Identity verification enables contributions over $10k and removes all fiat contribution restrictions')}
+            {t('Identity verification enables contributions over $10k and removes all fiat contribution restrictions.')}
           </Body>
         </VStack>
         {isVerified ? (

@@ -30,13 +30,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     icon: PiCompass,
     bottomNav: true,
   },
-  {
-    label: 'My Projects',
-    key: DiscoveryNavItemKey.MyProjects,
-    path: 'discoveryMyProjects',
-    icon: PiRocketLaunch,
-    bottomNav: true,
-  },
+
   {
     label: 'Products',
     key: DiscoveryNavItemKey.Products,
@@ -49,6 +43,13 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Activity,
     path: 'discoveryActivity',
     icon: PiWaveform,
+    bottomNav: true,
+  },
+  {
+    label: 'My Projects',
+    key: DiscoveryNavItemKey.MyProjects,
+    path: 'discoveryMyProjects',
+    icon: PiRocketLaunch,
     bottomNav: true,
   },
   {

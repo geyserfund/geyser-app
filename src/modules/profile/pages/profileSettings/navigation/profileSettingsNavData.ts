@@ -24,7 +24,12 @@ export const profileSettingsItems: ProfileSettingsItem[] = [
     type: ProfileSettingsType.general,
     icon: PiUser,
   },
-
+  {
+    label: 'Verifications',
+    path: 'userProfileSettingsVerifications',
+    type: ProfileSettingsType.verifications,
+    icon: PiSealCheck,
+  },
   {
     label: 'Notifications',
     path: 'userProfileSettingsNotifications',
@@ -36,11 +41,5 @@ export const profileSettingsItems: ProfileSettingsItem[] = [
     path: 'userProfileSettingsSubscriptions',
     type: ProfileSettingsType.subscriptions,
     icon: PiRepeat,
-  },
-  {
-    label: 'Verifications',
-    path: 'userProfileSettingsVerifications',
-    type: ProfileSettingsType.verifications,
-    icon: PiSealCheck,
   },
 ]
