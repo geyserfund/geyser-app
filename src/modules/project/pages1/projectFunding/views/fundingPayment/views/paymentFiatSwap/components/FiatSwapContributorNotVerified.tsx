@@ -18,10 +18,8 @@ export const FiatSwapContributorNotVerified = () => {
   return (
     <Feedback variant={FeedBackVariant.WARNING} icon={<Icon as={PiWarning} fontSize="26px" />}>
       <VStack w="full" alignItems="start">
-        <Body size="lg" medium>
-          {t('Identity verification required')}
-        </Body>
-        <Body>
+        <Body medium>{t('Identity verification required')}</Body>
+        <Body size="sm">
           <Trans i18nextKey="You will be required to verify your identity by our third-party payment provider. This verification is only required for fiat payments above $10,000 dollars. Learn more about why we’re required to do this verification <1>here.</1>">
             {
               'You will be required to verify your identity by our third-party payment provider. This verification is only required for fiat payments above $10,000 dollars. Learn more about why we’re required to do this verification'

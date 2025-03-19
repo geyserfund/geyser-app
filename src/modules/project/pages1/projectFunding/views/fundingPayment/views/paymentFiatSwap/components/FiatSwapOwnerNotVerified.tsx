@@ -45,11 +45,8 @@ export const FiatSwapOwnerNotVerified = () => {
   return (
     <VStack w="full" spacing={6}>
       <VStack spacing={2} w="full" maxWidth={'500px'}>
-        <Body size="lg" medium>
-          {' '}
-          {t('Create has not enabled fiat contributions')}
-        </Body>
-        <Body textAlign={'center'}>
+        <Body medium> {t('Create has not enabled fiat contributions')}</Body>
+        <Body size="sm" textAlign={'center'}>
           {t('Let the creator know you would like to make a payment with fiat, so they can get it setup.')}
         </Body>
       </VStack>
