@@ -32,7 +32,7 @@ export const CompleteVerificationToIncreaseFunding = () => {
           </VStack>
           <Button
             variant="outline"
-            colorScheme="neutral1"
+            colorScheme="warning"
             onClick={isLoggedIn ? () => startVerification() : () => loginOnOpen()}
             isLoading={generateVerificationTokenLoading}
             size="lg"
