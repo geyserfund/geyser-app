@@ -30,6 +30,7 @@ export const RedirectionNotice = () => {
               </Body>
             </Link>
           </Trans>
+          .
         </Body>
       </VStack>
     </Feedback>
