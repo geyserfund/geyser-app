@@ -8,6 +8,7 @@ export const FRAGMENT_REWARD_FOR_LANDING_PAGE = gql`
     cost
     name
     description
+    sold
     project {
       rewardCurrency
       id

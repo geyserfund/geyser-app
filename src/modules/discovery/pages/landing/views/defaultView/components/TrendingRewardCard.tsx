@@ -1,4 +1,5 @@
-import { Box, HStack, StackProps, VStack } from '@chakra-ui/react'
+import { Badge, Box, HStack, StackProps, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -18,7 +19,7 @@ type TrendingRewardCardProps = {
 } & StackProps
 
 export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps) => {
-  const { formatSatsAmount, formatUsdAmount } = useCurrencyFormatter()
+  const { formatSatsAmount, formatUsdAmount } = useCurrencyFormatter(true)
 
   const guardian = useMemo(() => {
     const guardian = Object.keys(guardianRewardUUIDs).find(
@@ -84,7 +85,7 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
           </Body>
         </HStack>
 
-        <HStack w="full" justifyContent={'start'} spacing={3}>
+        <HStack w="full" justifyContent={'space-between'} spacing={3}>
           <Body size="sm" dark>
             {reward.project.rewardCurrency === RewardCurrency.Usdcent ? (
               <>
@@ -110,6 +111,9 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
               </>
             )}
           </Body>
+          <Badge size="sm" variant="soft" colorScheme="neutral1">
+            {reward.sold} {t('sold')}
+          </Badge>
         </HStack>
       </VStack>
     </CardLayout>
