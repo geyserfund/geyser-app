@@ -47,7 +47,7 @@ export const TrendingRewards = () => {
         {rewards.slice(0, 4).map((reward) => {
           return (
             <GridItem key={reward.projectReward.id}>
-              <TrendingRewardCard reward={reward.projectReward} />
+              <TrendingRewardCard reward={reward.projectReward} sold={reward.count} />
             </GridItem>
           )
         })}

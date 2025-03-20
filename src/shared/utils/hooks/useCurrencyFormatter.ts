@@ -12,6 +12,12 @@ export enum FormatCurrencyType {
 
 type TCurrency = 'BTCSAT' | 'USDCENT' | 'USD'
 
+/**
+ * Format given amount with given currency type
+ * @description Uses current BTC rates to show the converted amount
+ * @param shortAmount - Whether to use short amount labels
+ * @returns - Formatted amount
+ */
 export const useCurrencyFormatter = (shortAmount?: boolean) => {
   const { getUSDCentsAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
@@ -64,8 +70,11 @@ export const useCurrencyFormatter = (shortAmount?: boolean) => {
   )
 
   return {
+    /** Format given amount with given currency type */
     formatAmount,
+    /** Convert given amount from sats to USD and format it */
     formatUsdAmount,
+    /** Convert given amount from USDCents to sats and format it */
     formatSatsAmount,
   }
 }

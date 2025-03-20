@@ -11,15 +11,16 @@ import { Body, H3 } from '@/shared/components/typography'
 import { getPath, getPathWithGeyserHero } from '@/shared/constants'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { GuardianType, RewardCurrency, RewardForLandingPageFragment } from '@/types'
-import { commaFormatted } from '@/utils'
 
 type TrendingRewardCardProps = {
   reward: RewardForLandingPageFragment
+  sold?: number
 } & StackProps
 
-export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps) => {
-  const { formatSatsAmount, formatUsdAmount } = useCurrencyFormatter(true)
+export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCardProps) => {
+  const { formatSatsAmount, formatUsdAmount, formatAmount } = useCurrencyFormatter(true)
 
   const guardian = useMemo(() => {
     const guardian = Object.keys(guardianRewardUUIDs).find(
@@ -89,10 +90,7 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
           <Body size="sm" dark>
             {reward.project.rewardCurrency === RewardCurrency.Usdcent ? (
               <>
-                <Body as="span" size="sm" light>
-                  $
-                </Body>
-                {reward.cost < 100 ? (reward.cost / 100).toFixed(2) : commaFormatted(Math.round(reward.cost / 100))}
+                {formatAmount(reward.cost, FormatCurrencyType.Usdcent)}
                 <Body as="span" size="sm" light>
                   {' '}
                   ({formatSatsAmount(reward.cost)})
@@ -100,7 +98,7 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
               </>
             ) : (
               <>
-                {commaFormatted(reward.cost)}{' '}
+                {formatAmount(reward.cost, FormatCurrencyType.Btcsat)}{' '}
                 <Body as="span" size="sm" light>
                   sats
                 </Body>
@@ -111,9 +109,11 @@ export const TrendingRewardCard = ({ reward, ...rest }: TrendingRewardCardProps)
               </>
             )}
           </Body>
-          <Badge size="sm" variant="soft" colorScheme="neutral1">
-            {reward.sold} {t('sold')}
-          </Badge>
+          {sold ? (
+            <Badge size="sm" variant="soft" colorScheme="neutral1">
+              {sold} {t('sold')}
+            </Badge>
+          ) : null}
         </HStack>
       </VStack>
     </CardLayout>

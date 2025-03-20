@@ -38,7 +38,7 @@ export const Products = () => {
           {rewards.map((reward) => {
             return (
               <GridItem key={reward.projectReward.id}>
-                <TrendingRewardCard reward={reward.projectReward} />
+                <TrendingRewardCard reward={reward.projectReward} sold={reward.count} />
               </GridItem>
             )
           })}
