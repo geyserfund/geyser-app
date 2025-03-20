@@ -11,7 +11,7 @@ export const FundingDisclaimer = (props: BodyProps) => {
     <VStack w="full">
       <Body light size="xs" {...props}>
         {t(
-          'Any sensitive information shared during the verification process is securly handled by the verification provider. No data will be processed, shared or stored by Geyser.',
+          'Any sensitive information shared during the verification process is securly handled by the verification provider.',
         )}
       </Body>
       <Body light size="xs" {...props}>

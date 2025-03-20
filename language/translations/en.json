@@ -1677,7 +1677,7 @@
   "Select a currency supported by our payment provider": "Select a currency supported by our payment provider",
   "Identity verification required": "Identity verification required",
   "here": "here",
-  "Any sensitive information shared during the verification process is securly handled by the verification provider. No data will be processed, shared or stored by Geyser.": "Any sensitive information shared during the verification process is securly handled by the verification provider. No data will be processed, shared or stored by Geyser.",
+  "Any sensitive information shared during the verification process is securly handled by the verification provider.": "Any sensitive information shared during the verification process is securly handled by the verification provider.",
   "Redirection Notice": "Redirection Notice",
   "clicking here": "clicking here",
   "Waiting for payment to be confirmed": "Waiting for payment to be confirmed",
