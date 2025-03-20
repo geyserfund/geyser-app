@@ -22,8 +22,8 @@ const stats = {
  * @returns {boolean} Whether the file should be processed
  */
 function shouldProcessFile(filePath) {
-  // Include a wider range of file extensions
-  const validExtensions = ['.js', '.jsx', '.ts', '.tsx', '.vue', '.svelte', '.html', '.md', '.mdx', '.json']
+  // File extensions to look for
+  const validExtensions = ['.js', '.jsx', '.ts', '.tsx', '.json']
   const ext = path.extname(filePath).toLowerCase()
 
   // Track stats for each extension
@@ -149,7 +149,7 @@ async function isKeyUsedInFile(filePath, key) {
 }
 
 // Main function to process the translation file
-async function cleanTranslationFile(translationFilePath, srcDir, outputFilePath) {
+async function cleanTranslationFile(translationFilePath, srcDir) {
   try {
     console.log('Reading translation file...')
     const translationContent = await readFileAsync(translationFilePath, 'utf-8')
@@ -228,7 +228,7 @@ async function cleanTranslationFile(translationFilePath, srcDir, outputFilePath)
 
     // Track used and unused keys
     const usedTranslations = {}
-    const unusedKeys = []
+    const unusedTranslations = {}
     const keysFoundInFiles = {}
 
     // Check each translation key against our set of strings
@@ -241,15 +241,14 @@ async function cleanTranslationFile(translationFilePath, srcDir, outputFilePath)
         usedTranslations[key] = translations[key]
         keysFoundInFiles[key] = 'string_literal'
       } else {
-        unusedKeys.push(key)
+        unusedTranslations[key] = translations[key]
       }
     }
 
     console.log(`First pass found ${Object.keys(usedTranslations).length} used keys`)
 
     // Second pass: check remaining keys with more detailed matching
-    const remainingKeys = [...unusedKeys]
-    unusedKeys.length = 0 // Clear the array
+    const remainingKeys = Object.keys(unusedTranslations)
 
     console.log(`\nPerforming detailed check on ${remainingKeys.length} remaining keys...`)
 
@@ -265,11 +264,10 @@ async function cleanTranslationFile(translationFilePath, srcDir, outputFilePath)
           if (keysFoundInFiles[key]) continue
 
           if (await isKeyUsedInFile(file, key)) {
-            usedTranslations[key] = translations[key]
+            usedTranslations[key] = unusedTranslations[key]
             keysFoundInFiles[key] = file
-            // Remove from remaining keys to check
-            const index = remainingKeys.indexOf(key)
-            if (index > -1) remainingKeys.splice(index, 1)
+            // Remove from unused translations
+            delete unusedTranslations[key]
           }
         }
       }
@@ -281,21 +279,27 @@ async function cleanTranslationFile(translationFilePath, srcDir, outputFilePath)
       )
     }
 
-    // Any keys still in remainingKeys are unused
-    unusedKeys.push(...remainingKeys)
+    // Generate paths for output files
+    const unusedTranslationsPath = path.join(path.dirname(translationFilePath), 'en.unused.json')
 
-    // Write the cleaned translations to the output file
-    await writeFileAsync(outputFilePath, JSON.stringify(usedTranslations, null, 2), 'utf-8')
+    // Create a backup of the original file
+    const backupPath = `${translationFilePath}.backup`
+    await writeFileAsync(backupPath, translationContent, 'utf-8')
+    console.log(`\nBackup of original translations saved to: ${backupPath}`)
+
+    // Write the cleaned translations back to the original file
+    await writeFileAsync(translationFilePath, JSON.stringify(usedTranslations, null, 2), 'utf-8')
+
+    // Write the unused translations to a separate file
+    await writeFileAsync(unusedTranslationsPath, JSON.stringify(unusedTranslations, null, 2), 'utf-8')
 
     console.log(`\nProcess complete:`)
-    console.log(`- ${Object.keys(usedTranslations).length} keys are used and kept`)
-    console.log(`- ${unusedKeys.length} keys are unused and removed`)
+    console.log(`- ${Object.keys(usedTranslations).length} keys are used and kept in ${translationFilePath}`)
+    console.log(`- ${Object.keys(unusedTranslations).length} keys are unused and saved to ${unusedTranslationsPath}`)
 
-    if (unusedKeys.length > 0) {
-      console.log(`\nUnused keys (first 20):`, unusedKeys.slice(0, 20))
+    if (Object.keys(unusedTranslations).length > 0) {
+      console.log(`\nUnused keys (first 20):`, Object.keys(unusedTranslations).slice(0, 20))
     }
-
-    console.log(`\nCleaned translation file saved to: ${outputFilePath}`)
   } catch (error) {
     console.error('Error processing translation file:', error.message)
   }
@@ -307,8 +311,7 @@ const projectRoot = path.resolve(__dirname, '..')
 // Execute the script
 const translationFilePath = path.resolve(projectRoot, 'language/translations/en.json')
 const srcDir = path.resolve(projectRoot, 'src')
-const outputFilePath = path.resolve(projectRoot, 'language/translations/en.cleaned.json')
 
-cleanTranslationFile(translationFilePath, srcDir, outputFilePath)
+cleanTranslationFile(translationFilePath, srcDir)
   .then(() => console.log('Script execution completed.'))
   .catch((err) => console.error('Script execution failed:', err))
