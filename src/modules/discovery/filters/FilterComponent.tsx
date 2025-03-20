@@ -1,4 +1,4 @@
-import { Button, InputGroup, InputLeftElement, InputRightElement } from '@chakra-ui/react'
+import { Button, HStack, InputGroup, InputLeftElement, InputRightElement } from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { useDebouncedCallback } from '@react-hookz/web'
 import { useEffect, useRef, useState } from 'react'
@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { PiMagnifyingGlass, PiSlidersHorizontal } from 'react-icons/pi'
 
 import { useFilterContext } from '@/context/filter'
+import { MapButton } from '@/modules/navigation/platformNavBar/components/MapButton.tsx'
 import { useModal } from '@/shared/hooks'
 import { useMobileMode } from '@/utils'
 
@@ -41,7 +42,8 @@ export const FilterComponent = () => {
   }
 
   return (
-    <>
+    <HStack w="full">
+      <MapButton />
       <form
         style={{ width: '100%' }}
         onSubmit={(e) => {
@@ -64,6 +66,6 @@ export const FilterComponent = () => {
         </InputGroup>
       </form>
       <FilterModal {...filterModal} />
-    </>
+    </HStack>
   )
 }
