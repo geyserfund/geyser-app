@@ -28,8 +28,7 @@ export const EnableFiatContributions = ({
         </Body>
         {isIdentityVerified ? (
           <HStack>
-            <VerifiedBadge />
-            <Body size="sm" color="primary1.9">
+            <Body size="lg" color="primary1.9" medium>
               {t('Enabled')}
             </Body>
           </HStack>
