@@ -157,6 +157,7 @@ export const AnimatedNavBar = ({
               ? {
                   border: '1px solid',
                   borderColor: disableColorMode ? lightModeColors.neutral1[7] : 'neutral1.7',
+                  backgroundColor: 'neutral1.6',
                 }
               : {})}
             isDisabled={item.isDisabled}

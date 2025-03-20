@@ -1,10 +1,8 @@
-import { Button, ButtonProps, HStack, Image, Switch, SwitchProps, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, Switch, SwitchProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
-import { VerifiedBadge } from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { DollarToBitcoinIllustrationUrl } from '@/shared/constants/index.ts'
 
 type EnableFiatContributionsProps = CardLayoutProps & {
   disableImage?: boolean
@@ -41,9 +39,6 @@ export const EnableFiatContributions = ({
         )}
       </HStack>
       <HStack flexDirection={{ base: 'column', lg: 'row' }} spacing={4}>
-        {!disableImage && (
-          <Image maxWidth={{ base: '100%', lg: '160px' }} borderRadius="4px" src={DollarToBitcoinIllustrationUrl} />
-        )}
         <VStack alignItems={'start'}>
           <Body size="sm" light>
             {t(
