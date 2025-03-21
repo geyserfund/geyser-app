@@ -1,6 +1,8 @@
 import { useDisclosure } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import { useProjectWalletAPI } from '@/modules/project/API/useProjectWalletAPI.ts'
 import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom'
 
 import { WalletConnectDetails } from '../../../../../shared/constants'
@@ -89,6 +91,7 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
   const { toast } = useNotification()
 
   const { project } = useProjectAtom()
+  const { queryProjectWalletConnectionDetails } = useProjectWalletAPI(true)
   const { wallet, walletConnectiondetails } = useWalletAtom()
 
   const projectWallet = useMemo(() => ({ ...wallet, ...walletConnectiondetails }), [wallet, walletConnectiondetails])
@@ -113,6 +116,10 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
     [WalletConnectDetails.NWCConnectionDetailsPrivate]: ConnectionOption.NWC,
     [WalletConnectDetails.LightningAddressConnectionDetails]: ConnectionOption.LIGHTNING_ADDRESS,
   }
+
+  useEffect(() => {
+    queryProjectWalletConnectionDetails.execute()
+  }, [])
 
   useEffect(() => {
     if (walletConnectiondetails?.connectionDetails.__typename) {
@@ -273,8 +280,8 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
 
     if (isEdit && !createWalletInput) {
       toast({
-        title: 'failed to create project wallet',
-        description: 'please provide valid wallet details',
+        title: t('failed to create project wallet'),
+        description: t('please provide valid wallet details'),
         status: 'error',
       })
       return

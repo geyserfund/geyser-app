@@ -5,7 +5,7 @@ import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/pro
 import { Body } from '@/shared/components/typography'
 import { toInt, useNotification } from '@/utils'
 
-import { ExternalAccountType } from '../../../../../../../../pages/auth'
+import { ExternalAccountType } from '../../../../../../../../modules/auth'
 import { SkeletonLayout } from '../../../../../../../../shared/components/layouts'
 import { useUserBadgesQuery } from '../../../../../../../../types'
 import { NostrBadges } from './NostrBadges'
@@ -24,8 +24,8 @@ export const BadgesBody = () => {
     variables: { input: { where: { userId: toInt(userProfile.id) } } },
     onError() {
       toast({
-        title: 'Error fetching badges',
-        description: 'Please refresh the page and try again.',
+        title: t('Error fetching badges'),
+        description: t('Please refresh the page and try again.'),
         status: 'error',
       })
     },

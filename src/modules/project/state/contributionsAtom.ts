@@ -1,16 +1,16 @@
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
-import { ProjectFundingTxFragment, ProjectLeaderboardContributorsFragment, ProjectLeaderboardPeriod } from 'types'
+import { ProjectContributionFragment, ProjectLeaderboardContributorsFragment, ProjectLeaderboardPeriod } from 'types'
 
 import { convertSatsToUsd } from '@/utils'
 
 /** Project contributions for project page contributions sorted by latest */
-export const contributionsAtom = atom<ProjectFundingTxFragment[]>([])
+export const contributionsAtom = atom<ProjectContributionFragment[]>([])
 
 /** Contribution list for Leaderboard page */
-export const contributionListAtom = atom<ProjectFundingTxFragment[]>([])
+export const contributionListAtom = atom<ProjectContributionFragment[]>([])
 
-export const addContributionAtom = atom(null, (get, set, contribution: ProjectFundingTxFragment) => {
+export const addContributionAtom = atom(null, (get, set, contribution: ProjectContributionFragment) => {
   set(contributionsAtom, [contribution, ...get(contributionsAtom)])
   set(contributionListAtom, [contribution, ...get(contributionListAtom)])
 })
@@ -25,12 +25,12 @@ export const ContributorsListFamily = atomFamily(
   (a, b) => a.period === b.period,
 )
 
-export const addContributorAtom = atom(null, (get, set, contributor: ProjectFundingTxFragment) => {
+export const addContributorAtom = atom(null, (get, set, contributor: ProjectContributionFragment) => {
   // Helper to update contributor stats and reorder list
   const updateContributorList = (
     contributors: ProjectLeaderboardContributorsFragment[],
     maxLength: number,
-    newContribution: ProjectFundingTxFragment,
+    newContribution: ProjectContributionFragment,
   ): ProjectLeaderboardContributorsFragment[] => {
     const existingContributorIndex = contributors.findIndex((c) => c.funderId === newContribution.funder.id)
 

@@ -1,7 +1,9 @@
-import { Avatar, Button, HStack } from '@chakra-ui/react'
+import { Button, HStack } from '@chakra-ui/react'
 import { NavLink } from 'react-router-dom'
 
-import { Body } from '@/shared/components/typography'
+import { UserVerifiedBadge } from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
+import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
+import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
 import { getExternalAccountsButtons } from '@/shared/utils/user/getExternalAccountsButtons'
 
 import { getPath } from '../../../../../../../../../shared/constants'
@@ -28,9 +30,12 @@ export const CreatorSocial = () => {
         size="sm"
         variant="soft"
         colorScheme="neutral1"
-        leftIcon={<Avatar p={0} h="16px" w="16px" src={user.imageUrl || ''} />}
+        leftIcon={<ProfileAvatar guardian={user.guardianType} src={`${user.imageUrl}`} h="16px" w="16px" />}
       >
-        <Body size="sm">{user.username}</Body>
+        <ProfileText name={user.username} guardian={user.guardianType} size="sm" bold dark>
+          {user.username}
+        </ProfileText>
+        <UserVerifiedBadge user={user} fontSize="16px" />
       </Button>
 
       {accountButtonProps.map(({ icon, props, key }) => {

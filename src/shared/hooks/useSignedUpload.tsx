@@ -1,4 +1,5 @@
 import { useLazyQuery } from '@apollo/client'
+import { t } from 'i18next'
 import { useCallback, useState } from 'react'
 
 import { getAppEndPoint } from '../../config/domain'
@@ -19,8 +20,8 @@ export const useSignedUpload = ({
 
   const failedToast = useCallback(() => {
     toast({
-      title: 'failed to upload image',
-      description: 'Please try again',
+      title: t('Failed to upload image'),
+      description: t('Please try again'),
       status: 'error',
     })
   }, [toast])

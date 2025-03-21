@@ -33,7 +33,7 @@ export const RewardByStatus = ({ status }: { status: OrdersGetStatus }) => {
     getRewardQueryProps: {
       onError(error) {
         toast({
-          title: 'Error fetching rewards',
+          title: t('Error fetching rewards'),
           status: 'error',
           description: `${error}`,
         })
@@ -41,11 +41,11 @@ export const RewardByStatus = ({ status }: { status: OrdersGetStatus }) => {
     },
     statusUpdateMutationProps: {
       onCompleted() {
-        toast({ title: 'Order status updated', status: 'success' })
+        toast({ title: t('Order status updated'), status: 'success' })
       },
       onError(error) {
         toast({
-          title: 'Error updating order status',
+          title: t('Error updating order status'),
           status: 'error',
           description: `${error}`,
         })

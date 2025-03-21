@@ -1,7 +1,6 @@
 import { gql } from '@apollo/client'
 
 import { FRAGMENT_USER_PROJECT_CONTRIBUTIONS } from '../fragments/contributionFragment'
-import { FRAGMENT_PROFILE_ORDER } from '../fragments/orderFragment'
 import { FRAGMENT_PROJECT_FOR_PROFILE_PAGE } from '../fragments/projectFragment'
 import { FRAGMENT_USER_FOR_PROFILE_PAGE } from '../fragments/userFragment'
 
@@ -41,7 +40,7 @@ export const QUERY_USER_CONTRIBUTIONS = gql`
   ${FRAGMENT_USER_PROJECT_CONTRIBUTIONS}
   query UserProfileContributions($where: UserGetInput!) {
     user(where: $where) {
-      contributions {
+      projectContributions {
         ...UserProjectContributions
       }
     }
@@ -73,17 +72,6 @@ export const QUERY_USER_HERO_STATS = gql`
           projectsCount
           rank
         }
-      }
-    }
-  }
-`
-
-export const QUERY_USER_PROFILE_ORDERS = gql`
-  ${FRAGMENT_PROFILE_ORDER}
-  query UserProfileOrders($where: UserGetInput!) {
-    user(where: $where) {
-      orders {
-        ...ProfileOrder
       }
     }
   }

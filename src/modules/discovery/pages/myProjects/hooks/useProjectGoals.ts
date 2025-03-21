@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useMemo, useState } from 'react'
 
@@ -38,7 +39,7 @@ export const useProjectGoals = (projectId: string) => {
     onError(error) {
       toast({
         status: 'error',
-        title: 'Failed to fetch project goals',
+        title: t('Failed to fetch project goals'),
         description: `${error.message}`,
       })
     },

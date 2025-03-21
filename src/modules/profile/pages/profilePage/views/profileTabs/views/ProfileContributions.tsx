@@ -12,6 +12,25 @@ import { ContributionSummary } from '../components/ContributionSummary'
 import { TabPanelSkeleton } from '../components/TabPanelSkeleton'
 import { useProfileContributionQuery } from '../hooks/useProfileContributionQuery'
 
+/** Helper function to get contribution date for sorting */
+const getContributionDate = (contribution: any) => {
+  const contributions =
+    contribution?.funder?.contributions && contribution?.funder?.contributions?.length > 0
+      ? contribution?.funder?.contributions
+      : []
+
+  return Number(contributions[0]?.confirmedAt || 0)
+}
+
+/** Sort contributions by date in descending order */
+const sortContributionsByDate = (contributions: any[]) => {
+  return [...contributions].sort((a, b) => {
+    const aDate = getContributionDate(a)
+    const bDate = getContributionDate(b)
+    return bDate - aDate
+  })
+}
+
 export const ProfileContributions = () => {
   const { t } = useTranslation()
 
@@ -29,14 +48,7 @@ export const ProfileContributions = () => {
 
   const downloadUrl = `${appEndpoint}/export/payments/user`
 
-  const contributionsSorted = [...contributions].sort((a, b) => {
-    const aFundingTxs = a?.funder?.fundingTxs && a?.funder?.fundingTxs?.length > 0 ? a?.funder?.fundingTxs : []
-    const bFundingTxs = b?.funder?.fundingTxs && b?.funder?.fundingTxs?.length > 0 ? b?.funder?.fundingTxs : []
-
-    const aDate = Number(aFundingTxs[0]?.paidAt || 0)
-    const bDate = Number(bFundingTxs[0]?.paidAt || 0)
-    return bDate - aDate
-  })
+  const contributionsSorted = sortContributionsByDate(contributions)
 
   return (
     <VStack w="full" alignItems={'start'} spacing={4}>

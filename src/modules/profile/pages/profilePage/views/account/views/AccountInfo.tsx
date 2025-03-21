@@ -28,11 +28,12 @@ import {
 } from '@/shared/utils/user/getExternalAccountsButtons'
 import { toInt, useNotification } from '@/utils'
 
-import { ConnectAccounts, ExternalAccountType } from '../../../../../../../pages/auth'
+import { ConnectAccounts, ExternalAccountType } from '../../../../../../../modules/auth'
 import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { userProfileAtom, useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 import { RemoveExternalAccountModal } from '../../../components/RemoveExternalAccountModal'
 import { useAccountUnlink } from '../hooks/useAccountUnlink'
+import { UserVerifiedBadge } from './badges/VerifiedBadge.tsx'
 import { UserBio } from './UserBio'
 
 export const AccountInfo = () => {
@@ -59,9 +60,13 @@ export const AccountInfo = () => {
           wrapperProps={{ padding: '3px' }}
         />
         <VStack w="full" h="full" alignItems="start" justifyContent={'center'} spacing={0}>
-          <H1 size="2xl" bold>
-            {userProfile.username}
-          </H1>
+          <HStack>
+            <H1 size="2xl" bold>
+              {userProfile.username}
+            </H1>
+            <UserVerifiedBadge user={userProfile} fontSize="2xl" />
+          </HStack>
+
           {userProfile.guardianType ? (
             <ProfileText name={userProfile.username} guardian={userProfile.guardianType} size="lg" />
           ) : (

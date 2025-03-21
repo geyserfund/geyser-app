@@ -43,7 +43,7 @@ export const HistoricalComponent = () => {
         }
       })
 
-      stats.current?.projectFundingTxs?.amountGraph?.map((amountData) => {
+      stats.current?.projectContributionsStats?.contributions.graph[0]?.graphData?.map((amountData) => {
         const name = getNameForDate(amountData?.dateTime || 0, selectionOption)
 
         const val = nameParam[name] || ({} as HistoryDataType)
@@ -52,7 +52,7 @@ export const HistoricalComponent = () => {
           ...val,
           name,
           dateTime: amountData?.dateTime || 0,
-          amount: amountData?.sum || 0,
+          amount: amountData?.value || 0,
         }
       })
 
@@ -64,8 +64,8 @@ export const HistoricalComponent = () => {
     },
     onError(error) {
       toast({
-        title: 'Error fetching project stats',
-        description: 'Please refresh the page and try again.',
+        title: t('Error fetching project stats'),
+        description: t('Please refresh the page and try again.'),
         status: 'error',
       })
     },

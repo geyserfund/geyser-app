@@ -9,7 +9,6 @@ import {
   PiPlugs,
   PiProjectorScreenChart,
   PiShapes,
-  PiUsersThree,
   PiWallet,
 } from 'react-icons/pi'
 
@@ -56,12 +55,6 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     icon: PiMegaphone,
   },
   {
-    label: 'Affiliates',
-    path: 'dashboardAffiliates',
-    type: DashboardType.features,
-    icon: PiUsersThree,
-  },
-  {
     label: 'Project Info',
     path: 'dashboardInfo',
     type: DashboardType.settings,
@@ -80,7 +73,7 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     icon: PiBookOpen,
   },
   {
-    label: 'Connect wallet',
+    label: 'Wallet',
     path: 'dashboardWallet',
     type: DashboardType.settings,
     icon: PiWallet,
@@ -104,12 +97,3 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     icon: PiGear,
   },
 ]
-
-// status: {
-//   label: 'Status',
-//   path: 'dashboardStatus',
-// },
-// rewards: {
-//   label: 'Currency Denominations',
-//   path: 'dashboardRewards',
-// },

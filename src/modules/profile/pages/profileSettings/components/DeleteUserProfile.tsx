@@ -26,7 +26,7 @@ export const DeleteUserProfile = () => {
     onError(error: ApolloError) {
       toast({
         status: 'error',
-        title: 'Failed to delete profile',
+        title: t('Failed to delete profile'),
         description: `${error?.message}`,
       })
     },

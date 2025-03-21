@@ -1,6 +1,7 @@
 import 'websocket-polyfill'
 
 import { useMutation } from '@apollo/client'
+import { t } from 'i18next'
 import { getEventHash, Relay, relayInit } from 'nostr-tools'
 import { Event } from 'nostr-tools'
 import { useEffect, useState } from 'react'
@@ -77,8 +78,8 @@ export const useNostrBadges = (pubKey: string) => {
   const handleErrorToast = () => {
     toast({
       status: 'error',
-      title: 'failed to claim the badge',
-      description: 'Please try again later.',
+      title: t('Failed to claim the badge'),
+      description: t('Please try again later.'),
     })
   }
 
@@ -138,8 +139,8 @@ export const useNostrBadges = (pubKey: string) => {
         setBadgeIds([...badgeIds, badgeId])
         toast({
           status: 'success',
-          title: 'Congratulations!',
-          description: 'You claimed the Geyser badge on Nostr.',
+          title: t('Congratulations!'),
+          description: t('You claimed the Geyser badge on Nostr.'),
         })
       })
       pub.on('failed', (reason: any) => {

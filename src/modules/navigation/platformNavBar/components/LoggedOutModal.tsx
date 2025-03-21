@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { useAuthModal } from '../../../../pages/auth/hooks'
+import { useAuthModal } from '../../../../modules/auth/hooks'
 
 export const LoggedOutModal = ({ isOpen, onClose }: UseModalProps) => {
   const { t } = useTranslation()

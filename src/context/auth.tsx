@@ -2,11 +2,18 @@ import { ApolloError } from '@apollo/client'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from 'react'
 
-import { getAuthEndPoint } from '../config/domain'
-import { authUserAtom, followedProjectsAtom, isUserAProjectCreatorAtom } from '../pages/auth/state/authAtom'
-import { useMeLazyQuery, useMeProjectFollowsLazyQuery, User, UserMeFragment } from '../types'
+import { authUserAtom, followedProjectsAtom, isUserAProjectCreatorAtom } from '@/modules/auth/state/authAtom'
 
-export const defaultUser: Omit<User, 'heroStats'> = {
+import { getAuthEndPoint } from '../config/domain'
+import {
+  useMeLazyQuery,
+  useMeProjectFollowsLazyQuery,
+  UserMeFragment,
+  UserVerificationLevel,
+  UserVerificationStatus,
+} from '../types'
+
+export const defaultUser: Omit<UserMeFragment, 'heroStats'> = {
   __typename: 'User',
   id: 0,
   email: '',
@@ -14,16 +21,37 @@ export const defaultUser: Omit<User, 'heroStats'> = {
   heroId: '',
   imageUrl: '',
   externalAccounts: [],
-  contributions: [],
   ownerOf: [],
-  entries: [],
-  fundingTxs: [],
-  projects: [],
-  projectFollows: [],
-  badges: [],
   isEmailVerified: false,
   hasSocialAccount: false,
-  posts: [],
+  complianceDetails: {
+    contributionLimits: {
+      monthly: {
+        limit: 0,
+        reached: false,
+        remaining: 0,
+      },
+    },
+    currentVerificationLevel: {
+      level: UserVerificationLevel.Level_0,
+      status: UserVerificationStatus.Verified,
+      verifiedAt: null,
+    },
+    verifiedDetails: {
+      email: {
+        verified: false,
+        verifiedAt: null,
+      },
+      identity: {
+        verified: false,
+        verifiedAt: null,
+      },
+      phoneNumber: {
+        verified: false,
+        verifiedAt: null,
+      },
+    },
+  },
 }
 
 const defaultContext: AuthContextProps = {

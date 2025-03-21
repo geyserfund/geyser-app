@@ -96,6 +96,7 @@ export const useProjectRewardForm = ({
   const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
     resolver: yupResolver(rewardFormSchema()),
     defaultValues: {
+      uuid: data?.getProjectReward?.uuid || '',
       name: data?.getProjectReward?.name || '',
       description: data?.getProjectReward?.description || '',
       shortDescription: data?.getProjectReward?.shortDescription || '',
@@ -116,9 +117,13 @@ export const useProjectRewardForm = ({
     mode: 'onChange',
   })
 
-  const { errors, isDirty, isValid } = formState
+  const { errors, isDirty, isValid, defaultValues } = formState
 
   const enableSubmit = isDirty && isValid
+
+  const formLoaded = rewardId
+    ? Boolean(!rewardLoading && data?.getProjectReward.uuid && defaultValues?.uuid === data?.getProjectReward.uuid)
+    : true
 
   // Fetch reward categories
   const { loading: isRewardCategoriesLoading, data: rewardCategoriesData } = useRewardCategoriesQuery()
@@ -132,6 +137,7 @@ export const useProjectRewardForm = ({
   useEffect(() => {
     if (isUpdate) {
       reset({
+        uuid: data?.getProjectReward?.uuid || '',
         name: data?.getProjectReward?.name || '',
         description: data?.getProjectReward?.description || '',
         shortDescription: data?.getProjectReward?.shortDescription || '',
@@ -332,6 +338,7 @@ export const useProjectRewardForm = ({
 
   return {
     control,
+    formLoaded,
     handleSubmit: handleSubmit(onSubmit),
     loading: createReward.loading || updateReward.loading,
     error: createReward.error || updateReward.error,

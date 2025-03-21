@@ -31,7 +31,7 @@ export const ProjectDashboardNostr = () => {
       }, 1000)
     } catch {
       toast({
-        title: 'failed to copy',
+        title: t('failed to copy'),
         status: 'error',
       })
     }

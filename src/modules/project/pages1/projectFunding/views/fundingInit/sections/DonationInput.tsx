@@ -26,7 +26,7 @@ export const DonationInput = () => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const {
-    formState: { donationAmount },
+    formState: { donationAmount, donationAmountUsdCent },
     setState,
   } = useFundingFormAtom()
 
@@ -35,10 +35,13 @@ export const DonationInput = () => {
     setState('donationAmount', val)
   }
 
+  const dollar = donationAmountUsdCent ? donationAmountUsdCent / 100 : 0
+  const setDollar = (val: number) => {
+    setState('donationAmountUsdCent', val * 100)
+  }
+
   const { isOpen: isSatoshi, onToggle } = useDisclosure({ defaultIsOpen: true })
   const isDollar = !isSatoshi
-
-  const [dollar, setDollar] = useState(Math.round(satoshi * btcRate))
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.replaceAll(',', '')

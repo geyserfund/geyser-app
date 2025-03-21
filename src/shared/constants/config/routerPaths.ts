@@ -14,6 +14,7 @@ export enum PathName {
   grantsRoundTwo = 'roundtwo',
   myProjects = 'my-projects',
   activity = 'activity',
+  products = 'products',
   activityGlobal = 'global',
   activityFollowed = 'followed',
 
@@ -58,6 +59,7 @@ export enum PathName {
   userSettingsGeneral = 'general',
   userSettingsNotifications = 'notifications',
   userSettingsSubscriptions = 'subscriptions',
+  userSettingsVerifications = 'verifications',
 
   heroProfile = 'hero',
   heroSettings = 'settings',
@@ -81,7 +83,6 @@ export enum PathName {
   dashboardSettings = 'settings',
   dashboardStatus = 'status',
   dashboardNostr = 'nostr',
-  dashboardAffiliates = 'affiliate',
   dashboardPromote = 'promote',
 
   projectFunding = 'funding',
@@ -93,10 +94,12 @@ export enum PathName {
   fundingPaymentLightning = 'lightning',
   fundingPaymentOnchain = 'onchain',
   fundingPaymentCard = 'card',
+  fundingPaymentFiatSwap = 'fiat-swap',
   fundingPaymentOnchainQR = 'qr',
   fundingPaymentOnchainProcessing = 'processing',
   fundingPaymentOnchainRefund = 'refund',
   fundingPaymentOnchainRefundInitiated = 'initiated',
+  fundingCallback = 'callback',
   fundingSuccess = 'success',
 
   badges = 'badges',
@@ -115,10 +118,6 @@ export enum PathName {
   legalPrivacy = 'Privacy',
 }
 
-// @TODO: These definitions are currently a WIP.
-// (Getting them started as part of the changes for
-// https://geyserteam.atlassian.net/browse/GT-207.)
-
 export const AboutGeyserOrigin = 'https://about.geyser.fund'
 
 const pathsMap = {
@@ -131,6 +130,7 @@ const pathsMap = {
   discoveryLanding: () => '/',
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,
   discoveryMyProjects: () => `/${PathName.myProjects}`,
+  discoveryProducts: () => `/${PathName.products}`,
   discoveryActivity: () => `/${PathName.activity}`,
   discoveryActivityGlobal: () => `/${PathName.activity}/${PathName.activityGlobal}`,
   discoveryActivityFollowed: () => `/${PathName.activity}/${PathName.activityFollowed}`,
@@ -207,8 +207,6 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardNotifications}`,
   dashboardSettings: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
-  dashboardAffiliates: (projectName: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardAffiliates}`,
   dashboardPromote: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardPromote}`,
 
@@ -232,6 +230,8 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentLightning}`,
   fundingPaymentCard: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentCard}`,
+  fundingPaymentFiatSwap: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentFiatSwap}`,
   fundingPaymentOnchain: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}`,
   fundingPaymentOnchainQR: (projectName: string) =>
@@ -242,6 +242,8 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainRefund}`,
   fundingPaymentOnchainRefundInitiated: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainRefund}/${PathName.fundingPaymentOnchainRefundInitiated}`,
+  fundingCallback: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingCallback}`,
   fundingSuccess: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingSuccess}`,
 
@@ -287,6 +289,8 @@ const pathsMap = {
     `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsNotifications}`,
   userProfileSettingsSubscriptions: (userId: string) =>
     `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsSubscriptions}`,
+  userProfileSettingsVerifications: (userId: string) =>
+    `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsVerifications}`,
 
   heroProfile: (heroId: string) => `/${PathName.heroProfile}/${heroId}`,
   heroProfileSettings: (heroId: string) => `/${PathName.heroProfile}/${heroId}/${PathName.heroSettings}`,

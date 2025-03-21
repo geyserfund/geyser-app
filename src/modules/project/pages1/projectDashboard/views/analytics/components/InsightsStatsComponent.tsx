@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -22,17 +23,24 @@ export const InsightsStatsComponent = () => {
   const [getProjectStatsInsight, { loading }] = useProjectStatsGetInsightLazyQuery({
     onCompleted(data) {
       const stats = data.projectStatsGet
-      const contributionSum = stats.current?.projectFundingTxs?.amountSum ?? 0
+
       const contributorsCount = stats.current?.projectFunders?.count ?? 0
-      const contributionCount = stats.current?.projectFundingTxs?.count ?? 0
+
+      const contributionSum = stats.current?.projectContributionsStats?.contributions.total ?? 0
+      const contributionCount = stats.current?.projectContributionsStats?.contributions.count ?? 0
+
       const rewardsPurchased = stats.current?.projectFunderRewards?.quantitySum ?? 0
+
       const viewCount = stats.current?.projectViews?.viewCount ?? 0
       const visitorCount = stats.current?.projectViews?.visitorCount ?? 0
 
-      const prevContributionSum = stats.prevTimeRange?.projectFundingTxs?.amountSum ?? 0
-      const prevContributionCount = stats.prevTimeRange?.projectFundingTxs?.count ?? 0
       const prevContributorsCount = stats.prevTimeRange?.projectFunders?.count ?? 0
+
+      const prevContributionSum = stats.prevTimeRange?.projectContributionsStats?.contributions.total ?? 0
+      const prevContributionCount = stats.prevTimeRange?.projectContributionsStats?.contributions.count ?? 0
+
       const prevRewardsPurchased = stats.prevTimeRange?.projectFunderRewards?.quantitySum ?? 0
+
       const prevViewCount = stats.prevTimeRange?.projectViews?.viewCount ?? 0
       const prevVisitorCount = stats.prevTimeRange?.projectViews?.visitorCount ?? 0
 
@@ -58,8 +66,8 @@ export const InsightsStatsComponent = () => {
     },
     onError() {
       toast({
-        title: 'Error fetching project stats',
-        description: 'Please refresh the page and try again.',
+        title: t('Error fetching project stats'),
+        description: t('Please refresh the page and try again.'),
         status: 'error',
       })
     },

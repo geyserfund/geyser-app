@@ -1,7 +1,7 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
-import { useAuthModal } from '../../../../pages/auth/hooks'
+import { useAuthModal } from '../../../../modules/auth/hooks'
 
 export const LoginButton = (props: ButtonProps) => {
   const { loginOnOpen } = useAuthModal()

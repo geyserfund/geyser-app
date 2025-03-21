@@ -2,13 +2,18 @@ import { ApolloError } from '@apollo/client'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
-import { FundingInput, FundMutation, useFundMutation } from '@/types'
+import { __development__ } from '@/shared/constants/index.ts'
+import { ContributionCreateInput, ContributionCreateMutation, useContributionCreateMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, useParseResponseToSwapAtom, useSetKeyPairAtom } from '../state'
-import { formattedFundingInputAtom, setFundingInputAfterRequestAtom } from '../state/fundingFormAtom'
-import { useFundingTxAtom } from '../state/fundingTxAtom'
+import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
+import {
+  formattedFundingInputAtom,
+  setFundingInputAfterRequestAtom,
+} from '../state/fundingContributionCreateInputAtom.ts'
+import { fundingPaymentDetailsPartialUpdateAtom } from '../state/fundingPaymentAtom.ts'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundingFormAtom } from './useFundingFormAtom'
@@ -32,7 +37,8 @@ export const useFundingAPI = () => {
   const setError = useSetAtom(fundingFlowErrorAtom)
   const setFundingRequestErrored = useSetAtom(fundingRequestErrorAtom)
 
-  const { updateFundingTx } = useFundingTxAtom()
+  const fundingContributionPartialUpdate = useSetAtom(fundingContributionPartialUpdateAtom)
+  const fundingPaymentDetailsPartialUpdate = useSetAtom(fundingPaymentDetailsPartialUpdateAtom)
 
   const parseResponseToSwap = useParseResponseToSwapAtom()
 
@@ -40,28 +46,37 @@ export const useFundingAPI = () => {
 
   const setKeyPair = useSetKeyPairAtom()
 
-  const [fundProject, requestFundingOptions] = useCustomMutation(useFundMutation, {
+  const [contributionCreate, requestFundingOptions] = useCustomMutation(useContributionCreateMutation, {
     onCompleted(data) {
       try {
         setError(undefined)
         setFundingRequestErrored(false)
 
-        if (!data.fund || !data.fund.fundingTx) {
+        if (!data.contributionCreate || !data.contributionCreate.contribution) {
           throw new Error('Undefined funding tx')
         }
 
-        updateFundingTx(data.fund.fundingTx)
-        if (data.fund?.swap?.json) {
-          parseResponseToSwap(data.fund.swap, {
+        fundingContributionPartialUpdate(data.contributionCreate.contribution)
+        fundingPaymentDetailsPartialUpdate({ ...data.contributionCreate.payments, fiatSwap: undefined })
+
+        if (data.contributionCreate.payments.onChainSwap?.swapJson) {
+          parseResponseToSwap(data.contributionCreate.payments.onChainSwap, {
             projectTitle: project?.title,
-            reference: data.fund.fundingTx.uuid,
-            bitcoinQuote: data.fund.fundingTx.bitcoinQuote,
-            datetime: data.fund.fundingTx.createdAt,
+            reference: data.contributionCreate.contribution.uuid,
+            bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
+            datetime: data.contributionCreate.contribution.createdAt,
           })
         }
 
-        if (hasBolt11 && hasWebLN && webln && !data.fund.fundingTx?.isSubscription) {
-          startWebLNFlow(data.fund.fundingTx).catch(() => {
+        if (
+          hasBolt11 &&
+          hasWebLN &&
+          webln &&
+          data.contributionCreate.payments.lightning &&
+          !data.contributionCreate.contribution.isSubscription &&
+          !__development__
+        ) {
+          startWebLNFlow(data.contributionCreate.payments.lightning).catch(() => {
             toast.error({
               title: 'Something went wrong',
               description: 'Please refresh the page and try again',
@@ -91,7 +106,7 @@ export const useFundingAPI = () => {
   })
 
   const requestFunding = useCallback(
-    async (input: FundingInput, onCompleted?: (data: FundMutation) => void) => {
+    async (input: ContributionCreateInput, onCompleted?: (data: ContributionCreateMutation) => void) => {
       const { isValid, error } = validateFundingInput(input)
 
       if (!isValid) {
@@ -105,17 +120,19 @@ export const useFundingAPI = () => {
       const keyPair = generatePrivatePublicKeyPair()
       setKeyPair(keyPair)
 
-      input.swapPublicKey = keyPair.publicKey.toString('hex')
+      if (input?.paymentsInput?.onChainSwap?.boltz) {
+        input.paymentsInput.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
+      }
 
       setFundingInputAfterRequest(input)
 
-      await fundProject({ variables: { input }, onCompleted })
+      await contributionCreate({ variables: { input }, onCompleted })
     },
-    [fundProject, toast, setKeyPair, setFundingInputAfterRequest],
+    [contributionCreate, toast, setKeyPair, setFundingInputAfterRequest],
   )
 
   const requestFundingFromContext = useCallback(
-    (onCompleted?: (data: FundMutation) => void) => requestFunding(formattedFundingInput, onCompleted),
+    (onCompleted?: (data: ContributionCreateMutation) => void) => requestFunding(formattedFundingInput, onCompleted),
     [requestFunding, formattedFundingInput],
   )
 
@@ -133,6 +150,5 @@ export const useFundingAPI = () => {
     requestFunding,
     requestFundingFromContext,
     retryFundingRequest,
-    // refetchFundingTx: refetch,
   }
 }

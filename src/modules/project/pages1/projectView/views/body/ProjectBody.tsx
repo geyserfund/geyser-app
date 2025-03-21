@@ -20,6 +20,7 @@ import {
   Rewards,
   Story,
 } from './sections'
+import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
 
 export const ProjectBody = () => {
   const { project, loading } = useProjectAtom()
@@ -36,8 +37,6 @@ export const ProjectBody = () => {
     }
   }, [project?.status, location.pathname, navigate, project?.name, loading])
 
-  // const projectDetails = useProjectDetails(project)
-
   return (
     <Stack w="full" spacing={dimensions.project.rightSideNav.gap} direction={{ base: 'column', lg: 'row' }}>
       <VStack
@@ -48,6 +47,8 @@ export const ProjectBody = () => {
         paddingBottom={{ base: 24, lg: 10 }}
       >
         <FinalizeProjectNotice />
+        <CreatorVerificationNotice />
+
         <Header />
         <CreatorTools />
         <Story />

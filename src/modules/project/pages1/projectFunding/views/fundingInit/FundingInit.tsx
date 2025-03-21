@@ -1,10 +1,13 @@
+import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { FundingResourceType } from '@/types'
+import { useNotification } from '@/utils/index.ts'
 
 import { FundingLayout } from '../../layouts/FundingLayout'
 import { DonationInput } from './sections/DonationInput'
@@ -16,6 +19,8 @@ import { FundingSubscription } from './sections/FundingSubscription'
 export const FundingInit = () => {
   const { setResource } = useFundingFormAtom()
   const { loading } = useProjectAtom()
+  const hasFundingLimitReached = useAtomValue(hasProjectFundingLimitReachedAtom)
+  const toast = useNotification()
 
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
@@ -28,6 +33,18 @@ export const FundingInit = () => {
       navigate({ pathname: location.pathname, search: location.search }, { state: null, replace: true })
     }
   }, [location, setResource, navigate])
+
+  useEffect(() => {
+    if (hasFundingLimitReached) {
+      navigate(-1)
+      setTimeout(() => {
+        toast.error({
+          title: 'This project has reached its Funding limit',
+          description: 'Please try again, once the creator has removed the funding limits.',
+        })
+      }, 1000)
+    }
+  }, [hasFundingLimitReached, navigate, toast])
 
   if (loading) {
     return null

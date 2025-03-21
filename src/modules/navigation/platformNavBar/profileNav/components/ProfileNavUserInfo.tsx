@@ -2,8 +2,8 @@ import { Avatar, Button, HStack, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
-import { ExternalAccountType } from '@/pages/auth'
-import { loginMethodAtom } from '@/pages/auth/state'
+import { ExternalAccountType } from '@/modules/auth'
+import { loginMethodAtom } from '@/modules/auth/state'
 import { ProfileText } from '@/shared/components/display/ProfileText'
 import { Body } from '@/shared/components/typography'
 import { externalAccountIconMap } from '@/shared/constants/platform/externalAccountIcons'
@@ -23,7 +23,7 @@ export const ProfileNavUserInfo = ({ user }: { user: UserMeFragment }) => {
           <Body w="full" fontSize="xl" lineHeight="1.2" bold isTruncated>
             {user.username}
           </Body>
-          {user.guardianType && <ProfileText size="sm" guardian={user.guardianType} />}
+          {user.guardianType && <ProfileText size="sm" name={user.username} guardian={user.guardianType} />}
         </VStack>
       </HStack>
       {loginMethod && (

@@ -1,19 +1,20 @@
 import { Button, IconButton, Input, InputGroup, InputRightElement, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { PiCopy, PiPaperPlaneTilt } from 'react-icons/pi'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useFundingTxAtom } from '@/modules/project/funding/state'
+import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
 import { Body } from '@/shared/components/typography'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 
 export const SendEmailToCreator = () => {
-  const { fundingTx } = useFundingTxAtom()
+  const fundingContribution = useAtomValue(fundingContributionAtom)
   const { hasSelectedRewards } = useFundingFormAtom()
 
-  const { hasCopied, onCopy } = useCopyToClipboard(fundingTx.creatorEmail || '')
+  const { hasCopied, onCopy } = useCopyToClipboard(fundingContribution.creatorEmail || '')
 
-  if (!fundingTx.creatorEmail || !hasSelectedRewards) {
+  if (!fundingContribution.creatorEmail || !hasSelectedRewards) {
     return null
   }
 
@@ -22,7 +23,7 @@ export const SendEmailToCreator = () => {
       <Stack direction={{ base: 'column', lg: 'row' }} w="full">
         <VStack flex={1} spacing={1}>
           <InputGroup>
-            <Input value={fundingTx.creatorEmail} isDisabled _disabled={{ color: 'neutral1.12' }} />
+            <Input value={fundingContribution.creatorEmail} isDisabled _disabled={{ color: 'neutral1.12' }} />
             <InputRightElement>
               <IconButton
                 variant="soft"

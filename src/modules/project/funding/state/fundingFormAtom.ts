@@ -1,34 +1,25 @@
 import { atom } from 'jotai'
 
-import { authUserAtom } from '@/pages/auth/state'
 import { SATOSHIS_IN_BTC } from '@/shared/constants'
 import { usdRateAtom } from '@/shared/state/btcRateAtom'
 import {
-  FundingInput,
   FundingResourceType,
-  OrderItemInput,
-  OrderItemType,
   ProjectPageWalletFragment,
   ProjectRewardFragment,
   ProjectSubscriptionPlansFragment,
-  QuoteCurrency,
   RewardCurrency,
   ShippingDestination,
   SubscriptionCurrencyType,
-  UserMeFragment,
   UserSubscriptionInterval,
 } from '@/types'
 import { centsToDollars, commaFormatted, isProjectAnException, toInt, validateEmail } from '@/utils'
 
-import { projectAffiliateAtom } from '../../pages1/projectView/state/affiliateAtom'
-import { projectHeroAtom } from '../../pages1/projectView/state/heroAtom'
 import { projectAtom, ProjectState } from '../../state/projectAtom'
 import { rewardsAtom } from '../../state/rewardsAtom'
 import { subscriptionsAtom } from '../../state/subscriptionAtom'
 import { walletAtom } from '../../state/walletAtom'
-import { getRefIdFromProjectAffiliates } from '../hooks/useProjectAffiliateWithProjectName'
-import { getHeroIdFromProjectHeroes } from '../hooks/useProjectHeroWithProjectName'
-import { fundingTxAtom, selectedGoalIdAtom } from './fundingTxAtom'
+import { fundingInputAfterRequestAtom } from './fundingContributionCreateInputAtom.ts'
+import { fundingPaymentDetailsAtom } from './fundingPaymentAtom.ts'
 
 export type FundingProject = Pick<
   ProjectState,
@@ -48,9 +39,13 @@ export type FundingProjectState = FundingProject & {
 
 export type FundFormType = {
   donationAmount: number
+  donationAmountUsdCent: number
   rewardsCost: number
+  rewardsCostInSatoshi: number
+  rewardsCostInUsdCent: number
   shippingCost: number
   totalAmount: number
+  totalAmountUsdCent: number
   email: string
   media: string
   comment: string
@@ -74,9 +69,13 @@ export type FundFormType = {
 
 const initialState: FundFormType = {
   donationAmount: 0,
+  donationAmountUsdCent: 0,
   rewardsCost: 0,
+  rewardsCostInSatoshi: 0,
+  rewardsCostInUsdCent: 0,
   shippingCost: 0,
   totalAmount: 0,
+  totalAmountUsdCent: 0,
   comment: '',
   privateComment: '',
   email: '',
@@ -151,7 +150,16 @@ export const setFundFormStateAtom = atom(null, (get, set, name: string, value: a
     set(fundingFormStateAtom, (current) => ({
       ...current,
       donationAmount: value,
-      totalAmount: value + current.rewardsCost + current.shippingCost,
+      totalAmount: value + current.rewardsCostInSatoshi + current.shippingCost,
+    }))
+    return
+  }
+
+  if (name === 'donationAmountUsdCent') {
+    set(fundingFormStateAtom, (current) => ({
+      ...current,
+      donationAmountUsdCent: value,
+      totalAmountUsdCent: value + current.rewardsCostInUsdCent + current.shippingCost,
     }))
     return
   }
@@ -228,6 +236,7 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
     let rewardsCost = 0
     let rewardsCostInSatoshi = 0
     let needsShipping = false
+    let rewardsCostInUsdCent = 0
 
     if (rewards) {
       Object.keys(newRewardsCountInfo).forEach((rewardID: string) => {
@@ -250,8 +259,10 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
           rewardsCost += cost * rewardMultiplier
 
           if (project.rewardCurrency === RewardCurrency.Btcsat) {
-            rewardsCostInSatoshi += cost * rewardMultiplier
+            rewardsCostInSatoshi += rewardsCost
+            rewardsCostInUsdCent += Math.round((centsToDollars(cost) / usdRate) * rewardMultiplier)
           } else {
+            rewardsCostInUsdCent = rewardsCost
             rewardsCostInSatoshi += Math.round((centsToDollars(cost) / usdRate) * rewardMultiplier * SATOSHIS_IN_BTC)
           }
         }
@@ -263,7 +274,10 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
       rewardsByIDAndCount: newRewardsCountInfo,
       rewardsCost,
       needsShipping,
+      rewardsCostInSatoshi,
+      rewardsCostInUsdCent,
       totalAmount: rewardsCostInSatoshi + current.donationAmount + current.shippingCost,
+      totalAmountUsdCent: rewardsCostInUsdCent + current.donationAmountUsdCent + current.shippingCost,
     }
   })
 
@@ -299,10 +313,6 @@ export const updateFundingFormSubscriptionAtom = atom(null, (get, set, { id }: {
         }
       }
 
-      console.log('subscriptionCostInSatoshi', subscriptionCostInSatoshi)
-      console.log('subscriptionCost', subscriptionCost)
-      console.log('id', id)
-
       return {
         ...current,
         subscription: {
@@ -324,14 +334,10 @@ export const updateFundingFormSubscriptionAtom = atom(null, (get, set, { id }: {
 export const fundingOnchainAmountWarningAtom = atom((get) => {
   const formState = get(fundingFormStateAtom)
   const fundingProjectState = get(fundingProjectAtom)
-  const fundingTx = get(fundingTxAtom)
+  const fundingPaymentDetails = get(fundingPaymentDetailsAtom)
 
   const { totalAmount } = formState
   const walletLimits = fundingProjectState.wallet?.limits?.contribution
-
-  if (!fundingTx.address) {
-    return `Something went wrong with the onChain payment, please try using Lightning or try again`
-  }
 
   if (totalAmount && walletLimits) {
     const { onChain } = walletLimits
@@ -350,6 +356,40 @@ export const fundingOnchainAmountWarningAtom = atom((get) => {
       return `The amount you are trying to send is too low for on-chain payments. Only payments over ${commaFormatted(
         onChain.min,
       )} sats can be sent on-chain.`
+    }
+  }
+
+  if (!fundingPaymentDetails.onChainSwap?.address) {
+    return `Something went wrong with the onChain payment, please try using Lightning or try again`
+  }
+
+  return ''
+})
+
+const BANXA_MAX_AMOUNT_CENT = 1500000 // 15,000 USD in cents
+const BANXA_MIN_AMOUNT_CENT = 3000 //   30 USD in cents
+
+/** Check if the  funding Amount is enough for fiat swap payments */
+export const fundingFiatSwapAmountWarningAtom = atom((get) => {
+  const formState = get(fundingFormStateAtom)
+
+  const { totalAmountUsdCent } = formState
+
+  if (totalAmountUsdCent) {
+    if (!totalAmountUsdCent) {
+      return ''
+    }
+
+    if (totalAmountUsdCent > BANXA_MAX_AMOUNT_CENT) {
+      return `The amount you are trying to send is too high for fiat payments. Only payments below $${commaFormatted(
+        15000,
+      )} can be sent via fiat.`
+    }
+
+    if (totalAmountUsdCent < BANXA_MIN_AMOUNT_CENT) {
+      return `The amount you are trying to send is too low for fiat payments. Only payments over $${commaFormatted(
+        30,
+      )} can be sent via fiat.`
     }
   }
 
@@ -449,97 +489,6 @@ export const isFundingUserInfoValidAtom = atom((get) => {
   }
 
   return { title: '', description: '', error: '', valid: true }
-})
-
-/** Formatted Funding Input data, for Fund Mutation */
-export const formattedFundingInputAtom = atom((get) => {
-  const formState = get(fundingFormStateAtom)
-  const fundingProject = get(fundingProjectAtom)
-  const hasSelectedRewards = get(fundingFormHasRewardsAtom)
-  const user = get(authUserAtom)
-  const usdRate = get(usdRateAtom)
-  const projectGoalId = get(selectedGoalIdAtom)
-  const affiliates = get(projectAffiliateAtom)
-  const affiliateId = getRefIdFromProjectAffiliates(affiliates, fundingProject?.name)
-  const projectHeroes = get(projectHeroAtom)
-  const heroId = getHeroIdFromProjectHeroes(projectHeroes, fundingProject?.name)
-
-  const {
-    donationAmount,
-    rewardsByIDAndCount,
-    email,
-    comment,
-    media,
-    privateComment,
-    followProject,
-    subscribeToGeyserEmails,
-    subscription,
-  } = formState
-
-  const anonymous = !user || !user.id
-
-  const orderItemInputs: OrderItemInput[] = []
-  if (hasSelectedRewards && rewardsByIDAndCount) {
-    Object.keys(rewardsByIDAndCount).map((key) => {
-      const rewardQuantity = rewardsByIDAndCount[key as keyof ProjectRewardFragment]
-      if (rewardQuantity && rewardQuantity > 0) {
-        orderItemInputs.push({
-          itemId: toInt(key),
-          itemType: OrderItemType.ProjectReward,
-          quantity: rewardQuantity,
-        })
-      }
-    })
-  }
-
-  if (subscription && subscription.cost) {
-    orderItemInputs.push({
-      itemId: toInt(subscription.subscriptionId),
-      itemType: OrderItemType.ProjectSubscriptionPlan,
-      quantity: 1,
-    })
-  }
-
-  const input: FundingInput = {
-    projectId: toInt(fundingProject?.id),
-    anonymous,
-    donationAmount: toInt(donationAmount),
-    metadataInput: {
-      ...(email && { email }),
-      ...(media && { media }),
-      ...(comment && { comment }),
-      ...(privateComment && { privateComment }),
-      ...(followProject && { followProject }),
-      ...(subscribeToGeyserEmails && { subscribeToGeyserEmails }),
-    },
-    orderInput: {
-      bitcoinQuote: {
-        quote: usdRate,
-        quoteCurrency: QuoteCurrency.Usd,
-      },
-      items: orderItemInputs,
-    },
-    sourceResourceInput: {
-      resourceId: formState.resourceId ? toInt(formState.resourceId) : toInt(fundingProject?.id),
-      resourceType: formState.resourceType || FundingResourceType.Project,
-    },
-    projectGoalId,
-    affiliateId,
-    ambassadorHeroId: heroId,
-    stripeCheckoutSessionInput: {
-      returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
-    },
-  }
-
-  return input
-})
-
-/** Funding Input after request */
-export const fundingInputAfterRequestAtom = atom<(FundingInput & { user: UserMeFragment }) | null>(null)
-
-export const setFundingInputAfterRequestAtom = atom(null, (get, set, input: FundingInput) => {
-  const user = get(authUserAtom)
-  set(fundingInputAfterRequestAtom, { ...input, user })
 })
 
 /** Reset Funding Form */

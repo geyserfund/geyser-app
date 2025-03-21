@@ -2,6 +2,8 @@ import { ComponentStyleConfig, StyleFunctionProps } from '@chakra-ui/react'
 
 import { darkModeColors, fonts, lightModeColors } from '../../../shared/styles'
 
+const darkStyleColorSchemes = ['primary1', 'warning', 'amber', 'orange']
+
 export const buttonTheme: ComponentStyleConfig = {
   // style object for base or default style
   baseStyle: {
@@ -20,6 +22,7 @@ export const buttonTheme: ComponentStyleConfig = {
     xs: {
       height: '20px',
       minWidth: '20px',
+      minW: '20px',
       paddingX: '4px',
       borderRadius: '5px',
       fontSize: '12px',
@@ -61,7 +64,7 @@ export const buttonTheme: ComponentStyleConfig = {
   variants: {
     solid: ({ colorScheme = 'primary1' }: StyleFunctionProps) => ({
       backgroundColor: `${colorScheme}.9`,
-      color: colorScheme === 'primary1' ? 'utils.blackContrast' : 'utils.whiteContrast',
+      color: darkStyleColorSchemes.includes(colorScheme) ? 'utils.blackContrast' : 'utils.whiteContrast',
       _hover: {
         backgroundColor: `${colorScheme}.10`,
       },

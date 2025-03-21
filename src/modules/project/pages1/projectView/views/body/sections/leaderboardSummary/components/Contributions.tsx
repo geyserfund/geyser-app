@@ -7,7 +7,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { contributionsAtom } from '@/modules/project/state/contributionsAtom'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
-import { OrderByOptions, useProjectPageFundingTxQuery } from '@/types'
+import { OrderByOptions, useProjectPageContributionsGetQuery } from '@/types'
 
 import {
   ContributionItem,
@@ -22,7 +22,7 @@ export const Contributions = () => {
 
   const [contributions, setContributions] = useAtom(contributionsAtom)
 
-  const { loading } = useProjectPageFundingTxQuery({
+  const { loading } = useProjectPageContributionsGetQuery({
     skip: !project.id,
     fetchPolicy: 'network-only',
     variables: {
@@ -39,8 +39,8 @@ export const Contributions = () => {
       },
     },
     onCompleted(data) {
-      if (data && data.fundingTxsGet?.fundingTxs) {
-        setContributions(data.fundingTxsGet?.fundingTxs)
+      if (data && data.contributionsGet?.contributions) {
+        setContributions(data.contributionsGet.contributions)
       }
     },
   })

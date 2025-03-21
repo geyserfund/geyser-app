@@ -115,11 +115,8 @@ export const ProjectDashboardDetails = () => {
             subCategory={project?.subCategory}
             updateProject={updateProject}
           />
-
           <ProjectRegion location={project?.location} updateProject={updateProject} />
-
           <ProjectLinks links={(project?.links as string[]) || []} setLinks={setLinks} linkError={linkError} />
-
           <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
         </VStack>
         <ProjectUnsavedModal {...unsavedModal} />

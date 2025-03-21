@@ -1,5 +1,4 @@
 export * from './fundingCalculation'
-export * from './getAvatarMetadata'
 export * from './getProjectShippingStatusBackgroundColor'
 export * from './ScrollInvoke'
 export * from './useBTCConverter'

@@ -20,6 +20,10 @@ export const FeaturedGrantCard = ({ grantId, showMini, startAnimating, ...rest }
   const { grant, loading } = useGrant(grantId)
 
   if (loading || !grant) {
+    if (showMini) {
+      return null
+    }
+
     return <FeaturedCardSkeleton />
   }
 

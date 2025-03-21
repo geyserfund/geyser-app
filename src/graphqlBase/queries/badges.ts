@@ -29,7 +29,7 @@ export const QUERY_USER_BADGES = gql`
       updatedAt
       status
       id
-      fundingTxId
+      contributionId
       createdAt
       badgeAwardEventId
     }

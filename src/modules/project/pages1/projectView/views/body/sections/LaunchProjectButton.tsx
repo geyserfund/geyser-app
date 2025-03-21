@@ -40,7 +40,7 @@ export const LaunchProjectButton = () => {
       })
     } catch (error) {
       toast({
-        title: 'Something went wrong',
+        title: t('Something went wrong'),
         description: `${error}`,
         status: 'error',
       })

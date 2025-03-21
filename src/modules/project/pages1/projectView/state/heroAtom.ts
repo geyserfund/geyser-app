@@ -18,20 +18,20 @@ export const addProjectHeroAtom = atom(null, (get, set, hero: Omit<ProjectHeroAt
   const isExist = allProjectHeroes.some((r) => r.projectName === hero.projectName)
   const dateTime = DateTime.now().toMillis()
 
-  const currentProjectAffiliate = { ...hero, dateTime }
+  const currentProjectHero = { ...hero, dateTime }
 
   let newProjectHero = [] as ProjectHeroAtomType[]
 
   if (isExist) {
     newProjectHero = allProjectHeroes.map((r) => {
       if (r.projectName === hero.projectName) {
-        return currentProjectAffiliate
+        return currentProjectHero
       }
 
       return r
     })
   } else {
-    newProjectHero = [...allProjectHeroes, currentProjectAffiliate]
+    newProjectHero = [...allProjectHeroes, currentProjectHero]
   }
 
   set(projectHeroAtom, newProjectHero)

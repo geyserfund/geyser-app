@@ -105,7 +105,7 @@ export const RewardTable = ({
         header: t('Email'),
         key: 'email',
         value(order: OrderFragment) {
-          return order.fundingTx.email || ''
+          return order.contribution?.email || ''
         },
         colSpan: 3,
       },
@@ -165,12 +165,12 @@ export const RewardTable = ({
         render(order: OrderFragment) {
           return (
             <>
-              {order.fundingTx.privateComment && (
+              {order.contribution?.privateComment && (
                 <VStack alignItems="flex-start" spacing="0px" w="100%">
                   <Body size="xs" medium>
                     {t('Private message')}:
                   </Body>
-                  <Body size="xs">{order.fundingTx.privateComment}</Body>
+                  <Body size="xs">{order.contribution?.privateComment}</Body>
                 </VStack>
               )}
             </>
@@ -193,7 +193,7 @@ export const RewardTable = ({
                 {t('Reference code')}:
               </Body>
               <Body size="xs" medium light>
-                {order.fundingTx.uuid}
+                {order.contribution.uuid}
               </Body>
             </HStack>
           )
@@ -205,7 +205,7 @@ export const RewardTable = ({
         key: 'total',
         isAccordion: true,
         render(order: OrderFragment) {
-          return <OrderAmounts amount={order.totalInSats} quote={order.fundingTx.bitcoinQuote?.quote} />
+          return <OrderAmounts amount={order.totalInSats} quote={order.contribution.bitcoinQuote?.quote} />
         },
       },
     ],

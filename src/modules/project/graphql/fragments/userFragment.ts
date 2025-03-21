@@ -6,12 +6,29 @@ export const FRAGMENT_PROJECT_PAGE_CREATOR = gql`
     imageUrl
     username
     email
+    guardianType
     externalAccounts {
       accountType
       externalUsername
       externalId
       id
       public
+    }
+    complianceDetails {
+      verifiedDetails {
+        email {
+          verified
+          verifiedAt
+        }
+        identity {
+          verified
+          verifiedAt
+        }
+        phoneNumber {
+          verified
+          verifiedAt
+        }
+      }
     }
   }
 `

@@ -22,8 +22,8 @@ export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
     if (!tweetId) {
       toast({
         status: 'error',
-        title: 'Invalid tweet URL',
-        description: 'Please try again',
+        title: t('Invalid tweet URL'),
+        description: t('Please try again'),
       })
       return
     }
@@ -44,8 +44,8 @@ export const TweetCommand = ({ isDisabled }: { isDisabled?: boolean }) => {
     } catch {
       toast({
         status: 'error',
-        title: 'Failed to insert tweet',
-        description: 'Please try again',
+        title: t('Failed to insert tweet'),
+        description: t('Please try again'),
       })
     }
 

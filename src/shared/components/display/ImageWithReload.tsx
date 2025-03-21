@@ -1,4 +1,5 @@
 import { Image, ImageProps, Skeleton } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
 
 import { useNotification } from '../../../utils'
@@ -44,8 +45,8 @@ export const ImageWithReload = ({ src = '', showError, defaultImage, empty, ...r
       componentRef.current = 0
       if (showError) {
         toast({
-          title: 'failed to load image',
-          description: 'Please try again',
+          title: t('Failed to load image'),
+          description: t('Please try again'),
           status: 'error',
         })
       }

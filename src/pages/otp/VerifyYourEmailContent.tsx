@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
 import Loader from '@/components/ui/Loader'
@@ -35,8 +36,8 @@ export const VerifyYourEmailContent = ({
     onError() {
       toast({
         status: 'error',
-        title: 'Failed to generate OTP.',
-        description: 'Please try again',
+        title: t('Failed to generate OTP.'),
+        description: t('Please try again'),
       })
     },
     onCompleted(data) {

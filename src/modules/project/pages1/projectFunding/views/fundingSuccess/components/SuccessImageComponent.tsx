@@ -1,15 +1,16 @@
 import { Avatar, Button, HStack, IconButton, Link, Tooltip, useClipboard, VStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 
 import { AnonymousAvatar } from '@/components/ui/AnonymousAvatar'
 import { useAuthContext } from '@/context'
 import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
-import { useFundingFlowAtom } from '@/modules/project/funding/hooks/useFundingFlowAtom'
+import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
-import { useAuthModal } from '@/pages/auth/hooks'
+import { useAuthModal } from '@/modules/auth/hooks'
 import { Body, H3 } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom'
@@ -22,7 +23,7 @@ export const SuccessImageComponent = () => {
   const { loginOnOpen } = useAuthModal()
   const { user: loggedInUser, isLoggedIn } = useAuthContext()
 
-  const { fundingInputAfterRequest } = useFundingFlowAtom()
+  const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
 
   const user = loggedInUser || fundingInputAfterRequest?.user
   const heroId = user?.heroId

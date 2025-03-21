@@ -1,7 +1,8 @@
 import { useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
-import { onChainRefundDownloadedAtom } from '../../pages1/projectFunding/views/fundingPayment/views/paymentOnchain/states'
+import { resetFiatSwapStatusAtom } from '../../pages1/projectFunding/views/fundingPayment/views/paymentFiatSwap/fiatSwapStatus.ts'
+import { onChainRefundDownloadedAtom } from '../../pages1/projectFunding/views/fundingPayment/views/paymentOnchain/states/onChainStatus.ts'
 import {
   currentSwapIdAtom,
   fundingFlowErrorAtom,
@@ -9,13 +10,15 @@ import {
   invoiceRefreshErrorAtom,
   selectedGoalIdAtom,
   useClearRefundedSwapData,
-  useFundingTxAtom,
   weblnErrorAtom,
 } from '../state'
-import { useFundPollingAndSubscriptionAtom } from '../state/pollingFundingTx'
+import { resetFundingContributionAtom } from '../state/fundingContributionAtom.ts'
+import { resetFundingPaymentDetailsAtom } from '../state/fundingPaymentAtom.ts'
+import { stopPollingAndSubscriptionAtom } from '../state/pollingAndSubscriptionAtom'
 
 export const useResetFundingFlow = () => {
-  const { resetFundingTx } = useFundingTxAtom()
+  const resetFundingContribution = useSetAtom(resetFundingContributionAtom)
+  const resetFundingPaymentDetails = useSetAtom(resetFundingPaymentDetailsAtom)
 
   const setProjectGoalId = useSetAtom(selectedGoalIdAtom)
 
@@ -30,7 +33,9 @@ export const useResetFundingFlow = () => {
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
   const clearRefundedSwapData = useClearRefundedSwapData()
 
-  const { clearPollingAndSubscription } = useFundPollingAndSubscriptionAtom()
+  const stopPollingAndSubscription = useSetAtom(stopPollingAndSubscriptionAtom)
+
+  const resetFiatSwapStatus = useSetAtom(resetFiatSwapStatusAtom)
 
   const resetFundingFlow = useCallback(() => {
     setFundingRequestErrored(false)
@@ -40,25 +45,29 @@ export const useResetFundingFlow = () => {
 
     setOnChainDownloaded(false)
 
-    resetFundingTx()
+    resetFundingContribution()
+    resetFundingPaymentDetails()
 
     setCurrentSwapId('')
 
     clearRefundedSwapData()
-    clearPollingAndSubscription()
+    stopPollingAndSubscription()
 
     setProjectGoalId(null)
+    resetFiatSwapStatus()
   }, [
     setFundingRequestErrored,
     setInvoiceRefreshErrored,
     setError,
     setWebLNErrored,
     setOnChainDownloaded,
-    resetFundingTx,
+    resetFundingContribution,
+    resetFundingPaymentDetails,
     setCurrentSwapId,
     clearRefundedSwapData,
-    clearPollingAndSubscription,
+    stopPollingAndSubscription,
     setProjectGoalId,
+    resetFiatSwapStatus,
   ])
 
   return resetFundingFlow

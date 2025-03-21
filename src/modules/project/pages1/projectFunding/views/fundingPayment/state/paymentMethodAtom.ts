@@ -1,7 +1,8 @@
-import { atom, useAtomValue } from 'jotai'
+import { atom } from 'jotai'
 
 import {
   projectFundingPaymentCardRoutes,
+  projectFundingPaymentFiatSwapRoutes,
   projectFundingPaymentLightingRoutes,
   projectFundingPaymentOnchainRoutes,
   projectFundingPaymentOnchainStartedRoutes,
@@ -13,6 +14,7 @@ export enum PaymentMethods {
   lightning = 'LIGHTNING',
   onChain = 'ONCHAIN',
   card = 'CARD',
+  fiatSwap = 'FIAT_SWAP',
 }
 
 export const paymentMethodAtom = atom((get) => {
@@ -28,12 +30,17 @@ export const paymentMethodAtom = atom((get) => {
     return PaymentMethods.card
   }
 
+  if (get(isFiatSwapMethodAtom)) {
+    return PaymentMethods.fiatSwap
+  }
+
   return undefined
 })
 
 export const isLightingMethodAtom = atom(routeMatchForAtom(projectFundingPaymentLightingRoutes))
 export const isCardMethodAtom = atom(routeMatchForAtom(projectFundingPaymentCardRoutes))
 export const isOnchainMethodAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainRoutes))
+export const isFiatSwapMethodAtom = atom(routeMatchForAtom(projectFundingPaymentFiatSwapRoutes))
 
 export const isOnchainMethodStartedAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainStartedRoutes))
 
@@ -46,5 +53,3 @@ export const hasStripePaymentMethodAtom = atom((get) => {
 
   return false
 })
-
-export const useIsLightingMethodAtom = () => useAtomValue(isLightingMethodAtom)
