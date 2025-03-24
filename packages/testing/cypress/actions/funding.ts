@@ -1,5 +1,11 @@
 export const clickContribute = () => {
-  cy.get('button').contains('Contribute').click()
+  cy.get('button')
+    .contains('Contribute')
+    .should('be.visible')
+    .should('not.be.disabled')
+    .should('not.have.attr', 'aria-disabled', 'true')
+
+  cy.get('button').contains('Contribute').realClick()
 }
 
 export const selectRewardAndHitCheckout = () => {
@@ -29,13 +35,25 @@ export const clickOnchainQrTab = () => {
 }
 
 export const clickCopyOnChainButton = () => {
-  cy.get('#copy-onchain-address-button').realClick()
-  cy.get('#copy-onchain-address-button').realClick()
+  // First ensure the button exists
+  cy.get('#copy-onchain-address-button').should('exist')
+
+  // Scroll the button into view before checking visibility
+  cy.get('#copy-onchain-address-button').scrollIntoView({ duration: 500 })
+
+  // Now check that it's visible and clickable
+  cy.get('#copy-onchain-address-button').should('be.visible').should('not.be.disabled').click({ force: true })
 }
 
 export const clickCopyLightningInvoiceButton = () => {
-  cy.get('#copy-lightning-invoice-button').realClick()
-  cy.get('#copy-lightning-invoice-button').realClick()
+  // First ensure the button exists
+  cy.get('#copy-lightning-invoice-button').should('exist')
+
+  // Scroll the button into view before checking visibility
+  cy.get('#copy-lightning-invoice-button').scrollIntoView({ duration: 500 })
+
+  // Now check that it's visible and clickable
+  cy.get('#copy-lightning-invoice-button').should('be.visible').should('not.be.disabled').click({ force: true })
 }
 
 export const enterRefundAddressAndClickRefund = (comment: string) => {

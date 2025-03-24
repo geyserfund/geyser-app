@@ -11,8 +11,8 @@
     "dev:stage": "vite --mode staging",
     "build": "tsc && vite build",
     "preview": "vite preview --port 3000",
-    "test:e2e": "yarn cypress run --e2e",
-    "test:watch": "yarn cypress open",
+    "test:e2e": "yarn workspace @geyser-app/testing test:e2e",
+    "test:watch": "yarn workspace @geyser-app/testing test:watch",
     "prepare": "husky install",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.{ts, tsx, js, jsx, css}' --write",
     "format": "prettier --config .prettierrc 'src/**/*.{ts, js, tsx, jsx, css}' --write",
@@ -27,8 +27,8 @@
     "changelog": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s",
     "theme:types": "yarn chakra-cli tokens ./src/config/theme/theme.ts",
     "dev:language": "tsx language/languageServer.ts",
-    "storybook": "storybook dev -p 6006",
-    "storybook:build": "storybook build",
+    "storybook": "yarn workspace @geyser-app/storybook storybook",
+    "storybook:build": "yarn workspace @geyser-app/storybook storybook:build",
     "knip": "knip"
   },
   "dependencies": {
