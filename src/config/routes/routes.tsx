@@ -818,6 +818,10 @@ export const platformRoutes: RouteObject[] = [
     Component: ExternalAuthSuccess,
   },
   {
+    path: getPath('fundingFailedCallback'),
+    Component: ExternalAuthSuccess,
+  },
+  {
     path: '/failed-authentication',
     Component: FailedAuth,
   },

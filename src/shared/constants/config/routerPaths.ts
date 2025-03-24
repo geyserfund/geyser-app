@@ -101,7 +101,7 @@ export enum PathName {
   fundingPaymentOnchainRefundInitiated = 'initiated',
   fundingCallback = 'callback',
   fundingSuccess = 'success',
-
+  fundingFailedCallback = 'failed-callback',
   badges = 'badges',
   about = 'about',
   projectId = ':projectId',
@@ -246,6 +246,7 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingCallback}`,
   fundingSuccess: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingSuccess}`,
+  fundingFailedCallback: () => `/${PathName.fundingFailedCallback}`,
 
   /** Refund Routes */
 
