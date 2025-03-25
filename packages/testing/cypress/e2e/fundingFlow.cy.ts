@@ -12,12 +12,15 @@ function setupBitcoinAddressInterception() {
     // Add an event listener to expose the clipboard value when it's available
     win.document.addEventListener('clipboard-value-available', (e) => {
       // @ts-ignore - This is a custom property for testing
-      ;(win as any).testClipboardValue = e.detail?.value || ''
+      ;(win as any).testClipboardValue = (e as any).detail?.value || ''
     })
 
     // Inject a script to intercept the copy operation
     const script = win.document.createElement('script')
     script.textContent = `
+      // Make sure we have a place to store the clipboard value
+      window.testClipboardValue = null;
+
       // Intercept clipboard operations for testing
       const originalClipboardWrite = navigator.clipboard.writeText;
       navigator.clipboard.writeText = function(text) {
