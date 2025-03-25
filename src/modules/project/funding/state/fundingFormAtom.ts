@@ -12,7 +12,7 @@ import {
   SubscriptionCurrencyType,
   UserSubscriptionInterval,
 } from '@/types'
-import { centsToDollars, commaFormatted, isProjectAnException, toInt, validateEmail } from '@/utils'
+import { centsToDollars, commaFormatted, dollarsToCents, isProjectAnException, toInt, validateEmail } from '@/utils'
 
 import { projectAtom, ProjectState } from '../../state/projectAtom'
 import { rewardsAtom } from '../../state/rewardsAtom'
@@ -109,7 +109,7 @@ export const fundingFormWarningAtom = atom<{ [key in keyof FundFormType]: string
 )
 
 /** Set the error state for the funding form */
-export const setErrorStateAtom = atom(null, (get, set, { key, value }: { key: keyof FundFormType; value: string }) => {
+export const setErrorStateAtom = atom(null, (_, set, { key, value }: { key: keyof FundFormType; value: string }) => {
   set(fundingFormErrorAtom, (current) => ({ ...current, [key]: value }))
 })
 
@@ -188,6 +188,7 @@ export const fundingFormHasRewardsAtom = atom((get) => {
   return fundingFormState.rewardsByIDAndCount && Object.keys(fundingFormState.rewardsByIDAndCount).length > 0
 })
 
+/** Boolean to check if the funding form has a subscription */
 export const fundingFormHasSubscriptionAtom = atom((get) => {
   const fundingFormState = get(fundingFormStateAtom)
   return fundingFormState.subscription && fundingFormState.subscription.cost > 0
@@ -205,7 +206,7 @@ export const fundingFormHasRewardsThatRequirePrivateCommentAtom = atom((get) => 
   return selectedRewards.some((reward) => reward.privateCommentPrompts && reward.privateCommentPrompts.length > 0)
 })
 
-/** Reset funing form rewards to it's initial value */
+/** Reset funding form rewards to it's initial value */
 export const resetFundingFormRewardsAtom = atom(null, (get, set) => {
   set(fundingFormStateAtom, (current) => ({
     ...current,
@@ -260,10 +261,10 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
 
           if (project.rewardCurrency === RewardCurrency.Btcsat) {
             rewardsCostInSatoshi += rewardsCost
-            rewardsCostInUsdCent += Math.round((centsToDollars(cost) / usdRate) * rewardMultiplier)
+            rewardsCostInUsdCent += Math.round(dollarsToCents((rewardsCost / SATOSHIS_IN_BTC) * usdRate))
           } else {
             rewardsCostInUsdCent = rewardsCost
-            rewardsCostInSatoshi += Math.round((centsToDollars(cost) / usdRate) * rewardMultiplier * SATOSHIS_IN_BTC)
+            rewardsCostInSatoshi += Math.round((centsToDollars(rewardsCost) / usdRate) * SATOSHIS_IN_BTC)
           }
         }
       })
@@ -280,13 +281,6 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
       totalAmountUsdCent: rewardsCostInUsdCent + current.donationAmountUsdCent + current.shippingCost,
     }
   })
-
-  if (project.rewardCurrency) {
-    set(fundingFormStateAtom, (current) => ({
-      ...current,
-      rewardCurrency: project.rewardCurrency ? project.rewardCurrency : current.rewardCurrency,
-    }))
-  }
 })
 
 /** Update subscription in the funding flow */
@@ -297,6 +291,7 @@ export const updateFundingFormSubscriptionAtom = atom(null, (get, set, { id }: {
   set(fundingFormStateAtom, (current) => {
     let subscriptionCost = 0
     let subscriptionCostInSatoshi = 0
+    let subscriptionCostInUsdCent = 0
 
     if (subscriptions) {
       const subscription = subscriptions.find((subscription) => toInt(subscription.id) === id)
@@ -308,8 +303,10 @@ export const updateFundingFormSubscriptionAtom = atom(null, (get, set, { id }: {
 
         if (subscription.currency === SubscriptionCurrencyType.Usdcent) {
           subscriptionCostInSatoshi = Math.round((centsToDollars(cost) / usdRate) * SATOSHIS_IN_BTC)
+          subscriptionCostInUsdCent = cost
         } else {
           subscriptionCostInSatoshi = cost
+          subscriptionCostInUsdCent = Math.round(dollarsToCents((cost / SATOSHIS_IN_BTC) * usdRate))
         }
       }
 
@@ -323,6 +320,7 @@ export const updateFundingFormSubscriptionAtom = atom(null, (get, set, { id }: {
           currency: subscription?.currency,
         },
         totalAmount: subscriptionCostInSatoshi + current.donationAmount,
+        totalAmountUsdCent: subscriptionCostInUsdCent + current.donationAmountUsdCent,
       }
     }
 
@@ -492,7 +490,9 @@ export const isFundingUserInfoValidAtom = atom((get) => {
 })
 
 /** Reset Funding Form */
-export const resetFundingFormAtom = atom(null, (get, set) => {
+export const resetFundingFormAtom = atom(null, (_, set) => {
   set(fundingFormStateAtom, initialState)
   set(fundingInputAfterRequestAtom, null)
+  set(fundingFormErrorAtom, {} as { [key in keyof FundFormType]: string })
+  set(fundingFormWarningAtom, {} as { [key in keyof FundFormType]: string })
 })

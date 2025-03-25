@@ -1,11 +1,11 @@
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import React, { PropsWithChildren, useEffect } from 'react'
 
 import { useProjectGoalsAPI } from '../API/useProjectGoalsAPI'
 import { useProjectRewardsAPI } from '../API/useProjectRewardsAPI'
 import { useProjectSubscriptionsAPI } from '../API/useProjectSubscriptionsAPI'
 import { useResetFundingFlow } from '../funding/hooks/useResetFundingFlow'
-import { FundingProject, resetFundingFormAtom } from '../funding/state/fundingFormAtom'
+import { FundingProject } from '../funding/state/fundingFormAtom'
 import { projectAtom } from '../state/projectAtom'
 
 interface FundingProviderProps extends PropsWithChildren {
@@ -14,7 +14,6 @@ interface FundingProviderProps extends PropsWithChildren {
 
 // Used if the project context is not available
 export const FundingProvider = ({ children, project }: FundingProviderProps) => {
-  const resetFundingForm = useSetAtom(resetFundingFormAtom)
   const resetFundingFlow = useResetFundingFlow()
 
   useEffect(() => {
@@ -23,9 +22,8 @@ export const FundingProvider = ({ children, project }: FundingProviderProps) => 
       console.log('========FUNDING FLOW RESET===========')
       console.log('==================================')
       resetFundingFlow()
-      resetFundingForm()
     }
-  }, [project, resetFundingFlow, resetFundingForm])
+  }, [project, resetFundingFlow])
 
   return <>{children}</>
 }
