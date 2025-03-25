@@ -7,11 +7,11 @@ import { useListenFundingContributionSuccess } from '@/modules/project/funding/h
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
 
+import { FiatSwapStatus, fiatSwapStatusAtom } from './atom/fiatSwapStatusAtom.ts'
 import { FiatSwapAwaitingPayment } from './components/FiatSwapAwaitingPayment.tsx'
 import { FiatSwapContributorNotVerified } from './components/FiatSwapContributorNotVerified.tsx'
 import { FiatSwapForm } from './components/FiatSwapForm.tsx'
 import { FiatSwapOwnerNotVerified } from './components/FiatSwapOwnerNotVerified.tsx'
-import { FiatSwapStatus, fiatSwapStatusAtom } from './fiatSwapStatus.ts'
 
 export const PaymentFiatSwap = () => {
   useListenFundingContributionSuccess()
@@ -33,6 +33,7 @@ export const PaymentFiatSwap = () => {
       navigate({ pathname: '../lightning', search: location.search }, { replace: true })
     }
   }, [userId])
+  console.log('checking fiatswap status', fiatSwapStatus)
 
   const renderFiatSwapPayment = () => {
     if (!isProjectOwnerVerified) {

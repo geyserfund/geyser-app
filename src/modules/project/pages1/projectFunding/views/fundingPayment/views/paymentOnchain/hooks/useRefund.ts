@@ -1,4 +1,3 @@
-import { useAtomValue } from 'jotai'
 import { useCallback, useState } from 'react'
 
 import { SwapData, useRefundedSwapData, useRemoveRefundFile } from '@/modules/project/funding/state'
@@ -6,13 +5,11 @@ import { useNotification } from '@/utils'
 
 import { BoltzTransaction, getTransactionFromSwap } from '../refund/api'
 import { refund } from '../refund/refund'
-import { swapTransactionAtom } from '../states/onChainTransaction.ts'
+
 const BAD_REFUND_FILE_ERROR = 'This refund file is not associated with any failed funding transaction'
 
 export const useRefund = () => {
   const toast = useNotification()
-
-  const swapTransaction = useAtomValue(swapTransactionAtom)
 
   const [_, setRefundedSwapData] = useRefundedSwapData()
   const removeRefundFile = useRemoveRefundFile()
@@ -71,7 +68,7 @@ export const useRefund = () => {
         return false
       }
     },
-    [removeRefundFile, setRefundedSwapData, swapTransaction, toast],
+    [removeRefundFile, setRefundedSwapData, toast],
   )
 
   return { initiateRefund, loading }

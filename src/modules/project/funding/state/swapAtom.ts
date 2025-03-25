@@ -1,9 +1,8 @@
+import { ECPairInterface } from 'ecpair'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
 import { BitcoinQuote, ContributionOnChainSwapPaymentDetails, Maybe } from '../../../../types'
-import { keyPairAtom } from './keyPairAtom'
-
 export type SwapContributionInfo = {
   projectTitle?: Maybe<string>
   reference?: Maybe<string>
@@ -35,6 +34,8 @@ export type SwapData = {
 }
 
 type SwapDataStructure = { [key: string]: SwapData }
+
+export const keyPairAtom = atom<ECPairInterface | null>(null)
 
 /** Hold the swap Id for the Funding Tx in progress */
 export const currentSwapIdAtom = atom<string>('')
@@ -104,12 +105,11 @@ export const useRefundFileValue = () => useAtomValue(currentSwapAtom)
 export const useRefundFileAdd = () => useSetAtom(addSwapAtom)
 export const useRemoveRefundFile = () => useSetAtom(removeRefundedSwapAtom)
 
-// Setting current swapId
-export const useSetCurrentSwapId = () => useSetAtom(currentSwapIdAtom)
-
 export const refundedSwapDataAtom = atom<SwapData | undefined>(undefined)
 export const useRefundedSwapData = () => useAtom(refundedSwapDataAtom)
-export const clearRefundedSwapDataAtom = atom(null, (get, set) => {
+
+/** Reset the currentSwapID and refundedSwapData */
+export const resetCurrentSwapAndRefundedDataAtom = atom(null, (get, set) => {
+  set(currentSwapIdAtom, '')
   set(refundedSwapDataAtom, undefined)
 })
-export const useClearRefundedSwapData = () => useSetAtom(clearRefundedSwapDataAtom)

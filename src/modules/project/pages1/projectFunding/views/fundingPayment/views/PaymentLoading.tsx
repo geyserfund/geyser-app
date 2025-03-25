@@ -52,7 +52,12 @@ export const PaymentLoading = () => {
   }, [requestFundingOptions.error, project.name, navigate])
 
   return (
-    <VStack w="full">
+    <VStack w="full" spacing={4}>
+      <VStack w="full" alignItems="start">
+        <SkeletonLayout height="26px" width="120px" />
+        <SkeletonLayout height="44px" width="full" />
+      </VStack>
+
       <SkeletonLayout height={qrSize} width={qrSize} />
       <SkeletonLayout height="26px" width="200px" />
       <VStack w="full" spacing={6} pt={4}>
