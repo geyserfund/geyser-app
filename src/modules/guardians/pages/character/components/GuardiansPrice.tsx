@@ -13,7 +13,7 @@ import { centsToDollars } from '@/utils'
 
 import { CharacterAssets } from '../characterAssets'
 
-const GUARDIANS_PROJECT_NAME = 'geyserguardians'
+export const GUARDIANS_PROJECT_NAME = 'geyserguardians'
 
 export const GuardiansPrice = ({
   currentGuardian,

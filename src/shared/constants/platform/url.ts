@@ -87,6 +87,7 @@ export const ProjectEntryThumbnailPlaceholderUrl =
 export const LogoNameBrand = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-brand.svg'
 export const LogoNameDark = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-dark.svg'
 export const LogoNameLight = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-light.svg'
+export const LogoOutline = 'https://storage.googleapis.com/geyser-projects-media/app/logo-outline.png'
 
 // Geyser Guide Links
 
