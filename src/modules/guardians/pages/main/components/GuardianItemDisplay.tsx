@@ -19,7 +19,7 @@ export const GuardianItemDisplay = ({
 }) => {
   return (
     <VStack w="full" spacing={12}>
-      <VStack w="full" spacing={3}>
+      <VStack w="full" spacing={3} id={`guardians-${details.rewardType}`}>
         <GuardianSubHeader textTransform="uppercase" lineHeight={1} textAlign={'center'}>
           {details.title}
         </GuardianSubHeader>

@@ -15,10 +15,7 @@ export const Promotion = () => {
       padding={{ base: '12px', lg: '20px', '2xl': '24px' }}
     >
       <Body fontSize={textSize} bold color="guardians.text">
-        {t('21% of all sales go directly to fund our Bitcoin grants.')}
-      </Body>
-      <Body fontSize={textSize} bold color="guardians.text">
-        {t('All prices include shipping.')}
+        {t('21% of all sales go directly to fund our Bitcoin grants.')} {t('All prices include shipping.')}
       </Body>
     </VStack>
   )

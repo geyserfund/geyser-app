@@ -1153,5 +1153,11 @@
   "Your post is now live": "Your post is now live",
   "Failed to fetch project stats": "Failed to fetch project stats",
   "Disconnect nostr": "Disconnect nostr",
-  "Disconnect twitter": "Disconnect twitter"
+  "Disconnect twitter": "Disconnect twitter",
+  "Support Bitcoin creators, fund groundbreaking projects driving Bitcoin adoption, and earn exclusive perks.": "Support Bitcoin creators, fund groundbreaking projects driving Bitcoin adoption, and earn exclusive perks.",
+  "Own limited-edition items made in collaboration with top Bitcoin brands and support Bitcoin creators.": "Own limited-edition items made in collaboration with top Bitcoin brands and support Bitcoin creators.",
+  "JOIN THE COMMUNITY OF": "JOIN THE COMMUNITY OF",
+  "JOIN THE COMMUNITY OF <1>{{totalUsers}}</1> GUARDIANS": "JOIN THE COMMUNITY OF <1>{{totalUsers}}</1> GUARDIANS",
+  "JOIN THE COMMUNITY OF ": "JOIN THE COMMUNITY OF ",
+  "COLLECT YOURS 👇 & JOIN THE COMMUNITY OF ": "COLLECT YOURS 👇 & JOIN THE COMMUNITY OF "
 }

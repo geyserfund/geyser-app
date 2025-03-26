@@ -14,6 +14,7 @@ import { fonts } from '@/shared/styles'
 import { GuardianType } from '@/types'
 
 import { guardiansTotalSoldCountAtom } from '../../state/guardianUsers.ts'
+import { ButtonArray } from './components/ButtonArray.tsx'
 import { Copyright } from './components/Copyright'
 import { GuardianRewards } from './components/GuardianRewards.tsx'
 import { GuardianUsers } from './components/GuardianUsers'
@@ -47,39 +48,38 @@ export const GuardiansMainPage = () => {
         <VStack
           w="full"
           zIndex={2}
-          maxWidth={'1152px'}
           fontFamily={fonts.cormorant}
           px={{ base: 3, lg: 6 }}
           spacing={{ base: 2, md: 3, lg: 6 }}
         >
-          <VStack w="full" spacing={{ base: 4, lg: 8 }}>
+          <VStack w="full" spacing={{ base: 4, lg: 6 }}>
             <Body fontSize={ctaTextSize} fontWeight={600} textAlign={'center'} color="neutral1.12" lineHeight={'1'}>
-              {t(
-                'Support Bitcoin creators, fund groundbreaking projects driving Bitcoin adoption, and earn exclusive perks. Choose your Guardian and help drive impact!',
-              )}
+              {t('Limited-edition items made in collaboration with top Bitcoin brands that support Bitcoin creators.')}
             </Body>
-            <Body fontSize={ctaTextSize} fontWeight={600} textAlign={'center'} color="neutral1.12" lineHeight={'1'}>
-              {t(
-                'All Guardian item purchases give you special powers on our platform and socials: Gem stones on Geyser platform, Nostr badges, and access to Discord.',
-              )}
-            </Body>
+
             <VStack spacing={0}>
               <Body fontSize={textSize} textAlign={'center'} bold lineHeight={'1'}>
-                <Trans i18nKey="JOIN THE <1>{{totalUsers}}</1> GUARDIANS" values={{ totalUsers: totalSoldCount }}>
-                  {t('JOIN THE ')}
+                <Trans
+                  i18nKey="JOIN THE COMMUNITY OF <1>{{totalUsers}}</1> GUARDIANS"
+                  values={{ totalUsers: totalSoldCount }}
+                >
+                  {t('TO JOIN THE COMMUNITY OF ')}
                   <Body as="span" size={extraSize} color={'guardians.LEGEND.text'} bold>
                     {'{{totalUsers}}'}
                   </Body>
                   {t(' GUARDIANS')}
                 </Trans>
               </Body>
+
               <Body fontSize={textSize} textAlign={'center'} bold lineHeight={'1'}>
-                {t('PURCHASE ITEMS FROM OUR COLLABS')} 👇
+                {t('COLLECT YOURS')} 👇
               </Body>
             </VStack>
+            <ButtonArray />
+
+            <Promotion />
           </VStack>
         </VStack>
-        <Promotion />
 
         <GuardianRewards />
 
