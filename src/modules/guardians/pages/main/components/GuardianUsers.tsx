@@ -1,7 +1,7 @@
 import { HStack, Image, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
-import { useGuardianUsersAtomSetValue } from '@/modules/guardians/state/guardianUsers.ts'
+import { useGuardiansSoldCountSetAtom, useGuardianUsersSetAtom } from '@/modules/guardians/state/guardianUsers.ts'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
 import { H2 } from '@/shared/components/typography'
 import { HeaderProps } from '@/shared/components/typography/Heading'
@@ -19,7 +19,8 @@ export const GuardianUsers = ({
   size: 'lg' | 'md' | 'sm'
   titleProps?: HeaderProps
 }) => {
-  const setGuardianUsers = useGuardianUsersAtomSetValue(guardian)
+  const setGuardianUsers = useGuardianUsersSetAtom(guardian)
+  const setGuardiansSoldCount = useGuardiansSoldCountSetAtom(guardian)
 
   const guardianAsset = CharacterAssets[guardian]
 
@@ -34,6 +35,7 @@ export const GuardianUsers = ({
     },
     onCompleted(data) {
       setGuardianUsers(data?.guardianUsersGet?.guardianUsers[0]?.users || [])
+      setGuardiansSoldCount(data?.guardianUsersGet?.guardianUsers[0]?.soldCount || 0)
     },
   })
 

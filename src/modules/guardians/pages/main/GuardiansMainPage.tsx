@@ -13,7 +13,7 @@ import { VideoPlayer } from '@/shared/molecules/VideoPlayer'
 import { fonts } from '@/shared/styles'
 import { GuardianType } from '@/types'
 
-import { guardianUsersCountAtom } from '../../state/guardianUsers.ts'
+import { guardiansTotalSoldCountAtom } from '../../state/guardianUsers.ts'
 import { Copyright } from './components/Copyright'
 import { GuardianRewards } from './components/GuardianRewards.tsx'
 import { GuardianUsers } from './components/GuardianUsers'
@@ -26,7 +26,7 @@ export const GuardiansMainPage = () => {
   const ctaTextSize = { base: '14px', sm: '20px', md: '22x', lg: '24px', xl: '28px', '3xl': '32px' }
   const extraSize = { base: '20px', sm: '24px', md: '28x', lg: '32px', xl: '36px', '3xl': '42px' }
 
-  const totalUsers = useAtomValue(guardianUsersCountAtom)
+  const totalSoldCount = useAtomValue(guardiansTotalSoldCountAtom)
 
   return (
     <>
@@ -65,7 +65,7 @@ export const GuardiansMainPage = () => {
             </Body>
             <VStack spacing={0}>
               <Body fontSize={textSize} textAlign={'center'} bold lineHeight={'1'}>
-                <Trans i18nKey="JOIN THE <1>{{totalUsers}}</1> GUARDIANS" values={{ totalUsers }}>
+                <Trans i18nKey="JOIN THE <1>{{totalUsers}}</1> GUARDIANS" values={{ totalUsers: totalSoldCount }}>
                   {t('JOIN THE ')}
                   <Body as="span" size={extraSize} color={'guardians.LEGEND.text'} bold>
                     {'{{totalUsers}}'}
