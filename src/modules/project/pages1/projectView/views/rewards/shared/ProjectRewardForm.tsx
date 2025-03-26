@@ -157,7 +157,7 @@ export const ProjectRewardForm = ({
                     onUploadComplete={handleImageUpload}
                     onDeleteClick={handleDeleteImage}
                     childrenOnLoading={<UploadBox loading h={{ base: '40px', lg: '64px' }} borderRadius="12px" />}
-                    // imageCrop={ImageCropAspectRatio.Reward}
+                    imageCrop={ImageCropAspectRatio.Reward}
                     isDisabled={watch('images').length >= MAX_REWARD_IMAGES}
                   >
                     <UploadBox

@@ -80,6 +80,14 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
 
 export type CarouselItem = string | React.ReactNode
 
+type MediaCarouselProps = {
+  links: CarouselItem[]
+  aspectRatio?: ImageCropAspectRatio
+  wrapperProps?: Omit<BoxProps, 'aspectRatio'>
+  onSlideChange?: (index: number) => void
+  initialSlide?: number
+  swiperProps?: SwiperProps
+} & BoxProps
 export const MediaCarousel = ({
   links,
   aspectRatio = ImageCropAspectRatio.Header,
@@ -87,18 +95,12 @@ export const MediaCarousel = ({
   onSlideChange,
   initialSlide,
   swiperProps,
-}: {
-  links: CarouselItem[]
-  aspectRatio?: ImageCropAspectRatio
-  wrapperProps?: Omit<BoxProps, 'aspectRatio'>
-  onSlideChange?: (index: number) => void
-  initialSlide?: number
-  swiperProps?: SwiperProps
-}) => {
+  ...rest
+}: MediaCarouselProps) => {
   const classes = useStyles()
 
   return (
-    <Box w="100%" overflow="hidden">
+    <Box w="100%" overflow="hidden" {...rest}>
       <Swiper
         className={classes.swiper}
         keyboard={{
