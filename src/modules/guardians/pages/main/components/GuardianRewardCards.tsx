@@ -3,16 +3,43 @@ import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } fr
 import { t } from 'i18next'
 import { useNavigate } from 'react-router'
 
-import { RewardMap } from '@/modules/guardians/data.ts'
+import { GuardianRewardType, RewardMap } from '@/modules/guardians/data.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { GuardianProjectRewardFragment } from '@/types/index.ts'
+import { GuardianProjectRewardFragment, GuardianType } from '@/types/index.ts'
 import { centsToDollars, commaFormatted } from '@/utils/index.ts'
 
 import { GUARDIANS_PROJECT_NAME } from '../../character/components/GuardiansPrice.tsx'
 
+type ShinyImageProps = React.ComponentProps<typeof Image> & {
+  guardian: GuardianType
+}
+
+type GradientColors = {
+  [key in GuardianType]: { primary: string; secondary: string }
+}
+
+const guardianGradientColors: GradientColors = {
+  [GuardianType.Warrior]: {
+    primary: '120, 220, 255',
+    secondary: '154, 71, 255',
+  },
+  [GuardianType.Knight]: {
+    primary: '191, 140, 189',
+    secondary: '82, 49, 103',
+  },
+  [GuardianType.King]: {
+    primary: '254, 199, 21',
+    secondary: '206, 77, 32',
+  },
+  [GuardianType.Legend]: {
+    primary: '24, 180, 160',
+    secondary: '13, 124, 109',
+  },
+}
+
 /** ShinyImage component that creates a 3D-like effect with shine on hover */
-const ShinyImage = (props: React.ComponentProps<typeof Image>) => {
+const ShinyImage = ({ guardian, ...props }: ShinyImageProps) => {
   // Motion values for tracking mouse position
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -24,6 +51,10 @@ const ShinyImage = (props: React.ComponentProps<typeof Image>) => {
   // Active position values (either current or last position)
   const activeX = useMotionValue(0)
   const activeY = useMotionValue(0)
+
+  // Add spring physics to active position for smoother gradient movement
+  const springActiveX = useSpring(activeX, { stiffness: 80, damping: 25 })
+  const springActiveY = useSpring(activeY, { stiffness: 80, damping: 25 })
 
   // Track hover state
   const isHovering = useMotionValue(0)
@@ -44,9 +75,9 @@ const ShinyImage = (props: React.ComponentProps<typeof Image>) => {
   const springRotateX = useSpring(rotateX, { stiffness: 150, damping: 20 })
   const springRotateY = useSpring(rotateY, { stiffness: 150, damping: 20 })
 
-  // Calculate distance from center for shine intensity - using activeX/Y
-  const mouseMoveX = useTransform(activeX, [-300, 0, 300], [-1, 0, 1])
-  const mouseMoveY = useTransform(activeY, [-300, 0, 300], [-1, 0, 1])
+  // Calculate distance from center for shine intensity - using springActiveX/Y for smoother movement
+  const mouseMoveX = useTransform(springActiveX, [-300, 0, 300], [-1, 0, 1])
+  const mouseMoveY = useTransform(springActiveY, [-300, 0, 300], [-1, 0, 1])
 
   // Calculate position for the shine effect - inverting the position to appear on the opposite side
   const shinePosX = useTransform(mouseMoveX, [-1, 0, 1], ['120%', '50%', '-20%']) // Extended range beyond 0-100%
@@ -71,13 +102,24 @@ const ShinyImage = (props: React.ComponentProps<typeof Image>) => {
     rgba(255, 255, 255, 0) 35%
   )`
 
+  const gradientColors = guardianGradientColors[guardian]
+
   // Create a subtle holographic color tint that follows the shine position
   const colorTintGradient = useMotionTemplate`radial-gradient(
     circle at ${shinePosX} ${shinePosY},
-    rgba(120, 220, 255, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.2, 0.4, 0.6])}) 0%,
-    rgba(180, 120, 255, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.1, 0.2, 0.3])}) 25%,
+    rgba(${gradientColors.primary}, ${useTransform(shineIntensity, [0.1, 0.6, 0.6], [0.2, 0.4, 0.6])}) 0%,
+    rgba(${gradientColors.secondary}, ${useTransform(shineIntensity, [0.1, 0.6, 0.3], [0.1, 0.2, 0.3])}) 25%,
     rgba(0, 0, 0, 0) 50%
   )`
+
+  //   rgba(24, 180, 160, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.2, 0.4, 0.6])}) 0%,
+  //   rgba(13, 124, 109, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.1, 0.2, 0.3])}) 25%,
+
+  //   rgba(200, 134, 20, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.2, 0.4, 0.6])}) 0%,
+  //   rgba(206, 77, 32, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.1, 0.2, 0.3])}) 25%,
+
+  //   rgba(215, 204, 230, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.2, 0.4, 0.6])}) 0%,
+  //   rgba(68, 59, 140, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.1, 0.2, 0.3])}) 25%,
 
   // Handle mouse move to update motion values
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -197,10 +239,16 @@ export const GuardianRewardCard = ({
     })
   }
 
+  const isCard = rewardMap?.type === GuardianRewardType.Card
+
   return (
     <VStack width="full" maxWidth="400px" spacing={{ base: 2, lg: 4 }}>
-      <Box position="relative" width="full" borderRadius="md" overflow="hidden">
-        <ShinyImage src={rewardMap?.image} alt={name} width="full" height="auto" />
+      <Box position="relative" width="full" borderRadius="md" overflow="hidden" _hover={{ cursor: 'pointer' }}>
+        {isCard ? (
+          <ShinyImage src={rewardMap?.image} alt={name} width="full" height="auto" guardian={rewardMap?.guardian} />
+        ) : (
+          <Image src={rewardMap?.image} alt={name} width="full" height="auto" />
+        )}
       </Box>
 
       <VStack width="full" align="center" spacing={0}>
