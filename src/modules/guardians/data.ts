@@ -144,21 +144,20 @@ export const guardianRewardsMap: RewardMap[] = [
     type: GuardianRewardType.Card,
     rewardUUID: '73351183-097e-4a10-accf-fed1247394cb',
     image:
-      'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/f-Knight%20Front.png',
+      'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/Knight-Front.png',
   },
   {
     guardian: GuardianType.King,
     type: GuardianRewardType.Card,
     rewardUUID: '39110286-acb4-4b90-b5e0-a49c59ddc035',
-    image:
-      'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/f-King-Front.png',
+    image: 'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/King-Front.png',
   },
   {
     guardian: GuardianType.Legend,
     type: GuardianRewardType.Card,
     rewardUUID: '8b652cd4-f373-43ef-9569-5e04235ba76e',
     image:
-      'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/f-Legend%20Front.png',
+      'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/Legend-Front.png',
   },
   {
     guardian: GuardianType.Knight,
