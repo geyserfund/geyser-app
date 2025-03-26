@@ -1,20 +1,30 @@
-import { Box, HStack, Icon, IconProps, Tooltip } from '@chakra-ui/react'
+import { Box, HStack, Icon, IconProps, Popover, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
 import React from 'react'
 import { PiSealCheckFill } from 'react-icons/pi'
 
+import { Body } from '@/shared/components/typography/Body.tsx'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { UserForProfilePageFragment } from '@/types/index.ts'
+import { useMobileMode } from '@/utils/index.ts'
 
 type UserVerifiedBadgeProps = {
   user: Pick<UserForProfilePageFragment, 'complianceDetails'>
 } & IconProps
 
 export const UserVerifiedBadge = ({ user, ...props }: UserVerifiedBadgeProps) => {
+  const isMobile = useMobileMode()
   if (user.complianceDetails?.verifiedDetails?.identity?.verified) {
     return (
-      <Tooltip label="This user has verified their identity with Geyser." placement="top">
-        <VerifiedBadge {...props} />
-      </Tooltip>
+      <Popover trigger={isMobile ? 'click' : 'hover'} placement="top">
+        <PopoverTrigger>
+          <VerifiedBadge {...props} />
+        </PopoverTrigger>
+        <PopoverContent paddingX={1} paddingY={0.5} background="neutral1.12">
+          <Body color="neutral1.1" size="sm" medium>
+            This user has verified their identity with Geyser.
+          </Body>
+        </PopoverContent>
+      </Popover>
     )
   }
 
