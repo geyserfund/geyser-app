@@ -60,7 +60,7 @@ export const GuardianUsers = ({
       />
       <VStack w="full" spacing={3} alignItems="flex-start">
         <H2 fontSize={{ base: '28', lg: '48px' }} fontWeight={600} color={`guardians.${guardian}.text`} {...titleProps}>
-          {guardianAsset.title}
+          {guardianAsset.title}s
         </H2>
         <HStack w="full" spacing="10px" overflowX="hidden" flexWrap="wrap">
           {users &&
