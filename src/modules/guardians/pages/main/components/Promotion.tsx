@@ -4,7 +4,7 @@ import { t } from 'i18next'
 import { Body } from '@/shared/components/typography/Body.tsx'
 
 export const Promotion = () => {
-  const textSize = { base: '16px', sm: '18px', md: '22x', lg: '38px', xl: '36px', '3xl': '42px' }
+  const textSize = { base: '16px', md: '28x', lg: '20px', xl: '34px', '3xl': '26px' }
   return (
     <VStack
       w="full"
@@ -15,10 +15,10 @@ export const Promotion = () => {
       padding={{ base: '12px', lg: '20px', '2xl': '24px' }}
     >
       <Body fontSize={textSize} bold color="guardians.text">
-        {t('21% of sales goes to fund our Grants!')}
+        {t('21% of all sales go directly to fund our Bitcoin grants.')}
       </Body>
       <Body fontSize={textSize} bold color="guardians.text">
-        {t('Shipping included')}
+        {t('All prices include shipping.')}
       </Body>
     </VStack>
   )

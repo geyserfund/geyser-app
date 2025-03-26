@@ -1,5 +1,7 @@
 import { Box, HStack, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
+import { Trans } from 'react-i18next'
 
 import { Head } from '@/config/Head'
 import { Body, H2 } from '@/shared/components/typography'
@@ -11,6 +13,7 @@ import { VideoPlayer } from '@/shared/molecules/VideoPlayer'
 import { fonts } from '@/shared/styles'
 import { GuardianType } from '@/types'
 
+import { guardianUsersCountAtom } from '../../state/guardianUsers.ts'
 import { Copyright } from './components/Copyright'
 import { GuardianRewards } from './components/GuardianRewards.tsx'
 import { GuardianUsers } from './components/GuardianUsers'
@@ -21,6 +24,9 @@ import { Promotion } from './components/Promotion.tsx'
 export const GuardiansMainPage = () => {
   const textSize = { base: '16px', sm: '18px', md: '20x', lg: '22px', xl: '24px', '3xl': '28px' }
   const ctaTextSize = { base: '14px', sm: '20px', md: '22x', lg: '24px', xl: '28px', '3xl': '32px' }
+  const extraSize = { base: '20px', sm: '24px', md: '28x', lg: '32px', xl: '36px', '3xl': '42px' }
+
+  const totalUsers = useAtomValue(guardianUsersCountAtom)
 
   return (
     <>
@@ -59,7 +65,13 @@ export const GuardiansMainPage = () => {
             </Body>
             <VStack spacing={0}>
               <Body fontSize={textSize} textAlign={'center'} bold lineHeight={'1'}>
-                {t('JOIN THE GUARDIANS')}
+                <Trans i18nKey="JOIN THE <1>{{totalUsers}}</1> GUARDIANS" values={{ totalUsers }}>
+                  {t('JOIN THE ')}
+                  <Body as="span" size={extraSize} color={'guardians.LEGEND.text'} bold>
+                    {'{{totalUsers}}'}
+                  </Body>
+                  {t(' GUARDIANS')}
+                </Trans>
               </Body>
               <Body fontSize={textSize} textAlign={'center'} bold lineHeight={'1'}>
                 {t('PURCHASE ITEMS FROM OUR COLLABS')} 👇
@@ -68,7 +80,9 @@ export const GuardiansMainPage = () => {
           </VStack>
         </VStack>
         <Promotion />
+
         <GuardianRewards />
+
         <VStack
           w="full"
           h="full"
@@ -76,6 +90,13 @@ export const GuardiansMainPage = () => {
           spacing={{ base: '32px', lg: '96px' }}
           px={{ base: 3, lg: 6 }}
         >
+          <VStack w="full" spacing={{ base: '16px', lg: '22px' }} paddingTop={10}>
+            <GuardianUsers guardian={GuardianType.Legend} size="lg" />
+            <GuardianUsers guardian={GuardianType.King} size="md" />
+            <GuardianUsers guardian={GuardianType.Knight} size="sm" />
+            <GuardianUsers guardian={GuardianType.Warrior} size="sm" />
+          </VStack>
+
           <VStack w="full">
             <VStack w="full" spacing={0}>
               <GuardianHeader>{t('Why Geyser')}</GuardianHeader>
@@ -136,10 +157,7 @@ export const GuardiansMainPage = () => {
               </VStack>
             </VStack>
           </VStack>
-          <GuardianUsers guardian={GuardianType.Legend} size="lg" />
-          <GuardianUsers guardian={GuardianType.King} size="md" />
-          <GuardianUsers guardian={GuardianType.Knight} size="sm" />
-          <GuardianUsers guardian={GuardianType.Warrior} size="sm" />
+
           <VStack w="full" spacing={{ base: '16px', lg: '22px' }}>
             <GuardianHeader>{t('Investors')}</GuardianHeader>
             <Investors />
