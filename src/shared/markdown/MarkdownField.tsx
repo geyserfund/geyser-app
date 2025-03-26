@@ -65,6 +65,7 @@ interface Props {
   toggleEditorMode?: () => void
   isFloatingToolbar?: boolean
   toolbarMaxWidth?: number | string
+  fontFamily?: string
 }
 
 export const MarkdownField = ({
@@ -86,6 +87,7 @@ export const MarkdownField = ({
   toggleEditorMode,
   isFloatingToolbar,
   toolbarMaxWidth,
+  fontFamily,
 }: Props) => {
   const isMobile = useMobileMode()
 
@@ -204,7 +206,7 @@ export const MarkdownField = ({
 
   if (preview) {
     return (
-      <StyleProvider flex={flex}>
+      <StyleProvider flex={flex} fontFamily={fontFamily}>
         <PreviewRenderer content={content} manager={manager} />
       </StyleProvider>
     )

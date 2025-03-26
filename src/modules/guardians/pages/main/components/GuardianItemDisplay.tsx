@@ -6,7 +6,7 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { GuardianProjectRewardFragment } from '@/types/index.ts'
 
 import { GuardianSubHeader } from '../GuardiansMainPage.tsx'
-import { GuardianRewardCard } from './GuardianRewardCards.tsx'
+import { GuardianRewardCard } from './GuardianRewardCard.tsx'
 
 export const GuardianItemDisplay = ({
   details,
@@ -17,7 +17,6 @@ export const GuardianItemDisplay = ({
   rewards: GuardianProjectRewardFragment[]
   rewardsMap: RewardMap[]
 }) => {
-  console.log('checking rewards', rewards)
   return (
     <VStack w="full" spacing={12}>
       <VStack w="full" spacing={3}>

@@ -1,15 +1,7 @@
-import { Box, Button, Image, VStack } from '@chakra-ui/react'
+import { Image } from '@chakra-ui/react'
 import { motion, useMotionTemplate, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { t } from 'i18next'
-import { useNavigate } from 'react-router'
 
-import { GuardianRewardType, RewardMap } from '@/modules/guardians/data.ts'
-import { Body } from '@/shared/components/typography/Body.tsx'
-import { getPath } from '@/shared/constants/index.ts'
-import { GuardianProjectRewardFragment, GuardianType } from '@/types/index.ts'
-import { centsToDollars, commaFormatted } from '@/utils/index.ts'
-
-import { GUARDIANS_PROJECT_NAME } from '../../character/components/GuardiansPrice.tsx'
+import { GuardianType } from '@/types/index.ts'
 
 type ShinyImageProps = React.ComponentProps<typeof Image> & {
   guardian: GuardianType
@@ -20,6 +12,7 @@ type GradientColors = {
 }
 
 const guardianGradientColors: GradientColors = {
+  /** This is the default one with holographic effect */
   [GuardianType.Warrior]: {
     primary: '120, 220, 255',
     secondary: '154, 71, 255',
@@ -38,8 +31,8 @@ const guardianGradientColors: GradientColors = {
   },
 }
 
-/** ShinyImage component that creates a 3D-like effect with shine on hover */
-const ShinyImage = ({ guardian, ...props }: ShinyImageProps) => {
+/** GuardianHoverEffectImage component that creates a 3D-like effect with shine on hover */
+export const GuardianHoverEffectImage = ({ guardian, ...props }: ShinyImageProps) => {
   // Motion values for tracking mouse position
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -96,30 +89,21 @@ const ShinyImage = ({ guardian, ...props }: ShinyImageProps) => {
 
   // Create the shine gradient template - made more concentrated and brighter
   const shineGradient = useMotionTemplate`radial-gradient(
-    circle at ${shinePosX} ${shinePosY},
-    rgba(255, 255, 255, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.02, 0.15, 0.3])}) 0%,
-    rgba(255, 255, 255, 0.1) 20%,
-    rgba(255, 255, 255, 0) 35%
-  )`
+      circle at ${shinePosX} ${shinePosY},
+      rgba(255, 255, 255, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.02, 0.15, 0.3])}) 0%,
+      rgba(255, 255, 255, 0.1) 20%,
+      rgba(255, 255, 255, 0) 35%
+    )`
 
   const gradientColors = guardianGradientColors[guardian]
 
   // Create a subtle holographic color tint that follows the shine position
   const colorTintGradient = useMotionTemplate`radial-gradient(
-    circle at ${shinePosX} ${shinePosY},
-    rgba(${gradientColors.primary}, ${useTransform(shineIntensity, [0.1, 0.6, 0.6], [0.2, 0.4, 0.6])}) 0%,
-    rgba(${gradientColors.secondary}, ${useTransform(shineIntensity, [0.1, 0.6, 0.3], [0.1, 0.2, 0.3])}) 25%,
-    rgba(0, 0, 0, 0) 50%
-  )`
-
-  //   rgba(24, 180, 160, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.2, 0.4, 0.6])}) 0%,
-  //   rgba(13, 124, 109, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.1, 0.2, 0.3])}) 25%,
-
-  //   rgba(200, 134, 20, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.2, 0.4, 0.6])}) 0%,
-  //   rgba(206, 77, 32, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.1, 0.2, 0.3])}) 25%,
-
-  //   rgba(215, 204, 230, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.2, 0.4, 0.6])}) 0%,
-  //   rgba(68, 59, 140, ${useTransform(shineIntensity, [0.1, 0.6, 1.0], [0.1, 0.2, 0.3])}) 25%,
+      circle at ${shinePosX} ${shinePosY},
+      rgba(${gradientColors.primary}, ${useTransform(shineIntensity, [0.1, 0.6, 0.6], [0.2, 0.4, 0.6])}) 0%,
+      rgba(${gradientColors.secondary}, ${useTransform(shineIntensity, [0.1, 0.6, 0.3], [0.1, 0.2, 0.3])}) 25%,
+      rgba(0, 0, 0, 0) 50%
+    )`
 
   // Handle mouse move to update motion values
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -216,72 +200,5 @@ const ShinyImage = ({ guardian, ...props }: ShinyImageProps) => {
         />
       </motion.div>
     </motion.div>
-  )
-}
-
-/** Component that displays a guardian reward card with image, name, availability and price */
-export const GuardianRewardCard = ({
-  reward,
-  rewardMap,
-}: {
-  reward: GuardianProjectRewardFragment
-  rewardMap?: RewardMap
-}) => {
-  const navigate = useNavigate()
-
-  const { name, cost, maxClaimable, sold, uuid } = reward
-  const available = maxClaimable ? maxClaimable - sold : 0
-  const totalSupply = maxClaimable || 0
-
-  const handleBuy = () => {
-    navigate(getPath('projectFunding', GUARDIANS_PROJECT_NAME), {
-      state: { rewardUUID: uuid },
-    })
-  }
-
-  const isCard = rewardMap?.type === GuardianRewardType.Card
-
-  return (
-    <VStack width="full" maxWidth="400px" spacing={{ base: 2, lg: 4 }}>
-      <Box
-        position="relative"
-        width="full"
-        borderRadius="md"
-        overflow="hidden"
-        _hover={{ cursor: 'pointer' }}
-        padding={isCard ? 6 : 0}
-      >
-        {isCard ? (
-          <ShinyImage src={rewardMap?.image} alt={name} width="full" height="auto" guardian={rewardMap?.guardian} />
-        ) : (
-          <Image src={rewardMap?.image} alt={name} width="full" height="auto" />
-        )}
-      </Box>
-
-      <VStack width="full" align="center" spacing={0}>
-        <Body textTransform="uppercase" bold fontSize={'32px'} textAlign="center" lineHeight={1}>
-          {name}
-        </Body>
-
-        <Body fontSize={{ base: '18px', lg: '22px', xl: '28px' }} light textTransform="uppercase" bold lineHeight={1}>
-          {t('AVAILABLE')}:{' '}
-          <Body as="span" color={`guardians.${rewardMap?.guardian}.text`}>
-            {available}{' '}
-          </Body>{' '}
-          {t('OF')}{' '}
-          <Body as="span" color={`guardians.${rewardMap?.guardian}.text`}>
-            {totalSupply}
-          </Body>
-        </Body>
-
-        <Body fontWeight={500} fontSize={'32px'} lineHeight={1}>
-          {t('Price')}: ${commaFormatted(centsToDollars(cost))}
-        </Body>
-      </VStack>
-
-      <Button size="lg" width="full" maxWidth="200px" bg="black" color="white" onClick={handleBuy}>
-        {t('Buy')}
-      </Button>
-    </VStack>
   )
 }

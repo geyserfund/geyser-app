@@ -142,62 +142,62 @@ export const guardianRewardsMap: RewardMap[] = [
   {
     guardian: GuardianType.Knight,
     type: GuardianRewardType.Card,
-    rewardUUID: '73351183-097e-4a10-accf-fed1247394cb',
+    rewardUUID: '8733add7-e317-47da-9a1f-4a4571b02cbc',
     image:
       'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/Knight-Front.png',
   },
   {
     guardian: GuardianType.King,
     type: GuardianRewardType.Card,
-    rewardUUID: '39110286-acb4-4b90-b5e0-a49c59ddc035',
+    rewardUUID: 'dcbe3267-005d-48b1-bc66-186f16edb2cd',
     image: 'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/King-Front.png',
   },
   {
     guardian: GuardianType.Legend,
     type: GuardianRewardType.Card,
-    rewardUUID: '8b652cd4-f373-43ef-9569-5e04235ba76e',
+    rewardUUID: '2d218665-ba07-4e1d-93ef-51ce36775ce5',
     image:
       'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/Legend-Front.png',
   },
   {
     guardian: GuardianType.Knight,
     type: GuardianRewardType.Tshirt,
-    rewardUUID: 'b3037458-225f-41f7-9d5e-8560640a1804',
+    rewardUUID: 'f62599a7-ec6d-4722-a395-c7ef2291ff6c',
     image:
       'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/f-knight-shirt.png',
   },
   {
     guardian: GuardianType.King,
     type: GuardianRewardType.Tshirt,
-    rewardUUID: 'cbb7a229-15b1-496d-be57-61f7d8f0f31a',
+    rewardUUID: '80e172e9-fb9d-4f7e-b4f9-3dc8f9cfde83',
     image:
       'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/f-King-shirt.png',
   },
   {
     guardian: GuardianType.Legend,
     type: GuardianRewardType.Tshirt,
-    rewardUUID: '798d8202-89f9-45dc-89c3-fc25991d08d0',
+    rewardUUID: '1d8db465-9942-4ecf-9500-8cdfce3d0499',
     image:
       'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/f-legend-shirt.png',
   },
   {
     guardian: GuardianType.King,
     type: GuardianRewardType.Jersey,
-    rewardUUID: 'abd5e0a0-9237-4d63-84aa-c9babe6ac1bd',
+    rewardUUID: 'b8c8c94d-627d-4fe4-9533-b7c631d33f51',
     image:
       'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/F-King-Gersey.png',
   },
   {
     guardian: GuardianType.Legend,
     type: GuardianRewardType.Jersey,
-    rewardUUID: '9a90e1fa-66c0-4ead-89c7-469cfad425a0',
+    rewardUUID: 'e0945bb2-59d4-4802-9278-570aa25ceb0d',
     image:
       'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/F-legend-Gersey.png',
   },
   {
     guardian: GuardianType.Legend,
     type: GuardianRewardType.Bitaxe,
-    rewardUUID: '35f5f84d-4b36-4910-a9f2-00f57e28c1d5',
+    rewardUUID: '824e2f42-4f21-47a3-9b80-57652406faea',
     image: 'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/Bitaxe-High.png',
   },
 ]
