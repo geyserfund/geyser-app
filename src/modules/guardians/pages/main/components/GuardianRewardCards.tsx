@@ -182,7 +182,7 @@ const ShinyImage = ({ guardian, ...props }: ShinyImageProps) => {
           transformStyle: 'preserve-3d',
         }}
       >
-        <Image {...props} />
+        <Image {...props} boxShadow={'0px 0px 10px 0px rgba(0, 0, 0, 0.5)'} />
 
         {/* Holographic color tint overlay */}
         <motion.div
@@ -243,7 +243,14 @@ export const GuardianRewardCard = ({
 
   return (
     <VStack width="full" maxWidth="400px" spacing={{ base: 2, lg: 4 }}>
-      <Box position="relative" width="full" borderRadius="md" overflow="hidden" _hover={{ cursor: 'pointer' }}>
+      <Box
+        position="relative"
+        width="full"
+        borderRadius="md"
+        overflow="hidden"
+        _hover={{ cursor: 'pointer' }}
+        padding={isCard ? 6 : 0}
+      >
         {isCard ? (
           <ShinyImage src={rewardMap?.image} alt={name} width="full" height="auto" guardian={rewardMap?.guardian} />
         ) : (
