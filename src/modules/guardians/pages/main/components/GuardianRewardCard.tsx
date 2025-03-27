@@ -75,14 +75,15 @@ export const GuardianRewardCard = ({
           </Body>
 
           <Body fontSize={{ base: '18px', lg: '22px', xl: '28px' }} light textTransform="uppercase" bold lineHeight={1}>
-            {t('AVAILABLE')}:{' '}
+
             <Body as="span" color={`guardians.${rewardMap?.guardian}.text`}>
               {available}{' '}
             </Body>{' '}
             {t('OF')}{' '}
             <Body as="span" color={`guardians.${rewardMap?.guardian}.text`}>
               {totalSupply}
-            </Body>
+            </Body>{' '}
+            {t('REMAINING')}
           </Body>
 
           <Body fontWeight={500} fontSize={'32px'} lineHeight={1}>
