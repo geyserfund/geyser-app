@@ -98,11 +98,11 @@ export const PlatformNavBar = () => {
     }
 
     if (shouldShowGeyserLogo) {
-      return <BrandLogo />
+      return <BrandLogo showOutline={isGuardiansPage} />
     }
 
-    return <BrandLogo />
-  }, [shouldShowGeyserLogo, shouldShowProjectLogo, isPlatformRoutes, isMobileMode])
+    return <BrandLogo showOutline={isGuardiansPage} />
+  }, [shouldShowGeyserLogo, shouldShowProjectLogo, isPlatformRoutes, isMobileMode, isGuardiansPage])
 
   const ShareGuardiansButton = () => {
     return (

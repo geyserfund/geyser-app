@@ -1,6 +1,7 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { HStack, Image, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
+import { useGuardiansSoldCountSetAtom, useGuardianUsersSetAtom } from '@/modules/guardians/state/guardianUsers.ts'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
 import { H2 } from '@/shared/components/typography'
 import { HeaderProps } from '@/shared/components/typography/Heading'
@@ -18,6 +19,9 @@ export const GuardianUsers = ({
   size: 'lg' | 'md' | 'sm'
   titleProps?: HeaderProps
 }) => {
+  const setGuardianUsers = useGuardianUsersSetAtom(guardian)
+  const setGuardiansSoldCount = useGuardiansSoldCountSetAtom(guardian)
+
   const guardianAsset = CharacterAssets[guardian]
 
   const { data, loading } = useGuardianUsersGetQuery({
@@ -28,6 +32,10 @@ export const GuardianUsers = ({
           guardianType: guardian,
         },
       },
+    },
+    onCompleted(data) {
+      setGuardianUsers(data?.guardianUsersGet?.guardianUsers[0]?.users || [])
+      setGuardiansSoldCount(data?.guardianUsersGet?.guardianUsers[0]?.soldCount || 0)
     },
   })
 
@@ -42,10 +50,17 @@ export const GuardianUsers = ({
   if (soldCount === 0 || loading) return null
 
   return (
-    <>
+    <HStack w="full" spacing={6} alignItems="flex-start">
+      <Image
+        src={guardianAsset.image}
+        alt={guardianAsset.title}
+        width={'260px'}
+        height={'auto'}
+        display={{ base: 'none', lg: 'block' }}
+      />
       <VStack w="full" spacing={3} alignItems="flex-start">
         <H2 fontSize={{ base: '28', lg: '48px' }} fontWeight={600} color={`guardians.${guardian}.text`} {...titleProps}>
-          {guardianAsset.title}
+          {guardianAsset.title}s
         </H2>
         <HStack w="full" spacing="10px" overflowX="hidden" flexWrap="wrap">
           {users &&
@@ -75,6 +90,6 @@ export const GuardianUsers = ({
             ))}
         </HStack>
       </VStack>
-    </>
+    </HStack>
   )
 }

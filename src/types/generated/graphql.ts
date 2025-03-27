@@ -6854,7 +6854,7 @@ export type GrantStatisticsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GrantStatisticsQuery = { __typename?: 'Query', grantStatistics: { __typename?: 'GrantStatistics', grants?: { __typename?: 'GrantStatisticsGrant', amountFunded: number, amountGranted: number, count: number } | null, applicants?: { __typename?: 'GrantStatisticsApplicant', countFunded: number } | null, grantGuardiansFunding: { __typename?: 'GrantGuardiansFunding', contributedTotal: any, contributorsCount: any } } };
 
-export type GuardianProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, cost: number, maxClaimable?: number | null, sold: number, rewardCurrency: RewardCurrency, isHidden: boolean };
+export type GuardianProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, cost: number, images: Array<string>, description?: string | null, shortDescription?: string | null, maxClaimable?: number | null, sold: number, rewardCurrency: RewardCurrency, isHidden: boolean };
 
 export type GuardianUserFragment = { __typename?: 'GuardianUser', guardianType: string, heroId: string, imageUrl?: string | null, userId: any, username: string };
 
@@ -8490,6 +8490,9 @@ export const GuardianProjectRewardFragmentDoc = gql`
   uuid
   name
   cost
+  images
+  description
+  shortDescription
   maxClaimable
   sold
   rewardCurrency

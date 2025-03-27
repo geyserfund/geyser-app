@@ -1,5 +1,6 @@
 import {
   Box,
+  BoxProps,
   IconButton,
   Modal as ChakraModal,
   ModalBody,
@@ -8,6 +9,7 @@ import {
   ModalContent,
   ModalContentProps,
   ModalHeader,
+  ModalHeaderProps,
   ModalOverlay,
   ModalProps,
 } from '@chakra-ui/react'
@@ -21,16 +23,27 @@ export interface CustomModalProps extends ModalProps {
   contentProps?: ModalContentProps
   bodyProps?: ModalBodyProps
   noClose?: boolean
+  headerProps?: ModalHeaderProps
+  wrapperProps?: BoxProps
 }
 
-export const Modal = ({ children, title, contentProps, bodyProps, noClose, ...props }: CustomModalProps) => {
+export const Modal = ({
+  children,
+  title,
+  contentProps,
+  bodyProps,
+  noClose,
+  headerProps,
+  wrapperProps,
+  ...props
+}: CustomModalProps) => {
   return (
     <ChakraModal isCentered size="sm" {...props}>
       <ModalOverlay />
       <ModalContent bg="transparent" boxShadow={0} {...contentProps}>
-        <Box borderRadius="12px" bg="utils.pbg" paddingY={6}>
+        <Box borderRadius="12px" bg="utils.pbg" paddingY={6} {...wrapperProps}>
           {title && (
-            <ModalHeader pt={0} pb={3} px={standardPadding}>
+            <ModalHeader pt={0} pb={3} px={standardPadding} {...headerProps}>
               {title}
             </ModalHeader>
           )}

@@ -1,5 +1,4 @@
 import { Box, HStack, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import { Link, Outlet } from 'react-router-dom'
@@ -82,23 +81,29 @@ export const Guardians = () => {
           }}
         >
           <Link to={getPath('guardians')}>
-            <H1
-              fontSize={{ base: '32px', md: '48px', lg: '56px', xl: '72px' }}
-              color={isGuardianCharacterPage ? 'neutral1.9' : 'utils.text'}
-              textAlign="center"
-              bold
-            >
-              {t('GEYSER GUARDIANS')}
-            </H1>
+            <VStack spacing={0}>
+              <H1
+                fontSize={{ base: '32px', md: '40px', lg: '64px', xl: '72px' }}
+                color={isGuardianCharacterPage ? 'neutral1.9' : 'utils.text'}
+                textAlign="center"
+                textTransform="uppercase"
+                lineHeight={1}
+              >
+                <Body as="span" bold lineHeight={1}>
+                  {'guardians'}
+                </Body>
+              </H1>
+
+              <Body
+                lineHeight={1}
+                bold
+                fontSize={{ base: '18px', md: '24px', lg: '28px', xl: '44px' }}
+                textTransform="uppercase"
+              >
+                {'of bitcoin adoption'}
+              </Body>
+            </VStack>
           </Link>
-          <Body
-            fontSize={{ base: '16px', md: '20px', lg: '24px', xl: '28px' }}
-            marginTop={{ base: '-8px', md: '-12px', lg: '-16px', xl: '-20px' }}
-            color={isGuardianCharacterPage ? 'utils.text' : ' neutral1.9'}
-            bold
-          >
-            {t('Series 1')}
-          </Body>
         </VStack>
         <Outlet />
       </VStack>
