@@ -83,14 +83,12 @@ export const Guardians = () => {
           <Link to={getPath('guardians')}>
             <VStack spacing={0}>
               <H1
-                fontSize={{ base: '32px', md: '40px', lg: '44px', xl: '72px' }}
+                fontSize={{ base: '32px', md: '40px', lg: '64px', xl: '72px' }}
                 color={isGuardianCharacterPage ? 'neutral1.9' : 'utils.text'}
                 textAlign="center"
                 textTransform="uppercase"
                 lineHeight={1}
               >
-                {/* {t('Join the guardians of bitcoin adoption')} */}
-                {'Join the '}
                 <Body as="span" bold lineHeight={1}>
                   {'guardians'}
                 </Body>

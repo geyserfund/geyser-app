@@ -41,18 +41,12 @@ export const GuardiansMainPage = () => {
       />
       <VStack
         w="full"
-        spacing={{ base: 8, md: 16 }}
-        paddingTop={{ base: 16, md: 20, lg: 16 }}
+        spacing={{ base: 8, md: 12 }}
+        paddingTop={{ base: 16, md: 20, lg: 8, xl: 12 }}
         paddingBottom={{ base: '60px', lg: 24 }}
       >
-        <VStack
-          w="full"
-          zIndex={2}
-          fontFamily={fonts.cormorant}
-          px={{ base: 3, lg: 6 }}
-          spacing={{ base: 2, md: 3, lg: 6 }}
-        >
-          <VStack w="full" spacing={{ base: 4, lg: 6 }}>
+        <VStack w="full" zIndex={2} fontFamily={fonts.cormorant} spacing={{ base: 2, md: 3, lg: 6 }}>
+          <VStack w="full" spacing={{ base: 4, lg: 4 }} px={{ base: 3, lg: 6 }}>
             <Body fontSize={ctaTextSize} fontWeight={600} textAlign={'center'} color="neutral1.12" lineHeight={'1'}>
               {t('Limited-edition items made in collaboration with top Bitcoin brands that support Bitcoin creators.')}
             </Body>
@@ -60,25 +54,25 @@ export const GuardiansMainPage = () => {
             <VStack spacing={0}>
               <Body fontSize={textSize} textAlign={'center'} bold lineHeight={'1'}>
                 <Trans
-                  i18nKey="JOIN THE COMMUNITY OF <1>{{totalUsers}}</1> GUARDIANS"
+                  i18nKey="COLLECT YOURS 👇 & JOIN THE COMMUNITY OF <1>{{totalUsers}}</1> GUARDIANS"
                   values={{ totalUsers: totalSoldCount }}
                 >
-                  {t('TO JOIN THE COMMUNITY OF ')}
+                  <Body as="span" color={'guardians.LEGEND.text'} bold>
+                    {t('COLLECT YOURS')}
+                  </Body>
+                  {' 👇 '}
+
+                  {t('& JOIN THE COMMUNITY OF ')}
                   <Body as="span" size={extraSize} color={'guardians.LEGEND.text'} bold>
                     {'{{totalUsers}}'}
                   </Body>
                   {t(' GUARDIANS')}
                 </Trans>
               </Body>
-
-              <Body fontSize={textSize} textAlign={'center'} bold lineHeight={'1'}>
-                {t('COLLECT YOURS')} 👇
-              </Body>
             </VStack>
             <ButtonArray />
-
-            <Promotion />
           </VStack>
+          <Promotion />
         </VStack>
 
         <GuardianRewards />

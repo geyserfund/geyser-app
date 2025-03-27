@@ -23,6 +23,9 @@ export const ButtonArray = () => {
         variant="soft"
         paddingX="4"
         fontFamily={fonts.cormorant}
+        textTransform="uppercase"
+        color="neutral1.12"
+        fontWeight={600}
       >
         {t('Collectible Cards')}
       </Button>
@@ -32,6 +35,9 @@ export const ButtonArray = () => {
         variant="soft"
         paddingX="4"
         fontFamily={fonts.cormorant}
+        textTransform="uppercase"
+        color="neutral1.12"
+        fontWeight={600}
       >
         {t('Jerseys')}
       </Button>
@@ -41,6 +47,9 @@ export const ButtonArray = () => {
         variant="soft"
         paddingX="4"
         fontFamily={fonts.cormorant}
+        textTransform="uppercase"
+        color="neutral1.12"
+        fontWeight={600}
       >
         {t('T-Shirts')}
       </Button>
@@ -50,6 +59,9 @@ export const ButtonArray = () => {
         variant="soft"
         paddingX="4"
         fontFamily={fonts.cormorant}
+        textTransform="uppercase"
+        color="neutral1.12"
+        fontWeight={600}
       >
         {t('BitAxe')}
       </Button>
