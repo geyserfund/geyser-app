@@ -100,8 +100,10 @@ export const projectFundingRoutes = [
   getPath('fundingPayment', PathName.projectName),
   getPath('fundingPaymentFailed', PathName.projectName),
   getPath('fundingSuccess', PathName.projectName),
+  getPath('fundingPaymentCard', PathName.projectName),
   ...projectFundingPaymentLightingRoutes,
   ...projectFundingPaymentOnchainRoutes,
+  ...projectFundingPaymentFiatSwapRoutes,
 ]
 
 export const ProjectPageRoutesWithNavBarForDesktop = [...projectBaseRoutes, ...projectDashboardRoutes]
