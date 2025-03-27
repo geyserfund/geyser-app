@@ -70,12 +70,17 @@ export const GuardianRewardCard = ({
         </Box>
 
         <VStack width="full" align="center" spacing={0}>
-          <Body textTransform="uppercase" bold fontSize={'32px'} textAlign="center" lineHeight={1}>
+          <Body
+            textTransform="uppercase"
+            bold
+            fontSize={{ base: '20px', lg: '32px' }}
+            textAlign="center"
+            lineHeight={1}
+          >
             {name}
           </Body>
 
           <Body fontSize={{ base: '18px', lg: '22px', xl: '28px' }} light textTransform="uppercase" bold lineHeight={1}>
-
             <Body as="span" color={`guardians.${rewardMap?.guardian}.text`}>
               {available}{' '}
             </Body>{' '}
@@ -86,7 +91,7 @@ export const GuardianRewardCard = ({
             {t('REMAINING')}
           </Body>
 
-          <Body fontWeight={500} fontSize={'32px'} lineHeight={1}>
+          <Body fontWeight={500} fontSize={{ base: '20px', lg: '32px' }} lineHeight={1}>
             {t('Price')}: ${commaFormatted(centsToDollars(cost))}
           </Body>
         </VStack>

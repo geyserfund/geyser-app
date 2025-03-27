@@ -16,9 +16,9 @@ export const ButtonArray = () => {
   const { t } = useTranslation()
 
   return (
-    <HStack spacing={8} justify="center">
+    <HStack spacing={{ base: 2, lg: 8 }} justify="center" w="full" flexWrap="wrap">
       <Button
-        size="lg"
+        size={{ base: 'sm', lg: 'lg' }}
         onClick={() => scrollToElement('guardians-card')}
         variant="soft"
         paddingX="4"
@@ -30,7 +30,7 @@ export const ButtonArray = () => {
         {t('Collectible Cards')}
       </Button>
       <Button
-        size="lg"
+        size={{ base: 'sm', lg: 'lg' }}
         onClick={() => scrollToElement('guardians-jersey')}
         variant="soft"
         paddingX="4"
@@ -42,7 +42,7 @@ export const ButtonArray = () => {
         {t('Jerseys')}
       </Button>
       <Button
-        size="lg"
+        size={{ base: 'sm', lg: 'lg' }}
         onClick={() => scrollToElement('guardians-tshirt')}
         variant="soft"
         paddingX="4"
@@ -54,7 +54,7 @@ export const ButtonArray = () => {
         {t('T-Shirts')}
       </Button>
       <Button
-        size="lg"
+        size={{ base: 'sm', lg: 'lg' }}
         onClick={() => scrollToElement('guardians-bitaxe')}
         variant="soft"
         paddingX="4"
