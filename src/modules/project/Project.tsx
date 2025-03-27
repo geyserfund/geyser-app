@@ -1,6 +1,6 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 
 import { useAuthContext } from '@/context/auth.tsx'
 
@@ -15,6 +15,7 @@ export const Project = () => {
 
   const { user } = useAuthContext()
 
+  const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const addHeroId = useSetAtom(addProjectHeroAtom)
@@ -36,7 +37,7 @@ export const Project = () => {
           params.delete('hero')
           return params
         },
-        { replace: true },
+        { replace: true, state: location.state },
       )
     }
 
@@ -46,10 +47,10 @@ export const Project = () => {
           params.set('hero', user.heroId)
           return params
         },
-        { replace: true },
+        { replace: true, state: location.state },
       )
     }
-  }, [projectName, heroId, addHeroId, currentProjectHero, user, searchParams, setSearchParams])
+  }, [projectName, heroId, addHeroId, currentProjectHero, user, searchParams, setSearchParams, location.state])
 
   return (
     <ProjectProvider projectName={projectName || ''} initializeWallet>

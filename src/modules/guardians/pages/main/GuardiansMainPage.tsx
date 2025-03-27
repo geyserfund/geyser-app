@@ -6,30 +6,28 @@ import { Trans } from 'react-i18next'
 import { Head } from '@/config/Head'
 import { Body, H2 } from '@/shared/components/typography'
 import { BodyProps } from '@/shared/components/typography/Body'
-import { HeaderProps } from '@/shared/components/typography/Heading'
+import { H3, HeaderProps } from '@/shared/components/typography/Heading'
 import { GuardiansSeoImageUrl } from '@/shared/constants'
 import { dimensions } from '@/shared/constants/components/dimensions'
 import { VideoPlayer } from '@/shared/molecules/VideoPlayer'
 import { fonts } from '@/shared/styles'
 import { GuardianType } from '@/types'
-import { useMobileMode } from '@/utils'
 
-import { guardianRewardsDiscountItemsAtom } from '../../state/guardianRewards'
+import { guardiansTotalSoldCountAtom } from '../../state/guardianUsers.ts'
+import { ButtonArray } from './components/ButtonArray.tsx'
 import { Copyright } from './components/Copyright'
-import { DesktopGuardiansIllustration } from './components/DesktopGuardiansIllustration'
+import { GuardianRewards } from './components/GuardianRewards.tsx'
 import { GuardianUsers } from './components/GuardianUsers'
 import { Investors } from './components/Investors.tsx'
-import { MobileGuardiansIllustration } from './components/MobileGuardiansIllustration'
 import { Partners } from './components/Partners.tsx'
 import { Promotion } from './components/Promotion.tsx'
 
 export const GuardiansMainPage = () => {
-  const isMobile = useMobileMode()
-
   const textSize = { base: '16px', sm: '18px', md: '20x', lg: '22px', xl: '24px', '3xl': '28px' }
   const ctaTextSize = { base: '14px', sm: '20px', md: '22x', lg: '24px', xl: '28px', '3xl': '32px' }
+  const extraSize = { base: '20px', sm: '24px', md: '28x', lg: '32px', xl: '36px', '3xl': '42px' }
 
-  const guardianDiscountItems = useAtomValue(guardianRewardsDiscountItemsAtom)
+  const totalSoldCount = useAtomValue(guardiansTotalSoldCountAtom)
 
   return (
     <>
@@ -41,53 +39,44 @@ export const GuardiansMainPage = () => {
         image={GuardiansSeoImageUrl}
         type="article"
       />
-      <VStack w="full" paddingTop={{ base: 16, md: 20, lg: 6 }} paddingBottom={{ base: '60px', lg: 24 }}>
-        <VStack
-          w="full"
-          zIndex={2}
-          maxWidth={dimensions.guardians.textMaxWidth}
-          fontFamily={fonts.cormorant}
-          px={{ base: 3, lg: 6 }}
-          spacing={{ base: 2, md: 3, lg: 6 }}
-        >
-          <VStack w="full" spacing={0}>
-            <Body fontSize={textSize} textAlign={'center'} medium light lineHeight={'1.2'}>
-              {t(
-                'Bitcoin adoption still has a long way to go, and Bitcoin creators are working tirelessly to bring that vision to life. Geyser’s mission is to support these creators and empower them to push Bitcoin adoption forward. Geyser Guardians play a vital role in this mission. By becoming a Guardian, you directly fund creator grants and receive exclusive perks in return.',
-              )}
+      <VStack
+        w="full"
+        spacing={{ base: 8, md: 12 }}
+        paddingTop={{ base: 16, md: 20, lg: 8, xl: 12 }}
+        paddingBottom={{ base: '60px', lg: 24 }}
+      >
+        <VStack w="full" zIndex={2} fontFamily={fonts.cormorant} spacing={{ base: 2, md: 3, lg: 6 }}>
+          <VStack w="full" spacing={{ base: 4, lg: 4 }} px={{ base: 3, lg: 6 }}>
+            <Body fontSize={ctaTextSize} fontWeight={600} textAlign={'center'} color="neutral1.12" lineHeight={'1'}>
+              {t('Limited-edition items made in collaboration with top Bitcoin brands that support Bitcoin creators.')}
             </Body>
-            <Body fontSize={textSize} textAlign={'center'} medium light lineHeight={'1.2'}>
-              {t('Become a Guardian now!')}
-            </Body>
-          </VStack>
 
-          <VStack w="full" spacing={0}>
-            <Body
-              size={{ base: '16px', md: '18px', lg: '20px' }}
-              light
-              fontWeight={700}
-              textTransform={'uppercase'}
-              color="error.9"
-            >
-              <Trans
-                i18nKey="The first {{count}} guardians get {{discount}} off. {{left}} left."
-                values={{ count: 121, discount: '10%', left: guardianDiscountItems }}
-              >
-                {'The first '}
-                <Body as="span" color="guardians.LEGEND.text">{`{{count}}`}</Body>
-                {' guardians get '}
-                <Body as="span" color="guardians.LEGEND.text">{`{{discount}}`}</Body>
-                {' off. '}
-                <Body as="span" color="guardians.LEGEND.text">{`{{left}}`}</Body>
-                {' left.'}
-              </Trans>
-            </Body>
-            <Body size={ctaTextSize} textTransform={'uppercase'} bold light marginTop={{ base: '-6px', lg: '-10px' }}>
-              {t('Select a character to explore perks')}
-            </Body>
+            <VStack spacing={0}>
+              <Body fontSize={textSize} textAlign={'center'} bold lineHeight={'1'}>
+                <Trans
+                  i18nKey="COLLECT YOURS 👇 & JOIN THE COMMUNITY OF <1>{{totalUsers}}</1> GUARDIANS"
+                  values={{ totalUsers: totalSoldCount }}
+                >
+                  <Body as="span" color={'guardians.LEGEND.text'} bold>
+                    {t('COLLECT YOURS')}
+                  </Body>
+                  {' 👇 '}
+
+                  {t('& JOIN THE COMMUNITY OF ')}
+                  <Body as="span" size={extraSize} color={'guardians.LEGEND.text'} bold>
+                    {'{{totalUsers}}'}
+                  </Body>
+                  {t(' GUARDIANS')}
+                </Trans>
+              </Body>
+            </VStack>
+            <ButtonArray />
           </VStack>
+          <Promotion />
         </VStack>
-        {isMobile ? <MobileGuardiansIllustration /> : <DesktopGuardiansIllustration />}
+
+        <GuardianRewards />
+
         <VStack
           w="full"
           h="full"
@@ -95,6 +84,13 @@ export const GuardiansMainPage = () => {
           spacing={{ base: '32px', lg: '96px' }}
           px={{ base: 3, lg: 6 }}
         >
+          <VStack w="full" spacing={{ base: '16px', lg: '22px' }} paddingTop={10}>
+            <GuardianUsers guardian={GuardianType.Legend} size="lg" />
+            <GuardianUsers guardian={GuardianType.King} size="md" />
+            <GuardianUsers guardian={GuardianType.Knight} size="sm" />
+            <GuardianUsers guardian={GuardianType.Warrior} size="sm" />
+          </VStack>
+
           <VStack w="full">
             <VStack w="full" spacing={0}>
               <GuardianHeader>{t('Why Geyser')}</GuardianHeader>
@@ -155,11 +151,7 @@ export const GuardiansMainPage = () => {
               </VStack>
             </VStack>
           </VStack>
-          <GuardianUsers guardian={GuardianType.Legend} size="lg" />
-          <GuardianUsers guardian={GuardianType.King} size="md" />
-          <GuardianUsers guardian={GuardianType.Knight} size="sm" />
-          <GuardianUsers guardian={GuardianType.Warrior} size="sm" />
-          <Promotion />
+
           <VStack w="full" spacing={{ base: '16px', lg: '22px' }}>
             <GuardianHeader>{t('Investors')}</GuardianHeader>
             <Investors />
@@ -180,6 +172,14 @@ export const GuardianHeader = ({ children, ...rest }: HeaderProps) => {
     <H2 fontSize={{ base: '28px', md: '32px', lg: '56px', xl: '72px' }} fontWeight={600} {...rest}>
       {children}
     </H2>
+  )
+}
+
+export const GuardianSubHeader = ({ children, ...rest }: HeaderProps) => {
+  return (
+    <H3 fontSize={{ base: '24px', md: '28px', lg: '40px', xl: '56px' }} bold {...rest}>
+      {children}
+    </H3>
   )
 }
 

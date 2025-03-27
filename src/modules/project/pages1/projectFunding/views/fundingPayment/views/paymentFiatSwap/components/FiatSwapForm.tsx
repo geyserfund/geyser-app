@@ -14,8 +14,8 @@ import { getPath } from '@/shared/constants/index.ts'
 import { useFundingFiatSwapPaymentCreateMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
+import { FiatSwapStatus, fiatSwapStatusAtom } from '../atom/fiatSwapStatusAtom.ts'
 import { fiatSwapCurrencies } from '../data.ts'
-import { FiatSwapStatus, fiatSwapStatusAtom } from '../fiatSwapStatus.ts'
 
 /** Component for handling fiat swap currency selection and payment */
 export const FiatSwapForm: React.FC = () => {
@@ -86,7 +86,7 @@ export const FiatSwapForm: React.FC = () => {
         onClick={handleCreateFiatSwapPayment}
         isLoading={isLoading}
       >
-        {t('Pay')}
+        {isLoading ? t('Redirecting you to fiat payment') : t('Pay')}
       </Button>
     </>
   )

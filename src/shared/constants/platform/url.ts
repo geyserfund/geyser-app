@@ -87,6 +87,7 @@ export const ProjectEntryThumbnailPlaceholderUrl =
 export const LogoNameBrand = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-brand.svg'
 export const LogoNameDark = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-dark.svg'
 export const LogoNameLight = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-light.svg'
+export const LogoOutline = 'https://storage.googleapis.com/geyser-projects-media/app/logo-outline.png'
 
 // Geyser Guide Links
 
@@ -433,7 +434,7 @@ export const GuardianPartnerBitcoinNewsUrl =
 // SEO
 
 export const GuardiansSeoImageUrl =
-  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/Guardians.png'
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/Main-Guardians-Image.png'
 export const KingSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/King.png'
 export const KnightSeoImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/Knight.png'

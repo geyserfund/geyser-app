@@ -53,7 +53,7 @@ export const useFollowedProjectsActivities = () => {
       .map((project) => {
         const activityCount = followedProjectsActivities.find((activity) => activity.project.id === project.id)
         return {
-          project: activityCount?.project as Project,
+          project: project as Project,
           count: activityCount ? activityCount.count : 0,
         }
       })

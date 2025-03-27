@@ -7,17 +7,18 @@ import { ContributionCreateInput, ContributionCreateMutation, useContributionCre
 import { useNotification } from '@/utils'
 
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
-import { fundingFlowErrorAtom, fundingRequestErrorAtom, useParseResponseToSwapAtom, useSetKeyPairAtom } from '../state'
+import { fundingFlowErrorAtom, fundingRequestErrorAtom, useParseResponseToSwapAtom } from '../state'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
   formattedFundingInputAtom,
   setFundingInputAfterRequestAtom,
 } from '../state/fundingContributionCreateInputAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '../state/fundingPaymentAtom.ts'
+import { keyPairAtom } from '../state/swapAtom.ts'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundingFormAtom } from './useFundingFormAtom'
-import { useResetFundingFlow } from './useResetFundingFlow'
+import { useResetContribution } from './useResetContribution.ts'
 import { useWebLNFlow } from './useWebLNFlow'
 
 const hasBolt11 = true
@@ -26,9 +27,7 @@ const hasWebLN = true
 export const useFundingAPI = () => {
   const toast = useNotification()
 
-  const resetFundingFlow = useResetFundingFlow()
-
-  const { project, isFundingInputAmountValid, isFundingUserInfoValid } = useFundingFormAtom()
+  const { project } = useFundingFormAtom()
 
   const formattedFundingInput = useAtomValue(formattedFundingInputAtom)
 
@@ -37,6 +36,8 @@ export const useFundingAPI = () => {
   const setError = useSetAtom(fundingFlowErrorAtom)
   const setFundingRequestErrored = useSetAtom(fundingRequestErrorAtom)
 
+  const resetContribution = useResetContribution()
+
   const fundingContributionPartialUpdate = useSetAtom(fundingContributionPartialUpdateAtom)
   const fundingPaymentDetailsPartialUpdate = useSetAtom(fundingPaymentDetailsPartialUpdateAtom)
 
@@ -44,14 +45,11 @@ export const useFundingAPI = () => {
 
   const startWebLNFlow = useWebLNFlow()
 
-  const setKeyPair = useSetKeyPairAtom()
+  const setKeyPair = useSetAtom(keyPairAtom)
 
   const [contributionCreate, requestFundingOptions] = useCustomMutation(useContributionCreateMutation, {
     onCompleted(data) {
       try {
-        setError(undefined)
-        setFundingRequestErrored(false)
-
         if (!data.contributionCreate || !data.contributionCreate.contribution) {
           throw new Error('Undefined funding tx')
         }
@@ -117,6 +115,8 @@ export const useFundingAPI = () => {
         return
       }
 
+      resetContribution()
+
       const keyPair = generatePrivatePublicKeyPair()
       setKeyPair(keyPair)
 
@@ -128,7 +128,7 @@ export const useFundingAPI = () => {
 
       await contributionCreate({ variables: { input }, onCompleted })
     },
-    [contributionCreate, toast, setKeyPair, setFundingInputAfterRequest],
+    [contributionCreate, toast, setKeyPair, setFundingInputAfterRequest, resetContribution],
   )
 
   const requestFundingFromContext = useCallback(
@@ -136,19 +136,9 @@ export const useFundingAPI = () => {
     [requestFunding, formattedFundingInput],
   )
 
-  const retryFundingRequest = useCallback(() => {
-    if (!isFundingInputAmountValid.valid || isFundingUserInfoValid.valid) {
-      return
-    }
-
-    resetFundingFlow()
-    requestFundingFromContext()
-  }, [resetFundingFlow, requestFundingFromContext, isFundingInputAmountValid, isFundingUserInfoValid])
-
   return {
     requestFundingOptions,
     requestFunding,
     requestFundingFromContext,
-    retryFundingRequest,
   }
 }

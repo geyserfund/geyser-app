@@ -148,7 +148,7 @@ const FundingLimitReachedNotice = () => {
 
   return (
     <>
-      <CardLayout as={HStack} width="100%" background="error.3" borderColor="error.6" flexDirection="row">
+      <CardLayout as={HStack} width="100%" background="orange.3" borderColor="orange.6" flexDirection="row">
         <VStack flex={1} spacing={0} alignItems="start">
           <Body bold>{t('Funding limit reached!')}</Body>
           <Body size="sm" light>
@@ -158,7 +158,7 @@ const FundingLimitReachedNotice = () => {
         <VStack justifyContent="flex-end" h="full">
           <Button
             variant="solid"
-            colorScheme="error"
+            colorScheme="orange"
             isLoading={generateVerificationTokenLoading}
             onClick={() => {
               startVerification(isLevel2 ? UserVerificationLevelInput.Level_3 : UserVerificationLevelInput.Level_2)
