@@ -118,6 +118,7 @@ export const projectFundingRoutes = [
   getPath('fundingSuccess', PathName.projectName),
   ...projectFundingPaymentCreatedRoutes,
   ...projectFundingPaymentOnchainRoutes,
+  ...projectFundingPaymentFiatSwapRoutes,
 ]
 
 export const ProjectPageRoutesWithNavBarForDesktop = [...projectBaseRoutes, ...projectDashboardRoutes]

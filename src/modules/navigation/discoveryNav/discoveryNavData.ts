@@ -36,7 +36,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Products,
     path: 'discoveryProducts',
     icon: PiHandbag,
-    bottomNav: false,
+    bottomNav: true,
   },
   {
     label: 'Activity',
@@ -57,7 +57,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.HallOfFame,
     path: 'discoveryHallOfFame',
     icon: PiCrown,
-    bottomNav: true,
+    bottomNav: false,
   },
   {
     label: 'Grants',

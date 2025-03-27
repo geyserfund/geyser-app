@@ -2,6 +2,7 @@ import { atom } from 'jotai'
 
 import { GuardianProjectRewardFragment } from '@/types'
 
+import { GuardianRewardDetails, guardianRewardsMap, RewardDetails, RewardMap } from '../data.ts'
 import { guardianRewardUUIDs } from '../pages/character/characterAssets'
 
 export const guardianRewardsAtom = atom<GuardianProjectRewardFragment[]>([])
@@ -21,4 +22,29 @@ export const guardianRewardsDiscountItemsAtom = atom<number>((get) => {
   })
 
   return discountItemNumber
+})
+
+export type GuardianRewardsPhysicalItems = {
+  rewards: GuardianProjectRewardFragment[]
+  rewardsMap: RewardMap[]
+  details: RewardDetails
+}
+
+export const guardianRewardsPhysicalItemsAtom = atom<GuardianRewardsPhysicalItems[]>((get) => {
+  const guardianRewards = get(guardianRewardsAtom)
+
+  const physicalRewards: GuardianRewardsPhysicalItems[] = GuardianRewardDetails.map((details) => {
+    const rewardsMap = guardianRewardsMap.filter((rewardMap) => rewardMap.type === details.rewardType)
+
+    const rewards = guardianRewards.filter((reward) =>
+      rewardsMap.some((rewardmap) => rewardmap.rewardUUID === reward.uuid),
+    )
+
+    return {
+      details,
+      rewards,
+      rewardsMap,
+    }
+  })
+  return physicalRewards
 })

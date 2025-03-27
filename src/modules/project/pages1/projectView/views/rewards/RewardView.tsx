@@ -160,7 +160,7 @@ export const RewardView = () => {
                 />
               </Box>
             ) : (
-              <MediaCarousel links={reward.images} aspectRatio={ImageCropAspectRatio.Reward} />
+              <MediaCarousel links={reward.images} aspectRatio={ImageCropAspectRatio.Reward} borderRadius={'8px'} />
             )}
             {isProjectOwner && !reward.isHidden && (
               <CardLayout w={'full'} padding={3}>
