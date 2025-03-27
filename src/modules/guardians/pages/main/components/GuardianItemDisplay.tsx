@@ -19,21 +19,21 @@ export const GuardianItemDisplay = ({
 }) => {
   return (
     <VStack w="full" spacing={8}>
-      <VStack w="full" spacing={3} id={`guardians-${details.rewardType}`}>
+      <VStack w="full" spacing={1} id={`guardians-${details.rewardType}`}>
         <GuardianSubHeader textTransform="uppercase" lineHeight={1} textAlign={'center'}>
           {details.title}
         </GuardianSubHeader>
         <HStack w="full" flexWrap={'wrap'} justifyContent={'center'}>
-          <Body fontSize={{ base: '24px', lg: '40px' }} textAlign={'center'}>
+          <Body fontSize={{ base: '20px', lg: '36px' }} textAlign={'center'}>
             {t('In partnership with')}
           </Body>
           {details.partners.map((partner, index) => {
             return (
               <HStack key={partner.link}>
                 <Box as={Link} href={partner.link} isExternal>
-                  <Image src={partner.image} maxHeight={{ base: '40px', lg: '60px' }} maxWidth="250px" />
+                  <Image src={partner.image} maxHeight={{ base: '30px', lg: '50px' }} maxWidth="250px" />
                 </Box>
-                {index < details.partners.length - 1 && <Body fontSize={{ base: '24px', lg: '40px' }}>{t('&')}</Body>}
+                {index < details.partners.length - 1 && <Body fontSize={{ base: '20px', lg: '36px' }}>{t('&')}</Body>}
               </HStack>
             )
           })}

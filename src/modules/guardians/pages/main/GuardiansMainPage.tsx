@@ -177,7 +177,7 @@ export const GuardianHeader = ({ children, ...rest }: HeaderProps) => {
 
 export const GuardianSubHeader = ({ children, ...rest }: HeaderProps) => {
   return (
-    <H3 fontSize={{ base: '24px', md: '28px', lg: '48px', xl: '60px' }} bold {...rest}>
+    <H3 fontSize={{ base: '24px', md: '28px', lg: '40px', xl: '56px' }} bold {...rest}>
       {children}
     </H3>
   )
