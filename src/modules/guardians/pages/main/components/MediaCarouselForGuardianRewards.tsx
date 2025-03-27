@@ -23,10 +23,9 @@ export const MediaCarouselForGuardianRewards = ({
     <Modal
       {...modalProps}
       size="lg"
-      noClose
       isCentered={false}
       title={data.name}
-      headerProps={{ fontWeight: 700, fontSize: '24px', textTransform: 'uppercase' }}
+      headerProps={{ fontWeight: 700, fontSize: '24px', textTransform: 'uppercase', paddingRight: '20px' }}
       contentProps={{ fontFamily: fonts.cormorant }}
       bodyProps={{ maxHeight: '70vh', overflowY: 'auto' }}
       wrapperProps={{ paddingBottom: 20 }}
