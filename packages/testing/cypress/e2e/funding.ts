@@ -81,10 +81,12 @@ export const onChainSuccessFlowWithRewards = () => {
           const clipboardValue = (win as any).testClipboardValue
 
           // Now parse the BIP21 URL in the test
-          console.log('Full clipboard value:', clipboardValue)
+
+          cy.task('log', `DEBUG - Clipboard Value: ${clipboardValue}`)
           const onChainAddress = clipboardValue.split(':')[1]?.split('?')[0]
 
-          console.log('Extracted Bitcoin address:', onChainAddress)
+          cy.task('log', `DEBUG - OnChain Address: ${onChainAddress}`)
+
           const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT)
           cy.request(payOnchain).then((response) => {
             onChainTransactionProcessingScreenIsVisible()

@@ -6,7 +6,7 @@ import { ProfileNavContent } from './ProfileNavContent'
 export const ProfileNavMenu = () => {
   return (
     <Menu placement="bottom-end" closeOnSelect={true} strategy="fixed">
-      <MenuButton data-testid="platform-dropdown-menu" as={ProfileNavButton} />
+      <MenuButton as={ProfileNavButton} />
       <Portal>
         <MenuList p={0} zIndex="99" shadow="md" maxHeight="calc(100vh - 100px)" overflowY="auto">
           <ProfileNavContent />
