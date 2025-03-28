@@ -53,6 +53,7 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
 
       <HStack
         ref={ref}
+        data-testid="platform-dropdown-menu"
         height={{ base: '40px', lg: '46px' }}
         width={{ base: '40px', lg: '48px' }}
         minWidth={{ base: '40px', lg: '48px' }}

@@ -9,9 +9,9 @@ export type ErrorExtensionType = {
 
 export const interceptFundingWithError = (extensions: ErrorExtensionType) => {
   interceptGraphql((req) => {
-    aliasQuery(req, 'Fund')
+    aliasQuery(req, 'ContributionCreate')
 
-    if (hasOperationName(req, 'Fund')) {
+    if (hasOperationName(req, 'ContributionCreate')) {
       req.reply({
         body: {
           data: null,

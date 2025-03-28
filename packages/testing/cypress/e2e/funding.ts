@@ -23,7 +23,7 @@ import { MINE_BLOCK_ADDRESS } from '../contants'
 import { mineBlockOptions, payLightningInvoice, payOnChainOptions } from '../utils/lncli'
 
 const ONCHAIN_FUNDING_AMOUNT = 60000
-const LIGHTNING_FUNDING_AMOUNT = 50
+const LIGHTNING_FUNDING_AMOUNT = 1000
 const FUNDING_COMMENT = 'This was the test comment'
 
 export const testLightningSuccessFlow = () => {
@@ -40,14 +40,21 @@ export const testLightningSuccessFlow = () => {
 
       clickCopyLightningInvoiceButton()
 
-      cy.get('@copy')
-        .its('lastCall.args.0')
-        .then((value) => {
-          const payLightningOptions = payLightningInvoice(value)
+      // Wait for our custom event handler to capture the clipboard value
+      cy.window().then((win) => {
+        // Wait for a short period to ensure our event handler has time to run
+        cy.wait(500).then(() => {
+          const clipboardValue = (win as any).testClipboardValue
+
+          cy.log('DEBUG - Clipboard Value: ', clipboardValue)
+          cy.task('log', `DEBUG - Clipboard Value: ${clipboardValue}`)
+
+          const payLightningOptions = payLightningInvoice(clipboardValue)
           cy.request(payLightningOptions).then(() => {
             successScreenIsVisible()
           })
         })
+      })
     })
   })
 }
@@ -69,10 +76,20 @@ export const onChainSuccessFlowWithRewards = () => {
 
       clickCopyOnChainButton()
 
-      cy.get('@copy')
-        .its('lastCall.args.0')
-        .then((value) => {
-          const onChainAddress = value.split(':')[1].split('?')[0]
+      // Wait for our custom event handler to capture the clipboard value
+      cy.window().then((win) => {
+        // Wait for a short period to ensure our event handler has time to run
+        cy.wait(500).then(() => {
+          // @ts-ignore - testClipboardValue is added by our custom interception
+          const clipboardValue = (win as any).testClipboardValue
+
+          // Now parse the BIP21 URL in the test
+
+          cy.task('log', `DEBUG - Clipboard Value: ${clipboardValue}`)
+          const onChainAddress = clipboardValue.split(':')[1]?.split('?')[0]
+
+          cy.task('log', `DEBUG - OnChain Address: ${onChainAddress}`)
+
           const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT)
           cy.request(payOnchain).then((response) => {
             onChainTransactionProcessingScreenIsVisible()
@@ -83,6 +100,7 @@ export const onChainSuccessFlowWithRewards = () => {
             })
           })
         })
+      })
     })
   })
 }
@@ -104,10 +122,18 @@ export const onChainSuccessFlowWithDonation = () => {
 
       clickCopyOnChainButton()
 
-      cy.get('@copy')
-        .its('lastCall.args.0')
-        .then((value) => {
-          const onChainAddress = value.split(':')[1].split('?')[0]
+      // Wait for our custom event handler to capture the clipboard value
+      cy.window().then((win) => {
+        // Wait for a short period to ensure our event handler has time to run
+        cy.wait(500).then(() => {
+          // @ts-ignore - testClipboardValue is added by our custom interception
+          const clipboardValue = (win as any).testClipboardValue
+
+          // Now parse the BIP21 URL in the test
+          cy.log('Full clipboard value:', clipboardValue)
+          const onChainAddress = clipboardValue.split(':')[1]?.split('?')[0]
+
+          cy.log('Extracted Bitcoin address:', onChainAddress)
           const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT)
           cy.request(payOnchain).then((response) => {
             onChainTransactionProcessingScreenIsVisible()
@@ -118,6 +144,7 @@ export const onChainSuccessFlowWithDonation = () => {
             })
           })
         })
+      })
     })
   })
 }
@@ -139,10 +166,18 @@ export const onChainRefundFlow = () => {
 
       clickCopyOnChainButton()
 
-      cy.get('@copy')
-        .its('lastCall.args.0')
-        .then((value) => {
-          const onChainAddress = value.split(':')[1].split('?')[0]
+      // Wait for our custom event handler to capture the clipboard value
+      cy.window().then((win) => {
+        // Wait for a short period to ensure our event handler has time to run
+        cy.wait(500).then(() => {
+          // @ts-ignore - testClipboardValue is added by our custom interception
+          const clipboardValue = (win as any).testClipboardValue
+
+          // Now parse the BIP21 URL in the test
+          cy.log('Full clipboard value:', clipboardValue)
+          const onChainAddress = clipboardValue.split(':')[1]?.split('?')[0]
+
+          cy.log('Extracted Bitcoin address:', onChainAddress)
           const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT - 1000)
           cy.request(payOnchain).then((response) => {
             transactionFailedScreenIsVisible()
@@ -152,6 +187,7 @@ export const onChainRefundFlow = () => {
             refundInitiatedScreenIsVisible()
           })
         })
+      })
     })
   })
 }

@@ -8,11 +8,11 @@
 /.idea
 
 # testing
-/coverage
-/cypress/videos
-/cypress/downloads
-/cypress/screenshots
-cypress.env.json
+coverage
+packages/testing/cypress/videos/*
+packages/testing/cypress/downloads/*
+packages/testing/cypress/screenshots/*
+packages/testing/cypress.env.json
 
 
 # production
