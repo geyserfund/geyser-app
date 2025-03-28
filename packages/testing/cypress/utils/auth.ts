@@ -11,7 +11,7 @@ export const openConnectPopup = () => {
   cy.get('p').contains('Connect').should('be.visible')
 }
 
-export const getDropdownButton = () => cy.get('button[data-testid="topnavbar-dropdown-menu"]')
+export const getDropdownButton = () => cy.get('button[data-testid="platform-dropdown-menu"]')
 
 export const loginWithNostr = () => {
   openConnectPopup()
