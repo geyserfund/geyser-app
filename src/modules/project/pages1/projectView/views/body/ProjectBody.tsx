@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { RightSideStickyLayout } from '@/modules/project/components/RightSideStickyLayout'
+import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 
 import { dimensions } from '../../../../../../shared/constants'
 import { ProjectStatus } from '../../../../../../types'
@@ -57,6 +58,7 @@ export const ProjectBody = () => {
         {project.entriesCount && <Posts />}
         {project.goalsCount && <Goals />}
         <Details />
+        <UserExternalLinksComponent />
       </VStack>
       <RightSideStickyLayout
         overflow="auto"

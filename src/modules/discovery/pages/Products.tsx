@@ -24,7 +24,7 @@ export const Products = () => {
   const rewards = data?.projectRewardsTrendingMonthlyGet || []
 
   return (
-    <VStack w="full" spacing={6}>
+    <VStack w="full" height="full" spacing={6}>
       <HStack w="full" justifyContent={'start'} alignItems={'center'}>
         <H3 size="2xl" dark bold>
           {t('Trending products on Geyser this month')}
