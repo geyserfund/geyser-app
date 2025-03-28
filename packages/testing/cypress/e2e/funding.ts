@@ -73,9 +73,6 @@ export const onChainSuccessFlowWithRewards = () => {
 
       clickCopyOnChainButton()
 
-      // Click the button first to trigger the copy operation
-      cy.get('#copy-onchain-address-button').click({ force: true })
-
       // Wait for our custom event handler to capture the clipboard value
       cy.window().then((win) => {
         // Wait for a short period to ensure our event handler has time to run
@@ -84,10 +81,10 @@ export const onChainSuccessFlowWithRewards = () => {
           const clipboardValue = (win as any).testClipboardValue
 
           // Now parse the BIP21 URL in the test
-          cy.log('Full clipboard value:', clipboardValue)
+          console.log('Full clipboard value:', clipboardValue)
           const onChainAddress = clipboardValue.split(':')[1]?.split('?')[0]
 
-          cy.log('Extracted Bitcoin address:', onChainAddress)
+          console.log('Extracted Bitcoin address:', onChainAddress)
           const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT)
           cy.request(payOnchain).then((response) => {
             onChainTransactionProcessingScreenIsVisible()
@@ -119,9 +116,6 @@ export const onChainSuccessFlowWithDonation = () => {
       onChainQrScreenIsVisible()
 
       clickCopyOnChainButton()
-
-      // Click the button first to trigger the copy operation
-      cy.get('#copy-onchain-address-button').click({ force: true })
 
       // Wait for our custom event handler to capture the clipboard value
       cy.window().then((win) => {
@@ -166,9 +160,6 @@ export const onChainRefundFlow = () => {
       onChainQrScreenIsVisible()
 
       clickCopyOnChainButton()
-
-      // Click the button first to trigger the copy operation
-      cy.get('#copy-onchain-address-button').click({ force: true })
 
       // Wait for our custom event handler to capture the clipboard value
       cy.window().then((win) => {

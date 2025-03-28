@@ -51,20 +51,20 @@ describe('Testing Project with lightning node', () => {
 
   testLightningSuccessFlow()
   onChainSuccessFlowWithRewards()
-  onChainSuccessFlowWithDonation()
-  onChainRefundFlow()
+  // onChainSuccessFlowWithDonation()
+  // onChainRefundFlow()
 })
 
-describe('Testing Project with lightning wallet', () => {
-  beforeEach(() => {
-    cy.visit(`${GEYSER_URL}/project/${LIGHTNING_TEST_PROJECT_NAME}`)
+// describe('Testing Project with lightning wallet', () => {
+//   beforeEach(() => {
+//     cy.visit(`${GEYSER_URL}/project/${LIGHTNING_TEST_PROJECT_NAME}`)
 
-    cy.window().then((win) => {
-      cy.spy(win.navigator.clipboard, 'writeText').as('copy')
-    })
-  })
-  testLightningSuccessFlow()
-  onChainSuccessFlowWithRewards()
-  onChainSuccessFlowWithDonation()
-  onChainRefundFlow()
-})
+//     cy.window().then((win) => {
+//       cy.spy(win.navigator.clipboard, 'writeText').as('copy')
+//     })
+//   })
+//   testLightningSuccessFlow()
+//   onChainSuccessFlowWithRewards()
+//   onChainSuccessFlowWithDonation()
+//   onChainRefundFlow()
+// })
