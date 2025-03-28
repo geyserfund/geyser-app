@@ -47,7 +47,7 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
   const handleDataUpdate = (data: TEntity[]) => {
     if (data) {
       // TODO: This is a temporary workaround - Replace with count
-      if (data.length < itemLimit - 2) {
+      if (data.length === 0) {
         setNoMoreItems(true)
       } else {
         setNoMoreItems(false)
@@ -108,7 +108,7 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
       updateQuery(_: any, { fetchMoreResult }: any) {
         const data = getNestedValue(fetchMoreResult, queryName)
 
-        if (data.length < itemLimit) {
+        if (data.length === 0) {
           setNoMoreItems(true)
         }
 
