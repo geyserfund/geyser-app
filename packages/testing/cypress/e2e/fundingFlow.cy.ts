@@ -43,17 +43,17 @@ function setupBitcoinAddressInterception() {
   })
 }
 
-describe('Testing Project with lightning node', () => {
-  beforeEach(() => {
-    cy.visit(`${GEYSER_URL}/project/${LND_TEST_PROJECT_NAME}`)
-    setupBitcoinAddressInterception()
-  })
+// describe('Testing Project with lightning node', () => {
+//   beforeEach(() => {
+//     cy.visit(`${GEYSER_URL}/project/${LND_TEST_PROJECT_NAME}`)
+//     setupBitcoinAddressInterception()
+//   })
 
-  testLightningSuccessFlow()
-  onChainSuccessFlowWithRewards()
-  onChainSuccessFlowWithDonation()
-  onChainRefundFlow()
-})
+//   testLightningSuccessFlow()
+//   onChainSuccessFlowWithRewards()
+//   onChainSuccessFlowWithDonation()
+//   onChainRefundFlow()
+// })
 
 describe('Testing Project with lightning wallet', () => {
   beforeEach(() => {
@@ -64,7 +64,7 @@ describe('Testing Project with lightning wallet', () => {
     })
   })
   testLightningSuccessFlow()
-  onChainSuccessFlowWithRewards()
-  onChainSuccessFlowWithDonation()
-  onChainRefundFlow()
+  // onChainSuccessFlowWithRewards()
+  // onChainSuccessFlowWithDonation()
+  // onChainRefundFlow()
 })

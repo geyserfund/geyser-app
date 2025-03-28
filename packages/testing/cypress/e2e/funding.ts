@@ -46,6 +46,9 @@ export const testLightningSuccessFlow = () => {
         cy.wait(500).then(() => {
           const clipboardValue = (win as any).testClipboardValue
 
+          cy.log('DEBUG - Clipboard Value: ', clipboardValue)
+          cy.task('log', `DEBUG - Clipboard Value: ${clipboardValue}`)
+
           const payLightningOptions = payLightningInvoice(clipboardValue)
           cy.request(payLightningOptions).then(() => {
             successScreenIsVisible()
