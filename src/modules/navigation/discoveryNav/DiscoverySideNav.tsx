@@ -1,20 +1,10 @@
-import {
-  Box,
-  Button,
-  ButtonProps,
-  HStack,
-  Image,
-  useBreakpointValue,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Button, ButtonProps, Image, useBreakpointValue, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { Link } from 'react-router-dom'
 
 import { LogoDark, LogoLight } from '@/assets'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
-import { Body } from '@/shared/components/typography/Body.tsx'
 import { dimensions, getPath, LogoNameDark, LogoNameLight } from '@/shared/constants'
 import { GradientBorder } from '@/shared/molecules/GradientBorder'
 import { UserExternalLinks } from '@/shared/molecules/UserExternalLinks'
