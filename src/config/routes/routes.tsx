@@ -786,8 +786,7 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('guardiansCharacter', PathName.characterId),
         async lazy() {
-          const CharacterPage = await Guardians().then((m) => m.CharacterPage)
-          return { Component: CharacterPage }
+          return { element: <Navigate to={getPath('guardians')} /> }
         },
       },
     ],
