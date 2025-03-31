@@ -154,7 +154,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
       isOpen={isOpen}
       onClose={privateRoute ? handlePrivateRouteModalClose : onClose}
       size="sm"
-      closeOnOverlayClick={!privateRoute}
+      closeOnOverlayClick={!privateRoute && !isOtpStarted}
       closeOnEsc={!privateRoute}
       onOverlayClick={handlePrivateRouteModalClose}
       onEsc={handlePrivateRouteModalClose}

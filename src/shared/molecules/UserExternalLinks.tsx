@@ -3,9 +3,11 @@ import { Button } from '@chakra-ui/react'
 import { Link as ChakraLink } from '@chakra-ui/react'
 import { ComponentWithAs } from '@chakra-ui/system'
 import { t } from 'i18next'
+import { Link } from 'react-router-dom'
 
 import {
   FeedbackUrl,
+  getPath,
   GeyserAboutUrl,
   GeyserGithubUrl,
   GeyserPrivacyUrl,
@@ -30,7 +32,7 @@ export const UserExternalLinksComponent = ({ noMobile, onlyMobile, ...rest }: Us
   }
 
   return (
-    <VStack paddingTop={20} {...rest}>
+    <VStack w="full" paddingTop={20} {...rest}>
       <Divider />
       <UserExternalLinks />
     </VStack>
@@ -59,7 +61,7 @@ export const UserExternalLinks = () => {
       <UserNavExternalButton as={ChakraLink} isExternal href={GeyserPrivacyUrl} color="neutral1.9">
         {t('Privacy')}
       </UserNavExternalButton>
-      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserPrivacyUrl} color="neutral1.9">
+      <UserNavExternalButton as={Link} to={getPath('project', 'geyser')} color="neutral1.9">
         {t('Donate')}
       </UserNavExternalButton>
     </HStack>
