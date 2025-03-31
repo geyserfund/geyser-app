@@ -43,28 +43,30 @@ function setupBitcoinAddressInterception() {
   })
 }
 
-// describe('Testing Project with lightning node', () => {
-//   beforeEach(() => {
-//     cy.visit(`${GEYSER_URL}/project/${LND_TEST_PROJECT_NAME}`)
-//     setupBitcoinAddressInterception()
-//   })
+describe('Testing Project with lightning node', () => {
+  beforeEach(() => {
+    cy.visit(`${GEYSER_URL}/project/${LND_TEST_PROJECT_NAME}`)
+    setupBitcoinAddressInterception()
+  })
 
+  testLightningSuccessFlow()
+  onChainSuccessFlowWithRewards()
+  onChainSuccessFlowWithDonation()
+  onChainRefundFlow()
+})
+
+// TODO: WILL have to be looked at again, currently not working due to external conditions
+
+// describe(`Testing Project with lightning wallet LIGHTNING_TEST_PROJECT_NAME: ${LIGHTNING_TEST_PROJECT_NAME}, CONTRIBUTOR_LND_ENDPOINT:${CONTRIBUTOR_LND_ENDPOINT}`, () => {
+//   beforeEach(() => {
+//     cy.visit(`${GEYSER_URL}/project/${LIGHTNING_TEST_PROJECT_NAME}`)
+
+//     cy.window().then((win) => {
+//       cy.spy(win.navigator.clipboard, 'writeText').as('copy')
+//     })
+//   })
 //   testLightningSuccessFlow()
 //   onChainSuccessFlowWithRewards()
 //   onChainSuccessFlowWithDonation()
 //   onChainRefundFlow()
 // })
-
-describe(`Testing Project with lightning wallet LIGHTNING_TEST_PROJECT_NAME: ${LIGHTNING_TEST_PROJECT_NAME}, CONTRIBUTOR_LND_ENDPOINT:${CONTRIBUTOR_LND_ENDPOINT}`, () => {
-  beforeEach(() => {
-    cy.visit(`${GEYSER_URL}/project/${LIGHTNING_TEST_PROJECT_NAME}`)
-
-    cy.window().then((win) => {
-      cy.spy(win.navigator.clipboard, 'writeText').as('copy')
-    })
-  })
-  testLightningSuccessFlow()
-  // onChainSuccessFlowWithRewards()
-  // onChainSuccessFlowWithDonation()
-  // onChainRefundFlow()
-})
