@@ -14,8 +14,6 @@ export const payOnChainOptions = (addr: string, amount: number | string) => {
   return {
     method: 'POST',
     url: `${CONTRIBUTOR_LND_ENDPOINT}/v1/transactions`,
-    rejectUnauthorized: false,
-    json: true,
     headers: {
       'Content-Type': 'application/json',
       'Grpc-Metadata-Macaroon': CONTRIBUTOR_LND_ADMIN_MACAROON_HEX,
@@ -31,8 +29,6 @@ export const payLightningInvoice = (payment_request: string) => {
   return {
     method: 'POST',
     url: `${CONTRIBUTOR_LND_ENDPOINT}/v1/channels/transaction-stream`,
-    rejectUnauthorized: false,
-    json: true,
     headers: {
       'Content-Type': 'application/json',
       'Grpc-Metadata-Macaroon': CONTRIBUTOR_LND_ADMIN_MACAROON_HEX,
