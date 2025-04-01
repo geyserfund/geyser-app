@@ -1,4 +1,4 @@
-import { GEYSER_URL, LIGHTNING_TEST_PROJECT_NAME, LND_TEST_PROJECT_NAME } from '../contants'
+import { CONTRIBUTOR_LND_ENDPOINT, GEYSER_URL, LIGHTNING_TEST_PROJECT_NAME, LND_TEST_PROJECT_NAME } from '../contants'
 import {
   onChainRefundFlow,
   onChainSuccessFlowWithDonation,
@@ -51,11 +51,13 @@ describe('Testing Project with lightning node', () => {
 
   testLightningSuccessFlow()
   onChainSuccessFlowWithRewards()
-  // onChainSuccessFlowWithDonation()
-  // onChainRefundFlow()
+  onChainSuccessFlowWithDonation()
+  onChainRefundFlow()
 })
 
-// describe('Testing Project with lightning wallet', () => {
+// TODO: WILL have to be looked at again, currently not working due to external conditions
+
+// describe(`Testing Project with lightning wallet LIGHTNING_TEST_PROJECT_NAME: ${LIGHTNING_TEST_PROJECT_NAME}, CONTRIBUTOR_LND_ENDPOINT:${CONTRIBUTOR_LND_ENDPOINT}`, () => {
 //   beforeEach(() => {
 //     cy.visit(`${GEYSER_URL}/project/${LIGHTNING_TEST_PROJECT_NAME}`)
 

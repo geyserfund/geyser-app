@@ -18,6 +18,6 @@ jobs:
     - id: build-publish
       uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
       with:
-        path: storybook-static # change to your build folder
+        path: packages/storybook/storybook-static # change to your build folder
         install_command: yarn install
         build_command: yarn storybook:build

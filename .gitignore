@@ -19,7 +19,7 @@ packages/testing/cypress.env.json
 /dist
 
 # Storybook
-/storybook-static
+packages/storybook/storybook-static
 
 # misc
 .DS_Store
