@@ -2,7 +2,7 @@ name: Test
 on:
   pull_request:
     branches:
-      - 'staging'
+      - 'main'
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
