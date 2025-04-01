@@ -20,7 +20,7 @@ export const ContributeButton = (props: ButtonProps) => {
 
   const votingInfoModal = useModal()
 
-  const { queryProjectGrantApplications } = useProjectGrantApplicationsAPI(true)
+  useProjectGrantApplicationsAPI(true)
 
   const { project } = useProjectAtom()
 
@@ -64,7 +64,6 @@ export const ContributeButton = (props: ButtonProps) => {
             ? votingInfoModal.onOpen()
             : navigate(getPath('projectFunding', project.name))
         }
-        isLoading={queryProjectGrantApplications.loading}
         {...props}
       >
         {t('Contribute')}
