@@ -6671,6 +6671,8 @@ export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, n
 
 export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
+export type RewardForProductsPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null } };
+
 export type ActivitiesGetQueryVariables = Exact<{
   input?: InputMaybe<GetActivitiesInput>;
 }>;
@@ -6736,7 +6738,7 @@ export type ProjectRewardsTrendingMonthlyGetQueryVariables = Exact<{ [key: strin
 
 export type ProjectRewardsTrendingMonthlyGetQuery = { __typename?: 'Query', projectRewardsTrendingMonthlyGet: Array<{ __typename?: 'ProjectRewardTrendingMonthlyGetRow', count: number, projectReward: (
       { __typename?: 'ProjectReward' }
-      & RewardForLandingPageFragment
+      & RewardForProductsPageFragment
     ) }> };
 
 export type TagsGetQueryVariables = Exact<{ [key: string]: never; }>;
@@ -8333,6 +8335,25 @@ export const RewardForLandingPageFragmentDoc = gql`
     name
     title
     thumbnailImage
+  }
+}
+    `;
+export const RewardForProductsPageFragmentDoc = gql`
+    fragment RewardForProductsPage on ProjectReward {
+  id
+  uuid
+  images
+  cost
+  name
+  description
+  project {
+    rewardCurrency
+    id
+    name
+    title
+    thumbnailImage
+    category
+    subCategory
   }
 }
     `;
@@ -10719,11 +10740,11 @@ export const ProjectRewardsTrendingMonthlyGetDocument = gql`
   projectRewardsTrendingMonthlyGet {
     count
     projectReward {
-      ...RewardForLandingPage
+      ...RewardForProductsPage
     }
   }
 }
-    ${RewardForLandingPageFragmentDoc}`;
+    ${RewardForProductsPageFragmentDoc}`;
 
 /**
  * __useProjectRewardsTrendingMonthlyGetQuery__
