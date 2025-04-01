@@ -99,6 +99,7 @@ const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAcc
   const { account, icon, key, props } = accountInfoProps
 
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isOpenWithDelay, onOpen: onOpenWithDelay, onClose: onCloseWithDelay } = useDisclosure()
 
   const removeAccountModal = useModal()
 
@@ -133,7 +134,7 @@ const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAcc
   if (isEdit) {
     return (
       <>
-        <Popover trigger="hover" onOpen={onOpen} onClose={onClose} openDelay={100} closeDelay={100}>
+        <Popover isOpen={isOpen || isOpenWithDelay} onOpen={onOpen} onClose={onClose} openDelay={100} closeDelay={100}>
           <PopoverTrigger>
             <Button
               key={key}
@@ -143,6 +144,17 @@ const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAcc
               colorScheme={isOpen ? 'error' : 'neutral1'}
               p={'0'}
               fontSize="16px"
+              onMouseOver={() => {
+                setTimeout(() => {
+                  onOpen()
+                }, 200)
+              }}
+              onMouseLeave={() => {
+                onClose()
+                setTimeout(() => {
+                  onCloseWithDelay()
+                }, 20)
+              }}
               {...props}
             >
               {icon}
@@ -153,7 +165,14 @@ const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAcc
               <PopoverArrow />
 
               <PopoverCloseButton />
-              <PopoverBody>
+              <PopoverBody
+                onMouseOver={onOpenWithDelay}
+                onMouseLeave={() => {
+                  setTimeout(() => {
+                    onCloseWithDelay()
+                  }, 200)
+                }}
+              >
                 <Button variant="solid" colorScheme="error" isLoading={isLoading} onClick={removeAccountModal.onOpen}>
                   {t('Disconnect')}
                 </Button>
