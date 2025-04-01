@@ -43,7 +43,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
     }
   }
 
-  const linkProps = noLink ? {} : { as: Link, to: getPath('projectRewardView', project?.name, reward.id) }
+  const linkProps = noLink ? {} : { as: Link, to: getPath('projectRewardView', project?.name, reward.uuid) }
 
   const isHidden = hidden || reward.isHidden
 

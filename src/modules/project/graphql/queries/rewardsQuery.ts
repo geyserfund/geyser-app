@@ -4,7 +4,7 @@ import { FRAGMENT_PROJECT_REWARD } from '../fragments/rewardsFragment'
 
 export const QUERY_PROJECT_REWARDS = gql`
   ${FRAGMENT_PROJECT_REWARD}
-  query ProjectRewards($input: GetProjectRewardInput!) {
+  query ProjectRewards($input: GetProjectRewardsInput!) {
     projectRewardsGet(input: $input) {
       ...ProjectReward
     }
@@ -13,8 +13,8 @@ export const QUERY_PROJECT_REWARDS = gql`
 
 export const QUERY_PROJECT_REWARD = gql`
   ${FRAGMENT_PROJECT_REWARD}
-  query ProjectReward($getProjectRewardId: BigInt!) {
-    getProjectReward(id: $getProjectRewardId) {
+  query ProjectRewardGet($input: GetProjectRewardInput!) {
+    projectRewardGet(input: $input) {
       ...ProjectReward
     }
   }

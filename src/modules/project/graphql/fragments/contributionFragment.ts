@@ -105,7 +105,6 @@ export const FRAGMENT_FUNDING_CONTRIBUTION_SUBSCRIPTION = gql`
   }
 `
 
-// TODO: update to use payment statuses from payment fragment
 export const FRAGMENT_CONTRIBUTION_WITH_INVOICE_STATUS = gql`
   fragment ContributionWithInvoiceStatus on Contribution {
     id

@@ -114,7 +114,7 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
-            path: getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardId),
+            path: getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardUUID),
             async lazy() {
               const ProjectCreationEditReward = await ProjectLaunch().then((m) => m.ProjectCreationEditReward)
               return { Component: ProjectCreationEditReward }
@@ -298,7 +298,7 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
-            path: getPath('projectRewardView', PathName.projectName, PathName.rewardId),
+            path: getPath('projectRewardView', PathName.projectName, PathName.rewardUUID),
             async lazy() {
               const RewardView = await Project().then((m) => m.RewardView)
               return { Component: RewardView }
@@ -314,7 +314,7 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
-            path: getPath('projectRewardEdit', PathName.projectName, PathName.rewardId),
+            path: getPath('projectRewardEdit', PathName.projectName, PathName.rewardUUID),
             async lazy() {
               const EditReward = await CreatorReward().then((m) => m.RewardEdit)
               return {

@@ -77,7 +77,7 @@ const RewardCardForPost = ({
   return (
     <CardLayout
       as={Link}
-      to={getPath('projectRewardView', project.name, reward.id)}
+      to={getPath('projectRewardView', project.name, reward.uuid)}
       hover
       w="full"
       overflow={'hidden'}

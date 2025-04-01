@@ -846,6 +846,15 @@ export type GetProjectRewardInput = {
 };
 
 export type GetProjectRewardWhereInput = {
+  id?: InputMaybe<Scalars['BigInt']['input']>;
+  uuid?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type GetProjectRewardsInput = {
+  where: GetProjectRewardsWhereInput;
+};
+
+export type GetProjectRewardsWhereInput = {
   dateRange?: InputMaybe<DateRangeInput>;
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   projectId: Scalars['BigInt']['input'];
@@ -2963,6 +2972,7 @@ export type Query = {
   projectNotificationSettingsGet: CreatorNotificationSettings;
   projectRegionsGet: Array<ProjectRegionsGetResult>;
   projectRewardCategoriesGet: Array<Scalars['String']['output']>;
+  projectRewardGet: ProjectReward;
   projectRewardsGet: Array<ProjectReward>;
   projectRewardsTrendingMonthlyGet: Array<ProjectRewardTrendingMonthlyGetRow>;
   projectRewardsTrendingWeeklyGet: Array<ProjectRewardTrendingWeeklyGetRow>;
@@ -3168,8 +3178,13 @@ export type QueryProjectNotificationSettingsGetArgs = {
 };
 
 
-export type QueryProjectRewardsGetArgs = {
+export type QueryProjectRewardGetArgs = {
   input: GetProjectRewardInput;
+};
+
+
+export type QueryProjectRewardsGetArgs = {
+  input: GetProjectRewardsInput;
 };
 
 
@@ -4043,6 +4058,8 @@ export type ResolversTypes = {
   GetProjectOrdersStatsWhereInput: GetProjectOrdersStatsWhereInput;
   GetProjectRewardInput: GetProjectRewardInput;
   GetProjectRewardWhereInput: GetProjectRewardWhereInput;
+  GetProjectRewardsInput: GetProjectRewardsInput;
+  GetProjectRewardsWhereInput: GetProjectRewardsWhereInput;
   GetProjectStatsInput: GetProjectStatsInput;
   GetProjectStatsWhereInput: GetProjectStatsWhereInput;
   GlobalAmbassadorLeaderboardRow: ResolverTypeWrapper<GlobalAmbassadorLeaderboardRow>;
@@ -4450,6 +4467,8 @@ export type ResolversParentTypes = {
   GetProjectOrdersStatsWhereInput: GetProjectOrdersStatsWhereInput;
   GetProjectRewardInput: GetProjectRewardInput;
   GetProjectRewardWhereInput: GetProjectRewardWhereInput;
+  GetProjectRewardsInput: GetProjectRewardsInput;
+  GetProjectRewardsWhereInput: GetProjectRewardsWhereInput;
   GetProjectStatsInput: GetProjectStatsInput;
   GetProjectStatsWhereInput: GetProjectStatsWhereInput;
   GlobalAmbassadorLeaderboardRow: GlobalAmbassadorLeaderboardRow;
@@ -6006,6 +6025,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectNotificationSettingsGet?: Resolver<ResolversTypes['CreatorNotificationSettings'], ParentType, ContextType, RequireFields<QueryProjectNotificationSettingsGetArgs, 'projectId'>>;
   projectRegionsGet?: Resolver<Array<ResolversTypes['ProjectRegionsGetResult']>, ParentType, ContextType>;
   projectRewardCategoriesGet?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  projectRewardGet?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<QueryProjectRewardGetArgs, 'input'>>;
   projectRewardsGet?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<QueryProjectRewardsGetArgs, 'input'>>;
   projectRewardsTrendingMonthlyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingMonthlyGetRow']>, ParentType, ContextType>;
   projectRewardsTrendingWeeklyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingWeeklyGetRow']>, ParentType, ContextType>;
@@ -6739,7 +6759,7 @@ export type TagsMostFundedGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type TagsMostFundedGetQuery = { __typename?: 'Query', tagsMostFundedGet: Array<{ __typename?: 'TagsMostFundedGetResult', id: number, label: string }> };
 
-export type ActivityFeedFragmentFragment = { __typename?: 'Activity', activityType: string, createdAt: any, id: string, project: { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null }, resource: { __typename?: 'Contribution', id: any, amount: number, projectId: any, isAnonymous: boolean, comment?: string | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, guardianType?: GuardianType | null } | null } } | { __typename?: 'Entry', id: any, title: string, content?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'Post', id: any, title: string, markdown?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null } | { __typename?: 'ProjectGoal', currency: ProjectGoalCurrency, title: string, targetAmount: number, status: ProjectGoalStatus, goalDescription?: string | null } | { __typename?: 'ProjectReward', id: any, category?: string | null, cost: number, rewardCurrency: RewardCurrency, sold: number, stock?: number | null, projectRewardDescription?: string | null, projectRewardImage: Array<string> } };
+export type ActivityFeedFragmentFragment = { __typename?: 'Activity', activityType: string, createdAt: any, id: string, project: { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null }, resource: { __typename?: 'Contribution', id: any, amount: number, projectId: any, isAnonymous: boolean, comment?: string | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, guardianType?: GuardianType | null } | null } } | { __typename?: 'Entry', id: any, title: string, content?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'Post', id: any, title: string, markdown?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null } | { __typename?: 'ProjectGoal', currency: ProjectGoalCurrency, title: string, targetAmount: number, status: ProjectGoalStatus, goalDescription?: string | null } | { __typename?: 'ProjectReward', id: any, uuid: string, category?: string | null, cost: number, rewardCurrency: RewardCurrency, sold: number, stock?: number | null, projectRewardDescription?: string | null, projectRewardImage: Array<string> } };
 
 export type ActivityFeedQueryVariables = Exact<{
   input: GetActivitiesInput;
@@ -6864,7 +6884,7 @@ export type GuardianResultFragment = { __typename?: 'GuardianResult', guardianTy
   )> };
 
 export type GuardianProjectRewardsGetQueryVariables = Exact<{
-  input: GetProjectRewardInput;
+  input: GetProjectRewardsInput;
 }>;
 
 
@@ -7857,7 +7877,7 @@ export type ProjectSubscriptionPlansQuery = { __typename?: 'Query', projectSubsc
   )> };
 
 export type ProjectRewardsQueryVariables = Exact<{
-  input: GetProjectRewardInput;
+  input: GetProjectRewardsInput;
 }>;
 
 
@@ -7866,12 +7886,12 @@ export type ProjectRewardsQuery = { __typename?: 'Query', projectRewardsGet: Arr
     & ProjectRewardFragment
   )> };
 
-export type ProjectRewardQueryVariables = Exact<{
-  getProjectRewardId: Scalars['BigInt']['input'];
+export type ProjectRewardGetQueryVariables = Exact<{
+  input: GetProjectRewardInput;
 }>;
 
 
-export type ProjectRewardQuery = { __typename?: 'Query', getProjectReward: (
+export type ProjectRewardGetQuery = { __typename?: 'Query', projectRewardGet: (
     { __typename?: 'ProjectReward' }
     & ProjectRewardFragment
   ) };
@@ -8365,6 +8385,7 @@ export const ActivityFeedFragmentFragmentDoc = gql`
     }
     ... on ProjectReward {
       id
+      uuid
       category
       cost
       projectRewardDescription: description
@@ -11319,7 +11340,7 @@ export type GrantStatisticsLazyQueryHookResult = ReturnType<typeof useGrantStati
 export type GrantStatisticsSuspenseQueryHookResult = ReturnType<typeof useGrantStatisticsSuspenseQuery>;
 export type GrantStatisticsQueryResult = Apollo.QueryResult<GrantStatisticsQuery, GrantStatisticsQueryVariables>;
 export const GuardianProjectRewardsGetDocument = gql`
-    query GuardianProjectRewardsGet($input: GetProjectRewardInput!) {
+    query GuardianProjectRewardsGet($input: GetProjectRewardsInput!) {
   projectRewardsGet(input: $input) {
     ...GuardianProjectReward
   }
@@ -14501,7 +14522,7 @@ export type ProjectSubscriptionPlansLazyQueryHookResult = ReturnType<typeof useP
 export type ProjectSubscriptionPlansSuspenseQueryHookResult = ReturnType<typeof useProjectSubscriptionPlansSuspenseQuery>;
 export type ProjectSubscriptionPlansQueryResult = Apollo.QueryResult<ProjectSubscriptionPlansQuery, ProjectSubscriptionPlansQueryVariables>;
 export const ProjectRewardsDocument = gql`
-    query ProjectRewards($input: GetProjectRewardInput!) {
+    query ProjectRewards($input: GetProjectRewardsInput!) {
   projectRewardsGet(input: $input) {
     ...ProjectReward
   }
@@ -14540,46 +14561,46 @@ export type ProjectRewardsQueryHookResult = ReturnType<typeof useProjectRewardsQ
 export type ProjectRewardsLazyQueryHookResult = ReturnType<typeof useProjectRewardsLazyQuery>;
 export type ProjectRewardsSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsSuspenseQuery>;
 export type ProjectRewardsQueryResult = Apollo.QueryResult<ProjectRewardsQuery, ProjectRewardsQueryVariables>;
-export const ProjectRewardDocument = gql`
-    query ProjectReward($getProjectRewardId: BigInt!) {
-  getProjectReward(id: $getProjectRewardId) {
+export const ProjectRewardGetDocument = gql`
+    query ProjectRewardGet($input: GetProjectRewardInput!) {
+  projectRewardGet(input: $input) {
     ...ProjectReward
   }
 }
     ${ProjectRewardFragmentDoc}`;
 
 /**
- * __useProjectRewardQuery__
+ * __useProjectRewardGetQuery__
  *
- * To run a query within a React component, call `useProjectRewardQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectRewardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProjectRewardGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProjectRewardQuery({
+ * const { data, loading, error } = useProjectRewardGetQuery({
  *   variables: {
- *      getProjectRewardId: // value for 'getProjectRewardId'
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useProjectRewardQuery(baseOptions: Apollo.QueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables> & ({ variables: ProjectRewardQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useProjectRewardGetQuery(baseOptions: Apollo.QueryHookOptions<ProjectRewardGetQuery, ProjectRewardGetQueryVariables> & ({ variables: ProjectRewardGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options);
+        return Apollo.useQuery<ProjectRewardGetQuery, ProjectRewardGetQueryVariables>(ProjectRewardGetDocument, options);
       }
-export function useProjectRewardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables>) {
+export function useProjectRewardGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRewardGetQuery, ProjectRewardGetQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options);
+          return Apollo.useLazyQuery<ProjectRewardGetQuery, ProjectRewardGetQueryVariables>(ProjectRewardGetDocument, options);
         }
-export function useProjectRewardSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRewardQuery, ProjectRewardQueryVariables>) {
+export function useProjectRewardGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRewardGetQuery, ProjectRewardGetQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectRewardQuery, ProjectRewardQueryVariables>(ProjectRewardDocument, options);
+          return Apollo.useSuspenseQuery<ProjectRewardGetQuery, ProjectRewardGetQueryVariables>(ProjectRewardGetDocument, options);
         }
-export type ProjectRewardQueryHookResult = ReturnType<typeof useProjectRewardQuery>;
-export type ProjectRewardLazyQueryHookResult = ReturnType<typeof useProjectRewardLazyQuery>;
-export type ProjectRewardSuspenseQueryHookResult = ReturnType<typeof useProjectRewardSuspenseQuery>;
-export type ProjectRewardQueryResult = Apollo.QueryResult<ProjectRewardQuery, ProjectRewardQueryVariables>;
+export type ProjectRewardGetQueryHookResult = ReturnType<typeof useProjectRewardGetQuery>;
+export type ProjectRewardGetLazyQueryHookResult = ReturnType<typeof useProjectRewardGetLazyQuery>;
+export type ProjectRewardGetSuspenseQueryHookResult = ReturnType<typeof useProjectRewardGetSuspenseQuery>;
+export type ProjectRewardGetQueryResult = Apollo.QueryResult<ProjectRewardGetQuery, ProjectRewardGetQueryVariables>;
 export const RewardCategoriesDocument = gql`
     query RewardCategories {
   projectRewardCategoriesGet

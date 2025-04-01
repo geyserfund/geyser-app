@@ -42,7 +42,7 @@ export const PaymentLoading = () => {
         }
       })
     }
-    // TODO: adding `requestFundingFromContext` to dependencies causes rerender loops, do not add until resolved
+    // NOTE: adding `requestFundingFromContext` to dependencies causes rerender loops, do not add until resolved
   }, [isFundingInputAmountValid, isFundingUserInfoValid, navigate, project.name])
 
   useEffect(() => {

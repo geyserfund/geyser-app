@@ -17,7 +17,7 @@ import { MarkdownField } from '@/shared/markdown/MarkdownField'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
-import { RewardCurrency, Satoshis, USDCents, useProjectRewardQuery } from '@/types'
+import { RewardCurrency, Satoshis, USDCents, useProjectRewardGetQuery } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { PostsUpdates } from '../../components/PostsUpdates'
@@ -27,22 +27,26 @@ import { RewardShare } from './components/RewardShare'
 
 export const RewardView = () => {
   const { project, isProjectOwner } = useProjectAtom()
-  const { rewardId } = useParams<{ rewardId: string }>()
+  const { rewardUUID } = useParams<{ rewardUUID: string }>()
   const isMobileMode = useMobileMode()
 
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   const navigate = useNavigate()
 
-  const { loading, data } = useProjectRewardQuery({
-    skip: !rewardId,
+  const { loading, data } = useProjectRewardGetQuery({
+    skip: !rewardUUID,
     fetchPolicy: 'network-only',
     variables: {
-      getProjectRewardId: rewardId,
+      input: {
+        where: {
+          uuid: rewardUUID,
+        },
+      },
     },
   })
 
-  const reward = data?.getProjectReward
+  const reward = data?.projectRewardGet
 
   const { count, buyReward, isAvailable } = useRewardBuy(reward)
 

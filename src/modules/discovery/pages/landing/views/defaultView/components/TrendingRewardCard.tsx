@@ -39,7 +39,7 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
       to={
         guardian
           ? getPath('guardiansCharacter', guardian)
-          : getPathWithGeyserHero('projectRewardView', reward.project.name, reward.id)
+          : getPathWithGeyserHero('projectRewardView', reward.project.name, reward.uuid)
       }
       padding="0px"
       width={{ base: 'full', lg: 'auto' }}

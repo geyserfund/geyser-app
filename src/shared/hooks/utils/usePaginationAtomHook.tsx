@@ -46,7 +46,6 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
 
   const handleDataUpdate = (data: TEntity[]) => {
     if (data) {
-      // TODO: This is a temporary workaround - Replace with count
       if (data.length === 0) {
         setNoMoreItems(true)
       } else {

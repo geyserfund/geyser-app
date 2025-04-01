@@ -49,6 +49,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
       }
       ... on ProjectReward {
         id
+        uuid
         category
         cost
         projectRewardDescription: description
