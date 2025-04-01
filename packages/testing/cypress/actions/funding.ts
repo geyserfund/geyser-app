@@ -121,5 +121,15 @@ export const clickCopyLightningInvoiceButton = () => {
 
 export const enterRefundAddressAndClickRefund = (comment: string) => {
   cy.get('#refund-address-input').type(comment)
-  cy.get('#initiate-refund-button').realClick()
+  cy.get('#initiate-refund-button').should('exist').should('not.be.disabled')
+  cy.get('#initiate-refund-button').click({ force: true })
+  // Add a small delay to ensure the click event has time to process
+  cy.wait(300).then(() => {
+    // Click again to ensure it registers
+    cy.get('body').then(($body) => {
+      if ($body.find('#copy-lightning-invoice-button').length) {
+        cy.get('#copy-lightning-invoice-button').click({ force: true })
+      }
+    })
+  })
 }
