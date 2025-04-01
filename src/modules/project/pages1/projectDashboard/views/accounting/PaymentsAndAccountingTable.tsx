@@ -61,7 +61,7 @@ export const PaymentsAndAccountingTable = ({
           },
         },
         value(val: OrderContributionFragment) {
-          return DateTime.fromMillis(val.confirmedAt).toFormat('LLL dd, yyyy')
+          return val.confirmedAt ? DateTime.fromMillis(val.confirmedAt).toFormat('LLL dd, yyyy') : 'N/A'
         },
         colSpan: 2,
         isMobile: true,
@@ -72,7 +72,14 @@ export const PaymentsAndAccountingTable = ({
         colSpan: 2,
         isAccordion: true,
         render(val: OrderContributionFragment) {
-          return <AccordionListItem items={[{ label: t('Reference'), value: val.uuid }]} />
+          return (
+            <AccordionListItem
+              items={[
+                { label: t('Reference'), value: val.uuid },
+                { label: t('Private comment'), value: val.privateComment },
+              ]}
+            />
+          )
         },
       },
       {

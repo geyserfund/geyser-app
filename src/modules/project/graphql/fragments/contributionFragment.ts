@@ -43,6 +43,7 @@ export const FRAGMENT_ORDER_CONTRIBUTION = gql`
     email
     uuid
     confirmedAt
+    privateComment
     bitcoinQuote {
       quoteCurrency
       quote

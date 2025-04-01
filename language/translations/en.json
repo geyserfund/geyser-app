@@ -1159,5 +1159,10 @@
   "JOIN THE COMMUNITY OF": "JOIN THE COMMUNITY OF",
   "JOIN THE COMMUNITY OF <1>{{totalUsers}}</1> GUARDIANS": "JOIN THE COMMUNITY OF <1>{{totalUsers}}</1> GUARDIANS",
   "JOIN THE COMMUNITY OF ": "JOIN THE COMMUNITY OF ",
-  "COLLECT YOURS 👇 & JOIN THE COMMUNITY OF ": "COLLECT YOURS 👇 & JOIN THE COMMUNITY OF "
+  "COLLECT YOURS 👇 & JOIN THE COMMUNITY OF ": "COLLECT YOURS 👇 & JOIN THE COMMUNITY OF ",
+  "Notifications for Projects I follow": "Notifications for Projects I follow",
+  "Donate": "Donate",
+  "Terms": "Terms",
+  "Safe to delete refund file": "Safe to delete refund file",
+  "The Refund File is safe to delete, as your transaction has been successfully processed.": "The Refund File is safe to delete, as your transaction has been successfully processed."
 }

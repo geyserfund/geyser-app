@@ -7070,7 +7070,7 @@ export type FundingContributionFragment = { __typename?: 'Contribution', id: any
     & ProjectFunderFragment
   ) };
 
-export type OrderContributionFragment = { __typename?: 'Contribution', id: any, status: ContributionStatus, donationAmount: number, amount: number, email?: string | null, uuid?: string | null, confirmedAt?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, externalId: string, accountType: string, public: boolean }> } | null }, order?: { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, items: Array<(
+export type OrderContributionFragment = { __typename?: 'Contribution', id: any, status: ContributionStatus, donationAmount: number, amount: number, email?: string | null, uuid?: string | null, confirmedAt?: any | null, privateComment?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, externalAccounts: Array<{ __typename?: 'ExternalAccount', id: any, externalUsername: string, externalId: string, accountType: string, public: boolean }> } | null }, order?: { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, items: Array<(
       { __typename?: 'OrderItem' }
       & OrderItemFragment
     )> } | null };
@@ -8823,6 +8823,7 @@ export const OrderContributionFragmentDoc = gql`
   email
   uuid
   confirmedAt
+  privateComment
   bitcoinQuote {
     quoteCurrency
     quote
