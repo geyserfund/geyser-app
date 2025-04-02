@@ -60,7 +60,7 @@ export const ProjectBody = () => {
         {project.goalsCount && <Goals />}
         <Details />
         <SuggestedProjects subCategory={project.subCategory} projectId={project.id} />
-        <UserExternalLinksComponent />
+        <UserExternalLinksComponent spread />
       </VStack>
       <RightSideStickyLayout
         overflow="auto"

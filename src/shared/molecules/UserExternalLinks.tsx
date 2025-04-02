@@ -19,9 +19,15 @@ import { useMobileMode } from '@/utils/index.ts'
 type UserExternalLinksComponentProps = {
   noMobile?: boolean
   onlyMobile?: boolean
+  spread?: boolean
 } & StackProps
 
-export const UserExternalLinksComponent = ({ noMobile, onlyMobile, ...rest }: UserExternalLinksComponentProps) => {
+export const UserExternalLinksComponent = ({
+  noMobile,
+  onlyMobile,
+  spread,
+  ...rest
+}: UserExternalLinksComponentProps) => {
   const isMobile = useMobileMode()
   if (noMobile && isMobile) {
     return null
@@ -34,14 +40,20 @@ export const UserExternalLinksComponent = ({ noMobile, onlyMobile, ...rest }: Us
   return (
     <VStack w="full" paddingTop={20} {...rest}>
       <Divider />
-      <UserExternalLinks />
+      <UserExternalLinks spread={spread} />
     </VStack>
   )
 }
 
-export const UserExternalLinks = () => {
+export const UserExternalLinks = ({ spread }: { spread?: boolean }) => {
   return (
-    <HStack w="full" flexWrap="wrap" paddingX={4} spacing={{ base: 2, lg: 0, xl: 2 }} justifyContent="center">
+    <HStack
+      w="full"
+      flexWrap="wrap"
+      paddingX={4}
+      spacing={{ base: 2, lg: spread ? 2 : 0, xl: 2 }}
+      justifyContent="center"
+    >
       <UserNavExternalButton as={ChakraLink} isExternal href={GuideUrl}>
         {t('Guide')}
       </UserNavExternalButton>
