@@ -109,7 +109,7 @@ export const formattedFundingInputAtom = atom((get) => {
       items: orderItemInputs,
     },
     sourceResourceInput: {
-      resourceId: formState.resourceId ? toInt(formState.resourceId) : toInt(fundingProject?.id),
+      resourceId: formState.resourceId ? `${formState.resourceId}` : `${fundingProject?.id}`,
       resourceType: formState.resourceType || FundingResourceType.Project,
     },
     paymentsInput,
