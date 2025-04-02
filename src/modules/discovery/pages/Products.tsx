@@ -1,6 +1,5 @@
-import { GridItem, HStack, Icon, SimpleGrid, Stack, VStack } from '@chakra-ui/react'
+import { GridItem, HStack, SimpleGrid, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiFire } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'

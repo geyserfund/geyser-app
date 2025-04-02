@@ -1,4 +1,4 @@
-import { Button, Divider, GridItem, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Button, GridItem, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { Link } from 'react-router-dom'
 
