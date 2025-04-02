@@ -709,6 +709,7 @@ export type FunderRewardGraphSum = GraphSumData & {
 };
 
 export enum FundingResourceType {
+  Activity = 'activity',
   Entry = 'entry',
   Project = 'project',
   User = 'user'
@@ -3257,7 +3258,7 @@ export enum QuoteCurrency {
 }
 
 export type ResourceInput = {
-  resourceId: Scalars['BigInt']['input'];
+  resourceId: Scalars['String']['input'];
   resourceType: FundingResourceType;
 };
 
@@ -3291,7 +3292,7 @@ export type SignedUploadUrl = {
   uploadUrl: Scalars['String']['output'];
 };
 
-export type SourceResource = Entry | Project;
+export type SourceResource = Activity | Entry | Project;
 
 export type Sponsor = {
   __typename?: 'Sponsor';
@@ -3924,7 +3925,7 @@ export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
   ConnectionDetails: ( LightningAddressConnectionDetails ) | ( LndConnectionDetailsPrivate ) | ( LndConnectionDetailsPublic ) | ( NwcConnectionDetailsPrivate );
   Grant: ( Omit<BoardVoteGrant, 'applicants' | 'boardMembers' | 'sponsors'> & { applicants: Array<_RefType['GrantApplicant']>, boardMembers: Array<_RefType['GrantBoardMember']>, sponsors: Array<_RefType['Sponsor']> } ) | ( Omit<CommunityVoteGrant, 'applicants' | 'sponsors'> & { applicants: Array<_RefType['GrantApplicant']>, sponsors: Array<_RefType['Sponsor']> } );
   PaymentDetails: ( FiatSwapPaymentDetails ) | ( LightningPaymentDetails ) | ( OnChainSwapPaymentDetails );
-  SourceResource: ( Omit<Entry, 'contributions' | 'creator' | 'project'> & { contributions: Array<_RefType['Contribution']>, creator: _RefType['User'], project?: Maybe<_RefType['Project']> } ) | ( Omit<Project, 'ambassadors' | 'contributions' | 'entries' | 'followers' | 'grantApplications' | 'owners' | 'sponsors' | 'wallets'> & { ambassadors: _RefType['ProjectAmbassadorsConnection'], contributions: Array<_RefType['Contribution']>, entries: Array<_RefType['Entry']>, followers: Array<_RefType['User']>, grantApplications: Array<_RefType['GrantApplicant']>, owners: Array<_RefType['Owner']>, sponsors: Array<_RefType['Sponsor']>, wallets: Array<_RefType['Wallet']> } );
+  SourceResource: ( Omit<Activity, 'project' | 'resource'> & { project: _RefType['Project'], resource: _RefType['ActivityResource'] } ) | ( Omit<Entry, 'contributions' | 'creator' | 'project'> & { contributions: Array<_RefType['Contribution']>, creator: _RefType['User'], project?: Maybe<_RefType['Project']> } ) | ( Omit<Project, 'ambassadors' | 'contributions' | 'entries' | 'followers' | 'grantApplications' | 'owners' | 'sponsors' | 'wallets'> & { ambassadors: _RefType['ProjectAmbassadorsConnection'], contributions: Array<_RefType['Contribution']>, entries: Array<_RefType['Entry']>, followers: Array<_RefType['User']>, grantApplications: Array<_RefType['GrantApplicant']>, owners: Array<_RefType['Owner']>, sponsors: Array<_RefType['Sponsor']>, wallets: Array<_RefType['Wallet']> } );
 };
 
 /** Mapping of interface types */
@@ -6056,7 +6057,7 @@ export type SignedUploadUrlResolvers<ContextType = any, ParentType extends Resol
 };
 
 export type SourceResourceResolvers<ContextType = any, ParentType extends ResolversParentTypes['SourceResource'] = ResolversParentTypes['SourceResource']> = {
-  __resolveType: TypeResolveFn<'Entry' | 'Project', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'Activity' | 'Entry' | 'Project', ParentType, ContextType>;
 };
 
 export type SponsorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Sponsor'] = ResolversParentTypes['Sponsor']> = {
@@ -6925,7 +6926,7 @@ export type ProfileOrderItemFragment = { __typename?: 'OrderItem', quantity: num
 export type ProfileOrderFragment = { __typename?: 'Order', id: any, referenceCode: string, totalInSats: number, status: string, confirmedAt?: any | null, updatedAt: any, items: Array<(
     { __typename?: 'OrderItem' }
     & ProfileOrderItemFragment
-  )>, contribution: { __typename?: 'Contribution', id: any, amount: number, status: ContributionStatus, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, sourceResource?: { __typename?: 'Entry' } | (
+  )>, contribution: { __typename?: 'Contribution', id: any, amount: number, status: ContributionStatus, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, sourceResource?: { __typename?: 'Activity' } | { __typename?: 'Entry' } | (
       { __typename?: 'Project' }
       & ProjectAvatarFragment
     ) | null } };
