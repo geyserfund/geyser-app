@@ -78,9 +78,12 @@ export const Products = () => {
           <VStack w="full" key={subCategory}>
             <HStack w="full" justifyContent={'start'} alignItems={'center'}>
               <H3 size="2xl" dark bold>
-                {t('Trending')} {ProjectSubCategoryLabel[subCategory]}
+                {t('Trending in')}{' '}
+                <Body as="span" color="primary1.9" bold>
+                  {' '}
+                  {ProjectSubCategoryLabel[subCategory]}
+                </Body>
               </H3>
-              <Icon as={PiFire} fontSize={'24px'} color="orange.9" />
             </HStack>
             <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacing={4}>
               {values.map((reward) => {
