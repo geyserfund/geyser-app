@@ -5,7 +5,7 @@ import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 
 import TitleWithProgressBar from '../../../../../../components/molecules/TitleWithProgressBar'
-import { getPath } from '../../../../../../shared/constants'
+import { getPath, PathName } from '../../../../../../shared/constants'
 import { FormContinueButton } from '../../components/FormContinueButton'
 import { ProjectCreateLayout } from '../../components/ProjectCreateLayout'
 import { useLocationMandatoryRedirect } from '../../hooks/useLocationMandatoryRedirect'
@@ -22,7 +22,7 @@ export const ProjectCreateRewards = () => {
   useLocationMandatoryRedirect()
 
   const isNew = useMatch(getPath('launchProjectRewardsCreate', project?.id))
-  const isEdit = useMatch(getPath('launchProjectRewardsEdit', project?.id, ':rewardId'))
+  const isEdit = useMatch(getPath('launchProjectRewardsEdit', project?.id, PathName.rewardUUID))
   const isCreatingOrEditing = isNew || isEdit
 
   const handleNext = () => {

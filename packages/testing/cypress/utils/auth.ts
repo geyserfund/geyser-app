@@ -7,11 +7,11 @@ export const interceptNostr = (handler: RouteHandler) => {
 }
 
 export const openConnectPopup = () => {
-  cy.get('button').contains('Login').click()
+  cy.get('button').contains('Sign in').click()
   cy.get('p').contains('Connect').should('be.visible')
 }
 
-export const getDropdownButton = () => cy.get('button[data-testid="topnavbar-dropdown-menu"]')
+export const getDropdownButton = () => cy.get('div[data-testid="platform-dropdown-menu"]')
 
 export const loginWithNostr = () => {
   openConnectPopup()

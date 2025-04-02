@@ -125,3 +125,8 @@ export const setFundingInputAfterRequestAtom = atom(null, (get, set, input: Cont
   const user = get(authUserAtom)
   set(fundingInputAfterRequestAtom, { ...input, user })
 })
+
+/** Reset funding input after request */
+export const resetFundingInputAfterRequestAtom = atom(null, (_, set) => {
+  set(fundingInputAfterRequestAtom, null)
+})

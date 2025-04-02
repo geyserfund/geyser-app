@@ -9,3 +9,7 @@ export enum OnChainErrorStatuses {
 }
 
 export const onChainErrorAtom = atom<undefined | SwapStatusUpdate>(undefined)
+
+export const resetOnChainErrorAtom = atom(null, (_, set) => {
+  set(onChainErrorAtom, undefined)
+})

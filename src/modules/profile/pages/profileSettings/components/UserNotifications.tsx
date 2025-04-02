@@ -1,4 +1,5 @@
 import { Select, Skeleton, Switch, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useEffect } from 'react'
 
 import { useAuthContext } from '@/context'
@@ -27,7 +28,7 @@ export const UserNotifications = () => {
     <>
       <VStack spacing={6} align="stretch" width="100%">
         <Body size="lg" bold>
-          Notifications for Projects I follow
+          {t('Notifications for Projects I follow')}
         </Body>
         <VStack spacing={4} align="stretch" p={4}>
           <HorizontalFormField label="Project Updates" htmlFor="project-updates">
@@ -55,13 +56,13 @@ export const UserNotifications = () => {
                 getUserNotificationConfigValue(UserNotificationType.PROJECT_SUMMARY, UserConfigName.IS_ENABLED) ===
                 'true'
               }
-              onChange={(e) =>
+              onChange={(e) => {
                 updateUserNotificationConfigValue(
                   UserNotificationType.PROJECT_SUMMARY,
                   UserConfigName.IS_ENABLED,
                   e.target.checked ? 'true' : 'false',
                 )
-              }
+              }}
             />
           </HorizontalFormField>
 

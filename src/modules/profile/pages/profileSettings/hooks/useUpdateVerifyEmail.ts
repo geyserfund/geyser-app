@@ -59,11 +59,11 @@ export const useUpdateVerifyEmail = () => {
   })
 
   const [updateUserEmail] = useUserEmailUpdateMutation({
-    onError() {
+    onError(error) {
       toast({
         status: 'error',
         title: t('Failed to update email.'),
-        description: t('Please try again'),
+        description: `${error.message}`,
       })
     },
     onCompleted(data) {

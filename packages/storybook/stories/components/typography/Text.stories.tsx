@@ -2,7 +2,7 @@ import { BellIcon } from '@chakra-ui/icons'
 import type { Meta, StoryObj } from '@storybook/react'
 import React from 'react'
 
-import { Body } from '../../../src/shared/components/typography/Body'
+import { Body } from '../../../../../src/shared/components/typography/Body'
 
 const meta = {
   title: 'Components/typography/Text',

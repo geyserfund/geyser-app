@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  ButtonProps,
-  ComponentWithAs,
-  Divider,
-  HStack,
-  Link as ChakraLink,
-  MenuItem,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Divider, HStack, Link as ChakraLink, MenuItem, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { PiArrowUpRight } from 'react-icons/pi'
@@ -17,17 +7,7 @@ import { Link } from 'react-router-dom'
 import { useAuthContext } from '@/context'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { Body } from '@/shared/components/typography'
-import {
-  dimensions,
-  FeedbackUrl,
-  getPath,
-  GeyserAboutUrl,
-  GeyserGithubUrl,
-  GeyserManifestoUrl,
-  GeyserPrivacyUrl,
-  GeyserSubscribeUrl,
-  GuideUrl,
-} from '@/shared/constants'
+import { dimensions, getPath, GeyserManifestoUrl, GeyserSubscribeUrl } from '@/shared/constants'
 
 import { DiscoveryNavItemKey, discoveryNavItems } from '../../discoveryNav/discoveryNavData'
 import { ProfileNavUserInfo } from './components'
@@ -117,41 +97,9 @@ export const ProfileNavContent = () => {
 
       <VStack w="full" spacing={4}>
         <Divider borderColor="neutral1.6" />
-        <HStack w="full" paddingX={0} spacing={0} justifyContent="space-between" flexWrap="wrap">
-          <UserNavExternalButton as={ChakraLink} isExternal href={GuideUrl}>
-            {t('Guide')}
-          </UserNavExternalButton>
-          <UserNavExternalButton as={ChakraLink} isExternal href={FeedbackUrl}>
-            {t('Feedback')}
-          </UserNavExternalButton>
-          <UserNavExternalButton as={ChakraLink} isExternal href={GeyserGithubUrl}>
-            {t('Github')}
-          </UserNavExternalButton>
-          <UserNavExternalButton as={ChakraLink} isExternal href={GeyserAboutUrl}>
-            {t('About')}
-          </UserNavExternalButton>
-          <UserNavExternalButton as={ChakraLink} isExternal href={GeyserPrivacyUrl}>
-            {t('Privacy')}
-          </UserNavExternalButton>
-        </HStack>
-        <Divider borderColor="neutral1.6" />
 
         <ModeChange />
       </VStack>
     </VStack>
-  )
-}
-
-const UserNavExternalButton: ComponentWithAs<'button', ButtonProps> = (props) => {
-  return (
-    <Button
-      variant="ghost"
-      colorScheme="neutral1"
-      size="sm"
-      textDecoration={'none'}
-      paddingX={0}
-      _hover={{ backgroundColor: 'none', textDecoration: 'underline' }}
-      {...props}
-    />
   )
 }

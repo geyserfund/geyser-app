@@ -17,7 +17,7 @@ export const Partners = () => {
             <Image
               src={partner.image}
               alt="Partner"
-              maxWidth="315px"
+              maxWidth={{ base: '150px', md: '200px', lg: '300px' }}
               width={'auto'}
               height={'72px'}
               objectFit={'contain'}
@@ -33,7 +33,7 @@ export const Partners = () => {
             <Image
               src={partner.image}
               alt="Partner"
-              maxWidth="315px"
+              maxWidth={{ base: '150px', md: '200px', lg: '300px' }}
               width={'auto'}
               height={'40px'}
               objectFit={'contain'}
@@ -49,7 +49,7 @@ export const Partners = () => {
             <Image
               src={partner.image}
               alt="Partner"
-              maxWidth="161px"
+              maxWidth={{ base: '100px', md: '150px' }}
               width={'auto'}
               height={'50px'}
               objectFit={'contain'}

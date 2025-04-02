@@ -7,6 +7,7 @@ export default defineConfig({
       on('task', {
         log(message) {
           console.log(message)
+          return null
         },
       })
       // implement node event listeners here

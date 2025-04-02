@@ -15,7 +15,7 @@ import { ProjectRowLayout } from '../components/ProjectRowLayout'
 import { FeaturedProjectsCarousel } from './FeaturedProjectsCarousel'
 
 export const GEYSER_PROMOTIONS_PROJECT_NAME = 'geyserpromotions'
-export const GEYSER_GET_FEATURED_REWARD_ID = '6232'
+export const GEYSER_GET_FEATURED_REWARD_ID = '3c13fada-5bf0-44bd-924a-053dcc6f97aa'
 
 export type FeatureAirtableData = {
   Name: string

@@ -98,14 +98,14 @@ export const useProjectShare = () => {
 }
 
 /** This hook must be used inside ProjectProvider Context to share project rewardLinks links */
-export const useRewardShare = ({ id, name }: Pick<ProjectReward, 'id' | 'name'>) => {
+export const useRewardShare = ({ uuid, name }: Pick<ProjectReward, 'uuid' | 'name'>) => {
   const { project, isProjectOwner } = useProjectAtom()
   const { isLoggedIn, user } = useAuthContext()
   const [copied, setCopied] = useState(false)
 
   const getShareRewardUrlWithHeroId = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
     if (user && user.heroId) {
-      return `${window.location.origin}${getPath('projectRewardView', project.name, `${id}`)}?hero=${user.heroId}`
+      return `${window.location.origin}${getPath('projectRewardView', project.name, `${uuid}`)}?hero=${user.heroId}`
     }
 
     return getShareRewardUrl({ clickedFrom })
@@ -118,7 +118,7 @@ export const useRewardShare = ({ id, name }: Pick<ProjectReward, 'id' | 'name'>)
       keyword: `${project?.name}-reward-${name}`,
       clickedFrom,
     })
-    return `${window.location.origin}${getPath('projectRewardView', project.name, `${id}`)}${campaignUrlSuffix}`
+    return `${window.location.origin}${getPath('projectRewardView', project.name, `${uuid}`)}${campaignUrlSuffix}`
   }
 
   const copyRewardLinkToClipboard = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {

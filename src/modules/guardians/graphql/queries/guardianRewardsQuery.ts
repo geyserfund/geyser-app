@@ -4,7 +4,7 @@ import { FRAGMENT_GUARDIAN_PROJECT_REWARD } from '../fragments/guardianRewardsFr
 
 export const QUERY_GUARDIAN_PROJECT_REWARDS = gql`
   ${FRAGMENT_GUARDIAN_PROJECT_REWARD}
-  query GuardianProjectRewardsGet($input: GetProjectRewardInput!) {
+  query GuardianProjectRewardsGet($input: GetProjectRewardsInput!) {
     projectRewardsGet(input: $input) {
       ...GuardianProjectReward
     }

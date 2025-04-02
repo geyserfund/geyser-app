@@ -25,6 +25,12 @@ export const useCurrencyFormatter = (shortAmount?: boolean) => {
     (amount: number, currency: TCurrency) => {
       if (currency === FormatCurrencyType.Btcsat) {
         if (amount === 0) return '0 sats'
+
+        if (shortAmount) {
+          const shortSatsAmount = getShortAmountLabel(amount)
+          return `${shortSatsAmount} sats`
+        }
+
         return `${commaFormatted(amount)} sats`
       }
 
@@ -58,12 +64,6 @@ export const useCurrencyFormatter = (shortAmount?: boolean) => {
   const formatSatsAmount = useCallback(
     (amount: number) => {
       const satsAmount = getSatoshisFromUSDCents(amount as USDCents)
-
-      if (shortAmount) {
-        const shortSatsAmount = getShortAmountLabel(satsAmount)
-        return `${shortSatsAmount} sats`
-      }
-
       return formatAmount(satsAmount, FormatCurrencyType.Btcsat)
     },
     [formatAmount, getSatoshisFromUSDCents, shortAmount],
