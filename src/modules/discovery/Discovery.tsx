@@ -2,6 +2,7 @@ import { Box, VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router'
 
 import { dimensions } from '@/shared/constants'
+import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 import { standardPadding } from '@/shared/styles'
 import { discoveryPageCommonLayoutStyles } from '@/shared/styles/discoveryPageLayout'
 
@@ -21,8 +22,10 @@ export const Discovery = () => {
           paddingBottom={{ base: 28, lg: 10 }}
         >
           <Outlet />
+          <UserExternalLinksComponent onlyMobile />
         </Box>
       </VStack>
+
       <DiscoveryBottomNav />
     </>
   )

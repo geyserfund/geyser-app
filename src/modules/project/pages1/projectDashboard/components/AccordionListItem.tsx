@@ -17,6 +17,7 @@ export const AccordionListItem = ({ items }: AccordionListItemProps) => {
     <HStack w={{ base: 'full', lg: 'auto' }} justifyContent="space-between" spacing="10px">
       <VStack alignItems="flex-start" spacing="5px">
         {items.map((item) => {
+          if (!item.value) return null
           return (
             <Body size="xs" dark key={item.label}>
               {item.label}:
@@ -24,8 +25,9 @@ export const AccordionListItem = ({ items }: AccordionListItemProps) => {
           )
         })}
       </VStack>
-      <VStack spacing="5px">
+      <VStack spacing="5px" alignItems={{ base: 'flex-end', lg: 'flex-start' }}>
         {items.map((item) => {
+          if (!item.value) return null
           return (
             <Body size="xs" medium light key={item.label}>
               {item.value}

@@ -1,13 +1,15 @@
 /* eslint-disable complexity */
 import { Badge, Box, Button, HStack, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useEffect } from 'react'
 import { PiArrowLeft, PiEyeSlash } from 'react-icons/pi'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { Head } from '@/config/Head'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { isNumericString } from '@/modules/project/utils/checkId.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
@@ -17,8 +19,8 @@ import { MarkdownField } from '@/shared/markdown/MarkdownField'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
-import { RewardCurrency, Satoshis, USDCents, useProjectRewardQuery } from '@/types'
-import { useMobileMode } from '@/utils'
+import { RewardCurrency, Satoshis, USDCents, useProjectRewardGetQuery } from '@/types'
+import { toInt, useMobileMode } from '@/utils'
 
 import { PostsUpdates } from '../../components/PostsUpdates'
 import { useRewardBuy } from '../../hooks'
@@ -27,26 +29,45 @@ import { RewardShare } from './components/RewardShare'
 
 export const RewardView = () => {
   const { project, isProjectOwner } = useProjectAtom()
-  const { rewardId } = useParams<{ rewardId: string }>()
+  const { rewardUUID } = useParams<{ rewardUUID: string }>()
+  const location = useLocation()
   const isMobileMode = useMobileMode()
 
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
 
   const navigate = useNavigate()
 
-  const { loading, data } = useProjectRewardQuery({
-    skip: !rewardId,
+  const isRewardID = isNumericString(rewardUUID)
+
+  const where = isRewardID ? { id: toInt(rewardUUID) } : { uuid: rewardUUID }
+
+  const { loading, data } = useProjectRewardGetQuery({
+    skip: !rewardUUID,
     fetchPolicy: 'network-only',
     variables: {
-      getProjectRewardId: rewardId,
+      input: {
+        where,
+      },
     },
   })
 
-  const reward = data?.getProjectReward
+  const reward = data?.projectRewardGet
 
   const { count, buyReward, isAvailable } = useRewardBuy(reward)
 
-  if (loading) {
+  useEffect(() => {
+    if (isRewardID && data?.projectRewardGet?.uuid) {
+      navigate(
+        {
+          pathname: `../${data.projectRewardGet.uuid}`,
+          search: location.search,
+        },
+        { replace: true, relative: 'path' },
+      )
+    }
+  }, [isRewardID, data?.projectRewardGet, navigate, location.search])
+
+  if (loading || isRewardID) {
     return <RewardViewSkeleton />
   }
 

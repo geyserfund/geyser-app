@@ -102,8 +102,8 @@ export const RewardEditMenu = ({ reward, isLaunch, ...props }: RewardEditMenuPro
               as={Link}
               to={
                 isLaunch
-                  ? getPath('launchProjectRewardsEdit', project.id, reward.id)
-                  : getPath('projectRewardEdit', project.name, reward.id)
+                  ? getPath('launchProjectRewardsEdit', project.id, reward.uuid)
+                  : getPath('projectRewardEdit', project.name, reward.uuid)
               }
               icon={<PiNotePencil fontSize={'16px'} />}
             >

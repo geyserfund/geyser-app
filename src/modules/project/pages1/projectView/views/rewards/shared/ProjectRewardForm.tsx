@@ -32,7 +32,7 @@ type Props = {
   isLaunch?: boolean
   defaultCategory?: string
   hideBackbutton?: boolean
-  rewardId?: string
+  rewardUUID?: string
 }
 
 const MAX_REWARD_IMAGES = 5
@@ -42,7 +42,7 @@ export const ProjectRewardForm = ({
   titleText,
   isUpdate,
   isLaunch = false,
-  rewardId,
+  rewardUUID,
   defaultCategory,
 }: Props) => {
   const { t } = useTranslation()
@@ -67,7 +67,7 @@ export const ProjectRewardForm = ({
     rewardLoading,
     utils,
   } = useProjectRewardForm({
-    rewardId,
+    rewardUUID,
     isUpdate,
     isLaunch,
     defaultCategory,

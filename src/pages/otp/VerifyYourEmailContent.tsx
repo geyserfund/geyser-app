@@ -33,11 +33,11 @@ export const VerifyYourEmailContent = ({
   const [inputEmail, setInputEmail] = useState('')
 
   const [sendOtpByEmail, { loading }] = useSendOtpByEmailMutation({
-    onError() {
+    onError(error) {
       toast({
         status: 'error',
         title: t('Failed to generate OTP.'),
-        description: t('Please try again'),
+        description: `${error.message}`,
       })
     },
     onCompleted(data) {

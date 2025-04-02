@@ -104,9 +104,11 @@ export enum PathName {
   fundingFailedCallback = 'failed-callback',
   badges = 'badges',
   about = 'about',
+
   projectId = ':projectId',
   projectName = ':projectName',
   rewardId = ':rewardId',
+  rewardUUID = ':rewardUUID',
   userId = ':userId',
   heroId = ':heroId',
   entryId = ':entryId',
@@ -174,10 +176,10 @@ const pathsMap = {
   /** Project Rewards internal routes */
 
   projectRewardCreate: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectRewards}/create`,
-  projectRewardEdit: (projectName: string, rewardId: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectRewards}/edit/${rewardId}`,
-  projectRewardView: (projectName: string, rewardId: string) =>
-    `/${PathName.project}/${projectName}/${PathName.projectRewards}/view/${rewardId}`,
+  projectRewardEdit: (projectName: string, rewardUUID: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectRewards}/edit/${rewardUUID}`,
+  projectRewardView: (projectName: string, rewardUUID: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectRewards}/view/${rewardUUID}`,
 
   /** Project Post internal  routes */
 
@@ -274,8 +276,8 @@ const pathsMap = {
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}`,
   launchProjectRewardsCreate: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/create`,
-  launchProjectRewardsEdit: (projectID: string, rewardID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/edit/${rewardID}`,
+  launchProjectRewardsEdit: (projectID: string, rewardUUID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/edit/${rewardUUID}`,
   launchProjectWallet: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.node}`,
 
   projectLaunch: (projectName: string) => `/${PathName.project}/${projectName}/?launch`,

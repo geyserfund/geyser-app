@@ -17,7 +17,7 @@ export const UserAvatar = ({ id, user, ...props }: UserAvatarProps) => {
         guardian={user.guardianType}
         height="40px"
         width="40px"
-        src={user.imageUrl || ''}
+        src={user.imageUrl || getRandomAvatar(toInt(`${id}`))}
         aria-label={user.username}
         {...props}
       />

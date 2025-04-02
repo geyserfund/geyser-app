@@ -10,7 +10,7 @@ import { ProjectRewardForm } from '../shared'
 export const RewardEdit = () => {
   const { loading } = useProjectAtom()
 
-  const { rewardId } = useParams<{ rewardId: string }>()
+  const { rewardUUID } = useParams<{ rewardUUID: string }>()
 
   if (loading) {
     return <Loader />
@@ -23,7 +23,7 @@ export const RewardEdit = () => {
         titleText={t('Edit Reward')}
         isUpdate={true}
         isLaunch={false}
-        rewardId={rewardId}
+        rewardUUID={rewardUUID}
       />
     </VStack>
   )

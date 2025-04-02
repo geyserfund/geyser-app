@@ -16,7 +16,7 @@ export const Investors = () => {
               <Image
                 src={partner.image}
                 alt="Partner"
-                maxWidth="300px"
+                maxWidth={{ base: '150px', md: '200px', lg: '300px' }}
                 width={'auto'}
                 height={'95px'}
                 objectFit={'contain'}

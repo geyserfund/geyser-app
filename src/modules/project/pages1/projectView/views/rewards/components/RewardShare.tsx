@@ -21,7 +21,7 @@ type RewardShareProps = {
 export const RewardShare = ({ reward, ...props }: RewardShareProps) => {
   const rewardShareModal = useModal()
 
-  const { getShareRewardUrlWithHeroId } = useRewardShare({ id: reward.id, name: reward.name })
+  const { getShareRewardUrlWithHeroId } = useRewardShare({ uuid: reward.uuid, name: reward.name })
 
   const projectRewardUrl = getShareRewardUrlWithHeroId({ clickedFrom: CampaignContent.rewardShareButton })
 
