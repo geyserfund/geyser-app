@@ -30,7 +30,8 @@ export const DiscoverySideNav = () => {
 
   return (
     <VStack
-      paddingY={8}
+      paddingTop={8}
+      paddingBottom={4}
       spacing={8}
       position="fixed"
       left={0}
