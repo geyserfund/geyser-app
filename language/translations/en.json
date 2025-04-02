@@ -1170,5 +1170,11 @@
   "Low 5% fees and no fees for node-runners": "Low 5% fees and no fees for node-runners",
   "Project name should be between 3 and 280 characters.": "Project name should be between 3 and 280 characters.",
   "5% Geyser fee per transaction": "5% Geyser fee per transaction",
-  "Trending": "Trending"
+  "Trending": "Trending",
+  "Suggested Projects from same category": "Suggested Projects from same category",
+  "Other projects in this category": "Other projects in this category",
+  "View all": "View all",
+  "Other projects in": "Other projects in",
+  "Suggested projects in": "Suggested projects in",
+  "Similar projects in": "Similar projects in"
 }

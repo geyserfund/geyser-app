@@ -22,6 +22,7 @@ import {
   Story,
 } from './sections'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
+import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 
 export const ProjectBody = () => {
   const { project, loading } = useProjectAtom()
@@ -58,6 +59,7 @@ export const ProjectBody = () => {
         {project.entriesCount && <Posts />}
         {project.goalsCount && <Goals />}
         <Details />
+        <SuggestedProjects subCategory={project.subCategory} projectId={project.id} />
         <UserExternalLinksComponent />
       </VStack>
       <RightSideStickyLayout
