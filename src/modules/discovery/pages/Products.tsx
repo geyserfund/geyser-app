@@ -1,6 +1,7 @@
 import { GridItem, HStack, SimpleGrid, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
@@ -78,7 +79,7 @@ export const Products = () => {
             <HStack w="full" justifyContent={'start'} alignItems={'center'}>
               <H3 size="2xl" dark bold>
                 {t('Trending in')}{' '}
-                <Body as="span" color="primary1.9" bold>
+                <Body as="span" color="primary1.11" bold>
                   {' '}
                   {ProjectSubCategoryLabel[subCategory]}
                 </Body>
@@ -102,10 +103,13 @@ export const Products = () => {
 
 const TrendingRewardsSkeleton = () => {
   return (
-    <Stack width="100%" direction={{ base: 'column', lg: 'row' }} spacing="20px">
-      {[1, 2, 3, 4].map((id) => {
-        return <TrendingRewardCardSkeleton key={id} />
-      })}
-    </Stack>
+    <VStack w="full" spacing={4} alignItems="start">
+      <SkeletonLayout w="200px" height="28px" />
+      <Stack width="100%" direction={{ base: 'column', lg: 'row' }} spacing="20px">
+        {[1, 2, 3, 4].map((id) => {
+          return <TrendingRewardCardSkeleton key={id} />
+        })}
+      </Stack>
+    </VStack>
   )
 }

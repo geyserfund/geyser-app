@@ -98,10 +98,7 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
               </>
             ) : (
               <>
-                {formatAmount(reward.cost, FormatCurrencyType.Btcsat)}{' '}
-                <Body as="span" size="sm" light>
-                  sats
-                </Body>
+                {formatAmount(reward.cost, FormatCurrencyType.Btcsat)}
                 <Body as="span" size="sm" light>
                   {' '}
                   ({formatUsdAmount(reward.cost)})
@@ -135,7 +132,7 @@ export const TrendingRewardCardSkeleton = () => {
         height={{ base: '96px', lg: 'auto' }}
         aspectRatio={ImageCropAspectRatio.Reward}
       >
-        <SkeletonLayout width="100%" height="100%" />
+        <SkeletonLayout borderRadius={0} width="100%" height="100%" />
       </Box>
       <VStack
         flex={1}
@@ -147,15 +144,15 @@ export const TrendingRewardCardSkeleton = () => {
         overflow="hidden"
         spacing={1}
       >
-        <SkeletonLayout height="29px" width="200px" />
+        <SkeletonLayout height="24px" width="200px" />
 
         <HStack spacing={0.5}>
-          <SkeletonLayout width="16px" height="16px" borderRadius={'4px'} />
-          <SkeletonLayout width="60px" height="16px" />
+          <SkeletonLayout width="16px" height="14px" borderRadius={'4px'} />
+          <SkeletonLayout width="60px" height="14px" />
         </HStack>
 
         <HStack w="full" justifyContent={'start'} spacing={3}>
-          <SkeletonLayout width="120px" height="20px" />
+          <SkeletonLayout width="120px" height="16px" />
         </HStack>
       </VStack>
     </CardLayout>
