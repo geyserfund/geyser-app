@@ -5,12 +5,12 @@ import { PiCopy, PiShareFat } from 'react-icons/pi'
 
 import { AnonymousAvatar } from '@/components/ui/AnonymousAvatar'
 import { useAuthContext } from '@/context'
+import { useAuthModal } from '@/modules/auth/hooks'
 import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
-import { useAuthModal } from '@/modules/auth/hooks'
 import { Body, H3 } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom'
@@ -166,7 +166,7 @@ export const SuccessImageComponent = () => {
               placement="top"
             >
               <span style={{ position: 'relative', display: 'inline-block' }}>
-                <Body as="span" color={lightModeColors.neutral1[12]} textDecoration="underline dotted" display="inline">
+                <Body as="span" color={lightModeColors.neutral1[12]} display="inline">
                   {t('Ambassador')}
                 </Body>
               </span>
