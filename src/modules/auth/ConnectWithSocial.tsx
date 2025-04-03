@@ -76,6 +76,7 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
           stopPolling()
           setPollAuthStatus(false)
           handleToastError((error as Error).message)
+          onClose?.()
         }
 
         if (statusRes && statusRes.status === 200) {
@@ -89,6 +90,7 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
 
             setPollAuthStatus(false)
             handleToastError(reason)
+            onClose?.()
           }
         }
       }, 1000)
