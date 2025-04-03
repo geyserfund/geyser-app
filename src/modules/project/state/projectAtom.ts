@@ -11,6 +11,7 @@ import {
   ProjectPageDetailsFragment,
 } from '../../../types'
 import { resetRewardsAtom } from '../pages1/projectDashboard/views/sales/state/rewardsAtom'
+import { resetSourceResourceAtom } from '../pages1/projectView/state/sourceActivityAtom.ts'
 import { contributionAtomReset } from './contributionsAtom'
 import { entriesAtomReset } from './entriesAtom'
 import { goalsAtomReset } from './goalsAtom'
@@ -113,6 +114,8 @@ export const useProjectReset = () => {
   const postReset = useSetAtom(postsAtomReset)
   const subscriptionReset = useSetAtom(subscriptionAtomReset)
 
+  const sourceActivityReset = useSetAtom(resetSourceResourceAtom)
+
   const resetProject = useCallback(() => {
     console.log('=================================')
     console.log('=========RESET IS CALLED=========')
@@ -129,6 +132,8 @@ export const useProjectReset = () => {
     rewardReset()
     postReset()
     subscriptionReset()
+
+    sourceActivityReset()
   }, [
     contributionsReset,
     entriesReset,
@@ -141,6 +146,8 @@ export const useProjectReset = () => {
     rewardReset,
     postReset,
     subscriptionReset,
+
+    sourceActivityReset,
   ])
 
   return resetProject

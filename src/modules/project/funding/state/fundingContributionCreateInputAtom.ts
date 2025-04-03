@@ -15,6 +15,7 @@ import {
 import { toInt } from '@/utils'
 
 import { projectHeroAtom } from '../../pages1/projectView/state/heroAtom'
+import { sourceResourceAtom } from '../../pages1/projectView/state/sourceActivityAtom.ts'
 import { getHeroIdFromProjectHeroes } from '../hooks/useProjectHeroWithProjectName'
 import { fundingProjectAtom } from './fundingFormAtom'
 import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAtom'
@@ -28,6 +29,8 @@ export const formattedFundingInputAtom = atom((get) => {
   const user = get(authUserAtom)
   const usdRate = get(usdRateAtom)
   const projectGoalId = get(selectedGoalIdAtom)
+
+  const sourceResource = get(sourceResourceAtom)
 
   const projectHeroes = get(projectHeroAtom)
   const heroId = getHeroIdFromProjectHeroes(projectHeroes, fundingProject?.name)
@@ -109,8 +112,8 @@ export const formattedFundingInputAtom = atom((get) => {
       items: orderItemInputs,
     },
     sourceResourceInput: {
-      resourceId: formState.resourceId ? `${formState.resourceId}` : `${fundingProject?.id}`,
-      resourceType: formState.resourceType || FundingResourceType.Project,
+      resourceId: sourceResource.resourceId ? `${sourceResource.resourceId}` : `${fundingProject?.id}`,
+      resourceType: sourceResource.resourceType || FundingResourceType.Project,
     },
     paymentsInput,
   }

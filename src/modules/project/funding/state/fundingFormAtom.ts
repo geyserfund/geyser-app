@@ -3,7 +3,6 @@ import { atom } from 'jotai'
 import { SATOSHIS_IN_BTC } from '@/shared/constants'
 import { usdRateAtom } from '@/shared/state/btcRateAtom'
 import {
-  FundingResourceType,
   ProjectPageWalletFragment,
   ProjectRewardFragment,
   ProjectSubscriptionPlansFragment,
@@ -54,8 +53,6 @@ export type FundFormType = {
   rewardCurrency: RewardCurrency
   needsShipping: boolean
   shippingDestination: ShippingDestination
-  resourceId?: number
-  resourceType?: FundingResourceType
   followProject: boolean
   subscribeToGeyserEmails: boolean
   subscription: {
@@ -169,18 +166,6 @@ export const setFundFormStateAtom = atom(null, (get, set, name: string, value: a
     [name]: value,
   }))
 })
-
-/** Set the resource for the funding form */
-export const setResourceAtom = atom(
-  null,
-  (_, set, { resourceId, resourceType }: { resourceId: number; resourceType: FundingResourceType }) => {
-    set(fundingFormStateAtom, (current) => ({
-      ...current,
-      resourceId,
-      resourceType,
-    }))
-  },
-)
 
 /* Boolean to check if the funding form has rewards */
 export const fundingFormHasRewardsAtom = atom((get) => {

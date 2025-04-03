@@ -3,14 +3,17 @@ import { useEffect } from 'react'
 import { useLocation, useParams, useSearchParams } from 'react-router-dom'
 
 import { useAuthContext } from '@/context/auth.tsx'
+import { FundingResourceType } from '@/types/index.ts'
 
 import { ProjectProvider } from './context'
 import { FundingProviderWithProjectContext } from './context/FundingProvider'
 import { addProjectHeroAtom, projectHeroAtom } from './pages1/projectView/state/heroAtom'
+import { sourceResourceAtom } from './pages1/projectView/state/sourceActivityAtom.ts'
 import { ProjectContainer } from './ProjectContainer'
 
 export const Project = () => {
   const params = useParams<{ projectName: string }>()
+
   const { projectName } = params
 
   const { user } = useAuthContext()
@@ -20,6 +23,7 @@ export const Project = () => {
 
   const addHeroId = useSetAtom(addProjectHeroAtom)
   const projectHeroes = useAtomValue(projectHeroAtom)
+  const setSourceResource = useSetAtom(sourceResourceAtom)
 
   const currentProjectHero = projectHeroes.find((r) => r.projectName === projectName)
 
@@ -50,7 +54,21 @@ export const Project = () => {
         { replace: true, state: location.state },
       )
     }
-  }, [projectName, heroId, addHeroId, currentProjectHero, user, searchParams, setSearchParams, location.state])
+
+    if (location.state?.sourceActivityId) {
+      setSourceResource({ resourceId: location.state.sourceActivityId, resourceType: FundingResourceType.Activity })
+    }
+  }, [
+    projectName,
+    heroId,
+    addHeroId,
+    currentProjectHero,
+    user,
+    searchParams,
+    setSearchParams,
+    location.state,
+    setSourceResource,
+  ])
 
   return (
     <ProjectProvider projectName={projectName || ''} initializeWallet>
