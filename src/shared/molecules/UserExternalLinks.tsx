@@ -45,7 +45,11 @@ export const UserExternalLinksComponent = ({
   )
 }
 
-export const UserExternalLinks = ({ spread }: { spread?: boolean }) => {
+type UserExternalLinksProps = {
+  spread?: boolean
+} & StackProps
+
+export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) => {
   return (
     <HStack
       w="full"
@@ -53,6 +57,7 @@ export const UserExternalLinks = ({ spread }: { spread?: boolean }) => {
       paddingX={4}
       spacing={{ base: 2, lg: spread ? 2 : 0, xl: 2 }}
       justifyContent="center"
+      {...props}
     >
       <UserNavExternalButton as={ChakraLink} isExternal href={GuideUrl}>
         {t('Guide')}
