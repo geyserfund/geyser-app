@@ -7,35 +7,43 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
-import { ProjectForLandingPageFragment, ProjectSubCategory, useProjectsForLandingPageQuery } from '@/types/index.ts'
+import {
+  ProjectForLandingPageFragment,
+  ProjectsMostFundedByCategoryRange,
+  ProjectSubCategory,
+  useProjectsMostFundedByCategoryQuery,
+} from '@/types/index.ts'
 
 type SuggestedProjectsProps = {
   subCategory?: ProjectSubCategory | null
   projectId?: string | null
 }
 
+const NO_OF_PROJECTS_TO_TAKE = 15
+const NO_OF_PROJECTS_TO_SHOW = 3
+
 export const SuggestedProjects = ({ subCategory, projectId }: SuggestedProjectsProps) => {
-  const { data, loading } = useProjectsForLandingPageQuery({
+  const { data, loading } = useProjectsMostFundedByCategoryQuery({
     skip: !subCategory,
     variables: {
       input: {
-        pagination: {
-          take: 15,
-        },
-        where: {
-          subCategory,
-        },
+        range: ProjectsMostFundedByCategoryRange.Week,
+        subCategory,
+        take: NO_OF_PROJECTS_TO_TAKE,
       },
     },
   })
 
-  const projects = data?.projectsGet.projects.filter((project) => project.id !== projectId) || []
+  const projects =
+    data?.projectsMostFundedByCategory[0]?.projects
+      .map((project) => project.project)
+      .filter((project) => project.id !== projectId) || []
 
-  const suggestedProjects = getRandomProjects(projects)
-
-  if (loading || !subCategory) {
+  if (loading || !subCategory || projects.length === 0) {
     return null
   }
+
+  const suggestedProjects = getRandomProjects(projects)
 
   return (
     <VStack w="full" paddingTop={12}>
@@ -86,7 +94,7 @@ const getRandomProjects = (allProjects: ProjectForLandingPageFragment[]): Projec
   const randomProjects: ProjectForLandingPageFragment[] = []
 
   // Get up to 3 random projects (or fewer if less than 3 exist)
-  const selectionCount = Math.min(3, projectsCopy.length)
+  const selectionCount = Math.min(NO_OF_PROJECTS_TO_SHOW, projectsCopy.length)
 
   for (let i = 0; i < selectionCount; i++) {
     // Get random index from remaining projects
