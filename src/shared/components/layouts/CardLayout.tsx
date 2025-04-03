@@ -5,7 +5,7 @@ import { useMobileMode } from '../../../utils'
 
 export interface CardLayoutProps
   extends StackProps,
-    Partial<Pick<LinkProps, 'to'>>,
+    Partial<Pick<LinkProps, 'to' | 'state'>>,
     Partial<Pick<ChakraLinkProps, 'href'>> {
   noborder?: boolean
   noMobileBorder?: boolean

@@ -14,7 +14,6 @@ import {
   setErrorStateAtom,
   setFundFormStateAtom,
   setFundFormTargetAtom,
-  setResourceAtom,
   setWarningStateAtom,
   updateFundingFormRewardAtom,
   updateFundingFormSubscriptionAtom,
@@ -47,8 +46,6 @@ export const useFundingFormAtom = () => {
 
   const setState = useSetAtom(setFundFormStateAtom)
 
-  const setResource = useSetAtom(setResourceAtom)
-
   const resetRewards = useSetAtom(resetFundingFormRewardsAtom)
 
   const updateReward = useSetAtom(updateFundingFormRewardAtom)
@@ -71,7 +68,6 @@ export const useFundingFormAtom = () => {
     setWarningstate,
     setTarget,
     setState,
-    setResource,
     updateReward,
     updateSubscription,
     resetForm,
