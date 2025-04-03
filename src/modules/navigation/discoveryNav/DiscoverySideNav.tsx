@@ -70,7 +70,7 @@ export const DiscoverySideNav = () => {
         </VStack>
       </VStack>
 
-      <UserExternalLinks />
+      <UserExternalLinks justifyContent="start" />
     </VStack>
   )
 }
