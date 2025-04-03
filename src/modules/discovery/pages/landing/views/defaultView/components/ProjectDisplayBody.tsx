@@ -9,6 +9,7 @@ import { ProjectRowLayout, ProjectRowLayoutProps } from './ProjectRowLayout'
 interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'> {
   projects: ProjectForLandingPageFragment[]
   seeAllText?: string
+  subtitleId?: string
 }
 
 export const ProjectDisplayBody = ({
@@ -18,6 +19,7 @@ export const ProjectDisplayBody = ({
   projects,
   onSeeAllClick,
   seeAllText,
+  subtitleId,
 }: ProjectDisplayBodyProps) => {
   return (
     <ProjectRowLayout
@@ -28,6 +30,7 @@ export const ProjectDisplayBody = ({
       onSeeAllClick={onSeeAllClick}
       seeAllText={seeAllText}
       subtitleProps={{
+        id: subtitleId,
         onClick: onSeeAllClick,
         textDecoration: 'underline',
         _hover: { cursor: 'pointer' },

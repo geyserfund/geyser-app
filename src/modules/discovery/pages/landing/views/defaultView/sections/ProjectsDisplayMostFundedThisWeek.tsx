@@ -69,6 +69,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
                 ? ProjectSubCategoryLabel[subCategory]
                 : t('Recent Projects')
             }
+            subtitleId={category ? `see-all-${category}` : subCategory ? `see-all-${subCategory}` : ''}
             projects={projects}
             onSeeAllClick={() =>
               onSeeAllClick({
