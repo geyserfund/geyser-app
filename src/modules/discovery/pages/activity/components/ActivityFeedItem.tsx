@@ -58,6 +58,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
     <CardLayout
       as={Link}
       to={activityPath(activityType)}
+      state={{ sourceActivityId: resource.id }}
       id={`activity-feed-item-${activityType}`}
       width={{ base: 'full', lg: '586px' }}
       borderColor={isProjectLaunchedActivity ? 'primaryAlpha.6' : 'neutralAlpha.6'}

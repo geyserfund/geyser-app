@@ -1,12 +1,10 @@
 // import { useAtomValue } from 'jotai'
-import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router'
 
-import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { useLocation } from 'react-router'
+
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 // import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { FundingResourceType } from '@/types'
 
 // import { useNotification } from '@/utils/index.ts'
 import { FundingLayout } from '../../layouts/FundingLayout'
@@ -17,22 +15,14 @@ import { FundingSubscription } from './sections/FundingSubscription'
 
 /** FundingInit is the first page of funding flow, consisting of donation input and rewards selection or subscription selection */
 export const FundingInit = () => {
-  const { setResource } = useFundingFormAtom()
   const { loading } = useProjectAtom()
+
   // const hasFundingLimitReached = useAtomValue(hasProjectFundingLimitReachedAtom)
   // const toast = useNotification()
 
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
   const isSub = queryParams.get('isSub') === 'true'
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (location.state && location.state.entryId) {
-      setResource({ resourceId: location.state.entryId, resourceType: FundingResourceType.Entry })
-      navigate({ pathname: location.pathname, search: location.search }, { state: null, replace: true })
-    }
-  }, [location, setResource, navigate])
 
   // useEffect(() => {
   //   if (hasFundingLimitReached) {
