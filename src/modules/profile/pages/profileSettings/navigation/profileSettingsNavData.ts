@@ -3,10 +3,11 @@ export enum ProfileSettingsType {
   notifications = 'notifications',
   subscriptions = 'subscriptions',
   verifications = 'verifications',
+  wallet = 'wallet',
 }
 
 import { IconType } from 'react-icons'
-import { PiBell, PiRepeat, PiSealCheck, PiUser } from 'react-icons/pi'
+import { PiBell, PiRepeat, PiSealCheck, PiUser, PiWallet } from 'react-icons/pi'
 
 import { PathsMap } from '@/shared/constants'
 
@@ -29,6 +30,12 @@ export const profileSettingsItems: ProfileSettingsItem[] = [
     path: 'userProfileSettingsVerifications',
     type: ProfileSettingsType.verifications,
     icon: PiSealCheck,
+  },
+  {
+    label: 'Wallet',
+    path: 'userProfileSettingsWallet',
+    type: ProfileSettingsType.wallet,
+    icon: PiWallet,
   },
   {
     label: 'Notifications',
