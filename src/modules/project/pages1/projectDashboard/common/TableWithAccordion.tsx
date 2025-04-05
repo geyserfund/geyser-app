@@ -132,6 +132,13 @@ export function TableItemWithAccordion<TItem>({
 
   const accordionSchema = useMemo(() => schema.filter((val) => val.isAccordion), [schema])
 
+  const hasMobileOnlyAccordionItems = useMemo(
+    () => isMobile && tableSchema.some((row) => !row.isMobile),
+    [isMobile, tableSchema],
+  )
+
+  const showAccordion = Boolean(accordionContent) || accordionSchema.length > 0 || hasMobileOnlyAccordionItems
+
   const accordionColSpan = useMemo(
     () =>
       tableSchema.reduce((sum, val) => {
@@ -141,8 +148,6 @@ export function TableItemWithAccordion<TItem>({
       }, 0),
     [tableSchema, isMobile],
   )
-
-  const showAccordion = accordionSchema.length > 0 || accordionContent
 
   return (
     <>
@@ -169,15 +174,17 @@ export function TableItemWithAccordion<TItem>({
               textAlign={row.key === 'dropdown' ? 'right' : 'left'}
             >
               {row.key === 'dropdown' ? (
-                <IconButton
-                  size="sm"
-                  alignSelf={'center'}
-                  aria-label="dropdown"
-                  variant="ghost"
-                  colorScheme="neutral1"
-                  icon={isOpen ? <PiCaretUp fontSize={'16px'} /> : <PiCaretDown fontSize={'16px'} />}
-                  onClick={onToggle}
-                />
+                showAccordion ? (
+                  <IconButton
+                    size="sm"
+                    alignSelf={'center'}
+                    aria-label="dropdown"
+                    variant="ghost"
+                    colorScheme="neutral1"
+                    icon={isOpen ? <PiCaretUp fontSize={'16px'} /> : <PiCaretDown fontSize={'16px'} />}
+                    onClick={onToggle}
+                  />
+                ) : null
               ) : (
                 value
               )}
