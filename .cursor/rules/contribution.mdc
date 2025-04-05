@@ -110,7 +110,16 @@ Performance Optimization
 - Minimal Code Changes: When adding types, we should focus only on the type definitions unless specifically asked to modify the implementation.
 - Code Block Format: When showing edits, I should have used a more focused format. Using anything reusable in the file or other files.
   
+## Currency Conversions
 
+- For currency conversions make sure to use the `@/shared/utils/hooks/useCurrencyFormatter` hook.
+
+## Toast Notifications
+
+- Make sure to use the useNotification hook from [Notification.tsx](mdc:src/utils/tools/Notification.tsx) when creating toast notifications.
+- Do not import individual toast calls, import toast as an object and use toast.success, toast.error, etc.
+
+## Table Components
 
 # Comment Formatting Rule
 
@@ -135,3 +144,4 @@ Performance Optimization
 
 ## Linting
 - Consider adding an ESLint rule to enforce this comment style across the codebase
+- Make sure to auto-remove any unused imported files
