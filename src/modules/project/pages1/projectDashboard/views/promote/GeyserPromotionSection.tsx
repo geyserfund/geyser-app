@@ -8,7 +8,7 @@ import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter.ts
 import { GeyserPromotionsContributionStatsQuery } from '@/types/index.ts'
 
 interface GeyserPromotionSectionProps {
-  promotionsEnabled: boolean | undefined
+  promotionsEnabled: boolean | undefined | null
   promotionStatsData: GeyserPromotionsContributionStatsQuery | undefined
   promotionStatsLoading: boolean
   handlePromotionsToggle: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>

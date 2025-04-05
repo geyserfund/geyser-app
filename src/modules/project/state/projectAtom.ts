@@ -23,7 +23,7 @@ import { walletAtomReset } from './walletAtom'
 export type ProjectState = ProjectPageBodyFragment &
   ProjectHeaderSummaryFragment &
   ProjectPageDetailsFragment & {
-    promotionsEnabled?: boolean
+    promotionsEnabled?: boolean | null
     grantApplications?: ProjectGrantApplicantFragment[]
   }
 
