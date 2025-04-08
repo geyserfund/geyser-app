@@ -8,8 +8,8 @@ import { createJSONStorage } from 'jotai/utils'
 
 const storage = createJSONStorage<string | null>(() => sessionStorage)
 
-export const referringHeroIdAtom = atomWithStorage<string | null>(
-  'referringHeroId', // Key in sessionStorage
+export const referrerHeroIdAtom = atomWithStorage<string | null>(
+  'referrerHeroId', // Key in sessionStorage
   null, // Initial value
   storage, // Pass the storage implementation directly
   { getOnInit: true }, // getOnInit needs to be in the options object

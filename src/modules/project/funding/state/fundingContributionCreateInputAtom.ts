@@ -2,7 +2,7 @@ import { atom } from 'jotai'
 
 import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom'
-import { referringHeroIdAtom } from '@/shared/state/referralAtom.ts'
+import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
 import {
   ContributionCreateInput,
   ContributionPaymentsInput,
@@ -28,7 +28,7 @@ export const formattedFundingInputAtom = atom((get) => {
   const usdRate = get(usdRateAtom)
   const projectGoalId = get(selectedGoalIdAtom)
 
-  const referringHeroId = get(referringHeroIdAtom)
+  const referrerHeroId = get(referrerHeroIdAtom)
 
   const {
     donationAmount,
@@ -90,7 +90,7 @@ export const formattedFundingInputAtom = atom((get) => {
     projectGoalId,
     anonymous,
     donationAmount: toInt(donationAmount),
-    ambassadorHeroId: referringHeroId,
+    referrerHeroId,
     metadataInput: {
       ...(email && { email }),
       ...(media && { media }),
