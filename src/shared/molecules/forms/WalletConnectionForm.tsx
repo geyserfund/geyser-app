@@ -61,6 +61,7 @@ type Props = {
   limits: Limits
   resourceType: WalletResourceType
   availableOptions?: AvailableOptions
+  showPromoText?: boolean
 }
 
 const FeaturedNWCWalletList = [
@@ -72,19 +73,19 @@ const FeaturedNWCWalletList = [
   },
 ]
 
-export const WalletConnectionForm = ({
+const LightningAddressAccordionItem = ({
   readOnly,
-  isEdit,
-  connectionOption,
   lightningAddress,
-  node,
-  nwc,
-  setConnectionOption,
-  fee,
+  connectionOption,
   limits,
-  resourceType,
-  availableOptions = { lightningAddress: true, node: true, nwc: true },
-}: Props) => {
+  showPromoText = true,
+}: {
+  readOnly?: boolean
+  lightningAddress: LightingWalletForm
+  connectionOption: ConnectionOption
+  limits: Limits
+  showPromoText?: boolean
+}) => {
   const { t } = useTranslation()
   const { colors } = useCustomTheme()
 
@@ -107,6 +108,259 @@ export const WalletConnectionForm = ({
     }
   }
 
+  return (
+    <AccordionItem mb="30px" border="none" tabIndex={0}>
+      <h2>
+        <AccordionButton {...accordionButtonStyles}>
+          <Box as="span" flex="1" textAlign="left">
+            {t('Lightning Address')}
+          </Box>
+          <BoltIcon
+            boxSize="30px"
+            color={connectionOption === ConnectionOption.LIGHTNING_ADDRESS ? colors.primary1[9] : colors.utils.text}
+          />
+        </AccordionButton>
+      </h2>
+      <AccordionPanel p={0}>
+        <WalletConnectionOptionInfoBox
+          pt={0}
+          primaryNode={
+            <>
+              <InputGroup w="full" size={'md'}>
+                <TextInputBox
+                  w="full"
+                  name="lightning-address"
+                  type={'email'}
+                  placeholder={'runwithbitcoin@getalby.com'}
+                  value={lightningAddress.value}
+                  onChange={(event) => {
+                    lightningAddress.setValue(event.target.value)
+                  }}
+                  onBlur={lightningAddress.validate}
+                  isInvalid={Boolean(lightningAddress.error)}
+                  focusBorderColor={'neutral.200'}
+                  _valid={{
+                    focusBorderColor: 'primary.500',
+                  }}
+                  error={lightningAddress.error}
+                  isDisabled={readOnly}
+                />
+                <InputRightElement>{renderRightElementContent()}</InputRightElement>
+              </InputGroup>
+              {lightningAddress.value && lightningAddress.state === LNAddressEvaluationState.SUCCEEDED ? (
+                <WalletLimitComponent limit={limits} />
+              ) : null}
+            </>
+          }
+          promoText={showPromoText ? t(`${LIGHTNING_FEE_PERCENTAGE}% Geyser fee per transaction`) : undefined}
+          secondaryText={
+            <Trans
+              i18nKey={
+                '<0>Lightning Addresses</0> are like an email address, but for your Bitcoin. You will receive all on-chain and lightning transactions directly to your lightning wallet. Get your own by looking at our featured and other <2>recommended wallets.</2>'
+              }
+            >
+              <Link textDecoration="underline" href={GeyserLightningWalletGuideLink} isExternal>
+                Lightning Addresses
+              </Link>
+              {
+                ' are like an email address, but for your Bitcoin. You will receive all on-chain and lightning transactions directly to your lightning wallet. Get your own by looking at our featured and other '
+              }
+              <Link textDecoration="underline" href={GeyserLightningWalletGuideLink} isExternal color="primary1.11">
+                recommended wallets.
+              </Link>
+            </Trans>
+          }
+        >
+          <VStack w="full" alignItems={'start'} spacing={1}>
+            <Body size="sm" medium>
+              {t('Featured Wallets')}
+            </Body>
+            <RenderSponsorFromTable />
+          </VStack>
+        </WalletConnectionOptionInfoBox>
+      </AccordionPanel>
+    </AccordionItem>
+  )
+}
+
+const LightningNodeAccordionItem = ({
+  readOnly,
+  node,
+  fee,
+  connectionOption,
+  hasLightningAddress,
+}: {
+  readOnly?: boolean
+  node: NodeWalletForm
+  fee: WalletForm['fee']
+  connectionOption: ConnectionOption
+  hasLightningAddress: boolean
+}) => {
+  const { t } = useTranslation()
+  const { colors } = useCustomTheme()
+  const nodeInput = node.value
+
+  return (
+    <AccordionItem mb="30px" border="none" tabIndex={hasLightningAddress ? 1 : 0}>
+      <h2>
+        <AccordionButton {...accordionButtonStyles}>
+          <Box as="span" flex="1" textAlign="left">
+            {t('Lightning Node')}
+          </Box>
+          <NodeIcon
+            color={connectionOption === ConnectionOption.PERSONAL_NODE ? colors.primary1[9] : colors.utils.text}
+          />
+        </AccordionButton>
+      </h2>
+      <AccordionPanel p={0}>
+        <WalletConnectionOptionInfoBox
+          pt={0}
+          primaryNode={
+            <>
+              <Button
+                leftIcon={<PiGear fontSize="20px" />}
+                w="full"
+                variant="outline"
+                colorScheme="neutral1"
+                onClick={node.onOpen}
+                isDisabled={readOnly}
+              >
+                {t('Connect Your Node')}
+              </Button>
+              {nodeInput && (
+                <NodeConnectionDetails
+                  projectWallet={{
+                    connectionDetails: {
+                      grpcPort: nodeInput.isVoltage ? 10009 : Number(nodeInput.grpc),
+                      hostname: nodeInput.hostname,
+                      lndNodeType: nodeInput.isVoltage ? LndNodeType.Voltage : LndNodeType.Geyser,
+                      macaroon: nodeInput.invoiceMacaroon,
+                      pubkey: nodeInput.publicKey,
+                      tlsCertificate: nodeInput.tlsCert,
+                    },
+                    name: nodeInput.name,
+                  }}
+                />
+              )}
+            </>
+          }
+          secondaryText={'Connect your lightning node to receive incoming transactions directly.'}
+        >
+          <ProjectFeeSelection readOnly={readOnly} value={fee.value} onChange={fee.setValue} />
+        </WalletConnectionOptionInfoBox>
+      </AccordionPanel>
+    </AccordionItem>
+  )
+}
+
+const NostrWalletConnectAccordionItem = ({
+  readOnly,
+  nwc,
+  connectionOption,
+  hasLightningAddress,
+  hasNode,
+  showPromoText = true,
+}: {
+  readOnly?: boolean
+  nwc: NWCWalletForm
+  connectionOption: ConnectionOption
+  hasLightningAddress: boolean
+  hasNode: boolean
+  showPromoText?: boolean
+}) => {
+  const { t } = useTranslation()
+  const { colors } = useCustomTheme()
+
+  return (
+    <AccordionItem border="none" tabIndex={(hasLightningAddress ? 1 : 0) + (hasNode ? 1 : 0)}>
+      <h2>
+        <AccordionButton {...accordionButtonStyles}>
+          <Box as="span" flex="1" textAlign="left">
+            {t('Nostr Wallet Connect')}
+          </Box>
+          <NWCIcon
+            boxSize="20px"
+            mr={1}
+            color={connectionOption === ConnectionOption.NWC ? colors.primary1[9] : colors.utils.text}
+          />
+        </AccordionButton>
+      </h2>
+      <AccordionPanel p={0}>
+        <WalletConnectionOptionInfoBox
+          pt={0}
+          primaryNode={
+            <InputGroup w="full" size={'md'}>
+              <TextInputBox
+                w="full"
+                name="nostr-wallet-connect"
+                type={'text'}
+                placeholder={'nostr+walletconnect://...'}
+                value={nwc.value}
+                onChange={(event) => {
+                  nwc.setValue(event.target.value)
+                }}
+                focusBorderColor={'neutral.200'}
+                _valid={{
+                  focusBorderColor: 'primary.500',
+                }}
+                isDisabled={readOnly}
+              />
+            </InputGroup>
+          }
+          promoText={showPromoText ? t(`${LIGHTNING_FEE_PERCENTAGE}% Geyser fee per transaction`) : undefined}
+          secondaryText={
+            <Trans
+              i18nKey={
+                '<0>Nostr Wallet Connect</0> is a protocol that makes use of Nostr to connect web apps with lightning wallets. Read more on <2>nwc.dev.</2>'
+              }
+            >
+              {
+                'Nostr Wallet Connect is a protocol that makes use of Nostr to connect web apps with lightning wallets. Read more on '
+              }
+              <Link textDecoration="underline" href="https://nwc.dev/" isExternal color="primary1.11">
+                nwc.dev
+              </Link>
+              {'.'}
+            </Trans>
+          }
+        >
+          <VStack w="full" alignItems={'start'} spacing={1}>
+            <Body size="sm" medium>
+              {t('Featured Wallets')}
+            </Body>
+            <HStack width={'full'} justifyContent={'flex-start'} spacing={'10px'} flexWrap="wrap">
+              {FeaturedNWCWalletList.map((wallet) => {
+                return (
+                  <RenderSponsorImage
+                    key={wallet.name}
+                    url={wallet.url}
+                    imageUrl={wallet.imageUrl}
+                    imageUrlDark={wallet.imageUrlDark}
+                  />
+                )
+              })}
+            </HStack>
+          </VStack>
+        </WalletConnectionOptionInfoBox>
+      </AccordionPanel>
+    </AccordionItem>
+  )
+}
+
+export const WalletConnectionForm = ({
+  readOnly,
+  isEdit,
+  connectionOption,
+  lightningAddress,
+  node,
+  nwc,
+  setConnectionOption,
+  fee,
+  limits,
+  resourceType,
+  availableOptions = { lightningAddress: true, node: true, nwc: true },
+  showPromoText = true,
+}: Props) => {
   const handleSelection = (expandedIndex: number) => {
     let optionIndex = 0
 
@@ -152,229 +406,48 @@ export const WalletConnectionForm = ({
     return 0
   }
 
-  const nodeInput = node?.value
-
   return (
     <VStack width="100%" alignItems="flex-start" spacing="40px">
       <Accordion w="full" onChange={handleSelection} index={getAccordionIndex()}>
         {availableOptions.lightningAddress && (
-          <AccordionItem mb="30px" border="none" tabIndex={0}>
-            <h2>
-              <AccordionButton {...accordionButtonStyles}>
-                <Box as="span" flex="1" textAlign="left">
-                  {t('Lightning Address')}
-                </Box>
-                <BoltIcon
-                  boxSize="30px"
-                  color={
-                    connectionOption === ConnectionOption.LIGHTNING_ADDRESS ? colors.primary1[9] : colors.utils.text
-                  }
-                />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel p={0}>
-              <WalletConnectionOptionInfoBox
-                pt={0}
-                primaryNode={
-                  <>
-                    <InputGroup w="full" size={'md'}>
-                      <TextInputBox
-                        w="full"
-                        name="lightning-address"
-                        type={'email'}
-                        placeholder={'runwithbitcoin@getalby.com'}
-                        value={lightningAddress.value}
-                        onChange={(event) => {
-                          lightningAddress.setValue(event.target.value)
-                        }}
-                        onBlur={lightningAddress.validate}
-                        isInvalid={Boolean(lightningAddress.error)}
-                        focusBorderColor={'neutral.200'}
-                        _valid={{
-                          focusBorderColor: 'primary.500',
-                        }}
-                        error={lightningAddress.error}
-                        isDisabled={readOnly}
-                      />
-                      <InputRightElement>{renderRightElementContent()}</InputRightElement>
-                    </InputGroup>
-                    {lightningAddress.value && lightningAddress.state === LNAddressEvaluationState.SUCCEEDED ? (
-                      <WalletLimitComponent limit={limits} />
-                    ) : null}
-                  </>
-                }
-                promoText={t(`${LIGHTNING_FEE_PERCENTAGE}% Geyser fee per transaction`)}
-                secondaryText={
-                  <Trans
-                    i18nKey={
-                      '<0>Lightning Addresses</0> are like an email address, but for your Bitcoin. You will receive all on-chain and lightning transactions directly to your lightning wallet. Get your own by looking at our featured and other <2>recommended wallets.</2>'
-                    }
-                  >
-                    <Link textDecoration="underline" href={GeyserLightningWalletGuideLink} isExternal>
-                      Lightning Addresses
-                    </Link>
-                    {
-                      ' are like an email address, but for your Bitcoin. You will receive all on-chain and lightning transactions directly to your lightning wallet. Get your own by looking at our featured and other '
-                    }
-                    <Link
-                      textDecoration="underline"
-                      href={GeyserLightningWalletGuideLink}
-                      isExternal
-                      color="primary1.11"
-                    >
-                      recommended wallets.
-                    </Link>
-                  </Trans>
-                }
-              >
-                <VStack w="full" alignItems={'start'} spacing={1}>
-                  <Body size="sm" medium>
-                    {t('Featured Wallets')}
-                  </Body>
-                  <RenderSponsorFromTable />
-                </VStack>
-              </WalletConnectionOptionInfoBox>
-            </AccordionPanel>
-          </AccordionItem>
+          <LightningAddressAccordionItem
+            readOnly={readOnly}
+            lightningAddress={lightningAddress}
+            connectionOption={connectionOption}
+            limits={limits}
+            showPromoText={showPromoText}
+          />
         )}
 
         {availableOptions.node && node && fee && (
-          <AccordionItem mb="30px" border="none" tabIndex={availableOptions.lightningAddress ? 1 : 0}>
-            <h2>
-              <AccordionButton {...accordionButtonStyles}>
-                <Box as="span" flex="1" textAlign="left">
-                  {t('Lightning Node')}
-                </Box>
-                <NodeIcon
-                  color={connectionOption === ConnectionOption.PERSONAL_NODE ? colors.primary1[9] : colors.utils.text}
-                />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel p={0}>
-              <WalletConnectionOptionInfoBox
-                pt={0}
-                primaryNode={
-                  <>
-                    <Button
-                      leftIcon={<PiGear fontSize="20px" />}
-                      w="full"
-                      variant="outline"
-                      colorScheme="neutral1"
-                      onClick={node.onOpen}
-                      isDisabled={readOnly}
-                    >
-                      {t('Connect Your Node')}
-                    </Button>
-                    {nodeInput && (
-                      <NodeConnectionDetails
-                        projectWallet={{
-                          connectionDetails: {
-                            grpcPort: nodeInput.isVoltage ? 10009 : Number(nodeInput.grpc),
-                            hostname: nodeInput.hostname,
-                            lndNodeType: nodeInput.isVoltage ? LndNodeType.Voltage : LndNodeType.Geyser,
-                            macaroon: nodeInput.invoiceMacaroon,
-                            pubkey: nodeInput.publicKey,
-                            tlsCertificate: nodeInput.tlsCert,
-                          },
-                          name: nodeInput.name,
-                        }}
-                      />
-                    )}
-                  </>
-                }
-                secondaryText={'Connect your lightning node to receive incoming transactions directly.'}
-              >
-                <>
-                  <ProjectFeeSelection readOnly={readOnly} value={fee.value} onChange={fee.setValue} />
-                </>
-              </WalletConnectionOptionInfoBox>
-            </AccordionPanel>
-          </AccordionItem>
+          <LightningNodeAccordionItem
+            readOnly={readOnly}
+            node={node}
+            fee={fee}
+            connectionOption={connectionOption}
+            hasLightningAddress={availableOptions.lightningAddress}
+          />
         )}
 
         {availableOptions.nwc && (
-          <AccordionItem
-            border="none"
-            tabIndex={(availableOptions.lightningAddress ? 1 : 0) + (availableOptions.node ? 1 : 0)}
-          >
-            <h2>
-              <AccordionButton {...accordionButtonStyles}>
-                <Box as="span" flex="1" textAlign="left">
-                  {t('Nostr Wallet Connect')}
-                </Box>
-                <NWCIcon
-                  boxSize="20px"
-                  mr={1}
-                  color={connectionOption === ConnectionOption.NWC ? colors.primary1[9] : colors.utils.text}
-                />
-              </AccordionButton>
-            </h2>
-            <AccordionPanel p={0}>
-              <WalletConnectionOptionInfoBox
-                pt={0}
-                primaryNode={
-                  <>
-                    <InputGroup w="full" size={'md'}>
-                      <TextInputBox
-                        w="full"
-                        name="nostr-wallet-connect"
-                        type={'text'}
-                        placeholder={'nostr+walletconnect://...'}
-                        value={nwc.value}
-                        onChange={(event) => {
-                          nwc.setValue(event.target.value)
-                        }}
-                        focusBorderColor={'neutral.200'}
-                        _valid={{
-                          focusBorderColor: 'primary.500',
-                        }}
-                        isDisabled={readOnly}
-                      />
-                    </InputGroup>
-                  </>
-                }
-                promoText={t(`${LIGHTNING_FEE_PERCENTAGE}% Geyser fee per transaction`)}
-                secondaryText={
-                  <Trans
-                    i18nKey={
-                      '<0>Nostr Wallet Connect</0> is a protocol that makes use of Nostr to connect web apps with lightning wallets. Read more on <2>nwc.dev.</2>'
-                    }
-                  >
-                    {
-                      'Nostr Wallet Connect is a protocol that makes use of Nostr to connect web apps with lightning wallets. Read more on '
-                    }
-                    <Link textDecoration="underline" href="https://nwc.dev/" isExternal color="primary1.11">
-                      nwc.dev
-                    </Link>
-                    {'.'}
-                  </Trans>
-                }
-              >
-                <VStack w="full" alignItems={'start'} spacing={1}>
-                  <Body size="sm" medium>
-                    {t('Featured Wallets')}
-                  </Body>
-                  <HStack width={'full'} justifyContent={'flex-start'} spacing={'10px'} flexWrap="wrap">
-                    {FeaturedNWCWalletList.map((wallet) => {
-                      return (
-                        <RenderSponsorImage
-                          key={wallet.name}
-                          url={wallet.url}
-                          imageUrl={wallet.imageUrl}
-                          imageUrlDark={wallet.imageUrlDark}
-                        />
-                      )
-                    })}
-                  </HStack>
-                </VStack>
-              </WalletConnectionOptionInfoBox>
-            </AccordionPanel>
-          </AccordionItem>
+          <NostrWalletConnectAccordionItem
+            readOnly={readOnly}
+            nwc={nwc}
+            connectionOption={connectionOption}
+            hasLightningAddress={availableOptions.lightningAddress}
+            hasNode={availableOptions.node}
+            showPromoText={showPromoText}
+          />
         )}
       </Accordion>
 
-      {node && nodeInput && (
-        <NodeAdditionModal isOpen={node.isOpen} onClose={node.onClose} nodeInput={nodeInput} onSubmit={node.setValue} />
+      {node && node.value && (
+        <NodeAdditionModal
+          isOpen={node.isOpen}
+          onClose={node.onClose}
+          nodeInput={node.value}
+          onSubmit={node.setValue}
+        />
       )}
     </VStack>
   )

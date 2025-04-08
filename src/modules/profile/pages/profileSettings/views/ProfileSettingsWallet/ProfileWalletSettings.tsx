@@ -1,4 +1,4 @@
-import { Box, Button, Center, Heading, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Flex, Heading, Text, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useCallback } from 'react'
 
@@ -61,11 +61,7 @@ export const ProfileWalletSettings = () => {
     <Box p={8} w="full">
       <VStack spacing={8} align="flex-start" w="full">
         <Heading size="md">{t('Wallet Connection')}</Heading>
-        <Text>
-          {t(
-            'Connect your Lightning wallet to receive contribution refunds, ambassador payouts, etc. directly to your wallet.',
-          )}
-        </Text>
+        <Text>{t('Connect a Lightning wallet to your account to receive refunds, ambassador payouts, etc.')}</Text>
 
         <WalletConnectionForm
           readOnly={false}
@@ -76,13 +72,20 @@ export const ProfileWalletSettings = () => {
           limits={limits}
           resourceType={WalletResourceType.User}
           availableOptions={{ lightningAddress: true, node: false, nwc: true }}
+          showPromoText={false}
         />
 
-        <Center w="full">
-          <Button size="lg" colorScheme="primary" onClick={handleConfirm} isDisabled={isLightningAddressInValid}>
-            {t('Save Wallet')}
+        <Flex w="full" justifyContent="flex-end">
+          <Button
+            w="full"
+            size="md"
+            colorScheme="primary1"
+            onClick={handleConfirm}
+            isDisabled={isLightningAddressInValid}
+          >
+            {t('Save')}
           </Button>
-        </Center>
+        </Flex>
       </VStack>
     </Box>
   )
