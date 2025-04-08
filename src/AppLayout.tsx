@@ -45,6 +45,7 @@ export const AppLayout = () => {
         pullingContent={<PullingDownContent />}
         pullDownThreshold={dimensions.pullDownThreshold}
         isPullable={isMobile}
+        maxPullDownDistance={dimensions.pullDownThreshold}
       >
         <Box w="full" h={'100%'} position="relative" className={layoutAnimationClassName}>
           <Box
