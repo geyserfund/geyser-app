@@ -7,18 +7,16 @@ import { PiCaretDown, PiCaretUp } from 'react-icons/pi'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
-import { useGoalsAtom, useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useGoalsAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body, H2 } from '@/shared/components/typography'
 import { SubscriptionCurrencyType } from '@/types/generated/graphql'
 
-import { useFundCalc } from '../../../../../helpers'
-import { centsToDollars, toInt, useMobileMode } from '../../../../../utils'
+import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../../../utils'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
 
 export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
   const { t } = useTranslation()
-  const { project } = useProjectAtom()
 
   const isMobileMode = useMobileMode()
 
@@ -35,11 +33,8 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
 
   const { formState, hasSelectedRewards } = useFundingFormAtom()
 
-  const { getTotalAmount, getRewardsAmount } = useFundCalc(formState)
-
   const { isOpen: isMobileDetailsOpen, onToggle: onMobileDetailsToggle } = useDisclosure()
 
-  const name = project ? project.name : ''
   const numberOfRewardsSelected =
     hasSelectedRewards && formState.rewardsByIDAndCount
       ? Object.entries(formState.rewardsByIDAndCount).reduce((accumulator, currentValue) => {
@@ -65,7 +60,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
 
   const hasDetails = disableCollapse
     ? false
-    : formState.donationAmount > 0 || numberOfRewardsSelected > 0 || getTotalAmount('dollar', name) >= 10
+    : formState.donationAmount > 0 || numberOfRewardsSelected > 0 || formState.totalAmountUsdCent >= 10
 
   const mobileDisplayStyle = disableCollapse
     ? 'flex'
@@ -151,7 +146,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
           <HStack alignItems={'start'}>
             <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
-              {getRewardsAmount('sats').toLocaleString()}{' '}
+              {commaFormatted(formState.rewardsCostInSatoshi)}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
                 sats
               </Body>
@@ -173,13 +168,13 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
         </Body>
         <HStack flex={1} flexWrap={'wrap'}>
           <Body size={{ base: 'md', lg: 'xl' }} medium wordBreak={'break-all'}>
-            {`${getTotalAmount('sats', name).toLocaleString()} `}
+            {`${commaFormatted(formState.totalAmount)} `}
           </Body>
           <Body as="span" size={{ base: 'md', lg: 'xl' }} light>
             sats
           </Body>
           <Body as="span" size={{ base: 'md', lg: 'xl' }} medium light wordBreak={'break-all'}>
-            {`($${getTotalAmount('dollar', name)})`}
+            {`($${commaFormatted(centsToDollars(formState.totalAmountUsdCent))})`}
           </Body>
         </HStack>
       </HStack>
