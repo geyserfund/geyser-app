@@ -80,6 +80,7 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
 
   // Query to get user wallet data
   const { data: userData } = useUserWalletQuery({
+    skip: !user.id
     variables: {
       where: { id: user?.id },
     },
