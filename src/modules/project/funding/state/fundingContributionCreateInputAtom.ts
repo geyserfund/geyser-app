@@ -2,6 +2,7 @@ import { atom } from 'jotai'
 
 import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom'
+import { referringHeroIdAtom } from '@/shared/state/referralAtom.ts'
 import {
   ContributionCreateInput,
   ContributionPaymentsInput,
@@ -14,8 +15,6 @@ import {
 } from '@/types/generated/graphql'
 import { toInt } from '@/utils'
 
-import { projectHeroAtom } from '../../pages1/projectView/state/heroAtom'
-import { getHeroIdFromProjectHeroes } from '../hooks/useProjectHeroWithProjectName'
 import { fundingProjectAtom } from './fundingFormAtom'
 import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAtom'
 import { selectedGoalIdAtom } from './selectedGoalAtom'
@@ -29,8 +28,7 @@ export const formattedFundingInputAtom = atom((get) => {
   const usdRate = get(usdRateAtom)
   const projectGoalId = get(selectedGoalIdAtom)
 
-  const projectHeroes = get(projectHeroAtom)
-  const heroId = getHeroIdFromProjectHeroes(projectHeroes, fundingProject?.name)
+  const referringHeroId = get(referringHeroIdAtom)
 
   const {
     donationAmount,
@@ -92,7 +90,7 @@ export const formattedFundingInputAtom = atom((get) => {
     projectGoalId,
     anonymous,
     donationAmount: toInt(donationAmount),
-    ambassadorHeroId: heroId,
+    ambassadorHeroId: referringHeroId,
     metadataInput: {
       ...(email && { email }),
       ...(media && { media }),
