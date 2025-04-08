@@ -99,6 +99,7 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
 
   const { project } = useProjectAtom()
   const { queryProjectWalletConnectionDetails } = useProjectWalletAPI(true)
+  const { execute: queryProjectWalletConnectionDetailsExecute } = queryProjectWalletConnectionDetails
   const { wallet, walletConnectionDetails } = useWalletAtom()
 
   const projectWallet = useMemo(() => ({ ...wallet, ...walletConnectionDetails }), [wallet, walletConnectionDetails])
@@ -118,8 +119,8 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
   const [connectionOption, setConnectionOption] = useState<ConnectionOption>(ConnectionOption.LIGHTNING_ADDRESS)
 
   useEffect(() => {
-    queryProjectWalletConnectionDetails.execute()
-  }, [queryProjectWalletConnectionDetails])
+    queryProjectWalletConnectionDetailsExecute()
+  }, [queryProjectWalletConnectionDetailsExecute])
 
   useEffect(() => {
     if (walletConnectionDetails?.connectionDetails.__typename) {

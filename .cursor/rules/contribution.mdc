@@ -18,10 +18,13 @@ Code Style and Structure
 - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
 - Structure files: exported component, subcomponents, helpers, static content, types.
 
-Internationalization (i18n)
+## Internationalization (i18n)
 - Always use the t() function from react-i18next for all user-facing strings.
+- Import the t() function directly for i18next integration
 - Never hardcode user-facing text strings; wrap all strings with t() function.
 - Keep the translations keys simple and descriptive, matching the English text.
+- Wrap all user-facing text in t() function calls, even for button labels and titles
+- When displaying app values like currencies or numbers, place them outside the t() function
 
 Importing from files
 - While importing from another file, favour the shortest route, i.e relative if it is short, else absolute if that is shortest.
@@ -100,11 +103,8 @@ Performance Optimization
 - Position the cursor inside the component's content area to facilitate adding content
 - Use nested VStack/HStack components to group related elements
 - For cards and sections, use CardLayout for consistency
-
-## Internationalization 
-- Always import and use the useTranslation hook for i18n integration
-- Wrap all user-facing text in t() function calls, even for button labels and titles
-- When displaying app values like currencies or numbers, place them outside the t() function
+- Place custom or external hooks at the top of the function body
+- Prefer the use of components in [Heading.tsx](mdc:src/shared/components/typography/Heading.tsx) for titles, sub-titles, etc.
 
 ## General Conventions
 - Minimal Code Changes: When adding types, we should focus only on the type definitions unless specifically asked to modify the implementation.
@@ -120,6 +120,12 @@ Performance Optimization
 - Do not import individual toast calls, import toast as an object and use toast.success, toast.error, etc.
 
 ## Table Components
+
+- Make use of [TableWithAccordion.tsx](mdc:src/modules/project/pages1/projectDashboard/common/TableWithAccordion.tsx)
+
+## Form Components
+
+- Make use of custom components in `src/shared/components/controlledInput`
 
 # Comment Formatting Rule
 

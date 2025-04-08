@@ -1,4 +1,4 @@
-import { Box, HStack, Icon, Spinner, Switch, Tooltip, VStack } from '@chakra-ui/react'
+import { Box, HStack, Icon, Switch, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React from 'react'
 import { PiInfo } from 'react-icons/pi'
@@ -25,6 +25,11 @@ export const GeyserPromotionSection = ({
   isUpdateProjectLoading,
   formatAmount,
 }: GeyserPromotionSectionProps) => {
+  const hasPromotionContributions =
+    !promotionStatsLoading &&
+    promotionStatsData?.geyserPromotionsContributionStats?.contributionsSumUsd !== undefined &&
+    promotionStatsData?.geyserPromotionsContributionStats?.contributionsSumUsd > 0
+
   return (
     <VStack w="full" spacing={4} align="start">
       <HStack w="full" justifyContent="space-between">
@@ -64,21 +69,17 @@ export const GeyserPromotionSection = ({
             "When enabled your project becomes eligible to be shared through Geyser's promotion network and partner digital media companies, bringing more eyes to your project to enable more contributions.",
           )}
         </Body>
-        {/* Display Geyser Promotion Stats Banner using correct data */}
-        {promotionsEnabled && promotionStatsLoading && <Spinner size="sm" />}
-        {!promotionStatsLoading &&
-          promotionStatsData?.geyserPromotionsContributionStats?.contributionsSumUsd !== undefined &&
-          promotionStatsData?.geyserPromotionsContributionStats?.contributionsSumUsd > 0 && (
-            <Box bg="green.50" p={3} borderRadius="md" mb={4}>
-              <Body size="sm" bold>
-                {formatAmount(
-                  promotionStatsData.geyserPromotionsContributionStats.contributionsSumUsd,
-                  FormatCurrencyType.Usd,
-                )}{' '}
-                {t('has been enabled through Geyser promotions on this project.')}
-              </Body>
-            </Box>
-          )}
+        {hasPromotionContributions && (
+          <Box bg="green.100" p={3} borderRadius="md" mb={4} w="fit-content">
+            <Body size="sm" bold color="green.900">
+              {formatAmount(
+                promotionStatsData.geyserPromotionsContributionStats.contributionsSumUsd,
+                FormatCurrencyType.Usd,
+              )}{' '}
+              {t('has been enabled through Geyser promotions on this project so far.')}
+            </Body>
+          </Box>
+        )}
       </Box>
     </VStack>
   )

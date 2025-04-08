@@ -1,9 +1,11 @@
 import { Box, HStack, Icon, IconButton, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { PiCheck, PiPencil, PiX } from 'react-icons/pi'
+import * as yup from 'yup'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { projectAtom } from '@/modules/project/state/projectAtom.ts'
@@ -33,10 +35,19 @@ const PAYOUT_RATE_SCALE = 100
 const PAYOUT_RATE_MIN = 0.01
 const PAYOUT_RATE_MAX = 99
 
-type AddAmbassadorFormData = {
-  heroId: string
-  payoutRate: number | string
-}
+// Define Yup Schema (moved outside component)
+const addAmbassadorSchema = yup.object().shape({
+  heroId: yup.string().required(t('User ID is required')),
+  payoutRate: yup
+    .number()
+    .typeError(t('Rate must be a number')) // Handle non-number input
+    .required(t('Rate is required'))
+    .min(PAYOUT_RATE_MIN, t('Rate must be > {{min}} and <= {{max}}', { min: 0, max: PAYOUT_RATE_MAX }))
+    .max(PAYOUT_RATE_MAX, t('Rate must be > {{min}} and <= {{max}}', { min: 0, max: PAYOUT_RATE_MAX })),
+})
+
+// Export the inferred type (moved outside component)
+export type AddAmbassadorFormData = yup.InferType<typeof addAmbassadorSchema>
 
 type EditAmbassadorState = {
   [userId: string]: {
@@ -54,23 +65,6 @@ type EdgesArrayType = NonNullable<AmbassadorsConnectionType['edges']>
 // Get the type of array elements (Edge | null) and remove null
 type AmbassadorEdge = NonNullable<EdgesArrayType[number]>
 
-// Type for AmbassadorEdge
-// ...
-
-// --- GeyserPromotionSection Component Definition REMOVED ---
-// interface GeyserPromotionSectionProps { ... }
-// const GeyserPromotionSection = ({ ... }) => { ... }
-// --- End GeyserPromotionSection Component Definition REMOVED ---
-
-// --- GetFeaturedSection Component Definition REMOVED ---
-// const GetFeaturedSection = () => { ... }
-// --- End GetFeaturedSection Component Definition REMOVED ---
-
-// --- AmbassadorPayoutsSection Component Definition REMOVED ---
-// interface AmbassadorPayoutsSectionProps { ... }
-// const AmbassadorPayoutsSection = ({ ... }) => { ... }
-// --- End AmbassadorPayoutsSection Component Definition REMOVED ---
-
 /** ProjectDashboardPromote: Page component for managing project promotion settings and ambassadors */
 export const ProjectDashboardPromote = () => {
   const toast = useNotification()
@@ -81,11 +75,17 @@ export const ProjectDashboardPromote = () => {
   const { formatAmount } = useCurrencyFormatter()
   const [editState, setEditState] = useState<EditAmbassadorState>({})
   const {
-    register: registerAddAmbassador,
     handleSubmit: handleAddAmbassadorSubmit,
     reset: resetAddAmbassadorForm,
-    formState: { errors: addAmbassadorErrors },
-  } = useForm<AddAmbassadorFormData>()
+    control,
+  } = useForm<AddAmbassadorFormData>({
+    resolver: yupResolver(addAmbassadorSchema),
+    mode: 'onBlur',
+    defaultValues: {
+      heroId: '',
+      payoutRate: undefined,
+    },
+  })
 
   const {
     data: ambassadorsData,
@@ -103,7 +103,7 @@ export const ProjectDashboardPromote = () => {
         title: t('Ambassador added successfully.'),
       })
       refetchAmbassadors()
-      resetAddAmbassadorForm({ heroId: '', payoutRate: '' })
+      resetAddAmbassadorForm({ heroId: '', payoutRate: undefined })
     },
     onError(error: Error) {
       toast.error({
@@ -166,7 +166,7 @@ export const ProjectDashboardPromote = () => {
         input: {
           projectId: project.id,
           heroId: data.heroId,
-          payoutRate: Number(data.payoutRate) / PAYOUT_RATE_SCALE,
+          payoutRate: (data.payoutRate ?? 0) / PAYOUT_RATE_SCALE,
         } as AmbassadorAddInput,
       },
     })
@@ -255,7 +255,10 @@ export const ProjectDashboardPromote = () => {
         }))
       } catch (error) {
         console.error('Error saving ambassador:', error)
-        // Consider adding a toast.error here as well
+        toast.error({
+          title: t('Error saving ambassador'),
+          description: (error as Error)?.message || t('Please try again.'),
+        })
       }
     },
     [editState, toast, updateAmbassador, project.id],
@@ -473,8 +476,7 @@ export const ProjectDashboardPromote = () => {
           ambassadorTableSchema={ambassadorTableSchema}
           handleAddAmbassadorSubmit={handleAddAmbassadorSubmit}
           onAddAmbassador={onAddAmbassador}
-          registerAddAmbassador={registerAddAmbassador}
-          addAmbassadorErrors={addAmbassadorErrors}
+          control={control}
           addAmbassadorLoading={addAmbassadorLoading}
         />
       </VStack>

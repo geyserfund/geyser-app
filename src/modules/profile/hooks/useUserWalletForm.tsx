@@ -65,7 +65,6 @@ const DEFAULT_LIGHTNING_FEE_PERCENTAGE = 0.05
 export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps): UserWalletForm => {
   const { toast } = useNotification()
   const { user } = useAuthContext()
-  const [loading, setLoading] = useState(false)
   const [hasExistingWallet, setHasExistingWallet] = useState(false)
 
   const [lightningAddressFormValue, setLightningAddressFormValue] = useState('')
@@ -77,45 +76,33 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
   )
 
   const [connectionOption, setConnectionOption] = useState<ConnectionOption>(ConnectionOption.LIGHTNING_ADDRESS)
-
-  // Query to get user wallet data
-  const { data: userData } = useUserWalletQuery({
-    skip: !user.id
-    variables: {
-      where: { id: user?.id },
-    },
-  })
-
-  // Load user data when component mounts
-  useEffect(() => {
-    if (user?.id) {
-      setLoading(true)
-    }
-  }, [user?.id])
-
-  // Process user data when it changes
-  useEffect(() => {
-    if (userData?.user?.wallet) {
-      const userWallet = userData.user.wallet
-      setHasExistingWallet(true)
-
-      // Set wallet connection details based on type
-      if (userWallet.connectionDetails?.__typename === WalletConnectDetails.LightningAddressConnectionDetails) {
-        setConnectionOption(ConnectionOption.LIGHTNING_ADDRESS)
-        setLightningAddressFormValue(userWallet.connectionDetails.lightningAddress || '')
-        setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED)
-      } else if (userWallet.connectionDetails?.__typename === WalletConnectDetails.NWCConnectionDetailsPrivate) {
-        setConnectionOption(ConnectionOption.NWC)
-        setNostrWalletConnectURI(userWallet.connectionDetails.nwcUrl || '')
-      }
-    }
-
-    setLoading(false)
-  }, [userData])
-
   const [limits, setLimits] = useState<
     LightningAddressContributionLimits | WalletOffChainContributionLimits | WalletOnChainContributionLimits
   >({})
+
+  // Query to get user wallet data
+  const { data: userData, loading } = useUserWalletQuery({
+    variables: {
+      where: { id: user?.id },
+    },
+    skip: !user?.id, // Skip query if user ID is not available
+    onCompleted(data) {
+      if (data?.user?.wallet) {
+        const userWallet = data.user.wallet
+        setHasExistingWallet(true)
+
+        // Set wallet connection details based on type
+        if (userWallet.connectionDetails?.__typename === WalletConnectDetails.LightningAddressConnectionDetails) {
+          setConnectionOption(ConnectionOption.LIGHTNING_ADDRESS)
+          setLightningAddressFormValue(userWallet.connectionDetails.lightningAddress || '')
+          setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED)
+        } else if (userWallet.connectionDetails?.__typename === WalletConnectDetails.NWCConnectionDetailsPrivate) {
+          setConnectionOption(ConnectionOption.NWC)
+          setNostrWalletConnectURI(userWallet.connectionDetails.nwcUrl || '')
+        }
+      }
+    },
+  })
 
   const debouncedLightningAddress = useDebounce(lightningAddressFormValue, 200)
 
@@ -123,7 +110,9 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
     onCompleted({ lightningAddressVerify: { valid, reason, limits } }) {
       if (Boolean(valid) === false) {
         setLnAddressEvaluationState(LNAddressEvaluationState.FAILED)
-        setLightningAddressFormError(`We could not validate this as a working Lightning Address: ${reason}`)
+        setLightningAddressFormError(
+          t('We could not validate this as a working Lightning Address: {{reason}}', { reason }),
+        )
       } else {
         setLightningAddressFormError('')
         setLnAddressEvaluationState(LNAddressEvaluationState.SUCCEEDED)
@@ -153,6 +142,7 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
         validateLightningAddress()
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- validateLightningAddressFormat is stable
   }, [debouncedLightningAddress, validateLightningAddress])
 
   const createWalletInput: CreateWalletInput | null = useMemo(() => {
@@ -232,7 +222,7 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
     isEdit,
   ])
 
-  const validateLightningAddressFormat = (lightningAddress: string) => {
+  const validateLightningAddressFormat = useCallback((lightningAddress: string): boolean => {
     if (!lightningAddress) {
       setLightningAddressFormError(null)
       setLnAddressEvaluationState(LNAddressEvaluationState.IDLE)
@@ -240,18 +230,18 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
     }
 
     if (lightningAddress.endsWith('@geyser.fund')) {
-      setLightningAddressFormError(`Custom Lightning Addresses can't end with "@geyser.fund".`)
+      setLightningAddressFormError(t('Custom Lightning Addresses can\'t end with "@geyser.fund".'))
       return false
     }
 
     if (validateEmail(lightningAddress) === false) {
-      setLightningAddressFormError(`Please use a valid email-formatted address for your Lightning Address.`)
+      setLightningAddressFormError(t('Please use a valid email-formatted address for your Lightning Address.'))
       return false
     }
 
     setLightningAddressFormError(null)
     return true
-  }
+  }, [])
 
   const isFormDirty = useCallback(() => {
     const userWallet = userData?.user?.wallet

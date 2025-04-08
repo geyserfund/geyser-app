@@ -1,4 +1,4 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { Button, Flex, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { Link } from 'react-router-dom'
 
@@ -14,8 +14,14 @@ import { getPathWithGeyserHero } from '@/shared/constants/index.ts'
 export const GetFeaturedSection = () => {
   return (
     <CardLayout w="full">
-      <HStack w="full" justifyContent="space-between" alignItems="center">
-        <VStack align="start" spacing={1}>
+      <Flex
+        w="full"
+        justifyContent={{ base: 'flex-start', md: 'space-between' }}
+        alignItems={{ base: 'flex-start', md: 'center' }}
+        direction={{ base: 'column', md: 'row' }}
+        gap={{ base: 4, md: 0 }}
+      >
+        <VStack align="start" spacing={1} w={{ base: 'full', md: 'auto' }}>
           <HStack>
             <Body size="lg" medium>
               {t('Featured for a week')}
@@ -30,13 +36,14 @@ export const GetFeaturedSection = () => {
         <Button
           as={Link}
           to={getPathWithGeyserHero('projectRewardView', GEYSER_PROMOTIONS_PROJECT_NAME, GEYSER_GET_FEATURED_REWARD_ID)}
-          size="lg"
+          size={{ base: 'md', md: 'lg' }}
           variant="solid"
           colorScheme="primary1"
+          w={{ base: 'full', md: 'auto' }}
         >
           {t('Get Featured')}
         </Button>
-      </HStack>
+      </Flex>
     </CardLayout>
   )
 }

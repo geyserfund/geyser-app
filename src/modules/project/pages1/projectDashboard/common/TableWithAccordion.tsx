@@ -157,6 +157,8 @@ export function TableItemWithAccordion<TItem>({
 
           const value = getValueFromTableItem({ row, item })
 
+          if (row.key === 'dropdown' && !showAccordion) return null
+
           return (
             <Td
               key={row.key}
@@ -174,17 +176,15 @@ export function TableItemWithAccordion<TItem>({
               textAlign={row.key === 'dropdown' ? 'right' : 'left'}
             >
               {row.key === 'dropdown' ? (
-                showAccordion ? (
-                  <IconButton
-                    size="sm"
-                    alignSelf={'center'}
-                    aria-label="dropdown"
-                    variant="ghost"
-                    colorScheme="neutral1"
-                    icon={isOpen ? <PiCaretUp fontSize={'16px'} /> : <PiCaretDown fontSize={'16px'} />}
-                    onClick={onToggle}
-                  />
-                ) : null
+                <IconButton
+                  size="sm"
+                  alignSelf={'center'}
+                  aria-label="dropdown"
+                  variant="ghost"
+                  colorScheme="neutral1"
+                  icon={isOpen ? <PiCaretUp fontSize={'16px'} /> : <PiCaretDown fontSize={'16px'} />}
+                  onClick={onToggle}
+                />
               ) : (
                 value
               )}
