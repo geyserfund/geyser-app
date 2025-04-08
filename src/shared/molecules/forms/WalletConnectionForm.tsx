@@ -441,7 +441,7 @@ export const WalletConnectionForm = ({
         )}
       </Accordion>
 
-      {node && node.value && (
+      {node && (
         <NodeAdditionModal
           isOpen={node.isOpen}
           onClose={node.onClose}
