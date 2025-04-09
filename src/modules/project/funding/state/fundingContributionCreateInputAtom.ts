@@ -15,6 +15,7 @@ import {
 } from '@/types/generated/graphql'
 import { toInt } from '@/utils'
 
+import { sourceResourceAtom } from '../../pages1/projectView/state/sourceActivityAtom.ts'
 import { fundingProjectAtom } from './fundingFormAtom'
 import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAtom'
 import { selectedGoalIdAtom } from './selectedGoalAtom'
@@ -27,7 +28,7 @@ export const formattedFundingInputAtom = atom((get) => {
   const user = get(authUserAtom)
   const usdRate = get(usdRateAtom)
   const projectGoalId = get(selectedGoalIdAtom)
-
+  const sourceResource = get(sourceResourceAtom)
   const referrerHeroId = get(referrerHeroIdAtom)
 
   const {
