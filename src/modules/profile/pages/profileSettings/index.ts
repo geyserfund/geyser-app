@@ -4,6 +4,7 @@ import { ProfileSettingsGeneral } from './views/ProfileSettingsGeneral.tsx'
 import { ProfileSettingsNotifications } from './views/ProfileSettingsNotifications.tsx'
 import { ProfileSettingsSubscriptions } from './views/ProfileSettingsSubscriptions.tsx'
 import { ProfileSettingsVerifications } from './views/ProfileSettingsVerifications.tsx'
+import { ProfileWalletSettings } from './views/ProfileSettingsWallet'
 
 export {
   ProfileSettings,
@@ -12,4 +13,5 @@ export {
   ProfileSettingsNotifications,
   ProfileSettingsSubscriptions,
   ProfileSettingsVerifications,
+  ProfileWalletSettings,
 }

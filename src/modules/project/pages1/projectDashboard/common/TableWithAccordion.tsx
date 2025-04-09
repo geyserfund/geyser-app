@@ -132,6 +132,13 @@ export function TableItemWithAccordion<TItem>({
 
   const accordionSchema = useMemo(() => schema.filter((val) => val.isAccordion), [schema])
 
+  const hasMobileOnlyAccordionItems = useMemo(
+    () => isMobile && tableSchema.some((row) => !row.isMobile),
+    [isMobile, tableSchema],
+  )
+
+  const showAccordion = Boolean(accordionContent) || accordionSchema.length > 0 || hasMobileOnlyAccordionItems
+
   const accordionColSpan = useMemo(
     () =>
       tableSchema.reduce((sum, val) => {
@@ -142,8 +149,6 @@ export function TableItemWithAccordion<TItem>({
     [tableSchema, isMobile],
   )
 
-  const showAccordion = accordionSchema.length > 0 || accordionContent
-
   return (
     <>
       <Tr>
@@ -151,6 +156,8 @@ export function TableItemWithAccordion<TItem>({
           if (isMobile && !row.isMobile) return null
 
           const value = getValueFromTableItem({ row, item })
+
+          if (row.key === 'dropdown' && !showAccordion) return null
 
           return (
             <Td

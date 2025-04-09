@@ -199,6 +199,13 @@ export const platformRoutes: RouteObject[] = [
               return { Component: ProfileSettingsVerifications }
             },
           },
+          {
+            path: getPath('userProfileSettingsWallet', PathName.userId),
+            async lazy() {
+              const ProfileWalletSettings = await ProfileSettingsIndex().then((m) => m.ProfileWalletSettings)
+              return { Component: ProfileWalletSettings }
+            },
+          },
         ],
       },
     ],

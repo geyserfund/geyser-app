@@ -35,9 +35,9 @@ export const ProjectDashboardWallet = () => {
   const { isOpen: emailVerifyOpen, onClose: emailVerifyOnClose, onOpen: emailVerifyOnOpen } = useDisclosure()
 
   const { project } = useProjectAtom()
-  const { wallet, walletConnectiondetails } = useWalletAtom()
+  const { wallet, walletConnectionDetails } = useWalletAtom()
 
-  const isEdit = Boolean(walletConnectiondetails?.id)
+  const isEdit = Boolean(walletConnectionDetails?.id)
 
   const walletLimits = wallet?.limits
 
@@ -103,7 +103,7 @@ export const ProjectDashboardWallet = () => {
 
   const handleWalletUpdate = async (otp: number, otpData: OtpResponseFragment) => {
     let input: UpdateWalletInput = {
-      id: walletConnectiondetails?.id,
+      id: walletConnectionDetails?.id,
       name: createWalletInput?.name,
       lndConnectionDetailsInput: createWalletInput?.lndConnectionDetailsInput,
       lightningAddressConnectionDetailsInput: createWalletInput?.lightningAddressConnectionDetailsInput,
@@ -206,7 +206,6 @@ export const ProjectDashboardWallet = () => {
         {project && (
           <ProjectCreationWalletConnectionForm
             readOnly={isReadOnly}
-            isEdit={isEdit}
             lightningAddress={lightningAddress}
             node={node}
             nwc={nwc}
