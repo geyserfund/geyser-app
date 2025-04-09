@@ -121,6 +121,12 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
         }
       }
     },
+    onError(error) {
+      setLnAddressEvaluationState(LNAddressEvaluationState.FAILED)
+      setLightningAddressFormError(
+        t('We could not validate this Lightning Address due to an error: {{message}}', { message: error.message }),
+      )
+    },
   })
 
   const validateLightningAddress = useCallback(async () => {

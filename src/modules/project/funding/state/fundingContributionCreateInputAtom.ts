@@ -107,8 +107,8 @@ export const formattedFundingInputAtom = atom((get) => {
       items: orderItemInputs,
     },
     sourceResourceInput: {
-      resourceId: formState.resourceId ? `${formState.resourceId}` : `${fundingProject?.id}`,
-      resourceType: formState.resourceType || FundingResourceType.Project,
+      resourceId: sourceResource.resourceId ? `${sourceResource.resourceId}` : `${fundingProject?.id}`,
+      resourceType: sourceResource.resourceType || FundingResourceType.Project,
     },
     paymentsInput,
   }

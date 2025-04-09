@@ -1,6 +1,7 @@
 /* eslint-disable complexity */
 import { Badge, Box, Button, HStack, Icon, Link as ChakraLink, SkeletonText, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtom } from 'jotai'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 import { PiArrowLeft, PiCopy, PiEnvelope, PiShareFat } from 'react-icons/pi'
@@ -19,10 +20,11 @@ import { dimensions, getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { useProjectPostLazyQuery } from '@/types'
+import { FundingResourceType, useProjectPostLazyQuery } from '@/types'
 import { toInt, useNotification } from '@/utils'
 
 import { MarkdownField } from '../../../../../../../../shared/markdown/MarkdownField'
+import { sourceResourceAtom } from '../../../../state/sourceActivityAtom.ts'
 import { PostEditMenu, PostShare } from '../../components'
 import { postTypeOptions } from '../../utils/postTypeLabel'
 import { LinkedRewardsAndGoals } from './LinkedRewardsAndGoals'
@@ -30,6 +32,7 @@ import { LinkedRewardsAndGoals } from './LinkedRewardsAndGoals'
 export const PostView = () => {
   const { project, isProjectOwner } = useProjectAtom()
   const { postId } = useParams<{ postId: string }>()
+  const [sourceResource, setSourceResource] = useAtom(sourceResourceAtom)
   const navigate = useNavigate()
 
   const toast = useNotification()
@@ -74,7 +77,14 @@ export const PostView = () => {
     return null
   }
 
-  const onContributeClick = () => navigate(getPath('projectFunding', project?.name), { state: { postId: post.id } })
+  const onContributeClick = () => {
+    if (!sourceResource.resourceId) {
+      setSourceResource({ resourceId: post.id, resourceType: FundingResourceType.Entry })
+    }
+
+    navigate(getPath('projectFunding', project?.name))
+  }
+
   const showLinkedRewardsAndGoals = post.projectGoals.inProgress.length > 0 || post.projectRewards.length > 0
 
   return (
