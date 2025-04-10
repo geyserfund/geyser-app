@@ -74,14 +74,17 @@ export enum ActivityResourceType {
 
 export type Ambassador = {
   __typename?: 'Ambassador';
+  contributionsCount: Scalars['Int']['output'];
+  contributionsSum: Scalars['BigInt']['output'];
   id: Scalars['BigInt']['output'];
+  payoutRate: Scalars['Float']['output'];
   user: User;
 };
 
-export type AmbassadorPayoutConfirmResponse = {
-  __typename?: 'AmbassadorPayoutConfirmResponse';
-  message?: Maybe<Scalars['String']['output']>;
-  success: Scalars['Boolean']['output'];
+export type AmbassadorAddInput = {
+  heroId: Scalars['String']['input'];
+  payoutRate: Scalars['Float']['input'];
+  projectId: Scalars['BigInt']['input'];
 };
 
 export type AmbassadorStats = HeroStats & {
@@ -92,6 +95,13 @@ export type AmbassadorStats = HeroStats & {
   /** Number of projects shared by the User. */
   projectsCount: Scalars['Int']['output'];
   rank: Scalars['Int']['output'];
+};
+
+export type AmbassadorUpdateInput = {
+  /** The payout rate for the ambassador, value between 0 and 99. */
+  payoutRate: Scalars['Float']['input'];
+  projectId: Scalars['BigInt']['input'];
+  userId: Scalars['BigInt']['input'];
 };
 
 export enum AmountCurrency {
@@ -241,11 +251,13 @@ export type ContributionCreateInput = {
   /** Set to true if the funder wishes to remain anonymous. The user will still be associated to the contribution. */
   anonymous: Scalars['Boolean']['input'];
   donationAmount: Scalars['Int']['input'];
+  geyserTipPercentage?: InputMaybe<Scalars['Int']['input']>;
   metadataInput?: InputMaybe<ContributionMetadataInput>;
   orderInput?: InputMaybe<OrderContributionInput>;
   paymentsInput?: InputMaybe<ContributionPaymentsInput>;
   projectGoalId?: InputMaybe<Scalars['BigInt']['input']>;
   projectId: Scalars['BigInt']['input'];
+  referrerHeroId?: InputMaybe<Scalars['String']['input']>;
   /** The resource from which the contribution is being created. */
   sourceResourceInput: ResourceInput;
 };
@@ -427,6 +439,8 @@ export type CreateProjectInput = {
   /** Project header images */
   images: Array<Scalars['String']['input']>;
   name: Scalars['String']['input'];
+  /** Boolean flag to indicate if the project can be promoted. */
+  promotionsEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   /** Project region */
   region?: InputMaybe<Scalars['String']['input']>;
   /** The currency used to price rewards for the project. Currently only USDCENT supported. */
@@ -715,22 +729,6 @@ export enum FundingResourceType {
   User = 'user'
 }
 
-export type GenerateAffiliatePaymentRequestsInput = {
-  /** The invoice ID of the Hodl invoice for the associated funding tx. */
-  invoiceId: Scalars['String']['input'];
-};
-
-export type GenerateAmbassadorPayoutRequestResponse = {
-  __typename?: 'GenerateAmbassadorPayoutRequestResponse';
-  ambassadorPayoutId: Scalars['BigInt']['output'];
-  paymentRequest: Scalars['String']['output'];
-};
-
-export type GenerateAmbassadorPayoutRequestsInput = {
-  /** The invoice ID of the Hodl invoice for the associated funding tx. */
-  invoiceId: Scalars['String']['input'];
-};
-
 export type GetActivitiesInput = {
   pagination?: InputMaybe<GetActivityPaginationInput>;
   where?: InputMaybe<GetActivityWhereInput>;
@@ -868,6 +866,21 @@ export type GetProjectStatsInput = {
 export type GetProjectStatsWhereInput = {
   dateRange?: InputMaybe<DateRangeInput>;
   groupBy?: InputMaybe<AnalyticsGroupByInterval>;
+  projectId: Scalars['BigInt']['input'];
+};
+
+export type GeyserPromotionsContributionStats = {
+  __typename?: 'GeyserPromotionsContributionStats';
+  contributionsCount: Scalars['Int']['output'];
+  contributionsSum: Scalars['BigInt']['output'];
+  contributionsSumUsd: Scalars['Float']['output'];
+};
+
+export type GeyserPromotionsContributionStatsInput = {
+  where: GeyserPromotionsContributionStatsWhereInput;
+};
+
+export type GeyserPromotionsContributionStatsWhereInput = {
   projectId: Scalars['BigInt']['input'];
 };
 
@@ -1293,8 +1306,8 @@ export type Milestone = {
 export type Mutation = {
   __typename?: 'Mutation';
   _?: Maybe<Scalars['Boolean']['output']>;
-  ambassadorPayoutConfirm: AmbassadorPayoutConfirmResponse;
-  ambassadorPayoutRequestGenerate?: Maybe<GenerateAmbassadorPayoutRequestResponse>;
+  ambassadorAdd?: Maybe<Ambassador>;
+  ambassadorUpdate?: Maybe<Ambassador>;
   claimBadge: UserBadge;
   contributionCreate: ContributionMutationResponse;
   contributionEmailUpdate: Contribution;
@@ -1367,13 +1380,13 @@ export type Mutation = {
 };
 
 
-export type MutationAmbassadorPayoutConfirmArgs = {
-  invoiceId: Scalars['String']['input'];
+export type MutationAmbassadorAddArgs = {
+  input: AmbassadorAddInput;
 };
 
 
-export type MutationAmbassadorPayoutRequestGenerateArgs = {
-  input: GenerateAmbassadorPayoutRequestsInput;
+export type MutationAmbassadorUpdateArgs = {
+  input: AmbassadorUpdateInput;
 };
 
 
@@ -2273,6 +2286,8 @@ export type Project = {
    * An unpublished post is only returned if the requesting user is the creator of the post.
    */
   posts: Array<Post>;
+  /** Boolean flag to indicate if the project can be promoted. */
+  promotionsEnabled?: Maybe<Scalars['Boolean']['output']>;
   rewardBuyersCount?: Maybe<Scalars['Int']['output']>;
   rewardCurrency?: Maybe<RewardCurrency>;
   rewards: Array<ProjectReward>;
@@ -2333,12 +2348,12 @@ export type ProjectAmbassadorEdge = {
 
 export type ProjectAmbassadorsConnection = {
   __typename?: 'ProjectAmbassadorsConnection';
-  /**
-   * List of ambassador edges
-   * @deprecated This field is not implemented yet and will always return an empty array
-   */
+  /** List of ambassador edges */
   edges: Array<ProjectAmbassadorEdge>;
-  /** Information about the pagination of ambassadors */
+  /**
+   * Information about the pagination of ambassadors
+   * @deprecated pagination is not implemented on this query yet
+   */
   pageInfo: PageInfo;
   /** Aggregated data about ambassadors */
   stats: ProjectAmbassadorsStats;
@@ -2945,6 +2960,7 @@ export type Query = {
   getProjectReward: ProjectReward;
   getSignedUploadUrl: SignedUploadUrl;
   getWallet: Wallet;
+  geyserPromotionsContributionStats: GeyserPromotionsContributionStats;
   grant: Grant;
   grantStatistics: GrantStatistics;
   grants: Array<Grant>;
@@ -3066,6 +3082,11 @@ export type QueryGetSignedUploadUrlArgs = {
 
 export type QueryGetWalletArgs = {
   id: Scalars['BigInt']['input'];
+};
+
+
+export type QueryGeyserPromotionsContributionStatsArgs = {
+  input: GeyserPromotionsContributionStatsInput;
 };
 
 
@@ -3438,6 +3459,8 @@ export type UpdateProjectInput = {
   /** Project name, used both for the project URL, project lightning address and NIP05. */
   name?: InputMaybe<Scalars['String']['input']>;
   projectId: Scalars['BigInt']['input'];
+  /** Boolean flag to indicate if the project can be promoted. */
+  promotionsEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   /** Project region */
   region?: InputMaybe<Scalars['String']['input']>;
   /** The currency used to price rewards for the project. Currently only USDCENT supported. Should become an Enum. */
@@ -3516,7 +3539,7 @@ export type User = {
   badges: Array<UserBadge>;
   bio?: Maybe<Scalars['String']['output']>;
   complianceDetails: UserComplianceDetails;
-  /** Returns a user's contributions accross all projects. */
+  /** Returns a user's contributions across all projects. */
   contributions: Array<Contribution>;
   email?: Maybe<Scalars['String']['output']>;
   emailVerifiedAt?: Maybe<Scalars['Date']['output']>;
@@ -3949,8 +3972,9 @@ export type ResolversTypes = {
   ActivityResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['ActivityResource']>;
   ActivityResourceType: ActivityResourceType;
   Ambassador: ResolverTypeWrapper<Omit<Ambassador, 'user'> & { user: ResolversTypes['User'] }>;
-  AmbassadorPayoutConfirmResponse: ResolverTypeWrapper<AmbassadorPayoutConfirmResponse>;
+  AmbassadorAddInput: AmbassadorAddInput;
   AmbassadorStats: ResolverTypeWrapper<AmbassadorStats>;
+  AmbassadorUpdateInput: AmbassadorUpdateInput;
   AmountCurrency: AmountCurrency;
   AmountSummary: ResolverTypeWrapper<AmountSummary>;
   AnalyticsGroupByInterval: AnalyticsGroupByInterval;
@@ -4034,9 +4058,6 @@ export type ResolversTypes = {
   Funder: ResolverTypeWrapper<Omit<Funder, 'contributions' | 'user'> & { contributions: Array<ResolversTypes['Contribution']>, user?: Maybe<ResolversTypes['User']> }>;
   FunderRewardGraphSum: ResolverTypeWrapper<FunderRewardGraphSum>;
   FundingResourceType: FundingResourceType;
-  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput;
-  GenerateAmbassadorPayoutRequestResponse: ResolverTypeWrapper<GenerateAmbassadorPayoutRequestResponse>;
-  GenerateAmbassadorPayoutRequestsInput: GenerateAmbassadorPayoutRequestsInput;
   GetActivitiesInput: GetActivitiesInput;
   GetActivityOrderByInput: GetActivityOrderByInput;
   GetActivityPaginationInput: GetActivityPaginationInput;
@@ -4063,6 +4084,9 @@ export type ResolversTypes = {
   GetProjectRewardsWhereInput: GetProjectRewardsWhereInput;
   GetProjectStatsInput: GetProjectStatsInput;
   GetProjectStatsWhereInput: GetProjectStatsWhereInput;
+  GeyserPromotionsContributionStats: ResolverTypeWrapper<GeyserPromotionsContributionStats>;
+  GeyserPromotionsContributionStatsInput: GeyserPromotionsContributionStatsInput;
+  GeyserPromotionsContributionStatsWhereInput: GeyserPromotionsContributionStatsWhereInput;
   GlobalAmbassadorLeaderboardRow: ResolverTypeWrapper<GlobalAmbassadorLeaderboardRow>;
   GlobalContributorLeaderboardRow: ResolverTypeWrapper<GlobalContributorLeaderboardRow>;
   GlobalCreatorLeaderboardRow: ResolverTypeWrapper<GlobalCreatorLeaderboardRow>;
@@ -4371,8 +4395,9 @@ export type ResolversParentTypes = {
   ActivityCreatedSubscriptionWhereInput: ActivityCreatedSubscriptionWhereInput;
   ActivityResource: ResolversUnionTypes<ResolversParentTypes>['ActivityResource'];
   Ambassador: Omit<Ambassador, 'user'> & { user: ResolversParentTypes['User'] };
-  AmbassadorPayoutConfirmResponse: AmbassadorPayoutConfirmResponse;
+  AmbassadorAddInput: AmbassadorAddInput;
   AmbassadorStats: AmbassadorStats;
+  AmbassadorUpdateInput: AmbassadorUpdateInput;
   AmountSummary: AmountSummary;
   Badge: Badge;
   BadgeClaimInput: BadgeClaimInput;
@@ -4443,9 +4468,6 @@ export type ResolversParentTypes = {
   Float: Scalars['Float']['output'];
   Funder: Omit<Funder, 'contributions' | 'user'> & { contributions: Array<ResolversParentTypes['Contribution']>, user?: Maybe<ResolversParentTypes['User']> };
   FunderRewardGraphSum: FunderRewardGraphSum;
-  GenerateAffiliatePaymentRequestsInput: GenerateAffiliatePaymentRequestsInput;
-  GenerateAmbassadorPayoutRequestResponse: GenerateAmbassadorPayoutRequestResponse;
-  GenerateAmbassadorPayoutRequestsInput: GenerateAmbassadorPayoutRequestsInput;
   GetActivitiesInput: GetActivitiesInput;
   GetActivityOrderByInput: GetActivityOrderByInput;
   GetActivityPaginationInput: GetActivityPaginationInput;
@@ -4472,6 +4494,9 @@ export type ResolversParentTypes = {
   GetProjectRewardsWhereInput: GetProjectRewardsWhereInput;
   GetProjectStatsInput: GetProjectStatsInput;
   GetProjectStatsWhereInput: GetProjectStatsWhereInput;
+  GeyserPromotionsContributionStats: GeyserPromotionsContributionStats;
+  GeyserPromotionsContributionStatsInput: GeyserPromotionsContributionStatsInput;
+  GeyserPromotionsContributionStatsWhereInput: GeyserPromotionsContributionStatsWhereInput;
   GlobalAmbassadorLeaderboardRow: GlobalAmbassadorLeaderboardRow;
   GlobalContributorLeaderboardRow: GlobalContributorLeaderboardRow;
   GlobalCreatorLeaderboardRow: GlobalCreatorLeaderboardRow;
@@ -4736,14 +4761,11 @@ export type ActivityResourceResolvers<ContextType = any, ParentType extends Reso
 };
 
 export type AmbassadorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Ambassador'] = ResolversParentTypes['Ambassador']> = {
+  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsSum?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  payoutRate?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type AmbassadorPayoutConfirmResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AmbassadorPayoutConfirmResponse'] = ResolversParentTypes['AmbassadorPayoutConfirmResponse']> = {
-  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -5062,9 +5084,10 @@ export type FunderRewardGraphSumResolvers<ContextType = any, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type GenerateAmbassadorPayoutRequestResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['GenerateAmbassadorPayoutRequestResponse'] = ResolversParentTypes['GenerateAmbassadorPayoutRequestResponse']> = {
-  ambassadorPayoutId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  paymentRequest?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+export type GeyserPromotionsContributionStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GeyserPromotionsContributionStats'] = ResolversParentTypes['GeyserPromotionsContributionStats']> = {
+  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsSum?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  contributionsSumUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -5297,8 +5320,8 @@ export type MilestoneResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  ambassadorPayoutConfirm?: Resolver<ResolversTypes['AmbassadorPayoutConfirmResponse'], ParentType, ContextType, RequireFields<MutationAmbassadorPayoutConfirmArgs, 'invoiceId'>>;
-  ambassadorPayoutRequestGenerate?: Resolver<Maybe<ResolversTypes['GenerateAmbassadorPayoutRequestResponse']>, ParentType, ContextType, RequireFields<MutationAmbassadorPayoutRequestGenerateArgs, 'input'>>;
+  ambassadorAdd?: Resolver<Maybe<ResolversTypes['Ambassador']>, ParentType, ContextType, RequireFields<MutationAmbassadorAddArgs, 'input'>>;
+  ambassadorUpdate?: Resolver<Maybe<ResolversTypes['Ambassador']>, ParentType, ContextType, RequireFields<MutationAmbassadorUpdateArgs, 'input'>>;
   claimBadge?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationClaimBadgeArgs, 'input'>>;
   contributionCreate?: Resolver<ResolversTypes['ContributionMutationResponse'], ParentType, ContextType, RequireFields<MutationContributionCreateArgs, 'input'>>;
   contributionEmailUpdate?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType, Partial<MutationContributionEmailUpdateArgs>>;
@@ -5659,6 +5682,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>;
   paymentMethods?: Resolver<ResolversTypes['PaymentMethods'], ParentType, ContextType>;
   posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType, Partial<ProjectPostsArgs>>;
+  promotionsEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   rewardBuyersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>;
   rewards?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType>;
@@ -5999,6 +6023,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getProjectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<QueryGetProjectRewardArgs, 'id'>>;
   getSignedUploadUrl?: Resolver<ResolversTypes['SignedUploadUrl'], ParentType, ContextType, RequireFields<QueryGetSignedUploadUrlArgs, 'input'>>;
   getWallet?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<QueryGetWalletArgs, 'id'>>;
+  geyserPromotionsContributionStats?: Resolver<ResolversTypes['GeyserPromotionsContributionStats'], ParentType, ContextType, RequireFields<QueryGeyserPromotionsContributionStatsArgs, 'input'>>;
   grant?: Resolver<ResolversTypes['Grant'], ParentType, ContextType, RequireFields<QueryGrantArgs, 'input'>>;
   grantStatistics?: Resolver<ResolversTypes['GrantStatistics'], ParentType, ContextType>;
   grants?: Resolver<Array<ResolversTypes['Grant']>, ParentType, ContextType>;
@@ -6279,7 +6304,6 @@ export type Resolvers<ContextType = any> = {
   Activity?: ActivityResolvers<ContextType>;
   ActivityResource?: ActivityResourceResolvers<ContextType>;
   Ambassador?: AmbassadorResolvers<ContextType>;
-  AmbassadorPayoutConfirmResponse?: AmbassadorPayoutConfirmResponseResolvers<ContextType>;
   AmbassadorStats?: AmbassadorStatsResolvers<ContextType>;
   AmountSummary?: AmountSummaryResolvers<ContextType>;
   Badge?: BadgeResolvers<ContextType>;
@@ -6318,7 +6342,7 @@ export type Resolvers<ContextType = any> = {
   FiatSwapPaymentDetails?: FiatSwapPaymentDetailsResolvers<ContextType>;
   Funder?: FunderResolvers<ContextType>;
   FunderRewardGraphSum?: FunderRewardGraphSumResolvers<ContextType>;
-  GenerateAmbassadorPayoutRequestResponse?: GenerateAmbassadorPayoutRequestResponseResolvers<ContextType>;
+  GeyserPromotionsContributionStats?: GeyserPromotionsContributionStatsResolvers<ContextType>;
   GlobalAmbassadorLeaderboardRow?: GlobalAmbassadorLeaderboardRowResolvers<ContextType>;
   GlobalContributorLeaderboardRow?: GlobalContributorLeaderboardRowResolvers<ContextType>;
   GlobalCreatorLeaderboardRow?: GlobalCreatorLeaderboardRowResolvers<ContextType>;
@@ -6962,6 +6986,8 @@ export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: s
 
 export type UserSubscriptionFragment = { __typename?: 'UserSubscription', canceledAt?: any | null, createdAt: any, id: any, nextBillingDate: any, startDate: any, status: UserSubscriptionStatus, updatedAt: any, projectSubscriptionPlan: { __typename?: 'ProjectSubscriptionPlan', id: any, projectId: any, name: string, cost: number, interval: UserSubscriptionInterval, currency: SubscriptionCurrencyType } };
 
+export type UserWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', tlsCertificate?: string | null, pubkey?: string | null, macaroon: string, lndNodeType: LndNodeType, hostname: string, grpcPort: number } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
+
 export type CancelUserSubscriptionMutationVariables = Exact<{
   id: Scalars['BigInt']['input'];
 }>;
@@ -7074,6 +7100,16 @@ export type UserHeroStatsQueryVariables = Exact<{
 
 
 export type UserHeroStatsQuery = { __typename?: 'Query', user: { __typename?: 'User', heroStats: { __typename?: 'UserHeroStats', ambassadorStats: { __typename?: 'AmbassadorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, contributorStats: { __typename?: 'ContributorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number }, creatorStats: { __typename?: 'CreatorStats', contributionsCount: number, contributionsTotalUsd: number, contributionsTotal: number, projectsCount: number, rank: number } } } };
+
+export type UserWalletQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type UserWalletQuery = { __typename?: 'Query', user: { __typename?: 'User', wallet?: (
+      { __typename?: 'Wallet' }
+      & UserWalletConnectionDetailsFragment
+    ) | null } };
 
 export type UserSubscriptionsQueryVariables = Exact<{
   input: UserSubscriptionsInput;
@@ -7197,7 +7233,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, launchedAt?: any | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, keys: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, launchedAt?: any | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, keys: (
     { __typename?: 'ProjectKeys' }
     & ProjectKeysFragment
   ), owners: Array<{ __typename?: 'Owner', id: any, user: (
@@ -7215,7 +7251,7 @@ export type ProjectPageDetailsFragment = { __typename?: 'Project', id: any, name
 
 export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null };
 
-export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
+export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
 
 export type ProjectStatsForInsightsPageFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectViews?: { __typename?: 'ProjectViewStats', viewCount: number, visitorCount: number, referrers: Array<{ __typename?: 'ProjectViewBaseStats', value: string, viewCount: number, visitorCount: number }>, regions: Array<{ __typename?: 'ProjectViewBaseStats', value: string, viewCount: number, visitorCount: number }> } | null, projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantitySum: number } | null, projectFunders?: { __typename?: 'ProjectFunderStats', count: number } | null, projectContributionsStats?: { __typename?: 'ProjectContributionsStatsBase', contributions: { __typename?: 'ProjectContributionsStats', count: number, total: number, totalUsd: number } } | null } | null, prevTimeRange?: { __typename?: 'ProjectStatsBase', projectViews?: { __typename?: 'ProjectViewStats', viewCount: number, visitorCount: number } | null, projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantitySum: number } | null, projectFunders?: { __typename?: 'ProjectFunderStats', count: number } | null, projectContributionsStats?: { __typename?: 'ProjectContributionsStatsBase', contributions: { __typename?: 'ProjectContributionsStats', count: number, total: number, totalUsd: number } } | null } | null };
 
@@ -7241,6 +7277,20 @@ export type ProjectPageWalletFragment = { __typename?: 'Wallet', id: any, name?:
     ) | null } | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } };
 
 export type ProjectWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', tlsCertificate?: string | null, pubkey?: string | null, macaroon: string, lndNodeType: LndNodeType, hostname: string, grpcPort: number } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
+
+export type AmbassadorAddMutationVariables = Exact<{
+  input: AmbassadorAddInput;
+}>;
+
+
+export type AmbassadorAddMutation = { __typename?: 'Mutation', ambassadorAdd?: { __typename?: 'Ambassador', id: any, payoutRate: number, user: { __typename?: 'User', id: any, username: string } } | null };
+
+export type AmbassadorUpdateMutationVariables = Exact<{
+  input: AmbassadorUpdateInput;
+}>;
+
+
+export type AmbassadorUpdateMutation = { __typename?: 'Mutation', ambassadorUpdate?: { __typename?: 'Ambassador', id: any, payoutRate: number } | null };
 
 export type ContributionCreateMutationVariables = Exact<{
   input: ContributionCreateInput;
@@ -7527,12 +7577,26 @@ export type UpdateWalletMutation = { __typename?: 'Mutation', walletUpdate: (
     & ProjectWalletConnectionDetailsFragment
   ) };
 
+export type GeyserPromotionsContributionStatsQueryVariables = Exact<{
+  input: GeyserPromotionsContributionStatsInput;
+}>;
+
+
+export type GeyserPromotionsContributionStatsQuery = { __typename?: 'Query', geyserPromotionsContributionStats: { __typename?: 'GeyserPromotionsContributionStats', contributionsCount: number, contributionsSum: any, contributionsSumUsd: number } };
+
 export type ProjectAmbassadorStatsQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
 }>;
 
 
 export type ProjectAmbassadorStatsQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', ambassadors: { __typename?: 'ProjectAmbassadorsConnection', stats: { __typename?: 'ProjectAmbassadorsStats', contributionsCount: number, contributionsSum: any, count: number } } } | null };
+
+export type ProjectAmbassadorListQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type ProjectAmbassadorListQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', ambassadors: { __typename?: 'ProjectAmbassadorsConnection', edges: Array<{ __typename?: 'ProjectAmbassadorEdge', node: { __typename?: 'Ambassador', id: any, payoutRate: number, contributionsCount: number, user: { __typename?: 'User', imageUrl?: string | null, username: string, heroId: string, id: any } } }> } } | null };
 
 export type OrderContributionsGetQueryVariables = Exact<{
   input?: InputMaybe<GetContributionsInput>;
@@ -8789,6 +8853,30 @@ export const UserSubscriptionFragmentDoc = gql`
   }
 }
     `;
+export const UserWalletConnectionDetailsFragmentDoc = gql`
+    fragment UserWalletConnectionDetails on Wallet {
+  id
+  connectionDetails {
+    ... on LightningAddressConnectionDetails {
+      lightningAddress
+    }
+    ... on LndConnectionDetailsPublic {
+      pubkey
+    }
+    ... on LndConnectionDetailsPrivate {
+      tlsCertificate
+      pubkey
+      macaroon
+      lndNodeType
+      hostname
+      grpcPort
+    }
+    ... on NWCConnectionDetailsPrivate {
+      nwcUrl
+    }
+  }
+}
+    `;
 export const FundingContributionPaymentFragmentDoc = gql`
     fragment FundingContributionPayment on Payment {
   id
@@ -9314,6 +9402,7 @@ export const ProjectPageBodyFragmentDoc = gql`
   goalsCount
   rewardsCount
   entriesCount
+  promotionsEnabled
   keys {
     ...ProjectKeys
   }
@@ -9371,6 +9460,7 @@ export const ProjectUpdateFragmentDoc = gql`
   description
   images
   thumbnailImage
+  promotionsEnabled
   location {
     country {
       name
@@ -11945,6 +12035,48 @@ export type UserHeroStatsQueryHookResult = ReturnType<typeof useUserHeroStatsQue
 export type UserHeroStatsLazyQueryHookResult = ReturnType<typeof useUserHeroStatsLazyQuery>;
 export type UserHeroStatsSuspenseQueryHookResult = ReturnType<typeof useUserHeroStatsSuspenseQuery>;
 export type UserHeroStatsQueryResult = Apollo.QueryResult<UserHeroStatsQuery, UserHeroStatsQueryVariables>;
+export const UserWalletDocument = gql`
+    query UserWallet($where: UserGetInput!) {
+  user(where: $where) {
+    wallet {
+      ...UserWalletConnectionDetails
+    }
+  }
+}
+    ${UserWalletConnectionDetailsFragmentDoc}`;
+
+/**
+ * __useUserWalletQuery__
+ *
+ * To run a query within a React component, call `useUserWalletQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserWalletQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserWalletQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserWalletQuery(baseOptions: Apollo.QueryHookOptions<UserWalletQuery, UserWalletQueryVariables> & ({ variables: UserWalletQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserWalletQuery, UserWalletQueryVariables>(UserWalletDocument, options);
+      }
+export function useUserWalletLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserWalletQuery, UserWalletQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserWalletQuery, UserWalletQueryVariables>(UserWalletDocument, options);
+        }
+export function useUserWalletSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserWalletQuery, UserWalletQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserWalletQuery, UserWalletQueryVariables>(UserWalletDocument, options);
+        }
+export type UserWalletQueryHookResult = ReturnType<typeof useUserWalletQuery>;
+export type UserWalletLazyQueryHookResult = ReturnType<typeof useUserWalletLazyQuery>;
+export type UserWalletSuspenseQueryHookResult = ReturnType<typeof useUserWalletSuspenseQuery>;
+export type UserWalletQueryResult = Apollo.QueryResult<UserWalletQuery, UserWalletQueryVariables>;
 export const UserSubscriptionsDocument = gql`
     query UserSubscriptions($input: UserSubscriptionsInput!) {
   userSubscriptions(input: $input) {
@@ -11985,6 +12117,78 @@ export type UserSubscriptionsQueryHookResult = ReturnType<typeof useUserSubscrip
 export type UserSubscriptionsLazyQueryHookResult = ReturnType<typeof useUserSubscriptionsLazyQuery>;
 export type UserSubscriptionsSuspenseQueryHookResult = ReturnType<typeof useUserSubscriptionsSuspenseQuery>;
 export type UserSubscriptionsQueryResult = Apollo.QueryResult<UserSubscriptionsQuery, UserSubscriptionsQueryVariables>;
+export const AmbassadorAddDocument = gql`
+    mutation AmbassadorAdd($input: AmbassadorAddInput!) {
+  ambassadorAdd(input: $input) {
+    id
+    payoutRate
+    user {
+      id
+      username
+    }
+  }
+}
+    `;
+export type AmbassadorAddMutationFn = Apollo.MutationFunction<AmbassadorAddMutation, AmbassadorAddMutationVariables>;
+
+/**
+ * __useAmbassadorAddMutation__
+ *
+ * To run a mutation, you first call `useAmbassadorAddMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAmbassadorAddMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [ambassadorAddMutation, { data, loading, error }] = useAmbassadorAddMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAmbassadorAddMutation(baseOptions?: Apollo.MutationHookOptions<AmbassadorAddMutation, AmbassadorAddMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AmbassadorAddMutation, AmbassadorAddMutationVariables>(AmbassadorAddDocument, options);
+      }
+export type AmbassadorAddMutationHookResult = ReturnType<typeof useAmbassadorAddMutation>;
+export type AmbassadorAddMutationResult = Apollo.MutationResult<AmbassadorAddMutation>;
+export type AmbassadorAddMutationOptions = Apollo.BaseMutationOptions<AmbassadorAddMutation, AmbassadorAddMutationVariables>;
+export const AmbassadorUpdateDocument = gql`
+    mutation AmbassadorUpdate($input: AmbassadorUpdateInput!) {
+  ambassadorUpdate(input: $input) {
+    id
+    payoutRate
+  }
+}
+    `;
+export type AmbassadorUpdateMutationFn = Apollo.MutationFunction<AmbassadorUpdateMutation, AmbassadorUpdateMutationVariables>;
+
+/**
+ * __useAmbassadorUpdateMutation__
+ *
+ * To run a mutation, you first call `useAmbassadorUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAmbassadorUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [ambassadorUpdateMutation, { data, loading, error }] = useAmbassadorUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAmbassadorUpdateMutation(baseOptions?: Apollo.MutationHookOptions<AmbassadorUpdateMutation, AmbassadorUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AmbassadorUpdateMutation, AmbassadorUpdateMutationVariables>(AmbassadorUpdateDocument, options);
+      }
+export type AmbassadorUpdateMutationHookResult = ReturnType<typeof useAmbassadorUpdateMutation>;
+export type AmbassadorUpdateMutationResult = Apollo.MutationResult<AmbassadorUpdateMutation>;
+export type AmbassadorUpdateMutationOptions = Apollo.BaseMutationOptions<AmbassadorUpdateMutation, AmbassadorUpdateMutationVariables>;
 export const ContributionCreateDocument = gql`
     mutation ContributionCreate($input: ContributionCreateInput!) {
   contributionCreate(input: $input) {
@@ -13088,6 +13292,48 @@ export function useUpdateWalletMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateWalletMutationHookResult = ReturnType<typeof useUpdateWalletMutation>;
 export type UpdateWalletMutationResult = Apollo.MutationResult<UpdateWalletMutation>;
 export type UpdateWalletMutationOptions = Apollo.BaseMutationOptions<UpdateWalletMutation, UpdateWalletMutationVariables>;
+export const GeyserPromotionsContributionStatsDocument = gql`
+    query GeyserPromotionsContributionStats($input: GeyserPromotionsContributionStatsInput!) {
+  geyserPromotionsContributionStats(input: $input) {
+    contributionsCount
+    contributionsSum
+    contributionsSumUsd
+  }
+}
+    `;
+
+/**
+ * __useGeyserPromotionsContributionStatsQuery__
+ *
+ * To run a query within a React component, call `useGeyserPromotionsContributionStatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGeyserPromotionsContributionStatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGeyserPromotionsContributionStatsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGeyserPromotionsContributionStatsQuery(baseOptions: Apollo.QueryHookOptions<GeyserPromotionsContributionStatsQuery, GeyserPromotionsContributionStatsQueryVariables> & ({ variables: GeyserPromotionsContributionStatsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GeyserPromotionsContributionStatsQuery, GeyserPromotionsContributionStatsQueryVariables>(GeyserPromotionsContributionStatsDocument, options);
+      }
+export function useGeyserPromotionsContributionStatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GeyserPromotionsContributionStatsQuery, GeyserPromotionsContributionStatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GeyserPromotionsContributionStatsQuery, GeyserPromotionsContributionStatsQueryVariables>(GeyserPromotionsContributionStatsDocument, options);
+        }
+export function useGeyserPromotionsContributionStatsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GeyserPromotionsContributionStatsQuery, GeyserPromotionsContributionStatsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GeyserPromotionsContributionStatsQuery, GeyserPromotionsContributionStatsQueryVariables>(GeyserPromotionsContributionStatsDocument, options);
+        }
+export type GeyserPromotionsContributionStatsQueryHookResult = ReturnType<typeof useGeyserPromotionsContributionStatsQuery>;
+export type GeyserPromotionsContributionStatsLazyQueryHookResult = ReturnType<typeof useGeyserPromotionsContributionStatsLazyQuery>;
+export type GeyserPromotionsContributionStatsSuspenseQueryHookResult = ReturnType<typeof useGeyserPromotionsContributionStatsSuspenseQuery>;
+export type GeyserPromotionsContributionStatsQueryResult = Apollo.QueryResult<GeyserPromotionsContributionStatsQuery, GeyserPromotionsContributionStatsQueryVariables>;
 export const ProjectAmbassadorStatsDocument = gql`
     query ProjectAmbassadorStats($where: UniqueProjectQueryInput!) {
   projectGet(where: $where) {
@@ -13134,6 +13380,60 @@ export type ProjectAmbassadorStatsQueryHookResult = ReturnType<typeof useProject
 export type ProjectAmbassadorStatsLazyQueryHookResult = ReturnType<typeof useProjectAmbassadorStatsLazyQuery>;
 export type ProjectAmbassadorStatsSuspenseQueryHookResult = ReturnType<typeof useProjectAmbassadorStatsSuspenseQuery>;
 export type ProjectAmbassadorStatsQueryResult = Apollo.QueryResult<ProjectAmbassadorStatsQuery, ProjectAmbassadorStatsQueryVariables>;
+export const ProjectAmbassadorListDocument = gql`
+    query ProjectAmbassadorList($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    ambassadors {
+      edges {
+        node {
+          id
+          payoutRate
+          contributionsCount
+          user {
+            imageUrl
+            username
+            heroId
+            id
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useProjectAmbassadorListQuery__
+ *
+ * To run a query within a React component, call `useProjectAmbassadorListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectAmbassadorListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectAmbassadorListQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectAmbassadorListQuery(baseOptions: Apollo.QueryHookOptions<ProjectAmbassadorListQuery, ProjectAmbassadorListQueryVariables> & ({ variables: ProjectAmbassadorListQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectAmbassadorListQuery, ProjectAmbassadorListQueryVariables>(ProjectAmbassadorListDocument, options);
+      }
+export function useProjectAmbassadorListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectAmbassadorListQuery, ProjectAmbassadorListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectAmbassadorListQuery, ProjectAmbassadorListQueryVariables>(ProjectAmbassadorListDocument, options);
+        }
+export function useProjectAmbassadorListSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectAmbassadorListQuery, ProjectAmbassadorListQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectAmbassadorListQuery, ProjectAmbassadorListQueryVariables>(ProjectAmbassadorListDocument, options);
+        }
+export type ProjectAmbassadorListQueryHookResult = ReturnType<typeof useProjectAmbassadorListQuery>;
+export type ProjectAmbassadorListLazyQueryHookResult = ReturnType<typeof useProjectAmbassadorListLazyQuery>;
+export type ProjectAmbassadorListSuspenseQueryHookResult = ReturnType<typeof useProjectAmbassadorListSuspenseQuery>;
+export type ProjectAmbassadorListQueryResult = Apollo.QueryResult<ProjectAmbassadorListQuery, ProjectAmbassadorListQueryVariables>;
 export const OrderContributionsGetDocument = gql`
     query OrderContributionsGet($input: GetContributionsInput) {
   contributionsGet(input: $input) {

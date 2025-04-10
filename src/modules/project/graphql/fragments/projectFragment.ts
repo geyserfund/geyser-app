@@ -97,6 +97,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     goalsCount
     rewardsCount
     entriesCount
+    promotionsEnabled
     keys {
       ...ProjectKeys
     }
@@ -146,6 +147,7 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     description
     images
     thumbnailImage
+    promotionsEnabled
     location {
       country {
         name

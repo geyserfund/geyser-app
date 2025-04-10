@@ -11,12 +11,16 @@
   "typescript.preferences.importModuleSpecifier": "shortest",
   "typescript.preferences.importModuleSpecifierEnding": "js",
   "cSpell.words": [
+    "Airtable",
+    "Btcsat",
     "chakra",
     "ecpair",
     "funder",
     "funders",
     "luxon",
+    "Matomo",
     "mazius",
+    "NOSTR",
     "Refferal",
     "secp",
     "Usdcent"

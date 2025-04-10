@@ -27,8 +27,8 @@ export const useProjectAtom = () => {
 export const useWalletAtom = () => {
   const loading = useAtomValue(walletLoadingAtom)
   const wallet = useAtomValue(walletAtom)
-  const walletConnectiondetails = useAtomValue(walletConnectionDetailsAtom)
-  return { loading, wallet, walletConnectiondetails }
+  const walletConnectionDetails = useAtomValue(walletConnectionDetailsAtom)
+  return { loading, wallet, walletConnectionDetails }
 }
 
 export const useGoalsAtom = () => {

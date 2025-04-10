@@ -1,4 +1,4 @@
-import { Input, InputGroup, InputProps, InputRightAddon } from '@chakra-ui/react'
+import { FormControl, FormErrorMessage, Input, InputGroup, InputProps, InputRightAddon, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { useController, UseControllerProps } from 'react-hook-form'
 
@@ -19,6 +19,7 @@ type Props = UseControllerProps<any, any> &
     displayValue?: string
     fontSize?: string
     numberOnly?: boolean
+    minimal?: boolean
   }
 
 export function ControlledTextInput(props: Props) {
@@ -64,29 +65,43 @@ export function ControlledTextInput(props: Props) {
       </div>
     ) : null
 
+  const InputContent = (
+    <InputGroup size={props.size || 'md'}>
+      <Input
+        {...field}
+        {...props}
+        variant="outline"
+        colorScheme="primary1.1"
+        borderColor="neutral1.6"
+        borderRadius="8px"
+        borderWidth="1px"
+        ref={props.inputRef}
+        isDisabled={props.isDisabled}
+        onBlur={handleBlur}
+        onChange={handleChange}
+        width={props.width || '100%'}
+        value={props.displayValue || field?.value || props.value || ''}
+        isInvalid={Boolean(error)}
+        fontSize={props.fontSize || 'md'}
+      />
+      {props.rightAddon && <InputRightAddon borderRadius="0 8px 8px 0">{props.rightAddon}</InputRightAddon>}
+    </InputGroup>
+  )
+
+  if (props.minimal) {
+    return (
+      <VStack spacing={1} alignItems="start" w="100%" minHeight="56px">
+        <FormControl isInvalid={Boolean(error)} h="100%">
+          {InputContent}
+          <FormErrorMessage>{error}</FormErrorMessage>
+        </FormControl>
+      </VStack>
+    )
+  }
+
   return (
     <FieldContainer required={props.required} title={title} subtitle={props.description} error={error}>
-      <InputGroup>
-        <Input
-          {...field}
-          {...props}
-          variant="outline"
-          colorScheme="primary1.1"
-          borderColor="neutral1.6"
-          borderRadius="8px"
-          borderWidth="1px"
-          ref={props.inputRef}
-          isDisabled={props.isDisabled}
-          onBlur={handleBlur}
-          onChange={handleChange}
-          width={props.width || '100%'}
-          value={props.displayValue || field?.value || props.value || ''}
-          isInvalid={Boolean(error)}
-          size={props.size || 'md'}
-          fontSize={props.fontSize || 'md'}
-        />
-        {props.rightAddon && <InputRightAddon>{props.rightAddon}</InputRightAddon>}
-      </InputGroup>
+      {InputContent}
     </FieldContainer>
   )
 }

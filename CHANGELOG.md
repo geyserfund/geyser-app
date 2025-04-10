@@ -1,3 +1,33 @@
+## [0.19.18](https://github.com/geyserfund/geyser-app/compare/v0.19.7...v0.19.18) (2025-04-09)
+
+
+### Features
+
+* new project promote page (ambassadors and affiliates) ([f676f3e](https://github.com/geyserfund/geyser-app/commit/f676f3e94981c4a8886fc7f846d4fd51ee95e71b))
+* new user wallet page ([d472f07](https://github.com/geyserfund/geyser-app/commit/d472f07e981238105799c2c0a4f00ae73001867b))
+
+
+### Bug Fixes
+
+* add onError handler for lightning address ([a66ef6f](https://github.com/geyserfund/geyser-app/commit/a66ef6ffa73c00c3bc89c197e4e651e53808c8db))
+* address pr comments ([49a992d](https://github.com/geyserfund/geyser-app/commit/49a992d619dd283566cdc4143cf2f1359c2f39fb))
+* build errors ([611fecd](https://github.com/geyserfund/geyser-app/commit/611fecd0cc7cec9b1988deceb6dc3c81f56d3719))
+* build errors ([058d547](https://github.com/geyserfund/geyser-app/commit/058d5472c6d41157fb1ac6b0f52d92079ba9fa72))
+* close modal when login fails, so that auth token is regenerated ([a3052ca](https://github.com/geyserfund/geyser-app/commit/a3052caaeb65eecdc75f9d959b7e38e22e16212b))
+* linting, deps and copy ([270a293](https://github.com/geyserfund/geyser-app/commit/270a293c4cca602f590d5b5d82998d0c3b693917))
+* minor copy update ([d1bc87b](https://github.com/geyserfund/geyser-app/commit/d1bc87b1b34bacb68cbb9d271dfb71c9e424d713))
+* renamed variable ([5d70a2a](https://github.com/geyserfund/geyser-app/commit/5d70a2a42a99ab160f6ff99df67389917759028f))
+* reward cost display in summary ([9fb1941](https://github.com/geyserfund/geyser-app/commit/9fb19410e52db5792a0d21a0f367692803fb80d0))
+* set max claimable to undefined ([727dbf3](https://github.com/geyserfund/geyser-app/commit/727dbf34914e8ed6e98307973f931076f8aca3fd))
+* sip query when user id is undefined ([911d747](https://github.com/geyserfund/geyser-app/commit/911d7476f5cee8e7fffffd21bec190af636207cf))
+* suggested projects to show latest funded projects instead of all projects ([b50bfa7](https://github.com/geyserfund/geyser-app/commit/b50bfa735b03ee217c168700d1c9b7f76f3613f2))
+* translation ([d314490](https://github.com/geyserfund/geyser-app/commit/d314490073db93cc4dd717e002b0a05991016a29))
+* update scroll down to refresh ([74bc0b8](https://github.com/geyserfund/geyser-app/commit/74bc0b8937fa4ea20cb8fa67093b6335d7b7e106))
+* update source resource to be string ([c5c4a96](https://github.com/geyserfund/geyser-app/commit/c5c4a96400b20997eb3eaeab8dc5b445208601db))
+* update types and translations ([46ae353](https://github.com/geyserfund/geyser-app/commit/46ae35375e7edbf35689c75395273302fc106b14))
+* update version ([a07a147](https://github.com/geyserfund/geyser-app/commit/a07a147a3a83d3dad6030516ee6420d421ef12d8))
+* use activityId for sourceID ([972df26](https://github.com/geyserfund/geyser-app/commit/972df26f4e0d5ddb7171c2399b2cd1104e54cdbc))
+
 ## [0.19.7](https://github.com/geyserfund/geyser-app/compare/v0.19.0...v0.19.7) (2025-04-02)
 
 

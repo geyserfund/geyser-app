@@ -1,0 +1,12 @@
+---
+description: 
+globs: src/**/graphql/**/*,src/types/generated/graphql.ts
+alwaysApply: false
+---
+## Create Query in GraphQL folder
+- Add the necessary query, mutation, fragment or subscription in the right folder inside the graphql folder
+- Look into [graphql.ts](mdc:src/types/generated/graphql.ts) to find the right Query, Mutation or Object to construct the query, mutation, subscription
+
+## Use Hooks
+- If you need to call a Query or Mutation, always check the [graphql.ts](mdc:src/types/generated/graphql.ts) file to find the auto-generated hook
+- Do not call useQuery or useMutation directly.
