@@ -42,7 +42,6 @@ export const AmbassadorPayoutsSection = ({
 }: AmbassadorPayoutsSectionProps) => {
   return (
     <CardLayout w="full" spacing={4} align="start">
-      {/* <VStack spacing={4} align="start"> */}
       <Body size="xl" medium>
         {t('Ambassador Payouts')}
       </Body>
@@ -94,7 +93,6 @@ export const AmbassadorPayoutsSection = ({
         /* Use TableWithAccordion */
         <TableWithAccordion items={ambassadors} schema={ambassadorTableSchema} />
       )}
-      {/* </VStack> */}
     </CardLayout>
   )
 }

@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
   Portal,
   SkeletonCircle,
+  useClipboard,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -18,8 +19,9 @@ import { useSetAtom } from 'jotai'
 import { Link } from 'react-router-dom'
 
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
-import { ProfileText } from '@/shared/components/display/ProfileText'
+import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
 import { H1 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, GuardiansJewelUrl } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import {
@@ -41,6 +43,9 @@ export const AccountInfo = () => {
 
   const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
+  const { onCopy } = useClipboard(userProfile.username)
+  const toast = useNotification()
+
   const userAccountToDisplay = userProfile.externalAccounts
 
   const accountButtonProps = getExternalAccountsButtons({
@@ -48,7 +53,6 @@ export const AccountInfo = () => {
   })
 
   if (isLoading) return <AccountInfoSkeleton />
-
   return (
     <VStack spacing={3}>
       <HStack w="full" spacing={{ base: 2, lg: 3 }} alignItems={'start'}>
@@ -59,28 +63,42 @@ export const AccountInfo = () => {
           guardian={userProfile.guardianType}
           wrapperProps={{ padding: '3px' }}
         />
-        <VStack w="full" h="full" alignItems="start" justifyContent={'center'} spacing={0}>
+        <VStack w="full" h="full" alignItems="start" justifyContent={'center'} spacing={1.5}>
           <HStack>
             <H1 size="2xl" bold>
               {userProfile.username}
             </H1>
             <UserVerifiedBadge user={userProfile} fontSize="2xl" />
+            <ProfileText name={userProfile.username} guardian={userProfile.guardianType} size="md" />
+            {/* {userProfile.guardianType && <Image height="24px" width="24px" src={GuardiansJewelUrl} />} */}
           </HStack>
 
-          {userProfile.guardianType ? (
-            <ProfileText name={userProfile.username} guardian={userProfile.guardianType} size="lg" />
-          ) : (
-            isViewingOwnProfile && (
-              <Button
-                as={Link}
-                to={getPath('guardians')}
-                variant="outline"
-                size="sm"
-                rightIcon={<Image height="20px" width="20px" src={GuardiansJewelUrl} />}
-              >
-                {t('Become a guardian')}
-              </Button>
-            )
+          <Body
+            size="sm"
+            color="neutral.500"
+            bgColor={'gray.100'}
+            borderRadius={'md'}
+            p={1}
+            onClick={() => {
+              onCopy()
+              toast.success({ title: t('Hero ID Copied!') })
+            }}
+            cursor="pointer"
+            _hover={{ bgColor: 'gray.200' }}
+          >
+            {t('Hero ID: {{username}}', { username: userProfile.username })}
+          </Body>
+          {!userProfile.guardianType && isViewingOwnProfile && (
+            <Button
+              as={Link}
+              to={getPath('guardians')}
+              variant="outline"
+              size="sm"
+              mt={1}
+              rightIcon={<Image height="16px" width="16px" src={GuardiansJewelUrl} />}
+            >
+              {t('Become a guardian')}
+            </Button>
           )}
         </VStack>
       </HStack>

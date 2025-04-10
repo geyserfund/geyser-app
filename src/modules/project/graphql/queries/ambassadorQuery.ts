@@ -26,6 +26,7 @@ export const QUERY_PROJECT_AMBASSADOR_LIST = gql`
             user {
               imageUrl
               username
+              heroId
               id
             }
           }

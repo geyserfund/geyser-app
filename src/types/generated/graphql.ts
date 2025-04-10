@@ -18,9 +18,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** Add BigInt functionality */
   BigInt: { input: any; output: any; }
-  /** Date custom scalar type */
   Date: { input: any; output: any; }
 };
 
@@ -253,6 +251,7 @@ export type ContributionCreateInput = {
   /** Set to true if the funder wishes to remain anonymous. The user will still be associated to the contribution. */
   anonymous: Scalars['Boolean']['input'];
   donationAmount: Scalars['Int']['input'];
+  geyserTipPercentage?: InputMaybe<Scalars['Int']['input']>;
   metadataInput?: InputMaybe<ContributionMetadataInput>;
   orderInput?: InputMaybe<OrderContributionInput>;
   paymentsInput?: InputMaybe<ContributionPaymentsInput>;
@@ -2295,7 +2294,7 @@ export type Project = {
   rewardsCount?: Maybe<Scalars['Int']['output']>;
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['String']['output']>;
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   sponsors: Array<Sponsor>;
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
@@ -2955,7 +2954,7 @@ export type Query = {
   getEntries: Array<Entry>;
   /**
    * Returns the public key of the Lightning node linked to a project, if there is one.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   getProjectPubkey?: Maybe<Scalars['String']['output']>;
   getProjectReward: ProjectReward;
@@ -3540,7 +3539,7 @@ export type User = {
   badges: Array<UserBadge>;
   bio?: Maybe<Scalars['String']['output']>;
   complianceDetails: UserComplianceDetails;
-  /** Returns a user's contributions accross all projects. */
+  /** Returns a user's contributions across all projects. */
   contributions: Array<Contribution>;
   email?: Maybe<Scalars['String']['output']>;
   emailVerifiedAt?: Maybe<Scalars['Date']['output']>;
@@ -3683,14 +3682,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>;
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isAmbassador: Scalars['Boolean']['output'];
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']['output'];
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isSponsor: Scalars['Boolean']['output'];
   /** Project linked to the contributions. */
@@ -7597,7 +7596,7 @@ export type ProjectAmbassadorListQueryVariables = Exact<{
 }>;
 
 
-export type ProjectAmbassadorListQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', ambassadors: { __typename?: 'ProjectAmbassadorsConnection', edges: Array<{ __typename?: 'ProjectAmbassadorEdge', node: { __typename?: 'Ambassador', id: any, payoutRate: number, contributionsCount: number, user: { __typename?: 'User', imageUrl?: string | null, username: string, id: any } } }> } } | null };
+export type ProjectAmbassadorListQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', ambassadors: { __typename?: 'ProjectAmbassadorsConnection', edges: Array<{ __typename?: 'ProjectAmbassadorEdge', node: { __typename?: 'Ambassador', id: any, payoutRate: number, contributionsCount: number, user: { __typename?: 'User', imageUrl?: string | null, username: string, heroId: string, id: any } } }> } } | null };
 
 export type OrderContributionsGetQueryVariables = Exact<{
   input?: InputMaybe<GetContributionsInput>;
@@ -13393,6 +13392,7 @@ export const ProjectAmbassadorListDocument = gql`
           user {
             imageUrl
             username
+            heroId
             id
           }
         }
