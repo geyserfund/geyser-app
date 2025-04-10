@@ -319,12 +319,10 @@ export const ProjectDashboardPromote = () => {
           const user = ambassadorRow.node?.user
           if (!user) return null
           return (
-            <Link href={`/hero/${user.heroId}`} isExternal _hover={{ textDecoration: 'none' }}>
-              <HStack spacing={2}>
-                <UserAvatar user={user} size="xs" />
-                <Body size="sm">{user.username || t('Unnamed User')}</Body>
-              </HStack>
-            </Link>
+            <HStack as={Link} href={`/hero/${user.heroId}`} isExternal spacing={2}>
+              <UserAvatar user={user} size="xs" />
+              <Body size="sm">{user.username || t('Unnamed User')}</Body>
+            </HStack>
           )
         },
         isMobile,

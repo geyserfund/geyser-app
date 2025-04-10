@@ -1,4 +1,4 @@
-import { Box, HStack, Icon, Image, Switch, Tooltip, useColorMode, VStack } from '@chakra-ui/react'
+import { Box, HStack, Icon, Image, Switch, Tooltip, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React from 'react'
 import { PiInfo } from 'react-icons/pi'
@@ -6,6 +6,45 @@ import { PiInfo } from 'react-icons/pi'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { GeyserPromotionsContributionStatsQuery } from '@/types/index.ts'
+
+const PROMOTION_LOGOS = {
+  light: [
+    {
+      src: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-news-light.png',
+      alt: 'Bitcoin News logo',
+    },
+    {
+      src: 'https://storage.googleapis.com/geyser-projects-media/platform/lightning-news-light.png',
+      alt: 'Lightning News logo',
+    },
+    {
+      src: 'https://storage.googleapis.com/geyser-projects-media/platform/bff-light.png',
+      alt: 'BFF logo',
+    },
+    {
+      src: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-bits-light.png',
+      alt: 'Bitcoin Bits logo',
+    },
+  ],
+  dark: [
+    {
+      src: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-news-dark.png',
+      alt: 'Bitcoin News logo',
+    },
+    {
+      src: 'https://storage.googleapis.com/geyser-projects-media/platform/lightning-news-dark.png',
+      alt: 'Lightning News logo',
+    },
+    {
+      src: 'https://storage.googleapis.com/geyser-projects-media/platform/bff-dark.png',
+      alt: 'BFF logo',
+    },
+    {
+      src: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-bits-dark.png',
+      alt: 'Bitcoin Bits logo',
+    },
+  ],
+}
 
 interface GeyserPromotionSectionProps {
   promotionsEnabled: boolean | undefined | null
@@ -25,7 +64,7 @@ export const GeyserPromotionSection = ({
   isUpdateProjectLoading,
   formatAmount,
 }: GeyserPromotionSectionProps) => {
-  const { colorMode } = useColorMode()
+  const promotionLogos = useColorModeValue(PROMOTION_LOGOS.light, PROMOTION_LOGOS.dark)
   const hasPromotionContributions =
     !promotionStatsLoading &&
     promotionStatsData?.geyserPromotionsContributionStats?.contributionsSumUsd !== undefined &&
@@ -74,31 +113,10 @@ export const GeyserPromotionSection = ({
           )}
         </Body>
         <HStack spacing={4} mb={4}>
-          {[
-            {
-              light: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-news-light.png',
-              dark: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-news-dark.png',
-              alt: 'Bitcoin News logo',
-            },
-            {
-              light: 'https://storage.googleapis.com/geyser-projects-media/platform/lightning-news-light.png',
-              dark: 'https://storage.googleapis.com/geyser-projects-media/platform/lightning-news-dark.png',
-              alt: 'Lightning News logo',
-            },
-            {
-              light: 'https://storage.googleapis.com/geyser-projects-media/platform/bff-light.png',
-              dark: 'https://storage.googleapis.com/geyser-projects-media/platform/bff-dark.png',
-              alt: 'BFF logo',
-            },
-            {
-              light: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-bits-light.png',
-              dark: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-bits-dark.png',
-              alt: 'Bitcoin Bits logo',
-            },
-          ].map((logo) => (
+          {promotionLogos.map((logo) => (
             <Image
               key={logo.alt}
-              src={colorMode === 'light' ? logo.light : logo.dark}
+              src={logo.src}
               alt={logo.alt}
               h="20px" // Adjust height as needed
               objectFit="contain"

@@ -63,7 +63,7 @@ export const ProfileText = ({ guardian, size = 'md', name, children, ...rest }: 
             textTransform={'capitalize'}
             background={backgroundColor}
             {...(backgroundColor && { backgroundClip: 'text', textFillColor: 'transparent' })}
-            fontSize={size === 'sm' ? '14px' : size === 'md' ? '16px' : '20px'}
+            fontSize={size || '20px'}
             bold
             {...rest}
           >

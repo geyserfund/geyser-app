@@ -11,7 +11,6 @@ import {
   Portal,
   SkeletonCircle,
   useClipboard,
-  useColorModeValue,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -47,11 +46,6 @@ export const AccountInfo = () => {
   const { onCopy } = useClipboard(userProfile.username)
   const toast = useNotification()
 
-  // Define color mode values
-  const heroIdBg = useColorModeValue('gray.100', 'gray.700')
-  const heroIdColor = useColorModeValue('neutral.500', 'neutral.600')
-  const heroIdHoverBg = useColorModeValue('gray.200', 'gray.600')
-
   const userAccountToDisplay = userProfile.externalAccounts
 
   const accountButtonProps = getExternalAccountsButtons({
@@ -75,14 +69,14 @@ export const AccountInfo = () => {
               {userProfile.username}
             </H1>
             <UserVerifiedBadge user={userProfile} fontSize="2xl" />
-            <ProfileText name={userProfile.username} guardian={userProfile.guardianType} size="md" />
+            <ProfileText name={userProfile.username} guardian={userProfile.guardianType} size="lg" />
             {/* {userProfile.guardianType && <Image height="24px" width="24px" src={GuardiansJewelUrl} />} */}
           </HStack>
 
           <Body
             size="sm"
-            color={heroIdColor}
-            bgColor={heroIdBg}
+            color={'neutral1.11'}
+            bgColor={'neutral1.4'}
             borderRadius={'md'}
             p={1}
             onClick={() => {
@@ -90,7 +84,7 @@ export const AccountInfo = () => {
               toast.success({ title: t('Hero ID Copied!') })
             }}
             cursor="pointer"
-            _hover={{ bgColor: heroIdHoverBg }}
+            _hover={{ bgColor: 'neutral1.6' }}
           >
             {t('Hero ID: {{username}}', { username: userProfile.username })}
           </Body>
