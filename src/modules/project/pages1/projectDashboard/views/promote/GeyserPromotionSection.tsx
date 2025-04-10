@@ -25,6 +25,10 @@ const PROMOTION_LOGOS = {
       src: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-bits-light.png',
       alt: 'Bitcoin Bits logo',
     },
+    {
+      src: 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-dark.svg',
+      alt: 'Geyser logo',
+    },
   ],
   dark: [
     {
@@ -42,6 +46,10 @@ const PROMOTION_LOGOS = {
     {
       src: 'https://storage.googleapis.com/geyser-projects-media/platform/bitcoin-bits-dark.png',
       alt: 'Bitcoin Bits logo',
+    },
+    {
+      src: 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-light.svg',
+      alt: 'Geyser logo',
     },
   ],
 }

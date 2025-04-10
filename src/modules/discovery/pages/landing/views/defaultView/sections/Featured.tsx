@@ -5,7 +5,7 @@ import { PiStarFour } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { fetchFeaturedProject } from '@/api/airtable'
-import { getFeaturedProject, getPathWithGeyserHero } from '@/shared/constants'
+import { getFeaturedProject, getPathWithGeyserPromotionsHero } from '@/shared/constants'
 import { useNotification } from '@/utils'
 
 import { FeaturedDisplayCard } from '../components/FeaturedDisplayCard'
@@ -95,7 +95,11 @@ export const Featured = () => {
     return (
       <Button
         as={RouterLink}
-        to={getPathWithGeyserHero('projectRewardView', GEYSER_PROMOTIONS_PROJECT_NAME, GEYSER_GET_FEATURED_REWARD_ID)}
+        to={getPathWithGeyserPromotionsHero(
+          'projectRewardView',
+          GEYSER_PROMOTIONS_PROJECT_NAME,
+          GEYSER_GET_FEATURED_REWARD_ID,
+        )}
         variant="surface"
         colorScheme="primary1"
         rightIcon={<PiStarFour />}
