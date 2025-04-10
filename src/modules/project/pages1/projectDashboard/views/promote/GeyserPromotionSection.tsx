@@ -80,11 +80,6 @@ export const GeyserPromotionSection = ({
 
   return (
     <VStack w="full" spacing={4} align="start">
-      <HStack w="full" justifyContent="space-between">
-        <Body size="xl" medium>
-          {t('Promotions')}
-        </Body>
-      </HStack>
       <Body size="sm" light>
         {t("Let's spread the word about your project.")}
       </Body>
