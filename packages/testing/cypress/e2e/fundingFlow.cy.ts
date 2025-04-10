@@ -45,7 +45,7 @@ function setupBitcoinAddressInterception() {
 
 describe('Testing Project with lightning node', () => {
   beforeEach(() => {
-    cy.visit(`${GEYSER_URL}/project/${LND_TEST_PROJECT_NAME}`)
+    cy.visit(`${GEYSER_URL}/project/${LND_TEST_PROJECT_NAME}/?hero=sajaldulal`)
     setupBitcoinAddressInterception()
   })
 
