@@ -58,16 +58,18 @@ export const ProfileText = ({ guardian, size = 'md', name, children, ...rest }: 
   return (
     <>
       <HStack spacing={1} alignItems={'center'}>
-        <Body
-          textTransform={'capitalize'}
-          background={backgroundColor}
-          {...(backgroundColor && { backgroundClip: 'text', textFillColor: 'transparent' })}
-          fontSize={size === 'sm' ? '14px' : size === 'md' ? '16px' : '20px'}
-          bold
-          {...rest}
-        >
-          {children || text}
-        </Body>
+        {children && (
+          <Body
+            textTransform={'capitalize'}
+            background={backgroundColor}
+            {...(backgroundColor && { backgroundClip: 'text', textFillColor: 'transparent' })}
+            fontSize={size || '20px'}
+            bold
+            {...rest}
+          >
+            {children}
+          </Body>
+        )}
         {guardianJewel && (
           <Tooltip label={`${children ? children : name} is a ${guardian}`} placement="top">
             <Image

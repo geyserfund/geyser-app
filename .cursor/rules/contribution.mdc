@@ -26,6 +26,12 @@ Code Style and Structure
 - Wrap all user-facing text in t() function calls, even for button labels and titles
 - When displaying app values like currencies or numbers, place them outside the t() function
 
+## Colour Palette
+- Only use colours from our colour palette, defined in [palette.ts](mdc:src/shared/styles/palette.ts)
+
+## Dark/Light Mode
+- Prefer the use of the React `useColorModeValue` hook instead of string comparison when dynamically rendering based on dark or light mode.
+
 Importing from files
 - While importing from another file, favour the shortest route, i.e relative if it is short, else absolute if that is shortest.
 - Absolute routes start with "@" which is the same as "src/"

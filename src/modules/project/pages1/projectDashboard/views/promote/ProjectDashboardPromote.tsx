@@ -1,4 +1,4 @@
-import { Box, HStack, Icon, IconButton, Input, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
+import { Box, HStack, Icon, IconButton, Input, InputGroup, InputRightElement, Link, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
@@ -319,7 +319,7 @@ export const ProjectDashboardPromote = () => {
           const user = ambassadorRow.node?.user
           if (!user) return null
           return (
-            <HStack spacing={2}>
+            <HStack as={Link} href={`/hero/${user.heroId}`} isExternal spacing={2}>
               <UserAvatar user={user} size="xs" />
               <Body size="sm">{user.username || t('Unnamed User')}</Body>
             </HStack>
