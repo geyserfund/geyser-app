@@ -86,7 +86,7 @@ export const AccountInfo = () => {
             cursor="pointer"
             _hover={{ bgColor: 'neutral1.6' }}
           >
-            {t('Hero ID: {{username}}', { username: userProfile.username })}
+            {t('Hero ID: {{heroId}}', { heroId: userProfile.heroId })}
           </Body>
           {!userProfile.guardianType && isViewingOwnProfile && (
             <Button
