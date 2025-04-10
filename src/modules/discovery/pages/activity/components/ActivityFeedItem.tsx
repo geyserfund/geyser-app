@@ -44,7 +44,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
     switch (activityType) {
       case ActivityType.ProjectGoalCreated:
       case ActivityType.ProjectGoalReached:
-        return getPathWithGeyserHero('projectGoals', project.name)
+        return getPathWithGeyserHero('projectGoalView', project.name, (resource as ProjectGoal).id)
       case ActivityType.ProjectRewardCreated:
         return getPathWithGeyserHero('projectRewardView', project.name, (resource as ProjectReward).uuid)
       case ActivityType.PostPublished:
