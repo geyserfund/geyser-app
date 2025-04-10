@@ -91,7 +91,7 @@ export const formattedFundingInputAtom = atom((get) => {
     projectGoalId,
     anonymous,
     donationAmount: toInt(donationAmount),
-    referrerHeroId,
+    // referrerHeroId,
     metadataInput: {
       ...(email && { email }),
       ...(media && { media }),

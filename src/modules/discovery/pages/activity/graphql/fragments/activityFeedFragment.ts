@@ -59,6 +59,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         projectRewardImage: images
       }
       ... on ProjectGoal {
+        id
         currency
         goalDescription: description
         title
