@@ -10,7 +10,7 @@ import { Body, H2 } from '@/shared/components/typography'
 import { standardPadding } from '@/shared/styles'
 import { commaFormatted } from '@/utils'
 
-import { getPathWithGeyserHero } from '../../../../../../../shared/constants'
+import { getPathWithGeyserPromotionsHero } from '../../../../../../../shared/constants'
 import { useFeaturedProjectForLandingPageQuery } from '../../../../../../../types'
 import { FeatureAirtableData } from '../sections/Featured'
 import { MiniProjectCard } from './MiniProjectCard.tsx'
@@ -55,7 +55,7 @@ export const FeaturedProjectCard = ({
         imageUrl={project.thumbnailImage}
         title={project.title}
         startAnimating={startAnimating}
-        onClick={() => navigate(getPathWithGeyserHero('project', projectName))}
+        onClick={() => navigate(getPathWithGeyserPromotionsHero('project', projectName))}
       />
     )
   }
@@ -70,7 +70,7 @@ export const FeaturedProjectCard = ({
       padding="0px"
       borderRadius="8px"
       overflow="hidden"
-      onClick={() => navigate(getPathWithGeyserHero('project', projectName))}
+      onClick={() => navigate(getPathWithGeyserPromotionsHero('project', projectName))}
       _hover={{ backgroundColor: 'neutral1.2', cursor: 'pointer' }}
       {...rest}
     >
