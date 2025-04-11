@@ -30,7 +30,7 @@ enum ActivityType {
   ContributionConfirmed = 'ContributionConfirmed',
 }
 
-export const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activity) => {
+export const ActivityFeedItem = ({ activityType, id, createdAt, project, resource }: Activity) => {
   const isMobile = useMobileMode()
 
   const isProjectLaunchedActivity = activityType === ActivityType.ProjectLaunched
@@ -54,11 +54,13 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
     }
   }
 
+  console.log('id', id)
+
   return (
     <CardLayout
       as={Link}
       to={activityPath(activityType)}
-      state={{ sourceActivityId: resource.id }}
+      state={{ sourceActivityId: id }}
       id={`activity-feed-item-${activityType}`}
       width={{ base: 'full', lg: '586px' }}
       borderColor={isProjectLaunchedActivity ? 'primaryAlpha.6' : 'neutralAlpha.6'}
