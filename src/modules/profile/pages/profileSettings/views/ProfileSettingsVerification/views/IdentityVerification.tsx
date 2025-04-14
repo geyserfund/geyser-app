@@ -6,7 +6,7 @@ import { useAuthContext } from '@/context/auth.tsx'
 import { UserVerificationModal } from '@/modules/project/pages1/projectDashboard/views/wallet/components/UserVerificationModal.tsx'
 import { useUserVerificationModal } from '@/modules/project/pages1/projectDashboard/views/wallet/hooks/useUserVerificationModal.ts'
 import { Body, H3 } from '@/shared/components/typography'
-import { UserVerificationLevelInput, useUserTaxProfileQuery } from '@/types/index.ts'
+import { UserVerificationLevelInput } from '@/types/index.ts'
 
 import { UserVerifiedBadge } from '../../../../profilePage/views/account/views/badges/VerifiedBadge.tsx'
 import { LegalEntitySelection } from '../components/LegalEntitySelection.tsx'
@@ -16,23 +16,9 @@ export const IdentityVerification = () => {
   const { generateVerificationTokenLoading, startVerification, userVerificationModal, userVerificationToken } =
     useUserVerificationModal()
 
-  const [taxProfile, setTaxProfile] = useAtom(userTaxProfileAtom)
+  const [taxProfile] = useAtom(userTaxProfileAtom)
 
   const { user } = useAuthContext()
-
-  useUserTaxProfileQuery({
-    skip: !user.id,
-    variables: {
-      where: {
-        id: user.id,
-      },
-    },
-    onCompleted(data) {
-      if (data?.user.taxProfile) {
-        setTaxProfile(data?.user.taxProfile)
-      }
-    },
-  })
 
   const isVerified = user?.complianceDetails?.verifiedDetails?.identity?.verified
 

@@ -17,9 +17,11 @@ import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/proje
 import { hasProjectFundingLimitAlmostReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
+import { useModal } from '@/shared/hooks/useModal.tsx'
 import { halfStandardPadding } from '@/shared/styles/reponsiveValues.ts'
 import { UserVerificationLevelInput } from '@/types/index.ts'
 
+import { VerificationModal } from '../../../components/VerificationModal.tsx'
 import { useUserVerificationModal } from '../hooks/useUserVerificationModal.ts'
 import { useWalletLimitProgressData } from '../hooks/useWalletLimitProgressData.ts'
 import { UserVerificationModal } from './UserVerificationModal.tsx'
@@ -29,6 +31,8 @@ export const WalletLimitsAndVerification = () => {
   const { percentage, barColor } = useWalletLimitProgressData()
 
   const { user } = useAuthContext()
+
+  const verifyIntroModal = useModal()
 
   const { userVerificationModal, startVerification, userVerificationToken, generateVerificationTokenLoading } =
     useUserVerificationModal()
@@ -70,7 +74,7 @@ export const WalletLimitsAndVerification = () => {
   }
 
   const handleGenerateVerificationTokenForIdentity = () => {
-    startVerification(UserVerificationLevelInput.Level_3)
+    verifyIntroModal.onOpen()
   }
 
   return (
@@ -267,6 +271,8 @@ export const WalletLimitsAndVerification = () => {
         accessToken={userVerificationToken?.token || ''}
         verificationLevel={userVerificationToken?.verificationLevel}
       />
+
+      <VerificationModal {...verifyIntroModal} />
     </>
   )
 }

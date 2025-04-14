@@ -60,7 +60,7 @@ export const LegalEntitySelection: React.FC = () => {
 
   return (
     <>
-      <HStack w="full" spacing={4} alignItems="start">
+      <HStack w="full" flexDirection={{ base: 'column', md: 'row' }} spacing={4} alignItems="start">
         {options.map((option) => {
           const isSelected = taxProfile?.legalEntityType === option.value
 
@@ -76,6 +76,7 @@ export const LegalEntitySelection: React.FC = () => {
                 p={4}
                 minHeight="80px"
                 color="neutral1.11"
+                width="full"
               >
                 <HStack w="full" py="2">
                   <Icon as={option.icon} boxSize={5} />
@@ -102,7 +103,7 @@ export const LegalEntitySelection: React.FC = () => {
                       </Body>
                     )}
                   <Button
-                    size="sm"
+                    size="md"
                     variant="outline"
                     onClick={() =>
                       openModal({
@@ -124,6 +125,7 @@ export const LegalEntitySelection: React.FC = () => {
           return (
             <Button
               flex={1}
+              width="full"
               size="xl"
               key={option.value}
               variant={'surface'}
@@ -146,8 +148,8 @@ export const LegalEntitySelection: React.FC = () => {
 }
 
 const ModalSubtitleMap = {
-  [LegalEntityType.Person]: t('This information will be displayed in your contribution and sale invoices.'),
-  [LegalEntityType.Company]: t('This information will be displayed in your contribution and sale invoices.'),
+  [LegalEntityType.Person]: t('This information will be displayed in your contribution and sale invoices. (optional)'),
+  [LegalEntityType.Company]: t('This information will be displayed in your contribution and sale invoices. (optional)'),
   [LegalEntityType.NonProfit]: t('This information will be used to generate tax-deductible invoices for your donors.'),
 }
 
@@ -176,6 +178,7 @@ export const TaxProfileModal = ({ ...props }: UseModalReturn<TaxProfileFormData>
       {...props}
       title={t('Tax profile')}
       subtitle={ModalSubtitleMap[props.props.legalEntityType]}
+      closeOnOverlayClick={false}
       size="lg"
       bodyProps={{ pt: 4 }}
     >

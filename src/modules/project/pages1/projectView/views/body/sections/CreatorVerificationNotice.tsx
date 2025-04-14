@@ -7,6 +7,7 @@ import { useAuthContext } from '@/context/auth.tsx'
 import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground.tsx'
 import { VerifiedBadge } from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
+import { VerificationModal } from '@/modules/project/pages1/projectDashboard/components/VerificationModal.tsx'
 import { UserVerificationModal } from '@/modules/project/pages1/projectDashboard/views/wallet/components/UserVerificationModal.tsx'
 import { useUserVerificationModal } from '@/modules/project/pages1/projectDashboard/views/wallet/hooks/useUserVerificationModal.ts'
 import { isProjectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
@@ -16,6 +17,7 @@ import {
 } from '@/modules/project/state/projectVerificationAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { useModal } from '@/shared/hooks/useModal.tsx'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { BrandCreamGradient } from '@/shared/styles/custom.ts'
 import { UserVerificationLevel, UserVerificationLevelInput, UserVerificationStatus } from '@/types/index.ts'
@@ -255,8 +257,8 @@ const AlmostReachedLimitNotice = () => {
 
 const BecomeVerifiedNotice = () => {
   const setBecomeVerifiedNotice = useSetAtom(becomeVerifiedNoticeAtom)
-  const { startVerification, userVerificationModal, generateVerificationTokenLoading, userVerificationToken } =
-    useUserVerificationModal()
+
+  const verifyIntroModal = useModal()
 
   return (
     <>
@@ -294,23 +296,12 @@ const BecomeVerifiedNotice = () => {
           </Body>
         </VStack>
         <VStack justifyContent="flex-end" h="full">
-          <Button
-            variant="solid"
-            colorScheme="primary1"
-            isLoading={generateVerificationTokenLoading}
-            onClick={() => {
-              startVerification(UserVerificationLevelInput.Level_3)
-            }}
-          >
+          <Button variant="solid" colorScheme="primary1" onClick={verifyIntroModal.onOpen}>
             {t('Verify now')}
           </Button>
         </VStack>
       </CardLayout>
-      <UserVerificationModal
-        userVerificationModal={userVerificationModal}
-        accessToken={userVerificationToken?.token || ''}
-        verificationLevel={userVerificationToken?.verificationLevel}
-      />
+      <VerificationModal {...verifyIntroModal} />
     </>
   )
 }
