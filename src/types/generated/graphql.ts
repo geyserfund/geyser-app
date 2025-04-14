@@ -242,6 +242,7 @@ export type Contribution = {
   projectId: Scalars['BigInt']['output'];
   sourceResource?: Maybe<SourceResource>;
   status: ContributionStatus;
+  taxProfile?: Maybe<UserTaxProfile>;
   /** Private reference code viewable only by the Funder and the ProjectOwner related to this Contribution */
   uuid?: Maybe<Scalars['String']['output']>;
 };
@@ -1165,6 +1166,12 @@ export type LeaderboardGlobalProjectsGetInput = {
 export enum LeaderboardPeriod {
   AllTime = 'ALL_TIME',
   Month = 'MONTH'
+}
+
+export enum LegalEntityType {
+  Company = 'COMPANY',
+  NonProfit = 'NON_PROFIT',
+  Person = 'PERSON'
 }
 
 export type LightningAddressConnectionDetails = {
@@ -3762,9 +3769,19 @@ export type UserTaxProfile = {
   fullName: Scalars['String']['output'];
   id: Scalars['BigInt']['output'];
   incorporationDocument?: Maybe<Scalars['String']['output']>;
+  legalEntityType: LegalEntityType;
   state?: Maybe<Scalars['String']['output']>;
   taxId: Scalars['String']['output'];
   userId: Scalars['BigInt']['output'];
+};
+
+export type UserTaxProfileUpdateInput = {
+  country?: InputMaybe<Scalars['String']['input']>;
+  fullName?: InputMaybe<Scalars['String']['input']>;
+  incorporationDocument?: InputMaybe<Scalars['String']['input']>;
+  legalEntityType: LegalEntityType;
+  state?: InputMaybe<Scalars['String']['input']>;
+  taxId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum UserVerificationLevel {
@@ -3903,14 +3920,6 @@ export type DashboardFundersGetInput = {
   orderBy?: InputMaybe<GetFundersOrderByInput>;
   pagination?: InputMaybe<PaginationInput>;
   where?: InputMaybe<GetDashboardFundersWhereInput>;
-};
-
-export type UserTaxProfileUpdateInput = {
-  country: Scalars['String']['input'];
-  fullName: Scalars['String']['input'];
-  incorporationDocument?: InputMaybe<Scalars['String']['input']>;
-  state?: InputMaybe<Scalars['String']['input']>;
-  taxId: Scalars['String']['input'];
 };
 
 
@@ -4167,6 +4176,7 @@ export type ResolversTypes = {
   LeaderboardGlobalCreatorsGetInput: LeaderboardGlobalCreatorsGetInput;
   LeaderboardGlobalProjectsGetInput: LeaderboardGlobalProjectsGetInput;
   LeaderboardPeriod: LeaderboardPeriod;
+  LegalEntityType: LegalEntityType;
   LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>;
   LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
   LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
@@ -4404,6 +4414,7 @@ export type ResolversTypes = {
   UserSubscriptionsInput: UserSubscriptionsInput;
   UserSubscriptionsWhereInput: UserSubscriptionsWhereInput;
   UserTaxProfile: ResolverTypeWrapper<UserTaxProfile>;
+  UserTaxProfileUpdateInput: UserTaxProfileUpdateInput;
   UserVerificationLevel: UserVerificationLevel;
   UserVerificationLevelInput: UserVerificationLevelInput;
   UserVerificationLevelStatus: ResolverTypeWrapper<UserVerificationLevelStatus>;
@@ -4424,7 +4435,6 @@ export type ResolversTypes = {
   WalletStatus: WalletStatus;
   WalletStatusCode: WalletStatusCode;
   dashboardFundersGetInput: DashboardFundersGetInput;
-  userTaxProfileUpdateInput: UserTaxProfileUpdateInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -4768,6 +4778,7 @@ export type ResolversParentTypes = {
   UserSubscriptionsInput: UserSubscriptionsInput;
   UserSubscriptionsWhereInput: UserSubscriptionsWhereInput;
   UserTaxProfile: UserTaxProfile;
+  UserTaxProfileUpdateInput: UserTaxProfileUpdateInput;
   UserVerificationLevelStatus: UserVerificationLevelStatus;
   UserVerificationTokenGenerateInput: UserVerificationTokenGenerateInput;
   UserVerificationTokenGenerateResponse: UserVerificationTokenGenerateResponse;
@@ -4781,7 +4792,6 @@ export type ResolversParentTypes = {
   WalletResourceInput: WalletResourceInput;
   WalletState: WalletState;
   dashboardFundersGetInput: DashboardFundersGetInput;
-  userTaxProfileUpdateInput: UserTaxProfileUpdateInput;
 };
 
 export type ActivitiesGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActivitiesGetResponse'] = ResolversParentTypes['ActivitiesGetResponse']> = {
@@ -4923,6 +4933,7 @@ export type ContributionResolvers<ContextType = any, ParentType extends Resolver
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   sourceResource?: Resolver<Maybe<ResolversTypes['SourceResource']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ContributionStatus'], ParentType, ContextType>;
+  taxProfile?: Resolver<Maybe<ResolversTypes['UserTaxProfile']>, ParentType, ContextType>;
   uuid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -6287,6 +6298,7 @@ export type UserTaxProfileResolvers<ContextType = any, ParentType extends Resolv
   fullName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   incorporationDocument?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  legalEntityType?: Resolver<ResolversTypes['LegalEntityType'], ParentType, ContextType>;
   state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   taxId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -7046,6 +7058,8 @@ export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: s
     & ExternalAccountFragment
   )>, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
+export type UserTaxProfileFragment = { __typename?: 'UserTaxProfile', id: any, userId: any, legalEntityType: LegalEntityType, fullName: string, country: string, state?: string | null, taxId: string, incorporationDocument?: string | null };
+
 export type UserSubscriptionFragment = { __typename?: 'UserSubscription', canceledAt?: any | null, createdAt: any, id: any, nextBillingDate: any, startDate: any, status: UserSubscriptionStatus, updatedAt: any, projectSubscriptionPlan: { __typename?: 'ProjectSubscriptionPlan', id: any, projectId: any, name: string, cost: number, interval: UserSubscriptionInterval, currency: SubscriptionCurrencyType } };
 
 export type UserWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', tlsCertificate?: string | null, pubkey?: string | null, macaroon: string, lndNodeType: LndNodeType, hostname: string, grpcPort: number } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
@@ -7067,6 +7081,16 @@ export type CreatorNotificationsSettingsUpdateMutationVariables = Exact<{
 
 
 export type CreatorNotificationsSettingsUpdateMutation = { __typename?: 'Mutation', creatorNotificationConfigurationValueUpdate?: boolean | null };
+
+export type UserTaxProfileUpdateMutationVariables = Exact<{
+  input: UserTaxProfileUpdateInput;
+}>;
+
+
+export type UserTaxProfileUpdateMutation = { __typename?: 'Mutation', userTaxProfileUpdate: (
+    { __typename?: 'UserTaxProfile' }
+    & UserTaxProfileFragment
+  ) };
 
 export type UserNotificationsSettingsUpdateMutationVariables = Exact<{
   userNotificationConfigurationId: Scalars['BigInt']['input'];
@@ -7171,6 +7195,16 @@ export type UserWalletQueryVariables = Exact<{
 export type UserWalletQuery = { __typename?: 'Query', user: { __typename?: 'User', wallet?: (
       { __typename?: 'Wallet' }
       & UserWalletConnectionDetailsFragment
+    ) | null } };
+
+export type UserTaxProfileQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type UserTaxProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', taxProfile?: (
+      { __typename?: 'UserTaxProfile' }
+      & UserTaxProfileFragment
     ) | null } };
 
 export type UserSubscriptionsQueryVariables = Exact<{
@@ -8897,6 +8931,18 @@ export const UserForProfilePageFragmentDoc = gql`
   }
 }
     ${ExternalAccountFragmentDoc}`;
+export const UserTaxProfileFragmentDoc = gql`
+    fragment UserTaxProfile on UserTaxProfile {
+  id
+  userId
+  legalEntityType
+  fullName
+  country
+  state
+  taxId
+  incorporationDocument
+}
+    `;
 export const UserSubscriptionFragmentDoc = gql`
     fragment UserSubscription on UserSubscription {
   canceledAt
@@ -11664,6 +11710,39 @@ export function useCreatorNotificationsSettingsUpdateMutation(baseOptions?: Apol
 export type CreatorNotificationsSettingsUpdateMutationHookResult = ReturnType<typeof useCreatorNotificationsSettingsUpdateMutation>;
 export type CreatorNotificationsSettingsUpdateMutationResult = Apollo.MutationResult<CreatorNotificationsSettingsUpdateMutation>;
 export type CreatorNotificationsSettingsUpdateMutationOptions = Apollo.BaseMutationOptions<CreatorNotificationsSettingsUpdateMutation, CreatorNotificationsSettingsUpdateMutationVariables>;
+export const UserTaxProfileUpdateDocument = gql`
+    mutation UserTaxProfileUpdate($input: UserTaxProfileUpdateInput!) {
+  userTaxProfileUpdate(input: $input) {
+    ...UserTaxProfile
+  }
+}
+    ${UserTaxProfileFragmentDoc}`;
+export type UserTaxProfileUpdateMutationFn = Apollo.MutationFunction<UserTaxProfileUpdateMutation, UserTaxProfileUpdateMutationVariables>;
+
+/**
+ * __useUserTaxProfileUpdateMutation__
+ *
+ * To run a mutation, you first call `useUserTaxProfileUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserTaxProfileUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userTaxProfileUpdateMutation, { data, loading, error }] = useUserTaxProfileUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUserTaxProfileUpdateMutation(baseOptions?: Apollo.MutationHookOptions<UserTaxProfileUpdateMutation, UserTaxProfileUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserTaxProfileUpdateMutation, UserTaxProfileUpdateMutationVariables>(UserTaxProfileUpdateDocument, options);
+      }
+export type UserTaxProfileUpdateMutationHookResult = ReturnType<typeof useUserTaxProfileUpdateMutation>;
+export type UserTaxProfileUpdateMutationResult = Apollo.MutationResult<UserTaxProfileUpdateMutation>;
+export type UserTaxProfileUpdateMutationOptions = Apollo.BaseMutationOptions<UserTaxProfileUpdateMutation, UserTaxProfileUpdateMutationVariables>;
 export const UserNotificationsSettingsUpdateDocument = gql`
     mutation UserNotificationsSettingsUpdate($userNotificationConfigurationId: BigInt!, $value: String!) {
   userNotificationConfigurationValueUpdate(
@@ -12140,6 +12219,48 @@ export type UserWalletQueryHookResult = ReturnType<typeof useUserWalletQuery>;
 export type UserWalletLazyQueryHookResult = ReturnType<typeof useUserWalletLazyQuery>;
 export type UserWalletSuspenseQueryHookResult = ReturnType<typeof useUserWalletSuspenseQuery>;
 export type UserWalletQueryResult = Apollo.QueryResult<UserWalletQuery, UserWalletQueryVariables>;
+export const UserTaxProfileDocument = gql`
+    query UserTaxProfile($where: UserGetInput!) {
+  user(where: $where) {
+    taxProfile {
+      ...UserTaxProfile
+    }
+  }
+}
+    ${UserTaxProfileFragmentDoc}`;
+
+/**
+ * __useUserTaxProfileQuery__
+ *
+ * To run a query within a React component, call `useUserTaxProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserTaxProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserTaxProfileQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserTaxProfileQuery(baseOptions: Apollo.QueryHookOptions<UserTaxProfileQuery, UserTaxProfileQueryVariables> & ({ variables: UserTaxProfileQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserTaxProfileQuery, UserTaxProfileQueryVariables>(UserTaxProfileDocument, options);
+      }
+export function useUserTaxProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserTaxProfileQuery, UserTaxProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserTaxProfileQuery, UserTaxProfileQueryVariables>(UserTaxProfileDocument, options);
+        }
+export function useUserTaxProfileSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserTaxProfileQuery, UserTaxProfileQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserTaxProfileQuery, UserTaxProfileQueryVariables>(UserTaxProfileDocument, options);
+        }
+export type UserTaxProfileQueryHookResult = ReturnType<typeof useUserTaxProfileQuery>;
+export type UserTaxProfileLazyQueryHookResult = ReturnType<typeof useUserTaxProfileLazyQuery>;
+export type UserTaxProfileSuspenseQueryHookResult = ReturnType<typeof useUserTaxProfileSuspenseQuery>;
+export type UserTaxProfileQueryResult = Apollo.QueryResult<UserTaxProfileQuery, UserTaxProfileQueryVariables>;
 export const UserSubscriptionsDocument = gql`
     query UserSubscriptions($input: UserSubscriptionsInput!) {
   userSubscriptions(input: $input) {

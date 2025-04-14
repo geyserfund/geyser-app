@@ -10,7 +10,7 @@ export function useModal<T extends Record<string, any>>(disclouseProps: UseDiscl
 
   const onOpen = useCallback(
     (props?: T) => {
-      setProps((current) => (props ? { ...current, ...props } : current))
+      setProps((current) => (props ? props : current))
       _onOpen()
     },
     [_onOpen],

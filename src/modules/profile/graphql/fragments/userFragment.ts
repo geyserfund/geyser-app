@@ -34,3 +34,16 @@ export const FRAGMENT_USER_FOR_PROFILE_PAGE = gql`
     }
   }
 `
+
+export const FRAGMENT_USER_TAX_PROFILE = gql`
+  fragment UserTaxProfile on UserTaxProfile {
+    id
+    userId
+    legalEntityType
+    fullName
+    country
+    state
+    taxId
+    incorporationDocument
+  }
+`
