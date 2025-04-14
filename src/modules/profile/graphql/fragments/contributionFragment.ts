@@ -17,6 +17,7 @@ export const FRAGMENT_USER_PROJECT_FUNDER = gql`
     confirmed
     id
     contributions {
+      id
       amount
       comment
       media

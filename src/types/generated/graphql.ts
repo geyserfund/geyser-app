@@ -3762,16 +3762,16 @@ export type UserSubscriptionsWhereInput = {
 
 export type UserTaxProfile = {
   __typename?: 'UserTaxProfile';
-  country: Scalars['String']['output'];
+  country?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['Date']['output'];
   deleted: Scalars['Boolean']['output'];
   deletedAt?: Maybe<Scalars['Date']['output']>;
-  fullName: Scalars['String']['output'];
+  fullName?: Maybe<Scalars['String']['output']>;
   id: Scalars['BigInt']['output'];
   incorporationDocument?: Maybe<Scalars['String']['output']>;
   legalEntityType: LegalEntityType;
   state?: Maybe<Scalars['String']['output']>;
-  taxId: Scalars['String']['output'];
+  taxId?: Maybe<Scalars['String']['output']>;
   userId: Scalars['BigInt']['output'];
 };
 
@@ -6291,16 +6291,16 @@ export type UserSubscriptionResolvers<ContextType = any, ParentType extends Reso
 };
 
 export type UserTaxProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserTaxProfile'] = ResolversParentTypes['UserTaxProfile']> = {
-  country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  fullName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fullName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   incorporationDocument?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   legalEntityType?: Resolver<ResolversTypes['LegalEntityType'], ParentType, ContextType>;
   state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  taxId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  taxId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -7006,7 +7006,7 @@ export type GuardianUsersGetQuery = { __typename?: 'Query', guardianUsersGet?: {
 
 export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
 
-export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, contributions: Array<{ __typename?: 'Contribution', amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, bitcoinQuote?: (
+export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, contributions: Array<{ __typename?: 'Contribution', id: any, amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, bitcoinQuote?: (
       { __typename?: 'BitcoinQuote' }
       & BitcoinQuoteFragment
     ) | null }> };
@@ -7058,7 +7058,7 @@ export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: s
     & ExternalAccountFragment
   )>, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
-export type UserTaxProfileFragment = { __typename?: 'UserTaxProfile', id: any, userId: any, legalEntityType: LegalEntityType, fullName: string, country: string, state?: string | null, taxId: string, incorporationDocument?: string | null };
+export type UserTaxProfileFragment = { __typename?: 'UserTaxProfile', id: any, userId: any, legalEntityType: LegalEntityType, fullName?: string | null, country?: string | null, state?: string | null, taxId?: string | null, incorporationDocument?: string | null };
 
 export type UserSubscriptionFragment = { __typename?: 'UserSubscription', canceledAt?: any | null, createdAt: any, id: any, nextBillingDate: any, startDate: any, status: UserSubscriptionStatus, updatedAt: any, projectSubscriptionPlan: { __typename?: 'ProjectSubscriptionPlan', id: any, projectId: any, name: string, cost: number, interval: UserSubscriptionInterval, currency: SubscriptionCurrencyType } };
 
@@ -8742,6 +8742,7 @@ export const UserProjectFunderFragmentDoc = gql`
   confirmed
   id
   contributions {
+    id
     amount
     comment
     media
