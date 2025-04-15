@@ -7374,7 +7374,7 @@ export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uui
 
 export type PostPageProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, images: Array<string>, shortDescription?: string | null, cost: number };
 
-export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
+export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: any, country?: string | null, legalEntityType: LegalEntityType } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
 export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, guardianType?: GuardianType | null };
 
@@ -9531,6 +9531,11 @@ export const ProjectPageCreatorFragmentDoc = gql`
     externalId
     id
     public
+  }
+  taxProfile {
+    id
+    country
+    legalEntityType
   }
   complianceDetails {
     verifiedDetails {

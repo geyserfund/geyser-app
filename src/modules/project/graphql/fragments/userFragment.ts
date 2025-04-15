@@ -14,6 +14,11 @@ export const FRAGMENT_PROJECT_PAGE_CREATOR = gql`
       id
       public
     }
+    taxProfile {
+      id
+      country
+      legalEntityType
+    }
     complianceDetails {
       verifiedDetails {
         email {
