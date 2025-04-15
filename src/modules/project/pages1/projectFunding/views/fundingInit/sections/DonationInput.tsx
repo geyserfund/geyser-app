@@ -40,7 +40,7 @@ export const DonationInput = () => {
     setState('donationAmountUsdCent', val * 100)
   }
 
-  const { isOpen: isSatoshi, onToggle } = useDisclosure({ defaultIsOpen: true })
+  const { isOpen: isSatoshi, onToggle } = useDisclosure({ defaultIsOpen: false })
   const isDollar = !isSatoshi
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
