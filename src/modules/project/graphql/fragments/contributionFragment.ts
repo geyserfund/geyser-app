@@ -156,7 +156,6 @@ export const FRAGMENT_CONTRIBUTION_DOWNLOAD_INVOICE = gql`
     }
     payments {
       status
-      paymentType
       uuid
       fees {
         description

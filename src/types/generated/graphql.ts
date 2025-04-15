@@ -7250,7 +7250,7 @@ export type FundingContributionSubscriptionFragment = { __typename?: 'Contributi
 
 export type ContributionWithInvoiceStatusFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, status: ContributionStatus, creatorEmail?: string | null, isAnonymous: boolean };
 
-export type ContributionForDownloadInvoiceFragment = { __typename?: 'Contribution', id: any, donationAmount: number, amount: number, uuid?: string | null, creatorEmail?: string | null, projectId: any, confirmedAt?: any | null, createdAt?: any | null, status: ContributionStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string, email?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, creatorTaxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, payments: Array<{ __typename?: 'Payment', status: PaymentStatus, paymentType: PaymentType, uuid: string, fees: Array<{ __typename?: 'PaymentFee', description?: string | null, feeType?: PaymentFeeType | null, feeAmount: number, external?: boolean | null, feeCurrency: FeeCurrency }> }> };
+export type ContributionForDownloadInvoiceFragment = { __typename?: 'Contribution', id: any, donationAmount: number, amount: number, uuid?: string | null, creatorEmail?: string | null, projectId: any, confirmedAt?: any | null, createdAt?: any | null, status: ContributionStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string, email?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, creatorTaxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, payments: Array<{ __typename?: 'Payment', status: PaymentStatus, uuid: string, fees: Array<{ __typename?: 'PaymentFee', description?: string | null, feeType?: PaymentFeeType | null, feeAmount: number, external?: boolean | null, feeCurrency: FeeCurrency }> }> };
 
 export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null };
 
@@ -7312,6 +7312,8 @@ export type FundingContributionPaymentDetailsFragment = { __typename?: 'Contribu
   ) | null };
 
 export type FundingContributionPaymentFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, status: PaymentStatus, userSubscriptionId?: any | null };
+
+export type PaymentSubscriptionFragment = { __typename?: 'Payment', id: any, status: PaymentStatus, paymentType: PaymentType, contributionUUID: string, failureReason?: string | null };
 
 export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', stripe: boolean } };
 
@@ -8111,6 +8113,16 @@ export type ProjectContributionSubscription = { __typename?: 'Subscription', con
       { __typename?: 'Contribution' }
       & ProjectContributionFragment
     ) } };
+
+export type PaymentStatusUpdatedSubscriptionVariables = Exact<{
+  input: PaymentStatusUpdatedInput;
+}>;
+
+
+export type PaymentStatusUpdatedSubscription = { __typename?: 'Subscription', paymentStatusUpdated: (
+    { __typename?: 'Payment' }
+    & PaymentSubscriptionFragment
+  ) };
 
 export const EmailUpdateUserFragmentDoc = gql`
     fragment EmailUpdateUser on User {
@@ -9195,7 +9207,6 @@ export const ContributionForDownloadInvoiceFragmentDoc = gql`
   }
   payments {
     status
-    paymentType
     uuid
     fees {
       description
@@ -9368,6 +9379,15 @@ export const FundingContributionPaymentDetailsFragmentDoc = gql`
 ${ContributionOnChainSwapPaymentDetailsFragmentDoc}
 ${ContributionFiatPaymentDetailsFragmentDoc}
 ${ContributionFiatSwapPaymentDetailsFragmentDoc}`;
+export const PaymentSubscriptionFragmentDoc = gql`
+    fragment PaymentSubscription on Payment {
+  id
+  status
+  paymentType
+  contributionUUID
+  failureReason
+}
+    `;
 export const ProjectSubscriptionPlansFragmentDoc = gql`
     fragment ProjectSubscriptionPlans on ProjectSubscriptionPlan {
   cost
@@ -15350,3 +15370,33 @@ export function useProjectContributionSubscription(baseOptions?: Apollo.Subscrip
       }
 export type ProjectContributionSubscriptionHookResult = ReturnType<typeof useProjectContributionSubscription>;
 export type ProjectContributionSubscriptionResult = Apollo.SubscriptionResult<ProjectContributionSubscription>;
+export const PaymentStatusUpdatedDocument = gql`
+    subscription PaymentStatusUpdated($input: PaymentStatusUpdatedInput!) {
+  paymentStatusUpdated(input: $input) {
+    ...PaymentSubscription
+  }
+}
+    ${PaymentSubscriptionFragmentDoc}`;
+
+/**
+ * __usePaymentStatusUpdatedSubscription__
+ *
+ * To run a query within a React component, call `usePaymentStatusUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `usePaymentStatusUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaymentStatusUpdatedSubscription({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePaymentStatusUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<PaymentStatusUpdatedSubscription, PaymentStatusUpdatedSubscriptionVariables> & ({ variables: PaymentStatusUpdatedSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<PaymentStatusUpdatedSubscription, PaymentStatusUpdatedSubscriptionVariables>(PaymentStatusUpdatedDocument, options);
+      }
+export type PaymentStatusUpdatedSubscriptionHookResult = ReturnType<typeof usePaymentStatusUpdatedSubscription>;
+export type PaymentStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<PaymentStatusUpdatedSubscription>;

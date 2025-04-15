@@ -20,9 +20,9 @@ export const RedirectionNotice = () => {
       <VStack w="full" alignItems="start">
         <Body medium>{t('Redirection Notice')}</Body>
         <Body size="sm">
-          <Trans i18nextKey="You should be redirected to a new tab to complete your payment. If the page hasn't opened automatically, please open it by <1>clicking here.</1>">
+          <Trans i18nextKey="You should be redirected to Banxa our payment provider to complete your payment. If the page hasn't opened automatically, please open it by <1>clicking here.</1>">
             {
-              "You should be redirected to a new tab to complete your payment. If the page hasn't opened automatically, please open it by"
+              "You should be redirected to Banxa our payment provider to complete your payment. If the page hasn't opened automatically, please open it by"
             }{' '}
             <Link isExternal href={checkoutUrl || ''}>
               <Body as="span" medium textDecoration={'underline'}>
