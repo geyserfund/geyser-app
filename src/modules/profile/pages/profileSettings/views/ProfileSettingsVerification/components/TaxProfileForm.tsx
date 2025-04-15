@@ -90,8 +90,6 @@ export const TaxProfileForm: React.FC<TaxProfileFormProps> = ({ data, onSubmit, 
     reset(data)
   }, [data])
 
-  console.log('checkign data', data)
-
   const { data: projectCountriesData } = useProjectCountriesGetQuery()
 
   const countryOptions = projectCountriesData?.projectCountriesGet.map((country) => ({

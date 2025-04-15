@@ -148,8 +148,8 @@ export const LegalEntitySelection: React.FC = () => {
 }
 
 const ModalSubtitleMap = {
-  [LegalEntityType.Person]: t('This information will be displayed in your contribution and sale invoices. (optional)'),
-  [LegalEntityType.Company]: t('This information will be displayed in your contribution and sale invoices. (optional)'),
+  [LegalEntityType.Person]: t('This information will be displayed in your contribution and sale invoices.'),
+  [LegalEntityType.Company]: t('This information will be displayed in your contribution and sale invoices.'),
   [LegalEntityType.NonProfit]: t('This information will be used to generate tax-deductible invoices for your donors.'),
 }
 
@@ -176,7 +176,7 @@ export const TaxProfileModal = ({ ...props }: UseModalReturn<TaxProfileFormData>
   return (
     <Modal
       {...props}
-      title={t('Tax profile')}
+      title={`${t('Tax profile')} ${props.props.legalEntityType === LegalEntityType.NonProfit ? '' : t('(optional)')}`}
       subtitle={ModalSubtitleMap[props.props.legalEntityType]}
       closeOnOverlayClick={false}
       size="lg"
