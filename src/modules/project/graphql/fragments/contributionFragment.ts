@@ -121,9 +121,15 @@ export const FRAGMENT_CONTRIBUTION_DOWNLOAD_INVOICE = gql`
     donationAmount
     amount
     uuid
+    creatorEmail
     funder {
       user {
         username
+        email
+        taxProfile {
+          fullName
+          taxId
+        }
       }
     }
     projectId
@@ -139,10 +145,26 @@ export const FRAGMENT_CONTRIBUTION_DOWNLOAD_INVOICE = gql`
       }
       totalInSats
     }
+    creatorTaxProfile {
+      fullName
+      taxId
+    }
     status
     bitcoinQuote {
       quote
       quoteCurrency
+    }
+    payments {
+      status
+      paymentType
+      uuid
+      fees {
+        description
+        feeType
+        feeAmount
+        external
+        feeCurrency
+      }
     }
   }
 `

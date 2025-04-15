@@ -10,6 +10,7 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import {
   ContributionForDownloadInvoiceFragment,
   useContributionForDownloadInvoiceGetLazyQuery,
+  useGetProjectOwnerUserForInvoiceQuery,
 } from '../../../../../../../types'
 import { toInt, useMobileMode } from '../../../../../../../utils'
 import { DownloadInvoicePDF } from './DownloadInvoicePDF'
@@ -21,7 +22,7 @@ export const DownloadInvoice = ({
   asIcon,
   buttonProps,
 }: {
-  project: Pick<FundingProjectState, 'title'>
+  project: Pick<FundingProjectState, 'title' | 'id'>
   contributionId: BigInt
   showFee?: false
   asIcon?: boolean
@@ -36,6 +37,17 @@ export const DownloadInvoice = ({
       setInvoiceData(data.contribution)
     },
   })
+
+  const { data: projectOwners } = useGetProjectOwnerUserForInvoiceQuery({
+    skip: !project?.id,
+    variables: {
+      where: {
+        id: project?.id,
+      },
+    },
+  })
+
+  const ownerUser = projectOwners?.projectGet?.owners[0]?.user
 
   const handleGetInvoiceData = () => {
     if (!dataFetched) {
@@ -87,7 +99,9 @@ export const DownloadInvoice = ({
 
   return (
     <PDFDownloadLink
-      document={<DownloadInvoicePDF invoiceData={invoiceData} projectData={project} showFee={showFee} />}
+      document={
+        <DownloadInvoicePDF invoiceData={invoiceData} projectData={project} showFee={showFee} ownerUser={ownerUser} />
+      }
     >
       {asIcon ? (
         <DownloadInvoicePopover>

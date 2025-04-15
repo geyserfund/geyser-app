@@ -227,6 +227,7 @@ export type Contribution = {
   createdAt?: Maybe<Scalars['Date']['output']>;
   /** Creator's email address. Only visible to the contributor. */
   creatorEmail?: Maybe<Scalars['String']['output']>;
+  creatorTaxProfile?: Maybe<UserTaxProfile>;
   donationAmount: Scalars['Int']['output'];
   /** Contributor's email address. Only visible to the project owner. */
   email?: Maybe<Scalars['String']['output']>;
@@ -242,7 +243,6 @@ export type Contribution = {
   projectId: Scalars['BigInt']['output'];
   sourceResource?: Maybe<SourceResource>;
   status: ContributionStatus;
-  taxProfile?: Maybe<UserTaxProfile>;
   /** Private reference code viewable only by the Funder and the ProjectOwner related to this Contribution */
   uuid?: Maybe<Scalars['String']['output']>;
 };
@@ -1958,6 +1958,7 @@ export type Payment = {
   paymentAmount: Scalars['Int']['output'];
   paymentCurrency: PaymentCurrency;
   paymentDetails: PaymentDetails;
+  paymentType: PaymentType;
   payoutAmount: Scalars['Int']['output'];
   payoutCurrency: PayoutCurrency;
   projectId: Scalars['BigInt']['output'];
@@ -2096,6 +2097,14 @@ export enum PaymentStatus {
 export type PaymentStatusUpdatedInput = {
   contributionUUID?: InputMaybe<Scalars['String']['input']>;
 };
+
+export enum PaymentType {
+  Fiat = 'FIAT',
+  FiatSwap = 'FIAT_SWAP',
+  Lightning = 'LIGHTNING',
+  LightningPodcastKeysend = 'LIGHTNING_PODCAST_KEYSEND',
+  OnChainSwap = 'ON_CHAIN_SWAP'
+}
 
 export enum PayoutCurrency {
   Btcsat = 'BTCSAT',
@@ -4258,6 +4267,7 @@ export type ResolversTypes = {
   PaymentPendResponse: ResolverTypeWrapper<PaymentPendResponse>;
   PaymentStatus: PaymentStatus;
   PaymentStatusUpdatedInput: PaymentStatusUpdatedInput;
+  PaymentType: PaymentType;
   PayoutCurrency: PayoutCurrency;
   PodcastKeysendContributionCreateInput: PodcastKeysendContributionCreateInput;
   PodcastKeysendContributionCreateResponse: ResolverTypeWrapper<PodcastKeysendContributionCreateResponse>;
@@ -4919,6 +4929,7 @@ export type ContributionResolvers<ContextType = any, ParentType extends Resolver
   confirmedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   creatorEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  creatorTaxProfile?: Resolver<Maybe<ResolversTypes['UserTaxProfile']>, ParentType, ContextType>;
   donationAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   funder?: Resolver<ResolversTypes['Funder'], ParentType, ContextType>;
@@ -4933,7 +4944,6 @@ export type ContributionResolvers<ContextType = any, ParentType extends Resolver
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   sourceResource?: Resolver<Maybe<ResolversTypes['SourceResource']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ContributionStatus'], ParentType, ContextType>;
-  taxProfile?: Resolver<Maybe<ResolversTypes['UserTaxProfile']>, ParentType, ContextType>;
   uuid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -5596,6 +5606,7 @@ export type PaymentResolvers<ContextType = any, ParentType extends ResolversPare
   paymentAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   paymentCurrency?: Resolver<ResolversTypes['PaymentCurrency'], ParentType, ContextType>;
   paymentDetails?: Resolver<ResolversTypes['PaymentDetails'], ParentType, ContextType>;
+  paymentType?: Resolver<ResolversTypes['PaymentType'], ParentType, ContextType>;
   payoutAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   payoutCurrency?: Resolver<ResolversTypes['PayoutCurrency'], ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -7239,7 +7250,7 @@ export type FundingContributionSubscriptionFragment = { __typename?: 'Contributi
 
 export type ContributionWithInvoiceStatusFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, status: ContributionStatus, creatorEmail?: string | null, isAnonymous: boolean };
 
-export type ContributionForDownloadInvoiceFragment = { __typename?: 'Contribution', id: any, donationAmount: number, amount: number, uuid?: string | null, projectId: any, confirmedAt?: any | null, createdAt?: any | null, status: ContributionStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null };
+export type ContributionForDownloadInvoiceFragment = { __typename?: 'Contribution', id: any, donationAmount: number, amount: number, uuid?: string | null, creatorEmail?: string | null, projectId: any, confirmedAt?: any | null, createdAt?: any | null, status: ContributionStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string, email?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, creatorTaxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, payments: Array<{ __typename?: 'Payment', status: PaymentStatus, paymentType: PaymentType, uuid: string, fees: Array<{ __typename?: 'PaymentFee', description?: string | null, feeType?: PaymentFeeType | null, feeAmount: number, external?: boolean | null, feeCurrency: FeeCurrency }> }> };
 
 export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null };
 
@@ -7364,6 +7375,8 @@ export type PostPageProjectRewardFragment = { __typename?: 'ProjectReward', id: 
 export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
 export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, guardianType?: GuardianType | null };
+
+export type ProjectOwnerUserForInvoiceFragment = { __typename?: 'User', id: any, username: string, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', identity?: { __typename?: 'VerificationResult', verifiedAt?: any | null, verified?: boolean | null } | null } } };
 
 export type WalletContributionLimitsFragment = { __typename?: 'WalletContributionLimits', min?: number | null, max?: number | null, offChain?: { __typename?: 'WalletOffChainContributionLimits', min?: number | null, max?: number | null } | null, onChain?: { __typename?: 'WalletOnChainContributionLimits', min?: number | null, max?: number | null } | null };
 
@@ -8068,6 +8081,16 @@ export type GetUserIpCountryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUserIpCountryQuery = { __typename?: 'Query', userIpCountry: string };
+
+export type GetProjectOwnerUserForInvoiceQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type GetProjectOwnerUserForInvoiceQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', owners: Array<{ __typename?: 'Owner', id: any, user: (
+        { __typename?: 'User' }
+        & ProjectOwnerUserForInvoiceFragment
+      ) }> } | null };
 
 export type FundingContributionStatusUpdatedSubscriptionVariables = Exact<{
   input?: InputMaybe<ContributionStatusUpdatedInput>;
@@ -9137,9 +9160,15 @@ export const ContributionForDownloadInvoiceFragmentDoc = gql`
   donationAmount
   amount
   uuid
+  creatorEmail
   funder {
     user {
       username
+      email
+      taxProfile {
+        fullName
+        taxId
+      }
     }
   }
   projectId
@@ -9155,10 +9184,26 @@ export const ContributionForDownloadInvoiceFragmentDoc = gql`
     }
     totalInSats
   }
+  creatorTaxProfile {
+    fullName
+    taxId
+  }
   status
   bitcoinQuote {
     quote
     quoteCurrency
+  }
+  payments {
+    status
+    paymentType
+    uuid
+    fees {
+      description
+      feeType
+      feeAmount
+      external
+      feeCurrency
+    }
   }
 }
     `;
@@ -9718,6 +9763,20 @@ export const ProjectRewardFragmentDoc = gql`
     postType
     description
     createdAt
+  }
+}
+    `;
+export const ProjectOwnerUserForInvoiceFragmentDoc = gql`
+    fragment ProjectOwnerUserForInvoice on User {
+  id
+  username
+  complianceDetails {
+    verifiedDetails {
+      identity {
+        verifiedAt
+        verified
+      }
+    }
   }
 }
     `;
@@ -15182,6 +15241,51 @@ export type GetUserIpCountryQueryHookResult = ReturnType<typeof useGetUserIpCoun
 export type GetUserIpCountryLazyQueryHookResult = ReturnType<typeof useGetUserIpCountryLazyQuery>;
 export type GetUserIpCountrySuspenseQueryHookResult = ReturnType<typeof useGetUserIpCountrySuspenseQuery>;
 export type GetUserIpCountryQueryResult = Apollo.QueryResult<GetUserIpCountryQuery, GetUserIpCountryQueryVariables>;
+export const GetProjectOwnerUserForInvoiceDocument = gql`
+    query GetProjectOwnerUserForInvoice($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    owners {
+      id
+      user {
+        ...ProjectOwnerUserForInvoice
+      }
+    }
+  }
+}
+    ${ProjectOwnerUserForInvoiceFragmentDoc}`;
+
+/**
+ * __useGetProjectOwnerUserForInvoiceQuery__
+ *
+ * To run a query within a React component, call `useGetProjectOwnerUserForInvoiceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectOwnerUserForInvoiceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectOwnerUserForInvoiceQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetProjectOwnerUserForInvoiceQuery(baseOptions: Apollo.QueryHookOptions<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables> & ({ variables: GetProjectOwnerUserForInvoiceQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>(GetProjectOwnerUserForInvoiceDocument, options);
+      }
+export function useGetProjectOwnerUserForInvoiceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>(GetProjectOwnerUserForInvoiceDocument, options);
+        }
+export function useGetProjectOwnerUserForInvoiceSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>(GetProjectOwnerUserForInvoiceDocument, options);
+        }
+export type GetProjectOwnerUserForInvoiceQueryHookResult = ReturnType<typeof useGetProjectOwnerUserForInvoiceQuery>;
+export type GetProjectOwnerUserForInvoiceLazyQueryHookResult = ReturnType<typeof useGetProjectOwnerUserForInvoiceLazyQuery>;
+export type GetProjectOwnerUserForInvoiceSuspenseQueryHookResult = ReturnType<typeof useGetProjectOwnerUserForInvoiceSuspenseQuery>;
+export type GetProjectOwnerUserForInvoiceQueryResult = Apollo.QueryResult<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>;
 export const FundingContributionStatusUpdatedDocument = gql`
     subscription FundingContributionStatusUpdated($input: ContributionStatusUpdatedInput) {
   contributionStatusUpdated(input: $input) {
