@@ -63,20 +63,18 @@ export const DownloadInvoice = ({
   if (!invoiceData) {
     if (asIcon) {
       return (
-        <DownloadInvoicePopover>
-          <IconButton
-            as="div"
-            size="lg"
-            variant="outline"
-            colorScheme="neutral1"
-            icon={<PiDownloadSimple />}
-            aria-label={t('Download invoice')}
-            onClick={(event) => event.stopPropagation()}
-            onMouseEnter={() => handleGetInvoiceData()}
-            isLoading={transactionQuery.loading}
-            {...buttonProps}
-          />
-        </DownloadInvoicePopover>
+        <IconButton
+          as="div"
+          size="lg"
+          variant="outline"
+          colorScheme="neutral1"
+          icon={<PiDownloadSimple />}
+          aria-label={t('Download invoice')}
+          onClick={(event) => event.stopPropagation()}
+          onMouseEnter={() => handleGetInvoiceData()}
+          isLoading={transactionQuery.loading}
+          {...buttonProps}
+        />
       )
     }
 
