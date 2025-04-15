@@ -6,7 +6,7 @@ import { PiCopy } from 'react-icons/pi'
 import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess'
 import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { useNotification } from '@/utils/index.ts'
+import { useMobileMode, useNotification } from '@/utils/index.ts'
 
 import { QRCodeComponent } from '../components/QRCodeComponent'
 import { TotalAmountToPay } from '../components/TotalAmountToPay'
@@ -14,6 +14,8 @@ import { WaitingForPayment } from '../components/WaitingForPayment'
 
 export const PaymentLightning = () => {
   useListenFundingContributionSuccess()
+
+  const isMobile = useMobileMode()
 
   const toast = useNotification()
 
@@ -41,8 +43,12 @@ export const PaymentLightning = () => {
     const lightningUri = `lightning:${paymentRequest}`
 
     // Only attempt to open lightning wallets on mobile devices
-    if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-      window.location.href = lightningUri
+    if (isMobile) {
+      const a = document.createElement('a')
+      a.href = lightningUri
+      a.rel = 'noopener noreferrer'
+      a.click()
+      a.remove()
     } else {
       handleCopy()
     }
