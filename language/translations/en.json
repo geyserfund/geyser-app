@@ -1188,5 +1188,6 @@
   "State": "State",
   "Disconnect twitter": "Disconnect twitter",
   "Disconnect nostr": "Disconnect nostr",
-  "Hero ID: {{heroId}}": "Hero ID: {{heroId}}"
+  "Hero ID: {{heroId}}": "Hero ID: {{heroId}}",
+  "Report project": "Report project"
 }

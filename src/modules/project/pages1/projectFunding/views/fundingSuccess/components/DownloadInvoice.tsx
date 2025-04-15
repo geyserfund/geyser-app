@@ -70,7 +70,10 @@ export const DownloadInvoice = ({
           colorScheme="neutral1"
           icon={<PiDownloadSimple />}
           aria-label={t('Download invoice')}
-          onClick={(event) => event.stopPropagation()}
+          onClick={(event) => {
+            event.stopPropagation()
+            handleGetInvoiceData()
+          }}
           onMouseEnter={() => handleGetInvoiceData()}
           isLoading={transactionQuery.loading}
           {...buttonProps}
