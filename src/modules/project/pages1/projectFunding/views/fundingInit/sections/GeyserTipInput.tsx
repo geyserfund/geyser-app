@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, HStack, IconButton, VStack } from '@chakra-ui/react'
+import { Button, ButtonGroup, HStack, IconButton } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiQuestion } from 'react-icons/pi'
 
