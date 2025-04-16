@@ -33,6 +33,10 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
 
   const { formState, hasSelectedRewards } = useFundingFormAtom()
 
+  // Calculate tip amount in sats
+  const geyserTipAmountSats =
+    formState.geyserTipPercent > 0 ? Math.round((formState.donationAmount * formState.geyserTipPercent) / 100) : 0
+
   const { isOpen: isMobileDetailsOpen, onToggle: onMobileDetailsToggle } = useDisclosure()
 
   const numberOfRewardsSelected =
@@ -98,7 +102,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
           <HStack>
             <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Donation')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
-              {`${formState.donationAmount.toLocaleString()} `}
+              {`${commaFormatted(formState.donationAmount)} `}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
                 sats
               </Body>
@@ -154,6 +158,18 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
           </HStack>
         )}
       </VStack>
+
+      {geyserTipAmountSats > 0 && (
+        <HStack>
+          <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser Tip')}: `}</Body>
+          <Body size={{ base: 'sm', lg: 'md' }}>
+            {`${commaFormatted(geyserTipAmountSats)} `}
+            <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
+              sats
+            </Body>
+          </Body>
+        </HStack>
+      )}
 
       {currentGoal && (
         <HStack>

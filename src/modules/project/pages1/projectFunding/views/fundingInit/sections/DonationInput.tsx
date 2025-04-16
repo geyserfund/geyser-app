@@ -1,20 +1,10 @@
-import {
-  Button,
-  ButtonProps,
-  HStack,
-  Input,
-  InputGroup,
-  InputRightElement,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react'
+import { Button, HStack, Input, InputGroup, InputRightElement, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { Body, H1 } from '@/shared/components/typography'
 
-import { CrownIcon, MedalIcon, StarIcon, TrophyIcon } from '../../../../../../../components/icons'
 import { useBtcContext } from '../../../../../../../context/btc'
 import { commaFormatted } from '../../../../../../../utils'
 
@@ -89,37 +79,83 @@ export const DonationInput = () => {
   }, [satoshi])
 
   return (
-    <VStack spacing={3}>
-      <HStack w="full" justifyContent="space-between" flexWrap={'wrap'}>
-        <H1 size="2xl" bold>
-          {t('Make a donation')}
-        </H1>
-        <HStack justifyContent="start">
-          <DonationInputIconButton
-            onClick={() => handleDefaultAmountButtonClick(10)}
-            leftIcon={<MedalIcon height="16px" width="16px" />}
+    <VStack spacing={4} alignItems="stretch">
+      <H1 size="2xl" bold alignSelf="start">
+        {t('Make a donation')}
+      </H1>
+
+      <HStack w="full" justifyContent="space-between" flexWrap="wrap" spacing={2} alignItems="flex-start">
+        {[50, 100].map((amount) => (
+          <Button
+            key={amount}
+            size="md"
+            variant="outline"
+            colorScheme="neutral1"
+            onClick={() => handleDefaultAmountButtonClick(amount)}
+            flexGrow={1}
+            minWidth="80px"
           >
-            $10
-          </DonationInputIconButton>
-          <DonationInputIconButton
-            onClick={() => handleDefaultAmountButtonClick(50)}
-            leftIcon={<TrophyIcon height="16px" width="16px" />}
+            {`$${commaFormatted(amount)}`}
+          </Button>
+        ))}
+
+        <VStack spacing={0} flexGrow={1} minWidth="80px" position="relative" alignItems="stretch">
+          <Button
+            key={210}
+            size="md"
+            variant="outline"
+            colorScheme="neutral1"
+            onClick={() => handleDefaultAmountButtonClick(210)}
+            w="full"
+            zIndex={1}
           >
-            $50
-          </DonationInputIconButton>
-          <DonationInputIconButton
-            onClick={() => handleDefaultAmountButtonClick(100)}
-            leftIcon={<CrownIcon height="16px" width="16px" />}
+            {`$${commaFormatted(210)}`}
+          </Button>
+          <Body
+            fontSize="8px"
+            bg="amber.6"
+            color="black"
+            fontWeight="bold"
+            px={2}
+            py={0.2}
+            borderRadius="md"
+            position="absolute"
+            bottom="-8px"
+            left="50%"
+            transform="translateX(-50%)"
+            zIndex={2}
+            whiteSpace="nowrap"
           >
-            $100
-          </DonationInputIconButton>
-          <DonationInputIconButton
-            onClick={() => handleDefaultAmountButtonClick(1000)}
-            leftIcon={<StarIcon height="16px" width="16px" />}
+            {t('SATOSHI AMOUNT')}
+          </Body>
+        </VStack>
+
+        {[500].map((amount) => (
+          <Button
+            key={amount}
+            size="md"
+            variant="outline"
+            colorScheme="neutral1"
+            onClick={() => handleDefaultAmountButtonClick(amount)}
+            flexGrow={1}
+            minWidth="80px"
           >
-            $1000
-          </DonationInputIconButton>
-        </HStack>
+            {`$${commaFormatted(amount)}`}
+          </Button>
+        ))}
+
+        <Button
+          key={1000}
+          size="md"
+          variant="outline"
+          colorScheme="neutral1"
+          onClick={() => handleDefaultAmountButtonClick(1000)}
+          flexGrow={1}
+          minWidth="80px"
+          display={{ base: 'none', md: 'inline-flex' }}
+        >
+          {`$${commaFormatted(1000)}`}
+        </Button>
       </HStack>
 
       <HStack w="full" position="relative">
@@ -180,8 +216,4 @@ export const DonationInput = () => {
       </HStack>
     </VStack>
   )
-}
-
-const DonationInputIconButton = (props: ButtonProps) => {
-  return <Button size="sm" variant="outline" colorScheme="neutral1" {...props} />
 }

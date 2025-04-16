@@ -1372,7 +1372,6 @@ export type Mutation = {
   userNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
   userSubscriptionCancel: UserSubscription;
   userSubscriptionUpdate: UserSubscription;
-  userTaxProfileUpdate: UserTaxProfile;
   userVerificationTokenGenerate: UserVerificationTokenGenerateResponse;
   walletCreate: Wallet;
   walletDelete: Scalars['Boolean']['output'];
@@ -1655,11 +1654,6 @@ export type MutationUserSubscriptionCancelArgs = {
 
 export type MutationUserSubscriptionUpdateArgs = {
   input: UpdateUserSubscriptionInput;
-};
-
-
-export type MutationUserTaxProfileUpdateArgs = {
-  input: UserTaxProfileUpdateInput;
 };
 
 
@@ -3549,8 +3543,6 @@ export type User = {
   contributions: Array<Contribution>;
   email?: Maybe<Scalars['String']['output']>;
   emailVerifiedAt?: Maybe<Scalars['Date']['output']>;
-  /** The type of entity that the User is in real life. For example, a person, a company, or a non-profit. */
-  entityType?: Maybe<UserEntityType>;
   /**
    * By default, returns all the entries of a user, both published and unpublished but not deleted.
    * To filter the result set, an explicit input can be passed that specifies a value of true or false for the published field.
@@ -3587,8 +3579,6 @@ export type User = {
   projects: Array<Project>;
   /** @deprecated Use heroStats.rank instead */
   ranking?: Maybe<Scalars['BigInt']['output']>;
-  taxProfile?: Maybe<UserTaxProfile>;
-  taxProfileId?: Maybe<Scalars['BigInt']['output']>;
   username: Scalars['String']['output'];
   wallet?: Maybe<Wallet>;
 };
@@ -3651,12 +3641,6 @@ export type UserEmailUpdateInput = {
   /** The two-factor authentication input is required if the user already has an email set. */
   twoFAInput?: InputMaybe<TwoFaInput>;
 };
-
-export enum UserEntityType {
-  Company = 'COMPANY',
-  NonProfit = 'NON_PROFIT',
-  Person = 'PERSON'
-}
 
 export type UserEntriesGetInput = {
   where?: InputMaybe<UserEntriesGetWhereInput>;
@@ -3751,20 +3735,6 @@ export type UserSubscriptionsInput = {
 
 export type UserSubscriptionsWhereInput = {
   userId: Scalars['BigInt']['input'];
-};
-
-export type UserTaxProfile = {
-  __typename?: 'UserTaxProfile';
-  country: Scalars['String']['output'];
-  createdAt: Scalars['Date']['output'];
-  deleted: Scalars['Boolean']['output'];
-  deletedAt?: Maybe<Scalars['Date']['output']>;
-  fullName: Scalars['String']['output'];
-  id: Scalars['BigInt']['output'];
-  incorporationDocument?: Maybe<Scalars['String']['output']>;
-  state?: Maybe<Scalars['String']['output']>;
-  taxId: Scalars['String']['output'];
-  userId: Scalars['BigInt']['output'];
 };
 
 export enum UserVerificationLevel {
@@ -3903,14 +3873,6 @@ export type DashboardFundersGetInput = {
   orderBy?: InputMaybe<GetFundersOrderByInput>;
   pagination?: InputMaybe<PaginationInput>;
   where?: InputMaybe<GetDashboardFundersWhereInput>;
-};
-
-export type UserTaxProfileUpdateInput = {
-  country: Scalars['String']['input'];
-  fullName: Scalars['String']['input'];
-  incorporationDocument?: InputMaybe<Scalars['String']['input']>;
-  state?: InputMaybe<Scalars['String']['input']>;
-  taxId: Scalars['String']['input'];
 };
 
 
@@ -4387,7 +4349,6 @@ export type ResolversTypes = {
   UserContributionLimit: ResolverTypeWrapper<UserContributionLimit>;
   UserContributionLimits: ResolverTypeWrapper<UserContributionLimits>;
   UserEmailUpdateInput: UserEmailUpdateInput;
-  UserEntityType: UserEntityType;
   UserEntriesGetInput: UserEntriesGetInput;
   UserEntriesGetWhereInput: UserEntriesGetWhereInput;
   UserGetInput: UserGetInput;
@@ -4403,7 +4364,6 @@ export type ResolversTypes = {
   UserSubscriptionStatus: UserSubscriptionStatus;
   UserSubscriptionsInput: UserSubscriptionsInput;
   UserSubscriptionsWhereInput: UserSubscriptionsWhereInput;
-  UserTaxProfile: ResolverTypeWrapper<UserTaxProfile>;
   UserVerificationLevel: UserVerificationLevel;
   UserVerificationLevelInput: UserVerificationLevelInput;
   UserVerificationLevelStatus: ResolverTypeWrapper<UserVerificationLevelStatus>;
@@ -4424,7 +4384,6 @@ export type ResolversTypes = {
   WalletStatus: WalletStatus;
   WalletStatusCode: WalletStatusCode;
   dashboardFundersGetInput: DashboardFundersGetInput;
-  userTaxProfileUpdateInput: UserTaxProfileUpdateInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -4767,7 +4726,6 @@ export type ResolversParentTypes = {
   UserSubscription: UserSubscription;
   UserSubscriptionsInput: UserSubscriptionsInput;
   UserSubscriptionsWhereInput: UserSubscriptionsWhereInput;
-  UserTaxProfile: UserTaxProfile;
   UserVerificationLevelStatus: UserVerificationLevelStatus;
   UserVerificationTokenGenerateInput: UserVerificationTokenGenerateInput;
   UserVerificationTokenGenerateResponse: UserVerificationTokenGenerateResponse;
@@ -4781,7 +4739,6 @@ export type ResolversParentTypes = {
   WalletResourceInput: WalletResourceInput;
   WalletState: WalletState;
   dashboardFundersGetInput: DashboardFundersGetInput;
-  userTaxProfileUpdateInput: UserTaxProfileUpdateInput;
 };
 
 export type ActivitiesGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActivitiesGetResponse'] = ResolversParentTypes['ActivitiesGetResponse']> = {
@@ -5419,7 +5376,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   userNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUserNotificationConfigurationValueUpdateArgs, 'userNotificationConfigurationId' | 'value'>>;
   userSubscriptionCancel?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionCancelArgs, 'id'>>;
   userSubscriptionUpdate?: Resolver<ResolversTypes['UserSubscription'], ParentType, ContextType, RequireFields<MutationUserSubscriptionUpdateArgs, 'input'>>;
-  userTaxProfileUpdate?: Resolver<ResolversTypes['UserTaxProfile'], ParentType, ContextType, RequireFields<MutationUserTaxProfileUpdateArgs, 'input'>>;
   userVerificationTokenGenerate?: Resolver<ResolversTypes['UserVerificationTokenGenerateResponse'], ParentType, ContextType, RequireFields<MutationUserVerificationTokenGenerateArgs, 'input'>>;
   walletCreate?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationWalletCreateArgs, 'input'>>;
   walletDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationWalletDeleteArgs, 'id'>>;
@@ -6188,7 +6144,6 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   contributions?: Resolver<Array<ResolversTypes['Contribution']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   emailVerifiedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  entityType?: Resolver<Maybe<ResolversTypes['UserEntityType']>, ParentType, ContextType>;
   entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<UserEntriesArgs>>;
   externalAccounts?: Resolver<Array<ResolversTypes['ExternalAccount']>, ParentType, ContextType>;
   guardianType?: Resolver<Maybe<ResolversTypes['GuardianType']>, ParentType, ContextType>;
@@ -6205,8 +6160,6 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   projectFollows?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType>;
   projects?: Resolver<Array<ResolversTypes['Project']>, ParentType, ContextType, Partial<UserProjectsArgs>>;
   ranking?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  taxProfile?: Resolver<Maybe<ResolversTypes['UserTaxProfile']>, ParentType, ContextType>;
-  taxProfileId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   wallet?: Resolver<Maybe<ResolversTypes['Wallet']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -6276,20 +6229,6 @@ export type UserSubscriptionResolvers<ContextType = any, ParentType extends Reso
   startDate?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['UserSubscriptionStatus'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type UserTaxProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserTaxProfile'] = ResolversParentTypes['UserTaxProfile']> = {
-  country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
-  deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  fullName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  incorporationDocument?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  taxId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6529,7 +6468,6 @@ export type Resolvers<ContextType = any> = {
   UserNotificationSettings?: UserNotificationSettingsResolvers<ContextType>;
   UserProjectContribution?: UserProjectContributionResolvers<ContextType>;
   UserSubscription?: UserSubscriptionResolvers<ContextType>;
-  UserTaxProfile?: UserTaxProfileResolvers<ContextType>;
   UserVerificationLevelStatus?: UserVerificationLevelStatusResolvers<ContextType>;
   UserVerificationTokenGenerateResponse?: UserVerificationTokenGenerateResponseResolvers<ContextType>;
   UserVerifiedDetails?: UserVerifiedDetailsResolvers<ContextType>;

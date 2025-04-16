@@ -1,4 +1,5 @@
 import { useAtomValue, useSetAtom } from 'jotai'
+import { useCallback } from 'react'
 
 import {
   fundingFiatSwapAmountWarningAtom,
@@ -54,6 +55,13 @@ export const useFundingFormAtom = () => {
 
   const resetForm = useSetAtom(resetFundingFormRewardsAtom)
 
+  const setGeyserTipPercent = useCallback(
+    (percent: number) => {
+      setState('geyserTipPercent', percent)
+    },
+    [setState],
+  )
+
   return {
     formState,
     project,
@@ -72,5 +80,6 @@ export const useFundingFormAtom = () => {
     updateSubscription,
     resetForm,
     resetRewards,
+    setGeyserTipPercent,
   }
 }
