@@ -9,6 +9,7 @@ import ItalianTranslations from './it.json'
 import JapaneseTranslations from './ja.json'
 import PolishTranslations from './pl.json'
 import PortugueseTranslation from './pt.json'
+import SlowakTranslation from './sk.json'
 import SwahiliTranslations from './sw.json'
 import TurkishTranslations from './tr.json'
 import ChineseTranslations from './zh.json'
@@ -25,6 +26,7 @@ export {
   JapaneseTranslations,
   PolishTranslations,
   PortugueseTranslation,
+  SlowakTranslation,
   SpanishTranslations,
   SwahiliTranslations,
   TurkishTranslations,
