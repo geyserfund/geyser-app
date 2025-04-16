@@ -1,14 +1,14 @@
 import { Badge, Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper, PiSparkle } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
 import { ProfileText } from '@/shared/components/display/ProfileText'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { getPathWithGeyserHero } from '@/shared/constants'
+import { getPath, getPathWithGeyserHero } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import {
   Activity,
@@ -388,6 +388,8 @@ const RewardsInfo = ({ reward }: { reward: ProjectReward }) => {
 const ContributionInfo = ({ resource }: { resource: ActivityResource }) => {
   const { t } = useTranslation()
 
+  const navigate = useNavigate()
+
   const { formatUsdAmount } = useCurrencyFormatter()
 
   if ('funder' in resource && typeof resource.funder === 'object') {
@@ -409,8 +411,16 @@ const ContributionInfo = ({ resource }: { resource: ActivityResource }) => {
 
     const { user } = resource.funder
 
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+      event.preventDefault()
+      event.stopPropagation()
+      if (user?.username) {
+        navigate(getPath('userProfile', user?.id))
+      }
+    }
+
     return (
-      <HStack width="full" spacing={2} justifyContent="flex-start">
+      <HStack width="full" spacing={2} justifyContent="flex-start" onClick={handleClick} _hover={{ cursor: 'pointer' }}>
         {user && user.imageUrl && (
           <ProfileAvatar width={'40px'} height={'40px'} src={user.imageUrl} guardian={user.guardianType} />
         )}
