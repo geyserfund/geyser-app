@@ -7371,7 +7371,7 @@ export type ProjectRewardSoldGraphStatsFragment = { __typename?: 'ProjectStats',
 
 export type ProjectFundingMethodStatsFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectContributionsStats?: { __typename?: 'ProjectContributionsStatsBase', contributionsGroupedByMethod: Array<{ __typename?: 'ProjectContributionsGroupedByMethodStats', count: number, method: string, total: number, totalUsd: number }> } | null } | null };
 
-export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, description?: string | null, shortDescription?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null, confirmationMessage?: string | null, privateCommentPrompts: Array<PrivateCommentPrompt>, posts: Array<{ __typename?: 'Post', id: any, title: string, postType?: PostType | null, description: string, createdAt: string }> };
+export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, description?: string | null, shortDescription?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null, confirmationMessage?: string | null, privateCommentPrompts: Array<PrivateCommentPrompt>, createdAt: any, posts: Array<{ __typename?: 'Post', id: any, title: string, postType?: PostType | null, description: string, createdAt: string }> };
 
 export type PostPageProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, images: Array<string>, shortDescription?: string | null, cost: number };
 
@@ -9783,6 +9783,7 @@ export const ProjectRewardFragmentDoc = gql`
   estimatedDeliveryInWeeks
   confirmationMessage
   privateCommentPrompts
+  createdAt
   posts {
     id
     title
