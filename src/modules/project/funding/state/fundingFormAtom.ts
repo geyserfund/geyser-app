@@ -91,7 +91,7 @@ const initialState: FundFormType = {
   rewardCurrency: RewardCurrency.Usdcent,
   needsShipping: false,
   shippingDestination: ShippingDestination.National,
-  geyserTipPercent: 5,
+  geyserTipPercent: 2.1,
 }
 
 /** Main Funding Form state atom */
@@ -146,6 +146,13 @@ const calculateTipAmountSats = (donationAmount: number, tipPercent: number): num
 }
 
 /**
+ * Calculates the tip amount in USD cents.
+ */
+const calculateTipAmountUsdCents = (tipAmountSats: number, usdRate: number): number => {
+  return tipAmountSats > 0 && usdRate > 0 ? Math.round(dollarsToCents((tipAmountSats / SATOSHIS_IN_BTC) * usdRate)) : 0
+}
+
+/**
  * Set funding form based on a name and value
  * @param {Object} [name, value] - The name and value to set
  * @param {string} name - The name of the field to set
@@ -153,6 +160,7 @@ const calculateTipAmountSats = (donationAmount: number, tipPercent: number): num
  */
 export const setFundFormStateAtom = atom(null, (get, set, name: keyof FundFormType, value: any) => {
   const currentState = get(fundingFormStateAtom)
+  const usdRate = get(usdRateAtom)
   let newState = { ...currentState, [name]: value }
 
   // Recalculate totals if donation amount or tip percentage changes
@@ -160,31 +168,36 @@ export const setFundFormStateAtom = atom(null, (get, set, name: keyof FundFormTy
     const donationAmount = name === 'donationAmount' ? value : currentState.donationAmount
     const geyserTipPercent = name === 'geyserTipPercent' ? value : currentState.geyserTipPercent
     const tipAmountSats = calculateTipAmountSats(donationAmount, geyserTipPercent)
+    const tipAmountUsdCents = calculateTipAmountUsdCents(tipAmountSats, usdRate)
 
     newState = {
       ...newState,
       totalAmount: donationAmount + currentState.rewardsCostInSatoshi + currentState.shippingCost + tipAmountSats,
-      // TODO: Add tip to totalAmountUsdCent if needed, requires USD rate and conversion
+      totalAmountUsdCent:
+        currentState.donationAmountUsdCent +
+        currentState.rewardsCostInUsdCent +
+        currentState.shippingCost +
+        tipAmountUsdCents,
     }
   } else if (name === 'donationAmountUsdCent') {
-    // This might need adjustment if tip affects USD total
+    const tipAmountSats = calculateTipAmountSats(currentState.donationAmount, currentState.geyserTipPercent)
+    const tipAmountUsdCents = calculateTipAmountUsdCents(tipAmountSats, usdRate)
     newState = {
       ...newState,
-      totalAmountUsdCent: value + currentState.rewardsCostInUsdCent + currentState.shippingCost,
-      // TODO: Add tip USD equivalent here
+      totalAmountUsdCent: value + currentState.rewardsCostInUsdCent + currentState.shippingCost + tipAmountUsdCents,
     }
   } else if (name === 'rewardsByIDAndCount' || name === 'shippingDestination') {
-    // If rewards or shipping change, recalculate total based on potentially new costs
-    // Assuming updateFundingFormRewardAtom handles rewardsCost update internally
-    // We need to ensure the total includes the current tip
     const tipAmountSats = calculateTipAmountSats(currentState.donationAmount, currentState.geyserTipPercent)
+    const tipAmountUsdCents = calculateTipAmountUsdCents(tipAmountSats, usdRate)
     newState = {
       ...newState,
       totalAmount:
         currentState.donationAmount + currentState.rewardsCostInSatoshi + currentState.shippingCost + tipAmountSats,
       totalAmountUsdCent:
-        currentState.donationAmountUsdCent + currentState.rewardsCostInUsdCent + currentState.shippingCost,
-      // TODO: Add tip USD equivalent here
+        currentState.donationAmountUsdCent +
+        currentState.rewardsCostInUsdCent +
+        currentState.shippingCost +
+        tipAmountUsdCents,
     }
   }
 

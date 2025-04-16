@@ -27,7 +27,7 @@ const hasWebLN = true
 export const useFundingAPI = () => {
   const toast = useNotification()
 
-  const { project, formState } = useFundingFormAtom()
+  const { project } = useFundingFormAtom()
 
   const formattedFundingInput = useAtomValue(formattedFundingInputAtom)
 
@@ -120,13 +120,7 @@ export const useFundingAPI = () => {
       const keyPair = generatePrivatePublicKeyPair()
       setKeyPair(keyPair)
 
-      const { geyserTipPercent } = formState
-
-      const finalInput = {
-        ...input,
-        geyserTipPercentage: geyserTipPercent > 0 ? geyserTipPercent : undefined,
-      }
-
+      const finalInput = { ...input }
       if (finalInput?.paymentsInput?.onChainSwap?.boltz) {
         finalInput.paymentsInput.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
       }
@@ -135,7 +129,7 @@ export const useFundingAPI = () => {
 
       await contributionCreate({ variables: { input: finalInput }, onCompleted })
     },
-    [contributionCreate, toast, setKeyPair, setFundingInputAfterRequest, resetContribution, formState],
+    [contributionCreate, toast, setKeyPair, setFundingInputAfterRequest, resetContribution],
   )
 
   const requestFundingFromContext = useCallback(

@@ -9,7 +9,7 @@ import { useBtcContext } from '../../../../../../../context/btc'
 import { commaFormatted } from '../../../../../../../utils'
 
 const MIN_WIDTH_AFTER_START = 50
-
+const PRESET_AMOUNTS = [50, 100, 210, 500, 1000]
 export const DonationInput = () => {
   const { btcRate } = useBtcContext()
 
@@ -85,7 +85,7 @@ export const DonationInput = () => {
       </H1>
 
       <HStack w="full" justifyContent="space-between" flexWrap="wrap" spacing={2} alignItems="flex-start">
-        {[50, 100].map((amount) => (
+        {PRESET_AMOUNTS.slice(0, 2).map((amount) => (
           <Button
             key={amount}
             size="md"
@@ -101,15 +101,15 @@ export const DonationInput = () => {
 
         <VStack spacing={0} flexGrow={1} minWidth="80px" position="relative" alignItems="stretch">
           <Button
-            key={210}
+            key={PRESET_AMOUNTS[2]}
             size="md"
             variant="outline"
             colorScheme="neutral1"
-            onClick={() => handleDefaultAmountButtonClick(210)}
+            onClick={() => handleDefaultAmountButtonClick(PRESET_AMOUNTS[2]!)}
             w="full"
             zIndex={1}
           >
-            {`$${commaFormatted(210)}`}
+            {`$${commaFormatted(PRESET_AMOUNTS[2])}`}
           </Button>
           <Body
             fontSize="8px"
@@ -130,7 +130,7 @@ export const DonationInput = () => {
           </Body>
         </VStack>
 
-        {[500].map((amount) => (
+        {PRESET_AMOUNTS.slice(3, 4).map((amount) => (
           <Button
             key={amount}
             size="md"
@@ -145,16 +145,16 @@ export const DonationInput = () => {
         ))}
 
         <Button
-          key={1000}
+          key={PRESET_AMOUNTS.at(-1)}
           size="md"
           variant="outline"
           colorScheme="neutral1"
-          onClick={() => handleDefaultAmountButtonClick(1000)}
+          onClick={() => handleDefaultAmountButtonClick(PRESET_AMOUNTS.at(-1)!)}
           flexGrow={1}
           minWidth="80px"
           display={{ base: 'none', md: 'inline-flex' }}
         >
-          {`$${commaFormatted(1000)}`}
+          {`$${commaFormatted(PRESET_AMOUNTS.at(-1))}`}
         </Button>
       </HStack>
 

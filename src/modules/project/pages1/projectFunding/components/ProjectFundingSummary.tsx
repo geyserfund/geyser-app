@@ -161,7 +161,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
 
       {geyserTipAmountSats > 0 && (
         <HStack>
-          <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser Tip')}: `}</Body>
+          <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser tip')}: `}</Body>
           <Body size={{ base: 'sm', lg: 'md' }}>
             {`${commaFormatted(geyserTipAmountSats)} `}
             <Body size={{ base: 'sm', lg: 'md' }} as="span" light>

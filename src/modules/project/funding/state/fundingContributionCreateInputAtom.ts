@@ -41,6 +41,7 @@ export const formattedFundingInputAtom = atom((get) => {
     followProject,
     subscribeToGeyserEmails,
     subscription,
+    geyserTipPercent,
   } = formState
 
   const anonymous = !user || !user.id
@@ -91,6 +92,7 @@ export const formattedFundingInputAtom = atom((get) => {
     projectGoalId,
     anonymous,
     donationAmount: toInt(donationAmount),
+    geyserTipPercentage: geyserTipPercent > 0 ? geyserTipPercent : undefined,
     referrerHeroId,
     metadataInput: {
       ...(email && { email }),
