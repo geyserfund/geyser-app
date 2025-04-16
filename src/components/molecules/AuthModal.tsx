@@ -5,20 +5,20 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { ConnectWithEmail } from '@/pages/auth/ConnectWithEmail'
+import { ConnectWithEmail } from '@/modules/auth/ConnectWithEmail'
 import { Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 
 import { useAuthContext } from '../../context'
-import { SocialAccountType } from '../../pages/auth'
-import { ConnectWithLightning } from '../../pages/auth/ConnectWithLightning'
-import { ConnectWithNostr } from '../../pages/auth/ConnectWithNostr'
+import { SocialAccountType } from '../../modules/auth'
+import { ConnectWithLightning } from '../../modules/auth/ConnectWithLightning'
+import { ConnectWithNostr } from '../../modules/auth/ConnectWithNostr'
 import {
   ConnectWithSocial,
   TWITTER_AUTH_ATTEMPT_KEY,
   TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS,
-} from '../../pages/auth/ConnectWithSocial'
-import { useRefreshAuthToken } from '../../pages/auth/useAuthToken'
+} from '../../modules/auth/ConnectWithSocial'
+import { useRefreshAuthToken } from '../../modules/auth/useAuthToken'
 import { hasFacebookAccount, hasGithubAccount, hasGoogleAccount, hasNostrAccount, hasTwitterAccount } from '../../utils'
 import { Caption } from '../typography'
 
@@ -154,7 +154,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
       isOpen={isOpen}
       onClose={privateRoute ? handlePrivateRouteModalClose : onClose}
       size="sm"
-      closeOnOverlayClick={!privateRoute}
+      closeOnOverlayClick={!privateRoute && !isOtpStarted}
       closeOnEsc={!privateRoute}
       onOverlayClick={handlePrivateRouteModalClose}
       onEsc={handlePrivateRouteModalClose}

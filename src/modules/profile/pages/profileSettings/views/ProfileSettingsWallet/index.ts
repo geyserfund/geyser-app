@@ -1,0 +1,1 @@
+export { ProfileWalletSettings } from './ProfileWalletSettings'

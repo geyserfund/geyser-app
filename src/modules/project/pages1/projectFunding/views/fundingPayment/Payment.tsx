@@ -1,13 +1,33 @@
 import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
+import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 
-import { Body, H1 } from '@/shared/components/typography'
+import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
+import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
+import { H1 } from '@/shared/components/typography'
+import { useSpeedWalletParams } from '@/shared/hooks/useSpeedWalletParams.tsx'
 
+import { FundingDisclaimer } from './components/FundingDisclaimer.tsx'
 import { ReachOutForHelpButton } from './components/ReachOutForHelpButton'
 import { PaymentMethodSelection } from './sections/PaymentMethodSelection'
 
 export const Payment = () => {
+  const { isSpeedWalletApp, sendSpeedWalletData } = useSpeedWalletParams()
+
+  const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
+  const fundingContribution = useAtomValue(fundingContributionAtom)
+
+  useEffect(() => {
+    if (isSpeedWalletApp && fundingPaymentDetails.lightning?.paymentRequest && fundingContribution.amount) {
+      sendSpeedWalletData({
+        invoice: fundingPaymentDetails.lightning?.paymentRequest,
+        amount: fundingContribution.amount,
+      })
+    }
+  }, [isSpeedWalletApp, sendSpeedWalletData, fundingPaymentDetails, fundingContribution])
+
   return (
     <>
       <VStack flex={1} w="full" alignItems="start">
@@ -22,11 +42,7 @@ export const Payment = () => {
 
       <VStack w="full" spacing={3}>
         <ReachOutForHelpButton />
-        <Body light size="xs">
-          {t(
-            'Geyser is not a store. It’s a way to bring creative projects to life using Bitcoin. Your donation will support a creative project that has yet to be developed. There’s a risk that, despite a creator’s best efforts, your reward will not be fulfilled, and we urge you to consider this risk prior to backing it. Geyser is not responsible for project claims or reward fulfillment.',
-          )}
-        </Body>
+        <FundingDisclaimer />
       </VStack>
     </>
   )

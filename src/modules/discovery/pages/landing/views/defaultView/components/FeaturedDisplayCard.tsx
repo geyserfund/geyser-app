@@ -1,14 +1,33 @@
 import { Box, Link, VStack } from '@chakra-ui/react'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { standardPadding } from '@/shared/styles'
 
 import { FeatureAirtableData } from '../sections/Featured'
+import { MiniProjectCard } from './MiniProjectCard.tsx'
 
-export const FeaturedDisplayCard = ({ data }: { data: FeatureAirtableData }) => {
+type FeaturedDisplayCardProps = {
+  data: FeatureAirtableData
+  showMini?: boolean
+  startAnimating?: boolean
+} & CardLayoutProps
+
+export const FeaturedDisplayCard = ({ data, showMini, startAnimating, ...rest }: FeaturedDisplayCardProps) => {
   const hadFeaturedData = data?.Featured_Author && data.Featured_Comment
+
+  if (showMini) {
+    return (
+      <MiniProjectCard
+        imageUrl={data.imageUrl}
+        title={data.Name}
+        startAnimating={startAnimating}
+        as={Link}
+        href={data.link}
+      />
+    )
+  }
 
   return (
     <CardLayout
@@ -23,6 +42,7 @@ export const FeaturedDisplayCard = ({ data }: { data: FeatureAirtableData }) => 
       as={Link}
       href={data.link}
       _hover={{ backgroundColor: 'neutral1.2', cursor: 'pointer' }}
+      {...rest}
     >
       <Box width={{ base: '100%', sm: '44%' }} height={{ base: '240px', sm: '100%' }} overflow="hidden">
         <ImageWithReload height="full" width="full" src={`${data.imageUrl}`} objectFit="cover" />

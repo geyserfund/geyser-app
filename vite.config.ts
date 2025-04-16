@@ -8,9 +8,15 @@ import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 const pwaOptions: Partial<VitePWAOptions> = {
-  base: '/',
-  injectRegister: 'inline',
+  strategies: 'injectManifest',
+  srcDir: 'src',
+  filename: 'sw.ts',
+  registerType: 'autoUpdate',
+  injectRegister: 'auto',
   includeAssets: ['logo-brand.svg', 'sitemap.xml'],
+  injectManifest: {
+    maximumFileSizeToCacheInBytes: 5242880,
+  },
   manifest: {
     start_url: '.',
     display: 'standalone',
@@ -67,25 +73,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
     ],
   },
   workbox: {
-    globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
-    maximumFileSizeToCacheInBytes: 5242880,
-    skipWaiting: true,
-    runtimeCaching: [
-      {
-        urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
-        handler: 'CacheFirst',
-        options: {
-          cacheName: 'google-fonts-cache',
-          expiration: {
-            maxEntries: 10,
-            maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days
-          },
-          cacheableResponse: {
-            statuses: [0, 200],
-          },
-        },
-      },
-    ],
+    globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
   },
 }
 
@@ -100,6 +88,7 @@ export default defineConfig(({ command, mode }) => {
     // open: env.DOCKER ? false : `http://dev.geyser.fund:${PORT}/`,
     watch: {
       usePolling: true,
+      ignored: ['language/**', '**/language/**', './language/**'],
     },
     host: true, // needed for the Docker Container port mapping to work
     strictPort: true,

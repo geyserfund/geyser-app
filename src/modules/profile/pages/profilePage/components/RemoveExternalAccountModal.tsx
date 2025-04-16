@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 
-import { ExternalAccountType } from '@/pages/auth'
+import { ExternalAccountType } from '@/modules/auth'
 import { Body } from '@/shared/components/typography'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 

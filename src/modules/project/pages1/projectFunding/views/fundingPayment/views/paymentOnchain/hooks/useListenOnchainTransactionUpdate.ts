@@ -5,7 +5,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { useRefundFileAdd, useRefundFileValue } from '@/modules/project/funding/state'
 import { getPath } from '@/shared/constants'
 
-import { OnChainErrorStatuses, useSetOnChainErrorAtom } from '../states'
+import { onChainErrorAtom, OnChainErrorStatuses } from '../states/onChainErrror.ts'
 import { swapTransactionAtom } from '../states/onChainTransaction'
 import { extractValuesFromError } from '../utils/parseError'
 import { SwapStatusUpdate, useTransactionStatusUpdate } from './useTransactionStatusUpdate'
@@ -20,7 +20,7 @@ export const useListenOnchainTransactionUpdate = () => {
 
   const addRefundFile = useRefundFileAdd()
 
-  const setOnChainError = useSetOnChainErrorAtom()
+  const setOnChainError = useSetAtom(onChainErrorAtom)
 
   const setSwapTransaction = useSetAtom(swapTransactionAtom)
 

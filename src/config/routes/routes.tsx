@@ -1,8 +1,10 @@
 import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
+import { ActivityDirection } from '@/modules/discovery/pages/activity/components/ActivityDirection.tsx'
+
 import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
-import { ExternalAuthSuccess, FailedAuth } from '../../pages/auth'
+import { ExternalAuthSuccess, FailedAuth } from '../../modules/auth'
 import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../pages/fallback'
 import { __production__, getPath, PathName } from '../../shared/constants'
 import { ErrorBoundary } from './components/ErrorBoundary'
@@ -112,7 +114,7 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
-            path: getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardId),
+            path: getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardUUID),
             async lazy() {
               const ProjectCreationEditReward = await ProjectLaunch().then((m) => m.ProjectCreationEditReward)
               return { Component: ProjectCreationEditReward }
@@ -186,6 +188,22 @@ export const platformRoutes: RouteObject[] = [
                 (m) => m.ProfileSettingsSubscriptions,
               )
               return { Component: ProfileSettingsSubscriptions }
+            },
+          },
+          {
+            path: getPath('userProfileSettingsVerifications', PathName.userId),
+            async lazy() {
+              const ProfileSettingsVerifications = await ProfileSettingsIndex().then(
+                (m) => m.ProfileSettingsVerifications,
+              )
+              return { Component: ProfileSettingsVerifications }
+            },
+          },
+          {
+            path: getPath('userProfileSettingsWallet', PathName.userId),
+            async lazy() {
+              const ProfileWalletSettings = await ProfileSettingsIndex().then((m) => m.ProfileWalletSettings)
+              return { Component: ProfileWalletSettings }
             },
           },
         ],
@@ -287,7 +305,7 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
-            path: getPath('projectRewardView', PathName.projectName, PathName.rewardId),
+            path: getPath('projectRewardView', PathName.projectName, PathName.rewardUUID),
             async lazy() {
               const RewardView = await Project().then((m) => m.RewardView)
               return { Component: RewardView }
@@ -303,7 +321,7 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
-            path: getPath('projectRewardEdit', PathName.projectName, PathName.rewardId),
+            path: getPath('projectRewardEdit', PathName.projectName, PathName.rewardUUID),
             async lazy() {
               const EditReward = await CreatorReward().then((m) => m.RewardEdit)
               return {
@@ -451,13 +469,6 @@ export const platformRoutes: RouteObject[] = [
                 },
               },
               {
-                path: getPath('dashboardAffiliates', PathName.projectName),
-                async lazy() {
-                  const ProjectDashboardAffiliates = await ProjectDashboard().then((m) => m.ProjectDashboardAffiliates)
-                  return { Component: ProjectDashboardAffiliates }
-                },
-              },
-              {
                 path: getPath('dashboardPromote', PathName.projectName),
                 async lazy() {
                   const ProjectDashboardPromote = await ProjectDashboard().then((m) => m.ProjectDashboardPromote)
@@ -540,6 +551,13 @@ export const platformRoutes: RouteObject[] = [
                     },
                   },
                   {
+                    path: getPath('fundingPaymentFiatSwap', PathName.projectName),
+                    async lazy() {
+                      const PaymentFiatSwap = await ProjectFunding().then((m) => m.PaymentFiatSwap)
+                      return { Component: PaymentFiatSwap }
+                    },
+                  },
+                  {
                     path: getPath('fundingPaymentOnchain', PathName.projectName),
                     async lazy() {
                       const PaymentOnchain = await ProjectFunding().then((m) => m.PaymentOnchain)
@@ -590,6 +608,10 @@ export const platformRoutes: RouteObject[] = [
                 ],
               },
             ],
+          },
+          {
+            path: getPath('fundingCallback', PathName.projectName),
+            Component: ExternalAuthSuccess,
           },
           {
             path: getPath('fundingSuccess', PathName.projectName),
@@ -661,6 +683,13 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('discoveryProducts'),
+        async lazy() {
+          const Products = await Discovery().then((m) => m.Products)
+          return { Component: Products }
+        },
+      },
+      {
         path: getPath('discoveryActivity'),
         async lazy() {
           const Activity = await Discovery().then((m) => m.Activity)
@@ -669,7 +698,7 @@ export const platformRoutes: RouteObject[] = [
         children: [
           {
             index: true,
-            element: <Navigate to={getPath('discoveryActivityFollowed')} replace />,
+            element: <ActivityDirection />,
           },
           {
             path: getPath('discoveryActivityFollowed'),
@@ -682,7 +711,7 @@ export const platformRoutes: RouteObject[] = [
             path: getPath('discoveryActivityGlobal'),
             async lazy() {
               const GlobalFeed = await Discovery().then((m) => m.GlobalFeed)
-              return { element: renderPrivateRoute(GlobalFeed) }
+              return { Component: GlobalFeed }
             },
           },
         ],
@@ -764,8 +793,7 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('guardiansCharacter', PathName.characterId),
         async lazy() {
-          const CharacterPage = await Guardians().then((m) => m.CharacterPage)
-          return { Component: CharacterPage }
+          return { element: <Navigate to={getPath('guardians')} /> }
         },
       },
     ],
@@ -793,6 +821,10 @@ export const platformRoutes: RouteObject[] = [
   },
   {
     path: '/auth/google',
+    Component: ExternalAuthSuccess,
+  },
+  {
+    path: getPath('fundingFailedCallback'),
     Component: ExternalAuthSuccess,
   },
   {

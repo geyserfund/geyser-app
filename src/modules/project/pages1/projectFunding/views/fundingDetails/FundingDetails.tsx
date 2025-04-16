@@ -10,6 +10,7 @@ import { FundingDetailsBottomContent, FundingDetailsSideContent } from './sectio
 import { FundingDetailsUserComment } from './sections/FundingDetailsUserComment'
 import { FundingDetailsUserEmailAndUpdates } from './sections/FundingDetailsUserEmail'
 
+/** FundingDetails is the second page of funding flow, consisting of extra input from contributor like user email, comment, and private comment prompt */
 export const FundingDetails = () => {
   const { project, isFundingInputAmountValid } = useFundingFormAtom()
 

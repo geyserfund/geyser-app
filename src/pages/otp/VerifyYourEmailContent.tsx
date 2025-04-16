@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
 import Loader from '@/components/ui/Loader'
@@ -13,6 +14,7 @@ export interface VerifyYourEmailContentProps {
   otpData?: OtpResponseFragment
   initEmail?: string
   handleVerify?: (otpCode: number, otpData: OtpResponseFragment, email?: string) => void
+  onClose?: () => void
 }
 
 export const VerifyYourEmailContent = ({
@@ -21,6 +23,7 @@ export const VerifyYourEmailContent = ({
   handleVerify,
   otpSent,
   otpData: otp,
+  onClose,
 }: VerifyYourEmailContentProps) => {
   const { toast } = useNotification()
   const { user } = useAuthContext()
@@ -30,11 +33,11 @@ export const VerifyYourEmailContent = ({
   const [inputEmail, setInputEmail] = useState('')
 
   const [sendOtpByEmail, { loading }] = useSendOtpByEmailMutation({
-    onError() {
+    onError(error) {
       toast({
         status: 'error',
-        title: 'Failed to generate OTP.',
-        description: 'Please try again',
+        title: t('Failed to generate OTP.'),
+        description: `${error.message}`,
       })
     },
     onCompleted(data) {
@@ -77,6 +80,7 @@ export const VerifyYourEmailContent = ({
           handleSendOtpByEmail={handleSendOtpByEmail}
           inputEmail={inputEmail || user.email || ''}
           handleVerify={handleVerify}
+          onClose={onClose}
         />
       ) : (
         <ReceiveOneTimePassword

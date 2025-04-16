@@ -10,7 +10,7 @@ export const ProjectCreationEditReward = () => {
 
   const { project, isProjectOwner } = useProjectAtom()
 
-  const params = useParams<{ rewardId: string; projectId: string }>()
+  const params = useParams<{ rewardUUID: string; projectId: string }>()
 
   if (!project || !isProjectOwner) {
     return null
@@ -26,7 +26,7 @@ export const ProjectCreationEditReward = () => {
       <ProjectRewardForm
         buttonText={t('Update Reward')}
         titleText={t('Edit Reward')}
-        rewardId={params.rewardId}
+        rewardUUID={params.rewardUUID}
         isUpdate={true}
         isLaunch={true}
       />

@@ -11,7 +11,7 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules'
 import { useMobileMode } from '@/utils'
 
 import { useDownloadRefund } from '../hooks/useDownloadRefund'
-import { onChainRefundDownloadedAtom } from '../states'
+import { onChainRefundDownloadedAtom } from '../states/onChainStatus.ts'
 
 export const PaymentOnchainPrompt = () => {
   const isMobile = useMobileMode()

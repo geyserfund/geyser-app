@@ -1,4 +1,4 @@
-import { Button, HStack, Image, VStack } from '@chakra-ui/react'
+import { Button, HStack, Image, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
@@ -29,9 +29,10 @@ import { guardianGradient } from './ProfileAvatar'
 type ProfileTextProps = {
   guardian?: GuardianType | null
   size?: 'sm' | 'md' | 'lg'
+  name?: string
 } & BodyProps
 
-export const ProfileText = ({ guardian, size = 'md', children, ...rest }: ProfileTextProps) => {
+export const ProfileText = ({ guardian, size = 'md', name, children, ...rest }: ProfileTextProps) => {
   const guardianModal = useModal()
 
   const backgroundColor = useMemo(() => {
@@ -57,28 +58,32 @@ export const ProfileText = ({ guardian, size = 'md', children, ...rest }: Profil
   return (
     <>
       <HStack spacing={1} alignItems={'center'}>
-        <Body
-          textTransform={'capitalize'}
-          background={backgroundColor}
-          {...(backgroundColor && { backgroundClip: 'text', textFillColor: 'transparent' })}
-          fontSize={size === 'sm' ? '14px' : size === 'md' ? '16px' : '20px'}
-          bold
-          {...rest}
-        >
-          {children || text}
-        </Body>
+        {children && (
+          <Body
+            textTransform={'capitalize'}
+            background={backgroundColor}
+            {...(backgroundColor && { backgroundClip: 'text', textFillColor: 'transparent' })}
+            fontSize={size || '20px'}
+            bold
+            {...rest}
+          >
+            {children}
+          </Body>
+        )}
         {guardianJewel && (
-          <Image
-            src={guardianJewel}
-            alt={`${guardian}-jewel`}
-            width={size === 'sm' ? '20px' : size === 'md' ? '24px' : '28px'}
-            _hover={{ cursor: 'pointer' }}
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              guardianModal.onOpen()
-            }}
-          />
+          <Tooltip label={`${children ? children : name} is a ${guardian}`} placement="top">
+            <Image
+              src={guardianJewel}
+              alt={`${guardian}-jewel`}
+              width={size === 'sm' ? '20px' : size === 'md' ? '24px' : '28px'}
+              _hover={{ cursor: 'pointer' }}
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                guardianModal.onOpen()
+              }}
+            />
+          </Tooltip>
         )}
       </HStack>
 

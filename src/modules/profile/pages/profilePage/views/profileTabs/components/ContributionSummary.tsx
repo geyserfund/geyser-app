@@ -16,8 +16,9 @@ interface ContributionSummaryProps {
 }
 
 export const ContributionSummary = ({ funder, project }: ContributionSummaryProps) => {
-  const fundingTxs = funder?.fundingTxs ? [...funder.fundingTxs] : []
-  const orderedFundingTxs = fundingTxs.length > 0 ? fundingTxs.sort((a, b) => b.paidAt - a.paidAt) : []
+  const contributions = funder?.contributions ? [...funder.contributions] : []
+  const orderedContributions =
+    contributions.length > 0 ? contributions.sort((a, b) => b.confirmedAt - a.confirmedAt) : []
   return (
     <CardLayout
       as={Link}
@@ -49,10 +50,10 @@ export const ContributionSummary = ({ funder, project }: ContributionSummaryProp
           </Body>
         </Body>
       </HStack>
-      {orderedFundingTxs.map((tx, i) => {
+      {orderedContributions.map((tx, i) => {
         return (
           <CardLayout
-            key={tx.paidAt}
+            key={tx.confirmedAt}
             padding="10px"
             borderTopRightRadius="0px"
             borderTopLeftRadius="0px"
@@ -77,13 +78,13 @@ export const ContributionSummary = ({ funder, project }: ContributionSummaryProp
                   />
                 </Box>
               ) : null}
-              <TransactionTime onChain={tx.onChain} dateTime={tx.paidAt} />
+              <TransactionTime dateTime={tx.confirmedAt} />
             </VStack>
 
             <Body size="sm" dark medium>
-              {commaFormatted(tx?.amountPaid) ?? 0}{' '}
+              {commaFormatted(tx?.amount) ?? 0}{' '}
               <Body as="span" light>
-                {`sats (${convertSatsToUsdFormatted({ sats: tx?.amountPaid, bitcoinQuote: tx.bitcoinQuote })})`}
+                {`sats (${convertSatsToUsdFormatted({ sats: tx?.amount, bitcoinQuote: tx.bitcoinQuote })})`}
               </Body>
             </Body>
           </CardLayout>

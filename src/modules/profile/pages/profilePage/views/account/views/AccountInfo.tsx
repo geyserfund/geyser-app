@@ -10,6 +10,7 @@ import {
   PopoverTrigger,
   Portal,
   SkeletonCircle,
+  useClipboard,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -18,8 +19,9 @@ import { useSetAtom } from 'jotai'
 import { Link } from 'react-router-dom'
 
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
-import { ProfileText } from '@/shared/components/display/ProfileText'
+import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
 import { H1 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, GuardiansJewelUrl } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import {
@@ -28,17 +30,21 @@ import {
 } from '@/shared/utils/user/getExternalAccountsButtons'
 import { toInt, useNotification } from '@/utils'
 
-import { ConnectAccounts, ExternalAccountType } from '../../../../../../../pages/auth'
+import { ConnectAccounts, ExternalAccountType } from '../../../../../../../modules/auth'
 import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { userProfileAtom, useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 import { RemoveExternalAccountModal } from '../../../components/RemoveExternalAccountModal'
 import { useAccountUnlink } from '../hooks/useAccountUnlink'
+import { UserVerifiedBadge } from './badges/VerifiedBadge.tsx'
 import { UserBio } from './UserBio'
 
 export const AccountInfo = () => {
   const { userProfile, isLoading } = useUserProfileAtom()
 
   const isViewingOwnProfile = useViewingOwnProfileAtomValue()
+
+  const { onCopy } = useClipboard(userProfile.username)
+  const toast = useNotification()
 
   const userAccountToDisplay = userProfile.externalAccounts
 
@@ -47,7 +53,6 @@ export const AccountInfo = () => {
   })
 
   if (isLoading) return <AccountInfoSkeleton />
-
   return (
     <VStack spacing={3}>
       <HStack w="full" spacing={{ base: 2, lg: 3 }} alignItems={'start'}>
@@ -58,24 +63,42 @@ export const AccountInfo = () => {
           guardian={userProfile.guardianType}
           wrapperProps={{ padding: '3px' }}
         />
-        <VStack w="full" h="full" alignItems="start" justifyContent={'center'} spacing={0}>
-          <H1 size="2xl" bold>
-            {userProfile.username}
-          </H1>
-          {userProfile.guardianType ? (
-            <ProfileText guardian={userProfile.guardianType} size="lg" />
-          ) : (
-            isViewingOwnProfile && (
-              <Button
-                as={Link}
-                to={getPath('guardians')}
-                variant="outline"
-                size="sm"
-                rightIcon={<Image height="20px" width="20px" src={GuardiansJewelUrl} />}
-              >
-                {t('Become a guardian')}
-              </Button>
-            )
+        <VStack w="full" h="full" alignItems="start" justifyContent={'center'} spacing={1.5}>
+          <HStack>
+            <H1 size="2xl" bold>
+              {userProfile.username}
+            </H1>
+            <UserVerifiedBadge user={userProfile} fontSize="2xl" />
+            <ProfileText name={userProfile.username} guardian={userProfile.guardianType} size="lg" />
+            {/* {userProfile.guardianType && <Image height="24px" width="24px" src={GuardiansJewelUrl} />} */}
+          </HStack>
+
+          <Body
+            size="sm"
+            color={'neutral1.11'}
+            bgColor={'neutral1.4'}
+            borderRadius={'md'}
+            p={1}
+            onClick={() => {
+              onCopy()
+              toast.success({ title: t('Hero ID Copied!') })
+            }}
+            cursor="pointer"
+            _hover={{ bgColor: 'neutral1.6' }}
+          >
+            {t('Hero ID: {{heroId}}', { heroId: userProfile.heroId })}
+          </Body>
+          {!userProfile.guardianType && isViewingOwnProfile && (
+            <Button
+              as={Link}
+              to={getPath('guardians')}
+              variant="outline"
+              size="sm"
+              mt={1}
+              rightIcon={<Image height="16px" width="16px" src={GuardiansJewelUrl} />}
+            >
+              {t('Become a guardian')}
+            </Button>
           )}
         </VStack>
       </HStack>
@@ -94,6 +117,7 @@ const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAcc
   const { account, icon, key, props } = accountInfoProps
 
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isOpenWithDelay, onOpen: onOpenWithDelay, onClose: onCloseWithDelay } = useDisclosure()
 
   const removeAccountModal = useModal()
 
@@ -128,7 +152,7 @@ const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAcc
   if (isEdit) {
     return (
       <>
-        <Popover trigger="hover" onOpen={onOpen} onClose={onClose} openDelay={100} closeDelay={100}>
+        <Popover isOpen={isOpen || isOpenWithDelay} onOpen={onOpen} onClose={onClose} openDelay={100} closeDelay={100}>
           <PopoverTrigger>
             <Button
               key={key}
@@ -138,6 +162,17 @@ const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAcc
               colorScheme={isOpen ? 'error' : 'neutral1'}
               p={'0'}
               fontSize="16px"
+              onMouseOver={() => {
+                setTimeout(() => {
+                  onOpen()
+                }, 200)
+              }}
+              onMouseLeave={() => {
+                onClose()
+                setTimeout(() => {
+                  onCloseWithDelay()
+                }, 20)
+              }}
               {...props}
             >
               {icon}
@@ -148,7 +183,14 @@ const AccountInfoButton = ({ accountInfoProps }: { accountInfoProps: ExternalAcc
               <PopoverArrow />
 
               <PopoverCloseButton />
-              <PopoverBody>
+              <PopoverBody
+                onMouseOver={onOpenWithDelay}
+                onMouseLeave={() => {
+                  setTimeout(() => {
+                    onCloseWithDelay()
+                  }, 200)
+                }}
+              >
                 <Button variant="solid" colorScheme="error" isLoading={isLoading} onClick={removeAccountModal.onOpen}>
                   {t('Disconnect')}
                 </Button>

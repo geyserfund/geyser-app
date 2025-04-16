@@ -21,27 +21,28 @@ export const PaymentLoading = () => {
   useEffect(() => {
     if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid) {
       requestFundingFromContext((data) => {
-        const fundingId = data.fund.fundingTx?.uuid
+        const contributionId = data.contributionCreate.contribution.uuid
 
-        if (fundingId && data.fund.fundingTx?.isSubscription) {
+        if (contributionId && data.contributionCreate.contribution.isSubscription) {
           navigate(
             {
               pathname: getPath('fundingSubscription', project.name),
-              search: `?transactionId=${fundingId}`,
+              search: `?transactionId=${contributionId}`,
             },
             { replace: true },
           )
-        } else if (fundingId) {
+        } else if (contributionId) {
           navigate(
             {
               pathname: getPath('fundingPaymentLightning', project.name),
-              search: `?transactionId=${fundingId}`,
+              search: `?transactionId=${contributionId}`,
             },
             { replace: true },
           )
         }
       })
     }
+    // NOTE: adding `requestFundingFromContext` to dependencies causes rerender loops, do not add until resolved
   }, [isFundingInputAmountValid, isFundingUserInfoValid, navigate, project.name])
 
   useEffect(() => {
@@ -51,7 +52,12 @@ export const PaymentLoading = () => {
   }, [requestFundingOptions.error, project.name, navigate])
 
   return (
-    <VStack w="full">
+    <VStack w="full" spacing={4}>
+      <VStack w="full" alignItems="start">
+        <SkeletonLayout height="26px" width="120px" />
+        <SkeletonLayout height="44px" width="full" />
+      </VStack>
+
       <SkeletonLayout height={qrSize} width={qrSize} />
       <SkeletonLayout height="26px" width="200px" />
       <VStack w="full" spacing={6} pt={4}>

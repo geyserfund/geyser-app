@@ -2,7 +2,7 @@ import { Link } from '@chakra-ui/react'
 import { nip19 } from 'nostr-tools'
 import { PiFacebookLogo, PiGithubLogo, PiGoogleLogo, PiLightning, PiXLogo } from 'react-icons/pi'
 
-import { ExternalAccountType } from '../../../pages/auth'
+import { ExternalAccountType } from '../../../modules/auth'
 import { ExternalAccount } from '../../../types'
 import { NostrIcon } from '../../components/icons'
 
@@ -92,6 +92,13 @@ export const getExternalAccountsButtons = ({
           icon: <PiFacebookLogo />,
           username: account.externalUsername,
           account,
+          ...(account.externalLink && {
+            props: {
+              as: Link,
+              isExternal: true,
+              href: account.externalLink,
+            },
+          }),
         })
       }
 

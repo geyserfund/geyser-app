@@ -32,7 +32,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         markdown
         entryImage: image
       }
-      ... on FundingTx {
+      ... on Contribution {
         id
         amount
         projectId
@@ -49,6 +49,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
       }
       ... on ProjectReward {
         id
+        uuid
         category
         cost
         projectRewardDescription: description
@@ -58,6 +59,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         projectRewardImage: images
       }
       ... on ProjectGoal {
+        id
         currency
         goalDescription: description
         title

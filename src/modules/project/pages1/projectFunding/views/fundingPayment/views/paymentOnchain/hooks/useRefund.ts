@@ -5,14 +5,11 @@ import { useNotification } from '@/utils'
 
 import { BoltzTransaction, getTransactionFromSwap } from '../refund/api'
 import { refund } from '../refund/refund'
-import { useSwapTransactionValue } from '../states/onChainTransaction'
 
 const BAD_REFUND_FILE_ERROR = 'This refund file is not associated with any failed funding transaction'
 
 export const useRefund = () => {
   const toast = useNotification()
-
-  const swapTransaction = useSwapTransactionValue()
 
   const [_, setRefundedSwapData] = useRefundedSwapData()
   const removeRefundFile = useRemoveRefundFile()
@@ -71,7 +68,7 @@ export const useRefund = () => {
         return false
       }
     },
-    [removeRefundFile, setRefundedSwapData, swapTransaction, toast],
+    [removeRefundFile, setRefundedSwapData, toast],
   )
 
   return { initiateRefund, loading }

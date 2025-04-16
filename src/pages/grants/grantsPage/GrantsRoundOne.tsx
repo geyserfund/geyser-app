@@ -193,7 +193,7 @@ export const GrantsRoundOne = ({
 
           <Box my={8}>
             <Text fontSize="24px" fontWeight={'bold'}>
-              {t('Principled Bitcoiners Board')}
+              {t('Board members')}
             </Text>
             <Text color={'neutral.600'} fontWeight="600">
               {t('The board will be responsible for reviewing and evaluating the applications.')}

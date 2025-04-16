@@ -41,7 +41,9 @@ export const PendingApplications = ({ applicants }: Props) => {
 
   return (
     <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
-      <H3 size="lg">{t('Pending Applications')}</H3>
+      <H3 size="lg" medium>
+        {t('Pending Applications')}
+      </H3>
       {applicants.map(({ project }) => {
         const projectLink = getPathWithGeyserHero('project', project.name)
 
@@ -75,7 +77,7 @@ export const PendingApplications = ({ applicants }: Props) => {
                 <Box display="flex" flexDirection="column" pt={1} flexGrow={1} gap={5}>
                   <HStack gap={2}>
                     <H2 size="2xl">{project.title}</H2>
-                    <Tag bg="warning.3">
+                    <Tag bg={lightModeColors.warning[3]}>
                       <Body size="xs" color={lightModeColors.utils.text}>
                         {t('APPLICATION PENDING')}
                       </Body>

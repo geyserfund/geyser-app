@@ -34,18 +34,18 @@ const semverGreaterThan = (versionA: string, versionB: string) => {
   return false
 }
 
+export const refreshCacheAndReload = async () => {
+  if (window.caches) {
+    // Service worker cache should be cleared with caches.delete()
+    const keys = await window.caches.keys()
+    await Promise.all(keys.map((key) => window.caches.delete(key)))
+  }
+
+  window.location.reload()
+}
+
 export const CacheBuster: React.FC<PropsWithChildren> = ({ children }) => {
   const [loading, setLoading] = useState(true)
-
-  const refreshCacheAndReload = async () => {
-    if (window.caches) {
-      // Service worker cache should be cleared with caches.delete()
-      const keys = await window.caches.keys()
-      await Promise.all(keys.map((key) => window.caches.delete(key)))
-    }
-
-    window.location.reload()
-  }
 
   useEffect(() => {
     fetch(metaUrl, {
@@ -57,8 +57,6 @@ export const CacheBuster: React.FC<PropsWithChildren> = ({ children }) => {
     })
       .then((response) => response.json())
       .then((meta) => {
-        console.log('checking meta', meta)
-
         const latestVersion = meta.version
         const currentVersion = global.appVersion
 

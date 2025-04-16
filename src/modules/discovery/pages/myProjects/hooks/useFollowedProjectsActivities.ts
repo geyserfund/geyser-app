@@ -1,12 +1,13 @@
+import { useAtomValue } from 'jotai'
 import { useMemo, useState } from 'react'
 
+import { followedProjectsAtom } from '@/modules/auth/state/authAtom.ts'
 import {
   ActivityFeedName,
   Project,
   ProjectActivitiesCount,
   ProjectStatus,
   useActivitiesCountGroupedByProjectQuery,
-  useMeProjectFollowsQuery,
 } from '@/types'
 
 const sortByActiveAndCount = (a: ProjectActivitiesCount, b: ProjectActivitiesCount) => {
@@ -19,7 +20,7 @@ const sortByActiveAndCount = (a: ProjectActivitiesCount, b: ProjectActivitiesCou
 }
 
 export const useFollowedProjectsActivities = () => {
-  const [followedProjects, setFollowedProjects] = useState<Project[]>([])
+  const followedProjects = useAtomValue(followedProjectsAtom)
   const [followedProjectsActivities, setFollowedProjectsActivities] = useState<ProjectActivitiesCount[]>([])
 
   const dateRange = useMemo(() => {
@@ -34,12 +35,6 @@ export const useFollowedProjectsActivities = () => {
       startDateTime: oneWeekAgo.getTime(),
     }
   }, [])
-
-  useMeProjectFollowsQuery({
-    onCompleted(data) {
-      setFollowedProjects(data.me?.projectFollows as Project[])
-    },
-  })
 
   useActivitiesCountGroupedByProjectQuery({
     variables: {
@@ -58,10 +53,11 @@ export const useFollowedProjectsActivities = () => {
       .map((project) => {
         const activityCount = followedProjectsActivities.find((activity) => activity.project.id === project.id)
         return {
-          project,
+          project: project as Project,
           count: activityCount ? activityCount.count : 0,
         }
       })
+      .filter((project) => project?.project && project.project.status === ProjectStatus.Active)
       .sort(sortByActiveAndCount)
   }, [followedProjects, followedProjectsActivities])
 

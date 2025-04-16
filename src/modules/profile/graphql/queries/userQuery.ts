@@ -1,9 +1,9 @@
 import { gql } from '@apollo/client'
 
 import { FRAGMENT_USER_PROJECT_CONTRIBUTIONS } from '../fragments/contributionFragment'
-import { FRAGMENT_PROFILE_ORDER } from '../fragments/orderFragment'
 import { FRAGMENT_PROJECT_FOR_PROFILE_PAGE } from '../fragments/projectFragment'
 import { FRAGMENT_USER_FOR_PROFILE_PAGE } from '../fragments/userFragment'
+import { FRAGMENT_USER_WALLET_CONNECTION_DETAILS } from '../fragments/walletFragment.ts'
 
 export const QUERY_USER_FOR_PROFILE_PAGE = gql`
   ${FRAGMENT_USER_FOR_PROFILE_PAGE}
@@ -41,7 +41,7 @@ export const QUERY_USER_CONTRIBUTIONS = gql`
   ${FRAGMENT_USER_PROJECT_CONTRIBUTIONS}
   query UserProfileContributions($where: UserGetInput!) {
     user(where: $where) {
-      contributions {
+      projectContributions {
         ...UserProjectContributions
       }
     }
@@ -78,12 +78,12 @@ export const QUERY_USER_HERO_STATS = gql`
   }
 `
 
-export const QUERY_USER_PROFILE_ORDERS = gql`
-  ${FRAGMENT_PROFILE_ORDER}
-  query UserProfileOrders($where: UserGetInput!) {
+export const QUERY_USER_WALLET = gql`
+  query UserWallet($where: UserGetInput!) {
+    ${FRAGMENT_USER_WALLET_CONNECTION_DETAILS}
     user(where: $where) {
-      orders {
-        ...ProfileOrder
+      wallet {
+        ...UserWalletConnectionDetails
       }
     }
   }

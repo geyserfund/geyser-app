@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { t } from 'i18next'
 import { FormEvent, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -37,14 +38,14 @@ export const useUpdateVerifyEmail = () => {
     onError(error) {
       toast({
         status: 'error',
-        title: 'Failed to generate OTP.',
+        title: t('Failed to generate OTP.'),
         description: error.message,
       })
     },
     onCompleted(data) {
       toast({
         status: 'info',
-        title: 'OTP Sent to the updated email',
+        title: t('OTP Sent to the updated email'),
       })
 
       const otp = data.sendOTPByEmail
@@ -58,11 +59,11 @@ export const useUpdateVerifyEmail = () => {
   })
 
   const [updateUserEmail] = useUserEmailUpdateMutation({
-    onError() {
+    onError(error) {
       toast({
         status: 'error',
-        title: 'Failed to update email.',
-        description: 'Please try again',
+        title: t('Failed to update email.'),
+        description: `${error.message}`,
       })
     },
     onCompleted(data) {
@@ -80,11 +81,11 @@ export const useUpdateVerifyEmail = () => {
         })
         toast({
           status: 'success',
-          title: 'Successfully updated user email',
+          title: t('Successfully updated user email'),
         })
         toast({
           status: 'info',
-          title: 'OTP Sent to the updated email',
+          title: t('OTP Sent to the updated email'),
         })
       }
     },

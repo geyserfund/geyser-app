@@ -1,9 +1,11 @@
+import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import { useCallback } from 'react'
 import { RejectionError } from 'webln'
 
-import { FundingTxFragment } from '../../../../types'
-import { useNotification } from '../../../../utils'
+import { ContributionLightningPaymentDetailsFragment } from '@/types/index.ts'
+import { useNotification } from '@/utils/index.ts'
+
 import { weblnErrorAtom } from '../state/errorAtom'
 import { requestWebLNPayment, WEBLN_ENABLE_ERROR } from '../utils/requestWebLNPayment'
 
@@ -13,16 +15,16 @@ export const useWebLNFlow = () => {
   const [weblnErrored, setWebLNErrored] = useAtom(weblnErrorAtom)
 
   const startWebLNFlow = useCallback(
-    async (fundingTx: FundingTxFragment) => {
+    async (paymentLightning: ContributionLightningPaymentDetailsFragment) => {
       if (weblnErrored) {
         return
       }
 
       try {
-        const paymentHash = await requestWebLNPayment(fundingTx)
+        const paymentHash = await requestWebLNPayment(paymentLightning)
 
         // Check preimage
-        if (paymentHash === fundingTx.invoiceId) {
+        if (paymentHash === paymentLightning.lightningInvoiceId) {
           return true
         }
 
@@ -47,8 +49,8 @@ export const useWebLNFlow = () => {
 
         if (error.constructor === RejectionError || error.message === 'User rejected') {
           toast({
-            title: 'Requested operation declined',
-            description: 'Please use the invoice instead.',
+            title: t('Requested operation declined'),
+            description: t('Please use the invoice instead.'),
             status: 'info',
           })
           return false
@@ -59,8 +61,8 @@ export const useWebLNFlow = () => {
         }
 
         toast({
-          title: 'Oops! Something went wrong with WebLN.',
-          description: 'Please copy the invoice manually instead.',
+          title: t('Oops! Something went wrong with WebLN.'),
+          description: t('Please copy the invoice manually instead.'),
           status: 'error',
         })
 

@@ -1,4 +1,4 @@
-import { atom, useAtomValue, useSetAtom } from 'jotai'
+import { atom } from 'jotai'
 
 import { SwapStatusUpdate } from '../hooks/useTransactionStatusUpdate'
 
@@ -9,5 +9,7 @@ export enum OnChainErrorStatuses {
 }
 
 export const onChainErrorAtom = atom<undefined | SwapStatusUpdate>(undefined)
-export const useSetOnChainErrorAtom = () => useSetAtom(onChainErrorAtom)
-export const useSetOnChainErrorValue = () => useAtomValue(onChainErrorAtom)
+
+export const resetOnChainErrorAtom = atom(null, (_, set) => {
+  set(onChainErrorAtom, undefined)
+})

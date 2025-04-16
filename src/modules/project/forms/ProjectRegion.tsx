@@ -1,9 +1,7 @@
-import { useQuery } from '@apollo/client'
-import { HStack, IconButton, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
+import { StackProps, useDisclosure } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiX } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
 import { SingleValue } from 'react-select'
 
@@ -11,10 +9,9 @@ import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Body } from '@/shared/components/typography'
 
 import { AppTheme } from '../../../context'
-import { QUERY_COUNTRIES, QUERY_REGION } from '../../../graphqlBase/queries'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { SkeletonLayout } from '../../../shared/components/layouts'
-import { Country, Location, Maybe, Project, ProjectCountriesGetResult, ProjectRegionsGetResult } from '../../../types'
+import { Country, Location, Maybe, Project, useProjectCountriesGetQuery } from '../../../types'
 import { ProjectState } from '../state/projectAtom'
 import { projectFormErrorAtom } from '../state/projectFormAtom'
 
@@ -23,15 +20,6 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
     width: '100%',
     alignItems: 'flex-start',
     spacing: '5px',
-  },
-
-  tagContainer: {
-    width: '100%',
-    backgroundColor: colors.utils.pbg,
-    border: '1px solid',
-    borderColor: colors.neutral1[6],
-    borderRadius: '8px',
-    padding: '12px',
   },
 
   select: {
@@ -60,28 +48,17 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
 
   const [options, setOptions] = useState<Country[]>([])
 
-  const { loading: countriesLoading, data: countries } = useQuery<{
-    projectCountriesGet: ProjectCountriesGetResult[]
-  }>(QUERY_COUNTRIES)
-
-  const { loading: regionsLoading, data: regions } = useQuery<{
-    projectRegionsGet: ProjectRegionsGetResult[]
-  }>(QUERY_REGION)
+  const { loading: countriesLoading, data: countries } = useProjectCountriesGetQuery()
 
   useEffect(() => {
-    if (!countries || !regions) {
+    if (!countries) {
       return
     }
 
     const countryOptions = countries.projectCountriesGet.map((val) => val.country)
 
-    const regionOptions = regions.projectRegionsGet.map((val) => ({
-      name: val.region,
-      code: val.region,
-    }))
-
-    setOptions([...countryOptions, ...regionOptions])
-  }, [countries, regions])
+    setOptions([...countryOptions])
+  }, [countries])
 
   const handleChange = (value: SingleValue<Country>) => {
     if (value?.code === value?.name) {
@@ -106,72 +83,37 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
     setProjectFormError((prev) => ({ ...prev, location: undefined }))
   }
 
-  const removeRegion = () => {
-    clearLocationError()
-    updateProject({
-      location: { region: '', country: { code: '', name: '' } },
-    })
-  }
-
-  const isLoading = countriesLoading || regionsLoading
-
-  const displayLocation = location?.country?.name
-    ? location?.region
-      ? `${location?.country?.name} ( ${location?.region} )`
-      : location?.country?.name
-    : location?.region || ''
+  const isLoading = countriesLoading
 
   return (
     <FieldContainer
-      title={`${t('Region')}*`}
-      subtitle={
-        <span>{t('Get found more easily by putting your project on the map. Select a country or region')}</span>
-      }
+      title={`${t('Country')}*`}
+      subtitle={<span>{t('Get found more easily by putting your project on the map. Select a country')}</span>}
       {...rest}
     >
-      <VStack className={classes.tagContainer} spacing="10px">
-        {isLoading ? (
-          <SkeletonLayout h="40px" />
-        ) : (
-          <CustomSelect<Country, false>
-            menuIsOpen={isOpen}
-            className={classes.select}
-            onChange={handleChange}
-            name="tags"
-            placeholder={t('Select region')}
-            value={[]}
-            isLoading={isLoading}
-            options={options}
-            getOptionLabel={(option: Country) => option.name}
-            getOptionValue={(option: Country) => option.code}
-            onInputChange={handleInputChange}
-            inputValue={inputValue}
-            onMenuOpen={onOpen}
-            onMenuClose={onClose}
-            isInvalid={Boolean(projectFormError.location)}
-            onFocus={clearLocationError}
-          />
-        )}
+      {isLoading ? (
+        <SkeletonLayout h="40px" />
+      ) : (
+        <CustomSelect<Country, false>
+          menuIsOpen={isOpen}
+          className={classes.select}
+          onChange={handleChange}
+          name="tags"
+          placeholder={t('Select country')}
+          value={location?.country}
+          isLoading={isLoading}
+          options={options}
+          getOptionLabel={(option: Country) => option.name}
+          getOptionValue={(option: Country) => option.code}
+          onInputChange={handleInputChange}
+          inputValue={inputValue}
+          onMenuOpen={onOpen}
+          onMenuClose={onClose}
+          isInvalid={Boolean(projectFormError.location)}
+          onFocus={clearLocationError}
+        />
+      )}
 
-        <HStack width="100%" spacing="10px" flexWrap={'wrap'}>
-          {displayLocation && (
-            <HStack borderRadius="4px" paddingLeft="8px" backgroundColor="neutral1.2">
-              <Body medium>{displayLocation}</Body>
-              <IconButton
-                variant="ghost"
-                _hover={{}}
-                _pressed={{}}
-                _active={{}}
-                size="xs"
-                borderRadius="8px"
-                aria-label="remove-region-close-icon"
-                onClick={removeRegion}
-                icon={<PiX />}
-              />
-            </HStack>
-          )}
-        </HStack>
-      </VStack>
       {projectFormError.location && (
         <Body size="xs" color="error.9" w="full" textAlign={'start'}>
           {projectFormError.location}

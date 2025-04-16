@@ -8,6 +8,7 @@ export const FRAGMENT_PROJECT_FUNDER = gql`
     id
     amountFunded
     timesFunded
+    confirmedAt
     user {
       ...UserAvatar
     }

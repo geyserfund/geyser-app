@@ -1,8 +1,10 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
+// import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useProjectGrantApplicationsAPI } from '@/modules/project/API/useProjectGrantApplicationsAPI'
+// import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { VotingInfoModal } from '@/shared/molecules/VotingInfoModal'
@@ -18,9 +20,11 @@ export const ContributeButton = (props: ButtonProps) => {
 
   const votingInfoModal = useModal()
 
-  const { queryProjectGrantApplications } = useProjectGrantApplicationsAPI(true)
+  useProjectGrantApplicationsAPI(true)
 
   const { project } = useProjectAtom()
+
+  // const hasFundingLimitReached = useAtomValue(hasProjectFundingLimitReachedAtom)
 
   if (!project) {
     return null
@@ -60,7 +64,6 @@ export const ContributeButton = (props: ButtonProps) => {
             ? votingInfoModal.onOpen()
             : navigate(getPath('projectFunding', project.name))
         }
-        isLoading={queryProjectGrantApplications.loading}
         {...props}
       >
         {t('Contribute')}

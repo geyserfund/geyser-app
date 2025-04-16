@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import { Button, HStack, IconButton, Stack, Tooltip, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, IconButton, Stack, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { BiInfoCircle } from 'react-icons/bi'
 import { PiArrowLeft, PiCaretDown, PiX } from 'react-icons/pi'
@@ -16,6 +16,7 @@ import { FieldContainer } from '@/shared/components/form'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
 import { CalendarButton, CreatorEmailButton, FileUpload } from '@/shared/molecules'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaControlWithReorder } from '@/shared/molecules/MediaControlWithReorder'
@@ -31,7 +32,7 @@ type Props = {
   isLaunch?: boolean
   defaultCategory?: string
   hideBackbutton?: boolean
-  rewardId?: string
+  rewardUUID?: string
 }
 
 const MAX_REWARD_IMAGES = 5
@@ -41,7 +42,7 @@ export const ProjectRewardForm = ({
   titleText,
   isUpdate,
   isLaunch = false,
-  rewardId,
+  rewardUUID,
   defaultCategory,
 }: Props) => {
   const { t } = useTranslation()
@@ -49,8 +50,11 @@ export const ProjectRewardForm = ({
 
   const { hasRewards } = useRewardsAtom()
 
+  const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
+
   const {
     control,
+    formLoaded,
     loading,
     watch,
     errors,
@@ -63,7 +67,7 @@ export const ProjectRewardForm = ({
     rewardLoading,
     utils,
   } = useProjectRewardForm({
-    rewardId,
+    rewardUUID,
     isUpdate,
     isLaunch,
     defaultCategory,
@@ -89,6 +93,8 @@ export const ProjectRewardForm = ({
   if (rewardLoading) {
     return <Loader />
   }
+
+  const rewardDescription = watch('description')
 
   return (
     <form style={{ width: '100%' }} onSubmit={handleSubmit}>
@@ -246,14 +252,54 @@ export const ProjectRewardForm = ({
               />
             </Stack>
             <Stack direction={{ base: 'column', lg: 'row' }}>
-              <ControlledTextArea
+              {/* <ControlledTextArea
                 label={t('Description')}
                 name="description"
                 control={control}
                 placeholder={t('Describe the item you would like to sell')}
                 error={errors.description?.message}
                 resize="vertical"
-              />
+              /> */}
+              <FieldContainer title={t('Description')} error={errors.description?.message}>
+                <Box
+                  flex={1}
+                  width="100%"
+                  border="1px solid"
+                  borderColor="neutral1.6"
+                  borderRadius="8px"
+                  overflow="hidden"
+                >
+                  {!formLoaded ? null : (
+                    <MarkdownField
+                      initialContentReady={formLoaded}
+                      initialContent={() => rewardDescription || ''}
+                      content={rewardDescription || ''}
+                      name="description"
+                      placeholder={t('Describe the item you would like to sell')}
+                      flex
+                      control={control}
+                      isEditorMode={isEditorMode}
+                      toggleEditorMode={toggleEditorMode}
+                      toolbarWrapperProps={{
+                        borderTop: 'none',
+                        borderRight: 'none',
+                        borderLeft: 'none',
+                        borderRadius: 0,
+                      }}
+                      toolbarMaxWidth={'100%'}
+                      enableRawMode
+                      editorWrapperProps={{
+                        paddingX: '16px',
+                        minHeight: '200px',
+                      }}
+                      markdownRawEditorProps={{
+                        minHeight: '200px',
+                        padding: '0px 16px',
+                      }}
+                    />
+                  )}
+                </Box>
+              </FieldContainer>
             </Stack>
 
             <CardLayout padding={4} overflow="none">

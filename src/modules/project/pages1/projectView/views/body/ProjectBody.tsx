@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { RightSideStickyLayout } from '@/modules/project/components/RightSideStickyLayout'
+import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 
 import { dimensions } from '../../../../../../shared/constants'
 import { ProjectStatus } from '../../../../../../types'
@@ -20,6 +21,8 @@ import {
   Rewards,
   Story,
 } from './sections'
+import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
+import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 
 export const ProjectBody = () => {
   const { project, loading } = useProjectAtom()
@@ -36,8 +39,6 @@ export const ProjectBody = () => {
     }
   }, [project?.status, location.pathname, navigate, project?.name, loading])
 
-  // const projectDetails = useProjectDetails(project)
-
   return (
     <Stack w="full" spacing={dimensions.project.rightSideNav.gap} direction={{ base: 'column', lg: 'row' }}>
       <VStack
@@ -48,6 +49,8 @@ export const ProjectBody = () => {
         paddingBottom={{ base: 24, lg: 10 }}
       >
         <FinalizeProjectNotice />
+        <CreatorVerificationNotice />
+
         <Header />
         <CreatorTools />
         <Story />
@@ -56,6 +59,8 @@ export const ProjectBody = () => {
         {project.entriesCount && <Posts />}
         {project.goalsCount && <Goals />}
         <Details />
+        <SuggestedProjects subCategory={project.subCategory} projectId={project.id} />
+        <UserExternalLinksComponent spread />
       </VStack>
       <RightSideStickyLayout
         overflow="auto"

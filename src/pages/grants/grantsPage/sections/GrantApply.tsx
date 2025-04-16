@@ -15,9 +15,12 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { BsCheckLg } from 'react-icons/bs'
 
+import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
+import { ConnectWithSocial } from '@/modules/auth/ConnectWithSocial.tsx'
+import { SocialAccountType } from '@/modules/auth/type.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 
@@ -28,9 +31,6 @@ import { LockedConnectAccountUrl } from '../../../../shared/constants'
 import { lightModeColors } from '../../../../shared/styles'
 import { Grant, GrantApplicant, GrantApplicantStatus, GrantApplyInput, Project } from '../../../../types'
 import { toInt, useCustomTheme, useNotification } from '../../../../utils'
-import { SocialAccountType } from '../../../auth'
-import { ConnectWithNostr } from '../../../auth/ConnectWithNostr'
-import { ConnectWithSocial } from '../../../auth/ConnectWithSocial'
 
 interface GrantProps {
   grant: Grant
@@ -39,22 +39,16 @@ interface GrantProps {
 
 export const GrantApply = ({ grant, pendingApplicants }: GrantProps) => {
   const { t } = useTranslation()
+
   return (
     <CardLayout noMobileBorder w="full" p={{ base: '10px', lg: '20px' }} alignItems="center">
-      <H3 size="lg" alignSelf="start">
+      <H3 size="lg" alignSelf="start" medium>
         {t('Apply')}
       </H3>
       <Body alignSelf="start">
-        <Trans
-          values={{ title: grant.title }}
-          i18nKey={
-            'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow'
-          }
-        >
-          {
-            'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow'
-          }
-        </Trans>
+        {t(
+          'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow',
+        ).replace('{{title}}', grant.title)}
       </Body>
       <ApplyGrant grant={grant} pendingApplicants={pendingApplicants} />
     </CardLayout>

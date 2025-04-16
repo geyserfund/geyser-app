@@ -1,42 +1,43 @@
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useLocation, useParams, useSearchParams } from 'react-router-dom'
+
+import { useAuthContext } from '@/context/auth.tsx'
+import { FundingResourceType } from '@/types/index.ts'
 
 import { ProjectProvider } from './context'
 import { FundingProviderWithProjectContext } from './context/FundingProvider'
-import { addProjectAffiliateAtom } from './pages1/projectView/state/affiliateAtom'
-import { addProjectHeroAtom } from './pages1/projectView/state/heroAtom'
+import { sourceResourceAtom } from './pages1/projectView/state/sourceActivityAtom.ts'
 import { ProjectContainer } from './ProjectContainer'
 
 export const Project = () => {
   const params = useParams<{ projectName: string }>()
+
   const { projectName } = params
+  const setSourceResource = useSetAtom(sourceResourceAtom)
+  const [, setSearchParams] = useSearchParams()
+  const { user } = useAuthContext()
 
-  const [searchParams] = useSearchParams()
-
-  const addRefferal = useSetAtom(addProjectAffiliateAtom)
-  const addHeroId = useSetAtom(addProjectHeroAtom)
-
-  const affiliateId = searchParams.get('refId')
-  const heroId = searchParams.get('hero')
+  const location = useLocation()
 
   useEffect(() => {
-    if (affiliateId && projectName) {
-      addRefferal({
-        projectName,
-        refId: affiliateId,
-      })
+    if (user && user.heroId) {
+      setSearchParams(
+        (params) => {
+          params.set('hero', user.heroId)
+          return params
+        },
+        { replace: true, state: location.state },
+      )
     }
-  }, [projectName, affiliateId, addRefferal])
 
-  useEffect(() => {
-    if (heroId && projectName) {
-      addHeroId({
-        projectName,
-        heroId,
+    if (location.state?.sourceActivityId) {
+      setSourceResource({
+        resourceId: location.state.sourceActivityId,
+        resourceType: FundingResourceType.Activity,
       })
     }
-  }, [projectName, heroId, addHeroId])
+  }, [user, setSearchParams, location.state, setSourceResource])
 
   return (
     <ProjectProvider projectName={projectName || ''} initializeWallet>

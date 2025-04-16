@@ -187,7 +187,7 @@ We've recently included [Jotai](https://jotai.org/docs/core/atom) as one of the 
 
 Our strategy is to migrate a large part of context overheads to Jotai for more effective state management. This move aims to boost the speed of state updates and renders.
 
-In any situation where a new state is needed across multiple scopes, we recommend using Jotai `Atoms`. Jotai’s primitive and declarative API makes handling complex state needs more manageable. It facilitates splitting the global state into a collection of distributed but well synchronized atoms, bringing more efficient and maintainable state management to the project.
+In any situation where a new state is needed across multiple scopes, we recommend using Jotai `Atoms`. Jotai's primitive and declarative API makes handling complex state needs more manageable. It facilitates splitting the global state into a collection of distributed but well synchronized atoms, bringing more efficient and maintainable state management to the project.
 
 
 ## Asset Handling
@@ -223,3 +223,20 @@ All the tests related code are housed inside the `cypress` folder in the root.
 `utils` folder has common utility functions.
 `support` folder contains configuration for supporting packages that we use along with cypress for running tests.
 
+
+## Translations
+
+Use i18next for all translations following these rules:
+
+1. Wrap all user-facing strings in `t()` function
+2. Import from `i18next` directly (preferred) or from `useTranslation` hook
+3. Use `<Trans>` component for translations with variables or nested formatting
+4. Run the language server to auto-capture translation keys and add them to en.json:
+   ```bash
+   make language
+   ```
+
+5. Remove unused translations by running:
+   ```bash
+   node scripts/clean-translations
+   ```

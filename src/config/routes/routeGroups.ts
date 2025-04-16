@@ -38,7 +38,6 @@ export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardNostr', PathName.projectName),
   getPath('dashboardSettings', PathName.projectName),
   getPath('dashboardNotifications', PathName.projectName),
-  getPath('dashboardAffiliates', PathName.projectName),
   getPath('dashboardPromote', PathName.projectName),
 ]
 
@@ -77,20 +76,38 @@ export const projectStoryCreatorRoutes = [getPath('projectStoryEdit', PathName.p
 export const projectFundingPaymentLightingRoutes = [getPath('fundingPaymentLightning', PathName.projectName)]
 export const projectFundingPaymentCardRoutes = [getPath('fundingPaymentCard', PathName.projectName)]
 
+/** Routes after onchain payment went into refund processing */
 export const projectFundingOnchainRefundRoutes = [
   getPath('fundingPaymentOnchainRefund', PathName.projectName),
   getPath('fundingPaymentOnchainRefundInitiated', PathName.projectName),
 ]
 
+/** Routes after onchain payment went into processing */
 export const projectFundingPaymentOnchainStartedRoutes = [
   getPath('fundingPaymentOnchainProcessing', PathName.projectName),
   ...projectFundingOnchainRefundRoutes,
 ]
 
-export const projectFundingPaymentOnchainRoutes = [
+/** Routes before onchain payment went into processing */
+export const projectFundingPaymentOnchainInitialRoutes = [
   getPath('fundingPaymentOnchain', PathName.projectName),
   getPath('fundingPaymentOnchainQR', PathName.projectName),
+]
+
+/** All onchain funding payment routes */
+export const projectFundingPaymentOnchainRoutes = [
+  ...projectFundingPaymentOnchainInitialRoutes,
   ...projectFundingPaymentOnchainStartedRoutes,
+]
+
+export const projectFundingPaymentFiatSwapRoutes = [getPath('fundingPaymentFiatSwap', PathName.projectName)]
+
+export const projectFundingPaymentCreatedRoutes = [
+  getPath('fundingPayment', PathName.projectName),
+  ...projectFundingPaymentLightingRoutes,
+  ...projectFundingPaymentCardRoutes,
+  ...projectFundingPaymentFiatSwapRoutes,
+  ...projectFundingPaymentOnchainInitialRoutes,
 ]
 
 export const projectFundingRoutes = [
@@ -99,8 +116,9 @@ export const projectFundingRoutes = [
   getPath('fundingPayment', PathName.projectName),
   getPath('fundingPaymentFailed', PathName.projectName),
   getPath('fundingSuccess', PathName.projectName),
-  ...projectFundingPaymentLightingRoutes,
+  ...projectFundingPaymentCreatedRoutes,
   ...projectFundingPaymentOnchainRoutes,
+  ...projectFundingPaymentFiatSwapRoutes,
 ]
 
 export const ProjectPageRoutesWithNavBarForDesktop = [...projectBaseRoutes, ...projectDashboardRoutes]
@@ -124,6 +142,7 @@ export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath(
 export const discoveryRoutes = [
   getPath('discoveryLanding'),
   getPath('discoveryMyProjects'),
+  getPath('discoveryProducts'),
   getPath('discoveryActivity'),
   getPath('discoveryActivityFollowed'),
   getPath('discoveryActivityGlobal'),

@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AnonymousAvatar, LinkableAvatar } from '../../../../../../components/ui'
-import { FundingTxOrderFragment, GetFundingTxsOrderByInput, OrderByOptions } from '../../../../../../types'
+import { GetContributionsOrderByInput, OrderByOptions, OrderContributionFragment } from '../../../../../../types'
 import { TableData, TableWithAccordion } from '../../common/TableWithAccordion'
 import { AccordionListItem, OrderAmounts, OrderItems } from '../../components'
 
@@ -12,18 +12,18 @@ export const PaymentsAndAccountingTable = ({
   setOrderBy,
   orderBy,
 }: {
-  data: FundingTxOrderFragment[]
-  setOrderBy: Dispatch<SetStateAction<GetFundingTxsOrderByInput>>
-  orderBy: GetFundingTxsOrderByInput
+  data: OrderContributionFragment[]
+  setOrderBy: Dispatch<SetStateAction<GetContributionsOrderByInput>>
+  orderBy: GetContributionsOrderByInput
 }) => {
   const { t } = useTranslation()
 
-  const tableData: TableData<FundingTxOrderFragment>[] = useMemo(
+  const tableData: TableData<OrderContributionFragment>[] = useMemo(
     () => [
       {
         header: t('Contributor'),
         key: 'name',
-        render(val: FundingTxOrderFragment) {
+        render(val: OrderContributionFragment) {
           const isFunderAnonymous = !val.funder.user?.id
           if (isFunderAnonymous) {
             return <AnonymousAvatar seed={val.id} imageSize={'20px'} textColor="neutral.900" />
@@ -60,8 +60,8 @@ export const PaymentsAndAccountingTable = ({
             })
           },
         },
-        value(val: FundingTxOrderFragment) {
-          return DateTime.fromMillis(val.paidAt).toFormat('LLL dd, yyyy')
+        value(val: OrderContributionFragment) {
+          return val.confirmedAt ? DateTime.fromMillis(val.confirmedAt).toFormat('LLL dd, yyyy') : 'N/A'
         },
         colSpan: 2,
         isMobile: true,
@@ -71,15 +71,22 @@ export const PaymentsAndAccountingTable = ({
         key: 'uuid',
         colSpan: 2,
         isAccordion: true,
-        render(val: FundingTxOrderFragment) {
-          return <AccordionListItem items={[{ label: t('Reference'), value: val.uuid }]} />
+        render(val: OrderContributionFragment) {
+          return (
+            <AccordionListItem
+              items={[
+                { label: t('Reference'), value: val.uuid },
+                { label: t('Private comment'), value: val.privateComment },
+              ]}
+            />
+          )
         },
       },
       {
         header: t('Type'),
         key: 'type',
         colSpan: 2,
-        value(val: FundingTxOrderFragment) {
+        value(val: OrderContributionFragment) {
           if (val.amount === val.donationAmount) {
             return 'Donation'
           }
@@ -94,7 +101,7 @@ export const PaymentsAndAccountingTable = ({
       {
         header: t('Amount'),
         key: 'amount',
-        value(val: FundingTxOrderFragment) {
+        value(val: OrderContributionFragment) {
           return `${val.amount} Sats`
         },
         colSpan: 2,
@@ -110,27 +117,21 @@ export const PaymentsAndAccountingTable = ({
         header: 'Items',
         key: 'items',
         isAccordion: true,
-        render(fundingTx: FundingTxOrderFragment) {
-          return <OrderItems orderItems={fundingTx.order?.items} />
+        render(contribution: OrderContributionFragment) {
+          return <OrderItems orderItems={contribution.order?.items} />
         },
       },
       {
         header: 'Total',
         key: 'total',
         isAccordion: true,
-        render(fundingTx: FundingTxOrderFragment) {
-          return (
-            <OrderAmounts
-              affiliateFee={fundingTx.affiliateFeeInSats}
-              amount={fundingTx.amount}
-              quote={fundingTx.bitcoinQuote?.quote}
-            />
-          )
+        render(contribution: OrderContributionFragment) {
+          return <OrderAmounts amount={contribution.amount} quote={contribution.bitcoinQuote?.quote} />
         },
       },
     ],
     [t, setOrderBy, orderBy.createdAt],
   )
 
-  return <TableWithAccordion<FundingTxOrderFragment> items={data} schema={tableData} />
+  return <TableWithAccordion<OrderContributionFragment> items={data} schema={tableData} />
 }

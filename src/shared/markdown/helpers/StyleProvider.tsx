@@ -33,6 +33,7 @@ const Container = styled(Box, {
     },
     '& a': {
       textDecoration: 'underline',
+      fontWeight: '600',
     },
     '& code': {
       lineBreak: 'anywhere',
@@ -41,7 +42,13 @@ const Container = styled(Box, {
   },
 })
 
-export const StyleProvider = ({ children, flex, display, ...rest }: { flex?: boolean } & Omit<BoxProps, 'flex'>) => {
+export const StyleProvider = ({
+  children,
+  flex,
+  display,
+  fontFamily,
+  ...rest
+}: { flex?: boolean } & Omit<BoxProps, 'flex'>) => {
   const { colors } = useCustomTheme()
 
   const remirrorTheme: RemirrorThemeType = useMemo(
@@ -66,8 +73,11 @@ export const StyleProvider = ({ children, flex, display, ...rest }: { flex?: boo
           boxShadow: 'none',
         },
       },
+      fontFamily: {
+        default: fontFamily ? `'${fontFamily}'` : undefined,
+      },
     }),
-    [colors],
+    [colors, fontFamily],
   )
 
   useEffect(() => {

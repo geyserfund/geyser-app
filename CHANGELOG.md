@@ -1,3 +1,319 @@
+## [0.19.18](https://github.com/geyserfund/geyser-app/compare/v0.19.7...v0.19.18) (2025-04-09)
+
+
+### Features
+
+* new project promote page (ambassadors and affiliates) ([f676f3e](https://github.com/geyserfund/geyser-app/commit/f676f3e94981c4a8886fc7f846d4fd51ee95e71b))
+* new user wallet page ([d472f07](https://github.com/geyserfund/geyser-app/commit/d472f07e981238105799c2c0a4f00ae73001867b))
+
+
+### Bug Fixes
+
+* add onError handler for lightning address ([a66ef6f](https://github.com/geyserfund/geyser-app/commit/a66ef6ffa73c00c3bc89c197e4e651e53808c8db))
+* address pr comments ([49a992d](https://github.com/geyserfund/geyser-app/commit/49a992d619dd283566cdc4143cf2f1359c2f39fb))
+* build errors ([611fecd](https://github.com/geyserfund/geyser-app/commit/611fecd0cc7cec9b1988deceb6dc3c81f56d3719))
+* build errors ([058d547](https://github.com/geyserfund/geyser-app/commit/058d5472c6d41157fb1ac6b0f52d92079ba9fa72))
+* close modal when login fails, so that auth token is regenerated ([a3052ca](https://github.com/geyserfund/geyser-app/commit/a3052caaeb65eecdc75f9d959b7e38e22e16212b))
+* linting, deps and copy ([270a293](https://github.com/geyserfund/geyser-app/commit/270a293c4cca602f590d5b5d82998d0c3b693917))
+* minor copy update ([d1bc87b](https://github.com/geyserfund/geyser-app/commit/d1bc87b1b34bacb68cbb9d271dfb71c9e424d713))
+* renamed variable ([5d70a2a](https://github.com/geyserfund/geyser-app/commit/5d70a2a42a99ab160f6ff99df67389917759028f))
+* reward cost display in summary ([9fb1941](https://github.com/geyserfund/geyser-app/commit/9fb19410e52db5792a0d21a0f367692803fb80d0))
+* set max claimable to undefined ([727dbf3](https://github.com/geyserfund/geyser-app/commit/727dbf34914e8ed6e98307973f931076f8aca3fd))
+* sip query when user id is undefined ([911d747](https://github.com/geyserfund/geyser-app/commit/911d7476f5cee8e7fffffd21bec190af636207cf))
+* suggested projects to show latest funded projects instead of all projects ([b50bfa7](https://github.com/geyserfund/geyser-app/commit/b50bfa735b03ee217c168700d1c9b7f76f3613f2))
+* translation ([d314490](https://github.com/geyserfund/geyser-app/commit/d314490073db93cc4dd717e002b0a05991016a29))
+* update scroll down to refresh ([74bc0b8](https://github.com/geyserfund/geyser-app/commit/74bc0b8937fa4ea20cb8fa67093b6335d7b7e106))
+* update source resource to be string ([c5c4a96](https://github.com/geyserfund/geyser-app/commit/c5c4a96400b20997eb3eaeab8dc5b445208601db))
+* update types and translations ([46ae353](https://github.com/geyserfund/geyser-app/commit/46ae35375e7edbf35689c75395273302fc106b14))
+* update version ([a07a147](https://github.com/geyserfund/geyser-app/commit/a07a147a3a83d3dad6030516ee6420d421ef12d8))
+* use activityId for sourceID ([972df26](https://github.com/geyserfund/geyser-app/commit/972df26f4e0d5ddb7171c2399b2cd1104e54cdbc))
+
+## [0.19.7](https://github.com/geyserfund/geyser-app/compare/v0.19.0...v0.19.7) (2025-04-02)
+
+
+### Features
+
+* add map button to the landing page ([fde5fbf](https://github.com/geyserfund/geyser-app/commit/fde5fbffe2ce65474a838e68cacc2b509a33ad74))
+* add popup for reward selection ([a8186cb](https://github.com/geyserfund/geyser-app/commit/a8186cbf838754732746fc05a8a5cad06235a679))
+* add suggested projects ([d39f235](https://github.com/geyserfund/geyser-app/commit/d39f2356c5fbf6199c91290191e00730ea207bf8))
+* added suggested projects in project page and minor improvement ([9ae8ed8](https://github.com/geyserfund/geyser-app/commit/9ae8ed82c0260188c7abcda08df84fe210a70e1f))
+* create clean translations and clean translation terms ([cb78aa9](https://github.com/geyserfund/geyser-app/commit/cb78aa9f8117c9673ddfb29714e0b5fddc1a8d71))
+* finalize guardians page ([ccf3408](https://github.com/geyserfund/geyser-app/commit/ccf340834e631569a565b947d1e3271231632191))
+* improve holographic effect on cards, and add custom colors for each card ([6b27514](https://github.com/geyserfund/geyser-app/commit/6b275146d29ff7d3d0c90de7d3e87ec0c31d1bba))
+* make dashboard tab in project navbar more prominent ([5991209](https://github.com/geyserfund/geyser-app/commit/599120929086d58c05a5a83a7d8cbf7bc9a1d587))
+* update guardians page ([b96f3ad](https://github.com/geyserfund/geyser-app/commit/b96f3ad9625e5b56245b8771dc79dda85cc155c8))
+* update product page to separate out data ([7c58501](https://github.com/geyserfund/geyser-app/commit/7c58501af4c7fd99001603572f2037075633a04a))
+* update trending reward cards to show sold count ([0c13449](https://github.com/geyserfund/geyser-app/commit/0c134492b42d56a6e6db55fba12db1a9e065bffe))
+
+
+### Bug Fixes
+
+* add a click triggered popover for verified badge, for mobile ([9a656c7](https://github.com/geyserfund/geyser-app/commit/9a656c7974c7317fc39006094ff9b5091d8d793c))
+* add auto closing failed-callback ([e53cb21](https://github.com/geyserfund/geyser-app/commit/e53cb21d69f1e8a18f18457376bf34fbf73306eb))
+* add box shadow to cards ([432cab2](https://github.com/geyserfund/geyser-app/commit/432cab201c25d77da2454651941a50f33bd32e01))
+* add close button to media carousel ([a830d27](https://github.com/geyserfund/geyser-app/commit/a830d27286ad3c88ec44ebd06674d649d33abdd3))
+* add info to analytics dashboard view ([c631575](https://github.com/geyserfund/geyser-app/commit/c6315750da9730d598bc4fca9ce5065f95bc0646))
+* add private comment to accounting ([e7d7a30](https://github.com/geyserfund/geyser-app/commit/e7d7a307f9fc8059e1d4edcafb03e0ef012b9f09))
+* ambassador copy style ([e4de773](https://github.com/geyserfund/geyser-app/commit/e4de773ef7ed1304b451e508d618e86a9e987291))
+* change available to remaining ([7a4723e](https://github.com/geyserfund/geyser-app/commit/7a4723e3976d5871dd17bd8a419988c81a71bb76))
+* change message to orange from red ([7a20430](https://github.com/geyserfund/geyser-app/commit/7a20430a7c8406b76e31a6996b86467cb8b7bf0c))
+* enable fiat contribution section ([457bdda](https://github.com/geyserfund/geyser-app/commit/457bddae8efd83dc55b4d49483fc7ed3507e3c60))
+* extra adjustments ([8e2dda5](https://github.com/geyserfund/geyser-app/commit/8e2dda56e2ff469ab71d4d191879d4a6e4f3e3f5))
+* final adjustments ([0211e5a](https://github.com/geyserfund/geyser-app/commit/0211e5a8698215847873852303a6f7d38bf23584))
+* final fixes ([7718380](https://github.com/geyserfund/geyser-app/commit/7718380269d84f797958c8929c0058361af04beb))
+* final pass for clean translations script ([6bb1068](https://github.com/geyserfund/geyser-app/commit/6bb10688809084cf5044fe80dd9ac9800eb140b9))
+* final qa fixes ([0f06e27](https://github.com/geyserfund/geyser-app/commit/0f06e27857c9768ad78508e9a920747c4019fb13))
+* final updates to guardians page ([1712d96](https://github.com/geyserfund/geyser-app/commit/1712d961f8888b458d20366e145aec79d6590c6d))
+* fix cypress tests ([a4a7ee2](https://github.com/geyserfund/geyser-app/commit/a4a7ee22994e738b0a116fdc818429d5c2ac882e))
+* followed project ([7f0e406](https://github.com/geyserfund/geyser-app/commit/7f0e40697a9a0f06be3c3224e4aeae084db1e177))
+* format amount to include short amount for both ([338576d](https://github.com/geyserfund/geyser-app/commit/338576deceb04ed0709382cca1937c5cbe0845f4))
+* funding flow to create new contribution if user logs in or out before payment happens ([7f984f5](https://github.com/geyserfund/geyser-app/commit/7f984f5aa20432b390cb5f726ec3d28b7a16c222))
+* guardian buy bug ([62acd5c](https://github.com/geyserfund/geyser-app/commit/62acd5cb6e8fc86327bd1381bca6baf39be29551))
+* guardians for mobile ([0ad11c6](https://github.com/geyserfund/geyser-app/commit/0ad11c6f31a11e00d25d8ed9a8a345b028e3d10b))
+* if image is not available for users, use anonymous images ([c87a55f](https://github.com/geyserfund/geyser-app/commit/c87a55f0ba5f073ea50a2b289fdfce2693497546))
+* improve products trending in ([796b5d5](https://github.com/geyserfund/geyser-app/commit/796b5d5d4e0b3bdca5d0a60fb0bfb5f1c26dc18a))
+* issues with products page and skeleton for trending rewards ([0493f30](https://github.com/geyserfund/geyser-app/commit/0493f301175aea71fc193bef328dec2b1ae7a057))
+* knowing more about it ([ae158cf](https://github.com/geyserfund/geyser-app/commit/ae158cfda39264d0c230fe124265700b0a535bbd))
+* links spacing ([e97f0be](https://github.com/geyserfund/geyser-app/commit/e97f0be3bf99f6c61defdf749772fc62d94c6085))
+* login test ([c04e9cb](https://github.com/geyserfund/geyser-app/commit/c04e9cb0843b81cdd033f3919dad5aeb72e019ee))
+* login test ([d03d891](https://github.com/geyserfund/geyser-app/commit/d03d891228f9d4c4cfe47bf4ca48901085e51d65))
+* make plural ([bad8901](https://github.com/geyserfund/geyser-app/commit/bad8901d1a7ea1541df021b65fed088d0ec9cbb1))
+* make tests more robust ([1411083](https://github.com/geyserfund/geyser-app/commit/1411083562d40610555c35dd8d0a53f40109b354))
+* minor change to fix test ([277ecaa](https://github.com/geyserfund/geyser-app/commit/277ecaab16eee572b663184c0273fd17f05196d9))
+* missing change ([939974a](https://github.com/geyserfund/geyser-app/commit/939974aa9c76b297991f27021f587ba3228577d2))
+* move user external links to lower ([0e801fa](https://github.com/geyserfund/geyser-app/commit/0e801fada334a48d574595fcbc69d964737e4580))
+* moved external links out of profile menu to each pages and discovery sidenav ([5d0d336](https://github.com/geyserfund/geyser-app/commit/5d0d3362756d2f4523503f541152f34addfa8494))
+* once otp is started, clicking outside the modal doesnot close it ([6b14f53](https://github.com/geyserfund/geyser-app/commit/6b14f53a27a0c32e43eaab0c52ff3920294720d8))
+* other minor urgent issues ([a005774](https://github.com/geyserfund/geyser-app/commit/a00577495df811406b2ec7a0471500c0ec65e012))
+* pagination hook to detect noMoreItems, when none are seen ([4e0b438](https://github.com/geyserfund/geyser-app/commit/4e0b4386e5490c77fb1cff6ffff1877db83b1b57))
+* partner and investor layout in guardians page ([b66107a](https://github.com/geyserfund/geyser-app/commit/b66107a90eaf89054cf751a4eb41bf0fa1312e30))
+* profile odd disconnect toggle opens randomly ([a9872c4](https://github.com/geyserfund/geyser-app/commit/a9872c4c5650be56e23760b03b1c86dfa64a0256))
+* put back all the tests ([1a149ea](https://github.com/geyserfund/geyser-app/commit/1a149eaaad68c258d5a412ddacf532304ec46ec7))
+* redirect guardian character pages to guardians main page ([db3b803](https://github.com/geyserfund/geyser-app/commit/db3b8030eb34138314816d15d6541c216b74e935))
+* refund initiated ([d9da3f3](https://github.com/geyserfund/geyser-app/commit/d9da3f38e1edd30dc813c009ec3dd385b0de45a9))
+* remove extra options ([72da4c0](https://github.com/geyserfund/geyser-app/commit/72da4c0b0f86b618352bab46676feadde8885674))
+* remove funding limits for projects ([c45cc83](https://github.com/geyserfund/geyser-app/commit/c45cc832f639a6b0760bf6084d9dccf02ab11f16))
+* replace old link with new link ([b4808b3](https://github.com/geyserfund/geyser-app/commit/b4808b39c0d21280ce5e28e9306b0b50ae002941))
+* reverting header change ([c2fc1dd](https://github.com/geyserfund/geyser-app/commit/c2fc1dd8f6fe9281ca2dff66afb0d990fdd85c9d))
+* reward to use the sold count in the trending period ([7466415](https://github.com/geyserfund/geyser-app/commit/7466415ad4c8a439c005001f69d29c9678692c5c))
+* reward view aspect ratio ([b147f66](https://github.com/geyserfund/geyser-app/commit/b147f6667b708419f702c67f7abe1d1d6e36e336))
+* script and update english translations ([5bf6ec1](https://github.com/geyserfund/geyser-app/commit/5bf6ec16219faf8204e281c4308446101ac1da12))
+* seo ([4428daa](https://github.com/geyserfund/geyser-app/commit/4428daa1a24c23f9986b38e2bef6fd77949d7549))
+* show project logo in funding routes ([a3f867c](https://github.com/geyserfund/geyser-app/commit/a3f867c84eaea3de81ac7afb789eb6f3d52be44f))
+* show redirection notice after payment waiting ([5b7e6dd](https://github.com/geyserfund/geyser-app/commit/5b7e6dd7365b5f180a2a674e850b96b40449d5b2))
+* small fix ([141306b](https://github.com/geyserfund/geyser-app/commit/141306bfc098aa5b2359e38f0b55329ba4399a03))
+* storybook build ([380712a](https://github.com/geyserfund/geyser-app/commit/380712abea81b9361d0bc755d1409e800c6b6707))
+* temporarily run tests on staging as well ([b381759](https://github.com/geyserfund/geyser-app/commit/b381759e00f490f969a567227e8f22ee59b384e3))
+* temporarily testing out tests ([148ee3f](https://github.com/geyserfund/geyser-app/commit/148ee3f91037db757519572ae1ee025662830122))
+* test only lightning wallet test ([78d823f](https://github.com/geyserfund/geyser-app/commit/78d823fde9d342c1c98c195b63c01358f8b09535))
+* test script ([0c85a9a](https://github.com/geyserfund/geyser-app/commit/0c85a9ad10a875df38a792ccbcd2817601e04211))
+* unclear error message on email update ([88fb2e2](https://github.com/geyserfund/geyser-app/commit/88fb2e2d81a4aa593ffaabb96b60b8e9eae071ec))
+* uncomment all tests, except for lightning address project ([d5152af](https://github.com/geyserfund/geyser-app/commit/d5152af3071b1063f324810a5bd02ac15f02e1f0))
+* update button to nanother color scheme ([5857d58](https://github.com/geyserfund/geyser-app/commit/5857d5896c21de119f2685cec314fca0799f9db6))
+* update images ([c3d8db7](https://github.com/geyserfund/geyser-app/commit/c3d8db7bf682b4061419942988893af82babd4f5))
+* update map button to include tooltip ([0ae6dd3](https://github.com/geyserfund/geyser-app/commit/0ae6dd3fdb25573f9aec0dfcea6987f700d60c6e))
+* update notice ([bfc98a4](https://github.com/geyserfund/geyser-app/commit/bfc98a4943d0b0b0fa4ec70f1c0c2d932b77a4c2))
+* update package version ([24e4ee3](https://github.com/geyserfund/geyser-app/commit/24e4ee32cdee877220a421c2cb64cd1a9cad0ccb))
+* update project info ([b329544](https://github.com/geyserfund/geyser-app/commit/b329544ecb59bf7cf4f8585834182cb396464933))
+* update redirection notice ([46fd026](https://github.com/geyserfund/geyser-app/commit/46fd026f62bb0dbbeb9bec75ff6cf2b587fe1ab5))
+* use reward UUID instead of ID for url ([acdddf8](https://github.com/geyserfund/geyser-app/commit/acdddf86fd393561d89bdad86c58b673941e93bd))
+* use sold count instead of user count ([51a4563](https://github.com/geyserfund/geyser-app/commit/51a4563fbb3d5aae9b8c212211268cc6ca5327f4))
+
+## [0.19.0](https://github.com/geyserfund/geyser-app/compare/v0.18.30...v0.19.0) (2025-03-19)
+
+
+### Features
+
+* add banxa payment form and redirect ([8df4e64](https://github.com/geyserfund/geyser-app/commit/8df4e6450bbfc19648916de6583eafe5b0fba8fa))
+* add email verification and space for identify verification in creation flow ([fc70986](https://github.com/geyserfund/geyser-app/commit/fc70986b551cb849bed4d2bf74ea919baa0e9bc9))
+* add products page ([3e3997a](https://github.com/geyserfund/geyser-app/commit/3e3997acf1911214750765d280374217bd92faa4))
+* add project notices for verification and profile settings verification section ([61f1f10](https://github.com/geyserfund/geyser-app/commit/61f1f10c0a5a32fc5fdb84a1cdb6ac03bb40ddc5))
+* add verified badge ([e8377ff](https://github.com/geyserfund/geyser-app/commit/e8377ff5369516c0f5b2654a6febf84620c6b728))
+* create UI for creator verification ([ebd016b](https://github.com/geyserfund/geyser-app/commit/ebd016b14c551488808547a3b9ee6a21e185c0ea))
+* featured carousel can feature, projects, grants or displays ([b6d4f67](https://github.com/geyserfund/geyser-app/commit/b6d4f675deda3fa7c118099952f2557955dfc183))
+* finalize banxa return url ([7a69746](https://github.com/geyserfund/geyser-app/commit/7a697463400b697548952bdca57683e3c80b264c))
+* initiated routes for fiat swap ([ac3936a](https://github.com/geyserfund/geyser-app/commit/ac3936abd2d9cc8dc533bd29229b88e53d5658a9))
+* update funding flow and improve verification flow ([2e0c200](https://github.com/geyserfund/geyser-app/commit/2e0c20061eb8fdeef1eac1c5ae7b4492b6177cf3))
+* wrap up project dashboard and project creation, creator verification ([dcde11b](https://github.com/geyserfund/geyser-app/commit/dcde11b4e7db24d6961ba40ebf73208b9b6f6234))
+
+
+### Bug Fixes
+
+* activity not being highlighted in discovery sidenav ([a6cb12f](https://github.com/geyserfund/geyser-app/commit/a6cb12f1ccce35f389b65b52d0b57265eacbeced))
+* add contribute button to grant contribute section ([c388fec](https://github.com/geyserfund/geyser-app/commit/c388fecf42cc8c697d8c0de09f08785383fcc1a4))
+* add heroId of loggedin users to url ([b9d6da1](https://github.com/geyserfund/geyser-app/commit/b9d6da15fd38956e93756afc1a29f04047348049))
+* add missing note ([b94fc85](https://github.com/geyserfund/geyser-app/commit/b94fc85e9f71e2b6732fb29602f1ced4b1090100))
+* add seo to grant page ([f8c4976](https://github.com/geyserfund/geyser-app/commit/f8c49769c96828c4d045a56b61efef36d9336a2b))
+* add tooltip to board member grants ([660bcc8](https://github.com/geyserfund/geyser-app/commit/660bcc867a598f0d609f44a19b7e17081b72f4db))
+* add tooltip to tags in grant definition ([c6d5aeb](https://github.com/geyserfund/geyser-app/commit/c6d5aeb16e82f55c276631bdd555f39419afe05d))
+* amount validation ([15c7545](https://github.com/geyserfund/geyser-app/commit/15c7545a4e16cb6a09bc261b08f76a4ff095ff33))
+* badge tooltip and colormode fix ([13189f4](https://github.com/geyserfund/geyser-app/commit/13189f4a3d472867fc7cf0bccbe75aab54815f5f))
+* change data format for speedwallet ([531a262](https://github.com/geyserfund/geyser-app/commit/531a2622bc6a1dd5e9b83a4798492ca559a04c53))
+* change the payment flow back ([5774a55](https://github.com/geyserfund/geyser-app/commit/5774a550d61ef0a30d04b237bff51b98f23a6a50))
+* copy updates and style updates to creator verification notice ([d7703f1](https://github.com/geyserfund/geyser-app/commit/d7703f1cb16a7bce02bbc78924cd9a56e86d320f))
+* debig for speed wallet ([cb591af](https://github.com/geyserfund/geyser-app/commit/cb591af9cd5f8c7a99b86fa213327a365d6f18ab))
+* debugging speed wallet ([980ff4d](https://github.com/geyserfund/geyser-app/commit/980ff4dc435aeff90d410c47566317296c12ed7e))
+* featured section skeletons look bad ([a2beba8](https://github.com/geyserfund/geyser-app/commit/a2beba86be710aed3900eb150f01a2bd96c43624))
+* final qa issues ([bf898d6](https://github.com/geyserfund/geyser-app/commit/bf898d6ac550b73a2dbfe1711dbbe4c631593c31))
+* finalize ui for wallet page ([eceb812](https://github.com/geyserfund/geyser-app/commit/eceb812e0b0ef0e410ac9b415f631510360a699c))
+* fix enable fiat contribution switch on verified identity ([e460341](https://github.com/geyserfund/geyser-app/commit/e460341c1ad3d10ccf81b97ac4bc153afcd65fa0))
+* grant countdown color ([b6677b5](https://github.com/geyserfund/geyser-app/commit/b6677b5f9fde3207a175f1016a7a2c4d2703918b))
+* improve sumsub verification status, and wallet page in creation flow ([e730321](https://github.com/geyserfund/geyser-app/commit/e7303212eea47dbecced863a12b7a54ae0b74eb5))
+* issue with memory leak in project creation info form ([d84db2d](https://github.com/geyserfund/geyser-app/commit/d84db2d436a71ec636b74854fcc75b0174a08a1e))
+* minor style fixes ([9e0d787](https://github.com/geyserfund/geyser-app/commit/9e0d7877b9b3b80846b12d1a1fad684cea16140c))
+* not going back and ambassador user link click ([f40490b](https://github.com/geyserfund/geyser-app/commit/f40490b778def2f41ea0f0ce5d6dea9c8a3753d1))
+* notice component dont updates ([5e9b0a1](https://github.com/geyserfund/geyser-app/commit/5e9b0a18c2f1d57dce4972ec5b578fe4c254ff06))
+* other qa fixes ([dca5eb0](https://github.com/geyserfund/geyser-app/commit/dca5eb0b79306dca69a3f2b1c21055656a0709c8))
+* project category selection ([f651ac2](https://github.com/geyserfund/geyser-app/commit/f651ac2b77a8497cc1480eba1c5bc54aba18166e))
+* project settings wallet ([d6b4f13](https://github.com/geyserfund/geyser-app/commit/d6b4f137519043c6c3eef66ccf4d72b405b02a2e))
+* qa fixes with fiat to bitcoin & creator verification ([a5fd6ff](https://github.com/geyserfund/geyser-app/commit/a5fd6ff8c0b8aa56da08a1f45ffb5defb6f0c5b1))
+* qa issues in fiat to bicoin & creator verification ([b14cd46](https://github.com/geyserfund/geyser-app/commit/b14cd4665b63f149090a7ad3987d37638d37807a))
+* remove enable fiat contributions if identity is verified ([73ae316](https://github.com/geyserfund/geyser-app/commit/73ae316881e7f657dc0608585ad539cedf79de5c))
+* remove logs ([1ae387b](https://github.com/geyserfund/geyser-app/commit/1ae387b00fbe06aac4e483a69f1e0a934030ccef))
+* remove params after adding it to localstorage ([a12411e](https://github.com/geyserfund/geyser-app/commit/a12411ea4005d361c98b134dbdf519b1c994bd89))
+* resolve contribution confirmation ([446bab0](https://github.com/geyserfund/geyser-app/commit/446bab020bac5b668447049bf70c08ceb0007576))
+* show guardians badge in the Creator section in the project page ([f05b429](https://github.com/geyserfund/geyser-app/commit/f05b429705205b81fcb9b1db715240b4a11759fb))
+* show verified badge if user is verified in profile settings ([1a69f5b](https://github.com/geyserfund/geyser-app/commit/1a69f5b07354d8506388640ac1debca7af16a8de))
+* small issues and improvements ([f3dcace](https://github.com/geyserfund/geyser-app/commit/f3dcaceff88f2086c696bc511a06a769260508f1))
+* speed wallet debug ([cc34e89](https://github.com/geyserfund/geyser-app/commit/cc34e8903d7beba7af4608137d1b332001ef03bf))
+* speed wallet issue, with stored values for wallet user in atom ([c433b60](https://github.com/geyserfund/geyser-app/commit/c433b60e731ee0153850ee6a15c3058551d26da7))
+* update copy ([60e9ecd](https://github.com/geyserfund/geyser-app/commit/60e9ecd769bec03c729b5c919421ed8932e784da))
+* update copy and style ([01924f3](https://github.com/geyserfund/geyser-app/commit/01924f3750abcb2c7a9072f3c751606a0168dc5f))
+* update guardians page to include new promotion block and investors and partners ([947489a](https://github.com/geyserfund/geyser-app/commit/947489a3f64c446b1e2781269ea80e6a66932ac6))
+* update monthly trending product query ([4d6d79f](https://github.com/geyserfund/geyser-app/commit/4d6d79fb32306348852f4162697e3b43f7a44c1e))
+* update project reward form to use markdown editor ([d76d4b8](https://github.com/geyserfund/geyser-app/commit/d76d4b8e47a6f8c6acfdb658854eb989b8fa4729))
+* use transalate function separately for toast invokes, removed at root ([1579f5a](https://github.com/geyserfund/geyser-app/commit/1579f5a4a5069fcdf62771b071eb0da7c9b5a2d7))
+* wallet params for speedwallet ([3050244](https://github.com/geyserfund/geyser-app/commit/305024450d2aacb97799f6664534a1a69cec80ad))
+
+## [0.18.30](https://github.com/geyserfund/geyser-app/compare/v0.18.6...v0.18.30) (2025-02-24)
+
+
+### Features
+
+* add payment with speedwallet option ([fb9955a](https://github.com/geyserfund/geyser-app/commit/fb9955a9613782b5f26e9417ef54a5abb528bb88))
+
+
+### Bug Fixes
+
+* add a version check workflow that fails if version is same ([885a9f3](https://github.com/geyserfund/geyser-app/commit/885a9f3eef4b6afa9715077b63b284ae7ff7e3bb))
+* applcation pending and grant name display ([ead9874](https://github.com/geyserfund/geyser-app/commit/ead98741f7006125c16ea4599245e874b72ed29b))
+* copy change to see version issue being fixed ([5e1b193](https://github.com/geyserfund/geyser-app/commit/5e1b1939ba7c95f97f46fcb857a24199cddf3c2c))
+* copy update to test deployment ([7ea26a6](https://github.com/geyserfund/geyser-app/commit/7ea26a60518b1507257f21bfe54c34f37929d6d7))
+* disabled navigation preload, and handle navigation with network only ([ee47492](https://github.com/geyserfund/geyser-app/commit/ee4749289e73a7b14747e15f151634365ca7c466))
+* final check ([7cbd1d4](https://github.com/geyserfund/geyser-app/commit/7cbd1d40f8d05ebb1c9fae186e06347ca499444f))
+* final test ([d58463b](https://github.com/geyserfund/geyser-app/commit/d58463b039840c35d08cf78c83f8081046a8b96f))
+* fix custom sw.ts ([e8ab6db](https://github.com/geyserfund/geyser-app/commit/e8ab6db9c4c489c0f2e8cae5e4e28f617c4ae772))
+* go back to configuration before wednesday ([16aca58](https://github.com/geyserfund/geyser-app/commit/16aca583f44426c96c47ab3e4f15d0c0eef6b46d))
+* issue with build ([9cfd1e7](https://github.com/geyserfund/geyser-app/commit/9cfd1e75dc211970a39f10f5f93238578538a0f1))
+* manually inject service worker ([5900c08](https://github.com/geyserfund/geyser-app/commit/5900c087004873fc1b5afdc53834678a6c6172e7))
+* minor copy change ([24e0525](https://github.com/geyserfund/geyser-app/commit/24e0525e3998af4cbd19defb7bb46cf31b71a0a7))
+* minor copy change to check post deployment bug ([4f20c67](https://github.com/geyserfund/geyser-app/commit/4f20c675745c435236b4a7c8c7fa7cffabe4dd90))
+* new pwa version and updated config ([cade6fd](https://github.com/geyserfund/geyser-app/commit/cade6fd46383f2fe3dc76d5f36006820f8e178bc))
+* safari in app fix ([9ba26f4](https://github.com/geyserfund/geyser-app/commit/9ba26f479fc7dbb59fae76241904af561fd27299))
+* service worker ([5eb879a](https://github.com/geyserfund/geyser-app/commit/5eb879a447fd88d2c655e249c355f11c62322abb))
+* service worker issue ([568cbd1](https://github.com/geyserfund/geyser-app/commit/568cbd10eb63c66c2ec71603e624d28e99701640))
+* service worker to remove service worker redirections ([389c444](https://github.com/geyserfund/geyser-app/commit/389c444f035bcf94adec11af6aedd7ad43950c18))
+* show all projects on featured carousel ([4c65d8f](https://github.com/geyserfund/geyser-app/commit/4c65d8f05b4329313f0bf9a1de88c486540896aa))
+* test package.json ([1a7a7cd](https://github.com/geyserfund/geyser-app/commit/1a7a7cd334324fc0525bdda18d37d279015bdfb4))
+* test version ([6c39c56](https://github.com/geyserfund/geyser-app/commit/6c39c569fa3eeb24a4cf02e2f84d68b1b50ed804))
+* testing ([76869c3](https://github.com/geyserfund/geyser-app/commit/76869c36b3b7eeaf558c66987b9413014f454ee1))
+* testing pwa ([839c7af](https://github.com/geyserfund/geyser-app/commit/839c7afe1480ac22e41af8b03f295f01f86efb9c))
+* update link for promote section ([9c043f0](https://github.com/geyserfund/geyser-app/commit/9c043f02f6b6e4678f3b97dcbb81f132780d5046))
+* update package version ([bcf2ed1](https://github.com/geyserfund/geyser-app/commit/bcf2ed1914aee0df96ab2510014291906a89acb1))
+* update package version ([6ff9ae4](https://github.com/geyserfund/geyser-app/commit/6ff9ae4563e8aa2c089814c1442ab2ef6efcdb4c))
+
+
+### Reverts
+
+* Revert "Revert "PRODUCTION PUSH: 2025-feb-19: Wallet service, Featured Project improvements and Bug fixes"" ([a73b626](https://github.com/geyserfund/geyser-app/commit/a73b626e901baa40dea648573d505249fa199e2f))
+
+## [0.18.6](https://github.com/geyserfund/geyser-app/compare/v0.18.5...v0.18.6) (2025-02-19)
+
+
+### Features
+
+* add category selection in creation flow and project dashboard, show categories in project details, on click leads to landing page filtered by category ([e345760](https://github.com/geyserfund/geyser-app/commit/e3457609235d728a70b99f288c32c0320e2e31a8))
+* add featured project carousel ([24a0b2d](https://github.com/geyserfund/geyser-app/commit/24a0b2d2594e87baa0f52143a67cd080442e254b))
+* add link to facebook ([ca963fd](https://github.com/geyserfund/geyser-app/commit/ca963fd1425a45710673fbed60b5031116c7acba))
+* add Tooltip when hovering over Guardian Gem ([c123145](https://github.com/geyserfund/geyser-app/commit/c123145b138411b34c2c56c68322fa6bc14a669b))
+* check from airtable which sponsor to render based on user ip country ([8daee7f](https://github.com/geyserfund/geyser-app/commit/8daee7f1d350b50bf04252d994883e31ba571882))
+* start adding rules for cursor to create and help with creating components ([2a92418](https://github.com/geyserfund/geyser-app/commit/2a92418e23a70dbd31e100bfe7a680709035310f))
+
+
+### Bug Fixes
+
+* "Buy" button should be greyed out if "available" is zero ([3b7f7d7](https://github.com/geyserfund/geyser-app/commit/3b7f7d76cfb2730947b1eeaa51e827fffdf7d663))
+* add reference code in funding success ([9e391ed](https://github.com/geyserfund/geyser-app/commit/9e391ed30d5230dcc34a2bbac195507380e9ec5f))
+* change reward copy ([0cdef62](https://github.com/geyserfund/geyser-app/commit/0cdef62ebc5256437f7533a7172e5900254dcd90))
+* close modal on email verfication ([d9b9627](https://github.com/geyserfund/geyser-app/commit/d9b9627f3e8171b649c9a4ed1994aca10236fc62))
+* copy update ([c2fc1fa](https://github.com/geyserfund/geyser-app/commit/c2fc1fad676e52249dd83c4efb78a081130b88b8))
+* do not allow urls in project title and description ([af0aed0](https://github.com/geyserfund/geyser-app/commit/af0aed0212c4ab0740074711221311afe4e6d0c7))
+* don't show sats for 0 ([1d95381](https://github.com/geyserfund/geyser-app/commit/1d9538140d67ecf1ea6a9e94b313f969ffbc352f))
+* issues with featured project carousel ([a96e746](https://github.com/geyserfund/geyser-app/commit/a96e746bf43f98b5174b1b7204c702bc565e4f02))
+* make final adjustments ([d3af9a7](https://github.com/geyserfund/geyser-app/commit/d3af9a766dac479f806e3acf845dd7f6c6013c17))
+* myProjects sorting issue ([4c95a20](https://github.com/geyserfund/geyser-app/commit/4c95a2077f1babf4cc4c0f54876990d14fa840ff))
+* projects with activity should always show at the top, but they dont ([02aab77](https://github.com/geyserfund/geyser-app/commit/02aab77d21bc5ef8f63be53a4197bc7759fe0015))
+* remove pre-commit lint check ([a02e4aa](https://github.com/geyserfund/geyser-app/commit/a02e4aa65922ebb3faceb8eadae4d01c4231bad7))
+* remove regions, only add country ([1ae34bd](https://github.com/geyserfund/geyser-app/commit/1ae34bd4c5fd619336c52ada0eb44bc67f735214))
+* remove the tags and add color to category and subcategory ([79a339a](https://github.com/geyserfund/geyser-app/commit/79a339a9385fb6241a6f985759cf5107d032c488))
+* showing wallet sponsors ([a1ab055](https://github.com/geyserfund/geyser-app/commit/a1ab055c13432238e7f83b05d3ddf91d763b07c1))
+* skeleton for badges ([b5d00bc](https://github.com/geyserfund/geyser-app/commit/b5d00bc2c08df75ae131735bd96a8791e6de605b))
+* success screen visual improvements ([f40823c](https://github.com/geyserfund/geyser-app/commit/f40823c53db40c10a9c0d1188b868408ac0ba3a2))
+* tls certificate issue ([f54242c](https://github.com/geyserfund/geyser-app/commit/f54242c947a80ac8f7f9c7a64774fc690f44a35c))
+* ui issue in creation flow ([571c40f](https://github.com/geyserfund/geyser-app/commit/571c40f4cfb8d4f12274bb87787d688ed48a6318))
+* update text ([bfef472](https://github.com/geyserfund/geyser-app/commit/bfef4724c66e8f3786a2128ce625a3031da0e410))
+
+## [0.18.5](https://github.com/geyserfund/geyser-app/compare/v0.18.4...v0.18.5) (2025-02-11)
+
+
+### Bug Fixes
+
+* failed service worker redirection ([f0d1cb9](https://github.com/geyserfund/geyser-app/commit/f0d1cb91591be2effb2e4f853d4e0840972d3480))
+
+## [0.18.4](https://github.com/geyserfund/geyser-app/compare/v0.18.0...v0.18.4) (2025-02-10)
+
+
+### Features
+
+* add category and subcategory to filters ([b6a3b4b](https://github.com/geyserfund/geyser-app/commit/b6a3b4b080f09b1e4e9ce93d25afdc4a63d7ed5a))
+
+
+### Bug Fixes
+
+* add grant custom url ([1f2f216](https://github.com/geyserfund/geyser-app/commit/1f2f216a8f8db2caaba0eccce41e49954255c251))
+* add grant has voting ([ffa6838](https://github.com/geyserfund/geyser-app/commit/ffa6838f265466dea84f88b8e57712fdf2e0bd15))
+* cannot unlink social account if last account is google ([523fb14](https://github.com/geyserfund/geyser-app/commit/523fb143f1c12857dbd94d0448fd54e1dd1f3cdd))
+* change twitter to x ([f5a2773](https://github.com/geyserfund/geyser-app/commit/f5a277358506b0ef56c1a17158f59a0b2b349c8b))
+* copy change for grant board members title ([d8d284e](https://github.com/geyserfund/geyser-app/commit/d8d284e776adc6b504a4d86be7693ea2e4f83465))
+* disable google as social login for creating projects ([2917786](https://github.com/geyserfund/geyser-app/commit/291778648dbac674e94b75ec7c4fbed1b4aa6205))
+* hide amount from btcisla ([77d7044](https://github.com/geyserfund/geyser-app/commit/77d704481c93bd2970e468350fea7f37418b0e21))
+* language stuff ([dae48f4](https://github.com/geyserfund/geyser-app/commit/dae48f46ca0f63693e75d4478aacde211c4c8a21))
+* prod cloud build script ([8582826](https://github.com/geyserfund/geyser-app/commit/8582826f9565a5dce7437798e850ce7c5c12e836))
+* projects with activity should always show at the top, but they dont ([d523c72](https://github.com/geyserfund/geyser-app/commit/d523c721202a2b24c267008020b476d124222fd6))
+* subcategories display ([5329732](https://github.com/geyserfund/geyser-app/commit/5329732bb23b9abaf8f88b8f89afb6d5c55d40f1))
+* update trending sections ([83e0d58](https://github.com/geyserfund/geyser-app/commit/83e0d583106228aa3dc278d82178b4953be8da85))
+* vite config for service worker generation to have navigation fallback ([d3bdf89](https://github.com/geyserfund/geyser-app/commit/d3bdf8998fbf80195eee0cb89d9afe14bc910c27))
+
+## [0.18.3](https://github.com/geyserfund/geyser-app/compare/v0.18.0...v0.18.3) (2025-02-07)
+
+
+### Features
+
+* add category and subcategory to filters ([b6a3b4b](https://github.com/geyserfund/geyser-app/commit/b6a3b4b080f09b1e4e9ce93d25afdc4a63d7ed5a))
+
+
+### Bug Fixes
+
+* add grant custom url ([1f2f216](https://github.com/geyserfund/geyser-app/commit/1f2f216a8f8db2caaba0eccce41e49954255c251))
+* cannot unlink social account if last account is google ([523fb14](https://github.com/geyserfund/geyser-app/commit/523fb143f1c12857dbd94d0448fd54e1dd1f3cdd))
+* change twitter to x ([f5a2773](https://github.com/geyserfund/geyser-app/commit/f5a277358506b0ef56c1a17158f59a0b2b349c8b))
+* copy change for grant board members title ([d8d284e](https://github.com/geyserfund/geyser-app/commit/d8d284e776adc6b504a4d86be7693ea2e4f83465))
+* disable google as social login for creating projects ([2917786](https://github.com/geyserfund/geyser-app/commit/291778648dbac674e94b75ec7c4fbed1b4aa6205))
+* hide amount from btcisla ([77d7044](https://github.com/geyserfund/geyser-app/commit/77d704481c93bd2970e468350fea7f37418b0e21))
+* prod cloud build script ([8582826](https://github.com/geyserfund/geyser-app/commit/8582826f9565a5dce7437798e850ce7c5c12e836))
+* subcategories display ([5329732](https://github.com/geyserfund/geyser-app/commit/5329732bb23b9abaf8f88b8f89afb6d5c55d40f1))
+* update trending sections ([83e0d58](https://github.com/geyserfund/geyser-app/commit/83e0d583106228aa3dc278d82178b4953be8da85))
+
 ## [0.18.2](https://github.com/geyserfund/geyser-app/compare/v0.18.0...v0.18.2) (2025-01-30)
 
 

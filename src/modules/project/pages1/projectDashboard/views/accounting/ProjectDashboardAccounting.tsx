@@ -9,12 +9,12 @@ import { ProjectNoTransactionImageUrl } from '../../../../../../shared/constants
 import { usePaginationHook } from '../../../../../../shared/hooks/usePaginationHook'
 import { standardPadding } from '../../../../../../shared/styles'
 import {
-  FundingTxOrderFragment,
-  FundingTxsWhereFundingStatus,
-  GetFundingTxsOrderByInput,
-  GetFundingTxsWhereInput,
+  ContributionsWhereContributionStatus,
+  GetContributionsOrderByInput,
+  GetContributionsWhereInput,
   OrderByOptions,
-  useFundingTxsOrderGetQuery,
+  OrderContributionFragment,
+  useOrderContributionsGetQuery,
 } from '../../../../../../types'
 import { useNotification } from '../../../../../../utils'
 import { DashboardLayout, ExportComponent } from '../../common'
@@ -29,16 +29,16 @@ export const ProjectDashboardAccounting = () => {
   const { toast } = useNotification()
 
   const [isLoading, setIsLoading] = useState(true)
-  const [orderBy, setOrderBy] = useState<GetFundingTxsOrderByInput>({
+  const [orderBy, setOrderBy] = useState<GetContributionsOrderByInput>({
     createdAt: OrderByOptions.Desc,
   })
 
-  const where: GetFundingTxsWhereInput = {
+  const where: GetContributionsWhereInput = {
     projectId: project?.id,
-    status: FundingTxsWhereFundingStatus.Paid,
+    status: ContributionsWhereContributionStatus.Confirmed,
   }
 
-  const { fetchMore } = useFundingTxsOrderGetQuery({
+  const { fetchMore } = useOrderContributionsGetQuery({
     skip: !project?.id,
     fetchPolicy: 'no-cache',
     variables: {
@@ -51,7 +51,7 @@ export const ProjectDashboardAccounting = () => {
       },
     },
     onCompleted(data) {
-      handleDataUpdate(data.fundingTxsGet?.fundingTxs || [])
+      handleDataUpdate(data.contributionsGet?.contributions || [])
       setIsLoading(false)
     },
     onError(error) {
@@ -70,9 +70,9 @@ export const ProjectDashboardAccounting = () => {
     isLoadingMore,
     noMoreItems,
     fetchNext,
-  } = usePaginationHook<FundingTxOrderFragment>({
+  } = usePaginationHook<OrderContributionFragment>({
     fetchMore,
-    queryName: ['fundingTxsGet', 'fundingTxs'],
+    queryName: ['contributionsGet', 'contributions'],
     itemLimit: MAXIMUM_ACCOUNTING_ITEMS,
     where,
     orderBy,

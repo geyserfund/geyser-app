@@ -15,7 +15,8 @@ import { currentDashboardItemAtom, isDashboardMainRouteAtom } from '../navigatio
 type DashboardLayoutProps = {
   mobileTopNavRightComponent?: React.ReactNode
   deskTopBottomComponent?: React.ReactNode
-  desktopTitle?: string
+  titleRightComponent?: React.ReactNode
+  desktopTitle?: string | React.ReactNode
 } & StackProps
 
 /** All Dashboard main Pages must be wrapped by this Layout container */
@@ -23,6 +24,7 @@ export const DashboardLayout = ({
   children,
   mobileTopNavRightComponent,
   deskTopBottomComponent,
+  titleRightComponent,
   desktopTitle,
   ...props
 }: PropsWithChildren<DashboardLayoutProps>) => {
@@ -73,13 +75,13 @@ export const DashboardLayout = ({
           <HStack w="full" h="32px" justifyContent={'start'} spacing={2} display={{ base: 'flex', lg: 'none' }}>
             <currentDashboardItem.icon size={24} />
             <H1 size="2xl" dark bold>
-              {t(currentDashboardItem.label)}
+              {t(currentDashboardItem.label)} {titleRightComponent}
             </H1>
           </HStack>
         )}
         {desktopTitle && (
           <H1 size="2xl" medium paddingX={6} display={{ base: 'none', lg: 'block' }}>
-            {desktopTitle}
+            {desktopTitle} {titleRightComponent}
           </H1>
         )}
         {children}

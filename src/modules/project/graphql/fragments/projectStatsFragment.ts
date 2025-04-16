@@ -23,9 +23,12 @@ export const FRAGMENT_PROJECT_STATS_INSIGHTS_PAGE = gql`
       projectFunders {
         count
       }
-      projectFundingTxs {
-        amountSum
-        count
+      projectContributionsStats {
+        contributions {
+          count
+          total
+          totalUsd
+        }
       }
     }
     prevTimeRange {
@@ -39,9 +42,12 @@ export const FRAGMENT_PROJECT_STATS_INSIGHTS_PAGE = gql`
       projectFunders {
         count
       }
-      projectFundingTxs {
-        amountSum
-        count
+      projectContributionsStats {
+        contributions {
+          count
+          total
+          totalUsd
+        }
       }
     }
   }
@@ -50,10 +56,15 @@ export const FRAGMENT_PROJECT_STATS_INSIGHTS_PAGE = gql`
 export const FRAGMENT_PROJECT_HISTORY_STATS = gql`
   fragment ProjectHistoryStats on ProjectStats {
     current {
-      projectFundingTxs {
-        amountGraph {
-          dateTime
-          sum
+      projectContributionsStats {
+        contributions {
+          graph {
+            statType
+            graphData {
+              value
+              dateTime
+            }
+          }
         }
       }
       projectViews {
@@ -85,10 +96,12 @@ export const FRAGMENT_REWARDS_SOLD_GRAPH_STATS = gql`
 export const FRAGMENT_FUNDING_METHOD_STATS = gql`
   fragment ProjectFundingMethodStats on ProjectStats {
     current {
-      projectFundingTxs {
-        methodSum {
-          sum
+      projectContributionsStats {
+        contributionsGroupedByMethod {
+          count
           method
+          total
+          totalUsd
         }
       }
     }

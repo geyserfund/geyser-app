@@ -1,16 +1,17 @@
-import { Button, Divider, VStack } from '@chakra-ui/react'
+import { Button, Divider, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import Confetti from 'react-confetti'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useFundingTxAtom } from '@/modules/project/funding/state'
+import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
-import { FundingStatus } from '@/types'
+import { ContributionStatus } from '@/types/index.ts'
 
 import { ProjectFundingSummary } from '../../components/ProjectFundingSummary'
 import { FundingLayout } from '../../layouts/FundingLayout'
@@ -22,15 +23,16 @@ import { SendEmailToCreator } from './components/SendEmailToCreator'
 
 export const FundingSuccess = () => {
   const { project, formState } = useFundingFormAtom()
-  const { fundingTx } = useFundingTxAtom()
+
+  const fundingContribution = useAtomValue(fundingContributionAtom)
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (fundingTx.status !== FundingStatus.Paid) {
+    if (fundingContribution.status !== ContributionStatus.Confirmed) {
       navigate(getPath('projectFunding', project.name))
     }
-  }, [fundingTx, navigate, project.name])
+  }, [fundingContribution, navigate, project.name])
 
   return (
     <FundingLayout
@@ -67,6 +69,10 @@ export const FundingSuccess = () => {
               <H2 size={{ base: 'xl', lg: '2xl' }} bold>
                 {t('Next Actions')}
               </H2>
+              <HStack>
+                <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Reference code')}: `}</Body>
+                <Body size={{ base: 'sm', lg: 'md' }}>{`${fundingContribution.uuid} `}</Body>
+              </HStack>
               <ConfirmationMessages />
               <SendEmailToCreator />
             </VStack>
@@ -77,7 +83,7 @@ export const FundingSuccess = () => {
                 {t('Manage Subscription')}
               </H2>
               <Body size="sm" light>
-                {fundingTx.isAnonymous
+                {fundingContribution.isAnonymous
                   ? t('To manage your subscription in the future, please login to stripe with your provided email.')
                   : t('Please check your profile to manage your subscription.')}
               </Body>
@@ -86,7 +92,7 @@ export const FundingSuccess = () => {
           <SafeToDeleteRefund />
           <Divider />
           <ProjectFundingSummary disableCollapse />
-          <DownloadInvoice project={project} fundingTxId={fundingTx.id} />
+          <DownloadInvoice project={project} contributionId={fundingContribution.id} />
         </VStack>
       </CardLayout>
     </FundingLayout>

@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { t } from 'i18next'
+import { useEffect, useMemo, useState } from 'react'
 
 import {
   ActivityFeedName,
@@ -10,23 +11,31 @@ import {
 } from '@/types'
 import { useNotification } from '@/utils'
 
-const sortProjectsByActivity = (
+export const sortProjectsByActivity = (
   projects: ProjectForProfilePageFragment[],
   activities: ProjectActivitiesCount[],
 ): ProjectForProfilePageFragment[] => {
-  const activityMap = new Map(activities.map((a) => [a.project.id, a.count]))
-
-  return [...projects].sort((a, b) => {
-    const countA = activityMap.get(a.id) || 0
-    const countB = activityMap.get(b.id) || 0
-    return countB - countA
+  const activityMap = {} as Record<string, number>
+  activities.map((a) => {
+    activityMap[a.project.id] = a.count
   })
+
+  return [...projects]
+    .sort((a, b) => {
+      return b.balance - a.balance
+    })
+    .sort((a, b) => {
+      const countA = activityMap[a.id] || 0
+      const countB = activityMap[b.id] || 0
+      return countB - countA
+    })
 }
 
 export const useMyProjects = (userId: number) => {
   const { toast } = useNotification()
 
   const [isLoading, setLoading] = useState(true)
+  const [_activeProjects, _setActiveProjects] = useState<ProjectForProfilePageFragment[]>([])
   const [activeProjects, setActiveProjects] = useState<ProjectForProfilePageFragment[]>([])
   const [inDraftProjects, setInDraftProjects] = useState<ProjectForProfilePageFragment[]>([])
   const [inReviewProjects, setInReviewProjects] = useState<ProjectForProfilePageFragment[]>([])
@@ -67,15 +76,21 @@ export const useMyProjects = (userId: number) => {
     },
     skip: !userId,
     onCompleted(data) {
-      setActiveProjects(
-        sortProjectsByActivity(
-          data.user.ownerOf
-            ?.filter((val) => val?.project?.status === ProjectStatus.Active)
-            .map((val) => val.project)
-            .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? [],
-          myProjectsActivities,
-        ),
-      )
+      const filteredActiveProjects =
+        data.user.ownerOf
+          ?.filter((val) => val?.project?.status === ProjectStatus.Active)
+          .map((val) => val.project)
+          .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? []
+      _setActiveProjects(filteredActiveProjects)
+      setActiveProjects(filteredActiveProjects)
+
+      // sortProjectsByActivity(
+      //   data.user.ownerOf
+      //     ?.filter((val) => val?.project?.status === ProjectStatus.Active)
+      //     .map((val) => val.project)
+      //     .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? [],
+      //   myProjectsActivities,
+      // )
       setInDraftProjects(
         data.user.ownerOf
           ?.filter((val) => val?.project?.status === ProjectStatus.Draft)
@@ -93,12 +108,18 @@ export const useMyProjects = (userId: number) => {
     onError(error) {
       toast({
         status: 'error',
-        title: 'Failed to fetch projects',
+        title: t('Failed to fetch projects'),
         description: `${error.message}`,
       })
       setLoading(false)
     },
   })
+
+  useEffect(() => {
+    if (_activeProjects.length > 0 && myProjectsActivities.length > 0) {
+      setActiveProjects(sortProjectsByActivity(_activeProjects, myProjectsActivities))
+    }
+  }, [_activeProjects, myProjectsActivities])
 
   return {
     activeProjects,

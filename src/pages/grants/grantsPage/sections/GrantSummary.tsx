@@ -31,6 +31,12 @@ const GRANT_DISTRIBUTION_SYSTEM = {
   [DistributionSystem.WinnerTakeAll]: 'Winner-take-all',
 }
 
+export const DistributionSystemExplanation = {
+  [DistributionSystem.Proportional]:
+    'The funds are split among the projects proportionally to the number of votes received.',
+  [DistributionSystem.WinnerTakeAll]: 'The funds are received by the project with the most number of votes received.',
+}
+
 export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHasVoting?: boolean }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
@@ -69,7 +75,7 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
 
   const votingSystemTooltipContent = () => {
     if (grant.type === GrantType.BoardVote) {
-      return null
+      return <Body>{t('The board evaluates all applications and decides the allocation of the funds collected.')}</Body>
     }
 
     if (grant?.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.OneToOne) {
@@ -175,9 +181,11 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
             </Tooltip>
 
             {grant?.__typename === 'CommunityVoteGrant' && grant.distributionSystem !== DistributionSystem.None && (
-              <Tag border="1px solid" borderColor="neutral.200" bg="neutral.50">
-                {t(GRANT_DISTRIBUTION_SYSTEM[grant.distributionSystem])}
-              </Tag>
+              <Tooltip content={DistributionSystemExplanation[grant.distributionSystem]}>
+                <Tag border="1px solid" borderColor="neutral.200" bg="neutral.50">
+                  {t(GRANT_DISTRIBUTION_SYSTEM[grant.distributionSystem])}
+                </Tag>
+              </Tooltip>
             )}
           </Box>
           <ContributionsWidget

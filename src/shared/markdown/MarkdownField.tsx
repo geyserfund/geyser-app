@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { Box, HStack, IconButton, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, HStack, IconButton, VStack } from '@chakra-ui/react'
 import { TableComponents } from '@remirror/extension-react-tables'
 import { EditorComponent, Remirror, useCommands, useKeymap, useRemirror, useRemirrorContext } from '@remirror/react'
 import { ForwardedRef, useCallback, useEffect } from 'react'
@@ -38,7 +38,7 @@ import TurndownService from 'turndown'
 import { SkeletonLayout } from '../../shared/components/layouts'
 import { useMobileMode } from '../../utils'
 import { useSignedUpload } from '../hooks'
-import { ReactHookTextArea } from './components/ReactHookTextArea'
+import { ReactHookTextArea, ReactHookTextAreaProps } from './components/ReactHookTextArea'
 import { TableCellMenuComponent } from './components/TableCellMenuComponent'
 import { FrameHandler, imageHandler, PreviewRenderer, SaveModule, StyleProvider } from './helpers'
 import { MarkdownToolbar } from './MarkdownToolbar'
@@ -57,11 +57,15 @@ interface Props {
   control?: Control<any, any>
   flex?: boolean
   stickyToolbar?: string | number
+  toolbarWrapperProps?: BoxProps
+  editorWrapperProps?: Omit<BoxProps, 'flex'>
+  markdownRawEditorProps?: Partial<ReactHookTextAreaProps>
   enableRawMode?: boolean
   isEditorMode?: boolean
   toggleEditorMode?: () => void
   isFloatingToolbar?: boolean
   toolbarMaxWidth?: number | string
+  fontFamily?: string
 }
 
 export const MarkdownField = ({
@@ -75,11 +79,15 @@ export const MarkdownField = ({
   control,
   flex,
   stickyToolbar,
+  toolbarWrapperProps,
+  editorWrapperProps,
+  markdownRawEditorProps,
   enableRawMode,
   isEditorMode,
   toggleEditorMode,
   isFloatingToolbar,
   toolbarMaxWidth,
+  fontFamily,
 }: Props) => {
   const isMobile = useMobileMode()
 
@@ -198,7 +206,7 @@ export const MarkdownField = ({
 
   if (preview) {
     return (
-      <StyleProvider flex={flex}>
+      <StyleProvider flex={flex} fontFamily={fontFamily}>
         <PreviewRenderer content={content} manager={manager} />
       </StyleProvider>
     )
@@ -215,6 +223,7 @@ export const MarkdownField = ({
       initialContent={initialContent?.()}
       hooks={hooks}
       placeholder={
+        placeholder ||
         'Traveling to 15 LATAM & CARICOM countries using Bitcoin, this journey aims to showcase the widespread adoption of Bitcoin through engaging travel vlogs..'
       }
     >
@@ -258,6 +267,7 @@ export const MarkdownField = ({
             overflowY: 'hidden',
             marginBottom: '0px',
           })}
+          {...toolbarWrapperProps}
         >
           <MarkdownToolbar isDisabled={isEditorMode} />
           <HStack justifyContent={'center'}>
@@ -281,11 +291,13 @@ export const MarkdownField = ({
           control={control}
           value={content}
           height="100%"
-          minHeight="120px"
+          minHeight={'120px'}
           border="none"
           padding={0}
           formControlProps={{ height: '100%' }}
           fieldContainerProps={{ height: '100%' }}
+          backgroundColor="utils.pbg"
+          {...markdownRawEditorProps}
         />
       )}
       <StyleProvider
@@ -295,6 +307,7 @@ export const MarkdownField = ({
         display={isEditorMode ? 'none' : undefined}
         minHeight={'120px'}
         paddingBottom={0}
+        {...editorWrapperProps}
       >
         <Editor focusEditor={autoFocus} />
         <TableComponents tableCellMenuProps={{ Component: TableCellMenuComponent }} />

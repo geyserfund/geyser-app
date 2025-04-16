@@ -8,7 +8,7 @@ import { contributionListAtom } from '@/modules/project/state/contributionsAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHook'
 import { standardPadding } from '@/shared/styles'
-import { OrderByOptions, ProjectFundingTxFragment, useProjectPageFundingTxQuery } from '@/types'
+import { OrderByOptions, ProjectContributionFragment, useProjectPageContributionsGetQuery } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { ContributeButton } from '../../../body/components'
@@ -34,7 +34,7 @@ export const Contributions = () => {
     createdAt: OrderByOptions.Desc,
   }
 
-  const { fetchMore } = useProjectPageFundingTxQuery({
+  const { fetchMore } = useProjectPageContributionsGetQuery({
     skip: !project.id,
     fetchPolicy: 'network-only',
     variables: {
@@ -47,7 +47,7 @@ export const Contributions = () => {
       },
     },
     onCompleted(data) {
-      handleDataUpdate(data.fundingTxsGet?.fundingTxs || [])
+      handleDataUpdate(data.contributionsGet?.contributions || [])
       setIsLoading(false)
     },
     onError(error) {
@@ -55,14 +55,15 @@ export const Contributions = () => {
     },
   })
 
-  const { handleDataUpdate, isLoadingMore, noMoreItems, fetchNext } = usePaginationAtomHook<ProjectFundingTxFragment>({
-    fetchMore,
-    queryName: ['fundingTxsGet', 'fundingTxs'],
-    itemLimit: MAXIMUM_CONTRIBUTIONS_ITEMS,
-    where,
-    orderBy,
-    setData: setContributions,
-  })
+  const { handleDataUpdate, isLoadingMore, noMoreItems, fetchNext } =
+    usePaginationAtomHook<ProjectContributionFragment>({
+      fetchMore,
+      queryName: ['contributionsGet', 'contributions'],
+      itemLimit: MAXIMUM_CONTRIBUTIONS_ITEMS,
+      where,
+      orderBy,
+      setData: setContributions,
+    })
 
   const id = 'contributions-scroll-container'
 

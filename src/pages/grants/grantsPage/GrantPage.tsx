@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link, useParams } from 'react-router-dom'
 
+import { Head } from '@/config/Head.tsx'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav/TopNavContainerBar'
 
 import Loader from '../../../components/ui/Loader'
@@ -35,11 +36,11 @@ export const GrantPage = () => {
     if (error) {
       toast({
         status: 'error',
-        title: 'Something went wrong.',
-        description: 'Please refresh the page and try again.',
+        title: t('Something went wrong.'),
+        description: t('Please refresh the page and try again.'),
       })
     }
-  }, [error, toast])
+  }, [error, toast, t])
 
   if (loading || !grant) {
     return <Loader paddingTop="20px" />
@@ -90,13 +91,11 @@ export const GrantPage = () => {
       return t('Vote for your favorite projects with your Sats!')
     }
 
-    const defaultTitle = 'Let the Sats flow to your favorite projects.'
-
     if (grantHasVoting) {
-      return `${defaultTitle} ${t('1 Sat = 1 vote.')}`
+      return `${t('Let the Sats flow to your favorite projects.')} ${t('1 Sat = 1 vote.')}`
     }
 
-    return defaultTitle
+    return 'Applicants'
   }
 
   const isBoardVoteGrant = (grant: Grant): grant is BoardVoteGrant => {
@@ -117,6 +116,12 @@ export const GrantPage = () => {
 
   return (
     <>
+      <Head
+        title={grant.title || ''}
+        description={grant.shortDescription || ''}
+        image={grant.image || ''}
+        type="article"
+      />
       <TopNavContainerBar>
         <Button
           as={Link}

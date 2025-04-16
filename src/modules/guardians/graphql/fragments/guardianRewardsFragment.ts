@@ -6,6 +6,9 @@ export const FRAGMENT_GUARDIAN_PROJECT_REWARD = gql`
     uuid
     name
     cost
+    images
+    description
+    shortDescription
     maxClaimable
     sold
     rewardCurrency

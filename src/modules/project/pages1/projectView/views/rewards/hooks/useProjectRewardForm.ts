@@ -20,7 +20,7 @@ import {
   UpdateProjectRewardInput,
   USDCents,
   useProjectRewardCurrencyUpdateMutation,
-  useProjectRewardQuery,
+  useProjectRewardGetQuery,
   useRewardCategoriesQuery,
 } from '@/types'
 import { useNotification } from '@/utils'
@@ -54,14 +54,14 @@ const rewardFormSchema = () =>
   }) as any
 
 type UseProjectRewardFormProps = {
-  rewardId?: string
+  rewardUUID?: string
   isUpdate?: boolean
   isLaunch?: boolean
   defaultCategory?: string | null
 }
 
 export const useProjectRewardForm = ({
-  rewardId,
+  rewardUUID,
   isUpdate,
   isLaunch,
   defaultCategory = null,
@@ -69,12 +69,18 @@ export const useProjectRewardForm = ({
   const navigate = useNavigate()
   const toast = useNotification()
 
-  const { loading: rewardLoading, data } = useProjectRewardQuery({
-    skip: !rewardId,
+  const { loading: rewardLoading, data } = useProjectRewardGetQuery({
+    skip: !rewardUUID,
     variables: {
-      getProjectRewardId: rewardId,
+      input: {
+        where: {
+          uuid: rewardUUID,
+        },
+      },
     },
   })
+
+  const rewardData = data?.projectRewardGet
 
   const { createReward, updateReward } = useProjectRewardsAPI()
 
@@ -91,34 +97,39 @@ export const useProjectRewardForm = ({
 
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
-  const soldAmount = data?.getProjectReward?.sold || 0
+  const soldAmount = rewardData?.sold || 0
 
   const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
     resolver: yupResolver(rewardFormSchema()),
     defaultValues: {
-      name: data?.getProjectReward?.name || '',
-      description: data?.getProjectReward?.description || '',
-      shortDescription: data?.getProjectReward?.shortDescription || '',
-      cost: data?.getProjectReward?.cost || 0,
-      maxClaimable: data?.getProjectReward?.maxClaimable || null,
-      images: data?.getProjectReward?.images || [],
-      hasShipping: data?.getProjectReward?.hasShipping || false,
-      isAddon: data?.getProjectReward?.isAddon || false,
-      isHidden: data?.getProjectReward?.isHidden || false,
-      category: data?.getProjectReward?.category || defaultCategory || null,
-      preOrder: data?.getProjectReward?.preOrder || false,
-      estimatedAvailabilityDate: data?.getProjectReward?.estimatedAvailabilityDate || null,
-      estimatedDeliveryInWeeks: data?.getProjectReward?.estimatedDeliveryInWeeks || null,
-      privateCommentPrompts: data?.getProjectReward?.privateCommentPrompts || [],
-      confirmationMessage: data?.getProjectReward?.confirmationMessage || '',
+      uuid: rewardData?.uuid || '',
+      name: rewardData?.name || '',
+      description: rewardData?.description || '',
+      shortDescription: rewardData?.shortDescription || '',
+      cost: rewardData?.cost || 0,
+      maxClaimable: rewardData?.maxClaimable || null,
+      images: rewardData?.images || [],
+      hasShipping: rewardData?.hasShipping || false,
+      isAddon: rewardData?.isAddon || false,
+      isHidden: rewardData?.isHidden || false,
+      category: rewardData?.category || defaultCategory || null,
+      preOrder: rewardData?.preOrder || false,
+      estimatedAvailabilityDate: rewardData?.estimatedAvailabilityDate || null,
+      estimatedDeliveryInWeeks: rewardData?.estimatedDeliveryInWeeks || null,
+      privateCommentPrompts: rewardData?.privateCommentPrompts || [],
+      confirmationMessage: rewardData?.confirmationMessage || '',
       rewardCurrency: projectCurrency,
     },
     mode: 'onChange',
   })
 
-  const { errors, isDirty, isValid } = formState
+  const { errors, isDirty, isValid, defaultValues } = formState
 
   const enableSubmit = isDirty && isValid
+
+  const formLoaded = rewardUUID
+    ? Boolean(!rewardLoading && rewardData?.uuid && defaultValues?.uuid === rewardData.uuid)
+    : true
 
   // Fetch reward categories
   const { loading: isRewardCategoriesLoading, data: rewardCategoriesData } = useRewardCategoriesQuery()
@@ -132,25 +143,26 @@ export const useProjectRewardForm = ({
   useEffect(() => {
     if (isUpdate) {
       reset({
-        name: data?.getProjectReward?.name || '',
-        description: data?.getProjectReward?.description || '',
-        shortDescription: data?.getProjectReward?.shortDescription || '',
-        cost: data?.getProjectReward?.cost || 0,
-        maxClaimable: data?.getProjectReward?.maxClaimable || null,
-        images: data?.getProjectReward?.images || [],
-        hasShipping: data?.getProjectReward?.hasShipping || false,
-        isAddon: data?.getProjectReward?.isAddon || false,
-        isHidden: data?.getProjectReward?.isHidden || false,
-        category: data?.getProjectReward?.category || null,
-        preOrder: data?.getProjectReward?.preOrder || false,
-        estimatedAvailabilityDate: data?.getProjectReward?.estimatedAvailabilityDate || null,
-        estimatedDeliveryInWeeks: data?.getProjectReward?.estimatedDeliveryInWeeks || null,
-        privateCommentPrompts: data?.getProjectReward?.privateCommentPrompts || [],
-        confirmationMessage: data?.getProjectReward?.confirmationMessage || '',
+        uuid: rewardData?.uuid || '',
+        name: rewardData?.name || '',
+        description: rewardData?.description || '',
+        shortDescription: rewardData?.shortDescription || '',
+        cost: rewardData?.cost || 0,
+        maxClaimable: rewardData?.maxClaimable || undefined,
+        images: rewardData?.images || [],
+        hasShipping: rewardData?.hasShipping || false,
+        isAddon: rewardData?.isAddon || false,
+        isHidden: rewardData?.isHidden || false,
+        category: rewardData?.category || null,
+        preOrder: rewardData?.preOrder || false,
+        estimatedAvailabilityDate: rewardData?.estimatedAvailabilityDate || null,
+        estimatedDeliveryInWeeks: rewardData?.estimatedDeliveryInWeeks || null,
+        privateCommentPrompts: rewardData?.privateCommentPrompts || [],
+        confirmationMessage: rewardData?.confirmationMessage || '',
         rewardCurrency: projectCurrency,
       })
     }
-  }, [data?.getProjectReward, reset, projectCurrency, isUpdate])
+  }, [rewardData, reset, projectCurrency, isUpdate])
 
   const onSubmit = (formData: FormValues) => {
     const commonData = {
@@ -158,7 +170,7 @@ export const useProjectRewardForm = ({
       description: formData.description,
       shortDescription: formData.shortDescription,
       cost: formData.cost,
-      maxClaimable: formData.maxClaimable ? Number(formData.maxClaimable) : null,
+      maxClaimable: formData.maxClaimable ? Number(formData.maxClaimable) : undefined,
       images: formData.images,
       hasShipping: formData.hasShipping,
       isAddon: formData.isAddon,
@@ -173,7 +185,7 @@ export const useProjectRewardForm = ({
 
     if (isUpdate) {
       const updateInput: UpdateProjectRewardInput = {
-        projectRewardId: data?.getProjectReward?.id,
+        projectRewardId: rewardData?.id,
         ...commonData,
       }
 
@@ -188,7 +200,7 @@ export const useProjectRewardForm = ({
           if (isLaunch) {
             navigate(-1)
           } else {
-            navigate(getPath('projectRewardView', project.name, data.projectRewardUpdate.id))
+            navigate(getPath('projectRewardView', project.name, data.projectRewardUpdate.uuid))
           }
         },
         onError(error) {
@@ -212,7 +224,7 @@ export const useProjectRewardForm = ({
           if (isLaunch) {
             navigate(-1)
           } else {
-            navigate(getPath('projectRewardView', project.name, data.projectRewardCreate.id))
+            navigate(getPath('projectRewardView', project.name, data.projectRewardCreate.uuid))
           }
         },
         onError(error) {
@@ -332,6 +344,7 @@ export const useProjectRewardForm = ({
 
   return {
     control,
+    formLoaded,
     handleSubmit: handleSubmit(onSubmit),
     loading: createReward.loading || updateReward.loading,
     error: createReward.error || updateReward.error,

@@ -12,13 +12,25 @@ export enum FormatCurrencyType {
 
 type TCurrency = 'BTCSAT' | 'USDCENT' | 'USD'
 
-export const useCurrencyFormatter = (shortUsdAmount?: boolean) => {
+/**
+ * Format given amount with given currency type
+ * @description Uses current BTC rates to show the converted amount
+ * @param shortAmount - Whether to use short amount labels
+ * @returns - Formatted amount
+ */
+export const useCurrencyFormatter = (shortAmount?: boolean) => {
   const { getUSDCentsAmount, getSatoshisFromUSDCents } = useBTCConverter()
 
   const formatAmount = useCallback(
     (amount: number, currency: TCurrency) => {
       if (currency === FormatCurrencyType.Btcsat) {
         if (amount === 0) return '0 sats'
+
+        if (shortAmount) {
+          const shortSatsAmount = getShortAmountLabel(amount)
+          return `${shortSatsAmount} sats`
+        }
+
         return `${commaFormatted(amount)} sats`
       }
 
@@ -30,7 +42,7 @@ export const useCurrencyFormatter = (shortUsdAmount?: boolean) => {
 
       if (amount === 0) return '$0'
       if (usdAmount < 1) return '< $1'
-      if (shortUsdAmount) {
+      if (shortAmount) {
         const roundedUsdAmount = Math.round(usdAmount)
         const shortUsdAmount = getShortAmountLabel(roundedUsdAmount)
         return `$${shortUsdAmount}`
@@ -38,7 +50,7 @@ export const useCurrencyFormatter = (shortUsdAmount?: boolean) => {
 
       return `$${commaFormatted(Math.round(usdAmount))}`
     },
-    [shortUsdAmount],
+    [shortAmount],
   )
 
   const formatUsdAmount = useCallback(
@@ -54,12 +66,15 @@ export const useCurrencyFormatter = (shortUsdAmount?: boolean) => {
       const satsAmount = getSatoshisFromUSDCents(amount as USDCents)
       return formatAmount(satsAmount, FormatCurrencyType.Btcsat)
     },
-    [formatAmount, getSatoshisFromUSDCents],
+    [formatAmount, getSatoshisFromUSDCents, shortAmount],
   )
 
   return {
+    /** Format given amount with given currency type */
     formatAmount,
+    /** Convert given amount from sats to USD and format it */
     formatUsdAmount,
+    /** Convert given amount from USDCents to sats and format it */
     formatSatsAmount,
   }
 }

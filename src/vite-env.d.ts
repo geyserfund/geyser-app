@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+/// <reference types="vite-plugin-pwa/react" />
 
 type ImportMetaEnv = {
   readonly VITE_APP_API_ENDPOINT: string

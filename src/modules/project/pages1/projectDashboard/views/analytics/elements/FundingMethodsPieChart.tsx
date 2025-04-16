@@ -5,13 +5,13 @@ import { Cell, Legend, Pie, PieChart, Tooltip } from 'recharts'
 
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { FundingTxMethodSum } from '@/types'
 import { commaFormatted, useCustomTheme } from '@/utils'
 
+import { MethodSumType } from '../components/TransactionMethodComponent.tsx'
 import { useColorByIndex } from '../hooks/useColorByIndex'
 import { ActiveShapeComponent } from './ActiveShapeComponent'
 
-export const FundingMethodsPieChart = ({ data, loading }: { data: FundingTxMethodSum[]; loading?: boolean }) => {
+export const FundingMethodsPieChart = ({ data, loading }: { data: MethodSumType[]; loading?: boolean }) => {
   const { colors } = useCustomTheme()
   const { t } = useTranslation()
   const ref = useRef<HTMLDivElement>(null)

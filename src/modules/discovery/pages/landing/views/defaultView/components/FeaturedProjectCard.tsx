@@ -4,17 +4,29 @@ import { PiLightning, PiUsers } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { standardPadding } from '@/shared/styles'
 import { commaFormatted } from '@/utils'
 
-import { getPathWithGeyserHero } from '../../../../../../../shared/constants'
+import { getPathWithGeyserPromotionsHero } from '../../../../../../../shared/constants'
 import { useFeaturedProjectForLandingPageQuery } from '../../../../../../../types'
 import { FeatureAirtableData } from '../sections/Featured'
+import { MiniProjectCard } from './MiniProjectCard.tsx'
 
-export const FeaturedProjectCard = ({ projectName, data }: { projectName: string; data?: FeatureAirtableData }) => {
+export const FeaturedProjectCard = ({
+  projectName,
+  showMini,
+  startAnimating,
+  data,
+  ...rest
+}: {
+  projectName: string
+  showMini?: boolean
+  startAnimating?: boolean
+  data?: FeatureAirtableData
+} & CardLayoutProps) => {
   const navigate = useNavigate()
   const { data: response, loading } = useFeaturedProjectForLandingPageQuery({
     variables: {
@@ -28,10 +40,25 @@ export const FeaturedProjectCard = ({ projectName, data }: { projectName: string
   const project = response?.projectGet
 
   if (loading || !project) {
+    if (showMini) {
+      return null
+    }
+
     return <FeaturedCardSkeleton />
   }
 
   const hadFeaturedData = data?.Featured_Author && data.Featured_Comment
+
+  if (showMini && project) {
+    return (
+      <MiniProjectCard
+        imageUrl={project.thumbnailImage}
+        title={project.title}
+        startAnimating={startAnimating}
+        onClick={() => navigate(getPathWithGeyserPromotionsHero('project', projectName))}
+      />
+    )
+  }
 
   return (
     <CardLayout
@@ -43,8 +70,9 @@ export const FeaturedProjectCard = ({ projectName, data }: { projectName: string
       padding="0px"
       borderRadius="8px"
       overflow="hidden"
-      onClick={() => navigate(getPathWithGeyserHero('project', projectName))}
+      onClick={() => navigate(getPathWithGeyserPromotionsHero('project', projectName))}
       _hover={{ backgroundColor: 'neutral1.2', cursor: 'pointer' }}
+      {...rest}
     >
       <Box width={{ base: '100%', sm: '44%' }} height={{ base: '240px', sm: '100%' }} overflow="hidden">
         <ImageWithReload height="full" width="full" src={`${project.thumbnailImage}`} objectFit="cover" />

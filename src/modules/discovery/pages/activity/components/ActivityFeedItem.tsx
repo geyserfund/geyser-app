@@ -30,23 +30,23 @@ enum ActivityType {
   ContributionConfirmed = 'ContributionConfirmed',
 }
 
-export const ActivityFeedItem = ({ activityType, createdAt, project, resource }: Activity) => {
+export const ActivityFeedItem = ({ activityType, id, createdAt, project, resource }: Activity) => {
   const isMobile = useMobileMode()
 
   const isProjectLaunchedActivity = activityType === ActivityType.ProjectLaunched
   const isGoalActivity =
     activityType === ActivityType.ProjectGoalCreated || activityType === ActivityType.ProjectGoalReached
   const isRewardActivity = activityType === ActivityType.ProjectRewardCreated
-  const isFundingTxActivity = activityType === ActivityType.ContributionConfirmed
+  const isContributionActivity = activityType === ActivityType.ContributionConfirmed
   const isPostActivity = activityType === ActivityType.PostPublished
 
   const activityPath = (activityType: string) => {
     switch (activityType) {
       case ActivityType.ProjectGoalCreated:
       case ActivityType.ProjectGoalReached:
-        return getPathWithGeyserHero('projectGoals', project.name)
+        return getPathWithGeyserHero('projectGoalView', project.name, (resource as ProjectGoal).id)
       case ActivityType.ProjectRewardCreated:
-        return getPathWithGeyserHero('projectRewardView', project.name, resource.id)
+        return getPathWithGeyserHero('projectRewardView', project.name, (resource as ProjectReward).uuid)
       case ActivityType.PostPublished:
         return getPathWithGeyserHero('projectPostView', project.name, resource.id)
       default:
@@ -54,10 +54,14 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
     }
   }
 
+  console.log('id', id)
+
   return (
     <CardLayout
       as={Link}
       to={activityPath(activityType)}
+      state={{ sourceActivityId: id }}
+      id={`activity-feed-item-${activityType}`}
       width={{ base: 'full', lg: '586px' }}
       borderColor={isProjectLaunchedActivity ? 'primaryAlpha.6' : 'neutralAlpha.6'}
       backgroundColor={isProjectLaunchedActivity ? 'primaryAlpha.2' : 'none'}
@@ -94,7 +98,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
       )}
       <VStack width="full" alignItems="flex-start" spacing={1}>
         {isPostActivity && <ActivityImage resource={resource} />}
-        {!isFundingTxActivity && !isProjectLaunchedActivity && <ActivityTitle resource={resource} />}
+        {!isContributionActivity && !isProjectLaunchedActivity && <ActivityTitle resource={resource} />}
         {isRewardActivity && <ActivityImage resource={resource} />}
         {isRewardActivity && <RewardsInfo reward={resource as ProjectReward} />}
         <ActivityDescription resource={resource} />
@@ -104,7 +108,7 @@ export const ActivityFeedItem = ({ activityType, createdAt, project, resource }:
             <GoalTargetAmount goal={resource as ProjectGoal} />
           </>
         )}
-        {isFundingTxActivity && <ContributionInfo resource={resource} />}
+        {isContributionActivity && <ContributionInfo resource={resource} />}
       </VStack>
     </CardLayout>
   )

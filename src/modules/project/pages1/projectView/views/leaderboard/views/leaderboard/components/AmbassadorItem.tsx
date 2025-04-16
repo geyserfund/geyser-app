@@ -29,7 +29,7 @@ export const AmbassadorItem = ({ ambassador, rank, ...props }: AmbassadorItemPro
     <>
       <HStack
         as={Link}
-        to={getPath('heroProfile', ambassador.user?.id)}
+        to={getPath('userProfile', ambassador.user?.id)}
         w="full"
         spacing={1}
         paddingX={6}

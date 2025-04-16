@@ -3,10 +3,10 @@ import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ProjectReward, ProjectRewardForCreateUpdateFragment } from '../../../../../../../types'
+import { ProjectRewardFragment } from '@/types/index.ts'
 
 interface Props {
-  reward: ProjectRewardForCreateUpdateFragment | ProjectReward
+  reward: ProjectRewardFragment
 }
 
 export const ProjectRewardShippingEstimate = ({ reward }: Props) => {
@@ -18,7 +18,7 @@ export const ProjectRewardShippingEstimate = ({ reward }: Props) => {
         const dateOfDelivery = DateTime.fromMillis(reward.estimatedAvailabilityDate).toFormat('LLL, yyyy')
 
         return {
-          text: `${t('Available on')} ${dateOfDelivery}`,
+          text: `${t('Receive on')} ${dateOfDelivery}`,
           colorScheme: 'orange',
         }
       }

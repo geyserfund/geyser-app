@@ -94,7 +94,7 @@ export const dimensions = {
     textMaxWidth: '1200px',
   },
 
-  pullDownThreshold: 70,
+  pullDownThreshold: 120,
   maxWidth: 1080,
 }
 

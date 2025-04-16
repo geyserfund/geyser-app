@@ -1,22 +1,22 @@
 import { Box, Button, Image, ImageProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PropsWithChildren, useState } from 'react'
+import { PropsWithChildren } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { Body, H1, H3 } from '@/shared/components/typography'
 
 import { useAuthContext } from '../../../../../context'
-import { ExternalAccountType, SocialAccountType } from '../../../../../pages/auth'
-import { ConnectWithNostr } from '../../../../../pages/auth/ConnectWithNostr'
-import { ConnectWithSocial } from '../../../../../pages/auth/ConnectWithSocial'
-import { useRefreshAuthToken } from '../../../../../pages/auth/useAuthToken'
+import { ExternalAccountType, SocialAccountType } from '../../../../../modules/auth'
+import { ConnectWithNostr } from '../../../../../modules/auth/ConnectWithNostr'
+import { ConnectWithSocial } from '../../../../../modules/auth/ConnectWithSocial'
+import { useRefreshAuthToken } from '../../../../../modules/auth/useAuthToken'
 import {
   getPath,
   LaunchProjectCoinsUrl,
   LaunchProjectEntryUrl,
   LaunchProjectFeesUrl,
   LaunchProjectGiftUrl,
-  LaunchProjectKeyUrl,
+  LaunchProjectPaymentMethodsUrl,
   LaunchProjectWorldUrl,
   LIGHTNING_FEE_PERCENTAGE,
 } from '../../../../../shared/constants'
@@ -61,15 +61,15 @@ export const ProjectCreateStart = () => {
     >
       <VStack spacing={6} w="100%">
         <H3 size="lg" medium>
-          {t('Transform your ideas into real world projects backed by your community')}
+          {t('Transform your ideas into real world projects backed by your community')}, {t('with following features')}:
         </H3>
 
         <Box display="flex" justifyContent={{ base: 'space-around', lg: 'space-between' }} w="100%" flexWrap="wrap">
           <ProjectInfoButton src={LaunchProjectWorldUrl} alt="create project world">
             {t('Raise funds from anywhere in the world')}
           </ProjectInfoButton>
-          <ProjectInfoButton src={LaunchProjectCoinsUrl} alt="create project lightning">
-            {t('Receive funds from on-chain & lightning')}
+          <ProjectInfoButton src={LaunchProjectPaymentMethodsUrl} alt="create project lightning">
+            {t('Bitcoin, Lightning or Fiat (20+ payment methods)')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectGiftUrl} alt="create project gift">
             {t('Sell anything to reward your contributors')}
@@ -80,8 +80,8 @@ export const ProjectCreateStart = () => {
           <ProjectInfoButton src={LaunchProjectFeesUrl} alt="create project fees">
             {t(`Low ${LIGHTNING_FEE_PERCENTAGE}% fees and no fees for node-runners`)}
           </ProjectInfoButton>
-          <ProjectInfoButton src={LaunchProjectKeyUrl} alt="create project key">
-            {t('Remain in control of your funds')}
+          <ProjectInfoButton src={LaunchProjectCoinsUrl} alt="create project key">
+            {t('Receive funds instantly, in your Bitcoin wallet')}
           </ProjectInfoButton>
         </Box>
 
@@ -120,12 +120,11 @@ export const ProjectCreateStart = () => {
 }
 
 const ProjectInfoButton = ({ src, alt, children }: PropsWithChildren<Pick<ImageProps, 'src' | 'alt'>>) => {
-  const [isHover, setHover] = useState(false)
   return (
     <Button
       my={2}
       flexGrow={0}
-      variant="outline"
+      variant="soft"
       colorScheme="neutral1"
       height="160px"
       width="160px"
@@ -136,10 +135,8 @@ const ProjectInfoButton = ({ src, alt, children }: PropsWithChildren<Pick<ImageP
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
     >
-      <Image sx={isHover ? { transform: 'scale(1.2)' } : undefined} src={src} alt={alt} maxHeight="80px" />
+      <Image src={src} alt={alt} maxHeight="80px" />
       <Body size="xs" light whiteSpace="break-spaces">
         {children}
       </Body>

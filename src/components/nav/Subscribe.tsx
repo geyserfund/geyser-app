@@ -89,13 +89,13 @@ export const Subscribe = ({ isOpen, onClose, style, interest, parentState, title
       }
 
       toast({
-        title: 'Succesfully subscribed to Geyser',
+        title: t('Succesfully subscribed to Geyser'),
         status: 'success',
       })
     } catch (error) {
       toast({
-        title: 'Something went wrong.',
-        description: 'Please try again',
+        title: t('Something went wrong.'),
+        description: t('Please try again'),
         status: 'error',
       })
     }

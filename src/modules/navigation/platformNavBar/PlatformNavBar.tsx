@@ -5,18 +5,18 @@ import { useCallback, useEffect } from 'react'
 import { PiArrowLeft, PiCopy, PiShareFat, PiX } from 'react-icons/pi'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 
+import { EmailPromptModal } from '@/modules/auth/components/EmailPromptModal'
+import { NotificationPromptModal } from '@/modules/auth/components/NotificationPromptModal'
+import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
+import { useNotificationPromptModal } from '@/modules/auth/hooks/useNotificationPromptModal'
 import { FilterComponent } from '@/modules/discovery/filters/FilterComponent'
-import { EmailPromptModal } from '@/pages/auth/components/EmailPromptModal'
-import { NotificationPromptModal } from '@/pages/auth/components/NotificationPromptModal'
-import { useEmailPromptModal } from '@/pages/auth/hooks/useEmailPromptModal'
-import { useNotificationPromptModal } from '@/pages/auth/hooks/useNotificationPromptModal'
 import { discoveryPageCommonLayoutStyles } from '@/shared/styles/discoveryPageLayout'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 import { useMobileMode } from '@/utils'
 
 import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
-import { useAuthModal } from '../../../pages/auth/hooks'
+import { useAuthModal } from '../../../modules/auth/hooks'
 import { dimensions, PathName } from '../../../shared/constants'
 import { BrandLogo, BrandLogoFull } from './components/BrandLogo'
 import { LoggedOutModal } from './components/LoggedOutModal'
@@ -98,11 +98,11 @@ export const PlatformNavBar = () => {
     }
 
     if (shouldShowGeyserLogo) {
-      return <BrandLogo />
+      return <BrandLogo showOutline={isGuardiansPage} />
     }
 
-    return <BrandLogo />
-  }, [shouldShowGeyserLogo, shouldShowProjectLogo, isPlatformRoutes, isMobileMode])
+    return <BrandLogo showOutline={isGuardiansPage} />
+  }, [shouldShowGeyserLogo, shouldShowProjectLogo, isPlatformRoutes, isMobileMode, isGuardiansPage])
 
   const ShareGuardiansButton = () => {
     return (

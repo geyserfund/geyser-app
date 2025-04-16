@@ -1,9 +1,9 @@
 import { atom, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
+import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
 import { toInt } from '@/utils'
 
-import { authUserAtom } from '../../../pages/auth/state'
 import {
   ProjectGrantApplicantFragment,
   ProjectHeaderSummaryFragment,
@@ -11,7 +11,7 @@ import {
   ProjectPageDetailsFragment,
 } from '../../../types'
 import { resetRewardsAtom } from '../pages1/projectDashboard/views/sales/state/rewardsAtom'
-import { affiliateAtomReset } from './affiliateAtom'
+import { resetSourceResourceAtom } from '../pages1/projectView/state/sourceActivityAtom.ts'
 import { contributionAtomReset } from './contributionsAtom'
 import { entriesAtomReset } from './entriesAtom'
 import { goalsAtomReset } from './goalsAtom'
@@ -23,7 +23,10 @@ import { walletAtomReset } from './walletAtom'
 
 export type ProjectState = ProjectPageBodyFragment &
   ProjectHeaderSummaryFragment &
-  ProjectPageDetailsFragment & { grantApplications?: ProjectGrantApplicantFragment[] }
+  ProjectPageDetailsFragment & {
+    promotionsEnabled?: boolean | null
+    grantApplications?: ProjectGrantApplicantFragment[]
+  }
 
 /** Project atom is the root project store */
 export const projectAtom = atom<ProjectState>({} as ProjectState)
@@ -109,10 +112,12 @@ export const useProjectReset = () => {
   const projectFormReset = useSetAtom(projectFormAtomReset)
   const rewardsReset = useSetAtom(rewardsAtomReset)
   const walletReset = useSetAtom(walletAtomReset)
-  const affiliateReset = useSetAtom(affiliateAtomReset)
+
   const rewardReset = useSetAtom(resetRewardsAtom)
   const postReset = useSetAtom(postsAtomReset)
   const subscriptionReset = useSetAtom(subscriptionAtomReset)
+
+  const sourceActivityReset = useSetAtom(resetSourceResourceAtom)
 
   const resetProject = useCallback(() => {
     console.log('=================================')
@@ -126,10 +131,12 @@ export const useProjectReset = () => {
     projectFormReset()
     rewardsReset()
     walletReset()
-    affiliateReset()
+
     rewardReset()
     postReset()
     subscriptionReset()
+
+    sourceActivityReset()
   }, [
     contributionsReset,
     entriesReset,
@@ -138,10 +145,12 @@ export const useProjectReset = () => {
     projectReset,
     rewardsReset,
     walletReset,
-    affiliateReset,
+
     rewardReset,
     postReset,
     subscriptionReset,
+
+    sourceActivityReset,
   ])
 
   return resetProject

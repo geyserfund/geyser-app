@@ -1,15 +1,16 @@
 import { Avatar, Button, HStack, IconButton, Link, Tooltip, useClipboard, VStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 
 import { AnonymousAvatar } from '@/components/ui/AnonymousAvatar'
 import { useAuthContext } from '@/context'
+import { useAuthModal } from '@/modules/auth/hooks'
 import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
-import { useFundingFlowAtom } from '@/modules/project/funding/hooks/useFundingFlowAtom'
+import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
-import { useAuthModal } from '@/pages/auth/hooks'
 import { Body, H3 } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom'
@@ -22,7 +23,7 @@ export const SuccessImageComponent = () => {
   const { loginOnOpen } = useAuthModal()
   const { user: loggedInUser, isLoggedIn } = useAuthContext()
 
-  const { fundingInputAfterRequest } = useFundingFlowAtom()
+  const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
 
   const user = loggedInUser || fundingInputAfterRequest?.user
   const heroId = user?.heroId
@@ -100,13 +101,7 @@ export const SuccessImageComponent = () => {
           {t('to get your custom')}{' '}
           <Tooltip label={t('A unique link that tracks contributions you helped generate')} placement="top">
             <span style={{ position: 'relative', display: 'inline-block' }}>
-              <Body
-                as="span"
-                color={lightModeColors.neutral1[12]}
-                textDecoration="underline dotted"
-                display="inline"
-                bold
-              >
+              <Body as="span" color={lightModeColors.neutral1[12]} display="inline">
                 {t('Hero link')}
               </Body>
             </span>
@@ -171,7 +166,7 @@ export const SuccessImageComponent = () => {
               placement="top"
             >
               <span style={{ position: 'relative', display: 'inline-block' }}>
-                <Body as="span" color={lightModeColors.neutral1[12]} textDecoration="underline dotted" display="inline">
+                <Body as="span" color={lightModeColors.neutral1[12]} display="inline">
                   {t('Ambassador')}
                 </Body>
               </span>
@@ -189,9 +184,10 @@ export const SuccessImageComponent = () => {
           </Body>
           {renderSignInPromptBody()}
           <HStack
-            h="40px"
+            minHeight="40px"
             w="full"
-            p={2}
+            px={2}
+            py={1}
             bg="whiteAlpha.700"
             borderRadius={10}
             border="1px solid"

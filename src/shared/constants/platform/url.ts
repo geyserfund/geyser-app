@@ -4,6 +4,7 @@ export const GeyserAboutUrl = 'https://about.geyser.fund'
 export const GeyserManifestoUrl = 'https://about.geyser.fund/manifesto'
 export const GeyserSubscribeUrl = 'https://about.geyser.fund/subscribe'
 export const GeyserPrivacyUrl = 'https://about.geyser.fund/Privacy'
+export const GeyserTermsUrl = 'https://about.geyser.fund/T&C'
 // Geyser footer Links
 
 export const GeyserTwitterUrl = 'https://twitter.com/geyserfund'
@@ -25,6 +26,8 @@ export const AnonymousAvatarBaseUrl = 'https://storage.googleapis.com/geyser-pro
 // LAUNCH PROJECT URLS
 export const LaunchProjectCoinsUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-coins.webp'
+export const LaunchProjectPaymentMethodsUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/payment-methods-illustrations.png'
 export const LaunchProjectEntryUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-entry.webp'
 export const LaunchProjectFeesUrl =
@@ -85,6 +88,7 @@ export const ProjectEntryThumbnailPlaceholderUrl =
 export const LogoNameBrand = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-brand.svg'
 export const LogoNameDark = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-dark.svg'
 export const LogoNameLight = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-light.svg'
+export const LogoOutline = 'https://storage.googleapis.com/geyser-projects-media/app/logo-outline.png'
 
 // Geyser Guide Links
 
@@ -145,6 +149,18 @@ export const HallOfFameIllustrationUrl = 'https://storage.googleapis.com/geyser-
 
 export const HallOfFameAnimatedGifUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/halloffame-animated-gif.gif'
+
+export const BecomeVerifiedCreatorIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/creator-verify-illustration.jpg'
+
+export const SuccessfullyVerifiedIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/successfully-verified.png'
+
+export const SuccessfullPhoneVerificationIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/successful-phone-verification.png'
+
+export const DollarToBitcoinIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/dollar-to-bitcoin-illustration.png'
 
 // FUNDING FLOW ERRORS
 
@@ -228,6 +244,8 @@ export const ArtworkImageUrl = 'https://storage.googleapis.com/geyser-projects-m
 export const PhysicalProductImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/reward-templates/physical-product.png'
 export const ExperienceImageUrl = 'https://storage.googleapis.com/geyser-projects-media/reward-templates/experience.png'
+export const EnableFiatContributionsImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/enable-fiat-illustartion.png'
 
 // Helpers
 export const EmailPromptModalUrl =
@@ -405,10 +423,19 @@ export const GuardianPartnerPlanBForumUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Plan-B-Forum.png'
 export const GuardianPartnerInitialCapitalUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/initial-capital-logo.png'
+export const GuardianPartnerRhinoUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Rhino.png'
+export const GuardianPartnerWalletofSatoshiUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Wallet-of-Satoshi.png'
+export const GuardianPartnerDJPUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-DJP.png'
+export const GuardianPartnerBitcoinNewsUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Bitcoin-News.png'
+
 // SEO
 
 export const GuardiansSeoImageUrl =
-  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/Guardians.png'
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/Main-Guardians-Image.png'
 export const KingSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/King.png'
 export const KnightSeoImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/Knight.png'

@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { selectedGoalIdAtom } from '@/modules/project/funding/state/fundingTxAtom'
+import { selectedGoalIdAtom } from '@/modules/project/funding/state/selectedGoalAtom'
 import { useSubscriptionBuy } from '@/modules/project/pages1/projectView/hooks/useSubscriptionBuy'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
@@ -45,6 +45,8 @@ export const FundingSubscription = () => {
       setSelectedGoalId(projectGoalId)
       navigate({ pathname: location.pathname, search: location.search }, { replace: true })
     }
+    // subscribing to navigate causes rerender loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectGoalId, project.name, setSelectedGoalId])
 
   const currentSubscriptionId = formState.subscription?.subscriptionId?.toString()

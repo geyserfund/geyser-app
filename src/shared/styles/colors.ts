@@ -232,6 +232,8 @@ export const guardianLightColors = {
   },
   background: '#FDFDFC',
   successText: '#007D6C',
+  text: '#377E7D',
+  textBackground: 'rgba(72, 201, 185, 0.10)',
 }
 
 export const guardianDarkColors = {
@@ -253,6 +255,8 @@ export const guardianDarkColors = {
   },
   background: '#21201C',
   successText: '#00E0C3',
+  text: '#377E7D',
+  textBackground: 'rgba(72, 201, 185, 0.10)',
 }
 
 export const lightModeColors = {

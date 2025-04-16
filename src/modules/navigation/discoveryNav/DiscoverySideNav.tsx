@@ -7,6 +7,7 @@ import { LogoDark, LogoLight } from '@/assets'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { dimensions, getPath, LogoNameDark, LogoNameLight } from '@/shared/constants'
 import { GradientBorder } from '@/shared/molecules/GradientBorder'
+import { UserExternalLinks } from '@/shared/molecules/UserExternalLinks'
 import { GuardiansButtonBackgroundGradient, GuardiansButtonBackgroundGradientBright } from '@/shared/styles/custom'
 import { useMobileMode } from '@/utils'
 
@@ -29,8 +30,8 @@ export const DiscoverySideNav = () => {
 
   return (
     <VStack
-      paddingY={8}
-      paddingX={{ lg: 4, xl: 8 }}
+      paddingTop={8}
+      paddingBottom={4}
       spacing={8}
       position="fixed"
       left={0}
@@ -41,30 +42,35 @@ export const DiscoverySideNav = () => {
       borderRight="1px solid"
       borderColor="neutral1.6"
       backgroundColor="utils.pbg"
+      justifyContent={'space-between'}
       zIndex={10}
     >
-      <Link to={getPath('discoveryLanding')}>
-        <Image src={isTabletSize ? tabletImage : imageUrl} height="48px" width="auto" />
-      </Link>
-      <VStack w="full" padding={0}>
-        {discoveryNavItems.map((item) => {
-          const activityDot =
-            item.key === DiscoveryNavItemKey.MyProjects
-              ? myProjectActivityDot
-              : item.key === DiscoveryNavItemKey.Activity
-              ? followedActivityDot
-              : false
+      <VStack w="full" h="full" paddingX={{ lg: 4, xl: 8 }}>
+        <Link to={getPath('discoveryLanding')}>
+          <Image src={isTabletSize ? tabletImage : imageUrl} height="48px" width="auto" />
+        </Link>
+        <VStack w="full" padding={0}>
+          {discoveryNavItems.map((item) => {
+            const activityDot =
+              item.key === DiscoveryNavItemKey.MyProjects
+                ? myProjectActivityDot
+                : item.key === DiscoveryNavItemKey.Activity
+                ? followedActivityDot
+                : false
 
-          return (
-            <DiscoverySideNavButton
-              key={item.label}
-              item={item}
-              currentNavItem={currentNavItem}
-              activityDot={activityDot}
-            />
-          )
-        })}
+            return (
+              <DiscoverySideNavButton
+                key={item.label}
+                item={item}
+                currentNavItem={currentNavItem}
+                activityDot={activityDot}
+              />
+            )
+          })}
+        </VStack>
       </VStack>
+
+      <UserExternalLinks justifyContent="start" />
     </VStack>
   )
 }

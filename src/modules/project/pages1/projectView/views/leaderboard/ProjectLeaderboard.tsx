@@ -43,9 +43,12 @@ export const ProjectLeaderboard = () => {
           zIndex={3}
           backgroundColor="utils.pbg"
         >
-          <H1 size="2xl" bold dark>
-            {t('Leaderboard')}
-          </H1>
+          <VStack>
+            <H1 size="2xl" bold dark>
+              {t('Leaderboard')}
+            </H1>
+          </VStack>
+
           <CustomSelect
             isSearchable={false}
             width={{ base: 'full', xs: '135px' }}

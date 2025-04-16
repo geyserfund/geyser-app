@@ -1,6 +1,8 @@
 import { useDisclosure } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
+import { useProjectWalletAPI } from '@/modules/project/API/useProjectWalletAPI.ts'
 import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom'
 
 import { WalletConnectDetails } from '../../../../../shared/constants'
@@ -85,13 +87,22 @@ export type WalletForm = {
 const DEFAULT_FEE_PERCENTAGE = 0.05
 const DEFAULT_LIGHTNING_FEE_PERCENTAGE = 0.05
 
+const connectionDetailsTypenameToConnectionOptionMap: Record<WalletConnectDetails, ConnectionOption> = {
+  [WalletConnectDetails.LndConnectionDetailsPrivate]: ConnectionOption.PERSONAL_NODE,
+  [WalletConnectDetails.LndConnectionDetailsPublic]: ConnectionOption.PERSONAL_NODE,
+  [WalletConnectDetails.NWCConnectionDetailsPrivate]: ConnectionOption.NWC,
+  [WalletConnectDetails.LightningAddressConnectionDetails]: ConnectionOption.LIGHTNING_ADDRESS,
+}
+
 export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletForm => {
   const { toast } = useNotification()
 
   const { project } = useProjectAtom()
-  const { wallet, walletConnectiondetails } = useWalletAtom()
+  const { queryProjectWalletConnectionDetails } = useProjectWalletAPI(true)
+  const { execute: queryProjectWalletConnectionDetailsExecute } = queryProjectWalletConnectionDetails
+  const { wallet, walletConnectionDetails } = useWalletAtom()
 
-  const projectWallet = useMemo(() => ({ ...wallet, ...walletConnectiondetails }), [wallet, walletConnectiondetails])
+  const projectWallet = useMemo(() => ({ ...wallet, ...walletConnectionDetails }), [wallet, walletConnectionDetails])
 
   const { isOpen, onClose, onOpen } = useDisclosure()
 
@@ -107,20 +118,17 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
 
   const [connectionOption, setConnectionOption] = useState<ConnectionOption>(ConnectionOption.LIGHTNING_ADDRESS)
 
-  const connectionDetailsTypenameToConnectionOptionMap: Record<WalletConnectDetails, ConnectionOption> = {
-    [WalletConnectDetails.LndConnectionDetailsPrivate]: ConnectionOption.PERSONAL_NODE,
-    [WalletConnectDetails.LndConnectionDetailsPublic]: ConnectionOption.PERSONAL_NODE,
-    [WalletConnectDetails.NWCConnectionDetailsPrivate]: ConnectionOption.NWC,
-    [WalletConnectDetails.LightningAddressConnectionDetails]: ConnectionOption.LIGHTNING_ADDRESS,
-  }
+  useEffect(() => {
+    queryProjectWalletConnectionDetailsExecute()
+  }, [queryProjectWalletConnectionDetailsExecute])
 
   useEffect(() => {
-    if (walletConnectiondetails?.connectionDetails.__typename) {
+    if (walletConnectionDetails?.connectionDetails.__typename) {
       setConnectionOption(
-        connectionDetailsTypenameToConnectionOptionMap[walletConnectiondetails.connectionDetails.__typename],
+        connectionDetailsTypenameToConnectionOptionMap[walletConnectionDetails.connectionDetails.__typename],
       )
     }
-  }, [walletConnectiondetails])
+  }, [walletConnectionDetails])
 
   const [limits, setLimits] = useState<
     LightningAddressContributionLimits | WalletOffChainContributionLimits | WalletOnChainContributionLimits
@@ -273,8 +281,8 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
 
     if (isEdit && !createWalletInput) {
       toast({
-        title: 'failed to create project wallet',
-        description: 'please provide valid wallet details',
+        title: t('failed to create project wallet'),
+        description: t('please provide valid wallet details'),
         status: 'error',
       })
       return
@@ -314,52 +322,56 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
   }
 
   const isFormDirty = useCallback(() => {
-    if (projectWallet && projectWallet.connectionDetails) {
-      if (connectionOption === ConnectionOption.LIGHTNING_ADDRESS) {
-        if (projectWallet.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails) {
-          return (
-            Boolean(projectWallet?.connectionDetails?.lightningAddress) &&
-            projectWallet?.connectionDetails?.lightningAddress !== lightningAddressFormValue
-          )
-        }
-
-        return Boolean(lightningAddressFormValue)
-      }
-
-      if (connectionOption === ConnectionOption.PERSONAL_NODE) {
-        if (projectWallet.connectionDetails.__typename === WalletConnectDetails.LndConnectionDetailsPrivate) {
-          const value =
-            `${projectWallet.name}` !== `${nodeInput?.name}` ||
-            `${projectWallet.connectionDetails.grpcPort}` !== `${nodeInput?.grpc}` ||
-            projectWallet.connectionDetails.hostname !== nodeInput?.hostname ||
-            (projectWallet.connectionDetails.lndNodeType === LndNodeType.Voltage) !== nodeInput?.isVoltage ||
-            projectWallet.connectionDetails.macaroon !== nodeInput?.invoiceMacaroon ||
-            projectWallet.connectionDetails.pubkey !== nodeInput?.publicKey ||
-            `${projectWallet.connectionDetails.tlsCertificate || ''}` !== `${nodeInput?.tlsCert}` ||
-            `${projectWallet.feePercentage}` !== `${feePercentage}`
-
-          return value
-        }
-
-        return Boolean(nodeInput)
-      }
-
-      if (connectionOption === ConnectionOption.NWC) {
-        if (projectWallet.connectionDetails.__typename === WalletConnectDetails.NWCConnectionDetailsPrivate) {
-          return (
-            Boolean(projectWallet?.connectionDetails?.nwcUrl) &&
-            projectWallet?.connectionDetails?.nwcUrl !== nostrWalletConnectURI
-          )
-        }
-
-        return Boolean(nostrWalletConnectURI)
-      }
-
-      return false
+    if (!projectWallet?.connectionDetails) {
+      return true
     }
 
-    return true
-  }, [connectionOption, lightningAddressFormValue, nodeInput, nostrWalletConnectURI, projectWallet, feePercentage])
+    const details = projectWallet.connectionDetails
+
+    const isLightningAddressDirty = () => {
+      if (details.__typename === WalletConnectDetails.LightningAddressConnectionDetails) {
+        return Boolean(details.lightningAddress) && details.lightningAddress !== lightningAddressFormValue
+      }
+
+      return Boolean(lightningAddressFormValue)
+    }
+
+    const isPersonalNodeDirty = () => {
+      if (details.__typename === WalletConnectDetails.LndConnectionDetailsPrivate) {
+        return (
+          `${projectWallet.name}` !== `${nodeInput?.name}` ||
+          `${details.grpcPort}` !== `${nodeInput?.grpc}` ||
+          details.hostname !== nodeInput?.hostname ||
+          (details.lndNodeType === LndNodeType.Voltage) !== nodeInput?.isVoltage ||
+          details.macaroon !== nodeInput?.invoiceMacaroon ||
+          (details.pubkey || '') !== (nodeInput?.publicKey || '') ||
+          `${details.tlsCertificate || ''}` !== `${nodeInput?.tlsCert}` ||
+          `${projectWallet.feePercentage}` !== `${feePercentage}`
+        )
+      }
+
+      return Boolean(nodeInput)
+    }
+
+    const isNWCDirty = () => {
+      if (details.__typename === WalletConnectDetails.NWCConnectionDetailsPrivate) {
+        return Boolean(details.nwcUrl) && details.nwcUrl !== nostrWalletConnectURI
+      }
+
+      return Boolean(nostrWalletConnectURI)
+    }
+
+    switch (connectionOption) {
+      case ConnectionOption.LIGHTNING_ADDRESS:
+        return isLightningAddressDirty()
+      case ConnectionOption.PERSONAL_NODE:
+        return isPersonalNodeDirty()
+      case ConnectionOption.NWC:
+        return isNWCDirty()
+      default:
+        return false
+    }
+  }, [connectionOption, projectWallet, lightningAddressFormValue, nodeInput, nostrWalletConnectURI, feePercentage])
 
   const isLightningAddressInValid = useMemo(() => {
     if (
