@@ -56,3 +56,13 @@ export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT = gql`
     userSubscriptionId
   }
 `
+
+export const FRAGMENT_PAYMENT_SUBSCRIPTION = gql`
+  fragment PaymentSubscription on Payment {
+    id
+    status
+    paymentType
+    contributionUUID
+    failureReason
+  }
+`

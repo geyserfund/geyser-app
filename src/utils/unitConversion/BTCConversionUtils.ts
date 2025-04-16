@@ -41,6 +41,21 @@ export const convertSatsToUsdFormatted = ({
   return `$0`
 }
 
+export const convertUsdCentsToSatsFormatted = ({
+  usdCents,
+  bitcoinQuote,
+}: {
+  usdCents: number
+  bitcoinQuote?: BitcoinQuote | null
+}) => {
+  if (bitcoinQuote && bitcoinQuote.quote) {
+    const sats = Math.round((usdCents / (100 * bitcoinQuote.quote)) * SATOSHIS_IN_BTC)
+    return sats > 0 ? `${sats} sats ` : '0'
+  }
+
+  return 0
+}
+
 /** Converts sats to usdcents based on BitcoinQuote of a Contribution */
 export const convertSatsToCents = ({ sats, bitcoinQuote }: { sats: number; bitcoinQuote?: BitcoinQuote | null }) => {
   if (bitcoinQuote && bitcoinQuote.quote) {

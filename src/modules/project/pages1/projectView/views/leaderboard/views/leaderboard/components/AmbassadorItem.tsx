@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
+import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
 import { RankMedal } from '@/shared/components/display/RankMedal'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
@@ -41,9 +42,9 @@ export const AmbassadorItem = ({ ambassador, rank, ...props }: AmbassadorItemPro
         <RankMedal rank={rank} />
         <UserAvatar user={ambassador.user} id={ambassador.user?.id} />
         <VStack flex={1} alignItems={'start'} justifyContent={'center'} spacing={0}>
-          <Body size="sm" bold dark>
+          <ProfileText guardian={ambassador.user?.guardianType} size="sm" bold dark>
             {ambassador.user?.username || t('Anonymous')}
-          </Body>
+          </ProfileText>
           <HStack spacing={2}>
             <Body size="sm">
               {`${formatAmount(ambassador.contributionsTotalUsd, FormatCurrencyType.Usd)}`}{' '}

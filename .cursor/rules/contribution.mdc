@@ -5,13 +5,13 @@ alwaysApply: false
 ---
 You are an expert in TypeScript, Node.js, React, Vite, Apollo Graphql Client, React Router, and ChakraUI.
 
-Response Constraints
+## Response Constraints
 - Do not remove any existing code unless necessary.
 - Do not remove my comments or commented-out code unless necessary.
 - Do not change the formatting of my imports.
 - Do not change the formatting of my code unless important for new functionality.
 
-Code Style and Structure
+## Code Style and Structure
 - Write concise, technical TypeScript code with accurate examples.
 - Use functional and declarative programming patterns; avoid classes.
 - Prefer iteration and modularization over code duplication.
@@ -20,30 +20,29 @@ Code Style and Structure
 
 ## Internationalization (i18n)
 - Always use the t() function from react-i18next for all user-facing strings.
-- Import the t() function directly for i18next integration
+- Import the t() function directly for 'i18next' integration, dont use useTranslation.
 - Never hardcode user-facing text strings; wrap all strings with t() function.
 - Keep the translations keys simple and descriptive, matching the English text.
 - Wrap all user-facing text in t() function calls, even for button labels and titles
 - When displaying app values like currencies or numbers, place them outside the t() function
+- Always wrap the actual raw texts, do not wrap variables.
 
-## Colour Palette
-- Only use colours from our colour palette, defined in [palette.ts](mdc:src/shared/styles/palette.ts)
 
 ## Dark/Light Mode
 - Prefer the use of the React `useColorModeValue` hook instead of string comparison when dynamically rendering based on dark or light mode.
 
-Importing from files
+## Importing from files
 - While importing from another file, favour the shortest route, i.e relative if it is short, else absolute if that is shortest.
 - Absolute routes start with "@" which is the same as "src/"
 - Always add the extension of the file that a component or function is imported from, for example: "@/api/airtable.ts"
 
-Export Conventions
+## Export Conventions
 - Always favour named exports over default exports.
 
-Component uses
+## Component uses
 - Favour use of the components in the `src/shared/components` folder for when an existing component could be used.
 
-Typography Components
+## Typography Components
 - Use the typography components (Body, H3, etc.) from the shared components directory for all text elements.
 - When styling typography components, use the component's props (size, bold, etc.) rather than wrapping with styled components.
 - For Body components, use size="sm", "md", or "lg" props instead of fontSize prop directly.
@@ -66,7 +65,7 @@ Syntax and Formatting
 - Use curly braces for all conditionals. Favor simplicity over cleverness.
 - Use declarative JSX.
 
-UI and Styling
+## UI and Styling
 - Use charkaUI for components and styling, check [package.json](mdc:package.json) for which version we're currently on.
 - Never use any HTML tags, unless not available in chakra stack.
 - Favour using the components props to pass in style configuration to chakra components.
@@ -74,6 +73,8 @@ UI and Styling
 - For icon components, use "as" prop to specify the icon component: <Icon as={IconComponent} />
 - For all icons only use the 'react-icons/pi' package.
 - Nest components in a consistent way: HStack/VStack containing related elements, properly grouped.
+- Only use colors from our color palette, defined in [colors.ts](mdc:src/shared/styles/colors.ts).
+
 
 Performance Optimization
 - Look for ways to make things faster:
@@ -129,9 +130,62 @@ Performance Optimization
 
 - Make use of [TableWithAccordion.tsx](mdc:src/modules/project/pages1/projectDashboard/common/TableWithAccordion.tsx)
 
-## Form Components
+# Form Creation Rules
 
-- Make use of custom components in `src/shared/components/controlledInput`
+When creating forms in this project, adhere to the following guidelines in addition to the general contribution rules:
+
+## Core Libraries
+- **Form Management:** Always use `react-hook-form` for managing form state, validation, and submission.
+- **Validation:** Always use `yup` for schema-based validation, integrated with `react-hook-form` via `@hookform/resolvers/yup`.
+- **UI Components:** Use Chakra UI components (`VStack`, `HStack`, `Button`, etc.) for layout and basic elements.
+
+## Controlled Inputs
+- **Use Shared Components:** Always use the specific controlled input components from `@/shared/components/controlledInput/` (e.g., `ControlledTextInput.tsx`, `ControlledSelect.tsx`). Do *not* use raw Chakra `Input` or `Select` directly within forms managed by `react-hook-form`.
+- **Internal FieldContainer:** Assume that components like `ControlledTextInput` and `ControlledSelect` already incorporate label rendering, error display, and layout logic (likely using `FieldContainer` internally). **Do not** wrap these standalone controlled components with an additional, explicit `FieldContainer`.
+- **Props:** Pass the following props directly to the controlled input components:
+    - `name`: (string) The name of the field, matching the form data interface and Yup schema.
+    - `control`: The `control` object from `react-hook-form`'s `useForm` hook.
+    - `label`: (string) The user-visible label for the field (use `t()` for i18n).
+    - `error`: The specific error message for the field from `formState.errors` (e.g., `errors.fieldName?.message`).
+    - `required`: (boolean, optional) Pass if the field is always required, visually indicating it (often handled by the internal `FieldContainer`). For conditionally required fields, rely on the Yup schema and error message.
+    - `placeholder`: (string, optional) Placeholder text for the input (use `t()` for i18n).
+    - Any other specific props needed by the component (e.g., `options` for `ControlledSelect`).
+
+## Field Grouping
+- **Use `FieldContainer` for Groups:** When multiple input fields need to be grouped under a single shared label (e.g., "Tax Residency" covering Country and State), wrap the layout component (`HStack` or `VStack`) containing those inputs with the standalone `@/shared/components/form/FieldContainer.tsx`.
+- **Group Props:** Pass `title` (use `t()`), combined `error` (or handle error display strategy within `FieldContainer`), and `required` status to the wrapping `FieldContainer`. The inner controlled components within the group should typically have their `label` prop set to `""` or omitted, as the group's `FieldContainer` provides the main title.
+
+## Validation Schema (`yup`)
+- **Define Schema:** Create a `yup` schema defining the shape and validation rules for the form data.
+- **Error Messages:** Provide user-friendly error messages within the schema definition (e.g., `.required(t('This field is required'))`, `.url(t('Invalid URL'))`). Use `t()` for all user-facing error messages.
+- **Optional Fields:** Use `.optional()` for fields that are not always required.
+- **Conditional Validation:**
+    - Use Yup's `.when()` method for fields whose requirement or validation rules depend on other fields *within the same form*.
+    - For validation depending on props passed *to* the form component (like `legalEntity`), pass that prop via the `context` option in `useForm` and access it in the schema using the `$` prefix (e.g., `.when('$legalEntity', ...)`).
+
+## `useForm` Hook Setup
+- **Resolver:** Connect the Yup schema using `resolver: yupResolver(taxProfileSchema)`.
+- **Mode:** Set `mode: 'onBlur'` to prevent validation errors from appearing before the user interacts with and leaves a field.
+- **Default Values:** Provide `defaultValues` that match the form data interface. Use `undefined` (not `''`) as the default for fields that are optional (`?: string`) in the interface and schema to ensure type compatibility.
+- **Context:** If using `.when()` based on external props in your schema, pass those props in the `context` object (e.g., `context: { legalEntity }`).
+
+## Form Structure and Submission
+- **Layout:** Use `VStack` with appropriate `gap` for the main form layout. Use `HStack` for inline fields where necessary (like Country/State).
+- **`form` Tag:** Wrap the form content in a standard HTML `<form>` tag. Attach `react-hook-form`'s `handleSubmit(onSubmit)` function to the `<form>`'s `onSubmit` prop.
+- **Submit Button:**
+    - Place the submit `Button` within the form's main `VStack`.
+    - Set `type="submit"`.
+    - Use the theme's primary action color scheme (e.g., `colorScheme="primary1"` for save/success actions).
+    - Include an `isLoading` prop tied to the submission state for user feedback.
+- **`onSubmit` Handler:** Define an `onSubmit` function (type `SubmitHandler<FormDataInterface>`) that receives the validated form data. This function should handle the actual data submission logic (e.g., API calls).
+
+## Componentization
+- **Extract Complex Forms:** For non-trivial forms, extract the form logic (interface, schema, `useForm`, JSX) into a dedicated component (e.g., `TaxProfileForm.tsx`).
+- **Props for Form Components:** The extracted form component should accept necessary data (like `legalEntity`) and the `onSubmit` handler as props.
+
+## Internationalization (i18n)
+- **Use `t()`:** Ensure all user-facing strings (labels, placeholders, error messages, button text) are wrapped in the `t()` function from `i18next`.
+
 
 # Comment Formatting Rule
 

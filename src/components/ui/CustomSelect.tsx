@@ -32,7 +32,7 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
       bg: 'panel.solid',
       color: 'utils.text',
       borderRadius: '8px',
-      height: '32px',
+      minHeight: '32px',
       fontSize: props.fontSize || '16px',
       fontWeight: '400',
       paddingX: '12px',

@@ -51,7 +51,7 @@ export function ControlledSelect(props: Props) {
           value={field.value || props.defaultValue}
           isDisabled={props.isDisabled}
           placeholder={props.defaultValue ? undefined : props.placeholder}
-          borderColor="neutral.200"
+          borderColor="neutral1.6"
           borderRadius="8px"
           borderWidth="1px"
           fontSize={props.fontSize || 'md'}

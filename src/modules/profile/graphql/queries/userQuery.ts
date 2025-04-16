@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_USER_PROJECT_CONTRIBUTIONS } from '../fragments/contributionFragment'
 import { FRAGMENT_PROJECT_FOR_PROFILE_PAGE } from '../fragments/projectFragment'
-import { FRAGMENT_USER_FOR_PROFILE_PAGE } from '../fragments/userFragment'
+import { FRAGMENT_USER_FOR_PROFILE_PAGE, FRAGMENT_USER_TAX_PROFILE } from '../fragments/userFragment'
 import { FRAGMENT_USER_WALLET_CONNECTION_DETAILS } from '../fragments/walletFragment.ts'
 
 export const QUERY_USER_FOR_PROFILE_PAGE = gql`
@@ -84,6 +84,16 @@ export const QUERY_USER_WALLET = gql`
     user(where: $where) {
       wallet {
         ...UserWalletConnectionDetails
+      }
+    }
+  }
+`
+export const QUERY_USER_TAX_PROFILE = gql`
+  ${FRAGMENT_USER_TAX_PROFILE}
+  query UserTaxProfile($where: UserGetInput!) {
+    user(where: $where) {
+      taxProfile {
+        ...UserTaxProfile
       }
     }
   }

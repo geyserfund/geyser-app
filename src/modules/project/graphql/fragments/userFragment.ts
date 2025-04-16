@@ -14,6 +14,11 @@ export const FRAGMENT_PROJECT_PAGE_CREATOR = gql`
       id
       public
     }
+    taxProfile {
+      id
+      country
+      legalEntityType
+    }
     complianceDetails {
       verifiedDetails {
         email {
@@ -39,5 +44,20 @@ export const FRAGMENT_USER_AVATAR = gql`
     imageUrl
     username
     guardianType
+  }
+`
+
+export const FRAGMENT_PROJECT_OWNER_USER_FOR_INVOICE = gql`
+  fragment ProjectOwnerUserForInvoice on User {
+    id
+    username
+    complianceDetails {
+      verifiedDetails {
+        identity {
+          verifiedAt
+          verified
+        }
+      }
+    }
   }
 `

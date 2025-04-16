@@ -13,7 +13,6 @@ import { useProjectForm } from '../../projectCreation/hooks/useProjectForm'
 import { ProjectCreationVariables } from '../../projectCreation/types'
 import { DashboardLayout } from '../common'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../common/ProjectUnsavedModal'
-import { BecomeVerifiedCreator } from '../components/BecomeVerifiedCreator.tsx'
 import { ProjectNameChangeConfirmModal } from '../components/ProjectNameChangeConfirmModal'
 
 export const ProjectDashboardInfo = () => {
@@ -104,8 +103,6 @@ export const ProjectDashboardInfo = () => {
       width="full"
       overflow="hidden"
     >
-      <BecomeVerifiedCreator />
-
       <VStack width="100%" alignItems="flex-start" spacing="24px" px={{ base: 0, lg: 6 }}>
         <ProjectForm form={form} isEdit />
       </VStack>

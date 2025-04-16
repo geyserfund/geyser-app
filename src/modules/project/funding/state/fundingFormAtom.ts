@@ -350,7 +350,7 @@ export const fundingOnchainAmountWarningAtom = atom((get) => {
 })
 
 const BANXA_MAX_AMOUNT_CENT = 1500000 // 15,000 USD in cents
-const BANXA_MIN_AMOUNT_CENT = 20 //   20 USD in cents
+const BANXA_MIN_AMOUNT_CENT = 2100 //   20 USD in cents
 
 /** Check if the  funding Amount is enough for fiat swap payments */
 export const fundingFiatSwapAmountWarningAtom = atom((get) => {
@@ -371,7 +371,7 @@ export const fundingFiatSwapAmountWarningAtom = atom((get) => {
 
     if (totalAmountUsdCent < BANXA_MIN_AMOUNT_CENT) {
       return `The amount you are trying to send is too low for fiat payments. Only payments over $${commaFormatted(
-        30,
+        21,
       )} can be sent via fiat.`
     }
   }

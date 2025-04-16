@@ -227,6 +227,7 @@ export type Contribution = {
   createdAt?: Maybe<Scalars['Date']['output']>;
   /** Creator's email address. Only visible to the contributor. */
   creatorEmail?: Maybe<Scalars['String']['output']>;
+  creatorTaxProfile?: Maybe<UserTaxProfile>;
   donationAmount: Scalars['Int']['output'];
   /** Contributor's email address. Only visible to the project owner. */
   email?: Maybe<Scalars['String']['output']>;
@@ -1167,6 +1168,12 @@ export enum LeaderboardPeriod {
   Month = 'MONTH'
 }
 
+export enum LegalEntityType {
+  Company = 'COMPANY',
+  NonProfit = 'NON_PROFIT',
+  Person = 'PERSON'
+}
+
 export type LightningAddressConnectionDetails = {
   __typename?: 'LightningAddressConnectionDetails';
   lightningAddress: Scalars['String']['output'];
@@ -1951,6 +1958,7 @@ export type Payment = {
   paymentAmount: Scalars['Int']['output'];
   paymentCurrency: PaymentCurrency;
   paymentDetails: PaymentDetails;
+  paymentType: PaymentType;
   payoutAmount: Scalars['Int']['output'];
   payoutCurrency: PayoutCurrency;
   projectId: Scalars['BigInt']['output'];
@@ -2080,6 +2088,7 @@ export type PaymentPendResponse = {
 
 export enum PaymentStatus {
   Canceled = 'CANCELED',
+  Failed = 'FAILED',
   Paid = 'PAID',
   PartiallyPaid = 'PARTIALLY_PAID',
   Pending = 'PENDING',
@@ -2089,6 +2098,14 @@ export enum PaymentStatus {
 export type PaymentStatusUpdatedInput = {
   contributionUUID?: InputMaybe<Scalars['String']['input']>;
 };
+
+export enum PaymentType {
+  Fiat = 'FIAT',
+  FiatSwap = 'FIAT_SWAP',
+  Lightning = 'LIGHTNING',
+  LightningPodcastKeysend = 'LIGHTNING_PODCAST_KEYSEND',
+  OnChainSwap = 'ON_CHAIN_SWAP'
+}
 
 export enum PayoutCurrency {
   Btcsat = 'BTCSAT',
@@ -3755,16 +3772,26 @@ export type UserSubscriptionsWhereInput = {
 
 export type UserTaxProfile = {
   __typename?: 'UserTaxProfile';
-  country: Scalars['String']['output'];
+  country?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['Date']['output'];
   deleted: Scalars['Boolean']['output'];
   deletedAt?: Maybe<Scalars['Date']['output']>;
-  fullName: Scalars['String']['output'];
+  fullName?: Maybe<Scalars['String']['output']>;
   id: Scalars['BigInt']['output'];
   incorporationDocument?: Maybe<Scalars['String']['output']>;
+  legalEntityType: LegalEntityType;
   state?: Maybe<Scalars['String']['output']>;
-  taxId: Scalars['String']['output'];
+  taxId?: Maybe<Scalars['String']['output']>;
   userId: Scalars['BigInt']['output'];
+};
+
+export type UserTaxProfileUpdateInput = {
+  country?: InputMaybe<Scalars['String']['input']>;
+  fullName?: InputMaybe<Scalars['String']['input']>;
+  incorporationDocument?: InputMaybe<Scalars['String']['input']>;
+  legalEntityType: LegalEntityType;
+  state?: InputMaybe<Scalars['String']['input']>;
+  taxId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum UserVerificationLevel {
@@ -3903,14 +3930,6 @@ export type DashboardFundersGetInput = {
   orderBy?: InputMaybe<GetFundersOrderByInput>;
   pagination?: InputMaybe<PaginationInput>;
   where?: InputMaybe<GetDashboardFundersWhereInput>;
-};
-
-export type UserTaxProfileUpdateInput = {
-  country: Scalars['String']['input'];
-  fullName: Scalars['String']['input'];
-  incorporationDocument?: InputMaybe<Scalars['String']['input']>;
-  state?: InputMaybe<Scalars['String']['input']>;
-  taxId: Scalars['String']['input'];
 };
 
 
@@ -4167,6 +4186,7 @@ export type ResolversTypes = {
   LeaderboardGlobalCreatorsGetInput: LeaderboardGlobalCreatorsGetInput;
   LeaderboardGlobalProjectsGetInput: LeaderboardGlobalProjectsGetInput;
   LeaderboardPeriod: LeaderboardPeriod;
+  LegalEntityType: LegalEntityType;
   LightningAddressConnectionDetails: ResolverTypeWrapper<LightningAddressConnectionDetails>;
   LightningAddressConnectionDetailsCreateInput: LightningAddressConnectionDetailsCreateInput;
   LightningAddressConnectionDetailsUpdateInput: LightningAddressConnectionDetailsUpdateInput;
@@ -4248,6 +4268,7 @@ export type ResolversTypes = {
   PaymentPendResponse: ResolverTypeWrapper<PaymentPendResponse>;
   PaymentStatus: PaymentStatus;
   PaymentStatusUpdatedInput: PaymentStatusUpdatedInput;
+  PaymentType: PaymentType;
   PayoutCurrency: PayoutCurrency;
   PodcastKeysendContributionCreateInput: PodcastKeysendContributionCreateInput;
   PodcastKeysendContributionCreateResponse: ResolverTypeWrapper<PodcastKeysendContributionCreateResponse>;
@@ -4404,6 +4425,7 @@ export type ResolversTypes = {
   UserSubscriptionsInput: UserSubscriptionsInput;
   UserSubscriptionsWhereInput: UserSubscriptionsWhereInput;
   UserTaxProfile: ResolverTypeWrapper<UserTaxProfile>;
+  UserTaxProfileUpdateInput: UserTaxProfileUpdateInput;
   UserVerificationLevel: UserVerificationLevel;
   UserVerificationLevelInput: UserVerificationLevelInput;
   UserVerificationLevelStatus: ResolverTypeWrapper<UserVerificationLevelStatus>;
@@ -4424,7 +4446,6 @@ export type ResolversTypes = {
   WalletStatus: WalletStatus;
   WalletStatusCode: WalletStatusCode;
   dashboardFundersGetInput: DashboardFundersGetInput;
-  userTaxProfileUpdateInput: UserTaxProfileUpdateInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -4768,6 +4789,7 @@ export type ResolversParentTypes = {
   UserSubscriptionsInput: UserSubscriptionsInput;
   UserSubscriptionsWhereInput: UserSubscriptionsWhereInput;
   UserTaxProfile: UserTaxProfile;
+  UserTaxProfileUpdateInput: UserTaxProfileUpdateInput;
   UserVerificationLevelStatus: UserVerificationLevelStatus;
   UserVerificationTokenGenerateInput: UserVerificationTokenGenerateInput;
   UserVerificationTokenGenerateResponse: UserVerificationTokenGenerateResponse;
@@ -4781,7 +4803,6 @@ export type ResolversParentTypes = {
   WalletResourceInput: WalletResourceInput;
   WalletState: WalletState;
   dashboardFundersGetInput: DashboardFundersGetInput;
-  userTaxProfileUpdateInput: UserTaxProfileUpdateInput;
 };
 
 export type ActivitiesGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActivitiesGetResponse'] = ResolversParentTypes['ActivitiesGetResponse']> = {
@@ -4909,6 +4930,7 @@ export type ContributionResolvers<ContextType = any, ParentType extends Resolver
   confirmedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   creatorEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  creatorTaxProfile?: Resolver<Maybe<ResolversTypes['UserTaxProfile']>, ParentType, ContextType>;
   donationAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   funder?: Resolver<ResolversTypes['Funder'], ParentType, ContextType>;
@@ -5585,6 +5607,7 @@ export type PaymentResolvers<ContextType = any, ParentType extends ResolversPare
   paymentAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   paymentCurrency?: Resolver<ResolversTypes['PaymentCurrency'], ParentType, ContextType>;
   paymentDetails?: Resolver<ResolversTypes['PaymentDetails'], ParentType, ContextType>;
+  paymentType?: Resolver<ResolversTypes['PaymentType'], ParentType, ContextType>;
   payoutAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   payoutCurrency?: Resolver<ResolversTypes['PayoutCurrency'], ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -6280,15 +6303,16 @@ export type UserSubscriptionResolvers<ContextType = any, ParentType extends Reso
 };
 
 export type UserTaxProfileResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserTaxProfile'] = ResolversParentTypes['UserTaxProfile']> = {
-  country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   deleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   deletedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
-  fullName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fullName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   incorporationDocument?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  legalEntityType?: Resolver<ResolversTypes['LegalEntityType'], ParentType, ContextType>;
   state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  taxId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  taxId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -6994,7 +7018,7 @@ export type GuardianUsersGetQuery = { __typename?: 'Query', guardianUsersGet?: {
 
 export type BitcoinQuoteFragment = { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency };
 
-export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, contributions: Array<{ __typename?: 'Contribution', amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, bitcoinQuote?: (
+export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: number | null, confirmedAt?: any | null, confirmed: boolean, id: any, contributions: Array<{ __typename?: 'Contribution', id: any, amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, bitcoinQuote?: (
       { __typename?: 'BitcoinQuote' }
       & BitcoinQuoteFragment
     ) | null }> };
@@ -7046,6 +7070,8 @@ export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: s
     & ExternalAccountFragment
   )>, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
+export type UserTaxProfileFragment = { __typename?: 'UserTaxProfile', id: any, userId: any, legalEntityType: LegalEntityType, fullName?: string | null, country?: string | null, state?: string | null, taxId?: string | null, incorporationDocument?: string | null };
+
 export type UserSubscriptionFragment = { __typename?: 'UserSubscription', canceledAt?: any | null, createdAt: any, id: any, nextBillingDate: any, startDate: any, status: UserSubscriptionStatus, updatedAt: any, projectSubscriptionPlan: { __typename?: 'ProjectSubscriptionPlan', id: any, projectId: any, name: string, cost: number, interval: UserSubscriptionInterval, currency: SubscriptionCurrencyType } };
 
 export type UserWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', tlsCertificate?: string | null, pubkey?: string | null, macaroon: string, lndNodeType: LndNodeType, hostname: string, grpcPort: number } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
@@ -7067,6 +7093,16 @@ export type CreatorNotificationsSettingsUpdateMutationVariables = Exact<{
 
 
 export type CreatorNotificationsSettingsUpdateMutation = { __typename?: 'Mutation', creatorNotificationConfigurationValueUpdate?: boolean | null };
+
+export type UserTaxProfileUpdateMutationVariables = Exact<{
+  input: UserTaxProfileUpdateInput;
+}>;
+
+
+export type UserTaxProfileUpdateMutation = { __typename?: 'Mutation', userTaxProfileUpdate: (
+    { __typename?: 'UserTaxProfile' }
+    & UserTaxProfileFragment
+  ) };
 
 export type UserNotificationsSettingsUpdateMutationVariables = Exact<{
   userNotificationConfigurationId: Scalars['BigInt']['input'];
@@ -7173,6 +7209,16 @@ export type UserWalletQuery = { __typename?: 'Query', user: { __typename?: 'User
       & UserWalletConnectionDetailsFragment
     ) | null } };
 
+export type UserTaxProfileQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type UserTaxProfileQuery = { __typename?: 'Query', user: { __typename?: 'User', taxProfile?: (
+      { __typename?: 'UserTaxProfile' }
+      & UserTaxProfileFragment
+    ) | null } };
+
 export type UserSubscriptionsQueryVariables = Exact<{
   input: UserSubscriptionsInput;
 }>;
@@ -7205,7 +7251,7 @@ export type FundingContributionSubscriptionFragment = { __typename?: 'Contributi
 
 export type ContributionWithInvoiceStatusFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, status: ContributionStatus, creatorEmail?: string | null, isAnonymous: boolean };
 
-export type ContributionForDownloadInvoiceFragment = { __typename?: 'Contribution', id: any, donationAmount: number, amount: number, uuid?: string | null, projectId: any, confirmedAt?: any | null, createdAt?: any | null, status: ContributionStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null };
+export type ContributionForDownloadInvoiceFragment = { __typename?: 'Contribution', id: any, donationAmount: number, amount: number, uuid?: string | null, creatorEmail?: string | null, projectId: any, confirmedAt?: any | null, createdAt?: any | null, status: ContributionStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string, email?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, creatorTaxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, payments: Array<{ __typename?: 'Payment', status: PaymentStatus, uuid: string, fees: Array<{ __typename?: 'PaymentFee', description?: string | null, feeType?: PaymentFeeType | null, feeAmount: number, external?: boolean | null, feeCurrency: FeeCurrency }> }> };
 
 export type ProjectEntryFragment = { __typename?: 'Entry', id: any, title: string, description: string, image?: string | null, type: EntryType, fundersCount: number, amountFunded: number, status: EntryStatus, createdAt: string, publishedAt?: string | null };
 
@@ -7268,6 +7314,8 @@ export type FundingContributionPaymentDetailsFragment = { __typename?: 'Contribu
 
 export type FundingContributionPaymentFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, status: PaymentStatus, userSubscriptionId?: any | null };
 
+export type PaymentSubscriptionFragment = { __typename?: 'Payment', id: any, status: PaymentStatus, paymentType: PaymentType, contributionUUID: string, failureReason?: string | null };
+
 export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', stripe: boolean } };
 
 export type ProjectSubscriptionPlansFragment = { __typename?: 'ProjectSubscriptionPlan', cost: number, currency: SubscriptionCurrencyType, description?: string | null, id: any, name: string, interval: UserSubscriptionInterval, projectId: any };
@@ -7323,13 +7371,15 @@ export type ProjectRewardSoldGraphStatsFragment = { __typename?: 'ProjectStats',
 
 export type ProjectFundingMethodStatsFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectContributionsStats?: { __typename?: 'ProjectContributionsStatsBase', contributionsGroupedByMethod: Array<{ __typename?: 'ProjectContributionsGroupedByMethodStats', count: number, method: string, total: number, totalUsd: number }> } | null } | null };
 
-export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, description?: string | null, shortDescription?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null, confirmationMessage?: string | null, privateCommentPrompts: Array<PrivateCommentPrompt>, posts: Array<{ __typename?: 'Post', id: any, title: string, postType?: PostType | null, description: string, createdAt: string }> };
+export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, description?: string | null, shortDescription?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null, confirmationMessage?: string | null, privateCommentPrompts: Array<PrivateCommentPrompt>, createdAt: any, posts: Array<{ __typename?: 'Post', id: any, title: string, postType?: PostType | null, description: string, createdAt: string }> };
 
 export type PostPageProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, images: Array<string>, shortDescription?: string | null, cost: number };
 
-export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
+export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: any, country?: string | null, legalEntityType: LegalEntityType } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
 export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, guardianType?: GuardianType | null };
+
+export type ProjectOwnerUserForInvoiceFragment = { __typename?: 'User', id: any, username: string, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', identity?: { __typename?: 'VerificationResult', verifiedAt?: any | null, verified?: boolean | null } | null } } };
 
 export type WalletContributionLimitsFragment = { __typename?: 'WalletContributionLimits', min?: number | null, max?: number | null, offChain?: { __typename?: 'WalletOffChainContributionLimits', min?: number | null, max?: number | null } | null, onChain?: { __typename?: 'WalletOnChainContributionLimits', min?: number | null, max?: number | null } | null };
 
@@ -8035,6 +8085,16 @@ export type GetUserIpCountryQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetUserIpCountryQuery = { __typename?: 'Query', userIpCountry: string };
 
+export type GetProjectOwnerUserForInvoiceQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type GetProjectOwnerUserForInvoiceQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', owners: Array<{ __typename?: 'Owner', id: any, user: (
+        { __typename?: 'User' }
+        & ProjectOwnerUserForInvoiceFragment
+      ) }> } | null };
+
 export type FundingContributionStatusUpdatedSubscriptionVariables = Exact<{
   input?: InputMaybe<ContributionStatusUpdatedInput>;
 }>;
@@ -8054,6 +8114,16 @@ export type ProjectContributionSubscription = { __typename?: 'Subscription', con
       { __typename?: 'Contribution' }
       & ProjectContributionFragment
     ) } };
+
+export type PaymentStatusUpdatedSubscriptionVariables = Exact<{
+  input: PaymentStatusUpdatedInput;
+}>;
+
+
+export type PaymentStatusUpdatedSubscription = { __typename?: 'Subscription', paymentStatusUpdated: (
+    { __typename?: 'Payment' }
+    & PaymentSubscriptionFragment
+  ) };
 
 export const EmailUpdateUserFragmentDoc = gql`
     fragment EmailUpdateUser on User {
@@ -8708,6 +8778,7 @@ export const UserProjectFunderFragmentDoc = gql`
   confirmed
   id
   contributions {
+    id
     amount
     comment
     media
@@ -8897,6 +8968,18 @@ export const UserForProfilePageFragmentDoc = gql`
   }
 }
     ${ExternalAccountFragmentDoc}`;
+export const UserTaxProfileFragmentDoc = gql`
+    fragment UserTaxProfile on UserTaxProfile {
+  id
+  userId
+  legalEntityType
+  fullName
+  country
+  state
+  taxId
+  incorporationDocument
+}
+    `;
 export const UserSubscriptionFragmentDoc = gql`
     fragment UserSubscription on UserSubscription {
   canceledAt
@@ -9090,9 +9173,15 @@ export const ContributionForDownloadInvoiceFragmentDoc = gql`
   donationAmount
   amount
   uuid
+  creatorEmail
   funder {
     user {
       username
+      email
+      taxProfile {
+        fullName
+        taxId
+      }
     }
   }
   projectId
@@ -9108,10 +9197,25 @@ export const ContributionForDownloadInvoiceFragmentDoc = gql`
     }
     totalInSats
   }
+  creatorTaxProfile {
+    fullName
+    taxId
+  }
   status
   bitcoinQuote {
     quote
     quoteCurrency
+  }
+  payments {
+    status
+    uuid
+    fees {
+      description
+      feeType
+      feeAmount
+      external
+      feeCurrency
+    }
   }
 }
     `;
@@ -9276,6 +9380,15 @@ export const FundingContributionPaymentDetailsFragmentDoc = gql`
 ${ContributionOnChainSwapPaymentDetailsFragmentDoc}
 ${ContributionFiatPaymentDetailsFragmentDoc}
 ${ContributionFiatSwapPaymentDetailsFragmentDoc}`;
+export const PaymentSubscriptionFragmentDoc = gql`
+    fragment PaymentSubscription on Payment {
+  id
+  status
+  paymentType
+  contributionUUID
+  failureReason
+}
+    `;
 export const ProjectSubscriptionPlansFragmentDoc = gql`
     fragment ProjectSubscriptionPlans on ProjectSubscriptionPlan {
   cost
@@ -9419,6 +9532,11 @@ export const ProjectPageCreatorFragmentDoc = gql`
     externalId
     id
     public
+  }
+  taxProfile {
+    id
+    country
+    legalEntityType
   }
   complianceDetails {
     verifiedDetails {
@@ -9665,12 +9783,27 @@ export const ProjectRewardFragmentDoc = gql`
   estimatedDeliveryInWeeks
   confirmationMessage
   privateCommentPrompts
+  createdAt
   posts {
     id
     title
     postType
     description
     createdAt
+  }
+}
+    `;
+export const ProjectOwnerUserForInvoiceFragmentDoc = gql`
+    fragment ProjectOwnerUserForInvoice on User {
+  id
+  username
+  complianceDetails {
+    verifiedDetails {
+      identity {
+        verifiedAt
+        verified
+      }
+    }
   }
 }
     `;
@@ -11664,6 +11797,39 @@ export function useCreatorNotificationsSettingsUpdateMutation(baseOptions?: Apol
 export type CreatorNotificationsSettingsUpdateMutationHookResult = ReturnType<typeof useCreatorNotificationsSettingsUpdateMutation>;
 export type CreatorNotificationsSettingsUpdateMutationResult = Apollo.MutationResult<CreatorNotificationsSettingsUpdateMutation>;
 export type CreatorNotificationsSettingsUpdateMutationOptions = Apollo.BaseMutationOptions<CreatorNotificationsSettingsUpdateMutation, CreatorNotificationsSettingsUpdateMutationVariables>;
+export const UserTaxProfileUpdateDocument = gql`
+    mutation UserTaxProfileUpdate($input: UserTaxProfileUpdateInput!) {
+  userTaxProfileUpdate(input: $input) {
+    ...UserTaxProfile
+  }
+}
+    ${UserTaxProfileFragmentDoc}`;
+export type UserTaxProfileUpdateMutationFn = Apollo.MutationFunction<UserTaxProfileUpdateMutation, UserTaxProfileUpdateMutationVariables>;
+
+/**
+ * __useUserTaxProfileUpdateMutation__
+ *
+ * To run a mutation, you first call `useUserTaxProfileUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserTaxProfileUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userTaxProfileUpdateMutation, { data, loading, error }] = useUserTaxProfileUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUserTaxProfileUpdateMutation(baseOptions?: Apollo.MutationHookOptions<UserTaxProfileUpdateMutation, UserTaxProfileUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserTaxProfileUpdateMutation, UserTaxProfileUpdateMutationVariables>(UserTaxProfileUpdateDocument, options);
+      }
+export type UserTaxProfileUpdateMutationHookResult = ReturnType<typeof useUserTaxProfileUpdateMutation>;
+export type UserTaxProfileUpdateMutationResult = Apollo.MutationResult<UserTaxProfileUpdateMutation>;
+export type UserTaxProfileUpdateMutationOptions = Apollo.BaseMutationOptions<UserTaxProfileUpdateMutation, UserTaxProfileUpdateMutationVariables>;
 export const UserNotificationsSettingsUpdateDocument = gql`
     mutation UserNotificationsSettingsUpdate($userNotificationConfigurationId: BigInt!, $value: String!) {
   userNotificationConfigurationValueUpdate(
@@ -12140,6 +12306,48 @@ export type UserWalletQueryHookResult = ReturnType<typeof useUserWalletQuery>;
 export type UserWalletLazyQueryHookResult = ReturnType<typeof useUserWalletLazyQuery>;
 export type UserWalletSuspenseQueryHookResult = ReturnType<typeof useUserWalletSuspenseQuery>;
 export type UserWalletQueryResult = Apollo.QueryResult<UserWalletQuery, UserWalletQueryVariables>;
+export const UserTaxProfileDocument = gql`
+    query UserTaxProfile($where: UserGetInput!) {
+  user(where: $where) {
+    taxProfile {
+      ...UserTaxProfile
+    }
+  }
+}
+    ${UserTaxProfileFragmentDoc}`;
+
+/**
+ * __useUserTaxProfileQuery__
+ *
+ * To run a query within a React component, call `useUserTaxProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserTaxProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserTaxProfileQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUserTaxProfileQuery(baseOptions: Apollo.QueryHookOptions<UserTaxProfileQuery, UserTaxProfileQueryVariables> & ({ variables: UserTaxProfileQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserTaxProfileQuery, UserTaxProfileQueryVariables>(UserTaxProfileDocument, options);
+      }
+export function useUserTaxProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserTaxProfileQuery, UserTaxProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserTaxProfileQuery, UserTaxProfileQueryVariables>(UserTaxProfileDocument, options);
+        }
+export function useUserTaxProfileSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserTaxProfileQuery, UserTaxProfileQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserTaxProfileQuery, UserTaxProfileQueryVariables>(UserTaxProfileDocument, options);
+        }
+export type UserTaxProfileQueryHookResult = ReturnType<typeof useUserTaxProfileQuery>;
+export type UserTaxProfileLazyQueryHookResult = ReturnType<typeof useUserTaxProfileLazyQuery>;
+export type UserTaxProfileSuspenseQueryHookResult = ReturnType<typeof useUserTaxProfileSuspenseQuery>;
+export type UserTaxProfileQueryResult = Apollo.QueryResult<UserTaxProfileQuery, UserTaxProfileQueryVariables>;
 export const UserSubscriptionsDocument = gql`
     query UserSubscriptions($input: UserSubscriptionsInput!) {
   userSubscriptions(input: $input) {
@@ -15060,6 +15268,51 @@ export type GetUserIpCountryQueryHookResult = ReturnType<typeof useGetUserIpCoun
 export type GetUserIpCountryLazyQueryHookResult = ReturnType<typeof useGetUserIpCountryLazyQuery>;
 export type GetUserIpCountrySuspenseQueryHookResult = ReturnType<typeof useGetUserIpCountrySuspenseQuery>;
 export type GetUserIpCountryQueryResult = Apollo.QueryResult<GetUserIpCountryQuery, GetUserIpCountryQueryVariables>;
+export const GetProjectOwnerUserForInvoiceDocument = gql`
+    query GetProjectOwnerUserForInvoice($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    owners {
+      id
+      user {
+        ...ProjectOwnerUserForInvoice
+      }
+    }
+  }
+}
+    ${ProjectOwnerUserForInvoiceFragmentDoc}`;
+
+/**
+ * __useGetProjectOwnerUserForInvoiceQuery__
+ *
+ * To run a query within a React component, call `useGetProjectOwnerUserForInvoiceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectOwnerUserForInvoiceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectOwnerUserForInvoiceQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGetProjectOwnerUserForInvoiceQuery(baseOptions: Apollo.QueryHookOptions<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables> & ({ variables: GetProjectOwnerUserForInvoiceQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>(GetProjectOwnerUserForInvoiceDocument, options);
+      }
+export function useGetProjectOwnerUserForInvoiceLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>(GetProjectOwnerUserForInvoiceDocument, options);
+        }
+export function useGetProjectOwnerUserForInvoiceSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>(GetProjectOwnerUserForInvoiceDocument, options);
+        }
+export type GetProjectOwnerUserForInvoiceQueryHookResult = ReturnType<typeof useGetProjectOwnerUserForInvoiceQuery>;
+export type GetProjectOwnerUserForInvoiceLazyQueryHookResult = ReturnType<typeof useGetProjectOwnerUserForInvoiceLazyQuery>;
+export type GetProjectOwnerUserForInvoiceSuspenseQueryHookResult = ReturnType<typeof useGetProjectOwnerUserForInvoiceSuspenseQuery>;
+export type GetProjectOwnerUserForInvoiceQueryResult = Apollo.QueryResult<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>;
 export const FundingContributionStatusUpdatedDocument = gql`
     subscription FundingContributionStatusUpdated($input: ContributionStatusUpdatedInput) {
   contributionStatusUpdated(input: $input) {
@@ -15124,3 +15377,33 @@ export function useProjectContributionSubscription(baseOptions?: Apollo.Subscrip
       }
 export type ProjectContributionSubscriptionHookResult = ReturnType<typeof useProjectContributionSubscription>;
 export type ProjectContributionSubscriptionResult = Apollo.SubscriptionResult<ProjectContributionSubscription>;
+export const PaymentStatusUpdatedDocument = gql`
+    subscription PaymentStatusUpdated($input: PaymentStatusUpdatedInput!) {
+  paymentStatusUpdated(input: $input) {
+    ...PaymentSubscription
+  }
+}
+    ${PaymentSubscriptionFragmentDoc}`;
+
+/**
+ * __usePaymentStatusUpdatedSubscription__
+ *
+ * To run a query within a React component, call `usePaymentStatusUpdatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `usePaymentStatusUpdatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaymentStatusUpdatedSubscription({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePaymentStatusUpdatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<PaymentStatusUpdatedSubscription, PaymentStatusUpdatedSubscriptionVariables> & ({ variables: PaymentStatusUpdatedSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<PaymentStatusUpdatedSubscription, PaymentStatusUpdatedSubscriptionVariables>(PaymentStatusUpdatedDocument, options);
+      }
+export type PaymentStatusUpdatedSubscriptionHookResult = ReturnType<typeof usePaymentStatusUpdatedSubscription>;
+export type PaymentStatusUpdatedSubscriptionResult = Apollo.SubscriptionResult<PaymentStatusUpdatedSubscription>;

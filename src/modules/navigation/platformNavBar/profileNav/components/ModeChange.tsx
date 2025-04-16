@@ -35,7 +35,15 @@ export const ModeChange = () => {
     <>
       <HStack w="full">
         <ColorModeSwitcher />
-        <Button variant="outline" colorScheme="neutral1" w="full" onClick={onOpen} flex={1} leftIcon={<PiTranslate />}>
+        <Button
+          size="lg"
+          variant="outline"
+          colorScheme="neutral1"
+          w="full"
+          onClick={onOpen}
+          flex={1}
+          leftIcon={<PiTranslate />}
+        >
           <Text isTruncated>{t('Change language')}</Text>
         </Button>
       </HStack>

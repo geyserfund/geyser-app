@@ -138,9 +138,6 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   const isWalletIncomplete = !isFormDirty() && !wallet?.id
 
-  console.log('checking isWalletIncomplete', wallet)
-  console.log('checking isLightningAddressInValid', isLightningAddressInValid)
-
   return (
     <ProjectCreateLayout
       onBackClick={handleBackClick}

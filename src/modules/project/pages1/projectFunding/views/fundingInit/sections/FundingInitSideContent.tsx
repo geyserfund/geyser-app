@@ -8,6 +8,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { LegalEntityType } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
@@ -36,6 +37,9 @@ export const FundingInitSummary = () => {
 
   const { isFundingInputAmountValid, project, formState } = useFundingFormAtom()
 
+  const ownerTaxProfile = project.owners[0]?.user.taxProfile
+  const isNonProfit = ownerTaxProfile?.legalEntityType === LegalEntityType.NonProfit
+
   const handleCheckoutButtonPressed = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     e.stopPropagation()
@@ -62,6 +66,12 @@ export const FundingInitSummary = () => {
       </FundingSummaryWrapper>
       <FundingCheckoutWrapper>
         <VStack w="full">
+          {isNonProfit && (
+            <Body size="sm" light>
+              {t('Tax-deductible invoice is provided  when contributing to this project.')}{' '}
+              {t('To ensure accurate name in the invoice, update your username or tax profile in profile settings.')}
+            </Body>
+          )}
           <Body size="sm" light>
             {t('By continuing to checkout you are accepting our T&Cs')}
           </Body>
