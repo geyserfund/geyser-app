@@ -2088,6 +2088,7 @@ export type PaymentPendResponse = {
 
 export enum PaymentStatus {
   Canceled = 'CANCELED',
+  Failed = 'FAILED',
   Paid = 'PAID',
   PartiallyPaid = 'PARTIALLY_PAID',
   Pending = 'PENDING',

@@ -19,7 +19,7 @@ export const useFiatSwapPaymentSubscription = ({ contributionUUID }: { contribut
         if (options.data.data?.paymentStatusUpdated.paymentType === PaymentType.FiatSwap) {
           if (options.data.data?.paymentStatusUpdated.status === PaymentStatus.Pending) {
             setFiatSwapStatus(FiatSwapStatus.processing)
-          } else if (options.data.data?.paymentStatusUpdated.status === PaymentStatus.Canceled) {
+          } else if (options.data.data?.paymentStatusUpdated.status === PaymentStatus.Failed) {
             setFiatSwapStatus(FiatSwapStatus.failed)
             setFiatFailureReason(options.data.data?.paymentStatusUpdated.failureReason || null)
           }
