@@ -7,7 +7,12 @@ import { LegalEntitySelection } from '@/modules/profile/pages/profileSettings/vi
 import { userTaxProfileAtom } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsVerification/state/taxProfileAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 
-export const VerificationDetails = ({ onContinue, onLoading }: { onContinue: () => void; onLoading: boolean }) => {
+type VerificationDetailsProps = {
+  onContinue: () => void
+  onLoading: boolean
+}
+
+export const VerificationDetails = ({ onContinue, onLoading }: VerificationDetailsProps) => {
   const taxProfile = useAtomValue(userTaxProfileAtom)
 
   const hasIdentity = taxProfile
@@ -47,7 +52,7 @@ export const VerificationDetails = ({ onContinue, onLoading }: { onContinue: () 
         {t('Verify your profile as a:')}
       </Body>
       <HStack w="full" paddingY="4">
-        <LegalEntitySelection />
+        <LegalEntitySelection disableIndividualPopup />
       </HStack>
 
       <HStack w="full">

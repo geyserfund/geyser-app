@@ -25,10 +25,16 @@ const options: { value: LegalEntityType; label: string; icon: React.ElementType 
 ]
 
 /** LegalEntitySelection: Allows selection of the legal entity type (Individual, Company, Non-profit). */
-export const LegalEntitySelection: React.FC = () => {
+export const LegalEntitySelection: React.FC<{ disableIndividualPopup?: boolean }> = ({ disableIndividualPopup }) => {
   const taxProfileModal = useModal<TaxProfileFormData>()
 
   const [taxProfile, setTaxProfile] = useAtom(userTaxProfileAtom)
+
+  const [updateTaxProfile] = useUserTaxProfileUpdateMutation({
+    onCompleted(data) {
+      setTaxProfile(data?.userTaxProfileUpdate)
+    },
+  })
 
   const { user } = useAuthContext()
 
@@ -55,6 +61,18 @@ export const LegalEntitySelection: React.FC = () => {
       : ''
 
   const openModal = (data: TaxProfileFormData) => {
+    console.log('disableIndividualPopup', disableIndividualPopup, data)
+    if (disableIndividualPopup && data.legalEntityType === LegalEntityType.Person) {
+      updateTaxProfile({
+        variables: {
+          input: {
+            ...data,
+          },
+        },
+      })
+      return
+    }
+
     taxProfileModal.onOpen(data)
   }
 
@@ -135,7 +153,7 @@ export const LegalEntitySelection: React.FC = () => {
               borderWidth={1}
               height="80px"
               justifyContent="flex-start"
-              onClick={() => taxProfileModal.onOpen({ legalEntityType: option.value })}
+              onClick={() => openModal({ legalEntityType: option.value })}
             >
               {option.label}
             </Button>

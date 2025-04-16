@@ -39,8 +39,8 @@ const taxProfileSchema = yup.object().shape({
   }),
   state: yup.string().when(['legalEntityType', 'country'], {
     is: (legalEntityType: LegalEntityType | undefined, country: string | undefined) =>
-      legalEntityType === LegalEntityType.NonProfit && country === 'US',
-    then: (schema) => schema.required(t('State is required for US Non-profits')),
+      legalEntityType === LegalEntityType.NonProfit || country === 'US',
+    then: (schema) => schema.required(t('Required for country US and Non-profits')),
     otherwise: (schema) => schema.optional(),
   }),
   taxId: yup.string().when('legalEntityType', {
@@ -127,12 +127,8 @@ export const TaxProfileForm: React.FC<TaxProfileFormProps> = ({ data, onSubmit, 
           placeholder={t('Enter full name')}
         />
 
-        <FieldContainer
-          title={t('Tax Residency')}
-          error={errors.country?.message || errors.state?.message}
-          required={isNonProfit}
-        >
-          <HStack w="full" alignItems="end">
+        <FieldContainer title={t('Tax Residency')} required={isNonProfit}>
+          <HStack w="full" alignItems="start">
             <ControlledCustomSelect
               name="country"
               control={control}
@@ -158,6 +154,7 @@ export const TaxProfileForm: React.FC<TaxProfileFormProps> = ({ data, onSubmit, 
             name="incorporationDocument"
             control={control}
             label={t('Incorporation Document Link')}
+            description={t('For private documents, share access with hello@geyser.fund or contact us directly')}
             error={errors.incorporationDocument?.message}
             required={isNonProfit}
             placeholder={t('incorporation/registrationdocument.pdf')}
