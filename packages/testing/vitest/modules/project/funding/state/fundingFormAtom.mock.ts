@@ -35,6 +35,7 @@ export const mockRewardsFull: ProjectRewardFragment[] = [
     isHidden: false,
     preOrder: false,
     posts: [],
+    createdAt: '2023-01-01T00:00:00Z',
   },
   {
     id: 102, // Number ID
@@ -54,6 +55,7 @@ export const mockRewardsFull: ProjectRewardFragment[] = [
     isHidden: false,
     preOrder: false,
     posts: [],
+    createdAt: '2023-01-01T00:00:00Z',
   },
   {
     id: 103, // Number ID
@@ -73,6 +75,7 @@ export const mockRewardsFull: ProjectRewardFragment[] = [
     isHidden: false,
     preOrder: false,
     posts: [],
+    createdAt: '2023-01-01T00:00:00Z',
   },
 ]
 
