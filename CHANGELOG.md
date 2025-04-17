@@ -1,3 +1,48 @@
+## [0.20.0](https://github.com/geyserfund/geyser-app/compare/v0.19.18...v0.20.0) (2025-04-17)
+
+
+### Features
+
+*  create identity and tax selection in profile settings ([263932d](https://github.com/geyserfund/geyser-app/commit/263932db1006951710fb65f845f27295a4dfc5ea))
+* add payment processing subcription ([98a8fef](https://github.com/geyserfund/geyser-app/commit/98a8fef14e47fc0c8cd14df16fbc8afc15e4e32f))
+* add tax profile information in creation flow, project wallet and dashboard ([d733237](https://github.com/geyserfund/geyser-app/commit/d733237e7b2868c09f9f7b743bcc993749ecc172))
+* add wallet popup when clicking on wallet ([a0d10dc](https://github.com/geyserfund/geyser-app/commit/a0d10dca18963e7f4889212d57a9e6edb118f206))
+* update invoice format ([77b0ec4](https://github.com/geyserfund/geyser-app/commit/77b0ec40f9749ccfa2c73b270c7ef0015f3012d1))
+
+
+### Bug Fixes
+
+* add auto link text when adding link in markdown ([f7c59f6](https://github.com/geyserfund/geyser-app/commit/f7c59f6d98a4099c43b9c693a90039a7431af489))
+* add download invoice button to contributions ([0259d22](https://github.com/geyserfund/geyser-app/commit/0259d22f93b1278294b7391d5cfbb65e63f952f9))
+* add isarael to blocked countries ([856f0cd](https://github.com/geyserfund/geyser-app/commit/856f0cd8da025a6f0d0535b25a621bdc192a629e))
+* add non-profit icon to the project ([831c066](https://github.com/geyserfund/geyser-app/commit/831c066f2cf2bc833ede60f660e840a83dfd4aca))
+* add report page ([85c44c3](https://github.com/geyserfund/geyser-app/commit/85c44c3718b772f645a8d73a06f0c8da4b42c017))
+* address PR comments and add contribution.mdc rules ([372c321](https://github.com/geyserfund/geyser-app/commit/372c321eade09f06d310d4f7515054687f37b3ec))
+* ambassador section missing Guardian badges ([c71986f](https://github.com/geyserfund/geyser-app/commit/c71986f97fa55353346e222d6541b82fc7bc3366))
+* dark mode hero ID component in profile ([b973434](https://github.com/geyserfund/geyser-app/commit/b973434deebf366275ae0b5b629f6c45219a227d))
+* dont show download until ready ([c0ef9eb](https://github.com/geyserfund/geyser-app/commit/c0ef9eb2d050c6546e389b7aefef7ef3f4585324))
+* hotfix ambassador ([b13fe04](https://github.com/geyserfund/geyser-app/commit/b13fe0487a115f139c3738631d2049b3cf5f53dd))
+* increase outline of the Guardian ring for larger tiers ([c393946](https://github.com/geyserfund/geyser-app/commit/c393946be0ae1e529e6e13b39944efe967354661))
+* leaderboard + contributions buttons converging ([029e682](https://github.com/geyserfund/geyser-app/commit/029e682781e0c219e6922414bc6783151695203f))
+* make dollars as the default input ([a1db5aa](https://github.com/geyserfund/geyser-app/commit/a1db5aab7cebeda3c20eaa3ee1a850336893b508))
+* profile and promote page ([4b3b1da](https://github.com/geyserfund/geyser-app/commit/4b3b1da671fbf881851f0d73a016e7d3cc6a3b9e))
+* push final updates to tax form ([6c9e27e](https://github.com/geyserfund/geyser-app/commit/6c9e27e1870f40a4a1d0034b4222dd9ea567a6e2))
+* reduce save time to 1sec from 2 sec in post ([3b1a868](https://github.com/geyserfund/geyser-app/commit/3b1a8687250040e72745cfeb335df6333ddd28b7))
+* refactor OTP initial screen, and remove loading scene ([ee36e75](https://github.com/geyserfund/geyser-app/commit/ee36e75e68cdea2057a61b2d8fafe48cde4c7c07))
+* remove 'become a verified creator badge' in project info dashboard ([0a96124](https://github.com/geyserfund/geyser-app/commit/0a96124bf618535c5c1510581c03131731aa4125))
+* remove funding comment, text to login ([d7b4b82](https://github.com/geyserfund/geyser-app/commit/d7b4b82446b757c9715ea8b7755a6223e2d36dad))
+* replace username with hero ID ([6d4302c](https://github.com/geyserfund/geyser-app/commit/6d4302ceec1b28a0906d51db3393799059e2f989))
+* revert back referrer and add referrer in tests ([692dd7a](https://github.com/geyserfund/geyser-app/commit/692dd7ad11a8d4543085995cc57eb75fa598d91f))
+* send to profile when profile is clicked in activity ([725a68a](https://github.com/geyserfund/geyser-app/commit/725a68a2bb6ea3065940326f01714f8c7d7cc17b))
+* sort rewards by newest first ([d90a51f](https://github.com/geyserfund/geyser-app/commit/d90a51f4fe1f19722d1a8c10b71980ac07f491dc))
+* update color mode button and icon ([28a7303](https://github.com/geyserfund/geyser-app/commit/28a73033ff874fe8838e4671745d56b224c3a383))
+* update featured project hero to geyserpromotions, and add geyser logo to promotions network ([b4a9b62](https://github.com/geyserfund/geyser-app/commit/b4a9b628486dbda4b109887a714d757812cc0f4a))
+* update legal entity copy ([f314db1](https://github.com/geyserfund/geyser-app/commit/f314db1a132c52ebcaf15bfd3c68dc800a8c26f0))
+* update summary to include notice ([2f9dc89](https://github.com/geyserfund/geyser-app/commit/2f9dc89cd831ae5c26b150de85fbe842b1547225))
+* update wallet popup ([ad0557e](https://github.com/geyserfund/geyser-app/commit/ad0557e454b33da668d437ed30154ed9e54f4ef4))
+* use activity id instead of resouce ID, and fix featuredProject hero to geyserpromotions ([5885160](https://github.com/geyserfund/geyser-app/commit/5885160b0d4e11043c1c0ba54df85a5d6222ef8a))
+* use failed payment status ([7ca2371](https://github.com/geyserfund/geyser-app/commit/7ca2371ad9b3712481eb5b10255eb2210c78cba5))
+
 ## [0.19.18](https://github.com/geyserfund/geyser-app/compare/v0.19.7...v0.19.18) (2025-04-09)
 
 
