@@ -11,13 +11,13 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 
 export const FiatSwapContributorNotVerified = () => {
   const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
-  const { formState } = useFundingFormAtom()
+  const { totalUsdCent } = useFundingFormAtom()
 
   const isUserOverLimit = fundingInputAfterRequest?.user?.complianceDetails.contributionLimits.monthly.reached
 
   const remainingLimit = fundingInputAfterRequest?.user?.complianceDetails.contributionLimits.monthly.remaining || 500
 
-  if (isUserOverLimit || formState.totalAmountUsdCent > remainingLimit * 100) {
+  if (isUserOverLimit || totalUsdCent > remainingLimit * 100) {
     return (
       <Feedback variant={FeedBackVariant.WARNING} icon={<Icon as={PiWarning} fontSize="26px" />}>
         <VStack w="full" alignItems="start">
