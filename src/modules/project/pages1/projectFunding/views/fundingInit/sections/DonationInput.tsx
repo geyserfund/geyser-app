@@ -45,16 +45,13 @@ export const DonationInput = () => {
 
     if (isDollar) {
       setDollar(val)
-      setSatoshi(Math.round(val / btcRate))
     } else {
       setSatoshi(val)
-      setDollar(Math.round(val * btcRate))
     }
   }
 
   const handleDefaultAmountButtonClick = (val: number) => {
     setDollar(val)
-    setSatoshi(Math.round(val / btcRate))
   }
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
