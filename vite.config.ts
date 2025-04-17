@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import react from '@vitejs/plugin-react-swc'
+import path from 'path'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import loadVersion from 'vite-plugin-package-version'
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
@@ -133,7 +134,7 @@ export default defineConfig(({ command, mode }) => {
     plugins,
     resolve: {
       alias: {
-        '@': '/src',
+        '@': path.resolve(__dirname, './src'),
       },
     },
     server,
@@ -142,7 +143,8 @@ export default defineConfig(({ command, mode }) => {
     test: {
       globals: true,
       environment: 'jsdom',
-      setupFiles: './packages/testing/vitest/setupTests.ts',
+      setupFiles: 'packages/testing/vitest/setupTests.ts',
+      include: ['packages/testing/vitest/**/state/**/*.test.ts'],
     },
     optimizeDeps: {
       include: ['ecpair', 'tiny-secp256k1'],
