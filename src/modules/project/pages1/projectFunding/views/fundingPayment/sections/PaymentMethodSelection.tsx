@@ -9,6 +9,7 @@ import { PathName } from '@/shared/constants'
 
 import {
   hasStripePaymentMethodAtom,
+  isFiatSwapMethodStartedAtom,
   isOnchainMethodStartedAtom,
   paymentMethodAtom,
   PaymentMethods,
@@ -33,7 +34,10 @@ export const PaymentMethodSelection = () => {
 
   const paymentMethod = useAtomValue(paymentMethodAtom)
   const isOnchainMethodStarted = useAtomValue(isOnchainMethodStartedAtom)
+  const isFiatSwapMethodStarted = useAtomValue(isFiatSwapMethodStartedAtom)
   const hasStripePaymentOption = useAtomValue(hasStripePaymentMethodAtom)
+
+  const isDisabled = isOnchainMethodStarted || isFiatSwapMethodStarted || Boolean(!paymentMethod)
 
   const items: AnimatedNavBarItem[] = useMemo(() => {
     const navBarItems = [] as AnimatedNavBarItem[]
@@ -43,8 +47,8 @@ export const PaymentMethodSelection = () => {
         name: t('Card'),
         key: PaymentMethods.card,
         path: PathName.fundingPaymentCard,
-        isDisabled: isOnchainMethodStarted || Boolean(!paymentMethod),
-        disableClick: isOnchainMethodStarted,
+        isDisabled,
+        disableClick: isDisabled,
         replacePath: true,
       })
     }
@@ -53,8 +57,8 @@ export const PaymentMethodSelection = () => {
       name: t('Fiat'),
       key: PaymentMethods.fiatSwap,
       path: PathName.fundingPaymentFiatSwap,
-      isDisabled: isOnchainMethodStarted || Boolean(!paymentMethod) || Boolean(fiatSwapAmountWarning) || !userId,
-      disableClick: isOnchainMethodStarted || userLimitReached || Boolean(fiatSwapAmountWarning),
+      isDisabled: isDisabled || Boolean(fiatSwapAmountWarning) || !userId,
+      disableClick: isDisabled || userLimitReached || Boolean(fiatSwapAmountWarning),
       tooltipLabel: !userId
         ? t('Please login to use fiat payment')
         : userLimitReached
@@ -67,8 +71,8 @@ export const PaymentMethodSelection = () => {
       name: t('Lightning'),
       key: PaymentMethods.lightning,
       path: PathName.fundingPaymentLightning,
-      isDisabled: isOnchainMethodStarted || Boolean(!paymentMethod),
-      disableClick: isOnchainMethodStarted,
+      isDisabled,
+      disableClick: isDisabled,
       replacePath: true,
     })
 
@@ -76,9 +80,9 @@ export const PaymentMethodSelection = () => {
       name: t('Onchain'),
       key: PaymentMethods.onChain,
       path: isOnchainMethodStarted ? '' : PathName.fundingPaymentOnchain,
-      isDisabled: Boolean(onChainAmountWarning) || Boolean(!paymentMethod),
+      isDisabled: Boolean(onChainAmountWarning) || Boolean(!paymentMethod) || !isFiatSwapMethodStarted,
       tooltipLabel: onChainAmountWarning || undefined,
-      disableClick: isOnchainMethodStarted,
+      disableClick: isDisabled,
       replacePath: true,
     })
 
@@ -92,6 +96,8 @@ export const PaymentMethodSelection = () => {
     fiatLimitMessage,
     fiatSwapAmountWarning,
     userLimitReached,
+    isFiatSwapMethodStarted,
+    isDisabled,
   ])
 
   const activeButtonIndex = useMemo(() => {

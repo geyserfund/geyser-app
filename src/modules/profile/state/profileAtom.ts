@@ -42,7 +42,7 @@ export const useUserProfileAtom = () => {
   return { userProfile, isLoading }
 }
 
-const isViewingOwnProfileAtom = atom<boolean>((get) => {
+export const isViewingOwnProfileAtom = atom<boolean>((get) => {
   const authUser = get(authUserAtom)
 
   const profileUser = get(userProfileAtom)

@@ -80,7 +80,7 @@ export const PostCreateEdit = () => {
     if (isDirty && postForm.status !== PostStatus.Published) {
       number = setInterval(() => {
         savePost()
-      }, 2000)
+      }, 1000)
     }
 
     if (postForm.status === PostStatus.Published) {

@@ -45,6 +45,7 @@ export const ProjectBody = () => {
         flex={1}
         w="full"
         maxWidth={{ base: 'unset', lg: dimensions.project.leftMainContainer.width }}
+        minWidth={{ base: 'unset', lg: dimensions.project.leftMainContainer.minWidth }}
         spacing={6}
         paddingBottom={{ base: 24, lg: 10 }}
       >

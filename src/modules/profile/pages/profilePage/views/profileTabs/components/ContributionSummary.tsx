@@ -1,6 +1,9 @@
 import { Box, HStack, Image, VStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { Link } from 'react-router-dom'
 
+import { isViewingOwnProfileAtom } from '@/modules/profile/state/profileAtom.ts'
+import { DownloadInvoice } from '@/modules/project/pages1/projectFunding/views/fundingSuccess/components/DownloadInvoice.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
@@ -19,17 +22,18 @@ export const ContributionSummary = ({ funder, project }: ContributionSummaryProp
   const contributions = funder?.contributions ? [...funder.contributions] : []
   const orderedContributions =
     contributions.length > 0 ? contributions.sort((a, b) => b.confirmedAt - a.confirmedAt) : []
+
+  const isViewingOwnProfile = useAtomValue(isViewingOwnProfileAtom)
+
   return (
-    <CardLayout
-      as={Link}
-      to={getPath('project', project.name)}
-      padding="0px"
-      hover
-      w="full"
-      overflow={'visible'}
-      spacing="0"
-    >
-      <HStack padding="10px" justifyContent="space-between">
+    <CardLayout padding="0px" w="full" overflow={'visible'} spacing="0">
+      <HStack
+        padding="10px"
+        justifyContent="space-between"
+        as={Link}
+        to={getPath('project', project.name)}
+        _hover={{ backgroundColor: 'neutral1.3' }}
+      >
         <HStack>
           <ImageWithReload
             width="50px"
@@ -53,7 +57,7 @@ export const ContributionSummary = ({ funder, project }: ContributionSummaryProp
       {orderedContributions.map((tx, i) => {
         return (
           <CardLayout
-            key={tx.confirmedAt}
+            key={tx.id}
             padding="10px"
             borderTopRightRadius="0px"
             borderTopLeftRadius="0px"
@@ -81,12 +85,22 @@ export const ContributionSummary = ({ funder, project }: ContributionSummaryProp
               <TransactionTime dateTime={tx.confirmedAt} />
             </VStack>
 
-            <Body size="sm" dark medium>
-              {commaFormatted(tx?.amount) ?? 0}{' '}
-              <Body as="span" light>
-                {`sats (${convertSatsToUsdFormatted({ sats: tx?.amount, bitcoinQuote: tx.bitcoinQuote })})`}
+            <VStack alignItems={'end'}>
+              <Body size="sm" dark medium>
+                {commaFormatted(tx?.amount) ?? 0}{' '}
+                <Body as="span" light>
+                  {`sats (${convertSatsToUsdFormatted({ sats: tx?.amount, bitcoinQuote: tx.bitcoinQuote })})`}
+                </Body>
               </Body>
-            </Body>
+              {isViewingOwnProfile && (
+                <DownloadInvoice
+                  asIcon
+                  project={project}
+                  contributionId={tx.id}
+                  buttonProps={{ size: 'sm', variant: 'soft' }}
+                />
+              )}
+            </VStack>
           </CardLayout>
         )
       })}

@@ -22,7 +22,7 @@ export const VerificationModal = ({ onContinue, ...props }: VerificationModalPro
     useUserVerificationModal()
 
   return (
-    <Modal {...props} size="lg" title={t('Creator Verification')} bodyProps={{ as: VStack, gap: 4 }}>
+    <Modal {...props} size="xl" title={t('Creator Verification')} bodyProps={{ as: VStack, gap: 4 }}>
       {!userVerificationModal.isOpen ? (
         <>
           <VerificationDetails

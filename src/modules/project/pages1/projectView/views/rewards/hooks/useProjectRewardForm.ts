@@ -25,7 +25,7 @@ import {
 } from '@/types'
 import { useNotification } from '@/utils'
 
-type FormValues = Omit<ProjectRewardFragment, 'id' | 'sold'>
+type FormValues = Omit<ProjectRewardFragment, 'id' | 'sold' | 'createdAt'>
 
 const MAX_REWARD_IMAGES = 5
 

@@ -2,7 +2,7 @@ import { CloseIcon } from '@chakra-ui/icons'
 import { Box, IconButton, Image, Tooltip, useBoolean, useDisclosure } from '@chakra-ui/react'
 import { IGif } from '@giphy/js-types'
 import { useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { GifModal } from '@/modules/project/pages1/projectView/views/body/components'
@@ -68,21 +68,7 @@ export const FundingDetailsUserComment = () => {
           />
 
           <Body size="xs" pt={1} px={1}>
-            {isAnonymous ? (
-              <Trans i18nKey="Funding anonymously. <1>Click here</1> to connect your profile to the contribution">
-                {'Funding anonymously. '}
-                <Box
-                  as="span"
-                  onClick={() => loginOnOpen()}
-                  color="primary.600"
-                  fontWeight="bold"
-                  _hover={{ cursor: 'pointer' }}
-                >
-                  Click here
-                </Box>
-                {' to connect your profile to contribution'}
-              </Trans>
-            ) : (
+            {!isAnonymous && (
               <>
                 {t('Funding as')} <i>{user.username}</i>
               </>

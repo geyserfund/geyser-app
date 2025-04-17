@@ -74,6 +74,9 @@ export const GuardianUsers = ({
                 guardian={guardian}
                 size={size}
                 key={user.userId}
+                wrapperProps={{
+                  padding: size === 'lg' ? '6px' : size === 'md' ? '4px' : '2px',
+                }}
                 src={user.imageUrl || ''}
               />
             ))}

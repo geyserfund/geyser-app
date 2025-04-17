@@ -10,6 +10,8 @@ import {
 } from '@/config/routes/routeGroups'
 import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom'
 
+import { FiatSwapStatus, fiatSwapStatusAtom } from '../views/paymentFiatSwap/atom/fiatSwapStatusAtom.ts'
+
 export enum PaymentMethods {
   lightning = 'LIGHTNING',
   onChain = 'ONCHAIN',
@@ -43,6 +45,12 @@ export const isOnchainMethodAtom = atom(routeMatchForAtom(projectFundingPaymentO
 export const isFiatSwapMethodAtom = atom(routeMatchForAtom(projectFundingPaymentFiatSwapRoutes))
 
 export const isOnchainMethodStartedAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainStartedRoutes))
+
+export const isFiatSwapMethodStartedAtom = atom((get) => {
+  const fiatSwapStatus = get(fiatSwapStatusAtom)
+
+  return fiatSwapStatus === FiatSwapStatus.processing
+})
 
 export const hasStripePaymentMethodAtom = atom((get) => {
   const project = get(fundingProjectAtom)

@@ -1,5 +1,6 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useRemirrorContext } from '@remirror/react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
@@ -25,8 +26,17 @@ export const InsertLinkModal = ({
   props: { onSubmit },
   ...modal
 }: UseModalReturn<{ onSubmit: SubmitHandler<MarkdownLink> }>) => {
+  const { getState } = useRemirrorContext()
+
+  const state = getState()
+  const selectedText = state.selection.empty ? '' : state.doc.textBetween(state.selection.from, state.selection.to)
+
   const form = useForm<MarkdownLink>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      label: selectedText || '',
+      url: '',
+    },
   })
 
   return (

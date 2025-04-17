@@ -43,7 +43,7 @@ export const AccountInfo = () => {
 
   const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
-  const { onCopy } = useClipboard(userProfile.username)
+  const { onCopy } = useClipboard(userProfile.heroId)
   const toast = useNotification()
 
   const userAccountToDisplay = userProfile.externalAccounts

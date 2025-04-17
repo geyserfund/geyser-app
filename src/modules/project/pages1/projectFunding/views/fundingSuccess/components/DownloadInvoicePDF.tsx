@@ -1,10 +1,16 @@
+/* eslint-disable complexity */
 import { Document, Page, StyleSheet, Text, View } from '@react-pdf/renderer'
 import { DateTime } from 'luxon'
 
 import { ProjectState } from '@/modules/project/state/projectAtom'
-import { LIGHTNING_FEE_PERCENTAGE } from '@/shared/constants'
 import { lightModeColors, utilColors } from '@/shared/styles'
-import { ContributionForDownloadInvoiceFragment } from '@/types/index.ts'
+import {
+  ContributionForDownloadInvoiceFragment,
+  FeeCurrency,
+  PaymentStatus,
+  ProjectOwnerUserForInvoiceFragment,
+} from '@/types/index.ts'
+import { convertSatsToUsdFormatted, convertUsdCentsToSatsFormatted } from '@/utils/index.ts'
 
 const styles = StyleSheet.create({
   page: {
@@ -20,21 +26,45 @@ const styles = StyleSheet.create({
     color: utilColors.light.text,
     fontWeight: 700,
   },
-  row: {
+  subHeaderText: {
+    fontSize: '20px',
+    color: utilColors.light.text,
+    fontWeight: 500,
+  },
+  rowContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  rowItem: {
+    flex: 1,
+    display: 'flex',
+    gap: '5px',
+    flexDirection: 'column',
+  },
+  rowItem2: {
+    flex: 2,
+    display: 'flex',
+    gap: '5px',
+    flexDirection: 'column',
+  },
+  row: {
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: '5px',
   },
   rowTitle: {
-    fontSize: '16px',
-    color: utilColors.light.pbg,
+    fontSize: '12px',
+    color: utilColors.light.text,
     fontWeight: 700,
   },
   rowContent: {
-    fontSize: '14px',
+    fontSize: '12px',
     color: lightModeColors.neutral1[11],
     fontWeight: 400,
+    textWrap: 'wrap',
   },
   inline: {
     display: 'flex',
@@ -42,13 +72,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tableView: {
-    marginTop: '45px',
+    marginTop: '20px',
   },
   tableHeader: {
+    marginTop: '10px',
     backgroundColor: lightModeColors.neutral1[3],
     borderBottom: `1px solid ${lightModeColors.neutral1[6]}`,
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: '10px',
     padding: '10px',
     borderTopLeftRadius: '8px',
@@ -101,7 +133,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: '25px',
+    marginTop: '5px',
     padding: '10px',
     borderRadius: '8px',
   },
@@ -126,43 +158,49 @@ export const DownloadInvoicePDF = ({
   invoiceData,
   projectData,
   showFee,
+  ownerUser,
 }: {
   invoiceData: ContributionForDownloadInvoiceFragment
   projectData: Pick<ProjectState, 'title'>
-  showFee?: false
+  showFee?: boolean
+  ownerUser?: ProjectOwnerUserForInvoiceFragment
 }) => {
   const datePaid = invoiceData.confirmedAt ? DateTime.fromMillis(invoiceData.confirmedAt).toFormat('LLLL d') : ''
-  const dateCreated = invoiceData.createdAt ? DateTime.fromMillis(invoiceData.createdAt).toFormat('LLLL d') : ''
   const totalAmountInSats = invoiceData.donationAmount + (invoiceData.order ? invoiceData.order.totalInSats : 0)
   const bitcoinQuote = invoiceData?.bitcoinQuote?.quote || 0
+
+  const { user } = invoiceData.funder
+  const creator = invoiceData.creatorTaxProfile
+
+  const paidPayment = invoiceData.payments.find((payment) => payment.status === PaymentStatus.Paid)
 
   return (
     <Document>
       <Page style={styles.page}>
         <Text style={styles.headerText}>Invoice</Text>
-        {invoiceData.uuid && (
-          <View style={styles.row}>
-            <Text style={styles.rowTitle}>Reference Code:</Text>
-            <Text style={styles.rowContent}>{invoiceData.uuid}</Text>
+        <View style={styles.rowContainer}>
+          <View style={styles.rowItem}>
+            <Text style={styles.subHeaderText}>Payer</Text>
+            <InvoiceListItem title="Name" value={user?.taxProfile ? user.taxProfile?.fullName || user.username : ''} />
+            <InvoiceListItem title="Email" value={invoiceData.funder.user ? `${invoiceData.funder.user.email}` : ''} />
+            <InvoiceListItem title="TaxId" value={user?.taxProfile?.taxId ? user.taxProfile?.taxId || '' : ''} />
+            <InvoiceListItem title="Date" value={datePaid ? datePaid || '' : ''} />
           </View>
-        )}
-        {(datePaid || dateCreated) && (
-          <View style={styles.row}>
-            <Text style={styles.rowTitle}>Date:</Text>
-            <Text style={styles.rowContent}>{`${datePaid || dateCreated}`}</Text>
+          <View style={styles.rowItem2}>
+            <Text style={styles.subHeaderText}>Payee</Text>
+            <InvoiceListItem title="Project Name" value={projectData.title || ''} />
+            <InvoiceListItem title="Name" value={creator?.fullName || ownerUser?.username || ''} />
+            <InvoiceListItem title="Email" value={invoiceData.creatorEmail || ''} />
+            <InvoiceListItem title="TaxId" value={creator?.taxId ? creator.taxId : ''} />
+            {ownerUser?.complianceDetails.verifiedDetails.identity?.verified && (
+              <InvoiceListItem title="Identify verified" value={'Sumsub has verified the identity of this creator.'} />
+            )}
           </View>
-        )}
-        <View style={styles.row}>
-          <Text style={styles.rowTitle}>Project Funded:</Text>
-          <Text style={styles.rowContent}>{projectData.title}</Text>
         </View>
-        <View style={styles.row}>
-          <Text style={styles.rowTitle}>Funding as:</Text>
-          <Text style={styles.rowContent}>
-            {invoiceData.funder.user ? invoiceData.funder.user.username : 'Anonymous'}
-          </Text>
-        </View>
+
         <View style={styles.tableView}>
+          <Text style={styles.subHeaderText}>Contribution</Text>
+          <InvoiceListItem title="Reference code: " value={invoiceData.uuid || ''} />
           <View style={styles.tableHeader}>
             <View style={styles.tableType}>
               <Text style={styles.tableBoldFont}>Type</Text>
@@ -212,24 +250,59 @@ export const DownloadInvoicePDF = ({
               </View>
             ))}
         </View>
-        {showFee && (
-          <View style={styles.geyserFeeRow}>
-            <Text style={styles.tableRegularFont}>Geyser fee:</Text>
-            <View style={styles.geyserFeeFixed}>
-              <Text style={styles.tableRegularFont}>
-                {Math.round(totalAmountInSats * 0.02).toLocaleString()} sats ({LIGHTNING_FEE_PERCENTAGE}%)
-              </Text>
-            </View>
-          </View>
-        )}
+
         <View style={styles.invoiceTotalRow}>
-          <Text style={styles.invoiceTotalTitle}>Amount</Text>
+          <Text style={styles.invoiceTotalTitle}>Total Amount</Text>
           <Text style={styles.invoiceTotalPrice}>
             {totalAmountInSats.toLocaleString()} sats{' '}
             {bitcoinQuote ? `($${((bitcoinQuote / 100000000) * totalAmountInSats).toFixed(2)})` : ''}
           </Text>
         </View>
+        {paidPayment?.fees.length && paidPayment?.fees.length > 0 && (
+          <View style={styles.tableView}>
+            <Text style={styles.subHeaderText}>Fees:</Text>
+            {paidPayment?.fees.map((fee) => {
+              return (
+                <InvoiceFiatFees
+                  key={fee.feeType}
+                  label={fee.description || fee.feeType || ''}
+                  value={
+                    fee.feeCurrency === FeeCurrency.Btcsat
+                      ? `${fee.feeAmount} sats ( ${convertSatsToUsdFormatted({
+                          sats: fee.feeAmount,
+                          bitcoinQuote: invoiceData?.bitcoinQuote,
+                        })})`
+                      : `$${fee.feeAmount} (${convertUsdCentsToSatsFormatted({
+                          usdCents: fee.feeAmount,
+                          bitcoinQuote: invoiceData?.bitcoinQuote,
+                        })})`
+                  }
+                />
+              )
+            })}
+          </View>
+        )}
       </Page>
     </Document>
+  )
+}
+
+export const InvoiceListItem = ({ title, value }: { title: string; value: string }) => {
+  return (
+    <View style={styles.row}>
+      <Text style={styles.rowTitle}>{title}:</Text>
+      <Text style={styles.rowContent}>{value}</Text>
+    </View>
+  )
+}
+
+export const InvoiceFiatFees = ({ label, value }: { label: string; value: string }) => {
+  return (
+    <View style={styles.geyserFeeRow}>
+      <Text style={styles.tableRegularFont}>{label}:</Text>
+      <View style={styles.geyserFeeFixed}>
+        <Text style={styles.tableRegularFont}>{value}</Text>
+      </View>
+    </View>
   )
 }

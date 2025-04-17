@@ -52,6 +52,7 @@ export const dimensions = {
     },
     leftMainContainer: {
       width: '658px',
+      minWidth: '500px',
     },
     rightSideNav: {
       width: '400px',
