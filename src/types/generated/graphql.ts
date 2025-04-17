@@ -252,7 +252,8 @@ export type ContributionCreateInput = {
   /** Set to true if the funder wishes to remain anonymous. The user will still be associated to the contribution. */
   anonymous: Scalars['Boolean']['input'];
   donationAmount: Scalars['Int']['input'];
-  geyserTipPercentage?: InputMaybe<Scalars['Int']['input']>;
+  /** The percentage of the donation that will be tipped to Geyser, between 0 and 100. */
+  geyserTipPercentage?: InputMaybe<Scalars['Float']['input']>;
   metadataInput?: InputMaybe<ContributionMetadataInput>;
   orderInput?: InputMaybe<OrderContributionInput>;
   paymentsInput?: InputMaybe<ContributionPaymentsInput>;

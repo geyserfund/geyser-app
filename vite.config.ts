@@ -143,8 +143,8 @@ export default defineConfig(({ command, mode }) => {
     test: {
       globals: true,
       environment: 'jsdom',
-      setupFiles: 'packages/testing/vitest/setupTests.ts',
-      include: ['packages/testing/vitest/**/state/**/*.test.ts'],
+      setupFiles: './vitest/setupTests.ts',
+      include: ['./vitest/**/state/**/*.test.ts'],
     },
     optimizeDeps: {
       include: ['ecpair', 'tiny-secp256k1'],
