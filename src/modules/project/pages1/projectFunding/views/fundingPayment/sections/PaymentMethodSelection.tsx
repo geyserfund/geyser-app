@@ -80,7 +80,7 @@ export const PaymentMethodSelection = () => {
       name: t('Onchain'),
       key: PaymentMethods.onChain,
       path: isOnchainMethodStarted ? '' : PathName.fundingPaymentOnchain,
-      isDisabled: Boolean(onChainAmountWarning) || Boolean(!paymentMethod) || !isFiatSwapMethodStarted,
+      isDisabled: Boolean(onChainAmountWarning) || Boolean(!paymentMethod) || isFiatSwapMethodStarted,
       tooltipLabel: onChainAmountWarning || undefined,
       disableClick: isDisabled,
       replacePath: true,
