@@ -1,8 +1,9 @@
 /* eslint-disable complexity */
-import { Badge, Button, HStack, Wrap } from '@chakra-ui/react'
+import { Badge, Button, HStack, Icon, Link as ChakraLink, Wrap } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiFlag } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI'
@@ -18,6 +19,8 @@ import {
 import { getPath, ID } from '../../../../../../../shared/constants'
 import { BodySectionLayout, ProjectLinks } from '../components'
 import { CreatorSocial } from './header/components/CreatorSocial'
+
+const REPORT_PROJECT_AIRTABLE_URL = 'https://airtable.com/appyM7XlNIWVypuP5/pagpNDtO12bhTK6hQ/form'
 
 export const Details = () => {
   const { t } = useTranslation()
@@ -132,8 +135,27 @@ export const Details = () => {
             </Body>
           </DetailLine>
         )}
+        <ReportProjectButton />
       </CardLayout>
     </BodySectionLayout>
+  )
+}
+
+const ReportProjectButton = () => {
+  const { t } = useTranslation()
+  return (
+    <Button
+      size="sm"
+      width="150px"
+      as={ChakraLink}
+      href={REPORT_PROJECT_AIRTABLE_URL}
+      isExternal
+      variant="outline"
+      colorScheme="neutral1"
+      leftIcon={<Icon as={PiFlag} />}
+    >
+      {t('Report project')}
+    </Button>
   )
 }
 

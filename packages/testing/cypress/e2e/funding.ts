@@ -3,6 +3,7 @@ import {
   clickCopyLightningInvoiceButton,
   clickCopyOnChainButton,
   clickOnchainQrTab,
+  clickToggleDonationInput,
   enterAmountAndHitCheckout,
   enterCommentAddEmailAndHitCheckout,
   enterCommentAndHitCheckout,
@@ -32,6 +33,7 @@ export const testLightningSuccessFlow = () => {
       clickContribute()
       fundingAmountScreenIsVisible()
 
+      clickToggleDonationInput()
       enterAmountAndHitCheckout(LIGHTNING_FUNDING_AMOUNT)
       commentScreenIsVisible()
 
@@ -65,6 +67,7 @@ export const onChainSuccessFlowWithRewards = () => {
       clickContribute()
       fundingAmountScreenIsVisible()
 
+      clickToggleDonationInput()
       selectRewardAndHitCheckout()
       commentScreenIsVisible()
 
@@ -111,6 +114,7 @@ export const onChainSuccessFlowWithDonation = () => {
       clickContribute()
       fundingAmountScreenIsVisible()
 
+      clickToggleDonationInput()
       enterAmountAndHitCheckout(ONCHAIN_FUNDING_AMOUNT)
       commentScreenIsVisible()
 
@@ -155,6 +159,7 @@ export const onChainRefundFlow = () => {
       clickContribute()
       fundingAmountScreenIsVisible()
 
+      clickToggleDonationInput()
       enterAmountAndHitCheckout(ONCHAIN_FUNDING_AMOUNT)
       commentScreenIsVisible()
 

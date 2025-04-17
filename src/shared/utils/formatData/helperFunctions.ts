@@ -3,6 +3,10 @@ import { Maybe } from 'yup'
 import { Satoshis, USDCents, USDollars } from '@/types'
 
 export const commaFormatted = (amount?: Maybe<number | USDollars | Satoshis | USDCents>) => {
+  if (amount === 0) {
+    return '0'
+  }
+
   if (!amount) {
     return ''
   }

@@ -1,10 +1,22 @@
 import { Button, HStack, Icon, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { PiUserCircleCheck } from 'react-icons/pi'
 
+import { LegalEntitySelection } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsVerification/components/LegalEntitySelection.tsx'
+import { userTaxProfileAtom } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsVerification/state/taxProfileAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 
-export const VerificationDetails = ({ onContinue, onLoading }: { onContinue: () => void; onLoading: boolean }) => {
+type VerificationDetailsProps = {
+  onContinue: () => void
+  onLoading: boolean
+}
+
+export const VerificationDetails = ({ onContinue, onLoading }: VerificationDetailsProps) => {
+  const taxProfile = useAtomValue(userTaxProfileAtom)
+
+  const hasIdentity = taxProfile
+
   return (
     <VStack w="full" gap={4}>
       <HStack justifyContent="center" w="full">
@@ -35,8 +47,23 @@ export const VerificationDetails = ({ onContinue, onLoading }: { onContinue: () 
           'Verification requires only a government-issued ID and takes less than 2 minutes through our secure, trusted partner.',
         )}
       </Body>
+
+      <Body alignSelf="start" textAlign="left" medium>
+        {t('Verify your profile as a:')}
+      </Body>
+      <HStack w="full" paddingY="4">
+        <LegalEntitySelection disableIndividualPopup />
+      </HStack>
+
       <HStack w="full">
-        <Button variant="solid" colorScheme="primary1" width="full" onClick={onContinue} isLoading={onLoading}>
+        <Button
+          variant="solid"
+          colorScheme="primary1"
+          width="full"
+          onClick={onContinue}
+          isLoading={onLoading}
+          isDisabled={!hasIdentity}
+        >
           {t('Continue to verification')}
         </Button>
       </HStack>

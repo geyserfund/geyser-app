@@ -5,25 +5,20 @@ import { Link as ReactLink } from 'react-router-dom'
 import { useProjectWalletAPI } from '@/modules/project/API/useProjectWalletAPI'
 import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
+import { useModal } from '@/shared/hooks/useModal.tsx'
 
 import { useAuthContext } from '../../../../../../context/index.ts'
 import { VerifyYourEmail } from '../../../../../../pages/otp/index.ts'
 import { getPath, GeyserEmailVerificationDocUrl, PathName } from '../../../../../../shared/constants/index.ts'
-import {
-  MfaAction,
-  OtpResponseFragment,
-  ProjectStatus,
-  UpdateWalletInput,
-  UserVerificationLevelInput,
-} from '../../../../../../types/index.ts'
+import { MfaAction, OtpResponseFragment, ProjectStatus, UpdateWalletInput } from '../../../../../../types/index.ts'
 import { useCustomTheme, useNotification } from '../../../../../../utils/index.ts'
 import { ConnectionOption, useWalletForm } from '../../../projectCreation/hooks/useWalletForm.tsx'
 import { ProjectCreationWalletConnectionForm } from '../../../projectCreation/index.ts'
 import { DashboardLayout } from '../../common/index.ts'
+import { VerificationModal } from '../../components/VerificationModal.tsx'
 import { EnableFiatContributions } from './components/EnableFiatContributions.tsx'
-import { UserVerificationModal } from './components/UserVerificationModal.tsx'
 import { WalletLimitsAndVerification } from './components/WalletLimitsAndVerification.tsx'
-import { useUserVerificationModal } from './hooks/useUserVerificationModal.ts'
+
 export const ProjectDashboardWallet = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -43,15 +38,9 @@ export const ProjectDashboardWallet = () => {
 
   const { createWallet, updateWallet, queryProjectWallet } = useProjectWalletAPI()
 
-  const { userVerificationModal, startVerification, userVerificationToken } = useUserVerificationModal()
+  const verifyIntroModal = useModal()
 
   const isIdentityVerified = user.complianceDetails.verifiedDetails.identity?.verified
-
-  const handleSwitchChange = () => {
-    if (!isIdentityVerified) {
-      startVerification(UserVerificationLevelInput.Level_3)
-    }
-  }
 
   const handleNext = () => {
     if (!project) return
@@ -170,7 +159,7 @@ export const ProjectDashboardWallet = () => {
         <WalletLimitsAndVerification />
         <EnableFiatContributions
           isIdentityVerified={Boolean(isIdentityVerified)}
-          buttonProps={{ onClick: () => handleSwitchChange() }}
+          buttonProps={{ onClick: verifyIntroModal.onOpen }}
         />
       </VStack>
       <HStack w="full" paddingX={{ base: 0, lg: 6 }} paddingTop={4}>
@@ -223,10 +212,7 @@ export const ProjectDashboardWallet = () => {
         action={MfaAction.ProjectWalletUpdate}
         handleVerify={handleWalletUpdate}
       />
-      <UserVerificationModal
-        userVerificationModal={userVerificationModal}
-        accessToken={userVerificationToken?.token || ''}
-      />
+      <VerificationModal {...verifyIntroModal} />
     </DashboardLayout>
   )
 }

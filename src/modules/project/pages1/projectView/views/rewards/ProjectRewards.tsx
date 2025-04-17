@@ -1,6 +1,6 @@
 import { SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { forwardRef, useEffect } from 'react'
+import { forwardRef, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
@@ -37,6 +37,14 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
     }
   }, [hasRewards, navigate, project, loading])
 
+  const sortedActiveRewards = useMemo(() => {
+    if (activeRewards.length > 0) {
+      return activeRewards.sort((a, b) => b.createdAt - a.createdAt)
+    }
+
+    return []
+  }, [activeRewards])
+
   if (loading) {
     return (
       <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'}>
@@ -51,7 +59,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
     <VStack w="full" spacing={8} alignItems="start" pb={28}>
       <CreatorRewardPageTopBar />
 
-      {activeRewards.length > 0 && (
+      {sortedActiveRewards.length > 0 && (
         <VStack w="full" alignItems={'start'}>
           <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
             {t('Rewards')}

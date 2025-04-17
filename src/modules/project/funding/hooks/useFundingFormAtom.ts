@@ -1,4 +1,5 @@
 import { useAtomValue, useSetAtom } from 'jotai'
+import { useCallback } from 'react'
 
 import {
   fundingFiatSwapAmountWarningAtom,
@@ -11,10 +12,15 @@ import {
   isFundingInputAmountValidAtom,
   isFundingUserInfoValidAtom,
   resetFundingFormRewardsAtom,
+  rewardsCostAtoms,
   setErrorStateAtom,
   setFundFormStateAtom,
   setFundFormTargetAtom,
   setWarningStateAtom,
+  subscriptionCostAtoms,
+  tipAtoms,
+  totalAmountSatsAtom,
+  totalAmountUsdCentAtom,
   updateFundingFormRewardAtom,
   updateFundingFormSubscriptionAtom,
 } from '../state/fundingFormAtom'
@@ -38,6 +44,12 @@ export const useFundingFormAtom = () => {
 
   const fundingFormWarning = useAtomValue(fundingFormWarningAtom)
 
+  const rewardsCosts = useAtomValue(rewardsCostAtoms)
+  const subscriptionCosts = useAtomValue(subscriptionCostAtoms)
+  const tip = useAtomValue(tipAtoms)
+  const totalSats = useAtomValue(totalAmountSatsAtom)
+  const totalUsdCent = useAtomValue(totalAmountUsdCentAtom)
+
   const setErrorstate = useSetAtom(setErrorStateAtom)
 
   const setWarningstate = useSetAtom(setWarningStateAtom)
@@ -54,10 +66,22 @@ export const useFundingFormAtom = () => {
 
   const resetForm = useSetAtom(resetFundingFormRewardsAtom)
 
+  const setGeyserTipPercent = useCallback(
+    (percent: number) => {
+      setState('geyserTipPercent', percent)
+    },
+    [setState],
+  )
+
   return {
     formState,
     project,
     hasSelectedRewards,
+    rewardsCosts,
+    subscriptionCosts,
+    tip,
+    totalSats,
+    totalUsdCent,
     onChainAmountWarning,
     fiatSwapAmountWarning,
     isFundingInputAmountValid,
@@ -72,5 +96,6 @@ export const useFundingFormAtom = () => {
     updateSubscription,
     resetForm,
     resetRewards,
+    setGeyserTipPercent,
   }
 }

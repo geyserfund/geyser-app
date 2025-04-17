@@ -39,12 +39,7 @@ export type FundingProjectState = FundingProject & {
 export type FundFormType = {
   donationAmount: number
   donationAmountUsdCent: number
-  rewardsCost: number
-  rewardsCostInSatoshi: number
-  rewardsCostInUsdCent: number
   shippingCost: number
-  totalAmount: number
-  totalAmountUsdCent: number
   email: string
   media: string
   comment: string
@@ -62,17 +57,13 @@ export type FundFormType = {
     interval: UserSubscriptionInterval
     name?: string
   }
+  geyserTipPercent: number
 }
 
 const initialState: FundFormType = {
   donationAmount: 0,
   donationAmountUsdCent: 0,
-  rewardsCost: 0,
-  rewardsCostInSatoshi: 0,
-  rewardsCostInUsdCent: 0,
   shippingCost: 0,
-  totalAmount: 0,
-  totalAmountUsdCent: 0,
   comment: '',
   privateComment: '',
   email: '',
@@ -90,6 +81,7 @@ const initialState: FundFormType = {
   rewardCurrency: RewardCurrency.Usdcent,
   needsShipping: false,
   shippingDestination: ShippingDestination.National,
+  geyserTipPercent: 2.1,
 }
 
 /** Main Funding Form state atom */
@@ -105,16 +97,136 @@ export const fundingFormWarningAtom = atom<{ [key in keyof FundFormType]: string
   {} as { [key in keyof FundFormType]: string },
 )
 
+/** Derived atom for calculating rewards costs in both units */
+export const rewardsCostAtoms = atom((get) => {
+  const { rewardsByIDAndCount } = get(fundingFormStateAtom)
+  const { rewards, rewardCurrency } = get(fundingProjectAtom)
+  const usdRate = get(usdRateAtom)
+
+  let totalCostInSatoshi = 0
+  let totalCostInUsdCent = 0
+  let baseCostTotal = 0 // Accumulates cost in the project's reward currency
+
+  if (rewards && rewardsByIDAndCount) {
+    Object.keys(rewardsByIDAndCount).forEach((rewardID: string) => {
+      // Find reward by comparing string representations of IDs
+      const reward = rewards.find((r) => r.id.toString() === rewardID)
+      const count = rewardsByIDAndCount[rewardID]
+
+      if (reward && count && count > 0) {
+        const currentRewardTotalCost = reward.cost * count
+        baseCostTotal += currentRewardTotalCost // Accumulate base cost
+
+        if (rewardCurrency === RewardCurrency.Btcsat) {
+          totalCostInSatoshi += currentRewardTotalCost
+          totalCostInUsdCent += Math.round(dollarsToCents((currentRewardTotalCost / SATOSHIS_IN_BTC) * usdRate))
+        } else {
+          // Usdcent
+          totalCostInUsdCent += currentRewardTotalCost
+          totalCostInSatoshi += Math.round((centsToDollars(currentRewardTotalCost) / usdRate) * SATOSHIS_IN_BTC)
+        }
+      }
+    })
+  }
+
+  return { satoshi: totalCostInSatoshi, usdCent: totalCostInUsdCent, base: baseCostTotal }
+})
+
+/**
+ * Derived atom for the costs associated with selected subscriptions.
+ * Returns costs in satoshi, usdCent, and the original base cost.
+ */
+export const subscriptionCostAtoms = atom((get): { satoshi: number; usdCent: number; base: number } => {
+  const { subscription } = get(fundingFormStateAtom)
+  const { subscriptions } = get(fundingProjectAtom)
+  const usdRate = get(usdRateAtom)
+
+  const selectedSubscription = subscriptions?.find((sub) => sub.id === subscription.subscriptionId)
+
+  if (!selectedSubscription) {
+    return { satoshi: 0, usdCent: 0, base: 0 }
+  }
+
+  const base = selectedSubscription.cost
+  let satoshi = 0
+  let usdCent = 0
+
+  // Compare against the value defined in the SubscriptionCurrencyType enum ('USDCENT')
+  // Note: The enum definition provided only includes Usdcent.
+  if (selectedSubscription.currency === 'USDCENT') {
+    // Using the correct uppercase string
+    usdCent = base // Base cost is already in USD cents
+    satoshi = usdRate > 0 ? Math.round((centsToDollars(base) / usdRate) * SATOSHIS_IN_BTC) : 0
+  }
+
+  return {
+    satoshi,
+    usdCent,
+    base,
+  }
+})
+
+/** Derived atom for calculating tip amounts in both units */
+export const tipAtoms = atom((get) => {
+  const { donationAmount, geyserTipPercent } = get(fundingFormStateAtom)
+  const rewardsCosts = get(rewardsCostAtoms) // Use derived rewards cost
+  const usdRate = get(usdRateAtom)
+
+  // Calculate tip based on satoshi value of donation + rewards
+  const tipBaseSats = donationAmount + rewardsCosts.satoshi
+  const tipSats = geyserTipPercent > 0 ? Math.round((tipBaseSats * geyserTipPercent) / 100) : 0
+  const tipUsdCent = tipSats > 0 && usdRate > 0 ? Math.round(dollarsToCents((tipSats / SATOSHIS_IN_BTC) * usdRate)) : 0
+
+  return { satoshi: tipSats, usdCent: tipUsdCent }
+})
+
+/**
+ * Derived atom for the total amount in Satoshis.
+ * Sums donation, rewards, subscription, shipping, and tip.
+ * Assumes shippingCost in base state is USD cents.
+ */
+export const totalAmountSatsAtom = atom((get) => {
+  const { donationAmount, shippingCost } = get(fundingFormStateAtom)
+  const rewardsCosts = get(rewardsCostAtoms)
+  const subscriptionCosts = get(subscriptionCostAtoms)
+  const tip = get(tipAtoms)
+  const usdRate = get(usdRateAtom)
+
+  // Convert shippingCost (assumed USD cents) to sats
+  const shippingCostSats =
+    shippingCost > 0 && usdRate > 0 ? Math.round((centsToDollars(shippingCost) / usdRate) * SATOSHIS_IN_BTC) : 0
+
+  // Sum all components
+  const total = donationAmount + rewardsCosts.satoshi + subscriptionCosts.satoshi + shippingCostSats + tip.satoshi
+  return total
+})
+
+/**
+ * Derived atom for the total amount in USD Cents.
+ * Converts the final total satoshi amount to USD cents for consistency.
+ */
+export const totalAmountUsdCentAtom = atom((get) => {
+  const totalSats = get(totalAmountSatsAtom) // Get the final satoshi total
+  const usdRate = get(usdRateAtom)
+
+  if (totalSats > 0 && usdRate > 0) {
+    // Convert the single total satoshi value to USD cents
+    return Math.round(dollarsToCents((totalSats / SATOSHIS_IN_BTC) * usdRate))
+  }
+
+  return 0 // Return 0 if sats or rate is zero
+})
+
 /** Set the error state for the funding form */
 export const setErrorStateAtom = atom(null, (_, set, { key, value }: { key: keyof FundFormType; value: string }) => {
-  set(fundingFormErrorAtom, (current) => ({ ...current, [key]: value }))
+  set(fundingFormErrorAtom, (current: { [key in keyof FundFormType]: string }) => ({ ...current, [key]: value }))
 })
 
 /** Set the warning state for the funding form */
 export const setWarningStateAtom = atom(
   null,
   (get, set, { key, value }: { key: keyof FundFormType; value: string }) => {
-    set(fundingFormWarningAtom, (current) => ({ ...current, [key]: value }))
+    set(fundingFormWarningAtom, (current: { [key in keyof FundFormType]: string }) => ({ ...current, [key]: value }))
   },
 )
 
@@ -137,34 +249,32 @@ export const setFundFormTargetAtom = atom(null, (get, set, event: any) => {
 })
 
 /**
- * Set funding form based on a name and value
- * @param {Object} [name, value] - The name and value to set
- * @param {string} name - The name of the field to set
- * @param {any} value - The value to set the field to
+ * Set funding form based on a name and value.
+ * Now only updates the specific field and syncs donation amounts.
+ * Totals are handled by derived atoms.
  */
-export const setFundFormStateAtom = atom(null, (get, set, name: string, value: any) => {
+export const setFundFormStateAtom = atom(null, (get, set, name: keyof FundFormType, value: any) => {
+  const currentState = get(fundingFormStateAtom)
+  const usdRate = get(usdRateAtom)
+  let newState = { ...currentState, [name]: value }
+
+  // Synchronize donation amounts
   if (name === 'donationAmount') {
-    set(fundingFormStateAtom, (current) => ({
-      ...current,
-      donationAmount: value,
-      totalAmount: value + current.rewardsCostInSatoshi + current.shippingCost,
-    }))
-    return
+    const sats = Number(value) || 0
+    if (usdRate > 0) {
+      const usdCent = Math.round(dollarsToCents((sats / SATOSHIS_IN_BTC) * usdRate))
+      newState = { ...newState, donationAmountUsdCent: usdCent }
+    }
+  } else if (name === 'donationAmountUsdCent') {
+    const usdCent = Number(value) || 0
+    if (usdRate > 0) {
+      const sats = Math.round((centsToDollars(usdCent) / usdRate) * SATOSHIS_IN_BTC)
+      newState = { ...newState, donationAmount: sats }
+    }
   }
+  // No longer calculates totals here
 
-  if (name === 'donationAmountUsdCent') {
-    set(fundingFormStateAtom, (current) => ({
-      ...current,
-      donationAmountUsdCent: value,
-      totalAmountUsdCent: value + current.rewardsCostInUsdCent + current.shippingCost,
-    }))
-    return
-  }
-
-  set(fundingFormStateAtom, (current) => ({
-    ...current,
-    [name]: value,
-  }))
+  set(fundingFormStateAtom, newState)
 })
 
 /* Boolean to check if the funding form has rewards */
@@ -191,24 +301,31 @@ export const fundingFormHasRewardsThatRequirePrivateCommentAtom = atom((get) => 
   return selectedRewards.some((reward) => reward.privateCommentPrompts && reward.privateCommentPrompts.length > 0)
 })
 
-/** Reset funding form rewards to it's initial value */
+/** Reset funding form rewards to its initial value (simplified) */
 export const resetFundingFormRewardsAtom = atom(null, (get, set) => {
   set(fundingFormStateAtom, (current) => ({
     ...current,
-    rewardsByIDAndCount: {},
-    rewardsCost: 0,
-    subscriptionId: undefined,
-    subscriptionCost: 0,
-    totalAmount: current.donationAmount,
-    needsShipping: false,
+    rewardsByIDAndCount: {}, // Reset selections
+    needsShipping: false, // Reset shipping flag
+    // Remove fields that are now calculated by derived atoms or will be
+    // rewardsCost: 0,
+    // rewardsCostInSatoshi: 0,
+    // rewardsCostInUsdCent: 0,
+    // subscriptionId: undefined,
+    // subscriptionCost: 0,
+    // totalAmount: current.donationAmount, // Totals are now derived
   }))
 })
 
-/** Update rewards in the funding flow */
+/**
+ * Update rewards in the funding flow.
+ * Now only updates rewardsByIDAndCount and needsShipping.
+ * Costs and totals are handled by derived atoms.
+ */
 export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: { id: number; count: number }) => {
   const { rewards } = get(fundingProjectAtom)
-  const project = get(fundingProjectAtom)
-  const usdRate = get(usdRateAtom)
+  // const project = get(fundingProjectAtom) // No longer needed for currency check here
+  // const usdRate = get(usdRateAtom) // No longer needed for conversion here
 
   set(fundingFormStateAtom, (current) => {
     const newRewardsCountInfo = { ...current.rewardsByIDAndCount }
@@ -219,38 +336,14 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
       delete newRewardsCountInfo[id.toString()]
     }
 
-    let rewardsCost = 0
-    let rewardsCostInSatoshi = 0
+    // Only calculate needsShipping based on selected rewards
     let needsShipping = false
-    let rewardsCostInUsdCent = 0
-
     if (rewards) {
       Object.keys(newRewardsCountInfo).forEach((rewardID: string) => {
-        const id = parseInt(rewardID, 10)
-
-        const reward = rewards.find((reward) => reward.id === id || `${reward.id}` === rewardID)
-
-        if (reward && reward.id) {
-          if (reward.hasShipping) {
-            needsShipping = true
-          }
-
-          const rewardMultiplier = newRewardsCountInfo[rewardID.toString()]
-          if (!rewardMultiplier) {
-            return 0
-          }
-
-          const { cost } = reward
-
-          rewardsCost += cost * rewardMultiplier
-
-          if (project.rewardCurrency === RewardCurrency.Btcsat) {
-            rewardsCostInSatoshi += rewardsCost
-            rewardsCostInUsdCent += Math.round(dollarsToCents((rewardsCost / SATOSHIS_IN_BTC) * usdRate))
-          } else {
-            rewardsCostInUsdCent = rewardsCost
-            rewardsCostInSatoshi += Math.round((centsToDollars(rewardsCost) / usdRate) * SATOSHIS_IN_BTC)
-          }
+        // Find reward by comparing string representations of IDs
+        const reward = rewards.find((r) => r.id.toString() === rewardID)
+        if (reward?.hasShipping) {
+          needsShipping = true
         }
       })
     }
@@ -258,68 +351,45 @@ export const updateFundingFormRewardAtom = atom(null, (get, set, { id, count }: 
     return {
       ...current,
       rewardsByIDAndCount: newRewardsCountInfo,
-      rewardsCost,
-      needsShipping,
-      rewardsCostInSatoshi,
-      rewardsCostInUsdCent,
-      totalAmount: rewardsCostInSatoshi + current.donationAmount + current.shippingCost,
-      totalAmountUsdCent: rewardsCostInUsdCent + current.donationAmountUsdCent + current.shippingCost,
+      needsShipping, // Update shipping status
     }
   })
 })
 
-/** Update subscription in the funding flow */
+/**
+ * Update subscription in the funding flow.
+ * Now only updates the subscription object.
+ * Costs and totals are handled by derived atoms.
+ */
 export const updateFundingFormSubscriptionAtom = atom(null, (get, set, { id }: { id: number }) => {
   const { subscriptions } = get(fundingProjectAtom)
-  const usdRate = get(usdRateAtom)
 
   set(fundingFormStateAtom, (current) => {
-    let subscriptionCost = 0
-    let subscriptionCostInSatoshi = 0
-    let subscriptionCostInUsdCent = 0
+    let selectedSubscription = null
 
     if (subscriptions) {
-      const subscription = subscriptions.find((subscription) => toInt(subscription.id) === id)
-
-      if (subscription && subscription.id) {
-        const { cost } = subscription
-
-        subscriptionCost = cost
-
-        if (subscription.currency === SubscriptionCurrencyType.Usdcent) {
-          subscriptionCostInSatoshi = Math.round((centsToDollars(cost) / usdRate) * SATOSHIS_IN_BTC)
-          subscriptionCostInUsdCent = cost
-        } else {
-          subscriptionCostInSatoshi = cost
-          subscriptionCostInUsdCent = Math.round(dollarsToCents((cost / SATOSHIS_IN_BTC) * usdRate))
-        }
-      }
-
-      return {
-        ...current,
-        subscription: {
-          cost: subscriptionCost,
-          subscriptionId: id,
-          interval: subscription?.interval || UserSubscriptionInterval.Monthly,
-          name: subscription?.name,
-          currency: subscription?.currency,
-        },
-        totalAmount: subscriptionCostInSatoshi + current.donationAmount,
-        totalAmountUsdCent: subscriptionCostInUsdCent + current.donationAmountUsdCent,
-      }
+      selectedSubscription = subscriptions.find((s) => toInt(s.id) === id)
     }
 
-    return current
+    return {
+      ...current,
+      // Update only the subscription details in the main state
+      subscription: {
+        cost: selectedSubscription?.cost ?? 0, // Put base cost back
+        subscriptionId: selectedSubscription?.id,
+        interval: selectedSubscription?.interval || UserSubscriptionInterval.Monthly,
+        name: selectedSubscription?.name,
+        currency: selectedSubscription?.currency,
+      },
+    }
   })
 })
 
 /** Check if the  funding Amount is enough for onChain payments */
 export const fundingOnchainAmountWarningAtom = atom((get) => {
-  const formState = get(fundingFormStateAtom)
   const fundingProjectState = get(fundingProjectAtom)
   const fundingPaymentDetails = get(fundingPaymentDetailsAtom)
-
-  const { totalAmount } = formState
+  const totalAmount = get(totalAmountSatsAtom)
   const walletLimits = fundingProjectState.wallet?.limits?.contribution
 
   if (totalAmount && walletLimits) {
@@ -329,13 +399,13 @@ export const fundingOnchainAmountWarningAtom = atom((get) => {
       return ''
     }
 
-    if (onChain?.max && totalAmount > onChain.max) {
+    if (onChain?.max && typeof onChain.max === 'number' && totalAmount > onChain.max) {
       return `The amount you are trying to send is too high for on-chain payments. Only payments below ${commaFormatted(
         onChain.max,
       )} sats can be sent on-chain.`
     }
 
-    if (onChain?.min && totalAmount < onChain.min) {
+    if (onChain?.min && typeof onChain.min === 'number' && totalAmount < onChain.min) {
       return `The amount you are trying to send is too low for on-chain payments. Only payments over ${commaFormatted(
         onChain.min,
       )} sats can be sent on-chain.`
@@ -350,13 +420,14 @@ export const fundingOnchainAmountWarningAtom = atom((get) => {
 })
 
 const BANXA_MAX_AMOUNT_CENT = 1500000 // 15,000 USD in cents
-const BANXA_MIN_AMOUNT_CENT = 20 //   20 USD in cents
+const BANXA_MIN_AMOUNT_CENT = 2100 //   20 USD in cents
 
 /** Check if the  funding Amount is enough for fiat swap payments */
 export const fundingFiatSwapAmountWarningAtom = atom((get) => {
-  const formState = get(fundingFormStateAtom)
+  // const formState = get(fundingFormStateAtom) // No longer needed for totalAmountUsdCent
 
-  const { totalAmountUsdCent } = formState
+  // Read totalAmountUsdCent from derived atom
+  const totalAmountUsdCent = get(totalAmountUsdCentAtom)
 
   if (totalAmountUsdCent) {
     if (!totalAmountUsdCent) {
@@ -371,7 +442,7 @@ export const fundingFiatSwapAmountWarningAtom = atom((get) => {
 
     if (totalAmountUsdCent < BANXA_MIN_AMOUNT_CENT) {
       return `The amount you are trying to send is too low for fiat payments. Only payments over $${commaFormatted(
-        30,
+        21,
       )} can be sent via fiat.`
     }
   }
@@ -381,10 +452,8 @@ export const fundingFiatSwapAmountWarningAtom = atom((get) => {
 
 /** Check if the input amount is valid for the funidng flow */
 export const isFundingInputAmountValidAtom = atom((get) => {
-  const formState = get(fundingFormStateAtom)
   const fundingProjectState = get(fundingProjectAtom)
-
-  const { totalAmount } = formState
+  const totalAmount: number = get(totalAmountSatsAtom)
   const walletLimits = fundingProjectState.wallet?.limits?.contribution
 
   const isException = isProjectAnException(fundingProjectState.name)

@@ -19,6 +19,10 @@ export const clickContribute = () => {
   })
 }
 
+export const clickToggleDonationInput = () => {
+  cy.get('button[data-testid="toggle-donation-input"]').click()
+}
+
 export const selectRewardAndHitCheckout = () => {
   cy.get('button').contains('Add').click()
   cy.get('button').contains('Checkout').click()

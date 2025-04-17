@@ -67,16 +67,16 @@ export const VerifyYourEmailContent = ({
     }
   }, [initEmail])
 
-  if (initEmail && loading) {
+  if (!initEmail && loading) {
     return <Loader />
   }
 
   return (
     <>
-      {sentOtp && otpData ? (
+      {initEmail || (sentOtp && otpData) ? (
         <VerifyOneTimePassword
           action={action}
-          otp={otpData}
+          otp={otpData || ({} as OtpResponseFragment)}
           handleSendOtpByEmail={handleSendOtpByEmail}
           inputEmail={inputEmail || user.email || ''}
           handleVerify={handleVerify}

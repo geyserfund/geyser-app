@@ -42,6 +42,7 @@ import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
 import { CreatorSocial } from './components/CreatorSocial'
 import { LightningAddressModal } from './components/LightningAddressModal'
+import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
 import { ShareProjectButton } from './components/ShareProjectButton'
 
 export const Header = () => {
@@ -162,6 +163,7 @@ export const Header = () => {
           <VStack maxWidth="full" flex={1} spacing={2} alignItems="start">
             <H1 size={'2xl'} width="100%" medium>
               {project.title}
+              <NonProjectProjectIcon />
             </H1>
 
             <HStack w="full" flexWrap={'wrap'}>

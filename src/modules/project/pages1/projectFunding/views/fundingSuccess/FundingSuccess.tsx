@@ -22,7 +22,7 @@ import { SafeToDeleteRefund } from './components/SafeToDeleteRefund'
 import { SendEmailToCreator } from './components/SendEmailToCreator'
 
 export const FundingSuccess = () => {
-  const { project, formState } = useFundingFormAtom()
+  const { project, formState, rewardsCosts } = useFundingFormAtom()
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
 
@@ -64,7 +64,7 @@ export const FundingSuccess = () => {
           <VStack w="full" alignItems="start">
             <SuccessImageComponent />
           </VStack>
-          {formState.rewardsCost > 0 && (
+          {rewardsCosts.satoshi > 0 && (
             <VStack w="full" alignItems="start" spacing={6}>
               <H2 size={{ base: 'xl', lg: '2xl' }} bold>
                 {t('Next Actions')}

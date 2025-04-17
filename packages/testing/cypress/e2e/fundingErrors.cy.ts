@@ -1,4 +1,9 @@
-import { clickContribute, enterAmountAndHitCheckout, enterCommentAndHitCheckout } from '../actions/funding'
+import {
+  clickContribute,
+  clickToggleDonationInput,
+  enterAmountAndHitCheckout,
+  enterCommentAndHitCheckout,
+} from '../actions/funding'
 import { commentScreenIsVisible, fundingAmountScreenIsVisible } from '../assertions/funding'
 import { ApolloErrors, GEYSER_URL, LND_TEST_PROJECT_NAME } from '../contants'
 import { ErrorExtensionType, interceptFundingWithError } from '../utils/funding'
@@ -78,6 +83,7 @@ const errorFlowForFundingMutation = (errorExtension: ErrorExtensionType) => {
   clickContribute()
   fundingAmountScreenIsVisible()
 
+  clickToggleDonationInput()
   enterAmountAndHitCheckout(FUNDING_AMOUNT)
   commentScreenIsVisible()
 

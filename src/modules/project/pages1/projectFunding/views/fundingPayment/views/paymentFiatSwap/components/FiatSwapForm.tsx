@@ -3,13 +3,14 @@ import { SingleValue } from 'chakra-react-select'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import React, { useState } from 'react'
-import { PiMoneyWavy } from 'react-icons/pi'
+import { PiArrowSquareOut } from 'react-icons/pi'
 
 import { CustomSelect } from '@/components/ui/CustomSelect.tsx'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
 import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
+import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { useFundingFiatSwapPaymentCreateMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
@@ -82,12 +83,13 @@ export const FiatSwapForm: React.FC = () => {
         size="lg"
         variant="solid"
         colorScheme="primary1"
-        rightIcon={<Icon as={PiMoneyWavy} />}
+        rightIcon={<Icon as={PiArrowSquareOut} />}
         onClick={handleCreateFiatSwapPayment}
         isLoading={isLoading}
       >
-        {isLoading ? t('Redirecting you to fiat payment') : t('Pay')}
+        {isLoading ? t('Redirecting you to fiat payment') : t('Pay with Banxa')}
       </Button>
+      <Body size="sm">{t('You will be redirected to Banxa our fiat payment provider to complete your payment.')}</Body>
     </>
   )
 }
