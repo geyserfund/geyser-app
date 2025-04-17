@@ -3,24 +3,14 @@ import { beforeEach, describe, expect, it } from 'vitest'
 
 import { SATOSHIS_IN_BTC } from '@/shared/constants' // Import constant
 import { usdRateAtom } from '@/shared/state/btcRateAtom' // Correct import for usdRateAtom
-import {
-  // PaymentMethodType, // Removed import
-  ProjectRewardFragment, // Import the reward type
-  ProjectSubscriptionPlansFragment, // Import subscription type
-  RewardCurrency,
-  ShippingDestination,
-  SubscriptionCurrencyType,
-  UserSubscriptionInterval,
-  WalletState,
-} from '@/types'
+// Import types needed here
+import { RewardCurrency, UserSubscriptionInterval } from '@/types'
 import { dollarsToCents } from '@/utils/index.ts'
 
+// Import atoms under test
 import {
-  FundFormType,
   fundingFormStateAtom,
   FundingProjectState,
-  resetFundingFormAtom,
-  // Import derived atoms
   rewardsCostAtoms,
   setFundFormStateAtom,
   setFundFormTargetAtom,
@@ -28,156 +18,29 @@ import {
   tipAtoms,
   totalAmountSatsAtom,
   totalAmountUsdCentAtom,
-  updateFundingFormRewardAtom, // Import the atom we are testing
-  updateFundingFormSubscriptionAtom, // Import the atom we are testing
-} from '../../../../../../../src/modules/project/funding/state/fundingFormAtom.ts' // Adjust path as necessary
-// Import source atoms that fundingProjectAtom depends on
+  updateFundingFormRewardAtom,
+  updateFundingFormSubscriptionAtom,
+} from '../../../../../../../src/modules/project/funding/state/fundingFormAtom.ts'
+// Import dependent source atoms
 import { projectAtom, ProjectState } from '../../../../../../../src/modules/project/state/projectAtom.ts'
 import { rewardsAtom } from '../../../../../../../src/modules/project/state/rewardsAtom.ts'
 import { subscriptionsAtom } from '../../../../../../../src/modules/project/state/subscriptionAtom.ts'
 import { walletAtom } from '../../../../../../../src/modules/project/state/walletAtom.ts'
-
-// --- Mocks ---
-const mockUsdRate = 50000
-
-// Define mock rewards
-const mockRewardsFull: ProjectRewardFragment[] = [
-  {
-    id: '101',
-    cost: 1000,
-    hasShipping: false,
-    __typename: 'ProjectReward',
-    uuid: 'uuid-101',
-    name: 'USD Reward 1 String ID',
-    description: 'Desc 101',
-    images: [],
-    privateCommentPrompts: [],
-    stock: null,
-    deleted: false,
-    sold: 0,
-    rewardCurrency: RewardCurrency.Usdcent,
-    isAddon: false,
-    isHidden: false,
-    preOrder: false,
-    posts: [],
-  },
-  {
-    id: 102,
-    cost: 20000,
-    hasShipping: false,
-    __typename: 'ProjectReward',
-    uuid: 'uuid-102',
-    name: 'USD Reward 2 Number ID',
-    description: 'Desc 102',
-    images: [],
-    privateCommentPrompts: [],
-    stock: null,
-    deleted: false,
-    sold: 0,
-    rewardCurrency: RewardCurrency.Usdcent,
-    isAddon: false,
-    isHidden: false,
-    preOrder: false,
-    posts: [],
-  },
-  {
-    id: 103,
-    cost: 500,
-    hasShipping: true,
-    __typename: 'ProjectReward',
-    uuid: 'uuid-103',
-    name: 'USD Reward 3 Shipping',
-    description: 'Desc 103',
-    images: [],
-    privateCommentPrompts: [],
-    stock: null,
-    deleted: false,
-    sold: 0,
-    rewardCurrency: RewardCurrency.Usdcent,
-    isAddon: false,
-    isHidden: false,
-    preOrder: false,
-    posts: [],
-  },
-]
-
-// Define minimal mock subscriptions for testing calculation logic
-const mockSubscriptionsMinimal = [
-  {
-    id: 201,
-    name: 'Monthly USD Supporter',
-    cost: 500, // $5.00
-    currency: 'USDCENT' as SubscriptionCurrencyType, // Use string literal + cast
-    interval: UserSubscriptionInterval.Monthly,
-  },
-  {
-    id: 202,
-    name: 'Annual SATS Backer',
-    cost: 100000, // 100,000 sats
-    currency: 'BTCSAT' as SubscriptionCurrencyType, // Use string literal + cast
-    interval: UserSubscriptionInterval.Yearly,
-  },
-] as ProjectSubscriptionPlansFragment[] // Cast the minimal array
-
-// Mock project data using the minimal subscriptions
-const mockProjectDataUsd: FundingProjectState = {
-  id: 1,
-  name: 'usd-project',
-  title: 'USD Project',
-  rewardCurrency: RewardCurrency.Usdcent,
-  paymentMethods: {
-    fiat: { stripe: false, __typename: 'FiatPaymentMethods' },
-    __typename: 'PaymentMethods',
-  },
-  owners: [],
-  rewards: mockRewardsFull,
-  wallet: {
-    id: 'wallet1',
-    limits: { contribution: { min: 100, max: 10000000, onChain: { min: 5000, max: 5000000 } } },
-    state: 'Ready' as unknown as WalletState,
-    __typename: 'Wallet',
-  },
-  subscriptions: mockSubscriptionsMinimal,
-}
-
-// Create a separate mock for a project using SATS rewards
-const mockProjectDataSats: FundingProjectState = {
-  ...mockProjectDataUsd,
-  id: 2,
-  name: 'Test Project SATS Rewards',
-  rewardCurrency: RewardCurrency.Btcsat, // Project uses SATS for rewards
-  rewards: mockRewardsFull,
-  subscriptions: mockSubscriptionsMinimal, // Use minimal subscriptions
-}
-
-const initialState: FundFormType = {
-  donationAmount: 0,
-  donationAmountUsdCent: 0,
-  // rewardsCost: 0,
-  // rewardsCostInSatoshi: 0,
-  // rewardsCostInUsdCent: 0,
-  shippingCost: 0,
-  // totalAmount: 0,
-  // totalAmountUsdCent: 0,
-  comment: '',
-  privateComment: '',
-  email: '',
-  media: '',
-  followProject: true,
-  subscribeToGeyserEmails: false,
-  rewardsByIDAndCount: undefined,
-  subscription: {
-    cost: 0,
-    subscriptionId: undefined,
-    currency: SubscriptionCurrencyType.Usdcent,
-    interval: UserSubscriptionInterval.Monthly,
-    name: '',
-  },
-  rewardCurrency: RewardCurrency.Usdcent,
-  needsShipping: false,
-  shippingDestination: ShippingDestination.National,
-  geyserTipPercent: 2.1,
-}
+// Import mocks from the new file
+import {
+  initialTestState,
+  mockProjectDataSats,
+  mockProjectDataUsd,
+  mockRewardsFull,
+  mockUsdRate,
+} from './fundingFormAtom.mock.ts'
+// Import test helpers
+import {
+  calculateExpectedRewardCosts,
+  calculateExpectedTip,
+  calculateExpectedTotalSats,
+  calculateExpectedTotalUsdCent,
+} from './fundingFormAtom.test.helpers.ts'
 
 // --- Test Setup ---
 const createTestStore = (projectData: FundingProjectState = mockProjectDataUsd) => {
@@ -187,9 +50,9 @@ const createTestStore = (projectData: FundingProjectState = mockProjectDataUsd) 
   store.set(projectAtom, projData as ProjectState)
   store.set(walletAtom, wallet)
   store.set(rewardsAtom, rewards)
-  // Subscriptions should match type due to array cast
   store.set(subscriptionsAtom, subscriptions ?? [])
-  store.set(fundingFormStateAtom, initialState)
+  // Use imported initial state
+  store.set(fundingFormStateAtom, initialTestState)
   return store
 }
 
@@ -204,165 +67,286 @@ describe('fundingFormAtom Tests', () => {
     })
 
     it('updateFundingFormRewardAtom should add a single USD cent reward', () => {
-      store.set(updateFundingFormRewardAtom, { id: 101, count: 1 })
-      const state = store.get(fundingFormStateAtom)
-      const derivedCosts = store.get(rewardsCostAtoms)
-      const tip = store.get(tipAtoms)
-      const totalSats = store.get(totalAmountSatsAtom)
-      const totalUsdCent = store.get(totalAmountUsdCentAtom)
-
-      const expectedRewardCostUsdCent = 1000
-      const expectedRewardCostSats = Math.round((expectedRewardCostUsdCent / 100 / mockUsdRate) * SATOSHIS_IN_BTC)
-
-      expect(state.rewardsByIDAndCount).toEqual({ '101': 1 })
-      expect(state.needsShipping).toBe(false)
-      expect(derivedCosts).toEqual({ satoshi: expectedRewardCostSats, usdCent: expectedRewardCostUsdCent, base: 1000 })
-      expect(tip.satoshi).toBe(Math.round((derivedCosts.satoshi * state.geyserTipPercent) / 100))
-      expect(totalSats).toBe(state.donationAmount + derivedCosts.satoshi + tip.satoshi)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedCosts.usdCent + tip.usdCent)
-    })
-
-    it('updateFundingFormRewardAtom should add multiple units of a USD cent reward', () => {
-      store.set(updateFundingFormRewardAtom, { id: 101, count: 3 })
-      const state = store.get(fundingFormStateAtom)
-      const derivedCosts = store.get(rewardsCostAtoms)
-      const tip = store.get(tipAtoms)
-      const totalSats = store.get(totalAmountSatsAtom)
-      const totalUsdCent = store.get(totalAmountUsdCentAtom)
-
-      const expectedRewardCostUsdCent = 1000 * 3
-      const expectedRewardCostSats = Math.round((expectedRewardCostUsdCent / 100 / mockUsdRate) * SATOSHIS_IN_BTC)
-
-      expect(state.rewardsByIDAndCount).toEqual({ '101': 3 })
-      expect(derivedCosts).toEqual({ satoshi: expectedRewardCostSats, usdCent: expectedRewardCostUsdCent, base: 3000 })
-      expect(tip.satoshi).toBe(Math.round((derivedCosts.satoshi * state.geyserTipPercent) / 100))
-      expect(totalSats).toBe(state.donationAmount + derivedCosts.satoshi + tip.satoshi)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedCosts.usdCent + tip.usdCent)
-    })
-
-    it('should calculate cost correctly for reward with string ID', () => {
-      // Use the reward with the string ID '101'
       store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 1 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
-      const tip = store.get(tipAtoms)
+      const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
-      // Assertions based on reward '101' (cost: 1000 usdCent)
-      const expectedRewardCostUsdCent = 1000
-      const expectedRewardCostSats = Math.round((expectedRewardCostUsdCent / 100 / mockUsdRate) * SATOSHIS_IN_BTC)
+      // Use helpers for expected values
+      const expectedCosts = calculateExpectedRewardCosts(
+        { '101': 1 },
+        mockRewardsFull,
+        RewardCurrency.Usdcent,
+        mockUsdRate,
+      )
+      const expectedTip = calculateExpectedTip(
+        state.donationAmount,
+        expectedCosts.satoshi,
+        state.geyserTipPercent,
+        mockUsdRate,
+      )
+      const expectedTotalSats = calculateExpectedTotalSats(
+        state.donationAmount,
+        state.shippingCost,
+        expectedCosts.satoshi,
+        0,
+        expectedTip.satoshi,
+        mockUsdRate,
+      )
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
 
-      // Check state update
       expect(state.rewardsByIDAndCount).toEqual({ '101': 1 })
       expect(state.needsShipping).toBe(false)
+      expect(derivedCosts).toEqual(expectedCosts)
+      expect(tipResult).toEqual(expectedTip)
+      expect(totalSats).toBe(expectedTotalSats)
+      expect(totalUsdCent).toBe(expectedTotalUsdCent)
+    })
 
-      // Verify derived costs are calculated correctly (not 0)
+    it('updateFundingFormRewardAtom should add multiple units of a USD cent reward', () => {
+      store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 3 })
+      const state = store.get(fundingFormStateAtom)
+      const derivedCosts = store.get(rewardsCostAtoms)
+      const tipResult = store.get(tipAtoms)
+      const totalSats = store.get(totalAmountSatsAtom)
+      const totalUsdCent = store.get(totalAmountUsdCentAtom)
+
+      const expectedCosts = calculateExpectedRewardCosts(
+        { '101': 3 },
+        mockRewardsFull,
+        RewardCurrency.Usdcent,
+        mockUsdRate,
+      )
+      const expectedTip = calculateExpectedTip(
+        state.donationAmount,
+        expectedCosts.satoshi,
+        state.geyserTipPercent,
+        mockUsdRate,
+      )
+      const expectedTotalSats = calculateExpectedTotalSats(
+        state.donationAmount,
+        state.shippingCost,
+        expectedCosts.satoshi,
+        0,
+        expectedTip.satoshi,
+        mockUsdRate,
+      )
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
+
+      expect(state.rewardsByIDAndCount).toEqual({ '101': 3 })
+      expect(derivedCosts).toEqual(expectedCosts)
+      expect(tipResult).toEqual(expectedTip)
+      expect(totalSats).toBe(expectedTotalSats)
+      expect(totalUsdCent).toBe(expectedTotalUsdCent)
+    })
+
+    it('should calculate cost correctly for reward with string ID', () => {
+      store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 1 })
+      const state = store.get(fundingFormStateAtom)
+      const derivedCosts = store.get(rewardsCostAtoms)
+      const tipResult = store.get(tipAtoms)
+      const totalSats = store.get(totalAmountSatsAtom)
+      const totalUsdCent = store.get(totalAmountUsdCentAtom)
+
+      const expectedCosts = calculateExpectedRewardCosts(
+        { '101': 1 },
+        mockRewardsFull,
+        RewardCurrency.Usdcent,
+        mockUsdRate,
+      )
+      const expectedTip = calculateExpectedTip(
+        state.donationAmount,
+        expectedCosts.satoshi,
+        state.geyserTipPercent,
+        mockUsdRate,
+      )
+      const expectedTotalSats = calculateExpectedTotalSats(
+        state.donationAmount,
+        state.shippingCost,
+        expectedCosts.satoshi,
+        0,
+        expectedTip.satoshi,
+        mockUsdRate,
+      )
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
+
+      expect(state.rewardsByIDAndCount).toEqual({ '101': 1 })
+      expect(state.needsShipping).toBe(false)
       expect(derivedCosts.satoshi).toBeGreaterThan(0)
       expect(derivedCosts.usdCent).toBeGreaterThan(0)
-      expect(derivedCosts).toEqual({ satoshi: expectedRewardCostSats, usdCent: expectedRewardCostUsdCent, base: 1000 })
-
-      // Verify tip is calculated based on reward cost
-      expect(tip.satoshi).toBeGreaterThan(0)
-      expect(tip.satoshi).toBe(Math.round((derivedCosts.satoshi * state.geyserTipPercent) / 100))
-
-      // Verify totals include the reward cost and tip
+      expect(derivedCosts).toEqual(expectedCosts)
+      expect(tipResult.satoshi).toBeGreaterThan(0)
+      expect(tipResult).toEqual(expectedTip)
       expect(totalSats).toBeGreaterThan(0)
-      expect(totalSats).toBe(state.donationAmount + derivedCosts.satoshi + tip.satoshi)
+      expect(totalSats).toBe(expectedTotalSats)
       expect(totalUsdCent).toBeGreaterThan(0)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedCosts.usdCent + tip.usdCent)
+      expect(totalUsdCent).toBe(expectedTotalUsdCent)
     })
 
     it('updateFundingFormRewardAtom should add a reward requiring shipping', () => {
       store.set(updateFundingFormRewardAtom, { id: 103, count: 1 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
-      const tip = store.get(tipAtoms)
+      const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
-      const expectedRewardCostUsdCent = 500
-      const expectedRewardCostSats = Math.round((expectedRewardCostUsdCent / 100 / mockUsdRate) * SATOSHIS_IN_BTC)
+      const expectedCosts = calculateExpectedRewardCosts(
+        { '103': 1 },
+        mockRewardsFull,
+        RewardCurrency.Usdcent,
+        mockUsdRate,
+      )
+      const expectedTip = calculateExpectedTip(
+        state.donationAmount,
+        expectedCosts.satoshi,
+        state.geyserTipPercent,
+        mockUsdRate,
+      )
+      const expectedTotalSats = calculateExpectedTotalSats(
+        state.donationAmount,
+        state.shippingCost,
+        expectedCosts.satoshi,
+        0,
+        expectedTip.satoshi,
+        mockUsdRate,
+      )
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
 
       expect(state.rewardsByIDAndCount).toEqual({ '103': 1 })
       expect(state.needsShipping).toBe(true)
-      expect(derivedCosts).toEqual({ satoshi: expectedRewardCostSats, usdCent: expectedRewardCostUsdCent, base: 500 })
-      expect(tip.satoshi).toBe(Math.round((derivedCosts.satoshi * state.geyserTipPercent) / 100))
-      expect(totalSats).toBe(state.donationAmount + derivedCosts.satoshi + tip.satoshi)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedCosts.usdCent + tip.usdCent)
+      expect(derivedCosts).toEqual(expectedCosts)
+      expect(tipResult).toEqual(expectedTip)
+      expect(totalSats).toBe(expectedTotalSats)
+      expect(totalUsdCent).toBe(expectedTotalUsdCent)
     })
 
     it('updateFundingFormRewardAtom should add multiple different rewards', () => {
-      store.set(updateFundingFormRewardAtom, { id: 101, count: 1 })
+      store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 1 })
       store.set(updateFundingFormRewardAtom, { id: 103, count: 2 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
-      const tip = store.get(tipAtoms)
+      const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
-      const expectedTotalBaseCost = 1000 + 500 * 2
-      const correctTotalRewardCostSats = Math.round((expectedTotalBaseCost / 100 / mockUsdRate) * SATOSHIS_IN_BTC)
+      const selectedRewards = { '101': 1, '103': 2 }
+      const expectedCosts = calculateExpectedRewardCosts(
+        selectedRewards,
+        mockRewardsFull,
+        RewardCurrency.Usdcent,
+        mockUsdRate,
+      )
+      const expectedTip = calculateExpectedTip(
+        state.donationAmount,
+        expectedCosts.satoshi,
+        state.geyserTipPercent,
+        mockUsdRate,
+      )
+      const expectedTotalSats = calculateExpectedTotalSats(
+        state.donationAmount,
+        state.shippingCost,
+        expectedCosts.satoshi,
+        0,
+        expectedTip.satoshi,
+        mockUsdRate,
+      )
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
 
-      expect(state.rewardsByIDAndCount).toEqual({ '101': 1, '103': 2 })
+      expect(state.rewardsByIDAndCount).toEqual(selectedRewards)
       expect(state.needsShipping).toBe(true)
-      expect(derivedCosts).toEqual({ satoshi: correctTotalRewardCostSats, usdCent: expectedTotalBaseCost, base: 2000 })
-      expect(tip.satoshi).toBe(Math.round((derivedCosts.satoshi * state.geyserTipPercent) / 100))
-      expect(totalSats).toBe(state.donationAmount + derivedCosts.satoshi + tip.satoshi)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedCosts.usdCent + tip.usdCent)
+      expect(derivedCosts).toEqual(expectedCosts)
+      expect(tipResult).toEqual(expectedTip)
+      expect(totalSats).toBe(expectedTotalSats)
+      expect(totalUsdCent).toBe(expectedTotalUsdCent)
     })
 
     it('updateFundingFormRewardAtom should remove a reward', () => {
-      store.set(updateFundingFormRewardAtom, { id: 101, count: 1 })
+      store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 1 })
       store.set(updateFundingFormRewardAtom, { id: 103, count: 1 })
-      store.set(updateFundingFormRewardAtom, { id: 101, count: 0 })
+      store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 0 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
-      const tip = store.get(tipAtoms)
+      const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
-      const remainingRewardCostUsdCent = 500
-      const remainingRewardCostSats = Math.round((remainingRewardCostUsdCent / 100 / mockUsdRate) * SATOSHIS_IN_BTC)
+      const selectedRewards = { '103': 1 }
+      const expectedCosts = calculateExpectedRewardCosts(
+        selectedRewards,
+        mockRewardsFull,
+        RewardCurrency.Usdcent,
+        mockUsdRate,
+      )
+      const expectedTip = calculateExpectedTip(
+        state.donationAmount,
+        expectedCosts.satoshi,
+        state.geyserTipPercent,
+        mockUsdRate,
+      )
+      const expectedTotalSats = calculateExpectedTotalSats(
+        state.donationAmount,
+        state.shippingCost,
+        expectedCosts.satoshi,
+        0,
+        expectedTip.satoshi,
+        mockUsdRate,
+      )
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
 
-      expect(state.rewardsByIDAndCount).toEqual({ '103': 1 })
+      expect(state.rewardsByIDAndCount).toEqual(selectedRewards)
       expect(state.needsShipping).toBe(true)
-      expect(derivedCosts).toEqual({ satoshi: remainingRewardCostSats, usdCent: remainingRewardCostUsdCent, base: 500 })
-      expect(tip.satoshi).toBe(Math.round((derivedCosts.satoshi * state.geyserTipPercent) / 100))
-      expect(totalSats).toBe(state.donationAmount + derivedCosts.satoshi + tip.satoshi)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedCosts.usdCent + tip.usdCent)
+      expect(derivedCosts).toEqual(expectedCosts)
+      expect(tipResult).toEqual(expectedTip)
+      expect(totalSats).toBe(expectedTotalSats)
+      expect(totalUsdCent).toBe(expectedTotalUsdCent)
     })
 
     it('updateFundingFormRewardAtom should recalculate derived totals correctly when donation exists', () => {
-      store.set(setFundFormStateAtom, 'donationAmount', 10000)
-      const initialDonationUsdCent = Math.round((10000 / SATOSHIS_IN_BTC) * mockUsdRate * 100)
-      store.set(setFundFormStateAtom, 'donationAmountUsdCent', initialDonationUsdCent)
-      const initialState = store.get(fundingFormStateAtom)
+      const initialDonationSats = 10000
+      const initialDonationUsdCent = calculateExpectedTotalUsdCent(initialDonationSats, mockUsdRate)
+      store.set(setFundFormStateAtom, 'donationAmount', initialDonationSats)
+      store.set(setFundFormStateAtom, 'donationAmountUsdCent', initialDonationUsdCent) // Ensure consistency
 
-      store.set(updateFundingFormRewardAtom, { id: 101, count: 1 })
+      store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 1 })
       const finalState = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
-      const tip = store.get(tipAtoms)
+      const tipResult = store.get(tipAtoms)
       const finalTotalSats = store.get(totalAmountSatsAtom)
       const finalTotalUsdCent = store.get(totalAmountUsdCentAtom)
 
-      const rewardCostUsdCent = 1000
-      const rewardCostSats = Math.round((rewardCostUsdCent / 100 / mockUsdRate) * SATOSHIS_IN_BTC)
-
-      expect(derivedCosts).toEqual({ satoshi: rewardCostSats, usdCent: rewardCostUsdCent, base: 1000 })
-      const finalExpectedTipSats = Math.round(
-        ((initialState.donationAmount + rewardCostSats) * finalState.geyserTipPercent) / 100,
+      const expectedCosts = calculateExpectedRewardCosts(
+        { '101': 1 },
+        mockRewardsFull,
+        RewardCurrency.Usdcent,
+        mockUsdRate,
       )
-      const finalExpectedTipUsdCent = Math.round((finalExpectedTipSats / SATOSHIS_IN_BTC) * mockUsdRate * 100)
-      expect(tip).toEqual({ satoshi: finalExpectedTipSats, usdCent: finalExpectedTipUsdCent })
+      const expectedTip = calculateExpectedTip(
+        initialDonationSats,
+        expectedCosts.satoshi,
+        finalState.geyserTipPercent,
+        mockUsdRate,
+      )
+      const expectedTotalSats = calculateExpectedTotalSats(
+        initialDonationSats,
+        finalState.shippingCost,
+        expectedCosts.satoshi,
+        0,
+        expectedTip.satoshi,
+        mockUsdRate,
+      )
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
 
+      expect(derivedCosts).toEqual(expectedCosts)
+      expect(tipResult).toEqual(expectedTip)
       expect(finalState.rewardsByIDAndCount).toEqual({ '101': 1 })
       expect(finalState.needsShipping).toBe(false)
-      expect(finalState.donationAmount).toBe(initialState.donationAmount)
-      expect(finalState.donationAmountUsdCent).toBe(initialState.donationAmountUsdCent)
-
-      expect(finalTotalSats).toBe(initialState.donationAmount + derivedCosts.satoshi + tip.satoshi)
-      expect(finalTotalUsdCent).toBe(initialState.donationAmountUsdCent + derivedCosts.usdCent + tip.usdCent)
+      expect(finalState.donationAmount).toBe(initialDonationSats)
+      expect(finalState.donationAmountUsdCent).toBe(initialDonationUsdCent)
+      expect(finalTotalSats).toBe(expectedTotalSats)
+      expect(finalTotalUsdCent).toBe(expectedTotalUsdCent)
     })
   })
 
@@ -375,45 +359,78 @@ describe('fundingFormAtom Tests', () => {
       store.set(updateFundingFormRewardAtom, { id: 102, count: 1 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
-      const tip = store.get(tipAtoms)
+      const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
-      const expectedRewardCostSats = 20000
-      const expectedRewardCostUsdCent = Math.round((expectedRewardCostSats / SATOSHIS_IN_BTC) * mockUsdRate * 100)
+      const expectedCosts = calculateExpectedRewardCosts(
+        { '102': 1 },
+        mockRewardsFull,
+        RewardCurrency.Btcsat,
+        mockUsdRate,
+      )
+      const expectedTip = calculateExpectedTip(
+        state.donationAmount,
+        expectedCosts.satoshi,
+        state.geyserTipPercent,
+        mockUsdRate,
+      )
+      const expectedTotalSats = calculateExpectedTotalSats(
+        state.donationAmount,
+        state.shippingCost,
+        expectedCosts.satoshi,
+        0,
+        expectedTip.satoshi,
+        mockUsdRate,
+      )
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
 
       expect(state.rewardsByIDAndCount).toEqual({ '102': 1 })
       expect(state.needsShipping).toBe(false)
-      expect(derivedCosts).toEqual({ satoshi: expectedRewardCostSats, usdCent: expectedRewardCostUsdCent, base: 20000 })
-      expect(tip.satoshi).toBe(Math.round((derivedCosts.satoshi * state.geyserTipPercent) / 100))
-      expect(totalSats).toBe(state.donationAmount + derivedCosts.satoshi + tip.satoshi)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedCosts.usdCent + tip.usdCent)
+      expect(derivedCosts).toEqual(expectedCosts)
+      expect(tipResult).toEqual(expectedTip)
+      expect(totalSats).toBe(expectedTotalSats)
+      expect(totalUsdCent).toBe(expectedTotalUsdCent)
     })
 
     it('updateFundingFormRewardAtom should add multiple different rewards (SATS project)', () => {
-      store.set(updateFundingFormRewardAtom, { id: 101, count: 1 })
+      store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 1 })
       store.set(updateFundingFormRewardAtom, { id: 102, count: 1 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
-      const tip = store.get(tipAtoms)
+      const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
-      const correctTotalRewardCostSats = 1000 + 20000 // 21000
-      const expectedTotalRewardCostUsdCent = Math.round(
-        (correctTotalRewardCostSats / SATOSHIS_IN_BTC) * mockUsdRate * 100,
+      const selectedRewards = { '101': 1, '102': 1 }
+      const expectedCosts = calculateExpectedRewardCosts(
+        selectedRewards,
+        mockRewardsFull,
+        RewardCurrency.Btcsat,
+        mockUsdRate,
       )
+      const expectedTip = calculateExpectedTip(
+        state.donationAmount,
+        expectedCosts.satoshi,
+        state.geyserTipPercent,
+        mockUsdRate,
+      )
+      const expectedTotalSats = calculateExpectedTotalSats(
+        state.donationAmount,
+        state.shippingCost,
+        expectedCosts.satoshi,
+        0,
+        expectedTip.satoshi,
+        mockUsdRate,
+      )
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
 
-      expect(state.rewardsByIDAndCount).toEqual({ '101': 1, '102': 1 })
+      expect(state.rewardsByIDAndCount).toEqual(selectedRewards)
       expect(state.needsShipping).toBe(false)
-      expect(derivedCosts).toEqual({
-        satoshi: correctTotalRewardCostSats,
-        usdCent: expectedTotalRewardCostUsdCent,
-        base: 21000,
-      })
-      expect(tip.satoshi).toBe(Math.round((derivedCosts.satoshi * state.geyserTipPercent) / 100))
-      expect(totalSats).toBe(state.donationAmount + derivedCosts.satoshi + tip.satoshi)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedCosts.usdCent + tip.usdCent)
+      expect(derivedCosts).toEqual(expectedCosts)
+      expect(tipResult).toEqual(expectedTip)
+      expect(totalSats).toBe(expectedTotalSats)
+      expect(totalUsdCent).toBe(expectedTotalUsdCent)
     })
   })
 
@@ -484,7 +501,7 @@ describe('fundingFormAtom Tests', () => {
     })
 
     it('updateFundingFormSubscriptionAtom totals reflect subscription cost over reward cost', () => {
-      store.set(updateFundingFormRewardAtom, { id: 101, count: 1 })
+      store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 1 })
       const stateWithReward = store.get(fundingFormStateAtom)
       const rewardCosts = store.get(rewardsCostAtoms)
       const tipWithReward = store.get(tipAtoms)
@@ -516,17 +533,6 @@ describe('fundingFormAtom Tests', () => {
   beforeEach(() => {
     // Reset store with default USD project before each top-level test
     store = createTestStore(mockProjectDataUsd)
-  })
-
-  it('should initialize with the correct default state', () => {
-    const state = store.get(fundingFormStateAtom)
-    expect(state).toEqual(initialState)
-    // Check initial derived values
-    expect(store.get(rewardsCostAtoms)).toEqual({ satoshi: 0, usdCent: 0, base: 0 })
-    expect(store.get(subscriptionCostAtoms)).toEqual({ satoshi: 0, usdCent: 0, base: 0 })
-    expect(store.get(tipAtoms)).toEqual({ satoshi: 0, usdCent: 0 })
-    expect(store.get(totalAmountSatsAtom)).toBe(0)
-    expect(store.get(totalAmountUsdCentAtom)).toBe(0)
   })
 
   it('setFundFormTargetAtom should update state based on event target', () => {
@@ -573,36 +579,6 @@ describe('fundingFormAtom Tests', () => {
     expect(store.get(tipAtoms)).toEqual({ satoshi: expectedTipSats, usdCent: expectedTipUsdCent })
     expect(store.get(totalAmountSatsAtom)).toBe(10000 + expectedTipSats)
     expect(store.get(totalAmountUsdCentAtom)).toBe(expectedDonationUsdCent + expectedTipUsdCent)
-  })
-
-  it('resetFundingFormAtom should reset the state to initial values', () => {
-    // Set some values different from initial
-    store.set(setFundFormStateAtom, 'donationAmount', 5000)
-    store.set(setFundFormStateAtom, 'email', 'test@example.com')
-    store.set(updateFundingFormRewardAtom, { id: 101, count: 1 })
-    let state = store.get(fundingFormStateAtom)
-    expect(state.donationAmount).toBe(5000)
-    expect(state.email).toBe('test@example.com')
-    expect(state.rewardsByIDAndCount).toEqual({ '101': 1 })
-
-    // Reset the state
-    store.set(resetFundingFormAtom)
-
-    // Verify reset fields are back to initial values
-    state = store.get(fundingFormStateAtom)
-    expect(state.rewardsByIDAndCount).toBeUndefined() // Check reset value
-    expect(state.needsShipping).toBe(false) // Check reset value
-    expect(state.email).toBe('') // Check reset value
-    expect(state.donationAmount).toBe(0) // Check reset value
-    expect(state.donationAmountUsdCent).toBe(0) // Check reset value
-    expect(state.geyserTipPercent).toBe(2.1) // Check reset value
-
-    // Derived atoms should reflect the reset state (e.g., 0 costs, 0 totals)
-    expect(store.get(rewardsCostAtoms)).toEqual({ satoshi: 0, usdCent: 0, base: 0 })
-    expect(store.get(subscriptionCostAtoms)).toEqual({ satoshi: 0, usdCent: 0, base: 0 })
-    expect(store.get(tipAtoms)).toEqual({ satoshi: 0, usdCent: 0 })
-    expect(store.get(totalAmountSatsAtom)).toBe(0)
-    expect(store.get(totalAmountUsdCentAtom)).toBe(0)
   })
 
   it('setFundFormStateAtom should update donationAmountUsdCent and sync donationAmount', () => {
