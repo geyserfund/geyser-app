@@ -3,6 +3,7 @@ import {
   clickCopyLightningInvoiceButton,
   clickCopyOnChainButton,
   clickOnchainQrTab,
+  clickToggleDonationInput,
   enterAmountAndHitCheckout,
   enterCommentAddEmailAndHitCheckout,
   enterCommentAndHitCheckout,
@@ -22,8 +23,8 @@ import {
 import { MINE_BLOCK_ADDRESS } from '../contants'
 import { mineBlockOptions, payLightningInvoice, payOnChainOptions } from '../utils/lncli'
 
-const ONCHAIN_FUNDING_AMOUNT = 100
-const LIGHTNING_FUNDING_AMOUNT = 10
+const ONCHAIN_FUNDING_AMOUNT = 60000
+const LIGHTNING_FUNDING_AMOUNT = 1000
 const FUNDING_COMMENT = 'This was the test comment'
 
 export const testLightningSuccessFlow = () => {
@@ -32,6 +33,7 @@ export const testLightningSuccessFlow = () => {
       clickContribute()
       fundingAmountScreenIsVisible()
 
+      clickToggleDonationInput()
       enterAmountAndHitCheckout(LIGHTNING_FUNDING_AMOUNT)
       commentScreenIsVisible()
 
@@ -65,6 +67,7 @@ export const onChainSuccessFlowWithRewards = () => {
       clickContribute()
       fundingAmountScreenIsVisible()
 
+      clickToggleDonationInput()
       selectRewardAndHitCheckout()
       commentScreenIsVisible()
 
@@ -111,6 +114,7 @@ export const onChainSuccessFlowWithDonation = () => {
       clickContribute()
       fundingAmountScreenIsVisible()
 
+      clickToggleDonationInput()
       enterAmountAndHitCheckout(ONCHAIN_FUNDING_AMOUNT)
       commentScreenIsVisible()
 
@@ -155,6 +159,7 @@ export const onChainRefundFlow = () => {
       clickContribute()
       fundingAmountScreenIsVisible()
 
+      clickToggleDonationInput()
       enterAmountAndHitCheckout(ONCHAIN_FUNDING_AMOUNT)
       commentScreenIsVisible()
 

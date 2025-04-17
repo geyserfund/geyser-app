@@ -180,7 +180,13 @@ export const DonationInput = () => {
             alignItems={'center'}
             paddingRight={2}
           >
-            <Button w="100%" variant="soft" colorScheme="neutral1" onClick={onToggle}>
+            <Button
+              data-testid="toggle-donation-input"
+              w="100%"
+              variant="soft"
+              colorScheme="neutral1"
+              onClick={onToggle}
+            >
               {isSatoshi ? (
                 <>
                   <Body isTruncated>{dollar > 0 ? `$${commaFormatted(dollar)}` : satoshi > 0 ? '< $1' : '$0'}</Body>
