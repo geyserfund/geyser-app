@@ -27,5 +27,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Run State Tests
+        run: yarn workspace @geyser-app/testing run test:state
+
       - name: Run build check
         run: yarn build
