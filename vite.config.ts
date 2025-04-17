@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import react from '@vitejs/plugin-react-swc'
+import path from 'path'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import loadVersion from 'vite-plugin-package-version'
 import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
@@ -94,12 +95,29 @@ export default defineConfig(({ command, mode }) => {
     strictPort: true,
   }
 
-  if (mode === 'development') {
+  // Base define config (allow extra string keys)
+  const define: { [key: string]: any } = {
+    global: 'globalThis',
+  }
+
+  // Apply production/development defines only when not running tests (heuristically)
+  // Vitest integration might set command differently, but often not 'serve' or 'build'
+  if (command === 'serve' || command === 'build') {
+    define['process.env'] = env
+    define.__APP_ENV__ = env.APP_ENV
     console.log(`
       ==================================================================================================
-      "Geyser - App" will available at http://dev.geyser.fund:${env.PORT}/
+      "Geyser - App" command: ${command}, mode: ${mode}. Applying define config.
       ==================================================================================================
       `)
+  } else {
+    console.log(`
+      ==================================================================================================
+      "Geyser - App" command: ${command}, mode: ${mode}. Skipping define config for process.env/__APP_ENV__.
+      ==================================================================================================
+      `)
+    // You could potentially define test-specific values here if needed
+    // define['process.env.NODE_ENV'] = '\"test\"'; // Example
   }
 
   pwaOptions.mode = env.APP_ENV === 'development' ? 'development' : 'production'
@@ -116,19 +134,17 @@ export default defineConfig(({ command, mode }) => {
     plugins,
     resolve: {
       alias: {
-        '@': '/src',
+        '@': path.resolve(__dirname, './src'),
       },
     },
     server,
-    define: {
-      global: 'globalThis',
-      'process.env': env,
-      __APP_ENV__: env.APP_ENV,
-    },
+    // Use the conditionally populated define object
+    define,
     test: {
       globals: true,
       environment: 'jsdom',
-      // setupFiles: './setupTests.ts',
+      setupFiles: 'packages/testing/vitest/setupTests.ts',
+      include: ['packages/testing/vitest/**/state/**/*.test.ts'],
     },
     optimizeDeps: {
       include: ['ecpair', 'tiny-secp256k1'],

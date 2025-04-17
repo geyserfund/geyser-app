@@ -120,13 +120,14 @@ export const useFundingAPI = () => {
       const keyPair = generatePrivatePublicKeyPair()
       setKeyPair(keyPair)
 
-      if (input?.paymentsInput?.onChainSwap?.boltz) {
-        input.paymentsInput.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
+      const finalInput = { ...input }
+      if (finalInput?.paymentsInput?.onChainSwap?.boltz) {
+        finalInput.paymentsInput.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
       }
 
-      setFundingInputAfterRequest(input)
+      setFundingInputAfterRequest(finalInput)
 
-      await contributionCreate({ variables: { input }, onCompleted })
+      await contributionCreate({ variables: { input: finalInput }, onCompleted })
     },
     [contributionCreate, toast, setKeyPair, setFundingInputAfterRequest, resetContribution],
   )
