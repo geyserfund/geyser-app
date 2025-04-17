@@ -3,7 +3,7 @@ import { commentScreenIsVisible, fundingAmountScreenIsVisible } from '../asserti
 import { ApolloErrors, GEYSER_URL, LND_TEST_PROJECT_NAME } from '../contants'
 import { ErrorExtensionType, interceptFundingWithError } from '../utils/funding'
 
-const FUNDING_AMOUNT = 60000
+const FUNDING_AMOUNT = 100
 const FUNDING_COMMENT = 'This was the test comment'
 
 describe('When fund mutation fails', () => {

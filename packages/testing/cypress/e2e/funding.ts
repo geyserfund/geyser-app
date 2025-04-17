@@ -22,8 +22,8 @@ import {
 import { MINE_BLOCK_ADDRESS } from '../contants'
 import { mineBlockOptions, payLightningInvoice, payOnChainOptions } from '../utils/lncli'
 
-const ONCHAIN_FUNDING_AMOUNT = 60000
-const LIGHTNING_FUNDING_AMOUNT = 1000
+const ONCHAIN_FUNDING_AMOUNT = 100
+const LIGHTNING_FUNDING_AMOUNT = 10
 const FUNDING_COMMENT = 'This was the test comment'
 
 export const testLightningSuccessFlow = () => {
