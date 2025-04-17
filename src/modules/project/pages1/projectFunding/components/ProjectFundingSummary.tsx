@@ -7,6 +7,12 @@ import { PiCaretDown, PiCaretUp } from 'react-icons/pi'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
+import {
+  rewardsCostAtoms,
+  tipAtoms,
+  totalAmountSatsAtom,
+  totalAmountUsdCentAtom,
+} from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { useGoalsAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body, H2 } from '@/shared/components/typography'
@@ -24,6 +30,11 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
   const { inProgressGoals } = useGoalsAtom()
   const projectGoalId = useAtomValue(selectedGoalIdAtom)
 
+  const rewardsCosts = useAtomValue(rewardsCostAtoms)
+  const tip = useAtomValue(tipAtoms)
+  const totalSats = useAtomValue(totalAmountSatsAtom)
+  const totalUsdCent = useAtomValue(totalAmountUsdCentAtom)
+
   const currentGoal =
     inProgressGoals.length > 0
       ? projectGoalId
@@ -32,10 +43,6 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
       : undefined
 
   const { formState, hasSelectedRewards } = useFundingFormAtom()
-
-  // Calculate tip amount in sats
-  const geyserTipAmountSats =
-    formState.geyserTipPercent > 0 ? Math.round((formState.donationAmount * formState.geyserTipPercent) / 100) : 0
 
   const { isOpen: isMobileDetailsOpen, onToggle: onMobileDetailsToggle } = useDisclosure()
 
@@ -64,7 +71,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
 
   const hasDetails = disableCollapse
     ? false
-    : formState.donationAmount > 0 || numberOfRewardsSelected > 0 || formState.totalAmountUsdCent >= 10
+    : formState.donationAmount > 0 || numberOfRewardsSelected > 0 || totalUsdCent >= 10
 
   const mobileDisplayStyle = disableCollapse
     ? 'flex'
@@ -146,11 +153,11 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
           </VStack>
         )}
 
-        {numberOfRewardsSelected > 0 && (
+        {rewardsCosts.satoshi > 0 && (
           <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards Cost')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
-              {commaFormatted(formState.rewardsCostInSatoshi)}{' '}
+              {commaFormatted(rewardsCosts.satoshi)}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
                 sats
               </Body>
@@ -159,11 +166,11 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
         )}
       </VStack>
 
-      {geyserTipAmountSats > 0 && (
+      {tip.satoshi > 0 && (
         <HStack>
           <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser tip')}: `}</Body>
           <Body size={{ base: 'sm', lg: 'md' }}>
-            {`${commaFormatted(geyserTipAmountSats)} `}
+            {`${commaFormatted(tip.satoshi)} `}
             <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
               sats
             </Body>
@@ -184,13 +191,13 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
         </Body>
         <HStack flex={1} flexWrap={'wrap'}>
           <Body size={{ base: 'md', lg: 'xl' }} medium wordBreak={'break-all'}>
-            {`${commaFormatted(formState.totalAmount)} `}
+            {`${commaFormatted(totalSats)} `}
           </Body>
           <Body as="span" size={{ base: 'md', lg: 'xl' }} light>
             sats
           </Body>
           <Body as="span" size={{ base: 'md', lg: 'xl' }} medium light wordBreak={'break-all'}>
-            {`($${commaFormatted(centsToDollars(formState.totalAmountUsdCent))})`}
+            {`($${commaFormatted(centsToDollars(totalUsdCent))})`}
           </Body>
         </HStack>
       </HStack>

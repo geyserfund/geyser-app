@@ -28,7 +28,7 @@
       "vite-plugin-pwa/client"
     ]
   },
-  "include": ["src", "language/translations"],
+  "include": ["src", "language/translations", "packages/testing/vitest/modules/project/funding/state/fundingFormAtom.test.ts"],
   "exclude":["src/types/generated/graphql.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

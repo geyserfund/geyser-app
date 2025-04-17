@@ -5,14 +5,11 @@ import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { Body, H1 } from '@/shared/components/typography'
 
-import { useBtcContext } from '../../../../../../../context/btc'
 import { commaFormatted } from '../../../../../../../utils'
 
 const MIN_WIDTH_AFTER_START = 50
 const PRESET_AMOUNTS = [50, 100, 210, 500, 1000]
 export const DonationInput = () => {
-  const { btcRate } = useBtcContext()
-
   const inputRef = useRef<HTMLInputElement>(null)
 
   const {
@@ -45,16 +42,13 @@ export const DonationInput = () => {
 
     if (isDollar) {
       setDollar(val)
-      setSatoshi(Math.round(val / btcRate))
     } else {
       setSatoshi(val)
-      setDollar(Math.round(val * btcRate))
     }
   }
 
   const handleDefaultAmountButtonClick = (val: number) => {
     setDollar(val)
-    setSatoshi(Math.round(val / btcRate))
   }
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {

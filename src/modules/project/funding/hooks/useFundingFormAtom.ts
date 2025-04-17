@@ -12,10 +12,15 @@ import {
   isFundingInputAmountValidAtom,
   isFundingUserInfoValidAtom,
   resetFundingFormRewardsAtom,
+  rewardsCostAtoms,
   setErrorStateAtom,
   setFundFormStateAtom,
   setFundFormTargetAtom,
   setWarningStateAtom,
+  subscriptionCostAtoms,
+  tipAtoms,
+  totalAmountSatsAtom,
+  totalAmountUsdCentAtom,
   updateFundingFormRewardAtom,
   updateFundingFormSubscriptionAtom,
 } from '../state/fundingFormAtom'
@@ -38,6 +43,12 @@ export const useFundingFormAtom = () => {
   const fundingFormError = useAtomValue(fundingFormErrorAtom)
 
   const fundingFormWarning = useAtomValue(fundingFormWarningAtom)
+
+  const rewardsCosts = useAtomValue(rewardsCostAtoms)
+  const subscriptionCosts = useAtomValue(subscriptionCostAtoms)
+  const tip = useAtomValue(tipAtoms)
+  const totalSats = useAtomValue(totalAmountSatsAtom)
+  const totalUsdCent = useAtomValue(totalAmountUsdCentAtom)
 
   const setErrorstate = useSetAtom(setErrorStateAtom)
 
@@ -66,6 +77,11 @@ export const useFundingFormAtom = () => {
     formState,
     project,
     hasSelectedRewards,
+    rewardsCosts,
+    subscriptionCosts,
+    tip,
+    totalSats,
+    totalUsdCent,
     onChainAmountWarning,
     fiatSwapAmountWarning,
     isFundingInputAmountValid,

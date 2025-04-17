@@ -8,8 +8,10 @@ const VITE_APP_ENV = import.meta.env.VITE_APP_ENV as ExtendProcessEnv
 export const __production__ = VITE_APP_ENV === 'production'
 export const __development__ = VITE_APP_ENV === 'development'
 export const __staging__ = VITE_APP_ENV === 'staging'
+export const __test__ = VITE_APP_ENV === 'test'
 
-if (!(__staging__ || __production__ || __development__)) {
+console.log('VITE_APP_ENV', VITE_APP_ENV)
+if (!(__staging__ || __production__ || __development__ || __test__)) {
   throw new Error('VITE_APP_ENV variable has invalid value')
 }
 
