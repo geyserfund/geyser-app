@@ -5,6 +5,7 @@ import { PiHeartbeatFill } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { countriesAtom } from '@/shared/state/countriesAtom.ts'
+import { darkModeColors } from '@/shared/styles/colors.ts'
 import { LegalEntityType, Maybe, UserTaxProfile } from '@/types/index.ts'
 import { useMobileMode } from '@/utils/index.ts'
 
@@ -22,8 +23,8 @@ export const NonProjectProjectIcon = ({ taxProfile }: { taxProfile?: Maybe<Parti
   return (
     <Popover trigger={isMobile ? 'click' : 'hover'} strategy="fixed">
       <PopoverTrigger>
-        <Box as="span" marginLeft={2}>
-          <Icon as={PiHeartbeatFill} color="orange.11" boxSize={5} />
+        <Box as="span" marginLeft={2} verticalAlign="middle">
+          <Icon as={PiHeartbeatFill} color={darkModeColors.orange[10]} boxSize={6} />
         </Box>
       </PopoverTrigger>
       <PopoverContent>
