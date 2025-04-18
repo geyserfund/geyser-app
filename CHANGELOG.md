@@ -1,3 +1,31 @@
+## [0.20.1](https://github.com/geyserfund/geyser-app/compare/v0.20.0...v0.20.1) (2025-04-18)
+
+
+### Features
+
+* add yarn test:state command (WIP) ([2fc8e3d](https://github.com/geyserfund/geyser-app/commit/2fc8e3d2b4042fb9f8f6daae0891eadd435127d2))
+* geyser tip and new donation input ([6da1204](https://github.com/geyserfund/geyser-app/commit/6da12043840f99d54e5cf0f62809f9f378c12e5d))
+
+
+### Bug Fixes
+
+* add charity projects in the landing page ([97d5b34](https://github.com/geyserfund/geyser-app/commit/97d5b34637e756146f7a6771945049cd69f6c5b2))
+* address PR comments ([cf70bd1](https://github.com/geyserfund/geyser-app/commit/cf70bd1269272ba906e2301f92700c215dc54bc4))
+* build errors ([d819d73](https://github.com/geyserfund/geyser-app/commit/d819d73dde1b4c75566057ddf16036447ea84885))
+* change icon color to orange, and add icons to discovery projects ([6b86bfb](https://github.com/geyserfund/geyser-app/commit/6b86bfb096cd4f51241d76e23694527a6d663de4))
+* click input toggle before adding amount ([d359b65](https://github.com/geyserfund/geyser-app/commit/d359b6543f5cae08f5025ded2f1b30ff004cf287))
+* fix tip amount in onchain ([c9bb3de](https://github.com/geyserfund/geyser-app/commit/c9bb3ded190ff7abc4fb1ebce2e0cdb1a2590f26))
+* funding amounts in tests ([97e7da1](https://github.com/geyserfund/geyser-app/commit/97e7da18a5ab28ffa0a4cdc3a8e4c48a7fc1ba13))
+* funding success screen ([e10bf20](https://github.com/geyserfund/geyser-app/commit/e10bf20a0d7a02dcd0a6ed759e77793c5b7fe645))
+* minor conflict ([17209f5](https://github.com/geyserfund/geyser-app/commit/17209f5157d2dbffca3133a71959752d95948985))
+* onchain ([5d48458](https://github.com/geyserfund/geyser-app/commit/5d484589e130d952c08afcc28b69bf3ead2b503c))
+* remove unused import ([a84523f](https://github.com/geyserfund/geyser-app/commit/a84523ff1470cb3d22b6e8df71541c67ee167cd4))
+* test amounts ([67d010d](https://github.com/geyserfund/geyser-app/commit/67d010d66dc93ef82097ad5237264c13e15113b7))
+* update icon size ([99d415e](https://github.com/geyserfund/geyser-app/commit/99d415e3529efcb95193c09cc9753cc19711e545))
+* update non profit form and include verified in the details ([f7948a0](https://github.com/geyserfund/geyser-app/commit/f7948a0ca13e4f5324da48976e91d0f9cc948dd0))
+* update tip amount with reward cost ([3c97be7](https://github.com/geyserfund/geyser-app/commit/3c97be77c95b776870676d88da578fa87a82d030))
+* yarn test command ([d6a3a6b](https://github.com/geyserfund/geyser-app/commit/d6a3a6b884cfb681bd3b3b1f6664af9b0393236e))
+
 ## [0.20.0](https://github.com/geyserfund/geyser-app/compare/v0.19.18...v0.20.0) (2025-04-17)
 
 
