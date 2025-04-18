@@ -1,6 +1,7 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import React, { useEffect } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -8,7 +9,8 @@ import * as yup from 'yup'
 import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
-import { LegalEntityType, useProjectCountriesGetQuery } from '@/types/index.ts'
+import { countriesAtom } from '@/shared/state/countriesAtom.ts'
+import { LegalEntityType } from '@/types/index.ts'
 
 // Define form data structure - Added legalEntity
 export type TaxProfileFormData = {
@@ -80,11 +82,11 @@ export const TaxProfileForm: React.FC<TaxProfileFormProps> = ({ data, onSubmit, 
     reset(data)
   }, [data])
 
-  const { data: projectCountriesData } = useProjectCountriesGetQuery()
+  const countries = useAtomValue(countriesAtom)
 
-  const countryOptions = projectCountriesData?.projectCountriesGet.map((country) => ({
-    label: country.country.name,
-    value: country.country.code,
+  const countryOptions = countries.map((country) => ({
+    label: country.name,
+    value: country.code,
   }))
 
   const formLegalEntity = watch('legalEntityType')

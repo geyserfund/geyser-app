@@ -1,6 +1,6 @@
 import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import React from 'react'
 import { PiBuildings, PiHeartbeatFill, PiUser } from 'react-icons/pi'
 
@@ -8,12 +8,8 @@ import { useAuthContext } from '@/context/auth.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useModal, UseModalReturn } from '@/shared/hooks/useModal.tsx'
-import {
-  LegalEntityType,
-  useProjectCountriesGetQuery,
-  useUserTaxProfileQuery,
-  useUserTaxProfileUpdateMutation,
-} from '@/types/index.ts'
+import { countriesAtom } from '@/shared/state/countriesAtom.ts'
+import { LegalEntityType, useUserTaxProfileQuery, useUserTaxProfileUpdateMutation } from '@/types/index.ts'
 
 import { userTaxProfileAtom } from '../state/taxProfileAtom.ts'
 import { TaxProfileForm, TaxProfileFormData } from './TaxProfileForm.tsx'
@@ -28,6 +24,7 @@ const options: { value: LegalEntityType; label: string; icon: React.ElementType 
 export const LegalEntitySelection: React.FC<{ disableIndividualPopup?: boolean }> = ({ disableIndividualPopup }) => {
   const taxProfileModal = useModal<TaxProfileFormData>()
 
+  const countries = useAtomValue(countriesAtom)
   const [taxProfile, setTaxProfile] = useAtom(userTaxProfileAtom)
 
   const [updateTaxProfile] = useUserTaxProfileUpdateMutation({
@@ -52,13 +49,8 @@ export const LegalEntitySelection: React.FC<{ disableIndividualPopup?: boolean }
     },
   })
 
-  const { data: projectCountriesData } = useProjectCountriesGetQuery()
-
   const countryLabel =
-    taxProfile && taxProfile.country
-      ? projectCountriesData?.projectCountriesGet.find((country) => country.country.code === taxProfile?.country)
-          ?.country.name
-      : ''
+    taxProfile && taxProfile.country ? countries.find((country) => country.code === taxProfile?.country)?.name : ''
 
   const openModal = (data: TaxProfileFormData) => {
     if (disableIndividualPopup && data.legalEntityType === LegalEntityType.Person) {

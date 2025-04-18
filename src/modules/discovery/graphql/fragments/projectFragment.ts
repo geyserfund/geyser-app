@@ -14,5 +14,16 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     fundersCount
     balance
     balanceUsdCent
+    owners {
+      id
+      user {
+        id
+        taxProfile {
+          legalEntityType
+          verified
+          country
+        }
+      }
+    }
   }
 `
