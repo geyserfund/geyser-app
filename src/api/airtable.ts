@@ -52,6 +52,16 @@ export const fetchFeaturedWalletsData = async () => {
   }).then((response) => response.json())
 }
 
+export const fetchCharityProjectsData = async () => {
+  return fetch(`${AIRTABLE_API}/Charity%20Projects?view=Grid%20view`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
+      'Content-Type': 'application/json',
+    },
+  }).then((response) => response.json())
+}
+
 export const postNudgeCreatorData = async (data: {
   projectName: string
   creatorName: string

@@ -13,6 +13,7 @@ import { NoticeBanner } from './modules/notification/NoticeBanner'
 import { LoadingPage } from './pages/loading'
 import { dimensions, ID } from './shared/constants'
 import { useLayoutAnimation } from './shared/hooks'
+import { useCountriesData } from './shared/hooks/graphqlState/useCountriesData.ts'
 import { useInitBtcRate } from './shared/hooks/platform/useInitBtcRate'
 import { useInitiateSpeedWalletParams } from './shared/hooks/useInitiateSpeedWalletParams.tsx'
 import { useMobileMode } from './utils'
@@ -21,6 +22,7 @@ import { useScrollToTop } from './utils/tools/useScrollToTop'
 export const AppLayout = () => {
   useInitBtcRate()
   useInitiateSpeedWalletParams()
+  useCountriesData()
 
   const { loading } = useAuthContext()
 

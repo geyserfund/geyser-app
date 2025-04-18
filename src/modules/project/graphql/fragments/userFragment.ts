@@ -18,6 +18,7 @@ export const FRAGMENT_PROJECT_PAGE_CREATOR = gql`
       id
       country
       legalEntityType
+      verified
     }
     complianceDetails {
       verifiedDetails {
