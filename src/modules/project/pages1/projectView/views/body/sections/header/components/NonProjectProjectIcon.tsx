@@ -1,33 +1,30 @@
 import { Box, Icon, Popover, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { PiHeartbeatFill } from 'react-icons/pi'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { LegalEntityType, useProjectCountriesGetQuery } from '@/types/index.ts'
+import { countriesAtom } from '@/shared/state/countriesAtom.ts'
+import { darkModeColors } from '@/shared/styles/colors.ts'
+import { LegalEntityType, Maybe, UserTaxProfile } from '@/types/index.ts'
 import { useMobileMode } from '@/utils/index.ts'
 
-export const NonProjectProjectIcon = () => {
+export const NonProjectProjectIcon = ({ taxProfile }: { taxProfile?: Maybe<Partial<UserTaxProfile>> }) => {
   const isMobile = useMobileMode()
-  const { projectOwner } = useProjectAtom()
 
-  const { data } = useProjectCountriesGetQuery()
+  const countries = useAtomValue(countriesAtom)
 
-  console.log(projectOwner?.user?.taxProfile)
-
-  if (projectOwner?.user?.taxProfile?.legalEntityType !== LegalEntityType.NonProfit) {
+  if (taxProfile?.legalEntityType !== LegalEntityType.NonProfit || !taxProfile?.verified) {
     return null
   }
 
-  const country = data?.projectCountriesGet.find(
-    (country) => country.country.code === projectOwner?.user?.taxProfile?.country,
-  )
+  const country = countries.find((country) => country.code === taxProfile?.country)
 
   return (
-    <Popover trigger={isMobile ? 'click' : 'hover'}>
+    <Popover trigger={isMobile ? 'click' : 'hover'} strategy="fixed">
       <PopoverTrigger>
-        <Box as="span" marginLeft={2}>
-          <Icon as={PiHeartbeatFill} color="blue.11" boxSize={5} />
+        <Box as="span" marginLeft={2} verticalAlign="middle">
+          <Icon as={PiHeartbeatFill} color={darkModeColors.orange[10]} boxSize={6} />
         </Box>
       </PopoverTrigger>
       <PopoverContent>
@@ -35,7 +32,7 @@ export const NonProjectProjectIcon = () => {
           <Body size="sm">
             {t(
               'This is a project is run by a non-profit in {{country}}. Your donation is tax-deductible and comes with a receipt for your tax records.',
-              { country: country?.country.name },
+              { country: country?.name },
             )}
           </Body>
         </PopoverBody>

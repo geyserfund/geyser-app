@@ -25,6 +25,9 @@ import { mineBlockOptions, payLightningInvoice, payOnChainOptions } from '../uti
 
 const ONCHAIN_FUNDING_AMOUNT = 60000
 const LIGHTNING_FUNDING_AMOUNT = 1000
+
+const ONCHAIN_FUNDING_AMOUNT_WITH_TIP = ONCHAIN_FUNDING_AMOUNT + ONCHAIN_FUNDING_AMOUNT * 0.021
+
 const FUNDING_COMMENT = 'This was the test comment'
 
 export const testLightningSuccessFlow = () => {
@@ -93,7 +96,7 @@ export const onChainSuccessFlowWithRewards = () => {
 
           cy.task('log', `DEBUG - OnChain Address: ${onChainAddress}`)
 
-          const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT)
+          const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT_WITH_TIP)
           cy.request(payOnchain).then((response) => {
             onChainTransactionProcessingScreenIsVisible()
 
@@ -138,7 +141,7 @@ export const onChainSuccessFlowWithDonation = () => {
           const onChainAddress = clipboardValue.split(':')[1]?.split('?')[0]
 
           cy.log('Extracted Bitcoin address:', onChainAddress)
-          const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT)
+          const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT_WITH_TIP)
           cy.request(payOnchain).then((response) => {
             onChainTransactionProcessingScreenIsVisible()
 
@@ -183,7 +186,7 @@ export const onChainRefundFlow = () => {
           const onChainAddress = clipboardValue.split(':')[1]?.split('?')[0]
 
           cy.log('Extracted Bitcoin address:', onChainAddress)
-          const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT - 1000)
+          const payOnchain = payOnChainOptions(onChainAddress, ONCHAIN_FUNDING_AMOUNT_WITH_TIP - 1000)
           cy.request(payOnchain).then((response) => {
             transactionFailedScreenIsVisible()
 
