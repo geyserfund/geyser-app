@@ -60,5 +60,9 @@ export const CharityProjects = ({ category, subCategory }: ProjectDisplayProps) 
 
   const projects = data?.projectsGet.projects || []
 
+  if (projects.length === 0) {
+    return null
+  }
+
   return <ProjectDisplayBody title={t('Charity projects with Tax benefits')} projects={projects} />
 }
