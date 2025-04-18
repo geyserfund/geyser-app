@@ -17,7 +17,6 @@ export type TaxProfileFormData = {
   country?: string
   state?: string
   taxId?: string
-  incorporationDocument?: string
 }
 
 // Define Yup validation schema
@@ -48,14 +47,6 @@ const taxProfileSchema = yup.object().shape({
     then: (schema) => schema.required(t('Tax ID is required for Non-profits')),
     otherwise: (schema) => schema.optional(),
   }),
-  incorporationDocument: yup
-    .string()
-    .url(t('Please enter a valid URL'))
-    .when('legalEntityType', {
-      is: LegalEntityType.NonProfit,
-      then: (schema) => schema.required(t('Incorporation document link is required for Non-profits')),
-      otherwise: (schema) => schema.optional(),
-    }),
 })
 
 interface TaxProfileFormProps {
@@ -80,7 +71,6 @@ export const TaxProfileForm: React.FC<TaxProfileFormProps> = ({ data, onSubmit, 
       country: data.country ?? undefined,
       state: data.state ?? undefined,
       taxId: data.taxId ?? undefined,
-      incorporationDocument: data.incorporationDocument ?? undefined,
     },
 
     mode: 'onBlur',
@@ -100,7 +90,6 @@ export const TaxProfileForm: React.FC<TaxProfileFormProps> = ({ data, onSubmit, 
   const formLegalEntity = watch('legalEntityType')
 
   const isNonProfit = formLegalEntity === LegalEntityType.NonProfit
-  const isCompany = formLegalEntity === LegalEntityType.Company
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -149,15 +138,11 @@ export const TaxProfileForm: React.FC<TaxProfileFormProps> = ({ data, onSubmit, 
           placeholder={t('Enter Tax ID')}
         />
 
-        {(isCompany || isNonProfit) && (
-          <ControlledTextInput
-            name="incorporationDocument"
-            control={control}
-            label={t('Incorporation Document Link')}
-            description={t('For private documents, share access with hello@geyser.fund or contact us directly')}
-            error={errors.incorporationDocument?.message}
+        {isNonProfit && (
+          <FieldContainer
+            title={t('Incorporation Document')}
+            subtitle={t('Send us a document certifying you are a Charity with 501C3 status to hello@geyser.fund.')}
             required={isNonProfit}
-            placeholder={t('incorporation/registrationdocument.pdf')}
           />
         )}
 

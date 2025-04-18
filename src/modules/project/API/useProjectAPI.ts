@@ -48,7 +48,7 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
     variables: {
       where: { name: projectName, id: projectId },
     },
-    fetchPolicy: launchModalShouldOpen || draftModalShouldOpen ? 'network-only' : 'cache-first',
+    fetchPolicy: launchModalShouldOpen || draftModalShouldOpen ? 'network-only' : 'cache-and-network',
     onError(error) {
       setProjectLoading(false)
       captureException(error, {

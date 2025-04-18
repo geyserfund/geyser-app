@@ -1,4 +1,4 @@
-import { Button, HStack, Icon, Link, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import React from 'react'
@@ -61,7 +61,6 @@ export const LegalEntitySelection: React.FC<{ disableIndividualPopup?: boolean }
       : ''
 
   const openModal = (data: TaxProfileFormData) => {
-    console.log('disableIndividualPopup', disableIndividualPopup, data)
     if (disableIndividualPopup && data.legalEntityType === LegalEntityType.Person) {
       updateTaxProfile({
         variables: {
@@ -110,16 +109,11 @@ export const LegalEntitySelection: React.FC<{ disableIndividualPopup?: boolean }
                     }`}</Body>
                   )}
                   {taxProfile?.taxId && <Body size="sm">{`${t('Tax ID')}: ${taxProfile.taxId}`}</Body>}
-                  {(taxProfile?.legalEntityType === LegalEntityType.Company ||
-                    taxProfile?.legalEntityType === LegalEntityType.NonProfit) &&
-                    taxProfile?.incorporationDocument && (
-                      <Body size="sm">
-                        {t('Incorporation Document')}:{' '}
-                        <Link href={taxProfile.incorporationDocument} isExternal>
-                          {t('View Document')}
-                        </Link>
-                      </Body>
-                    )}
+                  {taxProfile?.legalEntityType === LegalEntityType.NonProfit && (
+                    <Body size="sm" bold color={taxProfile?.verified ? 'primary1.11' : 'warning.11'}>
+                      {taxProfile?.verified ? t('Verified') : t('Pending Verification')}
+                    </Body>
+                  )}
                   <Button
                     size="md"
                     variant="outline"
@@ -128,8 +122,8 @@ export const LegalEntitySelection: React.FC<{ disableIndividualPopup?: boolean }
                         legalEntityType: taxProfile.legalEntityType,
                         fullName: taxProfile.fullName ?? undefined,
                         country: taxProfile.country ?? undefined,
+                        state: taxProfile.state ?? undefined,
                         taxId: taxProfile.taxId ?? undefined,
-                        incorporationDocument: taxProfile.incorporationDocument ?? undefined,
                       })
                     }
                   >
@@ -166,9 +160,11 @@ export const LegalEntitySelection: React.FC<{ disableIndividualPopup?: boolean }
 }
 
 const ModalSubtitleMap = {
-  [LegalEntityType.Person]: t('This information will be displayed in your contribution and sale invoices.'),
-  [LegalEntityType.Company]: t('This information will be displayed in your contribution and sale invoices.'),
-  [LegalEntityType.NonProfit]: t('This information will be used to generate tax-deductible invoices for your donors.'),
+  [LegalEntityType.Person]: t(
+    'This information will be displayed in donations and sale invoices, to enable tax-deductible donations on elegible projects.',
+  ),
+  [LegalEntityType.Company]: t('This information will be displayed in donations and sale invoices.'),
+  [LegalEntityType.NonProfit]: t('This information will be displayed in donations and sale invoices.'),
 }
 
 export const TaxProfileModal = ({ ...props }: UseModalReturn<TaxProfileFormData>) => {

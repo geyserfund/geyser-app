@@ -44,6 +44,6 @@ export const FRAGMENT_USER_TAX_PROFILE = gql`
     country
     state
     taxId
-    incorporationDocument
+    verified
   }
 `

@@ -13,9 +13,10 @@ export const NonProjectProjectIcon = () => {
 
   const { data } = useProjectCountriesGetQuery()
 
-  console.log(projectOwner?.user?.taxProfile)
-
-  if (projectOwner?.user?.taxProfile?.legalEntityType !== LegalEntityType.NonProfit) {
+  if (
+    projectOwner?.user?.taxProfile?.legalEntityType !== LegalEntityType.NonProfit ||
+    !projectOwner?.user?.taxProfile?.verified
+  ) {
     return null
   }
 
