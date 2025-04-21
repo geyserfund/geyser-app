@@ -1146,7 +1146,7 @@
   "Tax ID is required for Non-profits": "Tax ID is required for Non-profits",
   "Country is required for Non-profits": "Country is required for Non-profits",
   "Required for country US and Non-profits": "Required for country US and Non-profits",
-  "Tax-deductible invoice is provided  when contributing to this project.": "Tax-deductible invoice is provided  when contributing to this project.",
+  "A Tax-deductible invoice is provided  when contributing to this project.": "A Tax-deductible invoice is provided  when contributing to this project.",
   "To ensure accurate name in the invoice, update your username or tax profile in profile settings.": "To ensure accurate name in the invoice, update your username or tax profile in profile settings.",
   "Send us a document certifying you are a Charity with 501C3 status to hello@geyser.fund.": "Send us a document certifying you are a Charity with 501C3 status to hello@geyser.fund.",
   "This information will be displayed in donations and sale invoices.": "This information will be displayed in donations and sale invoices.",
@@ -1166,5 +1166,13 @@
   "Your post is now live": "Your post is now live",
   "followers": "followers",
   "Charity projects with Tax benefits": "Charity projects with Tax benefits",
-  "Pending Verification": "Pending Verification"
+  "Pending Verification": "Pending Verification",
+  "Help Geyser on its mission to accelerate grassroots Bitcoin adoption in the world.": "Help Geyser on its mission to accelerate grassroots Bitcoin adoption in the world.",
+  "SATOSHI AMOUNT": "SATOSHI AMOUNT",
+  "Geyser tip": "Geyser tip",
+  "sats in contributions to this project.": "sats in contributions to this project.",
+  "ambassadors have enabled": "ambassadors have enabled",
+  "So far, ": "So far, ",
+  "Copy hero link": "Copy hero link",
+  "This project has not enabled fiat contributions yet": "This project has not enabled fiat contributions yet"
 }

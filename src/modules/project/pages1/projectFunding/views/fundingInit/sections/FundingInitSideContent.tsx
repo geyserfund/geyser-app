@@ -68,7 +68,7 @@ export const FundingInitSummary = () => {
         <VStack w="full">
           {isNonProfit && (
             <Body size="sm" light>
-              {t('Tax-deductible invoice is provided  when contributing to this project.')}{' '}
+              {t('A Tax-deductible invoice is provided  when contributing to this project.')}{' '}
               {t('To ensure accurate name in the invoice, update your username or tax profile in profile settings.')}
             </Body>
           )}
