@@ -143,7 +143,9 @@ export const TaxProfileForm: React.FC<TaxProfileFormProps> = ({ data, onSubmit, 
         {isNonProfit && (
           <FieldContainer
             title={t('Incorporation Document')}
-            subtitle={t('Send us a document certifying you are a Charity with 501C3 status to hello@geyser.fund.')}
+            subtitle={t(
+              'Send us documents at  hello@geyser.fund, certifying you are a registered Charity with tax-deductible donations.',
+            )}
             required={isNonProfit}
           />
         )}
