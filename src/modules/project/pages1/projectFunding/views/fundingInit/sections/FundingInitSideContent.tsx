@@ -1,6 +1,7 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { Button, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { FormEvent } from 'react'
+import { PiHeartbeatFill } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
@@ -8,6 +9,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { darkModeColors } from '@/shared/styles/colors.ts'
 import { LegalEntityType } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
@@ -65,10 +67,11 @@ export const FundingInitSummary = () => {
         {showCompleteVerification && <CompleteVerificationToIncreaseFunding />}
       </FundingSummaryWrapper>
       <FundingCheckoutWrapper>
-        <VStack w="full">
+        <VStack w="full" alignItems="flex-start">
           {isNonProfit && (
             <Body size="sm" light>
-              {t('A Tax-deductible invoice is provided  when contributing to this project.')}{' '}
+              <Icon as={PiHeartbeatFill} color={darkModeColors.orange[10]} boxSize={4} />
+              {t('A tax-deductible invoice is provided  when contributing to this project.')}{' '}
               {t('To ensure accurate name in the invoice, update your username or tax profile in profile settings.')}
             </Body>
           )}

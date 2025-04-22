@@ -31,7 +31,7 @@ export const NonProjectProjectIcon = ({ taxProfile }: { taxProfile?: Maybe<Parti
         <PopoverBody maxWidth="300px">
           <Body size="sm">
             {t(
-              'This is a project is run by a non-profit in {{country}}. Your donation is tax-deductible and comes with a receipt for your tax records.',
+              'This project is run by a non-profit in {{country}}. Your donation is tax-deductible and comes with a receipt for your tax records.',
               { country: country?.name },
             )}
           </Body>
