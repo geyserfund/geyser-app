@@ -1,4 +1,13 @@
-import { Box, Button, ButtonProps, Image, useBreakpointValue, useColorModeValue, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  ButtonProps,
+  Divider,
+  Image,
+  useBreakpointValue,
+  useColorModeValue,
+  VStack,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { Link } from 'react-router-dom'
@@ -13,6 +22,8 @@ import { useMobileMode } from '@/utils'
 
 import { currentPlatformNavItemAtom } from './discoveryNavAtom'
 import { DiscoveryNavItem, DiscoveryNavItemKey, discoveryNavItems } from './discoveryNavData'
+
+const InsertDividerAfterIndex = [2, 4]
 
 export const DiscoverySideNav = () => {
   const isMobile = useMobileMode()
@@ -49,8 +60,8 @@ export const DiscoverySideNav = () => {
         <Link to={getPath('discoveryLanding')}>
           <Image src={isTabletSize ? tabletImage : imageUrl} height="48px" width="auto" />
         </Link>
-        <VStack w="full" padding={0}>
-          {discoveryNavItems.map((item) => {
+        <VStack w="full" padding={0} spacing={3}>
+          {discoveryNavItems.map((item, index) => {
             const activityDot =
               item.key === DiscoveryNavItemKey.MyProjects
                 ? myProjectActivityDot
@@ -59,12 +70,15 @@ export const DiscoverySideNav = () => {
                 : false
 
             return (
-              <DiscoverySideNavButton
-                key={item.label}
-                item={item}
-                currentNavItem={currentNavItem}
-                activityDot={activityDot}
-              />
+              <>
+                <DiscoverySideNavButton
+                  key={item.label}
+                  item={item}
+                  currentNavItem={currentNavItem}
+                  activityDot={activityDot}
+                />
+                {InsertDividerAfterIndex.includes(index) && <Divider />}
+              </>
             )
           })}
         </VStack>

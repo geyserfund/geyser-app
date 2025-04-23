@@ -49,6 +49,13 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     bottomNav: true,
   },
   {
+    label: 'Launchpad',
+    key: DiscoveryNavItemKey.Launchpad,
+    path: 'discoveryLaunchpad',
+    icon: PiRocket,
+    bottomNav: false,
+  },
+  {
     label: 'Activity',
     key: DiscoveryNavItemKey.Activity,
     path: 'discoveryActivity',
@@ -76,13 +83,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     icon: PiTrophy,
     bottomNav: false,
   },
-  {
-    label: 'Launchpad',
-    key: DiscoveryNavItemKey.Launchpad,
-    path: 'discoveryLaunchpad',
-    icon: PiRocket,
-    bottomNav: false,
-  },
+
   {
     label: 'Guardians',
     key: DiscoveryNavItemKey.Guardians,
