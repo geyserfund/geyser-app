@@ -123,6 +123,13 @@ export const platformRoutes: RouteObject[] = [
         ],
       },
       {
+        path: getPath('launchProjectStrategy', PathName.projectId),
+        async lazy() {
+          const ProjectCreateStrategy = await ProjectLaunch().then((m) => m.ProjectCreateStrategy)
+          return { Component: ProjectCreateStrategy }
+        },
+      },
+      {
         path: getPath('launchProjectWallet', PathName.projectId),
         async lazy() {
           const ProjectCreationWalletConnectionPage = await ProjectLaunch().then(
@@ -292,6 +299,13 @@ export const platformRoutes: RouteObject[] = [
           },
           {
             path: getPath('projectDraft', PathName.projectName),
+            async lazy() {
+              const ProjectBody = await Project().then((m) => m.ProjectBody)
+              return { Component: ProjectBody }
+            },
+          },
+          {
+            path: getPath('projectPreLaunch', PathName.projectName),
             async lazy() {
               const ProjectBody = await Project().then((m) => m.ProjectBody)
               return { Component: ProjectBody }

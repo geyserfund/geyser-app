@@ -1,7 +1,7 @@
 import { atom, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
-import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
+import { authUserAtom, followedProjectsAtom } from '@/modules/auth/state/authAtom.ts'
 import { toInt } from '@/utils'
 
 import {
@@ -90,6 +90,14 @@ export const projectOwnerAtom = atom((get) => {
 
   return undefined
 })
+
+export const userFollowsProjectAtom = atom((get) => {
+  const project = get(projectAtom)
+  const followedProjects = get(followedProjectsAtom)
+
+  return followedProjects.length > 0 && followedProjects.some((followedProject) => followedProject.id === project.id)
+})
+
 /** Initial load for project details, set to true after loaded */
 export const initialProjectDetailsLoadAtom = atom(false)
 

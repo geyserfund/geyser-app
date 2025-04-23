@@ -94,6 +94,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     rewardCurrency
     createdAt
     launchedAt
+    preLaunchedAt
     goalsCount
     rewardsCount
     entriesCount

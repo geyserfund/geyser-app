@@ -20,7 +20,7 @@ import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { RewardCurrency, Satoshis, USDCents, useProjectRewardGetQuery } from '@/types'
-import { toInt, useMobileMode } from '@/utils'
+import { isPrelaunch, toInt, useMobileMode } from '@/utils'
 
 import { PostsUpdates } from '../../components/PostsUpdates'
 import { useRewardBuy } from '../../hooks'
@@ -98,6 +98,8 @@ export const RewardView = () => {
     )
   }
 
+  const isBuyDisabled = !isAvailable || isPrelaunch(project?.status)
+
   return (
     <>
       <Head title={reward.name} description={reward.shortDescription || ''} image={reward.images[0]} />
@@ -135,7 +137,7 @@ export const RewardView = () => {
                       colorScheme="primary1"
                       width="160px"
                       onClick={buyReward}
-                      isDisabled={!isAvailable}
+                      isDisabled={isBuyDisabled}
                     >
                       {t('Buy')}
                     </Button>
@@ -246,7 +248,7 @@ export const RewardView = () => {
               colorScheme="primary1"
               width="full"
               onClick={buyReward}
-              isDisabled={!isAvailable}
+              isDisabled={isBuyDisabled}
             >
               {t('Buy')}
             </Button>

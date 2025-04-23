@@ -23,7 +23,12 @@ import { useMobileMode } from '@/utils'
 
 import { TopNavContainer } from '../../navigation/components/topNav/TopNavContainer'
 import { useProjectAtom } from '../hooks/useProjectAtom'
-import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from './projectNavigationAtom'
+import { ProjectPreLaunchNav } from './components/ProjectPreLaunchNav.tsx'
+import {
+  showProjectNavBarForDesktopAtom,
+  showProjectNavBarForMobileAtom,
+  showProjectNavBarForPreLaunchAtom,
+} from './projectNavigationAtom'
 
 export const ProjectNavigation = () => {
   const location = useLocation()
@@ -36,6 +41,8 @@ export const ProjectNavigation = () => {
   const showProjectNavBarForMobile = useAtomValue(showProjectNavBarForMobileAtom)
 
   const showProjectNavBarForDesktop = useAtomValue(showProjectNavBarForDesktopAtom)
+
+  const showProjectNavBarForPreLaunch = useAtomValue(showProjectNavBarForPreLaunchAtom)
 
   const ProjectNavigationButtons = useMemo(() => {
     const buttonList = [
@@ -103,6 +110,14 @@ export const ProjectNavigation = () => {
     })
     return activeIndex
   }, [location.pathname, ProjectNavigationButtons])
+
+  if (showProjectNavBarForPreLaunch) {
+    return (
+      <TopNavContainer zIndex={9}>
+        <ProjectPreLaunchNav />
+      </TopNavContainer>
+    )
+  }
 
   if ((isMobile && !showProjectNavBarForMobile) || (!isMobile && !showProjectNavBarForDesktop)) {
     return null

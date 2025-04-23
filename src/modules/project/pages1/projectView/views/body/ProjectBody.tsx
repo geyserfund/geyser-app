@@ -22,6 +22,8 @@ import {
   Story,
 } from './sections'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
+import { FollowBoard } from './sections/followboard/FollowBoard.tsx'
+import { FollowersSummary } from './sections/FollowersSummary.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 
 export const ProjectBody = () => {
@@ -30,10 +32,14 @@ export const ProjectBody = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
+  const isPrelaunch = project?.status === ProjectStatus.PreLaunch
+
   useEffect(() => {
     if (loading) return
     if (project?.status === ProjectStatus.Draft && !location.pathname.includes('/draft')) {
       navigate(location.pathname + '/draft')
+    } else if (project?.status === ProjectStatus.PreLaunch && !location.pathname.includes('/prelaunch')) {
+      navigate(location.pathname + '/prelaunch')
     } else if (project?.status === ProjectStatus.Active && location.pathname.includes('/draft')) {
       navigate(location.pathname.replace('/draft', ''))
     }
@@ -67,8 +73,8 @@ export const ProjectBody = () => {
         overflow="auto"
         css={{ '&::-webkit-scrollbar': { display: 'none' }, msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
-        <ContributionSummary />
-        <LeaderboardSummary />
+        {isPrelaunch ? <FollowersSummary /> : <ContributionSummary />}
+        {isPrelaunch ? <FollowBoard /> : <LeaderboardSummary />}
       </RightSideStickyLayout>
 
       {/* <Story />

@@ -19,3 +19,7 @@ export const isInReview = (status?: Maybe<ProjectStatus>) => {
 export const isClosed = (status?: Maybe<ProjectStatus>) => {
   return status === ProjectStatus.Closed
 }
+
+export const isPrelaunch = (status?: Maybe<ProjectStatus>) => {
+  return status === ProjectStatus.PreLaunch
+}

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
+import { ProjectStatus } from '@/types/index.ts'
 
 import { getPath } from '../../../../../../../shared/constants'
 import { useProjectAtom, useWalletAtom } from '../../../../../hooks/useProjectAtom'
@@ -20,6 +21,10 @@ export const FinalizeProjectNotice = () => {
   const handleConnectNodeClick = () => {
     const nodeConfigurationPath = getPath('launchProjectWallet', project.id)
     navigate(nodeConfigurationPath)
+  }
+
+  if (project.status !== ProjectStatus.Draft) {
+    return null
   }
 
   if (wallet?.id || loading) return null

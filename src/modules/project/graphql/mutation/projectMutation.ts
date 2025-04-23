@@ -39,6 +39,16 @@ export const MUTATION_UPDATE_PROJECT_STATUS = gql`
   }
 `
 
+export const MUTATION_PROJECT_PRE_LAUNCH = gql`
+  mutation ProjectPreLaunch($input: ProjectPreLaunchMutationInput!) {
+    projectPreLaunch(input: $input) {
+      id
+      name
+      status
+    }
+  }
+`
+
 export const MUTATION_PROJECT_PUBLISH = gql`
   mutation ProjectPublish($input: ProjectPublishMutationInput!) {
     projectPublish(input: $input) {

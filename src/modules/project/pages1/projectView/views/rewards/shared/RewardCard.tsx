@@ -13,6 +13,7 @@ import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { ProjectRewardFragment, ProjectStatus, RewardCurrency } from '@/types'
+import { isDraft, isPrelaunch } from '@/utils/index.ts'
 
 import { ProjectRewardShippingEstimate } from '../components/ProjectRewardShippingEstimate'
 import { RewardEditMenu } from '../components/RewardEditMenu'
@@ -44,6 +45,8 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
   }
 
   const linkProps = noLink ? {} : { as: Link, to: getPath('projectRewardView', project?.name, reward.uuid) }
+
+  const projectIsPrelaunch = isPrelaunch(project?.status)
 
   const isHidden = hidden || reward.isHidden
 
@@ -164,7 +167,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
                 colorScheme="primary1"
                 minWidth="80px"
                 onClick={onBuyClick}
-                isDisabled={!isRewardAvailable || project?.status === ProjectStatus.Inactive}
+                isDisabled={!isRewardAvailable || project?.status === ProjectStatus.Inactive || projectIsPrelaunch}
               >
                 {t('Buy')}
               </Button>

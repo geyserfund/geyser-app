@@ -21,7 +21,7 @@ const emailSchema = yup.object().shape({
     }),
 })
 
-export const useEmailPrompt = () => {
+export const useEmailPrompt = ({ afterEmailUpdate }: { afterEmailUpdate?: () => void } = {}) => {
   const { user, setUser } = useAuthContext()
   const setDontAskAgain = useSetAtom(dontAskAgainAtom)
   const shouldPrompt = useAtomValue(shouldPromptAtom)
@@ -30,6 +30,7 @@ export const useEmailPrompt = () => {
       if (data?.userEmailUpdate) {
         setUser({ ...user, email: data.userEmailUpdate.email })
         setDontAskAgain(true)
+        afterEmailUpdate?.()
       }
     },
   })
