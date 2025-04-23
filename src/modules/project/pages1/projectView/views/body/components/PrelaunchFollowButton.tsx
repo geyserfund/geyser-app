@@ -8,28 +8,34 @@ import { AuthModal } from '@/components/molecules/AuthModal.tsx'
 import { useAuthContext } from '@/context/auth.tsx'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal.ts'
 import { useEmailPrompt } from '@/modules/auth/hooks/useEmailPrompt.ts'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { EmailPromptModalUrl } from '@/shared/constants/index.ts'
 import { useFollowProject } from '@/shared/hooks/graphqlState/useFollowProject.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import { useUserNotificationsSettingsQuery, useUserNotificationsSettingsUpdateMutation } from '@/types/index.ts'
+import {
+  Project,
+  useUserNotificationsSettingsQuery,
+  useUserNotificationsSettingsUpdateMutation,
+} from '@/types/index.ts'
 import { NotificationSettings } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 export const FOLLOWERS_NEEDED = 21
 
-export const PrelaunchFollowButton = (props: ButtonProps) => {
+type PrelaunchFollowButtonProps = ButtonProps & {
+  project: Pick<Project, 'id' | 'name' | 'title' | 'followersCount'>
+  onFollowCompleted?: () => void
+}
+
+export const PrelaunchFollowButton = ({ project, onFollowCompleted, ...props }: PrelaunchFollowButtonProps) => {
   const { user } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
 
   const loginModal = useModal()
   const emailModal = useModal()
   const followSuccessModal = useModal()
-
-  const { project } = useProjectAtom()
 
   const projectUrl = `${window.location.origin}/project/${project.name}`
 
@@ -40,10 +46,14 @@ export const PrelaunchFollowButton = (props: ButtonProps) => {
   const { handleFollow, isFollowed } = useFollowProject(project, {
     onFollowCompleted() {
       followSuccessModal.onOpen()
+      onFollowCompleted?.()
     },
   })
 
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+
     if (!user || !user.id) {
       loginOnOpen()
       return
@@ -57,6 +67,12 @@ export const PrelaunchFollowButton = (props: ButtonProps) => {
     handleFollow()
   }
 
+  const handleCopy = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+    onCopy()
+  }
+
   return (
     <>
       {!isFollowed ? (
@@ -64,7 +80,13 @@ export const PrelaunchFollowButton = (props: ButtonProps) => {
           {t('Follow')}
         </Button>
       ) : (
-        <Button variant="outline" colorScheme={hasCopied ? 'primary1' : 'neutral1'} w="full" size="lg" onClick={onCopy}>
+        <Button
+          variant="outline"
+          colorScheme={hasCopied ? 'primary1' : 'neutral1'}
+          w="full"
+          size="lg"
+          onClick={handleCopy}
+        >
           {hasCopied ? t('Link copied!') : t('Share link')}
         </Button>
       )}
@@ -76,13 +98,20 @@ export const PrelaunchFollowButton = (props: ButtonProps) => {
         }}
       />
       <EmailInputModal isOpen={emailModal.isOpen} onClose={emailModal.onClose} onCloseAction={handleFollow} />
-      <FollowSuccessModal isOpen={followSuccessModal.isOpen} onClose={followSuccessModal.onClose} />
+      <FollowSuccessModal isOpen={followSuccessModal.isOpen} onClose={followSuccessModal.onClose} project={project} />
     </>
   )
 }
 
-const FollowSuccessModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
-  const { project } = useProjectAtom()
+const FollowSuccessModal = ({
+  isOpen,
+  onClose,
+  project,
+}: {
+  isOpen: boolean
+  onClose: () => void
+  project: Pick<Project, 'name' | 'followersCount'>
+}) => {
   const { followersCount } = project
   const followersNeeded = FOLLOWERS_NEEDED - (followersCount ?? 0)
 

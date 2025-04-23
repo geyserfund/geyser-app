@@ -51,7 +51,7 @@ export const FollowersSummary = (props: StackProps) => {
       </HStack>
 
       <VStack w="full" spacing={2}>
-        <PrelaunchFollowButton w="full" />
+        <PrelaunchFollowButton w="full" project={project} />
       </VStack>
     </CardLayout>
   )

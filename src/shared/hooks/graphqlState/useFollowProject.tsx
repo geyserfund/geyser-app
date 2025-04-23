@@ -9,7 +9,7 @@ import { toInt } from '../../../utils'
 
 export const useFollowProject = (
   project: Pick<Project, 'id' | 'name' | 'title'>,
-  options?: { onFollowCompleted?: () => void },
+  options?: { onFollowCompleted?: () => void; onUnFollowCompleted?: () => void },
 ) => {
   const followedProjects = useFollowedProjectsValue()
 
@@ -25,7 +25,10 @@ export const useFollowProject = (
     },
     onCompleted() {
       setFollowedProjects((prev) => [...prev, project])
-      partialUpdateProject({ followersCount: projectState?.followersCount ? projectState.followersCount + 1 : 1 })
+      if (toInt(project.id) === toInt(projectState?.id)) {
+        partialUpdateProject({ followersCount: projectState?.followersCount ? projectState.followersCount + 1 : 1 })
+      }
+
       options?.onFollowCompleted?.()
     },
   })
@@ -37,7 +40,11 @@ export const useFollowProject = (
       },
     },
     onCompleted() {
-      partialUpdateProject({ followersCount: projectState?.followersCount ? projectState.followersCount - 1 : 0 })
+      if (toInt(project.id) === toInt(projectState?.id)) {
+        partialUpdateProject({ followersCount: projectState?.followersCount ? projectState.followersCount - 1 : 0 })
+      }
+
+      options?.onUnFollowCompleted?.()
       setFollowedProjects((prev) => prev.filter((p) => toInt(p.id) !== toInt(project.id)))
     },
   })

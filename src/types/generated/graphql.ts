@@ -6798,6 +6798,8 @@ export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 
 
 export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
+export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, followersCount?: number | null, preLaunchedAt?: any | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
+
 export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
 export type RewardForProductsPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null } };
@@ -6852,6 +6854,16 @@ export type ProjectsForLandingPageQueryVariables = Exact<{
 export type ProjectsForLandingPageQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
       { __typename?: 'Project' }
       & ProjectForLandingPageFragment
+    )> } };
+
+export type ProjectsForLaunchpadPageQueryVariables = Exact<{
+  input?: InputMaybe<ProjectsGetQueryInput>;
+}>;
+
+
+export type ProjectsForLaunchpadPageQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
+      { __typename?: 'Project' }
+      & ProjectForLaunchpadPageFragment
     )> } };
 
 export type ProjectRewardsTrendingWeeklyGetQueryVariables = Exact<{ [key: string]: never; }>;
@@ -8548,9 +8560,31 @@ export const ProjectForLandingPageFragmentDoc = gql`
   shortDescription
   title
   status
-  fundersCount
   balance
   balanceUsdCent
+  owners {
+    id
+    user {
+      id
+      taxProfile {
+        legalEntityType
+        verified
+        country
+      }
+    }
+  }
+}
+    `;
+export const ProjectForLaunchpadPageFragmentDoc = gql`
+    fragment ProjectForLaunchpadPage on Project {
+  id
+  name
+  thumbnailImage
+  shortDescription
+  title
+  status
+  followersCount
+  preLaunchedAt
   owners {
     id
     user {
@@ -11031,6 +11065,48 @@ export type ProjectsForLandingPageQueryHookResult = ReturnType<typeof useProject
 export type ProjectsForLandingPageLazyQueryHookResult = ReturnType<typeof useProjectsForLandingPageLazyQuery>;
 export type ProjectsForLandingPageSuspenseQueryHookResult = ReturnType<typeof useProjectsForLandingPageSuspenseQuery>;
 export type ProjectsForLandingPageQueryResult = Apollo.QueryResult<ProjectsForLandingPageQuery, ProjectsForLandingPageQueryVariables>;
+export const ProjectsForLaunchpadPageDocument = gql`
+    query ProjectsForLaunchpadPage($input: ProjectsGetQueryInput) {
+  projectsGet(input: $input) {
+    projects {
+      ...ProjectForLaunchpadPage
+    }
+  }
+}
+    ${ProjectForLaunchpadPageFragmentDoc}`;
+
+/**
+ * __useProjectsForLaunchpadPageQuery__
+ *
+ * To run a query within a React component, call `useProjectsForLaunchpadPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectsForLaunchpadPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectsForLaunchpadPageQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectsForLaunchpadPageQuery(baseOptions?: Apollo.QueryHookOptions<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>(ProjectsForLaunchpadPageDocument, options);
+      }
+export function useProjectsForLaunchpadPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>(ProjectsForLaunchpadPageDocument, options);
+        }
+export function useProjectsForLaunchpadPageSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>(ProjectsForLaunchpadPageDocument, options);
+        }
+export type ProjectsForLaunchpadPageQueryHookResult = ReturnType<typeof useProjectsForLaunchpadPageQuery>;
+export type ProjectsForLaunchpadPageLazyQueryHookResult = ReturnType<typeof useProjectsForLaunchpadPageLazyQuery>;
+export type ProjectsForLaunchpadPageSuspenseQueryHookResult = ReturnType<typeof useProjectsForLaunchpadPageSuspenseQuery>;
+export type ProjectsForLaunchpadPageQueryResult = Apollo.QueryResult<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>;
 export const ProjectRewardsTrendingWeeklyGetDocument = gql`
     query ProjectRewardsTrendingWeeklyGet {
   projectRewardsTrendingWeeklyGet {

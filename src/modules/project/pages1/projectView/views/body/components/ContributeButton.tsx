@@ -73,7 +73,7 @@ export const ContributeButton = (props: ButtonProps) => {
           {t('Contribute')}
         </Button>
       ) : (
-        <PrelaunchFollowButton w="full" />
+        <PrelaunchFollowButton w="full" project={project} />
       )}
     </>
   )

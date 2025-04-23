@@ -11,9 +11,32 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     shortDescription
     title
     status
-    fundersCount
     balance
     balanceUsdCent
+    owners {
+      id
+      user {
+        id
+        taxProfile {
+          legalEntityType
+          verified
+          country
+        }
+      }
+    }
+  }
+`
+
+export const FRAGMENT_PROJECT_FOR_LAUNCHPAD_PAGE = gql`
+  fragment ProjectForLaunchpadPage on Project {
+    id
+    name
+    thumbnailImage
+    shortDescription
+    title
+    status
+    followersCount
+    preLaunchedAt
     owners {
       id
       user {
