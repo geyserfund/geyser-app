@@ -102,7 +102,7 @@ export const ProjectCreateStrategy = () => {
             onClick={() => setStrategy(ProjectCreationStrategy.GEYSER_LAUNCHPAD)}
             icon={PiRocket}
             title={t('Geyser Launchpad')}
-            subtitle={t('Test your idea and launch for free by gaining 21 followers')}
+            subtitle={t('Test your idea and launch for free by gaining 21 followers within 30 days')}
             why={t(
               "Launchpad is your sandbox to explore your idea publicly before going live. Get early feedback, rally support, and validate your project's potential. It's your chance to build early momentum and launch with a boom. 🚀",
             )}

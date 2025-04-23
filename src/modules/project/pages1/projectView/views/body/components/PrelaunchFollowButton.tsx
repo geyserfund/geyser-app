@@ -86,6 +86,7 @@ export const PrelaunchFollowButton = ({ project, onFollowCompleted, ...props }: 
           w="full"
           size="lg"
           onClick={handleCopy}
+          {...props}
         >
           {hasCopied ? t('Link copied!') : t('Share link')}
         </Button>

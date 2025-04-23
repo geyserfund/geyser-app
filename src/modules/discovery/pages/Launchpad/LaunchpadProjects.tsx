@@ -31,6 +31,10 @@ export const LaunchpadProjects = () => {
         return (a.preLaunchedAt ?? 0) - (b.preLaunchedAt ?? 0)
       }
 
+      if (sortBy === SortBy.Category) {
+        return (a.category ?? '').localeCompare(b.category ?? '')
+      }
+
       return (b.followersCount ?? 0) - (a.followersCount ?? 0)
     })
   }, [data, sortBy])

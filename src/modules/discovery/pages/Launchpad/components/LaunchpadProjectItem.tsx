@@ -1,5 +1,7 @@
-import { Box, HStack, Skeleton, VStack } from '@chakra-ui/react'
+import { Badge, Box, HStack, Skeleton, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { DateTime, Duration } from 'luxon'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { PrelaunchFollowButton } from '@/modules/project/pages1/projectView/views/body/components/PrelaunchFollowButton.tsx'
@@ -9,6 +11,7 @@ import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLay
 import { SkeletonLayout } from '@/shared/components/layouts/index.ts'
 import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPathWithGeyserHero } from '@/shared/constants/index.ts'
+import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 import { ProjectForLaunchpadPageFragment } from '@/types/index.ts'
 
 const FOLLOWERS_NEEDED = 21
@@ -20,6 +23,53 @@ type LaunchpadProjectItemProps = {
 export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemProps) => {
   const currentFollowers = project.followersCount ?? 0
   const followersNeeded = Math.max(0, FOLLOWERS_NEEDED - currentFollowers)
+
+  // Time remaining calculation
+  const [timeLeft, setTimeLeft] = useState<Duration | null>(null)
+
+  useEffect(() => {
+    if (!project?.preLaunchedAt) {
+      setTimeLeft(null)
+      return
+    }
+
+    const launchTime = DateTime.fromMillis(project.preLaunchedAt)
+    const endTime = launchTime.plus({ days: 30 })
+
+    const updateCountdown = () => {
+      const now = DateTime.now()
+      const remaining = endTime.diff(now, ['days', 'hours', 'minutes'])
+
+      if (remaining.valueOf() <= 0) {
+        setTimeLeft(Duration.fromMillis(0))
+        clearInterval(intervalId)
+      } else {
+        setTimeLeft(remaining)
+      }
+    }
+
+    updateCountdown()
+    const intervalId = setInterval(updateCountdown, 60000)
+
+    return () => clearInterval(intervalId)
+  }, [project?.preLaunchedAt])
+
+  // Format time value helper
+  const formatTimeValue = (value: number): string => {
+    return String(Math.max(0, Math.floor(value))).padStart(2, '0')
+  }
+
+  // Format time string for display
+  let timeDisplay = ''
+  if (timeLeft === null) {
+    timeDisplay = ''
+  } else if (timeLeft.days > 0) {
+    timeDisplay = `${formatTimeValue(timeLeft.days)}d ${t('left')}`
+  } else if (timeLeft.hours > 0) {
+    timeDisplay = `${formatTimeValue(timeLeft.hours)}hr ${t('left')}`
+  } else {
+    timeDisplay = `${formatTimeValue(timeLeft.minutes)}min ${t('left')}`
+  }
 
   return (
     <CardLayout
@@ -37,7 +87,7 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
       <Box
         minWidth={{ base: '102px', lg: 'auto' }}
         width="auto"
-        height={{ base: '139px', lg: 'auto' }}
+        height={{ base: '190px', lg: 'auto' }}
         position="relative"
       >
         <ImageWithReload
@@ -59,24 +109,33 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
         padding={4}
         alignItems="start"
         overflow="hidden"
-        spacing={{ base: 2, lg: 4 }}
+        spacing={{ base: 1, lg: 2 }}
       >
         <VStack w="full" spacing={0}>
           <H3 size="lg" medium isTruncated width="100%">
             {project.title}
           </H3>
+
           <Body size="sm" dark noOfLines={2} isTruncated width="100%" wordBreak={'break-all'} whiteSpace={'normal'}>
             {project.shortDescription}
           </Body>
-          <HStack w="full" justify="space-between">
-            <Body size="sm" light>
-              {currentFollowers} {t('followers')}
-            </Body>
-            <Body size="sm" light>
-              {followersNeeded > 0 ? t('{{count}} remaining', { count: followersNeeded }) : t('Goal reached!')}
-            </Body>
-          </HStack>
         </VStack>
+        <HStack>
+          <Badge variant="soft" colorScheme="neutral1">
+            {ProjectCategoryLabel[project.category ?? '']}
+          </Badge>
+          <Badge variant="soft" colorScheme="neutral1">
+            {ProjectSubCategoryLabel[project.subCategory ?? '']}
+          </Badge>
+        </HStack>
+        <HStack w="full" justify="space-between">
+          <Body size="sm" light>
+            {followersNeeded > 0 ? `${currentFollowers} ${t('followers')}` : t('Goal reached!')}
+          </Body>
+          <Body size="sm" light>
+            {timeDisplay}
+          </Body>
+        </HStack>
         <PrelaunchFollowButton project={project} width="full" size={{ base: 'md', lg: 'lg' }} />
       </VStack>
     </CardLayout>

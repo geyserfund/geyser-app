@@ -10,11 +10,13 @@ import { StandardOption } from '../../hallOfFame/types.ts'
 export enum SortBy {
   PreLaunchDate = 'preLaunchedAt',
   Followers = 'followersCount',
+  Category = 'category',
 }
 
 export const sortOptions: StandardOption<SortBy>[] = [
-  { value: SortBy.PreLaunchDate, label: t('Pre-launch') },
+  { value: SortBy.PreLaunchDate, label: t('Created At') },
   { value: SortBy.Followers, label: t('Followers') },
+  { value: SortBy.Category, label: t('Category') },
 ]
 
 type TitleWithSortProps = {

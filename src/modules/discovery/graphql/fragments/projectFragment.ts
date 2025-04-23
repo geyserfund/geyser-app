@@ -37,6 +37,8 @@ export const FRAGMENT_PROJECT_FOR_LAUNCHPAD_PAGE = gql`
     status
     followersCount
     preLaunchedAt
+    category
+    subCategory
     owners {
       id
       user {

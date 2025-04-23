@@ -6798,7 +6798,7 @@ export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 
 
 export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
-export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, followersCount?: number | null, preLaunchedAt?: any | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
+export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, followersCount?: number | null, preLaunchedAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
 export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
@@ -8585,6 +8585,8 @@ export const ProjectForLaunchpadPageFragmentDoc = gql`
   status
   followersCount
   preLaunchedAt
+  category
+  subCategory
   owners {
     id
     user {
