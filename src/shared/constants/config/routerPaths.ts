@@ -92,6 +92,7 @@ export enum PathName {
   fundingDetails = 'details',
   fundingSubscription = 'subscription',
   fundingPayment = 'payment',
+  fundingLaunchPayment = 'launch',
   fundingStart = 'start',
   fundingPaymentFailed = 'failed',
   fundingPaymentLightning = 'lightning',
@@ -221,6 +222,9 @@ const pathsMap = {
   projectFunding: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectFunding}`,
   fundingDetails: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingDetails}`,
+
+  fundingLaunchPayment: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingLaunchPayment}`,
 
   fundingStart: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}`,

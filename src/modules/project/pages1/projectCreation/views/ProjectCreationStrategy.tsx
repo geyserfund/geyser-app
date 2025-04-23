@@ -26,7 +26,7 @@ enum ProjectCreationStrategy {
   SAVE_AS_DRAFT = 'save_as_draft',
 }
 
-const PROJECT_LAUNCH_PAYMENT_PROJECT_NAME = 'launch'
+export const PROJECT_LAUNCH_PAYMENT_PROJECT_NAME = 'launch'
 
 export const ProjectCreateStrategy = () => {
   const { t } = useTranslation()
@@ -66,7 +66,11 @@ export const ProjectCreateStrategy = () => {
       return
     }
 
-    navigate(getPath('fundingStart', PROJECT_LAUNCH_PAYMENT_PROJECT_NAME))
+    navigate(getPath('fundingLaunchPayment', PROJECT_LAUNCH_PAYMENT_PROJECT_NAME), {
+      state: {
+        launchProjectId: project?.id,
+      },
+    })
   }
 
   const handleBack = () => {
@@ -124,6 +128,7 @@ export const ProjectCreateStrategy = () => {
           w="full"
           hover
           spacing={0}
+          padding={4}
           borderColor={isSaveAsDraft ? 'primary1.9' : 'neutral1.6'}
           onClick={() => setStrategy(ProjectCreationStrategy.SAVE_AS_DRAFT)}
           _hover={{
@@ -175,6 +180,7 @@ export const ProjectCreateStrategyCard = ({
         borderColor: isSelected ? 'primary1.9' : 'neutral1.9',
         cursor: 'pointer',
       }}
+      padding={4}
     >
       <HStack w="full" justifyContent="center">
         <Icon as={icon} boxSize={32} />

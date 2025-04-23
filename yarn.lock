@@ -14112,6 +14112,7 @@ __metadata:
     i18next-browser-languagedetector: "npm:^7.0.2"
     i18next-http-backend: "npm:^2.6.2"
     jotai: "npm:^2.8.3"
+    jotai-scope: "npm:^0.7.3"
     jsdom: "npm:^21.1.0"
     knip: "npm:^5.41.1"
     liquidjs-lib: "npm:^6.0.2-liquid.35"
@@ -15729,6 +15730,15 @@ __metadata:
   version: 5.9.6
   resolution: "jose@npm:5.9.6"
   checksum: 10c0/d6bcd8c7d655b5cda8e182952a76f0c093347f5476d74795405bb91563f7ab676f61540310dd4b1531c60d685335ceb600571a409551d2cbd2ab3e9f9fbf1e4d
+  languageName: node
+  linkType: hard
+
+"jotai-scope@npm:^0.7.3":
+  version: 0.7.3
+  resolution: "jotai-scope@npm:0.7.3"
+  peerDependencies:
+    jotai: ">=2.9.3"
+  checksum: 10c0/cf60211d495d918c62d5b07e24f599f2b9c205c3dd4623aeec47d9390fe3a2b8135ab3679f6511e8ce50181cb9fc9dc4626bcd3a1c09645b37776ff8cbfd94a8
   languageName: node
   linkType: hard
 
