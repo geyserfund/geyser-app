@@ -7361,7 +7361,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, launchedAt?: any | null, preLaunchedAt?: any | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, keys: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, launchedAt?: any | null, preLaunchedAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, keys: (
     { __typename?: 'ProjectKeys' }
     & ProjectKeysFragment
   ), owners: Array<{ __typename?: 'Owner', id: any, user: (
@@ -9629,10 +9629,12 @@ export const ProjectPageBodyFragmentDoc = gql`
   createdAt
   launchedAt
   preLaunchedAt
+  paidLaunch
   goalsCount
   rewardsCount
   entriesCount
   promotionsEnabled
+  followersCount
   keys {
     ...ProjectKeys
   }

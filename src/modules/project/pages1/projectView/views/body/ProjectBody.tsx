@@ -24,6 +24,7 @@ import {
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
 import { FollowBoard } from './sections/followboard/FollowBoard.tsx'
 import { FollowersSummary } from './sections/FollowersSummary.tsx'
+import { PreLaunchProjectNotice } from './sections/PreLaunchProjectNotice.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 
 export const ProjectBody = () => {
@@ -58,6 +59,7 @@ export const ProjectBody = () => {
         paddingBottom={{ base: 24, lg: 10 }}
       >
         <FinalizeProjectNotice />
+        <PreLaunchProjectNotice />
         <CreatorVerificationNotice />
 
         <Header />

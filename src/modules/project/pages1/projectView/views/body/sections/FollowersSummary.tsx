@@ -14,6 +14,7 @@ export const FollowersSummary = (props: StackProps) => {
   const { project } = useProjectAtom()
   const { followersCount } = project
   const followersNeeded = FOLLOWERS_NEEDED - (followersCount ?? 0)
+  const enoughFollowers = followersNeeded <= 0
   const userFollowsProject = useAtomValue(userFollowsProjectAtom)
 
   return (
@@ -38,10 +39,16 @@ export const FollowersSummary = (props: StackProps) => {
           </Body>
 
           <Body size="2xl" dark bold display="inline">
-            {`${followersNeeded}`}{' '}
-            <Body as="span" size="md" light>
-              {t(`more to launch`)}
-            </Body>
+            {enoughFollowers ? (
+              t(`Ready to launch!`)
+            ) : (
+              <>
+                {`${followersNeeded}`}{' '}
+                <Body as="span" size="md" light>
+                  {t(`more to launch`)}
+                </Body>
+              </>
+            )}
           </Body>
         </VStack>
       </HStack>

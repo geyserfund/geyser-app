@@ -14,7 +14,7 @@ import { useAuthContext } from '../../../../../context'
 import { getPath } from '../../../../../shared/constants'
 import { useModal } from '../../../../../shared/hooks'
 import { CreateWalletInput } from '../../../../../types'
-import { useNotification } from '../../../../../utils'
+import { isDraft, useNotification } from '../../../../../utils'
 import { ProjectLaunchConfirmModal } from '../../../components/ProjectLaunchConfirmModal'
 import { ProjectCreateCompleted } from '../components/ProjectCreateCompleted'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
@@ -114,9 +114,11 @@ export const ProjectCreateCompletionPage = ({
                 {t('Launch Project')}
               </Button>
             )}
-            <Button variant="outline" colorScheme="neutral1" w="full" onClick={onSaveDraftClick}>
-              {t('Save As Draft')}
-            </Button>
+            {isDraft(project?.status) && (
+              <Button variant="outline" colorScheme="neutral1" w="full" onClick={onSaveDraftClick}>
+                {t('Save As Draft')}
+              </Button>
+            )}
           </VStack>
         </ProjectCreateCompleted>
       </ProjectCreateLayout>
