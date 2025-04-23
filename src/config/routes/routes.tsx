@@ -744,7 +744,13 @@ export const platformRoutes: RouteObject[] = [
           return { Component: HallOfFamePage }
         },
       },
-
+      {
+        path: getPath('discoveryLaunchpad'),
+        async lazy() {
+          const LaunchpadPage = await Discovery().then((m) => m.Launchpad)
+          return { Component: LaunchpadPage }
+        },
+      },
       {
         path: getPath('hallOfFameProjects'),
         async lazy() {

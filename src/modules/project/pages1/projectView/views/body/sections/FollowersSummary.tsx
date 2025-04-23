@@ -1,9 +1,7 @@
 import { CircularProgress, HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { userFollowsProjectAtom } from '@/modules/project/state/projectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -15,7 +13,6 @@ export const FollowersSummary = (props: StackProps) => {
   const { followersCount } = project
   const followersNeeded = FOLLOWERS_NEEDED - (followersCount ?? 0)
   const enoughFollowers = followersNeeded <= 0
-  const userFollowsProject = useAtomValue(userFollowsProjectAtom)
 
   return (
     <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
@@ -52,11 +49,6 @@ export const FollowersSummary = (props: StackProps) => {
           </Body>
         </VStack>
       </HStack>
-
-      <Body size="xs">
-        {t('The project needs to reach 21 followers to begin receiving contributions.')}{' '}
-        {userFollowsProject ? t('Share on social media to help launch it!') : t('Show your interest by following it!')}
-      </Body>
 
       <VStack w="full" spacing={2}>
         <PrelaunchFollowButton w="full" />

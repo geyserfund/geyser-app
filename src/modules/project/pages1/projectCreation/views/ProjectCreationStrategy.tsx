@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons/lib/iconBase'
-import { PiRocketLaunch, PiShootingStar } from 'react-icons/pi'
+import { PiRocket, PiShootingStar } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
 import TitleWithProgressBar from '@/components/molecules/TitleWithProgressBar.tsx'
@@ -36,7 +36,7 @@ export const ProjectCreateStrategy = () => {
 
   const { project } = useProjectAtom()
 
-  const [strategy, setStrategy] = useState<ProjectCreationStrategy>(ProjectCreationStrategy.SAVE_AS_DRAFT)
+  const [strategy, setStrategy] = useState<ProjectCreationStrategy>(ProjectCreationStrategy.GEYSER_LAUNCHPAD)
 
   const [projectPreLaunch, { loading: isProjectPreLaunchLoading }] = useProjectPreLaunchMutation({
     variables: {
@@ -100,14 +100,14 @@ export const ProjectCreateStrategy = () => {
           <ProjectCreateStrategyCard
             isSelected={isLaunchPad}
             onClick={() => setStrategy(ProjectCreationStrategy.GEYSER_LAUNCHPAD)}
-            icon={PiRocketLaunch}
+            icon={PiRocket}
             title={t('Geyser Launchpad')}
             subtitle={t('Test your idea and launch for free by gaining 21 followers')}
             why={t(
               "Launchpad is your sandbox to explore your idea publicly before going live. Get early feedback, rally support, and validate your project's potential. It's your chance to build early momentum and launch with a boom. 🚀",
             )}
             howItWorks={t(
-              "You'll need to gather 21 followers within 30 days, the first is always Geyser, so you only need just 20 more. Once you reach the goal, you can officially launch and start receiving contributions from around the world.",
+              "You'll need to gather 21 followers within 30 days, the first is always yourself, so you only need just 20 more. Once you reach the goal, you can officially launch and start receiving contributions from around the world.",
             )}
           />
           <ProjectCreateStrategyCard
@@ -130,6 +130,8 @@ export const ProjectCreateStrategy = () => {
           spacing={0}
           padding={4}
           borderColor={isSaveAsDraft ? 'primary1.9' : 'neutral1.6'}
+          outline={isSaveAsDraft ? '2px solid' : 'none'}
+          outlineColor={isSaveAsDraft ? 'primary1.9' : 'transparent'}
           onClick={() => setStrategy(ProjectCreationStrategy.SAVE_AS_DRAFT)}
           _hover={{
             borderColor: isSaveAsDraft ? 'primary1.9' : 'neutral1.9',
@@ -176,6 +178,8 @@ export const ProjectCreateStrategyCard = ({
       {...props}
       spacing={4}
       borderColor={isSelected ? 'primary1.9' : 'neutral1.6'}
+      outline={isSelected ? '2px solid' : 'none'}
+      outlineColor={isSelected ? 'primary1.9' : 'transparent'}
       _hover={{
         borderColor: isSelected ? 'primary1.9' : 'neutral1.9',
         cursor: 'pointer',

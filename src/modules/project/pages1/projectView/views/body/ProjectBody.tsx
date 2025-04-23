@@ -37,6 +37,7 @@ export const ProjectBody = () => {
 
   useEffect(() => {
     if (loading) return
+    console.log('checking whats with the paths', location.pathname)
     if (project?.status === ProjectStatus.Draft && !location.pathname.includes('/draft')) {
       navigate(location.pathname + '/draft')
     } else if (project?.status === ProjectStatus.PreLaunch && !location.pathname.includes('/prelaunch')) {

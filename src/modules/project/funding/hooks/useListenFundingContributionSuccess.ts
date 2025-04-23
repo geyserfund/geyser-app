@@ -35,7 +35,9 @@ export const useListenFundingContributionSuccess = () => {
   useEffect(() => {
     if (fundingContribution && fundingContribution.status === ContributionStatus.Confirmed) {
       if (launchContributionProjectId) {
-        navigate({ pathname: getPath('launchProjectWallet', `${launchContributionProjectId}`) }, { replace: true })
+        setTimeout(() => {
+          navigate({ pathname: getPath('launchProjectWallet', `${launchContributionProjectId}`) }, { replace: true })
+        }, 2000)
       } else {
         navigate({ pathname: getPath('fundingSuccess', project.name), search: location.search }, { replace: true })
       }

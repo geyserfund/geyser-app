@@ -15,6 +15,7 @@ export enum PathName {
   myProjects = 'my-projects',
   activity = 'activity',
   products = 'products',
+  launchpad = 'launchpad',
   activityGlobal = 'global',
   activityFollowed = 'followed',
 
@@ -143,6 +144,7 @@ const pathsMap = {
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
   discoveryMerch: () => `/${PathName.merch}`,
+  discoveryLaunchpad: () => `/${PathName.launchpad}`,
 
   guardians: () => `/${PathName.guardians}`,
   guardiansCharacter: (characterId: string) => `/${PathName.guardians}/${characterId}`,

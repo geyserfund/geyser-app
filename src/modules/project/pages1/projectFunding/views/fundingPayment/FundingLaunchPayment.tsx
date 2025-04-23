@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuthContext } from '@/context/auth.tsx'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { launchContributionProjectIdAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
-import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
@@ -16,11 +16,11 @@ import { PROJECT_LAUNCH_PAYMENT_PROJECT_NAME } from '../../../projectCreation/vi
 import { FundingLayout } from '../../layouts/FundingLayout.tsx'
 import { QRCodeSizeMap } from './components/QRCodeComponent.tsx'
 
-const PROJECT_REWARD_UUID = 'c56fc2dd-21d2-4441-9221-4f7c2a2b1103'
+export const DONATION_AMOUNT_FOR_LAUNCH = 21000 // $21 in cents
 
 export const FundingLaunchPayment = () => {
   const { project, loading } = useProjectAtom()
-  const { rewards } = useRewardsAtom()
+
   const navigate = useNavigate()
 
   const setLaunchContributionProjectId = useSetAtom(launchContributionProjectIdAtom)
@@ -29,11 +29,9 @@ export const FundingLaunchPayment = () => {
 
   const { user } = useAuthContext()
 
-  const { updateReward, setState, formState } = useFundingFormAtom()
+  const { setState, formState } = useFundingFormAtom()
 
   const qrSize = useBreakpointValue(QRCodeSizeMap)
-
-  const launchPaymentReward = rewards.find((reward) => reward.uuid === PROJECT_REWARD_UUID)
 
   const launchProjectId = location?.state?.launchProjectId
 
@@ -42,16 +40,11 @@ export const FundingLaunchPayment = () => {
       return
     }
 
-    if (!launchPaymentReward) {
+    if (formState.donationAmountUsdCent !== DONATION_AMOUNT_FOR_LAUNCH) {
       return
     }
 
-    if (formState.rewardsByIDAndCount && formState.rewardsByIDAndCount?.[`${launchPaymentReward.id}`]) {
-      return
-    }
-
-    updateReward({ id: launchPaymentReward.id, count: 1 })
-
+    setState('donationAmountUsdCent', DONATION_AMOUNT_FOR_LAUNCH)
     setState('email', user.email)
     setState(
       'privateComment',
@@ -62,26 +55,17 @@ export const FundingLaunchPayment = () => {
     )
     setState('geyserTipPercent', 0)
     setLaunchContributionProjectId(launchProjectId)
-  }, [
-    loading,
-    formState.rewardsByIDAndCount,
-    setState,
-    updateReward,
-    launchPaymentReward,
-    user.email,
-    launchProjectId,
-    setLaunchContributionProjectId,
-  ])
+  }, [loading, formState.donationAmountUsdCent, setState, user.email, launchProjectId, setLaunchContributionProjectId])
 
   useEffect(() => {
     handleUpdateReward()
   }, [handleUpdateReward])
 
   useEffect(() => {
-    if (launchPaymentReward && formState.rewardsByIDAndCount?.[`${launchPaymentReward?.id}`]) {
+    if (formState.donationAmountUsdCent === DONATION_AMOUNT_FOR_LAUNCH) {
       navigate(getPath('fundingStart', project.name), { replace: true })
     }
-  }, [project.name, formState.rewardsByIDAndCount, navigate, launchPaymentReward])
+  }, [project.name, formState.donationAmountUsdCent, navigate])
 
   useEffect(() => {
     if (project.name !== PROJECT_LAUNCH_PAYMENT_PROJECT_NAME) {

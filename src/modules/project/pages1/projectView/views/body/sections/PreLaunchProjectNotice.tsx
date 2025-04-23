@@ -1,9 +1,17 @@
-import { Button, HStack } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
+import { PiShootingStar } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
+import {
+  PROJECT_LAUNCH_PAYMENT_PROJECT_NAME,
+  ProjectCreateStrategyCard,
+} from '@/modules/project/pages1/projectCreation/views/ProjectCreationStrategy.tsx'
+import { useProjectReset } from '@/modules/project/state/projectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography'
+import { useModal } from '@/shared/hooks/useModal.tsx'
 import { GuardiansButtonBackgroundGradient } from '@/shared/styles/custom.ts'
 import { ProjectStatus } from '@/types/index.ts'
 
@@ -15,15 +23,22 @@ export const PreLaunchProjectNotice = () => {
   const { t } = useTranslation()
 
   const { project, isProjectOwner } = useProjectAtom()
+  const resetProject = useProjectReset()
   const { loading } = useWalletAtom()
   const navigate = useNavigate()
 
-  if (!project || !isProjectOwner) return null
+  const launchRightAwayModal = useModal()
 
-  const handleConnectNodeClick = () => {
-    const nodeConfigurationPath = getPath('launchProjectWallet', project.id)
-    navigate(nodeConfigurationPath)
+  const handlePayToLaunch = () => {
+    resetProject()
+    navigate(getPath('fundingLaunchPayment', PROJECT_LAUNCH_PAYMENT_PROJECT_NAME), {
+      state: {
+        launchProjectId: project?.id,
+      },
+    })
   }
+
+  if (!project || !isProjectOwner) return null
 
   if (project.status !== ProjectStatus.PreLaunch) {
     return null
@@ -31,44 +46,44 @@ export const PreLaunchProjectNotice = () => {
 
   if (loading) return null
 
-  if (project.followersCount && project.followersCount < FOLLOWERS_NEEDED) {
+  if ((project.followersCount || 0) < FOLLOWERS_NEEDED) {
     return (
-      <CardLayout
-        flexDirection={'row'}
-        justifyContent={'space-between'}
-        mobileDense
-        w="full"
-        background={GuardiansButtonBackgroundGradient}
-      >
-        <Body size="lg" bold dark>
-          {t('Pay $21 to launch right away')}
-        </Body>
-        <Button variant="solid" colorScheme="primary1" onClick={handleConnectNodeClick}>
-          {t('Launch project')}
-        </Button>
-      </CardLayout>
+      <>
+        <CardLayout
+          flexDirection={'row'}
+          justifyContent={'space-between'}
+          mobileDense
+          w="full"
+          background={GuardiansButtonBackgroundGradient}
+        >
+          <Body size="lg" bold dark>
+            {t('Pay $21 to launch right away')}
+          </Body>
+          <Button variant="solid" colorScheme="primary1" onClick={launchRightAwayModal.onOpen}>
+            {t('Launch project')}
+          </Button>
+        </CardLayout>
+        <Modal size="lg" {...launchRightAwayModal}>
+          <ProjectCreateStrategyCard
+            icon={PiShootingStar}
+            title={t('Launch Now')}
+            subtitle={t('Pay $21 to go live - Start receiving contributions today.')}
+            why={t(
+              "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you can begin receiving support from contributors immediately.",
+            )}
+            howItWorks={t(
+              'Pay $21 in Bitcoin or Fiat to launch your project. It helps us keep Geyser sustainable. Additionally, project gets mentioned in our newsletter with over 2k subscribers to help you get started.',
+            )}
+            noborder
+            background="transparent"
+          />
+          <Button size="lg" width="100%" variant="solid" colorScheme="primary1" onClick={handlePayToLaunch}>
+            {t('Launch project')}
+          </Button>
+        </Modal>
+      </>
     )
   }
 
-  return (
-    <CardLayout mobileDense w="full" background={GuardiansButtonBackgroundGradient}>
-      <HStack justifyContent={'space-between'}>
-        <Body size="lg" bold dark>
-          {t('Pay $21 to launch right away')}
-        </Body>
-        <Button variant="solid" colorScheme="primary1" onClick={handleConnectNodeClick}>
-          {t('Finalize & Launch')}
-        </Button>
-      </HStack>
-      <Body>
-        {t('You have 21 people that care about your project. They’ll receive an email as soon as you go live.')}
-      </Body>
-
-      <Body>
-        {t(
-          'Next, you’ll need to your wallet information to start receiving funds, and verify your ID to start receiving funds in fiat. Good luck!',
-        )}
-      </Body>
-    </CardLayout>
-  )
+  return null
 }

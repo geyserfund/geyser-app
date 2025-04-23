@@ -86,6 +86,8 @@ const FollowSuccessModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
   const { followersCount } = project
   const followersNeeded = FOLLOWERS_NEEDED - (followersCount ?? 0)
 
+  const enoughFollowers = followersNeeded <= 0
+
   const projectUrl = `${window.location.origin}/project/${project.name}`
 
   const { onCopy, hasCopied } = useClipboard(projectUrl)
@@ -100,11 +102,13 @@ const FollowSuccessModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () 
         <Icon as={PiBellRinging} boxSize={32} color="primary1.9" />
       </HStack>
       <VStack w={'full'} alignItems={'flex-start'} gap={2}>
-        <Body>
-          {t('This project still needs {{count}} followers to be able to start raising funds.', {
-            count: followersNeeded,
-          })}
-        </Body>
+        {!enoughFollowers && (
+          <Body>
+            {t('This project still needs {{count}} followers to be able to start raising funds.', {
+              count: followersNeeded,
+            })}
+          </Body>
+        )}
         <Body>{t('Share it with other friends to help spread the word and make this project a reality!')}</Body>
         <Body>{t('We’ll email you when the project goes live, or if it does not')}</Body>
       </VStack>

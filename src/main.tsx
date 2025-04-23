@@ -45,9 +45,9 @@ if (typeof window !== 'undefined') {
 }
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <>
+  <React.StrictMode>
     <ColorModeScript initialColorMode="system" type="localStorage" />
     <GlobalStyles />
     <RouterProvider router={router} />
-  </>,
+  </React.StrictMode>,
 )

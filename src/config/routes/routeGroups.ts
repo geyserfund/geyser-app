@@ -155,6 +155,7 @@ export const discoveryRoutes = [
   getPath('discoveryActivityFollowed'),
   getPath('discoveryActivityGlobal'),
   getPath('discoveryLeaderboard'),
+  getPath('discoveryLaunchpad'),
   getPath('discoveryGrants'),
   getPath('discoveryGrant', PathName.grantId),
   getPath('discoveryHallOfFame'),

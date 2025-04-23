@@ -1,14 +1,19 @@
-import { HStack, Icon, Popover, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
+import { Button, HStack, Icon, Popover, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { DateTime, Duration } from 'luxon'
 import { useEffect, useState } from 'react'
 import { PiInfo } from 'react-icons/pi'
+import { Link } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { getPath } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
+import { FOLLOWERS_NEEDED } from '../../pages1/projectView/views/body/components/PrelaunchFollowButton.tsx'
+import { isProjectOwnerAtom } from '../../state/projectAtom.ts'
 
 const formatTimeValue = (value: number): string => {
   // Ensure value is non-negative and round down
@@ -17,6 +22,8 @@ const formatTimeValue = (value: number): string => {
 
 export const ProjectPreLaunchNav = () => {
   const { project } = useProjectAtom()
+
+  const isProjectOwner = useAtomValue(isProjectOwnerAtom)
 
   const isMobile = useMobileMode()
 
@@ -70,30 +77,64 @@ export const ProjectPreLaunchNav = () => {
       : '--d : --hr : --min'
   }
 
+  const enoughFollowers = project?.followersCount && project?.followersCount >= FOLLOWERS_NEEDED
+
   return (
-    <Feedback variant={FeedBackVariant.WARNING} noIcon height="44px" paddingY={0} alignItems="center">
-      <HStack w="full" alignItems="center" justifyContent="center" spacing={2}>
-        <Body size={{ base: 'md', lg: 'lg' }} bold>
-          {isMobile
-            ? `${t('Launchpad')}: ${formattedTime} ${t('to get 21 followers')}`
-            : `${t('Project in Launchpad')} - ${formattedTime} ${t('left to get to 21 followers')}`}
-        </Body>
-        <Popover trigger={isMobile ? 'click' : 'hover'}>
-          <PopoverTrigger>
-            <HStack h="full" alignItems="center">
-              <Icon as={PiInfo} />
-            </HStack>
-          </PopoverTrigger>
-          <PopoverContent>
-            <PopoverBody maxWidth="300px">
-              <Body size="sm" dark>
-                {t(
-                  'This project needs to reach 21 followers to begin receiving contributions. Share this project on social media to help launch it.',
-                )}
-              </Body>
-            </PopoverBody>
-          </PopoverContent>
-        </Popover>
+    <Feedback
+      variant={enoughFollowers ? FeedBackVariant.SUCCESS : FeedBackVariant.WARNING}
+      noIcon
+      height="44px"
+      paddingY={0}
+      paddingRight={0.5}
+      alignItems="center"
+    >
+      <HStack w="full" alignItems="center" justifyContent={'space-between'} spacing={2}>
+        <HStack>
+          <Body size={{ base: 'md', lg: 'lg' }} bold>
+            {isMobile ? `${t('Launchpad')}` : `${t('Project in Launchpad')}`}
+          </Body>
+          {enoughFollowers ? (
+            <Body size={{ base: 'md', lg: 'lg' }} bold>
+              {isMobile ? `- ${t('Ready')}` : `- ${t('Ready to launch')}`}
+            </Body>
+          ) : (
+            <Body size={{ base: 'md', lg: 'lg' }} bold>
+              {isMobile
+                ? `: ${formattedTime} ${t('to get 21 followers')}`
+                : `- ${formattedTime} ${t('left to get to 21 followers')}`}
+            </Body>
+          )}
+
+          <Popover trigger={isMobile ? 'click' : 'hover'}>
+            <PopoverTrigger>
+              <HStack h="full" alignItems="center">
+                <Icon as={PiInfo} />
+              </HStack>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverBody maxWidth="300px">
+                <Body size="sm" dark>
+                  {t(
+                    'This project needs to reach 21 followers to begin receiving contributions. Share this project on social media to help launch it.',
+                  )}
+                </Body>
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
+        </HStack>
+        {enoughFollowers && isProjectOwner && (
+          <Button
+            as={Link}
+            maxWidth="400px"
+            flex="1"
+            to={getPath('launchProjectWallet', project?.id)}
+            variant="solid"
+            colorScheme="primary1"
+            size="lg"
+          >
+            {t('Launch now')}
+          </Button>
+        )}
       </HStack>
     </Feedback>
   )

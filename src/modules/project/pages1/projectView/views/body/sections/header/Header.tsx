@@ -36,7 +36,13 @@ import {
 } from '../../../../../../../../shared/constants'
 import { VideoPlayer } from '../../../../../../../../shared/molecules/VideoPlayer'
 import { useProjectPageHeaderSummaryQuery } from '../../../../../../../../types'
-import { commaFormatted, removeProjectAmountException, toInt, useMobileMode } from '../../../../../../../../utils'
+import {
+  commaFormatted,
+  isPrelaunch,
+  removeProjectAmountException,
+  toInt,
+  useMobileMode,
+} from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
 import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
 import { FollowButton } from '../../components'
@@ -157,7 +163,7 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
               colorScheme="neutral1"
               onClick={handleClickDetails}
             />
-            <FollowButton project={project} withLabel />
+            {!isPrelaunch(project.status) && <FollowButton project={project} withLabel />}
             <ShareProjectButton />
           </HStack>
 
