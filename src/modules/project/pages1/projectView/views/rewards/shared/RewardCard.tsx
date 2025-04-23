@@ -1,6 +1,6 @@
 import { Badge, Box, Button, HStack, Skeleton, SkeletonText, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { MouseEvent } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -13,7 +13,7 @@ import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { ProjectRewardFragment, ProjectStatus, RewardCurrency } from '@/types'
-import { isDraft, isPrelaunch } from '@/utils/index.ts'
+import { isPrelaunch } from '@/utils/index.ts'
 
 import { ProjectRewardShippingEstimate } from '../components/ProjectRewardShippingEstimate'
 import { RewardEditMenu } from '../components/RewardEditMenu'
@@ -27,8 +27,46 @@ export type RewardCardProps = {
   isLaunch?: boolean
 } & CardLayoutProps
 
+/** Helper component for displaying the reward price */
+const RewardPriceDisplay = ({
+  reward,
+  rewardCurrency,
+  formatUsdAmount,
+  formatSatsAmount,
+}: {
+  reward: ProjectRewardFragment
+  rewardCurrency: RewardCurrency | null | undefined
+  formatUsdAmount: (amount: number) => string
+  formatSatsAmount: (amount: number) => string
+}) => {
+  return (
+    <HStack alignItems={'start'} justifyContent={'end'} gap={1}>
+      {rewardCurrency === RewardCurrency.Usdcent ? (
+        <>
+          <Body bold dark>{`$${reward.cost / 100}`}</Body>
+          <Body medium muted>
+            {`(${formatSatsAmount(reward.cost)})`}
+          </Body>
+        </>
+      ) : (
+        <>
+          <Body bold dark>
+            {`${reward.cost.toLocaleString()}`}
+            <Box as="span" color={'neutral1.9'}>
+              {' '}
+              sats
+            </Box>
+          </Body>
+          <Body medium muted>
+            {`(${formatUsdAmount(reward.cost)})`}
+          </Body>
+        </>
+      )}
+    </HStack>
+  )
+}
+
 export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count = 0, ...rest }: RewardCardProps) => {
-  const { t } = useTranslation()
   const { project, isProjectOwner } = useProjectAtom()
 
   const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
@@ -136,29 +174,12 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
           {/* <MarkdownField preview content={description} /> */}
         </Box>
         <HStack w="full" justifyContent={'space-between'} alignItems="center">
-          <HStack alignItems={'start'} justifyContent={'end'} gap={1}>
-            {project && project.rewardCurrency === RewardCurrency.Usdcent ? (
-              <>
-                <Body bold dark>{`$${reward.cost / 100}`}</Body>
-                <Body medium muted>
-                  {`(${formatSatsAmount(reward.cost)})`}
-                </Body>
-              </>
-            ) : (
-              <>
-                <Body bold dark>
-                  {`${reward.cost.toLocaleString()}`}
-                  <Box as="span" color={'neutral1.9'}>
-                    {' '}
-                    sats
-                  </Box>
-                </Body>
-                <Body medium muted>
-                  {`(${formatUsdAmount(reward.cost)})`}
-                </Body>
-              </>
-            )}
-          </HStack>
+          <RewardPriceDisplay
+            reward={reward}
+            rewardCurrency={project?.rewardCurrency}
+            formatUsdAmount={formatUsdAmount}
+            formatSatsAmount={formatSatsAmount}
+          />
 
           {!isProjectOwner ? (
             buyReward && (

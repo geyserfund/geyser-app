@@ -1,10 +1,7 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
 
-import { useAuthContext } from '@/context/auth.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { userFollowsProjectAtom } from '@/modules/project/state/projectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/index.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'

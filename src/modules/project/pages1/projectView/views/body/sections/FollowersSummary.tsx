@@ -1,13 +1,4 @@
-import {
-  Button,
-  CircularProgress,
-  HStack,
-  SkeletonCircle,
-  SkeletonText,
-  StackProps,
-  useClipboard,
-  VStack,
-} from '@chakra-ui/react'
+import { CircularProgress, HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 

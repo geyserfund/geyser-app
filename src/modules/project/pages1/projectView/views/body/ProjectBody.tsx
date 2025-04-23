@@ -40,6 +40,8 @@ export const ProjectBody = () => {
       navigate(location.pathname + '/draft')
     } else if (project?.status === ProjectStatus.PreLaunch && !location.pathname.includes('/prelaunch')) {
       navigate(location.pathname + '/prelaunch')
+    } else if (project?.status === ProjectStatus.Active && location.pathname.includes('/prelaunch')) {
+      navigate(location.pathname.replace('/prelaunch', ''))
     } else if (project?.status === ProjectStatus.Active && location.pathname.includes('/draft')) {
       navigate(location.pathname.replace('/draft', ''))
     }

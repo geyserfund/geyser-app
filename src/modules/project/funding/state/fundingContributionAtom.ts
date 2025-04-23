@@ -22,6 +22,7 @@ const initialFundingContribution: FundingContributionFragment = {
       id: '',
       imageUrl: '',
       username: '',
+      heroId: '',
     },
   },
   payments: [],
