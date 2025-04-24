@@ -1,14 +1,6 @@
 import { IconType } from 'react-icons'
-import {
-  PiCompass,
-  PiCrown,
-  PiHandbag,
-  PiRocket,
-  PiRocketLaunch,
-  PiSketchLogo,
-  PiTrophy,
-  PiWaveform,
-} from 'react-icons/pi'
+import { GiAirBalloon } from 'react-icons/gi'
+import { PiCompass, PiCrown, PiHandbag, PiRocketLaunch, PiSketchLogo, PiTrophy, PiWaveform } from 'react-icons/pi'
 
 import { PathsMap } from '@/shared/constants'
 
@@ -52,7 +44,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     label: 'Launchpad',
     key: DiscoveryNavItemKey.Launchpad,
     path: 'discoveryLaunchpad',
-    icon: PiRocket,
+    icon: GiAirBalloon,
     bottomNav: false,
   },
   {

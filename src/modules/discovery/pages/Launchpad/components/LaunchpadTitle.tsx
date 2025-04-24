@@ -9,8 +9,6 @@ import { lightModeColors } from '@/shared/styles'
 import { FlowingGifBackground } from '../../hallOfFame/components/FlowingGifBackground.tsx'
 
 export const LaunchpadTitle = () => {
-  const padding = { base: 4, lg: '6' }
-
   return (
     <CardLayout
       w="full"
@@ -23,13 +21,7 @@ export const LaunchpadTitle = () => {
     >
       <FlowingGifBackground />
 
-      <HStack
-        w="full"
-        spacing={{ base: 4, lg: 6 }}
-        paddingX={padding}
-        paddingTop={padding}
-        paddingBottom={{ base: 0, lg: 6 }}
-      >
+      <HStack w="full" spacing={{ base: 4, lg: 6 }} padding={{ base: 2, lg: 4 }}>
         <Icon
           as={PiRocket}
           color={lightModeColors.orange[9]}
