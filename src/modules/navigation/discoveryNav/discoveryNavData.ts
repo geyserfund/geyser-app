@@ -46,7 +46,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Launchpad,
     path: 'discoveryLaunchpad',
     icon: GiAirBalloon,
-    bottomNav: false,
+    bottomNav: true,
   },
   {
     label: 'Activity',
@@ -82,6 +82,6 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Guardians,
     path: 'guardians',
     icon: PiSketchLogo,
-    bottomNav: true,
+    bottomNav: false,
   },
 ]
