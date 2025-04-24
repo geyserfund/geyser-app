@@ -1225,5 +1225,7 @@
   "Sort by...": "Sort by...",
   "Projects in Launchpad": "Projects in Launchpad",
   "Goal reached!": "Goal reached!",
-  "{{countDown}} out of 21 followers": "{{countDown}} out of 21 followers"
+  "{{countDown}} out of 21 followers": "{{countDown}} out of 21 followers",
+  "This project still needs {{countdown}} followers to be able to start raising funds.": "This project still needs {{countdown}} followers to be able to start raising funds.",
+  "We’ll email you when the project goes live.": "We’ll email you when the project goes live."
 }

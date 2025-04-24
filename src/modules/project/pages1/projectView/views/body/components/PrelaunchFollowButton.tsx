@@ -133,13 +133,13 @@ const FollowSuccessModal = ({
       <VStack w={'full'} alignItems={'flex-start'} gap={2}>
         {!enoughFollowers && (
           <Body>
-            {t('This project still needs {{count}} followers to be able to start raising funds.', {
-              count: followersNeeded,
+            {t('This project still needs {{countdown}} followers to be able to start raising funds.', {
+              countdown: followersNeeded,
             })}
           </Body>
         )}
         <Body>{t('Share it with other friends to help spread the word and make this project a reality!')}</Body>
-        <Body>{t('We’ll email you when the project goes live')}</Body>
+        <Body>{t('We’ll email you when the project goes live.')}</Body>
       </VStack>
       <Button width="full" variant="outline" colorScheme={hasCopied ? 'primary1' : 'neutral1'} onClick={onCopy}>
         {hasCopied ? t('Copied!') : t('Copy link')}
