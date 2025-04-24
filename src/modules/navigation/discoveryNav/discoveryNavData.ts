@@ -2,7 +2,7 @@ import { IconType } from 'react-icons'
 import { GiAirBalloon } from 'react-icons/gi'
 import { PiCompass, PiCrown, PiHandbag, PiRocketLaunch, PiSketchLogo, PiTrophy, PiWaveform } from 'react-icons/pi'
 
-import { PathsMap } from '@/shared/constants'
+import { CrownIllustrationUrl, GrantsIllustrationUrl, LaunchPadIllustrationUrl, PathsMap } from '@/shared/constants'
 
 export enum DiscoveryNavItemKey {
   Discover = 'discover',
@@ -21,6 +21,7 @@ export type DiscoveryNavItem = {
   key: DiscoveryNavItemKey
   path: keyof PathsMap
   icon: IconType
+  image?: string
   bottomNav: boolean
 }
 
@@ -45,6 +46,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Launchpad,
     path: 'discoveryLaunchpad',
     icon: GiAirBalloon,
+    image: LaunchPadIllustrationUrl,
     bottomNav: false,
   },
   {
@@ -66,6 +68,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.HallOfFame,
     path: 'discoveryHallOfFame',
     icon: PiCrown,
+    image: CrownIllustrationUrl,
     bottomNav: false,
   },
   {
@@ -73,6 +76,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Grants,
     path: 'discoveryGrants',
     icon: PiTrophy,
+    image: GrantsIllustrationUrl,
     bottomNav: false,
   },
 

@@ -134,7 +134,7 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
           {...rest}
         >
           <>
-            <item.icon fontSize="18px" />
+            {item.image ? <Image height="20px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />}
             {activityDot ? (
               <Box
                 position="absolute"
@@ -160,7 +160,9 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
         size="lg"
         width={'full'}
         key={item.label}
-        leftIcon={<item.icon fontSize="18px" />}
+        leftIcon={
+          item.image ? <Image height="20px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />
+        }
         rightIcon={
           activityDot ? (
             <Box

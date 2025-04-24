@@ -169,6 +169,9 @@ export const SaveDraftIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/save-draft-illustration.png'
 export const FollowBellIllurationsUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/successfull-follow-illustration.png'
+export const CrownIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/crown-illustration.png'
+export const GrantsIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/grants-illustration.png'
 
 // FUNDING FLOW ERRORS
 
