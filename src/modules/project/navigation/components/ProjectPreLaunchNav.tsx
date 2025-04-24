@@ -88,9 +88,20 @@ export const ProjectPreLaunchNav = () => {
       paddingRight={0.5}
       alignItems="center"
     >
-      <HStack w="full" alignItems="center" justifyContent={'space-between'} spacing={2}>
+      <HStack
+        w="full"
+        alignItems="center"
+        justifyContent={enoughFollowers && isProjectOwner ? 'space-between' : 'center'}
+        spacing={2}
+      >
         <HStack>
-          <Body size={{ base: 'md', lg: 'lg' }} bold>
+          <Body
+            as={Link}
+            to={getPath('discoveryLaunchpad')}
+            size={{ base: 'md', lg: 'lg' }}
+            bold
+            textDecoration={'underline'}
+          >
             {isMobile ? `${t('Launchpad')}` : `${t('Project in Launchpad')}`}
           </Body>
           {enoughFollowers ? (
@@ -104,23 +115,7 @@ export const ProjectPreLaunchNav = () => {
                 : `- ${formattedTime} ${t('left to get to 21 followers')}`}
             </Body>
           )}
-
-          <Popover trigger={isMobile ? 'click' : 'hover'}>
-            <PopoverTrigger>
-              <HStack h="full" alignItems="center">
-                <Icon as={PiInfo} />
-              </HStack>
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverBody maxWidth="300px">
-                <Body size="sm" dark>
-                  {t(
-                    'This project needs to reach 21 followers to begin receiving contributions. Share this project on social media to help launch it.',
-                  )}
-                </Body>
-              </PopoverBody>
-            </PopoverContent>
-          </Popover>
+          <PopOverInfo />
         </HStack>
         {enoughFollowers && isProjectOwner && (
           <Button
@@ -137,5 +132,27 @@ export const ProjectPreLaunchNav = () => {
         )}
       </HStack>
     </Feedback>
+  )
+}
+
+const PopOverInfo = () => {
+  const isMobile = useMobileMode()
+  return (
+    <Popover trigger={isMobile ? 'click' : 'hover'}>
+      <PopoverTrigger>
+        <HStack h="full" alignItems="center">
+          <Icon as={PiInfo} />
+        </HStack>
+      </PopoverTrigger>
+      <PopoverContent>
+        <PopoverBody maxWidth="300px">
+          <Body size="sm" dark>
+            {t(
+              'This project needs to reach 21 followers to begin receiving contributions. Share this project on social media to help launch it.',
+            )}
+          </Body>
+        </PopoverBody>
+      </PopoverContent>
+    </Popover>
   )
 }

@@ -5,7 +5,7 @@ import { PiDotOutline } from 'react-icons/pi'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H2 } from '@/shared/components/typography'
-import { HallOfFameIllustrationUrl } from '@/shared/constants'
+import { CrownIllustrationUrl, HallOfFameIllustrationUrl } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
 import { commaFormatted, getBitcoinAmount, getShortAmountLabel } from '@/utils'
 
@@ -55,7 +55,7 @@ export const HallOfFameTitle = () => {
         paddingBottom={{ base: 0, lg: 6 }}
       >
         <Image
-          src={HallOfFameIllustrationUrl}
+          src={CrownIllustrationUrl}
           alt="Hall of Fame"
           width={{ base: '95px', lg: '130px' }}
           height="auto"

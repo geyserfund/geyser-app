@@ -46,7 +46,6 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Launchpad,
     path: 'discoveryLaunchpad',
     icon: GiAirBalloon,
-    image: LaunchPadIllustrationUrl,
     bottomNav: false,
   },
   {
@@ -68,7 +67,6 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.HallOfFame,
     path: 'discoveryHallOfFame',
     icon: PiCrown,
-    image: CrownIllustrationUrl,
     bottomNav: false,
   },
   {
@@ -76,7 +74,6 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Grants,
     path: 'discoveryGrants',
     icon: PiTrophy,
-    image: GrantsIllustrationUrl,
     bottomNav: false,
   },
 

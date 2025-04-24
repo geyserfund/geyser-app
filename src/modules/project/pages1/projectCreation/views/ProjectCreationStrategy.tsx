@@ -118,7 +118,7 @@ export const ProjectCreateStrategy = () => {
               "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you can begin receiving support from contributors immediately.",
             )}
             howItWorks={t(
-              'Pay $21 in Bitcoin or Fiat to launch your project. It helps us keep Geyser sustainable. Additionally, project gets mentioned in our newsletter with over 2k subscribers to help you get started.',
+              'Pay $21 in Bitcoin or Fiat to launch your project. It helps us keep Geyser sustainable. Additionally, project gets mentioned in our newsletter with over 6k subscribers to help you get started.',
             )}
           />
         </HStack>

@@ -139,7 +139,7 @@ const FollowSuccessModal = ({
           </Body>
         )}
         <Body>{t('Share it with other friends to help spread the word and make this project a reality!')}</Body>
-        <Body>{t('We’ll email you when the project goes live, or if it does not')}</Body>
+        <Body>{t('We’ll email you when the project goes live')}</Body>
       </VStack>
       <Button width="full" variant="outline" colorScheme={hasCopied ? 'primary1' : 'neutral1'} onClick={onCopy}>
         {hasCopied ? t('Copied!') : t('Copy link')}

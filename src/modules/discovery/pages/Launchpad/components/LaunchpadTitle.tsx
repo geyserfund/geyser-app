@@ -14,12 +14,12 @@ export const LaunchpadTitle = () => {
       w="full"
       dense
       spacing={{ base: 4, lg: 6 }}
-      background="linear-gradient(81deg, #FFFBE7 -9.6%, #C4FFF4 109.2%)"
+      background="linear-gradient(81deg, #EAF2F8 -9.6%, #AED6F1 109.2%)"
       position="relative"
       backgroundColor="utils.pbg"
       alignItems={{ base: 'start', lg: 'center' }}
     >
-      <FlowingGifBackground />
+      <FlowingGifBackground opacity="0.25" />
 
       <HStack w="full" spacing={{ base: 4, lg: 6 }} padding={{ base: 2, lg: 4 }}>
         <Image
@@ -32,7 +32,7 @@ export const LaunchpadTitle = () => {
 
         <VStack w="full" alignItems={'start'} spacing={{ base: 2, lg: 0 }} zIndex={1}>
           <H2 size={{ base: 'xl', lg: '3xl' }} bold color={lightModeColors.utils.text}>
-            {t('Geyser Launchpad')}
+            {t('Launchpad')}
           </H2>
 
           <Body size={{ base: 'sm', lg: 'xl' }} medium color={lightModeColors.neutral1[11]}>

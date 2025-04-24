@@ -41,7 +41,11 @@ export const LaunchpadProjects = () => {
 
   return (
     <VStack w="full" spacing={4}>
-      <TitleWithSort title={t('Projects')} sortBy={sortBy} onSortByChange={(sortBy) => setSortBy(sortBy)} />
+      <TitleWithSort
+        title={t('Projects in Launchpad')}
+        sortBy={sortBy}
+        onSortByChange={(sortBy) => setSortBy(sortBy)}
+      />
 
       <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacingX="20px" spacingY="20px">
         {loading

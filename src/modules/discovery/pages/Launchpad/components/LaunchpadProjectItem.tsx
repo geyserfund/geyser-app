@@ -71,6 +71,21 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
     timeDisplay = `${formatTimeValue(timeLeft.minutes)}min ${t('left')}`
   }
 
+  // Determine color for followers count
+  const getFollowersColor = () => {
+    if (currentFollowers < 3) return 'error.11'
+    if (currentFollowers < 15) return 'warning.11'
+    return 'primary1.11'
+  }
+
+  // Determine color for time display
+  const getTimeColor = () => {
+    if (!timeLeft) return 'neutral.text'
+    if (timeLeft.days > 15) return 'primary1.11'
+    if (timeLeft.days >= 1) return 'warning.11'
+    return 'error.11'
+  }
+
   return (
     <CardLayout
       hover
@@ -129,10 +144,10 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
           </Badge>
         </HStack>
         <HStack w="full" justify="space-between">
-          <Body size="sm" light>
+          <Body size="sm" bold color={getFollowersColor()}>
             {followersNeeded > 0 ? `${currentFollowers} ${t('followers')}` : t('Goal reached!')}
           </Body>
-          <Body size="sm" light>
+          <Body size="sm" bold color={getTimeColor()}>
             {timeDisplay}
           </Body>
         </HStack>

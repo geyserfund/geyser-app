@@ -7,7 +7,13 @@ import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/compo
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H2 } from '@/shared/components/typography'
-import { __production__, __staging__, getPath, HallOfFameIllustrationUrl } from '@/shared/constants'
+import {
+  __production__,
+  __staging__,
+  getPath,
+  GrantsIllustrationUrl,
+  HallOfFameIllustrationUrl,
+} from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
 import { useGrantStatisticsQuery } from '@/types'
 import { getShortAmountLabel } from '@/utils'
@@ -60,7 +66,7 @@ export const GrantsHeader = () => {
         paddingBottom={{ base: 0, lg: 6 }}
       >
         <Image
-          src={HallOfFameIllustrationUrl}
+          src={GrantsIllustrationUrl}
           alt="Geyser Grants"
           width={{ base: '95px', lg: '130px' }}
           height="auto"

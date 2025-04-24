@@ -139,20 +139,21 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
           <CreatorSocial />
         </HStack>
 
-        {summaryLoading ? (
-          <SkeletonLayout height="20px" w="250px" />
-        ) : (
-          <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
-            <Body size="md" medium light>
-              {`${t('Contributors')}: ${project.fundersCount}`}
-            </Body>
-            <Body size="md" medium light>
-              {`${t('Followers')}: ${project.followersCount}`}
-            </Body>
+        {!isPrelaunch(project.status) &&
+          (summaryLoading ? (
+            <SkeletonLayout height="20px" w="250px" />
+          ) : (
+            <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
+              <Body size="md" medium light>
+                {`${t('Contributors')}: ${project.fundersCount}`}
+              </Body>
+              <Body size="md" medium light>
+                {`${t('Followers')}: ${project.followersCount}`}
+              </Body>
 
-            {subscribers && <Body size="md" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
-          </HStack>
-        )}
+              {subscribers && <Body size="md" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
+            </HStack>
+          ))}
 
         <HStack w="full" paddingTop={1} justifyContent="space-between" flexWrap={'wrap'}>
           <HStack>
