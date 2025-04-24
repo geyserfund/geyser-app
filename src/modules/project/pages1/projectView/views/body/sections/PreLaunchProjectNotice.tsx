@@ -51,7 +51,6 @@ export const PreLaunchProjectNotice = () => {
         <CardLayout
           flexDirection={'row'}
           justifyContent={'space-between'}
-          mobileDense
           w="full"
           background={GuardiansButtonBackgroundGradient}
         >

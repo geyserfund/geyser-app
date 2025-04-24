@@ -1,5 +1,5 @@
 import { Button, HStack, Icon, Link, ModalProps, Progress, useClipboard, VStack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { PiLink, PiShare } from 'react-icons/pi'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
@@ -24,7 +24,11 @@ export const ProjectCreatePreLaunchedModal = (props: Omit<ModalProps, 'children'
       <VStack w="100%" spacing={6} pt={2}>
         <VStack w="100%">
           <HStack w="full" justifyContent="space-between">
-            <Body>{t(`{{count}} out of 21 followers`, { count: followersCount ?? 0 })}</Body>
+            <Body>
+              <Trans i18nKey={'{{countDown}} out of 21 followers'} values={{ countDown: followersCount ?? 0 }}>
+                {'{{countDown}} out of 21 followers'}
+              </Trans>
+            </Body>
             <Body>⛳️ {t('Launch')}</Body>
           </HStack>
           <Progress

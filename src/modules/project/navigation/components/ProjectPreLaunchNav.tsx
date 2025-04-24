@@ -20,14 +20,65 @@ const formatTimeValue = (value: number): string => {
   return String(Math.max(0, Math.floor(value))).padStart(2, '0')
 }
 
+/** Format time remaining based on device type and duration */
+const getFormattedTime = (timeLeft: Duration | null, isMobile: boolean): string => {
+  if (isMobile) {
+    if (timeLeft === null) return `-- ${t('left')}`
+    if (timeLeft.days > 0) return `${formatTimeValue(timeLeft.days)}d ${t('left')}`
+    if (timeLeft.hours > 0) return `${formatTimeValue(timeLeft.hours)}hr ${t('left')}`
+    return `${formatTimeValue(timeLeft.minutes)}min ${t('left')}`
+  }
+
+  return timeLeft
+    ? `${formatTimeValue(timeLeft.days)}d : ${formatTimeValue(timeLeft.hours)}hr : ${formatTimeValue(
+        timeLeft.minutes,
+      )}min`
+    : '--d : --hr : --min'
+}
+
+/** Render status message based on project state */
+const StatusMessage = ({
+  enoughFollowers,
+  isTimeUp,
+  isMobile,
+  formattedTime,
+}: {
+  enoughFollowers: boolean
+  isTimeUp: boolean
+  isMobile: boolean
+  formattedTime: string
+}) => {
+  if (enoughFollowers) {
+    return (
+      <Body size={{ base: 'md', lg: 'lg' }} bold>
+        {isMobile ? `- ${t('Ready')}` : `- ${t('Ready to launch')}`}
+      </Body>
+    )
+  }
+
+  if (isTimeUp && !enoughFollowers) {
+    return (
+      <Body size={{ base: 'md', lg: 'lg' }} bold>
+        {t('Time is up: this project did not reach 21 followers in a month.')}
+      </Body>
+    )
+  }
+
+  return (
+    <Body size={{ base: 'md', lg: 'lg' }} bold>
+      {isMobile
+        ? `: ${formattedTime} ${t('to get 21 followers')}`
+        : `- ${formattedTime} ${t('left to get to 21 followers')}`}
+    </Body>
+  )
+}
+
 export const ProjectPreLaunchNav = () => {
   const { project } = useProjectAtom()
-
   const isProjectOwner = useAtomValue(isProjectOwnerAtom)
-
-  const isMobile = useMobileMode()
-
+  const isMobile = Boolean(useMobileMode())
   const [timeLeft, setTimeLeft] = useState<Duration | null>(null)
+  const [isTimeUp, setIsTimeUp] = useState(false)
 
   useEffect(() => {
     if (!project?.preLaunchedAt) {
@@ -44,6 +95,7 @@ export const ProjectPreLaunchNav = () => {
 
       if (remaining.valueOf() <= 0) {
         setTimeLeft(Duration.fromMillis(0)) // Set to zero duration
+        setIsTimeUp(true)
         clearInterval(intervalId)
       } else {
         setTimeLeft(remaining)
@@ -56,44 +108,20 @@ export const ProjectPreLaunchNav = () => {
     return () => clearInterval(intervalId)
   }, [project?.preLaunchedAt])
 
-  let formattedTime: string
-  if (isMobile) {
-    if (timeLeft === null) {
-      formattedTime = '--'
-    } else if (timeLeft.days > 0) {
-      formattedTime = `${formatTimeValue(timeLeft.days)}d`
-    } else if (timeLeft.hours > 0) {
-      formattedTime = `${formatTimeValue(timeLeft.hours)}hr`
-    } else {
-      formattedTime = `${formatTimeValue(timeLeft.minutes)}min`
-    }
-
-    formattedTime += ` ${t('left')}`
-  } else {
-    formattedTime = timeLeft
-      ? `${formatTimeValue(timeLeft.days)}d : ${formatTimeValue(timeLeft.hours)}hr : ${formatTimeValue(
-          timeLeft.minutes,
-        )}min`
-      : '--d : --hr : --min'
-  }
-
-  const enoughFollowers = project?.followersCount && project?.followersCount >= FOLLOWERS_NEEDED
+  const formattedTime = getFormattedTime(timeLeft, isMobile)
+  const hasEnoughFollowers = Boolean(project?.followersCount && project?.followersCount >= FOLLOWERS_NEEDED)
+  const showLaunchButton = hasEnoughFollowers && Boolean(isProjectOwner)
 
   return (
     <Feedback
-      variant={enoughFollowers ? FeedBackVariant.SUCCESS : FeedBackVariant.WARNING}
+      variant={hasEnoughFollowers ? FeedBackVariant.SUCCESS : FeedBackVariant.WARNING}
       noIcon
       height="44px"
       paddingY={0}
       paddingRight={0.5}
       alignItems="center"
     >
-      <HStack
-        w="full"
-        alignItems="center"
-        justifyContent={enoughFollowers && isProjectOwner ? 'space-between' : 'center'}
-        spacing={2}
-      >
+      <HStack w="full" alignItems="center" justifyContent={showLaunchButton ? 'space-between' : 'center'} spacing={2}>
         <HStack>
           <Body
             as={Link}
@@ -104,20 +132,17 @@ export const ProjectPreLaunchNav = () => {
           >
             {isMobile ? `${t('Launchpad')}` : `${t('Project in Launchpad')}`}
           </Body>
-          {enoughFollowers ? (
-            <Body size={{ base: 'md', lg: 'lg' }} bold>
-              {isMobile ? `- ${t('Ready')}` : `- ${t('Ready to launch')}`}
-            </Body>
-          ) : (
-            <Body size={{ base: 'md', lg: 'lg' }} bold>
-              {isMobile
-                ? `: ${formattedTime} ${t('to get 21 followers')}`
-                : `- ${formattedTime} ${t('left to get to 21 followers')}`}
-            </Body>
-          )}
+
+          <StatusMessage
+            enoughFollowers={hasEnoughFollowers}
+            isTimeUp={isTimeUp}
+            isMobile={isMobile}
+            formattedTime={formattedTime}
+          />
+
           <PopOverInfo />
         </HStack>
-        {enoughFollowers && isProjectOwner && (
+        {showLaunchButton && (
           <Button
             as={Link}
             maxWidth="400px"
@@ -136,7 +161,7 @@ export const ProjectPreLaunchNav = () => {
 }
 
 const PopOverInfo = () => {
-  const isMobile = useMobileMode()
+  const isMobile = Boolean(useMobileMode())
   return (
     <Popover trigger={isMobile ? 'click' : 'hover'}>
       <PopoverTrigger>
