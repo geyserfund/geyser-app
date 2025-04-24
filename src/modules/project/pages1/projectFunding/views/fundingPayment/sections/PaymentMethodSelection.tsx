@@ -8,6 +8,7 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { PathName } from '@/shared/constants'
 
 import {
+  hasFiatPaymentMethodAtom,
   hasStripePaymentMethodAtom,
   isFiatSwapMethodStartedAtom,
   isOnchainMethodStartedAtom,
@@ -36,7 +37,7 @@ export const PaymentMethodSelection = () => {
   const isOnchainMethodStarted = useAtomValue(isOnchainMethodStartedAtom)
   const isFiatSwapMethodStarted = useAtomValue(isFiatSwapMethodStartedAtom)
   const hasStripePaymentOption = useAtomValue(hasStripePaymentMethodAtom)
-
+  const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
   const isDisabled = isOnchainMethodStarted || isFiatSwapMethodStarted || Boolean(!paymentMethod)
 
   const items: AnimatedNavBarItem[] = useMemo(() => {
@@ -53,19 +54,21 @@ export const PaymentMethodSelection = () => {
       })
     }
 
-    navBarItems.push({
-      name: t('Fiat'),
-      key: PaymentMethods.fiatSwap,
-      path: PathName.fundingPaymentFiatSwap,
-      isDisabled: isDisabled || Boolean(fiatSwapAmountWarning) || !userId,
-      disableClick: isDisabled || userLimitReached || Boolean(fiatSwapAmountWarning),
-      tooltipLabel: !userId
-        ? t('Please login to use fiat payment')
-        : userLimitReached
-        ? fiatLimitMessage
-        : fiatSwapAmountWarning,
-      replacePath: true,
-    })
+    if (hasFiatPaymentMethod) {
+      navBarItems.push({
+        name: t('Fiat'),
+        key: PaymentMethods.fiatSwap,
+        path: PathName.fundingPaymentFiatSwap,
+        isDisabled: isDisabled || Boolean(fiatSwapAmountWarning) || !userId,
+        disableClick: isDisabled || userLimitReached || Boolean(fiatSwapAmountWarning),
+        tooltipLabel: !userId
+          ? t('Please login to use fiat payment')
+          : userLimitReached
+          ? fiatLimitMessage
+          : fiatSwapAmountWarning,
+        replacePath: true,
+      })
+    }
 
     navBarItems.push({
       name: t('Lightning'),

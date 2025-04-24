@@ -248,7 +248,9 @@ export const Header = () => {
       </Modal>
 
       <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0} position="relative">
-        <ProjectStatusBar project={project} wallet={wallet} isProjectOwner={isProjectOwner} />
+        {!isPrelaunch(project.status) && (
+          <ProjectStatusBar project={project} wallet={wallet} isProjectOwner={isProjectOwner} />
+        )}
         {project.images.length === 1 && <Box>{renderImageOrVideo()}</Box>}
 
         {project.images.length > 1 && <MediaCarousel links={project.images} />}

@@ -28,7 +28,7 @@ type TitleWithSortProps = {
 export const TitleWithSort = ({ title, sortBy, onSortByChange, ...props }: TitleWithSortProps) => {
   return (
     <HStack w="full" justifyContent="space-between" flexWrap={'wrap'} spacing={1} {...props}>
-      <H3 size="2xl" bold dark wordBreak={'keep-all'} width={{ sm: '230px' }}>
+      <H3 size="2xl" bold dark wordBreak={'keep-all'} width={{ sm: '260px' }}>
         {title}
       </H3>
 

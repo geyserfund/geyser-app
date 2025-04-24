@@ -1221,5 +1221,10 @@
   "{{count}} out of 21 followers_other": "{{count}} out of 21 followers_other",
   "{{count}} out of 21 followers_one": "{{count}} out of 21 followers_one",
   "This project still needs {{count}} followers to be able to start raising funds._other": "This project still needs {{count}} followers to be able to start raising funds._other",
-  "This project still needs {{count}} followers to be able to start raising funds._one": "This project still needs {{count}} followers to be able to start raising funds._one"
+  "This project still needs {{count}} followers to be able to start raising funds._one": "This project still needs {{count}} followers to be able to start raising funds._one",
+  "Created At": "Created At",
+  "These early-stage projects are in countdown mode. To launch, they need 21 followers within 30 days. Help them build momentum — or they might never take off.": "These early-stage projects are in countdown mode. To launch, they need 21 followers within 30 days. Help them build momentum — or they might never take off.",
+  "Sort by...": "Sort by...",
+  "Projects in Launchpad": "Projects in Launchpad",
+  "Goal reached!": "Goal reached!"
 }

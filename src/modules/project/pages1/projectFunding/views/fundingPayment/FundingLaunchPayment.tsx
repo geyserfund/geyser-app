@@ -16,7 +16,7 @@ import { PROJECT_LAUNCH_PAYMENT_PROJECT_NAME } from '../../../projectCreation/vi
 import { FundingLayout } from '../../layouts/FundingLayout.tsx'
 import { QRCodeSizeMap } from './components/QRCodeComponent.tsx'
 
-export const DONATION_AMOUNT_FOR_LAUNCH = 21000 // $21 in cents
+export const DONATION_AMOUNT_FOR_LAUNCH = 2100 // $21 in cents
 
 export const FundingLaunchPayment = () => {
   const { project, loading } = useProjectAtom()

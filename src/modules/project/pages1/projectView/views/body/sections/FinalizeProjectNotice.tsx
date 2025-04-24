@@ -13,7 +13,7 @@ export const FinalizeProjectNotice = () => {
   const { t } = useTranslation()
 
   const { project, isProjectOwner } = useProjectAtom()
-  const { wallet, loading } = useWalletAtom()
+  const { loading } = useWalletAtom()
   const navigate = useNavigate()
 
   if (!project || !isProjectOwner) return null
@@ -22,11 +22,9 @@ export const FinalizeProjectNotice = () => {
     navigate(getPath('launchProjectStrategy', project.id))
   }
 
-  if (project.status !== ProjectStatus.Draft) {
+  if (project.status !== ProjectStatus.Draft || loading) {
     return null
   }
-
-  if (wallet?.id || loading) return null
 
   return (
     <CardLayout mobileDense w="full">

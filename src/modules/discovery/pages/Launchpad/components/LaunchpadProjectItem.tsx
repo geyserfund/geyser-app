@@ -21,7 +21,7 @@ type LaunchpadProjectItemProps = {
 } & CardLayoutProps
 
 export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemProps) => {
-  const currentFollowers = project.followersCount ?? 0
+  const [currentFollowers, setCurrentFollowers] = useState(project.followersCount ?? 0)
   const followersNeeded = Math.max(0, FOLLOWERS_NEEDED - currentFollowers)
 
   // Time remaining calculation
@@ -131,7 +131,16 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
             {project.title}
           </H3>
 
-          <Body size="sm" dark noOfLines={2} isTruncated width="100%" wordBreak={'break-all'} whiteSpace={'normal'}>
+          <Body
+            height="45px"
+            size="sm"
+            dark
+            noOfLines={2}
+            isTruncated
+            width="100%"
+            wordBreak={'break-all'}
+            whiteSpace={'normal'}
+          >
             {project.shortDescription}
           </Body>
         </VStack>
@@ -151,7 +160,12 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
             {timeDisplay}
           </Body>
         </HStack>
-        <PrelaunchFollowButton project={project} width="full" size={{ base: 'md', lg: 'lg' }} />
+        <PrelaunchFollowButton
+          project={project}
+          width="full"
+          size={{ base: 'md', lg: 'lg' }}
+          onFollowCompleted={() => setCurrentFollowers((current) => current + 1)}
+        />
       </VStack>
     </CardLayout>
   )
