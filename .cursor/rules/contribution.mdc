@@ -74,6 +74,7 @@ Syntax and Formatting
 - For all icons only use the 'react-icons/pi' package.
 - Nest components in a consistent way: HStack/VStack containing related elements, properly grouped.
 - Only use colors from our color palette, defined in [colors.ts](mdc:src/shared/styles/colors.ts).
+- To check for mobile mode use useMobileMode from [useMobileMode.ts](mdc:src/utils/info/useMobileMode.ts)](mdc:src/utils/info/useMobileMode.ts)
 
 
 Performance Optimization

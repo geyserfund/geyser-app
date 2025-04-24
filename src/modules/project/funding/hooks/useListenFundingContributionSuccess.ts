@@ -6,6 +6,7 @@ import { getPath } from '@/shared/constants'
 import { ContributionStatus } from '@/types/index.ts'
 
 import { fundingContributionAtom } from '../state/fundingContributionAtom.ts'
+import { launchContributionProjectIdAtom } from '../state/fundingFormAtom.ts'
 import { startPollingAndSubscriptionAtom, stopPollingAndSubscriptionAtom } from '../state/pollingAndSubscriptionAtom.ts'
 import { useFundingContributionPolling } from './useFundingContributionPolling.ts'
 import { useFundingContributionSubscription } from './useFundingContributionSubscription.ts'
@@ -22,6 +23,8 @@ export const useListenFundingContributionSuccess = () => {
   const stopPollingAndSubscription = useSetAtom(stopPollingAndSubscriptionAtom)
   const startPollingAndSubscription = useSetAtom(startPollingAndSubscriptionAtom)
 
+  const launchContributionProjectId = useAtomValue(launchContributionProjectIdAtom)
+
   const { project } = useFundingFormAtom()
 
   const { refetch } = useFundingContributionPolling()
@@ -31,9 +34,15 @@ export const useListenFundingContributionSuccess = () => {
 
   useEffect(() => {
     if (fundingContribution && fundingContribution.status === ContributionStatus.Confirmed) {
-      navigate({ pathname: getPath('fundingSuccess', project.name), search: location.search }, { replace: true })
+      if (launchContributionProjectId) {
+        setTimeout(() => {
+          navigate({ pathname: getPath('launchProjectWallet', `${launchContributionProjectId}`) }, { replace: true })
+        }, 2000)
+      } else {
+        navigate({ pathname: getPath('fundingSuccess', project.name), search: location.search }, { replace: true })
+      }
     }
-  }, [fundingContribution, navigate, project.name, location.search])
+  }, [fundingContribution, navigate, project.name, location.search, launchContributionProjectId])
 
   useEffect(() => {
     startPollingAndSubscription()

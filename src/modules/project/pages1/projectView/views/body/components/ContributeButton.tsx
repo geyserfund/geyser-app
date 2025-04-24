@@ -10,8 +10,9 @@ import { useModal } from '@/shared/hooks'
 import { VotingInfoModal } from '@/shared/molecules/VotingInfoModal'
 import { CommunityVoteGrant, GrantStatusEnum, VotingSystem } from '@/types'
 
-import { isActive } from '../../../../../../../utils'
+import { isActive, isPrelaunch } from '../../../../../../../utils'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
+import { PrelaunchFollowButton } from './PrelaunchFollowButton.tsx'
 
 export const ContributeButton = (props: ButtonProps) => {
   const { t } = useTranslation()
@@ -43,6 +44,8 @@ export const ContributeButton = (props: ButtonProps) => {
 
   const isFundingDisabled = !isActive(project.status)
 
+  const isProjectPrelaunch = isPrelaunch(project?.status)
+
   return (
     <>
       {communityVotingGrant && isStepVoting && (
@@ -54,20 +57,24 @@ export const ContributeButton = (props: ButtonProps) => {
           project={project}
         />
       )}
-      <Button
-        size="lg"
-        variant="solid"
-        colorScheme="primary1"
-        isDisabled={isFundingDisabled}
-        onClick={() =>
-          communityVotingGrant && isStepVoting
-            ? votingInfoModal.onOpen()
-            : navigate(getPath('projectFunding', project.name))
-        }
-        {...props}
-      >
-        {t('Contribute')}
-      </Button>
+      {!isProjectPrelaunch ? (
+        <Button
+          size="lg"
+          variant="solid"
+          colorScheme="primary1"
+          isDisabled={isFundingDisabled}
+          onClick={() =>
+            communityVotingGrant && isStepVoting
+              ? votingInfoModal.onOpen()
+              : navigate(getPath('projectFunding', project.name))
+          }
+          {...props}
+        >
+          {t('Contribute')}
+        </Button>
+      ) : (
+        <PrelaunchFollowButton w="full" project={project} />
+      )}
     </>
   )
 }

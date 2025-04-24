@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiBag, PiFlagBannerFold, PiNewspaper } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { useMobileMode } from '@/utils'
+import { isPrelaunch, useMobileMode } from '@/utils'
 
 import { getPath } from '../../../../../../../shared/constants'
 import { ProjectStatus } from '../../../../../../../types'
@@ -19,6 +19,8 @@ export const CreatorButtons = () => {
 
   if (!isProjectOwner || (project.status && [ProjectStatus.Closed, ProjectStatus.Deleted].includes(project.status)))
     return null
+
+  const isProjectPrelaunch = isPrelaunch(project.status)
 
   return (
     <>
@@ -40,6 +42,7 @@ export const CreatorButtons = () => {
         variant="outline"
         colorScheme="neutral1"
         leftIcon={<PiFlagBannerFold />}
+        isDisabled={isProjectPrelaunch}
       >
         {isMobile ? t('Goal') : t('Create goal')}
       </Button>
@@ -51,6 +54,7 @@ export const CreatorButtons = () => {
         variant="solid"
         colorScheme="primary1"
         leftIcon={<PiNewspaper />}
+        isDisabled={isProjectPrelaunch}
       >
         {isMobile ? t('Post') : t('Write post')}
       </Button>

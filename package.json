@@ -1,7 +1,7 @@
 {
   "name": "geyser-app",
   "private": true,
-  "version": "0.20.4",
+  "version": "0.21.0",
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -80,6 +80,7 @@
     "i18next": "^23.1.0",
     "i18next-browser-languagedetector": "^7.0.2",
     "jotai": "^2.8.3",
+    "jotai-scope": "^0.7.3",
     "liquidjs-lib": "^6.0.2-liquid.35",
     "luxon": "^3.2.1",
     "nostr-tools": "^1.7.5",

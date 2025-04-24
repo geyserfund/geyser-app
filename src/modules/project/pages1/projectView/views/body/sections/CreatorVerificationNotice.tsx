@@ -7,6 +7,7 @@ import { useAuthContext } from '@/context/auth.tsx'
 import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground.tsx'
 import { VerifiedBadge } from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { VerificationModal } from '@/modules/project/pages1/projectDashboard/components/VerificationModal.tsx'
 import { UserVerificationModal } from '@/modules/project/pages1/projectDashboard/views/wallet/components/UserVerificationModal.tsx'
 import { useUserVerificationModal } from '@/modules/project/pages1/projectDashboard/views/wallet/hooks/useUserVerificationModal.ts'
@@ -21,6 +22,7 @@ import { useModal } from '@/shared/hooks/useModal.tsx'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { BrandCreamGradient } from '@/shared/styles/custom.ts'
 import { UserVerificationLevel, UserVerificationLevelInput, UserVerificationStatus } from '@/types/index.ts'
+import { isPrelaunch } from '@/utils/index.ts'
 
 import {
   becomeVerifiedNoticeAtom,
@@ -45,6 +47,8 @@ export const CreatorVerificationNotice = () => {
   const { user } = useAuthContext()
   const becomeVerifiedNotice = useAtomValue(becomeVerifiedNoticeAtom)
 
+  const { project } = useProjectAtom()
+
   const isProjectOwner = useAtomValue(isProjectOwnerAtom)
 
   const isEmailVerified = user?.isEmailVerified
@@ -54,6 +58,10 @@ export const CreatorVerificationNotice = () => {
   const hasProjectFundingLimitAlmostReached = useAtomValue(hasProjectFundingLimitAlmostReachedAtom)
 
   if (!isProjectOwner) {
+    return null
+  }
+
+  if (isPrelaunch(project.status)) {
     return null
   }
 

@@ -543,10 +543,14 @@ export const isFundingUserInfoValidAtom = atom((get) => {
   return { title: '', description: '', error: '', valid: true }
 })
 
+/** Atom to store the launch project id */
+export const launchContributionProjectIdAtom = atom<string>('')
+
 /** Reset Funding Form */
 export const resetFundingFormAtom = atom(null, (_, set) => {
   set(fundingFormStateAtom, initialState)
   set(fundingInputAfterRequestAtom, null)
   set(fundingFormErrorAtom, {} as { [key in keyof FundFormType]: string })
   set(fundingFormWarningAtom, {} as { [key in keyof FundFormType]: string })
+  set(launchContributionProjectIdAtom, '')
 })

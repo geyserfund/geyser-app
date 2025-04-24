@@ -15,6 +15,7 @@ export enum PathName {
   myProjects = 'my-projects',
   activity = 'activity',
   products = 'products',
+  launchpad = 'launchpad',
   activityGlobal = 'global',
   activityFollowed = 'followed',
 
@@ -31,6 +32,7 @@ export enum PathName {
 
   project = 'project',
   projectDraft = 'draft',
+  projectPreLaunch = 'prelaunch',
   projectInsights = 'insights',
   projectContributors = 'contributors',
   projectPosts = 'posts',
@@ -53,6 +55,7 @@ export enum PathName {
   launchProjectRewards = 'rewards',
   launchProjectRewardsNew = 'rewards/new',
   launchProjectRewardsEdit = 'rewards/edit',
+  launchProjectStrategy = 'strategy',
 
   userProfile = 'user',
   userSettings = 'settings',
@@ -90,6 +93,7 @@ export enum PathName {
   fundingDetails = 'details',
   fundingSubscription = 'subscription',
   fundingPayment = 'payment',
+  fundingLaunchPayment = 'launch',
   fundingStart = 'start',
   fundingPaymentFailed = 'failed',
   fundingPaymentLightning = 'lightning',
@@ -140,6 +144,7 @@ const pathsMap = {
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
   discoveryMerch: () => `/${PathName.merch}`,
+  discoveryLaunchpad: () => `/${PathName.launchpad}`,
 
   guardians: () => `/${PathName.guardians}`,
   guardiansCharacter: (characterId: string) => `/${PathName.guardians}/${characterId}`,
@@ -165,6 +170,7 @@ const pathsMap = {
 
   project: (projectName: string) => `/${PathName.project}/${projectName}`,
   projectDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}`,
+  projectPreLaunch: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectPreLaunch}`,
   projectGoals: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectGoals}`,
   projectGoalView: (projectName: string, goalId: string | number) =>
     `/${PathName.project}/${projectName}/${PathName.projectGoals}/${goalId}`,
@@ -218,6 +224,9 @@ const pathsMap = {
   projectFunding: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectFunding}`,
   fundingDetails: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingDetails}`,
+
+  fundingLaunchPayment: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingLaunchPayment}`,
 
   fundingStart: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}`,
@@ -279,10 +288,15 @@ const pathsMap = {
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/create`,
   launchProjectRewardsEdit: (projectID: string, rewardUUID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/edit/${rewardUUID}`,
+  launchProjectStrategy: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStrategy}`,
+
   launchProjectWallet: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.node}`,
 
   projectLaunch: (projectName: string) => `/${PathName.project}/${projectName}/?launch`,
   projectLaunchDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}/?draft`,
+  projectLaunchPreLaunch: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectPreLaunch}/?prelaunch`,
 
   /** User Profile Routes */
   userProfile: (userId: string) => `/${PathName.userProfile}/${userId}`,

@@ -22,6 +22,9 @@ import {
   Story,
 } from './sections'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
+import { FollowBoard } from './sections/followboard/FollowBoard.tsx'
+import { FollowersSummary } from './sections/FollowersSummary.tsx'
+import { PreLaunchProjectNotice } from './sections/PreLaunchProjectNotice.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 
 export const ProjectBody = () => {
@@ -30,10 +33,17 @@ export const ProjectBody = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
+  const isPrelaunch = project?.status === ProjectStatus.PreLaunch
+
   useEffect(() => {
     if (loading) return
+    console.log('checking whats with the paths', location.pathname)
     if (project?.status === ProjectStatus.Draft && !location.pathname.includes('/draft')) {
       navigate(location.pathname + '/draft')
+    } else if (project?.status === ProjectStatus.PreLaunch && !location.pathname.includes('/prelaunch')) {
+      navigate(location.pathname + '/prelaunch')
+    } else if (project?.status === ProjectStatus.Active && location.pathname.includes('/prelaunch')) {
+      navigate(location.pathname.replace('/prelaunch', ''))
     } else if (project?.status === ProjectStatus.Active && location.pathname.includes('/draft')) {
       navigate(location.pathname.replace('/draft', ''))
     }
@@ -50,6 +60,7 @@ export const ProjectBody = () => {
         paddingBottom={{ base: 24, lg: 10 }}
       >
         <FinalizeProjectNotice />
+        <PreLaunchProjectNotice />
         <CreatorVerificationNotice />
 
         <Header />
@@ -67,8 +78,8 @@ export const ProjectBody = () => {
         overflow="auto"
         css={{ '&::-webkit-scrollbar': { display: 'none' }, msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
-        <ContributionSummary />
-        <LeaderboardSummary />
+        {isPrelaunch ? <FollowersSummary /> : <ContributionSummary />}
+        {isPrelaunch ? <FollowBoard /> : <LeaderboardSummary />}
       </RightSideStickyLayout>
 
       {/* <Story />

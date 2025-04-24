@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
+import { ProjectStatus } from '@/types/index.ts'
 
 import { getPath } from '../../../../../../../shared/constants'
 import { useProjectAtom, useWalletAtom } from '../../../../../hooks/useProjectAtom'
@@ -12,17 +13,18 @@ export const FinalizeProjectNotice = () => {
   const { t } = useTranslation()
 
   const { project, isProjectOwner } = useProjectAtom()
-  const { wallet, loading } = useWalletAtom()
+  const { loading } = useWalletAtom()
   const navigate = useNavigate()
 
   if (!project || !isProjectOwner) return null
 
   const handleConnectNodeClick = () => {
-    const nodeConfigurationPath = getPath('launchProjectWallet', project.id)
-    navigate(nodeConfigurationPath)
+    navigate(getPath('launchProjectStrategy', project.id))
   }
 
-  if (wallet?.id || loading) return null
+  if (project.status !== ProjectStatus.Draft || loading) {
+    return null
+  }
 
   return (
     <CardLayout mobileDense w="full">

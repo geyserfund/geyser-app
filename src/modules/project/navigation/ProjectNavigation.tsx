@@ -19,11 +19,16 @@ import { useLocation } from 'react-router-dom'
 import { useAuthContext } from '@/context'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { PathName } from '@/shared/constants'
-import { useMobileMode } from '@/utils'
+import { isPrelaunch, useMobileMode } from '@/utils'
 
 import { TopNavContainer } from '../../navigation/components/topNav/TopNavContainer'
 import { useProjectAtom } from '../hooks/useProjectAtom'
-import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from './projectNavigationAtom'
+import { ProjectPreLaunchNav } from './components/ProjectPreLaunchNav.tsx'
+import {
+  showProjectNavBarForDesktopAtom,
+  showProjectNavBarForMobileAtom,
+  showProjectNavBarForPreLaunchAtom,
+} from './projectNavigationAtom'
 
 export const ProjectNavigation = () => {
   const location = useLocation()
@@ -37,6 +42,10 @@ export const ProjectNavigation = () => {
 
   const showProjectNavBarForDesktop = useAtomValue(showProjectNavBarForDesktopAtom)
 
+  const showProjectNavBarForPreLaunch = useAtomValue(showProjectNavBarForPreLaunchAtom)
+
+  const isProjectPrelaunch = isPrelaunch(project.status)
+
   const ProjectNavigationButtons = useMemo(() => {
     const buttonList = [
       {
@@ -47,7 +56,7 @@ export const ProjectNavigation = () => {
       },
     ] as AnimatedNavBarItem[]
 
-    if (project.rewardsCount) {
+    if (!isProjectPrelaunch && project.rewardsCount) {
       buttonList.push({
         name: 'Rewards',
         path: PathName.projectRewards,
@@ -56,7 +65,7 @@ export const ProjectNavigation = () => {
       })
     }
 
-    if (project.entriesCount) {
+    if (!isProjectPrelaunch && project.entriesCount) {
       buttonList.push({
         name: 'Posts',
         path: PathName.projectPosts,
@@ -65,7 +74,7 @@ export const ProjectNavigation = () => {
       })
     }
 
-    if (project.goalsCount) {
+    if (!isProjectPrelaunch && project.goalsCount) {
       buttonList.push({
         name: 'Goals',
         path: PathName.projectGoals,
@@ -74,12 +83,15 @@ export const ProjectNavigation = () => {
       })
     }
 
-    buttonList.push({
-      name: 'Leaderboard',
-      path: PathName.projectLeaderboard,
-      icon: PiMedalMilitary,
-      activeIcon: PiMedalMilitaryBold,
-    })
+    if (!isProjectPrelaunch) {
+      buttonList.push({
+        name: 'Leaderboard',
+        path: PathName.projectLeaderboard,
+        icon: PiMedalMilitary,
+        activeIcon: PiMedalMilitaryBold,
+      })
+    }
+
     if (isProjectOwner) {
       buttonList.push({
         name: 'Dashboard',
@@ -92,7 +104,7 @@ export const ProjectNavigation = () => {
     }
 
     return buttonList
-  }, [project, isProjectOwner])
+  }, [project, isProjectOwner, isProjectPrelaunch])
 
   const activeButtonIndex = useMemo(() => {
     let activeIndex = 0
@@ -103,6 +115,14 @@ export const ProjectNavigation = () => {
     })
     return activeIndex
   }, [location.pathname, ProjectNavigationButtons])
+
+  if (showProjectNavBarForPreLaunch) {
+    return (
+      <TopNavContainer zIndex={9}>
+        <ProjectPreLaunchNav />
+      </TopNavContainer>
+    )
+  }
 
   if ((isMobile && !showProjectNavBarForMobile) || (!isMobile && !showProjectNavBarForDesktop)) {
     return null

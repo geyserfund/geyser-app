@@ -162,6 +162,17 @@ export const SuccessfullPhoneVerificationIllustrationUrl =
 export const DollarToBitcoinIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/dollar-to-bitcoin-illustration.png'
 
+export const LaunchNowIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/launch-now.png'
+export const LaunchPadIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/launchpad-illustration.png'
+export const SaveDraftIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/save-draft-illustration.png'
+export const FollowBellIllurationsUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/successfull-follow-illustration.png'
+export const CrownIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/crown-illustration.png'
+export const GrantsIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/grants-illustration.png'
+
 // FUNDING FLOW ERRORS
 
 export const FundingErrorUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/errors/error.png'
