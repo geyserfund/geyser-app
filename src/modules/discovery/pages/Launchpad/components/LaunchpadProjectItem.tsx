@@ -63,6 +63,8 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
   let timeDisplay = ''
   if (timeLeft === null) {
     timeDisplay = ''
+  } else if (timeLeft.valueOf() <= 0) {
+    timeDisplay = t('Time is up')
   } else if (timeLeft.days > 0) {
     timeDisplay = `${formatTimeValue(timeLeft.days)}d ${t('left')}`
   } else if (timeLeft.hours > 0) {
