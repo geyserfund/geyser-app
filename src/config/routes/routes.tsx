@@ -123,6 +123,13 @@ export const platformRoutes: RouteObject[] = [
         ],
       },
       {
+        path: getPath('launchProjectStrategy', PathName.projectId),
+        async lazy() {
+          const ProjectCreateStrategy = await ProjectLaunch().then((m) => m.ProjectCreateStrategy)
+          return { Component: ProjectCreateStrategy }
+        },
+      },
+      {
         path: getPath('launchProjectWallet', PathName.projectId),
         async lazy() {
           const ProjectCreationWalletConnectionPage = await ProjectLaunch().then(
@@ -292,6 +299,13 @@ export const platformRoutes: RouteObject[] = [
           },
           {
             path: getPath('projectDraft', PathName.projectName),
+            async lazy() {
+              const ProjectBody = await Project().then((m) => m.ProjectBody)
+              return { Component: ProjectBody }
+            },
+          },
+          {
+            path: getPath('projectPreLaunch', PathName.projectName),
             async lazy() {
               const ProjectBody = await Project().then((m) => m.ProjectBody)
               return { Component: ProjectBody }
@@ -498,6 +512,13 @@ export const platformRoutes: RouteObject[] = [
             async lazy() {
               const FundingDetails = await ProjectFunding().then((m) => m.FundingDetails)
               return { Component: FundingDetails }
+            },
+          },
+          {
+            path: getPath('fundingLaunchPayment', PathName.projectName),
+            async lazy() {
+              const FundingLaunchPayment = await ProjectFunding().then((m) => m.FundingLaunchPayment)
+              return { Component: FundingLaunchPayment }
             },
           },
           {
@@ -723,7 +744,13 @@ export const platformRoutes: RouteObject[] = [
           return { Component: HallOfFamePage }
         },
       },
-
+      {
+        path: getPath('discoveryLaunchpad'),
+        async lazy() {
+          const LaunchpadPage = await Discovery().then((m) => m.Launchpad)
+          return { Component: LaunchpadPage }
+        },
+      },
       {
         path: getPath('hallOfFameProjects'),
         async lazy() {

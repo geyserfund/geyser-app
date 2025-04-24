@@ -1,14 +1,21 @@
 import { useSetAtom } from 'jotai'
 import React from 'react'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+
 import { followedProjectsAtom, useFollowedProjectsValue } from '../../../modules/auth/state'
 import { Project, useProjectFollowMutation, useProjectUnfollowMutation } from '../../../types'
 import { toInt } from '../../../utils'
 
-export const useFollowProject = (project: Pick<Project, 'id' | 'name' | 'title'>) => {
+export const useFollowProject = (
+  project: Pick<Project, 'id' | 'name' | 'title'>,
+  options?: { onFollowCompleted?: () => void; onUnFollowCompleted?: () => void },
+) => {
   const followedProjects = useFollowedProjectsValue()
 
   const setFollowedProjects = useSetAtom(followedProjectsAtom)
+
+  const { project: projectState, partialUpdateProject } = useProjectAtom()
 
   const [followProject, { loading: followLoading, error: followError }] = useProjectFollowMutation({
     variables: {
@@ -18,6 +25,11 @@ export const useFollowProject = (project: Pick<Project, 'id' | 'name' | 'title'>
     },
     onCompleted() {
       setFollowedProjects((prev) => [...prev, project])
+      if (toInt(project.id) === toInt(projectState?.id)) {
+        partialUpdateProject({ followersCount: projectState?.followersCount ? projectState.followersCount + 1 : 1 })
+      }
+
+      options?.onFollowCompleted?.()
     },
   })
 
@@ -28,6 +40,11 @@ export const useFollowProject = (project: Pick<Project, 'id' | 'name' | 'title'>
       },
     },
     onCompleted() {
+      if (toInt(project.id) === toInt(projectState?.id)) {
+        partialUpdateProject({ followersCount: projectState?.followersCount ? projectState.followersCount - 1 : 0 })
+      }
+
+      options?.onUnFollowCompleted?.()
       setFollowedProjects((prev) => prev.filter((p) => toInt(p.id) !== toInt(project.id)))
     },
   })

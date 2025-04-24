@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_PROJECT_FOR_LANDING_PAGE } from '../fragments/projectFragment'
+import { FRAGMENT_PROJECT_FOR_LANDING_PAGE, FRAGMENT_PROJECT_FOR_LAUNCHPAD_PAGE } from '../fragments/projectFragment'
 
 export const QUERY_PROJECTS_SUMMARY = gql`
   query ProjectsSummary {
@@ -56,6 +56,17 @@ export const QUERY_PROJECTS_FOR_LANDING_PAGE = gql`
     projectsGet(input: $input) {
       projects {
         ...ProjectForLandingPage
+      }
+    }
+  }
+`
+
+export const QUERY_PROJECTS_FOR_LAUNCHPAD_PAGE = gql`
+  ${FRAGMENT_PROJECT_FOR_LAUNCHPAD_PAGE}
+  query ProjectsForLaunchpadPage($input: ProjectsGetQueryInput) {
+    projectsGet(input: $input) {
+      projects {
+        ...ProjectForLaunchpadPage
       }
     }
   }

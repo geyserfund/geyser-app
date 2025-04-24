@@ -44,6 +44,7 @@ export const FRAGMENT_USER_AVATAR = gql`
     id
     imageUrl
     username
+    heroId
     guardianType
   }
 `

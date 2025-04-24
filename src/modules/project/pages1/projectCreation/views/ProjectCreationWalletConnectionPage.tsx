@@ -18,6 +18,7 @@ import { EnableFiatContributions } from '../../projectDashboard/views/wallet/com
 import { ProjectCreationWalletConnectionForm } from '..'
 import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
+import { useCheckPrelaunchSteps } from '../hooks/useCheckPrelaunchSteps.tsx'
 import { useLocationMandatoryRedirect } from '../hooks/useLocationMandatoryRedirect'
 import { ConnectionOption, useWalletForm } from '../hooks/useWalletForm'
 import {
@@ -34,6 +35,8 @@ import { ProjectCreationIdentityVerificationPage } from './ProjectCreationIdenti
 export const ProjectCreationWalletConnectionPage = () => {
   const { t } = useTranslation()
   const toast = useNotification()
+
+  useCheckPrelaunchSteps()
 
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
@@ -150,7 +153,13 @@ export const ProjectCreationWalletConnectionPage = () => {
         />
       }
       title={
-        <TitleWithProgressBar title={t('Configure wallet')} subtitle={t('Create a project')} index={5} length={5} />
+        <TitleWithProgressBar
+          hideSteps
+          title={t('Configure wallet')}
+          subtitle={t('You’re almost ready to launch!')}
+          index={5}
+          length={5}
+        />
       }
     >
       <VStack w="full" alignItems="start" pb="20px">

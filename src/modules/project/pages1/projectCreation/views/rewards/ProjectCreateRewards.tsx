@@ -26,7 +26,7 @@ export const ProjectCreateRewards = () => {
   const isCreatingOrEditing = isNew || isEdit
 
   const handleNext = () => {
-    navigate(getPath('launchProjectWallet', project?.id))
+    navigate(getPath('launchProjectStrategy', project?.id))
   }
 
   const handleBack = () => {

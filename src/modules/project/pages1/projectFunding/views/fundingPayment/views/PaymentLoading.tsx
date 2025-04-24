@@ -1,5 +1,5 @@
 import { useBreakpointValue, VStack } from '@chakra-ui/react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useFundingAPI } from '@/modules/project/funding/hooks/useFundingAPI'
@@ -18,8 +18,11 @@ export const PaymentLoading = () => {
 
   const navigate = useNavigate()
 
+  const data = useRef(false)
+
   useEffect(() => {
-    if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid) {
+    if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid && !data.current) {
+      data.current = true
       requestFundingFromContext((data) => {
         const contributionId = data.contributionCreate.contribution.uuid
 

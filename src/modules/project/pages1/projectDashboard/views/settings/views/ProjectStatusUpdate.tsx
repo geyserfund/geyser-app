@@ -29,7 +29,10 @@ export const ProjectStatusUpdate = () => {
 
   const { updateProjectStatus } = useProjectAPI()
 
-  const isProjectInReview = project?.status === ProjectStatus.InReview || project?.status === ProjectStatus.Closed
+  const isProjectInReview =
+    project?.status === ProjectStatus.InReview ||
+    project?.status === ProjectStatus.Closed ||
+    project?.status === ProjectStatus.PreLaunch
   const isProjectInReviewTooltip = ProjectStatusTooltip[ProjectStatusLabels.IN_REVIEW]
 
   const statusConfirmModal = useModal()

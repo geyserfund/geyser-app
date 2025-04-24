@@ -20,10 +20,11 @@ import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { RewardCurrency, Satoshis, USDCents, useProjectRewardGetQuery } from '@/types'
-import { toInt, useMobileMode } from '@/utils'
+import { isPrelaunch, toInt, useMobileMode } from '@/utils'
 
 import { PostsUpdates } from '../../components/PostsUpdates'
 import { useRewardBuy } from '../../hooks'
+import { PrelaunchFollowButton } from '../body/components/PrelaunchFollowButton.tsx'
 import { ProjectRewardShippingEstimate, RewardEditMenu } from './components'
 import { RewardShare } from './components/RewardShare'
 
@@ -98,6 +99,8 @@ export const RewardView = () => {
     )
   }
 
+  const isBuyDisabled = !isAvailable || isPrelaunch(project?.status)
+
   return (
     <>
       <Head title={reward.name} description={reward.shortDescription || ''} image={reward.images[0]} />
@@ -113,7 +116,7 @@ export const RewardView = () => {
           >
             {t('All rewards')}
           </Button>
-          <RewardShare reward={reward} />
+          {isPrelaunch(project?.status) ? <PrelaunchFollowButton project={project} /> : <RewardShare reward={reward} />}
         </TopNavContainerBar>
 
         <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }}>
@@ -135,7 +138,7 @@ export const RewardView = () => {
                       colorScheme="primary1"
                       width="160px"
                       onClick={buyReward}
-                      isDisabled={!isAvailable}
+                      isDisabled={isBuyDisabled}
                     >
                       {t('Buy')}
                     </Button>
@@ -246,7 +249,7 @@ export const RewardView = () => {
               colorScheme="primary1"
               width="full"
               onClick={buyReward}
-              isDisabled={!isAvailable}
+              isDisabled={isBuyDisabled}
             >
               {t('Buy')}
             </Button>

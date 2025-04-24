@@ -36,7 +36,13 @@ import {
 } from '../../../../../../../../shared/constants'
 import { VideoPlayer } from '../../../../../../../../shared/molecules/VideoPlayer'
 import { useProjectPageHeaderSummaryQuery } from '../../../../../../../../types'
-import { commaFormatted, removeProjectAmountException, toInt, useMobileMode } from '../../../../../../../../utils'
+import {
+  commaFormatted,
+  isPrelaunch,
+  removeProjectAmountException,
+  toInt,
+  useMobileMode,
+} from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
 import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
 import { FollowButton } from '../../components'
@@ -133,20 +139,21 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
           <CreatorSocial />
         </HStack>
 
-        {summaryLoading ? (
-          <SkeletonLayout height="20px" w="250px" />
-        ) : (
-          <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
-            <Body size="md" medium light>
-              {`${t('Contributors')}: ${project.fundersCount}`}
-            </Body>
-            <Body size="md" medium light>
-              {`${t('Followers')}: ${project.followersCount}`}
-            </Body>
+        {!isPrelaunch(project.status) &&
+          (summaryLoading ? (
+            <SkeletonLayout height="20px" w="250px" />
+          ) : (
+            <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
+              <Body size="md" medium light>
+                {`${t('Contributors')}: ${project.fundersCount}`}
+              </Body>
+              <Body size="md" medium light>
+                {`${t('Followers')}: ${project.followersCount}`}
+              </Body>
 
-            {subscribers && <Body size="md" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
-          </HStack>
-        )}
+              {subscribers && <Body size="md" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
+            </HStack>
+          ))}
 
         <HStack w="full" paddingTop={1} justifyContent="space-between" flexWrap={'wrap'}>
           <HStack>
@@ -157,7 +164,7 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
               colorScheme="neutral1"
               onClick={handleClickDetails}
             />
-            <FollowButton project={project} withLabel />
+            {!isPrelaunch(project.status) && <FollowButton project={project} withLabel />}
             <ShareProjectButton />
           </HStack>
 
@@ -241,7 +248,9 @@ export const Header = () => {
       </Modal>
 
       <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0} position="relative">
-        <ProjectStatusBar project={project} wallet={wallet} isProjectOwner={isProjectOwner} />
+        {!isPrelaunch(project.status) && (
+          <ProjectStatusBar project={project} wallet={wallet} isProjectOwner={isProjectOwner} />
+        )}
         {project.images.length === 1 && <Box>{renderImageOrVideo()}</Box>}
 
         {project.images.length > 1 && <MediaCarousel links={project.images} />}

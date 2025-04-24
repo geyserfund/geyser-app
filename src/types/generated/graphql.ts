@@ -1346,6 +1346,7 @@ export type Mutation = {
   /** Only returns ProjectGoals that are in progress */
   projectGoalOrderingUpdate: Array<ProjectGoal>;
   projectGoalUpdate: ProjectGoal;
+  projectPreLaunch: Project;
   projectPublish: Project;
   projectRewardCreate: ProjectReward;
   projectRewardCurrencyUpdate: Array<ProjectReward>;
@@ -1532,6 +1533,11 @@ export type MutationProjectGoalOrderingUpdateArgs = {
 
 export type MutationProjectGoalUpdateArgs = {
   input: ProjectGoalUpdateInput;
+};
+
+
+export type MutationProjectPreLaunchArgs = {
+  input: ProjectPreLaunchMutationInput;
 };
 
 
@@ -2303,6 +2309,7 @@ export type Project = {
   /** Unique name for the project. Used for the project URL and lightning address. */
   name: Scalars['String']['output'];
   owners: Array<Owner>;
+  paidLaunch?: Maybe<Scalars['Boolean']['output']>;
   paymentMethods: PaymentMethods;
   /**
    * By default, returns all the posts of a project, both published and unpublished but not deleted.
@@ -2310,6 +2317,7 @@ export type Project = {
    * An unpublished post is only returned if the requesting user is the creator of the post.
    */
   posts: Array<Post>;
+  preLaunchedAt?: Maybe<Scalars['Date']['output']>;
   /** Boolean flag to indicate if the project can be promoted. */
   promotionsEnabled?: Maybe<Scalars['Boolean']['output']>;
   rewardBuyersCount?: Maybe<Scalars['Int']['output']>;
@@ -2646,6 +2654,10 @@ export type ProjectPostsGetWhereInput = {
   published?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type ProjectPreLaunchMutationInput = {
+  projectId: Scalars['BigInt']['input'];
+};
+
 export type ProjectPublishMutationInput = {
   projectId: Scalars['BigInt']['input'];
 };
@@ -2796,7 +2808,8 @@ export enum ProjectStatus {
   Deleted = 'deleted',
   Draft = 'draft',
   InReview = 'in_review',
-  Inactive = 'inactive'
+  Inactive = 'inactive',
+  PreLaunch = 'pre_launch'
 }
 
 export type ProjectStatusUpdate = {
@@ -4333,6 +4346,7 @@ export type ResolversTypes = {
   ProjectMostFundedByTag: ResolverTypeWrapper<Omit<ProjectMostFundedByTag, 'projects'> & { projects: Array<ResolversTypes['ProjectMostFunded']> }>;
   ProjectPostsGetInput: ProjectPostsGetInput;
   ProjectPostsGetWhereInput: ProjectPostsGetWhereInput;
+  ProjectPreLaunchMutationInput: ProjectPreLaunchMutationInput;
   ProjectPublishMutationInput: ProjectPublishMutationInput;
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>;
   ProjectReward: ResolverTypeWrapper<Omit<ProjectReward, 'project'> & { project: ResolversTypes['Project'] }>;
@@ -4714,6 +4728,7 @@ export type ResolversParentTypes = {
   ProjectMostFundedByTag: Omit<ProjectMostFundedByTag, 'projects'> & { projects: Array<ResolversParentTypes['ProjectMostFunded']> };
   ProjectPostsGetInput: ProjectPostsGetInput;
   ProjectPostsGetWhereInput: ProjectPostsGetWhereInput;
+  ProjectPreLaunchMutationInput: ProjectPreLaunchMutationInput;
   ProjectPublishMutationInput: ProjectPublishMutationInput;
   ProjectRegionsGetResult: ProjectRegionsGetResult;
   ProjectReward: Omit<ProjectReward, 'project'> & { project: ResolversParentTypes['Project'] };
@@ -5414,6 +5429,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectGoalDelete?: Resolver<ResolversTypes['ProjectGoalDeleteResponse'], ParentType, ContextType, RequireFields<MutationProjectGoalDeleteArgs, 'projectGoalId'>>;
   projectGoalOrderingUpdate?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType, RequireFields<MutationProjectGoalOrderingUpdateArgs, 'input'>>;
   projectGoalUpdate?: Resolver<ResolversTypes['ProjectGoal'], ParentType, ContextType, RequireFields<MutationProjectGoalUpdateArgs, 'input'>>;
+  projectPreLaunch?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectPreLaunchArgs, 'input'>>;
   projectPublish?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectPublishArgs, 'input'>>;
   projectRewardCreate?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationProjectRewardCreateArgs, 'input'>>;
   projectRewardCurrencyUpdate?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<MutationProjectRewardCurrencyUpdateArgs, 'input'>>;
@@ -5747,8 +5763,10 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   milestones?: Resolver<Array<ResolversTypes['Milestone']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   owners?: Resolver<Array<ResolversTypes['Owner']>, ParentType, ContextType>;
+  paidLaunch?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   paymentMethods?: Resolver<ResolversTypes['PaymentMethods'], ParentType, ContextType>;
   posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType, Partial<ProjectPostsArgs>>;
+  preLaunchedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   promotionsEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   rewardBuyersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>;
@@ -6780,6 +6798,8 @@ export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 
 
 export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
+export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, followersCount?: number | null, preLaunchedAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
+
 export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
 export type RewardForProductsPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null } };
@@ -6834,6 +6854,16 @@ export type ProjectsForLandingPageQueryVariables = Exact<{
 export type ProjectsForLandingPageQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
       { __typename?: 'Project' }
       & ProjectForLandingPageFragment
+    )> } };
+
+export type ProjectsForLaunchpadPageQueryVariables = Exact<{
+  input?: InputMaybe<ProjectsGetQueryInput>;
+}>;
+
+
+export type ProjectsForLaunchpadPageQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
+      { __typename?: 'Project' }
+      & ProjectForLaunchpadPageFragment
     )> } };
 
 export type ProjectRewardsTrendingWeeklyGetQueryVariables = Exact<{ [key: string]: never; }>;
@@ -7343,7 +7373,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, launchedAt?: any | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, keys: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, launchedAt?: any | null, preLaunchedAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, keys: (
     { __typename?: 'ProjectKeys' }
     & ProjectKeysFragment
   ), owners: Array<{ __typename?: 'Owner', id: any, user: (
@@ -7377,7 +7407,7 @@ export type PostPageProjectRewardFragment = { __typename?: 'ProjectReward', id: 
 
 export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: any, country?: string | null, legalEntityType: LegalEntityType, verified?: boolean | null } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
-export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, guardianType?: GuardianType | null };
+export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null };
 
 export type ProjectOwnerUserForInvoiceFragment = { __typename?: 'User', id: any, username: string, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', identity?: { __typename?: 'VerificationResult', verifiedAt?: any | null, verified?: boolean | null } | null } } };
 
@@ -7586,6 +7616,13 @@ export type ProjectStatusUpdateMutationVariables = Exact<{
 
 export type ProjectStatusUpdateMutation = { __typename?: 'Mutation', projectStatusUpdate: { __typename?: 'Project', id: any, status?: ProjectStatus | null } };
 
+export type ProjectPreLaunchMutationVariables = Exact<{
+  input: ProjectPreLaunchMutationInput;
+}>;
+
+
+export type ProjectPreLaunchMutation = { __typename?: 'Mutation', projectPreLaunch: { __typename?: 'Project', id: any, name: string, status?: ProjectStatus | null } };
+
 export type ProjectPublishMutationVariables = Exact<{
   input: ProjectPublishMutationInput;
 }>;
@@ -7790,6 +7827,16 @@ export type ProjectEntryQuery = { __typename?: 'Query', entry?: (
     { __typename?: 'Entry' }
     & ProjectEntryViewFragment
   ) | null };
+
+export type ProjectFollowersQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type ProjectFollowersQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', followers: Array<(
+      { __typename?: 'User' }
+      & UserAvatarFragment
+    )> } | null };
 
 export type ProjectPageFundersQueryVariables = Exact<{
   input: GetFundersInput;
@@ -8513,9 +8560,33 @@ export const ProjectForLandingPageFragmentDoc = gql`
   shortDescription
   title
   status
-  fundersCount
   balance
   balanceUsdCent
+  owners {
+    id
+    user {
+      id
+      taxProfile {
+        legalEntityType
+        verified
+        country
+      }
+    }
+  }
+}
+    `;
+export const ProjectForLaunchpadPageFragmentDoc = gql`
+    fragment ProjectForLaunchpadPage on Project {
+  id
+  name
+  thumbnailImage
+  shortDescription
+  title
+  status
+  followersCount
+  preLaunchedAt
+  category
+  subCategory
   owners {
     id
     user {
@@ -9048,6 +9119,7 @@ export const UserAvatarFragmentDoc = gql`
   id
   imageUrl
   username
+  heroId
   guardianType
 }
     `;
@@ -9592,10 +9664,13 @@ export const ProjectPageBodyFragmentDoc = gql`
   rewardCurrency
   createdAt
   launchedAt
+  preLaunchedAt
+  paidLaunch
   goalsCount
   rewardsCount
   entriesCount
   promotionsEnabled
+  followersCount
   keys {
     ...ProjectKeys
   }
@@ -10992,6 +11067,48 @@ export type ProjectsForLandingPageQueryHookResult = ReturnType<typeof useProject
 export type ProjectsForLandingPageLazyQueryHookResult = ReturnType<typeof useProjectsForLandingPageLazyQuery>;
 export type ProjectsForLandingPageSuspenseQueryHookResult = ReturnType<typeof useProjectsForLandingPageSuspenseQuery>;
 export type ProjectsForLandingPageQueryResult = Apollo.QueryResult<ProjectsForLandingPageQuery, ProjectsForLandingPageQueryVariables>;
+export const ProjectsForLaunchpadPageDocument = gql`
+    query ProjectsForLaunchpadPage($input: ProjectsGetQueryInput) {
+  projectsGet(input: $input) {
+    projects {
+      ...ProjectForLaunchpadPage
+    }
+  }
+}
+    ${ProjectForLaunchpadPageFragmentDoc}`;
+
+/**
+ * __useProjectsForLaunchpadPageQuery__
+ *
+ * To run a query within a React component, call `useProjectsForLaunchpadPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectsForLaunchpadPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectsForLaunchpadPageQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectsForLaunchpadPageQuery(baseOptions?: Apollo.QueryHookOptions<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>(ProjectsForLaunchpadPageDocument, options);
+      }
+export function useProjectsForLaunchpadPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>(ProjectsForLaunchpadPageDocument, options);
+        }
+export function useProjectsForLaunchpadPageSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>(ProjectsForLaunchpadPageDocument, options);
+        }
+export type ProjectsForLaunchpadPageQueryHookResult = ReturnType<typeof useProjectsForLaunchpadPageQuery>;
+export type ProjectsForLaunchpadPageLazyQueryHookResult = ReturnType<typeof useProjectsForLaunchpadPageLazyQuery>;
+export type ProjectsForLaunchpadPageSuspenseQueryHookResult = ReturnType<typeof useProjectsForLaunchpadPageSuspenseQuery>;
+export type ProjectsForLaunchpadPageQueryResult = Apollo.QueryResult<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>;
 export const ProjectRewardsTrendingWeeklyGetDocument = gql`
     query ProjectRewardsTrendingWeeklyGet {
   projectRewardsTrendingWeeklyGet {
@@ -13146,6 +13263,41 @@ export function useProjectStatusUpdateMutation(baseOptions?: Apollo.MutationHook
 export type ProjectStatusUpdateMutationHookResult = ReturnType<typeof useProjectStatusUpdateMutation>;
 export type ProjectStatusUpdateMutationResult = Apollo.MutationResult<ProjectStatusUpdateMutation>;
 export type ProjectStatusUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectStatusUpdateMutation, ProjectStatusUpdateMutationVariables>;
+export const ProjectPreLaunchDocument = gql`
+    mutation ProjectPreLaunch($input: ProjectPreLaunchMutationInput!) {
+  projectPreLaunch(input: $input) {
+    id
+    name
+    status
+  }
+}
+    `;
+export type ProjectPreLaunchMutationFn = Apollo.MutationFunction<ProjectPreLaunchMutation, ProjectPreLaunchMutationVariables>;
+
+/**
+ * __useProjectPreLaunchMutation__
+ *
+ * To run a mutation, you first call `useProjectPreLaunchMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectPreLaunchMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectPreLaunchMutation, { data, loading, error }] = useProjectPreLaunchMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectPreLaunchMutation(baseOptions?: Apollo.MutationHookOptions<ProjectPreLaunchMutation, ProjectPreLaunchMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectPreLaunchMutation, ProjectPreLaunchMutationVariables>(ProjectPreLaunchDocument, options);
+      }
+export type ProjectPreLaunchMutationHookResult = ReturnType<typeof useProjectPreLaunchMutation>;
+export type ProjectPreLaunchMutationResult = Apollo.MutationResult<ProjectPreLaunchMutation>;
+export type ProjectPreLaunchMutationOptions = Apollo.BaseMutationOptions<ProjectPreLaunchMutation, ProjectPreLaunchMutationVariables>;
 export const ProjectPublishDocument = gql`
     mutation ProjectPublish($input: ProjectPublishMutationInput!) {
   projectPublish(input: $input) {
@@ -14050,6 +14202,48 @@ export type ProjectEntryQueryHookResult = ReturnType<typeof useProjectEntryQuery
 export type ProjectEntryLazyQueryHookResult = ReturnType<typeof useProjectEntryLazyQuery>;
 export type ProjectEntrySuspenseQueryHookResult = ReturnType<typeof useProjectEntrySuspenseQuery>;
 export type ProjectEntryQueryResult = Apollo.QueryResult<ProjectEntryQuery, ProjectEntryQueryVariables>;
+export const ProjectFollowersDocument = gql`
+    query ProjectFollowers($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    followers {
+      ...UserAvatar
+    }
+  }
+}
+    ${UserAvatarFragmentDoc}`;
+
+/**
+ * __useProjectFollowersQuery__
+ *
+ * To run a query within a React component, call `useProjectFollowersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectFollowersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectFollowersQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectFollowersQuery(baseOptions: Apollo.QueryHookOptions<ProjectFollowersQuery, ProjectFollowersQueryVariables> & ({ variables: ProjectFollowersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectFollowersQuery, ProjectFollowersQueryVariables>(ProjectFollowersDocument, options);
+      }
+export function useProjectFollowersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectFollowersQuery, ProjectFollowersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectFollowersQuery, ProjectFollowersQueryVariables>(ProjectFollowersDocument, options);
+        }
+export function useProjectFollowersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectFollowersQuery, ProjectFollowersQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectFollowersQuery, ProjectFollowersQueryVariables>(ProjectFollowersDocument, options);
+        }
+export type ProjectFollowersQueryHookResult = ReturnType<typeof useProjectFollowersQuery>;
+export type ProjectFollowersLazyQueryHookResult = ReturnType<typeof useProjectFollowersLazyQuery>;
+export type ProjectFollowersSuspenseQueryHookResult = ReturnType<typeof useProjectFollowersSuspenseQuery>;
+export type ProjectFollowersQueryResult = Apollo.QueryResult<ProjectFollowersQuery, ProjectFollowersQueryVariables>;
 export const ProjectPageFundersDocument = gql`
     query ProjectPageFunders($input: GetFundersInput!) {
   fundersGet(input: $input) {

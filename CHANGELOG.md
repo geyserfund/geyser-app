@@ -1,3 +1,51 @@
+## [0.21.0](https://github.com/geyserfund/geyser-app/compare/v0.20.0...v0.21.0) (2025-04-24)
+
+
+### Features
+
+* add payment flow for launch project ([0e11d1a](https://github.com/geyserfund/geyser-app/commit/0e11d1a63a67578dd92dabd83e9bf52c70585455))
+* add post pre-launch finalizing and launching ([c27e251](https://github.com/geyserfund/geyser-app/commit/c27e2517493692e72d5b029abd6fe9215b124033))
+* add prelaunch flow for creation flow and project page ([765e5fa](https://github.com/geyserfund/geyser-app/commit/765e5fa4c91aa01054585b8abc757edd3c6ad579))
+* add yarn test:state command (WIP) ([2fc8e3d](https://github.com/geyserfund/geyser-app/commit/2fc8e3d2b4042fb9f8f6daae0891eadd435127d2))
+* geyser tip and new donation input ([6da1204](https://github.com/geyserfund/geyser-app/commit/6da12043840f99d54e5cf0f62809f9f378c12e5d))
+
+
+### Bug Fixes
+
+* add charity projects in the landing page ([97d5b34](https://github.com/geyserfund/geyser-app/commit/97d5b34637e756146f7a6771945049cd69f6c5b2))
+* add spacing to discovery nav ([a894ceb](https://github.com/geyserfund/geyser-app/commit/a894cebfbf13aa1e747f1209f9514003382328b2))
+* add time is up ([e0a7bf9](https://github.com/geyserfund/geyser-app/commit/e0a7bf984bfe480e0b01ce95bf287f774d3921e8))
+* address PR comments ([cf70bd1](https://github.com/geyserfund/geyser-app/commit/cf70bd1269272ba906e2301f92700c215dc54bc4))
+* build errors ([d819d73](https://github.com/geyserfund/geyser-app/commit/d819d73dde1b4c75566057ddf16036447ea84885))
+* change icon color to orange, and add icons to discovery projects ([6b86bfb](https://github.com/geyserfund/geyser-app/commit/6b86bfb096cd4f51241d76e23694527a6d663de4))
+* click input toggle before adding amount ([d359b65](https://github.com/geyserfund/geyser-app/commit/d359b6543f5cae08f5025ded2f1b30ff004cf287))
+* final illustration updates ([a0fa1ad](https://github.com/geyserfund/geyser-app/commit/a0fa1ade7372794504cc98aacd3f708b6e1a3d51))
+* final issues ([657d234](https://github.com/geyserfund/geyser-app/commit/657d2346203ad3876aa3e74ec6970ef49727a951))
+* final issues ([0129ee1](https://github.com/geyserfund/geyser-app/commit/0129ee17424c342b05500d56693c9f542df9a803))
+* final remaining issues ([785f98f](https://github.com/geyserfund/geyser-app/commit/785f98fcfba810d6b2ca0529c17cdd4c60e19c87))
+* fix launch page styles ([78f91f5](https://github.com/geyserfund/geyser-app/commit/78f91f54704eaf68aedf92ecb4eb5505d9dfa09c))
+* fix tip amount in onchain ([c9bb3de](https://github.com/geyserfund/geyser-app/commit/c9bb3ded190ff7abc4fb1ebce2e0cdb1a2590f26))
+* fix what we talked about in the call ([4cca034](https://github.com/geyserfund/geyser-app/commit/4cca034cb9775a7b3731aa286637f109322cb363))
+* funding amounts in tests ([97e7da1](https://github.com/geyserfund/geyser-app/commit/97e7da18a5ab28ffa0a4cdc3a8e4c48a7fc1ba13))
+* funding success screen ([e10bf20](https://github.com/geyserfund/geyser-app/commit/e10bf20a0d7a02dcd0a6ed759e77793c5b7fe645))
+* issues in discord ([50e1c43](https://github.com/geyserfund/geyser-app/commit/50e1c431dc02968fe513630be239c019c666fb02))
+* minor conflict ([17209f5](https://github.com/geyserfund/geyser-app/commit/17209f5157d2dbffca3133a71959752d95948985))
+* minor copy updates and icon addition ([4728e6e](https://github.com/geyserfund/geyser-app/commit/4728e6e92fd9b78009eb04edabf47bd1f296a483))
+* minor issues with copy ([34bf24a](https://github.com/geyserfund/geyser-app/commit/34bf24ad5679289bd017929f43ecd3cfd0e37483))
+* onchain ([5d48458](https://github.com/geyserfund/geyser-app/commit/5d484589e130d952c08afcc28b69bf3ead2b503c))
+* other issues with the project ([e1acd2f](https://github.com/geyserfund/geyser-app/commit/e1acd2f58c0c31378db7163a1e3803b19524f421))
+* qa issues ([17a055f](https://github.com/geyserfund/geyser-app/commit/17a055f39adef86288d097957c71bf6a7e034407))
+* remove charity projects if none ([c7ace7a](https://github.com/geyserfund/geyser-app/commit/c7ace7ad60a77510db4b72f68a0127c52989780d))
+* remove unused import ([a84523f](https://github.com/geyserfund/geyser-app/commit/a84523ff1470cb3d22b6e8df71541c67ee167cd4))
+* small copy update ([257b481](https://github.com/geyserfund/geyser-app/commit/257b4815859086521961724099120cca76b11b7d))
+* test amounts ([67d010d](https://github.com/geyserfund/geyser-app/commit/67d010d66dc93ef82097ad5237264c13e15113b7))
+* update icon size ([99d415e](https://github.com/geyserfund/geyser-app/commit/99d415e3529efcb95193c09cc9753cc19711e545))
+* update icons ([2bd1639](https://github.com/geyserfund/geyser-app/commit/2bd16398e21f7d23f8ee369afc1ccaf6297751e6))
+* update non profit form and include verified in the details ([f7948a0](https://github.com/geyserfund/geyser-app/commit/f7948a0ca13e4f5324da48976e91d0f9cc948dd0))
+* update tip amount with reward cost ([3c97be7](https://github.com/geyserfund/geyser-app/commit/3c97be77c95b776870676d88da578fa87a82d030))
+* updates for launchpad projects ([c01123b](https://github.com/geyserfund/geyser-app/commit/c01123be65a89b0d4d25ab05b28b7aa43ebefba9))
+* yarn test command ([d6a3a6b](https://github.com/geyserfund/geyser-app/commit/d6a3a6b884cfb681bd3b3b1f6664af9b0393236e))
+
 ## [0.20.1](https://github.com/geyserfund/geyser-app/compare/v0.20.0...v0.20.1) (2025-04-18)
 
 

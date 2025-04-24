@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { getPath } from '@/shared/constants'
 
-import { isActive } from '../../../../../../../utils'
+import { isDraft } from '../../../../../../../utils'
 import { useProjectAtom, useRewardsAtom } from '../../../../../hooks/useProjectAtom'
 import { RewardCardSkeleton, RewardCardWithBuy } from '../../rewards/shared'
 import { BodySectionLayout } from '../components'
@@ -31,7 +31,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
     )
   }
 
-  if (!isActive(project.status) || rewards.length === 0 || loading) {
+  if (isDraft(project.status) || rewards.length === 0 || loading) {
     return null
   }
 

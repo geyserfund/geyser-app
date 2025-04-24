@@ -5,11 +5,14 @@ import { Head } from '@/config/Head'
 import { standardPadding } from '@/shared/styles'
 
 import { dimensions } from '../../shared/constants'
+import { usePrelaunchRoutes } from './hooks/usePrelaunchRoutes.ts'
 import { useProjectAtom } from './hooks/useProjectAtom'
 import { ProjectNavigation } from './navigation/ProjectNavigation'
 import { GoalDeleteModal, GoalModal, ProjectCreateModal } from './pages1/projectView/components'
 
 export const ProjectContainer = () => {
+  usePrelaunchRoutes()
+
   const { project } = useProjectAtom()
 
   return (
