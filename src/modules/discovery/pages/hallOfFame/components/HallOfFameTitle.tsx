@@ -5,7 +5,7 @@ import { PiDotOutline } from 'react-icons/pi'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H2 } from '@/shared/components/typography'
-import { CrownIllustrationUrl, HallOfFameIllustrationUrl } from '@/shared/constants'
+import { CrownIllustrationUrl } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
 import { commaFormatted, getBitcoinAmount, getShortAmountLabel } from '@/utils'
 
