@@ -1217,5 +1217,9 @@
   "Your post is now live": "Your post is now live",
   "INACTIVE": "INACTIVE",
   "ACTIVE": "ACTIVE",
-  "reward": "reward"
+  "reward": "reward",
+  "{{count}} out of 21 followers_other": "{{count}} out of 21 followers_other",
+  "{{count}} out of 21 followers_one": "{{count}} out of 21 followers_one",
+  "This project still needs {{count}} followers to be able to start raising funds._other": "This project still needs {{count}} followers to be able to start raising funds._other",
+  "This project still needs {{count}} followers to be able to start raising funds._one": "This project still needs {{count}} followers to be able to start raising funds._one"
 }

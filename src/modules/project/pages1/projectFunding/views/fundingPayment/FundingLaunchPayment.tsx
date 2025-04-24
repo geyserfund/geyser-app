@@ -40,7 +40,7 @@ export const FundingLaunchPayment = () => {
       return
     }
 
-    if (formState.donationAmountUsdCent !== DONATION_AMOUNT_FOR_LAUNCH) {
+    if (formState.donationAmountUsdCent === DONATION_AMOUNT_FOR_LAUNCH) {
       return
     }
 
@@ -62,6 +62,7 @@ export const FundingLaunchPayment = () => {
   }, [handleUpdateReward])
 
   useEffect(() => {
+    console.log('formState.donationAmountUsdCent', formState.donationAmountUsdCent)
     if (formState.donationAmountUsdCent === DONATION_AMOUNT_FOR_LAUNCH) {
       navigate(getPath('fundingStart', project.name), { replace: true })
     }
