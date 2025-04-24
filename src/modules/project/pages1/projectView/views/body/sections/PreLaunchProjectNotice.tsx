@@ -1,6 +1,5 @@
 import { Button } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiShootingStar } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
 import {
@@ -15,7 +14,7 @@ import { useModal } from '@/shared/hooks/useModal.tsx'
 import { GuardiansButtonBackgroundGradient } from '@/shared/styles/custom.ts'
 import { ProjectStatus } from '@/types/index.ts'
 
-import { getPath } from '../../../../../../../shared/constants'
+import { getPath, LaunchNowIllustrationUrl } from '../../../../../../../shared/constants'
 import { useProjectAtom, useWalletAtom } from '../../../../../hooks/useProjectAtom'
 import { FOLLOWERS_NEEDED } from '../components/PrelaunchFollowButton.tsx'
 
@@ -65,9 +64,9 @@ export const PreLaunchProjectNotice = () => {
         </CardLayout>
         <Modal size="lg" {...launchRightAwayModal}>
           <ProjectCreateStrategyCard
-            icon={PiShootingStar}
+            image={LaunchNowIllustrationUrl}
             title={t('Launch Now')}
-            subtitle={t('Pay $21 to go live - Start receiving contributions today.')}
+            subtitle={t('Pay $21 to go live and start receiving contributions right away')}
             why={t(
               "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you can begin receiving support from contributors immediately.",
             )}

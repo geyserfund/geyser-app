@@ -1,8 +1,7 @@
-import { Box, Button, ButtonProps, HStack, Icon, Image, useClipboard, VStack } from '@chakra-ui/react'
+import { Box, Button, ButtonProps, HStack, Image, useClipboard, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { PiBellRinging } from 'react-icons/pi'
 
 import { AuthModal } from '@/components/molecules/AuthModal.tsx'
 import { useAuthContext } from '@/context/auth.tsx'
@@ -11,7 +10,7 @@ import { useEmailPrompt } from '@/modules/auth/hooks/useEmailPrompt.ts'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { EmailPromptModalUrl } from '@/shared/constants/index.ts'
+import { EmailPromptModalUrl, FollowBellIllurationsUrl } from '@/shared/constants/index.ts'
 import { useFollowProject } from '@/shared/hooks/graphqlState/useFollowProject.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import {
@@ -129,7 +128,7 @@ const FollowSuccessModal = ({
       bodyProps={{ as: VStack, width: 'full', gap: 8 }}
     >
       <HStack w="full" justifyContent="center">
-        <Icon as={PiBellRinging} boxSize={32} color="primary1.9" />
+        <Image height="200px" width="auto" src={FollowBellIllurationsUrl} alt="Email illustration" />
       </HStack>
       <VStack w={'full'} alignItems={'flex-start'} gap={2}>
         {!enoughFollowers && (

@@ -1,9 +1,7 @@
-import { Button, Collapse, HStack, Icon, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, Collapse, HStack, Image, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { IconType } from 'react-icons/lib/iconBase'
-import { PiRocket, PiShootingStar } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
 
 import TitleWithProgressBar from '@/components/molecules/TitleWithProgressBar.tsx'
@@ -11,7 +9,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
-import { dimensions } from '@/shared/constants/index.ts'
+import { dimensions, LaunchNowIllustrationUrl, LaunchPadIllustrationUrl } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { useProjectPreLaunchMutation } from '@/types/index.ts'
 import { useMobileMode, useNotification } from '@/utils/index.ts'
@@ -100,7 +98,7 @@ export const ProjectCreateStrategy = () => {
           <ProjectCreateStrategyCard
             isSelected={isLaunchPad}
             onClick={() => setStrategy(ProjectCreationStrategy.GEYSER_LAUNCHPAD)}
-            icon={PiRocket}
+            image={LaunchPadIllustrationUrl}
             title={t('Geyser Launchpad')}
             subtitle={t('Test your idea and launch for free by gaining 21 followers within 30 days')}
             why={t(
@@ -113,9 +111,9 @@ export const ProjectCreateStrategy = () => {
           <ProjectCreateStrategyCard
             isSelected={isLaunchNow}
             onClick={() => setStrategy(ProjectCreationStrategy.LAUNCH_NOW)}
-            icon={PiShootingStar}
+            image={LaunchNowIllustrationUrl}
             title={t('Launch Now')}
-            subtitle={t('Pay $21 to go live - Start receiving contributions today.')}
+            subtitle={t('Pay $21 to go live and start receiving contributions right away')}
             why={t(
               "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you can begin receiving support from contributors immediately.",
             )}
@@ -151,7 +149,7 @@ export const ProjectCreateStrategy = () => {
 }
 
 type ProjectCreateStrategyCardProps = {
-  icon: IconType
+  image: string
   title: string
   subtitle: string
   why: string
@@ -160,7 +158,7 @@ type ProjectCreateStrategyCardProps = {
 } & CardLayoutProps
 
 export const ProjectCreateStrategyCard = ({
-  icon,
+  image,
   title,
   subtitle,
   why,
@@ -186,8 +184,8 @@ export const ProjectCreateStrategyCard = ({
       }}
       padding={4}
     >
-      <HStack w="full" justifyContent="center">
-        <Icon as={icon} boxSize={32} />
+      <HStack width="full" justifyContent="center">
+        <Image width="auto" height="300px" src={image} alt={title} boxSize={32} />
       </HStack>
       <Feedback variant={FeedBackVariant.SUCCESS} noIcon>
         <VStack w="full" alignItems="flex-start" spacing={0}>

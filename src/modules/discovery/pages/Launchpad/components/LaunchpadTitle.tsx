@@ -1,9 +1,9 @@
-import { HStack, Icon, VStack } from '@chakra-ui/react'
+import { HStack, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiRocket } from 'react-icons/pi'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
+import { LaunchPadIllustrationUrl } from '@/shared/constants/platform/url.ts'
 import { lightModeColors } from '@/shared/styles'
 
 import { FlowingGifBackground } from '../../hallOfFame/components/FlowingGifBackground.tsx'
@@ -22,12 +22,12 @@ export const LaunchpadTitle = () => {
       <FlowingGifBackground />
 
       <HStack w="full" spacing={{ base: 4, lg: 6 }} padding={{ base: 2, lg: 4 }}>
-        <Icon
-          as={PiRocket}
-          color={lightModeColors.orange[9]}
+        <Image
           width={{ base: '95px', lg: '130px' }}
           height="auto"
           zIndex={1}
+          src={LaunchPadIllustrationUrl}
+          alt="Launchpad illustration"
         />
 
         <VStack w="full" alignItems={'start'} spacing={{ base: 2, lg: 0 }} zIndex={1}>
