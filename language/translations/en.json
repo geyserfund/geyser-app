@@ -1240,5 +1240,9 @@
   "Pre-launch": "Pre-launch",
   "follower": "follower",
   "Trending in {{category}}": "Trending in {{category}}",
-  "trending in": "trending in"
+  "trending in": "trending in",
+  "left to get to 21 follows & launch": "left to get to 21 follows & launch",
+  "5% Geyser fee per transaction": "5% Geyser fee per transaction",
+  "Low 5% fees and no fees for node-runners": "Low 5% fees and no fees for node-runners",
+  "Project name should be between 3 and 280 characters.": "Project name should be between 3 and 280 characters."
 }
