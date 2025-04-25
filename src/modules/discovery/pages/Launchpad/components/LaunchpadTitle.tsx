@@ -23,7 +23,7 @@ export const LaunchpadTitle = () => {
 
       <HStack w="full" spacing={{ base: 4, lg: 6 }} padding={{ base: 2, lg: 4 }}>
         <Image
-          width={{ base: '95px', lg: '130px' }}
+          width={{ base: '95px', lg: '120px' }}
           height="auto"
           zIndex={1}
           src={LaunchPadIllustrationUrl}

@@ -25,7 +25,7 @@ export const GrantsHeader = () => {
     { label: 'distributed', value: `${getShortAmountLabel(distributedAmount)}` },
   ]
 
-  const padding = { base: 4, lg: '6' }
+  const padding = { base: 2, lg: 4 }
 
   const renderPlatformStats = () => {
     if (loading) return <ProjectStatSkeleton />
@@ -57,12 +57,12 @@ export const GrantsHeader = () => {
         spacing={{ base: 4, lg: 6 }}
         paddingX={padding}
         paddingTop={padding}
-        paddingBottom={{ base: 0, lg: 6 }}
+        paddingBottom={{ base: 0, lg: 4 }}
       >
         <Image
           src={GrantsIllustrationUrl}
           alt="Geyser Grants"
-          width={{ base: '95px', lg: '130px' }}
+          width={{ base: '95px', lg: '120px' }}
           height="auto"
           objectFit={'contain'}
           zIndex={1}
