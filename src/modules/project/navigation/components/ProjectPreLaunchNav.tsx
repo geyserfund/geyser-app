@@ -116,7 +116,8 @@ export const ProjectPreLaunchNav = () => {
   }, [project?.preLaunchedAt])
 
   const formattedTime = getFormattedTime(timeLeft, isMobile)
-  const hasEnoughFollowers = Boolean(project?.followersCount && project?.followersCount >= FOLLOWERS_NEEDED)
+  const hasEnoughFollowers =
+    Boolean(project?.followersCount && project?.followersCount >= FOLLOWERS_NEEDED) || Boolean(project?.paidLaunch)
   const showLaunchButton = hasEnoughFollowers && Boolean(isProjectOwner)
 
   return (

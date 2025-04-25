@@ -77,7 +77,6 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   const {
     handleConfirm,
-    isFormDirty,
     connectionOption,
     lightningAddress,
     node,
@@ -139,7 +138,7 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   const isContinueButtonLoading = lightningAddress.evaluating || loading || createWallet.loading
 
-  const isWalletIncomplete = !isFormDirty() && !wallet?.id
+  const isWalletIncomplete = !wallet?.id
 
   return (
     <ProjectCreateLayout

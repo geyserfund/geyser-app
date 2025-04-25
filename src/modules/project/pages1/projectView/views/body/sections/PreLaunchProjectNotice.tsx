@@ -39,7 +39,7 @@ export const PreLaunchProjectNotice = () => {
 
   if (!project || !isProjectOwner) return null
 
-  if (project.status !== ProjectStatus.PreLaunch) {
+  if (project.status !== ProjectStatus.PreLaunch || project.paidLaunch) {
     return null
   }
 
