@@ -18,10 +18,11 @@ const FOLLOWERS_NEEDED = 21
 
 type LaunchpadProjectItemProps = {
   project: ProjectForLaunchpadPageFragment
+  onFollowCompleted?: (projectId: string) => void
 } & CardLayoutProps
 
-export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemProps) => {
-  const [currentFollowers, setCurrentFollowers] = useState(project.followersCount ?? 0)
+export const LaunchpadProjectItem = ({ project, onFollowCompleted, ...rest }: LaunchpadProjectItemProps) => {
+  const currentFollowers = project.followersCount ?? 0
   const followersNeeded = Math.max(0, FOLLOWERS_NEEDED - currentFollowers)
 
   // Time remaining calculation
@@ -92,21 +93,16 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
     <CardLayout
       hover
       as={Link}
-      to={getPathWithGeyserHero('project', project.name)}
+      to={getPathWithGeyserHero('projectPreLaunch', project.name)}
       padding="0px"
-      width={{ base: 'full', lg: 'auto' }}
-      direction={{ base: 'row', lg: 'column' }}
+      width={'auto'}
+      direction={'column'}
       spacing={0}
-      flex={{ base: 'unset', lg: 1 }}
+      flex={1}
       position="relative"
       {...rest}
     >
-      <Box
-        minWidth={{ base: '102px', lg: 'auto' }}
-        width="auto"
-        height={{ base: '190px', lg: 'auto' }}
-        position="relative"
-      >
+      <Box minWidth={'auto'} width="auto" height={'auto'} position="relative">
         <ImageWithReload
           width="100%"
           height="100%"
@@ -119,33 +115,25 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
           <NonProjectProjectIcon taxProfile={project.owners?.[0]?.user?.taxProfile} />
         </Box>
       </Box>
-      <VStack
-        flex={1}
-        width={{ base: 'auto', lg: '100%' }}
-        minWidth={{ base: '170px', lg: 'auto' }}
-        padding={4}
-        alignItems="start"
-        overflow="hidden"
-        spacing={{ base: 1, lg: 2 }}
-      >
-        <VStack w="full" spacing={0}>
-          <H3 size="lg" medium isTruncated width="100%">
-            {project.title}
-          </H3>
+      <VStack flex={1} width={'100%'} minWidth={'auto'} padding={4} alignItems="start" overflow="hidden" spacing={2}>
+        <H3 size="lg" medium isTruncated width="100%">
+          {project.title}
+        </H3>
 
-          <Body
-            height="45px"
-            size="sm"
-            dark
-            noOfLines={2}
-            isTruncated
-            width="100%"
-            wordBreak={'break-all'}
-            whiteSpace={'normal'}
-          >
-            {project.shortDescription}
-          </Body>
-        </VStack>
+        <Body
+          height="50px"
+          size="sm"
+          dark
+          noOfLines={3}
+          lineHeight={'1.2'}
+          isTruncated
+          width="100%"
+          wordBreak={'break-all'}
+          whiteSpace={'normal'}
+        >
+          {project.shortDescription}
+        </Body>
+
         <HStack>
           <Badge variant="soft" colorScheme="neutral1">
             {ProjectCategoryLabel[project.category ?? '']}
@@ -165,8 +153,8 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
         <PrelaunchFollowButton
           project={project}
           width="full"
-          size={{ base: 'md', lg: 'lg' }}
-          onFollowCompleted={() => setCurrentFollowers((current) => current + 1)}
+          size={'lg'}
+          onFollowCompleted={() => onFollowCompleted?.(project.id)}
         />
       </VStack>
     </CardLayout>
@@ -175,18 +163,7 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
 
 export const LaunchpadProjectItemSkeleton = () => {
   return (
-    <CardLayout
-      padding="0px"
-      overflow="hidden"
-      borderColor="neutral.border"
-      bg="neutral.surface"
-      borderWidth="1px"
-      borderRadius="lg"
-      direction="column"
-      spacing={0}
-      w="full"
-      maxW="sm"
-    >
+    <CardLayout padding="0px" width={'auto'} direction={'column'} spacing={0} flex={1} position="relative">
       <Skeleton h="160px" w="full" />
 
       <VStack p="4" spacing="3" align="stretch" flex={1}>

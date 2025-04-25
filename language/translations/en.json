@@ -1227,5 +1227,18 @@
   "Goal reached!": "Goal reached!",
   "{{countDown}} out of 21 followers": "{{countDown}} out of 21 followers",
   "This project still needs {{countdown}} followers to be able to start raising funds.": "This project still needs {{countdown}} followers to be able to start raising funds.",
-  "We’ll email you when the project goes live.": "We’ll email you when the project goes live."
+  "We’ll email you when the project goes live.": "We’ll email you when the project goes live.",
+  "Back to Launchpad": "Back to Launchpad",
+  "Launch now": "Launch now",
+  "Ready": "Ready",
+  "Support Geyser Grants": "Support Geyser Grants",
+  "Help fund the next round — or get an email when it launches.": "Help fund the next round — or get an email when it launches.",
+  "left to get to 21 followers & launch": "left to get to 21 followers & launch",
+  "to launch": "to launch",
+  "to reach 21 followers": "to reach 21 followers",
+  "to 21 followers": "to 21 followers",
+  "Pre-launch": "Pre-launch",
+  "follower": "follower",
+  "Trending in {{category}}": "Trending in {{category}}",
+  "trending in": "trending in"
 }

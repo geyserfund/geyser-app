@@ -32,9 +32,13 @@ export const PrelaunchFollowButton = ({ project, onFollowCompleted, ...props }: 
   const { user } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
 
+  const { isLoggedIn } = useAuthContext()
+
   const loginModal = useModal()
   const emailModal = useModal()
   const followSuccessModal = useModal()
+
+  const [loginWithFollow, setLoginWithFollow] = useState(false)
 
   const projectUrl = `${window.location.origin}/project/${project.name}`
 
@@ -46,6 +50,7 @@ export const PrelaunchFollowButton = ({ project, onFollowCompleted, ...props }: 
     onFollowCompleted() {
       followSuccessModal.onOpen()
       onFollowCompleted?.()
+      setLoginWithFollow(false)
     },
   })
 
@@ -55,6 +60,7 @@ export const PrelaunchFollowButton = ({ project, onFollowCompleted, ...props }: 
 
     if (!user || !user.id) {
       loginOnOpen()
+      setLoginWithFollow(true)
       return
     }
 
@@ -65,6 +71,12 @@ export const PrelaunchFollowButton = ({ project, onFollowCompleted, ...props }: 
 
     handleFollow()
   }
+
+  useEffect(() => {
+    if (isLoggedIn && loginWithFollow) {
+      handleFollow()
+    }
+  }, [isLoggedIn, loginWithFollow, handleFollow])
 
   const handleCopy = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()

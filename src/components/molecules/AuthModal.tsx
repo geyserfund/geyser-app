@@ -32,7 +32,6 @@ export type AuthModalAdditionalprops = {
   showGoogle?: boolean
   showGithub?: boolean
   privateRoute?: boolean
-  onLoginCompleted?: () => void
 }
 type AuthModalProps = {
   isOpen: boolean
