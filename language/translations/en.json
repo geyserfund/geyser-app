@@ -1227,5 +1227,8 @@
   "Goal reached!": "Goal reached!",
   "{{countDown}} out of 21 followers": "{{countDown}} out of 21 followers",
   "This project still needs {{countdown}} followers to be able to start raising funds.": "This project still needs {{countdown}} followers to be able to start raising funds.",
-  "We’ll email you when the project goes live.": "We’ll email you when the project goes live."
+  "We’ll email you when the project goes live.": "We’ll email you when the project goes live.",
+  "Back to Launchpad": "Back to Launchpad",
+  "Launch now": "Launch now",
+  "Ready": "Ready"
 }

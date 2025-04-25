@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { DateTime, Duration } from 'luxon'
 import { useEffect, useState } from 'react'
-import { PiInfo } from 'react-icons/pi'
+import { PiArrowLeft, PiInfo } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -14,7 +14,6 @@ import { useMobileMode } from '@/utils/index.ts'
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
 import { FOLLOWERS_NEEDED } from '../../pages1/projectView/views/body/components/PrelaunchFollowButton.tsx'
 import { isProjectOwnerAtom } from '../../state/projectAtom.ts'
-import { BackButton } from './BackButton.tsx'
 
 const formatTimeValue = (value: number): string => {
   // Ensure value is non-negative and round down
@@ -114,60 +113,54 @@ export const ProjectPreLaunchNav = () => {
   const showLaunchButton = hasEnoughFollowers && Boolean(isProjectOwner)
 
   return (
-    <HStack align="stretch" spacing={4} w="full">
-      <BackButton to={getPath('discoveryLaunchpad')} ariaLabel={t('Back to Launchpad')} height="44px" />
-      <Feedback
-        variant={hasEnoughFollowers ? FeedBackVariant.SUCCESS : FeedBackVariant.WARNING}
-        noIcon
-        height="44px"
-        paddingY={0}
-        paddingRight={0.5}
-        alignItems="center"
-        flex="1"
-      >
-        <HStack
-          w="full"
-          alignItems="center"
-          justifyContent={showLaunchButton ? 'space-between' : 'center'}
-          spacing={4}
-          px={2}
-        >
-          <HStack flexGrow={1} justifyContent={'center'}>
-            <Body
-              as={Link}
-              to={getPath('discoveryLaunchpad')}
-              size={{ base: 'md', lg: 'lg' }}
-              bold
-              textDecoration={'underline'}
-            >
-              {isMobile ? `${t('Launchpad')}` : `${t('Project in Launchpad')}`}
-            </Body>
+    <Feedback
+      variant={hasEnoughFollowers ? FeedBackVariant.SUCCESS : FeedBackVariant.WARNING}
+      noIcon
+      height="44px"
+      paddingY={0}
+      paddingX={0}
+      alignItems="center"
+      flex="1"
+    >
+      <Button variant="ghost" size="lg" as={Link} to={'-1'} leftIcon={<Icon as={PiArrowLeft} />}>
+        {t('Back')}
+      </Button>
+      <HStack w="full" alignItems="center" justifyContent={showLaunchButton ? 'space-between' : 'center'} spacing={4}>
+        <HStack flexGrow={1} justifyContent={'center'}>
+          <Body
+            as={Link}
+            to={getPath('discoveryLaunchpad')}
+            size={{ base: 'md', lg: 'lg' }}
+            bold
+            textDecoration={'underline'}
+          >
+            {isMobile ? `${t('Launchpad')}` : `${t('Project in Launchpad')}`}
+          </Body>
 
-            <StatusMessage
-              enoughFollowers={hasEnoughFollowers}
-              isTimeUp={isTimeUp}
-              isMobile={isMobile}
-              formattedTime={formattedTime}
-            />
+          <StatusMessage
+            enoughFollowers={hasEnoughFollowers}
+            isTimeUp={isTimeUp}
+            isMobile={isMobile}
+            formattedTime={formattedTime}
+          />
 
-            <PopOverInfo />
-          </HStack>
-          {showLaunchButton && (
-            <Button
-              as={Link}
-              maxWidth="400px"
-              flex="1"
-              to={getPath('launchProjectWallet', project?.id)}
-              variant="solid"
-              colorScheme="primary1"
-              size="lg"
-            >
-              {t('Launch now')}
-            </Button>
-          )}
+          <PopOverInfo />
         </HStack>
-      </Feedback>
-    </HStack>
+        {showLaunchButton && (
+          <Button
+            as={Link}
+            maxWidth="400px"
+            flex="1"
+            to={getPath('launchProjectWallet', project?.id)}
+            variant="solid"
+            colorScheme="primary1"
+            size="lg"
+          >
+            {t('Launch now')}
+          </Button>
+        )}
+      </HStack>
+    </Feedback>
   )
 }
 
