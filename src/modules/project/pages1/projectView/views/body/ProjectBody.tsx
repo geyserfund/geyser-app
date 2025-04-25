@@ -63,8 +63,9 @@ export const ProjectBody = () => {
         <PreLaunchProjectNotice />
         <CreatorVerificationNotice />
 
-        <Header />
         <CreatorTools />
+
+        <Header />
         <Story />
 
         {project.rewardsCount && <Rewards />}
