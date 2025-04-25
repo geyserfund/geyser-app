@@ -94,19 +94,14 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
       as={Link}
       to={getPathWithGeyserHero('project', project.name)}
       padding="0px"
-      width={{ base: 'full', lg: 'auto' }}
-      direction={{ base: 'row', lg: 'column' }}
+      width={'auto'}
+      direction={'column'}
       spacing={0}
-      flex={{ base: 'unset', lg: 1 }}
+      flex={1}
       position="relative"
       {...rest}
     >
-      <Box
-        minWidth={{ base: '102px', lg: 'auto' }}
-        width="auto"
-        height={{ base: '190px', lg: 'auto' }}
-        position="relative"
-      >
+      <Box minWidth={'auto'} width="auto" height={'auto'} position="relative">
         <ImageWithReload
           width="100%"
           height="100%"
@@ -119,15 +114,7 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
           <NonProjectProjectIcon taxProfile={project.owners?.[0]?.user?.taxProfile} />
         </Box>
       </Box>
-      <VStack
-        flex={1}
-        width={{ base: 'auto', lg: '100%' }}
-        minWidth={{ base: '170px', lg: 'auto' }}
-        padding={4}
-        alignItems="start"
-        overflow="hidden"
-        spacing={{ base: 1, lg: 2 }}
-      >
+      <VStack flex={1} width={'100%'} minWidth={'auto'} padding={4} alignItems="start" overflow="hidden" spacing={2}>
         <VStack w="full" spacing={0}>
           <H3 size="lg" medium isTruncated width="100%">
             {project.title}
@@ -165,7 +152,7 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
         <PrelaunchFollowButton
           project={project}
           width="full"
-          size={{ base: 'md', lg: 'lg' }}
+          size={'lg'}
           onFollowCompleted={() => setCurrentFollowers((current) => current + 1)}
         />
       </VStack>

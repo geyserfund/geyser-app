@@ -47,7 +47,7 @@ export const LaunchpadProjects = () => {
         onSortByChange={(sortBy) => setSortBy(sortBy)}
       />
 
-      <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacingX="20px" spacingY="20px">
+      <SimpleGrid w="full" columns={{ base: 1, sm: 2, md: 3, lg: 3, xl: 4 }} spacingX="20px" spacingY="20px">
         {loading
           ? [...Array(9).keys()].map((key) => {
               return (
