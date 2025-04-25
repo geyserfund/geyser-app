@@ -39,13 +39,13 @@ export const ProjectBody = () => {
     if (loading) return
     console.log('checking whats with the paths', location.pathname)
     if (project?.status === ProjectStatus.Draft && !location.pathname.includes('/draft')) {
-      navigate(location.pathname + '/draft')
+      navigate(location.pathname + '/draft', { replace: true })
     } else if (project?.status === ProjectStatus.PreLaunch && !location.pathname.includes('/prelaunch')) {
-      navigate(location.pathname + '/prelaunch')
+      navigate(location.pathname + '/prelaunch', { replace: true })
     } else if (project?.status === ProjectStatus.Active && location.pathname.includes('/prelaunch')) {
-      navigate(location.pathname.replace('/prelaunch', ''))
+      navigate(location.pathname.replace('/prelaunch', ''), { replace: true })
     } else if (project?.status === ProjectStatus.Active && location.pathname.includes('/draft')) {
-      navigate(location.pathname.replace('/draft', ''))
+      navigate(location.pathname.replace('/draft', ''), { replace: true })
     }
   }, [project?.status, location.pathname, navigate, project?.name, loading])
 

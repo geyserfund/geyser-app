@@ -13,11 +13,13 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { PiCaretDoubleDown } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { ProjectStatusBar } from '@/components/ui'
+import { userFollowsProjectAtom } from '@/modules/project/state/projectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
@@ -58,6 +60,7 @@ interface HeaderDetailsProps extends StackProps {
 
 const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
   const { project, projectOwner, partialUpdateProject } = useProjectAtom()
+  const userFollowsProject = useAtomValue(userFollowsProjectAtom)
 
   const [subscribers, setSubscribers] = useState(0)
   const isProjectSubscriptionEnabled = project && projectsWithSubscription.includes(project?.name)
@@ -164,7 +167,7 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
               colorScheme="neutral1"
               onClick={handleClickDetails}
             />
-            {!isPrelaunch(project.status) && <FollowButton project={project} withLabel />}
+            {(!isPrelaunch(project.status) || userFollowsProject) && <FollowButton project={project} withLabel />}
             <ShareProjectButton />
           </HStack>
 
@@ -179,6 +182,8 @@ const MobileBalanceInfo = () => {
   const { formatAmount } = useCurrencyFormatter()
   const { project } = useProjectAtom()
 
+  const isPrelaunchProject = isPrelaunch(project.status)
+
   return (
     <VStack
       w="full"
@@ -191,18 +196,27 @@ const MobileBalanceInfo = () => {
       alignItems="center"
       spacing={0}
     >
-      {project.balance > 0 && (
+      {isPrelaunchProject ? (
         <Body size="lg" bold>
-          {commaFormatted(project.balance)}
-          <Body as="span">{' sats'}</Body>
+          {project.followersCount}{' '}
+          <Body as="span">{project.followersCount === 1 ? t('follower') : t('followers')}</Body>
         </Body>
+      ) : (
+        <>
+          {project.balance > 0 && (
+            <Body size="lg" bold>
+              {commaFormatted(project.balance)}
+              <Body as="span">{' sats'}</Body>
+            </Body>
+          )}
+          <Body size="sm">
+            {`${formatAmount(project.balanceUsdCent, 'USDCENT')}`}{' '}
+            <Body as="span" light>
+              {t('contributed in total')}
+            </Body>
+          </Body>
+        </>
       )}
-      <Body size="sm">
-        {`${formatAmount(project.balanceUsdCent, 'USDCENT')}`}{' '}
-        <Body as="span" light>
-          {t('contributed in total')}
-        </Body>
-      </Body>
     </VStack>
   )
 }

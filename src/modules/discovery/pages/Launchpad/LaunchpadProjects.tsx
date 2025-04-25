@@ -2,7 +2,7 @@ import { GridItem, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo, useState } from 'react'
 
-import { ProjectStatus, useProjectsForLaunchpadPageQuery } from '@/types/index.ts'
+import { ProjectForLaunchpadPageFragment, ProjectStatus, useProjectsForLaunchpadPageQuery } from '@/types/index.ts'
 
 import { LaunchpadProjectItem, LaunchpadProjectItemSkeleton } from './components/LaunchpadProjectItem.tsx'
 import { SortBy, TitleWithSort } from './components/TitleWithSort.tsx'
@@ -10,22 +10,26 @@ import { SortBy, TitleWithSort } from './components/TitleWithSort.tsx'
 export const LaunchpadProjects = () => {
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.PreLaunchDate)
 
+  const [projects, setProjects] = useState<ProjectForLaunchpadPageFragment[]>([])
+
   const where = {
     status: ProjectStatus.PreLaunch,
   }
 
-  const { data, loading } = useProjectsForLaunchpadPageQuery({
+  const { loading } = useProjectsForLaunchpadPageQuery({
     fetchPolicy: 'network-only',
     variables: {
       input: {
         where,
       },
     },
+    onCompleted(data) {
+      const projects = data?.projectsGet.projects ? [...data.projectsGet.projects] : []
+      setProjects(projects)
+    },
   })
 
   const sortedProjects = useMemo(() => {
-    const projects = data?.projectsGet.projects ? [...data.projectsGet.projects] : []
-
     return projects.sort((a, b) => {
       if (sortBy === SortBy.PreLaunchDate) {
         return (a.preLaunchedAt ?? 0) - (b.preLaunchedAt ?? 0)
@@ -37,7 +41,15 @@ export const LaunchpadProjects = () => {
 
       return (b.followersCount ?? 0) - (a.followersCount ?? 0)
     })
-  }, [data, sortBy])
+  }, [projects, sortBy])
+
+  const onFollowCompleted = (projectId: string) => {
+    setProjects((prevProjects) =>
+      prevProjects.map((project) =>
+        project.id === projectId ? { ...project, followersCount: (project.followersCount ?? 0) + 1 } : project,
+      ),
+    )
+  }
 
   return (
     <VStack w="full" spacing={4}>
@@ -59,7 +71,7 @@ export const LaunchpadProjects = () => {
           : sortedProjects.map((project) => {
               return (
                 <GridItem key={project.id}>
-                  <LaunchpadProjectItem project={project} />
+                  <LaunchpadProjectItem project={project} onFollowCompleted={onFollowCompleted} />
                 </GridItem>
               )
             })}

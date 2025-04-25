@@ -1,10 +1,19 @@
-import { Button, HStack, Icon, Popover, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
+import {
+  Button,
+  HStack,
+  Icon,
+  IconButton,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { DateTime, Duration } from 'luxon'
 import { useEffect, useState } from 'react'
 import { PiArrowLeft, PiInfo } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
@@ -29,11 +38,7 @@ const getFormattedTime = (timeLeft: Duration | null, isMobile: boolean): string 
     return `${formatTimeValue(timeLeft.minutes)}min ${t('left')}`
   }
 
-  return timeLeft
-    ? `${formatTimeValue(timeLeft.days)}d : ${formatTimeValue(timeLeft.hours)}hr : ${formatTimeValue(
-        timeLeft.minutes,
-      )}min`
-    : '--d : --hr : --min'
+  return timeLeft ? `${formatTimeValue(timeLeft.days)}d : ${formatTimeValue(timeLeft.hours)}hr` : '--d : --hr'
 }
 
 /** Render status message based on project state */
@@ -67,8 +72,8 @@ const StatusMessage = ({
   return (
     <Body size={{ base: 'md', lg: 'lg' }} bold>
       {isMobile
-        ? `: ${formattedTime} ${t('to get 21 followers')}`
-        : `- ${formattedTime} ${t('left to get to 21 followers')}`}
+        ? `: ${formattedTime} ${t('to 21 followers')}`
+        : `- ${formattedTime} ${t('left to get to 21 follows & launch')}`}
     </Body>
   )
 }
@@ -79,6 +84,8 @@ export const ProjectPreLaunchNav = () => {
   const isMobile = Boolean(useMobileMode())
   const [timeLeft, setTimeLeft] = useState<Duration | null>(null)
   const [isTimeUp, setIsTimeUp] = useState(false)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!project?.preLaunchedAt) {
@@ -122,9 +129,19 @@ export const ProjectPreLaunchNav = () => {
       alignItems="center"
       flex="1"
     >
-      <Button variant="ghost" size="lg" as={Link} to={'-1'} leftIcon={<Icon as={PiArrowLeft} />}>
-        {t('Back')}
-      </Button>
+      {!isMobile ? (
+        <Button variant="ghost" size="lg" leftIcon={<Icon as={PiArrowLeft} />} onClick={() => navigate(-1)}>
+          {t('Back')}
+        </Button>
+      ) : (
+        <IconButton
+          aria-label="Back"
+          variant="ghost"
+          size="lg"
+          icon={<Icon as={PiArrowLeft} />}
+          onClick={() => navigate(-1)}
+        />
+      )}
       <HStack w="full" alignItems="center" justifyContent={showLaunchButton ? 'space-between' : 'center'} spacing={4}>
         <HStack flexGrow={1} justifyContent={'center'}>
           <Body
