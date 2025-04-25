@@ -294,7 +294,7 @@ const BecomeVerifiedNotice = () => {
         <VStack flex={1} spacing={0} alignItems="start">
           <HStack>
             <Body bold color={lightModeColors.neutral1[12]}>
-              {t('Become a Verified Creator')}
+              {t('Become a Verified Creator')} {t('(optional)')}
             </Body>
             <VerifiedBadge fontSize="20px" />
           </HStack>
