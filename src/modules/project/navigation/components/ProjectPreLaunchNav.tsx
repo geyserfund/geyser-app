@@ -1,10 +1,19 @@
-import { Button, HStack, Icon, Popover, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
+import {
+  Button,
+  HStack,
+  Icon,
+  IconButton,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { DateTime, Duration } from 'luxon'
 import { useEffect, useState } from 'react'
-import { PiInfo } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { PiArrowLeft, PiInfo } from 'react-icons/pi'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
@@ -14,7 +23,6 @@ import { useMobileMode } from '@/utils/index.ts'
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
 import { FOLLOWERS_NEEDED } from '../../pages1/projectView/views/body/components/PrelaunchFollowButton.tsx'
 import { isProjectOwnerAtom } from '../../state/projectAtom.ts'
-import { BackButton } from './BackButton.tsx'
 
 const formatTimeValue = (value: number): string => {
   // Ensure value is non-negative and round down
@@ -30,11 +38,7 @@ const getFormattedTime = (timeLeft: Duration | null, isMobile: boolean): string 
     return `${formatTimeValue(timeLeft.minutes)}min ${t('left')}`
   }
 
-  return timeLeft
-    ? `${formatTimeValue(timeLeft.days)}d : ${formatTimeValue(timeLeft.hours)}hr : ${formatTimeValue(
-        timeLeft.minutes,
-      )}min`
-    : '--d : --hr : --min'
+  return timeLeft ? `${formatTimeValue(timeLeft.days)}d : ${formatTimeValue(timeLeft.hours)}hr` : '--d : --hr'
 }
 
 /** Render status message based on project state */
@@ -68,8 +72,8 @@ const StatusMessage = ({
   return (
     <Body size={{ base: 'md', lg: 'lg' }} bold>
       {isMobile
-        ? `: ${formattedTime} ${t('to get 21 followers')}`
-        : `- ${formattedTime} ${t('left to get to 21 followers')}`}
+        ? `: ${formattedTime} ${t('to 21 followers')}`
+        : `- ${formattedTime} ${t('left to get to 21 follows & launch')}`}
     </Body>
   )
 }
@@ -80,6 +84,8 @@ export const ProjectPreLaunchNav = () => {
   const isMobile = Boolean(useMobileMode())
   const [timeLeft, setTimeLeft] = useState<Duration | null>(null)
   const [isTimeUp, setIsTimeUp] = useState(false)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!project?.preLaunchedAt) {
@@ -114,60 +120,64 @@ export const ProjectPreLaunchNav = () => {
   const showLaunchButton = hasEnoughFollowers && Boolean(isProjectOwner)
 
   return (
-    <HStack align="stretch" spacing={4} w="full">
-      <BackButton to={getPath('discoveryLaunchpad')} ariaLabel={t('Back to Launchpad')} height="44px" />
-      <Feedback
-        variant={hasEnoughFollowers ? FeedBackVariant.SUCCESS : FeedBackVariant.WARNING}
-        noIcon
-        height="44px"
-        paddingY={0}
-        paddingRight={0.5}
-        alignItems="center"
-        flex="1"
-      >
-        <HStack
-          w="full"
-          alignItems="center"
-          justifyContent={showLaunchButton ? 'space-between' : 'center'}
-          spacing={4}
-          px={2}
-        >
-          <HStack flexGrow={1} justifyContent={'center'}>
-            <Body
-              as={Link}
-              to={getPath('discoveryLaunchpad')}
-              size={{ base: 'md', lg: 'lg' }}
-              bold
-              textDecoration={'underline'}
-            >
-              {isMobile ? `${t('Launchpad')}` : `${t('Project in Launchpad')}`}
-            </Body>
+    <Feedback
+      variant={hasEnoughFollowers ? FeedBackVariant.SUCCESS : FeedBackVariant.WARNING}
+      noIcon
+      height="44px"
+      paddingY={0}
+      paddingX={0}
+      alignItems="center"
+      flex="1"
+    >
+      {!isMobile ? (
+        <Button variant="ghost" size="lg" leftIcon={<Icon as={PiArrowLeft} />} onClick={() => navigate(-1)}>
+          {t('Back')}
+        </Button>
+      ) : (
+        <IconButton
+          aria-label="Back"
+          variant="ghost"
+          size="lg"
+          icon={<Icon as={PiArrowLeft} />}
+          onClick={() => navigate(-1)}
+        />
+      )}
+      <HStack w="full" alignItems="center" justifyContent={showLaunchButton ? 'space-between' : 'center'} spacing={4}>
+        <HStack flexGrow={1} justifyContent={'center'}>
+          <Body
+            as={Link}
+            to={getPath('discoveryLaunchpad')}
+            size={{ base: 'md', lg: 'lg' }}
+            bold
+            textDecoration={'underline'}
+          >
+            {isMobile ? `${t('Launchpad')}` : `${t('Project in Launchpad')}`}
+          </Body>
 
-            <StatusMessage
-              enoughFollowers={hasEnoughFollowers}
-              isTimeUp={isTimeUp}
-              isMobile={isMobile}
-              formattedTime={formattedTime}
-            />
+          <StatusMessage
+            enoughFollowers={hasEnoughFollowers}
+            isTimeUp={isTimeUp}
+            isMobile={isMobile}
+            formattedTime={formattedTime}
+          />
 
-            <PopOverInfo />
-          </HStack>
-          {showLaunchButton && (
-            <Button
-              as={Link}
-              maxWidth="400px"
-              flex="1"
-              to={getPath('launchProjectWallet', project?.id)}
-              variant="solid"
-              colorScheme="primary1"
-              size="lg"
-            >
-              {t('Launch now')}
-            </Button>
-          )}
+          <PopOverInfo />
         </HStack>
-      </Feedback>
-    </HStack>
+        {showLaunchButton && (
+          <Button
+            as={Link}
+            maxWidth="400px"
+            flex="1"
+            to={getPath('launchProjectWallet', project?.id)}
+            variant="solid"
+            colorScheme="primary1"
+            size="lg"
+          >
+            {t('Launch now')}
+          </Button>
+        )}
+      </HStack>
+    </Feedback>
   )
 }
 

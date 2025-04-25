@@ -1,69 +1,39 @@
-import { GridItem, SimpleGrid, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
-import { useMemo, useState } from 'react'
+import { VStack } from '@chakra-ui/react'
 
-import { ProjectStatus, useProjectsForLaunchpadPageQuery } from '@/types/index.ts'
+import { ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
 
-import { LaunchpadProjectItem, LaunchpadProjectItemSkeleton } from './components/LaunchpadProjectItem.tsx'
-import { SortBy, TitleWithSort } from './components/TitleWithSort.tsx'
+import { LaunchpadProjectsByCategory } from './LaunchpadProjectsByCategory.tsx'
+
+const listOfItemsToShow = [
+  {
+    subCategory: ProjectSubCategory.CircularEconomy,
+  },
+  {
+    category: ProjectCategory.Tool,
+  },
+  {
+    category: ProjectCategory.Education,
+  },
+  {
+    category: ProjectCategory.Community,
+  },
+  {
+    category: ProjectCategory.Advocacy,
+  },
+  {
+    category: ProjectCategory.Cause,
+  },
+  {
+    category: ProjectCategory.Other,
+  },
+]
 
 export const LaunchpadProjects = () => {
-  const [sortBy, setSortBy] = useState<SortBy>(SortBy.PreLaunchDate)
-
-  const where = {
-    status: ProjectStatus.PreLaunch,
-  }
-
-  const { data, loading } = useProjectsForLaunchpadPageQuery({
-    fetchPolicy: 'network-only',
-    variables: {
-      input: {
-        where,
-      },
-    },
-  })
-
-  const sortedProjects = useMemo(() => {
-    const projects = data?.projectsGet.projects ? [...data.projectsGet.projects] : []
-
-    return projects.sort((a, b) => {
-      if (sortBy === SortBy.PreLaunchDate) {
-        return (a.preLaunchedAt ?? 0) - (b.preLaunchedAt ?? 0)
-      }
-
-      if (sortBy === SortBy.Category) {
-        return (a.category ?? '').localeCompare(b.category ?? '')
-      }
-
-      return (b.followersCount ?? 0) - (a.followersCount ?? 0)
-    })
-  }, [data, sortBy])
-
   return (
-    <VStack w="full" spacing={4}>
-      <TitleWithSort
-        title={t('Projects in Launchpad')}
-        sortBy={sortBy}
-        onSortByChange={(sortBy) => setSortBy(sortBy)}
-      />
-
-      <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacingX="20px" spacingY="20px">
-        {loading
-          ? [...Array(9).keys()].map((key) => {
-              return (
-                <GridItem key={key}>
-                  <LaunchpadProjectItemSkeleton />
-                </GridItem>
-              )
-            })
-          : sortedProjects.map((project) => {
-              return (
-                <GridItem key={project.id}>
-                  <LaunchpadProjectItem project={project} />
-                </GridItem>
-              )
-            })}
-      </SimpleGrid>
+    <VStack w="full" spacing={8}>
+      {listOfItemsToShow.map((item, index) => {
+        return <LaunchpadProjectsByCategory key={index} category={item.category} subCategory={item.subCategory} />
+      })}
     </VStack>
   )
 }
