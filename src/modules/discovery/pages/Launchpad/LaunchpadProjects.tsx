@@ -15,6 +15,9 @@ const listOfItemsToShow = [
     category: ProjectCategory.Education,
   },
   {
+    category: ProjectCategory.Culture,
+  },
+  {
     category: ProjectCategory.Community,
   },
   {
