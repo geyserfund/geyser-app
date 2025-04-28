@@ -1,4 +1,4 @@
-import { ButtonProps, HStack, StackProps, VStack } from '@chakra-ui/react'
+import { HStack, StackProps, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -11,9 +11,6 @@ export interface ProjectRowLayoutProps extends Omit<StackProps, 'title'> {
   subtext?: string
   subtitleProps?: BodyProps
   children: React.ReactNode
-  onSeeAllClick?: () => void
-  seeAllProps?: ButtonProps & { href: string; isExternal: boolean }
-  seeAllText?: string
   rightContent?: React.ReactNode
 }
 
@@ -23,9 +20,6 @@ export const ProjectRowLayout = ({
   subtitleProps,
   subtext,
   children,
-  onSeeAllClick,
-  seeAllProps,
-  seeAllText,
   rightContent,
   ...rest
 }: ProjectRowLayoutProps) => {

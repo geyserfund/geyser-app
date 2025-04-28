@@ -51,7 +51,7 @@ export const GeyserHeroes = () => {
       <TitleWithPeriod
         title={t('Top Heroes')}
         period={period}
-        seeAllTo={getPath('hallOfFameHeroesContributor')}
+        seeAllTo={getPath('heroesContributor')}
         handlePeriodChange={handlePeriodChange}
       />
       <SponsorshipBanner />
@@ -117,7 +117,7 @@ const RenderHeroList = ({
   return (
     <VStack w="full" alignItems={'start'}>
       {loading
-        ? [...Array(6).keys()].map((key) => <HeroesListitemSkeleton key={key} />)
+        ? [...Array(10).keys()].map((key) => <HeroesListitemSkeleton key={key} />)
         : data.map((datum, index) => {
             return (
               <HStack

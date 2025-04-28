@@ -29,7 +29,7 @@ const Discovery = () => import('../../modules/discovery')
 
 const Guardians = () => import('../../modules/guardians')
 
-const HallOfFame = () => import('../../modules/discovery/pages/hallOfFame')
+const HallOfFame = () => import('../../modules/discovery/pages/heroes')
 
 const Refund = () => import('../../modules/project/pages1/projectFunding/views/refund')
 
@@ -737,13 +737,7 @@ export const platformRoutes: RouteObject[] = [
           },
         ],
       },
-      {
-        path: getPath('discoveryHallOfFame'),
-        async lazy() {
-          const HallOfFamePage = await HallOfFame().then((m) => m.HallOfFame)
-          return { Component: HallOfFamePage }
-        },
-      },
+
       {
         path: getPath('discoveryLaunchpad'),
         async lazy() {
@@ -759,26 +753,62 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('discoveryHeroes'),
+        children: [
+          {
+            index: true,
+            async lazy() {
+              const HallOfFamePage = await HallOfFame().then((m) => m.HeroesMainPage)
+              return { Component: HallOfFamePage }
+            },
+          },
+          {
+            path: getPath('heroesAmbassador'),
+            async lazy() {
+              const Heroes = await HallOfFame().then((m) => m.HeroesIndividualPage)
+              return { Component: Heroes }
+            },
+          },
+          {
+            path: getPath('heroesCreator'),
+            async lazy() {
+              const Heroes = await HallOfFame().then((m) => m.HeroesIndividualPage)
+              return { Component: Heroes }
+            },
+          },
+          {
+            path: getPath('heroesContributor'),
+            async lazy() {
+              const Heroes = await HallOfFame().then((m) => m.HeroesIndividualPage)
+              return { Component: Heroes }
+            },
+          },
+        ],
+      },
+
+      /*
+        Deprecate for hero routes, currently redirecting to new hero routes
+      */
+      {
+        path: getPath('discoveryHallOfFame'),
+        element: <Navigate to={getPath('discoveryHeroes')} />,
+      },
+      {
         path: getPath('hallOfFameHeroesAmbassador'),
-        async lazy() {
-          const Heroes = await HallOfFame().then((m) => m.Heroes)
-          return { Component: Heroes }
-        },
+        element: <Navigate to={getPath('heroesAmbassador')} />,
       },
       {
         path: getPath('hallOfFameHeroesCreator'),
-        async lazy() {
-          const Heroes = await HallOfFame().then((m) => m.Heroes)
-          return { Component: Heroes }
-        },
+        element: <Navigate to={getPath('heroesCreator')} />,
       },
       {
         path: getPath('hallOfFameHeroesContributor'),
-        async lazy() {
-          const Heroes = await HallOfFame().then((m) => m.Heroes)
-          return { Component: Heroes }
-        },
+        element: <Navigate to={getPath('heroesContributor')} />,
       },
+      /*
+        End of deprecate for hero routes
+      */
+
       {
         path: getPath('discoveryLeaderboard'),
         async lazy() {

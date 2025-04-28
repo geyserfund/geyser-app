@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { PiDotOutline } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
+import { FlowingGifBackground } from '@/modules/discovery/pages/heroes/components/FlowingGifBackground'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H2 } from '@/shared/components/typography'

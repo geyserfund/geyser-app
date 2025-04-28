@@ -6,7 +6,7 @@ import { Body, H2 } from '@/shared/components/typography'
 import { LaunchPadIllustrationUrl } from '@/shared/constants/platform/url.ts'
 import { lightModeColors } from '@/shared/styles'
 
-import { FlowingGifBackground } from '../../hallOfFame/components/FlowingGifBackground.tsx'
+import { FlowingGifBackground } from '../../heroes/components/FlowingGifBackground.tsx'
 
 export const LaunchpadTitle = () => {
   return (

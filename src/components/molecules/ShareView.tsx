@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 import Truncate from 'react-truncate-inside'
 
-import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground'
+import { FlowingGifBackground } from '@/modules/discovery/pages/heroes/components/FlowingGifBackground'
 import { Body } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import { useNotification } from '@/utils'

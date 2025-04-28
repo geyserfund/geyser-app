@@ -13,7 +13,7 @@ import { dimensions } from '@/shared/constants'
 import { LeaderboardPeriod } from '@/types'
 import { getBitcoinAmount, getShortAmountLabel, useMobileMode } from '@/utils'
 
-import { useSummaryBannerStats } from '../hallOfFame/hooks'
+import { useSummaryBannerStats } from '../heroes/hooks'
 import { TopContributors, TopProjects } from './components'
 
 interface PeriodOption {

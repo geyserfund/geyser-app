@@ -12,7 +12,7 @@ import { commaFormatted, getBitcoinAmount, getShortAmountLabel } from '@/utils'
 import { useSummaryBannerStats } from '../hooks'
 import { FlowingGifBackground } from './FlowingGifBackground'
 
-export const HallOfFameTitle = () => {
+export const HeroesMainPageTitle = () => {
   const { projectsCount, bitcoinsRaised, contributorsCount, loading: projectStatLoading } = useSummaryBannerStats()
 
   const bannerItems = [

@@ -11,7 +11,7 @@ import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLay
 import { SkeletonLayout } from '@/shared/components/layouts/index.ts'
 import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPathWithGeyserHero } from '@/shared/constants/index.ts'
-import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
+import { ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 import { ProjectForLaunchpadPageFragment } from '@/types/index.ts'
 
 const FOLLOWERS_NEEDED = 21
@@ -134,14 +134,10 @@ export const LaunchpadProjectItem = ({ project, onFollowCompleted, ...rest }: La
           {project.shortDescription}
         </Body>
 
-        <HStack>
-          <Badge variant="soft" colorScheme="neutral1">
-            {ProjectCategoryLabel[project.category ?? '']}
-          </Badge>
-          <Badge variant="soft" colorScheme="neutral1">
-            {ProjectSubCategoryLabel[project.subCategory ?? '']}
-          </Badge>
-        </HStack>
+        <Badge variant="soft" colorScheme="neutral1">
+          {ProjectSubCategoryLabel[project.subCategory ?? '']}
+        </Badge>
+
         <HStack w="full" justify="space-between">
           <Body size="sm" bold color={getFollowersColor()}>
             {followersNeeded > 0 ? `${currentFollowers} ${t('followers')}` : t('Goal reached!')}

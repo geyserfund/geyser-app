@@ -1,11 +1,11 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowLeft, PiShare } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { PiShare } from 'react-icons/pi'
 
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { dimensions, getPath } from '@/shared/constants'
+import { dimensions } from '@/shared/constants'
+import { BackButton } from '@/shared/molecules/BackButton.tsx'
 import { toPx } from '@/utils'
 
 import { IndividualHallOfFameTitle } from '../components/IndividualHallOfFameTitle'
@@ -22,16 +22,7 @@ export const ProjectLeaderboard = () => {
       }}
     >
       <TopNavContainerBar>
-        <Button
-          as={Link}
-          to={getPath('discoveryHallOfFame')}
-          size="lg"
-          variant="ghost"
-          colorScheme="neutral1"
-          leftIcon={<PiArrowLeft />}
-        >
-          {t('Back')}
-        </Button>
+        <BackButton />
         <Button size="lg" variant="soft" colorScheme="neutral1" leftIcon={<PiShare />}>
           {t('Share')}
         </Button>

@@ -1245,5 +1245,7 @@
   "The Heroes bringing Bitcoin closer to mass adoption": "The Heroes bringing Bitcoin closer to mass adoption",
   "that match your interests!": "that match your interests!",
   "You are not following any projects yet.": "You are not following any projects yet.",
-  "Explore projects": "Explore projects"
+  "Explore projects": "Explore projects",
+  "Top Projects this month": "Top Projects this month",
+  "Enabled <1>{{usdAmount}}</1> ({{satsAmount}} sats) across <3>{{numberOfProjects}}</3> projects": "Enabled <1>{{usdAmount}}</1> ({{satsAmount}} sats) across <3>{{numberOfProjects}}</3> projects"
 }
