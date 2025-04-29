@@ -20,7 +20,8 @@ export const ProjectPreLaunchNav = () => {
   const isProjectOwner = useAtomValue(isProjectOwnerAtom)
   const isMobile = Boolean(useMobileMode())
 
-  const hasEnoughFollowers = Boolean(project?.followersCount && project?.followersCount >= FOLLOWERS_NEEDED)
+  const hasEnoughFollowers =
+    Boolean(project?.followersCount && project?.followersCount >= FOLLOWERS_NEEDED) || Boolean(project?.paidLaunch)
   const showLaunchButton = hasEnoughFollowers && Boolean(isProjectOwner)
 
   return (

@@ -30,7 +30,7 @@ export const ProjectPrelaunchStatus = ({
   project,
   onlyTimeLeft = false,
 }: {
-  project: Pick<ProjectState, 'preLaunchedAt' | 'followersCount'>
+  project: Pick<ProjectState, 'preLaunchedAt' | 'followersCount' | 'paidLaunch'>
   onlyTimeLeft?: boolean
 }) => {
   const isMobile = useMobileMode()
@@ -67,7 +67,8 @@ export const ProjectPrelaunchStatus = ({
   }, [project?.preLaunchedAt])
 
   const formattedTime = getFormattedTime(timeLeft, isMobile)
-  const hasEnoughFollowers = Boolean(project?.followersCount && project?.followersCount >= FOLLOWERS_NEEDED)
+  const hasEnoughFollowers =
+    Boolean(project?.followersCount && project?.followersCount >= FOLLOWERS_NEEDED) || Boolean(project?.paidLaunch)
 
   if (hasEnoughFollowers) {
     return (

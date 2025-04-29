@@ -1274,5 +1274,7 @@
   "Geyser & Nostr Badges": "Geyser & Nostr Badges",
   "The creator has requested: ": "The creator has requested: ",
   "Creator's message": "Creator's message",
-  "ambassador has enabled": "ambassador has enabled"
+  "ambassador has enabled": "ambassador has enabled",
+  "Low 5% fees and no fees for node-runners": "Low 5% fees and no fees for node-runners",
+  "Project name should be between 3 and 280 characters.": "Project name should be between 3 and 280 characters."
 }
