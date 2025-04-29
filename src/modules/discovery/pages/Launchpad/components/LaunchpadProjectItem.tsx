@@ -140,7 +140,7 @@ export const LaunchpadProjectItem = ({ project, onFollowCompleted, ...rest }: La
 
         <HStack w="full" justify="space-between">
           <Body size="sm" bold color={getFollowersColor()}>
-            {followersNeeded > 0 ? `${currentFollowers} ${t('followers')}` : t('Goal reached!')}
+            {followersNeeded > 0 ? `${currentFollowers} ${t('followers')}` : `${t('Goal reached!')} 🎉`}
           </Body>
           <Body size="sm" bold color={getTimeColor()}>
             {timeDisplay}

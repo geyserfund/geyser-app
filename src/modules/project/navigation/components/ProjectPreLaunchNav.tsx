@@ -32,10 +32,11 @@ export const ProjectPreLaunchNav = () => {
       paddingX={0}
       alignItems="center"
       flex="1"
+      spacing={2}
     >
-      <BackButton />
-      <HStack w="full" alignItems="center" justifyContent={showLaunchButton ? 'space-between' : 'center'} spacing={4}>
-        <HStack flexGrow={1} justifyContent={'center'}>
+      <BackButton iconOnlyOnMobile />
+      <HStack w="full" alignItems="center" justifyContent={showLaunchButton ? 'space-between' : 'center'} spacing={2}>
+        <HStack flexGrow={1} justifyContent={'center'} flexWrap={'nowrap'}>
           <Body
             as={Link}
             to={getPath('discoveryLaunchpad')}
@@ -48,13 +49,14 @@ export const ProjectPreLaunchNav = () => {
 
           <ProjectPrelaunchStatus project={project} />
 
-          <PopOverInfo />
+          {!hasEnoughFollowers && <PopOverInfo />}
         </HStack>
         {showLaunchButton && (
           <Button
             as={Link}
             maxWidth="400px"
-            flex="1"
+            minWidth="100px"
+            flex={1}
             to={getPath('launchProjectWallet', project?.id)}
             variant="solid"
             colorScheme="primary1"
