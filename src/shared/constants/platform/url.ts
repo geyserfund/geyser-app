@@ -384,6 +384,8 @@ export const LegendNostrCardUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/digital/Legend-Nostr-Card.png'
 export const LegendJewelUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/digital/Legend-Jewel.png'
+export const LegendJewelIconUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/digital/Legend-Jewel-icon.png'
 
 export const GuardiansJewelUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/digital/Guardian-Jewel.png'

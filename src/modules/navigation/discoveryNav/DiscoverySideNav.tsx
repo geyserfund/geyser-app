@@ -17,7 +17,7 @@ import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/di
 import { dimensions, getPath, LogoNameDark, LogoNameLight } from '@/shared/constants'
 import { GradientBorder } from '@/shared/molecules/GradientBorder'
 import { UserExternalLinks } from '@/shared/molecules/UserExternalLinks'
-import { GuardiansButtonBackgroundGradient, GuardiansButtonBackgroundGradientBright } from '@/shared/styles/custom'
+import { GuardiansButtonBackgroundGradientBright } from '@/shared/styles/custom'
 import { useMobileMode } from '@/utils'
 
 import { currentPlatformNavItemAtom } from './discoveryNavAtom'
@@ -83,7 +83,6 @@ export const DiscoverySideNav = () => {
           })}
         </VStack>
       </VStack>
-
       <UserExternalLinks justifyContent="start" />
     </VStack>
   )
@@ -100,25 +99,9 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
 
   const isTabletSize = useBreakpointValue({ xl: false, lg: true })
 
-  let buttonStyle: ButtonProps = {}
-
-  const isGuardians = item.key === DiscoveryNavItemKey.Guardians
-
-  if (isGuardians) {
-    buttonStyle = {
-      background: GuardiansButtonBackgroundGradient,
-      _hover: {},
-    }
-
-    if (isTabletSize) {
-      buttonStyle.width = '48px'
-      buttonStyle.height = '48px'
-    }
-  }
-
   if (isTabletSize) {
     return (
-      <GradientBorder enable={isGuardians} gradientColor={GuardiansButtonBackgroundGradientBright}>
+      <GradientBorder enable={false} gradientColor={GuardiansButtonBackgroundGradientBright}>
         <Button
           variant="menu"
           colorScheme="primary1"
@@ -130,11 +113,10 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
           paddingX={4}
           to={getPath(item.path)}
           isActive={isActive}
-          {...buttonStyle}
           {...rest}
         >
           <>
-            {item.image ? <Image height="20px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />}
+            {item.image ? <Image height="18px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />}
             {activityDot ? (
               <Box
                 position="absolute"
@@ -153,7 +135,7 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
   }
 
   return (
-    <GradientBorder enable={isGuardians} gradientColor={GuardiansButtonBackgroundGradientBright}>
+    <GradientBorder enable={false} gradientColor={GuardiansButtonBackgroundGradientBright}>
       <Button
         variant="menu"
         colorScheme="primary1"
@@ -161,7 +143,7 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
         width={'full'}
         key={item.label}
         leftIcon={
-          item.image ? <Image height="20px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />
+          item.image ? <Image height="18px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />
         }
         rightIcon={
           activityDot ? (
@@ -179,7 +161,6 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
         as={Link}
         to={getPath(item.path)}
         isActive={isActive}
-        {...buttonStyle}
         {...rest}
       >
         {t(item.label)}

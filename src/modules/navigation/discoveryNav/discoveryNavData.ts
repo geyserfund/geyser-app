@@ -2,7 +2,7 @@ import { IconType } from 'react-icons'
 import { GiAirBalloon } from 'react-icons/gi'
 import { PiCompass, PiCrown, PiHandbag, PiRocketLaunch, PiSketchLogo, PiTrophy, PiWaveform } from 'react-icons/pi'
 
-import { PathsMap } from '@/shared/constants'
+import { LegendJewelIconUrl, PathsMap } from '@/shared/constants'
 
 export enum DiscoveryNavItemKey {
   Discover = 'discover',
@@ -82,6 +82,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Guardians,
     path: 'guardians',
     icon: PiSketchLogo,
+    image: LegendJewelIconUrl,
     bottomNav: false,
   },
 ]
