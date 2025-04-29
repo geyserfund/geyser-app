@@ -3,11 +3,13 @@ import {
   Button,
   ButtonProps,
   Divider,
-  Image,
+  Image as ChakraImage,
+  ImageProps,
   useBreakpointValue,
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
+import { keyframes } from '@emotion/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { Link } from 'react-router-dom'
@@ -23,7 +25,17 @@ import { useMobileMode } from '@/utils'
 import { currentPlatformNavItemAtom } from './discoveryNavAtom'
 import { DiscoveryNavItem, DiscoveryNavItemKey, discoveryNavItems } from './discoveryNavData'
 
-const InsertDividerAfterIndex = [2, 4]
+const InsertDividerAfterIndex = [2, 4, 6]
+
+const glowAnimation = keyframes`
+  0% { filter: drop-shadow(0 0 0px #3182ce); }
+  50% { filter: drop-shadow(0 0 6px #63b3ed); }
+  100% { filter: drop-shadow(0 0 0px #3182ce); }
+`
+
+const Image = (props: ImageProps) => {
+  return <ChakraImage transition="all 0.3s ease" filter="brightness(1)" {...props} />
+}
 
 export const DiscoverySideNav = () => {
   const isMobile = useMobileMode()
@@ -96,7 +108,6 @@ type DiscoverySideNavButtonProps = {
 
 const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: DiscoverySideNavButtonProps) => {
   const isActive = currentNavItem?.path === item.path
-
   const isTabletSize = useBreakpointValue({ xl: false, lg: true })
 
   if (isTabletSize) {
@@ -113,6 +124,13 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
           paddingX={4}
           to={getPath(item.path)}
           isActive={isActive}
+          sx={{
+            '&:hover img': {
+              transform: 'scale(1.1)',
+              filter: 'brightness(1.3)',
+              animation: `${glowAnimation} 2s infinite`,
+            },
+          }}
           {...rest}
         >
           <>
@@ -161,6 +179,13 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
         as={Link}
         to={getPath(item.path)}
         isActive={isActive}
+        sx={{
+          '&:hover img': {
+            transform: 'scale(1.1)',
+            filter: 'brightness(1.3)',
+            animation: `${glowAnimation} 2s infinite`,
+          },
+        }}
         {...rest}
       >
         {t(item.label)}
