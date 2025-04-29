@@ -12,7 +12,7 @@ import {
   useProjectsForLaunchpadPageQuery,
 } from '@/types/index.ts'
 
-import { LaunchpadProjectItem, LaunchpadProjectItemSkeleton } from './components/LaunchpadProjectItem.tsx'
+import { LaunchpadProjectItem, LaunchpadProjectItemSkeleton } from './LaunchpadProjectItem.tsx'
 
 type LaunchpadProjectsByCategoryProps = {
   category?: ProjectCategory
