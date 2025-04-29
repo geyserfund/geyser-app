@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Trans } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { useTopProjects } from '@/modules/discovery/hooks/useTopProjects.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { RankMedal } from '@/shared/components/display/RankMedal'
 import { SkeletonLayout } from '@/shared/components/layouts'
@@ -15,7 +16,6 @@ import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
 import { GlobalProjectLeaderboardRow, LeaderboardPeriod } from '@/types'
 import { getShortAmountLabel } from '@/utils'
 
-import { useTopProjects } from '../hooks'
 import { StandardOption } from '../types'
 import { TitleWithPeriod } from './TitleWithPeriod'
 

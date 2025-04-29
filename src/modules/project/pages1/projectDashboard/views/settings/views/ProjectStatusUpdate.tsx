@@ -33,7 +33,10 @@ export const ProjectStatusUpdate = () => {
     project?.status === ProjectStatus.InReview ||
     project?.status === ProjectStatus.Closed ||
     project?.status === ProjectStatus.PreLaunch
-  const isProjectInReviewTooltip = ProjectStatusTooltip[ProjectStatusLabels.IN_REVIEW]
+  const isProjectInReviewTooltip =
+    project?.status === ProjectStatus.PreLaunch
+      ? ProjectStatusTooltip[ProjectStatusLabels.PRE_LAUNCH]
+      : ProjectStatusTooltip[ProjectStatusLabels.IN_REVIEW]
 
   const statusConfirmModal = useModal()
 

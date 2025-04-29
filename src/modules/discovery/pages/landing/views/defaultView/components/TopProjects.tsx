@@ -1,8 +1,8 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
+import { useTopProjects } from '@/modules/discovery/hooks/useTopProjects.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { RankMedal } from '@/shared/components/display/RankMedal'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
@@ -14,31 +14,25 @@ import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
 import { GlobalProjectLeaderboardRow, LeaderboardPeriod } from '@/types'
 import { getShortAmountLabel } from '@/utils'
 
-import { useTopProjects } from '../hooks'
-import { StandardOption } from '../types'
-import { TitleWithPeriod } from './TitleWithPeriod'
+import { ProjectRowLayout } from './ProjectRowLayout.tsx'
 
 const MAX_PROJECTS = 9
 
 export const TopProjects = () => {
-  const [period, setPeriod] = useState<LeaderboardPeriod>(LeaderboardPeriod.Month)
+  const navigate = useNavigate()
 
-  const handlePeriodChange = (selectedOption: StandardOption<LeaderboardPeriod> | null) => {
-    if (selectedOption) {
-      setPeriod(selectedOption.value)
-    }
-  }
-
-  const { projects, loading } = useTopProjects(period, MAX_PROJECTS)
+  const { projects, loading } = useTopProjects(LeaderboardPeriod.Month, MAX_PROJECTS)
 
   return (
-    <VStack w="full">
-      <TitleWithPeriod
-        title={t('Top Projects')}
-        period={period}
-        handlePeriodChange={handlePeriodChange}
-        seeAllTo={getPath('hallOfFameProjects')}
-      />
+    <ProjectRowLayout
+      title={t('Top Projects this month')}
+      width="100%"
+      rightContent={
+        <Button variant="soft" colorScheme="neutral1" onClick={() => navigate(getPath('hallOfFameProjects'))}>
+          {t('See all')}
+        </Button>
+      }
+    >
       <CardLayout w="full" direction="row" flexWrap={'wrap'}>
         {loading
           ? [...Array(9).keys()].map((key) => {
@@ -48,7 +42,7 @@ export const TopProjects = () => {
               return <ProjectHeroDisplay key={project.projectName} project={project} index={index} />
             })}
       </CardLayout>
-    </VStack>
+    </ProjectRowLayout>
   )
 }
 

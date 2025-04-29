@@ -9,11 +9,11 @@ export enum DiscoveryNavItemKey {
   MyProjects = 'myProjects',
   Products = 'products',
   Activity = 'activity',
-  HallOfFame = 'hallOfFame',
   Grants = 'grants',
   Merch = 'merch',
   Guardians = 'guardians',
   Launchpad = 'launchpad',
+  Heroes = 'heroes',
 }
 
 export type DiscoveryNavItem = {
@@ -63,9 +63,9 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     bottomNav: true,
   },
   {
-    label: 'Hall of fame',
-    key: DiscoveryNavItemKey.HallOfFame,
-    path: 'discoveryHallOfFame',
+    label: 'Heroes',
+    key: DiscoveryNavItemKey.Heroes,
+    path: 'discoveryHeroes',
     icon: PiCrown,
     bottomNav: false,
   },

@@ -14,6 +14,7 @@ export enum ProjectStatusLabels {
   INACTIVE = 'Inactive Project',
   IN_REVIEW = 'In Review',
   CLOSED = 'Project Deactivated',
+  PRE_LAUNCH = 'Pre-Launch',
 }
 
 export const ProjectStatusColorScheme = {
@@ -68,6 +69,9 @@ export const ProjectStatusTooltip = {
   ),
   [ProjectStatusLabels.INACTIVE_WALLET]: t(
     'The last time someone tried to make a transaction to this project, the invoice generation failed.',
+  ),
+  [ProjectStatusLabels.PRE_LAUNCH]: t(
+    'This project is in pre-launch and therefore cannot receive contributions, and you cannot change the status of the project.',
   ),
   [ProjectStatusLabels.RUNNING]: t('This project is live and wallet running smoothly.'),
   [ProjectStatusLabels.DRAFT]: t('This project has not been launched yet.'),

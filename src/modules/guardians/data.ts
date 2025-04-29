@@ -62,6 +62,7 @@ export const InvestorData = [
 ]
 
 export const enum GuardianRewardType {
+  Badge = 'badge',
   Card = 'card',
   Tshirt = 'tshirt',
   Jersey = 'jersey',
@@ -75,6 +76,17 @@ export type RewardDetails = {
 }
 
 export const GuardianRewardDetails: RewardDetails[] = [
+  {
+    rewardType: GuardianRewardType.Badge,
+    title: t('Geyser & Nostr Badges'),
+    partners: [
+      {
+        name: 'NoGood',
+        image: GuardianPartnerNoGoodUrl,
+        link: 'https://www.nogood.studio/',
+      },
+    ],
+  },
   {
     rewardType: GuardianRewardType.Card,
     title: t('Guardian collectible cards'),
@@ -139,6 +151,33 @@ export type RewardMap = {
 }
 
 export const guardianRewardsMap: RewardMap[] = [
+  {
+    guardian: GuardianType.Warrior,
+    type: GuardianRewardType.Badge,
+    rewardUUID: '8629ad9b-09d4-4ad4-b4eb-f4aecc5b56e9',
+    image:
+      'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/warrior-badge.png',
+  },
+  {
+    guardian: GuardianType.Knight,
+    type: GuardianRewardType.Badge,
+    rewardUUID: '3076da79-eedf-45aa-bae0-ad2be9ccf76a',
+    image:
+      'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/knight-badge.png',
+  },
+  {
+    guardian: GuardianType.King,
+    type: GuardianRewardType.Badge,
+    rewardUUID: 'fbba13b6-ba5d-42f7-823e-16fd55035203',
+    image: 'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/king-badge.png',
+  },
+  {
+    guardian: GuardianType.Legend,
+    type: GuardianRewardType.Badge,
+    rewardUUID: '6bd4995d-cbca-4b64-bf7e-884c57789c88',
+    image:
+      'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/items/individual/legend-badge.png',
+  },
   {
     guardian: GuardianType.Knight,
     type: GuardianRewardType.Card,

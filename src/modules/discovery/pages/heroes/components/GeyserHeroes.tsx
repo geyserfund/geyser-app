@@ -22,7 +22,7 @@ import { StandardOption } from '../types'
 import { SponsorshipBanner } from './SponsorshipBanner'
 import { TitleWithPeriod } from './TitleWithPeriod'
 
-const MAX_HEROES = 5
+const MAX_HEROES = 10
 
 const HeroListLabels = {
   username: 'username',
@@ -47,11 +47,11 @@ export const GeyserHeroes = () => {
   const { creators, loading: creatorsLoading } = useTopCreators(period, MAX_HEROES)
 
   return (
-    <VStack w="full">
+    <VStack w="full" flex={1}>
       <TitleWithPeriod
         title={t('Top Heroes')}
         period={period}
-        seeAllTo={getPath('hallOfFameHeroesContributor')}
+        seeAllTo={getPath('heroesContributor')}
         handlePeriodChange={handlePeriodChange}
       />
       <SponsorshipBanner />
@@ -117,7 +117,7 @@ const RenderHeroList = ({
   return (
     <VStack w="full" alignItems={'start'}>
       {loading
-        ? [...Array(6).keys()].map((key) => <HeroesListitemSkeleton key={key} />)
+        ? [...Array(10).keys()].map((key) => <HeroesListitemSkeleton key={key} />)
         : data.map((datum, index) => {
             return (
               <HStack

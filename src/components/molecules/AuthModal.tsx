@@ -25,6 +25,7 @@ import { Caption } from '../typography'
 export type AuthModalAdditionalprops = {
   title?: string
   description?: string
+  noEmailPopup?: boolean
   showTwitter?: boolean
   showNostr?: boolean
   showLightning?: boolean
@@ -113,6 +114,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
     onClose,
     title,
     description,
+    noEmailPopup = false,
     showTwitter = true,
     showNostr = true,
     showLightning = true,
@@ -162,8 +164,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
       useInert={false}
     >
       <VStack w="full" justifyContent="center" paddingTop={3} alignItems="start" spacing={4}>
-        <ConnectWithEmail onClose={onClose} isOTPStarted={setIsOtpStarted} />
-
+        {!noEmailPopup && <ConnectWithEmail onClose={onClose} isOTPStarted={setIsOtpStarted} />}
         {!isOtpStarted && (
           <>
             <VStack w="full" alignItems="start" spacing={0}>

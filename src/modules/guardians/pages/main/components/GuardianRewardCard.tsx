@@ -34,6 +34,7 @@ export const GuardianRewardCard = ({
   }
 
   const isCard = rewardMap?.type === GuardianRewardType.Card
+  const isBadge = rewardMap?.type === GuardianRewardType.Badge
   const itemsModal = useModal()
 
   const buyButton = () => {
@@ -69,7 +70,7 @@ export const GuardianRewardCard = ({
           )}
         </Box>
 
-        <VStack width="full" align="center" spacing={0}>
+        <VStack width="full" align="center" spacing={0} marginTop={isBadge ? '-20px' : undefined}>
           <Body
             textTransform="uppercase"
             bold
@@ -80,16 +81,24 @@ export const GuardianRewardCard = ({
             {name}
           </Body>
 
-          <Body fontSize={{ base: '18px', lg: '22px', xl: '28px' }} light textTransform="uppercase" bold lineHeight={1}>
-            <Body as="span" color={`guardians.${rewardMap?.guardian}.text`}>
-              {available}{' '}
-            </Body>{' '}
-            {t('OF')}{' '}
-            <Body as="span" color={`guardians.${rewardMap?.guardian}.text`}>
-              {totalSupply}
-            </Body>{' '}
-            {t('REMAINING')}
-          </Body>
+          {maxClaimable && !isBadge && (
+            <Body
+              fontSize={{ base: '18px', lg: '22px', xl: '28px' }}
+              light
+              textTransform="uppercase"
+              bold
+              lineHeight={1}
+            >
+              <Body as="span" color={`guardians.${rewardMap?.guardian}.text`}>
+                {available}{' '}
+              </Body>{' '}
+              {t('OF')}{' '}
+              <Body as="span" color={`guardians.${rewardMap?.guardian}.text`}>
+                {totalSupply}
+              </Body>{' '}
+              {t('REMAINING')}
+            </Body>
+          )}
 
           <Body fontWeight={500} fontSize={{ base: '20px', lg: '32px' }} lineHeight={1}>
             {t('Price')}: ${commaFormatted(centsToDollars(cost))}
