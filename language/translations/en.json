@@ -1244,5 +1244,7 @@
   "left to get to 21 follows & launch": "left to get to 21 follows & launch",
   "5% Geyser fee per transaction": "5% Geyser fee per transaction",
   "Low 5% fees and no fees for node-runners": "Low 5% fees and no fees for node-runners",
-  "Project name should be between 3 and 280 characters.": "Project name should be between 3 and 280 characters."
+  "Project name should be between 3 and 280 characters.": "Project name should be between 3 and 280 characters.",
+  "We could not validate this as a working Lightning Address: unknown error": "We could not validate this as a working Lightning Address: unknown error",
+  "We could not validate this as a working Lightning Address: lightning address request error, please try again later": "We could not validate this as a working Lightning Address: lightning address request error, please try again later"
 }
