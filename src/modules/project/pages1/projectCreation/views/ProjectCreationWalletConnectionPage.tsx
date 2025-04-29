@@ -45,7 +45,7 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   const { project, loading } = useProjectAtom()
   const { wallet } = useWalletAtom()
-  const { createWallet } = useProjectWalletAPI()
+  const { createWallet, updateWallet } = useProjectWalletAPI()
 
   useLocationMandatoryRedirect()
 
@@ -58,6 +58,18 @@ export const ProjectCreationWalletConnectionPage = () => {
   const setWhereToGoNext = useSetAtom(whereToGoNextAtom)
 
   const handleNext = (createWalletInput: CreateWalletInput | null) => {
+    if (wallet?.id) {
+      if (isFormDirty()) {
+        updateWallet.execute({
+          variables: { input: { ...createWalletInput, id: wallet.id } },
+        })
+      } else {
+        setWhereToGoNext()
+      }
+
+      return
+    }
+
     if (createWalletInput) {
       createWallet.execute({
         variables: { input: createWalletInput },
@@ -70,13 +82,12 @@ export const ProjectCreationWalletConnectionPage = () => {
           })
         },
       })
-    } else {
-      setWhereToGoNext()
     }
   }
 
   const {
     handleConfirm,
+    isFormDirty,
     connectionOption,
     lightningAddress,
     node,
@@ -138,7 +149,7 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   const isContinueButtonLoading = lightningAddress.evaluating || loading || createWallet.loading
 
-  const isWalletIncomplete = !wallet?.id
+  const isWalletIncomplete = !createWalletInput
 
   return (
     <ProjectCreateLayout

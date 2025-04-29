@@ -1276,5 +1276,7 @@
   "Creator's message": "Creator's message",
   "ambassador has enabled": "ambassador has enabled",
   "Low 5% fees and no fees for node-runners": "Low 5% fees and no fees for node-runners",
-  "Project name should be between 3 and 280 characters.": "Project name should be between 3 and 280 characters."
+  "Project name should be between 3 and 280 characters.": "Project name should be between 3 and 280 characters.",
+  "We could not validate this as a working Lightning Address: unknown error": "We could not validate this as a working Lightning Address: unknown error",
+  "We could not validate this as a working Lightning Address: lightning address request error, please try again later": "We could not validate this as a working Lightning Address: lightning address request error, please try again later"
 }
