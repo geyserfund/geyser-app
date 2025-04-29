@@ -1,3 +1,27 @@
+## [0.21.3](https://github.com/geyserfund/geyser-app/compare/v0.21.0...v0.21.3) (2025-04-29)
+
+
+### Features
+
+* remove subscriptions and simplify UI ([d0d7df6](https://github.com/geyserfund/geyser-app/commit/d0d7df6f849ae40c11baf5663704044067b9e852))
+* update myprojects page to have prelaunch projects ([237ecae](https://github.com/geyserfund/geyser-app/commit/237ecae8dcc502701ebc8f264ffa0e2fcb12438c))
+
+
+### Bug Fixes
+
+*  minor style issues ([2793432](https://github.com/geyserfund/geyser-app/commit/2793432ae0060df05038134fc489107c890369cc))
+* add back button in pre launch nav ([c7c42a7](https://github.com/geyserfund/geyser-app/commit/c7c42a70ffda9852d139bd9d679cec02ee7a578d))
+* add badges to guardians page ([802efb9](https://github.com/geyserfund/geyser-app/commit/802efb960d21655e3eabcd2c8f0cf1d670e4f8e7))
+* add category grouping in launchpad page ([f166cf0](https://github.com/geyserfund/geyser-app/commit/f166cf08572bd5f9970bb4fdbc6dcb92ae7b57c2))
+* add optional to the copy ([6889424](https://github.com/geyserfund/geyser-app/commit/688942416cb99fab1166198b1efe98a2a313e9bb))
+* back button ([a50f42f](https://github.com/geyserfund/geyser-app/commit/a50f42f06f36c34eec0ef631aba31dcbed0e9797))
+* change mobile component for lauchpad item to desktop ([65e69b6](https://github.com/geyserfund/geyser-app/commit/65e69b6f217804115ec013e905f59c2d7d11affb))
+* dont show project status update in prelaunch ([7daff3f](https://github.com/geyserfund/geyser-app/commit/7daff3f938fcfd667e1fc3fec4fd3ae49d2f4e4b))
+* move creator tools above ([27a5cb6](https://github.com/geyserfund/geyser-app/commit/27a5cb6426a126c870bd9e7e5cbeac1723e7c9f6))
+* qa issues with launchpad ([f5afde9](https://github.com/geyserfund/geyser-app/commit/f5afde91428f78b64c6df65125b75da34c6d2fbd))
+* update heroes page ([7896266](https://github.com/geyserfund/geyser-app/commit/789626668927f04bb9d75f456abf7dea3cbd6c29))
+* update navdata ([0bbf283](https://github.com/geyserfund/geyser-app/commit/0bbf2831dfdb88ab9088fb32295448824e2d961c))
+
 ## [0.21.0](https://github.com/geyserfund/geyser-app/compare/v0.20.0...v0.21.0) (2025-04-24)
 
 
