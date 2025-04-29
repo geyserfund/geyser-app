@@ -9,7 +9,7 @@ import { useAuthContext } from '../../../../../context'
 import { ExternalAccountType, SocialAccountType } from '../../../../../modules/auth'
 import { ConnectWithNostr } from '../../../../../modules/auth/ConnectWithNostr'
 import { ConnectWithSocial } from '../../../../../modules/auth/ConnectWithSocial'
-import { useRefreshAuthToken } from '../../../../../modules/auth/useAuthToken'
+import { useAuthToken } from '../../../../../modules/auth/useAuthToken'
 import {
   getPath,
   LaunchProjectCoinsUrl,
@@ -41,7 +41,8 @@ export const ProjectCreateStart = () => {
         account.accountType !== ExternalAccountType.lightning && account.accountType !== ExternalAccountType.google,
     ),
   )
-  useRefreshAuthToken(!isLoggedIn || !userHasProjectCreatableAccounts)
+
+  useAuthToken(!isLoggedIn || !userHasProjectCreatableAccounts)
 
   return (
     <ProjectCreateLayout

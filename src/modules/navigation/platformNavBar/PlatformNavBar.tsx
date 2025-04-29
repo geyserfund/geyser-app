@@ -219,7 +219,6 @@ export const PlatformNavBar = () => {
       {!dontAskNotificationAgain && (
         <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
       )}
-      {/* {heroCard?.isOpen && <HeroCardModal />} */}
     </HStack>
   )
 }

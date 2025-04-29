@@ -129,6 +129,9 @@ export const AboutGeyserOrigin = 'https://about.geyser.fund'
 
 const pathsMap = {
   index: () => '/',
+
+  logout: () => '/logout',
+
   landingPage: () => '/',
   landingFeed: () => `/${PathName.landingFeed}`,
   leaderboard: () => `/${PathName.leaderboard}`,

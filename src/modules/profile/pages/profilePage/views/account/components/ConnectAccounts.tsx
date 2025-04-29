@@ -8,7 +8,7 @@ import { ConnectWithLightning } from '../../../../../../../modules/auth/ConnectW
 import { ConnectWithNostr } from '../../../../../../../modules/auth/ConnectWithNostr'
 import { ConnectWithSocial } from '../../../../../../../modules/auth/ConnectWithSocial'
 import { SocialAccountType } from '../../../../../../../modules/auth/type'
-import { useRefreshAuthToken } from '../../../../../../../modules/auth/useAuthToken'
+import { useAuthToken } from '../../../../../../../modules/auth/useAuthToken'
 import { Modal } from '../../../../../../../shared/components/layouts/Modal'
 import { useModal } from '../../../../../../../shared/hooks/useModal'
 import { UserForProfilePageFragment } from '../../../../../../../types'
@@ -30,7 +30,7 @@ export const ConnectAccounts = ({ user }: { user: UserForProfilePageFragment }) 
 
   const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
-  useRefreshAuthToken(isOpen)
+  useAuthToken(isOpen)
 
   const displayNostrButton = !hasNostrAccount(user) && !isMobile
 
