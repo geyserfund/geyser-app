@@ -1271,5 +1271,8 @@
   "Payout Rate": "Payout Rate",
   "This project is in pre-launch and therefore cannot receive contributions, and you cannot change the status of the project.": "This project is in pre-launch and therefore cannot receive contributions, and you cannot change the status of the project.",
   "5% Geyser fee per transaction": "5% Geyser fee per transaction",
-  "Geyser & Nostr Badges": "Geyser & Nostr Badges"
+  "Geyser & Nostr Badges": "Geyser & Nostr Badges",
+  "The creator has requested: ": "The creator has requested: ",
+  "Creator's message": "Creator's message",
+  "ambassador has enabled": "ambassador has enabled"
 }
