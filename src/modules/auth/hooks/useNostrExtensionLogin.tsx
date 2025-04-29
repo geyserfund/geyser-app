@@ -25,6 +25,7 @@ export const useNostrExtensonLogin = () => {
       const pubkey = await getPubkey()
 
       const getAuthEvent = await fetch(`${authServiceEndpoint}/nostr`, {
+        method: 'POST',
         credentials: 'include',
         redirect: 'follow',
       })
@@ -44,6 +45,7 @@ export const useNostrExtensonLogin = () => {
       )
 
       const response = await fetch(`${authServiceEndpoint}/nostr?token=${nostrAuthToken}`, {
+        method: 'POST',
         credentials: 'include',
         redirect: 'follow',
       })

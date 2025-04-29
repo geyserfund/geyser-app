@@ -11,7 +11,7 @@ import { useCustomTheme, useNotification } from '../../utils'
 import { SocialConfig } from './SocialConfig'
 import { loginMethodAtom } from './state'
 import { ConnectWithButtonProps } from './type'
-import { useAuthToken, useCanLogin } from './useAuthToken'
+import { useCanLogin } from './useAuthToken'
 
 export const TWITTER_AUTH_ATTEMPT_KEY = 'twitterAuthAttempt'
 export const TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS = 1000 * 60 * 15 // 15 minutes
@@ -20,8 +20,6 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
   const { t } = useTranslation()
   const { login } = useAuthContext()
   const { toast } = useNotification()
-
-  useAuthToken()
 
   const { colors } = useCustomTheme()
 

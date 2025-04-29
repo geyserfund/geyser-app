@@ -1,10 +1,11 @@
 import { ApolloClient, ApolloClientOptions, createHttpLink, from, NormalizedCacheObject, split } from '@apollo/client'
+import { onError } from '@apollo/client/link/error'
 import { RetryLink } from '@apollo/client/link/retry'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { createClient } from 'graphql-ws'
 
-import { __development__ } from '../../shared/constants'
+import { __development__, getPath } from '../../shared/constants'
 import { toInt } from '../../utils'
 import { getAppEndPoint } from '../domain'
 import { cache } from './apolloClientCache'
@@ -16,18 +17,25 @@ const retryLink = new RetryLink({
 
     return (
       count <= 4 &&
-      (Boolean(
-        err &&
-          (err.code === 'STALE_REFRESH_TOKEN' ||
-            err.code === 'EXPIRED_REFRESH_TOKEN' ||
-            err.code === 'INVALIDE_REFRESH_TOKEN'),
-      ) ||
+      (Boolean(err && (err.code === 'STALE_REFRESH_TOKEN' || err.code === 'EXPIRED_ACCESS_TOKEN')) ||
         statusCode === 408)
     )
   },
   delay: {
     initial: 300,
   },
+})
+
+const logoutCodes = ['EXPIRED_REFRESH_TOKEN', 'INVALID_REFRESH_TOKEN', 'INVALID_ACCESS_TOKEN']
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach((gqlError) => {
+      if (logoutCodes.includes(gqlError.extensions?.code as string)) {
+        window.location.href = getPath('logout')
+      }
+    })
+
+  if (networkError) console.log(`[Network error]: ${networkError}`)
 })
 
 const apiServiceEndPoint = getAppEndPoint()
@@ -105,7 +113,7 @@ const splitLink = split(
 )
 
 const clientConfig: ApolloClientOptions<NormalizedCacheObject> = {
-  link: from([retryLink, splitLink]),
+  link: from([errorLink, retryLink, splitLink]),
   cache,
 }
 

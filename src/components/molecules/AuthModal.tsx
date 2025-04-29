@@ -18,7 +18,7 @@ import {
   TWITTER_AUTH_ATTEMPT_KEY,
   TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS,
 } from '../../modules/auth/ConnectWithSocial'
-import { useRefreshAuthToken } from '../../modules/auth/useAuthToken'
+import { useAuthToken } from '../../modules/auth/useAuthToken.tsx'
 import { hasFacebookAccount, hasGithubAccount, hasGoogleAccount, hasNostrAccount, hasTwitterAccount } from '../../utils'
 import { Caption } from '../typography'
 
@@ -127,7 +127,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  useRefreshAuthToken(isOpen)
+  useAuthToken(isOpen)
 
   const handlePrivateRouteModalClose = () => {
     if (privateRoute) {
