@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { PiCalendarDots } from 'react-icons/pi'
 
 import { CustomSelect } from '@/components/ui/CustomSelect'
-import { StandardOption } from '@/modules/discovery/pages/hallOfFame/types'
+import { StandardOption } from '@/modules/discovery/pages/heroes/types'
 import { H1 } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants'
 import { ProjectLeaderboardPeriod } from '@/types'

@@ -157,6 +157,11 @@ const pathsMap = {
   hallOfFameHeroesCreator: () => `/${PathName.hallOfFame}/${PathName.projects}/${PathName.creator}`,
   hallOfFameHeroesContributor: () => `/${PathName.hallOfFame}/${PathName.projects}/${PathName.contributor}`,
 
+  discoveryHeroes: () => `/${PathName.heroes}`,
+  heroesAmbassador: () => `/${PathName.heroes}/${PathName.ambassador}`,
+  heroesCreator: () => `/${PathName.heroes}/${PathName.creator}`,
+  heroesContributor: () => `/${PathName.heroes}/${PathName.contributor}`,
+
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
   grantsRoundTwo: () => `/${PathName.grants}/${PathName.grantsRoundTwo}`,

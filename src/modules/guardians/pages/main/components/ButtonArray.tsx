@@ -19,6 +19,18 @@ export const ButtonArray = () => {
     <HStack spacing={{ base: 2, lg: 8 }} justify="center" w="full" flexWrap="wrap">
       <Button
         size={{ base: 'sm', lg: 'lg' }}
+        onClick={() => scrollToElement('guardians-badge')}
+        variant="soft"
+        paddingX="4"
+        fontFamily={fonts.cormorant}
+        textTransform="uppercase"
+        color="neutral1.12"
+        fontWeight={600}
+      >
+        {t('Nostr Badges')}
+      </Button>
+      <Button
+        size={{ base: 'sm', lg: 'lg' }}
         onClick={() => scrollToElement('guardians-card')}
         variant="soft"
         paddingX="4"

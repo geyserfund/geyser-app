@@ -12,7 +12,7 @@ import { commaFormatted, getBitcoinAmount, getShortAmountLabel } from '@/utils'
 import { useSummaryBannerStats } from '../hooks'
 import { FlowingGifBackground } from './FlowingGifBackground'
 
-export const HallOfFameTitle = () => {
+export const HeroesMainPageTitle = () => {
   const { projectsCount, bitcoinsRaised, contributorsCount, loading: projectStatLoading } = useSummaryBannerStats()
 
   const bannerItems = [
@@ -20,7 +20,7 @@ export const HallOfFameTitle = () => {
     { label: 'Raised', value: `${getBitcoinAmount(bitcoinsRaised, true)} ₿` },
     { label: 'Projects', value: commaFormatted(projectsCount) },
   ]
-  const padding = { base: 4, lg: '6' }
+  const padding = { base: 2, lg: 4 }
 
   const renderPlatformStats = () => {
     if (projectStatLoading) return <ProjectStatSkeleton />
@@ -52,23 +52,23 @@ export const HallOfFameTitle = () => {
         spacing={{ base: 4, lg: 6 }}
         paddingX={padding}
         paddingTop={padding}
-        paddingBottom={{ base: 0, lg: 6 }}
+        paddingBottom={{ base: 0, lg: 4 }}
       >
         <Image
           src={CrownIllustrationUrl}
           alt="Hall of Fame"
-          width={{ base: '95px', lg: '130px' }}
+          width={{ base: '95px', lg: '120px' }}
           height="auto"
           objectFit={'contain'}
           zIndex={1}
         />
         <VStack w="full" alignItems={'start'} spacing={{ base: 2, lg: 0 }} zIndex={1}>
           <H2 size={{ base: 'xl', lg: '3xl' }} bold color={lightModeColors.utils.text}>
-            {t('Hall of Fame')}
+            {t('Heroes')}
           </H2>
 
           <Body size={{ base: 'sm', lg: 'xl' }} medium color={lightModeColors.neutral1[11]}>
-            {t('The Projects and Heroes bringing Bitcoin closer to mass adoption')}
+            {t('The Heroes bringing Bitcoin closer to mass adoption')}
           </Body>
           <HStack w="full" display={{ base: 'none', lg: 'flex' }} color={lightModeColors.utils.text}>
             {renderPlatformStats()}

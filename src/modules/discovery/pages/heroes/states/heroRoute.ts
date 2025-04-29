@@ -5,9 +5,9 @@ import { getPath } from '@/shared/constants'
 
 import { HeroType } from '../components/TopHeroes'
 
-export const isAmbassadorHeroRouteAtom = atom(routeMatchForAtom([getPath('hallOfFameHeroesAmbassador')]))
-export const isCreatorHeroRouteAtom = atom(routeMatchForAtom([getPath('hallOfFameHeroesCreator')]))
-export const isContributorHeroRouteAtom = atom(routeMatchForAtom([getPath('hallOfFameHeroesContributor')]))
+export const isAmbassadorHeroRouteAtom = atom(routeMatchForAtom([getPath('heroesAmbassador')]))
+export const isCreatorHeroRouteAtom = atom(routeMatchForAtom([getPath('heroesCreator')]))
+export const isContributorHeroRouteAtom = atom(routeMatchForAtom([getPath('heroesContributor')]))
 
 export const heroTypeFromRoute = atom((get) => {
   const isAmbassadorHeroRoute = get(isAmbassadorHeroRouteAtom)

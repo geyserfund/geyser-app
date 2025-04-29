@@ -6,7 +6,7 @@ import { Body, H2 } from '@/shared/components/typography'
 import { LaunchPadIllustrationUrl } from '@/shared/constants/platform/url.ts'
 import { lightModeColors } from '@/shared/styles'
 
-import { FlowingGifBackground } from '../../hallOfFame/components/FlowingGifBackground.tsx'
+import { FlowingGifBackground } from '../../heroes/components/FlowingGifBackground.tsx'
 
 export const LaunchpadTitle = () => {
   return (
@@ -23,7 +23,7 @@ export const LaunchpadTitle = () => {
 
       <HStack w="full" spacing={{ base: 4, lg: 6 }} padding={{ base: 2, lg: 4 }}>
         <Image
-          width={{ base: '95px', lg: '130px' }}
+          width={{ base: '95px', lg: '120px' }}
           height="auto"
           zIndex={1}
           src={LaunchPadIllustrationUrl}

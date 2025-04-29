@@ -4,7 +4,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { PiX } from 'react-icons/pi'
 
 import { useAuthContext } from '@/context/auth.tsx'
-import { FlowingGifBackground } from '@/modules/discovery/pages/hallOfFame/components/FlowingGifBackground.tsx'
+import { FlowingGifBackground } from '@/modules/discovery/pages/heroes/components/FlowingGifBackground.tsx'
 import { VerifiedBadge } from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'

@@ -2,18 +2,18 @@ import { IconType } from 'react-icons'
 import { GiAirBalloon } from 'react-icons/gi'
 import { PiCompass, PiCrown, PiHandbag, PiRocketLaunch, PiSketchLogo, PiTrophy, PiWaveform } from 'react-icons/pi'
 
-import { PathsMap } from '@/shared/constants'
+import { LegendJewelIconUrl, PathsMap } from '@/shared/constants'
 
 export enum DiscoveryNavItemKey {
   Discover = 'discover',
   MyProjects = 'myProjects',
   Products = 'products',
   Activity = 'activity',
-  HallOfFame = 'hallOfFame',
   Grants = 'grants',
   Merch = 'merch',
   Guardians = 'guardians',
   Launchpad = 'launchpad',
+  Heroes = 'heroes',
 }
 
 export type DiscoveryNavItem = {
@@ -63,9 +63,9 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     bottomNav: true,
   },
   {
-    label: 'Hall of fame',
-    key: DiscoveryNavItemKey.HallOfFame,
-    path: 'discoveryHallOfFame',
+    label: 'Heroes',
+    key: DiscoveryNavItemKey.Heroes,
+    path: 'discoveryHeroes',
     icon: PiCrown,
     bottomNav: false,
   },
@@ -82,6 +82,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Guardians,
     path: 'guardians',
     icon: PiSketchLogo,
+    image: LegendJewelIconUrl,
     bottomNav: false,
   },
 ]

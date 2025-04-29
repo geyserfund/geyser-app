@@ -1,18 +1,20 @@
 import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiEyeglasses, PiGear, PiNoteBlank, PiProjectorScreenChart } from 'react-icons/pi'
+import { PiClock, PiEyeglasses, PiGear, PiNoteBlank } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router-dom'
 
+import { FOLLOWERS_NEEDED } from '@/modules/project/pages1/projectView/views/body/components/PrelaunchFollowButton.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
-import { ProjectForProfilePageFragment, ProjectStatus } from '@/types'
+import { ProjectPrelaunchStatus } from '@/shared/molecules/ProjectPrelaunchStatus.tsx'
+import { ProjectForMyProjectsFragment, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { Contributions } from './Contributions'
 import { Rewards } from './Rewards'
 
 interface ProjectCardProps {
-  project: ProjectForProfilePageFragment
+  project: ProjectForMyProjectsFragment
 }
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
@@ -25,6 +27,14 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const Direction = isMobile ? VStack : HStack
 
   const renderProjectCardContent = () => {
+    if (project.status === ProjectStatus.PreLaunch) {
+      return (
+        <Direction mt={4} spacing={4} alignItems="stretch">
+          <InPrelaunchProjectCard project={project} />
+        </Direction>
+      )
+    }
+
     if (project.status === ProjectStatus.Draft) {
       return (
         <Direction mt={4} spacing={4} alignItems="stretch">
@@ -75,7 +85,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           size="md"
           rightIcon={isMobile ? undefined : <PiGear size={16} />}
         >
-          {isMobile ? <PiProjectorScreenChart size={16} /> : t('Dashboard')}
+          {isMobile ? <PiGear size={16} /> : t('Dashboard')}
         </Button>
       </HStack>
       {renderProjectCardContent()}
@@ -139,6 +149,54 @@ const InReviewProjectCard = () => {
       <Body size={'md'} regular>
         {t('Your project is in review and therefore cannot receive contributions, and is not visible by the public. ')}
       </Body>
+    </Box>
+  )
+}
+
+const InPrelaunchProjectCard = ({ project }: { project: ProjectForMyProjectsFragment }) => {
+  const { t } = useTranslation()
+
+  const { followersCount } = project
+  const followersNeeded = FOLLOWERS_NEEDED - (followersCount ?? 0)
+  const enoughFollowers = followersNeeded <= 0
+
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      borderWidth={1}
+      borderRadius="lg"
+      minHeight="124px"
+      gap={2}
+      p={4}
+      flex={1}
+    >
+      <HStack justifyContent="center" alignItems="center" spacing={2}>
+        <PiClock size={24} />
+        <Body size={'lg'} regular>
+          {t('Prelaunch')}
+        </Body>
+      </HStack>
+      <HStack>
+        <Body size="2xl" bold dark>
+          {followersCount ?? 0}{' '}
+          <Body as="span" size="md" light medium>
+            {t('followers')}
+          </Body>
+        </Body>
+
+        {!enoughFollowers && (
+          <Body size="2xl" dark bold display="inline">
+            {`${followersNeeded}`}{' '}
+            <Body as="span" size="md" light>
+              {t(`more to launch`)}
+            </Body>
+          </Body>
+        )}
+      </HStack>
+      <ProjectPrelaunchStatus project={project} onlyTimeLeft />
     </Box>
   )
 }

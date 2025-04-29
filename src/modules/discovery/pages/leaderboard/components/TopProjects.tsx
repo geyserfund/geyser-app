@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiLightning, PiUsers } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
+import { useTopProjects } from '@/modules/discovery/hooks/useTopProjects.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -10,7 +11,6 @@ import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { GlobalProjectLeaderboardRow, LeaderboardPeriod } from '@/types'
 
-import { useTopProjects } from '../../hallOfFame/hooks'
 import { ScrollableList } from './ScrollableList'
 
 interface TopProjectsProps {

@@ -4,17 +4,17 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   ActivityFeedName,
   ProjectActivitiesCount,
-  ProjectForProfilePageFragment,
+  ProjectForMyProjectsFragment,
   ProjectStatus,
   useActivitiesCountGroupedByProjectQuery,
-  useUserProfileProjectsQuery,
+  useProjectsForMyProjectsQuery,
 } from '@/types'
 import { useNotification } from '@/utils'
 
 export const sortProjectsByActivity = (
-  projects: ProjectForProfilePageFragment[],
+  projects: ProjectForMyProjectsFragment[],
   activities: ProjectActivitiesCount[],
-): ProjectForProfilePageFragment[] => {
+): ProjectForMyProjectsFragment[] => {
   const activityMap = {} as Record<string, number>
   activities.map((a) => {
     activityMap[a.project.id] = a.count
@@ -35,10 +35,11 @@ export const useMyProjects = (userId: number) => {
   const { toast } = useNotification()
 
   const [isLoading, setLoading] = useState(true)
-  const [_activeProjects, _setActiveProjects] = useState<ProjectForProfilePageFragment[]>([])
-  const [activeProjects, setActiveProjects] = useState<ProjectForProfilePageFragment[]>([])
-  const [inDraftProjects, setInDraftProjects] = useState<ProjectForProfilePageFragment[]>([])
-  const [inReviewProjects, setInReviewProjects] = useState<ProjectForProfilePageFragment[]>([])
+  const [_activeProjects, _setActiveProjects] = useState<ProjectForMyProjectsFragment[]>([])
+  const [activeProjects, setActiveProjects] = useState<ProjectForMyProjectsFragment[]>([])
+  const [inDraftProjects, setInDraftProjects] = useState<ProjectForMyProjectsFragment[]>([])
+  const [inReviewProjects, setInReviewProjects] = useState<ProjectForMyProjectsFragment[]>([])
+  const [inPrelaunchProjects, setInPrelaunchProjects] = useState<ProjectForMyProjectsFragment[]>([])
 
   const [myProjectsActivities, setMyProjectsActivities] = useState<ProjectActivitiesCount[]>([])
 
@@ -68,7 +69,7 @@ export const useMyProjects = (userId: number) => {
     },
   })
 
-  useUserProfileProjectsQuery({
+  useProjectsForMyProjectsQuery({
     variables: {
       where: {
         id: userId,
@@ -80,7 +81,7 @@ export const useMyProjects = (userId: number) => {
         data.user.ownerOf
           ?.filter((val) => val?.project?.status === ProjectStatus.Active)
           .map((val) => val.project)
-          .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? []
+          .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? []
       _setActiveProjects(filteredActiveProjects)
       setActiveProjects(filteredActiveProjects)
 
@@ -88,20 +89,26 @@ export const useMyProjects = (userId: number) => {
       //   data.user.ownerOf
       //     ?.filter((val) => val?.project?.status === ProjectStatus.Active)
       //     .map((val) => val.project)
-      //     .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? [],
+      //     .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
       //   myProjectsActivities,
       // )
       setInDraftProjects(
         data.user.ownerOf
           ?.filter((val) => val?.project?.status === ProjectStatus.Draft)
           .map((val) => val.project)
-          .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? [],
+          .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
       )
       setInReviewProjects(
         data.user.ownerOf
           ?.filter((val) => val?.project?.status === ProjectStatus.InReview)
           .map((val) => val.project)
-          .filter((project): project is ProjectForProfilePageFragment => project !== null) ?? [],
+          .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
+      )
+      setInPrelaunchProjects(
+        data.user.ownerOf
+          ?.filter((val) => val?.project?.status === ProjectStatus.PreLaunch)
+          .map((val) => val.project)
+          .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
       )
       setLoading(false)
     },
@@ -125,6 +132,7 @@ export const useMyProjects = (userId: number) => {
     activeProjects,
     inDraftProjects,
     inReviewProjects,
+    inPrelaunchProjects,
     isLoading,
   }
 }

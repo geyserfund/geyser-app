@@ -1,8 +1,7 @@
 import { Button, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { PiArrowLeft, PiShare } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { PiShare } from 'react-icons/pi'
 
 import { ShareView } from '@/components/molecules/ShareView'
 import { useAuthContext } from '@/context'
@@ -11,6 +10,7 @@ import { Modal } from '@/shared/components/layouts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { dimensions, getPath } from '@/shared/constants'
+import { BackButton } from '@/shared/molecules/BackButton.tsx'
 import { toPx } from '@/utils'
 
 import { IndividualHallOfFameTitle } from '../components/IndividualHallOfFameTitle'
@@ -18,7 +18,7 @@ import { HeroType, TopHeroes } from '../components/TopHeroes'
 import { heroTypeFromRoute } from '../states/heroRoute'
 import { HallOfFameHeroBackgroundGradient } from '../styles'
 
-export const Heroes = () => {
+export const HeroesIndividualPage = () => {
   const heroType = useAtomValue(heroTypeFromRoute)
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -31,9 +31,9 @@ export const Heroes = () => {
   }
 
   const pathsMap = {
-    [HeroType.Contributors]: getPath('hallOfFameHeroesContributor'),
-    [HeroType.Creators]: getPath('hallOfFameHeroesCreator'),
-    [HeroType.Ambassadors]: getPath('hallOfFameHeroesAmbassador'),
+    [HeroType.Contributors]: getPath('heroesContributor'),
+    [HeroType.Creators]: getPath('heroesCreator'),
+    [HeroType.Ambassadors]: getPath('heroesAmbassador'),
   }
 
   const items = [
@@ -41,19 +41,22 @@ export const Heroes = () => {
       name: t('Contributors'),
       key: HeroType.Contributors,
       render: () => <TopHeroes heroType={HeroType.Contributors} />,
-      path: getPath('hallOfFameHeroesContributor'),
+      path: getPath('heroesContributor'),
+      replacePath: true,
     },
     {
       name: t('Creators'),
       key: HeroType.Creators,
       render: () => <TopHeroes heroType={HeroType.Creators} />,
-      path: getPath('hallOfFameHeroesCreator'),
+      path: getPath('heroesCreator'),
+      replacePath: true,
     },
     {
       name: t('Ambassadors'),
       key: HeroType.Ambassadors,
       render: () => <TopHeroes heroType={HeroType.Ambassadors} />,
-      path: getPath('hallOfFameHeroesAmbassador'),
+      path: getPath('heroesAmbassador'),
+      replacePath: true,
     },
   ] as AnimatedNavBarItem[]
 
@@ -76,16 +79,7 @@ export const Heroes = () => {
       }}
     >
       <TopNavContainerBar>
-        <Button
-          as={Link}
-          to={getPath('discoveryHallOfFame')}
-          size="lg"
-          variant="ghost"
-          colorScheme="neutral1"
-          leftIcon={<PiArrowLeft />}
-        >
-          {t('Back')}
-        </Button>
+        <BackButton />
         <Button size="lg" variant="soft" colorScheme="neutral1" leftIcon={<PiShare />} onClick={onOpen}>
           {t('Share')}
         </Button>

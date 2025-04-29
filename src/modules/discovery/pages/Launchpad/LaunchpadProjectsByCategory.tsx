@@ -66,7 +66,7 @@ export const LaunchpadProjectsByCategory = ({ category, subCategory }: Launchpad
   return (
     <VStack w="full" spacing={2}>
       <HStack justifyContent={'space-between'} width="100%">
-        <H3 size="2xl" medium dark>
+        <H3 size={{ base: 'lg', md: '2xl' }} medium dark>
           {t('Trending in')}{' '}
           <Body as="span" bold color="primary1.11">
             {category ? ProjectCategoryLabel[category] : ProjectSubCategoryLabel[subCategory ?? '']}

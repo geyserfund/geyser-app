@@ -1,7 +1,5 @@
 import { Button, ButtonProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiArrowLeft } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
 
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
@@ -9,7 +7,8 @@ import { ProjectStoryForm } from '@/modules/project/forms/ProjectStoryForm'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H1 } from '@/shared/components/typography'
-import { dimensions, getPath } from '@/shared/constants'
+import { dimensions } from '@/shared/constants'
+import { BackButton } from '@/shared/molecules/BackButton.tsx'
 import { useNotification } from '@/utils'
 
 import { useProjectStoryForm } from '../../projectCreation/hooks/useProjectStoryForm'
@@ -71,16 +70,7 @@ export const ProjectDashboardStory = () => {
     <>
       <VStack as={'form'} onSubmit={form.handleSubmit(onSubmit)} w="full" height="full" paddingBottom={20}>
         <TopNavContainerBar>
-          <Button
-            size="lg"
-            variant="ghost"
-            colorScheme="neutral1"
-            as={Link}
-            to={getPath('project', project?.name)}
-            leftIcon={<PiArrowLeft />}
-          >
-            {t('Back to project')}
-          </Button>
+          <BackButton />
           <SaveButton />
         </TopNavContainerBar>
 

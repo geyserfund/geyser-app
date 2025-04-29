@@ -158,11 +158,11 @@ export const discoveryRoutes = [
   getPath('discoveryLaunchpad'),
   getPath('discoveryGrants'),
   getPath('discoveryGrant', PathName.grantId),
-  getPath('discoveryHallOfFame'),
   getPath('hallOfFameProjects'),
-  getPath('hallOfFameHeroesCreator'),
-  getPath('hallOfFameHeroesAmbassador'),
-  getPath('hallOfFameHeroesContributor'),
+  getPath('discoveryHeroes'),
+  getPath('heroesCreator'),
+  getPath('heroesAmbassador'),
+  getPath('heroesContributor'),
 ]
 
 export const profileSettingsRoutes = [
