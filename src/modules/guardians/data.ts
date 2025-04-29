@@ -78,7 +78,7 @@ export type RewardDetails = {
 export const GuardianRewardDetails: RewardDetails[] = [
   {
     rewardType: GuardianRewardType.Badge,
-    title: t('Geyser & Nostr Badges'),
+    title: t('Nostr Badges'),
     partners: [
       {
         name: 'NoGood',
