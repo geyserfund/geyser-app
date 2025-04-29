@@ -73,7 +73,8 @@ export const ProjectPrelaunchStatus = ({
   if (hasEnoughFollowers) {
     return (
       <Body size={{ base: 'md', lg: 'lg' }} bold>
-        {isMobile ? `- ${t('Ready')} 🎉` : `- ${t('Ready to launch')} 🎉`}
+        {onlyTimeLeft ? '' : '- '}
+        {isMobile ? `${t('Ready')} 🎉` : `${t('Ready to launch')} 🎉`}
       </Body>
     )
   }

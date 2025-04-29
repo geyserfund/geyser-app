@@ -187,20 +187,16 @@ const InPrelaunchProjectCard = ({ project }: { project: ProjectForMyProjectsFrag
           </Body>
         </Body>
 
-        <Body size="2xl" dark bold display="inline">
-          {enoughFollowers ? (
-            t(`Ready to launch!`)
-          ) : (
-            <>
-              {`${followersNeeded}`}{' '}
-              <Body as="span" size="md" light>
-                {t(`more to launch`)}
-              </Body>
-            </>
-          )}
-        </Body>
+        {!enoughFollowers && (
+          <Body size="2xl" dark bold display="inline">
+            {`${followersNeeded}`}{' '}
+            <Body as="span" size="md" light>
+              {t(`more to launch`)}
+            </Body>
+          </Body>
+        )}
       </HStack>
-      {!enoughFollowers && <ProjectPrelaunchStatus project={project} onlyTimeLeft />}
+      <ProjectPrelaunchStatus project={project} onlyTimeLeft />
     </Box>
   )
 }
