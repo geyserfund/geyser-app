@@ -1339,6 +1339,7 @@ export type Mutation = {
   postPublish: Post;
   postSendByEmail: PostSendByEmailResponse;
   postUpdate: Post;
+  projectClose: Project;
   projectDelete: ProjectDeleteResponse;
   projectFollow: Scalars['Boolean']['output'];
   projectGoalCreate: Array<ProjectGoal>;
@@ -1348,6 +1349,7 @@ export type Mutation = {
   projectGoalUpdate: ProjectGoal;
   projectPreLaunch: Project;
   projectPublish: Project;
+  projectPutInReview: Project;
   projectRewardCreate: ProjectReward;
   projectRewardCurrencyUpdate: Array<ProjectReward>;
   /** Soft deletes the reward. */
@@ -1506,6 +1508,11 @@ export type MutationPostUpdateArgs = {
 };
 
 
+export type MutationProjectCloseArgs = {
+  input: ProjectCloseMutationInput;
+};
+
+
 export type MutationProjectDeleteArgs = {
   input: DeleteProjectInput;
 };
@@ -1543,6 +1550,11 @@ export type MutationProjectPreLaunchArgs = {
 
 export type MutationProjectPublishArgs = {
   input: ProjectPublishMutationInput;
+};
+
+
+export type MutationProjectPutInReviewArgs = {
+  input: ProjectPutInReviewMutationInput;
 };
 
 
@@ -2037,10 +2049,13 @@ export enum PaymentFeePayer {
 }
 
 export enum PaymentFeeType {
+  AffiliatePartner = 'AFFILIATE_PARTNER',
   Ambassador = 'AMBASSADOR',
   Partner = 'PARTNER',
   Payment = 'PAYMENT',
-  Platform = 'PLATFORM'
+  Platform = 'PLATFORM',
+  Promotion = 'PROMOTION',
+  Tip = 'TIP'
 }
 
 export type PaymentGetInput = {
@@ -2317,9 +2332,11 @@ export type Project = {
    * An unpublished post is only returned if the requesting user is the creator of the post.
    */
   posts: Array<Post>;
+  preLaunchExpiresAt?: Maybe<Scalars['Date']['output']>;
   preLaunchedAt?: Maybe<Scalars['Date']['output']>;
   /** Boolean flag to indicate if the project can be promoted. */
   promotionsEnabled?: Maybe<Scalars['Boolean']['output']>;
+  rejectionReason?: Maybe<Scalars['String']['output']>;
   rewardBuyersCount?: Maybe<Scalars['Int']['output']>;
   rewardCurrency?: Maybe<RewardCurrency>;
   rewards: Array<ProjectReward>;
@@ -2411,6 +2428,11 @@ export enum ProjectCategory {
   Other = 'OTHER',
   Tool = 'TOOL'
 }
+
+export type ProjectCloseMutationInput = {
+  projectId: Scalars['BigInt']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
+};
 
 export type ProjectContributionsGroupedByMethodStats = StatsInterface & {
   __typename?: 'ProjectContributionsGroupedByMethodStats';
@@ -2660,6 +2682,11 @@ export type ProjectPreLaunchMutationInput = {
 
 export type ProjectPublishMutationInput = {
   projectId: Scalars['BigInt']['input'];
+};
+
+export type ProjectPutInReviewMutationInput = {
+  projectId: Scalars['BigInt']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ProjectRegionsGetResult = {
@@ -4307,6 +4334,7 @@ export type ResolversTypes = {
   ProjectAmbassadorsConnection: ResolverTypeWrapper<Omit<ProjectAmbassadorsConnection, 'edges'> & { edges: Array<ResolversTypes['ProjectAmbassadorEdge']> }>;
   ProjectAmbassadorsStats: ResolverTypeWrapper<ProjectAmbassadorsStats>;
   ProjectCategory: ProjectCategory;
+  ProjectCloseMutationInput: ProjectCloseMutationInput;
   ProjectContributionsGroupedByMethodStats: ResolverTypeWrapper<ProjectContributionsGroupedByMethodStats>;
   ProjectContributionsStats: ResolverTypeWrapper<ProjectContributionsStats>;
   ProjectContributionsStatsBase: ResolverTypeWrapper<ProjectContributionsStatsBase>;
@@ -4348,6 +4376,7 @@ export type ResolversTypes = {
   ProjectPostsGetWhereInput: ProjectPostsGetWhereInput;
   ProjectPreLaunchMutationInput: ProjectPreLaunchMutationInput;
   ProjectPublishMutationInput: ProjectPublishMutationInput;
+  ProjectPutInReviewMutationInput: ProjectPutInReviewMutationInput;
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>;
   ProjectReward: ResolverTypeWrapper<Omit<ProjectReward, 'project'> & { project: ResolversTypes['Project'] }>;
   ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
@@ -4695,6 +4724,7 @@ export type ResolversParentTypes = {
   ProjectAmbassadorEdge: Omit<ProjectAmbassadorEdge, 'node'> & { node: ResolversParentTypes['Ambassador'] };
   ProjectAmbassadorsConnection: Omit<ProjectAmbassadorsConnection, 'edges'> & { edges: Array<ResolversParentTypes['ProjectAmbassadorEdge']> };
   ProjectAmbassadorsStats: ProjectAmbassadorsStats;
+  ProjectCloseMutationInput: ProjectCloseMutationInput;
   ProjectContributionsGroupedByMethodStats: ProjectContributionsGroupedByMethodStats;
   ProjectContributionsStats: ProjectContributionsStats;
   ProjectContributionsStatsBase: ProjectContributionsStatsBase;
@@ -4730,6 +4760,7 @@ export type ResolversParentTypes = {
   ProjectPostsGetWhereInput: ProjectPostsGetWhereInput;
   ProjectPreLaunchMutationInput: ProjectPreLaunchMutationInput;
   ProjectPublishMutationInput: ProjectPublishMutationInput;
+  ProjectPutInReviewMutationInput: ProjectPutInReviewMutationInput;
   ProjectRegionsGetResult: ProjectRegionsGetResult;
   ProjectReward: Omit<ProjectReward, 'project'> & { project: ResolversParentTypes['Project'] };
   ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
@@ -5423,6 +5454,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   postPublish?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationPostPublishArgs, 'input'>>;
   postSendByEmail?: Resolver<ResolversTypes['PostSendByEmailResponse'], ParentType, ContextType, RequireFields<MutationPostSendByEmailArgs, 'input'>>;
   postUpdate?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationPostUpdateArgs, 'input'>>;
+  projectClose?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectCloseArgs, 'input'>>;
   projectDelete?: Resolver<ResolversTypes['ProjectDeleteResponse'], ParentType, ContextType, RequireFields<MutationProjectDeleteArgs, 'input'>>;
   projectFollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectFollowArgs, 'input'>>;
   projectGoalCreate?: Resolver<Array<ResolversTypes['ProjectGoal']>, ParentType, ContextType, RequireFields<MutationProjectGoalCreateArgs, 'input'>>;
@@ -5431,6 +5463,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectGoalUpdate?: Resolver<ResolversTypes['ProjectGoal'], ParentType, ContextType, RequireFields<MutationProjectGoalUpdateArgs, 'input'>>;
   projectPreLaunch?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectPreLaunchArgs, 'input'>>;
   projectPublish?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectPublishArgs, 'input'>>;
+  projectPutInReview?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectPutInReviewArgs, 'input'>>;
   projectRewardCreate?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationProjectRewardCreateArgs, 'input'>>;
   projectRewardCurrencyUpdate?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<MutationProjectRewardCurrencyUpdateArgs, 'input'>>;
   projectRewardDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectRewardDeleteArgs, 'input'>>;
@@ -5766,8 +5799,10 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   paidLaunch?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   paymentMethods?: Resolver<ResolversTypes['PaymentMethods'], ParentType, ContextType>;
   posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType, Partial<ProjectPostsArgs>>;
+  preLaunchExpiresAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   preLaunchedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   promotionsEnabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  rejectionReason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   rewardBuyersCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>;
   rewards?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType>;
@@ -6800,6 +6835,8 @@ export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, n
 
 export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, followersCount?: number | null, preLaunchedAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
+export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: string, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
+
 export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
 export type RewardForProductsPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null } };
@@ -6865,6 +6902,16 @@ export type ProjectsForLaunchpadPageQuery = { __typename?: 'Query', projectsGet:
       { __typename?: 'Project' }
       & ProjectForLaunchpadPageFragment
     )> } };
+
+export type ProjectsForMyProjectsQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type ProjectsForMyProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
+        { __typename?: 'Project' }
+        & ProjectForMyProjectsFragment
+      ) | null }> } };
 
 export type ProjectRewardsTrendingWeeklyGetQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -8596,6 +8643,29 @@ export const ProjectForLaunchpadPageFragmentDoc = gql`
         verified
         country
       }
+    }
+  }
+}
+    `;
+export const ProjectForMyProjectsFragmentDoc = gql`
+    fragment ProjectForMyProjects on Project {
+  id
+  name
+  balance
+  fundersCount
+  thumbnailImage
+  title
+  shortDescription
+  createdAt
+  status
+  rewardsCount
+  followersCount
+  wallets {
+    id
+    name
+    state {
+      status
+      statusCode
     }
   }
 }
@@ -11109,6 +11179,50 @@ export type ProjectsForLaunchpadPageQueryHookResult = ReturnType<typeof useProje
 export type ProjectsForLaunchpadPageLazyQueryHookResult = ReturnType<typeof useProjectsForLaunchpadPageLazyQuery>;
 export type ProjectsForLaunchpadPageSuspenseQueryHookResult = ReturnType<typeof useProjectsForLaunchpadPageSuspenseQuery>;
 export type ProjectsForLaunchpadPageQueryResult = Apollo.QueryResult<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>;
+export const ProjectsForMyProjectsDocument = gql`
+    query ProjectsForMyProjects($where: UserGetInput!) {
+  user(where: $where) {
+    ownerOf {
+      project {
+        ...ProjectForMyProjects
+      }
+    }
+  }
+}
+    ${ProjectForMyProjectsFragmentDoc}`;
+
+/**
+ * __useProjectsForMyProjectsQuery__
+ *
+ * To run a query within a React component, call `useProjectsForMyProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectsForMyProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectsForMyProjectsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectsForMyProjectsQuery(baseOptions: Apollo.QueryHookOptions<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables> & ({ variables: ProjectsForMyProjectsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>(ProjectsForMyProjectsDocument, options);
+      }
+export function useProjectsForMyProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>(ProjectsForMyProjectsDocument, options);
+        }
+export function useProjectsForMyProjectsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>(ProjectsForMyProjectsDocument, options);
+        }
+export type ProjectsForMyProjectsQueryHookResult = ReturnType<typeof useProjectsForMyProjectsQuery>;
+export type ProjectsForMyProjectsLazyQueryHookResult = ReturnType<typeof useProjectsForMyProjectsLazyQuery>;
+export type ProjectsForMyProjectsSuspenseQueryHookResult = ReturnType<typeof useProjectsForMyProjectsSuspenseQuery>;
+export type ProjectsForMyProjectsQueryResult = Apollo.QueryResult<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>;
 export const ProjectRewardsTrendingWeeklyGetDocument = gql`
     query ProjectRewardsTrendingWeeklyGet {
   projectRewardsTrendingWeeklyGet {

@@ -19,9 +19,13 @@ export const MyProjects = () => {
   useLastVisitedMyProjects()
 
   const { user } = useAuthContext()
-  const { activeProjects, inDraftProjects, inReviewProjects, isLoading } = useMyProjects(user?.id)
+  const { activeProjects, inDraftProjects, inReviewProjects, inPrelaunchProjects, isLoading } = useMyProjects(user?.id)
 
-  const hasNoProjects = activeProjects.length === 0 && inDraftProjects.length === 0 && inReviewProjects.length === 0
+  const hasNoProjects =
+    activeProjects.length === 0 &&
+    inDraftProjects.length === 0 &&
+    inReviewProjects.length === 0 &&
+    inPrelaunchProjects.length === 0
 
   return (
     <>
@@ -43,6 +47,9 @@ export const MyProjects = () => {
         ) : (
           <>
             {hasNoProjects && <LaunchNewProjectBanner />}
+            {inPrelaunchProjects.map((project) =>
+              project ? <ProjectCard key={project.id} project={project} /> : null,
+            )}
             {activeProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
             {inReviewProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
             {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}

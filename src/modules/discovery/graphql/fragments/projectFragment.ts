@@ -52,3 +52,27 @@ export const FRAGMENT_PROJECT_FOR_LAUNCHPAD_PAGE = gql`
     }
   }
 `
+
+export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
+  fragment ProjectForMyProjects on Project {
+    id
+    name
+    balance
+    fundersCount
+    thumbnailImage
+    title
+    shortDescription
+    createdAt
+    status
+    rewardsCount
+    followersCount
+    wallets {
+      id
+      name
+      state {
+        status
+        statusCode
+      }
+    }
+  }
+`
