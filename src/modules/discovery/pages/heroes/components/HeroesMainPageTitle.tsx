@@ -68,7 +68,7 @@ export const HeroesMainPageTitle = () => {
           </H2>
 
           <Body size={{ base: 'sm', lg: 'xl' }} medium color={lightModeColors.neutral1[11]}>
-            {t('The Heroes bringing Bitcoin closer to mass adoption')}
+            {t('The creators, contributors and ambassadors bringing Bitcoin closer to mass adoption.')}
           </Body>
           <HStack w="full" display={{ base: 'none', lg: 'flex' }} color={lightModeColors.utils.text}>
             {renderPlatformStats()}
