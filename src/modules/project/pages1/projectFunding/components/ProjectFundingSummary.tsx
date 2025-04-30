@@ -19,7 +19,6 @@ import { Body, H2 } from '@/shared/components/typography'
 import { SubscriptionCurrencyType } from '@/types/generated/graphql'
 
 import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../../../utils'
-import { NonProfitSummary } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
 
 export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {

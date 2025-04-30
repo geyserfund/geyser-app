@@ -2976,6 +2976,7 @@ export enum ProjectsMostFundedByTagRange {
 
 export enum ProjectsOrderByField {
   Balance = 'balance',
+  CreatedAt = 'createdAt',
   LaunchedAt = 'launchedAt'
 }
 
@@ -6711,18 +6712,6 @@ export type UserDeleteMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type UserDeleteMutation = { __typename?: 'Mutation', userDelete: { __typename?: 'DeleteUserResponse', message?: string | null, success: boolean } };
 
-export type BadgesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type BadgesQuery = { __typename?: 'Query', badges: Array<{ __typename?: 'Badge', createdAt: any, description: string, id: string, image: string, name: string, thumb: string, uniqueName: string }> };
-
-export type UserBadgesQueryVariables = Exact<{
-  input: BadgesGetInput;
-}>;
-
-
-export type UserBadgesQuery = { __typename?: 'Query', userBadges: Array<{ __typename?: 'UserBadge', userId: any, updatedAt: any, status?: UserBadgeStatus | null, id: any, contributionId?: any | null, createdAt: any, badgeAwardEventId?: string | null, badge: { __typename?: 'Badge', name: string, thumb: string, uniqueName: string, image: string, id: string, description: string, createdAt: any } }> };
-
 export type SignedUploadUrlQueryVariables = Exact<{
   input: FileUploadInput;
 }>;
@@ -7142,6 +7131,13 @@ export type ProjectForProfilePageFragment = { __typename?: 'Project', id: any, n
 
 export type ProjectNotificationSettingsFragment = { __typename?: 'CreatorNotificationSettings', userId: any, project: { __typename?: 'CreatorNotificationSettingsProject', id: any, title: string, image?: string | null }, notificationSettings: Array<{ __typename?: 'NotificationSettings', notificationType: string, isEnabled: boolean, configurations: Array<{ __typename?: 'NotificationConfiguration', id: any, name: string, description?: string | null, value: string, type?: SettingValueType | null, options: Array<string> }> }> };
 
+export type BadgeFragment = { __typename?: 'Badge', id: string, name: string, thumb: string, uniqueName: string, image: string, description: string, createdAt: any };
+
+export type UserBadgeFragment = { __typename?: 'UserBadge', id: any, userId: any, updatedAt: any, status?: UserBadgeStatus | null, contributionId?: any | null, createdAt: any, badgeAwardEventId?: string | null, badge: (
+    { __typename?: 'Badge' }
+    & BadgeFragment
+  ) };
+
 export type UserForProfilePageFragment = { __typename?: 'User', id: any, bio?: string | null, heroId: string, username: string, imageUrl?: string | null, ranking?: any | null, guardianType?: GuardianType | null, isEmailVerified: boolean, externalAccounts: Array<(
     { __typename?: 'ExternalAccount' }
     & ExternalAccountFragment
@@ -7188,6 +7184,24 @@ export type UserNotificationsSettingsUpdateMutationVariables = Exact<{
 
 
 export type UserNotificationsSettingsUpdateMutation = { __typename?: 'Mutation', userNotificationConfigurationValueUpdate?: boolean | null };
+
+export type BadgesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BadgesQuery = { __typename?: 'Query', badges: Array<(
+    { __typename?: 'Badge' }
+    & BadgeFragment
+  )> };
+
+export type UserBadgesQueryVariables = Exact<{
+  input: BadgesGetInput;
+}>;
+
+
+export type UserBadgesQuery = { __typename?: 'Query', userBadges: Array<(
+    { __typename?: 'UserBadge' }
+    & UserBadgeFragment
+  )> };
 
 export type UserOrdersGetQueryVariables = Exact<{
   input: OrdersGetInput;
@@ -9089,6 +9103,31 @@ export const ProjectNotificationSettingsFragmentDoc = gql`
   }
 }
     `;
+export const BadgeFragmentDoc = gql`
+    fragment Badge on Badge {
+  id
+  name
+  thumb
+  uniqueName
+  image
+  description
+  createdAt
+}
+    `;
+export const UserBadgeFragmentDoc = gql`
+    fragment UserBadge on UserBadge {
+  id
+  userId
+  updatedAt
+  status
+  contributionId
+  createdAt
+  badgeAwardEventId
+  badge {
+    ...Badge
+  }
+}
+    ${BadgeFragmentDoc}`;
 export const UserForProfilePageFragmentDoc = gql`
     fragment UserForProfilePage on User {
   id
@@ -10337,106 +10376,6 @@ export function useUserDeleteMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UserDeleteMutationHookResult = ReturnType<typeof useUserDeleteMutation>;
 export type UserDeleteMutationResult = Apollo.MutationResult<UserDeleteMutation>;
 export type UserDeleteMutationOptions = Apollo.BaseMutationOptions<UserDeleteMutation, UserDeleteMutationVariables>;
-export const BadgesDocument = gql`
-    query Badges {
-  badges {
-    createdAt
-    description
-    id
-    image
-    name
-    thumb
-    uniqueName
-  }
-}
-    `;
-
-/**
- * __useBadgesQuery__
- *
- * To run a query within a React component, call `useBadgesQuery` and pass it any options that fit your needs.
- * When your component renders, `useBadgesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBadgesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useBadgesQuery(baseOptions?: Apollo.QueryHookOptions<BadgesQuery, BadgesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BadgesQuery, BadgesQueryVariables>(BadgesDocument, options);
-      }
-export function useBadgesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BadgesQuery, BadgesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BadgesQuery, BadgesQueryVariables>(BadgesDocument, options);
-        }
-export function useBadgesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<BadgesQuery, BadgesQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<BadgesQuery, BadgesQueryVariables>(BadgesDocument, options);
-        }
-export type BadgesQueryHookResult = ReturnType<typeof useBadgesQuery>;
-export type BadgesLazyQueryHookResult = ReturnType<typeof useBadgesLazyQuery>;
-export type BadgesSuspenseQueryHookResult = ReturnType<typeof useBadgesSuspenseQuery>;
-export type BadgesQueryResult = Apollo.QueryResult<BadgesQuery, BadgesQueryVariables>;
-export const UserBadgesDocument = gql`
-    query UserBadges($input: BadgesGetInput!) {
-  userBadges(input: $input) {
-    badge {
-      name
-      thumb
-      uniqueName
-      image
-      id
-      description
-      createdAt
-    }
-    userId
-    updatedAt
-    status
-    id
-    contributionId
-    createdAt
-    badgeAwardEventId
-  }
-}
-    `;
-
-/**
- * __useUserBadgesQuery__
- *
- * To run a query within a React component, call `useUserBadgesQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserBadgesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserBadgesQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUserBadgesQuery(baseOptions: Apollo.QueryHookOptions<UserBadgesQuery, UserBadgesQueryVariables> & ({ variables: UserBadgesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserBadgesQuery, UserBadgesQueryVariables>(UserBadgesDocument, options);
-      }
-export function useUserBadgesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserBadgesQuery, UserBadgesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserBadgesQuery, UserBadgesQueryVariables>(UserBadgesDocument, options);
-        }
-export function useUserBadgesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserBadgesQuery, UserBadgesQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<UserBadgesQuery, UserBadgesQueryVariables>(UserBadgesDocument, options);
-        }
-export type UserBadgesQueryHookResult = ReturnType<typeof useUserBadgesQuery>;
-export type UserBadgesLazyQueryHookResult = ReturnType<typeof useUserBadgesLazyQuery>;
-export type UserBadgesSuspenseQueryHookResult = ReturnType<typeof useUserBadgesSuspenseQuery>;
-export type UserBadgesQueryResult = Apollo.QueryResult<UserBadgesQuery, UserBadgesQueryVariables>;
 export const SignedUploadUrlDocument = gql`
     query SignedUploadUrl($input: FileUploadInput!) {
   getSignedUploadUrl(input: $input) {
@@ -12108,6 +12047,85 @@ export function useUserNotificationsSettingsUpdateMutation(baseOptions?: Apollo.
 export type UserNotificationsSettingsUpdateMutationHookResult = ReturnType<typeof useUserNotificationsSettingsUpdateMutation>;
 export type UserNotificationsSettingsUpdateMutationResult = Apollo.MutationResult<UserNotificationsSettingsUpdateMutation>;
 export type UserNotificationsSettingsUpdateMutationOptions = Apollo.BaseMutationOptions<UserNotificationsSettingsUpdateMutation, UserNotificationsSettingsUpdateMutationVariables>;
+export const BadgesDocument = gql`
+    query Badges {
+  badges {
+    ...Badge
+  }
+}
+    ${BadgeFragmentDoc}`;
+
+/**
+ * __useBadgesQuery__
+ *
+ * To run a query within a React component, call `useBadgesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBadgesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBadgesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBadgesQuery(baseOptions?: Apollo.QueryHookOptions<BadgesQuery, BadgesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BadgesQuery, BadgesQueryVariables>(BadgesDocument, options);
+      }
+export function useBadgesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BadgesQuery, BadgesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BadgesQuery, BadgesQueryVariables>(BadgesDocument, options);
+        }
+export function useBadgesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<BadgesQuery, BadgesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<BadgesQuery, BadgesQueryVariables>(BadgesDocument, options);
+        }
+export type BadgesQueryHookResult = ReturnType<typeof useBadgesQuery>;
+export type BadgesLazyQueryHookResult = ReturnType<typeof useBadgesLazyQuery>;
+export type BadgesSuspenseQueryHookResult = ReturnType<typeof useBadgesSuspenseQuery>;
+export type BadgesQueryResult = Apollo.QueryResult<BadgesQuery, BadgesQueryVariables>;
+export const UserBadgesDocument = gql`
+    query UserBadges($input: BadgesGetInput!) {
+  userBadges(input: $input) {
+    ...UserBadge
+  }
+}
+    ${UserBadgeFragmentDoc}`;
+
+/**
+ * __useUserBadgesQuery__
+ *
+ * To run a query within a React component, call `useUserBadgesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserBadgesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserBadgesQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUserBadgesQuery(baseOptions: Apollo.QueryHookOptions<UserBadgesQuery, UserBadgesQueryVariables> & ({ variables: UserBadgesQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserBadgesQuery, UserBadgesQueryVariables>(UserBadgesDocument, options);
+      }
+export function useUserBadgesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserBadgesQuery, UserBadgesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserBadgesQuery, UserBadgesQueryVariables>(UserBadgesDocument, options);
+        }
+export function useUserBadgesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<UserBadgesQuery, UserBadgesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<UserBadgesQuery, UserBadgesQueryVariables>(UserBadgesDocument, options);
+        }
+export type UserBadgesQueryHookResult = ReturnType<typeof useUserBadgesQuery>;
+export type UserBadgesLazyQueryHookResult = ReturnType<typeof useUserBadgesLazyQuery>;
+export type UserBadgesSuspenseQueryHookResult = ReturnType<typeof useUserBadgesSuspenseQuery>;
+export type UserBadgesQueryResult = Apollo.QueryResult<UserBadgesQuery, UserBadgesQueryVariables>;
 export const UserOrdersGetDocument = gql`
     query UserOrdersGet($input: OrdersGetInput!) {
   ordersGet(input: $input) {

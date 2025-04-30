@@ -1,7 +1,9 @@
 import { VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { useAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
+import { userBadgesAtom } from '@/modules/profile/state/badgesAtom.ts'
 import { Body } from '@/shared/components/typography'
 import { toInt, useNotification } from '@/utils'
 
@@ -18,8 +20,9 @@ export const BadgesBody = () => {
   const { toast } = useNotification()
 
   const { userProfile } = useUserProfileAtom()
+  const [userBadges, setUserBadges] = useAtom(userBadgesAtom)
 
-  const { data: userBadgesData, loading: userBadgeLoading } = useUserBadgesQuery({
+  const { loading: userBadgeLoading } = useUserBadgesQuery({
     skip: !userProfile.id,
     variables: { input: { where: { userId: toInt(userProfile.id) } } },
     onError() {
@@ -29,9 +32,10 @@ export const BadgesBody = () => {
         status: 'error',
       })
     },
+    onCompleted(data) {
+      setUserBadges(data.userBadges)
+    },
   })
-
-  const userBadges = userBadgesData?.userBadges || []
 
   const nostrId =
     userProfile.externalAccounts.find((account) => account?.accountType === ExternalAccountType.nostr)?.externalId || ''

@@ -39,9 +39,6 @@ export const FundingInitSummary = () => {
 
   const { isFundingInputAmountValid, project, formState } = useFundingFormAtom()
 
-  const ownerTaxProfile = project.owners[0]?.user.taxProfile
-  const isNonProfit = ownerTaxProfile?.legalEntityType === LegalEntityType.NonProfit && ownerTaxProfile?.verified
-
   const handleCheckoutButtonPressed = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     e.stopPropagation()

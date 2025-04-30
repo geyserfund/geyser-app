@@ -1,13 +1,4 @@
-import {
-  Button,
-  ButtonProps,
-  ComponentWithAs,
-  forwardRef,
-  HStack,
-  Skeleton,
-  StackProps,
-  Tooltip,
-} from '@chakra-ui/react'
+import { Button, ButtonProps, ComponentWithAs, forwardRef, HStack, Skeleton, StackProps } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
