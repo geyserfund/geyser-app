@@ -25,10 +25,12 @@ export const LaunchpadTitle = () => {
       <HStack w="full" spacing={{ base: 4, lg: 6 }} padding={{ base: 2, lg: 4 }}>
         <Image
           width={{ base: '95px', lg: '120px' }}
+          maxHeight="120px"
           height="auto"
           zIndex={1}
           src={LaunchPadIllustrationUrl}
           alt="Launchpad illustration"
+          objectFit="contain"
         />
 
         <VStack w="full" alignItems={'start'} spacing={{ base: 2, lg: 0 }} zIndex={1}>
