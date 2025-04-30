@@ -78,7 +78,7 @@ export const ProjectRewardDenominationUpdate = () => {
   return (
     <form>
       <FieldContainer
-        title={t('Reward currency denomination')}
+        title={t('Product currency denomination')}
         subtitle={t(
           'Switch between USD and Bitcoin (Sats) for reward prices. This allows you to view and manage rewards in the currency that suits your preference.',
         )}
@@ -101,13 +101,13 @@ export const ProjectRewardDenominationUpdate = () => {
         title={`${t('Are you sure you want to make the change?')}`}
         confirm={handleChangeProjectCurrency}
         description={`${t(
-          'Please note that all reward prices will be automatically updated to reflect their equivalent value in SWITCH_TO_REWARD_CURRENCY, based on the current Bitcoin price in US Dollars. If you wish you can update prices individually for each reward on reward’s page.',
+          'Please note that all product prices will be automatically updated to reflect their equivalent value in SWITCH_TO_REWARD_CURRENCY, based on the current Bitcoin price in US Dollars. If you wish you can update prices individually for each product on product’s page.',
         ).replace(
           'SWITCH_TO_REWARD_CURRENCY',
           watch('rewardCurrency') === RewardCurrency.Usdcent ? 'USD' : 'Bitcoin',
         )}`}
         warning={`${t(
-          'You are about to switch the currency denomination for all your rewards from CURRENT_REWARD_CURRENCY to SWITCH_TO_REWARD_CURRENCY. ',
+          'You are about to switch the currency denomination for all your products from CURRENT_REWARD_CURRENCY to SWITCH_TO_REWARD_CURRENCY. ',
         )
           .replace(
             'SWITCH_TO_REWARD_CURRENCY',

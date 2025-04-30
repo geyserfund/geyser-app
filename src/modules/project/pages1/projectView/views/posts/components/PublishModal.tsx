@@ -30,7 +30,7 @@ import { RewardItem } from './RewardItem'
 const sendToOptions = [
   { label: t('Followers (Everyone)'), value: EmailSubscriberSegment.Followers },
   { label: t('Contributors'), value: EmailSubscriberSegment.Contributors },
-  { label: t('Reward buyers'), value: EmailSubscriberSegment.RewardBuyers },
+  { label: t('Product buyers'), value: EmailSubscriberSegment.RewardBuyers },
 ]
 
 export const PublishModal = ({
@@ -181,7 +181,7 @@ export const PublishModal = ({
               width="full"
               onChange={handleChange}
               name="rewards"
-              placeholder={t('Select rewards')}
+              placeholder={t('Select products')}
               value={[]}
               options={rewards}
               getOptionLabel={(option: ProjectRewardFragment) => option.name}
@@ -211,7 +211,7 @@ export const PublishModal = ({
                     {reward.name}
                   </Body>
                   <IconButton
-                    aria-label="clear-reward-selection"
+                    aria-label="clear-product-selection"
                     icon={<PiX />}
                     size="sm"
                     variant="surface"

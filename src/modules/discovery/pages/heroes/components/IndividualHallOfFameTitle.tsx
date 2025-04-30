@@ -5,6 +5,7 @@ import React from 'react'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
+import { TitleHeaderGradient } from '@/shared/styles/custom.ts'
 
 import { FlowingGifBackground } from './FlowingGifBackground'
 
@@ -27,7 +28,7 @@ export const IndividualHallOfFameTitle = ({
       w="full"
       direction="row"
       spacing={{ base: 4, lg: 6 }}
-      background={background || 'linear-gradient(81deg, #FFFBE7 -9.6%, #C4FFF4 109.2%)'}
+      background={background || TitleHeaderGradient}
       position="relative"
       backgroundColor="utils.pbg"
       alignItems={{ base: 'start', lg: 'center' }}

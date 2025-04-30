@@ -58,7 +58,7 @@ export const ProjectNavigation = () => {
 
     if (!isProjectPrelaunch && project.rewardsCount) {
       buttonList.push({
-        name: 'Rewards',
+        name: 'Products',
         path: PathName.projectRewards,
         icon: PiBag,
         activeIcon: PiBagBold,

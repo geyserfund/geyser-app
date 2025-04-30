@@ -33,7 +33,7 @@ export const RewardByStatus = ({ status }: { status: OrdersGetStatus }) => {
     getRewardQueryProps: {
       onError(error) {
         toast({
-          title: t('Error fetching rewards'),
+          title: t('Error fetching products'),
           status: 'error',
           description: `${error}`,
         })

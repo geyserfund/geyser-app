@@ -59,7 +59,7 @@ const CreateRewardButtons = () => {
         colorScheme="primary1"
         leftIcon={<PiPlus />}
       >
-        {t('Add reward')}
+        {t('Add product')}
       </Button>
     </>
   )

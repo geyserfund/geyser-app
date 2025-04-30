@@ -19,7 +19,6 @@ import { useSetAtom } from 'jotai'
 import { Link } from 'react-router-dom'
 
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
-import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
 import { H1 } from '@/shared/components/typography'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, GuardiansJewelUrl } from '@/shared/constants'
@@ -35,6 +34,7 @@ import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { userProfileAtom, useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 import { RemoveExternalAccountModal } from '../../../components/RemoveExternalAccountModal'
 import { useAccountUnlink } from '../hooks/useAccountUnlink'
+import { GemArray } from './badges/GemArray.tsx'
 import { UserVerifiedBadge } from './badges/VerifiedBadge.tsx'
 import { UserBio } from './UserBio'
 
@@ -69,8 +69,7 @@ export const AccountInfo = () => {
               {userProfile.username}
             </H1>
             <UserVerifiedBadge user={userProfile} fontSize="2xl" />
-            <ProfileText name={userProfile.username} guardian={userProfile.guardianType} size="lg" />
-            {/* {userProfile.guardianType && <Image height="24px" width="24px" src={GuardiansJewelUrl} />} */}
+            <GemArray size="lg" name={userProfile.username} />
           </HStack>
 
           <Body

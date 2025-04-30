@@ -164,7 +164,7 @@ export const DollarToBitcoinIllustrationUrl =
 
 export const LaunchNowIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/launch-now.png'
 export const LaunchPadIllustrationUrl =
-  'https://storage.googleapis.com/geyser-projects-media/utils/launchpad-illustration.png'
+  'https://storage.googleapis.com/geyser-projects-media/utils/launchpad-balloon.png'
 export const SaveDraftIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/save-draft-illustration.png'
 export const FollowBellIllurationsUrl =

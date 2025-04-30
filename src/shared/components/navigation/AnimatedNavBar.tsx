@@ -1,13 +1,4 @@
-import {
-  Button,
-  ButtonProps,
-  ComponentWithAs,
-  forwardRef,
-  HStack,
-  Skeleton,
-  StackProps,
-  Tooltip,
-} from '@chakra-ui/react'
+import { Button, ButtonProps, ComponentWithAs, forwardRef, HStack, Skeleton, StackProps } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -17,6 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { lightModeColors } from '@/shared/styles'
 
 import { toInt, useCustomTheme } from '../../../utils'
+import { TooltipPopover } from '../feedback/TooltipPopover.tsx'
 import { SkeletonLayout } from '../layouts'
 
 export type AnimatedNavBarItem = {
@@ -145,11 +137,17 @@ export const AnimatedNavBar = ({
         const ActiveIcon = item.activeIcon
         return (
           <ProjectNavigationButton
-            ref={(node) => measuredRef(node, index)}
             key={item.name}
+            ref={(node) => measuredRef(node, index)}
             isActive={isActive}
             length={items.length}
-            onClick={() => handleClick(item, index)}
+            onClick={() => {
+              if (item.isDisabled) {
+                return
+              }
+
+              handleClick(item, index)
+            }}
             _hover={
               isActive ? {} : { backgroundColor: disableColorMode ? lightModeColors.neutralAlpha[5] : 'neutralAlpha.5' }
             }
@@ -160,10 +158,15 @@ export const AnimatedNavBar = ({
                   backgroundColor: 'neutral1.6',
                 }
               : {})}
-            isDisabled={item.isDisabled}
+            {...(item.isDisabled &&
+              item.tooltipLabel && {
+                backgroundColor: 'transparent',
+                color: 'neutral1.9',
+              })}
+            isDisabled={item.tooltipLabel ? false : item.isDisabled}
             disableColorMode={disableColorMode}
           >
-            <Tooltip label={item.tooltipLabel}>
+            <TooltipPopover key={item.name} text={item.tooltipLabel}>
               <HStack
                 w="full"
                 h="full"
@@ -173,12 +176,15 @@ export const AnimatedNavBar = ({
                 justifyContent="center"
                 alignItems="center"
                 fontWeight={isActive ? 500 : 400}
+                onClick={() => {
+                  console.log('clicked')
+                }}
               >
                 {(showIcon || item.showIconAlways) &&
                   (isActive && ActiveIcon ? <ActiveIcon fontSize="18px" /> : Icon ? <Icon fontSize="18px" /> : null)}
                 {showLabel && <span>{t(item.name)}</span>}
               </HStack>
-            </Tooltip>
+            </TooltipPopover>
           </ProjectNavigationButton>
         )
       })}

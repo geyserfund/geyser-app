@@ -187,7 +187,7 @@ const ActivityTypeItem = ({ activityType }: { activityType: ActivityType }) => {
             <PiBag size={'20px'} />
           </Box>
           <Body size="lg" medium light>
-            {t('Created reward')}
+            {t('Created product')}
           </Body>
         </HStack>
       )

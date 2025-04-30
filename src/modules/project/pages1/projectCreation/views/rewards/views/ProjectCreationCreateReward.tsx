@@ -25,8 +25,8 @@ export const ProjectCreationCreateReward = () => {
       spacing={{ base: '10px', lg: '20px' }}
     >
       <ProjectRewardForm
-        buttonText={t('Save reward')}
-        titleText={t('Create Reward')}
+        buttonText={t('Save product')}
+        titleText={t('Create product')}
         isUpdate={false}
         defaultCategory={category}
         isLaunch={true}

@@ -19,8 +19,8 @@ export const RewardEdit = () => {
   return (
     <VStack w="full" paddingBottom="120px">
       <ProjectRewardForm
-        buttonText={t('Update Reward')}
-        titleText={t('Edit Reward')}
+        buttonText={t('Update Product')}
+        titleText={t('Edit Product')}
         isUpdate={true}
         isLaunch={false}
         rewardUUID={rewardUUID}

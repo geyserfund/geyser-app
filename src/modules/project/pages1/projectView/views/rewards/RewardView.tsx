@@ -114,7 +114,7 @@ export const RewardView = () => {
             colorScheme="neutral1"
             leftIcon={<PiArrowLeft />}
           >
-            {t('All rewards')}
+            {t('All products')}
           </Button>
           {isPrelaunch(project?.status) ? <PrelaunchFollowButton project={project} /> : <RewardShare reward={reward} />}
         </TopNavContainerBar>
@@ -191,7 +191,7 @@ export const RewardView = () => {
                 <VStack w={'full'} p={0}>
                   <Body size="md" medium>
                     {t(
-                      'Engage your community, followers, contributors, and reward purchasers by sending them an update about your new reward via email.',
+                      'Engage your community, followers, contributors, and product purchasers by sending them an update about your new product via email.',
                     )}
                   </Body>
                   <Button
@@ -228,7 +228,7 @@ export const RewardView = () => {
             {reward.posts.length > 0 && (
               <VStack w="full" spacing={2} alignItems="start">
                 <Body size="xl" bold>
-                  {t('Reward Updates')}
+                  {t('Product Updates')}
                 </Body>
                 <PostsUpdates posts={reward.posts} />
               </VStack>

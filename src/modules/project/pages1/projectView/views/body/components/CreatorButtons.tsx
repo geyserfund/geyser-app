@@ -33,7 +33,7 @@ export const CreatorButtons = () => {
         colorScheme="neutral1"
         leftIcon={<PiBag />}
       >
-        {isMobile ? t('Reward') : t('Sell reward')}
+        {isMobile ? t('Product') : t('Sell product')}
       </Button>
       <Button
         size={'lg'}

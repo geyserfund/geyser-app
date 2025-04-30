@@ -117,7 +117,7 @@ export const InsightsStatsComponent = () => {
       </Stack>
       <Stack direction={{ base: 'column', lg: 'row' }} w="full" spacing={3} wrap="wrap" alignItems="start">
         <StatsBlock
-          title={t('Rewards sold')}
+          title={t('Products sold')}
           prevValue={projectStats.prevRewardsPurchased}
           value={projectStats.rewardsPurchased}
           width={{ base: 'full', lg: 'auto' }}

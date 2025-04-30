@@ -132,7 +132,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
         )}
         {numberOfRewardsSelected > 0 && (
           <VStack w="full" alignItems={'start'} spacing={1}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Products')}: `}</Body>
             {items.map((item) => {
               return (
                 <HStack w="full" key={item?.label} alignItems="center">
@@ -155,7 +155,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
 
         {rewardsCosts.satoshi > 0 && (
           <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards Cost')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Products Cost')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
               {commaFormatted(rewardsCosts.satoshi)}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
@@ -164,26 +164,25 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
             </Body>
           </HStack>
         )}
-      </VStack>
-
-      {tip.satoshi > 0 && (
-        <HStack>
-          <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser tip')}: `}</Body>
-          <Body size={{ base: 'sm', lg: 'md' }}>
-            {`${commaFormatted(tip.satoshi)} `}
-            <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
-              sats
+        {tip.satoshi > 0 && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser tip')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>
+              {`${commaFormatted(tip.satoshi)} `}
+              <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
+                sats
+              </Body>
             </Body>
-          </Body>
-        </HStack>
-      )}
+          </HStack>
+        )}
 
-      {currentGoal && (
-        <HStack>
-          <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('To a goal')}: `}</Body>
-          <Body size={{ base: 'sm', lg: 'md' }}>{currentGoal?.title}</Body>
-        </HStack>
-      )}
+        {currentGoal && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('To a goal')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>{currentGoal?.title}</Body>
+          </HStack>
+        )}
+      </VStack>
 
       <HStack as={motion.div} layout alignItems="start">
         <Body size={{ base: 'md', lg: 'xl' }} light>
