@@ -1,4 +1,4 @@
-import { Button, Icon, VStack } from '@chakra-ui/react'
+import { Box, Button, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { FormEvent } from 'react'
 import { PiHeartbeatFill } from 'react-icons/pi'
@@ -11,7 +11,7 @@ import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { darkModeColors } from '@/shared/styles/colors.ts'
 import { LegalEntityType } from '@/types/index.ts'
-import { useNotification } from '@/utils'
+import { useMobileMode, useNotification } from '@/utils'
 
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
@@ -64,17 +64,13 @@ export const FundingInitSummary = () => {
     <form style={{ width: '100%', height: '100%', overflowY: 'visible' }} onSubmit={handleCheckoutButtonPressed}>
       <FundingSummaryWrapper justifyContent="space-between">
         <ProjectFundingSummary />
-        {showCompleteVerification && <CompleteVerificationToIncreaseFunding />}
+        <VStack w="full" alignItems="flex-start">
+          {showCompleteVerification && <CompleteVerificationToIncreaseFunding />}
+        </VStack>
       </FundingSummaryWrapper>
       <FundingCheckoutWrapper>
         <VStack w="full" alignItems="flex-start">
-          {isNonProfit && (
-            <Body size="sm" light>
-              <Icon as={PiHeartbeatFill} color={darkModeColors.orange[10]} boxSize={4} />
-              {t('A tax-deductible invoice is provided  when contributing to this project.')}{' '}
-              {t('To ensure accurate name in the invoice, update your username or tax profile in profile settings.')}
-            </Body>
-          )}
+          <NonProfitSummary disableMobile={true} />
           <Body size="sm" light>
             {t('By continuing to checkout you are accepting our T&Cs')}
           </Body>
@@ -91,5 +87,33 @@ export const FundingInitSummary = () => {
         </VStack>
       </FundingCheckoutWrapper>
     </form>
+  )
+}
+
+export const NonProfitSummary = ({
+  disableMobile,
+  disableDesktop,
+}: {
+  disableMobile?: boolean
+  disableDesktop?: boolean
+}) => {
+  const { project } = useFundingFormAtom()
+  const isMobile = useMobileMode()
+
+  const ownerTaxProfile = project.owners[0]?.user.taxProfile
+  const isNonProfit = ownerTaxProfile?.legalEntityType === LegalEntityType.NonProfit && ownerTaxProfile?.verified
+
+  if (!isNonProfit || (isMobile && disableMobile) || (!isMobile && disableDesktop)) {
+    return null
+  }
+
+  return (
+    <Body size="sm" light>
+      <Box as="span" verticalAlign={'text-top'}>
+        <Icon as={PiHeartbeatFill} color={darkModeColors.orange[10]} boxSize={4} />
+      </Box>
+      {t('A tax-deductible invoice is provided  when contributing to this project.')}{' '}
+      {t('To ensure accurate name in the invoice, update your username or tax profile in profile settings.')}
+    </Body>
   )
 }

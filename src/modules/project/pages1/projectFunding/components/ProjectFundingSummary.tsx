@@ -19,6 +19,7 @@ import { Body, H2 } from '@/shared/components/typography'
 import { SubscriptionCurrencyType } from '@/types/generated/graphql'
 
 import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../../../utils'
+import { NonProfitSummary } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
 
 export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
@@ -164,26 +165,25 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
             </Body>
           </HStack>
         )}
-      </VStack>
-
-      {tip.satoshi > 0 && (
-        <HStack>
-          <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser tip')}: `}</Body>
-          <Body size={{ base: 'sm', lg: 'md' }}>
-            {`${commaFormatted(tip.satoshi)} `}
-            <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
-              sats
+        {tip.satoshi > 0 && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser tip')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>
+              {`${commaFormatted(tip.satoshi)} `}
+              <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
+                sats
+              </Body>
             </Body>
-          </Body>
-        </HStack>
-      )}
+          </HStack>
+        )}
 
-      {currentGoal && (
-        <HStack>
-          <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('To a goal')}: `}</Body>
-          <Body size={{ base: 'sm', lg: 'md' }}>{currentGoal?.title}</Body>
-        </HStack>
-      )}
+        {currentGoal && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('To a goal')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>{currentGoal?.title}</Body>
+          </HStack>
+        )}
+      </VStack>
 
       <HStack as={motion.div} layout alignItems="start">
         <Body size={{ base: 'md', lg: 'xl' }} light>
