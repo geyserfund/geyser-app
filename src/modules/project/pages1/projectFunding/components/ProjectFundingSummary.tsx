@@ -133,7 +133,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
         )}
         {numberOfRewardsSelected > 0 && (
           <VStack w="full" alignItems={'start'} spacing={1}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Products')}: `}</Body>
             {items.map((item) => {
               return (
                 <HStack w="full" key={item?.label} alignItems="center">
@@ -156,7 +156,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
 
         {rewardsCosts.satoshi > 0 && (
           <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Rewards Cost')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Products Cost')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
               {commaFormatted(rewardsCosts.satoshi)}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>

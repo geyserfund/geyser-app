@@ -92,10 +92,10 @@ export const PaymentsAndAccountingTable = ({
           }
 
           if (val.donationAmount === 0) {
-            return 'Rewards'
+            return 'Products'
           }
 
-          return 'Rewards, Donation'
+          return 'Products, Donation'
         },
       },
       {

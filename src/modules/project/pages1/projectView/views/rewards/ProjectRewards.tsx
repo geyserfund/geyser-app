@@ -62,7 +62,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
       {sortedActiveRewards.length > 0 && (
         <VStack w="full" alignItems={'start'}>
           <H1 size="2xl" bold display={{ base: 'unset', lg: 'none' }}>
-            {t('Rewards')}
+            {t('Products')}
           </H1>
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'} pb={10}>
             {activeRewards.map((reward) => {
@@ -74,7 +74,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
       {isProjectOwner && hiddenRewards.length > 0 && (
         <VStack w="full" alignItems={'start'}>
           <Body size="2xl" bold>
-            {t('Hidden rewards')}
+            {t('Hidden products')}
           </Body>
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'}>
             {hiddenRewards.map((reward) => {

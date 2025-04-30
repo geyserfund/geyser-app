@@ -16,7 +16,7 @@ export const RewardCreate = () => {
 
   return (
     <VStack w="full" paddingBottom="120px">
-      <ProjectRewardForm buttonText={t('Publish Reward')} titleText={t('Create Reward')} isUpdate={false} />
+      <ProjectRewardForm buttonText={t('Publish Product')} titleText={t('Create Product')} isUpdate={false} />
     </VStack>
   )
 }

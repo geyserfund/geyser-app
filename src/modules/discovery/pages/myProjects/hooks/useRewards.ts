@@ -44,7 +44,7 @@ export const useRewards = (projectId: string) => {
     onError(error) {
       toast({
         status: 'error',
-        title: t('Failed to fetch project rewards'),
+        title: t('Failed to fetch project products'),
         description: `${error.message}`,
       })
     },

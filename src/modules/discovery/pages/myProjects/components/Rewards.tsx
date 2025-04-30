@@ -46,14 +46,14 @@ const Header = ({ rewardsSold }: { rewardsSold: number | undefined }) => {
       <HStack w="100%" justifyContent="center" color="neutralAlpha.11">
         <PiBag />
         <Body size={'sm'} regular>
-          {t('Rewards Sold')}
+          {t('Products Sold')}
         </Body>
       </HStack>
 
       {noRewardsSold ? (
         <HStack w="100%" justifyContent="center">
           <Body size={'xl'} bold>
-            {t('No rewards sold')}
+            {t('No products sold')}
           </Body>
         </HStack>
       ) : (
@@ -73,7 +73,7 @@ const RewardsList = ({ rewards, projectName }: { rewards: Reward[]; projectName:
   if (noRewardsSold) {
     return (
       <VStack w="100%" align="center" spacing={0.5} px={4} py={8}>
-        <Image maxHeight="150px" src={NoRewardsSoldUrl} alt="No rewards sold" />
+        <Image maxHeight="150px" src={NoRewardsSoldUrl} alt="No products sold" />
       </VStack>
     )
   }

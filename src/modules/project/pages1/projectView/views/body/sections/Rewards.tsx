@@ -46,7 +46,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
   }
 
   return (
-    <BodySectionLayout ref={ref} title={t('Rewards')}>
+    <BodySectionLayout ref={ref} title={t('Products')}>
       <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4} width={'100%'}>
         {rewardsToRender.map((reward) => {
           return <RewardCardWithBuy key={reward.id} width="100%" reward={reward} />
@@ -55,7 +55,7 @@ export const Rewards = forwardRef<HTMLDivElement>((_, ref) => {
       {hasMoreRewards && (
         <HStack w="full" justifyContent="center">
           <Button as={Link} to={getPath('projectRewards', project.name)} variant="soft" colorScheme="neutral1">
-            {t('See all')} {`${rewards.length} rewards`}
+            {t('See all')} {`${rewards.length} products`}
           </Button>
         </HStack>
       )}

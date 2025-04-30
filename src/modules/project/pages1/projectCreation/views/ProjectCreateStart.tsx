@@ -73,6 +73,7 @@ export const ProjectCreateStart = () => {
             {t('Bitcoin, Lightning or Fiat (20+ payment methods)')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectGiftUrl} alt="create project gift">
+            {/* EXCEPTION: Add translation */}
             {t('Sell anything to reward your contributors')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectEntryUrl} alt="create project entry">

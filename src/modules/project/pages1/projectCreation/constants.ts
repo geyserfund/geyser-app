@@ -75,7 +75,7 @@ export const rewardTemplates: RewardTemplateType[] = [
   {
     title: 'Book',
     category: RewardCategory.Book,
-    description: 'Reward with a special edition book',
+    description: 'Product with a special edition book',
     image: BookImageUrl,
   },
   {

@@ -18,6 +18,7 @@ import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
 import { CalendarButton, CreatorEmailButton, FileUpload } from '@/shared/molecules'
+import { BackButton } from '@/shared/molecules/BackButton.tsx'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaControlWithReorder } from '@/shared/molecules/MediaControlWithReorder'
 import { PrivateCommentPrompt, RewardCurrency } from '@/types'
@@ -47,8 +48,6 @@ export const ProjectRewardForm = ({
 }: Props) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-
-  const { hasRewards } = useRewardsAtom()
 
   const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
 
@@ -100,16 +99,7 @@ export const ProjectRewardForm = ({
     <form style={{ width: '100%' }} onSubmit={handleSubmit}>
       {!isLaunch && (
         <TopNavContainerBar>
-          <Button
-            as={Link}
-            to={hasRewards ? getPath('projectRewards', project?.name) : getPath('project', project?.name)}
-            size="lg"
-            variant="ghost"
-            colorScheme="neutral1"
-            leftIcon={<PiArrowLeft />}
-          >
-            {hasRewards ? t('Back to rewards') : t('Back to project')}
-          </Button>
+          <BackButton />
 
           <Button
             {...(isLaunch ? { flexGrow: 1 } : {})}
@@ -143,7 +133,7 @@ export const ProjectRewardForm = ({
             <CardLayout>
               <FieldContainer
                 title={t('Images')}
-                subtitle={t('Add one or multiple images to help showcase your reward')}
+                subtitle={t('Add one or multiple images to help showcase your product')}
               >
                 <MediaControlWithReorder
                   links={watch('images')}
@@ -180,7 +170,7 @@ export const ProjectRewardForm = ({
             </CardLayout>
             <Stack direction={{ base: 'column', lg: 'row' }}>
               <ControlledTextInput
-                label={t('Reward Name')}
+                label={t('Product Name')}
                 name="name"
                 control={control}
                 placeholder={'T-Shirt'}
@@ -197,7 +187,7 @@ export const ProjectRewardForm = ({
                 infoTooltip={
                   <Tooltip
                     label={t(
-                      'Limited Edition rewards cannot be edited after rewards have been purchased to ensure fairness for the first buyers. To change the amounts of Limited Edition rewards create a new reward.',
+                      'Limited Edition products cannot be edited after products have been purchased to ensure fairness for the first buyers. To change the amounts of Limited Edition products create a new product.',
                     )}
                   >
                     <span>
@@ -322,7 +312,7 @@ export const ProjectRewardForm = ({
 
                 <Body size={'md'} light pr={{ base: 0, lg: 2 }}>
                   {t(
-                    "For rewards that are still in development and not ready to ship, set them to 'Pre-order' to enable advance purchases by users.",
+                    "For products that are still in development and not ready to ship, set them to 'Pre-order' to enable advance purchases by users.",
                   )}
                 </Body>
               </VStack>
@@ -362,7 +352,7 @@ export const ProjectRewardForm = ({
                     />
                   </CalendarButton>
                   <Body size={'sm'} light>
-                    {t("Use “Expected Availability Date' to set when your reward will be developed and available.")}
+                    {t("Use “Expected Availability Date' to set when your product will be developed and available.")}
                   </Body>
                 </VStack>
               ) : (
@@ -379,7 +369,7 @@ export const ProjectRewardForm = ({
                   />
 
                   <Body size={'sm'} light>
-                    {t('Specify estimated delivery time for the reward from the moment it is ordered.')}
+                    {t('Specify estimated delivery time for the product from the moment it is ordered.')}
                   </Body>
                 </VStack>
               )}
@@ -391,7 +381,7 @@ export const ProjectRewardForm = ({
                   label={t('Confirmation Message')}
                   name="confirmationMessage"
                   description={t(
-                    'Set a custom message to thank contributors, provide important details, or share any additional information you’d like them to know after they claim the reward.',
+                    'Set a custom message to thank contributors, provide important details, or share any additional information you’d like them to know after they claim the product.',
                   )}
                   control={control}
                   error={errors.confirmationMessage?.message}
@@ -414,7 +404,7 @@ export const ProjectRewardForm = ({
                   )}
                 </Body>
                 <ControlledSwitchInput
-                  label={t('Add your reward specifications (eg. T-shirt size)')}
+                  label={t('Add your product specifications (eg. T-shirt size)')}
                   name="privateCommentPrompts"
                   control={control}
                   switchPosition="left"
@@ -508,10 +498,10 @@ export const ProjectRewardForm = ({
         title={`${t('Are you sure you want to make the change?')}`}
         confirm={handleConfirmCurrencyChange}
         description={`${t(
-          'Please note that all reward prices will be automatically updated to reflect their equivalent value in SWITCH_TO_REWARD_CURRENCY, based on the current Bitcoin price in US Dollars. If you wish you can update prices individually for each reward on reward’s page.',
+          'Please note that all product prices will be automatically updated to reflect their equivalent value in SWITCH_TO_REWARD_CURRENCY, based on the current Bitcoin price in US Dollars. If you wish you can update prices individually for each product on product’s page.',
         ).replace('SWITCH_TO_REWARD_CURRENCY', pendingCurrency === RewardCurrency.Usdcent ? 'USD' : 'Bitcoin')}`}
         warning={`${t(
-          'You are about to switch the currency denomination for all your rewards from CURRENT_REWARD_CURRENCY to SWITCH_TO_REWARD_CURRENCY. ',
+          'You are about to switch the currency denomination for all your products from CURRENT_REWARD_CURRENCY to SWITCH_TO_REWARD_CURRENCY. ',
         )
           .replace('SWITCH_TO_REWARD_CURRENCY', pendingCurrency === RewardCurrency.Usdcent ? 'USD($)' : 'Bitcoin(sats)')
           .replace(

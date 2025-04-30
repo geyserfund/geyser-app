@@ -21,12 +21,12 @@ export const FundingRewardsOutOfStock = ({
   return (
     <ErrorLayout
       url={FundingErrorRewardsOutOfStockUrl}
-      title={t('Rewards Out of Stock')}
+      title={t('Products Out of Stock')}
       body={
         <>
           <Body>
-            {t('Unfortunately, one or more of the rewards you selected are no longer available or in stock.')}
-            {rewards.length > 0 ? `${t('Rewards affected')}:` : ''}
+            {t('Unfortunately, one or more of the products you selected are no longer available or in stock.')}
+            {rewards.length > 0 ? `${t('Products affected')}:` : ''}
           </Body>
           {rewards.length > 0 && (
             <UnorderedList>
@@ -50,14 +50,14 @@ export const FundingRewardsOutOfStock = ({
               <Body size="sm">
                 <Trans
                   i18nKey={
-                    'You can <1>return to the reward selection screen</1> to adjust your choices, excluding the affected rewards, and proceed with your contribution.'
+                    'You can <1>return to the product selection screen</1> to adjust your choices, excluding the affected products, and proceed with your contribution.'
                   }
                 >
                   {'You can '}
                   <Link to={getPath('projectRewards', `${projectName}`)} style={{ textDecoration: 'underline' }}>
-                    return to the reward selection screen
+                    return to the product selection screen
                   </Link>
-                  {' to adjust your choices, excluding the affected rewards, and proceed with your contribution.'}
+                  {' to adjust your choices, excluding the affected products, and proceed with your contribution.'}
                 </Trans>
               </Body>
             </ListItem>
