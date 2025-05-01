@@ -64,7 +64,7 @@ describe('When fund mutation fails', () => {
         code: ApolloErrors.REWARD_OUT_OF_STOCK,
       })
 
-      cy.get('h2').contains('Rewards Out of Stock').should('be.visible')
+      cy.get('h2').contains('Products Out of Stock').should('be.visible')
     })
   })
 

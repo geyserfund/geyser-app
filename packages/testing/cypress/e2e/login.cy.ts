@@ -28,7 +28,7 @@ describe('Login', () => {
       }
     })
 
-    cy.intercept('GET', '/auth/nostr', (req) => {
+    cy.intercept('POST', '/auth/nostr', (req) => {
       req.reply({
         statusCode: 200,
         body: {
@@ -46,7 +46,7 @@ describe('Login', () => {
     }).as('NostrAuth')
 
     cy.intercept(
-      'GET',
+      'POST',
       'auth/nostr?token=eyJzaWciOiI1ZDA5NzE4M2FlNGI1OTlhODNmNmY3ODI0OWJjMzViZTU4YzZkNThjZTM1ZDBjNGNhMTY1YTQxZjk4MDkwMjM3ODQzNzcxMWMyODhkOWYzNDEwNzQxMDA5Yjg0NTllNjVlODI0ZjkyN2NhOGY4MDcyMjQ3ZGU5MzE0NGZhNTFmZCJ9',
       (req) => {
         req.reply({
