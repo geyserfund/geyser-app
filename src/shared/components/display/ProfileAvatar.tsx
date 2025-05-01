@@ -21,7 +21,7 @@ export const ProfileAvatar: ComponentWithAs<'span', AvatarProps & ProfileAvatarP
       return guardianGradient[guardian]
     }
 
-    return 'neutral1.4'
+    return 'neutral1.8'
   }, [guardian])
 
   return (

@@ -132,7 +132,7 @@ const guardianValues = (guardian?: GuardianType | null) => {
     default:
       return {
         jewel: GuardiansJewelUrl,
-        background: 'neutralAlpha.2',
+        background: 'utils.pbg',
         borderColor: 'neutral1.8',
         path: getPath('guardians'),
       }
