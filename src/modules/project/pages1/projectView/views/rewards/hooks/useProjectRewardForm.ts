@@ -195,7 +195,7 @@ export const useProjectRewardForm = ({
           reset()
           toast.success({
             title: 'Successfully updated!',
-            description: `Reward ${data.projectRewardUpdate.name} was successfully updated`,
+            description: `Product ${data.projectRewardUpdate.name} was successfully updated`,
           })
           if (isLaunch) {
             navigate(-1)
@@ -205,7 +205,7 @@ export const useProjectRewardForm = ({
         },
         onError(error) {
           toast.error({
-            title: 'Failed to update reward',
+            title: 'Failed to update product',
             description: `${error}`,
           })
         },
@@ -220,7 +220,7 @@ export const useProjectRewardForm = ({
         variables: { input: createInput },
         onCompleted(data) {
           reset()
-          toast.success({ title: 'Successfully created project reward!' })
+          toast.success({ title: 'Successfully created project product!' })
           if (isLaunch) {
             navigate(-1)
           } else {
@@ -229,7 +229,7 @@ export const useProjectRewardForm = ({
         },
         onError(error) {
           toast.error({
-            title: 'Failed to create reward',
+            title: 'Failed to create product',
             description: `${error}`,
           })
         },

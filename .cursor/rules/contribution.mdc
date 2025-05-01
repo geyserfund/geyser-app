@@ -35,6 +35,7 @@ You are an expert in TypeScript, Node.js, React, Vite, Apollo Graphql Client, Re
 - While importing from another file, favour the shortest route, i.e relative if it is short, else absolute if that is shortest.
 - Absolute routes start with "@" which is the same as "src/"
 - Always add the extension of the file that a component or function is imported from, for example: "@/api/airtable.ts"
+- When importing types always use import type instead of simply import.
 
 ## Export Conventions
 - Always favour named exports over default exports.

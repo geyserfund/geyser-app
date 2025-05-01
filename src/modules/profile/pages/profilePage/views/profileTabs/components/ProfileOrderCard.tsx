@@ -57,7 +57,7 @@ export const ProfileOrderCard = ({ order }: { order: ProfileOrderFragment }) => 
       <VStack w="full" alignItems={'start'} spacing="0">
         <KeyValueDisplay label={t('Project')} value={project.title} />
         <KeyValueDisplay label={t('Order number')} value={order.referenceCode} />
-        <KeyValueDisplay label={t('Rewards')} value={''} />
+        <KeyValueDisplay label={t('Products')} value={''} />
       </VStack>
       <VStack w="full" spacing={0.5}>
         {items.map((item, index) => {

@@ -24,8 +24,8 @@ export const ProjectCreationEditReward = () => {
       spacing={{ base: '10px', lg: '20px' }}
     >
       <ProjectRewardForm
-        buttonText={t('Update Reward')}
-        titleText={t('Edit Reward')}
+        buttonText={t('Update Product')}
+        titleText={t('Edit Product')}
         rewardUUID={params.rewardUUID}
         isUpdate={true}
         isLaunch={true}

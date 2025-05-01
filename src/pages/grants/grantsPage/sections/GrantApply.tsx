@@ -21,6 +21,7 @@ import { BsCheckLg } from 'react-icons/bs'
 import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
 import { ConnectWithSocial } from '@/modules/auth/ConnectWithSocial.tsx'
 import { SocialAccountType } from '@/modules/auth/type.ts'
+import { useAuthToken } from '@/modules/auth/useAuthToken.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 
@@ -141,6 +142,7 @@ export const ApplyGrantModal = ({ grant, isOpen, onClose, pendingApplicants }: A
 
 export const LoginForGrant = () => {
   const { t } = useTranslation()
+  useAuthToken()
   return (
     <>
       <Image src={LockedConnectAccountUrl} maxWidth="200px" />

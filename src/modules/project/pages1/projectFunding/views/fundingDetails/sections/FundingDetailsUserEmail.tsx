@@ -15,6 +15,8 @@ import { PiCheckCircleFill, PiXCircleFill } from 'react-icons/pi'
 
 import Loader from '@/components/ui/Loader'
 import { useAuthContext } from '@/context'
+import { useAuthModal } from '@/modules/auth/hooks'
+import { useFollowedProjectsValue } from '@/modules/auth/state'
 import { HorizontalFormField } from '@/modules/profile/pages/profileSettings/common/HorizontalFormField'
 import {
   UserConfigName,
@@ -22,8 +24,6 @@ import {
   useUserNotificationSettings,
 } from '@/modules/profile/pages/profileSettings/hooks/useUserNotificationSettings'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useAuthModal } from '@/modules/auth/hooks'
-import { useFollowedProjectsValue } from '@/modules/auth/state'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { H1 } from '@/shared/components/typography'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
@@ -246,7 +246,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
         <Feedback
           variant={FeedBackVariant.WARNING}
           text={t(
-            'To receive the selected rewards, please send your shipping details to the creator’s email, which will be revealed in the success screen.',
+            'To receive the selected products, please send your shipping details to the creator’s email, which will be revealed in the success screen.',
           )}
         />
       )}

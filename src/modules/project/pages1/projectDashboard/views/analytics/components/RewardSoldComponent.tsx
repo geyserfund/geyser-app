@@ -97,7 +97,7 @@ export const RewardSoldComponent = () => {
   return (
     <VStack w="full" alignItems={'start'}>
       <H3 size="xl" medium>
-        {t('Rewards sold')}
+        {t('Products sold')}
       </H3>
       <CardLayout padding={{ base: 3, lg: 6 }} w="full">
         {rewardSoldData.length > 0 ? (

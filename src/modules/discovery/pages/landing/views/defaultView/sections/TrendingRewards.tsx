@@ -32,7 +32,7 @@ export const TrendingRewards = () => {
         <HStack w="full" justifyContent={'space-between'}>
           <HStack spacing={1}>
             <H3 size="2xl" dark bold>
-              {t('Trending rewards')}
+              {t('Trending products')}
             </H3>
             <Icon as={PiFire} fontSize={'24px'} color="orange.9" />
           </HStack>

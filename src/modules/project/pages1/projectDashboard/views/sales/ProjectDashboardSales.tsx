@@ -23,7 +23,7 @@ export const ProjectDashboardSales = () => {
   return (
     <DashboardLayout desktopTitle={t('Sales')}>
       {isRewardEmpty ? (
-        <EmptyContainer image={ProjectRewardsImageUrl} text={t('No rewards sold yet')} />
+        <EmptyContainer image={ProjectRewardsImageUrl} text={t('No products sold yet')} />
       ) : (
         <VStack
           direction={{ base: 'column', lg: 'row' }}

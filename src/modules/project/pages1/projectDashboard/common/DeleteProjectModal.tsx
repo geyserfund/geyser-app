@@ -20,7 +20,7 @@ export const DeleteProjectModal = ({
       <VStack spacing={4}>
         <Body size="sm" light>
           {t(
-            'By deleting this project you will loose all data associated to this project including descriptions, photos, entries, and rewards.',
+            'By deleting this project you will loose all data associated to this project including descriptions, photos, entries, and products.',
           )}
         </Body>
         <Alert>

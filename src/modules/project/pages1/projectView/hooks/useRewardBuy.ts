@@ -31,7 +31,7 @@ export const useRewardBuy = (reward?: Pick<ProjectRewardFragment, 'id' | 'maxCla
     (onCompleted?: Function) => {
       if (!reward) {
         toast.error({
-          title: 'Reward purchase fail',
+          title: 'Product purchase failed',
           description: `Please refresh the page and try again`,
         })
         return
@@ -46,8 +46,8 @@ export const useRewardBuy = (reward?: Pick<ProjectRewardFragment, 'id' | 'maxCla
         }
       } else {
         toast.error({
-          title: 'Reward Limit',
-          description: `Maximum number of ${reward.maxClaimable - reward.sold} rewards are available`,
+          title: 'Product Limit',
+          description: `Maximum number of ${reward.maxClaimable - reward.sold} products are available`,
         })
       }
     },

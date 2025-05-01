@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
+import { SignOut } from '@/modules/auth/pages/SignOut.tsx'
 import { ActivityDirection } from '@/modules/discovery/pages/activity/components/ActivityDirection.tsx'
 
 import { App } from '../../App'
@@ -905,6 +906,10 @@ export const router = createBrowserRouter([
         children: platformRoutes,
         ErrorBoundary,
         // ,
+      },
+      {
+        path: getPath('logout'),
+        Component: SignOut,
       },
     ],
   },

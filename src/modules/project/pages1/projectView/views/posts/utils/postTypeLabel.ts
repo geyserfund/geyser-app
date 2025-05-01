@@ -10,6 +10,6 @@ export const postTypeOptions = [
   { label: 'Goal - Update', value: PostType.GoalUpdate, icon: PiFlagBannerFold },
   { label: 'Goal - Reached', value: PostType.GoalReached, icon: PiFlagBannerFold },
   { label: 'Impact', value: PostType.Impact, icon: PiMeteor },
-  { label: 'Reward - New', value: PostType.NewReward, icon: PiHandbag },
-  { label: 'Reward - Update', value: PostType.RewardUpdate, icon: PiHandbag },
+  { label: 'Product - New', value: PostType.NewReward, icon: PiHandbag },
+  { label: 'Product - Update', value: PostType.RewardUpdate, icon: PiHandbag },
 ]

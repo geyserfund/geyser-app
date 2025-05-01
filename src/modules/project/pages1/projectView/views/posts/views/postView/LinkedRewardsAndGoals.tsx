@@ -19,7 +19,7 @@ export const LinkedRewardsAndGoals = ({ post }: { post: ProjectPostViewFragment 
   return (
     <VStack w="full" alignItems={'start'} mt={20}>
       <Body size="xl" bold>
-        {t('Linked rewards and goals')}
+        {t('Linked products and goals')}
       </Body>
       {goalsToRender.map((goal) => (
         <GoalInProgress

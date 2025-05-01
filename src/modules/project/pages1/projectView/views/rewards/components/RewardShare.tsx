@@ -49,10 +49,10 @@ export const RewardShare = ({ reward, ...props }: RewardShareProps) => {
         isOpen={rewardShareModal.isOpen}
         onClose={rewardShareModal.onClose}
         bodyProps={{ as: VStack, gap: 4 }}
-        title={t('Share reward')}
+        title={t('Share product')}
       >
         <Body size="sm" dark>
-          {t('Share the reward page to spread the word across the internet and social media.')}
+          {t('Share the product page to spread the word across the internet and social media.')}
         </Body>
         <ShareBanner
           aspectRatio={ImageCropAspectRatio.Reward}

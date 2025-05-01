@@ -41,14 +41,14 @@ export const ProjectCreateRewardMain = () => {
   return (
     <VStack spacing={8} width="100%" height="100%" gap={3}>
       <Box width="100%" display={'flex'} flexDirection={'column'} gap={2}>
-        <Body medium>{t('Create a reward')}</Body>
+        <Body medium>{t('Create a product')}</Body>
 
         <Body size="sm" light>
           {t(
-            'Rewards allow you to give something back to your contributors, from digital badges and physical products to sponsorships. Check out our guide on ',
+            'Products allow you to give something back to your contributors, from digital badges and physical products to sponsorships. Check out our guide on ',
           )}
           <Link href={GeyserRewardsGuideLink} target="_blank" isExternal>
-            {t('How to leverage the power of Rewards')}
+            {t('How to leverage the power of Products')}
           </Link>
         </Body>
         <Button
@@ -58,11 +58,11 @@ export const ProjectCreateRewardMain = () => {
           leftIcon={<AddIcon fontSize="10px" />}
           onClick={handleCreateRewardClick}
         >
-          {t('Create reward')}
+          {t('Create product')}
         </Button>
       </Box>
       <Body size="sm" light>
-        {t('Or, use a reward template below')}
+        {t('Or, use a product template below')}
       </Body>
       <Box
         width="100%"
@@ -81,7 +81,7 @@ export const ProjectCreateRewardMain = () => {
 
       {hasRewards && (
         <Box width="100%" display={'flex'} flexDirection={'column'} gap={2} pb={10}>
-          <Body medium>{t('Rewards')}</Body>
+          <Body medium>{t('Products')}</Body>
           <ProjectCreationRewards />
         </Box>
       )}

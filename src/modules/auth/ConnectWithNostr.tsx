@@ -12,11 +12,9 @@ import { NostrHelpModal } from './components/NostrHelpModal'
 import { useNostrExtensonLogin } from './hooks/useNostrExtensionLogin'
 import { loginMethodAtom } from './state'
 import { ConnectWithButtonProps, ExternalAccountType } from './type'
-import { useAuthToken, useCanLogin } from './useAuthToken'
+import { useCanLogin } from './useAuthToken'
 
 export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectWithButtonProps, 'accountType'>) => {
-  useAuthToken()
-
   const canLogin = useCanLogin()
 
   const setLoginMethod = useSetAtom(loginMethodAtom)

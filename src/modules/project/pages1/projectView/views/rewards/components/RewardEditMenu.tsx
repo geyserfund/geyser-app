@@ -45,12 +45,12 @@ export const RewardEditMenu = ({ reward, isLaunch, ...props }: RewardEditMenuPro
         if (!data.projectRewardUpdate) return
         toast.success({
           title: 'Successfully updated!',
-          description: `${t('Reward')} ${data.projectRewardUpdate?.name} ${t('was successfully updated')}`,
+          description: `${t('Product')} ${data.projectRewardUpdate?.name} ${t('was successfully updated')}`,
         })
       },
       onError(error) {
         toast.error({
-          title: 'Failed to update reward',
+          title: 'Failed to update product',
           description: `${error}`,
         })
       },
@@ -63,13 +63,13 @@ export const RewardEditMenu = ({ reward, isLaunch, ...props }: RewardEditMenuPro
       onCompleted(data) {
         toast.success({
           title: 'Successfully !',
-          description: `${t('Reward')} ${reward.name} ${t('was successfully deleted')}`,
+          description: `${t('Product')} ${reward.name} ${t('was successfully deleted')}`,
         })
         deleteRewardModal.onClose()
       },
       onError(error) {
         toast.error({
-          title: 'Failed to delete reward',
+          title: 'Failed to delete product',
           description: `${error}`,
         })
       },
@@ -127,8 +127,8 @@ export const RewardEditMenu = ({ reward, isLaunch, ...props }: RewardEditMenuPro
       </Menu>
       <DeleteConfirmModal
         {...deleteRewardModal}
-        title="Delete reward"
-        description="Are you sure you want to remove the reward?"
+        title="Delete product"
+        description="Are you sure you want to remove the product?"
         confirm={handleDeleteReward}
       />
     </>

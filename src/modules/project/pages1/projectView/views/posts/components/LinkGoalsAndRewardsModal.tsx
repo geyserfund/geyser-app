@@ -74,12 +74,12 @@ export const LinkGoalsAndRewardsModal = ({
   return (
     <>
       <Button size="md" variant={'soft'} colorScheme="neutral1" rightIcon={<PiPlus />} onClick={onOpen}>
-        {t('Linked goals and rewards')}
+        {t('Linked goals and products')}
         {totalLinks ? <Body as="span" color="primary1.11" paddingLeft="3px">{` (${totalLinks})`}</Body> : null}
       </Button>
 
       <Modal
-        title={t('Link Goals and Rewards')}
+        title={t('Link Goals and Products')}
         isOpen={isOpen}
         onClose={handleClose}
         bodyProps={{
@@ -93,7 +93,7 @@ export const LinkGoalsAndRewardsModal = ({
         ) : (
           <>
             <Body size="sm" paddingX={standardPadding}>
-              {t('Using links enables you to highlight a specific reward or goal, helping you direct people to it.')}
+              {t('Using links enables you to highlight a specific product or goal, helping you direct people to it.')}
             </Body>
             {hasRewards && (
               <>
@@ -163,7 +163,7 @@ const Rewards = ({
   return (
     <VStack w="full" alignItems="flex-start">
       <Body size="md" medium paddingX={standardPadding}>
-        {t('Rewards')}
+        {t('Products')}
       </Body>
       <VStack w="full" alignItems="start" maxHeight={'200px'} overflowY={'scroll'} paddingX={standardPadding}>
         {queryProjectRewards.loading ? (
@@ -295,12 +295,12 @@ const NoGoalsAndRewards = ({ projectName }: { projectName: string }) => {
   return (
     <>
       <Body size="sm" paddingX={standardPadding}>
-        {t('No goals or rewards found')}
+        {t('No goals or products found')}
       </Body>
 
       <HStack w="full" paddingX={standardPadding}>
         <Button flex={1} variant="solid" colorScheme="primary1" onClick={handleCreateReward}>
-          {t('Create a reward')}
+          {t('Create a product')}
         </Button>
         <Button flex={1} variant="solid" colorScheme="primary1" onClick={handleCreateGoal}>
           {t('Create a goal')}

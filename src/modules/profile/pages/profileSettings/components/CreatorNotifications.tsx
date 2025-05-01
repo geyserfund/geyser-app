@@ -111,7 +111,7 @@ export const CreatorNotifications = () => {
                 />
               </HorizontalFormField>
               <Body size="sm" regular color="neutral1.10">
-                {t('Receive a monthly email about your project summary: stats, goal progress and, hot rewards.')}
+                {t('Receive a monthly email about your project summary: stats, goal progress and, hot products.')}
               </Body>
 
               <HorizontalFormField label="Goal Reached Email" htmlFor="goal-reached">

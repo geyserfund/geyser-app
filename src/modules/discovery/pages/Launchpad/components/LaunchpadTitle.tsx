@@ -5,6 +5,7 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { LaunchPadIllustrationUrl } from '@/shared/constants/platform/url.ts'
 import { lightModeColors } from '@/shared/styles'
+import { TitleHeaderGradient } from '@/shared/styles/custom.ts'
 
 import { FlowingGifBackground } from '../../heroes/components/FlowingGifBackground.tsx'
 
@@ -14,20 +15,22 @@ export const LaunchpadTitle = () => {
       w="full"
       dense
       spacing={{ base: 4, lg: 6 }}
-      background="linear-gradient(81deg, #EAF2F8 -9.6%, #AED6F1 109.2%)"
+      background={TitleHeaderGradient}
       position="relative"
       backgroundColor="utils.pbg"
       alignItems={{ base: 'start', lg: 'center' }}
     >
-      <FlowingGifBackground opacity="0.25" />
+      <FlowingGifBackground />
 
       <HStack w="full" spacing={{ base: 4, lg: 6 }} padding={{ base: 2, lg: 4 }}>
         <Image
           width={{ base: '95px', lg: '120px' }}
+          maxHeight="120px"
           height="auto"
           zIndex={1}
           src={LaunchPadIllustrationUrl}
           alt="Launchpad illustration"
+          objectFit="contain"
         />
 
         <VStack w="full" alignItems={'start'} spacing={{ base: 2, lg: 0 }} zIndex={1}>
@@ -36,8 +39,9 @@ export const LaunchpadTitle = () => {
           </H2>
 
           <Body size={{ base: 'sm', lg: 'xl' }} medium color={lightModeColors.neutral1[11]}>
+            {t('Where grassroots Bitcoin projects come to life. ')}{' '}
             {t(
-              'These early-stage projects are in countdown mode. To launch, they need 21 followers within 30 days. Help them build momentum — or they might never take off.',
+              'Geyser rallies the Bitcoin community to fund ideas, products, and causes that drive real-world adoption from the ground up.',
             )}
           </Body>
         </VStack>

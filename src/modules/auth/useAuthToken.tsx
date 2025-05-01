@@ -17,8 +17,14 @@ const refreshLoginTriggerAtom = atom(null, (get, set) => {
 
 export const useCanLogin = () => useAtomValue(canLoginAtom)
 
-/* useRefreshAuthToken: should be used on the container wrapping SocialLogin (useAuthToken) */
-export const useRefreshAuthToken = (isOpen: boolean) => {
+/* useAuthToken: Used inside a social login to get the latest auth-token */
+export const useAuthToken = (isOpen?: boolean) => {
+  const [canLogin, setCanLogin] = useAtom(canLoginAtom)
+
+  const [refreshLogin, setRefreshLogin] = useAtom(refreshLoginAtom)
+
+  const authServiceEndpoint = getAuthEndPoint()
+
   const refreshAuthToken = useSetAtom(refreshLoginTriggerAtom)
 
   useEffect(() => {
@@ -26,15 +32,6 @@ export const useRefreshAuthToken = (isOpen: boolean) => {
       refreshAuthToken()
     }
   }, [isOpen, refreshAuthToken])
-}
-
-/* useAuthToken: Used inside a social login to get the latest auth-token */
-export const useAuthToken = () => {
-  const [canLogin, setCanLogin] = useAtom(canLoginAtom)
-
-  const [refreshLogin, setRefreshLogin] = useAtom(refreshLoginAtom)
-
-  const authServiceEndpoint = getAuthEndPoint()
 
   useEffect(() => {
     const initalizeLogin = async () => {

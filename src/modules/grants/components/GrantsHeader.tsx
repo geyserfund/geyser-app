@@ -9,6 +9,7 @@ import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { __production__, __staging__, getPath, GrantsIllustrationUrl } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
+import { TitleHeaderGradient } from '@/shared/styles/custom.ts'
 import { useGrantStatisticsQuery } from '@/types'
 import { getShortAmountLabel } from '@/utils'
 
@@ -45,7 +46,7 @@ export const GrantsHeader = () => {
       w="full"
       dense
       spacing={{ base: 4, lg: 6 }}
-      background="linear-gradient(81deg, #FFFBE7 -9.6%, #C4FFF4 109.2%)"
+      background={TitleHeaderGradient}
       position="relative"
       backgroundColor="utils.pbg"
       alignItems={{ base: 'start', lg: 'center' }}

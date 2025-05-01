@@ -46,13 +46,13 @@ export const FundingInitRewards = ({ readOnly }: Props) => {
             })}
           </VStack>
         ) : (
-          <Text>{t('No rewards are selected')}</Text>
+          <Text>{t('No products are selected')}</Text>
         )}
       </VStack>
 
       <VStack w="full" spacing={2} alignItems="start">
         <H2 size="2xl" bold>
-          {t('Available Rewards')}
+          {t('Available Products')}
         </H2>
         <VStack w="full">
           {availableRewards.map((reward) => {

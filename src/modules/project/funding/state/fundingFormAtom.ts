@@ -497,7 +497,7 @@ export const isFundingUserInfoValidAtom = atom((get) => {
 
   if (hasSelectedRewards && !formState.email) {
     return {
-      title: 'Email is required when purchasing a reward.',
+      title: 'Email is required when purchasing a product.',
       description: 'Please enter an email.',
       error: FundingUserInfoError.EMAIL,
       valid: false,
