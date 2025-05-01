@@ -1,16 +1,13 @@
-import { HStack, Icon, Image, VStack } from '@chakra-ui/react'
+import { Icon } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiDotOutline } from 'react-icons/pi'
 
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
-import { Body, H2 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography'
 import { CrownIllustrationUrl } from '@/shared/constants'
-import { lightModeColors } from '@/shared/styles'
+import { GradientBanner } from '@/shared/molecules/GradientBanner.tsx'
 import { commaFormatted, getBitcoinAmount, getShortAmountLabel } from '@/utils'
 
 import { useSummaryBannerStats } from '../hooks'
-import { FlowingGifBackground } from './FlowingGifBackground'
 
 export const HeroesMainPageTitle = () => {
   const { projectsCount, bitcoinsRaised, contributorsCount, loading: projectStatLoading } = useSummaryBannerStats()
@@ -20,11 +17,8 @@ export const HeroesMainPageTitle = () => {
     { label: 'Raised', value: `${getBitcoinAmount(bitcoinsRaised, true)} ₿` },
     { label: 'Projects', value: commaFormatted(projectsCount) },
   ]
-  const padding = { base: 2, lg: 4 }
 
   const renderPlatformStats = () => {
-    if (projectStatLoading) return <ProjectStatSkeleton />
-
     return bannerItems.map((item, index) => (
       <>
         <Body key={index} size={{ base: 'sm', lg: 'xl' }} color="neutral1.10" textAlign={'center'}>
@@ -36,67 +30,12 @@ export const HeroesMainPageTitle = () => {
   }
 
   return (
-    <CardLayout
-      w="full"
-      dense
-      spacing={{ base: 4, lg: 6 }}
-      background="linear-gradient(81deg, #FFFBE7 -9.6%, #C4FFF4 109.2%)"
-      position="relative"
-      backgroundColor="utils.pbg"
-      alignItems={{ base: 'start', lg: 'center' }}
-    >
-      <FlowingGifBackground />
-
-      <HStack
-        w="full"
-        spacing={{ base: 4, lg: 6 }}
-        paddingX={padding}
-        paddingTop={padding}
-        paddingBottom={{ base: 0, lg: 4 }}
-      >
-        <Image
-          src={CrownIllustrationUrl}
-          alt="Hall of Fame"
-          width={{ base: '95px', lg: '120px' }}
-          height="auto"
-          objectFit={'contain'}
-          zIndex={1}
-        />
-        <VStack w="full" alignItems={'start'} spacing={{ base: 2, lg: 0 }} zIndex={1}>
-          <H2 size={{ base: 'xl', lg: '3xl' }} bold color={lightModeColors.utils.text}>
-            {t('Heroes')}
-          </H2>
-
-          <Body size={{ base: 'sm', lg: 'xl' }} medium color={lightModeColors.neutral1[11]}>
-            {t('The creators, contributors and ambassadors bringing Bitcoin closer to mass adoption.')}
-          </Body>
-          <HStack w="full" display={{ base: 'none', lg: 'flex' }} color={lightModeColors.utils.text}>
-            {renderPlatformStats()}
-          </HStack>
-        </VStack>
-      </HStack>
-      <HStack
-        paddingX={padding}
-        paddingY={2}
-        alignItems={'center'}
-        justifyContent={'center'}
-        w="full"
-        display={{ base: 'flex', lg: 'none' }}
-        backgroundColor="neutralAlpha.3"
-      >
-        {renderPlatformStats()}
-      </HStack>
-    </CardLayout>
+    <GradientBanner
+      title={t('Heroes')}
+      subtitle={t('The creators, contributors and ambassadors bringing Bitcoin closer to mass adoption.')}
+      imageUrl={CrownIllustrationUrl}
+      statsLoading={projectStatLoading}
+      stats={renderPlatformStats()}
+    />
   )
-}
-
-const ProjectStatSkeleton = () => {
-  return [1, 2, 3].map((key) => {
-    return (
-      <>
-        <SkeletonLayout height="24px" />
-        {key < 3 && <Icon as={PiDotOutline} size="xl" />}
-      </>
-    )
-  })
 }

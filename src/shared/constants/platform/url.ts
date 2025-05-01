@@ -23,6 +23,9 @@ export const anonymousOrbBaseUrl = 'https://storage.googleapis.com/geyser-projec
 
 export const AnonymousAvatarBaseUrl = 'https://storage.googleapis.com/geyser-projects-media/anonymous/avatar'
 
+// LOGO URLS
+export const GeyserBannerLogoUrl = 'https://storage.googleapis.com/geyser-projects-media/app/Geyser-banner-logo.png'
+
 // LAUNCH PROJECT URLS
 export const LaunchProjectCoinsUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-coins.webp'
