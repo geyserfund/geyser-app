@@ -67,7 +67,7 @@ export const GradientBanner = ({
         spacing={{ base: 4, lg: 6 }}
         paddingX={padding}
         paddingTop={padding}
-        paddingBottom={{ base: 0, lg: 4 }}
+        paddingBottom={{ base: stats ? 0 : 2, lg: 4 }}
       >
         <Image
           src={imageUrl}
@@ -98,17 +98,19 @@ export const GradientBanner = ({
           </HStack>
         </VStack>
       </HStack>
-      <HStack
-        paddingX={padding}
-        paddingY={2}
-        alignItems={'center'}
-        justifyContent={'center'}
-        w="full"
-        display={{ base: 'flex', lg: 'none' }}
-        backgroundColor="neutralAlpha.3"
-      >
-        {renderPlatformStats()}
-      </HStack>
+      {stats && (
+        <HStack
+          paddingX={padding}
+          paddingY={2}
+          alignItems={'center'}
+          justifyContent={'center'}
+          w="full"
+          display={{ base: 'flex', lg: 'none' }}
+          backgroundColor="neutralAlpha.3"
+        >
+          {renderPlatformStats()}
+        </HStack>
+      )}
     </CardLayout>
   )
 }
