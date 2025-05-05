@@ -13,6 +13,7 @@ export enum lng {
   sw = 'sw',
   tr = 'tr',
   ja = 'ja',
+  sk = 'sk',
 }
 
 export const languages = {
@@ -30,6 +31,7 @@ export const languages = {
   [lng.sw]: 'Swahili',
   [lng.tr]: 'Turkish',
   [lng.ja]: 'Japanese',
+  [lng.sk]: 'Slovak',
 } as { [key: string]: string }
 
 export const languageFalgs = {
@@ -47,4 +49,5 @@ export const languageFalgs = {
   [lng.sw]: '🇰🇪',
   [lng.tr]: '🇹🇷',
   [lng.ja]: '🇯🇵',
+  [lng.sk]: '🇸🇸',
 } as { [key: string]: string }
