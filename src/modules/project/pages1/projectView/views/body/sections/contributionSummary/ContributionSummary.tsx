@@ -6,13 +6,17 @@ import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { ContributeButton } from '../../components'
 import { ProjectBalanceDisplay } from './components/ProjectBalanceDisplay'
 
-export const ContributionSummary = (props: StackProps) => {
+type ContributionSummaryProps = StackProps & {
+  isWidget?: boolean
+}
+
+export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryProps) => {
   return (
     <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
       <ProjectBalanceDisplay />
 
       <HStack w="full">
-        <ContributeButton flex="1" />
+        <ContributeButton flex="1" isWidget={isWidget} />
       </HStack>
     </CardLayout>
   )

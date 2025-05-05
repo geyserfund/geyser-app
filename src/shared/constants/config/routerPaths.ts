@@ -45,6 +45,9 @@ export enum PathName {
   projectEditReward = 'edit-reward',
   projectStoryEdit = 'story',
 
+  widget = 'widget',
+  contributionWidget = 'contribution',
+
   refund = 'refund',
   refundInitiated = 'initiated',
 
@@ -137,6 +140,7 @@ const pathsMap = {
   leaderboard: () => `/${PathName.leaderboard}`,
   projectDiscovery: () => `/${PathName.projectDiscovery}`,
 
+  /** Discovery Routes */
   discoveryLanding: () => '/',
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,
   discoveryMyProjects: () => `/${PathName.myProjects}`,
@@ -165,9 +169,13 @@ const pathsMap = {
   heroesCreator: () => `/${PathName.heroes}/${PathName.creator}`,
   heroesContributor: () => `/${PathName.heroes}/${PathName.contributor}`,
 
+  /** Grants Routes */
+
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
   grantsRoundTwo: () => `/${PathName.grants}/${PathName.grantsRoundTwo}`,
+
+  /** Not Found Routes */
 
   notFound: () => `/${PathName.notFound}`,
   notAuthorized: () => `/${PathName.notAuthorized}`,
@@ -305,6 +313,10 @@ const pathsMap = {
   projectLaunchDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}/?draft`,
   projectLaunchPreLaunch: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectPreLaunch}/?prelaunch`,
+
+  /** Project Widget Routes */
+  contributionWidget: (projectName: string) =>
+    `/${PathName.widget}/${PathName.project}/${projectName}/${PathName.contributionWidget}`,
 
   /** User Profile Routes */
   userProfile: (userId: string) => `/${PathName.userProfile}/${userId}`,

@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@chakra-ui/react'
+import { Button, ButtonProps, Link } from '@chakra-ui/react'
 // import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -14,7 +14,11 @@ import { isActive, isPrelaunch } from '../../../../../../../utils'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 import { PrelaunchFollowButton } from './PrelaunchFollowButton.tsx'
 
-export const ContributeButton = (props: ButtonProps) => {
+type ContributeButtonProps = ButtonProps & {
+  isWidget?: boolean
+}
+
+export const ContributeButton = ({ isWidget, ...props }: ContributeButtonProps) => {
   const { t } = useTranslation()
 
   const navigate = useNavigate()
@@ -46,6 +50,19 @@ export const ContributeButton = (props: ButtonProps) => {
 
   const isProjectPrelaunch = isPrelaunch(project?.status)
 
+  const buttonProps = isWidget
+    ? {
+        as: Link,
+        href: `https://geyser.fund/${getPath('projectFunding', project.name)}`,
+        isExternal: true,
+      }
+    : {
+        onClick: () =>
+          communityVotingGrant && isStepVoting
+            ? votingInfoModal.onOpen()
+            : navigate(getPath('projectFunding', project.name)),
+      }
+
   return (
     <>
       {communityVotingGrant && isStepVoting && (
@@ -63,11 +80,7 @@ export const ContributeButton = (props: ButtonProps) => {
           variant="solid"
           colorScheme="primary1"
           isDisabled={isFundingDisabled}
-          onClick={() =>
-            communityVotingGrant && isStepVoting
-              ? votingInfoModal.onOpen()
-              : navigate(getPath('projectFunding', project.name))
-          }
+          {...buttonProps}
           {...props}
         >
           {t('Contribute')}
