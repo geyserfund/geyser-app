@@ -21,6 +21,7 @@ const allTranslations = [
   lng.pl,
   lng.pt,
   lng.sw,
+  lng.sk,
   lng.tr,
   lng.zh,
 ]
