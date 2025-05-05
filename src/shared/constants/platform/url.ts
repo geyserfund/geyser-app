@@ -176,6 +176,15 @@ export const CrownIllustrationUrl = 'https://storage.googleapis.com/geyser-proje
 export const GrantsIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/grants-illustration.png'
 
+// PAYMENT METHOD
+export const BitcoinLightingPaymentImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/payment/bitcoin-lightning-payment.png'
+export const MasterCardPaymentImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/payment/mastercard-payment.png'
+export const VisaPaymentImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/payment/visa-payment.png'
+export const StripePaymentImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/payment/stripe-payment.png'
+
 // FUNDING FLOW ERRORS
 
 export const FundingErrorUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/errors/error.png'
