@@ -1,13 +1,15 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
-import { useAtom } from 'jotai'
+import { Button, HStack, Link as ChakraLink, StackProps, VStack } from '@chakra-ui/react'
+import { useAtom, useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { useUserContributorToCurrentProject } from '@/modules/project/pages1/projectView/hooks/useUserContributorToCurrentProject'
 import { contributorsAtom } from '@/modules/project/state/contributionsAtom'
+import { isWidgetAtom } from '@/modules/project/state/widgetAtom.ts'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
+import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 import { ProjectLeaderboardPeriod, useProjectLeaderboardContributorsGetQuery } from '@/types'
 
 import {
@@ -22,6 +24,7 @@ export const Leaderboard = () => {
   const { project, loading: projectLoading } = useProjectAtom()
 
   const [contributors, setContributors] = useAtom(contributorsAtom)
+  const isWidget = useAtomValue(isWidgetAtom)
 
   const { loading } = useProjectLeaderboardContributorsGetQuery({
     skip: !project.id,
@@ -58,16 +61,30 @@ export const Leaderboard = () => {
       {userContributor && <LeaderboardItem funder={userContributor} rank={userAllTimeRank || 0} hideLabel />}
 
       <HStack w="full" justifyContent={'center'} spacing={1} paddingX={6} paddingTop={2}>
-        <Button
-          as={Link}
-          to={getPath('projectLeaderboard', project.name)}
-          variant="soft"
-          size="sm"
-          minW={20}
-          colorScheme="neutral1"
-        >
-          {t('See all')}
-        </Button>
+        {isWidget ? (
+          <Button
+            as={ChakraLink}
+            href={getFullDomainUrl(getPath('projectLeaderboard', project.name))}
+            isExternal
+            variant="soft"
+            size="sm"
+            minW={20}
+            colorScheme="neutral1"
+          >
+            {t('See all')}
+          </Button>
+        ) : (
+          <Button
+            as={Link}
+            to={getPath('projectLeaderboard', project.name)}
+            variant="soft"
+            size="sm"
+            minW={20}
+            colorScheme="neutral1"
+          >
+            {t('See all')}
+          </Button>
+        )}
       </HStack>
     </VStack>
   )
