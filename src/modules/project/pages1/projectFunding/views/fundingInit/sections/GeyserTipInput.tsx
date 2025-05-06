@@ -12,7 +12,7 @@ export const GeyserTipInput = () => {
   const { formState, setGeyserTipPercent } = useFundingFormAtom()
   const { geyserTipPercent } = formState
 
-  const tipOptions = [0, 2.1, 5]
+  const tipOptions = [0, 5, 10]
 
   return (
     <CardLayout w="full" spacing={3}>

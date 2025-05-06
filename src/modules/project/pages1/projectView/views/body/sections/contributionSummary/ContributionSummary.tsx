@@ -1,7 +1,12 @@
-import { HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
+import { HStack, Image, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
+import {
+  BitcoinLightingPaymentImageUrl,
+  MasterCardPaymentImageUrl,
+  VisaPaymentImageUrl,
+} from '@/shared/constants/platform/url.ts'
 
 import { ContributeButton } from '../../components'
 import { ProjectBalanceDisplay } from './components/ProjectBalanceDisplay'
@@ -10,14 +15,23 @@ type ContributionSummaryProps = StackProps & {
   isWidget?: boolean
 }
 
+const paymentMethods = [BitcoinLightingPaymentImageUrl, VisaPaymentImageUrl, MasterCardPaymentImageUrl]
+
 export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryProps) => {
   return (
     <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
       <ProjectBalanceDisplay />
 
-      <HStack w="full">
-        <ContributeButton flex="1" isWidget={isWidget} />
-      </HStack>
+      <VStack w="full">
+        <HStack w="full">
+          <ContributeButton flex="1" isWidget={isWidget} />
+        </HStack>
+        <HStack>
+          {paymentMethods.map((method) => (
+            <Image src={method} key={method} maxHeight="14px" />
+          ))}
+        </HStack>
+      </VStack>
     </CardLayout>
   )
 }

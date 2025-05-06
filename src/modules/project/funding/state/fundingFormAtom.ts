@@ -81,7 +81,7 @@ const initialState: FundFormType = {
   rewardCurrency: RewardCurrency.Usdcent,
   needsShipping: false,
   shippingDestination: ShippingDestination.National,
-  geyserTipPercent: 2.1,
+  geyserTipPercent: 5,
 }
 
 /** Main Funding Form state atom */
