@@ -1,7 +1,7 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { useColorMode, VStack } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { ScopeProvider } from 'jotai-scope'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI.ts'
@@ -45,16 +45,36 @@ export const ContributionSummaryWidget = () => {
 export const ContributionSummaryWrapper = () => {
   useProjectGoalsAPI(true)
 
+  const { setColorMode, colorMode } = useColorMode()
+
   const setIsWidget = useSetAtom(isWidgetAtom)
+  const [viewMode, setViewMode] = useState<string | null>(null)
+  const [widgetColorMode, setWidgetColorMode] = useState<string | null>(null)
 
   useEffect(() => {
     setIsWidget(true)
+
+    // Get view parameter from URL
+    const urlParams = new URLSearchParams(window.location.search)
+    const viewParam = urlParams.get('view')
+    const colorModeParam = urlParams.get('colorMode')
+
+    setViewMode(viewParam)
+    setWidgetColorMode(colorModeParam)
   }, [])
+
+  useEffect(() => {
+    if (widgetColorMode === 'dark' && colorMode !== 'dark') {
+      setColorMode('dark')
+    } else if (widgetColorMode === 'light' && colorMode !== 'light') {
+      setColorMode('light')
+    }
+  }, [widgetColorMode, setColorMode, colorMode])
 
   return (
     <VStack maxWidth="400px" height="100vh" overflow="auto" backgroundColor="transparent">
       <ContributionSummary isWidget />
-      <LeaderboardSummary />
+      {viewMode && viewMode === 'full' && <LeaderboardSummary />}
     </VStack>
   )
 }

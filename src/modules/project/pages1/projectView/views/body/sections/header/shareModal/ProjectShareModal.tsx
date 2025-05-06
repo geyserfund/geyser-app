@@ -5,8 +5,8 @@ import { Modal } from '@/shared/components/layouts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 
-import { ProjectBannerView } from './views/ProjectBannerView'
-import { ProjectShareContribute } from './views/ProjectShareContribute'
+import { ProjectBanners } from './views/ProjectBanners.tsx'
+import { ProjectContributionEmbed } from './views/ProjectContributionEmbed.tsx'
 import { ProjectShareView } from './views/ProjectShareView'
 
 interface IProjectShareModal {
@@ -19,7 +19,7 @@ interface IProjectShareModal {
 enum ProjectShareModalView {
   share = 'share',
   banner = 'banner',
-  lightning = 'lightning',
+  embed = 'embed',
 }
 
 export const ProjectShareModal = ({ isOpen, onClose }: IProjectShareModal) => {
@@ -34,12 +34,12 @@ export const ProjectShareModal = ({ isOpen, onClose }: IProjectShareModal) => {
     {
       name: t('Banner'),
       key: ProjectShareModalView.banner,
-      render: () => <ProjectBannerView />,
+      render: () => <ProjectBanners />,
     },
     {
-      name: t('Lightning'),
-      key: ProjectShareModalView.lightning,
-      render: () => <ProjectShareContribute />,
+      name: t('Embed'),
+      key: ProjectShareModalView.embed,
+      render: () => <ProjectContributionEmbed />,
     },
   ] as AnimatedNavBarItem[]
 

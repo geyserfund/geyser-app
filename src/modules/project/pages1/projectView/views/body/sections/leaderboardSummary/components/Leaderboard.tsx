@@ -1,4 +1,4 @@
-import { Button, HStack, Link as ChakraLink, StackProps, VStack } from '@chakra-ui/react'
+import { Button, HStack, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { useAtom, useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
