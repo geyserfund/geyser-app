@@ -18,7 +18,6 @@ import { EnableFiatContributions } from '../../projectDashboard/views/wallet/com
 import { ProjectCreationWalletConnectionForm } from '..'
 import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
-import { useCheckPrelaunchSteps } from '../hooks/useCheckPrelaunchSteps.tsx'
 import { useLocationMandatoryRedirect } from '../hooks/useLocationMandatoryRedirect'
 import { ConnectionOption, useWalletForm } from '../hooks/useWalletForm'
 import {
@@ -35,8 +34,6 @@ import { ProjectCreationIdentityVerificationPage } from './ProjectCreationIdenti
 export const ProjectCreationWalletConnectionPage = () => {
   const { t } = useTranslation()
   const toast = useNotification()
-
-  useCheckPrelaunchSteps()
 
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
