@@ -32,6 +32,8 @@ const Guardians = () => import('../../modules/guardians')
 
 const HallOfFame = () => import('../../modules/discovery/pages/heroes')
 
+const Widgets = () => import('../../modules/widget')
+
 const Refund = () => import('../../modules/project/pages1/projectFunding/views/refund')
 
 const ProfilePage = () => import('../../modules/profile')
@@ -660,6 +662,9 @@ export const platformRoutes: RouteObject[] = [
       return { Component: RefundPage }
     },
   },
+
+  /** Not-Found Pages */
+
   {
     path: getPath('notFound'),
     Component: NotFoundPage,
@@ -910,6 +915,14 @@ export const router = createBrowserRouter([
       {
         path: getPath('logout'),
         Component: SignOut,
+      },
+      /** Widgets */
+      {
+        path: getPath('contributionWidget', PathName.projectName),
+        async lazy() {
+          const ContributionSummaryWidget = await Widgets().then((m) => m.ContributionSummaryWidget)
+          return { Component: ContributionSummaryWidget }
+        },
       },
     ],
   },

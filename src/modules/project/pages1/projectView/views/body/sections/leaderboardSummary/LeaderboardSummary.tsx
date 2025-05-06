@@ -1,4 +1,4 @@
-import { HStack } from '@chakra-ui/react'
+import { HStack, StackProps } from '@chakra-ui/react'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
@@ -7,7 +7,9 @@ import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNav
 import { Contributions } from './components/Contributions'
 import { Leaderboard } from './components/Leaderboard'
 
-export const LeaderboardSummary = () => {
+type LeaderboardSummaryProps = StackProps
+
+export const LeaderboardSummary = ({ ...props }: LeaderboardSummaryProps) => {
   const items = [
     {
       name: 'Leaderboard',
@@ -24,7 +26,7 @@ export const LeaderboardSummary = () => {
   const { render, ...animatedNavbarProps } = useAnimatedNavBar({ items, defaultView: 'leaderboard' })
 
   return (
-    <CardLayout w="full" flex={1} dense py={6} minHeight="320px">
+    <CardLayout w="full" flex={1} dense py={6} minHeight="320px" {...props}>
       <HStack w="full" px={6}>
         <AnimatedNavBar {...animatedNavbarProps} showLabel />
       </HStack>

@@ -1,13 +1,16 @@
-import { Button, Image, UseModalProps, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, Image, Link as ChakraLink, UseModalProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { Trans } from 'react-i18next'
 import Tilt from 'react-parallax-tilt'
 import { Link } from 'react-router-dom'
 
+import { isWidgetAtom } from '@/modules/project/state/widgetAtom.ts'
 import { getPath } from '@/shared/constants'
 import { guardianNostrCards, guardianText } from '@/shared/constants/assets/guardianAssets.tsx'
 import { GradientBorder } from '@/shared/molecules/GradientBorder'
 import { GuardiansButtonBackgroundGradient, GuardiansButtonBackgroundGradientBright } from '@/shared/styles/custom'
+import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 import { GuardianType } from '@/types'
 
 import { Modal } from '../layouts'
@@ -21,6 +24,8 @@ export type GuardianCardProps = {
 type GuardianCardModalProps = GuardianCardProps & UseModalProps
 
 export const GuardianCardModal = ({ guardianType, userName, ...guardianModal }: GuardianCardModalProps) => {
+  const isWidget = useAtomValue(isWidgetAtom)
+
   if (!guardianType) return null
 
   const text = guardianText[guardianType]
@@ -50,8 +55,16 @@ export const GuardianCardModal = ({ guardianType, userName, ...guardianModal }: 
           size="lg"
           variant="outline"
           borderWidth="0px"
-          as={Link}
-          to={getPath('guardians')}
+          {...(isWidget
+            ? ({
+                as: ChakraLink,
+                href: getFullDomainUrl(getPath('guardians')),
+                isExternal: true,
+              } as ButtonProps)
+            : {
+                as: Link,
+                to: getPath('guardians'),
+              })}
           background={GuardiansButtonBackgroundGradient}
           _hover={{}}
           _active={{}}

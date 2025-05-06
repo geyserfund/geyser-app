@@ -1,14 +1,17 @@
-import { HStack, ModalProps, VStack } from '@chakra-ui/react'
+import { HStack, Link as ChakraLink, ModalProps, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ScrollInvoke } from '@/helpers'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { isWidgetAtom } from '@/modules/project/state/widgetAtom.ts'
 import { ProfileText } from '@/shared/components/display/ProfileText'
 import { Modal } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
 import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHook'
+import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 import {
   OrderByOptions,
   ProjectContributionFragment,
@@ -29,6 +32,7 @@ export const FunderContributionModal = ({ funder, ...props }: FunderContribution
   const { project } = useProjectAtom()
 
   const [contributions, setContributions] = useState<ProjectContributionFragment[]>([])
+  const isWidget = useAtomValue(isWidgetAtom)
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -92,10 +96,17 @@ export const FunderContributionModal = ({ funder, ...props }: FunderContribution
       <HStack
         spacing={1}
         paddingX={6}
-        {...(funder.user && {
-          as: Link,
-          to: getPath('userProfile', funder.user.id),
-        })}
+        {...(funder.user &&
+          (isWidget
+            ? ({
+                as: ChakraLink,
+                href: getFullDomainUrl(getPath('userProfile', funder.user.id)),
+                isExternal: true,
+              } as StackProps)
+            : {
+                as: Link,
+                to: getPath('userProfile', funder.user?.id || ''),
+              }))}
       >
         <UserAvatar user={funder.user} id={funder.funderId} />
         <ProfileText guardian={funder.user?.guardianType} size="sm" bold dark>
