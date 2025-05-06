@@ -1,12 +1,14 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
-import { useAtom } from 'jotai'
+import { Button, ButtonProps, HStack, Link as ChakraLink, VStack } from '@chakra-ui/react'
+import { useAtom, useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { contributionsAtom } from '@/modules/project/state/contributionsAtom'
+import { isWidgetAtom } from '@/modules/project/state/widgetAtom.ts'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
+import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 import { OrderByOptions, useProjectPageContributionsGetQuery } from '@/types'
 
 import {
@@ -19,6 +21,8 @@ export const Contributions = () => {
   const { t } = useTranslation()
 
   const { project, loading: projectLoading } = useProjectAtom()
+
+  const isWidget = useAtomValue(isWidgetAtom)
 
   const [contributions, setContributions] = useAtom(contributionsAtom)
 
@@ -63,8 +67,16 @@ export const Contributions = () => {
 
       <HStack w="full" justifyContent={'center'} spacing={1} paddingX={6} paddingTop={2}>
         <Button
-          as={Link}
-          to={getPath('projectLeaderboard', project.name)}
+          {...(isWidget
+            ? ({
+                as: ChakraLink,
+                href: getFullDomainUrl(getPath('projectLeaderboard', project.name)),
+                isExternal: true,
+              } as ButtonProps)
+            : {
+                as: Link,
+                to: getPath('projectLeaderboard', project.name),
+              })}
           variant="soft"
           size="sm"
           minW={20}

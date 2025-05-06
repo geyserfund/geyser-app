@@ -1,12 +1,24 @@
-import { Box, HStack, Image, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  HStack,
+  Image,
+  Link as ChakraLink,
+  SkeletonCircle,
+  SkeletonText,
+  StackProps,
+  VStack,
+} from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { isWidgetAtom } from '@/modules/project/state/widgetAtom.ts'
 import { ProfileText } from '@/shared/components/display/ProfileText'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { TimeAgo } from '@/shared/molecules/TimeAgo'
+import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 import { ProjectContributionFragment } from '@/types/index.ts'
 import { commaFormatted, convertSatsToUsdFormatted } from '@/utils'
 
@@ -19,6 +31,8 @@ type ContributionItemProps = {
 export const ContributionItem = ({ contribution, ...props }: ContributionItemProps) => {
   const { t } = useTranslation()
 
+  const isWidget = useAtomValue(isWidgetAtom)
+
   return (
     <HStack
       w="full"
@@ -27,13 +41,23 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
       key={contribution.id}
       paddingX={6}
       paddingY={2}
-      {...(contribution.funder.user && {
-        as: Link,
-        to: getPath('userProfile', contribution.funder.user.id),
-        _hover: {
-          backgroundColor: 'neutral1.3',
-        },
-      })}
+      {...(contribution.funder.user &&
+        (isWidget
+          ? {
+              as: ChakraLink,
+              href: getFullDomainUrl(getPath('userProfile', contribution.funder.user.id)),
+              isExternal: true,
+              _hover: {
+                backgroundColor: 'neutral1.3',
+              },
+            }
+          : {
+              as: Link,
+              to: getPath('userProfile', contribution.funder.user.id),
+              _hover: {
+                backgroundColor: 'neutral1.3',
+              },
+            }))}
       {...props}
     >
       <UserAvatar user={contribution.funder.user} id={contribution.funder.id} />

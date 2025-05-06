@@ -11,16 +11,20 @@ import {
 import { ContributeButton } from '../../components'
 import { ProjectBalanceDisplay } from './components/ProjectBalanceDisplay'
 
+type ContributionSummaryProps = StackProps & {
+  isWidget?: boolean
+}
+
 const paymentMethods = [BitcoinLightingPaymentImageUrl, VisaPaymentImageUrl, MasterCardPaymentImageUrl]
 
-export const ContributionSummary = (props: StackProps) => {
+export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryProps) => {
   return (
     <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
       <ProjectBalanceDisplay />
 
       <VStack w="full">
         <HStack w="full">
-          <ContributeButton flex="1" />
+          <ContributeButton flex="1" isWidget={isWidget} />
         </HStack>
         <HStack>
           {paymentMethods.map((method) => (
