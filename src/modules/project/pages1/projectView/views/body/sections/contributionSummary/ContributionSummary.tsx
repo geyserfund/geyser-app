@@ -1,6 +1,7 @@
 import { HStack, Image, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 
-import { useAuthContext } from '@/context/auth.tsx'
+import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import {
@@ -13,9 +14,9 @@ import { ContributeButton } from '../../components'
 import { ProjectBalanceDisplay } from './components/ProjectBalanceDisplay'
 
 export const ContributionSummary = (props: StackProps) => {
-  const { user } = useAuthContext()
+  const projectOwner = useAtomValue(projectOwnerAtom)
 
-  const isVerified = Boolean(user?.complianceDetails?.verifiedDetails?.identity?.verified)
+  const isVerified = Boolean(projectOwner?.user?.complianceDetails?.verifiedDetails?.identity?.verified)
   const paymentMethods = [BitcoinLightingPaymentImageUrl]
 
   if (isVerified) {
