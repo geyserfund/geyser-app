@@ -1,5 +1,6 @@
 import { HStack, Image, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 
+import { useAuthContext } from '@/context/auth.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import {
@@ -11,9 +12,17 @@ import {
 import { ContributeButton } from '../../components'
 import { ProjectBalanceDisplay } from './components/ProjectBalanceDisplay'
 
-const paymentMethods = [BitcoinLightingPaymentImageUrl, VisaPaymentImageUrl, MasterCardPaymentImageUrl]
-
 export const ContributionSummary = (props: StackProps) => {
+  const { user } = useAuthContext()
+
+  const isVerified = Boolean(user?.complianceDetails?.verifiedDetails?.identity?.verified)
+  const paymentMethods = [BitcoinLightingPaymentImageUrl]
+
+  if (isVerified) {
+    paymentMethods.push(VisaPaymentImageUrl)
+    paymentMethods.push(MasterCardPaymentImageUrl)
+  }
+
   return (
     <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
       <ProjectBalanceDisplay />
