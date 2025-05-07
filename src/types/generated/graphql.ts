@@ -2775,6 +2775,12 @@ export type ProjectRewardTrendingMonthlyGetRow = {
   projectReward: ProjectReward;
 };
 
+export type ProjectRewardTrendingQuarterlyGetRow = {
+  __typename?: 'ProjectRewardTrendingQuarterlyGetRow';
+  count: Scalars['Int']['output'];
+  projectReward: ProjectReward;
+};
+
 export type ProjectRewardTrendingWeeklyGetRow = {
   __typename?: 'ProjectRewardTrendingWeeklyGetRow';
   count: Scalars['Int']['output'];
@@ -2948,6 +2954,7 @@ export type ProjectsGetWhereInput = {
   region?: InputMaybe<Scalars['String']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<ProjectStatus>;
+  statuses?: InputMaybe<Array<ProjectStatus>>;
   subCategory?: InputMaybe<ProjectSubCategory>;
   tagIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   type?: InputMaybe<ProjectType>;
@@ -3057,6 +3064,7 @@ export type Query = {
   projectRewardGet: ProjectReward;
   projectRewardsGet: Array<ProjectReward>;
   projectRewardsTrendingMonthlyGet: Array<ProjectRewardTrendingMonthlyGetRow>;
+  projectRewardsTrendingQuarterlyGet: Array<ProjectRewardTrendingQuarterlyGetRow>;
   projectRewardsTrendingWeeklyGet: Array<ProjectRewardTrendingWeeklyGetRow>;
   projectStatsGet: ProjectStats;
   projectSubscriptionPlan?: Maybe<ProjectSubscriptionPlan>;
@@ -3653,6 +3661,11 @@ export type User = {
 };
 
 
+export type UserContributionsArgs = {
+  input?: InputMaybe<UserContributionsInput>;
+};
+
+
 export type UserEntriesArgs = {
   input?: InputMaybe<UserEntriesGetInput>;
 };
@@ -3703,6 +3716,10 @@ export type UserContributionLimit = {
 export type UserContributionLimits = {
   __typename?: 'UserContributionLimits';
   monthly: UserContributionLimit;
+};
+
+export type UserContributionsInput = {
+  pagination?: InputMaybe<PaginationInput>;
 };
 
 export type UserEmailUpdateInput = {
@@ -4383,6 +4400,7 @@ export type ResolversTypes = {
   ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
   ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput;
   ProjectRewardTrendingMonthlyGetRow: ResolverTypeWrapper<ProjectRewardTrendingMonthlyGetRow>;
+  ProjectRewardTrendingQuarterlyGetRow: ResolverTypeWrapper<ProjectRewardTrendingQuarterlyGetRow>;
   ProjectRewardTrendingWeeklyGetRow: ResolverTypeWrapper<ProjectRewardTrendingWeeklyGetRow>;
   ProjectRewardsGroupedByRewardIdStats: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStats>;
   ProjectRewardsGroupedByRewardIdStatsProjectReward: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStatsProjectReward>;
@@ -4451,6 +4469,7 @@ export type ResolversTypes = {
   UserComplianceDetails: ResolverTypeWrapper<UserComplianceDetails>;
   UserContributionLimit: ResolverTypeWrapper<UserContributionLimit>;
   UserContributionLimits: ResolverTypeWrapper<UserContributionLimits>;
+  UserContributionsInput: UserContributionsInput;
   UserEmailUpdateInput: UserEmailUpdateInput;
   UserEntityType: UserEntityType;
   UserEntriesGetInput: UserEntriesGetInput;
@@ -4767,6 +4786,7 @@ export type ResolversParentTypes = {
   ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
   ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput;
   ProjectRewardTrendingMonthlyGetRow: ProjectRewardTrendingMonthlyGetRow;
+  ProjectRewardTrendingQuarterlyGetRow: ProjectRewardTrendingQuarterlyGetRow;
   ProjectRewardTrendingWeeklyGetRow: ProjectRewardTrendingWeeklyGetRow;
   ProjectRewardsGroupedByRewardIdStats: ProjectRewardsGroupedByRewardIdStats;
   ProjectRewardsGroupedByRewardIdStatsProjectReward: ProjectRewardsGroupedByRewardIdStatsProjectReward;
@@ -4821,6 +4841,7 @@ export type ResolversParentTypes = {
   UserComplianceDetails: UserComplianceDetails;
   UserContributionLimit: UserContributionLimit;
   UserContributionLimits: UserContributionLimits;
+  UserContributionsInput: UserContributionsInput;
   UserEmailUpdateInput: UserEmailUpdateInput;
   UserEntriesGetInput: UserEntriesGetInput;
   UserEntriesGetWhereInput: UserEntriesGetWhereInput;
@@ -6034,6 +6055,12 @@ export type ProjectRewardTrendingMonthlyGetRowResolvers<ContextType = any, Paren
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProjectRewardTrendingQuarterlyGetRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardTrendingQuarterlyGetRow'] = ResolversParentTypes['ProjectRewardTrendingQuarterlyGetRow']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  projectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ProjectRewardTrendingWeeklyGetRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardTrendingWeeklyGetRow'] = ResolversParentTypes['ProjectRewardTrendingWeeklyGetRow']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   projectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>;
@@ -6175,6 +6202,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectRewardGet?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<QueryProjectRewardGetArgs, 'input'>>;
   projectRewardsGet?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<QueryProjectRewardsGetArgs, 'input'>>;
   projectRewardsTrendingMonthlyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingMonthlyGetRow']>, ParentType, ContextType>;
+  projectRewardsTrendingQuarterlyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingQuarterlyGetRow']>, ParentType, ContextType>;
   projectRewardsTrendingWeeklyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingWeeklyGetRow']>, ParentType, ContextType>;
   projectStatsGet?: Resolver<ResolversTypes['ProjectStats'], ParentType, ContextType, RequireFields<QueryProjectStatsGetArgs, 'input'>>;
   projectSubscriptionPlan?: Resolver<Maybe<ResolversTypes['ProjectSubscriptionPlan']>, ParentType, ContextType, RequireFields<QueryProjectSubscriptionPlanArgs, 'id'>>;
@@ -6262,7 +6290,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   badges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType>;
   bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   complianceDetails?: Resolver<ResolversTypes['UserComplianceDetails'], ParentType, ContextType>;
-  contributions?: Resolver<Array<ResolversTypes['Contribution']>, ParentType, ContextType>;
+  contributions?: Resolver<Array<ResolversTypes['Contribution']>, ParentType, ContextType, Partial<UserContributionsArgs>>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   emailVerifiedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   entityType?: Resolver<Maybe<ResolversTypes['UserEntityType']>, ParentType, ContextType>;
@@ -6576,6 +6604,7 @@ export type Resolvers<ContextType = any> = {
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>;
   ProjectReward?: ProjectRewardResolvers<ContextType>;
   ProjectRewardTrendingMonthlyGetRow?: ProjectRewardTrendingMonthlyGetRowResolvers<ContextType>;
+  ProjectRewardTrendingQuarterlyGetRow?: ProjectRewardTrendingQuarterlyGetRowResolvers<ContextType>;
   ProjectRewardTrendingWeeklyGetRow?: ProjectRewardTrendingWeeklyGetRowResolvers<ContextType>;
   ProjectRewardsGroupedByRewardIdStats?: ProjectRewardsGroupedByRewardIdStatsResolvers<ContextType>;
   ProjectRewardsGroupedByRewardIdStatsProjectReward?: ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<ContextType>;
@@ -6822,9 +6851,9 @@ export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 
 
 export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
-export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, followersCount?: number | null, preLaunchedAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
+export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, balanceUsdCent: number, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
-export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: string, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
+export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: string, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, balanceUsdCent: number, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
 
 export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
@@ -8644,8 +8673,9 @@ export const ProjectForLaunchpadPageFragmentDoc = gql`
   shortDescription
   title
   status
-  followersCount
   preLaunchedAt
+  preLaunchExpiresAt
+  balanceUsdCent
   category
   subCategory
   owners {
@@ -8674,6 +8704,7 @@ export const ProjectForMyProjectsFragmentDoc = gql`
   status
   rewardsCount
   followersCount
+  balanceUsdCent
   wallets {
     id
     name

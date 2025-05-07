@@ -63,9 +63,13 @@ export const completedGoalsAtom = atom<ProjectGoalsFragment[]>([])
 /** Initial goals  load, set to false by default */
 export const initialGoalsLoadAtom = atom(false)
 
+/** Goals loading, set to false by default */
+export const goalsLoadingAtom = atom(true)
+
 /** Reset all real-atoms in this file to it's initial State */
 export const goalsAtomReset = atom(null, (get, set) => {
   set(inProgressGoalsAtom, [])
   set(completedGoalsAtom, [])
   set(initialGoalsLoadAtom, false)
+  set(goalsLoadingAtom, true)
 })

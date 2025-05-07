@@ -1,6 +1,6 @@
 import { Box, VStack } from '@chakra-ui/react'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { useMemo } from 'react'
+import { useEffect } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -19,7 +19,7 @@ import { ProjectCreationWalletConnectionForm } from '..'
 import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
 import { useLocationMandatoryRedirect } from '../hooks/useLocationMandatoryRedirect'
-import { ConnectionOption, useWalletForm } from '../hooks/useWalletForm'
+import { useWalletForm } from '../hooks/useWalletForm'
 import {
   fiatContributionAtom,
   goToIdentityVerificationAtom,
@@ -27,7 +27,6 @@ import {
   whereToGoNextAtom,
 } from '../states/nodeStatusAtom.ts'
 import { goToEmailVerificationAtom } from '../states/nodeStatusAtom.ts'
-import { ProjectCreateCompletionPage } from './ProjectCreateCompletionPage'
 import { ProjectCreationEmailVerificationPage } from './ProjectCreationEmailVerificationPage.tsx'
 import { ProjectCreationIdentityVerificationPage } from './ProjectCreationIdentityVerificationPage.tsx'
 
@@ -53,6 +52,12 @@ export const ProjectCreationWalletConnectionPage = () => {
   const goToIdentityVerification = useAtomValue(goToIdentityVerificationAtom)
 
   const setWhereToGoNext = useSetAtom(whereToGoNextAtom)
+
+  useEffect(() => {
+    if (isReadyForLaunch) {
+      navigate(getPath('launchProjectStrategy', project?.id))
+    }
+  }, [isReadyForLaunch, project?.id, navigate])
 
   const handleNext = (createWalletInput: CreateWalletInput | null) => {
     if (wallet?.id) {
@@ -110,30 +115,6 @@ export const ProjectCreationWalletConnectionPage = () => {
     }
 
     navigate(-1)
-  }
-
-  const isSubmitEnabled = useMemo(() => {
-    if (createWalletInput === null) {
-      return false
-    }
-
-    return (
-      connectionOption === ConnectionOption.PERSONAL_NODE ||
-      (connectionOption === ConnectionOption.LIGHTNING_ADDRESS &&
-        Boolean(lightningAddress.value) &&
-        !isLightningAddressInValid)
-    )
-  }, [connectionOption, lightningAddress.value, createWalletInput, isLightningAddressInValid])
-
-  if (isReadyForLaunch) {
-    return (
-      <ProjectCreateCompletionPage
-        project={project}
-        createWalletInput={createWalletInput}
-        isSubmitEnabled={isSubmitEnabled}
-        setReadyToLaunch={setReadyForLaunch}
-      />
-    )
   }
 
   if (goToEmailVerification) {

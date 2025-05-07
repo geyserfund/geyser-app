@@ -5,23 +5,25 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { centsToDollars } from '@/utils/index.ts'
 
-import { FOLLOWERS_NEEDED, PrelaunchFollowButton } from '../components/PrelaunchFollowButton.tsx'
+import { PrelaunchFollowButton, USD_AMOUNT_TO_GO_LIVE } from '../components/PrelaunchFollowButton.tsx'
 
 export const FollowersSummary = (props: StackProps) => {
   const { project } = useProjectAtom()
-  const { followersCount } = project
-  const followersNeeded = FOLLOWERS_NEEDED - (followersCount ?? 0)
-  const enoughFollowers = followersNeeded <= 0
+
+  const usdAmount = Math.round(centsToDollars(project.balanceUsdCent))
+
+  const amountToGoLive = USD_AMOUNT_TO_GO_LIVE - usdAmount
 
   return (
     <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
       <HStack width="100%" spacing={4}>
         <CircularProgress
           capIsRound
-          value={followersCount ?? 0}
+          value={usdAmount ?? 0}
           min={0}
-          max={21}
+          max={210}
           size="96px"
           thickness="10px"
           color={'primary1.9'}
@@ -29,23 +31,15 @@ export const FollowersSummary = (props: StackProps) => {
         />
         <VStack flex="1" spacing={0} width="100%" px={2} alignItems={'start'}>
           <Body size="2xl" bold dark>
-            {followersCount ?? 0}{' '}
-            <Body as="span" size="md" light medium>
-              {t('followers')}
-            </Body>
+            {'$'}
+            {usdAmount ?? 0}
           </Body>
 
           <Body size="2xl" dark bold display="inline">
-            {enoughFollowers ? (
-              t(`Ready to launch!`)
-            ) : (
-              <>
-                {`${followersNeeded}`}{' '}
-                <Body as="span" size="md" light>
-                  {t(`more to launch`)}
-                </Body>
-              </>
-            )}
+            {`$${amountToGoLive}`}{' '}
+            <Body as="span" size="md" light>
+              {t(`more to go live`)}
+            </Body>
           </Body>
         </VStack>
       </HStack>

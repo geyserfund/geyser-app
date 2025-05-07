@@ -1,35 +1,36 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { isDraft, isPrelaunch } from '@/utils/index.ts'
 
-import { FOLLOWERS_NEEDED } from '../../projectView/views/body/components/PrelaunchFollowButton.tsx'
-
 export const useCheckPrelaunchSteps = () => {
   const { project, loading } = useProjectAtom()
+  const { wallet, loading: walletLoading } = useWalletAtom()
 
   const navigate = useNavigate()
 
   const isProjectDraft = isDraft(project?.status)
   const isProjectPrelaunch = isPrelaunch(project?.status)
-  const hasEnoughFollowers = project?.followersCount && project?.followersCount >= FOLLOWERS_NEEDED
-
-  const hasPaidToLaunch = project?.paidLaunch
 
   useEffect(() => {
-    if (hasPaidToLaunch || (isProjectPrelaunch && hasEnoughFollowers) || loading) {
+    if (loading || walletLoading) {
       return
     }
 
-    if (isProjectDraft) {
-      navigate(getPath('launchProjectStrategy', project.id))
+    if (!isProjectDraft) {
+      if (isProjectPrelaunch) {
+        navigate(getPath('projectPreLaunch', project?.name), { replace: true })
+      } else {
+        navigate(getPath('project', project?.name), { replace: true })
+      }
+
       return
     }
 
-    if (isProjectPrelaunch) {
-      navigate(getPath('projectPreLaunch', project.id))
+    if (!wallet?.id) {
+      navigate(getPath('launchProjectWallet', project?.id), { replace: true })
     }
-  }, [isProjectPrelaunch, isProjectDraft, hasEnoughFollowers, hasPaidToLaunch, navigate, project?.id, loading])
+  }, [loading, project, wallet, navigate, isProjectDraft, isProjectPrelaunch, walletLoading])
 }

@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { RightSideStickyLayout } from '@/modules/project/components/RightSideStickyLayout'
+import { ProjectPreLaunchNav } from '@/modules/project/navigation/components/ProjectPreLaunchNav.tsx'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 
 import { dimensions } from '../../../../../../shared/constants'
@@ -22,8 +23,6 @@ import {
   Story,
 } from './sections'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
-import { FollowBoard } from './sections/followboard/FollowBoard.tsx'
-import { FollowersSummary } from './sections/FollowersSummary.tsx'
 import { PreLaunchProjectNotice } from './sections/PreLaunchProjectNotice.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 
@@ -33,11 +32,8 @@ export const ProjectBody = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const isPrelaunch = project?.status === ProjectStatus.PreLaunch
-
   useEffect(() => {
     if (loading) return
-    console.log('checking whats with the paths', location.pathname)
     if (project?.status === ProjectStatus.Draft && !location.pathname.includes('/draft')) {
       navigate(location.pathname + '/draft', { replace: true })
     } else if (project?.status === ProjectStatus.PreLaunch && !location.pathname.includes('/prelaunch')) {
@@ -59,6 +55,7 @@ export const ProjectBody = () => {
         spacing={6}
         paddingBottom={{ base: 24, lg: 10 }}
       >
+        <ProjectPreLaunchNav />
         <FinalizeProjectNotice />
         <PreLaunchProjectNotice />
         <CreatorVerificationNotice />
@@ -79,16 +76,10 @@ export const ProjectBody = () => {
         overflow="auto"
         css={{ '&::-webkit-scrollbar': { display: 'none' }, msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
-        {isPrelaunch ? <FollowersSummary /> : <ContributionSummary />}
-        {isPrelaunch ? <FollowBoard /> : <LeaderboardSummary />}
+        <ContributionSummary />
+        <LeaderboardSummary />
       </RightSideStickyLayout>
 
-      {/* <Story />
-      <Rewards /> */}
-      {/* {projectDetails.entriesLength ? <Entries /> : null}
-      {goals.hasGoals ? <Goals /> : null} */}
-      {/* <CreatorTools />
-      <Details /> */}
       <BodySectionPageBottomBar />
     </Stack>
   )

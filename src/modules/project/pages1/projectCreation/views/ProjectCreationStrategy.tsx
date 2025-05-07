@@ -1,27 +1,31 @@
-import { Button, Collapse, HStack, Image, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, Collapse, HStack, Image, ListItem, UnorderedList, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useSetAtom } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import TitleWithProgressBar from '@/components/molecules/TitleWithProgressBar.tsx'
+import { useAuthContext } from '@/context/auth.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
 import { dimensions, LaunchNowIllustrationUrl, LaunchPadIllustrationUrl } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { useProjectPreLaunchMutation } from '@/types/index.ts'
+import { useProjectPreLaunchMutation } from '@/types/generated/graphql.ts'
 import { useMobileMode, useNotification } from '@/utils/index.ts'
 
 import { FormContinueButton } from '../components/FormContinueButton.tsx'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
+import { useCheckPrelaunchSteps } from '../hooks/useCheckPrelaunchSteps.tsx'
 import { useLocationMandatoryRedirect } from '../hooks/useLocationMandatoryRedirect.tsx'
+import { isReadyForLaunchAtom } from '../states/nodeStatusAtom.ts'
+import { ProjectCreateCompletionPage } from './ProjectCreateCompletionPage.tsx'
 
-enum ProjectCreationStrategy {
+export enum ProjectCreationStrategy {
   GEYSER_LAUNCHPAD = 'geyser_launchpad',
   LAUNCH_NOW = 'launch_now',
-  SAVE_AS_DRAFT = 'save_as_draft',
 }
 
 export const PROJECT_LAUNCH_PAYMENT_PROJECT_NAME = 'launch'
@@ -31,18 +35,22 @@ export const ProjectCreateStrategy = () => {
   const navigate = useNavigate()
   const toast = useNotification()
   useLocationMandatoryRedirect()
+  useCheckPrelaunchSteps()
+
+  const { queryCurrentUser } = useAuthContext()
 
   const { project } = useProjectAtom()
 
-  const [strategy, setStrategy] = useState<ProjectCreationStrategy>(ProjectCreationStrategy.GEYSER_LAUNCHPAD)
+  const setReadyForLaunch = useSetAtom(isReadyForLaunchAtom)
 
-  const [projectPreLaunch, { loading: isProjectPreLaunchLoading }] = useProjectPreLaunchMutation({
+  const [projectPreLaunch, { loading: projectPreLaunchLoading }] = useProjectPreLaunchMutation({
     variables: {
       input: {
         projectId: project?.id,
       },
     },
     onCompleted() {
+      queryCurrentUser()
       navigate(getPath('projectLaunchPreLaunch', project?.name))
     },
     onError(error) {
@@ -53,12 +61,15 @@ export const ProjectCreateStrategy = () => {
     },
   })
 
-  const handleNext = () => {
-    if (strategy === ProjectCreationStrategy.SAVE_AS_DRAFT) {
-      navigate(`${getPath('projectLaunchDraft', project.name)}`)
-      return
-    }
+  const [strategy, setStrategy] = useState<ProjectCreationStrategy>(ProjectCreationStrategy.GEYSER_LAUNCHPAD)
+  const [strategySelected, setStrategySelected] = useState<boolean>(false)
 
+  const handleBack = () => {
+    setReadyForLaunch(false)
+    navigate(-1)
+  }
+
+  const handleNext = () => {
     if (strategy === ProjectCreationStrategy.GEYSER_LAUNCHPAD) {
       projectPreLaunch()
       return
@@ -71,79 +82,67 @@ export const ProjectCreateStrategy = () => {
     })
   }
 
-  const handleBack = () => {
-    if (!project) {
-      return navigate(-1)
-    }
-
-    navigate(getPath('launchProjectRewards', project?.id))
-  }
-
   const isLaunchPad = strategy === ProjectCreationStrategy.GEYSER_LAUNCHPAD
   const isLaunchNow = strategy === ProjectCreationStrategy.LAUNCH_NOW
-  const isSaveAsDraft = strategy === ProjectCreationStrategy.SAVE_AS_DRAFT
+
+  if (project.paidLaunch || strategySelected) {
+    return <ProjectCreateCompletionPage strategy={strategy} setStrategySelected={setStrategySelected} />
+  }
 
   return (
     <ProjectCreateLayout
       title={
-        <TitleWithProgressBar title={t('Launch strategy')} subtitle={t('Choose how to launch')} index={5} length={5} />
+        <TitleWithProgressBar
+          title={t('Launch your project')}
+          subtitle={t('Choose your launch strategy')}
+          hideSteps
+          index={5}
+          length={5}
+        />
       }
-      continueButton={<FormContinueButton flexGrow={1} onClick={handleNext} isLoading={isProjectPreLaunchLoading} />}
+      continueButton={<FormContinueButton flexGrow={1} onClick={handleNext} isLoading={projectPreLaunchLoading} />}
       onBackClick={handleBack}
       maxW={dimensions.maxWidth}
-      height="100%"
     >
-      <VStack w="full" spacing={{ base: 4, lg: 6 }}>
-        <HStack w="full" flexDirection={{ base: 'column', lg: 'row' }} spacing={{ base: 4, lg: 6 }}>
-          <ProjectCreateStrategyCard
-            isSelected={isLaunchPad}
-            onClick={() => setStrategy(ProjectCreationStrategy.GEYSER_LAUNCHPAD)}
-            image={LaunchPadIllustrationUrl}
-            title={t('Geyser Launchpad')}
-            subtitle={t('Test your idea and launch for free by gaining 21 followers within 30 days')}
-            why={t(
-              "Launchpad is your sandbox to explore your idea publicly before going live. Get early feedback, rally support, and validate your project's potential. It's your chance to build early momentum and launch with a boom. 🚀",
-            )}
-            howItWorks={t(
-              "You'll need to gather 21 followers within 30 days, the first is always yourself, so you only need just 20 more. Once you reach the goal, you can officially launch and start receiving contributions from around the world.",
-            )}
-          />
-          <ProjectCreateStrategyCard
-            isSelected={isLaunchNow}
-            onClick={() => setStrategy(ProjectCreationStrategy.LAUNCH_NOW)}
-            image={LaunchNowIllustrationUrl}
-            title={t('Launch Now')}
-            subtitle={t('Pay $21 to go live and start receiving contributions right away')}
-            why={t(
-              "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you can begin receiving support from contributors immediately.",
-            )}
-            howItWorks={t(
-              'Pay $21 in Bitcoin or Fiat to launch your project. It helps us keep Geyser sustainable. Additionally, project gets mentioned in our newsletter with over 6k subscribers to help you get started.',
-            )}
-          />
-        </HStack>
-        <CardLayout
-          w="full"
-          hover
-          spacing={0}
-          padding={4}
-          borderColor={isSaveAsDraft ? 'primary1.9' : 'neutral1.6'}
-          outline={isSaveAsDraft ? '2px solid' : 'none'}
-          outlineColor={isSaveAsDraft ? 'primary1.9' : 'transparent'}
-          onClick={() => setStrategy(ProjectCreationStrategy.SAVE_AS_DRAFT)}
-          _hover={{
-            borderColor: isSaveAsDraft ? 'primary1.9' : 'neutral1.9',
-            cursor: 'pointer',
-          }}
-        >
-          <Body size="xl" bold>
-            {t('Save Project as Draft')}
-          </Body>
-          <Body size="md" light>
-            {t('Decide later how to launch, and keep your project in draft')}
-          </Body>
-        </CardLayout>
-      </VStack>
+      <Body size="lg" bold>
+        {t(
+          'To launch on Geyser, you must gather enough support within the first 30 days, or your project will be closed down',
+        )}
+      </Body>
+      <HStack w="full" alignItems="stretch" flexDirection={{ base: 'column', lg: 'row' }} spacing={{ base: 4, lg: 6 }}>
+        <ProjectCreateStrategyCard
+          flex={6}
+          isSelected={isLaunchPad}
+          onClick={() => setStrategy(ProjectCreationStrategy.GEYSER_LAUNCHPAD)}
+          image={LaunchPadIllustrationUrl}
+          title={t('Geyser Launch Challenge')}
+          subtitle={t('Raise $210 in 30 days with your community, and breakthrough')}
+          body={t(
+            'You must raise at least $210 in your first 30 days to be able to continue raising funds on Geyser. It’s your chance to build early momentum and launch with a boom. 🚀',
+          )}
+          points={[
+            t('Seen in Launchpad & discovery emails'),
+            t('Build momentum quickly with early supporters'),
+
+            `⚠️ ${t('If you don’t reach $210 in your first month, your project will close (you can start over)')}`,
+          ]}
+        />
+        <ProjectCreateStrategyCard
+          flex={5}
+          isSelected={isLaunchNow}
+          onClick={() => setStrategy(ProjectCreationStrategy.LAUNCH_NOW)}
+          image={LaunchNowIllustrationUrl}
+          title={t('Go Live Now')}
+          subtitle={t('Skip the challenge. Launch instantly for $21.')}
+          body={t(
+            "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you can begin receiving support from contributors immediately.",
+          )}
+          points={[
+            t('Seen in ‘Recently launched’ in Discovery page'),
+            t('No pressure to raise a lot right away, go by your plan.'),
+          ]}
+        />
+      </HStack>
     </ProjectCreateLayout>
   )
 }
@@ -152,8 +151,8 @@ type ProjectCreateStrategyCardProps = {
   image: string
   title: string
   subtitle: string
-  why: string
-  howItWorks: string
+  body: string
+  points: string[]
   isSelected?: boolean
 } & CardLayoutProps
 
@@ -161,8 +160,8 @@ export const ProjectCreateStrategyCard = ({
   image,
   title,
   subtitle,
-  why,
-  howItWorks,
+  body,
+  points,
   isSelected,
   ...props
 }: ProjectCreateStrategyCardProps) => {
@@ -199,22 +198,18 @@ export const ProjectCreateStrategyCard = ({
       </Feedback>
       <Collapse in={isMobile ? isOpen : true} animateOpacity>
         <VStack w="full" alignItems="flex-start" spacing={4}>
-          <VStack w="full" alignItems="flex-start" spacing={0}>
-            <Body size="md" bold>
-              {t('Why?')}
-            </Body>
-            <Body size="sm" light>
-              {why}
-            </Body>
-          </VStack>
-          <VStack w="full" alignItems="flex-start" spacing={0}>
-            <Body size="md" bold>
-              {t('How it works?')}
-            </Body>
-            <Body size="sm" light>
-              {howItWorks}
-            </Body>
-          </VStack>
+          <Body size="sm" light>
+            {body}
+          </Body>
+          <UnorderedList w="full" alignItems="flex-start" spacing={0}>
+            {points.map((point) => (
+              <ListItem key={point}>
+                <Body size="sm" light>
+                  {point}
+                </Body>
+              </ListItem>
+            ))}
+          </UnorderedList>
         </VStack>
       </Collapse>
       {isMobile && (

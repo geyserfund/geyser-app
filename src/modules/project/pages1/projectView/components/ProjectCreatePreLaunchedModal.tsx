@@ -5,6 +5,7 @@ import { PiLink, PiShare } from 'react-icons/pi'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { generateTwitterShareUrl } from '@/modules/project/utils/twitterShareTemplate.ts'
 import { getPath } from '@/shared/constants/index.ts'
+import { centsToDollars } from '@/utils/index.ts'
 
 import { Modal } from '../../../../../shared/components/layouts/Modal'
 import { Body } from '../../../../../shared/components/typography'
@@ -20,13 +21,24 @@ export const ProjectCreatePreLaunchedModal = (props: Omit<ModalProps, 'children'
   const { followersCount } = project
 
   return (
-    <Modal size="md" title={t("You're live on Geyser Launchpad!")} {...props}>
+    <Modal
+      size="md"
+      title={t("You're live on Geyser Launchpad!")}
+      subtitle={t('Now lets build the momentum.')}
+      subtitleProps={{ medium: true }}
+      {...props}
+    >
       <VStack w="100%" spacing={6} pt={2}>
         <VStack w="100%">
           <HStack w="full" justifyContent="space-between">
             <Body>
-              <Trans i18nKey={'{{countDown}} out of 21 followers'} values={{ countDown: followersCount ?? 0 }}>
-                {'{{countDown}} out of 21 followers'}
+              <Trans
+                i18nKey={'$ {{countDown}} out of $210'}
+                values={{
+                  countDown: project?.balanceUsdCent ? Math.round(centsToDollars(project?.balanceUsdCent)) : 0,
+                }}
+              >
+                {'$ {{countDown}} out of $210'}
               </Trans>
             </Body>
             <Body>⛳️ {t('Launch')}</Body>
@@ -43,19 +55,29 @@ export const ProjectCreatePreLaunchedModal = (props: Omit<ModalProps, 'children'
           />
         </VStack>
         <Body medium dark>
-          {t('You have 30 days to reach 21 followers to officially launch and start raising funds.')}
+          {t('You have 30 days to raise $210 to officially launch and keep the project alive.')}
         </Body>
 
         <Body light>
           {t(
-            'Your project is now live on the Geyser Launchpad, where contributors discover and support promising new ideas.',
-          )}
-        </Body>
-        <Body light>
+            'Your project is now featured on the Geyser Launchpad, where supporters discover bold, early-stage ideas.',
+          )}{' '}
+          <br />
           {t(
-            'Spread the word — share your project on social media, send it to friends and family, or get it featured on the Launchpad to boost your visibility.',
+            'This is your moment to build traction, rally your backers, and prove your project has the energy to erupt.',
           )}
+          {' 🚀'}
         </Body>
+        <VStack w="full" spacing={0} alignItems="flex-start">
+          <Body medium dark>
+            {t("What's next?")}
+          </Body>
+          <Body light>
+            {t(
+              'Share your project far and wide — post it on social media, text it to friends, or pitch it in your community. Also, check out our Guide on how to market your project.  The more attention you spark now, the faster you’ll reach liftoff.',
+            )}
+          </Body>
+        </VStack>
 
         <HStack w="full" gap={2}>
           <Button

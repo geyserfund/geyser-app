@@ -49,6 +49,7 @@ export const projectDashboardRoutes = [
 export const projectBaseRoutes = [
   getPath('project', PathName.projectName),
   getPath('projectDraft', PathName.projectName),
+  getPath('projectPreLaunch', PathName.projectName),
   getPath('projectPosts', PathName.projectName),
   getPath('projectGoals', PathName.projectName),
   getPath('projectRewards', PathName.projectName),
@@ -120,8 +121,6 @@ export const projectFundingRoutes = [
   ...projectFundingPaymentOnchainRoutes,
   ...projectFundingPaymentFiatSwapRoutes,
 ]
-
-export const projectPreLaunchRoutes = [getPath('projectPreLaunch', PathName.projectName)]
 
 export const projectRoutesNotAllowedForPrelaunchProjects = [
   ...projectBaseRoutes,
