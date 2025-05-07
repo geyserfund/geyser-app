@@ -24,6 +24,7 @@ import { toInt, useMobileMode } from '@/utils'
 
 import { PostsUpdates } from '../../components/PostsUpdates'
 import { useRewardBuy } from '../../hooks'
+import { FollowButton } from '../body/components/FollowButton.tsx'
 import { ProjectRewardShippingEstimate, RewardEditMenu } from './components'
 import { RewardShare } from './components/RewardShare'
 
@@ -115,7 +116,7 @@ export const RewardView = () => {
           >
             {t('All products')}
           </Button>
-          <RewardShare reward={reward} />
+          {!isProjectOwner ? <FollowButton size="lg" withLabel project={project} /> : <RewardShare reward={reward} />}
         </TopNavContainerBar>
 
         <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }}>

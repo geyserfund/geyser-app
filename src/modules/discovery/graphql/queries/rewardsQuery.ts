@@ -16,8 +16,8 @@ export const QUERY_TRENDING_REWARDS_FOR_LANDING_PAGE = gql`
 
 export const QUERY_TRENDING_REWARDS_FOR_PRODUCTS_PAGE = gql`
   ${FRAGMENT_REWARD_FOR_PRODUCTS_PAGE}
-  query ProjectRewardsTrendingMonthlyGet {
-    projectRewardsTrendingMonthlyGet {
+  query ProjectRewardsTrendingQuarterlyGet {
+    projectRewardsTrendingQuarterlyGet {
       count
       projectReward {
         ...RewardForProductsPage

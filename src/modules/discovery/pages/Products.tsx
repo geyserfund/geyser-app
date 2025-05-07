@@ -8,7 +8,7 @@ import { ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCate
 import {
   ProjectSubCategory,
   RewardForProductsPageFragment,
-  useProjectRewardsTrendingMonthlyGetQuery,
+  useProjectRewardsTrendingQuarterlyGetQuery,
 } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
@@ -19,14 +19,14 @@ import {
 
 export const Products = () => {
   const toast = useNotification()
-  const { data, loading } = useProjectRewardsTrendingMonthlyGetQuery({
+  const { data, loading } = useProjectRewardsTrendingQuarterlyGetQuery({
     fetchPolicy: 'network-only',
     onError(error) {
       toast.error({ title: t('Failed to fetch recent products') })
     },
   })
 
-  const rewards = data?.projectRewardsTrendingMonthlyGet || []
+  const rewards = data?.projectRewardsTrendingQuarterlyGet || []
 
   const rewardsBySubCategory = rewards.reduce((acc, reward) => {
     const { subCategory } = reward.projectReward.project

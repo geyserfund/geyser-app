@@ -25,6 +25,7 @@ import { toInt, useNotification } from '@/utils'
 
 import { MarkdownField } from '../../../../../../../../shared/markdown/MarkdownField'
 import { sourceResourceAtom } from '../../../../state/sourceActivityAtom.ts'
+import { FollowButton } from '../../../body/components/FollowButton.tsx'
 import { PostEditMenu, PostShare } from '../../components'
 import { postTypeOptions } from '../../utils/postTypeLabel'
 import { LinkedRewardsAndGoals } from './LinkedRewardsAndGoals'
@@ -109,7 +110,7 @@ export const PostView = () => {
             {t('All posts')}
           </Button>
           <HStack>
-            <PostShare post={post} />
+            {!isProjectOwner ? <FollowButton size="lg" withLabel project={project} /> : <PostShare post={post} />}
 
             {isProjectOwner ? (
               <PostEditMenu

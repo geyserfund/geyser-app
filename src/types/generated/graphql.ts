@@ -6958,10 +6958,10 @@ export type ProjectRewardsTrendingWeeklyGetQuery = { __typename?: 'Query', proje
       & RewardForLandingPageFragment
     ) }> };
 
-export type ProjectRewardsTrendingMonthlyGetQueryVariables = Exact<{ [key: string]: never; }>;
+export type ProjectRewardsTrendingQuarterlyGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProjectRewardsTrendingMonthlyGetQuery = { __typename?: 'Query', projectRewardsTrendingMonthlyGet: Array<{ __typename?: 'ProjectRewardTrendingMonthlyGetRow', count: number, projectReward: (
+export type ProjectRewardsTrendingQuarterlyGetQuery = { __typename?: 'Query', projectRewardsTrendingQuarterlyGet: Array<{ __typename?: 'ProjectRewardTrendingQuarterlyGetRow', count: number, projectReward: (
       { __typename?: 'ProjectReward' }
       & RewardForProductsPageFragment
     ) }> };
@@ -11271,9 +11271,9 @@ export type ProjectRewardsTrendingWeeklyGetQueryHookResult = ReturnType<typeof u
 export type ProjectRewardsTrendingWeeklyGetLazyQueryHookResult = ReturnType<typeof useProjectRewardsTrendingWeeklyGetLazyQuery>;
 export type ProjectRewardsTrendingWeeklyGetSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsTrendingWeeklyGetSuspenseQuery>;
 export type ProjectRewardsTrendingWeeklyGetQueryResult = Apollo.QueryResult<ProjectRewardsTrendingWeeklyGetQuery, ProjectRewardsTrendingWeeklyGetQueryVariables>;
-export const ProjectRewardsTrendingMonthlyGetDocument = gql`
-    query ProjectRewardsTrendingMonthlyGet {
-  projectRewardsTrendingMonthlyGet {
+export const ProjectRewardsTrendingQuarterlyGetDocument = gql`
+    query ProjectRewardsTrendingQuarterlyGet {
+  projectRewardsTrendingQuarterlyGet {
     count
     projectReward {
       ...RewardForProductsPage
@@ -11283,36 +11283,36 @@ export const ProjectRewardsTrendingMonthlyGetDocument = gql`
     ${RewardForProductsPageFragmentDoc}`;
 
 /**
- * __useProjectRewardsTrendingMonthlyGetQuery__
+ * __useProjectRewardsTrendingQuarterlyGetQuery__
  *
- * To run a query within a React component, call `useProjectRewardsTrendingMonthlyGetQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectRewardsTrendingMonthlyGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProjectRewardsTrendingQuarterlyGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardsTrendingQuarterlyGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProjectRewardsTrendingMonthlyGetQuery({
+ * const { data, loading, error } = useProjectRewardsTrendingQuarterlyGetQuery({
  *   variables: {
  *   },
  * });
  */
-export function useProjectRewardsTrendingMonthlyGetQuery(baseOptions?: Apollo.QueryHookOptions<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>) {
+export function useProjectRewardsTrendingQuarterlyGetQuery(baseOptions?: Apollo.QueryHookOptions<ProjectRewardsTrendingQuarterlyGetQuery, ProjectRewardsTrendingQuarterlyGetQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>(ProjectRewardsTrendingMonthlyGetDocument, options);
+        return Apollo.useQuery<ProjectRewardsTrendingQuarterlyGetQuery, ProjectRewardsTrendingQuarterlyGetQueryVariables>(ProjectRewardsTrendingQuarterlyGetDocument, options);
       }
-export function useProjectRewardsTrendingMonthlyGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>) {
+export function useProjectRewardsTrendingQuarterlyGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRewardsTrendingQuarterlyGetQuery, ProjectRewardsTrendingQuarterlyGetQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>(ProjectRewardsTrendingMonthlyGetDocument, options);
+          return Apollo.useLazyQuery<ProjectRewardsTrendingQuarterlyGetQuery, ProjectRewardsTrendingQuarterlyGetQueryVariables>(ProjectRewardsTrendingQuarterlyGetDocument, options);
         }
-export function useProjectRewardsTrendingMonthlyGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>) {
+export function useProjectRewardsTrendingQuarterlyGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRewardsTrendingQuarterlyGetQuery, ProjectRewardsTrendingQuarterlyGetQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>(ProjectRewardsTrendingMonthlyGetDocument, options);
+          return Apollo.useSuspenseQuery<ProjectRewardsTrendingQuarterlyGetQuery, ProjectRewardsTrendingQuarterlyGetQueryVariables>(ProjectRewardsTrendingQuarterlyGetDocument, options);
         }
-export type ProjectRewardsTrendingMonthlyGetQueryHookResult = ReturnType<typeof useProjectRewardsTrendingMonthlyGetQuery>;
-export type ProjectRewardsTrendingMonthlyGetLazyQueryHookResult = ReturnType<typeof useProjectRewardsTrendingMonthlyGetLazyQuery>;
-export type ProjectRewardsTrendingMonthlyGetSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsTrendingMonthlyGetSuspenseQuery>;
-export type ProjectRewardsTrendingMonthlyGetQueryResult = Apollo.QueryResult<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>;
+export type ProjectRewardsTrendingQuarterlyGetQueryHookResult = ReturnType<typeof useProjectRewardsTrendingQuarterlyGetQuery>;
+export type ProjectRewardsTrendingQuarterlyGetLazyQueryHookResult = ReturnType<typeof useProjectRewardsTrendingQuarterlyGetLazyQuery>;
+export type ProjectRewardsTrendingQuarterlyGetSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsTrendingQuarterlyGetSuspenseQuery>;
+export type ProjectRewardsTrendingQuarterlyGetQueryResult = Apollo.QueryResult<ProjectRewardsTrendingQuarterlyGetQuery, ProjectRewardsTrendingQuarterlyGetQueryVariables>;
 export const TagsGetDocument = gql`
     query TagsGet {
   tagsGet {
