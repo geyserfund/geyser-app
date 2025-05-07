@@ -14,13 +14,11 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { QRCode } from 'react-qrcode-logo'
 import { RejectionError, WebLNProvider } from 'webln'
-
-import { defaultUser } from '@/context/auth.tsx'
 
 import { LogoDarkGreenImage } from '../../assets'
 import { BoltSvgIcon } from '../../components/icons'
@@ -29,7 +27,6 @@ import Loader from '../../components/ui/Loader'
 import { getAuthEndPoint } from '../../config/domain'
 import { useAuthContext } from '../../context'
 import { lightModeColors } from '../../shared/styles'
-import { User } from '../../types'
 import { copyTextToClipboard, useMobileMode, useNotification } from '../../utils'
 import { loginMethodAtom } from './state'
 import { ConnectWithButtonProps, ExternalAccountType } from './type'
@@ -81,8 +78,6 @@ interface ConnectWithLightningModalProps {
 export const ConnectWithLightning = ({ onClose, isIconOnly, ...rest }: Omit<ConnectWithButtonProps, 'accountType'>) => {
   const { isOpen: isModalOpen, onClose: onModalClose, onOpen: onModalOpen } = useDisclosure()
 
-  const { t } = useTranslation()
-
   const handleClose = () => {
     if (onClose) {
       onClose()
@@ -121,10 +116,9 @@ export const ConnectWithLightning = ({ onClose, isIconOnly, ...rest }: Omit<Conn
 }
 
 export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightningModalProps) => {
-  const { t } = useTranslation()
   const isMobile = useMobileMode()
   const { toast } = useNotification()
-  const { login } = useAuthContext()
+  const { queryCurrentUser } = useAuthContext()
 
   const authServiceEndPoint = getAuthEndPoint()
   const setLoginMethod = useSetAtom(loginMethodAtom)
@@ -219,12 +213,11 @@ export const ConnectWithLightningModal = ({ isOpen, onClose }: ConnectWithLightn
             throw new Error(response.reason)
           }
 
-          const { user: userData }: { user: { user: User } } = response
-
-          if (userData) {
-            login({ ...defaultUser, ...userData.user })
+          if (response.status === 'ok') {
+            queryCurrentUser()
             setLoginMethod(ExternalAccountType.lightning)
             onClose()
+            clearInterval(id)
           }
         })
         .catch((err) => {
