@@ -61,6 +61,7 @@ export const useProjectWalletAPI = (load?: boolean) => {
   const [createWallet, createWalletOptions] = useCustomMutation(useCreateWalletMutation, {
     onCompleted(data) {
       if (data.walletCreate) {
+        setWallet(data.walletCreate)
         setWalletConnectionDetails(data.walletCreate)
       }
     },

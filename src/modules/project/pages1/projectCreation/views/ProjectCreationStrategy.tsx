@@ -6,15 +6,13 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import TitleWithProgressBar from '@/components/molecules/TitleWithProgressBar.tsx'
-import { useAuthContext } from '@/context/auth.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
 import { dimensions, LaunchNowIllustrationUrl, LaunchPadIllustrationUrl } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { useProjectPreLaunchMutation } from '@/types/generated/graphql.ts'
-import { useMobileMode, useNotification } from '@/utils/index.ts'
+import { useMobileMode } from '@/utils/index.ts'
 
 import { FormContinueButton } from '../components/FormContinueButton.tsx'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
@@ -33,45 +31,29 @@ export const PROJECT_LAUNCH_PAYMENT_PROJECT_NAME = 'launch'
 export const ProjectCreateStrategy = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const toast = useNotification()
+
   useLocationMandatoryRedirect()
   useCheckPrelaunchSteps()
 
-  const { queryCurrentUser } = useAuthContext()
-
-  const { project } = useProjectAtom()
+  const { project, loading } = useProjectAtom()
 
   const setReadyForLaunch = useSetAtom(isReadyForLaunchAtom)
-
-  const [projectPreLaunch, { loading: projectPreLaunchLoading }] = useProjectPreLaunchMutation({
-    variables: {
-      input: {
-        projectId: project?.id,
-      },
-    },
-    onCompleted() {
-      queryCurrentUser()
-      navigate(getPath('projectLaunchPreLaunch', project?.name))
-    },
-    onError(error) {
-      toast.error({
-        title: t('Failed to pre-launch project'),
-        description: error.message,
-      })
-    },
-  })
 
   const [strategy, setStrategy] = useState<ProjectCreationStrategy>(ProjectCreationStrategy.GEYSER_LAUNCHPAD)
   const [strategySelected, setStrategySelected] = useState<boolean>(false)
 
   const handleBack = () => {
     setReadyForLaunch(false)
-    navigate(-1)
+    if (!project) {
+      return navigate(-1)
+    }
+
+    navigate(getPath('launchProjectWallet', project?.id))
   }
 
   const handleNext = () => {
     if (strategy === ProjectCreationStrategy.GEYSER_LAUNCHPAD) {
-      projectPreLaunch()
+      setStrategySelected(true)
       return
     }
 
@@ -84,6 +66,10 @@ export const ProjectCreateStrategy = () => {
 
   const isLaunchPad = strategy === ProjectCreationStrategy.GEYSER_LAUNCHPAD
   const isLaunchNow = strategy === ProjectCreationStrategy.LAUNCH_NOW
+
+  if (loading) {
+    return null
+  }
 
   if (project.paidLaunch || strategySelected) {
     return <ProjectCreateCompletionPage strategy={strategy} setStrategySelected={setStrategySelected} />
@@ -100,7 +86,7 @@ export const ProjectCreateStrategy = () => {
           length={5}
         />
       }
-      continueButton={<FormContinueButton flexGrow={1} onClick={handleNext} isLoading={projectPreLaunchLoading} />}
+      continueButton={<FormContinueButton flexGrow={1} onClick={handleNext} />}
       onBackClick={handleBack}
       maxW={dimensions.maxWidth}
     >

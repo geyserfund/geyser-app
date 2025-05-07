@@ -21,13 +21,7 @@ export const ProjectCreatePreLaunchedModal = (props: Omit<ModalProps, 'children'
   const { followersCount } = project
 
   return (
-    <Modal
-      size="md"
-      title={t("You're live on Geyser Launchpad!")}
-      subtitle={t('Now lets build the momentum.')}
-      subtitleProps={{ medium: true }}
-      {...props}
-    >
+    <Modal size="md" title={t("You're live on Geyser Launchpad!")} subtitleProps={{ medium: true }} {...props}>
       <VStack w="100%" spacing={6} pt={2}>
         <VStack w="100%">
           <HStack w="full" justifyContent="space-between">
@@ -41,7 +35,7 @@ export const ProjectCreatePreLaunchedModal = (props: Omit<ModalProps, 'children'
                 {'$ {{countDown}} out of $210'}
               </Trans>
             </Body>
-            <Body>⛳️ {t('Launch')}</Body>
+            <Body>🚀</Body>
           </HStack>
           <Progress
             borderRadius="8px"
@@ -61,12 +55,7 @@ export const ProjectCreatePreLaunchedModal = (props: Omit<ModalProps, 'children'
         <Body light>
           {t(
             'Your project is now featured on the Geyser Launchpad, where supporters discover bold, early-stage ideas.',
-          )}{' '}
-          <br />
-          {t(
-            'This is your moment to build traction, rally your backers, and prove your project has the energy to erupt.',
           )}
-          {' 🚀'}
         </Body>
         <VStack w="full" spacing={0} alignItems="flex-start">
           <Body medium dark>
@@ -74,7 +63,7 @@ export const ProjectCreatePreLaunchedModal = (props: Omit<ModalProps, 'children'
           </Body>
           <Body light>
             {t(
-              'Share your project far and wide — post it on social media, text it to friends, or pitch it in your community. Also, check out our Guide on how to market your project.  The more attention you spark now, the faster you’ll reach liftoff.',
+              'Share your project far and wide — post it on social media, text it to friends, or pitch it in your community.',
             )}
           </Body>
         </VStack>

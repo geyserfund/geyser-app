@@ -2,12 +2,14 @@ import { Stack } from '@chakra-ui/react'
 
 import { LandingCardBaseSkeleton, SkeletonLayout } from '@/shared/components/layouts'
 
-import { ProjectForLandingPageFragment } from '../../../../../../../types'
+import { ContributionsSummary, ProjectForLandingPageFragment } from '../../../../../../../types'
 import { LandingProjectCard } from '../../../components/LandingProjectCard'
 import { ProjectRowLayout, ProjectRowLayoutProps } from './ProjectRowLayout'
 
 interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'> {
-  projects: ProjectForLandingPageFragment[]
+  projects: (ProjectForLandingPageFragment & {
+    contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
+  })[]
   onSubtitleClick?: () => void
   subtitleId?: string
 }

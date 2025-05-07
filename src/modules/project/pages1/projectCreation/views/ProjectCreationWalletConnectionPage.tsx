@@ -1,4 +1,4 @@
-import { Box, VStack } from '@chakra-ui/react'
+import { Box, Button, VStack } from '@chakra-ui/react'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -129,16 +129,30 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   const isWalletIncomplete = !createWalletInput
 
+  const isContinueButtonDisabled = isWalletIncomplete || isLightningAddressInValid
+
   return (
     <ProjectCreateLayout
       onBackClick={handleBackClick}
       continueButton={
-        <FormContinueButton
-          onClick={handleConfirm}
-          isLoading={isContinueButtonLoading}
-          isDisabled={isWalletIncomplete || isLightningAddressInValid}
-          flexGrow={1}
-        />
+        isContinueButtonDisabled ? (
+          <Button
+            size="lg"
+            variant="solid"
+            colorScheme="neutral1"
+            flexGrow={1}
+            onClick={() => navigate(getPath('projectLaunchDraft', project?.name))}
+          >
+            {t('Save as Draft')}
+          </Button>
+        ) : (
+          <FormContinueButton
+            onClick={handleConfirm}
+            isLoading={isContinueButtonLoading}
+            isDisabled={isContinueButtonDisabled}
+            flexGrow={1}
+          />
+        )
       }
       title={
         <TitleWithProgressBar

@@ -1,6 +1,5 @@
 import { HStack, Icon, Popover, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
 import { PiInfo } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
@@ -8,24 +7,22 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { ProjectPrelaunchStatus } from '@/shared/molecules/ProjectPrelaunchStatus.tsx'
-import { useMobileMode } from '@/utils/index.ts'
+import { isPrelaunch, useMobileMode } from '@/utils/index.ts'
 
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
-import { FOLLOWERS_NEEDED } from '../../pages1/projectView/views/body/components/PrelaunchFollowButton.tsx'
-import { isProjectOwnerAtom } from '../../state/projectAtom.ts'
 
 export const ProjectPreLaunchNav = () => {
   const { project } = useProjectAtom()
-  const isProjectOwner = useAtomValue(isProjectOwnerAtom)
+
   const isMobile = Boolean(useMobileMode())
 
-  const hasEnoughFollowers =
-    Boolean(project?.followersCount && project?.followersCount >= FOLLOWERS_NEEDED) || Boolean(project?.paidLaunch)
-  const showLaunchButton = hasEnoughFollowers && Boolean(isProjectOwner)
+  if (!isPrelaunch(project?.status)) {
+    return null
+  }
 
   return (
     <Feedback
-      variant={hasEnoughFollowers ? FeedBackVariant.SUCCESS : FeedBackVariant.WARNING}
+      variant={FeedBackVariant.WARNING}
       noIcon
       minHeight="44px"
       paddingY={0}
@@ -34,7 +31,7 @@ export const ProjectPreLaunchNav = () => {
       flex="1"
       spacing={2}
     >
-      <HStack w="full" alignItems="center" justifyContent={showLaunchButton ? 'space-between' : 'center'} spacing={2}>
+      <HStack w="full" alignItems="center" justifyContent={'center'} spacing={2}>
         <HStack flexGrow={1} justifyContent={'center'} flexWrap={'nowrap'}>
           <Body
             as={Link}
@@ -48,7 +45,7 @@ export const ProjectPreLaunchNav = () => {
 
           <ProjectPrelaunchStatus project={project} />
 
-          {!hasEnoughFollowers && <PopOverInfo />}
+          <PopOverInfo />
         </HStack>
       </HStack>
     </Feedback>

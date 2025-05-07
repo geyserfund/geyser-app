@@ -14,7 +14,7 @@ export const ProjectCreateCompleted = ({ children }: PropsWithChildren) => {
   const { project } = useProjectAtom()
 
   return (
-    <VStack w="100%" spacing={4}>
+    <VStack w="100%" spacing={4} alignItems="flex-start">
       <Body mb={2}>
         {isDraft(project?.status) &&
           t(

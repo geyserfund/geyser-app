@@ -1,3 +1,4 @@
+import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
@@ -5,9 +6,12 @@ import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjec
 import { getPath } from '@/shared/constants/index.ts'
 import { isDraft, isPrelaunch } from '@/utils/index.ts'
 
+import { isReadyForLaunchAtom } from '../states/nodeStatusAtom.ts'
+
 export const useCheckPrelaunchSteps = () => {
   const { project, loading } = useProjectAtom()
   const { wallet, loading: walletLoading } = useWalletAtom()
+  const setIsReadyForLaunch = useSetAtom(isReadyForLaunchAtom)
 
   const navigate = useNavigate()
 
@@ -30,7 +34,8 @@ export const useCheckPrelaunchSteps = () => {
     }
 
     if (!wallet?.id) {
+      setIsReadyForLaunch(false)
       navigate(getPath('launchProjectWallet', project?.id), { replace: true })
     }
-  }, [loading, project, wallet, navigate, isProjectDraft, isProjectPrelaunch, walletLoading])
+  }, [loading, project, wallet, navigate, isProjectDraft, isProjectPrelaunch, walletLoading, setIsReadyForLaunch])
 }

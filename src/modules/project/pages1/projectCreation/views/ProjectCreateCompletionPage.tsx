@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import Loader from '@/components/ui/Loader'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useProjectPreLaunchMutation } from '@/types/index.ts'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
 import { useAuthContext } from '../../../../../context'
@@ -37,8 +38,31 @@ export const ProjectCreateCompletionPage = ({ strategy, setStrategySelected }: P
 
   const { publishProject } = useProjectAPI()
 
+  const [projectPreLaunch] = useProjectPreLaunchMutation({
+    variables: {
+      input: {
+        projectId: project?.id,
+      },
+    },
+    onCompleted() {
+      queryCurrentUser()
+      navigate(getPath('projectLaunchPreLaunch', project?.name))
+    },
+    onError(error) {
+      toast.error({
+        title: t('Failed to pre-launch project'),
+        description: error.message,
+      })
+    },
+  })
+
   const handleBackClick = () => {
-    navigate(-1)
+    if (project.paidLaunch) {
+      navigate(-1)
+      return
+    }
+
+    setStrategySelected(false)
   }
 
   const onLaunchClick = async () => {
@@ -46,24 +70,29 @@ export const ProjectCreateCompletionPage = ({ strategy, setStrategySelected }: P
       return
     }
 
-    publishProject.execute({
-      variables: {
-        input: { projectId: project?.id },
-      },
-      onCompleted() {
-        toast.success({
-          title: 'Project launched',
-        })
-        queryCurrentUser()
-        navigate(getPath('projectLaunch', project?.name))
-      },
-      onError(error) {
-        toast.error({
-          title: 'Error launching project',
-          description: `${error}`,
-        })
-      },
-    })
+    if (project.paidLaunch) {
+      publishProject.execute({
+        variables: {
+          input: { projectId: project?.id },
+        },
+        onCompleted() {
+          toast.success({
+            title: 'Project launched',
+          })
+          queryCurrentUser()
+          navigate(getPath('projectLaunch', project?.name))
+        },
+        onError(error) {
+          toast.error({
+            title: 'Error launching project',
+            description: `${error}`,
+          })
+        },
+      })
+      return
+    }
+
+    projectPreLaunch()
   }
 
   const onSaveDraftClick = async () => {

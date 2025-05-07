@@ -49,6 +49,10 @@ export const QUERY_PROJECTS_MOST_FUNDED_OF_THE_WEEK_BY_CATEGORY = gql`
         project {
           ...ProjectForLandingPage
         }
+        contributionsSummary {
+          contributionsTotalUsd
+          contributionsTotal
+        }
       }
     }
   }

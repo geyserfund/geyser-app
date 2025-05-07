@@ -385,6 +385,13 @@ export type ContributionsGetResponse = {
   pagination?: Maybe<CursorPaginationResponse>;
 };
 
+export type ContributionsSummary = {
+  __typename?: 'ContributionsSummary';
+  contributionsTotal: Scalars['Int']['output'];
+  contributionsTotalUsd: Scalars['Float']['output'];
+  contributorsCount: Scalars['Int']['output'];
+};
+
 export enum ContributionsSummaryPeriod {
   AllTime = 'ALL_TIME',
   Month = 'MONTH',
@@ -2651,6 +2658,7 @@ export type ProjectLinkMutationInput = {
 
 export type ProjectMostFunded = {
   __typename?: 'ProjectMostFunded';
+  contributionsSummary?: Maybe<ContributionsSummary>;
   /** The project details */
   project: Project;
 };
@@ -4130,6 +4138,7 @@ export type ResolversTypes = {
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversTypes['Contribution'] }>;
   ContributionsGetResponse: ResolverTypeWrapper<Omit<ContributionsGetResponse, 'contributions'> & { contributions: Array<ResolversTypes['Contribution']> }>;
+  ContributionsSummary: ResolverTypeWrapper<ContributionsSummary>;
   ContributionsSummaryPeriod: ContributionsSummaryPeriod;
   ContributionsWhereContributionStatus: ContributionsWhereContributionStatus;
   ContributorContributionsSummary: ResolverTypeWrapper<ContributorContributionsSummary>;
@@ -4559,6 +4568,7 @@ export type ResolversParentTypes = {
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversParentTypes['Contribution'] };
   ContributionsGetResponse: Omit<ContributionsGetResponse, 'contributions'> & { contributions: Array<ResolversParentTypes['Contribution']> };
+  ContributionsSummary: ContributionsSummary;
   ContributorContributionsSummary: ContributorContributionsSummary;
   ContributorStats: ContributorStats;
   Country: Country;
@@ -5066,6 +5076,13 @@ export type ContributionStatusUpdatedSubscriptionResponseResolvers<ContextType =
 export type ContributionsGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionsGetResponse'] = ResolversParentTypes['ContributionsGetResponse']> = {
   contributions?: Resolver<Array<ResolversTypes['Contribution']>, ParentType, ContextType>;
   pagination?: Resolver<Maybe<ResolversTypes['CursorPaginationResponse']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ContributionsSummaryResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionsSummary'] = ResolversParentTypes['ContributionsSummary']> = {
+  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsTotalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  contributorsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -5993,6 +6010,7 @@ export type ProjectLeaderboardContributorsRowResolvers<ContextType = any, Parent
 };
 
 export type ProjectMostFundedResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectMostFunded'] = ResolversParentTypes['ProjectMostFunded']> = {
+  contributionsSummary?: Resolver<Maybe<ResolversTypes['ContributionsSummary']>, ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -6491,6 +6509,7 @@ export type Resolvers<ContextType = any> = {
   ContributionPaymentsDetails?: ContributionPaymentsDetailsResolvers<ContextType>;
   ContributionStatusUpdatedSubscriptionResponse?: ContributionStatusUpdatedSubscriptionResponseResolvers<ContextType>;
   ContributionsGetResponse?: ContributionsGetResponseResolvers<ContextType>;
+  ContributionsSummary?: ContributionsSummaryResolvers<ContextType>;
   ContributorContributionsSummary?: ContributorContributionsSummaryResolvers<ContextType>;
   ContributorStats?: ContributorStatsResolvers<ContextType>;
   Country?: CountryResolvers<ContextType>;
@@ -6899,7 +6918,7 @@ export type ProjectsMostFundedByCategoryQueryVariables = Exact<{
 export type ProjectsMostFundedByCategoryQuery = { __typename?: 'Query', projectsMostFundedByCategory: Array<{ __typename?: 'ProjectMostFundedByCategory', category?: string | null, subCategory?: string | null, projects: Array<{ __typename?: 'ProjectMostFunded', project: (
         { __typename?: 'Project' }
         & ProjectForLandingPageFragment
-      ) }> }> };
+      ), contributionsSummary?: { __typename?: 'ContributionsSummary', contributionsTotalUsd: number, contributionsTotal: number } | null }> }> };
 
 export type ProjectsForLandingPageQueryVariables = Exact<{
   input?: InputMaybe<ProjectsGetQueryInput>;
@@ -7510,6 +7529,12 @@ export type ProjectPageWalletFragment = { __typename?: 'Wallet', id: any, name?:
 
 export type ProjectWalletConnectionDetailsFragment = { __typename?: 'Wallet', id: any, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', tlsCertificate?: string | null, pubkey?: string | null, macaroon: string, lndNodeType: LndNodeType, hostname: string, grpcPort: number } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } | { __typename?: 'NWCConnectionDetailsPrivate', nwcUrl?: string | null } };
 
+export type ProjectPageWalletCreationDetailsFragment = (
+  { __typename?: 'Wallet' }
+  & ProjectPageWalletFragment
+  & ProjectWalletConnectionDetailsFragment
+);
+
 export type AmbassadorAddMutationVariables = Exact<{
   input: AmbassadorAddInput;
 }>;
@@ -7803,7 +7828,7 @@ export type CreateWalletMutationVariables = Exact<{
 
 export type CreateWalletMutation = { __typename?: 'Mutation', walletCreate: (
     { __typename?: 'Wallet' }
-    & ProjectWalletConnectionDetailsFragment
+    & ProjectPageWalletCreationDetailsFragment
   ) };
 
 export type UpdateWalletMutationVariables = Exact<{
@@ -10088,6 +10113,13 @@ export const ProjectWalletConnectionDetailsFragmentDoc = gql`
   }
 }
     `;
+export const ProjectPageWalletCreationDetailsFragmentDoc = gql`
+    fragment ProjectPageWalletCreationDetails on Wallet {
+  ...ProjectPageWallet
+  ...ProjectWalletConnectionDetails
+}
+    ${ProjectPageWalletFragmentDoc}
+${ProjectWalletConnectionDetailsFragmentDoc}`;
 export const UserBadgeAwardDocument = gql`
     mutation UserBadgeAward($userBadgeId: BigInt!) {
   userBadgeAward(userBadgeId: $userBadgeId) {
@@ -11027,6 +11059,10 @@ export const ProjectsMostFundedByCategoryDocument = gql`
     projects {
       project {
         ...ProjectForLandingPage
+      }
+      contributionsSummary {
+        contributionsTotalUsd
+        contributionsTotal
       }
     }
   }
@@ -13827,10 +13863,10 @@ export type UserVerificationTokenGenerateMutationOptions = Apollo.BaseMutationOp
 export const CreateWalletDocument = gql`
     mutation CreateWallet($input: CreateWalletInput!) {
   walletCreate(input: $input) {
-    ...ProjectWalletConnectionDetails
+    ...ProjectPageWalletCreationDetails
   }
 }
-    ${ProjectWalletConnectionDetailsFragmentDoc}`;
+    ${ProjectPageWalletCreationDetailsFragmentDoc}`;
 export type CreateWalletMutationFn = Apollo.MutationFunction<CreateWalletMutation, CreateWalletMutationVariables>;
 
 /**

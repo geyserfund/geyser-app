@@ -51,13 +51,15 @@ export const PreLaunchProjectNotice = () => {
         <CardLayout
           flexDirection={'row'}
           justifyContent={'space-between'}
+          alignItems={'center'}
           w="full"
+          padding={'12px 24px'}
           background={GuardiansButtonBackgroundGradient}
         >
           <Body size="lg" bold dark>
             {t('Pay $21 to launch right away')}
           </Body>
-          <Button variant="solid" colorScheme="primary1" onClick={launchRightAwayModal.onOpen}>
+          <Button size="lg" variant="surface" colorScheme="neutral1" onClick={launchRightAwayModal.onOpen}>
             {t('Launch project')}
           </Button>
         </CardLayout>
