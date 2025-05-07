@@ -22,7 +22,7 @@ import { fundingPaymentDetailsAtom } from './fundingPaymentAtom.ts'
 
 export type FundingProject = Pick<
   ProjectState,
-  'id' | 'name' | 'rewardCurrency' | 'title' | 'owners' | 'paymentMethods'
+  'id' | 'name' | 'status' | 'rewardCurrency' | 'title' | 'owners' | 'paymentMethods'
 >
 
 export enum FundingUserInfoError {
