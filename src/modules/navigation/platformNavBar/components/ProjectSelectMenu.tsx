@@ -26,7 +26,11 @@ export const ProjectSelectMenu = () => {
     .sort((a, b) => toInt(b?.createdAt) - toInt(a?.createdAt))
 
   const activeProjects = projectListByOrder.filter((project) => project?.status === ProjectStatus.Active) || []
-  const inActiveProjects = projectListByOrder.filter((project) => project?.status !== ProjectStatus.Active) || []
+  const preLaunchProjects = projectListByOrder.filter((project) => project?.status === ProjectStatus.PreLaunch) || []
+  const inActiveProjects =
+    projectListByOrder.filter(
+      (project) => project?.status !== ProjectStatus.Active && project?.status !== ProjectStatus.PreLaunch,
+    ) || []
 
   return (
     <Menu size={'lg'} closeOnSelect placement="bottom-end">
@@ -46,8 +50,22 @@ export const ProjectSelectMenu = () => {
               if (!project) return null
               return <ProjectSelectMenuItem key={project.id} project={project} />
             })}
-            {inActiveProjects.length > 0 && activeProjects.length > 0 && <Divider />}
 
+            {preLaunchProjects.length > 0 && activeProjects.length > 0 && <Divider />}
+            {preLaunchProjects.length > 0 && (
+              <>
+                <Body w="full" textAlign={'start'} px={2} py={1}>
+                  {t('Launchpad projects')}
+                </Body>
+
+                {preLaunchProjects.map((project) => {
+                  if (!project) return null
+                  return <ProjectSelectMenuItem key={project.id} project={project} />
+                })}
+              </>
+            )}
+
+            {inActiveProjects.length > 0 && activeProjects.length > 0 && <Divider />}
             {inActiveProjects.length > 0 && (
               <>
                 <Body w="full" textAlign={'start'} px={2} py={1}>

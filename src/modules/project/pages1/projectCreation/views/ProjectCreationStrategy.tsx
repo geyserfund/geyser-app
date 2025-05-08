@@ -86,11 +86,6 @@ export const ProjectCreateStrategy = () => {
       onBackClick={handleBack}
       maxW={dimensions.maxWidth}
     >
-      <Body size="lg" bold>
-        {t(
-          'To launch on Geyser, you must gather enough support within the first 30 days, or your project will be closed down',
-        )}
-      </Body>
       <HStack w="full" alignItems="stretch" flexDirection={{ base: 'column', lg: 'row' }} spacing={{ base: 4, lg: 6 }}>
         <ProjectCreateStrategyCard
           flex={6}
@@ -103,7 +98,7 @@ export const ProjectCreateStrategy = () => {
             "Your project's future depends on this critical first step - meet the goal to keep your vision alive. It’s your chance to build early momentum and launch with a boom.",
           )}  🚀`}
           points={[
-            t('Your project will be featured in Launchpad & discovery emails'),
+            t('Featured in Launchpad & discovery emails'),
             t('Build momentum quickly with early supporters'),
             `${t('If you don’t reach $210 in your first month, your project will close (you can start over)')}`,
           ]}
@@ -120,7 +115,7 @@ export const ProjectCreateStrategy = () => {
             "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you can begin receiving support from contributors immediately.",
           )}
           points={[
-            t('Seen in ‘Recently launched’ in Discovery page'),
+            t('Featured in ‘Recently launched’ in Discovery page'),
             t('No pressure to raise a lot right away, go by your plan.'),
           ]}
         />
@@ -165,6 +160,7 @@ export const ProjectCreateStrategyCard = ({
         borderColor: isSelected ? 'primary1.9' : 'neutral1.9',
         cursor: 'pointer',
       }}
+      overflow={'hidden'}
       padding={4}
     >
       <HStack width="full" justifyContent="center">
@@ -185,7 +181,7 @@ export const ProjectCreateStrategyCard = ({
           <Body size="sm" light>
             {body}
           </Body>
-          <UnorderedList w="full" alignItems="flex-start" spacing={0}>
+          <UnorderedList alignItems="flex-start" spacing={0}>
             {points.map((point, index) => (
               <ListItem key={point}>
                 <Body

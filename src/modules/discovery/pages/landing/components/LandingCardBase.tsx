@@ -99,7 +99,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           noOfLines={2}
           isTruncated
           width="100%"
-          wordBreak={'break-all'}
+          wordBreak={'break-word'}
           whiteSpace={'normal'}
         >
           {project.shortDescription}

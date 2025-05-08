@@ -155,13 +155,7 @@ export const ProjectCreationWalletConnectionPage = () => {
         )
       }
       title={
-        <TitleWithProgressBar
-          hideSteps
-          title={t('Configure wallet')}
-          subtitle={t('You’re almost ready to launch!')}
-          index={5}
-          length={5}
-        />
+        <TitleWithProgressBar title={t('Configure wallet')} subtitle={t('Create a project')} index={5} length={5} />
       }
     >
       <VStack w="full" alignItems="start" pb="20px">
