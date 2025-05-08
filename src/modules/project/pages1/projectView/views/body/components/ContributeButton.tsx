@@ -12,7 +12,6 @@ import { CommunityVoteGrant, GrantStatusEnum, VotingSystem } from '@/types'
 
 import { isActive, isPrelaunch } from '../../../../../../../utils'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
-import { PrelaunchFollowButton } from './PrelaunchFollowButton.tsx'
 
 type ContributeButtonProps = ButtonProps & {
   isWidget?: boolean
@@ -46,9 +45,7 @@ export const ContributeButton = ({ isWidget, ...props }: ContributeButtonProps) 
 
   const isStepVoting = communityVotingGrant ? communityVotingGrant.votingSystem === VotingSystem.StepLog_10 : false
 
-  const isFundingDisabled = !isActive(project.status)
-
-  const isProjectPrelaunch = isPrelaunch(project?.status)
+  const isFundingDisabled = !isActive(project.status) && !isPrelaunch(project.status)
 
   const buttonProps = isWidget
     ? {
@@ -74,20 +71,17 @@ export const ContributeButton = ({ isWidget, ...props }: ContributeButtonProps) 
           project={project}
         />
       )}
-      {!isProjectPrelaunch ? (
-        <Button
-          size="lg"
-          variant="solid"
-          colorScheme="primary1"
-          isDisabled={isFundingDisabled}
-          {...buttonProps}
-          {...props}
-        >
-          {t('Contribute')}
-        </Button>
-      ) : (
-        <PrelaunchFollowButton w="full" project={project} />
-      )}
+
+      <Button
+        size="lg"
+        variant="solid"
+        colorScheme="primary1"
+        isDisabled={isFundingDisabled}
+        {...buttonProps}
+        {...props}
+      >
+        {t('Contribute')}
+      </Button>
     </>
   )
 }

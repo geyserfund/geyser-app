@@ -7,6 +7,7 @@ import { TopProjects } from './components/TopProjects.tsx'
 import { CharityProjects } from './sections/CharityProjects.tsx'
 import { Featured } from './sections/Featured'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek'
+import { RecentLaunches } from './sections/RecentLaunches.tsx'
 import { SubCategoriesBar } from './sections/SubCategoriesBar.tsx'
 import { TrendingRewards } from './sections/TrendingRewards'
 import { WelcomeCard } from './sections/WelcomeCard'
@@ -19,11 +20,13 @@ export const DefaultView = () => {
       <VStack w="full" spacing={8}>
         <Featured />
         <TrendingRewards />
-        <CharityProjects />
+        <RecentLaunches />
         <ProjectsDisplayMostFundedThisWeek subCategory={ProjectSubCategory.CircularEconomy} />
         {ProjectCategoryList.map((category) => (
           <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
         ))}
+        <CharityProjects />
+
         <TopProjects />
       </VStack>
     </VStack>

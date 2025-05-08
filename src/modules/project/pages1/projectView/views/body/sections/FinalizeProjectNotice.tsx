@@ -13,13 +13,18 @@ export const FinalizeProjectNotice = () => {
   const { t } = useTranslation()
 
   const { project, isProjectOwner } = useProjectAtom()
+  const { wallet } = useWalletAtom()
   const { loading } = useWalletAtom()
   const navigate = useNavigate()
 
   if (!project || !isProjectOwner) return null
 
   const handleConnectNodeClick = () => {
-    navigate(getPath('launchProjectStrategy', project.id))
+    if (wallet?.id) {
+      navigate(getPath('launchProjectStrategy', project.id))
+    } else {
+      navigate(getPath('launchProjectWallet', project.id))
+    }
   }
 
   if (project.status !== ProjectStatus.Draft || loading) {

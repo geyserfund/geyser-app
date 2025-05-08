@@ -12,6 +12,7 @@ import {
   Link,
   VStack,
 } from '@chakra-ui/react'
+import { forwardRef } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
 import { PiGear } from 'react-icons/pi'
@@ -73,19 +74,16 @@ const FeaturedNWCWalletList = [
   },
 ]
 
-const LightningAddressAccordionItem = ({
-  readOnly,
-  lightningAddress,
-  connectionOption,
-  limits,
-  showPromoText = true,
-}: {
-  readOnly?: boolean
-  lightningAddress: LightingWalletForm
-  connectionOption: ConnectionOption
-  limits: Limits
-  showPromoText?: boolean
-}) => {
+const LightningAddressAccordionItem = forwardRef<
+  HTMLDivElement,
+  {
+    readOnly?: boolean
+    lightningAddress: LightingWalletForm
+    connectionOption: ConnectionOption
+    limits: Limits
+    showPromoText?: boolean
+  }
+>(({ readOnly, lightningAddress, connectionOption, limits, showPromoText = true }, ref) => {
   const { t } = useTranslation()
   const { colors } = useCustomTheme()
 
@@ -109,7 +107,7 @@ const LightningAddressAccordionItem = ({
   }
 
   return (
-    <AccordionItem mb="30px" border="none" tabIndex={0}>
+    <AccordionItem mb="30px" border="none" tabIndex={0} ref={ref}>
       <h2>
         <AccordionButton {...accordionButtonStyles}>
           <Box as="span" flex="1" textAlign="left">
@@ -181,27 +179,24 @@ const LightningAddressAccordionItem = ({
       </AccordionPanel>
     </AccordionItem>
   )
-}
+})
 
-const LightningNodeAccordionItem = ({
-  readOnly,
-  node,
-  fee,
-  connectionOption,
-  hasLightningAddress,
-}: {
-  readOnly?: boolean
-  node: NodeWalletForm
-  fee: WalletForm['fee']
-  connectionOption: ConnectionOption
-  hasLightningAddress: boolean
-}) => {
+const LightningNodeAccordionItem = forwardRef<
+  HTMLDivElement,
+  {
+    readOnly?: boolean
+    node: NodeWalletForm
+    fee: WalletForm['fee']
+    connectionOption: ConnectionOption
+    hasLightningAddress: boolean
+  }
+>(({ readOnly, node, fee, connectionOption, hasLightningAddress }, ref) => {
   const { t } = useTranslation()
   const { colors } = useCustomTheme()
   const nodeInput = node.value
 
   return (
-    <AccordionItem mb="30px" border="none" tabIndex={hasLightningAddress ? 1 : 0}>
+    <AccordionItem mb="30px" border="none" tabIndex={hasLightningAddress ? 1 : 0} ref={ref}>
       <h2>
         <AccordionButton {...accordionButtonStyles}>
           <Box as="span" flex="1" textAlign="left">
@@ -251,28 +246,24 @@ const LightningNodeAccordionItem = ({
       </AccordionPanel>
     </AccordionItem>
   )
-}
+})
 
-const NostrWalletConnectAccordionItem = ({
-  readOnly,
-  nwc,
-  connectionOption,
-  hasLightningAddress,
-  hasNode,
-  showPromoText = true,
-}: {
-  readOnly?: boolean
-  nwc: NWCWalletForm
-  connectionOption: ConnectionOption
-  hasLightningAddress: boolean
-  hasNode: boolean
-  showPromoText?: boolean
-}) => {
+const NostrWalletConnectAccordionItem = forwardRef<
+  HTMLDivElement,
+  {
+    readOnly?: boolean
+    nwc: NWCWalletForm
+    connectionOption: ConnectionOption
+    hasLightningAddress: boolean
+    hasNode: boolean
+    showPromoText?: boolean
+  }
+>(({ readOnly, nwc, connectionOption, hasLightningAddress, hasNode, showPromoText = true }, ref) => {
   const { t } = useTranslation()
   const { colors } = useCustomTheme()
 
   return (
-    <AccordionItem border="none" tabIndex={(hasLightningAddress ? 1 : 0) + (hasNode ? 1 : 0)}>
+    <AccordionItem border="none" tabIndex={(hasLightningAddress ? 1 : 0) + (hasNode ? 1 : 0)} ref={ref}>
       <h2>
         <AccordionButton {...accordionButtonStyles}>
           <Box as="span" flex="1" textAlign="left">
@@ -345,7 +336,7 @@ const NostrWalletConnectAccordionItem = ({
       </AccordionPanel>
     </AccordionItem>
   )
-}
+})
 
 export const WalletConnectionForm = ({
   readOnly,

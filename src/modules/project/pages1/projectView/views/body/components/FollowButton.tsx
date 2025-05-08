@@ -1,4 +1,4 @@
-import { Button, ButtonProps, IconButton } from '@chakra-ui/react'
+import { Button, ButtonProps, IconButton, Tooltip } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { MouseEvent } from 'react'
@@ -36,7 +36,7 @@ export const FollowButton = ({ project, withLabel, ...rest }: FollowButtonProps)
       return
     }
 
-    if (shouldPrompt) {
+    if (shouldPrompt && !isFollowed) {
       setEmailPromptOnCloseAction(handleFollowUnfollow)
       emailPromptOnOpen()
       return
@@ -70,14 +70,16 @@ export const FollowButton = ({ project, withLabel, ...rest }: FollowButtonProps)
   }
 
   return (
-    <IconButton
-      aria-label="follow-button"
-      variant="soft"
-      colorScheme={isFollowed ? 'primary1' : 'neutral1'}
-      onClick={handleClick}
-      isLoading={followLoading || unfollowLoading}
-      icon={<PiBell />}
-      {...rest}
-    />
+    <Tooltip label={isFollowed ? t('unFollow') : t('Follow')}>
+      <IconButton
+        aria-label="follow-button"
+        variant="soft"
+        colorScheme={isFollowed ? 'primary1' : 'neutral1'}
+        onClick={handleClick}
+        isLoading={followLoading || unfollowLoading}
+        icon={<PiBell />}
+        {...rest}
+      />
+    </Tooltip>
   )
 }

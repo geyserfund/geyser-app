@@ -60,21 +60,18 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     path: 'dashboardInfo',
     type: DashboardType.settings,
     icon: PiPlanet,
-    isPrelaunch: true,
   },
   {
     label: 'Links & tags',
     path: 'dashboardDetails',
     type: DashboardType.settings,
     icon: PiShapes,
-    isPrelaunch: true,
   },
   {
     label: 'Story',
     path: 'projectStoryEdit',
     type: DashboardType.settings,
     icon: PiBookOpen,
-    isPrelaunch: true,
   },
   {
     label: 'Wallet',
@@ -93,13 +90,11 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     path: 'dashboardNotifications',
     type: DashboardType.settings,
     icon: PiBell,
-    isPrelaunch: true,
   },
   {
     label: 'Settings',
     path: 'dashboardSettings',
     type: DashboardType.settings,
     icon: PiGear,
-    isPrelaunch: true,
   },
 ]

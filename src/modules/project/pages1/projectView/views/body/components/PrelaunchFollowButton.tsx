@@ -23,6 +23,9 @@ import { useNotification } from '@/utils/index.ts'
 
 export const FOLLOWERS_NEEDED = 21
 
+export const USD_AMOUNT_TO_GO_LIVE = 210
+export const USD_CENTS_AMOUNT_TO_GO_LIVE = USD_AMOUNT_TO_GO_LIVE * 100
+
 type PrelaunchFollowButtonProps = ButtonProps & {
   project: Pick<Project, 'id' | 'name' | 'title' | 'followersCount'>
   onFollowCompleted?: () => void

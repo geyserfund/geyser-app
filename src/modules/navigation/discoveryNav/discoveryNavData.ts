@@ -1,6 +1,14 @@
 import { IconType } from 'react-icons'
-import { GiAirBalloon } from 'react-icons/gi'
-import { PiCompass, PiCrown, PiHandbag, PiRocketLaunch, PiSketchLogo, PiTrophy, PiWaveform } from 'react-icons/pi'
+import {
+  PiBookmark,
+  PiCompass,
+  PiCrown,
+  PiHandbag,
+  PiRocketLaunch,
+  PiSketchLogo,
+  PiTrophy,
+  PiWaveform,
+} from 'react-icons/pi'
 
 import { LegendJewelIconUrl, PathsMap } from '@/shared/constants'
 
@@ -45,7 +53,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     label: 'Launchpad',
     key: DiscoveryNavItemKey.Launchpad,
     path: 'discoveryLaunchpad',
-    icon: GiAirBalloon,
+    icon: PiRocketLaunch,
     bottomNav: true,
   },
   {
@@ -59,7 +67,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     label: 'My Projects',
     key: DiscoveryNavItemKey.MyProjects,
     path: 'discoveryMyProjects',
-    icon: PiRocketLaunch,
+    icon: PiBookmark,
     bottomNav: true,
   },
   {

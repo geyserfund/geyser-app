@@ -35,8 +35,9 @@ export const FRAGMENT_PROJECT_FOR_LAUNCHPAD_PAGE = gql`
     shortDescription
     title
     status
-    followersCount
     preLaunchedAt
+    preLaunchExpiresAt
+    balanceUsdCent
     category
     subCategory
     owners {
@@ -66,6 +67,7 @@ export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
     status
     rewardsCount
     followersCount
+    balanceUsdCent
     wallets {
       id
       name

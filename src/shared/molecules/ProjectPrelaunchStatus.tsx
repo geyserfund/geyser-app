@@ -2,7 +2,7 @@ import { t } from 'i18next'
 import { DateTime, Duration } from 'luxon'
 import { useEffect, useState } from 'react'
 
-import { FOLLOWERS_NEEDED } from '@/modules/project/pages1/projectView/views/body/components/PrelaunchFollowButton.tsx'
+import { USD_CENTS_AMOUNT_TO_GO_LIVE } from '@/modules/project/pages1/projectView/views/body/components/PrelaunchFollowButton.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useMobileMode } from '@/utils/index.ts'
 
@@ -30,7 +30,7 @@ export const ProjectPrelaunchStatus = ({
   project,
   onlyTimeLeft = false,
 }: {
-  project: Pick<ProjectState, 'preLaunchedAt' | 'followersCount' | 'paidLaunch'>
+  project: Pick<ProjectState, 'preLaunchedAt' | 'balanceUsdCent' | 'paidLaunch'>
   onlyTimeLeft?: boolean
 }) => {
   const isMobile = useMobileMode()
@@ -67,10 +67,9 @@ export const ProjectPrelaunchStatus = ({
   }, [project?.preLaunchedAt])
 
   const formattedTime = getFormattedTime(timeLeft, isMobile)
-  const hasEnoughFollowers =
-    Boolean(project?.followersCount && project?.followersCount >= FOLLOWERS_NEEDED) || Boolean(project?.paidLaunch)
+  const hasEnoughFunds = Boolean(project?.balanceUsdCent && project?.balanceUsdCent >= USD_CENTS_AMOUNT_TO_GO_LIVE)
 
-  if (hasEnoughFollowers) {
+  if (hasEnoughFunds) {
     return (
       <Body size={{ base: 'md', lg: 'lg' }} bold>
         {onlyTimeLeft ? '' : '- '}
@@ -79,10 +78,10 @@ export const ProjectPrelaunchStatus = ({
     )
   }
 
-  if (isTimeUp && !hasEnoughFollowers) {
+  if (isTimeUp && !hasEnoughFunds) {
     return (
       <Body size={{ base: 'md', lg: 'lg' }} bold>
-        {t('Time is up: this project did not reach 21 followers in a month.')}
+        {t('Time is up: this project did not raise $210 in 30 days.')}
       </Body>
     )
   }
@@ -92,8 +91,8 @@ export const ProjectPrelaunchStatus = ({
       {onlyTimeLeft
         ? `Time left: ${formattedTime}`
         : isMobile
-        ? `: ${formattedTime} ${t('to 21 followers')}`
-        : `- ${formattedTime} ${t('left to get to 21 follows & launch')}`}
+        ? `: ${formattedTime} ${t('to raise $210')}`
+        : `- ${formattedTime} ${t('left to raise $210 & launch')}`}
     </Body>
   )
 }

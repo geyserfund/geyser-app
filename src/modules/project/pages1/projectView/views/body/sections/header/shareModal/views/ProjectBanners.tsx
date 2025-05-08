@@ -1,5 +1,6 @@
 import { VStack } from '@chakra-ui/react'
 import { SingleValue } from 'chakra-react-select'
+import { t } from 'i18next'
 import { useState } from 'react'
 
 import { CustomSelect } from '@/components/ui/CustomSelect.tsx'
@@ -11,11 +12,11 @@ type BannerType = 'project' | 'lightning'
 
 const options = [
   {
-    label: 'Project',
+    label: t('Go to Project'),
     value: 'project',
   },
   {
-    label: 'Lightning',
+    label: t('Lightning QR code'),
     value: 'lightning',
   },
 ]

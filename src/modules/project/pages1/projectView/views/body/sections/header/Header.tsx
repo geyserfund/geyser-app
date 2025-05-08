@@ -13,13 +13,11 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { PiCaretDoubleDown } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { ProjectStatusBar } from '@/components/ui'
-import { userFollowsProjectAtom } from '@/modules/project/state/projectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
@@ -38,13 +36,7 @@ import {
 } from '../../../../../../../../shared/constants'
 import { VideoPlayer } from '../../../../../../../../shared/molecules/VideoPlayer'
 import { useProjectPageHeaderSummaryQuery } from '../../../../../../../../types'
-import {
-  commaFormatted,
-  isPrelaunch,
-  removeProjectAmountException,
-  toInt,
-  useMobileMode,
-} from '../../../../../../../../utils'
+import { commaFormatted, removeProjectAmountException, toInt, useMobileMode } from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
 import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
 import { FollowButton } from '../../components'
@@ -60,7 +52,6 @@ interface HeaderDetailsProps extends StackProps {
 
 const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
   const { project, projectOwner, partialUpdateProject } = useProjectAtom()
-  const userFollowsProject = useAtomValue(userFollowsProjectAtom)
 
   const [subscribers, setSubscribers] = useState(0)
   const isProjectSubscriptionEnabled = project && projectsWithSubscription.includes(project?.name)
@@ -142,21 +133,20 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
           <CreatorSocial />
         </HStack>
 
-        {!isPrelaunch(project.status) &&
-          (summaryLoading ? (
-            <SkeletonLayout height="20px" w="250px" />
-          ) : (
-            <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
-              <Body size="md" medium light>
-                {`${t('Contributors')}: ${project.fundersCount}`}
-              </Body>
-              <Body size="md" medium light>
-                {`${t('Followers')}: ${project.followersCount}`}
-              </Body>
+        {summaryLoading ? (
+          <SkeletonLayout height="20px" w="250px" />
+        ) : (
+          <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
+            <Body size="md" medium light>
+              {`${t('Contributors')}: ${project.fundersCount}`}
+            </Body>
+            <Body size="md" medium light>
+              {`${t('Followers')}: ${project.followersCount}`}
+            </Body>
 
-              {subscribers && <Body size="md" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
-            </HStack>
-          ))}
+            {subscribers && <Body size="md" medium light>{`${subscribers || 0} ${t('subscribers')}`}</Body>}
+          </HStack>
+        )}
 
         <HStack w="full" paddingTop={1} justifyContent="space-between" flexWrap={'wrap'}>
           <HStack>
@@ -167,7 +157,7 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
               colorScheme="neutral1"
               onClick={handleClickDetails}
             />
-            {(!isPrelaunch(project.status) || userFollowsProject) && <FollowButton project={project} withLabel />}
+            <FollowButton project={project} withLabel />
             <ShareProjectButton />
           </HStack>
 
@@ -182,8 +172,6 @@ const MobileBalanceInfo = () => {
   const { formatAmount } = useCurrencyFormatter()
   const { project } = useProjectAtom()
 
-  const isPrelaunchProject = isPrelaunch(project.status)
-
   return (
     <VStack
       w="full"
@@ -196,27 +184,18 @@ const MobileBalanceInfo = () => {
       alignItems="center"
       spacing={0}
     >
-      {isPrelaunchProject ? (
+      {project.balance > 0 && (
         <Body size="lg" bold>
-          {project.followersCount}{' '}
-          <Body as="span">{project.followersCount === 1 ? t('follower') : t('followers')}</Body>
+          {commaFormatted(project.balance)}
+          <Body as="span">{' sats'}</Body>
         </Body>
-      ) : (
-        <>
-          {project.balance > 0 && (
-            <Body size="lg" bold>
-              {commaFormatted(project.balance)}
-              <Body as="span">{' sats'}</Body>
-            </Body>
-          )}
-          <Body size="sm">
-            {`${formatAmount(project.balanceUsdCent, 'USDCENT')}`}{' '}
-            <Body as="span" light>
-              {t('contributed in total')}
-            </Body>
-          </Body>
-        </>
       )}
+      <Body size="sm">
+        {`${formatAmount(project.balanceUsdCent, 'USDCENT')}`}{' '}
+        <Body as="span" light>
+          {t('contributed in total')}
+        </Body>
+      </Body>
     </VStack>
   )
 }
@@ -262,9 +241,8 @@ export const Header = () => {
       </Modal>
 
       <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0} position="relative">
-        {!isPrelaunch(project.status) && (
-          <ProjectStatusBar project={project} wallet={wallet} isProjectOwner={isProjectOwner} />
-        )}
+        <ProjectStatusBar project={project} wallet={wallet} isProjectOwner={isProjectOwner} />
+
         {project.images.length === 1 && <Box>{renderImageOrVideo()}</Box>}
 
         {project.images.length > 1 && <MediaCarousel links={project.images} />}

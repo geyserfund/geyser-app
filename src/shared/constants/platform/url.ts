@@ -165,9 +165,10 @@ export const SuccessfullPhoneVerificationIllustrationUrl =
 export const DollarToBitcoinIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/dollar-to-bitcoin-illustration.png'
 
-export const LaunchNowIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/launch-now.png'
+export const LaunchNowIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/launch-now-illustration.png'
 export const LaunchPadIllustrationUrl =
-  'https://storage.googleapis.com/geyser-projects-media/utils/launchpad-balloon.png'
+  'https://storage.googleapis.com/geyser-projects-media/utils/launch-pad-illustration.png'
 export const SaveDraftIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/save-draft-illustration.png'
 export const FollowBellIllurationsUrl =
@@ -175,6 +176,8 @@ export const FollowBellIllurationsUrl =
 export const CrownIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/crown-illustration.png'
 export const GrantsIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/grants-illustration.png'
+export const VerificationIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/verification-illustration.png'
 
 // PAYMENT METHOD
 export const BitcoinLightingPaymentImageUrl =
