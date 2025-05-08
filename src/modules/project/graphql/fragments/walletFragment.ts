@@ -57,3 +57,12 @@ export const FRAGMENT_PROJECT_WALLET_CONNECTION_DETAILS = gql`
     }
   }
 `
+
+export const FRAGMENT_PROJECT_WALLET_CREATION_DETAILS = gql`
+  ${FRAGMENT_PROJECT_PAGE_WALLET}
+  ${FRAGMENT_PROJECT_WALLET_CONNECTION_DETAILS}
+  fragment ProjectPageWalletCreationDetails on Wallet {
+    ...ProjectPageWallet
+    ...ProjectWalletConnectionDetails
+  }
+`

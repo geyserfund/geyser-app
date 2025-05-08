@@ -11,7 +11,6 @@ import {
   projectPostCreatorRoutes,
   projectRewardCreatorRoutes,
   projectRoutes,
-  projectRoutesNotAllowedForPrelaunchProjects,
   projectStoryCreatorRoutes,
   routeMatchForAtom,
 } from '../../../config/routes/routeGroups'
@@ -36,10 +35,6 @@ const isProjectMainPageAtom = atom(
     getPath('projectDraft', PathName.projectName),
     getPath('projectPreLaunch', PathName.projectName),
   ]),
-)
-
-export const isProjectRoutesNotAllowedForPrelaunchProjectsAtom = atom(
-  routeMatchForAtom(projectRoutesNotAllowedForPrelaunchProjects),
 )
 
 const mainProjectPageScrolledPassThresholdAtom = atom(false)

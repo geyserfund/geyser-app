@@ -1,7 +1,7 @@
 import { Box, Circle, CircularProgress, HStack, VStack } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
+import { t } from 'i18next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useSwipeable } from 'react-swipeable'
 
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
@@ -9,20 +9,25 @@ import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { Body } from '../../../../../../../../../shared/components/typography'
 import { ProjectGoalCurrency } from '../../../../../../../../../types'
-import { commaFormatted, removeProjectAmountException } from '../../../../../../../../../utils'
+import {
+  centsToDollars,
+  commaFormatted,
+  isPrelaunch,
+  removeProjectAmountException,
+} from '../../../../../../../../../utils'
 import { useGoalsAtom, useProjectAtom } from '../../../../../../../hooks/useProjectAtom'
+import { USD_AMOUNT_TO_GO_LIVE } from '../../../components/PrelaunchFollowButton.tsx'
 import { useProjectDefaultGoal } from '../../../hooks/useProjectDefaultGoal'
 
 enum BalanceView {
   Goal = 'goal',
   Total = 'total',
+  PreLaunch = 'preLaunch',
 }
 
 export function ProjectBalanceDisplay() {
-  const { t } = useTranslation()
-
   const { project, loading } = useProjectAtom()
-  const { inProgressGoals } = useGoalsAtom()
+  const { inProgressGoals, goalsLoading } = useGoalsAtom()
 
   const { defaultGoalId, balanceUsdCent, balance } = project
 
@@ -33,6 +38,10 @@ export function ProjectBalanceDisplay() {
     balanceUsdCent,
     inProgressGoals,
   })
+
+  const usdAmount = Math.round(centsToDollars(project.balanceUsdCent))
+
+  const amountToGoLive = USD_AMOUNT_TO_GO_LIVE - usdAmount
 
   const handlers = useSwipeable({
     onSwiped() {
@@ -46,21 +55,57 @@ export function ProjectBalanceDisplay() {
   const [currentView, setCurrentView] = useState<BalanceView>(hasGoal ? BalanceView.Goal : BalanceView.Total)
 
   const isTotalView = currentView === BalanceView.Total
+  const isGoalView = currentView === BalanceView.Goal
+  const isPreLaunchView = currentView === BalanceView.PreLaunch
+
+  const hasPreLaunch = isPrelaunch(project.status)
 
   useEffect(() => {
     if (!loading) {
-      setCurrentView(hasGoal ? BalanceView.Goal : BalanceView.Total)
+      if (hasPreLaunch) {
+        setCurrentView(BalanceView.PreLaunch)
+      } else {
+        setCurrentView(hasGoal ? BalanceView.Goal : BalanceView.Total)
+      }
     }
-  }, [loading, hasGoal])
+  }, [loading, hasGoal, hasPreLaunch])
 
   const toggleTotalProject = () => {
     setCurrentView((current) => {
-      if (current === BalanceView.Goal && hasTotalBalance) {
-        return BalanceView.Total
+      if (current === BalanceView.PreLaunch) {
+        if (hasTotalBalance) {
+          return BalanceView.Total
+        }
+
+        if (hasGoal) {
+          return BalanceView.Goal
+        }
+
+        return BalanceView.PreLaunch
       }
 
-      if (current === BalanceView.Total && hasGoal) {
+      if (current === BalanceView.Goal) {
+        if (hasPreLaunch) {
+          return BalanceView.PreLaunch
+        }
+
+        if (hasTotalBalance) {
+          return BalanceView.Total
+        }
+
         return BalanceView.Goal
+      }
+
+      if (current === BalanceView.Total) {
+        if (hasGoal) {
+          return BalanceView.Goal
+        }
+
+        if (hasPreLaunch) {
+          return BalanceView.PreLaunch
+        }
+
+        return BalanceView.Total
       }
 
       return current
@@ -74,12 +119,8 @@ export function ProjectBalanceDisplay() {
   }, [priorityGoal])
 
   const renderGoalValue = useCallback(() => {
-    if (!priorityGoal) {
-      if (isTotalView) {
-        return null
-      }
-
-      return <SkeletonLayout height="90px" width="100%" />
+    if (goalsLoading || !priorityGoal) {
+      return null
     }
 
     const percentage = (priorityGoal.amountContributed / priorityGoal.targetAmount) * 100
@@ -88,9 +129,9 @@ export function ProjectBalanceDisplay() {
         width="100%"
         spacing={4}
         as={motion.div}
-        px={isTotalView ? 6 : 0}
-        position={isTotalView ? 'absolute' : undefined}
-        animate={{ opacity: !isTotalView ? 1 : 0 }}
+        px={!isGoalView ? 6 : 0}
+        position={!isGoalView ? 'absolute' : undefined}
+        animate={{ opacity: isGoalView ? 1 : 0 }}
       >
         <CircularProgress
           capIsRound
@@ -131,7 +172,7 @@ export function ProjectBalanceDisplay() {
         </VStack>
       </HStack>
     )
-  }, [priorityGoal, formattedUsdAmount, formattedSatsAmount, t, circularPercentage, isTotalView])
+  }, [priorityGoal, formattedUsdAmount, formattedSatsAmount, formatAmount, circularPercentage, isTotalView, isGoalView])
 
   const renderProjectTotalValue = useCallback(() => {
     return (
@@ -140,6 +181,7 @@ export function ProjectBalanceDisplay() {
         display="flex"
         alignItems="center"
         as={motion.div}
+        px={!isTotalView ? 6 : 0}
         position={!isTotalView ? 'absolute' : undefined}
         animate={{ opacity: isTotalView ? 1 : 0 }}
       >
@@ -160,13 +202,58 @@ export function ProjectBalanceDisplay() {
         </Box>
       </VStack>
     )
-  }, [balance, formattedTotalUsdAmount, t, isTotalView])
+  }, [balance, formattedTotalUsdAmount, isTotalView])
+
+  const renderProjectPreLaunchValue = useCallback(() => {
+    if (!hasPreLaunch) {
+      return null
+    }
+
+    return (
+      <HStack
+        width="100%"
+        spacing={4}
+        as={motion.div}
+        px={!isPreLaunchView ? 6 : 0}
+        position={!isPreLaunchView ? 'absolute' : undefined}
+        animate={{ opacity: isPreLaunchView ? 1 : 0 }}
+      >
+        <CircularProgress
+          capIsRound
+          value={usdAmount ?? 0}
+          min={0}
+          max={210}
+          size="96px"
+          thickness="10px"
+          color={'primary1.9'}
+          trackColor="neutral1.3"
+        />
+        <VStack flex="1" spacing={0} width="100%" px={2} alignItems={'start'}>
+          <Body size="2xl" bold dark>
+            {'$'}
+            {usdAmount ?? 0}{' '}
+            <Body as="span" size="md" light>
+              {t(`raised`)}
+            </Body>
+          </Body>
+
+          <Body size="2xl" dark bold display="inline">
+            {`$${amountToGoLive}`}{' '}
+            <Body as="span" size="md" light>
+              {t(`more to go live.`)}
+            </Body>
+          </Body>
+        </VStack>
+      </HStack>
+    )
+  }, [usdAmount, amountToGoLive, isPreLaunchView, hasPreLaunch])
 
   const DotIndicator = () => {
     return (
       <HStack width="100%" justifyContent="center" spacing={1}>
-        <Circle size="12px" bg={!isTotalView ? 'neutral.600' : 'neutral.200'} />
-        <Circle size="12px" bg={isTotalView ? 'neutral.600' : 'neutral.200'} />
+        {hasPreLaunch && <Circle size="12px" bg={isPreLaunchView ? 'neutral.600' : 'neutral.200'} />}
+        {hasGoal && <Circle size="12px" bg={isGoalView ? 'neutral.600' : 'neutral.200'} />}
+        {hasTotalBalance && <Circle size="12px" bg={isTotalView ? 'neutral.600' : 'neutral.200'} />}
       </HStack>
     )
   }
@@ -175,9 +262,12 @@ export function ProjectBalanceDisplay() {
     return <SkeletonLayout height="90px" width="100%" />
   }
 
-  if (!hasGoal && !hasTotalBalance) {
+  if (!hasGoal && !hasTotalBalance && !hasPreLaunch) {
     return null
   }
+
+  const shouldShowDotIndicator =
+    (hasGoal && hasTotalBalance) || (hasPreLaunch && hasTotalBalance) || (hasGoal && hasPreLaunch)
 
   return (
     <VStack
@@ -192,9 +282,10 @@ export function ProjectBalanceDisplay() {
       <VStack height={'128px'} justifyContent={'center'}>
         {renderProjectTotalValue()}
         {renderGoalValue()}
+        {renderProjectPreLaunchValue()}
       </VStack>
 
-      {hasGoal && hasTotalBalance && <DotIndicator />}
+      {shouldShowDotIndicator && <DotIndicator />}
     </VStack>
   )
 }

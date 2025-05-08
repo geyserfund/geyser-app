@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@chakra-ui/react'
+import { Button, ButtonProps, Link } from '@chakra-ui/react'
 // import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -12,9 +12,12 @@ import { CommunityVoteGrant, GrantStatusEnum, VotingSystem } from '@/types'
 
 import { isActive, isPrelaunch } from '../../../../../../../utils'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
-import { PrelaunchFollowButton } from './PrelaunchFollowButton.tsx'
 
-export const ContributeButton = (props: ButtonProps) => {
+type ContributeButtonProps = ButtonProps & {
+  isWidget?: boolean
+}
+
+export const ContributeButton = ({ isWidget, ...props }: ContributeButtonProps) => {
   const { t } = useTranslation()
 
   const navigate = useNavigate()
@@ -42,9 +45,20 @@ export const ContributeButton = (props: ButtonProps) => {
 
   const isStepVoting = communityVotingGrant ? communityVotingGrant.votingSystem === VotingSystem.StepLog_10 : false
 
-  const isFundingDisabled = !isActive(project.status)
+  const isFundingDisabled = !isActive(project.status) && !isPrelaunch(project.status)
 
-  const isProjectPrelaunch = isPrelaunch(project?.status)
+  const buttonProps = isWidget
+    ? {
+        as: Link,
+        href: `https://geyser.fund/${getPath('projectFunding', project.name)}`,
+        isExternal: true,
+      }
+    : {
+        onClick: () =>
+          communityVotingGrant && isStepVoting
+            ? votingInfoModal.onOpen()
+            : navigate(getPath('projectFunding', project.name)),
+      }
 
   return (
     <>
@@ -57,24 +71,17 @@ export const ContributeButton = (props: ButtonProps) => {
           project={project}
         />
       )}
-      {!isProjectPrelaunch ? (
-        <Button
-          size="lg"
-          variant="solid"
-          colorScheme="primary1"
-          isDisabled={isFundingDisabled}
-          onClick={() =>
-            communityVotingGrant && isStepVoting
-              ? votingInfoModal.onOpen()
-              : navigate(getPath('projectFunding', project.name))
-          }
-          {...props}
-        >
-          {t('Contribute')}
-        </Button>
-      ) : (
-        <PrelaunchFollowButton w="full" project={project} />
-      )}
+
+      <Button
+        size="lg"
+        variant="solid"
+        colorScheme="primary1"
+        isDisabled={isFundingDisabled}
+        {...buttonProps}
+        {...props}
+      >
+        {t('Contribute')}
+      </Button>
     </>
   )
 }

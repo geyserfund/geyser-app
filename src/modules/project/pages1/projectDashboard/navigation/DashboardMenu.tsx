@@ -1,12 +1,13 @@
 import { Button, ButtonProps, Divider, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
+import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectState } from '@/modules/project/state/projectAtom'
 import { dimensions, getPath } from '@/shared/constants'
-import { isPrelaunch, useMobileMode } from '@/utils'
+import { useMobileMode } from '@/utils'
 
 import { currentDashboardItemAtom } from './dashboardAtom'
 import { DashboardType, ProjectDashboardItem, projectDashboardItems } from './dashboardNavData'
@@ -34,46 +35,40 @@ const DashboardMenuContent = (props: ButtonProps) => {
 
   const currentDashboardItem = useAtomValue(currentDashboardItemAtom)
 
-  const isPrelaunchProject = isPrelaunch(project.status)
-
   const dashboardAnalyticsItems = projectDashboardItems.filter((item) => item.type === DashboardType.analytics)
   const dashboardSettingsItems = projectDashboardItems.filter((item) => item.type === DashboardType.settings)
   const dashboardFeaturesItems = projectDashboardItems.filter((item) => item.type === DashboardType.features)
 
   return (
     <>
-      {!isPrelaunchProject &&
-        dashboardAnalyticsItems.map((item, index) => (
-          <>
-            <DashboardMenuButton
-              key={item.label}
-              item={item}
-              currentDashboardItem={currentDashboardItem}
-              isMobile={isMobile}
-              project={project}
-              {...props}
-            />
+      {dashboardAnalyticsItems.map((item, index) => (
+        <React.Fragment key={item.label}>
+          <DashboardMenuButton
+            key={item.label}
+            item={item}
+            currentDashboardItem={currentDashboardItem}
+            isMobile={isMobile}
+            project={project}
+            {...props}
+          />
 
-            {index !== dashboardAnalyticsItems.length - 1 && <Divider />}
-          </>
-        ))}
-      {!isPrelaunchProject &&
-        dashboardFeaturesItems.map((item, index) => (
-          <>
-            <DashboardMenuButton
-              key={item.label}
-              item={item}
-              currentDashboardItem={currentDashboardItem}
-              isMobile={isMobile}
-              project={project}
-              {...props}
-            />
-            {index !== dashboardFeaturesItems.length - 1 && <Divider />}
-          </>
-        ))}
+          {index !== dashboardAnalyticsItems.length - 1 && <Divider />}
+        </React.Fragment>
+      ))}
+      {dashboardFeaturesItems.map((item, index) => (
+        <React.Fragment key={item.label}>
+          <DashboardMenuButton
+            key={item.label}
+            item={item}
+            currentDashboardItem={currentDashboardItem}
+            isMobile={isMobile}
+            project={project}
+            {...props}
+          />
+          {index !== dashboardFeaturesItems.length - 1 && <Divider />}
+        </React.Fragment>
+      ))}
       {dashboardSettingsItems.map((item) => {
-        if (isPrelaunchProject && !item.isPrelaunch) return null
-
         return (
           <DashboardMenuButton
             key={item.label}

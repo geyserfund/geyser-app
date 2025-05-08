@@ -56,7 +56,10 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
       {ProjectByCategoryList.map((projectByCategory) => {
         if (projectByCategory.projects.length === 0) return null
 
-        const projects = projectByCategory.projects.map((project) => project.project)
+        const projects = projectByCategory.projects.map((project) => ({
+          ...project.project,
+          contributionSummary: project.contributionsSummary || undefined,
+        }))
 
         return (
           <ProjectDisplayBody

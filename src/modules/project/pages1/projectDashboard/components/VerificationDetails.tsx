@@ -1,11 +1,11 @@
-import { Button, HStack, Icon, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
+import { Button, HStack, Image, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { PiUserCircleCheck } from 'react-icons/pi'
 
 import { LegalEntitySelection } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsVerification/components/LegalEntitySelection.tsx'
 import { userTaxProfileAtom } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsVerification/state/taxProfileAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { VerificationIllustrationUrl } from '@/shared/constants/platform/url.ts'
 
 type VerificationDetailsProps = {
   onContinue: () => void
@@ -20,7 +20,7 @@ export const VerificationDetails = ({ onContinue, onLoading }: VerificationDetai
   return (
     <VStack w="full" gap={4}>
       <HStack justifyContent="center" w="full">
-        <Icon as={PiUserCircleCheck} fontSize="150px" />
+        <Image src={VerificationIllustrationUrl} maxHeight="150px" alt="verification" />
       </HStack>
 
       <Body>

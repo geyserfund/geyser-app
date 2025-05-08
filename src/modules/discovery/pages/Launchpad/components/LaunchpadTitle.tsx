@@ -7,9 +7,9 @@ export const LaunchpadTitle = () => {
   return (
     <GradientBanner
       title={t('Launchpad')}
-      subtitle={t(
-        'These early-stage projects are in countdown mode. To launch, they need 21 followers within 30 days. Help them build momentum — or they might never take off.',
-      )}
+      subtitle={`${t(
+        'These early-stage projects are in countdown mode. To launch, they must raise $210 within 30 days. Help them build momentum — or they might never take off.',
+      )} 🚀`}
       imageUrl={LaunchPadIllustrationUrl}
     />
   )

@@ -68,15 +68,18 @@ export const ProjectPosts = () => {
       <CardLayout w="full" direction="row" justifyContent="center" dense noborder>
         <VStack maxWidth={dimensions.project.posts.view.maxWidth} w="full" spacing={6}>
           <CreatorPostPageTopBar />
+
           <VStack w="full" spacing={4} alignItems={'start'}>
             <H2 bold size="2xl" display={{ base: 'unset', lg: 'none' }}>
               {t('Posts')}
             </H2>
+
             <PostTypeFilterBar
               availablePostTypes={availablePostTypes}
               selectedPostType={selectedPostType}
               onFilterChange={setSelectedPostType}
             />
+
             {filteredPosts.map((entry, index) => {
               return <ProjectPostCard post={entry} key={entry.id} />
             })}

@@ -7,30 +7,24 @@ import { useNavigate } from 'react-router-dom'
 import Loader from '@/components/ui/Loader'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { ProjectState } from '@/modules/project/state/projectAtom.ts'
+import { useProjectPreLaunchMutation } from '@/types/index.ts'
 
 import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
 import { useAuthContext } from '../../../../../context'
 import { getPath } from '../../../../../shared/constants'
 import { useModal } from '../../../../../shared/hooks'
-import { CreateWalletInput } from '../../../../../types'
 import { isDraft, useNotification } from '../../../../../utils'
 import { ProjectLaunchConfirmModal } from '../../../components/ProjectLaunchConfirmModal'
 import { ProjectCreateCompleted } from '../components/ProjectCreateCompleted'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
+import { ProjectCreationStrategy } from './ProjectCreationStrategy.tsx'
 
 interface ProjectCreateCompletionPageProps {
-  project?: ProjectState
-  createWalletInput: CreateWalletInput | null
-  isSubmitEnabled: boolean
-  setReadyToLaunch: Dispatch<SetStateAction<boolean>>
+  strategy: ProjectCreationStrategy
+  setStrategySelected: Dispatch<SetStateAction<boolean>>
 }
 
-export const ProjectCreateCompletionPage = ({
-  createWalletInput,
-  isSubmitEnabled,
-  setReadyToLaunch,
-}: ProjectCreateCompletionPageProps) => {
+export const ProjectCreateCompletionPage = ({ strategy, setStrategySelected }: ProjectCreateCompletionPageProps) => {
   const { t } = useTranslation()
   const { queryCurrentUser } = useAuthContext()
 
@@ -44,8 +38,31 @@ export const ProjectCreateCompletionPage = ({
 
   const { publishProject } = useProjectAPI()
 
+  const [projectPreLaunch] = useProjectPreLaunchMutation({
+    variables: {
+      input: {
+        projectId: project?.id,
+      },
+    },
+    onCompleted() {
+      queryCurrentUser()
+      navigate(getPath('projectLaunchPreLaunch', project?.name))
+    },
+    onError(error) {
+      toast.error({
+        title: t('Failed to pre-launch project'),
+        description: error.message,
+      })
+    },
+  })
+
   const handleBackClick = () => {
-    setReadyToLaunch(false)
+    if (project.paidLaunch) {
+      navigate(-1)
+      return
+    }
+
+    setStrategySelected(false)
   }
 
   const onLaunchClick = async () => {
@@ -53,24 +70,29 @@ export const ProjectCreateCompletionPage = ({
       return
     }
 
-    publishProject.execute({
-      variables: {
-        input: { projectId: project?.id },
-      },
-      onCompleted() {
-        toast.success({
-          title: 'Project launched',
-        })
-        queryCurrentUser()
-        navigate(getPath('projectLaunch', project?.name))
-      },
-      onError(error) {
-        toast.error({
-          title: 'Error launching project',
-          description: `${error}`,
-        })
-      },
-    })
+    if (project.paidLaunch) {
+      publishProject.execute({
+        variables: {
+          input: { projectId: project?.id },
+        },
+        onCompleted() {
+          toast.success({
+            title: 'Project launched',
+          })
+          queryCurrentUser()
+          navigate(getPath('projectLaunch', project?.name))
+        },
+        onError(error) {
+          toast.error({
+            title: 'Error launching project',
+            description: `${error}`,
+          })
+        },
+      })
+      return
+    }
+
+    projectPreLaunch()
   }
 
   const onSaveDraftClick = async () => {
@@ -101,19 +123,17 @@ export const ProjectCreateCompletionPage = ({
       >
         <ProjectCreateCompleted>
           <VStack w="100%">
-            {createWalletInput && (
-              <Button
-                variant="solid"
-                colorScheme="primary1"
-                w="full"
-                leftIcon={<PiRocketLaunch />}
-                onClick={confirmModal.onOpen}
-                disabled={!isSubmitEnabled}
-                isLoading={publishProject.loading}
-              >
-                {t('Launch Project')}
-              </Button>
-            )}
+            <Button
+              variant="solid"
+              colorScheme="primary1"
+              w="full"
+              leftIcon={<PiRocketLaunch />}
+              onClick={confirmModal.onOpen}
+              isLoading={publishProject.loading}
+            >
+              {t('Launch Project')}
+            </Button>
+
             {isDraft(project?.status) && (
               <Button variant="outline" colorScheme="neutral1" w="full" onClick={onSaveDraftClick}>
                 {t('Save As Draft')}

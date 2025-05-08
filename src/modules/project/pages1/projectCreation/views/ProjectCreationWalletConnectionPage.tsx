@@ -1,6 +1,6 @@
-import { Box, VStack } from '@chakra-ui/react'
+import { Box, Button, VStack } from '@chakra-ui/react'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { useMemo } from 'react'
+import { useEffect } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -18,9 +18,8 @@ import { EnableFiatContributions } from '../../projectDashboard/views/wallet/com
 import { ProjectCreationWalletConnectionForm } from '..'
 import { FormContinueButton } from '../components/FormContinueButton'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
-import { useCheckPrelaunchSteps } from '../hooks/useCheckPrelaunchSteps.tsx'
 import { useLocationMandatoryRedirect } from '../hooks/useLocationMandatoryRedirect'
-import { ConnectionOption, useWalletForm } from '../hooks/useWalletForm'
+import { useWalletForm } from '../hooks/useWalletForm'
 import {
   fiatContributionAtom,
   goToIdentityVerificationAtom,
@@ -28,15 +27,12 @@ import {
   whereToGoNextAtom,
 } from '../states/nodeStatusAtom.ts'
 import { goToEmailVerificationAtom } from '../states/nodeStatusAtom.ts'
-import { ProjectCreateCompletionPage } from './ProjectCreateCompletionPage'
 import { ProjectCreationEmailVerificationPage } from './ProjectCreationEmailVerificationPage.tsx'
 import { ProjectCreationIdentityVerificationPage } from './ProjectCreationIdentityVerificationPage.tsx'
 
 export const ProjectCreationWalletConnectionPage = () => {
   const { t } = useTranslation()
   const toast = useNotification()
-
-  useCheckPrelaunchSteps()
 
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
@@ -56,6 +52,12 @@ export const ProjectCreationWalletConnectionPage = () => {
   const goToIdentityVerification = useAtomValue(goToIdentityVerificationAtom)
 
   const setWhereToGoNext = useSetAtom(whereToGoNextAtom)
+
+  useEffect(() => {
+    if (isReadyForLaunch) {
+      navigate(getPath('launchProjectStrategy', project?.id))
+    }
+  }, [isReadyForLaunch, project?.id, navigate])
 
   const handleNext = (createWalletInput: CreateWalletInput | null) => {
     if (wallet?.id) {
@@ -115,30 +117,6 @@ export const ProjectCreationWalletConnectionPage = () => {
     navigate(-1)
   }
 
-  const isSubmitEnabled = useMemo(() => {
-    if (createWalletInput === null) {
-      return false
-    }
-
-    return (
-      connectionOption === ConnectionOption.PERSONAL_NODE ||
-      (connectionOption === ConnectionOption.LIGHTNING_ADDRESS &&
-        Boolean(lightningAddress.value) &&
-        !isLightningAddressInValid)
-    )
-  }, [connectionOption, lightningAddress.value, createWalletInput, isLightningAddressInValid])
-
-  if (isReadyForLaunch) {
-    return (
-      <ProjectCreateCompletionPage
-        project={project}
-        createWalletInput={createWalletInput}
-        isSubmitEnabled={isSubmitEnabled}
-        setReadyToLaunch={setReadyForLaunch}
-      />
-    )
-  }
-
   if (goToEmailVerification) {
     return <ProjectCreationEmailVerificationPage />
   }
@@ -151,25 +129,33 @@ export const ProjectCreationWalletConnectionPage = () => {
 
   const isWalletIncomplete = !createWalletInput
 
+  const isContinueButtonDisabled = isWalletIncomplete || isLightningAddressInValid
+
   return (
     <ProjectCreateLayout
       onBackClick={handleBackClick}
       continueButton={
-        <FormContinueButton
-          onClick={handleConfirm}
-          isLoading={isContinueButtonLoading}
-          isDisabled={isWalletIncomplete || isLightningAddressInValid}
-          flexGrow={1}
-        />
+        isContinueButtonDisabled ? (
+          <Button
+            size="lg"
+            variant="solid"
+            colorScheme="neutral1"
+            flexGrow={1}
+            onClick={() => navigate(getPath('projectLaunchDraft', project?.name))}
+          >
+            {t('Save as Draft')}
+          </Button>
+        ) : (
+          <FormContinueButton
+            onClick={handleConfirm}
+            isLoading={isContinueButtonLoading}
+            isDisabled={isContinueButtonDisabled}
+            flexGrow={1}
+          />
+        )
       }
       title={
-        <TitleWithProgressBar
-          hideSteps
-          title={t('Configure wallet')}
-          subtitle={t('You’re almost ready to launch!')}
-          index={5}
-          length={5}
-        />
+        <TitleWithProgressBar title={t('Configure wallet')} subtitle={t('Create a project')} index={5} length={5} />
       }
     >
       <VStack w="full" alignItems="start" pb="20px">

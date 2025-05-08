@@ -43,17 +43,9 @@ export const LaunchpadProjectsByCategory = ({ category, subCategory }: Launchpad
 
   const sortedProjects = useMemo(() => {
     return projects.sort((a, b) => {
-      return (b.followersCount ?? 0) - (a.followersCount ?? 0)
+      return (b.balanceUsdCent ?? 0) - (a.balanceUsdCent ?? 0)
     })
   }, [projects])
-
-  const onFollowCompleted = (projectId: string) => {
-    setProjects((prevProjects) =>
-      prevProjects.map((project) =>
-        project.id === projectId ? { ...project, followersCount: (project.followersCount ?? 0) + 1 } : project,
-      ),
-    )
-  }
 
   const hadMoreThan4Projects = sortedProjects.length > 4
 
@@ -67,7 +59,7 @@ export const LaunchpadProjectsByCategory = ({ category, subCategory }: Launchpad
     <VStack w="full" spacing={2}>
       <HStack justifyContent={'space-between'} width="100%">
         <H3 size={{ base: 'lg', md: '2xl' }} medium dark>
-          {t('Trending in')}{' '}
+          {t('New in')}{' '}
           <Body as="span" bold color="primary1.11">
             {category ? ProjectCategoryLabel[category] : ProjectSubCategoryLabel[subCategory ?? '']}
           </Body>
@@ -92,7 +84,7 @@ export const LaunchpadProjectsByCategory = ({ category, subCategory }: Launchpad
           : projectsToShow.map((project) => {
               return (
                 <GridItem key={project.id}>
-                  <LaunchpadProjectItem project={project} onFollowCompleted={onFollowCompleted} />
+                  <LaunchpadProjectItem project={project} />
                 </GridItem>
               )
             })}

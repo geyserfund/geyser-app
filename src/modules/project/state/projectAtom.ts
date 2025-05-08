@@ -20,6 +20,7 @@ import { projectFormAtomReset } from './projectFormAtom'
 import { rewardsAtomReset } from './rewardsAtom'
 import { subscriptionAtomReset } from './subscriptionAtom'
 import { walletAtomReset } from './walletAtom'
+import { resetIsWidgetAtom } from './widgetAtom.ts'
 
 export type ProjectState = ProjectPageBodyFragment &
   ProjectHeaderSummaryFragment &
@@ -126,6 +127,7 @@ export const useProjectReset = () => {
   const subscriptionReset = useSetAtom(subscriptionAtomReset)
 
   const sourceActivityReset = useSetAtom(resetSourceResourceAtom)
+  const isWidgetReset = useSetAtom(resetIsWidgetAtom)
 
   const resetProject = useCallback(() => {
     console.log('=================================')
@@ -145,6 +147,7 @@ export const useProjectReset = () => {
     subscriptionReset()
 
     sourceActivityReset()
+    isWidgetReset()
   }, [
     contributionsReset,
     entriesReset,
@@ -159,6 +162,7 @@ export const useProjectReset = () => {
     subscriptionReset,
 
     sourceActivityReset,
+    isWidgetReset,
   ])
 
   return resetProject

@@ -15,7 +15,7 @@ export const CreatorPostPageTopBar = () => {
   }
 
   return (
-    <CardLayout dense noborder w="full" direction="row" display={{ base: 'none', lg: 'flex' }}>
+    <CardLayout dense noborder w="full" direction="row" display={{ base: 'none', lg: 'flex' }} flexWrap="wrap">
       <CreatePostButtons />
     </CardLayout>
   )

@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 import { Button, HStack, Icon, Link, ModalProps, Progress, useClipboard, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { PiLink, PiShare } from 'react-icons/pi'
@@ -5,6 +6,7 @@ import { PiLink, PiShare } from 'react-icons/pi'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { generateTwitterShareUrl } from '@/modules/project/utils/twitterShareTemplate.ts'
 import { getPath } from '@/shared/constants/index.ts'
+import { centsToDollars } from '@/utils/index.ts'
 
 import { Modal } from '../../../../../shared/components/layouts/Modal'
 import { Body } from '../../../../../shared/components/typography'
@@ -20,16 +22,21 @@ export const ProjectCreatePreLaunchedModal = (props: Omit<ModalProps, 'children'
   const { followersCount } = project
 
   return (
-    <Modal size="md" title={t("You're live on Geyser Launchpad!")} {...props}>
+    <Modal size="md" title={t("You're live on Geyser Launchpad!")} subtitleProps={{ medium: true }} {...props}>
       <VStack w="100%" spacing={6} pt={2}>
         <VStack w="100%">
           <HStack w="full" justifyContent="space-between">
             <Body>
-              <Trans i18nKey={'{{countDown}} out of 21 followers'} values={{ countDown: followersCount ?? 0 }}>
-                {'{{countDown}} out of 21 followers'}
+              <Trans
+                i18nKey={'${{countDown}} out of $210'}
+                values={{
+                  countDown: project?.balanceUsdCent ? Math.round(centsToDollars(project?.balanceUsdCent)) : 0,
+                }}
+              >
+                {'${{countDown}} out of $210'}
               </Trans>
             </Body>
-            <Body>⛳️ {t('Launch')}</Body>
+            <Body>🚀</Body>
           </HStack>
           <Progress
             borderRadius="8px"
@@ -43,19 +50,24 @@ export const ProjectCreatePreLaunchedModal = (props: Omit<ModalProps, 'children'
           />
         </VStack>
         <Body medium dark>
-          {t('You have 30 days to reach 21 followers to officially launch and start raising funds.')}
+          {t('You have 30 days to raise $210 to officially launch and keep the project alive.')}
         </Body>
 
         <Body light>
           {t(
-            'Your project is now live on the Geyser Launchpad, where contributors discover and support promising new ideas.',
+            'Your project is now featured on the Geyser Launchpad, where supporters discover bold, early-stage ideas.',
           )}
         </Body>
-        <Body light>
-          {t(
-            'Spread the word — share your project on social media, send it to friends and family, or get it featured on the Launchpad to boost your visibility.',
-          )}
-        </Body>
+        <VStack w="full" spacing={0} alignItems="flex-start">
+          <Body medium dark>
+            {t("What's next?")}
+          </Body>
+          <Body light>
+            {t(
+              'Share your project far and wide — post it on social media, text it to friends, or pitch it in your community.',
+            )}
+          </Body>
+        </VStack>
 
         <HStack w="full" gap={2}>
           <Button

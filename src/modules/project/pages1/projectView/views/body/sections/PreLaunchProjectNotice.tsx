@@ -51,27 +51,30 @@ export const PreLaunchProjectNotice = () => {
         <CardLayout
           flexDirection={'row'}
           justifyContent={'space-between'}
+          alignItems={'center'}
           w="full"
+          padding={'12px 24px'}
           background={GuardiansButtonBackgroundGradient}
         >
           <Body size="lg" bold dark>
             {t('Pay $21 to launch right away')}
           </Body>
-          <Button variant="solid" colorScheme="primary1" onClick={launchRightAwayModal.onOpen}>
+          <Button size="lg" variant="surface" colorScheme="neutral1" onClick={launchRightAwayModal.onOpen}>
             {t('Launch project')}
           </Button>
         </CardLayout>
         <Modal size="lg" {...launchRightAwayModal}>
           <ProjectCreateStrategyCard
             image={LaunchNowIllustrationUrl}
-            title={t('Launch Now')}
-            subtitle={t('Pay $21 to go live and start receiving contributions right away')}
-            why={t(
+            title={t('Go Live Now')}
+            subtitle={t('Skip the challenge. Launch instantly for $21.')}
+            body={t(
               "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you can begin receiving support from contributors immediately.",
             )}
-            howItWorks={t(
-              'Pay $21 in Bitcoin or Fiat to launch your project. It helps us keep Geyser sustainable. Additionally, project gets mentioned in our newsletter with over 6k subscribers to help you get started.',
-            )}
+            points={[
+              t('Seen in ‘Recently launched’ in Discovery page'),
+              t('No pressure to raise a lot right away, go by your plan.'),
+            ]}
             noborder
             background="transparent"
           />

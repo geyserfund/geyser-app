@@ -13,6 +13,7 @@ import { useProjectAtom } from '../hooks/useProjectAtom'
 import {
   addUpdateInProgressGoalsAtom,
   completedGoalsAtom,
+  goalsLoadingAtom,
   initialGoalsLoadAtom,
   inProgressGoalsAtom,
   removeGoalsAtom,
@@ -31,6 +32,7 @@ export const useProjectGoalsAPI = (load?: boolean) => {
 
   const removeInprogressGoals = useSetAtom(removeGoalsAtom)
   const addUpdateInProgressGoals = useSetAtom(addUpdateInProgressGoalsAtom)
+  const setGoalsLoading = useSetAtom(goalsLoadingAtom)
 
   const updateProjectItemCounts = useSetAtom(updateProjectItemCountsAtom)
 
@@ -49,6 +51,10 @@ export const useProjectGoalsAPI = (load?: boolean) => {
       const inProgressGoals = data?.projectGoals.inProgress || []
       setInProgressGoals(inProgressGoals)
       setInitialGoalsLoad(true)
+      setGoalsLoading(false)
+    },
+    onError() {
+      setGoalsLoading(false)
     },
   })
 

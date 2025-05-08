@@ -13,7 +13,11 @@ import {
 import { ContributeButton } from '../../components'
 import { ProjectBalanceDisplay } from './components/ProjectBalanceDisplay'
 
-export const ContributionSummary = (props: StackProps) => {
+type ContributionSummaryProps = StackProps & {
+  isWidget?: boolean
+}
+
+export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryProps) => {
   const projectOwner = useAtomValue(projectOwnerAtom)
 
   const isVerified = Boolean(projectOwner?.user?.complianceDetails?.verifiedDetails?.identity?.verified)
@@ -30,7 +34,7 @@ export const ContributionSummary = (props: StackProps) => {
 
       <VStack w="full">
         <HStack w="full">
-          <ContributeButton flex="1" />
+          <ContributeButton flex="1" isWidget={isWidget} />
         </HStack>
         <HStack>
           {paymentMethods.map((method) => (

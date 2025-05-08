@@ -8,6 +8,9 @@ export const fiatContributionAtom = atom<boolean>(true)
 /** Atom to know if the user can go to launch the project */
 export const isReadyForLaunchAtom = atom<boolean>(false)
 
+/** Atom to know how the user wants to launch the project */
+export const launchStrategyAtom = atom(null)
+
 /** Atom to know if the user needs to go to the  email verification page */
 export const goToEmailVerificationAtom = atom<boolean>(false)
 

@@ -19,6 +19,7 @@ import { Body, H2 } from '@/shared/components/typography'
 import { SubscriptionCurrencyType } from '@/types/generated/graphql'
 
 import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../../../utils'
+import { LaunchpadSummary, NonProfitSummary } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
 
 export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
@@ -105,6 +106,9 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
         </Button>
       </HStack>
       <VStack w="full" alignItems="start" spacing={{ base: 0, lg: 3 }} display={mobileDisplayStyle}>
+        <NonProfitSummary disableDesktop={true} paddingY={3} />
+        <LaunchpadSummary disableDesktop={true} marginY={3} />
+
         {formState.donationAmount && formState.donationAmount > 0 && (
           <HStack>
             <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Donation')}: `}</Body>

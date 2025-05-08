@@ -24,7 +24,7 @@ export const GemArray = ({ size = 'md', name, children }: GemArrayProps) => {
   const navigate = useNavigate()
 
   // Define the display order
-  const orderedGuardianTypes = [GuardianType.Legend, GuardianType.King, GuardianType.Knight, GuardianType.Warrior]
+  const orderedGuardianTypes = [GuardianType.Warrior, GuardianType.Knight, GuardianType.King, GuardianType.Legend]
 
   // Create an array of guardian types that user has
   const userGuardianTypes = userGuardianJewels.map((jewel) => jewel.guardianType)

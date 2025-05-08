@@ -83,10 +83,6 @@ export const useUpdateVerifyEmail = () => {
           status: 'success',
           title: t('Successfully updated user email'),
         })
-        toast({
-          status: 'info',
-          title: t('OTP Sent to the updated email'),
-        })
       }
     },
   })
