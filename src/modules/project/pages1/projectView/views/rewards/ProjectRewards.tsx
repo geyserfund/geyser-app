@@ -39,7 +39,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
 
   const sortedActiveRewards = useMemo(() => {
     if (activeRewards.length > 0) {
-      return activeRewards.sort((a, b) => b.createdAt - a.createdAt)
+      return activeRewards.sort((a, b) => a.cost - b.cost)
     }
 
     return []
@@ -65,7 +65,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
             {t('Products')}
           </H1>
           <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={4} width={'100%'} pb={10}>
-            {activeRewards.map((reward) => {
+            {sortedActiveRewards.map((reward) => {
               return <RewardCardWithBuy key={reward.id} width="100%" reward={reward} />
             })}
           </SimpleGrid>
