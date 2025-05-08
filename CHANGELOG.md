@@ -1,3 +1,43 @@
+## [0.22.0](https://github.com/geyserfund/geyser-app/compare/v0.21.6...v0.22.0) (2025-05-08)
+
+
+### Features
+
+* add digital badges in Profile page ([5eea412](https://github.com/geyserfund/geyser-app/commit/5eea412f4f5b67863fac3933e9db71a28cdb8dff))
+* add launchpad seo ([ad8462d](https://github.com/geyserfund/geyser-app/commit/ad8462dfc5910c9ad752ea8966e29d41fb408d59))
+* create widget for contribution summary ([4d0c58f](https://github.com/geyserfund/geyser-app/commit/4d0c58fa312e9a0985b54b1a87f04bb9811db925))
+* update creation flow for launchpad and ([6e61dce](https://github.com/geyserfund/geyser-app/commit/6e61dce4bad7dc3065a32caecdf6edf7bf3427c1))
+
+
+### Bug Fixes
+
+* add icons for payment methods ([7352fff](https://github.com/geyserfund/geyser-app/commit/7352fff293f144d095f8912a891a19344bfa9c8e))
+* add information when users fund a launchpad project ([32544bd](https://github.com/geyserfund/geyser-app/commit/32544bdb778d01779bc1cf8201dfc2678c33d20d))
+* add leaderboard & contribution summary to widget ([7b91299](https://github.com/geyserfund/geyser-app/commit/7b9129974c159847dbede2b3a23c75b636429c5e))
+* add more follow prompts for projects ([bd12ad4](https://github.com/geyserfund/geyser-app/commit/bd12ad4106d80b4f78e7e0f9feae27cecbfd9070))
+* add slovak to the language list ([faf3948](https://github.com/geyserfund/geyser-app/commit/faf39485e1497c022ea9f066576ae9936f698c68))
+* banner ([6ea245b](https://github.com/geyserfund/geyser-app/commit/6ea245b3e8a36396112f00b4912480e78d982332))
+* double toast for otp sent on email update ([178a2eb](https://github.com/geyserfund/geyser-app/commit/178a2eb1fa09b786ccc527455ca6473c5416d0d5))
+* final issues with launchpad ([dc1826c](https://github.com/geyserfund/geyser-app/commit/dc1826cd56edd57281ca0dd9b4e7cfd4eb5cde46))
+* gem array order ([1c45bf1](https://github.com/geyserfund/geyser-app/commit/1c45bf11d46ccef0cf8dc90bef9c2abce679993f))
+* hotfix project owner for user in contribution summary icon palcement ([5c620cd](https://github.com/geyserfund/geyser-app/commit/5c620cd2940782f4123a4d5ab3f7b9c7b83af4dc))
+* icons when user is not verified ([8884b6f](https://github.com/geyserfund/geyser-app/commit/8884b6fe0272c777cf950f9e03e16b6775aaf8b2))
+* increase tips to 5 and 10 percent ([e5284f5](https://github.com/geyserfund/geyser-app/commit/e5284f5684adfdbc245a0cf380ee1718c25583cc))
+* lightning url login ([b994510](https://github.com/geyserfund/geyser-app/commit/b9945102dcbb009b530b3a8becc76a6136106b56))
+* make strategy cards the same width ([3be1dcb](https://github.com/geyserfund/geyser-app/commit/3be1dcb43e33809a10ec3b77eb9187e953390d85))
+* navbar tooltips ([094e97d](https://github.com/geyserfund/geyser-app/commit/094e97db801bcbb639b4fcff9c01a31d7eb4a8fc))
+* prelaunch updates qa ([3a68b23](https://github.com/geyserfund/geyser-app/commit/3a68b23bfaee1d419f09a005196f837c3c3716d7))
+* profile nav menu button, border color ([12ecfdb](https://github.com/geyserfund/geyser-app/commit/12ecfdbd57e071193ad3d6cc7a49cf2f57b2b76c))
+* qa issues ([e30fe22](https://github.com/geyserfund/geyser-app/commit/e30fe226966c46320ff7b1197febd613f4bbf75f))
+* qa issues with share banner ([8c85196](https://github.com/geyserfund/geyser-app/commit/8c8519668884c2171edcbd3139055079f1142b89))
+* sort project rewards by lower price ([6682a89](https://github.com/geyserfund/geyser-app/commit/6682a89bb16a577db6fd7a47626081b2dc8daf30))
+* style fix for banner in mobile ([104c1a8](https://github.com/geyserfund/geyser-app/commit/104c1a84f973b85cc76c82286457662c02e55b1f))
+* tests ([fce65f8](https://github.com/geyserfund/geyser-app/commit/fce65f8869160a5d3c31bbd5ff49bfadb10e310c))
+* update auth flow ([dc7bc26](https://github.com/geyserfund/geyser-app/commit/dc7bc26cbeefbb0f9d1c24d4e5359c412aefc8b9))
+* update banner copies ([37b88c3](https://github.com/geyserfund/geyser-app/commit/37b88c3890fe537013b35075bf0fe7c8a702714d))
+* wip ([bf26039](https://github.com/geyserfund/geyser-app/commit/bf260397975616c3a13dd3af89b35bc217a1f246))
+* wrap up the widget ([991338c](https://github.com/geyserfund/geyser-app/commit/991338cdb9d30f3dc419e4c45aa9e52ad0d6a09f))
+
 ## [0.21.6](https://github.com/geyserfund/geyser-app/compare/v0.21.0...v0.21.6) (2025-04-29)
 
 
