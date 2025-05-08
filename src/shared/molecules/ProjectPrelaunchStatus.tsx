@@ -30,7 +30,7 @@ export const ProjectPrelaunchStatus = ({
   project,
   onlyTimeLeft = false,
 }: {
-  project: Pick<ProjectState, 'preLaunchedAt' | 'balanceUsdCent' | 'paidLaunch'>
+  project: Pick<ProjectState, 'preLaunchExpiresAt' | 'balanceUsdCent' | 'paidLaunch'>
   onlyTimeLeft?: boolean
 }) => {
   const isMobile = useMobileMode()
@@ -39,13 +39,12 @@ export const ProjectPrelaunchStatus = ({
   const [isTimeUp, setIsTimeUp] = useState(false)
 
   useEffect(() => {
-    if (!project?.preLaunchedAt) {
+    if (!project?.preLaunchExpiresAt) {
       setTimeLeft(null)
       return
     }
 
-    const launchTime = DateTime.fromMillis(project.preLaunchedAt)
-    const endTime = launchTime.plus({ days: 30 })
+    const endTime = DateTime.fromMillis(project.preLaunchExpiresAt)
 
     const updateCountdown = () => {
       const now = DateTime.now()
@@ -64,7 +63,7 @@ export const ProjectPrelaunchStatus = ({
     const intervalId = setInterval(updateCountdown, 60000)
 
     return () => clearInterval(intervalId)
-  }, [project?.preLaunchedAt])
+  }, [project?.preLaunchExpiresAt])
 
   const formattedTime = getFormattedTime(timeLeft, isMobile)
   const hasEnoughFunds = Boolean(project?.balanceUsdCent && project?.balanceUsdCent >= USD_CENTS_AMOUNT_TO_GO_LIVE)

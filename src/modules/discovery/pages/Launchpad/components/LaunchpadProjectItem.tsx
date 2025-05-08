@@ -27,13 +27,12 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
   const [timeLeft, setTimeLeft] = useState<Duration | null>(null)
 
   useEffect(() => {
-    if (!project?.preLaunchedAt) {
+    if (!project?.preLaunchExpiresAt) {
       setTimeLeft(null)
       return
     }
 
-    const launchTime = DateTime.fromMillis(project.preLaunchedAt)
-    const endTime = launchTime.plus({ days: 30 })
+    const endTime = DateTime.fromMillis(project.preLaunchExpiresAt)
 
     const updateCountdown = () => {
       const now = DateTime.now()
@@ -51,7 +50,7 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
     const intervalId = setInterval(updateCountdown, 60000)
 
     return () => clearInterval(intervalId)
-  }, [project?.preLaunchedAt])
+  }, [project?.preLaunchExpiresAt])
 
   // Format time value helper
   const formatTimeValue = (value: number): string => {
