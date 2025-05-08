@@ -1,5 +1,7 @@
 import { HStack, Image, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 
+import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import {
@@ -15,9 +17,17 @@ type ContributionSummaryProps = StackProps & {
   isWidget?: boolean
 }
 
-const paymentMethods = [BitcoinLightingPaymentImageUrl, VisaPaymentImageUrl, MasterCardPaymentImageUrl]
-
 export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryProps) => {
+  const projectOwner = useAtomValue(projectOwnerAtom)
+
+  const isVerified = Boolean(projectOwner?.user?.complianceDetails?.verifiedDetails?.identity?.verified)
+  const paymentMethods = [BitcoinLightingPaymentImageUrl]
+
+  if (isVerified) {
+    paymentMethods.push(VisaPaymentImageUrl)
+    paymentMethods.push(MasterCardPaymentImageUrl)
+  }
+
   return (
     <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
       <ProjectBalanceDisplay />
