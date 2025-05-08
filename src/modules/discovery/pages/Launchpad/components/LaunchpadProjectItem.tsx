@@ -131,13 +131,15 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
 
         <VStack w="full" spacing={0}>
           <HStack w="full" alignItems="flex-end" justify="space-between">
-            <Body size="xl" bold color="primary1.11">
-              {formatAmount(project.balanceUsdCent, 'USDCENT')}
+            <HStack spacing={0} alignItems="flex-end">
+              <Body size="xl" lineHeight="1.3" bold color="primary1.11">
+                {formatAmount(project.balanceUsdCent, 'USDCENT')}
+              </Body>
               <Body as="span" size="sm" thin color="primary1.11">
                 /$210
               </Body>
-            </Body>
-            <Body size="sm" color={getTimeColor()}>
+            </HStack>
+            <Body size="sm" thin color={getTimeColor()}>
               {timeDisplay}
             </Body>
           </HStack>

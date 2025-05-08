@@ -44,11 +44,7 @@ export const ProjectCreateStrategy = () => {
 
   const handleBack = () => {
     setReadyForLaunch(false)
-    if (!project) {
-      return navigate(-1)
-    }
-
-    navigate(getPath('launchProjectWallet', project?.id))
+    navigate(-1)
   }
 
   const handleNext = () => {
@@ -102,16 +98,16 @@ export const ProjectCreateStrategy = () => {
           onClick={() => setStrategy(ProjectCreationStrategy.GEYSER_LAUNCHPAD)}
           image={LaunchPadIllustrationUrl}
           title={t('Geyser Launch Challenge')}
-          subtitle={t('Raise $210 in 30 days with your community, and breakthrough')}
-          body={t(
-            'You must raise at least $210 in your first 30 days to be able to continue raising funds on Geyser. It’s your chance to build early momentum and launch with a boom. 🚀',
-          )}
+          subtitle={t('Raise $210 in 30 days with your community.')}
+          body={`${t(
+            "Your project's future depends on this critical first step - meet the goal to keep your vision alive. It’s your chance to build early momentum and launch with a boom.",
+          )}  🚀`}
           points={[
-            t('Seen in Launchpad & discovery emails'),
+            t('Your project will be featured in Launchpad & discovery emails'),
             t('Build momentum quickly with early supporters'),
-
-            `⚠️ ${t('If you don’t reach $210 in your first month, your project will close (you can start over)')}`,
+            `${t('If you don’t reach $210 in your first month, your project will close (you can start over)')}`,
           ]}
+          pointIndexToWarn={2}
         />
         <ProjectCreateStrategyCard
           flex={5}
@@ -140,6 +136,7 @@ type ProjectCreateStrategyCardProps = {
   body: string
   points: string[]
   isSelected?: boolean
+  pointIndexToWarn?: number
 } & CardLayoutProps
 
 export const ProjectCreateStrategyCard = ({
@@ -149,6 +146,7 @@ export const ProjectCreateStrategyCard = ({
   body,
   points,
   isSelected,
+  pointIndexToWarn,
   ...props
 }: ProjectCreateStrategyCardProps) => {
   const { isOpen, onToggle } = useDisclosure()
@@ -188,9 +186,14 @@ export const ProjectCreateStrategyCard = ({
             {body}
           </Body>
           <UnorderedList w="full" alignItems="flex-start" spacing={0}>
-            {points.map((point) => (
+            {points.map((point, index) => (
               <ListItem key={point}>
-                <Body size="sm" light>
+                <Body
+                  size="sm"
+                  light
+                  color={pointIndexToWarn === index ? 'warning.11' : 'inherit'}
+                  fontWeight={pointIndexToWarn === index ? 'bold' : 'normal'}
+                >
                   {point}
                 </Body>
               </ListItem>

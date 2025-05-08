@@ -1,3 +1,4 @@
+/* eslint-disable no-template-curly-in-string */
 import { Button, HStack, Icon, Link, ModalProps, Progress, useClipboard, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { PiLink, PiShare } from 'react-icons/pi'
@@ -27,12 +28,12 @@ export const ProjectCreatePreLaunchedModal = (props: Omit<ModalProps, 'children'
           <HStack w="full" justifyContent="space-between">
             <Body>
               <Trans
-                i18nKey={'$ {{countDown}} out of $210'}
+                i18nKey={'${{countDown}} out of $210'}
                 values={{
                   countDown: project?.balanceUsdCent ? Math.round(centsToDollars(project?.balanceUsdCent)) : 0,
                 }}
               >
-                {'$ {{countDown}} out of $210'}
+                {'${{countDown}} out of $210'}
               </Trans>
             </Body>
             <Body>🚀</Body>

@@ -122,12 +122,6 @@ export const projectFundingRoutes = [
   ...projectFundingPaymentFiatSwapRoutes,
 ]
 
-export const projectRoutesNotAllowedForPrelaunchProjects = [
-  ...projectBaseRoutes,
-  getPath('projectPostView', PathName.projectName, PathName.postId),
-  ...projectFundingRoutes,
-]
-
 export const ProjectPageRoutesWithNavBarForDesktop = [...projectBaseRoutes, ...projectDashboardRoutes]
 
 export const ProjectPageRoutesWithNavBarForMobile = [
