@@ -88,7 +88,7 @@ export const ProjectCreateStrategy = () => {
     >
       <HStack w="full" alignItems="stretch" flexDirection={{ base: 'column', lg: 'row' }} spacing={{ base: 4, lg: 6 }}>
         <ProjectCreateStrategyCard
-          flex={6}
+          flex={1}
           isSelected={isLaunchPad}
           onClick={() => setStrategy(ProjectCreationStrategy.GEYSER_LAUNCHPAD)}
           image={LaunchPadIllustrationUrl}
@@ -105,7 +105,7 @@ export const ProjectCreateStrategy = () => {
           pointIndexToWarn={2}
         />
         <ProjectCreateStrategyCard
-          flex={5}
+          flex={1}
           isSelected={isLaunchNow}
           onClick={() => setStrategy(ProjectCreationStrategy.LAUNCH_NOW)}
           image={LaunchNowIllustrationUrl}
