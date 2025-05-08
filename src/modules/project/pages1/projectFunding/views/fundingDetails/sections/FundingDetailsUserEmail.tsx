@@ -3,14 +3,17 @@ import {
   FormControl,
   FormErrorMessage,
   FormHelperText,
+  HStack,
   Input,
   InputGroup,
   InputRightElement,
   Switch,
+  VStack,
 } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { Trans } from 'react-i18next'
 import { PiCheckCircleFill, PiXCircleFill } from 'react-icons/pi'
 
 import Loader from '@/components/ui/Loader'
@@ -25,7 +28,7 @@ import {
 } from '@/modules/profile/pages/profileSettings/hooks/useUserNotificationSettings'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { H1 } from '@/shared/components/typography'
+import { Body, H1 } from '@/shared/components/typography'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
 import { lightModeColors } from '@/shared/styles'
 import { useUserEmailIsAvailableLazyQuery } from '@/types'
@@ -41,7 +44,6 @@ const EMAIL_VALIDATION_STATE = {
 }
 
 export const FundingDetailsUserEmailAndUpdates = () => {
-  const { t } = useTranslation()
   const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
   const followedProjects = useFollowedProjectsValue()
@@ -68,6 +70,8 @@ export const FundingDetailsUserEmailAndUpdates = () => {
   const [emailValidationState, setEmailValidationState] = useState(EMAIL_VALIDATION_STATE.IDLE)
 
   const showEmailComponent = !user?.email || !followsProject || !subscribedToGeyserEmails
+
+  const isEmailValidated = emailValidationState === EMAIL_VALIDATION_STATE.SUCCEEDED
 
   /*
    Set the email from the user to the funding form. We do this because the input field
@@ -151,13 +155,20 @@ export const FundingDetailsUserEmailAndUpdates = () => {
     }
   }
 
+  if (!isLoggedIn && !hasSelectedRewards) return <ConnectProfileCard />
+
   if (!showEmailComponent) return null
 
   return (
     <CardLayout mobileDense width="100%" position="relative">
-      <H1 size="2xl" bold>
-        {t('Email and Updates')}
-      </H1>
+      <VStack w="full" alignItems="flex-start" spacing={0}>
+        <H1 size="2xl" bold>
+          {t('Add Email')}
+        </H1>
+        <Body size="sm" light>
+          {t('Add your email to receive project updates from the creator.')}
+        </Body>
+      </VStack>
 
       <FieldContainer>
         <FormControl isInvalid={Boolean(fundingFormError.email)}>
@@ -204,44 +215,46 @@ export const FundingDetailsUserEmailAndUpdates = () => {
           )}
         </FormControl>
       </FieldContainer>
-
-      {!followsProject && (
-        <HorizontalFormField
-          label="Follow Project: receive this project’s updates directly by email."
-          htmlFor="creator-email-toggle"
-        >
-          <Switch
-            id="creator-email-toggle"
-            isChecked={followProject}
-            onChange={(e) => {
-              if (user.id) {
-                setState('followProject', e.target.checked)
-              } else {
-                loginOnOpen()
-              }
-            }}
-          />
-        </HorizontalFormField>
+      {(isEmailValidated || user.email) && (
+        <>
+          {!followsProject && (
+            <HorizontalFormField
+              label="Follow Project: receive this project’s updates directly by email."
+              htmlFor="creator-email-toggle"
+            >
+              <Switch
+                id="creator-email-toggle"
+                isChecked={followProject}
+                onChange={(e) => {
+                  if (user.id) {
+                    setState('followProject', e.target.checked)
+                  } else {
+                    loginOnOpen()
+                  }
+                }}
+              />
+            </HorizontalFormField>
+          )}
+          {!subscribedToGeyserEmails && (
+            <HorizontalFormField
+              label="Subscribe to Geyser newsletter to discover new projects."
+              htmlFor="geyser-email-toggle"
+            >
+              <Switch
+                id="geyser-email-toggle"
+                isChecked={subscribeToGeyserEmails}
+                onChange={(e) => {
+                  if (user.id) {
+                    setState('subscribeToGeyserEmails', e.target.checked)
+                  } else {
+                    loginOnOpen()
+                  }
+                }}
+              />
+            </HorizontalFormField>
+          )}
+        </>
       )}
-      {!subscribedToGeyserEmails && (
-        <HorizontalFormField
-          label="Subscribe to Geyser newsletter to discover new projects."
-          htmlFor="geyser-email-toggle"
-        >
-          <Switch
-            id="geyser-email-toggle"
-            isChecked={subscribeToGeyserEmails}
-            onChange={(e) => {
-              if (user.id) {
-                setState('subscribeToGeyserEmails', e.target.checked)
-              } else {
-                loginOnOpen()
-              }
-            }}
-          />
-        </HorizontalFormField>
-      )}
-
       {needsShipping && (
         <Feedback
           variant={FeedBackVariant.WARNING}
@@ -250,6 +263,31 @@ export const FundingDetailsUserEmailAndUpdates = () => {
           )}
         />
       )}
+    </CardLayout>
+  )
+}
+
+export const ConnectProfileCard = () => {
+  const { loginOnOpen } = useAuthModal()
+  return (
+    <CardLayout mobileDense width="100%" position="relative">
+      <VStack w="full" alignItems="flex-start" spacing={0}>
+        <HStack w="full" justifyContent="space-between">
+          <H1 size="2xl" bold>
+            {t('Connect profile')}
+          </H1>
+          <Switch
+            size="lg"
+            onChange={() => {
+              loginOnOpen()
+            }}
+          />
+        </HStack>
+
+        <Body size="sm" light>
+          {t('Connect this transaction with your social profile and receive project updates.')}
+        </Body>
+      </VStack>
     </CardLayout>
   )
 }

@@ -12,6 +12,7 @@ interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'
   })[]
   onSubtitleClick?: () => void
   subtitleId?: string
+  rightContent?: React.ReactNode
 }
 
 export const ProjectDisplayBody = ({
@@ -21,6 +22,7 @@ export const ProjectDisplayBody = ({
   projects,
   onSubtitleClick,
   subtitleId,
+  rightContent,
 }: ProjectDisplayBodyProps) => {
   return (
     <ProjectRowLayout
@@ -34,6 +36,7 @@ export const ProjectDisplayBody = ({
         textDecoration: 'underline',
         _hover: { cursor: 'pointer' },
       }}
+      rightContent={rightContent}
     >
       <Stack width="100%" direction={{ base: 'column', lg: 'row' }} spacing={4}>
         {projects.map((project) => {

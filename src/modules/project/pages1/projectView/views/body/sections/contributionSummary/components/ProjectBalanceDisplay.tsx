@@ -9,14 +9,9 @@ import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { Body } from '../../../../../../../../../shared/components/typography'
 import { ProjectGoalCurrency } from '../../../../../../../../../types'
-import {
-  centsToDollars,
-  commaFormatted,
-  isPrelaunch,
-  removeProjectAmountException,
-} from '../../../../../../../../../utils'
+import { commaFormatted, isPrelaunch, removeProjectAmountException } from '../../../../../../../../../utils'
 import { useGoalsAtom, useProjectAtom } from '../../../../../../../hooks/useProjectAtom'
-import { USD_AMOUNT_TO_GO_LIVE } from '../../../components/PrelaunchFollowButton.tsx'
+import { USD_CENTS_AMOUNT_TO_GO_LIVE } from '../../../components/PrelaunchFollowButton.tsx'
 import { useProjectDefaultGoal } from '../../../hooks/useProjectDefaultGoal'
 
 enum BalanceView {
@@ -39,9 +34,9 @@ export function ProjectBalanceDisplay() {
     inProgressGoals,
   })
 
-  const usdAmount = Math.round(centsToDollars(project.balanceUsdCent))
+  const usdCentsAmount = project.balanceUsdCent ?? 0
 
-  const amountToGoLive = USD_AMOUNT_TO_GO_LIVE - usdAmount
+  const amountUsdCentsToGoLive = USD_CENTS_AMOUNT_TO_GO_LIVE - usdCentsAmount
 
   const handlers = useSwipeable({
     onSwiped() {
@@ -131,6 +126,7 @@ export function ProjectBalanceDisplay() {
         as={motion.div}
         px={!isGoalView ? 6 : 0}
         position={!isGoalView ? 'absolute' : undefined}
+        opacity={isTotalView ? 1 : 0}
         animate={{ opacity: isGoalView ? 1 : 0 }}
       >
         <CircularProgress
@@ -172,7 +168,16 @@ export function ProjectBalanceDisplay() {
         </VStack>
       </HStack>
     )
-  }, [priorityGoal, formattedUsdAmount, formattedSatsAmount, formatAmount, circularPercentage, isTotalView, isGoalView])
+  }, [
+    priorityGoal,
+    formattedUsdAmount,
+    formattedSatsAmount,
+    formatAmount,
+    circularPercentage,
+    isGoalView,
+    goalsLoading,
+    isTotalView,
+  ])
 
   const renderProjectTotalValue = useCallback(() => {
     return (
@@ -220,9 +225,9 @@ export function ProjectBalanceDisplay() {
       >
         <CircularProgress
           capIsRound
-          value={usdAmount ?? 0}
+          value={usdCentsAmount ?? 0}
           min={0}
-          max={210}
+          max={USD_CENTS_AMOUNT_TO_GO_LIVE}
           size="96px"
           thickness="10px"
           color={'primary1.9'}
@@ -230,15 +235,14 @@ export function ProjectBalanceDisplay() {
         />
         <VStack flex="1" spacing={0} width="100%" px={2} alignItems={'start'}>
           <Body size="2xl" bold dark>
-            {'$'}
-            {usdAmount ?? 0}{' '}
+            {formatAmount(usdCentsAmount, 'USDCENT') ?? 0}{' '}
             <Body as="span" size="md" light>
               {t(`raised`)}
             </Body>
           </Body>
 
           <Body size="2xl" dark bold display="inline">
-            {`$${amountToGoLive}`}{' '}
+            {formatAmount(amountUsdCentsToGoLive, 'USDCENT')}{' '}
             <Body as="span" size="md" light>
               {t(`more to go live.`)}
             </Body>
@@ -246,7 +250,7 @@ export function ProjectBalanceDisplay() {
         </VStack>
       </HStack>
     )
-  }, [usdAmount, amountToGoLive, isPreLaunchView, hasPreLaunch])
+  }, [usdCentsAmount, amountUsdCentsToGoLive, isPreLaunchView, hasPreLaunch, formatAmount])
 
   const DotIndicator = () => {
     return (
