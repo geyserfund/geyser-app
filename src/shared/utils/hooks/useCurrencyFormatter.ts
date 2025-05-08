@@ -41,7 +41,7 @@ export const useCurrencyFormatter = (shortAmount?: boolean) => {
       }
 
       if (amount === 0) return '$0'
-      if (usdAmount < 1) return '< $1'
+      if (usdAmount < 1) return '<$1'
       if (shortAmount) {
         const roundedUsdAmount = Math.round(usdAmount)
         const shortUsdAmount = getShortAmountLabel(roundedUsdAmount)
