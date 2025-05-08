@@ -26,8 +26,11 @@ const options = [
   },
 ]
 
+const COMPACT_HEIGHT = '264px'
+const FULL_HEIGHT = '620px'
+
 const getEmbedCode = ({ projectName, embedType }: { projectName: string; embedType: EmbedType }) => {
-  const minHeight = embedType === 'full' ? '720px' : '262px'
+  const minHeight = embedType === 'full' ? FULL_HEIGHT : COMPACT_HEIGHT
   return `
     <iframe 
         src="${getFullDomainUrl(`${getPath('contributionWidget', projectName)}?view=${embedType}&colorMode=light`)}"
@@ -86,7 +89,7 @@ const ProjectContributionWidget = ({ embedType }: { embedType: EmbedType }) => {
     <VStack
       width="full"
       maxWidth="400px"
-      height={isFull ? '620px' : '262px'}
+      height={isFull ? FULL_HEIGHT : COMPACT_HEIGHT}
       overflow="auto"
       backgroundColor="transparent"
     >

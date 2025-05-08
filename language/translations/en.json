@@ -1312,5 +1312,13 @@
   "Email address is a required field.": "Email address is a required field.",
   "Email verification": "Email verification",
   "Featured in ‘Recently launched’ in Discovery page": "Featured in ‘Recently launched’ in Discovery page",
-  "Featured in Launchpad & discovery emails": "Featured in Launchpad & discovery emails"
+  "Featured in Launchpad & discovery emails": "Featured in Launchpad & discovery emails",
+  "Lightning QR code": "Lightning QR code",
+  "Go to Project": "Go to Project",
+  "ambassador has enabled": "ambassador has enabled",
+  "Generating banner...": "Generating banner...",
+  "Copy image": "Copy image",
+  "Contribute with lightning": "Contribute with lightning",
+  "Copy embed code": "Copy embed code",
+  "Embed the contribute and leaderboard section of this page on your website": "Embed the contribute and leaderboard section of this page on your website"
 }
