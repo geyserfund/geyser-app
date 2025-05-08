@@ -66,7 +66,7 @@ export const useCurrencyFormatter = (shortAmount?: boolean) => {
       const satsAmount = getSatoshisFromUSDCents(amount as USDCents)
       return formatAmount(satsAmount, FormatCurrencyType.Btcsat)
     },
-    [formatAmount, getSatoshisFromUSDCents, shortAmount],
+    [formatAmount, getSatoshisFromUSDCents],
   )
 
   return {

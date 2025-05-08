@@ -1,4 +1,9 @@
+import { Button } from '@chakra-ui/react'
+import { t } from 'i18next'
+import { Link } from 'react-router-dom'
+
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { getPath } from '@/shared/constants/index.ts'
 
 import {
   OrderByDirection,
@@ -47,6 +52,11 @@ export const RecentLaunches = () => {
         </Body>
       }
       projects={projects}
+      rightContent={
+        <Button as={Link} to={getPath('discoveryLaunchpad')} variant="soft" colorScheme="neutral1">
+          {t('See all')}
+        </Button>
+      }
     />
   )
 }
