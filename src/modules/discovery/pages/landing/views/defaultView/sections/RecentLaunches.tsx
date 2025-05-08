@@ -16,7 +16,7 @@ export const RecentLaunches = () => {
       input: {
         orderBy: [
           {
-            direction: OrderByDirection.Asc,
+            direction: OrderByDirection.Desc,
             field: ProjectsOrderByField.LaunchedAt,
           },
         ],
