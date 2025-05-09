@@ -471,4 +471,5 @@ export const LegendSeoImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/Legend.png'
 export const WarriorSeoImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/seo/Warrior.png'
-export const LaunchpadSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/app/launch-pad-seo.png'
+export const LaunchpadSeoImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/seo/geyser-launchpad-seo.png'
