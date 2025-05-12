@@ -10,8 +10,8 @@ import { useModal } from '@/shared/hooks/useModal.tsx'
 import { useAuthContext } from '../../../../../../context/index.ts'
 import { VerifyYourEmail } from '../../../../../../pages/otp/index.ts'
 import { getPath, GeyserEmailVerificationDocUrl, PathName } from '../../../../../../shared/constants/index.ts'
-import { MfaAction, OtpResponseFragment, ProjectStatus, UpdateWalletInput } from '../../../../../../types/index.ts'
-import { useCustomTheme, useNotification } from '../../../../../../utils/index.ts'
+import { MfaAction, OtpResponseFragment, UpdateWalletInput } from '../../../../../../types/index.ts'
+import { isDraft, isPrelaunch, useCustomTheme, useNotification } from '../../../../../../utils/index.ts'
 import { ConnectionOption, useWalletForm } from '../../../projectCreation/hooks/useWalletForm.tsx'
 import { ProjectCreationWalletConnectionForm } from '../../../projectCreation/index.ts'
 import { DashboardLayout } from '../../common/index.ts'
@@ -45,7 +45,7 @@ export const ProjectDashboardWallet = () => {
   const handleNext = () => {
     if (!project) return
 
-    if (!isEdit && project.status === ProjectStatus.Draft && createWalletInput) {
+    if (!isEdit && (isDraft(project.status) || isPrelaunch(project.status)) && createWalletInput) {
       createWallet.execute({
         variables: { input: createWalletInput },
         onError() {
@@ -131,7 +131,8 @@ export const ProjectDashboardWallet = () => {
     })
   }
 
-  const isReadOnly = !user.isEmailVerified && (!isEdit ? project?.status !== ProjectStatus.Draft : true)
+  const isReadOnly =
+    !user.isEmailVerified && (!isEdit ? isDraft(project?.status) || isPrelaunch(project?.status) : true)
 
   const SaveButton = (props: ButtonProps) => {
     return (
