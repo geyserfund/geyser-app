@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 import Loader from '@/components/ui/Loader'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
+import { ProjectPreLaunchConfirmModal } from '@/modules/project/components/ProjectPreLaunchConfirmModal.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { useProjectPreLaunchMutation } from '@/types/index.ts'
 
@@ -33,12 +34,12 @@ export const ProjectCreateCompletionPage = ({ strategy, setStrategySelected }: P
   const toast = useNotification()
 
   const confirmModal = useModal()
-
+  const prelaunchConfirmModal = useModal()
   const { project, loading } = useProjectAtom()
 
   const { publishProject } = useProjectAPI()
 
-  const [projectPreLaunch] = useProjectPreLaunchMutation({
+  const [projectPreLaunch, { loading: prelaunchProjectLoading }] = useProjectPreLaunchMutation({
     variables: {
       input: {
         projectId: project?.id,
@@ -70,29 +71,40 @@ export const ProjectCreateCompletionPage = ({ strategy, setStrategySelected }: P
       return
     }
 
-    if (project.paidLaunch) {
-      publishProject.execute({
-        variables: {
-          input: { projectId: project?.id },
-        },
-        onCompleted() {
-          toast.success({
-            title: 'Project launched',
-          })
-          queryCurrentUser()
-          navigate(getPath('projectLaunch', project?.name))
-        },
-        onError(error) {
-          toast.error({
-            title: 'Error launching project',
-            description: `${error}`,
-          })
-        },
-      })
+    publishProject.execute({
+      variables: {
+        input: { projectId: project?.id },
+      },
+      onCompleted() {
+        toast.success({
+          title: 'Project launched',
+        })
+        queryCurrentUser()
+        navigate(getPath('projectLaunch', project?.name))
+      },
+      onError(error) {
+        toast.error({
+          title: 'Error launching project',
+          description: `${error}`,
+        })
+      },
+    })
+  }
+
+  const onPreLaunchClick = async () => {
+    if (!project) {
       return
     }
 
     projectPreLaunch()
+  }
+
+  const handleLaunchButtonClick = () => {
+    if (project.paidLaunch) {
+      confirmModal.onOpen()
+    } else {
+      prelaunchConfirmModal.onOpen()
+    }
   }
 
   const onSaveDraftClick = async () => {
@@ -128,8 +140,8 @@ export const ProjectCreateCompletionPage = ({ strategy, setStrategySelected }: P
               colorScheme="primary1"
               w="full"
               leftIcon={<PiRocketLaunch />}
-              onClick={confirmModal.onOpen}
-              isLoading={publishProject.loading}
+              onClick={handleLaunchButtonClick}
+              isLoading={publishProject.loading || prelaunchProjectLoading}
             >
               {t('Launch Project')}
             </Button>
@@ -143,6 +155,11 @@ export const ProjectCreateCompletionPage = ({ strategy, setStrategySelected }: P
         </ProjectCreateCompleted>
       </ProjectCreateLayout>
       <ProjectLaunchConfirmModal isLoading={publishProject.loading} onLaunchClick={onLaunchClick} {...confirmModal} />
+      <ProjectPreLaunchConfirmModal
+        isLoading={prelaunchProjectLoading}
+        onLaunchClick={onPreLaunchClick}
+        {...prelaunchConfirmModal}
+      />
     </>
   )
 }

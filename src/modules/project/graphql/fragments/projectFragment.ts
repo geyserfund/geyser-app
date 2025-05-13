@@ -102,6 +102,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     entriesCount
     promotionsEnabled
     followersCount
+    rejectionReason
     keys {
       ...ProjectKeys
     }

@@ -7,7 +7,10 @@ import { CreatorButtons } from '../components/CreatorButtons'
 export const CreatorTools = () => {
   const { project, isProjectOwner } = useProjectAtom()
 
-  if (!isProjectOwner || (project.status && [ProjectStatus.Closed, ProjectStatus.Deleted].includes(project.status)))
+  if (
+    !isProjectOwner ||
+    (project.status && [ProjectStatus.Closed, ProjectStatus.Deleted, ProjectStatus.Draft].includes(project.status))
+  )
     return null
 
   return (

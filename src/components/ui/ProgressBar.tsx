@@ -5,9 +5,10 @@ interface IProgressBar extends BoxProps {
   min?: number
   max?: number
   current?: number
+  progressColor?: string
 }
 
-export const ProgressBar = ({ value, min = 0, max, current, ...rest }: IProgressBar) => {
+export const ProgressBar = ({ value, min = 0, max, current, progressColor, ...rest }: IProgressBar) => {
   const percentage = max && current ? ((current - min) / (max - min)) * 100 : value
 
   return (
@@ -16,7 +17,7 @@ export const ProgressBar = ({ value, min = 0, max, current, ...rest }: IProgress
         height={'100%'}
         borderRadius={rest.borderRadius || '3px'}
         width={`${percentage}%`}
-        backgroundColor="primary1.9"
+        backgroundColor={progressColor || 'primary1.9'}
       ></Box>
     </Box>
   )

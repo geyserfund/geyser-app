@@ -60,7 +60,7 @@ export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolBarBottom, fi
             <HStack pt={1} width="100%">
               {form.formState.isValid ? null : (
                 <Body size="xs" pt={1} color="error.9">
-                  {t(form.getFieldState('description').error?.message || '')}
+                  {t(form.formState.errors.description?.message || '')}
                 </Body>
               )}
               <Body size="xs" light flexGrow={1} textAlign="right">
