@@ -93,14 +93,14 @@ export const ProjectCreateStrategy = () => {
           onClick={() => setStrategy(ProjectCreationStrategy.GEYSER_LAUNCHPAD)}
           image={LaunchPadIllustrationUrl}
           title={t('Geyser Launch Challenge')}
-          subtitle={t('Raise $210 in 30 days with your community.')}
+          subtitle={t('Raise $210 in 7 days with your community.')}
           body={`${t(
             "Your project's future depends on this critical first step - meet the goal to keep your vision alive. It’s your chance to build early momentum and launch with a boom.",
           )}  🚀`}
           points={[
             t('Featured in Launchpad & discovery emails'),
             t('Build momentum quickly with early supporters'),
-            `${t('If you don’t reach $210 in your first month, your project will close (you can start over)')}`,
+            `${t('If you don’t reach $210 in your first week, your project will close (you can start over)')}`,
           ]}
           pointIndexToWarn={2}
         />
@@ -112,7 +112,7 @@ export const ProjectCreateStrategy = () => {
           title={t('Go Live Now')}
           subtitle={t('Skip the challenge. Launch instantly for $21.')}
           body={t(
-            "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you can begin receiving support from contributors immediately.",
+            "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you don't need to worry about reaching $210 in 7 days",
           )}
           points={[
             t('Featured in ‘Recently launched’ in Discovery page'),

@@ -1,12 +1,18 @@
-/* eslint-disable no-template-curly-in-string */
-import { Button, HStack, Icon, Link, ModalProps, Progress, useClipboard, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, Image, Link, ModalProps, useClipboard, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { PiLink, PiShare } from 'react-icons/pi'
 
+import { ProgressBar } from '@/components/ui/ProgressBar.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { generateTwitterShareUrl } from '@/modules/project/utils/twitterShareTemplate.ts'
-import { getPath } from '@/shared/constants/index.ts'
-import { centsToDollars } from '@/utils/index.ts'
+import {
+  getPath,
+  GeyserDiscordUrl,
+  GeyserNostrUrl,
+  GeyserTelegramUrl,
+  GeyserTwitterUrl,
+  LaunchpadStartedCountdownIllustrationUrl,
+} from '@/shared/constants/index.ts'
 
 import { Modal } from '../../../../../shared/components/layouts/Modal'
 import { Body } from '../../../../../shared/components/typography'
@@ -19,55 +25,66 @@ export const ProjectCreatePreLaunchedModal = (props: Omit<ModalProps, 'children'
 
   const { onCopy, hasCopied } = useClipboard(projectLink)
 
-  const { followersCount } = project
-
   return (
-    <Modal size="md" title={t("You're live on Geyser Launchpad!")} subtitleProps={{ medium: true }} {...props}>
-      <VStack w="100%" spacing={6} pt={2}>
+    <Modal size="md" title={t("You're live on the Launchpad!")} subtitleProps={{ medium: true }} {...props}>
+      <VStack w="100%" spacing={4} pt={2}>
+        <Image
+          src={LaunchpadStartedCountdownIllustrationUrl}
+          alt="Launchpad started countdown illustration"
+          height="160px"
+        />
         <VStack w="100%">
           <HStack w="full" justifyContent="space-between">
-            <Body>
-              <Trans
-                i18nKey={'${{countDown}} out of $210'}
-                values={{
-                  countDown: project?.balanceUsdCent ? Math.round(centsToDollars(project?.balanceUsdCent)) : 0,
-                }}
-              >
-                {'${{countDown}} out of $210'}
-              </Trans>
+            <Body size="sm" bold>
+              {' '}
+              {t('Raise $210 to lift off')}
             </Body>
             <Body>🚀</Body>
           </HStack>
-          <Progress
-            borderRadius="8px"
+          <ProgressBar
             width="100%"
             height="20px"
-            value={followersCount ?? 0}
+            borderRadius="8px"
             min={0}
             max={21}
-            isAnimated
-            colorScheme="teal"
+            current={1}
+            progressColor="primary1.11"
           />
         </VStack>
+
         <Body medium dark>
-          {t('You have 30 days to raise $210 to officially launch and keep the project alive.')}
+          {t('You’ve just launched a Bitcoin project - let`s make it fly!')} {t("It's time to raise $210 in 7 days!")}
         </Body>
 
-        <Body light>
-          {t(
-            'Your project is now featured on the Geyser Launchpad, where supporters discover bold, early-stage ideas.',
-          )}
-        </Body>
         <VStack w="full" spacing={0} alignItems="flex-start">
           <Body medium dark>
             {t("What's next?")}
           </Body>
           <Body light>
-            {t(
-              'Share your project far and wide — post it on social media, text it to friends, or pitch it in your community.',
-            )}
+            {t('Share your project with your friends, community, and people you think will care about your project.')}
           </Body>
         </VStack>
+        <Body light>
+          <Trans i18nKey="Connect with the Geyser team on <1>Discord</1>, <3>Telegram</3>, <5>Nostr</5>, <7>X</7>.">
+            {'Connect with the Geyser team on '}
+            <Link href={GeyserDiscordUrl} isExternal textDecoration="underline">
+              {'Discord'}
+            </Link>
+            {', '}
+            <Link href={GeyserTelegramUrl} isExternal textDecoration="underline">
+              {'Telegram'}
+            </Link>
+            {', '}
+            <Link href={GeyserNostrUrl} isExternal textDecoration="underline">
+              {'Nostr'}
+            </Link>
+            {', '}
+            <Link href={GeyserTwitterUrl} isExternal textDecoration="underline">
+              {'X'}
+            </Link>
+            .
+          </Trans>
+        </Body>
 
         <HStack w="full" gap={2}>
           <Button

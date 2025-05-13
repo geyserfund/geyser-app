@@ -51,6 +51,8 @@ const schema = yup
       )
       .matches(noUrlRegex, 'Project title cannot contain a URL'),
     email: yup.string().email('Please enter a valid email address').required('Email address is a required field.'),
+    thumbnailImage: yup.string().required('Thumbnail image is a required field.'),
+    images: yup.array().of(yup.string()).required('Images are a required field.'),
   })
   .required()
 
@@ -65,6 +67,7 @@ export const useProjectForm = ({ isEdit, project }: UseProjectFormProps) => {
   const form = useForm<ProjectCreationVariables>({
     resolver: yupResolver(schema) as any,
     defaultValues: DEFAULT_VALUES,
+    reValidateMode: 'onChange',
     values: useMemo(() => {
       if (isEdit && project) {
         return {

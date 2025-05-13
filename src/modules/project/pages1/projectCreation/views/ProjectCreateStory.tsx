@@ -63,7 +63,7 @@ export const ProjectCreateStory = () => {
   }
 
   const nextProps = {
-    isDisabled: loading || updateProject.loading || !form.formState.isValid,
+    isDisabled: loading || updateProject.loading,
     onClick: form.handleSubmit(onSubmit),
   }
 

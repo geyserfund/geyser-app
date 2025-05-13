@@ -10,6 +10,7 @@ import { ProjectValidations } from '../../../../../shared/constants'
 const schema = yup.object({
   description: yup
     .string()
+    .min(ProjectValidations.description.minLength, 'Project story should be longer than 210 characters.')
     .max(
       ProjectValidations.description.maxLength,
       `Project story should be shorter than ${ProjectValidations.description.maxLength} characters.`,
@@ -20,6 +21,7 @@ const schema = yup.object({
 export const useProjectStoryForm = ({ project }: { project?: ProjectState | null }) => {
   const form = useForm<{ description: string }>({
     resolver: yupResolver(schema),
+    reValidateMode: 'onSubmit',
     values: useMemo(() => ({ description: project?.description || '' }), [project]),
   })
 

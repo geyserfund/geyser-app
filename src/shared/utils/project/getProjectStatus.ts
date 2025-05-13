@@ -15,6 +15,7 @@ export enum ProjectStatusLabels {
   IN_REVIEW = 'In Review',
   CLOSED = 'Project Deactivated',
   PRE_LAUNCH = 'Pre-Launch',
+  PRE_LAUNCH_CLOSED = 'Project Closed',
 }
 
 export const ProjectStatusColorScheme = {
@@ -25,6 +26,7 @@ export const ProjectStatusColorScheme = {
   [ProjectStatusLabels.INACTIVE]: 'neutral1',
   [ProjectStatusLabels.IN_REVIEW]: 'neutral1',
   [ProjectStatusLabels.CLOSED]: 'error',
+  [ProjectStatusLabels.PRE_LAUNCH_CLOSED]: 'warning',
 } as {
   [key in ProjectStatusLabels]: keyof typeof lightModeColors
 }
@@ -37,6 +39,7 @@ export const ProjectStatusIcons = {
   [ProjectStatusLabels.INACTIVE]: PiXCircle,
   [ProjectStatusLabels.IN_REVIEW]: PiEyeglasses,
   [ProjectStatusLabels.CLOSED]: PiMinusCircle,
+  [ProjectStatusLabels.PRE_LAUNCH_CLOSED]: PiMinusCircle,
 }
 
 export const ProjectStatusCreatorText = {
@@ -61,6 +64,7 @@ export const ProjectStatusCreatorText = {
   [ProjectStatusLabels.CLOSED]: t(
     'You project has been flagged for violating our Terms & Conditions. You should have received an email with further detail on how to proceed. Your project is currently not visible to the public.',
   ),
+  [ProjectStatusLabels.PRE_LAUNCH_CLOSED]: t('Your project did not reach its goal in the launchpad.'),
 }
 
 export const ProjectStatusTooltip = {
@@ -78,10 +82,11 @@ export const ProjectStatusTooltip = {
   [ProjectStatusLabels.INACTIVE]: t('This project has been deactivated by the project creator.'),
   [ProjectStatusLabels.IN_REVIEW]: t('Your project is in review and therefore cannot receive contributions'),
   [ProjectStatusLabels.CLOSED]: t('This project has been flagged for violating our Terms & Conditions.'),
+  [ProjectStatusLabels.PRE_LAUNCH_CLOSED]: t('This project did not reach its goal in the launchpad.'),
 }
 
 export type GetProjectStatusProps = {
-  project: Pick<ProjectState, 'status' | 'id' | 'name'>
+  project: Pick<ProjectState, 'status' | 'id' | 'name' | 'rejectionReason'>
   wallet: Pick<ProjectWalletFragment, 'state'>
 }
 
@@ -100,7 +105,11 @@ export const getProjectStatus = ({ project, wallet }: GetProjectStatusProps) => 
     }
 
     if (isClosed(project.status)) {
-      return ProjectStatusLabels.CLOSED
+      if (project.rejectionReason) {
+        return ProjectStatusLabels.CLOSED
+      }
+
+      return ProjectStatusLabels.PRE_LAUNCH_CLOSED
     }
 
     if (wallet?.state.status === WalletStatus.Inactive) {

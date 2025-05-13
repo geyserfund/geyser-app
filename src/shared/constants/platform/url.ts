@@ -13,6 +13,8 @@ export const GeyserMetamickTelegramUrl = 'https://t.me/Metamick14'
 export const GeyserPodcastUrl = 'https://fountain.fm/show/P5kWpoVIT7YGmPRenVN4'
 export const GeyserGithubUrl = 'https://github.com/geyserfund/geyser-app'
 export const GeyserHomepageUrl = 'https://geyser.fund/'
+export const GeyserDiscordUrl = 'https://discord.gg/PgBQRxbtgJ'
+export const GeyserNostrUrl = 'https://primal.net/p/npub1kmwdmhuxvafg05dyap3qmy42jpwztrv9p0uvey3a8803ahlwtmnsnhxqk9'
 
 export const GeyserPromotionPlaylistUrl =
   'https://www.youtube.com/watch?v=acOPSyEsoqI&list=PLIDbic_KUMN1FDW2ipHkbUZxGyNgL2bJ7'
@@ -178,6 +180,11 @@ export const GrantsIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/grants-illustration.png'
 export const VerificationIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/verification-illustration.png'
+export const LaunchpadCountdownIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/launchpad-countdown-illustration.png'
+export const LaunchpadStartedCountdownIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/launchpad-started-countdown-illustration.png'
+export const DraftIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/draft-illustration.png'
 
 // PAYMENT METHOD
 export const BitcoinLightingPaymentImageUrl =
