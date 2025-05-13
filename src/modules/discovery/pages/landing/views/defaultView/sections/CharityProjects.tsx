@@ -48,7 +48,13 @@ export const CharityProjects = ({ category, subCategory }: ProjectDisplayProps) 
     variables: {
       input: {
         where: {
-          ids: projectList.map((project) => project.projectId),
+          ids:
+            projectList.length > 4
+              ? projectList
+                  .sort(() => Math.random() - 0.5)
+                  .slice(0, 4)
+                  .map((project) => project.projectId)
+              : projectList.map((project) => project.projectId),
         },
       },
     },
