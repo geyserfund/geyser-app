@@ -4,8 +4,6 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import { LaunchProjectButton } from '@/modules/project/pages1/projectView/views/body/sections/LaunchProjectButton'
-
 import { Body } from '../components/typography'
 import { getPath, GeyserTelegramUrl } from '../constants'
 import {
@@ -43,7 +41,7 @@ export const ProjectStatusBar = ({ isProjectOwner, project, wallet, ...props }: 
         </Button>
       ),
       [ProjectStatusLabels.RUNNING]: undefined,
-      [ProjectStatusLabels.DRAFT]: () => <LaunchProjectButton />,
+      [ProjectStatusLabels.DRAFT]: () => undefined,
 
       [ProjectStatusLabels.INACTIVE]: () => (
         <Button variant="solid" colorScheme="primary1" as={Link} to={getPath('dashboardSettings', project.name)}>

@@ -1257,6 +1257,7 @@
   "Share your project with your friends, community, and people you think will care about your project.": "Share your project with your friends, community, and people you think will care about your project.",
   "Connect with the Geyser team on <1>Discord</1>, <3>Telegram</3>, <5>Nostr</5>, <7>X</7>.": "Connect with the Geyser team on <1>Discord</1>, <3>Telegram</3>, <5>Nostr</5>, <7>X</7>.",
   "Your project will remain hidden until you decide to launch it.": "Your project will remain hidden until you decide to launch it.",
+  "Your project is not visible to the public and cannot receive contributions.": "Your project is not visible to the public and cannot receive contributions.",
   "Connect your social account with the biggest social proof, allowing users to discover you and verify your reputation more easily": "Connect your social account with the biggest social proof, allowing users to discover you and verify your reputation more easily",
   "As he ventures into the no-coiner lands, the Knight’s armor and broadsword protects him from any Fear, Uncertainty and Doubt thrown at him. His broadsword has mythical powers. It energizes itself near natural energy sources like waterfalls and geysers, and unleashes lightning bolds towards its opponents.": "As he ventures into the no-coiner lands, the Knight’s armor and broadsword protects him from any Fear, Uncertainty and Doubt thrown at him. His broadsword has mythical powers. It energizes itself near natural energy sources like waterfalls and geysers, and unleashes lightning bolds towards its opponents.",
   "Shrouded in mystery, the Legend moves through the shadows, evading even the sharpest scrutiny. His laser-eyed vision cuts through the lies of governments and institutions, uncovering clarity and truth. Those who meet his gaze are forever transformed, ignited with an unshakable desire to pursue a freer, better future.": "Shrouded in mystery, the Legend moves through the shadows, evading even the sharpest scrutiny. His laser-eyed vision cuts through the lies of governments and institutions, uncovering clarity and truth. Those who meet his gaze are forever transformed, ignited with an unshakable desire to pursue a freer, better future.",
@@ -1265,10 +1266,10 @@
   "Email is required when purchasing a product.": "Email is required when purchasing a product.",
   "Please enter an email.": "Please enter an email.",
   "Email is required when subscribing to a project.": "Email is required when subscribing to a project.",
+  "You’ve just launched a Bitcoin project - let`s make it fly!": "You’ve just launched a Bitcoin project - let`s make it fly!",
+  "Connect with the Geyser team on ": "Connect with the Geyser team on ",
   "Post published": "Post published",
   "Your post is now live": "Your post is now live",
   "INACTIVE": "INACTIVE",
-  "ACTIVE": "ACTIVE",
-  "You’ve just launched a Bitcoin project - let`s make it fly!": "You’ve just launched a Bitcoin project - let`s make it fly!",
-  "Connect with the Geyser team on ": "Connect with the Geyser team on "
+  "ACTIVE": "ACTIVE"
 }

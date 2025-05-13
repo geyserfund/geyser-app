@@ -298,7 +298,9 @@ const NostrWalletConnectAccordionItem = forwardRef<
               />
             </InputGroup>
           }
-          promoText={showPromoText ? t(`${LIGHTNING_FEE_PERCENTAGE}% Geyser fee per transaction`) : undefined}
+          promoText={
+            showPromoText ? t(`{{fee}}% Geyser fee per transaction`, { fee: LIGHTNING_FEE_PERCENTAGE }) : undefined
+          }
           secondaryText={
             <Trans
               i18nKey={

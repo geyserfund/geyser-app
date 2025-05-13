@@ -10,15 +10,15 @@ import { DashboardMenuMobile } from './navigation'
 export const ProjectDashboardMain = () => {
   const isMobile = useMobileMode()
 
-  const { project } = useProjectAtom()
+  const { project, loading } = useProjectAtom()
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!isMobile && project) {
+    if (!isMobile && project && !loading) {
       navigate(getPath('dashboardAnalytics', project.name))
     }
-  }, [isMobile, navigate, project])
+  }, [isMobile, navigate, project, loading])
 
   if (isMobile) {
     return <DashboardMenuMobile />

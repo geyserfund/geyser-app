@@ -52,9 +52,7 @@ export const ProjectStatusCreatorText = {
   [ProjectStatusLabels.RUNNING]: t(
     'Your project is live and can receive contributions. Share your project to get more visibility.',
   ),
-  [ProjectStatusLabels.DRAFT]: t(
-    "Your project is not visible to the public and cannot receive contributions. Click Publish when you're ready to go live.",
-  ),
+  [ProjectStatusLabels.DRAFT]: t('Your project is not visible to the public and cannot receive contributions.'),
   [ProjectStatusLabels.INACTIVE]: t(
     'Your project cannot receive contributions but is visible to the public. To reactivate your project go to Setting.',
   ),
