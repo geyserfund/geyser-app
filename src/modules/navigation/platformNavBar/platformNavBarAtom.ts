@@ -29,6 +29,9 @@ export const isProjectRoutesAtom = atom(
     ...projectFundingRoutes,
   ]),
 )
+
+export const isProjectFundingRoutesAtom = atom(routeMatchForAtom(projectFundingRoutes))
+
 const isProjectMainPageAtom = atom(
   routeMatchForAtom([
     getPath('project', PathName.projectName),
