@@ -20,11 +20,11 @@ export const DefaultView = () => {
       <VStack w="full" spacing={8}>
         <Featured />
         <TrendingRewards />
-        <RecentLaunches />
         <ProjectsDisplayMostFundedThisWeek subCategory={ProjectSubCategory.CircularEconomy} />
         {ProjectCategoryList.map((category) => (
           <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
         ))}
+        <RecentLaunches />
         <CharityProjects />
 
         <TopProjects />
