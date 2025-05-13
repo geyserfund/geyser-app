@@ -12,16 +12,15 @@ import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { GuardiansButtonBackgroundGradient } from '@/shared/styles/custom.ts'
-import { ProjectStatus } from '@/types/index.ts'
+import { isClosed, isPrelaunch } from '@/utils/index.ts'
 
 import { getPath, LaunchNowIllustrationUrl } from '../../../../../../../shared/constants'
 import { useProjectAtom, useWalletAtom } from '../../../../../hooks/useProjectAtom'
-import { FOLLOWERS_NEEDED } from '../components/PrelaunchFollowButton.tsx'
 
 export const PreLaunchProjectNotice = () => {
   const { t } = useTranslation()
 
-  const { project, isProjectOwner } = useProjectAtom()
+  const { project, isProjectOwner, loading: projectLoading } = useProjectAtom()
   const resetProject = useProjectReset()
   const { loading } = useWalletAtom()
   const navigate = useNavigate()
@@ -37,15 +36,9 @@ export const PreLaunchProjectNotice = () => {
     })
   }
 
-  if (!project || !isProjectOwner) return null
+  if (!project || !isProjectOwner || loading || projectLoading || project.paidLaunch) return null
 
-  if (project.status !== ProjectStatus.PreLaunch || project.paidLaunch) {
-    return null
-  }
-
-  if (loading) return null
-
-  if ((project.followersCount || 0) < FOLLOWERS_NEEDED) {
+  if (isPrelaunch(project.status) || (isClosed(project.status) && !project.rejectionReason)) {
     return (
       <>
         <CardLayout

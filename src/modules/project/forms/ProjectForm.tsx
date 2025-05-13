@@ -71,7 +71,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   }, [debouncedProjectName, handleProjectFetch])
 
   const handleImageUpload = (url: string) => {
-    setValue('thumbnailImage', toMediumImageUrl(url), { shouldDirty: true })
+    setValue('thumbnailImage', toMediumImageUrl(url), { shouldDirty: true, shouldValidate: true })
   }
 
   const handleHeaderImageUpload = (url: string) => {
@@ -81,15 +81,15 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   }
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue('email', event.target.value, { shouldDirty: true })
+    setValue('email', event.target.value, { shouldDirty: true, shouldValidate: true })
   }
 
   const handleDeleteThumbnail = () => {
-    setValue('thumbnailImage', '', { shouldDirty: true })
+    setValue('thumbnailImage', '', { shouldDirty: true, shouldValidate: true })
   }
 
   const handleDeleteImage = () => {
-    setValue('images', [], { shouldDirty: true })
+    setValue('images', [], { shouldDirty: true, shouldValidate: true })
   }
 
   const handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
@@ -124,7 +124,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
   return (
     <VStack spacing={6} w="100%">
-      <FieldContainer title={t('Title')} subtitle={t('A few words that make your project stand out')}>
+      <FieldContainer title={t('Title')} subtitle={t('A few words that make your project stand out')} required>
         <TextInputBox
           name="title"
           onChange={handleChange}
@@ -136,6 +136,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
       <FieldContainer
         title={t('Project Identifier')}
+        required
         subtitle={
           <>
             {t(
@@ -204,6 +205,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
       <FieldContainer
         title={t('Objective')}
+        required
         subtitle={t("Add 'one liner' a simple descriptions of what your project is about")}
       >
         <TextArea
@@ -236,7 +238,9 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
       <FieldContainer
         title={t('Image')}
+        required
         subtitle={t('Add the main project image that will be displayed in all thumbnails')}
+        error={formState.errors.thumbnailImage?.message}
       >
         <FileUpload
           showcase
@@ -260,6 +264,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
       <FieldContainer
         title={t('Header')}
+        required
         subtitle={t('Add one or multiple images or video links to help bring your project to life')}
       >
         <MediaControlWithReorder
@@ -313,6 +318,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
       {!isEdit && (
         <FieldContainer
           title={t('Email')}
+          required
           subtitle={t(
             'Project notifications will be sent to your profile email, which you can edit in Profile Settings. Make sure to verify your email to keep your wallet secure.',
           )}

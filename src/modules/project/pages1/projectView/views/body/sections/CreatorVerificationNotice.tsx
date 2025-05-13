@@ -22,7 +22,7 @@ import { useModal } from '@/shared/hooks/useModal.tsx'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { BrandCreamGradient } from '@/shared/styles/custom.ts'
 import { UserVerificationLevel, UserVerificationLevelInput, UserVerificationStatus } from '@/types/index.ts'
-import { isPrelaunch } from '@/utils/index.ts'
+import { isActive } from '@/utils/index.ts'
 
 import {
   becomeVerifiedNoticeAtom,
@@ -61,7 +61,7 @@ export const CreatorVerificationNotice = () => {
     return null
   }
 
-  if (isPrelaunch(project.status)) {
+  if (!isActive(project.status)) {
     return null
   }
 

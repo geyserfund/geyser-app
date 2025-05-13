@@ -1,5 +1,5 @@
 import { Box, HStack, IconButton, Link, VStack } from '@chakra-ui/react'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { PiX } from 'react-icons/pi'
 
@@ -10,7 +10,7 @@ import { Body } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import { BrandCreamGradient } from '@/shared/styles/custom'
 
-import { useIsGuardiansPage } from '../navigation/platformNavBar/platformNavBarAtom'
+import { isProjectFundingRoutesAtom, useIsGuardiansPage } from '../navigation/platformNavBar/platformNavBarAtom'
 import { InfoBannerHistoryDataAtom } from './InfoBannerAtom'
 
 type AirtableInfoBannerData = {
@@ -29,6 +29,7 @@ export const InfoBanner = () => {
   const [data, setData] = useState<AirtableInfoBannerData>()
 
   const isGuardiansPage = useIsGuardiansPage()
+  const isFundingPage = useAtomValue(isProjectFundingRoutesAtom)
 
   useEffect(() => {
     const fetchFeatured = async () => {
@@ -66,7 +67,7 @@ export const InfoBanner = () => {
     }
   }
 
-  if (isGuardiansPage) {
+  if (isGuardiansPage || isFundingPage) {
     return null
   }
 
