@@ -100,7 +100,13 @@ export function ControlledTextInput(props: Props) {
   }
 
   return (
-    <FieldContainer required={props.required} title={title} subtitle={props.description} error={error}>
+    <FieldContainer
+      size={props.size}
+      required={props.required}
+      title={title}
+      subtitle={props.description}
+      error={error}
+    >
       {InputContent}
     </FieldContainer>
   )

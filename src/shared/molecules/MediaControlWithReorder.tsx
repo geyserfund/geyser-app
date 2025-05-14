@@ -1,4 +1,4 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { BoxProps, HStack, VStack } from '@chakra-ui/react'
 import {
   closestCenter,
   DndContext,
@@ -20,16 +20,21 @@ import {
 import { CSS } from '@dnd-kit/utilities'
 import { useState } from 'react'
 
-import { ImageCropAspectRatio } from './ImageCropperModal'
 import { RenderImageOrVideo, RenderImageOrVideoProps } from './RenderImageOrVideo'
 
 type MediaControlWithReorderProps = {
   links: string[]
   updateLinks: (links: string[]) => void
   aspectRatio: number
+  mediaProps?: Omit<BoxProps, 'aspectRatio'>
 }
 
-export const MediaControlWithReorder = ({ links, updateLinks, aspectRatio }: MediaControlWithReorderProps) => {
+export const MediaControlWithReorder = ({
+  links,
+  updateLinks,
+  aspectRatio,
+  mediaProps,
+}: MediaControlWithReorderProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   const [activeId, setActiveId] = useState<string>()
@@ -77,8 +82,6 @@ export const MediaControlWithReorder = ({ links, updateLinks, aspectRatio }: Med
 
   const selectedMedia = links[selectedIndex]
 
-  const selectedMediaWidth = aspectRatio === ImageCropAspectRatio.Reward ? 'auto' : 'full'
-
   return (
     <VStack w="full" overflowX="hidden">
       {selectedMedia && (
@@ -86,7 +89,8 @@ export const MediaControlWithReorder = ({ links, updateLinks, aspectRatio }: Med
           aspectRatio={aspectRatio}
           link={selectedMedia}
           onDelete={onDelete}
-          width={selectedMediaWidth}
+          width={'full'}
+          {...mediaProps}
         />
       )}
       <HStack w="full" overflowX="auto" py={2}>

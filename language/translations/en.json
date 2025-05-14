@@ -1261,5 +1261,9 @@
   "Your post is now live": "Your post is now live",
   "${{countDown}} out of $210": "${{countDown}} out of $210",
   "INACTIVE": "INACTIVE",
-  "ACTIVE": "ACTIVE"
+  "ACTIVE": "ACTIVE",
+  "Add Email": "Add Email",
+  "Add your email to receive project updates from the creator.": "Add your email to receive project updates from the creator.",
+  "Connect profile": "Connect profile",
+  "Connect this transaction with your social profile and receive project updates.": "Connect this transaction with your social profile and receive project updates."
 }
