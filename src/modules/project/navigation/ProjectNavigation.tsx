@@ -40,7 +40,7 @@ export const ProjectNavigation = () => {
   const ProjectNavigationButtons = useMemo(() => {
     const buttonList = [
       {
-        name: 'Project',
+        name: 'Story',
         path: '',
         icon: PiRocketLaunch,
         activeIcon: PiRocketLaunchBold,
@@ -49,7 +49,7 @@ export const ProjectNavigation = () => {
 
     if (project.rewardsCount) {
       buttonList.push({
-        name: 'Products',
+        name: 'Shop',
         path: PathName.projectRewards,
         icon: PiBag,
         activeIcon: PiBagBold,
@@ -58,7 +58,7 @@ export const ProjectNavigation = () => {
 
     if (project.entriesCount) {
       buttonList.push({
-        name: 'Posts',
+        name: 'Updates',
         path: PathName.projectPosts,
         icon: PiNewspaper,
         activeIcon: PiNewspaperBold,
@@ -75,7 +75,7 @@ export const ProjectNavigation = () => {
     }
 
     buttonList.push({
-      name: 'Leaderboard',
+      name: 'Community',
       path: PathName.projectLeaderboard,
       icon: PiMedalMilitary,
       activeIcon: PiMedalMilitaryBold,
