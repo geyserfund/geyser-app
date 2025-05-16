@@ -8,6 +8,7 @@ import { useProjectGrantApplicationsAPI } from '@/modules/project/API/useProject
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { VotingInfoModal } from '@/shared/molecules/VotingInfoModal'
+import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 import { CommunityVoteGrant, GrantStatusEnum, VotingSystem } from '@/types'
 
 import { isActive, isPrelaunch } from '../../../../../../../utils'
@@ -50,7 +51,7 @@ export const ContributeButton = ({ isWidget, ...props }: ContributeButtonProps) 
   const buttonProps = isWidget
     ? {
         as: Link,
-        href: `https://geyser.fund/${getPath('projectFunding', project.name)}`,
+        href: getFullDomainUrl(getPath('projectFunding', project.name)),
         isExternal: true,
       }
     : {
