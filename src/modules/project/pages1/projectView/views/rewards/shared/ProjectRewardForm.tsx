@@ -128,17 +128,23 @@ export const ProjectRewardForm = ({
             </Body>
           </HStack>
           <CardLayout w="100%" border={'none'} padding={0} mobileDense gap={6}>
-            <CardLayout>
-              <FieldContainer
-                title={t('Images')}
-                subtitle={t('Add one or multiple images to help showcase your product')}
-              >
+            <FieldContainer
+              title={t('Images')}
+              subtitle={t('Add one or multiple images to help showcase your product')}
+              size="sm"
+            >
+              <VStack pt={4} w="full">
                 <MediaControlWithReorder
                   links={watch('images')}
                   updateLinks={(links) => setValue('images', links, { shouldDirty: true })}
                   aspectRatio={ImageCropAspectRatio.Reward}
+                  mediaProps={{
+                    maxHeight: { base: '200px', sm: '300px', md: '400px' },
+                    minHeight: { base: '200px', sm: '300px', md: '400px' },
+                    width: 'auto',
+                  }}
                 />
-                <Stack alignItems="start" direction={{ base: 'column', md: 'row' }} w={'full'} pt={4}>
+                <Stack alignItems="start" direction={{ base: 'column', md: 'row' }} w={'full'}>
                   <FileUpload
                     containerProps={{ flex: 1, w: { base: 'full', md: 'unset' } }}
                     caption={t('For best fit, select horizontal 4:3 image. Image size limit: 10MB.')}
@@ -164,8 +170,9 @@ export const ProjectRewardForm = ({
                     />
                   </FileUpload>
                 </Stack>
-              </FieldContainer>
-            </CardLayout>
+              </VStack>
+            </FieldContainer>
+
             <Stack direction={{ base: 'column', lg: 'row' }}>
               <ControlledTextInput
                 label={t('Product Name')}
@@ -248,7 +255,7 @@ export const ProjectRewardForm = ({
                 error={errors.description?.message}
                 resize="vertical"
               /> */}
-              <FieldContainer title={t('Description')} error={errors.description?.message}>
+              <FieldContainer size="sm" title={t('Description')} error={errors.description?.message}>
                 <Box
                   flex={1}
                   width="100%"
@@ -265,6 +272,7 @@ export const ProjectRewardForm = ({
                       name="description"
                       placeholder={t('Describe the item you would like to sell')}
                       flex
+                      noFloatingToolbar
                       control={control}
                       isEditorMode={isEditorMode}
                       toggleEditorMode={toggleEditorMode}
@@ -273,6 +281,7 @@ export const ProjectRewardForm = ({
                         borderRight: 'none',
                         borderLeft: 'none',
                         borderRadius: 0,
+                        overflowX: 'auto',
                       }}
                       toolbarMaxWidth={'100%'}
                       enableRawMode

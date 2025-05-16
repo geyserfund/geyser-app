@@ -1271,5 +1271,9 @@
   "Post published": "Post published",
   "Your post is now live": "Your post is now live",
   "INACTIVE": "INACTIVE",
-  "ACTIVE": "ACTIVE"
+  "ACTIVE": "ACTIVE",
+  "Add Email": "Add Email",
+  "Add your email to receive project updates from the creator.": "Add your email to receive project updates from the creator.",
+  "Connect profile": "Connect profile",
+  "Connect this transaction with your social profile and receive project updates.": "Connect this transaction with your social profile and receive project updates."
 }
