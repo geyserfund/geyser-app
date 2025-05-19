@@ -65,7 +65,7 @@ const PopOverInfo = () => {
         <PopoverBody maxWidth="300px">
           <Body size="sm" dark>
             {t(
-              'This project needs to raise $210 in 30 days to go live. Share this project on social media to help launch it.',
+              'This project needs to raise $210 in 7 days to go live. Share this project on social media to help launch it.',
             )}
           </Body>
         </PopoverBody>

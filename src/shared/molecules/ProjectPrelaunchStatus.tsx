@@ -80,7 +80,7 @@ export const ProjectPrelaunchStatus = ({
   if (isTimeUp && !hasEnoughFunds) {
     return (
       <Body size={{ base: 'md', lg: 'lg' }} bold>
-        {t('Time is up: this project did not raise $210 in 30 days.')}
+        {t('Time is up: this project did not raise $210 in 7 days.')}
       </Body>
     )
   }
