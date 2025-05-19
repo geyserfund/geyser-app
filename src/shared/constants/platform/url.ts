@@ -1,4 +1,5 @@
 export const GuideUrl = 'https://guide.geyser.fund/'
+export const GuideStepByStepUrl = 'https://guide.geyser.fund/geyser-docs/guides/step-by-step-tutorials'
 export const FeedbackUrl = 'https://geyser.steelsync.io/feedback'
 export const GeyserAboutUrl = 'https://about.geyser.fund'
 export const GeyserManifestoUrl = 'https://about.geyser.fund/manifesto'

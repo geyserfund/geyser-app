@@ -1,11 +1,11 @@
-import { Button } from '@chakra-ui/react'
+import { Button, IconButton, Link as ChakraLink } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiBag, PiFlagBannerFold, PiNewspaper } from 'react-icons/pi'
+import { PiArrowRight, PiBag, PiFlagBannerFold, PiNewspaper } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { useMobileMode } from '@/utils'
 
-import { getPath } from '../../../../../../../shared/constants'
+import { getPath, GuideStepByStepUrl } from '../../../../../../../shared/constants'
 import { ProjectStatus } from '../../../../../../../types'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 import { useGoalsModal } from '../../../hooks'
@@ -29,6 +29,7 @@ export const CreatorButtons = () => {
         flex={1}
         variant="outline"
         colorScheme="neutral1"
+        minWidth={{ base: '90px', lg: '120px' }}
         leftIcon={<PiBag />}
       >
         {isMobile ? t('Product') : t('Sell product')}
@@ -39,6 +40,7 @@ export const CreatorButtons = () => {
         flex={1}
         variant="outline"
         colorScheme="neutral1"
+        minWidth={{ base: '90px', lg: '120px' }}
         leftIcon={<PiFlagBannerFold />}
       >
         {isMobile ? t('Goal') : t('Create goal')}
@@ -50,10 +52,37 @@ export const CreatorButtons = () => {
         flex={1}
         variant="solid"
         colorScheme="primary1"
+        minWidth={{ base: '90px', lg: '120px' }}
         leftIcon={<PiNewspaper />}
       >
         {isMobile ? t('Post') : t('Write post')}
       </Button>
+
+      {isMobile ? (
+        <IconButton
+          aria-label="guide"
+          size={'lg'}
+          as={ChakraLink}
+          href={GuideStepByStepUrl}
+          isExternal
+          variant="outline"
+          colorScheme="neutral1"
+          icon={<PiArrowRight />}
+        />
+      ) : (
+        <Button
+          size={'lg'}
+          as={ChakraLink}
+          href={GuideStepByStepUrl}
+          isExternal
+          variant="outline"
+          colorScheme="neutral1"
+          rightIcon={<PiArrowRight />}
+          minWidth="120px"
+        >
+          {t('Guides')}
+        </Button>
+      )}
     </>
   )
 }
