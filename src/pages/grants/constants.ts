@@ -31,7 +31,7 @@ export const GrantSubscribeSegment: {
 } = {
   'grant-round-014': {
     title: 'Subscribe',
-    description: 'Get updates on NWC Software and Hardware Grant',
+    description: 'Get updates on NWC Hackathon Grant',
     modalTitle: 'Subscribe to NWC Grants',
     segmentId: '681b2095a76b1971e0153274',
   },
