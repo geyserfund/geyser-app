@@ -1,4 +1,4 @@
-import { Button, Flex, HStack, Link, VStack } from '@chakra-ui/react'
+import { Button, Flex, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiBell, PiCoins } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'

@@ -61,7 +61,7 @@ export const ApplyGrant = ({ grant, pendingApplicants }: GrantProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
-      <Button variant="solid" colorScheme="primary1" onClick={onOpen} textTransform="uppercase">
+      <Button size="lg" width="200px" variant="solid" colorScheme="primary1" onClick={onOpen} textTransform="uppercase">
         {t('Apply')}
       </Button>
       <ApplyGrantModal {...{ isOpen, onOpen, onClose, grant, pendingApplicants }} />

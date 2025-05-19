@@ -1,15 +1,15 @@
-import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
+import { Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { PiCheckSquareOffset } from 'react-icons/pi'
 import * as yup from 'yup'
 
 import { createSubscriber } from '@/api/flodesk.ts'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { FollowBellIllurationsUrl } from '@/shared/constants/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const schema = yup.object({
@@ -90,7 +90,7 @@ export const SubscriptionForm = ({ title, segmentIds, customFields, isOpen, onCl
       return (
         <VStack spacing={6} w="full" align="flex-start" p={4}>
           <HStack w="full" justifyContent="center">
-            <Icon as={PiCheckSquareOffset} fontSize="150px" color="primary1.9" />
+            <Image height="200px" width="auto" src={FollowBellIllurationsUrl} alt="Email illustration" />
           </HStack>
           <VStack align="flex-start" spacing={2}>
             <Body medium>{t('You have successfully subscribed!')}</Body>
