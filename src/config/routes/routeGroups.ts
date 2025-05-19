@@ -59,12 +59,12 @@ export const projectBaseRoutes = [
 export const projectRoutes = [
   ...projectBaseRoutes,
   getPath('projectPostView', PathName.projectName, PathName.postId),
-  getPath('projectRewardView', PathName.projectName, PathName.rewardId),
+  getPath('projectRewardView', PathName.projectName, PathName.rewardUUID),
 ]
 
 export const projectRewardCreatorRoutes = [
   getPath('projectRewardCreate', PathName.projectName),
-  getPath('projectRewardEdit', PathName.projectName, PathName.rewardId),
+  getPath('projectRewardEdit', PathName.projectName, PathName.rewardUUID),
 ]
 
 export const projectPostCreatorRoutes = [
