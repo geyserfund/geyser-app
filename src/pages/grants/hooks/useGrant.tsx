@@ -16,6 +16,7 @@ const GRANT_CUSTOM_URL_TO_ID_MAP = {
   satshack2024: 13,
   satsnart: 14,
   satsnhacks: 15,
+  'nwc-hardware-software': 16,
 } as {
   [key: string]: number
 }
