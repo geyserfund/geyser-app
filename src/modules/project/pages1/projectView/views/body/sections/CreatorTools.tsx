@@ -14,7 +14,14 @@ export const CreatorTools = () => {
     return null
 
   return (
-    <CardLayout display={{ base: 'none', lg: 'flex' }} w="full" direction="row" backgroundColor="neutral.1" spacing={4}>
+    <CardLayout
+      display={{ base: 'none', lg: 'flex' }}
+      w="full"
+      direction="row"
+      flexWrap="wrap"
+      backgroundColor="neutral.1"
+      spacing={4}
+    >
       <CreatorButtons />
     </CardLayout>
   )
