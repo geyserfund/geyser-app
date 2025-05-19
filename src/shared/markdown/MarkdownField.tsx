@@ -64,6 +64,7 @@ interface Props {
   isEditorMode?: boolean
   toggleEditorMode?: () => void
   isFloatingToolbar?: boolean
+  noFloatingToolbar?: boolean
   toolbarMaxWidth?: number | string
   fontFamily?: string
 }
@@ -86,6 +87,7 @@ export const MarkdownField = ({
   isEditorMode,
   toggleEditorMode,
   isFloatingToolbar,
+  noFloatingToolbar,
   toolbarMaxWidth,
   fontFamily,
 }: Props) => {
@@ -253,20 +255,21 @@ export const MarkdownField = ({
           borderColor="neutral1.6"
           padding="10px"
           background="utils.pbg"
-          {...(isMobile && {
-            zIndex: 2,
-            borderLeftWidth: '0px',
-            borderRightWidth: '0px',
-            borderTopWidth: '1px',
-            borderTopStyle: 'solid',
-            borderRadius: '0px',
-            padding: '12px 12px 20px',
-            position: 'fixed',
-            bottom: stickyToolbar || 0,
-            overflowX: 'auto',
-            overflowY: 'hidden',
-            marginBottom: '0px',
-          })}
+          {...(isMobile &&
+            !noFloatingToolbar && {
+              zIndex: 2,
+              borderLeftWidth: '0px',
+              borderRightWidth: '0px',
+              borderTopWidth: '1px',
+              borderTopStyle: 'solid',
+              borderRadius: '0px',
+              padding: '12px 12px 20px',
+              position: 'fixed',
+              bottom: stickyToolbar || 0,
+              overflowX: 'auto',
+              overflowY: 'hidden',
+              marginBottom: '0px',
+            })}
           {...toolbarWrapperProps}
         >
           <MarkdownToolbar isDisabled={isEditorMode} />

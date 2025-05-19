@@ -26,7 +26,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
 
   const { project, formState } = useFundingFormAtom()
 
-  const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
+  const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter(true)
 
   const location = useLocation()
 
@@ -73,7 +73,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                 </Body>
               )}
             </HStack>
-            <HStack>
+            <HStack flexWrap="wrap">
               {reward.category && (
                 <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
                   {reward.category}
@@ -82,23 +82,25 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
               <ProjectRewardShippingEstimate reward={reward} />
             </HStack>
           </VStack>
-          <HStack w="full" justifyContent={'space-between'} alignItems={'end'}>
+          <HStack
+            flexDirection={{ base: 'column', sm: 'row' }}
+            w="full"
+            justifyContent={'space-between'}
+            alignItems={{ base: 'start', sm: 'end' }}
+          >
             <Box
               display={'flex'}
-              flexDirection={{ base: 'column', sm: 'row', lg: 'row' }}
+              flexDirection={{ base: 'row', sm: 'row', lg: 'row' }}
               alignItems={'start'}
               justifyContent={'end'}
+              flexWrap={'nowrap'}
               gap={1}
             >
               {project && project.rewardCurrency === RewardCurrency.Usdcent ? (
                 <>
                   <Body bold dark>{`$${reward.cost / 100}`}</Body>
                   <Body medium muted>
-                    {`(${formatSatsAmount(reward.cost)}`}
-                    <Box as="span" color={'neutral1.9'}>
-                      {' '}
-                      sats{')'}
-                    </Box>
+                    {`(${formatSatsAmount(reward.cost)})`}
                   </Body>
                 </>
               ) : (

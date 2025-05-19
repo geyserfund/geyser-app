@@ -1,13 +1,14 @@
 import { HStack, VStack } from '@chakra-ui/react'
 
+import { GrantBalanceCurrency } from '@/pages/grants/constants.ts'
 import { Body } from '@/shared/components/typography'
 import { useCountdown } from '@/shared/hooks/useCountdown'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { Grant, GrantStatusEnum } from '@/types'
-import { getFormattedDate, getShortAmountLabel } from '@/utils'
+import { centsToDollars, getFormattedDate, getShortAmountLabel } from '@/utils'
 
 const GrantWidget = ({ grant, compact = false }: { grant: Grant; compact?: boolean }) => {
-  const { formatUsdAmount } = useCurrencyFormatter(true)
+  const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter(true)
 
   const votingStartDate = grant.statuses.find((s) => s.status === GrantStatusEnum.FundingOpen)?.startAt
   const isUpcomingGrant = votingStartDate > Date.now()
@@ -15,11 +16,21 @@ const GrantWidget = ({ grant, compact = false }: { grant: Grant; compact?: boole
 
   const votingEndDate = grant.statuses.find((s) => s.status === GrantStatusEnum.Closed)?.startAt
 
-  const grantPool = `${getShortAmountLabel(grant.balance, false, true)} Sats`
-  const grantPoolUsd = `(${formatUsdAmount(grant.balance)})`
+  const isSatoshi = !GrantBalanceCurrency[grant.name] || !(GrantBalanceCurrency[grant.name] === 'USDCENT')
+  console.log(GrantBalanceCurrency[grant.name])
+
+  const grantPool = isSatoshi
+    ? `${getShortAmountLabel(grant.balance, false, true)} Sats`
+    : `$${getShortAmountLabel(centsToDollars(grant.balance), false, true)}`
+  const grantPoolSecondary = isSatoshi ? `(${formatUsdAmount(grant.balance)})` : `(${formatSatsAmount(grant.balance)})`
 
   if (isUpcomingGrant) {
-    return <GrantInfo label="Starts on" value={getFormattedDate(votingStartDate || 0)} />
+    return (
+      <HStack w={'full'} spacing={{ base: 4, lg: 8 }}>
+        <GrantInfo label="Starts on" value={getFormattedDate(votingStartDate || 0)} />
+        <GrantInfo label={'Grant pool'} value={`${grantPool}`} suffix={grantPoolSecondary} compact={compact} />
+      </HStack>
+    )
   }
 
   if (isClosedGrant) {
@@ -32,7 +43,7 @@ const GrantWidget = ({ grant, compact = false }: { grant: Grant; compact?: boole
         />
         {!compact && <GrantInfo label={'Applicants'} value={grant?.applicants?.length || 0} compact={compact} />}
         {grant.balance > 0 && (
-          <GrantInfo label={'Grant pool'} value={`${grantPool}`} suffix={grantPoolUsd} compact={compact} />
+          <GrantInfo label={'Grant pool'} value={`${grantPool}`} suffix={grantPoolSecondary} compact={compact} />
         )}
       </>
     )
@@ -42,7 +53,7 @@ const GrantWidget = ({ grant, compact = false }: { grant: Grant; compact?: boole
     <>
       <GrantInfo label={'Time left to vote'} endDate={votingEndDate || 0} />
       {grant.__typename === 'CommunityVoteGrant' && <GrantInfo label={'Votes'} value={grant.votes.voteCount} />}
-      {grant.balance > 0 && <GrantInfo label={'Grant pool'} value={`${grantPool}`} suffix={grantPoolUsd} />}
+      {grant.balance > 0 && <GrantInfo label={'Grant pool'} value={`${grantPool}`} suffix={grantPoolSecondary} />}
     </>
   )
 }

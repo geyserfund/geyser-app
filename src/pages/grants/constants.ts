@@ -21,9 +21,25 @@ export const GrantHasVoting: { [key: string]: boolean } = {
   'grant-round-011': true,
   'grant-round-012': true,
   'grant-round-013': false,
+  'grant-round-014': false,
 }
 
-export const NoContributionInGrant = ['grant-round-008']
+export const GrantBalanceCurrency: { [key: string]: string } = {
+  'grant-round-014': 'USDCENT',
+}
+
+export const NoContributionInGrant = ['grant-round-008', 'grant-round-014']
+
+export const GrantSubscribeSegment: {
+  [key: string]: { title: string; description: string; modalTitle: string; segmentId: string }
+} = {
+  'grant-round-014': {
+    title: 'Subscribe',
+    description: 'Get updates on NWC Hackathon Grant',
+    modalTitle: 'Subscribe to NWC Grants',
+    segmentId: '681b2095a76b1971e0153274',
+  },
+}
 
 export type GrantAnnouncement = {
   linkUrl: string

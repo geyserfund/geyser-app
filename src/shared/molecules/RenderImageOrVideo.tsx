@@ -27,7 +27,7 @@ export const RenderImageOrVideo = forwardRef(
 
     const vimeoThumbnail = getVimeoThumbailFromLink(link)
 
-    const objectFit = enableDrag || aspectRatio === ImageCropAspectRatio.Reward ? 'cover' : 'contain'
+    const objectFit = enableDrag ? 'cover' : 'contain'
 
     return (
       <Box

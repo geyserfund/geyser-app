@@ -14,8 +14,15 @@ import { dimensions, getPath } from '../../../shared/constants'
 import { BoardVoteGrant, Grant, GrantApplicant, GrantApplicantStatus, GrantStatusEnum, GrantType } from '../../../types'
 import { useNotification } from '../../../utils'
 import { GrantWinnerAnnouncement, MobileDivider } from '../components'
-import { GrantAnnouncements, GrantHasVoting, GrantProjectNameMap, NoContributionInGrant } from '../constants'
+import {
+  GrantAnnouncements,
+  GrantHasVoting,
+  GrantProjectNameMap,
+  GrantSubscribeSegment,
+  NoContributionInGrant,
+} from '../constants'
 import { useGrant } from '../hooks/useGrant'
+import { GrantSubscriptionSection } from './components/GrantSubscriptionCard.tsx'
 import { GrantsRoundOne } from './GrantsRoundOne'
 import { GrantsRoundTwo } from './GrantsRoundTwo'
 import { GrantContribute, GrantSummary } from './sections'
@@ -103,6 +110,7 @@ export const GrantPage = () => {
   }
 
   const grantHasVoting = GrantHasVoting[grant.name]
+  const grantHasSubscribeSegment = GrantSubscribeSegment[grant.name]
   const isCompetitionVote = grant.type === GrantType.CommunityVote
   const showCommunityVoting = applicants.length > 0
   const showDistributionChart = grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
@@ -231,6 +239,13 @@ export const GrantPage = () => {
               grantHasVoting={grantHasVoting}
             />
 
+            <MobileDivider />
+          </>
+        )}
+
+        {grantHasSubscribeSegment && (
+          <>
+            <GrantSubscriptionSection {...grantHasSubscribeSegment} />
             <MobileDivider />
           </>
         )}

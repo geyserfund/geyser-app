@@ -12,6 +12,7 @@ export interface FieldContainerProps extends Omit<StackProps, 'title'> {
   children?: ReactNode
   boldTitle?: boolean
   required?: boolean
+  size?: 'sm' | 'md' | 'lg'
 }
 
 export const FieldContainer = ({
@@ -22,19 +23,20 @@ export const FieldContainer = ({
   info,
   error = null,
   boldTitle = false,
+  size = 'md',
   ...props
 }: FieldContainerProps) => {
   return (
-    <VStack spacing={1} alignItems="start" w="100%" {...props}>
+    <VStack spacing={0} alignItems="start" w="100%" {...props}>
       {title && (
-        <Body wordBreak="keep-all" fontWeight={boldTitle ? 700 : 500}>
+        <Body size={size} wordBreak="keep-all" fontWeight={boldTitle ? 700 : 500}>
           {title}
           {required && '*'}
         </Body>
       )}
       {subtitle && (
         <HStack w="full">
-          <Body size="sm" light>
+          <Body size={size === 'sm' ? 'xs' : 'sm'} light>
             {subtitle}
           </Body>
           {info && (

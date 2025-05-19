@@ -27,7 +27,7 @@ export const useCurrencyFormatter = (shortAmount?: boolean) => {
         if (amount === 0) return '0 sats'
 
         if (shortAmount) {
-          const shortSatsAmount = getShortAmountLabel(amount)
+          const shortSatsAmount = getShortAmountLabel(amount, true)
           return `${shortSatsAmount} sats`
         }
 
@@ -44,7 +44,7 @@ export const useCurrencyFormatter = (shortAmount?: boolean) => {
       if (usdAmount < 1) return '<$1'
       if (shortAmount) {
         const roundedUsdAmount = Math.round(usdAmount)
-        const shortUsdAmount = getShortAmountLabel(roundedUsdAmount)
+        const shortUsdAmount = getShortAmountLabel(roundedUsdAmount, true)
         return `$${shortUsdAmount}`
       }
 
