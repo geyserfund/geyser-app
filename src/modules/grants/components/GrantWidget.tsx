@@ -20,7 +20,7 @@ const GrantWidget = ({ grant, compact = false }: { grant: Grant; compact?: boole
   console.log(GrantBalanceCurrency[grant.name])
 
   const grantPool = isSatoshi
-    ? `${getShortAmountLabel(grant.balance, false, true)} Sats`
+    ? `${getShortAmountLabel(grant.balance, false, true)} sats`
     : `$${getShortAmountLabel(centsToDollars(grant.balance), false, true)}`
   const grantPoolSecondary = isSatoshi ? `(${formatUsdAmount(grant.balance)})` : `(${formatSatsAmount(grant.balance)})`
 

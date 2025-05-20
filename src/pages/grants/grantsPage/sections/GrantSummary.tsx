@@ -10,14 +10,9 @@ import { StatusLabel } from '../../../../components/ui/StatusLabel'
 import { Tooltip } from '../../../../components/ui/Tooltip'
 import { VideoPlayer } from '../../../../shared/molecules/VideoPlayer'
 import { DistributionSystem, Grant, GrantType, VotingSystem } from '../../../../types'
-import { getShortAmountLabel, useMobileMode } from '../../../../utils'
+import { useMobileMode } from '../../../../utils'
 import { ContributionsWidget } from '../../components/ContributionsWidget'
-import {
-  GRANT_STATUS_COUNTDOWN_TITLES,
-  GRANT_STATUS_COUNTDOWN_TITLES_NON_VOTE,
-  GRANT_STATUS_MAP,
-  GrantHasVoting,
-} from '../../constants'
+import { GRANT_STATUS_MAP } from '../../constants'
 
 const CUSTOM_VIDEO_URL = 'https://youtu.be/xemVDGbQwHs'
 
@@ -40,8 +35,6 @@ export const DistributionSystemExplanation = {
 export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHasVoting?: boolean }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
-
-  const votingEndDate = grant.statuses.find((s) => s.status === grant.status)?.endAt
 
   const renderImageOrVideo = () => {
     if (grant.name === 'grant-round-008') {
@@ -138,19 +131,6 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
     }
   }
 
-  const contributions = () => {
-    if (grant?.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.OneToOne) {
-      return getShortAmountLabel(
-        grant.applicants.reduce((prev, curr) => prev + (curr?.funding.communityFunding || 0), 0) || 0,
-        true,
-      )
-    }
-
-    if (grant?.__typename === 'CommunityVoteGrant' && grant.votingSystem === VotingSystem.StepLog_10) {
-      return getShortAmountLabel(grant.votes?.voteCount || 0, true)
-    }
-  }
-
   return (
     <CardLayout noborder={isMobile} padding={{ base: 0, lg: 0 }}>
       {renderImageOrVideo()}
@@ -188,22 +168,7 @@ export const GrantSummary = ({ grant, grantHasVoting }: { grant: Grant; grantHas
               </Tooltip>
             )}
           </Box>
-          <ContributionsWidget
-            sponsors={grant.sponsors}
-            endDateSubtitle={
-              grantHasVoting
-                ? t(GRANT_STATUS_COUNTDOWN_TITLES[grant.status])
-                : t(GRANT_STATUS_COUNTDOWN_TITLES_NON_VOTE[grant.status])
-            }
-            endDateTimestamp={votingEndDate}
-            balance={getShortAmountLabel(grant.balance || 0, true)}
-            hasVoting={GrantHasVoting[grant.name]}
-            contributions={contributions()}
-            distributionSystem={
-              grant?.__typename === 'CommunityVoteGrant' ? grant.distributionSystem : DistributionSystem.None
-            }
-            votingSystem={grant?.__typename === 'CommunityVoteGrant' ? grant.votingSystem : VotingSystem.OneToOne}
-          />
+          <ContributionsWidget grant={grant} />
         </Box>
       </Box>
     </CardLayout>
