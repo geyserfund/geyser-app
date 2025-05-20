@@ -29,7 +29,7 @@ import { ProjectRewardShippingEstimate, RewardEditMenu } from './components'
 import { RewardShare } from './components/RewardShare'
 
 export const RewardView = () => {
-  const { project, isProjectOwner } = useProjectAtom()
+  const { project, isProjectOwner, loading: projectLoading } = useProjectAtom()
   const { rewardUUID } = useParams<{ rewardUUID: string }>()
   const location = useLocation()
   const isMobileMode = useMobileMode()
@@ -113,6 +113,7 @@ export const RewardView = () => {
             variant="ghost"
             colorScheme="neutral1"
             leftIcon={<PiArrowLeft />}
+            isDisabled={projectLoading}
           >
             {t('All products')}
           </Button>

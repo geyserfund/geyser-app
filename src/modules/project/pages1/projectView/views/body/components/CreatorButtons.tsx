@@ -1,6 +1,6 @@
 import { Button, IconButton, Link as ChakraLink } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiArrowRight, PiBag, PiFlagBannerFold, PiNewspaper } from 'react-icons/pi'
+import { PiArrowUpRight, PiBag, PiFlagBannerFold, PiNewspaper } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { useMobileMode } from '@/utils'
@@ -61,24 +61,24 @@ export const CreatorButtons = () => {
       {isMobile ? (
         <IconButton
           aria-label="guide"
-          size={'lg'}
+          size={'md'}
           as={ChakraLink}
           href={GuideStepByStepUrl}
           isExternal
-          variant="outline"
+          variant="ghost"
           colorScheme="neutral1"
-          icon={<PiArrowRight />}
+          icon={<PiArrowUpRight />}
         />
       ) : (
         <Button
-          size={'lg'}
+          size={'md'}
           as={ChakraLink}
           href={GuideStepByStepUrl}
           isExternal
-          variant="outline"
+          variant="ghost"
           colorScheme="neutral1"
-          rightIcon={<PiArrowRight />}
-          minWidth="120px"
+          paddingX={2}
+          rightIcon={<PiArrowUpRight />}
         >
           {t('Guides')}
         </Button>

@@ -31,7 +31,7 @@ import { postTypeOptions } from '../../utils/postTypeLabel'
 import { LinkedRewardsAndGoals } from './LinkedRewardsAndGoals'
 
 export const PostView = () => {
-  const { project, isProjectOwner } = useProjectAtom()
+  const { project, isProjectOwner, loading: projectLoading } = useProjectAtom()
   const { postId } = useParams<{ postId: string }>()
   const [sourceResource, setSourceResource] = useAtom(sourceResourceAtom)
   const navigate = useNavigate()
@@ -106,6 +106,7 @@ export const PostView = () => {
             variant="ghost"
             colorScheme="neutral1"
             leftIcon={<PiArrowLeft />}
+            isDisabled={projectLoading}
           >
             {t('All posts')}
           </Button>
