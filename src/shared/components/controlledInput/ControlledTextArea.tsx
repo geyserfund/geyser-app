@@ -6,7 +6,7 @@ import { FieldContainer } from '../form'
 import { Body } from '../typography'
 
 type Props = UseControllerProps<any, any> &
-  Omit<TextareaProps, 'size'> & {
+  TextareaProps & {
     width?: string | number
     inputRef?: React.Ref<HTMLInputElement>
     label: string
@@ -39,7 +39,7 @@ export function ControlledTextArea(props: Props) {
   }
 
   const label = props.label ? (
-    <Body size={'sm'} medium>
+    <Body size={props.size || 'md'} medium>
       {props.label}
     </Body>
   ) : null

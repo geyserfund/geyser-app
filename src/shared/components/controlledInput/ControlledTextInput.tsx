@@ -58,7 +58,7 @@ export function ControlledTextInput(props: Props) {
   const title =
     props.label || props.infoTooltip ? (
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-        <Body size="sm" medium>
+        <Body size={props.size || 'md'} medium>
           {props.label}
         </Body>
         {props.infoTooltip && props.infoTooltip}

@@ -36,7 +36,7 @@ export const FieldContainer = ({
       )}
       {subtitle && (
         <HStack w="full">
-          <Body size={size === 'sm' ? 'xs' : 'sm'} light>
+          <Body size={'sm'} light>
             {subtitle}
           </Body>
           {info && (

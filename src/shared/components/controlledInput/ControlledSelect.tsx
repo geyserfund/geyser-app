@@ -25,7 +25,7 @@ export function ControlledSelect(props: Props) {
   return (
     <FieldContainer
       title={
-        <Body size="sm" medium>
+        <Body size={props.size || 'md'} medium>
           {props.label}
         </Body>
       }
