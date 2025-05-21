@@ -36,6 +36,7 @@ export const useSignedUpload = ({
 
   const uploadFile = useCallback(
     async (file: any): Promise<{ src: string; filename: string }> => {
+      file.name = file.name.replace(/\s+/g, '')
       try {
         setIsLoading(true)
         const { data } = await getSignedUrl({
