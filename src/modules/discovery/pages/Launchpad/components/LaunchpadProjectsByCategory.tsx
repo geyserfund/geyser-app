@@ -1,4 +1,4 @@
-import { Button, GridItem, HStack, SimpleGrid, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, GridItem } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo, useState } from 'react'
 
@@ -21,8 +21,6 @@ type LaunchpadProjectsByCategoryProps = {
 
 export const LaunchpadProjectsByCategory = ({ category, subCategory }: LaunchpadProjectsByCategoryProps) => {
   const [projects, setProjects] = useState<ProjectForLaunchpadPageFragment[]>([])
-
-  const { isOpen: isSeeAll, onOpen: onSeeAll } = useDisclosure()
 
   const { loading } = useProjectsForLaunchpadPageQuery({
     fetchPolicy: 'network-only',
@@ -47,48 +45,45 @@ export const LaunchpadProjectsByCategory = ({ category, subCategory }: Launchpad
     })
   }, [projects])
 
-  const hadMoreThan4Projects = sortedProjects.length > 4
-
-  const projectsToShow = isSeeAll ? sortedProjects : hadMoreThan4Projects ? sortedProjects.slice(0, 4) : sortedProjects
+  const projectsToShow = sortedProjects
 
   if (projectsToShow.length === 0) {
     return null
   }
 
   return (
-    <VStack w="full" spacing={2}>
-      <HStack justifyContent={'space-between'} width="100%">
-        <H3 size={{ base: 'lg', md: '2xl' }} medium dark>
-          {t('New in')}{' '}
-          <Body as="span" bold color="primary1.11">
-            {category ? ProjectCategoryLabel[category] : ProjectSubCategoryLabel[subCategory ?? '']}
-          </Body>
-        </H3>
+    <>
+      {loading
+        ? [...Array(4).keys()].map((key) => {
+            return (
+              <GridItem key={key}>
+                <LaunchpadProjectItemSkeleton />
+              </GridItem>
+            )
+          })
+        : projectsToShow.map((project, index) => {
+            const isFirst = index === 0
+            return (
+              <GridItem key={project.id} overflow="visible">
+                <Box height={{ base: '32px', md: '40px' }} marginBottom={2} overflow="visible">
+                  <H3 size={{ base: 'lg', md: '2xl' }} medium dark whiteSpace="nowrap">
+                    {isFirst ? (
+                      <>
+                        {t('New in')}{' '}
+                        <Body as="span" bold color="primary1.11">
+                          {category ? ProjectCategoryLabel[category] : ProjectSubCategoryLabel[subCategory ?? '']}
+                        </Body>
+                      </>
+                    ) : (
+                      ''
+                    )}
+                  </H3>
+                </Box>
 
-        {!isSeeAll && hadMoreThan4Projects && (
-          <Button variant={'outline'} onClick={onSeeAll}>
-            {t('See all')}
-          </Button>
-        )}
-      </HStack>
-
-      <SimpleGrid w="full" columns={{ base: 1, sm: 2, md: 3, lg: 3, xl: 4 }} spacingX="20px" spacingY="20px">
-        {loading
-          ? [...Array(4).keys()].map((key) => {
-              return (
-                <GridItem key={key}>
-                  <LaunchpadProjectItemSkeleton />
-                </GridItem>
-              )
-            })
-          : projectsToShow.map((project) => {
-              return (
-                <GridItem key={project.id}>
-                  <LaunchpadProjectItem project={project} />
-                </GridItem>
-              )
-            })}
-      </SimpleGrid>
-    </VStack>
+                <LaunchpadProjectItem project={project} />
+              </GridItem>
+            )
+          })}
+    </>
   )
 }
