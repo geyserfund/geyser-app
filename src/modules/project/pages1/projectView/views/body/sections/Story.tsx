@@ -19,7 +19,7 @@ export const Story = () => {
     return <StorySkeleton />
   }
 
-  if (!project?.description) {
+  if (!project?.description && !project?.shortDescription) {
     return null
   }
 
@@ -29,9 +29,11 @@ export const Story = () => {
         <Body bold size="2xl">
           {project.shortDescription}
         </Body>
-        <article>
-          <MarkdownField preview content={project?.description} />
-        </article>
+        {project?.description && (
+          <article>
+            <MarkdownField preview content={project?.description} />
+          </article>
+        )}
         <HStack w="full" justifyContent={'end'}>
           <CreatorEditButton as={Link} to={getPath('projectStoryEdit', project.name)} />
         </HStack>
