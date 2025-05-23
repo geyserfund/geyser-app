@@ -1,4 +1,4 @@
-import { HStack, StackProps, Tooltip, VStack } from '@chakra-ui/react'
+import { Collapse, HStack, StackProps, Tooltip, VStack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { PiInfo } from 'react-icons/pi'
 
@@ -50,11 +50,12 @@ export const FieldContainer = ({
       )}
 
       {children}
-      {error && (
+
+      <Collapse in={Boolean(error)}>
         <Body size="xs" color="error.9">
           {error}
         </Body>
-      )}
+      </Collapse>
     </VStack>
   )
 }

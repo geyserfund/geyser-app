@@ -39,6 +39,7 @@ const ButtonDateInput = forwardRef<
     variant="outline"
     overflow={'hidden'}
     colorScheme="neutral1"
+    size="lg"
     width="100%"
     ref={ref}
     onClick={onClick}

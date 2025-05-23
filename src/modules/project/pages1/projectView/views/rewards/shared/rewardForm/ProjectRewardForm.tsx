@@ -11,9 +11,10 @@ import { ControlledTextArea, ControlledTextInput } from '@/shared/components/con
 import { ControlledAmountInput } from '@/shared/components/controlledInput/ControlledAmountInput'
 import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
 import { ControlledSwitchInput } from '@/shared/components/controlledInput/ControlledSwitchInput'
+import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { CalendarButton, CreatorEmailButton } from '@/shared/molecules'
+import { CalendarButton } from '@/shared/molecules'
 import { BackButton } from '@/shared/molecules/BackButton.tsx'
 import { PrivateCommentPrompt, RewardCurrency } from '@/types'
 
@@ -22,7 +23,7 @@ import { useProjectRewardForm } from '../../hooks/useProjectRewardForm'
 import { DescriptionComponent } from './components/DescriptionComponent.tsx'
 import { FormElementWithSwitch } from './components/FormElementWithSwitch.tsx'
 import { HeaderComponent } from './components/HeaderComponent.tsx'
-import { ShippingConfig } from './components/ShippingConfig.tsx'
+import { ShippingConfigComponent } from './components/ShippingConfigComponent.tsx'
 
 type Props = {
   buttonText: string
@@ -55,9 +56,9 @@ export const ProjectRewardForm = ({
     handleSubmit,
     setValue,
     project,
-    projectOwner,
     currencyChangeModal,
     rewardLoading,
+    rewardData,
     utils,
   } = useProjectRewardForm({
     rewardUUID,
@@ -65,8 +66,6 @@ export const ProjectRewardForm = ({
     isLaunch,
     defaultCategory,
   })
-
-  const ownerEmail = projectOwner?.user?.email || ''
 
   const {
     handleConfirmCurrencyChange,
@@ -86,6 +85,8 @@ export const ProjectRewardForm = ({
   if (rewardLoading) {
     return <Loader />
   }
+
+  const shippingConfig = rewardData?.shippingConfig
 
   return (
     <form style={{ width: '100%' }} onSubmit={handleSubmit}>
@@ -211,9 +212,32 @@ export const ProjectRewardForm = ({
             switchProps={{
               name: 'hasShipping',
               control,
+              isChecked: watch('hasShipping'),
+              onChange(e) {
+                setValue('hasShipping', e.target.checked, { shouldDirty: true })
+                if (!e.target.checked) {
+                  setValue('shippingConfigId', undefined, { shouldDirty: true })
+                  setValue('estimatedDeliveryInWeeks', undefined, { shouldDirty: true })
+                }
+              },
             }}
           >
-            <ShippingConfig />
+            <VStack w="full" alignItems={'flex-start'} spacing={6}>
+              <ControlledTextInput
+                name="estimatedDeliveryInWeeks"
+                label={t('Delivery Time (Weeks)')}
+                description={t('Specify estimated delivery time for the product from the moment it is ordered.')}
+                control={control}
+                placeholder={'Enter number of weeks'}
+                error={errors.estimatedDeliveryInWeeks?.message}
+              />
+              <ShippingConfigComponent
+                shippingConfig={shippingConfig}
+                projectId={project.id}
+                control={control}
+                name="shippingConfigId"
+              />
+            </VStack>
           </FormElementWithSwitch>
         </VStack>
         <VStack
@@ -226,165 +250,130 @@ export const ProjectRewardForm = ({
           <Body size="lg" fontWeight={600}>
             {t('Additional configuration')}
           </Body>
-          <CardLayout padding={4} overflow="none">
-            <VStack alignItems={'flex-start'}>
-              <ControlledSwitchInput
-                labelComponent={
-                  <Body size="md" medium>
-                    {t('Pre-Order')}
-                  </Body>
-                }
-                name="preOrder"
-                control={control}
-                onChange={(e) => {
-                  setValue('preOrder', e.target.checked, { shouldDirty: true })
-                  setValue('estimatedAvailabilityDate', undefined, { shouldDirty: true })
-                  setValue('estimatedDeliveryInWeeks', undefined, { shouldDirty: true })
-                }}
-                isChecked={watch('preOrder')}
-              />
 
-              <Body size={'md'} light pr={{ base: 0, lg: 2 }}>
-                {t(
-                  "For products that are still in development and not ready to ship, set them to 'Pre-order' to enable advance purchases by users.",
-                )}
-              </Body>
-            </VStack>
-            {watch('preOrder') ? (
-              <VStack alignItems={'flex-start'}>
-                <Body size={'sm'} medium>
-                  {t('Expected Availability Date')}
-                </Body>
-                <CalendarButton
-                  onChange={(value) => setValue('estimatedAvailabilityDate', value, { shouldDirty: true })}
-                  containerProps={{ w: '100%' }}
-                  showMonthYearPicker={true}
-                >
-                  <ControlledTextInput
-                    name="estimatedAvailabilityDate"
-                    control={control}
-                    width="full"
-                    border="none"
-                    backgroundColor="transparent"
-                    displayValue={formatEstimatedAvailabilityDate(watch('estimatedAvailabilityDate')) || 'Select date'}
-                    rightAddon={
-                      watch('estimatedAvailabilityDate') ? (
-                        <IconButton
-                          aria-label="clear-date"
-                          icon={<PiX />}
-                          variant="ghost"
-                          onClick={() => {
-                            setValue('estimatedAvailabilityDate', undefined, { shouldDirty: true })
-                          }}
-                        />
-                      ) : (
-                        <PiCaretDown />
-                      )
-                    }
-                  />
-                </CalendarButton>
-                <Body size={'sm'} light>
-                  {t("Use “Expected Availability Date' to set when your product will be developed and available.")}
-                </Body>
-              </VStack>
-            ) : (
-              <VStack alignItems={'flex-start'}>
-                <Body size={'sm'} medium>
-                  {t('Delivery Time (Weeks)')}
-                </Body>
+          <FormElementWithSwitch
+            title={t('Pre-Order')}
+            description={t(
+              "For products that are still in development and not ready to ship, set them to 'Pre-order' to enable advance purchases by users.",
+            )}
+            switchProps={{
+              name: 'preOrder',
+              control,
+              isChecked: watch('preOrder'),
+              onChange(e) {
+                setValue('preOrder', e.target.checked, { shouldDirty: true })
+                setValue('estimatedAvailabilityDate', undefined, { shouldDirty: true })
+              },
+            }}
+          >
+            <FieldContainer
+              title={t('Expected Availability Date')}
+              subtitle={t("Use “Expected Availability Date' to set when your product will be developed and available.")}
+            >
+              <CalendarButton
+                onChange={(value) => setValue('estimatedAvailabilityDate', value, { shouldDirty: true })}
+                containerProps={{ w: '100%' }}
+                showMonthYearPicker={true}
+              >
                 <ControlledTextInput
-                  name="estimatedDeliveryInWeeks"
+                  name="estimatedAvailabilityDate"
                   control={control}
-                  placeholder={'Enter number of weeks'}
-                  error={errors.estimatedDeliveryInWeeks?.message}
+                  width="full"
+                  border="none"
+                  backgroundColor="transparent"
+                  displayValue={formatEstimatedAvailabilityDate(watch('estimatedAvailabilityDate')) || 'Select date'}
+                  onFocus={(e) => {
+                    e.target.blur()
+                  }}
+                  rightAddon={
+                    watch('estimatedAvailabilityDate') ? (
+                      <IconButton
+                        aria-label="clear-date"
+                        icon={<PiX />}
+                        variant="ghost"
+                        onClick={() => {
+                          setValue('estimatedAvailabilityDate', undefined, { shouldDirty: true })
+                        }}
+                      />
+                    ) : (
+                      <PiCaretDown />
+                    )
+                  }
                 />
+              </CalendarButton>
+            </FieldContainer>
+          </FormElementWithSwitch>
 
-                <Body size={'sm'} light>
-                  {t('Specify estimated delivery time for the product from the moment it is ordered.')}
-                </Body>
-              </VStack>
+          <FormElementWithSwitch
+            title={t('Confirmation Message')}
+            description={t(
+              'Set a custom message to thank contributors, provide important details, or share any additional information you’d like them to know after they claim the product.',
             )}
-          </CardLayout>
+            switchProps={{
+              name: 'hasConfirmationMessage',
+              control,
+              isChecked: watch('hasConfirmationMessage'),
+              onChange(e) {
+                setValue('hasConfirmationMessage', e.target.checked, { shouldDirty: true })
+                if (!e.target.checked) {
+                  setValue('confirmationMessage', '', { shouldDirty: true })
+                }
+              },
+            }}
+          >
+            <ControlledTextArea
+              name="confirmationMessage"
+              control={control}
+              error={errors.confirmationMessage?.message}
+              isInvalid={Boolean(errors.confirmationMessage?.message)}
+              placeholder={t('Enter your message here...')}
+              resize="vertical"
+            />
+          </FormElementWithSwitch>
 
-          <CardLayout padding={4} overflow="none">
-            <VStack alignItems={'flex-start'}>
-              <ControlledTextArea
-                label={t('Confirmation Message')}
-                name="confirmationMessage"
-                description={t(
-                  'Set a custom message to thank contributors, provide important details, or share any additional information you’d like them to know after they claim the product.',
-                )}
-                control={control}
-                error={errors.confirmationMessage?.message}
-                isInvalid={Boolean(errors.confirmationMessage?.message)}
-                placeholder={t('Enter your message here...')}
-                resize="vertical"
-              />
-            </VStack>
-          </CardLayout>
-
-          <CardLayout>
-            <VStack alignItems={'flex-start'}>
-              <Body size={'md'} medium>
-                {t('Private comment')}
-              </Body>
-
-              <Body size={'md'} light>
-                {t(
-                  'Contributors can always send you a private message with additional information. You can also select predefined options below to request specific details from them in the private message. If selected, the private comment becomes mandatory for the contributor.',
-                )}
-              </Body>
-              <ControlledSwitchInput
-                label={t('Add your product specifications (eg. T-shirt size)')}
-                name="privateCommentPrompts"
-                control={control}
-                switchPosition="left"
-                isChecked={utils.isPromptChecked(PrivateCommentPrompt.ProjectRewardSpecs)}
-                onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.ProjectRewardSpecs)}
-              />
-              <ControlledSwitchInput
-                label={t('Ask contributors for Nostr public address (npub)')}
-                name="privateCommentPrompts"
-                control={control}
-                switchPosition="left"
-                isChecked={utils.isPromptChecked(PrivateCommentPrompt.NostrNpub)}
-                onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.NostrNpub)}
-              />
-              <ControlledSwitchInput
-                label={t('Ask contributors for a lighting address in case of partial or full refund')}
-                name="privateCommentPrompts"
-                control={control}
-                switchPosition="left"
-                isChecked={utils.isPromptChecked(PrivateCommentPrompt.LightningAddress)}
-                onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.LightningAddress)}
-              />
-            </VStack>
-          </CardLayout>
-
-          <CardLayout spacing={4} w="100%" align={'flex-start'}>
-            <VStack alignItems={'flex-start'}>
-              <ControlledSwitchInput
-                label={t('Ask for shipping address')}
-                name="hasShipping"
-                control={control}
-                isChecked={watch('hasShipping')}
-              />
-
-              <Body size={'md'} light pr={{ base: 0, lg: 2 }}>
-                {t(
-                  "Enable this option to request the user's shipping address. This is necessary for delivering physical products directly to your supporters.",
-                )}
-              </Body>
-            </VStack>
-
-            {watch('hasShipping') && (
-              <VStack pl={2} spacing={2} borderLeft="2px solid" borderColor="primary.400" align={'flex-start'} w="100%">
-                <Body medium>{t('Send your shipping address to the creator at the following email')}</Body>
-
-                <CreatorEmailButton email={ownerEmail} />
-              </VStack>
+          <FormElementWithSwitch
+            title={t('Private comment')}
+            description={t(
+              'Contributors can always send you a private message with additional information. You can also select predefined options below to request specific details from them in the private message. If selected, the private comment becomes mandatory for the contributor.',
             )}
-          </CardLayout>
+            switchProps={{
+              name: 'hasPrivateCommentPrompts',
+              control,
+              isChecked: watch('hasPrivateCommentPrompts'),
+              onChange(e) {
+                setValue('hasPrivateCommentPrompts', e.target.checked, { shouldDirty: true })
+                if (!e.target.checked) {
+                  setValue('privateCommentPrompts', [], { shouldDirty: true })
+                }
+              },
+            }}
+          >
+            <ControlledSwitchInput
+              label={t('Add your product specifications (eg. T-shirt size)')}
+              name="privateCommentPrompts"
+              control={control}
+              switchPosition="left"
+              isChecked={utils.isPromptChecked(PrivateCommentPrompt.ProjectRewardSpecs)}
+              onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.ProjectRewardSpecs)}
+            />
+            <ControlledSwitchInput
+              label={t('Ask contributors for Nostr public address (npub)')}
+              name="privateCommentPrompts"
+              control={control}
+              switchPosition="left"
+              isChecked={utils.isPromptChecked(PrivateCommentPrompt.NostrNpub)}
+              onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.NostrNpub)}
+            />
+            <ControlledSwitchInput
+              label={t('Ask contributors for a lighting address in case of partial or full refund')}
+              name="privateCommentPrompts"
+              control={control}
+              switchPosition="left"
+              isChecked={utils.isPromptChecked(PrivateCommentPrompt.LightningAddress)}
+              onChange={() => utils.handlePromptToggle(PrivateCommentPrompt.LightningAddress)}
+            />
+          </FormElementWithSwitch>
+
           {isLaunch && (
             <Stack
               h="100%"

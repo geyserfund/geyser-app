@@ -478,7 +478,16 @@ export type CreateProjectRewardInput = {
   preOrder?: InputMaybe<Scalars['Boolean']['input']>;
   privateCommentPrompts: Array<PrivateCommentPrompt>;
   projectId: Scalars['BigInt']['input'];
+  shippingConfigId?: InputMaybe<Scalars['BigInt']['input']>;
   shortDescription?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateProjectShippingConfigInput = {
+  globalShipping: Scalars['Boolean']['input'];
+  name: Scalars['String']['input'];
+  projectId: Scalars['BigInt']['input'];
+  shippingRates: Array<UpdateProjectShippingFeeRateInput>;
+  type: ProjectShippingConfigType;
 };
 
 export type CreateProjectSubscriptionPlanInput = {
@@ -1362,6 +1371,8 @@ export type Mutation = {
   /** Soft deletes the reward. */
   projectRewardDelete: Scalars['Boolean']['output'];
   projectRewardUpdate: ProjectReward;
+  projectShippingConfigCreate: ShippingConfig;
+  projectShippingConfigUpdate: ShippingConfig;
   projectStatusUpdate: Project;
   projectSubscriptionPlanCreate: ProjectSubscriptionPlan;
   projectSubscriptionPlanDelete: Scalars['Boolean']['output'];
@@ -1376,6 +1387,7 @@ export type Mutation = {
    * a request made by the client.
    */
   sendOTPByEmail: OtpResponse;
+  shippingAddressCreate: ShippingAddress;
   tagCreate: Tag;
   unlinkExternalAccount: User;
   /** @deprecated Use postUpdate instead */
@@ -1585,6 +1597,16 @@ export type MutationProjectRewardUpdateArgs = {
 };
 
 
+export type MutationProjectShippingConfigCreateArgs = {
+  input: CreateProjectShippingConfigInput;
+};
+
+
+export type MutationProjectShippingConfigUpdateArgs = {
+  input: UpdateProjectShippingConfigInput;
+};
+
+
 export type MutationProjectStatusUpdateArgs = {
   input: ProjectStatusUpdate;
 };
@@ -1627,6 +1649,11 @@ export type MutationPublishEntryArgs = {
 
 export type MutationSendOtpByEmailArgs = {
   input: SendOtpByEmailInput;
+};
+
+
+export type MutationShippingAddressCreateArgs = {
+  input: ShippingAddressCreateInput;
 };
 
 
@@ -1859,6 +1886,7 @@ export type OrderContributionInput = {
    */
   bitcoinQuote?: InputMaybe<OrderBitcoinQuoteInput>;
   items: Array<OrderItemInput>;
+  shippingAddressId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type OrderItem = {
@@ -2754,6 +2782,8 @@ export type ProjectReward = {
   /** Currency in which the reward cost is stored. */
   rewardCurrency: RewardCurrency;
   sentByEmailAt?: Maybe<Scalars['Date']['output']>;
+  /** Shipping rates for the reward. */
+  shippingConfig?: Maybe<ShippingConfig>;
   /** Short description of the reward. */
   shortDescription?: Maybe<Scalars['String']['output']>;
   /** Number of times this Project Reward was sold. */
@@ -2815,6 +2845,24 @@ export type ProjectRewardsGroupedByRewardIdStatsProjectReward = {
 export type ProjectRewardsStats = {
   __typename?: 'ProjectRewardsStats';
   count: Scalars['Int']['output'];
+};
+
+export enum ProjectShippingConfigType {
+  Flat = 'FLAT',
+  Incremental = 'INCREMENTAL',
+  PerUnit = 'PER_UNIT'
+}
+
+export type ProjectShippingConfigsGetInput = {
+  projectId: Scalars['BigInt']['input'];
+};
+
+export type ProjectShippingRate = {
+  __typename?: 'ProjectShippingRate';
+  baseRate: Scalars['Int']['output'];
+  country: Scalars['String']['output'];
+  incrementRate: Scalars['Int']['output'];
+  sameAsDefault?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type ProjectStatistics = {
@@ -3074,6 +3122,7 @@ export type Query = {
   projectRewardsTrendingMonthlyGet: Array<ProjectRewardTrendingMonthlyGetRow>;
   projectRewardsTrendingQuarterlyGet: Array<ProjectRewardTrendingQuarterlyGetRow>;
   projectRewardsTrendingWeeklyGet: Array<ProjectRewardTrendingWeeklyGetRow>;
+  projectShippingConfigsGet: Array<ShippingConfig>;
   projectStatsGet: ProjectStats;
   projectSubscriptionPlan?: Maybe<ProjectSubscriptionPlan>;
   projectSubscriptionPlans: Array<ProjectSubscriptionPlan>;
@@ -3082,6 +3131,7 @@ export type Query = {
   projectsMostFundedByCategory: Array<ProjectMostFundedByCategory>;
   projectsMostFundedByTag: Array<ProjectMostFundedByTag>;
   projectsSummary: ProjectsSummary;
+  shippingAddressesGet: Array<ShippingAddress>;
   statusCheck: Scalars['Boolean']['output'];
   tagsGet: Array<TagsGetResult>;
   tagsMostFundedGet: Array<TagsMostFundedGetResult>;
@@ -3089,6 +3139,7 @@ export type Query = {
   userBadge?: Maybe<UserBadge>;
   userBadges: Array<UserBadge>;
   userEmailIsAvailable: Scalars['Boolean']['output'];
+  userEmailIsValid: UserEmailIsValidResponse;
   userIpCountry: Scalars['String']['output'];
   userNotificationSettingsGet: ProfileNotificationSettings;
   userSubscription?: Maybe<UserSubscription>;
@@ -3291,6 +3342,11 @@ export type QueryProjectRewardsGetArgs = {
 };
 
 
+export type QueryProjectShippingConfigsGetArgs = {
+  input: ProjectShippingConfigsGetInput;
+};
+
+
 export type QueryProjectStatsGetArgs = {
   input: GetProjectStatsInput;
 };
@@ -3321,6 +3377,11 @@ export type QueryProjectsMostFundedByTagArgs = {
 };
 
 
+export type QueryShippingAddressesGetArgs = {
+  input: ShippingAddressesGetInput;
+};
+
+
 export type QueryUserArgs = {
   where: UserGetInput;
 };
@@ -3337,6 +3398,11 @@ export type QueryUserBadgesArgs = {
 
 
 export type QueryUserEmailIsAvailableArgs = {
+  email: Scalars['String']['input'];
+};
+
+
+export type QueryUserEmailIsValidArgs = {
   email: Scalars['String']['input'];
 };
 
@@ -3380,6 +3446,39 @@ export enum SettingValueType {
   Integer = 'INTEGER',
   String = 'STRING'
 }
+
+export type ShippingAddress = {
+  __typename?: 'ShippingAddress';
+  addressLines: Array<Scalars['String']['output']>;
+  city: Scalars['String']['output'];
+  country: Scalars['String']['output'];
+  fullName: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  postalCode: Scalars['String']['output'];
+  state?: Maybe<Scalars['String']['output']>;
+};
+
+export type ShippingAddressCreateInput = {
+  addressLines: Array<Scalars['String']['input']>;
+  city: Scalars['String']['input'];
+  country: Scalars['String']['input'];
+  fullName: Scalars['String']['input'];
+  postalCode: Scalars['String']['input'];
+  state?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ShippingAddressesGetInput = {
+  userId: Scalars['String']['input'];
+};
+
+export type ShippingConfig = {
+  __typename?: 'ShippingConfig';
+  globalShipping: Scalars['Boolean']['output'];
+  id?: Maybe<Scalars['BigInt']['output']>;
+  name: Scalars['String']['output'];
+  shippingRates?: Maybe<Array<ProjectShippingRate>>;
+  type: ProjectShippingConfigType;
+};
 
 export enum ShippingDestination {
   International = 'international',
@@ -3574,7 +3673,23 @@ export type UpdateProjectRewardInput = {
   preOrder?: InputMaybe<Scalars['Boolean']['input']>;
   privateCommentPrompts?: InputMaybe<Array<PrivateCommentPrompt>>;
   projectRewardId: Scalars['BigInt']['input'];
+  shippingConfigId?: InputMaybe<Scalars['BigInt']['input']>;
   shortDescription?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateProjectShippingConfigInput = {
+  globalShipping: Scalars['Boolean']['input'];
+  id: Scalars['BigInt']['input'];
+  name: Scalars['String']['input'];
+  shippingRates: Array<UpdateProjectShippingFeeRateInput>;
+  type: ProjectShippingConfigType;
+};
+
+export type UpdateProjectShippingFeeRateInput = {
+  baseRate: Scalars['Int']['input'];
+  country: Scalars['String']['input'];
+  incrementRate: Scalars['Int']['input'];
+  sameAsDefault: Scalars['Boolean']['input'];
 };
 
 export type UpdateProjectSubscriptionPlanInput = {
@@ -3728,6 +3843,14 @@ export type UserContributionLimits = {
 
 export type UserContributionsInput = {
   pagination?: InputMaybe<PaginationInput>;
+};
+
+export type UserEmailIsValidResponse = {
+  __typename?: 'UserEmailIsValidResponse';
+  isAvailable: Scalars['Boolean']['output'];
+  isDeliverable: Scalars['Boolean']['output'];
+  isValid: Scalars['Boolean']['output'];
+  reason?: Maybe<Scalars['String']['output']>;
 };
 
 export type UserEmailUpdateInput = {
@@ -4147,6 +4270,7 @@ export type ResolversTypes = {
   CreateEntryInput: CreateEntryInput;
   CreateProjectInput: CreateProjectInput;
   CreateProjectRewardInput: CreateProjectRewardInput;
+  CreateProjectShippingConfigInput: CreateProjectShippingConfigInput;
   CreateProjectSubscriptionPlanInput: CreateProjectSubscriptionPlanInput;
   CreateUserSubscriptionInput: CreateUserSubscriptionInput;
   CreateWalletInput: CreateWalletInput;
@@ -4414,6 +4538,9 @@ export type ResolversTypes = {
   ProjectRewardsGroupedByRewardIdStats: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStats>;
   ProjectRewardsGroupedByRewardIdStatsProjectReward: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStatsProjectReward>;
   ProjectRewardsStats: ResolverTypeWrapper<ProjectRewardsStats>;
+  ProjectShippingConfigType: ProjectShippingConfigType;
+  ProjectShippingConfigsGetInput: ProjectShippingConfigsGetInput;
+  ProjectShippingRate: ResolverTypeWrapper<ProjectShippingRate>;
   ProjectStatistics: ResolverTypeWrapper<ProjectStatistics>;
   ProjectStats: ResolverTypeWrapper<ProjectStats>;
   ProjectStatsBase: ResolverTypeWrapper<ProjectStatsBase>;
@@ -4443,6 +4570,10 @@ export type ResolversTypes = {
   RewardCurrency: RewardCurrency;
   SendOtpByEmailInput: SendOtpByEmailInput;
   SettingValueType: SettingValueType;
+  ShippingAddress: ResolverTypeWrapper<ShippingAddress>;
+  ShippingAddressCreateInput: ShippingAddressCreateInput;
+  ShippingAddressesGetInput: ShippingAddressesGetInput;
+  ShippingConfig: ResolverTypeWrapper<ShippingConfig>;
   ShippingDestination: ShippingDestination;
   SignedUploadUrl: ResolverTypeWrapper<SignedUploadUrl>;
   SourceResource: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['SourceResource']>;
@@ -4467,6 +4598,8 @@ export type ResolversTypes = {
   UpdateEntryInput: UpdateEntryInput;
   UpdateProjectInput: UpdateProjectInput;
   UpdateProjectRewardInput: UpdateProjectRewardInput;
+  UpdateProjectShippingConfigInput: UpdateProjectShippingConfigInput;
+  UpdateProjectShippingFeeRateInput: UpdateProjectShippingFeeRateInput;
   UpdateProjectSubscriptionPlanInput: UpdateProjectSubscriptionPlanInput;
   UpdateUserInput: UpdateUserInput;
   UpdateUserSubscriptionInput: UpdateUserSubscriptionInput;
@@ -4479,6 +4612,7 @@ export type ResolversTypes = {
   UserContributionLimit: ResolverTypeWrapper<UserContributionLimit>;
   UserContributionLimits: ResolverTypeWrapper<UserContributionLimits>;
   UserContributionsInput: UserContributionsInput;
+  UserEmailIsValidResponse: ResolverTypeWrapper<UserEmailIsValidResponse>;
   UserEmailUpdateInput: UserEmailUpdateInput;
   UserEntityType: UserEntityType;
   UserEntriesGetInput: UserEntriesGetInput;
@@ -4575,6 +4709,7 @@ export type ResolversParentTypes = {
   CreateEntryInput: CreateEntryInput;
   CreateProjectInput: CreateProjectInput;
   CreateProjectRewardInput: CreateProjectRewardInput;
+  CreateProjectShippingConfigInput: CreateProjectShippingConfigInput;
   CreateProjectSubscriptionPlanInput: CreateProjectSubscriptionPlanInput;
   CreateUserSubscriptionInput: CreateUserSubscriptionInput;
   CreateWalletInput: CreateWalletInput;
@@ -4801,6 +4936,8 @@ export type ResolversParentTypes = {
   ProjectRewardsGroupedByRewardIdStats: ProjectRewardsGroupedByRewardIdStats;
   ProjectRewardsGroupedByRewardIdStatsProjectReward: ProjectRewardsGroupedByRewardIdStatsProjectReward;
   ProjectRewardsStats: ProjectRewardsStats;
+  ProjectShippingConfigsGetInput: ProjectShippingConfigsGetInput;
+  ProjectShippingRate: ProjectShippingRate;
   ProjectStatistics: ProjectStatistics;
   ProjectStats: ProjectStats;
   ProjectStatsBase: ProjectStatsBase;
@@ -4821,6 +4958,10 @@ export type ResolversParentTypes = {
   Query: {};
   ResourceInput: ResourceInput;
   SendOtpByEmailInput: SendOtpByEmailInput;
+  ShippingAddress: ShippingAddress;
+  ShippingAddressCreateInput: ShippingAddressCreateInput;
+  ShippingAddressesGetInput: ShippingAddressesGetInput;
+  ShippingConfig: ShippingConfig;
   SignedUploadUrl: SignedUploadUrl;
   SourceResource: ResolversUnionTypes<ResolversParentTypes>['SourceResource'];
   Sponsor: Omit<Sponsor, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
@@ -4841,6 +4982,8 @@ export type ResolversParentTypes = {
   UpdateEntryInput: UpdateEntryInput;
   UpdateProjectInput: UpdateProjectInput;
   UpdateProjectRewardInput: UpdateProjectRewardInput;
+  UpdateProjectShippingConfigInput: UpdateProjectShippingConfigInput;
+  UpdateProjectShippingFeeRateInput: UpdateProjectShippingFeeRateInput;
   UpdateProjectSubscriptionPlanInput: UpdateProjectSubscriptionPlanInput;
   UpdateUserInput: UpdateUserInput;
   UpdateUserSubscriptionInput: UpdateUserSubscriptionInput;
@@ -4852,6 +4995,7 @@ export type ResolversParentTypes = {
   UserContributionLimit: UserContributionLimit;
   UserContributionLimits: UserContributionLimits;
   UserContributionsInput: UserContributionsInput;
+  UserEmailIsValidResponse: UserEmailIsValidResponse;
   UserEmailUpdateInput: UserEmailUpdateInput;
   UserEntriesGetInput: UserEntriesGetInput;
   UserEntriesGetWhereInput: UserEntriesGetWhereInput;
@@ -5507,6 +5651,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectRewardCurrencyUpdate?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<MutationProjectRewardCurrencyUpdateArgs, 'input'>>;
   projectRewardDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectRewardDeleteArgs, 'input'>>;
   projectRewardUpdate?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationProjectRewardUpdateArgs, 'input'>>;
+  projectShippingConfigCreate?: Resolver<ResolversTypes['ShippingConfig'], ParentType, ContextType, RequireFields<MutationProjectShippingConfigCreateArgs, 'input'>>;
+  projectShippingConfigUpdate?: Resolver<ResolversTypes['ShippingConfig'], ParentType, ContextType, RequireFields<MutationProjectShippingConfigUpdateArgs, 'input'>>;
   projectStatusUpdate?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectStatusUpdateArgs, 'input'>>;
   projectSubscriptionPlanCreate?: Resolver<ResolversTypes['ProjectSubscriptionPlan'], ParentType, ContextType, RequireFields<MutationProjectSubscriptionPlanCreateArgs, 'input'>>;
   projectSubscriptionPlanDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectSubscriptionPlanDeleteArgs, 'id'>>;
@@ -5516,6 +5662,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectUnfollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectUnfollowArgs, 'input'>>;
   publishEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationPublishEntryArgs, 'id'>>;
   sendOTPByEmail?: Resolver<ResolversTypes['OTPResponse'], ParentType, ContextType, RequireFields<MutationSendOtpByEmailArgs, 'input'>>;
+  shippingAddressCreate?: Resolver<ResolversTypes['ShippingAddress'], ParentType, ContextType, RequireFields<MutationShippingAddressCreateArgs, 'input'>>;
   tagCreate?: Resolver<ResolversTypes['Tag'], ParentType, ContextType, RequireFields<MutationTagCreateArgs, 'input'>>;
   unlinkExternalAccount?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUnlinkExternalAccountArgs, 'id'>>;
   updateEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationUpdateEntryArgs, 'input'>>;
@@ -6058,6 +6205,7 @@ export type ProjectRewardResolvers<ContextType = any, ParentType extends Resolve
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   rewardCurrency?: Resolver<ResolversTypes['RewardCurrency'], ParentType, ContextType>;
   sentByEmailAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  shippingConfig?: Resolver<Maybe<ResolversTypes['ShippingConfig']>, ParentType, ContextType>;
   shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   sold?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   soldOut?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -6104,6 +6252,14 @@ export type ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<ContextTy
 
 export type ProjectRewardsStatsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardsStats'] = ResolversParentTypes['ProjectRewardsStats']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProjectShippingRateResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectShippingRate'] = ResolversParentTypes['ProjectShippingRate']> = {
+  baseRate?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  incrementRate?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  sameAsDefault?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6222,6 +6378,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectRewardsTrendingMonthlyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingMonthlyGetRow']>, ParentType, ContextType>;
   projectRewardsTrendingQuarterlyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingQuarterlyGetRow']>, ParentType, ContextType>;
   projectRewardsTrendingWeeklyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingWeeklyGetRow']>, ParentType, ContextType>;
+  projectShippingConfigsGet?: Resolver<Array<ResolversTypes['ShippingConfig']>, ParentType, ContextType, RequireFields<QueryProjectShippingConfigsGetArgs, 'input'>>;
   projectStatsGet?: Resolver<ResolversTypes['ProjectStats'], ParentType, ContextType, RequireFields<QueryProjectStatsGetArgs, 'input'>>;
   projectSubscriptionPlan?: Resolver<Maybe<ResolversTypes['ProjectSubscriptionPlan']>, ParentType, ContextType, RequireFields<QueryProjectSubscriptionPlanArgs, 'id'>>;
   projectSubscriptionPlans?: Resolver<Array<ResolversTypes['ProjectSubscriptionPlan']>, ParentType, ContextType, RequireFields<QueryProjectSubscriptionPlansArgs, 'input'>>;
@@ -6229,6 +6386,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectsMostFundedByCategory?: Resolver<Array<ResolversTypes['ProjectMostFundedByCategory']>, ParentType, ContextType, RequireFields<QueryProjectsMostFundedByCategoryArgs, 'input'>>;
   projectsMostFundedByTag?: Resolver<Array<ResolversTypes['ProjectMostFundedByTag']>, ParentType, ContextType, RequireFields<QueryProjectsMostFundedByTagArgs, 'input'>>;
   projectsSummary?: Resolver<ResolversTypes['ProjectsSummary'], ParentType, ContextType>;
+  shippingAddressesGet?: Resolver<Array<ResolversTypes['ShippingAddress']>, ParentType, ContextType, RequireFields<QueryShippingAddressesGetArgs, 'input'>>;
   statusCheck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   tagsGet?: Resolver<Array<ResolversTypes['TagsGetResult']>, ParentType, ContextType>;
   tagsMostFundedGet?: Resolver<Array<ResolversTypes['TagsMostFundedGetResult']>, ParentType, ContextType>;
@@ -6236,10 +6394,31 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   userBadge?: Resolver<Maybe<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgeArgs, 'userBadgeId'>>;
   userBadges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgesArgs, 'input'>>;
   userEmailIsAvailable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryUserEmailIsAvailableArgs, 'email'>>;
+  userEmailIsValid?: Resolver<ResolversTypes['UserEmailIsValidResponse'], ParentType, ContextType, RequireFields<QueryUserEmailIsValidArgs, 'email'>>;
   userIpCountry?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userNotificationSettingsGet?: Resolver<ResolversTypes['ProfileNotificationSettings'], ParentType, ContextType, RequireFields<QueryUserNotificationSettingsGetArgs, 'userId'>>;
   userSubscription?: Resolver<Maybe<ResolversTypes['UserSubscription']>, ParentType, ContextType, RequireFields<QueryUserSubscriptionArgs, 'id'>>;
   userSubscriptions?: Resolver<Array<ResolversTypes['UserSubscription']>, ParentType, ContextType, RequireFields<QueryUserSubscriptionsArgs, 'input'>>;
+};
+
+export type ShippingAddressResolvers<ContextType = any, ParentType extends ResolversParentTypes['ShippingAddress'] = ResolversParentTypes['ShippingAddress']> = {
+  addressLines?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  country?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fullName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  postalCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ShippingConfigResolvers<ContextType = any, ParentType extends ResolversParentTypes['ShippingConfig'] = ResolversParentTypes['ShippingConfig']> = {
+  globalShipping?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  shippingRates?: Resolver<Maybe<Array<ResolversTypes['ProjectShippingRate']>>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['ProjectShippingConfigType'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SignedUploadUrlResolvers<ContextType = any, ParentType extends ResolversParentTypes['SignedUploadUrl'] = ResolversParentTypes['SignedUploadUrl']> = {
@@ -6365,6 +6544,14 @@ export type UserContributionLimitResolvers<ContextType = any, ParentType extends
 
 export type UserContributionLimitsResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserContributionLimits'] = ResolversParentTypes['UserContributionLimits']> = {
   monthly?: Resolver<ResolversTypes['UserContributionLimit'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserEmailIsValidResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserEmailIsValidResponse'] = ResolversParentTypes['UserEmailIsValidResponse']> = {
+  isAvailable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isDeliverable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isValid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6628,6 +6815,7 @@ export type Resolvers<ContextType = any> = {
   ProjectRewardsGroupedByRewardIdStats?: ProjectRewardsGroupedByRewardIdStatsResolvers<ContextType>;
   ProjectRewardsGroupedByRewardIdStatsProjectReward?: ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<ContextType>;
   ProjectRewardsStats?: ProjectRewardsStatsResolvers<ContextType>;
+  ProjectShippingRate?: ProjectShippingRateResolvers<ContextType>;
   ProjectStatistics?: ProjectStatisticsResolvers<ContextType>;
   ProjectStats?: ProjectStatsResolvers<ContextType>;
   ProjectStatsBase?: ProjectStatsBaseResolvers<ContextType>;
@@ -6637,6 +6825,8 @@ export type Resolvers<ContextType = any> = {
   ProjectsResponse?: ProjectsResponseResolvers<ContextType>;
   ProjectsSummary?: ProjectsSummaryResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  ShippingAddress?: ShippingAddressResolvers<ContextType>;
+  ShippingConfig?: ShippingConfigResolvers<ContextType>;
   SignedUploadUrl?: SignedUploadUrlResolvers<ContextType>;
   SourceResource?: SourceResourceResolvers<ContextType>;
   Sponsor?: SponsorResolvers<ContextType>;
@@ -6651,6 +6841,7 @@ export type Resolvers<ContextType = any> = {
   UserComplianceDetails?: UserComplianceDetailsResolvers<ContextType>;
   UserContributionLimit?: UserContributionLimitResolvers<ContextType>;
   UserContributionLimits?: UserContributionLimitsResolvers<ContextType>;
+  UserEmailIsValidResponse?: UserEmailIsValidResponseResolvers<ContextType>;
   UserHeroStats?: UserHeroStatsResolvers<ContextType>;
   UserNotificationSettings?: UserNotificationSettingsResolvers<ContextType>;
   UserProjectContribution?: UserProjectContributionResolvers<ContextType>;
@@ -7510,9 +7701,19 @@ export type ProjectRewardSoldGraphStatsFragment = { __typename?: 'ProjectStats',
 
 export type ProjectFundingMethodStatsFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectContributionsStats?: { __typename?: 'ProjectContributionsStatsBase', contributionsGroupedByMethod: Array<{ __typename?: 'ProjectContributionsGroupedByMethodStats', count: number, method: string, total: number, totalUsd: number }> } | null } | null };
 
-export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, description?: string | null, shortDescription?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null, confirmationMessage?: string | null, privateCommentPrompts: Array<PrivateCommentPrompt>, createdAt: any, posts: Array<{ __typename?: 'Post', id: any, title: string, postType?: PostType | null, description: string, createdAt: string }> };
+export type ProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, description?: string | null, shortDescription?: string | null, cost: number, images: Array<string>, deleted: boolean, stock?: number | null, sold: number, hasShipping: boolean, maxClaimable?: number | null, rewardCurrency: RewardCurrency, isAddon: boolean, isHidden: boolean, category?: string | null, preOrder: boolean, estimatedAvailabilityDate?: any | null, estimatedDeliveryInWeeks?: number | null, confirmationMessage?: string | null, privateCommentPrompts: Array<PrivateCommentPrompt>, createdAt: any, shippingConfig?: (
+    { __typename?: 'ShippingConfig' }
+    & ShippingConfigFragment
+  ) | null, posts: Array<{ __typename?: 'Post', id: any, title: string, postType?: PostType | null, description: string, createdAt: string }> };
 
 export type PostPageProjectRewardFragment = { __typename?: 'ProjectReward', id: any, uuid: string, name: string, images: Array<string>, shortDescription?: string | null, cost: number };
+
+export type ShippingRateFragment = { __typename?: 'ProjectShippingRate', baseRate: number, country: string, incrementRate: number, sameAsDefault?: boolean | null };
+
+export type ShippingConfigFragment = { __typename?: 'ShippingConfig', id?: any | null, globalShipping: boolean, name: string, type: ProjectShippingConfigType, shippingRates?: Array<(
+    { __typename?: 'ProjectShippingRate' }
+    & ShippingRateFragment
+  )> | null };
 
 export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: any, country?: string | null, legalEntityType: LegalEntityType, verified?: boolean | null } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
@@ -7791,6 +7992,26 @@ export type ProjectRewardCreateMutationVariables = Exact<{
 export type ProjectRewardCreateMutation = { __typename?: 'Mutation', projectRewardCreate: (
     { __typename?: 'ProjectReward' }
     & ProjectRewardFragment
+  ) };
+
+export type ProjectShippingConfigCreateMutationVariables = Exact<{
+  input: CreateProjectShippingConfigInput;
+}>;
+
+
+export type ProjectShippingConfigCreateMutation = { __typename?: 'Mutation', projectShippingConfigCreate: (
+    { __typename?: 'ShippingConfig' }
+    & ShippingConfigFragment
+  ) };
+
+export type ProjectShippingConfigUpdateMutationVariables = Exact<{
+  input: UpdateProjectShippingConfigInput;
+}>;
+
+
+export type ProjectShippingConfigUpdateMutation = { __typename?: 'Mutation', projectShippingConfigUpdate: (
+    { __typename?: 'ShippingConfig' }
+    & ShippingConfigFragment
   ) };
 
 export type ProjectTagAddMutationVariables = Exact<{
@@ -8241,6 +8462,16 @@ export type RewardCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type RewardCategoriesQuery = { __typename?: 'Query', projectRewardCategoriesGet: Array<string> };
+
+export type ProjectShippingConfigsGetQueryVariables = Exact<{
+  input: ProjectShippingConfigsGetInput;
+}>;
+
+
+export type ProjectShippingConfigsGetQuery = { __typename?: 'Query', projectShippingConfigsGet: Array<(
+    { __typename?: 'ShippingConfig' }
+    & ShippingConfigFragment
+  )> };
 
 export type GetUserIpCountryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -10015,6 +10246,25 @@ export const ProjectFundingMethodStatsFragmentDoc = gql`
   }
 }
     `;
+export const ShippingRateFragmentDoc = gql`
+    fragment ShippingRate on ProjectShippingRate {
+  baseRate
+  country
+  incrementRate
+  sameAsDefault
+}
+    `;
+export const ShippingConfigFragmentDoc = gql`
+    fragment ShippingConfig on ShippingConfig {
+  id
+  globalShipping
+  name
+  type
+  shippingRates {
+    ...ShippingRate
+  }
+}
+    ${ShippingRateFragmentDoc}`;
 export const ProjectRewardFragmentDoc = gql`
     fragment ProjectReward on ProjectReward {
   id
@@ -10039,6 +10289,9 @@ export const ProjectRewardFragmentDoc = gql`
   confirmationMessage
   privateCommentPrompts
   createdAt
+  shippingConfig {
+    ...ShippingConfig
+  }
   posts {
     id
     title
@@ -10047,7 +10300,7 @@ export const ProjectRewardFragmentDoc = gql`
     createdAt
   }
 }
-    `;
+    ${ShippingConfigFragmentDoc}`;
 export const ProjectOwnerUserForInvoiceFragmentDoc = gql`
     fragment ProjectOwnerUserForInvoice on User {
   id
@@ -13727,6 +13980,72 @@ export function useProjectRewardCreateMutation(baseOptions?: Apollo.MutationHook
 export type ProjectRewardCreateMutationHookResult = ReturnType<typeof useProjectRewardCreateMutation>;
 export type ProjectRewardCreateMutationResult = Apollo.MutationResult<ProjectRewardCreateMutation>;
 export type ProjectRewardCreateMutationOptions = Apollo.BaseMutationOptions<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>;
+export const ProjectShippingConfigCreateDocument = gql`
+    mutation ProjectShippingConfigCreate($input: CreateProjectShippingConfigInput!) {
+  projectShippingConfigCreate(input: $input) {
+    ...ShippingConfig
+  }
+}
+    ${ShippingConfigFragmentDoc}`;
+export type ProjectShippingConfigCreateMutationFn = Apollo.MutationFunction<ProjectShippingConfigCreateMutation, ProjectShippingConfigCreateMutationVariables>;
+
+/**
+ * __useProjectShippingConfigCreateMutation__
+ *
+ * To run a mutation, you first call `useProjectShippingConfigCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectShippingConfigCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectShippingConfigCreateMutation, { data, loading, error }] = useProjectShippingConfigCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectShippingConfigCreateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectShippingConfigCreateMutation, ProjectShippingConfigCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectShippingConfigCreateMutation, ProjectShippingConfigCreateMutationVariables>(ProjectShippingConfigCreateDocument, options);
+      }
+export type ProjectShippingConfigCreateMutationHookResult = ReturnType<typeof useProjectShippingConfigCreateMutation>;
+export type ProjectShippingConfigCreateMutationResult = Apollo.MutationResult<ProjectShippingConfigCreateMutation>;
+export type ProjectShippingConfigCreateMutationOptions = Apollo.BaseMutationOptions<ProjectShippingConfigCreateMutation, ProjectShippingConfigCreateMutationVariables>;
+export const ProjectShippingConfigUpdateDocument = gql`
+    mutation ProjectShippingConfigUpdate($input: UpdateProjectShippingConfigInput!) {
+  projectShippingConfigUpdate(input: $input) {
+    ...ShippingConfig
+  }
+}
+    ${ShippingConfigFragmentDoc}`;
+export type ProjectShippingConfigUpdateMutationFn = Apollo.MutationFunction<ProjectShippingConfigUpdateMutation, ProjectShippingConfigUpdateMutationVariables>;
+
+/**
+ * __useProjectShippingConfigUpdateMutation__
+ *
+ * To run a mutation, you first call `useProjectShippingConfigUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectShippingConfigUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectShippingConfigUpdateMutation, { data, loading, error }] = useProjectShippingConfigUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectShippingConfigUpdateMutation(baseOptions?: Apollo.MutationHookOptions<ProjectShippingConfigUpdateMutation, ProjectShippingConfigUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectShippingConfigUpdateMutation, ProjectShippingConfigUpdateMutationVariables>(ProjectShippingConfigUpdateDocument, options);
+      }
+export type ProjectShippingConfigUpdateMutationHookResult = ReturnType<typeof useProjectShippingConfigUpdateMutation>;
+export type ProjectShippingConfigUpdateMutationResult = Apollo.MutationResult<ProjectShippingConfigUpdateMutation>;
+export type ProjectShippingConfigUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectShippingConfigUpdateMutation, ProjectShippingConfigUpdateMutationVariables>;
 export const ProjectTagAddDocument = gql`
     mutation ProjectTagAdd($input: ProjectTagMutationInput!) {
   projectTagAdd(input: $input) {
@@ -15639,6 +15958,46 @@ export type RewardCategoriesQueryHookResult = ReturnType<typeof useRewardCategor
 export type RewardCategoriesLazyQueryHookResult = ReturnType<typeof useRewardCategoriesLazyQuery>;
 export type RewardCategoriesSuspenseQueryHookResult = ReturnType<typeof useRewardCategoriesSuspenseQuery>;
 export type RewardCategoriesQueryResult = Apollo.QueryResult<RewardCategoriesQuery, RewardCategoriesQueryVariables>;
+export const ProjectShippingConfigsGetDocument = gql`
+    query ProjectShippingConfigsGet($input: ProjectShippingConfigsGetInput!) {
+  projectShippingConfigsGet(input: $input) {
+    ...ShippingConfig
+  }
+}
+    ${ShippingConfigFragmentDoc}`;
+
+/**
+ * __useProjectShippingConfigsGetQuery__
+ *
+ * To run a query within a React component, call `useProjectShippingConfigsGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectShippingConfigsGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectShippingConfigsGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectShippingConfigsGetQuery(baseOptions: Apollo.QueryHookOptions<ProjectShippingConfigsGetQuery, ProjectShippingConfigsGetQueryVariables> & ({ variables: ProjectShippingConfigsGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectShippingConfigsGetQuery, ProjectShippingConfigsGetQueryVariables>(ProjectShippingConfigsGetDocument, options);
+      }
+export function useProjectShippingConfigsGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectShippingConfigsGetQuery, ProjectShippingConfigsGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectShippingConfigsGetQuery, ProjectShippingConfigsGetQueryVariables>(ProjectShippingConfigsGetDocument, options);
+        }
+export function useProjectShippingConfigsGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectShippingConfigsGetQuery, ProjectShippingConfigsGetQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectShippingConfigsGetQuery, ProjectShippingConfigsGetQueryVariables>(ProjectShippingConfigsGetDocument, options);
+        }
+export type ProjectShippingConfigsGetQueryHookResult = ReturnType<typeof useProjectShippingConfigsGetQuery>;
+export type ProjectShippingConfigsGetLazyQueryHookResult = ReturnType<typeof useProjectShippingConfigsGetLazyQuery>;
+export type ProjectShippingConfigsGetSuspenseQueryHookResult = ReturnType<typeof useProjectShippingConfigsGetSuspenseQuery>;
+export type ProjectShippingConfigsGetQueryResult = Apollo.QueryResult<ProjectShippingConfigsGetQuery, ProjectShippingConfigsGetQueryVariables>;
 export const GetUserIpCountryDocument = gql`
     query GetUserIpCountry {
   userIpCountry

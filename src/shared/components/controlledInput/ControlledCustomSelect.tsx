@@ -41,6 +41,8 @@ export const ControlledCustomSelect = <FormValues extends FieldValues, Option, I
     ? props.options.filter((option) => field.value.includes(getOptionValue(option)))
     : props.options.find((option) => getOptionValue(option) === field.value)
 
+  console.log('checking is invalid', fieldState)
+
   return (
     <FieldContainer
       title={props.label}
@@ -80,6 +82,8 @@ export const ControlledCustomSelect = <FormValues extends FieldValues, Option, I
             props.onBlur()
           }
         }}
+        isInvalid={Boolean(fieldState.error?.message)}
+        errorBorderColor="error.9"
       />
     </FieldContainer>
   )

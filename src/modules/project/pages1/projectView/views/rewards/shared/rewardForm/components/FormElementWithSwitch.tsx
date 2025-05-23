@@ -29,7 +29,7 @@ export const FormElementWithSwitch = ({
   return (
     <CardLayout w="full" padding={4} overflow="none" spacing={0} {...rest}>
       <VStack alignItems={'flex-start'} spacing={0}>
-        <HStack w="full" spacing={4}>
+        <HStack w="full" spacing={4} justifyContent={'space-between'}>
           <Body size="md" medium>
             {title}
           </Body>

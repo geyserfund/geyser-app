@@ -25,7 +25,11 @@ import {
 } from '@/types'
 import { useNotification } from '@/utils'
 
-export type RewardFormValues = Omit<ProjectRewardFragment, 'id' | 'sold' | 'createdAt'>
+export type RewardFormValues = Omit<ProjectRewardFragment, 'id' | 'sold' | 'createdAt'> & {
+  shippingConfigId?: number
+  hasConfirmationMessage?: boolean
+  hasPrivateCommentPrompts?: boolean
+}
 
 const MAX_REWARD_IMAGES = 5
 
@@ -51,6 +55,9 @@ const rewardFormSchema = () =>
       .string()
       .max(500, ({ value }) => `${value.length}/500 - Confirmation message must not be longer than 500 characters`),
     privateCommentPrompts: yup.array().of(yup.string()),
+    shippingConfigId: yup.number().nullable(),
+    hasConfirmationMessage: yup.boolean(),
+    hasPrivateCommentPrompts: yup.boolean(),
   }) as any
 
 type UseProjectRewardFormProps = {
@@ -119,6 +126,7 @@ export const useProjectRewardForm = ({
       privateCommentPrompts: rewardData?.privateCommentPrompts || [],
       confirmationMessage: rewardData?.confirmationMessage || '',
       rewardCurrency: projectCurrency,
+      shippingConfigId: rewardData?.shippingConfig?.id,
     },
     mode: 'onChange',
   })
@@ -160,6 +168,7 @@ export const useProjectRewardForm = ({
         privateCommentPrompts: rewardData?.privateCommentPrompts || [],
         confirmationMessage: rewardData?.confirmationMessage || '',
         rewardCurrency: projectCurrency,
+        shippingConfigId: rewardData?.shippingConfig?.id,
       })
     }
   }, [rewardData, reset, projectCurrency, isUpdate])
@@ -181,6 +190,7 @@ export const useProjectRewardForm = ({
       estimatedDeliveryInWeeks: formData.estimatedDeliveryInWeeks,
       privateCommentPrompts: formData.privateCommentPrompts,
       confirmationMessage: formData.confirmationMessage,
+      shippingConfigId: formData.shippingConfigId,
     }
 
     if (isUpdate) {
@@ -356,6 +366,7 @@ export const useProjectRewardForm = ({
     trigger,
     project,
     projectOwner,
+    rewardData,
     rewardLoading,
     currencyChangeModal: {
       isOpen: isCurrencyChangeModalOpen,

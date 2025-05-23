@@ -31,6 +31,8 @@ export function ControlledSwitchInput({
 
   const label = props.labelComponent ? props.labelComponent : <Body size="md">{props.label}</Body>
 
+  console.log('field', field)
+
   return (
     <VStack alignItems="flex-start" width="100%" {...containerProps}>
       <HStack>
@@ -38,9 +40,9 @@ export function ControlledSwitchInput({
         <Switch
           {...field}
           onChange={handleChange}
-          sx={{ '--switch-track-width': '2.4rem' }}
+          sx={{ '--switch-track-width': '2.4rem', '--switch-track-height': '1.2rem' }}
           size="md"
-          value={field?.value || props.value || false}
+          value={field.value || props.value || false}
           {...props}
         />
         {switchPosition === 'left' && <>{label}</>}

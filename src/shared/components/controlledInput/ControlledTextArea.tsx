@@ -9,7 +9,7 @@ type Props = UseControllerProps<any, any> &
   TextareaProps & {
     width?: string | number
     inputRef?: React.Ref<HTMLInputElement>
-    label: string
+    label?: string
     description?: string
     error?: React.ReactNode
     resize?: 'none' | 'vertical' | 'horizontal'
