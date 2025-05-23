@@ -16,16 +16,21 @@ export const routeMatchForAtom =
     return routes.some((route) => route === matchRoute.path)
   }
 
+export const projectCreationRoutesThatNeedStory = [
+  getPath('launchProjectRewards', PathName.projectId),
+  getPath('launchProjectRewardsCreate', PathName.projectId),
+  getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardId),
+  getPath('launchProjectWallet', PathName.projectId),
+  getPath('launchProjectStrategy', PathName.projectId),
+]
+
 export const creatorProjectCreationRoutes = [
   getPath('launch'),
   getPath('launchProject', PathName.projectId),
   getPath('launchStartProject', PathName.projectId),
   getPath('launchProjectDetails', PathName.projectId),
   getPath('launchProjectStory', PathName.projectId),
-  getPath('launchProjectRewards', PathName.projectId),
-  getPath('launchProjectRewardsCreate', PathName.projectId),
-  getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardId),
-  getPath('launchProjectWallet', PathName.projectId),
+  ...projectCreationRoutesThatNeedStory,
 ]
 
 export const ProjectPageDashboardInternalRoutes = [
