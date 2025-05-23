@@ -40,7 +40,7 @@ const defaultFormValues = {
   name: '',
   feesModel: ProjectShippingConfigType.Flat,
   shippingAvailability: 'worldwide',
-  shippingRates: [{ country: DEFAULT_COUNTRY_CODE, sameAsDefault: false, baseRate: null, incrementRate: null }],
+  shippingRates: [{ country: DEFAULT_COUNTRY_CODE, sameAsDefault: true, baseRate: null, incrementRate: null }],
 } as ShippingFeesFormValues
 
 const shippingRateSchema = (feesModel: ProjectShippingConfigType) => {

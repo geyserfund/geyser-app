@@ -1,4 +1,4 @@
-import { commaFormatted } from '@/shared/utils/formatData'
+import { centsToDollars, commaFormatted } from '@/shared/utils/formatData'
 import { BitcoinQuote } from '@/types'
 
 import { SATOSHIS_IN_BTC } from '../../shared/constants'
@@ -58,11 +58,31 @@ export const convertUsdCentsToSatsFormatted = ({
 
 /** Converts sats to usdcents based on BitcoinQuote of a Contribution */
 export const convertSatsToCents = ({ sats, bitcoinQuote }: { sats: number; bitcoinQuote?: BitcoinQuote | null }) => {
-  if (bitcoinQuote && bitcoinQuote.quote) {
+  if (bitcoinQuote && bitcoinQuote.quote && bitcoinQuote.quote > 0) {
     const dollars = convertToBTC(sats as Satoshis) * bitcoinQuote.quote
     const cents = Math.round(dollars * 100)
     return cents
   }
 
   return 0
+}
+
+export const convertUsdCentsToSatsAmount = ({
+  usdCents,
+  bitcoinQuote,
+}: {
+  usdCents: number
+  bitcoinQuote?: BitcoinQuote | null
+}) => {
+  if (bitcoinQuote && bitcoinQuote.quote && bitcoinQuote.quote > 0) {
+    const sats = Math.round((centsToDollars(usdCents) / bitcoinQuote.quote) * SATOSHIS_IN_BTC)
+    return sats
+  }
+
+  return 0
+}
+
+export const convertAmount = {
+  usdCentsToSats: convertUsdCentsToSatsAmount,
+  satsToUsdCents: convertSatsToCents,
 }

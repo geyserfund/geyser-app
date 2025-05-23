@@ -1356,5 +1356,9 @@
   "Add new": "Add new",
   "Select fees": "Select fees",
   "Select fee": "Select fee",
-  "Invalid amount": "Invalid amount"
+  "Invalid amount": "Invalid amount",
+  "Collect Warrior jewel": "Collect Warrior jewel",
+  "Collect Knight jewel": "Collect Knight jewel",
+  "Collect Legend jewel": "Collect Legend jewel",
+  "Collect King jewel": "Collect King jewel"
 }
