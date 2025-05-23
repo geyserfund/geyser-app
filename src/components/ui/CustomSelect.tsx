@@ -6,6 +6,7 @@ export interface CustomSelectProps<Option, IsMulti extends boolean = false>
   extends Omit<Props<Option, IsMulti>, 'chakraStyles'> {
   customChakraStyles?: ChakraStylesConfig<Option, IsMulti>
   dropdownIndicator?: React.ReactNode
+  menuMinWidth?: number | string
   width?: ResponsiveValue<number | string>
   fontSize?: string
   dropdownIndicatorPosition?: 'left' | 'right'
@@ -16,6 +17,7 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
   dropdownIndicator,
   width,
   dropdownIndicatorPosition = 'right',
+  menuMinWidth,
   ...props
 }: CustomSelectProps<Option, IsMulti>) {
   const chakraStyles: ChakraStylesConfig<Option, IsMulti> = {
@@ -26,6 +28,7 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
 
     menu: (provided) => ({
       ...provided,
+      minWidth: menuMinWidth,
     }),
 
     option: (_, state) => ({

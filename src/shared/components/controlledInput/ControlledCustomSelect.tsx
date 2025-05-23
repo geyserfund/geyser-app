@@ -26,7 +26,7 @@ export interface ControlledCustomSelectProps<FormValues extends FieldValues, Opt
   error?: React.ReactNode
   size?: 'sm' | 'md' | 'lg'
   fontSize?: string
-  disableError?: boolean
+  disableErrorLabel?: boolean
   isDisabled?: boolean
 }
 
@@ -47,7 +47,7 @@ export const ControlledCustomSelect = <FormValues extends FieldValues, Option, I
     <FieldContainer
       title={props.label}
       required={props.required}
-      error={props.disableError ? undefined : fieldState.error?.message}
+      error={props.disableErrorLabel ? undefined : fieldState.error?.message}
       info={props.info}
       subtitle={props.description}
       {...props.containerProps}

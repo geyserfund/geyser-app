@@ -7,14 +7,14 @@ import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
 
 import { RewardFormValues } from '../../../hooks/useProjectRewardForm.ts'
 
-type DescriptionComponentProps = {
+type DescriptionFormComponentProps = {
   formLoaded: boolean
   control: Control<RewardFormValues>
   errors: FieldErrors<RewardFormValues>
   watch: UseFormWatch<RewardFormValues>
 }
 
-export const DescriptionComponent = ({ formLoaded, control, errors, watch }: DescriptionComponentProps) => {
+export const DescriptionFormComponent = ({ formLoaded, control, errors, watch }: DescriptionFormComponentProps) => {
   const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
 
   const rewardDescription = watch('description')

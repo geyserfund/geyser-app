@@ -2,7 +2,7 @@ import { Box, Button, HStack, Icon, IconButton, Radio, RadioGroup, VStack } from
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Controller, useFieldArray, useForm, useWatch } from 'react-hook-form'
 import { PiInfo, PiPlus, PiTrash } from 'react-icons/pi'
 import * as yup from 'yup'
@@ -16,6 +16,7 @@ import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { countriesAtom } from '@/shared/state/countriesAtom.ts'
 import { ProjectShippingConfigType, RewardCurrency, ShippingConfigFragment } from '@/types'
+import { useMobileMode } from '@/utils/index.ts'
 
 import { ProjectShippingConfigTypeOptions } from './constants.ts'
 
@@ -55,7 +56,7 @@ const shippingRateSchema = (feesModel: ProjectShippingConfigType) => {
         then: (schema) =>
           schema
             .typeError(t('Base rate must be a number'))
-            .min(1, t('Invalid base rate'))
+            .min(1, t('Invalid amount'))
             .required(t('Base rate is required')),
         otherwise: (schema) => schema.optional(),
       }),
@@ -129,6 +130,7 @@ type ShippingConfigFormProps = {
 
 export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingConfigFormProps) => {
   const countries = useAtomValue(countriesAtom)
+  const isMobile = useMobileMode()
 
   const countryOptions = countries.map((country) => ({
     label: country.name,
@@ -178,6 +180,38 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
   }
 
   console.log('errors', errors)
+
+  const getShippingErrors = useCallback(() => {
+    const errorsForShippingRates = []
+
+    if (errors.shippingRates?.message) {
+      errorsForShippingRates.push(errors.shippingRates.message)
+    }
+
+    if (errors.shippingRates?.root?.message) {
+      errorsForShippingRates.push(errors.shippingRates?.root.message)
+    }
+
+    if (Array.isArray(errors.shippingRates) && isMobile) {
+      for (const rateError of errors.shippingRates) {
+        if (rateError?.country?.message) errorsForShippingRates.push(rateError.country.message)
+        if (rateError?.baseRate?.message) errorsForShippingRates.push(rateError.baseRate.message)
+        if (rateError?.incrementRate?.message) errorsForShippingRates.push(rateError.incrementRate.message)
+      }
+    }
+
+    if (errorsForShippingRates.length === 0) return null
+
+    return (
+      <VStack w="full" alignItems="flex-start" paddingTop={2} spacing={0}>
+        {errorsForShippingRates.map((error) => (
+          <Body size="xs" light key={error} color={'error.11'}>
+            {error}
+          </Body>
+        ))}
+      </VStack>
+    )
+  }, [errors, isMobile])
 
   return (
     <VStack id="shipping-fees-form" as="form" onSubmit={handleOnSubmitClick} gap={6} w="full" px={2}>
@@ -276,34 +310,34 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
           subtitle={t(
             'Default rate is applied to any region not specified for worldwide shipping. If worldwide shipping is not available, all available countries must be listed below.',
           )}
-          error={errors.shippingRates?.message || errors.shippingRates?.root?.message}
+          error={getShippingErrors()}
           w="full"
         >
           <VStack w="full" alignItems="flex-start" spacing={3} paddingTop={2}>
             <HStack w="full" justifyContent="space-between" px={1}>
-              <Box flex={1.5}>
+              <Box flex={5}>
                 <Body size="sm" medium>
                   {t('Country')}
                 </Body>
               </Box>
-              <Box flex={1}>
+              <Box flex={3}>
                 <Body size="sm" medium>
                   {t('Base rate ($)')}
                 </Body>
               </Box>
               {isIncremental && (
-                <Box flex={1}>
+                <Box flex={3}>
                   <Body size="sm" medium>
                     {t('Increment rate ($)')}
                   </Body>
                 </Box>
               )}
-              <Box flex={1}>
+              <Box flex={3}>
                 <Body size="sm" medium>
                   {t('Same as Default')}
                 </Body>
               </Box>
-              <Box w="40px" />
+              <Box flex={1} />
             </HStack>
 
             {fields.map((item, index) => {
@@ -330,7 +364,7 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
 
               return (
                 <HStack key={item.id} w="full" spacing={2} alignItems="flex-start">
-                  <Box flex={1.5}>
+                  <Box flex={5}>
                     {isDefaultRow ? (
                       <HStack
                         paddingX={3}
@@ -354,17 +388,18 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
                             !(watchedShippingRates || []).find((r, i) => i !== index && r.country === option.value) ||
                             option.value === currentShippingRate.country,
                         )}
-                        placeholder={t('Select Country')}
+                        placeholder={isMobile ? t('Select') : t('Select Country')}
                         size="sm"
+                        disableErrorLabel={isMobile}
                       />
                     )}
                   </Box>
-                  <Box flex={1}>
+                  <Box flex={3}>
                     <ControlledAmountInput
                       name={`shippingRates.${index}.baseRate`}
                       control={control}
                       placeholder="0"
-                      width="80px"
+                      maxWidth="80px"
                       currency={RewardCurrency.Usdcent}
                       size="sm"
                       textAlign="center"
@@ -374,15 +409,16 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
                           shouldValidate: true,
                         })
                       }
+                      disableErrorLabel={isMobile}
                     />
                   </Box>
                   {isIncremental && (
-                    <Box flex={1}>
+                    <Box flex={3}>
                       <ControlledAmountInput
                         name={`shippingRates.${index}.incrementRate`}
                         control={control}
                         placeholder="0"
-                        width="80px"
+                        maxWidth="80px"
                         currency={RewardCurrency.Usdcent}
                         size="sm"
                         textAlign="center"
@@ -392,10 +428,11 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
                             shouldValidate: true,
                           })
                         }
+                        disableErrorLabel={isMobile}
                       />
                     </Box>
                   )}
-                  <HStack flex={1} justifyContent="center">
+                  <HStack flex={3} justifyContent="center">
                     {!isDefaultRow && (
                       <ControlledSwitchInput
                         name={`shippingRates.${index}.sameAsDefault`}

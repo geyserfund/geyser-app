@@ -1351,5 +1351,10 @@
   "Editing this shipping fee will update all rewards that use this shipping fee.": "Editing this shipping fee will update all rewards that use this shipping fee.",
   "Updating this shipping fee will update all rewards that use this shipping fee.": "Updating this shipping fee will update all rewards that use this shipping fee.",
   "Updating this shipping fee configuation will update all rewards that use this shipping fee.": "Updating this shipping fee configuation will update all rewards that use this shipping fee.",
-  "Create a resuable shipping fee configuration that can be used across multiple rewards.": "Create a resuable shipping fee configuration that can be used across multiple rewards."
+  "Create a resuable shipping fee configuration that can be used across multiple rewards.": "Create a resuable shipping fee configuration that can be used across multiple rewards.",
+  "No shipping fees configured. Shipping is included in the product price.": "No shipping fees configured. Shipping is included in the product price.",
+  "Add new": "Add new",
+  "Select fees": "Select fees",
+  "Select fee": "Select fee",
+  "Invalid amount": "Invalid amount"
 }

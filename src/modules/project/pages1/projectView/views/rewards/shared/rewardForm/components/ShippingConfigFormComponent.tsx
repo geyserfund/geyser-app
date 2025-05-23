@@ -15,7 +15,7 @@ import {
   useProjectShippingConfigsGetQuery,
   useProjectShippingConfigUpdateMutation,
 } from '@/types/generated/graphql.ts'
-import { useNotification } from '@/utils/index.ts'
+import { useMobileMode, useNotification } from '@/utils/index.ts'
 
 import { RewardFormValues } from '../../../hooks/useProjectRewardForm.ts'
 import { ShippingConfigForm } from '../../shippingConfigForm/ShippingConfigForm.tsx'
@@ -35,16 +35,22 @@ interface ShippingFeesFormValues {
   shippingRates: ShippingRate[]
 }
 
-type ShippingConfigComponentProps = {
+type ShippingConfigFormComponentProps = {
   shippingConfig?: ShippingConfigFragment | null
   projectId: number
   control: Control<RewardFormValues>
   name: string
 }
 
-export const ShippingConfigComponent = ({ projectId, shippingConfig, control, name }: ShippingConfigComponentProps) => {
+export const ShippingConfigFormComponent = ({
+  projectId,
+  shippingConfig,
+  control,
+  name,
+}: ShippingConfigFormComponentProps) => {
   const shippingFeeModal = useModal<{ isEdit: boolean }>()
   const toast = useNotification()
+  const isMobile = useMobileMode()
 
   const { field } = useController({
     control,
@@ -145,32 +151,37 @@ export const ShippingConfigComponent = ({ projectId, shippingConfig, control, na
     <>
       {hasShippingConfigs ? (
         <VStack w="full" alignItems="flex-start" spacing={4}>
-          <HStack w="full" justifyContent="space-between" alignItems="flex-end">
-            <Body size="md" medium>
-              {t('Shipping fees')}
-            </Body>
+          <HStack w="full" justifyContent="space-between" alignItems="flex-start">
+            <VStack flex={1} alignItems="flex-start" spacing={0}>
+              <Body size="md" medium>
+                {t('Shipping fees')}
+              </Body>
+            </VStack>
+          </HStack>
+          <HStack w="full" justifyContent="space-between" alignItems="flex-start">
+            <ControlledCustomSelect
+              options={shippingConfigs?.projectShippingConfigsGet || []}
+              name="shippingConfigId"
+              placeholder={t('Select fee')}
+              control={control}
+              getOptionLabel={(option) => option.name}
+              getOptionValue={(option) => option.id}
+              onChange={(value) => {
+                setSelectedShippingConfig(value as ShippingConfigFragment)
+              }}
+              width="full"
+              menuMinWidth={'200px'}
+            />
             <Button
               variant="solid"
               colorScheme="primary1"
-              size="sm"
+              size="lg"
               rightIcon={<PiPlus />}
               onClick={() => shippingFeeModal.onOpen({ isEdit: false })}
             >
-              {t('Add new fees')}
+              {isMobile ? t('Add') : t('Add new')}
             </Button>
           </HStack>
-          <ControlledCustomSelect
-            options={shippingConfigs?.projectShippingConfigsGet || []}
-            name="shippingConfigId"
-            placeholder={t('Select shipping fees')}
-            control={control}
-            getOptionLabel={(option) => option.name}
-            getOptionValue={(option) => option.id}
-            onChange={(value) => {
-              setSelectedShippingConfig(value as ShippingConfigFragment)
-            }}
-            width="full"
-          />
 
           <ShowCurrentShippingConfig
             selectedShippingConfig={selectedShippingConfig}

@@ -20,10 +20,10 @@ import { PrivateCommentPrompt, RewardCurrency } from '@/types'
 
 import { UpdateCurrencyModal } from '../../components/UpdateCurrencyModal'
 import { useProjectRewardForm } from '../../hooks/useProjectRewardForm'
-import { DescriptionComponent } from './components/DescriptionComponent.tsx'
+import { DescriptionFormComponent } from './components/DescriptionFormComponent.tsx'
 import { FormElementWithSwitch } from './components/FormElementWithSwitch.tsx'
 import { HeaderComponent } from './components/HeaderComponent.tsx'
-import { ShippingConfigComponent } from './components/ShippingConfigComponent.tsx'
+import { ShippingConfigFormComponent } from './components/ShippingConfigFormComponent.tsx'
 
 type Props = {
   buttonText: string
@@ -149,7 +149,7 @@ export const ProjectRewardForm = ({
             error={errors.shortDescription?.message}
           />
 
-          <DescriptionComponent formLoaded={formLoaded} control={control} errors={errors} watch={watch} />
+          <DescriptionFormComponent formLoaded={formLoaded} control={control} errors={errors} watch={watch} />
 
           <Stack w="full" direction={{ base: 'column', lg: 'row' }}>
             <ControlledAmountInput
@@ -231,7 +231,7 @@ export const ProjectRewardForm = ({
                 placeholder={'Enter number of weeks'}
                 error={errors.estimatedDeliveryInWeeks?.message}
               />
-              <ShippingConfigComponent
+              <ShippingConfigFormComponent
                 shippingConfig={shippingConfig}
                 projectId={project.id}
                 control={control}
