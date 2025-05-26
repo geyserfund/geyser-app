@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_SHIPPING_CONFIG } from './shippingConfigFragment.ts'
+import { FRAGMENT_SHIPPING_CONFIG } from './shippingFragment.ts'
 
 export const FRAGMENT_PROJECT_REWARD = gql`
   ${FRAGMENT_SHIPPING_CONFIG}

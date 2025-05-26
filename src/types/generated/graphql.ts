@@ -1858,6 +1858,7 @@ export type Order = {
   project: Project;
   referenceCode: Scalars['String']['output'];
   shippedAt?: Maybe<Scalars['Date']['output']>;
+  shippingAddress?: Maybe<ShippingAddress>;
   status: Scalars['String']['output'];
   totalInSats: Scalars['Int']['output'];
   updatedAt: Scalars['Date']['output'];
@@ -5766,6 +5767,7 @@ export type OrderResolvers<ContextType = any, ParentType extends ResolversParent
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   referenceCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   shippedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  shippingAddress?: Resolver<Maybe<ResolversTypes['ShippingAddress']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   totalInSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -7715,6 +7717,8 @@ export type ShippingConfigFragment = { __typename?: 'ShippingConfig', id?: any |
     & ShippingRateFragment
   )> | null };
 
+export type ShippingAddressFragment = { __typename?: 'ShippingAddress', id: string, postalCode: string, state?: string | null, fullName: string, country: string, city: string, addressLines: Array<string> };
+
 export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: any, country?: string | null, legalEntityType: LegalEntityType, verified?: boolean | null } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
 export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null };
@@ -8012,6 +8016,16 @@ export type ProjectShippingConfigUpdateMutationVariables = Exact<{
 export type ProjectShippingConfigUpdateMutation = { __typename?: 'Mutation', projectShippingConfigUpdate: (
     { __typename?: 'ShippingConfig' }
     & ShippingConfigFragment
+  ) };
+
+export type ShippingAddressCreateMutationVariables = Exact<{
+  input: ShippingAddressCreateInput;
+}>;
+
+
+export type ShippingAddressCreateMutation = { __typename?: 'Mutation', shippingAddressCreate: (
+    { __typename?: 'ShippingAddress' }
+    & ShippingAddressFragment
   ) };
 
 export type ProjectTagAddMutationVariables = Exact<{
@@ -8471,6 +8485,16 @@ export type ProjectShippingConfigsGetQueryVariables = Exact<{
 export type ProjectShippingConfigsGetQuery = { __typename?: 'Query', projectShippingConfigsGet: Array<(
     { __typename?: 'ShippingConfig' }
     & ShippingConfigFragment
+  )> };
+
+export type ShippingAddressesGetQueryVariables = Exact<{
+  input: ShippingAddressesGetInput;
+}>;
+
+
+export type ShippingAddressesGetQuery = { __typename?: 'Query', shippingAddressesGet: Array<(
+    { __typename?: 'ShippingAddress' }
+    & ShippingAddressFragment
   )> };
 
 export type GetUserIpCountryQueryVariables = Exact<{ [key: string]: never; }>;
@@ -10301,6 +10325,17 @@ export const ProjectRewardFragmentDoc = gql`
   }
 }
     ${ShippingConfigFragmentDoc}`;
+export const ShippingAddressFragmentDoc = gql`
+    fragment ShippingAddress on ShippingAddress {
+  id
+  postalCode
+  state
+  fullName
+  country
+  city
+  addressLines
+}
+    `;
 export const ProjectOwnerUserForInvoiceFragmentDoc = gql`
     fragment ProjectOwnerUserForInvoice on User {
   id
@@ -14046,6 +14081,39 @@ export function useProjectShippingConfigUpdateMutation(baseOptions?: Apollo.Muta
 export type ProjectShippingConfigUpdateMutationHookResult = ReturnType<typeof useProjectShippingConfigUpdateMutation>;
 export type ProjectShippingConfigUpdateMutationResult = Apollo.MutationResult<ProjectShippingConfigUpdateMutation>;
 export type ProjectShippingConfigUpdateMutationOptions = Apollo.BaseMutationOptions<ProjectShippingConfigUpdateMutation, ProjectShippingConfigUpdateMutationVariables>;
+export const ShippingAddressCreateDocument = gql`
+    mutation ShippingAddressCreate($input: ShippingAddressCreateInput!) {
+  shippingAddressCreate(input: $input) {
+    ...ShippingAddress
+  }
+}
+    ${ShippingAddressFragmentDoc}`;
+export type ShippingAddressCreateMutationFn = Apollo.MutationFunction<ShippingAddressCreateMutation, ShippingAddressCreateMutationVariables>;
+
+/**
+ * __useShippingAddressCreateMutation__
+ *
+ * To run a mutation, you first call `useShippingAddressCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useShippingAddressCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [shippingAddressCreateMutation, { data, loading, error }] = useShippingAddressCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useShippingAddressCreateMutation(baseOptions?: Apollo.MutationHookOptions<ShippingAddressCreateMutation, ShippingAddressCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ShippingAddressCreateMutation, ShippingAddressCreateMutationVariables>(ShippingAddressCreateDocument, options);
+      }
+export type ShippingAddressCreateMutationHookResult = ReturnType<typeof useShippingAddressCreateMutation>;
+export type ShippingAddressCreateMutationResult = Apollo.MutationResult<ShippingAddressCreateMutation>;
+export type ShippingAddressCreateMutationOptions = Apollo.BaseMutationOptions<ShippingAddressCreateMutation, ShippingAddressCreateMutationVariables>;
 export const ProjectTagAddDocument = gql`
     mutation ProjectTagAdd($input: ProjectTagMutationInput!) {
   projectTagAdd(input: $input) {
@@ -15998,6 +16066,46 @@ export type ProjectShippingConfigsGetQueryHookResult = ReturnType<typeof useProj
 export type ProjectShippingConfigsGetLazyQueryHookResult = ReturnType<typeof useProjectShippingConfigsGetLazyQuery>;
 export type ProjectShippingConfigsGetSuspenseQueryHookResult = ReturnType<typeof useProjectShippingConfigsGetSuspenseQuery>;
 export type ProjectShippingConfigsGetQueryResult = Apollo.QueryResult<ProjectShippingConfigsGetQuery, ProjectShippingConfigsGetQueryVariables>;
+export const ShippingAddressesGetDocument = gql`
+    query ShippingAddressesGet($input: ShippingAddressesGetInput!) {
+  shippingAddressesGet(input: $input) {
+    ...ShippingAddress
+  }
+}
+    ${ShippingAddressFragmentDoc}`;
+
+/**
+ * __useShippingAddressesGetQuery__
+ *
+ * To run a query within a React component, call `useShippingAddressesGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useShippingAddressesGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useShippingAddressesGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useShippingAddressesGetQuery(baseOptions: Apollo.QueryHookOptions<ShippingAddressesGetQuery, ShippingAddressesGetQueryVariables> & ({ variables: ShippingAddressesGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ShippingAddressesGetQuery, ShippingAddressesGetQueryVariables>(ShippingAddressesGetDocument, options);
+      }
+export function useShippingAddressesGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ShippingAddressesGetQuery, ShippingAddressesGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ShippingAddressesGetQuery, ShippingAddressesGetQueryVariables>(ShippingAddressesGetDocument, options);
+        }
+export function useShippingAddressesGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ShippingAddressesGetQuery, ShippingAddressesGetQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ShippingAddressesGetQuery, ShippingAddressesGetQueryVariables>(ShippingAddressesGetDocument, options);
+        }
+export type ShippingAddressesGetQueryHookResult = ReturnType<typeof useShippingAddressesGetQuery>;
+export type ShippingAddressesGetLazyQueryHookResult = ReturnType<typeof useShippingAddressesGetLazyQuery>;
+export type ShippingAddressesGetSuspenseQueryHookResult = ReturnType<typeof useShippingAddressesGetSuspenseQuery>;
+export type ShippingAddressesGetQueryResult = Apollo.QueryResult<ShippingAddressesGetQuery, ShippingAddressesGetQueryVariables>;
 export const GetUserIpCountryDocument = gql`
     query GetUserIpCountry {
   userIpCountry

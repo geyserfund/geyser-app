@@ -155,7 +155,7 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
             country: rate.country,
             baseRate: rate.baseRate || 0,
             incrementRate: rate.incrementRate || 0,
-            sameAsDefault: rate.sameAsDefault || false,
+            sameAsDefault: rate.sameAsDefault || true,
           })),
         }
       : defaultFormValues,
@@ -212,6 +212,8 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
       </VStack>
     )
   }, [errors, isMobile])
+
+  console.log('errors', watch('shippingRates'))
 
   return (
     <VStack id="shipping-fees-form" as="form" onSubmit={handleOnSubmitClick} gap={6} w="full" px={2}>
@@ -403,12 +405,13 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
                       currency={RewardCurrency.Usdcent}
                       size="sm"
                       textAlign="center"
-                      onFocus={() =>
+                      onFocus={() => {
+                        if (isDefaultRow) return
                         setValue(`shippingRates.${index}.sameAsDefault`, false, {
                           shouldDirty: true,
                           shouldValidate: true,
                         })
-                      }
+                      }}
                       disableErrorLabel={isMobile}
                     />
                   </Box>
@@ -422,12 +425,13 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
                         currency={RewardCurrency.Usdcent}
                         size="sm"
                         textAlign="center"
-                        onFocus={() =>
+                        onFocus={() => {
+                          if (isDefaultRow) return
                           setValue(`shippingRates.${index}.sameAsDefault`, false, {
                             shouldDirty: true,
                             shouldValidate: true,
                           })
-                        }
+                        }}
                         disableErrorLabel={isMobile}
                       />
                     </Box>

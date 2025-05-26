@@ -50,6 +50,7 @@ export const ControlledCustomSelect = <FormValues extends FieldValues, Option, I
       error={props.disableErrorLabel ? undefined : fieldState.error?.message}
       info={props.info}
       subtitle={props.description}
+      size={props.size}
       {...props.containerProps}
     >
       <CustomSelect<Option, IsMulti>

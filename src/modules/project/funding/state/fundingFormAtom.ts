@@ -19,7 +19,7 @@ import { subscriptionsAtom } from '../../state/subscriptionAtom'
 import { walletAtom } from '../../state/walletAtom'
 import { fundingInputAfterRequestAtom } from './fundingContributionCreateInputAtom.ts'
 import { fundingPaymentDetailsAtom } from './fundingPaymentAtom.ts'
-import { shippingAddressAtom } from './shippingAddressAtom.ts'
+import { shippingAddressAtom, shippingCountryAtom } from './shippingAddressAtom.ts'
 
 export type FundingProject = Pick<
   ProjectState,
@@ -29,6 +29,7 @@ export type FundingProject = Pick<
 export enum FundingUserInfoError {
   EMAIL = 'email',
   PRIVATE_COMMENT = 'privateComment',
+  SHIPPING_ADDRESS = 'shippingAddress',
 }
 
 export const DEFAULT_COUNTRY_CODE = 'DEFAULT'
@@ -132,13 +133,14 @@ export const rewardsCostAtoms = atom((get) => {
     })
   }
 
-  return { satoshi: totalCostInSatoshi, usdCent: totalCostInUsdCent, base: baseCostTotal }
+  return { sats: totalCostInSatoshi, usdCents: totalCostInUsdCent, base: baseCostTotal }
 })
 
 export const shippingCostAtom = atom((get) => {
   const { rewardsByIDAndCount } = get(fundingFormStateAtom)
   const { rewards } = get(fundingProjectAtom)
   const shippingAddress = get(shippingAddressAtom)
+  const shippingCountry = get(shippingCountryAtom)
   const bitcoinQuote = get(bitcoinQuoteAtom)
 
   const response = { sats: 0, usdCents: 0 }
@@ -148,8 +150,9 @@ export const shippingCostAtom = atom((get) => {
       // Find reward by comparing string representations of IDs
       const reward = rewards.find((r) => r.id.toString() === rewardID)
       const count = rewardsByIDAndCount[rewardID]
+      const country = shippingCountry || shippingAddress?.country
 
-      if (!reward || !count || !(count > 0) || !reward.hasShipping || !shippingAddress?.country) return
+      if (!reward || !count || !(count > 0) || !reward.hasShipping || !country) return
 
       const { shippingConfig } = reward
       if (!shippingConfig) return
@@ -160,7 +163,7 @@ export const shippingCostAtom = atom((get) => {
       const defaultRate = shippingRates.find((rate) => rate.country === DEFAULT_COUNTRY_CODE)
       if (!defaultRate) return
 
-      const countryRate = shippingRates.find((rate) => rate.country === shippingAddress.country) || defaultRate
+      const countryRate = shippingRates.find((rate) => rate.country === country) || defaultRate
 
       const { baseRate, incrementRate } = countryRate
 
@@ -184,7 +187,7 @@ export const shippingCostAtom = atom((get) => {
  * Derived atom for the costs associated with selected subscriptions.
  * Returns costs in satoshi, usdCent, and the original base cost.
  */
-export const subscriptionCostAtoms = atom((get): { satoshi: number; usdCent: number; base: number } => {
+export const subscriptionCostAtoms = atom((get): { sats: number; usdCents: number; base: number } => {
   const { subscription } = get(fundingFormStateAtom)
   const { subscriptions } = get(fundingProjectAtom)
   const bitcoinQuote = get(bitcoinQuoteAtom)
@@ -192,24 +195,24 @@ export const subscriptionCostAtoms = atom((get): { satoshi: number; usdCent: num
   const selectedSubscription = subscriptions?.find((sub) => sub.id === subscription.subscriptionId)
 
   if (!selectedSubscription) {
-    return { satoshi: 0, usdCent: 0, base: 0 }
+    return { sats: 0, usdCents: 0, base: 0 }
   }
 
   const base = selectedSubscription.cost
-  let satoshi = 0
-  let usdCent = 0
+  let sats = 0
+  let usdCents = 0
 
   // Compare against the value defined in the SubscriptionCurrencyType enum ('USDCENT')
   // Note: The enum definition provided only includes Usdcent.
   if (selectedSubscription.currency === 'USDCENT') {
     // Using the correct uppercase string
-    usdCent = base // Base cost is already in USD cents
-    satoshi = convertAmount.usdCentsToSats({ usdCents: base, bitcoinQuote })
+    usdCents = base // Base cost is already in USD cents
+    sats = convertAmount.usdCentsToSats({ usdCents: base, bitcoinQuote })
   }
 
   return {
-    satoshi,
-    usdCent,
+    sats,
+    usdCents,
     base,
   }
 })
@@ -218,14 +221,15 @@ export const subscriptionCostAtoms = atom((get): { satoshi: number; usdCent: num
 export const tipAtoms = atom((get) => {
   const { donationAmount, geyserTipPercent } = get(fundingFormStateAtom)
   const rewardsCosts = get(rewardsCostAtoms) // Use derived rewards cost
+  const shippingCosts = get(shippingCostAtom)
   const bitcoinQuote = get(bitcoinQuoteAtom)
 
   // Calculate tip based on satoshi value of donation + rewards
-  const tipBaseSats = donationAmount + rewardsCosts.satoshi
+  const tipBaseSats = donationAmount + rewardsCosts.sats + shippingCosts.sats
   const tipSats = geyserTipPercent > 0 ? Math.round((tipBaseSats * geyserTipPercent) / 100) : 0
   const tipUsdCent = tipSats > 0 ? convertAmount.satsToUsdCents({ sats: tipSats, bitcoinQuote }) : 0
 
-  return { satoshi: tipSats, usdCent: tipUsdCent }
+  return { sats: tipSats, usdCents: tipUsdCent }
 })
 
 /**
@@ -241,7 +245,7 @@ export const totalAmountSatsAtom = atom((get) => {
   const tip = get(tipAtoms)
 
   // Sum all components
-  const total = donationAmount + rewardsCosts.satoshi + subscriptionCosts.satoshi + shippingCosts.sats + tip.satoshi
+  const total = donationAmount + rewardsCosts.sats + subscriptionCosts.sats + shippingCosts.sats + tip.sats
   return total
 })
 
@@ -322,6 +326,40 @@ export const setFundFormStateAtom = atom(null, (get, set, name: keyof FundFormTy
 export const fundingFormHasRewardsAtom = atom((get) => {
   const fundingFormState = get(fundingFormStateAtom)
   return fundingFormState.rewardsByIDAndCount && Object.keys(fundingFormState.rewardsByIDAndCount).length > 0
+})
+
+export const fundingFormShippingAvailabilityAtom = atom((get) => {
+  const { rewardsByIDAndCount } = get(fundingFormStateAtom)
+  const { rewards } = get(fundingProjectAtom)
+
+  let shippingAvailability: string[] | undefined
+
+  if (!rewardsByIDAndCount) return shippingAvailability
+
+  Object.keys(rewardsByIDAndCount).forEach((rewardID: string) => {
+    const reward = rewards.find((r) => r.id.toString() === rewardID)
+    if (reward?.hasShipping && !reward.shippingConfig?.globalShipping) {
+      const shippingCountries = reward.shippingConfig?.shippingRates
+        ?.filter((rate) => rate.country !== DEFAULT_COUNTRY_CODE)
+        .map((rate) => rate.country)
+
+      if (!shippingAvailability) {
+        shippingAvailability = shippingCountries
+      } else {
+        shippingAvailability = shippingAvailability.filter((country) => shippingCountries?.includes(country))
+      }
+    }
+  })
+
+  return shippingAvailability
+})
+
+export const cannotCompleteShippingForThisOrderAtom = atom((get) => {
+  const shippingAvailability = get(fundingFormShippingAvailabilityAtom)
+
+  if (shippingAvailability && shippingAvailability.length === 0) return true
+
+  return false
 })
 
 /** Boolean to check if the funding form has a subscription */

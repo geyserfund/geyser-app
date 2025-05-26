@@ -126,15 +126,13 @@ export const ShowCurrentShippingConfig = ({
               </Box>
 
               <Box flex={1}>
-                <Body size="sm">
-                  {rate.sameAsDefault ? t('Same as Default') : formatAmount(rate.baseRate, 'USDCENT')}
-                </Body>
+                <Body size="sm">{rate.baseRate ? formatAmount(rate.baseRate, 'USDCENT') : t('Same as Default')}</Body>
               </Box>
 
               {isIncremental && (
                 <Box flex={1}>
                   <Body size="sm">
-                    {rate.sameAsDefault ? t('Same as Default') : formatAmount(rate.incrementRate, 'USDCENT')}
+                    {rate.incrementRate ? formatAmount(rate.incrementRate, 'USDCENT') : t('Same as Default')}
                   </Body>
                 </Box>
               )}

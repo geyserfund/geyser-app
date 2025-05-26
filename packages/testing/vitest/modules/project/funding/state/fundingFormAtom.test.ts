@@ -174,10 +174,10 @@ describe('fundingFormAtom Tests', () => {
 
       expect(state.rewardsByIDAndCount).toEqual({ '101': 1 })
       expect(state.needsShipping).toBe(false)
-      expect(derivedCosts.satoshi).toBeGreaterThan(0)
-      expect(derivedCosts.usdCent).toBeGreaterThan(0)
+      expect(derivedCosts.sats).toBeGreaterThan(0)
+      expect(derivedCosts.usdCents).toBeGreaterThan(0)
       expect(derivedCosts).toEqual(expectedCosts)
-      expect(tipResult.satoshi).toBeGreaterThan(0)
+      expect(tipResult.sats).toBeGreaterThan(0)
       expect(tipResult).toEqual(expectedTip)
       expect(totalSats).toBeGreaterThan(0)
       expect(totalSats).toBe(expectedTotalSats)
@@ -457,8 +457,8 @@ describe('fundingFormAtom Tests', () => {
       expect(state.subscription.interval).toBe(UserSubscriptionInterval.Monthly)
       expect(state.subscription.name).toBe('Monthly USD Supporter')
       expect(derivedSubCosts).toEqual({ satoshi: expectedSubCostSats, usdCent: expectedSubCostUsdCent, base: 500 })
-      expect(totalSats).toBe(state.donationAmount + derivedSubCosts.satoshi + tip.satoshi)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedSubCosts.usdCent + tip.usdCent)
+      expect(totalSats).toBe(state.donationAmount + derivedSubCosts.sats + tip.sats)
+      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedSubCosts.usdCents + tip.usdCents)
     })
 
     it('updateFundingFormSubscriptionAtom should add a SATS subscription', () => {
@@ -477,8 +477,8 @@ describe('fundingFormAtom Tests', () => {
       expect(state.subscription.interval).toBe(UserSubscriptionInterval.Yearly)
       expect(state.subscription.name).toBe('Annual SATS Backer')
       expect(derivedSubCosts).toEqual({ satoshi: 0, usdCent: 0, base: 100000 })
-      expect(totalSats).toBe(state.donationAmount + tip.satoshi)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + tip.usdCent)
+      expect(totalSats).toBe(state.donationAmount + tip.sats)
+      expect(totalUsdCent).toBe(state.donationAmountUsdCent + tip.usdCents)
     })
 
     it('updateFundingFormSubscriptionAtom should overwrite previous subscription', () => {
@@ -496,8 +496,8 @@ describe('fundingFormAtom Tests', () => {
       expect(state.subscription.cost).toBe(expectedSubCostSats)
       expect(state.subscription.currency).toBe('BTCSAT')
       expect(derivedSubCosts).toEqual({ satoshi: 0, usdCent: 0, base: 100000 })
-      expect(totalSats).toBe(state.donationAmount + tip.satoshi)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + tip.usdCent)
+      expect(totalSats).toBe(state.donationAmount + tip.sats)
+      expect(totalUsdCent).toBe(state.donationAmountUsdCent + tip.usdCents)
     })
 
     it('updateFundingFormSubscriptionAtom totals reflect subscription cost over reward cost', () => {
@@ -506,7 +506,7 @@ describe('fundingFormAtom Tests', () => {
       const rewardCosts = store.get(rewardsCostAtoms)
       const tipWithReward = store.get(tipAtoms)
       const totalSatsWithReward = store.get(totalAmountSatsAtom)
-      expect(totalSatsWithReward).toBe(stateWithReward.donationAmount + rewardCosts.satoshi + tipWithReward.satoshi)
+      expect(totalSatsWithReward).toBe(stateWithReward.donationAmount + rewardCosts.sats + tipWithReward.sats)
 
       store.set(updateFundingFormSubscriptionAtom, { id: 201 })
       const stateWithSub = store.get(fundingFormStateAtom)
@@ -517,15 +517,15 @@ describe('fundingFormAtom Tests', () => {
       const derivedRewardCostsAfterSub = store.get(rewardsCostAtoms)
 
       expect(tipAfterSub).toEqual(tipWithReward)
-      const expectedTotalSats = 0 + rewardCosts.satoshi + subCosts.satoshi + tipAfterSub.satoshi
+      const expectedTotalSats = 0 + rewardCosts.sats + subCosts.sats + tipAfterSub.sats
       expect(totalSatsWithSub).toBe(expectedTotalSats)
       expect(totalSatsWithSub).not.toBe(totalSatsWithReward)
-      const expectedTipUsdCent = Math.round(dollarsToCents((tipAfterSub.satoshi / SATOSHIS_IN_BTC) * mockUsdRate))
-      const expectedTotalUsdCent = 0 + rewardCosts.usdCent + subCosts.usdCent + expectedTipUsdCent
+      const expectedTipUsdCent = Math.round(dollarsToCents((tipAfterSub.sats / SATOSHIS_IN_BTC) * mockUsdRate))
+      const expectedTotalUsdCent = 0 + rewardCosts.usdCents + subCosts.usdCents + expectedTipUsdCent
       expect(totalUsdCentWithSub).toBe(expectedTotalUsdCent)
 
       expect(stateWithSub.rewardsByIDAndCount).toEqual({ '101': 1 })
-      expect(derivedRewardCostsAfterSub.satoshi).toBe(rewardCosts.satoshi)
+      expect(derivedRewardCostsAfterSub.sats).toBe(rewardCosts.sats)
     })
   })
 

@@ -20,3 +20,15 @@ export const FRAGMENT_SHIPPING_CONFIG = gql`
     }
   }
 `
+
+export const FRAGMENT_SHIPPING_ADDRESS = gql`
+  fragment ShippingAddress on ShippingAddress {
+    id
+    postalCode
+    state
+    fullName
+    country
+    city
+    addressLines
+  }
+`

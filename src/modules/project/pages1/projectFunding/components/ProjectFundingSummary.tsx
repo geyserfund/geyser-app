@@ -9,6 +9,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import {
   rewardsCostAtoms,
+  shippingCostAtom,
   tipAtoms,
   totalAmountSatsAtom,
   totalAmountUsdCentAtom,
@@ -22,7 +23,13 @@ import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../.
 import { LaunchpadSummary, NonProfitSummary } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
 
-export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
+export const ProjectFundingSummary = ({
+  disableCollapse,
+  noShipping,
+}: {
+  disableCollapse?: boolean
+  noShipping?: boolean
+}) => {
   const { t } = useTranslation()
 
   const isMobileMode = useMobileMode()
@@ -32,6 +39,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
   const projectGoalId = useAtomValue(selectedGoalIdAtom)
 
   const rewardsCosts = useAtomValue(rewardsCostAtoms)
+  const shippingCosts = useAtomValue(shippingCostAtom)
   const tip = useAtomValue(tipAtoms)
   const totalSats = useAtomValue(totalAmountSatsAtom)
   const totalUsdCent = useAtomValue(totalAmountUsdCentAtom)
@@ -86,6 +94,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
         alignItems: 'flex-start',
         display: 'flex',
         flexDirection: 'column',
+
         gap: isMobileMode ? '4px' : '12px',
       }}
       transition={{ type: 'spring', stiffness: 900, damping: 40 }}
@@ -157,25 +166,45 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
           </VStack>
         )}
 
-        {rewardsCosts.satoshi > 0 && (
+        {rewardsCosts.sats > 0 && (
           <HStack alignItems={'start'}>
             <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Products Cost')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
-              {commaFormatted(rewardsCosts.satoshi)}{' '}
+              {commaFormatted(rewardsCosts.sats)}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
                 sats
               </Body>
             </Body>
+            <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
+              {`($${centsToDollars(rewardsCosts.usdCents)})`}
+            </Body>
           </HStack>
         )}
-        {tip.satoshi > 0 && (
-          <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser tip')}: `}</Body>
+        {!noShipping && shippingCosts.sats > 0 && (
+          <HStack alignItems={'start'}>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Shipping')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
-              {`${commaFormatted(tip.satoshi)} `}
+              {commaFormatted(shippingCosts.sats)}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
                 sats
               </Body>
+            </Body>
+            <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
+              {`($${centsToDollars(shippingCosts.usdCents)})`}
+            </Body>
+          </HStack>
+        )}
+        {tip.sats > 0 && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser tip')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>
+              {`${commaFormatted(tip.sats)} `}
+              <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
+                sats
+              </Body>
+            </Body>
+            <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
+              {`($${centsToDollars(tip.usdCents)})`}
             </Body>
           </HStack>
         )}

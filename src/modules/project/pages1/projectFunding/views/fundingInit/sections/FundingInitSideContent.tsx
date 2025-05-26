@@ -1,5 +1,6 @@
 import { Box, Button, Icon, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { FormEvent } from 'react'
 import { PiHeartbeatFill } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
@@ -7,6 +8,7 @@ import { useNavigate } from 'react-router'
 import { BodyProps } from '@/components/typography/Body.tsx'
 import { useAuthContext } from '@/context/auth.tsx'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { cannotCompleteShippingForThisOrderAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -17,9 +19,8 @@ import { isPrelaunch, useMobileMode, useNotification } from '@/utils'
 
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
-import { CompleteVerificationToIncreaseFunding } from '../components/CompleteVerificationToIncreaseFunding.tsx'
 
-const MAX_DONATION_AMOUNT = 1000000 // 10,000 USD in cents
+export const MAX_DONATION_AMOUNT = 1000000 // 10,000 USD in cents
 
 export const FundingInitBottomContent = () => {
   return <FundingInitSummary />
@@ -36,12 +37,13 @@ export const FundingInitSideContent = () => {
 export const FundingInitSummary = () => {
   const navigate = useNavigate()
   const toast = useNotification()
+  const cannotCompleteShippingForThisOrder = useAtomValue(cannotCompleteShippingForThisOrderAtom)
 
   const { user } = useAuthContext()
 
   const { isFundingInputAmountValid, project, formState } = useFundingFormAtom()
 
-  const handleCheckoutButtonPressed = (e: FormEvent<HTMLFormElement>) => {
+  const handleCheckoutButtonPressed = (e: FormEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
     const { valid, title, description } = isFundingInputAmountValid
@@ -59,13 +61,22 @@ export const FundingInitSummary = () => {
 
   const showCompleteVerification = isFundingAmountTooHigh && !user.complianceDetails.verifiedDetails?.identity?.verified
 
+  const isDisabled = cannotCompleteShippingForThisOrder || showCompleteVerification
+
+  console.log('cannotCompleteShippingForThisOrder', cannotCompleteShippingForThisOrder)
+
   return (
-    <form style={{ width: '100%', height: '100%', overflowY: 'visible' }} onSubmit={handleCheckoutButtonPressed}>
-      <FundingSummaryWrapper justifyContent="space-between">
-        <ProjectFundingSummary />
-        <VStack w="full" alignItems="flex-start">
-          {showCompleteVerification && <CompleteVerificationToIncreaseFunding />}
-        </VStack>
+    <VStack
+      as="form"
+      width="100%"
+      height="100%"
+      maxHeight={{ base: 'calc(100vh - 177px)', lg: 'auto' }}
+      overflowY="auto"
+      justifyContent={'space-between'}
+      onSubmit={handleCheckoutButtonPressed}
+    >
+      <FundingSummaryWrapper>
+        <ProjectFundingSummary noShipping />
       </FundingSummaryWrapper>
       <FundingCheckoutWrapper>
         <VStack w="full" alignItems="flex-start">
@@ -74,19 +85,12 @@ export const FundingInitSummary = () => {
           <Body size="sm" light>
             {t('By continuing to checkout you are accepting our T&Cs')}
           </Body>
-          <Button
-            size="lg"
-            w="full"
-            variant="solid"
-            colorScheme="primary1"
-            type="submit"
-            isDisabled={showCompleteVerification}
-          >
+          <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit" isDisabled={isDisabled}>
             {t('Checkout')}
           </Button>
         </VStack>
       </FundingCheckoutWrapper>
-    </form>
+    </VStack>
   )
 }
 

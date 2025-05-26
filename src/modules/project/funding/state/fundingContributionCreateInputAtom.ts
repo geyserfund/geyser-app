@@ -19,11 +19,13 @@ import { sourceResourceAtom } from '../../pages1/projectView/state/sourceActivit
 import { fundingProjectAtom } from './fundingFormAtom'
 import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAtom'
 import { selectedGoalIdAtom } from './selectedGoalAtom'
+import { shippingAddressAtom } from './shippingAddressAtom.ts'
 
 /** Formatted Funding Input data, for Fund Mutation */
 export const formattedFundingInputAtom = atom((get) => {
   const formState = get(fundingFormStateAtom)
   const fundingProject = get(fundingProjectAtom)
+  const shippingAddress = get(shippingAddressAtom)
   const hasSelectedRewards = get(fundingFormHasRewardsAtom)
   const user = get(authUserAtom)
   const usdRate = get(usdRateAtom)
@@ -107,6 +109,7 @@ export const formattedFundingInputAtom = atom((get) => {
         quote: usdRate,
         quoteCurrency: QuoteCurrency.Usd,
       },
+      shippingAddressId: shippingAddress?.id,
       items: orderItemInputs,
     },
     sourceResourceInput: {

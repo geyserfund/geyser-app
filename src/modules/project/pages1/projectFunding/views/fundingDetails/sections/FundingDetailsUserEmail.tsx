@@ -29,7 +29,6 @@ import {
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H1 } from '@/shared/components/typography'
-import { Feedback, FeedBackVariant } from '@/shared/molecules'
 import { lightModeColors } from '@/shared/styles'
 import { useUserEmailIsAvailableLazyQuery } from '@/types'
 import { validEmail } from '@/utils'
@@ -50,7 +49,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
 
   const {
     project,
-    formState: { needsShipping, followProject, subscribeToGeyserEmails, email },
+    formState: { followProject, subscribeToGeyserEmails, email },
     hasSelectedRewards,
     setTarget,
     setState,
@@ -254,14 +253,6 @@ export const FundingDetailsUserEmailAndUpdates = () => {
             </HorizontalFormField>
           )}
         </>
-      )}
-      {needsShipping && (
-        <Feedback
-          variant={FeedBackVariant.WARNING}
-          text={t(
-            'To receive the selected products, please send your shipping details to the creator’s email, which will be revealed in the success screen.',
-          )}
-        />
       )}
     </CardLayout>
   )

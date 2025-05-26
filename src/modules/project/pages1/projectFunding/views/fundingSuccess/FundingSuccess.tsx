@@ -64,7 +64,7 @@ export const FundingSuccess = () => {
           <VStack w="full" alignItems="start">
             <SuccessImageComponent />
           </VStack>
-          {rewardsCosts.satoshi > 0 && (
+          {rewardsCosts.sats > 0 && (
             <VStack w="full" alignItems="start" spacing={6}>
               <H2 size={{ base: 'xl', lg: '2xl' }} bold>
                 {t('Next Actions')}
