@@ -57,28 +57,31 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
             <Body width="full" size="md" medium>
               {reward.name}
             </Body>
-            <HStack w="full" justifyContent="start" spacing={3}>
-              <Body size="xs" medium muted>
-                {t('Sold')}:{' '}
-                <Box as="span" color="utils.text" fontWeight={700}>
-                  {reward.sold}
-                </Box>
-              </Body>
-              {reward.maxClaimable && (
+            <HStack w="full" spacing={3} flexWrap={'wrap'}>
+              <HStack justifyContent="start" spacing={3}>
                 <Body size="xs" medium muted>
-                  {t('Available')}:{' '}
+                  {t('Sold')}:{' '}
                   <Box as="span" color="utils.text" fontWeight={700}>
-                    {reward.maxClaimable - reward.sold - count}
+                    {reward.sold}
                   </Box>
                 </Body>
-              )}
-            </HStack>
-            <HStack flexWrap="wrap">
+                {reward.maxClaimable && (
+                  <Body size="xs" medium muted>
+                    {t('Available')}:{' '}
+                    <Box as="span" color="utils.text" fontWeight={700}>
+                      {reward.maxClaimable - reward.sold - count}
+                    </Box>
+                  </Body>
+                )}
+              </HStack>
               {reward.category && (
                 <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
                   {reward.category}
                 </Badge>
               )}
+            </HStack>
+
+            <HStack flexWrap="wrap">
               <ProjectRewardShippingEstimate reward={reward} />
             </HStack>
           </VStack>

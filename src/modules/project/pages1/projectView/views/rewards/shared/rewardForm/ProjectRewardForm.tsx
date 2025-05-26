@@ -14,7 +14,7 @@ import { ControlledSwitchInput } from '@/shared/components/controlledInput/Contr
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { CalendarButton } from '@/shared/molecules'
+import { CalendarButton, Feedback, FeedBackVariant } from '@/shared/molecules'
 import { BackButton } from '@/shared/molecules/BackButton.tsx'
 import { PrivateCommentPrompt, RewardCurrency } from '@/types'
 
@@ -223,6 +223,11 @@ export const ProjectRewardForm = ({
             }}
           >
             <VStack w="full" alignItems={'flex-start'} spacing={6}>
+              <Feedback
+                variant={FeedBackVariant.WARNING}
+                iconProps={{ fontSize: '20px' }}
+                text={t('NOTE: This makes shipping fees mandatory for your contributors who buy this product.')}
+              />
               <ControlledTextInput
                 name="estimatedDeliveryInWeeks"
                 label={t('Delivery Time (Weeks)')}

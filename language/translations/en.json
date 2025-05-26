@@ -1392,5 +1392,14 @@
   "San Francisco": "San Francisco",
   "Invalid shipping address": "Invalid shipping address",
   "Error creating shipping address": "Error creating shipping address",
-  "Failed to save shipping address": "Failed to save shipping address"
+  "Failed to save shipping address": "Failed to save shipping address",
+  "Unstable Wallet": "Unstable Wallet",
+  "Ships worldwide": "Ships worldwide",
+  "Ships to select regions": "Ships to select regions",
+  "Ready to deliver": "Ready to deliver",
+  "Expected": "Expected",
+  "Collect the customer’s shipping address and automatically add shipping fees to the product based on that address. NOTE: This makes shipping fees mandatory for your contribuors who buy this product.": "Collect the customer’s shipping address and automatically add shipping fees to the product based on that address. NOTE: This makes shipping fees mandatory for your contribuors who buy this product.",
+  "Collect the customer’s shipping address and automatically add shipping fees to the product based on that address. ": "Collect the customer’s shipping address and automatically add shipping fees to the product based on that address. ",
+  "NOTE: This makes shipping fees mandatory for your contribuors who buy this product.": "NOTE: This makes shipping fees mandatory for your contribuors who buy this product.",
+  "NOTE: This makes shipping fees mandatory for your contributors who buy this product.": "NOTE: This makes shipping fees mandatory for your contributors who buy this product."
 }

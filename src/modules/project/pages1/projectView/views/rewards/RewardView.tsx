@@ -145,29 +145,34 @@ export const RewardView = () => {
                     </Button>
                   ))}
               </HStack>
-              <HStack w="full" alignItems="center" justifyContent="space-between">
-                <HStack spacing={{ base: 2, lg: 3 }} alignItems="center">
-                  <Body size="sm" medium muted>
-                    {t('Sold')}:{' '}
-                    <Box as="span" color="utils.text" fontWeight={700}>
-                      {reward.sold}
-                    </Box>
-                  </Body>
-                  {reward.maxClaimable && (
+              <HStack w="full" alignItems="start" justifyContent="space-between">
+                <VStack flex={1} alignItems="start">
+                  <HStack spacing={{ base: 2, lg: 3 }} alignItems="center">
                     <Body size="sm" medium muted>
-                      {t('Available')}:{' '}
+                      {t('Sold')}:{' '}
                       <Box as="span" color="utils.text" fontWeight={700}>
-                        {reward.maxClaimable - reward.sold - count > 0 ? reward.maxClaimable - reward.sold - count : 0}
+                        {reward.sold}
                       </Box>
                     </Body>
-                  )}
-                  {reward.category && (
-                    <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
-                      {reward.category}
-                    </Badge>
-                  )}
+                    {reward.maxClaimable && (
+                      <Body size="sm" medium muted>
+                        {t('Available')}:{' '}
+                        <Box as="span" color="utils.text" fontWeight={700}>
+                          {reward.maxClaimable - reward.sold - count > 0
+                            ? reward.maxClaimable - reward.sold - count
+                            : 0}
+                        </Box>
+                      </Body>
+                    )}
+                    {reward.category && (
+                      <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
+                        {reward.category}
+                      </Badge>
+                    )}
+                  </HStack>
                   <ProjectRewardShippingEstimate reward={reward} />
-                </HStack>
+                </VStack>
+
                 <HStack display={{ base: 'none', lg: 'flex' }}>{renderAmountComponent()}</HStack>
               </HStack>
             </VStack>

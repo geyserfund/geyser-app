@@ -131,28 +131,31 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
         <Body size="md" medium>
           {reward.name}
         </Body>
-        <HStack w="full" justifyContent="start" spacing={3}>
-          <Body size="sm" medium muted>
-            {t('Sold')}:{' '}
-            <Box as="span" color="utils.text" fontWeight={700}>
-              {reward.sold}
-            </Box>
-          </Body>
-          {reward.maxClaimable && (
+        <HStack w="full" justifyContent="space-between">
+          <HStack justifyContent="start" spacing={3}>
             <Body size="sm" medium muted>
-              {t('Available')}:{' '}
+              {t('Sold')}:{' '}
               <Box as="span" color="utils.text" fontWeight={700}>
-                {reward.maxClaimable - reward.sold - count > 0 ? reward.maxClaimable - reward.sold - count : 0}
+                {reward.sold}
               </Box>
             </Body>
-          )}
-        </HStack>
-        <HStack>
+            {reward.maxClaimable && (
+              <Body size="sm" medium muted>
+                {t('Available')}:{' '}
+                <Box as="span" color="utils.text" fontWeight={700}>
+                  {reward.maxClaimable - reward.sold - count > 0 ? reward.maxClaimable - reward.sold - count : 0}
+                </Box>
+              </Body>
+            )}
+          </HStack>
           {reward.category && (
             <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
               {reward.category}
             </Badge>
           )}
+        </HStack>
+
+        <HStack>
           <ProjectRewardShippingEstimate reward={reward} />
         </HStack>
         <Box
