@@ -224,6 +224,8 @@ export const ProjectRewardForm = ({
           >
             <VStack w="full" alignItems={'flex-start'} spacing={6}>
               <Feedback
+                paddingY={2}
+                paddingX={3}
                 variant={FeedBackVariant.WARNING}
                 iconProps={{ fontSize: '20px' }}
                 text={t('NOTE: This makes shipping fees mandatory for your contributors who buy this product.')}

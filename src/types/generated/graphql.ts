@@ -7620,7 +7620,10 @@ export type OrderItemFragment = { __typename?: 'OrderItem', quantity: number, un
 export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, createdAt: any, deliveredAt?: any | null, id: any, shippedAt?: any | null, status: string, totalInSats: number, updatedAt: any, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null } | null, items: Array<(
     { __typename?: 'OrderItem' }
     & OrderItemFragment
-  )>, contribution: { __typename?: 'Contribution', id: any, amount: number, donationAmount: number, email?: string | null, isAnonymous: boolean, status: ContributionStatus, uuid?: string | null, privateComment?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null } };
+  )>, contribution: { __typename?: 'Contribution', id: any, amount: number, donationAmount: number, email?: string | null, isAnonymous: boolean, status: ContributionStatus, uuid?: string | null, privateComment?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null }, shippingAddress?: (
+    { __typename?: 'ShippingAddress' }
+    & ShippingAddressFragment
+  ) | null };
 
 export type ContributionLightningPaymentDetailsFragment = { __typename?: 'ContributionLightningPaymentDetails', lightningInvoiceId: string, paymentRequest: string };
 
@@ -9808,6 +9811,17 @@ export const ProjectGrantApplicantFragmentDoc = gql`
   }
 }
     `;
+export const ShippingAddressFragmentDoc = gql`
+    fragment ShippingAddress on ShippingAddress {
+  id
+  postalCode
+  state
+  fullName
+  country
+  city
+  addressLines
+}
+    `;
 export const OrderFragmentDoc = gql`
     fragment Order on Order {
   confirmedAt
@@ -9841,8 +9855,12 @@ export const OrderFragmentDoc = gql`
     uuid
     privateComment
   }
+  shippingAddress {
+    ...ShippingAddress
+  }
 }
-    ${OrderItemFragmentDoc}`;
+    ${OrderItemFragmentDoc}
+${ShippingAddressFragmentDoc}`;
 export const ContributionLightningPaymentDetailsFragmentDoc = gql`
     fragment ContributionLightningPaymentDetails on ContributionLightningPaymentDetails {
   lightningInvoiceId
@@ -10325,17 +10343,6 @@ export const ProjectRewardFragmentDoc = gql`
   }
 }
     ${ShippingConfigFragmentDoc}`;
-export const ShippingAddressFragmentDoc = gql`
-    fragment ShippingAddress on ShippingAddress {
-  id
-  postalCode
-  state
-  fullName
-  country
-  city
-  addressLines
-}
-    `;
 export const ProjectOwnerUserForInvoiceFragmentDoc = gql`
     fragment ProjectOwnerUserForInvoice on User {
   id

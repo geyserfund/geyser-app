@@ -1,4 +1,4 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -17,8 +17,8 @@ import {
   UpdatableOrderStatus,
 } from '../../../../../../../types'
 import { useCustomTheme } from '../../../../../../../utils'
-import { TableData, TableWithAccordion } from '../../../common'
-import { OrderAmounts, OrderItems } from '../../../components'
+import { getUSD, TableData, TableWithAccordion } from '../../../common'
+import { AccordionListItem, OrderItems } from '../../../components'
 import { ShippingStatusSelect } from './ShippingStatusSelect'
 
 export const RewardTable = ({
@@ -179,33 +179,44 @@ export const RewardTable = ({
         isAccordion: true,
       },
       {
-        header: t('Reference code'),
-        key: 'reference',
-        render(order: OrderFragment) {
-          return (
-            <HStack
-              w={{ base: 'full', lg: 'auto' }}
-              alignItems="flex-start"
-              justifyContent="space-between"
-              spacing="10px"
-            >
-              <Body size="xs" dark>
-                {t('Reference code')}:
-              </Body>
-              <Body size="xs" medium light>
-                {order.contribution.uuid}
-              </Body>
-            </HStack>
-          )
-        },
-        isAccordion: true,
-      },
-      {
         header: 'Total',
         key: 'total',
         isAccordion: true,
         render(order: OrderFragment) {
-          return <OrderAmounts amount={order.totalInSats} quote={order.contribution.bitcoinQuote?.quote} />
+          const amount = order.totalInSats
+          const quote = order.contribution.bitcoinQuote?.quote
+
+          const { shippingAddress } = order
+
+          const items: { label: string; value: string | number }[] = [
+            {
+              label: t('Reference code'),
+              value: order.contribution.uuid || '',
+            },
+          ]
+
+          if (shippingAddress) {
+            items.push({
+              label: t('Shipping address'),
+              value: `${shippingAddress.addressLines.join(', ')}, ${shippingAddress.postalCode}, ${
+                shippingAddress.city
+              }, ${shippingAddress.state}, ${shippingAddress.country}`,
+            })
+          }
+
+          items.push({ label: `${t('Total')} (sats)`, value: amount })
+
+          if (quote) {
+            items.push({ label: t('Total'), value: getUSD(amount, quote) })
+
+            items.push({ label: t('Bitcoin Price'), value: `$${quote}` })
+          }
+
+          return (
+            <VStack w="full" justifyContent="space-between" alignItems="flex-start">
+              <AccordionListItem items={items} />
+            </VStack>
+          )
         },
       },
     ],

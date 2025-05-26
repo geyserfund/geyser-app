@@ -1,6 +1,9 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_SHIPPING_ADDRESS, FRAGMENT_SHIPPING_CONFIG } from './shippingFragment.ts'
+
 export const FRAGMENT_ORDER_ITEM = gql`
+  ${FRAGMENT_SHIPPING_CONFIG}
   fragment OrderItem on OrderItem {
     item {
       id
@@ -16,6 +19,7 @@ export const FRAGMENT_ORDER_ITEM = gql`
 
 export const FRAGMENT_ORDER = gql`
   ${FRAGMENT_ORDER_ITEM}
+  ${FRAGMENT_SHIPPING_ADDRESS}
   fragment Order on Order {
     confirmedAt
     createdAt
@@ -47,6 +51,9 @@ export const FRAGMENT_ORDER = gql`
       status
       uuid
       privateComment
+    }
+    shippingAddress {
+      ...ShippingAddress
     }
   }
 `

@@ -1401,5 +1401,8 @@
   "Collect the customer’s shipping address and automatically add shipping fees to the product based on that address. NOTE: This makes shipping fees mandatory for your contribuors who buy this product.": "Collect the customer’s shipping address and automatically add shipping fees to the product based on that address. NOTE: This makes shipping fees mandatory for your contribuors who buy this product.",
   "Collect the customer’s shipping address and automatically add shipping fees to the product based on that address. ": "Collect the customer’s shipping address and automatically add shipping fees to the product based on that address. ",
   "NOTE: This makes shipping fees mandatory for your contribuors who buy this product.": "NOTE: This makes shipping fees mandatory for your contribuors who buy this product.",
-  "NOTE: This makes shipping fees mandatory for your contributors who buy this product.": "NOTE: This makes shipping fees mandatory for your contributors who buy this product."
+  "NOTE: This makes shipping fees mandatory for your contributors who buy this product.": "NOTE: This makes shipping fees mandatory for your contributors who buy this product.",
+  "You are purchasing a physical item that requires shipping. ": "You are purchasing a physical item that requires shipping. ",
+  "This data is stored securely and deleted after a period of 3 months.": "This data is stored securely and deleted after a period of 3 months.",
+  "This information is stored securely and deleted after a period of 3 months.": "This information is stored securely and deleted after a period of 3 months."
 }

@@ -11,6 +11,7 @@ import { ControlledCustomSelect } from '@/shared/components/controlledInput/Cont
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H1 } from '@/shared/components/typography/index.ts'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { countriesAtom } from '@/shared/state/countriesAtom.ts'
 
 export type ShippingAddressFormData = {
@@ -125,11 +126,16 @@ export const FundingDetailsShippingAddress = ({ form }: { form: UseFormReturn<Sh
             {t('Shipping Address')}
           </H1>
           <Body size="sm" light>
-            {t(
-              'You are purchasing a physical item that requires shipping. This data is stored securely and deleted after a period of 3 months.',
-            )}
+            {t('You are purchasing a physical item that requires shipping. ')}
           </Body>
         </VStack>
+        <Feedback
+          paddingY={2}
+          paddingX={3}
+          variant={FeedBackVariant.WARNING}
+          iconProps={{ fontSize: '20px' }}
+          text={t('This information is stored securely and deleted after a period of 3 months.')}
+        />
 
         <ShippingAddressFormFields control={control} errors={errors} countryOptions={countryOptions} />
       </VStack>
