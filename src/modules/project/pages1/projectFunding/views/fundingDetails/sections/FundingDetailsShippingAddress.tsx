@@ -130,14 +130,17 @@ export const FundingDetailsShippingAddress = ({ form }: { form: UseFormReturn<Sh
           <Body size="sm" light>
             {t('You are purchasing a physical item that requires shipping. ')}
           </Body>
+          <Feedback
+            paddingY={2}
+            paddingX={3}
+            variant={FeedBackVariant.NEUTRAL}
+            border="none"
+            backgroundColor="neutral1.3"
+            marginTop={1}
+            iconProps={{ fontSize: '20px' }}
+            text={t('This information is stored securely and deleted after a period of 3 months.')}
+          />
         </VStack>
-        <Feedback
-          paddingY={2}
-          paddingX={3}
-          variant={FeedBackVariant.WARNING}
-          iconProps={{ fontSize: '20px' }}
-          text={t('This information is stored securely and deleted after a period of 3 months.')}
-        />
 
         <ShippingAddressFormFields control={control} errors={errors} countryOptions={countryOptions} />
       </VStack>

@@ -51,8 +51,8 @@ const shippingRateSchema = (feesModel: ProjectShippingConfigType) => {
       .number()
       .transform((value) => (isNaN(value) || value === null || value === undefined ? null : Number(value)))
       .nullable()
-      .when('sameAsDefault', {
-        is: false,
+      .when(['sameAsDefault', 'country'], {
+        is: (sameAsDefault: boolean, country: string) => !sameAsDefault || country === DEFAULT_COUNTRY_CODE,
         then: (schema) =>
           schema
             .typeError(t('Base rate must be a number'))
@@ -64,11 +64,10 @@ const shippingRateSchema = (feesModel: ProjectShippingConfigType) => {
       .number()
       .transform((value) => (isNaN(value) || value === null || value === undefined ? null : Number(value)))
       .nullable()
-      .when(['sameAsDefault'], {
-        is(sameAsDefault: boolean) {
-          console.log('what is happening here', !sameAsDefault && feesModel === ProjectShippingConfigType.Incremental)
-          return !sameAsDefault && feesModel === ProjectShippingConfigType.Incremental
-        },
+
+      .when(['sameAsDefault', 'country'], {
+        is: (sameAsDefault: boolean, country: string) =>
+          feesModel === ProjectShippingConfigType.Incremental && (!sameAsDefault || country === DEFAULT_COUNTRY_CODE),
         then: (schema) =>
           schema
             .typeError(t('Increment rate must be a number'))

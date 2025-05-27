@@ -63,7 +63,7 @@ export const ShowCurrentShippingConfig = ({
       >
         <VStack
           w="full"
-          maxWidth="440px"
+          maxWidth="550px"
           alignItems="flex-start"
           spacing={4}
           padding={5}
@@ -71,13 +71,13 @@ export const ShowCurrentShippingConfig = ({
           backgroundColor="neutral1.3"
         >
           <VStack w="full" spacing={0}>
-            <HStack w="full" justifyContent="space-between">
+            <HStack w="full" justifyContent="space-between" spacing={0}>
               <Box flex={1.5}>
                 <Body size="sm" medium>
                   {t('Fee model')}:
                 </Body>
               </Box>
-              <Box flex={1}>
+              <Box flex={isIncremental ? 2 : 1}>
                 <Body size="sm" light display={'inline-block'}>
                   {
                     ProjectShippingConfigTypeOptions.find((option) => option.value === selectedShippingConfig?.type)
@@ -102,20 +102,18 @@ export const ShowCurrentShippingConfig = ({
                   </Box>
                 </TooltipPopover>
               </Box>
-              {isIncremental && <Box flex={1} />}
             </HStack>
-            <HStack w="full" justifyContent="space-between" alignItems="flex-start">
+            <HStack w="full" justifyContent="space-between" alignItems="flex-start" spacing={0}>
               <Box flex={1.5}>
                 <Body size="sm" medium>
                   {t('Shipping availability')}:
                 </Body>
               </Box>
-              <Box flex={1}>
+              <Box flex={isIncremental ? 2 : 1}>
                 <Body size="sm" light>
                   {selectedShippingConfig?.globalShipping ? t('Worldwide') : t('Specific countries listed below')}
                 </Body>
               </Box>
-              {isIncremental && <Box flex={1} />}
             </HStack>
           </VStack>
 
