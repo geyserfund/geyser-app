@@ -1,6 +1,6 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Control, FieldPath, useController } from 'react-hook-form'
 import { PiPlus } from 'react-icons/pi'
 
@@ -25,7 +25,7 @@ interface ShippingRate {
   country: string // Can be 'default' or a country code
   baseRate?: number | null
   incrementRate?: number | null
-  sameAsDefault: boolean
+  sameAsDefault?: boolean | null
 }
 
 interface ShippingFeesFormValues {
@@ -36,7 +36,7 @@ interface ShippingFeesFormValues {
 }
 
 type ShippingConfigFormComponentProps = {
-  shippingConfig?: ShippingConfigFragment | null
+  shippingConfigId?: number | null
   projectId: number
   control: Control<RewardFormValues>
   name: string
@@ -44,7 +44,7 @@ type ShippingConfigFormComponentProps = {
 
 export const ShippingConfigFormComponent = ({
   projectId,
-  shippingConfig,
+  shippingConfigId,
   control,
   name,
 }: ShippingConfigFormComponentProps) => {
@@ -57,9 +57,7 @@ export const ShippingConfigFormComponent = ({
     name: name as FieldPath<RewardFormValues>,
   })
 
-  const [selectedShippingConfig, setSelectedShippingConfig] = useState<ShippingConfigFragment | null | undefined>(
-    shippingConfig,
-  )
+  const [selectedShippingConfig, setSelectedShippingConfig] = useState<ShippingConfigFragment | null | undefined>()
 
   const { isEdit } = shippingFeeModal.props
 
@@ -70,6 +68,14 @@ export const ShippingConfigFormComponent = ({
       },
     },
   })
+
+  useEffect(() => {
+    if (field.value && shippingConfigs?.projectShippingConfigsGet?.length) {
+      setSelectedShippingConfig(shippingConfigs?.projectShippingConfigsGet?.find((config) => config.id === field.value))
+    } else {
+      setSelectedShippingConfig(null)
+    }
+  }, [field, shippingConfigs])
 
   const onConfigChange = useCallback(
     (shippingConfigId: number) => {
@@ -122,8 +128,8 @@ export const ShippingConfigFormComponent = ({
       shippingRates: data.shippingRates.map((rate) => ({
         country: rate.country,
         baseRate: rate.baseRate || 0,
-        incrementRate: rate.incrementRate || 0,
-        sameAsDefault: rate.sameAsDefault,
+        incrementRate: data.feesModel === ProjectShippingConfigType.Incremental ? rate.incrementRate || 0 : 0,
+        sameAsDefault: rate.sameAsDefault || false,
       })),
     }
 
@@ -149,15 +155,18 @@ export const ShippingConfigFormComponent = ({
 
   return (
     <>
-      {hasShippingConfigs ? (
-        <VStack w="full" alignItems="flex-start" spacing={4}>
-          <HStack w="full" justifyContent="space-between" alignItems="flex-start">
-            <VStack flex={1} alignItems="flex-start" spacing={0}>
-              <Body size="md" medium>
-                {t('Shipping fees')}
-              </Body>
-            </VStack>
-          </HStack>
+      <VStack w="full" alignItems="flex-start" spacing={2}>
+        <HStack w="full" justifyContent="space-between" alignItems="flex-start">
+          <VStack flex={1} alignItems="flex-start" spacing={0}>
+            <Body size="md" medium>
+              {t('Shipping fees')}
+            </Body>
+            <Body size="sm" light>
+              {t('Add shipping fees based on specific countries or globally.')}
+            </Body>
+          </VStack>
+        </HStack>
+        {hasShippingConfigs ? (
           <HStack w="full" justifyContent="space-between" alignItems="flex-start">
             <ControlledCustomSelect
               options={shippingConfigs?.projectShippingConfigsGet || []}
@@ -166,9 +175,6 @@ export const ShippingConfigFormComponent = ({
               control={control}
               getOptionLabel={(option) => option.name}
               getOptionValue={(option) => option.id}
-              onChange={(value) => {
-                setSelectedShippingConfig(value as ShippingConfigFragment)
-              }}
               width="full"
               menuMinWidth={'200px'}
             />
@@ -182,24 +188,24 @@ export const ShippingConfigFormComponent = ({
               {isMobile ? t('Add') : t('Add new')}
             </Button>
           </HStack>
+        ) : (
+          <Button
+            variant="solid"
+            colorScheme="primary1"
+            size="lg"
+            width="full"
+            rightIcon={<PiPlus />}
+            onClick={() => shippingFeeModal.onOpen({ isEdit: false })}
+          >
+            {t('Add shipping fees')}
+          </Button>
+        )}
 
-          <ShowCurrentShippingConfig
-            selectedShippingConfig={selectedShippingConfig}
-            shippingFeeModal={shippingFeeModal}
-          />
-        </VStack>
-      ) : (
-        <Button
-          variant="solid"
-          colorScheme="primary1"
-          size="lg"
-          width="full"
-          rightIcon={<PiPlus />}
-          onClick={() => shippingFeeModal.onOpen({ isEdit: false })}
-        >
-          {t('Add shipping fees')}
-        </Button>
-      )}
+        <ShowCurrentShippingConfig
+          selectedShippingConfig={selectedShippingConfig}
+          shippingFeeModal={shippingFeeModal}
+        />
+      </VStack>
 
       <Modal
         {...shippingFeeModal}
@@ -207,7 +213,7 @@ export const ShippingConfigFormComponent = ({
         subtitle={
           isEdit
             ? t('Updating this shipping fee configuation will update all rewards that use this shipping fee.')
-            : t('Create a resuable shipping fee configuration that can be used across multiple rewards.')
+            : t('Create a re-usable shipping fee configuration that can be used across multiple rewards.')
         }
         bodyProps={{ as: VStack, gap: 6, py: 6, maxHeight: '75vh', overflowY: 'auto' }}
         size="3xl"

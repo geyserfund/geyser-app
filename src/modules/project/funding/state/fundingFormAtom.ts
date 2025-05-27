@@ -150,9 +150,9 @@ export const shippingCostAtom = atom((get) => {
       // Find reward by comparing string representations of IDs
       const reward = rewards.find((r) => r.id.toString() === rewardID)
       const count = rewardsByIDAndCount[rewardID]
-      const country = shippingCountry || shippingAddress?.country
+      const country = shippingCountry || shippingAddress?.country || DEFAULT_COUNTRY_CODE
 
-      if (!reward || !count || !(count > 0) || !reward.hasShipping || !country) return
+      if (!reward || !count || !(count > 0) || !reward.hasShipping) return
 
       const { shippingConfig } = reward
       if (!shippingConfig) return
@@ -164,8 +164,9 @@ export const shippingCostAtom = atom((get) => {
       if (!defaultRate) return
 
       const countryRate = shippingRates.find((rate) => rate.country === country) || defaultRate
+      console.log('country', countryRate)
 
-      const { baseRate, incrementRate } = countryRate
+      const { baseRate, incrementRate } = countryRate.sameAsDefault ? defaultRate : countryRate
 
       if (shippingConfig.type === ProjectShippingConfigType.Flat) {
         response.usdCents += baseRate

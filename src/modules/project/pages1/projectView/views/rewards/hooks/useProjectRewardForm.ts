@@ -50,7 +50,6 @@ const rewardFormSchema = () =>
     category: yup.string().nullable(),
     preOrder: yup.boolean(),
     rewardCurrency: yup.string(),
-    estimatedDeliveryInWeeks: yup.number().nullable().min(0, 'Delivery time must be greater than or equal to 0'),
     confirmationMessage: yup
       .string()
       .max(500, ({ value }) => `${value.length}/500 - Confirmation message must not be longer than 500 characters`),
@@ -187,7 +186,7 @@ export const useProjectRewardForm = ({
       category: formData.category || null,
       preOrder: formData.preOrder,
       estimatedAvailabilityDate: formData.estimatedAvailabilityDate?.valueOf(),
-      estimatedDeliveryInWeeks: formData.estimatedDeliveryInWeeks,
+      estimatedDeliveryInWeeks: formData.estimatedDeliveryInWeeks || null,
       privateCommentPrompts: formData.privateCommentPrompts,
       confirmationMessage: formData.confirmationMessage,
       shippingConfigId: formData.shippingConfigId,

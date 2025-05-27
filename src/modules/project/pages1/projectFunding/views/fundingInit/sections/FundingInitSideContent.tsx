@@ -76,7 +76,7 @@ export const FundingInitSummary = () => {
       onSubmit={handleCheckoutButtonPressed}
     >
       <FundingSummaryWrapper>
-        <ProjectFundingSummary noShipping />
+        <ProjectFundingSummary />
       </FundingSummaryWrapper>
       <FundingCheckoutWrapper>
         <VStack w="full" alignItems="flex-start">

@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useAtom, useSetAtom } from 'jotai'
-import { FormEvent, useEffect } from 'react'
+import { FormEvent, useCallback, useEffect } from 'react'
 import { SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
@@ -52,6 +52,8 @@ export const useShippingAddressForm = () => {
       country: shippingAddress?.country ?? undefined,
     },
   })
+
+  const { isDirty } = form.formState
 
   useShippingAddressesGetQuery({
     skip: !user?.id && !shippingAddress?.id,
@@ -107,36 +109,39 @@ export const useShippingAddressForm = () => {
     }
   }, [formCountry, setShippingCountry])
 
-  const handleSubmitWrapper = (
-    e: FormEvent<HTMLDivElement>,
-    onValid: SubmitHandler<ShippingAddressFormData>,
-    onInvalid: SubmitErrorHandler<ShippingAddressFormData>,
-  ) => {
-    form.handleSubmit(
-      async (data) => {
-        if (!shippingAddress?.id) {
-          await createShippingAddress({
-            variables: {
-              input: {
-                addressLines: [data.streetAddress],
-                city: data.city,
-                state: data.state,
-                postalCode: data.postalCode,
-                country: data.country,
-                fullName: data.fullName,
+  const handleSubmitWrapper = useCallback(
+    (
+      e: FormEvent<HTMLDivElement>,
+      onValid: SubmitHandler<ShippingAddressFormData>,
+      onInvalid: SubmitErrorHandler<ShippingAddressFormData>,
+    ) => {
+      form.handleSubmit(
+        async (data) => {
+          if (!shippingAddress?.id || isDirty) {
+            await createShippingAddress({
+              variables: {
+                input: {
+                  addressLines: [data.streetAddress],
+                  city: data.city,
+                  state: data.state,
+                  postalCode: data.postalCode,
+                  country: data.country,
+                  fullName: data.fullName,
+                },
               },
-            },
-          })
-        }
+            })
+          }
 
-        onValid(data)
-      },
-      (errors) => {
-        setIsShippingAddressValid(false)
-        onInvalid(errors)
-      },
-    )(e)
-  }
+          onValid(data)
+        },
+        (errors) => {
+          setIsShippingAddressValid(false)
+          onInvalid(errors)
+        },
+      )(e)
+    },
+    [createShippingAddress, form, isDirty, shippingAddress?.id, setIsShippingAddressValid],
+  )
 
   return {
     form,

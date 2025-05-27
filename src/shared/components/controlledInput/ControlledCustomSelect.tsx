@@ -37,11 +37,15 @@ export const ControlledCustomSelect = <FormValues extends FieldValues, Option, I
 
   const getOptionValue = props.getOptionValue || ((opt: any) => opt?.value)
 
-  const value = props.isMulti
-    ? props.options.filter((option) => field.value.includes(getOptionValue(option)))
-    : props.options.find((option) => getOptionValue(option) === field.value)
+  console.log('custom select', field.value)
 
-  console.log('checking is invalid', fieldState)
+  const value = props.isMulti
+    ? field.value
+      ? props.options.filter((option) => field.value.includes(getOptionValue(option)))
+      : []
+    : field.value
+    ? props.options.find((option) => getOptionValue(option) === field.value) || null
+    : null
 
   return (
     <FieldContainer

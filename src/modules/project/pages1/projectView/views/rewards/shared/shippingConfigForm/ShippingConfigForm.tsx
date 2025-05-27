@@ -24,7 +24,7 @@ interface ShippingRate {
   country: string // Can be 'default' or a country code
   baseRate?: number | null
   incrementRate?: number | null
-  sameAsDefault: boolean
+  sameAsDefault?: boolean | null
 }
 
 interface ShippingFeesFormValues {
@@ -151,12 +151,18 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
           name: data.name,
           feesModel: data.type,
           shippingAvailability: data.globalShipping ? 'worldwide' : 'specificCountries',
-          shippingRates: data?.shippingRates?.map((rate) => ({
-            country: rate.country,
-            baseRate: rate.baseRate || 0,
-            incrementRate: rate.incrementRate || 0,
-            sameAsDefault: rate.sameAsDefault || true,
-          })),
+          shippingRates: data?.shippingRates
+            ?.map((rate) => ({
+              country: rate.country,
+              baseRate: rate.baseRate || 0,
+              incrementRate: rate.incrementRate || 0,
+              sameAsDefault: rate.sameAsDefault,
+            }))
+            .sort((a, b) => {
+              if (a.country === DEFAULT_COUNTRY_CODE) return -1
+              if (b.country === DEFAULT_COUNTRY_CODE) return 1
+              return a.country.localeCompare(b.country)
+            }),
         }
       : defaultFormValues,
     mode: 'onChange',
@@ -280,7 +286,9 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
               paddingTop={2}
               onChange={(val) => {
                 field.onChange(val)
-                trigger('shippingRates')
+                if (val === 'worldwide') {
+                  trigger('shippingRates')
+                }
               }}
             >
               <VStack alignItems="flex-start">
@@ -309,9 +317,11 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
       <VStack w="full" alignItems="flex-start" spacing={6}>
         <FieldContainer
           title={t('Shipping rates')}
-          subtitle={t(
-            'Default rate is applied to any region not specified for worldwide shipping. If worldwide shipping is not available, all available countries must be listed below.',
-          )}
+          subtitle={
+            watch('shippingAvailability') === 'worldwide'
+              ? t('The default rate is used for any country not configured below.')
+              : t('List all the countries that are eligible for shipping.')
+          }
           error={getShippingErrors()}
           w="full"
         >
@@ -470,7 +480,6 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
           leftIcon={<PiPlus />}
           onClick={() => {
             append({ country: '', sameAsDefault: true, baseRate: 0, incrementRate: 0 })
-            trigger('shippingRates')
           }}
           isDisabled={fields.length >= countryOptions.length + 1}
         >

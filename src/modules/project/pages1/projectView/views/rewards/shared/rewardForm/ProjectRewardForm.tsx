@@ -14,7 +14,7 @@ import { ControlledSwitchInput } from '@/shared/components/controlledInput/Contr
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { CalendarButton, Feedback, FeedBackVariant } from '@/shared/molecules'
+import { CalendarButton } from '@/shared/molecules'
 import { BackButton } from '@/shared/molecules/BackButton.tsx'
 import { PrivateCommentPrompt, RewardCurrency } from '@/types'
 
@@ -58,7 +58,6 @@ export const ProjectRewardForm = ({
     project,
     currencyChangeModal,
     rewardLoading,
-    rewardData,
     utils,
   } = useProjectRewardForm({
     rewardUUID,
@@ -85,8 +84,6 @@ export const ProjectRewardForm = ({
   if (rewardLoading) {
     return <Loader />
   }
-
-  const shippingConfig = rewardData?.shippingConfig
 
   return (
     <form style={{ width: '100%' }} onSubmit={handleSubmit}>
@@ -205,10 +202,10 @@ export const ProjectRewardForm = ({
           </Stack>
 
           <FormElementWithSwitch
-            title={t('Add shipping')}
-            description={t(
-              'Collect the customer’s shipping address and automatically add shipping fees to the product based on that address. This is necessary for delivering physical products directly to your supporters.',
-            )}
+            title={t('Require shipping')}
+            description={`${t(
+              'Collect shipping address for delivering physical products directly to your supporters.',
+            )} ${t('This makes shipping fees mandatory for contributors who buy this product.')}`}
             switchProps={{
               name: 'hasShipping',
               control,
@@ -216,34 +213,24 @@ export const ProjectRewardForm = ({
               onChange(e) {
                 setValue('hasShipping', e.target.checked, { shouldDirty: true })
                 if (!e.target.checked) {
+                  console.log('did it go here', e?.target.checked)
                   setValue('shippingConfigId', undefined, { shouldDirty: true })
-                  setValue('estimatedDeliveryInWeeks', undefined, { shouldDirty: true })
+                  setValue('estimatedDeliveryInWeeks', null, { shouldDirty: true })
                 }
               },
             }}
           >
             <VStack w="full" alignItems={'flex-start'} spacing={6}>
-              <Feedback
-                paddingY={2}
-                paddingX={3}
-                variant={FeedBackVariant.WARNING}
-                iconProps={{ fontSize: '20px' }}
-                text={t('NOTE: This makes shipping fees mandatory for your contributors who buy this product.')}
-              />
               <ControlledTextInput
                 name="estimatedDeliveryInWeeks"
                 label={t('Delivery Time (Weeks)')}
                 description={t('Specify estimated delivery time for the product from the moment it is ordered.')}
                 control={control}
                 placeholder={'Enter number of weeks'}
+                isDisabled={Boolean(watch('preOrder'))}
                 error={errors.estimatedDeliveryInWeeks?.message}
               />
-              <ShippingConfigFormComponent
-                shippingConfig={shippingConfig}
-                projectId={project.id}
-                control={control}
-                name="shippingConfigId"
-              />
+              <ShippingConfigFormComponent projectId={project.id} control={control} name="shippingConfigId" />
             </VStack>
           </FormElementWithSwitch>
         </VStack>
@@ -266,6 +253,7 @@ export const ProjectRewardForm = ({
             switchProps={{
               name: 'preOrder',
               control,
+              isDisabled: Boolean(watch('estimatedDeliveryInWeeks')),
               isChecked: watch('preOrder'),
               onChange(e) {
                 setValue('preOrder', e.target.checked, { shouldDirty: true })

@@ -100,10 +100,12 @@ export const FundingDetailsShippingAddress = ({ form }: { form: UseFormReturn<Sh
 
   const setIsShippingAddressValid = useSetAtom(isShippingAddressValidAtom)
 
-  const countryOptions = countries.map((country) => ({
-    label: country.name,
-    value: country.code,
-  }))
+  const countryOptions = countries
+    .filter((country) => (shippingAvailability ? shippingAvailability.includes(country.code) : true))
+    .map((country) => ({
+      label: country.name,
+      value: country.code,
+    }))
 
   const {
     control,

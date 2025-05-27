@@ -1,4 +1,5 @@
 import { Collapse, HStack, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 import { useController } from 'react-hook-form'
 
 import {
@@ -25,6 +26,13 @@ export const FormElementWithSwitch = ({
   const { field } = useController({ control: switchProps.control, name: switchProps.name })
 
   const isOpen = Boolean(field.value)
+  const [isOpenAfter, setIsOpenAfter] = useState(false)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsOpenAfter(true)
+    }, 200)
+  }, [isOpen])
 
   return (
     <CardLayout w="full" padding={4} overflow="none" spacing={0} {...rest}>
@@ -40,7 +48,11 @@ export const FormElementWithSwitch = ({
         </Body>
       </VStack>
       <Collapse in={isOpen}>
-        <VStack paddingTop={4}>{children}</VStack>
+        {isOpenAfter && (
+          <VStack paddingTop={4} paddingX={'1px'}>
+            {children}
+          </VStack>
+        )}
       </Collapse>
     </CardLayout>
   )

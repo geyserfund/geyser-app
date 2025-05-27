@@ -1,9 +1,9 @@
 /* eslint-disable complexity */
-import { Button, HStack, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, useDisclosure, VStack } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
-import { PiCaretDown, PiCaretUp } from 'react-icons/pi'
+import { PiCaretDown, PiCaretUp, PiInfo } from 'react-icons/pi'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
@@ -16,6 +16,7 @@ import {
 } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { useGoalsAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
 import { Body, H2 } from '@/shared/components/typography'
 import { SubscriptionCurrencyType } from '@/types/generated/graphql'
 
@@ -23,13 +24,7 @@ import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../.
 import { LaunchpadSummary, NonProfitSummary } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
 
-export const ProjectFundingSummary = ({
-  disableCollapse,
-  noShipping,
-}: {
-  disableCollapse?: boolean
-  noShipping?: boolean
-}) => {
+export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
   const { t } = useTranslation()
 
   const isMobileMode = useMobileMode()
@@ -168,7 +163,7 @@ export const ProjectFundingSummary = ({
 
         {rewardsCosts.sats > 0 && (
           <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Products Cost')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Products cost')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
               {commaFormatted(rewardsCosts.sats)}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
@@ -180,9 +175,9 @@ export const ProjectFundingSummary = ({
             </Body>
           </HStack>
         )}
-        {!noShipping && shippingCosts.sats > 0 && (
+        {shippingCosts.sats > 0 && (
           <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Shipping')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Shipping cost')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
               {commaFormatted(shippingCosts.sats)}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
@@ -192,6 +187,11 @@ export const ProjectFundingSummary = ({
             <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
               {`($${centsToDollars(shippingCosts.usdCents)})`}
             </Body>
+            <TooltipPopover text={t('Shipping cost is an estimate and may vary depending on the shipping address.')}>
+              <HStack as="span" h="full" alignItems={'center'}>
+                <Icon as={PiInfo} />
+              </HStack>
+            </TooltipPopover>
           </HStack>
         )}
         {tip.sats > 0 && (
