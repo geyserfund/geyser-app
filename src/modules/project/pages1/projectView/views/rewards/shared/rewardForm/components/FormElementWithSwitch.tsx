@@ -11,7 +11,7 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 
 type FormElementWithSwitchProps = {
   title: string
-  description: string
+  description: React.ReactNode
   children: React.ReactNode
   switchProps: ControlledSwitchInputProps
 } & CardLayoutProps

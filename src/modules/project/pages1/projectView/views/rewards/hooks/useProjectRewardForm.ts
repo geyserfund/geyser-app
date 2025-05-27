@@ -26,7 +26,7 @@ import {
 import { useNotification } from '@/utils'
 
 export type RewardFormValues = Omit<ProjectRewardFragment, 'id' | 'sold' | 'createdAt'> & {
-  shippingConfigId?: number
+  shippingConfigId?: number | null
   hasConfirmationMessage?: boolean
   hasPrivateCommentPrompts?: boolean
 }

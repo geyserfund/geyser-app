@@ -203,9 +203,14 @@ export const ProjectRewardForm = ({
 
           <FormElementWithSwitch
             title={t('Require shipping')}
-            description={`${t(
-              'Collect shipping address for delivering physical products directly to your supporters.',
-            )} ${t('This makes shipping fees mandatory for contributors who buy this product.')}`}
+            description={
+              <>
+                {t('Collect shipping address for delivering physical products directly to your supporters.')}
+                <Body size={'sm'} medium>
+                  {t('NOTE: This makes shipping address mandatory for contributors who buy this product.')}
+                </Body>
+              </>
+            }
             switchProps={{
               name: 'hasShipping',
               control,
@@ -214,7 +219,7 @@ export const ProjectRewardForm = ({
                 setValue('hasShipping', e.target.checked, { shouldDirty: true })
                 if (!e.target.checked) {
                   console.log('did it go here', e?.target.checked)
-                  setValue('shippingConfigId', undefined, { shouldDirty: true })
+                  setValue('shippingConfigId', null, { shouldDirty: true })
                   setValue('estimatedDeliveryInWeeks', null, { shouldDirty: true })
                 }
               },
