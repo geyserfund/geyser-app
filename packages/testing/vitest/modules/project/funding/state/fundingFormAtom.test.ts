@@ -83,16 +83,16 @@ describe('fundingFormAtom Tests', () => {
       )
       const expectedTip = calculateExpectedTip(
         state.donationAmount,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         state.geyserTipPercent,
         mockUsdRate,
       )
       const expectedTotalSats = calculateExpectedTotalSats(
         state.donationAmount,
         state.shippingCost,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         0,
-        expectedTip.satoshi,
+        expectedTip.sats,
         mockUsdRate,
       )
       const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
@@ -121,16 +121,16 @@ describe('fundingFormAtom Tests', () => {
       )
       const expectedTip = calculateExpectedTip(
         state.donationAmount,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         state.geyserTipPercent,
         mockUsdRate,
       )
       const expectedTotalSats = calculateExpectedTotalSats(
         state.donationAmount,
         state.shippingCost,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         0,
-        expectedTip.satoshi,
+        expectedTip.sats,
         mockUsdRate,
       )
       const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
@@ -158,16 +158,16 @@ describe('fundingFormAtom Tests', () => {
       )
       const expectedTip = calculateExpectedTip(
         state.donationAmount,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         state.geyserTipPercent,
         mockUsdRate,
       )
       const expectedTotalSats = calculateExpectedTotalSats(
         state.donationAmount,
         state.shippingCost,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         0,
-        expectedTip.satoshi,
+        expectedTip.sats,
         mockUsdRate,
       )
       const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
@@ -201,16 +201,16 @@ describe('fundingFormAtom Tests', () => {
       )
       const expectedTip = calculateExpectedTip(
         state.donationAmount,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         state.geyserTipPercent,
         mockUsdRate,
       )
       const expectedTotalSats = calculateExpectedTotalSats(
         state.donationAmount,
         state.shippingCost,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         0,
-        expectedTip.satoshi,
+        expectedTip.sats,
         mockUsdRate,
       )
       const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
@@ -241,16 +241,16 @@ describe('fundingFormAtom Tests', () => {
       )
       const expectedTip = calculateExpectedTip(
         state.donationAmount,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         state.geyserTipPercent,
         mockUsdRate,
       )
       const expectedTotalSats = calculateExpectedTotalSats(
         state.donationAmount,
         state.shippingCost,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         0,
-        expectedTip.satoshi,
+        expectedTip.sats,
         mockUsdRate,
       )
       const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
@@ -282,16 +282,16 @@ describe('fundingFormAtom Tests', () => {
       )
       const expectedTip = calculateExpectedTip(
         state.donationAmount,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         state.geyserTipPercent,
         mockUsdRate,
       )
       const expectedTotalSats = calculateExpectedTotalSats(
         state.donationAmount,
         state.shippingCost,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         0,
-        expectedTip.satoshi,
+        expectedTip.sats,
         mockUsdRate,
       )
       const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
@@ -325,16 +325,16 @@ describe('fundingFormAtom Tests', () => {
       )
       const expectedTip = calculateExpectedTip(
         initialDonationSats,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         finalState.geyserTipPercent,
         mockUsdRate,
       )
       const expectedTotalSats = calculateExpectedTotalSats(
         initialDonationSats,
         finalState.shippingCost,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         0,
-        expectedTip.satoshi,
+        expectedTip.sats,
         mockUsdRate,
       )
       const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
@@ -371,16 +371,16 @@ describe('fundingFormAtom Tests', () => {
       )
       const expectedTip = calculateExpectedTip(
         state.donationAmount,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         state.geyserTipPercent,
         mockUsdRate,
       )
       const expectedTotalSats = calculateExpectedTotalSats(
         state.donationAmount,
         state.shippingCost,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         0,
-        expectedTip.satoshi,
+        expectedTip.sats,
         mockUsdRate,
       )
       const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
@@ -411,16 +411,16 @@ describe('fundingFormAtom Tests', () => {
       )
       const expectedTip = calculateExpectedTip(
         state.donationAmount,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         state.geyserTipPercent,
         mockUsdRate,
       )
       const expectedTotalSats = calculateExpectedTotalSats(
         state.donationAmount,
         state.shippingCost,
-        expectedCosts.satoshi,
+        expectedCosts.sats,
         0,
-        expectedTip.satoshi,
+        expectedTip.sats,
         mockUsdRate,
       )
       const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
@@ -456,7 +456,7 @@ describe('fundingFormAtom Tests', () => {
       expect(state.subscription.currency).toBe('USDCENT')
       expect(state.subscription.interval).toBe(UserSubscriptionInterval.Monthly)
       expect(state.subscription.name).toBe('Monthly USD Supporter')
-      expect(derivedSubCosts).toEqual({ satoshi: expectedSubCostSats, usdCent: expectedSubCostUsdCent, base: 500 })
+      expect(derivedSubCosts).toEqual({ sats: expectedSubCostSats, usdCents: expectedSubCostUsdCent, base: 500 })
       expect(totalSats).toBe(state.donationAmount + derivedSubCosts.sats + tip.sats)
       expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedSubCosts.usdCents + tip.usdCents)
     })
@@ -476,7 +476,7 @@ describe('fundingFormAtom Tests', () => {
       expect(state.subscription.currency).toBe('BTCSAT')
       expect(state.subscription.interval).toBe(UserSubscriptionInterval.Yearly)
       expect(state.subscription.name).toBe('Annual SATS Backer')
-      expect(derivedSubCosts).toEqual({ satoshi: 0, usdCent: 0, base: 100000 })
+      expect(derivedSubCosts).toEqual({ sats: 0, usdCents: 0, base: 100000 })
       expect(totalSats).toBe(state.donationAmount + tip.sats)
       expect(totalUsdCent).toBe(state.donationAmountUsdCent + tip.usdCents)
     })
@@ -495,7 +495,7 @@ describe('fundingFormAtom Tests', () => {
       expect(state.subscription.subscriptionId).toBe(202)
       expect(state.subscription.cost).toBe(expectedSubCostSats)
       expect(state.subscription.currency).toBe('BTCSAT')
-      expect(derivedSubCosts).toEqual({ satoshi: 0, usdCent: 0, base: 100000 })
+      expect(derivedSubCosts).toEqual({ sats: 0, usdCents: 0, base: 100000 })
       expect(totalSats).toBe(state.donationAmount + tip.sats)
       expect(totalUsdCent).toBe(state.donationAmountUsdCent + tip.usdCents)
     })
@@ -558,7 +558,7 @@ describe('fundingFormAtom Tests', () => {
     // Check derived totals
     const expectedTipSats = Math.round((10000 * state.geyserTipPercent) / 100) // Tip on donation only
     const expectedTipUsdCent = Math.round((expectedTipSats / SATOSHIS_IN_BTC) * mockUsdRate * 100)
-    expect(store.get(tipAtoms)).toEqual({ satoshi: expectedTipSats, usdCent: expectedTipUsdCent })
+    expect(store.get(tipAtoms)).toEqual({ sats: expectedTipSats, usdCents: expectedTipUsdCent })
     expect(store.get(totalAmountSatsAtom)).toBe(10000 + expectedTipSats) // donation + tip
     expect(store.get(totalAmountUsdCentAtom)).toBe(expectedUsdCent + expectedTipUsdCent) // donationUsd + tipUsd
   })
@@ -576,7 +576,7 @@ describe('fundingFormAtom Tests', () => {
     const expectedDonationUsdCent = Math.round((10000 / SATOSHIS_IN_BTC) * mockUsdRate * 100)
 
     // Check derived tip and totals
-    expect(store.get(tipAtoms)).toEqual({ satoshi: expectedTipSats, usdCent: expectedTipUsdCent })
+    expect(store.get(tipAtoms)).toEqual({ sats: expectedTipSats, usdCents: expectedTipUsdCent })
     expect(store.get(totalAmountSatsAtom)).toBe(10000 + expectedTipSats)
     expect(store.get(totalAmountUsdCentAtom)).toBe(expectedDonationUsdCent + expectedTipUsdCent)
   })
@@ -593,7 +593,7 @@ describe('fundingFormAtom Tests', () => {
     // Check derived totals
     const expectedTipSats = Math.round((expectedSats * state.geyserTipPercent) / 100)
     const expectedTipUsdCent = Math.round((expectedTipSats / SATOSHIS_IN_BTC) * mockUsdRate * 100)
-    expect(store.get(tipAtoms)).toEqual({ satoshi: expectedTipSats, usdCent: expectedTipUsdCent })
+    expect(store.get(tipAtoms)).toEqual({ sats: expectedTipSats, usdCents: expectedTipUsdCent })
     expect(store.get(totalAmountSatsAtom)).toBe(expectedSats + expectedTipSats)
     expect(store.get(totalAmountUsdCentAtom)).toBe(newDonationUsdCent + expectedTipUsdCent)
   })
