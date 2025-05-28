@@ -4,15 +4,18 @@ import { useEffect } from 'react'
 import { historyRouteAtom } from '@/config/routes/state/historyRouteAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 
+import { resetFundingFormAtom } from '../funding/state/fundingFormAtom.ts'
 import { followModalAtom } from '../state/followModalAtom.ts'
 import { userFollowsProjectAtom } from '../state/projectAtom.ts'
 import { useProjectAtom } from './useProjectAtom.ts'
 
-export const useFollowOnBackModal = () => {
+export const useFundingFlowCleanup = () => {
   const { project } = useProjectAtom()
 
   const setEnableFollowModal = useSetAtom(followModalAtom)
   const userFollowsProject = useAtomValue(userFollowsProjectAtom)
+
+  const resetFundingForm = useSetAtom(resetFundingFormAtom)
 
   const history = useAtomValue(historyRouteAtom)
 
@@ -28,4 +31,10 @@ export const useFollowOnBackModal = () => {
       setEnableFollowModal(true)
     }
   }, [isContributeTheLastRoute, setEnableFollowModal, userFollowsProject])
+
+  useEffect(() => {
+    if (isContributeTheLastRoute) {
+      resetFundingForm()
+    }
+  }, [isContributeTheLastRoute, resetFundingForm])
 }

@@ -1,17 +1,22 @@
-import { HStack, Switch, SwitchProps, VStack } from '@chakra-ui/react'
+import { HStack, StackProps, Switch, SwitchProps, VStack } from '@chakra-ui/react'
 import { useController, UseControllerProps } from 'react-hook-form'
 
 import { Body } from '../typography'
 
-type Props = UseControllerProps<any, any> &
+export type ControlledSwitchInputProps = UseControllerProps<any, any> &
   Omit<SwitchProps, 'size'> & {
     label?: string
     labelComponent?: React.ReactNode
     error?: string
     switchPosition?: 'left' | 'right'
+    containerProps?: StackProps
   }
 
-export function ControlledSwitchInput({ switchPosition = 'right', ...props }: Props) {
+export function ControlledSwitchInput({
+  switchPosition = 'right',
+  containerProps,
+  ...props
+}: ControlledSwitchInputProps) {
   const { field } = useController(props)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,17 +31,19 @@ export function ControlledSwitchInput({ switchPosition = 'right', ...props }: Pr
 
   const label = props.labelComponent ? props.labelComponent : <Body size="md">{props.label}</Body>
 
+  console.log('field', field)
+
   return (
-    <VStack alignItems="flex-start" width="100%">
+    <VStack alignItems="flex-start" width="100%" {...containerProps}>
       <HStack>
         {switchPosition === 'right' && <>{label}</>}
         <Switch
           {...field}
-          {...props}
           onChange={handleChange}
-          sx={{ '--switch-track-width': '2.4rem' }}
+          sx={{ '--switch-track-width': '2.4rem', '--switch-track-height': '1.2rem' }}
           size="md"
-          value={field?.value || props.value || false}
+          value={field.value || props.value || false}
+          {...props}
         />
         {switchPosition === 'left' && <>{label}</>}
         {props.error && (

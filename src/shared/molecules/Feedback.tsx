@@ -1,4 +1,4 @@
-import { HStack, StackProps } from '@chakra-ui/react'
+import { HStack, Icon, IconProps, StackProps } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { PiCheckCircle, PiInfo, PiXCircle } from 'react-icons/pi'
 
@@ -19,6 +19,7 @@ type FeedbackProps = {
   text?: string | React.ReactNode
   children?: React.ReactNode
   icon?: React.ReactNode
+  iconProps?: IconProps
   noIcon?: boolean
 } & StackProps
 
@@ -30,7 +31,7 @@ const icons = {
   [FeedBackVariant.NEUTRAL]: PiInfo,
 }
 
-export const Feedback = ({ variant, text, children, icon, noIcon, ...props }: FeedbackProps) => {
+export const Feedback = ({ variant, text, children, icon, noIcon, iconProps, ...props }: FeedbackProps) => {
   const { colors } = useCustomTheme()
 
   const feedbackColors = useMemo(
@@ -66,8 +67,6 @@ export const Feedback = ({ variant, text, children, icon, noIcon, ...props }: Fe
 
   const feedbackColor = feedbackColors[variant]
 
-  const Icon = icons[variant]
-
   return (
     <HStack
       padding={4}
@@ -82,7 +81,11 @@ export const Feedback = ({ variant, text, children, icon, noIcon, ...props }: Fe
       color={feedbackColor.color}
       {...props}
     >
-      {noIcon ? null : icon ? icon : <Icon color={feedbackColor.color} fontSize="30px" />}
+      {noIcon ? null : icon ? (
+        icon
+      ) : (
+        <Icon as={icons[variant]} color={feedbackColor.color} fontSize="30px" {...iconProps} />
+      )}
       {children ? (
         children
       ) : (

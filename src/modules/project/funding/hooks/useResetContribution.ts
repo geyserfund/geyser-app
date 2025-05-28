@@ -16,6 +16,7 @@ export const useResetContribution = () => {
   const resetFundingContribution = useSetAtom(resetFundingContributionAtom)
   const resetFundingPaymentDetails = useSetAtom(resetFundingPaymentDetailsAtom)
   const resetFundingInputAfterRequest = useSetAtom(resetFundingInputAfterRequestAtom)
+
   const resetFundingError = useSetAtom(resetFundingErrorAtom)
 
   const resetOnChainRefundDownloaded = useSetAtom(resetOnChainRefundDownloadedAtom)

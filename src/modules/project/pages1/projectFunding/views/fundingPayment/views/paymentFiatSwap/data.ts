@@ -2,7 +2,6 @@ export const fiatSwapCurrencies = [
   { label: 'United States Dollar', value: 'USD' },
   { label: 'Euro', value: 'EUR' },
   { label: 'Canadian Dollar', value: 'CAD' },
-  { label: 'British Pound Sterling', value: 'GBP' },
   { label: 'United Arab Emirates Dirham', value: 'AED' },
   { label: 'Australian Dollar', value: 'AUD' },
   { label: 'Singapore Dollar', value: 'SGD' },

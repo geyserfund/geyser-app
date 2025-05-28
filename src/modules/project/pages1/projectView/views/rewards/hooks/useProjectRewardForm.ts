@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 import { yupResolver } from '@hookform/resolvers/yup'
 import { format } from 'date-fns'
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import * as yup from 'yup'
@@ -25,7 +25,11 @@ import {
 } from '@/types'
 import { useNotification } from '@/utils'
 
-type FormValues = Omit<ProjectRewardFragment, 'id' | 'sold' | 'createdAt'>
+export type RewardFormValues = Omit<ProjectRewardFragment, 'id' | 'sold' | 'createdAt'> & {
+  shippingConfigId?: number | null
+  hasConfirmationMessage?: boolean
+  hasPrivateCommentPrompts?: boolean
+}
 
 const MAX_REWARD_IMAGES = 5
 
@@ -46,11 +50,13 @@ const rewardFormSchema = () =>
     category: yup.string().nullable(),
     preOrder: yup.boolean(),
     rewardCurrency: yup.string(),
-    estimatedDeliveryInWeeks: yup.number().nullable().min(0, 'Delivery time must be greater than or equal to 0'),
     confirmationMessage: yup
       .string()
       .max(500, ({ value }) => `${value.length}/500 - Confirmation message must not be longer than 500 characters`),
     privateCommentPrompts: yup.array().of(yup.string()),
+    shippingConfigId: yup.number().nullable(),
+    hasConfirmationMessage: yup.boolean(),
+    hasPrivateCommentPrompts: yup.boolean(),
   }) as any
 
 type UseProjectRewardFormProps = {
@@ -99,7 +105,7 @@ export const useProjectRewardForm = ({
 
   const soldAmount = rewardData?.sold || 0
 
-  const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<FormValues>({
+  const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<RewardFormValues>({
     resolver: yupResolver(rewardFormSchema()),
     defaultValues: {
       uuid: rewardData?.uuid || '',
@@ -119,6 +125,7 @@ export const useProjectRewardForm = ({
       privateCommentPrompts: rewardData?.privateCommentPrompts || [],
       confirmationMessage: rewardData?.confirmationMessage || '',
       rewardCurrency: projectCurrency,
+      shippingConfigId: rewardData?.shippingConfig?.id,
     },
     mode: 'onChange',
   })
@@ -160,11 +167,12 @@ export const useProjectRewardForm = ({
         privateCommentPrompts: rewardData?.privateCommentPrompts || [],
         confirmationMessage: rewardData?.confirmationMessage || '',
         rewardCurrency: projectCurrency,
+        shippingConfigId: rewardData?.shippingConfig?.id,
       })
     }
   }, [rewardData, reset, projectCurrency, isUpdate])
 
-  const onSubmit = (formData: FormValues) => {
+  const onSubmit = (formData: RewardFormValues) => {
     const commonData = {
       name: formData.name.trim(),
       description: formData.description,
@@ -178,9 +186,10 @@ export const useProjectRewardForm = ({
       category: formData.category || null,
       preOrder: formData.preOrder,
       estimatedAvailabilityDate: formData.estimatedAvailabilityDate?.valueOf(),
-      estimatedDeliveryInWeeks: formData.estimatedDeliveryInWeeks,
+      estimatedDeliveryInWeeks: formData.estimatedDeliveryInWeeks || null,
       privateCommentPrompts: formData.privateCommentPrompts,
       confirmationMessage: formData.confirmationMessage,
+      shippingConfigId: formData.shippingConfigId,
     }
 
     if (isUpdate) {
@@ -274,8 +283,8 @@ export const useProjectRewardForm = ({
     },
   })
 
-  const handleCurrencySelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const newCurrency = e.target.value as RewardCurrency
+  const handleCurrencySelectChange = (value: string) => {
+    const newCurrency = value as RewardCurrency
     setPendingCurrency(newCurrency)
 
     // Prevent the update from being triggered - set the pending currency instead
@@ -356,6 +365,7 @@ export const useProjectRewardForm = ({
     trigger,
     project,
     projectOwner,
+    rewardData,
     rewardLoading,
     currencyChangeModal: {
       isOpen: isCurrencyChangeModalOpen,

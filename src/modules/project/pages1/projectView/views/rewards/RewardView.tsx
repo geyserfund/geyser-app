@@ -120,7 +120,7 @@ export const RewardView = () => {
           {!isProjectOwner ? <FollowButton size="lg" withLabel project={project} /> : <RewardShare reward={reward} />}
         </TopNavContainerBar>
 
-        <CardLayout w="full" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }}>
+        <CardLayout w="auto" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }}>
           <VStack maxWidth={dimensions.project.rewards.view.maxWidth} w="full" spacing={6}>
             <VStack w="full" spacing={3}>
               <HStack w="full" alignItems="start" justifyContent="space-between">
@@ -145,29 +145,34 @@ export const RewardView = () => {
                     </Button>
                   ))}
               </HStack>
-              <HStack w="full" alignItems="center" justifyContent="space-between">
-                <HStack spacing={{ base: 2, lg: 3 }} alignItems="center">
-                  <Body size="sm" medium muted>
-                    {t('Sold')}:{' '}
-                    <Box as="span" color="utils.text" fontWeight={700}>
-                      {reward.sold}
-                    </Box>
-                  </Body>
-                  {reward.maxClaimable && (
+              <HStack w="full" alignItems="start" justifyContent="space-between">
+                <VStack flex={1} alignItems="start">
+                  <HStack spacing={{ base: 2, lg: 3 }} alignItems="center">
                     <Body size="sm" medium muted>
-                      {t('Available')}:{' '}
+                      {t('Sold')}:{' '}
                       <Box as="span" color="utils.text" fontWeight={700}>
-                        {reward.maxClaimable - reward.sold - count > 0 ? reward.maxClaimable - reward.sold - count : 0}
+                        {reward.sold}
                       </Box>
                     </Body>
-                  )}
-                  {reward.category && (
-                    <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
-                      {reward.category}
-                    </Badge>
-                  )}
+                    {reward.maxClaimable && (
+                      <Body size="sm" medium muted>
+                        {t('Available')}:{' '}
+                        <Box as="span" color="utils.text" fontWeight={700}>
+                          {reward.maxClaimable - reward.sold - count > 0
+                            ? reward.maxClaimable - reward.sold - count
+                            : 0}
+                        </Box>
+                      </Body>
+                    )}
+                    {reward.category && (
+                      <Badge variant="soft" colorScheme="neutral1" size="sm" textTransform={'capitalize'}>
+                        {reward.category}
+                      </Badge>
+                    )}
+                  </HStack>
                   <ProjectRewardShippingEstimate reward={reward} />
-                </HStack>
+                </VStack>
+
                 <HStack display={{ base: 'none', lg: 'flex' }}>{renderAmountComponent()}</HStack>
               </HStack>
             </VStack>
@@ -192,7 +197,7 @@ export const RewardView = () => {
                 <VStack w={'full'} p={0}>
                   <Body size="md" medium>
                     {t(
-                      'Engage your community, followers, contributors, and product purchasers by sending them an update about your new product via email.',
+                      'Engage your community, followers, contributors, and product purchasers by sending them an update about your product via email.',
                     )}
                   </Body>
                   <Button

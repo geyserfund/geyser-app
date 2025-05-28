@@ -8,13 +8,14 @@ import { Body } from '../typography/Body.tsx'
 type TooltipPopoverProps = {
   children: React.ReactNode
   text?: string
+  content?: React.ReactNode
   bodyProps?: PopoverBodyProps
 } & PopoverProps
 
-export const TooltipPopover = ({ children, text, bodyProps, ...props }: TooltipPopoverProps) => {
+export const TooltipPopover = ({ children, text, content, bodyProps, ...props }: TooltipPopoverProps) => {
   const isMobile = useMobileMode()
 
-  if (!text) {
+  if (!text && !content) {
     return children
   }
 
@@ -23,9 +24,12 @@ export const TooltipPopover = ({ children, text, bodyProps, ...props }: TooltipP
       <PopoverTrigger>{children}</PopoverTrigger>
       <PopoverContent>
         <PopoverBody maxWidth="300px" {...bodyProps}>
-          <Body size="sm" light whiteSpace="normal" textAlign="left">
-            {text}
-          </Body>
+          {text && (
+            <Body size="sm" light whiteSpace="normal" textAlign="left">
+              {text}
+            </Body>
+          )}
+          {content}
         </PopoverBody>
       </PopoverContent>
     </Popover>

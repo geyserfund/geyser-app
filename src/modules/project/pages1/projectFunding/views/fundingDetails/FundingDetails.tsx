@@ -5,7 +5,9 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { getPath } from '@/shared/constants'
 
 import { FundingLayout } from '../../layouts/FundingLayout'
+import { useShippingAddressForm } from './hooks/useShippingAddressForm.tsx'
 import { FundingDetailsPrivateCommentPrompt } from './sections/FundingDetailsPrivateCommentPrompt'
+import { FundingDetailsShippingAddress } from './sections/FundingDetailsShippingAddress.tsx'
 import { FundingDetailsBottomContent, FundingDetailsSideContent } from './sections/FundingDetailsSideContent'
 import { FundingDetailsUserComment } from './sections/FundingDetailsUserComment'
 import { FundingDetailsUserEmailAndUpdates } from './sections/FundingDetailsUserEmail'
@@ -16,6 +18,8 @@ export const FundingDetails = () => {
 
   const navigate = useNavigate()
 
+  const { form, handleSubmitWrapper } = useShippingAddressForm()
+
   useEffect(() => {
     if (!isFundingInputAmountValid.valid) {
       navigate(getPath('projectFunding', project.name))
@@ -24,10 +28,11 @@ export const FundingDetails = () => {
 
   return (
     <FundingLayout
-      sideContent={<FundingDetailsSideContent />}
-      bottomContent={<FundingDetailsBottomContent />}
+      sideContent={<FundingDetailsSideContent addressForm={form} handleSubmit={handleSubmitWrapper} />}
+      bottomContent={<FundingDetailsBottomContent addressForm={form} handleSubmit={handleSubmitWrapper} />}
       containerProps={{ spacing: 6 }}
     >
+      <FundingDetailsShippingAddress form={form} />
       <FundingDetailsUserEmailAndUpdates />
       <FundingDetailsUserComment />
       <FundingDetailsPrivateCommentPrompt />

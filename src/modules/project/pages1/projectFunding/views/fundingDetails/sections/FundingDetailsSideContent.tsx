@@ -1,6 +1,7 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { FormEvent } from 'react'
+import { UseFormReturn } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context'
@@ -16,20 +17,28 @@ import { useNotification } from '@/utils'
 
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
+import { LaunchpadSummary, NonProfitSummary } from '../../fundingInit/sections/FundingInitSideContent.tsx'
+import { ShippingHandleSubmitType } from '../hooks/useShippingAddressForm.tsx'
+import { ShippingAddressFormData } from './FundingDetailsShippingAddress.tsx'
 
-export const FundingDetailsBottomContent = () => {
-  return <FundingDetailsSummary />
+type FundingDetailsSummaryProps = {
+  handleSubmit: ShippingHandleSubmitType
+  addressForm: UseFormReturn<ShippingAddressFormData, any, undefined>
 }
 
-export const FundingDetailsSideContent = () => {
+export const FundingDetailsBottomContent = ({ handleSubmit, addressForm }: FundingDetailsSummaryProps) => {
+  return <FundingDetailsSummary handleSubmit={handleSubmit} addressForm={addressForm} />
+}
+
+export const FundingDetailsSideContent = ({ handleSubmit, addressForm }: FundingDetailsSummaryProps) => {
   return (
     <CardLayout w="full" h="full" padding={0}>
-      <FundingDetailsSummary />
+      <FundingDetailsSummary handleSubmit={handleSubmit} addressForm={addressForm} />
     </CardLayout>
   )
 }
 
-export const FundingDetailsSummary = () => {
+export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDetailsSummaryProps) => {
   const navigate = useNavigate()
   const toast = useNotification()
 
@@ -42,10 +51,30 @@ export const FundingDetailsSummary = () => {
 
   const hasSubscription = Boolean(formState.subscription?.subscriptionId)
 
-  const handleCheckoutButtonPressed = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmitFunction = (e: FormEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (formState.needsShipping) {
+      handleSubmit(
+        e,
+        () => {
+          handleCheckoutButtonPressed(e as FormEvent<HTMLDivElement>)
+        },
+        () => {
+          toast.warning({ title: t('Invalid shipping address') })
+        },
+      )
+    } else {
+      handleCheckoutButtonPressed(e as FormEvent<HTMLDivElement>)
+    }
+  }
+
+  const handleCheckoutButtonPressed = (e: FormEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
     const { title, description, error, valid } = isFundingUserInfoValid
+    console.log('did it get here', valid, error)
 
     if (valid) {
       if (!isLoggedIn && hasSubscription) {
@@ -74,13 +103,23 @@ export const FundingDetailsSummary = () => {
   }
 
   return (
-    <form style={{ width: '100%', height: '100%' }} onSubmit={handleCheckoutButtonPressed}>
+    <VStack
+      as="form"
+      width="100%"
+      height="100%"
+      maxHeight={{ base: 'calc(100vh - 177px)', lg: 'auto' }}
+      overflowY="auto"
+      justifyContent={'space-between'}
+      onSubmit={onSubmitFunction}
+    >
       <FundingSummaryWrapper>
         <ProjectFundingSummary />
       </FundingSummaryWrapper>
 
       <FundingCheckoutWrapper>
-        <VStack w="full">
+        <VStack w="full" alignItems="flex-start">
+          <NonProfitSummary disableMobile={true} />
+          <LaunchpadSummary disableMobile={true} />
           <Body size="sm" light>
             {t('By continuing to checkout you are accepting our T&Cs')}
           </Body>
@@ -113,6 +152,6 @@ export const FundingDetailsSummary = () => {
           </Body>
         </AlertDialogue>
       </FundingCheckoutWrapper>
-    </form>
+    </VStack>
   )
 }

@@ -1,20 +1,23 @@
 /* eslint-disable complexity */
-import { Button, HStack, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, useDisclosure, VStack } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
-import { PiCaretDown, PiCaretUp } from 'react-icons/pi'
+import { PiCaretDown, PiCaretUp, PiInfo } from 'react-icons/pi'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import {
   rewardsCostAtoms,
+  shippingCostAtom,
   tipAtoms,
   totalAmountSatsAtom,
   totalAmountUsdCentAtom,
 } from '@/modules/project/funding/state/fundingFormAtom.ts'
+import { shippingCountryAtom } from '@/modules/project/funding/state/shippingAddressAtom.ts'
 import { useGoalsAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
 import { Body, H2 } from '@/shared/components/typography'
 import { SubscriptionCurrencyType } from '@/types/generated/graphql'
 
@@ -22,7 +25,12 @@ import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../.
 import { LaunchpadSummary, NonProfitSummary } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
 
-export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
+type ProjectFundingSummaryProps = {
+  disableCollapse?: boolean
+  referenceCode?: string | null
+}
+
+export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: ProjectFundingSummaryProps) => {
   const { t } = useTranslation()
 
   const isMobileMode = useMobileMode()
@@ -32,6 +40,8 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
   const projectGoalId = useAtomValue(selectedGoalIdAtom)
 
   const rewardsCosts = useAtomValue(rewardsCostAtoms)
+  const shippingCosts = useAtomValue(shippingCostAtom)
+  const shippingCountry = useAtomValue(shippingCountryAtom)
   const tip = useAtomValue(tipAtoms)
   const totalSats = useAtomValue(totalAmountSatsAtom)
   const totalUsdCent = useAtomValue(totalAmountUsdCentAtom)
@@ -86,6 +96,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
         alignItems: 'flex-start',
         display: 'flex',
         flexDirection: 'column',
+
         gap: isMobileMode ? '4px' : '12px',
       }}
       transition={{ type: 'spring', stiffness: 900, damping: 40 }}
@@ -108,6 +119,13 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
       <VStack w="full" alignItems="start" spacing={{ base: 0, lg: 3 }} display={mobileDisplayStyle}>
         <NonProfitSummary disableDesktop={true} paddingY={3} />
         <LaunchpadSummary disableDesktop={true} marginY={3} />
+
+        {referenceCode && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Reference code')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>{referenceCode}</Body>
+          </HStack>
+        )}
 
         {formState.donationAmount && formState.donationAmount > 0 && (
           <HStack>
@@ -157,25 +175,52 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
           </VStack>
         )}
 
-        {rewardsCosts.satoshi > 0 && (
+        {rewardsCosts.sats > 0 && (
           <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Products Cost')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Products cost')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
-              {commaFormatted(rewardsCosts.satoshi)}{' '}
+              {commaFormatted(rewardsCosts.sats)}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
                 sats
               </Body>
             </Body>
+            <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
+              {`($${centsToDollars(rewardsCosts.usdCents)})`}
+            </Body>
           </HStack>
         )}
-        {tip.satoshi > 0 && (
-          <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser tip')}: `}</Body>
+        {shippingCosts.sats > 0 && (
+          <HStack alignItems={'start'}>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Shipping cost')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
-              {`${commaFormatted(tip.satoshi)} `}
+              {commaFormatted(shippingCosts.sats)}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
                 sats
               </Body>
+            </Body>
+            <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
+              {`($${centsToDollars(shippingCosts.usdCents)})`}
+            </Body>
+            {!shippingCountry && (
+              <TooltipPopover text={t('Shipping cost is an estimate and may vary depending on the shipping address.')}>
+                <HStack as="span" h="full" alignItems={'center'}>
+                  <Icon as={PiInfo} />
+                </HStack>
+              </TooltipPopover>
+            )}
+          </HStack>
+        )}
+        {tip.sats > 0 && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser tip')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>
+              {`${commaFormatted(tip.sats)} `}
+              <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
+                sats
+              </Body>
+            </Body>
+            <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
+              {`($${centsToDollars(tip.usdCents)})`}
             </Body>
           </HStack>
         )}
