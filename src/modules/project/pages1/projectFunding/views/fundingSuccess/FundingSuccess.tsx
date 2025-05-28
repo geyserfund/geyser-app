@@ -94,7 +94,11 @@ export const FundingSuccess = () => {
           <Divider />
           <ProjectFundingSummary disableCollapse />
           <DownloadInvoice project={project} contributionId={fundingContribution.id} />
-          <SuggestedProjects subCategory={project.subCategory} projectId={project.id} />
+          <SuggestedProjects
+            id={'suggested-projects-funding-success'}
+            subCategory={project.subCategory}
+            projectId={project.id}
+          />
         </VStack>
       </CardLayout>
     </FundingLayout>

@@ -41,9 +41,10 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
     return ''
   }
 
-  const contributioAmount = project.contributionSummary?.contributionsTotalUsd || centsToDollars(project.balanceUsdCent)
+  const contributionAmount =
+    project.contributionSummary?.contributionsTotalUsd || centsToDollars(project.balanceUsdCent)
   const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
-  const fires = getFires(contributioAmount)
+  const fires = getFires(contributionAmount)
 
   return (
     <CardLayout
@@ -107,7 +108,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
         <HStack w="full" justifyContent="space-between">
           <Body size="sm" bold color="primary1.11" isTruncated>
             {fires ? `${fires} ` : ''}
-            {formatAmount(contributioAmount, 'USD')}{' '}
+            {formatAmount(contributionAmount, 'USD')}{' '}
             <Body as="span" regular>
               {isWeekly ? t('raised this week!') : t('raised!')}
             </Body>

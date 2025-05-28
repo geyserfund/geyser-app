@@ -4,7 +4,7 @@ import { LandingCardBase } from '../../../../../shared/components/layouts'
 import { getPathWithGeyserHero } from '../../../../../shared/constants'
 import { ContributionsSummary, ProjectForLandingPageFragment } from '../../../../../types'
 
-interface LandingProjectCardProps extends Omit<CardLayoutProps, 'to'> {
+interface LandingProjectCardProps extends CardLayoutProps {
   project: ProjectForLandingPageFragment & {
     contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
   }
