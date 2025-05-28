@@ -50,7 +50,7 @@ export const useCreatorNotificationSettings = (userId: string, projectId?: strin
 
   const { refetch: refetchUserCreatorNotificationSettings } = useProfileNotificationsSettingsQuery({
     variables: { userId },
-    skip: Boolean(projectId),
+    skip: Boolean(projectId) || !userId,
     onCompleted(data) {
       if (data?.userNotificationSettingsGet?.creatorSettings) {
         setCreatorNotificationSettings(data.userNotificationSettingsGet.creatorSettings)

@@ -18,13 +18,13 @@ export const CompleteVerificationToIncreaseFunding = () => {
 
   return (
     <>
-      <Feedback variant={FeedBackVariant.WARNING} noIcon marginTop={4}>
-        <VStack w="full" spacing={4}>
-          <VStack w="full">
-            <Body size="lg" medium>
+      <Feedback variant={FeedBackVariant.WARNING} noIcon padding={{ base: 3, lg: 4 }}>
+        <VStack w="full" spacing={{ base: 2, lg: 4 }}>
+          <VStack w="full" alignItems="flex-start" spacing={{ base: 0, lg: 2 }}>
+            <Body size={{ base: 'md', lg: 'lg' }} medium>
               {t('Contribution amount above $10k')}
             </Body>
-            <Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>
               {isLoggedIn
                 ? t('To contribute more than $10k, please complete a one-time identity verification.')
                 : t('To contribute more than $10k, please log in and complete a one-time verification.')}
@@ -35,7 +35,8 @@ export const CompleteVerificationToIncreaseFunding = () => {
             colorScheme="warning"
             onClick={isLoggedIn ? () => startVerification() : () => loginOnOpen()}
             isLoading={generateVerificationTokenLoading}
-            size="lg"
+            width={{ base: '100%', lg: 'auto' }}
+            size={{ base: 'md', lg: 'lg' }}
           >
             {t('Complete verification')}
           </Button>

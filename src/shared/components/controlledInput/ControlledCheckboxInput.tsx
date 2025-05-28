@@ -4,7 +4,7 @@ import { useController, UseControllerProps } from 'react-hook-form'
 import { Body } from '../typography'
 
 type Props = UseControllerProps<any, any> &
-  Omit<CheckboxProps, 'size'> & {
+  CheckboxProps & {
     label: string
     error?: string
     defaultChecked?: boolean
@@ -26,7 +26,7 @@ export function ControlledCheckboxInput(props: Props) {
   return (
     <VStack alignItems="flex-start" width="100%">
       <Checkbox {...field} {...props} onChange={handleChange} defaultChecked={props.defaultValue || false}>
-        <Body size="sm" color="neutral.700">
+        <Body size={props.size || 'md'} color="neutral.700">
           {props.label}
         </Body>
       </Checkbox>

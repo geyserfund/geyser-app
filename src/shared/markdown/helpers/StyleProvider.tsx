@@ -11,6 +11,15 @@ import { tableCellStyles } from './typeMaps'
 
 const Container = styled(Box, {
   baseStyle: {
+    '& .remirror-is-empty': {
+      fontStyle: 'normal !important',
+      fontSize: '16px !important',
+      color: 'var(--chakra-colors-neutral1-9) !important',
+      '&::before': {
+        color: 'var(--chakra-colors-neutral1-9) !important',
+        fontStyle: 'normal !important',
+      },
+    },
     '& p, & iframe, & h1, & h2, & h3, & h4, & h5': {
       mt: 6,
     },

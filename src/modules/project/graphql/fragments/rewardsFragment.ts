@@ -1,6 +1,9 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_SHIPPING_CONFIG } from './shippingFragment.ts'
+
 export const FRAGMENT_PROJECT_REWARD = gql`
+  ${FRAGMENT_SHIPPING_CONFIG}
   fragment ProjectReward on ProjectReward {
     id
     uuid
@@ -24,6 +27,9 @@ export const FRAGMENT_PROJECT_REWARD = gql`
     confirmationMessage
     privateCommentPrompts
     createdAt
+    shippingConfig {
+      ...ShippingConfig
+    }
     posts {
       id
       title

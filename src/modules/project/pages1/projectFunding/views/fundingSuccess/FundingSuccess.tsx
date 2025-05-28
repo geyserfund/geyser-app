@@ -1,4 +1,4 @@
-import { Button, Divider, HStack, VStack } from '@chakra-ui/react'
+import { Button, Divider, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useEffect } from 'react'
@@ -13,16 +13,15 @@ import { getPath } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
 import { ContributionStatus } from '@/types/index.ts'
 
+import { SuggestedProjects } from '../../../projectView/views/body/sections/SuggestedProjects.tsx'
 import { ProjectFundingSummary } from '../../components/ProjectFundingSummary'
 import { FundingLayout } from '../../layouts/FundingLayout'
 import { SuccessImageComponent } from './components'
-import { ConfirmationMessages } from './components/ConfirmationMessage'
 import { DownloadInvoice } from './components/DownloadInvoice'
 import { SafeToDeleteRefund } from './components/SafeToDeleteRefund'
-import { SendEmailToCreator } from './components/SendEmailToCreator'
 
 export const FundingSuccess = () => {
-  const { project, formState, rewardsCosts } = useFundingFormAtom()
+  const { project, formState } = useFundingFormAtom()
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
 
@@ -64,19 +63,6 @@ export const FundingSuccess = () => {
           <VStack w="full" alignItems="start">
             <SuccessImageComponent />
           </VStack>
-          {rewardsCosts.satoshi > 0 && (
-            <VStack w="full" alignItems="start" spacing={6}>
-              <H2 size={{ base: 'xl', lg: '2xl' }} bold>
-                {t('Next Actions')}
-              </H2>
-              <HStack>
-                <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Reference code')}: `}</Body>
-                <Body size={{ base: 'sm', lg: 'md' }}>{`${fundingContribution.uuid} `}</Body>
-              </HStack>
-              <ConfirmationMessages />
-              <SendEmailToCreator />
-            </VStack>
-          )}
           {formState.subscription.cost > 0 && (
             <VStack w="full" alignItems="start" spacing={6}>
               <H2 size={{ base: 'xl', lg: '2xl' }} bold>
@@ -91,8 +77,13 @@ export const FundingSuccess = () => {
           )}
           <SafeToDeleteRefund />
           <Divider />
-          <ProjectFundingSummary disableCollapse />
+          <ProjectFundingSummary disableCollapse referenceCode={fundingContribution.uuid} />
           <DownloadInvoice project={project} contributionId={fundingContribution.id} />
+          <SuggestedProjects
+            id={'suggested-projects-funding-success'}
+            subCategory={project.subCategory}
+            projectId={project.id}
+          />
         </VStack>
       </CardLayout>
     </FundingLayout>

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { LandingProjectCard } from '@/modules/discovery/pages/landing/components/LandingProjectCard.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
-import { getPath } from '@/shared/constants/index.ts'
+import { getPath, getPathWithGeyserPromotionsHero } from '@/shared/constants/index.ts'
 import { ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 import {
   ProjectForLandingPageFragment,
@@ -15,6 +15,7 @@ import {
 } from '@/types/index.ts'
 
 type SuggestedProjectsProps = {
+  id?: string
   subCategory?: ProjectSubCategory | null
   projectId?: string | null
 }
@@ -22,7 +23,7 @@ type SuggestedProjectsProps = {
 const NO_OF_PROJECTS_TO_TAKE = 15
 const NO_OF_PROJECTS_TO_SHOW = 3
 
-export const SuggestedProjects = ({ subCategory, projectId }: SuggestedProjectsProps) => {
+export const SuggestedProjects = ({ subCategory, projectId, id }: SuggestedProjectsProps) => {
   const { data, loading } = useProjectsMostFundedByCategoryQuery({
     skip: !subCategory,
     variables: {
@@ -74,7 +75,11 @@ export const SuggestedProjects = ({ subCategory, projectId }: SuggestedProjectsP
           {suggestedProjects.map((project) => {
             return (
               <GridItem key={project.id}>
-                <LandingProjectCard project={project} />
+                <LandingProjectCard
+                  id={id}
+                  project={project}
+                  to={getPathWithGeyserPromotionsHero('project', project.name)}
+                />
               </GridItem>
             )
           })}

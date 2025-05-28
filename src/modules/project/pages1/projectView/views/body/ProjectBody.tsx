@@ -69,7 +69,11 @@ export const ProjectBody = () => {
         {project.entriesCount && <Posts />}
         {project.goalsCount && <Goals />}
         <Details />
-        <SuggestedProjects subCategory={project.subCategory} projectId={project.id} />
+        <SuggestedProjects
+          id={'suggested-projects-project-page'}
+          subCategory={project.subCategory}
+          projectId={project.id}
+        />
         <UserExternalLinksComponent spread />
       </VStack>
       <RightSideStickyLayout

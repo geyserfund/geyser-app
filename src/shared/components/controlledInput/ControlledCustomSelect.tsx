@@ -26,6 +26,7 @@ export interface ControlledCustomSelectProps<FormValues extends FieldValues, Opt
   error?: React.ReactNode
   size?: 'sm' | 'md' | 'lg'
   fontSize?: string
+  disableErrorLabel?: boolean
   isDisabled?: boolean
 }
 
@@ -36,17 +37,24 @@ export const ControlledCustomSelect = <FormValues extends FieldValues, Option, I
 
   const getOptionValue = props.getOptionValue || ((opt: any) => opt?.value)
 
+  console.log('custom select', field.value)
+
   const value = props.isMulti
-    ? props.options.filter((option) => field.value.includes(getOptionValue(option)))
-    : props.options.find((option) => getOptionValue(option) === field.value)
+    ? field.value
+      ? props.options.filter((option) => field.value.includes(getOptionValue(option)))
+      : []
+    : field.value
+    ? props.options.find((option) => getOptionValue(option) === field.value) || null
+    : null
 
   return (
     <FieldContainer
       title={props.label}
       required={props.required}
-      error={fieldState.error?.message}
+      error={props.disableErrorLabel ? undefined : fieldState.error?.message}
       info={props.info}
       subtitle={props.description}
+      size={props.size}
       {...props.containerProps}
     >
       <CustomSelect<Option, IsMulti>
@@ -79,6 +87,8 @@ export const ControlledCustomSelect = <FormValues extends FieldValues, Option, I
             props.onBlur()
           }
         }}
+        isInvalid={Boolean(fieldState.error?.message)}
+        errorBorderColor="error.9"
       />
     </FieldContainer>
   )

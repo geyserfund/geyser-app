@@ -35,8 +35,8 @@ export const calculateExpectedRewardCosts = (
   }
 
   return {
-    satoshi: totalCostInSatoshi,
-    usdCent: totalCostInUsdCent,
+    sats: totalCostInSatoshi,
+    usdCents: totalCostInUsdCent,
     base: baseCostTotal,
   }
 }
@@ -53,12 +53,12 @@ export const calculateExpectedTip = (
   const tipUsdCent = tipSats > 0 && usdRate > 0 ? Math.round(dollarsToCents((tipSats / SATOSHIS_IN_BTC) * usdRate)) : 0
 
   return {
-    satoshi: tipSats,
-    usdCent: tipUsdCent,
+    sats: tipSats,
+    usdCents: tipUsdCent,
   }
 }
 
-/** Calculate expected total satoshis */
+/** Calculate expected total satss */
 export const calculateExpectedTotalSats = (
   donationAmount: number,
   shippingCost: number,
@@ -72,7 +72,7 @@ export const calculateExpectedTotalSats = (
   return donationAmount + rewardsSats + subscriptionSats + shippingCostSats + tipSats
 }
 
-/** Calculate expected total USD cents (based on final satoshi total) */
+/** Calculate expected total USD cents (based on final sats total) */
 export const calculateExpectedTotalUsdCent = (totalSats: number, usdRate: number) => {
   if (totalSats > 0 && usdRate > 0) {
     return Math.round(dollarsToCents((totalSats / SATOSHIS_IN_BTC) * usdRate))

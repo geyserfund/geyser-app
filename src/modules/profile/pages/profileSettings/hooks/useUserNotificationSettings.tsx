@@ -36,6 +36,7 @@ export const useUserNotificationSettings = (userId: string) => {
 
   const { refetch: refetchUserNotificationSettings, loading: loadingUserNotificationSettings } =
     useProfileNotificationsSettingsQuery({
+      skip: !userId,
       variables: { userId },
       onCompleted(data) {
         if (data?.userNotificationSettingsGet?.userSettings) {

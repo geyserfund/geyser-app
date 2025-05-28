@@ -8,13 +8,14 @@ import { toInt } from '@/utils'
 import { FieldContainer } from '../form'
 import { Body } from '../typography'
 
-type Props = UseControllerProps<any, any> &
+type ControlledAmountInputProps = UseControllerProps<any, any> &
   Omit<InputProps, 'size'> & {
     width?: string | number
     inputRef?: React.Ref<HTMLInputElement>
     description?: string
     label?: string
     error?: React.ReactNode
+    disableErrorLabel?: boolean
     rightAddon?: React.ReactNode
     required?: boolean
     infoTooltip?: React.ReactNode
@@ -23,8 +24,8 @@ type Props = UseControllerProps<any, any> &
     currency: RewardCurrency
   }
 
-export function ControlledAmountInput(props: Props) {
-  const { field, formState } = useController(props)
+export function ControlledAmountInput(props: ControlledAmountInputProps) {
+  const { field, formState } = useController({ name: props.name, control: props.control })
   const [formattedValue, setFormattedValue] = useState('')
 
   useEffect(() => {
@@ -72,16 +73,23 @@ export function ControlledAmountInput(props: Props) {
     }
   }
 
-  const error = formState.errors[props.name]?.message
-    ? `${formState.errors[props.name]?.message}`
-    : props.error
-    ? props.error
-    : ''
+  let nestedError: any = formState.errors
+  const nameParts = props.name.split('.')
+  for (const part of nameParts) {
+    if (nestedError && nestedError[part]) {
+      nestedError = nestedError[part]
+    } else {
+      nestedError = undefined
+      break
+    }
+  }
+
+  const error = nestedError?.message ? `${nestedError.message}` : props.error ? props.error : ''
 
   const title =
     props.label || props.infoTooltip ? (
       <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-        <Body size="sm" medium>
+        <Body size={props.size || 'md'} medium>
           {props.label}
         </Body>
         {props.infoTooltip && props.infoTooltip}
@@ -89,7 +97,12 @@ export function ControlledAmountInput(props: Props) {
     ) : null
 
   return (
-    <FieldContainer required={props.required} title={title} subtitle={props.description} error={error}>
+    <FieldContainer
+      required={props.required}
+      title={title}
+      subtitle={props.description}
+      error={!props.disableErrorLabel && error}
+    >
       <InputGroup>
         <Input
           {...field}
