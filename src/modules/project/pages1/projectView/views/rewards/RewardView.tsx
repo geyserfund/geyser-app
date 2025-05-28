@@ -197,7 +197,7 @@ export const RewardView = () => {
                 <VStack w={'full'} p={0}>
                   <Body size="md" medium>
                     {t(
-                      'Engage your community, followers, contributors, and product purchasers by sending them an update about your new product via email.',
+                      'Engage your community, followers, contributors, and product purchasers by sending them an update about your product via email.',
                     )}
                   </Body>
                   <Button
