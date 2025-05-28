@@ -13,6 +13,7 @@ import { getPath } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
 import { ContributionStatus } from '@/types/index.ts'
 
+import { SuggestedProjects } from '../../../projectView/views/body/sections/SuggestedProjects.tsx'
 import { ProjectFundingSummary } from '../../components/ProjectFundingSummary'
 import { FundingLayout } from '../../layouts/FundingLayout'
 import { SuccessImageComponent } from './components'
@@ -93,6 +94,7 @@ export const FundingSuccess = () => {
           <Divider />
           <ProjectFundingSummary disableCollapse />
           <DownloadInvoice project={project} contributionId={fundingContribution.id} />
+          <SuggestedProjects subCategory={project.subCategory} projectId={project.id} />
         </VStack>
       </CardLayout>
     </FundingLayout>
