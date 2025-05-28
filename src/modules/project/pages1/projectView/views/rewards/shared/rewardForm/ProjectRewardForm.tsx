@@ -218,7 +218,6 @@ export const ProjectRewardForm = ({
               onChange(e) {
                 setValue('hasShipping', e.target.checked, { shouldDirty: true })
                 if (!e.target.checked) {
-                  console.log('did it go here', e?.target.checked)
                   setValue('shippingConfigId', null, { shouldDirty: true })
                   setValue('estimatedDeliveryInWeeks', null, { shouldDirty: true })
                 }
@@ -232,7 +231,6 @@ export const ProjectRewardForm = ({
                 description={t('Specify estimated delivery time for the product from the moment it is ordered.')}
                 control={control}
                 placeholder={'Enter number of weeks'}
-                isDisabled={Boolean(watch('preOrder'))}
                 error={errors.estimatedDeliveryInWeeks?.message}
               />
               <ShippingConfigFormComponent projectId={project.id} control={control} name="shippingConfigId" />
@@ -258,7 +256,6 @@ export const ProjectRewardForm = ({
             switchProps={{
               name: 'preOrder',
               control,
-              isDisabled: Boolean(watch('estimatedDeliveryInWeeks')),
               isChecked: watch('preOrder'),
               onChange(e) {
                 setValue('preOrder', e.target.checked, { shouldDirty: true })

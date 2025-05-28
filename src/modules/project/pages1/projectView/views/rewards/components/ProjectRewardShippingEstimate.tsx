@@ -36,9 +36,7 @@ export const ProjectRewardShippingEstimate = ({ reward }: Props) => {
           colorScheme: 'orange',
         })
       }
-    }
-
-    if (reward.estimatedDeliveryInWeeks) {
+    } else if (reward.estimatedDeliveryInWeeks) {
       list.push({
         text: `${t('Delivery in')} ${reward.estimatedDeliveryInWeeks} ${t('weeks')}`,
         colorScheme: 'info',
