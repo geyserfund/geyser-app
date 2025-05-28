@@ -197,10 +197,25 @@ export const RewardTable = ({
 
           if (shippingAddress) {
             items.push({
+              label: t('Shipping to:'),
+              value: shippingAddress.fullName || '',
+            })
+            items.push({
               label: t('Shipping address'),
               value: `${shippingAddress.addressLines.join(', ')}, ${shippingAddress.postalCode}, ${
                 shippingAddress.city
               }, ${shippingAddress.state}, ${shippingAddress.country}`,
+            })
+          }
+
+          if (order.shippingFeeTotalInSats) {
+            items.push({
+              label: `${t('Items cost')} (sats)`,
+              value: order.itemsTotalInSats,
+            })
+            items.push({
+              label: `${t('Shipping cost')} (sats)`,
+              value: order.shippingFeeTotalInSats,
             })
           }
 

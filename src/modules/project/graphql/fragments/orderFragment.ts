@@ -28,6 +28,8 @@ export const FRAGMENT_ORDER = gql`
     shippedAt
     status
     totalInSats
+    shippingFeeTotalInSats
+    itemsTotalInSats
     updatedAt
     user {
       id

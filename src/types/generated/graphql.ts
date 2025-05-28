@@ -1855,10 +1855,12 @@ export type Order = {
   deliveredAt?: Maybe<Scalars['Date']['output']>;
   id: Scalars['BigInt']['output'];
   items: Array<OrderItem>;
+  itemsTotalInSats: Scalars['Int']['output'];
   project: Project;
   referenceCode: Scalars['String']['output'];
   shippedAt?: Maybe<Scalars['Date']['output']>;
   shippingAddress?: Maybe<ShippingAddress>;
+  shippingFeeTotalInSats: Scalars['Int']['output'];
   status: Scalars['String']['output'];
   totalInSats: Scalars['Int']['output'];
   updatedAt: Scalars['Date']['output'];
@@ -3469,7 +3471,7 @@ export type ShippingAddressCreateInput = {
 };
 
 export type ShippingAddressesGetInput = {
-  userId: Scalars['String']['input'];
+  userId: Scalars['BigInt']['input'];
 };
 
 export type ShippingConfig = {
@@ -5764,10 +5766,12 @@ export type OrderResolvers<ContextType = any, ParentType extends ResolversParent
   deliveredAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   items?: Resolver<Array<ResolversTypes['OrderItem']>, ParentType, ContextType>;
+  itemsTotalInSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   referenceCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   shippedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   shippingAddress?: Resolver<Maybe<ResolversTypes['ShippingAddress']>, ParentType, ContextType>;
+  shippingFeeTotalInSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   totalInSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -7617,7 +7621,7 @@ export type ProjectGrantApplicantFragment = { __typename?: 'GrantApplicant', id:
 
 export type OrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, category?: string | null } };
 
-export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, createdAt: any, deliveredAt?: any | null, id: any, shippedAt?: any | null, status: string, totalInSats: number, updatedAt: any, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null } | null, items: Array<(
+export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, createdAt: any, deliveredAt?: any | null, id: any, shippedAt?: any | null, status: string, totalInSats: number, shippingFeeTotalInSats: number, itemsTotalInSats: number, updatedAt: any, user?: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null } | null, items: Array<(
     { __typename?: 'OrderItem' }
     & OrderItemFragment
   )>, contribution: { __typename?: 'Contribution', id: any, amount: number, donationAmount: number, email?: string | null, isAnonymous: boolean, status: ContributionStatus, uuid?: string | null, privateComment?: string | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quoteCurrency: QuoteCurrency, quote: number } | null }, shippingAddress?: (
@@ -9831,6 +9835,8 @@ export const OrderFragmentDoc = gql`
   shippedAt
   status
   totalInSats
+  shippingFeeTotalInSats
+  itemsTotalInSats
   updatedAt
   user {
     id
