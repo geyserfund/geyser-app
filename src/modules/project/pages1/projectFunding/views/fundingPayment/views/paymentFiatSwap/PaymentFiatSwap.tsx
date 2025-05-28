@@ -45,7 +45,6 @@ export const PaymentFiatSwap = () => {
       navigate({ pathname: '../lightning', search: location.search }, { replace: true })
     }
   }, [userId])
-  console.log('checking fiatswap status', fiatSwapStatus)
 
   const renderFiatSwapPayment = () => {
     if (!isProjectOwnerVerified) {
