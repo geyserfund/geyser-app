@@ -168,7 +168,7 @@ export const ShowCurrentShippingConfig = ({
             rightIcon={<PiPencil />}
             onClick={() => shippingFeeModal.onOpen({ isEdit: true })}
           >
-            {t('Update shipping fee')}
+            {t('Update')}
           </Button>
         </VStack>
       </Collapse>

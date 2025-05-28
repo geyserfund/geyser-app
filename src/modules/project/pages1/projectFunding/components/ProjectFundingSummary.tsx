@@ -14,6 +14,7 @@ import {
   totalAmountSatsAtom,
   totalAmountUsdCentAtom,
 } from '@/modules/project/funding/state/fundingFormAtom.ts'
+import { shippingCountryAtom } from '@/modules/project/funding/state/shippingAddressAtom.ts'
 import { useGoalsAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
@@ -24,7 +25,12 @@ import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../.
 import { LaunchpadSummary, NonProfitSummary } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
 
-export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: boolean }) => {
+type ProjectFundingSummaryProps = {
+  disableCollapse?: boolean
+  referenceCode?: string | null
+}
+
+export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: ProjectFundingSummaryProps) => {
   const { t } = useTranslation()
 
   const isMobileMode = useMobileMode()
@@ -35,6 +41,7 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
 
   const rewardsCosts = useAtomValue(rewardsCostAtoms)
   const shippingCosts = useAtomValue(shippingCostAtom)
+  const shippingCountry = useAtomValue(shippingCountryAtom)
   const tip = useAtomValue(tipAtoms)
   const totalSats = useAtomValue(totalAmountSatsAtom)
   const totalUsdCent = useAtomValue(totalAmountUsdCentAtom)
@@ -113,6 +120,13 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
         <NonProfitSummary disableDesktop={true} paddingY={3} />
         <LaunchpadSummary disableDesktop={true} marginY={3} />
 
+        {referenceCode && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Reference code')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>{referenceCode}</Body>
+          </HStack>
+        )}
+
         {formState.donationAmount && formState.donationAmount > 0 && (
           <HStack>
             <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Donation')}: `}</Body>
@@ -187,11 +201,13 @@ export const ProjectFundingSummary = ({ disableCollapse }: { disableCollapse?: b
             <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
               {`($${centsToDollars(shippingCosts.usdCents)})`}
             </Body>
-            <TooltipPopover text={t('Shipping cost is an estimate and may vary depending on the shipping address.')}>
-              <HStack as="span" h="full" alignItems={'center'}>
-                <Icon as={PiInfo} />
-              </HStack>
-            </TooltipPopover>
+            {!shippingCountry && (
+              <TooltipPopover text={t('Shipping cost is an estimate and may vary depending on the shipping address.')}>
+                <HStack as="span" h="full" alignItems={'center'}>
+                  <Icon as={PiInfo} />
+                </HStack>
+              </TooltipPopover>
+            )}
           </HStack>
         )}
         {tip.sats > 0 && (

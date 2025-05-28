@@ -197,7 +197,7 @@ export const RewardTable = ({
 
           if (shippingAddress) {
             items.push({
-              label: t('Shipping to:'),
+              label: t('Shipping to'),
               value: shippingAddress.fullName || '',
             })
             items.push({
