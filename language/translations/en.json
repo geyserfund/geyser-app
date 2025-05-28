@@ -1429,5 +1429,7 @@
   "Shipping cost": "Shipping cost",
   "Products cost": "Products cost",
   "Shipping cost is an estimate and may vary depending on the shipping address.": "Shipping cost is an estimate and may vary depending on the shipping address.",
-  "ambassadors have enabled": "ambassadors have enabled"
+  "ambassadors have enabled": "ambassadors have enabled",
+  "Wallet Connection": "Wallet Connection",
+  "Connect a Lightning wallet to your account to receive refunds, ambassador payouts, etc.": "Connect a Lightning wallet to your account to receive refunds, ambassador payouts, etc."
 }
