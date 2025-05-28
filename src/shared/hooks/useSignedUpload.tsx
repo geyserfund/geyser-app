@@ -35,8 +35,11 @@ export const useSignedUpload = ({
   })
 
   const uploadFile = useCallback(
-    async (file: any): Promise<{ src: string; filename: string }> => {
-      file.name = file.name.replace(/\s+/g, '')
+    async (fileProp: any): Promise<{ src: string; filename: string }> => {
+      const fileName = fileProp.name.replace(/\s+/g, '')
+
+      const file = new File([fileProp], fileName, { type: fileProp.type })
+
       try {
         setIsLoading(true)
         const { data } = await getSignedUrl({

@@ -10,6 +10,8 @@ import { initialRewardsLoadAtom, rewardsAtom } from '@/modules/project/state/rew
 import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '@/modules/project/state/walletAtom.ts'
 import { toInt } from '@/utils'
 
+import { useMustHaveProjectStory } from '../hooks/useMustHaveProjectStory.tsx'
+
 const listOfAtoms = [
   projectAtom,
   projectLoadingAtom,
@@ -30,8 +32,13 @@ export const ProjectCreationContainer = () => {
   return (
     <ScopeProvider atoms={listOfAtoms}>
       <ProjectProvider projectId={toInt(projectId)}>
-        <Outlet />
+        <ProjectCreationContainerContent />
       </ProjectProvider>
     </ScopeProvider>
   )
+}
+
+const ProjectCreationContainerContent = () => {
+  useMustHaveProjectStory()
+  return <Outlet />
 }
