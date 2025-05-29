@@ -3,7 +3,7 @@ import { Trans } from 'react-i18next'
 
 import { Body } from '@/shared/components/typography'
 
-import { FeedbackUrl } from '../../shared/constants'
+import { FeedbackUrl } from '../../../shared/constants'
 
 export const CommonFeedbackMessage = ({ prefix }: { prefix?: string }) => {
   return (

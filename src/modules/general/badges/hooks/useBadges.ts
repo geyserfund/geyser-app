@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { Badge, useBadgesQuery } from '../../../types'
+import { Badge, useBadgesQuery } from '../../../../types'
 
 export const useBadges = () => {
   const { data, error, loading, refetch } = useBadgesQuery()

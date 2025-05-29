@@ -2,7 +2,7 @@
 import { PropsWithChildren, useState } from 'react'
 import { useEffect } from 'react'
 
-import { LoadingPage } from '@/pages/loading/index.tsx'
+import { LoadingPage } from '@/modules/general/loading'
 import { __development__ } from '@/shared/constants/index.ts'
 
 import packageJson from '../../package.json'

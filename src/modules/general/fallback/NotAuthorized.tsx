@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import { Head } from '@/config/Head'
 import { H2 } from '@/shared/components/typography'
 
-import { useServiceWorkerUpdate } from '../../context'
-import { NotAuthorizedImageUrl } from '../../shared/constants/platform/url'
+import { useServiceWorkerUpdate } from '../../../context'
+import { NotAuthorizedImageUrl } from '../../../shared/constants/platform/url'
 import { CommonFeedbackMessage } from './CommonFeedbackMessage'
 
 export const NotAuthorized = () => {

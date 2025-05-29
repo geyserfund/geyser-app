@@ -1,8 +1,8 @@
 import { Image, VStack } from '@chakra-ui/react'
 import { createUseStyles } from 'react-jss'
 
-import { LogoNameBrand } from '../../shared/constants'
-import { neutralColorsDark, neutralColorsLight } from '../../shared/styles'
+import { LogoNameBrand } from '@/shared/constants'
+import { neutralColorsDark, neutralColorsLight } from '@/shared/styles'
 
 function useColor(light = neutralColorsLight[0], dark = neutralColorsDark[0]) {
   return window.localStorage.getItem('chakra-ui-color-mode') === 'dark' ? dark : light

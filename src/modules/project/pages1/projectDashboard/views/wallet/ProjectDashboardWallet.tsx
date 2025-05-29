@@ -2,13 +2,13 @@ import { Button, ButtonProps, HStack, Link, useDisclosure, VStack } from '@chakr
 import { Trans, useTranslation } from 'react-i18next'
 import { Link as ReactLink } from 'react-router-dom'
 
+import { VerifyYourEmail } from '@/modules/auth/otp/VerifyYourEmail.tsx'
 import { useProjectWalletAPI } from '@/modules/project/API/useProjectWalletAPI'
 import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 
 import { useAuthContext } from '../../../../../../context/index.ts'
-import { VerifyYourEmail } from '../../../../../../pages/otp/index.ts'
 import { getPath, GeyserEmailVerificationDocUrl, PathName } from '../../../../../../shared/constants/index.ts'
 import { MfaAction, OtpResponseFragment, UpdateWalletInput } from '../../../../../../types/index.ts'
 import { isDraft, isPrelaunch, useCustomTheme, useNotification } from '../../../../../../utils/index.ts'

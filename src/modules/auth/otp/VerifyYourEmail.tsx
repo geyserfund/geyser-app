@@ -1,10 +1,10 @@
 import { Stack, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { CustomModalProps, Modal } from '@/shared/components/layouts'
 import { H3 } from '@/shared/components/typography'
+import { MfaAction } from '@/types'
 
-import { CustomModalProps, Modal } from '../../shared/components/layouts'
-import { MfaAction } from '../../types'
 import { VerifyYourEmailContent, VerifyYourEmailContentProps } from './VerifyYourEmailContent'
 
 interface VerifyYourEmailProps

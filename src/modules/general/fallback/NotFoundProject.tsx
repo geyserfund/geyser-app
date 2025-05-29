@@ -5,7 +5,7 @@ import { Head } from '@/config/Head'
 import { useServiceWorkerUpdate } from '@/context'
 import { Body, H2 } from '@/shared/components/typography'
 
-import { NotFoundPageImageUrl } from '../../shared/constants/platform/url'
+import { NotFoundPageImageUrl } from '../../../shared/constants/platform/url'
 
 export const NotFoundProject = () => {
   const { t } = useTranslation()

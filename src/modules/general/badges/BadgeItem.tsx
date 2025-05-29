@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Body, H3 } from '@/shared/components/typography'
 import { AvatarCircle, AvatarElement } from '@/shared/molecules/AvatarElement'
 
-import { User } from '../../types'
+import { User } from '../../../types'
 
 interface BadgeItemProps {
   image: string

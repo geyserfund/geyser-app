@@ -4,11 +4,10 @@ import { useTranslation } from 'react-i18next'
 import { PiArrowClockwise } from 'react-icons/pi'
 import OtpInput from 'react-otp-input'
 
+import { useAuthContext } from '@/context'
 import { Body } from '@/shared/components/typography'
-
-import { useAuthContext } from '../../../context'
-import { MfaAction, OtpResponseFragment, useUserEmailVerifyMutation } from '../../../types'
-import { toInt, useNotification } from '../../../utils'
+import { MfaAction, OtpResponseFragment, useUserEmailVerifyMutation } from '@/types'
+import { toInt, useNotification } from '@/utils'
 
 const DEFAULT_WAIT_SECONDS_FOR_RESEND = 60
 

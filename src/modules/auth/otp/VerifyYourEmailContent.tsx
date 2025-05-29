@@ -2,11 +2,12 @@ import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
 import Loader from '@/components/ui/Loader'
+import { useAuthContext } from '@/context'
+import { MfaAction, OtpResponseFragment, useSendOtpByEmailMutation } from '@/types'
+import { useNotification } from '@/utils'
 
-import { useAuthContext } from '../../context'
-import { MfaAction, OtpResponseFragment, useSendOtpByEmailMutation } from '../../types'
-import { useNotification } from '../../utils'
-import { ReceiveOneTimePassword, VerifyOneTimePassword } from './components'
+import { ReceiveOneTimePassword } from './components/ReceiveOneTimePassword'
+import { VerifyOneTimePassword } from './components/VerifyOneTimePassword'
 
 export interface VerifyYourEmailContentProps {
   action: MfaAction

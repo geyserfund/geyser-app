@@ -5,7 +5,7 @@ import { Navigate, useParams } from 'react-router-dom'
 import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
 import { ExternalAccountType } from '../../../modules/auth'
-import { LoadingPage } from '../../../pages/loading'
+import { LoadingPage } from '../../../modules/general/loading'
 import { getPath } from '../../../shared/constants'
 import { useRouteMatchesForPrivateRoute } from '../state/privateRoutesAtom'
 

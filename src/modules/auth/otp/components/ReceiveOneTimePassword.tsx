@@ -4,13 +4,12 @@ import { Dispatch, SetStateAction } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useAuthContext } from '@/context'
 import { ControlledTextInput } from '@/shared/components/controlledInput'
 import { Body } from '@/shared/components/typography'
 import { VerifyEmailImageUrl } from '@/shared/constants'
-
-import { useAuthContext } from '../../../context'
-import { MfaAction, useUserEmailUpdateMutation } from '../../../types'
-import { emailValidationSchema, useNotification } from '../../../utils'
+import { MfaAction, useUserEmailUpdateMutation } from '@/types'
+import { emailValidationSchema, useNotification } from '@/utils'
 
 interface ReceiveOneTimePasswordProps {
   handleSendOtpByEmail(email: string): void

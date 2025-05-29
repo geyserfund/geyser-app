@@ -2,11 +2,11 @@ import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons'
 import { Button, ButtonProps, HStack, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
+import { VerifyYourEmail } from '@/modules/auth/otp/VerifyYourEmail.tsx'
 import { Body, H3 } from '@/shared/components/typography'
 import { TextField } from '@/shared/markdown/components/TextField'
 
 import { useAuthContext } from '../../../../../context'
-import { VerifyYourEmail } from '../../../../../pages/otp'
 import { MfaAction } from '../../../../../types'
 import { useUpdateVerifyEmail } from '../hooks/useUpdateVerifyEmail'
 

@@ -5,9 +5,9 @@ import { useMatch } from 'react-router-dom'
 import { Head } from '@/config/Head'
 import { H2 } from '@/shared/components/typography'
 
-import { useServiceWorkerUpdate } from '../../context'
-import { getPath } from '../../shared/constants'
-import { NotFoundPageImageUrl } from '../../shared/constants/platform/url'
+import { useServiceWorkerUpdate } from '../../../context'
+import { getPath } from '../../../shared/constants'
+import { NotFoundPageImageUrl } from '../../../shared/constants/platform/url'
 import { CommonFeedbackMessage } from './CommonFeedbackMessage'
 
 export const NotFoundPage = () => {
