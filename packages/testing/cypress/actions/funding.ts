@@ -46,7 +46,9 @@ export const enterCommentAddEmailAndHitCheckout = (comment: string) => {
 
 export const clickOnchainQrTab = () => {
   cy.get('button').contains('Onchain').click()
-  cy.get('button').contains('Download & Continue').click()
+  cy.get('button').contains('Download & Continue').should('exist')
+  cy.get('button').contains('Download & Continue').scrollIntoView({ duration: 500 })
+  cy.get('button').contains('Download & Continue').click({ force: true })
 }
 
 export const clickCopyOnChainButton = () => {
