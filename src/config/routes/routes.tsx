@@ -6,13 +6,12 @@ import { ActivityDirection } from '@/modules/discovery/pages/activity/components
 import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
 import { ExternalAuthSuccess, FailedAuth } from '../../modules/auth'
-import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../pages/fallback'
+import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../modules/general/fallback'
 import { __production__, getPath, PathName } from '../../shared/constants'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { renderPrivateRoute } from './components/PrivateRoute'
 
-const GrantsOld = () => import('../../pages/grants')
-const Grants = () => import('../../modules/grants/Grants')
+const Grants = () => import('../../modules/grants')
 
 const ProjectLaunch = () => import('../../modules/project/pages1/projectCreation')
 
@@ -40,7 +39,7 @@ const ProfilePage = () => import('../../modules/profile')
 
 const ProfileSettingsIndex = () => import('../../modules/profile/pages/profileSettings')
 
-const Badges = () => import('../../pages/badges/BadgesPage')
+const Badges = () => import('../../modules/general/badges/BadgesPage')
 
 export const platformRoutes: RouteObject[] = [
   {
@@ -832,7 +831,7 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('discoveryGrant', PathName.grantId),
         async lazy() {
-          const GrantPage = await GrantsOld().then((m) => m.GrantPage)
+          const GrantPage = await Grants().then((m) => m.GrantPage)
           return { Component: GrantPage }
         },
       },
