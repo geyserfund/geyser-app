@@ -1,7 +1,7 @@
 import { Box, Stack, StackProps, VStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 
-import { useGrant } from '@/pages/grants/hooks/useGrant'
+import { useGrant } from '@/modules/grants/pages/grantsIndividualPage/hooks/useGrant.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body, H2 } from '@/shared/components/typography'
 import { standardPadding } from '@/shared/styles'

@@ -11,8 +11,7 @@ import { __production__, getPath, PathName } from '../../shared/constants'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { renderPrivateRoute } from './components/PrivateRoute'
 
-const GrantsOld = () => import('../../pages/grants')
-const Grants = () => import('../../modules/grants/Grants')
+const Grants = () => import('../../modules/grants')
 
 const ProjectLaunch = () => import('../../modules/project/pages1/projectCreation')
 
@@ -832,7 +831,7 @@ export const platformRoutes: RouteObject[] = [
       {
         path: getPath('discoveryGrant', PathName.grantId),
         async lazy() {
-          const GrantPage = await GrantsOld().then((m) => m.GrantPage)
+          const GrantPage = await Grants().then((m) => m.GrantPage)
           return { Component: GrantPage }
         },
       },
