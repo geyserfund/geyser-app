@@ -37,8 +37,6 @@ export const ControlledCustomSelect = <FormValues extends FieldValues, Option, I
 
   const getOptionValue = props.getOptionValue || ((opt: any) => opt?.value)
 
-  console.log('custom select', field.value)
-
   const value = props.isMulti
     ? field.value
       ? props.options.filter((option) => field.value.includes(getOptionValue(option)))

@@ -91,7 +91,7 @@ export const useShippingAddressForm = () => {
         country: data.shippingAddressCreate.country,
         postalCode: data.shippingAddressCreate.postalCode,
       })
-    }
+    },
   })
 
   const formCountry = form.watch('country')
@@ -113,22 +113,21 @@ export const useShippingAddressForm = () => {
         async (data) => {
           // Only called when needs shipping is true
           if (!shippingAddress?.id || isDirty) {
-
-            try{
+            try {
               await createShippingAddress({
                 variables: {
                   input: {
                     addressLines: [data.streetAddress],
                     city: data.city,
-                    state: data.state,
+                    state: data.state.toUpperCase(),
                     postalCode: data.postalCode,
                     country: data.country,
                     fullName: data.fullName,
                   },
                 },
               })
-            onValid(data) 
-            } catch(error){
+              onValid(data)
+            } catch (error) {
               toast.error({
                 title: t('Failed to save shipping address'),
                 description: error instanceof Error ? error.message : undefined,
