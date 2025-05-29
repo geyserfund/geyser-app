@@ -12,20 +12,17 @@ import {
   CreateWalletInput,
   LightningAddressContributionLimits,
   Maybe,
+  UpdateWalletInput,
+  useCreateWalletMutation,
   useLightningAddressVerifyLazyQuery,
+  UserWalletConnectionDetailsFragment,
+  useUpdateWalletMutation,
   useUserWalletQuery,
-  WalletLimitsFragment,
   WalletOffChainContributionLimits,
   WalletOnChainContributionLimits,
   WalletResourceType,
 } from '@/types'
 import { toInt, useNotification, validateEmail } from '@/utils'
-
-interface useUserWalletFormProps {
-  walletLimits?: WalletLimitsFragment | null
-  onSubmit: (createWalletInput: CreateWalletInput | null) => void
-  isEdit?: boolean
-}
 
 export type LightingWalletForm = {
   error: string | null
@@ -57,15 +54,13 @@ export type UserWalletForm = {
   isLightningAddressInValid: boolean
   limits: Limits
   loading: boolean
-  hasExistingWallet: boolean
 }
 
 const DEFAULT_LIGHTNING_FEE_PERCENTAGE = 0.05
 
-export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps): UserWalletForm => {
-  const { toast } = useNotification()
+export const useUserWalletForm = (): UserWalletForm => {
+  const toast = useNotification()
   const { user } = useAuthContext()
-  const [hasExistingWallet, setHasExistingWallet] = useState(false)
 
   const [lightningAddressFormValue, setLightningAddressFormValue] = useState('')
   const [nostrWalletConnectURI, setNostrWalletConnectURI] = useState('')
@@ -80,6 +75,8 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
     LightningAddressContributionLimits | WalletOffChainContributionLimits | WalletOnChainContributionLimits
   >({})
 
+  const [existingWallet, setExistingWallet] = useState<UserWalletConnectionDetailsFragment>()
+
   // Query to get user wallet data
   const { data: userData, loading } = useUserWalletQuery({
     variables: {
@@ -89,8 +86,7 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
     onCompleted(data) {
       if (data?.user?.wallet) {
         const userWallet = data.user.wallet
-        setHasExistingWallet(true)
-
+        setExistingWallet(userWallet)
         // Set wallet connection details based on type
         if (userWallet.connectionDetails?.__typename === WalletConnectDetails.LightningAddressConnectionDetails) {
           setConnectionOption(ConnectionOption.LIGHTNING_ADDRESS)
@@ -101,6 +97,39 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
           setNostrWalletConnectURI(userWallet.connectionDetails.nwcUrl || '')
         }
       }
+    },
+  })
+
+  const [createWallet] = useCreateWalletMutation({
+    onCompleted(data) {
+      if (data?.walletCreate) {
+        setExistingWallet(data.walletCreate)
+        toast.success({
+          title: t('Wallet connected successfully'),
+        })
+      }
+    },
+    onError(error) {
+      toast.error({
+        title: t('Wallet creation failed'),
+        description: error.message,
+      })
+    },
+  })
+  const [updateWallet] = useUpdateWalletMutation({
+    onCompleted(data) {
+      if (data?.walletUpdate) {
+        setExistingWallet(data.walletUpdate)
+        toast.success({
+          title: t('Wallet updated successfully'),
+        })
+      }
+    },
+    onError(error) {
+      toast.error({
+        title: t('Wallet update failed'),
+        description: error.message,
+      })
     },
   })
 
@@ -193,6 +222,40 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
     return null
   }, [user, connectionOption, lightningAddressFormValue, nostrWalletConnectURI])
 
+  const handleSubmit = useCallback(
+    async (input: CreateWalletInput | null) => {
+      if (!input) {
+        toast.error({
+          title: t('Wallet creation failed'),
+          description: t('Please provide valid wallet connection details'),
+        })
+        return
+      }
+
+      if (existingWallet && existingWallet.id) {
+        const updateInput: UpdateWalletInput = {
+          id: existingWallet.id,
+          lightningAddressConnectionDetailsInput: input.lightningAddressConnectionDetailsInput,
+          nwcConnectionDetailsInput: input.nwcConnectionDetailsInput,
+          lndConnectionDetailsInput: input.lndConnectionDetailsInput,
+          feePercentage: input.feePercentage,
+          name: input.name,
+        }
+
+        updateWallet({
+          variables: {
+            input: updateInput,
+          },
+        })
+      } else {
+        createWallet({
+          variables: { input },
+        })
+      }
+    },
+    [createWallet, existingWallet, toast, updateWallet],
+  )
+
   const handleConfirm = useCallback(async () => {
     if (
       connectionOption === ConnectionOption.LIGHTNING_ADDRESS &&
@@ -207,25 +270,23 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
       }
     }
 
-    if (isEdit && !createWalletInput) {
-      toast({
+    if (!createWalletInput) {
+      toast.error({
         title: t('failed to create user wallet'),
         description: t('please provide valid wallet details'),
-        status: 'error',
       })
       return
     }
 
-    onSubmit(createWalletInput)
+    handleSubmit(createWalletInput)
   }, [
     createWalletInput,
-    onSubmit,
+    handleSubmit,
     toast,
     lightningAddressFormValue,
     lnAddressEvaluationState,
     connectionOption,
     evaluateLightningAddress,
-    isEdit,
   ])
 
   const validateLightningAddressFormat = useCallback((lightningAddress: string): boolean => {
@@ -307,6 +368,5 @@ export const useUserWalletForm = ({ onSubmit, isEdit }: useUserWalletFormProps):
     createWalletInput,
     isLightningAddressInValid,
     loading,
-    hasExistingWallet,
   }
 }
