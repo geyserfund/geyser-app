@@ -92,12 +92,6 @@ export const useShippingAddressForm = () => {
         postalCode: data.shippingAddressCreate.postalCode,
       })
     },
-    onError(error) {
-      toast.error({
-        title: t('Failed to save shipping address'),
-        description: error.message,
-      })
-    },
   })
 
   const formCountry = form.watch('country')
@@ -117,22 +111,31 @@ export const useShippingAddressForm = () => {
     ) => {
       form.handleSubmit(
         async (data) => {
+          // Only called when needs shipping is true
           if (!shippingAddress?.id || isDirty) {
-            await createShippingAddress({
-              variables: {
-                input: {
-                  addressLines: [data.streetAddress],
-                  city: data.city,
-                  state: data.state,
-                  postalCode: data.postalCode,
-                  country: data.country,
-                  fullName: data.fullName,
+            try {
+              await createShippingAddress({
+                variables: {
+                  input: {
+                    addressLines: [data.streetAddress],
+                    city: data.city,
+                    state: data.state.toUpperCase(),
+                    postalCode: data.postalCode,
+                    country: data.country,
+                    fullName: data.fullName,
+                  },
                 },
-              },
-            })
+              })
+              onValid(data)
+            } catch (error) {
+              toast.error({
+                title: t('Failed to save shipping address'),
+                description: error instanceof Error ? error.message : undefined,
+              })
+            }
+          } else {
+            onValid(data)
           }
-
-          onValid(data)
         },
         (errors) => {
           setIsShippingAddressValid(false)
@@ -140,7 +143,7 @@ export const useShippingAddressForm = () => {
         },
       )(e)
     },
-    [createShippingAddress, form, isDirty, shippingAddress?.id, setIsShippingAddressValid],
+    [createShippingAddress, form, isDirty, shippingAddress, setIsShippingAddressValid, toast],
   )
 
   return {

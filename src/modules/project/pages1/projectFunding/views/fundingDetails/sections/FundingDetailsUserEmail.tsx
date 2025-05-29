@@ -72,13 +72,17 @@ export const FundingDetailsUserEmailAndUpdates = () => {
 
   const isEmailValidated = emailValidationState === EMAIL_VALIDATION_STATE.SUCCEEDED
 
+  console.log('checking email', email)
+
   /*
    Set the email from the user to the funding form. We do this because the input field
    is not shown if the user already has an email.
   */
   useEffect(() => {
-    if (user?.email) setState('email', user.email)
-    else setState('email', '')
+    if (!email) {
+      if (user?.email) setState('email', user.email)
+      else setState('email', '')
+    }
 
     if (user?.id) {
       setState('followProject', true)
