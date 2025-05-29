@@ -4,7 +4,9 @@ import {
 } from '../../../../../../../src/modules/project/funding/state/fundingFormAtom.ts' // Adjust path if needed
 import {
   ProjectRewardFragment,
+  ProjectShippingConfigType,
   ProjectSubscriptionPlansFragment,
+  QuoteCurrency,
   RewardCurrency,
   ShippingDestination,
   SubscriptionCurrencyType,
@@ -14,6 +16,11 @@ import {
 
 // --- Mocks ---
 export const mockUsdRate = 50000
+
+export const mockBitcoinQuote = {
+  quote: mockUsdRate,
+  quoteCurrency: QuoteCurrency.Usd,
+}
 
 // Define mock rewards
 export const mockRewardsFull: ProjectRewardFragment[] = [
@@ -76,6 +83,121 @@ export const mockRewardsFull: ProjectRewardFragment[] = [
     preOrder: false,
     posts: [],
     createdAt: '2023-01-01T00:00:00Z',
+  },
+  {
+    id: 104, // Reward with shipping that is incremental & global
+    cost: 500,
+    hasShipping: true,
+    __typename: 'ProjectReward',
+    uuid: 'uuid-103',
+    name: 'USD Reward 4 Shipping Global & Incremental',
+    description: 'Desc 103',
+    images: [],
+    privateCommentPrompts: [],
+    stock: null,
+    deleted: false,
+    sold: 0,
+    rewardCurrency: RewardCurrency.Usdcent,
+    isAddon: false,
+    isHidden: false,
+    preOrder: false,
+    posts: [],
+    createdAt: '2023-01-01T00:00:00Z',
+    shippingConfig: {
+      globalShipping: true,
+      id: '2',
+      name: 'Test Shipping fee for tshirt',
+      type: ProjectShippingConfigType.Incremental,
+      shippingRates: [
+        {
+          baseRate: 1000,
+          country: 'DEFAULT',
+          incrementRate: 200,
+          sameAsDefault: true,
+          __typename: 'ProjectShippingRate',
+        },
+      ],
+      __typename: 'ShippingConfig',
+    },
+  },
+  {
+    id: 105, // Reward with shipping that is Flat & global
+    cost: 500,
+    hasShipping: true,
+    __typename: 'ProjectReward',
+    uuid: 'uuid-103',
+    name: 'USD Reward 5 Shipping Global & Flat',
+    description: 'Desc 103',
+    images: [],
+    privateCommentPrompts: [],
+    stock: null,
+    deleted: false,
+    sold: 0,
+    rewardCurrency: RewardCurrency.Usdcent,
+    isAddon: false,
+    isHidden: false,
+    preOrder: false,
+    posts: [],
+    createdAt: '2023-01-01T00:00:00Z',
+    shippingConfig: {
+      globalShipping: true,
+      id: '2',
+      name: 'Test Shipping fee for tshirt',
+      type: ProjectShippingConfigType.Flat,
+      shippingRates: [
+        {
+          baseRate: 1000,
+          country: 'DEFAULT',
+          incrementRate: 0,
+          sameAsDefault: true,
+          __typename: 'ProjectShippingRate',
+        },
+      ],
+      __typename: 'ShippingConfig',
+    },
+  },
+  {
+    id: 106, // Reward with shipping that is not global & Per unit
+    cost: 500,
+    hasShipping: true,
+    __typename: 'ProjectReward',
+    uuid: 'uuid-103',
+    name: 'USD Reward 6 Shipping Not Global & Per Unit',
+    description: 'Desc 103',
+    images: [],
+    privateCommentPrompts: [],
+    stock: null,
+    deleted: false,
+    sold: 0,
+    rewardCurrency: RewardCurrency.Usdcent,
+    isAddon: false,
+    isHidden: false,
+    preOrder: false,
+    posts: [],
+    createdAt: '2023-01-01T00:00:00Z',
+    shippingConfig: {
+      globalShipping: false,
+      id: '2',
+      name: 'Test Shipping fee for tshirt',
+      type: ProjectShippingConfigType.PerUnit,
+      shippingRates: [
+        {
+          baseRate: 1000,
+          country: 'DEFAULT',
+          incrementRate: 0,
+          sameAsDefault: true,
+          __typename: 'ProjectShippingRate',
+        },
+        {
+          baseRate: 1200,
+          country: 'US',
+          incrementRate: 0,
+          sameAsDefault: false,
+          __typename: 'ProjectShippingRate',
+        },
+      ],
+      __typename: 'ShippingConfig',
+    },
   },
 ]
 

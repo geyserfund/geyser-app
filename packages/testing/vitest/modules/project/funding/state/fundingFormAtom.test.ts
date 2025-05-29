@@ -1,6 +1,7 @@
 import { createStore } from 'jotai'
 import { beforeEach, describe, expect, it } from 'vitest'
 
+import { shippingCountryAtom } from '@/modules/project/funding/state/shippingAddressAtom.ts'
 import { SATOSHIS_IN_BTC } from '@/shared/constants' // Import constant
 import { usdRateAtom } from '@/shared/state/btcRateAtom' // Correct import for usdRateAtom
 // Import types needed here
@@ -14,6 +15,7 @@ import {
   rewardsCostAtoms,
   setFundFormStateAtom,
   setFundFormTargetAtom,
+  shippingCostAtom,
   subscriptionCostAtoms,
   tipAtoms,
   totalAmountSatsAtom,
@@ -29,6 +31,7 @@ import { walletAtom } from '../../../../../../../src/modules/project/state/walle
 // Import mocks from the new file
 import {
   initialTestState,
+  mockBitcoinQuote,
   mockProjectDataSats,
   mockProjectDataUsd,
   mockRewardsFull,
@@ -37,6 +40,7 @@ import {
 // Import test helpers
 import {
   calculateExpectedRewardCosts,
+  calculateExpectedShippingCost,
   calculateExpectedTip,
   calculateExpectedTotalSats,
   calculateExpectedTotalUsdCent,
@@ -70,32 +74,31 @@ describe('fundingFormAtom Tests', () => {
       store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 1 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
+      const shippingCost = store.get(shippingCostAtom)
       const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
       // Use helpers for expected values
-      const expectedCosts = calculateExpectedRewardCosts(
-        { '101': 1 },
-        mockRewardsFull,
-        RewardCurrency.Usdcent,
-        mockUsdRate,
-      )
-      const expectedTip = calculateExpectedTip(
-        state.donationAmount,
-        expectedCosts.sats,
-        state.geyserTipPercent,
-        mockUsdRate,
-      )
-      const expectedTotalSats = calculateExpectedTotalSats(
-        state.donationAmount,
-        state.shippingCost,
-        expectedCosts.sats,
-        0,
-        expectedTip.sats,
-        mockUsdRate,
-      )
-      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
+      const expectedCosts = calculateExpectedRewardCosts({
+        rewardsByIDAndCount: { '101': 1 },
+        rewards: mockRewardsFull,
+        rewardCurrency: RewardCurrency.Usdcent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTip = calculateExpectedTip({
+        donationAmount: state.donationAmount,
+        rewardsCostSatoshi: expectedCosts.sats,
+        geyserTipPercent: state.geyserTipPercent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTotalSats = calculateExpectedTotalSats({
+        donationAmount: state.donationAmount,
+        shippingCostSats: shippingCost.sats,
+        rewardsSats: expectedCosts.sats,
+        tipSats: expectedTip.sats,
+      })
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote)
 
       expect(state.rewardsByIDAndCount).toEqual({ '101': 1 })
       expect(state.needsShipping).toBe(false)
@@ -109,31 +112,30 @@ describe('fundingFormAtom Tests', () => {
       store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 3 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
+      const shippingCost = store.get(shippingCostAtom)
       const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
-      const expectedCosts = calculateExpectedRewardCosts(
-        { '101': 3 },
-        mockRewardsFull,
-        RewardCurrency.Usdcent,
-        mockUsdRate,
-      )
-      const expectedTip = calculateExpectedTip(
-        state.donationAmount,
-        expectedCosts.sats,
-        state.geyserTipPercent,
-        mockUsdRate,
-      )
-      const expectedTotalSats = calculateExpectedTotalSats(
-        state.donationAmount,
-        state.shippingCost,
-        expectedCosts.sats,
-        0,
-        expectedTip.sats,
-        mockUsdRate,
-      )
-      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
+      const expectedCosts = calculateExpectedRewardCosts({
+        rewardsByIDAndCount: { '101': 3 },
+        rewards: mockRewardsFull,
+        rewardCurrency: RewardCurrency.Usdcent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTip = calculateExpectedTip({
+        donationAmount: state.donationAmount,
+        rewardsCostSatoshi: expectedCosts.sats,
+        geyserTipPercent: state.geyserTipPercent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTotalSats = calculateExpectedTotalSats({
+        donationAmount: state.donationAmount,
+        shippingCostSats: shippingCost.sats,
+        rewardsSats: expectedCosts.sats,
+        tipSats: expectedTip.sats,
+      })
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote)
 
       expect(state.rewardsByIDAndCount).toEqual({ '101': 3 })
       expect(derivedCosts).toEqual(expectedCosts)
@@ -146,31 +148,30 @@ describe('fundingFormAtom Tests', () => {
       store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 1 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
+      const shippingCost = store.get(shippingCostAtom)
       const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
-      const expectedCosts = calculateExpectedRewardCosts(
-        { '101': 1 },
-        mockRewardsFull,
-        RewardCurrency.Usdcent,
-        mockUsdRate,
-      )
-      const expectedTip = calculateExpectedTip(
-        state.donationAmount,
-        expectedCosts.sats,
-        state.geyserTipPercent,
-        mockUsdRate,
-      )
-      const expectedTotalSats = calculateExpectedTotalSats(
-        state.donationAmount,
-        state.shippingCost,
-        expectedCosts.sats,
-        0,
-        expectedTip.sats,
-        mockUsdRate,
-      )
-      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
+      const expectedCosts = calculateExpectedRewardCosts({
+        rewardsByIDAndCount: { '101': 1 },
+        rewards: mockRewardsFull,
+        rewardCurrency: RewardCurrency.Usdcent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTip = calculateExpectedTip({
+        donationAmount: state.donationAmount,
+        rewardsCostSatoshi: expectedCosts.sats,
+        geyserTipPercent: state.geyserTipPercent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTotalSats = calculateExpectedTotalSats({
+        donationAmount: state.donationAmount,
+        shippingCostSats: shippingCost.sats,
+        rewardsSats: expectedCosts.sats,
+        tipSats: expectedTip.sats,
+      })
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote)
 
       expect(state.rewardsByIDAndCount).toEqual({ '101': 1 })
       expect(state.needsShipping).toBe(false)
@@ -189,31 +190,30 @@ describe('fundingFormAtom Tests', () => {
       store.set(updateFundingFormRewardAtom, { id: 103, count: 1 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
+      const shippingCost = store.get(shippingCostAtom)
       const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
-      const expectedCosts = calculateExpectedRewardCosts(
-        { '103': 1 },
-        mockRewardsFull,
-        RewardCurrency.Usdcent,
-        mockUsdRate,
-      )
-      const expectedTip = calculateExpectedTip(
-        state.donationAmount,
-        expectedCosts.sats,
-        state.geyserTipPercent,
-        mockUsdRate,
-      )
-      const expectedTotalSats = calculateExpectedTotalSats(
-        state.donationAmount,
-        state.shippingCost,
-        expectedCosts.sats,
-        0,
-        expectedTip.sats,
-        mockUsdRate,
-      )
-      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
+      const expectedCosts = calculateExpectedRewardCosts({
+        rewardsByIDAndCount: { '103': 1 },
+        rewards: mockRewardsFull,
+        rewardCurrency: RewardCurrency.Usdcent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTip = calculateExpectedTip({
+        donationAmount: state.donationAmount,
+        rewardsCostSatoshi: expectedCosts.sats,
+        geyserTipPercent: state.geyserTipPercent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTotalSats = calculateExpectedTotalSats({
+        donationAmount: state.donationAmount,
+        shippingCostSats: shippingCost.sats,
+        rewardsSats: expectedCosts.sats,
+        tipSats: expectedTip.sats,
+      })
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote)
 
       expect(state.rewardsByIDAndCount).toEqual({ '103': 1 })
       expect(state.needsShipping).toBe(true)
@@ -228,32 +228,31 @@ describe('fundingFormAtom Tests', () => {
       store.set(updateFundingFormRewardAtom, { id: 103, count: 2 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
+      const shippingCost = store.get(shippingCostAtom)
       const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
       const selectedRewards = { '101': 1, '103': 2 }
-      const expectedCosts = calculateExpectedRewardCosts(
-        selectedRewards,
-        mockRewardsFull,
-        RewardCurrency.Usdcent,
-        mockUsdRate,
-      )
-      const expectedTip = calculateExpectedTip(
-        state.donationAmount,
-        expectedCosts.sats,
-        state.geyserTipPercent,
-        mockUsdRate,
-      )
-      const expectedTotalSats = calculateExpectedTotalSats(
-        state.donationAmount,
-        state.shippingCost,
-        expectedCosts.sats,
-        0,
-        expectedTip.sats,
-        mockUsdRate,
-      )
-      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
+      const expectedCosts = calculateExpectedRewardCosts({
+        rewardsByIDAndCount: selectedRewards,
+        rewards: mockRewardsFull,
+        rewardCurrency: RewardCurrency.Usdcent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTip = calculateExpectedTip({
+        donationAmount: state.donationAmount,
+        rewardsCostSatoshi: expectedCosts.sats,
+        geyserTipPercent: state.geyserTipPercent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTotalSats = calculateExpectedTotalSats({
+        donationAmount: state.donationAmount,
+        shippingCostSats: shippingCost.sats,
+        rewardsSats: expectedCosts.sats,
+        tipSats: expectedTip.sats,
+      })
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote)
 
       expect(state.rewardsByIDAndCount).toEqual(selectedRewards)
       expect(state.needsShipping).toBe(true)
@@ -269,32 +268,31 @@ describe('fundingFormAtom Tests', () => {
       store.set(updateFundingFormRewardAtom, { id: '101' as any, count: 0 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
+      const shippingCost = store.get(shippingCostAtom)
       const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
       const selectedRewards = { '103': 1 }
-      const expectedCosts = calculateExpectedRewardCosts(
-        selectedRewards,
-        mockRewardsFull,
-        RewardCurrency.Usdcent,
-        mockUsdRate,
-      )
-      const expectedTip = calculateExpectedTip(
-        state.donationAmount,
-        expectedCosts.sats,
-        state.geyserTipPercent,
-        mockUsdRate,
-      )
-      const expectedTotalSats = calculateExpectedTotalSats(
-        state.donationAmount,
-        state.shippingCost,
-        expectedCosts.sats,
-        0,
-        expectedTip.sats,
-        mockUsdRate,
-      )
-      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
+      const expectedCosts = calculateExpectedRewardCosts({
+        rewardsByIDAndCount: selectedRewards,
+        rewards: mockRewardsFull,
+        rewardCurrency: RewardCurrency.Usdcent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTip = calculateExpectedTip({
+        donationAmount: state.donationAmount,
+        rewardsCostSatoshi: expectedCosts.sats,
+        geyserTipPercent: state.geyserTipPercent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTotalSats = calculateExpectedTotalSats({
+        donationAmount: state.donationAmount,
+        shippingCostSats: shippingCost.sats,
+        rewardsSats: expectedCosts.sats,
+        tipSats: expectedTip.sats,
+      })
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote)
 
       expect(state.rewardsByIDAndCount).toEqual(selectedRewards)
       expect(state.needsShipping).toBe(true)
@@ -306,7 +304,7 @@ describe('fundingFormAtom Tests', () => {
 
     it('updateFundingFormRewardAtom should recalculate derived totals correctly when donation exists', () => {
       const initialDonationSats = 10000
-      const initialDonationUsdCent = calculateExpectedTotalUsdCent(initialDonationSats, mockUsdRate)
+      const initialDonationUsdCent = calculateExpectedTotalUsdCent(initialDonationSats, mockBitcoinQuote)
       store.set(setFundFormStateAtom, 'donationAmount', initialDonationSats)
       store.set(setFundFormStateAtom, 'donationAmountUsdCent', initialDonationUsdCent) // Ensure consistency
 
@@ -317,27 +315,25 @@ describe('fundingFormAtom Tests', () => {
       const finalTotalSats = store.get(totalAmountSatsAtom)
       const finalTotalUsdCent = store.get(totalAmountUsdCentAtom)
 
-      const expectedCosts = calculateExpectedRewardCosts(
-        { '101': 1 },
-        mockRewardsFull,
-        RewardCurrency.Usdcent,
-        mockUsdRate,
-      )
-      const expectedTip = calculateExpectedTip(
-        initialDonationSats,
-        expectedCosts.sats,
-        finalState.geyserTipPercent,
-        mockUsdRate,
-      )
-      const expectedTotalSats = calculateExpectedTotalSats(
-        initialDonationSats,
-        finalState.shippingCost,
-        expectedCosts.sats,
-        0,
-        expectedTip.sats,
-        mockUsdRate,
-      )
-      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
+      const expectedCosts = calculateExpectedRewardCosts({
+        rewardsByIDAndCount: { '101': 1 },
+        rewards: mockRewardsFull,
+        rewardCurrency: RewardCurrency.Usdcent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTip = calculateExpectedTip({
+        donationAmount: finalState.donationAmount,
+        rewardsCostSatoshi: expectedCosts.sats,
+        geyserTipPercent: finalState.geyserTipPercent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTotalSats = calculateExpectedTotalSats({
+        donationAmount: initialDonationSats,
+        shippingCostSats: finalState.shippingCost,
+        rewardsSats: expectedCosts.sats,
+        tipSats: expectedTip.sats,
+      })
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote)
 
       expect(derivedCosts).toEqual(expectedCosts)
       expect(tipResult).toEqual(expectedTip)
@@ -347,6 +343,150 @@ describe('fundingFormAtom Tests', () => {
       expect(finalState.donationAmountUsdCent).toBe(initialDonationUsdCent)
       expect(finalTotalSats).toBe(expectedTotalSats)
       expect(finalTotalUsdCent).toBe(expectedTotalUsdCent)
+    })
+
+    it('updateFundingFormRewardAtom should calculate shipping correctly for global & incremental shipping', () => {
+      store.set(updateFundingFormRewardAtom, { id: '104' as any, count: 3 })
+      const state = store.get(fundingFormStateAtom)
+      const shippingCost = store.get(shippingCostAtom)
+      const derivedCosts = store.get(rewardsCostAtoms)
+      const tipResult = store.get(tipAtoms)
+      const totalSats = store.get(totalAmountSatsAtom)
+      const totalUsdCent = store.get(totalAmountUsdCentAtom)
+
+      const expectedCosts = calculateExpectedRewardCosts({
+        rewardsByIDAndCount: { '104': 3 },
+        rewards: mockRewardsFull,
+        rewardCurrency: RewardCurrency.Usdcent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+
+      const expectedShippingCost = calculateExpectedShippingCost({
+        rewards: mockRewardsFull,
+        rewardsByIDAndCount: { '104': 3 },
+        bitcoinQuote: mockBitcoinQuote,
+      })
+
+      const expectedTip = calculateExpectedTip({
+        donationAmount: state.donationAmount,
+        rewardsCostSatoshi: expectedCosts.sats,
+        shippingCostSats: expectedShippingCost.sats,
+        geyserTipPercent: state.geyserTipPercent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+
+      const expectedTotalSats = calculateExpectedTotalSats({
+        donationAmount: state.donationAmount,
+        shippingCostSats: shippingCost.sats,
+        rewardsSats: expectedCosts.sats,
+        tipSats: expectedTip.sats,
+      })
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote)
+
+      expect(state.rewardsByIDAndCount).toEqual({ '104': 3 })
+      expect(derivedCosts).toEqual(expectedCosts)
+      expect(tipResult).toEqual(expectedTip)
+      expect(totalSats).toBe(expectedTotalSats)
+      expect(totalUsdCent).toBe(expectedTotalUsdCent)
+      expect(shippingCost).toEqual(expectedShippingCost)
+    })
+
+    it('updateFundingFormRewardAtom should calculate shipping correctly for a different country code', () => {
+      store.set(updateFundingFormRewardAtom, { id: '106' as any, count: 4 })
+      store.set(shippingCountryAtom, 'US')
+
+      const state = store.get(fundingFormStateAtom)
+      const shippingCost = store.get(shippingCostAtom)
+      const derivedCosts = store.get(rewardsCostAtoms)
+      const tipResult = store.get(tipAtoms)
+      const totalSats = store.get(totalAmountSatsAtom)
+      const totalUsdCent = store.get(totalAmountUsdCentAtom)
+
+      const expectedCosts = calculateExpectedRewardCosts({
+        rewardsByIDAndCount: { '106': 4 },
+        rewards: mockRewardsFull,
+        rewardCurrency: RewardCurrency.Usdcent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+
+      const expectedShippingCost = calculateExpectedShippingCost({
+        rewards: mockRewardsFull,
+        rewardsByIDAndCount: { '106': 4 },
+        shippingCountry: 'US',
+        bitcoinQuote: mockBitcoinQuote,
+      })
+
+      const expectedTip = calculateExpectedTip({
+        donationAmount: state.donationAmount,
+        rewardsCostSatoshi: expectedCosts.sats,
+        shippingCostSats: expectedShippingCost.sats,
+        geyserTipPercent: state.geyserTipPercent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+
+      const expectedTotalSats = calculateExpectedTotalSats({
+        donationAmount: state.donationAmount,
+        shippingCostSats: shippingCost.sats,
+        rewardsSats: expectedCosts.sats,
+        tipSats: expectedTip.sats,
+      })
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote)
+
+      expect(state.rewardsByIDAndCount).toEqual({ '106': 4 })
+      expect(derivedCosts).toEqual(expectedCosts)
+      expect(tipResult).toEqual(expectedTip)
+      expect(totalSats).toBe(expectedTotalSats)
+      expect(totalUsdCent).toBe(expectedTotalUsdCent)
+      expect(shippingCost).toEqual(expectedShippingCost)
+    })
+
+    it('updateFundingFormRewardAtom should calculate shipping correctly for rewards with multiple shipping configs', () => {
+      store.set(updateFundingFormRewardAtom, { id: '104' as any, count: 2 })
+      store.set(updateFundingFormRewardAtom, { id: '105' as any, count: 3 })
+      store.set(updateFundingFormRewardAtom, { id: '106' as any, count: 4 })
+
+      const state = store.get(fundingFormStateAtom)
+      const shippingCost = store.get(shippingCostAtom)
+      const derivedCosts = store.get(rewardsCostAtoms)
+      const tipResult = store.get(tipAtoms)
+      const totalSats = store.get(totalAmountSatsAtom)
+      const totalUsdCent = store.get(totalAmountUsdCentAtom)
+
+      const expectedCosts = calculateExpectedRewardCosts({
+        rewardsByIDAndCount: { '104': 2, '105': 3, '106': 4 },
+        rewards: mockRewardsFull,
+        rewardCurrency: RewardCurrency.Usdcent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+
+      const expectedShippingCost = calculateExpectedShippingCost({
+        rewards: mockRewardsFull,
+        rewardsByIDAndCount: { '104': 2, '105': 3, '106': 4 },
+        bitcoinQuote: mockBitcoinQuote,
+      })
+
+      const expectedTip = calculateExpectedTip({
+        donationAmount: state.donationAmount,
+        rewardsCostSatoshi: expectedCosts.sats,
+        shippingCostSats: expectedShippingCost.sats,
+        geyserTipPercent: state.geyserTipPercent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+
+      const expectedTotalSats = calculateExpectedTotalSats({
+        donationAmount: state.donationAmount,
+        shippingCostSats: shippingCost.sats,
+        rewardsSats: expectedCosts.sats,
+        tipSats: expectedTip.sats,
+      })
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote)
+
+      expect(state.rewardsByIDAndCount).toEqual({ '104': 2, '105': 3, '106': 4 })
+      expect(derivedCosts).toEqual(expectedCosts)
+      expect(tipResult).toEqual(expectedTip)
+      expect(totalSats).toBe(expectedTotalSats)
+      expect(totalUsdCent).toBe(expectedTotalUsdCent)
+      expect(shippingCost).toEqual(expectedShippingCost)
     })
   })
 
@@ -359,31 +499,30 @@ describe('fundingFormAtom Tests', () => {
       store.set(updateFundingFormRewardAtom, { id: 102, count: 1 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
+      const shippingCost = store.get(shippingCostAtom)
       const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
-      const expectedCosts = calculateExpectedRewardCosts(
-        { '102': 1 },
-        mockRewardsFull,
-        RewardCurrency.Btcsat,
-        mockUsdRate,
-      )
-      const expectedTip = calculateExpectedTip(
-        state.donationAmount,
-        expectedCosts.sats,
-        state.geyserTipPercent,
-        mockUsdRate,
-      )
-      const expectedTotalSats = calculateExpectedTotalSats(
-        state.donationAmount,
-        state.shippingCost,
-        expectedCosts.sats,
-        0,
-        expectedTip.sats,
-        mockUsdRate,
-      )
-      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
+      const expectedCosts = calculateExpectedRewardCosts({
+        rewardsByIDAndCount: { '102': 1 },
+        rewards: mockRewardsFull,
+        rewardCurrency: RewardCurrency.Btcsat,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTip = calculateExpectedTip({
+        donationAmount: state.donationAmount,
+        rewardsCostSatoshi: expectedCosts.sats,
+        geyserTipPercent: state.geyserTipPercent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTotalSats = calculateExpectedTotalSats({
+        donationAmount: state.donationAmount,
+        shippingCostSats: shippingCost.sats,
+        rewardsSats: expectedCosts.sats,
+        tipSats: expectedTip.sats,
+      })
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote)
 
       expect(state.rewardsByIDAndCount).toEqual({ '102': 1 })
       expect(state.needsShipping).toBe(false)
@@ -398,32 +537,31 @@ describe('fundingFormAtom Tests', () => {
       store.set(updateFundingFormRewardAtom, { id: 102, count: 1 })
       const state = store.get(fundingFormStateAtom)
       const derivedCosts = store.get(rewardsCostAtoms)
+      const shippingCost = store.get(shippingCostAtom)
       const tipResult = store.get(tipAtoms)
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
       const selectedRewards = { '101': 1, '102': 1 }
-      const expectedCosts = calculateExpectedRewardCosts(
-        selectedRewards,
-        mockRewardsFull,
-        RewardCurrency.Btcsat,
-        mockUsdRate,
-      )
-      const expectedTip = calculateExpectedTip(
-        state.donationAmount,
-        expectedCosts.sats,
-        state.geyserTipPercent,
-        mockUsdRate,
-      )
-      const expectedTotalSats = calculateExpectedTotalSats(
-        state.donationAmount,
-        state.shippingCost,
-        expectedCosts.sats,
-        0,
-        expectedTip.sats,
-        mockUsdRate,
-      )
-      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockUsdRate)
+      const expectedCosts = calculateExpectedRewardCosts({
+        rewardsByIDAndCount: selectedRewards,
+        rewards: mockRewardsFull,
+        rewardCurrency: RewardCurrency.Btcsat,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTip = calculateExpectedTip({
+        donationAmount: state.donationAmount,
+        rewardsCostSatoshi: expectedCosts.sats,
+        geyserTipPercent: state.geyserTipPercent,
+        bitcoinQuote: mockBitcoinQuote,
+      })
+      const expectedTotalSats = calculateExpectedTotalSats({
+        donationAmount: state.donationAmount,
+        shippingCostSats: shippingCost.sats,
+        rewardsSats: expectedCosts.sats,
+        tipSats: expectedTip.sats,
+      })
+      const expectedTotalUsdCent = calculateExpectedTotalUsdCent(expectedTotalSats, mockBitcoinQuote)
 
       expect(state.rewardsByIDAndCount).toEqual(selectedRewards)
       expect(state.needsShipping).toBe(false)
