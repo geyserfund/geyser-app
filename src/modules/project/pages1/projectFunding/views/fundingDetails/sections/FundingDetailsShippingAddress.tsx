@@ -2,7 +2,7 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
-import { UseFormReturn } from 'react-hook-form'
+import { Control, FieldErrors, useController, UseFormReturn, UseFormWatch } from 'react-hook-form'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
 import { fundingFormShippingAvailabilityAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
@@ -11,6 +11,8 @@ import { ControlledCustomSelect } from '@/shared/components/controlledInput/Cont
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H1 } from '@/shared/components/typography/index.ts'
+import { IsoToCanadaStateMap } from '@/shared/constants/general/CanadaStatesMap.ts'
+import { IsoToUsStateMap } from '@/shared/constants/general/USStatesMap.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { countriesAtom } from '@/shared/state/countriesAtom.ts'
 
@@ -26,12 +28,26 @@ export type ShippingAddressFormData = {
 
 // New sub-component for form fields
 interface ShippingAddressFormFieldsProps {
-  control: any // Control from react-hook-form
-  errors: any // Errors from react-hook-form
+  control: Control<ShippingAddressFormData, any>
+  errors: FieldErrors<ShippingAddressFormData>
+  watch: UseFormWatch<ShippingAddressFormData>
   countryOptions: { label: string; value: string }[]
 }
 
-const ShippingAddressFormFields: React.FC<ShippingAddressFormFieldsProps> = ({ control, errors, countryOptions }) => {
+const ShippingAddressFormFields: React.FC<ShippingAddressFormFieldsProps> = ({
+  control,
+  errors,
+  countryOptions,
+  watch,
+}) => {
+  const isUSA = watch('country') === 'US'
+  const isCanada = watch('country') === 'CA'
+
+  const { field: stateField } = useController({ name: 'state', control })
+
+  const hasUniqueStates = isUSA || isCanada
+  const mapOptions = isUSA ? IsoToUsStateMap : isCanada ? IsoToCanadaStateMap : {}
+
   return (
     <VStack w="full" spacing={4}>
       <ControlledTextInput
@@ -51,7 +67,7 @@ const ShippingAddressFormFields: React.FC<ShippingAddressFormFieldsProps> = ({ c
         error={errors.streetAddress?.message}
         required
       />
-      <HStack w="full" spacing={{ base: 4, lg: 8 }}>
+      <HStack w="full" alignItems="flex-start" spacing={{ base: 4, lg: 8 }}>
         <ControlledCustomSelect
           width="100%"
           name="country"
@@ -60,16 +76,35 @@ const ShippingAddressFormFields: React.FC<ShippingAddressFormFieldsProps> = ({ c
           error={errors.country?.message}
           options={countryOptions}
           placeholder={t('Select')}
+          onChange={() => {
+            stateField.onChange('')
+          }}
           required
         />
-        <ControlledTextInput
-          name="state"
-          control={control}
-          label={t('State / Region')}
-          placeholder={t('California')}
-          error={errors.state?.message}
-          required
-        />
+        {hasUniqueStates ? (
+          <ControlledCustomSelect
+            width="100%"
+            name="state"
+            options={Object.entries(mapOptions).map(([key, value]) => ({
+              label: value,
+              value: key,
+            }))}
+            control={control}
+            label={t('State / Region')}
+            placeholder={isUSA ? t('California') : t('Alberta')}
+            error={errors.state?.message}
+            required
+          />
+        ) : (
+          <ControlledTextInput
+            name="state"
+            control={control}
+            label={t('State / Region')}
+            placeholder={t('California')}
+            error={errors.state?.message}
+            required
+          />
+        )}
       </HStack>
       <HStack w="full" spacing={{ base: 4, lg: 8 }}>
         <ControlledTextInput
@@ -110,6 +145,7 @@ export const FundingDetailsShippingAddress = ({ form }: { form: UseFormReturn<Sh
   const {
     control,
     formState: { errors, isValid },
+    watch,
   } = form
 
   useEffect(() => {
@@ -142,7 +178,7 @@ export const FundingDetailsShippingAddress = ({ form }: { form: UseFormReturn<Sh
           />
         </VStack>
 
-        <ShippingAddressFormFields control={control} errors={errors} countryOptions={countryOptions} />
+        <ShippingAddressFormFields watch={watch} control={control} errors={errors} countryOptions={countryOptions} />
       </VStack>
     </CardLayout>
   )
