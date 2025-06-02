@@ -135,7 +135,13 @@ export const PostView = () => {
           </HStack>
         </TopNavContainerBar>
 
-        <CardLayout w="auto" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }} mobileDense>
+        <CardLayout
+          w={{ base: 'full', lg: 'auto' }}
+          direction="row"
+          justifyContent="center"
+          paddingY={{ base: 6, lg: 12 }}
+          mobileDense
+        >
           <VStack maxWidth={dimensions.project.posts.view.maxWidth} w="full" alignItems="start" spacing={6}>
             {post.image && (
               <Box overflow={'hidden'} width="100%" position="relative" paddingTop="75%" borderRadius={'8px'}>

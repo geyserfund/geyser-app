@@ -120,7 +120,12 @@ export const RewardView = () => {
           {!isProjectOwner ? <FollowButton size="lg" withLabel project={project} /> : <RewardShare reward={reward} />}
         </TopNavContainerBar>
 
-        <CardLayout w="auto" direction="row" justifyContent="center" paddingY={{ base: 6, lg: 12 }}>
+        <CardLayout
+          w={{ base: 'full', lg: 'auto' }}
+          direction="row"
+          justifyContent="center"
+          paddingY={{ base: 6, lg: 12 }}
+        >
           <VStack maxWidth={dimensions.project.rewards.view.maxWidth} w="full" spacing={6}>
             <VStack w="full" spacing={3}>
               <HStack w="full" alignItems="start" justifyContent="space-between">
