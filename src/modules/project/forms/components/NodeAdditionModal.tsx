@@ -98,6 +98,9 @@ export const NodeAdditionModal = ({ isOpen, onClose, nodeInput, onSubmit }: Prop
     if (!form.hostname) {
       errors.hostname = 'Host name' + additionalText
       isValid = false
+    } else if (form.hostname.match(/:\d+$/)) {
+      errors.hostname = `${t('Host name cannot contain port number')}.`
+      isValid = false
     } else {
       const val = isTorV3Address(form.hostname)
       if (val) {
