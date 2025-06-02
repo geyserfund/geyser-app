@@ -32,6 +32,8 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
       return
     }
 
+    let intervalId: NodeJS.Timeout | null = null
+
     const endTime = DateTime.fromMillis(project.preLaunchExpiresAt)
 
     const updateCountdown = () => {
@@ -40,16 +42,22 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
 
       if (remaining.valueOf() <= 0) {
         setTimeLeft(Duration.fromMillis(0))
-        clearInterval(intervalId)
+        if (intervalId) {
+          clearInterval(intervalId)
+        }
       } else {
         setTimeLeft(remaining)
       }
     }
 
     updateCountdown()
-    const intervalId = setInterval(updateCountdown, 60000)
+    intervalId = setInterval(updateCountdown, 60000)
 
-    return () => clearInterval(intervalId)
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId)
+      }
+    }
   }, [project?.preLaunchExpiresAt])
 
   // Format time value helper
