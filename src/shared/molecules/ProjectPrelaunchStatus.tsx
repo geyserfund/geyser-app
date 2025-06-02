@@ -44,6 +44,8 @@ export const ProjectPrelaunchStatus = ({
       return
     }
 
+    let intervalId: NodeJS.Timeout | null = null
+
     const endTime = DateTime.fromMillis(project.preLaunchExpiresAt)
 
     const updateCountdown = () => {
@@ -53,16 +55,22 @@ export const ProjectPrelaunchStatus = ({
       if (remaining.valueOf() <= 0) {
         setTimeLeft(Duration.fromMillis(0)) // Set to zero duration
         setIsTimeUp(true)
-        clearInterval(intervalId)
+        if (intervalId) {
+          clearInterval(intervalId)
+        }
       } else {
         setTimeLeft(remaining)
       }
     }
 
     updateCountdown()
-    const intervalId = setInterval(updateCountdown, 60000)
+    intervalId = setInterval(updateCountdown, 60000)
 
-    return () => clearInterval(intervalId)
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId)
+      }
+    }
   }, [project?.preLaunchExpiresAt])
 
   const formattedTime = getFormattedTime(timeLeft, isMobile)
