@@ -1,11 +1,14 @@
-import { Box, HStack, Skeleton, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Skeleton, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useNavigate } from 'react-router-dom'
 
 import { FollowButton } from '@/modules/project/pages1/projectView/views/body/components/FollowButton.tsx'
 import { NonProjectProjectIcon } from '@/modules/project/pages1/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
-import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
+import { CardLayoutProps } from '@/shared/components/layouts/CardLayout'
+import { InteractiveCardLayout } from '@/shared/components/layouts/InteractiveCardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants/index.ts'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { centsToDollars, isInactive } from '@/utils'
 
@@ -22,7 +25,7 @@ export interface LandingCardBaseProps extends CardLayoutProps {
 
 export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: LandingCardBaseProps) => {
   const inActive = isInactive(project.status)
-
+  const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
 
   const getFires = (amount: number) => {
@@ -46,15 +49,27 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
   const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
   const fires = getFires(contributionAmount)
 
+  const handleContribute = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    navigate(getPath('projectFunding', project.name))
+  }
+
   return (
-    <CardLayout
-      hover
+    <InteractiveCardLayout
       padding="0px"
-      width={{ base: 'full', lg: 'auto' }}
+      width={{ base: 'full', lg: 'full' }}
       direction={{ base: 'row', lg: 'column' }}
       spacing={0}
       flex={{ base: 'unset', lg: 1 }}
       position="relative"
+      hoverContent={
+        <VStack paddingX={{ base: 3, lg: 4 }} paddingBottom={{ base: 3, lg: 4 }} width="100%">
+          <Button variant="solid" colorScheme="primary1" size="sm" width="100%" onClick={handleContribute}>
+            {t('Contribute')}
+          </Button>
+        </VStack>
+      }
       {...rest}
     >
       {inActive && (
@@ -74,6 +89,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           height="100%"
           aspectRatio={{ base: undefined, lg: 1 }}
           objectFit="cover"
+          borderRadius="8px"
           src={project.thumbnailImage}
           alt={`${project.title}-header-image`}
         />
@@ -116,15 +132,14 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           <FollowButton project={project} />
         </HStack>
       </VStack>
-    </CardLayout>
+    </InteractiveCardLayout>
   )
 }
 
 export const LandingCardBaseSkeleton = ({ isMobile }: { isMobile?: boolean }) => {
   return (
     <>
-      <CardLayout
-        hover
+      <InteractiveCardLayout
         padding="0px"
         width={{ base: 'full', lg: 'auto' }}
         direction={{ base: 'row', lg: 'column' }}
@@ -152,7 +167,7 @@ export const LandingCardBaseSkeleton = ({ isMobile }: { isMobile?: boolean }) =>
             <SkeletonLayout width="60px" height="22px" />
           </HStack>
         </VStack>
-      </CardLayout>
+      </InteractiveCardLayout>
     </>
   )
 }

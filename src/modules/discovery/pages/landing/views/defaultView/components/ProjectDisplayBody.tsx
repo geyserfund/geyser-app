@@ -1,4 +1,4 @@
-import { Stack } from '@chakra-ui/react'
+import { GridItem, SimpleGrid, Stack } from '@chakra-ui/react'
 
 import { LandingCardBaseSkeleton, SkeletonLayout } from '@/shared/components/layouts'
 
@@ -38,17 +38,15 @@ export const ProjectDisplayBody = ({
       }}
       rightContent={rightContent}
     >
-      <Stack width="100%" direction={{ base: 'column', lg: 'row' }} spacing={4}>
+      <SimpleGrid w="full" columns={{ base: 1, lg: 3, xl: 4 }} spacing={4}>
         {projects.map((project) => {
           return (
-            <LandingProjectCard
-              key={project.id}
-              project={project}
-              maxWidth={{ base: 'unset', lg: 'calc((100% - 48px) / 4 )' }}
-            />
+            <GridItem key={project.id}>
+              <LandingProjectCard key={project.id} project={project} />
+            </GridItem>
           )
         })}
-      </Stack>
+      </SimpleGrid>
     </ProjectRowLayout>
   )
 }

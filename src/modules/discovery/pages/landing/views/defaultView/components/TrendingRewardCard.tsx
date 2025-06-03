@@ -1,11 +1,12 @@
-import { Badge, Box, HStack, StackProps, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { guardianRewardUUIDs } from '@/modules/guardians/pages/character/characterAssets'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { InteractiveCardLayout } from '@/shared/components/layouts/InteractiveCardLayout.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath, getPathWithGeyserHero } from '@/shared/constants'
@@ -21,6 +22,15 @@ type TrendingRewardCardProps = {
 
 export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCardProps) => {
   const { formatSatsAmount, formatUsdAmount, formatAmount } = useCurrencyFormatter(true)
+  const navigate = useNavigate()
+
+  const handleBuy = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    navigate(getPath('projectFunding', reward.project.name), {
+      state: { rewardUUID: reward.uuid },
+    })
+  }
 
   const guardian = useMemo(() => {
     const guardian = Object.keys(guardianRewardUUIDs).find(
@@ -33,9 +43,7 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
   }, [reward])
 
   return (
-    <CardLayout
-      hover
-      as={Link}
+    <InteractiveCardLayout
       to={
         guardian
           ? getPath('guardiansCharacter', guardian)
@@ -43,17 +51,29 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
       }
       padding="0px"
       width={{ base: 'full', lg: 'auto' }}
-      direction={{ base: 'row', lg: 'column' }}
+      flexDirection={{ base: 'row', lg: 'column' }}
       spacing={0}
       flex={{ base: 'unset', lg: 1 }}
+      hoverContent={
+        <VStack paddingX={{ base: 3, lg: 4 }} paddingBottom={{ base: 3, lg: 4 }} width="100%">
+          <Body size="sm" light>
+            {reward.shortDescription}
+          </Body>
+          <Button variant="solid" colorScheme="primary1" size="sm" width="100%" onClick={handleBuy}>
+            {t('Buy')}
+          </Button>
+        </VStack>
+      }
       {...rest}
     >
       <Box width={{ base: '96px', lg: 'auto' }} height={{ base: '96px', lg: 'auto' }}>
         <ImageWithReload
+          id={`${reward.uuid}-image`}
           width="100%"
           height="100%"
           aspectRatio={{ base: 1, lg: ImageCropAspectRatio.Reward }}
           objectFit="cover"
+          borderRadius="8px"
           src={reward.images[0]}
           alt={`${reward.name}-header-image`}
         />
@@ -113,7 +133,7 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
           ) : null}
         </HStack>
       </VStack>
-    </CardLayout>
+    </InteractiveCardLayout>
   )
 }
 

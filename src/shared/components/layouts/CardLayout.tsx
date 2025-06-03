@@ -1,4 +1,5 @@
 import { LinkProps as ChakraLinkProps, Stack, StackProps } from '@chakra-ui/react'
+import { motion } from 'framer-motion'
 import { Link, LinkProps } from 'react-router-dom'
 
 import { useMobileMode } from '../../../utils'
@@ -13,7 +14,7 @@ export interface CardLayoutProps
   dense?: boolean
   hover?: boolean
   click?: boolean
-  topRightComponent?: React.ReactNode
+  raiseOnHover?: boolean
 }
 
 export const CardLayout = ({
@@ -24,10 +25,12 @@ export const CardLayout = ({
   noborder,
   click,
   hover,
-  topRightComponent,
+  raiseOnHover,
+  to,
   ...rest
 }: CardLayoutProps) => {
   const isMobile = useMobileMode()
+
   const props: StackProps = {
     spacing: 3,
     tabIndex: -1,
@@ -36,8 +39,6 @@ export const CardLayout = ({
     border: noborder ? 'none' : '1px solid',
     transition: 'border-color 0.5s',
     boxShadow: 'none',
-    as: rest.to ? Link : undefined,
-
     _hover: hover
       ? {
           cursor: 'pointer',
@@ -47,12 +48,20 @@ export const CardLayout = ({
       : {},
     _active: click ? { borderColor: 'primary1.9' } : {},
     _focus: click ? { borderColor: 'primary1.9' } : {},
-    ...rest,
     borderColor: noborder || (isMobile && noMobileBorder) ? 'transparent' : rest.borderColor || 'neutral1.6',
     position: 'relative',
+    ...rest,
   }
 
   if (mobileDense && isMobile) {
+    if (to) {
+      return (
+        <Stack padding={0} width="100%" {...props} {...rest} border="none">
+          <Link to={to}>{children}</Link>
+        </Stack>
+      )
+    }
+
     return (
       <Stack padding={0} width="100%" {...props} {...rest} border="none">
         {children}
@@ -60,8 +69,38 @@ export const CardLayout = ({
     )
   }
 
+  if (to) {
+    return (
+      <Stack
+        {...(raiseOnHover
+          ? {
+              as: motion.div,
+              whileHover: { scale: 1.02 },
+            }
+          : {})}
+        padding={dense ? 0 : { base: 3, lg: 6 }}
+        borderRadius="8px"
+        {...props}
+        {...rest}
+      >
+        <Link to={to}>{children}</Link>
+      </Stack>
+    )
+  }
+
   return (
-    <Stack padding={dense ? 0 : { base: 3, lg: 6 }} borderRadius="8px" {...props} {...rest}>
+    <Stack
+      {...(raiseOnHover
+        ? {
+            as: motion.div,
+            whileHover: { scale: 1.02 },
+          }
+        : {})}
+      padding={dense ? 0 : { base: 3, lg: 6 }}
+      borderRadius="8px"
+      {...props}
+      {...rest}
+    >
       {children}
     </Stack>
   )
