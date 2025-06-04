@@ -60,16 +60,16 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
       padding="0px"
       width={{ base: 'full', lg: 'full' }}
       direction={{ base: 'row', lg: 'column' }}
-      spacing={{ base: 3, lg: 4 }}
+      spacing={2}
       flex={{ base: 'unset', lg: 1 }}
       position="relative"
       hoverContent={
-        <VStack paddingX={{ base: 3, lg: 4 }} paddingBottom={{ base: 3, lg: 4 }} width="100%">
+        <VStack paddingX={{ base: 3, lg: 4 }} paddingBottom={{ base: 3, lg: 4 }} width="100%" alignItems="start">
           <Body size="sm" dark isTruncated width="100%" wordBreak={'break-word'} whiteSpace={'normal'}>
             {project.shortDescription}
           </Body>
 
-          <Button variant="solid" colorScheme="primary1" size="sm" width="100%" onClick={handleContribute}>
+          <Button variant="solid" colorScheme="primary1" size="md" width="100%" onClick={handleContribute}>
             {t('Contribute')}
           </Button>
         </VStack>
@@ -107,7 +107,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
         minWidth={{ base: '170px', lg: 'auto' }}
         alignItems="start"
         overflow="hidden"
-        spacing={1}
+        spacing={{ base: 1, lg: 0 }}
       >
         <H3 size="lg" medium isTruncated width="100%">
           {project.title}

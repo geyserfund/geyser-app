@@ -51,14 +51,14 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
       padding="0px"
       width={{ base: 'full', lg: 'auto' }}
       flexDirection={{ base: 'row', lg: 'column' }}
-      spacing={{ base: 3, lg: 4 }}
+      spacing={2}
       flex={{ base: 'unset', lg: 1 }}
       hoverContent={
-        <VStack paddingX={{ base: 3, lg: 4 }} paddingBottom={{ base: 3, lg: 4 }} width="100%">
+        <VStack paddingX={{ base: 3, lg: 4 }} paddingBottom={{ base: 3, lg: 4 }} width="100%" alignItems="start">
           <Body size="sm" light>
             {reward.shortDescription}
           </Body>
-          <Button variant="solid" colorScheme="primary1" size="sm" width="100%" onClick={handleBuy}>
+          <Button variant="solid" colorScheme="primary1" size="md" width="100%" onClick={handleBuy}>
             {t('Buy')}
           </Button>
         </VStack>
