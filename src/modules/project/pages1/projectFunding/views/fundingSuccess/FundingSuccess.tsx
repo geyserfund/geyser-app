@@ -83,6 +83,7 @@ export const FundingSuccess = () => {
             id={'suggested-projects-funding-success'}
             subCategory={project.subCategory}
             projectId={project.id}
+            paddingBottom={40}
           />
         </VStack>
       </CardLayout>

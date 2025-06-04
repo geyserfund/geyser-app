@@ -13,7 +13,7 @@ export interface CardLayoutProps
   dense?: boolean
   hover?: boolean
   click?: boolean
-  topRightComponent?: React.ReactNode
+  raiseOnHover?: boolean
 }
 
 export const CardLayout = ({
@@ -24,20 +24,20 @@ export const CardLayout = ({
   noborder,
   click,
   hover,
-  topRightComponent,
+  raiseOnHover,
   ...rest
 }: CardLayoutProps) => {
   const isMobile = useMobileMode()
+
   const props: StackProps = {
     spacing: 3,
     tabIndex: -1,
     overflow: 'hidden',
-    backgroundColor: 'neutral1.1',
+    as: rest.to ? Link : undefined,
+    backgroundColor: 'utils.pbg',
     border: noborder ? 'none' : '1px solid',
     transition: 'border-color 0.5s',
     boxShadow: 'none',
-    as: rest.to ? Link : undefined,
-
     _hover: hover
       ? {
           cursor: 'pointer',
@@ -47,9 +47,9 @@ export const CardLayout = ({
       : {},
     _active: click ? { borderColor: 'primary1.9' } : {},
     _focus: click ? { borderColor: 'primary1.9' } : {},
-    ...rest,
     borderColor: noborder || (isMobile && noMobileBorder) ? 'transparent' : rest.borderColor || 'neutral1.6',
     position: 'relative',
+    ...rest,
   }
 
   if (mobileDense && isMobile) {

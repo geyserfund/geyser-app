@@ -43,7 +43,7 @@ export const TrendingRewards = () => {
       }
       width="100%"
     >
-      <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacing={4}>
+      <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacing={{ base: 4, lg: 8 }}>
         {rewards.slice(0, 4).map((reward) => {
           return (
             <GridItem key={reward.projectReward.id}>

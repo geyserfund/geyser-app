@@ -2093,6 +2093,7 @@ export enum PaymentFeeType {
   Payment = 'PAYMENT',
   Platform = 'PLATFORM',
   Promotion = 'PROMOTION',
+  Shipping = 'SHIPPING',
   Tip = 'TIP'
 }
 
@@ -7071,9 +7072,9 @@ export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any,
 
 export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: string, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, balanceUsdCent: number, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
 
-export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
+export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, shortDescription?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
-export type RewardForProductsPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, description?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null } };
+export type RewardForProductsPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, shortDescription?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null } };
 
 export type ActivitiesGetQueryVariables = Exact<{
   input?: InputMaybe<GetActivitiesInput>;
@@ -9009,7 +9010,7 @@ export const RewardForLandingPageFragmentDoc = gql`
   images
   cost
   name
-  description
+  shortDescription
   project {
     rewardCurrency
     id
@@ -9026,7 +9027,7 @@ export const RewardForProductsPageFragmentDoc = gql`
   images
   cost
   name
-  description
+  shortDescription
   project {
     rewardCurrency
     id
