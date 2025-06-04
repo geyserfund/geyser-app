@@ -62,7 +62,7 @@ export const InteractiveCardLayout = ({
             whileHover={{ scale: 1.02 }}
             {...props}
             {...rest}
-            _hover={{ cursor: 'pointer', shadow: hoverContent ? 'none' : 'md' }}
+            _hover={{ cursor: 'pointer', shadow: hoverContent ? 'none' : 'lg' }}
             zIndex={isOpen ? 3 : 1}
             overflow="visible"
           >
@@ -77,9 +77,9 @@ export const InteractiveCardLayout = ({
                 onMouseOver={onOpen}
                 onMouseLeave={onClose}
                 _hover={{
-                  shadow: 'md',
+                  shadow: 'lg',
                   border: '1px solid',
-                  borderColor: 'neutral1.3',
+                  borderColor: 'neutral1.6',
                   cursor: 'pointer',
                 }}
                 width={'calc(100% + 32px)'}

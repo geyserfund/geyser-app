@@ -73,7 +73,7 @@ export const Products = () => {
     <VStack w="full" height="full" spacing={{ base: 6, lg: 12 }}>
       {rewardsBySubCategorySorted.map(({ subCategory, values }) => {
         return (
-          <VStack w="full" key={subCategory}>
+          <VStack w="full" key={subCategory} spacing={5}>
             <HStack w="full" justifyContent={'start'} alignItems={'center'}>
               <H3 size="2xl" dark bold>
                 {t('Trending in')}{' '}
@@ -83,7 +83,7 @@ export const Products = () => {
                 </Body>
               </H3>
             </HStack>
-            <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacing={4}>
+            <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacing={6}>
               {values.map((reward) => {
                 return (
                   <GridItem key={reward.projectReward.id}>
