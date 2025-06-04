@@ -60,11 +60,15 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
       padding="0px"
       width={{ base: 'full', lg: 'full' }}
       direction={{ base: 'row', lg: 'column' }}
-      spacing={0}
+      spacing={{ base: 3, lg: 4 }}
       flex={{ base: 'unset', lg: 1 }}
       position="relative"
       hoverContent={
         <VStack paddingX={{ base: 3, lg: 4 }} paddingBottom={{ base: 3, lg: 4 }} width="100%">
+          <Body size="sm" dark isTruncated width="100%" wordBreak={'break-word'} whiteSpace={'normal'}>
+            {project.shortDescription}
+          </Body>
+
           <Button variant="solid" colorScheme="primary1" size="sm" width="100%" onClick={handleContribute}>
             {t('Contribute')}
           </Button>
@@ -83,7 +87,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           height="100%"
         />
       )}
-      <Box width={{ base: '120px', lg: 'auto' }} height={{ base: '141px', lg: 'auto' }} position="relative">
+      <Box width={{ base: '120px', lg: 'auto' }} height={{ base: '120px', lg: 'auto' }} position="relative">
         <ImageWithReload
           width="100%"
           height="100%"
@@ -101,7 +105,6 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
         flex={1}
         width={{ base: 'auto', lg: '100%' }}
         minWidth={{ base: '170px', lg: 'auto' }}
-        padding={4}
         alignItems="start"
         overflow="hidden"
         spacing={1}
@@ -118,17 +121,26 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           width="100%"
           wordBreak={'break-word'}
           whiteSpace={'normal'}
+          display={{ base: 'block', lg: 'none' }}
         >
           {project.shortDescription}
         </Body>
-        <HStack w="full" justifyContent="space-between">
-          <Body size="sm" bold color="primary1.11" isTruncated>
-            {fires ? `${fires} ` : ''}
-            {formatAmount(contributionAmount, 'USD')}{' '}
-            <Body as="span" regular>
-              {isWeekly ? t('raised this week!') : t('raised!')}
+        <HStack w="full" justifyContent="space-between" justifyItems="flex-end">
+          {
+            <Body size="sm" bold color="primary1.11" isTruncated>
+              {contributionAmount ? (
+                <>
+                  {fires ? `${fires} ` : ''}
+                  {formatAmount(contributionAmount, 'USD')}{' '}
+                  <Body as="span" regular>
+                    {isWeekly ? t('raised this week!') : t('raised!')}
+                  </Body>
+                </>
+              ) : (
+                t('Just launched!')
+              )}
             </Body>
-          </Body>
+          }
           <FollowButton project={project} />
         </HStack>
       </VStack>

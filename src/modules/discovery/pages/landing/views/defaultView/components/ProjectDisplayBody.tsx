@@ -38,7 +38,7 @@ export const ProjectDisplayBody = ({
       }}
       rightContent={rightContent}
     >
-      <SimpleGrid w="full" columns={{ base: 1, lg: 3, xl: 4 }} spacing={4}>
+      <SimpleGrid w="full" columns={{ base: 1, lg: 3, xl: 4 }} spacing={6}>
         {projects.map((project) => {
           return (
             <GridItem key={project.id}>

@@ -62,8 +62,8 @@ export const InteractiveCardLayout = ({
             whileHover={{ scale: 1.02 }}
             {...props}
             {...rest}
-            _hover={{ cursor: 'pointer', shadow: hoverContent ? undefined : 'md' }}
-            zIndex={isOpen ? 10 : 1}
+            _hover={{ cursor: 'pointer', shadow: hoverContent ? 'none' : 'md' }}
+            zIndex={isOpen ? 3 : 1}
             overflow="visible"
           >
             {children}
@@ -73,19 +73,21 @@ export const InteractiveCardLayout = ({
                 {...props}
                 position="absolute"
                 background={'transparent'}
-                // pointerEvents="none"
+                display={{ base: 'none', lg: 'flex' }}
                 onMouseOver={onOpen}
                 onMouseLeave={onClose}
                 _hover={{
                   shadow: 'md',
+                  border: '1px solid',
+                  borderColor: 'neutral1.3',
                   cursor: 'pointer',
                 }}
-                zIndex={2}
-                top={0}
-                left={0}
-                right={0}
+                width={'calc(100% + 32px)'}
+                zIndex={isOpen ? 2 : 1}
+                top={'-16px'}
+                left={'-16px'}
               >
-                <Box height={contentHeight} pointerEvents="none" />
+                <Box height={`${contentHeight + 16}px`} pointerEvents="none" />
                 <Collapse in={isOpen} unmountOnExit>
                   <Box backgroundColor="utils.pbg">{hoverContent}</Box>
                 </Collapse>

@@ -52,7 +52,7 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
       padding="0px"
       width={{ base: 'full', lg: 'auto' }}
       flexDirection={{ base: 'row', lg: 'column' }}
-      spacing={0}
+      spacing={{ base: 3, lg: 4 }}
       flex={{ base: 'unset', lg: 1 }}
       hoverContent={
         <VStack paddingX={{ base: 3, lg: 4 }} paddingBottom={{ base: 3, lg: 4 }} width="100%">
@@ -82,7 +82,6 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
         flex={1}
         width={{ base: 'auto', lg: '100%' }}
         minWidth={{ base: '170px', lg: 'auto' }}
-        padding={{ base: 3, lg: 4 }}
         alignItems="start"
         justifyContent="space-between"
         overflow="hidden"
