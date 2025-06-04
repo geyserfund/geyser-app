@@ -1,5 +1,4 @@
 import { LinkProps as ChakraLinkProps, Stack, StackProps } from '@chakra-ui/react'
-import { motion } from 'framer-motion'
 import { Link, LinkProps } from 'react-router-dom'
 
 import { useMobileMode } from '../../../utils'
@@ -26,7 +25,6 @@ export const CardLayout = ({
   click,
   hover,
   raiseOnHover,
-  to,
   ...rest
 }: CardLayoutProps) => {
   const isMobile = useMobileMode()
@@ -35,7 +33,8 @@ export const CardLayout = ({
     spacing: 3,
     tabIndex: -1,
     overflow: 'hidden',
-    backgroundColor: 'neutral1.1',
+    as: rest.to ? Link : undefined,
+    backgroundColor: 'utils.pbg',
     border: noborder ? 'none' : '1px solid',
     transition: 'border-color 0.5s',
     boxShadow: 'none',
@@ -54,14 +53,6 @@ export const CardLayout = ({
   }
 
   if (mobileDense && isMobile) {
-    if (to) {
-      return (
-        <Stack padding={0} width="100%" {...props} {...rest} border="none">
-          <Link to={to}>{children}</Link>
-        </Stack>
-      )
-    }
-
     return (
       <Stack padding={0} width="100%" {...props} {...rest} border="none">
         {children}
@@ -69,38 +60,8 @@ export const CardLayout = ({
     )
   }
 
-  if (to) {
-    return (
-      <Stack
-        {...(raiseOnHover
-          ? {
-              as: motion.div,
-              whileHover: { scale: 1.02 },
-            }
-          : {})}
-        padding={dense ? 0 : { base: 3, lg: 6 }}
-        borderRadius="8px"
-        {...props}
-        {...rest}
-      >
-        <Link to={to}>{children}</Link>
-      </Stack>
-    )
-  }
-
   return (
-    <Stack
-      {...(raiseOnHover
-        ? {
-            as: motion.div,
-            whileHover: { scale: 1.02 },
-          }
-        : {})}
-      padding={dense ? 0 : { base: 3, lg: 6 }}
-      borderRadius="8px"
-      {...props}
-      {...rest}
-    >
+    <Stack padding={dense ? 0 : { base: 3, lg: 6 }} borderRadius="8px" {...props} {...rest}>
       {children}
     </Stack>
   )

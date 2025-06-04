@@ -125,7 +125,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
         >
           {project.shortDescription}
         </Body>
-        <HStack w="full" justifyContent="space-between" justifyItems="flex-end">
+        <HStack w="full" justifyContent="space-between" alignItems="flex-end">
           {
             <Body size="sm" bold color="primary1.11" isTruncated>
               {contributionAmount ? (

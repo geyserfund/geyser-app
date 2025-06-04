@@ -83,7 +83,7 @@ export const Products = () => {
                 </Body>
               </H3>
             </HStack>
-            <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacing={6}>
+            <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacing={{ base: 4, lg: 8 }}>
               {values.map((reward) => {
                 return (
                   <GridItem key={reward.projectReward.id}>

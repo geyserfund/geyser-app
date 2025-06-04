@@ -1,4 +1,4 @@
-import { Badge, Box, HStack, Skeleton, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, HStack, Skeleton, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime, Duration } from 'luxon'
 import { useEffect, useState } from 'react'
@@ -8,8 +8,9 @@ import { ProgressBar } from '@/components/ui/ProgressBar.tsx'
 import { USD_CENTS_AMOUNT_TO_GO_LIVE } from '@/modules/project/pages1/projectView/views/body/components/PrelaunchFollowButton.tsx'
 import { NonProjectProjectIcon } from '@/modules/project/pages1/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload.tsx'
-import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
+import { CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/index.ts'
+import { InteractiveCardLayout } from '@/shared/components/layouts/InteractiveCardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPathWithGeyserHero } from '@/shared/constants/index.ts'
 import { ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
@@ -88,16 +89,28 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
   }
 
   return (
-    <CardLayout
-      hover
-      as={Link}
+    <InteractiveCardLayout
       to={getPathWithGeyserHero('projectPreLaunch', project.name)}
       padding="0px"
       width={'auto'}
       direction={'column'}
-      spacing={0}
+      spacing={4}
       flex={1}
       position="relative"
+      hoverContent={
+        <VStack width="full" paddingX={4} paddingBottom={4}>
+          <Button
+            as={Link}
+            to={getPathWithGeyserHero('projectFunding', project.name)}
+            variant="solid"
+            colorScheme="primary1"
+            size="lg"
+            width="100%"
+          >
+            {t('Contribute')}
+          </Button>
+        </VStack>
+      }
       {...rest}
     >
       <Box minWidth={'auto'} width="auto" height={'auto'} position="relative">
@@ -106,6 +119,7 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
           height="100%"
           aspectRatio={1}
           objectFit="cover"
+          borderRadius="8px"
           src={project.thumbnailImage}
           alt={`${project.title}-header-image`}
         />
@@ -113,7 +127,7 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
           <NonProjectProjectIcon taxProfile={project.owners?.[0]?.user?.taxProfile} />
         </Box>
       </Box>
-      <VStack flex={1} width={'100%'} minWidth={'auto'} padding={4} alignItems="start" overflow="hidden" spacing={2}>
+      <VStack flex={1} width={'100%'} minWidth={'auto'} alignItems="start" overflow="hidden" spacing={2}>
         <H3 size="lg" medium isTruncated width="100%">
           {project.title}
         </H3>
@@ -160,16 +174,16 @@ export const LaunchpadProjectItem = ({ project, ...rest }: LaunchpadProjectItemP
           />
         </VStack>
       </VStack>
-    </CardLayout>
+    </InteractiveCardLayout>
   )
 }
 
 export const LaunchpadProjectItemSkeleton = () => {
   return (
-    <CardLayout padding="0px" width={'auto'} direction={'column'} spacing={0} flex={1} position="relative">
-      <Skeleton h="160px" w="full" />
+    <InteractiveCardLayout padding="0px" width={'auto'} direction={'column'} spacing={4} flex={1} position="relative">
+      <Skeleton h="160px" borderRadius="8px" w="full" />
 
-      <VStack p="4" spacing="4" align="stretch" flex={1}>
+      <VStack spacing="4" align="stretch" flex={1}>
         <SkeletonLayout height="24px" width="80%" />
         <SkeletonLayout height="16px" width="100%" />
         <SkeletonLayout height="16px" width="100%" />
@@ -184,6 +198,6 @@ export const LaunchpadProjectItemSkeleton = () => {
           <SkeletonLayout height="16px" w="full" borderRadius="md" />
         </VStack>
       </VStack>
-    </CardLayout>
+    </InteractiveCardLayout>
   )
 }

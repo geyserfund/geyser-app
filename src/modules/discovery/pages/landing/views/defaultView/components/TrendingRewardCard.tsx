@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom'
 
 import { guardianRewardUUIDs } from '@/modules/guardians/pages/character/characterAssets'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { InteractiveCardLayout } from '@/shared/components/layouts/InteractiveCardLayout.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H3 } from '@/shared/components/typography'
@@ -138,12 +137,11 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
 
 export const TrendingRewardCardSkeleton = () => {
   return (
-    <CardLayout
-      hover
+    <InteractiveCardLayout
       padding="0px"
       width={{ base: 'full', lg: 'auto' }}
       direction={{ base: 'row', lg: 'column' }}
-      spacing={0}
+      spacing={4}
       flex={{ base: 'unset', lg: 1 }}
     >
       <Box
@@ -151,13 +149,12 @@ export const TrendingRewardCardSkeleton = () => {
         height={{ base: '96px', lg: 'auto' }}
         aspectRatio={ImageCropAspectRatio.Reward}
       >
-        <SkeletonLayout borderRadius={0} width="100%" height="100%" />
+        <SkeletonLayout borderRadius={'8px'} width="100%" height="100%" />
       </Box>
       <VStack
         flex={1}
         width={{ base: 'auto', lg: '100%' }}
         minWidth={{ base: '170px', lg: 'auto' }}
-        padding={4}
         alignItems="start"
         justifyContent="space-between"
         overflow="hidden"
@@ -174,6 +171,6 @@ export const TrendingRewardCardSkeleton = () => {
           <SkeletonLayout width="120px" height="16px" />
         </HStack>
       </VStack>
-    </CardLayout>
+    </InteractiveCardLayout>
   )
 }

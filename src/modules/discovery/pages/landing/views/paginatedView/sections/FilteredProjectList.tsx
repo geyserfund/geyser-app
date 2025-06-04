@@ -41,7 +41,7 @@ export const FilteredProjectList = ({ projects, error, loading }: FilteredProjec
       {error ? (
         <NoDataError />
       ) : (
-        <SimpleGrid w="full" columns={{ base: 1, lg: 3, xl: 4 }} spacing={6}>
+        <SimpleGrid w="full" columns={{ base: 1, lg: 3, xl: 4 }} spacing={{ base: 4, lg: 8 }}>
           {renderProjects()}
         </SimpleGrid>
       )}
