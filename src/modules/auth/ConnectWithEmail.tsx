@@ -4,7 +4,6 @@ import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { VerifyYourEmailContent } from '@/pages/otp/VerifyYourEmailContent.tsx'
 import { ControlledTextInput } from '@/shared/components/controlledInput'
 
 import { getAuthEndPoint } from '../../config/domain'
@@ -12,6 +11,7 @@ import { useAuthContext } from '../../context'
 import { MfaAction, OtpResponseFragment } from '../../types'
 import { emailValidationSchema, useNotification } from '../../utils'
 import { useNotificationPromptModal } from './hooks/useNotificationPromptModal'
+import { VerifyYourEmailContent } from './otp/VerifyYourEmailContent.tsx'
 
 interface ConnectWithEmailProps extends ButtonProps {
   onClose?: () => void
