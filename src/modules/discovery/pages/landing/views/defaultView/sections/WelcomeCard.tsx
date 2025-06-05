@@ -1,4 +1,4 @@
-import { Button, HStack, Link, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
@@ -11,7 +11,7 @@ import { createSubscriber } from '@/api/index.ts'
 import { useAuthContext } from '@/context'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Body } from '@/shared/components/typography'
-import { GeyserAboutUrl, GeyserBannerLogoUrl } from '@/shared/constants'
+import { GeyserBannerLogoUrl } from '@/shared/constants'
 import { GradientBanner } from '@/shared/molecules/GradientBanner.tsx'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { useNotification } from '@/utils/index.ts'
@@ -83,10 +83,7 @@ export const WelcomeCard = () => {
       onClose={() => setIsWelcomeCardDismissed(true)}
       endContent={
         <>
-          <Body as={Link} href={GeyserAboutUrl} underline wordBreak="keep-all">
-            {t('Learn more')}.
-          </Body>{' '}
-          <Body as="span" bold>
+          <Body medium as="span">
             {t('Discover the best bitcoin projects - join the list!')}
           </Body>
         </>
@@ -99,8 +96,6 @@ export const WelcomeCard = () => {
               name="email"
               size="sm"
               containerProps={{ maxWidth: '250px' }}
-              opacity={0.5}
-              _focus={{ opacity: 1 }}
               backgroundColor="white"
               color={lightModeColors.neutral1[11]}
               control={control}
@@ -129,9 +124,6 @@ export const WelcomeCard = () => {
           </Body>
           <Body size="md" color="inherit" wordBreak="keep-all">
             ✔️ {t('Real-world Bitcoin adoption stories')}
-          </Body>
-          <Body size="md" color="inherit" wordBreak="keep-all">
-            ✔️ {t('Join +10,0000 Bitcoiners supporting Bitcoin adoption')}
           </Body>
         </HStack>
       </VStack>
