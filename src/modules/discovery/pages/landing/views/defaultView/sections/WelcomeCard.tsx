@@ -13,6 +13,7 @@ import { ControlledTextInput } from '@/shared/components/controlledInput/Control
 import { Body } from '@/shared/components/typography'
 import { GeyserAboutUrl, GeyserBannerLogoUrl } from '@/shared/constants'
 import { GradientBanner } from '@/shared/molecules/GradientBanner.tsx'
+import { lightModeColors } from '@/shared/styles/colors.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const schema = yup.object({
@@ -85,7 +86,7 @@ export const WelcomeCard = () => {
           <Body as={Link} href={GeyserAboutUrl} underline wordBreak="keep-all">
             {t('Learn more')}.
           </Body>{' '}
-          <Body as="span" light bold>
+          <Body as="span" bold>
             {t('Discover the best bitcoin projects - join the list!')}
           </Body>
         </>
@@ -100,7 +101,10 @@ export const WelcomeCard = () => {
               containerProps={{ maxWidth: '250px' }}
               opacity={0.5}
               _focus={{ opacity: 1 }}
+              backgroundColor="white"
+              color={lightModeColors.neutral1[11]}
               control={control}
+              borderColor={lightModeColors.neutral1[6]}
               placeholder={t('satoshi@gmx.com')}
               error={errors.email?.message}
               required
@@ -109,6 +113,8 @@ export const WelcomeCard = () => {
               variant="outline"
               minWidth="150px"
               backgroundColor="white"
+              _hover={{ backgroundColor: lightModeColors.neutral1[2] }}
+              color={lightModeColors.neutral1[11]}
               colorScheme="gray"
               type="submit"
               isLoading={submitting}
@@ -117,14 +123,14 @@ export const WelcomeCard = () => {
             </Button>
           </HStack>
         </form>
-        <HStack w="full" justifyContent="flex-start" flexWrap="wrap" spacing={2}>
-          <Body size="md" wordBreak="keep-all">
+        <HStack w="full" justifyContent="flex-start" flexWrap="wrap" spacing={2} color={lightModeColors.neutral1[11]}>
+          <Body size="md" color="inherit" wordBreak="keep-all">
             ✔️ {t('New projects & product launches')}
           </Body>
-          <Body size="md" wordBreak="keep-all">
+          <Body size="md" color="inherit" wordBreak="keep-all">
             ✔️ {t('Real-world Bitcoin adoption stories')}
           </Body>
-          <Body size="md" wordBreak="keep-all">
+          <Body size="md" color="inherit" wordBreak="keep-all">
             ✔️ {t('Join +10,0000 Bitcoiners supporting Bitcoin adoption')}
           </Body>
         </HStack>

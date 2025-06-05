@@ -59,6 +59,7 @@ export const GradientBanner = ({
           right={1}
           top={1}
           icon={<PiX />}
+          zIndex={2}
           onClick={onClose}
         />
       )}
