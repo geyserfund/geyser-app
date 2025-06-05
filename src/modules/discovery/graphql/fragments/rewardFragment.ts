@@ -7,7 +7,7 @@ export const FRAGMENT_REWARD_FOR_LANDING_PAGE = gql`
     images
     cost
     name
-    description
+    shortDescription
     project {
       rewardCurrency
       id
@@ -25,7 +25,7 @@ export const FRAGMENT_REWARD_FOR_PRODUCTS_PAGE = gql`
     images
     cost
     name
-    description
+    shortDescription
     project {
       rewardCurrency
       id

@@ -1,15 +1,27 @@
 // Import FundFormType from the atom file
-import { SATOSHIS_IN_BTC } from '../../../../../../../src/shared/constants'
 import { ProjectRewardFragment, RewardCurrency } from '../../../../../../../src/types'
-import { centsToDollars, dollarsToCents } from '../../../../../../../src/utils'
+import type {
+  BitcoinQuote,
+  ProjectReward,
+  ProjectShippingConfigType,
+  ProjectShippingRate,
+} from '../../../../../../../src/types/generated/graphql.ts'
+import { convertAmount } from '../../../../../../../src/utils'
+
+type CalculateExpectedRewardCostsArgs = {
+  rewardsByIDAndCount: { [key: string]: number } | undefined
+  rewards: ProjectRewardFragment[]
+  rewardCurrency: RewardCurrency
+  bitcoinQuote: BitcoinQuote
+}
 
 /** Calculate expected rewards cost breakdown */
-export const calculateExpectedRewardCosts = (
-  rewardsByIDAndCount: { [key: string]: number } | undefined,
-  rewards: ProjectRewardFragment[],
-  rewardCurrency: RewardCurrency,
-  usdRate: number,
-) => {
+export const calculateExpectedRewardCosts = ({
+  rewardsByIDAndCount,
+  rewards,
+  rewardCurrency,
+  bitcoinQuote,
+}: CalculateExpectedRewardCostsArgs) => {
   let totalCostInSatoshi = 0
   let totalCostInUsdCent = 0
   let baseCostTotal = 0
@@ -25,10 +37,10 @@ export const calculateExpectedRewardCosts = (
 
         if (rewardCurrency === RewardCurrency.Btcsat) {
           totalCostInSatoshi += currentRewardTotalCost
-          totalCostInUsdCent += Math.round(dollarsToCents((currentRewardTotalCost / SATOSHIS_IN_BTC) * usdRate))
+          totalCostInUsdCent += convertAmount.satsToUsdCents({ sats: currentRewardTotalCost, bitcoinQuote })
         } else {
           totalCostInUsdCent += currentRewardTotalCost
-          totalCostInSatoshi += Math.round((centsToDollars(currentRewardTotalCost) / usdRate) * SATOSHIS_IN_BTC)
+          totalCostInSatoshi += convertAmount.usdCentsToSats({ usdCents: currentRewardTotalCost, bitcoinQuote })
         }
       }
     })
@@ -41,16 +53,96 @@ export const calculateExpectedRewardCosts = (
   }
 }
 
+export const DEFAULT_COUNTRY_CODE = 'DEFAULT'
+
+type CalculateExpectedShippingCostArgs = {
+  rewards?: Pick<ProjectReward, 'id' | 'hasShipping' | 'shippingConfig'>[]
+  rewardsByIDAndCount?: Record<string, number>
+  shippingCountry?: string
+  bitcoinQuote: BitcoinQuote
+}
+
+/**
+ * Calculates the expected shipping cost based on the provided rewards, counts, and shipping information.
+ * This function mirrors the logic in `shippingCostAtom`.
+ */
+export const calculateExpectedShippingCost = ({
+  rewards,
+  rewardsByIDAndCount,
+  shippingCountry,
+  bitcoinQuote,
+}: CalculateExpectedShippingCostArgs): { sats: number; usdCents: number } => {
+  const response = { sats: 0, usdCents: 0 }
+
+  if (rewards && rewardsByIDAndCount) {
+    Object.keys(rewardsByIDAndCount).forEach((rewardID: string) => {
+      const reward = rewards.find((r) => r.id.toString() === rewardID)
+      const count = rewardsByIDAndCount[rewardID]
+      const country = shippingCountry || DEFAULT_COUNTRY_CODE
+
+      if (!reward || !count || !(count > 0) || !reward.hasShipping) return
+
+      const { shippingConfig } = reward
+      if (!shippingConfig) return
+
+      const { shippingRates, type: shippingType } = shippingConfig
+      if (!shippingRates) return
+
+      const defaultRate = shippingRates.find((rate) => rate.country === DEFAULT_COUNTRY_CODE)
+      if (!defaultRate) return // Should not happen if data is sane
+
+      const countryRateCandidate = shippingRates.find((rate) => rate.country === country)
+
+      let effectiveRate: Pick<ProjectShippingRate, 'baseRate' | 'incrementRate'> = defaultRate
+      if (countryRateCandidate) {
+        effectiveRate = countryRateCandidate.sameAsDefault ? defaultRate : countryRateCandidate
+      }
+
+      const { baseRate, incrementRate } = effectiveRate
+
+      if (shippingType === ('FLAT' as ProjectShippingConfigType)) {
+        response.usdCents += baseRate
+      } else if (shippingType === ('PER_UNIT' as ProjectShippingConfigType)) {
+        response.usdCents += baseRate * count
+      } else if (shippingType === ('INCREMENTAL' as ProjectShippingConfigType)) {
+        // Incremental cost only applies if count > 1
+        response.usdCents += baseRate + (count > 1 ? incrementRate * (count - 1) : 0)
+      }
+    })
+  }
+
+  if (bitcoinQuote && response.usdCents > 0) {
+    response.sats = convertAmount.usdCentsToSats({
+      usdCents: response.usdCents,
+      bitcoinQuote,
+    })
+  } else {
+    response.sats = 0
+  }
+
+  return response
+}
+
+type CalculateExpectedTipArgs = {
+  donationAmount: number
+  rewardsCostSatoshi: number
+  shippingCostSats?: number
+  geyserTipPercent: number
+  bitcoinQuote: BitcoinQuote
+}
+
 /** Calculate expected tip breakdown */
-export const calculateExpectedTip = (
-  donationAmount: number,
-  rewardsCostSatoshi: number,
-  geyserTipPercent: number,
-  usdRate: number,
-) => {
-  const tipBaseSats = donationAmount + rewardsCostSatoshi
+export const calculateExpectedTip = ({
+  donationAmount,
+  rewardsCostSatoshi,
+  shippingCostSats = 0,
+  geyserTipPercent,
+  bitcoinQuote,
+}: CalculateExpectedTipArgs) => {
+  const tipBaseSats = donationAmount + rewardsCostSatoshi + shippingCostSats
   const tipSats = geyserTipPercent > 0 ? Math.round((tipBaseSats * geyserTipPercent) / 100) : 0
-  const tipUsdCent = tipSats > 0 && usdRate > 0 ? Math.round(dollarsToCents((tipSats / SATOSHIS_IN_BTC) * usdRate)) : 0
+  const tipUsdCent =
+    tipSats > 0 && bitcoinQuote.quote > 0 ? convertAmount.satsToUsdCents({ sats: tipSats, bitcoinQuote }) : 0
 
   return {
     sats: tipSats,
@@ -58,27 +150,26 @@ export const calculateExpectedTip = (
   }
 }
 
-/** Calculate expected total satss */
-export const calculateExpectedTotalSats = (
-  donationAmount: number,
-  shippingCost: number,
-  rewardsSats: number,
-  subscriptionSats: number,
-  tipSats: number,
-  usdRate: number, // Needed for shipping conversion
-) => {
-  const shippingCostSats =
-    shippingCost > 0 && usdRate > 0 ? Math.round((centsToDollars(shippingCost) / usdRate) * SATOSHIS_IN_BTC) : 0
-  return donationAmount + rewardsSats + subscriptionSats + shippingCostSats + tipSats
+type CalculateExpectedTotalSatsArgs = {
+  donationAmount?: number
+  shippingCostSats?: number
+  rewardsSats?: number
+  subscriptionSats?: number
+  tipSats?: number
 }
 
-/** Calculate expected total USD cents (based on final sats total) */
-export const calculateExpectedTotalUsdCent = (totalSats: number, usdRate: number) => {
-  if (totalSats > 0 && usdRate > 0) {
-    return Math.round(dollarsToCents((totalSats / SATOSHIS_IN_BTC) * usdRate))
-  }
+/** Calculate expected total satss */
+export const calculateExpectedTotalSats = ({
+  donationAmount = 0,
+  shippingCostSats = 0,
+  rewardsSats = 0,
+  subscriptionSats = 0,
+  tipSats = 0,
+}: CalculateExpectedTotalSatsArgs) => donationAmount + rewardsSats + subscriptionSats + shippingCostSats + tipSats
 
-  return 0
+/** Calculate expected total USD cents (based on final sats total) */
+export const calculateExpectedTotalUsdCent = (totalSats: number, bitcoinQuote: BitcoinQuote) => {
+  return convertAmount.satsToUsdCents({ sats: totalSats, bitcoinQuote })
 }
 
 // Add other helper functions if needed, e.g., for subscription cost calculation if complex

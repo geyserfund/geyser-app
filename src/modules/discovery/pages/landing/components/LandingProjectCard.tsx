@@ -12,5 +12,7 @@ interface LandingProjectCardProps extends CardLayoutProps {
 }
 
 export const LandingProjectCard = ({ project, isMobile, ...rest }: LandingProjectCardProps) => {
-  return <LandingCardBase to={getPathWithGeyserHero('project', project.name)} project={project} {...rest} />
+  return (
+    <LandingCardBase to={getPathWithGeyserHero('project', project.name)} project={project} raiseOnHover {...rest} />
+  )
 }

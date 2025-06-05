@@ -33,7 +33,7 @@ export const LaunchpadProjectsByCategory = ({ category, subCategory, projects }:
         const isFirst = index === 0
         return (
           <GridItem key={project.id} overflow="visible">
-            <Box height={{ base: '32px', md: '40px' }} marginBottom={2} overflow="visible">
+            <Box height={{ base: '32px', md: '40px' }} marginBottom={5} overflow="visible">
               <H3 size={{ base: 'lg', md: '2xl' }} medium dark whiteSpace="nowrap">
                 {isFirst ? (
                   <>

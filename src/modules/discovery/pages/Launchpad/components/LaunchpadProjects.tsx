@@ -56,7 +56,7 @@ export const LaunchpadProjects = () => {
   }))
 
   return (
-    <SimpleGrid w="full" columns={{ base: 1, sm: 2, md: 3, lg: 3, xl: 4 }} spacingX="20px" spacingY="20px">
+    <SimpleGrid w="full" columns={{ base: 1, sm: 2, md: 3, lg: 3, xl: 4 }} spacingX={8} spacingY={8}>
       {loading
         ? [...Array(4).keys()].map((key) => {
             return (

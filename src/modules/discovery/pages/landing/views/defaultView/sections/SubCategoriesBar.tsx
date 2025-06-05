@@ -3,8 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import { PiCaretLeft, PiCaretRight } from 'react-icons/pi'
 
 import { useFilterContext } from '@/context/filter'
-import { ProjectSubCategoryLabel, ProjectSubCategoryList } from '@/shared/constants/platform/projectCategory.ts'
-import { ProjectSubCategory } from '@/types/index.ts'
+import { ProjectCategoryLabel, ProjectCategoryList } from '@/shared/constants/platform/projectCategory.ts'
+import { ProjectCategory } from '@/types/index.ts'
 
 export const SubCategoriesBar = () => {
   const { updateFilter } = useFilterContext()
@@ -13,8 +13,8 @@ export const SubCategoriesBar = () => {
   const [showLeftButton, setShowLeftButton] = useState(false)
   const [showRightButton, setShowRightButton] = useState(false)
 
-  const handleSubCategoryClick = (subCategory: ProjectSubCategory) => {
-    updateFilter({ subCategory })
+  const handleCategoryClick = (category: ProjectCategory) => {
+    updateFilter({ category })
   }
 
   const checkScroll = () => {
@@ -65,19 +65,22 @@ export const SubCategoriesBar = () => {
           },
         }}
       >
-        {ProjectSubCategoryList.map((subCategory) => {
+        {ProjectCategoryList.map((category) => {
           return (
             <Badge
-              key={subCategory}
+              key={category}
               size="lg"
+              flex={1}
               variant="soft"
               colorScheme="neutral1"
               _hover={{ cursor: 'pointer' }}
-              onClick={() => handleSubCategoryClick(subCategory)}
+              onClick={() => handleCategoryClick(category)}
               height="32px"
-              textTransform="lowercase"
+              textTransform="capitalize"
+              fontWeight="500"
+              fontSize="16px"
             >
-              {ProjectSubCategoryLabel[subCategory]}
+              {ProjectCategoryLabel[category]}
             </Badge>
           )
         })}

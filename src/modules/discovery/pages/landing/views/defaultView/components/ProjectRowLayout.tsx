@@ -25,7 +25,7 @@ export const ProjectRowLayout = ({
 }: ProjectRowLayoutProps) => {
   const { t } = useTranslation()
   return (
-    <VStack alignItems="start" spacing={2} {...rest}>
+    <VStack alignItems="start" spacing={5} {...rest}>
       <VStack w="full" spacing={0} alignItems={'start'}>
         <HStack width="100%" justifyContent="space-between">
           {typeof title === 'string' || subtitle ? (

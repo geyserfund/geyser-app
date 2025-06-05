@@ -6,7 +6,7 @@ import { useRouteError } from 'react-router-dom'
 import { refreshCacheAndReload } from '@/config/CacheBuster.tsx'
 
 import { useServiceWorkerUpdate } from '../../../context'
-import { NotFoundPage } from '../../../pages/fallback'
+import { NotFoundPage } from '../../../modules/general/fallback'
 
 const FAILED_FETCH_ERROR = [
   'Failed to fetch dynamically imported module',

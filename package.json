@@ -1,7 +1,7 @@
 {
   "name": "geyser-app",
   "private": true,
-  "version": "0.23.5",
+  "version": "0.23.6",
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -13,6 +13,7 @@
     "preview": "vite preview --port 3000",
     "test:e2e": "yarn workspace @geyser-app/testing test:e2e",
     "test:watch": "yarn workspace @geyser-app/testing test:watch",
+    "test:state": "yarn workspace @geyser-app/testing test:state",
     "prepare": "husky install",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.{ts, tsx, js, jsx, css}' --write",
     "format": "prettier --config .prettierrc 'src/**/*.{ts, js, tsx, jsx, css}' --write",
