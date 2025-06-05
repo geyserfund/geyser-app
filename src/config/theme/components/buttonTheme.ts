@@ -176,15 +176,15 @@ export const buttonTheme: ComponentStyleConfig = {
         color: 'utils.text',
       },
       _active: {
-        bg: `${colorScheme}.10`,
+        bg: `${colorScheme}.4`,
         color: 'utils.blackContrast',
       },
       _selected: {
-        bg: `${colorScheme}.9`,
+        bg: `${colorScheme}.4`,
         color: 'utils.blackContrast',
       },
       _loading: {
-        backgroundColor: `${colorScheme}.6`,
+        backgroundColor: `${colorScheme}.3`,
         color: 'utils.blackContrast',
       },
       _disabled: {

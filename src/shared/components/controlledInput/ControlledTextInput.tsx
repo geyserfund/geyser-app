@@ -1,4 +1,13 @@
-import { FormControl, FormErrorMessage, Input, InputGroup, InputProps, InputRightAddon, VStack } from '@chakra-ui/react'
+import {
+  FormControl,
+  FormErrorMessage,
+  Input,
+  InputGroup,
+  InputProps,
+  InputRightAddon,
+  StackProps,
+  VStack,
+} from '@chakra-ui/react'
 import React from 'react'
 import { useController, UseControllerProps } from 'react-hook-form'
 
@@ -20,6 +29,7 @@ type Props = UseControllerProps<any, any> &
     fontSize?: string
     numberOnly?: boolean
     minimal?: boolean
+    containerProps?: StackProps
   }
 
 export function ControlledTextInput(props: Props) {
@@ -106,6 +116,7 @@ export function ControlledTextInput(props: Props) {
       title={title}
       subtitle={props.description}
       error={error}
+      {...props.containerProps}
     >
       {InputContent}
     </FieldContainer>

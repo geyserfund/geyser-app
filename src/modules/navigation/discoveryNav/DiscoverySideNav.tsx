@@ -68,7 +68,7 @@ export const DiscoverySideNav = () => {
       justifyContent={'space-between'}
       zIndex={10}
     >
-      <VStack w="full" h="full" paddingX={{ lg: 4, xl: 8 }}>
+      <VStack w="full" h="full" paddingX={{ lg: 4, xl: 8 }} spacing={8}>
         <Link to={getPath('discoveryLanding')}>
           <Image src={isTabletSize ? tabletImage : imageUrl} height="48px" width="auto" />
         </Link>
@@ -114,7 +114,7 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
     return (
       <GradientBorder enable={false} gradientColor={GuardiansButtonBackgroundGradientBright}>
         <Button
-          variant="menu"
+          variant={isActive ? 'surface' : 'menu'}
           colorScheme="primary1"
           size="lg"
           key={item.label}
@@ -155,7 +155,7 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
   return (
     <GradientBorder enable={false} gradientColor={GuardiansButtonBackgroundGradientBright}>
       <Button
-        variant="menu"
+        variant={'menu'}
         colorScheme="primary1"
         size="lg"
         width={'full'}

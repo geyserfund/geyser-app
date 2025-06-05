@@ -9,9 +9,13 @@ import {
   FeedbackUrl,
   getPath,
   GeyserAboutUrl,
+  GeyserDiscordUrl,
   GeyserGithubUrl,
+  GeyserNostrUrl,
   GeyserPrivacyUrl,
+  GeyserTelegramUrl,
   GeyserTermsUrl,
+  GeyserTwitterUrl,
   GuideUrl,
 } from '@/shared/constants'
 import { useMobileMode } from '@/utils/index.ts'
@@ -59,6 +63,19 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
       justifyContent="center"
       {...props}
     >
+      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserDiscordUrl}>
+        {t('Discord')}
+      </UserNavExternalButton>
+      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserTwitterUrl}>
+        {t('X')}
+      </UserNavExternalButton>
+      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserTelegramUrl}>
+        {t('Telegram')}
+      </UserNavExternalButton>
+      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserNostrUrl}>
+        {t('Nostr')}
+      </UserNavExternalButton>
+
       <UserNavExternalButton as={ChakraLink} isExternal href={GuideUrl}>
         {t('Guide')}
       </UserNavExternalButton>

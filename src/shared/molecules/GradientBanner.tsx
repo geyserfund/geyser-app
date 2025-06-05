@@ -59,6 +59,7 @@ export const GradientBanner = ({
           right={1}
           top={1}
           icon={<PiX />}
+          zIndex={2}
           onClick={onClose}
         />
       )}
@@ -68,6 +69,7 @@ export const GradientBanner = ({
         paddingX={padding}
         paddingTop={padding}
         paddingBottom={{ base: stats ? 0 : 2, lg: 4 }}
+        alignItems="flex-start"
       >
         <Image
           src={imageUrl}
@@ -92,11 +94,16 @@ export const GradientBanner = ({
             {subtitle}
             {endContent && <> {endContent}</>}
           </Body>
-          {children}
+          <HStack w="full" display={{ base: 'none', lg: 'flex' }}>
+            {children}
+          </HStack>
           <HStack w="full" display={{ base: 'none', lg: 'flex' }} color={lightModeColors.utils.text}>
             {renderPlatformStats()}
           </HStack>
         </VStack>
+      </HStack>
+      <HStack w="full" paddingX={2} paddingBottom={2} display={{ base: 'flex', lg: 'none' }}>
+        {children}
       </HStack>
       {stats && (
         <HStack
