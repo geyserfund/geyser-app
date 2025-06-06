@@ -1,14 +1,11 @@
 import { GridItem, SimpleGrid } from '@chakra-ui/react'
 
-import { ProjectCategory, ProjectStatus, ProjectSubCategory, useProjectsForLaunchpadPageQuery } from '@/types/index.ts'
+import { ProjectCategory, ProjectStatus, useProjectsForLaunchpadPageQuery } from '@/types/index.ts'
 
 import { LaunchpadProjectItemSkeleton } from './LaunchpadProjectItem.tsx'
 import { LaunchpadProjectsByCategory } from './LaunchpadProjectsByCategory.tsx'
 
 const listOfItemsToShow = [
-  {
-    subCategory: ProjectSubCategory.CircularEconomy,
-  },
   {
     category: ProjectCategory.Tool,
   },
@@ -48,11 +45,7 @@ export const LaunchpadProjects = () => {
 
   const projectsByCategory = listOfItemsToShow.map((item) => ({
     ...item,
-    projects: projects.filter(
-      (project) =>
-        (item.category && project.category === item.category) ||
-        (item.subCategory && project.subCategory === item.subCategory),
-    ),
+    projects: projects.filter((project) => item.category && project.category === item.category),
   }))
 
   return (
@@ -70,14 +63,7 @@ export const LaunchpadProjects = () => {
               return null
             }
 
-            return (
-              <LaunchpadProjectsByCategory
-                key={index}
-                category={item.category}
-                subCategory={item.subCategory}
-                projects={item.projects}
-              />
-            )
+            return <LaunchpadProjectsByCategory key={index} category={item.category} projects={item.projects} />
           })}
     </SimpleGrid>
   )

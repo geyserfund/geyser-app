@@ -177,14 +177,13 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
   })
 
   const watchedShippingRates = useWatch({ control, name: 'shippingRates' })
+  const defaultShippingRate = watchedShippingRates.find((rate) => rate.country === DEFAULT_COUNTRY_CODE)
 
   const handleOnSubmitClick = (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault()
     event.stopPropagation()
     handleSubmit(onSubmit)(event)
   }
-
-  console.log('errors', errors)
 
   const getShippingErrors = useCallback(() => {
     const errorsForShippingRates = []
@@ -356,6 +355,12 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
               if (!currentShippingRate) return null
               const isDefaultRow = currentShippingRate.country === DEFAULT_COUNTRY_CODE
               const sameAsDefaultChecked = Boolean(currentShippingRate.sameAsDefault)
+              const defaultBaseRate = defaultShippingRate?.baseRate
+                ? (defaultShippingRate.baseRate / 100).toFixed(2)
+                : '0'
+              const defaultIncrementRate = defaultShippingRate?.incrementRate
+                ? (defaultShippingRate.incrementRate / 100).toFixed(2)
+                : '0'
 
               const handleSameAsDefaultChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                 const { checked } = e.target
@@ -409,7 +414,7 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
                     <ControlledAmountInput
                       name={`shippingRates.${index}.baseRate`}
                       control={control}
-                      placeholder="0"
+                      placeholder={sameAsDefaultChecked ? defaultBaseRate : '0'}
                       maxWidth="80px"
                       currency={RewardCurrency.Usdcent}
                       size="sm"
@@ -429,7 +434,7 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
                       <ControlledAmountInput
                         name={`shippingRates.${index}.incrementRate`}
                         control={control}
-                        placeholder="0"
+                        placeholder={sameAsDefaultChecked ? defaultIncrementRate : '0'}
                         maxWidth="80px"
                         currency={RewardCurrency.Usdcent}
                         size="sm"

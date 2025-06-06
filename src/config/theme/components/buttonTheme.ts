@@ -177,15 +177,15 @@ export const buttonTheme: ComponentStyleConfig = {
       },
       _active: {
         bg: `${colorScheme}.4`,
-        color: 'utils.blackContrast',
+        color: 'utils.text',
       },
       _selected: {
         bg: `${colorScheme}.4`,
-        color: 'utils.blackContrast',
+        color: 'utils.text',
       },
       _loading: {
         backgroundColor: `${colorScheme}.3`,
-        color: 'utils.blackContrast',
+        color: 'utils.text',
       },
       _disabled: {
         bg: 'panel.solid',
