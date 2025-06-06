@@ -186,7 +186,7 @@ export const useProjectRewardForm = ({
       category: formData.category || null,
       preOrder: formData.preOrder,
       estimatedAvailabilityDate: formData.estimatedAvailabilityDate?.valueOf(),
-      estimatedDeliveryInWeeks: formData.estimatedDeliveryInWeeks || null,
+      estimatedDeliveryInWeeks: formData.estimatedDeliveryInWeeks ? Number(formData.estimatedDeliveryInWeeks) : null,
       privateCommentPrompts: formData.privateCommentPrompts,
       confirmationMessage: formData.confirmationMessage,
       shippingConfigId: formData.shippingConfigId,

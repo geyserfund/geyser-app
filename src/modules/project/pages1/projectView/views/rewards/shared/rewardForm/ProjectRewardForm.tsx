@@ -228,6 +228,7 @@ export const ProjectRewardForm = ({
               <ControlledTextInput
                 name="estimatedDeliveryInWeeks"
                 label={t('Delivery Time (Weeks)')}
+                numberOnly
                 description={t('Specify estimated delivery time for the product from the moment it is ordered.')}
                 control={control}
                 placeholder={'Enter number of weeks'}
