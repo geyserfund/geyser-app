@@ -60,7 +60,7 @@ export const GRANT_STATUS_COUNTDOWN_TITLES = {
 }
 
 export const GRANT_STATUS_COUNTDOWN_TITLES_NON_VOTE = {
-  [GrantStatusEnum.ApplicationsOpen]: 'Countdown to grant going live',
+  [GrantStatusEnum.ApplicationsOpen]: 'Time remaining to submit application',
   [GrantStatusEnum.FundingOpen]: 'Time left',
   [GrantStatusEnum.Closed]: 'Time left',
 }
