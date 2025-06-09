@@ -71,7 +71,6 @@
   "copy": "نسخ",
   "Go to project": "عُد إلى المشروع",
   "Your project is in draft": "مشروعك في المسودة",
-  "Saved in draft": "حُفظ في المسودة",
   "Please refresh the page and try again.": "رجاءً حدث الصفحة وحاول ثانيةً.",
   "Description": "الوصف",
   "Links & tags": "الروابط والوسوم",
@@ -369,7 +368,6 @@
   "Your Nostr Private Key Kit (nsec)": "مجموعة مفاتيح Nostr الخاصة بك (nsec)",
   "Limited Edition (skip if no limit)": "إصدار محدود (تخطَ إذا لم يكن هناك حد)",
   "Currency": "العملة",
-  "Describe the item you would like to sell": "صف العنصر الذي ترغب في بيعه",
   "Price": "السعر",
   "Your Geyser lightning address is <1>{{projectAddress}}</1>. All funds sent to this address will be instantly routed to the wallet you specify below.": "عنوان Geyser Lightning الخاص بك هو <1>{{projectAddress}}</1>. سيتم توجيه جميع الأموال المرسلة إلى هذا العنوان على الفور إلى المحفظة التي تحددها أدناه.",
   "Confirm project launch": "تأكيد إطلاق المشروع",
@@ -470,7 +468,6 @@
   "Breaking news: We're shaking things up with our new project on @geyserfund! Check it out: {{projectLink}} #BreakingNews": "أخبار عاجلة: نحن نهز الأمور بمشروعنا الجديد على @geyserfund! تحقق من ذلك: {{projectLink}} #أخبار_عاجلة",
   "We're transforming our dreams into reality with this project on @geyserfund. Your support matters: {{projectLink}}": "نحن نحول أحلامنا إلى حقيقة بهذا المشروع على @geyserfund. دعمك مهم: {{projectLink}}",
   "Making a difference, one step at a time. Join our mission on @geyserfund and help us leave a lasting impact. Your support makes all the difference: {{projectLink}} #MakeADifference": "إحداث فرق، خطوة بخطوة. انضم إلى مهمتنا على @geyserfund وساعدنا في ترك تأثير دائم. دعمك يصنع كل الفرق: {{projectLink}} #اصنع_فرقًا",
-  "By keeping your project in 'draft', it will remain hidden until you decide to launch it": "عن طريق إبقاء مشروعك في 'مسودة'، سيظل مخفيًا حتى تقرر إطلاقه",
   "Alternatively, you can explore other Lightning address providers and their respective limits through this link: <1>List of Lightning Wallets</1>": "بدلاً من ذلك، يمكنك استكشاف موفري عناوين Lightning الآخرين والحدود الخاصة بهم من خلال هذا الرابط: <1>قائمة محافظ Lightning</1>",
   "We're sorry, but your transaction cannot be completed. The project's wallet you are trying to fund has reached its maximum limit and cannot receive more than {{amount}} Sats at this time.": "نأسف، لكن لا يمكن إكمال معاملتك. وصلت محفظة المشروع التي تحاول تمويلها إلى الحد الأقصى ولا يمكنها استلام أكثر من {{amount}} سات في هذا الوقت.",
   "Scan and pay invoice with bitcoin.": "امسح وادفع الفاتورة باستخدام البيتكوين.",
@@ -526,7 +523,6 @@
   "Sold": "تم البيع",
   "Buy": "شراء",
   "Followers": "المتابعون",
-  "Ready for delivery": "جاهز للتسليم",
   "Preorder": "الطلب المسبق",
   "Goals": "الأهداف",
   "weeks": "أسابيع",
@@ -561,7 +557,6 @@
   "Feature project": "المشاريع المميزة",
   "Featured": "مميز",
   "No, no project updates": "لا ، لا توجد تحديثات للمشروع",
-  "Learn more": "أعرف أكثر",
   "Filter by": "تصفية حسب",
   "View results": "عرض النتائج",
   "My Projects": "مشاريعي",
@@ -672,7 +667,6 @@
   "Merch": "بضائع",
   "Provide your Lightning Address for a full or partial refund": "يرجى تقديم عنوان Lightning الخاص بك لاسترداد كامل أو جزئي",
   "To a goal": "إلى هدف",
-  "Email and Updates": "البريد الإلكتروني والتحديثات",
   " Total to pay": "إجمالي الدفع",
   "Copy invoice": "نسخ الفاتورة",
   "Download invoice": "تنزيل الفاتورة",
@@ -751,7 +745,6 @@
   "Some system errors are temporary. By clicking try again button you can reattempt the payment.": "بعض أخطاء النظام مؤقتة. بالنقر على زر المحاولة مرة أخرى، يمكنك إعادة محاولة الدفع.",
   "If you keep experiencing this problem or need assistance, please don't hesitate to reach out to us for support.": "إذا كنت لا تزال تواجه هذه المشكلة أو كنت بحاجة إلى مساعدة، فيرجى عدم التردد في الاتصال بنا للحصول على الدعم.",
   "for this project by spreading the word using your": "لهذا المشروع عن طريق نشر الكلمة باستخدام",
-  "Next Actions": "الإجراءات التالية",
   "Become an": "كن",
   "Hero Link:": "رابط البطل:",
   "Send to new email": "إرسال إلى بريد إلكتروني جديد",
@@ -808,7 +801,6 @@
   "Get discovered more easily by selecting up to {{MAX_TAGS_ALLOWED}} project tags.": "تم اكتشافك بسهولة أكبر عن طريق تحديد ما يصل إلى {{MAX_TAGS_ALLOWED}} علامات للمشروع.",
   "Board members": "أعضاء مجلس الإدارة",
   "You can send Sats to projects to multiple projects and multiple times": "يمكنك إرسال Sats إلى المشاريع إلى مشاريع متعددة ومرات متعددة",
-  "Receive on": "تلقي على",
   "Add external video": "إضافة مقطع فيديو خارجي",
   "Create Goal": "إنشاء هدف",
   "did ": "فعل",
@@ -833,13 +825,11 @@
   "Select country": "اختر البلد",
   "Post saved successfully!": "تم حفظ المنشور بنجاح!",
   "Write an update": "اكتب تحديثًا",
-  "Images": "صور",
   "Pre-Order": "طلب مسبق",
   "For best fit, select horizontal 4:3 image. Image size limit: 10MB.": "للحصول على أفضل ملاءمة، حدد صورة أفقية بنسبة 4:3. الحد الأقصى لحجم الصورة: 10 ميغابايت.",
   "Select Category": "اختر الفئة",
   "Short Description": "وصف مختصر",
   "Expected Availability Date": "تاريخ التوفر المتوقع",
-  "Enable this option to request the user's shipping address. This is necessary for delivering physical products directly to your supporters.": "قم بتمكين هذا الخيار لطلب عنوان شحن المستخدم. هذا ضروري لتوصيل المنتجات المادية مباشرة إلى مؤيديك.",
   "Successfully updated!": "تم التحديث بنجاح!",
   "All goals": "جميع الأهداف",
   "Goal updates": "تحديثات الهدف",
@@ -980,7 +970,6 @@
   "Please use a valid email-formatted address for your Lightning Address.": "استعمل عنوانًا مصوغًا كعنوان البريد الإلكتروني، ليكون عنوانك في البرق.",
   "Are you sure you want to disconnect this account?": "هل تريد فصل هذا الحساب؟",
   "Bitcoin is signal, everything else is noise.\n          We created Geyser Grants to help broadcast more Bitcoin signal into the world.\n          That is, to accelerate the growth of the Bitcoin ecosystem by increasing Bitcoin awareness, enabling Bitcoin culture, and supporting needed development.\n          Through these grants we will be supporting Bitcoin educators, developers, entrepreneurs and creatives with the resources they need to bootstrap their initiatives.\n          We accept Bitcoin contributions for each individual grant and don't charge any grant operations fees. For more information see this doc.": "بيتكوين هي الإشارة، وكل شيء آخر هو ضجيج.\n          لقد أنشأنا Geyser Grants للمساعدة في نشر المزيد من إشارات Bitcoin في العالم.\n          وهذا يعني تسريع نمو نظام Bitcoin البيئي عن طريق زيادة الوعي بـ Bitcoin، وتمكين ثقافة Bitcoin، ودعم التنمية اللازمة.\n          من خلال هذه المنح، سندعم معلمي Bitcoin والمطورين ورجال الأعمال والمبدعين بالموارد التي يحتاجونها لبدء مبادراتهم.\n          نحن نقبل مساهمات Bitcoin لكل منحة فردية ولا نفرض أي رسوم على عمليات المنح. لمزيد من المعلومات، راجع هذه الوثيقة.",
-  "Ask for shipping address": "اطلب عنوان الشحن",
   "Lightning address is a simple way for others to send you funds. When someone sends money to this address, it's instantly routed to your private wallet. This ensures you have full custody and immediate access to your funds.": "عنوان Lightning هو وسيلة بسيطة لإرسال الأموال إليك من الآخرين. عندما يرسل شخص ما أموالاً إلى هذا العنوان، يتم توجيهها على الفور إلى محفظتك الخاصة. وهذا يضمن لك الحضانة الكاملة والوصول الفوري إلى أموالك.",
   "Bitcoin Meetups and Travel Vlogs of Bitcoin Adoption in the Global South!": "لقاءات Bitcoin و Travel Vlogs لاعتماد Bitcoin في الجنوب العالمي!",
   "Are you sure you want to save these changes?": "هل أنت متأكد أنك تريد حفظ هذه التغييرات؟",
@@ -1031,7 +1020,6 @@
   "$100 per week": "100 دولار في الأسبوع",
   "Contributed": "مساهم",
   "Browse map": "تصفح الخريطة",
-  "Send your shipping address to the creator at the following email": "أرسل عنوان الشحن الخاص بك إلى المنشئ على البريد الإلكتروني التالي",
   "In partnership with": "بالشراكة مع",
   "&": "&",
   "Guardian collectible cards": "بطاقات حارس قابلة للتحصيل",
@@ -1090,7 +1078,6 @@
   "Products sold": "المنتجات المباعة",
   "You are about to switch the currency denomination for all your products from CURRENT_REWARD_CURRENCY to SWITCH_TO_REWARD_CURRENCY. ": "أنت على وشك تغيير فئة العملة لجميع منتجاتك من CURRENT_REWARD_CURRENCY إلى SWITCH_TO_REWARD_CURRENCY.",
   "Available Products": "المنتجات المتاحة",
-  "To receive the selected products, please send your shipping details to the creator’s email, which will be revealed in the success screen.": "لتلقي المنتجات المحددة، يرجى إرسال تفاصيل الشحن الخاصة بك إلى البريد الإلكتروني للمنشئ، والذي سيتم الكشف عنه في شاشة النجاح.",
   "Product buyers": "مشترو المنتج",
   "Linked goals and products": "الأهداف والمنتجات المرتبطة",
   "Using links enables you to highlight a specific product or goal, helping you direct people to it.": "يتيح لك استخدام الروابط إبراز منتج أو هدف معين، مما يساعدك في توجيه الأشخاص إليه.",
@@ -1101,11 +1088,9 @@
   "Product currency denomination": "فئة عملة المنتج",
   "Product Updates": "تحديثات المنتج",
   "All products": "جميع المنتجات",
-  "Engage your community, followers, contributors, and product purchasers by sending them an update about your new product via email.": "تفاعل مع مجتمعك، ومتابعيك، والمساهمين، ومشترو المنتجات عن طريق إرسال تحديث لهم حول منتجك الجديد عبر البريد الإلكتروني.",
   "Share product": "شارك المنتج",
   "Share the product page to spread the word across the internet and social media.": "شارك صفحة المنتج لنشر الخبر عبر الإنترنت ووسائل التواصل الاجتماعي.",
   "For products that are still in development and not ready to ship, set them to 'Pre-order' to enable advance purchases by users.": "بالنسبة للمنتجات التي لا تزال قيد التطوير وليست جاهزة للشحن، قم بتعيينها على 'الطلب المسبق' لتمكين عمليات الشراء المسبقة من قبل المستخدمين.",
-  "Add one or multiple images to help showcase your product": "أضف صورة واحدة أو متعددة للمساعدة في عرض منتجك",
   "Set a custom message to thank contributors, provide important details, or share any additional information you’d like them to know after they claim the product.": "قم بتعيين رسالة مخصصة لشكر المساهمين أو تقديم تفاصيل مهمة أو مشاركة أي معلومات إضافية ترغب في معرفتها بعد أن يطالبوا بالمنتج.",
   "Use “Expected Availability Date' to set when your product will be developed and available.": "استخدم \"تاريخ التوفر المتوقع\" لتحديد موعد تطوير منتجك وتوفره.",
   "Specify estimated delivery time for the product from the moment it is ordered.": "حدد وقت التسليم المقدر للمنتج من لحظة طلبه.",
@@ -1162,7 +1147,6 @@
   "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you can begin receiving support from contributors immediately.": "هذه الرسوم الصغيرة هي علامة على الالتزام.  فهي توضح أنك جاد بشأن مشروعك ومستعد لمشاركته مع العالم.  هذا يعني أنه يمكنك البدء في تلقي الدعم من المساهمين على الفور.",
   "Show Less": "أظهر أقل",
   "Wallet Unreachable": "المحفظة غير قابلة للوصول",
-  "You're live on Geyser Launchpad!": "أنت مباشر على منصة Geyser Launchpad!",
   "Copied": "تم النسخ",
   "Project in Launchpad": "المشروع في Launchpad",
   "more to launch": "المزيد للإطلاق",
@@ -1173,7 +1157,6 @@
   "Add email to follow": "أضف البريد الإلكتروني للمتابعة",
   "Latest followers": "أحدث المتابعين",
   "Share link": "مشاركة الرابط",
-  "Products Cost": "تكلفة المنتجات",
   "Launchpad": "Launchpad",
   "left": "متبقي",
   "Pay $21 to launch right away": "ادفع 21 دولارًا للإطلاق على الفور",
@@ -1219,7 +1202,6 @@
   "Geyser rallies the Bitcoin community to fund ideas, products, and causes that drive real-world adoption from the ground up.": "تحشد Geyser مجتمع Bitcoin لتمويل الأفكار والمنتجات والقضايا التي تدفع إلى اعتماد العالم الحقيقي من الأسفل إلى الأعلى.",
   "Choose your launch strategy": "اختر استراتيجية الإطلاق الخاصة بك",
   "Launch your project": "أطلق مشروعك",
-  "If you don’t reach $210 in your first month, your project will close (you can start over)": "إذا لم تصل إلى 210 دولارات أمريكية في شهرك الأول، فسيتم إغلاق مشروعك (يمكنك البدء من جديد)",
   "Skip the challenge. Launch instantly for $21.": "تجاوز التحدي. انطلق على الفور مقابل 21 دولارًا.",
   "Build momentum quickly with early supporters": "ابنِ الزخم بسرعة مع المؤيدين الأوائل",
   "Geyser Launch Challenge": "تحدي إطلاق Geyser",
@@ -1227,26 +1209,20 @@
   "No pressure to raise a lot right away, go by your plan.": "لا يوجد ضغط لجمع الكثير على الفور، اتبع خطتك.",
   "Seen in ‘Recently launched’ in Discovery page": "شوهد في 'تم إطلاقه مؤخرًا' في صفحة الاكتشاف",
   "Embed": "تضمين",
-  "You have 30 days to raise $210 to officially launch and keep the project alive.": "لديك 30 يومًا لجمع 210 دولارات أمريكية للإطلاق الرسمي والحفاظ على المشروع على قيد الحياة.",
-  "Your project is now featured on the Geyser Launchpad, where supporters discover bold, early-stage ideas.": "يتميز مشروعك الآن في منصة إطلاق Geyser، حيث يكتشف المؤيدون الأفكار الجريئة في المرحلة الأولى.",
   "What's next?": "ماذا بعد؟",
   "more to go live": "المزيد للانطلاق",
   "New in": "جديد في",
   "left to raise $210 & launch": "متبقي لجمع 210 دولارًا أمريكيًا وإطلاق",
-  "This project needs to raise $210 in 30 days to go live. Share this project on social media to help launch it.": "يحتاج هذا المشروع إلى جمع 210 دولارات أمريكية في غضون 30 يومًا للانطلاق. شارك هذا المشروع على وسائل التواصل الاجتماعي للمساعدة في إطلاقه.",
   "raised": "تم جمعه",
   "more to go live.": "المزيد للانطلاق.",
-  "Share your project far and wide — post it on social media, text it to friends, or pitch it in your community.": "شارك مشروعك على نطاق واسع - انشره على وسائل التواصل الاجتماعي، وأرسله إلى الأصدقاء، أو اطرحه في مجتمعك.",
   "to raise $210": "لجمع 210 دولارًا أمريكيًا",
   "Save as Draft": "حفظ كمسودة",
   "raised!": "تم جمعه!",
   "raised this week!": "تم جمعه هذا الأسبوع!",
-  "These early-stage projects are in countdown mode. To launch, they must raise $210 within 30 days. Help them build momentum — or they might never take off.": "هذه المشاريع في المرحلة الأولى في وضع العد التنازلي. للإطلاق، يجب عليهم جمع 210 دولارات أمريكية في غضون 30 يومًا. ساعدهم على بناء الزخم - أو قد لا ينجحوا أبدًا.",
   "You’re purchasing a product from a project that’s in Launchpad. Your payment will be processed, but the project will only be going live if the project reaches $210. By contributing, you're helping the creator reach that milestone. 🙌": "أنت تشتري منتجًا من مشروع في Launchpad. ستتم معالجة دفعتك، ولكن المشروع سيبدأ العمل فقط إذا وصل المشروع إلى 210 دولارات أمريكية. من خلال المساهمة، فإنك تساعد المنشئ في الوصول إلى هذا المعلم. 🙌",
   "Are you interested in receiving updates from this project?": "هل أنت مهتم بتلقي تحديثات من هذا المشروع؟",
   "Follow project": "تابع المشروع",
   "We will send you important updates via your profile email for the projects your follow.": "سنرسل لك تحديثات مهمة عبر بريدك الإلكتروني الخاص بالملف الشخصي للمشاريع التي تتابعها.",
-  "Raise $210 in 30 days with your community.": "اجمع 210 دولارًا في 30 يومًا مع مجتمعك.",
   "Your project's future depends on this critical first step - meet the goal to keep your vision alive. It’s your chance to build early momentum and launch with a boom.": "يعتمد مستقبل مشروعك على هذه الخطوة الحاسمة الأولى - حقق الهدف للحفاظ على رؤيتك حية. إنها فرصتك لبناء زخم مبكر والانطلاق بقوة.",
   "unFollow": "إلغاء المتابعة",
   "Launchpad projects": "مشاريع منصة الإطلاق",
@@ -1261,5 +1237,140 @@
   "Contribute with lightning": "ساهم باستخدام Lightning",
   "Copy embed code": "نسخ كود التضمين",
   "Embed the contribute and leaderboard section of this page on your website": "قم بتضمين قسم المساهمة ولوحة الصدارة لهذه الصفحة على موقع الويب الخاص بك",
-  "${{countDown}} out of $210": "${{countDown}} من 210 دولار"
+  "12345": "12345",
+  "Project Deactivated": "تم تعطيل المشروع",
+  "This project did not reach its goal in the launchpad.": "لم يحقق هذا المشروع هدفه في منصة الإطلاق.",
+  "Your project did not reach its goal in the launchpad.": "لم يحقق مشروعك هدفه في منصة الإطلاق.",
+  "Project Closed": "تم إغلاق المشروع",
+  "Project story should be longer than 210 characters.": "يجب أن تكون قصة المشروع أطول من 210 أحرف.",
+  "Raise $210 in 7 days with your community.": "اجمع 210 دولارات في 7 أيام مع مجتمعك.",
+  "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you don't need to worry about reaching $210 in 7 days": "هذه الرسوم الصغيرة هي علامة على الالتزام. إنها تُظهر أنك جاد بشأن مشروعك ومستعد لمشاركته مع العالم. هذا يعني أنك لست مضطرًا للقلق بشأن الوصول إلى 210 دولارات في 7 أيام",
+  "If you don’t reach $210 in your first week, your project will close (you can start over)": "إذا لم تصل إلى 210 دولارات في الأسبوع الأول، فسيتم إغلاق مشروعك (يمكنك البدء من جديد)",
+  "Once you launch your project, it will become visible and searchable by the public. A 7-day countdown will begin immediately.": "بمجرد إطلاق مشروعك، سيصبح مرئيًا وقابلاً للبحث من قبل الجمهور. سيبدأ العد التنازلي لمدة 7 أيام على الفور.",
+  "If you’re not ready to launch we recommend you place your project in Draft mode. ": "إذا لم تكن مستعدًا للإطلاق، فإننا نوصي بوضع مشروعك في وضع المسودة.",
+  "Launch & Start Countdown": "إطلاق وبدء العد التنازلي",
+  "You're live on the Launchpad!": "أنت على الهواء مباشرة على Launchpad!",
+  "Raise $210 to lift off": "اجمع 210 دولارات للإقلاع",
+  "It's time to raise $210 in 7 days!": "حان الوقت لجمع 210 دولارات في 7 أيام!",
+  "Share your project with your friends, community, and people you think will care about your project.": "شارك مشروعك مع أصدقائك ومجتمعك والأشخاص الذين تعتقد أنهم سيهتمون بمشروعك.",
+  "Connect with the Geyser team on <1>Discord</1>, <3>Telegram</3>, <5>Nostr</5>, <7>X</7>.": "تواصل مع فريق Geyser على <1>Discord</1>، <3>Telegram</3>، <5>Nostr</5>، <7>X</7>.",
+  "Your project will remain hidden until you decide to launch it.": "سيظل مشروعك مخفيًا حتى تقرر إطلاقه.",
+  "Your project is not visible to the public and cannot receive contributions.": "مشروعك غير مرئي للجمهور ولا يمكنه تلقي مساهمات.",
+  "These early-stage projects are in countdown mode. To launch, they must raise $210 within 7 days. Help them build momentum — or they might never take off.": "مشاريع المرحلة المبكرة هذه في وضع العد التنازلي. للإطلاق، يجب عليهم جمع 210 دولارات في غضون 7 أيام. ساعدهم على بناء الزخم - وإلا فقد لا تنطلق أبدًا.",
+  "Add Email": "إضافة بريد إلكتروني",
+  "Add your email to receive project updates from the creator.": "أضف بريدك الإلكتروني لتلقي تحديثات المشروع من المنشئ.",
+  "Connect profile": "توصيل الملف الشخصي",
+  "Connect this transaction with your social profile and receive project updates.": "قم بتوصيل هذه المعاملة بملفك الشخصي على وسائل التواصل الاجتماعي وتلقي تحديثات المشروع.",
+  "At least one shipping rate is required": "مطلوب معدل شحن واحد على الأقل",
+  "Shipping availability is required": "مطلوب توفر الشحن",
+  "At least one specific country must be added when not shipping worldwide": "يجب إضافة بلد واحد على الأقل عند عدم الشحن في جميع أنحاء العالم",
+  "Name is required": "الاسم مطلوب",
+  "Fees model is required": "نموذج الرسوم مطلوب",
+  "Country is required": "البلد مطلوب",
+  "Summary that captures the essence of your product": "ملخص يلخص جوهر منتجك",
+  "Additional configuration": "تكوين إضافي",
+  "Add one or multiple images to showcase your product": "أضف صورة أو صور متعددة لعرض منتجك",
+  "Header images": "صور الرأس",
+  "Best for small, lightweight items where shipping cost doesn't change with quantity. eg: stickers, keychains, etc.": "الأفضل للعناصر الصغيرة وخفيفة الوزن حيث لا تتغير تكلفة الشحن مع الكمية. على سبيل المثال: الملصقات وسلاسل المفاتيح وما إلى ذلك.",
+  "One fee, regardless of quantity": "رسوم واحدة، بغض النظر عن الكمية",
+  "Flat Rate": "سعر ثابت",
+  "Per Unit": "لكل وحدة",
+  "Calculation: If 1 item = $10,   then 2+ items = $10": "الحساب: إذا كان عنصر واحد = 10 دولارات، إذن 2+ عناصر = 10 دولارات",
+  "Ideal when each item adds to the shipping cost. eg: laptops, books, etc.": "مثالي عندما يضيف كل عنصر إلى تكلفة الشحن. على سبيل المثال: أجهزة الكمبيوتر المحمولة والكتب وما إلى ذلك.",
+  "Calculation: If 1 item = $10,   then 2+ items = $20": "الحساب: إذا كان عنصر واحد = 10 دولارات، إذن 2+ عناصر = 20 دولارًا",
+  "Incremental": "تدريجي",
+  "Base fee + extra charge per additional item": "رسوم أساسية + رسوم إضافية لكل عنصر إضافي",
+  "Multiply fee by number of items": "اضرب الرسوم بعدد العناصر",
+  "Calculation: If 1 item = $10, increment rate = $2, then 2 items = $10 + (1×2) = $12": "الحساب: إذا كان عنصر واحد = 10 دولارات، معدل الزيادة = 2 دولار، إذن 2 عنصر = 10 دولارات + (1×2) = 12 دولارًا",
+  "Add shipping fees": "إضافة رسوم الشحن",
+  "Enter a name to remember this fees configuration": "أدخل اسمًا لتذكر تكوين الرسوم هذا",
+  "Fees model": "نموذج الرسوم",
+  "Great for items where shipping a few costs the same, but bulk adds extra fees. Set a base price, then add a small fee per item to balance the cost. eg: small electronics, apparel, etc.": "رائع للعناصر التي تكون فيها تكلفة الشحن لعدد قليل من العناصر مماثلة، ولكن الكميات الكبيرة تضيف رسومًا إضافية. قم بتعيين سعر أساسي، ثم أضف رسومًا صغيرة لكل عنصر لتحقيق التوازن في التكلفة. على سبيل المثال: الأجهزة الإلكترونية الصغيرة، الملابس، إلخ.",
+  "Shipping rates": "أسعار الشحن",
+  "Base rate ($)": "السعر الأساسي ($)",
+  "Same as Default": "كما هو افتراضي",
+  "Shipping Availability": "توفر الشحن",
+  "Add new country": "أضف دولة جديدة",
+  "Base rate must be a number": "يجب أن يكون السعر الأساسي رقمًا",
+  "Default": "افتراضي",
+  "Describe your product in detail - features, specifications, and benefits.": "صف منتجك بالتفصيل - الميزات والمواصفات والفوائد.",
+  "Base rate is required": "السعر الأساسي مطلوب",
+  "If selected, only the countries selected below will be eligible for shipping": "إذا تم التحديد، ستكون الدول المحددة أدناه فقط مؤهلة للشحن",
+  "Ships Worldwide": "يشحن إلى جميع أنحاء العالم",
+  "Ships to certain countries": "يشحن إلى دول معينة",
+  "Increment rate ($)": "سعر الزيادة ($)",
+  "Select Country": "اختر الدولة",
+  "Remove country rate": "إزالة سعر الدولة",
+  "Increment rate is required": "معدل الزيادة مطلوب",
+  "Increment rate must be a number": "يجب أن يكون معدل الزيادة رقمًا",
+  "Invalid increment rate": "سعر زيادة غير صالح",
+  "Updates": "تحديثات",
+  "Shop": "متجر",
+  "Community": "مجتمع",
+  "Guides": "أدلة",
+  "Shipping fees": "رسوم الشحن",
+  "fee": "رسوم",
+  "Shipping availability": "توفر الشحن",
+  "Increment rate": "سعر الزيادة",
+  "Base rate": "السعر الأساسي",
+  "Fee model": "نموذج الرسوم",
+  "Edit shipping fees": "تعديل رسوم الشحن",
+  "Rates": "الأسعار",
+  "Specific countries listed below": "دول محددة مدرجة أدناه",
+  "Updating this shipping fee configuation will update all rewards that use this shipping fee.": "سيؤدي تحديث تكوين رسوم الشحن هذا إلى تحديث جميع المكافآت التي تستخدم رسوم الشحن هذه.",
+  "Add new": "إضافة جديد",
+  "Select fee": "اختر الرسوم",
+  "Invalid amount": "مبلغ غير صالح",
+  "Shipping conflict": "تعارض الشحن",
+  "The items in your basket cannot all be shipped to a single country. Please adjust your selection or choose items available for global shipping.": "لا يمكن شحن جميع العناصر الموجودة في سلتك إلى بلد واحد. يرجى تعديل اختيارك أو اختيار العناصر المتاحة للشحن العالمي.",
+  "City is required": "المدينة مطلوبة",
+  "Full name is required": "الاسم الكامل مطلوب",
+  "Postal code is required": "الرمز البريدي مطلوب",
+  "Street address is required": "عنوان الشارع مطلوب",
+  "Shipping Address": "عنوان الشحن",
+  "Postal code": "الرمز البريدي",
+  "City": "المدينة",
+  "State / Region": "الولاية / المنطقة",
+  "Street Address": "عنوان الشارع",
+  "Include unit/apartment/suite no. if applicable": "قم بتضمين رقم الوحدة / الشقة / الجناح، إن أمكن",
+  "Raymond Holt": "ريموند هولت",
+  "123 Main St, Unit 123": "123 شارع مين، الوحدة 123",
+  "State is required": "الولاية مطلوبة",
+  "California": "كاليفورنيا",
+  "San Francisco": "سان فرانسيسكو",
+  "Invalid shipping address": "عنوان شحن غير صالح",
+  "Failed to save shipping address": "فشل حفظ عنوان الشحن",
+  "Unstable Wallet": "محفظة غير مستقرة",
+  "Ships worldwide": "يشحن إلى جميع أنحاء العالم",
+  "Ships to select regions": "يشحن إلى مناطق محددة",
+  "Expected": "متوقع",
+  "You are purchasing a physical item that requires shipping. ": "أنت تشتري عنصرًا ماديًا يتطلب شحنًا.",
+  "This information is stored securely and deleted after a period of 3 months.": "يتم تخزين هذه المعلومات بشكل آمن وحذفها بعد فترة 3 أشهر.",
+  "This project needs to raise $210 in 7 days to go live. Share this project on social media to help launch it.": "يحتاج هذا المشروع إلى جمع 210 دولارًا في غضون 7 أيام ليصبح متاحًا. شارك هذا المشروع على وسائل التواصل الاجتماعي للمساعدة في إطلاقه.",
+  "Create a re-usable shipping fee configuration that can be used across multiple rewards.": "قم بإنشاء تكوين رسوم شحن قابلة لإعادة الاستخدام يمكن استخدامه عبر مكافآت متعددة.",
+  "The default rate is used for any country not configured below.": "يتم استخدام السعر الافتراضي لأي بلد غير مُكوَّن أدناه.",
+  "List all the countries that are eligible for shipping.": "أدرج جميع البلدان المؤهلة للشحن.",
+  "Require shipping": "تطلب الشحن",
+  "Collect shipping address for delivering physical products directly to your supporters.": "اجمع عنوان الشحن لتسليم المنتجات المادية مباشرة إلى مؤيديك.",
+  "Add shipping fees based on specific countries or globally.": "أضف رسوم الشحن بناءً على دول معينة أو على مستوى العالم.",
+  "Shipping cost": "تكلفة الشحن",
+  "Products cost": "تكلفة المنتجات",
+  "Shipping cost is an estimate and may vary depending on the shipping address.": "تكلفة الشحن تقديرية وقد تختلف حسب عنوان الشحن.",
+  "Wallet Connection": "اتصال المحفظة",
+  "Connect a Lightning wallet to your account to receive refunds, ambassador payouts, etc.": "قم بتوصيل محفظة Lightning بحسابك لتلقي المبالغ المستردة ومدفوعات السفراء وما إلى ذلك.",
+  "Engage your community, followers, contributors, and product purchasers by sending them an update about your product via email.": "تفاعل مع مجتمعك ومتابعيك والمساهمين والمشترين لمنتجاتك عن طريق إرسال تحديث لهم حول منتجك عبر البريد الإلكتروني.",
+  "Linked products and goals": "المنتجات والأهداف المرتبطة",
+  "Please enter a valid email address": "يرجى إدخال عنوان بريد إلكتروني صالح",
+  "Email is required": "البريد الإلكتروني مطلوب",
+  "Discord": "Discord",
+  "X": "X",
+  "Discover the best bitcoin projects - join the list!": "اكتشف أفضل مشاريع البيتكوين - انضم إلى القائمة!",
+  "Real-world Bitcoin adoption stories": "قصص اعتماد البيتكوين في العالم الحقيقي",
+  "Telegram": "Telegram",
+  "satoshi@gmx.com": "satoshi@gmx.com",
+  "New projects & product launches": "مشاريع جديدة وإطلاق منتجات",
+  "Get Updates": "احصل على التحديثات",
+  "Just launched!": "تم الإطلاق!",
+  "You’ve just launched a Bitcoin project - let`s make it fly!": "لقد أطلقت للتو مشروع Bitcoin - دعنا نجعله يطير!",
+  "Connect with the Geyser team on ": "تواصل مع فريق Geyser على "
 }
