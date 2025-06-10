@@ -62,7 +62,11 @@ export const ProfileProjects = () => {
       </H1>
       {isViewingOwnProfile && <CreateProjectButton width="full" />}
       {projectsToRender.map((project) => {
-        if (!isViewingOwnProfile && project.status !== ProjectStatus.Active) {
+        if (
+          !isViewingOwnProfile &&
+          project.status !== ProjectStatus.Active &&
+          project.status !== ProjectStatus.PreLaunch
+        ) {
           return null
         }
 
