@@ -1,6 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 
 import { Head } from '@/config/Head.tsx'
+import { GrantsSeoImageUrl } from '@/shared/constants/index.ts'
 
 import { ClosedGrants } from './components/ClosedGrants'
 import { GrantsHeader } from './components/GrantsHeader'
@@ -17,6 +18,7 @@ export const Grants = () => {
       <Head
         title="Grants"
         description="Geyser Grants fund Bitcoin creators, educators, and builders. Apply for support and help grow Bitcoin through content, culture, and community."
+        image={GrantsSeoImageUrl}
       />
       <GrantsHeader />
       <GrantSubscriptionSection />
