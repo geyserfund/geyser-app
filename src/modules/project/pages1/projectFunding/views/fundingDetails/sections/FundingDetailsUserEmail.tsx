@@ -89,7 +89,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
     } else {
       setState('followProject', false)
     }
-  }, [user])
+  }, [user, email, setState])
 
   const [isEmailAvailable, { loading: userEmailIsAvailableLoading }] = useUserEmailIsAvailableLazyQuery()
 

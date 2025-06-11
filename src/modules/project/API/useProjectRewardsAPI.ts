@@ -10,7 +10,13 @@ import {
 
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { updateProjectItemCountsAtom } from '../state/projectAtom'
-import { addUpdateRewardsAtom, deleteRewardAtom, initialRewardsLoadAtom, rewardsAtom } from '../state/rewardsAtom'
+import {
+  addUpdateRewardsAtom,
+  deleteRewardAtom,
+  initialRewardsLoadAtom,
+  initialRewardsLoadingAtom,
+  rewardsAtom,
+} from '../state/rewardsAtom'
 import { updateProjectItemCountCache } from './cache/projectBodyCache'
 import { useCustomMutation } from './custom/useCustomMutation'
 
@@ -20,6 +26,7 @@ import { useCustomMutation } from './custom/useCustomMutation'
  */
 export const useProjectRewardsAPI = (load?: boolean) => {
   const setRewards = useSetAtom(rewardsAtom)
+  const setInitialRewardsLoading = useSetAtom(initialRewardsLoadingAtom)
   const addUpdateRewards = useSetAtom(addUpdateRewardsAtom)
   const removeReward = useSetAtom(deleteRewardAtom)
 
@@ -43,6 +50,11 @@ export const useProjectRewardsAPI = (load?: boolean) => {
         setRewards(data?.projectRewardsGet)
         setInitialRewardsLoad(true)
       }
+
+      setInitialRewardsLoading(false)
+    },
+    onError() {
+      setInitialRewardsLoading(false)
     },
   })
 
@@ -89,9 +101,10 @@ export const useProjectRewardsAPI = (load?: boolean) => {
 
   useEffect(() => {
     if (project.id && !loading && load && !initialRewardsLoad) {
+      setInitialRewardsLoading(true)
       queryProjectRewards()
     }
-  }, [project.id, load, loading, initialRewardsLoad, queryProjectRewards])
+  }, [project.id, load, loading, initialRewardsLoad, queryProjectRewards, setInitialRewardsLoading])
 
   return {
     queryProjectRewards: {
