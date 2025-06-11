@@ -7,14 +7,16 @@ import { standardPadding } from '@/shared/styles'
 import { dimensions } from '../../shared/constants'
 import { FollowProjectModal } from './components/FollowProjectModal.tsx'
 import { useFundingFlowCleanup } from './hooks/useFollowOnBackModal.ts'
-import { useProjectAtom } from './hooks/useProjectAtom'
+import { useProjectAtom, useRewardsAtom } from './hooks/useProjectAtom'
 import { ProjectNavigation } from './navigation/ProjectNavigation'
 import { GoalDeleteModal, GoalModal, ProjectCreateModal } from './pages1/projectView/components'
+import { buildProjectJsonLd } from './tools/generateProjectJsonLD.ts'
 
 export const ProjectContainer = () => {
   useFundingFlowCleanup()
 
-  const { project } = useProjectAtom()
+  const { project, loading } = useProjectAtom()
+  const { rewards, initialRewardsLoading } = useRewardsAtom()
 
   return (
     <Box
@@ -31,7 +33,11 @@ export const ProjectContainer = () => {
         description={project?.shortDescription || ''}
         image={project?.thumbnailImage || ''}
         type="article"
-      />
+      >
+        {!loading && !initialRewardsLoading && (
+          <script type="application/ld+json">{buildProjectJsonLd(project, rewards)}</script>
+        )}
+      </Head>
       <ProjectNavigation />
       <VStack
         width="100%"
