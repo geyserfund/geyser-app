@@ -1,5 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 
+import { Head } from '@/config/Head.tsx'
+
 import { ClosedGrants } from './components/ClosedGrants'
 import { GrantsHeader } from './components/GrantsHeader'
 import { GrantSubscriptionSection } from './components/GrantSubscriptionSection'
@@ -12,6 +14,10 @@ export const Grants = () => {
 
   return (
     <VStack align="stretch" spacing={8}>
+      <Head
+        title="Grants"
+        description="Geyser Grants fund Bitcoin creators, educators, and builders. Apply for support and help grow Bitcoin through content, culture, and community."
+      />
       <GrantsHeader />
       <GrantSubscriptionSection />
       <OpenGrants openGrants={fundingOpenGrants} />

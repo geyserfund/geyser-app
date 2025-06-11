@@ -10,7 +10,13 @@ import {
   projectLoadingAtom,
   projectOwnerAtom,
 } from '../state/projectAtom'
-import { activeRewardsAtom, hasRewardsAtom, hiddenRewardsAtom, rewardsAtom } from '../state/rewardsAtom'
+import {
+  activeRewardsAtom,
+  hasRewardsAtom,
+  hiddenRewardsAtom,
+  initialRewardsLoadingAtom,
+  rewardsAtom,
+} from '../state/rewardsAtom'
 import { hasSubscriptionsAtom, subscriptionsAtom } from '../state/subscriptionAtom'
 import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '../state/walletAtom'
 
@@ -45,7 +51,8 @@ export const useRewardsAtom = () => {
   const activeRewards = useAtomValue(activeRewardsAtom)
   const hiddenRewards = useAtomValue(hiddenRewardsAtom)
   const hasRewards = useAtomValue(hasRewardsAtom)
-  return { rewards, activeRewards, hiddenRewards, hasRewards }
+  const initialRewardsLoading = useAtomValue(initialRewardsLoadingAtom)
+  return { rewards, activeRewards, hiddenRewards, hasRewards, initialRewardsLoading }
 }
 
 export const useSubscriptionsAtom = () => {

@@ -1372,5 +1372,12 @@
   "Post published": "Post published",
   "Your post is now live": "Your post is now live",
   "INACTIVE": "INACTIVE",
-  "ACTIVE": "ACTIVE"
+  "ACTIVE": "ACTIVE",
+  "Low 5% fees and no fees for node-runners": "Low 5% fees and no fees for node-runners",
+  "Project name should be between 3 and 280 characters.": "Project name should be between 3 and 280 characters.",
+  "Collect Knight jewel": "Collect Knight jewel",
+  "Collect Legend jewel": "Collect Legend jewel",
+  "Collect King jewel": "Collect King jewel",
+  "Collect Warrior jewel": "Collect Warrior jewel",
+  "{{fee}}% Geyser fee per transaction": "{{fee}}% Geyser fee per transaction"
 }

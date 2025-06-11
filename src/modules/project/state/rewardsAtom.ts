@@ -8,6 +8,9 @@ import { isProjectOwnerAtom } from './projectAtom'
 /** Rewards for the Project in context */
 export const rewardsAtom = atom<ProjectRewardFragment[]>([])
 
+/** Loading state for rewards */
+export const initialRewardsLoadingAtom = atom(true)
+
 /** Active rewards for the Project in context */
 export const activeRewardsAtom = atom((get) => {
   const rewards = get(rewardsAtom)
@@ -66,4 +69,5 @@ export const initialRewardsLoadAtom = atom(false)
 export const rewardsAtomReset = atom(null, (get, set) => {
   set(rewardsAtom, [])
   set(initialRewardsLoadAtom, false)
+  set(initialRewardsLoadingAtom, true)
 })
