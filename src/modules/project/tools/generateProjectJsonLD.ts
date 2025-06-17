@@ -1,4 +1,5 @@
-import { ProjectPageBodyFragment, ProjectRewardFragment } from '@/types/generated/graphql.ts'
+import { ProjectPageBodyFragment, ProjectPostViewFragment, ProjectRewardFragment } from '@/types/generated/graphql.ts'
+import { toInt } from '@/utils/index.ts'
 
 export const buildProjectJsonLd = (project: ProjectPageBodyFragment, rewards: ProjectRewardFragment[]): string => {
   const schema: any = {
@@ -43,4 +44,45 @@ export const buildProjectJsonLd = (project: ProjectPageBodyFragment, rewards: Pr
   }
 
   return JSON.stringify(schema, null, 2)
+}
+
+export const generatePostJsonLd = (post: ProjectPostViewFragment, project: ProjectPageBodyFragment): string => {
+  const projectOwner = project.owners?.[0]?.user
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.description,
+    image: post.image || project.thumbnailImage || '',
+    datePublished: post.createdAt ? new Date(toInt(post.createdAt)).toISOString() : undefined,
+    author: projectOwner
+      ? {
+          '@type': 'Person',
+          name: projectOwner.username,
+          url: `https://geyser.fund/profile/${projectOwner.username}`,
+          ...(projectOwner.imageUrl && { image: projectOwner.imageUrl }),
+        }
+      : {
+          '@type': 'Organization',
+          name: project.title,
+          url: `https://geyser.fund/project/${project.name}`,
+        },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Geyser',
+      url: 'https://geyser.fund',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://geyser.fund/logo.png',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://geyser.fund/project/${project.name}/posts/view/${post.id}`,
+    },
+    url: `https://geyser.fund/project/${project.name}/posts/view/${post.id}`,
+  }
+
+  return JSON.stringify(schema)
 }
