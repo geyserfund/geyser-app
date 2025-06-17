@@ -26,6 +26,7 @@ export const HeaderComponent = ({ watch, setValue, handleImageUpload, handleDele
       <VStack pt={4} w="full">
         <MediaControlWithReorder
           links={watch('images')}
+          altText={'Reward image'}
           updateLinks={(links) => setValue('images', links, { shouldDirty: true })}
           aspectRatio={ImageCropAspectRatio.Reward}
           mediaProps={{

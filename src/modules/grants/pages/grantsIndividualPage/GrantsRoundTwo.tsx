@@ -66,7 +66,7 @@ export const GrantsRoundTwo = ({
             <FaArrowLeft /> {t('See all Grants')}
           </Button>
           <Box display="flex" justifyContent={'center'}>
-            <Image height={'220px'} src={GrantsRound2Url} />
+            <Image height={'220px'} src={GrantsRound2Url} alt={'Grants round 2 image'} />
           </Box>
           <Box display="flex" alignItems={'center'} justifyContent="center" my={1} gap={4}>
             <Text bg="neutral.100" fontSize={'10px'} px="14px" py={'5px'} fontWeight="500">
@@ -175,10 +175,10 @@ export const GrantsRoundTwo = ({
             <Box width="100%" display="flex" alignItems={'center'} my={4}>
               <Wrap width="100%" justify="center" spacing="25px">
                 <WrapItem>
-                  <Image height="70px" src={WalletOfSatoshiUrl} />
+                  <Image height="70px" src={WalletOfSatoshiUrl} alt={'Wallet of Satoshi logo'} />
                 </WrapItem>
                 <WrapItem>
-                  <Image height="70px" src={AlbyUrl} />
+                  <Image height="70px" src={AlbyUrl} alt={'Alby logo'} />
                 </WrapItem>
               </Wrap>
             </Box>

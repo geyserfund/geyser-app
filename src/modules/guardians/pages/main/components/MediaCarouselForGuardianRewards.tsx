@@ -32,6 +32,7 @@ export const MediaCarouselForGuardianRewards = ({
     >
       <MediaCarousel
         links={imageLinkList}
+        altText={'Guardian reward image'}
         wrapperProps={{
           backgroundColor: 'transparent',
         }}

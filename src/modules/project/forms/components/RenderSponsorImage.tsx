@@ -8,6 +8,7 @@ type RenderSponsorImageProps = {
   height?: string
   backgroundColor?: string
   padding?: string
+  alt?: string
 }
 
 export const RenderSponsorImage: FC<RenderSponsorImageProps> = ({
@@ -17,13 +18,14 @@ export const RenderSponsorImage: FC<RenderSponsorImageProps> = ({
   height = '40px',
   backgroundColor,
   padding,
+  alt,
 }) => {
   const image = useColorModeValue(imageUrl, imageUrlDark || imageUrl)
 
   return (
     <Box backgroundColor={backgroundColor || 'utils.pbg'} borderRadius={'8px'} padding={padding} height={height}>
       <Link isExternal href={url}>
-        <Image src={image} height="100%" />
+        <Image src={image} alt={alt || `${url} sponsor image`} height="100%" />
       </Link>
     </Box>
   )

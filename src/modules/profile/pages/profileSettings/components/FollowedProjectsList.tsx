@@ -55,7 +55,13 @@ const FollowedProjectItem = ({ project }: { project: Project }) => {
   return (
     <HStack w="full" justifyContent="space-between" alignItems="center" pt={2} pb={2}>
       <HStack justifyContent="flex-start" alignItems="center" as={Link} to={getPath('project', project.name)}>
-        <ImageWithReload src={project.thumbnailImage} w="40px" h="40px" borderRadius="md" />
+        <ImageWithReload
+          src={project.thumbnailImage}
+          alt={`${project.name} project thumbnail image`}
+          w="40px"
+          h="40px"
+          borderRadius="md"
+        />
         <Body size="md" medium>
           {project.name}
         </Body>

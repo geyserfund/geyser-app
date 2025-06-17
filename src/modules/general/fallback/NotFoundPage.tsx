@@ -37,7 +37,7 @@ export const NotFoundPage = () => {
         alignItems="center"
         spacing="20px"
       >
-        <Image width={308} height={278} src={NotFoundPageImageUrl} />
+        <Image width={308} height={278} src={NotFoundPageImageUrl} alt={'Not found page image'} />
         <H2 size="2xl" bold textAlign="center">
           {t('Oops, looks like this page got lost in space')}
         </H2>

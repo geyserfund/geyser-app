@@ -37,7 +37,7 @@ export const NotAuthorized = () => {
         alignItems="center"
         spacing="20px"
       >
-        <Image width={308} height={175} src={NotAuthorizedImageUrl} />
+        <Image width={308} height={175} src={NotAuthorizedImageUrl} alt={'Not authorized image'} />
 
         <H2 size="2xl" bold textAlign="center">
           {t('Oops!')} {t('You do not have permission to access this page.')}

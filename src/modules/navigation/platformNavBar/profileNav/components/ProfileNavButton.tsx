@@ -42,6 +42,7 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
           leftIcon={
             <Image
               src={guardianData.jewel}
+              alt={'guardian jewel image'}
               width={{ base: '20px', lg: '30px' }}
               height={{ base: '20px', lg: '30px' }}
             />

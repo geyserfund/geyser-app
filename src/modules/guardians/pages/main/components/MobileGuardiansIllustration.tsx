@@ -214,7 +214,14 @@ export const MobileGuardiansIllustration = () => {
           transition="opacity 0.2s ease-in-out"
           right={'48%'}
         >
-          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={previousGuardianImageGrey} />
+          <Image
+            h="full"
+            w="full"
+            objectFit="cover"
+            objectPosition="top"
+            src={previousGuardianImageGrey}
+            alt={`${previousGuardian} guardian grey image`}
+          />
         </Box>
         <Box
           className={classNames({
@@ -256,7 +263,14 @@ export const MobileGuardiansIllustration = () => {
           transition="opacity 0.2s ease-in-out"
           left={'48%'}
         >
-          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={nextGuardianImageGrey} />
+          <Image
+            h="full"
+            w="full"
+            objectFit="cover"
+            objectPosition="top"
+            src={nextGuardianImageGrey}
+            alt={`${nextGuardian} guardian grey image`}
+          />
         </Box>
         <Box
           className={classNames({
@@ -293,7 +307,14 @@ export const MobileGuardiansIllustration = () => {
           bottom={-1}
           zIndex={1}
         >
-          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={currentGuardianImageGrey} />
+          <Image
+            h="full"
+            w="full"
+            objectFit="cover"
+            objectPosition="top"
+            src={currentGuardianImageGrey}
+            alt={`${currentGuardian} guardian grey image`}
+          />
         </Box>
         <Box
           className={classNames({
@@ -307,7 +328,14 @@ export const MobileGuardiansIllustration = () => {
           zIndex={1}
           pointerEvents="none"
         >
-          <Image h="full" w="full" objectFit="cover" objectPosition="top" src={currentGuardianImageRaycast} />
+          <Image
+            h="full"
+            w="full"
+            objectFit="cover"
+            objectPosition="top"
+            src={currentGuardianImageRaycast}
+            alt={`${currentGuardian} guardian raycast image`}
+          />
         </Box>
 
         <Box
@@ -333,6 +361,7 @@ export const MobileGuardiansIllustration = () => {
       </VStack>
       <Image
         src={GuardiansSeriesOneOrnamentSeparatorUrl}
+        alt={'guardians series one ornaments separator image'}
         position="relative"
         zIndex={3}
         height="100px"

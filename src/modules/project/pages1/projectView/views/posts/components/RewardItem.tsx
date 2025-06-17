@@ -12,7 +12,14 @@ type RewardItemProps = {
 export const RewardItem = ({ imageUrl, name, ...rest }: RewardItemProps) => {
   return (
     <HStack w="full" alignItems={'start'} {...rest}>
-      <ImageWithReload borderRadius={'8px'} width="24px" minWidth={'24px'} height="24px" src={imageUrl} />
+      <ImageWithReload
+        borderRadius={'8px'}
+        width="24px"
+        minWidth={'24px'}
+        height="24px"
+        src={imageUrl}
+        alt={`${name} reward image`}
+      />
       <Body size="sm" isTruncated>
         {name}
       </Body>

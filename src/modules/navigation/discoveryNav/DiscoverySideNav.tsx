@@ -70,7 +70,7 @@ export const DiscoverySideNav = () => {
     >
       <VStack w="full" h="full" paddingX={{ lg: 4, xl: 8 }} spacing={8}>
         <Link to={getPath('discoveryLanding')}>
-          <Image src={isTabletSize ? tabletImage : imageUrl} height="48px" width="auto" />
+          <Image src={isTabletSize ? tabletImage : imageUrl} alt={'Brand logo image'} height="48px" width="auto" />
         </Link>
         <VStack w="full" padding={0} spacing={3}>
           {discoveryNavItems.map((item, index) => {

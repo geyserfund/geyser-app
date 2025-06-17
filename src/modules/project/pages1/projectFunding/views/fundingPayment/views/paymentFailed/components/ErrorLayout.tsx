@@ -17,7 +17,7 @@ export const ErrorLayout = ({
     <VStack w="full" spacing="20px">
       <VStack w="full" alignItems="center">
         <Box padding={5}>
-          <Image src={url} width="150px" height="auto" objectFit="contain" />
+          <Image src={url} width="150px" height="auto" objectFit="contain" alt={`${title} error image`} />
         </Box>
         <H2 size="xl" medium color="error.11">
           {title}

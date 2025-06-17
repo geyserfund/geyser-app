@@ -46,7 +46,7 @@ export const ProfileProjects = () => {
   if (projects.length === 0) {
     return (
       <VStack w="full" p="20px" spacing="20px">
-        <Image height="200px" src={TelescopeUrl} />
+        <Image height="200px" src={TelescopeUrl} alt={'No projects image'} />
         <Body medium light>
           {t('No projects')}
         </Body>

@@ -32,7 +32,13 @@ export const PerkWithImageList = ({
                 maxWidth="172px"
               >
                 <Box flex={1} height={{ base: '124px', lg: '124px' }} maxHeight={{ base: '124px', lg: '124px' }}>
-                  <Image height="100%" width="auto" objectFit="contain" src={item.url} />
+                  <Image
+                    height="100%"
+                    width="auto"
+                    objectFit="contain"
+                    src={item.url}
+                    alt={`${item.name} perk image`}
+                  />
                 </Box>
                 <Body size="lg" bold w="full" textAlign="center">
                   {item.name}

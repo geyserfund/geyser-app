@@ -58,6 +58,7 @@ export const LargeGrantCard = ({ grant, showBanner }: Props) => {
             borderTopLeftRadius="8px"
             borderTopRightRadius="8px"
             src={grant.image}
+            alt={`${grant.title} grant banner image`}
             minWidth={'100%'}
           />
           {isMobile && (

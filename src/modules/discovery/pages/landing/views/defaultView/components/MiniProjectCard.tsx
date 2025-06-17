@@ -27,7 +27,13 @@ export const MiniProjectCard = ({ imageUrl, title, startAnimating, ...rest }: Mi
       {...rest}
     >
       <Box width="24px" height="24px" borderRadius="8px" overflow="hidden">
-        <ImageWithReload height="full" width="full" src={imageUrl} objectFit="cover" />
+        <ImageWithReload
+          height="full"
+          width="full"
+          src={imageUrl}
+          alt={`${title} project thumbnail image`}
+          objectFit="cover"
+        />
       </Box>
       <Body medium isTruncated>
         {title}

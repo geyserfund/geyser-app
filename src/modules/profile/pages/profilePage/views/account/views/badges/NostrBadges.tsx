@@ -87,7 +87,7 @@ export const NostrBadges = ({
       <Wrap w="full" spacingX={2} spacingY={4} justify="start" paddingBottom="20px">
         <WrapItem>
           <VStack overflow="hidden" w="full" onClick={handleClickHeroCard} _hover={{ cursor: 'pointer' }}>
-            <Image width="auto" maxWidth="110px" src={GenericHeroCardUrl} />
+            <Image width="auto" maxWidth="110px" src={GenericHeroCardUrl} alt={'Generic hero card image'} />
           </VStack>
         </WrapItem>
 

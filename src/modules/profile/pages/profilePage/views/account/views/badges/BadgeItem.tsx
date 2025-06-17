@@ -42,7 +42,7 @@ export const BadgeItem = ({
       onClick={() => handleClick(userBadge)}
       _hover={{ cursor: 'pointer' }}
     >
-      <Image width="auto" maxWidth="110px" src={badge.image} />
+      <Image width="auto" maxWidth="110px" src={badge.image} alt={`${badge.name} badge image`} />
       {/* {
         !isClaimed && isEdit &&
         <ButtonComponent size="sm" primary onClick={onClaim} isLoading={claiming}>
