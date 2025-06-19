@@ -23,3 +23,12 @@ export const FRAGMENT_PROJECT_FOR_PROFILE_PAGE = gql`
     }
   }
 `
+
+export const FRAGMENT_PROJECT_FOR_PROFILE_CONTRIBUTIONS = gql`
+  fragment ProjectForProfileContributions on Project {
+    id
+    name
+    title
+    thumbnailImage
+  }
+`

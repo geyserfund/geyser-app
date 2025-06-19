@@ -1,7 +1,5 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_PROJECT_AVATAR } from '@/modules/project/graphql/fragments/projectFragment.ts'
-
 export const FRAGMENT_BITCOIN_QUOTE = gql`
   fragment BitcoinQuote on BitcoinQuote {
     quote
@@ -29,15 +27,17 @@ export const FRAGMENT_USER_PROJECT_FUNDER = gql`
   }
 `
 
-export const FRAGMENT_USER_PROJECT_CONTRIBUTIONS = gql`
-  ${FRAGMENT_PROJECT_AVATAR}
-  ${FRAGMENT_USER_PROJECT_FUNDER}
-  fragment UserProjectContributions on UserProjectContribution {
-    project {
-      ...ProjectAvatar
-    }
-    funder {
-      ...UserProjectFunder
+export const FRAGMENT_USER_PROJECT_CONTRIBUTION = gql`
+  ${FRAGMENT_BITCOIN_QUOTE}
+  fragment UserProjectContribution on Contribution {
+    id
+    amount
+    comment
+    media
+    confirmedAt
+    projectId
+    bitcoinQuote {
+      ...BitcoinQuote
     }
   }
 `

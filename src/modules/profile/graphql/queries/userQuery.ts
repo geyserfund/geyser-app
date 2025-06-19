@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_USER_PROJECT_CONTRIBUTIONS } from '../fragments/contributionFragment'
+import { FRAGMENT_USER_PROJECT_CONTRIBUTION } from '../fragments/contributionFragment.ts'
 import { FRAGMENT_PROJECT_FOR_PROFILE_PAGE } from '../fragments/projectFragment'
 import { FRAGMENT_USER_FOR_PROFILE_PAGE, FRAGMENT_USER_TAX_PROFILE } from '../fragments/userFragment'
 import { FRAGMENT_USER_WALLET_CONNECTION_DETAILS } from '../fragments/walletFragment.ts'
@@ -38,11 +38,12 @@ export const QUERY_USER_FOLLOWED_PROJECTS = gql`
   }
 `
 export const QUERY_USER_CONTRIBUTIONS = gql`
-  ${FRAGMENT_USER_PROJECT_CONTRIBUTIONS}
-  query UserProfileContributions($where: UserGetInput!) {
+  ${FRAGMENT_USER_PROJECT_CONTRIBUTION}
+  query UserProfileContributions($where: UserGetInput!, $input: UserContributionsInput) {
     user(where: $where) {
-      projectContributions {
-        ...UserProjectContributions
+      id
+      contributions(input: $input) {
+        ...UserProjectContribution
       }
     }
   }
