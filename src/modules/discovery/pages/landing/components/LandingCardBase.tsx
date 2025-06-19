@@ -10,7 +10,7 @@ import { InteractiveCardLayout } from '@/shared/components/layouts/InteractiveCa
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { centsToDollars, isInactive, toSmallImageUrl } from '@/utils'
+import { centsToDollars, isInactive } from '@/utils'
 
 import { SkeletonLayout } from '../../../../../shared/components/layouts'
 import { ContributionsSummary, ProjectForLandingPageFragment } from '../../../../../types'
@@ -94,7 +94,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           aspectRatio={{ base: undefined, lg: 1 }}
           objectFit="cover"
           borderRadius="8px"
-          src={toSmallImageUrl(project.thumbnailImage || '')}
+          src={project.thumbnailImage || ''}
           alt={`${project.title}-header-image`}
         />
         <Box position="absolute" top={2} right={2}>
