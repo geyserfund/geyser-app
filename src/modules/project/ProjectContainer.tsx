@@ -33,12 +33,10 @@ export const ProjectContainer = () => {
         description={project?.shortDescription || ''}
         image={project?.thumbnailImage || ''}
         type="article"
+        url={`https://geyser.fund/project/${project?.name}`}
       >
         {!loading && !initialRewardsLoading && (
-          <>
-            <link rel="canonical" href={`https://geyser.fund/project/${project?.name}`} />
-            <script type="application/ld+json">{buildProjectJsonLd(project, rewards)}</script>
-          </>
+          <script type="application/ld+json">{buildProjectJsonLd(project, rewards)}</script>
         )}
       </Head>
       <ProjectNavigation />

@@ -43,6 +43,9 @@ export const buildProjectJsonLd = (project: ProjectPageBodyFragment, rewards: Pr
     }
   }
 
+  console.log(schema)
+  console.log(JSON.stringify(schema, null, 2))
+
   return JSON.stringify(schema, null, 2)
 }
 

@@ -1,10 +1,9 @@
 import { Button, HStack, Icon, IconButton, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { PiX } from 'react-icons/pi'
 
 import { useAuthContext } from '@/context/auth.tsx'
-import { FlowingGifBackground } from '@/modules/discovery/pages/heroes/components/FlowingGifBackground.tsx'
 import { VerifiedBadge } from '@/modules/profile/pages/profilePage/views/account/views/badges/VerifiedBadge.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
@@ -56,6 +55,9 @@ export const CreatorVerificationNotice = () => {
 
   const hasProjectFundingLimitReached = useAtomValue(hasProjectFundingLimitReachedAtom)
   const hasProjectFundingLimitAlmostReached = useAtomValue(hasProjectFundingLimitAlmostReachedAtom)
+  const fistFundingLimitAlmostReached = useAtomValue(firstFundingLimitAlmostReachedNoticeClosedAtom)
+  const secondFundingLimitAlmostReached = useAtomValue(secondFundingLimitAlmostReachedNoticeClosedAtom)
+  const isLevel2 = user?.complianceDetails.verifiedDetails.phoneNumber?.verified
 
   if (!isProjectOwner) {
     return null
@@ -74,7 +76,9 @@ export const CreatorVerificationNotice = () => {
   }
 
   if (hasProjectFundingLimitAlmostReached) {
-    return <AlmostReachedLimitNotice />
+    if ((isLevel2 && !secondFundingLimitAlmostReached) || (!isLevel2 && !fistFundingLimitAlmostReached)) {
+      return <AlmostReachedLimitNotice />
+    }
   }
 
   if (isVerificationOnHold(currentVerificationLevel)) {
@@ -189,12 +193,8 @@ const FundingLimitReachedNotice = () => {
 
 const AlmostReachedLimitNotice = () => {
   const { user } = useAuthContext()
-  const [fistFundingLimitAlmostReached, setFirstFundingLimitAlmostReached] = useAtom(
-    firstFundingLimitAlmostReachedNoticeClosedAtom,
-  )
-  const [secondFundingLimitAlmostReached, setSecondFundingLimitAlmostReached] = useAtom(
-    secondFundingLimitAlmostReachedNoticeClosedAtom,
-  )
+  const setFirstFundingLimitAlmostReached = useSetAtom(firstFundingLimitAlmostReachedNoticeClosedAtom)
+  const setSecondFundingLimitAlmostReached = useSetAtom(secondFundingLimitAlmostReachedNoticeClosedAtom)
 
   const { startVerification, userVerificationModal, generateVerificationTokenLoading, userVerificationToken } =
     useUserVerificationModal()
@@ -207,14 +207,6 @@ const AlmostReachedLimitNotice = () => {
   const level2Text = t(
     'Your project has almost reached your funding limit of $100k. Complete identity-verification to continue raising above $100k.',
   )
-
-  if (isLevel2 && secondFundingLimitAlmostReached) {
-    return null
-  }
-
-  if (!isLevel2 && fistFundingLimitAlmostReached) {
-    return null
-  }
 
   return (
     <>
@@ -278,7 +270,6 @@ const BecomeVerifiedNotice = () => {
         position="relative"
         backgroundColor="utils.pbg"
       >
-        <FlowingGifBackground />
         <IconButton
           position="absolute"
           variant="ghost"
