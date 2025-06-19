@@ -75,7 +75,13 @@ export const FeaturedProjectCard = ({
       {...rest}
     >
       <Box width={{ base: '100%', sm: '44%' }} height={{ base: '240px', sm: '100%' }} overflow="hidden">
-        <ImageWithReload height="full" width="full" src={`${project.thumbnailImage}`} objectFit="cover" />
+        <ImageWithReload
+          height="full"
+          width="full"
+          src={`${project.thumbnailImage}`}
+          alt={`${project.title} project thumbnail image`}
+          objectFit="cover"
+        />
       </Box>
       <VStack
         width={{ base: '100%', sm: '55%' }}

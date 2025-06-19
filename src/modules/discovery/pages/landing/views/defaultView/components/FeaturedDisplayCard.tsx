@@ -45,7 +45,13 @@ export const FeaturedDisplayCard = ({ data, showMini, startAnimating, ...rest }:
       {...rest}
     >
       <Box width={{ base: '100%', sm: '44%' }} height={{ base: '240px', sm: '100%' }} overflow="hidden">
-        <ImageWithReload height="full" width="full" src={`${data.imageUrl}`} objectFit="cover" />
+        <ImageWithReload
+          height="full"
+          width="full"
+          src={`${data.imageUrl}`}
+          alt={`${data.Name} project thumbnail image`}
+          objectFit="cover"
+        />
       </Box>
       <VStack
         width={{ base: '100%', sm: '55%' }}

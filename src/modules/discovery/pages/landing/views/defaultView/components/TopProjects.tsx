@@ -62,7 +62,13 @@ const ProjectHeroDisplay = ({ project, index }: { project: GlobalProjectLeaderbo
         borderRadius="16px"
         paddingRight={2}
       >
-        <ImageWithReload borderRadius={'16px'} height="64px" width="64px" src={project.projectThumbnailUrl} />
+        <ImageWithReload
+          borderRadius={'16px'}
+          height="64px"
+          width="64px"
+          src={project.projectThumbnailUrl}
+          alt={`${project.projectTitle} project thumbnail image`}
+        />
         <VStack w="full" overflow="hidden" flex={1} spacing={0} alignItems="start">
           <Body w="full" bold isTruncated>
             {project.projectTitle}

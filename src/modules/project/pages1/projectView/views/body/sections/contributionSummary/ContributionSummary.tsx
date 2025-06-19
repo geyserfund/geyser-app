@@ -38,7 +38,7 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
         </HStack>
         <HStack>
           {paymentMethods.map((method) => (
-            <Image src={method} key={method} maxHeight="14px" />
+            <Image src={method} alt={`${method} payment method image`} key={method} maxHeight="14px" />
           ))}
         </HStack>
       </VStack>

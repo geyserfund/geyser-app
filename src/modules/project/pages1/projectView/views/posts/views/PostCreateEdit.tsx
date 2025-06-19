@@ -239,7 +239,7 @@ export const PostCreateEdit = () => {
                         _hover={{ opacity: 0.9 }}
                         height="100%"
                       />
-                      <ImageWithReload width="100%" objectFit="cover" src={postForm.image} />
+                      <ImageWithReload width="100%" objectFit="cover" src={postForm.image} alt={postForm.title} />
                     </HStack>
                   ) : (
                     <ImageUploadUi />

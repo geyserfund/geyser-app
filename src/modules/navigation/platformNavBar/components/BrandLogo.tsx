@@ -22,7 +22,7 @@ export const BrandLogoFull = () => {
   return (
     <Link to={getPath('landingPage')} style={{ height: '100%' }}>
       <Box h="100%">
-        <Image src={imageUrl} height="100%" width="auto" objectFit="contain" />
+        <Image src={imageUrl} alt={'Brand logo image'} height="100%" width="auto" objectFit="contain" />
       </Box>
     </Link>
   )

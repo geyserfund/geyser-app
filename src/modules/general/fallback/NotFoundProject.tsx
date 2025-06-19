@@ -30,7 +30,7 @@ export const NotFoundProject = () => {
         alignItems="center"
         spacing="20px"
       >
-        <Image width={308} height={278} src={NotFoundPageImageUrl} />
+        <Image width={308} height={278} src={NotFoundPageImageUrl} alt={'Not found project image'} />
 
         <H2 size="2xl" bold textAlign="center">
           {t('This project does not exist')}

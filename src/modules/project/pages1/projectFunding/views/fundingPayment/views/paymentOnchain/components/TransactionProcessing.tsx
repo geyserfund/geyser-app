@@ -19,7 +19,14 @@ export const TransactionProcessing = ({ title, subTitle, transactionId, ...rest 
   return (
     <CardLayout w="100%" spacing={6} dense noborder alignItems="center" {...rest}>
       <Box padding={5}>
-        <Image maxHeight="150px" height="auto" width="auto" objectFit={'contain'} src={TransactionProcessingUrl} />
+        <Image
+          maxHeight="150px"
+          height="auto"
+          width="auto"
+          objectFit={'contain'}
+          src={TransactionProcessingUrl}
+          alt={'Transaction processing image'}
+        />
       </Box>
       <VStack spacing="10px" pb="20px">
         <H3>{title}</H3>

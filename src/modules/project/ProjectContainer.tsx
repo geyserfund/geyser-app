@@ -33,6 +33,7 @@ export const ProjectContainer = () => {
         description={project?.shortDescription || ''}
         image={project?.thumbnailImage || ''}
         type="article"
+        url={`https://geyser.fund/project/${project?.name}`}
       >
         {!loading && !initialRewardsLoading && (
           <script type="application/ld+json">{buildProjectJsonLd(project, rewards)}</script>

@@ -24,7 +24,7 @@ export const ProjectShareBanner = forwardRef<HTMLDivElement, Props>(
     return (
       <VStack ref={ref} w="100%" position="relative">
         <Box aspectRatio={ASPECT_RATIO} w="100%" position="absolute" top={0} left={0}>
-          <Image width="100%" height="100%" objectFit={'cover'} src={bannerImage} />
+          <Image width="100%" height="100%" objectFit={'cover'} src={bannerImage} alt={'share banner image'} />
         </Box>
         <HStack
           aspectRatio={ASPECT_RATIO}

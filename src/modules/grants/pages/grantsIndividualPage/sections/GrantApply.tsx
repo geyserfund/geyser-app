@@ -277,7 +277,13 @@ export const SelectAProject = ({ grantId, projects, onSuccess, pendingApplicants
                 borderColor: isSelected ? 'primary.400' : 'neutral.400',
               }}
             >
-              <Image h="100%" width="135px" src={project.thumbnailImage || ''} objectFit="cover" />
+              <Image
+                h="100%"
+                width="135px"
+                src={project.thumbnailImage || ''}
+                alt={`${project.title} project thumbnail image`}
+                objectFit="cover"
+              />
               <Body bold>{project.title}</Body>
               {isPending && (
                 <Tag bg="warning.3">

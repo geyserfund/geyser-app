@@ -94,7 +94,7 @@ export const AccountInfo = () => {
               variant="outline"
               size="sm"
               mt={1}
-              rightIcon={<Image height="16px" width="16px" src={GuardiansJewelUrl} />}
+              rightIcon={<Image height="16px" width="16px" src={GuardiansJewelUrl} alt={'Guardians jewel image'} />}
             >
               {t('Become a guardian')}
             </Button>

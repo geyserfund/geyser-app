@@ -9,7 +9,14 @@ export const FiatSwapProcessing = () => {
     <VStack w="full" spacing={6}>
       <VStack spacing={2} w="full" maxWidth={'500px'}>
         <Box padding={5}>
-          <Image maxHeight="150px" height="auto" width="auto" objectFit={'contain'} src={TransactionProcessingUrl} />
+          <Image
+            maxHeight="150px"
+            height="auto"
+            width="auto"
+            objectFit={'contain'}
+            src={TransactionProcessingUrl}
+            alt={'Transaction processing image'}
+          />
         </Box>
         <Body medium> {t('Processing your payment')}</Body>
         <Body size="sm" textAlign={'center'}>

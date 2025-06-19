@@ -126,7 +126,14 @@ const ProjectTitle = ({
   return (
     <HStack as={Link} to={getPathWithGeyserHero('project', projectName)}>
       {projectImage && (
-        <Image width={'32px'} height={'32px'} borderRadius={'8px'} src={projectImage} objectFit="cover" />
+        <Image
+          width={'32px'}
+          height={'32px'}
+          borderRadius={'8px'}
+          src={projectImage}
+          alt={`${projectTitle} project thumbnail image`}
+          objectFit="cover"
+        />
       )}
       <Body size="lg" medium isTruncated maxW={{ base: '250px', lg: '200px' }}>
         {projectTitle}
@@ -243,6 +250,7 @@ const ActivityImage = ({ resource }: { resource: ActivityResource }) => {
         height={{ base: '100px', lg: '175px' }}
         borderRadius="md"
         src={resource.entryImage}
+        alt={`${resource.id} project post image`}
         objectFit="cover"
         my={{ base: 2, lg: 1 }}
       />
@@ -257,6 +265,7 @@ const ActivityImage = ({ resource }: { resource: ActivityResource }) => {
         height={{ base: '100px', lg: '175px' }}
         borderRadius="md"
         src={resource.projectRewardImage}
+        alt={`${resource.id} project reward image`}
         objectFit="cover"
         my={{ base: 2, lg: 1 }}
       />

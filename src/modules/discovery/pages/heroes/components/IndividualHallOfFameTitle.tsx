@@ -7,8 +7,6 @@ import { Body, H2 } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import { TitleHeaderGradient } from '@/shared/styles/custom.ts'
 
-import { FlowingGifBackground } from './FlowingGifBackground'
-
 type IndividualHallOfFameTitleProps = {
   title?: string
   description?: string
@@ -34,8 +32,6 @@ export const IndividualHallOfFameTitle = ({
       alignItems={{ base: 'start', lg: 'center' }}
       {...rest}
     >
-      <FlowingGifBackground />
-
       <VStack w="full" alignItems={'center'} spacing={{ base: 2, lg: 0 }} zIndex={1}>
         <H2 size="3xl" bold color={lightModeColors.utils.text}>
           {title || t('Projects Hall of Fame')}

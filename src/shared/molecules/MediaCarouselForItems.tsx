@@ -34,12 +34,14 @@ type MediaCarouselForItemsModalProps = {
   imageLinkList: string[]
   dataList: { name: string; description: string[] }[]
   bottomContent?: React.ReactNode
+  altText?: string
 } & Omit<UseModalReturn<{ currentIndex: number }>, 'children'>
 
 export const MediaCarouselForItemsModal = ({
   imageLinkList,
   dataList,
   bottomContent,
+  altText,
   ...modalProps
 }: MediaCarouselForItemsModalProps) => {
   const classes = useStyles()
@@ -49,6 +51,7 @@ export const MediaCarouselForItemsModal = ({
     <Modal {...modalProps} size="lg" noClose isCentered={false}>
       <MediaCarousel
         links={imageLinkList}
+        altText={altText}
         onSlideChange={(index) => {
           console.log('checking index', index)
           setCurrentIndex(index)

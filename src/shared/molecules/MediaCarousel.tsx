@@ -87,6 +87,7 @@ type MediaCarouselProps = {
   onSlideChange?: (index: number) => void
   initialSlide?: number
   swiperProps?: SwiperProps
+  altText?: string
 } & BoxProps
 export const MediaCarousel = ({
   links,
@@ -95,6 +96,7 @@ export const MediaCarousel = ({
   onSlideChange,
   initialSlide,
   swiperProps,
+  altText,
   ...rest
 }: MediaCarouselProps) => {
   const classes = useStyles()
@@ -123,7 +125,13 @@ export const MediaCarousel = ({
           return (
             <SwiperSlide key={index}>
               {typeof link === 'string' ? (
-                <RenderImageOrVideo link={link} borderRadius={0} aspectRatio={aspectRatio} {...wrapperProps} />
+                <RenderImageOrVideo
+                  link={link}
+                  borderRadius={0}
+                  aspectRatio={aspectRatio}
+                  imageProps={{ alt: `${altText}-${index}-carousel` }}
+                  {...wrapperProps}
+                />
               ) : (
                 link
               )}

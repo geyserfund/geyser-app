@@ -123,7 +123,11 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
         </Box>
       ) : (
         <Box borderColor={'neutral.700'} overflow={'hidden'} width="100%" position="relative">
-          <MediaCarousel links={reward.images} aspectRatio={ImageCropAspectRatio.Reward} />
+          <MediaCarousel
+            altText={'Reward card image'}
+            links={reward.images}
+            aspectRatio={ImageCropAspectRatio.Reward}
+          />
         </Box>
       )}
 

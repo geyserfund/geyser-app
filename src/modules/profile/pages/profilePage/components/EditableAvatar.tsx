@@ -31,7 +31,7 @@ export const EditableAvatar = ({ onUploadImage, imageUrl, userId }: Props) => {
         position="relative"
         cursor="pointer"
       >
-        <ImageWithReload src={src} height="100%" width="100%" />
+        <ImageWithReload src={src} alt={'Profile avatar image'} height="100%" width="100%" />
         <Box
           position="absolute"
           top="0"

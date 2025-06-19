@@ -11,6 +11,7 @@ import { Head } from '@/config/Head'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { generatePostJsonLd } from '@/modules/project/tools/generateProjectJsonLD.ts'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
@@ -94,8 +95,11 @@ export const PostView = () => {
         title={post?.title || ''}
         description={post?.description || ''}
         image={post?.image || project.thumbnailImage || ''}
+        url={`https://geyser.fund/project/${project?.name}/post/${post?.id}`}
         type="article"
-      />
+      >
+        {!loading && !projectLoading && <script type="application/ld+json">{generatePostJsonLd(post, project)}</script>}
+      </Head>
 
       <VStack w="full" paddingBottom="80px">
         <TopNavContainerBar>

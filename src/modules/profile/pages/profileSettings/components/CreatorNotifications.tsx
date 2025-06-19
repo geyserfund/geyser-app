@@ -54,6 +54,7 @@ export const CreatorNotifications = () => {
                 {setting.project.image && (
                   <ImageWithReload
                     src={setting.project.image}
+                    alt={`${setting.project.title} project image`}
                     width={'28px'}
                     height={'28px'}
                     maxHeight="28px"

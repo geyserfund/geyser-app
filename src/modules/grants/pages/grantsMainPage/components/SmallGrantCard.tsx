@@ -58,6 +58,7 @@ export const SmallGrantCard = ({ grant, showBanner }: Props) => {
           <Image
             objectFit="cover"
             src={grant.image}
+            alt={`${grant.title} grant banner image`}
             borderTopLeftRadius="8px"
             borderBottomLeftRadius="8px"
             w={{ base: '96px', lg: '228px' }}

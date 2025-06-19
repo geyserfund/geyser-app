@@ -6,7 +6,6 @@ import { PiCopy, PiShareFat } from 'react-icons/pi'
 import { AnonymousAvatar } from '@/components/ui/AnonymousAvatar'
 import { useAuthContext } from '@/context'
 import { useAuthModal } from '@/modules/auth/hooks'
-import { FlowingGifBackground } from '@/modules/discovery/pages/heroes/components/FlowingGifBackground'
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
@@ -134,7 +133,6 @@ export const SuccessImageComponent = () => {
         backgroundColor="utils.pbg"
         position="relative"
       >
-        <FlowingGifBackground />
         {user && (
           <HStack spacing={2} zIndex={1}>
             {user.imageUrl ? (

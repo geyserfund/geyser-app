@@ -13,7 +13,14 @@ export const FiatSwapFailed = () => {
     <VStack w="full" spacing={6}>
       <VStack spacing={2} w="full" maxWidth={'500px'}>
         <Box padding={5}>
-          <Image maxHeight="150px" height="auto" width="auto" objectFit={'contain'} src={TransactionFailedImageUrl} />
+          <Image
+            maxHeight="150px"
+            height="auto"
+            width="auto"
+            objectFit={'contain'}
+            src={TransactionFailedImageUrl}
+            alt={'Transaction failed image'}
+          />
         </Box>
         <Body medium> {t('Payment failed')}</Body>
         <Body size="sm" textAlign={'center'}>

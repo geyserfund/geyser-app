@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { PiCopy, PiShareFat } from 'react-icons/pi'
 import Truncate from 'react-truncate-inside'
 
-import { FlowingGifBackground } from '@/modules/discovery/pages/heroes/components/FlowingGifBackground'
 import { Body } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import { useNotification } from '@/utils'
@@ -42,7 +41,6 @@ export const ShareView = ({
         position="relative"
       >
         <Body size="md" textAlign="center" color={lightModeColors.neutral1[11]}>
-          <FlowingGifBackground />
           <Body zIndex={1}>{children}</Body>
         </Body>
       </VStack>

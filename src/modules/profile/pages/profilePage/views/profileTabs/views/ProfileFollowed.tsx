@@ -57,7 +57,7 @@ export const ProfileFollowed = () => {
         <VStack w="full" p={6} spacing={6}>
           {isViewingOwnProfile ? (
             <>
-              <Image height="200px" src={FollowAProjectUrl} />
+              <Image height="200px" src={FollowAProjectUrl} alt={'No followed projects image'} />
               <Body medium>{t('You do not follow any project')}</Body>
               <Body medium>
                 {t('Check out some trending projects this week that you can follow in the discovery view!')}

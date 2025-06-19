@@ -13,6 +13,7 @@ import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'
 import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { GuardianType, RewardCurrency, RewardForLandingPageFragment } from '@/types'
+import { toSmallImageUrl } from '@/utils/index.ts'
 
 type TrendingRewardCardProps = {
   reward: RewardForLandingPageFragment
@@ -73,7 +74,7 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
           aspectRatio={{ base: 1, lg: ImageCropAspectRatio.Reward }}
           objectFit="cover"
           borderRadius="8px"
-          src={reward.images[0]}
+          src={toSmallImageUrl(reward.images[0] || '')}
           alt={`${reward.name}-header-image`}
         />
       </Box>

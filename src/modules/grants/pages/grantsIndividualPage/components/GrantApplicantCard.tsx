@@ -4,8 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
 import { Link } from 'react-router-dom'
 
-import { ContributorsModal, useContributorsModal } from '@/modules/grants/pages/grantsMainPage/components/ContributorsModal'
 import { useAuthModal } from '@/modules/auth/hooks'
+import {
+  ContributorsModal,
+  useContributorsModal,
+} from '@/modules/grants/pages/grantsMainPage/components/ContributorsModal'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'

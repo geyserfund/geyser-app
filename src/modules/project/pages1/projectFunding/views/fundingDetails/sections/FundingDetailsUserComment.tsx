@@ -91,7 +91,7 @@ export const FundingDetailsUserComment = () => {
             {selectedGIF ? (
               <Image
                 src={selectedGIF.images.preview_webp.url}
-                alt="gif"
+                alt={`${selectedGIF.title} gif image`}
                 width="50px"
                 height="50px"
                 cursor="pointer"

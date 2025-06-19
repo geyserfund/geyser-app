@@ -1,4 +1,4 @@
-import { Box, BoxProps, forwardRef, HStack, Icon, IconButton } from '@chakra-ui/react'
+import { Box, BoxProps, forwardRef, HStack, Icon, IconButton, ImageProps } from '@chakra-ui/react'
 import { PiArrowLeft, PiArrowRight, PiStarFill, PiTrash } from 'react-icons/pi'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
@@ -17,10 +17,11 @@ export type RenderImageOrVideoProps = {
   showStar?: boolean
   onDelete?: (link: string) => void
   aspectRatio?: number
+  imageProps?: ImageProps
 } & BoxProps
 
 export const RenderImageOrVideo = forwardRef(
-  ({ link, enableDrag, onDelete, aspectRatio, showStar, ...rest }: RenderImageOrVideoProps, ref) => {
+  ({ link, enableDrag, onDelete, aspectRatio, showStar, imageProps, ...rest }: RenderImageOrVideoProps, ref) => {
     const isImage = validateImageUrl(link)
 
     const youtubeThumbnail = getYoutubeThumbailFromLink(link)
@@ -99,6 +100,7 @@ export const RenderImageOrVideo = forwardRef(
             objectFit={objectFit}
             src={isImage ? link : youtubeThumbnail || vimeoThumbnail || undefined}
             userSelect={'none'}
+            {...imageProps}
           />
         ) : (
           <VideoPlayer url={link} />
