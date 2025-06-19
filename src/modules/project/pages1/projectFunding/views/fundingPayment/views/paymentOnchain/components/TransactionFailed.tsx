@@ -10,7 +10,13 @@ export const TransactionFailed = ({ error }: { error?: Error | string }) => {
   return (
     <CardLayout noborder dense id="transaction-failed-card" w="full" alignItems="center" spacing={6}>
       <Box padding="20px">
-        <Image src={TransactionFailedImageUrl} height="150px" width="auto" objectFit={'contain'} />
+        <Image
+          src={TransactionFailedImageUrl}
+          alt={'Transaction failed image'}
+          height="150px"
+          width="auto"
+          objectFit={'contain'}
+        />
       </Box>
       <VStack alignItems="center">
         <H3 color="error.11">{t('Transaction has failed')}</H3>

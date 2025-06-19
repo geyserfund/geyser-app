@@ -111,7 +111,7 @@ export const MediaCarouselForCards = ({
             index={index + 1}
             setRefElement={setRefElement}
             key={`${index} + 1`}
-            props={{ src: item, alt: item }}
+            props={{ src: item, alt: `${item} image` }}
           />
         )
       }),
@@ -123,6 +123,7 @@ export const MediaCarouselForCards = ({
       {description && <Body size="sm">{description}</Body>}
       <MediaCarousel
         links={links}
+        altText={'carousel card image'}
         onSlideChange={(index) => {
           setCurrentIndex(index)
         }}

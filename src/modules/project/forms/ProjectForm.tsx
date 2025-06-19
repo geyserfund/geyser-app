@@ -269,6 +269,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
       >
         <MediaControlWithReorder
           links={watch('images')}
+          altText={'Project header image'}
           updateLinks={(links) => setValue('images', links, { shouldDirty: true })}
           aspectRatio={ImageCropAspectRatio.Header}
         />

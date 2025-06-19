@@ -67,6 +67,7 @@ export const RenderSponsorFromTable = () => {
             imageUrlDark={wallet.imageUrlDark}
             backgroundColor="transparent"
             padding={`${wallet.name}`.toLowerCase().includes('speed') ? '8px' : '0px'}
+            alt={`${wallet.name} sponsor image`}
           />
         )
       })}

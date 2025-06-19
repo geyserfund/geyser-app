@@ -31,6 +31,7 @@ export const Banner = ({ title, items, loading, reverse = false }: BannerProps) 
       >
         <Image
           src={GrantsPageBannerNoiseGifUrl}
+          alt={'Banner noise'}
           position="absolute"
           top={0}
           left={0}

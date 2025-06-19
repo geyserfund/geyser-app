@@ -114,6 +114,7 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
           borderRadius="16px"
           objectFit="cover"
           src={project.thumbnailImage || ''}
+          alt={`${project.title} project thumbnail image`}
           width={'64px'}
           height={'64px'}
           maxHeight="64px"
@@ -218,6 +219,7 @@ export const Header = () => {
           maxHeight={dimensions.project.header.maxHeight}
           objectFit="contain"
           src={project.images[0] || undefined}
+          alt={`${project.title} project image`}
         />
       )
     }
@@ -245,7 +247,7 @@ export const Header = () => {
 
         {project.images.length === 1 && <Box>{renderImageOrVideo()}</Box>}
 
-        {project.images.length > 1 && <MediaCarousel links={project.images} />}
+        {project.images.length > 1 && <MediaCarousel altText={'Project header image'} links={project.images} />}
         <HeaderDetails onOpen={onOpen} />
         {isMobile && !hideProjectAmount && <MobileBalanceInfo />}
       </CardLayout>

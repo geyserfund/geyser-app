@@ -25,7 +25,7 @@ export const ProjectLogo = () => {
           width={{ base: '40px', lg: '48px' }}
           borderRadius={'50%'}
           src={project?.thumbnailImage}
-          alt={project?.name}
+          alt={`${project?.title} project thumbnail image`}
         />
         <Heading size="md" display={{ base: 'none', lg: 'unset' }}>
           {project?.title}

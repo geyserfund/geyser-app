@@ -182,10 +182,19 @@ export const DesktopGuardiansIllustration = () => {
                 <Image
                   {...getCommonRaycastProps(guardian.guardian)}
                   src={GuardianCharacter[guardian.guardian].raycast}
+                  alt={`${guardian.guardian} guardian raycast image`}
                 />
                 <Body {...getGuardianTextProps(guardian.guardian)}>{guardian.text}</Body>
-                <Image {...getCommonGreyProps(guardian.guardian)} src={GuardianCharacter[guardian.guardian].mainGrey} />
-                <Image {...getCommonImageProps(guardian.guardian)} src={GuardianCharacter[guardian.guardian].main} />
+                <Image
+                  {...getCommonGreyProps(guardian.guardian)}
+                  src={GuardianCharacter[guardian.guardian].mainGrey}
+                  alt={`${guardian.guardian} guardian main grey image`}
+                />
+                <Image
+                  {...getCommonImageProps(guardian.guardian)}
+                  src={GuardianCharacter[guardian.guardian].main}
+                  alt={`${guardian.guardian} guardian main image`}
+                />
               </Box>
             )
           })}
@@ -210,7 +219,13 @@ export const DesktopGuardiansIllustration = () => {
               WebkitMaskSize: '100% 100%',
             }}
           />
-          <Image src={GuardiansSeriesOneOrnamentSeparatorUrl} position="relative" width="100%" objectFit="cover" />
+          <Image
+            src={GuardiansSeriesOneOrnamentSeparatorUrl}
+            alt={'Guardians series one ornament separator image'}
+            position="relative"
+            width="100%"
+            objectFit="cover"
+          />
         </Box>
       </VStack>
     </>

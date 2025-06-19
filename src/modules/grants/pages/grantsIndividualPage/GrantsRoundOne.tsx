@@ -159,6 +159,7 @@ export const GrantsRoundOne = ({
                 htmlHeight={450}
                 htmlWidth={800}
                 src="https://storage.googleapis.com/geyser-projects-media/grants/geyser-grants-round-1-results.jpeg"
+                alt={'Geyser grants round 1 results image'}
               ></Image>
               <Link
                 margin="0 auto"

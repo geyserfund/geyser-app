@@ -206,6 +206,7 @@ export const PublishModal = ({
                     minWidth={'24px'}
                     height="24px"
                     src={reward.images[0]}
+                    alt={`${reward.name} reward image`}
                   />
                   <Body size="sm" isTruncated>
                     {reward.name}

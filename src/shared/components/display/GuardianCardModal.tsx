@@ -47,7 +47,13 @@ export const GuardianCardModal = ({ guardianType, userName, ...guardianModal }: 
         </Trans>
       </Body>
       <Tilt tiltMaxAngleX={10} tiltMaxAngleY={10}>
-        <Image src={guardianAsset} height="400px" width="auto" objectFit="cover" />
+        <Image
+          src={guardianAsset}
+          alt={`${guardianType} guardian asset`}
+          height="400px"
+          width="auto"
+          objectFit="cover"
+        />
       </Tilt>
       <GradientBorder enable gradientColor={GuardiansButtonBackgroundGradientBright}>
         <Button

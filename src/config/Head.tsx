@@ -16,6 +16,7 @@ type HeadProps = {
   image?: string
   type?: string
   children?: React.ReactNode
+  url?: string
 }
 
 export const Head: React.FC<HeadProps> = (tags) => {
@@ -25,6 +26,7 @@ export const Head: React.FC<HeadProps> = (tags) => {
     image = DefaultMetaImage,
     type = DefaultMetaType,
     children,
+    url,
   } = tags
   const location = useLocation()
   return (
@@ -38,6 +40,7 @@ export const Head: React.FC<HeadProps> = (tags) => {
       <meta property="og:type" content={type} />
       <meta property="twitter:card" content={DefaultMetaTwitterCard} />
       <meta property="twitter:site" content={DefaultMetaTwitterSite} />
+      {url && <link rel="canonical" href={url} />}
       {children}
     </Helmet>
   )

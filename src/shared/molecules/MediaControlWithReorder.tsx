@@ -27,6 +27,7 @@ type MediaControlWithReorderProps = {
   updateLinks: (links: string[]) => void
   aspectRatio: number
   mediaProps?: Omit<BoxProps, 'aspectRatio'>
+  altText?: string
 }
 
 export const MediaControlWithReorder = ({
@@ -34,6 +35,7 @@ export const MediaControlWithReorder = ({
   updateLinks,
   aspectRatio,
   mediaProps,
+  altText,
 }: MediaControlWithReorderProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
 
@@ -90,6 +92,7 @@ export const MediaControlWithReorder = ({
           link={selectedMedia}
           onDelete={onDelete}
           width={'full'}
+          imageProps={{ alt: `${altText}-${selectedIndex}-main` }}
           {...mediaProps}
         />
       )}
@@ -120,6 +123,7 @@ export const MediaControlWithReorder = ({
                   aspectRatio={aspectRatio}
                   showStar={showStar}
                   enableDrag
+                  imageProps={{ alt: `${altText}-${index}` }}
                 />
               )
             })}
@@ -133,6 +137,7 @@ export const MediaControlWithReorder = ({
                 width="auto"
                 minWidth="145px"
                 _hover={{ cursor: 'pointer' }}
+                imageProps={{ alt: `${altText}-dragging` }}
               />
             ) : null}
           </DragOverlay>

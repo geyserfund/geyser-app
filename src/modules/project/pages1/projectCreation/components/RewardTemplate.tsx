@@ -49,7 +49,13 @@ export const RewardTemplate = ({ reward, onClick }: RewardTemplateProps) => {
         <Body size="xs">{reward.description}</Body>
       </Box>
       <Box height="100px" maxHeight="200px">
-        <Image h={'100%'} src={reward.image} objectFit="contain" borderRadius="8px" />
+        <Image
+          h={'100%'}
+          src={reward.image}
+          alt={`${reward.title} reward image`}
+          objectFit="contain"
+          borderRadius="8px"
+        />
       </Box>
     </Box>
   )

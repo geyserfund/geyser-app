@@ -81,7 +81,7 @@ export const ProfileContributions = () => {
       })}
       {contributions.length === 0 && (
         <VStack w="full" p="20px" spacing="20px">
-          <Image height="200px" src={NoContributionImageUrl} />
+          <Image height="200px" src={NoContributionImageUrl} alt={'no contribution image'} />
           <Body medium light>
             {t('No contributions made yet')}
           </Body>

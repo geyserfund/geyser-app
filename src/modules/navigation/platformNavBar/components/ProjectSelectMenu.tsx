@@ -110,7 +110,15 @@ const ProjectSelectMenuItem = ({ project, isInactive }: { project: ProjectForOwn
       key={project.id}
       paddingX={2}
       paddingY={1}
-      icon={<ImageWithReload src={project.thumbnailImage} height="32px" width="32px" borderRadius={'6px'} />}
+      icon={
+        <ImageWithReload
+          src={project.thumbnailImage}
+          alt={`${project.title} project thumbnail image`}
+          height="32px"
+          width="32px"
+          borderRadius={'6px'}
+        />
+      }
       sx={{
         '& span': {
           maxWidth: 'calc(100% - 40px)',

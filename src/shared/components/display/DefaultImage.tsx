@@ -7,5 +7,14 @@ export const DefaultImage = ({ grey, ...rest }: { grey?: boolean } & BoxProps & 
     return <Box height="100%" width="100%" backgroundColor="neutral.200" {...rest} />
   }
 
-  return <Image src={ProjectEntryThumbnailPlaceholderUrl} maxHeight="500px" height="222px" width="350px" {...rest} />
+  return (
+    <Image
+      src={ProjectEntryThumbnailPlaceholderUrl}
+      alt={'Default image for entry'}
+      maxHeight="500px"
+      height="222px"
+      width="350px"
+      {...rest}
+    />
+  )
 }

@@ -31,7 +31,12 @@ export const GuardianItemDisplay = ({
             return (
               <HStack key={partner.link}>
                 <Box as={Link} href={partner.link} isExternal>
-                  <Image src={partner.image} maxHeight={{ base: '30px', lg: '50px' }} maxWidth="250px" />
+                  <Image
+                    src={partner.image}
+                    alt={`${partner.name} partner image`}
+                    maxHeight={{ base: '30px', lg: '50px' }}
+                    maxWidth="250px"
+                  />
                 </Box>
                 {index < details.partners.length - 1 && <Body fontSize={{ base: '20px', lg: '36px' }}>{t('&')}</Body>}
               </HStack>

@@ -142,6 +142,7 @@ export const CharacterPage = () => {
         </VStack>
         {itemsModal.isOpen && (
           <MediaCarouselForItemsModal
+            altText={'Guardian items image'}
             imageLinkList={totalLinks}
             dataList={totalItems}
             {...itemsModal}

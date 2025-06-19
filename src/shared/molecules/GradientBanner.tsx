@@ -1,7 +1,6 @@
 import { HStack, Icon, IconButton, Image, VStack } from '@chakra-ui/react'
 import { PiDotOutline, PiX } from 'react-icons/pi'
 
-import { FlowingGifBackground } from '@/modules/discovery/pages/heroes/components/FlowingGifBackground.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body, H2 } from '@/shared/components/typography'
@@ -48,9 +47,10 @@ export const GradientBanner = ({
       background={background || TitleHeaderGradient}
       position="relative"
       backgroundColor="utils.pbg"
+      shadow="lg"
+      borderColor="neutral1.3"
       alignItems={{ base: 'start', lg: 'center' }}
     >
-      <FlowingGifBackground />
       {onClose && (
         <IconButton
           aria-label="Close"

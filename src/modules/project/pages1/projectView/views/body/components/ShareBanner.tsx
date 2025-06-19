@@ -16,7 +16,7 @@ export const ShareBanner = ({ aspectRatio, bannerImage, bannerText, emoji, ...re
   return (
     <VStack w="100%" position="relative" borderRadius="8px" overflow="hidden" {...rest}>
       <Box aspectRatio={aspectRatio} w="100%" overflow={'hidden'}>
-        <ImageWithReload width="100%" height="100%" objectFit={'cover'} src={bannerImage} />
+        <ImageWithReload width="100%" height="100%" objectFit={'cover'} src={bannerImage} alt={'share banner image'} />
       </Box>
 
       <HStack

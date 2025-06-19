@@ -125,7 +125,7 @@ export const ImageBlock = ({ disableArrowKeys }: { disableArrowKeys?: boolean })
       maxWidth: 'full',
       display: currentGuardian === guardian ? 'block' : 'none',
       src: guardianImages[guardian].character,
-      alt: guardian,
+      alt: `${guardian} guardian image`,
     } as ImageProps
   }
 
@@ -136,6 +136,7 @@ export const ImageBlock = ({ disableArrowKeys }: { disableArrowKeys?: boolean })
       }),
 
       src: guardianImages[guardian].raycast,
+      alt: `${guardian} guardian raycast image`,
       height: { base: '110%', lg: '103%' },
       width: '70%',
       position: 'absolute',
@@ -224,6 +225,7 @@ export const ImageBlock = ({ disableArrowKeys }: { disableArrowKeys?: boolean })
 
           <Image
             src={GuardiansSeriesOneOrnamentSeparatorUrl}
+            alt={'Guardians series one ornament separator image'}
             display={{ base: 'block', lg: 'none' }}
             height="90px"
             width="auto"

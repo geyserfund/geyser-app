@@ -329,6 +329,7 @@ const NostrWalletConnectAccordionItem = forwardRef<
                     url={wallet.url}
                     imageUrl={wallet.imageUrl}
                     imageUrlDark={wallet.imageUrlDark}
+                    alt={`${wallet.name} sponsor image`}
                   />
                 )
               })}

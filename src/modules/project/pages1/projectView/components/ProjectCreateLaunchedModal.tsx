@@ -16,7 +16,7 @@ export const ProjectCreateLaunchedModal = (props: Omit<ModalProps, 'children'>) 
   return (
     <Modal size="md" title={t('You’re all set!')} {...props}>
       <VStack w="100%" spacing={6} pt={2}>
-        <Image src={ProjectLaunchedImageUrl} />
+        <Image src={ProjectLaunchedImageUrl} alt={'Project launched image'} />
 
         <HStack spacing="10px" p="10px 16px" bgColor="neutral.100" borderRadius={8}>
           <PiSealCheckBold color={colors.primary[600]} />
