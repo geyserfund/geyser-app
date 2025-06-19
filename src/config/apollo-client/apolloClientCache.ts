@@ -53,6 +53,11 @@ export const cache: InMemoryCache = new InMemoryCache({
           keyArgs: ['input', ['where', 'orderBy', 'pagination']],
           merge: false,
         },
+        projectGet: {
+          // Normalize cache keys so queries with same project are cached together
+          keyArgs: ['where', ['id', 'name', 'nostrPublicKey']],
+          merge: false,
+        },
       },
     },
   },

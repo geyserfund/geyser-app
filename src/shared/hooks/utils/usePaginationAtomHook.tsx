@@ -17,6 +17,7 @@ export type usePaginationAtomHookProps<TEntity, TTransformed = TEntity> = {
   itemLimit?: number
   cursorID?: number
   where?: any
+  variables?: any
   orderBy?: any
   resultMap?: (_: TEntity[]) => TTransformed[]
   setData: SetAtom<[SetStateAction<PaginatedListType<TEntity, TTransformed>>], void>
@@ -31,6 +32,7 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
   itemLimit = 10,
   cursorID,
   where,
+  variables,
   orderBy,
   resultMap,
   setData,
@@ -103,6 +105,7 @@ export const usePaginationAtomHook = <TEntity, TTransformed = TEntity>({
           where,
           orderBy,
         },
+        ...variables,
       },
       updateQuery(_: any, { fetchMoreResult }: any) {
         const data = getNestedValue(fetchMoreResult, queryName)

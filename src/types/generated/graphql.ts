@@ -7335,12 +7335,9 @@ export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: 
       & BitcoinQuoteFragment
     ) | null }> };
 
-export type UserProjectContributionsFragment = { __typename?: 'UserProjectContribution', project: (
-    { __typename?: 'Project' }
-    & ProjectAvatarFragment
-  ), funder?: (
-    { __typename?: 'Funder' }
-    & UserProjectFunderFragment
+export type UserProjectContributionFragment = { __typename?: 'Contribution', id: any, amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, projectId: any, bitcoinQuote?: (
+    { __typename?: 'BitcoinQuote' }
+    & BitcoinQuoteFragment
   ) | null };
 
 export type ProfileOrderItemFragment = { __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', id: any, name: string, cost: number, rewardCurrency: RewardCurrency, description?: string | null, images: Array<string>, category?: string | null } };
@@ -7374,6 +7371,8 @@ export type UserNotificationsSettingsFragment = { __typename?: 'ProfileNotificat
     )> } };
 
 export type ProjectForProfilePageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: string, status?: ProjectStatus | null, rejectionReason?: string | null, rewardsCount?: number | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
+
+export type ProjectForProfileContributionsFragment = { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null };
 
 export type ProjectNotificationSettingsFragment = { __typename?: 'CreatorNotificationSettings', userId: any, project: { __typename?: 'CreatorNotificationSettingsProject', id: any, title: string, image?: string | null }, notificationSettings: Array<{ __typename?: 'NotificationSettings', notificationType: string, isEnabled: boolean, configurations: Array<{ __typename?: 'NotificationConfiguration', id: any, name: string, description?: string | null, value: string, type?: SettingValueType | null, options: Array<string> }> }> };
 
@@ -7489,6 +7488,16 @@ export type ProjectNotificationSettingsQuery = { __typename?: 'Query', projectNo
     & ProjectNotificationSettingsFragment
   ) };
 
+export type ProjectForProfileContributionsQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type ProjectForProfileContributionsQuery = { __typename?: 'Query', projectGet?: (
+    { __typename?: 'Project' }
+    & ProjectForProfileContributionsFragment
+  ) | null };
+
 export type UserForProfilePageQueryVariables = Exact<{
   where: UserGetInput;
 }>;
@@ -7521,12 +7530,13 @@ export type UserFollowedProjectsQuery = { __typename?: 'Query', user: { __typena
 
 export type UserProfileContributionsQueryVariables = Exact<{
   where: UserGetInput;
+  input?: InputMaybe<UserContributionsInput>;
 }>;
 
 
-export type UserProfileContributionsQuery = { __typename?: 'Query', user: { __typename?: 'User', projectContributions: Array<(
-      { __typename?: 'UserProjectContribution' }
-      & UserProjectContributionsFragment
+export type UserProfileContributionsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: any, contributions: Array<(
+      { __typename?: 'Contribution' }
+      & UserProjectContributionFragment
     )> } };
 
 export type UserHeroStatsQueryVariables = Exact<{
@@ -9242,14 +9252,6 @@ export const GuardianResultFragmentDoc = gql`
   }
 }
     ${GuardianUserFragmentDoc}`;
-export const ProjectAvatarFragmentDoc = gql`
-    fragment ProjectAvatar on Project {
-  id
-  name
-  thumbnailImage
-  title
-}
-    `;
 export const BitcoinQuoteFragmentDoc = gql`
     fragment BitcoinQuote on BitcoinQuote {
   quote
@@ -9274,17 +9276,19 @@ export const UserProjectFunderFragmentDoc = gql`
   }
 }
     ${BitcoinQuoteFragmentDoc}`;
-export const UserProjectContributionsFragmentDoc = gql`
-    fragment UserProjectContributions on UserProjectContribution {
-  project {
-    ...ProjectAvatar
-  }
-  funder {
-    ...UserProjectFunder
+export const UserProjectContributionFragmentDoc = gql`
+    fragment UserProjectContribution on Contribution {
+  id
+  amount
+  comment
+  media
+  confirmedAt
+  projectId
+  bitcoinQuote {
+    ...BitcoinQuote
   }
 }
-    ${ProjectAvatarFragmentDoc}
-${UserProjectFunderFragmentDoc}`;
+    ${BitcoinQuoteFragmentDoc}`;
 export const ProfileOrderItemFragmentDoc = gql`
     fragment ProfileOrderItem on OrderItem {
   item {
@@ -9298,6 +9302,14 @@ export const ProfileOrderItemFragmentDoc = gql`
   }
   quantity
   unitPriceInSats
+}
+    `;
+export const ProjectAvatarFragmentDoc = gql`
+    fragment ProjectAvatar on Project {
+  id
+  name
+  thumbnailImage
+  title
 }
     `;
 export const ProfileOrderFragmentDoc = gql`
@@ -9399,6 +9411,14 @@ export const ProjectForProfilePageFragmentDoc = gql`
       statusCode
     }
   }
+}
+    `;
+export const ProjectForProfileContributionsFragmentDoc = gql`
+    fragment ProjectForProfileContributions on Project {
+  id
+  name
+  title
+  thumbnailImage
 }
     `;
 export const ProjectNotificationSettingsFragmentDoc = gql`
@@ -12667,6 +12687,46 @@ export type ProjectNotificationSettingsQueryHookResult = ReturnType<typeof usePr
 export type ProjectNotificationSettingsLazyQueryHookResult = ReturnType<typeof useProjectNotificationSettingsLazyQuery>;
 export type ProjectNotificationSettingsSuspenseQueryHookResult = ReturnType<typeof useProjectNotificationSettingsSuspenseQuery>;
 export type ProjectNotificationSettingsQueryResult = Apollo.QueryResult<ProjectNotificationSettingsQuery, ProjectNotificationSettingsQueryVariables>;
+export const ProjectForProfileContributionsDocument = gql`
+    query ProjectForProfileContributions($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    ...ProjectForProfileContributions
+  }
+}
+    ${ProjectForProfileContributionsFragmentDoc}`;
+
+/**
+ * __useProjectForProfileContributionsQuery__
+ *
+ * To run a query within a React component, call `useProjectForProfileContributionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectForProfileContributionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectForProfileContributionsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectForProfileContributionsQuery(baseOptions: Apollo.QueryHookOptions<ProjectForProfileContributionsQuery, ProjectForProfileContributionsQueryVariables> & ({ variables: ProjectForProfileContributionsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectForProfileContributionsQuery, ProjectForProfileContributionsQueryVariables>(ProjectForProfileContributionsDocument, options);
+      }
+export function useProjectForProfileContributionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectForProfileContributionsQuery, ProjectForProfileContributionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectForProfileContributionsQuery, ProjectForProfileContributionsQueryVariables>(ProjectForProfileContributionsDocument, options);
+        }
+export function useProjectForProfileContributionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectForProfileContributionsQuery, ProjectForProfileContributionsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectForProfileContributionsQuery, ProjectForProfileContributionsQueryVariables>(ProjectForProfileContributionsDocument, options);
+        }
+export type ProjectForProfileContributionsQueryHookResult = ReturnType<typeof useProjectForProfileContributionsQuery>;
+export type ProjectForProfileContributionsLazyQueryHookResult = ReturnType<typeof useProjectForProfileContributionsLazyQuery>;
+export type ProjectForProfileContributionsSuspenseQueryHookResult = ReturnType<typeof useProjectForProfileContributionsSuspenseQuery>;
+export type ProjectForProfileContributionsQueryResult = Apollo.QueryResult<ProjectForProfileContributionsQuery, ProjectForProfileContributionsQueryVariables>;
 export const UserForProfilePageDocument = gql`
     query UserForProfilePage($where: UserGetInput!) {
   user(where: $where) {
@@ -12794,14 +12854,15 @@ export type UserFollowedProjectsLazyQueryHookResult = ReturnType<typeof useUserF
 export type UserFollowedProjectsSuspenseQueryHookResult = ReturnType<typeof useUserFollowedProjectsSuspenseQuery>;
 export type UserFollowedProjectsQueryResult = Apollo.QueryResult<UserFollowedProjectsQuery, UserFollowedProjectsQueryVariables>;
 export const UserProfileContributionsDocument = gql`
-    query UserProfileContributions($where: UserGetInput!) {
+    query UserProfileContributions($where: UserGetInput!, $input: UserContributionsInput) {
   user(where: $where) {
-    projectContributions {
-      ...UserProjectContributions
+    id
+    contributions(input: $input) {
+      ...UserProjectContribution
     }
   }
 }
-    ${UserProjectContributionsFragmentDoc}`;
+    ${UserProjectContributionFragmentDoc}`;
 
 /**
  * __useUserProfileContributionsQuery__
@@ -12816,6 +12877,7 @@ export const UserProfileContributionsDocument = gql`
  * const { data, loading, error } = useUserProfileContributionsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      input: // value for 'input'
  *   },
  * });
  */
