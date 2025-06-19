@@ -1,6 +1,6 @@
 export const GuideUrl = 'https://guide.geyser.fund/'
 export const GuideStepByStepUrl = 'https://guide.geyser.fund/geyser-docs/guides/step-by-step-tutorials'
-export const FeedbackUrl = 'https://geyser.steelsync.io/feedback'
+export const FeedbackUrl = 'https://airtable.com/appyM7XlNIWVypuP5/pagtedCU3NPqEjBjR/form'
 export const GeyserAboutUrl = 'https://about.geyser.fund'
 export const GeyserManifestoUrl = 'https://about.geyser.fund/manifesto'
 export const GeyserSubscribeUrl = 'https://about.geyser.fund/subscribe'
