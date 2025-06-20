@@ -5,7 +5,8 @@ import { Outlet, useLocation, useNavigate } from 'react-router'
 
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
-import { dimensions, getPath } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { getPath } from '@/shared/constants/index.ts'
 
 import { useLastVisistedFollowedProjects } from '../../hooks/useLastVisited'
 

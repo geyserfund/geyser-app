@@ -10,23 +10,23 @@ import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjec
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 
-import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
-import { getPath } from '../../../../../shared/constants'
-import { CreateWalletInput } from '../../../../../types'
-import { useNotification } from '../../../../../utils'
-import { EnableFiatContributions } from '../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
-import { ProjectCreationWalletConnectionForm } from '..'
-import { FormContinueButton } from '../components/FormContinueButton'
-import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
-import { useLocationMandatoryRedirect } from '../hooks/useLocationMandatoryRedirect'
-import { useWalletForm } from '../hooks/useWalletForm'
+import TitleWithProgressBar from '../../../../../../components/molecules/TitleWithProgressBar.tsx'
+import { getPath } from '../../../../../../shared/constants/index.ts'
+import { CreateWalletInput } from '../../../../../../types/index.ts'
+import { useNotification } from '../../../../../../utils/index.ts'
+import { EnableFiatContributions } from '../../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
+import { ProjectCreationWalletConnectionForm } from '../../index.ts'
+import { FormContinueButton } from '../../components/FormContinueButton.tsx'
+import { ProjectCreateLayout } from '../../components/ProjectCreateLayout.tsx'
+import { useLocationMandatoryRedirect } from '../../hooks/useLocationMandatoryRedirect.tsx'
+import { useWalletForm } from '../../hooks/useWalletForm.tsx'
 import {
   fiatContributionAtom,
   goToIdentityVerificationAtom,
   isReadyForLaunchAtom,
   whereToGoNextAtom,
-} from '../states/nodeStatusAtom.ts'
-import { goToEmailVerificationAtom } from '../states/nodeStatusAtom.ts'
+} from '../../states/nodeStatusAtom.ts'
+import { goToEmailVerificationAtom } from '../../states/nodeStatusAtom.ts'
 import { ProjectCreationEmailVerificationPage } from './ProjectCreationEmailVerificationPage.tsx'
 import { ProjectCreationIdentityVerificationPage } from './ProjectCreationIdentityVerificationPage.tsx'
 

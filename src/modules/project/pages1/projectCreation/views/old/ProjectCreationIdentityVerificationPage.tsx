@@ -3,14 +3,14 @@ import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
-import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar.tsx'
-import { useAuthContext } from '../../../../../context/index.ts'
-import { UserVerificationLevelInput } from '../../../../../types/index.ts'
-import { VerificationDetails } from '../../projectDashboard/components/VerificationDetails.tsx'
-import { SumSubVerification } from '../../projectDashboard/views/wallet/components/SumSubVerification.tsx'
-import { useUserVerificationModal } from '../../projectDashboard/views/wallet/hooks/useUserVerificationModal.ts'
-import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
-import { goToIdentityVerificationAtom, isReadyForLaunchAtom, whereToGoNextAtom } from '../states/nodeStatusAtom.ts'
+import TitleWithProgressBar from '../../../../../../components/molecules/TitleWithProgressBar.tsx'
+import { useAuthContext } from '../../../../../../context/index.ts'
+import { UserVerificationLevelInput } from '../../../../../../types/index.ts'
+import { VerificationDetails } from '../../../projectDashboard/components/VerificationDetails.tsx'
+import { SumSubVerification } from '../../../projectDashboard/views/wallet/components/SumSubVerification.tsx'
+import { useUserVerificationModal } from '../../../projectDashboard/views/wallet/hooks/useUserVerificationModal.ts'
+import { ProjectCreateLayout } from '../../components/ProjectCreateLayout.tsx'
+import { goToIdentityVerificationAtom, isReadyForLaunchAtom, whereToGoNextAtom } from '../../states/nodeStatusAtom.ts'
 
 export const ProjectCreationIdentityVerificationPage = () => {
   const { user } = useAuthContext()

@@ -4,9 +4,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import { RightSideStickyLayout } from '@/modules/project/components/RightSideStickyLayout'
 import { ProjectPreLaunchNav } from '@/modules/project/navigation/components/ProjectPreLaunchNav.tsx'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 
-import { dimensions } from '../../../../../../shared/constants'
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
 import { BodySectionPageBottomBar } from './components/BodySectionPageBottomBar'

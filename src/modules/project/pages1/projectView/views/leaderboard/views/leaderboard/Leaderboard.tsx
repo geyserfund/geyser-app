@@ -7,7 +7,7 @@ import { useMemo } from 'react'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
-import { dimensions } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { ProjectLeaderboardPeriod } from '@/types'
 import { toPx, useMobileMode } from '@/utils'
 

@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectState } from '@/modules/project/state/projectAtom'
-import { dimensions, getPath } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import { useMobileMode } from '@/utils'
 
 import { currentDashboardItemAtom } from './dashboardAtom'

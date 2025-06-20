@@ -3,15 +3,16 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import { useNotification } from '@/utils'
 
-import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
-import { dimensions, getPath } from '../../../../../shared/constants'
-import { ProjectStoryForm } from '../../../forms/ProjectStoryForm'
-import { FormContinueButton } from '../components/FormContinueButton'
-import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
-import { useLocationMandatoryRedirect } from '../hooks/useLocationMandatoryRedirect'
-import { useProjectStoryForm } from '../hooks/useProjectStoryForm'
+import TitleWithProgressBar from '../../../../../../components/molecules/TitleWithProgressBar'
+import { ProjectStoryForm } from '../../../../forms/ProjectStoryForm'
+import { FormContinueButton } from '../../components/FormContinueButton'
+import { ProjectCreateLayout } from '../../components/ProjectCreateLayout'
+import { useLocationMandatoryRedirect } from '../../hooks/useLocationMandatoryRedirect'
+import { useProjectStoryForm } from '../../hooks/useProjectStoryForm'
 
 export const ProjectCreateStory = () => {
   const { t } = useTranslation()

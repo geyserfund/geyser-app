@@ -4,10 +4,11 @@ import { FormProvider, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { Body } from '@/shared/components/typography'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { MarkdownField, MarkdownFieldSkeleton } from '@/shared/markdown/MarkdownField'
 
 import { FieldContainer, FieldContainerProps } from '../../../shared/components/form/FieldContainer'
-import { dimensions, ProjectValidations } from '../../../shared/constants'
+import { ProjectValidations } from '../../../shared/constants'
 
 interface Props {
   autoFocus?: boolean

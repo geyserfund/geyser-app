@@ -2,9 +2,9 @@ import { Box, VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router-dom'
 
 import { Head } from '@/config/Head'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { standardPadding } from '@/shared/styles'
 
-import { dimensions } from '../../shared/constants'
 import { FollowProjectModal } from './components/FollowProjectModal.tsx'
 import { useFundingFlowCleanup } from './hooks/useFollowOnBackModal.ts'
 import { useProjectAtom, useRewardsAtom } from './hooks/useProjectAtom'

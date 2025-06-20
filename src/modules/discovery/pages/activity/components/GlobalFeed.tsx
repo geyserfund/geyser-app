@@ -1,7 +1,7 @@
 import { Skeleton, VStack } from '@chakra-ui/react'
 
 import { ScrollInvoke } from '@/helpers'
-import { ID } from '@/shared/constants'
+import { ID } from '@/shared/constants/components/id.ts'
 import { Activity, ActivityFeedName } from '@/types'
 import { useMobileMode } from '@/utils'
 

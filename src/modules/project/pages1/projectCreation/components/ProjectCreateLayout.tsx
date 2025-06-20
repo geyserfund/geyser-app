@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { PiArrowLeft } from 'react-icons/pi'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 
-import { dimensions } from '../../../../../shared/constants'
 import { useMobileMode } from '../../../../../utils'
 
 interface ProjectCreateLayoutProps extends Omit<ContainerProps, 'children' | 'title'> {

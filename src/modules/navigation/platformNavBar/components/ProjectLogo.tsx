@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 
-import { PROJECT_LAUNCH_PAYMENT_PROJECT_NAME } from '@/modules/project/pages1/projectCreation/views/ProjectCreationStrategy.tsx'
+import { PROJECT_LAUNCH_PAYMENT_PROJECT_NAME } from '@/modules/project/pages1/projectCreation/views/old/ProjectCreationStrategy'
 import { projectAtom } from '@/modules/project/state/projectAtom'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { getPath } from '@/shared/constants'

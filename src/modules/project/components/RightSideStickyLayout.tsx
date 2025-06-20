@@ -1,7 +1,7 @@
 import { StackProps, VStack } from '@chakra-ui/react'
 import { PropsWithChildren } from 'react'
 
-import { derivedDimensions, dimensions } from '@/shared/constants'
+import { derivedDimensions, dimensions } from '@/shared/constants/components/dimensions.ts'
 
 export const RightSideStickyLayout = ({ children, ...props }: PropsWithChildren<StackProps>) => {
   return (

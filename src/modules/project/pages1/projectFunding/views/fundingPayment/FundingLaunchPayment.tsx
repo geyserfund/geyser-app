@@ -9,10 +9,10 @@ import { launchContributionProjectIdAtom } from '@/modules/project/funding/state
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
+import { derivedDimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
-import { derivedDimensions } from '@/shared/constants/index.ts'
 
-import { PROJECT_LAUNCH_PAYMENT_PROJECT_NAME } from '../../../projectCreation/views/ProjectCreationStrategy.tsx'
+import { PROJECT_LAUNCH_PAYMENT_PROJECT_NAME } from '../../../projectCreation/views/old/ProjectCreationStrategy.tsx'
 import { FundingLayout } from '../../layouts/FundingLayout.tsx'
 import { QRCodeSizeMap } from './components/QRCodeComponent.tsx'
 

@@ -24,7 +24,7 @@ export const projectCreationRoutesThatNeedStory = [
   getPath('launchProjectStrategy', PathName.projectId),
 ]
 
-export const creatorProjectCreationRoutes = [
+export const privateCreatorProjectCreationRoutes = [
   getPath('launch'),
   getPath('launchProject', PathName.projectId),
   getPath('launchStartProject', PathName.projectId),
@@ -32,6 +32,8 @@ export const creatorProjectCreationRoutes = [
   getPath('launchProjectStory', PathName.projectId),
   ...projectCreationRoutesThatNeedStory,
 ]
+
+export const allCreatorProjectCreationRoutes = [getPath('launchStart'), ...privateCreatorProjectCreationRoutes]
 
 export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardAnalytics', PathName.projectName),

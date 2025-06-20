@@ -4,7 +4,8 @@ import { useAtomValue } from 'jotai'
 import { Link } from 'react-router-dom'
 
 import { useAuthContext } from '@/context'
-import { dimensions, getPath } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import { useMobileMode } from '@/utils'
 
 import { currentProfileSettingsItemAtom } from './profileSettingsAtom'

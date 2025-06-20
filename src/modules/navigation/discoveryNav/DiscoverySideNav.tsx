@@ -16,10 +16,9 @@ import { Link } from 'react-router-dom'
 
 import { LogoDark, LogoLight } from '@/assets'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
-import { dimensions, getPath, LogoNameDark, LogoNameLight } from '@/shared/constants'
-import { GradientBorder } from '@/shared/molecules/GradientBorder'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { getPath, LogoNameDark, LogoNameLight } from '@/shared/constants/index.ts'
 import { UserExternalLinks } from '@/shared/molecules/UserExternalLinks'
-import { GuardiansButtonBackgroundGradientBright } from '@/shared/styles/custom'
 import { useMobileMode } from '@/utils'
 
 import { currentPlatformNavItemAtom } from './discoveryNavAtom'
@@ -112,71 +111,15 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
 
   if (isTabletSize) {
     return (
-      <GradientBorder enable={false} gradientColor={GuardiansButtonBackgroundGradientBright}>
-        <Button
-          variant={isActive ? 'surface' : 'menu'}
-          colorScheme="primary1"
-          size="lg"
-          key={item.label}
-          width="50px"
-          height="50px"
-          as={Link}
-          paddingX={4}
-          to={getPath(item.path)}
-          isActive={isActive}
-          sx={{
-            '&:hover img': {
-              transform: 'scale(1.1)',
-              filter: 'brightness(1.3)',
-              animation: `${glowAnimation} 2s infinite`,
-            },
-          }}
-          {...rest}
-        >
-          <>
-            {item.image ? <Image height="18px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />}
-            {activityDot ? (
-              <Box
-                position="absolute"
-                top={4}
-                right={1}
-                borderRadius="50%"
-                backgroundColor="error.9"
-                height="6px"
-                width="6px"
-              />
-            ) : null}
-          </>
-        </Button>
-      </GradientBorder>
-    )
-  }
-
-  return (
-    <GradientBorder enable={false} gradientColor={GuardiansButtonBackgroundGradientBright}>
       <Button
-        variant={'menu'}
+        variant={isActive ? 'surface' : 'menu'}
         colorScheme="primary1"
         size="lg"
-        width={'full'}
         key={item.label}
-        leftIcon={
-          item.image ? <Image height="18px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />
-        }
-        rightIcon={
-          activityDot ? (
-            <Box
-              position="absolute"
-              top={4}
-              right={2}
-              borderRadius="50%"
-              backgroundColor="error.9"
-              height="6px"
-              width="6px"
-            />
-          ) : undefined
-        }
+        width="50px"
+        height="50px"
         as={Link}
+        paddingX={4}
         to={getPath(item.path)}
         isActive={isActive}
         sx={{
@@ -188,8 +131,58 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
         }}
         {...rest}
       >
-        {t(item.label)}
+        <>
+          {item.image ? <Image height="18px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />}
+          {activityDot ? (
+            <Box
+              position="absolute"
+              top={4}
+              right={1}
+              borderRadius="50%"
+              backgroundColor="error.9"
+              height="6px"
+              width="6px"
+            />
+          ) : null}
+        </>
       </Button>
-    </GradientBorder>
+    )
+  }
+
+  return (
+    <Button
+      variant={'menu'}
+      colorScheme="primary1"
+      size="lg"
+      width={'full'}
+      key={item.label}
+      leftIcon={item.image ? <Image height="18px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />}
+      rightIcon={
+        activityDot ? (
+          <Box
+            position="absolute"
+            top={4}
+            right={2}
+            borderRadius="50%"
+            backgroundColor="error.9"
+            height="6px"
+            width="6px"
+          />
+        ) : undefined
+      }
+      as={Link}
+      to={getPath(item.path)}
+      isActive={isActive}
+      sx={{
+        '&:hover img': {
+          transform: 'scale(1.1)',
+          filter: 'brightness(1.3)',
+          animation: `${glowAnimation} 2s infinite`,
+        },
+      }}
+      {...rest}
+    >
+      {t(item.label)}
+    </Button>
   )
 }

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import {
   PROJECT_LAUNCH_PAYMENT_PROJECT_NAME,
   ProjectCreateStrategyCard,
-} from '@/modules/project/pages1/projectCreation/views/ProjectCreationStrategy.tsx'
+} from '@/modules/project/pages1/projectCreation/views/old/ProjectCreationStrategy'
 import { useProjectReset } from '@/modules/project/state/projectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'

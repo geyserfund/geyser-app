@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { H1 } from '@/shared/components/typography'
-import { dimensions } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { useMobileMode } from '@/utils'
 
 import { currentDashboardItemAtom, isDashboardMainRouteAtom } from '../navigation/dashboardAtom'

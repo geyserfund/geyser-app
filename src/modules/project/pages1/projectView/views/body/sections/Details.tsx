@@ -10,13 +10,14 @@ import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
+import { ID } from '@/shared/constants/components/id.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import {
   ProjectCategoryLabel,
   ProjectSubCategoryLabel,
   ProjectSubCategoryList,
 } from '@/shared/constants/platform/projectCategory.ts'
 
-import { getPath, ID } from '../../../../../../../shared/constants'
 import { BodySectionLayout, ProjectLinks } from '../components'
 import { CreatorSocial } from './header/components/CreatorSocial'
 

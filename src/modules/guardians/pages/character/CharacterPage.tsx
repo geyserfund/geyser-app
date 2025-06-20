@@ -5,14 +5,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
 import { Head } from '@/config/Head'
-import {
-  dimensions,
-  getPath,
-  KingSeoImageUrl,
-  KnightSeoImageUrl,
-  LegendSeoImageUrl,
-  WarriorSeoImageUrl,
-} from '@/shared/constants'
+import { getPath, KingSeoImageUrl, KnightSeoImageUrl, LegendSeoImageUrl, WarriorSeoImageUrl } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { useModal } from '@/shared/hooks'
 import { fonts } from '@/shared/styles'
 import { GuardianType } from '@/types'

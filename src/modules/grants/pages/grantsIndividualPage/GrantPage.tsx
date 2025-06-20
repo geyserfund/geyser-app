@@ -7,7 +7,7 @@ import { Link, useParams } from 'react-router-dom'
 
 import { Head } from '@/config/Head.tsx'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav/TopNavContainerBar'
-import { dimensions } from '@/shared/constants/index.ts'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
 
 import Loader from '../../../../components/ui/Loader.tsx'

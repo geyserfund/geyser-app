@@ -4,11 +4,12 @@ import { PiDownloadSimple } from 'react-icons/pi'
 
 import { ScrollInvoke } from '@/helpers/ScrollInvoke.tsx'
 import { Body, H1 } from '@/shared/components/typography'
+import { ID } from '@/shared/constants/components/id.ts'
 import { UserProjectContributionFragment } from '@/types/generated/graphql.ts'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { getAppEndPoint } from '../../../../../../../config/domain'
-import { ID, NoContributionImageUrl } from '../../../../../../../shared/constants'
+import { NoContributionImageUrl } from '../../../../../../../shared/constants'
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 import { ContributionSummary } from '../components/ContributionSummary'
 import { TabPanelSkeleton } from '../components/TabPanelSkeleton'

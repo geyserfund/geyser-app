@@ -2,7 +2,8 @@ import { HStack } from '@chakra-ui/react'
 import { useEffect, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { dimensions, PathName } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { PathName } from '@/shared/constants/index.ts'
 
 import { useMobileMode } from '../../../../utils'
 import { ProfileError } from '../../components/ProfileError'

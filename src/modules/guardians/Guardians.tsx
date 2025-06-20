@@ -3,13 +3,13 @@ import { Link, Outlet } from 'react-router-dom'
 
 import { Body, H1 } from '@/shared/components/typography'
 import {
-  dimensions,
   getPath,
   GuardiansSeriesOneBackground4kUrl,
   GuardiansSeriesOneBackgroundFullHDUrl,
   GuardiansSeriesOneBackgroundMobileUrl,
   GuardiansSeriesOneBackgroundTabUrl,
 } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { useInitialColorModeEffect } from '@/shared/hooks/utils/useInitialColorMode'
 import { fonts } from '@/shared/styles'
 import { toPx } from '@/utils'

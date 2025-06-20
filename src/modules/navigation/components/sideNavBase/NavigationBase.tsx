@@ -1,7 +1,7 @@
 import { HStack, Modal, ModalContent, ModalOverlay } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
-import { dimensions } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { useMobileMode } from '@/utils'
 
 import { useNavAnimationStyles } from './styles'

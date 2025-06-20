@@ -9,16 +9,17 @@ import TitleWithProgressBar from '@/components/molecules/TitleWithProgressBar.ts
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
-import { dimensions, LaunchNowIllustrationUrl, LaunchPadIllustrationUrl } from '@/shared/constants/index.ts'
+import { LaunchNowIllustrationUrl, LaunchPadIllustrationUrl } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { useMobileMode } from '@/utils/index.ts'
 
-import { FormContinueButton } from '../components/FormContinueButton.tsx'
-import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
-import { useCheckPrelaunchSteps } from '../hooks/useCheckPrelaunchSteps.tsx'
-import { useLocationMandatoryRedirect } from '../hooks/useLocationMandatoryRedirect.tsx'
-import { isReadyForLaunchAtom } from '../states/nodeStatusAtom.ts'
+import { FormContinueButton } from '../../components/FormContinueButton.tsx'
+import { ProjectCreateLayout } from '../../components/ProjectCreateLayout.tsx'
+import { useCheckPrelaunchSteps } from '../../hooks/useCheckPrelaunchSteps.tsx'
+import { useLocationMandatoryRedirect } from '../../hooks/useLocationMandatoryRedirect.tsx'
+import { isReadyForLaunchAtom } from '../../states/nodeStatusAtom.ts'
 import { ProjectCreateCompletionPage } from './ProjectCreateCompletionPage.tsx'
 
 export enum ProjectCreationStrategy {

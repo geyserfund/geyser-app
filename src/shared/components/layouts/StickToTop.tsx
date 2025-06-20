@@ -2,8 +2,8 @@ import { Box, BoxProps } from '@chakra-ui/react'
 import { throttle } from 'lodash'
 import { useEffect, useRef } from 'react'
 
-import { dimensions } from '../../constants'
-import { useListenerState } from '../../hooks'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { useListenerState } from '@/shared/hooks'
 
 interface StickToTopProps extends BoxProps {
   id: string

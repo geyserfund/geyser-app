@@ -7,7 +7,7 @@ import { ProjectStoryForm } from '@/modules/project/forms/ProjectStoryForm'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H1 } from '@/shared/components/typography'
-import { dimensions } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { BackButton } from '@/shared/molecules/BackButton.tsx'
 import { useNotification } from '@/utils'
 

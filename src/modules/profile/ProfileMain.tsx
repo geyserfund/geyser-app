@@ -1,7 +1,7 @@
 import { Box, VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router'
 
-import { dimensions } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { standardPadding } from '@/shared/styles'
 
 export const ProfileMain = () => {

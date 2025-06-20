@@ -1,8 +1,10 @@
 import { Button, Divider, HStack, Menu, MenuButton, MenuItem, MenuList, Portal, VStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { PiRocketLaunch } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
+import { isRouteForProjectCreationAtom } from '@/config/routes/state/privateRoutesAtom.ts'
 import { useAuthContext } from '@/context'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body } from '@/shared/components/typography'
@@ -14,8 +16,13 @@ import { CreateProjectButton } from './CreateProjectButton'
 
 export const ProjectSelectMenu = () => {
   const { t } = useTranslation()
+  const isRouteForProjectCreation = useAtomValue(isRouteForProjectCreationAtom)
 
   const { user, isUserAProjectCreator } = useAuthContext()
+
+  if (isRouteForProjectCreation) {
+    return null
+  }
 
   if (!isUserAProjectCreator) {
     return <CreateProjectButton />

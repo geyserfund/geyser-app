@@ -10,7 +10,8 @@ import { initialRewardsLoadAtom, rewardsAtom } from '@/modules/project/state/rew
 import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '@/modules/project/state/walletAtom.ts'
 import { toInt } from '@/utils'
 
-import { useMustHaveProjectStory } from '../hooks/useMustHaveProjectStory.tsx'
+import { useMustHaveProjectStory } from './hooks/useMustHaveProjectStory.tsx'
+import { ProjectCreationLayout } from './Layouts/ProjectCreationLayout.tsx'
 
 const listOfAtoms = [
   projectAtom,
@@ -40,5 +41,9 @@ export const ProjectCreationContainer = () => {
 
 const ProjectCreationContainerContent = () => {
   useMustHaveProjectStory()
-  return <Outlet />
+  return (
+    <ProjectCreationLayout>
+      <Outlet />
+    </ProjectCreationLayout>
+  )
 }

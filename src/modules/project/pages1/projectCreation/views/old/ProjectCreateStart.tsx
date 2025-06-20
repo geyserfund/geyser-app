@@ -5,11 +5,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 import { Body, H1, H3 } from '@/shared/components/typography'
 
-import { useAuthContext } from '../../../../../context'
-import { ExternalAccountType, SocialAccountType } from '../../../../../modules/auth'
-import { ConnectWithNostr } from '../../../../../modules/auth/ConnectWithNostr'
-import { ConnectWithSocial } from '../../../../../modules/auth/ConnectWithSocial'
-import { useAuthToken } from '../../../../../modules/auth/useAuthToken'
+import { useAuthContext } from '../../../../../../context'
+import { ExternalAccountType, SocialAccountType } from '../../../../../auth'
+import { ConnectWithNostr } from '../../../../../auth/ConnectWithNostr'
+import { ConnectWithSocial } from '../../../../../auth/ConnectWithSocial'
+import { useAuthToken } from '../../../../../auth/useAuthToken'
 import {
   getPath,
   LaunchProjectCoinsUrl,
@@ -19,10 +19,10 @@ import {
   LaunchProjectPaymentMethodsUrl,
   LaunchProjectWorldUrl,
   LIGHTNING_FEE_PERCENTAGE,
-} from '../../../../../shared/constants'
-import { useMobileMode } from '../../../../../utils'
-import { FormContinueButton } from '../components/FormContinueButton'
-import { ProjectCreateLayout } from '../components/ProjectCreateLayout'
+} from '../../../../../../shared/constants'
+import { useMobileMode } from '../../../../../../utils'
+import { FormContinueButton } from '../../components/FormContinueButton'
+import { ProjectCreateLayout } from '../../components/ProjectCreateLayout'
 
 export const ProjectCreateStart = () => {
   const isMobile = useMobileMode()

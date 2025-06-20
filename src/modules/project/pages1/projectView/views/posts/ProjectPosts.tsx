@@ -9,7 +9,8 @@ import { usePostsAtom, useProjectAtom } from '@/modules/project/hooks/useProject
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { H2 } from '@/shared/components/typography'
-import { dimensions, getPath } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import { PostType } from '@/types'
 import { truthyFilter } from '@/utils/array'
 

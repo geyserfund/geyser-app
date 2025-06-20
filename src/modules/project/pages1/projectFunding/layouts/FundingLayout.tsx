@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { RightSideStickyLayout } from '@/modules/project/components/RightSideStickyLayout'
-import { dimensions } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 
 type FundingLayoutProps = {
   showBack?: boolean

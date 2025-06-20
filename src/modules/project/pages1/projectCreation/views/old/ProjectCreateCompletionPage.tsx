@@ -10,14 +10,14 @@ import { ProjectPreLaunchConfirmModal } from '@/modules/project/components/Proje
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { useProjectPreLaunchMutation } from '@/types/index.ts'
 
-import TitleWithProgressBar from '../../../../../components/molecules/TitleWithProgressBar'
-import { useAuthContext } from '../../../../../context'
-import { getPath } from '../../../../../shared/constants'
-import { useModal } from '../../../../../shared/hooks'
-import { isDraft, useNotification } from '../../../../../utils'
-import { ProjectLaunchConfirmModal } from '../../../components/ProjectLaunchConfirmModal'
-import { ProjectCreateCompleted } from '../components/ProjectCreateCompleted'
-import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
+import TitleWithProgressBar from '../../../../../../components/molecules/TitleWithProgressBar.tsx'
+import { useAuthContext } from '../../../../../../context/index.ts'
+import { getPath } from '../../../../../../shared/constants/index.ts'
+import { useModal } from '../../../../../../shared/hooks/index.ts'
+import { isDraft, useNotification } from '../../../../../../utils/index.ts'
+import { ProjectLaunchConfirmModal } from '../../../../components/ProjectLaunchConfirmModal.tsx'
+import { ProjectCreateCompleted } from '../../components/ProjectCreateCompleted.tsx'
+import { ProjectCreateLayout } from '../../components/ProjectCreateLayout.tsx'
 import { ProjectCreationStrategy } from './ProjectCreationStrategy.tsx'
 
 interface ProjectCreateCompletionPageProps {
