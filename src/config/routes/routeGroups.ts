@@ -20,7 +20,7 @@ export const projectCreationRoutesThatNeedStory = [
   getPath('launchProjectRewards', PathName.projectId),
   getPath('launchProjectRewardsCreate', PathName.projectId),
   getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardId),
-  getPath('launchProjectWallet', PathName.projectId),
+  getPath('launchPayment', PathName.projectId),
   getPath('launchProjectStrategy', PathName.projectId),
 ]
 
@@ -28,8 +28,8 @@ export const privateCreatorProjectCreationRoutes = [
   getPath('launch'),
   getPath('launchProject', PathName.projectId),
   getPath('launchStartProject', PathName.projectId),
-  getPath('launchProjectDetails', PathName.projectId),
-  getPath('launchProjectStory', PathName.projectId),
+  getPath('launchProjectDetails'),
+  getPath('launchStory', PathName.projectId),
   ...projectCreationRoutesThatNeedStory,
 ]
 

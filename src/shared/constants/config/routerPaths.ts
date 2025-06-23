@@ -54,11 +54,15 @@ export enum PathName {
   launchStart = 'start',
   launchProject = 'launch',
   launchProjectDetails = 'details',
-  launchProjectStory = 'story',
+  launchFundingStrategy = 'funding',
+  launchStory = 'story',
   launchProjectRewards = 'rewards',
   launchProjectRewardsNew = 'rewards/new',
   launchProjectRewardsEdit = 'rewards/edit',
   launchProjectStrategy = 'strategy',
+  launchAboutYou = 'about-you',
+  launchPayment = 'payment',
+  launchSummary = 'summary',
 
   userProfile = 'user',
   userSettings = 'settings',
@@ -295,19 +299,23 @@ const pathsMap = {
   launch: () => `/${PathName.launchProject}`,
   launchStartProject: (projectID: string) => `/${PathName.launchProject}/${PathName.launchStart}/${projectID}`,
   launchProject: (projectID: string) => `/${PathName.launchProject}/${projectID}`,
-  launchProjectDetails: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectDetails}`,
-  launchProjectStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStory}`,
+
+  launchProjectDetails: () => `/${PathName.launchProject}/new/${PathName.launchProjectDetails}`,
+  launchFundingStrategy: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchFundingStrategy}`,
   launchProjectRewards: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}`,
   launchProjectRewardsCreate: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/create`,
   launchProjectRewardsEdit: (projectID: string, rewardUUID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/edit/${rewardUUID}`,
+  launchStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchStory}`,
+  launchAboutYou: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchAboutYou}`,
+  launchPayment: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}`,
+  launchSummary: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchSummary}`,
+
   launchProjectStrategy: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStrategy}`,
-
-  launchProjectWallet: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.node}`,
 
   projectLaunch: (projectName: string) => `/${PathName.project}/${projectName}/?launch`,
   projectLaunchDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}/?draft`,

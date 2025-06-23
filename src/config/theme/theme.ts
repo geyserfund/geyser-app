@@ -1,21 +1,20 @@
 import { extendTheme, StyleFunctionProps } from '@chakra-ui/react'
 
 import { fonts, lightModeColors } from '../../shared/styles'
-import {
-  alertTheme,
-  badgeTheme,
-  buttonTheme,
-  drawerTheme,
-  inputTheme,
-  menuTheme,
-  modalTheme,
-  popOverTheme,
-  selectTheme,
-  switchTheme,
-  tabTheme,
-  textareaTheme,
-  tooltipTheme,
-} from './components'
+import { alertTheme } from './components/alertTheme.ts'
+import { badgeTheme } from './components/badgeTheme.ts'
+import { buttonTheme } from './components/buttonTheme.ts'
+import { drawerTheme } from './components/drawerTheme.ts'
+import { inputTheme } from './components/inputTheme.ts'
+import { menuTheme } from './components/menuTheme.ts'
+import { modalTheme } from './components/modalTheme.ts'
+import { popOverTheme } from './components/popOverTheme.ts'
+import { selectTheme } from './components/selectTheme.ts'
+import { stepperTheme } from './components/stepperTheme.ts'
+import { switchTheme } from './components/switchTheme.ts'
+import { tabTheme } from './components/tabTheme.ts'
+import { textareaTheme } from './components/textAreaTheme.ts'
+import { tooltipTheme } from './components/tooltipTheme.ts'
 
 export const theme = {
   initialColorMode: 'system',
@@ -162,6 +161,7 @@ export const theme = {
     Tabs: tabTheme,
     Input: inputTheme,
     Textarea: textareaTheme,
+    Stepper: stepperTheme,
   },
   styles: {
     global: ({ theme }: StyleFunctionProps) => ({
