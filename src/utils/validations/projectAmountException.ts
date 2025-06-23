@@ -12,5 +12,6 @@ export const removeProjectAmountException = (name = '') => {
     'deathathletic',
     'runwithbitcoin',
     'btcisla',
+    'makethefutureofhundredsofchildren',
   ].includes(name)
 }
