@@ -144,7 +144,6 @@ type LinkActionsSectionProps = {
 /** Shared link display and action buttons component */
 const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: LinkActionsSectionProps) => {
   const { t } = useTranslation()
-
   return (
     <>
       <HStack
@@ -162,7 +161,7 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
           {heroLink.replace('https://', '')}
         </Body>
         <IconButton
-          aria-label={heroId ? 'Copy link' : 'Copy hero link'}
+          aria-label={heroId ? 'Copy hero link' : 'Copy link'}
           icon={<PiCopy />}
           variant="ghost"
           size="md"
@@ -199,7 +198,7 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
           onClick={handleCopy}
           w="full"
         >
-          {t(heroId ? 'Copy link' : 'Copy hero link')}
+          {heroId ? t('Copy hero link') : t('Copy link')}
         </Button>
       </HStack>
     </>
@@ -301,14 +300,14 @@ export const BecomeAnAmbassador = () => {
   const toast = useNotification()
   const { getShareProjectUrl } = useProjectShare()
 
-  const projectShareUrl = getShareProjectUrl({ clickedFrom: CampaignContent.successScreen })
+  const projectShareUrl = heroId ? heroLink : getShareProjectUrl({ clickedFrom: CampaignContent.successScreen })
   const twitterShareText = `I just contributed to ${project.title} on Geyser! Check it out: ${projectShareUrl}`
 
   const handleCopy = () => {
     onCopy()
     toast.success({
       title: t('Copied!'),
-      description: t('Hero link copied to clipboard'),
+      description: heroId ? t('Hero link copied to clipboard') : t('Link copied to clipboard'),
     })
   }
 
