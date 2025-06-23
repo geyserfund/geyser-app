@@ -1379,5 +1379,17 @@
   "Collect Legend jewel": "Collect Legend jewel",
   "Collect King jewel": "Collect King jewel",
   "Collect Warrior jewel": "Collect Warrior jewel",
-  "{{fee}}% Geyser fee per transaction": "{{fee}}% Geyser fee per transaction"
+  "{{fee}}% Geyser fee per transaction": "{{fee}}% Geyser fee per transaction",
+  "successfully contributed to": "successfully contributed to",
+  "Get exclusive early access to new Bitcoin projects, powerful updates, and progress reports from the global Bitcoin movement. Join thousands already subscribed, and be the first to know what’s next.": "Get exclusive early access to new Bitcoin projects, powerful updates, and progress reports from the global Bitcoin movement. Join thousands already subscribed, and be the first to know what’s next.",
+  "Don’t miss the next big Bitcoin project!": "Don’t miss the next big Bitcoin project!",
+  "Become an ambassador": "Become an ambassador",
+  "Spread the word using your own Hero link. So far, 2 ambassadors have enabled 336,212 sats in contributions to this project.": "Spread the word using your own Hero link. So far, 2 ambassadors have enabled 336,212 sats in contributions to this project.",
+  "Spread the word using your own Hero link. So far, {{ambassadorsCount}} ambassadors have enabled {{totalSats}} sats in contributions to this project.": "Spread the word using your own Hero link. So far, {{ambassadorsCount}} ambassadors have enabled {{totalSats}} sats in contributions to this project.",
+  "Spread the word using your own <1>Hero link</1>. So far, {{ambassadorsCount}} ambassadors have enabled {{totalSats}} sats in contributions to this project.": "Spread the word using your own <1>Hero link</1>. So far, {{ambassadorsCount}} ambassadors have enabled {{totalSats}} sats in contributions to this project.",
+  "You successfully contributed to": "You successfully contributed to",
+  "Sign up": "Sign up",
+  "Share Project": "Share Project",
+  "Spread the word to help this project become a success.": "Spread the word to help this project become a success.",
+  "Hero link copied to clipboard": "Hero link copied to clipboard"
 }
