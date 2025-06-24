@@ -187,6 +187,12 @@ export const LaunchpadStartedCountdownIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/launchpad-started-countdown-illustration.png'
 export const DraftIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/draft-illustration.png'
 
+export const ContributionSuccessIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/contribution-success-illustration.png'
+export const MailIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/mail-illustration.png'
+export const SuccessfullySubscribedIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/subscribed-illustration.png'
+
 // PAYMENT METHOD
 export const BitcoinLightingPaymentImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/payment/bitcoin-lightning-payment.png'

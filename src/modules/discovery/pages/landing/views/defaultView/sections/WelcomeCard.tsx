@@ -94,7 +94,6 @@ export const WelcomeCard = () => {
           <HStack w="full" maxWidth="450px" flexWrap="wrap" spacing={4} alignItems="flex-start">
             <ControlledTextInput
               name="email"
-              size="sm"
               containerProps={{ maxWidth: '250px' }}
               backgroundColor="white"
               color={lightModeColors.neutral1[11]}
@@ -105,16 +104,17 @@ export const WelcomeCard = () => {
               required
             />
             <Button
-              variant="outline"
+              variant="soft"
+              size="lg"
               minWidth="150px"
-              backgroundColor="white"
+              backgroundColor="black"
               _hover={{ backgroundColor: lightModeColors.neutral1[2] }}
-              color={lightModeColors.neutral1[11]}
+              color={'white'}
               colorScheme="gray"
               type="submit"
               isLoading={submitting}
             >
-              {t('Get Updates')}
+              {t('Sign up')}
             </Button>
           </HStack>
         </form>

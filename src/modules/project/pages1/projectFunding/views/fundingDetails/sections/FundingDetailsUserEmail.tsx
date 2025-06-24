@@ -72,8 +72,6 @@ export const FundingDetailsUserEmailAndUpdates = () => {
 
   const isEmailValidated = emailValidationState === EMAIL_VALIDATION_STATE.SUCCEEDED
 
-  console.log('checking email', email)
-
   /*
    Set the email from the user to the funding form. We do this because the input field
    is not shown if the user already has an email.
@@ -269,7 +267,7 @@ export const ConnectProfileCard = () => {
       <VStack w="full" alignItems="flex-start" spacing={0}>
         <HStack w="full" justifyContent="space-between">
           <H1 size="2xl" bold>
-            {t('Connect profile')}
+            ✨ {t('Follow this project for exclusive updates')}
           </H1>
           <Switch
             size="lg"
@@ -280,7 +278,9 @@ export const ConnectProfileCard = () => {
         </HStack>
 
         <Body size="sm" light>
-          {t('Connect this transaction with your social profile and receive project updates.')}
+          {t(
+            'Get notified by email when new goals are hit, impact is made, and Bitcoin adoption grows, straight from the creator.',
+          )}
         </Body>
       </VStack>
     </CardLayout>
