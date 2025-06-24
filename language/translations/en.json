@@ -1379,5 +1379,11 @@
   "Collect Legend jewel": "Collect Legend jewel",
   "Collect King jewel": "Collect King jewel",
   "Collect Warrior jewel": "Collect Warrior jewel",
-  "{{fee}}% Geyser fee per transaction": "{{fee}}% Geyser fee per transaction"
+  "{{fee}}% Geyser fee per transaction": "{{fee}}% Geyser fee per transaction",
+  "View preview": "View preview",
+  "ategory": "ategory",
+  "Sub-Category": "Sub-Category",
+  "Sub-category": "Sub-category",
+  "Select sub-category": "Select sub-category",
+  "Project name is a required field.": "Project name is a required field."
 }

@@ -82,7 +82,7 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
-        path: getPath('launchProjectDetails'),
+        path: getPath('launchProjectDetails', PathName.projectId),
         async lazy() {
           const LaunchProjectDetails = await ProjectLaunch().then((m) => m.LaunchProjectDetails)
           return { Component: LaunchProjectDetails }

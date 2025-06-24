@@ -300,7 +300,8 @@ const pathsMap = {
   launchStartProject: (projectID: string) => `/${PathName.launchProject}/${PathName.launchStart}/${projectID}`,
   launchProject: (projectID: string) => `/${PathName.launchProject}/${projectID}`,
 
-  launchProjectDetails: () => `/${PathName.launchProject}/new/${PathName.launchProjectDetails}`,
+  launchProjectDetails: (projectID?: string) =>
+    `/${PathName.launchProject}/${projectID || 'new'}/${PathName.launchProjectDetails}`,
   launchFundingStrategy: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchFundingStrategy}`,
   launchProjectRewards: (projectID: string) =>

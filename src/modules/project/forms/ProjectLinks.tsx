@@ -1,79 +1,73 @@
 import { Button, VStack } from '@chakra-ui/react'
-import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
+import { t } from 'i18next'
+import { useFieldArray, UseFormReturn } from 'react-hook-form'
 
 import { getIconForLink } from '../../../helpers/getIconForLinks'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
-import { Maybe } from '../../../types'
+import { ProjectCreationVariables } from '../pages1/projectCreation/types.ts'
 import { ProjectLinkInput } from './components/ProjectLinkInput'
 
 interface ProjectLinksProps {
-  links: string[]
-  setLinks: (_: string[]) => void
-  linkError?: boolean[]
+  form: UseFormReturn<ProjectCreationVariables>
 }
 
-export const ProjectLinks = ({ links = [], setLinks, linkError = [] }: ProjectLinksProps) => {
-  const { t } = useTranslation()
-  const handleClose = (val: Maybe<string>) => {
-    const newLinks = links.filter((link) => link !== val)
-    setLinks(newLinks)
-  }
+export const ProjectLinks = ({ form }: ProjectLinksProps) => {
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: 'links' as never,
+  })
 
+  /** Add a new empty link to the links array */
   const addNewLink = () => {
-    if (links[links.length - 1] === '' || links.length >= 7) {
-      return
-    }
-
-    setLinks([...links, ''])
+    append('')
   }
 
-  useEffect(() => {
-    if (links) {
-      if (links && links.length > 1 && links[0] === '') {
-        const newList = links.filter((val) => val) as string[]
-        setLinks(newList)
-      }
-    }
-  }, [links, setLinks])
+  /** Remove a link from the links array */
+  const handleLinkClose = (index: number) => {
+    remove(index)
+  }
 
-  const handleChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
-    const newLinkList = links.map((val, i) => (i === index ? value : val))
-    setLinks(newLinkList)
+  /** Handle link input changes */
+  const handleLinkChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+    form.setValue(`links.${index}`, event.target.value, { shouldDirty: true, shouldValidate: true })
   }
 
   return (
-    <FieldContainer
-      title={t('Project links')}
-      subtitle={t('Connect your sites so viewers can see more proof of your work')}
-      info={t('Please provide secure links, starting with https://')}
-    >
-      <VStack w="full" spacing={3}>
-        {links &&
-          links.map((link, index) => {
+    <VStack w="full" spacing={3}>
+      <FieldContainer
+        title={t('Project links')}
+        subtitle={t('Connect your sites so viewers can see more proof of your work')}
+        info={t('Please provide secure links, starting with https://')}
+        error={form.formState.errors.links?.[0]?.message}
+      >
+        <VStack w="full" spacing={2}>
+          {fields.map((field, index) => {
+            const linkValue = form.watch(`links.${index}`)
+            const linkError = form.formState.errors.links?.[index]?.message
+
             return (
               <ProjectLinkInput
-                key={index}
-                leftIcon={getIconForLink(link)}
-                handleClose={() => handleClose(link)}
-                value={link || ''}
-                isError={linkError[index]}
-                onChange={(event) => handleChange(index, event)}
+                key={field.id}
+                leftIcon={getIconForLink(linkValue)}
+                handleClose={() => handleLinkClose(index)}
+                value={linkValue || ''}
+                isError={Boolean(linkError)}
+                onChange={(event) => handleLinkChange(index, event)}
               />
             )
           })}
-        <Button
-          size="lg"
-          variant="outline"
-          colorScheme="neutral1"
-          w="full"
-          onClick={addNewLink}
-          isDisabled={links.length >= 7}
-        >
-          {t('Add Project Link')}
-        </Button>
-      </VStack>
-    </FieldContainer>
+        </VStack>
+      </FieldContainer>
+      <Button
+        size="lg"
+        variant="soft"
+        colorScheme="neutral1"
+        w="full"
+        onClick={addNewLink}
+        isDisabled={fields.length >= 7}
+      >
+        {t('Add Project Link')}
+      </Button>
+    </VStack>
   )
 }

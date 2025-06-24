@@ -32,6 +32,10 @@ export const useProjectDetailsAPI = (load?: boolean) => {
   })
 
   useEffect(() => {
+    console.log('project.id', project.id)
+    console.log('loading', loading)
+    console.log('load', load)
+    console.log('initialProjectDetailsLoad', initialProjectDetailsLoad)
     if (project.id && !loading && load && !initialProjectDetailsLoad) {
       queryProjectDetails()
     }

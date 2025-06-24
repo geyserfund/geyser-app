@@ -3,11 +3,13 @@ import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { noUrlRegex } from '@/utils/index.ts'
+import { LoadingPage } from '@/modules/general/loading/index.tsx'
+import { noUrlRegex, validUrl } from '@/utils/index.ts'
 
 import { useAuthContext } from '../../../../../context'
 import { ProjectValidations } from '../../../../../shared/constants'
-import { ProjectPageBodyFragment } from '../../../../../types'
+import { ProjectPageBodyFragment, ProjectPageDetailsFragment } from '../../../../../types'
+import { ProjectCountryCodesThatAreRestricted } from '../constants.ts'
 import { ProjectCreationVariables } from '../types'
 
 const DEFAULT_VALUES: ProjectCreationVariables = {
@@ -16,8 +18,12 @@ const DEFAULT_VALUES: ProjectCreationVariables = {
   description: '',
   images: [],
   thumbnailImage: '',
-  email: '',
   name: '',
+  category: '',
+  subCategory: '',
+  location: '',
+  links: [],
+  tags: [],
 }
 
 const schema = yup
@@ -50,39 +56,61 @@ const schema = yup
         `Title should be shorter than ${ProjectValidations.title.maxLength} characters.`,
       )
       .matches(noUrlRegex, 'Project title cannot contain a URL'),
-    email: yup.string().email('Please enter a valid email address').required('Email address is a required field.'),
     thumbnailImage: yup.string().required('Thumbnail image is a required field.'),
-    images: yup.array().of(yup.string()).required('Images are a required field.'),
+    images: yup
+      .array()
+      .of(yup.string())
+      .required('Images are a required field.')
+      .min(1, 'At least one image is required.'),
+    category: yup
+      .string()
+      .required('Category is a required field.')
+      .test('is-valid', 'We are unable to support projects from this country.', (value) => {
+        if (ProjectCountryCodesThatAreRestricted.includes(value)) {
+          return false
+        }
+
+        return true
+      }),
+    subCategory: yup.string().required('Subcategory is a required field.'),
+    location: yup.string().required('Country is a required field.'),
+    links: yup.array().of(yup.string().matches(validUrl, 'Please enter a valid URL')),
+    tags: yup.array().of(yup.number()),
   })
   .required()
 
 type UseProjectFormProps = {
   isEdit: boolean
-  project: ProjectPageBodyFragment | undefined | null
+  project: (ProjectPageBodyFragment & ProjectPageDetailsFragment) | undefined | null
+  loading: boolean
 }
 
-export const useProjectForm = ({ isEdit, project }: UseProjectFormProps) => {
+export const useProjectForm = ({ isEdit, project, loading }: UseProjectFormProps) => {
   const { user } = useAuthContext()
 
   const form = useForm<ProjectCreationVariables>({
     resolver: yupResolver(schema) as any,
-    defaultValues: DEFAULT_VALUES,
     reValidateMode: 'onChange',
-    values: useMemo(() => {
-      if (isEdit && project) {
+    shouldUnregister: true,
+    defaultValues: useMemo(() => {
+      if (isEdit && project && !loading) {
         return {
           title: project.title,
           name: project.name,
-          images: project.images || '',
+          images: project.images || [],
           thumbnailImage: project.thumbnailImage || '',
           shortDescription: project.shortDescription || '',
           description: project.description || '',
-          email: user.email || '',
+          category: project.category || '',
+          subCategory: project.subCategory || '',
+          location: project.location?.country?.code || '',
+          links: project.links || [],
+          tags: project?.tags?.map((tag) => tag.id) || [],
         }
       }
 
       return { ...DEFAULT_VALUES, email: user.email || '' }
-    }, [isEdit, project, user]),
+    }, [isEdit, project, user, loading]),
   })
 
   return form

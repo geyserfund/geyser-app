@@ -7,10 +7,10 @@ const baseStyle = definePartsStyle({
   indicator: {
     '[data-status=active] &': {
       background: 'utils.pbg',
-      borderColor: 'primary1.9',
+      borderColor: 'neutral1.9',
     },
     '[data-status=complete] &': {
-      background: 'primary1.5',
+      background: 'neutral1.9',
     },
     '[data-status=incomplete] &': {
       background: 'utils.pbg',
@@ -24,7 +24,7 @@ const baseStyle = definePartsStyle({
       background: 'neutral1.3',
     },
     '[data-status=complete] &': {
-      background: 'primary1.5',
+      background: 'neutral1.9',
     },
     '[data-status=incomplete] &': {
       background: 'neutral1.3',

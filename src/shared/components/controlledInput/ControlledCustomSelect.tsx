@@ -10,7 +10,7 @@ export interface ControlledCustomSelectProps<FormValues extends FieldValues, Opt
       CustomSelectProps<Option, IsMulti>,
       'name' | 'value' | 'defaultValue' | 'onChange' | 'onBlur' | 'options'
     >,
-    Pick<FieldContainerProps, 'info'> {
+    Pick<FieldContainerProps, 'info' | 'boldSubtitle' | 'boldTitle'> {
   name: Path<FormValues>
   label?: string
   control: Control<FormValues>
@@ -53,6 +53,8 @@ export const ControlledCustomSelect = <FormValues extends FieldValues, Option, I
       info={props.info}
       subtitle={props.description}
       size={props.size}
+      boldSubtitle={props.boldSubtitle}
+      boldTitle={props.boldTitle}
       {...props.containerProps}
     >
       <CustomSelect<Option, IsMulti>

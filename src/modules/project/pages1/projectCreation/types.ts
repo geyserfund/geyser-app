@@ -1,4 +1,4 @@
-import { Project, ProjectType, RewardCurrency, Satoshis } from '../../../../types'
+import { CreateProjectInput, ProjectType, RewardCurrency, Satoshis, UpdateProjectInput } from '../../../../types'
 
 export type ProjectCreationVariables = {
   title: string
@@ -7,25 +7,14 @@ export type ProjectCreationVariables = {
   thumbnailImage?: string
   shortDescription: string
   description: string
-  email: string
   rewardCurrency?: RewardCurrency | null
   type?: ProjectType
+  category: string
+  subCategory: string
+  location: string
+  links: string[]
+  tags: number[]
 }
-
-export type ProjectUpdateVariables = Partial<
-  Pick<
-    Project,
-    | 'title'
-    | 'name'
-    | 'images'
-    | 'thumbnailImage'
-    | 'shortDescription'
-    | 'description'
-    | 'type'
-    | 'rewardCurrency'
-    | 'status'
-  >
->
 
 export type ProjectRewardCreationVariables = {
   projectId: number

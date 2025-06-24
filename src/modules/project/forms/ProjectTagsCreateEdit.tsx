@@ -1,11 +1,13 @@
 import { Button, HStack, IconButton, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
 import { chakraComponents, MenuListProps, MultiValue } from 'chakra-react-select'
 import { Dispatch, SetStateAction, useState } from 'react'
+import { UseFormReturn } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { PiPlus, PiX } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
 
 import { CustomSelect } from '@/components/ui/CustomSelect'
+import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
 import { Body } from '@/shared/components/typography'
 
 import { AppTheme } from '../../../context'
@@ -13,19 +15,11 @@ import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { SkeletonLayout } from '../../../shared/components/layouts'
 import { Tag, TagsGetResult, useProjectTagCreateMutation, useTagsGetQuery } from '../../../types'
 import { useNotification } from '../../../utils'
+import { ProjectCreationVariables } from '../pages1/projectCreation/types.ts'
 
 const MAX_TAGS_ALLOWED = 4
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
-  tagContainer: {
-    width: '100%',
-    backgroundColor: colors.utils.pbg,
-    border: '1px solid',
-    borderColor: colors.neutral1[6],
-    borderRadius: '8px',
-    padding: '12px',
-  },
-
   select: {
     width: '100%',
     borderRadius: '8px',
@@ -37,14 +31,13 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
 }))
 
 interface ProjectTagsCreateEditProps extends StackProps {
-  tags: Tag[]
-  updateTags: Dispatch<SetStateAction<Tag[]>>
+  form: UseFormReturn<ProjectCreationVariables>
 }
 
 const TAG_MIN_LENGTH = 3
 const TAG_MAX_LENGTH = 25
 
-export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTagsCreateEditProps) => {
+export const ProjectTagsCreateEdit = ({ form, ...rest }: ProjectTagsCreateEditProps) => {
   const classes = useStyles()
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -53,6 +46,8 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
   const [inputValue, setInputValue] = useState('')
 
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const tags = form.watch('tags') || []
 
   const { loading } = useTagsGetQuery({
     onCompleted(data) {
@@ -69,37 +64,28 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
     },
     onCompleted(data) {
       if (data.tagCreate) {
-        updateTags((current) => [...current, data.tagCreate])
+        form.setValue('tags', [...tags, data.tagCreate.id], {
+          shouldDirty: true,
+          shouldValidate: true,
+        })
+        setTagOptions([...tagOptions, { ...data.tagCreate, count: 0 } as TagsGetResult])
         setInputValue('')
         onClose()
       }
     },
   })
 
-  const handleChange = (value: MultiValue<TagsGetResult>) => {
-    if (!value[0]) {
+  const handleInputChange = (newValue: string) => {
+    if (tags.length >= MAX_TAGS_ALLOWED) {
       return
     }
 
-    const newTag: Tag = { id: value[0].id, label: value[0].label }
-    if (!tags.some((tag) => tag.id === newTag.id)) {
-      updateTags([...tags, newTag])
-    } else {
-      updateTags(tags.filter((tag) => tag.id !== newTag.id))
-    }
-  }
-
-  const handleInputChange = (newValue: string) => {
     setInputValue(newValue)
     if (newValue?.length >= 1) {
       onOpen()
     } else {
       onClose()
     }
-  }
-
-  const removeTag = (id: number) => {
-    updateTags(tags.filter((tag) => tag.id !== id))
   }
 
   const handleCreateTag = () => {
@@ -147,7 +133,6 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
     )
   }
 
-  const isDisabled = tags.length >= MAX_TAGS_ALLOWED
   const showAddTag = !tagOptions.some((tag) => tag.label.toLowerCase().includes(inputValue.toLowerCase()))
   const disableShowAddTag = inputValue.length < MAX_TAGS_ALLOWED || createLoading
 
@@ -161,24 +146,29 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
       </Trans>{' '}
     </span>
   )
+  const handleMenuOpen = () => {
+    if (tags.length >= MAX_TAGS_ALLOWED) {
+      return
+    }
+
+    onOpen()
+  }
 
   return (
     <>
       <FieldContainer title="Tags" subtitle={SubTitle} {...rest}>
-        <VStack className={classes.tagContainer} spacing="10px">
+        <VStack width="100%" spacing="10px">
           {loading ? (
             <SkeletonLayout h="40px" />
           ) : (
-            <CustomSelect<TagsGetResult, true>
+            <ControlledCustomSelect<ProjectCreationVariables, TagsGetResult, true>
               isMulti
-              isDisabled={isDisabled}
               menuIsOpen={isOpen}
               className={classes.select}
-              onChange={handleChange}
               isLoading={loading}
               name="tags"
               placeholder={t('Add tags')}
-              value={[]}
+              control={form.control}
               options={tagOptions}
               getOptionLabel={(option: TagsGetResult) => option.label}
               getOptionValue={(option: TagsGetResult) => option.label}
@@ -186,30 +176,10 @@ export const ProjectTagsCreateEdit = ({ tags, updateTags, ...rest }: ProjectTags
               onKeyDown={handleKeyDown}
               inputValue={inputValue}
               components={{ MenuList }}
-              onMenuOpen={onOpen}
+              onMenuOpen={handleMenuOpen}
               onMenuClose={onClose}
             />
           )}
-          <HStack width="100%" spacing="10px" flexWrap={'wrap'}>
-            {tags.map((tag) => {
-              return (
-                <HStack key={tag.id} borderRadius="4px" paddingLeft="8px" backgroundColor="neutral1.2">
-                  <Body medium>{tag.label}</Body>
-                  <IconButton
-                    variant="ghost"
-                    _hover={{}}
-                    _pressed={{}}
-                    _active={{}}
-                    size="xs"
-                    borderRadius="8px"
-                    aria-label="remove-tag-close-icon"
-                    onClick={() => removeTag(tag.id)}
-                    icon={<PiX />}
-                  />
-                </HStack>
-              )
-            })}
-          </HStack>
         </VStack>
       </FieldContainer>
     </>

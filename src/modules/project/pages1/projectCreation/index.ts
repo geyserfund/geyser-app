@@ -12,7 +12,6 @@ import { ProjectCreateStart } from './views/old/ProjectCreateStart.tsx'
 import { ProjectCreateStory } from './views/old/ProjectCreateStory.tsx'
 import { ProjectCreateStrategy } from './views/old/ProjectCreationStrategy.tsx'
 import { ProjectCreationWalletConnectionPage } from './views/old/ProjectCreationWalletConnectionPage.tsx'
-import { ProjectDetails } from './views/old/ProjectDetails.tsx'
 import { ProjectCreateRewards } from './views/rewards/ProjectCreateRewards.tsx'
 import { ProjectCreateRewardMain } from './views/rewards/views/ProjectCreateRewardMain.tsx'
 import { ProjectCreationCreateReward } from './views/rewards/views/ProjectCreationCreateReward.tsx'
@@ -37,5 +36,4 @@ export {
   ProjectCreationEditReward,
   ProjectCreationWalletConnectionForm,
   ProjectCreationWalletConnectionPage,
-  ProjectDetails,
 }

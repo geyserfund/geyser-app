@@ -11,6 +11,7 @@ export interface FieldContainerProps extends Omit<StackProps, 'title'> {
   error?: ReactNode
   children?: ReactNode
   boldTitle?: boolean
+  boldSubtitle?: boolean
   required?: boolean
   size?: 'sm' | 'md' | 'lg'
 }
@@ -23,6 +24,7 @@ export const FieldContainer = ({
   info,
   error = null,
   boldTitle = false,
+  boldSubtitle = false,
   size = 'md',
   ...props
 }: FieldContainerProps) => {
@@ -36,7 +38,7 @@ export const FieldContainer = ({
       )}
       {subtitle && (
         <HStack w="full">
-          <Body size={'sm'} light>
+          <Body size={'sm'} light fontWeight={boldSubtitle ? 700 : 400}>
             {subtitle}
           </Body>
           {info && (
