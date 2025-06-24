@@ -34,6 +34,8 @@ export enum FundingUserInfoError {
 
 export const DEFAULT_COUNTRY_CODE = 'DEFAULT'
 
+export const DEFAULT_GEYSER_TIP_PERCENT = 5
+
 export type FundingProjectState = FundingProject & {
   wallet?: ProjectPageWalletFragment
   rewards: ProjectRewardFragment[]
@@ -85,7 +87,7 @@ const initialState: FundFormType = {
   rewardCurrency: RewardCurrency.Usdcent,
   needsShipping: false,
   shippingDestination: ShippingDestination.National,
-  geyserTipPercent: 10,
+  geyserTipPercent: DEFAULT_GEYSER_TIP_PERCENT,
 }
 
 /** Main Funding Form state atom */
