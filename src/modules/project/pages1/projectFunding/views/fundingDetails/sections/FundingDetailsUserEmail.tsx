@@ -47,8 +47,6 @@ export const FundingDetailsUserEmailAndUpdates = () => {
   const { loginOnOpen } = useAuthModal()
   const followedProjects = useFollowedProjectsValue()
 
-  const [showEmailInput, setShowEmailInput] = useState(false)
-
   const {
     project,
     formState: { followProject, subscribeToGeyserEmails, email },
@@ -158,8 +156,21 @@ export const FundingDetailsUserEmailAndUpdates = () => {
     }
   }
 
-  const emailInput = () => {
-    return (
+  if (!isLoggedIn && !hasSelectedRewards) return <ConnectProfileCard />
+
+  if (!showEmailComponent) return null
+
+  return (
+    <CardLayout mobileDense width="100%" position="relative">
+      <VStack w="full" alignItems="flex-start" spacing={0}>
+        <H1 size="2xl" bold>
+          {t('Add Email')}
+        </H1>
+        <Body size="sm" light>
+          {t('Add your email to receive project updates from the creator.')}
+        </Body>
+      </VStack>
+
       <FieldContainer>
         <FormControl isInvalid={Boolean(fundingFormError.email)}>
           <InputGroup>
@@ -186,7 +197,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
           </InputGroup>
           {fundingFormError.email && <FormErrorMessage>{fundingFormError.email}</FormErrorMessage>}
           {fundingFormWarning.email && <FormHelperText color="orange.9">{fundingFormWarning.email}</FormHelperText>}
-          {!fundingFormWarning.email && !fundingFormError.email && !isLoggedIn && !showEmailInput && (
+          {!fundingFormWarning.email && !fundingFormError.email && !isLoggedIn && (
             <FormHelperText color="neutral1.11">
               <Trans i18nKey="You're funding anonymously. <1>Sign in</1> to connect your contribution to your profile.">
                 {"You're funding anonymously. "}
@@ -199,54 +210,12 @@ export const FundingDetailsUserEmailAndUpdates = () => {
                 >
                   Sign in
                 </Box>
-                {' to connect your profile to  '}
+                {' to connect your profile to contribution'}
               </Trans>
             </FormHelperText>
           )}
         </FormControl>
       </FieldContainer>
-    )
-  }
-
-  const connectProfileCard = () => {
-    return (
-      <CardLayout mobileDense width="100%" position="relative">
-        <VStack w="full" alignItems="flex-start" spacing={0}>
-          <HStack w="full" justifyContent="space-between">
-            <H1 size="2xl" bold>
-              ✨ {t('Follow this project for exclusive updates')}
-            </H1>
-
-            <Switch size="lg" isChecked={showEmailInput} onChange={(e) => setShowEmailInput(e.target.checked)} />
-          </HStack>
-
-          <Body size="sm" light>
-            {t(
-              'Get notified by email when new goals are hit, impact is made, and Bitcoin adoption grows, straight from the creator.',
-            )}
-          </Body>
-        </VStack>
-        {showEmailInput && emailInput()}
-      </CardLayout>
-    )
-  }
-
-  if (!isLoggedIn && !hasSelectedRewards) return connectProfileCard()
-
-  if (!showEmailComponent) return null
-
-  return (
-    <CardLayout mobileDense width="100%" position="relative">
-      <VStack w="full" alignItems="flex-start" spacing={0}>
-        <H1 size="2xl" bold>
-          {t('Add Email')}
-        </H1>
-        <Body size="sm" light>
-          {t('Add your email to receive project updates from the creator.')}
-        </Body>
-      </VStack>
-      {emailInput()}
-
       {(isEmailValidated || user.email) && (
         <>
           {!followsProject && (
@@ -287,6 +256,33 @@ export const FundingDetailsUserEmailAndUpdates = () => {
           )}
         </>
       )}
+    </CardLayout>
+  )
+}
+
+export const ConnectProfileCard = () => {
+  const { loginOnOpen } = useAuthModal()
+  return (
+    <CardLayout mobileDense width="100%" position="relative">
+      <VStack w="full" alignItems="flex-start" spacing={0}>
+        <HStack w="full" justifyContent="space-between">
+          <H1 size="2xl" bold>
+            ✨ {t('Follow this project for exclusive updates')}
+          </H1>
+          <Switch
+            size="lg"
+            onChange={() => {
+              loginOnOpen()
+            }}
+          />
+        </HStack>
+
+        <Body size="sm" light>
+          {t(
+            'Get notified by email when new goals are hit, impact is made, and Bitcoin adoption grows, straight from the creator.',
+          )}
+        </Body>
+      </VStack>
     </CardLayout>
   )
 }
