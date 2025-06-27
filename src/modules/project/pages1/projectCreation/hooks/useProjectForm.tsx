@@ -3,12 +3,10 @@ import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { LoadingPage } from '@/modules/general/loading/index.tsx'
 import { noUrlRegex, validUrl } from '@/utils/index.ts'
 
-import { useAuthContext } from '../../../../../context'
 import { ProjectValidations } from '../../../../../shared/constants'
-import { ProjectPageBodyFragment, ProjectPageDetailsFragment } from '../../../../../types'
+import { ProjectPageBodyFragment } from '../../../../../types'
 import { ProjectCountryCodesThatAreRestricted } from '../constants.ts'
 import { ProjectCreationVariables } from '../types'
 
@@ -81,19 +79,16 @@ const schema = yup
 
 type UseProjectFormProps = {
   isEdit: boolean
-  project: (ProjectPageBodyFragment & ProjectPageDetailsFragment) | undefined | null
-  loading: boolean
+  project: ProjectPageBodyFragment | undefined | null
 }
 
-export const useProjectForm = ({ isEdit, project, loading }: UseProjectFormProps) => {
-  const { user } = useAuthContext()
-
+export const useProjectForm = ({ isEdit, project }: UseProjectFormProps) => {
   const form = useForm<ProjectCreationVariables>({
     resolver: yupResolver(schema) as any,
     reValidateMode: 'onChange',
-    shouldUnregister: true,
-    defaultValues: useMemo(() => {
-      if (isEdit && project && !loading) {
+    defaultValues: DEFAULT_VALUES,
+    values: useMemo(() => {
+      if (isEdit && project) {
         return {
           title: project.title,
           name: project.name,
@@ -109,8 +104,8 @@ export const useProjectForm = ({ isEdit, project, loading }: UseProjectFormProps
         }
       }
 
-      return { ...DEFAULT_VALUES, email: user.email || '' }
-    }, [isEdit, project, user, loading]),
+      return { ...DEFAULT_VALUES }
+    }, [isEdit, project]),
   })
 
   return form

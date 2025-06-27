@@ -103,6 +103,18 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     promotionsEnabled
     followersCount
     rejectionReason
+    fundingStrategy
+    lastCreationStep
+    category
+    subCategory
+    links
+    location {
+      ...ProjectLocation
+    }
+    tags {
+      id
+      label
+    }
     keys {
       ...ProjectKeys
     }
@@ -114,23 +126,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     }
     paymentMethods {
       ...ProjectPaymentMethods
-    }
-  }
-`
-
-export const FRAGMENT_PROJECT_PAGE_DETAILS = gql`
-  fragment ProjectPageDetails on Project {
-    id
-    name
-    category
-    subCategory
-    links
-    location {
-      ...ProjectLocation
-    }
-    tags {
-      id
-      label
     }
   }
 `

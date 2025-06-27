@@ -61,10 +61,9 @@ export const ShowCurrentShippingConfig = ({
           width: '100%',
         }}
       >
-        <VStack w="full" maxWidth="622px">
+        <VStack w="full" maxWidth={`calc(100% - 112px)`}>
           <VStack
             w="full"
-            maxWidth="622px"
             alignItems="flex-start"
             spacing={4}
             padding={5}

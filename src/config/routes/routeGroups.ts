@@ -17,9 +17,6 @@ export const routeMatchForAtom =
   }
 
 export const projectCreationRoutesThatNeedStory = [
-  getPath('launchProjectRewards', PathName.projectId),
-  getPath('launchProjectRewardsCreate', PathName.projectId),
-  getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardId),
   getPath('launchPayment', PathName.projectId),
   getPath('launchProjectStrategy', PathName.projectId),
 ]

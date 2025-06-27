@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { PiFlag } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
-import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
@@ -27,9 +26,7 @@ export const Details = () => {
   const { t } = useTranslation()
   const { loading, project } = useProjectAtom()
 
-  const { queryProjectDetails } = useProjectDetailsAPI(true)
-
-  if (loading || queryProjectDetails.loading) {
+  if (loading) {
     return null
   }
 

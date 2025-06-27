@@ -89,6 +89,10 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('launchProjectFunding', PathName.projectId),
+        element: <Navigate to={PathName.launchFundingStrategy} />,
+      },
+      {
         path: getPath('launchFundingStrategy', PathName.projectId),
         async lazy() {
           const LaunchFundingStrategy = await ProjectLaunch().then((m) => m.LaunchFundingStrategy)
@@ -96,48 +100,55 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
-        path: getPath('launchProjectRewards', PathName.projectId),
+        path: getPath('launchFundingGoal', PathName.projectId),
         async lazy() {
-          const LaunchProducts = await ProjectLaunch().then((m) => m.LaunchProducts)
-          return { Component: LaunchProducts }
+          const LaunchFundingGoal = await ProjectLaunch().then((m) => m.LaunchFundingGoal)
+          return { Component: LaunchFundingGoal }
         },
       },
       // {
       //   path: getPath('launchProjectRewards', PathName.projectId),
       //   async lazy() {
-      //     const ProjectCreateRewards = await ProjectLaunch().then((m) => m.ProjectCreateRewards)
-      //     return { Component: ProjectCreateRewards }
+      //     const LaunchProducts = await ProjectLaunch().then((m) => m.LaunchProducts)
+      //     return { Component: LaunchProducts }
       //   },
-      //   children: [
-      //     {
-      //       index: true,
-      //       async lazy() {
-      //         const ProjectCreateRewardMain = await ProjectLaunch().then((m) => m.ProjectCreateRewardMain)
-      //         return { Component: ProjectCreateRewardMain }
-      //       },
-      //     },
-      //     {
-      //       path: getPath('launchProjectRewardsCreate', PathName.projectId),
-      //       async lazy() {
-      //         const ProjectCreationCreateReward = await ProjectLaunch().then((m) => m.ProjectCreationCreateReward)
-      //         return { Component: ProjectCreationCreateReward }
-      //       },
-      //     },
-      //     {
-      //       path: getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardUUID),
-      //       async lazy() {
-      //         const ProjectCreationEditReward = await ProjectLaunch().then((m) => m.ProjectCreationEditReward)
-      //         return { Component: ProjectCreationEditReward }
-      //       },
-      //     },
-      //   ],
       // },
+      {
+        path: getPath('launchProjectRewards', PathName.projectId),
+        async lazy() {
+          const ProjectCreateRewards = await ProjectLaunch().then((m) => m.ProjectCreateRewards)
+          return { Component: ProjectCreateRewards }
+        },
+        children: [
+          {
+            index: true,
+            async lazy() {
+              const ProjectCreateRewardMain = await ProjectLaunch().then((m) => m.ProjectCreateRewardMain)
+              return { Component: ProjectCreateRewardMain }
+            },
+          },
+          {
+            path: getPath('launchProjectRewardsCreate', PathName.projectId),
+            async lazy() {
+              const ProjectCreationCreateReward = await ProjectLaunch().then((m) => m.ProjectCreationCreateReward)
+              return { Component: ProjectCreationCreateReward }
+            },
+          },
+          {
+            path: getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardUUID),
+            async lazy() {
+              const ProjectCreationEditReward = await ProjectLaunch().then((m) => m.ProjectCreationEditReward)
+              return { Component: ProjectCreationEditReward }
+            },
+          },
+        ],
+      },
 
       {
         path: getPath('launchStory', PathName.projectId),
         async lazy() {
-          const ProjectCreateStory = await ProjectLaunch().then((m) => m.ProjectCreateStory)
-          return { Component: ProjectCreateStory }
+          const LaunchStory = await ProjectLaunch().then((m) => m.LaunchStory)
+          return { Component: LaunchStory }
         },
       },
 

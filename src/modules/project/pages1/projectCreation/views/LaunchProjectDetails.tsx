@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
-import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { Country, ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
+import { Country, ProjectCategory, ProjectCreationStep, ProjectSubCategory } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
 import { useAuthContext } from '../../../../../context'
@@ -27,18 +26,17 @@ export const LaunchProjectDetails = () => {
   const { queryCurrentUser } = useAuthContext()
 
   const isEdit = params.projectId ? params.projectId !== 'new' : false
-  const projectId = isEdit ? Number(params.projectId) : undefined
 
   const { project, loading } = useProjectAtom()
+
+  const exitModal = useModal()
 
   const form = useProjectForm({
     isEdit,
     project,
-    loading,
   })
 
-  const { createProject, updateProject } = useProjectAPI({ load: isEdit, projectId })
-  useProjectDetailsAPI(true)
+  const { createProject, updateProject } = useProjectAPI()
 
   const onLeave = () =>
     navigate(params.projectId ? `${getPath('launchStartProject', params.projectId)}` : getPath('launchStart'))
@@ -47,22 +45,13 @@ export const LaunchProjectDetails = () => {
     hasUnsaved: form.formState.isDirty,
   })
 
-  const exitModal = useModal()
+  const onSubmit = async ({ category, subCategory, location, tags, ...values }: ProjectCreationVariables) => {
+    console.log('checking is direty', form.formState.isDirty)
 
-  const onBackClick = () => {
-    if (form.formState.isDirty) {
-      return unsavedModal.onOpen({
-        onLeave,
-      })
-    }
-
-    onLeave()
-  }
-
-  const onSubmit = async ({ category, subCategory, location, tags, links, ...values }: ProjectCreationVariables) => {
     if (isEdit && project.id) {
       if (!form.formState.isDirty) {
         navigate(getPath('launchFundingStrategy', project.id))
+        return
       }
 
       updateProject.execute({
@@ -72,8 +61,7 @@ export const LaunchProjectDetails = () => {
             category: category as ProjectCategory,
             subCategory: subCategory as ProjectSubCategory,
             countryCode: location as Country['code'],
-            links,
-            // tagIds: tags,
+            tagIds: tags,
             ...values,
           },
         },
@@ -92,16 +80,22 @@ export const LaunchProjectDetails = () => {
         variables: {
           input: {
             ...values,
-            // country: values.location,
-            // category: category as ProjectCategory,
-            // subCategory: subCategory as ProjectSubCategory,
-            // TODO: Remove email
-            description: '',
-            email: 'sajal@geyser.fund',
+            countryCode: location as Country['code'],
+            category: category as ProjectCategory,
+            subCategory: subCategory as ProjectSubCategory,
+            tagIds: tags,
           },
         },
         onCompleted({ createProject }) {
           queryCurrentUser()
+          updateProject.execute({
+            variables: {
+              input: {
+                projectId: createProject.id,
+                lastCreationStep: ProjectCreationStep.FundingType,
+              },
+            },
+          })
           navigate(getPath('launchFundingStrategy', createProject.id))
         },
         onError(error) {
@@ -120,6 +114,20 @@ export const LaunchProjectDetails = () => {
     type: 'submit' as const,
   }
 
+  const onBackClick = () => {
+    if (form.formState.isDirty) {
+      return unsavedModal.onOpen({
+        onLeave,
+      })
+    }
+
+    onLeave()
+  }
+
+  const backButtonProps = {
+    onClick: isEdit ? exitModal.onOpen : onBackClick,
+  }
+
   return (
     <form
       onSubmit={form.handleSubmit(onSubmit, (errors) => {
@@ -129,7 +137,7 @@ export const LaunchProjectDetails = () => {
       <ProjectCreationLayout
         title={t('Project details')}
         continueButtonProps={continueProps}
-        backButtonProps={{ onClick: onBackClick }}
+        backButtonProps={backButtonProps}
       >
         <VStack width="100%" alignItems="flex-start" spacing={6}>
           <ProjectForm form={form} isEdit={isEdit} />

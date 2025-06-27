@@ -1,7 +1,8 @@
 import { ProjectCreationWalletConnectionForm } from '../../forms/ProjectCreationWalletConnectionForm.tsx'
 import { ProjectCreationContainer } from './ProjectCreationContainer.tsx'
+import { LaunchFundingGoal } from './views/fundingStrategy/LaunchFundingGoal.tsx'
+import { LaunchFundingStrategy } from './views/fundingStrategy/LaunchFundingStrategy.tsx'
 import { LaunchAboutYou } from './views/LaunchAboutYou.tsx'
-import { LaunchFundingStrategy } from './views/LaunchFundingStrategy.tsx'
 import { LaunchPayment } from './views/LaunchPayment.tsx'
 import { LaunchProducts } from './views/LaunchProducts.tsx'
 import { LaunchProjectDetails } from './views/LaunchProjectDetails.tsx'
@@ -19,6 +20,7 @@ import { ProjectCreationEditReward } from './views/rewards/views/ProjectCreation
 
 export {
   LaunchAboutYou,
+  LaunchFundingGoal,
   LaunchFundingStrategy,
   LaunchPayment,
   LaunchProducts,

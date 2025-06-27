@@ -15,7 +15,7 @@ export const useMustHaveProjectStory = () => {
 
   useEffect(() => {
     if (isCreationRouteThatNeedsStory && !loading && !project.description) {
-      navigate(getPath('launchProjectStory', project?.id), { replace: true })
+      navigate(getPath('launchStory', project?.id), { replace: true })
     }
   }, [isCreationRouteThatNeedsStory, loading, project?.description, project?.id, navigate])
 }

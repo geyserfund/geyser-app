@@ -14,6 +14,7 @@ import { getPath } from '@/shared/constants/index.ts'
 import { useFollowProject } from '@/shared/hooks/graphqlState'
 import { useProjectGoalQuery } from '@/types'
 
+import { GoalModal } from '../../components/GoalModal.tsx'
 import { PostsUpdates } from '../../components/PostsUpdates'
 import { useGoalsModal } from '../../hooks'
 import { FollowButton } from '../body/components'
@@ -114,6 +115,7 @@ export const GoalView = () => {
       <BottomNavBarContainer direction="column">
         <GoalContributeButton projectGoalId={goal.id} isNavButton displayOnMobile />
       </BottomNavBarContainer>
+      <GoalModal />
     </VStack>
   )
 }

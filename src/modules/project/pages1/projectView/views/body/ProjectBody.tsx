@@ -5,10 +5,12 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { RightSideStickyLayout } from '@/modules/project/components/RightSideStickyLayout'
 import { ProjectPreLaunchNav } from '@/modules/project/navigation/components/ProjectPreLaunchNav.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
+import { GoalModal } from '../../components/GoalModal.tsx'
 import { BodySectionPageBottomBar } from './components/BodySectionPageBottomBar'
 import {
   ContributionSummary,
@@ -31,6 +33,10 @@ export const ProjectBody = () => {
 
   const location = useLocation()
   const navigate = useNavigate()
+
+  const onGoalCreated = () => {
+    navigate(getPath('projectGoals', project.name))
+  }
 
   useEffect(() => {
     if (loading) return
@@ -85,6 +91,7 @@ export const ProjectBody = () => {
       </RightSideStickyLayout>
 
       <BodySectionPageBottomBar />
+      <GoalModal onGoalCreated={onGoalCreated} />
     </Stack>
   )
 }

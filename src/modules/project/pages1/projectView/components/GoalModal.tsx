@@ -26,13 +26,14 @@ import { ProjectGoalCurrency, ProjectGoalStatus } from '../../../../../types'
 import { useProjectAtom } from '../../../hooks/useProjectAtom'
 import { useGoalsModal } from '../hooks/useGoalsModal'
 import { useProjectGoalForm } from '../hooks/useProjectGoalForm'
+import { GoalDeleteModal } from './GoalDeleteModal.tsx'
 
 const denominationOptions = [
   { value: ProjectGoalCurrency.Btcsat, label: 'Bitcoin' },
   { value: ProjectGoalCurrency.Usdcent, label: 'USD' },
 ]
 
-export const GoalModal = () => {
+export const GoalModal = ({ onGoalCreated }: { onGoalCreated?: () => void }) => {
   const { t } = useTranslation()
 
   const { project } = useProjectAtom()
@@ -43,6 +44,7 @@ export const GoalModal = () => {
     goal: currentGoal,
     projectId: project.id,
     onClose: onGoalModalClose,
+    onGoalCreated,
   })
   const isCompleted = currentGoal && currentGoal.status === ProjectGoalStatus.Completed
 
@@ -93,10 +95,6 @@ export const GoalModal = () => {
         )}
       </VStack>
     )
-  }
-
-  if (!isGoalModalOpen) {
-    return null
   }
 
   return (
@@ -200,6 +198,7 @@ export const GoalModal = () => {
           </ModalBody>
         </ModalContent>
       </Modal>
+      <GoalDeleteModal />
     </>
   )
 }

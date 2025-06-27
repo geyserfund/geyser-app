@@ -4,12 +4,7 @@ import { useCallback } from 'react'
 import { authUserAtom, followedProjectsAtom } from '@/modules/auth/state/authAtom.ts'
 import { toInt } from '@/utils'
 
-import {
-  ProjectGrantApplicantFragment,
-  ProjectHeaderSummaryFragment,
-  ProjectPageBodyFragment,
-  ProjectPageDetailsFragment,
-} from '../../../types'
+import { ProjectGrantApplicantFragment, ProjectHeaderSummaryFragment, ProjectPageBodyFragment } from '../../../types'
 import { resetRewardsAtom } from '../pages1/projectDashboard/views/sales/state/rewardsAtom'
 import { resetSourceResourceAtom } from '../pages1/projectView/state/sourceActivityAtom.ts'
 import { contributionAtomReset } from './contributionsAtom'
@@ -23,8 +18,7 @@ import { walletAtomReset } from './walletAtom'
 import { resetIsWidgetAtom } from './widgetAtom.ts'
 
 export type ProjectState = ProjectPageBodyFragment &
-  ProjectHeaderSummaryFragment &
-  ProjectPageDetailsFragment & {
+  ProjectHeaderSummaryFragment & {
     promotionsEnabled?: boolean | null
     grantApplications?: ProjectGrantApplicantFragment[]
   }

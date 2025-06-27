@@ -4,6 +4,8 @@ import { PiInfo } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
 
+import { BodyProps } from '../typography/Body.tsx'
+
 export interface FieldContainerProps extends Omit<StackProps, 'title'> {
   title?: ReactNode
   subtitle?: ReactNode
@@ -13,7 +15,7 @@ export interface FieldContainerProps extends Omit<StackProps, 'title'> {
   boldTitle?: boolean
   boldSubtitle?: boolean
   required?: boolean
-  size?: 'sm' | 'md' | 'lg'
+  size?: BodyProps['size']
 }
 
 export const FieldContainer = ({
@@ -25,7 +27,7 @@ export const FieldContainer = ({
   error = null,
   boldTitle = false,
   boldSubtitle = false,
-  size = 'md',
+  size = 'lg',
   ...props
 }: FieldContainerProps) => {
   return (

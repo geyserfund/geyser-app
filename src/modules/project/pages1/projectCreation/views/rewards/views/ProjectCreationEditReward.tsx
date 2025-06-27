@@ -22,6 +22,7 @@ export const ProjectCreationEditReward = () => {
       w="full"
       backgroundColor={{ base: 'neutral.0', lg: 'inherit' }}
       spacing={{ base: '10px', lg: '20px' }}
+      paddingBottom={'120px'}
     >
       <ProjectRewardForm
         buttonText={t('Update Product')}

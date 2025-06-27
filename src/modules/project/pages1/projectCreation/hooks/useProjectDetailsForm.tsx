@@ -9,17 +9,20 @@ export const useProjectDetailsForm = () => {
     updateProject,
   })
 
-  const { isDirty: areTagsDirty, saveTags, loading: tagsLoading, setTags, tags } = useProjectTagsState()
+  // const { isDirty: areTagsDirty, saveTags, loading: tagsLoading, setTags, tags } = useProjectTagsState()
 
   return {
     project,
-    tagsLoading,
+    // tagsLoading,
     updateProject,
     saveProject,
-    saveTags,
-    setTags,
-    tags,
-    isDirty: Boolean(areTagsDirty || isDirty),
+    // saveTags,
+    // setTags,
+    // tags,
+    isDirty: Boolean(
+      // areTagsDirty
+      isDirty,
+    ),
     setLinks,
     linkError,
     saving,

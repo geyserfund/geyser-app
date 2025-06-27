@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Icon } from '@chakra-ui/react'
+import { Button, ButtonProps, Icon, StackProps } from '@chakra-ui/react'
 import { VStack } from '@chakra-ui/react'
 import { HStack } from '@chakra-ui/react'
 import { t } from 'i18next'
@@ -7,26 +7,46 @@ import { PiArrowLeft, PiArrowRight, PiEye } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { H1 } from '@/shared/components/typography/Heading.tsx'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 
 type ProjectCreationLayoutProps = PropsWithChildren<{
   title: string
   continueButtonProps?: ButtonProps
   backButtonProps?: ButtonProps
-}>
+  removeBottomContainer?: boolean
+  buttonContainerProps?: StackProps
+}> &
+  StackProps
 
 export const ProjectCreationLayout = ({
   children,
   title,
   continueButtonProps,
   backButtonProps,
+  removeBottomContainer,
+  buttonContainerProps,
+  ...rest
 }: ProjectCreationLayoutProps) => {
   const navigate = useNavigate()
   return (
-    <VStack flex={1} gap={8} paddingBottom={20} position="relative">
+    <VStack
+      flex={1}
+      gap={8}
+      position="relative"
+      maxWidth={{ base: '100%', lg: '652px' }}
+      minHeight={{
+        base: `calc(100vh - ${dimensions.topNavBar.mobile.height}px)`,
+        lg: `calc(100vh - ${dimensions.topNavBar.desktop.height}px)`,
+      }}
+      {...rest}
+    >
       <HStack w="full" justifyContent="space-between">
-        <H1 fontSize="2xl" medium>
-          {title}
-        </H1>
+        <VStack>
+          <H1 fontSize="2xl" medium>
+            {title}
+          </H1>
+        </VStack>
+
         <HStack>
           <Button variant="ghost" leftIcon={<Icon as={PiEye} />}>
             {t('View preview')}
@@ -34,7 +54,18 @@ export const ProjectCreationLayout = ({
         </HStack>
       </HStack>
       {children}
-      <HStack w="full" justifyContent="space-between" paddingTop={8}>
+      <HStack
+        w="full"
+        justifyContent="space-between"
+        paddingTop={4}
+        paddingBottom={20}
+        display={removeBottomContainer ? 'none' : 'flex'}
+        //  paddingY={8} zIndex={1} position="sticky" bottom={0}
+        bg="white"
+        alignItems="flex-end"
+        flex={1}
+        {...buttonContainerProps}
+      >
         <Button
           width="200px"
           size="lg"

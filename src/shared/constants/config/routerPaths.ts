@@ -54,7 +54,9 @@ export enum PathName {
   launchStart = 'start',
   launchProject = 'launch',
   launchProjectDetails = 'details',
-  launchFundingStrategy = 'funding',
+  launchProjectFunding = 'funding',
+  launchFundingStrategy = 'strategy',
+  launchFundingGoal = 'goal',
   launchStory = 'story',
   launchProjectRewards = 'rewards',
   launchProjectRewardsNew = 'rewards/new',
@@ -302,8 +304,13 @@ const pathsMap = {
 
   launchProjectDetails: (projectID?: string) =>
     `/${PathName.launchProject}/${projectID || 'new'}/${PathName.launchProjectDetails}`,
+  launchProjectFunding: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectFunding}`,
   launchFundingStrategy: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchFundingStrategy}`,
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectFunding}/${PathName.launchFundingStrategy}`,
+  launchFundingGoal: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectFunding}/${PathName.launchFundingGoal}`,
+
   launchProjectRewards: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}`,
   launchProjectRewardsCreate: (projectID: string) =>

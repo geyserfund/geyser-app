@@ -14,6 +14,7 @@ import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 import { toInt } from '@/utils'
 
+import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
 import { ProjectCreationNavigationDesktop } from './components/ProjectCreationNavigation.tsx'
 import { useMustHaveProjectStory } from './hooks/useMustHaveProjectStory.tsx'
 
@@ -34,9 +35,11 @@ const listOfAtoms = [
 export const ProjectCreationContainer = () => {
   const { projectId } = useParams<{ projectId: string }>()
 
+  const isProjectId = projectId && projectId !== 'new'
+
   return (
     <ScopeProvider atoms={listOfAtoms}>
-      <ProjectProvider projectId={toInt(projectId)}>
+      <ProjectProvider projectId={isProjectId ? toInt(projectId) : undefined}>
         <ProjectCreationContainerContent />
       </ProjectProvider>
     </ScopeProvider>
@@ -45,6 +48,13 @@ export const ProjectCreationContainer = () => {
 
 const ProjectCreationContainerContent = () => {
   useMustHaveProjectStory()
+
+  // const { loading } = useProjectAtom()
+
+  // if (loading) {
+  //   return null
+  // }
+
   return (
     <VStack width="100%" height="100%" paddingX={standardPadding} alignItems="center">
       <HStack
@@ -56,7 +66,7 @@ const ProjectCreationContainerContent = () => {
         position="relative"
       >
         <ProjectCreationNavigationDesktop />
-        <Box flex={1} maxWidth="100%">
+        <Box flex={1} maxWidth="100%" height="100%">
           <Outlet />
         </Box>
         <Box minWidth="150px" display={{ base: 'none', xl: 'block' }} />

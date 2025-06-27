@@ -15,14 +15,12 @@ import { CSS } from '@dnd-kit/utilities'
 import { useSetAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
 import { inProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
 
 import { ProjectGoalFragment, useProjectGoalOrderingUpdateMutation } from '../../../../../../../types'
 import { useGoalsAtom, useProjectAtom } from '../../../../../hooks/useProjectAtom'
@@ -30,12 +28,15 @@ import { useGoalsModal } from '../../../hooks/useGoalsModal'
 import { useProjectDefaultGoal } from '../../body/hooks/useProjectDefaultGoal'
 import { GoalCompleted, GoalInProgress } from '../components'
 
-export const RenderGoals = () => {
+type RenderGoalsProps = {
+  onNoGoals?: () => void
+  creationMode?: boolean
+}
+
+export const RenderGoals = ({ onNoGoals, creationMode }: RenderGoalsProps) => {
   const { t } = useTranslation()
 
   const { project, loading: projectLoading } = useProjectAtom()
-
-  const navigate = useNavigate()
 
   const { queryInProgressGoals, queryCompletedGoals } = useProjectGoalsAPI(true)
 
@@ -128,14 +129,14 @@ export const RenderGoals = () => {
 
     if (!loading && !hasInProgressGoals && !hasCompletedGoals) {
       number = setInterval(() => {
-        navigate(getPath('project', project.name))
+        onNoGoals?.()
       }, 500)
     }
 
     return () => {
       clearInterval(number)
     }
-  }, [loading, hasInProgressGoals, hasCompletedGoals, navigate, project])
+  }, [loading, hasInProgressGoals, hasCompletedGoals, onNoGoals])
 
   if (loading) {
     return <RenderGoalsSkeleton />
@@ -145,9 +146,11 @@ export const RenderGoals = () => {
     <VStack width="100%" alignItems="flex-start" spacing={6}>
       {hasInProgressGoals && (
         <VStack alignItems="flex-start" spacing={4} width="100%">
-          <Body size="2xl" bold>
-            {t('Goals')}
-          </Body>
+          {!creationMode && (
+            <Body size="2xl" bold>
+              {t('Goals')}
+            </Body>
+          )}
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -160,7 +163,7 @@ export const RenderGoals = () => {
                 <SortableItem
                   key={goal.id}
                   goal={goal}
-                  editMode={isGoalinEditMode}
+                  editMode={isGoalinEditMode || Boolean(creationMode)}
                   handleEditGoalModalOpen={handleEditGoalModalOpen}
                   isPriorityGoal={goal.id === priorityGoal?.id}
                 />

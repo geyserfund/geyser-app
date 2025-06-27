@@ -3,6 +3,7 @@ import { Loader } from '@giphy/react-components'
 import { useTranslation } from 'react-i18next'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 
 import { ProjectRewardForm } from '../shared'
 
@@ -15,8 +16,10 @@ export const RewardCreate = () => {
   }
 
   return (
-    <VStack w="full" paddingBottom="120px">
-      <ProjectRewardForm buttonText={t('Publish Product')} titleText={t('Create Product')} isUpdate={false} />
+    <VStack paddingBottom={'120px'}>
+      <CardLayout w="auto">
+        <ProjectRewardForm buttonText={t('Publish Product')} titleText={t('Create Product')} isUpdate={false} />
+      </CardLayout>
     </VStack>
   )
 }

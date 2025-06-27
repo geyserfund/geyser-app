@@ -57,10 +57,10 @@ type UseProjectGoalFormProps = {
   goal: ProjectGoalFragment | null
   projectId: string
   onClose: () => void
+  onGoalCreated?: () => void
 }
 
-export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalFormProps) => {
-  const navigate = useNavigate()
+export const useProjectGoalForm = ({ goal, projectId, onClose, onGoalCreated }: UseProjectGoalFormProps) => {
   const toast = useNotification()
 
   let isBTC = goal?.currency === ProjectGoalCurrency.Btcsat
@@ -151,7 +151,7 @@ export const useProjectGoalForm = ({ goal, projectId, onClose }: UseProjectGoalF
             toast.success({
               title: 'Successfully created project goal!',
             })
-            navigate(PathName.projectGoals)
+            onGoalCreated?.()
           },
         })
       }

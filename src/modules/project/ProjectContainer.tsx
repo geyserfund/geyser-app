@@ -9,7 +9,7 @@ import { FollowProjectModal } from './components/FollowProjectModal.tsx'
 import { useFundingFlowCleanup } from './hooks/useFollowOnBackModal.ts'
 import { useProjectAtom, useRewardsAtom } from './hooks/useProjectAtom'
 import { ProjectNavigation } from './navigation/ProjectNavigation'
-import { GoalDeleteModal, GoalModal, ProjectCreateModal } from './pages1/projectView/components'
+import { ProjectCreateModal } from './pages1/projectView/components'
 import { buildProjectJsonLd } from './tools/generateProjectJsonLD.ts'
 
 export const ProjectContainer = () => {
@@ -56,8 +56,6 @@ export const ProjectContainer = () => {
       </VStack>
       <ProjectCreateModal />
       <FollowProjectModal />
-      <GoalModal />
-      <GoalDeleteModal />
     </Box>
   )
 }

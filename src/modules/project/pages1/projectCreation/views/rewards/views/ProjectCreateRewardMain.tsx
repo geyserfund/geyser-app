@@ -80,7 +80,7 @@ export const ProjectCreateRewardMain = () => {
       </Box>
 
       {hasRewards && (
-        <Box width="100%" display={'flex'} flexDirection={'column'} gap={2} pb={10}>
+        <Box width="100%" display={'flex'} flexDirection={'column'} gap={2}>
           <Body medium>{t('Products')}</Body>
           <ProjectCreationRewards />
         </Box>

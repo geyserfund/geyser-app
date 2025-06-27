@@ -46,7 +46,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
   const { formState, setValue, watch, setError, control, clearErrors } = form
 
-  console.log(formState.errors.images)
+  console.log(form.watch('name'))
 
   const [getProject] = useProjectByNameForNameCheckLazyQuery({
     onCompleted(data) {

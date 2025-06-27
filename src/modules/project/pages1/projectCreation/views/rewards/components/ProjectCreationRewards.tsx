@@ -26,21 +26,19 @@ export const ProjectCreationRewards = () => {
   }
 
   return (
-    <>
-      <CardLayout
-        id={ID.project.rewards.container}
-        width="100%"
-        flexDirection="column"
-        alignItems="flex-start"
-        spacing="25px"
-        dense
-        noborder
-        p={0}
-      >
-        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={'20px'} width={'100%'}>
-          {renderRewards()}
-        </SimpleGrid>
-      </CardLayout>
-    </>
+    <CardLayout
+      id={ID.project.rewards.container}
+      width="100%"
+      flexDirection="column"
+      alignItems="flex-start"
+      spacing="25px"
+      dense
+      noborder
+      p={0}
+    >
+      <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4} width={'100%'}>
+        {renderRewards()}
+      </SimpleGrid>
+    </CardLayout>
   )
 }

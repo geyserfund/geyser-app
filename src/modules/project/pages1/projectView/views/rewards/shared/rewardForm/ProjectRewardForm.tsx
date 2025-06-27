@@ -82,11 +82,21 @@ export const ProjectRewardForm = ({
   }
 
   if (rewardLoading) {
-    return <Loader />
+    return (
+      <VStack
+        justifyContent="start"
+        width={{ base: '100%', lg: isLaunch ? '100%' : '720px' }}
+        height="100%"
+        alignItems="center"
+        spacing={{ base: 6, lg: 10 }}
+      >
+        <Loader />
+      </VStack>
+    )
   }
 
   return (
-    <form style={{ width: '100%' }} onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       {!isLaunch && (
         <TopNavContainerBar>
           <BackButton />
@@ -105,22 +115,13 @@ export const ProjectRewardForm = ({
           </Button>
         </TopNavContainerBar>
       )}
-      <CardLayout
-        minWidth="100%"
+      <VStack
         justifyContent="center"
+        maxWidth={{ base: '100%', lg: isLaunch ? '100%' : '720px' }}
         alignItems="center"
-        bg={isLaunch ? 'transparent' : 'neutralAlpha.1'}
-        border={isLaunch ? 'none' : '1px solid'}
         spacing={{ base: 6, lg: 10 }}
-        mobileDense
       >
-        <VStack
-          width={'100%'}
-          maxWidth={{ base: '100%', lg: isLaunch ? '100%' : '75%' }}
-          alignItems="start"
-          justifyContent="center"
-          gap={6}
-        >
+        <VStack width={'100%'} alignItems="start" justifyContent="center" gap={6}>
           <Body size="lg" fontWeight={600}>
             {t(titleText)}
           </Body>
@@ -238,13 +239,7 @@ export const ProjectRewardForm = ({
             </VStack>
           </FormElementWithSwitch>
         </VStack>
-        <VStack
-          width={'100%'}
-          maxWidth={{ base: '100%', lg: isLaunch ? '100%' : '75%' }}
-          alignItems="start"
-          justifyContent="center"
-          gap={6}
-        >
+        <VStack width={'100%'} alignItems="start" justifyContent="center" gap={6}>
           <Body size="lg" fontWeight={600}>
             {t('Additional configuration')}
           </Body>
@@ -400,7 +395,7 @@ export const ProjectRewardForm = ({
             </Stack>
           )}
         </VStack>
-      </CardLayout>
+      </VStack>
 
       <UpdateCurrencyModal
         isOpen={currencyChangeModal.isOpen}

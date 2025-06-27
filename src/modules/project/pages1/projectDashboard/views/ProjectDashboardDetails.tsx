@@ -2,11 +2,10 @@ import { Button, ButtonProps, VStack } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
-import { useProjectDetailsAPI } from '@/modules/project/API/useProjectDetailsAPI'
-import { SelectProjectCategory } from '@/modules/project/forms/ProjectCategory.tsx'
-import { ProjectLinks } from '@/modules/project/forms/ProjectLinks'
-import { ProjectRegion } from '@/modules/project/forms/ProjectRegion'
-import { ProjectTagsCreateEdit } from '@/modules/project/forms/ProjectTagsCreateEdit'
+// import { SelectProjectCategory } from '@/modules/project/forms/ProjectCategory.tsx'
+// import { ProjectLinks } from '@/modules/project/forms/ProjectLinks'
+// import { ProjectRegion } from '@/modules/project/forms/ProjectRegion'
+// import { ProjectTagsCreateEdit } from '@/modules/project/forms/ProjectTagsCreateEdit'
 import { projectFormErrorAtom } from '@/modules/project/state/projectFormAtom'
 import { useNotification } from '@/utils'
 
@@ -19,10 +18,15 @@ export const ProjectDashboardDetails = () => {
   const { t } = useTranslation()
   const toast = useNotification()
 
-  useProjectDetailsAPI(true)
-
-  const { project, isDirty, linkError, saveProject, saving, saveTags, setLinks, setTags, tags, updateProject } =
-    useProjectDetailsForm()
+  const {
+    project,
+    isDirty,
+    linkError,
+    saveProject,
+    saving,
+    // saveTags,
+    //  setLinks, setTags, tags, updateProject
+  } = useProjectDetailsForm()
   const setProjectFormError = useSetAtom(projectFormErrorAtom)
 
   const unsavedModal = useProjectUnsavedModal({
@@ -75,7 +79,7 @@ export const ProjectDashboardDetails = () => {
 
       try {
         await saveProject()
-        await saveTags()
+        // await saveTags()
         toast.success({
           title: 'Project updated successfully!',
         })
@@ -110,14 +114,14 @@ export const ProjectDashboardDetails = () => {
         width="full"
       >
         <VStack w="100%" spacing={6} flexGrow={1} px={{ base: 0, lg: 6 }}>
-          <SelectProjectCategory
+          {/* <SelectProjectCategory
             category={project?.category}
             subCategory={project?.subCategory}
             updateProject={updateProject}
           />
           <ProjectRegion location={project?.location} updateProject={updateProject} />
           <ProjectLinks links={(project?.links as string[]) || []} setLinks={setLinks} linkError={linkError} />
-          <ProjectTagsCreateEdit tags={tags} updateTags={setTags} />
+          <ProjectTagsCreateEdit tags={tags} updateTags={setTags} /> */}
         </VStack>
         <ProjectUnsavedModal {...unsavedModal} />
       </DashboardLayout>

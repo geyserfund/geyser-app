@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Outlet, useMatch, useNavigate } from 'react-router-dom'
 
@@ -9,6 +10,7 @@ import { getPath, PathName } from '../../../../../../shared/constants'
 import { FormContinueButton } from '../../components/FormContinueButton'
 import { ProjectCreateLayout } from '../../components/ProjectCreateLayout'
 import { useLocationMandatoryRedirect } from '../../hooks/useLocationMandatoryRedirect'
+import { ProjectCreationLayout } from '../../Layouts/ProjectCreationLayout.tsx'
 
 export const ProjectCreateRewards = () => {
   const { t } = useTranslation()
@@ -26,7 +28,7 @@ export const ProjectCreateRewards = () => {
   const isCreatingOrEditing = isNew || isEdit
 
   const handleNext = () => {
-    navigate(getPath('launchProjectWallet', project?.id))
+    navigate(getPath('launchStory', project?.id))
   }
 
   const handleBack = () => {
@@ -34,23 +36,27 @@ export const ProjectCreateRewards = () => {
       return navigate(-1)
     }
 
-    navigate(getPath('launchProjectStory', project?.id))
+    navigate(getPath('launchFundingGoal', project?.id))
   }
 
   const noRewards = rewards?.length === 0
 
+  const continueProps = {
+    onClick: handleNext,
+  }
+
+  const backProps = {
+    onClick: handleBack,
+  }
+
   return (
-    <ProjectCreateLayout
-      title={<TitleWithProgressBar title={t('Add Products')} subtitle={t('Create a project')} index={4} length={5} />}
-      continueButton={
-        !isCreatingOrEditing && <FormContinueButton isSkip={noRewards} flexGrow={1} onClick={handleNext} />
-      }
-      isNestedProcess={Boolean(isCreatingOrEditing)}
-      onBackClick={handleBack}
-      maxW="3xl"
-      height="100%"
+    <ProjectCreationLayout
+      title={t('Products & Perks')}
+      removeBottomContainer={Boolean(isCreatingOrEditing)}
+      continueButtonProps={continueProps}
+      backButtonProps={backProps}
     >
       <Outlet />
-    </ProjectCreateLayout>
+    </ProjectCreationLayout>
   )
 }
