@@ -201,6 +201,12 @@ export const GrantPage = () => {
                     <MobileDivider />
                   </>
                 )}
+                {showGrantApply && (
+                  <>
+                    <GrantApply grant={grant} pendingApplicants={pendingApplicants} />
+                    <MobileDivider />
+                  </>
+                )}
                 {showCommunityVoting && (
                   <>
                     <CommunityVoting
@@ -215,13 +221,6 @@ export const GrantPage = () => {
                     <MobileDivider />
                   </>
                 )}
-                {showGrantApply && (
-                  <>
-                    <GrantApply grant={grant} pendingApplicants={pendingApplicants} />
-                    <MobileDivider />
-                  </>
-                )}
-
                 {showApplicationPending && pendingApplicants.length > 0 && showGrantApply && (
                   <>
                     <PendingApplications applicants={pendingApplicants} />
