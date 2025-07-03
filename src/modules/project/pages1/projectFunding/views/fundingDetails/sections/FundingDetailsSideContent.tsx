@@ -17,7 +17,7 @@ import { useNotification } from '@/utils'
 
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
-import { LaunchpadSummary, NonProfitSummary } from '../../fundingInit/sections/FundingInitSideContent.tsx'
+import { LaunchpadSummary, NonProfitSummary, TAndCs } from '../../fundingInit/sections/FundingInitSideContent.tsx'
 import { ShippingHandleSubmitType } from '../hooks/useShippingAddressForm.tsx'
 import { ShippingAddressFormData } from './FundingDetailsShippingAddress.tsx'
 
@@ -120,9 +120,7 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
         <VStack w="full" alignItems="flex-start">
           <NonProfitSummary disableMobile={true} />
           <LaunchpadSummary disableMobile={true} />
-          <Body size="sm" light>
-            {t('By continuing to checkout you are accepting our T&Cs')}
-          </Body>
+          <TAndCs disableMobile={true} />
           <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit">
             {t('Checkout')}
           </Button>

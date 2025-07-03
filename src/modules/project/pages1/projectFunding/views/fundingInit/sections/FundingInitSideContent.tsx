@@ -1,7 +1,8 @@
-import { Box, Button, Icon, StackProps, VStack } from '@chakra-ui/react'
+import { Box, Button, Icon, Link, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { FormEvent } from 'react'
+import { Trans } from 'react-i18next'
 import { PiHeartbeatFill } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
@@ -11,7 +12,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { cannotCompleteShippingForThisOrderAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
+import { getPath, GeyserTermsUrl } from '@/shared/constants'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { darkModeColors } from '@/shared/styles/colors.ts'
 import { LegalEntityType } from '@/types/index.ts'
@@ -82,15 +83,40 @@ export const FundingInitSummary = () => {
         <VStack w="full" alignItems="flex-start">
           <NonProfitSummary disableMobile={true} />
           <LaunchpadSummary disableMobile={true} />
-          <Body size="sm" light>
-            {t('By continuing to checkout you are accepting our T&Cs')}
-          </Body>
+          <TAndCs disableMobile={true} />
           <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit" isDisabled={isDisabled}>
             {t('Checkout')}
           </Button>
         </VStack>
       </FundingCheckoutWrapper>
     </VStack>
+  )
+}
+
+export const TAndCs = ({
+  disableMobile,
+  disableDesktop,
+  ...props
+}: {
+  disableMobile?: boolean
+  disableDesktop?: boolean
+} & BodyProps) => {
+  const isMobile = useMobileMode()
+
+  if ((isMobile && disableMobile) || (!isMobile && disableDesktop)) {
+    return null
+  }
+
+  return (
+    <Body size="sm" light {...props}>
+      <Trans i18nKey="By continuing to checkout you are accepting our <1>T&Cs</1>.">
+        {'By continuing to checkout you are accepting our '}
+        <Link isExternal href={GeyserTermsUrl} textDecoration={'underline'}>
+          {'T&Cs'}
+        </Link>
+        {'.'}
+      </Trans>
+    </Body>
   )
 }
 

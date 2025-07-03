@@ -11,6 +11,8 @@ import {
 
 const routesForPrivateProjectLaunchAtom = atom(routeMatchForAtom(routesForPrivateProjectLaunch))
 
+export const isProjectCreationRouteAtom = atom(routeMatchForAtom(routesForPrivateProjectLaunch))
+
 export const routesForProjectCreatorAtom = atom(routeMatchForAtom(routesForProjectCreator))
 
 export const routeMatchForProjectPageAtom = atom(routeMatchForAtom([getPath('project', PathName.projectId)]))

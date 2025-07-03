@@ -1,21 +1,32 @@
 import { Button, Divider, HStack, Menu, MenuButton, MenuItem, MenuList, Portal, VStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { PiRocketLaunch } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
+import { isProjectCreationRouteAtom } from '@/config/routes/state/privateRoutesAtom.ts'
 import { useAuthContext } from '@/context'
-import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
+import { ImageWithReload } from '@/shared/components/display/ImageWithReload.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { ProjectForOwnerFragment, ProjectStatus } from '@/types'
 import { toInt } from '@/utils'
 
+import { isProjectFundingRoutesAtom } from '../platformNavBarAtom.ts'
 import { CreateProjectButton } from './CreateProjectButton'
 
 export const ProjectSelectMenu = () => {
   const { t } = useTranslation()
 
   const { user, isUserAProjectCreator } = useAuthContext()
+
+  const isProjectFundingRoute = useAtomValue(isProjectFundingRoutesAtom)
+  const isProjectCreationRoute = useAtomValue(isProjectCreationRouteAtom)
+
+  // For funding flow and creation flow, we don't want to show the project select menu
+  if (isProjectFundingRoute || isProjectCreationRoute) {
+    return null
+  }
 
   if (!isUserAProjectCreator) {
     return <CreateProjectButton />
