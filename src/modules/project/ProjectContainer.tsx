@@ -10,10 +10,12 @@ import { useFundingFlowCleanup } from './hooks/useFollowOnBackModal.ts'
 import { useProjectAtom, useRewardsAtom } from './hooks/useProjectAtom'
 import { ProjectNavigation } from './navigation/ProjectNavigation'
 import { ProjectCreateModal } from './pages1/projectView/components'
+import { useProjectDraftRedirect } from './pages1/projectView/views/body/hooks/useProjectDraftRedirect.tsx'
 import { buildProjectJsonLd } from './tools/generateProjectJsonLD.ts'
 
 export const ProjectContainer = () => {
   useFundingFlowCleanup()
+  useProjectDraftRedirect()
 
   const { project, loading } = useProjectAtom()
   const { rewards, initialRewardsLoading } = useRewardsAtom()

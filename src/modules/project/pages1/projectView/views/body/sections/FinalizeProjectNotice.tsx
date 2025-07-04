@@ -23,7 +23,7 @@ export const FinalizeProjectNotice = () => {
     if (wallet?.id) {
       navigate(getPath('launchProjectStrategy', project.id))
     } else {
-      navigate(getPath('launchProjectWallet', project.id))
+      navigate(getPath('launchPayment', project.id))
     }
   }
 

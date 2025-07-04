@@ -64,6 +64,9 @@ export enum PathName {
   launchProjectStrategy = 'strategy',
   launchAboutYou = 'about-you',
   launchPayment = 'payment',
+  launchPaymentWallet = 'wallet',
+  launchPaymentIdentityVerification = 'identity-verification',
+  launchPaymentTaxId = 'tax-id',
   launchSummary = 'summary',
 
   userProfile = 'user',
@@ -310,7 +313,6 @@ const pathsMap = {
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectFunding}/${PathName.launchFundingStrategy}`,
   launchFundingGoal: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectFunding}/${PathName.launchFundingGoal}`,
-
   launchProjectRewards: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}`,
   launchProjectRewardsCreate: (projectID: string) =>
@@ -319,7 +321,14 @@ const pathsMap = {
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/edit/${rewardUUID}`,
   launchStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchStory}`,
   launchAboutYou: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchAboutYou}`,
+
   launchPayment: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}`,
+  launchPaymentWallet: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentWallet}`,
+  launchPaymentIdentityVerification: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentIdentityVerification}`,
+  launchPaymentTaxId: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentTaxId}`,
   launchSummary: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchSummary}`,
 
   launchProjectStrategy: (projectID: string) =>

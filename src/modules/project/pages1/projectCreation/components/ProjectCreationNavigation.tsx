@@ -19,6 +19,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
+import { ProjectCreationStep } from '@/types/index.ts'
 
 export const ProjectCreationNavigationMobile = () => {
   return (
@@ -67,6 +68,10 @@ const ProjectCreationNavigation = (props: StackProps) => {
     return activeIndex
   }, [location.pathname, steps])
 
+  const activeStepIndex = useMemo(() => {
+    return projectCreationStepIndex[project?.lastCreationStep as ProjectCreationStep]
+  }, [project?.lastCreationStep])
+
   return (
     <HStack w="150px" height="350px" alignItems={'stretch'} paddingTop={1} {...props}>
       <VStack flex={1} height="100%" justifyContent="space-between" alignItems="flex-end" paddingTop="1px">
@@ -87,7 +92,7 @@ const ProjectCreationNavigation = (props: StackProps) => {
         })}
       </VStack>
 
-      <Stepper index={0} orientation="vertical" gap="0" paddingY={2} size="xs">
+      <Stepper index={activeStepIndex} orientation="vertical" gap="0" paddingY={2} size="xs">
         {steps.map((_, index) => {
           return (
             <Step key={index} display="flex" alignItems="flex-start">
@@ -102,4 +107,42 @@ const ProjectCreationNavigation = (props: StackProps) => {
       </Stepper>
     </HStack>
   )
+}
+
+export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, projectId: string) => {
+  switch (lastCreationStep) {
+    case ProjectCreationStep.ProjectDetails:
+      return getPath('launchProjectDetails', projectId)
+    case ProjectCreationStep.FundingGoal:
+      return getPath('launchFundingGoal', projectId)
+    case ProjectCreationStep.FundingType:
+      return getPath('launchFundingStrategy', projectId)
+    case ProjectCreationStep.PerksAndProducts:
+      return getPath('launchProjectRewards', projectId)
+    case ProjectCreationStep.Story:
+      return getPath('launchStory', projectId)
+    case ProjectCreationStep.AboutYou:
+      return getPath('launchAboutYou', projectId)
+    case ProjectCreationStep.Wallet:
+      return getPath('launchPaymentWallet', projectId)
+    case ProjectCreationStep.TaxId:
+      return getPath('launchPaymentTaxId', projectId)
+    case ProjectCreationStep.IdentityVerification:
+      return getPath('launchPaymentIdentityVerification', projectId)
+
+    default:
+      return getPath('launchProjectDetails', projectId)
+  }
+}
+
+const projectCreationStepIndex = {
+  [ProjectCreationStep.ProjectDetails]: 0,
+  [ProjectCreationStep.FundingGoal]: 1,
+  [ProjectCreationStep.FundingType]: 1,
+  [ProjectCreationStep.PerksAndProducts]: 2,
+  [ProjectCreationStep.Story]: 3,
+  [ProjectCreationStep.AboutYou]: 4,
+  [ProjectCreationStep.Wallet]: 5,
+  [ProjectCreationStep.TaxId]: 5,
+  [ProjectCreationStep.IdentityVerification]: 5,
 }
