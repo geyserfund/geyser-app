@@ -15,11 +15,11 @@ import { getPath } from '../../../../../../shared/constants/index.ts'
 import { CreateWalletInput } from '../../../../../../types/index.ts'
 import { useNotification } from '../../../../../../utils/index.ts'
 import { EnableFiatContributions } from '../../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
-import { ProjectCreationWalletConnectionForm } from '../../index.ts'
 import { FormContinueButton } from '../../components/FormContinueButton.tsx'
 import { ProjectCreateLayout } from '../../components/ProjectCreateLayout.tsx'
 import { useLocationMandatoryRedirect } from '../../hooks/useLocationMandatoryRedirect.tsx'
 import { useWalletForm } from '../../hooks/useWalletForm.tsx'
+import { ProjectCreationWalletConnectionForm } from '../../index.ts'
 import {
   fiatContributionAtom,
   goToIdentityVerificationAtom,

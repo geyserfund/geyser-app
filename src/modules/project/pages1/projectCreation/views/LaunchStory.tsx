@@ -3,24 +3,20 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import Loader from '@/components/ui/Loader.tsx'
-import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
-import { ProjectStoryForm } from '@/modules/project/forms/ProjectStoryForm.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
-import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath, ProjectValidations } from '@/shared/constants/index.ts'
 import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
-import { useNotification } from '@/utils'
+import { ProjectCreationStep } from '@/types/index.ts'
 
+import { useUpdateProjectWithLastCreationStep } from '../hooks/useIsStepAhead.tsx'
 import { useProjectStoryForm } from '../hooks/useProjectStoryForm.tsx'
 import { ProjectCreationLayout } from '../Layouts/ProjectCreationLayout.tsx'
 
 export const LaunchStory = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const toast = useNotification()
 
   const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
 
@@ -28,7 +24,10 @@ export const LaunchStory = () => {
 
   const { project, loading } = useProjectAtom()
 
-  const { updateProject } = useProjectAPI()
+  const { updateProjectWithLastCreationStep, loading: updateProjectLoading } = useUpdateProjectWithLastCreationStep(
+    ProjectCreationStep.Story,
+    getPath('launchAboutYou', project.id),
+  )
 
   const form = useProjectStoryForm({ project })
 
@@ -37,7 +36,7 @@ export const LaunchStory = () => {
       return navigate(-1)
     }
 
-    navigate(getPath('launchProjectDetails', project?.id))
+    navigate(getPath('launchProjectRewards', project?.id))
   }
 
   const onBackCLick = () => {
@@ -46,29 +45,18 @@ export const LaunchStory = () => {
 
   const onSubmit = async ({ description }: { description: string }) => {
     if (project.description === description) {
-      navigate(getPath('launchAboutYou', project?.id))
+      updateProjectWithLastCreationStep()
       return
     }
 
-    updateProject.execute({
-      variables: {
-        input: { projectId: params.projectId, description },
-      },
-      onCompleted() {
-        navigate(getPath('launchAboutYou', project?.id))
-      },
-      onError(error) {
-        toast.error({
-          title: 'failed to update project story',
-          description: `${error}`,
-        })
-      },
+    updateProjectWithLastCreationStep({
+      description,
     })
   }
 
   const continueProps = {
     type: 'submit' as const,
-    isDisabled: loading || updateProject.loading,
+    isDisabled: loading || updateProjectLoading,
   }
 
   const backProps = {

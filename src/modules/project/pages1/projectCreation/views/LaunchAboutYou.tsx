@@ -1,30 +1,41 @@
-import { Avatar, HStack, Textarea, useDisclosure, VStack } from '@chakra-ui/react'
+import { Avatar, Button, ButtonProps, HStack, Icon, Textarea, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { PiCheckBold } from 'react-icons/pi'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import Loader from '@/components/ui/Loader.tsx'
 import { useAuthContext } from '@/context/auth.tsx'
-import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
-import { ProjectStoryForm } from '@/modules/project/forms/ProjectStoryForm.tsx'
+import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
+import { ConnectWithSocial } from '@/modules/auth/ConnectWithSocial.tsx'
+import { SocialAccountType } from '@/modules/auth/index.ts'
+import { SocialConfig } from '@/modules/auth/SocialConfig.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
-import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { getPath, ProjectValidations } from '@/shared/constants/index.ts'
-import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
-import { useNotification } from '@/utils'
+import { getPath } from '@/shared/constants/index.ts'
+import { ProjectCreationStep, useUpdateUserMutation } from '@/types/index.ts'
+import {
+  hasGithubAccount,
+  hasNostrAccount,
+  hasTwitterAccount,
+  toInt,
+  useCustomTheme,
+  useMobileMode,
+  useNotification,
+} from '@/utils'
 
+import { useUpdateProjectWithLastCreationStep } from '../hooks/useIsStepAhead.tsx'
 import { useProjectStoryForm } from '../hooks/useProjectStoryForm.tsx'
 import { ProjectCreationLayout } from '../Layouts/ProjectCreationLayout.tsx'
 
 export const LaunchAboutYou = () => {
-  const { t } = useTranslation()
   const navigate = useNavigate()
   const toast = useNotification()
+  const isMobile = useMobileMode()
 
-  const { user } = useAuthContext()
+  const { user, queryCurrentUser } = useAuthContext()
 
   const [aboutYou, setAboutYou] = useState(user.bio)
 
@@ -32,13 +43,14 @@ export const LaunchAboutYou = () => {
     setAboutYou(user.bio)
   }, [user.bio])
 
-  const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
-
-  const params = useParams<{ projectId: string }>()
-
   const { project, loading } = useProjectAtom()
 
-  const { updateProject } = useProjectAPI()
+  const [updateUser, { loading: updateUserLoading }] = useUpdateUserMutation()
+
+  const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
+    ProjectCreationStep.AboutYou,
+    getPath('launchPayment', project.id),
+  )
 
   const form = useProjectStoryForm({ project })
 
@@ -54,33 +66,36 @@ export const LaunchAboutYou = () => {
     onLeave()
   }
 
-  const onSubmit = async ({ description }: { description: string }) => {
-    if (project.description === description) {
-      navigate(getPath('launchAboutYou', project?.id))
+  const onSubmit = async () => {
+    if (user.bio === aboutYou) {
+      updateProjectWithLastCreationStep()
       return
     }
 
-    updateProject.execute({
+    updateUser({
       variables: {
-        input: { projectId: params.projectId, description },
+        input: {
+          id: toInt(user.id),
+          bio: aboutYou,
+        },
       },
       onCompleted() {
-        navigate(getPath('launchAboutYou', project?.id))
+        queryCurrentUser()
+        updateProjectWithLastCreationStep()
       },
       onError(error) {
         toast.error({
-          title: 'failed to update project story',
+          title: 'failed to update user bio',
           description: `${error}`,
         })
       },
     })
   }
 
-  const continueProps = {
-    type: 'submit' as const,
-    isDisabled: loading || updateProject.loading,
+  const continueProps: ButtonProps = {
+    onClick: onSubmit,
+    isLoading: updateUserLoading,
   }
-
   const backProps = {
     onClick: onBackCLick,
   }
@@ -88,6 +103,12 @@ export const LaunchAboutYou = () => {
   if (loading) {
     return <Loader />
   }
+
+  const displayNostrButton = !hasNostrAccount(user) && !isMobile
+
+  const displayTwitterButton = !hasTwitterAccount(user)
+
+  const displayGithubButton = !hasGithubAccount(user)
 
   return (
     <ProjectCreationLayout title={t('About you')} continueButtonProps={continueProps} backButtonProps={backProps}>
@@ -117,11 +138,64 @@ export const LaunchAboutYou = () => {
             padding={0}
             border="none"
             placeholder={t('Write a bit more about yourself')}
+            backgroundColor="utils.bg"
             value={aboutYou || ''}
             onChange={(e) => setAboutYou(e.target.value)}
           />
         </VStack>
       </FieldContainer>
+      <FieldContainer
+        title={t('Social Accounts')}
+        subtitle={t('Help contributors get to know you better by linking your social accounts')}
+      >
+        <VStack w="full" spacing={4} paddingTop={4} alignItems="start">
+          {displayTwitterButton ? (
+            <ConnectWithSocial maxWidth="300px" accountType={SocialAccountType.twitter} w="full" />
+          ) : (
+            <ConnectedSocialAccountButton accountType={SocialAccountType.twitter} />
+          )}
+
+          {displayGithubButton ? (
+            <ConnectWithSocial maxWidth="300px" accountType={SocialAccountType.github} w="full" />
+          ) : (
+            <ConnectedSocialAccountButton accountType={SocialAccountType.github} />
+          )}
+
+          {displayNostrButton ? (
+            <ConnectWithNostr width="100%" maxWidth="300px" />
+          ) : (
+            <ConnectedSocialAccountButton accountType={SocialAccountType.nostr} />
+          )}
+        </VStack>
+      </FieldContainer>
     </ProjectCreationLayout>
+  )
+}
+
+export const ConnectedSocialAccountButton = ({ accountType }: { accountType: SocialAccountType }) => {
+  const { colors } = useCustomTheme()
+
+  const { icon: SocialIcon, label } = SocialConfig[accountType]
+
+  const icon = <SocialIcon color={colors.social[accountType]} fontSize="20px" boxSize="20px" />
+
+  return (
+    <HStack width="100%" justifyContent="space-between">
+      <Button
+        leftIcon={icon}
+        size="lg"
+        variant="soft"
+        colorScheme="neutral1"
+        w="full"
+        maxWidth="300px"
+        _hover={{ cursor: 'default' }}
+      >
+        {label}
+      </Button>
+      <HStack>
+        <Body> {t('Connected')}</Body>
+        <Icon as={PiCheckBold} color="primary1.9" />
+      </HStack>
+    </HStack>
   )
 }

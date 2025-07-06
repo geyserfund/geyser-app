@@ -12,11 +12,8 @@ import { NostrHelpModal } from './components/NostrHelpModal'
 import { useNostrExtensonLogin } from './hooks/useNostrExtensionLogin'
 import { loginMethodAtom } from './state'
 import { ConnectWithButtonProps, ExternalAccountType } from './type'
-import { useCanLogin } from './useAuthToken'
 
 export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectWithButtonProps, 'accountType'>) => {
-  const canLogin = useCanLogin()
-
   const setLoginMethod = useSetAtom(loginMethodAtom)
 
   const { connect, error, clearError } = useNostrExtensonLogin()
@@ -67,11 +64,10 @@ export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectW
         variant="solid"
         colorScheme="violet"
         onClick={handleClick}
-        isDisabled={!canLogin}
         {...buttonProps}
         {...rest}
       >
-        {!isIconOnly && t('Nostr')}
+        {!isIconOnly && rest.children ? rest.children : t('Nostr')}
       </ButtonComponent>
       <NostrHelpModal {...nostrHelpModal} />
       <FailedToConnectAccount {...failedModal} />

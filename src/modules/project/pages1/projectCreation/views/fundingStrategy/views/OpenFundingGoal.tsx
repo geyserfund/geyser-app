@@ -8,7 +8,9 @@ import { useGoalsModal } from '@/modules/project/pages1/projectView/hooks/useGoa
 import { RenderGoals } from '@/modules/project/pages1/projectView/views/goals/common/RenderGoals.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
+import { ProjectCreationStep } from '@/types/index.ts'
 
+import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 import { ProjectCreationLayout } from '../../../Layouts/ProjectCreationLayout.tsx'
 
 export const OpenFundingGoal = () => {
@@ -16,11 +18,16 @@ export const OpenFundingGoal = () => {
 
   const { project } = useProjectAtom()
 
+  const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
+    ProjectCreationStep.FundingGoal,
+    getPath('launchProjectRewards', project.id),
+  )
+
   const { onGoalModalOpen } = useGoalsModal()
 
   const continueProps = {
     onClick() {
-      navigate(getPath('launchProjectRewards', project.id))
+      updateProjectWithLastCreationStep()
     },
     isDisabled: false,
   }

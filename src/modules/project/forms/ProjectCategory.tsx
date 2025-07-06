@@ -1,27 +1,19 @@
 import { HStack, StackProps } from '@chakra-ui/react'
-import { useAtom } from 'jotai'
 import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
-import { SingleValue } from 'react-select'
 
-import { CustomSelect } from '@/components/ui/CustomSelect'
 import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
-import { Body } from '@/shared/components/typography'
 import {
   ProjectCategoryLabel,
   ProjectCategoryList,
   ProjectSubCategoryLabel,
   ProjectSubCategoryList,
-  ProjectSubCategoryMap,
 } from '@/shared/constants/platform/projectCategory.ts'
-import { Maybe, ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
 
 import { AppTheme } from '../../../context'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { ProjectCreationVariables } from '../pages1/projectCreation/types.ts'
-import { ProjectState } from '../state/projectAtom'
-import { projectFormErrorAtom } from '../state/projectFormAtom'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   select: {

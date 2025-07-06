@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { PiInfo } from 'react-icons/pi'
 
 import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
-import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Body } from '@/shared/components/typography'
 import {
   ProjectCategoryLabel,

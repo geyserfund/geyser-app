@@ -1,35 +1,14 @@
-import { StackProps, useDisclosure } from '@chakra-ui/react'
-import { useAtom, useAtomValue } from 'jotai'
-import { useEffect, useState } from 'react'
+import { StackProps } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { createUseStyles } from 'react-jss'
-import { SingleValue } from 'react-select'
 
-import { CustomSelect } from '@/components/ui/CustomSelect'
 import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
-import { Body } from '@/shared/components/typography'
 import { countriesAtom } from '@/shared/state/countriesAtom.ts'
 
-import { AppTheme } from '../../../context'
-import { FieldContainer } from '../../../shared/components/form/FieldContainer'
-import { SkeletonLayout } from '../../../shared/components/layouts'
-import { Country, Location, Maybe, Project, useProjectCountriesGetQuery } from '../../../types'
+import { Country, Location, Maybe } from '../../../types'
 import { ProjectCreationVariables } from '../pages1/projectCreation/types.ts'
 import { ProjectState } from '../state/projectAtom'
-import { projectFormErrorAtom } from '../state/projectFormAtom'
-
-const useStyles = createUseStyles(({ colors }: AppTheme) => ({
-  container: {
-    width: '100%',
-    alignItems: 'flex-start',
-    spacing: '5px',
-  },
-
-  menuGroup: {
-    backgroundColor: 'red',
-  },
-}))
 
 interface ProjectRegionProps extends StackProps {
   form: UseFormReturn<ProjectCreationVariables>

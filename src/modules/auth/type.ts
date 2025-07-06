@@ -15,6 +15,7 @@ export enum SocialAccountType {
   google = 'google',
   github = 'github',
   twitter = 'twitter',
+  nostr = 'nostr',
 }
 
 export interface ConnectWithButtonProps extends ButtonProps {

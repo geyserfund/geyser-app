@@ -1,6 +1,6 @@
 import { HStack, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
@@ -8,9 +8,10 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
-import { ProjectFundingStrategy } from '@/types/index.ts'
+import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
+import { useUpdateProjectWithLastCreationStep } from '../../hooks/useIsStepAhead.tsx'
 import { ProjectCreationLayout } from '../../Layouts/ProjectCreationLayout.tsx'
 
 const options = {
@@ -49,34 +50,26 @@ export const LaunchFundingStrategy = () => {
   const toast = useNotification()
 
   const { project } = useProjectAtom()
+  const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
+    ProjectCreationStep.FundingType,
+    getPath('launchFundingGoal', project.id),
+  )
 
   const [selectedOption, setSelectedOption] = useState<ProjectFundingStrategy>(
     project.fundingStrategy || ProjectFundingStrategy.TakeItAll,
   )
 
-  const { updateProject } = useProjectAPI()
+  useEffect(() => {
+    setSelectedOption(project.fundingStrategy || ProjectFundingStrategy.TakeItAll)
+  }, [project.fundingStrategy])
 
   const continueProps = {
     onClick() {
       if (project.fundingStrategy === selectedOption) {
-        navigate(getPath('launchFundingGoal', project.id))
+        updateProjectWithLastCreationStep()
       } else {
-        updateProject.execute({
-          variables: {
-            input: {
-              projectId: project.id,
-              fundingStrategy: selectedOption,
-            },
-          },
-          onCompleted() {
-            navigate(getPath('launchFundingGoal', project.id))
-          },
-          onError() {
-            toast.error({
-              title: t('Failed to select funding strategy'),
-              description: t('Please try again later.'),
-            })
-          },
+        updateProjectWithLastCreationStep({
+          fundingStrategy: selectedOption,
         })
       }
     },

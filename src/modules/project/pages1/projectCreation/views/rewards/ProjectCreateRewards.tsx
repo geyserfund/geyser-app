@@ -1,14 +1,12 @@
-import { Box } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { Outlet, useMatch, useNavigate } from 'react-router-dom'
 
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+import { ProjectCreationStep } from '@/types/index.ts'
 
-import TitleWithProgressBar from '../../../../../../components/molecules/TitleWithProgressBar'
 import { getPath, PathName } from '../../../../../../shared/constants'
-import { FormContinueButton } from '../../components/FormContinueButton'
-import { ProjectCreateLayout } from '../../components/ProjectCreateLayout'
+import { useUpdateProjectWithLastCreationStep } from '../../hooks/useIsStepAhead.tsx'
 import { useLocationMandatoryRedirect } from '../../hooks/useLocationMandatoryRedirect'
 import { ProjectCreationLayout } from '../../Layouts/ProjectCreationLayout.tsx'
 
@@ -21,6 +19,11 @@ export const ProjectCreateRewards = () => {
   const { project } = useProjectAtom()
   const { rewards } = useRewardsAtom()
 
+  const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
+    ProjectCreationStep.PerksAndProducts,
+    getPath('launchStory', project.id),
+  )
+
   useLocationMandatoryRedirect()
 
   const isNew = useMatch(getPath('launchProjectRewardsCreate', project?.id))
@@ -28,7 +31,7 @@ export const ProjectCreateRewards = () => {
   const isCreatingOrEditing = isNew || isEdit
 
   const handleNext = () => {
-    navigate(getPath('launchStory', project?.id))
+    updateProjectWithLastCreationStep()
   }
 
   const handleBack = () => {

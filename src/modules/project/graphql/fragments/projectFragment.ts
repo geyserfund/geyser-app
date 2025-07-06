@@ -160,5 +160,7 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     category
     subCategory
     rewardCurrency
+    fundingStrategy
+    lastCreationStep
   }
 `

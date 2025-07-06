@@ -1459,5 +1459,13 @@
   "About you": "About you",
   "Tell contributors more about yourself": "Tell contributors more about yourself",
   "Building trust with your contributors is one of the most important aspects of a successful project. Tell contributors a bit more about yourself. This information will show on your project page and profile.": "Building trust with your contributors is one of the most important aspects of a successful project. Tell contributors a bit more about yourself. This information will show on your project page and profile.",
-  "Write a bit more about yourself": "Write a bit more about yourself"
+  "Write a bit more about yourself": "Write a bit more about yourself",
+  "Connect with Github": "Connect with Github",
+  "Social Accounts": "Social Accounts",
+  "Connect with X": "Connect with X",
+  "Help contributors get to know you better by linking your social accounts": "Help contributors get to know you better by linking your social accounts",
+  "Nostr connected": "Nostr connected",
+  "Failed to upload image": "Failed to upload image",
+  "Failed to update project": "Failed to update project",
+  "Connected": "Connected"
 }

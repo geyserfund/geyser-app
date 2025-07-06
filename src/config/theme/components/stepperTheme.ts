@@ -1,5 +1,5 @@
 import { stepperAnatomy } from '@chakra-ui/anatomy'
-import { ComponentStyleConfig, createMultiStyleConfigHelpers } from '@chakra-ui/react'
+import { createMultiStyleConfigHelpers } from '@chakra-ui/react'
 
 const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(stepperAnatomy.keys)
 

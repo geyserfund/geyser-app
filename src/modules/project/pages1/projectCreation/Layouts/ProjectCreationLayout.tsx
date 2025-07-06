@@ -61,7 +61,7 @@ export const ProjectCreationLayout = ({
         paddingBottom={20}
         display={removeBottomContainer ? 'none' : 'flex'}
         //  paddingY={8} zIndex={1} position="sticky" bottom={0}
-        bg="white"
+        bg="utils.bg"
         alignItems="flex-end"
         flex={1}
         {...buttonContainerProps}

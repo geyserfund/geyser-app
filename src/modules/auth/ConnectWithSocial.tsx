@@ -1,4 +1,4 @@
-import { Button, IconButton, Link, Tooltip } from '@chakra-ui/react'
+import { Button, IconButton, Link } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { DateTime } from 'luxon'
 import { useCallback, useEffect, useState } from 'react'
@@ -11,7 +11,6 @@ import { useCustomTheme, useNotification } from '../../utils'
 import { SocialConfig } from './SocialConfig'
 import { loginMethodAtom } from './state'
 import { ConnectWithButtonProps } from './type'
-import { useCanLogin } from './useAuthToken'
 
 export const TWITTER_AUTH_ATTEMPT_KEY = 'twitterAuthAttempt'
 export const TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS = 1000 * 60 * 15 // 15 minutes
@@ -23,7 +22,6 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
 
   const { colors } = useCustomTheme()
 
-  const canLogin = useCanLogin()
   const setLoginMethod = useSetAtom(loginMethodAtom)
   const authServiceEndpoint = getAuthEndPoint()
 
@@ -98,11 +96,9 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
   }, [pollAuthStatus, stopPolling, authServiceEndpoint, handleToastError])
 
   const handleClick = async () => {
-    if (canLogin) {
-      setPollAuthStatus(true)
-      getMe()
-      startPolling(1000)
-    }
+    setPollAuthStatus(true)
+    getMe()
+    startPolling(1000)
 
     localStorage.setItem(TWITTER_AUTH_ATTEMPT_KEY, DateTime.now().toMillis().toString())
   }
@@ -117,26 +113,20 @@ export const ConnectWithSocial = ({ onClose, isIconOnly, accountType, ...rest }:
         leftIcon: <Icon color={colors.social[accountType]} fontSize="20px" boxSize="20px" />,
       }
 
-  const isDisabled = !canLogin
-
   return (
-    <Tooltip label={!canLogin && t('Please refresh the page and try again.')}>
-      <ButtonComponent
-        aria-label={`Connect with ${accountType}`}
-        as={Link}
-        size="lg"
-        variant="outline"
-        colorScheme="neutral1"
-        href={`${authServiceEndpoint}/${accountType}?nextPath=/auth/${accountType}`}
-        isExternal
-        onClick={handleClick}
-        isDisabled={isDisabled}
-        pointerEvents={isDisabled ? 'none' : undefined}
-        {...buttonProps}
-        {...rest}
-      >
-        {!isIconOnly && t(label)}
-      </ButtonComponent>
-    </Tooltip>
+    <ButtonComponent
+      aria-label={`Connect with ${accountType}`}
+      as={Link}
+      size="lg"
+      variant="outline"
+      colorScheme="neutral1"
+      href={`${authServiceEndpoint}/${accountType}?nextPath=/auth/${accountType}`}
+      isExternal
+      onClick={handleClick}
+      {...buttonProps}
+      {...rest}
+    >
+      {!isIconOnly && rest.children ? rest.children : t(label)}
+    </ButtonComponent>
   )
 }

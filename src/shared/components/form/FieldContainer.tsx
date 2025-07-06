@@ -38,7 +38,7 @@ export const FieldContainer = ({
           {required && '*'}
         </Body>
       )}
-      {subtitle && (
+      {subtitle ? (
         <HStack w="full">
           <Body size={'sm'} light fontWeight={boldSubtitle ? 700 : 400}>
             {subtitle}
@@ -51,7 +51,7 @@ export const FieldContainer = ({
             </Tooltip>
           )}
         </HStack>
-      )}
+      ) : null}
 
       {children}
 
