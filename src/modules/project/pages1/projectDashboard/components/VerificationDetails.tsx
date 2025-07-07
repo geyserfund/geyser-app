@@ -48,13 +48,6 @@ export const VerificationDetails = ({ onContinue, onLoading }: VerificationDetai
         )}
       </Body>
 
-      <Body alignSelf="start" textAlign="left" medium>
-        {t('Verify your profile as a:')}
-      </Body>
-      <HStack w="full" paddingY="4">
-        <LegalEntitySelection disableIndividualPopup />
-      </HStack>
-
       <HStack w="full">
         <Button
           variant="solid"
@@ -64,7 +57,7 @@ export const VerificationDetails = ({ onContinue, onLoading }: VerificationDetai
           isLoading={onLoading}
           isDisabled={!hasIdentity}
         >
-          {t('Continue to verification')}
+          {t('Continue verification')}
         </Button>
       </HStack>
     </VStack>

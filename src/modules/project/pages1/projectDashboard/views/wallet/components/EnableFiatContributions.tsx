@@ -1,20 +1,17 @@
-import { Button, ButtonProps, HStack, Switch, SwitchProps, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { VerifiedButton } from '@/shared/molecules/VerifiedButton.tsx'
 
 type EnableFiatContributionsProps = CardLayoutProps & {
-  disableImage?: boolean
-  switchProps?: SwitchProps
   buttonProps?: ButtonProps
   isIdentityVerified?: boolean
 }
 
 export const EnableFiatContributions = ({
-  disableImage,
   buttonProps,
-  switchProps,
   isIdentityVerified,
   ...props
 }: EnableFiatContributionsProps) => {
@@ -25,17 +22,11 @@ export const EnableFiatContributions = ({
           {t('Enable fiat contributions')}
         </Body>
         {isIdentityVerified ? (
-          <HStack>
-            <Body size="lg" color="primary1.9" medium>
-              {t('Enabled')}
-            </Body>
-          </HStack>
-        ) : buttonProps ? (
-          <Button size="lg" variant="solid" colorScheme="primary1" {...buttonProps}>
-            {t('Enable')}
-          </Button>
+          <VerifiedButton />
         ) : (
-          <Switch size="lg" {...switchProps} />
+          <Button size="lg" variant="outline" colorScheme="primary1" {...buttonProps}>
+            {t('Verify')}
+          </Button>
         )}
       </HStack>
       <HStack flexDirection={{ base: 'column', lg: 'row' }} spacing={4}>

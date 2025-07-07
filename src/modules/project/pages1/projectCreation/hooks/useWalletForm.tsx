@@ -4,8 +4,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useProjectWalletAPI } from '@/modules/project/API/useProjectWalletAPI.ts'
 import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom'
+import { validateTLSCertificate } from '@/utils/validations/checkTLSCertificate.ts'
 
-import { WalletConnectDetails } from '../../../../../shared/constants'
+import { ProjectNodeValidations, WalletConnectDetails } from '../../../../../shared/constants'
 import { useDebounce } from '../../../../../shared/hooks'
 import {
   CreateWalletInput,
@@ -18,7 +19,14 @@ import {
   WalletOnChainContributionLimits,
   WalletResourceType,
 } from '../../../../../types'
-import { toInt, useNotification, validateEmail } from '../../../../../utils'
+import {
+  checkMacaroonPermissions,
+  isSecp256k1Compressed,
+  isTorV3Address,
+  toInt,
+  useNotification,
+  validateEmail,
+} from '../../../../../utils'
 import { TNodeInput } from '../types'
 
 interface useWalletFormProps {
@@ -50,8 +58,10 @@ export type LightingWalletForm = {
 }
 
 export type NodeWalletForm = {
-  value: TNodeInput | undefined
-  setValue: (node: TNodeInput | undefined) => void
+  value: TNodeInput
+  setValue: (node: TNodeInput) => void
+  error: Record<keyof TNodeInput, string>
+  clearError: () => void
   isOpen: boolean
   onClose: () => void
   onOpen: () => void
@@ -84,6 +94,26 @@ export type WalletForm = {
   limits: Limits
 }
 
+export const defaultNode = {
+  name: '',
+  isVoltage: false,
+  hostname: '',
+  publicKey: '',
+  invoiceMacaroon: '',
+  tlsCert: '',
+  grpc: '',
+}
+
+const defaultNodeFormError: Record<keyof TNodeInput, string> = {
+  name: '',
+  isVoltage: '',
+  hostname: '',
+  publicKey: '',
+  invoiceMacaroon: '',
+  tlsCert: '',
+  grpc: '',
+}
+
 const DEFAULT_FEE_PERCENTAGE = 0.05
 const DEFAULT_LIGHTNING_FEE_PERCENTAGE = 0.05
 
@@ -106,7 +136,8 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
 
   const { isOpen, onClose, onOpen } = useDisclosure()
 
-  const [nodeInput, setNode] = useState<TNodeInput | undefined>(undefined)
+  const [nodeInput, setNode] = useState<TNodeInput>(defaultNode)
+  const [nodeFormError, setNodeFormError] = useState<Record<keyof TNodeInput, string>>(defaultNodeFormError)
 
   const [lightningAddressFormValue, setLightningAddressFormValue] = useState('')
   const [nostrWalletConnectURI, setNostrWalletConnectURI] = useState('')
@@ -215,7 +246,7 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
     }
 
     if (connectionOption === ConnectionOption.PERSONAL_NODE) {
-      if (!nodeInput) {
+      if (!nodeInput.name) {
         return null
       }
 
@@ -279,7 +310,21 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
       }
     }
 
-    if (isEdit && !createWalletInput) {
+    const walletInputToSubmit = createWalletInput
+
+    if (connectionOption === ConnectionOption.PERSONAL_NODE) {
+      const { isValid, errors, formattedTlsCert } = validateNodeForm(nodeInput)
+      if (!isValid) {
+        setNodeFormError(errors)
+        return
+      }
+
+      if (walletInputToSubmit?.lndConnectionDetailsInput && formattedTlsCert) {
+        walletInputToSubmit.lndConnectionDetailsInput.tlsCertificate = formattedTlsCert
+      }
+    }
+
+    if (isEdit && !walletInputToSubmit) {
       toast({
         title: t('failed to create project wallet'),
         description: t('please provide valid wallet details'),
@@ -288,7 +333,7 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
       return
     }
 
-    onSubmit(createWalletInput)
+    onSubmit(walletInputToSubmit)
   }, [
     createWalletInput,
     onSubmit,
@@ -298,6 +343,7 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
     connectionOption,
     evaluateLightningAddress,
     isEdit,
+    nodeInput,
   ])
 
   const validateLightningAddressFormat = (lightningAddress: string) => {
@@ -399,6 +445,8 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
     node: {
       value: nodeInput,
       setValue: setNode,
+      error: nodeFormError,
+      clearError: () => setNodeFormError(defaultNodeFormError),
       isOpen,
       onClose,
       onOpen,
@@ -418,4 +466,88 @@ export const useWalletForm = ({ onSubmit, isEdit }: useWalletFormProps): WalletF
     createWalletInput,
     isLightningAddressInValid,
   }
+}
+
+const validateNodeForm = (form: TNodeInput) => {
+  const errors: any = {}
+  let isValid = true
+  let formattedTlsCert = ''
+
+  const additionalText = ' is a required field'
+
+  if (!form.name) {
+    errors.name = 'Node name' + additionalText
+    isValid = false
+  } else if (form.name.length > ProjectNodeValidations.nodeName.maxLength) {
+    errors.name = `${t('Node name cannot be longer than')} ${ProjectNodeValidations.nodeName.maxLength} ${t(
+      'characters',
+    )}.`
+    isValid = false
+  }
+
+  if (!form.hostname) {
+    errors.hostname = 'Host name' + additionalText
+    isValid = false
+  } else if (form.hostname.match(/:\d+$/)) {
+    errors.hostname = `${t('Host name cannot contain port number')}.`
+    isValid = false
+  } else {
+    const val = isTorV3Address(form.hostname)
+    if (val) {
+      errors.hostname = 'Tor addresses are currently not supported'
+      isValid = false
+    }
+  }
+
+  if (!form.publicKey) {
+    errors.publicKey = 'Public Key' + additionalText
+    isValid = false
+  } else if (form.publicKey.length !== ProjectNodeValidations.publicKey.length) {
+    errors.publicKey = `${t('Public Key must be')} ${ProjectNodeValidations.publicKey.length} ${t('characters long')}.`
+    isValid = false
+  } else {
+    const val = isSecp256k1Compressed(form.publicKey)
+    if (!val) {
+      errors.publicKey = 'The Public Key is wrongly formatted.'
+      isValid = false
+    }
+  }
+
+  if (!form.invoiceMacaroon) {
+    errors.invoiceMacaroon = 'Invoice Macaroon' + additionalText
+    isValid = false
+  } else if (form.invoiceMacaroon.length > ProjectNodeValidations.invoiceMacaroon.maxLength) {
+    errors.invoiceMacaroon = `${t('Invoice Macaroon cannot be longer than')} ${
+      ProjectNodeValidations.invoiceMacaroon.maxLength
+    } ${t('characters')}.`
+    isValid = false
+  } else {
+    const val = checkMacaroonPermissions(form.invoiceMacaroon)
+    if (val) {
+      errors.invoiceMacaroon = val
+      isValid = false
+    }
+  }
+
+  if (!form.isVoltage) {
+    if (!form.tlsCert) {
+      errors.tlsCert = 'TLS certificate' + additionalText
+      isValid = false
+    } else {
+      const tlsValidation = validateTLSCertificate(form.tlsCert)
+      if (!tlsValidation.isValid) {
+        errors.tlsCert = tlsValidation.error
+        isValid = false
+      } else {
+        formattedTlsCert = tlsValidation.formattedCert
+      }
+    }
+  }
+
+  if (!form.isVoltage && !form.grpc) {
+    errors.grpc = 'gRPC port' + additionalText
+    isValid = false
+  }
+
+  return { isValid, errors, formattedTlsCert }
 }

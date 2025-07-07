@@ -3,7 +3,10 @@ import { ProjectCreationContainer } from './ProjectCreationContainer.tsx'
 import { LaunchFundingGoal } from './views/fundingStrategy/LaunchFundingGoal.tsx'
 import { LaunchFundingStrategy } from './views/fundingStrategy/LaunchFundingStrategy.tsx'
 import { LaunchAboutYou } from './views/LaunchAboutYou.tsx'
-import { LaunchPayment } from './views/LaunchPayment.tsx'
+import { LaunchPayment } from './views/launchPayment/LaunchPayment.tsx'
+import { LaunchPaymentAccountPassword } from './views/launchPayment/LaunchPaymentAccountPassword.tsx'
+import { LaunchPaymentTaxId } from './views/launchPayment/LaunchPaymentTaxId.tsx'
+import { LaunchPaymentWallet } from './views/launchPayment/LaunchPaymentWallet.tsx'
 import { LaunchProducts } from './views/LaunchProducts.tsx'
 import { LaunchProjectDetails } from './views/LaunchProjectDetails.tsx'
 import { LaunchStory } from './views/LaunchStory.tsx'
@@ -23,6 +26,9 @@ export {
   LaunchFundingGoal,
   LaunchFundingStrategy,
   LaunchPayment,
+  LaunchPaymentAccountPassword,
+  LaunchPaymentTaxId,
+  LaunchPaymentWallet,
   LaunchProducts,
   LaunchProjectDetails,
   LaunchStory,

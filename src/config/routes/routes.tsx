@@ -165,6 +165,34 @@ export const platformRoutes: RouteObject[] = [
           const LaunchPayment = await ProjectLaunch().then((m) => m.LaunchPayment)
           return { Component: LaunchPayment }
         },
+        children: [
+          // TODO remove and add this logic to LaunchPayment component
+          {
+            index: true,
+            element: <Navigate to={PathName.launchPaymentWallet} />,
+          },
+          {
+            path: getPath('launchPaymentWallet', PathName.projectId),
+            async lazy() {
+              const LaunchPaymentWallet = await ProjectLaunch().then((m) => m.LaunchPaymentWallet)
+              return { Component: LaunchPaymentWallet }
+            },
+          },
+          {
+            path: getPath('launchPaymentAccountPassword', PathName.projectId),
+            async lazy() {
+              const LaunchPaymentAccountPassword = await ProjectLaunch().then((m) => m.LaunchPaymentAccountPassword)
+              return { Component: LaunchPaymentAccountPassword }
+            },
+          },
+          {
+            path: getPath('launchPaymentTaxId', PathName.projectId),
+            async lazy() {
+              const LaunchPaymentTaxId = await ProjectLaunch().then((m) => m.LaunchPaymentTaxId)
+              return { Component: LaunchPaymentTaxId }
+            },
+          },
+        ],
       },
 
       {

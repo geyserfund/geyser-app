@@ -32,12 +32,15 @@ export const FieldContainer = ({
 }: FieldContainerProps) => {
   return (
     <VStack spacing={0} alignItems="start" w="100%" {...props}>
-      {title && (
-        <Body size={size} wordBreak="keep-all" fontWeight={boldTitle ? 700 : 500}>
-          {title}
-          {required && '*'}
-        </Body>
-      )}
+      {title &&
+        (typeof title === 'string' ? (
+          <Body size={size} wordBreak="keep-all" fontWeight={boldTitle ? 700 : 500}>
+            {title}
+            {required && '*'}
+          </Body>
+        ) : (
+          title
+        ))}
       {subtitle ? (
         <HStack w="full">
           <Body size={'sm'} light fontWeight={boldSubtitle ? 700 : 400}>
