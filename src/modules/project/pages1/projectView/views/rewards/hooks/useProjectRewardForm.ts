@@ -107,26 +107,7 @@ export const useProjectRewardForm = ({
 
   const { control, handleSubmit, reset, watch, formState, setValue, trigger } = useForm<RewardFormValues>({
     resolver: yupResolver(rewardFormSchema()),
-    defaultValues: {
-      uuid: rewardData?.uuid || '',
-      name: rewardData?.name || '',
-      description: rewardData?.description || '',
-      shortDescription: rewardData?.shortDescription || '',
-      cost: rewardData?.cost || 0,
-      maxClaimable: rewardData?.maxClaimable || null,
-      images: rewardData?.images || [],
-      hasShipping: rewardData?.hasShipping || false,
-      isAddon: rewardData?.isAddon || false,
-      isHidden: rewardData?.isHidden || false,
-      category: rewardData?.category || defaultCategory || null,
-      preOrder: rewardData?.preOrder || false,
-      estimatedAvailabilityDate: rewardData?.estimatedAvailabilityDate || null,
-      estimatedDeliveryInWeeks: rewardData?.estimatedDeliveryInWeeks || null,
-      privateCommentPrompts: rewardData?.privateCommentPrompts || [],
-      confirmationMessage: rewardData?.confirmationMessage || '',
-      rewardCurrency: projectCurrency,
-      shippingConfigId: rewardData?.shippingConfig?.id,
-    },
+    defaultValues: mapRewardToFormValues(rewardData, projectCurrency, defaultCategory),
     mode: 'onChange',
   })
 
@@ -148,29 +129,10 @@ export const useProjectRewardForm = ({
     })) || []
 
   useEffect(() => {
-    if (isUpdate) {
-      reset({
-        uuid: rewardData?.uuid || '',
-        name: rewardData?.name || '',
-        description: rewardData?.description || '',
-        shortDescription: rewardData?.shortDescription || '',
-        cost: rewardData?.cost || 0,
-        maxClaimable: rewardData?.maxClaimable || undefined,
-        images: rewardData?.images || [],
-        hasShipping: rewardData?.hasShipping || false,
-        isAddon: rewardData?.isAddon || false,
-        isHidden: rewardData?.isHidden || false,
-        category: rewardData?.category || null,
-        preOrder: rewardData?.preOrder || false,
-        estimatedAvailabilityDate: rewardData?.estimatedAvailabilityDate || null,
-        estimatedDeliveryInWeeks: rewardData?.estimatedDeliveryInWeeks || null,
-        privateCommentPrompts: rewardData?.privateCommentPrompts || [],
-        confirmationMessage: rewardData?.confirmationMessage || '',
-        rewardCurrency: projectCurrency,
-        shippingConfigId: rewardData?.shippingConfig?.id,
-      })
+    if (rewardData?.id) {
+      reset(mapRewardToFormValues(rewardData, projectCurrency, defaultCategory))
     }
-  }, [rewardData, reset, projectCurrency, isUpdate])
+  }, [rewardData, reset, projectCurrency, defaultCategory])
 
   const onSubmit = (formData: RewardFormValues) => {
     const commonData = {
@@ -385,5 +347,34 @@ export const useProjectRewardForm = ({
       isPromptChecked,
       maxClaimableDisabled: soldAmount > 0,
     },
+  }
+}
+
+const mapRewardToFormValues = (
+  rewardData?: ProjectRewardFragment,
+  projectCurrency?: RewardCurrency,
+  defaultCategory?: string | null,
+) => {
+  return {
+    uuid: rewardData?.uuid || '',
+    name: rewardData?.name || '',
+    description: rewardData?.description || '',
+    shortDescription: rewardData?.shortDescription || '',
+    cost: rewardData?.cost || 0,
+    maxClaimable: rewardData?.maxClaimable || null,
+    images: rewardData?.images || [],
+    hasShipping: rewardData?.hasShipping || false,
+    isAddon: rewardData?.isAddon || false,
+    isHidden: rewardData?.isHidden || false,
+    category: rewardData?.category || defaultCategory || null,
+    preOrder: rewardData?.preOrder || false,
+    hasConfirmationMessage: Boolean(rewardData?.confirmationMessage),
+    hasPrivateCommentPrompts: rewardData?.privateCommentPrompts ? rewardData?.privateCommentPrompts?.length > 0 : false,
+    estimatedAvailabilityDate: rewardData?.estimatedAvailabilityDate || null,
+    estimatedDeliveryInWeeks: rewardData?.estimatedDeliveryInWeeks || null,
+    privateCommentPrompts: rewardData?.privateCommentPrompts || [],
+    confirmationMessage: rewardData?.confirmationMessage || '',
+    rewardCurrency: projectCurrency || RewardCurrency.Usdcent,
+    shippingConfigId: rewardData?.shippingConfig?.id,
   }
 }

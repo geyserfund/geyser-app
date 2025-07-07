@@ -32,12 +32,8 @@ import {
 import { ProfileNav } from './profileNav/ProfileNav'
 
 export const PlatformNavBar = () => {
-  const { isLoggedIn, logout, queryCurrentUser, user } = useAuthContext()
+  const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
-
-  const { onCopy, hasCopied } = useCopyToClipboard(
-    `${window.location.origin}/${PathName.guardians}${user.heroId ? `?hero=${user.heroId}` : ''}`,
-  )
 
   const isManifestoPage = useIsManifestoPage()
 
@@ -104,57 +100,26 @@ export const PlatformNavBar = () => {
     return <BrandLogo showOutline={isGuardiansPage} />
   }, [shouldShowGeyserLogo, shouldShowProjectLogo, isPlatformRoutes, isMobileMode, isGuardiansPage])
 
-  const ShareGuardiansButton = () => {
-    return (
-      <Button
-        variant={hasCopied ? 'solid' : 'outline'}
-        colorScheme={hasCopied ? 'primary1' : 'neutral1'}
-        size={{ base: 'md', lg: 'lg' }}
-        rightIcon={hasCopied ? <PiCopy /> : <PiShareFat />}
-        onClick={() => onCopy()}
-        backgroundColor={hasCopied ? undefined : 'utils.pbg'}
-      >
-        {hasCopied ? t('Copied') : t('Share')}
-      </Button>
-    )
-  }
+  const renderRightSide = useCallback(() => {
+    if (isManifestoPage) {
+      return <CloseGoBackButton />
+    }
 
-  const CloseGoBackButton = () => {
     return (
-      <IconButton
-        variant="outline"
-        colorScheme="neutral1"
-        size={{ base: 'md', lg: 'lg' }}
-        width={{ base: '40px', lg: '48px' }}
-        minWidth={{ base: '40px', lg: '48px' }}
-        height={{ base: '40px', lg: '48px' }}
-        borderRadius="50% !important"
-        aria-label="go-back"
-        icon={<PiX fontSize={'24px'} />}
-        onClick={() => navigate(-1)}
-      />
+      <HStack position="relative">
+        {!isLoggedIn ? (
+          <>
+            <LoginButton />
+          </>
+        ) : isGuardiansPage ? (
+          <ShareGuardiansButton />
+        ) : (
+          <ProjectSelectMenu />
+        )}
+        <ProfileNav />
+      </HStack>
     )
-  }
-
-  const BackButton = () => {
-    return (
-      <IconButton
-        variant="outline"
-        colorScheme="neutral1"
-        size={{ base: 'md', lg: 'lg' }}
-        width={{ base: '32px', lg: '40px' }}
-        minWidth={{ base: '32px', lg: '40px' }}
-        height={{ base: '32px', lg: '40px' }}
-        paddingInlineStart={'4px !important'}
-        paddingInlineEnd={'4px !important'}
-        borderRadius="50% !important"
-        backgroundColor="utils.pbg"
-        aria-label="go-back"
-        icon={<PiArrowLeft fontSize={'16px'} />}
-        onClick={() => navigate(-1)}
-      />
-    )
-  }
+  }, [isGuardiansPage, isLoggedIn, isManifestoPage])
 
   return (
     <HStack
@@ -185,22 +150,7 @@ export const PlatformNavBar = () => {
             {renderLeftSide()}
           </HStack>
 
-          {isManifestoPage ? (
-            <CloseGoBackButton />
-          ) : (
-            <HStack position="relative">
-              {!isLoggedIn ? (
-                <>
-                  <LoginButton />
-                </>
-              ) : isGuardiansPage ? (
-                <ShareGuardiansButton />
-              ) : (
-                <ProjectSelectMenu />
-              )}
-              <ProfileNav />
-            </HStack>
-          )}
+          {renderRightSide()}
         </HStack>
       </VStack>
 
@@ -220,5 +170,66 @@ export const PlatformNavBar = () => {
         <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
       )}
     </HStack>
+  )
+}
+
+const CloseGoBackButton = () => {
+  const navigate = useNavigate()
+
+  return (
+    <IconButton
+      variant="outline"
+      colorScheme="neutral1"
+      size={{ base: 'md', lg: 'lg' }}
+      width={{ base: '40px', lg: '48px' }}
+      minWidth={{ base: '40px', lg: '48px' }}
+      height={{ base: '40px', lg: '48px' }}
+      borderRadius="50% !important"
+      aria-label="go-back"
+      icon={<PiX fontSize={'24px'} />}
+      onClick={() => navigate(-1)}
+    />
+  )
+}
+
+const ShareGuardiansButton = () => {
+  const { user } = useAuthContext()
+
+  const { onCopy, hasCopied } = useCopyToClipboard(
+    `${window.location.origin}/${PathName.guardians}${user.heroId ? `?hero=${user.heroId}` : ''}`,
+  )
+  return (
+    <Button
+      variant={hasCopied ? 'solid' : 'outline'}
+      colorScheme={hasCopied ? 'primary1' : 'neutral1'}
+      size={{ base: 'md', lg: 'lg' }}
+      rightIcon={hasCopied ? <PiCopy /> : <PiShareFat />}
+      onClick={() => onCopy()}
+      backgroundColor={hasCopied ? undefined : 'utils.pbg'}
+    >
+      {hasCopied ? t('Copied') : t('Share')}
+    </Button>
+  )
+}
+
+const BackButton = () => {
+  const navigate = useNavigate()
+
+  return (
+    <IconButton
+      variant="outline"
+      colorScheme="neutral1"
+      size={{ base: 'md', lg: 'lg' }}
+      width={{ base: '32px', lg: '40px' }}
+      minWidth={{ base: '32px', lg: '40px' }}
+      height={{ base: '32px', lg: '40px' }}
+      paddingInlineStart={'4px !important'}
+      paddingInlineEnd={'4px !important'}
+      borderRadius="50% !important"
+      backgroundColor="utils.pbg"
+      aria-label="go-back"
+      icon={<PiArrowLeft fontSize={'16px'} />}
+      onClick={() => navigate(-1)}
+    />
   )
 }
