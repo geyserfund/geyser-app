@@ -12,12 +12,12 @@ export const GeyserTipInput = () => {
   const { formState, setGeyserTipPercent } = useFundingFormAtom()
   const { geyserTipPercent } = formState
 
-  const tipOptions = [0, 10, 21]
+  const tipOptions = [0, 2, 5, 10, 21]
 
   return (
     <CardLayout w="full" spacing={3}>
       {/* <VStack align="start" w="full" spacing={3}> */}
-      <HStack spacing={4} align="center" justify="space-between" w="full">
+      <HStack spacing={4} align="center" justify="space-between" w="full" flexWrap="wrap">
         <HStack>
           <H3>{t('Support Geyser')}</H3>
           <Tooltip content={t('Help Geyser on its mission to accelerate grassroots Bitcoin adoption in the world.')}>
@@ -35,9 +35,9 @@ export const GeyserTipInput = () => {
             <Button
               key={percent}
               onClick={() => setGeyserTipPercent(percent)}
-              variant={geyserTipPercent === percent ? 'surface' : 'outline'}
-              colorScheme={geyserTipPercent === percent ? 'primary1' : 'neutral.9'}
-              w="70px" // Fixed width for buttons
+              variant={geyserTipPercent === percent ? 'surface' : 'soft'}
+              colorScheme={geyserTipPercent === percent ? 'primary1' : 'neutral1'}
+              w="55px" // Fixed width for buttons
             >
               {percent}%
             </Button>

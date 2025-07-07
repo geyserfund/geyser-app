@@ -1,3 +1,4 @@
+import { DEFAULT_GEYSER_TIP_PERCENT } from '../../../../src/modules/project/funding/state/fundingFormAtom'
 import {
   clickContribute,
   clickCopyLightningInvoiceButton,
@@ -26,7 +27,8 @@ import { mineBlockOptions, payLightningInvoice, payOnChainOptions } from '../uti
 const ONCHAIN_FUNDING_AMOUNT = 60000
 const LIGHTNING_FUNDING_AMOUNT = 1000
 
-const ONCHAIN_FUNDING_AMOUNT_WITH_TIP = ONCHAIN_FUNDING_AMOUNT + ONCHAIN_FUNDING_AMOUNT * 0.1
+const ONCHAIN_FUNDING_AMOUNT_WITH_TIP =
+  ONCHAIN_FUNDING_AMOUNT + ONCHAIN_FUNDING_AMOUNT * (DEFAULT_GEYSER_TIP_PERCENT / 100)
 
 const FUNDING_COMMENT = 'This was the test comment'
 
