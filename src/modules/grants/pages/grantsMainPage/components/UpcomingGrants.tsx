@@ -16,7 +16,7 @@ export const UpcomingGrants = ({ upcomingGrants }: { upcomingGrants: Grant[] }) 
   return (
     <VStack w="100%" alignItems="flex-start">
       <Body size={'2xl'} bold>
-        {t('Upcoming Grants')}
+        {t('Live Grants')}
       </Body>
       {upcomingGrants.map((grant) => (
         <LargeGrantCard key={grant.id} grant={grant} showBanner />
