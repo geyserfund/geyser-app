@@ -86,7 +86,7 @@ export const useProjectRewardForm = ({
     },
   })
 
-  const rewardData = data?.projectRewardGet
+  let rewardData = data?.projectRewardGet
 
   const { createReward, updateReward } = useProjectRewardsAPI()
 
@@ -223,6 +223,7 @@ export const useProjectRewardForm = ({
           ...newReward,
           cost: newReward.cost,
         })
+        rewardData = newReward
       } else {
         const currentCost = watch('cost')
         const newCost =
