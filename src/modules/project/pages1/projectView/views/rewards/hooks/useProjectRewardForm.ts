@@ -1,6 +1,7 @@
 /* eslint-disable complexity */
 import { yupResolver } from '@hookform/resolvers/yup'
 import { format } from 'date-fns'
+import { useSetAtom } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
@@ -9,6 +10,7 @@ import * as yup from 'yup'
 import { useBTCConverter } from '@/helpers'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { rewardsAtom } from '@/modules/project/state/rewardsAtom.ts'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import {
@@ -75,8 +77,13 @@ export const useProjectRewardForm = ({
   const navigate = useNavigate()
   const toast = useNotification()
 
-  const { loading: rewardLoading, data } = useProjectRewardGetQuery({
+  const setProjectRewards = useSetAtom(rewardsAtom)
+
+  const [rewardData, setRewardData] = useState<ProjectRewardFragment>()
+
+  const { loading: rewardLoading } = useProjectRewardGetQuery({
     skip: !rewardUUID,
+    fetchPolicy: 'network-only',
     variables: {
       input: {
         where: {
@@ -84,9 +91,12 @@ export const useProjectRewardForm = ({
         },
       },
     },
+    onCompleted(data) {
+      if (data?.projectRewardGet) {
+        setRewardData(data?.projectRewardGet)
+      }
+    },
   })
-
-  let rewardData = data?.projectRewardGet
 
   const { createReward, updateReward } = useProjectRewardsAPI()
 
@@ -213,6 +223,8 @@ export const useProjectRewardForm = ({
       // Update the project reward currency
       partialUpdateProject({ rewardCurrency: pendingCurrency })
 
+      setProjectRewards(data.projectRewardCurrencyUpdate)
+
       // Update the form values
       const newReward = data.projectRewardCurrencyUpdate.find(
         (newRewards) => newRewards.name === watch('name'),
@@ -223,7 +235,7 @@ export const useProjectRewardForm = ({
           ...newReward,
           cost: newReward.cost,
         })
-        rewardData = newReward
+        setRewardData(newReward)
       } else {
         const currentCost = watch('cost')
         const newCost =
@@ -375,7 +387,7 @@ const mapRewardToFormValues = (
     estimatedDeliveryInWeeks: rewardData?.estimatedDeliveryInWeeks || null,
     privateCommentPrompts: rewardData?.privateCommentPrompts || [],
     confirmationMessage: rewardData?.confirmationMessage || '',
-    rewardCurrency: projectCurrency || RewardCurrency.Usdcent,
+    rewardCurrency: rewardData?.rewardCurrency || projectCurrency || RewardCurrency.Usdcent,
     shippingConfigId: rewardData?.shippingConfig?.id,
   }
 }
