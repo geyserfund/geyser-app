@@ -74,12 +74,12 @@ export const LaunchStory = () => {
         continueButtonProps={continueProps}
         backButtonProps={backProps}
       >
-        <FieldContainer
-          subtitle={t(
-            'Explain in more detail what your are doing with this project. The more detailed the better. Keep it personal and authentic. Why does this project matter to you?',
-          )}
-          error={form.formState.errors.description?.message}
-        >
+        <FieldContainer error={form.formState.errors.description?.message} gap={2}>
+          <Body>
+            {t(
+              'Explain in more detail what you are doing with this project. The more detailed the better. Keep it personal and authentic. Why does this project matter to you?',
+            )}
+          </Body>
           <VStack
             flexDirection={'column-reverse'}
             justifyContent="space-between"

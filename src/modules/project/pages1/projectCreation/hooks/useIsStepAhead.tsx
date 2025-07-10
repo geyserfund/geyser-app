@@ -1,9 +1,10 @@
+import { ApolloCache, DefaultContext, MutationFunctionOptions } from '@apollo/client'
 import { t } from 'i18next'
 import { useNavigate } from 'react-router'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { ProjectCreationStep, UpdateProjectInput } from '@/types/index.ts'
+import { Exact, ProjectCreationStep, UpdateProjectInput, UpdateProjectMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const projectCreationStepIndex = {
@@ -28,7 +29,17 @@ export const useUpdateProjectWithLastCreationStep = (step: ProjectCreationStep, 
 
   const nextStep = Object.keys(projectCreationStepIndex)[projectCreationStepIndex[step] + 1]
 
-  const updateProjectWithLastCreationStep = (projectUpdateIput?: Omit<UpdateProjectInput, 'projectId'>) => {
+  const updateProjectWithLastCreationStep = (
+    projectUpdateIput?: Omit<UpdateProjectInput, 'projectId'>,
+    options?: MutationFunctionOptions<
+      UpdateProjectMutation,
+      Exact<{
+        input: UpdateProjectInput
+      }>,
+      DefaultContext,
+      ApolloCache<any>
+    >,
+  ) => {
     if (projectStepIsAhead) {
       navigate(nextPath)
       return
@@ -42,10 +53,13 @@ export const useUpdateProjectWithLastCreationStep = (step: ProjectCreationStep, 
           ...projectUpdateIput,
         },
       },
-      onCompleted() {
+      ...options,
+      onCompleted(data) {
+        options?.onCompleted?.(data)
         navigate(nextPath)
       },
-      onError() {
+      onError(error) {
+        options?.onError?.(error)
         toast.error({
           title: t('Failed to update project'),
           description: t('Please try again later.'),

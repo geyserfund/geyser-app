@@ -108,6 +108,8 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     category
     subCategory
     links
+    aonGoalDurationInDays
+    aonGoalInSats
     location {
       ...ProjectLocation
     }
@@ -162,5 +164,7 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     rewardCurrency
     fundingStrategy
     lastCreationStep
+    aonGoalDurationInDays
+    aonGoalInSats
   }
 `

@@ -9,7 +9,6 @@ import { CacheBuster } from './config/CacheBuster.tsx'
 import { Head } from './config/Head'
 import { configMatomo } from './config/matomo'
 import { AuthProvider, ChakraThemeProvider, ServiceWorkerProvider } from './context'
-import { BtcProvider } from './context/btc'
 import { FilterProvider } from './context/filter'
 import { ReferralCapture } from './shared/components/ReferralCapture.tsx'
 
@@ -26,13 +25,11 @@ export const App = () => {
             <CacheBuster>
               <ApolloProvider client={client}>
                 <AuthProvider>
-                  <BtcProvider>
-                    <FilterProvider>
-                      <Head />
-                      <ReferralCapture />
-                      <Outlet />
-                    </FilterProvider>
-                  </BtcProvider>
+                  <FilterProvider>
+                    <Head />
+                    <ReferralCapture />
+                    <Outlet />
+                  </FilterProvider>
                 </AuthProvider>
               </ApolloProvider>
             </CacheBuster>

@@ -1,5 +1,7 @@
 import { atom } from 'jotai'
 
-import { UserTaxProfileFragment } from '@/types/index.ts'
+import { LegalEntityType, UserTaxProfileFragment } from '@/types/index.ts'
 
-export const userTaxProfileAtom = atom<UserTaxProfileFragment | null>(null)
+export const userTaxProfileAtom = atom<UserTaxProfileFragment>({
+  legalEntityType: LegalEntityType.Person,
+} as UserTaxProfileFragment)

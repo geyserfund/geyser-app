@@ -32,7 +32,7 @@ type Props = UseControllerProps<any, any> &
     containerProps?: StackProps
   }
 
-export function ControlledTextInput(props: Props) {
+export const ControlledTextInput = (props: Props) => {
   const { field, formState } = useController(props)
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     if (field?.onBlur) {
@@ -68,7 +68,7 @@ export function ControlledTextInput(props: Props) {
   const title =
     props.label || props.infoTooltip ? (
       <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-        <Body size={props.size || 'md'} medium>
+        <Body size={props.size || 'lg'} medium>
           {props.label}
         </Body>
         {props.infoTooltip && props.infoTooltip}

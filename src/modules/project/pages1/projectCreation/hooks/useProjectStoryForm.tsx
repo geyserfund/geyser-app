@@ -21,7 +21,7 @@ const schema = yup.object({
 export const useProjectStoryForm = ({ project }: { project?: ProjectState | null }) => {
   const form = useForm<{ description: string }>({
     resolver: yupResolver(schema),
-    reValidateMode: 'onSubmit',
+    reValidateMode: 'onChange',
     values: useMemo(() => ({ description: project?.description || '' }), [project]),
   })
 
