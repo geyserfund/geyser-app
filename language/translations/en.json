@@ -1380,5 +1380,8 @@
   "Post published": "Post published",
   "Your post is now live": "Your post is now live",
   "INACTIVE": "INACTIVE",
-  "ACTIVE": "ACTIVE"
+  "ACTIVE": "ACTIVE",
+  "NOTE: This makes shipping address mandatory for contributors who buy this product.": "NOTE: This makes shipping address mandatory for contributors who buy this product.",
+  "No shipping fees added yet. This means the product price includes shipping costs.": "No shipping fees added yet. This means the product price includes shipping costs.",
+  "Update": "Update"
 }
