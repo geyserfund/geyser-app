@@ -1,4 +1,9 @@
-import { Grant3AnnouncementImageUrl, Grant3AnnouncementTwitterUrl } from '../../shared/constants'
+import {
+  Grant3AnnouncementImageUrl,
+  Grant3AnnouncementTwitterUrl,
+  Grant14AnnouncementImageUrl,
+  Grant14AnnouncementTwitterUrl,
+} from '../../shared/constants'
 import { GrantStatusEnum } from '../../types'
 
 export const GRANT_STATUS_MAP: Record<GrantStatusEnum, string> = {
@@ -50,6 +55,10 @@ export const GrantAnnouncements: { [key: string]: GrantAnnouncement } = {
   'grant-round-003': {
     linkUrl: Grant3AnnouncementTwitterUrl,
     imageUrl: Grant3AnnouncementImageUrl,
+  },
+  'grant-round-014': {
+    linkUrl: Grant14AnnouncementTwitterUrl,
+    imageUrl: Grant14AnnouncementImageUrl,
   },
 }
 

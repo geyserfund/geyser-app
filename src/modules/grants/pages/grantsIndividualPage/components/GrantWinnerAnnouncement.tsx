@@ -17,7 +17,7 @@ export const GrantWinnerAnnouncement = ({ imageUrl, linkUrl, ...rest }: GrantWin
         {t('See the winner announcement')}
       </H3>
 
-      <Image maxWidth="350px" alt="grant-3-announcement-url" src={imageUrl} />
+      <Image borderRadius="8px" maxWidth="350px" alt="grant-3-announcement-url" src={imageUrl} />
 
       <Button
         as={Link}
@@ -29,7 +29,7 @@ export const GrantWinnerAnnouncement = ({ imageUrl, linkUrl, ...rest }: GrantWin
         px="10px"
         textDecoration="none"
       >
-        {t('Announcement')}
+        {t('View announcement')}
       </Button>
     </CardLayout>
   )
