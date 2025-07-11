@@ -1383,5 +1383,17 @@
   "ACTIVE": "ACTIVE",
   "NOTE: This makes shipping address mandatory for contributors who buy this product.": "NOTE: This makes shipping address mandatory for contributors who buy this product.",
   "No shipping fees added yet. This means the product price includes shipping costs.": "No shipping fees added yet. This means the product price includes shipping costs.",
-  "Update": "Update"
+  "Update": "Update",
+  "Subscribe to Geyser Grants": "Subscribe to Geyser Grants",
+  "Enter your email": "Enter your email",
+  "Live Grants": "Live Grants",
+  "All Grants": "All Grants",
+  "NWC Software and Hardware Grant": "NWC Software and Hardware Grant",
+  "A global grant round to fund open-source projects that integrate Nostr Wallet Connect (NWC), supporting both software and hardware applications. Builders will have access to workshops, pitch sessions, and mentorship from leaders in the space.": "A global grant round to fund open-source projects that integrate Nostr Wallet Connect (NWC), supporting both software and hardware applications. Builders will have access to workshops, pitch sessions, and mentorship from leaders in the space.",
+  "Board-voting grant": "Board-voting grant",
+  "Time remaining to submit application": "Time remaining to submit application",
+  "Applicants": "Applicants",
+  "This Grant uses Proportional Voting to enable more funding to go towards projects. This means:": "This Grant uses Proportional Voting to enable more funding to go towards projects. This means:",
+  "Time left": "Time left",
+  "View announcement": "View announcement"
 }
