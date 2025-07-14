@@ -13,11 +13,11 @@ import { VerifiedButton } from '@/shared/molecules/VerifiedButton.tsx'
 import { ProjectCreationStep } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
-import { VerificationModal } from '../../../projectDashboard/components/VerificationModal.tsx'
-import { EnableFiatContributions } from '../../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
-import { useUpdateProjectWithLastCreationStep } from '../../hooks/useIsStepAhead.tsx'
-import { ProjectCreationLayout } from '../../Layouts/ProjectCreationLayout.tsx'
-import { LaunchConnectWallet } from './components/LaunchConnectWallet.tsx'
+import { VerificationModal } from '../../../../projectDashboard/components/VerificationModal.tsx'
+import { EnableFiatContributions } from '../../../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
+import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
+import { ProjectCreationLayout } from '../../../Layouts/ProjectCreationLayout.tsx'
+import { LaunchConnectWallet } from '../components/LaunchConnectWallet.tsx'
 
 export const LaunchPaymentWallet = () => {
   const { user } = useAuthContext()

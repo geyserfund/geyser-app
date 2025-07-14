@@ -50,8 +50,6 @@ export const ViewInvoice = ({
     return null
   }
 
-  console.log('checking transaction', invoiceData)
-
   const ownerUser = projectOwners?.projectGet?.owners[0]?.user
 
   return (

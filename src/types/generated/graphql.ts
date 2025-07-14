@@ -1451,6 +1451,7 @@ export type Mutation = {
   updateProject: Project;
   updateUser: User;
   updateWalletState: Wallet;
+  userAccountKeysUpdate: UserAccountKeys;
   userBadgeAward: UserBadge;
   userDelete: DeleteUserResponse;
   userEmailUpdate: User;
@@ -1750,6 +1751,11 @@ export type MutationUpdateUserArgs = {
 
 export type MutationUpdateWalletStateArgs = {
   input: UpdateWalletStateInput;
+};
+
+
+export type MutationUserAccountKeysUpdateArgs = {
+  input: UserAccountKeysUpdateInput;
 };
 
 
@@ -2407,7 +2413,7 @@ export type Project = {
   category?: Maybe<ProjectCategory>;
   contributions: Array<Contribution>;
   contributionsCount?: Maybe<Scalars['Int']['output']>;
-  createdAt: Scalars['String']['output'];
+  createdAt: Scalars['Date']['output'];
   defaultGoalId?: Maybe<Scalars['BigInt']['output']>;
   /** Description of the project. */
   description?: Maybe<Scalars['String']['output']>;
@@ -2476,7 +2482,7 @@ export type Project = {
   /** Public title of the project. */
   title: Scalars['String']['output'];
   type: ProjectType;
-  updatedAt: Scalars['String']['output'];
+  updatedAt: Scalars['Date']['output'];
   /** Wallets linked to a Project. */
   wallets: Array<Wallet>;
 };
@@ -3587,6 +3593,19 @@ export enum RewardCurrency {
   Usdcent = 'USDCENT'
 }
 
+export type RskKeyPair = {
+  __typename?: 'RskKeyPair';
+  address: Scalars['String']['output'];
+  derivationPath: Scalars['String']['output'];
+  publicKey: Scalars['String']['output'];
+};
+
+export type RskKeyPairInput = {
+  address: Scalars['String']['input'];
+  derivationPath: Scalars['String']['input'];
+  publicKey: Scalars['String']['input'];
+};
+
 export type SendOtpByEmailInput = {
   action: MfaAction;
   email?: InputMaybe<Scalars['String']['input']>;
@@ -3892,6 +3911,7 @@ export type UpdateWalletStateInput = {
 
 export type User = {
   __typename?: 'User';
+  accountKeys?: Maybe<UserAccountKeys>;
   badges: Array<UserBadge>;
   bio?: Maybe<Scalars['String']['output']>;
   complianceDetails: UserComplianceDetails;
@@ -3961,6 +3981,21 @@ export type UserPostsArgs = {
 
 export type UserProjectsArgs = {
   input?: InputMaybe<UserProjectsGetInput>;
+};
+
+export type UserAccountKeys = {
+  __typename?: 'UserAccountKeys';
+  createdAt: Scalars['Date']['output'];
+  encryptedSeed: Scalars['String']['output'];
+  id: Scalars['BigInt']['output'];
+  rskKeyPair: RskKeyPair;
+  updatedAt: Scalars['Date']['output'];
+  userId: Scalars['BigInt']['output'];
+};
+
+export type UserAccountKeysUpdateInput = {
+  encryptedSeed: Scalars['String']['input'];
+  rskKeyPair: RskKeyPairInput;
 };
 
 export type UserBadge = {
@@ -4745,6 +4780,8 @@ export type ResolversTypes = {
   RejectionReason: RejectionReason;
   ResourceInput: ResourceInput;
   RewardCurrency: RewardCurrency;
+  RskKeyPair: ResolverTypeWrapper<RskKeyPair>;
+  RskKeyPairInput: RskKeyPairInput;
   SendOtpByEmailInput: SendOtpByEmailInput;
   SettingValueType: SettingValueType;
   ShippingAddress: ResolverTypeWrapper<ShippingAddress>;
@@ -4783,6 +4820,8 @@ export type ResolversTypes = {
   UpdateWalletInput: UpdateWalletInput;
   UpdateWalletStateInput: UpdateWalletStateInput;
   User: ResolverTypeWrapper<Omit<User, 'contributions' | 'entries' | 'ownerOf' | 'projectFollows' | 'projects' | 'wallet'> & { contributions: Array<ResolversTypes['Contribution']>, entries: Array<ResolversTypes['Entry']>, ownerOf: Array<ResolversTypes['OwnerOf']>, projectFollows: Array<ResolversTypes['Project']>, projects: Array<ResolversTypes['Project']>, wallet?: Maybe<ResolversTypes['Wallet']> }>;
+  UserAccountKeys: ResolverTypeWrapper<UserAccountKeys>;
+  UserAccountKeysUpdateInput: UserAccountKeysUpdateInput;
   UserBadge: ResolverTypeWrapper<UserBadge>;
   UserBadgeStatus: UserBadgeStatus;
   UserComplianceDetails: ResolverTypeWrapper<UserComplianceDetails>;
@@ -5146,6 +5185,8 @@ export type ResolversParentTypes = {
   ProjectsSummary: ProjectsSummary;
   Query: {};
   ResourceInput: ResourceInput;
+  RskKeyPair: RskKeyPair;
+  RskKeyPairInput: RskKeyPairInput;
   SendOtpByEmailInput: SendOtpByEmailInput;
   ShippingAddress: ShippingAddress;
   ShippingAddressCreateInput: ShippingAddressCreateInput;
@@ -5179,6 +5220,8 @@ export type ResolversParentTypes = {
   UpdateWalletInput: UpdateWalletInput;
   UpdateWalletStateInput: UpdateWalletStateInput;
   User: Omit<User, 'contributions' | 'entries' | 'ownerOf' | 'projectFollows' | 'projects' | 'wallet'> & { contributions: Array<ResolversParentTypes['Contribution']>, entries: Array<ResolversParentTypes['Entry']>, ownerOf: Array<ResolversParentTypes['OwnerOf']>, projectFollows: Array<ResolversParentTypes['Project']>, projects: Array<ResolversParentTypes['Project']>, wallet?: Maybe<ResolversParentTypes['Wallet']> };
+  UserAccountKeys: UserAccountKeys;
+  UserAccountKeysUpdateInput: UserAccountKeysUpdateInput;
   UserBadge: UserBadge;
   UserComplianceDetails: UserComplianceDetails;
   UserContributionLimit: UserContributionLimit;
@@ -5883,6 +5926,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationUpdateProjectArgs, 'input'>>;
   updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
   updateWalletState?: Resolver<ResolversTypes['Wallet'], ParentType, ContextType, RequireFields<MutationUpdateWalletStateArgs, 'input'>>;
+  userAccountKeysUpdate?: Resolver<ResolversTypes['UserAccountKeys'], ParentType, ContextType, RequireFields<MutationUserAccountKeysUpdateArgs, 'input'>>;
   userBadgeAward?: Resolver<ResolversTypes['UserBadge'], ParentType, ContextType, RequireFields<MutationUserBadgeAwardArgs, 'userBadgeId'>>;
   userDelete?: Resolver<ResolversTypes['DeleteUserResponse'], ParentType, ContextType>;
   userEmailUpdate?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUserEmailUpdateArgs, 'input'>>;
@@ -6188,7 +6232,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   category?: Resolver<Maybe<ResolversTypes['ProjectCategory']>, ParentType, ContextType>;
   contributions?: Resolver<Array<ResolversTypes['Contribution']>, ParentType, ContextType>;
   contributionsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   defaultGoalId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   entries?: Resolver<Array<ResolversTypes['Entry']>, ParentType, ContextType, Partial<ProjectEntriesArgs>>;
@@ -6233,7 +6277,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   thumbnailImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['ProjectType'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   wallets?: Resolver<Array<ResolversTypes['Wallet']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -6643,6 +6687,13 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   userSubscriptions?: Resolver<Array<ResolversTypes['UserSubscription']>, ParentType, ContextType, RequireFields<QueryUserSubscriptionsArgs, 'input'>>;
 };
 
+export type RskKeyPairResolvers<ContextType = any, ParentType extends ResolversParentTypes['RskKeyPair'] = ResolversParentTypes['RskKeyPair']> = {
+  address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  derivationPath?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  publicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ShippingAddressResolvers<ContextType = any, ParentType extends ResolversParentTypes['ShippingAddress'] = ResolversParentTypes['ShippingAddress']> = {
   addressLines?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -6726,6 +6777,7 @@ export type TagsMostFundedGetResultResolvers<ContextType = any, ParentType exten
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  accountKeys?: Resolver<Maybe<ResolversTypes['UserAccountKeys']>, ParentType, ContextType>;
   badges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType>;
   bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   complianceDetails?: Resolver<ResolversTypes['UserComplianceDetails'], ParentType, ContextType>;
@@ -6753,6 +6805,16 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   taxProfileId?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   wallet?: Resolver<Maybe<ResolversTypes['Wallet']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserAccountKeysResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserAccountKeys'] = ResolversParentTypes['UserAccountKeys']> = {
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  encryptedSeed?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  rskKeyPair?: Resolver<ResolversTypes['RskKeyPair'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7072,6 +7134,7 @@ export type Resolvers<ContextType = any> = {
   ProjectsResponse?: ProjectsResponseResolvers<ContextType>;
   ProjectsSummary?: ProjectsSummaryResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  RskKeyPair?: RskKeyPairResolvers<ContextType>;
   ShippingAddress?: ShippingAddressResolvers<ContextType>;
   ShippingConfig?: ShippingConfigResolvers<ContextType>;
   SignedUploadUrl?: SignedUploadUrlResolvers<ContextType>;
@@ -7084,6 +7147,7 @@ export type Resolvers<ContextType = any> = {
   TagsGetResult?: TagsGetResultResolvers<ContextType>;
   TagsMostFundedGetResult?: TagsMostFundedGetResultResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
+  UserAccountKeys?: UserAccountKeysResolvers<ContextType>;
   UserBadge?: UserBadgeResolvers<ContextType>;
   UserComplianceDetails?: UserComplianceDetailsResolvers<ContextType>;
   UserContributionLimit?: UserContributionLimitResolvers<ContextType>;
@@ -7125,7 +7189,7 @@ export type CommunityVoteGrantFragmentFragment = { __typename?: 'CommunityVoteGr
 
 export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null };
 
-export type ProjectForOwnerFragment = { __typename?: 'Project', id: any, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: string };
+export type ProjectForOwnerFragment = { __typename?: 'Project', id: any, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: any };
 
 export type ProjectWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode }, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', macaroon: string, tlsCertificate?: string | null, hostname: string, grpcPort: number, lndNodeType: LndNodeType, pubkey?: string | null } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } | { __typename?: 'NWCConnectionDetailsPrivate' } };
 
@@ -7310,7 +7374,7 @@ export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, n
 
 export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, balanceUsdCent: number, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
-export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: string, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, balanceUsdCent: number, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
+export type ProjectForMyProjectsFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rewardsCount?: number | null, followersCount?: number | null, balanceUsdCent: number, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
 
 export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, shortDescription?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
@@ -7610,7 +7674,7 @@ export type UserNotificationsSettingsFragment = { __typename?: 'ProfileNotificat
       & NotificationSettingsFragment
     )> } };
 
-export type ProjectForProfilePageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: string, status?: ProjectStatus | null, rejectionReason?: string | null, rewardsCount?: number | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
+export type ProjectForProfilePageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rejectionReason?: string | null, rewardsCount?: number | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
 
 export type ProjectForProfileContributionsFragment = { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null };
 
@@ -7923,7 +7987,7 @@ export type ProjectPostViewFragment = { __typename?: 'Post', id: any, title: str
       & ProjectGoalsFragment
     )> } };
 
-export type ProjectFragment = { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: string, updatedAt: string, images: Array<string>, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, contributionsCount?: number | null };
+export type ProjectFragment = { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: any, updatedAt: any, images: Array<string>, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, contributionsCount?: number | null };
 
 export type ProjectNostrKeysFragment = { __typename?: 'Project', id: any, name: string, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', privateKey?: { __typename?: 'NostrPrivateKey', nsec: string } | null, publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
 
@@ -7933,7 +7997,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: string, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonGoalDurationInDays?: number | null, aonGoalInSats?: number | null, location?: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonGoalDurationInDays?: number | null, aonGoalInSats?: number | null, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -7974,6 +8038,8 @@ export type ShippingConfigFragment = { __typename?: 'ShippingConfig', id?: any |
   )> | null };
 
 export type ShippingAddressFragment = { __typename?: 'ShippingAddress', id: string, postalCode: string, state?: string | null, fullName: string, country: string, city: string, addressLines: Array<string> };
+
+export type UserAccountKeysFragment = { __typename?: 'UserAccountKeys', id: any, encryptedSeed: string, createdAt: any, userId: any, updatedAt: any, rskKeyPair: { __typename?: 'RskKeyPair', address: string, derivationPath: string, publicKey: string } };
 
 export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: any, country?: string | null, legalEntityType: LegalEntityType, verified?: boolean | null } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
 
@@ -8290,6 +8356,16 @@ export type ProjectTagCreateMutationVariables = Exact<{
 
 
 export type ProjectTagCreateMutation = { __typename?: 'Mutation', tagCreate: { __typename?: 'Tag', id: number, label: string } };
+
+export type UserAccountKeysUpdateMutationVariables = Exact<{
+  input: UserAccountKeysUpdateInput;
+}>;
+
+
+export type UserAccountKeysUpdateMutation = { __typename?: 'Mutation', userAccountKeysUpdate: (
+    { __typename?: 'UserAccountKeys' }
+    & UserAccountKeysFragment
+  ) };
 
 export type UserVerificationTokenGenerateMutationVariables = Exact<{
   input: UserVerificationTokenGenerateInput;
@@ -8743,6 +8819,16 @@ export type GetProjectOwnerUserForInvoiceQuery = { __typename?: 'Query', project
         { __typename?: 'User' }
         & ProjectOwnerUserForInvoiceFragment
       ) }> } | null };
+
+export type AccountKeysQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type AccountKeysQuery = { __typename?: 'Query', user: { __typename?: 'User', accountKeys?: (
+      { __typename?: 'UserAccountKeys' }
+      & UserAccountKeysFragment
+    ) | null } };
 
 export type FundingContributionStatusUpdatedSubscriptionVariables = Exact<{
   input?: InputMaybe<ContributionStatusUpdatedInput>;
@@ -10588,6 +10674,20 @@ export const ProjectRewardFragmentDoc = gql`
   }
 }
     ${ShippingConfigFragmentDoc}`;
+export const UserAccountKeysFragmentDoc = gql`
+    fragment UserAccountKeys on UserAccountKeys {
+  id
+  rskKeyPair {
+    address
+    derivationPath
+    publicKey
+  }
+  encryptedSeed
+  createdAt
+  userId
+  updatedAt
+}
+    `;
 export const ProjectOwnerUserForInvoiceFragmentDoc = gql`
     fragment ProjectOwnerUserForInvoice on User {
   id
@@ -14442,6 +14542,39 @@ export function useProjectTagCreateMutation(baseOptions?: Apollo.MutationHookOpt
 export type ProjectTagCreateMutationHookResult = ReturnType<typeof useProjectTagCreateMutation>;
 export type ProjectTagCreateMutationResult = Apollo.MutationResult<ProjectTagCreateMutation>;
 export type ProjectTagCreateMutationOptions = Apollo.BaseMutationOptions<ProjectTagCreateMutation, ProjectTagCreateMutationVariables>;
+export const UserAccountKeysUpdateDocument = gql`
+    mutation UserAccountKeysUpdate($input: UserAccountKeysUpdateInput!) {
+  userAccountKeysUpdate(input: $input) {
+    ...UserAccountKeys
+  }
+}
+    ${UserAccountKeysFragmentDoc}`;
+export type UserAccountKeysUpdateMutationFn = Apollo.MutationFunction<UserAccountKeysUpdateMutation, UserAccountKeysUpdateMutationVariables>;
+
+/**
+ * __useUserAccountKeysUpdateMutation__
+ *
+ * To run a mutation, you first call `useUserAccountKeysUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserAccountKeysUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userAccountKeysUpdateMutation, { data, loading, error }] = useUserAccountKeysUpdateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUserAccountKeysUpdateMutation(baseOptions?: Apollo.MutationHookOptions<UserAccountKeysUpdateMutation, UserAccountKeysUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserAccountKeysUpdateMutation, UserAccountKeysUpdateMutationVariables>(UserAccountKeysUpdateDocument, options);
+      }
+export type UserAccountKeysUpdateMutationHookResult = ReturnType<typeof useUserAccountKeysUpdateMutation>;
+export type UserAccountKeysUpdateMutationResult = Apollo.MutationResult<UserAccountKeysUpdateMutation>;
+export type UserAccountKeysUpdateMutationOptions = Apollo.BaseMutationOptions<UserAccountKeysUpdateMutation, UserAccountKeysUpdateMutationVariables>;
 export const UserVerificationTokenGenerateDocument = gql`
     mutation UserVerificationTokenGenerate($input: UserVerificationTokenGenerateInput!) {
   userVerificationTokenGenerate(input: $input) {
@@ -16374,6 +16507,48 @@ export type GetProjectOwnerUserForInvoiceQueryHookResult = ReturnType<typeof use
 export type GetProjectOwnerUserForInvoiceLazyQueryHookResult = ReturnType<typeof useGetProjectOwnerUserForInvoiceLazyQuery>;
 export type GetProjectOwnerUserForInvoiceSuspenseQueryHookResult = ReturnType<typeof useGetProjectOwnerUserForInvoiceSuspenseQuery>;
 export type GetProjectOwnerUserForInvoiceQueryResult = Apollo.QueryResult<GetProjectOwnerUserForInvoiceQuery, GetProjectOwnerUserForInvoiceQueryVariables>;
+export const AccountKeysDocument = gql`
+    query AccountKeys($where: UserGetInput!) {
+  user(where: $where) {
+    accountKeys {
+      ...UserAccountKeys
+    }
+  }
+}
+    ${UserAccountKeysFragmentDoc}`;
+
+/**
+ * __useAccountKeysQuery__
+ *
+ * To run a query within a React component, call `useAccountKeysQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAccountKeysQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAccountKeysQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useAccountKeysQuery(baseOptions: Apollo.QueryHookOptions<AccountKeysQuery, AccountKeysQueryVariables> & ({ variables: AccountKeysQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AccountKeysQuery, AccountKeysQueryVariables>(AccountKeysDocument, options);
+      }
+export function useAccountKeysLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AccountKeysQuery, AccountKeysQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AccountKeysQuery, AccountKeysQueryVariables>(AccountKeysDocument, options);
+        }
+export function useAccountKeysSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AccountKeysQuery, AccountKeysQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AccountKeysQuery, AccountKeysQueryVariables>(AccountKeysDocument, options);
+        }
+export type AccountKeysQueryHookResult = ReturnType<typeof useAccountKeysQuery>;
+export type AccountKeysLazyQueryHookResult = ReturnType<typeof useAccountKeysLazyQuery>;
+export type AccountKeysSuspenseQueryHookResult = ReturnType<typeof useAccountKeysSuspenseQuery>;
+export type AccountKeysQueryResult = Apollo.QueryResult<AccountKeysQuery, AccountKeysQueryVariables>;
 export const FundingContributionStatusUpdatedDocument = gql`
     subscription FundingContributionStatusUpdated($input: ContributionStatusUpdatedInput) {
   contributionStatusUpdated(input: $input) {

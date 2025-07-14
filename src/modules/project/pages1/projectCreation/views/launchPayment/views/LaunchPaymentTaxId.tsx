@@ -10,8 +10,8 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCreationStep } from '@/types/index.ts'
 
-import { useUpdateProjectWithLastCreationStep } from '../../hooks/useIsStepAhead.tsx'
-import { ProjectCreationLayout } from '../../Layouts/ProjectCreationLayout.tsx'
+import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
+import { ProjectCreationLayout } from '../../../Layouts/ProjectCreationLayout.tsx'
 
 export const LaunchPaymentTaxId = () => {
   const { user } = useAuthContext()
