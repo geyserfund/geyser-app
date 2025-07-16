@@ -92,11 +92,23 @@ export const GrantPage = () => {
       : []
 
   if (grant.name === 'grant-round-001') {
-    return <GrantsRoundOne applicants={applicants} isCompetitionVote={grant.type === GrantType.CommunityVote} />
+    return (
+      <GrantsRoundOne
+        applicants={applicants}
+        isCompetitionVote={grant.type === GrantType.CommunityVote}
+        grantName={grant.name}
+      />
+    )
   }
 
   if (grant.name === 'grant-round-002') {
-    return <GrantsRoundTwo applicants={applicants} isCompetitionVote={grant.type === GrantType.CommunityVote} />
+    return (
+      <GrantsRoundTwo
+        grantName={grant.name}
+        applicants={applicants}
+        isCompetitionVote={grant.type === GrantType.CommunityVote}
+      />
+    )
   }
 
   const winnerAnnouncement = GrantAnnouncements[grant.name]
@@ -124,7 +136,6 @@ export const GrantPage = () => {
   const grantHasVoting = GrantHasVoting[grant.name]
   const grantHasSubscribeSegment = GrantSubscribeSegment[grant.name]
   const isCompetitionVote = grant.type === GrantType.CommunityVote
-  const showCommunityVoting = applicants.length > 0
   const showDistributionChart = grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
   const showGrantApply = grant.status === GrantStatusEnum.ApplicationsOpen
   const showContributeToGrant = !isCompetitionVote && !NoContributionInGrant.includes(grant.name)
@@ -207,10 +218,11 @@ export const GrantPage = () => {
                     <MobileDivider />
                   </>
                 )}
-                {showCommunityVoting && (
+                {applicants.length > 0 && (
                   <>
                     <CommunityVoting
                       title={getTitle()}
+                      grantName={grant.name}
                       applicants={applicants}
                       grantHasVoting={grantHasVoting}
                       grantStatus={grant.status}
