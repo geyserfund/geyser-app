@@ -55,9 +55,11 @@ const grants = [
 export const GrantsRoundOne = ({
   applicants,
   isCompetitionVote,
+  grantName,
 }: {
   applicants?: GrantApplicant[]
   isCompetitionVote: boolean
+  grantName: string
 }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
@@ -183,6 +185,7 @@ export const GrantsRoundOne = ({
             <Box my={5}>
               <CommunityVoting
                 title="Grant Winners"
+                grantName={grantName}
                 applicants={applicants}
                 grantHasVoting={false}
                 grantStatus={GrantStatusEnum.Closed}

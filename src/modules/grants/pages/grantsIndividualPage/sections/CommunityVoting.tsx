@@ -15,6 +15,7 @@ interface Props {
   isClosed?: boolean
   isCompetitionVote: boolean
   votingSystem?: VotingSystem
+  grantName: string
 }
 
 export const CommunityVoting = ({
@@ -25,6 +26,7 @@ export const CommunityVoting = ({
   isClosed,
   isCompetitionVote,
   votingSystem,
+  grantName,
 }: Props) => {
   const { t } = useTranslation()
   const { user, isLoggedIn } = useAuthContext()
@@ -77,6 +79,7 @@ export const CommunityVoting = ({
               canVote={canVote || false}
               currentUser={user}
               votingSystem={votingSystem}
+              grantName={grantName}
             />
           )
         })}
