@@ -38,8 +38,7 @@ export const LaunchProjectDetails = () => {
 
   const { createProject, updateProject } = useProjectAPI()
 
-  const onLeave = () =>
-    navigate(params.projectId ? `${getPath('launchStartProject', params.projectId)}` : getPath('launchStart'))
+  const onLeave = () => navigate(getPath('launchStart'))
 
   const unsavedModal = useProjectUnsavedModal({
     hasUnsaved: form.formState.isDirty,

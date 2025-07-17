@@ -1,17 +1,11 @@
 import { HStack } from '@chakra-ui/react'
 
-import { BoltIcon, NodeIcon } from '@/components/icons/index.tsx'
-import { NWCIcon } from '@/components/icons/svg/NWCIcon.tsx'
 import { NodeConnectionDetails } from '@/modules/project/components/NodeConnectionDetails.tsx'
 import { useWalletAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { WalletConnectDetails } from '@/shared/constants/platform/wallet.ts'
-import {
-  LightningAddressConnectionDetails,
-  LndConnectionDetailsPrivate,
-  NwcConnectionDetailsPrivate,
-} from '@/types/index.ts'
+import { LndConnectionDetailsPrivate } from '@/types/index.ts'
 
 import { ConnectionOption } from '../../../hooks/useWalletForm.tsx'
 import { WalletList } from './ConnectWalletModal.tsx'

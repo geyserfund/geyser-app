@@ -1,11 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router'
 import * as yup from 'yup'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI'
-import { PathName } from '@/shared/constants'
 
 import { ProjectGoalCreateInput, ProjectGoalCurrency, ProjectGoalFragment } from '../../../../../types'
 import { dollarsToCents, useNotification } from '../../../../../utils'

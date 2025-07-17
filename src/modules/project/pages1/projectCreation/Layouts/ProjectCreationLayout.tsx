@@ -1,13 +1,15 @@
-import { Button, ButtonProps, Icon, StackProps } from '@chakra-ui/react'
+import { Button, ButtonProps, Icon, IconButton, StackProps, useBreakpointValue } from '@chakra-ui/react'
 import { VStack } from '@chakra-ui/react'
 import { HStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PropsWithChildren } from 'react'
-import { PiArrowLeft, PiArrowRight, PiEye } from 'react-icons/pi'
-import { useNavigate } from 'react-router'
+import { PiArrowLeft, PiArrowRight, PiEye, PiListBullets } from 'react-icons/pi'
+import { useNavigate, useParams } from 'react-router'
+import { Link } from 'react-router-dom'
 
 import { H1 } from '@/shared/components/typography/Heading.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { getPath } from '@/shared/constants/index.ts'
 
 type ProjectCreationLayoutProps = PropsWithChildren<{
   title: string
@@ -27,7 +29,10 @@ export const ProjectCreationLayout = ({
   buttonContainerProps,
   ...rest
 }: ProjectCreationLayoutProps) => {
+  const isMobile = useBreakpointValue({ base: true, md: false })
+
   const navigate = useNavigate()
+  const params = useParams<{ projectId: string }>()
   return (
     <VStack
       flex={1}
@@ -41,11 +46,21 @@ export const ProjectCreationLayout = ({
       {...rest}
     >
       <HStack w="full" justifyContent="space-between">
-        <VStack>
+        <HStack spacing={2}>
+          {isMobile && (
+            <IconButton
+              aria-label="creation-menu"
+              variant="ghost"
+              as={Link}
+              size="sm"
+              to={getPath('launchProject', params.projectId || '')}
+              icon={<Icon as={PiListBullets} fontSize={28} />}
+            />
+          )}
           <H1 fontSize="2xl" medium>
             {title}
           </H1>
-        </VStack>
+        </HStack>
 
         <HStack>
           <Button variant="ghost" leftIcon={<Icon as={PiEye} />}>

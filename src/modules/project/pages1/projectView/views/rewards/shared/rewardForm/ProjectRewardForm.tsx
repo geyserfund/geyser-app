@@ -12,7 +12,6 @@ import { ControlledAmountInput } from '@/shared/components/controlledInput/Contr
 import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
 import { ControlledSwitchInput } from '@/shared/components/controlledInput/ControlledSwitchInput'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { CalendarButton } from '@/shared/molecules'
 import { BackButton } from '@/shared/molecules/BackButton.tsx'

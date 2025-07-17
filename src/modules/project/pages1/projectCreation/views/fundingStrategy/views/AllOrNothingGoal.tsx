@@ -1,16 +1,13 @@
-import { Button, Checkbox, Input, InputGroup, InputLeftElement, InputRightElement, VStack } from '@chakra-ui/react'
+import { Button, Input, InputGroup, InputLeftElement, InputRightElement, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { DateTime } from 'luxon'
-import { useState } from 'react'
 import ReactDatePicker from 'react-datepicker'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import * as yup from 'yup'
 
-import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
-import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { ControlledCheckboxInput } from '@/shared/components/controlledInput/ControlledCheckboxInput.tsx'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
@@ -19,7 +16,7 @@ import { getPath } from '@/shared/constants/index.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { ProjectCreationStep } from '@/types/index.ts'
-import { commaFormatted, toInt, useNotification } from '@/utils/index.ts'
+import { commaFormatted, toInt } from '@/utils/index.ts'
 
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 import { ProjectCreationLayout } from '../../../Layouts/ProjectCreationLayout.tsx'
@@ -43,7 +40,6 @@ type FormValues = yup.InferType<typeof formSchema>
 
 export const AllOrNothingGoal = () => {
   const navigate = useNavigate()
-  const toast = useNotification()
   const usdRate = useAtomValue(usdRateAtom)
 
   const { control, handleSubmit, register, setValue, watch, formState, clearErrors } = useForm<FormValues>({

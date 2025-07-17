@@ -90,6 +90,7 @@ export const formattedFundingInputAtom = atom((get) => {
   }
 
   const input: ContributionCreateInput = {
+    refundable: true,
     projectId: toInt(fundingProject?.id),
     projectGoalId,
     anonymous,

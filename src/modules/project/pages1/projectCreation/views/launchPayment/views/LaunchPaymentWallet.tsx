@@ -42,6 +42,7 @@ export const LaunchPaymentWallet = () => {
 
       if (!wallet?.id) {
         toast.error({ title: t('Please connect a wallet to continue') })
+        return
       }
 
       updateProjectWithLastCreationStep()

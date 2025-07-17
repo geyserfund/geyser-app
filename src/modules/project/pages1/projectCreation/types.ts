@@ -1,4 +1,4 @@
-import { CreateProjectInput, ProjectType, RewardCurrency, Satoshis, UpdateProjectInput } from '../../../../types'
+import { ProjectType, RewardCurrency, Satoshis } from '../../../../types'
 
 export type ProjectCreationVariables = {
   title: string

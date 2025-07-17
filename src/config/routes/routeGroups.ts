@@ -18,14 +18,23 @@ export const routeMatchForAtom =
 
 export const projectCreationRoutesThatNeedStory = [
   getPath('launchPayment', PathName.projectId),
-  getPath('launchProjectStrategy', PathName.projectId),
+  getPath('launchPaymentWallet', PathName.projectId),
+  getPath('launchPaymentTaxId', PathName.projectId),
+  getPath('launchPaymentAccountPassword', PathName.projectId),
+  getPath('launchAboutYou', PathName.projectId),
+  getPath('launchSummary', PathName.projectId),
 ]
 
 export const privateCreatorProjectCreationRoutes = [
   getPath('launch'),
   getPath('launchProject', PathName.projectId),
-  getPath('launchStartProject', PathName.projectId),
-  getPath('launchProjectDetails'),
+  getPath('launchProjectDetails', PathName.projectId),
+  getPath('launchProjectRewards', PathName.projectId),
+  getPath('launchProjectRewardsCreate', PathName.projectId),
+  getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardUUID),
+  getPath('launchProjectFunding', PathName.projectId),
+  getPath('launchFundingStrategy', PathName.projectId),
+  getPath('launchFundingGoal', PathName.projectId),
   getPath('launchStory', PathName.projectId),
   ...projectCreationRoutesThatNeedStory,
 ]

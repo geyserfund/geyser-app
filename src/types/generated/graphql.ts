@@ -260,6 +260,7 @@ export type ContributionCreateInput = {
   projectGoalId?: InputMaybe<Scalars['BigInt']['input']>;
   projectId: Scalars['BigInt']['input'];
   referrerHeroId?: InputMaybe<Scalars['String']['input']>;
+  refundable: Scalars['Boolean']['input'];
   /** The resource from which the contribution is being created. */
   sourceResourceInput: ResourceInput;
 };
@@ -399,6 +400,18 @@ export type ContributionPaymentsInput = {
   lightningToRskSwap?: InputMaybe<ContributionLightningToRskSwapPaymentDetailsInput>;
   onChainSwap?: InputMaybe<ContributionOnChainSwapPaymentDetailsInput>;
   onChainToRskSwap?: InputMaybe<ContributionOnChainToRskSwapPaymentDetailsInput>;
+};
+
+export type ContributionRefundInput = {
+  contributionId: Scalars['BigInt']['input'];
+  /** The payment details to refund the contributor. */
+  refundPaymentInput?: InputMaybe<RefundPaymentInput>;
+};
+
+export type ContributionRefundResponse = {
+  __typename?: 'ContributionRefundResponse';
+  contribution: Contribution;
+  refund: Refund;
 };
 
 export enum ContributionStatus {
@@ -1388,6 +1401,7 @@ export type Mutation = {
   contributionCreate: ContributionMutationResponse;
   contributionEmailUpdate: Contribution;
   contributionPaymentsAdd: ContributionPaymentsAddResponse;
+  contributionRefund: ContributionRefundResponse;
   /** @deprecated Use postCreate instead */
   createEntry: Entry;
   /** @deprecated Use projectCreate instead */
@@ -1408,6 +1422,12 @@ export type Mutation = {
   postPublish: Post;
   postSendByEmail: PostSendByEmailResponse;
   postUpdate: Post;
+  /** Mark an AON goal as cancelled (Accountant only) */
+  projectAonGoalMarkCancelled: ProjectAonGoalStatusUpdateResponse;
+  /** Mark an AON goal as claimed (Accountant only) */
+  projectAonGoalMarkClaimed: ProjectAonGoalStatusUpdateResponse;
+  /** Mark an AON goal as refunded (Accountant only) */
+  projectAonGoalMarkRefunded: ProjectAonGoalStatusUpdateResponse;
   projectClose: Project;
   projectCreate: Project;
   projectDelete: ProjectDeleteResponse;
@@ -1498,6 +1518,11 @@ export type MutationContributionPaymentsAddArgs = {
 };
 
 
+export type MutationContributionRefundArgs = {
+  input: ContributionRefundInput;
+};
+
+
 export type MutationCreateEntryArgs = {
   input: CreateEntryInput;
 };
@@ -1581,6 +1606,21 @@ export type MutationPostSendByEmailArgs = {
 
 export type MutationPostUpdateArgs = {
   input: PostUpdateInput;
+};
+
+
+export type MutationProjectAonGoalMarkCancelledArgs = {
+  input: ProjectAonGoalStatusUpdateInput;
+};
+
+
+export type MutationProjectAonGoalMarkClaimedArgs = {
+  input: ProjectAonGoalStatusUpdateInput;
+};
+
+
+export type MutationProjectAonGoalMarkRefundedArgs = {
+  input: ProjectAonGoalStatusUpdateInput;
 };
 
 
@@ -2551,6 +2591,29 @@ export type ProjectAonGoalAmountUpdateInput = {
   aonGoalUsdQuote: Scalars['Int']['input'];
 };
 
+export enum ProjectAonGoalStatus {
+  Active = 'ACTIVE',
+  Canceled = 'CANCELED',
+  Claimed = 'CLAIMED',
+  Deploying = 'DEPLOYING',
+  Failed = 'FAILED',
+  Pending = 'PENDING',
+  Refunded = 'REFUNDED',
+  Succeeded = 'SUCCEEDED',
+  Unclaimed = 'UNCLAIMED'
+}
+
+export type ProjectAonGoalStatusUpdateInput = {
+  contractAddress: Scalars['String']['input'];
+};
+
+export type ProjectAonGoalStatusUpdateResponse = MutationResponse & {
+  __typename?: 'ProjectAonGoalStatusUpdateResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  status: ProjectAonGoalStatus;
+  success: Scalars['Boolean']['output'];
+};
+
 export type ProjectAonGoalUpdateInput = {
   aonGoalAmount?: InputMaybe<ProjectAonGoalAmountUpdateInput>;
   aonGoalDurationInDays?: InputMaybe<Scalars['Int']['input']>;
@@ -2626,6 +2689,7 @@ export enum ProjectCreationStep {
   FundingGoal = 'FUNDING_GOAL',
   FundingType = 'FUNDING_TYPE',
   IdentityVerification = 'IDENTITY_VERIFICATION',
+  Launch = 'LAUNCH',
   PerksAndProducts = 'PERKS_AND_PRODUCTS',
   ProjectDetails = 'PROJECT_DETAILS',
   Story = 'STORY',
@@ -3574,6 +3638,26 @@ export enum QuoteCurrency {
   Usd = 'USD'
 }
 
+export type Refund = {
+  __typename?: 'Refund';
+  expiresAt: Scalars['Date']['output'];
+  id: Scalars['BigInt']['output'];
+  status: RefundStatus;
+};
+
+export type RefundPaymentInput = {
+  rskToLightningSwap?: InputMaybe<RskToLightningSwapPaymentDetailsInput>;
+  rskToOnChainSwap?: InputMaybe<RskToOnChainSwapPaymentDetailsInput>;
+};
+
+export enum RefundStatus {
+  Completed = 'COMPLETED',
+  Expired = 'EXPIRED',
+  Failed = 'FAILED',
+  Pending = 'PENDING',
+  Processing = 'PROCESSING'
+}
+
 export enum RejectionReason {
   IncompleteProject = 'INCOMPLETE_PROJECT',
   RestrictedProjectType = 'RESTRICTED_PROJECT_TYPE',
@@ -3604,6 +3688,26 @@ export type RskKeyPairInput = {
   address: Scalars['String']['input'];
   derivationPath: Scalars['String']['input'];
   publicKey: Scalars['String']['input'];
+};
+
+export type RskToLightningSwapPaymentDetailsBoltzInput = {
+  claimPublicKey: Scalars['String']['input'];
+  preimageHash: Scalars['String']['input'];
+};
+
+export type RskToLightningSwapPaymentDetailsInput = {
+  boltz: RskToLightningSwapPaymentDetailsBoltzInput;
+  create?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type RskToOnChainSwapPaymentDetailsBoltzInput = {
+  claimPublicKey: Scalars['String']['input'];
+  preimageHash: Scalars['String']['input'];
+};
+
+export type RskToOnChainSwapPaymentDetailsInput = {
+  boltz: RskToOnChainSwapPaymentDetailsBoltzInput;
+  create?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type SendOtpByEmailInput = {
@@ -3811,6 +3915,8 @@ export type UpdateProjectInput = {
   images?: InputMaybe<Array<Scalars['String']['input']>>;
   /** Project creation step */
   lastCreationStep?: InputMaybe<ProjectCreationStep>;
+  /** Scheduled launch date */
+  launchScheduledAt?: InputMaybe<Scalars['Date']['input']>;
   /** Project links */
   links?: InputMaybe<Array<Scalars['String']['input']>>;
   /** Project name, used both for the project URL, project lightning address and NIP05. */
@@ -4398,7 +4504,7 @@ export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = 
   GraphSumData: ( FunderRewardGraphSum );
   HeroStats: ( AmbassadorStats ) | ( ContributorStats ) | ( CreatorStats );
   LndConnectionDetails: never;
-  MutationResponse: ( DeleteUserResponse ) | ( ProjectDeleteResponse ) | ( ProjectGoalDeleteResponse );
+  MutationResponse: ( DeleteUserResponse ) | ( ProjectAonGoalStatusUpdateResponse ) | ( ProjectDeleteResponse ) | ( ProjectGoalDeleteResponse );
   StatsInterface: ( ProjectContributionsGroupedByMethodStats ) | ( ProjectContributionsStats );
 };
 
@@ -4458,6 +4564,8 @@ export type ResolversTypes = {
   ContributionPaymentsAddResponse: ResolverTypeWrapper<ContributionPaymentsAddResponse>;
   ContributionPaymentsDetails: ResolverTypeWrapper<ContributionPaymentsDetails>;
   ContributionPaymentsInput: ContributionPaymentsInput;
+  ContributionRefundInput: ContributionRefundInput;
+  ContributionRefundResponse: ResolverTypeWrapper<Omit<ContributionRefundResponse, 'contribution'> & { contribution: ResolversTypes['Contribution'] }>;
   ContributionStatus: ContributionStatus;
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversTypes['Contribution'] }>;
@@ -4688,6 +4796,9 @@ export type ResolversTypes = {
   ProjectAmbassadorsConnection: ResolverTypeWrapper<Omit<ProjectAmbassadorsConnection, 'edges'> & { edges: Array<ResolversTypes['ProjectAmbassadorEdge']> }>;
   ProjectAmbassadorsStats: ResolverTypeWrapper<ProjectAmbassadorsStats>;
   ProjectAonGoalAmountUpdateInput: ProjectAonGoalAmountUpdateInput;
+  ProjectAonGoalStatus: ProjectAonGoalStatus;
+  ProjectAonGoalStatusUpdateInput: ProjectAonGoalStatusUpdateInput;
+  ProjectAonGoalStatusUpdateResponse: ResolverTypeWrapper<ProjectAonGoalStatusUpdateResponse>;
   ProjectAonGoalUpdateInput: ProjectAonGoalUpdateInput;
   ProjectCategory: ProjectCategory;
   ProjectCloseMutationInput: ProjectCloseMutationInput;
@@ -4777,11 +4888,18 @@ export type ResolversTypes = {
   ProjectsSummary: ResolverTypeWrapper<ProjectsSummary>;
   Query: ResolverTypeWrapper<{}>;
   QuoteCurrency: QuoteCurrency;
+  Refund: ResolverTypeWrapper<Refund>;
+  RefundPaymentInput: RefundPaymentInput;
+  RefundStatus: RefundStatus;
   RejectionReason: RejectionReason;
   ResourceInput: ResourceInput;
   RewardCurrency: RewardCurrency;
   RskKeyPair: ResolverTypeWrapper<RskKeyPair>;
   RskKeyPairInput: RskKeyPairInput;
+  RskToLightningSwapPaymentDetailsBoltzInput: RskToLightningSwapPaymentDetailsBoltzInput;
+  RskToLightningSwapPaymentDetailsInput: RskToLightningSwapPaymentDetailsInput;
+  RskToOnChainSwapPaymentDetailsBoltzInput: RskToOnChainSwapPaymentDetailsBoltzInput;
+  RskToOnChainSwapPaymentDetailsInput: RskToOnChainSwapPaymentDetailsInput;
   SendOtpByEmailInput: SendOtpByEmailInput;
   SettingValueType: SettingValueType;
   ShippingAddress: ResolverTypeWrapper<ShippingAddress>;
@@ -4921,6 +5039,8 @@ export type ResolversParentTypes = {
   ContributionPaymentsAddResponse: ContributionPaymentsAddResponse;
   ContributionPaymentsDetails: ContributionPaymentsDetails;
   ContributionPaymentsInput: ContributionPaymentsInput;
+  ContributionRefundInput: ContributionRefundInput;
+  ContributionRefundResponse: Omit<ContributionRefundResponse, 'contribution'> & { contribution: ResolversParentTypes['Contribution'] };
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversParentTypes['Contribution'] };
   ContributionsGetResponse: Omit<ContributionsGetResponse, 'contributions'> & { contributions: Array<ResolversParentTypes['Contribution']> };
@@ -5114,6 +5234,8 @@ export type ResolversParentTypes = {
   ProjectAmbassadorsConnection: Omit<ProjectAmbassadorsConnection, 'edges'> & { edges: Array<ResolversParentTypes['ProjectAmbassadorEdge']> };
   ProjectAmbassadorsStats: ProjectAmbassadorsStats;
   ProjectAonGoalAmountUpdateInput: ProjectAonGoalAmountUpdateInput;
+  ProjectAonGoalStatusUpdateInput: ProjectAonGoalStatusUpdateInput;
+  ProjectAonGoalStatusUpdateResponse: ProjectAonGoalStatusUpdateResponse;
   ProjectAonGoalUpdateInput: ProjectAonGoalUpdateInput;
   ProjectCloseMutationInput: ProjectCloseMutationInput;
   ProjectContributionsGroupedByMethodStats: ProjectContributionsGroupedByMethodStats;
@@ -5184,9 +5306,15 @@ export type ResolversParentTypes = {
   ProjectsResponse: Omit<ProjectsResponse, 'projects'> & { projects: Array<ResolversParentTypes['Project']> };
   ProjectsSummary: ProjectsSummary;
   Query: {};
+  Refund: Refund;
+  RefundPaymentInput: RefundPaymentInput;
   ResourceInput: ResourceInput;
   RskKeyPair: RskKeyPair;
   RskKeyPairInput: RskKeyPairInput;
+  RskToLightningSwapPaymentDetailsBoltzInput: RskToLightningSwapPaymentDetailsBoltzInput;
+  RskToLightningSwapPaymentDetailsInput: RskToLightningSwapPaymentDetailsInput;
+  RskToOnChainSwapPaymentDetailsBoltzInput: RskToOnChainSwapPaymentDetailsBoltzInput;
+  RskToOnChainSwapPaymentDetailsInput: RskToOnChainSwapPaymentDetailsInput;
   SendOtpByEmailInput: SendOtpByEmailInput;
   ShippingAddress: ShippingAddress;
   ShippingAddressCreateInput: ShippingAddressCreateInput;
@@ -5456,6 +5584,12 @@ export type ContributionPaymentsDetailsResolvers<ContextType = any, ParentType e
   lightningToRskSwap?: Resolver<Maybe<ResolversTypes['ContributionLightningToRskSwapPaymentDetails']>, ParentType, ContextType>;
   onChainSwap?: Resolver<Maybe<ResolversTypes['ContributionOnChainSwapPaymentDetails']>, ParentType, ContextType>;
   onChainToRskSwap?: Resolver<Maybe<ResolversTypes['ContributionOnChainToRskSwapPaymentDetails']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ContributionRefundResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionRefundResponse'] = ResolversParentTypes['ContributionRefundResponse']> = {
+  contribution?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType>;
+  refund?: Resolver<ResolversTypes['Refund'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -5875,6 +6009,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   contributionCreate?: Resolver<ResolversTypes['ContributionMutationResponse'], ParentType, ContextType, RequireFields<MutationContributionCreateArgs, 'input'>>;
   contributionEmailUpdate?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType, Partial<MutationContributionEmailUpdateArgs>>;
   contributionPaymentsAdd?: Resolver<ResolversTypes['ContributionPaymentsAddResponse'], ParentType, ContextType, RequireFields<MutationContributionPaymentsAddArgs, 'input'>>;
+  contributionRefund?: Resolver<ResolversTypes['ContributionRefundResponse'], ParentType, ContextType, RequireFields<MutationContributionRefundArgs, 'input'>>;
   createEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationCreateEntryArgs, 'input'>>;
   createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>;
   creatorNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreatorNotificationConfigurationValueUpdateArgs, 'creatorNotificationConfigurationId' | 'value'>>;
@@ -5892,6 +6027,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   postPublish?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationPostPublishArgs, 'input'>>;
   postSendByEmail?: Resolver<ResolversTypes['PostSendByEmailResponse'], ParentType, ContextType, RequireFields<MutationPostSendByEmailArgs, 'input'>>;
   postUpdate?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationPostUpdateArgs, 'input'>>;
+  projectAonGoalMarkCancelled?: Resolver<ResolversTypes['ProjectAonGoalStatusUpdateResponse'], ParentType, ContextType, RequireFields<MutationProjectAonGoalMarkCancelledArgs, 'input'>>;
+  projectAonGoalMarkClaimed?: Resolver<ResolversTypes['ProjectAonGoalStatusUpdateResponse'], ParentType, ContextType, RequireFields<MutationProjectAonGoalMarkClaimedArgs, 'input'>>;
+  projectAonGoalMarkRefunded?: Resolver<ResolversTypes['ProjectAonGoalStatusUpdateResponse'], ParentType, ContextType, RequireFields<MutationProjectAonGoalMarkRefundedArgs, 'input'>>;
   projectClose?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectCloseArgs, 'input'>>;
   projectCreate?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectCreateArgs, 'input'>>;
   projectDelete?: Resolver<ResolversTypes['ProjectDeleteResponse'], ParentType, ContextType, RequireFields<MutationProjectDeleteArgs, 'input'>>;
@@ -5942,7 +6080,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type MutationResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['MutationResponse'] = ResolversParentTypes['MutationResponse']> = {
-  __resolveType: TypeResolveFn<'DeleteUserResponse' | 'ProjectDeleteResponse' | 'ProjectGoalDeleteResponse', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'DeleteUserResponse' | 'ProjectAonGoalStatusUpdateResponse' | 'ProjectDeleteResponse' | 'ProjectGoalDeleteResponse', ParentType, ContextType>;
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
 };
@@ -6310,6 +6448,13 @@ export type ProjectAmbassadorsStatsResolvers<ContextType = any, ParentType exten
   contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   contributionsSum?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProjectAonGoalStatusUpdateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectAonGoalStatusUpdateResponse'] = ResolversParentTypes['ProjectAonGoalStatusUpdateResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['ProjectAonGoalStatus'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6687,6 +6832,13 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   userSubscriptions?: Resolver<Array<ResolversTypes['UserSubscription']>, ParentType, ContextType, RequireFields<QueryUserSubscriptionsArgs, 'input'>>;
 };
 
+export type RefundResolvers<ContextType = any, ParentType extends ResolversParentTypes['Refund'] = ResolversParentTypes['Refund']> = {
+  expiresAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['RefundStatus'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type RskKeyPairResolvers<ContextType = any, ParentType extends ResolversParentTypes['RskKeyPair'] = ResolversParentTypes['RskKeyPair']> = {
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   derivationPath?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -7000,6 +7152,7 @@ export type Resolvers<ContextType = any> = {
   ContributionOnChainToRskSwapPaymentDetails?: ContributionOnChainToRskSwapPaymentDetailsResolvers<ContextType>;
   ContributionPaymentsAddResponse?: ContributionPaymentsAddResponseResolvers<ContextType>;
   ContributionPaymentsDetails?: ContributionPaymentsDetailsResolvers<ContextType>;
+  ContributionRefundResponse?: ContributionRefundResponseResolvers<ContextType>;
   ContributionStatusUpdatedSubscriptionResponse?: ContributionStatusUpdatedSubscriptionResponseResolvers<ContextType>;
   ContributionsGetResponse?: ContributionsGetResponseResolvers<ContextType>;
   ContributionsSummary?: ContributionsSummaryResolvers<ContextType>;
@@ -7096,6 +7249,7 @@ export type Resolvers<ContextType = any> = {
   ProjectAmbassadorEdge?: ProjectAmbassadorEdgeResolvers<ContextType>;
   ProjectAmbassadorsConnection?: ProjectAmbassadorsConnectionResolvers<ContextType>;
   ProjectAmbassadorsStats?: ProjectAmbassadorsStatsResolvers<ContextType>;
+  ProjectAonGoalStatusUpdateResponse?: ProjectAonGoalStatusUpdateResponseResolvers<ContextType>;
   ProjectContributionsGroupedByMethodStats?: ProjectContributionsGroupedByMethodStatsResolvers<ContextType>;
   ProjectContributionsStats?: ProjectContributionsStatsResolvers<ContextType>;
   ProjectContributionsStatsBase?: ProjectContributionsStatsBaseResolvers<ContextType>;
@@ -7134,6 +7288,7 @@ export type Resolvers<ContextType = any> = {
   ProjectsResponse?: ProjectsResponseResolvers<ContextType>;
   ProjectsSummary?: ProjectsSummaryResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Refund?: RefundResolvers<ContextType>;
   RskKeyPair?: RskKeyPairResolvers<ContextType>;
   ShippingAddress?: ShippingAddressResolvers<ContextType>;
   ShippingConfig?: ShippingConfigResolvers<ContextType>;

@@ -52,7 +52,10 @@ export enum PathName {
   refundInitiated = 'initiated',
 
   launchStart = 'start',
+  launchRules = 'rules',
+
   launchProject = 'launch',
+
   launchProjectDetails = 'details',
   launchProjectFunding = 'funding',
   launchFundingStrategy = 'strategy',
@@ -300,10 +303,15 @@ const pathsMap = {
 
   /** Project creation Routes */
 
+  // Non Creation Flow path routes ( Splash pages before creation flow )
+
   launchStart: () => `/${PathName.launchProject}/${PathName.launchStart}`,
+  launchRules: () => `/${PathName.launchProject}/${PathName.launchRules}`,
+
+  // Creation  flow path routes
+
   launch: () => `/${PathName.launchProject}`,
-  launchStartProject: (projectID: string) => `/${PathName.launchProject}/${PathName.launchStart}/${projectID}`,
-  launchProject: (projectID: string) => `/${PathName.launchProject}/${projectID}`,
+  launchProject: (projectID?: string) => `/${PathName.launchProject}/${projectID || 'new'}`,
 
   launchProjectDetails: (projectID?: string) =>
     `/${PathName.launchProject}/${projectID || 'new'}/${PathName.launchProjectDetails}`,

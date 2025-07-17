@@ -25,7 +25,6 @@ import {
   Story,
 } from './sections'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
-import { PreLaunchProjectNotice } from './sections/PreLaunchProjectNotice.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 
 export const ProjectBody = () => {
@@ -63,7 +62,6 @@ export const ProjectBody = () => {
       >
         <ProjectPreLaunchNav />
         <FinalizeProjectNotice />
-        <PreLaunchProjectNotice />
         <CreatorVerificationNotice />
 
         <CreatorTools />

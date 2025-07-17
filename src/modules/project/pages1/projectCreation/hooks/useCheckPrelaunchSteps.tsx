@@ -35,7 +35,7 @@ export const useCheckPrelaunchSteps = () => {
 
     if (!wallet?.id) {
       setIsReadyForLaunch(false)
-      navigate(getPath('launchProjectWallet', project?.id), { replace: true })
+      navigate(getPath('launchPaymentWallet', project?.id), { replace: true })
     }
   }, [loading, project, wallet, navigate, isProjectDraft, isProjectPrelaunch, walletLoading, setIsReadyForLaunch])
 }

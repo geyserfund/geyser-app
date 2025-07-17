@@ -12,7 +12,6 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { derivedDimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
 
-import { PROJECT_LAUNCH_PAYMENT_PROJECT_NAME } from '../../../projectCreation/views/old/ProjectCreationStrategy.tsx'
 import { FundingLayout } from '../../layouts/FundingLayout.tsx'
 import { QRCodeSizeMap } from './components/QRCodeComponent.tsx'
 
@@ -68,9 +67,10 @@ export const FundingLaunchPayment = () => {
   }, [project.name, formState.donationAmountUsdCent, navigate])
 
   useEffect(() => {
-    if (project.name !== PROJECT_LAUNCH_PAYMENT_PROJECT_NAME) {
-      navigate(getPath('projectFunding', project.name), { replace: true })
-    }
+    // TODO: remove this once we have a proper project name
+    // if (project.name !== PROJECT_LAUNCH_PAYMENT_PROJECT_NAME) {
+    //   navigate(getPath('projectFunding', project.name), { replace: true })
+    // }
   }, [project.name, navigate])
 
   return (

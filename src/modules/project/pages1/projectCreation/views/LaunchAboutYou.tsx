@@ -1,9 +1,8 @@
 import { Avatar, Button, ButtonProps, HStack, Icon, Textarea, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { PiCheckBold } from 'react-icons/pi'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import Loader from '@/components/ui/Loader.tsx'
 import { useAuthContext } from '@/context/auth.tsx'

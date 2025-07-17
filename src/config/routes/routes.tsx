@@ -50,8 +50,22 @@ export const platformRoutes: RouteObject[] = [
     },
   },
 
+  // TODO: Replace with ProjectCreateRules component after creating it
+  {
+    path: getPath('launchRules'),
+    async lazy() {
+      const ProjectCreateRules = await ProjectLaunch().then((m) => m.ProjectCreateStart)
+      return { Component: ProjectCreateRules }
+    },
+  },
+
   {
     path: getPath('launch'),
+    element: <Navigate to={getPath('launchStart')} />,
+  },
+
+  {
+    path: getPath('launchProject', PathName.projectId),
     async lazy() {
       const ProjectCreationContainer = await ProjectLaunch().then((m) => m.ProjectCreationContainer)
       return {
@@ -62,163 +76,144 @@ export const platformRoutes: RouteObject[] = [
       {
         index: true,
         async lazy() {
-          const ProjectCreateInfo = await ProjectLaunch().then((m) => m.ProjectCreateInfo)
-          return { Component: ProjectCreateInfo }
-        },
-      },
-
-      {
-        path: getPath('launchStartProject', PathName.projectId),
-        async lazy() {
-          const ProjectCreateStart = await ProjectLaunch().then((m) => m.ProjectCreateStart)
-          return { Component: ProjectCreateStart }
+          const ProjectCreationContentMain = await ProjectLaunch().then((m) => m.ProjectCreationContentMain)
+          return { Component: ProjectCreationContentMain }
         },
       },
       {
         path: getPath('launchProject', PathName.projectId),
         async lazy() {
-          const ProjectCreateInfo = await ProjectLaunch().then((m) => m.ProjectCreateInfo)
-          return { Component: ProjectCreateInfo }
-        },
-      },
-      {
-        path: getPath('launchProjectDetails', PathName.projectId),
-        async lazy() {
-          const LaunchProjectDetails = await ProjectLaunch().then((m) => m.LaunchProjectDetails)
-          return { Component: LaunchProjectDetails }
-        },
-      },
-      {
-        path: getPath('launchProjectFunding', PathName.projectId),
-        element: <Navigate to={PathName.launchFundingStrategy} />,
-      },
-      {
-        path: getPath('launchFundingStrategy', PathName.projectId),
-        async lazy() {
-          const LaunchFundingStrategy = await ProjectLaunch().then((m) => m.LaunchFundingStrategy)
-          return { Component: LaunchFundingStrategy }
-        },
-      },
-      {
-        path: getPath('launchFundingGoal', PathName.projectId),
-        async lazy() {
-          const LaunchFundingGoal = await ProjectLaunch().then((m) => m.LaunchFundingGoal)
-          return { Component: LaunchFundingGoal }
-        },
-      },
-      // {
-      //   path: getPath('launchProjectRewards', PathName.projectId),
-      //   async lazy() {
-      //     const LaunchProducts = await ProjectLaunch().then((m) => m.LaunchProducts)
-      //     return { Component: LaunchProducts }
-      //   },
-      // },
-      {
-        path: getPath('launchProjectRewards', PathName.projectId),
-        async lazy() {
-          const ProjectCreateRewards = await ProjectLaunch().then((m) => m.ProjectCreateRewards)
-          return { Component: ProjectCreateRewards }
+          const ProjectCreationContainerContentDesktop = await ProjectLaunch().then(
+            (m) => m.ProjectCreationContainerContentDesktop,
+          )
+          return {
+            Component: ProjectCreationContainerContentDesktop,
+          }
         },
         children: [
           {
-            index: true,
+            path: getPath('launchProjectDetails', PathName.projectId),
             async lazy() {
-              const ProjectCreateRewardMain = await ProjectLaunch().then((m) => m.ProjectCreateRewardMain)
-              return { Component: ProjectCreateRewardMain }
+              const LaunchProjectDetails = await ProjectLaunch().then((m) => m.LaunchProjectDetails)
+              return { Component: LaunchProjectDetails }
             },
           },
           {
-            path: getPath('launchProjectRewardsCreate', PathName.projectId),
+            path: getPath('launchProjectFunding', PathName.projectId),
+            element: <Navigate to={PathName.launchFundingStrategy} />,
+          },
+          {
+            path: getPath('launchFundingStrategy', PathName.projectId),
             async lazy() {
-              const ProjectCreationCreateReward = await ProjectLaunch().then((m) => m.ProjectCreationCreateReward)
-              return { Component: ProjectCreationCreateReward }
+              const LaunchFundingStrategy = await ProjectLaunch().then((m) => m.LaunchFundingStrategy)
+              return { Component: LaunchFundingStrategy }
             },
           },
           {
-            path: getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardUUID),
+            path: getPath('launchFundingGoal', PathName.projectId),
             async lazy() {
-              const ProjectCreationEditReward = await ProjectLaunch().then((m) => m.ProjectCreationEditReward)
-              return { Component: ProjectCreationEditReward }
+              const LaunchFundingGoal = await ProjectLaunch().then((m) => m.LaunchFundingGoal)
+              return { Component: LaunchFundingGoal }
+            },
+          },
+          // {
+          //   path: getPath('launchProjectRewards', PathName.projectId),
+          //   async lazy() {
+          //     const LaunchProducts = await ProjectLaunch().then((m) => m.LaunchProducts)
+          //     return { Component: LaunchProducts }
+          //   },
+          // },
+          {
+            path: getPath('launchProjectRewards', PathName.projectId),
+            async lazy() {
+              const ProjectCreateRewards = await ProjectLaunch().then((m) => m.ProjectCreateRewards)
+              return { Component: ProjectCreateRewards }
+            },
+            children: [
+              {
+                index: true,
+                async lazy() {
+                  const ProjectCreateRewardMain = await ProjectLaunch().then((m) => m.ProjectCreateRewardMain)
+                  return { Component: ProjectCreateRewardMain }
+                },
+              },
+              {
+                path: getPath('launchProjectRewardsCreate', PathName.projectId),
+                async lazy() {
+                  const ProjectCreationCreateReward = await ProjectLaunch().then((m) => m.ProjectCreationCreateReward)
+                  return { Component: ProjectCreationCreateReward }
+                },
+              },
+              {
+                path: getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardUUID),
+                async lazy() {
+                  const ProjectCreationEditReward = await ProjectLaunch().then((m) => m.ProjectCreationEditReward)
+                  return { Component: ProjectCreationEditReward }
+                },
+              },
+            ],
+          },
+
+          {
+            path: getPath('launchStory', PathName.projectId),
+            async lazy() {
+              const LaunchStory = await ProjectLaunch().then((m) => m.LaunchStory)
+              return { Component: LaunchStory }
+            },
+          },
+
+          {
+            path: getPath('launchAboutYou', PathName.projectId),
+            async lazy() {
+              const LaunchAboutYou = await ProjectLaunch().then((m) => m.LaunchAboutYou)
+              return { Component: LaunchAboutYou }
+            },
+          },
+          {
+            path: getPath('launchPayment', PathName.projectId),
+            async lazy() {
+              const LaunchPayment = await ProjectLaunch().then((m) => m.LaunchPayment)
+              return { Component: LaunchPayment }
+            },
+            children: [
+              // TODO remove and add this logic to LaunchPayment component
+              {
+                index: true,
+                element: <Navigate to={PathName.launchPaymentWallet} />,
+              },
+              {
+                path: getPath('launchPaymentWallet', PathName.projectId),
+                async lazy() {
+                  const LaunchPaymentWallet = await ProjectLaunch().then((m) => m.LaunchPaymentWallet)
+                  return { Component: LaunchPaymentWallet }
+                },
+              },
+              {
+                path: getPath('launchPaymentAccountPassword', PathName.projectId),
+                async lazy() {
+                  const LaunchPaymentAccountPassword = await ProjectLaunch().then((m) => m.LaunchPaymentAccountPassword)
+                  return { Component: LaunchPaymentAccountPassword }
+                },
+              },
+              {
+                path: getPath('launchPaymentTaxId', PathName.projectId),
+                async lazy() {
+                  const LaunchPaymentTaxId = await ProjectLaunch().then((m) => m.LaunchPaymentTaxId)
+                  return { Component: LaunchPaymentTaxId }
+                },
+              },
+            ],
+          },
+
+          {
+            path: getPath('launchSummary', PathName.projectId),
+            async lazy() {
+              const LaunchSummary = await ProjectLaunch().then((m) => m.LaunchSummary)
+              return { Component: LaunchSummary }
             },
           },
         ],
       },
-
-      {
-        path: getPath('launchStory', PathName.projectId),
-        async lazy() {
-          const LaunchStory = await ProjectLaunch().then((m) => m.LaunchStory)
-          return { Component: LaunchStory }
-        },
-      },
-
-      {
-        path: getPath('launchAboutYou', PathName.projectId),
-        async lazy() {
-          const LaunchAboutYou = await ProjectLaunch().then((m) => m.LaunchAboutYou)
-          return { Component: LaunchAboutYou }
-        },
-      },
-      {
-        path: getPath('launchPayment', PathName.projectId),
-        async lazy() {
-          const LaunchPayment = await ProjectLaunch().then((m) => m.LaunchPayment)
-          return { Component: LaunchPayment }
-        },
-        children: [
-          // TODO remove and add this logic to LaunchPayment component
-          {
-            index: true,
-            element: <Navigate to={PathName.launchPaymentWallet} />,
-          },
-          {
-            path: getPath('launchPaymentWallet', PathName.projectId),
-            async lazy() {
-              const LaunchPaymentWallet = await ProjectLaunch().then((m) => m.LaunchPaymentWallet)
-              return { Component: LaunchPaymentWallet }
-            },
-          },
-          {
-            path: getPath('launchPaymentAccountPassword', PathName.projectId),
-            async lazy() {
-              const LaunchPaymentAccountPassword = await ProjectLaunch().then((m) => m.LaunchPaymentAccountPassword)
-              return { Component: LaunchPaymentAccountPassword }
-            },
-          },
-          {
-            path: getPath('launchPaymentTaxId', PathName.projectId),
-            async lazy() {
-              const LaunchPaymentTaxId = await ProjectLaunch().then((m) => m.LaunchPaymentTaxId)
-              return { Component: LaunchPaymentTaxId }
-            },
-          },
-        ],
-      },
-
-      {
-        path: getPath('launchSummary', PathName.projectId),
-        async lazy() {
-          const LaunchSummary = await ProjectLaunch().then((m) => m.LaunchSummary)
-          return { Component: LaunchSummary }
-        },
-      },
-
-      {
-        path: getPath('launchProjectStrategy', PathName.projectId),
-        async lazy() {
-          const ProjectCreateStrategy = await ProjectLaunch().then((m) => m.ProjectCreateStrategy)
-          return { Component: ProjectCreateStrategy }
-        },
-      },
-      // {
-      //   path: getPath('launchProjectWallet', PathName.projectId),
-      //   async lazy() {
-      //     const ProjectCreationWalletConnectionPage = await ProjectLaunch().then(
-      //       (m) => m.ProjectCreationWalletConnectionPage,
-      //     )
-      //     return { Component: ProjectCreationWalletConnectionPage }
-      //   },
-      // },
     ],
   },
 

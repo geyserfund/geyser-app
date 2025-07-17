@@ -49,8 +49,8 @@ export const LaunchPaymentAccountPassword = () => {
   const [accountPasswordType, setAccountPasswordType] = useState<AccountPasswordTypes>(AccountPasswordTypes.CREATE)
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
-    ProjectCreationStep.Wallet,
-    getPath('launchPaymentAccountPassword', project.id),
+    ProjectCreationStep.IdentityVerification,
+    getPath('launchSummary', project.id),
   )
 
   const handleCreatePasswordSubmit = (data: UserAccountKeysFragment) => {

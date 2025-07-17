@@ -1,13 +1,10 @@
 import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtom, useAtomValue } from 'jotai'
-import React, { useState } from 'react'
+import React from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { PiBuildings, PiHeartbeatFill, PiUser } from 'react-icons/pi'
 
-import { useAuthContext } from '@/context/auth.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
-import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { LegalEntityType } from '@/types/index.ts'
 

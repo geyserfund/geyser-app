@@ -2,7 +2,6 @@ import { Button, HStack, Image, ListItem, UnorderedList, VStack } from '@chakra-
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 
-import { LegalEntitySelection } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsVerification/components/LegalEntitySelection.tsx'
 import { userTaxProfileAtom } from '@/modules/profile/pages/profileSettings/views/ProfileSettingsVerification/state/taxProfileAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { VerificationIllustrationUrl } from '@/shared/constants/platform/url.ts'

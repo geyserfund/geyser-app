@@ -19,13 +19,14 @@ import { Link, useLocation } from 'react-router-dom'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
+import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 import { ProjectCreationStep } from '@/types/index.ts'
 
 export const ProjectCreationNavigationMobile = () => {
   return (
-    <Box>
-      <ProjectCreationNavigation />
-    </Box>
+    <HStack w="full" paddingX={standardPadding}>
+      <ProjectCreationNavigation w="full" spacing={8} paddingX={standardPadding} />
+    </HStack>
   )
 }
 
@@ -59,7 +60,7 @@ const ProjectCreationNavigation = (props: StackProps) => {
   )
 
   const activeButtonIndex = useMemo(() => {
-    let activeIndex = 0
+    let activeIndex: number | undefined
     steps.map((navButton) => {
       if (navButton.path && location.pathname.includes(navButton.path)) {
         activeIndex = steps.indexOf(navButton)
@@ -69,7 +70,7 @@ const ProjectCreationNavigation = (props: StackProps) => {
   }, [location.pathname, steps])
 
   const activeStepIndex = useMemo(() => {
-    return projectCreationStepIndex[project?.lastCreationStep as ProjectCreationStep]
+    return projectCreationStepIndex[project?.lastCreationStep as ProjectCreationStep] || 0
   }, [project?.lastCreationStep])
 
   return (
@@ -77,14 +78,19 @@ const ProjectCreationNavigation = (props: StackProps) => {
       <VStack flex={1} height="100%" justifyContent="space-between" alignItems="flex-end" paddingTop="1px">
         {steps.map((step, index) => {
           const isActive = index === activeButtonIndex
+          const isDisabled = activeStepIndex < index || step.isDisabled
+
           return (
             <Button
               as={Link}
               to={step.path}
+              w={{ base: '100%', md: 'auto' }}
               variant={isActive ? 'soft' : 'ghost'}
               colorScheme={isActive ? 'primary1' : 'neutral1'}
               key={index}
-              pointerEvents={step.isDisabled ? 'none' : 'auto'}
+              pointerEvents={isDisabled ? 'none' : 'auto'}
+              color={isDisabled ? 'neutral1.8' : 'neutral1.11'}
+              justifyContent={{ base: 'flex-start', md: 'center' }}
             >
               {step.title}
             </Button>
@@ -128,7 +134,9 @@ export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, p
     case ProjectCreationStep.TaxId:
       return getPath('launchPaymentTaxId', projectId)
     case ProjectCreationStep.IdentityVerification:
-      return getPath('launchPaymentIdentityVerification', projectId)
+      return getPath('launchPaymentAccountPassword', projectId)
+    case ProjectCreationStep.Launch:
+      return getPath('launchSummary', projectId)
 
     default:
       return getPath('launchProjectDetails', projectId)
@@ -145,4 +153,5 @@ const projectCreationStepIndex = {
   [ProjectCreationStep.Wallet]: 5,
   [ProjectCreationStep.TaxId]: 5,
   [ProjectCreationStep.IdentityVerification]: 5,
+  [ProjectCreationStep.Launch]: 6,
 }

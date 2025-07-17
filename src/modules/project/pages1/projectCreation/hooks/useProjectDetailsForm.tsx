@@ -1,6 +1,5 @@
 import { useProjectLinksValidation } from '../../../../../shared/hooks/validations'
 import { useProjectState } from '../../../hooks/useProjectState'
-import { useProjectTagsState } from './useProjectTagsState'
 
 export const useProjectDetailsForm = () => {
   const { project, isDirty, updateProject, saveProject, saving } = useProjectState()

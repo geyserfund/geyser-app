@@ -17,6 +17,7 @@ const projectCreationStepIndex = {
   [ProjectCreationStep.Wallet]: 6,
   [ProjectCreationStep.TaxId]: 7,
   [ProjectCreationStep.IdentityVerification]: 8,
+  [ProjectCreationStep.Launch]: 9,
 }
 
 export const useUpdateProjectWithLastCreationStep = (step: ProjectCreationStep, nextPath: string) => {
@@ -40,6 +41,8 @@ export const useUpdateProjectWithLastCreationStep = (step: ProjectCreationStep, 
       ApolloCache<any>
     >,
   ) => {
+    console.log('projectStepIsAhead', projectStepIsAhead, nextStep)
+
     if (projectStepIsAhead) {
       navigate(nextPath)
       return

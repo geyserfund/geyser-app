@@ -1,6 +1,6 @@
 import { useDisclosure, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import Loader from '@/components/ui/Loader.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -19,8 +19,6 @@ export const LaunchStory = () => {
   const navigate = useNavigate()
 
   const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
-
-  const params = useParams<{ projectId: string }>()
 
   const { project, loading } = useProjectAtom()
 

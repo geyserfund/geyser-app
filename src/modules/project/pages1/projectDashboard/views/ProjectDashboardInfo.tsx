@@ -7,6 +7,7 @@ import { ProjectForm } from '@/modules/project/forms/ProjectForm'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
+import { ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
 import { useProjectForm } from '../../projectCreation/hooks/useProjectForm'
@@ -32,12 +33,14 @@ export const ProjectDashboardInfo = () => {
     hasUnsaved: form.formState.isDirty,
   })
 
-  const handleUpdateProject = ({ email, ...values }: ProjectCreationVariables) => {
+  const handleUpdateProject = ({ ...values }: ProjectCreationVariables) => {
     updateProject.execute({
       variables: {
         input: {
           projectId: Number(project.id),
           ...values,
+          category: values.category as ProjectCategory,
+          subCategory: values.subCategory as ProjectSubCategory,
         },
       },
       onCompleted(data) {

@@ -1,15 +1,11 @@
 import { Box, Button, Image, ImageProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PropsWithChildren } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { Body, H1, H3 } from '@/shared/components/typography'
 
 import { useAuthContext } from '../../../../../../context'
-import { ExternalAccountType, SocialAccountType } from '../../../../../auth'
-import { ConnectWithNostr } from '../../../../../auth/ConnectWithNostr'
-import { ConnectWithSocial } from '../../../../../auth/ConnectWithSocial'
-import { useAuthToken } from '../../../../../auth/useAuthToken'
 import {
   getPath,
   LaunchProjectCoinsUrl,
@@ -21,6 +17,10 @@ import {
   LIGHTNING_FEE_PERCENTAGE,
 } from '../../../../../../shared/constants'
 import { useMobileMode } from '../../../../../../utils'
+import { ExternalAccountType, SocialAccountType } from '../../../../../auth'
+import { ConnectWithNostr } from '../../../../../auth/ConnectWithNostr'
+import { ConnectWithSocial } from '../../../../../auth/ConnectWithSocial'
+import { useAuthToken } from '../../../../../auth/useAuthToken'
 import { FormContinueButton } from '../../components/FormContinueButton'
 import { ProjectCreateLayout } from '../../components/ProjectCreateLayout'
 
@@ -29,11 +29,9 @@ export const ProjectCreateStart = () => {
   const { loading, isLoggedIn, user } = useAuthContext()
   const navigate = useNavigate()
 
-  const params = useParams<{ projectId: string }>()
-
   const handleBack = () => navigate('/')
 
-  const handleNext = () => navigate(params.projectId ? `${getPath('launch')}/${params.projectId}` : getPath('launch'))
+  const handleNext = () => navigate(getPath('launchProjectDetails'))
 
   const userHasProjectCreatableAccounts = Boolean(
     user?.externalAccounts?.find(

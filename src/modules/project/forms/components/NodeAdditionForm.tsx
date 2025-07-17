@@ -1,4 +1,4 @@
-import { Avatar, Button, Checkbox, Link, VStack } from '@chakra-ui/react'
+import { Avatar, Checkbox, Link, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiQuestion } from 'react-icons/pi'

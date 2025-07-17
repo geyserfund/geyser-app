@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Outlet, useMatch, useNavigate } from 'react-router-dom'
 
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
-import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectCreationStep } from '@/types/index.ts'
 
 import { getPath, PathName } from '../../../../../../shared/constants'
@@ -17,7 +17,6 @@ export const ProjectCreateRewards = () => {
   useProjectRewardsAPI(true)
 
   const { project } = useProjectAtom()
-  const { rewards } = useRewardsAtom()
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.PerksAndProducts,
@@ -41,8 +40,6 @@ export const ProjectCreateRewards = () => {
 
     navigate(getPath('launchFundingGoal', project?.id))
   }
-
-  const noRewards = rewards?.length === 0
 
   const continueProps = {
     onClick: handleNext,

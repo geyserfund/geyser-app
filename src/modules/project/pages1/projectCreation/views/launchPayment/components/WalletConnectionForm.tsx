@@ -1,19 +1,12 @@
-import { Button, ButtonProps, HStack, InputGroup, InputRightElement, Link, VStack } from '@chakra-ui/react'
+import { HStack, InputGroup, InputRightElement, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useState } from 'react'
 import { Trans } from 'react-i18next'
 import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
-import { PiGear } from 'react-icons/pi'
 
-import { BoltIcon } from '@/components/icons'
-import { NodeIcon } from '@/components/icons'
-import { NWCIcon } from '@/components/icons/svg/NWCIcon'
 import { TextInputBox } from '@/components/ui'
 import Loader from '@/components/ui/Loader'
-import { NodeConnectionDetails } from '@/modules/project/components/NodeConnectionDetails'
 import { ProjectFeeSelection } from '@/modules/project/components/ProjectFeeSelection'
 import { NodeAdditionForm } from '@/modules/project/forms/components/NodeAdditionForm.tsx'
-import { NodeAdditionModal } from '@/modules/project/forms/components/NodeAdditionModal'
 import { RenderSponsorFromTable } from '@/modules/project/forms/components/RenderSponsorFromTable.tsx'
 import { RenderSponsorImage } from '@/modules/project/forms/components/RenderSponsorImage.tsx'
 import { WalletConnectionOptionInfoBox } from '@/modules/project/pages1/projectCreation/components/WalletConnectionOptionInfoBox'
@@ -27,17 +20,9 @@ import {
   WalletForm,
 } from '@/modules/project/pages1/projectCreation/hooks/useWalletForm'
 import { WalletLimitComponent } from '@/modules/project/pages1/projectDashboard/components/WalletLimitComponent'
-import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
-import { Body, H3 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography'
 import { GeyserLightningWalletGuideLink, LIGHTNING_FEE_PERCENTAGE } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
-import { LndNodeType, WalletResourceType } from '@/types'
-
-type AvailableOptions = {
-  lightningAddress: boolean
-  node: boolean
-  nwc: boolean
-}
 
 const FeaturedNWCWalletList = [
   {
