@@ -121,9 +121,16 @@ export const ProjectRewardForm = ({
           justifyContent="center"
           gap={6}
         >
-          <Body size="lg" fontWeight={600}>
-            {t(titleText)}
-          </Body>
+          <VStack w="full" alignItems="flex-start" gap={2}>
+            <Body size="xl" fontWeight={600}>
+              {t(titleText)}
+            </Body>
+            <Body size="sm" light>
+              {t(
+                'Contributors will be prompted to provide their email address at checkout, which you can use for follow-up communication. You may also collect shipping information. You can monitor all sales at any time in the Project Dashboard under Sales.',
+              )}
+            </Body>
+          </VStack>
 
           <HeaderComponent
             watch={watch}
