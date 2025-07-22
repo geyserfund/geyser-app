@@ -2,20 +2,21 @@ import {
   PiBag,
   PiBell,
   PiBookOpen,
+  PiFlagBannerFold,
   PiGear,
+  PiHandbag,
   PiInvoice,
   PiMegaphone,
   PiPlanet,
   PiPlugs,
   PiProjectorScreenChart,
-  PiShapes,
   PiWallet,
 } from 'react-icons/pi'
 
 export enum DashboardType {
+  config = 'config',
   settings = 'settings',
   analytics = 'analytics',
-  features = 'features',
 }
 
 import { IconType } from 'react-icons'
@@ -31,6 +32,37 @@ export type ProjectDashboardItem = {
 }
 
 export const projectDashboardItems: ProjectDashboardItem[] = [
+  {
+    label: 'Project Details',
+    path: 'dashboardInfo',
+    type: DashboardType.config,
+    icon: PiPlanet,
+  },
+  {
+    label: 'Story',
+    path: 'projectStoryEdit',
+    type: DashboardType.config,
+    icon: PiBookOpen,
+  },
+  {
+    label: 'Funding Goal',
+    path: 'dashboardFundingGoal',
+    type: DashboardType.config,
+    icon: PiFlagBannerFold,
+  },
+  {
+    label: 'Perks & Products',
+    path: 'dashboardRewards',
+    type: DashboardType.config,
+    icon: PiHandbag,
+  },
+  {
+    label: 'Wallet',
+    path: 'dashboardWallet',
+    type: DashboardType.config,
+    icon: PiWallet,
+  },
+  // ------------------------------------------------------------ //
   {
     label: 'Analytics',
     path: 'dashboardAnalytics',
@@ -52,33 +84,11 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
   {
     label: 'Promote',
     path: 'dashboardPromote',
-    type: DashboardType.features,
+    type: DashboardType.analytics,
     icon: PiMegaphone,
   },
-  {
-    label: 'Project Info',
-    path: 'dashboardInfo',
-    type: DashboardType.settings,
-    icon: PiPlanet,
-  },
-  {
-    label: 'Links & tags',
-    path: 'dashboardDetails',
-    type: DashboardType.settings,
-    icon: PiShapes,
-  },
-  {
-    label: 'Story',
-    path: 'projectStoryEdit',
-    type: DashboardType.settings,
-    icon: PiBookOpen,
-  },
-  {
-    label: 'Wallet',
-    path: 'dashboardWallet',
-    type: DashboardType.settings,
-    icon: PiWallet,
-  },
+  // ------------------------------------------------------------ //
+
   {
     label: 'Nostr',
     path: 'dashboardNostr',

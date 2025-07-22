@@ -17,7 +17,7 @@ import { VerificationModal } from '../../../../projectDashboard/components/Verif
 import { EnableFiatContributions } from '../../../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 import { ProjectCreationLayout } from '../../../Layouts/ProjectCreationLayout.tsx'
-import { LaunchConnectWallet } from '../components/LaunchConnectWallet.tsx'
+import { ConnectWallet } from '../components/ConnectWallet.tsx'
 
 export const LaunchPaymentWallet = () => {
   const { user } = useAuthContext()
@@ -61,7 +61,7 @@ export const LaunchPaymentWallet = () => {
     <ProjectCreationLayout title={t('Payment Wallet')} continueButtonProps={continueProps} backButtonProps={backProps}>
       <UpdateVerifyEmail inputWrapperProps={{ marginTop: 2 }} />
 
-      <LaunchConnectWallet />
+      <ConnectWallet />
 
       <EnableFiatContributions
         paddingX={0}

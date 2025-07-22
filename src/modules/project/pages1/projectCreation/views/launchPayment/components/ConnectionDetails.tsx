@@ -1,21 +1,30 @@
 import { HStack } from '@chakra-ui/react'
 
 import { NodeConnectionDetails } from '@/modules/project/components/NodeConnectionDetails.tsx'
-import { useWalletAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { WalletConnectDetails } from '@/shared/constants/platform/wallet.ts'
-import { LndConnectionDetailsPrivate } from '@/types/index.ts'
+import {
+  LndConnectionDetailsPrivate,
+  ProjectPageWalletFragment,
+  ProjectWalletConnectionDetailsFragment,
+} from '@/types/index.ts'
 
 import { ConnectionOption } from '../../../hooks/useWalletForm.tsx'
 import { WalletList } from './ConnectWalletModal.tsx'
 
-export const ConnectionDetails = (props: CardLayoutProps) => {
-  const { wallet, walletConnectionDetails } = useWalletAtom()
+type ConnectionDetailsProps = CardLayoutProps & {
+  wallet?: Pick<ProjectPageWalletFragment, 'name'>
+  walletConnectionDetails?: ProjectWalletConnectionDetailsFragment
+}
 
+export const ConnectionDetails = ({ wallet, walletConnectionDetails, ...props }: ConnectionDetailsProps) => {
   if (!walletConnectionDetails || !walletConnectionDetails.id) {
     return null
   }
+
+  console.log(walletConnectionDetails)
+  console.log(wallet)
 
   if (walletConnectionDetails.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails) {
     return (

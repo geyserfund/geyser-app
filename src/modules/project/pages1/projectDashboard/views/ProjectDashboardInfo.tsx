@@ -33,14 +33,16 @@ export const ProjectDashboardInfo = () => {
     hasUnsaved: form.formState.isDirty,
   })
 
-  const handleUpdateProject = ({ ...values }: ProjectCreationVariables) => {
+  const handleUpdateProject = ({ category, subCategory, location, tags, ...values }: ProjectCreationVariables) => {
     updateProject.execute({
       variables: {
         input: {
           projectId: Number(project.id),
+          category: category as ProjectCategory,
+          subCategory: subCategory as ProjectSubCategory,
+          countryCode: location,
+          tagIds: tags,
           ...values,
-          category: values.category as ProjectCategory,
-          subCategory: values.subCategory as ProjectSubCategory,
         },
       },
       onCompleted(data) {

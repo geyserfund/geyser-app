@@ -1,5 +1,8 @@
-import { Button, ButtonProps, HStack, Link, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, Icon, Link, useDisclosure, VStack } from '@chakra-ui/react'
+import { useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+import { PiPlus } from 'react-icons/pi'
+import { PiPencil } from 'react-icons/pi'
 import { Link as ReactLink } from 'react-router-dom'
 
 import { VerifyYourEmail } from '@/modules/auth/otp/VerifyYourEmail.tsx'
@@ -9,16 +12,29 @@ import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 
 import { useAuthContext } from '../../../../../../context/index.ts'
-import { getPath, GeyserEmailVerificationDocUrl, PathName } from '../../../../../../shared/constants/index.ts'
-import { MfaAction, OtpResponseFragment, UpdateWalletInput } from '../../../../../../types/index.ts'
+import {
+  getPath,
+  GeyserEmailVerificationDocUrl,
+  PathName,
+  WalletConnectDetails,
+} from '../../../../../../shared/constants/index.ts'
+import {
+  LightningAddressConnectionDetails,
+  LndConnectionDetailsPrivate,
+  LndNodeType,
+  MfaAction,
+  NwcConnectionDetailsPrivate,
+  OtpResponseFragment,
+  UpdateWalletInput,
+} from '../../../../../../types/index.ts'
 import { isDraft, isPrelaunch, useCustomTheme, useNotification } from '../../../../../../utils/index.ts'
 import { ConnectionOption, useWalletForm } from '../../../projectCreation/hooks/useWalletForm.tsx'
-import { ProjectCreationWalletConnectionForm } from '../../../projectCreation/index.ts'
+import { ConnectionDetails } from '../../../projectCreation/views/launchPayment/components/ConnectionDetails.tsx'
+import { ConnectWalletModal } from '../../../projectCreation/views/launchPayment/components/ConnectWalletModal.tsx'
 import { DashboardLayout } from '../../common/index.ts'
 import { VerificationModal } from '../../components/VerificationModal.tsx'
 import { EnableFiatContributions } from './components/EnableFiatContributions.tsx'
 import { WalletLimitsAndVerification } from './components/WalletLimitsAndVerification.tsx'
-
 export const ProjectDashboardWallet = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -34,11 +50,10 @@ export const ProjectDashboardWallet = () => {
 
   const isEdit = Boolean(walletConnectionDetails?.id)
 
-  const walletLimits = wallet?.limits
-
   const { createWallet, updateWallet, queryProjectWallet } = useProjectWalletAPI()
 
   const verifyIntroModal = useModal()
+  const connectWalletModal = useModal()
 
   const isIdentityVerified = user.complianceDetails.verifiedDetails.identity?.verified
 
@@ -85,7 +100,6 @@ export const ProjectDashboardWallet = () => {
     fee,
     limits,
   } = useWalletForm({
-    walletLimits,
     isEdit,
     onSubmit: handleNext,
   })
@@ -150,6 +164,43 @@ export const ProjectDashboardWallet = () => {
     )
   }
 
+  const formConnectionDetails = useMemo(() => {
+    switch (connectionOption) {
+      case ConnectionOption.PERSONAL_NODE:
+        return {
+          __typename: WalletConnectDetails.LndConnectionDetailsPrivate,
+          grpcPort: Number(node.value.grpc),
+          hostname: node.value.hostname,
+          lndNodeType: node.value.isVoltage ? LndNodeType.Voltage : LndNodeType.Custom,
+          macaroon: node.value.invoiceMacaroon,
+          pubkey: node.value.publicKey,
+          tlsCertificate: node.value.tlsCert,
+        } as LndConnectionDetailsPrivate
+      case ConnectionOption.NWC:
+        return {
+          __typename: WalletConnectDetails.NWCConnectionDetailsPrivate,
+          nwcConnectionDetails: nwc.value,
+        } as NwcConnectionDetailsPrivate
+      case ConnectionOption.LIGHTNING_ADDRESS:
+      default:
+        return {
+          __typename: WalletConnectDetails.LightningAddressConnectionDetails,
+          lightningAddress: lightningAddress.value,
+        } as LightningAddressConnectionDetails
+    }
+  }, [connectionOption, node.value, lightningAddress.value, nwc.value])
+
+  const formWalletConnectionDetails = {
+    connectionDetails: formConnectionDetails,
+    id: wallet?.id,
+  }
+  const formWallet = {
+    name: node.value.name,
+    id: wallet?.id,
+  }
+
+  console.log(formWalletConnectionDetails)
+
   return (
     <DashboardLayout
       desktopTitle={t('Wallet')}
@@ -193,7 +244,7 @@ export const ProjectDashboardWallet = () => {
             </Link>
           </Trans>
         </Body>
-        {project && (
+        {/* {project && (
           <ProjectCreationWalletConnectionForm
             readOnly={isReadOnly}
             lightningAddress={lightningAddress}
@@ -204,7 +255,19 @@ export const ProjectDashboardWallet = () => {
             fee={fee}
             limits={limits}
           />
-        )}
+        )} */}
+
+        <ConnectionDetails marginTop={4} wallet={formWallet} walletConnectionDetails={formWalletConnectionDetails} />
+        <Button
+          size="lg"
+          leftIcon={wallet?.id ? <Icon as={PiPencil} /> : <Icon as={PiPlus} />}
+          variant="outline"
+          width="full"
+          marginTop={4}
+          onClick={connectWalletModal.onOpen}
+        >
+          {t('Update wallet info')}
+        </Button>
       </VStack>
 
       <VerifyYourEmail
@@ -214,6 +277,25 @@ export const ProjectDashboardWallet = () => {
         handleVerify={handleWalletUpdate}
       />
       <VerificationModal {...verifyIntroModal} />
+      {connectWalletModal.isOpen && (
+        <ConnectWalletModal
+          walletFormProps={{
+            connectionOption,
+            setConnectionOption,
+            lightningAddress,
+            node,
+            fee,
+            limits,
+            nwc,
+          }}
+          continueButtonProps={{
+            // isLoading: isContinueButtonLoading,
+            // isDisabled: isContinueButtonDisabled,
+            onClick: connectWalletModal.onClose,
+          }}
+          modalProps={connectWalletModal}
+        />
+      )}
     </DashboardLayout>
   )
 }

@@ -38,10 +38,23 @@ const DashboardMenuContent = (props: ButtonProps) => {
 
   const dashboardAnalyticsItems = projectDashboardItems.filter((item) => item.type === DashboardType.analytics)
   const dashboardSettingsItems = projectDashboardItems.filter((item) => item.type === DashboardType.settings)
-  const dashboardFeaturesItems = projectDashboardItems.filter((item) => item.type === DashboardType.features)
+  const dashboardConfigItems = projectDashboardItems.filter((item) => item.type === DashboardType.config)
 
   return (
     <>
+      {dashboardConfigItems.map((item, index) => (
+        <React.Fragment key={item.label}>
+          <DashboardMenuButton
+            key={item.label}
+            item={item}
+            currentDashboardItem={currentDashboardItem}
+            isMobile={isMobile}
+            project={project}
+            {...props}
+          />
+          {index === dashboardConfigItems.length - 1 && <Divider />}
+        </React.Fragment>
+      ))}
       {dashboardAnalyticsItems.map((item, index) => (
         <React.Fragment key={item.label}>
           <DashboardMenuButton
@@ -53,20 +66,7 @@ const DashboardMenuContent = (props: ButtonProps) => {
             {...props}
           />
 
-          {index !== dashboardAnalyticsItems.length - 1 && <Divider />}
-        </React.Fragment>
-      ))}
-      {dashboardFeaturesItems.map((item, index) => (
-        <React.Fragment key={item.label}>
-          <DashboardMenuButton
-            key={item.label}
-            item={item}
-            currentDashboardItem={currentDashboardItem}
-            isMobile={isMobile}
-            project={project}
-            {...props}
-          />
-          {index !== dashboardFeaturesItems.length - 1 && <Divider />}
+          {index === dashboardAnalyticsItems.length - 1 && <Divider />}
         </React.Fragment>
       ))}
       {dashboardSettingsItems.map((item) => {

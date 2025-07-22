@@ -14,7 +14,6 @@ import {
   LndNodeType,
   Maybe,
   useLightningAddressVerifyLazyQuery,
-  WalletLimitsFragment,
   WalletOffChainContributionLimits,
   WalletOnChainContributionLimits,
   WalletResourceType,
@@ -30,7 +29,6 @@ import {
 import { TNodeInput } from '../types'
 
 interface useWalletFormProps {
-  walletLimits?: WalletLimitsFragment | null
   onSubmit: (createWalletInput: CreateWalletInput | null) => void
   isEdit?: boolean
 }

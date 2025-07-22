@@ -13,13 +13,13 @@ import { useWalletForm } from '../../../hooks/useWalletForm.tsx'
 import { ConnectionDetails } from './ConnectionDetails.tsx'
 import { ConnectWalletModal } from './ConnectWalletModal.tsx'
 
-export const LaunchConnectWallet = () => {
+export const ConnectWallet = () => {
   const connectWalletModal = useModal()
 
   const toast = useNotification()
 
   const { loading } = useProjectAtom()
-  const { wallet } = useWalletAtom()
+  const { wallet, walletConnectionDetails } = useWalletAtom()
   const { createWallet, updateWallet } = useProjectWalletAPI()
 
   const handleNext = (createWalletInput: CreateWalletInput | null) => {
@@ -100,7 +100,7 @@ export const LaunchConnectWallet = () => {
         subtitle={t('Configure the wallet where funds from your project will be sent to.')}
         gap={2}
       >
-        <ConnectionDetails marginTop={4} />
+        <ConnectionDetails marginTop={4} wallet={wallet} walletConnectionDetails={walletConnectionDetails} />
         <Button
           size="lg"
           height="64px"
