@@ -31,7 +31,7 @@ export const LightningAddressModal = ({ name, npub, ...rest }: LightningAddressM
         onClick={lightningAddressModal.onOpen}
         {...rest}
       >
-        <Body size="sm" medium isTruncated flex={1}>
+        <Body size="sm" className="notranslate" translate="no" medium isTruncated flex={1}>
           {name}
         </Body>
 
