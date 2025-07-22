@@ -43,7 +43,7 @@ export const useUpdateProjectWithLastCreationStep = (step: ProjectCreationStep, 
   ) => {
     console.log('projectStepIsAhead', projectStepIsAhead, nextStep)
 
-    if (projectStepIsAhead) {
+    if (!projectUpdateIput && projectStepIsAhead) {
       navigate(nextPath)
       return
     }

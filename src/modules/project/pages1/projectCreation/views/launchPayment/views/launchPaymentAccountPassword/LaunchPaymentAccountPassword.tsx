@@ -50,7 +50,7 @@ export const LaunchPaymentAccountPassword = () => {
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.IdentityVerification,
-    getPath('launchSummary', project.id),
+    getPath('launchFinalize', project.id),
   )
 
   const handleCreatePasswordSubmit = (data: UserAccountKeysFragment) => {

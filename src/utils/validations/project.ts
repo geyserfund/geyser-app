@@ -8,6 +8,10 @@ export const isDraft = (status?: Maybe<ProjectStatus>) => {
   return status === ProjectStatus.Draft
 }
 
+export const isAccepted = (status?: Maybe<ProjectStatus>) => {
+  return status === ProjectStatus.Accepted
+}
+
 export const isInactive = (status?: Maybe<ProjectStatus>) => {
   return status === ProjectStatus.Inactive
 }

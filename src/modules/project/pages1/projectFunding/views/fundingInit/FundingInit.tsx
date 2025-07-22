@@ -2,6 +2,7 @@
 
 import { useLocation } from 'react-router'
 
+import { useFundingUserAccountKeys } from '@/modules/project/funding/hooks/useFundingUserAccountKeys.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 // import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
@@ -17,6 +18,8 @@ import { GeyserTipInput } from './sections/GeyserTipInput.tsx'
 /** FundingInit is the first page of funding flow, consisting of donation input and rewards selection or subscription selection */
 export const FundingInit = () => {
   const { loading } = useProjectAtom()
+
+  useFundingUserAccountKeys()
 
   // const hasFundingLimitReached = useAtomValue(hasProjectFundingLimitReachedAtom)
   // const toast = useNotification()

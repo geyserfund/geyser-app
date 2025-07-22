@@ -7,6 +7,7 @@ import {
   FRAGMENT_PROJECT_NOSTR_KEYS,
   FRAGMENT_PROJECT_PAGE_BODY,
 } from '../fragments/projectFragment'
+import { FRAGMENT_PROJECT_REVIEW } from '../fragments/projectReviewFragment.ts'
 import { FRAGMENT_PROJECT_PAGE_WALLET, FRAGMENT_PROJECT_WALLET_CONNECTION_DETAILS } from '../fragments/walletFragment'
 
 export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
@@ -81,6 +82,17 @@ export const QUERY_PROJECT_WALLET_CONNECTION_DETAILS = gql`
     projectGet(where: $where) {
       wallets {
         ...ProjectWalletConnectionDetails
+      }
+    }
+  }
+`
+
+export const QUERY_PROJECT_LAUNCH_REVIEWS = gql`
+  ${FRAGMENT_PROJECT_REVIEW}
+  query ProjectLaunchReviews($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      reviews {
+        ...ProjectReview
       }
     }
   }

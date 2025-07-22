@@ -110,6 +110,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     links
     aonGoalDurationInDays
     aonGoalInSats
+    launchScheduledAt
     location {
       ...ProjectLocation
     }
@@ -166,5 +167,6 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     lastCreationStep
     aonGoalDurationInDays
     aonGoalInSats
+    launchScheduledAt
   }
 `

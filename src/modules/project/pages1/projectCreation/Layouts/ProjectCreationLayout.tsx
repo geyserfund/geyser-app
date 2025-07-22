@@ -13,10 +13,12 @@ import { getPath } from '@/shared/constants/index.ts'
 
 type ProjectCreationLayoutProps = PropsWithChildren<{
   title: string
-  continueButtonProps?: ButtonProps
-  backButtonProps?: ButtonProps
+  continueButtonProps?: { label?: string } & ButtonProps
+  backButtonProps?: { label?: string } & ButtonProps
   removeBottomContainer?: boolean
   buttonContainerProps?: StackProps
+  hideContinueButton?: boolean
+  hideBackButton?: boolean
 }> &
   StackProps
 
@@ -27,12 +29,15 @@ export const ProjectCreationLayout = ({
   backButtonProps,
   removeBottomContainer,
   buttonContainerProps,
+  hideContinueButton = false,
+  hideBackButton = false,
   ...rest
 }: ProjectCreationLayoutProps) => {
   const isMobile = useBreakpointValue({ base: true, md: false })
 
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
+
   return (
     <VStack
       flex={1}
@@ -81,27 +86,31 @@ export const ProjectCreationLayout = ({
         flex={1}
         {...buttonContainerProps}
       >
-        <Button
-          width="200px"
-          size="lg"
-          variant="soft"
-          colorScheme="neutral1"
-          onClick={() => navigate(-1)}
-          leftIcon={<Icon as={PiArrowLeft} />}
-          {...backButtonProps}
-        >
-          {t('Back')}
-        </Button>
-        <Button
-          width="200px"
-          size="lg"
-          variant="soft"
-          colorScheme="primary1"
-          rightIcon={<Icon as={PiArrowRight} />}
-          {...continueButtonProps}
-        >
-          {t('Continue')}
-        </Button>
+        {!hideBackButton && (
+          <Button
+            width="200px"
+            size="lg"
+            variant="soft"
+            colorScheme="neutral1"
+            onClick={() => navigate(-1)}
+            leftIcon={<Icon as={PiArrowLeft} />}
+            {...backButtonProps}
+          >
+            {backButtonProps?.label || t('Back')}
+          </Button>
+        )}
+        {!hideContinueButton && (
+          <Button
+            width="200px"
+            size="lg"
+            variant="soft"
+            colorScheme="primary1"
+            rightIcon={<Icon as={PiArrowRight} />}
+            {...continueButtonProps}
+          >
+            {continueButtonProps?.label || t('Continue')}
+          </Button>
+        )}
       </HStack>
     </VStack>
   )

@@ -258,9 +258,22 @@ export const generateKeysFromSeedHex = (seedHex: string): AccountKeys => {
   }
 }
 
+export const generateAccountKeys = (): AccountKeys => {
+  const seedHex = generateSeedHexForUser()
+  const accountKeys = generateKeysFromSeedHex(seedHex)
+  return accountKeys
+}
+
 export type AccountKeys = {
   derivationPath: string
   address: string
   privateKey: string
   publicKey: string
+}
+
+export const generatePreImageHash = () => {
+  const preimage = new Uint8Array(32)
+  window.crypto.getRandomValues(preimage)
+  const preimageHash = bitcoin.crypto.sha256(Buffer.from(preimage)).toString('hex')
+  return preimageHash
 }

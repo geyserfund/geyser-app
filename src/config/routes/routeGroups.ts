@@ -22,7 +22,7 @@ export const projectCreationRoutesThatNeedStory = [
   getPath('launchPaymentTaxId', PathName.projectId),
   getPath('launchPaymentAccountPassword', PathName.projectId),
   getPath('launchAboutYou', PathName.projectId),
-  getPath('launchSummary', PathName.projectId),
+  getPath('launchFinalize', PathName.projectId),
 ]
 
 export const privateCreatorProjectCreationRoutes = [

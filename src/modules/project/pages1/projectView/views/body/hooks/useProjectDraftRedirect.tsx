@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCreationStep } from '@/types/index.ts'
-import { isDraft } from '@/utils/index.ts'
+import { isAccepted, isDraft } from '@/utils/index.ts'
 
 export const useProjectDraftRedirect = () => {
   const navigate = useNavigate()
@@ -12,7 +12,7 @@ export const useProjectDraftRedirect = () => {
   const { project, loading, isProjectOwner } = useProjectAtom()
 
   useEffect(() => {
-    if (project && isProjectOwner && !loading && isDraft(project.status)) {
+    if (project && isProjectOwner && !loading && (isDraft(project.status) || isAccepted(project.status))) {
       navigate(getProjectCreationRoute(project.lastCreationStep, project.id))
     }
   }, [project, isProjectOwner, loading, navigate])
@@ -38,6 +38,8 @@ export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, p
       return getPath('launchPaymentTaxId', projectId)
     case ProjectCreationStep.IdentityVerification:
       return getPath('launchPaymentAccountPassword', projectId)
+    case ProjectCreationStep.Launch:
+      return getPath('launchFinalize', projectId)
 
     default:
       return getPath('launchProjectDetails', projectId)

@@ -206,10 +206,10 @@ export const platformRoutes: RouteObject[] = [
           },
 
           {
-            path: getPath('launchSummary', PathName.projectId),
+            path: getPath('launchFinalize', PathName.projectId),
             async lazy() {
-              const LaunchSummary = await ProjectLaunch().then((m) => m.LaunchSummary)
-              return { Component: LaunchSummary }
+              const LaunchFinalize = await ProjectLaunch().then((m) => m.Launch)
+              return { Component: LaunchFinalize }
             },
           },
         ],

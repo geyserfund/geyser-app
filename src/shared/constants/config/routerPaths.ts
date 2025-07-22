@@ -70,7 +70,7 @@ export enum PathName {
   launchPaymentWallet = 'wallet',
   launchPaymentAccountPassword = 'account-password',
   launchPaymentTaxId = 'tax-id',
-  launchSummary = 'summary',
+  launchFinalize = 'finalize',
 
   userProfile = 'user',
   userSettings = 'settings',
@@ -337,7 +337,7 @@ const pathsMap = {
     `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentAccountPassword}`,
   launchPaymentTaxId: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentTaxId}`,
-  launchSummary: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchSummary}`,
+  launchFinalize: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchFinalize}`,
 
   launchProjectStrategy: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStrategy}`,

@@ -23,7 +23,15 @@ import { shippingAddressAtom, shippingCountryAtom } from './shippingAddressAtom.
 
 export type FundingProject = Pick<
   ProjectState,
-  'id' | 'name' | 'status' | 'rewardCurrency' | 'title' | 'owners' | 'paymentMethods' | 'subCategory'
+  | 'id'
+  | 'name'
+  | 'status'
+  | 'rewardCurrency'
+  | 'title'
+  | 'owners'
+  | 'paymentMethods'
+  | 'subCategory'
+  | 'fundingStrategy'
 >
 
 export enum FundingUserInfoError {

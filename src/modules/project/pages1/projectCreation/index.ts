@@ -3,6 +3,7 @@ import { ProjectCreationContainer } from './ProjectCreationContainer.tsx'
 import { ProjectCreationContainerContentDesktop, ProjectCreationContentMain } from './ProjectCreationContent.tsx'
 import { LaunchFundingGoal } from './views/fundingStrategy/LaunchFundingGoal.tsx'
 import { LaunchFundingStrategy } from './views/fundingStrategy/LaunchFundingStrategy.tsx'
+import { Launch } from './views/launch/Launch.tsx'
 import { LaunchAboutYou } from './views/LaunchAboutYou.tsx'
 import { LaunchPayment } from './views/launchPayment/LaunchPayment.tsx'
 import { LaunchPaymentAccountPassword } from './views/launchPayment/views/launchPaymentAccountPassword/LaunchPaymentAccountPassword.tsx'
@@ -11,7 +12,6 @@ import { LaunchPaymentWallet } from './views/launchPayment/views/LaunchPaymentWa
 import { LaunchProducts } from './views/LaunchProducts.tsx'
 import { LaunchProjectDetails } from './views/LaunchProjectDetails.tsx'
 import { LaunchStory } from './views/LaunchStory.tsx'
-import { LaunchSummary } from './views/LaunchSummary.tsx'
 import { ProjectCreateStart } from './views/old/ProjectCreateStart.tsx'
 import { ProjectCreateRewards } from './views/rewards/ProjectCreateRewards.tsx'
 import { ProjectCreateRewardMain } from './views/rewards/views/ProjectCreateRewardMain.tsx'
@@ -19,6 +19,7 @@ import { ProjectCreationCreateReward } from './views/rewards/views/ProjectCreati
 import { ProjectCreationEditReward } from './views/rewards/views/ProjectCreationEditReward.tsx'
 
 export {
+  Launch,
   LaunchAboutYou,
   LaunchFundingGoal,
   LaunchFundingStrategy,
@@ -29,7 +30,6 @@ export {
   LaunchProducts,
   LaunchProjectDetails,
   LaunchStory,
-  LaunchSummary,
   ProjectCreateRewardMain,
   ProjectCreateRewards,
   ProjectCreateStart,

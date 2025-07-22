@@ -89,6 +89,7 @@ export const AllOrNothingGoal = () => {
         },
         aonGoalDurationInDays: data.duration,
       },
+      launchScheduledAt: data.launchDate ? DateTime.fromJSDate(data.launchDate).toMillis() : undefined,
     })
   }
 

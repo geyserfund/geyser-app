@@ -7,6 +7,7 @@ import { ContributionCreateInput, ContributionCreateMutation, useContributionCre
 import { useNotification } from '@/utils'
 
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
+import { generateAccountKeys } from '../../pages1/projectCreation/views/launchPayment/views/launchPaymentAccountPassword/keyGenerationHelper.ts'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom, useParseResponseToSwapAtom } from '../state'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
@@ -15,6 +16,7 @@ import {
 } from '../state/fundingContributionCreateInputAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '../state/fundingPaymentAtom.ts'
 import { keyPairAtom } from '../state/swapAtom.ts'
+import { rskAccountKeysAtom } from '../state/swapRskAtom.ts'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundingFormAtom } from './useFundingFormAtom'
@@ -46,6 +48,7 @@ export const useFundingAPI = () => {
   const startWebLNFlow = useWebLNFlow()
 
   const setKeyPair = useSetAtom(keyPairAtom)
+  const setRskAccountKeys = useSetAtom(rskAccountKeysAtom)
 
   const [contributionCreate, requestFundingOptions] = useCustomMutation(useContributionCreateMutation, {
     onCompleted(data) {
@@ -117,19 +120,26 @@ export const useFundingAPI = () => {
 
       resetContribution()
 
-      const keyPair = generatePrivatePublicKeyPair()
-      setKeyPair(keyPair)
-
       const finalInput = { ...input }
+
       if (finalInput?.paymentsInput?.onChainSwap?.boltz) {
+        const keyPair = generatePrivatePublicKeyPair()
+        setKeyPair(keyPair)
         finalInput.paymentsInput.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
+      }
+
+      if (finalInput?.paymentsInput?.lightningToRskSwap?.boltz && finalInput.paymentsInput.onChainToRskSwap?.boltz) {
+        const accountKeys = generateAccountKeys()
+        setRskAccountKeys(accountKeys)
+        finalInput.paymentsInput.lightningToRskSwap.boltz.claimPublicKey = accountKeys.publicKey
+        finalInput.paymentsInput.onChainToRskSwap.boltz.claimPublicKey = accountKeys.publicKey
       }
 
       setFundingInputAfterRequest(finalInput)
 
       await contributionCreate({ variables: { input: finalInput }, onCompleted })
     },
-    [contributionCreate, toast, setKeyPair, setFundingInputAfterRequest, resetContribution],
+    [contributionCreate, toast, setKeyPair, setFundingInputAfterRequest, resetContribution, setRskAccountKeys],
   )
 
   const requestFundingFromContext = useCallback(

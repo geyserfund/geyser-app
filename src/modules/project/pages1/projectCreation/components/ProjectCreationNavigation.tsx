@@ -54,7 +54,7 @@ const ProjectCreationNavigation = (props: StackProps) => {
       { title: 'Story', path: getPath('launchStory', project?.id), isDisabled: !project.id },
       { title: 'About You', path: getPath('launchAboutYou', project?.id), isDisabled: !project.id },
       { title: 'Payment', path: getPath('launchPayment', project?.id), isDisabled: !project.id },
-      { title: 'Launch', path: getPath('launchSummary', project?.id), isDisabled: !project.id },
+      { title: 'Launch', path: getPath('launchFinalize', project?.id), isDisabled: !project.id },
     ],
     [project?.id],
   )
@@ -136,7 +136,7 @@ export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, p
     case ProjectCreationStep.IdentityVerification:
       return getPath('launchPaymentAccountPassword', projectId)
     case ProjectCreationStep.Launch:
-      return getPath('launchSummary', projectId)
+      return getPath('launchFinalize', projectId)
 
     default:
       return getPath('launchProjectDetails', projectId)

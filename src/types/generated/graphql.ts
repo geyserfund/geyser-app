@@ -402,18 +402,6 @@ export type ContributionPaymentsInput = {
   onChainToRskSwap?: InputMaybe<ContributionOnChainToRskSwapPaymentDetailsInput>;
 };
 
-export type ContributionRefundInput = {
-  contributionId: Scalars['BigInt']['input'];
-  /** The payment details to refund the contributor. */
-  refundPaymentInput?: InputMaybe<RefundPaymentInput>;
-};
-
-export type ContributionRefundResponse = {
-  __typename?: 'ContributionRefundResponse';
-  contribution: Contribution;
-  refund: Refund;
-};
-
 export enum ContributionStatus {
   Confirmed = 'CONFIRMED',
   Pending = 'PENDING'
@@ -1401,7 +1389,6 @@ export type Mutation = {
   contributionCreate: ContributionMutationResponse;
   contributionEmailUpdate: Contribution;
   contributionPaymentsAdd: ContributionPaymentsAddResponse;
-  contributionRefund: ContributionRefundResponse;
   /** @deprecated Use postCreate instead */
   createEntry: Entry;
   /** @deprecated Use projectCreate instead */
@@ -1457,6 +1444,11 @@ export type Mutation = {
   projectUpdate: Project;
   /** @deprecated Use postPublish instead */
   publishEntry: Entry;
+  refundCancel: RefundResponse;
+  refundConfirm: RefundResponse;
+  refundFail: RefundResponse;
+  refundInitiate: RefundInitiateResponse;
+  refundRequest: RefundRequestResponse;
   /**
    * Sends an OTP to the user's email address and responds with a token that can be used, together with the OTP, to two-factor authenticate
    * a request made by the client.
@@ -1515,11 +1507,6 @@ export type MutationContributionEmailUpdateArgs = {
 
 export type MutationContributionPaymentsAddArgs = {
   input: ContributionPaymentsAddInput;
-};
-
-
-export type MutationContributionRefundArgs = {
-  input: ContributionRefundInput;
 };
 
 
@@ -1751,6 +1738,31 @@ export type MutationProjectUpdateArgs = {
 
 export type MutationPublishEntryArgs = {
   id: Scalars['BigInt']['input'];
+};
+
+
+export type MutationRefundCancelArgs = {
+  input: RefundCancelInput;
+};
+
+
+export type MutationRefundConfirmArgs = {
+  input: RefundConfirmInput;
+};
+
+
+export type MutationRefundFailArgs = {
+  input: RefundFailInput;
+};
+
+
+export type MutationRefundInitiateArgs = {
+  input: RefundInitiateInput;
+};
+
+
+export type MutationRefundRequestArgs = {
+  input: RefundRequestInput;
 };
 
 
@@ -2482,6 +2494,7 @@ export type Project = {
   images: Array<Scalars['String']['output']>;
   keys: ProjectKeys;
   lastCreationStep: ProjectCreationStep;
+  launchScheduledAt?: Maybe<Scalars['Date']['output']>;
   launchedAt?: Maybe<Scalars['Date']['output']>;
   links: Array<Scalars['String']['output']>;
   location?: Maybe<Location>;
@@ -3110,6 +3123,7 @@ export type ProjectStatsBase = {
 };
 
 export enum ProjectStatus {
+  Accepted = 'accepted',
   Active = 'active',
   Closed = 'closed',
   Deleted = 'deleted',
@@ -3344,6 +3358,7 @@ export type Query = {
   projectsMostFundedByCategory: Array<ProjectMostFundedByCategory>;
   projectsMostFundedByTag: Array<ProjectMostFundedByTag>;
   projectsSummary: ProjectsSummary;
+  refundGet?: Maybe<Refund>;
   shippingAddressesGet: Array<ShippingAddress>;
   statusCheck: Scalars['Boolean']['output'];
   tagsGet: Array<TagsGetResult>;
@@ -3590,6 +3605,11 @@ export type QueryProjectsMostFundedByTagArgs = {
 };
 
 
+export type QueryRefundGetArgs = {
+  input: RefundGetInput;
+};
+
+
 export type QueryShippingAddressesGetArgs = {
   input: ShippingAddressesGetInput;
 };
@@ -3640,14 +3660,65 @@ export enum QuoteCurrency {
 
 export type Refund = {
   __typename?: 'Refund';
+  amount: Scalars['Int']['output'];
   expiresAt: Scalars['Date']['output'];
   id: Scalars['BigInt']['output'];
   status: RefundStatus;
 };
 
+export type RefundCancelInput = {
+  reason?: InputMaybe<Scalars['String']['input']>;
+  refundId: Scalars['BigInt']['input'];
+};
+
+export type RefundConfirmInput = {
+  refundId: Scalars['BigInt']['input'];
+};
+
+export type RefundFailInput = {
+  reason?: InputMaybe<Scalars['String']['input']>;
+  refundId: Scalars['BigInt']['input'];
+};
+
+export type RefundGetInput = {
+  refundId?: InputMaybe<Scalars['BigInt']['input']>;
+  swapId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type RefundInitiateInput = {
+  /** The payment details to refund the contributor. */
+  refundId: Scalars['BigInt']['input'];
+  refundPaymentInput: RefundPaymentInput;
+};
+
+export type RefundInitiateResponse = {
+  __typename?: 'RefundInitiateResponse';
+  refund: Refund;
+};
+
 export type RefundPaymentInput = {
   rskToLightningSwap?: InputMaybe<RskToLightningSwapPaymentDetailsInput>;
   rskToOnChainSwap?: InputMaybe<RskToOnChainSwapPaymentDetailsInput>;
+};
+
+export type RefundRequestInput = {
+  /** Use this field to request a refund for a single contribution. */
+  contributionId?: InputMaybe<Scalars['BigInt']['input']>;
+  /** Use this field to request a batch refund for all contributions in a project (only available for logged in users) */
+  projectId?: InputMaybe<Scalars['BigInt']['input']>;
+  /** The RSK address of the contributor (for anonymous contributions) */
+  rskAddress?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type RefundRequestResponse = {
+  __typename?: 'RefundRequestResponse';
+  refund: Refund;
+};
+
+export type RefundResponse = {
+  __typename?: 'RefundResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
 };
 
 export enum RefundStatus {
@@ -3691,13 +3762,12 @@ export type RskKeyPairInput = {
 };
 
 export type RskToLightningSwapPaymentDetailsBoltzInput = {
-  claimPublicKey: Scalars['String']['input'];
-  preimageHash: Scalars['String']['input'];
+  paymentRequest: Scalars['String']['input'];
+  refundPublicKey: Scalars['String']['input'];
 };
 
 export type RskToLightningSwapPaymentDetailsInput = {
   boltz: RskToLightningSwapPaymentDetailsBoltzInput;
-  create?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type RskToOnChainSwapPaymentDetailsBoltzInput = {
@@ -3707,7 +3777,6 @@ export type RskToOnChainSwapPaymentDetailsBoltzInput = {
 
 export type RskToOnChainSwapPaymentDetailsInput = {
   boltz: RskToOnChainSwapPaymentDetailsBoltzInput;
-  create?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type SendOtpByEmailInput = {
@@ -4564,8 +4633,6 @@ export type ResolversTypes = {
   ContributionPaymentsAddResponse: ResolverTypeWrapper<ContributionPaymentsAddResponse>;
   ContributionPaymentsDetails: ResolverTypeWrapper<ContributionPaymentsDetails>;
   ContributionPaymentsInput: ContributionPaymentsInput;
-  ContributionRefundInput: ContributionRefundInput;
-  ContributionRefundResponse: ResolverTypeWrapper<Omit<ContributionRefundResponse, 'contribution'> & { contribution: ResolversTypes['Contribution'] }>;
   ContributionStatus: ContributionStatus;
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: ResolverTypeWrapper<Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversTypes['Contribution'] }>;
@@ -4889,7 +4956,16 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   QuoteCurrency: QuoteCurrency;
   Refund: ResolverTypeWrapper<Refund>;
+  RefundCancelInput: RefundCancelInput;
+  RefundConfirmInput: RefundConfirmInput;
+  RefundFailInput: RefundFailInput;
+  RefundGetInput: RefundGetInput;
+  RefundInitiateInput: RefundInitiateInput;
+  RefundInitiateResponse: ResolverTypeWrapper<RefundInitiateResponse>;
   RefundPaymentInput: RefundPaymentInput;
+  RefundRequestInput: RefundRequestInput;
+  RefundRequestResponse: ResolverTypeWrapper<RefundRequestResponse>;
+  RefundResponse: ResolverTypeWrapper<RefundResponse>;
   RefundStatus: RefundStatus;
   RejectionReason: RejectionReason;
   ResourceInput: ResourceInput;
@@ -5039,8 +5115,6 @@ export type ResolversParentTypes = {
   ContributionPaymentsAddResponse: ContributionPaymentsAddResponse;
   ContributionPaymentsDetails: ContributionPaymentsDetails;
   ContributionPaymentsInput: ContributionPaymentsInput;
-  ContributionRefundInput: ContributionRefundInput;
-  ContributionRefundResponse: Omit<ContributionRefundResponse, 'contribution'> & { contribution: ResolversParentTypes['Contribution'] };
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversParentTypes['Contribution'] };
   ContributionsGetResponse: Omit<ContributionsGetResponse, 'contributions'> & { contributions: Array<ResolversParentTypes['Contribution']> };
@@ -5307,7 +5381,16 @@ export type ResolversParentTypes = {
   ProjectsSummary: ProjectsSummary;
   Query: {};
   Refund: Refund;
+  RefundCancelInput: RefundCancelInput;
+  RefundConfirmInput: RefundConfirmInput;
+  RefundFailInput: RefundFailInput;
+  RefundGetInput: RefundGetInput;
+  RefundInitiateInput: RefundInitiateInput;
+  RefundInitiateResponse: RefundInitiateResponse;
   RefundPaymentInput: RefundPaymentInput;
+  RefundRequestInput: RefundRequestInput;
+  RefundRequestResponse: RefundRequestResponse;
+  RefundResponse: RefundResponse;
   ResourceInput: ResourceInput;
   RskKeyPair: RskKeyPair;
   RskKeyPairInput: RskKeyPairInput;
@@ -5584,12 +5667,6 @@ export type ContributionPaymentsDetailsResolvers<ContextType = any, ParentType e
   lightningToRskSwap?: Resolver<Maybe<ResolversTypes['ContributionLightningToRskSwapPaymentDetails']>, ParentType, ContextType>;
   onChainSwap?: Resolver<Maybe<ResolversTypes['ContributionOnChainSwapPaymentDetails']>, ParentType, ContextType>;
   onChainToRskSwap?: Resolver<Maybe<ResolversTypes['ContributionOnChainToRskSwapPaymentDetails']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ContributionRefundResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionRefundResponse'] = ResolversParentTypes['ContributionRefundResponse']> = {
-  contribution?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType>;
-  refund?: Resolver<ResolversTypes['Refund'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6009,7 +6086,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   contributionCreate?: Resolver<ResolversTypes['ContributionMutationResponse'], ParentType, ContextType, RequireFields<MutationContributionCreateArgs, 'input'>>;
   contributionEmailUpdate?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType, Partial<MutationContributionEmailUpdateArgs>>;
   contributionPaymentsAdd?: Resolver<ResolversTypes['ContributionPaymentsAddResponse'], ParentType, ContextType, RequireFields<MutationContributionPaymentsAddArgs, 'input'>>;
-  contributionRefund?: Resolver<ResolversTypes['ContributionRefundResponse'], ParentType, ContextType, RequireFields<MutationContributionRefundArgs, 'input'>>;
   createEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationCreateEntryArgs, 'input'>>;
   createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>;
   creatorNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreatorNotificationConfigurationValueUpdateArgs, 'creatorNotificationConfigurationId' | 'value'>>;
@@ -6056,6 +6132,11 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectUnfollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectUnfollowArgs, 'input'>>;
   projectUpdate?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectUpdateArgs, 'input'>>;
   publishEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationPublishEntryArgs, 'id'>>;
+  refundCancel?: Resolver<ResolversTypes['RefundResponse'], ParentType, ContextType, RequireFields<MutationRefundCancelArgs, 'input'>>;
+  refundConfirm?: Resolver<ResolversTypes['RefundResponse'], ParentType, ContextType, RequireFields<MutationRefundConfirmArgs, 'input'>>;
+  refundFail?: Resolver<ResolversTypes['RefundResponse'], ParentType, ContextType, RequireFields<MutationRefundFailArgs, 'input'>>;
+  refundInitiate?: Resolver<ResolversTypes['RefundInitiateResponse'], ParentType, ContextType, RequireFields<MutationRefundInitiateArgs, 'input'>>;
+  refundRequest?: Resolver<ResolversTypes['RefundRequestResponse'], ParentType, ContextType, RequireFields<MutationRefundRequestArgs, 'input'>>;
   sendOTPByEmail?: Resolver<ResolversTypes['OTPResponse'], ParentType, ContextType, RequireFields<MutationSendOtpByEmailArgs, 'input'>>;
   shippingAddressCreate?: Resolver<ResolversTypes['ShippingAddress'], ParentType, ContextType, RequireFields<MutationShippingAddressCreateArgs, 'input'>>;
   tagCreate?: Resolver<ResolversTypes['Tag'], ParentType, ContextType, RequireFields<MutationTagCreateArgs, 'input'>>;
@@ -6387,6 +6468,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
   lastCreationStep?: Resolver<ResolversTypes['ProjectCreationStep'], ParentType, ContextType>;
+  launchScheduledAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   launchedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
@@ -6817,6 +6899,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectsMostFundedByCategory?: Resolver<Array<ResolversTypes['ProjectMostFundedByCategory']>, ParentType, ContextType, RequireFields<QueryProjectsMostFundedByCategoryArgs, 'input'>>;
   projectsMostFundedByTag?: Resolver<Array<ResolversTypes['ProjectMostFundedByTag']>, ParentType, ContextType, RequireFields<QueryProjectsMostFundedByTagArgs, 'input'>>;
   projectsSummary?: Resolver<ResolversTypes['ProjectsSummary'], ParentType, ContextType>;
+  refundGet?: Resolver<Maybe<ResolversTypes['Refund']>, ParentType, ContextType, RequireFields<QueryRefundGetArgs, 'input'>>;
   shippingAddressesGet?: Resolver<Array<ResolversTypes['ShippingAddress']>, ParentType, ContextType, RequireFields<QueryShippingAddressesGetArgs, 'input'>>;
   statusCheck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   tagsGet?: Resolver<Array<ResolversTypes['TagsGetResult']>, ParentType, ContextType>;
@@ -6833,9 +6916,26 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type RefundResolvers<ContextType = any, ParentType extends ResolversParentTypes['Refund'] = ResolversParentTypes['Refund']> = {
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   expiresAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['RefundStatus'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RefundInitiateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['RefundInitiateResponse'] = ResolversParentTypes['RefundInitiateResponse']> = {
+  refund?: Resolver<ResolversTypes['Refund'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RefundRequestResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['RefundRequestResponse'] = ResolversParentTypes['RefundRequestResponse']> = {
+  refund?: Resolver<ResolversTypes['Refund'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type RefundResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['RefundResponse'] = ResolversParentTypes['RefundResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7152,7 +7252,6 @@ export type Resolvers<ContextType = any> = {
   ContributionOnChainToRskSwapPaymentDetails?: ContributionOnChainToRskSwapPaymentDetailsResolvers<ContextType>;
   ContributionPaymentsAddResponse?: ContributionPaymentsAddResponseResolvers<ContextType>;
   ContributionPaymentsDetails?: ContributionPaymentsDetailsResolvers<ContextType>;
-  ContributionRefundResponse?: ContributionRefundResponseResolvers<ContextType>;
   ContributionStatusUpdatedSubscriptionResponse?: ContributionStatusUpdatedSubscriptionResponseResolvers<ContextType>;
   ContributionsGetResponse?: ContributionsGetResponseResolvers<ContextType>;
   ContributionsSummary?: ContributionsSummaryResolvers<ContextType>;
@@ -7289,6 +7388,9 @@ export type Resolvers<ContextType = any> = {
   ProjectsSummary?: ProjectsSummaryResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Refund?: RefundResolvers<ContextType>;
+  RefundInitiateResponse?: RefundInitiateResponseResolvers<ContextType>;
+  RefundRequestResponse?: RefundRequestResponseResolvers<ContextType>;
+  RefundResponse?: RefundResponseResolvers<ContextType>;
   RskKeyPair?: RskKeyPairResolvers<ContextType>;
   ShippingAddress?: ShippingAddressResolvers<ContextType>;
   ShippingConfig?: ShippingConfigResolvers<ContextType>;
@@ -8152,7 +8254,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonGoalDurationInDays?: number | null, aonGoalInSats?: number | null, location?: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonGoalDurationInDays?: number | null, aonGoalInSats?: number | null, launchScheduledAt?: any | null, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -8168,7 +8270,9 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
 
 export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null };
 
-export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, aonGoalDurationInDays?: number | null, aonGoalInSats?: number | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
+export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, aonGoalDurationInDays?: number | null, aonGoalInSats?: number | null, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
+
+export type ProjectReviewFragment = { __typename?: 'ProjectReview', id: any, reviewedAt?: any | null, status: ProjectReviewStatus, rejectionReasons: Array<string>, version: number };
 
 export type ProjectStatsForInsightsPageFragment = { __typename?: 'ProjectStats', current?: { __typename?: 'ProjectStatsBase', projectViews?: { __typename?: 'ProjectViewStats', viewCount: number, visitorCount: number, referrers: Array<{ __typename?: 'ProjectViewBaseStats', value: string, viewCount: number, visitorCount: number }>, regions: Array<{ __typename?: 'ProjectViewBaseStats', value: string, viewCount: number, visitorCount: number }> } | null, projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantitySum: number } | null, projectFunders?: { __typename?: 'ProjectFunderStats', count: number } | null, projectContributionsStats?: { __typename?: 'ProjectContributionsStatsBase', contributions: { __typename?: 'ProjectContributionsStats', count: number, total: number, totalUsd: number } } | null } | null, prevTimeRange?: { __typename?: 'ProjectStatsBase', projectViews?: { __typename?: 'ProjectViewStats', viewCount: number, visitorCount: number } | null, projectFunderRewards?: { __typename?: 'ProjectFunderRewardStats', quantitySum: number } | null, projectFunders?: { __typename?: 'ProjectFunderStats', count: number } | null, projectContributionsStats?: { __typename?: 'ProjectContributionsStatsBase', contributions: { __typename?: 'ProjectContributionsStats', count: number, total: number, totalUsd: number } } | null } | null };
 
@@ -8447,6 +8551,16 @@ export type ProjectUnfollowMutationVariables = Exact<{
 
 
 export type ProjectUnfollowMutation = { __typename?: 'Mutation', projectUnfollow: boolean };
+
+export type ProjectReviewRequestMutationVariables = Exact<{
+  input: ProjectReviewRequestInput;
+}>;
+
+
+export type ProjectReviewRequestMutation = { __typename?: 'Mutation', projectReviewRequest: (
+    { __typename?: 'ProjectReview' }
+    & ProjectReviewFragment
+  ) };
 
 export type RewardUpdateMutationVariables = Exact<{
   input: UpdateProjectRewardInput;
@@ -8863,6 +8977,16 @@ export type ProjectWalletConnectionDetailsQueryVariables = Exact<{
 export type ProjectWalletConnectionDetailsQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', wallets: Array<(
       { __typename?: 'Wallet' }
       & ProjectWalletConnectionDetailsFragment
+    )> } | null };
+
+export type ProjectLaunchReviewsQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type ProjectLaunchReviewsQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', reviews: Array<(
+      { __typename?: 'ProjectReview' }
+      & ProjectReviewFragment
     )> } | null };
 
 export type ProjectStatsGetInsightQueryVariables = Exact<{
@@ -10611,6 +10735,7 @@ export const ProjectPageBodyFragmentDoc = gql`
   links
   aonGoalDurationInDays
   aonGoalInSats
+  launchScheduledAt
   location {
     ...ProjectLocation
   }
@@ -10668,6 +10793,16 @@ export const ProjectUpdateFragmentDoc = gql`
   lastCreationStep
   aonGoalDurationInDays
   aonGoalInSats
+  launchScheduledAt
+}
+    `;
+export const ProjectReviewFragmentDoc = gql`
+    fragment ProjectReview on ProjectReview {
+  id
+  reviewedAt
+  status
+  rejectionReasons
+  version
 }
     `;
 export const ProjectStatsForInsightsPageFragmentDoc = gql`
@@ -14467,6 +14602,39 @@ export function useProjectUnfollowMutation(baseOptions?: Apollo.MutationHookOpti
 export type ProjectUnfollowMutationHookResult = ReturnType<typeof useProjectUnfollowMutation>;
 export type ProjectUnfollowMutationResult = Apollo.MutationResult<ProjectUnfollowMutation>;
 export type ProjectUnfollowMutationOptions = Apollo.BaseMutationOptions<ProjectUnfollowMutation, ProjectUnfollowMutationVariables>;
+export const ProjectReviewRequestDocument = gql`
+    mutation ProjectReviewRequest($input: ProjectReviewRequestInput!) {
+  projectReviewRequest(input: $input) {
+    ...ProjectReview
+  }
+}
+    ${ProjectReviewFragmentDoc}`;
+export type ProjectReviewRequestMutationFn = Apollo.MutationFunction<ProjectReviewRequestMutation, ProjectReviewRequestMutationVariables>;
+
+/**
+ * __useProjectReviewRequestMutation__
+ *
+ * To run a mutation, you first call `useProjectReviewRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectReviewRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectReviewRequestMutation, { data, loading, error }] = useProjectReviewRequestMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectReviewRequestMutation(baseOptions?: Apollo.MutationHookOptions<ProjectReviewRequestMutation, ProjectReviewRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectReviewRequestMutation, ProjectReviewRequestMutationVariables>(ProjectReviewRequestDocument, options);
+      }
+export type ProjectReviewRequestMutationHookResult = ReturnType<typeof useProjectReviewRequestMutation>;
+export type ProjectReviewRequestMutationResult = Apollo.MutationResult<ProjectReviewRequestMutation>;
+export type ProjectReviewRequestMutationOptions = Apollo.BaseMutationOptions<ProjectReviewRequestMutation, ProjectReviewRequestMutationVariables>;
 export const RewardUpdateDocument = gql`
     mutation RewardUpdate($input: UpdateProjectRewardInput!) {
   projectRewardUpdate(input: $input) {
@@ -16183,6 +16351,48 @@ export type ProjectWalletConnectionDetailsQueryHookResult = ReturnType<typeof us
 export type ProjectWalletConnectionDetailsLazyQueryHookResult = ReturnType<typeof useProjectWalletConnectionDetailsLazyQuery>;
 export type ProjectWalletConnectionDetailsSuspenseQueryHookResult = ReturnType<typeof useProjectWalletConnectionDetailsSuspenseQuery>;
 export type ProjectWalletConnectionDetailsQueryResult = Apollo.QueryResult<ProjectWalletConnectionDetailsQuery, ProjectWalletConnectionDetailsQueryVariables>;
+export const ProjectLaunchReviewsDocument = gql`
+    query ProjectLaunchReviews($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    reviews {
+      ...ProjectReview
+    }
+  }
+}
+    ${ProjectReviewFragmentDoc}`;
+
+/**
+ * __useProjectLaunchReviewsQuery__
+ *
+ * To run a query within a React component, call `useProjectLaunchReviewsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectLaunchReviewsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectLaunchReviewsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectLaunchReviewsQuery(baseOptions: Apollo.QueryHookOptions<ProjectLaunchReviewsQuery, ProjectLaunchReviewsQueryVariables> & ({ variables: ProjectLaunchReviewsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectLaunchReviewsQuery, ProjectLaunchReviewsQueryVariables>(ProjectLaunchReviewsDocument, options);
+      }
+export function useProjectLaunchReviewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectLaunchReviewsQuery, ProjectLaunchReviewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectLaunchReviewsQuery, ProjectLaunchReviewsQueryVariables>(ProjectLaunchReviewsDocument, options);
+        }
+export function useProjectLaunchReviewsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectLaunchReviewsQuery, ProjectLaunchReviewsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectLaunchReviewsQuery, ProjectLaunchReviewsQueryVariables>(ProjectLaunchReviewsDocument, options);
+        }
+export type ProjectLaunchReviewsQueryHookResult = ReturnType<typeof useProjectLaunchReviewsQuery>;
+export type ProjectLaunchReviewsLazyQueryHookResult = ReturnType<typeof useProjectLaunchReviewsLazyQuery>;
+export type ProjectLaunchReviewsSuspenseQueryHookResult = ReturnType<typeof useProjectLaunchReviewsSuspenseQuery>;
+export type ProjectLaunchReviewsQueryResult = Apollo.QueryResult<ProjectLaunchReviewsQuery, ProjectLaunchReviewsQueryVariables>;
 export const ProjectStatsGetInsightDocument = gql`
     query ProjectStatsGetInsight($input: GetProjectStatsInput!) {
   projectStatsGet(input: $input) {

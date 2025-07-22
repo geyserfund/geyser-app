@@ -62,6 +62,8 @@ export const LaunchFundingStrategy = () => {
 
   const continueProps = {
     onClick() {
+      console.log('selectedOption', selectedOption)
+      console.log('project.fundingStrategy', project.fundingStrategy)
       if (project.fundingStrategy === selectedOption) {
         updateProjectWithLastCreationStep()
       } else {

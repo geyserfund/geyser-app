@@ -9,15 +9,18 @@ import {
   FundingResourceType,
   OrderItemInput,
   OrderItemType,
+  ProjectFundingStrategy,
   ProjectRewardFragment,
   QuoteCurrency,
   UserMeFragment,
 } from '@/types/generated/graphql'
 import { toInt } from '@/utils'
 
+import { generatePreImageHash } from '../../pages1/projectCreation/views/launchPayment/views/launchPaymentAccountPassword/keyGenerationHelper.ts'
 import { sourceResourceAtom } from '../../pages1/projectView/state/sourceActivityAtom.ts'
 import { fundingProjectAtom } from './fundingFormAtom'
 import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAtom'
+import { fundingUserAccountKeysAtom } from './fundingUserAccountKeys.ts'
 import { selectedGoalIdAtom } from './selectedGoalAtom'
 import { shippingAddressAtom } from './shippingAddressAtom.ts'
 
@@ -32,6 +35,8 @@ export const formattedFundingInputAtom = atom((get) => {
   const projectGoalId = get(selectedGoalIdAtom)
   const sourceResource = get(sourceResourceAtom)
   const referrerHeroId = get(referrerHeroIdAtom)
+
+  const paymentsInput = get(paymentsInputAtom)
 
   const {
     donationAmount,
@@ -70,27 +75,8 @@ export const formattedFundingInputAtom = atom((get) => {
     })
   }
 
-  const paymentsInput: ContributionPaymentsInput = {
-    fiat: {
-      create: true,
-      stripe: {
-        returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
-      },
-    },
-    lightning: {
-      create: true,
-      zapRequest: null,
-    },
-    onChainSwap: {
-      create: true,
-      boltz: {
-        swapPublicKey: '',
-      },
-    },
-  }
-
   const input: ContributionCreateInput = {
-    refundable: true,
+    refundable: false,
     projectId: toInt(fundingProject?.id),
     projectGoalId,
     anonymous,
@@ -134,4 +120,55 @@ export const setFundingInputAfterRequestAtom = atom(null, (get, set, input: Cont
 /** Reset funding input after request */
 export const resetFundingInputAfterRequestAtom = atom(null, (_, set) => {
   set(fundingInputAfterRequestAtom, null)
+})
+
+const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
+  const fundingProject = get(fundingProjectAtom)
+  const userAccountKeys = get(fundingUserAccountKeysAtom)
+
+  const paymentsInput: ContributionPaymentsInput = {}
+
+  const preimageHashForLightning = generatePreImageHash()
+  const preimageHashForOnChain = generatePreImageHash()
+
+  const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
+
+  if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
+    paymentsInput.fiat = {
+      create: true,
+      stripe: {
+        returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
+      },
+    }
+    paymentsInput.lightning = {
+      create: true,
+      zapRequest: null,
+    }
+    paymentsInput.onChainSwap = {
+      create: true,
+      boltz: {
+        swapPublicKey: '',
+      },
+    }
+  }
+
+  if (fundingProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
+    paymentsInput.lightningToRskSwap = {
+      create: true,
+      boltz: {
+        claimPublicKey,
+        preimageHash: preimageHashForLightning,
+      },
+    }
+
+    paymentsInput.onChainToRskSwap = {
+      create: true,
+      boltz: {
+        claimPublicKey,
+        preimageHash: preimageHashForOnChain,
+      },
+    }
+  }
+
+  return paymentsInput
 })
