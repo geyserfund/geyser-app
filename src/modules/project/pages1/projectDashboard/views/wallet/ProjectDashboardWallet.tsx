@@ -244,18 +244,6 @@ export const ProjectDashboardWallet = () => {
             </Link>
           </Trans>
         </Body>
-        {/* {project && (
-          <ProjectCreationWalletConnectionForm
-            readOnly={isReadOnly}
-            lightningAddress={lightningAddress}
-            node={node}
-            nwc={nwc}
-            connectionOption={connectionOption}
-            setConnectionOption={setConnectionOption}
-            fee={fee}
-            limits={limits}
-          />
-        )} */}
 
         <ConnectionDetails marginTop={4} wallet={formWallet} walletConnectionDetails={formWalletConnectionDetails} />
         <Button
@@ -289,8 +277,6 @@ export const ProjectDashboardWallet = () => {
             nwc,
           }}
           continueButtonProps={{
-            // isLoading: isContinueButtonLoading,
-            // isDisabled: isContinueButtonDisabled,
             onClick: connectWalletModal.onClose,
           }}
           modalProps={connectWalletModal}
