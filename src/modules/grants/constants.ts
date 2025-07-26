@@ -27,10 +27,12 @@ export const GrantHasVoting: { [key: string]: boolean } = {
   'grant-round-012': true,
   'grant-round-013': false,
   'grant-round-014': false,
+  'grant-round-015': true,
 }
 
 export const GrantBalanceCurrency: { [key: string]: string } = {
   'grant-round-014': 'USDCENT',
+  'grant-round-015': 'USDCENT',
 }
 
 export const NoContributionInGrant = ['grant-round-008', 'grant-round-014']
