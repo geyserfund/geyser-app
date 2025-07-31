@@ -48,9 +48,9 @@ export const CategoryFilterBody = ({ searchCode, onClose }: CategoryFilterBodyPr
   const value = subCategory ? subCategory : category
 
   const handleClick = (value: string) => {
-    if (value.length === 2) {
+    if (ProjectSubCategoryList.includes(value as any)) {
       handleSubCategoryClick(value)
-    } else {
+    } else if (ProjectCategoryList.includes(value as any)) {
       handleCategoryClick(value)
     }
   }
