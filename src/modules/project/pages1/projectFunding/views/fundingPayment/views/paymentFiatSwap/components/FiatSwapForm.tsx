@@ -17,6 +17,7 @@ import { useNotification } from '@/utils/index.ts'
 
 import { FiatSwapStatus, fiatSwapStatusAtom } from '../atom/fiatSwapStatusAtom.ts'
 import { fiatSwapCurrencies } from '../data.ts'
+import { BitcoinPurchaseNotice } from './BitcoinPurchaseNotice.tsx'
 
 /** Component for handling fiat swap currency selection and payment */
 export const FiatSwapForm: React.FC = () => {
@@ -90,6 +91,7 @@ export const FiatSwapForm: React.FC = () => {
         {isLoading ? t('Redirecting you to fiat payment') : t('Pay with Banxa')}
       </Button>
       <Body size="sm">{t('You will be redirected to Banxa our fiat payment provider to complete your payment.')}</Body>
+      <BitcoinPurchaseNotice />
     </>
   )
 }
