@@ -56,12 +56,9 @@ export const SuccessfulContributionBanner = () => {
       justifyContent="center"
       backgroundColor="utils.pbg"
     >
+      <Image height="140px" src={ContributionSuccessIllustrationUrl} alt="Contribution success" />
       <HStack spacing={2} zIndex={1}>
-        {user.imageUrl ? (
-          <Avatar src={user.imageUrl || ''} size="md" />
-        ) : (
-          <Image height="140px" src={ContributionSuccessIllustrationUrl} alt="Contribution success" />
-        )}
+        {user.imageUrl && <Avatar src={user.imageUrl || ''} size="md" />}
         <Body light size="2xl" medium>
           {user.username}
         </Body>
