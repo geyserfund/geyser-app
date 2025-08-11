@@ -1,4 +1,4 @@
-import { Button, ButtonProps, HStack, Icon } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, Icon, StackProps } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCopy, PiLightning } from 'react-icons/pi'
@@ -11,9 +11,10 @@ import { copyTextToClipboard } from '../../../../../../../../../utils'
 interface ILightningQR extends ButtonProps {
   name: string
   isGeyser?: boolean
+  containerProps?: StackProps
 }
 
-export const LightningAddress = ({ name, isGeyser = true, ...rest }: ILightningQR) => {
+export const LightningAddress = ({ name, isGeyser = true, containerProps, ...rest }: ILightningQR) => {
   const { t } = useTranslation()
   const [copy, setCopy] = useState(false)
 
@@ -31,7 +32,7 @@ export const LightningAddress = ({ name, isGeyser = true, ...rest }: ILightningQ
   }
 
   return (
-    <HStack w="full">
+    <HStack w="full" {...containerProps}>
       <Button
         id="lightning-address"
         size="md"
@@ -54,7 +55,7 @@ export const LightningAddress = ({ name, isGeyser = true, ...rest }: ILightningQ
         minWidth={24}
         size="md"
         variant="solid"
-        colorScheme="primary1"
+        colorScheme={'primary1'}
         rightIcon={<PiCopy />}
         onClick={handleAddressCopy}
       >
