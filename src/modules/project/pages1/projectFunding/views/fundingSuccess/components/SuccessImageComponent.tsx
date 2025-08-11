@@ -71,7 +71,7 @@ export const SuccessfulContributionBanner = () => {
         <H3 light fontSize="2xl" regular w="full" textAlign={'center'}>
           {user.username ? t('successfully contributed to') : t('You successfully contributed to')}
         </H3>
-        <H3 dark bold fontSize="4xl">
+        <H3 dark bold fontSize="4xl" textAlign="center">
           {project.title}
         </H3>
       </VStack>
