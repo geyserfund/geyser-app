@@ -9,8 +9,8 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { Maybe, UserAccountKeysFragment } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
-import { FeedBackText } from '../components/FeedBackText.tsx'
 import { AccountKeys, decryptSeed, generateKeysFromSeedHex } from '../keyGenerationHelper.ts'
+import { FeedBackText } from './FeedBackText.tsx'
 
 export type ConfirmPasswordFormData = {
   password: string
@@ -19,19 +19,24 @@ export type ConfirmPasswordFormData = {
 type ConfirmPasswordFormProps = {
   control: Control<ConfirmPasswordFormData>
   onForgotPassword: () => void
+  isCreator?: boolean
 }
 
+const creatorText = t(
+  'Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the project funds. ',
+)
+
+const contributorText = t(
+  'Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds. ',
+)
+
 /** Password confirmation form component with single password field and forgot password option */
-export const ConfirmPasswordForm = ({ control, onForgotPassword }: ConfirmPasswordFormProps) => {
+export const ConfirmPasswordForm = ({ control, onForgotPassword, isCreator }: ConfirmPasswordFormProps) => {
   return (
     <VStack w="full" gap={4}>
       <VStack w="full" alignItems="start" gap={2}>
-        <Body>
-          {t(
-            'Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the project funds. ',
-          )}
-        </Body>
-        <FeedBackText />
+        <Body>{isCreator ? creatorText : contributorText}</Body>
+        <FeedBackText isCreator={isCreator} />
       </VStack>
       <ControlledTextInput
         name="password"

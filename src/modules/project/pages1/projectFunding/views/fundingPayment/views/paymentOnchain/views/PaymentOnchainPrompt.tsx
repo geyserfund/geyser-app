@@ -8,22 +8,36 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { Body } from '@/shared/components/typography'
 import { getPath, GeyserOnChainGuideUrl } from '@/shared/constants'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
+import { ProjectFundingStrategy } from '@/types/index.ts'
 import { useMobileMode } from '@/utils'
 
+import { PaymentAccountPassword } from '../../../components/PaymentAccountPassword.tsx'
 import { useDownloadRefund } from '../hooks/useDownloadRefund'
 import { onChainRefundDownloadedAtom } from '../states/onChainStatus.ts'
 
 export const PaymentOnchainPrompt = () => {
-  const isMobile = useMobileMode()
-
   const { project } = useFundingFormAtom()
+
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const handleComplete = () => {
+    navigate({ pathname: getPath('fundingPaymentOnchainQR', project.name), search: location.search }, { replace: true })
+  }
+
+  if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
+    return <PaymentAccountPassword onComplete={handleComplete} />
+  }
+
+  return <PaymentOnchainDownloadPrompt onComplete={handleComplete} />
+}
+
+export const PaymentOnchainDownloadPrompt = ({ onComplete }: { onComplete: () => void }) => {
+  const isMobile = useMobileMode()
 
   const setOnchainRefundDownloadAtom = useSetAtom(onChainRefundDownloadedAtom)
 
   const { downloadRefundJson, downloadRefundQr } = useDownloadRefund()
-
-  const navigate = useNavigate()
-  const location = useLocation()
 
   const handleClick = () => {
     if (isMobile) {
@@ -33,7 +47,7 @@ export const PaymentOnchainPrompt = () => {
     }
 
     setOnchainRefundDownloadAtom(true)
-    navigate({ pathname: getPath('fundingPaymentOnchainQR', project.name), search: location.search }, { replace: true })
+    onComplete()
   }
 
   return (

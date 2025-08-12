@@ -498,7 +498,7 @@ export const fundingOnchainAmountWarningAtom = atom((get) => {
     }
   }
 
-  if (!fundingPaymentDetails.onChainSwap?.address) {
+  if (!fundingPaymentDetails.onChainSwap?.address && !fundingPaymentDetails.onChainToRskSwap?.address) {
     return `Something went wrong with the onChain payment, please try using Lightning or try again`
   }
 

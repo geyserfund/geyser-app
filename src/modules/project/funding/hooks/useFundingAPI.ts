@@ -7,15 +7,15 @@ import { ContributionCreateInput, ContributionCreateMutation, useContributionCre
 import { useNotification } from '@/utils'
 
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
-import { generateAccountKeys } from '../../pages1/projectCreation/views/launchPayment/views/launchPaymentAccountPassword/keyGenerationHelper.ts'
-import { fundingFlowErrorAtom, fundingRequestErrorAtom, useParseResponseToSwapAtom } from '../state'
+import { generateAccountKeys } from '../../forms/accountPassword/keyGenerationHelper.ts'
+import { fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
   formattedFundingInputAtom,
   setFundingInputAfterRequestAtom,
 } from '../state/fundingContributionCreateInputAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '../state/fundingPaymentAtom.ts'
-import { keyPairAtom } from '../state/swapAtom.ts'
+import { keyPairAtom, parseOnChainToRskSwapAtom, parseSwapAtom } from '../state/swapAtom.ts'
 import { rskAccountKeysAtom } from '../state/swapRskAtom.ts'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
 import { webln } from '../utils/requestWebLNPayment'
@@ -43,7 +43,8 @@ export const useFundingAPI = () => {
   const fundingContributionPartialUpdate = useSetAtom(fundingContributionPartialUpdateAtom)
   const fundingPaymentDetailsPartialUpdate = useSetAtom(fundingPaymentDetailsPartialUpdateAtom)
 
-  const parseResponseToSwap = useParseResponseToSwapAtom()
+  const parseResponseToSwap = useSetAtom(parseSwapAtom)
+  const parseResponseToOnChainToRskSwap = useSetAtom(parseOnChainToRskSwapAtom)
 
   const startWebLNFlow = useWebLNFlow()
 
@@ -62,6 +63,15 @@ export const useFundingAPI = () => {
 
         if (data.contributionCreate.payments.onChainSwap?.swapJson) {
           parseResponseToSwap(data.contributionCreate.payments.onChainSwap, {
+            projectTitle: project?.title,
+            reference: data.contributionCreate.contribution.uuid,
+            bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
+            datetime: data.contributionCreate.contribution.createdAt,
+          })
+        }
+
+        if (data.contributionCreate.payments.onChainToRskSwap?.swapJson) {
+          parseResponseToOnChainToRskSwap(data.contributionCreate.payments.onChainToRskSwap, {
             projectTitle: project?.title,
             reference: data.contributionCreate.contribution.uuid,
             bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,

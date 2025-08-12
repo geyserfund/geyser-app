@@ -6,7 +6,7 @@ import { LaunchFundingStrategy } from './views/fundingStrategy/LaunchFundingStra
 import { Launch } from './views/launch/Launch.tsx'
 import { LaunchAboutYou } from './views/LaunchAboutYou.tsx'
 import { LaunchPayment } from './views/launchPayment/LaunchPayment.tsx'
-import { LaunchPaymentAccountPassword } from './views/launchPayment/views/launchPaymentAccountPassword/LaunchPaymentAccountPassword.tsx'
+import { LaunchPaymentAccountPassword } from './views/launchPayment/views/LaunchPaymentAccountPassword.tsx'
 import { LaunchPaymentTaxId } from './views/launchPayment/views/LaunchPaymentTaxId.tsx'
 import { LaunchPaymentWallet } from './views/launchPayment/views/LaunchPaymentWallet.tsx'
 import { LaunchProducts } from './views/LaunchProducts.tsx'

@@ -15,12 +15,24 @@ import { PaymentAndRefundInstructions } from '../components'
 import { useListenOnchainTransactionUpdate } from '../hooks/useListenOnchainTransactionUpdate'
 
 export const PaymentOnchainQR = () => {
+  const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
+  if (!fundingPaymentDetails.onChainSwap?.address && !fundingPaymentDetails.onChainToRskSwap?.address) {
+    return null
+  }
+
+  return (
+    <PaymentOnchainQRContent
+      address={fundingPaymentDetails.onChainSwap?.address || fundingPaymentDetails.onChainToRskSwap?.address || ''}
+    />
+  )
+}
+
+export const PaymentOnchainQRContent = ({ address }: { address: string }) => {
   useListenOnchainTransactionUpdate()
 
   const totalAmountSats = useAtomValue(totalAmountSatsAtom)
-  const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
 
-  const onChainBip21Invoice = getBip21Invoice(totalAmountSats, fundingPaymentDetails.onChainSwap?.address)
+  const onChainBip21Invoice = getBip21Invoice(totalAmountSats, address)
 
   const { onCopy: onCopyBip21Invoice, hasCopied: hasCopiedBip21Invoice } = useCopyToClipboard(onChainBip21Invoice)
 

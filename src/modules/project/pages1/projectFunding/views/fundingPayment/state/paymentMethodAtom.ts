@@ -9,6 +9,7 @@ import {
   routeMatchForAtom,
 } from '@/config/routes/routeGroups'
 import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom'
+import { ProjectFundingStrategy } from '@/types/index.ts'
 
 import { FiatSwapStatus, fiatSwapStatusAtom } from '../views/paymentFiatSwap/atom/fiatSwapStatusAtom.ts'
 
@@ -55,6 +56,10 @@ export const isFiatSwapMethodStartedAtom = atom((get) => {
 export const hasStripePaymentMethodAtom = atom((get) => {
   const project = get(fundingProjectAtom)
 
+  if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
+    return false
+  }
+
   if (project.paymentMethods.fiat.stripe) {
     return true
   }
@@ -66,6 +71,10 @@ const listOfProjectToRemoveFiatPaymentMethod = ['launch']
 
 export const hasFiatPaymentMethodAtom = atom((get) => {
   const project = get(fundingProjectAtom)
+
+  if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
+    return false
+  }
 
   if (listOfProjectToRemoveFiatPaymentMethod.includes(project.name)) {
     return false

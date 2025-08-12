@@ -94,6 +94,7 @@ export const PaymentMethodSelection = () => {
     onChainAmountWarning,
     isOnchainMethodStarted,
     hasStripePaymentOption,
+    hasFiatPaymentMethod,
     paymentMethod,
     userId,
     fiatLimitMessage,

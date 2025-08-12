@@ -730,8 +730,8 @@ export type FiatPaymentMethods = {
   stripe: Scalars['Boolean']['output'];
 };
 
-export type FiatSwapPaymentDetails = {
-  __typename?: 'FiatSwapPaymentDetails';
+export type FiatToLightningSwapPaymentDetails = {
+  __typename?: 'FiatToLightningSwapPaymentDetails';
   lightningInvoiceId: Scalars['String']['output'];
   lightningInvoiceStatus: LightningInvoiceStatus;
   swapId: Scalars['String']['output'];
@@ -1403,6 +1403,9 @@ export type Mutation = {
   paymentFail: PaymentFailResponse;
   paymentInvoiceCancel: PaymentInvoiceCancelResponse;
   paymentPend: PaymentPendResponse;
+  payoutCancel: PayoutResponse;
+  payoutInitiate: PayoutInitiateResponse;
+  payoutRequest: PayoutRequestResponse;
   podcastKeysendContributionCreate: PodcastKeysendContributionCreateResponse;
   postCreate: Post;
   postDelete: Post;
@@ -1445,8 +1448,6 @@ export type Mutation = {
   /** @deprecated Use postPublish instead */
   publishEntry: Entry;
   refundCancel: RefundResponse;
-  refundConfirm: RefundResponse;
-  refundFail: RefundResponse;
   refundInitiate: RefundInitiateResponse;
   refundRequest: RefundRequestResponse;
   /**
@@ -1563,6 +1564,21 @@ export type MutationPaymentInvoiceCancelArgs = {
 
 export type MutationPaymentPendArgs = {
   input: PaymentPendInput;
+};
+
+
+export type MutationPayoutCancelArgs = {
+  input: PayoutCancelInput;
+};
+
+
+export type MutationPayoutInitiateArgs = {
+  input: PayoutInitiateInput;
+};
+
+
+export type MutationPayoutRequestArgs = {
+  input: PayoutRequestInput;
 };
 
 
@@ -1743,16 +1759,6 @@ export type MutationPublishEntryArgs = {
 
 export type MutationRefundCancelArgs = {
   input: RefundCancelInput;
-};
-
-
-export type MutationRefundConfirmArgs = {
-  input: RefundConfirmInput;
-};
-
-
-export type MutationRefundFailArgs = {
-  input: RefundFailInput;
 };
 
 
@@ -1958,8 +1964,8 @@ export type OnChainPaymentMethods = {
   native: Scalars['Boolean']['output'];
 };
 
-export type OnChainSwapPaymentDetails = {
-  __typename?: 'OnChainSwapPaymentDetails';
+export type OnChainToLightningSwapPaymentDetails = {
+  __typename?: 'OnChainToLightningSwapPaymentDetails';
   lightningInvoiceId: Scalars['String']['output'];
   lightningInvoiceStatus: LightningInvoiceStatus;
   onChainAddress: Scalars['String']['output'];
@@ -2173,6 +2179,7 @@ export type PaymentCancelResponse = {
 export type PaymentConfirmInput = {
   amount: Scalars['Int']['input'];
   amountCurrency: AmountCurrency;
+  id?: InputMaybe<Scalars['BigInt']['input']>;
   invoiceId?: InputMaybe<Scalars['String']['input']>;
   subscription?: InputMaybe<SubscriptionPaymentConfirmationInput>;
   uuid?: InputMaybe<Scalars['String']['input']>;
@@ -2189,10 +2196,11 @@ export enum PaymentCurrency {
   Usdcent = 'USDCENT'
 }
 
-export type PaymentDetails = FiatSwapPaymentDetails | LightningPaymentDetails | LightningToRskSwapPaymentDetails | OnChainSwapPaymentDetails | OnChainToRskSwapPaymentDetails;
+export type PaymentDetails = FiatToLightningSwapPaymentDetails | LightningPaymentDetails | LightningToRskSwapPaymentDetails | OnChainToLightningSwapPaymentDetails | OnChainToRskSwapPaymentDetails;
 
 export type PaymentFailInput = {
   failureReason?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['BigInt']['input']>;
   invoiceId?: InputMaybe<Scalars['String']['input']>;
   uuid?: InputMaybe<Scalars['String']['input']>;
 };
@@ -2264,6 +2272,7 @@ export type PaymentMethods = {
 export type PaymentPendInput = {
   amount: Scalars['Int']['input'];
   amountCurrency: AmountCurrency;
+  id?: InputMaybe<Scalars['BigInt']['input']>;
   invoiceId?: InputMaybe<Scalars['String']['input']>;
   onChainSwap?: InputMaybe<PaymentPendOnChainSwapInput>;
   uuid?: InputMaybe<Scalars['String']['input']>;
@@ -2294,15 +2303,81 @@ export type PaymentStatusUpdatedInput = {
 
 export enum PaymentType {
   Fiat = 'FIAT',
-  FiatSwap = 'FIAT_SWAP',
+  FiatToLightningSwap = 'FIAT_TO_LIGHTNING_SWAP',
   Lightning = 'LIGHTNING',
   LightningPodcastKeysend = 'LIGHTNING_PODCAST_KEYSEND',
-  OnChainSwap = 'ON_CHAIN_SWAP'
+  LightningToRskSwap = 'LIGHTNING_TO_RSK_SWAP',
+  OnChainToLightningSwap = 'ON_CHAIN_TO_LIGHTNING_SWAP',
+  OnChainToRskSwap = 'ON_CHAIN_TO_RSK_SWAP',
+  RskToLightningSwap = 'RSK_TO_LIGHTNING_SWAP',
+  RskToOnChainSwap = 'RSK_TO_ON_CHAIN_SWAP'
 }
+
+export type Payout = {
+  __typename?: 'Payout';
+  amount: Scalars['Int']['output'];
+  expiresAt: Scalars['Date']['output'];
+  id: Scalars['BigInt']['output'];
+  status: PayoutStatus;
+};
+
+export type PayoutCancelInput = {
+  payoutId: Scalars['BigInt']['input'];
+  reason?: InputMaybe<Scalars['String']['input']>;
+};
 
 export enum PayoutCurrency {
   Btcsat = 'BTCSAT',
   Usdcent = 'USDCENT'
+}
+
+export type PayoutGetInput = {
+  payoutId?: InputMaybe<Scalars['BigInt']['input']>;
+  swapId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PayoutInitiateInput = {
+  /** The payment details to refund the contributor. */
+  payoutId: Scalars['BigInt']['input'];
+  payoutPaymentInput: PayoutPaymentInput;
+};
+
+export type PayoutInitiateResponse = {
+  __typename?: 'PayoutInitiateResponse';
+  payout: Payout;
+};
+
+export type PayoutPaymentInput = {
+  rskToLightningSwap?: InputMaybe<RskToLightningSwapPaymentDetailsInput>;
+  rskToOnChainSwap?: InputMaybe<RskToOnChainSwapPaymentDetailsInput>;
+};
+
+export type PayoutRequestInput = {
+  /** Use this field to request a refund for a single contribution. */
+  contributionId?: InputMaybe<Scalars['BigInt']['input']>;
+  /** Use this field to request a batch payout for all contributions in a project (only available for logged in users) */
+  projectId?: InputMaybe<Scalars['BigInt']['input']>;
+  /** The RSK address of the contributor (for anonymous contributions) */
+  rskAddress?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PayoutRequestResponse = {
+  __typename?: 'PayoutRequestResponse';
+  payout: Payout;
+};
+
+export type PayoutResponse = {
+  __typename?: 'PayoutResponse';
+  message?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
+};
+
+export enum PayoutStatus {
+  Completed = 'COMPLETED',
+  Expired = 'EXPIRED',
+  Failed = 'FAILED',
+  Pending = 'PENDING',
+  Processing = 'PROCESSING'
 }
 
 export type PodcastKeysendContributionCreateInput = {
@@ -2933,6 +3008,7 @@ export type ProjectReview = {
   id: Scalars['BigInt']['output'];
   projectId: Scalars['BigInt']['output'];
   rejectionReasons: Array<Scalars['String']['output']>;
+  reviewNotes?: Maybe<Scalars['String']['output']>;
   reviewedAt?: Maybe<Scalars['Date']['output']>;
   status: ProjectReviewStatus;
   updatedAt: Scalars['Date']['output'];
@@ -2959,6 +3035,7 @@ export enum ProjectReviewStatusInput {
 export type ProjectReviewSubmitInput = {
   projectId: Scalars['BigInt']['input'];
   rejectionReasons?: InputMaybe<Array<RejectionReason>>;
+  reviewNotes?: InputMaybe<Scalars['String']['input']>;
   status: ProjectReviewStatusInput;
 };
 
@@ -3331,6 +3408,7 @@ export type Query = {
   ordersStatsGet: OrdersStatsBase;
   payment: Payment;
   paymentInvoiceSanctionCheckStatusGet: PaymentInvoiceSanctionCheckStatusResponse;
+  payoutGet?: Maybe<Payout>;
   post?: Maybe<Post>;
   postEmailSegmentSizeGet: Scalars['Int']['output'];
   /** Returns all published posts */
@@ -3510,6 +3588,11 @@ export type QueryPaymentInvoiceSanctionCheckStatusGetArgs = {
 };
 
 
+export type QueryPayoutGetArgs = {
+  input: PayoutGetInput;
+};
+
+
 export type QueryPostArgs = {
   id: Scalars['BigInt']['input'];
 };
@@ -3667,15 +3750,6 @@ export type Refund = {
 };
 
 export type RefundCancelInput = {
-  reason?: InputMaybe<Scalars['String']['input']>;
-  refundId: Scalars['BigInt']['input'];
-};
-
-export type RefundConfirmInput = {
-  refundId: Scalars['BigInt']['input'];
-};
-
-export type RefundFailInput = {
   reason?: InputMaybe<Scalars['String']['input']>;
   refundId: Scalars['BigInt']['input'];
 };
@@ -4563,7 +4637,7 @@ export type ResolversUnionTypes<_RefType extends Record<string, unknown>> = {
   ActivityResource: ( Omit<Contribution, 'bitcoinQuote' | 'payments' | 'sourceResource'> & { bitcoinQuote?: Maybe<_RefType['BitcoinQuote']>, payments: Array<_RefType['Payment']>, sourceResource?: Maybe<_RefType['SourceResource']> } ) | ( Omit<Entry, 'contributions' | 'creator' | 'project'> & { contributions: Array<_RefType['Contribution']>, creator: _RefType['User'], project?: Maybe<_RefType['Project']> } ) | ( Omit<Post, 'contributions' | 'creator' | 'project'> & { contributions: Array<_RefType['Contribution']>, creator: _RefType['User'], project?: Maybe<_RefType['Project']> } ) | ( Omit<Project, 'ambassadors' | 'contributions' | 'entries' | 'followers' | 'grantApplications' | 'owners' | 'sponsors' | 'wallets'> & { ambassadors: _RefType['ProjectAmbassadorsConnection'], contributions: Array<_RefType['Contribution']>, entries: Array<_RefType['Entry']>, followers: Array<_RefType['User']>, grantApplications: Array<_RefType['GrantApplicant']>, owners: Array<_RefType['Owner']>, sponsors: Array<_RefType['Sponsor']>, wallets: Array<_RefType['Wallet']> } ) | ( ProjectGoal ) | ( Omit<ProjectReward, 'project'> & { project: _RefType['Project'] } );
   ConnectionDetails: ( LightningAddressConnectionDetails ) | ( LndConnectionDetailsPrivate ) | ( LndConnectionDetailsPublic ) | ( NwcConnectionDetailsPrivate );
   Grant: ( Omit<BoardVoteGrant, 'applicants' | 'boardMembers' | 'sponsors'> & { applicants: Array<_RefType['GrantApplicant']>, boardMembers: Array<_RefType['GrantBoardMember']>, sponsors: Array<_RefType['Sponsor']> } ) | ( Omit<CommunityVoteGrant, 'applicants' | 'sponsors'> & { applicants: Array<_RefType['GrantApplicant']>, sponsors: Array<_RefType['Sponsor']> } );
-  PaymentDetails: ( FiatSwapPaymentDetails ) | ( LightningPaymentDetails ) | ( LightningToRskSwapPaymentDetails ) | ( OnChainSwapPaymentDetails ) | ( OnChainToRskSwapPaymentDetails );
+  PaymentDetails: ( FiatToLightningSwapPaymentDetails ) | ( LightningPaymentDetails ) | ( LightningToRskSwapPaymentDetails ) | ( OnChainToLightningSwapPaymentDetails ) | ( OnChainToRskSwapPaymentDetails );
   SourceResource: ( Omit<Activity, 'project' | 'resource'> & { project: _RefType['Project'], resource: _RefType['ActivityResource'] } ) | ( Omit<Entry, 'contributions' | 'creator' | 'project'> & { contributions: Array<_RefType['Contribution']>, creator: _RefType['User'], project?: Maybe<_RefType['Project']> } ) | ( Omit<Project, 'ambassadors' | 'contributions' | 'entries' | 'followers' | 'grantApplications' | 'owners' | 'sponsors' | 'wallets'> & { ambassadors: _RefType['ProjectAmbassadorsConnection'], contributions: Array<_RefType['Contribution']>, entries: Array<_RefType['Entry']>, followers: Array<_RefType['User']>, grantApplications: Array<_RefType['GrantApplicant']>, owners: Array<_RefType['Owner']>, sponsors: Array<_RefType['Sponsor']>, wallets: Array<_RefType['Wallet']> } );
 };
 
@@ -4676,7 +4750,7 @@ export type ResolversTypes = {
   ExternalAccount: ResolverTypeWrapper<ExternalAccount>;
   FeeCurrency: FeeCurrency;
   FiatPaymentMethods: ResolverTypeWrapper<FiatPaymentMethods>;
-  FiatSwapPaymentDetails: ResolverTypeWrapper<FiatSwapPaymentDetails>;
+  FiatToLightningSwapPaymentDetails: ResolverTypeWrapper<FiatToLightningSwapPaymentDetails>;
   FileUploadInput: FileUploadInput;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   Funder: ResolverTypeWrapper<Omit<Funder, 'contributions' | 'user'> & { contributions: Array<ResolversTypes['Contribution']>, user?: Maybe<ResolversTypes['User']> }>;
@@ -4789,7 +4863,7 @@ export type ResolversTypes = {
   OTPResponse: ResolverTypeWrapper<OtpResponse>;
   OffsetBasedPaginationInput: OffsetBasedPaginationInput;
   OnChainPaymentMethods: ResolverTypeWrapper<OnChainPaymentMethods>;
-  OnChainSwapPaymentDetails: ResolverTypeWrapper<OnChainSwapPaymentDetails>;
+  OnChainToLightningSwapPaymentDetails: ResolverTypeWrapper<OnChainToLightningSwapPaymentDetails>;
   OnChainToRskSwapPaymentDetails: ResolverTypeWrapper<OnChainToRskSwapPaymentDetails>;
   OnChainTxInput: OnChainTxInput;
   Order: ResolverTypeWrapper<Omit<Order, 'contribution' | 'project' | 'user'> & { contribution: ResolversTypes['Contribution'], project: ResolversTypes['Project'], user?: Maybe<ResolversTypes['User']> }>;
@@ -4838,7 +4912,17 @@ export type ResolversTypes = {
   PaymentStatus: PaymentStatus;
   PaymentStatusUpdatedInput: PaymentStatusUpdatedInput;
   PaymentType: PaymentType;
+  Payout: ResolverTypeWrapper<Payout>;
+  PayoutCancelInput: PayoutCancelInput;
   PayoutCurrency: PayoutCurrency;
+  PayoutGetInput: PayoutGetInput;
+  PayoutInitiateInput: PayoutInitiateInput;
+  PayoutInitiateResponse: ResolverTypeWrapper<PayoutInitiateResponse>;
+  PayoutPaymentInput: PayoutPaymentInput;
+  PayoutRequestInput: PayoutRequestInput;
+  PayoutRequestResponse: ResolverTypeWrapper<PayoutRequestResponse>;
+  PayoutResponse: ResolverTypeWrapper<PayoutResponse>;
+  PayoutStatus: PayoutStatus;
   PodcastKeysendContributionCreateInput: PodcastKeysendContributionCreateInput;
   PodcastKeysendContributionCreateResponse: ResolverTypeWrapper<PodcastKeysendContributionCreateResponse>;
   Post: ResolverTypeWrapper<Omit<Post, 'contributions' | 'creator' | 'project'> & { contributions: Array<ResolversTypes['Contribution']>, creator: ResolversTypes['User'], project?: Maybe<ResolversTypes['Project']> }>;
@@ -4957,8 +5041,6 @@ export type ResolversTypes = {
   QuoteCurrency: QuoteCurrency;
   Refund: ResolverTypeWrapper<Refund>;
   RefundCancelInput: RefundCancelInput;
-  RefundConfirmInput: RefundConfirmInput;
-  RefundFailInput: RefundFailInput;
   RefundGetInput: RefundGetInput;
   RefundInitiateInput: RefundInitiateInput;
   RefundInitiateResponse: ResolverTypeWrapper<RefundInitiateResponse>;
@@ -5149,7 +5231,7 @@ export type ResolversParentTypes = {
   EntryPublishedSubscriptionResponse: Omit<EntryPublishedSubscriptionResponse, 'entry'> & { entry: ResolversParentTypes['Entry'] };
   ExternalAccount: ExternalAccount;
   FiatPaymentMethods: FiatPaymentMethods;
-  FiatSwapPaymentDetails: FiatSwapPaymentDetails;
+  FiatToLightningSwapPaymentDetails: FiatToLightningSwapPaymentDetails;
   FileUploadInput: FileUploadInput;
   Float: Scalars['Float']['output'];
   Funder: Omit<Funder, 'contributions' | 'user'> & { contributions: Array<ResolversParentTypes['Contribution']>, user?: Maybe<ResolversParentTypes['User']> };
@@ -5249,7 +5331,7 @@ export type ResolversParentTypes = {
   OTPResponse: OtpResponse;
   OffsetBasedPaginationInput: OffsetBasedPaginationInput;
   OnChainPaymentMethods: OnChainPaymentMethods;
-  OnChainSwapPaymentDetails: OnChainSwapPaymentDetails;
+  OnChainToLightningSwapPaymentDetails: OnChainToLightningSwapPaymentDetails;
   OnChainToRskSwapPaymentDetails: OnChainToRskSwapPaymentDetails;
   OnChainTxInput: OnChainTxInput;
   Order: Omit<Order, 'contribution' | 'project' | 'user'> & { contribution: ResolversParentTypes['Contribution'], project: ResolversParentTypes['Project'], user?: Maybe<ResolversParentTypes['User']> };
@@ -5287,6 +5369,15 @@ export type ResolversParentTypes = {
   PaymentPendOnChainSwapInput: PaymentPendOnChainSwapInput;
   PaymentPendResponse: PaymentPendResponse;
   PaymentStatusUpdatedInput: PaymentStatusUpdatedInput;
+  Payout: Payout;
+  PayoutCancelInput: PayoutCancelInput;
+  PayoutGetInput: PayoutGetInput;
+  PayoutInitiateInput: PayoutInitiateInput;
+  PayoutInitiateResponse: PayoutInitiateResponse;
+  PayoutPaymentInput: PayoutPaymentInput;
+  PayoutRequestInput: PayoutRequestInput;
+  PayoutRequestResponse: PayoutRequestResponse;
+  PayoutResponse: PayoutResponse;
   PodcastKeysendContributionCreateInput: PodcastKeysendContributionCreateInput;
   PodcastKeysendContributionCreateResponse: PodcastKeysendContributionCreateResponse;
   Post: Omit<Post, 'contributions' | 'creator' | 'project'> & { contributions: Array<ResolversParentTypes['Contribution']>, creator: ResolversParentTypes['User'], project?: Maybe<ResolversParentTypes['Project']> };
@@ -5382,8 +5473,6 @@ export type ResolversParentTypes = {
   Query: {};
   Refund: Refund;
   RefundCancelInput: RefundCancelInput;
-  RefundConfirmInput: RefundConfirmInput;
-  RefundFailInput: RefundFailInput;
   RefundGetInput: RefundGetInput;
   RefundInitiateInput: RefundInitiateInput;
   RefundInitiateResponse: RefundInitiateResponse;
@@ -5807,7 +5896,7 @@ export type FiatPaymentMethodsResolvers<ContextType = any, ParentType extends Re
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type FiatSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['FiatSwapPaymentDetails'] = ResolversParentTypes['FiatSwapPaymentDetails']> = {
+export type FiatToLightningSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['FiatToLightningSwapPaymentDetails'] = ResolversParentTypes['FiatToLightningSwapPaymentDetails']> = {
   lightningInvoiceId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lightningInvoiceStatus?: Resolver<ResolversTypes['LightningInvoiceStatus'], ParentType, ContextType>;
   swapId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -6097,6 +6186,9 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   paymentFail?: Resolver<ResolversTypes['PaymentFailResponse'], ParentType, ContextType, RequireFields<MutationPaymentFailArgs, 'input'>>;
   paymentInvoiceCancel?: Resolver<ResolversTypes['PaymentInvoiceCancelResponse'], ParentType, ContextType, RequireFields<MutationPaymentInvoiceCancelArgs, 'invoiceId'>>;
   paymentPend?: Resolver<ResolversTypes['PaymentPendResponse'], ParentType, ContextType, RequireFields<MutationPaymentPendArgs, 'input'>>;
+  payoutCancel?: Resolver<ResolversTypes['PayoutResponse'], ParentType, ContextType, RequireFields<MutationPayoutCancelArgs, 'input'>>;
+  payoutInitiate?: Resolver<ResolversTypes['PayoutInitiateResponse'], ParentType, ContextType, RequireFields<MutationPayoutInitiateArgs, 'input'>>;
+  payoutRequest?: Resolver<ResolversTypes['PayoutRequestResponse'], ParentType, ContextType, RequireFields<MutationPayoutRequestArgs, 'input'>>;
   podcastKeysendContributionCreate?: Resolver<ResolversTypes['PodcastKeysendContributionCreateResponse'], ParentType, ContextType, RequireFields<MutationPodcastKeysendContributionCreateArgs, 'input'>>;
   postCreate?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'input'>>;
   postDelete?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationPostDeleteArgs, 'id'>>;
@@ -6133,8 +6225,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectUpdate?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectUpdateArgs, 'input'>>;
   publishEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationPublishEntryArgs, 'id'>>;
   refundCancel?: Resolver<ResolversTypes['RefundResponse'], ParentType, ContextType, RequireFields<MutationRefundCancelArgs, 'input'>>;
-  refundConfirm?: Resolver<ResolversTypes['RefundResponse'], ParentType, ContextType, RequireFields<MutationRefundConfirmArgs, 'input'>>;
-  refundFail?: Resolver<ResolversTypes['RefundResponse'], ParentType, ContextType, RequireFields<MutationRefundFailArgs, 'input'>>;
   refundInitiate?: Resolver<ResolversTypes['RefundInitiateResponse'], ParentType, ContextType, RequireFields<MutationRefundInitiateArgs, 'input'>>;
   refundRequest?: Resolver<ResolversTypes['RefundRequestResponse'], ParentType, ContextType, RequireFields<MutationRefundRequestArgs, 'input'>>;
   sendOTPByEmail?: Resolver<ResolversTypes['OTPResponse'], ParentType, ContextType, RequireFields<MutationSendOtpByEmailArgs, 'input'>>;
@@ -6224,7 +6314,7 @@ export type OnChainPaymentMethodsResolvers<ContextType = any, ParentType extends
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type OnChainSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['OnChainSwapPaymentDetails'] = ResolversParentTypes['OnChainSwapPaymentDetails']> = {
+export type OnChainToLightningSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['OnChainToLightningSwapPaymentDetails'] = ResolversParentTypes['OnChainToLightningSwapPaymentDetails']> = {
   lightningInvoiceId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lightningInvoiceStatus?: Resolver<ResolversTypes['LightningInvoiceStatus'], ParentType, ContextType>;
   onChainAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -6355,7 +6445,7 @@ export type PaymentConfirmResponseResolvers<ContextType = any, ParentType extend
 };
 
 export type PaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentDetails'] = ResolversParentTypes['PaymentDetails']> = {
-  __resolveType: TypeResolveFn<'FiatSwapPaymentDetails' | 'LightningPaymentDetails' | 'LightningToRskSwapPaymentDetails' | 'OnChainSwapPaymentDetails' | 'OnChainToRskSwapPaymentDetails', ParentType, ContextType>;
+  __resolveType: TypeResolveFn<'FiatToLightningSwapPaymentDetails' | 'LightningPaymentDetails' | 'LightningToRskSwapPaymentDetails' | 'OnChainToLightningSwapPaymentDetails' | 'OnChainToRskSwapPaymentDetails', ParentType, ContextType>;
 };
 
 export type PaymentFailResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentFailResponse'] = ResolversParentTypes['PaymentFailResponse']> = {
@@ -6393,6 +6483,30 @@ export type PaymentMethodsResolvers<ContextType = any, ParentType extends Resolv
 
 export type PaymentPendResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentPendResponse'] = ResolversParentTypes['PaymentPendResponse']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PayoutResolvers<ContextType = any, ParentType extends ResolversParentTypes['Payout'] = ResolversParentTypes['Payout']> = {
+  amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  expiresAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['PayoutStatus'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PayoutInitiateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutInitiateResponse'] = ResolversParentTypes['PayoutInitiateResponse']> = {
+  payout?: Resolver<ResolversTypes['Payout'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PayoutRequestResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutRequestResponse'] = ResolversParentTypes['PayoutRequestResponse']> = {
+  payout?: Resolver<ResolversTypes['Payout'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PayoutResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutResponse'] = ResolversParentTypes['PayoutResponse']> = {
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -6687,6 +6801,7 @@ export type ProjectReviewResolvers<ContextType = any, ParentType extends Resolve
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   projectId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   rejectionReasons?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  reviewNotes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   reviewedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ProjectReviewStatus'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -6874,6 +6989,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   ordersStatsGet?: Resolver<ResolversTypes['OrdersStatsBase'], ParentType, ContextType, RequireFields<QueryOrdersStatsGetArgs, 'input'>>;
   payment?: Resolver<ResolversTypes['Payment'], ParentType, ContextType, RequireFields<QueryPaymentArgs, 'input'>>;
   paymentInvoiceSanctionCheckStatusGet?: Resolver<ResolversTypes['PaymentInvoiceSanctionCheckStatusResponse'], ParentType, ContextType, RequireFields<QueryPaymentInvoiceSanctionCheckStatusGetArgs, 'input'>>;
+  payoutGet?: Resolver<Maybe<ResolversTypes['Payout']>, ParentType, ContextType, RequireFields<QueryPayoutGetArgs, 'input'>>;
   post?: Resolver<Maybe<ResolversTypes['Post']>, ParentType, ContextType, RequireFields<QueryPostArgs, 'id'>>;
   postEmailSegmentSizeGet?: Resolver<ResolversTypes['Int'], ParentType, ContextType, RequireFields<QueryPostEmailSegmentSizeGetArgs, 'input'>>;
   posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType, Partial<QueryPostsArgs>>;
@@ -7270,7 +7386,7 @@ export type Resolvers<ContextType = any> = {
   EntryPublishedSubscriptionResponse?: EntryPublishedSubscriptionResponseResolvers<ContextType>;
   ExternalAccount?: ExternalAccountResolvers<ContextType>;
   FiatPaymentMethods?: FiatPaymentMethodsResolvers<ContextType>;
-  FiatSwapPaymentDetails?: FiatSwapPaymentDetailsResolvers<ContextType>;
+  FiatToLightningSwapPaymentDetails?: FiatToLightningSwapPaymentDetailsResolvers<ContextType>;
   Funder?: FunderResolvers<ContextType>;
   FunderRewardGraphSum?: FunderRewardGraphSumResolvers<ContextType>;
   GeyserPromotionsContributionStats?: GeyserPromotionsContributionStatsResolvers<ContextType>;
@@ -7316,7 +7432,7 @@ export type Resolvers<ContextType = any> = {
   NotificationSettings?: NotificationSettingsResolvers<ContextType>;
   OTPResponse?: OtpResponseResolvers<ContextType>;
   OnChainPaymentMethods?: OnChainPaymentMethodsResolvers<ContextType>;
-  OnChainSwapPaymentDetails?: OnChainSwapPaymentDetailsResolvers<ContextType>;
+  OnChainToLightningSwapPaymentDetails?: OnChainToLightningSwapPaymentDetailsResolvers<ContextType>;
   OnChainToRskSwapPaymentDetails?: OnChainToRskSwapPaymentDetailsResolvers<ContextType>;
   Order?: OrderResolvers<ContextType>;
   OrderItem?: OrderItemResolvers<ContextType>;
@@ -7337,6 +7453,10 @@ export type Resolvers<ContextType = any> = {
   PaymentInvoiceSanctionCheckStatusResponse?: PaymentInvoiceSanctionCheckStatusResponseResolvers<ContextType>;
   PaymentMethods?: PaymentMethodsResolvers<ContextType>;
   PaymentPendResponse?: PaymentPendResponseResolvers<ContextType>;
+  Payout?: PayoutResolvers<ContextType>;
+  PayoutInitiateResponse?: PayoutInitiateResponseResolvers<ContextType>;
+  PayoutRequestResponse?: PayoutRequestResponseResolvers<ContextType>;
+  PayoutResponse?: PayoutResponseResolvers<ContextType>;
   PodcastKeysendContributionCreateResponse?: PodcastKeysendContributionCreateResponseResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
   PostPublishedSubscriptionResponse?: PostPublishedSubscriptionResponseResolvers<ContextType>;
@@ -8209,6 +8329,10 @@ export type ContributionFiatPaymentDetailsFragment = { __typename?: 'Contributio
 
 export type ContributionFiatSwapPaymentDetailsFragment = { __typename?: 'ContributionFiatSwapPaymentDetails', checkoutUrl: string };
 
+export type ContributionLightningToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionLightningToRskSwapPaymentDetails', lightningInvoiceId: string, paymentRequest: string, swapJson: string };
+
+export type ContributionOnChainToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainToRskSwapPaymentDetails', address: string, swapJson: string };
+
 export type FundingContributionPaymentDetailsFragment = { __typename?: 'ContributionPaymentsDetails', lightning?: (
     { __typename?: 'ContributionLightningPaymentDetails' }
     & ContributionLightningPaymentDetailsFragment
@@ -8221,6 +8345,12 @@ export type FundingContributionPaymentDetailsFragment = { __typename?: 'Contribu
   ) | null, fiatSwap?: (
     { __typename?: 'ContributionFiatSwapPaymentDetails' }
     & ContributionFiatSwapPaymentDetailsFragment
+  ) | null, lightningToRskSwap?: (
+    { __typename?: 'ContributionLightningToRskSwapPaymentDetails' }
+    & ContributionLightningToRskSwapPaymentDetailsFragment
+  ) | null, onChainToRskSwap?: (
+    { __typename?: 'ContributionOnChainToRskSwapPaymentDetails' }
+    & ContributionOnChainToRskSwapPaymentDetailsFragment
   ) | null };
 
 export type FundingContributionPaymentFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, status: PaymentStatus, userSubscriptionId?: any | null };
@@ -10490,6 +10620,19 @@ export const ContributionFiatSwapPaymentDetailsFragmentDoc = gql`
   checkoutUrl
 }
     `;
+export const ContributionLightningToRskSwapPaymentDetailsFragmentDoc = gql`
+    fragment ContributionLightningToRskSwapPaymentDetails on ContributionLightningToRskSwapPaymentDetails {
+  lightningInvoiceId
+  paymentRequest
+  swapJson
+}
+    `;
+export const ContributionOnChainToRskSwapPaymentDetailsFragmentDoc = gql`
+    fragment ContributionOnChainToRskSwapPaymentDetails on ContributionOnChainToRskSwapPaymentDetails {
+  address
+  swapJson
+}
+    `;
 export const FundingContributionPaymentDetailsFragmentDoc = gql`
     fragment FundingContributionPaymentDetails on ContributionPaymentsDetails {
   lightning {
@@ -10504,11 +10647,19 @@ export const FundingContributionPaymentDetailsFragmentDoc = gql`
   fiatSwap {
     ...ContributionFiatSwapPaymentDetails
   }
+  lightningToRskSwap {
+    ...ContributionLightningToRskSwapPaymentDetails
+  }
+  onChainToRskSwap {
+    ...ContributionOnChainToRskSwapPaymentDetails
+  }
 }
     ${ContributionLightningPaymentDetailsFragmentDoc}
 ${ContributionOnChainSwapPaymentDetailsFragmentDoc}
 ${ContributionFiatPaymentDetailsFragmentDoc}
-${ContributionFiatSwapPaymentDetailsFragmentDoc}`;
+${ContributionFiatSwapPaymentDetailsFragmentDoc}
+${ContributionLightningToRskSwapPaymentDetailsFragmentDoc}
+${ContributionOnChainToRskSwapPaymentDetailsFragmentDoc}`;
 export const PaymentSubscriptionFragmentDoc = gql`
     fragment PaymentSubscription on Payment {
   id

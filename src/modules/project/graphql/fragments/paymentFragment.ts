@@ -26,11 +26,28 @@ export const ContributionFiatSwapPaymentDetailsFragment = gql`
   }
 `
 
+export const ContributionLightningToRskSwapPaymentDetailsFragment = gql`
+  fragment ContributionLightningToRskSwapPaymentDetails on ContributionLightningToRskSwapPaymentDetails {
+    lightningInvoiceId
+    paymentRequest
+    swapJson
+  }
+`
+
+export const ContributionOnChainToRskSwapPaymentDetailsFragment = gql`
+  fragment ContributionOnChainToRskSwapPaymentDetails on ContributionOnChainToRskSwapPaymentDetails {
+    address
+    swapJson
+  }
+`
+
 export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_DETAILS = gql`
   ${ContributionLightningPaymentDetailsFragment}
   ${ContributionOnChainSwapPaymentDetailsFragment}
   ${ContributionFiatPaymentDetailsFragment}
   ${ContributionFiatSwapPaymentDetailsFragment}
+  ${ContributionLightningToRskSwapPaymentDetailsFragment}
+  ${ContributionOnChainToRskSwapPaymentDetailsFragment}
   fragment FundingContributionPaymentDetails on ContributionPaymentsDetails {
     lightning {
       ...ContributionLightningPaymentDetails
@@ -43,6 +60,12 @@ export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_DETAILS = gql`
     }
     fiatSwap {
       ...ContributionFiatSwapPaymentDetails
+    }
+    lightningToRskSwap {
+      ...ContributionLightningToRskSwapPaymentDetails
+    }
+    onChainToRskSwap {
+      ...ContributionOnChainToRskSwapPaymentDetails
     }
   }
 `

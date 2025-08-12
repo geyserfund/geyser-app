@@ -8,8 +8,8 @@ import { ControlledTextInput } from '@/shared/components/controlledInput/Control
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { UserAccountKeysFragment } from '@/types/index.ts'
 
-import { FeedBackText } from '../components/FeedBackText.tsx'
 import { useUpdateAccountPassword } from '../hooks/useUpdateAccountPassword.ts'
+import { FeedBackText } from './FeedBackText.tsx'
 
 export type CreatePasswordFormData = {
   password: string
@@ -17,21 +17,25 @@ export type CreatePasswordFormData = {
 }
 
 export type CreatePasswordFormProps = {
+  isCreator?: boolean
   form: UseFormReturn<CreatePasswordFormData>
 }
 
+const creatorText = t(
+  'Configure your account password. Only you will know this password, and no one but you has access to the project funds.',
+)
+const contributorText = t(
+  'Configure your account password. Only you will know this password, and it will be required to refund your contribution.',
+)
+
 /** Account password form component with password and repeat password fields */
-export const CreatePasswordForm = ({ form }: CreatePasswordFormProps) => {
+export const CreatePasswordForm = ({ form, isCreator }: CreatePasswordFormProps) => {
   const { control } = form
   return (
     <VStack w="full" gap={4}>
       <VStack w="full" alignItems="start" gap={2}>
-        <Body>
-          {t(
-            'Configure your account password. This password is known only by you, and no one but you has access to the project funds.',
-          )}
-        </Body>
-        <FeedBackText />
+        <Body>{isCreator ? creatorText : contributorText}</Body>
+        <FeedBackText isCreator={isCreator} />
       </VStack>
       <ControlledTextInput
         name="password"

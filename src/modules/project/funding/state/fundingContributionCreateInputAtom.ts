@@ -16,7 +16,7 @@ import {
 } from '@/types/generated/graphql'
 import { toInt } from '@/utils'
 
-import { generatePreImageHash } from '../../pages1/projectCreation/views/launchPayment/views/launchPaymentAccountPassword/keyGenerationHelper.ts'
+import { generatePreImageHash } from '../../forms/accountPassword/keyGenerationHelper.ts'
 import { sourceResourceAtom } from '../../pages1/projectView/state/sourceActivityAtom.ts'
 import { fundingProjectAtom } from './fundingFormAtom'
 import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAtom'

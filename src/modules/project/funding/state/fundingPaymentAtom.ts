@@ -18,6 +18,15 @@ const defaultFundingPaymentDetails: FundingContributionPaymentDetailsFragment = 
     swapJson: '',
     address: '',
   },
+  lightningToRskSwap: {
+    lightningInvoiceId: '',
+    paymentRequest: '',
+    swapJson: '',
+  },
+  onChainToRskSwap: {
+    address: '',
+    swapJson: '',
+  },
 }
 
 /** Atom for storing funding payment details */

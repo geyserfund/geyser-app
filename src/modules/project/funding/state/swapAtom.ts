@@ -2,7 +2,12 @@ import { ECPairInterface } from 'ecpair'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
-import { BitcoinQuote, ContributionOnChainSwapPaymentDetails, Maybe } from '../../../../types'
+import {
+  BitcoinQuote,
+  ContributionOnChainSwapPaymentDetails,
+  ContributionOnChainToRskSwapPaymentDetails,
+  Maybe,
+} from '../../../../types'
 export type SwapContributionInfo = {
   projectTitle?: Maybe<string>
   reference?: Maybe<string>
@@ -44,13 +49,26 @@ export const currentSwapIdAtom = atom<string>('')
 export const swapAtom = atomWithStorage<SwapDataStructure>('swapArray', {})
 
 /** Parses swap json received with Contribution and stores it in swapAtom, also sets currentSwapId */
-const swapParseAtom = atom(
+export const parseSwapAtom = atom(
   null,
   (get, set, swap: ContributionOnChainSwapPaymentDetails, contributionInfo?: SwapContributionInfo) => {
     const keys = get(keyPairAtom)
     const swapData = get(swapAtom)
     const refundFile = JSON.parse(swap.swapJson)
     refundFile.privateKey = keys?.privateKey?.toString('hex')
+
+    refundFile.contributionInfo = contributionInfo
+
+    set(currentSwapIdAtom, refundFile.id) // Set the current id as current swap id
+    set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
+  },
+)
+
+export const parseOnChainToRskSwapAtom = atom(
+  null,
+  (get, set, swap: ContributionOnChainToRskSwapPaymentDetails, contributionInfo?: SwapContributionInfo) => {
+    const swapData = get(swapAtom)
+    const refundFile = JSON.parse(swap.swapJson)
 
     refundFile.contributionInfo = contributionInfo
 
@@ -96,9 +114,6 @@ const removeRefundedSwapAtom = atom(null, (get, set, swapId: string) => {
   set(currentSwapIdAtom, '')
   set(swapAtom, newSwapData)
 })
-
-// Used for starting out the refund file
-export const useParseResponseToSwapAtom = () => useSetAtom(swapParseAtom)
 
 // For fetching and updating refund file
 export const useRefundFileValue = () => useAtomValue(currentSwapAtom)

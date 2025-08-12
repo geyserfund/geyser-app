@@ -1,18 +1,12 @@
-import { ButtonProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useCallback, useMemo, useState } from 'react'
 
 import { useAuthContext } from '@/context/auth.tsx'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { getPath } from '@/shared/constants/index.ts'
-import { ProjectCreationStep, useAccountKeysQuery, UserAccountKeysFragment } from '@/types/index.ts'
+import { useAccountKeysQuery, UserAccountKeysFragment } from '@/types/index.ts'
 
-import { useUpdateProjectWithLastCreationStep } from '../../../../hooks/useIsStepAhead.tsx'
-import { ProjectCreationLayout } from '../../../../Layouts/ProjectCreationLayout.tsx'
-import { ConfirmPasswordForm, useConfirmPasswordForm } from './views/ConfirmPasswordForm.tsx'
-import { CreatePasswordForm, useCreateAccountForm } from './views/CreatePasswordForm.tsx'
-import { RecoverPasswordForm, useRecoverPasswordForm } from './views/RecoverPasswordForm.tsx'
+import { ConfirmPasswordForm, useConfirmPasswordForm } from './components/ConfirmPasswordForm.tsx'
+import { CreatePasswordForm, useCreateAccountForm } from './components/CreatePasswordForm.tsx'
+import { RecoverPasswordForm, useRecoverPasswordForm } from './components/RecoverPasswordForm.tsx'
 
 enum AccountPasswordTypes {
   CREATE = 'create',
@@ -26,10 +20,10 @@ const FormTitles = {
   [AccountPasswordTypes.RECOVER]: t('Recover your account password'),
 }
 
-export const LaunchPaymentAccountPassword = () => {
+export const useAccountPasswordForm = ({ onComplete, isCreator }: { onComplete: () => void; isCreator?: boolean }) => {
+  const [accountPasswordType, setAccountPasswordType] = useState<AccountPasswordTypes>(AccountPasswordTypes.CREATE)
+
   const { user } = useAuthContext()
-  const { project } = useProjectAtom()
-  const navigate = useNavigate()
 
   const { data: accountKeysData } = useAccountKeysQuery({
     skip: !user?.id,
@@ -46,23 +40,16 @@ export const LaunchPaymentAccountPassword = () => {
   })
   const keys = accountKeysData?.user?.accountKeys
 
-  const [accountPasswordType, setAccountPasswordType] = useState<AccountPasswordTypes>(AccountPasswordTypes.CREATE)
-
-  const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
-    ProjectCreationStep.IdentityVerification,
-    getPath('launchFinalize', project.id),
-  )
-
   const handleCreatePasswordSubmit = (data: UserAccountKeysFragment) => {
-    updateProjectWithLastCreationStep()
+    onComplete()
   }
 
   const handleConfirmPasswordSubmit = () => {
-    updateProjectWithLastCreationStep()
+    onComplete()
   }
 
   const handleRecoverPasswordSubmit = (data: UserAccountKeysFragment) => {
-    updateProjectWithLastCreationStep()
+    onComplete()
   }
 
   const createPasswordForm = useCreateAccountForm(handleCreatePasswordSubmit)
@@ -93,44 +80,30 @@ export const LaunchPaymentAccountPassword = () => {
     setAccountPasswordType(AccountPasswordTypes.CONFIRM)
   }
 
-  const continueProps: ButtonProps = {
-    type: 'submit',
-  }
-
-  const backProps: ButtonProps = {
-    onClick() {
-      navigate(getPath('launchPaymentWallet', project.id))
-    },
-  }
-
-  const titles = FormTitles[accountPasswordType]
-
-  const renderForm = () => {
+  const renderForm = useCallback(() => {
     switch (accountPasswordType) {
       case AccountPasswordTypes.CREATE:
-        return <CreatePasswordForm form={createPasswordForm} />
+        return <CreatePasswordForm form={createPasswordForm} isCreator={isCreator} />
       case AccountPasswordTypes.CONFIRM:
         return (
-          <ConfirmPasswordForm control={passwordConfirmationForm.control} onForgotPassword={handleForgotPassword} />
+          <ConfirmPasswordForm
+            control={passwordConfirmationForm.control}
+            onForgotPassword={handleForgotPassword}
+            isCreator={isCreator}
+          />
         )
       case AccountPasswordTypes.RECOVER:
         return <RecoverPasswordForm control={recoverPasswordForm.control} onBackToConfirm={handleBackToConfirm} />
       default:
         return null
     }
-  }
+  }, [accountPasswordType, createPasswordForm, passwordConfirmationForm, recoverPasswordForm, isCreator])
 
-  return (
-    <ProjectCreationLayout
-      title={titles}
-      continueButtonProps={continueProps}
-      backButtonProps={backProps}
-      as="form"
-      onSubmit={currentForm.onSubmit}
-    >
-      <VStack w="full" alignItems="start" gap={6}>
-        {renderForm()}
-      </VStack>
-    </ProjectCreationLayout>
-  )
+  const titles = FormTitles[accountPasswordType]
+
+  return {
+    renderForm,
+    currentForm,
+    titles,
+  }
 }
