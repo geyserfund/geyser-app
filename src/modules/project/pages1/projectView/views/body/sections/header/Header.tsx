@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
-import { PiCaretDoubleDown } from 'react-icons/pi'
+import { PiCaretDoubleDown, PiQrCode } from 'react-icons/pi'
 import { Link } from 'react-router-dom'
 
 import { ProjectStatusBar } from '@/components/ui'
@@ -91,6 +91,13 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
     }
   }
 
+  const handleClickLightingQR = () => {
+    const element = document.getElementById(ID.project.fundNow.container)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
     <Stack
       direction={{ base: 'column', lg: 'row' }}
@@ -157,6 +164,13 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
               variant="soft"
               colorScheme="neutral1"
               onClick={handleClickDetails}
+            />
+            <IconButton
+              aria-label="Go to project Lighting QR"
+              icon={<PiQrCode fontSize="20px" />}
+              variant="soft"
+              colorScheme="neutral1"
+              onClick={handleClickLightingQR}
             />
             <FollowButton project={project} withLabel />
             <ShareProjectButton />

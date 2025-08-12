@@ -56,12 +56,9 @@ export const SuccessfulContributionBanner = () => {
       justifyContent="center"
       backgroundColor="utils.pbg"
     >
+      <Image height="140px" src={ContributionSuccessIllustrationUrl} alt="Contribution success" />
       <HStack spacing={2} zIndex={1}>
-        {user.imageUrl ? (
-          <Avatar src={user.imageUrl || ''} size="md" />
-        ) : (
-          <Image height="140px" src={ContributionSuccessIllustrationUrl} alt="Contribution success" />
-        )}
+        {user.imageUrl && <Avatar src={user.imageUrl || ''} size="md" />}
         <Body light size="2xl" medium>
           {user.username}
         </Body>
@@ -71,7 +68,7 @@ export const SuccessfulContributionBanner = () => {
         <H3 light fontSize="2xl" regular w="full" textAlign={'center'}>
           {user.username ? t('successfully contributed to') : t('You successfully contributed to')}
         </H3>
-        <H3 dark bold fontSize="4xl">
+        <H3 dark bold fontSize="4xl" textAlign="center">
           {project.title}
         </H3>
       </VStack>
