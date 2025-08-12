@@ -28,7 +28,7 @@ export const Partners = () => {
       </HStack>
 
       <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
-        {PartnerUrls.slice(4, 7).map((partner, index) => (
+        {PartnerUrls.slice(4, 6).map((partner, index) => (
           <Link href={partner.link} isExternal key={partner.image}>
             <Image
               src={partner.image}
@@ -44,7 +44,7 @@ export const Partners = () => {
       </HStack>
 
       <HStack flexWrap={'wrap'} spacing={8} justifyContent={'center'}>
-        {PartnerUrls.slice(7, 9).map((partner, index) => (
+        {PartnerUrls.slice(6, 8).map((partner, index) => (
           <Link href={partner.link} isExternal key={partner.image}>
             <Image
               src={partner.image}
