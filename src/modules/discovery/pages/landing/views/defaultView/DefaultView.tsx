@@ -1,7 +1,6 @@
 import { VStack } from '@chakra-ui/react'
 
 import { ProjectCategoryList } from '@/shared/constants/platform/projectCategory.ts'
-import { ProjectSubCategory } from '@/types/index.ts'
 
 import { TopProjects } from './components/TopProjects.tsx'
 import { CharityProjects } from './sections/CharityProjects.tsx'
@@ -20,7 +19,6 @@ export const DefaultView = () => {
       <VStack w="full" spacing={8}>
         <Featured />
         <TrendingRewards />
-        <ProjectsDisplayMostFundedThisWeek subCategory={ProjectSubCategory.CircularEconomy} />
         {ProjectCategoryList.map((category) => (
           <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
         ))}

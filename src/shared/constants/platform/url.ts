@@ -471,6 +471,8 @@ export const GuardianPartnerInitialCapitalUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/initial-capital-logo.png'
 export const GuardianPartnerRhinoUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Rhino.png'
+export const GuardianPartnerBitcoinGamesLabsUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/guardian_partner_bitcoin_games_labs.png'
 export const GuardianPartnerWalletofSatoshiUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Wallet-of-Satoshi.png'
 export const GuardianPartnerDJPUrl =
