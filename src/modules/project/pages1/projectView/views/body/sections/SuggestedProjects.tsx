@@ -49,11 +49,11 @@ export const SuggestedProjects = ({ subCategory, projectId, id, ...rest }: Sugge
 
   return (
     <VStack w="full" paddingTop={16} paddingBottom={16} {...rest}>
-      <VStack w="full" spacing={6}>
+      <VStack w="full" spacing={4}>
         <HStack w="full" justifyContent="space-between" alignItems="flex-start">
-          <H3 size="xl" medium>
+          <H3 size="xl" bold>
             {t('Similar projects in')}{' '}
-            <Body as="span" medium color="primary1.9">
+            <Body as="span" bold color="primary1.9">
               {ProjectSubCategoryLabel[subCategory]}
             </Body>
           </H3>
