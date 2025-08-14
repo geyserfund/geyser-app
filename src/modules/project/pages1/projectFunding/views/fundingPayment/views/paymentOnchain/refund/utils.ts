@@ -1,3 +1,5 @@
+import { SwapData } from '@/modules/project/funding/state/swapAtom.ts'
+
 /**
  * Get a hex encoded Buffer from a string
  *
@@ -20,4 +22,20 @@ export const generateRandomBytes = () => {
   const array = new Uint8Array(32) // Create a typed array of 32 bytes (256 bits)
   crypto.getRandomValues(array) // Fill the array with cryptographically secure random numbers
   return Buffer.from(array)
+}
+
+export const getBoltzPublicKey = (swap: SwapData): string => {
+  if ('claimPublicKey' in swap) {
+    return swap.claimPublicKey
+  }
+
+  return swap.lockupDetails.serverPublicKey
+}
+
+export const getSwapTree = (swap: SwapData): any => {
+  if ('claimPublicKey' in swap) {
+    return swap.swapTree
+  }
+
+  return swap.lockupDetails.swapTree
 }

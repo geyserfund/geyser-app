@@ -16,11 +16,10 @@ import {
 } from '@/types/generated/graphql'
 import { toInt } from '@/utils'
 
-import { generatePreImageHash } from '../../forms/accountPassword/keyGenerationHelper.ts'
+import { userAccountKeysAtom } from '../../../auth/state/userAccountKeysAtom.ts'
 import { sourceResourceAtom } from '../../pages1/projectView/state/sourceActivityAtom.ts'
 import { fundingProjectAtom } from './fundingFormAtom'
 import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAtom'
-import { fundingUserAccountKeysAtom } from './fundingUserAccountKeys.ts'
 import { selectedGoalIdAtom } from './selectedGoalAtom'
 import { shippingAddressAtom } from './shippingAddressAtom.ts'
 
@@ -124,12 +123,9 @@ export const resetFundingInputAfterRequestAtom = atom(null, (_, set) => {
 
 const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const fundingProject = get(fundingProjectAtom)
-  const userAccountKeys = get(fundingUserAccountKeysAtom)
+  const userAccountKeys = get(userAccountKeysAtom)
 
   const paymentsInput: ContributionPaymentsInput = {}
-
-  const preimageHashForLightning = generatePreImageHash()
-  const preimageHashForOnChain = generatePreImageHash()
 
   const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
 
@@ -147,7 +143,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
     paymentsInput.onChainSwap = {
       create: true,
       boltz: {
-        swapPublicKey: '',
+        swapPublicKey: claimPublicKey,
       },
     }
   }
@@ -157,7 +153,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
       create: true,
       boltz: {
         claimPublicKey,
-        preimageHash: preimageHashForLightning,
+        preimageHash: '',
       },
     }
 
@@ -165,7 +161,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
       create: true,
       boltz: {
         claimPublicKey,
-        preimageHash: preimageHashForOnChain,
+        preimageHash: '',
       },
     }
   }

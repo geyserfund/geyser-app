@@ -1,12 +1,14 @@
 import { t } from 'i18next'
-import { useCallback, useMemo, useState } from 'react'
+import { useAtomValue } from 'jotai'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { useAuthContext } from '@/context/auth.tsx'
-import { useAccountKeysQuery, UserAccountKeysFragment } from '@/types/index.ts'
+import { UserAccountKeysFragment } from '@/types/index.ts'
 
+import { userAccountKeysAtom } from '../../../auth/state/userAccountKeysAtom.ts'
 import { ConfirmPasswordForm, useConfirmPasswordForm } from './components/ConfirmPasswordForm.tsx'
 import { CreatePasswordForm, useCreateAccountForm } from './components/CreatePasswordForm.tsx'
 import { RecoverPasswordForm, useRecoverPasswordForm } from './components/RecoverPasswordForm.tsx'
+import { AccountKeys } from './keyGenerationHelper.ts'
 
 enum AccountPasswordTypes {
   CREATE = 'create',
@@ -20,36 +22,33 @@ const FormTitles = {
   [AccountPasswordTypes.RECOVER]: t('Recover your account password'),
 }
 
-export const useAccountPasswordForm = ({ onComplete, isCreator }: { onComplete: () => void; isCreator?: boolean }) => {
+export const useAccountPasswordForm = ({
+  onComplete,
+  isCreator,
+}: {
+  onComplete: (data?: UserAccountKeysFragment) => void
+  isCreator?: boolean
+}) => {
   const [accountPasswordType, setAccountPasswordType] = useState<AccountPasswordTypes>(AccountPasswordTypes.CREATE)
 
-  const { user } = useAuthContext()
+  const keys = useAtomValue(userAccountKeysAtom)
 
-  const { data: accountKeysData } = useAccountKeysQuery({
-    skip: !user?.id,
-    variables: {
-      where: {
-        id: user?.id,
-      },
-    },
-    onCompleted(data) {
-      if (data.user?.accountKeys?.id) {
-        setAccountPasswordType(AccountPasswordTypes.CONFIRM)
-      }
-    },
-  })
-  const keys = accountKeysData?.user?.accountKeys
+  useEffect(() => {
+    if (keys?.id) {
+      setAccountPasswordType(AccountPasswordTypes.CONFIRM)
+    }
+  }, [keys])
 
   const handleCreatePasswordSubmit = (data: UserAccountKeysFragment) => {
-    onComplete()
+    onComplete(data)
   }
 
-  const handleConfirmPasswordSubmit = () => {
+  const handleConfirmPasswordSubmit = (data: AccountKeys) => {
     onComplete()
   }
 
   const handleRecoverPasswordSubmit = (data: UserAccountKeysFragment) => {
-    onComplete()
+    onComplete(data)
   }
 
   const createPasswordForm = useCreateAccountForm(handleCreatePasswordSubmit)

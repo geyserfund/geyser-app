@@ -17,12 +17,22 @@ export const getTransactionFromSwap = async (swapId: string): Promise<BoltzTrans
   return resp
 }
 
+export const getTransactionFromChainSwap = async (swapId: string): Promise<BoltzTransaction> => {
+  const resp = await fetch(`${swapServiceEndpoint}/swap/chain/${swapId}/transactions`).then((res) => res.json())
+  return {
+    id: resp.userLock?.transaction?.id || resp.transaction?.id,
+    hex: resp.userLock?.transaction?.hex || resp.transaction?.hex,
+    timeoutBlockHeight: resp.userLock?.timeout?.blockHeight || resp.timeout?.blockHeight,
+    timeoutEta: resp.userLock?.timeout?.eta || resp.timeout?.eta,
+  }
+}
+
 export const getFeeEstimations = async (): Promise<Record<string, number>> => {
   const resp = await fetch(`${swapServiceEndpoint}/chain/fees`).then((res) => res.json())
   return resp
 }
 
-type PartialSignature = {
+export type PartialSignature = {
   pubNonce: Buffer
   signature: Buffer
 }
@@ -34,6 +44,34 @@ export const getPartialRefundSignature = async (
   index: number,
 ): Promise<PartialSignature> => {
   const resp = await fetch(`${swapServiceEndpoint}/swap/submarine/${id}/refund`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      index,
+      pubNonce: pubNonce.toString('hex'),
+      transaction: transaction.toHex(),
+    }),
+  }).then((res) => res.json())
+
+  if (resp.error) {
+    throw new Error(resp.error)
+  }
+
+  return {
+    pubNonce: Musig.parsePubNonce(resp.pubNonce),
+    signature: Buffer.from(resp.partialSignature, 'hex'),
+  }
+}
+
+export const getPartialRefundSignatureChain = async (
+  id: string,
+  pubNonce: Buffer,
+  transaction: Transaction,
+  index: number,
+): Promise<PartialSignature> => {
+  const resp = await fetch(`${swapServiceEndpoint}/swap/chain/${id}/refund`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

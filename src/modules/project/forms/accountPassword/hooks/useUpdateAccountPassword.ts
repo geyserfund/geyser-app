@@ -1,9 +1,15 @@
+import { useSetAtom } from 'jotai'
+
+import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { UserAccountKeysFragment, useUserAccountKeysUpdateMutation } from '@/types/index.ts'
 
 import { encryptSeed, generateKeysFromSeedHex, generateSeedHexForUser } from '../keyGenerationHelper.ts'
 
 export const useUpdateAccountPassword = (onComplete?: (_: UserAccountKeysFragment) => void) => {
   const [userAccountKeysUpdate, { loading: isUserAccountKeysCreateLoading }] = useUserAccountKeysUpdateMutation()
+
+  const setUserAccountKeys = useSetAtom(userAccountKeysAtom)
+  const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
 
   const onSubmit = async (data: { password: string; repeatPassword: string }) => {
     const seedHex = generateSeedHexForUser()
@@ -29,6 +35,8 @@ export const useUpdateAccountPassword = (onComplete?: (_: UserAccountKeysFragmen
       },
       onCompleted(data) {
         onComplete?.(data.userAccountKeysUpdate)
+        setUserAccountKeys(data.userAccountKeysUpdate)
+        setUserAccountKeyPair({ privateKey, publicKey })
       },
     })
   }

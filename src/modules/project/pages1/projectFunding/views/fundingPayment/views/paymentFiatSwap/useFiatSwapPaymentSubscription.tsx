@@ -16,7 +16,7 @@ export const useFiatSwapPaymentSubscription = ({ contributionUUID }: { contribut
     },
     onData(options) {
       if (options.data.data?.paymentStatusUpdated) {
-        if (options.data.data?.paymentStatusUpdated.paymentType === PaymentType.FiatSwap) {
+        if (options.data.data?.paymentStatusUpdated.paymentType === PaymentType.FiatToLightningSwap) {
           if (options.data.data?.paymentStatusUpdated.status === PaymentStatus.Pending) {
             setFiatSwapStatus(FiatSwapStatus.processing)
           } else if (options.data.data?.paymentStatusUpdated.status === PaymentStatus.Failed) {

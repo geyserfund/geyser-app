@@ -15,7 +15,7 @@ enum Network {
   TESTNET = 'testnet',
 }
 
-const derivationPathMap = {
+const derivationPathMapRSK = {
   [Network.TESTNET]: "m/44'/37310'/0'/0/0",
   [Network.MAINNET]: "m/44'/137'/0'/0/0",
 }
@@ -200,7 +200,7 @@ export const decryptSeed = async (encryptedSeed: string, password: string): Prom
 
 export const generateKeysFromSeedHex = (seedHex: string): AccountKeys => {
   const network = __production__ ? Network.MAINNET : Network.TESTNET
-  const derivationPath = derivationPathMap[network]
+  const derivationPath = derivationPathMapRSK[network]
   const bitcoinNetwork = __production__ ? bitcoin.networks.bitcoin : bitcoin.networks.testnet
 
   const seedFromSeedHex = Buffer.from(seedHex, 'hex')

@@ -2,6 +2,7 @@ import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 
+import { useAuthContext } from '@/context/auth.tsx'
 import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess'
 import { Body } from '@/shared/components/typography'
 
@@ -10,6 +11,8 @@ import { DownloadRefundButton } from '../components/DownloadRefundButton'
 import { swapTransactionAtom } from '../states/onChainTransaction.ts'
 
 export const PaymentOnchainProcessing = () => {
+  const { isLoggedIn } = useAuthContext()
+
   useListenFundingContributionSuccess()
 
   const swapTransaction = useAtomValue(swapTransactionAtom)
@@ -25,12 +28,14 @@ export const PaymentOnchainProcessing = () => {
         transactionId={swapTransaction.id}
       />
       <UpdateFundingContributionEmailAddress />
-      <VStack w="full" spacing={0} maxWidth="310px">
-        <DownloadRefundButton variant="surface" colorScheme="primary1" size="lg" width="310px" />
-        <Body size="xs" light>
-          {t('Download and securely store your Refund File; if in doubt, re-download to ensure its safety.')}
-        </Body>
-      </VStack>
+      {isLoggedIn && (
+        <VStack w="full" spacing={0} maxWidth="310px">
+          <DownloadRefundButton variant="surface" colorScheme="primary1" size="lg" width="310px" />
+          <Body size="xs" light>
+            {t('Download and securely store your Refund File; if in doubt, re-download to ensure its safety.')}
+          </Body>
+        </VStack>
+      )}
     </VStack>
   )
 }

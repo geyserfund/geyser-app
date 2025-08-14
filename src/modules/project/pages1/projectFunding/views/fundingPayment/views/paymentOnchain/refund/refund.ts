@@ -3,7 +3,13 @@ import { detectSwap, OutputType, RefundDetails, SwapTreeSerializer, TaprootUtils
 import { Buffer } from 'buffer'
 import { ECPairInterface } from 'ecpair'
 
-import { broadcastTransaction, getFeeEstimations, getPartialRefundSignature } from './api'
+import {
+  broadcastTransaction,
+  getFeeEstimations,
+  getPartialRefundSignature,
+  getPartialRefundSignatureChain,
+  PartialSignature,
+} from './api'
 import {
   decodeAddress,
   DecodedAddress,
@@ -13,6 +19,7 @@ import {
   setup,
 } from './helpers'
 import { createMusig, hashForWitnessV1 } from './musig'
+import { getBoltzPublicKey, getSwapTree } from './utils.ts'
 
 export const refundJsonKeys = ['id', 'asset', 'privateKey']
 export const refundJsonKeysLiquid = refundJsonKeys.concat('blindingKey')
@@ -24,9 +31,9 @@ const refundTaproot = async (
   decodedAddress: DecodedAddress,
   fees: number,
 ) => {
-  const boltzPublicKey = Buffer.from(swap.claimPublicKey, 'hex')
+  const boltzPublicKey = Buffer.from(getBoltzPublicKey(swap), 'hex')
   const musig = createMusig(privateKey, boltzPublicKey)
-  const tree = SwapTreeSerializer.deserializeSwapTree(swap.swapTree)
+  const tree = SwapTreeSerializer.deserializeSwapTree(getSwapTree(swap))
   const tweakedKey = TaprootUtils.tweakMusig(musig, tree.tree)
   const swapOutput = detectSwap(tweakedKey, lockupTx)
 
@@ -44,7 +51,13 @@ const refundTaproot = async (
   const constructRefundTransaction = getConstructRefundTransaction()
   const claimTx = constructRefundTransaction(details, decodedAddress.script, 0, fees, true)
 
-  const boltzSig = await getPartialRefundSignature(swap.id, Buffer.from(musig.getPublicNonce()), claimTx, 0)
+  let boltzSig: PartialSignature
+
+  if (swap.version === 3) {
+    boltzSig = await getPartialRefundSignature(swap.id, Buffer.from(musig.getPublicNonce()), claimTx, 0)
+  } else {
+    boltzSig = await getPartialRefundSignatureChain(swap.id, Buffer.from(musig.getPublicNonce()), claimTx, 0)
+  }
 
   musig.aggregateNonces([[boltzPublicKey, boltzSig.pubNonce]])
   musig.initializeSession(hashForWitnessV1(details, claimTx, 0))

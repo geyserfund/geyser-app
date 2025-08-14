@@ -1,6 +1,7 @@
 import { ScopeProvider } from 'jotai-scope'
 import { Outlet, useParams } from 'react-router'
 
+import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { ProjectProvider } from '@/modules/project/context'
 import { initialProjectDetailsLoadAtom, projectAtom, projectLoadingAtom } from '@/modules/project/state/projectAtom.ts'
 import { initialProjectGrantApplicationsLoadAtom } from '@/modules/project/state/projectAtom.ts'
@@ -26,6 +27,7 @@ const listOfAtoms = [
 
 export const ProjectCreationContainer = () => {
   const { projectId } = useParams<{ projectId: string }>()
+  useUserAccountKeys()
 
   const isProjectId = projectId && projectId !== 'new'
 

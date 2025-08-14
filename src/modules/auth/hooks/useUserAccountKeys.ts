@@ -3,15 +3,15 @@ import { useSetAtom } from 'jotai'
 import { useAuthContext } from '@/context/auth.tsx'
 import { useAccountKeysQuery } from '@/types/index.ts'
 
-import { fundingUserAccountKeysAtom } from '../state/fundingUserAccountKeys.ts'
+import { userAccountKeysAtom } from '../state/userAccountKeysAtom.ts'
 
 /**
  * Hook to fetch the user's account keys and set them in the atom
  */
-export const useFundingUserAccountKeys = () => {
+export const useUserAccountKeys = () => {
   const { user } = useAuthContext()
 
-  const setFundingUserAccountKeys = useSetAtom(fundingUserAccountKeysAtom)
+  const setUserAccountKeys = useSetAtom(userAccountKeysAtom)
 
   useAccountKeysQuery({
     skip: !user.id,
@@ -22,7 +22,7 @@ export const useFundingUserAccountKeys = () => {
     },
     onCompleted(data) {
       if (data.user.accountKeys) {
-        setFundingUserAccountKeys(data.user.accountKeys)
+        setUserAccountKeys(data.user.accountKeys)
       }
     },
   })

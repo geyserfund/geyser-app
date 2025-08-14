@@ -53,10 +53,12 @@ export const PaymentAndRefundInstructions = () => {
           <Divider />
           <Body size="sm">
             <Trans
-              i18nKey={'<0>Download and securely store your Refund File;</0> if in doubt, re-download to ensure its'}
+              i18nKey={
+                '<0>Download and securely store your Refund File;</0> if in doubt, re-download to ensure its stored safely'
+              }
             >
               <strong>{'Download and securely store your Refund File;'}</strong>
-              {' if in doubt, re-download to ensure its'}
+              {' if in doubt, re-download to ensure its stored safely'}
             </Trans>
           </Body>
         </VStack>

@@ -7,7 +7,7 @@ import { ContributionCreateInput, ContributionCreateMutation, useContributionCre
 import { useNotification } from '@/utils'
 
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
-import { generateAccountKeys } from '../../forms/accountPassword/keyGenerationHelper.ts'
+import { generateAccountKeys, generatePreImageHash } from '../../forms/accountPassword/keyGenerationHelper.ts'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
@@ -132,17 +132,32 @@ export const useFundingAPI = () => {
 
       const finalInput = { ...input }
 
-      if (finalInput?.paymentsInput?.onChainSwap?.boltz) {
+      if (
+        finalInput?.paymentsInput?.onChainSwap?.boltz &&
+        !finalInput?.paymentsInput?.onChainSwap?.boltz.swapPublicKey
+      ) {
         const keyPair = generatePrivatePublicKeyPair()
         setKeyPair(keyPair)
         finalInput.paymentsInput.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
       }
 
       if (finalInput?.paymentsInput?.lightningToRskSwap?.boltz && finalInput.paymentsInput.onChainToRskSwap?.boltz) {
-        const accountKeys = generateAccountKeys()
-        setRskAccountKeys(accountKeys)
-        finalInput.paymentsInput.lightningToRskSwap.boltz.claimPublicKey = accountKeys.publicKey
-        finalInput.paymentsInput.onChainToRskSwap.boltz.claimPublicKey = accountKeys.publicKey
+        const preimageHashForLightning = generatePreImageHash()
+        const preimageHashForOnChain = generatePreImageHash()
+
+        finalInput.paymentsInput.lightningToRskSwap.boltz.preimageHash = preimageHashForLightning
+        finalInput.paymentsInput.onChainToRskSwap.boltz.preimageHash = preimageHashForOnChain
+
+        // If the claim public key is not set (i.e user is not logged in or doesnot have one), generate a new account keys
+        if (
+          !finalInput.paymentsInput.lightningToRskSwap.boltz.claimPublicKey ||
+          !finalInput.paymentsInput.onChainToRskSwap.boltz.claimPublicKey
+        ) {
+          const accountKeys = generateAccountKeys()
+          setRskAccountKeys(accountKeys)
+          finalInput.paymentsInput.lightningToRskSwap.boltz.claimPublicKey = accountKeys.publicKey
+          finalInput.paymentsInput.onChainToRskSwap.boltz.claimPublicKey = accountKeys.publicKey
+        }
       }
 
       setFundingInputAfterRequest(finalInput)

@@ -19,7 +19,7 @@ export const LaunchPaymentAccountPassword = () => {
   )
 
   const { renderForm, currentForm, titles } = useAccountPasswordForm({
-    onComplete: updateProjectWithLastCreationStep,
+    onComplete: () => updateProjectWithLastCreationStep(),
     isCreator: true,
   })
 

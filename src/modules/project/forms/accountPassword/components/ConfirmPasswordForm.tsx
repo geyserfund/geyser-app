@@ -1,9 +1,11 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
+import { useSetAtom } from 'jotai'
 import { Control, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
+import { userAccountKeyPairAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Maybe, UserAccountKeysFragment } from '@/types/index.ts'
@@ -66,6 +68,8 @@ export const useConfirmPasswordForm = ({
 }) => {
   const toast = useNotification()
 
+  const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
+
   const form = useForm<ConfirmPasswordFormData>({
     resolver: yupResolver(confirmPasswordSchema),
     mode: 'onSubmit',
@@ -83,18 +87,16 @@ export const useConfirmPasswordForm = ({
       return
     }
 
-    console.log('checking password', data.password)
-
     try {
       const decryptedSeed = await decryptSeed(keys.encryptedSeed, data.password)
 
       const accountKeys = generateKeysFromSeedHex(decryptedSeed)
 
+      setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
       console.log('accountKeys', accountKeys)
 
       onComplete(accountKeys)
     } catch (error) {
-      console.log('error', error)
       form.setError('password', { message: t('Invalid password') })
     }
   }

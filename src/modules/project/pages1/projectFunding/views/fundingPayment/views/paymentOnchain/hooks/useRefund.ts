@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import { SwapData, useRefundedSwapData, useRemoveRefundFile } from '@/modules/project/funding/state'
 import { useNotification } from '@/utils'
 
-import { BoltzTransaction, getTransactionFromSwap } from '../refund/api'
+import { BoltzTransaction, getTransactionFromChainSwap, getTransactionFromSwap } from '../refund/api'
 import { refund } from '../refund/refund'
 
 const BAD_REFUND_FILE_ERROR = 'This refund file is not associated with any failed funding transaction'
@@ -25,7 +25,14 @@ export const useRefund = () => {
       try {
         setLoading(true)
 
-        const transaction: BoltzTransaction & { error?: string } = await getTransactionFromSwap(refundFile.id)
+        let transaction: BoltzTransaction & { error?: string }
+
+        if (refundFile.version === 3) {
+          transaction = await getTransactionFromSwap(refundFile.id)
+        } else {
+          transaction = await getTransactionFromChainSwap(refundFile.id)
+        }
+
         if (transaction.error) {
           toast.error({
             title: 'Refund failed',
