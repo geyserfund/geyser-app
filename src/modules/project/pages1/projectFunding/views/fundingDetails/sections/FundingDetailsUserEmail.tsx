@@ -82,7 +82,7 @@ export const FundingDetailsUserEmailAndUpdates = () => {
       else setState('email', '')
     }
 
-    if (user?.id) {
+    if (user?.id && user?.email) {
       setState('followProject', true)
     } else {
       setState('followProject', false)
