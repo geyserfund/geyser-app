@@ -1,7 +1,6 @@
 import { t } from 'i18next'
 import { useState } from 'react'
 
-import { VITE_APP_GEYSER_NOSTR_PUBKEY } from '@/shared/constants'
 import { useNotification } from '@/utils/tools/Notification.tsx'
 
 export interface NostrEvent {
@@ -59,8 +58,8 @@ export const useNostrRepost = () => {
           ['e', nostrEventId], // Reference to the original event
           ['k', '30023'], // Kind of original event (NIP-23 article)
           ['client', 'geyser'], // Identify Geyser as the reposting client
-          ['p', VITE_APP_GEYSER_NOSTR_PUBKEY], // Mention Geyser platform for association
-          ...(options.projectNostrPubkey ? [['p', options.projectNostrPubkey]] : []), // Reference original author if available
+          //   ['p', VITE_APP_GEYSER_NOSTR_PUBKEY], // Mention Geyser platform for association
+          //   ...(options.projectNostrPubkey ? [['p', options.projectNostrPubkey]] : []), // Reference original author if available
         ],
         content: options.content || '', // Optional additional content
       }
