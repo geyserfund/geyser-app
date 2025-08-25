@@ -11,6 +11,7 @@ export const FRAGMENT_PROJECT_POST = gql`
     title
     description
     image
+    content
     postType
     fundersCount
     amountFunded
@@ -35,6 +36,7 @@ export const FRAGMENT_PROJECT_POST_VIEW = gql`
     status
     createdAt
     publishedAt
+    content
     markdown
     sentByEmailAt
     projectRewards {
