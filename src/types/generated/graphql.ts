@@ -1382,6 +1382,7 @@ export type Mutation = {
   projectUnfollow: Scalars['Boolean']['output'];
   /** @deprecated Use postPublish instead */
   publishEntry: Entry;
+  publishNostrEvent?: Maybe<Scalars['Boolean']['output']>;
   /**
    * Sends an OTP to the user's email address and responds with a token that can be used, together with the OTP, to two-factor authenticate
    * a request made by the client.
@@ -1644,6 +1645,11 @@ export type MutationProjectUnfollowArgs = {
 
 export type MutationPublishEntryArgs = {
   id: Scalars['BigInt']['input'];
+};
+
+
+export type MutationPublishNostrEventArgs = {
+  event: Scalars['String']['input'];
 };
 
 
@@ -2194,6 +2200,7 @@ export type Post = {
   __typename?: 'Post';
   /** Total amount of satoshis funded from the Post's page. */
   amountFunded: Scalars['Int']['output'];
+  content?: Maybe<Scalars['String']['output']>;
   /** Contributions that were created from the Post's page. */
   contributions: Array<Contribution>;
   createdAt: Scalars['String']['output'];
@@ -5665,6 +5672,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectTagRemove?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType, RequireFields<MutationProjectTagRemoveArgs, 'input'>>;
   projectUnfollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectUnfollowArgs, 'input'>>;
   publishEntry?: Resolver<ResolversTypes['Entry'], ParentType, ContextType, RequireFields<MutationPublishEntryArgs, 'id'>>;
+  publishNostrEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationPublishNostrEventArgs, 'event'>>;
   sendOTPByEmail?: Resolver<ResolversTypes['OTPResponse'], ParentType, ContextType, RequireFields<MutationSendOtpByEmailArgs, 'input'>>;
   shippingAddressCreate?: Resolver<ResolversTypes['ShippingAddress'], ParentType, ContextType, RequireFields<MutationShippingAddressCreateArgs, 'input'>>;
   tagCreate?: Resolver<ResolversTypes['Tag'], ParentType, ContextType, RequireFields<MutationTagCreateArgs, 'input'>>;
@@ -5924,6 +5932,7 @@ export type PodcastKeysendContributionCreateResponseResolvers<ContextType = any,
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
   amountFunded?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   contributions?: Resolver<Array<ResolversTypes['Contribution']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   creator?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
@@ -7670,9 +7679,9 @@ export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fia
 
 export type ProjectSubscriptionPlansFragment = { __typename?: 'ProjectSubscriptionPlan', cost: number, currency: SubscriptionCurrencyType, description?: string | null, id: any, name: string, interval: UserSubscriptionInterval, projectId: any };
 
-export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
+export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, content?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
 
-export type ProjectPostViewFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, markdown?: string | null, sentByEmailAt?: any | null, projectRewards: Array<(
+export type ProjectPostViewFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, content?: string | null, markdown?: string | null, sentByEmailAt?: any | null, projectRewards: Array<(
     { __typename?: 'ProjectReward' }
     & PostPageProjectRewardFragment
   )>, projectGoals: { __typename?: 'ProjectGoals', inProgress: Array<(
@@ -7988,6 +7997,13 @@ export type ProjectUnfollowMutationVariables = Exact<{
 
 
 export type ProjectUnfollowMutation = { __typename?: 'Mutation', projectUnfollow: boolean };
+
+export type PublishNostrEventMutationVariables = Exact<{
+  event: Scalars['String']['input'];
+}>;
+
+
+export type PublishNostrEventMutation = { __typename?: 'Mutation', publishNostrEvent?: boolean | null };
 
 export type RewardUpdateMutationVariables = Exact<{
   input: UpdateProjectRewardInput;
@@ -9955,6 +9971,7 @@ export const ProjectPostFragmentDoc = gql`
   title
   description
   image
+  content
   postType
   fundersCount
   amountFunded
@@ -10004,6 +10021,7 @@ export const ProjectPostViewFragmentDoc = gql`
   status
   createdAt
   publishedAt
+  content
   markdown
   sentByEmailAt
   projectRewards {
@@ -13994,6 +14012,37 @@ export function useProjectUnfollowMutation(baseOptions?: Apollo.MutationHookOpti
 export type ProjectUnfollowMutationHookResult = ReturnType<typeof useProjectUnfollowMutation>;
 export type ProjectUnfollowMutationResult = Apollo.MutationResult<ProjectUnfollowMutation>;
 export type ProjectUnfollowMutationOptions = Apollo.BaseMutationOptions<ProjectUnfollowMutation, ProjectUnfollowMutationVariables>;
+export const PublishNostrEventDocument = gql`
+    mutation PublishNostrEvent($event: String!) {
+  publishNostrEvent(event: $event)
+}
+    `;
+export type PublishNostrEventMutationFn = Apollo.MutationFunction<PublishNostrEventMutation, PublishNostrEventMutationVariables>;
+
+/**
+ * __usePublishNostrEventMutation__
+ *
+ * To run a mutation, you first call `usePublishNostrEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishNostrEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishNostrEventMutation, { data, loading, error }] = usePublishNostrEventMutation({
+ *   variables: {
+ *      event: // value for 'event'
+ *   },
+ * });
+ */
+export function usePublishNostrEventMutation(baseOptions?: Apollo.MutationHookOptions<PublishNostrEventMutation, PublishNostrEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PublishNostrEventMutation, PublishNostrEventMutationVariables>(PublishNostrEventDocument, options);
+      }
+export type PublishNostrEventMutationHookResult = ReturnType<typeof usePublishNostrEventMutation>;
+export type PublishNostrEventMutationResult = Apollo.MutationResult<PublishNostrEventMutation>;
+export type PublishNostrEventMutationOptions = Apollo.BaseMutationOptions<PublishNostrEventMutation, PublishNostrEventMutationVariables>;
 export const RewardUpdateDocument = gql`
     mutation RewardUpdate($input: UpdateProjectRewardInput!) {
   projectRewardUpdate(input: $input) {
