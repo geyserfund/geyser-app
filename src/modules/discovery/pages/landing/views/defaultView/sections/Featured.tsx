@@ -5,8 +5,7 @@ import { PiStarFour } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { fetchFeaturedProject } from '@/api/airtable'
-import { getFeaturedProject, getPathWithGeyserPromotionsHero } from '@/shared/constants'
-import { useNotification } from '@/utils'
+import { getPathWithGeyserPromotionsHero } from '@/shared/constants'
 
 import { FeaturedDisplayCard } from '../components/FeaturedDisplayCard'
 import { FeaturedGrantCard } from '../components/FeaturedGrantCard'
@@ -36,10 +35,11 @@ export type FeaturedAirtableResponse = {
 }
 
 export const Featured = () => {
-  const toast = useNotification()
   const { t } = useTranslation()
 
   const [loading, setLoading] = useState(true)
+
+  const [noData, setNoData] = useState(false)
 
   const [data, setData] = useState<FeatureAirtableData>()
   const [allAirtableData, setAllAirtableData] = useState<FeatureAirtableData[]>([])
@@ -58,7 +58,7 @@ export const Featured = () => {
           setData(data)
         }
       } catch (error) {
-        toast.error({ title: 'Failed to fetch featured project' })
+        setNoData(true)
       }
 
       setLoading(false)
@@ -88,7 +88,7 @@ export const Featured = () => {
       return <FeaturedGrantCard grantId={data.Name} />
     }
 
-    return <FeaturedProjectCard projectName={getFeaturedProject()} />
+    return null
   }
 
   const rightContent = () => {
@@ -107,6 +107,10 @@ export const Featured = () => {
         {t('Feature project')}
       </Button>
     )
+  }
+
+  if (noData) {
+    return null
   }
 
   return (
