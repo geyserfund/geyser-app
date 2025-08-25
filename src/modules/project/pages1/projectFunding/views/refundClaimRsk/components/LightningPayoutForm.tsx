@@ -23,9 +23,6 @@ export const LightningPayoutForm: React.FC<LightningPayoutFormProps> = ({ form, 
       <ControlledTextInput
         name="lightningAddress"
         label={t('Enter your lightning address')}
-        description={`${t('Also accepted: Bolt 12 address or Invoice for ')} ${
-          satsAmount ? `${satsAmount.toLocaleString()} sats.` : '123,543 sats.'
-        }`}
         control={control}
         size="md"
       />
@@ -51,11 +48,6 @@ export const LightningPayoutForm: React.FC<LightningPayoutFormProps> = ({ form, 
             <Body size="sm" light>
               {t(
                 "Without your password, you won't be able to claim the funds of the project. Geyser cannot recover this password for you.",
-              )}
-            </Body>
-            <Body size="sm" light>
-              {t(
-                'If you have forgotten your password, the funds will be returned contributors after a period of 30 days.',
               )}
             </Body>
           </VStack>

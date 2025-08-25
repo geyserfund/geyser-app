@@ -31,6 +31,7 @@ export const FRAGMENT_USER_PROJECT_CONTRIBUTION = gql`
   ${FRAGMENT_BITCOIN_QUOTE}
   fragment UserProjectContribution on Contribution {
     id
+    uuid
     amount
     comment
     media

@@ -6,10 +6,10 @@ import { useNavigate } from 'react-router-dom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { H2 } from '@/shared/components/typography'
 
-import { getPath } from '../../../../../../shared/constants'
-import { standardPadding } from '../../../../../../shared/styles'
-import { useRefundedSwapData } from '../../../../funding/state'
-import { RefundProcessing, RefundSummary, SafeToDeleteNotice } from './components'
+import { getPath } from '../../../../../../../shared/constants'
+import { standardPadding } from '../../../../../../../shared/styles'
+import { useRefundedSwapData } from '../../../../../funding/state'
+import { RefundProcessing, RefundSummary, SafeToDeleteNotice } from '../components'
 
 export const RefundInitiatedPage = () => {
   const { t } = useTranslation()

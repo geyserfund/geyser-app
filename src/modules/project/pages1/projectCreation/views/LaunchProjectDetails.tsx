@@ -13,6 +13,7 @@ import { useModal } from '../../../../../shared/hooks'
 import { ProjectForm } from '../../../forms/ProjectForm'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../../projectDashboard/common/ProjectUnsavedModal'
 import { ProjectExitConfirmModal } from '../components/ProjectExitConfirmModal'
+import { useUpdateProjectWithLastCreationStep } from '../hooks/useIsStepAhead.tsx'
 import { useProjectForm } from '../hooks/useProjectForm'
 import { ProjectCreationLayout } from '../Layouts/ProjectCreationLayout.tsx'
 import { ProjectCreationVariables } from '../types'
@@ -38,6 +39,11 @@ export const LaunchProjectDetails = () => {
 
   const { createProject, updateProject } = useProjectAPI()
 
+  const { updateProjectWithLastCreationStep, loading: updateProjectLoading } = useUpdateProjectWithLastCreationStep(
+    ProjectCreationStep.ProjectDetails,
+    getPath('launchFundingStrategy', project.id),
+  )
+
   const onLeave = () => navigate(getPath('launchStart'))
 
   const unsavedModal = useProjectUnsavedModal({
@@ -48,25 +54,18 @@ export const LaunchProjectDetails = () => {
     console.log('checking is direty', form.formState.isDirty)
 
     if (isEdit && project.id) {
-      if (!form.formState.isDirty) {
-        navigate(getPath('launchFundingStrategy', project.id))
-        return
-      }
-
-      updateProject.execute({
-        variables: {
-          input: {
+      const projectUpdates = !form.formState.isDirty
+        ? {}
+        : {
             projectId: Number(project.id),
             category: category as ProjectCategory,
             subCategory: subCategory as ProjectSubCategory,
             countryCode: location as Country['code'],
             tagIds: tags,
             ...values,
-          },
-        },
-        onCompleted({ updateProject }) {
-          navigate(getPath('launchFundingStrategy', updateProject.id))
-        },
+          }
+
+      updateProjectWithLastCreationStep(projectUpdates, {
         onError(error) {
           toast.error({
             title: 'failed to update project',

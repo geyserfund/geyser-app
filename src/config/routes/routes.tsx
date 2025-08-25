@@ -729,6 +729,13 @@ export const platformRoutes: RouteObject[] = [
     },
   },
   {
+    path: getPath('refundFile'),
+    async lazy() {
+      const RefundPage = await Refund().then((m) => m.RefundFilePage)
+      return { Component: RefundPage }
+    },
+  },
+  {
     path: getPath('refund'),
     async lazy() {
       const RefundPage = await Refund().then((m) => m.RefundPage)

@@ -28,7 +28,7 @@ export const PaymentOnchainPrompt = () => {
 
   if (user.id) {
     setOnchainRefundDownloadAtom(true)
-    return <Navigate to={getPath('fundingPaymentOnchainQR', project.name)} />
+    return <Navigate to={getPath('fundingPaymentOnchainQR', project.name)} replace />
   }
 
   return <PaymentOnchainDownloadPrompt onComplete={handleComplete} />

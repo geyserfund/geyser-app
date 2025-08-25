@@ -9,13 +9,13 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
 
-import { getPath } from '../../../../../../shared/constants'
-import { commaFormatted } from '../../../../../../utils'
-import { currentSwapIdAtom, swapAtom, SwapContributionInfo, useRefundFileValue } from '../../../../funding/state'
-import { RefundPolicyNote } from '../fundingPayment/components/RefundPolicyNote'
-import { ClaimRefundForm } from '../fundingPayment/views/paymentOnchain/components/ClaimRefundForm'
+import { getPath } from '../../../../../../../shared/constants'
+import { commaFormatted } from '../../../../../../../utils'
+import { currentSwapIdAtom, swapAtom, SwapContributionInfo, useRefundFileValue } from '../../../../../funding/state'
+import { RefundPolicyNote } from '../../fundingPayment/components/RefundPolicyNote'
+import { ClaimRefundForm } from '../../fundingPayment/views/paymentOnchain/components/ClaimRefundForm'
 
-export const RefundPage = () => {
+export const RefundFilePage = () => {
   const { t } = useTranslation()
 
   const navigate = useNavigate()

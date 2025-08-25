@@ -95,6 +95,7 @@ export const ContributionSummary = ({ contribution }: ContributionSummaryProps) 
             <TransactionTime dateTime={contribution.confirmedAt} />
 
             {contribution.comment && <Body size="sm">{contribution.comment}</Body>}
+
             {contribution.media ? (
               <Box h={'178px'} bg={'neutral1.6'} pos={'relative'} borderRadius="8px">
                 <Image
@@ -124,7 +125,7 @@ export const ContributionSummary = ({ contribution }: ContributionSummaryProps) 
           </HStack>
         </CardLayout>
       </CardLayout>
-      <RefundRsk {...refundRskModal} satsAmount={contribution.amount} />
+      <RefundRsk {...refundRskModal} contribution={contribution} project={project} />
     </>
   )
 }

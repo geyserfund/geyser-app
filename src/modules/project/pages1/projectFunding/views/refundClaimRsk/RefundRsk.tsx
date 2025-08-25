@@ -1,17 +1,36 @@
+/* eslint-disable complexity */
 import { Button, HStack, IconButton, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import React, { useState } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
+import React, { useEffect, useState } from 'react'
 import { PiX } from 'react-icons/pi'
 
+import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
+import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import {
+  AccountKeys,
+  decryptSeed,
+  generateKeysFromSeedHex,
+  generatePreImageHash,
+} from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
+import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import {
+  ProjectForProfileContributionsFragment,
+  usePledgeRefundInitiateMutation,
+  usePledgeRefundRequestMutation,
+  UserProjectContributionFragment,
+} from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
+import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.tsx'
+import { createAndSignRefundMessage, createAonRefundSignature, findCorrectChainIdForDomain } from './helper.tsx'
 import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
@@ -21,28 +40,91 @@ import { PayoutMethod } from './types.ts'
 type RefundRskProps = {
   isOpen: boolean
   onClose: () => void
-  satsAmount?: number
+  contribution: UserProjectContributionFragment
+  project: ProjectForProfileContributionsFragment
 }
 
 /** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
-export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, satsAmount }) => {
+export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribution, project }) => {
   const toast = useNotification()
+
+  useUserAccountKeys()
+
+  const userAccountKeys = useAtomValue(userAccountKeysAtom)
+  const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
 
   const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.Lightning)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isProcessed, setIsProcessed] = useState(false)
+  const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
+  const [refundAddress, setRefundAddress] = useState<string | null>(null)
 
-  const handleLightningSubmit = async (data: LightningPayoutFormData) => {
+  const [pledgeRefundRequest, { data: pledgeRefundRequestData, loading: pledgeRefundRequestLoading }] =
+    usePledgeRefundRequestMutation()
+
+  const [pledgeRefundInitiate, { loading: isPledgeRefundInitiateLoading }] = usePledgeRefundInitiateMutation()
+
+  const [swapData, setSwapData] = useState<any>(null)
+
+  useEffect(() => {
+    if (isOpen) {
+      pledgeRefundRequest({
+        variables: {
+          input: {
+            contributionUuid: contribution.uuid,
+            projectId: project.id,
+            rskAddress: userAccountKeys?.rskKeyPair.address,
+          },
+        },
+      })
+    }
+  }, [isOpen, pledgeRefundRequest, contribution.uuid, project.id, userAccountKeys?.rskKeyPair.address])
+
+  const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
-      // TODO: Implement actual Lightning refund API call
       console.log('Lightning refund data:', data)
 
-      // Simulate processing delay
-      await new Promise<void>((resolve) => {
-        setTimeout(() => {
-          resolve()
-        }, 1000)
+      const preimageHash = generatePreImageHash()
+
+      const { signature, digest, v, r, s } = createAndSignRefundMessage({
+        aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
+        swapContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
+        contributorAddress: accountKeys.address,
+        amount: (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) * 10000000000, // 10^10 WEI
+        nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
+        deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
+        rskPrivateKey: accountKeys.privateKey,
+      })
+
+      // Debug with the fixed function to compare
+      createAonRefundSignature(
+        accountKeys.privateKey,
+        accountKeys.address,
+        pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
+        (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) * 10000000000, // 10^10 WEI
+        pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
+        pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
+      )
+
+      console.log('signature', signature)
+
+      await pledgeRefundInitiate({
+        variables: {
+          input: {
+            pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
+            signature,
+            rskAddress: accountKeys.address,
+            pledgeRefundPaymentInput: {
+              rskToLightningSwap: {
+                boltz: {
+                  paymentRequest: data.lightningAddress,
+                  refundPublicKey: accountKeys.publicKey,
+                },
+              },
+            },
+          },
+        },
       })
 
       setIsProcessed(true)
@@ -61,22 +143,64 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, satsAmoun
     }
   }
 
-  const handleBitcoinSubmit = async (data: BitcoinPayoutFormData) => {
+  const handleBitcoinSubmit = async (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
       // TODO: Implement actual Bitcoin on-chain refund API call
       console.log('Bitcoin refund data:', data)
+      console.log('checking accountKeys', accountKeys)
 
-      // Simulate processing delay
-      await new Promise<void>((resolve) => {
-        setTimeout(() => {
-          resolve()
-        }, 1000)
+      const preimageHash = generatePreImageHash()
+
+      const { signature, digest, v, r, s } = createAndSignRefundMessage({
+        aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
+        swapContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
+        contributorAddress: accountKeys.address,
+        amount: (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) * 10000000000, // 10^10 WEI
+        nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
+        deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
+        rskPrivateKey: accountKeys.privateKey,
       })
 
-      setIsProcessed(true)
-      toast.success({
-        title: t('Refund initiated successfully'),
+      // Debug with the fixed function to compare
+      createAonRefundSignature(
+        accountKeys.privateKey,
+        accountKeys.address,
+        pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
+        (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) * 10000000000, // 10^10 WEI
+        pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
+        pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
+      )
+
+      // Simulate processing delay
+      await pledgeRefundInitiate({
+        variables: {
+          input: {
+            pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
+            signature,
+            pledgeRefundPaymentInput: {
+              rskToOnChainSwap: {
+                boltz: {
+                  claimPublicKey: accountKeys.publicKey,
+                  preimageHash,
+                },
+              },
+            },
+          },
+        },
+        onCompleted(data) {
+          if (data.pledgeRefundInitiate.swap) {
+            const swapObj = JSON.parse(data.pledgeRefundInitiate.swap)
+            swapObj.privateKey = accountKeys.privateKey
+            console.log('swapObj', swapObj)
+            setSwapData(swapObj)
+          }
+        },
+      })
+      setIsWaitingConfirmation(true)
+      setRefundAddress(data.bitcoinAddress)
+      toast.info({
+        title: t('Refund initiated'),
         description: t('Your Bitcoin on-chain refund will be processed shortly'),
       })
     } catch (error) {
@@ -90,15 +214,15 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, satsAmoun
     }
   }
 
+  // Get form objects from both hooks
+  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit)
+  const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit)
+
   const handleClose = () => {
     setIsProcessed(false)
     setIsSubmitting(false)
     onClose()
   }
-
-  // Get form objects from both hooks
-  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit)
-  const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit)
 
   const enableSubmit = selectedMethod === PayoutMethod.Lightning ? lightningForm.enableSubmit : bitcoinForm.enableSubmit
 
@@ -110,105 +234,100 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, satsAmoun
     }
   }
 
+  if (isWaitingConfirmation) {
+    return (
+      <Modal isOpen={isOpen} size="lg" title={t('Please wait for swap confirmation')} onClose={() => {}}>
+        <BitcoinPayoutWaitingConfirmation
+          isRefund={true}
+          onClose={handleClose}
+          swapData={swapData}
+          refundAddress={refundAddress || ''}
+          setIsProcessed={setIsProcessed}
+        />
+      </Modal>
+    )
+  }
+
   // Show processed screen after successful submission
   if (isProcessed) {
     return (
-      <Modal isOpen={isOpen} onClose={handleClose} size="lg" title="">
-        <VStack w="full" spacing={6} p={6}>
-          <HStack w="full" justifyContent="space-between" alignItems="center">
-            <Body size="sm" color="primary1.9">
-              {selectedMethod === PayoutMethod.Lightning
-                ? t('Payout Processed (Off-Chain)')
-                : t('Payout Processed (On-Chain)')}
-            </Body>
-            <IconButton aria-label="Close modal" icon={<PiX />} variant="ghost" onClick={handleClose} />
-          </HStack>
-
-          {selectedMethod === PayoutMethod.Lightning ? (
-            <LightningPayoutProcessed isRefund={true} onClose={handleClose} />
-          ) : (
-            <BitcoinPayoutProcessed isRefund={true} onClose={handleClose} />
-          )}
-        </VStack>
+      <Modal
+        isOpen={isOpen}
+        onClose={handleClose}
+        size="lg"
+        title={
+          selectedMethod === PayoutMethod.Lightning
+            ? t('Payout Processed (Off-Chain)')
+            : t('Payout Processed (On-Chain)')
+        }
+      >
+        {selectedMethod === PayoutMethod.Lightning ? (
+          <LightningPayoutProcessed isRefund={true} onClose={handleClose} />
+        ) : (
+          <BitcoinPayoutProcessed isRefund={true} onClose={handleClose} />
+        )}
       </Modal>
     )
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="lg" title="">
-      <VStack w="full" spacing={6} p={6}>
-        {/* Header */}
-        <HStack w="full" justifyContent="space-between" alignItems="center">
-          <Body size="lg" medium>
-            {t('Refunding Page - Off-Chain')}
-          </Body>
-          <HStack spacing={2}>
-            {/* Demo Toggle Button */}
-            <Button size="sm" variant="outline" colorScheme="neutral1" onClick={() => setIsProcessed(!isProcessed)}>
-              {isProcessed ? t('Show Form') : t('Show Success')}
-            </Button>
-            <IconButton aria-label="Close modal" icon={<PiX />} variant="ghost" onClick={handleClose} />
-          </HStack>
-        </HStack>
+    <Modal isOpen={isOpen} onClose={handleClose} size="lg" title={t('Refund you contribution')} bodyProps={{ gap: 4 }}>
+      {pledgeRefundRequestLoading ? (
+        <RefundRskSkeleton />
+      ) : (
+        <>
+          {/* Payout Method Selection */}
+          <VStack w="full" spacing={4} alignItems="start">
+            <Body size="md" medium>
+              {t('Select a payout method')}
+            </Body>
+            <HStack w="full" spacing={4}>
+              <Button
+                flex={1}
+                variant={selectedMethod === PayoutMethod.Lightning ? 'solid' : 'outline'}
+                colorScheme={selectedMethod === PayoutMethod.Lightning ? 'primary1' : 'neutral1'}
+                onClick={() => setSelectedMethod(PayoutMethod.Lightning)}
+                borderColor="primary1.6"
+                borderWidth="1px"
+                p={6}
+                height="auto"
+                justifyContent="center"
+                flexDirection="column"
+              >
+                <Body size="md" medium>
+                  {t('Bitcoin Lightning')}
+                </Body>
+                <Body size="sm">{t('Instant')}</Body>
+              </Button>
+              <Button
+                flex={1}
+                variant={selectedMethod === PayoutMethod.OnChain ? 'solid' : 'outline'}
+                colorScheme={selectedMethod === PayoutMethod.OnChain ? 'primary1' : 'neutral1'}
+                onClick={() => setSelectedMethod(PayoutMethod.OnChain)}
+                borderColor="neutral1.6"
+                borderWidth="1px"
+                p={6}
+                height="auto"
+                justifyContent="center"
+                flexDirection="column"
+              >
+                <Body size="md" medium>
+                  {t('Bitcoin On-Chain')}
+                </Body>
+                <Body size="sm">{t('~1 hour')}</Body>
+              </Button>
+            </HStack>
+          </VStack>
 
-        {/* Payout Method Selection */}
-        <VStack w="full" spacing={4} alignItems="start">
-          <Body size="md" medium>
-            {t('Select a payout method')}
-          </Body>
-          <HStack w="full" spacing={4}>
-            <Button
-              flex={1}
-              variant={selectedMethod === PayoutMethod.Lightning ? 'solid' : 'outline'}
-              colorScheme={selectedMethod === PayoutMethod.Lightning ? 'primary1' : 'neutral1'}
-              onClick={() => setSelectedMethod(PayoutMethod.Lightning)}
-              borderColor="primary1.6"
-              borderWidth="1px"
-              p={6}
-              height="auto"
-              justifyContent="center"
-              flexDirection="column"
-            >
-              <Body size="md" medium>
-                {t('Bitcoin Lightning')}
-              </Body>
-              <Body size="sm" light>
-                {t('Instant')}
-              </Body>
-            </Button>
-            <Button
-              flex={1}
-              variant={selectedMethod === PayoutMethod.OnChain ? 'solid' : 'outline'}
-              colorScheme={selectedMethod === PayoutMethod.OnChain ? 'primary1' : 'neutral1'}
-              onClick={() => setSelectedMethod(PayoutMethod.OnChain)}
-              borderColor="neutral1.6"
-              borderWidth="1px"
-              p={6}
-              height="auto"
-              justifyContent="center"
-              flexDirection="column"
-            >
-              <Body size="md" medium>
-                {t('Bitcoin On-Chain')}
-              </Body>
-              <Body size="sm" light>
-                {t('~1 hour')}
-              </Body>
-            </Button>
-          </HStack>
-        </VStack>
+          {/* Form Section */}
+          <CardLayout w="full" p={6}>
+            {selectedMethod === PayoutMethod.Lightning ? (
+              <LightningPayoutForm form={lightningForm.form} satsAmount={contribution.amount} />
+            ) : (
+              <BitcoinPayoutForm form={bitcoinForm.form} satsAmount={contribution.amount} />
+            )}
+          </CardLayout>
 
-        {/* Form Section */}
-        <CardLayout w="full" p={6}>
-          {selectedMethod === PayoutMethod.Lightning ? (
-            <LightningPayoutForm form={lightningForm.form} satsAmount={satsAmount} />
-          ) : (
-            <BitcoinPayoutForm form={bitcoinForm.form} satsAmount={satsAmount} />
-          )}
-        </CardLayout>
-
-        {/* Conditional Button - Submit in form view, Close in success view */}
-        {!isProcessed ? (
           <Button
             w="full"
             size="lg"
@@ -220,12 +339,59 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, satsAmoun
           >
             {t('Claim Refund')}
           </Button>
-        ) : (
-          <Button w="full" size="lg" colorScheme="neutral1" variant="outline" onClick={handleClose}>
-            {t('Close')}
-          </Button>
-        )}
-      </VStack>
+        </>
+      )}
     </Modal>
+  )
+}
+
+/** RefundRskSkeleton: Loading skeleton for the refund modal with payout method selection */
+export const RefundRskSkeleton = () => {
+  return (
+    <VStack w="full" spacing={4} alignItems="start">
+      {/* Payout Method Selection Label Skeleton */}
+      <SkeletonLayout height="24px" width="160px" />
+
+      {/* Payout Method Buttons Skeleton */}
+      <HStack w="full" spacing={4}>
+        <VStack
+          flex={1}
+          p={6}
+          borderWidth="1px"
+          borderColor="neutral1.6"
+          borderRadius="8px"
+          alignItems="center"
+          spacing={2}
+        >
+          <SkeletonLayout height="20px" width="120px" />
+          <SkeletonLayout height="16px" width="60px" />
+        </VStack>
+        <VStack
+          flex={1}
+          p={6}
+          borderWidth="1px"
+          borderColor="neutral1.6"
+          borderRadius="8px"
+          alignItems="center"
+          spacing={2}
+        >
+          <SkeletonLayout height="20px" width="140px" />
+          <SkeletonLayout height="16px" width="70px" />
+        </VStack>
+      </HStack>
+
+      {/* Form Section Skeleton */}
+      <CardLayout w="full" p={6}>
+        <VStack w="full" spacing={4} alignItems="start">
+          <SkeletonLayout height="20px" width="100px" />
+          <SkeletonLayout height="40px" width="100%" />
+          <SkeletonLayout height="20px" width="80px" />
+          <SkeletonLayout height="40px" width="100%" />
+        </VStack>
+      </CardLayout>
+
+      {/* Submit Button Skeleton */}
+      <SkeletonLayout height="48px" width="100%" />
+    </VStack>
   )
 }

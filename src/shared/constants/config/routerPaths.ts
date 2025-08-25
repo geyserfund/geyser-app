@@ -49,6 +49,7 @@ export enum PathName {
   contributionWidget = 'contribution',
 
   refund = 'refund',
+  refundFile = 'file',
   refundInitiated = 'initiated',
 
   launchStart = 'start',
@@ -297,6 +298,7 @@ const pathsMap = {
   /** Refund Routes */
 
   refund: () => `/${PathName.refund}`,
+  refundFile: () => `/${PathName.refund}/${PathName.refundFile}`,
   refundInitiated: () => `/${PathName.refund}/${PathName.refundInitiated}`,
 
   entry: (entryID: string) => `/${PathName.entry}/${entryID}`,

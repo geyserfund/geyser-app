@@ -21,6 +21,7 @@ const SwapStatus = [
   'transaction.claimed',
   'invoice.failedToPay',
   'transaction.lockupFailed',
+  'transaction.server.mempool',
   'swap.expired',
 ] as const
 export type SwapStatusType = (typeof SwapStatus)[number]
@@ -35,15 +36,17 @@ export type SwapStatusUpdate = {
 type useTransactionStatusUpdateProps = {
   swapId?: string
   handleConfirmed?: Function
-  handleFailed: Function
-  handleProcessing: Function
+  handleFailed?: Function
+  handleProcessing?: Function
+  handleClaimCoins?: Function
 }
 
 export const useTransactionStatusUpdate = ({
   swapId,
-  handleConfirmed,
-  handleFailed,
+  handleConfirmed = () => {},
+  handleFailed = () => {},
   handleProcessing = () => {},
+  handleClaimCoins = () => {},
 }: useTransactionStatusUpdateProps) => {
   const { sendMessage, lastJsonMessage, readyState } = useWebSocket<any>(swapServiceWsEndpoint, {
     heartbeat: {
@@ -52,7 +55,6 @@ export const useTransactionStatusUpdate = ({
       timeout: 60000, // 1 minute, if no response is received, the connection will be closed
       interval: HEARTBEAT_INTERVAL_MS,
     },
-
     retryOnError: true,
   })
 
@@ -81,6 +83,9 @@ export const useTransactionStatusUpdate = ({
             }
 
             break
+          case 'transaction.server.mempool':
+            handleClaimCoins(swapStatusUpdate)
+            break
           case OnChainErrorStatuses.INVOICE_FAILED:
           case OnChainErrorStatuses.LOCKUP_FAILED:
           case OnChainErrorStatuses.SWAP_EXPIRED:
@@ -93,7 +98,7 @@ export const useTransactionStatusUpdate = ({
         captureException(error)
       }
     },
-    [handleConfirmed, handleFailed, handleProcessing],
+    [handleConfirmed, handleFailed, handleProcessing, handleClaimCoins],
   )
 
   useEffect(() => {

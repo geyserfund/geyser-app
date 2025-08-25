@@ -17,13 +17,17 @@ export const getTransactionFromSwap = async (swapId: string): Promise<BoltzTrans
   return resp
 }
 
-export const getTransactionFromChainSwap = async (swapId: string): Promise<BoltzTransaction> => {
+export const getTransactionFromChainSwap = async (
+  swapId: string,
+  label: 'userLock' | 'serverLock' = 'userLock',
+): Promise<BoltzTransaction> => {
   const resp = await fetch(`${swapServiceEndpoint}/swap/chain/${swapId}/transactions`).then((res) => res.json())
+
   return {
-    id: resp.userLock?.transaction?.id || resp.transaction?.id,
-    hex: resp.userLock?.transaction?.hex || resp.transaction?.hex,
-    timeoutBlockHeight: resp.userLock?.timeout?.blockHeight || resp.timeout?.blockHeight,
-    timeoutEta: resp.userLock?.timeout?.eta || resp.timeout?.eta,
+    id: resp[label]?.transaction?.id || resp.transaction?.id,
+    hex: resp[label]?.transaction?.hex || resp.transaction?.hex,
+    timeoutBlockHeight: resp[label]?.timeout?.blockHeight || resp.timeout?.blockHeight,
+    timeoutEta: resp[label]?.timeout?.eta || resp.timeout?.eta,
   }
 }
 

@@ -1,4 +1,5 @@
-import { RefundInitiatedPage } from './RefundInitiatedPage'
-import { RefundPage } from './RefundPage'
+import { RefundFilePage } from './views/RefundFilePage'
+import { RefundInitiatedPage } from './views/RefundInitiatedPage'
+import { RefundPage } from './views/RefundPage'
 
-export { RefundInitiatedPage, RefundPage }
+export { RefundFilePage, RefundInitiatedPage, RefundPage }
