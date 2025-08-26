@@ -56,15 +56,13 @@ export const useNostrRepost = () => {
         kind: 6, // Repost event kind
         tags: [
           ['e', nostrEventId], // Reference to the original event
-          ['k', '30023'], // Kind of original event (NIP-23 article)
+          ['k', '1'], // Kind of original event
           ['client', 'geyser'], // Identify Geyser as the reposting client
           //   ['p', VITE_APP_GEYSER_NOSTR_PUBKEY], // Mention Geyser platform for association
           //   ...(options.projectNostrPubkey ? [['p', options.projectNostrPubkey]] : []), // Reference original author if available
         ],
         content: options.content || '', // Optional additional content
       }
-
-      console.log('checking unsigned event', unsignedEvent)
 
       // Sign the event using the Nostr extension
       const signedEvent = (await window.nostr.signEvent(unsignedEvent)) as NostrEvent
