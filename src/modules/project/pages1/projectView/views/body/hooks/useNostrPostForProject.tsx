@@ -1,4 +1,5 @@
 import { t } from 'i18next'
+import { getEventHash, nip19 } from 'nostr-tools'
 import { useState } from 'react'
 
 import { ExternalAccountType } from '@/modules/auth/type.ts'
@@ -40,7 +41,7 @@ export const useNostrPostForProject = () => {
   )?.externalId
 
   /** Creates and signs a Kind 1 note for a project */
-  const createPostEvent = async (projectName: string, projectNPubKey: string): Promise<NostrEvent | null> => {
+  const createPostEvent = async (projectName: string, projectHex: string): Promise<NostrEvent | null> => {
     if (!window.nostr) {
       toast.error({
         title: t('Post failed'),
@@ -60,12 +61,28 @@ export const useNostrPostForProject = () => {
 
       const template = creatorNPubKey ? projectNostrTemplate : projectNostrTemplateWithoutCreator
 
+      // Convert hex keys to npub for display in template
+      const projectNPubKey = nip19.npubEncode(projectHex)
+      const geyserNPubKey = nip19.npubEncode(VITE_APP_GEYSER_NOSTR_PUBKEY)
+      const creatorNPubKeyDisplay = creatorNPubKey ? nip19.npubEncode(creatorNPubKey) : ''
+
       // Replace placeholders in the template
       const content = template
         .replace('{{projectLink}}', projectLink)
         .replace('{{projectNPubKey}}', projectNPubKey)
-        .replace('{{GeyserNostrPubKey}}', VITE_APP_GEYSER_NOSTR_PUBKEY)
-        .replace('{{creatorNPubKey}}', creatorNPubKey ?? '')
+        .replace('{{GeyserNostrPubKey}}', geyserNPubKey)
+        .replace('{{creatorNPubKey}}', creatorNPubKeyDisplay)
+
+      // Convert creator npub to hex if exists
+      let creatorHex: string | null = null
+      if (creatorNPubKey) {
+        try {
+          creatorHex = nip19.decode(creatorNPubKey).data as string
+        } catch (error) {
+          console.error('Invalid creator npub format:', error)
+          // Continue without creator tag if invalid
+        }
+      }
 
       // Create the unsigned note event
       const unsignedEvent: UnsignedNostrEvent = {
@@ -73,6 +90,9 @@ export const useNostrPostForProject = () => {
         created_at: Math.floor(Date.now() / 1000), // eslint-disable-line camelcase
         kind: 1, // Kind 1 for text note
         tags: [
+          ['p', VITE_APP_GEYSER_NOSTR_PUBKEY], // Tag Geyser profile
+          ['p', projectHex], // Tag project profile
+          ...(creatorHex ? [['p', creatorHex]] : []), // Tag creator if available
           ['client', 'geyser'], // Identify Geyser as the posting client
           ['t', 'geyser'], // Add geyser hashtag
           ['t', 'crowdfunding'], // Add crowdfunding hashtag
@@ -80,9 +100,13 @@ export const useNostrPostForProject = () => {
         content,
       }
 
-      // Sign the event using the Nostr extension
-      const signedEvent = (await window.nostr.signEvent(unsignedEvent)) as NostrEvent
+      // Calculate the event ID hash
+      const eventWithId = { ...unsignedEvent, id: getEventHash(unsignedEvent) }
 
+      // Sign the event using the Nostr extension
+      const signedEvent = (await window.nostr.signEvent(eventWithId)) as NostrEvent
+
+      console.log('checking signed event', signedEvent)
       return signedEvent
     } catch (error) {
       console.error('Failed to create post:', error)

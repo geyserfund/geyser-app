@@ -15,11 +15,11 @@ export const PostOnNostr = (props: Omit<IconButtonProps, 'aria-label'>) => {
   const [publishNostrEvent, { loading: isPublishing }] = usePublishNostrEventMutation()
 
   const handlePost = async () => {
-    if (!project?.keys?.nostrKeys?.publicKey?.npub || !project.name) {
+    if (!project?.keys?.nostrKeys?.publicKey?.hex || !project.name) {
       return
     }
 
-    const signedEvent = await createPostEvent(project.name, project.keys.nostrKeys.publicKey.npub)
+    const signedEvent = await createPostEvent(project.name, project.keys.nostrKeys.publicKey.hex)
 
     if (signedEvent) {
       await publishNostrEvent({
@@ -42,7 +42,7 @@ export const PostOnNostr = (props: Omit<IconButtonProps, 'aria-label'>) => {
     }
   }
 
-  if (!project?.keys?.nostrKeys?.publicKey?.npub || !window.nostr) {
+  if (!project?.keys?.nostrKeys?.publicKey?.hex || !window.nostr) {
     return null
   }
 
