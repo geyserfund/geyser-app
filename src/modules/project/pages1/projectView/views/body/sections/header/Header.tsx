@@ -44,6 +44,7 @@ import { CreatorEditButton } from '../../components/CreatorEditButton'
 import { CreatorSocial } from './components/CreatorSocial'
 import { LightningAddressModal } from './components/LightningAddressModal'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
+import { PostOnNostr } from './components/PostOnNostr.tsx'
 import { ShareProjectButton } from './components/ShareProjectButton'
 
 interface HeaderDetailsProps extends StackProps {
@@ -174,6 +175,7 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
             />
             <FollowButton project={project} withLabel />
             <ShareProjectButton />
+            <PostOnNostr />
           </HStack>
 
           <CreatorEditButton as={Link} to={getPath('dashboardInfo', project.name)} />
