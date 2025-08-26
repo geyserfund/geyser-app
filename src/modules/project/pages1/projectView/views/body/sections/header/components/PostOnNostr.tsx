@@ -53,7 +53,7 @@ export const PostOnNostr = (props: Omit<IconButtonProps, 'aria-label'>) => {
         icon={<PiArrowsClockwiseBold />}
         variant="soft"
         colorScheme="nostr"
-        size={{ base: 'md', lg: 'lg' }}
+        size="md"
         isLoading={isPosting || isPublishing}
         onClick={handlePost}
         {...props}

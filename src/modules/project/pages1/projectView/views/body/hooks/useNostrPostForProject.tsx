@@ -73,8 +73,6 @@ export const useNostrPostForProject = () => {
         created_at: Math.floor(Date.now() / 1000), // eslint-disable-line camelcase
         kind: 1, // Kind 1 for text note
         tags: [
-          ['p', VITE_APP_GEYSER_NOSTR_PUBKEY], // Tag Geyser profile
-          ['p', projectNPubKey], // Tag project profile
           ['client', 'geyser'], // Identify Geyser as the posting client
           ['t', 'geyser'], // Add geyser hashtag
           ['t', 'crowdfunding'], // Add crowdfunding hashtag
