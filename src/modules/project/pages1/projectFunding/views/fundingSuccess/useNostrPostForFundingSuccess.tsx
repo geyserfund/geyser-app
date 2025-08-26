@@ -26,12 +26,11 @@ export interface UnsignedNostrEvent {
   [key: string]: unknown
 }
 
-const projectNostrTemplate =
-  'Love this project on Geyser: nostr:{{projectNPubKey}} [by nostr:{{creatorNPubKey}}]. \nCheck it out! {{projectLink}}'
-const projectNostrTemplateWithoutCreator =
-  'Love this project on Geyser: nostr:{{projectNPubKey}}. \nCheck it out! {{projectLink}}'
-/** Hook for creating and posting Nostr events for projects */
-export const useNostrPostForProject = () => {
+const fundingSuccessNostrTemplate =
+  'Just zapped {{ContributionAmountSats}} sats into {{ProjectNostrTag}} on Geyser. 🚀 LFG! \nCheck it out! {{ProjectLink}}'
+
+/** Hook for creating and posting Nostr events for funding success */
+export const useNostrPostForFundingSuccess = () => {
   const [isPosting, setIsPosting] = useState(false)
   const toast = useNotification()
   const { projectOwner } = useProjectAtom()
@@ -40,8 +39,12 @@ export const useNostrPostForProject = () => {
     (account) => account.accountType === ExternalAccountType.nostr,
   )?.externalId
 
-  /** Creates and signs a Kind 1 note for a project */
-  const createPostEvent = async (projectName: string, projectHex: string): Promise<NostrEvent | null> => {
+  /** Creates and signs a Kind 1 note for funding success */
+  const createPostEvent = async (
+    projectName: string,
+    projectHex: string,
+    contributionAmountSats: number,
+  ): Promise<NostrEvent | null> => {
     if (!window.nostr) {
       toast.error({
         title: t('Post failed'),
@@ -59,17 +62,14 @@ export const useNostrPostForProject = () => {
       // Get project link
       const projectLink = `${window.location.origin}/project/${projectName}`
 
-      const template = creatorPubKey ? projectNostrTemplate : projectNostrTemplateWithoutCreator
-
       // Convert hex keys to npub for display in template
       const projectNPubKey = nip19.npubEncode(projectHex)
-      const creatorNPubKeyDisplay = creatorPubKey ? nip19.npubEncode(creatorPubKey) : ''
 
       // Replace placeholders in the template
-      const content = template
-        .replace('{{projectLink}}', projectLink)
-        .replace('{{projectNPubKey}}', projectNPubKey)
-        .replace('{{creatorNPubKey}}', creatorNPubKeyDisplay)
+      const content = fundingSuccessNostrTemplate
+        .replace('{{ContributionAmountSats}}', contributionAmountSats.toString())
+        .replace('{{ProjectNostrTag}}', `nostr:${projectNPubKey}`)
+        .replace('{{ProjectLink}}', projectLink)
 
       // Create the unsigned note event
       const unsignedEvent: UnsignedNostrEvent = {
@@ -83,6 +83,7 @@ export const useNostrPostForProject = () => {
           ['client', 'geyser'], // Identify Geyser as the posting client
           ['t', 'geyser'], // Add geyser hashtag
           ['t', 'crowdfunding'], // Add crowdfunding hashtag
+          ['t', 'zap'], // Add zap hashtag for funding
         ],
         content,
       }
@@ -93,10 +94,10 @@ export const useNostrPostForProject = () => {
       // Sign the event using the Nostr extension
       const signedEvent = (await window.nostr.signEvent(eventWithId)) as NostrEvent
 
-      console.log('checking signed event', signedEvent)
+      console.log('checking signed funding success event', signedEvent)
       return signedEvent
     } catch (error) {
-      console.error('Failed to create post:', error)
+      console.error('Failed to create funding success post:', error)
 
       toast.error({
         title: t('Post failed'),

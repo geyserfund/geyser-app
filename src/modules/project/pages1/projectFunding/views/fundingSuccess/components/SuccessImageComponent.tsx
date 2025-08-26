@@ -2,9 +2,10 @@ import { Avatar, Button, HStack, IconButton, Image, Link, useClipboard, VStack }
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { Trans, useTranslation } from 'react-i18next'
-import { PiCopy, PiShareFat } from 'react-icons/pi'
+import { PiArrowClockwiseBold, PiCopy, PiShareFat } from 'react-icons/pi'
 
 import { useAuthContext } from '@/context'
+import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages1/projectView/hooks'
@@ -20,8 +21,10 @@ import {
 import { useEmailForm } from '@/shared/hooks/forms/useEmailForm.tsx'
 import { lightModeColors, standardPadding } from '@/shared/styles'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom'
-import { useProjectAmbassadorStatsQuery } from '@/types'
+import { useProjectAmbassadorStatsQuery, usePublishNostrEventMutation } from '@/types'
 import { useNotification } from '@/utils'
+
+import { useNostrPostForFundingSuccess } from '../useNostrPostForFundingSuccess.tsx'
 
 export const SuccessImageComponent = () => {
   const { isLoggedIn } = useAuthContext()
@@ -141,6 +144,39 @@ type LinkActionsSectionProps = {
 /** Shared link display and action buttons component */
 const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: LinkActionsSectionProps) => {
   const { t } = useTranslation()
+  const toast = useNotification()
+
+  const { createPostEvent, isPosting } = useNostrPostForFundingSuccess()
+  const [publishNostrEvent, { loading: isPublishingNostrEvent }] = usePublishNostrEventMutation()
+
+  const { project } = useProjectAtom()
+
+  const { totalSats } = useFundingFormAtom()
+
+  const handleNostrPost = async () => {
+    const event = await createPostEvent(project.title, project.keys.nostrKeys.publicKey.hex, totalSats)
+
+    if (event) {
+      await publishNostrEvent({
+        variables: { event: JSON.stringify(event) },
+        onCompleted() {
+          toast.success({
+            title: t('Post successful'),
+            description: t('Your Nostr post has been published'),
+          })
+        },
+        onError(error) {
+          toast.error({
+            title: t('Post failed'),
+            description: error.message,
+          })
+        },
+      })
+    }
+
+    console.log('handleNostrPost', event)
+  }
+
   return (
     <>
       <HStack
@@ -167,6 +203,17 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
       </HStack>
 
       <HStack w="full" justifyContent="center" spacing={4} zIndex={1}>
+        <Button
+          size="lg"
+          variant="soft"
+          colorScheme="nostr"
+          rightIcon={<PiArrowClockwiseBold />}
+          w="full"
+          isLoading={isPublishingNostrEvent || isPosting}
+          onClick={handleNostrPost}
+        >
+          {t('Post on Nostr')}
+        </Button>
         <Button
           size="lg"
           variant="solid"
