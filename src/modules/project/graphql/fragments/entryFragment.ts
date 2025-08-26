@@ -13,6 +13,7 @@ export const FRAGMENT_PROJECT_ENTRY = gql`
     fundersCount
     amountFunded
     status
+    content
     createdAt
     publishedAt
   }
