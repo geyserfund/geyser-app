@@ -29,7 +29,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         id
         title
         entryDescription: description
-        markdown
+        content
         entryImage: image
       }
       ... on Contribution {

@@ -1,7 +1,7 @@
-import { Button, ButtonProps, HStack, Link, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, Link, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { MouseEvent } from 'react'
-import { PiCopy, PiRepeat, PiShareFat, PiXLogo } from 'react-icons/pi'
+import { PiArrowsClockwiseBold, PiCopy, PiShareFat, PiXLogo } from 'react-icons/pi'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
@@ -70,7 +70,7 @@ export const PostShare = ({ post, ...props }: PostShareProps) => {
   const showRepostOnNostr = Boolean(content.nostrEventId) && Boolean(content.nostrEventNoteId)
 
   return (
-    <>
+    <HStack spacing={2}>
       <Button
         size={{ base: 'md', lg: 'lg' }}
         variant="soft"
@@ -81,6 +81,24 @@ export const PostShare = ({ post, ...props }: PostShareProps) => {
       >
         {t('Share')}
       </Button>
+      {showRepostOnNostr && window.nostr && (
+        <Tooltip label={t('Repost on nostr')}>
+          <Button
+            aria-label={t('Repost on nostr')}
+            variant="soft"
+            colorScheme="nostr"
+            size={{ base: 'md', lg: 'lg' }}
+            isLoading={isReposting}
+            onClick={handleRepostClick}
+            {...props}
+          >
+            <HStack spacing={1}>
+              <PiArrowsClockwiseBold />
+              {content.repostCount && <Body> {content.repostCount}</Body>}
+            </HStack>
+          </Button>
+        </Tooltip>
+      )}
 
       <Modal
         isOpen={postShareModal.isOpen}
@@ -122,18 +140,24 @@ export const PostShare = ({ post, ...props }: PostShareProps) => {
           </HStack>
           {showRepostOnNostr && window.nostr && (
             <Button
+              aria-label={t('Repost on nostr')}
               width="full"
-              variant="solid"
-              colorScheme="primary1"
-              rightIcon={<PiRepeat />}
+              variant="soft"
+              colorScheme="nostr"
+              size={{ base: 'md', lg: 'lg' }}
               isLoading={isReposting}
               onClick={handleRepostClick}
+              {...props}
             >
-              {t('Repost on Nostr')}
+              <HStack spacing={2}>
+                <Body> {t('Repost on Nostr')}</Body>
+                <PiArrowsClockwiseBold />
+                {content.repostCount && <Body> {content.repostCount}</Body>}
+              </HStack>
             </Button>
           )}
         </VStack>
       </Modal>
-    </>
+    </HStack>
   )
 }

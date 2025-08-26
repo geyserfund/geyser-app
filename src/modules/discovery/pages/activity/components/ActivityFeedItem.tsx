@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper, PiSparkle } from 'react-icons/pi'
 import { Link, useNavigate } from 'react-router-dom'
 
+import { PostShare } from '@/modules/project/pages1/projectView/views/posts/components/PostShare.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
 import { ProfileText } from '@/shared/components/display/ProfileText'
@@ -16,6 +17,7 @@ import {
   ProjectGoal,
   ProjectGoalCurrency,
   ProjectGoalStatus,
+  ProjectPostFragment,
   ProjectReward,
   RewardCurrency,
 } from '@/types'
@@ -96,12 +98,24 @@ export const ActivityFeedItem = ({ activityType, id, createdAt, project, resourc
           <ActivityDate date={createdAt} />
         </HStack>
       )}
+
       <VStack width="full" alignItems="flex-start" spacing={1}>
         {isPostActivity && <ActivityImage resource={resource} />}
         {!isContributionActivity && !isProjectLaunchedActivity && <ActivityTitle resource={resource} />}
         {isRewardActivity && <ActivityImage resource={resource} />}
         {isRewardActivity && <RewardsInfo reward={resource as ProjectReward} />}
-        <ActivityDescription resource={resource} />
+        <HStack
+          width="full"
+          flexDirection={{ base: 'column', md: 'row' }}
+          justifyContent="space-between"
+          alignItems="flex-start"
+        >
+          <ActivityDescription resource={resource} />
+
+          {typeof resource === 'object' && 'entryImage' in resource && (
+            <PostShare size="md" post={{ ...resource, image: resource.entryImage } as ProjectPostFragment} />
+          )}
+        </HStack>
         {isGoalActivity && (
           <>
             <GoalProgressBar goal={resource as ProjectGoal} />

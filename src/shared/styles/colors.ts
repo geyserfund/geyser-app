@@ -57,29 +57,33 @@ export const primaryColorsDark = {
 }
 
 export const nostrColorsLight = {
-  50: '#F7E7FF',
-  100: '#E3B5FF',
-  200: '#EBC1FF',
-  300: '#DE98FF',
-  400: '#C54BFF',
-  500: '#BA29FF',
-  600: '#B010FD',
-  700: '#9104D3',
-  800: '#6F02A3',
-  900: '#3A0255',
+  1: '#F7E7FF',
+  2: '#E3B5FF',
+  3: '#EBC1FF',
+  4: '#DE98FF',
+  5: '#C54BFF',
+  6: '#BA29FF',
+  7: '#B010FD',
+  8: '#9104D3',
+  9: '#6F02A3',
+  10: '#3A0255',
+  11: '#360250',
+  12: '#28023C',
 }
 
 export const nostrColorsDark = {
-  50: '#3A0255',
-  100: '#6F02A3',
-  200: '#9104D3',
-  300: '#B010FD',
-  400: '#BA29FF',
-  500: '#C54BFF',
-  600: '#CF69FF',
-  700: '#DE98FF',
-  800: '#EBC1FF',
-  900: '#F7E7FF',
+  1: '#28023C',
+  2: '#360250',
+  3: '#3A0255',
+  4: '#6F02A3',
+  5: '#9104D3',
+  6: '#B010FD',
+  7: '#BA29FF',
+  8: '#C54BFF',
+  9: '#CF69FF',
+  10: '#DE98FF',
+  11: '#EBC1FF',
+  12: '#F7E7FF',
 }
 
 export const secondaryColors = {
