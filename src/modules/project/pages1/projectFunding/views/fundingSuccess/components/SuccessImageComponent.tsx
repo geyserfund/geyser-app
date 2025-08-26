@@ -203,17 +203,19 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
       </HStack>
 
       <HStack w="full" justifyContent="center" spacing={4} zIndex={1}>
-        <Button
-          size="lg"
-          variant="soft"
-          colorScheme="nostr"
-          rightIcon={<PiArrowClockwiseBold />}
-          w="full"
-          isLoading={isPublishingNostrEvent || isPosting}
-          onClick={handleNostrPost}
-        >
-          {t('Post on Nostr')}
-        </Button>
+        {window.nostr && (
+          <Button
+            size="lg"
+            variant="soft"
+            colorScheme="nostr"
+            rightIcon={<PiArrowClockwiseBold />}
+            w="full"
+            isLoading={isPublishingNostrEvent || isPosting}
+            onClick={handleNostrPost}
+          >
+            {t('Post on Nostr')}
+          </Button>
+        )}
         <Button
           size="lg"
           variant="solid"
