@@ -44,7 +44,9 @@ export const PostShare = ({ post, ...props }: PostShareProps) => {
     postShareModal.onOpen()
   }
 
-  const handleRepostClick = async () => {
+  const handleRepostClick = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
     const event = await createRepost(content.nostrEventNoteId, {
       projectNostrPubkey: project.keys.nostrKeys.publicKey.npub,
     })

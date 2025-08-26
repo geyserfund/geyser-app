@@ -142,6 +142,7 @@ export const PostView = () => {
 
         <CardLayout
           w={{ base: 'full', lg: 'auto' }}
+          minWidth={{ base: 'full', lg: dimensions.project.posts.view.maxWidth }}
           direction="row"
           justifyContent="center"
           paddingY={{ base: 6, lg: 12 }}
