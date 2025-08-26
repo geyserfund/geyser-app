@@ -37,3 +37,11 @@ export const MUTATION_PUBLISH_ENTRY = gql`
     }
   }
 `
+
+export const MUTATION_POST_REPOST_ON_NOSTR = gql`
+  mutation PostRepostOnNostr($input: PostRepostOnNostrInput!) {
+    postRepostOnNostr(input: $input) {
+      success
+    }
+  }
+`

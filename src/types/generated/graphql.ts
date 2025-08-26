@@ -1353,6 +1353,7 @@ export type Mutation = {
   postCreate: Post;
   postDelete: Post;
   postPublish: Post;
+  postRepostOnNostr: PostRepostOnNostrResponse;
   postSendByEmail: PostSendByEmailResponse;
   postUpdate: Post;
   projectClose: Project;
@@ -1515,6 +1516,11 @@ export type MutationPostDeleteArgs = {
 
 export type MutationPostPublishArgs = {
   input: PostPublishInput;
+};
+
+
+export type MutationPostRepostOnNostrArgs = {
+  input: PostRepostOnNostrInput;
 };
 
 
@@ -2271,6 +2277,16 @@ export type PostPublishInput = {
 export type PostPublishedSubscriptionResponse = {
   __typename?: 'PostPublishedSubscriptionResponse';
   post: Post;
+};
+
+export type PostRepostOnNostrInput = {
+  event: Scalars['String']['input'];
+  postId: Scalars['BigInt']['input'];
+};
+
+export type PostRepostOnNostrResponse = {
+  __typename?: 'PostRepostOnNostrResponse';
+  success: Scalars['Boolean']['output'];
 };
 
 export type PostSendByEmailInput = {
@@ -4482,6 +4498,8 @@ export type ResolversTypes = {
   PostGetWhereInput: PostGetWhereInput;
   PostPublishInput: PostPublishInput;
   PostPublishedSubscriptionResponse: ResolverTypeWrapper<PostPublishedSubscriptionResponse>;
+  PostRepostOnNostrInput: PostRepostOnNostrInput;
+  PostRepostOnNostrResponse: ResolverTypeWrapper<PostRepostOnNostrResponse>;
   PostSendByEmailInput: PostSendByEmailInput;
   PostSendByEmailResponse: ResolverTypeWrapper<PostSendByEmailResponse>;
   PostStatus: PostStatus;
@@ -4890,6 +4908,8 @@ export type ResolversParentTypes = {
   PostGetWhereInput: PostGetWhereInput;
   PostPublishInput: PostPublishInput;
   PostPublishedSubscriptionResponse: PostPublishedSubscriptionResponse;
+  PostRepostOnNostrInput: PostRepostOnNostrInput;
+  PostRepostOnNostrResponse: PostRepostOnNostrResponse;
   PostSendByEmailInput: PostSendByEmailInput;
   PostSendByEmailResponse: PostSendByEmailResponse;
   PostUpdateInput: PostUpdateInput;
@@ -5646,6 +5666,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   postCreate?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'input'>>;
   postDelete?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationPostDeleteArgs, 'id'>>;
   postPublish?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationPostPublishArgs, 'input'>>;
+  postRepostOnNostr?: Resolver<ResolversTypes['PostRepostOnNostrResponse'], ParentType, ContextType, RequireFields<MutationPostRepostOnNostrArgs, 'input'>>;
   postSendByEmail?: Resolver<ResolversTypes['PostSendByEmailResponse'], ParentType, ContextType, RequireFields<MutationPostSendByEmailArgs, 'input'>>;
   postUpdate?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationPostUpdateArgs, 'input'>>;
   projectClose?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectCloseArgs, 'input'>>;
@@ -5955,6 +5976,11 @@ export type PostResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type PostPublishedSubscriptionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostPublishedSubscriptionResponse'] = ResolversParentTypes['PostPublishedSubscriptionResponse']> = {
   post?: Resolver<ResolversTypes['Post'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PostRepostOnNostrResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PostRepostOnNostrResponse'] = ResolversParentTypes['PostRepostOnNostrResponse']> = {
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6796,6 +6822,7 @@ export type Resolvers<ContextType = any> = {
   PodcastKeysendContributionCreateResponse?: PodcastKeysendContributionCreateResponseResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
   PostPublishedSubscriptionResponse?: PostPublishedSubscriptionResponseResolvers<ContextType>;
+  PostRepostOnNostrResponse?: PostRepostOnNostrResponseResolvers<ContextType>;
   PostSendByEmailResponse?: PostSendByEmailResponseResolvers<ContextType>;
   ProfileNotificationSettings?: ProfileNotificationSettingsResolvers<ContextType>;
   Project?: ProjectResolvers<ContextType>;
@@ -7844,6 +7871,13 @@ export type PublishEntryMutation = { __typename?: 'Mutation', publishEntry: (
     { __typename?: 'Entry' }
     & ProjectEntryViewFragment
   ) };
+
+export type PostRepostOnNostrMutationVariables = Exact<{
+  input: PostRepostOnNostrInput;
+}>;
+
+
+export type PostRepostOnNostrMutation = { __typename?: 'Mutation', postRepostOnNostr: { __typename?: 'PostRepostOnNostrResponse', success: boolean } };
 
 export type ProjectGoalOrderingUpdateMutationVariables = Exact<{
   input: ProjectGoalOrderingUpdateInput;
@@ -13416,6 +13450,39 @@ export function usePublishEntryMutation(baseOptions?: Apollo.MutationHookOptions
 export type PublishEntryMutationHookResult = ReturnType<typeof usePublishEntryMutation>;
 export type PublishEntryMutationResult = Apollo.MutationResult<PublishEntryMutation>;
 export type PublishEntryMutationOptions = Apollo.BaseMutationOptions<PublishEntryMutation, PublishEntryMutationVariables>;
+export const PostRepostOnNostrDocument = gql`
+    mutation PostRepostOnNostr($input: PostRepostOnNostrInput!) {
+  postRepostOnNostr(input: $input) {
+    success
+  }
+}
+    `;
+export type PostRepostOnNostrMutationFn = Apollo.MutationFunction<PostRepostOnNostrMutation, PostRepostOnNostrMutationVariables>;
+
+/**
+ * __usePostRepostOnNostrMutation__
+ *
+ * To run a mutation, you first call `usePostRepostOnNostrMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePostRepostOnNostrMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [postRepostOnNostrMutation, { data, loading, error }] = usePostRepostOnNostrMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePostRepostOnNostrMutation(baseOptions?: Apollo.MutationHookOptions<PostRepostOnNostrMutation, PostRepostOnNostrMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PostRepostOnNostrMutation, PostRepostOnNostrMutationVariables>(PostRepostOnNostrDocument, options);
+      }
+export type PostRepostOnNostrMutationHookResult = ReturnType<typeof usePostRepostOnNostrMutation>;
+export type PostRepostOnNostrMutationResult = Apollo.MutationResult<PostRepostOnNostrMutation>;
+export type PostRepostOnNostrMutationOptions = Apollo.BaseMutationOptions<PostRepostOnNostrMutation, PostRepostOnNostrMutationVariables>;
 export const ProjectGoalOrderingUpdateDocument = gql`
     mutation ProjectGoalOrderingUpdate($input: ProjectGoalOrderingUpdateInput!) {
   projectGoalOrderingUpdate(input: $input) {
