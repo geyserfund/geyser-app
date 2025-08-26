@@ -10,7 +10,7 @@ import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks'
 import { CopyButton } from '@/shared/molecules'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
-import { ProjectPostFragment, usePublishNostrEventMutation } from '@/types'
+import { ProjectPostFragment, usePostRepostOnNostrMutation } from '@/types'
 import { useNotification } from '@/utils/index.ts'
 
 import { CampaignContent } from '../../../hooks'
@@ -32,7 +32,7 @@ export const PostShare = ({ post, ...props }: PostShareProps) => {
 
   const { createRepost, isReposting } = useNostrRepost()
 
-  const [publishNostrEvent] = usePublishNostrEventMutation()
+  const [postRepostOnNostr] = usePostRepostOnNostrMutation()
 
   const postRewardUrl = getSharePostUrlWithHeroId({ clickedFrom: CampaignContent.postShareButton })
 
@@ -45,24 +45,29 @@ export const PostShare = ({ post, ...props }: PostShareProps) => {
   }
 
   const handleRepostClick = async () => {
-    const event = await createRepost(content.nostrEventId, {
+    const event = await createRepost(content.nostrEventNoteId, {
       projectNostrPubkey: project.keys.nostrKeys.publicKey.npub,
     })
 
-    await publishNostrEvent({
-      variables: { event: JSON.stringify(event) },
+    await postRepostOnNostr({
+      variables: { input: { postId: post.id, event: JSON.stringify(event) } },
       onCompleted() {
         toast.success({
           title: t('Repost successful'),
           description: t('Article has been reposted successfully'),
         })
       },
+      onError(error) {
+        toast.error({
+          title: t('Repost failed'),
+          description: error.message,
+        })
+      },
     })
-    console.log('event', event)
   }
 
   const content = post.content ? JSON.parse(post.content) : ''
-  const showRepostOnNostr = Boolean(content.nostrEventId)
+  const showRepostOnNostr = Boolean(content.nostrEventId) && Boolean(content.nostrEventNoteId)
 
   return (
     <>
