@@ -61,7 +61,7 @@ export const useNostrRepost = () => {
           //   ['p', VITE_APP_GEYSER_NOSTR_PUBKEY], // Mention Geyser platform for association
           //   ...(options.projectNostrPubkey ? [['p', options.projectNostrPubkey]] : []), // Reference original author if available
         ],
-        content: options.content || '', // Optional additional content
+        content: options.content || 'Check out this article on Geyser', // Optional additional content
       }
 
       console.log('checking unsigned event', unsignedEvent)
