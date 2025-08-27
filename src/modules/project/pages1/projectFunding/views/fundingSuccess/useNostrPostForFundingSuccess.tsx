@@ -2,6 +2,7 @@ import { t } from 'i18next'
 import { getEventHash, nip19 } from 'nostr-tools'
 import { useState } from 'react'
 
+import { useAuthContext } from '@/context/auth.tsx'
 import { ExternalAccountType } from '@/modules/auth/type.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { VITE_APP_GEYSER_NOSTR_PUBKEY } from '@/shared/constants'
@@ -34,6 +35,7 @@ export const useNostrPostForFundingSuccess = () => {
   const [isPosting, setIsPosting] = useState(false)
   const toast = useNotification()
   const { projectOwner } = useProjectAtom()
+  const { user } = useAuthContext()
 
   const creatorPubKey = projectOwner?.user.externalAccounts.find(
     (account) => account.accountType === ExternalAccountType.nostr,
@@ -60,7 +62,9 @@ export const useNostrPostForFundingSuccess = () => {
       const pubkey = await window.nostr.getPublicKey()
 
       // Get project link
-      const projectLink = `${window.location.origin}/project/${projectName}`
+      const projectLink = `${window.location.origin}/project/${projectName}${
+        user?.heroId ? `?heroId=${user?.heroId}` : ''
+      }`
 
       // Convert hex keys to npub for display in template
       const projectNPubKey = nip19.npubEncode(projectHex)
