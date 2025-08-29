@@ -46,6 +46,7 @@ export const useRefund = () => {
 
         const value = await refund(refundFile, refundAddress, transaction)
 
+        console.log('value', value)
         if (value && value.refundTx) {
           setRefundedSwapData(value)
           removeRefundFile(refundFile.id)

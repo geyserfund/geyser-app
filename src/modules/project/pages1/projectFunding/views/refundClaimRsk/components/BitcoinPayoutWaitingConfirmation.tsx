@@ -1,6 +1,6 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -9,10 +9,7 @@ import { AlertDialogue } from '@/shared/molecules/AlertDialogue.tsx'
 import { useNotification } from '@/utils/index.ts'
 
 import { useRefund } from '../../fundingPayment/views/paymentOnchain/hooks/useRefund.ts'
-import {
-  SwapStatusUpdate,
-  useTransactionStatusUpdate,
-} from '../../fundingPayment/views/paymentOnchain/hooks/useTransactionStatusUpdate.ts'
+import { useTransactionStatusUpdate } from '../../fundingPayment/views/paymentOnchain/hooks/useTransactionStatusUpdate.ts'
 
 type BitcoinPayoutWaitingConfirmationProps = {
   isRefund?: boolean
@@ -31,21 +28,32 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
   setIsProcessed,
 }) => {
   const alertModalProps = useModal()
-  usePayoutWithTransaction(swapData, refundAddress, setIsProcessed)
+  const toast = useNotification()
+
+  const [isReadyToBeClaimed, setIsReadyToBeClaimed] = useState(false)
+
+  useTransactionStatusUpdate({
+    swapId: swapData.id,
+    handleClaimCoins: () => setIsReadyToBeClaimed(true),
+  })
+
+  const { initiateRefund } = useRefund()
+
+  const handleInitiateRefund = useCallback(async () => {
+    const result = await initiateRefund(refundAddress, swapData, 'serverLock')
+    if (result) {
+      setIsProcessed(true)
+    } else {
+      toast.error({
+        title: t('Something went wrong'),
+        description: t('Please try again'),
+      })
+    }
+  }, [initiateRefund, refundAddress, swapData, toast, setIsProcessed])
 
   return (
     <>
       <VStack w="full" spacing={6} alignItems="center">
-        {/* Header */}
-        <VStack w="full" spacing={0}>
-          <Body size="lg" medium textAlign="center">
-            {t('Please wait for swap confirmation')}
-          </Body>
-          <Body size="sm" textAlign="center" color="neutral1.10" lineHeight="1.5">
-            {t('Warning: Do not close this modal')}
-          </Body>
-        </VStack>
-
         {/* Illustration Placeholder */}
         <CardLayout
           w="full"
@@ -75,6 +83,18 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
           </Body>
         </VStack>
 
+        <Button
+          w="full"
+          maxW="300px"
+          size="lg"
+          colorScheme="primary1"
+          variant="solid"
+          isDisabled={!isReadyToBeClaimed}
+          onClick={handleInitiateRefund}
+        >
+          {t('Get refund')}
+        </Button>
+
         {/* Action Button */}
         <Button w="full" maxW="300px" size="lg" colorScheme="neutral1" variant="outline" onClick={onClose}>
           {isRefund ? t('Close') : t('Go back to my project')}
@@ -94,54 +114,4 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
       />
     </>
   )
-}
-
-const usePayoutWithTransaction = (
-  swapData: any,
-  refundAddress: string,
-  setIsProcessed: (isProcessed: boolean) => void,
-) => {
-  const toast = useNotification()
-  const { initiateRefund } = useRefund()
-
-  const [swapStatusUpdateData, setSwapStatusUpdateData] = useState<SwapStatusUpdate>()
-
-  const handleClaimCoins = useCallback(async () => {
-    try {
-      const result = await initiateRefund(refundAddress, swapData, 'serverLock')
-      if (result) {
-        setIsProcessed(true)
-      } else {
-        toast.error({
-          title: 'Refund failed',
-          description: 'Error initiating refund',
-        })
-      }
-    } catch (error) {
-      toast.error({
-        title: 'Refund failed',
-        description: 'Error initiating refund',
-      })
-    }
-  }, [initiateRefund, setIsProcessed, refundAddress, swapData, toast])
-
-  const handleSwapStatusUpdate = useCallback(
-    (swapStatusUpdate: SwapStatusUpdate) => {
-      if (!swapData) {
-        setSwapStatusUpdateData(swapStatusUpdate)
-      }
-    },
-    [setSwapStatusUpdateData, swapData],
-  )
-
-  useEffect(() => {
-    if (swapStatusUpdateData) {
-      handleClaimCoins()
-    }
-  }, [swapStatusUpdateData, handleClaimCoins])
-
-  useTransactionStatusUpdate({
-    swapId: swapData.id,
-    handleClaimCoins: handleSwapStatusUpdate,
-  })
 }

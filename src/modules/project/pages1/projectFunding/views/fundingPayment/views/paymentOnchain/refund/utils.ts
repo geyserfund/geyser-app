@@ -29,7 +29,15 @@ export const getBoltzPublicKey = (swap: SwapData): string => {
     return swap.claimPublicKey
   }
 
-  return swap.lockupDetails.serverPublicKey
+  if ('serverPublicKey' in swap.lockupDetails) {
+    return swap.lockupDetails.serverPublicKey
+  }
+
+  if ('serverPublicKey' in swap.claimDetails) {
+    return swap.claimDetails.serverPublicKey
+  }
+
+  return ''
 }
 
 export const getSwapTree = (swap: SwapData): any => {
@@ -37,5 +45,13 @@ export const getSwapTree = (swap: SwapData): any => {
     return swap.swapTree
   }
 
-  return swap.lockupDetails.swapTree
+  if ('swapTree' in swap.lockupDetails) {
+    return swap.lockupDetails.swapTree
+  }
+
+  if ('swapTree' in swap.claimDetails) {
+    return swap.claimDetails.swapTree
+  }
+
+  return ''
 }

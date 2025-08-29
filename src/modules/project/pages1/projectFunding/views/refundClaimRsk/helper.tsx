@@ -399,47 +399,5 @@ export const createAonRefundSignature = (
   }
 }
 
-/** Find which chain ID produces the expected domain separator */
-export const findCorrectChainIdForDomain = () => {
-  const contractAddress = '0x55652FF92Dc17a21AD6810Cce2F4703fa2339CAE'
-  const expectedDomainSeparator = '0x4426e94641d275c751b62646ec8cdbe2df7187e212252311ebba4b4006f2ac93'
-
-  console.log('=== Finding Correct Chain ID ===')
-  console.log('Expected Domain Separator:', expectedDomainSeparator)
-
-  // Test a wide range of chain IDs
-  const chainIds = [1, 30, 31, 33, 31337, 1337, 137, 56, 43114, 250, 42161, 10, 8453, 100]
-
-  for (const chainId of chainIds) {
-    const domainTypeString = 'EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'
-    const domainTypeHash = Buffer.from(keccak_256(domainTypeString))
-
-    const nameHash = Buffer.from(keccak_256(CONTRACT_NAME))
-    const versionHash = Buffer.from(keccak_256(CONTRACT_VERSION))
-
-    const chainIdBuffer = Buffer.alloc(32)
-    chainIdBuffer.writeBigUInt64BE(BigInt(chainId), 24)
-
-    const addressBuffer = Buffer.alloc(32)
-    const cleanAddress = contractAddress.replace('0x', '')
-    Buffer.from(cleanAddress, 'hex').copy(addressBuffer, 12)
-
-    const encodedData = Buffer.concat([domainTypeHash, nameHash, versionHash, chainIdBuffer, addressBuffer])
-
-    const domainSeparator = keccak_256(encodedData)
-    const result = '0x' + Buffer.from(domainSeparator).toString('hex')
-
-    if (result === expectedDomainSeparator) {
-      console.log(`✅ FOUND MATCH! Chain ID ${chainId}:`, result)
-      return chainId
-    }
-
-    console.log(`❌ Chain ID ${chainId}:`, result)
-  }
-
-  console.log('=== No matching chain ID found ===')
-  return null
-}
-
 // Export constants for external use
 export { CHAIN_ID, CONTRACT_NAME, CONTRACT_VERSION }

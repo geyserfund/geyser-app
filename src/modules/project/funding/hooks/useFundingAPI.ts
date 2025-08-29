@@ -142,8 +142,8 @@ export const useFundingAPI = () => {
       }
 
       if (finalInput?.paymentsInput?.lightningToRskSwap?.boltz && finalInput.paymentsInput.onChainToRskSwap?.boltz) {
-        const preimageHashForLightning = generatePreImageHash()
-        const preimageHashForOnChain = generatePreImageHash()
+        const { preimageHash: preimageHashForLightning } = generatePreImageHash()
+        const { preimageHash: preimageHashForOnChain } = generatePreImageHash()
 
         finalInput.paymentsInput.lightningToRskSwap.boltz.preimageHash = preimageHashForLightning
         finalInput.paymentsInput.onChainToRskSwap.boltz.preimageHash = preimageHashForOnChain

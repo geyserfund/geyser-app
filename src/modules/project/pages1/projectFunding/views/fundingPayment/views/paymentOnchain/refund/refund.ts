@@ -1,10 +1,12 @@
 import { Transaction } from 'bitcoinjs-lib'
-import { detectSwap, OutputType, RefundDetails, SwapTreeSerializer, TaprootUtils } from 'boltz-core'
+import { detectSwap, Musig, OutputType, RefundDetails, SwapTreeSerializer, TaprootUtils } from 'boltz-core'
 import { Buffer } from 'buffer'
 import { ECPairInterface } from 'ecpair'
 
 import {
   broadcastTransaction,
+  getClaimDetails,
+  getClaimForSignatureChain,
   getFeeEstimations,
   getPartialRefundSignature,
   getPartialRefundSignatureChain,
@@ -33,9 +35,27 @@ const refundTaproot = async (
 ) => {
   const boltzPublicKey = Buffer.from(getBoltzPublicKey(swap), 'hex')
   const musig = createMusig(privateKey, boltzPublicKey)
+  if (!musig) {
+    throw new Error('Failed to create Musig')
+  }
+
   const tree = SwapTreeSerializer.deserializeSwapTree(getSwapTree(swap))
+
+  if (!tree) {
+    throw new Error('Failed to deserialize swap tree')
+  }
+
   const tweakedKey = TaprootUtils.tweakMusig(musig, tree.tree)
+
+  if (!tweakedKey) {
+    throw new Error('Failed to tweak Musig')
+  }
+
   const swapOutput = detectSwap(tweakedKey, lockupTx)
+
+  if (!swapOutput) {
+    throw new Error('Failed to detect swap')
+  }
 
   const details = [
     {
@@ -55,8 +75,16 @@ const refundTaproot = async (
 
   if (swap.version === 3) {
     boltzSig = await getPartialRefundSignature(swap.id, Buffer.from(musig.getPublicNonce()), claimTx, 0)
-  } else {
+  } else if (swap.lockupDetails.serverPublicKey) {
     boltzSig = await getPartialRefundSignatureChain(swap.id, Buffer.from(musig.getPublicNonce()), claimTx, 0)
+  } else {
+    boltzSig = await getClaimForSignatureChain(
+      swap.id,
+      Buffer.from(musig.getPublicNonce()),
+      claimTx,
+      0,
+      swap.preimageHex,
+    )
   }
 
   musig.aggregateNonces([[boltzPublicKey, boltzSig.pubNonce]])

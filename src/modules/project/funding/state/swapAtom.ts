@@ -41,9 +41,11 @@ export type SwapData =
       contributionInfo?: SwapContributionInfo
       privateKey?: string
       refundTx?: string
+      preimageHash?: string
+      preimageHex?: string
     }
   | {
-      // Type for RSK/chain swaps (version !== 3)
+      // Type for BTC -> RSK chain swaps (version !== 3)
       id: string
       referralId?: string
       version?: number
@@ -75,6 +77,43 @@ export type SwapData =
       contributionInfo?: SwapContributionInfo
       privateKey?: string
       refundTx?: string
+      preimageHash?: string
+      preimageHex?: string
+    }
+  | {
+      // Type for RSK -> BTC swaps (version !== 3)
+      id: string
+      referralId?: string
+      version?: number
+      lockupDetails: {
+        claimAddress: string
+        amount: number
+        lockupAddress: string
+        timeoutBlockHeight: number
+      }
+      claimDetails: {
+        serverPublicKey: string
+        amount: number
+        lockupAddress: string
+        timeoutBlockHeight: number
+        swapTree: {
+          claimLeaf: {
+            version: number
+            output: string
+          }
+          refundLeaf: {
+            version: number
+            output: string
+          }
+        }
+      }
+      amount?: number
+      fees?: number
+      contributionInfo?: SwapContributionInfo
+      privateKey?: string
+      refundTx?: string
+      preimageHash?: string
+      preimageHex?: string
     }
 
 type SwapDataStructure = { [key: string]: SwapData }

@@ -30,7 +30,7 @@ import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.tsx'
-import { createAndSignRefundMessage, createAonRefundSignature, findCorrectChainIdForDomain } from './helper.tsx'
+import { createAndSignRefundMessage, createAonRefundSignature } from './helper.tsx'
 import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
@@ -51,7 +51,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
   useUserAccountKeys()
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
-  const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
 
   const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.Lightning)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -83,11 +82,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
-      console.log('Lightning refund data:', data)
-
-      const preimageHash = generatePreImageHash()
-
-      const { signature, digest, v, r, s } = createAndSignRefundMessage({
+      const { signature } = createAndSignRefundMessage({
         aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
         swapContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
         contributorAddress: accountKeys.address,
@@ -96,18 +91,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
         deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
         rskPrivateKey: accountKeys.privateKey,
       })
-
-      // Debug with the fixed function to compare
-      createAonRefundSignature(
-        accountKeys.privateKey,
-        accountKeys.address,
-        pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
-        (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) * 10000000000, // 10^10 WEI
-        pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
-        pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
-      )
-
-      console.log('signature', signature)
 
       await pledgeRefundInitiate({
         variables: {
@@ -150,9 +133,9 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
       console.log('Bitcoin refund data:', data)
       console.log('checking accountKeys', accountKeys)
 
-      const preimageHash = generatePreImageHash()
+      const { preimageHash, preimageHex } = generatePreImageHash()
 
-      const { signature, digest, v, r, s } = createAndSignRefundMessage({
+      const { signature } = createAndSignRefundMessage({
         aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
         swapContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
         contributorAddress: accountKeys.address,
@@ -192,7 +175,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
           if (data.pledgeRefundInitiate.swap) {
             const swapObj = JSON.parse(data.pledgeRefundInitiate.swap)
             swapObj.privateKey = accountKeys.privateKey
-            console.log('swapObj', swapObj)
+            swapObj.preimageHash = preimageHash
+            swapObj.preimageHex = preimageHex
             setSwapData(swapObj)
           }
         },

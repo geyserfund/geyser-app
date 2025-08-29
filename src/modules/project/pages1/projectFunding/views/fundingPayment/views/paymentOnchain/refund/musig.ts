@@ -8,11 +8,17 @@ import { secp } from './helpers'
 import { generateRandomBytes } from './utils'
 
 export const createMusig = (privateKey: ECPairInterface, boltzPublicKey: Buffer) => {
-  return new Musig(secp, privateKey, generateRandomBytes(), [
-    // The key of Boltz always comes first
-    boltzPublicKey,
-    privateKey.publicKey,
-  ])
+  try {
+    const musig = new Musig(secp, privateKey, generateRandomBytes(), [
+      // The key of Boltz always comes first
+      boltzPublicKey,
+      privateKey.publicKey,
+    ])
+    return musig
+  } catch (error) {
+    console.error('Error creating Musig', error)
+    return null
+  }
 }
 
 export const tweakMusig = (musig: Musig, tree: Taptree) => TaprootUtils.tweakMusig(musig, tree)

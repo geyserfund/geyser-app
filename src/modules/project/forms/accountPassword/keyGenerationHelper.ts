@@ -275,5 +275,6 @@ export const generatePreImageHash = () => {
   const preimage = new Uint8Array(32)
   window.crypto.getRandomValues(preimage)
   const preimageHash = bitcoin.crypto.sha256(Buffer.from(preimage)).toString('hex')
-  return preimageHash
+  const preimageHex = Buffer.from(preimage).toString('hex')
+  return { preimageHash, preimageHex }
 }

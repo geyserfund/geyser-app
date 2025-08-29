@@ -69,6 +69,49 @@ export const getPartialRefundSignature = async (
   }
 }
 
+export const getClaimForSignatureChain = async (
+  id: string,
+  pubNonce: Buffer,
+  transaction: Transaction,
+  index: number,
+  preimageHash: string,
+  // partialSignatureHex: string,
+): Promise<PartialSignature> => {
+  const resp = await fetch(`${swapServiceEndpoint}/swap/chain/${id}/claim`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      // TODO: add preimage and signature
+      preimage: preimageHash,
+      // signature: {
+      //   pubNonce: pubNonce.toString('hex'),
+      //   partialSignature: partialSignatureHex,
+      // },
+      toSign: {
+        index,
+        pubNonce: pubNonce.toString('hex'),
+        transaction: transaction.toHex(),
+      },
+    }),
+  }).then((res) => res.json())
+
+  if (resp.error) {
+    throw new Error(resp.error)
+  }
+
+  return {
+    pubNonce: Musig.parsePubNonce(resp.pubNonce),
+    signature: Buffer.from(resp.partialSignature, 'hex'),
+  }
+}
+
+export const getClaimDetails = async (id: string): Promise<any> => {
+  const resp = await fetch(`${swapServiceEndpoint}/swap/chain/${id}/claim`).then((res) => res.json())
+  return resp
+}
+
 export const getPartialRefundSignatureChain = async (
   id: string,
   pubNonce: Buffer,
