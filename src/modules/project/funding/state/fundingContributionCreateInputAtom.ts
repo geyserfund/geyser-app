@@ -102,7 +102,7 @@ export const formattedFundingInputAtom = atom((get) => {
   }
   const geyserTotalTipAmount = guardianBadgesCosts.sats ? geyserTip.sats + guardianBadgesCosts.sats : geyserTip.sats
   const geyserTipPercentage = guardianBadgesCosts.sats
-    ? geyserTotalTipAmount / (donationAmount + rewardsCosts.sats + shippingCosts.sats)
+    ? (geyserTotalTipAmount * 100) / (donationAmount + rewardsCosts.sats + shippingCosts.sats)
     : geyserTipPercent > 0
     ? geyserTipPercent
     : undefined

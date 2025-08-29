@@ -18,7 +18,7 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
 import { guardianBadgeUniqueName, guardianJewels, guardianText } from '@/shared/constants/assets/guardianAssets.tsx'
 import { GuardianType, useGuardianUsersGetQuery, useUserBadgesQuery } from '@/types'
-import { toInt, useNotification } from '@/utils'
+import { toInt, useMobileMode, useNotification } from '@/utils'
 
 export const FundingGuardiansBadgeSelection = () => {
   const { user, isLoggedIn } = useAuthContext()
@@ -75,12 +75,12 @@ export const FundingGuardiansBadgeSelection = () => {
       <VStack w="full" alignItems="flex-start" spacing={6}>
         {/* Header Section */}
         <VStack w="full" alignItems="flex-start" spacing={0}>
-          <H1 size="2xl" bold>
+          <H1 size={{ base: 'xl', lg: '2xl' }} bold>
             {t('Become a Guardian. Help us fuel Bitcoin adoption.')}
           </H1>
           <Body size="sm" light>
             {t(
-              'Every Guardian badge you collect powers Geyser to keep Bitcoin adoption spreading worldwide. Show it proudly on your profile and the Guardians page.',
+              'Every Guardian badge you collect powers Geyser to enable Bitcoin adoption. Show it proudly on your profile.',
             )}
           </Body>
         </VStack>
@@ -106,6 +106,7 @@ export const FundingGuardiansBadgeSelection = () => {
 
 /** User profile section with verified badge and gem array */
 const UserProfileSection = ({ user, selectedBadges }: { user: any; selectedBadges: GuardianType[] }) => {
+  const isMobile = useMobileMode()
   return (
     <HStack w="full" justifyContent="center">
       <CardLayout
@@ -119,19 +120,24 @@ const UserProfileSection = ({ user, selectedBadges }: { user: any; selectedBadge
         <HStack>
           <ProfileAvatar
             src={user.imageUrl}
-            h="40px"
-            w="40px"
+            h={{ base: '32px', lg: '40px' }}
+            w={{ base: '32px', lg: '40px' }}
             guardian={user.guardianType}
             wrapperProps={{ padding: '2px' }}
           />
-          <Body size="xl" bold>
+          <Body size={{ base: 'lg', lg: 'xl' }} bold>
             {user.username}
           </Body>
           <UserVerifiedBadge user={user} fontSize="lg" />
         </HStack>
 
         <HStack spacing={2} alignItems="center">
-          <GemArray size="xl" name={user.username} disablePopover selectedGuardianTypes={selectedBadges} />
+          <GemArray
+            size={isMobile ? 'lg' : 'xl'}
+            name={user.username}
+            disablePopover
+            selectedGuardianTypes={selectedBadges}
+          />
         </HStack>
       </CardLayout>
     </HStack>
@@ -140,6 +146,8 @@ const UserProfileSection = ({ user, selectedBadges }: { user: any; selectedBadge
 
 /** Display guardian users (5 random from all types) */
 const GuardianUsersDisplay = () => {
+  const isMobile = useMobileMode()
+
   const [totalGuardianCount, setTotalGuardianCount] = useState<number>(0)
   const [displayUsers, setDisplayUsers] = useState<any[]>([])
 
@@ -165,7 +173,7 @@ const GuardianUsersDisplay = () => {
 
         // Get 5 random users for display
         const shuffled = [...uniqueUsers].sort(() => 0.5 - Math.random())
-        return shuffled.slice(0, 5)
+        return shuffled.slice(0, isMobile ? 3 : 5)
       })
 
       setTotalGuardianCount((prev) => prev + soldCount)
@@ -372,8 +380,8 @@ const BadgeSelectionButton = ({
     <Button
       variant="outline"
       size="lg"
-      h="178px"
-      width="150px"
+      h={{ base: '138px', lg: '178px' }}
+      width={{ base: '130px', lg: '150px' }}
       minWidth="120px"
       flex={1}
       as={VStack}
@@ -395,7 +403,12 @@ const BadgeSelectionButton = ({
       onClick={onSelect}
       disabled={hasThisBadge}
     >
-      <Image src={image} alt={`${guardian} badge`} boxSize="80px" filter={hasThisBadge ? 'grayscale(100%)' : 'none'} />
+      <Image
+        src={image}
+        alt={`${guardian} badge`}
+        boxSize={{ base: '40px', lg: '80px' }}
+        filter={hasThisBadge ? 'grayscale(100%)' : 'none'}
+      />
       <Body medium dark>
         {guardian} Badge
       </Body>
