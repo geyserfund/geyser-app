@@ -12,12 +12,27 @@ import { useModal } from '@/shared/hooks/useModal.tsx'
 import { GuardianType } from '@/types/index.ts'
 
 type GemArrayProps = {
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'lg' | 'xl'
   name?: string
   children?: string
+  disablePopover?: boolean
+  selectedGuardianTypes?: GuardianType[]
 }
 
-export const GemArray = ({ size = 'md', name, children }: GemArrayProps) => {
+const sizeMap = {
+  sm: '20px',
+  md: '24px',
+  lg: '28px',
+  xl: '40px',
+}
+
+export const GemArray = ({
+  size = 'md',
+  name,
+  children,
+  disablePopover = false,
+  selectedGuardianTypes,
+}: GemArrayProps) => {
   const userGuardianJewels = useAtomValue(guardianJewelsToRenderAtom)
   const guardianModal = useModal<GuardianCardProps>()
 
@@ -27,7 +42,7 @@ export const GemArray = ({ size = 'md', name, children }: GemArrayProps) => {
   const orderedGuardianTypes = [GuardianType.Warrior, GuardianType.Knight, GuardianType.King, GuardianType.Legend]
 
   // Create an array of guardian types that user has
-  const userGuardianTypes = userGuardianJewels.map((jewel) => jewel.guardianType)
+  const userGuardianTypes = [...userGuardianJewels.map((jewel) => jewel.guardianType), ...(selectedGuardianTypes || [])]
 
   // Sort the guardian types to show present ones first, then the rest in the specified order
   const sortedGuardianTypes = [
@@ -37,12 +52,22 @@ export const GemArray = ({ size = 'md', name, children }: GemArrayProps) => {
     ...orderedGuardianTypes.filter((type) => !userGuardianTypes.includes(type)),
   ]
 
+  const selectedGuardianBadges = selectedGuardianTypes
+    ? selectedGuardianTypes.map((type) => ({
+        guardianType: type,
+        jewel: guardianJewels[type],
+        guardianText: guardianText[type],
+      }))
+    : []
+
+  const userBadges = [...userGuardianJewels, ...selectedGuardianBadges]
+
   return (
     <>
       <HStack spacing={2}>
         {sortedGuardianTypes.map((guardianType) => {
           // Find the jewel in the user's collection
-          const userJewel = userGuardianJewels.find((jewel) => jewel.guardianType === guardianType)
+          const userJewel = userBadges.find((jewel) => jewel.guardianType === guardianType)
           const hasJewel = Boolean(userJewel)
           const guardian = guardianText[guardianType] || ''
           const guardianJewel = hasJewel && userJewel ? userJewel.jewel : guardianJewels[guardianType]
@@ -52,11 +77,15 @@ export const GemArray = ({ size = 'md', name, children }: GemArrayProps) => {
             <Image
               src={guardianJewel}
               alt={`${guardian}-jewel`}
-              width={size === 'sm' ? '20px' : size === 'md' ? '24px' : '28px'}
+              width={sizeMap[size]}
               _hover={{ cursor: 'pointer' }}
               opacity={hasJewel ? 1 : 0.5}
               filter={hasJewel ? 'none' : 'grayscale(100%)'}
               onClick={(e) => {
+                if (disablePopover) {
+                  return
+                }
+
                 if (hasJewel) {
                   e.preventDefault()
                   e.stopPropagation()
@@ -67,6 +96,10 @@ export const GemArray = ({ size = 'md', name, children }: GemArrayProps) => {
               }}
             />
           )
+
+          if (disablePopover) {
+            return imageElement
+          }
 
           return (
             <TooltipPopover

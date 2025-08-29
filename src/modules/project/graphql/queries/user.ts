@@ -21,3 +21,9 @@ export const QUERY_PROJECT_OWNER_USER_FOR_INVOICE = gql`
     }
   }
 `
+
+export const QUERY_USER_IP_COUNTRY = gql`
+  query GetUserIpCountry {
+    userIpCountry
+  }
+`

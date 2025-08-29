@@ -8,6 +8,7 @@ import { PiCaretDown, PiCaretUp, PiInfo } from 'react-icons/pi'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import {
+  guardianBadgesCostAtoms,
   rewardsCostAtoms,
   shippingCostAtom,
   tipAtoms,
@@ -45,6 +46,7 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
   const tip = useAtomValue(tipAtoms)
   const totalSats = useAtomValue(totalAmountSatsAtom)
   const totalUsdCent = useAtomValue(totalAmountUsdCentAtom)
+  const guardianBadgesCosts = useAtomValue(guardianBadgesCostAtoms)
 
   const currentGoal =
     inProgressGoals.length > 0
@@ -233,6 +235,13 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
             <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
               {`($${centsToDollars(tip.usdCents)})`}
             </Body>
+          </HStack>
+        )}
+
+        {guardianBadgesCosts.sats > 0 && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Guardian badges')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>{`${commaFormatted(guardianBadgesCosts.sats)} `}</Body>
           </HStack>
         )}
 
