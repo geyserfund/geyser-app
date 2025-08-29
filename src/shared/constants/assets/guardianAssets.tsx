@@ -42,6 +42,7 @@ export type GuardianBadgeJewel = {
   guardianType: GuardianType
   guardianText: string
   jewel: string
+  selected?: boolean
 }
 
 export const getBadgeJewelImage = (badgeUniqueName: string): GuardianBadgeJewel | undefined => {

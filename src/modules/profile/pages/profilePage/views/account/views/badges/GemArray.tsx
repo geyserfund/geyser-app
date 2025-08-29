@@ -1,4 +1,5 @@
 import { HStack, Image } from '@chakra-ui/react'
+import { keyframes } from '@emotion/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useNavigate } from 'react-router-dom'
@@ -38,6 +39,22 @@ export const GemArray = ({
 
   const navigate = useNavigate()
 
+  /** Glowing animation for selected guardian jewels */
+  const glowAnimation = keyframes`
+    0% {
+      box-shadow: 0 0 10px rgba(255, 179, 0, 0.6), 0 0 20px rgba(255, 179, 0, 0.4), 0 0 30px rgba(255, 179, 0, 0.3);
+      transform: scale(1);
+    }
+    50% {
+      box-shadow: 0 0 15px rgba(255, 179, 0, 0.8), 0 0 30px rgba(255, 179, 0, 0.6), 0 0 45px rgba(255, 179, 0, 0.4);
+      transform: scale(1.05);
+    }
+    100% {
+      box-shadow: 0 0 10px rgba(255, 179, 0, 0.6), 0 0 20px rgba(255, 179, 0, 0.4), 0 0 30px rgba(255, 179, 0, 0.3);
+      transform: scale(1);
+    }
+  `
+
   // Define the display order
   const orderedGuardianTypes = [GuardianType.Warrior, GuardianType.Knight, GuardianType.King, GuardianType.Legend]
 
@@ -57,6 +74,7 @@ export const GemArray = ({
         guardianType: type,
         jewel: guardianJewels[type],
         guardianText: guardianText[type],
+        selected: true,
       }))
     : []
 
@@ -73,6 +91,8 @@ export const GemArray = ({
           const guardianJewel = hasJewel && userJewel ? userJewel.jewel : guardianJewels[guardianType]
           const displayName = children || name || guardian
 
+          const isSelected = userJewel?.selected
+
           const imageElement = (
             <Image
               src={guardianJewel}
@@ -81,6 +101,9 @@ export const GemArray = ({
               _hover={{ cursor: 'pointer' }}
               opacity={hasJewel ? 1 : 0.5}
               filter={hasJewel ? 'none' : 'grayscale(100%)'}
+              borderRadius="12px"
+              animation={isSelected ? `${glowAnimation} 2s ease-in-out infinite` : 'none'}
+              transition="all 0.3s ease"
               onClick={(e) => {
                 if (disablePopover) {
                   return

@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
+import { TAndCs } from '../../fundingInit/sections/FundingInitSideContent.tsx'
 
 export const FundingGuardiansBottomContent = () => {
   return <FundingGuardiansSummary />
@@ -47,9 +47,7 @@ export const FundingGuardiansSummary = () => {
 
       <FundingCheckoutWrapper>
         <VStack w="full" alignItems="flex-start">
-          <Body size="sm" light>
-            {t('By continuing to checkout you are accepting our T&Cs')}
-          </Body>
+          <TAndCs disableMobile={true} />
           <Button size="lg" w="full" variant="solid" colorScheme="primary1" onClick={handleCheckout}>
             {t('Checkout')}
           </Button>
