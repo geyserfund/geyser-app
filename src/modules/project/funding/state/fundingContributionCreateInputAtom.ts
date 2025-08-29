@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { atom } from 'jotai'
 
 import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
@@ -16,7 +17,13 @@ import {
 import { toInt } from '@/utils'
 
 import { sourceResourceAtom } from '../../pages1/projectView/state/sourceActivityAtom.ts'
-import { fundingProjectAtom } from './fundingFormAtom'
+import {
+  fundingProjectAtom,
+  guardianBadgesCostAtoms,
+  rewardsCostAtoms,
+  shippingCostAtom,
+  tipAtoms,
+} from './fundingFormAtom'
 import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAtom'
 import { selectedGoalIdAtom } from './selectedGoalAtom'
 import { shippingAddressAtom } from './shippingAddressAtom.ts'
@@ -32,6 +39,10 @@ export const formattedFundingInputAtom = atom((get) => {
   const projectGoalId = get(selectedGoalIdAtom)
   const sourceResource = get(sourceResourceAtom)
   const referrerHeroId = get(referrerHeroIdAtom)
+  const rewardsCosts = get(rewardsCostAtoms)
+  const geyserTip = get(tipAtoms)
+  const guardianBadgesCosts = get(guardianBadgesCostAtoms)
+  const shippingCosts = get(shippingCostAtom)
 
   const {
     donationAmount,
@@ -89,13 +100,19 @@ export const formattedFundingInputAtom = atom((get) => {
       },
     },
   }
+  const geyserTotalTipAmount = guardianBadgesCosts.sats ? geyserTip.sats + guardianBadgesCosts.sats : geyserTip.sats
+  const geyserTipPercentage = guardianBadgesCosts.sats
+    ? geyserTotalTipAmount / (donationAmount + rewardsCosts.sats + shippingCosts.sats)
+    : geyserTipPercent > 0
+    ? geyserTipPercent
+    : undefined
 
   const input: ContributionCreateInput = {
     projectId: toInt(fundingProject?.id),
     projectGoalId,
     anonymous,
     donationAmount: toInt(donationAmount),
-    geyserTipPercentage: geyserTipPercent > 0 ? geyserTipPercent : undefined,
+    geyserTipPercentage,
     referrerHeroId,
     metadataInput: {
       ...(email && { email }),
