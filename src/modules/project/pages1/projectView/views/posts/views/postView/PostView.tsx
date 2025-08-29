@@ -116,7 +116,7 @@ export const PostView = () => {
             {t('All posts')}
           </Button>
           <HStack>
-            {<PostShare post={post} />}
+            {<PostShare post={post} project={project} />}
 
             {isProjectOwner ? (
               <PostEditMenu

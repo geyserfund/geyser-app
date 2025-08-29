@@ -3,14 +3,13 @@ import { t } from 'i18next'
 import { MouseEvent } from 'react'
 import { PiArrowsClockwiseBold, PiCopy, PiShareFat, PiXLogo } from 'react-icons/pi'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks'
 import { CopyButton } from '@/shared/molecules'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
-import { ProjectPostFragment, usePostRepostOnNostrMutation } from '@/types'
+import { ProjectPageBodyFragment, ProjectPostFragment, usePostRepostOnNostrMutation } from '@/types'
 import { useNotification } from '@/utils/index.ts'
 
 import { CampaignContent } from '../../../hooks'
@@ -20,10 +19,10 @@ import { useNostrRepost } from '../hooks/useNostrRepost.tsx'
 
 type PostShareProps = {
   post: ProjectPostFragment
+  project: Pick<ProjectPageBodyFragment, 'keys' | 'thumbnailImage'>
 } & ButtonProps
 
-export const PostShare = ({ post, ...props }: PostShareProps) => {
-  const { project } = useProjectAtom()
+export const PostShare = ({ post, project, ...props }: PostShareProps) => {
   const toast = useNotification()
 
   const postShareModal = useModal()

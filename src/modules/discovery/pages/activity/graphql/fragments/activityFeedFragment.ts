@@ -10,6 +10,14 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
       title
       name
       thumbnailImage
+      keys {
+        nostrKeys {
+          publicKey {
+            hex
+            npub
+          }
+        }
+      }
     }
     resource {
       ... on Project {
