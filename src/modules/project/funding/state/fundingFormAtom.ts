@@ -1,7 +1,10 @@
 import { atom } from 'jotai'
 
+import { guardianRewardsMap, GuardianRewardType } from '@/modules/guardians/data.ts'
+import { guardianRewardsAtom } from '@/modules/guardians/state/guardianRewards.ts'
 import { bitcoinQuoteAtom } from '@/shared/state/btcRateAtom'
 import {
+  GuardianType,
   ProjectPageWalletFragment,
   ProjectRewardFragment,
   ProjectShippingConfigType,
@@ -64,6 +67,7 @@ export type FundFormType = {
     name?: string
   }
   geyserTipPercent: number
+  guardianBadges: GuardianType[]
 }
 
 const initialState: FundFormType = {
@@ -88,6 +92,7 @@ const initialState: FundFormType = {
   needsShipping: false,
   shippingDestination: ShippingDestination.National,
   geyserTipPercent: DEFAULT_GEYSER_TIP_PERCENT,
+  guardianBadges: [],
 }
 
 /** Main Funding Form state atom */
@@ -235,6 +240,27 @@ export const tipAtoms = atom((get) => {
   return { sats: tipSats, usdCents: tipUsdCent }
 })
 
+export const guardianBadgesCostAtoms = atom((get) => {
+  const { guardianBadges } = get(fundingFormStateAtom)
+  const guardianRewards = get(guardianRewardsAtom)
+  const bitcoinQuote = get(bitcoinQuoteAtom)
+
+  const guardianBadgesCost = guardianRewards
+    .filter((reward) =>
+      guardianRewardsMap.some(
+        (map) =>
+          map.rewardUUID === reward.uuid &&
+          map.type === GuardianRewardType.Badge &&
+          guardianBadges.includes(map.guardian as GuardianType),
+      ),
+    )
+    .reduce((acc, reward) => acc + reward.cost, 0)
+
+  const guardianBadgesCostSats = convertAmount.usdCentsToSats({ usdCents: guardianBadgesCost, bitcoinQuote })
+
+  return { sats: guardianBadgesCostSats, usdCents: guardianBadgesCost }
+})
+
 /**
  * Derived atom for the total amount in Satoshis.
  * Sums donation, rewards, subscription, shipping, and tip.
@@ -246,9 +272,16 @@ export const totalAmountSatsAtom = atom((get) => {
   const shippingCosts = get(shippingCostAtom)
   const subscriptionCosts = get(subscriptionCostAtoms)
   const tip = get(tipAtoms)
+  const guardianBadgesCosts = get(guardianBadgesCostAtoms)
 
   // Sum all components
-  const total = donationAmount + rewardsCosts.sats + subscriptionCosts.sats + shippingCosts.sats + tip.sats
+  const total =
+    donationAmount +
+    rewardsCosts.sats +
+    subscriptionCosts.sats +
+    shippingCosts.sats +
+    tip.sats +
+    guardianBadgesCosts.sats
   return total
 })
 

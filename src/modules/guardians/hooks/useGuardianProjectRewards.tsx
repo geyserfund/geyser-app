@@ -7,7 +7,7 @@ import { guardianRewardsAtom, guardianRewardsLoadingAtom } from '../state/guardi
 
 const PRODUCTION_GUARDIAN_PROJECT_ID = 2621
 const STAGING_GUARDIAN_PROJECT_ID = 892
-const DEVELOPMENT_GUARDIAN_PROJECT_ID = 822
+const DEVELOPMENT_GUARDIAN_PROJECT_ID = 892
 
 const guardianProjectId = __production__
   ? PRODUCTION_GUARDIAN_PROJECT_ID

@@ -275,4 +275,5 @@ export const initialTestState: FundFormType = {
   needsShipping: false,
   shippingDestination: ShippingDestination.National,
   geyserTipPercent: 2.1,
+  guardianBadges: [],
 }

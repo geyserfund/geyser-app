@@ -44,6 +44,7 @@ export const formattedFundingInputAtom = atom((get) => {
     subscribeToGeyserEmails,
     subscription,
     geyserTipPercent,
+    guardianBadges,
   } = formState
 
   const anonymous = !user || !user.id
@@ -103,6 +104,7 @@ export const formattedFundingInputAtom = atom((get) => {
       ...(privateComment && { privateComment }),
       ...(followProject && { followProject }),
       ...(subscribeToGeyserEmails && { subscribeToGeyserEmails }),
+      ...(guardianBadges.length > 0 && { guardianBadges }),
     },
     orderInput: {
       bitcoinQuote: {

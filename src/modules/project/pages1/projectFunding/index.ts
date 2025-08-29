@@ -1,5 +1,6 @@
 import { ProjectFunding } from './ProjectFunding'
 import { FundingDetails } from './views/fundingDetails/FundingDetails'
+import { FundingGuardians } from './views/fundingGuardians/FundingGuardians'
 import { FundingInit } from './views/fundingInit/FundingInit'
 import { Funding } from './views/fundingPayment/Funding'
 import { FundingLaunchPayment } from './views/fundingPayment/FundingLaunchPayment.tsx'
@@ -21,6 +22,7 @@ import { FundingSuccess } from './views/fundingSuccess/FundingSuccess'
 export {
   Funding,
   FundingDetails,
+  FundingGuardians,
   FundingInit,
   FundingLaunchPayment,
   FundingSuccess,

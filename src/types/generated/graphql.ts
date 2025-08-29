@@ -317,6 +317,7 @@ export type ContributionMetadataInput = {
   comment?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   followProject?: InputMaybe<Scalars['Boolean']['input']>;
+  guardianBadges?: InputMaybe<Array<GuardianType>>;
   media?: InputMaybe<Scalars['String']['input']>;
   privateComment?: InputMaybe<Scalars['String']['input']>;
   subscribeToGeyserEmails?: InputMaybe<Scalars['Boolean']['input']>;

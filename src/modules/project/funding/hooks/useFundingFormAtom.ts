@@ -9,6 +9,7 @@ import {
   fundingFormWarningAtom,
   fundingOnchainAmountWarningAtom,
   fundingProjectAtom,
+  guardianBadgesCostAtoms,
   isFundingInputAmountValidAtom,
   isFundingUserInfoValidAtom,
   resetFundingFormRewardsAtom,
@@ -47,6 +48,7 @@ export const useFundingFormAtom = () => {
   const rewardsCosts = useAtomValue(rewardsCostAtoms)
   const subscriptionCosts = useAtomValue(subscriptionCostAtoms)
   const tip = useAtomValue(tipAtoms)
+  const guardianBadgesCosts = useAtomValue(guardianBadgesCostAtoms)
   const totalSats = useAtomValue(totalAmountSatsAtom)
   const totalUsdCent = useAtomValue(totalAmountUsdCentAtom)
 
@@ -80,6 +82,7 @@ export const useFundingFormAtom = () => {
     rewardsCosts,
     subscriptionCosts,
     tip,
+    guardianBadgesCosts,
     totalSats,
     totalUsdCent,
     onChainAmountWarning,

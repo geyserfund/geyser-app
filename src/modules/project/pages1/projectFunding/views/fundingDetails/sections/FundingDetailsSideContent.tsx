@@ -99,7 +99,11 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
   }
 
   const handleGoNext = () => {
-    navigate(getPath('fundingStart', project.name))
+    if (isLoggedIn) {
+      navigate(getPath('fundingGuardians', project.name))
+    } else {
+      navigate(getPath('fundingStart', project.name))
+    }
   }
 
   return (

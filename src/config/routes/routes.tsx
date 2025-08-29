@@ -517,6 +517,13 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
+            path: getPath('fundingGuardians', PathName.projectName),
+            async lazy() {
+              const FundingGuardians = await ProjectFunding().then((m) => m.FundingGuardians)
+              return { Component: FundingGuardians }
+            },
+          },
+          {
             path: getPath('fundingLaunchPayment', PathName.projectName),
             async lazy() {
               const FundingLaunchPayment = await ProjectFunding().then((m) => m.FundingLaunchPayment)
