@@ -113,7 +113,11 @@ export const ActivityFeedItem = ({ activityType, id, createdAt, project, resourc
           <ActivityDescription resource={resource} />
 
           {typeof resource === 'object' && 'entryImage' in resource && (
-            <PostShare size="md" post={{ ...resource, image: resource.entryImage } as ProjectPostFragment} />
+            <PostShare
+              size="md"
+              post={{ ...resource, image: resource.entryImage } as ProjectPostFragment}
+              project={project}
+            />
           )}
         </HStack>
         {isGoalActivity && (
