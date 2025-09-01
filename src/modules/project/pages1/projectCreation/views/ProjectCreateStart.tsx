@@ -80,7 +80,7 @@ export const ProjectCreateStart = () => {
             {t('Update your community by email')}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectFeesUrl} alt="create project fees">
-            {t(`Low ${LIGHTNING_FEE_PERCENTAGE}% fees and no fees for node-runners`)}
+            {t(`$25 to launch, ${LIGHTNING_FEE_PERCENTAGE}% fees (0% for node-runners)`)}
           </ProjectInfoButton>
           <ProjectInfoButton src={LaunchProjectCoinsUrl} alt="create project key">
             {t('Receive funds instantly, in your Bitcoin wallet')}
