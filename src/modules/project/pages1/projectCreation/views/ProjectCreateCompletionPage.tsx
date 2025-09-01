@@ -18,14 +18,12 @@ import { isDraft, useNotification } from '../../../../../utils'
 import { ProjectLaunchConfirmModal } from '../../../components/ProjectLaunchConfirmModal'
 import { ProjectCreateCompleted } from '../components/ProjectCreateCompleted'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
-import { ProjectCreationStrategy } from './ProjectCreationStrategy.tsx'
 
 interface ProjectCreateCompletionPageProps {
-  strategy: ProjectCreationStrategy
   setStrategySelected: Dispatch<SetStateAction<boolean>>
 }
 
-export const ProjectCreateCompletionPage = ({ strategy, setStrategySelected }: ProjectCreateCompletionPageProps) => {
+export const ProjectCreateCompletionPage = ({ setStrategySelected }: ProjectCreateCompletionPageProps) => {
   const { t } = useTranslation()
   const { queryCurrentUser } = useAuthContext()
 

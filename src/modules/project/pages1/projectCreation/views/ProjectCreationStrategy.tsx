@@ -1,4 +1,4 @@
-import { Button, Collapse, HStack, Image, ListItem, UnorderedList, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, Collapse, HStack, ListItem, UnorderedList, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 import { useState } from 'react'
@@ -10,8 +10,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
-import { dimensions, LaunchNowIllustrationUrl, LaunchPadIllustrationUrl } from '@/shared/constants/index.ts'
-import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { dimensions } from '@/shared/constants/index.ts'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { FormContinueButton } from '../components/FormContinueButton.tsx'
@@ -24,6 +23,12 @@ import { ProjectCreateCompletionPage } from './ProjectCreateCompletionPage.tsx'
 export enum ProjectCreationStrategy {
   GEYSER_LAUNCHPAD = 'geyser_launchpad',
   LAUNCH_NOW = 'launch_now',
+}
+
+export enum ProjectLaunchStrategy {
+  STARTER_LAUNCH = 'STARTER_LAUNCH',
+  GROWTH_LAUNCH = 'GROWTH_LAUNCH',
+  PRO_LAUNCH = 'PRO_LAUNCH',
 }
 
 export const PROJECT_LAUNCH_PAYMENT_PROJECT_NAME = 'launch'
@@ -39,7 +44,7 @@ export const ProjectCreateStrategy = () => {
 
   const setReadyForLaunch = useSetAtom(isReadyForLaunchAtom)
 
-  const [strategy, setStrategy] = useState<ProjectCreationStrategy>(ProjectCreationStrategy.GEYSER_LAUNCHPAD)
+  const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(ProjectLaunchStrategy.STARTER_LAUNCH)
   const [strategySelected, setStrategySelected] = useState<boolean>(false)
 
   const handleBack = () => {
@@ -48,27 +53,24 @@ export const ProjectCreateStrategy = () => {
   }
 
   const handleNext = () => {
-    if (strategy === ProjectCreationStrategy.GEYSER_LAUNCHPAD) {
-      setStrategySelected(true)
-      return
-    }
-
     navigate(getPath('fundingLaunchPayment', PROJECT_LAUNCH_PAYMENT_PROJECT_NAME), {
       state: {
         launchProjectId: project?.id,
+        launchStrategy: strategy,
       },
     })
   }
 
-  const isLaunchPad = strategy === ProjectCreationStrategy.GEYSER_LAUNCHPAD
-  const isLaunchNow = strategy === ProjectCreationStrategy.LAUNCH_NOW
+  const isStarterLaunch = strategy === ProjectLaunchStrategy.STARTER_LAUNCH
+  const isGrowthLaunch = strategy === ProjectLaunchStrategy.GROWTH_LAUNCH
+  const isProLaunch = strategy === ProjectLaunchStrategy.PRO_LAUNCH
 
   if (loading) {
     return null
   }
 
   if (project.paidLaunch || strategySelected) {
-    return <ProjectCreateCompletionPage strategy={strategy} setStrategySelected={setStrategySelected} />
+    return <ProjectCreateCompletionPage setStrategySelected={setStrategySelected} />
   }
 
   return (
@@ -86,62 +88,82 @@ export const ProjectCreateStrategy = () => {
       onBackClick={handleBack}
       maxW={dimensions.maxWidth}
     >
-      <HStack w="full" alignItems="stretch" flexDirection={{ base: 'column', lg: 'row' }} spacing={{ base: 4, lg: 6 }}>
+      <VStack w="full" alignItems="stretch" spacing={{ base: 4, lg: 6 }}>
         <ProjectCreateStrategyCard
           flex={1}
-          isSelected={isLaunchPad}
-          onClick={() => setStrategy(ProjectCreationStrategy.GEYSER_LAUNCHPAD)}
-          image={LaunchPadIllustrationUrl}
-          title={t('Geyser Launch Challenge')}
-          subtitle={t('Raise $210 in 7 days with your community.')}
-          body={`${t(
-            "Your project's future depends on this critical first step - meet the goal to keep your vision alive. It’s your chance to build early momentum and launch with a boom.",
-          )}  🚀`}
-          points={[
-            t('Featured in Launchpad & discovery emails'),
-            t('Build momentum quickly with early supporters'),
-            `${t('If you don’t reach $210 in your first week, your project will close (you can start over)')}`,
-          ]}
-          pointIndexToWarn={2}
+          isSelected={isStarterLaunch}
+          onClick={() => setStrategy(ProjectLaunchStrategy.STARTER_LAUNCH)}
+          title={t('Starter Launch')}
+          subtitle={t('do it yourself, get the basic exposure at a lower cost.')}
+          body={`${t('Access to all Geyser tooling and get discovered through the Geyser platform')} `}
+          price={t('$25')}
         />
         <ProjectCreateStrategyCard
           flex={1}
-          isSelected={isLaunchNow}
-          onClick={() => setStrategy(ProjectCreationStrategy.LAUNCH_NOW)}
-          image={LaunchNowIllustrationUrl}
-          title={t('Go Live Now')}
-          subtitle={t('Skip the challenge. Launch instantly for $21.')}
-          body={t(
-            "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you don't need to worry about reaching $210 in 7 days",
-          )}
+          isSelected={isGrowthLaunch}
+          onClick={() => setStrategy(ProjectLaunchStrategy.GROWTH_LAUNCH)}
+          title={t('Growth Launch')}
+          subtitle={t('visibility boost with expert feedback')}
+          price={t('$50')}
           points={[
-            t('Featured in ‘Recently launched’ in Discovery page'),
-            t('No pressure to raise a lot right away, go by your plan.'),
+            [t('Landing Page Feature'), t('1 week front-page spotlight')],
+            [
+              t('Geyser Newsletter feature'),
+              t('get featured at the top of our monthly newsletter going out to 5000+ subscribers'),
+            ],
+            [t('Social Media post'), t('1 social media post on Geyser’s X account with 15k+ followers')],
+            [
+              t('Project feedback'),
+              t('Geyser Team Expert provides 1-time feedback on your project story and structure'),
+            ],
           ]}
         />
-      </HStack>
+        <ProjectCreateStrategyCard
+          flex={1}
+          isSelected={isProLaunch}
+          onClick={() => setStrategy(ProjectLaunchStrategy.PRO_LAUNCH)}
+          title={t('Pro Launch')}
+          subtitle={t('hands-on support + network amplification')}
+          body={t('Limited to 5 per month, subject to selection')}
+          price={t('$350')}
+          points={[
+            [t('Everything in Growth')],
+            [
+              t('Spotlight Email'),
+              t('Your project featured in a dedicated email sent to Geyser users most interested in your category'),
+            ],
+            [
+              t('Personalised Launch Strategy'),
+              t('a one-on-one session to design the perfect launch plan for your project'),
+            ],
+            [
+              t('Dedicated support'),
+              t('one month of hands-on guidance from our team to keep you on path for a successful raise'),
+            ],
+            [t('Exclusive network'), t('tap into our podcasters, media, and creator partners')],
+          ]}
+        />
+      </VStack>
     </ProjectCreateLayout>
   )
 }
 
 type ProjectCreateStrategyCardProps = {
-  image: string
   title: string
   subtitle: string
-  body: string
-  points: string[]
+  body?: string
+  price?: string
+  points?: string[][]
   isSelected?: boolean
-  pointIndexToWarn?: number
 } & CardLayoutProps
 
 export const ProjectCreateStrategyCard = ({
-  image,
   title,
   subtitle,
   body,
+  price,
   points,
   isSelected,
-  pointIndexToWarn,
   ...props
 }: ProjectCreateStrategyCardProps) => {
   const { isOpen, onToggle } = useDisclosure()
@@ -152,7 +174,7 @@ export const ProjectCreateStrategyCard = ({
       width={isMobile ? 'full' : 'auto'}
       hover
       {...props}
-      spacing={4}
+      spacing={2}
       borderColor={isSelected ? 'primary1.9' : 'neutral1.6'}
       outline={isSelected ? '2px solid' : 'none'}
       outlineColor={isSelected ? 'primary1.9' : 'transparent'}
@@ -163,38 +185,50 @@ export const ProjectCreateStrategyCard = ({
       overflow={'hidden'}
       padding={4}
     >
-      <HStack width="full" justifyContent="center">
-        <Image width="auto" height="300px" src={image} alt={title} boxSize={32} />
-      </HStack>
-      <Feedback variant={FeedBackVariant.SUCCESS} noIcon>
-        <VStack w="full" alignItems="flex-start" spacing={0}>
+      <HStack w="full">
+        <HStack
+          flex={1}
+          flexDirection={{ base: 'column', lg: 'row' }}
+          alignItems={{ base: 'start', lg: 'center' }}
+          justifyContent={'start'}
+          spacing={{ base: 0, lg: 2 }}
+        >
           <Body size="xl" bold>
             {title}
           </Body>
-          <Body size="md" light medium>
-            {subtitle}
+          <Body size={{ base: 'lg', lg: 'xl' }} light medium>
+            - {subtitle}
           </Body>
-        </VStack>
-      </Feedback>
+        </HStack>
+        <Body size="xl" muted medium>
+          {price}
+        </Body>
+      </HStack>
+
       <Collapse in={isMobile ? isOpen : true} animateOpacity>
         <VStack w="full" alignItems="flex-start" spacing={4}>
-          <Body size="sm" light>
-            {body}
-          </Body>
-          <UnorderedList alignItems="flex-start" spacing={0}>
-            {points.map((point, index) => (
-              <ListItem key={point}>
-                <Body
-                  size="sm"
-                  light
-                  color={pointIndexToWarn === index ? 'warning.11' : 'inherit'}
-                  fontWeight={pointIndexToWarn === index ? 'bold' : 'normal'}
-                >
-                  {point}
-                </Body>
-              </ListItem>
-            ))}
-          </UnorderedList>
+          {body && (
+            <Body size="sm" light>
+              {body}
+            </Body>
+          )}
+          {points && (
+            <UnorderedList alignItems="flex-start" spacing={1}>
+              {points.map((point, index) => (
+                <ListItem key={point[0]} as={HStack} flexWrap="wrap" spacing={0.5}>
+                  <Body size="sm" bold>
+                    {point[0]}
+                    {point[0] && point[1] && ':'}
+                  </Body>
+                  {point[1] && (
+                    <Body size="sm" light>
+                      {point[1]}
+                    </Body>
+                  )}
+                </ListItem>
+              ))}
+            </UnorderedList>
+          )}
         </VStack>
       </Collapse>
       {isMobile && (

@@ -14,7 +14,7 @@ import { useModal } from '@/shared/hooks/useModal.tsx'
 import { GuardiansButtonBackgroundGradient } from '@/shared/styles/custom.ts'
 import { isClosed, isPrelaunch } from '@/utils/index.ts'
 
-import { getPath, LaunchNowIllustrationUrl } from '../../../../../../../shared/constants'
+import { getPath } from '../../../../../../../shared/constants'
 import { useProjectAtom, useWalletAtom } from '../../../../../hooks/useProjectAtom'
 
 export const PreLaunchProjectNotice = () => {
@@ -58,15 +58,14 @@ export const PreLaunchProjectNotice = () => {
         </CardLayout>
         <Modal size="lg" {...launchRightAwayModal}>
           <ProjectCreateStrategyCard
-            image={LaunchNowIllustrationUrl}
             title={t('Go Live Now')}
             subtitle={t('Skip the challenge. Launch instantly for $21.')}
             body={t(
               "This small fee is a sign of commitment. It shows that you're serious about your project and ready to share it with the world. That means you can begin receiving support from contributors immediately.",
             )}
             points={[
-              t('Seen in ‘Recently launched’ in Discovery page'),
-              t('No pressure to raise a lot right away, go by your plan.'),
+              [t('Seen in ‘Recently launched’ in Discovery page')],
+              [t('No pressure to raise a lot right away, go by your plan.')],
             ]}
             noborder
             background="transparent"

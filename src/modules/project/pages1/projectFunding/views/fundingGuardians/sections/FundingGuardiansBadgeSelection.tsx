@@ -409,7 +409,7 @@ const BadgeSelectionButton = ({
         boxSize={{ base: '40px', lg: '80px' }}
         filter={hasThisBadge ? 'grayscale(100%)' : 'none'}
       />
-      <Body medium dark>
+      <Body medium dark size={{ base: 'sm', lg: 'md' }}>
         {guardian} Badge
       </Body>
       <VStack spacing={0}>

@@ -12,11 +12,18 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
 import { derivedDimensions } from '@/shared/constants/index.ts'
 
-import { PROJECT_LAUNCH_PAYMENT_PROJECT_NAME } from '../../../projectCreation/views/ProjectCreationStrategy.tsx'
+import {
+  PROJECT_LAUNCH_PAYMENT_PROJECT_NAME,
+  ProjectLaunchStrategy,
+} from '../../../projectCreation/views/ProjectCreationStrategy.tsx'
 import { FundingLayout } from '../../layouts/FundingLayout.tsx'
 import { QRCodeSizeMap } from './components/QRCodeComponent.tsx'
 
-export const DONATION_AMOUNT_FOR_LAUNCH = 2100 // $21 in cents
+export const DONATION_AMOUNT_FOR_LAUNCH: Record<ProjectLaunchStrategy, number> = {
+  [ProjectLaunchStrategy.STARTER_LAUNCH]: 2500, // $25 in cents
+  [ProjectLaunchStrategy.GROWTH_LAUNCH]: 5000, // $50 in cents
+  [ProjectLaunchStrategy.PRO_LAUNCH]: 35000, // $350 in cents
+}
 
 export const FundingLaunchPayment = () => {
   const { project, loading } = useProjectAtom()
@@ -34,38 +41,50 @@ export const FundingLaunchPayment = () => {
   const qrSize = useBreakpointValue(QRCodeSizeMap)
 
   const launchProjectId = location?.state?.launchProjectId
+  const launchStrategy =
+    (location?.state?.launchStrategy as ProjectLaunchStrategy) || ProjectLaunchStrategy.STARTER_LAUNCH
 
   const handleUpdateReward = useCallback(() => {
     if (loading) {
       return
     }
 
-    if (formState.donationAmountUsdCent === DONATION_AMOUNT_FOR_LAUNCH) {
+    if (formState.donationAmountUsdCent === DONATION_AMOUNT_FOR_LAUNCH[launchStrategy]) {
       return
     }
 
-    setState('donationAmountUsdCent', DONATION_AMOUNT_FOR_LAUNCH)
+    setState('donationAmountUsdCent', DONATION_AMOUNT_FOR_LAUNCH[launchStrategy])
     setState('email', user.email)
+    setState('geyserTipPercent', 0)
     setState(
       'privateComment',
       JSON.stringify({
         paidLaunch: true,
         projectId: launchProjectId,
+        launchStrategy,
       }),
     )
     setState('geyserTipPercent', 0)
     setLaunchContributionProjectId(launchProjectId)
-  }, [loading, formState.donationAmountUsdCent, setState, user.email, launchProjectId, setLaunchContributionProjectId])
+  }, [
+    loading,
+    formState.donationAmountUsdCent,
+    setState,
+    user.email,
+    launchProjectId,
+    setLaunchContributionProjectId,
+    launchStrategy,
+  ])
 
   useEffect(() => {
     handleUpdateReward()
   }, [handleUpdateReward])
 
   useEffect(() => {
-    if (formState.donationAmountUsdCent === DONATION_AMOUNT_FOR_LAUNCH) {
+    if (formState.donationAmountUsdCent === DONATION_AMOUNT_FOR_LAUNCH[launchStrategy]) {
       navigate(getPath('fundingStart', project.name), { replace: true })
     }
-  }, [project.name, formState.donationAmountUsdCent, navigate])
+  }, [project.name, formState.donationAmountUsdCent, navigate, launchStrategy])
 
   useEffect(() => {
     if (project.name !== PROJECT_LAUNCH_PAYMENT_PROJECT_NAME) {
