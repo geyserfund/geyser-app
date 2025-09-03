@@ -186,12 +186,6 @@ export type BoardVoteGrantApplicantsArgs = {
   input?: InputMaybe<GrantApplicantsGetInput>;
 };
 
-export type BoltzPayoutSwap = {
-  __typename?: 'BoltzPayoutSwap';
-  lightningSwapContractAddress: Scalars['String']['output'];
-  onChainSwapContractAddress: Scalars['String']['output'];
-};
-
 export type CommunityVoteGrant = {
   __typename?: 'CommunityVoteGrant';
   applicants: Array<GrantApplicant>;
@@ -1417,7 +1411,6 @@ export type Mutation = {
   payoutInitiate: PayoutInitiateResponse;
   payoutRequest: PayoutRequestResponse;
   pledgeRefundCancel: PledgeRefundResponse;
-  pledgeRefundConfirm: PledgeRefundResponse;
   pledgeRefundInitiate: PledgeRefundInitiateResponse;
   pledgeRefundRequest: PledgeRefundRequestResponse;
   podcastKeysendContributionCreate: PodcastKeysendContributionCreateResponse;
@@ -1600,11 +1593,6 @@ export type MutationPayoutRequestArgs = {
 
 export type MutationPledgeRefundCancelArgs = {
   input: PledgeRefundCancelInput;
-};
-
-
-export type MutationPledgeRefundConfirmArgs = {
-  input: PledgeRefundConfirmInput;
 };
 
 
@@ -2205,8 +2193,14 @@ export type PaymentConfirmInput = {
   amountCurrency: AmountCurrency;
   id?: InputMaybe<Scalars['BigInt']['input']>;
   invoiceId?: InputMaybe<Scalars['String']['input']>;
+  onChainSwap?: InputMaybe<PaymentConfirmOnChainSwapInput>;
   subscription?: InputMaybe<SubscriptionPaymentConfirmationInput>;
   uuid?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PaymentConfirmOnChainSwapInput = {
+  /** The transaction hash of the claiming transaction for the on-chain swap. */
+  txHash: Scalars['String']['input'];
 };
 
 export type PaymentConfirmResponse = {
@@ -2397,18 +2391,24 @@ export type PayoutGetResponse = {
 export type PayoutInitiateInput = {
   /** The payment details to refund the contributor. */
   payoutId: Scalars['BigInt']['input'];
+  /** The payment details to refund the contributor. */
   payoutPaymentInput: PayoutPaymentInput;
+  /** The signature of the contributor for RBTC payment */
+  signature: Scalars['String']['input'];
 };
 
 export type PayoutInitiateResponse = {
   __typename?: 'PayoutInitiateResponse';
+  payment: Payment;
   payout: Payout;
+  swap: Scalars['String']['output'];
 };
 
 export type PayoutMetadata = {
   __typename?: 'PayoutMetadata';
+  aonContractAddress: Scalars['String']['output'];
   nonce: Scalars['Int']['output'];
-  swap: BoltzPayoutSwap;
+  swapContractAddress: Scalars['String']['output'];
 };
 
 export type PayoutPaymentInput = {
@@ -2457,10 +2457,6 @@ export type PledgeRefund = {
 export type PledgeRefundCancelInput = {
   pledgeRefundId: Scalars['BigInt']['input'];
   reason?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type PledgeRefundConfirmInput = {
-  paymentId: Scalars['BigInt']['input'];
 };
 
 export type PledgeRefundGetInput = {
@@ -2690,6 +2686,7 @@ export type Project = {
   aonGoalDurationInDays?: Maybe<Scalars['Int']['output']>;
   /** AON goal in sats */
   aonGoalInSats?: Maybe<Scalars['Int']['output']>;
+  aonGoalStatus?: Maybe<ProjectAonGoalStatus>;
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']['output'];
   balanceUsdCent: Scalars['Int']['output'];
@@ -3955,12 +3952,16 @@ export type RskToLightningSwapPaymentDetails = {
 };
 
 export type RskToLightningSwapPaymentDetailsBoltzInput = {
-  paymentRequest: Scalars['String']['input'];
   refundPublicKey: Scalars['String']['input'];
 };
 
 export type RskToLightningSwapPaymentDetailsInput = {
   boltz: RskToLightningSwapPaymentDetailsBoltzInput;
+  /**
+   * The Lightning address to send the swapped funds to.
+   * If not provided, the funds will be sent to the user's default lightning address.
+   */
+  lightningAddress?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type RskToOnChainSwapPaymentDetails = {
@@ -3975,6 +3976,7 @@ export type RskToOnChainSwapPaymentDetails = {
 export type RskToOnChainSwapPaymentDetailsBoltzInput = {
   claimPublicKey: Scalars['String']['input'];
   preimageHash: Scalars['String']['input'];
+  userClaimAddress: Scalars['String']['input'];
 };
 
 export type RskToOnChainSwapPaymentDetailsInput = {
@@ -4805,7 +4807,6 @@ export type ResolversTypes = {
   BitcoinPaymentMethods: ResolverTypeWrapper<BitcoinPaymentMethods>;
   BitcoinQuote: ResolverTypeWrapper<BitcoinQuote>;
   BoardVoteGrant: ResolverTypeWrapper<Omit<BoardVoteGrant, 'applicants' | 'boardMembers' | 'sponsors'> & { applicants: Array<ResolversTypes['GrantApplicant']>, boardMembers: Array<ResolversTypes['GrantBoardMember']>, sponsors: Array<ResolversTypes['Sponsor']> }>;
-  BoltzPayoutSwap: ResolverTypeWrapper<BoltzPayoutSwap>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CommunityVoteGrant: ResolverTypeWrapper<Omit<CommunityVoteGrant, 'applicants' | 'sponsors'> & { applicants: Array<ResolversTypes['GrantApplicant']>, sponsors: Array<ResolversTypes['Sponsor']> }>;
   CompetitionVoteGrantVoteSummary: ResolverTypeWrapper<CompetitionVoteGrantVoteSummary>;
@@ -5021,6 +5022,7 @@ export type ResolversTypes = {
   PaymentCancelInput: PaymentCancelInput;
   PaymentCancelResponse: ResolverTypeWrapper<PaymentCancelResponse>;
   PaymentConfirmInput: PaymentConfirmInput;
+  PaymentConfirmOnChainSwapInput: PaymentConfirmOnChainSwapInput;
   PaymentConfirmResponse: ResolverTypeWrapper<PaymentConfirmResponse>;
   PaymentCurrency: PaymentCurrency;
   PaymentDetails: ResolverTypeWrapper<ResolversUnionTypes<ResolversTypes>['PaymentDetails']>;
@@ -5052,7 +5054,7 @@ export type ResolversTypes = {
   PayoutGetInput: PayoutGetInput;
   PayoutGetResponse: ResolverTypeWrapper<PayoutGetResponse>;
   PayoutInitiateInput: PayoutInitiateInput;
-  PayoutInitiateResponse: ResolverTypeWrapper<PayoutInitiateResponse>;
+  PayoutInitiateResponse: ResolverTypeWrapper<Omit<PayoutInitiateResponse, 'payment'> & { payment: ResolversTypes['Payment'] }>;
   PayoutMetadata: ResolverTypeWrapper<PayoutMetadata>;
   PayoutPaymentInput: PayoutPaymentInput;
   PayoutRequestInput: PayoutRequestInput;
@@ -5061,7 +5063,6 @@ export type ResolversTypes = {
   PayoutStatus: PayoutStatus;
   PledgeRefund: ResolverTypeWrapper<Omit<PledgeRefund, 'project'> & { project: ResolversTypes['Project'] }>;
   PledgeRefundCancelInput: PledgeRefundCancelInput;
-  PledgeRefundConfirmInput: PledgeRefundConfirmInput;
   PledgeRefundGetInput: PledgeRefundGetInput;
   PledgeRefundGetResponse: ResolverTypeWrapper<Omit<PledgeRefundGetResponse, 'refund'> & { refund: ResolversTypes['PledgeRefund'] }>;
   PledgeRefundInitiateInput: PledgeRefundInitiateInput;
@@ -5311,7 +5312,6 @@ export type ResolversParentTypes = {
   BitcoinPaymentMethods: BitcoinPaymentMethods;
   BitcoinQuote: BitcoinQuote;
   BoardVoteGrant: Omit<BoardVoteGrant, 'applicants' | 'boardMembers' | 'sponsors'> & { applicants: Array<ResolversParentTypes['GrantApplicant']>, boardMembers: Array<ResolversParentTypes['GrantBoardMember']>, sponsors: Array<ResolversParentTypes['Sponsor']> };
-  BoltzPayoutSwap: BoltzPayoutSwap;
   Boolean: Scalars['Boolean']['output'];
   CommunityVoteGrant: Omit<CommunityVoteGrant, 'applicants' | 'sponsors'> & { applicants: Array<ResolversParentTypes['GrantApplicant']>, sponsors: Array<ResolversParentTypes['Sponsor']> };
   CompetitionVoteGrantVoteSummary: CompetitionVoteGrantVoteSummary;
@@ -5500,6 +5500,7 @@ export type ResolversParentTypes = {
   PaymentCancelInput: PaymentCancelInput;
   PaymentCancelResponse: PaymentCancelResponse;
   PaymentConfirmInput: PaymentConfirmInput;
+  PaymentConfirmOnChainSwapInput: PaymentConfirmOnChainSwapInput;
   PaymentConfirmResponse: PaymentConfirmResponse;
   PaymentDetails: ResolversUnionTypes<ResolversParentTypes>['PaymentDetails'];
   PaymentFailInput: PaymentFailInput;
@@ -5523,7 +5524,7 @@ export type ResolversParentTypes = {
   PayoutGetInput: PayoutGetInput;
   PayoutGetResponse: PayoutGetResponse;
   PayoutInitiateInput: PayoutInitiateInput;
-  PayoutInitiateResponse: PayoutInitiateResponse;
+  PayoutInitiateResponse: Omit<PayoutInitiateResponse, 'payment'> & { payment: ResolversParentTypes['Payment'] };
   PayoutMetadata: PayoutMetadata;
   PayoutPaymentInput: PayoutPaymentInput;
   PayoutRequestInput: PayoutRequestInput;
@@ -5531,7 +5532,6 @@ export type ResolversParentTypes = {
   PayoutResponse: PayoutResponse;
   PledgeRefund: Omit<PledgeRefund, 'project'> & { project: ResolversParentTypes['Project'] };
   PledgeRefundCancelInput: PledgeRefundCancelInput;
-  PledgeRefundConfirmInput: PledgeRefundConfirmInput;
   PledgeRefundGetInput: PledgeRefundGetInput;
   PledgeRefundGetResponse: Omit<PledgeRefundGetResponse, 'refund'> & { refund: ResolversParentTypes['PledgeRefund'] };
   PledgeRefundInitiateInput: PledgeRefundInitiateInput;
@@ -5804,12 +5804,6 @@ export type BoardVoteGrantResolvers<ContextType = any, ParentType extends Resolv
   statuses?: Resolver<Array<ResolversTypes['GrantStatus']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['GrantType'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type BoltzPayoutSwapResolvers<ContextType = any, ParentType extends ResolversParentTypes['BoltzPayoutSwap'] = ResolversParentTypes['BoltzPayoutSwap']> = {
-  lightningSwapContractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  onChainSwapContractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6358,7 +6352,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   payoutInitiate?: Resolver<ResolversTypes['PayoutInitiateResponse'], ParentType, ContextType, RequireFields<MutationPayoutInitiateArgs, 'input'>>;
   payoutRequest?: Resolver<ResolversTypes['PayoutRequestResponse'], ParentType, ContextType, RequireFields<MutationPayoutRequestArgs, 'input'>>;
   pledgeRefundCancel?: Resolver<ResolversTypes['PledgeRefundResponse'], ParentType, ContextType, RequireFields<MutationPledgeRefundCancelArgs, 'input'>>;
-  pledgeRefundConfirm?: Resolver<ResolversTypes['PledgeRefundResponse'], ParentType, ContextType, RequireFields<MutationPledgeRefundConfirmArgs, 'input'>>;
   pledgeRefundInitiate?: Resolver<ResolversTypes['PledgeRefundInitiateResponse'], ParentType, ContextType, RequireFields<MutationPledgeRefundInitiateArgs, 'input'>>;
   pledgeRefundRequest?: Resolver<ResolversTypes['PledgeRefundRequestResponse'], ParentType, ContextType, RequireFields<MutationPledgeRefundRequestArgs, 'input'>>;
   podcastKeysendContributionCreate?: Resolver<ResolversTypes['PodcastKeysendContributionCreateResponse'], ParentType, ContextType, RequireFields<MutationPodcastKeysendContributionCreateArgs, 'input'>>;
@@ -6691,13 +6684,16 @@ export type PayoutGetResponseResolvers<ContextType = any, ParentType extends Res
 };
 
 export type PayoutInitiateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutInitiateResponse'] = ResolversParentTypes['PayoutInitiateResponse']> = {
+  payment?: Resolver<ResolversTypes['Payment'], ParentType, ContextType>;
   payout?: Resolver<ResolversTypes['Payout'], ParentType, ContextType>;
+  swap?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type PayoutMetadataResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutMetadata'] = ResolversParentTypes['PayoutMetadata']> = {
+  aonContractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   nonce?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  swap?: Resolver<ResolversTypes['BoltzPayoutSwap'], ParentType, ContextType>;
+  swapContractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6807,6 +6803,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   ambassadors?: Resolver<ResolversTypes['ProjectAmbassadorsConnection'], ParentType, ContextType>;
   aonGoalDurationInDays?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   aonGoalInSats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  aonGoalStatus?: Resolver<Maybe<ResolversTypes['ProjectAonGoalStatus']>, ParentType, ContextType>;
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   balanceUsdCent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -7610,7 +7607,6 @@ export type Resolvers<ContextType = any> = {
   BitcoinPaymentMethods?: BitcoinPaymentMethodsResolvers<ContextType>;
   BitcoinQuote?: BitcoinQuoteResolvers<ContextType>;
   BoardVoteGrant?: BoardVoteGrantResolvers<ContextType>;
-  BoltzPayoutSwap?: BoltzPayoutSwapResolvers<ContextType>;
   CommunityVoteGrant?: CommunityVoteGrantResolvers<ContextType>;
   CompetitionVoteGrantVoteSummary?: CompetitionVoteGrantVoteSummaryResolvers<ContextType>;
   ConnectionDetails?: ConnectionDetailsResolvers<ContextType>;
@@ -8629,6 +8625,12 @@ export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fia
 
 export type ProjectSubscriptionPlansFragment = { __typename?: 'ProjectSubscriptionPlan', cost: number, currency: SubscriptionCurrencyType, description?: string | null, id: any, name: string, interval: UserSubscriptionInterval, projectId: any };
 
+export type PaymentPayoutFragment = { __typename?: 'Payment', id: any, payoutAmount: number, status: PaymentStatus };
+
+export type PayoutFragment = { __typename?: 'Payout', amount: number, expiresAt: any, id: any, status: PayoutStatus };
+
+export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress: string };
+
 export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
 
 export type ProjectPostViewFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, markdown?: string | null, sentByEmailAt?: any | null, projectRewards: Array<(
@@ -8652,7 +8654,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonGoalDurationInDays?: number | null, aonGoalInSats?: number | null, launchScheduledAt?: any | null, location?: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonGoalDurationInDays?: number | null, aonGoalInSats?: number | null, aonGoalStatus?: ProjectAonGoalStatus | null, launchScheduledAt?: any | null, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -8839,6 +8841,26 @@ export type ProjectGoalDeleteMutationVariables = Exact<{
 
 
 export type ProjectGoalDeleteMutation = { __typename?: 'Mutation', projectGoalDelete: { __typename?: 'ProjectGoalDeleteResponse', success: boolean } };
+
+export type PayoutRequestMutationVariables = Exact<{
+  input: PayoutRequestInput;
+}>;
+
+
+export type PayoutRequestMutation = { __typename?: 'Mutation', payoutRequest: { __typename?: 'PayoutRequestResponse', payout: (
+      { __typename?: 'Payout' }
+      & PayoutFragment
+    ), payoutMetadata: { __typename?: 'PayoutMetadata', swapContractAddress: string, nonce: number, aonContractAddress: string } } };
+
+export type PayoutInitiateMutationVariables = Exact<{
+  input: PayoutInitiateInput;
+}>;
+
+
+export type PayoutInitiateMutation = { __typename?: 'Mutation', payoutInitiate: { __typename?: 'PayoutInitiateResponse', swap: string, payout: (
+      { __typename?: 'Payout' }
+      & PayoutFragment
+    ) } };
 
 export type PostDeleteMutationVariables = Exact<{
   postDeleteId: Scalars['BigInt']['input'];
@@ -10994,6 +11016,28 @@ export const ProjectSubscriptionPlansFragmentDoc = gql`
   projectId
 }
     `;
+export const PaymentPayoutFragmentDoc = gql`
+    fragment PaymentPayout on Payment {
+  id
+  payoutAmount
+  status
+}
+    `;
+export const PayoutFragmentDoc = gql`
+    fragment Payout on Payout {
+  amount
+  expiresAt
+  id
+  status
+}
+    `;
+export const PayoutMetadataFragmentDoc = gql`
+    fragment PayoutMetadata on PayoutMetadata {
+  nonce
+  swapContractAddress
+  aonContractAddress
+}
+    `;
 export const ProjectPostFragmentDoc = gql`
     fragment ProjectPost on Post {
   id
@@ -11200,6 +11244,7 @@ export const ProjectPageBodyFragmentDoc = gql`
   links
   aonGoalDurationInDays
   aonGoalInSats
+  aonGoalStatus
   launchScheduledAt
   location {
     ...ProjectLocation
@@ -14625,6 +14670,82 @@ export function useProjectGoalDeleteMutation(baseOptions?: Apollo.MutationHookOp
 export type ProjectGoalDeleteMutationHookResult = ReturnType<typeof useProjectGoalDeleteMutation>;
 export type ProjectGoalDeleteMutationResult = Apollo.MutationResult<ProjectGoalDeleteMutation>;
 export type ProjectGoalDeleteMutationOptions = Apollo.BaseMutationOptions<ProjectGoalDeleteMutation, ProjectGoalDeleteMutationVariables>;
+export const PayoutRequestDocument = gql`
+    mutation PayoutRequest($input: PayoutRequestInput!) {
+  payoutRequest(input: $input) {
+    payout {
+      ...Payout
+    }
+    payoutMetadata {
+      swapContractAddress
+      nonce
+      aonContractAddress
+    }
+  }
+}
+    ${PayoutFragmentDoc}`;
+export type PayoutRequestMutationFn = Apollo.MutationFunction<PayoutRequestMutation, PayoutRequestMutationVariables>;
+
+/**
+ * __usePayoutRequestMutation__
+ *
+ * To run a mutation, you first call `usePayoutRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePayoutRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [payoutRequestMutation, { data, loading, error }] = usePayoutRequestMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePayoutRequestMutation(baseOptions?: Apollo.MutationHookOptions<PayoutRequestMutation, PayoutRequestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PayoutRequestMutation, PayoutRequestMutationVariables>(PayoutRequestDocument, options);
+      }
+export type PayoutRequestMutationHookResult = ReturnType<typeof usePayoutRequestMutation>;
+export type PayoutRequestMutationResult = Apollo.MutationResult<PayoutRequestMutation>;
+export type PayoutRequestMutationOptions = Apollo.BaseMutationOptions<PayoutRequestMutation, PayoutRequestMutationVariables>;
+export const PayoutInitiateDocument = gql`
+    mutation PayoutInitiate($input: PayoutInitiateInput!) {
+  payoutInitiate(input: $input) {
+    payout {
+      ...Payout
+    }
+    swap
+  }
+}
+    ${PayoutFragmentDoc}`;
+export type PayoutInitiateMutationFn = Apollo.MutationFunction<PayoutInitiateMutation, PayoutInitiateMutationVariables>;
+
+/**
+ * __usePayoutInitiateMutation__
+ *
+ * To run a mutation, you first call `usePayoutInitiateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePayoutInitiateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [payoutInitiateMutation, { data, loading, error }] = usePayoutInitiateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePayoutInitiateMutation(baseOptions?: Apollo.MutationHookOptions<PayoutInitiateMutation, PayoutInitiateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PayoutInitiateMutation, PayoutInitiateMutationVariables>(PayoutInitiateDocument, options);
+      }
+export type PayoutInitiateMutationHookResult = ReturnType<typeof usePayoutInitiateMutation>;
+export type PayoutInitiateMutationResult = Apollo.MutationResult<PayoutInitiateMutation>;
+export type PayoutInitiateMutationOptions = Apollo.BaseMutationOptions<PayoutInitiateMutation, PayoutInitiateMutationVariables>;
 export const PostDeleteDocument = gql`
     mutation PostDelete($postDeleteId: BigInt!) {
   postDelete(id: $postDeleteId) {

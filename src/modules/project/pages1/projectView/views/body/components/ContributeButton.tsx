@@ -1,9 +1,10 @@
-import { Button, ButtonProps, Link } from '@chakra-ui/react'
+import { Box, Button, ButtonProps, HStack, Image, Link } from '@chakra-ui/react'
 // import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useProjectGrantApplicationsAPI } from '@/modules/project/API/useProjectGrantApplicationsAPI'
+import { Body } from '@/shared/components/typography/Body.tsx'
 // import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
@@ -16,9 +17,10 @@ import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 
 type ContributeButtonProps = ButtonProps & {
   isWidget?: boolean
+  paymentMethods?: string[]
 }
 
-export const ContributeButton = ({ isWidget, ...props }: ContributeButtonProps) => {
+export const ContributeButton = ({ isWidget, paymentMethods, ...props }: ContributeButtonProps) => {
   const { t } = useTranslation()
 
   const navigate = useNavigate()
@@ -78,10 +80,16 @@ export const ContributeButton = ({ isWidget, ...props }: ContributeButtonProps) 
         variant="solid"
         colorScheme="primary1"
         isDisabled={isFundingDisabled}
+        position="relative"
         {...buttonProps}
         {...props}
       >
         {t('Contribute')}
+        <HStack position="absolute" right="10px">
+          {paymentMethods?.map((method) => (
+            <Image src={method} alt={`${method} payment method image`} key={method} maxHeight="14px" />
+          ))}
+        </HStack>
       </Button>
     </>
   )

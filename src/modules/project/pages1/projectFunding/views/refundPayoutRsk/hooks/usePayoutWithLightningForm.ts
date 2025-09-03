@@ -14,20 +14,13 @@ import { useNotification } from '@/utils/index.ts'
 
 /** Form data interface for Lightning payout */
 export type LightningPayoutFormData = {
-  lightningAddress: string
+  lightningAddress?: string
   accountPassword: string
 }
 
 /** Validation schema for Lightning payout form */
 export const lightningPayoutSchema = yup.object({
-  lightningAddress: yup
-    .string()
-    .required(t('Lightning address is required'))
-    .test('valid-lightning-address', t('Please enter a valid Lightning address or Bolt 12 address'), (value) => {
-      if (!value) return false
-      // Basic validation for Lightning address format
-      return value.includes('@') || value.toLowerCase().startsWith('ln') || value.toLowerCase().startsWith('lnurl')
-    }),
+  lightningAddress: yup.string(),
   accountPassword: yup.string().required(t('Account password is required')),
 })
 

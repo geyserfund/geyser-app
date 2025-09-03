@@ -32,16 +32,9 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
     <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
       <ProjectBalanceDisplay />
 
-      <VStack w="full">
-        <HStack w="full">
-          <ContributeButton flex="1" isWidget={isWidget} />
-        </HStack>
-        <HStack>
-          {paymentMethods.map((method) => (
-            <Image src={method} alt={`${method} payment method image`} key={method} maxHeight="14px" />
-          ))}
-        </HStack>
-      </VStack>
+      <HStack w="full">
+        <ContributeButton flex="1" isWidget={isWidget} paymentMethods={paymentMethods} />
+      </HStack>
     </CardLayout>
   )
 }

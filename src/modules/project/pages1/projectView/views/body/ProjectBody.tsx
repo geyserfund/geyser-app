@@ -24,6 +24,7 @@ import {
   Rewards,
   Story,
 } from './sections'
+import { AonNotification } from './sections/aonNotification/AonNotification.tsx'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 
@@ -63,6 +64,7 @@ export const ProjectBody = () => {
         <ProjectPreLaunchNav />
         <FinalizeProjectNotice />
         <CreatorVerificationNotice />
+        <AonNotification />
 
         <CreatorTools />
 

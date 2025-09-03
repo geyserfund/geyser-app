@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai'
 
 import { isViewingOwnProfileAtom } from '@/modules/profile/state/profileAtom.ts'
 import { DownloadInvoice } from '@/modules/project/pages1/projectFunding/views/fundingSuccess/components/DownloadInvoice.tsx'
-import { RefundRsk } from '@/modules/project/pages1/projectFunding/views/refundClaimRsk/RefundRsk.tsx'
+import { RefundRsk } from '@/modules/project/pages1/projectFunding/views/refundPayoutRsk/RefundRsk'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
