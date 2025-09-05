@@ -123,7 +123,7 @@ const UserProfileSection = ({ user, selectedBadges }: { user: any; selectedBadge
             h={{ base: '32px', lg: '40px' }}
             w={{ base: '32px', lg: '40px' }}
             guardian={user.guardianType}
-            wrapperProps={{ padding: '2px' }}
+            wrapperProps={{ padding: '4px' }}
           />
           <Body size={{ base: 'lg', lg: 'xl' }} bold>
             {user.username}
@@ -279,7 +279,7 @@ const GuardianUsersDisplay = () => {
             h="32px"
             w="32px"
             guardian={user.guardianType as GuardianType}
-            wrapperProps={{ padding: '1px' }}
+            wrapperProps={{ padding: '2px' }}
           />
         ))}
       </HStack>
@@ -409,7 +409,7 @@ const BadgeSelectionButton = ({
         boxSize={{ base: '40px', lg: '80px' }}
         filter={hasThisBadge ? 'grayscale(100%)' : 'none'}
       />
-      <Body medium dark size={{ base: 'sm', lg: 'md' }}>
+      <Body bold dark size={{ base: 'sm', lg: 'md' }}>
         {guardian} Badge
       </Body>
       <VStack spacing={0}>
