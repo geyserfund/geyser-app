@@ -5,7 +5,7 @@ import { PiStarFour } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router-dom'
 
 import { fetchFeaturedProject } from '@/api/airtable'
-import { getPathWithGeyserPromotionsHero } from '@/shared/constants'
+import { __production__, getPathWithGeyserPromotionsHero } from '@/shared/constants'
 
 import { FeaturedDisplayCard } from '../components/FeaturedDisplayCard'
 import { FeaturedGrantCard } from '../components/FeaturedGrantCard'
@@ -47,15 +47,17 @@ export const Featured = () => {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const response: FeaturedAirtableResponse = await fetchFeaturedProject()
+        if (__production__) {
+          const response: FeaturedAirtableResponse = await fetchFeaturedProject()
 
-        if (response.records.length > 1) {
-          setAllAirtableData(response.records.map((record) => record.fields).filter((data) => data.Name !== ''))
-        }
+          if (response.records.length > 1) {
+            setAllAirtableData(response.records.map((record) => record.fields).filter((data) => data.Name !== ''))
+          }
 
-        const data = response?.records?.[0]?.fields
-        if (data) {
-          setData(data)
+          const data = response?.records?.[0]?.fields
+          if (data) {
+            setData(data)
+          }
         }
       } catch (error) {
         setNoData(true)
