@@ -45,7 +45,6 @@ export const ProjectCreateStrategy = () => {
   const setReadyForLaunch = useSetAtom(isReadyForLaunchAtom)
 
   const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(ProjectLaunchStrategy.STARTER_LAUNCH)
-  const [strategySelected, setStrategySelected] = useState<boolean>(false)
 
   const handleBack = () => {
     setReadyForLaunch(false)
@@ -69,8 +68,8 @@ export const ProjectCreateStrategy = () => {
     return null
   }
 
-  if (project.paidLaunch || strategySelected) {
-    return <ProjectCreateCompletionPage setStrategySelected={setStrategySelected} />
+  if (project.paidLaunch) {
+    return <ProjectCreateCompletionPage />
   }
 
   return (
