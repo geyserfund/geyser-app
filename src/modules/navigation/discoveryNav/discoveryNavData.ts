@@ -1,14 +1,5 @@
 import { IconType } from 'react-icons'
-import {
-  PiBookmark,
-  PiCompass,
-  PiCrown,
-  PiHandbag,
-  PiRocketLaunch,
-  PiSketchLogo,
-  PiTrophy,
-  PiWaveform,
-} from 'react-icons/pi'
+import { PiBookmark, PiCompass, PiCrown, PiHandbag, PiSketchLogo, PiTrophy, PiWaveform } from 'react-icons/pi'
 
 import { LegendJewelIconUrl, PathsMap } from '@/shared/constants'
 
@@ -47,13 +38,6 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.Products,
     path: 'discoveryProducts',
     icon: PiHandbag,
-    bottomNav: true,
-  },
-  {
-    label: 'Launchpad',
-    key: DiscoveryNavItemKey.Launchpad,
-    path: 'discoveryLaunchpad',
-    icon: PiRocketLaunch,
     bottomNav: true,
   },
   {

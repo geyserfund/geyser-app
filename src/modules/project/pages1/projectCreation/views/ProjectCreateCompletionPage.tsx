@@ -1,5 +1,4 @@
 import { Button, VStack } from '@chakra-ui/react'
-import { Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiRocketLaunch } from 'react-icons/pi'
 import { useNavigate } from 'react-router-dom'
@@ -19,11 +18,7 @@ import { ProjectLaunchConfirmModal } from '../../../components/ProjectLaunchConf
 import { ProjectCreateCompleted } from '../components/ProjectCreateCompleted'
 import { ProjectCreateLayout } from '../components/ProjectCreateLayout.tsx'
 
-interface ProjectCreateCompletionPageProps {
-  setStrategySelected: Dispatch<SetStateAction<boolean>>
-}
-
-export const ProjectCreateCompletionPage = ({ setStrategySelected }: ProjectCreateCompletionPageProps) => {
+export const ProjectCreateCompletionPage = () => {
   const { t } = useTranslation()
   const { queryCurrentUser } = useAuthContext()
 
@@ -56,12 +51,7 @@ export const ProjectCreateCompletionPage = ({ setStrategySelected }: ProjectCrea
   })
 
   const handleBackClick = () => {
-    if (project.paidLaunch) {
-      navigate(-1)
-      return
-    }
-
-    setStrategySelected(false)
+    navigate(-1)
   }
 
   const onLaunchClick = async () => {

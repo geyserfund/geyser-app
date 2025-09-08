@@ -752,10 +752,7 @@ export const platformRoutes: RouteObject[] = [
 
       {
         path: getPath('discoveryLaunchpad'),
-        async lazy() {
-          const LaunchpadPage = await Discovery().then((m) => m.Launchpad)
-          return { Component: LaunchpadPage }
-        },
+        element: <Navigate to={getPath('discoveryLanding')} />,
       },
       {
         path: getPath('hallOfFameProjects'),
