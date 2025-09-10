@@ -109,16 +109,31 @@ export const formattedFundingInputAtom = atom((get) => {
 })
 
 /** Funding Input after request */
-export const fundingInputAfterRequestAtom = atom<(ContributionCreateInput & { user: UserMeFragment }) | null>(null)
+export const fundingInputAfterRequestAtom = atom<
+  | (ContributionCreateInput & { user: UserMeFragment; lightningPreImageHex?: string; onChainPreImageHex?: string })
+  | null
+>(null)
 
-export const setFundingInputAfterRequestAtom = atom(null, (get, set, input: ContributionCreateInput) => {
-  const user = get(authUserAtom)
-  set(fundingInputAfterRequestAtom, { ...input, user })
-})
+export const setFundingInputAfterRequestAtom = atom(
+  null,
+  (get, set, input: ContributionCreateInput & { lightningPreImageHex?: string; onChainPreImageHex?: string }) => {
+    const user = get(authUserAtom)
+    set(fundingInputAfterRequestAtom, { ...input, user })
+  },
+)
+
+export const contributionCreatePreImagesAtom = atom<{
+  lightning?: { preimageHex: string; preimageHash: string }
+  onChain?: { preimageHex: string; preimageHash: string }
+}>({})
 
 /** Reset funding input after request */
 export const resetFundingInputAfterRequestAtom = atom(null, (_, set) => {
   set(fundingInputAfterRequestAtom, null)
+  set(contributionCreatePreImagesAtom, {
+    lightning: { preimageHex: '', preimageHash: '' },
+    onChain: { preimageHex: '', preimageHash: '' },
+  })
 })
 
 const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
@@ -128,6 +143,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const paymentsInput: ContributionPaymentsInput = {}
 
   const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
+  const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
 
   if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
     paymentsInput.fiat = {
@@ -153,6 +169,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
       create: true,
       boltz: {
         claimPublicKey,
+        claimAddress,
         preimageHash: '',
       },
     }
@@ -161,6 +178,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
       create: true,
       boltz: {
         claimPublicKey,
+        claimAddress,
         preimageHash: '',
       },
     }

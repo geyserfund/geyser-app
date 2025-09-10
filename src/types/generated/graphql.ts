@@ -272,6 +272,10 @@ export type ContributionEmailUpdateInput = {
 
 export type ContributionFiatPaymentDetails = {
   __typename?: 'ContributionFiatPaymentDetails';
+  amountDue: Scalars['Int']['output'];
+  amountDueCurrency: PaymentCurrency;
+  fees: Array<PaymentFee>;
+  paymentId: Scalars['BigInt']['output'];
   stripeClientSecret: Scalars['String']['output'];
 };
 
@@ -286,7 +290,11 @@ export type ContributionFiatPaymentDetailsStripeInput = {
 
 export type ContributionFiatSwapPaymentDetails = {
   __typename?: 'ContributionFiatSwapPaymentDetails';
+  amountDue: Scalars['Int']['output'];
+  amountDueCurrency: PaymentCurrency;
   checkoutUrl: Scalars['String']['output'];
+  fees: Array<PaymentFee>;
+  paymentId: Scalars['BigInt']['output'];
 };
 
 export type ContributionFiatSwapPaymentDetailsBanxaInput = {
@@ -305,7 +313,11 @@ export type ContributionFiatSwapPaymentDetailsInput = {
 
 export type ContributionLightningPaymentDetails = {
   __typename?: 'ContributionLightningPaymentDetails';
+  amountDue: Scalars['Int']['output'];
+  amountDueCurrency: PaymentCurrency;
+  fees: Array<PaymentFee>;
   lightningInvoiceId: Scalars['String']['output'];
+  paymentId: Scalars['BigInt']['output'];
   paymentRequest: Scalars['String']['output'];
 };
 
@@ -316,12 +328,17 @@ export type ContributionLightningPaymentDetailsInput = {
 
 export type ContributionLightningToRskSwapPaymentDetails = {
   __typename?: 'ContributionLightningToRskSwapPaymentDetails';
+  amountDue: Scalars['Int']['output'];
+  amountDueCurrency: PaymentCurrency;
+  fees: Array<PaymentFee>;
   lightningInvoiceId: Scalars['String']['output'];
+  paymentId: Scalars['BigInt']['output'];
   paymentRequest: Scalars['String']['output'];
   swapJson: Scalars['String']['output'];
 };
 
 export type ContributionLightningToRskSwapPaymentDetailsBoltzInput = {
+  claimAddress: Scalars['String']['input'];
   claimPublicKey: Scalars['String']['input'];
   preimageHash: Scalars['String']['input'];
 };
@@ -349,6 +366,10 @@ export type ContributionMutationResponse = {
 export type ContributionOnChainSwapPaymentDetails = {
   __typename?: 'ContributionOnChainSwapPaymentDetails';
   address: Scalars['String']['output'];
+  amountDue: Scalars['Int']['output'];
+  amountDueCurrency: PaymentCurrency;
+  fees: Array<PaymentFee>;
+  paymentId: Scalars['BigInt']['output'];
   swapJson: Scalars['String']['output'];
 };
 
@@ -360,10 +381,15 @@ export type ContributionOnChainSwapPaymentDetailsInput = {
 export type ContributionOnChainToRskSwapPaymentDetails = {
   __typename?: 'ContributionOnChainToRskSwapPaymentDetails';
   address: Scalars['String']['output'];
+  amountDue: Scalars['Int']['output'];
+  amountDueCurrency: PaymentCurrency;
+  fees: Array<PaymentFee>;
+  paymentId: Scalars['BigInt']['output'];
   swapJson: Scalars['String']['output'];
 };
 
 export type ContributionOnChainToRskSwapPaymentDetailsBoltzInput = {
+  claimAddress: Scalars['String']['input'];
   claimPublicKey: Scalars['String']['input'];
   preimageHash: Scalars['String']['input'];
 };
@@ -1407,6 +1433,8 @@ export type Mutation = {
   paymentInvoiceCancel: PaymentInvoiceCancelResponse;
   paymentPend: PaymentPendResponse;
   paymentRefundComplete: PaymentRefundCompleteResponse;
+  paymentSwapClaimTxBroadcast: PaymentSwapClaimTxBroadcastResponse;
+  paymentSwapClaimTxSet: PaymentSwapClaimTxSetResponse;
   payoutCancel: PayoutResponse;
   payoutInitiate: PayoutInitiateResponse;
   payoutRequest: PayoutRequestResponse;
@@ -1573,6 +1601,16 @@ export type MutationPaymentPendArgs = {
 
 export type MutationPaymentRefundCompleteArgs = {
   input: PaymentRefundCompleteInput;
+};
+
+
+export type MutationPaymentSwapClaimTxBroadcastArgs = {
+  input: PaymentSwapClaimTxBroadcastInput;
+};
+
+
+export type MutationPaymentSwapClaimTxSetArgs = {
+  input: PaymentSwapClaimTxSetInput;
 };
 
 
@@ -2347,6 +2385,28 @@ export type PaymentStatusUpdatedInput = {
   contributionUUID?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type PaymentSwapClaimTxBroadcastInput = {
+  paymentId: Scalars['BigInt']['input'];
+};
+
+export type PaymentSwapClaimTxBroadcastResponse = {
+  __typename?: 'PaymentSwapClaimTxBroadcastResponse';
+  id: Scalars['BigInt']['output'];
+  success: Scalars['Boolean']['output'];
+  txHash?: Maybe<Scalars['String']['output']>;
+};
+
+export type PaymentSwapClaimTxSetInput = {
+  claimTxCallDataHex: Scalars['String']['input'];
+  paymentId: Scalars['BigInt']['input'];
+};
+
+export type PaymentSwapClaimTxSetResponse = {
+  __typename?: 'PaymentSwapClaimTxSetResponse';
+  id: Scalars['BigInt']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
 export enum PaymentType {
   Fiat = 'FIAT',
   FiatToLightningSwap = 'FIAT_TO_LIGHTNING_SWAP',
@@ -2417,8 +2477,6 @@ export type PayoutPaymentInput = {
 };
 
 export type PayoutRequestInput = {
-  /** Use this field to request a refund for a single contribution. */
-  contributionId?: InputMaybe<Scalars['BigInt']['input']>;
   /** Use this field to request a batch payout for all contributions in a project (only available for logged in users) */
   projectId?: InputMaybe<Scalars['BigInt']['input']>;
   /** The RSK address of the contributor (for anonymous contributions) */
@@ -2682,6 +2740,7 @@ export type ProfileNotificationSettings = {
 export type Project = {
   __typename?: 'Project';
   ambassadors: ProjectAmbassadorsConnection;
+  aonContractAddress?: Maybe<Scalars['String']['output']>;
   /** AON goal duration in days */
   aonGoalDurationInDays?: Maybe<Scalars['Int']['output']>;
   /** AON goal in sats */
@@ -4814,28 +4873,28 @@ export type ResolversTypes = {
   Contribution: ResolverTypeWrapper<Omit<Contribution, 'bitcoinQuote' | 'payments' | 'sourceResource'> & { bitcoinQuote?: Maybe<ResolversTypes['BitcoinQuote']>, payments: Array<ResolversTypes['Payment']>, sourceResource?: Maybe<ResolversTypes['SourceResource']> }>;
   ContributionCreateInput: ContributionCreateInput;
   ContributionEmailUpdateInput: ContributionEmailUpdateInput;
-  ContributionFiatPaymentDetails: ResolverTypeWrapper<ContributionFiatPaymentDetails>;
+  ContributionFiatPaymentDetails: ResolverTypeWrapper<Omit<ContributionFiatPaymentDetails, 'fees'> & { fees: Array<ResolversTypes['PaymentFee']> }>;
   ContributionFiatPaymentDetailsInput: ContributionFiatPaymentDetailsInput;
   ContributionFiatPaymentDetailsStripeInput: ContributionFiatPaymentDetailsStripeInput;
-  ContributionFiatSwapPaymentDetails: ResolverTypeWrapper<ContributionFiatSwapPaymentDetails>;
+  ContributionFiatSwapPaymentDetails: ResolverTypeWrapper<Omit<ContributionFiatSwapPaymentDetails, 'fees'> & { fees: Array<ResolversTypes['PaymentFee']> }>;
   ContributionFiatSwapPaymentDetailsBanxaInput: ContributionFiatSwapPaymentDetailsBanxaInput;
   ContributionFiatSwapPaymentDetailsBoltzInput: ContributionFiatSwapPaymentDetailsBoltzInput;
   ContributionFiatSwapPaymentDetailsInput: ContributionFiatSwapPaymentDetailsInput;
-  ContributionLightningPaymentDetails: ResolverTypeWrapper<ContributionLightningPaymentDetails>;
+  ContributionLightningPaymentDetails: ResolverTypeWrapper<Omit<ContributionLightningPaymentDetails, 'fees'> & { fees: Array<ResolversTypes['PaymentFee']> }>;
   ContributionLightningPaymentDetailsInput: ContributionLightningPaymentDetailsInput;
-  ContributionLightningToRskSwapPaymentDetails: ResolverTypeWrapper<ContributionLightningToRskSwapPaymentDetails>;
+  ContributionLightningToRskSwapPaymentDetails: ResolverTypeWrapper<Omit<ContributionLightningToRskSwapPaymentDetails, 'fees'> & { fees: Array<ResolversTypes['PaymentFee']> }>;
   ContributionLightningToRskSwapPaymentDetailsBoltzInput: ContributionLightningToRskSwapPaymentDetailsBoltzInput;
   ContributionLightningToRskSwapPaymentDetailsInput: ContributionLightningToRskSwapPaymentDetailsInput;
   ContributionMetadataInput: ContributionMetadataInput;
-  ContributionMutationResponse: ResolverTypeWrapper<Omit<ContributionMutationResponse, 'contribution'> & { contribution: ResolversTypes['Contribution'] }>;
-  ContributionOnChainSwapPaymentDetails: ResolverTypeWrapper<ContributionOnChainSwapPaymentDetails>;
+  ContributionMutationResponse: ResolverTypeWrapper<Omit<ContributionMutationResponse, 'contribution' | 'payments'> & { contribution: ResolversTypes['Contribution'], payments: ResolversTypes['ContributionPaymentsDetails'] }>;
+  ContributionOnChainSwapPaymentDetails: ResolverTypeWrapper<Omit<ContributionOnChainSwapPaymentDetails, 'fees'> & { fees: Array<ResolversTypes['PaymentFee']> }>;
   ContributionOnChainSwapPaymentDetailsInput: ContributionOnChainSwapPaymentDetailsInput;
-  ContributionOnChainToRskSwapPaymentDetails: ResolverTypeWrapper<ContributionOnChainToRskSwapPaymentDetails>;
+  ContributionOnChainToRskSwapPaymentDetails: ResolverTypeWrapper<Omit<ContributionOnChainToRskSwapPaymentDetails, 'fees'> & { fees: Array<ResolversTypes['PaymentFee']> }>;
   ContributionOnChainToRskSwapPaymentDetailsBoltzInput: ContributionOnChainToRskSwapPaymentDetailsBoltzInput;
   ContributionOnChainToRskSwapPaymentDetailsInput: ContributionOnChainToRskSwapPaymentDetailsInput;
   ContributionPaymentsAddInput: ContributionPaymentsAddInput;
-  ContributionPaymentsAddResponse: ResolverTypeWrapper<ContributionPaymentsAddResponse>;
-  ContributionPaymentsDetails: ResolverTypeWrapper<ContributionPaymentsDetails>;
+  ContributionPaymentsAddResponse: ResolverTypeWrapper<Omit<ContributionPaymentsAddResponse, 'payments'> & { payments: ResolversTypes['ContributionPaymentsDetails'] }>;
+  ContributionPaymentsDetails: ResolverTypeWrapper<Omit<ContributionPaymentsDetails, 'fiat' | 'fiatSwap' | 'lightning' | 'lightningToRskSwap' | 'onChainSwap' | 'onChainToRskSwap'> & { fiat?: Maybe<ResolversTypes['ContributionFiatPaymentDetails']>, fiatSwap?: Maybe<ResolversTypes['ContributionFiatSwapPaymentDetails']>, lightning?: Maybe<ResolversTypes['ContributionLightningPaymentDetails']>, lightningToRskSwap?: Maybe<ResolversTypes['ContributionLightningToRskSwapPaymentDetails']>, onChainSwap?: Maybe<ResolversTypes['ContributionOnChainSwapPaymentDetails']>, onChainToRskSwap?: Maybe<ResolversTypes['ContributionOnChainToRskSwapPaymentDetails']> }>;
   ContributionPaymentsInput: ContributionPaymentsInput;
   ContributionStatus: ContributionStatus;
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
@@ -5047,6 +5106,10 @@ export type ResolversTypes = {
   PaymentRefundsGetResponse: ResolverTypeWrapper<PaymentRefundsGetResponse>;
   PaymentStatus: PaymentStatus;
   PaymentStatusUpdatedInput: PaymentStatusUpdatedInput;
+  PaymentSwapClaimTxBroadcastInput: PaymentSwapClaimTxBroadcastInput;
+  PaymentSwapClaimTxBroadcastResponse: ResolverTypeWrapper<PaymentSwapClaimTxBroadcastResponse>;
+  PaymentSwapClaimTxSetInput: PaymentSwapClaimTxSetInput;
+  PaymentSwapClaimTxSetResponse: ResolverTypeWrapper<PaymentSwapClaimTxSetResponse>;
   PaymentType: PaymentType;
   Payout: ResolverTypeWrapper<Payout>;
   PayoutCancelInput: PayoutCancelInput;
@@ -5319,28 +5382,28 @@ export type ResolversParentTypes = {
   Contribution: Omit<Contribution, 'bitcoinQuote' | 'payments' | 'sourceResource'> & { bitcoinQuote?: Maybe<ResolversParentTypes['BitcoinQuote']>, payments: Array<ResolversParentTypes['Payment']>, sourceResource?: Maybe<ResolversParentTypes['SourceResource']> };
   ContributionCreateInput: ContributionCreateInput;
   ContributionEmailUpdateInput: ContributionEmailUpdateInput;
-  ContributionFiatPaymentDetails: ContributionFiatPaymentDetails;
+  ContributionFiatPaymentDetails: Omit<ContributionFiatPaymentDetails, 'fees'> & { fees: Array<ResolversParentTypes['PaymentFee']> };
   ContributionFiatPaymentDetailsInput: ContributionFiatPaymentDetailsInput;
   ContributionFiatPaymentDetailsStripeInput: ContributionFiatPaymentDetailsStripeInput;
-  ContributionFiatSwapPaymentDetails: ContributionFiatSwapPaymentDetails;
+  ContributionFiatSwapPaymentDetails: Omit<ContributionFiatSwapPaymentDetails, 'fees'> & { fees: Array<ResolversParentTypes['PaymentFee']> };
   ContributionFiatSwapPaymentDetailsBanxaInput: ContributionFiatSwapPaymentDetailsBanxaInput;
   ContributionFiatSwapPaymentDetailsBoltzInput: ContributionFiatSwapPaymentDetailsBoltzInput;
   ContributionFiatSwapPaymentDetailsInput: ContributionFiatSwapPaymentDetailsInput;
-  ContributionLightningPaymentDetails: ContributionLightningPaymentDetails;
+  ContributionLightningPaymentDetails: Omit<ContributionLightningPaymentDetails, 'fees'> & { fees: Array<ResolversParentTypes['PaymentFee']> };
   ContributionLightningPaymentDetailsInput: ContributionLightningPaymentDetailsInput;
-  ContributionLightningToRskSwapPaymentDetails: ContributionLightningToRskSwapPaymentDetails;
+  ContributionLightningToRskSwapPaymentDetails: Omit<ContributionLightningToRskSwapPaymentDetails, 'fees'> & { fees: Array<ResolversParentTypes['PaymentFee']> };
   ContributionLightningToRskSwapPaymentDetailsBoltzInput: ContributionLightningToRskSwapPaymentDetailsBoltzInput;
   ContributionLightningToRskSwapPaymentDetailsInput: ContributionLightningToRskSwapPaymentDetailsInput;
   ContributionMetadataInput: ContributionMetadataInput;
-  ContributionMutationResponse: Omit<ContributionMutationResponse, 'contribution'> & { contribution: ResolversParentTypes['Contribution'] };
-  ContributionOnChainSwapPaymentDetails: ContributionOnChainSwapPaymentDetails;
+  ContributionMutationResponse: Omit<ContributionMutationResponse, 'contribution' | 'payments'> & { contribution: ResolversParentTypes['Contribution'], payments: ResolversParentTypes['ContributionPaymentsDetails'] };
+  ContributionOnChainSwapPaymentDetails: Omit<ContributionOnChainSwapPaymentDetails, 'fees'> & { fees: Array<ResolversParentTypes['PaymentFee']> };
   ContributionOnChainSwapPaymentDetailsInput: ContributionOnChainSwapPaymentDetailsInput;
-  ContributionOnChainToRskSwapPaymentDetails: ContributionOnChainToRskSwapPaymentDetails;
+  ContributionOnChainToRskSwapPaymentDetails: Omit<ContributionOnChainToRskSwapPaymentDetails, 'fees'> & { fees: Array<ResolversParentTypes['PaymentFee']> };
   ContributionOnChainToRskSwapPaymentDetailsBoltzInput: ContributionOnChainToRskSwapPaymentDetailsBoltzInput;
   ContributionOnChainToRskSwapPaymentDetailsInput: ContributionOnChainToRskSwapPaymentDetailsInput;
   ContributionPaymentsAddInput: ContributionPaymentsAddInput;
-  ContributionPaymentsAddResponse: ContributionPaymentsAddResponse;
-  ContributionPaymentsDetails: ContributionPaymentsDetails;
+  ContributionPaymentsAddResponse: Omit<ContributionPaymentsAddResponse, 'payments'> & { payments: ResolversParentTypes['ContributionPaymentsDetails'] };
+  ContributionPaymentsDetails: Omit<ContributionPaymentsDetails, 'fiat' | 'fiatSwap' | 'lightning' | 'lightningToRskSwap' | 'onChainSwap' | 'onChainToRskSwap'> & { fiat?: Maybe<ResolversParentTypes['ContributionFiatPaymentDetails']>, fiatSwap?: Maybe<ResolversParentTypes['ContributionFiatSwapPaymentDetails']>, lightning?: Maybe<ResolversParentTypes['ContributionLightningPaymentDetails']>, lightningToRskSwap?: Maybe<ResolversParentTypes['ContributionLightningToRskSwapPaymentDetails']>, onChainSwap?: Maybe<ResolversParentTypes['ContributionOnChainSwapPaymentDetails']>, onChainToRskSwap?: Maybe<ResolversParentTypes['ContributionOnChainToRskSwapPaymentDetails']> };
   ContributionPaymentsInput: ContributionPaymentsInput;
   ContributionStatusUpdatedInput: ContributionStatusUpdatedInput;
   ContributionStatusUpdatedSubscriptionResponse: Omit<ContributionStatusUpdatedSubscriptionResponse, 'contribution'> & { contribution: ResolversParentTypes['Contribution'] };
@@ -5519,6 +5582,10 @@ export type ResolversParentTypes = {
   PaymentRefundCompleteResponse: PaymentRefundCompleteResponse;
   PaymentRefundsGetResponse: PaymentRefundsGetResponse;
   PaymentStatusUpdatedInput: PaymentStatusUpdatedInput;
+  PaymentSwapClaimTxBroadcastInput: PaymentSwapClaimTxBroadcastInput;
+  PaymentSwapClaimTxBroadcastResponse: PaymentSwapClaimTxBroadcastResponse;
+  PaymentSwapClaimTxSetInput: PaymentSwapClaimTxSetInput;
+  PaymentSwapClaimTxSetResponse: PaymentSwapClaimTxSetResponse;
   Payout: Payout;
   PayoutCancelInput: PayoutCancelInput;
   PayoutGetInput: PayoutGetInput;
@@ -5863,23 +5930,39 @@ export type ContributionResolvers<ContextType = any, ParentType extends Resolver
 };
 
 export type ContributionFiatPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionFiatPaymentDetails'] = ResolversParentTypes['ContributionFiatPaymentDetails']> = {
+  amountDue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  amountDueCurrency?: Resolver<ResolversTypes['PaymentCurrency'], ParentType, ContextType>;
+  fees?: Resolver<Array<ResolversTypes['PaymentFee']>, ParentType, ContextType>;
+  paymentId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   stripeClientSecret?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ContributionFiatSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionFiatSwapPaymentDetails'] = ResolversParentTypes['ContributionFiatSwapPaymentDetails']> = {
+  amountDue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  amountDueCurrency?: Resolver<ResolversTypes['PaymentCurrency'], ParentType, ContextType>;
   checkoutUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  fees?: Resolver<Array<ResolversTypes['PaymentFee']>, ParentType, ContextType>;
+  paymentId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ContributionLightningPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionLightningPaymentDetails'] = ResolversParentTypes['ContributionLightningPaymentDetails']> = {
+  amountDue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  amountDueCurrency?: Resolver<ResolversTypes['PaymentCurrency'], ParentType, ContextType>;
+  fees?: Resolver<Array<ResolversTypes['PaymentFee']>, ParentType, ContextType>;
   lightningInvoiceId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  paymentId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   paymentRequest?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ContributionLightningToRskSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionLightningToRskSwapPaymentDetails'] = ResolversParentTypes['ContributionLightningToRskSwapPaymentDetails']> = {
+  amountDue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  amountDueCurrency?: Resolver<ResolversTypes['PaymentCurrency'], ParentType, ContextType>;
+  fees?: Resolver<Array<ResolversTypes['PaymentFee']>, ParentType, ContextType>;
   lightningInvoiceId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  paymentId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   paymentRequest?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   swapJson?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -5893,12 +5976,20 @@ export type ContributionMutationResponseResolvers<ContextType = any, ParentType 
 
 export type ContributionOnChainSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionOnChainSwapPaymentDetails'] = ResolversParentTypes['ContributionOnChainSwapPaymentDetails']> = {
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  amountDue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  amountDueCurrency?: Resolver<ResolversTypes['PaymentCurrency'], ParentType, ContextType>;
+  fees?: Resolver<Array<ResolversTypes['PaymentFee']>, ParentType, ContextType>;
+  paymentId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   swapJson?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ContributionOnChainToRskSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionOnChainToRskSwapPaymentDetails'] = ResolversParentTypes['ContributionOnChainToRskSwapPaymentDetails']> = {
   address?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  amountDue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  amountDueCurrency?: Resolver<ResolversTypes['PaymentCurrency'], ParentType, ContextType>;
+  fees?: Resolver<Array<ResolversTypes['PaymentFee']>, ParentType, ContextType>;
+  paymentId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   swapJson?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -6348,6 +6439,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   paymentInvoiceCancel?: Resolver<ResolversTypes['PaymentInvoiceCancelResponse'], ParentType, ContextType, RequireFields<MutationPaymentInvoiceCancelArgs, 'invoiceId'>>;
   paymentPend?: Resolver<ResolversTypes['PaymentPendResponse'], ParentType, ContextType, RequireFields<MutationPaymentPendArgs, 'input'>>;
   paymentRefundComplete?: Resolver<ResolversTypes['PaymentRefundCompleteResponse'], ParentType, ContextType, RequireFields<MutationPaymentRefundCompleteArgs, 'input'>>;
+  paymentSwapClaimTxBroadcast?: Resolver<ResolversTypes['PaymentSwapClaimTxBroadcastResponse'], ParentType, ContextType, RequireFields<MutationPaymentSwapClaimTxBroadcastArgs, 'input'>>;
+  paymentSwapClaimTxSet?: Resolver<ResolversTypes['PaymentSwapClaimTxSetResponse'], ParentType, ContextType, RequireFields<MutationPaymentSwapClaimTxSetArgs, 'input'>>;
   payoutCancel?: Resolver<ResolversTypes['PayoutResponse'], ParentType, ContextType, RequireFields<MutationPayoutCancelArgs, 'input'>>;
   payoutInitiate?: Resolver<ResolversTypes['PayoutInitiateResponse'], ParentType, ContextType, RequireFields<MutationPayoutInitiateArgs, 'input'>>;
   payoutRequest?: Resolver<ResolversTypes['PayoutRequestResponse'], ParentType, ContextType, RequireFields<MutationPayoutRequestArgs, 'input'>>;
@@ -6669,6 +6762,19 @@ export type PaymentRefundsGetResponseResolvers<ContextType = any, ParentType ext
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PaymentSwapClaimTxBroadcastResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentSwapClaimTxBroadcastResponse'] = ResolversParentTypes['PaymentSwapClaimTxBroadcastResponse']> = {
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  txHash?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PaymentSwapClaimTxSetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentSwapClaimTxSetResponse'] = ResolversParentTypes['PaymentSwapClaimTxSetResponse']> = {
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PayoutResolvers<ContextType = any, ParentType extends ResolversParentTypes['Payout'] = ResolversParentTypes['Payout']> = {
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   expiresAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -6801,6 +6907,7 @@ export type ProfileNotificationSettingsResolvers<ContextType = any, ParentType e
 
 export type ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
   ambassadors?: Resolver<ResolversTypes['ProjectAmbassadorsConnection'], ParentType, ContextType>;
+  aonContractAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   aonGoalDurationInDays?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   aonGoalInSats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   aonGoalStatus?: Resolver<Maybe<ResolversTypes['ProjectAonGoalStatus']>, ParentType, ContextType>;
@@ -7708,6 +7815,8 @@ export type Resolvers<ContextType = any> = {
   PaymentRefund?: PaymentRefundResolvers<ContextType>;
   PaymentRefundCompleteResponse?: PaymentRefundCompleteResponseResolvers<ContextType>;
   PaymentRefundsGetResponse?: PaymentRefundsGetResponseResolvers<ContextType>;
+  PaymentSwapClaimTxBroadcastResponse?: PaymentSwapClaimTxBroadcastResponseResolvers<ContextType>;
+  PaymentSwapClaimTxSetResponse?: PaymentSwapClaimTxSetResponseResolvers<ContextType>;
   Payout?: PayoutResolvers<ContextType>;
   PayoutGetResponse?: PayoutGetResponseResolvers<ContextType>;
   PayoutInitiateResponse?: PayoutInitiateResponseResolvers<ContextType>;
@@ -8585,6 +8694,8 @@ export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, cr
     & ShippingAddressFragment
   ) | null };
 
+export type ContributionFeesFragment = { __typename?: 'PaymentFee', feeAmount: number, feePayer?: PaymentFeePayer | null };
+
 export type ContributionLightningPaymentDetailsFragment = { __typename?: 'ContributionLightningPaymentDetails', lightningInvoiceId: string, paymentRequest: string };
 
 export type ContributionOnChainSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainSwapPaymentDetails', address: string, swapJson: string };
@@ -8593,9 +8704,15 @@ export type ContributionFiatPaymentDetailsFragment = { __typename?: 'Contributio
 
 export type ContributionFiatSwapPaymentDetailsFragment = { __typename?: 'ContributionFiatSwapPaymentDetails', checkoutUrl: string };
 
-export type ContributionLightningToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionLightningToRskSwapPaymentDetails', lightningInvoiceId: string, paymentRequest: string, swapJson: string };
+export type ContributionLightningToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionLightningToRskSwapPaymentDetails', lightningInvoiceId: string, paymentRequest: string, swapJson: string, paymentId: any, amountDue: number, fees: Array<(
+    { __typename?: 'PaymentFee' }
+    & ContributionFeesFragment
+  )> };
 
-export type ContributionOnChainToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainToRskSwapPaymentDetails', address: string, swapJson: string };
+export type ContributionOnChainToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainToRskSwapPaymentDetails', address: string, swapJson: string, paymentId: any, amountDue: number, fees: Array<(
+    { __typename?: 'PaymentFee' }
+    & ContributionFeesFragment
+  )> };
 
 export type FundingContributionPaymentDetailsFragment = { __typename?: 'ContributionPaymentsDetails', lightning?: (
     { __typename?: 'ContributionLightningPaymentDetails' }
@@ -8654,7 +8771,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonGoalDurationInDays?: number | null, aonGoalInSats?: number | null, aonGoalStatus?: ProjectAonGoalStatus | null, launchScheduledAt?: any | null, location?: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonContractAddress?: string | null, aonGoalDurationInDays?: number | null, aonGoalInSats?: number | null, aonGoalStatus?: ProjectAonGoalStatus | null, launchScheduledAt?: any | null, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -8767,6 +8884,13 @@ export type FundingFiatSwapPaymentCreateMutationVariables = Exact<{
 
 
 export type FundingFiatSwapPaymentCreateMutation = { __typename?: 'Mutation', contributionPaymentsAdd: { __typename?: 'ContributionPaymentsAddResponse', payments: { __typename?: 'ContributionPaymentsDetails', fiatSwap?: { __typename?: 'ContributionFiatSwapPaymentDetails', checkoutUrl: string } | null } } };
+
+export type PaymentSwapClaimTxSetMutationVariables = Exact<{
+  input: PaymentSwapClaimTxSetInput;
+}>;
+
+
+export type PaymentSwapClaimTxSetMutation = { __typename?: 'Mutation', paymentSwapClaimTxSet: { __typename?: 'PaymentSwapClaimTxSetResponse', id: any, success: boolean } };
 
 export type DeleteEntryMutationVariables = Exact<{
   deleteEntryId: Scalars['BigInt']['input'];
@@ -10956,19 +11080,35 @@ export const ContributionFiatSwapPaymentDetailsFragmentDoc = gql`
   checkoutUrl
 }
     `;
+export const ContributionFeesFragmentDoc = gql`
+    fragment ContributionFees on PaymentFee {
+  feeAmount
+  feePayer
+}
+    `;
 export const ContributionLightningToRskSwapPaymentDetailsFragmentDoc = gql`
     fragment ContributionLightningToRskSwapPaymentDetails on ContributionLightningToRskSwapPaymentDetails {
   lightningInvoiceId
   paymentRequest
   swapJson
+  paymentId
+  amountDue
+  fees {
+    ...ContributionFees
+  }
 }
-    `;
+    ${ContributionFeesFragmentDoc}`;
 export const ContributionOnChainToRskSwapPaymentDetailsFragmentDoc = gql`
     fragment ContributionOnChainToRskSwapPaymentDetails on ContributionOnChainToRskSwapPaymentDetails {
   address
   swapJson
+  paymentId
+  amountDue
+  fees {
+    ...ContributionFees
+  }
 }
-    `;
+    ${ContributionFeesFragmentDoc}`;
 export const FundingContributionPaymentDetailsFragmentDoc = gql`
     fragment FundingContributionPaymentDetails on ContributionPaymentsDetails {
   lightning {
@@ -11242,6 +11382,7 @@ export const ProjectPageBodyFragmentDoc = gql`
   category
   subCategory
   links
+  aonContractAddress
   aonGoalDurationInDays
   aonGoalInSats
   aonGoalStatus
@@ -14405,6 +14546,40 @@ export function useFundingFiatSwapPaymentCreateMutation(baseOptions?: Apollo.Mut
 export type FundingFiatSwapPaymentCreateMutationHookResult = ReturnType<typeof useFundingFiatSwapPaymentCreateMutation>;
 export type FundingFiatSwapPaymentCreateMutationResult = Apollo.MutationResult<FundingFiatSwapPaymentCreateMutation>;
 export type FundingFiatSwapPaymentCreateMutationOptions = Apollo.BaseMutationOptions<FundingFiatSwapPaymentCreateMutation, FundingFiatSwapPaymentCreateMutationVariables>;
+export const PaymentSwapClaimTxSetDocument = gql`
+    mutation PaymentSwapClaimTxSet($input: PaymentSwapClaimTxSetInput!) {
+  paymentSwapClaimTxSet(input: $input) {
+    id
+    success
+  }
+}
+    `;
+export type PaymentSwapClaimTxSetMutationFn = Apollo.MutationFunction<PaymentSwapClaimTxSetMutation, PaymentSwapClaimTxSetMutationVariables>;
+
+/**
+ * __usePaymentSwapClaimTxSetMutation__
+ *
+ * To run a mutation, you first call `usePaymentSwapClaimTxSetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePaymentSwapClaimTxSetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [paymentSwapClaimTxSetMutation, { data, loading, error }] = usePaymentSwapClaimTxSetMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePaymentSwapClaimTxSetMutation(baseOptions?: Apollo.MutationHookOptions<PaymentSwapClaimTxSetMutation, PaymentSwapClaimTxSetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PaymentSwapClaimTxSetMutation, PaymentSwapClaimTxSetMutationVariables>(PaymentSwapClaimTxSetDocument, options);
+      }
+export type PaymentSwapClaimTxSetMutationHookResult = ReturnType<typeof usePaymentSwapClaimTxSetMutation>;
+export type PaymentSwapClaimTxSetMutationResult = Apollo.MutationResult<PaymentSwapClaimTxSetMutation>;
+export type PaymentSwapClaimTxSetMutationOptions = Apollo.BaseMutationOptions<PaymentSwapClaimTxSetMutation, PaymentSwapClaimTxSetMutationVariables>;
 export const DeleteEntryDocument = gql`
     mutation DeleteEntry($deleteEntryId: BigInt!) {
   deleteEntry(id: $deleteEntryId) {

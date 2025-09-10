@@ -26,6 +26,7 @@ export const RefundFileInput = ({ name, caption, required, label }: ImageFieldPr
 
   const checkRefundJsonKeys = useCallback(
     async (json: any) => {
+      console.log('REFUND FILE JSON', json)
       if ('id' in json && json.id !== undefined) {
         const valid = ['id', 'asset', 'privateKey'].every((key) => key in json)
 
@@ -43,10 +44,15 @@ export const RefundFileInput = ({ name, caption, required, label }: ImageFieldPr
 
   const handleFile = useCallback(
     (inputFile: File) => {
+      console.log('INPUT FILE', inputFile)
       if (inputFile.type === 'image/png') {
         QrScanner.scanImage(inputFile, { returnDetailedScanResult: true })
-          .then((result) => checkRefundJsonKeys(JSON.parse(result.data)))
+          .then((result) => {
+            console.log('RESULT', result)
+            checkRefundJsonKeys(JSON.parse(result.data))
+          })
           .catch((e) => {
+            console.log('QR SCAN ERROR', e)
             setIsInvalid(true)
           })
       } else {

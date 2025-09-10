@@ -1,11 +1,10 @@
 import { Transaction } from 'bitcoinjs-lib'
-import { detectSwap, Musig, OutputType, RefundDetails, SwapTreeSerializer, TaprootUtils } from 'boltz-core'
+import { detectSwap, OutputType, RefundDetails, SwapTreeSerializer, TaprootUtils } from 'boltz-core'
 import { Buffer } from 'buffer'
 import { ECPairInterface } from 'ecpair'
 
 import {
   broadcastTransaction,
-  getClaimDetails,
   getClaimForSignatureChain,
   getFeeEstimations,
   getPartialRefundSignature,

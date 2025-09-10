@@ -108,6 +108,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     category
     subCategory
     links
+    aonContractAddress
     aonGoalDurationInDays
     aonGoalInSats
     aonGoalStatus

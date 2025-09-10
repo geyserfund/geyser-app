@@ -1,8 +1,14 @@
 import { keccak_256 } from '@noble/hashes/sha3'
+import { sha256 } from '@noble/hashes/sha256'
 import { bytesToHex } from '@noble/hashes/utils'
 import { Buffer } from 'buffer'
 import * as secp256k1 from 'tiny-secp256k1'
 
+import {
+  VITE_APP_BOLTZ_ROUTER_CONTRACT_ADDRESS,
+  VITE_APP_BOLTZ_SWAP_CONTRACT_ADDRESS,
+  VITE_APP_GEYSER_RSK_PUBKEY,
+} from '@/shared/constants/config/env.ts'
 import { __development__, __production__, __staging__ } from '@/shared/constants/index.ts'
 
 const CONTRACT_NAME = 'Aon'
@@ -15,10 +21,52 @@ export enum EIP712MessageType {
   Refund = 'Refund',
 }
 
+export const BOLTZ_TYPEHASH_CLAIM =
+  'Claim(bytes32 preimage,uint256 amount,address refundAddress,uint256 timelock,address destination)'
+export const BOLTZ_TYPEHASH_CLAIM_CALL = 'ClaimCall(bytes32 preimage,address callee,bytes32 callData)'
+export const BOLTZ_DOMAIN_SEPARATOR =
+  'EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'
+export const GEYSER_AON_DOMAIN_SEPARATOR =
+  'EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'
+
+export const CreateBoltzSwapDomainSeparator = (contractAddress: string, name: string, version: string): string => {
+  const domainTypeString = BOLTZ_DOMAIN_SEPARATOR
+  const domainTypeHash = Buffer.from(keccak_256(domainTypeString))
+
+  const nameHash = Buffer.from(keccak_256(name))
+  const versionHash = Buffer.from(keccak_256(version))
+
+  const chainIdBuffer = Buffer.alloc(32)
+  chainIdBuffer.writeBigUInt64BE(BigInt(CHAIN_ID), 24)
+
+  const addressBuffer = Buffer.alloc(32)
+  const cleanAddress = contractAddress.replace('0x', '')
+
+  // Validate address format
+  if (cleanAddress.length !== 40) {
+    throw new Error('Invalid Ethereum address format')
+  }
+
+  Buffer.from(cleanAddress, 'hex').copy(addressBuffer, 12)
+
+  const encodedData = Buffer.concat([domainTypeHash, nameHash, versionHash, chainIdBuffer, addressBuffer])
+  const domainSeparator = keccak_256(encodedData)
+
+  return '0x' + bytesToHex(domainSeparator)
+}
+
+export const CreateBoltzRouterDomainSeparator = (): string => {
+  return CreateBoltzSwapDomainSeparator(VITE_APP_BOLTZ_ROUTER_CONTRACT_ADDRESS, 'Router', '1')
+}
+
+export const CreateBoltzEtherSwapDomainSeparator = (): string => {
+  return CreateBoltzSwapDomainSeparator(VITE_APP_BOLTZ_SWAP_CONTRACT_ADDRESS, 'EtherSwap', '5')
+}
+
 /** Creates EIP-712 domain separator for contract signature verification */
-export const createDomainSeparator = (contractAddress: string): string => {
+export const createAonDomainSeparator = (contractAddress: string): string => {
   // EIP712Domain type hash
-  const domainTypeString = 'EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'
+  const domainTypeString = GEYSER_AON_DOMAIN_SEPARATOR
   const domainTypeHash = Buffer.from(keccak_256(domainTypeString))
 
   // Hash the contract name and version
@@ -55,8 +103,75 @@ export const createDomainSeparator = (contractAddress: string): string => {
   return '0x' + bytesToHex(domainSeparator)
 }
 
+/**
+ * @param preimage - The preimage value from swap file
+ * @param amount - The amount from swap file
+ * @param refundAddress - The refund address from swap file
+ * @param timelock - The timelock from swap file
+ * @param destination - The sender's RSK address ( geyser )
+ */
+export const createEIP712MessageForBoltzClaim = (
+  preimage: string,
+  amount: number,
+  refundAddress: string,
+  timelock: number,
+  destination: string,
+) => {
+  const domainSeparator = Buffer.from(CreateBoltzEtherSwapDomainSeparator().slice(2), 'hex')
+
+  const structTypeHash = Buffer.from(keccak_256(BOLTZ_TYPEHASH_CLAIM))
+
+  const preimageBuffer = Buffer.from(preimage, 'hex')
+  const amountBuffer = numberToBuffer32(amount)
+  const refundAddressBuffer = addressToBuffer32(refundAddress)
+  const timelockBuffer = numberToBuffer32(timelock)
+  const destinationBuffer = addressToBuffer32(destination)
+
+  const structEncoded = Buffer.concat([
+    structTypeHash,
+    preimageBuffer,
+    amountBuffer,
+    refundAddressBuffer,
+    timelockBuffer,
+    destinationBuffer,
+  ])
+
+  const structHash = Buffer.from(keccak_256(structEncoded))
+
+  const eip712Prefix = Buffer.from('1901', 'hex') // "\x19\x01"
+  const digestData = Buffer.concat([eip712Prefix, domainSeparator, structHash])
+
+  const digest = keccak_256(digestData)
+  return '0x' + bytesToHex(digest)
+}
+
+/**
+ * @param preimage - The preimage value (we generate it)
+ * @param callee - The project AON contract address
+ * @param callData - The generated call data
+ */
+export const createEIP712MessageForBoltzClaimCall = (preimage: string, callee: string, callData: string) => {
+  const domainSeparator = Buffer.from(CreateBoltzRouterDomainSeparator().slice(2), 'hex')
+
+  const structTypeHash = Buffer.from(keccak_256(BOLTZ_TYPEHASH_CLAIM_CALL))
+
+  const preimageBuffer = Buffer.from(preimage, 'hex')
+  const calleeBuffer = addressToBuffer32(callee)
+  const callDataBuffer = Buffer.from(callData, 'hex')
+
+  const structEncoded = Buffer.concat([structTypeHash, preimageBuffer, calleeBuffer, callDataBuffer])
+
+  const structHash = Buffer.from(keccak_256(structEncoded))
+
+  const eip712Prefix = Buffer.from('1901', 'hex') // "\x19\x01"
+  const digestData = Buffer.concat([eip712Prefix, domainSeparator, structHash])
+
+  const digest = keccak_256(digestData)
+  return '0x' + bytesToHex(digest)
+}
+
 /** Creates EIP-712 structured data hash for signing */
-export const createEIP712Message = (
+export const createEIP712MessageForAon = (
   messageType: EIP712MessageType,
   aonContractAddress: string,
   swapContractAddress: string,
@@ -66,7 +181,7 @@ export const createEIP712Message = (
   deadline: number,
 ): string => {
   // Get domain separator
-  const domainSeparator = Buffer.from(createDomainSeparator(aonContractAddress).slice(2), 'hex')
+  const domainSeparator = Buffer.from(createAonDomainSeparator(aonContractAddress).slice(2), 'hex')
 
   // Create struct hash based on message type
   const structTypeString =
@@ -113,7 +228,7 @@ export const createClaimMessage = (
   nonce: number,
   deadline: number,
 ) => {
-  return createEIP712Message(
+  return createEIP712MessageForAon(
     EIP712MessageType.Claim,
     aonContractAddress,
     swapContractAddress,
@@ -133,7 +248,7 @@ export const createRefundMessage = (
   nonce: number,
   deadline: number,
 ) => {
-  return createEIP712Message(
+  return createEIP712MessageForAon(
     EIP712MessageType.Refund,
     aonContractAddress,
     swapContractAddress,
@@ -265,7 +380,7 @@ export const createAndSignEIP712Message = (
   deadline: number,
   rskPrivateKey: string,
 ) => {
-  const digest = createEIP712Message(
+  const digest = createEIP712MessageForAon(
     messageType,
     aonContractAddress,
     swapContractAddress,
@@ -328,7 +443,7 @@ export const createAonRefundSignature = (
 
     // Create domain separator
     const contractAddress = '0x55652FF92Dc17a21AD6810Cce2F4703fa2339CAE'
-    const ourDomainSeparator = createDomainSeparator(contractAddress)
+    const ourDomainSeparator = createAonDomainSeparator(contractAddress)
     console.log('Domain Separator Check:')
     console.log('  Expected:', expectedDomainSeparator)
     console.log('  Our result:', ourDomainSeparator)
@@ -395,6 +510,328 @@ export const createAonRefundSignature = (
   } catch (error) {
     throw new Error(
       `Failed to create fixed Aon refund signature: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    )
+  }
+}
+
+/** Creates call data equivalent to Solidity's abi.encodeWithSignature("contributeFor(address, uint256)", contributorAddress, fees) */
+export const createCallDataForContributeForAon = (contributorAddress: string, fees: number): string => {
+  try {
+    // Step 1: Create function selector from signature
+    const functionSignature = 'contributeFor(address,uint256)'
+    const functionSelector = Buffer.from(keccak_256(functionSignature)).slice(0, 4)
+
+    // Step 2: Encode parameters according to ABI encoding rules
+    // Address parameter (32 bytes, left-padded with zeros)
+    const addressBuffer = addressToBuffer32(contributorAddress)
+
+    // Uint256 parameter (32 bytes, big-endian)
+    const feesBuffer = numberToBuffer32(fees)
+
+    // Step 3: Concatenate selector + encoded parameters
+    const callData = Buffer.concat([functionSelector, addressBuffer, feesBuffer])
+
+    // Return as hex string with 0x prefix
+    return '0x' + callData.toString('hex')
+  } catch (error) {
+    throw new Error(`Failed to create call data: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+
+/** Creates encoded Claim struct data for use in claimCall function */
+export const createClaimStructData = (
+  preimage: string,
+  amount: number,
+  refundAddress: string,
+  timelock: number,
+  v: number,
+  r: string,
+  s: string,
+): string => {
+  try {
+    // Encode Claim struct according to ABI encoding rules
+    // struct Claim { bytes32 preimage; uint256 amount; address refundAddress; uint256 timelock; uint8 v; bytes32 r; bytes32 s; }
+
+    // bytes32 preimage (32 bytes)
+    const preimageBuffer = Buffer.alloc(32)
+    const cleanPreimage = preimage.replace('0x', '')
+    if (cleanPreimage.length !== 64) {
+      throw new Error('Invalid preimage format: must be 32 bytes (64 hex chars)')
+    }
+
+    Buffer.from(cleanPreimage, 'hex').copy(preimageBuffer)
+
+    // uint256 amount (32 bytes, big-endian)
+    const amountBuffer = numberToBuffer32(amount)
+
+    // address refundAddress (32 bytes, left-padded with zeros)
+    const refundAddressBuffer = addressToBuffer32(refundAddress)
+
+    // uint256 timelock (32 bytes, big-endian)
+    const timelockBuffer = numberToBuffer32(timelock)
+
+    // uint8 v (32 bytes, left-padded with zeros)
+    const vBuffer = Buffer.alloc(32)
+    vBuffer.writeUInt8(v, 31) // Write to last byte
+
+    // bytes32 r (32 bytes)
+    const rBuffer = Buffer.alloc(32)
+    const cleanR = r.replace('0x', '')
+    if (cleanR.length !== 64) {
+      throw new Error('Invalid r format: must be 32 bytes (64 hex chars)')
+    }
+
+    Buffer.from(cleanR, 'hex').copy(rBuffer)
+
+    // bytes32 s (32 bytes)
+    const sBuffer = Buffer.alloc(32)
+    const cleanS = s.replace('0x', '')
+    if (cleanS.length !== 64) {
+      throw new Error('Invalid s format: must be 32 bytes (64 hex chars)')
+    }
+
+    Buffer.from(cleanS, 'hex').copy(sBuffer)
+
+    // Concatenate all struct fields
+    const structData = Buffer.concat([
+      preimageBuffer,
+      amountBuffer,
+      refundAddressBuffer,
+      timelockBuffer,
+      vBuffer,
+      rBuffer,
+      sBuffer,
+    ])
+
+    // Return as hex string with 0x prefix
+    return '0x' + structData.toString('hex')
+  } catch (error) {
+    throw new Error(`Failed to create Claim struct data: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+
+/**
+ * Replicates Solidity hashValues function from EtherSwap.sol
+ * Concatenates and hashes preimageHash, amount, claimAddress, refundAddress, timelock
+ */
+export const hashValues = (
+  preimageHash: string,
+  amount: number,
+  claimAddress: string,
+  refundAddress: string,
+  timelock: number,
+): string => {
+  try {
+    // Convert preimageHash to 32-byte buffer
+    const preimageBuffer = Buffer.alloc(32)
+    const cleanPreimageHash = preimageHash.replace('0x', '')
+    if (cleanPreimageHash.length !== 64) {
+      throw new Error('Invalid preimageHash format: must be 32 bytes (64 hex chars)')
+    }
+
+    Buffer.from(cleanPreimageHash, 'hex').copy(preimageBuffer)
+
+    // Convert other parameters to 32-byte buffers using existing helper functions
+    const amountBuffer = numberToBuffer32(amount)
+    const claimAddressBuffer = addressToBuffer32(claimAddress)
+    const refundAddressBuffer = addressToBuffer32(refundAddress)
+    const timelockBuffer = numberToBuffer32(timelock)
+
+    // Concatenate all parameters (replicating the assembly logic)
+    // mstore(ptr, preimageHash)         -> offset 0x00 (0)
+    // mstore(add(ptr, 0x20), amount)    -> offset 0x20 (32)
+    // mstore(add(ptr, 0x40), claimAddress) -> offset 0x40 (64)
+    // mstore(add(ptr, 0x60), refundAddress) -> offset 0x60 (96)
+    // mstore(add(ptr, 0x80), timelock)  -> offset 0x80 (128)
+    // Total length: 0xa0 (160 bytes)
+    const concatenated = Buffer.concat([
+      preimageBuffer, // 32 bytes
+      amountBuffer, // 32 bytes
+      claimAddressBuffer, // 32 bytes
+      refundAddressBuffer, // 32 bytes
+      timelockBuffer, // 32 bytes
+    ])
+
+    // Hash with keccak256 (replicating: result := keccak256(ptr, 0xa0))
+    const hash = keccak_256(concatenated)
+    const result = '0x' + Buffer.from(hash).toString('hex')
+
+    console.log('=== hashValues Function ===')
+    console.log('Inputs:', { preimageHash, amount, claimAddress, refundAddress, timelock })
+    console.log('Hash result:', result)
+    console.log('=== End hashValues ===')
+
+    return result
+  } catch (error) {
+    throw new Error(`Failed to hash values: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+
+/** Creates call data for claimCall function on Router contract */
+export const createCallDataForClaimCall = (
+  claimStructData: string,
+  callee: string,
+  callData: string,
+  v: number,
+  r: string,
+  s: string,
+): string => {
+  try {
+    // Step 1: Create function selector from signature
+    // function claimCall(Claim calldata claim, address callee, bytes calldata callData, uint8 v, bytes32 r, bytes32 s)
+    const functionSignature =
+      'claimCall((bytes32,uint256,address,uint256,uint8,bytes32,bytes32),address,bytes,uint8,bytes32,bytes32)'
+    const functionSelector = Buffer.from(keccak_256(functionSignature)).slice(0, 4)
+
+    // Step 2: Encode parameters according to ABI encoding rules
+
+    // Claim struct data (already encoded)
+    const claimBuffer = Buffer.from(claimStructData.replace('0x', ''), 'hex')
+
+    // address callee (32 bytes, left-padded with zeros)
+    const calleeBuffer = addressToBuffer32(callee)
+
+    // bytes callData - dynamic type, needs offset + length + data
+    const callDataClean = callData.replace('0x', '')
+    const callDataLength = callDataClean.length / 2
+    const callDataLengthBuffer = numberToBuffer32(callDataLength)
+    const callDataBuffer = Buffer.from(callDataClean, 'hex')
+    // Pad callData to 32-byte boundary
+    const callDataPadded = Buffer.alloc(Math.ceil(callDataBuffer.length / 32) * 32)
+    callDataBuffer.copy(callDataPadded)
+
+    // uint8 v (32 bytes, left-padded with zeros)
+    const vBuffer = Buffer.alloc(32)
+    vBuffer.writeUInt8(v, 31)
+
+    // bytes32 r (32 bytes)
+    const rBuffer = Buffer.alloc(32)
+    const cleanR = r.replace('0x', '')
+    if (cleanR.length !== 64) {
+      throw new Error('Invalid r format: must be 32 bytes (64 hex chars)')
+    }
+
+    Buffer.from(cleanR, 'hex').copy(rBuffer)
+
+    // bytes32 s (32 bytes)
+    const sBuffer = Buffer.alloc(32)
+    const cleanS = s.replace('0x', '')
+    if (cleanS.length !== 64) {
+      throw new Error('Invalid s format: must be 32 bytes (64 hex chars)')
+    }
+
+    Buffer.from(cleanS, 'hex').copy(sBuffer)
+
+    // For dynamic types, we need to calculate offsets
+    // The callData bytes parameter needs an offset pointer
+    const baseOffset = 12 * 32 // 12 parameters before the dynamic callData
+    const callDataOffsetBuffer = numberToBuffer32(baseOffset)
+
+    // Step 3: Concatenate selector + encoded parameters
+    const encodedCall = Buffer.concat([
+      functionSelector,
+      claimBuffer, // Claim struct (7 * 32 bytes)
+      calleeBuffer, // address callee (32 bytes)
+      callDataOffsetBuffer, // offset to callData (32 bytes)
+      vBuffer, // uint8 v (32 bytes)
+      rBuffer, // bytes32 r (32 bytes)
+      sBuffer, // bytes32 s (32 bytes)
+      callDataLengthBuffer, // length of callData (32 bytes)
+      callDataPadded, // actual callData (padded to 32-byte boundary)
+    ])
+
+    // Return as hex string with 0x prefix
+    return '0x' + encodedCall.toString('hex')
+  } catch (error) {
+    throw new Error(`Failed to create claimCall call data: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+
+/** Backward compatibility alias */
+export const createCallDataForBoltzClaim = createClaimStructData
+
+/** Transaction structure for Rootstock/Ethereum-style transactions */
+export type RootstockTransaction = {
+  to: string // Contract address
+  value: string // Amount in wei (usually "0" for contract calls)
+  data: string // Call data (function selector + encoded parameters)
+  gas: string // Gas limit
+  gasPrice: string // Gas price in wei
+  nonce: string // Transaction nonce
+  chainId: number // Chain ID (30 for RSK mainnet, 33 for testnet)
+}
+
+/** Creates an unsigned Rootstock transaction for Boltz claimCall */
+export const createTransactionForBoltzClaimCall = (params: {
+  contributorAddress: string
+  fees: number
+  preimage: string
+  amount: number
+  refundAddress: string
+  timelock: number
+  privateKey: string
+  aonContractAddress: string
+}): string => {
+  const { contributorAddress, fees, preimage, amount, refundAddress, timelock, privateKey, aonContractAddress } = params
+
+  try {
+    console.log('=== Creating Transaction for Boltz ClaimCall ===')
+
+    // Step 1: Create call data for contributeFor function
+    const contributeForCallData = createCallDataForContributeForAon(contributorAddress, fees)
+    console.log('ContributeFor call data:', contributeForCallData)
+
+    // Step 2: Create and sign the Boltz claim message
+    const claimEIP712Message = createEIP712MessageForBoltzClaim(
+      preimage,
+      amount,
+      refundAddress,
+      timelock,
+      VITE_APP_GEYSER_RSK_PUBKEY,
+    )
+    const claimSignature = signEIP712Message(claimEIP712Message, privateKey)
+    console.log('Claim signature:', claimSignature)
+
+    // Step 3: Create Claim struct data
+    const claimStructData = createClaimStructData(
+      preimage,
+      amount,
+      refundAddress,
+      timelock,
+      claimSignature.v,
+      claimSignature.r,
+      claimSignature.s,
+    )
+    console.log('Claim struct data:', claimStructData)
+
+    // Step 3.5: Calculate hashValues for verification (replicating Solidity hashValues function)
+    // Note: Need to convert preimage to preimageHash using SHA256 (as per EtherSwap contract)
+    const preimageHash = '0x' + Buffer.from(sha256(Buffer.from(preimage.replace('0x', ''), 'hex'))).toString('hex')
+    const hashResult = hashValues(preimageHash, 3608007029506048, contributorAddress, refundAddress, timelock)
+
+    // Step 4: Create and sign the claimCall message
+    const claimCallEIP712Message = createEIP712MessageForBoltzClaimCall(
+      preimage,
+      aonContractAddress,
+      contributeForCallData,
+    )
+    const claimCallSignature = signEIP712Message(claimCallEIP712Message, privateKey)
+    console.log('ClaimCall signature:', claimCallSignature)
+
+    // Step 5: Create the final claimCall transaction data
+    const claimCallData = createCallDataForClaimCall(
+      claimStructData,
+      aonContractAddress, // callee
+      contributeForCallData, // callData
+      claimCallSignature.v,
+      claimCallSignature.r,
+      claimCallSignature.s,
+    )
+
+    return claimCallData
+  } catch (error) {
+    throw new Error(
+      `Failed to create claimCall transaction: ${error instanceof Error ? error.message : 'Unknown error'}`,
     )
   }
 }

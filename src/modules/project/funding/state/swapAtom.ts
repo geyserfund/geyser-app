@@ -6,8 +6,8 @@ import { userAccountKeyPairAtom } from '@/modules/auth/state/userAccountKeysAtom
 
 import {
   BitcoinQuote,
-  ContributionOnChainSwapPaymentDetails,
-  ContributionOnChainToRskSwapPaymentDetails,
+  ContributionOnChainSwapPaymentDetailsFragment,
+  ContributionOnChainToRskSwapPaymentDetailsFragment,
   Maybe,
 } from '../../../../types'
 import { rskAccountKeysAtom } from './swapRskAtom.ts'
@@ -129,7 +129,7 @@ export const swapAtom = atomWithStorage<SwapDataStructure>('swapArray', {})
 /** Parses swap json received with Contribution and stores it in swapAtom, also sets currentSwapId */
 export const parseSwapAtom = atom(
   null,
-  (get, set, swap: ContributionOnChainSwapPaymentDetails, contributionInfo?: SwapContributionInfo) => {
+  (get, set, swap: ContributionOnChainSwapPaymentDetailsFragment, contributionInfo?: SwapContributionInfo) => {
     const userAccountKeyPair = get(userAccountKeyPairAtom)
     const keys = get(keyPairAtom)
 
@@ -146,7 +146,7 @@ export const parseSwapAtom = atom(
 
 export const parseOnChainToRskSwapAtom = atom(
   null,
-  (get, set, swap: ContributionOnChainToRskSwapPaymentDetails, contributionInfo?: SwapContributionInfo) => {
+  (get, set, swap: ContributionOnChainToRskSwapPaymentDetailsFragment, contributionInfo?: SwapContributionInfo) => {
     const userAccountKeyPair = get(userAccountKeyPairAtom)
     const rskKeyPair = get(rskAccountKeysAtom)
 

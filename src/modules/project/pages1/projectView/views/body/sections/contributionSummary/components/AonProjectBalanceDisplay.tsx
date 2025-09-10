@@ -69,7 +69,7 @@ export const AonProjectBalanceDisplay = () => {
   return (
     <VStack w="full" justifyContent={'space-between'} minHeight="128px" spacing={4}>
       <LiveProgressAqua
-        value={20}
+        value={percent}
         height={22}
         radius={16}
         label="All-or-Nothing"

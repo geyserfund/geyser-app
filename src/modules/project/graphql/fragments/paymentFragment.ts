@@ -1,4 +1,10 @@
 import { gql } from '@apollo/client'
+export const ContributionFeesFragment = gql`
+  fragment ContributionFees on PaymentFee {
+    feeAmount
+    feePayer
+  }
+`
 
 export const ContributionLightningPaymentDetailsFragment = gql`
   fragment ContributionLightningPaymentDetails on ContributionLightningPaymentDetails {
@@ -27,17 +33,29 @@ export const ContributionFiatSwapPaymentDetailsFragment = gql`
 `
 
 export const ContributionLightningToRskSwapPaymentDetailsFragment = gql`
+  ${ContributionFeesFragment}
   fragment ContributionLightningToRskSwapPaymentDetails on ContributionLightningToRskSwapPaymentDetails {
     lightningInvoiceId
     paymentRequest
     swapJson
+    paymentId
+    amountDue
+    fees {
+      ...ContributionFees
+    }
   }
 `
 
 export const ContributionOnChainToRskSwapPaymentDetailsFragment = gql`
+  ${ContributionFeesFragment}
   fragment ContributionOnChainToRskSwapPaymentDetails on ContributionOnChainToRskSwapPaymentDetails {
     address
     swapJson
+    paymentId
+    amountDue
+    fees {
+      ...ContributionFees
+    }
   }
 `
 
