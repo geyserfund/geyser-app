@@ -266,7 +266,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       contributorAddress: userAccountKeys?.rskKeyPair?.address || '',
       fees: satsToWei(feesAmount),
       preimage: preImages.preimageHex,
-      amount: satsToWei(swap.amount),
+      amount: satsToWei(swap.onchainAmount),
       refundAddress: swap.refundAddress,
       timelock: swap.timeoutBlockHeight,
       privateKey: userAccountKeyPair?.privateKey || '',

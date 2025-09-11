@@ -1,5 +1,4 @@
 import { keccak_256 } from '@noble/hashes/sha3'
-import { sha256 } from '@noble/hashes/sha256'
 import { bytesToHex } from '@noble/hashes/utils'
 import { Buffer } from 'buffer'
 import * as secp256k1 from 'tiny-secp256k1'
@@ -7,7 +6,6 @@ import * as secp256k1 from 'tiny-secp256k1'
 import {
   VITE_APP_BOLTZ_ROUTER_CONTRACT_ADDRESS,
   VITE_APP_BOLTZ_SWAP_CONTRACT_ADDRESS,
-  VITE_APP_GEYSER_RSK_PUBKEY,
 } from '@/shared/constants/config/env.ts'
 import { __development__, __production__, __staging__ } from '@/shared/constants/index.ts'
 
@@ -26,6 +24,7 @@ export const BOLTZ_TYPEHASH_CLAIM =
 export const BOLTZ_TYPEHASH_CLAIM_CALL = 'ClaimCall(bytes32 preimage,address callee,bytes32 callData)'
 export const BOLTZ_DOMAIN_SEPARATOR =
   'EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'
+
 export const GEYSER_AON_DOMAIN_SEPARATOR =
   'EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)'
 
@@ -108,7 +107,7 @@ export const createAonDomainSeparator = (contractAddress: string): string => {
  * @param amount - The amount from swap file
  * @param refundAddress - The refund address from swap file
  * @param timelock - The timelock from swap file
- * @param destination - The sender's RSK address ( geyser )
+ * @param destination - The transaction executor's address (msg.sender who will call the claim function)
  */
 export const createEIP712MessageForBoltzClaim = (
   preimage: string,
@@ -152,14 +151,21 @@ export const createEIP712MessageForBoltzClaim = (
  */
 export const createEIP712MessageForBoltzClaimCall = (preimage: string, callee: string, callData: string) => {
   const domainSeparator = Buffer.from(CreateBoltzRouterDomainSeparator().slice(2), 'hex')
+  console.log('domainSeparator', domainSeparator)
+  console.log('expected domain separator', '0xdd1ef94ca7311d78e89105f27c563b0e7be4ae6eed96da7fce25262290500225')
 
   const structTypeHash = Buffer.from(keccak_256(BOLTZ_TYPEHASH_CLAIM_CALL))
 
   const preimageBuffer = Buffer.from(preimage, 'hex')
   const calleeBuffer = addressToBuffer32(callee)
-  const callDataBuffer = Buffer.from(callData, 'hex')
 
-  const structEncoded = Buffer.concat([structTypeHash, preimageBuffer, calleeBuffer, callDataBuffer])
+  // IMPORTANT: Hash the callData first, as per Router contract line 192: keccak256(callData)
+  const callDataHash = Buffer.from(keccak_256(Buffer.from(callData.replace('0x', ''), 'hex')))
+
+  console.log('CallData before hashing:', callData)
+  console.log('CallData hash:', '0x' + callDataHash.toString('hex'))
+
+  const structEncoded = Buffer.concat([structTypeHash, preimageBuffer, calleeBuffer, callDataHash])
 
   const structHash = Buffer.from(keccak_256(structEncoded))
 
@@ -776,7 +782,6 @@ export const createTransactionForBoltzClaimCall = (params: {
 
   try {
     console.log('=== Creating Transaction for Boltz ClaimCall ===')
-
     // Step 1: Create call data for contributeFor function
     const contributeForCallData = createCallDataForContributeForAon(contributorAddress, fees)
     console.log('ContributeFor call data:', contributeForCallData)
@@ -787,7 +792,7 @@ export const createTransactionForBoltzClaimCall = (params: {
       amount,
       refundAddress,
       timelock,
-      VITE_APP_GEYSER_RSK_PUBKEY,
+      VITE_APP_BOLTZ_ROUTER_CONTRACT_ADDRESS,
     )
     const claimSignature = signEIP712Message(claimEIP712Message, privateKey)
     console.log('Claim signature:', claimSignature)
@@ -806,8 +811,6 @@ export const createTransactionForBoltzClaimCall = (params: {
 
     // Step 3.5: Calculate hashValues for verification (replicating Solidity hashValues function)
     // Note: Need to convert preimage to preimageHash using SHA256 (as per EtherSwap contract)
-    const preimageHash = '0x' + Buffer.from(sha256(Buffer.from(preimage.replace('0x', ''), 'hex'))).toString('hex')
-    const hashResult = hashValues(preimageHash, 3608007029506048, contributorAddress, refundAddress, timelock)
 
     // Step 4: Create and sign the claimCall message
     const claimCallEIP712Message = createEIP712MessageForBoltzClaimCall(
