@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
@@ -14,7 +13,6 @@ import {
   ProjectForProfileContributionsFragment,
   usePayoutInitiateMutation,
   usePayoutRequestMutation,
-  UserProjectContributionFragment,
 } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
@@ -24,7 +22,7 @@ import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWait
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.tsx'
 import { PayoutMethodSelection } from './components/PayoutMethodSelection.tsx'
-import { createAndSignClaimMessage, createAonRefundSignature } from './helper.tsx'
+import { createAndSignClaimMessage } from './createAndSignRefundAndPayout.ts'
 import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
@@ -134,16 +132,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
         deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
         rskPrivateKey: accountKeys.privateKey,
       })
-
-      // Debug with the fixed function to compare
-      createAonRefundSignature(
-        accountKeys.privateKey,
-        accountKeys.address,
-        payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
-        (payoutRequestData?.payoutRequest.payout.amount || 0) * 10000000000, // 10^10 WEI
-        payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
-        payoutRequestData?.payoutRequest.payout.expiresAt || 0,
-      )
 
       // Simulate processing delay
       await payoutInitiate({
@@ -271,7 +259,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
             size="lg"
             colorScheme="primary1"
             variant="solid"
-            isLoading={isSubmitting}
+            isLoading={isSubmitting || isPayoutInitiateLoading}
             isDisabled={!enableSubmit}
             onClick={handleSubmit}
           >

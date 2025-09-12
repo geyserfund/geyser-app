@@ -1,10 +1,9 @@
-import { Box, Button, ButtonProps, HStack, Image, Link } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, Image, Link } from '@chakra-ui/react'
 // import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { useProjectGrantApplicationsAPI } from '@/modules/project/API/useProjectGrantApplicationsAPI'
-import { Body } from '@/shared/components/typography/Body.tsx'
 // import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'

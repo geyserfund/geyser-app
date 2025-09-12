@@ -20,6 +20,8 @@ import { SuccessImageComponent } from './components'
 import { DownloadInvoice } from './components/DownloadInvoice'
 import { SafeToDeleteRefund } from './components/SafeToDeleteRefund'
 
+const StatusForSuccess = [ContributionStatus.Confirmed, ContributionStatus.Pledged]
+
 export const FundingSuccess = () => {
   const { project, formState } = useFundingFormAtom()
 
@@ -28,7 +30,7 @@ export const FundingSuccess = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (fundingContribution.status !== ContributionStatus.Confirmed) {
+    if (!StatusForSuccess.includes(fundingContribution.status)) {
       navigate(getPath('projectFunding', project.name))
     }
   }, [fundingContribution, navigate, project.name])

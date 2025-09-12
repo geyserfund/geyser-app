@@ -22,10 +22,16 @@ const defaultFundingPaymentDetails: FundingContributionPaymentDetailsFragment = 
     lightningInvoiceId: '',
     paymentRequest: '',
     swapJson: '',
+    paymentId: '',
+    amountDue: 0,
+    fees: [],
   },
   onChainToRskSwap: {
     address: '',
     swapJson: '',
+    paymentId: '',
+    amountDue: 0,
+    fees: [],
   },
 }
 

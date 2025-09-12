@@ -1,4 +1,4 @@
-import { HStack, Image, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
+import { HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 
 import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'

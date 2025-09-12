@@ -107,7 +107,7 @@ export const LaunchProjectDetails = () => {
   }
 
   const continueProps = {
-    isLoading: (isEdit && loading) || createProject.loading || updateProject.loading,
+    isLoading: (isEdit && loading) || createProject.loading || updateProject.loading || updateProjectLoading,
     isDisabled: createProject.loading || updateProject.loading,
     type: 'submit' as const,
   }

@@ -1,22 +1,14 @@
-/* eslint-disable complexity */
-import { Button, HStack, IconButton, VStack } from '@chakra-ui/react'
+import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import React, { useEffect, useState } from 'react'
-import { PiX } from 'react-icons/pi'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
-import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
-import {
-  AccountKeys,
-  decryptSeed,
-  generateKeysFromSeedHex,
-  generatePreImageHash,
-} from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
+import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
-import { Body } from '@/shared/components/typography/Body.tsx'
 import {
   ProjectForProfileContributionsFragment,
   usePledgeRefundInitiateMutation,
@@ -31,7 +23,7 @@ import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWait
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.tsx'
 import { PayoutMethodSelection } from './components/PayoutMethodSelection.tsx'
-import { createAndSignRefundMessage, createAonRefundSignature } from './helper.tsx'
+import { createAndSignRefundMessage } from './createAndSignRefundAndPayout.ts'
 import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
@@ -145,16 +137,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
         deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
         rskPrivateKey: accountKeys.privateKey,
       })
-
-      // Debug with the fixed function to compare
-      createAonRefundSignature(
-        accountKeys.privateKey,
-        accountKeys.address,
-        pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
-        (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) * 10000000000, // 10^10 WEI
-        pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
-        pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
-      )
 
       // Simulate processing delay
       await pledgeRefundInitiate({
@@ -279,7 +261,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
             size="lg"
             colorScheme="primary1"
             variant="solid"
-            isLoading={isSubmitting}
+            isLoading={isSubmitting || isPledgeRefundInitiateLoading}
             isDisabled={!enableSubmit}
             onClick={handleSubmit}
           >
