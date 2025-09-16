@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import TitleWithProgressBar from '@/components/molecules/TitleWithProgressBar.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -36,6 +36,7 @@ export const PROJECT_LAUNCH_PAYMENT_PROJECT_NAME = 'launch'
 export const ProjectCreateStrategy = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const params = useParams<{ projectId: string }>()
 
   useLocationMandatoryRedirect()
   useCheckPrelaunchSteps()
@@ -48,6 +49,12 @@ export const ProjectCreateStrategy = () => {
 
   const handleBack = () => {
     setReadyForLaunch(false)
+
+    if (params.projectId) {
+      navigate(getPath('launchProjectWallet', params.projectId))
+      return
+    }
+
     navigate(-1)
   }
 
