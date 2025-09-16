@@ -2280,7 +2280,8 @@ export type PaymentFee = {
 
 export enum PaymentFeePayer {
   Contributor = 'CONTRIBUTOR',
-  Creator = 'CREATOR'
+  Creator = 'CREATOR',
+  Geyser = 'GEYSER'
 }
 
 export enum PaymentFeeType {
@@ -7939,7 +7940,7 @@ export type CommunityVoteGrantFragmentFragment = { __typename?: 'CommunityVoteGr
 
 export type PaginationFragment = { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null };
 
-export type ProjectForOwnerFragment = { __typename?: 'Project', id: any, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: any };
+export type ProjectForOwnerFragment = { __typename?: 'Project', id: any, name: string, images: Array<string>, thumbnailImage?: string | null, title: string, status?: ProjectStatus | null, createdAt: any, lastCreationStep: ProjectCreationStep };
 
 export type ProjectWalletFragment = { __typename?: 'Wallet', id: any, name?: string | null, feePercentage?: number | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode }, connectionDetails: { __typename?: 'LightningAddressConnectionDetails', lightningAddress: string } | { __typename?: 'LndConnectionDetailsPrivate', macaroon: string, tlsCertificate?: string | null, hostname: string, grpcPort: number, lndNodeType: LndNodeType, pubkey?: string | null } | { __typename?: 'LndConnectionDetailsPublic', pubkey?: string | null } | { __typename?: 'NWCConnectionDetailsPrivate' } };
 
@@ -10077,6 +10078,7 @@ export const ProjectForOwnerFragmentDoc = gql`
   title
   status
   createdAt
+  lastCreationStep
 }
     `;
 export const UserMeFragmentDoc = gql`

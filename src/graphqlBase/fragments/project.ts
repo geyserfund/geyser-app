@@ -9,5 +9,6 @@ export const FRAGMENT_PROJECT_FOR_OWNER = gql`
     title
     status
     createdAt
+    lastCreationStep
   }
 `

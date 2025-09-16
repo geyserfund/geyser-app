@@ -7,6 +7,7 @@ import { PiArrowLeft, PiArrowRight, PiEye, PiListBullets } from 'react-icons/pi'
 import { useNavigate, useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -34,6 +35,7 @@ export const ProjectCreationLayout = ({
   ...rest
 }: ProjectCreationLayoutProps) => {
   const isMobile = useBreakpointValue({ base: true, md: false })
+  const { project } = useProjectAtom()
 
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
@@ -68,9 +70,16 @@ export const ProjectCreationLayout = ({
         </HStack>
 
         <HStack>
-          <Button variant="ghost" leftIcon={<Icon as={PiEye} />}>
-            {t('View preview')}
-          </Button>
+          {project?.id && project.name && (
+            <Button
+              as={Link}
+              to={getPath('projectDraft', project?.name)}
+              variant="ghost"
+              leftIcon={<Icon as={PiEye} />}
+            >
+              {t('View preview')}
+            </Button>
+          )}
         </HStack>
       </HStack>
       {children}

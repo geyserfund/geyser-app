@@ -1,6 +1,7 @@
 import { Button, ButtonProps, ComponentWithAs, forwardRef } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiDotsThreeOutline } from 'react-icons/pi'
+import { useLocation } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 
@@ -14,8 +15,10 @@ export const CreatorEditButton: ComponentWithAs<'button', CreatorEditButtonProps
   ({ isMenu, ...props }: CreatorEditButtonProps, ref) => {
     const { isProjectOwner } = useProjectAtom()
     const { t } = useTranslation()
+    const location = useLocation()
+    const isDraftUrl = location.pathname.includes('/draft')
 
-    if (!isProjectOwner) return null
+    if (!isProjectOwner || isDraftUrl) return null
     return (
       <Button
         ref={ref}

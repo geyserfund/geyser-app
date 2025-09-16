@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form'
 import { PiCheck, PiPencil, PiX } from 'react-icons/pi'
 import * as yup from 'yup'
 
-import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { projectAtom } from '@/modules/project/state/projectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { UserAvatar } from '@/shared/molecules/UserAvatar.tsx'
@@ -18,7 +17,6 @@ import {
   ProjectAmbassadorListQuery,
   useAmbassadorAddMutation,
   useAmbassadorUpdateMutation,
-  useGeyserPromotionsContributionStatsQuery,
   useProjectAmbassadorListQuery,
 } from '@/types/index.ts'
 import { useMobileMode } from '@/utils/index.ts'
@@ -70,7 +68,6 @@ export const ProjectDashboardPromote = () => {
   const toast = useNotification()
   const project = useAtomValue(projectAtom)
   const isMobile = useMobileMode()
-  const { updateProject } = useProjectAPI()
 
   const { formatAmount } = useCurrencyFormatter()
   const [editState, setEditState] = useState<EditAmbassadorState>({})
@@ -126,17 +123,6 @@ export const ProjectDashboardPromote = () => {
         description: error.message,
       })
     },
-  })
-
-  // Fetch Geyser Promotion Contribution Stats using the generated hook
-  const { data: promotionStatsData, loading: promotionStatsLoading } = useGeyserPromotionsContributionStatsQuery({
-    variables: {
-      input: {
-        where: { projectId: project.id },
-      },
-    },
-    skip: !project.id || !project.promotionsEnabled,
-    fetchPolicy: 'cache-and-network',
   })
 
   useEffect(() => {
@@ -282,32 +268,6 @@ export const ProjectDashboardPromote = () => {
       .slice()
       .sort((a, b) => (b.node?.contributionsCount ?? 0) - (a.node?.contributionsCount ?? 0))
   }, [ambassadorsData])
-
-  const handlePromotionsToggle = useCallback(
-    async (event: React.ChangeEvent<HTMLInputElement>) => {
-      const isEnabled = event.target.checked
-      try {
-        await updateProject.execute({
-          variables: {
-            input: {
-              projectId: project.id,
-              promotionsEnabled: isEnabled,
-            },
-          },
-        })
-        toast.success({
-          title: t('Promotion settings updated.'),
-        })
-      } catch (error) {
-        console.error('Error updating promotions status:', error)
-        toast.error({
-          title: t('Failed to update promotion settings.'),
-          description: (error as Error)?.message || t('Please try again.'),
-        })
-      }
-    },
-    [project.id, updateProject, toast],
-  )
 
   // Define the schema for TableWithAccordion inside the component scope
   const ambassadorTableSchema: TableData<AmbassadorEdge>[] = useMemo(
@@ -459,14 +419,7 @@ export const ProjectDashboardPromote = () => {
         position="relative"
         paddingX={{ base: 0, lg: 6 }}
       >
-        <GeyserPromotionSection
-          promotionsEnabled={project.promotionsEnabled}
-          promotionStatsData={promotionStatsData}
-          promotionStatsLoading={promotionStatsLoading}
-          handlePromotionsToggle={handlePromotionsToggle}
-          isUpdateProjectLoading={updateProject.loading}
-          formatAmount={formatAmount}
-        />
+        <GeyserPromotionSection />
 
         <GetFeaturedSection />
 

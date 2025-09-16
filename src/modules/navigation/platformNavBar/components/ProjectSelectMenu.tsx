@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 
 import { isRouteForProjectCreationAtom } from '@/config/routes/state/privateRoutesAtom.ts'
 import { useAuthContext } from '@/context'
+import { getProjectCreationRoute } from '@/modules/project/pages1/projectView/views/body/hooks/useProjectDraftRedirect.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -13,6 +14,9 @@ import { ProjectForOwnerFragment, ProjectStatus } from '@/types'
 import { toInt } from '@/utils'
 
 import { CreateProjectButton } from './CreateProjectButton'
+
+const DraftProjectStatuses = [ProjectStatus.Draft, ProjectStatus.InReview, ProjectStatus.Accepted]
+const NotInactiveProjectStatuses = [ProjectStatus.Active, ProjectStatus.PreLaunch, ...DraftProjectStatuses]
 
 export const ProjectSelectMenu = () => {
   const { t } = useTranslation()
@@ -34,10 +38,10 @@ export const ProjectSelectMenu = () => {
 
   const activeProjects = projectListByOrder.filter((project) => project?.status === ProjectStatus.Active) || []
   const preLaunchProjects = projectListByOrder.filter((project) => project?.status === ProjectStatus.PreLaunch) || []
+  const draftProjects =
+    projectListByOrder.filter((project) => DraftProjectStatuses.includes(project?.status as ProjectStatus)) || []
   const inActiveProjects =
-    projectListByOrder.filter(
-      (project) => project?.status !== ProjectStatus.Active && project?.status !== ProjectStatus.PreLaunch,
-    ) || []
+    projectListByOrder.filter((project) => !NotInactiveProjectStatuses.includes(project?.status as ProjectStatus)) || []
 
   return (
     <Menu size={'lg'} closeOnSelect placement="bottom-end">
@@ -68,6 +72,20 @@ export const ProjectSelectMenu = () => {
                 {preLaunchProjects.map((project) => {
                   if (!project) return null
                   return <ProjectSelectMenuItem key={project.id} project={project} />
+                })}
+              </>
+            )}
+
+            {draftProjects.length > 0 && activeProjects.length > 0 && <Divider />}
+            {draftProjects.length > 0 && (
+              <>
+                <Body w="full" textAlign={'start'} px={2} py={1}>
+                  {t('Draft projects')}
+                </Body>
+
+                {draftProjects.map((project) => {
+                  if (!project) return null
+                  return <ProjectSelectMenuItem key={project.id} project={project} isDraft />
                 })}
               </>
             )}
@@ -108,11 +126,19 @@ export const ProjectSelectMenu = () => {
   )
 }
 
-const ProjectSelectMenuItem = ({ project, isInactive }: { project: ProjectForOwnerFragment; isInactive?: boolean }) => {
+const ProjectSelectMenuItem = ({
+  project,
+  isInactive,
+  isDraft,
+}: {
+  project: ProjectForOwnerFragment
+  isInactive?: boolean
+  isDraft?: boolean
+}) => {
   return (
     <MenuItem
       as={Link}
-      to={getPath('project', project.name)}
+      to={isDraft ? getProjectCreationRoute(project.lastCreationStep, project.id) : getPath('project', project.name)}
       overflow={'hidden'}
       key={project.id}
       paddingX={2}
@@ -131,7 +157,7 @@ const ProjectSelectMenuItem = ({ project, isInactive }: { project: ProjectForOwn
           maxWidth: 'calc(100% - 40px)',
         },
       }}
-      opacity={isInactive ? 0.5 : 1}
+      opacity={isInactive ? 0.5 : isDraft ? 0.7 : 1}
     >
       <Body medium isTruncated w="full">
         {project?.title}

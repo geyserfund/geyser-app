@@ -31,12 +31,25 @@ import { QRCodeComponent } from '../../../../projectFunding/views/fundingPayment
 import { WaitingForPayment } from '../../../../projectFunding/views/fundingPayment/components/WaitingForPayment'
 import { ProjectCreationLayout } from '../../../Layouts/ProjectCreationLayout.tsx'
 import { useListenToContributionConfirmed } from '../hooks/useListenToContributionConfirmed.ts'
+import { ProjectLaunchStrategy } from './LaunchStrategySelection.tsx'
 
-const PROJECT_ID_FOR_GEYSER_LAUNCH = __production__ ? 3075 : __staging__ ? 839 : 787
+const PROJECT_ID_FOR_GEYSER_LAUNCH = __production__ ? 3075 : __staging__ ? 839 : 839
 
-const LAUNCH_FEE_USD_CENTS = 1000 as USDCents // 10 USD
+const LAUNCH_FEE_USD_CENTS = {
+  [ProjectLaunchStrategy.STARTER_LAUNCH]: 2500 as USDCents, // 25 USD
+  [ProjectLaunchStrategy.GROWTH_LAUNCH]: 5000 as USDCents, // 50 USD
+  [ProjectLaunchStrategy.PRO_LAUNCH]: 35000 as USDCents, // 350 USD
+}
 
-export const LaunchFees = ({ handleNext, handleBack }: { handleNext: () => void; handleBack: () => void }) => {
+export const LaunchFees = ({
+  handleNext,
+  handleBack,
+  strategy,
+}: {
+  handleNext: () => void
+  handleBack: () => void
+  strategy: ProjectLaunchStrategy
+}) => {
   const { user } = useAuthContext()
   const isMobile = useMobileMode()
   const toast = useNotification()
@@ -61,7 +74,7 @@ export const LaunchFees = ({ handleNext, handleBack }: { handleNext: () => void;
 
   const { getSatoshisFromUSDCents } = useBTCConverter()
 
-  const donationAmount = getSatoshisFromUSDCents(LAUNCH_FEE_USD_CENTS)
+  const donationAmount = getSatoshisFromUSDCents(LAUNCH_FEE_USD_CENTS[strategy])
 
   const { hasCopied, onCopy } = useCopyToClipboard(paymentsData?.lightning?.paymentRequest || '')
 
@@ -113,6 +126,13 @@ export const LaunchFees = ({ handleNext, handleBack }: { handleNext: () => void;
           },
         },
       },
+      onError(error) {
+        console.error(error)
+        toast.error({
+          title: t('Error creating contribution'),
+          description: error.message || t('Something went wrong. Please try again.'),
+        })
+      },
     })
   }, [contributionCreate, donationAmount, project?.id, usdRate, user])
 
@@ -143,8 +163,8 @@ export const LaunchFees = ({ handleNext, handleBack }: { handleNext: () => void;
     }
   }
 
-  const totalSats = getSatoshisFromUSDCents(LAUNCH_FEE_USD_CENTS)
-  const totalUsdCent = LAUNCH_FEE_USD_CENTS
+  const totalSats = getSatoshisFromUSDCents(LAUNCH_FEE_USD_CENTS[strategy])
+  const totalUsdCent = LAUNCH_FEE_USD_CENTS[strategy]
 
   const renderSuccessContent = () => {
     return (
@@ -248,15 +268,18 @@ export const LaunchFees = ({ handleNext, handleBack }: { handleNext: () => void;
     onClick: handleNext,
     isDisabled: !project.paidLaunch,
   }
+  const backButtonProps = {
+    onClick: handleBack,
+  }
 
   return (
-    <ProjectCreationLayout title={t('Project launch fees')} continueButtonProps={continueButtonProps}>
+    <ProjectCreationLayout
+      title={t('Launch Payment')}
+      continueButtonProps={continueButtonProps}
+      backButtonProps={backButtonProps}
+    >
       <HStack w="full" justifyContent="space-between">
-        <Body>
-          {t(
-            'A $10 fee helps us maintain the platform and support creators like you. Once completed, you can launch your project and begin collecting contributions.',
-          )}
-        </Body>
+        <Body>{t('Please pay the launch fee with lightning to continue.')}</Body>
       </HStack>
       {isPaid ? renderSuccessContent() : renderPaymentContent()}
     </ProjectCreationLayout>

@@ -1,21 +1,26 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { ProjectCreationStep } from '@/types/index.ts'
-import { isAccepted, isDraft } from '@/utils/index.ts'
+import { ProjectCreationStep, ProjectStatus } from '@/types/index.ts'
+
+const DraftProjectStatuses = [ProjectStatus.Draft, ProjectStatus.InReview, ProjectStatus.Accepted]
 
 export const useProjectDraftRedirect = () => {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const { project, loading, isProjectOwner } = useProjectAtom()
 
+  const isDraftProject = DraftProjectStatuses.includes(project?.status as ProjectStatus)
+  const isDraftUrl = location.pathname.includes('/draft')
+
   useEffect(() => {
-    if (project && isProjectOwner && !loading && (isDraft(project.status) || isAccepted(project.status))) {
+    if (project && isProjectOwner && !loading && isDraftProject && !isDraftUrl) {
       navigate(getProjectCreationRoute(project.lastCreationStep, project.id))
     }
-  }, [project, isProjectOwner, loading, navigate])
+  }, [project, isProjectOwner, loading, navigate, isDraftProject, isDraftUrl])
 }
 
 export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, projectId: string) => {

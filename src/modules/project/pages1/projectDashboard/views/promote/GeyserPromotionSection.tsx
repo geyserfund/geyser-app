@@ -1,11 +1,14 @@
 import { Box, HStack, Icon, Image, Switch, Tooltip, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { PiInfo } from 'react-icons/pi'
 
+import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { GeyserPromotionsContributionStatsQuery } from '@/types/index.ts'
+import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
+import { useGeyserPromotionsContributionStatsQuery } from '@/types/index.ts'
+import { useNotification } from '@/utils/index.ts'
 
 const PROMOTION_LOGOS = {
   light: [
@@ -54,29 +57,61 @@ const PROMOTION_LOGOS = {
   ],
 }
 
-interface GeyserPromotionSectionProps {
-  promotionsEnabled: boolean | undefined | null
-  promotionStatsData: GeyserPromotionsContributionStatsQuery | undefined
-  promotionStatsLoading: boolean
-  handlePromotionsToggle: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>
-  isUpdateProjectLoading: boolean
-  formatAmount: (amount: number, type: FormatCurrencyType) => string
-}
-
 /** GeyserPromotionSection: Displays the Geyser Promotion toggle and stats */
-export const GeyserPromotionSection = ({
-  promotionsEnabled,
-  promotionStatsData,
-  promotionStatsLoading,
-  handlePromotionsToggle,
-  isUpdateProjectLoading,
-  formatAmount,
-}: GeyserPromotionSectionProps) => {
+/** Must be used inside ProjectContextProvider */
+export const GeyserPromotionSection = () => {
   const promotionLogos = useColorModeValue(PROMOTION_LOGOS.light, PROMOTION_LOGOS.dark)
+
+  const { formatAmount } = useCurrencyFormatter()
+
+  const toast = useNotification()
+
+  const { project } = useProjectAtom()
+  const { updateProject } = useProjectAPI()
+
+  const handlePromotionsToggle = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const isEnabled = event.target.checked
+      try {
+        await updateProject.execute({
+          variables: {
+            input: {
+              projectId: project.id,
+              promotionsEnabled: isEnabled,
+            },
+          },
+        })
+        toast.success({
+          title: t('Promotion settings updated.'),
+        })
+      } catch (error) {
+        console.error('Error updating promotions status:', error)
+        toast.error({
+          title: t('Failed to update promotion settings.'),
+          description: (error as Error)?.message || t('Please try again.'),
+        })
+      }
+    },
+    [project.id, updateProject, toast],
+  )
+
+  // Fetch Geyser Promotion Contribution Stats using the generated hook
+  const { data: promotionStatsData, loading: promotionStatsLoading } = useGeyserPromotionsContributionStatsQuery({
+    variables: {
+      input: {
+        where: { projectId: project.id },
+      },
+    },
+    skip: !project.id || !project.promotionsEnabled,
+    fetchPolicy: 'cache-and-network',
+  })
+
   const hasPromotionContributions =
     !promotionStatsLoading &&
     promotionStatsData?.geyserPromotionsContributionStats?.contributionsSumUsd !== undefined &&
     promotionStatsData?.geyserPromotionsContributionStats?.contributionsSumUsd > 0
+
+  const { promotionsEnabled } = project
 
   return (
     <VStack w="full" spacing={4} align="start">
@@ -111,7 +146,7 @@ export const GeyserPromotionSection = ({
             id="geyser-promotions-toggle"
             isChecked={promotionsEnabled ?? false}
             onChange={handlePromotionsToggle}
-            isDisabled={isUpdateProjectLoading}
+            isDisabled={updateProject.loading}
             colorScheme="primary1"
           />
         </HStack>

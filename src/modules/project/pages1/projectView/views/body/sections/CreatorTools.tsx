@@ -1,3 +1,5 @@
+import { useLocation } from 'react-router'
+
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 
 import { ProjectStatus } from '../../../../../../../types'
@@ -6,8 +8,14 @@ import { CreatorButtons } from '../components/CreatorButtons'
 
 export const CreatorTools = () => {
   const { project, isProjectOwner } = useProjectAtom()
+  const location = useLocation()
+  const isDraftUrl = location.pathname.includes('/draft')
 
-  if (!isProjectOwner || (project.status && [ProjectStatus.Closed, ProjectStatus.Deleted].includes(project.status)))
+  if (
+    !isProjectOwner ||
+    isDraftUrl ||
+    (project.status && [ProjectStatus.Closed, ProjectStatus.Deleted].includes(project.status))
+  )
     return null
 
   return (
