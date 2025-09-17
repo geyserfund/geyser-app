@@ -156,6 +156,8 @@ export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath(
 
 export const discoveryRoutes = [
   getPath('discoveryLanding'),
+  getPath('discoveryProjectCategory', PathName.categoryName),
+  getPath('discoveryProjectSubCategory', PathName.subCategoryName),
   getPath('discoveryMyProjects'),
   getPath('discoveryProducts'),
   getPath('discoveryActivity'),

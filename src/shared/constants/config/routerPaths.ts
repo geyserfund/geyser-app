@@ -19,6 +19,9 @@ export enum PathName {
   activityGlobal = 'global',
   activityFollowed = 'followed',
 
+  projectCategory = 'category',
+  projectSubCategory = 'subcategory',
+
   manifesto = 'manifesto',
 
   merch = 'project/geyser/rewards',
@@ -130,6 +133,8 @@ export enum PathName {
 
   projectId = ':projectId',
   projectName = ':projectName',
+  categoryName = ':category',
+  subCategoryName = ':subcategory',
   rewardId = ':rewardId',
   rewardUUID = ':rewardUUID',
   userId = ':userId',
@@ -157,6 +162,8 @@ const pathsMap = {
 
   /** Discovery Routes */
   discoveryLanding: () => '/',
+  discoveryProjectCategory: (category: string) => `/${PathName.projectCategory}/${category}`,
+  discoveryProjectSubCategory: (subCategory: string) => `/${PathName.projectSubCategory}/${subCategory}`,
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,
   discoveryMyProjects: () => `/${PathName.myProjects}`,
   discoveryProducts: () => `/${PathName.products}`,

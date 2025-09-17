@@ -781,6 +781,20 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('discoveryProjectCategory', PathName.categoryName),
+        async lazy() {
+          const Landing = await Discovery().then((m) => m.Landing)
+          return { Component: Landing }
+        },
+      },
+      {
+        path: getPath('discoveryProjectSubCategory', PathName.subCategoryName),
+        async lazy() {
+          const Landing = await Discovery().then((m) => m.Landing)
+          return { Component: Landing }
+        },
+      },
+      {
         path: getPath('discoveryMyProjects'),
         async lazy() {
           const MyProjects = await Discovery().then((m) => m.MyProjects)
