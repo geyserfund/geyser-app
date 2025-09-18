@@ -1,13 +1,14 @@
-import { Button, HStack, Input, InputGroup, InputRightElement, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, HStack, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { KeyboardEvent, useEffect, useRef, useState } from 'react'
+import { KeyboardEvent, useRef } from 'react'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { AmountInput } from '@/shared/components/form/AmountInput.tsx'
 import { Body, H1 } from '@/shared/components/typography'
 
 import { commaFormatted } from '../../../../../../../utils'
 
-const MIN_WIDTH_AFTER_START = 50
+export const MIN_WIDTH_AFTER_START = 50
 const PRESET_AMOUNTS = [50, 100, 210, 500, 1000]
 export const DonationInput = () => {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -56,21 +57,6 @@ export const DonationInput = () => {
       inputRef.current?.blur()
     }
   }
-
-  const [satsPosition, setSatsPosition] = useState(MIN_WIDTH_AFTER_START)
-
-  useEffect(() => {
-    if (satoshi) {
-      const currentText = commaFormatted(satoshi)
-      const commaCount = (currentText.match(/,/g) || []).length
-      const restCount = currentText.length - commaCount
-      const textWidth = restCount * 9 + commaCount * 5
-
-      setSatsPosition(textWidth + MIN_WIDTH_AFTER_START)
-    } else {
-      setSatsPosition(MIN_WIDTH_AFTER_START)
-    }
-  }, [satoshi])
 
   return (
     <VStack spacing={4} alignItems="stretch">
@@ -151,8 +137,17 @@ export const DonationInput = () => {
           {`$${commaFormatted(PRESET_AMOUNTS.at(-1))}`}
         </Button>
       </HStack>
+      <AmountInput
+        inputRef={inputRef}
+        satoshi={satoshi}
+        dollar={dollar}
+        isSatoshi={isSatoshi}
+        handleInput={handleInput}
+        handleKeyDown={handleKeyDown}
+        onToggle={onToggle}
+      />
 
-      <HStack w="full" position="relative">
+      {/* <HStack w="full" position="relative">
         <InputGroup>
           <Input
             ref={inputRef}
@@ -213,7 +208,7 @@ export const DonationInput = () => {
         >
           {isSatoshi ? 'sats' : '$'}
         </Body>
-      </HStack>
+      </HStack> */}
     </VStack>
   )
 }

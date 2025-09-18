@@ -1,22 +1,24 @@
-import { Button, Input, InputGroup, InputLeftElement, InputRightElement, VStack } from '@chakra-ui/react'
+import { Button, Input, InputGroup, InputRightElement, useDisclosure, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { DateTime } from 'luxon'
+import { useEffect } from 'react'
 import ReactDatePicker from 'react-datepicker'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 import * as yup from 'yup'
 
+import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { ControlledCheckboxInput } from '@/shared/components/controlledInput/ControlledCheckboxInput.tsx'
+import { AmountInput } from '@/shared/components/form/AmountInput.tsx'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
-import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { ProjectCreationStep } from '@/types/index.ts'
-import { commaFormatted, toInt } from '@/utils/index.ts'
+import { ProjectCreationStep, Satoshis, USDCents } from '@/types/index.ts'
+import { toInt } from '@/utils/index.ts'
 
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 import { ProjectCreationLayout } from '../../../Layouts/ProjectCreationLayout.tsx'
@@ -33,6 +35,7 @@ const formSchema = yup.object({
     .min(1, t('Duration must be at least 1 day'))
     .typeError(t('Duration must be a number')),
   launchDate: yup.date().optional().typeError(t('Launch date must be a valid date')),
+  amountUSD: yup.number().optional().typeError(t('Amount must be a number')),
   isPrivate: yup.boolean().optional(),
 })
 
@@ -42,17 +45,23 @@ export const AllOrNothingGoal = () => {
   const navigate = useNavigate()
   const usdRate = useAtomValue(usdRateAtom)
 
+  const { getSatoshisFromUSDCents, getUSDAmount } = useBTCConverter()
+
   const { control, handleSubmit, register, setValue, watch, formState, clearErrors } = useForm<FormValues>({
     resolver: yupResolver(formSchema),
     reValidateMode: 'onSubmit',
     mode: 'onSubmit',
     defaultValues: {
       amount: 0,
+      amountUSD: 0,
       duration: 0,
       launchDate: undefined,
       isPrivate: true,
     },
   })
+
+  const amount = watch('amount') || 0
+  const amountUSD = watch('amountUSD') || 0
 
   const { project } = useProjectAtom()
 
@@ -60,8 +69,6 @@ export const AllOrNothingGoal = () => {
     ProjectCreationStep.FundingGoal,
     getPath('launchProjectRewards', project.id),
   )
-
-  const { formatUsdAmount } = useCurrencyFormatter()
 
   const continueProps = {
     type: 'submit' as const,
@@ -72,12 +79,6 @@ export const AllOrNothingGoal = () => {
     onClick() {
       navigate(getPath('launchFundingStrategy', project.id))
     },
-  }
-
-  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.replaceAll(',', '')
-    const val = Number(value)
-    setValue('amount', val, { shouldValidate: true, shouldDirty: true })
   }
 
   const onSubmit = (data: FormValues) => {
@@ -95,6 +96,40 @@ export const AllOrNothingGoal = () => {
 
   const launchDate = watch('launchDate')
 
+  const { isOpen: isSatoshi, onToggle } = useDisclosure({ defaultIsOpen: false })
+  const isDollar = !isSatoshi
+
+  const handleAmountInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.replaceAll(',', '')
+    const val = Number(value)
+
+    if (!val) {
+      setValue('amountUSD', 0)
+      setValue('amount', 0)
+      return
+    }
+
+    if (isDollar) {
+      setValue('amountUSD', val)
+    } else {
+      setValue('amount', val)
+    }
+  }
+
+  useEffect(() => {
+    if (isDollar) {
+      const usdToSats = getSatoshisFromUSDCents((amountUSD * 100) as USDCents)
+      setValue('amount', usdToSats)
+    }
+  }, [isDollar, amountUSD, getSatoshisFromUSDCents, setValue])
+
+  useEffect(() => {
+    if (isSatoshi) {
+      const satsToUsd = getUSDAmount(amount as Satoshis)
+      setValue('amountUSD', satsToUsd)
+    }
+  }, [isSatoshi, amount, getUSDAmount, setValue])
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <ProjectCreationLayout
@@ -108,37 +143,13 @@ export const AllOrNothingGoal = () => {
             subtitle={t('The goal must be at least of 210,000 sats (~210$).')}
             error={formState.errors.amount?.message}
           >
-            <InputGroup maxWidth="600px" marginTop={4}>
-              <InputLeftElement
-                minWidth="100px"
-                h="full"
-                alignItems="center"
-                justifyContent="flex-start"
-                paddingLeft={4}
-              >
-                <Body size="lg" light>
-                  {formatUsdAmount(watch('amount'))}
-                </Body>
-              </InputLeftElement>
-
-              <Input
-                paddingRight={14}
-                size="lg"
-                fontWeight="bold"
-                textAlign="right"
-                placeholder={'0'}
-                value={watch('amount') ? commaFormatted(watch('amount')) : ''}
-                onChange={handleInput}
-                isInvalid={Boolean(formState.errors.amount)}
-                onFocus={() => {
-                  clearErrors('amount')
-                }}
-              />
-
-              <InputRightElement h="full" alignItems="center" minWidth="50px" paddingRight={4}>
-                <Body bold>sats</Body>
-              </InputRightElement>
-            </InputGroup>
+            <AmountInput
+              satoshi={watch('amount')}
+              dollar={watch('amountUSD') || 0}
+              isSatoshi={isSatoshi}
+              handleInput={handleAmountInput}
+              onToggle={onToggle}
+            />
           </FieldContainer>
           <FieldContainer
             title={t('Project duration')}
