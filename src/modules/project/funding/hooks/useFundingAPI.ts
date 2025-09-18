@@ -1,6 +1,6 @@
 import { ApolloError } from '@apollo/client'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { __development__ } from '@/shared/constants/index.ts'
@@ -67,10 +67,23 @@ export const useFundingAPI = () => {
   const setKeyPair = useSetAtom(keyPairAtom)
   const setRskAccountKeys = useSetAtom(rskAccountKeysAtom)
 
-  const preImages = {
-    lightning: { preimageHex: '', preimageHash: '' },
-    onChain: { preimageHex: '', preimageHash: '' },
-  }
+  const preImages = useMemo(
+    () => ({
+      lightning: { preimageHex: '', preimageHash: '' },
+      onChain: { preimageHex: '', preimageHash: '' },
+    }),
+    [],
+  )
+
+  // Used when user is logged out and does not have account keys
+  const currentAccountKeys = useMemo(
+    () => ({
+      publicKey: '',
+      address: '',
+      privateKey: '',
+    }),
+    [],
+  )
 
   const [contributionCreate, requestFundingOptions] = useCustomMutation(useContributionCreateMutation, {
     onCompleted(data) {
@@ -102,6 +115,7 @@ export const useFundingAPI = () => {
             contribution: data.contributionCreate.contribution,
             payment: data.contributionCreate.payments.onChainToRskSwap,
             preImages: preImages.onChain,
+            accountKeys: currentAccountKeys,
           })
         }
 
@@ -110,6 +124,7 @@ export const useFundingAPI = () => {
             contribution: data.contributionCreate.contribution,
             payment: data.contributionCreate.payments.lightningToRskSwap,
             preImages: preImages.lightning,
+            accountKeys: currentAccountKeys,
           })
         }
 
@@ -123,16 +138,17 @@ export const useFundingAPI = () => {
         ) {
           startWebLNFlow(data.contributionCreate.payments.lightning).catch(() => {
             toast.error({
-              title: 'Something went wrong',
+              title: 'Something went wrong1',
               description: 'Please refresh the page and try again',
             })
           })
         }
       } catch (e) {
         setFundingRequestErrored(true)
+        console.log('e', e)
         toast.error({
-          title: 'Something went wrong',
-          description: 'Please refresh the page and try again',
+          title: 'Something went wrong2',
+          description: e instanceof Error ? e.message : JSON.stringify(e),
         })
       }
     },
@@ -144,7 +160,7 @@ export const useFundingAPI = () => {
       setFundingRequestErrored(true)
 
       toast.error({
-        title: 'Something went wrong',
+        title: 'Something went wrong3',
         description: 'Please refresh the page and try again',
       })
     },
@@ -197,10 +213,15 @@ export const useFundingAPI = () => {
         ) {
           const accountKeys = generateAccountKeys()
           setRskAccountKeys(accountKeys)
+
           finalInput.paymentsInput.lightningToRskSwap.boltz.claimPublicKey = accountKeys.publicKey
           finalInput.paymentsInput.lightningToRskSwap.boltz.claimAddress = accountKeys.address
           finalInput.paymentsInput.onChainToRskSwap.boltz.claimPublicKey = accountKeys.publicKey
           finalInput.paymentsInput.onChainToRskSwap.boltz.claimAddress = accountKeys.address
+
+          currentAccountKeys.publicKey = accountKeys.publicKey
+          currentAccountKeys.address = accountKeys.address
+          currentAccountKeys.privateKey = accountKeys.privateKey
         }
       }
 
@@ -216,6 +237,8 @@ export const useFundingAPI = () => {
       resetContribution,
       setRskAccountKeys,
       setContributionCreatePreImages,
+      currentAccountKeys,
+      preImages,
     ],
   )
 
@@ -243,10 +266,12 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     contribution,
     payment,
     preImages,
+    accountKeys,
   }: {
     contribution: FundingContributionFragment
     payment: ContributionLightningToRskSwapPaymentDetailsFragment
     preImages: { preimageHex: string; preimageHash: string }
+    accountKeys: { publicKey: string; address: string; privateKey: string }
   }) => {
     const { swapJson, fees } = payment
 
@@ -263,13 +288,13 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     console.log('contributionCreatePreImages.lightning', preImages)
 
     const getTransactionForBoltzClaimCall = createTransactionForBoltzClaimCall({
-      contributorAddress: userAccountKeys?.rskKeyPair?.address || '',
+      contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
       fees: satsToWei(feesAmount),
       preimage: preImages.preimageHex,
       amount: satsToWei(swap.onchainAmount),
       refundAddress: swap.refundAddress,
       timelock: swap.timeoutBlockHeight,
-      privateKey: userAccountKeyPair?.privateKey || '',
+      privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
       aonContractAddress: project?.aonContractAddress || '',
     })
     console.log('getTransactionForBoltzClaimCall for LIGHTNING', getTransactionForBoltzClaimCall)
@@ -287,10 +312,12 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     contribution,
     payment,
     preImages,
+    accountKeys,
   }: {
     contribution: FundingContributionFragment
     payment: ContributionOnChainToRskSwapPaymentDetailsFragment
     preImages: { preimageHex: string; preimageHash: string }
+    accountKeys: { publicKey: string; address: string; privateKey: string }
   }) => {
     const { swapJson, fees } = payment
 
@@ -308,13 +335,13 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     console.log('swap.amount', swap)
 
     const getTransactionForBoltzClaimCall = createTransactionForBoltzClaimCall({
-      contributorAddress: userAccountKeys?.rskKeyPair?.address || '',
+      contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
       fees: satsToWei(feesAmount),
       preimage: preImages.preimageHex,
       amount: satsToWei(swap.claimDetails.amount),
       refundAddress: swap.claimDetails.refundAddress,
       timelock: swap.claimDetails.timeoutBlockHeight,
-      privateKey: userAccountKeyPair?.privateKey || '',
+      privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
       aonContractAddress: project?.aonContractAddress || '',
     })
     console.log('getTransactionForBoltzClaimCall for ONCHAIN', getTransactionForBoltzClaimCall)

@@ -1,7 +1,8 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import React, { useEffect, useState } from 'react'
+import { PiWarningCircleBold } from 'react-icons/pi'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
@@ -9,6 +10,7 @@ import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accou
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
+import { Body } from '@/shared/components/typography/Body.tsx'
 import {
   ProjectForProfileContributionsFragment,
   usePledgeRefundInitiateMutation,
@@ -51,8 +53,10 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
   const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
   const [refundAddress, setRefundAddress] = useState<string | null>(null)
 
-  const [pledgeRefundRequest, { data: pledgeRefundRequestData, loading: pledgeRefundRequestLoading }] =
-    usePledgeRefundRequestMutation()
+  const [
+    pledgeRefundRequest,
+    { data: pledgeRefundRequestData, loading: pledgeRefundRequestLoading, error: pledgeRefundRequestError },
+  ] = usePledgeRefundRequestMutation()
 
   const [pledgeRefundInitiate, { loading: isPledgeRefundInitiateLoading }] = usePledgeRefundInitiateMutation()
 
@@ -200,6 +204,15 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
     } else {
       bitcoinForm.handleSubmit()
     }
+  }
+
+  if (pledgeRefundRequestError) {
+    return (
+      <Modal isOpen={isOpen} size="lg" title={t('Cannot issue refund')} onClose={handleClose}>
+        <Icon as={PiWarningCircleBold} fontSize="120px" color="error.9" />
+        <Body size="md">{pledgeRefundRequestError.message}</Body>
+      </Modal>
+    )
   }
 
   if (isWaitingConfirmation) {

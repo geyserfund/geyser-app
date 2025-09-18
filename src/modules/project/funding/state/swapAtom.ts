@@ -213,3 +213,7 @@ export const resetCurrentSwapAndRefundedDataAtom = atom(null, (get, set) => {
   set(currentSwapIdAtom, '')
   set(refundedSwapDataAtom, undefined)
 })
+
+export const resetKeyPairAtom = atom(null, (get, set) => {
+  set(keyPairAtom, null)
+})

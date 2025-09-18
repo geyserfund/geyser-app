@@ -10,6 +10,8 @@ import { resetFundingContributionAtom } from '../state/fundingContributionAtom.t
 import { resetFundingInputAfterRequestAtom } from '../state/fundingContributionCreateInputAtom.ts'
 import { resetFundingPaymentDetailsAtom } from '../state/fundingPaymentAtom.ts'
 import { stopPollingAndSubscriptionAtom } from '../state/pollingAndSubscriptionAtom.ts'
+import { resetKeyPairAtom } from '../state/swapAtom.ts'
+import { resetRskAccountKeysAtom } from '../state/swapRskAtom.ts'
 
 /** Reset contribution state, without changing anything about the funding form */
 export const useResetContribution = () => {
@@ -27,6 +29,10 @@ export const useResetContribution = () => {
 
   const stopPollingAndSubscription = useSetAtom(stopPollingAndSubscriptionAtom)
 
+  // Reset account keys and key pair before creating a new contribution
+  const resetRskAccountKeys = useSetAtom(resetRskAccountKeysAtom)
+  const resetKeyPair = useSetAtom(resetKeyPairAtom)
+
   const resetContribution = useCallback(() => {
     resetFundingContribution()
     resetSwapTransaction()
@@ -37,6 +43,8 @@ export const useResetContribution = () => {
     resetFundingInputAfterRequest()
     resetFundingError()
     stopPollingAndSubscription()
+    resetRskAccountKeys()
+    resetKeyPair()
   }, [
     resetFundingContribution,
     resetSwapTransaction,
@@ -47,6 +55,8 @@ export const useResetContribution = () => {
     resetFundingInputAfterRequest,
     resetFundingError,
     stopPollingAndSubscription,
+    resetRskAccountKeys,
+    resetKeyPair,
   ])
 
   return resetContribution
