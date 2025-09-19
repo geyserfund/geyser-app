@@ -28,11 +28,13 @@ export const GrantHasVoting: { [key: string]: boolean } = {
   'grant-round-013': false,
   'grant-round-014': false,
   'grant-round-015': false,
+  'grant-round-016': false,
 }
 
 export const GrantBalanceCurrency: { [key: string]: string } = {
   'grant-round-014': 'USDCENT',
   'grant-round-015': 'USDCENT',
+  'grant-round-016': 'USDCENT',
 }
 
 export const NoContributionInGrant = ['grant-round-008', 'grant-round-014']
@@ -79,4 +81,5 @@ export const GRANT_STATUS_COUNTDOWN_TITLES_NON_VOTE = {
 export const GrantProjectNameMap: { [key: string]: string } = {
   'grant-round-004': 'bitcoingaminggrant',
   'grant-round-013': 'satsnfacts',
+  'grant-round-016': 'time2build',
 }
