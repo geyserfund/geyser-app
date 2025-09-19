@@ -42,10 +42,12 @@ import { GrantSummary } from './sections/GrantSummary.tsx'
 import { MoreInfo } from './sections/MoreInfo.tsx'
 import { PendingApplications } from './sections/PendingApplications.tsx'
 
-export const GrantPage = () => {
+export const GrantPage = ({ grantId: propGrantId }: { grantId?: number }) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
-  const { grantId } = useParams<{ grantId: string }>()
+  const { grantId: paramGrantId } = useParams<{ grantId: string }>()
+
+  const grantId = paramGrantId || propGrantId
 
   const { grant, loading, error } = useGrant(grantId)
 

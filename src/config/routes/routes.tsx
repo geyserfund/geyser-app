@@ -843,6 +843,14 @@ export const platformRoutes: RouteObject[] = [
   },
 
   {
+    path: '/time2build',
+    async lazy() {
+      const GrantPage = await Grants().then((m) => m.GrantPage)
+      return { element: <GrantPage grantId={20} /> }
+    },
+  },
+
+  {
     path: getPath('guardians'),
     async lazy() {
       const GuardiansPage = await Guardians().then((m) => m.Guardians)
