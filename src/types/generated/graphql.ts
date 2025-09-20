@@ -8695,7 +8695,7 @@ export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, cr
     & ShippingAddressFragment
   ) | null };
 
-export type ContributionFeesFragment = { __typename?: 'PaymentFee', feeAmount: number, feePayer?: PaymentFeePayer | null };
+export type ContributionFeesFragment = { __typename?: 'PaymentFee', feeType?: PaymentFeeType | null, feeAmount: number, feePayer?: PaymentFeePayer | null };
 
 export type ContributionLightningPaymentDetailsFragment = { __typename?: 'ContributionLightningPaymentDetails', lightningInvoiceId: string, paymentRequest: string };
 
@@ -11084,6 +11084,7 @@ export const ContributionFiatSwapPaymentDetailsFragmentDoc = gql`
     `;
 export const ContributionFeesFragmentDoc = gql`
     fragment ContributionFees on PaymentFee {
+  feeType
   feeAmount
   feePayer
 }
