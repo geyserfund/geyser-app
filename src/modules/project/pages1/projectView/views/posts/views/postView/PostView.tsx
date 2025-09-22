@@ -141,13 +141,14 @@ export const PostView = () => {
         </TopNavContainerBar>
 
         <CardLayout
-          w={{ base: 'full', lg: 'auto' }}
+          w="full"
+          maxWidth={dimensions.project.posts.view.maxWidth}
           direction="row"
           justifyContent="center"
           paddingY={{ base: 6, lg: 12 }}
           mobileDense
         >
-          <VStack maxWidth={dimensions.project.posts.view.maxWidth} w="full" alignItems="start" spacing={6}>
+          <VStack w="full" alignItems="start" spacing={6}>
             {post.image && (
               <Box overflow={'hidden'} width="100%" position="relative" paddingTop="75%" borderRadius={'8px'}>
                 <ImageWithReload

@@ -122,12 +122,13 @@ export const RewardView = () => {
         </TopNavContainerBar>
 
         <CardLayout
-          w={{ base: 'full', lg: 'auto' }}
+          w="full"
+          maxWidth={dimensions.project.rewards.view.maxWidth}
           direction="row"
           justifyContent="center"
           paddingY={{ base: 6, lg: 12 }}
         >
-          <VStack maxWidth={dimensions.project.rewards.view.maxWidth} w="full" spacing={6}>
+          <VStack w="full" spacing={6}>
             <VStack w="full" spacing={3}>
               <HStack w="full" alignItems="start" justifyContent="space-between">
                 <H2 flex={1} size="2xl" bold>

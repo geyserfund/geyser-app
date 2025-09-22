@@ -17,6 +17,9 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
       id
       user {
         id
+        guardianType
+        username
+        imageUrl
         taxProfile {
           legalEntityType
           verified

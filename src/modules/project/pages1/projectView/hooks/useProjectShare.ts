@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { getPath } from '@/shared/constants'
-import { ProjectEntryFragment, ProjectReward } from '@/types'
+import { ProjectPostFragment, ProjectReward } from '@/types'
 
 import { useAuthContext } from '../../../../../context'
 import { copyTextToClipboard } from '../../../../../utils'
@@ -136,7 +136,7 @@ export const useRewardShare = ({ uuid, name }: Pick<ProjectReward, 'uuid' | 'nam
 }
 
 /** This hook must be used inside ProjectProvider Context to share project rpostLinks links */
-export const usePostShare = ({ id }: Pick<ProjectEntryFragment, 'id'>) => {
+export const usePostShare = ({ id }: Pick<ProjectPostFragment, 'id'>) => {
   const { project, isProjectOwner } = useProjectAtom()
   const { isLoggedIn, user } = useAuthContext()
   const [copied, setCopied] = useState(false)

@@ -8,7 +8,6 @@ import { ProjectGrantApplicantFragment, ProjectHeaderSummaryFragment, ProjectPag
 import { resetRewardsAtom } from '../pages1/projectDashboard/views/sales/state/rewardsAtom'
 import { resetSourceResourceAtom } from '../pages1/projectView/state/sourceActivityAtom.ts'
 import { contributionAtomReset } from './contributionsAtom'
-import { entriesAtomReset } from './entriesAtom'
 import { goalsAtomReset } from './goalsAtom'
 import { postsAtomReset } from './postsAtom'
 import { projectFormAtomReset } from './projectFormAtom'
@@ -110,7 +109,6 @@ export const projectAtomReset = atom(null, (get, set) => {
 export const useProjectReset = () => {
   const projectReset = useSetAtom(projectAtomReset)
   const contributionsReset = useSetAtom(contributionAtomReset)
-  const entriesReset = useSetAtom(entriesAtomReset)
   const goalsReset = useSetAtom(goalsAtomReset)
   const projectFormReset = useSetAtom(projectFormAtomReset)
   const rewardsReset = useSetAtom(rewardsAtomReset)
@@ -130,7 +128,6 @@ export const useProjectReset = () => {
 
     projectReset()
     contributionsReset()
-    entriesReset()
     goalsReset()
     projectFormReset()
     rewardsReset()
@@ -144,7 +141,6 @@ export const useProjectReset = () => {
     isWidgetReset()
   }, [
     contributionsReset,
-    entriesReset,
     goalsReset,
     projectFormReset,
     projectReset,

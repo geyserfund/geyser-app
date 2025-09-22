@@ -3,48 +3,43 @@ import { t } from 'i18next'
 import { forwardRef } from 'react'
 import { Link } from 'react-router-dom'
 
-import { useProjectEntriesAPI } from '@/modules/project/API/useProjectEntriesAPI'
+import { useProjectPostsAPI } from '@/modules/project/API/useProjectPostsAPI.ts'
 import { getPath } from '@/shared/constants'
 import { truthyFilter } from '@/utils/array'
 
-import { useEntriesAtom, useProjectAtom } from '../../../../../hooks/useProjectAtom'
+import { usePostsAtom, useProjectAtom } from '../../../../../hooks/useProjectAtom'
 import { ProjectPostCard } from '../../posts/shared'
 import { BodySectionLayout } from '../components'
 
 export const Posts = forwardRef<HTMLDivElement>((_, ref) => {
   const { project, loading } = useProjectAtom()
 
-  const { queryProjectEntries, queryUnpublishedProjectEntries } = useProjectEntriesAPI(true)
+  const { queryProjectPosts, queryUnpublishedProjectPosts } = useProjectPostsAPI(true)
 
-  const { entries: publishedEntries } = useEntriesAtom()
+  const { posts: publishedPosts } = usePostsAtom()
 
-  const entries = [...publishedEntries]
+  const posts = [...publishedPosts]
 
-  const sortedEntries =
-    entries && entries.filter(truthyFilter).sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))
+  const sortedPosts =
+    posts && posts.filter(truthyFilter).sort((a, b) => Number(b.createdAt || '') - Number(a.createdAt || ''))
 
-  const hasMoreEntries = sortedEntries.length > 3
+  const hasMorePosts = sortedPosts.length > 3
 
-  const entriesToRender = hasMoreEntries ? sortedEntries.slice(0, 3) : sortedEntries
+  const postsToRender = hasMorePosts ? sortedPosts.slice(0, 3) : sortedPosts
 
-  if (
-    loading ||
-    queryProjectEntries.loading ||
-    queryUnpublishedProjectEntries.loading ||
-    entriesToRender.length === 0
-  ) {
+  if (loading || queryProjectPosts.loading || queryUnpublishedProjectPosts.loading || postsToRender.length === 0) {
     return null
   }
 
   return (
     <BodySectionLayout ref={ref} title={t('Posts')}>
-      {entriesToRender.map((entry) => {
-        return <ProjectPostCard post={entry} key={entry.id} />
+      {postsToRender.map((post) => {
+        return <ProjectPostCard post={post} key={post.id} />
       })}
-      {hasMoreEntries && (
+      {hasMorePosts && (
         <HStack w="full" justifyContent="center">
           <Button variant="soft" colorScheme="neutral1" as={Link} to={getPath('projectPosts', project.name)}>
-            {t('See all')} {`${entries.length} posts`}
+            {t('See all')} {`${posts.length} posts`}
           </Button>
         </HStack>
       )}

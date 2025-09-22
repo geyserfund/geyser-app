@@ -37,3 +37,10 @@ export const guardianGradient = {
   [GuardianType.King]: 'linear-gradient(to bottom left, #FFDC00, #9E6C00)',
   [GuardianType.Legend]: 'linear-gradient(to bottom left, #12A594, #83CDC1)',
 }
+
+export const guardianColors = {
+  [GuardianType.Warrior]: '#E592A3',
+  [GuardianType.Knight]: '#AA99EC',
+  [GuardianType.King]: '#FFDC00',
+  [GuardianType.Legend]: '#12A594',
+}

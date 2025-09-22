@@ -15,7 +15,7 @@ export const AonNotification = () => {
     return null
   }
 
-  if (project.aonGoalStatus === ProjectAonGoalStatus.Succeeded) {
+  if (project.aonGoalStatus === ProjectAonGoalStatus.Successful) {
     return <CampaignSuccessNotification />
   }
 
@@ -27,11 +27,11 @@ export const AonNotification = () => {
     return <FundsClaimedNotification />
   }
 
-  if (project.aonGoalStatus === ProjectAonGoalStatus.Unclaimed) {
+  if (project.aonGoalStatus === ProjectAonGoalStatus.Cancelled) {
     return <FailedToClaimNotification />
   }
 
-  if (project.aonGoalStatus === ProjectAonGoalStatus.Refunded) {
+  if (project.aonGoalStatus === ProjectAonGoalStatus.Finalized) {
     return <FundsReturnedNotification />
   }
 }

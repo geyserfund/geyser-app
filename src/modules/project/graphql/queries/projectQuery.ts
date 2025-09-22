@@ -2,22 +2,12 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_GRANT_APPLICANT } from '../fragments/grantFragment'
 import {
-  FRAGMENT_PROJECT,
   FRAGMENT_PROJECT_HEADER_SUMMARY,
   FRAGMENT_PROJECT_NOSTR_KEYS,
   FRAGMENT_PROJECT_PAGE_BODY,
 } from '../fragments/projectFragment'
 import { FRAGMENT_PROJECT_REVIEW } from '../fragments/projectReviewFragment.ts'
 import { FRAGMENT_PROJECT_PAGE_WALLET, FRAGMENT_PROJECT_WALLET_CONNECTION_DETAILS } from '../fragments/walletFragment'
-
-export const QUERY_PROJECT_BY_NAME_OR_ID = gql`
-  ${FRAGMENT_PROJECT}
-  query ProjectByNameOrId($where: UniqueProjectQueryInput!, $input: ProjectEntriesGetInput) {
-    projectGet(where: $where) {
-      ...Project
-    }
-  }
-`
 
 export const QUERY_PROJECT_BY_NAME_FOR_NAME_CHECK = gql`
   query ProjectByNameForNameCheck($where: UniqueProjectQueryInput!) {
