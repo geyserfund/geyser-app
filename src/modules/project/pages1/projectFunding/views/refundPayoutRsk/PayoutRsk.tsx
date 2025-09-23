@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
+import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
@@ -71,11 +72,12 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
+      const amount = payoutRequestData?.payoutRequest.payout.amount || 0
       const { signature } = createAndSignClaimMessage({
         aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
         swapContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
         creatorAddress: accountKeys.address,
-        amount: (payoutRequestData?.payoutRequest.payout.amount || 0) * 10000000000, // 10^10 WEI
+        amount: satsToWei(amount),
         nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
         deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
         rskPrivateKey: accountKeys.privateKey,
@@ -123,11 +125,13 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
 
       const { preimageHash, preimageHex } = generatePreImageHash()
 
+      const amount = payoutRequestData?.payoutRequest.payout.amount || 0
+
       const { signature } = createAndSignClaimMessage({
         aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
         swapContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
         creatorAddress: accountKeys.address,
-        amount: (payoutRequestData?.payoutRequest.payout.amount || 0) * 10000000000, // 10^10 WEI
+        amount: satsToWei(amount),
         nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
         deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
         rskPrivateKey: accountKeys.privateKey,

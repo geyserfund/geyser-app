@@ -1,11 +1,11 @@
 import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
+import { aonProjectTimeLeft } from '@/shared/utils/project/getTimeLeft.ts'
 
 import { LiveProgressAqua } from '../../../../../../../../../shared/components/feedback/LiveProgressAqua.tsx'
 
@@ -17,44 +17,7 @@ export const AonProjectBalanceDisplay = () => {
   const { formatAmount } = useCurrencyFormatter()
 
   /** Calculate time left for AON project showing only the largest time unit */
-  const timeLeft = useMemo(() => {
-    if (!project.launchedAt || !project.aonGoalDurationInDays) {
-      return null
-    }
-
-    const launchDate = DateTime.fromMillis(project.launchedAt)
-    const aonEndDate = launchDate.plus({ days: project.aonGoalDurationInDays })
-    const currentDateTime = DateTime.now()
-
-    if (currentDateTime >= aonEndDate) {
-      return null // Time is up, don't show the component
-    }
-
-    const duration = aonEndDate.diff(currentDateTime, ['days', 'hours', 'minutes', 'seconds']).toObject()
-    const days = Math.floor(duration.days || 0)
-    const hours = Math.floor(duration.hours || 0)
-    const minutes = Math.floor(duration.minutes || 0)
-    const seconds = Math.floor(duration.seconds || 0)
-
-    // Show the largest available time unit
-    if (days > 0) {
-      return { value: days, label: days === 1 ? t('day left') : t('days left') }
-    }
-
-    if (hours > 0) {
-      return { value: hours, label: hours === 1 ? t('hour left') : t('hours left') }
-    }
-
-    if (minutes > 0) {
-      return { value: minutes, label: minutes === 1 ? t('minute left') : t('minutes left') }
-    }
-
-    if (seconds > 0) {
-      return { value: seconds, label: seconds === 1 ? t('second left') : t('seconds left') }
-    }
-
-    return null // No time left
-  }, [project.launchedAt, project.aonGoalDurationInDays])
+  const timeLeft = useMemo(() => aonProjectTimeLeft(project), [project])
 
   // Don't render the component if time is up
 

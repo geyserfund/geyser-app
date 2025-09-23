@@ -13,6 +13,7 @@ export const MUTATION_PLEDGE_REFUND_REQUEST = gql`
       refundMetadata {
         ...PledgeRefundMetadata
       }
+      refundProcessingFee
     }
   }
 `

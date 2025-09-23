@@ -7,6 +7,7 @@ import { PiWarningCircleBold } from 'react-icons/pi'
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
+import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
@@ -79,11 +80,15 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
+      const amount =
+        (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
+        (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
+
       const { signature } = createAndSignRefundMessage({
         aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
         swapContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
         contributorAddress: accountKeys.address,
-        amount: (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) * 10000000000, // 10^10 WEI
+        amount: satsToWei(amount),
         nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
         deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
         rskPrivateKey: accountKeys.privateKey,
@@ -132,11 +137,17 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
 
       const { preimageHash, preimageHex } = generatePreImageHash()
 
+      const amount =
+        (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
+        (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
+
+      console.log('this is the amount to be sent', amount)
+
       const { signature } = createAndSignRefundMessage({
         aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
         swapContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
         contributorAddress: accountKeys.address,
-        amount: (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) * 10000000000, // 10^10 WEI
+        amount: satsToWei(amount),
         nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
         deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
         rskPrivateKey: accountKeys.privateKey,

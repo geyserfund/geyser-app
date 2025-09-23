@@ -2,6 +2,7 @@ import { Box, Button, HStack, Skeleton, Tooltip, useDisclosure, VStack } from '@
 import { t } from 'i18next'
 import { useNavigate } from 'react-router-dom'
 
+import { ProgressBar } from '@/components/ui/ProgressBar.tsx'
 import { FollowButton } from '@/modules/project/pages1/projectView/views/body/components/FollowButton.tsx'
 import { NonProjectProjectIcon } from '@/modules/project/pages1/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
@@ -12,7 +13,8 @@ import { InteractiveCardLayout } from '@/shared/components/layouts/InteractiveCa
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { centsToDollars, isInactive } from '@/utils'
+import { aonProjectTimeLeft } from '@/shared/utils/project/getTimeLeft.ts'
+import { centsToDollars, isAllOrNothing, isInactive } from '@/utils'
 
 import { SkeletonLayout } from '../../../../../shared/components/layouts'
 import { ContributionsSummary, ProjectForLandingPageFragment } from '../../../../../types'
@@ -50,6 +52,15 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
 
   const contributionAmount =
     project.contributionSummary?.contributionsTotalUsd || centsToDollars(project.balanceUsdCent)
+
+  const isAonProject = isAllOrNothing(project)
+  const percentage = isAonProject
+    ? project.aonGoalInSats
+      ? Math.round((project.balance / project.aonGoalInSats) * 100)
+      : 0
+    : 0
+  const timeLeft = aonProjectTimeLeft(project)
+
   const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
   const fires = getFires(contributionAmount)
 
@@ -73,7 +84,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
     return (
       <HStack w="full" overflow="hidden" alignItems="start">
         <Tooltip label={projectOwner?.username}>
-          <Box>
+          <Box display={{ base: 'none', lg: 'block' }}>
             <ProfileAvatar
               guardian={projectOwner?.guardianType}
               src={projectOwner?.imageUrl || ''}
@@ -92,17 +103,33 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           >
             {project.title}
           </H3>
-          <ProfileText
-            size="sm"
-            guardian={projectOwner?.guardianType}
-            _hover={{ textDecoration: 'underline' }}
-            onClick={handleProfileClick}
-            maxWidth="100%"
-            wrapperProps={{ width: '100%' }}
-            isTruncated={alwaysTruncate || !isOpen}
-          >
-            {projectOwner?.username}
-          </ProfileText>
+          <HStack w="full" spacing={1}>
+            <Box display={{ base: 'block', lg: 'none' }}>
+              <ProfileAvatar
+                guardian={projectOwner?.guardianType}
+                src={projectOwner?.imageUrl || ''}
+                height="16px"
+                width="16px"
+                wrapperProps={{
+                  padding: '1px',
+                  height: '18px',
+                  width: '18px',
+                }}
+                onClick={handleProfileClick}
+              />
+            </Box>
+            <ProfileText
+              size="sm"
+              guardian={projectOwner?.guardianType}
+              _hover={{ textDecoration: 'underline' }}
+              onClick={handleProfileClick}
+              maxWidth="100%"
+              wrapperProps={{ width: '100%' }}
+              isTruncated={alwaysTruncate || !isOpen}
+            >
+              {projectOwner?.username}
+            </ProfileText>
+          </HStack>
         </VStack>
       </HStack>
     )
@@ -111,7 +138,25 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
   const contributionContent = () => {
     return (
       <HStack w="full" justifyContent="space-between" alignItems="flex-end">
-        {
+        {isAonProject ? (
+          <Body
+            size="sm"
+            bold
+            color={percentage < 100 && timeLeft?.label !== 'days left' ? 'warning.11' : 'primary1.11'}
+            isTruncated
+          >
+            {percentage ? (
+              <>
+                {timeLeft?.value} {timeLeft?.label} {' - '}
+                <Body as="span" regular>
+                  {percentage}% {t('raised!')}
+                </Body>
+              </>
+            ) : (
+              t('Just launched!')
+            )}
+          </Body>
+        ) : (
           <Body size="sm" bold color="primary1.11" isTruncated>
             {contributionAmount ? (
               <>
@@ -125,7 +170,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
               t('Just launched!')
             )}
           </Body>
-        }
+        )}
         <FollowButton project={project} />
       </HStack>
     )
@@ -194,6 +239,17 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
         <Box position="absolute" top={2} right={2}>
           <NonProjectProjectIcon taxProfile={project.owners?.[0]?.user?.taxProfile} />
         </Box>
+        {isAonProject && (
+          <Box position="absolute" width="100%" height="12px" bottom={'-1px'} paddingTop="2px" background="utils.pbg">
+            <ProgressBar
+              value={percentage}
+              height="10px"
+              borderRadius="20px"
+              borderTopLeftRadius="0px"
+              borderTopEndRadius="0px"
+            />
+          </Box>
+        )}
       </Box>
       {!isOpenTemp && (
         <VStack
@@ -206,19 +262,20 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
         >
           {headerContent({ alwaysTruncate: true })}
 
-          {/* <Body
-          size="sm"
-          height="45px"
-          dark
-          noOfLines={2}
-          isTruncated
-          width="100%"
-          wordBreak={'break-word'}
-          whiteSpace={'normal'}
-          display={{ base: 'block', lg: 'none' }}
-        >
-          {project.shortDescription}
-        </Body> */}
+          <Body
+            size="sm"
+            height="34px"
+            dark
+            noOfLines={2}
+            isTruncated
+            width="100%"
+            wordBreak={'break-word'}
+            whiteSpace={'normal'}
+            lineHeight="1.2"
+            display={{ base: 'block', lg: 'none' }}
+          >
+            {project.shortDescription}
+          </Body>
           {contributionContent()}
         </VStack>
       )}

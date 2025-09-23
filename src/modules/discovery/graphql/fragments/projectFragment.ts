@@ -13,6 +13,10 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     status
     balance
     balanceUsdCent
+    fundingStrategy
+    aonGoalInSats
+    aonGoalDurationInDays
+    launchedAt
     owners {
       id
       user {

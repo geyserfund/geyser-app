@@ -11,7 +11,6 @@ import {
   ContributionOnChainToRskSwapPaymentDetailsFragment,
   FundingContributionFragment,
   PaymentFeePayer,
-  PaymentFeeType,
   useContributionCreateMutation,
   usePaymentSwapClaimTxSetMutation,
 } from '@/types/index.ts'
@@ -276,7 +275,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
   }) => {
     const { swapJson, fees } = payment
 
-    const feesAmount = fees.reduce((acc, fee) => {
+    const creatorFeesAmount = fees.reduce((acc, fee) => {
       if (fee.feePayer === PaymentFeePayer.Creator) {
         return acc + fee.feeAmount
       }
@@ -284,8 +283,8 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       return acc
     }, 0)
 
-    const tipAmount = fees.reduce((acc, fee) => {
-      if (fee.feeType === PaymentFeeType.Tip) {
+    const contributorFeesAmount = fees.reduce((acc, fee) => {
+      if (fee.feePayer === PaymentFeePayer.Contributor) {
         return acc + fee.feeAmount
       }
 
@@ -298,8 +297,8 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
 
     const getTransactionForBoltzClaimCall = createTransactionForBoltzClaimCall({
       contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
-      fees: satsToWei(feesAmount),
-      tips: satsToWei(tipAmount),
+      creatorFees: satsToWei(creatorFeesAmount),
+      contributorFees: satsToWei(contributorFeesAmount),
       preimage: preImages.preimageHex,
       amount: satsToWei(payment.amountDue),
       refundAddress: swap.refundAddress,
@@ -331,7 +330,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
   }) => {
     const { swapJson, fees } = payment
 
-    const feesAmount = fees.reduce((acc, fee) => {
+    const creatorFeesAmount = fees.reduce((acc, fee) => {
       if (fee.feePayer === PaymentFeePayer.Creator) {
         return acc + fee.feeAmount
       }
@@ -339,8 +338,8 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       return acc
     }, 0)
 
-    const tipAmount = fees.reduce((acc, fee) => {
-      if (fee.feeType === PaymentFeeType.Tip) {
+    const contributorFeesAmount = fees.reduce((acc, fee) => {
+      if (fee.feePayer === PaymentFeePayer.Contributor) {
         return acc + fee.feeAmount
       }
 
@@ -354,8 +353,8 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
 
     const getTransactionForBoltzClaimCall = createTransactionForBoltzClaimCall({
       contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
-      fees: satsToWei(feesAmount),
-      tips: satsToWei(tipAmount),
+      creatorFees: satsToWei(creatorFeesAmount),
+      contributorFees: satsToWei(contributorFeesAmount),
       preimage: preImages.preimageHex,
       amount: satsToWei(swap.claimDetails.amount),
       refundAddress: swap.claimDetails.refundAddress,

@@ -2488,6 +2488,7 @@ export type PledgeRefundRequestResponse = {
   __typename?: 'PledgeRefundRequestResponse';
   refund: PledgeRefund;
   refundMetadata: PledgeRefundMetadata;
+  refundProcessingFee: Scalars['Int']['output'];
 };
 
 export type PledgeRefundResponse = {
@@ -6693,6 +6694,7 @@ export type PledgeRefundMetadataResolvers<ContextType = any, ParentType extends 
 export type PledgeRefundRequestResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PledgeRefundRequestResponse'] = ResolversParentTypes['PledgeRefundRequestResponse']> = {
   refund?: Resolver<ResolversTypes['PledgeRefund'], ParentType, ContextType>;
   refundMetadata?: Resolver<ResolversTypes['PledgeRefundMetadata'], ParentType, ContextType>;
+  refundProcessingFee?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7971,7 +7973,7 @@ export type MeProjectFollowsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: any, projectFollows: Array<{ __typename?: 'Project', id: any, title: string, status?: ProjectStatus | null, thumbnailImage?: string | null, name: string }> } | null };
 
-export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
+export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, aonGoalInSats?: number | null, aonGoalDurationInDays?: number | null, launchedAt?: any | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
 export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, balanceUsdCent: number, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
@@ -8927,7 +8929,7 @@ export type PledgeRefundRequestMutationVariables = Exact<{
 }>;
 
 
-export type PledgeRefundRequestMutation = { __typename?: 'Mutation', pledgeRefundRequest: { __typename?: 'PledgeRefundRequestResponse', refund: (
+export type PledgeRefundRequestMutation = { __typename?: 'Mutation', pledgeRefundRequest: { __typename?: 'PledgeRefundRequestResponse', refundProcessingFee: number, refund: (
       { __typename?: 'PledgeRefund' }
       & PledgeRefundFragment
     ), refundMetadata: (
@@ -9888,6 +9890,10 @@ export const ProjectForLandingPageFragmentDoc = gql`
   status
   balance
   balanceUsdCent
+  fundingStrategy
+  aonGoalInSats
+  aonGoalDurationInDays
+  launchedAt
   owners {
     id
     user {
@@ -15030,6 +15036,7 @@ export const PledgeRefundRequestDocument = gql`
     refundMetadata {
       ...PledgeRefundMetadata
     }
+    refundProcessingFee
   }
 }
     ${PledgeRefundFragmentDoc}
