@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 export const ContributionFeesFragment = gql`
   fragment ContributionFees on PaymentFee {
+    feeType
     feeAmount
     feePayer
   }

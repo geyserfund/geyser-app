@@ -11,6 +11,7 @@ import {
   ContributionOnChainToRskSwapPaymentDetailsFragment,
   FundingContributionFragment,
   PaymentFeePayer,
+  PaymentFeeType,
   useContributionCreateMutation,
   usePaymentSwapClaimTxSetMutation,
 } from '@/types/index.ts'
@@ -283,6 +284,14 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       return acc
     }, 0)
 
+    const tipAmount = fees.reduce((acc, fee) => {
+      if (fee.feeType === PaymentFeeType.Tip) {
+        return acc + fee.feeAmount
+      }
+
+      return acc
+    }, 0)
+
     const swap = JSON.parse(swapJson)
 
     console.log('contributionCreatePreImages.lightning', preImages)
@@ -290,8 +299,9 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     const getTransactionForBoltzClaimCall = createTransactionForBoltzClaimCall({
       contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
       fees: satsToWei(feesAmount),
+      tips: satsToWei(tipAmount),
       preimage: preImages.preimageHex,
-      amount: satsToWei(swap.onchainAmount),
+      amount: satsToWei(payment.amountDue),
       refundAddress: swap.refundAddress,
       timelock: swap.timeoutBlockHeight,
       privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
@@ -329,6 +339,14 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       return acc
     }, 0)
 
+    const tipAmount = fees.reduce((acc, fee) => {
+      if (fee.feeType === PaymentFeeType.Tip) {
+        return acc + fee.feeAmount
+      }
+
+      return acc
+    }, 0)
+
     const swap = JSON.parse(swapJson)
 
     console.log('contributionCreatePreImages.onChain', preImages)
@@ -337,6 +355,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     const getTransactionForBoltzClaimCall = createTransactionForBoltzClaimCall({
       contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
       fees: satsToWei(feesAmount),
+      tips: satsToWei(tipAmount),
       preimage: preImages.preimageHex,
       amount: satsToWei(swap.claimDetails.amount),
       refundAddress: swap.claimDetails.refundAddress,

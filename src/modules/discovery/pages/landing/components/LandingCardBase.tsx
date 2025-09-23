@@ -30,6 +30,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isOpenTemp, onOpen: onOpenTemp, onClose: onCloseTemp } = useDisclosure()
 
   const getFires = (amount: number) => {
     if (amount > 100) {
@@ -66,6 +67,70 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
     navigate(getPath('userProfile', projectOwner?.id))
   }
 
+  const headerContent = (props?: { alwaysTruncate?: boolean; highlight?: boolean }) => {
+    const { alwaysTruncate, highlight } = props || {}
+
+    return (
+      <HStack w="full" overflow="hidden" alignItems="start">
+        <Tooltip label={projectOwner?.username}>
+          <Box>
+            <ProfileAvatar
+              guardian={projectOwner?.guardianType}
+              src={projectOwner?.imageUrl || ''}
+              size="sm"
+              onClick={handleProfileClick}
+            />
+          </Box>
+        </Tooltip>
+        <VStack flex={1} alignItems="start" spacing={0} overflow="hidden">
+          <H3
+            size="lg"
+            medium
+            width="100%"
+            isTruncated={alwaysTruncate || !isOpen}
+            color={highlight ? 'primary1.8' : 'unset'}
+          >
+            {project.title}
+          </H3>
+          <ProfileText
+            size="sm"
+            guardian={projectOwner?.guardianType}
+            _hover={{ textDecoration: 'underline' }}
+            onClick={handleProfileClick}
+            maxWidth="100%"
+            wrapperProps={{ width: '100%' }}
+            isTruncated={alwaysTruncate || !isOpen}
+          >
+            {projectOwner?.username}
+          </ProfileText>
+        </VStack>
+      </HStack>
+    )
+  }
+
+  const contributionContent = () => {
+    return (
+      <HStack w="full" justifyContent="space-between" alignItems="flex-end">
+        {
+          <Body size="sm" bold color="primary1.11" isTruncated>
+            {contributionAmount ? (
+              <>
+                {fires ? `${fires} ` : ''}
+                {formatAmount(contributionAmount, 'USD')}{' '}
+                <Body as="span" regular>
+                  {isWeekly ? t('raised this week!') : t('raised!')}
+                </Body>
+              </>
+            ) : (
+              t('Just launched!')
+            )}
+          </Body>
+        }
+        <FollowButton project={project} />
+      </HStack>
+    )
+  }
+
   return (
     <InteractiveCardLayout
       padding="0px"
@@ -77,18 +142,32 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
       background="transparent"
       hoverContent={
         <VStack paddingX={{ base: 3, lg: 4 }} paddingBottom={{ base: 3, lg: 4 }} width="100%" alignItems="start">
+          <VStack w="full" spacing={0} opacity={!isOpenTemp ? 0 : 1}>
+            {headerContent({ highlight: true })}
+            {contributionContent()}
+          </VStack>
+
           <Body size="sm" dark isTruncated width="100%" wordBreak={'break-word'} whiteSpace={'normal'}>
             {project.shortDescription}
           </Body>
-
           <Button variant="solid" colorScheme="primary1" size="md" width="100%" onClick={handleContribute}>
             {t('Contribute')}
           </Button>
         </VStack>
       }
       isOpen={isOpen}
-      onOpen={onOpen}
-      onClose={onClose}
+      onOpen={() => {
+        onOpen()
+        setTimeout(() => {
+          onOpenTemp()
+        }, 100)
+      }}
+      onClose={() => {
+        onClose()
+        setTimeout(() => {
+          onCloseTemp()
+        }, 100)
+      }}
       {...rest}
     >
       {inActive && (
@@ -116,45 +195,18 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           <NonProjectProjectIcon taxProfile={project.owners?.[0]?.user?.taxProfile} />
         </Box>
       </Box>
-      <VStack
-        flex={1}
-        width={{ base: 'auto', lg: '100%' }}
-        minWidth={{ base: '170px', lg: 'auto' }}
-        alignItems="start"
-        overflow="hidden"
-        spacing={{ base: 1, lg: 0 }}
-        zIndex={1}
-      >
-        <HStack w="full" overflow="hidden" alignItems="start">
-          <Tooltip label={projectOwner?.username}>
-            <Box>
-              <ProfileAvatar
-                guardian={projectOwner?.guardianType}
-                src={projectOwner?.imageUrl || ''}
-                size="sm"
-                onClick={handleProfileClick}
-              />
-            </Box>
-          </Tooltip>
-          <VStack flex={1} alignItems="start" spacing={0} overflow="hidden">
-            <H3 size="lg" medium width="100%" isTruncated={!isOpen}>
-              {project.title}
-            </H3>
-            <ProfileText
-              size="sm"
-              guardian={projectOwner?.guardianType}
-              _hover={{ textDecoration: 'underline' }}
-              onClick={handleProfileClick}
-              width="100%"
-              wrapperProps={{ width: '100%' }}
-              isTruncated={!isOpen}
-            >
-              {projectOwner?.username}
-            </ProfileText>
-          </VStack>
-        </HStack>
+      {!isOpenTemp && (
+        <VStack
+          flex={1}
+          width={{ base: 'auto', lg: '100%' }}
+          minWidth={{ base: '170px', lg: 'auto' }}
+          alignItems="start"
+          overflow="hidden"
+          spacing={{ base: 1, lg: 0 }}
+        >
+          {headerContent({ alwaysTruncate: true })}
 
-        <Body
+          {/* <Body
           size="sm"
           height="45px"
           dark
@@ -166,26 +218,10 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           display={{ base: 'block', lg: 'none' }}
         >
           {project.shortDescription}
-        </Body>
-        <HStack w="full" justifyContent="space-between" alignItems="flex-end">
-          {
-            <Body size="sm" bold color="primary1.11" isTruncated>
-              {contributionAmount ? (
-                <>
-                  {fires ? `${fires} ` : ''}
-                  {formatAmount(contributionAmount, 'USD')}{' '}
-                  <Body as="span" regular>
-                    {isWeekly ? t('raised this week!') : t('raised!')}
-                  </Body>
-                </>
-              ) : (
-                t('Just launched!')
-              )}
-            </Body>
-          }
-          <FollowButton project={project} />
-        </HStack>
-      </VStack>
+        </Body> */}
+          {contributionContent()}
+        </VStack>
+      )}
     </InteractiveCardLayout>
   )
 }

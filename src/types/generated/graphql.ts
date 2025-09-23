@@ -3106,6 +3106,18 @@ export type ProjectPutInReviewMutationInput = {
   reason?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type ProjectRecommendedGetInput = {
+  n: Scalars['Int']['input'];
+};
+
+export type ProjectRecommendedGetResult = {
+  __typename?: 'ProjectRecommendedGetResult';
+  contributionsCount: Scalars['Int']['output'];
+  contributionsTotal: Scalars['Int']['output'];
+  contributionsTotalUsd: Scalars['Int']['output'];
+  project: Project;
+};
+
 export type ProjectRefundablePayment = {
   __typename?: 'ProjectRefundablePayment';
   payments: Array<Payment>;
@@ -3547,6 +3559,7 @@ export type Query = {
   projectLeaderboardAmbassadorsGet: Array<ProjectLeaderboardAmbassadorsRow>;
   projectLeaderboardContributorsGet: Array<ProjectLeaderboardContributorsRow>;
   projectNotificationSettingsGet: CreatorNotificationSettings;
+  projectRecommendedGet: Array<ProjectRecommendedGetResult>;
   projectRegionsGet: Array<ProjectRegionsGetResult>;
   projectRewardCategoriesGet: Array<Scalars['String']['output']>;
   projectRewardGet: ProjectReward;
@@ -3762,6 +3775,11 @@ export type QueryProjectLeaderboardContributorsGetArgs = {
 
 export type QueryProjectNotificationSettingsGetArgs = {
   projectId: Scalars['BigInt']['input'];
+};
+
+
+export type QueryProjectRecommendedGetArgs = {
+  input: ProjectRecommendedGetInput;
 };
 
 
@@ -5072,6 +5090,8 @@ export type ResolversTypes = {
   ProjectPreLaunchMutationInput: ProjectPreLaunchMutationInput;
   ProjectPublishMutationInput: ProjectPublishMutationInput;
   ProjectPutInReviewMutationInput: ProjectPutInReviewMutationInput;
+  ProjectRecommendedGetInput: ProjectRecommendedGetInput;
+  ProjectRecommendedGetResult: ResolverTypeWrapper<Omit<ProjectRecommendedGetResult, 'project'> & { project: ResolversTypes['Project'] }>;
   ProjectRefundablePayment: ResolverTypeWrapper<Omit<ProjectRefundablePayment, 'payments' | 'project'> & { payments: Array<ResolversTypes['Payment']>, project: ResolversTypes['Project'] }>;
   ProjectRegionsGetResult: ResolverTypeWrapper<ProjectRegionsGetResult>;
   ProjectReview: ResolverTypeWrapper<ProjectReview>;
@@ -5525,6 +5545,8 @@ export type ResolversParentTypes = {
   ProjectPreLaunchMutationInput: ProjectPreLaunchMutationInput;
   ProjectPublishMutationInput: ProjectPublishMutationInput;
   ProjectPutInReviewMutationInput: ProjectPutInReviewMutationInput;
+  ProjectRecommendedGetInput: ProjectRecommendedGetInput;
+  ProjectRecommendedGetResult: Omit<ProjectRecommendedGetResult, 'project'> & { project: ResolversParentTypes['Project'] };
   ProjectRefundablePayment: Omit<ProjectRefundablePayment, 'payments' | 'project'> & { payments: Array<ResolversParentTypes['Payment']>, project: ResolversParentTypes['Project'] };
   ProjectRegionsGetResult: ProjectRegionsGetResult;
   ProjectReview: ProjectReview;
@@ -6966,6 +6988,14 @@ export type ProjectMostFundedByTagResolvers<ContextType = any, ParentType extend
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProjectRecommendedGetResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRecommendedGetResult'] = ResolversParentTypes['ProjectRecommendedGetResult']> = {
+  contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsTotal?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contributionsTotalUsd?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ProjectRefundablePaymentResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRefundablePayment'] = ResolversParentTypes['ProjectRefundablePayment']> = {
   payments?: Resolver<Array<ResolversTypes['Payment']>, ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
@@ -7184,6 +7214,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectLeaderboardAmbassadorsGet?: Resolver<Array<ResolversTypes['ProjectLeaderboardAmbassadorsRow']>, ParentType, ContextType, RequireFields<QueryProjectLeaderboardAmbassadorsGetArgs, 'input'>>;
   projectLeaderboardContributorsGet?: Resolver<Array<ResolversTypes['ProjectLeaderboardContributorsRow']>, ParentType, ContextType, RequireFields<QueryProjectLeaderboardContributorsGetArgs, 'input'>>;
   projectNotificationSettingsGet?: Resolver<ResolversTypes['CreatorNotificationSettings'], ParentType, ContextType, RequireFields<QueryProjectNotificationSettingsGetArgs, 'projectId'>>;
+  projectRecommendedGet?: Resolver<Array<ResolversTypes['ProjectRecommendedGetResult']>, ParentType, ContextType, RequireFields<QueryProjectRecommendedGetArgs, 'input'>>;
   projectRegionsGet?: Resolver<Array<ResolversTypes['ProjectRegionsGetResult']>, ParentType, ContextType>;
   projectRewardCategoriesGet?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   projectRewardGet?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<QueryProjectRewardGetArgs, 'input'>>;
@@ -7680,6 +7711,7 @@ export type Resolvers<ContextType = any> = {
   ProjectMostFunded?: ProjectMostFundedResolvers<ContextType>;
   ProjectMostFundedByCategory?: ProjectMostFundedByCategoryResolvers<ContextType>;
   ProjectMostFundedByTag?: ProjectMostFundedByTagResolvers<ContextType>;
+  ProjectRecommendedGetResult?: ProjectRecommendedGetResultResolvers<ContextType>;
   ProjectRefundablePayment?: ProjectRefundablePaymentResolvers<ContextType>;
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>;
   ProjectReview?: ProjectReviewResolvers<ContextType>;
@@ -8509,7 +8541,7 @@ export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, cr
     & ShippingAddressFragment
   ) | null };
 
-export type ContributionFeesFragment = { __typename?: 'PaymentFee', feeAmount: number, feePayer?: PaymentFeePayer | null };
+export type ContributionFeesFragment = { __typename?: 'PaymentFee', feeType?: PaymentFeeType | null, feeAmount: number, feePayer?: PaymentFeePayer | null };
 
 export type ContributionLightningPaymentDetailsFragment = { __typename?: 'ContributionLightningPaymentDetails', lightningInvoiceId: string, paymentRequest: string };
 
@@ -10785,6 +10817,7 @@ export const ContributionFiatSwapPaymentDetailsFragmentDoc = gql`
     `;
 export const ContributionFeesFragmentDoc = gql`
     fragment ContributionFees on PaymentFee {
+  feeType
   feeAmount
   feePayer
 }

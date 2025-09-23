@@ -8,7 +8,7 @@ import { GuardianType } from '@/types'
 import { Body } from '../typography'
 import { BodyProps } from '../typography/Body'
 import { GuardianCardModal } from './GuardianCardModal.tsx'
-import { guardianColors, guardianGradient } from './ProfileAvatar'
+import { guardianColors } from './ProfileAvatar'
 
 type ProfileTextProps = {
   guardian?: GuardianType | null
@@ -32,7 +32,7 @@ export const ProfileText = ({ guardian, size = 'md', name, children, wrapperProp
 
   return (
     <>
-      <HStack spacing={1} alignItems={'center'} {...wrapperProps}>
+      <HStack spacing={1} alignItems={'center'} justifyContent="start" {...wrapperProps}>
         {children && (
           <Body textTransform={'capitalize'} color={backgroundColor} fontSize={size || '20px'} bold {...rest}>
             {children}

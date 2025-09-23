@@ -77,8 +77,8 @@ export const InteractiveCardLayout = ({
             _hover={{ cursor: 'pointer', shadow: hoverContent ? 'none' : 'lg' }}
             zIndex={isOpen ? 3 : 1}
             overflow="visible"
-            onMouseOver={onOpen}
-            onMouseLeave={onClose}
+            // onMouseOver={onOpen}
+            // onMouseLeave={onClose}
           >
             {children}
 
@@ -90,14 +90,14 @@ export const InteractiveCardLayout = ({
                 display={{ base: 'none', lg: 'flex' }}
                 onMouseOver={onOpen}
                 onMouseLeave={onClose}
-                {...(isOpen
-                  ? {
-                      shadow: 'lg',
-                      border: '1px solid var(--chakra-colors-neutral1-6)',
-                      cursor: 'pointer',
-                    }
-                  : {})}
+                _hover={{
+                  shadow: 'lg',
+                  border: '1px solid',
+                  borderColor: 'neutral1.6',
+                  cursor: 'pointer',
+                }}
                 width={'calc(100% + 32px)'}
+                zIndex={isOpen ? 4 : 1}
                 top={'-16px'}
                 left={'-16px'}
               >

@@ -7,10 +7,10 @@ import { addressToBuffer32, numberToBuffer32 } from './helperFunctions.ts'
 import { signEIP712Message } from './signEIP712Message.ts'
 
 /** Creates call data equivalent to Solidity's abi.encodeWithSignature("contributeFor(address, uint256)", contributorAddress, fees) */
-export const createCallDataForContributeForAon = (contributorAddress: string, fees: number): string => {
+export const createCallDataForContributeForAon = (contributorAddress: string, fees: number, tips: number): string => {
   try {
     // Step 1: Create function selector from signature
-    const functionSignature = 'contributeFor(address,uint256)'
+    const functionSignature = 'contributeFor(address,uint256,uint256)'
     const functionSelector = Buffer.from(keccak_256(functionSignature)).slice(0, 4)
 
     // Step 2: Encode parameters according to ABI encoding rules
@@ -20,8 +20,11 @@ export const createCallDataForContributeForAon = (contributorAddress: string, fe
     // Uint256 parameter (32 bytes, big-endian)
     const feesBuffer = numberToBuffer32(fees)
 
+    // Uint256 parameter (32 bytes, big-endian)
+    const tipsBuffer = numberToBuffer32(tips)
+
     // Step 3: Concatenate selector + encoded parameters
-    const callData = Buffer.concat([functionSelector, addressBuffer, feesBuffer])
+    const callData = Buffer.concat([functionSelector, addressBuffer, feesBuffer, tipsBuffer])
 
     // Return as hex string with 0x prefix
     return '0x' + callData.toString('hex')
@@ -186,6 +189,7 @@ export const createCallDataForClaimCall = (
 export const createTransactionForBoltzClaimCall = (params: {
   contributorAddress: string
   fees: number
+  tips: number
   preimage: string
   amount: number
   refundAddress: string
@@ -193,11 +197,12 @@ export const createTransactionForBoltzClaimCall = (params: {
   privateKey: string
   aonContractAddress: string
 }): string => {
-  const { contributorAddress, fees, preimage, amount, refundAddress, timelock, privateKey, aonContractAddress } = params
+  const { contributorAddress, fees, tips, preimage, amount, refundAddress, timelock, privateKey, aonContractAddress } =
+    params
 
   try {
     // Step 1: Create call data for contributeFor function
-    const contributeForCallData = createCallDataForContributeForAon(contributorAddress, fees)
+    const contributeForCallData = createCallDataForContributeForAon(contributorAddress, fees, tips)
 
     // Step 2: Create and sign the Boltz claim message
     const claimEIP712Message = createEIP712MessageForBoltzClaim(
