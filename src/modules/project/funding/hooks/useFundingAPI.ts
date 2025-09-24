@@ -11,6 +11,7 @@ import {
   ContributionOnChainToRskSwapPaymentDetailsFragment,
   FundingContributionFragment,
   PaymentFeePayer,
+  PaymentFeeType,
   useContributionCreateMutation,
   usePaymentSwapClaimTxSetMutation,
 } from '@/types/index.ts'
@@ -293,6 +294,9 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
 
     const swap = JSON.parse(swapJson)
 
+    const tipAmount = fees.find((fee) => fee.feeType === PaymentFeeType.Tip)?.feeAmount || 0
+    const amountToClaim = payment.amountDue - (contributorFeesAmount - tipAmount)
+
     console.log('contributionCreatePreImages.lightning', preImages)
 
     const getTransactionForBoltzClaimCall = createTransactionForBoltzClaimCall({
@@ -300,7 +304,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       creatorFees: satsToWei(creatorFeesAmount),
       contributorFees: satsToWei(contributorFeesAmount),
       preimage: preImages.preimageHex,
-      amount: satsToWei(payment.amountDue),
+      amount: satsToWei(amountToClaim),
       refundAddress: swap.refundAddress,
       timelock: swap.timeoutBlockHeight,
       privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
