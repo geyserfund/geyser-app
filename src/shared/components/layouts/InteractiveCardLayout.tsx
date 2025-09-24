@@ -102,7 +102,7 @@ export const InteractiveCardLayout = ({
                 left={'-16px'}
               >
                 <Box height={`${contentHeight + 16}px`} pointerEvents="none" />
-                <Collapse in={isOpen} unmountOnExit>
+                <Collapse in={isOpen} unmountOnExit style={{ overflow: 'visible' }}>
                   <Box backgroundColor="utils.pbg">{hoverContent}</Box>
                 </Collapse>
               </Stack>

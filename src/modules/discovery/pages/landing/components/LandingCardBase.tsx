@@ -18,6 +18,7 @@ import { centsToDollars, isAllOrNothing, isInactive } from '@/utils'
 
 import { SkeletonLayout } from '../../../../../shared/components/layouts'
 import { ContributionsSummary, ProjectForLandingPageFragment } from '../../../../../types'
+import { AllOrNothingIcon } from './AllOrNothingIcon.tsx'
 
 export interface LandingCardBaseProps extends CardLayoutProps {
   isMobile?: boolean
@@ -84,7 +85,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
     return (
       <HStack w="full" overflow="hidden" alignItems="start">
         <Tooltip label={projectOwner?.username}>
-          <Box display={{ base: 'none', lg: 'block' }}>
+          <Box display={{ base: 'none', lg: 'block' }} paddingY={'2px'}>
             <ProfileAvatar
               guardian={projectOwner?.guardianType}
               src={projectOwner?.imageUrl || ''}
@@ -186,7 +187,13 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
       position="relative"
       background="transparent"
       hoverContent={
-        <VStack paddingX={{ base: 3, lg: 4 }} paddingBottom={{ base: 3, lg: 4 }} width="100%" alignItems="start">
+        <VStack
+          paddingX={{ base: 3, lg: 4 }}
+          paddingBottom={{ base: 3, lg: 4 }}
+          width="100%"
+          alignItems="start"
+          marginTop="-86px"
+        >
           <VStack w="full" spacing={0} opacity={!isOpenTemp ? 0 : 1}>
             {headerContent({ highlight: true })}
             {contributionContent()}
@@ -205,13 +212,13 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
         onOpen()
         setTimeout(() => {
           onOpenTemp()
-        }, 100)
+        }, 50)
       }}
       onClose={() => {
         onClose()
         setTimeout(() => {
           onCloseTemp()
-        }, 100)
+        }, 50)
       }}
       {...rest}
     >
@@ -244,22 +251,30 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
         />
         <Box position="absolute" top={2} right={2}>
           <NonProjectProjectIcon taxProfile={project.owners?.[0]?.user?.taxProfile} />
+          <AllOrNothingIcon project={project} />
         </Box>
         {isAonProject && (
           <HStack
             position="absolute"
-            width="calc(100% - 4px)"
+            width="calc(100% - 6px)"
             bottom={'3px'}
-            background="neutral1.1"
+            background="neutral1.2"
             borderRadius="20px"
             border="2px solid"
-            borderColor="neutral1.6"
+            borderColor="neutral1.2"
           >
-            <ProgressBar w="full" value={percentage} height="14px" borderRadius="20px" overflow="hidden" />
+            <ProgressBar
+              w="full"
+              value={percentage}
+              height={{ base: '10px', lg: '14px' }}
+              borderRadius="20px"
+              overflow="hidden"
+              trackColor="neutral1.2"
+            />
           </HStack>
         )}
       </HStack>
-      {!isOpenTemp && (
+      {!isOpenTemp ? (
         <VStack
           flex={1}
           width={{ base: 'auto', lg: '100%' }}
@@ -286,6 +301,8 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           </Body>
           {contributionContent()}
         </VStack>
+      ) : (
+        <Box width="100%" height="76px" background="transparent"></Box>
       )}
     </InteractiveCardLayout>
   )

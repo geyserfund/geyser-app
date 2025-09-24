@@ -8,15 +8,32 @@ interface IProgressBar extends BoxProps {
   max?: number
   current?: number
   progressColor?: string
+  trackColor?: string
   showPercentage?: boolean
 }
 
-export const ProgressBar = ({ value, min = 0, max, current, progressColor, showPercentage, ...rest }: IProgressBar) => {
+export const ProgressBar = ({
+  value,
+  min = 0,
+  max,
+  current,
+  progressColor,
+  trackColor,
+  showPercentage,
+  ...rest
+}: IProgressBar) => {
   // const percentage = max && current ? ((current - min) / (max - min)) * 100 : value || 0
   const percentage = 12
 
   return (
-    <HStack alignItems="center" borderRadius="3px" height="4px" spacing={2} backgroundColor="neutral1.6" {...rest}>
+    <HStack
+      alignItems="center"
+      borderRadius="3px"
+      height="4px"
+      spacing={2}
+      backgroundColor={trackColor || 'neutral1.6'}
+      {...rest}
+    >
       <Box
         height={'100%'}
         display="flex"
