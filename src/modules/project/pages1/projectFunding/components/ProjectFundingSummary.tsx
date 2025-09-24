@@ -8,6 +8,7 @@ import { PiCaretDown, PiCaretUp, PiInfo } from 'react-icons/pi'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import {
+  networkFeeAtom,
   rewardsCostAtoms,
   shippingCostAtom,
   tipAtoms,
@@ -43,6 +44,7 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
   const shippingCosts = useAtomValue(shippingCostAtom)
   const shippingCountry = useAtomValue(shippingCountryAtom)
   const tip = useAtomValue(tipAtoms)
+  const networkFee = useAtomValue(networkFeeAtom)
   const totalSats = useAtomValue(totalAmountSatsAtom)
   const totalUsdCent = useAtomValue(totalAmountUsdCentAtom)
 
@@ -221,6 +223,21 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
             </Body>
             <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
               {`($${centsToDollars(tip.usdCents)})`}
+            </Body>
+          </HStack>
+        )}
+
+        {networkFee.sats > 0 && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Network Fees')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>
+              {`${commaFormatted(networkFee.sats)} `}
+              <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
+                sats
+              </Body>
+            </Body>
+            <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
+              {`($${centsToDollars(networkFee.usdCents)})`}
             </Body>
           </HStack>
         )}

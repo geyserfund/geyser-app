@@ -2,6 +2,8 @@ import { atom } from 'jotai'
 
 import { bitcoinQuoteAtom } from '@/shared/state/btcRateAtom'
 import {
+  PaymentFeePayer,
+  PaymentFeeType,
   ProjectPageWalletFragment,
   ProjectRewardFragment,
   ProjectShippingConfigType,
@@ -13,6 +15,10 @@ import {
 } from '@/types'
 import { commaFormatted, convertAmount, isProjectAnException, toInt, validateEmail } from '@/utils'
 
+import {
+  paymentMethodAtom,
+  PaymentMethods,
+} from '../../pages1/projectFunding/views/fundingPayment/state/paymentMethodAtom.ts'
 import { projectAtom, ProjectState } from '../../state/projectAtom'
 import { rewardsAtom } from '../../state/rewardsAtom'
 import { subscriptionsAtom } from '../../state/subscriptionAtom'
@@ -241,6 +247,38 @@ export const tipAtoms = atom((get) => {
   return { sats: tipSats, usdCents: tipUsdCent }
 })
 
+/** Derived atom for calculating network fees */
+export const networkFeeAtom = atom((get) => {
+  const paymentMethod = get(paymentMethodAtom)
+  const fundingPaymentDetails = get(fundingPaymentDetailsAtom)
+  const bitcoinQuote = get(bitcoinQuoteAtom)
+
+  let feesSats = 0
+
+  if (paymentMethod === PaymentMethods.onChain && fundingPaymentDetails.onChainToRskSwap?.fees?.length) {
+    feesSats =
+      fundingPaymentDetails.onChainToRskSwap?.fees.reduce(
+        (acc, fee) =>
+          fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip
+            ? acc + fee.feeAmount
+            : acc,
+        0,
+      ) || 0
+  } else if (paymentMethod === PaymentMethods.lightning && fundingPaymentDetails.lightningToRskSwap?.fees?.length) {
+    feesSats =
+      fundingPaymentDetails.lightningToRskSwap?.fees.reduce(
+        (acc, fee) =>
+          fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip
+            ? acc + fee.feeAmount
+            : acc,
+        0,
+      ) || 0
+  }
+
+  const feesUsdCents = feesSats > 0 ? convertAmount.satsToUsdCents({ sats: feesSats, bitcoinQuote }) : 0
+  return { sats: feesSats, usdCents: feesUsdCents }
+})
+
 /**
  * Derived atom for the total amount in Satoshis.
  * Sums donation, rewards, subscription, shipping, and tip.
@@ -252,9 +290,11 @@ export const totalAmountSatsAtom = atom((get) => {
   const shippingCosts = get(shippingCostAtom)
   const subscriptionCosts = get(subscriptionCostAtoms)
   const tip = get(tipAtoms)
+  const networkFee = get(networkFeeAtom)
 
   // Sum all components
-  const total = donationAmount + rewardsCosts.sats + subscriptionCosts.sats + shippingCosts.sats + tip.sats
+  const total =
+    donationAmount + rewardsCosts.sats + subscriptionCosts.sats + shippingCosts.sats + tip.sats + networkFee.sats
   return total
 })
 
