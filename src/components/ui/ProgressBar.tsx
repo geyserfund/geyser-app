@@ -25,7 +25,7 @@ export const ProgressBar = ({ value, min = 0, max, current, progressColor, showP
         paddingRight={2}
         borderRadius={rest.borderRadius || '3px'}
         width={`${percentage}%`}
-        backgroundColor={progressColor || 'primary1.9'}
+        background={progressColor || 'primary1.9'}
       >
         {showPercentage && percentage > 10 && (
           <Body size="xs" bold color="utils.text">

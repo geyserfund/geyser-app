@@ -142,14 +142,14 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           <Body
             size="sm"
             bold
-            color={percentage < 100 && timeLeft?.label !== 'days left' ? 'warning.11' : 'primary1.11'}
+            color={percentage > 100 ? 'primary1.11' : timeLeft?.label !== 'days left' ? 'warning.11' : 'neutral1.12'}
             isTruncated
           >
             {percentage ? (
               <>
                 {timeLeft?.value} {timeLeft?.label} {' - '}
-                <Body as="span" regular>
-                  {percentage}% {t('raised!')}
+                <Body as="span" bold color={percentage >= 100 ? 'primary1.11' : 'neutral1.12'}>
+                  {percentage}% {t('funded')}
                 </Body>
               </>
             ) : (
@@ -226,7 +226,13 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           height="100%"
         />
       )}
-      <Box width={{ base: '120px', lg: 'auto' }} height={{ base: '120px', lg: 'auto' }} position="relative" zIndex={1}>
+      <HStack
+        width={{ base: '120px', lg: 'auto' }}
+        height={{ base: '120px', lg: 'auto' }}
+        position="relative"
+        justifyContent="center"
+        zIndex={1}
+      >
         <ImageWithReload
           width="100%"
           height="100%"
@@ -240,17 +246,19 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           <NonProjectProjectIcon taxProfile={project.owners?.[0]?.user?.taxProfile} />
         </Box>
         {isAonProject && (
-          <Box position="absolute" width="100%" height="12px" bottom={'-1px'} paddingTop="2px" background="utils.pbg">
-            <ProgressBar
-              value={percentage}
-              height="10px"
-              borderRadius="20px"
-              borderTopLeftRadius="0px"
-              borderTopEndRadius="0px"
-            />
-          </Box>
+          <HStack
+            position="absolute"
+            width="calc(100% - 4px)"
+            bottom={'3px'}
+            background="neutral1.1"
+            borderRadius="20px"
+            border="2px solid"
+            borderColor="neutral1.6"
+          >
+            <ProgressBar w="full" value={percentage} height="14px" borderRadius="20px" overflow="hidden" />
+          </HStack>
         )}
-      </Box>
+      </HStack>
       {!isOpenTemp && (
         <VStack
           flex={1}
