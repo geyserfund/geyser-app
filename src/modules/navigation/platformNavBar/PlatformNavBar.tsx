@@ -180,7 +180,12 @@ export const PlatformNavBar = () => {
         justifySelf={'center'}
         spacing={4}
       >
-        <HStack w="100%" height={{ base: '40px', lg: '48px' }} justifyContent={'space-between'}>
+        <HStack
+          w="100%"
+          height={{ base: '40px', lg: '48px' }}
+          justifyContent={'space-between'}
+          spacing={{ base: 2, lg: 16 }}
+        >
           <HStack height="full" w="full" flex={1}>
             {isGuardiansPage && <BackButton />}
             {renderLeftSide()}
