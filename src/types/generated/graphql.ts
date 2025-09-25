@@ -330,6 +330,7 @@ export type ContributionLightningToRskSwapPaymentDetails = {
   __typename?: 'ContributionLightningToRskSwapPaymentDetails';
   amountDue: Scalars['Int']['output'];
   amountDueCurrency: PaymentCurrency;
+  amountToClaim: Scalars['Int']['output'];
   fees: Array<PaymentFee>;
   lightningInvoiceId: Scalars['String']['output'];
   paymentId: Scalars['BigInt']['output'];
@@ -2531,7 +2532,6 @@ export type Post = {
   __typename?: 'Post';
   /** Total amount of satoshis funded from the Post's page. */
   amountFunded: Scalars['Int']['output'];
-  content?: Maybe<Scalars['String']['output']>;
   /** Contributions that were created from the Post's page. */
   contributions: Array<Contribution>;
   createdAt: Scalars['String']['output'];
@@ -5836,6 +5836,7 @@ export type ContributionLightningPaymentDetailsResolvers<ContextType = any, Pare
 export type ContributionLightningToRskSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionLightningToRskSwapPaymentDetails'] = ResolversParentTypes['ContributionLightningToRskSwapPaymentDetails']> = {
   amountDue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   amountDueCurrency?: Resolver<ResolversTypes['PaymentCurrency'], ParentType, ContextType>;
+  amountToClaim?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   fees?: Resolver<Array<ResolversTypes['PaymentFee']>, ParentType, ContextType>;
   lightningInvoiceId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   paymentId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -6717,7 +6718,6 @@ export type PodcastKeysendContributionCreateResponseResolvers<ContextType = any,
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
   amountFunded?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   contributions?: Resolver<Array<ResolversTypes['Contribution']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   creator?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
@@ -8543,7 +8543,7 @@ export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, cr
     & ShippingAddressFragment
   ) | null };
 
-export type ContributionFeesFragment = { __typename?: 'PaymentFee', feeType?: PaymentFeeType | null, feeAmount: number, feePayer?: PaymentFeePayer | null };
+export type ContributionFeesFragment = { __typename?: 'PaymentFee', feeType?: PaymentFeeType | null, feeAmount: number, feePayer?: PaymentFeePayer | null, description?: string | null };
 
 export type ContributionLightningPaymentDetailsFragment = { __typename?: 'ContributionLightningPaymentDetails', lightningInvoiceId: string, paymentRequest: string };
 
@@ -8553,12 +8553,12 @@ export type ContributionFiatPaymentDetailsFragment = { __typename?: 'Contributio
 
 export type ContributionFiatSwapPaymentDetailsFragment = { __typename?: 'ContributionFiatSwapPaymentDetails', checkoutUrl: string };
 
-export type ContributionLightningToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionLightningToRskSwapPaymentDetails', lightningInvoiceId: string, paymentRequest: string, swapJson: string, paymentId: any, amountDue: number, fees: Array<(
+export type ContributionLightningToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionLightningToRskSwapPaymentDetails', lightningInvoiceId: string, paymentRequest: string, swapJson: string, paymentId: any, amountToClaim: number, fees: Array<(
     { __typename?: 'PaymentFee' }
     & ContributionFeesFragment
   )> };
 
-export type ContributionOnChainToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainToRskSwapPaymentDetails', address: string, swapJson: string, paymentId: any, amountDue: number, fees: Array<(
+export type ContributionOnChainToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainToRskSwapPaymentDetails', address: string, swapJson: string, paymentId: any, fees: Array<(
     { __typename?: 'PaymentFee' }
     & ContributionFeesFragment
   )> };
@@ -10826,6 +10826,7 @@ export const ContributionFeesFragmentDoc = gql`
   feeType
   feeAmount
   feePayer
+  description
 }
     `;
 export const ContributionLightningToRskSwapPaymentDetailsFragmentDoc = gql`
@@ -10834,7 +10835,7 @@ export const ContributionLightningToRskSwapPaymentDetailsFragmentDoc = gql`
   paymentRequest
   swapJson
   paymentId
-  amountDue
+  amountToClaim
   fees {
     ...ContributionFees
   }
@@ -10845,7 +10846,6 @@ export const ContributionOnChainToRskSwapPaymentDetailsFragmentDoc = gql`
   address
   swapJson
   paymentId
-  amountDue
   fees {
     ...ContributionFees
   }

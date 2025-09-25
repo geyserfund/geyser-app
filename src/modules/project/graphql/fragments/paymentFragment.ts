@@ -4,6 +4,7 @@ export const ContributionFeesFragment = gql`
     feeType
     feeAmount
     feePayer
+    description
   }
 `
 
@@ -40,7 +41,7 @@ export const ContributionLightningToRskSwapPaymentDetailsFragment = gql`
     paymentRequest
     swapJson
     paymentId
-    amountDue
+    amountToClaim
     fees {
       ...ContributionFees
     }
@@ -53,7 +54,6 @@ export const ContributionOnChainToRskSwapPaymentDetailsFragment = gql`
     address
     swapJson
     paymentId
-    amountDue
     fees {
       ...ContributionFees
     }

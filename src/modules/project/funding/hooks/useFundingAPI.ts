@@ -11,7 +11,6 @@ import {
   ContributionOnChainToRskSwapPaymentDetailsFragment,
   FundingContributionFragment,
   PaymentFeePayer,
-  PaymentFeeType,
   useContributionCreateMutation,
   usePaymentSwapClaimTxSetMutation,
 } from '@/types/index.ts'
@@ -113,7 +112,6 @@ export const useFundingAPI = () => {
             datetime: data.contributionCreate.contribution.createdAt,
           })
           generateTransactionForOnChainToRskSwap({
-            contribution: data.contributionCreate.contribution,
             payment: data.contributionCreate.payments.onChainToRskSwap,
             preImages: preImages.onChain,
             accountKeys: currentAccountKeys,
@@ -264,7 +262,6 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
   const [paymentSwapClaimTxSet] = usePaymentSwapClaimTxSetMutation()
 
   const generateTransactionForLightningToRskSwap = ({
-    contribution,
     payment,
     preImages,
     accountKeys,
@@ -294,9 +291,6 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
 
     const swap = JSON.parse(swapJson)
 
-    const tipAmount = fees.find((fee) => fee.feeType === PaymentFeeType.Tip)?.feeAmount || 0
-    const amountToClaim = payment.amountDue - (contributorFeesAmount - tipAmount)
-
     console.log('contributionCreatePreImages.lightning', preImages)
 
     const getTransactionForBoltzClaimCall = createTransactionForBoltzClaimCall({
@@ -304,7 +298,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       creatorFees: satsToWei(creatorFeesAmount),
       contributorFees: satsToWei(contributorFeesAmount),
       preimage: preImages.preimageHex,
-      amount: satsToWei(amountToClaim),
+      amount: satsToWei(payment.amountToClaim),
       refundAddress: swap.refundAddress,
       timelock: swap.timeoutBlockHeight,
       privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
@@ -322,12 +316,10 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
   }
 
   const generateTransactionForOnChainToRskSwap = ({
-    contribution,
     payment,
     preImages,
     accountKeys,
   }: {
-    contribution: FundingContributionFragment
     payment: ContributionOnChainToRskSwapPaymentDetailsFragment
     preImages: { preimageHex: string; preimageHash: string }
     accountKeys: { publicKey: string; address: string; privateKey: string }
