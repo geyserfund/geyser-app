@@ -9,6 +9,8 @@ interface LandingProjectCardProps extends CardLayoutProps {
     contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
   }
   isMobile?: boolean
+  noMobile?: boolean
+  hideContributionContent?: boolean
 }
 
 export const LandingProjectCard = ({ project, isMobile, ...rest }: LandingProjectCardProps) => {

@@ -2,7 +2,7 @@ import { Box, BoxProps, HStack } from '@chakra-ui/react'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 
-interface IProgressBar extends BoxProps {
+export interface ProgressBarProps extends BoxProps {
   value?: number
   min?: number
   max?: number
@@ -21,7 +21,7 @@ export const ProgressBar = ({
   trackColor,
   showPercentage,
   ...rest
-}: IProgressBar) => {
+}: ProgressBarProps) => {
   // const percentage = max && current ? ((current - min) / (max - min)) * 100 : value || 0
   const percentage = 12
 

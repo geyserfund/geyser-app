@@ -17,6 +17,27 @@ export const useRefund = () => {
 
   const [loading, setLoading] = useState(false)
 
+  const getSwapTransaction = useCallback(
+    async (refundFile: SwapData, label: 'userLock' | 'serverLock' = 'userLock') => {
+      let transaction: BoltzTransaction & { error?: string }
+
+      if (refundFile.version === 3) {
+        transaction = await getTransactionFromSwap(refundFile.id)
+      }
+
+      transaction = await getTransactionFromChainSwap(refundFile.id, label)
+
+      if (transaction.error) {
+        removeRefundFile(refundFile.id)
+        setLoading(false)
+        throw new Error(BAD_REFUND_FILE_ERROR)
+      }
+
+      return transaction
+    },
+    [removeRefundFile],
+  )
+
   const initiateRefund = useCallback(
     async (refundAddress: string, refundFile?: SwapData, label: 'userLock' | 'serverLock' = 'userLock') => {
       if (!refundFile) {
@@ -26,27 +47,10 @@ export const useRefund = () => {
       try {
         setLoading(true)
 
-        let transaction: BoltzTransaction & { error?: string }
-
-        if (refundFile.version === 3) {
-          transaction = await getTransactionFromSwap(refundFile.id)
-        } else {
-          transaction = await getTransactionFromChainSwap(refundFile.id, label)
-        }
-
-        if (transaction.error) {
-          toast.error({
-            title: 'Refund failed',
-            description: BAD_REFUND_FILE_ERROR,
-          })
-          removeRefundFile(refundFile.id)
-          setLoading(false)
-          return false
-        }
+        const transaction = await getSwapTransaction(refundFile, label)
 
         const value = await refund(refundFile, refundAddress, transaction)
 
-        console.log('value', value)
         if (value && value.refundTx) {
           setRefundedSwapData(value)
           removeRefundFile(refundFile.id)

@@ -98,7 +98,7 @@ const refundTaproot = async (
   return claimTx
 }
 
-export async function refund(swap: any, refundAddress: string, transactionToRefund: { hex: string }) {
+export const getRefundTransaction = async (swap: any, refundAddress: string, transactionToRefund: { hex: string }) => {
   const output = decodeAddress(refundAddress)
 
   await setup()
@@ -112,7 +112,13 @@ export async function refund(swap: any, refundAddress: string, transactionToRefu
 
   const refundTransaction = await refundTaproot(swap, tx, privateKey, output, fees)
 
-  const res = await broadcastTransaction(refundTransaction.toHex())
+  return refundTransaction.toHex()
+}
+
+export async function refund(swap: any, refundAddress: string, transactionToRefund: { hex: string }) {
+  const refundTransactionHex = await getRefundTransaction(swap, refundAddress, transactionToRefund)
+
+  const res = await broadcastTransaction(refundTransactionHex)
   if (res.id) {
     swap.refundTx = res.id
     return swap

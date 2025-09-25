@@ -2,7 +2,6 @@ import { Box, Button, HStack, Skeleton, Tooltip, useDisclosure, VStack } from '@
 import { t } from 'i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { ProgressBar } from '@/components/ui/ProgressBar.tsx'
 import { FollowButton } from '@/modules/project/pages1/projectView/views/body/components/FollowButton.tsx'
 import { NonProjectProjectIcon } from '@/modules/project/pages1/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
@@ -12,8 +11,9 @@ import { CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { InteractiveCardLayout } from '@/shared/components/layouts/InteractiveCardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
+import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { aonProjectTimeLeft } from '@/shared/utils/project/getTimeLeft.ts'
+import { aonProjectTimeLeft, getAonGoalPercentage } from '@/shared/utils/project/getAonData.ts'
 import { centsToDollars, isAllOrNothing, isInactive } from '@/utils'
 
 import { SkeletonLayout } from '../../../../../shared/components/layouts'
@@ -25,15 +25,23 @@ export interface LandingCardBaseProps extends CardLayoutProps {
   project: ProjectForLandingPageFragment & {
     contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
   }
+  hideContributionContent?: boolean
+  noMobile?: boolean
   hasSubscribe?: boolean
 }
 
-export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: LandingCardBaseProps) => {
+export const LandingCardBase = ({
+  isMobile,
+  project,
+  hasSubscribe,
+  noMobile,
+  hideContributionContent,
+  ...rest
+}: LandingCardBaseProps) => {
   const inActive = isInactive(project.status)
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { isOpen: isOpenTemp, onOpen: onOpenTemp, onClose: onCloseTemp } = useDisclosure()
 
   const getFires = (amount: number) => {
     if (amount > 100) {
@@ -55,11 +63,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
     project.contributionSummary?.contributionsTotalUsd || centsToDollars(project.balanceUsdCent)
 
   const isAonProject = isAllOrNothing(project)
-  const percentage = isAonProject
-    ? project.aonGoalInSats
-      ? Math.round((project.balance / project.aonGoalInSats) * 100)
-      : 0
-    : 0
+  const percentage = getAonGoalPercentage(project)
   const timeLeft = aonProjectTimeLeft(project)
 
   const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
@@ -79,13 +83,17 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
     navigate(getPath('userProfile', projectOwner?.id))
   }
 
+  const getResponsiveValue = ({ base, lg }: { base: any; lg: any }) => {
+    return noMobile ? lg : { base, lg }
+  }
+
   const headerContent = (props?: { alwaysTruncate?: boolean; highlight?: boolean }) => {
     const { alwaysTruncate, highlight } = props || {}
 
     return (
       <HStack w="full" overflow="hidden" alignItems="start">
         <Tooltip label={projectOwner?.username}>
-          <Box display={{ base: 'none', lg: 'block' }} paddingY={'2px'}>
+          <Box display={getResponsiveValue({ base: 'none', lg: 'block' })} paddingY={'2px'}>
             <ProfileAvatar
               guardian={projectOwner?.guardianType}
               src={projectOwner?.imageUrl || ''}
@@ -105,7 +113,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
             {project.title}
           </H3>
           <HStack w="full" spacing={1}>
-            <Box display={{ base: 'block', lg: 'none' }}>
+            <Box display={getResponsiveValue({ base: 'block', lg: 'none' })}>
               <ProfileAvatar
                 guardian={projectOwner?.guardianType}
                 src={projectOwner?.imageUrl || ''}
@@ -180,21 +188,21 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
   return (
     <InteractiveCardLayout
       padding="0px"
-      width={{ base: 'full', lg: 'full' }}
-      direction={{ base: 'row', lg: 'column' }}
+      width={'full'}
+      direction={getResponsiveValue({ base: 'row', lg: 'column' })}
       spacing={2}
-      flex={{ base: 'unset', lg: 1 }}
+      flex={getResponsiveValue({ base: 'unset', lg: 1 })}
       position="relative"
       background="transparent"
       hoverContent={
         <VStack
-          paddingX={{ base: 3, lg: 4 }}
-          paddingBottom={{ base: 3, lg: 4 }}
+          paddingX={getResponsiveValue({ base: 3, lg: 4 })}
+          paddingBottom={getResponsiveValue({ base: 3, lg: 4 })}
           width="100%"
           alignItems="start"
-          marginTop="-86px"
+          marginTop={hideContributionContent ? '-52px' : '-84px'}
         >
-          <VStack w="full" spacing={0} opacity={!isOpenTemp ? 0 : 1}>
+          <VStack w="full" spacing={0} opacity={!isOpen ? 0 : 1}>
             {headerContent({ highlight: true })}
             {contributionContent()}
           </VStack>
@@ -208,18 +216,8 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
         </VStack>
       }
       isOpen={isOpen}
-      onOpen={() => {
-        onOpen()
-        setTimeout(() => {
-          onOpenTemp()
-        }, 50)
-      }}
-      onClose={() => {
-        onClose()
-        setTimeout(() => {
-          onCloseTemp()
-        }, 50)
-      }}
+      onOpen={onOpen}
+      onClose={onClose}
       {...rest}
     >
       {inActive && (
@@ -234,8 +232,8 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
         />
       )}
       <HStack
-        width={{ base: '120px', lg: 'auto' }}
-        height={{ base: '120px', lg: 'auto' }}
+        width={getResponsiveValue({ base: '120px', lg: 'auto' })}
+        height={getResponsiveValue({ base: '120px', lg: 'auto' })}
         position="relative"
         justifyContent="center"
         zIndex={1}
@@ -243,7 +241,7 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
         <ImageWithReload
           width="100%"
           height="100%"
-          aspectRatio={{ base: undefined, lg: 1 }}
+          aspectRatio={getResponsiveValue({ base: undefined, lg: 1 })}
           objectFit="cover"
           borderRadius="8px"
           src={project.thumbnailImage || ''}
@@ -254,77 +252,74 @@ export const LandingCardBase = ({ isMobile, project, hasSubscribe, ...rest }: La
           <AllOrNothingIcon project={project} />
         </Box>
         {isAonProject && (
-          <HStack
-            position="absolute"
-            width="calc(100% - 6px)"
-            bottom={'3px'}
-            background="neutral1.2"
-            borderRadius="20px"
-            border="2px solid"
-            borderColor="neutral1.2"
-          >
-            <ProgressBar
-              w="full"
-              value={percentage}
-              height={{ base: '10px', lg: '14px' }}
-              borderRadius="20px"
-              overflow="hidden"
-              trackColor="neutral1.2"
-            />
-          </HStack>
+          <AonProgressBar
+            project={project}
+            height={getResponsiveValue({ base: '10px', lg: '14px' })}
+            wrapperProps={{
+              position: 'absolute',
+              width: 'calc(100% - 6px)',
+              bottom: '3px',
+            }}
+          />
         )}
       </HStack>
-      {!isOpenTemp ? (
-        <VStack
-          flex={1}
-          width={{ base: 'auto', lg: '100%' }}
-          minWidth={{ base: '170px', lg: 'auto' }}
-          alignItems="start"
-          overflow="hidden"
-          spacing={{ base: 1, lg: 0 }}
-        >
-          {headerContent({ alwaysTruncate: true })}
 
-          <Body
-            size="sm"
-            height="34px"
-            dark
-            noOfLines={2}
-            isTruncated
-            width="100%"
-            wordBreak={'break-word'}
-            whiteSpace={'normal'}
-            lineHeight="1.2"
-            display={{ base: 'block', lg: 'none' }}
-          >
-            {project.shortDescription}
-          </Body>
-          {contributionContent()}
-        </VStack>
-      ) : (
-        <Box width="100%" height="76px" background="transparent"></Box>
-      )}
+      <VStack
+        flex={1}
+        width={getResponsiveValue({ base: 'auto', lg: '100%' })}
+        minWidth={getResponsiveValue({ base: '170px', lg: 'auto' })}
+        alignItems="start"
+        overflow="hidden"
+        spacing={getResponsiveValue({ base: 1, lg: 0 })}
+        opacity={isOpen ? 0 : 1}
+      >
+        {headerContent({ alwaysTruncate: true })}
+
+        <Body
+          size="sm"
+          height="34px"
+          dark
+          noOfLines={2}
+          isTruncated
+          width="100%"
+          wordBreak={'break-word'}
+          whiteSpace={'normal'}
+          lineHeight="1.2"
+          display={getResponsiveValue({ base: 'block', lg: 'none' })}
+        >
+          {project.shortDescription}
+        </Body>
+        {!hideContributionContent && contributionContent()}
+      </VStack>
     </InteractiveCardLayout>
   )
 }
 
-export const LandingCardBaseSkeleton = ({ isMobile }: { isMobile?: boolean }) => {
+export const LandingCardBaseSkeleton = ({ isMobile, noMobile }: { isMobile?: boolean; noMobile?: boolean }) => {
+  const getResponsiveValue = ({ base, lg }: { base: any; lg: any }) => {
+    return noMobile ? lg : { base, lg }
+  }
+
   return (
     <>
       <InteractiveCardLayout
         padding="0px"
-        width={{ base: 'full', lg: 'auto' }}
-        direction={{ base: 'row', lg: 'column' }}
+        width={getResponsiveValue({ base: 'full', lg: 'auto' })}
+        direction={getResponsiveValue({ base: 'row', lg: 'column' })}
         spacing={0}
-        flex={{ base: 'unset', lg: 1 }}
+        flex={getResponsiveValue({ base: 'unset', lg: 1 })}
       >
-        <Box width={{ base: '96px', lg: 'auto' }} height={{ base: '96px', lg: 'auto' }} aspectRatio={1}>
+        <Box
+          width={getResponsiveValue({ base: '96px', lg: 'auto' })}
+          height={getResponsiveValue({ base: '96px', lg: 'auto' })}
+          aspectRatio={1}
+        >
           <Skeleton width="100%" height="100%"></Skeleton>
         </Box>
         <VStack
           flex={1}
-          width={{ base: 'auto', lg: '100%' }}
-          minWidth={{ base: '170px', lg: 'auto' }}
+          width={getResponsiveValue({ base: 'auto', lg: '100%' })}
+          minWidth={getResponsiveValue({ base: '170px', lg: 'auto' })}
           padding={4}
           alignItems="start"
           justifyContent="space-between"

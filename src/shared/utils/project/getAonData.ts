@@ -41,3 +41,7 @@ export const aonProjectTimeLeft = (project: Pick<ProjectState, 'launchedAt' | 'a
 
   return null // No time left
 }
+
+export const getAonGoalPercentage = (project: Pick<ProjectState, 'aonGoalInSats' | 'balance'>) => {
+  return project.aonGoalInSats ? Math.round((project.balance / project.aonGoalInSats) * 100) : 0
+}

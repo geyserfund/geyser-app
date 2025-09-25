@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { aonProjectTimeLeft } from '@/shared/utils/project/getTimeLeft.ts'
+import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
 
 import { LiveProgressAqua } from '../../../../../../../../../shared/components/feedback/LiveProgressAqua.tsx'
 

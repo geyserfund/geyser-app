@@ -8055,6 +8055,16 @@ export type ProjectsForMyProjectsQuery = { __typename?: 'Query', user: { __typen
         & ProjectForMyProjectsFragment
       ) | null }> } };
 
+export type ProjectRecommendedGetQueryVariables = Exact<{
+  input: ProjectRecommendedGetInput;
+}>;
+
+
+export type ProjectRecommendedGetQuery = { __typename?: 'Query', projectRecommendedGet: Array<{ __typename?: 'ProjectRecommendedGetResult', project: (
+      { __typename?: 'Project' }
+      & ProjectForLandingPageFragment
+    ) }> };
+
 export type ProjectRewardsTrendingWeeklyGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -12577,6 +12587,48 @@ export type ProjectsForMyProjectsQueryHookResult = ReturnType<typeof useProjects
 export type ProjectsForMyProjectsLazyQueryHookResult = ReturnType<typeof useProjectsForMyProjectsLazyQuery>;
 export type ProjectsForMyProjectsSuspenseQueryHookResult = ReturnType<typeof useProjectsForMyProjectsSuspenseQuery>;
 export type ProjectsForMyProjectsQueryResult = Apollo.QueryResult<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>;
+export const ProjectRecommendedGetDocument = gql`
+    query ProjectRecommendedGet($input: ProjectRecommendedGetInput!) {
+  projectRecommendedGet(input: $input) {
+    project {
+      ...ProjectForLandingPage
+    }
+  }
+}
+    ${ProjectForLandingPageFragmentDoc}`;
+
+/**
+ * __useProjectRecommendedGetQuery__
+ *
+ * To run a query within a React component, call `useProjectRecommendedGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRecommendedGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectRecommendedGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectRecommendedGetQuery(baseOptions: Apollo.QueryHookOptions<ProjectRecommendedGetQuery, ProjectRecommendedGetQueryVariables> & ({ variables: ProjectRecommendedGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectRecommendedGetQuery, ProjectRecommendedGetQueryVariables>(ProjectRecommendedGetDocument, options);
+      }
+export function useProjectRecommendedGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRecommendedGetQuery, ProjectRecommendedGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectRecommendedGetQuery, ProjectRecommendedGetQueryVariables>(ProjectRecommendedGetDocument, options);
+        }
+export function useProjectRecommendedGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRecommendedGetQuery, ProjectRecommendedGetQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectRecommendedGetQuery, ProjectRecommendedGetQueryVariables>(ProjectRecommendedGetDocument, options);
+        }
+export type ProjectRecommendedGetQueryHookResult = ReturnType<typeof useProjectRecommendedGetQuery>;
+export type ProjectRecommendedGetLazyQueryHookResult = ReturnType<typeof useProjectRecommendedGetLazyQuery>;
+export type ProjectRecommendedGetSuspenseQueryHookResult = ReturnType<typeof useProjectRecommendedGetSuspenseQuery>;
+export type ProjectRecommendedGetQueryResult = Apollo.QueryResult<ProjectRecommendedGetQuery, ProjectRecommendedGetQueryVariables>;
 export const ProjectRewardsTrendingWeeklyGetDocument = gql`
     query ProjectRewardsTrendingWeeklyGet {
   projectRewardsTrendingWeeklyGet {

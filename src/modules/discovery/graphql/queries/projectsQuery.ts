@@ -92,3 +92,14 @@ export const QUERY_PROJECTS_FOR_MY_PROJECTS = gql`
     }
   }
 `
+
+export const QUERY_RECOMMENDED_FOR_YOU_PROJECTS = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectRecommendedGet($input: ProjectRecommendedGetInput!) {
+    projectRecommendedGet(input: $input) {
+      project {
+        ...ProjectForLandingPage
+      }
+    }
+  }
+`
