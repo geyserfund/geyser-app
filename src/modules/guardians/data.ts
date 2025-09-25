@@ -7,6 +7,7 @@ import {
   GuardianPartnerDJPUrl,
   GuardianPartnerHodlersUrl,
   GuardianPartnerInitialCapitalUrl,
+  GuardianPartnerLightningPlacesUrl,
   GuardianPartnerNoGoodUrl,
   GuardianPartnerRhinoUrl,
   GuardianPartnerSoloSatoshiUrl,
@@ -21,6 +22,7 @@ export const PartnerUrls = [
 
   { image: GuardianPartnerInitialCapitalUrl, link: 'https://www.initialcapital.com/' },
   { image: GuardianPartnerRhinoUrl, link: 'https://rhinobitcoin.com/' },
+  { image: GuardianPartnerLightningPlacesUrl, link: 'https://lightningplaces.com/' },
 
   { image: GuardianPartnerDJPUrl, link: 'https://djp.pl/' },
   { image: GuardianPartnerBitcoinNewsUrl, link: 'https://bitcoinnews.com/' },
