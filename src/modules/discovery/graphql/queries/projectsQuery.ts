@@ -103,3 +103,14 @@ export const QUERY_RECOMMENDED_FOR_YOU_PROJECTS = gql`
     }
   }
 `
+
+export const QUERY_AON_PROJECTS_MOST_FUNDED_THIS_WEEK = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectsMostFundedAllOrNothing($input: ProjectsMostFundedAllOrNothingInput!) {
+    projectsMostFundedAllOrNothing(input: $input) {
+      project {
+        ...ProjectForLandingPage
+      }
+    }
+  }
+`

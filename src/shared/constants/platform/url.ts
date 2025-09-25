@@ -96,6 +96,9 @@ export const LogoNameDark = 'https://storage.googleapis.com/geyser-projects-medi
 export const LogoNameLight = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-light.svg'
 export const LogoOutline = 'https://storage.googleapis.com/geyser-projects-media/app/logo-outline.png'
 
+export const LandingDescriptionBackdropUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/landing_description_backdrop.webp'
+
 // Geyser Guide Links
 
 export const GrantsFAQUrl = 'https://guide.geyser.fund/geyser-docs/product-features/geyser-grants'

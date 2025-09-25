@@ -1,8 +1,8 @@
+import { VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { fetchFeaturedProject } from '@/api/airtable'
-import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { getFeaturedProject } from '@/shared/constants'
 import { useNotification } from '@/utils'
 
@@ -10,7 +10,7 @@ import { FeaturedCardSkeleton } from '../components/FeaturedCardLayout.tsx'
 import { FeaturedDisplayCard } from '../components/FeaturedDisplayCard'
 import { FeaturedGrantCard } from '../components/FeaturedGrantCard'
 import { FeaturedProjectCard } from '../components/FeaturedProjectCard'
-import { ProjectRowLayout } from '../components/ProjectRowLayout'
+import { LandingPageSectionTitle } from '../components/LandingPageSectionTitle.tsx'
 import { FeaturedProjectsCarousel } from './FeaturedProjectsCarousel'
 
 export const GEYSER_PROMOTIONS_PROJECT_NAME = 'geyserpromotions'
@@ -109,19 +109,9 @@ export const Featured = () => {
   // }
 
   return (
-    <>
-      <ProjectRowLayout
-        title={
-          <H3 size="xl" bold color="primary1.11" textTransform="uppercase">
-            {t('Featured')}
-          </H3>
-        }
-        // rightContent={rightContent()}
-        flex={1}
-        maxWidth={{ base: '100%', md: '48%' }}
-      >
-        {renderFeatured()}
-      </ProjectRowLayout>
-    </>
+    <VStack alignItems="start" flex={1} spacing={5} width="100%" maxWidth={{ base: '100%', md: '48%' }}>
+      <LandingPageSectionTitle>{t('Featured')}</LandingPageSectionTitle>
+      {renderFeatured()}
+    </VStack>
   )
 }

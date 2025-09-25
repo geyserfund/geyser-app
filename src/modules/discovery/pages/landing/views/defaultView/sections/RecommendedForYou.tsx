@@ -1,12 +1,11 @@
-import { GridItem, SimpleGrid } from '@chakra-ui/react'
+import { GridItem, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
-import { H3 } from '@/shared/components/typography/index.ts'
 import { useProjectRecommendedGetQuery } from '@/types/index.ts'
 
 import { LandingCardBaseSkeleton } from '../../../components/LandingCardBase.tsx'
 import { LandingProjectCard } from '../../../components/LandingProjectCard.tsx'
-import { ProjectRowLayout } from '../components/ProjectRowLayout.tsx'
+import { LandingPageSectionTitle } from '../components/LandingPageSectionTitle.tsx'
 
 export const RecommendedForYou = () => {
   const { data, loading } = useProjectRecommendedGetQuery({
@@ -38,18 +37,11 @@ export const RecommendedForYou = () => {
   }
 
   return (
-    <ProjectRowLayout
-      title={
-        <H3 size="xl" bold color="primary1.11" textTransform="uppercase">
-          {t('Recommended for you')}
-        </H3>
-      }
-      flex={1}
-      width="100%"
-    >
+    <VStack alignItems="start" flex={1} spacing={5} width="100%">
+      <LandingPageSectionTitle>{t('Recommended for you')}</LandingPageSectionTitle>
       <SimpleGrid width="100%" columns={{ base: 1, xs: 2 }} spacing={{ base: 4, lg: 8 }}>
         {renderProjects()}
       </SimpleGrid>
-    </ProjectRowLayout>
+    </VStack>
   )
 }

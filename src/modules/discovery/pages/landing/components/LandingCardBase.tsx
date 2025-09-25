@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Skeleton, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -314,7 +314,7 @@ export const LandingCardBaseSkeleton = ({ isMobile, noMobile }: { isMobile?: boo
           height={getResponsiveValue({ base: '96px', lg: 'auto' })}
           aspectRatio={1}
         >
-          <Skeleton width="100%" height="100%"></Skeleton>
+          <SkeletonLayout width="100%" height="100%"></SkeletonLayout>
         </Box>
         <VStack
           flex={1}
