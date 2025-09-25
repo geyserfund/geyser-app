@@ -23,14 +23,13 @@ const defaultFundingPaymentDetails: FundingContributionPaymentDetailsFragment = 
     paymentRequest: '',
     swapJson: '',
     paymentId: '',
-    amountDue: 0,
+    amountToClaim: 0,
     fees: [],
   },
   onChainToRskSwap: {
     address: '',
     swapJson: '',
     paymentId: '',
-    amountDue: 0,
     fees: [],
   },
 }
