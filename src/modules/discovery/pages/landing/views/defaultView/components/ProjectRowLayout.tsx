@@ -29,7 +29,7 @@ export const ProjectRowLayout = ({
       <VStack w="full" spacing={0} alignItems={'start'}>
         <HStack width="100%" justifyContent="space-between">
           {typeof title === 'string' || subtitle ? (
-            <H3 size="2xl" dark bold>
+            <H3 size={{ base: '2xl', lg: '4xl' }} dark bold>
               {title}{' '}
               {subtitle && (
                 <Body as="span" color="primary1.11" paddingRight="4px" bold {...subtitleProps}>

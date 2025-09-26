@@ -1,19 +1,10 @@
 import { IconType } from 'react-icons'
-import {
-  PiBookmark,
-  PiCompass,
-  PiCrown,
-  PiHandbag,
-  PiRocketLaunch,
-  PiSketchLogo,
-  PiTrophy,
-  PiWaveform,
-} from 'react-icons/pi'
+import { PiBell, PiClockCountdown, PiHandbag, PiSketchLogo, PiTrophy, PiWaveform } from 'react-icons/pi'
 
 import { LegendJewelIconUrl, PathsMap } from '@/shared/constants'
 
 export enum DiscoveryNavItemKey {
-  Discover = 'discover',
+  AllOrNothing = 'allOrNothing',
   MyProjects = 'myProjects',
   Products = 'products',
   Activity = 'activity',
@@ -35,47 +26,32 @@ export type DiscoveryNavItem = {
 
 export const discoveryNavItems: DiscoveryNavItem[] = [
   {
-    label: 'Discover',
-    key: DiscoveryNavItemKey.Discover,
-    path: 'discoveryLanding',
-    icon: PiCompass,
-    bottomNav: true,
-  },
-
-  {
-    label: 'Products',
-    key: DiscoveryNavItemKey.Products,
-    path: 'discoveryProducts',
-    icon: PiHandbag,
+    label: 'All or Nothing',
+    key: DiscoveryNavItemKey.AllOrNothing,
+    path: 'discoveryAllOrNothing',
+    icon: PiClockCountdown,
     bottomNav: true,
   },
   {
-    label: 'Launchpad',
-    key: DiscoveryNavItemKey.Launchpad,
-    path: 'discoveryLaunchpad',
-    icon: PiRocketLaunch,
-    bottomNav: true,
-  },
-  {
-    label: 'Activity',
+    label: 'Feed',
     key: DiscoveryNavItemKey.Activity,
     path: 'discoveryActivity',
     icon: PiWaveform,
     bottomNav: true,
   },
   {
-    label: 'My Projects',
+    label: 'Updates',
     key: DiscoveryNavItemKey.MyProjects,
     path: 'discoveryMyProjects',
-    icon: PiBookmark,
+    icon: PiBell,
     bottomNav: true,
   },
   {
-    label: 'Heroes',
-    key: DiscoveryNavItemKey.Heroes,
-    path: 'discoveryHeroes',
-    icon: PiCrown,
-    bottomNav: false,
+    label: 'Products',
+    key: DiscoveryNavItemKey.Products,
+    path: 'discoveryProducts',
+    icon: PiHandbag,
+    bottomNav: true,
   },
   {
     label: 'Grants',

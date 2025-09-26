@@ -1,9 +1,4 @@
-import { Button } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { Link } from 'react-router-dom'
-
-import { Body } from '@/shared/components/typography/Body.tsx'
-import { getPath } from '@/shared/constants/index.ts'
 
 import {
   OrderByDirection,
@@ -41,22 +36,5 @@ export const RecentLaunches = () => {
 
   const projects = data?.projectsGet.projects || []
 
-  return (
-    <ProjectDisplayBody
-      title={
-        <Body size="xl">
-          Recent{' '}
-          <Body as="span" size="xl" bold>
-            Launches
-          </Body>
-        </Body>
-      }
-      projects={projects}
-      rightContent={
-        <Button as={Link} to={getPath('discoveryLaunchpad')} variant="soft" colorScheme="neutral1">
-          {t('See all')}
-        </Button>
-      }
-    />
-  )
+  return <ProjectDisplayBody title={t('Recent Launches')} projects={projects} />
 }

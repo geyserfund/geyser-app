@@ -25,7 +25,7 @@ export const TitleWithPeriod = ({ title, period, seeAllTo, handlePeriodChange, .
   return (
     <HStack w="full" justifyContent="space-between" flexWrap={'wrap'} spacing={1} {...props}>
       <HStack w={{ base: 'full', sm: 'auto' }} justifyContent="space-between">
-        <H3 size="2xl" bold dark wordBreak={'keep-all'} width={{ sm: '230px' }}>
+        <H3 size={{ base: '2xl', lg: '4xl' }} bold dark wordBreak={'keep-all'} width={{ sm: '230px' }}>
           {title}
         </H3>
         {seeAllTo && (
