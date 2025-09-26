@@ -2,8 +2,13 @@ import { GridItem, SimpleGrid, Stack } from '@chakra-ui/react'
 
 import { LandingCardBaseSkeleton, SkeletonLayout } from '@/shared/components/layouts'
 
-import { ContributionsSummary, ProjectForLandingPageFragment } from '../../../../../../../types'
+import {
+  ContributionsSummary,
+  PostForLandingPageFragment,
+  ProjectForLandingPageFragment,
+} from '../../../../../../../types'
 import { LandingProjectCard } from '../../../components/LandingProjectCard'
+import { LandingPostCard } from './LandingPostCard.tsx'
 import { ProjectRowLayout, ProjectRowLayoutProps } from './ProjectRowLayout'
 
 interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'> {
@@ -13,6 +18,7 @@ interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'
   onSubtitleClick?: () => void
   subtitleId?: string
   rightContent?: React.ReactNode
+  post?: PostForLandingPageFragment
 }
 
 export const ProjectDisplayBody = ({
@@ -23,6 +29,7 @@ export const ProjectDisplayBody = ({
   onSubtitleClick,
   subtitleId,
   rightContent,
+  post,
 }: ProjectDisplayBodyProps) => {
   return (
     <ProjectRowLayout
@@ -47,6 +54,7 @@ export const ProjectDisplayBody = ({
           )
         })}
       </SimpleGrid>
+      {post && <LandingPostCard post={post} />}
     </ProjectRowLayout>
   )
 }

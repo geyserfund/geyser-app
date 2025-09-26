@@ -1,4 +1,8 @@
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
+
+import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
+import { getPath } from '@/shared/constants/index.ts'
 
 import { ProjectsMostFundedAllOrNothingRange, useProjectsMostFundedAllOrNothingQuery } from '../../../../../../../types'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
@@ -24,8 +28,10 @@ export const AonProjectsDisplayMostFundedThisWeek = () => {
   const ProjectByCategoryList = data?.projectsMostFundedAllOrNothing?.map((project) => project.project) || []
 
   return (
-    <>
-      <ProjectDisplayBody title={t('All or Nothing Campaigns 🔥')} projects={ProjectByCategoryList} />
-    </>
+    <ProjectDisplayBody
+      title={t('All or Nothing Campaigns 🔥')}
+      projects={ProjectByCategoryList}
+      rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryAllOrNothing')} />}
+    />
   )
 }

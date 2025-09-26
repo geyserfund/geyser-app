@@ -21,6 +21,7 @@ export enum PathName {
 
   projectCategory = 'category',
   projectSubCategory = 'subcategory',
+  allOrNothing = 'allornothing',
 
   manifesto = 'manifesto',
 
@@ -162,6 +163,7 @@ const pathsMap = {
 
   /** Discovery Routes */
   discoveryLanding: () => '/',
+  discoveryAllOrNothing: () => `/${PathName.allOrNothing}`,
   discoveryProjectCategory: (category: string) => `/${PathName.projectCategory}/${category}`,
   discoveryProjectSubCategory: (subCategory: string) => `/${PathName.projectSubCategory}/${subCategory}`,
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,

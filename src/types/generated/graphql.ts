@@ -7975,6 +7975,8 @@ export type MeProjectFollowsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: any, projectFollows: Array<{ __typename?: 'Project', id: any, title: string, status?: ProjectStatus | null, thumbnailImage?: string | null, name: string }> } | null };
 
+export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
+
 export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, aonGoalInSats?: number | null, aonGoalDurationInDays?: number | null, launchedAt?: any | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
 export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, balanceUsdCent: number, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
@@ -7991,6 +7993,13 @@ export type ActivitiesGetQueryVariables = Exact<{
 
 
 export type ActivitiesGetQuery = { __typename?: 'Query', activitiesGet: { __typename?: 'ActivitiesGetResponse', activities: Array<{ __typename?: 'Activity', id: string, createdAt: any, activityType: string }> } };
+
+export type PostsForLandingPageQueryVariables = Exact<{
+  input?: InputMaybe<GetPostsInput>;
+}>;
+
+
+export type PostsForLandingPageQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null }> };
 
 export type ProjectsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -9899,6 +9908,32 @@ export const UserMeFragmentDoc = gql`
     ${UserComplianceDetailsFragmentDoc}
 ${ExternalAccountFragmentDoc}
 ${ProjectForOwnerFragmentDoc}`;
+export const PostForLandingPageFragmentDoc = gql`
+    fragment PostForLandingPage on Post {
+  id
+  postType
+  publishedAt
+  title
+  image
+  description
+  project {
+    title
+    name
+    id
+    thumbnailImage
+    owners {
+      id
+      user {
+        id
+        imageUrl
+        username
+        heroId
+        guardianType
+      }
+    }
+  }
+}
+    `;
 export const ProjectForLandingPageFragmentDoc = gql`
     fragment ProjectForLandingPage on Project {
   id
@@ -12295,6 +12330,67 @@ export type ActivitiesGetQueryHookResult = ReturnType<typeof useActivitiesGetQue
 export type ActivitiesGetLazyQueryHookResult = ReturnType<typeof useActivitiesGetLazyQuery>;
 export type ActivitiesGetSuspenseQueryHookResult = ReturnType<typeof useActivitiesGetSuspenseQuery>;
 export type ActivitiesGetQueryResult = Apollo.QueryResult<ActivitiesGetQuery, ActivitiesGetQueryVariables>;
+export const PostsForLandingPageDocument = gql`
+    query PostsForLandingPage($input: GetPostsInput) {
+  posts(input: $input) {
+    id
+    postType
+    publishedAt
+    title
+    image
+    description
+    project {
+      title
+      name
+      id
+      thumbnailImage
+      owners {
+        id
+        user {
+          id
+          imageUrl
+          username
+          heroId
+          guardianType
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __usePostsForLandingPageQuery__
+ *
+ * To run a query within a React component, call `usePostsForLandingPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostsForLandingPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePostsForLandingPageQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePostsForLandingPageQuery(baseOptions?: Apollo.QueryHookOptions<PostsForLandingPageQuery, PostsForLandingPageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PostsForLandingPageQuery, PostsForLandingPageQueryVariables>(PostsForLandingPageDocument, options);
+      }
+export function usePostsForLandingPageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostsForLandingPageQuery, PostsForLandingPageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PostsForLandingPageQuery, PostsForLandingPageQueryVariables>(PostsForLandingPageDocument, options);
+        }
+export function usePostsForLandingPageSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<PostsForLandingPageQuery, PostsForLandingPageQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<PostsForLandingPageQuery, PostsForLandingPageQueryVariables>(PostsForLandingPageDocument, options);
+        }
+export type PostsForLandingPageQueryHookResult = ReturnType<typeof usePostsForLandingPageQuery>;
+export type PostsForLandingPageLazyQueryHookResult = ReturnType<typeof usePostsForLandingPageLazyQuery>;
+export type PostsForLandingPageSuspenseQueryHookResult = ReturnType<typeof usePostsForLandingPageSuspenseQuery>;
+export type PostsForLandingPageQueryResult = Apollo.QueryResult<PostsForLandingPageQuery, PostsForLandingPageQueryVariables>;
 export const ProjectsSummaryDocument = gql`
     query ProjectsSummary {
   projectsSummary {

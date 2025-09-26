@@ -1,10 +1,9 @@
-import { Box, Stack, VStack } from '@chakra-ui/react'
+import { Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
+import { LandingBackdropWrapper } from '@/shared/components/display/LandingBackdropWrapper.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { LandingDescriptionBackdropUrl } from '@/shared/constants/index.ts'
 import { ProjectCategoryList } from '@/shared/constants/platform/projectCategory.ts'
-import { ProjectSubCategory } from '@/types/index.ts'
 
 import { LandingPageSectionTitle } from './components/LandingPageSectionTitle.tsx'
 import { TopProjects } from './components/TopProjects.tsx'
@@ -30,28 +29,16 @@ export const DefaultView = () => {
 
         <VStack w="full" alignItems="start">
           <LandingPageSectionTitle>{t('Trending')}</LandingPageSectionTitle>
-          <Box
-            w="full"
-            paddingX={6}
-            paddingY={6}
-            borderRadius="22px"
-            backgroundImage={`linear-gradient(0deg, rgba(237, 255, 254, 0.33) 0%, rgba(237, 255, 254, 0.33) 100%), url(${LandingDescriptionBackdropUrl})`}
-            backgroundSize="cover"
-            backgroundPosition="center"
-            backgroundRepeat="no-repeat"
-            backgroundBlendMode="lighten"
-            backgroundColor="rgba(255, 255, 255, 0.88)"
-          >
+
+          <LandingBackdropWrapper>
             <Body light size="xl" bold>
               {t('Discover the most funded all-or-nothing campaigns and fundraisers in Bitcoin')}
             </Body>
-          </Box>
+          </LandingBackdropWrapper>
         </VStack>
 
         <AonProjectsDisplayMostFundedThisWeek />
 
-        <ProjectsDisplayMostFundedThisWeek subCategory={ProjectSubCategory.CircularEconomy} />
-        <ProjectsDisplayMostFundedThisWeek subCategory={ProjectSubCategory.CircularEconomy} />
         {ProjectCategoryList.map((category) => (
           <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
         ))}

@@ -1,12 +1,15 @@
 import { useTranslation } from 'react-i18next'
 
 import { useFilterContext } from '@/context/filter'
+import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 
 import {
+  OrderByOptions,
   ProjectCategory,
   ProjectsMostFundedByCategoryRange,
   ProjectSubCategory,
+  usePostsForLandingPageQuery,
   useProjectsMostFundedByCategoryQuery,
 } from '../../../../../../../types'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
@@ -34,6 +37,23 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
     },
   })
 
+  const { data: postsQueryData } = usePostsForLandingPageQuery({
+    skip: !category,
+    variables: {
+      input: {
+        orderBy: {
+          publishedAt: OrderByOptions.Desc,
+        },
+        pagination: {
+          take: 1,
+        },
+        where: {
+          category,
+        },
+      },
+    },
+  })
+
   const onSeeAllClick = ({ category, subCategory }: { category?: string | null; subCategory?: string | null }) => {
     if (category) {
       updateFilter({ category })
@@ -50,7 +70,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
 
   const ProjectByCategoryList =
     data?.projectsMostFundedByCategory?.filter((tagMap) => tagMap.projects.length >= 4) || []
-
+  const post = postsQueryData?.posts[0]
   return (
     <>
       {ProjectByCategoryList.map((projectByCategory) => {
@@ -64,23 +84,25 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
         return (
           <ProjectDisplayBody
             key={projectByCategory.category}
-            title={projectByCategory.category || subCategory ? t('Trending in') : ''}
-            subtitle={
+            title={
               category
                 ? ProjectCategoryLabel[category]
                 : subCategory
                 ? ProjectSubCategoryLabel[subCategory]
                 : t('Recent Projects')
             }
-            subtitleId={
-              category ? `discovery-see-all-${category}` : subCategory ? `discovery-see-all-${subCategory}` : ''
-            }
             projects={projects}
-            onSubtitleClick={() =>
-              onSeeAllClick({
-                category: projectByCategory.category,
-                subCategory: projectByCategory.subCategory,
-              })
+            post={post}
+            rightContent={
+              <DiscoverMoreButton
+                id={category ? `discovery-see-all-${category}` : subCategory ? `discovery-see-all-${subCategory}` : ''}
+                onClick={() =>
+                  onSeeAllClick({
+                    category: projectByCategory.category,
+                    subCategory: projectByCategory.subCategory,
+                  })
+                }
+              />
             }
           />
         )
