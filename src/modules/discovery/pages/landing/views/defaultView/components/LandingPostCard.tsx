@@ -1,4 +1,4 @@
-import { Badge, Box, HStack, Icon, Stack, VStack } from '@chakra-ui/react'
+import { Badge, Box, HStack, Icon, Stack, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { PiNewspaper } from 'react-icons/pi'
@@ -13,7 +13,12 @@ import { halfStandardPadding } from '@/shared/styles/reponsiveValues.ts'
 import { PostForLandingPageFragment } from '@/types/index.ts'
 import { toInt } from '@/utils/index.ts'
 
-export const LandingPostCard = ({ post, isMobile }: { post: PostForLandingPageFragment; isMobile?: boolean }) => {
+type LandingPostCardProps = {
+  post: PostForLandingPageFragment
+  isMobile?: boolean
+} & StackProps
+
+export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProps) => {
   const navigate = useNavigate()
 
   const getResponsiveValue = (prop: { base: any; lg: any }) => {
@@ -64,6 +69,7 @@ export const LandingPostCard = ({ post, isMobile }: { post: PostForLandingPageFr
       onClick={() => navigate(getPath('projectPostView', post.project?.name || '', post.id))}
       borderRadius="8px"
       padding={halfStandardPadding}
+      {...rest}
     >
       <Stack width="100%" direction={getResponsiveValue({ base: 'column', lg: 'row' })} spacing={4}>
         <Box w="full" display={getResponsiveValue({ base: 'block', lg: 'none' })}>

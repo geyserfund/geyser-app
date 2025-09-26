@@ -54,7 +54,7 @@ export const ProjectDisplayBody = ({
           )
         })}
       </SimpleGrid>
-      {post && <LandingPostCard post={post} />}
+      {post && <LandingPostCard post={post} marginTop={5} />}
     </ProjectRowLayout>
   )
 }
