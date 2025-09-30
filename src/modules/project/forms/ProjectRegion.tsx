@@ -35,9 +35,11 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
 interface ProjectRegionProps extends StackProps {
   location?: Maybe<Location>
   updateProject: (project: Partial<ProjectState>) => void
+  error?: string
+  clearError?: () => void
 }
 
-export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegionProps) => {
+export const ProjectRegion = ({ location, updateProject, error, clearError, ...rest }: ProjectRegionProps) => {
   const { t } = useTranslation()
   const classes = useStyles()
 
@@ -81,6 +83,7 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
 
   const clearLocationError = () => {
     setProjectFormError((prev) => ({ ...prev, location: undefined }))
+    clearError?.()
   }
 
   const isLoading = countriesLoading
@@ -109,16 +112,17 @@ export const ProjectRegion = ({ location, updateProject, ...rest }: ProjectRegio
           inputValue={inputValue}
           onMenuOpen={onOpen}
           onMenuClose={onClose}
-          isInvalid={Boolean(projectFormError.location)}
+          isInvalid={Boolean(projectFormError.location || error)}
           onFocus={clearLocationError}
         />
       )}
 
-      {projectFormError.location && (
-        <Body size="xs" color="error.9" w="full" textAlign={'start'}>
-          {projectFormError.location}
-        </Body>
-      )}
+      {projectFormError.location ||
+        (error && (
+          <Body size="xs" color="error.9" w="full" textAlign={'start'}>
+            {projectFormError.location || error}
+          </Body>
+        ))}
     </FieldContainer>
   )
 }

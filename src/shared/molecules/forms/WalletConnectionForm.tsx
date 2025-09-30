@@ -63,6 +63,7 @@ type Props = {
   resourceType: WalletResourceType
   availableOptions?: AvailableOptions
   showPromoText?: boolean
+  removeSponsors?: boolean
 }
 
 const FeaturedNWCWalletList = [
@@ -82,8 +83,9 @@ const LightningAddressAccordionItem = forwardRef<
     connectionOption: ConnectionOption
     limits: Limits
     showPromoText?: boolean
+    removeSponsors?: boolean
   }
->(({ readOnly, lightningAddress, connectionOption, limits, showPromoText = true }, ref) => {
+>(({ readOnly, lightningAddress, connectionOption, limits, showPromoText = true, removeSponsors }, ref) => {
   const { t } = useTranslation()
   const { colors } = useCustomTheme()
 
@@ -169,12 +171,14 @@ const LightningAddressAccordionItem = forwardRef<
             </Trans>
           }
         >
-          <VStack w="full" alignItems={'start'} spacing={1}>
-            <Body size="sm" medium>
-              {t('Featured Wallets')}
-            </Body>
-            <RenderSponsorFromTable />
-          </VStack>
+          {removeSponsors ? null : (
+            <VStack w="full" alignItems={'start'} spacing={1}>
+              <Body size="sm" medium>
+                {t('Featured Wallets')}
+              </Body>
+              <RenderSponsorFromTable />
+            </VStack>
+          )}
         </WalletConnectionOptionInfoBox>
       </AccordionPanel>
     </AccordionItem>
@@ -257,8 +261,9 @@ const NostrWalletConnectAccordionItem = forwardRef<
     hasLightningAddress: boolean
     hasNode: boolean
     showPromoText?: boolean
+    removeSponsors?: boolean
   }
->(({ readOnly, nwc, connectionOption, hasLightningAddress, hasNode, showPromoText = true }, ref) => {
+>(({ readOnly, nwc, connectionOption, hasLightningAddress, hasNode, showPromoText = true, removeSponsors }, ref) => {
   const { t } = useTranslation()
   const { colors } = useCustomTheme()
 
@@ -317,24 +322,26 @@ const NostrWalletConnectAccordionItem = forwardRef<
             </Trans>
           }
         >
-          <VStack w="full" alignItems={'start'} spacing={1}>
-            <Body size="sm" medium>
-              {t('Featured Wallets')}
-            </Body>
-            <HStack width={'full'} justifyContent={'flex-start'} spacing={'10px'} flexWrap="wrap">
-              {FeaturedNWCWalletList.map((wallet) => {
-                return (
-                  <RenderSponsorImage
-                    key={wallet.name}
-                    url={wallet.url}
-                    imageUrl={wallet.imageUrl}
-                    imageUrlDark={wallet.imageUrlDark}
-                    alt={`${wallet.name} sponsor image`}
-                  />
-                )
-              })}
-            </HStack>
-          </VStack>
+          {removeSponsors ? null : (
+            <VStack w="full" alignItems={'start'} spacing={1}>
+              <Body size="sm" medium>
+                {t('Featured Wallets')}
+              </Body>
+              <HStack width={'full'} justifyContent={'flex-start'} spacing={'10px'} flexWrap="wrap">
+                {FeaturedNWCWalletList.map((wallet) => {
+                  return (
+                    <RenderSponsorImage
+                      key={wallet.name}
+                      url={wallet.url}
+                      imageUrl={wallet.imageUrl}
+                      imageUrlDark={wallet.imageUrlDark}
+                      alt={`${wallet.name} sponsor image`}
+                    />
+                  )
+                })}
+              </HStack>
+            </VStack>
+          )}
         </WalletConnectionOptionInfoBox>
       </AccordionPanel>
     </AccordionItem>
@@ -354,6 +361,7 @@ export const WalletConnectionForm = ({
   resourceType,
   availableOptions = { lightningAddress: true, node: true, nwc: true },
   showPromoText = true,
+  removeSponsors,
 }: Props) => {
   const handleSelection = (expandedIndex: number) => {
     let optionIndex = 0
@@ -410,6 +418,7 @@ export const WalletConnectionForm = ({
             connectionOption={connectionOption}
             limits={limits}
             showPromoText={showPromoText}
+            removeSponsors={removeSponsors}
           />
         )}
 
@@ -431,6 +440,7 @@ export const WalletConnectionForm = ({
             hasLightningAddress={availableOptions.lightningAddress}
             hasNode={availableOptions.node}
             showPromoText={showPromoText}
+            removeSponsors={removeSponsors}
           />
         )}
       </Accordion>

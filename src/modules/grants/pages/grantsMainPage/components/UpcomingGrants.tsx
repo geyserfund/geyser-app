@@ -9,7 +9,7 @@ import { LargeGrantCard } from './LargeGrantCard'
 export const UpcomingGrants = ({ upcomingGrants }: { upcomingGrants: Grant[] }) => {
   const { t } = useTranslation()
 
-  if (upcomingGrants.length <= 1) {
+  if (upcomingGrants.length < 1) {
     return null
   }
 

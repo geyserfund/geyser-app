@@ -17,11 +17,13 @@ import {
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsCheckLg } from 'react-icons/bs'
+import { Navigate } from 'react-router'
 
 import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
 import { ConnectWithSocial } from '@/modules/auth/ConnectWithSocial.tsx'
 import { SocialAccountType } from '@/modules/auth/type.ts'
 import { useAuthToken } from '@/modules/auth/useAuthToken.tsx'
+import { GrantWithCustomApplicationForm } from '@/modules/grants/constants.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 
@@ -59,9 +61,21 @@ export const GrantApply = ({ grant, pendingApplicants }: GrantProps) => {
 export const ApplyGrant = ({ grant, pendingApplicants }: GrantProps) => {
   const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const handleOpen = () => {
+    onOpen()
+  }
+
   return (
     <>
-      <Button size="lg" width="200px" variant="solid" colorScheme="primary1" onClick={onOpen} textTransform="uppercase">
+      <Button
+        size="lg"
+        width="200px"
+        variant="solid"
+        colorScheme="primary1"
+        onClick={handleOpen}
+        textTransform="uppercase"
+      >
         {t('Apply')}
       </Button>
       <ApplyGrantModal {...{ isOpen, onOpen, onClose, grant, pendingApplicants }} />
@@ -82,6 +96,8 @@ export const ApplyGrantModal = ({ grant, isOpen, onClose, pendingApplicants }: A
 
   const [isSuccessful, setIsSuccessfull] = useState(false)
 
+  const isCustomApplicationGrant = GrantWithCustomApplicationForm[grant.name] || false
+
   const getModalTitle = () => {
     if (!isLoggedIn) {
       return 'Login to apply'
@@ -97,6 +113,10 @@ export const ApplyGrantModal = ({ grant, isOpen, onClose, pendingApplicants }: A
   const getModalContent = () => {
     if (!isLoggedIn) {
       return <LoginForGrant />
+    }
+
+    if (isCustomApplicationGrant) {
+      return <Navigate to="./apply" />
     }
 
     if (isSuccessful) {
@@ -142,7 +162,7 @@ export const ApplyGrantModal = ({ grant, isOpen, onClose, pendingApplicants }: A
 
 export const LoginForGrant = () => {
   const { t } = useTranslation()
-  useAuthToken()
+  useAuthToken(true)
   return (
     <>
       <Image src={LockedConnectAccountUrl} maxWidth="200px" />
