@@ -19,6 +19,7 @@ type Props = {
   setConnectionOption: (connectionOption: ConnectionOption) => void
   fee: WalletForm['fee']
   limits: Limits
+  removeSponsors?: boolean
 }
 
 export const ProjectCreationWalletConnectionForm = ({
@@ -30,6 +31,7 @@ export const ProjectCreationWalletConnectionForm = ({
   setConnectionOption,
   fee,
   limits,
+  removeSponsors,
 }: Props) => {
   return (
     <WalletConnectionForm
@@ -42,6 +44,7 @@ export const ProjectCreationWalletConnectionForm = ({
       fee={fee}
       limits={limits}
       resourceType={WalletResourceType.Project}
+      removeSponsors={removeSponsors}
     />
   )
 }

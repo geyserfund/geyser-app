@@ -92,6 +92,8 @@ export enum PathName {
   dashboardNostr = 'nostr',
   dashboardPromote = 'promote',
 
+  grantApply = 'apply',
+
   projectFunding = 'funding',
   fundingDetails = 'details',
   fundingGuardians = 'support',
@@ -151,6 +153,7 @@ const pathsMap = {
   discoveryActivityFollowed: () => `/${PathName.activity}/${PathName.activityFollowed}`,
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
+  discoveryGrantApply: (grantId: string) => `/${PathName.grants}/${grantId}/${PathName.grantApply}`,
   discoveryMerch: () => `/${PathName.merch}`,
   discoveryLaunchpad: () => `/${PathName.launchpad}`,
 

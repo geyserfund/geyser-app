@@ -37,7 +37,7 @@ export const GrantBalanceCurrency: { [key: string]: string } = {
   'grant-round-016': 'USDCENT',
 }
 
-export const NoContributionInGrant = ['grant-round-008', 'grant-round-014']
+export const NoContributionInGrant = ['grant-round-008', 'grant-round-014', 'grant-round-016']
 
 export const GrantSubscribeSegment: {
   [key: string]: { title: string; description: string; modalTitle: string; segmentId: string }
@@ -82,4 +82,8 @@ export const GrantProjectNameMap: { [key: string]: string } = {
   'grant-round-004': 'bitcoingaminggrant',
   'grant-round-013': 'satsnfacts',
   'grant-round-016': 'time2build',
+}
+
+export const GrantWithCustomApplicationForm: { [key: string]: boolean } = {
+  'grant-round-016': true,
 }

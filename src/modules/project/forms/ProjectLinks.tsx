@@ -11,9 +11,21 @@ interface ProjectLinksProps {
   links: string[]
   setLinks: (_: string[]) => void
   linkError?: boolean[]
+  formError?: string
+  clearError?: () => void
+  title?: string
+  subtitle?: string
 }
 
-export const ProjectLinks = ({ links = [], setLinks, linkError = [] }: ProjectLinksProps) => {
+export const ProjectLinks = ({
+  links = [],
+  setLinks,
+  linkError = [],
+  title,
+  subtitle,
+  formError,
+  clearError,
+}: ProjectLinksProps) => {
   const { t } = useTranslation()
   const handleClose = (val: Maybe<string>) => {
     const newLinks = links.filter((link) => link !== val)
@@ -45,9 +57,10 @@ export const ProjectLinks = ({ links = [], setLinks, linkError = [] }: ProjectLi
 
   return (
     <FieldContainer
-      title={t('Project links')}
-      subtitle={t('Connect your sites so viewers can see more proof of your work')}
+      title={title || t('Project links')}
+      subtitle={subtitle || t('Connect your sites so viewers can see more proof of your work')}
       info={t('Please provide secure links, starting with https://')}
+      error={formError}
     >
       <VStack w="full" spacing={3}>
         {links &&
