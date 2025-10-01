@@ -170,7 +170,6 @@ export const LoginForGrant = () => {
       <VStack w="full">
         <ConnectWithSocial accountType={SocialAccountType.facebook} />
         <ConnectWithSocial accountType={SocialAccountType.github} />
-        <ConnectWithSocial accountType={SocialAccountType.google} />
         <ConnectWithSocial accountType={SocialAccountType.twitter} />
         <ConnectWithNostr />
       </VStack>
