@@ -39,7 +39,7 @@ import { DistributionChart } from './sections/DistributionChart.tsx'
 import { GrantApply } from './sections/GrantApply.tsx'
 import { GrantContribute } from './sections/GrantContribute.tsx'
 import { GrantSummary } from './sections/GrantSummary.tsx'
-import { MoreInfo } from './sections/MoreInfo.tsx'
+// import { MoreInfo } from './sections/MoreInfo.tsx'
 import { PendingApplications } from './sections/PendingApplications.tsx'
 
 export const GrantPage = ({ grantId: propGrantId }: { grantId?: number }) => {
@@ -281,7 +281,7 @@ export const GrantPage = ({ grantId: propGrantId }: { grantId?: number }) => {
             <MobileDivider mt={'2'} />
           </>
         )}
-        <MoreInfo />
+        {/* <MoreInfo /> */}
       </VStack>
     </>
   )
