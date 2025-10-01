@@ -59,6 +59,10 @@ export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectW
         leftIcon: <NostrIcon boxSize={'16px'} />,
       }
 
+  if (!window.nostr) {
+    return null
+  }
+
   return (
     <>
       <ButtonComponent

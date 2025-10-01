@@ -17,8 +17,8 @@ import { ContributionsWidget } from '../components/ContributionsWidget'
 const CUSTOM_VIDEO_URL = 'https://youtu.be/xemVDGbQwHs'
 
 const GRANT_TYPE = {
-  [GrantType.BoardVote]: 'Board-voting grant',
-  [GrantType.CommunityVote]: 'Community-voting grant',
+  [GrantType.BoardVote]: 'Board-voting',
+  [GrantType.CommunityVote]: 'Community-voting',
 }
 
 const GRANT_DISTRIBUTION_SYSTEM = {
