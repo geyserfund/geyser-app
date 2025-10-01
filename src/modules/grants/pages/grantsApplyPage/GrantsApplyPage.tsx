@@ -27,6 +27,7 @@ import { useProjectLinksValidation } from '@/shared/hooks/validations/useProject
 import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
 import { FileUpload } from '@/shared/molecules/FileUpload.tsx'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal.tsx'
+import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 import {
   CreateWalletInput,
   useCreateProjectMutation,
@@ -290,7 +291,7 @@ export const GrantsApplyPage = () => {
         height: '100%',
       }}
     >
-      <CardLayout maxWidth="700px" spacing={12} maxHeight="100%" overflowY="scroll">
+      <CardLayout maxWidth="700px" width="100%" noMobileBorder spacing={12} maxHeight="100%" overflowY="scroll">
         <VStack alignItems="start" w="full">
           <H2 bold>{template.title}</H2>
           <Body>{template.description}</Body>
@@ -456,7 +457,7 @@ export const GrantsApplyPage = () => {
         </VStack>
       </CardLayout>
 
-      <VStack w="full" paddingTop={8} maxWidth="600px">
+      <VStack w="full" paddingTop={8} maxWidth="600px" paddingX={standardPadding}>
         <Body>
           {' '}
           {t('By submitting this project, you agree to our')}{' '}
