@@ -72,7 +72,7 @@ export const BoardMembers = ({ members }: { members?: GrantBoardMember[] }) => {
 
   return (
     <Box w={'full'} display={'flex'} justifyContent="center">
-      <Box width={isMobile ? '100%' : '600px'}>
+      <Box width={isMobile ? '100%' : '800px'}>
         <Wrap spacing="20px" justify="center">
           {members?.length
             ? members.map((item, idx) => (

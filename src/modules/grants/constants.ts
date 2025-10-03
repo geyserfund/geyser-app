@@ -7,7 +7,7 @@ import {
 import { GrantStatusEnum } from '../../types'
 
 export const GRANT_STATUS_MAP: Record<GrantStatusEnum, string> = {
-  [GrantStatusEnum.ApplicationsOpen]: 'Applications Open',
+  [GrantStatusEnum.ApplicationsOpen]: 'APPLICATIONS ARE NOW OPEN ⚡️',
   [GrantStatusEnum.Closed]: 'Closed',
   [GrantStatusEnum.FundingOpen]: 'Active',
 }
