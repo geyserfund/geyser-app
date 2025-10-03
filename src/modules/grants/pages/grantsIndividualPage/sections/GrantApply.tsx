@@ -62,19 +62,16 @@ export const ApplyGrant = ({ grant, pendingApplicants }: GrantProps) => {
   const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const handleOpen = () => {
-    onOpen()
-  }
-
   return (
     <>
       <Button
-        size="lg"
-        width="200px"
+        size="xl"
+        width="300px"
         variant="solid"
         colorScheme="primary1"
-        onClick={handleOpen}
+        onClick={onOpen}
         textTransform="uppercase"
+        marginY="20px"
       >
         {t('Apply')}
       </Button>
