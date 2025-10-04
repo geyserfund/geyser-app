@@ -2,13 +2,19 @@ import { Badge, HTMLChakraProps, VStack } from '@chakra-ui/react'
 
 import { Body } from '@/shared/components/typography'
 
-type Props = HTMLChakraProps<'div'> & {
+export type WalletConnectionOptionInfoBoxProps = HTMLChakraProps<'div'> & {
   primaryNode: React.ReactNode
   promoText?: string
-  secondaryText: string | React.ReactElement
+  secondaryText?: string | React.ReactElement
 }
 
-export const WalletConnectionOptionInfoBox = ({ primaryNode, promoText, secondaryText, children, ...rest }: Props) => {
+export const WalletConnectionOptionInfoBox = ({
+  primaryNode,
+  promoText,
+  secondaryText,
+  children,
+  ...rest
+}: WalletConnectionOptionInfoBoxProps) => {
   return (
     <VStack
       backgroundColor={'utils.pbg'}
@@ -31,9 +37,11 @@ export const WalletConnectionOptionInfoBox = ({ primaryNode, promoText, secondar
           {promoText}
         </Badge>
       )}
-      <Body size="sm" light>
-        {secondaryText}
-      </Body>
+      {secondaryText && (
+        <Body size="sm" light>
+          {secondaryText}
+        </Body>
+      )}
       {children}
     </VStack>
   )

@@ -27,7 +27,10 @@ import { ProjectFeeSelection } from '@/modules/project/components/ProjectFeeSele
 import { NodeAdditionModal } from '@/modules/project/forms/components/NodeAdditionModal'
 import { RenderSponsorFromTable } from '@/modules/project/forms/components/RenderSponsorFromTable.tsx'
 import { RenderSponsorImage } from '@/modules/project/forms/components/RenderSponsorImage.tsx'
-import { WalletConnectionOptionInfoBox } from '@/modules/project/pages1/projectCreation/components/WalletConnectionOptionInfoBox'
+import {
+  WalletConnectionOptionInfoBox,
+  WalletConnectionOptionInfoBoxProps,
+} from '@/modules/project/pages1/projectCreation/components/WalletConnectionOptionInfoBox'
 import {
   ConnectionOption,
   LightingWalletForm,
@@ -75,19 +78,21 @@ const FeaturedNWCWalletList = [
   },
 ]
 
-const LightningAddressAccordionItem = forwardRef<
-  HTMLDivElement,
-  {
-    readOnly?: boolean
-    lightningAddress: LightingWalletForm
-    connectionOption: ConnectionOption
-    limits: Limits
-    showPromoText?: boolean
-    removeSponsors?: boolean
-  }
->(({ readOnly, lightningAddress, connectionOption, limits, showPromoText = true, removeSponsors }, ref) => {
+export const LightningAddressInputField = ({
+  lightningAddress,
+  readOnly,
+  showPromoText,
+  removeSponsors,
+  limits,
+  ...rest
+}: {
+  lightningAddress: LightingWalletForm
+  readOnly?: boolean
+  showPromoText?: boolean
+  removeSponsors?: boolean
+  limits: Limits
+} & Omit<WalletConnectionOptionInfoBoxProps, 'primaryNode'>) => {
   const { t } = useTranslation()
-  const { colors } = useCustomTheme()
 
   const renderRightElementContent = () => {
     if (lightningAddress.evaluating) {
@@ -109,6 +114,83 @@ const LightningAddressAccordionItem = forwardRef<
   }
 
   return (
+    <WalletConnectionOptionInfoBox
+      pt={0}
+      primaryNode={
+        <>
+          <InputGroup w="full" size={'md'}>
+            <TextInputBox
+              w="full"
+              name="lightning-address"
+              type={'email'}
+              placeholder={'runwithbitcoin@getalby.com'}
+              value={lightningAddress.value}
+              onChange={(event) => {
+                lightningAddress.setValue(event.target.value)
+              }}
+              onBlur={lightningAddress.validate}
+              isInvalid={Boolean(lightningAddress.error)}
+              focusBorderColor={'neutral.200'}
+              _valid={{
+                focusBorderColor: 'primary.500',
+              }}
+              error={lightningAddress.error}
+              isDisabled={readOnly}
+            />
+            <InputRightElement>{renderRightElementContent()}</InputRightElement>
+          </InputGroup>
+          {lightningAddress.value && lightningAddress.state === LNAddressEvaluationState.SUCCEEDED ? (
+            <WalletLimitComponent limit={limits} />
+          ) : null}
+        </>
+      }
+      promoText={showPromoText ? t(`${LIGHTNING_FEE_PERCENTAGE}% Geyser fee per transaction`) : undefined}
+      secondaryText={
+        <Trans
+          i18nKey={
+            '<0>Lightning Addresses</0> are like an email address, but for your Bitcoin. You will receive all on-chain and lightning transactions directly to your lightning wallet. Get your own by looking at our featured and other <2>recommended wallets.</2>'
+          }
+        >
+          <Link textDecoration="underline" href={GeyserLightningWalletGuideLink} isExternal>
+            Lightning Addresses
+          </Link>
+          {
+            ' are like an email address, but for your Bitcoin. You will receive all on-chain and lightning transactions directly to your lightning wallet. Get your own by looking at our featured and other '
+          }
+          <Link textDecoration="underline" href={GeyserLightningWalletGuideLink} isExternal color="primary1.11">
+            recommended wallets.
+          </Link>
+        </Trans>
+      }
+      {...rest}
+    >
+      {removeSponsors ? null : (
+        <VStack w="full" alignItems={'start'} spacing={1}>
+          <Body size="sm" medium>
+            {t('Featured Wallets')}
+          </Body>
+          <RenderSponsorFromTable />
+        </VStack>
+      )}
+    </WalletConnectionOptionInfoBox>
+  )
+}
+
+const LightningAddressAccordionItem = forwardRef<
+  HTMLDivElement,
+  {
+    readOnly?: boolean
+    lightningAddress: LightingWalletForm
+    connectionOption: ConnectionOption
+    limits: Limits
+    showPromoText?: boolean
+    removeSponsors?: boolean
+  }
+>(({ readOnly, lightningAddress, connectionOption, limits, showPromoText = true, removeSponsors }, ref) => {
+  const { t } = useTranslation()
+  const { colors } = useCustomTheme()
+
+  return (
     <AccordionItem mb="30px" border="none" tabIndex={0} ref={ref}>
       <h2>
         <AccordionButton {...accordionButtonStyles}>
@@ -122,64 +204,13 @@ const LightningAddressAccordionItem = forwardRef<
         </AccordionButton>
       </h2>
       <AccordionPanel p={0}>
-        <WalletConnectionOptionInfoBox
-          pt={0}
-          primaryNode={
-            <>
-              <InputGroup w="full" size={'md'}>
-                <TextInputBox
-                  w="full"
-                  name="lightning-address"
-                  type={'email'}
-                  placeholder={'runwithbitcoin@getalby.com'}
-                  value={lightningAddress.value}
-                  onChange={(event) => {
-                    lightningAddress.setValue(event.target.value)
-                  }}
-                  onBlur={lightningAddress.validate}
-                  isInvalid={Boolean(lightningAddress.error)}
-                  focusBorderColor={'neutral.200'}
-                  _valid={{
-                    focusBorderColor: 'primary.500',
-                  }}
-                  error={lightningAddress.error}
-                  isDisabled={readOnly}
-                />
-                <InputRightElement>{renderRightElementContent()}</InputRightElement>
-              </InputGroup>
-              {lightningAddress.value && lightningAddress.state === LNAddressEvaluationState.SUCCEEDED ? (
-                <WalletLimitComponent limit={limits} />
-              ) : null}
-            </>
-          }
-          promoText={showPromoText ? t(`${LIGHTNING_FEE_PERCENTAGE}% Geyser fee per transaction`) : undefined}
-          secondaryText={
-            <Trans
-              i18nKey={
-                '<0>Lightning Addresses</0> are like an email address, but for your Bitcoin. You will receive all on-chain and lightning transactions directly to your lightning wallet. Get your own by looking at our featured and other <2>recommended wallets.</2>'
-              }
-            >
-              <Link textDecoration="underline" href={GeyserLightningWalletGuideLink} isExternal>
-                Lightning Addresses
-              </Link>
-              {
-                ' are like an email address, but for your Bitcoin. You will receive all on-chain and lightning transactions directly to your lightning wallet. Get your own by looking at our featured and other '
-              }
-              <Link textDecoration="underline" href={GeyserLightningWalletGuideLink} isExternal color="primary1.11">
-                recommended wallets.
-              </Link>
-            </Trans>
-          }
-        >
-          {removeSponsors ? null : (
-            <VStack w="full" alignItems={'start'} spacing={1}>
-              <Body size="sm" medium>
-                {t('Featured Wallets')}
-              </Body>
-              <RenderSponsorFromTable />
-            </VStack>
-          )}
-        </WalletConnectionOptionInfoBox>
+        <LightningAddressInputField
+          lightningAddress={lightningAddress}
+          readOnly={readOnly || false}
+          showPromoText={showPromoText}
+          removeSponsors={removeSponsors || false}
+          limits={limits}
+        />
       </AccordionPanel>
     </AccordionItem>
   )

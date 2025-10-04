@@ -5,11 +5,12 @@ export const StatusLabel = ({ ...props }: BoxProps) => {
     <Box
       p={2}
       borderRadius="8px"
-      backgroundColor="primary.100"
       textAlign="center"
-      color="neutral.900"
+      color="primary1.11"
+      border="1px solid"
+      borderColor="neutral1.6"
       fontSize="14px"
-      fontWeight={500}
+      fontWeight={700}
       {...props}
     />
   )

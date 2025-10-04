@@ -14,6 +14,7 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsCheckLg } from 'react-icons/bs'
@@ -34,25 +35,38 @@ import { lightModeColors } from '../../../../../shared/styles'
 import { Grant, GrantApplicant, GrantApplicantStatus, GrantApplyInput, Project } from '../../../../../types'
 import { toInt, useCustomTheme, useNotification } from '../../../../../utils'
 import { CreateAProjectButton } from '../../../../profile/pages/profilePage/components'
+import { GrantItemTitle } from '../components/GrantItemTitle.tsx'
 
 interface GrantProps {
   grant: Grant
   pendingApplicants?: GrantApplicant[]
 }
 
+const GRANT_TITLE_MAP: Record<string, string> = {
+  'grant-round-016': t('Submit Your Integration'),
+}
+
+const GRANT_SUBTITLE_MAP: Record<string, string> = {
+  'grant-round-016': t(
+    'Ready to enter your integration to the Time2Build challenge? Click “Submit” below and complete the form. As a reminder, you’ll have one month from November 16th to merge your code, to be eligible for judging. Good luck ⚡️',
+  ),
+}
+
 export const GrantApply = ({ grant, pendingApplicants }: GrantProps) => {
   const { t } = useTranslation()
 
+  const title = GRANT_TITLE_MAP[grant.name] || t('Apply')
+  const subtitle =
+    GRANT_SUBTITLE_MAP[grant.name] ||
+    t(
+      'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow',
+    ).replace('{{title}}', grant.title)
+
   return (
     <CardLayout noMobileBorder w="full" p={{ base: '10px', lg: '20px' }} alignItems="center">
-      <H3 size="lg" alignSelf="start" medium>
-        {t('Apply')}
-      </H3>
-      <Body alignSelf="start">
-        {t(
-          'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow',
-        ).replace('{{title}}', grant.title)}
-      </Body>
+      <GrantItemTitle alignSelf="start">{title}</GrantItemTitle>
+
+      <Body alignSelf="start">{subtitle}</Body>
       <ApplyGrant grant={grant} pendingApplicants={pendingApplicants} />
     </CardLayout>
   )

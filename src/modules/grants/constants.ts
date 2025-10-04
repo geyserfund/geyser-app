@@ -87,3 +87,7 @@ export const GrantProjectNameMap: { [key: string]: string } = {
 export const GrantWithCustomApplicationForm: { [key: string]: boolean } = {
   'grant-round-016': true,
 }
+
+export const GrantHasHowToApply: { [key: string]: boolean } = {
+  'grant-round-016': true,
+}

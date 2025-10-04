@@ -23,6 +23,7 @@ import {
 import { useNotification } from '../../../../utils/index.ts'
 import {
   GrantAnnouncements,
+  GrantHasHowToApply,
   GrantHasVoting,
   GrantProjectNameMap,
   GrantSubscribeSegment,
@@ -39,6 +40,7 @@ import { DistributionChart } from './sections/DistributionChart.tsx'
 import { GrantApply } from './sections/GrantApply.tsx'
 import { GrantContribute } from './sections/GrantContribute.tsx'
 import { GrantSummary } from './sections/GrantSummary.tsx'
+import { HowToApply } from './sections/HowToApply.tsx'
 // import { MoreInfo } from './sections/MoreInfo.tsx'
 import { PendingApplications } from './sections/PendingApplications.tsx'
 
@@ -142,6 +144,8 @@ export const GrantPage = ({ grantId: propGrantId }: { grantId?: number }) => {
   const showGrantApply = grant.status === GrantStatusEnum.ApplicationsOpen
   const showContributeToGrant = !isCompetitionVote && !NoContributionInGrant.includes(grant.name)
 
+  const showHowToApply = GrantHasHowToApply[grant.name]
+
   const showBoardMembers = isBoardVoteGrant(grant) && grant.boardMembers.length > 0
   const showApplicationPending =
     (GrantHasVoting[grant.name] || showBoardMembers) &&
@@ -176,6 +180,7 @@ export const GrantPage = ({ grantId: propGrantId }: { grantId?: number }) => {
         w="full"
         spacing="15px"
         alignItems="center"
+        paddingBottom={20}
       >
         <GrantSummary grant={grant} grantHasVoting={grantHasVoting} />
         <MobileDivider />
@@ -279,6 +284,11 @@ export const GrantPage = ({ grantId: propGrantId }: { grantId?: number }) => {
           <>
             <CommonBoardMembers members={grant.boardMembers} />
             <MobileDivider mt={'2'} />
+          </>
+        )}
+        {showHowToApply && (
+          <>
+            <HowToApply />
           </>
         )}
         {/* <MoreInfo /> */}
