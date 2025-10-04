@@ -1,13 +1,14 @@
 import { Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import Confetti from 'react-confetti'
+import { Link } from 'react-router-dom'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
-import { ContributionSuccessIllustrationUrl } from '@/shared/constants/index.ts'
+import { ContributionSuccessIllustrationUrl, getPath } from '@/shared/constants/index.ts'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 
-export const SuccessfullyAppliedToGrant = () => {
+export const SuccessfullyAppliedToGrant = ({ projectName }: { projectName?: string }) => {
   return (
     <VStack w="full" alignItems="center" h="100%" spacing={10} paddingTop={6}>
       <CardLayout mobileDense w="full" padding={{ base: 0, lg: 12 }} alignItems="center" maxWidth="800px">
@@ -48,10 +49,17 @@ export const SuccessfullyAppliedToGrant = () => {
         </VStack>
       </CardLayout>
       <HStack w="full" maxWidth="800px">
-        <Button flex={1} size="lg" variant="solid" colorScheme="primary1">
+        <Button flex={1} size="lg" variant="solid" colorScheme="primary1" as={Link} to={'../'}>
           {t('Back to grants')}
         </Button>
-        <Button flex={1} size="lg" variant="outline" colorScheme="neutral1">
+        <Button
+          flex={1}
+          size="lg"
+          variant="outline"
+          colorScheme="neutral1"
+          as={Link}
+          to={getPath('project', projectName || '')}
+        >
           {t('View your project')}
         </Button>
       </HStack>

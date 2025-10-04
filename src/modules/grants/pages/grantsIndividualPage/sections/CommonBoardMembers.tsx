@@ -3,15 +3,16 @@ import { useTranslation } from 'react-i18next'
 
 import { GrantBoardMember } from '../../../../../types'
 import { BoardMembers } from '../components/BoardMembers'
+import { GrantItemTitle } from '../components/GrantItemTitle.tsx'
 
 export const CommonBoardMembers = ({ members }: { members: GrantBoardMember[] }) => {
   const { t } = useTranslation()
   return (
     <VStack w={'full'} alignItems={'start'} paddingX={'10px'}>
       <Box my={4}>
-        <Text fontSize="24px" fontWeight={'bold'}>
-          {t('Grant Judges')}
-        </Text>
+        <GrantItemTitle>
+        {t('Challenge Judges')}
+        </GrantItemTitle>
         <Text color={'neutral.600'} fontWeight="600">
           {t('The judges will be responsible for reviewing and evaluating the applications.')}
         </Text>

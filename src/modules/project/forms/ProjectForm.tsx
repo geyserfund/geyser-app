@@ -21,7 +21,7 @@ import { AdditionalUrlModal } from './components/AdditionalUrlModal'
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
 
-const MAX_PROJECT_HEADERS = 7
+export const MAX_PROJECT_HEADERS = 7
 
 type ProjectFormProps = {
   form: UseFormReturn<ProjectCreationVariables>

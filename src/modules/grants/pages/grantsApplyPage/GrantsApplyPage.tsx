@@ -1,32 +1,30 @@
 /* eslint-disable complexity */
-import { Button, HStack, Link, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, HStack, Link, Stack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { ChangeEventHandler, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
 import { TextArea } from '@/components/ui/TextArea.tsx'
 import { TextInputBox } from '@/components/ui/TextInputBox.tsx'
 import { UploadBox } from '@/components/ui/UploadBox.tsx'
 import { useAuthContext } from '@/context/auth.tsx'
-import { ProjectCreationWalletConnectionForm } from '@/modules/project/forms/ProjectCreationWalletConnectionForm.tsx'
-import { ProjectLinks } from '@/modules/project/forms/ProjectLinks.tsx'
+import { AdditionalUrlModal } from '@/modules/project/forms/components/AdditionalUrlModal.tsx'
+import { MAX_PROJECT_HEADERS } from '@/modules/project/forms/ProjectForm.tsx'
 import { ProjectRegion } from '@/modules/project/forms/ProjectRegion.tsx'
 import { useWalletForm } from '@/modules/project/pages1/projectCreation/hooks/useWalletForm.tsx'
-import { ProjectCreationVariables } from '@/modules/project/pages1/projectCreation/types.ts'
-import { ProjectState } from '@/modules/project/state/projectAtom.ts'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { H2, H3 } from '@/shared/components/typography/Heading.tsx'
+import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { GeyserTermsUrl } from '@/shared/constants/index.ts'
 import { ProjectValidations } from '@/shared/constants/validations/project.ts'
-import { useProjectLinksValidation } from '@/shared/hooks/validations/useProjectLinksValidation.tsx'
-import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
 import { FileUpload } from '@/shared/molecules/FileUpload.tsx'
+import { LightningAddressInputField } from '@/shared/molecules/forms/WalletConnectionForm.tsx'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal.tsx'
+import { MediaControlWithReorder } from '@/shared/molecules/MediaControlWithReorder.tsx'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 import {
   CreateWalletInput,
@@ -40,16 +38,24 @@ import { toMediumImageUrl, useNotification } from '@/utils/index.ts'
 import { validLightningAddress } from '@/utils/validations/index.ts'
 
 import { SuccessfullyAppliedToGrant } from './SuccessfullyAppliedToGrant.tsx'
-import { grantApplicationTemplateForGrantNo016 } from './template.ts'
+import { getDescriptionFromValues, grantApplicationTemplateForGrantNo016 } from './template.ts'
 
-type grantApplicationVariables = ProjectCreationVariables & {
+type grantApplicationVariables = {
+  title: string
+  name: string
+  images: string[]
+  shortDescription: string
+  email: string
+  githubLink: string
+  description: string
+  team: string
+  leanings: string
+  anythingElse: string
+  thumbnailImage: string
   country: {
     name: string
     code: string
   }
-  projectLinks: string[]
-  description: string
-  thumbnailImage: string
 }
 
 const template = grantApplicationTemplateForGrantNo016
@@ -83,26 +89,13 @@ const grantApplicationSchema = yup.object({
       name: yup.string().required(t('Country name is required')),
       code: yup.string().required(t('Country code is required')),
     }),
-  projectLinks: yup
-    .array()
-    .of(yup.string().required().url(t('Please enter a valid URL')))
-    .min(1, t('At least one project link is required'))
-    .test('has-github', t('At least one link must be a GitHub URL'), function (links) {
-      if (!links || links.length === 0) return false
-      return links.some((link) => link && link.includes('github.com'))
-    })
-    .required(t('Project links are required')),
-  description: yup
-    .string()
-    .required(t('Project submission form is required'))
-    .min(
-      ProjectValidations.description.minLength,
-      t(`Description must be at least ${ProjectValidations.description.minLength} characters`),
-    )
-    .max(
-      ProjectValidations.description.maxLength,
-      t(`Description must be ${ProjectValidations.description.maxLength} characters or less`),
-    ),
+
+  githubLink: yup.string().url(t('Please enter a valid URL')).required(t('GitHub link is required')),
+  description: yup.string().required(t('Description is required')),
+  team: yup.string().required(t('Team is required')),
+  leanings: yup.string().required(t('Learnings are required')),
+  anythingElse: yup.string().required(t('Anything else is required')),
+
   email: yup.string().email(t('Please enter a valid email address')).required(t('Email is required')),
   images: yup
     .array()
@@ -114,11 +107,9 @@ export const GrantsApplyPage = () => {
   const toast = useNotification()
   const { user, queryCurrentUser } = useAuthContext()
 
-  const { isOpen: isEditorMode, onToggle: toggleEditorMode } = useDisclosure()
-
   const [projectAppliedToGrant, setProjectAppliedToGrant] = useState<boolean>(false)
 
-  const [createProject, { loading: createProjectLoading }] = useCreateProjectMutation()
+  const [createProject, { loading: createProjectLoading, data: createProjectData }] = useCreateProjectMutation()
 
   const [projectPublish, { loading: projectPublishLoading }] = useProjectPublishMutation()
 
@@ -126,16 +117,14 @@ export const GrantsApplyPage = () => {
 
   const [createWallet, { loading: createWalletLoading }] = useCreateWalletMutation()
 
-  const { connectionOption, lightningAddress, node, nwc, setConnectionOption, fee, limits, createWalletInput } =
-    useWalletForm({
-      onSubmit() {},
-    })
+  const { lightningAddress, limits, createWalletInput } = useWalletForm({
+    onSubmit() {},
+  })
 
   const form = useForm<grantApplicationVariables>({
     resolver: yupResolver(grantApplicationSchema),
     mode: 'onBlur',
     defaultValues: {
-      projectLinks: template.fields.projectLinks?.defaultValue || [],
       title: template.fields.title?.defaultValue || '',
       shortDescription: template.fields.shortDescription?.defaultValue || '',
       thumbnailImage: template.fields.thumbnailImage?.defaultValue || '',
@@ -143,23 +132,13 @@ export const GrantsApplyPage = () => {
         name: '',
         code: '',
       },
-      description: template.fields.description?.defaultValue || '',
+      description: '',
       images: template.fields.images?.defaultValue || [],
       email: user?.email || '',
       name: '',
     },
   })
   const { formState, setValue, watch, control, clearErrors } = form
-
-  const { setLinks, linkError } = useProjectLinksValidation({
-    updateProject(project: Partial<ProjectState>) {
-      console.log('checking project', project)
-      setValue('projectLinks', project.links || [], {
-        shouldDirty: true,
-        shouldValidate: true,
-      })
-    },
-  })
 
   const handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
     if (event) {
@@ -197,19 +176,25 @@ export const GrantsApplyPage = () => {
       return
     }
 
+    const description = getDescriptionFromValues({
+      githubLink: data.githubLink,
+      description: data.description,
+      team: data.team,
+      learnings: data.leanings,
+      anythingElse: data.anythingElse,
+    })
+
     createProject({
       variables: {
         input: {
           title: data.title,
-          description: data.description,
+          description,
           images: data.images,
           name: data.name,
           shortDescription: data.shortDescription,
           email: data.email,
-          //   projectLinks: data.projectLinks,
           thumbnailImage: data.thumbnailImage,
           countryCode: data.country.code,
-          //   paidLaunch: data.paidLaunch,
         },
       },
       onCompleted(data) {
@@ -274,8 +259,18 @@ export const GrantsApplyPage = () => {
     console.log('checking errors', errors)
   }
 
+  const handleDeleteImage = () => {
+    setValue('images', [], { shouldDirty: true, shouldValidate: true })
+  }
+
+  const handleHeaderImageUpload = (url: string) => {
+    const currentImages = watch('images')
+    if (currentImages.includes(url)) return
+    setValue('images', [...currentImages, url], { shouldDirty: true })
+  }
+
   if (projectAppliedToGrant) {
-    return <SuccessfullyAppliedToGrant />
+    return <SuccessfullyAppliedToGrant projectName={createProjectData?.createProject?.name} />
   }
 
   return (
@@ -297,7 +292,11 @@ export const GrantsApplyPage = () => {
           <Body>{template.description}</Body>
         </VStack>
         <VStack w="full" spacing={8}>
-          <FieldContainer title={t('Title')} subtitle={t('A few words that make your project stand out')} required>
+          <FieldContainer
+            title={template.fields.title?.label || t('Title')}
+            subtitle={template.fields.title?.description || t('A few words that make your project stand out')}
+            required
+          >
             <TextInputBox
               name="title"
               onChange={handleChange}
@@ -307,9 +306,12 @@ export const GrantsApplyPage = () => {
             />
           </FieldContainer>
           <FieldContainer
-            title={t('Objective')}
+            title={template.fields.shortDescription?.label || t('Objective')}
             required
-            subtitle={t("Add 'one liner' a simple descriptions of what your project is about")}
+            subtitle={
+              template.fields.shortDescription?.description ||
+              t("Add 'one liner' a simple descriptions of what your project is about")
+            }
           >
             <TextArea
               name="shortDescription"
@@ -339,9 +341,12 @@ export const GrantsApplyPage = () => {
             )}
           </FieldContainer>
           <FieldContainer
-            title={t('Image')}
+            title={template.fields.thumbnailImage?.label || t('Image')}
             required
-            subtitle={t('Add the main project image that will be displayed in all thumbnails')}
+            subtitle={
+              template.fields.thumbnailImage?.description ||
+              t('Add the main project image that will be displayed in all thumbnails')
+            }
             error={formState.errors.thumbnailImage?.message}
           >
             <FileUpload
@@ -362,6 +367,60 @@ export const GrantsApplyPage = () => {
                 titleProps={{ fontSize: 'lg', light: true }}
               />
             </FileUpload>
+          </FieldContainer>
+
+          <FieldContainer
+            title={t('Header')}
+            required
+            subtitle={t('Add one or multiple images or video links to help bring your project to life')}
+          >
+            <MediaControlWithReorder
+              links={watch('images')}
+              altText={'Project header image'}
+              updateLinks={(links) => setValue('images', links, { shouldDirty: true })}
+              aspectRatio={ImageCropAspectRatio.Header}
+            />
+            <Controller
+              name="images"
+              control={control}
+              render={({ field }) => {
+                const maxReached = field.value.length >= MAX_PROJECT_HEADERS
+
+                return (
+                  <Stack alignItems="start" direction={{ base: 'column', md: 'row' }} w={'full'} pt={4}>
+                    <AdditionalUrlModal
+                      w="full"
+                      onAdd={(url) => field.onChange([...field.value, url])}
+                      isDisabled={maxReached}
+                    />
+                    <FileUpload
+                      containerProps={{ flex: 1, w: { base: 'full', md: 'unset' } }}
+                      caption={t('For best fit, select horizontal 16:9 image. Image size limit: 10MB.')}
+                      onUploadComplete={handleHeaderImageUpload}
+                      onDeleteClick={handleDeleteImage}
+                      childrenOnLoading={<UploadBox loading h={{ base: '40px', lg: '64px' }} borderRadius="12px" />}
+                      imageCrop={ImageCropAspectRatio.Header}
+                      isDisabled={maxReached}
+                    >
+                      <UploadBox
+                        h={{ base: '40px', lg: '64px' }}
+                        borderRadius="12px"
+                        flex={1}
+                        title={
+                          maxReached
+                            ? t('Max items reached')
+                            : field.value.length > 0
+                            ? t('Upload additional image')
+                            : t('Upload image')
+                        }
+                        opacity={maxReached ? 0.5 : 1}
+                        titleProps={{ fontSize: 'lg', light: true }}
+                      />
+                    </FileUpload>
+                  </Stack>
+                )
+              }}
+            />
           </FieldContainer>
 
           <FieldContainer title={t('Email')} subtitle={t('Email we can reach you at')} required>
@@ -387,73 +446,103 @@ export const GrantsApplyPage = () => {
             error={formState.errors.country?.message}
             clearError={() => clearErrors('country')}
           />
-          <ProjectLinks
-            title={t('Project links') + '*'}
-            links={watch('projectLinks')}
-            setLinks={setLinks}
-            linkError={linkError}
-            formError={formState.errors.projectLinks?.message}
-            clearError={() => clearErrors('projectLinks')}
-            subtitle={template.fields.projectLinks?.description}
-          />
 
           <FieldContainer
-            title={template.fields.description?.label}
-            subtitle={template.fields.description?.description}
-            error={formState.errors.description?.message}
+            title={t('Link to Github PR')}
+            subtitle={t('Direct link to the pull request with Breez SDK integration, and any other relevant links')}
+            required
           >
-            <VStack
-              flexDirection={'column-reverse'}
-              flex={1}
-              width="100%"
-              border="1px solid"
-              borderColor="neutral1.6"
-              borderRadius="8px"
-              overflow="hidden"
-              paddingTop={3}
-              backgroundColor="utils.pbg"
-            >
-              <MarkdownField
-                initialContentReady={true}
-                initialContent={() => watch('description') || ''}
-                content={watch('description') || ''}
-                name="description"
-                placeholder={t('Describe your product in detail - features, specifications, and benefits.')}
-                flex
-                noFloatingToolbar
-                control={control}
-                isEditorMode={isEditorMode}
-                toggleEditorMode={toggleEditorMode}
-                toolbarWrapperProps={{
-                  borderBottom: 'none',
-                  borderRight: 'none',
-                  borderLeft: 'none',
-                  borderRadius: 0,
-                  marginBottom: 0,
-                  overflowX: 'auto',
-                }}
-                toolbarMaxWidth={'100%'}
-                enableRawMode
-                editorWrapperProps={{
-                  paddingX: '16px',
-                  minHeight: '200px',
-                }}
-                markdownRawEditorProps={{
-                  minHeight: '200px',
-                  padding: '0px 16px',
-                }}
-              />
-            </VStack>
+            <TextInputBox
+              name="githubLink"
+              onChange={handleChange}
+              value={watch('githubLink')}
+              placeholder={'https://github.com/your-username/your-repo/pull/1'}
+              error={formState.errors.githubLink?.message}
+            />
           </FieldContainer>
-        </VStack>
 
-        <VStack w="full" alignItems="flex-start">
-          <H3 bold>{t('Project Wallet')}</H3>
+          <FieldContainer
+            title={t('Project Description')}
+            subtitle={t(
+              'Brief explanation of what the project is and what Bitcoin functionality you added with the Breez SDK. \n Why did you choose to integrate this?',
+            )}
+            required
+          >
+            <TextArea
+              name="description"
+              onChange={handleChange}
+              value={watch('description')}
+              placeholder={''}
+              error={formState.errors.description?.message}
+            />
+          </FieldContainer>
 
-          <ProjectCreationWalletConnectionForm
-            {...{ connectionOption, lightningAddress, node, setConnectionOption, fee, limits, nwc }}
-            removeSponsors
-          />
+          <FieldContainer
+            title={t('Team')}
+            subtitle={
+              <>
+                <Body>{t('List all the contributors to this integration with their GitHub and/or social links.')}</Body>
+                <Body>{t(' \n Format: Name – GitHub / Twitter / Nostr')}</Body>
+              </>
+            }
+            required
+          >
+            <TextArea
+              name="team"
+              onChange={handleChange}
+              value={watch('team')}
+              placeholder={'Nick Blakely - blakely77 / @blakely77 / nostr:npub1...'}
+              error={formState.errors.team?.message}
+            />
+          </FieldContainer>
+
+          <FieldContainer
+            title={t('Learnings and Challenges')}
+            subtitle={
+              <>
+                <Body>{t('What did you learn during the implementation?')}</Body>
+                <Body>{t('What challenges did you face and how did you solve them?')}</Body>
+              </>
+            }
+            required
+          >
+            <TextArea
+              name="leanings"
+              onChange={handleChange}
+              value={watch('leanings')}
+              placeholder={'I learned about the Breez SDK and how to integrate it into a project.'}
+              error={formState.errors.leanings?.message}
+            />
+          </FieldContainer>
+          <FieldContainer
+            title={t('Anything Else Judges Should Know')}
+            subtitle={t(
+              'Space for context: community size, impact, future plans, or any other details that strengthen your submission.',
+            )}
+            required
+          >
+            <TextArea
+              name="anythingElse"
+              onChange={handleChange}
+              value={watch('anythingElse')}
+              placeholder={'I learned about the Breez SDK and how to integrate it into a project.'}
+              error={formState.errors.anythingElse?.message}
+            />
+          </FieldContainer>
+
+          <FieldContainer title={t('Lightning Address & Wallet')} subtitle={t('')} required>
+            <LightningAddressInputField
+              readOnly={false}
+              lightningAddress={lightningAddress}
+              limits={limits}
+              showPromoText={false}
+              removeSponsors={true}
+              border="none"
+              padding={0}
+              secondaryText={t('')}
+              width="full"
+            />
+          </FieldContainer>
         </VStack>
       </CardLayout>
 
