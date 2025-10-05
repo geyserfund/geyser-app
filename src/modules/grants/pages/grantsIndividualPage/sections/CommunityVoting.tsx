@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { H3 } from '@/shared/components/typography'
 
 import { useAuthContext } from '../../../../../context'
 import { GrantApplicant, GrantStatusEnum, VotingSystem } from '../../../../../types'
 import { GrantApplicantCard } from '../components/GrantApplicantCard'
+import { GrantItemTitle } from '../components/GrantItemTitle.tsx'
 
 interface Props {
   applicants: Array<GrantApplicant>
@@ -59,9 +59,7 @@ export const CommunityVoting = ({
   return (
     <>
       <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
-        <H3 size="lg" medium>
-          {t(title)}
-        </H3>
+        <GrantItemTitle>{t(title)}</GrantItemTitle>
         {sortedApplicants.map(({ project, funding, contributors, contributorsCount, voteCount }) => {
           return (
             <GrantApplicantCard

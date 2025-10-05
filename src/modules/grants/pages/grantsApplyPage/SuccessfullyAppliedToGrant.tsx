@@ -49,7 +49,14 @@ export const SuccessfullyAppliedToGrant = ({ projectName }: { projectName?: stri
         </VStack>
       </CardLayout>
       <HStack w="full" maxWidth="800px">
-        <Button flex={1} size="lg" variant="solid" colorScheme="primary1" as={Link} to={'../'}>
+        <Button
+          flex={1}
+          size="lg"
+          variant="solid"
+          colorScheme="primary1"
+          as={Link}
+          to={getPath('discoveryGrant', 'time2build')}
+        >
           {t('Back to grants')}
         </Button>
         <Button

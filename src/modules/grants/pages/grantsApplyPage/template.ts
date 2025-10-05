@@ -39,7 +39,9 @@ export const grantApplicationTemplateForGrantNo016: Template = {
     },
     images: {
       label: 'Header Images',
-      defaultValue: ['https://storage.googleapis.com/geyser-projects-media/grants/round-015/honeybadger-hackathon.png'],
+      defaultValue: [
+        'https://storage.googleapis.com/geyser-projects-media/grants/round-016/time2build_grant_header.webp',
+      ],
     },
     description: {
       label: 'Project Submission Form',
@@ -63,5 +65,5 @@ export const getDescriptionFromValues = ({
   learnings: string
   anythingElse: string
 }) => {
-  return `** Link to GitHub PR**  \n${githubLink}\n\n  \n  \n** Project Description**  \n${description}\n\n  \n   \n** Team**  \n${team}\n\n  \n  \n** Learnings & Challenges**  \n${learnings}\n\n  \n  \n** Anything Else Judges Should Know**  \n${anythingElse}`
+  return `## Link to GitHub PR  \n${githubLink}\n\n  \n  \n## Project Description  \n${description}\n\n  \n   \n## Team  \n${team}\n\n  \n  \n## Learnings & Challenges  \n${learnings}\n\n  \n  \n## Anything Else Judges Should Know  \n${anythingElse}`
 }

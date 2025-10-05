@@ -546,7 +546,7 @@ export const GrantsApplyPage = () => {
         </VStack>
       </CardLayout>
 
-      <VStack w="full" paddingTop={8} maxWidth="600px" paddingX={standardPadding}>
+      <VStack w="full" paddingTop={4} maxWidth="600px" paddingX={standardPadding}>
         <Body>
           {' '}
           {t('By submitting this project, you agree to our')}{' '}
