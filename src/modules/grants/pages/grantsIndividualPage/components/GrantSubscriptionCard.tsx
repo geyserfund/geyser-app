@@ -3,9 +3,11 @@ import { t } from 'i18next'
 import { PiBell } from 'react-icons/pi'
 
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
-import { Body, H3 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { SubscriptionForm } from '@/shared/molecules/forms/SubscriptionForm.tsx'
+
+import { GrantItemTitle } from './GrantItemTitle.tsx'
 
 type GrantSubscriptionSectionProps = {
   title: string
@@ -29,9 +31,7 @@ export const GrantSubscriptionSection = ({
         <Flex direction={{ base: 'column', md: 'row' }} align={{ base: 'stretch', md: 'center' }} gap={6}>
           <VStack align="start" spacing={2} flex={1}>
             <VStack align="start" spacing={1} w="90%">
-              <H3 size="lg" medium>
-                {title}
-              </H3>
+              <GrantItemTitle>{title}</GrantItemTitle>
               <Body size="md">{description}</Body>
             </VStack>
           </VStack>

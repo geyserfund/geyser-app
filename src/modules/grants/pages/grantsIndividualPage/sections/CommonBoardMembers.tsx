@@ -10,9 +10,7 @@ export const CommonBoardMembers = ({ members }: { members: GrantBoardMember[] })
   return (
     <VStack w={'full'} alignItems={'start'} paddingX={'10px'}>
       <Box my={4}>
-        <GrantItemTitle>
-        {t('Challenge Judges')}
-        </GrantItemTitle>
+        <GrantItemTitle>{t('Challenge Judges')}</GrantItemTitle>
         <Text color={'neutral.600'} fontWeight="600">
           {t('The judges will be responsible for reviewing and evaluating the applications.')}
         </Text>

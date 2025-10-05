@@ -2,7 +2,8 @@ import { Button, Image, Link } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
-import { H3 } from '@/shared/components/typography'
+
+import { GrantItemTitle } from './GrantItemTitle.tsx'
 
 interface GrantWinnerAnnouncementProps extends CardLayoutProps {
   imageUrl: string
@@ -13,9 +14,7 @@ export const GrantWinnerAnnouncement = ({ imageUrl, linkUrl, ...rest }: GrantWin
   const { t } = useTranslation()
   return (
     <CardLayout backgroundColor="neutral.0" w="full" alignItems="center" spacing="20px" {...rest}>
-      <H3 size="lg" medium>
-        {t('See the winner announcement')}
-      </H3>
+      <GrantItemTitle>{t('See the winner announcement')}</GrantItemTitle>
 
       <Image borderRadius="8px" maxWidth="350px" alt="grant-3-announcement-url" src={imageUrl} />
 

@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { Body, H3 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography'
 
 import { getPathWithGeyserHero } from '../../../../../shared/constants'
 import { standardPadding } from '../../../../../shared/styles'
 import { GrantApplicant, VotingSystem } from '../../../../../types'
 import { getShortAmountLabel, useMobileMode } from '../../../../../utils'
+import { GrantItemTitle } from '../components/GrantItemTitle.tsx'
 
 const CHART_BAR_COLORS = ['primary.900', 'primary.700', 'primary.500', 'primary.400', 'primary.100']
 
@@ -65,9 +66,7 @@ export const DistributionChart = ({
 
   return (
     <CardLayout noMobileBorder p={standardPadding} w="full">
-      <H3 size="lg" medium>
-        {t('Leaderboard')}
-      </H3>
+      <GrantItemTitle>{t('Leaderboard')}</GrantItemTitle>
       {percentages.length > 0 && (
         <Box py={2}>
           {displayedPercentages.map(
