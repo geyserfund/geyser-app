@@ -52,6 +52,7 @@ export const LargeGrantCard = ({ grant, showBanner }: Props) => {
           borderTopLeftRadius="8px"
           overflow="hidden"
           height={{ base: '296px', lg: '320px' }}
+          width="100%"
         >
           <Image
             objectFit="cover"
@@ -60,6 +61,7 @@ export const LargeGrantCard = ({ grant, showBanner }: Props) => {
             src={grant.image}
             alt={`${grant.title} grant banner image`}
             minWidth={'100%'}
+            height="100%"
           />
           {isMobile && (
             <Box position="absolute" top={2} right={1} zIndex={2} p={1} borderRadius="md">
