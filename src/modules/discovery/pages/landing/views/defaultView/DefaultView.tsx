@@ -19,17 +19,18 @@ import { RecentLaunches } from './sections/RecentLaunches.tsx'
 import { RecommendedForYou } from './sections/RecommendedForYou.tsx'
 import { SubCategoriesBar } from './sections/SubCategoriesBar.tsx'
 import { SuccessStories } from './sections/SuccessStories.tsx'
+import { WelcomeCard } from './sections/WelcomeCard.tsx'
 
 export const DefaultView = () => {
   return (
     <VStack w="full" spacing={10}>
       <SubCategoriesBar />
 
-      <LandingBackdropWrapper width="auto">
-        <Body dark size="3xl" bold>
-          {t('Fund and Fuel Bitcoin Adoption Worldwide')}
-        </Body>
-      </LandingBackdropWrapper>
+      {/* <Body dark size="3xl" bold>
+        {t('Fund and Fuel Bitcoin Adoption Worldwide')}
+      </Body> */}
+      <WelcomeCard />
+
       <VStack w="full" spacing={20} paddingBottom={40}>
         <Stack direction={{ base: 'column', md: 'row' }} w="full" alignItems="start" spacing={{ base: 4, lg: 12 }}>
           <Featured />

@@ -31,7 +31,7 @@ export const JoinTheMovement = () => {
   return (
     <VStack w="full" alignItems="start">
       <LandingPageSectionTitle>{t('Join the movement')}</LandingPageSectionTitle>
-      <CardLayout background="neutral1.3" w="full" noborder alignItems="center" spacing={6}>
+      <CardLayout background="neutral1.3" w="full" noborder alignItems="center" spacing={4}>
         <VStack spacing={0}>
           <Body textTransform="uppercase" size="5xl" fontFamily={fonts.cormorant} bold lineHeight={1}>
             {t('Guardians')}
@@ -43,7 +43,7 @@ export const JoinTheMovement = () => {
         <Body size="2xl" maxWidth="600px" textAlign="center" lineHeight={1.1}>
           {t('Limited-edition items made in collaboration with top Bitcoin brands that support Bitcoin creators.')}
         </Body>
-        <HStack w="full" justifyContent="space-between" flexWrap="wrap" maxWidth="800px">
+        <HStack w="full" justifyContent="space-between" flexWrap="wrap" maxWidth="700px">
           {ImagesToRender.map((image, index) => (
             <Image key={index} {...imageProps[index]} src={image} alt="Guardian" borderRadius="12px" height="full" />
           ))}

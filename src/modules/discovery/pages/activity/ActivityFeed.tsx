@@ -1,61 +1,34 @@
 import { HStack, VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { PiBell, PiGlobe } from 'react-icons/pi'
-import { Outlet, useLocation, useNavigate } from 'react-router'
+import { Outlet } from 'react-router'
 
-import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
-import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { getPath } from '@/shared/constants/index.ts'
 
 import { useLastVisistedFollowedProjects } from '../../hooks/useLastVisited'
+import { FilterComponent } from './components/FilterComponent.tsx'
+import { useFilterComponent } from './hooks/useFilterComponent.tsx'
 
 export const Activity = () => {
-  const navigate = useNavigate()
-
-  const location = useLocation()
-
-  const [activeIndex, setActiveIndex] = useState(0)
-
-  useEffect(() => {
-    if (location.pathname === getPath('discoveryActivityFollowed')) {
-      setActiveIndex(0)
-    } else if (location.pathname === getPath('discoveryActivityGlobal')) {
-      setActiveIndex(1)
-    }
-  }, [location.pathname])
-
   useLastVisistedFollowedProjects()
 
-  const items: AnimatedNavBarItem[] = [
-    {
-      name: 'Projects I Follow',
-      key: 'projectsIFollow',
-      icon: PiBell,
-      onClick() {
-        navigate(getPath('discoveryActivityFollowed'))
-      },
-    },
-    {
-      name: 'Global Feed',
-      key: 'globalFeed',
-      icon: PiGlobe,
-      onClick() {
-        navigate(getPath('discoveryActivityGlobal'))
-      },
-    },
-  ]
-
-  const { ...animatedNavBarProps } = useAnimatedNavBar({
-    items,
-    defaultView: 'projectsIFollow',
-  })
+  const {
+    filters,
+    postTypeDropdown,
+    categoryDropdown,
+    setPostType,
+    setCategory,
+    setSubCategory,
+    setFollowedProjects,
+    togglePostTypeDropdown,
+    toggleCategoryDropdown,
+    closeAllDropdowns,
+  } = useFilterComponent()
 
   return (
     <VStack
       h="full"
       paddingTop={{ base: `${dimensions.animatedNavBar.height.base}px`, lg: 0 }}
       width="full"
+      alignItems="flex-start"
       spacing={4}
       borderTopRadius="xl"
       bg="neutralAlpha.1"
@@ -64,13 +37,23 @@ export const Activity = () => {
         position={{ base: 'fixed', lg: 'sticky' }}
         paddingX={{ base: 3, lg: 0 }}
         top={{ base: `${dimensions.topNavBar.mobile.height}px`, lg: 0 }}
-        width="full"
         justifyContent="center"
         alignItems="center"
         bg="utils.pbg"
         zIndex={2}
       >
-        <AnimatedNavBar {...animatedNavBarProps} activeIndex={activeIndex} showIcon showLabel />
+        <FilterComponent
+          filters={filters}
+          postTypeDropdown={postTypeDropdown}
+          categoryDropdown={categoryDropdown}
+          onPostTypeChange={setPostType}
+          onCategoryChange={setCategory}
+          onSubCategoryChange={setSubCategory}
+          onFollowedProjectsChange={setFollowedProjects}
+          onTogglePostTypeDropdown={togglePostTypeDropdown}
+          onToggleCategoryDropdown={toggleCategoryDropdown}
+          onCloseAllDropdowns={closeAllDropdowns}
+        />
       </HStack>
       <Outlet />
     </VStack>

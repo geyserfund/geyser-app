@@ -1,6 +1,9 @@
 import { SimpleGrid } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { Link } from 'react-router-dom'
 
+import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
+import { getPath } from '@/shared/constants/index.ts'
 import { OrderByOptions, PostType, usePostsForLandingPageQuery } from '@/types/index.ts'
 
 import { LandingPostCard } from '../components/LandingPostCard.tsx'
@@ -30,7 +33,11 @@ export const RecentImpactPosts = () => {
   }
 
   return (
-    <ProjectRowLayout title={t('Recent Impact Posts')} width="100%">
+    <ProjectRowLayout
+      title={t('Recent Impact Posts')}
+      width="100%"
+      rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryActivity')} />}
+    >
       <SimpleGrid w="full" columns={{ base: 1, md: 2 }} spacing={{ base: 4, lg: 8 }}>
         {posts.map((post) => {
           return <LandingPostCard key={post.id} post={post} isMobile />

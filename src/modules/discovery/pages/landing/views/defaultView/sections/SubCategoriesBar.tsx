@@ -71,7 +71,7 @@ export const SubCategoriesBar = () => {
               key={category}
               size="lg"
               flex={1}
-              variant="soft"
+              variant="ghost"
               colorScheme="neutral1"
               _hover={{ cursor: 'pointer' }}
               onClick={() => handleCategoryClick(category)}
