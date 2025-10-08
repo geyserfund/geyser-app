@@ -4,6 +4,7 @@ import {
   FRAGMENT_PROJECT_FOR_LANDING_PAGE,
   FRAGMENT_PROJECT_FOR_LAUNCHPAD_PAGE,
   FRAGMENT_PROJECT_FOR_MY_PROJECTS,
+  FRAGMENT_PROJECT_THUMBNAIL_IMAGE,
 } from '../fragments/projectFragment'
 
 export const QUERY_PROJECTS_SUMMARY = gql`
@@ -111,6 +112,15 @@ export const QUERY_AON_PROJECTS_MOST_FUNDED_THIS_WEEK = gql`
       project {
         ...ProjectForLandingPage
       }
+    }
+  }
+`
+
+export const QUERY_PROJECT_THUMBNAIL_IMAGE = gql`
+  ${FRAGMENT_PROJECT_THUMBNAIL_IMAGE}
+  query ProjectThumbnailImage($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      ...ProjectThumbnailImage
     }
   }
 `

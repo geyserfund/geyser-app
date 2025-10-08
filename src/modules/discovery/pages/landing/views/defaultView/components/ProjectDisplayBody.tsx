@@ -1,4 +1,4 @@
-import { GridItem, SimpleGrid, Stack } from '@chakra-ui/react'
+import { GridItem, HStack, SimpleGrid, Stack } from '@chakra-ui/react'
 
 import { LandingCardBaseSkeleton, SkeletonLayout } from '@/shared/components/layouts'
 
@@ -18,7 +18,7 @@ interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'
   onSubtitleClick?: () => void
   subtitleId?: string
   rightContent?: React.ReactNode
-  post?: PostForLandingPageFragment
+  posts?: PostForLandingPageFragment[]
 }
 
 export const ProjectDisplayBody = ({
@@ -29,7 +29,7 @@ export const ProjectDisplayBody = ({
   onSubtitleClick,
   subtitleId,
   rightContent,
-  post,
+  posts,
 }: ProjectDisplayBodyProps) => {
   return (
     <ProjectRowLayout
@@ -40,12 +40,12 @@ export const ProjectDisplayBody = ({
       subtitleProps={{
         id: subtitleId,
         onClick: onSubtitleClick,
-        textDecoration: 'underline',
-        _hover: { cursor: 'pointer' },
+        fontStyle: 'italic',
+        textTransform: 'capitalize',
       }}
       rightContent={rightContent}
     >
-      <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacing={{ base: 8, lg: 6, xl: 8 }}>
+      <SimpleGrid w="full" columns={{ base: 1, lg: 5 }} spacing={{ base: 8, lg: 6, xl: 8 }}>
         {projects.map((project) => {
           return (
             <GridItem key={project.id}>
@@ -54,7 +54,13 @@ export const ProjectDisplayBody = ({
           )
         })}
       </SimpleGrid>
-      {post && <LandingPostCard post={post} marginTop={5} />}
+      {posts && (
+        <HStack w="full" alignItems="stretch" spacing={{ base: 6, lg: 12 }}>
+          {posts.map((post) => (
+            <LandingPostCard post={post} key={post.id} />
+          ))}
+        </HStack>
+      )}
     </ProjectRowLayout>
   )
 }

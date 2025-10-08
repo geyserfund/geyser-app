@@ -3,7 +3,7 @@ import { Outlet } from 'react-router'
 
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 
-import { useLastVisistedFollowedProjects } from '../../hooks/useLastVisited'
+import { useLastVisistedFollowedProjects } from '../../../../hooks/useLastVisited.ts'
 import { FilterComponent } from './components/FilterComponent.tsx'
 import { useFilterComponent } from './hooks/useFilterComponent.tsx'
 

@@ -4,16 +4,14 @@ import { Outlet } from 'react-router'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 import { standardPadding } from '@/shared/styles'
-import { discoveryPageCommonLayoutStyles } from '@/shared/styles/discoveryPageLayout'
 
 import { DiscoveryBottomNav } from '../navigation/discoveryNav/DiscoveryBottomNav'
-import { DiscoverySideNav } from '../navigation/discoveryNav/DiscoverySideNav'
 
 export const Discovery = () => {
   return (
     <>
-      <DiscoverySideNav />
-      <VStack w="full" h="full" {...discoveryPageCommonLayoutStyles}>
+      {/* <DiscoverySideNav /> */}
+      <VStack w="full" h="full">
         <Box
           w="100%"
           maxWidth={`${dimensions.maxWidth + 24 * 2}`}

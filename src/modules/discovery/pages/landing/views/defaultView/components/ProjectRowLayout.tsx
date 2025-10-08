@@ -3,6 +3,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { BodyProps } from '@/components/typography'
+import { LandingBackdropWrapper } from '@/shared/components/display/LandingBackdropWrapper.tsx'
 import { Body, H3 } from '@/shared/components/typography'
 
 export interface ProjectRowLayoutProps extends Omit<StackProps, 'title'> {
@@ -27,21 +28,32 @@ export const ProjectRowLayout = ({
   return (
     <VStack alignItems="start" spacing={5} {...rest}>
       <VStack w="full" spacing={0} alignItems={'start'}>
-        <HStack width="100%" justifyContent="space-between">
-          {typeof title === 'string' || subtitle ? (
-            <H3 size={{ base: '2xl', lg: '4xl' }} dark bold>
-              {title}{' '}
-              {subtitle && (
-                <Body as="span" color="primary1.11" paddingRight="4px" bold {...subtitleProps}>
-                  {subtitle}
-                </Body>
-              )}
-            </H3>
-          ) : (
-            title
-          )}
-          {rightContent}
-        </HStack>
+        <LandingBackdropWrapper paddingY={2} borderRadius="12px">
+          <HStack width="100%" justifyContent="space-between">
+            {typeof title === 'string' || subtitle ? (
+              <H3 size={'xl'} color="primary1.11" bold textTransform="uppercase">
+                {title}{' '}
+                {subtitle && (
+                  <Body
+                    as="span"
+                    color="primary1.11"
+                    paddingX="4px"
+                    bold
+                    fontStyle="italic"
+                    textTransform="capitalize"
+                    {...subtitleProps}
+                  >
+                    {subtitle}
+                  </Body>
+                )}
+              </H3>
+            ) : (
+              title
+            )}
+            {rightContent}
+          </HStack>
+        </LandingBackdropWrapper>
+
         {subtext && (
           <Body as="span" color="neutralAlpha.11" regular>
             {t(subtext)}

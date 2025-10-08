@@ -85,3 +85,12 @@ export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
     }
   }
 `
+
+export const FRAGMENT_PROJECT_THUMBNAIL_IMAGE = gql`
+  fragment ProjectThumbnailImage on Project {
+    id
+    title
+    name
+    thumbnailImage
+  }
+`

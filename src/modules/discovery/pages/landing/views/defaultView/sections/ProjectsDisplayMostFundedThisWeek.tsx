@@ -19,7 +19,7 @@ interface ProjectDisplayProps {
   subCategory?: ProjectSubCategory
 }
 
-const NO_OF_PROJECT_TO_LOAD = 4
+const NO_OF_PROJECT_TO_LOAD = 5
 
 export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: ProjectDisplayProps) => {
   const { t } = useTranslation()
@@ -70,7 +70,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
 
   const ProjectByCategoryList =
     data?.projectsMostFundedByCategory?.filter((tagMap) => tagMap.projects.length >= 4) || []
-  const post = postsQueryData?.posts[0]
+
   return (
     <>
       {ProjectByCategoryList.map((projectByCategory) => {
@@ -92,7 +92,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
                 : t('Recent Projects')
             }
             projects={projects}
-            post={post}
+            posts={postsQueryData?.posts || []}
             rightContent={
               <DiscoverMoreButton
                 id={category ? `discovery-see-all-${category}` : subCategory ? `discovery-see-all-${subCategory}` : ''}

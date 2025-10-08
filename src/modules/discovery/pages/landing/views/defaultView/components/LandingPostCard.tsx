@@ -9,7 +9,7 @@ import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
 import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { halfStandardPadding } from '@/shared/styles/reponsiveValues.ts'
+import {  standardPadding } from '@/shared/styles/reponsiveValues.ts'
 import { PostForLandingPageFragment } from '@/types/index.ts'
 import { toInt } from '@/utils/index.ts'
 
@@ -68,7 +68,8 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
       }}
       onClick={() => navigate(getPath('projectPostView', post.project?.name || '', post.id))}
       borderRadius="8px"
-      padding={halfStandardPadding}
+      padding={standardPadding}
+      marginX={{ base: -3, lg: -6 }}
       {...rest}
     >
       <Stack width="100%" direction={getResponsiveValue({ base: 'column', lg: 'row' })} spacing={4}>
@@ -85,7 +86,7 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
             objectFit="cover"
           />
         </Box>
-        <VStack flex={1} alignItems="start">
+        <VStack flex={1} alignItems="start" overflow="hidden">
           <Box w="full" display={getResponsiveValue({ base: 'none', lg: 'block' })}>
             {renderProjectContent()}
           </Box>
@@ -93,7 +94,7 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
           <Body size="xl" medium dark>
             {post.title}
           </Body>
-          <Body medium dark wordBreak={'break-all'}>
+          <Body medium dark wordBreak={'break-all'} noOfLines={3}>
             {post.description}
           </Body>
           <HStack w={'full'}>

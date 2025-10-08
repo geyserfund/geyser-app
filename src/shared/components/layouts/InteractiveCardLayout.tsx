@@ -42,7 +42,6 @@ export const InteractiveCardLayout = ({
     if (node) {
       const resizeObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
-          console.log('checking content height', entry.contentRect.height)
           setContentHeight(entry.contentRect.height)
         }
       })

@@ -22,7 +22,7 @@ export const RecommendedForYou = () => {
 
   const renderProjects = () => {
     if (loading) {
-      return [...Array(4).keys()].map((key) => (
+      return [...Array(6).keys()].map((key) => (
         <GridItem key={key}>
           <LandingCardBaseSkeleton />
         </GridItem>

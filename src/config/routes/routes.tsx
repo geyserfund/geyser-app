@@ -1,7 +1,7 @@
 import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
 import { SignOut } from '@/modules/auth/pages/SignOut.tsx'
-import { ActivityDirection } from '@/modules/discovery/pages/activity/components/ActivityDirection.tsx'
+import { ActivityDirection } from '@/modules/discovery/pages/landing/views/activity/components/ActivityDirection'
 
 import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
@@ -781,6 +781,27 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
+        path: getPath('discoveryCampaigns'),
+        async lazy() {
+          const Campaigns = await Discovery().then((m) => m.Campaigns)
+          return { Component: Campaigns }
+        },
+      },
+      {
+        path: getPath('discoveryFundraisers'),
+        async lazy() {
+          const Fundraisers = await Discovery().then((m) => m.Fundraisers)
+          return { Component: Fundraisers }
+        },
+      },
+      {
+        path: getPath('discoveryProducts'),
+        async lazy() {
+          const Products = await Discovery().then((m) => m.Products)
+          return { Component: Products }
+        },
+      },
+      {
         path: getPath('discoveryProjectCategory', PathName.categoryName),
         async lazy() {
           const Landing = await Discovery().then((m) => m.Landing)
@@ -803,13 +824,7 @@ export const platformRoutes: RouteObject[] = [
           }
         },
       },
-      {
-        path: getPath('discoveryProducts'),
-        async lazy() {
-          const Products = await Discovery().then((m) => m.Products)
-          return { Component: Products }
-        },
-      },
+
       {
         path: getPath('discoveryActivity'),
         async lazy() {

@@ -6,6 +6,7 @@ import { checkIfRenderFilter } from '@/utils/helpers'
 
 import { FilterComponent } from '../../filters/FilterComponent'
 import { DefaultView } from './views/defaultView/DefaultView'
+import { TitleBar } from './views/defaultView/sections/TitleBar.tsx'
 import { PaginatedView } from './views/paginatedView/PaginatedView'
 
 export const Landing = () => {
@@ -23,6 +24,8 @@ export const Landing = () => {
 
   return (
     <VStack w="full" spacing={4}>
+      <TitleBar />
+
       {isMobileMode && <FilterComponent />}
       {renderView()}
     </VStack>

@@ -8,7 +8,7 @@ import {
 } from '../../../../../../../types'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
 
-const NO_OF_PROJECT_TO_LOAD = 4
+const NO_OF_PROJECT_TO_LOAD = 5
 
 export const RecentLaunches = () => {
   const { loading, data } = useProjectsForLandingPageQuery({

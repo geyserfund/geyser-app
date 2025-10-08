@@ -1,4 +1,12 @@
-import { HStack, Icon, IconButton, InputGroup, InputLeftElement, InputRightElement } from '@chakra-ui/react'
+import {
+  HStack,
+  Icon,
+  IconButton,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { useDebouncedCallback } from '@react-hookz/web'
 import { useEffect, useRef, useState } from 'react'
@@ -6,13 +14,14 @@ import { useTranslation } from 'react-i18next'
 import { PiFunnelSimple, PiMagnifyingGlass } from 'react-icons/pi'
 
 import { useFilterContext } from '@/context/filter'
-import { MapButton } from '@/modules/navigation/platformNavBar/components/MapButton.tsx'
 import { useModal } from '@/shared/hooks'
 
 import { FilterModal } from './FilterModal'
 
 export const FilterComponent = () => {
   const inputRef = useRef<HTMLInputElement>(null)
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [search, setSearch] = useState('')
 
@@ -39,10 +48,8 @@ export const FilterComponent = () => {
   }
 
   return (
-    <HStack w="full">
-      <MapButton />
+    <HStack>
       <form
-        style={{ width: '100%' }}
         onSubmit={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -50,10 +57,27 @@ export const FilterComponent = () => {
         }}
       >
         <InputGroup>
-          <InputLeftElement color="neutral1.11">
+          <InputLeftElement
+            color="neutral1.11"
+            onClick={() => {
+              onOpen()
+              inputRef.current?.focus()
+            }}
+            _hover={{
+              cursor: 'pointer',
+            }}
+          >
             <Icon as={PiMagnifyingGlass} fontSize="20px" />
           </InputLeftElement>
-          <Input ref={inputRef} placeholder={t('Search project')} value={search} onChange={handleSearchUpdate} />
+          <Input
+            ref={inputRef}
+            placeholder={t('Filter Projects')}
+            width={isOpen ? 'auto' : '40px'}
+            value={search}
+            onFocus={onOpen}
+            onBlur={() => !search && onClose()}
+            onChange={handleSearchUpdate}
+          />
           <InputRightElement minWidth="46px">
             <IconButton
               aria-label="filter"

@@ -12,7 +12,7 @@ import { guardianColors } from './ProfileAvatar'
 
 type ProfileTextProps = {
   guardian?: GuardianType | null
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'xs' | 'sm' | 'md' | 'lg'
   name?: string
   wrapperProps?: StackProps
 } & BodyProps
@@ -43,7 +43,7 @@ export const ProfileText = ({ guardian, size = 'md', name, children, wrapperProp
             <Image
               src={guardianJewel}
               alt={`${guardian}-jewel`}
-              width={size === 'sm' ? '20px' : size === 'md' ? '24px' : '28px'}
+              width={size === 'xs' ? '16px' : size === 'sm' ? '20px' : size === 'md' ? '24px' : '28px'}
               _hover={{ cursor: 'pointer' }}
               onClick={(e) => {
                 e.preventDefault()

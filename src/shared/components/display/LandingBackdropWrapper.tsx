@@ -15,7 +15,7 @@ export const LandingBackdropWrapper = ({ children, ...rest }: PropsWithChildren<
       backgroundPosition="center"
       backgroundRepeat="no-repeat"
       backgroundBlendMode="color-burn"
-      backgroundColor="overlay.white.10"
+      backgroundColor="overlay.white.11"
       {...rest}
     >
       {children}

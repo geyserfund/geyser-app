@@ -9,11 +9,8 @@ import { EmailPromptModal } from '@/modules/auth/components/EmailPromptModal'
 import { NotificationPromptModal } from '@/modules/auth/components/NotificationPromptModal'
 import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
 import { useNotificationPromptModal } from '@/modules/auth/hooks/useNotificationPromptModal'
-import { FilterComponent } from '@/modules/discovery/filters/FilterComponent'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { discoveryPageCommonLayoutStyles } from '@/shared/styles/discoveryPageLayout'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { useMobileMode } from '@/utils'
 
 import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
@@ -30,6 +27,7 @@ import {
   shouldShowProjectLogoAtom,
   useIsManifestoPage,
 } from './platformNavBarAtom'
+import { PlatformNav } from './profileNav/components/PlatformNav.tsx'
 import { ProfileNav } from './profileNav/ProfileNav'
 
 export const PlatformNavBar = () => {
@@ -41,8 +39,6 @@ export const PlatformNavBar = () => {
   )
 
   const isManifestoPage = useIsManifestoPage()
-
-  const isMobileMode = useMobileMode()
 
   const shouldShowProjectLogo = useAtomValue(shouldShowProjectLogoAtom)
   const shouldShowGeyserLogo = useAtomValue(shouldShowGeyserLogoAtom)
@@ -87,11 +83,7 @@ export const PlatformNavBar = () => {
 
   const renderLeftSide = useCallback(() => {
     if (isPlatformRoutes) {
-      if (isMobileMode) {
-        return <BrandLogoFull />
-      }
-
-      return <FilterComponent />
+      return <BrandLogoFull />
     }
 
     if (shouldShowProjectLogo) {
@@ -103,7 +95,7 @@ export const PlatformNavBar = () => {
     }
 
     return <BrandLogo showOutline={isGuardiansPage} />
-  }, [shouldShowGeyserLogo, shouldShowProjectLogo, isPlatformRoutes, isMobileMode, isGuardiansPage])
+  }, [shouldShowGeyserLogo, shouldShowProjectLogo, isPlatformRoutes, isGuardiansPage])
 
   const ShareGuardiansButton = () => {
     return (
@@ -162,7 +154,6 @@ export const PlatformNavBar = () => {
       w="full"
       position="fixed"
       top={0}
-      {...(isPlatformRoutes && discoveryPageCommonLayoutStyles)}
       justifyContent={'center'}
       zIndex={9}
       bgColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
@@ -184,17 +175,19 @@ export const PlatformNavBar = () => {
           w="100%"
           height={{ base: '40px', lg: '48px' }}
           justifyContent={'space-between'}
-          spacing={{ base: 2, lg: 16 }}
+          spacing={{ base: 2, lg: 4 }}
         >
-          <HStack height="full" w="full" flex={1}>
+          <HStack height="full">
             {isGuardiansPage && <BackButton />}
             {renderLeftSide()}
           </HStack>
 
+          <PlatformNav />
+
           {isManifestoPage ? (
             <CloseGoBackButton />
           ) : (
-            <HStack position="relative">
+            <HStack position="relative" spacing={2}>
               {!isLoggedIn ? (
                 <>
                   <LoginButton />

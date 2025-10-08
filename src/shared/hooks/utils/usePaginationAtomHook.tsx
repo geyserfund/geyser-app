@@ -1,4 +1,5 @@
 import { SetStateAction } from 'jotai'
+import { Dispatch } from 'react'
 
 import { PaginationInput } from '../../../types'
 import { validNumber } from '../../../utils'
@@ -20,7 +21,9 @@ export type usePaginationAtomHookProps<TEntity, TTransformed = TEntity> = {
   variables?: any
   orderBy?: any
   resultMap?: (_: TEntity[]) => TTransformed[]
-  setData: SetAtom<[SetStateAction<PaginatedListType<TEntity, TTransformed>>], void>
+  setData:
+    | SetAtom<[SetStateAction<PaginatedListType<TEntity, TTransformed>>], void>
+    | Dispatch<SetStateAction<PaginatedListType<TEntity, TTransformed>>>
 }
 
 const thresholdNoOfAggregatedResultsToFetchMore = 5

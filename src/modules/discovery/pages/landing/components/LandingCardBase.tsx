@@ -97,14 +97,20 @@ export const LandingCardBase = ({
             <ProfileAvatar
               guardian={projectOwner?.guardianType}
               src={projectOwner?.imageUrl || ''}
-              size="sm"
               onClick={handleProfileClick}
+              height="28px"
+              width="28px"
+              wrapperProps={{
+                padding: '2px',
+                height: '32px',
+                width: '32px',
+              }}
             />
           </Box>
         </Tooltip>
         <VStack flex={1} alignItems="start" spacing={0} overflow="hidden">
           <H3
-            size="lg"
+            size="md"
             medium
             width="100%"
             isTruncated={alwaysTruncate || !isOpen}
@@ -128,7 +134,7 @@ export const LandingCardBase = ({
               />
             </Box>
             <ProfileText
-              size="sm"
+              size="xs"
               guardian={projectOwner?.guardianType}
               _hover={{ textDecoration: 'underline' }}
               onClick={handleProfileClick}
@@ -200,7 +206,7 @@ export const LandingCardBase = ({
           paddingBottom={getResponsiveValue({ base: 3, lg: 4 })}
           width="100%"
           alignItems="start"
-          marginTop={hideContributionContent ? '-52px' : '-84px'}
+          marginTop={hideContributionContent ? '-49px' : '-81px'}
         >
           <VStack w="full" spacing={0} opacity={!isOpen ? 0 : 1}>
             {headerContent({ highlight: true })}

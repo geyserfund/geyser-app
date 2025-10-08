@@ -52,11 +52,11 @@ export const dimensions = {
     },
     leftMainContainer: {
       width: '658px',
-      minWidth: '500px',
+      minWidth: '400px',
     },
     rightSideNav: {
       width: '400px',
-      gap: '20px',
+      gap: { base: '20px', xl: '60px' },
     },
     header: {
       maxHeight: '369px',
