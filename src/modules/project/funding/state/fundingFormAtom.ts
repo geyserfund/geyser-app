@@ -571,9 +571,9 @@ export const isFundingInputAmountValidAtom = atom((get) => {
 
   const isException = isProjectAnException(fundingProjectState.name)
 
-  if (totalAmount === 0) {
+  if (totalAmount < 1000) {
     return {
-      title: `The payment minimum is 1 satoshi.`,
+      title: `The payment minimum is 1000 satoshi.`,
       description: 'Please update the amount.',
       valid: false,
     }
