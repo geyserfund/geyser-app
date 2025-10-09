@@ -46,8 +46,8 @@ export const ProjectContainer = () => {
         width="100%"
         height="100%"
         paddingTop={{
-          base: `${dimensions.projectNavBar.mobile.height}px`,
-          lg: `${dimensions.projectNavBar.desktop.height}px`,
+          base: `${dimensions.projectNavBar.mobile.height + 20}px`,
+          lg: `${dimensions.projectNavBar.desktop.height + 20}px`,
         }}
         paddingX={standardPadding}
         alignItems="center"

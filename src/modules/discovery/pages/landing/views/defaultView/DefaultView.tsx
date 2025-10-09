@@ -1,13 +1,8 @@
 import { Stack, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
-import { Link } from 'react-router-dom'
 
-import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
-import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCategoryList } from '@/shared/constants/platform/projectCategory.ts'
 
 import { HeroesMainPage } from '../../../heroes/index.ts'
-import { ProjectRowLayout } from './components/ProjectRowLayout.tsx'
 import { TopProjects } from './components/TopProjects.tsx'
 import { AonProjectsDisplayMostFundedThisWeek } from './sections/AonProjectsDisplayMostFundedThisWeek.tsx'
 import { CharityProjects } from './sections/CharityProjects.tsx'
@@ -36,14 +31,7 @@ export const DefaultView = () => {
         <AonProjectsDisplayMostFundedThisWeek />
         <TiaProjectsDisplayMostFundedThisWeek />
 
-        <ProjectRowLayout
-          title={t("What's happening")}
-          subtitle={t('Discover the latest activity')}
-          width="100%"
-          rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryActivity')} />}
-        >
-          <RecentImpactPosts />
-        </ProjectRowLayout>
+        <RecentImpactPosts />
 
         {ProjectCategoryList.map((category) => (
           <ProjectsDisplayMostFundedThisWeek key={category} category={category} />

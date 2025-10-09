@@ -19,7 +19,7 @@ interface ProjectDisplayProps {
   subCategory?: ProjectSubCategory
 }
 
-const NO_OF_PROJECT_TO_LOAD = 5
+const NO_OF_PROJECT_TO_LOAD = 6
 
 export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: ProjectDisplayProps) => {
   const { t } = useTranslation()
@@ -45,7 +45,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
           publishedAt: OrderByOptions.Desc,
         },
         pagination: {
-          take: 1,
+          take: 2,
         },
         where: {
           category,

@@ -9,7 +9,7 @@ import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
 import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import {  standardPadding } from '@/shared/styles/reponsiveValues.ts'
+import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 import { PostForLandingPageFragment } from '@/types/index.ts'
 import { toInt } from '@/utils/index.ts'
 

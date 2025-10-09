@@ -161,11 +161,7 @@ export const PlatformNavBar = () => {
       <VStack
         paddingY={{ base: 5, lg: 8 }}
         paddingX={{ base: 3, lg: 6 }}
-        maxWidth={
-          isGuardiansPage
-            ? dimensions.guardians.maxWidth
-            : { base: dimensions.maxWidth + 24, lg: dimensions.maxWidth + 48 }
-        }
+        maxWidth={dimensions.guardians.maxWidth}
         width="100%"
         backgroundColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
         justifySelf={'center'}
@@ -182,7 +178,7 @@ export const PlatformNavBar = () => {
             {renderLeftSide()}
           </HStack>
 
-          <PlatformNav />
+          {isPlatformRoutes && <PlatformNav />}
 
           {isManifestoPage ? (
             <CloseGoBackButton />

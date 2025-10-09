@@ -7,6 +7,7 @@ import { LandingBackdropWrapper } from '@/shared/components/display/LandingBackd
 import { Body, H3 } from '@/shared/components/typography'
 
 export interface ProjectRowLayoutProps extends Omit<StackProps, 'title'> {
+  titleWrapperProps?: StackProps
   title: string | React.ReactNode
   subtitle?: string
   subtext?: string
@@ -22,16 +23,17 @@ export const ProjectRowLayout = ({
   subtext,
   children,
   rightContent,
+  titleWrapperProps,
   ...rest
 }: ProjectRowLayoutProps) => {
   const { t } = useTranslation()
   return (
-    <VStack alignItems="start" spacing={5} {...rest}>
-      <VStack w="full" spacing={0} alignItems={'start'}>
+    <VStack alignItems="start" spacing={6} {...rest}>
+      <VStack w="full" spacing={0} alignItems={'start'} {...titleWrapperProps}>
         <LandingBackdropWrapper paddingY={2} borderRadius="12px">
           <HStack width="100%" justifyContent="space-between">
             {typeof title === 'string' || subtitle ? (
-              <H3 size={'xl'} color="primary1.11" bold textTransform="uppercase">
+              <H3 size={'lg'} color="primary1.11" bold textTransform="uppercase">
                 {title}{' '}
                 {subtitle && (
                   <Body

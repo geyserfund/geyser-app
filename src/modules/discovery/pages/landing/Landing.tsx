@@ -23,7 +23,7 @@ export const Landing = () => {
   }
 
   return (
-    <VStack w="full" spacing={4}>
+    <VStack w="full" spacing={4} paddingTop={8}>
       <TitleBar />
 
       {isMobileMode && <FilterComponent />}
