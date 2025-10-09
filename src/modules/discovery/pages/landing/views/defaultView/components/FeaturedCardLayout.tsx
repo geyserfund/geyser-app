@@ -43,8 +43,8 @@ export const FeaturedCardLayout = ({
     >
       <HStack
         width="100%"
-        height="auto"
-        maxHeight="300px"
+        height="100%"
+        maxHeight="350px"
         aspectRatio={3 / 2}
         overflow="hidden"
         borderRadius="8px"

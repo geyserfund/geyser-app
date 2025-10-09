@@ -107,7 +107,7 @@ export const AnimatedNavSlide = ({
         <motion.div
           style={{
             position: 'absolute',
-            bottom: '-4px',
+            bottom: '-20px',
             height: '4px',
             background: SuccessImageBackgroundGradient,
             zIndex: props.zIndex ? toInt(`${props.zIndex}`) + 1 : 3,
@@ -164,16 +164,16 @@ export const AnimatedNavSlide = ({
                 h="full"
                 zIndex={props.zIndex ? toInt(`${props.zIndex}`) + 2 : 4}
                 p={0}
-                spacing={1}
+                spacing={0}
                 justifyContent="center"
-                alignItems="flex-end"
+                alignItems="center"
                 onClick={() => {
                   console.log('clicked')
                 }}
               >
                 {item.icon}
                 {
-                  <Body as="span" size="lg" fontWeight={isActive ? 600 : 400}>
+                  <Body as="span" size="lg" fontWeight={isActive ? 700 : 500} paddingTop={6}>
                     {t(item.name)}
                   </Body>
                 }
@@ -199,6 +199,8 @@ const ProjectNavigationButton: ComponentWithAs<
       backgroundColor={'transparent'}
       color={disableColorMode ? lightModeColors.neutral1[12] : 'neutral1.12'}
       _disabled={{ color: disableColorMode ? lightModeColors.neutral1[9] : 'neutral1.9' }}
+      _focus={{}}
+      _active={{}}
       padding={0}
       {...props}
     />

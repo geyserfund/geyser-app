@@ -62,9 +62,9 @@ export const RecentImpactPosts = () => {
       <HStack alignItems="stretch">
         <VStack flex={2} w="full" alignItems="start" justifyContent="start">
           <LandingPageSectionTitle>{t('Impact Posts')}</LandingPageSectionTitle>
-          <SimpleGrid w="full" columns={{ base: 1, md: 2 }}>
+          <SimpleGrid w="full" columns={{ base: 1, md: 1 }} spacingY={0}>
             {posts.map((post) => {
-              return <LandingPostCard key={post.id} post={post} isMobile />
+              return <LandingPostCard key={post.id} post={post} />
             })}
           </SimpleGrid>
         </VStack>
@@ -74,7 +74,9 @@ export const RecentImpactPosts = () => {
           <VStack w="full" alignItems="start" spacing={6}>
             {!contributionsLoading &&
               contributionsData?.contributionsGet?.contributions.map((contribution) => {
-                return <ContributionCard key={contribution.id} contribution={contribution} textMaxWidth="100px" />
+                return (
+                  <ContributionCard key={contribution.id} contribution={contribution} textMaxWidth="100px" size="lg" />
+                )
               })}
           </VStack>
         </VStack>

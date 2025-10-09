@@ -1,4 +1,5 @@
-import { Badge, HStack, Icon, Image } from '@chakra-ui/react'
+/* eslint-disable complexity */
+import { Badge, BadgeProps, HStack, Icon, Image } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
 import { PiArrowFatLineRightFill } from 'react-icons/pi'
@@ -128,10 +129,13 @@ export const FeaturedContributions = () => {
 export const ContributionCard = ({
   contribution,
   textMaxWidth = '200px',
+  size = 'md',
+  ...rest
 }: {
   contribution: ContributionForLandingPageFragment
   textMaxWidth?: string
-}) => {
+  size?: 'md' | 'lg'
+} & BadgeProps) => {
   const { user } = contribution.funder
 
   const navigate = useNavigate()
@@ -158,11 +162,12 @@ export const ContributionCard = ({
       as={HStack}
       colorScheme={colorScheme}
       variant="surface"
-      size="lg"
+      size={size === 'lg' ? 'xl' : 'md'}
       onClick={() => navigate(getPath('project', project.name))}
       _hover={{
         cursor: 'pointer',
       }}
+      {...rest}
     >
       <Body size="sm" light>
         {commaFormatted(contribution.amount)} sats
@@ -171,12 +176,12 @@ export const ContributionCard = ({
         <ProfileAvatar
           src={user?.imageUrl || ''}
           guardian={user?.guardianType}
-          height="18px"
-          width="18px"
+          height={size === 'lg' ? '24px' : '18px'}
+          width={size === 'lg' ? '24px' : '18px'}
           wrapperProps={{
             padding: '1px',
-            height: '20px',
-            width: '20px',
+            height: size === 'lg' ? '24px' : '20px',
+            width: size === 'lg' ? '24px' : '20px',
           }}
         />
         <ProfileText guardian={user?.guardianType} maxWidth={textMaxWidth} isTruncated>
@@ -185,7 +190,13 @@ export const ContributionCard = ({
       </HStack>
       <Icon as={PiArrowFatLineRightFill} />
       <HStack>
-        <Image src={project?.thumbnailImage || ''} height="18px" width="18px" borderRadius="4px" objectFit="cover" />
+        <Image
+          src={project?.thumbnailImage || ''}
+          height={size === 'lg' ? '24px' : '18px'}
+          width={size === 'lg' ? '24px' : '18px'}
+          borderRadius="4px"
+          objectFit="cover"
+        />
         <Body size="sm" light isTruncated maxWidth={textMaxWidth}>
           {project.title}
         </Body>

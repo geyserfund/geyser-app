@@ -71,7 +71,11 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
         <Box w="full" display={getResponsiveValue({ base: 'block', lg: 'none' })}>
           {renderProjectContent()}
         </Box>
-        <Box width={getResponsiveValue({ base: '100%', lg: '48%' })} height="200px" maxHeight={'200px'}>
+        <Box
+          width={getResponsiveValue({ base: '100%', lg: '55%' })}
+          height="200px"
+          maxHeight={isMobile ? '200px' : '150px'}
+        >
           <ImageWithReload
             src={post.image || ''}
             alt={post.title}
@@ -89,12 +93,12 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
           <Body size="md" bold dark>
             {post.title}
           </Body>
-          <Body size="sm" medium dark wordBreak={'break-all'} noOfLines={2}>
+          <Body size="sm" medium dark wordBreak={'break-all'} noOfLines={3}>
             {post.description}
           </Body>
-          <HStack w={'full'} paddingTop={2}>
+          <HStack w={'full'} paddingTop={2} flexWrap="wrap">
             {post.postType && (
-              <Badge variant="soft" colorScheme="neutral1">
+              <Badge variant="soft" colorScheme="neutral1" size="sm">
                 {post.postType}
               </Badge>
             )}

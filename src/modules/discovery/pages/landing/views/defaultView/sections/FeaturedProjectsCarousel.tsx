@@ -44,7 +44,7 @@ export const FeaturedProjectsCarousel = ({ allAirtableData }: FeaturedProjectsCa
   }
 
   return (
-    <VStack w="full">
+    <VStack w="full" flex={1} justifyContent="space-between">
       <Box position="relative" width="100%">
         {allAirtableData.map((airtableData, index) => (
           <Box

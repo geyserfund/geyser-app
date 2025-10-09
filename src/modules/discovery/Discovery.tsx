@@ -20,7 +20,7 @@ export const Discovery = () => {
           paddingBottom={{ base: 28, lg: 10 }}
         >
           <Outlet />
-          <UserExternalLinksComponent onlyMobile />
+          <UserExternalLinksComponent />
         </Box>
       </VStack>
 

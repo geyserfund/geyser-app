@@ -23,7 +23,7 @@ export const DefaultView = () => {
       </Body> */}
 
       <VStack w="full" spacing={20} paddingBottom={40}>
-        <Stack direction={{ base: 'column', md: 'row' }} w="full" alignItems="start" spacing={{ base: 4, lg: 12 }}>
+        <Stack direction={{ base: 'column', md: 'row' }} w="full" alignItems="stretch" spacing={{ base: 4, lg: 12 }}>
           <Featured />
           <RecommendedForYou />
         </Stack>
@@ -42,8 +42,6 @@ export const DefaultView = () => {
         <HeroesMainPage />
 
         <TopProjects />
-
-        {/* <SuccessStories /> */}
 
         <JoinTheMovement />
 
