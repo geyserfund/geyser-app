@@ -39,7 +39,12 @@ export const RecommendedForYou = () => {
   return (
     <VStack alignItems="start" flex={1} spacing={5} width="100%">
       <LandingPageSectionTitle>{t('Recommended for you')}</LandingPageSectionTitle>
-      <SimpleGrid width="100%" columns={{ base: 1, xs: 2 }} spacing={{ base: 4, lg: 8 }}>
+      <SimpleGrid
+        width="100%"
+        columns={{ base: 1, xs: 2 }}
+        spacingX={{ base: 4, lg: 12 }}
+        spacingY={{ base: 4, lg: 6 }}
+      >
         {renderProjects()}
       </SimpleGrid>
     </VStack>

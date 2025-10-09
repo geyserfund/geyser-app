@@ -40,7 +40,7 @@ export const RecentImpactPosts = () => {
           createdAt: OrderByOptions.Desc,
         },
         pagination: {
-          take: 16,
+          take: 12,
         },
       },
     },

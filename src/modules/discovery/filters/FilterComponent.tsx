@@ -1,12 +1,4 @@
-import {
-  HStack,
-  Icon,
-  IconButton,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { HStack, Icon, IconButton, InputGroup, InputLeftElement, InputRightElement } from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { useDebouncedCallback } from '@react-hookz/web'
 import { useEffect, useRef, useState } from 'react'
@@ -20,8 +12,6 @@ import { FilterModal } from './FilterModal'
 
 export const FilterComponent = () => {
   const inputRef = useRef<HTMLInputElement>(null)
-
-  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [search, setSearch] = useState('')
 
@@ -57,28 +47,17 @@ export const FilterComponent = () => {
         }}
       >
         <InputGroup>
-          <InputLeftElement
-            color="neutral1.11"
-            onClick={() => {
-              onOpen()
-              inputRef.current?.focus()
-            }}
-            _hover={{
-              cursor: 'pointer',
-            }}
-          >
+          <InputLeftElement color="neutral1.11">
             <Icon as={PiMagnifyingGlass} fontSize="20px" />
           </InputLeftElement>
           <Input
             ref={inputRef}
-            placeholder={t('Filter Projects')}
-            width={isOpen ? 'auto' : '40px'}
+            placeholder={t('search projects')}
+            width={'220px'}
             value={search}
-            onFocus={onOpen}
-            onBlur={() => !search && onClose()}
             onChange={handleSearchUpdate}
           />
-          <InputRightElement minWidth="46px">
+          <InputRightElement minWidth="40px">
             <IconButton
               aria-label="filter"
               variant="ghost"

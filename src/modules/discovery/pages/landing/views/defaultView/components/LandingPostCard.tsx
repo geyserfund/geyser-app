@@ -1,7 +1,6 @@
-import { Badge, Box, HStack, Icon, Stack, StackProps, VStack } from '@chakra-ui/react'
+import { Badge, Box, HStack, Stack, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
-import { PiNewspaper } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload.tsx'
@@ -40,10 +39,6 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
           <Body size="sm" light isTruncated maxWidth="200px">
             {post?.project?.title}
           </Body>
-          <HStack marginLeft="20px">
-            <Icon as={PiNewspaper} />
-            <Body light>{t('New post')}</Body>
-          </HStack>
         </HStack>
         {post.publishedAt && (
           <Body size="sm" light>
@@ -72,7 +67,7 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
       marginX={{ base: -3, lg: -6 }}
       {...rest}
     >
-      <Stack width="100%" direction={getResponsiveValue({ base: 'column', lg: 'row' })} spacing={4}>
+      <Stack width="100%" direction={getResponsiveValue({ base: 'column', lg: 'row' })}>
         <Box w="full" display={getResponsiveValue({ base: 'block', lg: 'none' })}>
           {renderProjectContent()}
         </Box>
@@ -86,18 +81,18 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
             objectFit="cover"
           />
         </Box>
-        <VStack flex={1} alignItems="start" overflow="hidden">
+        <VStack flex={1} alignItems="start" overflow="hidden" spacing={0}>
           <Box w="full" display={getResponsiveValue({ base: 'none', lg: 'block' })}>
             {renderProjectContent()}
           </Box>
 
-          <Body size="xl" medium dark>
+          <Body size="md" bold dark>
             {post.title}
           </Body>
-          <Body medium dark wordBreak={'break-all'} noOfLines={3}>
+          <Body size="sm" medium dark wordBreak={'break-all'} noOfLines={2}>
             {post.description}
           </Body>
-          <HStack w={'full'}>
+          <HStack w={'full'} paddingTop={2}>
             {post.postType && (
               <Badge variant="soft" colorScheme="neutral1">
                 {post.postType}

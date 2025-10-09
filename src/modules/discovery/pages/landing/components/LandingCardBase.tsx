@@ -178,7 +178,7 @@ export const LandingCardBase = ({
                 {fires ? `${fires} ` : ''}
                 {formatAmount(contributionAmount, 'USD')}{' '}
                 <Body as="span" regular>
-                  {isWeekly ? t('raised this week!') : t('raised!')}
+                  {isWeekly ? t('this week!') : t('raised!')}
                 </Body>
               </>
             ) : (
