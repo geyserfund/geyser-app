@@ -780,6 +780,7 @@ export const platformRoutes: RouteObject[] = [
     },
     children: [
       {
+        path: getPath('discoveryLanding'),
         async lazy() {
           const Landing = await loadLandingMainViewPages().then((m) => m.Landing)
           return { Component: Landing }
