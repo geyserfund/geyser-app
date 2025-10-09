@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { PropsWithChildren } from 'react'
 import { PiArrowLeft } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'

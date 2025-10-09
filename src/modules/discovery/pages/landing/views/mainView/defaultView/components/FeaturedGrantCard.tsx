@@ -1,5 +1,5 @@
 import { Box, Stack, StackProps, VStack } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useGrant } from '@/modules/grants/pages/grantsIndividualPage/hooks/useGrant.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'

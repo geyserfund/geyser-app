@@ -1,7 +1,7 @@
 import { Box, Collapse, LinkProps as ChakraLinkProps, Stack, StackProps, useDisclosure } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import { Link, LinkProps } from 'react-router-dom'
+import { Link, LinkProps } from 'react-router'
 
 export interface InteractiveCardLayoutProps
   extends StackProps,

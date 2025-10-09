@@ -3,7 +3,7 @@ import { Button } from '@chakra-ui/react'
 import { Link as ChakraLink } from '@chakra-ui/react'
 import { ComponentWithAs } from '@chakra-ui/system'
 import { t } from 'i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import {
   FeedbackUrl,

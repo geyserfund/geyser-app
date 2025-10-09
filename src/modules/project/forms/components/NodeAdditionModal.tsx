@@ -16,7 +16,7 @@ import { useMobileMode } from '../../../../utils'
 import { checkMacaroonPermissions } from '../../../../utils/validations/checkMacaroonPermissions'
 import { isSecp256k1Compressed } from '../../../../utils/validations/isSecp256k1Compressed'
 import { isTorV3Address } from '../../../../utils/validations/isTorV3Address'
-import { TNodeInput } from '../../pages1/projectCreation/types'
+import { TNodeInput } from '../../pages/projectCreation/hooks/useWalletForm.tsx'
 
 type Props = {
   isOpen: boolean

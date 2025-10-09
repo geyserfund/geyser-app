@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react'
-import { Outlet } from 'react-router-dom'
+import { Suspense } from 'react'
+import { Outlet } from 'react-router'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 
 import { PullingDownContent } from './components/ui'
@@ -41,7 +42,7 @@ export const AppLayout = () => {
   }
 
   return (
-    <>
+    <Suspense fallback={<LoadingPage />}>
       {loading && <LoadingPage />}
       <PullToRefresh
         onRefresh={handleFunction}
@@ -79,6 +80,6 @@ export const AppLayout = () => {
           </Box>
         </Box>
       </PullToRefresh>
-    </>
+    </Suspense>
   )
 }

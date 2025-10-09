@@ -2,7 +2,7 @@ import { Box, Divider, HStack, Link as ChakraLink, MenuItem, VStack } from '@cha
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { PiArrowUpRight } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'

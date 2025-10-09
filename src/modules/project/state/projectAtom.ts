@@ -5,8 +5,8 @@ import { authUserAtom, followedProjectsAtom } from '@/modules/auth/state/authAto
 import { toInt } from '@/utils'
 
 import { ProjectGrantApplicantFragment, ProjectHeaderSummaryFragment, ProjectPageBodyFragment } from '../../../types'
-import { resetRewardsAtom } from '../pages1/projectDashboard/views/sales/state/rewardsAtom'
-import { resetSourceResourceAtom } from '../pages1/projectView/state/sourceActivityAtom.ts'
+import { resetRewardsAtom } from '../pages/projectDashboard/views/sales/state/rewardsAtom'
+import { resetSourceResourceAtom } from '../pages/projectView/state/sourceActivityAtom.ts'
 import { contributionAtomReset } from './contributionsAtom'
 import { goalsAtomReset } from './goalsAtom'
 import { postsAtomReset } from './postsAtom'

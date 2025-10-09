@@ -1,7 +1,7 @@
 import { Avatar, AvatarBadge, Button, forwardRef, HStack, Icon, Image, StackProps } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { PiList, PiUser } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'

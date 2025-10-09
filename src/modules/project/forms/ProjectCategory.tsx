@@ -13,7 +13,7 @@ import {
 
 import { AppTheme } from '../../../context'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
-import { ProjectCreationVariables } from '../pages1/projectCreation/types.ts'
+import { ProjectCreationVariables } from '../pages/projectCreation/hooks/useProjectForm.tsx'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   select: {

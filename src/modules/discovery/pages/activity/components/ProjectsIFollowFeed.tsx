@@ -1,6 +1,6 @@
 import { Box, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { ScrollInvoke } from '@/helpers'
 import { Body } from '@/shared/components/typography'

@@ -17,7 +17,7 @@ import {
 import { toInt } from '@/utils'
 
 import { userAccountKeysAtom } from '../../../auth/state/userAccountKeysAtom.ts'
-import { sourceResourceAtom } from '../../pages1/projectView/state/sourceActivityAtom.ts'
+import { sourceResourceAtom } from '../../pages/projectView/state/sourceActivityAtom.ts'
 import { fundingProjectAtom } from './fundingFormAtom'
 import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAtom'
 import { selectedGoalIdAtom } from './selectedGoalAtom'

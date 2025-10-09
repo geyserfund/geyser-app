@@ -1,9 +1,9 @@
 import { Badge, Box, Button, HStack, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
-import { guardianRewardUUIDs } from '@/modules/guardians/pages/character/characterAssets'
+import { guardianRewardUUIDs } from '@/modules/guardians/utils/characterAssets'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { InteractiveCardLayout } from '@/shared/components/layouts/InteractiveCardLayout.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'

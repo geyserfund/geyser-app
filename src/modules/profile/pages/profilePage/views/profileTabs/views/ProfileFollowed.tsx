@@ -1,6 +1,6 @@
 import { Button, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
 import { Body, H1 } from '@/shared/components/typography'

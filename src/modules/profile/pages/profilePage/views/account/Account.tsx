@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiGear } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'

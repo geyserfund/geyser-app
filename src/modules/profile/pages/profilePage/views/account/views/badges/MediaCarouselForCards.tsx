@@ -5,7 +5,7 @@ import { PiCopy, PiDownloadSimple } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
 
 import { AppTheme } from '@/context'
-import { useCreateAndCopyImage } from '@/modules/project/pages1/projectView/hooks'
+import { useCreateAndCopyImage } from '@/modules/project/pages/projectView/hooks'
 import { CustomModalProps, Modal } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
 import { UseModalReturn } from '@/shared/hooks'

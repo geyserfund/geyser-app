@@ -1,7 +1,7 @@
 import { useSetAtom } from 'jotai'
 import { useAtom } from 'jotai'
 import { useEffect } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router'
 
 import { isSpeedWalletAppAtom, speedWalletParamsAtom } from '@/shared/state/speedWalletParamsAtom'
 

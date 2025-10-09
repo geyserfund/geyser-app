@@ -1,6 +1,6 @@
 import { Button, Divider, HStack, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { useAuthModal } from '@/modules/auth/hooks'

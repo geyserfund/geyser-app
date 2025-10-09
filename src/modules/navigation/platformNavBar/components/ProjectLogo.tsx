@@ -1,19 +1,18 @@
 import { Heading, HStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { projectAtom } from '@/modules/project/state/projectAtom'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { getPath } from '@/shared/constants'
-
-export const GEYSER_GUARDIANS_PROJECT_NAME = 'geyserguardians'
+import { GUARDIANS_PROJECT_NAME } from '@/shared/constants/platform/projectNames.ts'
 
 export const ProjectLogo = () => {
   const project = useAtomValue(projectAtom)
 
   const linkTo = useMemo(() => {
-    return project.name === GEYSER_GUARDIANS_PROJECT_NAME ? getPath('guardians') : getPath('project', project.name)
+    return project.name === GUARDIANS_PROJECT_NAME ? getPath('guardians') : getPath('project', project.name)
   }, [project.name])
 
   const logo = () => {

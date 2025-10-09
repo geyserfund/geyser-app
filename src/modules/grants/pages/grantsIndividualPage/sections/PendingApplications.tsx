@@ -2,7 +2,7 @@ import { Box, HStack, Tag } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'

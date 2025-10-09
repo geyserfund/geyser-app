@@ -1,14 +1,14 @@
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
-import { useLocation, useParams, useSearchParams } from 'react-router-dom'
+import { useLocation, useParams, useSearchParams } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { FundingResourceType } from '@/types/index.ts'
 
-import { ProjectProvider } from './context'
-import { FundingProviderWithProjectContext } from './context/FundingProvider'
-import { sourceResourceAtom } from './pages1/projectView/state/sourceActivityAtom.ts'
-import { ProjectContainer } from './ProjectContainer'
+import { FundingProviderWithProjectContext } from './context/FundingProvider.tsx'
+import { ProjectProvider } from './context/ProjectProvider.tsx'
+import { ProjectLayout } from './layouts/ProjectLayout.tsx'
+import { sourceResourceAtom } from './pages/projectView/state/sourceActivityAtom.ts'
 
 export const Project = () => {
   const params = useParams<{ projectName: string }>()
@@ -42,7 +42,7 @@ export const Project = () => {
   return (
     <ProjectProvider projectName={projectName || ''} initializeWallet>
       <FundingProviderWithProjectContext>
-        <ProjectContainer />
+        <ProjectLayout />
       </FundingProviderWithProjectContext>
     </ProjectProvider>
   )

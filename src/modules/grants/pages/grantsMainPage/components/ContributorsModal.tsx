@@ -2,7 +2,7 @@ import { Box, HStack, HTMLChakraProps, VStack } from '@chakra-ui/react'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { LinkableAvatar } from '@/components/ui'
 import { Modal } from '@/shared/components/layouts'

@@ -2,7 +2,7 @@ import { Avatar, AvatarGroup, Box, Button, HStack, Text, useDisclosure, useTheme
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useAuthModal } from '@/modules/auth/hooks'
 import {

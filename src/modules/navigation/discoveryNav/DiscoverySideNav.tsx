@@ -12,7 +12,7 @@ import {
 import { keyframes } from '@emotion/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { LogoDark, LogoLight } from '@/assets'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'

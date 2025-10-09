@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
 import { PiArrowLeft, PiCopy, PiShareFat, PiX } from 'react-icons/pi'
-import { Location, useLocation, useNavigate } from 'react-router-dom'
+import { Location, useLocation, useNavigate } from 'react-router'
 
 import { currentRouteAtom } from '@/config/routes/index.ts'
 import { EmailPromptModal } from '@/modules/auth/components/EmailPromptModal'

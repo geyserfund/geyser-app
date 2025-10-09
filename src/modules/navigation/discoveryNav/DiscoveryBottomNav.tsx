@@ -1,6 +1,6 @@
 import { Box, Button, ButtonProps } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { getPath } from '@/shared/constants'

@@ -4,7 +4,7 @@ import { ColorModeScript } from '@chakra-ui/react'
 import * as Sentry from '@sentry/react'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { createRoutesFromChildren, matchRoutes, RouterProvider, useLocation, useNavigationType } from 'react-router-dom'
+import { createRoutesFromChildren, matchRoutes, RouterProvider, useLocation, useNavigationType } from 'react-router'
 
 import GlobalStyles from './config/GlobalStyles.tsx'
 import { router } from './config/routes/index.ts'

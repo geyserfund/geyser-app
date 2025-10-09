@@ -1,5 +1,5 @@
 import { VStack } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import { CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'

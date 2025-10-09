@@ -24,7 +24,7 @@ import { ImageCropAspectRatio } from '../../../shared/molecules/ImageCropperModa
 import { MediaControlWithReorder } from '../../../shared/molecules/MediaControlWithReorder'
 import { Country, useProjectByNameForNameCheckLazyQuery } from '../../../types'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
-import { ProjectCreationVariables } from '../pages1/projectCreation/types'
+import { ProjectCreationVariables } from '../pages/projectCreation/hooks/useProjectForm.tsx'
 import { AdditionalUrlModal } from './components/AdditionalUrlModal'
 import { ProjectLinks } from './ProjectLinks.tsx'
 import { ProjectTagsCreateEdit } from './ProjectTagsCreateEdit.tsx'

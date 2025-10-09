@@ -1,7 +1,7 @@
 import { Button, HStack, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 
-import { MIN_WIDTH_AFTER_START } from '@/modules/project/pages1/projectFunding/views/fundingInit/sections/DonationInput.tsx'
+import { MIN_WIDTH_AFTER_START } from '@/modules/project/pages/projectFunding/views/fundingInit/sections/DonationInput.tsx'
 import { commaFormatted } from '@/shared/utils/formatData/index.ts'
 
 import { Body } from '../typography'

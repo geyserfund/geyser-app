@@ -1,7 +1,7 @@
 import { HStack, Image } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import { guardianJewelsToRenderAtom } from '@/modules/profile/state/badgesAtom.ts'
 import { GuardianCardModal, GuardianCardProps } from '@/shared/components/display/GuardianCardModal.tsx'

@@ -19,7 +19,7 @@ import { useNotification } from '@/utils'
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
 import { generateAccountKeys, generatePreImageHash } from '../../forms/accountPassword/keyGenerationHelper.ts'
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
-import { createTransactionForBoltzClaimCall } from '../../pages1/projectFunding/utils/createCallData.ts'
+import { createTransactionForBoltzClaimCall } from '../../pages/projectFunding/utils/createCallData.ts'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {

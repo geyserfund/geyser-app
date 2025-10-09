@@ -1,7 +1,7 @@
 import { Button, HStack, StackProps } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiCalendarDots } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { H3 } from '@/shared/components/typography'

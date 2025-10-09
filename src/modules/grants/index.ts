@@ -1,6 +1,6 @@
 import { GrantPage } from './pages/grantsIndividualPage/GrantPage.tsx'
 import { GrantsRoundOne } from './pages/grantsIndividualPage/GrantsRoundOne.tsx'
 import { GrantsRoundTwo } from './pages/grantsIndividualPage/GrantsRoundTwo.tsx'
-import { Grants } from './pages/grantsMainPage/Grants.tsx'
+import { GrantsMainPage } from './pages/grantsMainPage/GrantsMainPage.tsx'
 
-export { GrantPage, Grants, GrantsRoundOne, GrantsRoundTwo }
+export { GrantPage, GrantsMainPage, GrantsRoundOne, GrantsRoundTwo }

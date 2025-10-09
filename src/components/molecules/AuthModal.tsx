@@ -3,7 +3,7 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router'
 
 import { ConnectWithEmail } from '@/modules/auth/ConnectWithEmail'
 import { Modal } from '@/shared/components/layouts'

@@ -1,6 +1,6 @@
 import { useDisclosure } from '@chakra-ui/react'
 import { ComponentType, useEffect, useMemo } from 'react'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router'
 
 import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'

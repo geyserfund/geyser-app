@@ -9,7 +9,7 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules'
 import { DescriptionLinkWithIconComponent } from '../../../../components/molecules'
 import { TextArea, TextInputBox } from '../../../../components/ui'
 import { VoltageNodeConnectionDemoURL, WalletCreationFindOutMoreUrl } from '../../../../shared/constants'
-import { TNodeInput } from '../../pages1/projectCreation/types'
+import { TNodeInput } from '../../pages/projectCreation/hooks/useWalletForm.tsx'
 
 type Props = {
   form: TNodeInput

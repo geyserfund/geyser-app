@@ -1,6 +1,6 @@
 import { HStack, VStack } from '@chakra-ui/react'
 
-import { GrantBalanceCurrency } from '@/modules/grants/constants'
+import { GrantBalanceCurrency } from '@/modules/grants/utils/constants'
 import { Body } from '@/shared/components/typography'
 import { useCountdown } from '@/shared/hooks/useCountdown'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'

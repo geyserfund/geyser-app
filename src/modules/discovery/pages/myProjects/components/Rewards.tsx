@@ -1,7 +1,7 @@
 import { Box, Button, Divider, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiBag } from 'react-icons/pi'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router'
 
 import { Body } from '@/shared/components/typography'
 import { getPath, NoRewardsSoldUrl } from '@/shared/constants'

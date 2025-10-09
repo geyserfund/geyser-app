@@ -14,7 +14,7 @@ import {
   GRANT_STATUS_COUNTDOWN_TITLES_NON_VOTE,
   GrantBalanceCurrency,
   GrantHasVoting,
-} from '../../../constants.ts'
+} from '../../../utils/constants.ts'
 import { SponsorList } from './SponsorList'
 import { WidgetItem } from './WidgetItem'
 

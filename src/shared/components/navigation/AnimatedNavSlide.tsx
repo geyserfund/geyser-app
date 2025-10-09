@@ -2,7 +2,7 @@ import { Button, ButtonProps, ComponentWithAs, forwardRef, HStack, Skeleton, Sta
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router'
 
 import { lightModeColors } from '@/shared/styles'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom.ts'

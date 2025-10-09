@@ -1,7 +1,7 @@
 import { Button, ButtonProps, Image, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { fetchNoticeBannerData } from '@/api/airtable'
 import { Modal } from '@/shared/components/layouts'

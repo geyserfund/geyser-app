@@ -1,6 +1,6 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router'
 
 import { useTopProjects } from '@/modules/discovery/hooks/useTopProjects.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'

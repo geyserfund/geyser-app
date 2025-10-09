@@ -2,7 +2,7 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { Trans } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useTopProjects } from '@/modules/discovery/hooks/useTopProjects.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'

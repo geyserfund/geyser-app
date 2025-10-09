@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
-import { useLocation, useMatch, useNavigate, useParams, useSearchParams } from 'react-router-dom'
+import { useLocation, useMatch, useNavigate, useParams, useSearchParams } from 'react-router'
 
 import { getPath } from '@/shared/constants'
 import { ActivityResourceType, ProjectStatus, ProjectType } from '@/types'

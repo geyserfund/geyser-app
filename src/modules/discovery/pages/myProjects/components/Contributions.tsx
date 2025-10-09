@@ -2,9 +2,9 @@ import { Box, BoxProps, Button, Divider, HStack, Image, Skeleton, Stack, VStack 
 import { Emoji, EmojiStyle } from 'emoji-picker-react'
 import { useTranslation } from 'react-i18next'
 import { PiCoins, PiFlagBannerFold } from 'react-icons/pi'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router'
 
-import { useGoalsModal } from '@/modules/project/pages1/projectView/hooks'
+import { useGoalsModal } from '@/modules/project/pages/projectView/hooks'
 import { Body } from '@/shared/components/typography'
 import { getPath, NoContributionImageUrl } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks'

@@ -15,7 +15,7 @@ import {
   PiRocketLaunchBold,
   PiSignOut,
 } from 'react-icons/pi'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'

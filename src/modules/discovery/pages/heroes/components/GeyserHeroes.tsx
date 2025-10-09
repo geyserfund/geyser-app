@@ -1,7 +1,7 @@
 import { HStack, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
 import { ProfileText } from '@/shared/components/display/ProfileText'

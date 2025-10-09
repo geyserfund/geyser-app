@@ -1,4 +1,4 @@
+import { ProfileLayout } from './layouts/ProfileLayout'
 import { Profile } from './pages/profilePage/Profile'
-import { ProfileMain } from './ProfileMain'
 
-export { Profile, ProfileMain }
+export { Profile, ProfileLayout }

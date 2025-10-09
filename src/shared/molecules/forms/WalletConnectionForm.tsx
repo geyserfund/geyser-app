@@ -27,7 +27,7 @@ import { ProjectFeeSelection } from '@/modules/project/components/ProjectFeeSele
 import { NodeAdditionModal } from '@/modules/project/forms/components/NodeAdditionModal'
 import { RenderSponsorFromTable } from '@/modules/project/forms/components/RenderSponsorFromTable.tsx'
 import { RenderSponsorImage } from '@/modules/project/forms/components/RenderSponsorImage.tsx'
-import { WalletConnectionOptionInfoBox } from '@/modules/project/pages1/projectCreation/components/WalletConnectionOptionInfoBox'
+import { WalletConnectionOptionInfoBox } from '@/modules/project/pages/projectCreation/components/WalletConnectionOptionInfoBox'
 import {
   ConnectionOption,
   LightingWalletForm,
@@ -36,8 +36,8 @@ import {
   NodeWalletForm,
   NWCWalletForm,
   WalletForm,
-} from '@/modules/project/pages1/projectCreation/hooks/useWalletForm'
-import { WalletLimitComponent } from '@/modules/project/pages1/projectDashboard/components/WalletLimitComponent'
+} from '@/modules/project/pages/projectCreation/hooks/useWalletForm'
+import { WalletLimitComponent } from '@/modules/project/pages/projectDashboard/components/WalletLimitComponent'
 import { Body } from '@/shared/components/typography'
 import { GeyserLightningWalletGuideLink, LIGHTNING_FEE_PERCENTAGE } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'

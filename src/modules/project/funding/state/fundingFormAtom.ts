@@ -18,7 +18,7 @@ import { commaFormatted, convertAmount, isProjectAnException, toInt, validateEma
 import {
   paymentMethodAtom,
   PaymentMethods,
-} from '../../pages1/projectFunding/views/fundingPayment/state/paymentMethodAtom.ts'
+} from '../../pages/projectFunding/views/fundingPayment/state/paymentMethodAtom.ts'
 import { projectAtom, ProjectState } from '../../state/projectAtom'
 import { rewardsAtom } from '../../state/rewardsAtom'
 import { subscriptionsAtom } from '../../state/subscriptionAtom'

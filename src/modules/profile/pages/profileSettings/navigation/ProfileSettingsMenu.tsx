@@ -1,7 +1,7 @@
 import { Button, ButtonProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'

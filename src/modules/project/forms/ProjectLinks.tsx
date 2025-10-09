@@ -4,7 +4,7 @@ import { useFieldArray, UseFormReturn } from 'react-hook-form'
 
 import { getIconForLink } from '../../../helpers/getIconForLinks'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
-import { ProjectCreationVariables } from '../pages1/projectCreation/types.ts'
+import { ProjectCreationVariables } from '../pages/projectCreation/hooks/useProjectForm.tsx'
 import { ProjectLinkInput } from './components/ProjectLinkInput'
 
 interface ProjectLinksProps {

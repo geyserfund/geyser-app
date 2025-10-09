@@ -11,7 +11,7 @@ import { Tooltip } from '../../../../../components/ui/Tooltip'
 import { VideoPlayer } from '../../../../../shared/molecules/VideoPlayer'
 import { DistributionSystem, Grant, GrantType, VotingSystem } from '../../../../../types'
 import { useMobileMode } from '../../../../../utils'
-import { GRANT_STATUS_MAP } from '../../../constants'
+import { GRANT_STATUS_MAP } from '../../../utils/constants'
 import { ContributionsWidget } from '../components/ContributionsWidget'
 
 const CUSTOM_VIDEO_URL = 'https://youtu.be/xemVDGbQwHs'

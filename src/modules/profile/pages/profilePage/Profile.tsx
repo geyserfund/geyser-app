@@ -1,6 +1,6 @@
 import { HStack } from '@chakra-ui/react'
 import { useEffect, useMemo } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { PathName } from '@/shared/constants/index.ts'

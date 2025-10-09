@@ -1,7 +1,7 @@
 import { Icon } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiDotOutline } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { Body } from '@/shared/components/typography'
 import { __production__, __staging__, getPath, GrantsIllustrationUrl } from '@/shared/constants'

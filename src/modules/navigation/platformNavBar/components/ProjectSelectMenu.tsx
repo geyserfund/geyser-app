@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { isRouteForProjectCreationAtom } from '@/config/routes/state/privateRoutesAtom.ts'
 import { useAuthContext } from '@/context'

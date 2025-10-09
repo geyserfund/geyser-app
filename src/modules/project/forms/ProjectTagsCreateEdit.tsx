@@ -13,7 +13,7 @@ import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { SkeletonLayout } from '../../../shared/components/layouts'
 import { TagsGetResult, useProjectTagCreateMutation, useTagsGetQuery } from '../../../types'
 import { useNotification } from '../../../utils'
-import { ProjectCreationVariables } from '../pages1/projectCreation/types.ts'
+import { ProjectCreationVariables } from '../pages/projectCreation/hooks/useProjectForm.tsx'
 
 const MAX_TAGS_ALLOWED = 4
 

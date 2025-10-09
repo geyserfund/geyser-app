@@ -1,9 +1,9 @@
 import { Box, Button, HStack, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
-import { FollowButton } from '@/modules/project/pages1/projectView/views/body/components/FollowButton.tsx'
-import { NonProjectProjectIcon } from '@/modules/project/pages1/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
+import { FollowButton } from '@/modules/project/pages/projectView/views/body/components/FollowButton.tsx'
+import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
 import { ProfileText } from '@/shared/components/display/ProfileText.tsx'

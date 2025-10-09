@@ -7,7 +7,7 @@ import { ControlledCustomSelect } from '@/shared/components/controlledInput/Cont
 import { countriesAtom } from '@/shared/state/countriesAtom.ts'
 
 import { Country, Location, Maybe } from '../../../types'
-import { ProjectCreationVariables } from '../pages1/projectCreation/types.ts'
+import { ProjectCreationVariables } from '../pages/projectCreation/hooks/useProjectForm.tsx'
 import { ProjectState } from '../state/projectAtom'
 
 interface ProjectRegionProps extends StackProps {

@@ -2,7 +2,7 @@ import { ApolloProvider } from '@apollo/client'
 import { ChakraProvider } from '@chakra-ui/react'
 import { Provider } from 'jotai'
 import { useEffect } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet } from 'react-router'
 
 import { client } from './config/apollo-client'
 import { CacheBuster } from './config/CacheBuster.tsx'

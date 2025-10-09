@@ -1,6 +1,6 @@
 import { HStack, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { getPath } from '@/shared/constants/index.ts'

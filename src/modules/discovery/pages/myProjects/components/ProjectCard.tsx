@@ -1,9 +1,9 @@
 import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiClock, PiEyeglasses, PiGear, PiNoteBlank } from 'react-icons/pi'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router'
 
-import { FOLLOWERS_NEEDED } from '@/modules/project/pages1/projectView/views/body/components/PrelaunchFollowButton.tsx'
+import { FOLLOWERS_NEEDED } from '@/modules/project/pages/projectView/views/body/components/PrelaunchFollowButton.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { ProjectPrelaunchStatus } from '@/shared/molecules/ProjectPrelaunchStatus.tsx'
