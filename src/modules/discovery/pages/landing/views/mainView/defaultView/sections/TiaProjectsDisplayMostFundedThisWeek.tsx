@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom'
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
-import { ProjectsMostFundedAllOrNothingRange, useProjectsMostFundedAllOrNothingQuery } from '../../../../../../../types'
+import { ProjectsMostFundedAllOrNothingRange, useProjectsMostFundedAllOrNothingQuery } from '../../../../../../../../types'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
 
-const NO_OF_PROJECT_TO_LOAD = 4
+const NO_OF_PROJECT_TO_LOAD = 5
 
-export const AonProjectsDisplayMostFundedThisWeek = () => {
+export const TiaProjectsDisplayMostFundedThisWeek = () => {
   const { t } = useTranslation()
 
   const { loading, data } = useProjectsMostFundedAllOrNothingQuery({
@@ -33,8 +33,7 @@ export const AonProjectsDisplayMostFundedThisWeek = () => {
 
   return (
     <ProjectDisplayBody
-      title={t('Trending in All or Nothing')}
-      subtitle={t('Discover the most funded projects in Bitcoin')}
+      title={t('Trending Fundraisers ')}
       projects={ProjectByCategoryList}
       rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryAllOrNothing')} />}
     />

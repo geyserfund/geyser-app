@@ -15,7 +15,7 @@ import { useNotification } from '@/utils/index.ts'
 import {
   TrendingRewardCard,
   TrendingRewardCardSkeleton,
-} from './landing/views/defaultView/components/TrendingRewardCard.tsx'
+} from './mainView/defaultView/components/TrendingRewardCard.tsx'
 
 export const Products = () => {
   const toast = useNotification()

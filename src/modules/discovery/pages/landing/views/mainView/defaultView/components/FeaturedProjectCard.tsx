@@ -6,9 +6,9 @@ import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'
 import { AonProgressData } from '@/shared/molecules/project/AonProgressData.tsx'
 import { isAllOrNothing } from '@/utils/index.ts'
 
-import { getPathWithGeyserPromotionsHero } from '../../../../../../../shared/constants'
-import { useFeaturedProjectForLandingPageQuery } from '../../../../../../../types'
-import { FeatureAirtableData } from '../sections/Featured'
+import { getPathWithGeyserPromotionsHero } from '../../../../../../../../shared/constants/index.ts'
+import { useFeaturedProjectForLandingPageQuery } from '../../../../../../../../types/index.ts'
+import { FeatureAirtableData } from '../sections/Featured.tsx'
 import { FeaturedCardLayout, FeaturedCardSkeleton } from './FeaturedCardLayout.tsx'
 import { MiniProjectCard } from './MiniProjectCard.tsx'
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { fetchCharityProjectsData } from '@/api/airtable.ts'
 
-import { ProjectCategory, ProjectSubCategory, useProjectsForLandingPageQuery } from '../../../../../../../types'
+import { ProjectCategory, ProjectSubCategory, useProjectsForLandingPageQuery } from '../../../../../../../../types'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
 
 interface ProjectDisplayProps {

@@ -1,7 +1,8 @@
+import { TbReceiptYen } from 'react-icons/tb'
 import { createBrowserRouter, Navigate, RouteObject } from 'react-router-dom'
 
 import { SignOut } from '@/modules/auth/pages/SignOut.tsx'
-import { ActivityDirection } from '@/modules/discovery/pages/landing/views/activity/components/ActivityDirection'
+import { ActivityDirection } from '@/modules/discovery/pages/activity/components/ActivityDirection'
 
 import { App } from '../../App'
 import { AppLayout } from '../../AppLayout'
@@ -26,6 +27,8 @@ const CreatorReward = () => import('../../modules/project/pages1/projectView/vie
 const CreatorPost = () => import('../../modules/project/pages1/projectView/views/posts/views')
 
 const Discovery = () => import('../../modules/discovery')
+
+const DiscoveryLanding = () => import('../../modules/discovery/pages/landing')
 
 const Guardians = () => import('../../modules/guardians')
 
@@ -774,47 +777,57 @@ export const platformRoutes: RouteObject[] = [
     },
     children: [
       {
-        index: true,
         async lazy() {
-          const Landing = await Discovery().then((m) => m.Landing)
+          const Landing = await DiscoveryLanding().then((m) => m.Landing)
           return { Component: Landing }
         },
+        children: [
+          {
+            index: true,
+            async lazy() {
+              const DefaultView = await DiscoveryLanding().then((m) => m.MainView)
+              return { Component: DefaultView }
+            },
+          },
+          {
+            path: getPath('discoveryCampaigns'),
+            async lazy() {
+              const Campaigns = await DiscoveryLanding().then((m) => m.Campaigns)
+              return { Component: Campaigns }
+            },
+          },
+          {
+            path: getPath('discoveryFundraisers'),
+            async lazy() {
+              const Fundraisers = await DiscoveryLanding().then((m) => m.Fundraisers)
+              return { Component: Fundraisers }
+            },
+          },
+          {
+            path: getPath('discoveryProducts'),
+            async lazy() {
+              const Products = await DiscoveryLanding().then((m) => m.Products)
+              return { Component: Products }
+            },
+          },
+
+          {
+            path: getPath('discoveryProjectCategory', PathName.categoryName),
+            async lazy() {
+              const Landing = await DiscoveryLanding().then((m) => m.Landing)
+              return { Component: Landing }
+            },
+          },
+          {
+            path: getPath('discoveryProjectSubCategory', PathName.subCategoryName),
+            async lazy() {
+              const Landing = await DiscoveryLanding().then((m) => m.Landing)
+              return { Component: Landing }
+            },
+          },
+        ],
       },
-      {
-        path: getPath('discoveryCampaigns'),
-        async lazy() {
-          const Campaigns = await Discovery().then((m) => m.Campaigns)
-          return { Component: Campaigns }
-        },
-      },
-      {
-        path: getPath('discoveryFundraisers'),
-        async lazy() {
-          const Fundraisers = await Discovery().then((m) => m.Fundraisers)
-          return { Component: Fundraisers }
-        },
-      },
-      {
-        path: getPath('discoveryProducts'),
-        async lazy() {
-          const Products = await Discovery().then((m) => m.Products)
-          return { Component: Products }
-        },
-      },
-      {
-        path: getPath('discoveryProjectCategory', PathName.categoryName),
-        async lazy() {
-          const Landing = await Discovery().then((m) => m.Landing)
-          return { Component: Landing }
-        },
-      },
-      {
-        path: getPath('discoveryProjectSubCategory', PathName.subCategoryName),
-        async lazy() {
-          const Landing = await Discovery().then((m) => m.Landing)
-          return { Component: Landing }
-        },
-      },
+
       {
         path: getPath('discoveryMyProjects'),
         async lazy() {

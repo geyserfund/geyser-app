@@ -15,7 +15,7 @@ import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
 import { LeaderboardPeriod } from '@/types'
 import { getShortAmountLabel } from '@/utils'
 
-import { ProjectRowLayout } from '../../landing/views/defaultView/components/ProjectRowLayout.tsx'
+import { ProjectRowLayout } from '../../landing/views/mainView/defaultView/components/ProjectRowLayout.tsx'
 import { useTopContributors } from '../hooks'
 import { useTopAmbassadors } from '../hooks/useTopAmbassadors'
 import { useTopCreators } from '../hooks/useTopCreators'

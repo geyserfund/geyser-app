@@ -4,7 +4,7 @@ import { NoDataError } from '@/components/errors'
 import { LandingCardBaseSkeleton } from '@/shared/components/layouts'
 import { ProjectForLandingPageFragment } from '@/types'
 
-import { LandingProjectCard } from '../../../components/LandingProjectCard'
+import { LandingProjectCard } from '../../../../components/LandingProjectCard'
 import { NoSearchResults } from '../components/NoSearchResults'
 
 interface FilteredProjectListProps {

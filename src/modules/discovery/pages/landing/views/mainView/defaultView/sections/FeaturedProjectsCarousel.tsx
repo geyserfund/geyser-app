@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 
 import { FeaturedDisplayCard } from '../components/FeaturedDisplayCard.tsx'
 import { FeaturedGrantCard } from '../components/FeaturedGrantCard.tsx'
-import { FeaturedProjectCard } from '../components/FeaturedProjectCard'
-import { FeatureAirtableData } from './Featured'
+import { FeaturedProjectCard } from '../components/FeaturedProjectCard.tsx'
+import { FeatureAirtableData } from './Featured.tsx'
 
 type FeaturedProjectsCarouselProps = {
   allAirtableData: FeatureAirtableData[]

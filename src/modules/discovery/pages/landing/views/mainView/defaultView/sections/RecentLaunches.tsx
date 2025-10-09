@@ -5,7 +5,7 @@ import {
   ProjectsOrderByField,
   ProjectStatus,
   useProjectsForLandingPageQuery,
-} from '../../../../../../../types'
+} from '../../../../../../../../types'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
 
 const NO_OF_PROJECT_TO_LOAD = 6

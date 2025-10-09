@@ -1,7 +1,6 @@
 import { t } from 'i18next'
 
-import { FilterComponent } from '@/modules/discovery/filters/FilterComponent.tsx'
-
+import { FilterComponent } from '../../../../components/FilterComponent.tsx'
 import { FeaturedContributions } from '../components/FeaturedContributions.tsx'
 import { ProjectRowLayout } from '../components/ProjectRowLayout.tsx'
 

@@ -3,8 +3,8 @@ import { t } from 'i18next'
 
 import { useProjectRecommendedGetQuery } from '@/types/index.ts'
 
-import { LandingCardBaseSkeleton } from '../../../components/LandingCardBase.tsx'
-import { LandingProjectCard } from '../../../components/LandingProjectCard.tsx'
+import { LandingCardBaseSkeleton } from '../../../../components/LandingCardBase.tsx'
+import { LandingProjectCard } from '../../../../components/LandingProjectCard.tsx'
 import { LandingPageSectionTitle } from '../components/LandingPageSectionTitle.tsx'
 
 export const RecommendedForYou = () => {

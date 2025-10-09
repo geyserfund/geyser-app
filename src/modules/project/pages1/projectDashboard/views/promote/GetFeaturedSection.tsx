@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import {
   GEYSER_GET_FEATURED_REWARD_ID,
   GEYSER_PROMOTIONS_PROJECT_NAME,
-} from '@/modules/discovery/pages/landing/views/defaultView/sections/Featured.tsx'
+} from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPathWithGeyserHero } from '@/shared/constants/index.ts'

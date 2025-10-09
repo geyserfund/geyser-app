@@ -5,6 +5,7 @@ import { useCallback, useEffect } from 'react'
 import { PiArrowLeft, PiCopy, PiShareFat, PiX } from 'react-icons/pi'
 import { Location, useLocation, useNavigate } from 'react-router-dom'
 
+import { currentRouteAtom } from '@/config/routes/index.ts'
 import { EmailPromptModal } from '@/modules/auth/components/EmailPromptModal'
 import { NotificationPromptModal } from '@/modules/auth/components/NotificationPromptModal'
 import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
@@ -44,6 +45,9 @@ export const PlatformNavBar = () => {
   const shouldShowGeyserLogo = useAtomValue(shouldShowGeyserLogoAtom)
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
 
+  const currentROute = useAtomValue(currentRouteAtom)
+  console.log('currentROute', currentROute)
+
   const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
 
   const { notificationPromptIsOpen, dontAskNotificationAgain, notificationPromptOnClose } = useNotificationPromptModal()
@@ -65,6 +69,8 @@ export const PlatformNavBar = () => {
     onOpen: onLoginAlertModalOpen,
     onClose: onLoginAlertModalClose,
   } = useDisclosure()
+
+  console.log('isPlatformRoutes', isPlatformRoutes)
 
   useEffect(() => {
     if (state && state.loggedOut) {

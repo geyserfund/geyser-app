@@ -2,7 +2,7 @@ import { Link } from '@chakra-ui/react'
 
 import { CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 
-import { FeatureAirtableData } from '../sections/Featured'
+import { FeatureAirtableData } from '../sections/Featured.tsx'
 import { FeaturedCardLayout } from './FeaturedCardLayout.tsx'
 import { MiniProjectCard } from './MiniProjectCard.tsx'
 

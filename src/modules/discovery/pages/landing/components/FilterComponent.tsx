@@ -8,7 +8,7 @@ import { PiFunnelSimple, PiMagnifyingGlass } from 'react-icons/pi'
 import { useFilterContext } from '@/context/filter'
 import { useModal } from '@/shared/hooks'
 
-import { FilterModal } from './FilterModal'
+import { FilterModal } from '../../../filters/FilterModal'
 
 export const FilterComponent = () => {
   const inputRef = useRef<HTMLInputElement>(null)

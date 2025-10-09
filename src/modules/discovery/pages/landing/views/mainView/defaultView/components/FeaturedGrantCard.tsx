@@ -6,7 +6,7 @@ import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body, H2 } from '@/shared/components/typography'
 import { standardPadding } from '@/shared/styles'
 
-import { getPath } from '../../../../../../../shared/constants'
+import { getPath } from '../../../../../../../../shared/constants/index.ts'
 import { FeaturedCardLayout, FeaturedCardSkeleton } from './FeaturedCardLayout.tsx'
 import { MiniProjectCard } from './MiniProjectCard.tsx'
 

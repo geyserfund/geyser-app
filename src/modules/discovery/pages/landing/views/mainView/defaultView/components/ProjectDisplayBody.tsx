@@ -6,10 +6,10 @@ import {
   ContributionsSummary,
   PostForLandingPageFragment,
   ProjectForLandingPageFragment,
-} from '../../../../../../../types'
-import { LandingProjectCard } from '../../../components/LandingProjectCard'
+} from '../../../../../../../../types/index.ts'
+import { LandingProjectCard } from '../../../../components/LandingProjectCard.tsx'
 import { LandingPostCard } from './LandingPostCard.tsx'
-import { ProjectRowLayout, ProjectRowLayoutProps } from './ProjectRowLayout'
+import { ProjectRowLayout, ProjectRowLayoutProps } from './ProjectRowLayout.tsx'
 
 interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'> {
   projects: (ProjectForLandingPageFragment & {

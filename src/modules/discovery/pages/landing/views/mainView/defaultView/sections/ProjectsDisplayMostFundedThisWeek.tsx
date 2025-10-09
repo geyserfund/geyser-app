@@ -11,7 +11,7 @@ import {
   ProjectSubCategory,
   usePostsForLandingPageQuery,
   useProjectsMostFundedByCategoryQuery,
-} from '../../../../../../../types'
+} from '../../../../../../../../types'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
 
 interface ProjectDisplayProps {
