@@ -17,17 +17,17 @@ export const AonProjectBalanceDisplay = () => {
   const { formatAmount } = useCurrencyFormatter()
 
   /** Calculate time left for AON project showing only the largest time unit */
-  const timeLeft = useMemo(() => aonProjectTimeLeft(project), [project])
+  const timeLeft = useMemo(() => aonProjectTimeLeft(project.aonGoal), [project.aonGoal])
 
   // Don't render the component if time is up
 
   const percent = useMemo(() => {
-    if (!project.aonGoalInSats || !balance) {
+    if (!project.aonGoal?.goalAmount || !balance) {
       return 0
     }
 
-    return (balance * 100) / project.aonGoalInSats
-  }, [balance, project.aonGoalInSats])
+    return (balance * 100) / project.aonGoal.goalAmount
+  }, [balance, project.aonGoal?.goalAmount])
 
   return (
     <VStack w="full" justifyContent={'space-between'} minHeight="128px" spacing={4}>

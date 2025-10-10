@@ -2535,7 +2535,6 @@ export type Post = {
   __typename?: 'Post';
   /** Total amount of satoshis funded from the Post's page. */
   amountFunded: Scalars['Int']['output'];
-  content?: Maybe<Scalars['String']['output']>;
   /** Contributions that were created from the Post's page. */
   contributions: Array<Contribution>;
   createdAt: Scalars['String']['output'];
@@ -2663,13 +2662,7 @@ export type ProfileNotificationSettings = {
 export type Project = {
   __typename?: 'Project';
   ambassadors: ProjectAmbassadorsConnection;
-  aonContractAddress?: Maybe<Scalars['String']['output']>;
-  /** AON goal duration in days */
-  aonGoalDurationInDays?: Maybe<Scalars['Int']['output']>;
-  /** AON goal in sats */
-  aonGoalInSats?: Maybe<Scalars['Int']['output']>;
-  aonGoalStatus?: Maybe<ProjectAonGoalStatus>;
-  aonGoalTimeRemaining?: Maybe<Scalars['Int']['output']>;
+  aonGoal?: Maybe<ProjectAonGoal>;
   /** Total amount raised by the project, in satoshis. */
   balance: Scalars['Int']['output'];
   balanceUsdCent: Scalars['Int']['output'];
@@ -2693,11 +2686,7 @@ export type Project = {
   /** Returns the project's grant applications. */
   grantApplications: Array<GrantApplicant>;
   id: Scalars['BigInt']['output'];
-  /**
-   * Project header images.
-   * @deprecated Use images instead.
-   */
-  image?: Maybe<Scalars['String']['output']>;
+  /** Project header images. */
   images: Array<Scalars['String']['output']>;
   keys: ProjectKeys;
   lastCreationStep: ProjectCreationStep;
@@ -2799,6 +2788,20 @@ export type ProjectAmbassadorsStats = {
   contributionsSum: Scalars['BigInt']['output'];
   /** Total number of ambassadors */
   count: Scalars['Int']['output'];
+};
+
+export type ProjectAonGoal = {
+  __typename?: 'ProjectAonGoal';
+  balance: Scalars['Int']['output'];
+  contractAddress: Scalars['String']['output'];
+  contractCreationTxId: Scalars['String']['output'];
+  createdAt: Scalars['Date']['output'];
+  deployedAt?: Maybe<Scalars['Date']['output']>;
+  endsAt?: Maybe<Scalars['Date']['output']>;
+  goalAmount: Scalars['Int']['output'];
+  goalDurationInDays: Scalars['Int']['output'];
+  status: ProjectAonGoalStatus;
+  updatedAt: Scalars['Date']['output'];
 };
 
 export type ProjectAonGoalAmountUpdateInput = {
@@ -3502,6 +3505,15 @@ export enum ProjectsMostFundedByTagRange {
   Week = 'WEEK'
 }
 
+export type ProjectsMostFundedTakeItAllInput = {
+  range: ProjectsMostFundedTakeItAllRange;
+  take?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export enum ProjectsMostFundedTakeItAllRange {
+  Week = 'WEEK'
+}
+
 export enum ProjectsOrderByField {
   Balance = 'balance',
   CreatedAt = 'createdAt',
@@ -3602,6 +3614,7 @@ export type Query = {
   projectsMostFundedAllOrNothing: Array<ProjectMostFunded>;
   projectsMostFundedByCategory: Array<ProjectMostFundedByCategory>;
   projectsMostFundedByTag: Array<ProjectMostFundedByTag>;
+  projectsMostFundedTakeItAll: Array<ProjectMostFunded>;
   projectsSummary: ProjectsSummary;
   shippingAddressesGet: Array<ShippingAddress>;
   statusCheck: Scalars['Boolean']['output'];
@@ -3866,6 +3879,11 @@ export type QueryProjectsMostFundedByCategoryArgs = {
 
 export type QueryProjectsMostFundedByTagArgs = {
   input: ProjectsMostFundedByTagInput;
+};
+
+
+export type QueryProjectsMostFundedTakeItAllArgs = {
+  input: ProjectsMostFundedTakeItAllInput;
 };
 
 
@@ -5077,6 +5095,7 @@ export type ResolversTypes = {
   ProjectAmbassadorEdge: ResolverTypeWrapper<Omit<ProjectAmbassadorEdge, 'node'> & { node: ResolversTypes['Ambassador'] }>;
   ProjectAmbassadorsConnection: ResolverTypeWrapper<Omit<ProjectAmbassadorsConnection, 'edges'> & { edges: Array<ResolversTypes['ProjectAmbassadorEdge']> }>;
   ProjectAmbassadorsStats: ResolverTypeWrapper<ProjectAmbassadorsStats>;
+  ProjectAonGoal: ResolverTypeWrapper<ProjectAonGoal>;
   ProjectAonGoalAmountUpdateInput: ProjectAonGoalAmountUpdateInput;
   ProjectAonGoalStatus: ProjectAonGoalStatus;
   ProjectAonGoalStatusUpdateInput: ProjectAonGoalStatusUpdateInput;
@@ -5171,6 +5190,8 @@ export type ResolversTypes = {
   ProjectsMostFundedByCategoryRange: ProjectsMostFundedByCategoryRange;
   ProjectsMostFundedByTagInput: ProjectsMostFundedByTagInput;
   ProjectsMostFundedByTagRange: ProjectsMostFundedByTagRange;
+  ProjectsMostFundedTakeItAllInput: ProjectsMostFundedTakeItAllInput;
+  ProjectsMostFundedTakeItAllRange: ProjectsMostFundedTakeItAllRange;
   ProjectsOrderByField: ProjectsOrderByField;
   ProjectsOrderByInput: ProjectsOrderByInput;
   ProjectsResponse: ResolverTypeWrapper<Omit<ProjectsResponse, 'projects'> & { projects: Array<ResolversTypes['Project']> }>;
@@ -5546,6 +5567,7 @@ export type ResolversParentTypes = {
   ProjectAmbassadorEdge: Omit<ProjectAmbassadorEdge, 'node'> & { node: ResolversParentTypes['Ambassador'] };
   ProjectAmbassadorsConnection: Omit<ProjectAmbassadorsConnection, 'edges'> & { edges: Array<ResolversParentTypes['ProjectAmbassadorEdge']> };
   ProjectAmbassadorsStats: ProjectAmbassadorsStats;
+  ProjectAonGoal: ProjectAonGoal;
   ProjectAonGoalAmountUpdateInput: ProjectAonGoalAmountUpdateInput;
   ProjectAonGoalStatusUpdateInput: ProjectAonGoalStatusUpdateInput;
   ProjectAonGoalStatusUpdateResponse: ProjectAonGoalStatusUpdateResponse;
@@ -5621,6 +5643,7 @@ export type ResolversParentTypes = {
   ProjectsMostFundedAllOrNothingInput: ProjectsMostFundedAllOrNothingInput;
   ProjectsMostFundedByCategoryInput: ProjectsMostFundedByCategoryInput;
   ProjectsMostFundedByTagInput: ProjectsMostFundedByTagInput;
+  ProjectsMostFundedTakeItAllInput: ProjectsMostFundedTakeItAllInput;
   ProjectsOrderByInput: ProjectsOrderByInput;
   ProjectsResponse: Omit<ProjectsResponse, 'projects'> & { projects: Array<ResolversParentTypes['Project']> };
   ProjectsSummary: ProjectsSummary;
@@ -6761,7 +6784,6 @@ export type PodcastKeysendContributionCreateResponseResolvers<ContextType = any,
 
 export type PostResolvers<ContextType = any, ParentType extends ResolversParentTypes['Post'] = ResolversParentTypes['Post']> = {
   amountFunded?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   contributions?: Resolver<Array<ResolversTypes['Contribution']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   creator?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
@@ -6800,11 +6822,7 @@ export type ProfileNotificationSettingsResolvers<ContextType = any, ParentType e
 
 export type ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {
   ambassadors?: Resolver<ResolversTypes['ProjectAmbassadorsConnection'], ParentType, ContextType>;
-  aonContractAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  aonGoalDurationInDays?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  aonGoalInSats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  aonGoalStatus?: Resolver<Maybe<ResolversTypes['ProjectAonGoalStatus']>, ParentType, ContextType>;
-  aonGoalTimeRemaining?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  aonGoal?: Resolver<Maybe<ResolversTypes['ProjectAonGoal']>, ParentType, ContextType>;
   balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   balanceUsdCent?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   canDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -6823,7 +6841,6 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   goalsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   grantApplications?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<ProjectGrantApplicationsArgs>>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
   lastCreationStep?: Resolver<ResolversTypes['ProjectCreationStep'], ParentType, ContextType>;
@@ -6889,6 +6906,20 @@ export type ProjectAmbassadorsStatsResolvers<ContextType = any, ParentType exten
   contributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   contributionsSum?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProjectAonGoalResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectAonGoal'] = ResolversParentTypes['ProjectAonGoal']> = {
+  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  contractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  contractCreationTxId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  deployedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  endsAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  goalAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  goalDurationInDays?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['ProjectAonGoalStatus'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7289,6 +7320,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectsMostFundedAllOrNothing?: Resolver<Array<ResolversTypes['ProjectMostFunded']>, ParentType, ContextType, RequireFields<QueryProjectsMostFundedAllOrNothingArgs, 'input'>>;
   projectsMostFundedByCategory?: Resolver<Array<ResolversTypes['ProjectMostFundedByCategory']>, ParentType, ContextType, RequireFields<QueryProjectsMostFundedByCategoryArgs, 'input'>>;
   projectsMostFundedByTag?: Resolver<Array<ResolversTypes['ProjectMostFundedByTag']>, ParentType, ContextType, RequireFields<QueryProjectsMostFundedByTagArgs, 'input'>>;
+  projectsMostFundedTakeItAll?: Resolver<Array<ResolversTypes['ProjectMostFunded']>, ParentType, ContextType, RequireFields<QueryProjectsMostFundedTakeItAllArgs, 'input'>>;
   projectsSummary?: Resolver<ResolversTypes['ProjectsSummary'], ParentType, ContextType>;
   shippingAddressesGet?: Resolver<Array<ResolversTypes['ShippingAddress']>, ParentType, ContextType, RequireFields<QueryShippingAddressesGetArgs, 'input'>>;
   statusCheck?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -7750,6 +7782,7 @@ export type Resolvers<ContextType = any> = {
   ProjectAmbassadorEdge?: ProjectAmbassadorEdgeResolvers<ContextType>;
   ProjectAmbassadorsConnection?: ProjectAmbassadorsConnectionResolvers<ContextType>;
   ProjectAmbassadorsStats?: ProjectAmbassadorsStatsResolvers<ContextType>;
+  ProjectAonGoal?: ProjectAonGoalResolvers<ContextType>;
   ProjectAonGoalStatusUpdateResponse?: ProjectAonGoalStatusUpdateResponseResolvers<ContextType>;
   ProjectContributionsGroupedByMethodStats?: ProjectContributionsGroupedByMethodStatsResolvers<ContextType>;
   ProjectContributionsStats?: ProjectContributionsStatsResolvers<ContextType>;
@@ -8032,11 +8065,16 @@ export type MeProjectFollowsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: any, projectFollows: Array<{ __typename?: 'Project', id: any, title: string, status?: ProjectStatus | null, thumbnailImage?: string | null, name: string }> } | null };
 
+export type ProjectAonGoalForLandingPageFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, balance: number, goalDurationInDays: number, deployedAt?: any | null, status: ProjectAonGoalStatus };
+
 export type ContributionForLandingPageFragment = { __typename?: 'Contribution', amount: number, id: any, projectId: any, createdAt?: any | null, funder: { __typename?: 'Funder', id: any, user?: { __typename?: 'User', id: any, heroId: string, imageUrl?: string | null, guardianType?: GuardianType | null, username: string } | null } };
 
 export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
 
-export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, aonGoalInSats?: number | null, aonGoalDurationInDays?: number | null, launchedAt?: any | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
+export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, launchedAt?: any | null, aonGoal?: (
+    { __typename?: 'ProjectAonGoal' }
+    & ProjectAonGoalForLandingPageFragment
+  ) | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
 export type ProjectForLaunchpadPageFragment = { __typename?: 'Project', id: any, name: string, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, balanceUsdCent: number, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
 
@@ -8722,6 +8760,10 @@ export type ProjectPostViewFragment = { __typename?: 'Post', id: any, title: str
       & ProjectGoalsFragment
     )> } };
 
+export type ProjectAonGoalForProjectPageFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, balance: number, goalDurationInDays: number, deployedAt?: any | null, status: ProjectAonGoalStatus, contractAddress: string };
+
+export type ProjectAonGoalForProjectUpdateFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, goalDurationInDays: number };
+
 export type ProjectFragment = { __typename?: 'Project', id: any, title: string, name: string, type: ProjectType, shortDescription?: string | null, description?: string | null, defaultGoalId?: any | null, balance: number, balanceUsdCent: number, createdAt: any, updatedAt: any, images: Array<string>, thumbnailImage?: string | null, links: Array<string>, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, fundersCount?: number | null, contributionsCount?: number | null };
 
 export type ProjectNostrKeysFragment = { __typename?: 'Project', id: any, name: string, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', privateKey?: { __typename?: 'NostrPrivateKey', nsec: string } | null, publicKey: { __typename?: 'NostrPublicKey', npub: string } } } };
@@ -8732,7 +8774,10 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonContractAddress?: string | null, aonGoalDurationInDays?: number | null, aonGoalInSats?: number | null, aonGoalStatus?: ProjectAonGoalStatus | null, launchScheduledAt?: any | null, location?: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, launchScheduledAt?: any | null, aonGoal?: (
+    { __typename?: 'ProjectAonGoal' }
+    & ProjectAonGoalForProjectPageFragment
+  ) | null, location?: (
     { __typename?: 'Location' }
     & ProjectLocationFragment
   ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
@@ -8748,7 +8793,10 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
 
 export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null };
 
-export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, aonGoalDurationInDays?: number | null, aonGoalInSats?: number | null, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null };
+export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, aonGoal?: (
+    { __typename?: 'ProjectAonGoal' }
+    & ProjectAonGoalForProjectPageFragment
+  ) | null };
 
 export type ProjectReviewFragment = { __typename?: 'ProjectReview', id: any, reviewedAt?: any | null, status: ProjectReviewStatus, rejectionReasons: Array<string>, version: number };
 
@@ -10033,6 +10081,15 @@ export const PostForLandingPageFragmentDoc = gql`
   }
 }
     `;
+export const ProjectAonGoalForLandingPageFragmentDoc = gql`
+    fragment ProjectAonGoalForLandingPage on ProjectAonGoal {
+  goalAmount
+  balance
+  goalDurationInDays
+  deployedAt
+  status
+}
+    `;
 export const ProjectForLandingPageFragmentDoc = gql`
     fragment ProjectForLandingPage on Project {
   id
@@ -10047,8 +10104,9 @@ export const ProjectForLandingPageFragmentDoc = gql`
   balance
   balanceUsdCent
   fundingStrategy
-  aonGoalInSats
-  aonGoalDurationInDays
+  aonGoal {
+    ...ProjectAonGoalForLandingPage
+  }
   launchedAt
   owners {
     id
@@ -10065,7 +10123,7 @@ export const ProjectForLandingPageFragmentDoc = gql`
     }
   }
 }
-    `;
+    ${ProjectAonGoalForLandingPageFragmentDoc}`;
 export const ProjectForLaunchpadPageFragmentDoc = gql`
     fragment ProjectForLaunchpadPage on Project {
   id
@@ -11155,6 +11213,12 @@ export const ProjectPostViewFragmentDoc = gql`
 }
     ${PostPageProjectRewardFragmentDoc}
 ${ProjectGoalsFragmentDoc}`;
+export const ProjectAonGoalForProjectUpdateFragmentDoc = gql`
+    fragment ProjectAonGoalForProjectUpdate on ProjectAonGoal {
+  goalAmount
+  goalDurationInDays
+}
+    `;
 export const ProjectFragmentDoc = gql`
     fragment Project on Project {
   id
@@ -11191,6 +11255,16 @@ export const ProjectNostrKeysFragmentDoc = gql`
       }
     }
   }
+}
+    `;
+export const ProjectAonGoalForProjectPageFragmentDoc = gql`
+    fragment ProjectAonGoalForProjectPage on ProjectAonGoal {
+  goalAmount
+  balance
+  goalDurationInDays
+  deployedAt
+  status
+  contractAddress
 }
     `;
 export const ProjectLocationFragmentDoc = gql`
@@ -11288,10 +11362,9 @@ export const ProjectPageBodyFragmentDoc = gql`
   category
   subCategory
   links
-  aonContractAddress
-  aonGoalDurationInDays
-  aonGoalInSats
-  aonGoalStatus
+  aonGoal {
+    ...ProjectAonGoalForProjectPage
+  }
   launchScheduledAt
   location {
     ...ProjectLocation
@@ -11313,7 +11386,8 @@ export const ProjectPageBodyFragmentDoc = gql`
     ...ProjectPaymentMethods
   }
 }
-    ${ProjectLocationFragmentDoc}
+    ${ProjectAonGoalForProjectPageFragmentDoc}
+${ProjectLocationFragmentDoc}
 ${ProjectKeysFragmentDoc}
 ${ProjectPageCreatorFragmentDoc}
 ${ProjectPaymentMethodsFragmentDoc}`;
@@ -11348,11 +11422,12 @@ export const ProjectUpdateFragmentDoc = gql`
   rewardCurrency
   fundingStrategy
   lastCreationStep
-  aonGoalDurationInDays
-  aonGoalInSats
+  aonGoal {
+    ...ProjectAonGoalForProjectPage
+  }
   launchScheduledAt
 }
-    `;
+    ${ProjectAonGoalForProjectPageFragmentDoc}`;
 export const ProjectReviewFragmentDoc = gql`
     fragment ProjectReview on ProjectReview {
   id

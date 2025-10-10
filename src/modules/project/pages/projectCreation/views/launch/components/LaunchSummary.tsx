@@ -18,11 +18,11 @@ export const LaunchSummary = () => {
 
   /** Get formatted funding goal display */
   const getFundingGoalDisplay = () => {
-    if (!project?.aonGoalInSats) return '0 sats'
+    if (!project?.aonGoal?.goalAmount) return '0 sats'
 
-    const satsAmount = formatAmount(project.aonGoalInSats, 'BTCSAT')
+    const satsAmount = formatAmount(project.aonGoal.goalAmount, 'BTCSAT')
     // Simplified USD conversion for display - replace with proper conversion
-    const usdAmount = Math.round(project.aonGoalInSats * 0.001) // Placeholder conversion
+    const usdAmount = Math.round(project.aonGoal.goalAmount * 0.001) // Placeholder conversion
     return `${satsAmount} (or ${usdAmount.toLocaleString()} USD)`
   }
 
@@ -71,7 +71,7 @@ export const LaunchSummary = () => {
         </HStack>
 
         {/* Only show funding goal if aonGoalInSats exists */}
-        {project?.aonGoalInSats && (
+        {project?.aonGoal?.goalAmount && (
           <HStack>
             <Body medium>{t('Funding Goal')}: </Body>
             <Body bold>{getFundingGoalDisplay()}</Body>
@@ -79,10 +79,10 @@ export const LaunchSummary = () => {
         )}
 
         {/* Only show funding duration if aonGoalDurationInDays exists */}
-        {project?.aonGoalDurationInDays && (
+        {project?.aonGoal?.goalDurationInDays && (
           <HStack>
             <Body medium>{t('Funding duration')}: </Body>
-            <Body bold>{`${project.aonGoalDurationInDays} ${t('days')}`}</Body>
+            <Body bold>{`${project.aonGoal.goalDurationInDays} ${t('days')}`}</Body>
           </HStack>
         )}
 

@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_PAYMENT_METHODS } from './paymentMethodsFragment'
+import { FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE } from './projectAognGoalFragment.ts'
 import { FRAGMENT_PROJECT_PAGE_CREATOR } from './userFragment'
 
 export const FRAGMENT_PROJECT = gql`
@@ -78,6 +79,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
   ${FRAGMENT_PROJECT_LOCATION}
   ${FRAGMENT_PROJECT_KEYS}
   ${FRAGMENT_PROJECT_PAYMENT_METHODS}
+  ${FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE}
   fragment ProjectPageBody on Project {
     id
     name
@@ -108,10 +110,9 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     category
     subCategory
     links
-    aonContractAddress
-    aonGoalDurationInDays
-    aonGoalInSats
-    aonGoalStatus
+    aonGoal {
+      ...ProjectAonGoalForProjectPage
+    }
     launchScheduledAt
     location {
       ...ProjectLocation
@@ -144,6 +145,7 @@ export const FRAGMENT_PROJECT_HEADER_SUMMARY = gql`
 `
 
 export const FRAGMENT_PROJECT_UPDATE = gql`
+  ${FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE}
   fragment ProjectUpdate on Project {
     id
     title
@@ -167,8 +169,9 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     rewardCurrency
     fundingStrategy
     lastCreationStep
-    aonGoalDurationInDays
-    aonGoalInSats
+    aonGoal {
+      ...ProjectAonGoalForProjectPage
+    }
     launchScheduledAt
   }
 `

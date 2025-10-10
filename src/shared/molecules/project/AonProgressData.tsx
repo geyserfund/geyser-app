@@ -2,15 +2,11 @@ import { t } from 'i18next'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { aonProjectTimeLeft, getAonGoalPercentage } from '@/shared/utils/project/getAonData.ts'
-import { Project } from '@/types/index.ts'
+import { ProjectAonGoalForLandingPageFragment } from '@/types/index.ts'
 
-export const AonProgressData = ({
-  project,
-}: {
-  project: Pick<Project, 'aonGoalInSats' | 'balance' | 'launchedAt' | 'aonGoalDurationInDays'>
-}) => {
-  const percentage = getAonGoalPercentage(project)
-  const timeLeft = aonProjectTimeLeft(project)
+export const AonProgressData = ({ aonGoal }: { aonGoal: ProjectAonGoalForLandingPageFragment }) => {
+  const percentage = getAonGoalPercentage(aonGoal)
+  const timeLeft = aonProjectTimeLeft(aonGoal)
   return (
     <Body
       size="sm"

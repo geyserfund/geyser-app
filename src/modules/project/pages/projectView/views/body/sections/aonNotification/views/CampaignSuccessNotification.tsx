@@ -16,12 +16,12 @@ export const CampaignSuccessNotification = () => {
 
   /** Calculate days left for claiming funds */
   const daysLeft = useMemo(() => {
-    if (!project.launchedAt || !project.aonGoalDurationInDays) {
+    if (!project.aonGoal?.deployedAt || !project.aonGoal?.goalDurationInDays) {
       return '00:00:00'
     }
 
-    const launchDate = DateTime.fromMillis(project.launchedAt)
-    const claimDeadline = launchDate.plus({ days: project.aonGoalDurationInDays + 30 })
+    const launchDate = DateTime.fromMillis(project.aonGoal?.deployedAt)
+    const claimDeadline = launchDate.plus({ days: project.aonGoal?.goalDurationInDays || 0 + 30 })
     const currentDateTime = DateTime.now()
 
     if (currentDateTime > claimDeadline) {
@@ -38,7 +38,7 @@ export const CampaignSuccessNotification = () => {
     const formattedMinutes = minutes.toString().padStart(2, '0')
 
     return `${formattedDays}:${formattedHours}:${formattedMinutes}`
-  }, [project.launchedAt, project.aonGoalDurationInDays])
+  }, [project.aonGoal?.deployedAt, project.aonGoal?.goalDurationInDays])
 
   if (!isProjectOwner) {
     return (

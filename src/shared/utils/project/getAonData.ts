@@ -1,15 +1,17 @@
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 
-import { ProjectState } from '@/modules/project/state/projectAtom.ts'
+import { ProjectAonGoalForLandingPageFragment } from '@/types/index.ts'
 
-export const aonProjectTimeLeft = (project: Pick<ProjectState, 'launchedAt' | 'aonGoalDurationInDays'>) => {
-  if (!project.launchedAt || !project.aonGoalDurationInDays) {
+export const aonProjectTimeLeft = (
+  aonGoal?: Pick<ProjectAonGoalForLandingPageFragment, 'deployedAt' | 'goalDurationInDays'> | null,
+) => {
+  if (!aonGoal || !aonGoal.deployedAt || !aonGoal.goalDurationInDays) {
     return null
   }
 
-  const launchDate = DateTime.fromMillis(project.launchedAt)
-  const aonEndDate = launchDate.plus({ days: project.aonGoalDurationInDays })
+  const launchDate = DateTime.fromMillis(aonGoal.deployedAt)
+  const aonEndDate = launchDate.plus({ days: aonGoal.goalDurationInDays })
   const currentDateTime = DateTime.now()
 
   if (currentDateTime >= aonEndDate) {
@@ -42,6 +44,12 @@ export const aonProjectTimeLeft = (project: Pick<ProjectState, 'launchedAt' | 'a
   return null // No time left
 }
 
-export const getAonGoalPercentage = (project: Pick<ProjectState, 'aonGoalInSats' | 'balance'>) => {
-  return project.aonGoalInSats ? Math.round((project.balance / project.aonGoalInSats) * 100) : 0
+export const getAonGoalPercentage = (
+  aonGoal?: Pick<ProjectAonGoalForLandingPageFragment, 'goalAmount' | 'balance'> | null,
+) => {
+  if (!aonGoal || !aonGoal?.goalAmount || !aonGoal.balance) {
+    return 0
+  }
+
+  return Math.round((aonGoal.balance / aonGoal.goalAmount) * 100)
 }

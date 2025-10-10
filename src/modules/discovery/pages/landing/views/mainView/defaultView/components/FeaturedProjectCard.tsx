@@ -68,10 +68,10 @@ export const FeaturedProjectCard = ({
         onClick={() => navigate(getPathWithGeyserPromotionsHero('project', projectName))}
         {...rest}
       >
-        {isAON && (
+        {isAON && project.aonGoal && (
           <VStack w="full" alignItems="start" spacing={1}>
-            <AonProgressBar project={project} />
-            <AonProgressData project={project} />
+            <AonProgressBar aonGoal={project.aonGoal} />
+            <AonProgressData aonGoal={project.aonGoal} />
           </VStack>
         )}
       </FeaturedCardLayout>

@@ -302,7 +302,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       refundAddress: swap.refundAddress,
       timelock: swap.timeoutBlockHeight,
       privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      aonContractAddress: project?.aonContractAddress || '',
+      aonContractAddress: project?.aonGoal?.contractAddress || '',
     })
     console.log('getTransactionForBoltzClaimCall for LIGHTNING', getTransactionForBoltzClaimCall)
     paymentSwapClaimTxSet({
@@ -356,7 +356,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       refundAddress: swap.claimDetails.refundAddress,
       timelock: swap.claimDetails.timeoutBlockHeight,
       privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      aonContractAddress: project?.aonContractAddress || '',
+      aonContractAddress: project?.aonGoal?.contractAddress || '',
     })
     console.log('getTransactionForBoltzClaimCall for ONCHAIN', getTransactionForBoltzClaimCall)
     paymentSwapClaimTxSet({

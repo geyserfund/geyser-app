@@ -1,6 +1,9 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_AON_GOAL_FOR_LANDING_PAGE } from './aonGoalFragment.ts'
+
 export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
+  ${FRAGMENT_PROJECT_AON_GOAL_FOR_LANDING_PAGE}
   fragment ProjectForLandingPage on Project {
     id
     name
@@ -14,8 +17,9 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     balance
     balanceUsdCent
     fundingStrategy
-    aonGoalInSats
-    aonGoalDurationInDays
+    aonGoal {
+      ...ProjectAonGoalForLandingPage
+    }
     launchedAt
     owners {
       id

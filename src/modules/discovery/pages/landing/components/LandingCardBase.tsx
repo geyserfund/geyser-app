@@ -63,8 +63,8 @@ export const LandingCardBase = ({
     project.contributionSummary?.contributionsTotalUsd || centsToDollars(project.balanceUsdCent)
 
   const isAonProject = isAllOrNothing(project)
-  const percentage = getAonGoalPercentage(project)
-  const timeLeft = aonProjectTimeLeft(project)
+  const percentage = getAonGoalPercentage(project.aonGoal)
+  const timeLeft = aonProjectTimeLeft(project.aonGoal)
 
   const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
   const fires = getFires(contributionAmount)
@@ -259,7 +259,7 @@ export const LandingCardBase = ({
         </Box>
         {isAonProject && (
           <AonProgressBar
-            project={project}
+            aonGoal={project.aonGoal}
             height={getResponsiveValue({ base: '10px', lg: '14px' })}
             wrapperProps={{
               position: 'absolute',
