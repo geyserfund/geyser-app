@@ -39,7 +39,8 @@ export const FilterComponent = () => {
 
   return (
     <HStack>
-      <form
+      <HStack
+        as="form"
         onSubmit={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -68,7 +69,8 @@ export const FilterComponent = () => {
             />
           </InputRightElement>
         </InputGroup>
-      </form>
+        {/* <FilterByRegionMenuMenu /> */}
+      </HStack>
       <FilterModal {...filterModal} />
     </HStack>
   )

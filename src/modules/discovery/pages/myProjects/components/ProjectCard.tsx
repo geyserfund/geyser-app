@@ -10,6 +10,7 @@ import { ProjectPrelaunchStatus } from '@/shared/molecules/ProjectPrelaunchStatu
 import { ProjectForMyProjectsFragment, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
 
+import { inDraftStatus } from '../hooks/useMyProjects.ts'
 import { Contributions } from './Contributions'
 import { Rewards } from './Rewards'
 
@@ -35,7 +36,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       )
     }
 
-    if (project.status === ProjectStatus.Draft) {
+    if (project.status && inDraftStatus.includes(project.status)) {
       return (
         <Direction mt={4} spacing={4} alignItems="stretch">
           <InDraftProjectCard />

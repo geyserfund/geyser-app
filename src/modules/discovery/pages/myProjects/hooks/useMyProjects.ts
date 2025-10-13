@@ -31,6 +31,13 @@ export const sortProjectsByActivity = (
     })
 }
 
+export const inDraftStatus = [
+  ProjectStatus.Draft,
+  ProjectStatus.InReview,
+  ProjectStatus.PreLaunch,
+  ProjectStatus.Accepted,
+] as ProjectStatus[]
+
 export const useMyProjects = (userId: number) => {
   const { toast } = useNotification()
 
@@ -94,7 +101,7 @@ export const useMyProjects = (userId: number) => {
       // )
       setInDraftProjects(
         data.user.ownerOf
-          ?.filter((val) => val?.project?.status === ProjectStatus.Draft)
+          ?.filter((val) => val?.project?.status && inDraftStatus.includes(val?.project?.status))
           .map((val) => val.project)
           .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
       )

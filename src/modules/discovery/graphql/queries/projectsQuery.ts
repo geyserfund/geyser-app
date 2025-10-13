@@ -124,3 +124,36 @@ export const QUERY_PROJECT_THUMBNAIL_IMAGE = gql`
     }
   }
 `
+
+export const QUERY_PROJECTS_ALMOST_FUNDED_ALL_OR_NOTHING = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectsAonAlmostFunded($input: ProjectsAonAlmostFundedInput) {
+    projectsAonAlmostFunded(input: $input) {
+      projects {
+        ...ProjectForLandingPage
+      }
+    }
+  }
+`
+
+export const QUERY_PROJECTS_ALMOST_OVER_ALL_OR_NOTHING = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectsAonAlmostOver($input: ProjectsAonAlmostOverInput) {
+    projectsAonAlmostOver(input: $input) {
+      projects {
+        ...ProjectForLandingPage
+      }
+    }
+  }
+`
+
+export const QUERY_PROJECTS_MOST_FUNDED_TIA = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectsMostFundedTakeItAll($input: ProjectsMostFundedTakeItAllInput!) {
+    projectsMostFundedTakeItAll(input: $input) {
+      project {
+        ...ProjectForLandingPage
+      }
+    }
+  }
+`

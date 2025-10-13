@@ -3,8 +3,8 @@ import { Outlet } from 'react-router'
 
 import { useMobileMode } from '@/utils'
 
-import { FilterComponent } from '../components/FilterComponent.tsx'
-import { TitleBar } from '../views/mainView/defaultView/sections/TitleBar.tsx'
+import { FilterComponent } from './components/FilterComponent.tsx'
+import { TitleBar } from './views/mainView/defaultView/sections/TitleBar.tsx'
 
 export const Landing = () => {
   const isMobileMode = useMobileMode()

@@ -161,7 +161,7 @@ export const PlatformNavBar = () => {
       position="fixed"
       top={0}
       justifyContent={'center'}
-      zIndex={9}
+      zIndex={99}
       bgColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
     >
       <VStack
