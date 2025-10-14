@@ -29,3 +29,11 @@ export const MUTATION_PLEDGE_REFUND_INITIATE = gql`
     }
   }
 `
+
+export const MUTATION_BROADCAST_TRANSACTION = gql`
+  mutation BroadcastTransaction($input: BroadcastTransactionInput!) {
+    broadcastTransaction(input: $input) {
+      id
+    }
+  }
+`

@@ -11,7 +11,6 @@ import * as yup from 'yup'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { ControlledCheckboxInput } from '@/shared/components/controlledInput/ControlledCheckboxInput.tsx'
 import { AmountInput } from '@/shared/components/form/AmountInput.tsx'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { Body } from '@/shared/components/typography'
@@ -20,8 +19,8 @@ import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import { ProjectCreationStep, Satoshis, USDCents } from '@/types/index.ts'
 import { toInt } from '@/utils/index.ts'
 
-import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
+import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 
 const formSchema = yup.object({
   amount: yup
@@ -36,7 +35,6 @@ const formSchema = yup.object({
     .typeError(t('Duration must be a number')),
   launchDate: yup.date().optional().typeError(t('Launch date must be a valid date')),
   amountUSD: yup.number().optional().typeError(t('Amount must be a number')),
-  isPrivate: yup.boolean().optional(),
 })
 
 type FormValues = yup.InferType<typeof formSchema>
@@ -45,25 +43,24 @@ export const AllOrNothingGoal = () => {
   const navigate = useNavigate()
   const usdRate = useAtomValue(usdRateAtom)
 
+  const { project } = useProjectAtom()
+
   const { getSatoshisFromUSDCents, getUSDAmount } = useBTCConverter()
 
-  const { control, handleSubmit, register, setValue, watch, formState, clearErrors } = useForm<FormValues>({
+  const { handleSubmit, register, setValue, watch, formState, clearErrors } = useForm<FormValues>({
     resolver: yupResolver(formSchema),
     reValidateMode: 'onSubmit',
     mode: 'onSubmit',
     defaultValues: {
-      amount: 0,
-      amountUSD: 0,
-      duration: 0,
-      launchDate: undefined,
-      isPrivate: true,
+      amount: project.aonGoal?.goalAmount || 0,
+      amountUSD: project.aonGoal?.goalAmount ? getUSDAmount(project.aonGoal?.goalAmount as Satoshis) : 0,
+      duration: project.aonGoal?.goalDurationInDays || 0,
+      launchDate: project.launchScheduledAt ? DateTime.fromMillis(project.launchScheduledAt).toJSDate() : undefined,
     },
   })
 
   const amount = watch('amount') || 0
   const amountUSD = watch('amountUSD') || 0
-
-  const { project } = useProjectAtom()
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.FundingGoal,
@@ -235,13 +232,6 @@ export const AllOrNothingGoal = () => {
                     : ' Select date and time'}
                 </Button>
               }
-            />
-            <ControlledCheckboxInput
-              control={control}
-              name="isPrivate"
-              label={t('Keep project private until launch')}
-              size="lg"
-              marginTop={4}
             />
           </FieldContainer>
         </VStack>

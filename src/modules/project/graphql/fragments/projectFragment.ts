@@ -107,6 +107,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     rejectionReason
     fundingStrategy
     lastCreationStep
+    launchScheduledAt
     category
     subCategory
     links

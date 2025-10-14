@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
@@ -8,75 +7,8 @@ import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
-const pwaOptions: Partial<VitePWAOptions> = {
-  strategies: 'injectManifest',
-  srcDir: 'src',
-  filename: 'sw.ts',
-  registerType: 'autoUpdate',
-  injectRegister: 'auto',
-  includeAssets: ['logo-brand.svg', 'sitemap.xml'],
-  injectManifest: {
-    maximumFileSizeToCacheInBytes: 5242880,
-  },
-  manifest: {
-    start_url: '.',
-    display: 'standalone',
-    background_color: '#111110',
-    name: 'Geyser',
-    short_name: 'Geyser',
-    description:
-      'Geyser is a bitcoin crowdfunding platform that enables campaign creators to launch their projects with rewards and engage their communities with posts and content.',
-    theme_color: '#111110',
-    icons: [
-      {
-        src: 'logo-brand.svg',
-        sizes: 'any',
-        type: 'image/svg+xml',
-      },
-      {
-        src: '/icons/60.png',
-        sizes: '60x60',
-        type: 'image/png',
-      },
-      {
-        src: '/icons/120.png',
-        sizes: '120x120',
-        type: 'image/png',
-      },
-      {
-        src: '/icons/180-padded.png',
-        sizes: '180x180',
-        type: 'image/png',
-      },
-      {
-        src: '/icons/192.png',
-        sizes: '192x192',
-        type: 'image/png',
-      },
-      {
-        src: '/icons/512-padded.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'any',
-      },
-      {
-        src: '/icons/192-maskable.png',
-        sizes: '192x192',
-        type: 'image/png',
-        purpose: 'maskable',
-      },
-      {
-        src: '/icons/512-maskable.png',
-        sizes: '512x512',
-        type: 'image/png',
-        purpose: 'maskable',
-      },
-    ],
-  },
-  workbox: {
-    globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
-  },
-}
+import { pwaOptions } from './config/pwaOptions'
+import { rollupOptions } from './config/rollupOptions'
 
 export default defineConfig(({ command, mode }) => {
   // Load env file based on `mode` in the current working directory.
@@ -120,9 +52,9 @@ export default defineConfig(({ command, mode }) => {
     // define['process.env.NODE_ENV'] = '\"test\"'; // Example
   }
 
-  pwaOptions.mode = env.APP_ENV === 'development' ? 'development' : 'production'
+  const pwaOptionsMode = env.APP_ENV === 'development' ? 'development' : 'production'
   const plugins: PluginOption[] = [
-    VitePWA(pwaOptions),
+    VitePWA({ ...pwaOptions, mode: pwaOptionsMode }),
     react(),
     tsconfigPaths(),
     loadVersion(),
@@ -140,6 +72,9 @@ export default defineConfig(({ command, mode }) => {
     server,
     // Use the conditionally populated define object
     define,
+    build: {
+      rollupOptions,
+    },
     test: {
       globals: true,
       environment: 'jsdom',

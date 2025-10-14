@@ -17,7 +17,7 @@ export const TitleBar = () => {
       rightContent={<FilterComponent />}
       headerProps={{
         display: 'flex',
-        flexDirection: { base: 'column', lg: 'column' },
+        flexDirection: { base: 'column', lg: 'row' },
         alignItems: 'center',
         paddingY: 2,
       }}
