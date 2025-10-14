@@ -23,7 +23,7 @@ type TitleWithPeriodProps = {
 
 export const TitleWithPeriod = ({ title, period, seeAllTo, handlePeriodChange, ...props }: TitleWithPeriodProps) => {
   return (
-    <HStack w="full" justifyContent="space-between" flexWrap={'wrap'} spacing={1} {...props}>
+    <HStack w="full" justifyContent="space-between" spacing={1} {...props}>
       <HStack w={{ base: 'full', sm: 'auto' }} justifyContent="space-between">
         {title && (
           <H3 size={{ base: 'lg', lg: 'xl' }} bold dark wordBreak={'keep-all'} width={{ sm: '230px' }}>
@@ -58,7 +58,7 @@ export const TitleWithPeriod = ({ title, period, seeAllTo, handlePeriodChange, .
         )}
         <CustomSelect
           isSearchable={false}
-          width={{ base: 'full', sm: '135px' }}
+          width={{ base: '135px', sm: '135px' }}
           options={periodOptions}
           value={periodOptions.find((option) => option.value === period)}
           onChange={handlePeriodChange}

@@ -1,101 +1,86 @@
-import { Box, Button, ButtonProps } from '@chakra-ui/react'
+import { Button, ButtonProps, Image } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { Link } from 'react-router'
 
-import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
-import { getPath } from '@/shared/constants'
-import { GradientBorder } from '@/shared/molecules/GradientBorder'
-import { GuardiansButtonBackgroundGradient, GuardiansButtonBackgroundGradientBright } from '@/shared/styles/custom'
+import { CampaignIconUrl, FundraiserIconUrl, getPath, PathsMap, ProductsIconUrl } from '@/shared/constants/index.ts'
 
 import { BottomNavBarContainer } from '../components/bottomNav'
-import { currentPlatformNavItemAtom } from './discoveryNavAtom'
-import { DiscoveryNavItem, DiscoveryNavItemKey, discoveryNavItems } from './discoveryNavData'
+import { currentBottomNavItemAtom } from './discoveryNavAtom'
+
+export enum BottomNavItemKey {
+  campaigns = 'campaigns',
+  fundraisers = 'fundraisers',
+  products = 'products',
+}
+
+export type BottomNavItem = {
+  label: string
+  key: BottomNavItemKey
+  path: keyof PathsMap
+  IconComponent: React.ReactNode
+}
+
+const imageDimension = { base: '40px', sm: '45px', md: '50px' }
+
+export const bottomNavItems = [
+  {
+    label: 'Campaigns',
+    key: BottomNavItemKey.campaigns,
+    path: 'discoveryCampaigns',
+    IconComponent: <Image src={CampaignIconUrl} height={imageDimension} width={imageDimension} />,
+  },
+  {
+    label: 'Fundraisers',
+    key: BottomNavItemKey.fundraisers,
+    path: 'discoveryFundraisers',
+    IconComponent: <Image src={FundraiserIconUrl} height={imageDimension} width={imageDimension} />,
+  },
+  {
+    label: 'Products',
+    key: BottomNavItemKey.products,
+    path: 'discoveryProducts',
+    IconComponent: <Image src={ProductsIconUrl} height={imageDimension} width={imageDimension} />,
+  },
+] as BottomNavItem[]
 
 export const DiscoveryBottomNav = () => {
-  const currentNavItem = useAtomValue(currentPlatformNavItemAtom)
-
-  const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
-  const followedActivityDot = useAtomValue(followedActivityDotAtom)
+  const currentNavItem = useAtomValue(currentBottomNavItemAtom)
 
   return (
     <BottomNavBarContainer spacing={1} w="full" marginX={0}>
-      {discoveryNavItems.map((item) => {
-        if (!item.bottomNav) return null
-        const activityDot =
-          item.key === DiscoveryNavItemKey.MyProjects
-            ? myProjectActivityDot
-            : item.key === DiscoveryNavItemKey.Activity
-            ? followedActivityDot
-            : false
-
-        return (
-          <DiscoveryBottomNavButton
-            key={item.label}
-            item={item}
-            currentNavItem={currentNavItem}
-            activityDot={activityDot}
-          />
-        )
+      {bottomNavItems.map((item) => {
+        return <DiscoveryBottomNavButton key={item.label} item={item} currentNavItem={currentNavItem} />
       })}
     </BottomNavBarContainer>
   )
 }
 
 type DiscoveryBottomNavButtonProps = {
-  item: DiscoveryNavItem
-  currentNavItem?: DiscoveryNavItem
-  activityDot?: boolean
+  item: BottomNavItem
+  currentNavItem?: BottomNavItem
 } & ButtonProps
 
-const DiscoveryBottomNavButton = ({ item, currentNavItem, activityDot, ...rest }: DiscoveryBottomNavButtonProps) => {
+const DiscoveryBottomNavButton = ({ item, currentNavItem, ...rest }: DiscoveryBottomNavButtonProps) => {
   const isActive = currentNavItem?.path === item.path
 
-  const isGuardians = item.path === DiscoveryNavItemKey.Guardians
-
-  let buttonStyles: ButtonProps = {}
-
-  if (isGuardians) {
-    buttonStyles = {
-      background: GuardiansButtonBackgroundGradient,
-      width: 'full',
-    }
-  }
-
   return (
-    <GradientBorder
-      display="inline-flex"
+    <Button
+      variant="menu"
+      colorScheme="primary1"
+      size="xl"
       flex={1}
-      internalContainerProps={{ flex: 1 }}
-      enable={isGuardians}
-      gradientColor={GuardiansButtonBackgroundGradientBright}
+      key={item.label}
+      as={Link}
+      paddingX={4}
+      to={getPath(item.path)}
+      isActive={isActive}
+      justifyContent={'center'}
+      fontSize={{ base: '12px', sm: '16px', md: '18px' }}
+      {...rest}
     >
-      <Button
-        variant="menu"
-        colorScheme="primary1"
-        size="lg"
-        flex={1}
-        key={item.label}
-        as={Link}
-        paddingX={4}
-        to={getPath(item.path)}
-        isActive={isActive}
-        justifyContent={'center'}
-        {...buttonStyles}
-        {...rest}
-      >
-        <item.icon fontSize="24px" />
-        {activityDot ? (
-          <Box
-            position="absolute"
-            top={2}
-            right={2}
-            borderRadius="50%"
-            backgroundColor="error.9"
-            height="6px"
-            width="6px"
-          />
-        ) : null}
-      </Button>
-    </GradientBorder>
+      {item.IconComponent}
+      {t(item.label)}
+    </Button>
   )
 }

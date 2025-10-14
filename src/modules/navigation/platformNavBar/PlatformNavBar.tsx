@@ -12,6 +12,7 @@ import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
 import { useNotificationPromptModal } from '@/modules/auth/hooks/useNotificationPromptModal'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
+import { useMobileMode } from '@/utils/index.ts'
 
 import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
@@ -34,6 +35,8 @@ import { ProfileNav } from './profileNav/ProfileNav'
 export const PlatformNavBar = () => {
   const { isLoggedIn, logout, queryCurrentUser, user } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
+
+  const isMobileMode = useMobileMode()
 
   const { onCopy, hasCopied } = useCopyToClipboard(
     `${window.location.origin}/${PathName.guardians}${user.heroId ? `?hero=${user.heroId}` : ''}`,
@@ -184,7 +187,7 @@ export const PlatformNavBar = () => {
             {renderLeftSide()}
           </HStack>
 
-          {isPlatformRoutes && <PlatformNav />}
+          {isPlatformRoutes && !isMobileMode && <PlatformNav />}
 
           {isManifestoPage ? (
             <CloseGoBackButton />

@@ -9,8 +9,18 @@ export const TitleBar = () => {
     <ProjectRowLayout
       w="full"
       title={t('Discover and fund Bitcoin projects worldwide')}
+      titleProps={{
+        textAlign: 'center',
+        size: 'xl',
+      }}
       spacing={8}
       rightContent={<FilterComponent />}
+      headerProps={{
+        display: 'flex',
+        flexDirection: { base: 'column', lg: 'column' },
+        alignItems: 'center',
+        paddingY: 2,
+      }}
     >
       <FeaturedContributions />
     </ProjectRowLayout>

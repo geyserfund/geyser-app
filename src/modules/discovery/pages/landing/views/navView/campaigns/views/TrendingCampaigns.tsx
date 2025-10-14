@@ -8,7 +8,7 @@ import {
 
 import { RenderProjectList } from '../../components/RenderProjectList.tsx'
 
-const NO_OF_PROJECT_TO_LOAD = 20
+const NO_OF_PROJECT_TO_LOAD = 30
 
 export const TrendingCampaigns = () => {
   const [campaignProjects, setCampaignProjects] = useState<ProjectForLandingPageFragment[]>([])

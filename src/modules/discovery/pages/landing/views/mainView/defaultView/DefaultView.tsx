@@ -18,10 +18,6 @@ import { TiaProjectsDisplayMostFundedThisWeek } from './sections/TiaProjectsDisp
 export const DefaultView = () => {
   return (
     <VStack w="full" spacing={10} paddingTop="20px">
-      {/* <Body dark size="3xl" bold>
-        {t('Fund and Fuel Bitcoin Adoption Worldwide')}
-      </Body> */}
-
       <VStack w="full" spacing={20} paddingBottom={40}>
         <Stack direction={{ base: 'column', md: 'row' }} w="full" alignItems="stretch" spacing={{ base: 4, lg: 12 }}>
           <Featured />

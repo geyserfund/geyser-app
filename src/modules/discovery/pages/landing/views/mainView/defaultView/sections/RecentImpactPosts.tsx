@@ -59,7 +59,7 @@ export const RecentImpactPosts = () => {
       width="100%"
       rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryActivity')} />}
     >
-      <HStack alignItems="stretch">
+      <HStack alignItems="stretch" flexDirection={{ base: 'column', lg: 'row' }}>
         <VStack flex={2} w="full" alignItems="start" justifyContent="start">
           <LandingPageSectionTitle>{t('Impact Posts')}</LandingPageSectionTitle>
           <SimpleGrid w="full" columns={{ base: 1, md: 1 }} spacingY={0}>
