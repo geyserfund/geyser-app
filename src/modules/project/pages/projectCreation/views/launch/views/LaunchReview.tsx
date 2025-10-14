@@ -160,7 +160,7 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
           <VStack spacing={4} alignItems="start" w="full">
             <Body>
               {t(
-                'Each all-or-nothing project is reviewed by our team before it can launch. During the review process we may provide feedback on our project to help you improve it. This ensures a higher quality of projects on the platform.',
+                'Each project is reviewed by our team before it can launch. During the review process we may provide feedback on your project to help you improve it. This ensures a higher quality of projects on the platform.',
               )}
             </Body>
             <Body>
@@ -181,7 +181,13 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
         )
 
       case ProjectReviewStatus.Accepted:
-        return null // Just the status badge for approved
+        return (
+          <Body>
+            {t(
+              'Your project has been successfully reviewed and is ready for launch! Click "Continue" to move forward.',
+            )}
+          </Body>
+        )
 
       case ProjectReviewStatus.RevisionsRequested:
         return (

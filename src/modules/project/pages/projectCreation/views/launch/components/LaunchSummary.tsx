@@ -23,11 +23,11 @@ export const LaunchSummary = () => {
     const satsAmount = formatAmount(project.aonGoal.goalAmount, 'BTCSAT')
     // Simplified USD conversion for display - replace with proper conversion
     const usdAmount = Math.round(project.aonGoal.goalAmount * 0.001) // Placeholder conversion
-    return `${satsAmount} (or ${usdAmount.toLocaleString()} USD)`
+    return `${satsAmount} (~ ${usdAmount.toLocaleString()} USD)`
   }
 
   /** Get formatted launch time */
-  const getLaunchTimeDisplay = () => {
+  const getLaunchTimeDisplay = (): string | null => {
     if (!project?.launchScheduledAt) return null
 
     // Format the actual launch scheduled time

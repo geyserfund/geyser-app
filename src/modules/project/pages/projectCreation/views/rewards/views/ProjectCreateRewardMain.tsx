@@ -47,7 +47,7 @@ export const ProjectCreateRewardMain = () => {
           {t(
             'Products allow you to give something back to your contributors, from digital badges and physical products to sponsorships. Check out our guide on ',
           )}
-          <Link href={GeyserRewardsGuideLink} target="_blank" isExternal>
+          <Link href={GeyserRewardsGuideLink} target="_blank" isExternal textDecoration="underline">
             {t('How to leverage the power of Products')}
           </Link>
         </Body>

@@ -57,13 +57,15 @@ export const LegalEntitySelection = ({ form }: { form: UseFormReturn<TaxProfileF
           )
         })}
       </HStack>
-      <CardLayout noborder backgroundColor="neutral1.3" w="full">
-        <Body size="lg" medium>
-          {`${t('Tax profile')} ${legalEntityType === LegalEntityType.NonProfit ? '(required)' : t('(optional)')}`}
-        </Body>
-        <Body>{infoMap[legalEntityType]}</Body>
-        <TaxProfileForm form={form} />
-      </CardLayout>
+      {legalEntityType && (
+        <CardLayout noborder backgroundColor="neutral1.3" w="full">
+          <Body size="lg" medium>
+            {`${t('Tax profile')} ${legalEntityType === LegalEntityType.NonProfit ? '(required)' : t('(optional)')}`}
+          </Body>
+          <Body>{infoMap[legalEntityType]}</Body>
+          <TaxProfileForm form={form} />
+        </CardLayout>
+      )}
     </VStack>
   )
 }

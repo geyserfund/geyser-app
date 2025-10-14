@@ -4,6 +4,7 @@ import { t } from 'i18next'
 import { useForm, UseFormReturn } from 'react-hook-form'
 import * as yup from 'yup'
 
+import { ControlledCheckboxInput } from '@/shared/components/controlledInput/ControlledCheckboxInput.tsx'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { UserAccountKeysFragment } from '@/types/index.ts'
@@ -14,6 +15,8 @@ import { FeedBackText } from './FeedBackText.tsx'
 export type CreatePasswordFormData = {
   password: string
   repeatPassword: string
+  acknowledgePassword: boolean
+  acknowledgeFundsLoss: boolean
 }
 
 export type CreatePasswordFormProps = {
@@ -53,6 +56,16 @@ export const CreatePasswordForm = ({ form, isCreator }: CreatePasswordFormProps)
         type="password"
         required
       />
+      <ControlledCheckboxInput
+        name="acknowledgePassword"
+        control={control}
+        label={t('I acknowledge this password is known only by me and Geyser cannot recover it for me.')}
+      />
+      <ControlledCheckboxInput
+        name="acknowledgeFundsLoss"
+        control={control}
+        label={t('I acknowledge losing this password could lead to loss of funds.')}
+      />
     </VStack>
   )
 }
@@ -63,6 +76,8 @@ const createPasswordSchema = yup.object({
     .string()
     .required(t('Please repeat your password'))
     .oneOf([yup.ref('password')], t('Passwords must match')),
+  acknowledgePassword: yup.boolean().oneOf([true], t('required')).required(),
+  acknowledgeFundsLoss: yup.boolean().oneOf([true], t('required')).required(),
 })
 
 export const useCreateAccountForm = (onComplete: (_: UserAccountKeysFragment) => void) => {
@@ -72,6 +87,8 @@ export const useCreateAccountForm = (onComplete: (_: UserAccountKeysFragment) =>
     defaultValues: {
       password: '',
       repeatPassword: '',
+      acknowledgePassword: false,
+      acknowledgeFundsLoss: false,
     },
   })
 

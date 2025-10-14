@@ -9,14 +9,13 @@ import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import { VerifiedButton } from '@/shared/molecules/VerifiedButton.tsx'
 import { ProjectCreationStep } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { VerificationModal } from '../../../../projectDashboard/components/VerificationModal.tsx'
 import { EnableFiatContributions } from '../../../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
-import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
+import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 import { ConnectWallet } from '../components/ConnectWallet.tsx'
 
 export const LaunchPaymentWallet = () => {
@@ -58,7 +57,11 @@ export const LaunchPaymentWallet = () => {
   const isIdentityVerified = Boolean(user.complianceDetails.verifiedDetails.identity?.verified)
 
   return (
-    <ProjectCreationPageWrapper title={t('Payment Wallet')} continueButtonProps={continueProps} backButtonProps={backProps}>
+    <ProjectCreationPageWrapper
+      title={t('Payment Wallet')}
+      continueButtonProps={continueProps}
+      backButtonProps={backProps}
+    >
       <UpdateVerifyEmail inputWrapperProps={{ marginTop: 2 }} />
 
       <ConnectWallet />
@@ -72,26 +75,24 @@ export const LaunchPaymentWallet = () => {
           onClick: verifyIntroModal.onOpen,
         }}
       />
-      <FieldContainer
-        title={
-          <HStack w="full" justifyContent="space-between">
-            <Body size="lg" medium>
-              {t('Become a verified creator')}
-            </Body>
-            {isIdentityVerified ? (
-              <VerifiedButton />
-            ) : (
+      {!isIdentityVerified && (
+        <FieldContainer
+          title={
+            <HStack w="full" justifyContent="space-between">
+              <Body size="lg" medium>
+                {t('Become a verified creator')}
+              </Body>
               <Button variant="outline" colorScheme="primary1" size="lg" onClick={verifyIntroModal.onOpen}>
                 {t('Verify')}
               </Button>
-            )}
-          </HStack>
-        }
-        subtitle={t(
-          'Get verified to earn a trusted creator badge. Verified creators often receive more contributions as backers feel more confident supporting projects with verified identities.',
-        )}
-        gap={2}
-      />
+            </HStack>
+          }
+          subtitle={t(
+            'Get verified to earn a trusted creator badge. Verified creators often receive more contributions as backers feel more confident supporting projects with verified identities.',
+          )}
+          gap={2}
+        />
+      )}
       <VerificationModal {...verifyIntroModal} />
     </ProjectCreationPageWrapper>
   )

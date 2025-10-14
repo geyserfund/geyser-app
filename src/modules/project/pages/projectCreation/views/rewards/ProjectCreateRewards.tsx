@@ -6,9 +6,9 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectCreationStep } from '@/types/index.ts'
 
 import { getPath, PathName } from '../../../../../../shared/constants'
+import { ProjectCreationPageWrapper } from '../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../hooks/useIsStepAhead.tsx'
 import { useLocationMandatoryRedirect } from '../../hooks/useLocationMandatoryRedirect'
-import { ProjectCreationPageWrapper } from '../../components/ProjectCreationPageWrapper.tsx'
 
 export const ProjectCreateRewards = () => {
   const { t } = useTranslation()

@@ -10,8 +10,8 @@ import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCreationStep } from '@/types/index.ts'
 
-import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
+import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 
 export const OpenFundingGoal = () => {
   const navigate = useNavigate()

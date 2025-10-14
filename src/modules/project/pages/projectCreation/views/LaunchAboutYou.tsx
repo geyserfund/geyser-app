@@ -25,9 +25,9 @@ import {
   useNotification,
 } from '@/utils'
 
+import { ProjectCreationPageWrapper } from '../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../hooks/useIsStepAhead.tsx'
 import { useProjectStoryForm } from '../hooks/useProjectStoryForm.tsx'
-import { ProjectCreationPageWrapper } from '../components/ProjectCreationPageWrapper.tsx'
 
 export const LaunchAboutYou = () => {
   const navigate = useNavigate()

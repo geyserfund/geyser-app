@@ -6,7 +6,7 @@ import * as yup from 'yup'
 import { LegalEntityType, useUserTaxProfileQuery, useUserTaxProfileUpdateMutation } from '@/types/index.ts'
 
 export type TaxProfileFormData = {
-  legalEntityType: LegalEntityType
+  legalEntityType?: LegalEntityType
   fullName?: string
   country?: string
   state?: string
@@ -19,7 +19,7 @@ const taxProfileSchema = yup.object().shape({
   legalEntityType: yup
     .mixed<LegalEntityType>()
     .oneOf(Object.values(LegalEntityType), t('Invalid legal entity type'))
-    .required(),
+    .optional(),
   fullName: yup.string().when('legalEntity', {
     is: LegalEntityType.NonProfit,
     then: (schema) => schema.required(t('Full name is required for Non-profits')),
@@ -46,9 +46,6 @@ const taxProfileSchema = yup.object().shape({
 export const useTaxProfileForm = ({ userId, onUpdate }: { userId: string; onUpdate?: () => void }) => {
   const form = useForm<TaxProfileFormData>({
     resolver: yupResolver(taxProfileSchema),
-    defaultValues: {
-      legalEntityType: LegalEntityType.Person,
-    },
     mode: 'onBlur',
   })
 
@@ -76,9 +73,19 @@ export const useTaxProfileForm = ({ userId, onUpdate }: { userId: string; onUpda
   })
 
   const handleSubmit = form.handleSubmit((data: TaxProfileFormData) => {
+    if (!data.legalEntityType) {
+      return
+    }
+
     updateTaxProfile({
       variables: {
-        input: data,
+        input: {
+          legalEntityType: data.legalEntityType,
+          fullName: data.fullName ?? undefined,
+          country: data.country ?? undefined,
+          state: data.state ?? undefined,
+          taxId: data.taxId ?? undefined,
+        },
       },
       onCompleted() {
         onUpdate?.()

@@ -28,7 +28,7 @@ export const useAccountPasswordForm = ({
 }: {
   onComplete: (data?: UserAccountKeysFragment) => void
   isCreator?: boolean
-}) => {
+}): { renderForm: () => JSX.Element | null; currentForm: any; titles: string } => {
   const [accountPasswordType, setAccountPasswordType] = useState<AccountPasswordTypes>(AccountPasswordTypes.CREATE)
 
   const keys = useAtomValue(userAccountKeysAtom)

@@ -61,14 +61,14 @@ export const UpdateVerifyEmail = ({
                   </InputRightElement>
                 </InputGroup>
                 {isSavedEmailVerfied && (
-                  <Body light w="full" textAlign="right">
-                    {t('This email has been verified')}
+                  <Body size="xs" color="primary1.11" w="full" textAlign="right">
+                    {t('This email has been verified')}.
                   </Body>
                 )}
 
                 {isSavedEmailUnverified && (
-                  <Body light w="full" textAlign="right">
-                    {t('This email has not been verified')}
+                  <Body size="xs" color="neutral1.11" w="full" textAlign="right">
+                    {t('This email has not been verified')}.
                   </Body>
                 )}
               </VStack>

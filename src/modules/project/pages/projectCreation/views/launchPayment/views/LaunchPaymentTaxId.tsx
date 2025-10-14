@@ -10,8 +10,8 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCreationStep } from '@/types/index.ts'
 
-import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
+import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
 
 export const LaunchPaymentTaxId = () => {
   const { user } = useAuthContext()
@@ -43,7 +43,11 @@ export const LaunchPaymentTaxId = () => {
   }
 
   return (
-    <ProjectCreationPageWrapper title={t('Payment Tax ID')} continueButtonProps={continueProps} backButtonProps={backProps}>
+    <ProjectCreationPageWrapper
+      title={t('Payment Tax ID')}
+      continueButtonProps={continueProps}
+      backButtonProps={backProps}
+    >
       <VStack w="full" alignItems="start" gap={2}>
         <Body>{t('Add Tax information to all contribution invoices made to your project.')}</Body>
         <LegalEntitySelection form={form} />

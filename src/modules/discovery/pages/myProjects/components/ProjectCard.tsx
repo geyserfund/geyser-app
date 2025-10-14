@@ -62,8 +62,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   return (
     <Box width="100%" py={4}>
-      <HStack spacing={4} alignItems="center" justifyContent="space-between">
-        <HStack as={RouterLink} to={getPath('project', project.name)}>
+      <HStack spacing={4} justifyContent="space-between" alignItems='start'>
+        <HStack as={RouterLink} to={getPath('project', project.name)} alignItems='start'>
           {project.thumbnailImage && (
             <Image
               src={project.thumbnailImage}
@@ -73,7 +73,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               objectFit="cover"
             />
           )}
-          <Body size="2xl" bold>
+          <Body size={{base: "lg", lg: "2xl"}} bold>
             {project.title}
           </Body>
         </HStack>

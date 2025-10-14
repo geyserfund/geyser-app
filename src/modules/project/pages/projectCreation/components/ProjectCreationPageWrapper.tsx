@@ -1,8 +1,8 @@
-import { Button, ButtonProps, Icon, IconButton, StackProps, useBreakpointValue } from '@chakra-ui/react'
+import { Button, ButtonProps, Fade, Icon, IconButton, StackProps, useBreakpointValue } from '@chakra-ui/react'
 import { VStack } from '@chakra-ui/react'
 import { HStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useId } from 'react'
 import { PiArrowLeft, PiArrowRight, PiEye, PiListBullets } from 'react-icons/pi'
 import { useNavigate, useParams } from 'react-router'
 import { Link } from 'react-router'
@@ -40,6 +40,8 @@ export const ProjectCreationPageWrapper = ({
   const navigate = useNavigate()
   const params = useParams<{ projectId: string }>()
 
+  const id = useId()
+
   return (
     <VStack
       flex={1}
@@ -64,9 +66,11 @@ export const ProjectCreationPageWrapper = ({
               icon={<Icon as={PiListBullets} fontSize={28} />}
             />
           )}
-          <H1 fontSize="2xl" medium>
-            {title}
-          </H1>
+          <Fade in={true}>
+            <H1 fontSize="2xl" medium id={id}>
+              {title}
+            </H1>
+          </Fade>
         </HStack>
 
         <HStack>

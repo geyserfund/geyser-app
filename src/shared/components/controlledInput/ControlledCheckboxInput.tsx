@@ -11,7 +11,7 @@ type Props = UseControllerProps<any, any> &
   }
 
 export function ControlledCheckboxInput(props: Props) {
-  const { field } = useController(props)
+  const { field, formState } = useController(props)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (field?.onChange) {
@@ -23,6 +23,12 @@ export function ControlledCheckboxInput(props: Props) {
     }
   }
 
+  const error = formState.errors[props.name]?.message
+    ? `${formState.errors[props.name]?.message}`
+    : props.error
+    ? props.error
+    : ''
+
   return (
     <VStack alignItems="flex-start" width="100%">
       <Checkbox {...field} {...props} onChange={handleChange} defaultChecked={props.defaultValue || false}>
@@ -30,9 +36,9 @@ export function ControlledCheckboxInput(props: Props) {
           {props.label}
         </Body>
       </Checkbox>
-      {props.error && (
+      {error && (
         <Body size="sm" fontWeight="400" color="secondary.red">
-          {props.error}
+          {error}
         </Body>
       )}
     </VStack>
