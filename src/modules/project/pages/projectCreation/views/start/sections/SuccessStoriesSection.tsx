@@ -43,7 +43,7 @@ const stories: StoryCard[] = [
 /** Success Stories section with project cards */
 export const SuccessStoriesSection = () => {
   return (
-    <CreationLayoutCard bg="neutral1.2">
+    <CreationLayoutCard bg="neutral1.3">
       <VStack maxW={dimensions.creation.start.maxWidth} alignItems="flex-start">
         <H2 size="2xl" bold>
           {t('Success Stories')}

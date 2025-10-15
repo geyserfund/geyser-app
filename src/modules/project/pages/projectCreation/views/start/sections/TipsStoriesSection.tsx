@@ -39,7 +39,7 @@ const stories: StoryCard[] = [
 /** Tips & Creator Stories section with video/story cards */
 export const TipsStoriesSection = () => {
   return (
-    <CreationLayoutCard bg="neutral1.2">
+    <CreationLayoutCard bg="neutral1.3">
       <VStack maxW={dimensions.creation.start.maxWidth} alignItems="flex-start">
         <H2 size="2xl" bold>
           {t('Tips & Creator Stories')}
