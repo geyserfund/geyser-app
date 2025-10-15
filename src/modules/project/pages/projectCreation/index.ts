@@ -17,6 +17,7 @@ import { ProjectCreateRewards } from './views/rewards/ProjectCreateRewards.tsx'
 import { ProjectCreateRewardMain } from './views/rewards/views/ProjectCreateRewardMain.tsx'
 import { ProjectCreationCreateReward } from './views/rewards/views/ProjectCreationCreateReward.tsx'
 import { ProjectCreationEditReward } from './views/rewards/views/ProjectCreationEditReward.tsx'
+import { LaunchStart } from './views/start/LaunchStart.tsx'
 
 export {
   Launch,
@@ -29,6 +30,7 @@ export {
   LaunchPaymentWallet,
   LaunchProducts,
   LaunchProjectDetails,
+  LaunchStart,
   LaunchStory,
   ProjectCreateRewardMain,
   ProjectCreateRewards,

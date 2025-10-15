@@ -2321,6 +2321,7 @@ export type PaymentStatusUpdatedInput = {
 
 export type PaymentSwapClaimTxBroadcastInput = {
   paymentId: Scalars['BigInt']['input'];
+  signedTxHex?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type PaymentSwapClaimTxBroadcastResponse = {
@@ -9028,7 +9029,7 @@ export type PayoutInitiateMutationVariables = Exact<{
 export type PayoutInitiateMutation = { __typename?: 'Mutation', payoutInitiate: { __typename?: 'PayoutInitiateResponse', swap: string, payout: (
       { __typename?: 'Payout' }
       & PayoutFragment
-    ) } };
+    ), payment: { __typename?: 'Payment', id: any } } };
 
 export type PostDeleteMutationVariables = Exact<{
   postDeleteId: Scalars['BigInt']['input'];
@@ -9177,7 +9178,14 @@ export type PledgeRefundInitiateMutationVariables = Exact<{
 export type PledgeRefundInitiateMutation = { __typename?: 'Mutation', pledgeRefundInitiate: { __typename?: 'PledgeRefundInitiateResponse', swap: string, refund: (
       { __typename?: 'PledgeRefund' }
       & PledgeRefundFragment
-    ) } };
+    ), payment: { __typename?: 'Payment', id: any } } };
+
+export type PaymentSwapClaimTxBroadcastMutationVariables = Exact<{
+  input: PaymentSwapClaimTxBroadcastInput;
+}>;
+
+
+export type PaymentSwapClaimTxBroadcastMutation = { __typename?: 'Mutation', paymentSwapClaimTxBroadcast: { __typename?: 'PaymentSwapClaimTxBroadcastResponse', id: any, success: boolean, txHash?: string | null } };
 
 export type RewardUpdateMutationVariables = Exact<{
   input: UpdateProjectRewardInput;
@@ -15180,6 +15188,9 @@ export const PayoutInitiateDocument = gql`
       ...Payout
     }
     swap
+    payment {
+      id
+    }
   }
 }
     ${PayoutFragmentDoc}`;
@@ -15753,6 +15764,9 @@ export const PledgeRefundInitiateDocument = gql`
       ...PledgeRefund
     }
     swap
+    payment {
+      id
+    }
   }
 }
     ${PledgeRefundFragmentDoc}`;
@@ -15782,6 +15796,41 @@ export function usePledgeRefundInitiateMutation(baseOptions?: Apollo.MutationHoo
 export type PledgeRefundInitiateMutationHookResult = ReturnType<typeof usePledgeRefundInitiateMutation>;
 export type PledgeRefundInitiateMutationResult = Apollo.MutationResult<PledgeRefundInitiateMutation>;
 export type PledgeRefundInitiateMutationOptions = Apollo.BaseMutationOptions<PledgeRefundInitiateMutation, PledgeRefundInitiateMutationVariables>;
+export const PaymentSwapClaimTxBroadcastDocument = gql`
+    mutation PaymentSwapClaimTxBroadcast($input: PaymentSwapClaimTxBroadcastInput!) {
+  paymentSwapClaimTxBroadcast(input: $input) {
+    id
+    success
+    txHash
+  }
+}
+    `;
+export type PaymentSwapClaimTxBroadcastMutationFn = Apollo.MutationFunction<PaymentSwapClaimTxBroadcastMutation, PaymentSwapClaimTxBroadcastMutationVariables>;
+
+/**
+ * __usePaymentSwapClaimTxBroadcastMutation__
+ *
+ * To run a mutation, you first call `usePaymentSwapClaimTxBroadcastMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePaymentSwapClaimTxBroadcastMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [paymentSwapClaimTxBroadcastMutation, { data, loading, error }] = usePaymentSwapClaimTxBroadcastMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePaymentSwapClaimTxBroadcastMutation(baseOptions?: Apollo.MutationHookOptions<PaymentSwapClaimTxBroadcastMutation, PaymentSwapClaimTxBroadcastMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PaymentSwapClaimTxBroadcastMutation, PaymentSwapClaimTxBroadcastMutationVariables>(PaymentSwapClaimTxBroadcastDocument, options);
+      }
+export type PaymentSwapClaimTxBroadcastMutationHookResult = ReturnType<typeof usePaymentSwapClaimTxBroadcastMutation>;
+export type PaymentSwapClaimTxBroadcastMutationResult = Apollo.MutationResult<PaymentSwapClaimTxBroadcastMutation>;
+export type PaymentSwapClaimTxBroadcastMutationOptions = Apollo.BaseMutationOptions<PaymentSwapClaimTxBroadcastMutation, PaymentSwapClaimTxBroadcastMutationVariables>;
 export const RewardUpdateDocument = gql`
     mutation RewardUpdate($input: UpdateProjectRewardInput!) {
   projectRewardUpdate(input: $input) {

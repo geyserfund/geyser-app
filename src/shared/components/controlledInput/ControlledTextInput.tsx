@@ -14,7 +14,7 @@ import { useController, UseControllerProps } from 'react-hook-form'
 import { FieldContainer } from '../form'
 import { Body } from '../typography'
 
-type Props = UseControllerProps<any, any> &
+export type ControlledTextInputProps = UseControllerProps<any, any> &
   Omit<InputProps, 'size'> & {
     width?: string | number
     inputRef?: React.Ref<HTMLInputElement>
@@ -32,7 +32,7 @@ type Props = UseControllerProps<any, any> &
     containerProps?: StackProps
   }
 
-export const ControlledTextInput = (props: Props) => {
+export const ControlledTextInput = (props: ControlledTextInputProps) => {
   const { field, formState } = useController(props)
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     if (field?.onBlur) {

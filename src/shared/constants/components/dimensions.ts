@@ -94,6 +94,11 @@ export const dimensions = {
     maxWidth: '1920px',
     textMaxWidth: '1200px',
   },
+  creation: {
+    start: {
+      maxWidth: '900px',
+    },
+  },
 
   pullDownThreshold: 120,
   maxWidth: 1200,

@@ -27,6 +27,9 @@ export const MUTATION_PAYOUT_INITIATE = gql`
         ...Payout
       }
       swap
+      payment {
+        id
+      }
     }
   }
 `

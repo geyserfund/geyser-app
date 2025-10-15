@@ -176,6 +176,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
             swapObj.privateKey = accountKeys.privateKey
             swapObj.preimageHash = preimageHash
             swapObj.preimageHex = preimageHex
+            swapObj.paymentId = data.pledgeRefundInitiate.payment?.id
             setSwapData(swapObj)
           }
         },

@@ -6,7 +6,7 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue.tsx'
-import { usePaymentSwapClaimTxSetMutation } from '@/types/index.ts'
+import { usePaymentSwapClaimTxBroadcastMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { useRefund } from '../../fundingPayment/views/paymentOnchain/hooks/useRefund.ts'
@@ -40,20 +40,20 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
 
   const { initiateRefundToGetRefundTx } = useRefund()
 
-  const [paymentSwapClaimTxSet] = usePaymentSwapClaimTxSetMutation()
+  const [paymentSwapClaimTxBroadcast] = usePaymentSwapClaimTxBroadcastMutation()
 
   const handleInitiateRefund = useCallback(async () => {
     const refundTransactionHex = await initiateRefundToGetRefundTx(refundAddress, swapData, 'serverLock')
     if (refundTransactionHex) {
-      paymentSwapClaimTxSet({
+      paymentSwapClaimTxBroadcast({
         variables: {
           input: {
-            paymentId: swapData.id,
+            paymentId: swapData.paymentId,
             signedTxHex: refundTransactionHex,
           },
         },
         onCompleted(data) {
-          if (data.paymentSwapClaimTxSet.success) {
+          if (data.paymentSwapClaimTxBroadcast.success) {
             setIsProcessed(true)
             toast.success({
               title: t('Transaction broadcasted successfully!'),
@@ -68,7 +68,7 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
         description: t('Please try again'),
       })
     }
-  }, [initiateRefundToGetRefundTx, refundAddress, swapData, toast, paymentSwapClaimTxSet, setIsProcessed])
+  }, [initiateRefundToGetRefundTx, refundAddress, swapData, toast, paymentSwapClaimTxBroadcast, setIsProcessed])
 
   return (
     <>

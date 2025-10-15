@@ -26,14 +26,19 @@ export const MUTATION_PLEDGE_REFUND_INITIATE = gql`
         ...PledgeRefund
       }
       swap
+      payment {
+        id
+      }
     }
   }
 `
 
-export const MUTATION_BROADCAST_TRANSACTION = gql`
-  mutation BroadcastTransaction($input: BroadcastTransactionInput!) {
-    broadcastTransaction(input: $input) {
+export const MUTATION_PAYMENT_SWAP_CLAIM_TX_BROADCAST = gql`
+  mutation PaymentSwapClaimTxBroadcast($input: PaymentSwapClaimTxBroadcastInput!) {
+    paymentSwapClaimTxBroadcast(input: $input) {
       id
+      success
+      txHash
     }
   }
 `

@@ -32,8 +32,8 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('launchStart'),
     async lazy() {
-      const ProjectCreateStart = await loadProjectCreationPages().then((m) => m.ProjectCreateStart)
-      return { Component: ProjectCreateStart }
+      const LaunchStart = await loadProjectCreationPages().then((m) => m.LaunchStart)
+      return { Component: LaunchStart }
     },
   },
 
