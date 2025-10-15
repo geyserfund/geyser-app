@@ -29,6 +29,7 @@ export const Launch = () => {
 
   const setProjectReviews = useSetAtom(projectReviewsAtom)
 
+  /** Fetch the project reviews and set to the atom */
   const { loading } = useProjectLaunchReviewsQuery({
     skip: !project.id,
     variables: {
