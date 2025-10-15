@@ -8,7 +8,6 @@ import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 import { pwaOptions } from './config/pwaOptions'
-import { rollupOptions } from './config/rollupOptions'
 
 export default defineConfig(({ command, mode }) => {
   // Load env file based on `mode` in the current working directory.
@@ -72,9 +71,6 @@ export default defineConfig(({ command, mode }) => {
     server,
     // Use the conditionally populated define object
     define,
-    build: {
-      rollupOptions,
-    },
     test: {
       globals: true,
       environment: 'jsdom',
