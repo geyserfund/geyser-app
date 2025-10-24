@@ -1266,10 +1266,10 @@ export type LightningPaymentMethods = {
 export type LightningToRskSwapPaymentDetails = {
   __typename?: 'LightningToRskSwapPaymentDetails';
   claimPublicKey: Scalars['String']['output'];
-  preimageHash: Scalars['String']['output'];
   refundPublicKey: Scalars['String']['output'];
   swapId: Scalars['String']['output'];
   swapMetadata: Scalars['String']['output'];
+  swapPreimageHash: Scalars['String']['output'];
 };
 
 export type LndConnectionDetails = {
@@ -1988,9 +1988,9 @@ export type OnChainToRskSwapPaymentDetails = {
   __typename?: 'OnChainToRskSwapPaymentDetails';
   onChainAddress: Scalars['String']['output'];
   onChainTxId?: Maybe<Scalars['String']['output']>;
-  preimageHash: Scalars['String']['output'];
   swapId: Scalars['String']['output'];
   swapMetadata: Scalars['String']['output'];
+  swapPreimageHash: Scalars['String']['output'];
 };
 
 export type OnChainTxInput = {
@@ -2678,6 +2678,7 @@ export type PledgeRefundRetryRequestRskToOnChainSwapPaymentDetailsInput = {
 };
 
 export enum PledgeRefundStatus {
+  Cancelled = 'CANCELLED',
   Completed = 'COMPLETED',
   Expired = 'EXPIRED',
   Failed = 'FAILED',
@@ -4188,9 +4189,9 @@ export type RskToOnChainSwapPaymentDetails = {
   __typename?: 'RskToOnChainSwapPaymentDetails';
   onChainAddress: Scalars['String']['output'];
   onChainTxId?: Maybe<Scalars['String']['output']>;
-  preimageHash: Scalars['String']['output'];
   swapId: Scalars['String']['output'];
   swapMetadata: Scalars['String']['output'];
+  swapPreimageHash: Scalars['String']['output'];
 };
 
 export type RskToOnChainSwapPaymentDetailsBoltzInput = {
@@ -6527,10 +6528,10 @@ export type LightningPaymentMethodsResolvers<ContextType = any, ParentType exten
 
 export type LightningToRskSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['LightningToRskSwapPaymentDetails'] = ResolversParentTypes['LightningToRskSwapPaymentDetails']> = {
   claimPublicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  preimageHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   refundPublicKey?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   swapId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   swapMetadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  swapPreimageHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -6738,9 +6739,9 @@ export type OnChainToLightningSwapPaymentDetailsResolvers<ContextType = any, Par
 export type OnChainToRskSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['OnChainToRskSwapPaymentDetails'] = ResolversParentTypes['OnChainToRskSwapPaymentDetails']> = {
   onChainAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   onChainTxId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  preimageHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   swapId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   swapMetadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  swapPreimageHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7637,9 +7638,9 @@ export type RskToLightningSwapPaymentDetailsResolvers<ContextType = any, ParentT
 export type RskToOnChainSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['RskToOnChainSwapPaymentDetails'] = ResolversParentTypes['RskToOnChainSwapPaymentDetails']> = {
   onChainAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   onChainTxId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  preimageHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   swapId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   swapMetadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  swapPreimageHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -9122,14 +9123,14 @@ export type ProjectFundingMethodStatsFragment = { __typename?: 'ProjectStats', c
 
 export type PaymentRefundFragment = { __typename?: 'PaymentRefund', id: any, amount: number, status: PaymentRefundStatus };
 
-export type LightningToRskSwapPaymentDetailsFragment = { __typename?: 'LightningToRskSwapPaymentDetails', swapMetadata: string, swapId: string, refundPublicKey: string, preimageHash: string, claimPublicKey: string };
+export type LightningToRskSwapPaymentDetailsFragment = { __typename?: 'LightningToRskSwapPaymentDetails', swapMetadata: string, swapId: string, refundPublicKey: string, swapPreimageHash: string, claimPublicKey: string };
 
-export type OnChainToRskSwapPaymentDetailsFragment = { __typename?: 'OnChainToRskSwapPaymentDetails', swapMetadata: string, swapId: string, preimageHash: string, onChainTxId?: string | null, onChainAddress: string };
+export type OnChainToRskSwapPaymentDetailsFragment = { __typename?: 'OnChainToRskSwapPaymentDetails', swapMetadata: string, swapId: string, swapPreimageHash: string, onChainTxId?: string | null, onChainAddress: string };
 
 export type PledgeRefundFragment = { __typename?: 'PledgeRefund', id: any, amount: number, status: PledgeRefundStatus, expiresAt: any, project: (
     { __typename?: 'Project' }
     & ProjectThumbnailImageFragment
-  ), payments: Array<{ __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails', swapMetadata: string, swapId: string, refundPublicKey: string, preimageHash: string, claimPublicKey: string } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails', swapMetadata: string, swapId: string, preimageHash: string, onChainTxId?: string | null, onChainAddress: string } | { __typename?: 'RskToLightningSwapPaymentDetails' } | { __typename?: 'RskToOnChainSwapPaymentDetails' } }> };
+  ), payments: Array<{ __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails', swapMetadata: string, swapId: string, refundPublicKey: string, swapPreimageHash: string, claimPublicKey: string } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails', swapMetadata: string, swapId: string, swapPreimageHash: string, onChainTxId?: string | null, onChainAddress: string } | { __typename?: 'RskToLightningSwapPaymentDetails' } | { __typename?: 'RskToOnChainSwapPaymentDetails' } }> };
 
 export type PledgeRefundMetadataFragment = { __typename?: 'PledgeRefundMetadata', nonce: number, swapContractAddress: string, aonContractAddress: string };
 
@@ -11901,7 +11902,7 @@ export const LightningToRskSwapPaymentDetailsFragmentDoc = gql`
   swapMetadata
   swapId
   refundPublicKey
-  preimageHash
+  swapPreimageHash
   claimPublicKey
 }
     `;
@@ -11909,7 +11910,7 @@ export const OnChainToRskSwapPaymentDetailsFragmentDoc = gql`
     fragment OnChainToRskSwapPaymentDetails on OnChainToRskSwapPaymentDetails {
   swapMetadata
   swapId
-  preimageHash
+  swapPreimageHash
   onChainTxId
   onChainAddress
 }
@@ -11943,13 +11944,13 @@ export const PledgeRefundFragmentDoc = gql`
         swapMetadata
         swapId
         refundPublicKey
-        preimageHash
+        swapPreimageHash
         claimPublicKey
       }
       ... on OnChainToRskSwapPaymentDetails {
         swapMetadata
         swapId
-        preimageHash
+        swapPreimageHash
         onChainTxId
         onChainAddress
       }

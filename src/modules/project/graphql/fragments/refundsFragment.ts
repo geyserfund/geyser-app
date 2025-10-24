@@ -15,7 +15,7 @@ export const FRAGMENT_LIGHTNING_TO_RSK_SWAP_PAYMENT_DETAILS = gql`
     swapMetadata
     swapId
     refundPublicKey
-    preimageHash
+    swapPreimageHash
     claimPublicKey
   }
 `
@@ -24,7 +24,7 @@ export const FRAGMENT_ON_CHAIN_TO_RSK_SWAP_PAYMENT_DETAILS = gql`
   fragment OnChainToRskSwapPaymentDetails on OnChainToRskSwapPaymentDetails {
     swapMetadata
     swapId
-    preimageHash
+    swapPreimageHash
     onChainTxId
     onChainAddress
   }
@@ -54,13 +54,13 @@ export const FRAGMENT_PLEDGE_REFUND = gql`
           swapMetadata
           swapId
           refundPublicKey
-          preimageHash
+          swapPreimageHash
           claimPublicKey
         }
         ... on OnChainToRskSwapPaymentDetails {
           swapMetadata
           swapId
-          preimageHash
+          swapPreimageHash
           onChainTxId
           onChainAddress
         }

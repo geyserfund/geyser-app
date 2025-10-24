@@ -139,13 +139,13 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
           const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
           timelock = swapData.timeoutBlockHeight
           claimAddress = swapData.claimAddress
-          failedSwapPreImageHash = pastPaymentDetails.preimageHash
+          failedSwapPreImageHash = pastPaymentDetails.swapPreimageHash
         } else if (pastPayment.paymentType === PaymentType.OnChainToRskSwap) {
           const pastPaymentDetails = pastPayment.paymentDetails as OnChainToRskSwapPaymentDetailsFragment
           const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
           timelock = swapData.lockupDetails.timeoutBlockHeight
           claimAddress = swapData.lockupDetails.claimAddress
-          failedSwapPreImageHash = pastPaymentDetails.preimageHash
+          failedSwapPreImageHash = pastPaymentDetails.swapPreimageHash
         }
       }
 
@@ -262,15 +262,22 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
           const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
           timelock = swapData.timeoutBlockHeight
           claimAddress = swapData.claimAddress
-          failedSwapPreImageHash = pastPaymentDetails.preimageHash
+          failedSwapPreImageHash = pastPaymentDetails.swapPreimageHash
         } else if (pastPayment.paymentType === PaymentType.OnChainToRskSwap) {
           const pastPaymentDetails = pastPayment.paymentDetails as OnChainToRskSwapPaymentDetailsFragment
           const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
           timelock = swapData.lockupDetails.timeoutBlockHeight
           claimAddress = swapData.lockupDetails.claimAddress
-          failedSwapPreImageHash = pastPaymentDetails.preimageHash
+          failedSwapPreImageHash = pastPaymentDetails.swapPreimageHash
         }
       }
+
+      console.log('claimAddress', claimAddress)
+      console.log('failedSwapPreImageHash', failedSwapPreImageHash)
+      console.log('timelock', timelock)
+      console.log('amount', amount)
+      console.log('refundAddress', accountKeys.address)
+      console.log('privateKey', accountKeys.privateKey)
 
       const { v, r, s } = createAndSignEIP712MessageForPaymentRefund({
         preimageHash: `0x${failedSwapPreImageHash}`,
