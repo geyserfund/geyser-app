@@ -80,9 +80,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
-      const amount =
-        (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
-        (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
+      const amount = pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0
 
       const { signature } = createAndSignRefundMessage({
         aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
