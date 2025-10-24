@@ -4170,6 +4170,7 @@ export type RskToLightningSwapPaymentDetails = {
   lightningInvoiceStatus: LightningInvoiceStatus;
   swapId: Scalars['String']['output'];
   swapMetadata: Scalars['String']['output'];
+  swapPreimageHash: Scalars['String']['output'];
 };
 
 export type RskToLightningSwapPaymentDetailsBoltzInput = {
@@ -7632,6 +7633,7 @@ export type RskToLightningSwapPaymentDetailsResolvers<ContextType = any, ParentT
   lightningInvoiceStatus?: Resolver<ResolversTypes['LightningInvoiceStatus'], ParentType, ContextType>;
   swapId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   swapMetadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  swapPreimageHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -9130,7 +9132,7 @@ export type OnChainToRskSwapPaymentDetailsFragment = { __typename?: 'OnChainToRs
 export type PledgeRefundFragment = { __typename?: 'PledgeRefund', id: any, amount: number, status: PledgeRefundStatus, expiresAt: any, project: (
     { __typename?: 'Project' }
     & ProjectThumbnailImageFragment
-  ), payments: Array<{ __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails', swapMetadata: string, swapId: string, refundPublicKey: string, swapPreimageHash: string, claimPublicKey: string } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails', swapMetadata: string, swapId: string, swapPreimageHash: string, onChainTxId?: string | null, onChainAddress: string } | { __typename?: 'RskToLightningSwapPaymentDetails' } | { __typename?: 'RskToOnChainSwapPaymentDetails' } }> };
+  ), payments: Array<{ __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | { __typename?: 'RskToLightningSwapPaymentDetails', swapId: string, swapMetadata: string, lightningInvoiceId: string, lightningInvoiceStatus: LightningInvoiceStatus, swapPreimageHash: string } | { __typename?: 'RskToOnChainSwapPaymentDetails', swapId: string, swapMetadata: string, onChainAddress: string, onChainTxId?: string | null, swapPreimageHash: string } }> };
 
 export type PledgeRefundMetadataFragment = { __typename?: 'PledgeRefundMetadata', nonce: number, swapContractAddress: string, aonContractAddress: string };
 
@@ -11940,19 +11942,19 @@ export const PledgeRefundFragmentDoc = gql`
     createdAt
     status
     paymentDetails {
-      ... on LightningToRskSwapPaymentDetails {
-        swapMetadata
+      ... on RskToOnChainSwapPaymentDetails {
         swapId
-        refundPublicKey
-        swapPreimageHash
-        claimPublicKey
-      }
-      ... on OnChainToRskSwapPaymentDetails {
         swapMetadata
-        swapId
-        swapPreimageHash
-        onChainTxId
         onChainAddress
+        onChainTxId
+        swapPreimageHash
+      }
+      ... on RskToLightningSwapPaymentDetails {
+        swapId
+        swapMetadata
+        lightningInvoiceId
+        lightningInvoiceStatus
+        swapPreimageHash
       }
     }
   }

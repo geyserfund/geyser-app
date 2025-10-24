@@ -50,19 +50,19 @@ export const FRAGMENT_PLEDGE_REFUND = gql`
       createdAt
       status
       paymentDetails {
-        ... on LightningToRskSwapPaymentDetails {
-          swapMetadata
+        ... on RskToOnChainSwapPaymentDetails {
           swapId
-          refundPublicKey
-          swapPreimageHash
-          claimPublicKey
-        }
-        ... on OnChainToRskSwapPaymentDetails {
           swapMetadata
-          swapId
-          swapPreimageHash
-          onChainTxId
           onChainAddress
+          onChainTxId
+          swapPreimageHash
+        }
+        ... on RskToLightningSwapPaymentDetails {
+          swapId
+          swapMetadata
+          lightningInvoiceId
+          lightningInvoiceStatus
+          swapPreimageHash
         }
       }
     }

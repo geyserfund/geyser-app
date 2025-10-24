@@ -20,6 +20,8 @@ import {
   PaymentStatus,
   PaymentType,
   PledgeRefundFragment,
+  RskToLightningSwapPaymentDetails,
+  RskToOnChainSwapPaymentDetails,
   usePledgeRefundRetryInitiateMutation,
   usePledgeRefundRetryRequestMutation,
 } from '@/types/index.ts'
@@ -257,14 +259,14 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
       let failedSwapPreImageHash = '' as any
 
       if (pastPayment) {
-        if (pastPayment.paymentType === PaymentType.LightningToRskSwap) {
-          const pastPaymentDetails = pastPayment.paymentDetails as LightningToRskSwapPaymentDetailsFragment
+        if (pastPayment.paymentType === PaymentType.RskToLightningSwap) {
+          const pastPaymentDetails = pastPayment.paymentDetails as RskToLightningSwapPaymentDetails
           const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
           timelock = swapData.timeoutBlockHeight
           claimAddress = swapData.claimAddress
           failedSwapPreImageHash = pastPaymentDetails.swapPreimageHash
-        } else if (pastPayment.paymentType === PaymentType.OnChainToRskSwap) {
-          const pastPaymentDetails = pastPayment.paymentDetails as OnChainToRskSwapPaymentDetailsFragment
+        } else if (pastPayment.paymentType === PaymentType.RskToOnChainSwap) {
+          const pastPaymentDetails = pastPayment.paymentDetails as RskToOnChainSwapPaymentDetails
           const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
           timelock = swapData.lockupDetails.timeoutBlockHeight
           claimAddress = swapData.lockupDetails.claimAddress
