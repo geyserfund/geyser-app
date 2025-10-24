@@ -1,65 +1,15 @@
-import { Button, useBreakpointValue, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
-import { useSetAtom } from 'jotai'
-import { useEffect, useRef, useState } from 'react'
+import { useBreakpointValue, VStack } from '@chakra-ui/react'
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
 
-import { useAuthContext } from '@/context/auth.tsx'
-import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
-import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
 import { useFundingAPI } from '@/modules/project/funding/hooks/useFundingAPI'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { SkeletonLayout } from '@/shared/components/layouts'
-import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants'
-import { isAllOrNothing } from '@/utils/index.ts'
 
-import { QRCodeSizeMap } from '../components/QRCodeComponent'
+import { QRCodeSizeMap } from '../../components/QRCodeComponent'
 
-export const PaymentLoading = () => {
-  const { user, loading: authLoading } = useAuthContext()
-  const { project, loading: projectLoading } = useProjectAtom()
-  const [passwordConfirmed, setPasswordConfirmed] = useState(false)
-
-  if (authLoading || projectLoading) {
-    return null
-  }
-
-  if (user?.id && isAllOrNothing(project) && !passwordConfirmed) {
-    return <PaymentPassword onComplete={() => setPasswordConfirmed(true)} />
-  }
-
-  return <PaymentLoadingContribution />
-}
-
-export const PaymentPassword = ({ onComplete }: { onComplete: () => void }) => {
-  const setFundingUserAccountKeys = useSetAtom(userAccountKeysAtom)
-
-  const { currentForm, renderForm, titles } = useAccountPasswordForm({
-    onComplete(data) {
-      if (data) {
-        setFundingUserAccountKeys(data)
-      }
-
-      onComplete()
-    },
-  })
-
-  return (
-    <VStack w="full" spacing={6}>
-      <Body size="lg" bold alignSelf="start">
-        {titles}
-      </Body>
-      {renderForm()}
-      <Button width="200px" size="lg" colorScheme="primary1" onClick={currentForm.onSubmit}>
-        {t('Continue')}
-      </Button>
-    </VStack>
-  )
-}
-
-export const PaymentLoadingContribution = () => {
+export const PaymentLoadingContribution = ({ onComplete }: { onComplete: (_: string) => void }) => {
   const { requestFundingFromContext, requestFundingOptions } = useFundingAPI()
 
   const { isFundingInputAmountValid, isFundingUserInfoValid, project } = useFundingFormAtom()
@@ -85,13 +35,17 @@ export const PaymentLoadingContribution = () => {
             { replace: true },
           )
         } else if (contributionId) {
-          navigate(
-            {
-              pathname: getPath('fundingPaymentLightning', project.name),
-              search: `?transactionId=${contributionId}`,
-            },
-            { replace: true },
-          )
+          if (onComplete) {
+            onComplete(contributionId)
+          } else {
+            navigate(
+              {
+                pathname: getPath('fundingPaymentLightning', project.name),
+                search: `?transactionId=${contributionId}`,
+              },
+              { replace: true },
+            )
+          }
         }
       })
     }

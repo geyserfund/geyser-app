@@ -116,6 +116,7 @@
     "serve-handler": "^6.1.5",
     "swiper": "^11.1.14",
     "turndown": "^7.1.2",
+    "viem": "^2.38.3",
     "webln": "^0.3.2",
     "websocket-polyfill": "^0.0.3",
     "yup": "^1.1.1"

@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_THUMBNAIL_IMAGE } from '@/modules/discovery/graphql/fragments/projectFragment.ts'
+
 export const FRAGMENT_PAYMENT_REFUND = gql`
   fragment PaymentRefund on PaymentRefund {
     id
@@ -8,12 +10,62 @@ export const FRAGMENT_PAYMENT_REFUND = gql`
   }
 `
 
+export const FRAGMENT_LIGHTNING_TO_RSK_SWAP_PAYMENT_DETAILS = gql`
+  fragment LightningToRskSwapPaymentDetails on LightningToRskSwapPaymentDetails {
+    swapMetadata
+    swapId
+    refundPublicKey
+    preimageHash
+    claimPublicKey
+  }
+`
+
+export const FRAGMENT_ON_CHAIN_TO_RSK_SWAP_PAYMENT_DETAILS = gql`
+  fragment OnChainToRskSwapPaymentDetails on OnChainToRskSwapPaymentDetails {
+    swapMetadata
+    swapId
+    preimageHash
+    onChainTxId
+    onChainAddress
+  }
+`
+
 export const FRAGMENT_PLEDGE_REFUND = gql`
+  ${FRAGMENT_PROJECT_THUMBNAIL_IMAGE}
+  ${FRAGMENT_LIGHTNING_TO_RSK_SWAP_PAYMENT_DETAILS}
+  ${FRAGMENT_ON_CHAIN_TO_RSK_SWAP_PAYMENT_DETAILS}
   fragment PledgeRefund on PledgeRefund {
     id
+    amount
     status
     expiresAt
-    amount
+    project {
+      ...ProjectThumbnailImage
+    }
+    payments {
+      id
+      method
+      failureReason
+      paymentType
+      createdAt
+      status
+      paymentDetails {
+        ... on LightningToRskSwapPaymentDetails {
+          swapMetadata
+          swapId
+          refundPublicKey
+          preimageHash
+          claimPublicKey
+        }
+        ... on OnChainToRskSwapPaymentDetails {
+          swapMetadata
+          swapId
+          preimageHash
+          onChainTxId
+          onChainAddress
+        }
+      }
+    }
   }
 `
 

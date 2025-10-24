@@ -6,6 +6,7 @@ import { userAccountKeyPairAtom } from '@/modules/auth/state/userAccountKeysAtom
 
 import {
   BitcoinQuote,
+  ContributionLightningToRskSwapPaymentDetailsFragment,
   ContributionOnChainSwapPaymentDetailsFragment,
   ContributionOnChainToRskSwapPaymentDetailsFragment,
   Maybe,
@@ -147,6 +148,23 @@ export const parseSwapAtom = atom(
 export const parseOnChainToRskSwapAtom = atom(
   null,
   (get, set, swap: ContributionOnChainToRskSwapPaymentDetailsFragment, contributionInfo?: SwapContributionInfo) => {
+    const userAccountKeyPair = get(userAccountKeyPairAtom)
+    const rskKeyPair = get(rskAccountKeysAtom)
+
+    const swapData = get(swapAtom)
+    const refundFile = JSON.parse(swap.swapJson)
+
+    refundFile.privateKey = userAccountKeyPair?.privateKey || rskKeyPair?.privateKey
+
+    refundFile.contributionInfo = contributionInfo
+
+    set(currentSwapIdAtom, refundFile.id) // Set the current id as current swap id
+    set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
+  },
+)
+export const parseLightningToRskSwapAtom = atom(
+  null,
+  (get, set, swap: ContributionLightningToRskSwapPaymentDetailsFragment, contributionInfo?: SwapContributionInfo) => {
     const userAccountKeyPair = get(userAccountKeyPairAtom)
     const rskKeyPair = get(rskAccountKeysAtom)
 

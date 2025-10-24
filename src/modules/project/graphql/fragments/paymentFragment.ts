@@ -104,7 +104,6 @@ export const FRAGMENT_PAYMENT_SUBSCRIPTION = gql`
     id
     status
     paymentType
-    contributionUUID
     failureReason
   }
 `

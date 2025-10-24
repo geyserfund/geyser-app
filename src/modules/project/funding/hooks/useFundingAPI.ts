@@ -28,7 +28,12 @@ import {
   setFundingInputAfterRequestAtom,
 } from '../state/fundingContributionCreateInputAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '../state/fundingPaymentAtom.ts'
-import { keyPairAtom, parseOnChainToRskSwapAtom, parseSwapAtom } from '../state/swapAtom.ts'
+import {
+  keyPairAtom,
+  parseLightningToRskSwapAtom,
+  parseOnChainToRskSwapAtom,
+  parseSwapAtom,
+} from '../state/swapAtom.ts'
 import { rskAccountKeysAtom } from '../state/swapRskAtom.ts'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
 import { webln } from '../utils/requestWebLNPayment'
@@ -61,6 +66,7 @@ export const useFundingAPI = () => {
 
   const parseResponseToSwap = useSetAtom(parseSwapAtom)
   const parseResponseToOnChainToRskSwap = useSetAtom(parseOnChainToRskSwapAtom)
+  const parseResponseToLightningToRskSwap = useSetAtom(parseLightningToRskSwapAtom)
 
   const startWebLNFlow = useWebLNFlow()
 
@@ -119,6 +125,12 @@ export const useFundingAPI = () => {
         }
 
         if (data.contributionCreate.payments.lightningToRskSwap?.swapJson) {
+          parseResponseToLightningToRskSwap(data.contributionCreate.payments.lightningToRskSwap, {
+            projectTitle: project?.title,
+            reference: data.contributionCreate.contribution.uuid,
+            bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
+            datetime: data.contributionCreate.contribution.createdAt,
+          })
           generateTransactionForLightningToRskSwap({
             contribution: data.contributionCreate.contribution,
             payment: data.contributionCreate.payments.lightningToRskSwap,

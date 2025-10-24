@@ -4,6 +4,7 @@ import { Buffer } from 'buffer'
 
 import { __development__, __production__, __staging__ } from '@/shared/constants/index.ts'
 
+import { createEIP712MessageForPaymentRefund } from '../../utils/createEIP712Message.ts'
 import { addressToBuffer32, numberToBuffer32 } from '../../utils/helperFunctions.ts'
 import { signEIP712Message } from '../../utils/signEIP712Message.ts'
 
@@ -218,5 +219,15 @@ export const createAndSignEIP712Message = (
   return signEIP712Message(digest, rskPrivateKey)
 }
 
-// Export constants for external use
-export { CHAIN_ID, CONTRACT_NAME, CONTRACT_VERSION }
+export const createAndSignRefundEIP712Message = (props: {
+  preimageHash: string
+  amount: number
+  claimAddress: string
+  refundAddress: string
+  timelock: number
+  rskPrivateKey: string
+}) => {
+  const { preimageHash, amount, claimAddress, refundAddress, timelock, rskPrivateKey } = props
+  const digest = createEIP712MessageForPaymentRefund(preimageHash, amount, claimAddress, refundAddress, timelock)
+  return signEIP712Message(digest, rskPrivateKey)
+}

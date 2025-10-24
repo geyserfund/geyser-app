@@ -15,7 +15,7 @@ import { useTransactionStatusUpdate } from '../../fundingPayment/views/paymentOn
 type BitcoinPayoutWaitingConfirmationProps = {
   isRefund?: boolean
   onClose: () => void
-  swapData: any
+  swapData?: any
   refundAddress: string
   setIsProcessed: (isProcessed: boolean) => void
 }
