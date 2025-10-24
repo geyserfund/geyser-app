@@ -114,7 +114,7 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
         claimAddress: accountKeys.address as Address,
         refundAddress: accountKeys.address as Address,
         timelock: swapObj?.timeoutBlockHeight || 0,
-        amount,
+        amount, // subract fees
         privateKey: `0x${accountKeys.privateKey}`,
       })
 
@@ -130,23 +130,29 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
       }
 
       let timelock = 0 as number
+      let claimAddress = '' as any
+      let failedSwapPreImageHash = '' as any
 
       if (pastPayment) {
         if (pastPayment.paymentType === PaymentType.LightningToRskSwap) {
           const pastPaymentDetails = pastPayment.paymentDetails as LightningToRskSwapPaymentDetailsFragment
           const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
           timelock = swapData.timeoutBlockHeight
+          claimAddress = swapData.claimAddress
+          failedSwapPreImageHash = pastPaymentDetails.preimageHash
         } else if (pastPayment.paymentType === PaymentType.OnChainToRskSwap) {
           const pastPaymentDetails = pastPayment.paymentDetails as OnChainToRskSwapPaymentDetailsFragment
           const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
-          timelock = swapData.timeoutBlockHeight
+          timelock = swapData.lockupDetails.timeoutBlockHeight
+          claimAddress = swapData.lockupDetails.claimAddress
+          failedSwapPreImageHash = pastPaymentDetails.preimageHash
         }
       }
 
       const { v, r, s } = createAndSignEIP712MessageForPaymentRefund({
-        preimageHash: `0x${preimageHash}`,
+        preimageHash: `0x${failedSwapPreImageHash}`,
         amount: Number(amount),
-        claimAddress: accountKeys.address as Address,
+        claimAddress,
         refundAddress: accountKeys.address as Address,
         timelock,
         privateKey: accountKeys.privateKey as Hex,
