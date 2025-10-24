@@ -9132,7 +9132,7 @@ export type OnChainToRskSwapPaymentDetailsFragment = { __typename?: 'OnChainToRs
 export type PledgeRefundFragment = { __typename?: 'PledgeRefund', id: any, amount: number, status: PledgeRefundStatus, expiresAt: any, project: (
     { __typename?: 'Project' }
     & ProjectThumbnailImageFragment
-  ), payments: Array<{ __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | { __typename?: 'RskToLightningSwapPaymentDetails', swapId: string, swapMetadata: string, lightningInvoiceId: string, lightningInvoiceStatus: LightningInvoiceStatus, swapPreimageHash: string } | { __typename?: 'RskToOnChainSwapPaymentDetails', swapId: string, swapMetadata: string, onChainAddress: string, onChainTxId?: string | null, swapPreimageHash: string } }> };
+  ), payments: Array<{ __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | { __typename?: 'RskToLightningSwapPaymentDetails', swapId: string, swapMetadata: string, lightningInvoiceId: string, swapPreimageHash: string } | { __typename?: 'RskToOnChainSwapPaymentDetails', swapId: string, swapMetadata: string, onChainAddress: string, onChainTxId?: string | null, swapPreimageHash: string } }> };
 
 export type PledgeRefundMetadataFragment = { __typename?: 'PledgeRefundMetadata', nonce: number, swapContractAddress: string, aonContractAddress: string };
 
@@ -11953,7 +11953,6 @@ export const PledgeRefundFragmentDoc = gql`
         swapId
         swapMetadata
         lightningInvoiceId
-        lightningInvoiceStatus
         swapPreimageHash
       }
     }
