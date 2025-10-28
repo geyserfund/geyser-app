@@ -61,7 +61,6 @@ export const FRAGMENT_PLEDGE_REFUND = gql`
           swapId
           swapMetadata
           lightningInvoiceId
-          # lightningInvoiceStatus
           swapPreimageHash
         }
       }

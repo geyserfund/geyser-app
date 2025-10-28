@@ -54,6 +54,26 @@ export const MUTATION_RETRY_PLEDGE_REFUND_REQUEST = gql`
       payment {
         id
         accountingAmountDue
+        method
+        failureReason
+        paymentType
+        createdAt
+        status
+        paymentDetails {
+          ... on RskToOnChainSwapPaymentDetails {
+            swapId
+            swapMetadata
+            onChainAddress
+            onChainTxId
+            swapPreimageHash
+          }
+          ... on RskToLightningSwapPaymentDetails {
+            swapId
+            swapMetadata
+            lightningInvoiceId
+            swapPreimageHash
+          }
+        }
       }
     }
   }

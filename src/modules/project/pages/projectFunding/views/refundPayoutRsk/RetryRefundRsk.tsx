@@ -76,8 +76,6 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
     setIsSubmitting(true)
 
     try {
-      const { preimageHash, preimageHex } = generatePreImageHash()
-
       const response = await pledgeRefundRetryRequest({
         variables: {
           input: {
@@ -103,17 +101,27 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
         return
       }
 
+      const newPayment = pledgeRefundRequest?.payment
+
+      let newPreimageHash = ''
+
+      if (newPayment.paymentType === PaymentType.RskToLightningSwap) {
+        const newPaymentDetails = newPayment.paymentDetails as LightningToRskSwapPaymentDetailsFragment
+        newPreimageHash = newPaymentDetails.swapPreimageHash
+      } else if (newPayment.paymentType === PaymentType.RskToOnChainSwap) {
+        const newPaymentDetails = newPayment.paymentDetails as OnChainToRskSwapPaymentDetailsFragment
+        newPreimageHash = newPaymentDetails.swapPreimageHash
+      }
+
       const swapObj = JSON.parse(pledgeRefundRequest?.swap)
       swapObj.privateKey = userAccountKeyPair?.privateKey
-      swapObj.preimageHash = preimageHash
-      swapObj.preimageHex = preimageHex
       swapObj.paymentId = pledgeRefundRequest?.payment?.id
 
       const amount = BigInt(satsToWei(pledgeRefundRequest?.payment.accountingAmountDue || 0))
 
       const lockTxHex = await createAndSignLockTransaction({
-        preimageHash: `0x${preimageHash}`,
-        claimAddress: accountKeys.address as Address,
+        preimageHash: `0x${newPreimageHash}`,
+        claimAddress: swapObj.claimAddress as Address,
         refundAddress: accountKeys.address as Address,
         timelock: swapObj?.timeoutBlockHeight || 0,
         amount, // subract fees
@@ -135,14 +143,17 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
       let claimAddress = '' as any
       let failedSwapPreImageHash = '' as any
 
+      console.log('pastPayment', pastPayment)
+
       if (pastPayment) {
-        if (pastPayment.paymentType === PaymentType.LightningToRskSwap) {
+        if (pastPayment.paymentType === PaymentType.RskToLightningSwap) {
           const pastPaymentDetails = pastPayment.paymentDetails as LightningToRskSwapPaymentDetailsFragment
           const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
+          console.log('swapData', swapData)
           timelock = swapData.timeoutBlockHeight
           claimAddress = swapData.claimAddress
           failedSwapPreImageHash = pastPaymentDetails.swapPreimageHash
-        } else if (pastPayment.paymentType === PaymentType.OnChainToRskSwap) {
+        } else if (pastPayment.paymentType === PaymentType.RskToOnChainSwap) {
           const pastPaymentDetails = pastPayment.paymentDetails as OnChainToRskSwapPaymentDetailsFragment
           const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
           timelock = swapData.lockupDetails.timeoutBlockHeight
@@ -150,6 +161,16 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
           failedSwapPreImageHash = pastPaymentDetails.swapPreimageHash
         }
       }
+
+      console.log('===============================================')
+      console.log('PARAMS FOR REFUND SIGNATURE')
+      console.log('preimageHash', `0x${failedSwapPreImageHash}`)
+      console.log('amount', amount)
+      console.log('claimAddress', claimAddress)
+      console.log('refundAddress', accountKeys.address)
+      console.log('timelock', timelock)
+      console.log('privateKey', accountKeys.privateKey)
+      console.log('===============================================')
 
       const { v, r, s } = createAndSignEIP712MessageForPaymentRefund({
         preimageHash: `0x${failedSwapPreImageHash}`,
@@ -261,13 +282,13 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
       if (pastPayment) {
         if (pastPayment.paymentType === PaymentType.RskToLightningSwap) {
           const pastPaymentDetails = pastPayment.paymentDetails as RskToLightningSwapPaymentDetails
-          const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
+          const swapData = JSON.parse(JSON.parse(pastPaymentDetails.swapMetadata))
           timelock = swapData.timeoutBlockHeight
           claimAddress = swapData.claimAddress
           failedSwapPreImageHash = pastPaymentDetails.swapPreimageHash
         } else if (pastPayment.paymentType === PaymentType.RskToOnChainSwap) {
           const pastPaymentDetails = pastPayment.paymentDetails as RskToOnChainSwapPaymentDetails
-          const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
+          const swapData = JSON.parse(JSON.parse(pastPaymentDetails.swapMetadata))
           timelock = swapData.lockupDetails.timeoutBlockHeight
           claimAddress = swapData.lockupDetails.claimAddress
           failedSwapPreImageHash = pastPaymentDetails.swapPreimageHash

@@ -9444,7 +9444,7 @@ export type PledgeRefundRetryRequestMutationVariables = Exact<{
 export type PledgeRefundRetryRequestMutation = { __typename?: 'Mutation', pledgeRefundRetryRequest: { __typename?: 'PledgeRefundRetryRequestResponse', swap: string, refund: (
       { __typename?: 'PledgeRefund' }
       & PledgeRefundFragment
-    ), payment: { __typename?: 'Payment', id: any, accountingAmountDue: number } } };
+    ), payment: { __typename?: 'Payment', id: any, accountingAmountDue: number, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | { __typename?: 'RskToLightningSwapPaymentDetails', swapId: string, swapMetadata: string, lightningInvoiceId: string, swapPreimageHash: string } | { __typename?: 'RskToOnChainSwapPaymentDetails', swapId: string, swapMetadata: string, onChainAddress: string, onChainTxId?: string | null, swapPreimageHash: string } } } };
 
 export type PledgeRefundRetryInitiateMutationVariables = Exact<{
   input: PledgeRefundRetryInitiateInput;
@@ -16153,6 +16153,26 @@ export const PledgeRefundRetryRequestDocument = gql`
     payment {
       id
       accountingAmountDue
+      method
+      failureReason
+      paymentType
+      createdAt
+      status
+      paymentDetails {
+        ... on RskToOnChainSwapPaymentDetails {
+          swapId
+          swapMetadata
+          onChainAddress
+          onChainTxId
+          swapPreimageHash
+        }
+        ... on RskToLightningSwapPaymentDetails {
+          swapId
+          swapMetadata
+          lightningInvoiceId
+          swapPreimageHash
+        }
+      }
     }
   }
 }
