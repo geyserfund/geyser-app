@@ -45,7 +45,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
           publishedAt: OrderByOptions.Desc,
         },
         pagination: {
-          take: 2,
+          take: 3,
         },
         where: {
           category,
@@ -86,9 +86,9 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
             key={projectByCategory.category}
             title={
               category
-                ? ProjectCategoryLabel[category]
+                ? `${t('Trending in')} ${ProjectCategoryLabel[category]}`
                 : subCategory
-                ? ProjectSubCategoryLabel[subCategory]
+                ? `${t('Trending in')} ${ProjectSubCategoryLabel[subCategory]}`
                 : t('Recent Projects')
             }
             projects={projects}

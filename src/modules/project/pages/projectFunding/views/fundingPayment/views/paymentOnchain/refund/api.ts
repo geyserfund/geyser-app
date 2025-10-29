@@ -140,6 +140,16 @@ export const getPartialRefundSignatureChain = async (
   }
 }
 
+export const getRefundSignatureForSubmarineSwap = async (id: string) => {
+  const resp = await fetch(`${swapServiceEndpoint}/swap/submarine/${id}/refund`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then((res) => res.json())
+  console.log('resp', resp)
+  return resp
+}
+
 export const broadcastTransaction = async (txHex: string): Promise<{ id: string }> => {
   const resp = await fetch(`${swapServiceEndpoint}/chain/BTC/transaction`, {
     method: 'POST',

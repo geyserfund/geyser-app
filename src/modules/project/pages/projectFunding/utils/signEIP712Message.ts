@@ -63,3 +63,12 @@ export const signEIP712Message = (digest: string, rskPrivateKey: string) => {
     throw new Error(`Failed to sign EIP-712 message: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
+
+export const signatureToVRS = (signature: string) => {
+  const cleanSignature = signature.startsWith('0x') ? signature.slice(2) : signature
+  const sigBuffer = Buffer.from(cleanSignature, 'hex')
+  const r = '0x' + sigBuffer.subarray(0, 32).toString('hex')
+  const s = '0x' + sigBuffer.subarray(32, 64).toString('hex')
+  const v = parseInt(sigBuffer.subarray(64, 65).toString('hex'), 16)
+  return { v, r, s }
+}

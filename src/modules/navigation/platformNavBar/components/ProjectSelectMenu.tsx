@@ -25,7 +25,7 @@ export const ProjectSelectMenu = () => {
 
   return (
     <Button as={Link} to={getPath('discoveryMyProjects')} size="md" variant="outline" colorScheme="neutral1">
-      {t('Creator')}
+      {t('My projects')}
     </Button>
   )
 }

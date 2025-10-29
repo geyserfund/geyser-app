@@ -23,7 +23,7 @@ export const PlatformNav = () => {
       },
 
       {
-        name: 'Products',
+        name: 'Shop',
         path: '/products',
         icon: <Image src={ProductsIconUrl} height={buttonDimension} width={buttonDimension} />,
       },

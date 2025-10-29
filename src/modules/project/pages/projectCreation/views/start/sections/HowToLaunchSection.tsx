@@ -10,7 +10,7 @@ import { CreationLayoutCard } from '../components/CreationLayoutCard.tsx'
 /** How to Launch section with step-by-step guide */
 export const HowToLaunchSection = () => {
   return (
-    <CreationLayoutCard bg="neutral1.3">
+    <CreationLayoutCard bg="neutral1.3" id="how-to-launch">
       <VStack maxW={dimensions.creation.start.maxWidth} alignItems="flex-start">
         <Body size="sm" muted bold>
           {t('HOW TO LAUNCH')}

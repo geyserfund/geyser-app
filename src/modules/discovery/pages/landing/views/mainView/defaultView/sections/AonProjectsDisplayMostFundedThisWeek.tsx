@@ -37,7 +37,6 @@ export const AonProjectsDisplayMostFundedThisWeek = () => {
   return (
     <ProjectDisplayBody
       title={t('Trending in All or Nothing')}
-      subtitle={t('Discover the most funded projects in Bitcoin')}
       projects={ProjectByCategoryList}
       rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryCampaigns')} />}
     />

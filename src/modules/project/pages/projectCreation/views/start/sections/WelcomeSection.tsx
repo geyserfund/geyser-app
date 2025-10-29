@@ -11,7 +11,7 @@ import { DefaultCreationImageURL } from '../utils/urls.ts'
 /** Welcome to Geyser section with description and illustration */
 export const WelcomeSection = () => {
   return (
-    <CreationLayoutCard>
+    <CreationLayoutCard id="about-geyser">
       <VStack maxW={dimensions.creation.start.maxWidth} alignItems="flex-start">
         <Body size="sm" bold muted>
           {t('ABOUT GEYSER')}

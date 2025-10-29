@@ -5,6 +5,7 @@ import { useAtomValue } from 'jotai'
 import React, { useState } from 'react'
 import { PiWarningCircleBold } from 'react-icons/pi'
 import { Address, Hex } from 'viem'
+import { parseSignature } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
@@ -29,7 +30,9 @@ import { useNotification } from '@/utils/index.ts'
 
 import { createAndSignEIP712MessageForPaymentRefund } from '../../utils/createEIP712Message.ts'
 import { createAndSignLockTransaction } from '../../utils/createLockTransaction.ts'
+import { signatureToVRS } from '../../utils/signEIP712Message.ts'
 import { useRefund } from '../fundingPayment/views/paymentOnchain/hooks/useRefund.ts'
+import { getRefundSignatureForSubmarineSwap } from '../fundingPayment/views/paymentOnchain/refund/api.ts'
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
@@ -119,15 +122,6 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
 
       const amount = BigInt(satsToWei(pledgeRefundRequest?.payment.accountingAmountDue || 0))
 
-      const lockTxHex = await createAndSignLockTransaction({
-        preimageHash: `0x${newPreimageHash}`,
-        claimAddress: swapObj.claimAddress as Address,
-        refundAddress: accountKeys.address as Address,
-        timelock: swapObj?.timeoutBlockHeight || 0,
-        amount, // subract fees
-        privateKey: `0x${accountKeys.privateKey}`,
-      })
-
       const pastPayment = [...pledgeRefund.payments].sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )[0]
@@ -142,8 +136,10 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
       let timelock = 0 as number
       let claimAddress = '' as any
       let failedSwapPreImageHash = '' as any
+      let swapId = '' as any
 
       console.log('pastPayment', pastPayment)
+      console.log('swapId', swapId)
 
       if (pastPayment) {
         if (pastPayment.paymentType === PaymentType.RskToLightningSwap) {
@@ -153,14 +149,41 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
           timelock = swapData.timeoutBlockHeight
           claimAddress = swapData.claimAddress
           failedSwapPreImageHash = pastPaymentDetails.swapPreimageHash
+          swapId = swapData.id
         } else if (pastPayment.paymentType === PaymentType.RskToOnChainSwap) {
           const pastPaymentDetails = pastPayment.paymentDetails as OnChainToRskSwapPaymentDetailsFragment
           const swapData = JSON.parse(pastPaymentDetails.swapMetadata)
           timelock = swapData.lockupDetails.timeoutBlockHeight
           claimAddress = swapData.lockupDetails.claimAddress
           failedSwapPreImageHash = pastPaymentDetails.swapPreimageHash
+          swapId = swapData.id
         }
       }
+
+      const refundSignatureResponse = await getRefundSignatureForSubmarineSwap(failedSwapPreImageHash)
+
+      const { r, v, s } = parseSignature(refundSignatureResponse.signature)
+
+      console.log('r', r)
+      console.log('v', v)
+      console.log('s', s)
+
+      const { v: refundV, r: refundR, s: refundS } = signatureToVRS(refundSignatureResponse.signature)
+
+      console.log('refundV', refundV)
+      console.log('refundR', refundR)
+      console.log('refundS', refundS)
+
+      console.log('refundSignatureResponse', refundSignatureResponse)
+
+      const lockTxHex = await createAndSignLockTransaction({
+        preimageHash: `0x${newPreimageHash}`,
+        claimAddress: swapObj.claimAddress as Address,
+        refundAddress: accountKeys.address as Address,
+        timelock: swapObj?.timeoutBlockHeight || 0,
+        amount, // subract fees
+        privateKey: `0x${accountKeys.privateKey}`,
+      })
 
       console.log('===============================================')
       console.log('PARAMS FOR REFUND SIGNATURE')
@@ -172,24 +195,15 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
       console.log('privateKey', accountKeys.privateKey)
       console.log('===============================================')
 
-      const { v, r, s } = createAndSignEIP712MessageForPaymentRefund({
-        preimageHash: `0x${failedSwapPreImageHash}`,
-        amount: Number(amount),
-        claimAddress,
-        refundAddress: accountKeys.address as Address,
-        timelock,
-        privateKey: accountKeys.privateKey as Hex,
-      })
-
       await pledgeRefundRetryInitiate({
         variables: {
           input: {
             pledgeRefundId: pledgeRefund.id,
             pledgeRefundSwapPaymentInput: {
               swapRefundSignature: {
-                v,
-                r,
-                s,
+                v: refundV,
+                r: refundR,
+                s: refundS,
               },
               rskAddress: accountKeys.address,
               rskPublicKey: accountKeys.publicKey,

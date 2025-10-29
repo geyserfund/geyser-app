@@ -60,6 +60,7 @@ export const ProjectDisplayBody = ({
           alignItems="stretch"
           spacing={{ base: 6, lg: 12 }}
           flexDirection={{ base: 'column', lg: 'row' }}
+          paddingTop={4}
         >
           {posts.map((post) => (
             <LandingPostCard post={post} key={post.id} isMobile />

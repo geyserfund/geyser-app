@@ -38,7 +38,7 @@ export const ProjectRowLayout = ({
         <LandingBackdropWrapper paddingY={2} borderRadius="12px">
           <HStack width="100%" justifyContent="space-between" flexWrap={'wrap'} {...headerProps}>
             {typeof title === 'string' || subtitle ? (
-              <H3 size={'lg'} color="primary1.11" bold textTransform="uppercase" {...titleProps}>
+              <H3 size={'lg'} color="primary1.11" bold {...titleProps}>
                 {title}{' '}
                 {subtitle && (
                   <Body

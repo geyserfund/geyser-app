@@ -8,7 +8,6 @@ import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
 import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 import { PostForLandingPageFragment } from '@/types/index.ts'
 import { toInt } from '@/utils/index.ts'
 
@@ -56,17 +55,29 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
       outlineColor="neutralAlpha.3"
       _hover={{
         cursor: 'pointer',
-        shadow: 'xl',
-        outline: '1px solid',
-        outlineColor: 'neutralAlpha.6',
-        transition: 'all 0.3s ease-in-out',
       }}
       onClick={() => navigate(getPath('projectPostView', post.project?.name || '', post.id))}
-      borderRadius="8px"
-      padding={standardPadding}
-      marginX={{ base: -3, lg: -6 }}
       {...rest}
+      position="relative"
+      role="group"
     >
+      <Box
+        position="absolute"
+        top={{ base: '-8px', lg: '-16px' }}
+        left={{ base: '-8px', lg: '-16px' }}
+        right={{ base: '-8px', lg: '-16px' }}
+        bottom={{ base: '-8px', lg: '-16px' }}
+        borderRadius="8px"
+        display="none"
+        _groupHover={{
+          display: 'block',
+          shadow: 'xl',
+          outline: '1px solid',
+          outlineColor: 'neutralAlpha.6',
+          transition: 'all 0.3s ease-in-out',
+        }}
+      />
+
       <Stack width="100%" direction={getResponsiveValue({ base: 'column', lg: 'row' })}>
         <Box w="full" display={getResponsiveValue({ base: 'block', lg: 'none' })}>
           {renderProjectContent()}

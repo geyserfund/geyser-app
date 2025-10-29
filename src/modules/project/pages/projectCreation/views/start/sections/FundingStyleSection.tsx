@@ -34,7 +34,7 @@ const fundingStyles: FundingStyle[] = [
 /** Choose your funding style section */
 export const FundingStyleSection = () => {
   return (
-    <CreationLayoutCard>
+    <CreationLayoutCard id="how-it-works">
       <VStack maxW={dimensions.creation.start.maxWidth} alignItems="flex-start">
         <Body size="sm" muted bold>
           {t('HOW GEYSER WORKS')}

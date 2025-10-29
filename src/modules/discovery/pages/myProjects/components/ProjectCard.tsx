@@ -62,8 +62,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   return (
     <Box width="100%" py={4}>
-      <HStack spacing={4} justifyContent="space-between" alignItems='start'>
-        <HStack as={RouterLink} to={getPath('project', project.name)} alignItems='start'>
+      <HStack spacing={4} justifyContent="space-between" alignItems="start">
+        <HStack as={RouterLink} to={getPath('project', project.name)} alignItems="start">
           {project.thumbnailImage && (
             <Image
               src={project.thumbnailImage}
@@ -73,7 +73,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               objectFit="cover"
             />
           )}
-          <Body size={{base: "lg", lg: "2xl"}} bold>
+          <Body size={{ base: 'lg', lg: '2xl' }} bold>
             {project.title}
           </Body>
         </HStack>
@@ -84,7 +84,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           as={RouterLink}
           to={getPath('dashboardAnalytics', project.name)}
           size="md"
-          rightIcon={isMobile ? undefined : <PiGear size={16} />}
+          leftIcon={isMobile ? undefined : <PiGear size={16} />}
         >
           {isMobile ? <PiGear size={16} /> : t('Dashboard')}
         </Button>
