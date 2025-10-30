@@ -1,12 +1,10 @@
-import { Button, ButtonProps, HStack } from '@chakra-ui/react'
+import { ButtonProps } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
 import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
-import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { ProjectCreationStep } from '@/types/index.ts'
@@ -75,24 +73,6 @@ export const LaunchPaymentWallet = () => {
           onClick: verifyIntroModal.onOpen,
         }}
       />
-      {!isIdentityVerified && (
-        <FieldContainer
-          title={
-            <HStack w="full" justifyContent="space-between">
-              <Body size="lg" medium>
-                {t('Become a verified creator')}
-              </Body>
-              <Button variant="outline" colorScheme="primary1" size="lg" onClick={verifyIntroModal.onOpen}>
-                {t('Verify')}
-              </Button>
-            </HStack>
-          }
-          subtitle={t(
-            'Get verified to earn a trusted creator badge. Verified creators often receive more contributions as backers feel more confident supporting projects with verified identities.',
-          )}
-          gap={2}
-        />
-      )}
       <VerificationModal {...verifyIntroModal} />
     </ProjectCreationPageWrapper>
   )

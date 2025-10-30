@@ -1,4 +1,4 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
@@ -12,7 +12,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
-import { __production__, __staging__ } from '@/shared/constants/index.ts'
+import { __production__, __staging__, FundingErrorUrl } from '@/shared/constants/index.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom.ts'
@@ -35,7 +35,7 @@ import { ProjectLaunchStrategy } from './LaunchStrategySelection.tsx'
 
 const PROJECT_ID_FOR_GEYSER_LAUNCH = __production__ ? 3075 : __staging__ ? 839 : 839
 
-const LAUNCH_FEE_USD_CENTS = {
+export const LAUNCH_FEE_USD_CENTS = {
   [ProjectLaunchStrategy.STARTER_LAUNCH]: 2500 as USDCents, // 25 USD
   [ProjectLaunchStrategy.GROWTH_LAUNCH]: 5000 as USDCents, // 50 USD
   [ProjectLaunchStrategy.PRO_LAUNCH]: 35000 as USDCents, // 350 USD
@@ -224,7 +224,22 @@ export const LaunchFees = ({
     }
 
     if (!paymentsData?.lightning?.paymentRequest) {
-      return null
+      return (
+        <VStack w="full" spacing={6}>
+          <Image
+            src={FundingErrorUrl}
+            height="200px"
+            width="auto"
+            objectFit="contain"
+            alt={t('No payment request found')}
+          />
+          <VStack w="full" spacing={0} alignItems="center">
+            <Body>{t('We were unable to generate a payment request. Please try again.')}</Body>
+            <Body>{t('If the problem persists, please contact us for support.')}</Body>
+            <Body>{t('Email: hello@geyser.fund')}</Body>
+          </VStack>
+        </VStack>
+      )
     }
 
     return (

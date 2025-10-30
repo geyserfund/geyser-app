@@ -9,6 +9,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCreationStep } from '@/types/index.ts'
+import { isAllOrNothing } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
@@ -18,9 +19,12 @@ export const LaunchPaymentTaxId = () => {
   const { project } = useProjectAtom()
   const navigate = useNavigate()
 
+  const isAon = isAllOrNothing(project)
+  const nextPath = isAon ? getPath('launchPaymentAccountPassword', project.id) : getPath('launchFinalize', project.id)
+
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.Wallet,
-    getPath('launchPaymentAccountPassword', project.id),
+    nextPath,
   )
 
   const { form, handleSubmit } = useTaxProfileForm({ userId: user.id, onUpdate: updateProjectWithLastCreationStep })

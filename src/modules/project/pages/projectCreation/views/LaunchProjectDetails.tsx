@@ -41,7 +41,8 @@ export const LaunchProjectDetails = () => {
 
   const { updateProjectWithLastCreationStep, loading: updateProjectLoading } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.ProjectDetails,
-    getPath('launchFundingStrategy', project.id),
+    // getPath('launchFundingStrategy', project.id), // TODO: uncomment when we release AON
+    getPath('launchFundingGoal', project.id),
   )
 
   const onLeave = () => navigate(getPath('launchStart'))

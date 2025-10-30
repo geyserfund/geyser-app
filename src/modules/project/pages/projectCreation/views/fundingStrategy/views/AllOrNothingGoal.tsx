@@ -190,7 +190,7 @@ export const AllOrNothingGoal = () => {
             </InputGroup>
           </FieldContainer>
           <FieldContainer
-            title={t('Schedule launch date & time (optional)')}
+            title={t('Schedule launch (optional)')}
             subtitle={
               <VStack align="flex-start" gap={0}>
                 <Body size="sm">

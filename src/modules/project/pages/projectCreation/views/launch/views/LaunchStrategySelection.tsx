@@ -154,14 +154,14 @@ export const ProjectCreateStrategyCard = ({
           justifyContent={'start'}
           spacing={{ base: 0, lg: 2 }}
         >
-          <Body size="xl" bold>
+          <Body size="lg" bold>
             {title}
           </Body>
-          <Body size={{ base: 'lg', lg: 'xl' }} light medium>
+          <Body size={{ base: 'md', lg: 'lg' }} light medium>
             - {subtitle}
           </Body>
         </HStack>
-        <Body size="xl" muted medium>
+        <Body size="lg" muted medium>
           {price}
         </Body>
       </HStack>
@@ -176,13 +176,13 @@ export const ProjectCreateStrategyCard = ({
           {points && (
             <UnorderedList alignItems="flex-start" spacing={1}>
               {points.map((point, index) => (
-                <ListItem key={point[0]} as={HStack} flexWrap="wrap" spacing={0.5}>
-                  <Body size="sm" bold>
+                <ListItem key={point[0]}>
+                  <Body size="sm" bold display="inline">
                     {point[0]}
-                    {point[0] && point[1] && ':'}
+                    {point[0] && point[1] && ':'}{' '}
                   </Body>
                   {point[1] && (
-                    <Body size="sm" light>
+                    <Body size="sm" light display="inline">
                       {point[1]}
                     </Body>
                   )}
