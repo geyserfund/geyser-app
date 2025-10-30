@@ -1,7 +1,9 @@
 import { Tab, TabList, TabPanels, Tabs, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
+import { useLocation } from 'react-router'
 
+import { CampaignsComingSoon } from './CampaignsComingSoon.tsx'
 import { AlmostFundedCampaigns } from './views/AlmostFundedCampaigns.tsx'
 import { AlmostOverCampaigns } from './views/AlmostOverCampaigns.tsx'
 import { InYourRegionCampaigns } from './views/InYourRegionCampaigns.tsx'
@@ -33,6 +35,12 @@ const tabs = [
 
 export const Campaigns = () => {
   const [activeTabIndex, setActiveTabIndex] = useState(0)
+
+  const location = useLocation()
+
+  if (location.pathname.includes('/campaigns')) {
+    return <CampaignsComingSoon />
+  }
 
   return (
     <Tabs w="full" variant="secondary" onChange={(index) => setActiveTabIndex(index)}>

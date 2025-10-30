@@ -80,3 +80,18 @@ export const postNudgeCreatorData = async (data: {
     body: JSON.stringify(sendData),
   }).then((response) => response.json())
 }
+
+export const postCampaignLaunchRegistration = async (data: { email: string; description: string }) => {
+  const sendData = {
+    records: [{ fields: data }],
+  }
+
+  return fetch(`${AIRTABLE_API}/campaign%20registration`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${VITE_APP_AIR_TABLE_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(sendData),
+  }).then((response) => response.json())
+}
