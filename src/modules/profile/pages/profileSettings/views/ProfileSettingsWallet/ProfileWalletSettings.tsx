@@ -21,7 +21,12 @@ export const ProfileWalletSettings = () => {
   return (
     <VStack p={8} spacing={8} overflowY="auto" align="flex-start" w="full">
       <H2>{t('Wallet Connection')}</H2>
-      <Body>{t('Connect a Lightning wallet to your account to receive refunds, ambassador payouts, etc.')}</Body>
+      <VStack spacing={0} align="flex-start">
+        <Body>{t('Connect a Lightning wallet to your account to receive refunds, ambassador payouts, etc.')}</Body>
+        <Body>
+          {t('NOTE: This is your profile wallet, to change your project wallet, please visit the project dashboard.')}
+        </Body>
+      </VStack>
 
       <WalletConnectionForm
         readOnly={false}
