@@ -48,24 +48,25 @@ export const FilterComponent = () => {
           inputRef.current?.blur()
         }}
       >
-        <InputGroup>
+        <InputGroup size={{ base: 'sm', lg: 'md' }}>
           <InputLeftElement color="neutral1.11">
-            <Icon as={PiMagnifyingGlass} fontSize="20px" />
+            <Icon as={PiMagnifyingGlass} fontSize={{ base: '16px', lg: '20px' }} />
           </InputLeftElement>
           <Input
             ref={inputRef}
-            placeholder={t('Discover projects')}
+            size={{ base: 'sm', lg: 'md' }}
+            placeholder={t('search projects')}
             width={{ base: 'full', lg: '220px' }}
             value={search}
             onChange={handleSearchUpdate}
           />
-          <InputRightElement minWidth="40px">
+          <InputRightElement minWidth={{ base: '28px', lg: '40px' }}>
             <IconButton
               aria-label="filter"
               variant="ghost"
-              size="md"
+              size={{ base: 'sm', lg: 'md' }}
               colorScheme="neutral1"
-              icon={<Icon as={PiFunnelSimple} fontSize="20px" />}
+              icon={<Icon as={PiFunnelSimple} fontSize={{ base: '16px', lg: '20px' }} />}
               onClick={filterModal.onOpen}
             />
           </InputRightElement>

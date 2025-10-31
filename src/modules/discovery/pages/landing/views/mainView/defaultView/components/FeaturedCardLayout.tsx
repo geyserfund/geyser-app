@@ -78,7 +78,7 @@ export const FeaturedCardLayout = ({
             <Body size="xl" fontStyle={'italic'} bold light>
               {comment}
             </Body>
-            <Body>{author}</Body>
+            {/* <Body>{author}</Body> */}
           </VStack>
         )}
         {children}

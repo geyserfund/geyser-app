@@ -37,10 +37,10 @@ export const bottomNavItems = [
     IconComponent: <Image src={FundraiserIconUrl} height={imageDimension} width={imageDimension} />,
   },
   {
-    label: 'Products',
+    label: 'Shop',
     key: BottomNavItemKey.products,
     path: 'discoveryProducts',
-    IconComponent: <Image src={ProductsIconUrl} height={imageDimension} width={imageDimension} />,
+    IconComponent: <Image src={ProductsIconUrl} height={imageDimension} width={imageDimension} marginRight={2} />,
   },
 ] as BottomNavItem[]
 
@@ -79,8 +79,7 @@ const DiscoveryBottomNavButton = ({ item, currentNavItem, ...rest }: DiscoveryBo
       fontSize={{ base: '12px', sm: '16px', md: '18px' }}
       {...rest}
     >
-      {item.IconComponent}
-      {t(item.label)}
+      {item.IconComponent} {t(item.label)}
     </Button>
   )
 }
