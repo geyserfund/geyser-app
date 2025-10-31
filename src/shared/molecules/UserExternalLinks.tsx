@@ -88,7 +88,7 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
       <VStack>
         <SocialLinks />
         <Body fontStyle="italic" medium>
-          {t('2022 GEYSER INC.')}
+          {t('2025 GEYSER INC.')}
         </Body>
       </VStack>
     </VStack>

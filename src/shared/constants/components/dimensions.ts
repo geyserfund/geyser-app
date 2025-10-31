@@ -56,7 +56,7 @@ export const dimensions = {
     },
     rightSideNav: {
       width: '420px',
-      gap: { base: '20px', xl: '60px' },
+      gap: { base: '20px', xl: '40px' },
     },
     header: {
       maxHeight: '369px',

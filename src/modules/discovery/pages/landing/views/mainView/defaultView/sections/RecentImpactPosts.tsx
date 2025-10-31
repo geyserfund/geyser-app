@@ -4,7 +4,6 @@ import { Link } from 'react-router'
 
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 import { OrderByOptions, PostType, usePostsForLandingPageQuery } from '@/types/index.ts'
 
 import { LandingPostCard } from '../components/LandingPostCard.tsx'
@@ -39,7 +38,7 @@ export const RecentImpactPosts = () => {
       width="100%"
       rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryActivity')} />}
     >
-      <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={standardPadding}>
+      <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 4, lg: 8 }}>
         {posts.map((post) => {
           return <LandingPostCard key={post.id} post={post} isMobile />
         })}
