@@ -9,7 +9,7 @@ export const PlatformNav = () => {
   const location = useLocation()
 
   const ProjectNavigationButtons = useMemo(() => {
-    const buttonDimension = '65px'
+    const buttonDimension = '60px'
     const buttonList = [
       {
         name: 'Campaigns',
@@ -45,7 +45,7 @@ export const PlatformNav = () => {
 
   return (
     <HStack h="full" alignItems="start">
-      <AnimatedNavSlide items={ProjectNavigationButtons} activeIndex={activeButtonIndex} zIndex={9} spacing={6} />
+      <AnimatedNavSlide items={ProjectNavigationButtons} activeIndex={activeButtonIndex} zIndex={9} spacing={4} />
     </HStack>
   )
 }

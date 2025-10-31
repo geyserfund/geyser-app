@@ -95,11 +95,11 @@ export const AnimatedNavSlide = ({
 
   return (
     <HStack
-      w="full"
       padding={'2px'}
       background={'utils.pbg'}
       borderRadius={'12px'}
       position="relative"
+      justifyContent="space-around"
       zIndex={2}
       {...props}
     >
@@ -173,7 +173,7 @@ export const AnimatedNavSlide = ({
               >
                 {item.icon}
                 {
-                  <Body as="span" size="lg" fontWeight={isActive ? 700 : 500} paddingTop={6}>
+                  <Body as="span" size="md" fontWeight={isActive ? 700 : 500} paddingTop={6}>
                     {t(item.name)}
                   </Body>
                 }
@@ -202,6 +202,7 @@ const ProjectNavigationButton: ComponentWithAs<
       _focus={{}}
       _active={{}}
       padding={0}
+      minWidth="150px"
       {...props}
     />
   )

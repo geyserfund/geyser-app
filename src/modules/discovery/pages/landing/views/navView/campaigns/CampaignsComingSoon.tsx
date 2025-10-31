@@ -1,10 +1,10 @@
 import { HStack, Image, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
-import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { CampaignsComingSoonImageUrl } from '@/shared/constants/index.ts'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 
 import { RegisterCampaignLaunch } from './RegisterCampaignLaunch.tsx'
@@ -131,35 +131,36 @@ export const CampaignsComingSoon = () => {
             'We’re launching AON campaigns in several cohorts. This allows us to test this feature in the open while also helping with project promotion.',
           )}
         </Body>
-        <CardLayout w="full" backgroundColor="error.3" maxWidth="500px">
+        <Feedback variant={FeedBackVariant.ERROR} noIcon maxWidth="500px">
           <VStack w="full" alignItems="start" gap={0}>
             <H3 size="xl" bold>
               {t('Cohort 1 - FULLY BOOKED')}
             </H3>
             <Body size="lg>">{t('Novermber 24 - Dec 14')}</Body>
+            <UnorderedList marginTop={4}>
+              <ListItem fontWeight={'bold'}>📕 {t('Translation of The Sovereign Individual')}</ListItem>
+              <ListItem fontWeight={'bold'}>📱 {t('New Hardware Wallet')}</ListItem>
+              <ListItem fontWeight={'bold'}>🎲 {t('New Board game')}</ListItem>
+            </UnorderedList>
           </VStack>
-          <UnorderedList>
-            <ListItem fontWeight={'bold'}>📕 {t('Translation of The Sovereign Individual')}</ListItem>
-            <ListItem fontWeight={'bold'}>📱 {t('New Hardware Wallet')}</ListItem>
-            <ListItem fontWeight={'bold'}>🎲 {t('New Board game')}</ListItem>
-          </UnorderedList>
-        </CardLayout>
-        <CardLayout w="full" backgroundColor="primary1.3" maxWidth="500px">
+        </Feedback>
+
+        <Feedback variant={FeedBackVariant.SUCCESS} noIcon maxWidth="500px">
           <VStack w="full" alignItems="start" gap={0}>
             <H3 size="xl" bold>
               {t('Cohort 2 - OPEN')}
             </H3>
             <Body size="lg>">{t('January 2026')}</Body>
           </VStack>
-        </CardLayout>
-        <CardLayout w="full" backgroundColor="error.3" maxWidth="500px">
+        </Feedback>
+        <Feedback variant={FeedBackVariant.INFO} noIcon maxWidth="500px">
           <VStack w="full" alignItems="start" gap={0}>
             <H3 size="xl" bold>
               {t('All or Nothing open launch')}
             </H3>
             <Body size="lg>">{t('End of January 2026')}</Body>
           </VStack>
-        </CardLayout>
+        </Feedback>
       </VStack>
     </VStack>
   )

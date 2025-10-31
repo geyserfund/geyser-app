@@ -192,9 +192,10 @@ export const DraftIllustrationUrl = 'https://storage.googleapis.com/geyser-proje
 
 // ICONS
 
-export const CampaignIconUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/navbar/campaign6.png'
-export const FundraiserIconUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/navbar/icon_fundraiser.png'
-export const ProductsIconUrl = 'https://storage.googleapis.com/geyser-projects-media/icons/navbar/product_icon.png'
+export const CampaignIconUrl = 'https://storage.googleapis.com/geyser-projects-media/app/navigation/campaign_icon1.webp'
+export const FundraiserIconUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/navigation/fundraiser_icon1.webp'
+export const ProductsIconUrl = 'https://storage.googleapis.com/geyser-projects-media/app/navigation/products_icon1.webp'
 
 // PAYMENT METHOD
 export const BitcoinLightingPaymentImageUrl =

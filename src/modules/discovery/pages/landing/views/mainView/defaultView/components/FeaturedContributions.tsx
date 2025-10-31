@@ -22,25 +22,15 @@ import {
 import { commaFormatted } from '@/utils/index.ts'
 
 const ITEM_LIMIT = 10
-const MINIMUM_CONTRIBUTION_AMOUNT = 100000 // 100K sats
+const MINIMUM_CONTRIBUTION_AMOUNT = 50000 // 100K sats
 
 /** Helper function to get color scheme based on contribution age */
-const getContributionColorScheme = (createdAt: number): string => {
-  const now = Date.now()
-  const contributionTime = createdAt
-  const timeDiffInMs = now - contributionTime
-  const oneMinuteInMs = 60 * 1000
-  const oneHourInMs = 60 * 60 * 1000
-
-  if (timeDiffInMs <= oneMinuteInMs) {
-    return 'error'
+const getContributionColorScheme = (amount: number): string => {
+  if (amount >= 100000) {
+    return 'orange'
   }
 
-  if (timeDiffInMs <= oneHourInMs) {
-    return 'warning'
-  }
-
-  return 'primary1'
+  return 'blue'
 }
 
 export const FeaturedContributions = () => {
@@ -151,7 +141,7 @@ export const ContributionCard = ({
   })
 
   const project = data?.projectGet
-  const colorScheme = getContributionColorScheme(contribution.createdAt)
+  const colorScheme = getContributionColorScheme(contribution.amount)
 
   if (loading || !project) {
     return null
@@ -167,9 +157,22 @@ export const ContributionCard = ({
       _hover={{
         cursor: 'pointer',
       }}
+      height="28px"
+      alignItems="center"
+      paddingLeft={2}
       {...rest}
     >
-      <Body size="sm" light>
+      {colorScheme === 'orange' && (
+        <Image
+          height="20px"
+          width="auto"
+          marginBottom={'6px'}
+          marginLeft="8px"
+          src="https://storage.googleapis.com/geyser-projects-media/app/launch/Fire.gif"
+        />
+      )}
+
+      <Body size="sm" dark bold>
         {commaFormatted(contribution.amount)} sats
       </Body>
       <HStack>
@@ -188,6 +191,7 @@ export const ContributionCard = ({
           {user?.username || t('Anonymous')}
         </ProfileText>
       </HStack>
+
       <Icon as={PiArrowFatLineRightFill} />
       <HStack>
         <Image
@@ -197,7 +201,7 @@ export const ContributionCard = ({
           borderRadius="4px"
           objectFit="cover"
         />
-        <Body size="sm" light isTruncated maxWidth={textMaxWidth}>
+        <Body size="sm" dark isTruncated maxWidth={textMaxWidth} bold>
           {project.title}
         </Body>
       </HStack>

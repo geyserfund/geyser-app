@@ -80,7 +80,6 @@ export const SubscribeForm = ({ buttonProps, inputProps, ...props }: SubscribeFo
         flex={1}
         name="email"
         size="lg"
-        backgroundColor="white"
         control={control}
         placeholder={t('satoshi@gmx.com')}
         error={errors.email?.message}

@@ -87,7 +87,7 @@ export const LandingCardBase = ({
   }
 
   const headerContent = (props?: { alwaysTruncate?: boolean; highlight?: boolean }) => {
-    const { alwaysTruncate, highlight } = props || {}
+    const { alwaysTruncate } = props || {}
 
     return (
       <HStack w="full" overflow="hidden" alignItems="start">
@@ -108,13 +108,7 @@ export const LandingCardBase = ({
           </Box>
         </Tooltip>
         <VStack flex={1} alignItems="start" spacing={0} overflow="hidden">
-          <H3
-            size="md"
-            medium
-            width="100%"
-            isTruncated={alwaysTruncate || !isOpen}
-            color={highlight ? 'primary1.8' : 'unset'}
-          >
+          <H3 size="md" medium width="100%" isTruncated={alwaysTruncate || !isOpen}>
             {project.title}
           </H3>
           <HStack w="full" spacing={1}>
