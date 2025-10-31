@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { useNavigate } from 'react-router'
 
+import { postTypeOptions } from '@/modules/project/pages/projectView/views/posts/utils/postTypeLabel.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload.tsx'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
 import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
@@ -110,7 +111,7 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
           <HStack w={'full'} paddingTop={2} flexWrap="wrap">
             {post.postType && (
               <Badge variant="soft" colorScheme="neutral1" size="sm">
-                {post.postType}
+                {postTypeOptions.find((option) => option.value === post.postType)?.label}
               </Badge>
             )}
             <PostAuthor post={post} />

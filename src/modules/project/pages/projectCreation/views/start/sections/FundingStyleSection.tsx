@@ -53,8 +53,8 @@ export const FundingStyleSection = () => {
 
       <SimpleGrid columns={[1, 2]} spacing={16} width="100%" maxW={dimensions.creation.start.maxWidth}>
         {fundingStyles.map((style) => (
-          <CardLayout key={style.title} spacing={0}>
-            <Box height="160px" width="auto" borderRadius="md" overflow="hidden" objectFit={'contain'}>
+          <CardLayout key={style.title} spacing={0} justifyContent="space-between">
+            <Box height="auto" width="full" borderRadius="md" overflow="hidden" objectFit={'contain'}>
               <Image src={style.image} alt={style.title} width="100%" height="100%" objectFit="cover" />
             </Box>
 

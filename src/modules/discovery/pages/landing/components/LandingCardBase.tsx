@@ -2,7 +2,6 @@ import { Box, Button, HStack, Tooltip, useDisclosure, VStack } from '@chakra-ui/
 import { t } from 'i18next'
 import { useNavigate } from 'react-router'
 
-import { FollowButton } from '@/modules/project/pages/projectView/views/body/components/FollowButton.tsx'
 import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
@@ -186,7 +185,6 @@ export const LandingCardBase = ({
             )}
           </Body>
         )}
-        <FollowButton project={project} />
       </HStack>
     )
   }
@@ -206,7 +204,7 @@ export const LandingCardBase = ({
           paddingBottom={getResponsiveValue({ base: 3, lg: 4 })}
           width="100%"
           alignItems="start"
-          marginTop={hideContributionContent ? '-49px' : '-81px'}
+          marginTop={hideContributionContent ? '-49px' : '-70px'}
         >
           <VStack w="full" spacing={0} opacity={!isOpen ? 0 : 1}>
             {headerContent({ highlight: true })}

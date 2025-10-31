@@ -13,8 +13,8 @@ type CreationIllustrationCardProps = {
 /** Get discovered section with three feature cards */
 export const CreationIllustrationCard = ({ title, description, image }: CreationIllustrationCardProps) => {
   return (
-    <CardLayout w="full" key={title} spacing={4}>
-      <Box height="200px" width="auto" borderRadius="md" overflow="hidden" objectFit={'contain'}>
+    <CardLayout w="full" key={title} spacing={4} justifyContent="space-between">
+      <Box height="auto" width="100%" borderRadius="md" overflow="hidden" objectFit={'contain'}>
         <Image src={image} alt={title} width="100%" height="100%" objectFit="cover" />
       </Box>
 

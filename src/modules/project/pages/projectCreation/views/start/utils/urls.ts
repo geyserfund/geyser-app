@@ -1,8 +1,8 @@
 export const CampaignIllurationURL =
-  'https://storage.googleapis.com/geyser-projects-media/app/creationflow/creation-campaigns-illustration.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/creationflow/creation-campaigns-illustration-1.png'
 
 export const FundraiserIllurationURL =
-  'https://storage.googleapis.com/geyser-projects-media/app/creationflow/creation-fundraiser-illustation.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/creationflow/creation-fundraiser-illustation-1.png'
 
 export const GetDiscoveredIllutration1URL =
   'https://storage.googleapis.com/geyser-projects-media/app/creationflow/getdiscovered-illustation-1.png'

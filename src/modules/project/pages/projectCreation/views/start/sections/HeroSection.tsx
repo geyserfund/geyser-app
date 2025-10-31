@@ -2,6 +2,8 @@ import { Button, HStack, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { Link as RouterLink } from 'react-router'
 
+import { useAuthContext } from '@/context/auth.tsx'
+import { useAuthModal } from '@/modules/auth/hooks/useAuthModal.ts'
 import { H1, H2 } from '@/shared/components/typography/Heading.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
@@ -10,6 +12,9 @@ import { CreationLayoutCard } from '../components/CreationLayoutCard.tsx'
 
 /** Hero section with title, subtitle, and navigation links */
 export const HeroSection = () => {
+  const { isLoggedIn } = useAuthContext()
+  const { loginOnOpen } = useAuthModal()
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     element?.scrollIntoView({ behavior: 'smooth' })
@@ -28,14 +33,21 @@ export const HeroSection = () => {
       </VStack>
 
       <Button
-        variant="surface"
+        variant="solid"
         colorScheme="primary1"
-        paddingY={{ base: 4, lg: 9 }}
-        paddingX={{ base: 4, lg: 8 }}
-        borderRadius={{ base: '8px', lg: '18px' }}
+        paddingY={{ base: 6, lg: 8 }}
+        paddingX={{ base: 6, lg: 8 }}
+        borderRadius={{ base: '12px', lg: '18px' }}
         _hover={{ backgroundColor: 'primary1.9', color: 'utils.blackContrast', shadow: 'lg' }}
-        as={RouterLink}
-        to={getPath('launchProjectDetails')}
+        {...(isLoggedIn
+          ? { as: RouterLink, to: getPath('launchProjectDetails') }
+          : {
+              onClick: () =>
+                loginOnOpen({
+                  showLightning: false,
+                  showGoogle: false,
+                }),
+            })}
       >
         <H1 size="2xl" textAlign="center" bold>
           {t('Launch your project')}

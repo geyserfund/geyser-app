@@ -70,5 +70,11 @@ export const CharityProjects = ({ category, subCategory }: ProjectDisplayProps) 
     return null
   }
 
-  return <ProjectDisplayBody title={t('Charity projects with Tax benefits')} projects={projects} />
+  return (
+    <ProjectDisplayBody
+      title={t('Charity projects with tax benefits')}
+      description={t('Make donations to these registered charities and claim tax deductions in your country')}
+      projects={projects}
+    />
+  )
 }

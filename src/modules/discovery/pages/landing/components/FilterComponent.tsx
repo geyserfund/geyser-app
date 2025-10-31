@@ -38,8 +38,9 @@ export const FilterComponent = () => {
   }
 
   return (
-    <HStack>
+    <>
       <HStack
+        w={{ base: 'full', lg: 'auto' }}
         as="form"
         onSubmit={(e) => {
           e.preventDefault()
@@ -53,8 +54,8 @@ export const FilterComponent = () => {
           </InputLeftElement>
           <Input
             ref={inputRef}
-            placeholder={t('search projects')}
-            width={'220px'}
+            placeholder={t('Discover projects')}
+            width={{ base: 'full', lg: '220px' }}
             value={search}
             onChange={handleSearchUpdate}
           />
@@ -72,6 +73,6 @@ export const FilterComponent = () => {
         {/* <FilterByRegionMenuMenu /> */}
       </HStack>
       <FilterModal {...filterModal} />
-    </HStack>
+    </>
   )
 }

@@ -17,7 +17,7 @@ export const PlatformNav = () => {
         icon: <Image src={CampaignIconUrl} height={buttonDimension} width={buttonDimension} />,
       },
       {
-        name: 'Fundraiser',
+        name: 'Fundraisers',
         path: '/fundraisers',
         icon: <Image src={FundraiserIconUrl} height={buttonDimension} width={buttonDimension} />,
       },

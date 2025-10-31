@@ -16,9 +16,9 @@ export const TitleBar = () => {
   }
 
   return (
-    <VStack w="full" spacing={8}>
+    <VStack w="full" spacing={{ base: 4, lg: 8 }}>
       <HStack flexDirection={{ base: 'column', lg: 'row' }} w="full" justifyContent="space-between">
-        <H1 size={{ base: 'xl', md: '2xl', xl: '3xl' }} bold color="primary1.11">
+        <H1 size={{ base: 'md', sm: 'lg', md: '2xl', xl: '3xl' }} bold color="primary1.11" textAlign="center">
           {t('Discover and fund Bitcoin projects worldwide')}
         </H1>
         <FilterComponent />

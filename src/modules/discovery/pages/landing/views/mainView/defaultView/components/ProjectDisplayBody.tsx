@@ -1,6 +1,7 @@
 import { GridItem, HStack, SimpleGrid, Stack } from '@chakra-ui/react'
 
 import { LandingCardBaseSkeleton, SkeletonLayout } from '@/shared/components/layouts'
+import { Body } from '@/shared/components/typography/Body.tsx'
 
 import {
   ContributionsSummary,
@@ -19,6 +20,7 @@ interface ProjectDisplayBodyProps extends Omit<ProjectRowLayoutProps, 'children'
   subtitleId?: string
   rightContent?: React.ReactNode
   posts?: PostForLandingPageFragment[]
+  description?: string
 }
 
 export const ProjectDisplayBody = ({
@@ -30,6 +32,7 @@ export const ProjectDisplayBody = ({
   subtitleId,
   rightContent,
   posts,
+  description,
 }: ProjectDisplayBodyProps) => {
   return (
     <ProjectRowLayout
@@ -45,6 +48,11 @@ export const ProjectDisplayBody = ({
       }}
       rightContent={rightContent}
     >
+      {description && (
+        <Body size="sm" medium>
+          {description}
+        </Body>
+      )}
       <SimpleGrid w="full" columns={{ base: 1, lg: 6 }} spacing={{ base: 8, lg: 6, xl: 8 }}>
         {projects.map((project) => {
           return (

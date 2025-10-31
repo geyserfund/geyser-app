@@ -5,7 +5,7 @@ import { TitleBar } from './views/mainView/defaultView/sections/TitleBar.tsx'
 
 export const Landing = () => {
   return (
-    <VStack w="full" spacing={4} paddingTop={8}>
+    <VStack w="full" spacing={4}>
       <TitleBar />
 
       <Outlet />

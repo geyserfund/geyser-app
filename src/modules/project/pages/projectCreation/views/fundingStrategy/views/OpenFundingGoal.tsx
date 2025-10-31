@@ -2,7 +2,7 @@ import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useNavigate } from 'react-router'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { useGoalsAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { GoalModal } from '@/modules/project/pages/projectView/components/GoalModal.tsx'
 import { useGoalsModal } from '@/modules/project/pages/projectView/hooks/useGoalsModal.tsx'
 import { RenderGoals } from '@/modules/project/pages/projectView/views/goals/common/RenderGoals.tsx'
@@ -17,6 +17,7 @@ export const OpenFundingGoal = () => {
   const navigate = useNavigate()
 
   const { project } = useProjectAtom()
+  const { inProgressGoals } = useGoalsAtom()
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.FundingGoal,
@@ -29,6 +30,7 @@ export const OpenFundingGoal = () => {
     onClick() {
       updateProjectWithLastCreationStep()
     },
+    label: inProgressGoals.length > 0 ? t('Continue') : t('Skip for now'),
     isDisabled: false,
   }
 
