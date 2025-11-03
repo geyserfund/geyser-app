@@ -28,7 +28,7 @@ import { ErrorBoundary } from './components/ErrorBoundary'
 import { renderPrivateRoute } from './components/PrivateRoute'
 
 /** Toggle this to enable/disable maintenance mode - set to true to show maintenance page for all routes */
-const MAINTENANCE_MODE = true
+const MAINTENANCE_MODE = false
 
 const Badges = () => import('../../modules/general/badges/BadgesPage')
 
