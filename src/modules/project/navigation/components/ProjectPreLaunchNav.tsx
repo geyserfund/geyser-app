@@ -1,7 +1,7 @@
 import { HStack, Icon, Popover, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiInfo } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'

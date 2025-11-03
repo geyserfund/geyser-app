@@ -2,19 +2,20 @@
 import { Button, HStack, Link, Stack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { DateTime } from 'luxon'
 import { ChangeEventHandler, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
+import { CustomSelect } from '@/components/ui/CustomSelect.tsx'
 import { TextArea } from '@/components/ui/TextArea.tsx'
 import { TextInputBox } from '@/components/ui/TextInputBox.tsx'
 import { UploadBox } from '@/components/ui/UploadBox.tsx'
 import { useAuthContext } from '@/context/auth.tsx'
 import { AdditionalUrlModal } from '@/modules/project/forms/components/AdditionalUrlModal.tsx'
 import { MAX_PROJECT_HEADERS } from '@/modules/project/forms/ProjectForm.tsx'
-import { ProjectRegion } from '@/modules/project/forms/ProjectRegion.tsx'
-import { useWalletForm } from '@/modules/project/pages1/projectCreation/hooks/useWalletForm.tsx'
+import { useWalletForm } from '@/modules/project/pages/projectCreation/hooks/useWalletForm.tsx'
 import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -25,9 +26,13 @@ import { FileUpload } from '@/shared/molecules/FileUpload.tsx'
 import { LightningAddressInputField } from '@/shared/molecules/forms/WalletConnectionForm.tsx'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal.tsx'
 import { MediaControlWithReorder } from '@/shared/molecules/MediaControlWithReorder.tsx'
+import { countriesAtom } from '@/shared/state/countriesAtom.ts'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 import {
+  Country,
   CreateWalletInput,
+  ProjectCategory,
+  ProjectSubCategory,
   useCreateProjectMutation,
   useCreateWalletMutation,
   useGrantApplyMutation,
@@ -106,6 +111,8 @@ const grantApplicationSchema = yup.object({
 export const GrantsApplyPage = () => {
   const toast = useNotification()
   const { user, queryCurrentUser } = useAuthContext()
+
+  const countriesData = useAtomValue(countriesAtom)
 
   const [projectAppliedToGrant, setProjectAppliedToGrant] = useState<boolean>(false)
 
@@ -192,9 +199,10 @@ export const GrantsApplyPage = () => {
           images: data.images,
           name: data.name,
           shortDescription: data.shortDescription,
-          email: data.email,
           thumbnailImage: data.thumbnailImage,
           countryCode: data.country.code,
+          category: ProjectCategory.Tool,
+          subCategory: ProjectSubCategory.OsSoftware,
         },
       },
       onCompleted(data) {
@@ -433,19 +441,28 @@ export const GrantsApplyPage = () => {
             />
           </FieldContainer>
 
-          <ProjectRegion
-            location={{
-              country: watch('country'),
-            }}
-            updateProject={(project) => {
-              setValue('country', project.location?.country || { name: '', code: '' }, {
-                shouldDirty: true,
-                shouldValidate: true,
-              })
-            }}
-            error={formState.errors.country?.message}
-            clearError={() => clearErrors('country')}
-          />
+          <FieldContainer
+            title={t('Country')}
+            subtitle={t('Get found more easily by putting your project on the map. Select a country')}
+            required
+          >
+            <CustomSelect<Country, false>
+              width="100%"
+              name="location"
+              placeholder={t('Select country')}
+              required
+              options={countriesData}
+              getOptionLabel={(option: Country) => option.name}
+              getOptionValue={(option: Country) => option.code}
+              onChange={(value) => {
+                setValue('country', value || { name: '', code: '' }, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }}
+              onFocus={() => clearErrors('country')}
+            />
+          </FieldContainer>
 
           <FieldContainer
             title={t('Link to Github PR')}

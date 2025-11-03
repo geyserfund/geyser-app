@@ -1,5 +1,5 @@
 import { atom } from 'jotai'
-import { RouteMatch, RouteObject } from 'react-router-dom'
+import { RouteMatch, RouteObject } from 'react-router'
 
 /** Atom to store matches for all routes for the platform */
 export const matchRoutesAtom = atom<RouteMatch<string, RouteObject>[] | null>([])

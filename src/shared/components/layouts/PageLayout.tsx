@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
 
-import { dimensions } from '../../constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 
 interface PageLayoutProps {
   children: React.ReactNode

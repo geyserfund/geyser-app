@@ -3,12 +3,12 @@ import { PiArrowLeft, PiArrowRight, PiStarFill, PiTrash } from 'react-icons/pi'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body } from '@/shared/components/typography'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { lightModeColors } from '@/shared/styles'
 import { getVimeoThumbailFromLink, getYoutubeThumbailFromLink } from '@/shared/utils/formatData/videoTools'
 
-import { dimensions } from '../constants'
 import { VideoPlayer } from './VideoPlayer'
 
 export type RenderImageOrVideoProps = {

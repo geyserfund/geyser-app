@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_PAYMENT_METHODS } from './paymentMethodsFragment'
+import { FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE } from './projectAognGoalFragment.ts'
 import { FRAGMENT_PROJECT_PAGE_CREATOR } from './userFragment'
 
 export const FRAGMENT_PROJECT = gql`
@@ -78,6 +79,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
   ${FRAGMENT_PROJECT_LOCATION}
   ${FRAGMENT_PROJECT_KEYS}
   ${FRAGMENT_PROJECT_PAYMENT_METHODS}
+  ${FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE}
   fragment ProjectPageBody on Project {
     id
     name
@@ -103,6 +105,23 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     promotionsEnabled
     followersCount
     rejectionReason
+    fundingStrategy
+    lastCreationStep
+    launchScheduledAt
+    category
+    subCategory
+    links
+    aonGoal {
+      ...ProjectAonGoalForProjectPage
+    }
+    launchScheduledAt
+    location {
+      ...ProjectLocation
+    }
+    tags {
+      id
+      label
+    }
     keys {
       ...ProjectKeys
     }
@@ -118,23 +137,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
   }
 `
 
-export const FRAGMENT_PROJECT_PAGE_DETAILS = gql`
-  fragment ProjectPageDetails on Project {
-    id
-    name
-    category
-    subCategory
-    links
-    location {
-      ...ProjectLocation
-    }
-    tags {
-      id
-      label
-    }
-  }
-`
-
 export const FRAGMENT_PROJECT_HEADER_SUMMARY = gql`
   fragment ProjectHeaderSummary on Project {
     followersCount
@@ -144,6 +146,7 @@ export const FRAGMENT_PROJECT_HEADER_SUMMARY = gql`
 `
 
 export const FRAGMENT_PROJECT_UPDATE = gql`
+  ${FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE}
   fragment ProjectUpdate on Project {
     id
     title
@@ -165,5 +168,11 @@ export const FRAGMENT_PROJECT_UPDATE = gql`
     category
     subCategory
     rewardCurrency
+    fundingStrategy
+    lastCreationStep
+    aonGoal {
+      ...ProjectAonGoalForProjectPage
+    }
+    launchScheduledAt
   }
 `

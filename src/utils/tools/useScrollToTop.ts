@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router'
 
-import { ID } from '@/shared/constants'
+import { ID } from '@/shared/constants/components/id.ts'
 
 import { useMobileMode } from '../info'
 

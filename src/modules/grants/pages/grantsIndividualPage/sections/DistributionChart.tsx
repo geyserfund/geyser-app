@@ -1,6 +1,6 @@
 import { Box, BoxProps, HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'

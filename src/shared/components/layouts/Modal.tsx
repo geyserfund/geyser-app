@@ -77,7 +77,7 @@ export const Modal = ({
               />
             </ModalCloseButton>
           )}
-          <ModalBody paddingY={0} paddingX={standardPadding} {...bodyProps}>
+          <ModalBody as={VStack} paddingY={0} paddingX={standardPadding} {...bodyProps}>
             {children}
           </ModalBody>
         </Box>

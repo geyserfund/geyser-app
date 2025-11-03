@@ -2,7 +2,7 @@ import { HStack, IconButton, Link, Stack, Text, useDisclosure, VStack, Wrap } fr
 import { useTranslation } from 'react-i18next'
 import { FaGithub, FaPodcast, FaTelegramPlane } from 'react-icons/fa'
 import { RiTwitterXLine } from 'react-icons/ri'
-import { Link as ReactLink } from 'react-router-dom'
+import { Link as ReactLink } from 'react-router'
 
 import {
   AnalyticsUrl,

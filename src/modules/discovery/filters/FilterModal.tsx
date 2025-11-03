@@ -42,10 +42,10 @@ export const FilterModal = (props: Omit<ModalProps, 'children'>) => {
 
   return (
     <Modal title={`${t('Filter by')}:`} {...props} bodyProps={{ paddingX: 0 }}>
-      <HStack paddingX={standardPadding} paddingBottom={4}>
+      <HStack paddingX={standardPadding} paddingBottom={4} w="full">
         <AnimatedNavBar {...animatedNavBarProps} showLabel />
       </HStack>
-      <VStack height="400px" overflowY="auto">
+      <VStack height="400px" overflowY="auto" w="full">
         {render && render()}
       </VStack>
       <HStack w="full" paddingX={standardPadding} paddingTop={4}>

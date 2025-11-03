@@ -13,8 +13,9 @@ import {
   PiNewspaperBold,
   PiRocketLaunch,
   PiRocketLaunchBold,
+  PiSignOut,
 } from 'react-icons/pi'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
@@ -27,6 +28,8 @@ import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from 
 
 export const ProjectNavigation = () => {
   const location = useLocation()
+  const isDraftUrl = location.pathname.includes('/draft')
+  const navigate = useNavigate()
 
   const isMobile = useMobileMode()
 
@@ -74,14 +77,26 @@ export const ProjectNavigation = () => {
       })
     }
 
-    buttonList.push({
-      name: 'Community',
-      path: PathName.projectLeaderboard,
-      icon: PiMedalMilitary,
-      activeIcon: PiMedalMilitaryBold,
-    })
+    if (!isDraftUrl) {
+      buttonList.push({
+        name: 'Community',
+        path: PathName.projectLeaderboard,
+        icon: PiMedalMilitary,
+        activeIcon: PiMedalMilitaryBold,
+      })
+    }
 
-    if (isProjectOwner) {
+    if (isProjectOwner && isDraftUrl) {
+      buttonList.push({
+        name: 'Exit Preview',
+        onClick: () => navigate(-1),
+        icon: PiSignOut,
+        showIconAlways: true,
+        isBordered: true,
+      })
+    }
+
+    if (isProjectOwner && !isDraftUrl) {
       buttonList.push({
         name: 'Dashboard',
         path: PathName.projectDashboard,
@@ -93,7 +108,7 @@ export const ProjectNavigation = () => {
     }
 
     return buttonList
-  }, [project, isProjectOwner])
+  }, [project, isProjectOwner, isDraftUrl, navigate])
 
   const activeButtonIndex = useMemo(() => {
     let activeIndex = 0

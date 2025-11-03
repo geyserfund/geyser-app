@@ -5,7 +5,7 @@ import { useAuthContext } from '@/context'
 import {
   ConnectionOption,
   LNAddressEvaluationState,
-} from '@/modules/project/pages1/projectCreation/hooks/useWalletForm'
+} from '@/modules/project/pages/projectCreation/hooks/useWalletForm'
 import { WalletConnectDetails } from '@/shared/constants'
 import { useDebounce } from '@/shared/hooks'
 import {

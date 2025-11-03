@@ -1,23 +1,33 @@
 import { Box, FormErrorIcon, HStack, Stack, Tooltip, VStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { ChangeEventHandler, useCallback, useEffect } from 'react'
 import { Controller, UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { PiInfo } from 'react-icons/pi'
 
+import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
 import { Body } from '@/shared/components/typography'
+import {
+  ProjectCategoryLabel,
+  ProjectCategoryList,
+  ProjectSubCategoryLabel,
+  ProjectSubCategoryList,
+} from '@/shared/constants/platform/projectCategory.ts'
 import { FileUpload } from '@/shared/molecules'
+import { countriesAtom } from '@/shared/state/countriesAtom.ts'
 
 import { TextArea, TextInputBox, UploadBox } from '../../../components/ui'
-import { useAuthContext } from '../../../context'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
 import { ProjectValidations } from '../../../shared/constants'
 import { useDebounce } from '../../../shared/hooks'
 import { ImageCropAspectRatio } from '../../../shared/molecules/ImageCropperModal'
 import { MediaControlWithReorder } from '../../../shared/molecules/MediaControlWithReorder'
-import { useProjectByNameForNameCheckLazyQuery } from '../../../types'
+import { Country, useProjectByNameForNameCheckLazyQuery } from '../../../types'
 import { toMediumImageUrl, validLightningAddress } from '../../../utils'
-import { ProjectCreationVariables } from '../pages1/projectCreation/types'
+import { ProjectCreationVariables } from '../pages/projectCreation/hooks/useProjectForm.tsx'
 import { AdditionalUrlModal } from './components/AdditionalUrlModal'
+import { ProjectLinks } from './ProjectLinks.tsx'
+import { ProjectTagsCreateEdit } from './ProjectTagsCreateEdit.tsx'
 
 const MIN_LENGTH_TO_QUERY_PROJECT = 3
 
@@ -30,9 +40,12 @@ type ProjectFormProps = {
 
 export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   const { t } = useTranslation()
-  const { user } = useAuthContext()
+
+  const countriesData = useAtomValue(countriesAtom)
 
   const { formState, setValue, watch, setError, control, clearErrors } = form
+
+  console.log(form.watch('name'))
 
   const [getProject] = useProjectByNameForNameCheckLazyQuery({
     onCompleted(data) {
@@ -77,11 +90,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   const handleHeaderImageUpload = (url: string) => {
     const currentImages = watch('images')
     if (currentImages.includes(url)) return
-    setValue('images', [...currentImages, url], { shouldDirty: true })
-  }
-
-  const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue('email', event.target.value, { shouldDirty: true, shouldValidate: true })
+    setValue('images', [...currentImages, url], { shouldDirty: true, shouldValidate: true })
   }
 
   const handleDeleteThumbnail = () => {
@@ -123,7 +132,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
   }
 
   return (
-    <VStack spacing={6} w="100%">
+    <>
       <FieldContainer title={t('Title')} subtitle={t('A few words that make your project stand out')} required>
         <TextInputBox
           name="title"
@@ -266,6 +275,7 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         title={t('Header')}
         required
         subtitle={t('Add one or multiple images or video links to help bring your project to life')}
+        error={formState.errors.images?.message}
       >
         <MediaControlWithReorder
           links={watch('images')}
@@ -316,25 +326,60 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
         />
       </FieldContainer>
 
-      {!isEdit && (
-        <FieldContainer
-          title={t('Email')}
-          required
-          subtitle={t(
-            'Project notifications will be sent to your profile email, which you can edit in Profile Settings. Make sure to verify your email to keep your wallet secure.',
-          )}
-        >
-          <TextInputBox
-            name="email"
-            value={watch('email')}
-            onChange={handleEmail}
-            placeholder="creator@gmail.com"
-            error={formState.errors.email?.message}
-            onBlur={() => form.trigger('email')}
-            isDisabled={Boolean(user.email)}
+      <FieldContainer
+        title={`${t('Project Category')}*`}
+        subtitle={
+          <span>
+            {t('Choose the most fitting category. Landing page features trending projects in each category.')}
+          </span>
+        }
+      >
+        <HStack w="full" flexDirection={{ base: 'column', sm: 'row' }} alignItems="flex-start">
+          <ControlledCustomSelect
+            width="100%"
+            control={form.control}
+            name="category"
+            placeholder={t('Select category')}
+            options={ProjectCategoryList.map((subCategory) => ({
+              label: ProjectCategoryLabel[subCategory],
+              value: subCategory,
+            }))}
+            onFocus={() => clearErrors('category')}
           />
-        </FieldContainer>
-      )}
-    </VStack>
+          <ControlledCustomSelect
+            width="100%"
+            control={form.control}
+            name="subCategory"
+            placeholder={t('Select sub-category')}
+            options={ProjectSubCategoryList.map((subCategory) => ({
+              label: ProjectSubCategoryLabel[subCategory],
+              value: subCategory,
+            }))}
+            onFocus={() => clearErrors('subCategory')}
+          />
+        </HStack>
+      </FieldContainer>
+
+      <FieldContainer
+        title={`${t('Country')}*`}
+        subtitle={<span>{t('Get found more easily by putting your project on the map. Select a country')}</span>}
+      >
+        <ControlledCustomSelect<ProjectCreationVariables, Country, false>
+          width="100%"
+          name="location"
+          placeholder={t('Select country')}
+          required
+          control={form.control}
+          options={countriesData}
+          getOptionLabel={(option: Country) => option.name}
+          getOptionValue={(option: Country) => option.code}
+          onFocus={() => clearErrors('location')}
+        />
+      </FieldContainer>
+
+      <ProjectLinks form={form} />
+
+      <ProjectTagsCreateEdit form={form} />
+    </>
   )
 }

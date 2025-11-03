@@ -1,9 +1,9 @@
 import { Badge, Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper, PiSparkle } from 'react-icons/pi'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router'
 
-import { PostShare } from '@/modules/project/pages1/projectView/views/posts/components/PostShare.tsx'
+import { PostShare } from '@/modules/project/pages/projectView/views/posts/components/PostShare.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
 import { ProfileText } from '@/shared/components/display/ProfileText'

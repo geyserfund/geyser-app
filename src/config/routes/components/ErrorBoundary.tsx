@@ -1,7 +1,7 @@
 import { captureException } from '@sentry/react'
 import { DateTime } from 'luxon'
 import { useEffect } from 'react'
-import { useRouteError } from 'react-router-dom'
+import { useRouteError } from 'react-router'
 
 import { refreshCacheAndReload } from '@/config/CacheBuster.tsx'
 

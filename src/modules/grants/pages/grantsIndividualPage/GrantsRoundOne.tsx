@@ -2,7 +2,7 @@ import { ExternalLinkIcon } from '@chakra-ui/icons'
 import { Box, Button, Grid, GridItem, Image, Link, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import { AppFooter } from '../../../../components/molecules'
 import { ButtonComponent } from '../../../../components/ui'

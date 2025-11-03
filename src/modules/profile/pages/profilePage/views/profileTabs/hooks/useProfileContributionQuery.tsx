@@ -6,7 +6,7 @@ import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHoo
 import { UserProjectContributionFragment, useUserProfileContributionsQuery } from '../../../../../../../types'
 import { useNotification } from '../../../../../../../utils'
 
-const PROFILE_CONTRIBUTION_FETCH_LIMIT = 30
+const PROFILE_CONTRIBUTION_FETCH_LIMIT = 50
 
 export const useProfileContributionQuery = (userId: number) => {
   const { toast } = useNotification()

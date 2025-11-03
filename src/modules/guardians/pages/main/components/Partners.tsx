@@ -1,7 +1,7 @@
 import { HStack, Image, Link } from '@chakra-ui/react'
 import { t } from 'i18next'
 
-import { PartnerUrls } from '@/modules/guardians/data'
+import { PartnerUrls } from '@/modules/guardians/utils/constants.ts'
 
 import { GuardianBody } from '../GuardiansMainPage.tsx'
 

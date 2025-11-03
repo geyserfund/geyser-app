@@ -1,24 +1,60 @@
-import { Box, BoxProps } from '@chakra-ui/react'
+import { Box, BoxProps, HStack } from '@chakra-ui/react'
 
-interface IProgressBar extends BoxProps {
+import { Body } from '@/shared/components/typography/Body.tsx'
+
+export interface ProgressBarProps extends BoxProps {
   value?: number
   min?: number
   max?: number
   current?: number
   progressColor?: string
+  trackColor?: string
+  showPercentage?: boolean
 }
 
-export const ProgressBar = ({ value, min = 0, max, current, progressColor, ...rest }: IProgressBar) => {
-  const percentage = max && current ? ((current - min) / (max - min)) * 100 : value
+export const ProgressBar = ({
+  value,
+  min = 0,
+  max,
+  current,
+  progressColor,
+  trackColor,
+  showPercentage,
+  ...rest
+}: ProgressBarProps) => {
+  // const percentage = max && current ? ((current - min) / (max - min)) * 100 : value || 0
+  const percentage = 12
 
   return (
-    <Box display="flex" borderRadius="3px" height="4px" backgroundColor="neutral1.6" {...rest}>
+    <HStack
+      alignItems="center"
+      borderRadius="3px"
+      height="4px"
+      spacing={2}
+      backgroundColor={trackColor || 'neutral1.6'}
+      {...rest}
+    >
       <Box
         height={'100%'}
+        display="flex"
+        alignItems="center"
+        justifyContent="flex-end"
+        paddingRight={2}
         borderRadius={rest.borderRadius || '3px'}
         width={`${percentage}%`}
-        backgroundColor={progressColor || 'primary1.9'}
-      ></Box>
-    </Box>
+        background={progressColor || 'primary1.9'}
+      >
+        {showPercentage && percentage > 10 && (
+          <Body size="xs" bold color="utils.text">
+            {percentage?.toFixed(0) ?? '0'}%
+          </Body>
+        )}
+      </Box>
+      {showPercentage && percentage <= 10 && (
+        <Body size="xs" bold color="utils.text">
+          {percentage?.toFixed(0) ?? '0'}%
+        </Body>
+      )}
+    </HStack>
   )
 }

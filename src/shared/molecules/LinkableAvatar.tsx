@@ -2,7 +2,7 @@ import { HStack, Link } from '@chakra-ui/react'
 import { Avatar } from '@chakra-ui/react'
 import { ReactElement } from 'react'
 import { FaUserCircle } from 'react-icons/fa'
-import { Link as ReactRouterLink } from 'react-router-dom'
+import { Link as ReactRouterLink } from 'react-router'
 
 import { useMediumScreen, useMobileMode } from '../../utils'
 import { Body } from '../components/typography'

@@ -1,4 +1,5 @@
 import { HStack, VStack } from '@chakra-ui/react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCheckCircleFill } from 'react-icons/pi'
 
@@ -11,6 +12,8 @@ export const NodeConnectionDetails = ({ projectWallet }: { projectWallet: Partia
   const { t } = useTranslation()
   const { colors } = useCustomTheme()
   const { connectionDetails } = projectWallet || {}
+  const [isTlsCertificateExpanded, setIsTlsCertificateExpanded] = useState(false)
+  const [isMacaroonExpanded, setIsMacaroonExpanded] = useState(false)
 
   if (!connectionDetails) {
     return null
@@ -20,27 +23,18 @@ export const NodeConnectionDetails = ({ projectWallet }: { projectWallet: Partia
 
   return (
     <>
-      <VStack
-        width="100%"
-        border="1px solid"
-        borderColor="neutral.400"
-        borderRadius="4px"
-        alignItems="flex-start"
-        padding="10px"
-        spacing="10px"
-      >
-        <HStack width="100%" justifyContent="space-between">
-          <Body size="sm" medium>
-            {projectWallet?.name}
-          </Body>
-        </HStack>
+      <VStack width="100%" alignItems="flex-start" spacing="10px">
         <HStack width="100%">
           <PiCheckCircleFill color={colors.primary1[11]} fontSize="12px" />
           <Body size="xs" color="primary.800">
             {t('RUNNING')}
           </Body>
         </HStack>
-
+        <HStack width="100%" justifyContent="space-between">
+          <Body size="sm" medium>
+            {projectWallet?.name}
+          </Body>
+        </HStack>
         <VStack width="100%" spacing={0} alignItems="flex-start">
           <Body size="xs" light>
             {t('Hostname or IP address')}
@@ -63,9 +57,21 @@ export const NodeConnectionDetails = ({ projectWallet }: { projectWallet: Partia
             {t('Invoice Macaroon')}
           </Body>
 
-          <Body size="sm" wordBreak="break-all">
-            {lndConnectionDetails.macaroon}
-          </Body>
+          <VStack width="100%" spacing={1} alignItems="flex-start">
+            <Body size="sm" wordBreak="break-all">
+              {isMacaroonExpanded
+                ? lndConnectionDetails.macaroon
+                : `${lndConnectionDetails.macaroon.substring(0, 50)}...`}
+            </Body>
+            <Body
+              size="xs"
+              cursor="pointer"
+              onClick={() => setIsMacaroonExpanded(!isMacaroonExpanded)}
+              _hover={{ textDecoration: 'underline' }}
+            >
+              {isMacaroonExpanded ? t('Show less') : t('Show full macaroon')}
+            </Body>
+          </VStack>
         </VStack>
         {lndConnectionDetails.tlsCertificate && (
           <VStack width="100%" spacing={0} alignItems="flex-start">
@@ -73,9 +79,21 @@ export const NodeConnectionDetails = ({ projectWallet }: { projectWallet: Partia
               {t('TLS certificate')}
             </Body>
 
-            <Body size="sm" wordBreak="break-all">
-              {lndConnectionDetails.tlsCertificate}
-            </Body>
+            <VStack width="100%" spacing={1} alignItems="flex-start">
+              <Body size="sm" wordBreak="break-all">
+                {isTlsCertificateExpanded
+                  ? lndConnectionDetails.tlsCertificate
+                  : `${lndConnectionDetails.tlsCertificate.substring(0, 50)}...`}
+              </Body>
+              <Body
+                size="xs"
+                cursor="pointer"
+                onClick={() => setIsTlsCertificateExpanded(!isTlsCertificateExpanded)}
+                _hover={{ textDecoration: 'underline' }}
+              >
+                {isTlsCertificateExpanded ? t('Show less') : t('Show full certificate')}
+              </Body>
+            </VStack>
           </VStack>
         )}
         <VStack width="100%" spacing={0} alignItems="flex-start">

@@ -26,13 +26,6 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         name
         thumbnailImage
       }
-      ... on Entry {
-        id
-        title
-        entryDescription: description
-        content
-        entryImage: image
-      }
       ... on Post {
         id
         title

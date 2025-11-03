@@ -1,9 +1,10 @@
 import { Box, Button, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiRocket } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
+import { CreateProjectButton } from '@/modules/navigation/platformNavBar/components/CreateProjectButton.tsx'
 import { Body } from '@/shared/components/typography'
 import { DiamondUrl, getPath } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
@@ -30,13 +31,16 @@ export const MyProjects = () => {
   return (
     <>
       <VStack spacing={6} align="stretch">
-        <HStack justifyContent="flex-start" alignItems="center">
-          <Body size="2xl" bold>
-            {t('My Projects')}
-          </Body>
-          <Body size="2xl" muted>
-            ({t('Past week')})
-          </Body>
+        <HStack justifyContent="space-between" alignItems="center" flexWrap="wrap">
+          <HStack>
+            <Body size="2xl" bold>
+              {t('My Projects')}
+            </Body>
+            <Body size="2xl" muted>
+              ({t('Past week')})
+            </Body>
+          </HStack>
+          <CreateProjectButton />
         </HStack>
         {isLoading ? (
           <>
@@ -50,9 +54,9 @@ export const MyProjects = () => {
             {inPrelaunchProjects.map((project) =>
               project ? <ProjectCard key={project.id} project={project} /> : null,
             )}
+            {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
             {activeProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
             {inReviewProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
-            {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
           </>
         )}
       </VStack>

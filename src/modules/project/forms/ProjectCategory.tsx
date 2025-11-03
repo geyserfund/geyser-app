@@ -1,22 +1,19 @@
-import { StackProps } from '@chakra-ui/react'
-import { useAtom } from 'jotai'
+import { HStack, StackProps } from '@chakra-ui/react'
+import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
-import { SingleValue } from 'react-select'
 
-import { CustomSelect } from '@/components/ui/CustomSelect'
-import { Body } from '@/shared/components/typography'
+import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
 import {
+  ProjectCategoryLabel,
+  ProjectCategoryList,
   ProjectSubCategoryLabel,
   ProjectSubCategoryList,
-  ProjectSubCategoryMap,
 } from '@/shared/constants/platform/projectCategory.ts'
-import { Maybe, ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
 
 import { AppTheme } from '../../../context'
 import { FieldContainer } from '../../../shared/components/form/FieldContainer'
-import { ProjectState } from '../state/projectAtom'
-import { projectFormErrorAtom } from '../state/projectFormAtom'
+import { ProjectCreationVariables } from '../pages/projectCreation/hooks/useProjectForm.tsx'
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   select: {
@@ -26,35 +23,22 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
 }))
 
 interface ProjectCategoryProps extends StackProps {
-  category?: Maybe<ProjectCategory>
-  subCategory?: Maybe<ProjectSubCategory>
-  updateProject: (project: Partial<ProjectState>) => void
+  form: UseFormReturn<ProjectCreationVariables>
 }
 
-export const SelectProjectCategory = ({ category, subCategory, updateProject, ...rest }: ProjectCategoryProps) => {
+export const SelectProjectCategory = ({ form, ...rest }: ProjectCategoryProps) => {
   const { t } = useTranslation()
   const classes = useStyles()
 
-  const [projectFormError, setProjectFormError] = useAtom(projectFormErrorAtom)
-
-  const handleSubCategoryChange = (value: SingleValue<{ value: ProjectSubCategory; label: string | undefined }>) => {
-    if (value) {
-      const categoryForSubcategory = Object.keys(ProjectSubCategoryMap).find((key) =>
-        ProjectSubCategoryMap[key as ProjectCategory].includes(value.value),
-      )
-
-      updateProject({
-        subCategory: value.value,
-        category: categoryForSubcategory,
-      } as ProjectState)
-    }
-  }
+  const { clearErrors } = form
 
   const clearSubCategoryError = () => {
-    setProjectFormError((prev) => ({ ...prev, category: undefined, subCategory: undefined }))
+    clearErrors('subCategory')
   }
 
-  const subCategoryValue = subCategory ? { value: subCategory, label: ProjectSubCategoryLabel[subCategory] } : null
+  const clearCategoryError = () => {
+    clearErrors('category')
+  }
 
   return (
     <FieldContainer
@@ -64,25 +48,30 @@ export const SelectProjectCategory = ({ category, subCategory, updateProject, ..
       }
       {...rest}
     >
-      <CustomSelect
-        className={classes.select}
-        onChange={handleSubCategoryChange}
-        name="subCategory"
-        placeholder={t('Select category')}
-        value={subCategoryValue}
-        options={ProjectSubCategoryList.map((subCategory) => ({
-          label: ProjectSubCategoryLabel[subCategory],
-          value: subCategory,
-        }))}
-        isInvalid={Boolean(projectFormError.subCategory)}
-        onFocus={clearSubCategoryError}
-      />
-
-      {projectFormError.subCategory && (
-        <Body size="xs" color="error.9" w="full" textAlign={'start'}>
-          {projectFormError.subCategory}
-        </Body>
-      )}
+      <HStack w="full" alignItems="flex-start">
+        <ControlledCustomSelect
+          className={classes.select}
+          control={form.control}
+          name="category"
+          placeholder={t('Select category')}
+          options={ProjectCategoryList.map((subCategory) => ({
+            label: ProjectCategoryLabel[subCategory],
+            value: subCategory,
+          }))}
+          onFocus={clearCategoryError}
+        />
+        <ControlledCustomSelect
+          className={classes.select}
+          control={form.control}
+          name="subCategory"
+          placeholder={t('Select sub-category')}
+          options={ProjectSubCategoryList.map((subCategory) => ({
+            label: ProjectSubCategoryLabel[subCategory],
+            value: subCategory,
+          }))}
+          onFocus={clearSubCategoryError}
+        />
+      </HStack>
     </FieldContainer>
   )
 }

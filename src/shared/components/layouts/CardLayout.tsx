@@ -1,5 +1,5 @@
 import { LinkProps as ChakraLinkProps, Stack, StackProps } from '@chakra-ui/react'
-import { Link, LinkProps } from 'react-router-dom'
+import { Link, LinkProps } from 'react-router'
 
 import { useMobileMode } from '../../../utils'
 

@@ -3,13 +3,12 @@ import { t } from 'i18next'
 import { useAtom } from 'jotai'
 
 import { useAuthContext } from '@/context/auth.tsx'
-import { UserVerificationModal } from '@/modules/project/pages1/projectDashboard/views/wallet/components/UserVerificationModal.tsx'
-import { useUserVerificationModal } from '@/modules/project/pages1/projectDashboard/views/wallet/hooks/useUserVerificationModal.ts'
+import { UserVerificationModal } from '@/modules/project/pages/projectDashboard/views/wallet/components/UserVerificationModal.tsx'
+import { useUserVerificationModal } from '@/modules/project/pages/projectDashboard/views/wallet/hooks/useUserVerificationModal.ts'
 import { Body, H3 } from '@/shared/components/typography'
 import { UserVerificationLevelInput } from '@/types/index.ts'
 
 import { UserVerifiedBadge } from '../../../../profilePage/views/account/views/badges/VerifiedBadge.tsx'
-import { LegalEntitySelection } from '../components/LegalEntitySelection.tsx'
 import { userTaxProfileAtom } from '../state/taxProfileAtom.ts'
 
 export const IdentityVerification = () => {
@@ -53,7 +52,6 @@ export const IdentityVerification = () => {
           </Button>
         )}
       </HStack>
-      <LegalEntitySelection />
 
       <UserVerificationModal
         userVerificationModal={userVerificationModal}

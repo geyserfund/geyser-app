@@ -1,7 +1,7 @@
 import { Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import Confetti from 'react-confetti'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'

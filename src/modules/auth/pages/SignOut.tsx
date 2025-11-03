@@ -1,7 +1,7 @@
 import { Center, Spinner, VStack } from '@chakra-ui/react'
 import { useAtom, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import { getAuthEndPoint } from '@/config/domain.ts'
 import { defaultUser } from '@/context/auth.tsx'

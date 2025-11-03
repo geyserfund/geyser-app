@@ -9,7 +9,7 @@ import { StickToTop } from '@/shared/components/layouts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 import { Body } from '@/shared/components/typography'
-import { dimensions } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { LeaderboardPeriod } from '@/types'
 import { getBitcoinAmount, getShortAmountLabel, useMobileMode } from '@/utils'
 

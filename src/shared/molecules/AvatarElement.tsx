@@ -1,5 +1,5 @@
 import { Avatar, AvatarProps, Box, HStack, StackProps } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { Body2, BodyProps } from '../../components/typography'
 import { Maybe, User, UserMeFragment } from '../../types/generated/graphql'

@@ -3,11 +3,11 @@ import { Button, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from '@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiArrowLeft } from 'react-icons/pi'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav/TopNavContainerBar'
-import { dimensions } from '@/shared/constants/index.ts'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
 
 import Loader from '../../../../components/ui/Loader.tsx'
@@ -27,7 +27,7 @@ import {
   GrantProjectNameMap,
   GrantSubscribeSegment,
   NoContributionInGrant,
-} from '../../constants.ts'
+} from '../../utils/constants.ts'
 import { GrantSubscriptionSection } from './components/GrantSubscriptionCard.tsx'
 import { GrantWinnerAnnouncement, MobileDivider } from './components/index.ts'
 import { GrantsRoundOne } from './GrantsRoundOne'

@@ -2,7 +2,7 @@ import { t } from 'i18next'
 import { DateTime, Duration } from 'luxon'
 import { useEffect, useState } from 'react'
 
-import { USD_CENTS_AMOUNT_TO_GO_LIVE } from '@/modules/project/pages1/projectView/views/body/components/PrelaunchFollowButton.tsx'
+import { USD_CENTS_AMOUNT_TO_GO_LIVE } from '@/modules/project/pages/projectView/views/body/components/PrelaunchFollowButton.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useMobileMode } from '@/utils/index.ts'
 

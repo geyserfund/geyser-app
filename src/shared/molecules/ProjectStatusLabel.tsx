@@ -2,7 +2,7 @@ import { Button, HStack, Icon, Link as ChakraLink, StackProps, Tooltip, VStack }
 import { t } from 'i18next'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { Body } from '../components/typography'
 import { getPath, GeyserTelegramUrl } from '../constants'

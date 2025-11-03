@@ -1,7 +1,7 @@
 import { Button, HStack, StackProps } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiCalendarDots } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { H3 } from '@/shared/components/typography'
@@ -15,7 +15,7 @@ export const periodOptions: StandardOption<LeaderboardPeriod>[] = [
 ]
 
 type TitleWithPeriodProps = {
-  title: string
+  title?: string
   period: LeaderboardPeriod
   seeAllTo?: string
   handlePeriodChange: (selectedOption: StandardOption<LeaderboardPeriod> | null) => void
@@ -23,11 +23,13 @@ type TitleWithPeriodProps = {
 
 export const TitleWithPeriod = ({ title, period, seeAllTo, handlePeriodChange, ...props }: TitleWithPeriodProps) => {
   return (
-    <HStack w="full" justifyContent="space-between" flexWrap={'wrap'} spacing={1} {...props}>
+    <HStack w="full" justifyContent="space-between" spacing={1} {...props}>
       <HStack w={{ base: 'full', sm: 'auto' }} justifyContent="space-between">
-        <H3 size="2xl" bold dark wordBreak={'keep-all'} width={{ sm: '230px' }}>
-          {title}
-        </H3>
+        {title && (
+          <H3 size={{ base: 'lg', lg: 'xl' }} bold dark wordBreak={'keep-all'} width={{ sm: '230px' }}>
+            {title}
+          </H3>
+        )}
         {seeAllTo && (
           <Button
             display={{ base: 'flex', sm: 'none' }}
@@ -56,7 +58,7 @@ export const TitleWithPeriod = ({ title, period, seeAllTo, handlePeriodChange, .
         )}
         <CustomSelect
           isSearchable={false}
-          width={{ base: 'full', sm: '135px' }}
+          width={{ base: '135px', sm: '135px' }}
           options={periodOptions}
           value={periodOptions.find((option) => option.value === period)}
           onChange={handlePeriodChange}

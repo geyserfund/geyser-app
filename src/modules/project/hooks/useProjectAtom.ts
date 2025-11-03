@@ -1,6 +1,5 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 
-import { entriesAtom, hasEntriesAtom, unpublishedEntriesAtom } from '../state/entriesAtom'
 import { completedGoalsAtom, goalsLoadingAtom, initialGoalsLoadAtom, inProgressGoalsAtom } from '../state/goalsAtom'
 import { hasPostsAtom, postsAtom, unpublishedPostsAtom } from '../state/postsAtom'
 import {
@@ -60,14 +59,6 @@ export const useSubscriptionsAtom = () => {
   const hasSubscriptions = useAtomValue(hasSubscriptionsAtom)
 
   return { subscriptions, hasSubscriptions }
-}
-
-export const useEntriesAtom = () => {
-  const entries = useAtomValue(entriesAtom)
-  const unpublishedEntries = useAtomValue(unpublishedEntriesAtom)
-  const hasEntries = useAtomValue(hasEntriesAtom)
-
-  return { entries, unpublishedEntries, hasEntries }
 }
 
 export const usePostsAtom = () => {

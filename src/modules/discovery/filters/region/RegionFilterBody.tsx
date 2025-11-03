@@ -80,7 +80,7 @@ export const RegionFilterBody = ({ regions, countries, searchCode, onClose }: Re
     <Box width="100%" overflowY="auto" paddingX={standardPadding}>
       <RadioGroup onChange={handleClick} value={value}>
         <VStack w="full" alignItems="start">
-          <Radio value={''}>
+          <Radio value={''} height="30px" _hover={{ backgroundColor: 'neutral1.6' }}>
             <Body>{t('Worldwide')}</Body>
           </Radio>
           {regionsToRender.map((reg) => {

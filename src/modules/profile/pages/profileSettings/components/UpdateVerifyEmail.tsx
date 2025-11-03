@@ -1,5 +1,5 @@
 import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons'
-import { Button, ButtonProps, HStack, InputGroup, InputRightElement, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, InputGroup, InputRightElement, StackProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { VerifyYourEmail } from '@/modules/auth/otp/VerifyYourEmail.tsx'
@@ -13,9 +13,11 @@ import { useUpdateVerifyEmail } from '../hooks/useUpdateVerifyEmail'
 export const UpdateVerifyEmail = ({
   verifyButtonMode,
   verifyButtonProps,
+  inputWrapperProps,
 }: {
   verifyButtonMode?: boolean
   verifyButtonProps?: ButtonProps
+  inputWrapperProps?: StackProps
 }) => {
   const { t } = useTranslation()
   const { user } = useAuthContext()
@@ -49,7 +51,7 @@ export const UpdateVerifyEmail = ({
               )}
             </Body>
 
-            <HStack w="full" alignItems="start">
+            <HStack w="full" alignItems="start" {...inputWrapperProps}>
               <VStack w="full" spacing="0px" flex={1}>
                 <InputGroup>
                   <TextField required control={control} name="email" />
@@ -59,14 +61,14 @@ export const UpdateVerifyEmail = ({
                   </InputRightElement>
                 </InputGroup>
                 {isSavedEmailVerfied && (
-                  <Body light w="full" textAlign="right">
-                    {t('This email has been verified')}
+                  <Body size="xs" color="primary1.11" w="full" textAlign="right">
+                    {t('This email has been verified')}.
                   </Body>
                 )}
 
                 {isSavedEmailUnverified && (
-                  <Body light w="full" textAlign="right">
-                    {t('This email has not been verified')}
+                  <Body size="xs" color="neutral1.11" w="full" textAlign="right">
+                    {t('This email has not been verified')}.
                   </Body>
                 )}
               </VStack>

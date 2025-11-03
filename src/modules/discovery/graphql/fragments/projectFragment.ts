@@ -1,6 +1,9 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_AON_GOAL_FOR_LANDING_PAGE } from './aonGoalFragment.ts'
+
 export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
+  ${FRAGMENT_PROJECT_AON_GOAL_FOR_LANDING_PAGE}
   fragment ProjectForLandingPage on Project {
     id
     name
@@ -13,10 +16,18 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     status
     balance
     balanceUsdCent
+    fundingStrategy
+    aonGoal {
+      ...ProjectAonGoalForLandingPage
+    }
+    launchedAt
     owners {
       id
       user {
         id
+        guardianType
+        username
+        imageUrl
         taxProfile {
           legalEntityType
           verified
@@ -76,5 +87,14 @@ export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
         statusCode
       }
     }
+  }
+`
+
+export const FRAGMENT_PROJECT_THUMBNAIL_IMAGE = gql`
+  fragment ProjectThumbnailImage on Project {
+    id
+    title
+    name
+    thumbnailImage
   }
 `

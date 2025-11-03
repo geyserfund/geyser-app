@@ -1,7 +1,7 @@
 import { AddIcon } from '@chakra-ui/icons'
 import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { getPath } from '../../../../../shared/constants'
 

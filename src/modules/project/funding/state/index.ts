@@ -6,7 +6,6 @@ export {
   currentSwapIdAtom,
   refundedSwapDataAtom,
   swapAtom,
-  useParseResponseToSwapAtom,
   useRefundedSwapData,
   useRefundFileAdd,
   useRefundFileValue,

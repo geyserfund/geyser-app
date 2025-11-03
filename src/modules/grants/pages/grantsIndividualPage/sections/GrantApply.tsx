@@ -24,7 +24,7 @@ import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
 import { ConnectWithSocial } from '@/modules/auth/ConnectWithSocial.tsx'
 import { SocialAccountType } from '@/modules/auth/type.ts'
 import { useAuthToken } from '@/modules/auth/useAuthToken.tsx'
-import { GrantWithCustomApplicationForm } from '@/modules/grants/constants.ts'
+import { GrantWithCustomApplicationForm } from '@/modules/grants/utils/constants.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 

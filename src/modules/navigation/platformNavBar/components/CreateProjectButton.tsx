@@ -1,7 +1,7 @@
 import { Button, ButtonProps } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiRocketLaunch } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { getPath } from '@/shared/constants'
 

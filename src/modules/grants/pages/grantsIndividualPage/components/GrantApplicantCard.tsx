@@ -2,14 +2,14 @@ import { Avatar, AvatarGroup, Box, Button, HStack, Text, useDisclosure, useTheme
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { createUseStyles } from 'react-jss'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useAuthModal } from '@/modules/auth/hooks'
-import { GrantBalanceCurrency } from '@/modules/grants/constants.ts'
 import {
   ContributorsModal,
   useContributorsModal,
 } from '@/modules/grants/pages/grantsMainPage/components/ContributorsModal'
+import { GrantBalanceCurrency } from '@/modules/grants/utils/constants.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
@@ -216,8 +216,6 @@ export const GrantApplicantCard = ({
 
   const grantCurrency = GrantBalanceCurrency[grantName] || 'BTCSAT'
   const isUSDCent = grantCurrency === 'USDCENT'
-
-  console.log('checking grant currency', grantCurrency, grantName)
 
   const subtitle = isUSDCent ? t('USD sent') : t('sats sent')
 

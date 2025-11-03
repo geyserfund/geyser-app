@@ -1,7 +1,7 @@
 import { Box, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiLightning, PiUsers } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useTopProjects } from '@/modules/discovery/hooks/useTopProjects.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'

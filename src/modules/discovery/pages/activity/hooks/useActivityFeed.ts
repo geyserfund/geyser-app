@@ -2,7 +2,7 @@ import { useAtom } from 'jotai'
 import { useState } from 'react'
 
 import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHook'
-import { ActivityFeedFragmentFragment, ActivityFeedName, useActivityFeedQuery } from '@/types'
+import { ActivityFeedFragmentFragment, ActivityFeedName, ActivityResourceType, useActivityFeedQuery } from '@/types'
 
 import { activityFeedFollowedProjectsAtom, activityFeedGlobalAtom } from '../state/activityFeedAtom'
 
@@ -21,6 +21,7 @@ export const useActivityFeed = (feed: ActivityFeedName) => {
       input: {
         where: {
           feed,
+          resourceType: ActivityResourceType.Post,
         },
         pagination: {
           take: MAXIMUM_ACTIVITY_ITEMS,

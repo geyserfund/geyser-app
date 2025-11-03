@@ -1,15 +1,18 @@
 import { Box, Collapse, LinkProps as ChakraLinkProps, Stack, StackProps, useDisclosure } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import { Link, LinkProps } from 'react-router-dom'
+import { Link, LinkProps } from 'react-router'
 
-export interface InteractiveCardLayout
+export interface InteractiveCardLayoutProps
   extends StackProps,
     Partial<Pick<LinkProps, 'to' | 'state'>>,
     Partial<Pick<ChakraLinkProps, 'href'>> {
   mobileDense?: boolean
   dense?: boolean
   hoverContent?: React.ReactNode
+  isOpen?: boolean
+  onOpen?: () => void
+  onClose?: () => void
 }
 
 export const InteractiveCardLayout = ({
@@ -19,9 +22,18 @@ export const InteractiveCardLayout = ({
   to,
   hoverContent,
   maxWidth,
+  isOpen: isOpenProp,
+  onOpen: onOpenProp,
+  onClose: onCloseProp,
+
   ...rest
-}: InteractiveCardLayout) => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+}: InteractiveCardLayoutProps) => {
+  const { isOpen: _isOpen, onOpen: _onOpen, onClose: _onClose } = useDisclosure()
+
+  const isOpen = isOpenProp || _isOpen
+  const onOpen = onOpenProp || _onOpen
+  const onClose = onCloseProp || _onClose
+
   const contentRef = useRef<HTMLDivElement>(null)
   const [contentHeight, setContentHeight] = useState<number>(0)
 
@@ -65,6 +77,8 @@ export const InteractiveCardLayout = ({
             _hover={{ cursor: 'pointer', shadow: hoverContent ? 'none' : 'lg' }}
             zIndex={isOpen ? 3 : 1}
             overflow="visible"
+            // onMouseOver={onOpen}
+            // onMouseLeave={onClose}
           >
             {children}
 
@@ -83,12 +97,12 @@ export const InteractiveCardLayout = ({
                   cursor: 'pointer',
                 }}
                 width={'calc(100% + 32px)'}
-                zIndex={isOpen ? 2 : 1}
+                zIndex={isOpen ? 4 : 1}
                 top={'-16px'}
                 left={'-16px'}
               >
                 <Box height={`${contentHeight + 16}px`} pointerEvents="none" />
-                <Collapse in={isOpen} unmountOnExit>
+                <Collapse in={isOpen} unmountOnExit style={{ overflow: 'visible' }}>
                   <Box backgroundColor="utils.pbg">{hoverContent}</Box>
                 </Collapse>
               </Stack>

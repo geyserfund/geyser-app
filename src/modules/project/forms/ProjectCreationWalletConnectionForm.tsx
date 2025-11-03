@@ -8,7 +8,7 @@ import {
   NodeWalletForm,
   NWCWalletForm,
   WalletForm,
-} from '../pages1/projectCreation/hooks/useWalletForm'
+} from '../pages/projectCreation/hooks/useWalletForm'
 
 type Props = {
   readOnly?: boolean

@@ -1,10 +1,11 @@
 import { IconType } from 'react-icons'
-import { PiBookmark, PiCompass, PiCrown, PiHandbag, PiSketchLogo, PiTrophy, PiWaveform } from 'react-icons/pi'
+import { PiClockCountdown, PiHandbag, PiHandCoins, PiHouse, PiRocket, PiTrophy } from 'react-icons/pi'
 
-import { LegendJewelIconUrl, PathsMap } from '@/shared/constants'
+import { PathsMap } from '@/shared/constants'
 
 export enum DiscoveryNavItemKey {
-  Discover = 'discover',
+  Campaigns = 'campaigns',
+  Fundraisers = 'fundraisers',
   MyProjects = 'myProjects',
   Products = 'products',
   Activity = 'activity',
@@ -13,6 +14,8 @@ export enum DiscoveryNavItemKey {
   Guardians = 'guardians',
   Launchpad = 'launchpad',
   Heroes = 'heroes',
+  Profile = 'profile',
+  landing = 'landing',
 }
 
 export type DiscoveryNavItem = {
@@ -26,55 +29,45 @@ export type DiscoveryNavItem = {
 
 export const discoveryNavItems: DiscoveryNavItem[] = [
   {
-    label: 'Discover',
-    key: DiscoveryNavItemKey.Discover,
+    label: 'Discovery',
+    key: DiscoveryNavItemKey.landing,
     path: 'discoveryLanding',
-    icon: PiCompass,
+    icon: PiHouse,
     bottomNav: true,
   },
-
   {
-    label: 'Products',
+    label: 'Campaigns',
+    key: DiscoveryNavItemKey.Campaigns,
+    path: 'discoveryAllOrNothing',
+    icon: PiClockCountdown,
+    bottomNav: true,
+  },
+  {
+    label: 'Fundraisers',
+    key: DiscoveryNavItemKey.Fundraisers,
+    path: 'discoveryFundraisers',
+    icon: PiHandCoins,
+    bottomNav: true,
+  },
+  {
+    label: 'My projects',
+    key: DiscoveryNavItemKey.MyProjects,
+    path: 'discoveryMyProjects',
+    icon: PiRocket,
+    bottomNav: true,
+  },
+  {
+    label: 'Shop',
     key: DiscoveryNavItemKey.Products,
     path: 'discoveryProducts',
     icon: PiHandbag,
     bottomNav: true,
   },
   {
-    label: 'Activity',
-    key: DiscoveryNavItemKey.Activity,
-    path: 'discoveryActivity',
-    icon: PiWaveform,
-    bottomNav: true,
-  },
-  {
-    label: 'My Projects',
-    key: DiscoveryNavItemKey.MyProjects,
-    path: 'discoveryMyProjects',
-    icon: PiBookmark,
-    bottomNav: true,
-  },
-  {
-    label: 'Heroes',
-    key: DiscoveryNavItemKey.Heroes,
-    path: 'discoveryHeroes',
-    icon: PiCrown,
-    bottomNav: false,
-  },
-  {
     label: 'Grants',
     key: DiscoveryNavItemKey.Grants,
     path: 'discoveryGrants',
     icon: PiTrophy,
-    bottomNav: false,
-  },
-
-  {
-    label: 'Guardians',
-    key: DiscoveryNavItemKey.Guardians,
-    path: 'guardians',
-    icon: PiSketchLogo,
-    image: LegendJewelIconUrl,
     bottomNav: false,
   },
 ]

@@ -63,6 +63,8 @@ steps:
         --build-arg VITE_APP_GEYSER_NOSTR_PUBKEY=$$GEYSER_NOSTR_PUBKEY \
         --build-arg VITE_APP_ENV=${_VITE_APP_ENV} \
         --build-arg VITE_APP_STRIPE_API_KEY=${_VITE_APP_STRIPE_API_KEY} \
+        --build-arg VITE_APP_BOLTZ_ROUTER_CONTRACT_ADDRESS=${_VITE_APP_BOLTZ_ROUTER_CONTRACT_ADDRESS} \
+        --build-arg VITE_APP_BOLTZ_SWAP_CONTRACT_ADDRESS=${_VITE_APP_BOLTZ_SWAP_CONTRACT_ADDRESS} \
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies \
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest . \
         && \

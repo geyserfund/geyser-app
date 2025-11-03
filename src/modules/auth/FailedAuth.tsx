@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { CookiesProvider, useCookies } from 'react-cookie'
 import { useTranslation } from 'react-i18next'
 import { BsArrowLeft } from 'react-icons/bs'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
 

@@ -1,5 +1,5 @@
 import { HStack, Image, VStack } from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useGuardiansSoldCountSetAtom, useGuardianUsersSetAtom } from '@/modules/guardians/state/guardianUsers.ts'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
@@ -8,7 +8,7 @@ import { HeaderProps } from '@/shared/components/typography/Heading'
 import { getPath } from '@/shared/constants'
 import { GuardianType, useGuardianUsersGetQuery } from '@/types'
 
-import { CharacterAssets } from '../../character/characterAssets'
+import { CharacterAssets } from '../../../utils/characterAssets'
 
 export const GuardianUsers = ({
   guardian,

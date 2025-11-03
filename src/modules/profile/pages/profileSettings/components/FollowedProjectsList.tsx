@@ -1,7 +1,7 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useFollowedProjectsValue } from '@/modules/auth/state'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'

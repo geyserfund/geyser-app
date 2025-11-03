@@ -1,15 +1,16 @@
 import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiClock, PiEyeglasses, PiGear, PiNoteBlank } from 'react-icons/pi'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router'
 
-import { FOLLOWERS_NEEDED } from '@/modules/project/pages1/projectView/views/body/components/PrelaunchFollowButton.tsx'
+import { FOLLOWERS_NEEDED } from '@/modules/project/pages/projectView/views/body/components/PrelaunchFollowButton.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { ProjectPrelaunchStatus } from '@/shared/molecules/ProjectPrelaunchStatus.tsx'
 import { ProjectForMyProjectsFragment, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
 
+import { inDraftStatus } from '../hooks/useMyProjects.ts'
 import { Contributions } from './Contributions'
 import { Rewards } from './Rewards'
 
@@ -35,7 +36,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       )
     }
 
-    if (project.status === ProjectStatus.Draft) {
+    if (project.status && inDraftStatus.includes(project.status)) {
       return (
         <Direction mt={4} spacing={4} alignItems="stretch">
           <InDraftProjectCard />
@@ -61,8 +62,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   return (
     <Box width="100%" py={4}>
-      <HStack spacing={4} alignItems="center" justifyContent="space-between">
-        <HStack as={RouterLink} to={getPath('project', project.name)}>
+      <HStack spacing={4} justifyContent="space-between" alignItems="start">
+        <HStack as={RouterLink} to={getPath('project', project.name)} alignItems="start">
           {project.thumbnailImage && (
             <Image
               src={project.thumbnailImage}
@@ -72,7 +73,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               objectFit="cover"
             />
           )}
-          <Body size="2xl" bold>
+          <Body size={{ base: 'lg', lg: '2xl' }} bold>
             {project.title}
           </Body>
         </HStack>
@@ -83,7 +84,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           as={RouterLink}
           to={getPath('dashboardAnalytics', project.name)}
           size="md"
-          rightIcon={isMobile ? undefined : <PiGear size={16} />}
+          leftIcon={isMobile ? undefined : <PiGear size={16} />}
         >
           {isMobile ? <PiGear size={16} /> : t('Dashboard')}
         </Button>

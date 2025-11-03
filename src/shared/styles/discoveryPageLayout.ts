@@ -1,4 +1,4 @@
-import { dimensions } from '../constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 
 export const discoveryPageCommonLayoutStyles = {
   paddingLeft: {
