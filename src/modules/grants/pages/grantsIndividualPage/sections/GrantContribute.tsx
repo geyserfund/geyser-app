@@ -3,8 +3,10 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { Body, H3 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
+
+import { GrantItemTitle } from '../components/GrantItemTitle.tsx'
 
 export const GrantContribute = ({
   grantProjectName,
@@ -18,9 +20,7 @@ export const GrantContribute = ({
   const { t } = useTranslation()
   return (
     <CardLayout noMobileBorder w="full" p={{ base: '10px', lg: '20px' }} alignItems="center">
-      <H3 size="lg" alignSelf="start">
-        {t('Contribute')}
-      </H3>
+      <GrantItemTitle>{t('Contribute')}</GrantItemTitle>
       <Body>
         {t('Contribute directly to {{title}} Grant via QR code (lightning and onchain)').replace(
           '{{title}}',

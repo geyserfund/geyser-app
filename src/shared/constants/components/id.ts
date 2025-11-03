@@ -36,6 +36,9 @@ export const ID = {
     details: {
       container: 'project-details-container',
     },
+    fundNow: {
+      container: 'project-fund-now-container',
+    },
     rewards: {
       container: 'project-rewards-container',
       title: 'project-rewards-title',

@@ -5,6 +5,7 @@ import { KeyboardEvent, useRef } from 'react'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { AmountInput } from '@/shared/components/form/AmountInput.tsx'
 import { Body, H1 } from '@/shared/components/typography'
+import { lightModeColors } from '@/shared/styles/colors.ts'
 
 import { commaFormatted } from '../../../../../../../utils'
 
@@ -93,7 +94,7 @@ export const DonationInput = () => {
           </Button>
           <Body
             fontSize="8px"
-            bg="amber.6"
+            bg={lightModeColors.amber[6]}
             color="black"
             fontWeight="bold"
             px={2}

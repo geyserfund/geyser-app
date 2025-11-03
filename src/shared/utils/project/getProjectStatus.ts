@@ -44,7 +44,7 @@ export const ProjectStatusIcons = {
 
 export const ProjectStatusCreatorText = {
   [ProjectStatusLabels.UNSTABLE_WALLET]: t(
-    'Wallets are marked as unstable when a transaction fails due to a transaction failure, not enough inbound liquidity, or other. Consider making a small transaction to set your project back to active, or change your wallet.',
+    'Wallets are marked as unstable when a transaction fails (due to a transaction failure, not enough inbound liquidity, or other). The wallet status will be updated when a successful transaction is made. Make a small "1 sat" transaction to refresh wallet status.',
   ),
   [ProjectStatusLabels.INACTIVE_WALLET]: t(
     'Your wallet is not functional. Please change your wallet to receive contributions.  ',

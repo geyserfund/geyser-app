@@ -17,6 +17,8 @@ const GRANT_CUSTOM_URL_TO_ID_MAP = {
   satsnart: 14,
   satsnhacks: 15,
   'nwc-hardware-software': 16,
+  honeybadger: 17,
+  time2build: 20,
 } as {
   [key: string]: number
 }

@@ -27,7 +27,6 @@ import { toInt, useNotification } from '@/utils'
 
 import { MarkdownField } from '../../../../../../shared/markdown/MarkdownField.tsx'
 import { sourceResourceAtom } from '../../state/sourceActivityAtom.ts'
-import { FollowButton } from '../body/components/FollowButton.tsx'
 import { LinkedRewardsAndGoals } from './components/LinkedRewardsAndGoals.tsx'
 import { PostEditMenu } from './components/PostEditMenu.tsx'
 import { PostShare } from './components/PostShare.tsx'
@@ -89,6 +88,8 @@ export const PostView = () => {
     navigate(getPath('projectFunding', project?.name))
   }
 
+  console.log('checking project', project)
+
   const showLinkedRewardsAndGoals = post.projectGoals.inProgress.length > 0 || post.projectRewards.length > 0
 
   return (
@@ -117,7 +118,7 @@ export const PostView = () => {
             {t('All posts')}
           </Button>
           <HStack>
-            {!isProjectOwner ? <FollowButton size="lg" withLabel project={project} /> : <PostShare post={post} />}
+            {<PostShare post={post} project={project} />}
 
             {isProjectOwner ? (
               <PostEditMenu
@@ -143,7 +144,7 @@ export const PostView = () => {
 
         <CardLayout
           w="full"
-          maxWidth={dimensions.project.posts.view.maxWidth}
+          minWidth={{ base: 'full', lg: dimensions.project.posts.view.maxWidth }}
           direction="row"
           justifyContent="center"
           paddingY={{ base: 6, lg: 12 }}

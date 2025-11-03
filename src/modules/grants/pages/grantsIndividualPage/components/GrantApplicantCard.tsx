@@ -9,6 +9,7 @@ import {
   ContributorsModal,
   useContributorsModal,
 } from '@/modules/grants/pages/grantsMainPage/components/ContributorsModal'
+import { GrantBalanceCurrency } from '@/modules/grants/utils/constants.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
@@ -24,7 +25,7 @@ import {
   UserMeFragment,
   VotingSystem,
 } from '../../../../../types'
-import { getShortAmountLabel, useMobileMode } from '../../../../../utils'
+import { centsToDollars, getShortAmountLabel, useMobileMode } from '../../../../../utils'
 import { WidgetItem } from './WidgetItem'
 
 interface GrantApplicantCardProps {
@@ -41,6 +42,7 @@ interface GrantApplicantCardProps {
   isLoggedIn: boolean
   currentUser: UserMeFragment | null
   votingSystem?: VotingSystem
+  grantName: string
 }
 
 const useStyles = createUseStyles({
@@ -198,6 +200,7 @@ export const GrantApplicantCard = ({
   isLoggedIn,
   currentUser,
   votingSystem,
+  grantName,
 }: GrantApplicantCardProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
@@ -210,6 +213,11 @@ export const GrantApplicantCard = ({
     currentUser &&
     currentUser.hasSocialAccount &&
     contributors.find((contributor) => contributor.user?.id === currentUser?.id)
+
+  const grantCurrency = GrantBalanceCurrency[grantName] || 'BTCSAT'
+  const isUSDCent = grantCurrency === 'USDCENT'
+
+  const subtitle = isUSDCent ? t('USD sent') : t('sats sent')
 
   const renderWidgetItem = (funding: GrantApplicantFunding, contributorsCount: number, voteCount: number) => {
     return (
@@ -225,10 +233,17 @@ export const GrantApplicantCard = ({
             <Body size="sm">{votingSystem === VotingSystem.OneToOne ? t('voters') : t('votes')}</Body>
           </Box>
         )}
-        <WidgetItem subtitle={!isClosed ? t('sats sent') : t('distributed')}>
-          {getShortAmountLabel(
-            !isClosed ? funding.communityFunding : funding.grantAmount + funding.communityFunding || 0,
-          )}
+        <WidgetItem subtitle={!isClosed ? subtitle : t('distributed')} isSatLogo={!isUSDCent}>
+          {isUSDCent
+            ? `$${getShortAmountLabel(
+                !isClosed
+                  ? centsToDollars(funding.communityFunding)
+                  : centsToDollars(funding.grantAmount) + centsToDollars(funding.communityFunding) || 0,
+                true,
+              )}`
+            : getShortAmountLabel(
+                !isClosed ? funding.communityFunding : funding.grantAmount + funding.communityFunding || 0,
+              )}
         </WidgetItem>
       </HStack>
     )

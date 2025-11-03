@@ -8,6 +8,7 @@ import { PiCaretDown, PiCaretUp, PiInfo } from 'react-icons/pi'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import {
+  guardianBadgesCostAtoms,
   networkFeeAtom,
   rewardsCostAtoms,
   shippingCostAtom,
@@ -23,7 +24,7 @@ import { Body, H2 } from '@/shared/components/typography'
 import { SubscriptionCurrencyType } from '@/types/generated/graphql'
 
 import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../../../utils'
-import { LaunchpadSummary, NonProfitSummary } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
+import { LaunchpadSummary, NonProfitSummary, TAndCs } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
 
 type ProjectFundingSummaryProps = {
@@ -47,6 +48,7 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
   const networkFee = useAtomValue(networkFeeAtom)
   const totalSats = useAtomValue(totalAmountSatsAtom)
   const totalUsdCent = useAtomValue(totalAmountUsdCentAtom)
+  const guardianBadgesCosts = useAtomValue(guardianBadgesCostAtoms)
 
   const currentGoal =
     inProgressGoals.length > 0
@@ -98,29 +100,40 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
         alignItems: 'flex-start',
         display: 'flex',
         flexDirection: 'column',
+        position: 'relative',
 
         gap: isMobileMode ? '4px' : '12px',
       }}
       transition={{ type: 'spring', stiffness: 900, damping: 40 }}
     >
       <HStack as={motion.div} layout w="full" justifyContent={'space-between'}>
-        <H2 size={{ base: 'xl', lg: '2xl' }} bold>
+        <H2 size={{ base: 'xl', lg: '2xl' }} display={{ base: 'none', lg: 'block' }} bold>
           {t('Summary')}
         </H2>
-        <Button
-          variant="soft"
-          colorScheme="neutral1"
-          size="sm"
-          onClick={onMobileDetailsToggle}
-          rightIcon={isMobileDetailsOpen ? <PiCaretDown /> : <PiCaretUp />}
-          display={{ base: hasDetails ? 'auto' : 'none', lg: 'none' }}
-        >
-          {isMobileDetailsOpen ? t('Collapse') : t('Details')}
-        </Button>
       </HStack>
+      <Button
+        variant="soft"
+        colorScheme="neutral1"
+        size="sm"
+        onClick={onMobileDetailsToggle}
+        rightIcon={isMobileDetailsOpen ? <PiCaretDown /> : <PiCaretUp />}
+        display={{ base: hasDetails ? 'auto' : 'none', lg: 'none' }}
+        position="absolute"
+        top={1}
+        right={0}
+      >
+        {isMobileDetailsOpen ? t('Collapse') : t('Details')}
+      </Button>
       <VStack w="full" alignItems="start" spacing={{ base: 0, lg: 3 }} display={mobileDisplayStyle}>
-        <NonProfitSummary disableDesktop={true} paddingY={3} />
-        <LaunchpadSummary disableDesktop={true} marginY={3} />
+        <VStack w="full" alignItems="start" display={{ base: 'flex', lg: 'none' }} spacing={3} marginBottom={3}>
+          <H2 size="xl" bold>
+            {t('Summary')}
+          </H2>
+
+          <NonProfitSummary disableDesktop={true} />
+          <LaunchpadSummary disableDesktop={true} />
+          <TAndCs disableDesktop={true} />
+        </VStack>
 
         {referenceCode && (
           <HStack>
@@ -239,6 +252,12 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
             <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
               {`($${centsToDollars(networkFee.usdCents)})`}
             </Body>
+          </HStack>
+        )}
+        {guardianBadgesCosts.sats > 0 && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Guardian badges')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>{`${commaFormatted(guardianBadgesCosts.sats)} `}</Body>
           </HStack>
         )}
 

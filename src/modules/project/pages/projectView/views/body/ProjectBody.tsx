@@ -26,6 +26,7 @@ import {
 } from './sections'
 import { AonNotification } from './sections/aonNotification/AonNotification.tsx'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
+import { FundNowWithLightning } from './sections/FundNowWithLightning.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 
 export const ProjectBody = () => {
@@ -75,6 +76,7 @@ export const ProjectBody = () => {
         {project.entriesCount && <Posts />}
         {project.goalsCount && <Goals />}
         <Details />
+        <FundNowWithLightning />
         <SuggestedProjects
           id={'suggested-projects-project-page'}
           subCategory={project.subCategory}

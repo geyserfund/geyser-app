@@ -592,6 +592,13 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
+            path: getPath('fundingGuardians', PathName.projectName),
+            async lazy() {
+              const FundingGuardians = await loadProjectFundingPages().then((m) => m.FundingGuardians)
+              return { Component: FundingGuardians }
+            },
+          },
+          {
             path: getPath('fundingLaunchPayment', PathName.projectName),
             async lazy() {
               const FundingLaunchPayment = await loadProjectFundingPages().then((m) => m.FundingLaunchPayment)
@@ -871,10 +878,7 @@ export const platformRoutes: RouteObject[] = [
 
       {
         path: getPath('discoveryLaunchpad'),
-        async lazy() {
-          const LaunchpadPage = await loadDiscoveryModule().then((m) => m.Launchpad)
-          return { Component: LaunchpadPage }
-        },
+        element: <Navigate to={getPath('discoveryLanding')} />,
       },
       {
         path: getPath('hallOfFameProjects'),
@@ -961,7 +965,30 @@ export const platformRoutes: RouteObject[] = [
           return { Component: grantsModule.GrantPage }
         },
       },
+      {
+        path: getPath('discoveryGrant', PathName.grantId),
+        async lazy() {
+          const GrantPage = await loadGrantsModule().then((m) => m.GrantPage)
+          return { Component: GrantPage }
+        },
+      },
     ],
+  },
+
+  {
+    path: getPath('discoveryGrantApply', PathName.grantId),
+    async lazy() {
+      const GrantsApplyPage = await loadGrantsModule().then((m) => m.GrantsApplyPage)
+      return { Component: GrantsApplyPage }
+    },
+  },
+
+  {
+    path: '/time2build',
+    async lazy() {
+      const GrantPage = await loadGrantsModule().then((m) => m.GrantPage)
+      return { element: <GrantPage grantId={20} /> }
+    },
   },
 
   {

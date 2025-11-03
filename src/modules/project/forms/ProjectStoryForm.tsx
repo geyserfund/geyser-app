@@ -12,7 +12,7 @@ import { ProjectValidations } from '../../../shared/constants'
 
 interface Props {
   autoFocus?: boolean
-  form: UseFormReturn<{ description: string }>
+  form: UseFormReturn<{ description: string } & any>
   isLoading?: boolean
   toolBarBottom?: string
   fieldContainerProps?: FieldContainerProps
@@ -61,7 +61,7 @@ export const ProjectStoryForm = ({ autoFocus, form, isLoading, toolBarBottom, fi
             <HStack pt={1} width="100%">
               {form.formState.isValid ? null : (
                 <Body size="xs" pt={1} color="error.9">
-                  {t(form.formState.errors.description?.message || '')}
+                  {t(form.formState.errors.description?.message?.toString() || '')}
                 </Body>
               )}
               <Body size="xs" light flexGrow={1} textAlign="right">

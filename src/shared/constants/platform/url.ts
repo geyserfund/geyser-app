@@ -196,6 +196,11 @@ export const CampaignIconUrl = 'https://storage.googleapis.com/geyser-projects-m
 export const FundraiserIconUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/navigation/fundraiser_icon1.webp'
 export const ProductsIconUrl = 'https://storage.googleapis.com/geyser-projects-media/app/navigation/products_icon1.webp'
+export const ContributionSuccessIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/contribution-success-illustration.png'
+export const MailIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/mail-illustration.png'
+export const SuccessfullySubscribedIllustrationUrl =
+  'https://storage.googleapis.com/geyser-projects-media/utils/subscribed-illustration.png'
 
 // PAYMENT METHOD
 export const BitcoinLightingPaymentImageUrl =
@@ -237,6 +242,10 @@ export const Grant2AnnouncementTwitterUrl = 'https://twitter.com/geyserfund/stat
 
 export const GrantsPageBannerNoiseGifUrl =
   'https://storage.googleapis.com/geyser-projects-media/gifs/GrantsPageBannerNoise.gif'
+
+export const Grant14AnnouncementImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/grants/round-014/nwc-announcement.png'
+export const Grant14AnnouncementTwitterUrl = 'https://x.com/Geysergrants/status/1943675608682156479'
 
 // PLATFORMS
 
@@ -471,6 +480,10 @@ export const GuardianPartnerInitialCapitalUrl =
   'https://storage.googleapis.com/geyser-projects-media/platform/initial-capital-logo.png'
 export const GuardianPartnerRhinoUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Rhino.png'
+export const GuardianPartnerLightningPlacesUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guaridan-Partner-Lightning-Places.webp'
+export const GuardianPartnerBitcoinGamesLabsUrl =
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/guardian_partner_bitcoin_games_labs.png'
 export const GuardianPartnerWalletofSatoshiUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Wallet-of-Satoshi.png'
 export const GuardianPartnerDJPUrl =

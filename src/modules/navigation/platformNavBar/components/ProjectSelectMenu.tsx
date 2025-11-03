@@ -3,19 +3,23 @@ import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
-import { isRouteForProjectCreationAtom } from '@/config/routes/state/privateRoutesAtom.ts'
+import { isProjectCreationRouteAtom } from '@/config/routes/state/privateRoutesAtom.ts'
 import { useAuthContext } from '@/context'
 import { getPath } from '@/shared/constants/index.ts'
 
+import { isProjectFundingRoutesAtom } from '../platformNavBarAtom.ts'
 import { CreateProjectButton } from './CreateProjectButton'
 
 export const ProjectSelectMenu = () => {
   const { t } = useTranslation()
-  const isRouteForProjectCreation = useAtomValue(isRouteForProjectCreationAtom)
 
   const { isUserAProjectCreator } = useAuthContext()
 
-  if (isRouteForProjectCreation) {
+  const isProjectFundingRoute = useAtomValue(isProjectFundingRoutesAtom)
+  const isProjectCreationRoute = useAtomValue(isProjectCreationRouteAtom)
+
+  // For funding flow and creation flow, we don't want to show the project select menu
+  if (isProjectFundingRoute || isProjectCreationRoute) {
     return null
   }
 

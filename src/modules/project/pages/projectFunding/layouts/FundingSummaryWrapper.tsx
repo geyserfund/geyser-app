@@ -53,7 +53,7 @@ export const FundingCheckoutWrapper: React.FC<PropsWithChildren<StackProps>> = (
     <HStack
       alignItems={'flex-end'}
       w="full"
-      height={{ base: '72px', lg: '120px' }}
+      height={{ base: '40px', lg: '120px' }}
       padding={{ base: 0, lg: 6 }}
       {...rest}
     >

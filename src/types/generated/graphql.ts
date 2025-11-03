@@ -8556,7 +8556,7 @@ export type TagsMostFundedGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type TagsMostFundedGetQuery = { __typename?: 'Query', tagsMostFundedGet: Array<{ __typename?: 'TagsMostFundedGetResult', id: number, label: string }> };
 
-export type ActivityFeedFragmentFragment = { __typename?: 'Activity', activityType: string, createdAt: any, id: string, project: { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null }, resource: { __typename?: 'Contribution', id: any, amount: number, projectId: any, isAnonymous: boolean, comment?: string | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, guardianType?: GuardianType | null } | null } } | { __typename?: 'Post', id: any, title: string, markdown?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null } | { __typename?: 'ProjectGoal', id: any, currency: ProjectGoalCurrency, title: string, targetAmount: number, status: ProjectGoalStatus, goalDescription?: string | null } | { __typename?: 'ProjectReward', id: any, uuid: string, category?: string | null, cost: number, rewardCurrency: RewardCurrency, sold: number, stock?: number | null, projectRewardDescription?: string | null, projectRewardImage: Array<string> } };
+export type ActivityFeedFragmentFragment = { __typename?: 'Activity', activityType: string, createdAt: any, id: string, project: { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null, keys: { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } } }, resource: { __typename?: 'Contribution', id: any, amount: number, projectId: any, isAnonymous: boolean, comment?: string | null, funder: { __typename?: 'Funder', user?: { __typename?: 'User', id: any, username: string, imageUrl?: string | null, guardianType?: GuardianType | null } | null } } | { __typename?: 'Post', id: any, title: string, content?: string | null, entryDescription: string, entryImage?: string | null } | { __typename?: 'Project', id: any, title: string, name: string, thumbnailImage?: string | null } | { __typename?: 'ProjectGoal', id: any, currency: ProjectGoalCurrency, title: string, targetAmount: number, status: ProjectGoalStatus, goalDescription?: string | null } | { __typename?: 'ProjectReward', id: any, uuid: string, category?: string | null, cost: number, rewardCurrency: RewardCurrency, sold: number, stock?: number | null, projectRewardDescription?: string | null, projectRewardImage: Array<string> } };
 
 export type ActivityFeedQueryVariables = Exact<{
   input: GetActivitiesInput;
@@ -9062,9 +9062,9 @@ export type PayoutFragment = { __typename?: 'Payout', amount: number, expiresAt:
 
 export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress: string };
 
-export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
+export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, content?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
 
-export type ProjectPostViewFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, markdown?: string | null, sentByEmailAt?: any | null, projectRewards: Array<(
+export type ProjectPostViewFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, content?: string | null, markdown?: string | null, sentByEmailAt?: any | null, projectRewards: Array<(
     { __typename?: 'ProjectReward' }
     & PostPageProjectRewardFragment
   )>, projectGoals: { __typename?: 'ProjectGoals', inProgress: Array<(
@@ -9324,6 +9324,13 @@ export type PostSendByEmailMutationVariables = Exact<{
 
 export type PostSendByEmailMutation = { __typename?: 'Mutation', postSendByEmail: { __typename?: 'PostSendByEmailResponse', recipientCount?: number | null } };
 
+export type PostRepostOnNostrMutationVariables = Exact<{
+  input: PostRepostOnNostrInput;
+}>;
+
+
+export type PostRepostOnNostrMutation = { __typename?: 'Mutation', postRepostOnNostr: { __typename?: 'PostRepostOnNostrResponse', success: boolean } };
+
 export type ProjectRewardCurrencyUpdateMutationVariables = Exact<{
   input: ProjectRewardCurrencyUpdate;
 }>;
@@ -9405,6 +9412,13 @@ export type ProjectReviewRequestMutation = { __typename?: 'Mutation', projectRev
     { __typename?: 'ProjectReview' }
     & ProjectReviewFragment
   ) };
+
+export type PublishNostrEventMutationVariables = Exact<{
+  event: Scalars['String']['input'];
+}>;
+
+
+export type PublishNostrEventMutation = { __typename?: 'Mutation', publishNostrEvent?: boolean | null };
 
 export type PledgeRefundRequestMutationVariables = Exact<{
   input: PledgeRefundRequestInput;
@@ -10579,6 +10593,14 @@ export const ActivityFeedFragmentFragmentDoc = gql`
     title
     name
     thumbnailImage
+    keys {
+      nostrKeys {
+        publicKey {
+          hex
+          npub
+        }
+      }
+    }
   }
   resource {
     ... on Project {
@@ -10591,7 +10613,7 @@ export const ActivityFeedFragmentFragmentDoc = gql`
       id
       title
       entryDescription: description
-      markdown
+      content
       entryImage: image
     }
     ... on Contribution {
@@ -11498,6 +11520,7 @@ export const ProjectPostFragmentDoc = gql`
   title
   description
   image
+  content
   postType
   fundersCount
   amountFunded
@@ -11547,6 +11570,7 @@ export const ProjectPostViewFragmentDoc = gql`
   status
   createdAt
   publishedAt
+  content
   markdown
   sentByEmailAt
   projectRewards {
@@ -15698,6 +15722,39 @@ export function usePostSendByEmailMutation(baseOptions?: Apollo.MutationHookOpti
 export type PostSendByEmailMutationHookResult = ReturnType<typeof usePostSendByEmailMutation>;
 export type PostSendByEmailMutationResult = Apollo.MutationResult<PostSendByEmailMutation>;
 export type PostSendByEmailMutationOptions = Apollo.BaseMutationOptions<PostSendByEmailMutation, PostSendByEmailMutationVariables>;
+export const PostRepostOnNostrDocument = gql`
+    mutation PostRepostOnNostr($input: PostRepostOnNostrInput!) {
+  postRepostOnNostr(input: $input) {
+    success
+  }
+}
+    `;
+export type PostRepostOnNostrMutationFn = Apollo.MutationFunction<PostRepostOnNostrMutation, PostRepostOnNostrMutationVariables>;
+
+/**
+ * __usePostRepostOnNostrMutation__
+ *
+ * To run a mutation, you first call `usePostRepostOnNostrMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePostRepostOnNostrMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [postRepostOnNostrMutation, { data, loading, error }] = usePostRepostOnNostrMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePostRepostOnNostrMutation(baseOptions?: Apollo.MutationHookOptions<PostRepostOnNostrMutation, PostRepostOnNostrMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PostRepostOnNostrMutation, PostRepostOnNostrMutationVariables>(PostRepostOnNostrDocument, options);
+      }
+export type PostRepostOnNostrMutationHookResult = ReturnType<typeof usePostRepostOnNostrMutation>;
+export type PostRepostOnNostrMutationResult = Apollo.MutationResult<PostRepostOnNostrMutation>;
+export type PostRepostOnNostrMutationOptions = Apollo.BaseMutationOptions<PostRepostOnNostrMutation, PostRepostOnNostrMutationVariables>;
 export const ProjectRewardCurrencyUpdateDocument = gql`
     mutation ProjectRewardCurrencyUpdate($input: ProjectRewardCurrencyUpdate!) {
   projectRewardCurrencyUpdate(input: $input) {
@@ -16029,6 +16086,37 @@ export function useProjectReviewRequestMutation(baseOptions?: Apollo.MutationHoo
 export type ProjectReviewRequestMutationHookResult = ReturnType<typeof useProjectReviewRequestMutation>;
 export type ProjectReviewRequestMutationResult = Apollo.MutationResult<ProjectReviewRequestMutation>;
 export type ProjectReviewRequestMutationOptions = Apollo.BaseMutationOptions<ProjectReviewRequestMutation, ProjectReviewRequestMutationVariables>;
+export const PublishNostrEventDocument = gql`
+    mutation PublishNostrEvent($event: String!) {
+  publishNostrEvent(event: $event)
+}
+    `;
+export type PublishNostrEventMutationFn = Apollo.MutationFunction<PublishNostrEventMutation, PublishNostrEventMutationVariables>;
+
+/**
+ * __usePublishNostrEventMutation__
+ *
+ * To run a mutation, you first call `usePublishNostrEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishNostrEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishNostrEventMutation, { data, loading, error }] = usePublishNostrEventMutation({
+ *   variables: {
+ *      event: // value for 'event'
+ *   },
+ * });
+ */
+export function usePublishNostrEventMutation(baseOptions?: Apollo.MutationHookOptions<PublishNostrEventMutation, PublishNostrEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PublishNostrEventMutation, PublishNostrEventMutationVariables>(PublishNostrEventDocument, options);
+      }
+export type PublishNostrEventMutationHookResult = ReturnType<typeof usePublishNostrEventMutation>;
+export type PublishNostrEventMutationResult = Apollo.MutationResult<PublishNostrEventMutation>;
+export type PublishNostrEventMutationOptions = Apollo.BaseMutationOptions<PublishNostrEventMutation, PublishNostrEventMutationVariables>;
 export const PledgeRefundRequestDocument = gql`
     mutation PledgeRefundRequest($input: PledgeRefundRequestInput!) {
   pledgeRefundRequest(input: $input) {

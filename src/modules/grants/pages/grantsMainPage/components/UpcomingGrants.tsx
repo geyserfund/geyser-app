@@ -9,14 +9,14 @@ import { LargeGrantCard } from './LargeGrantCard'
 export const UpcomingGrants = ({ upcomingGrants }: { upcomingGrants: Grant[] }) => {
   const { t } = useTranslation()
 
-  if (upcomingGrants.length === 0) {
+  if (upcomingGrants.length < 1) {
     return null
   }
 
   return (
     <VStack w="100%" alignItems="flex-start">
       <Body size={'2xl'} bold>
-        {t('Upcoming Grants')}
+        {t('Live Grants')}
       </Body>
       {upcomingGrants.map((grant) => (
         <LargeGrantCard key={grant.id} grant={grant} showBanner />

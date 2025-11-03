@@ -1,8 +1,13 @@
-import { Grant3AnnouncementImageUrl, Grant3AnnouncementTwitterUrl } from '../../../shared/constants'
-import { GrantStatusEnum } from '../../../types'
+import {
+  Grant3AnnouncementImageUrl,
+  Grant3AnnouncementTwitterUrl,
+  Grant14AnnouncementImageUrl,
+  Grant14AnnouncementTwitterUrl,
+} from '@/shared/constants'
+import { GrantStatusEnum } from '@/types'
 
 export const GRANT_STATUS_MAP: Record<GrantStatusEnum, string> = {
-  [GrantStatusEnum.ApplicationsOpen]: 'Applications Open',
+  [GrantStatusEnum.ApplicationsOpen]: 'APPLICATIONS ARE NOW OPEN ⚡️',
   [GrantStatusEnum.Closed]: 'Closed',
   [GrantStatusEnum.FundingOpen]: 'Active',
 }
@@ -22,13 +27,17 @@ export const GrantHasVoting: { [key: string]: boolean } = {
   'grant-round-012': true,
   'grant-round-013': false,
   'grant-round-014': false,
+  'grant-round-015': false,
+  'grant-round-016': false,
 }
 
 export const GrantBalanceCurrency: { [key: string]: string } = {
   'grant-round-014': 'USDCENT',
+  'grant-round-015': 'USDCENT',
+  'grant-round-016': 'USDCENT',
 }
 
-export const NoContributionInGrant = ['grant-round-008', 'grant-round-014']
+export const NoContributionInGrant = ['grant-round-008', 'grant-round-014', 'grant-round-016']
 
 export const GrantSubscribeSegment: {
   [key: string]: { title: string; description: string; modalTitle: string; segmentId: string }
@@ -51,6 +60,10 @@ export const GrantAnnouncements: { [key: string]: GrantAnnouncement } = {
     linkUrl: Grant3AnnouncementTwitterUrl,
     imageUrl: Grant3AnnouncementImageUrl,
   },
+  'grant-round-014': {
+    linkUrl: Grant14AnnouncementTwitterUrl,
+    imageUrl: Grant14AnnouncementImageUrl,
+  },
 }
 
 export const GRANT_STATUS_COUNTDOWN_TITLES = {
@@ -68,4 +81,9 @@ export const GRANT_STATUS_COUNTDOWN_TITLES_NON_VOTE = {
 export const GrantProjectNameMap: { [key: string]: string } = {
   'grant-round-004': 'bitcoingaminggrant',
   'grant-round-013': 'satsnfacts',
+  'grant-round-016': 'time2build',
+}
+
+export const GrantWithCustomApplicationForm: { [key: string]: boolean } = {
+  'grant-round-016': true,
 }

@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
-import { PiCaretDoubleDown } from 'react-icons/pi'
+import { PiCaretDoubleDown, PiQrCode } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { ProjectStatusBar } from '@/components/ui'
@@ -44,6 +44,7 @@ import { CreatorEditButton } from '../../components/CreatorEditButton'
 import { CreatorSocial } from './components/CreatorSocial'
 import { LightningAddressModal } from './components/LightningAddressModal'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
+import { PostOnNostr } from './components/PostOnNostr.tsx'
 import { ShareProjectButton } from './components/ShareProjectButton'
 
 interface HeaderDetailsProps extends StackProps {
@@ -86,6 +87,13 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
 
   const handleClickDetails = () => {
     const element = document.getElementById(ID.project.details.container)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  const handleClickLightingQR = () => {
+    const element = document.getElementById(ID.project.fundNow.container)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' })
     }
@@ -158,8 +166,16 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
               colorScheme="neutral1"
               onClick={handleClickDetails}
             />
+            <IconButton
+              aria-label="Go to project Lighting QR"
+              icon={<PiQrCode fontSize="20px" />}
+              variant="soft"
+              colorScheme="neutral1"
+              onClick={handleClickLightingQR}
+            />
             <FollowButton project={project} withLabel />
             <ShareProjectButton />
+            <PostOnNostr />
           </HStack>
 
           <CreatorEditButton as={Link} to={getPath('dashboardInfo', project.name)} />

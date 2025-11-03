@@ -82,7 +82,7 @@ export const ProjectPostCard = ({ post }: Props) => {
           <HStack w="full" justifyContent={'end'}>
             <PostEditMenu post={post} />
 
-            <PostShare size="md" post={post} />
+            <PostShare size="md" post={post} project={project} />
           </HStack>
         </VStack>
       </CardLayout>

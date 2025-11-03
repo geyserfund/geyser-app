@@ -79,7 +79,7 @@ export const RewardView = () => {
   }
 
   const renderAmountComponent = () => {
-    if (project && project.rewardCurrency === RewardCurrency.Usdcent)
+    if (reward && reward.rewardCurrency === RewardCurrency.Usdcent)
       return (
         <Body bold dark>
           {`$${reward.cost / 100} `}

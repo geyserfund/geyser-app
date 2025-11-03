@@ -6,12 +6,13 @@ import { Link } from 'react-router'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { Body, H2, H3 } from '@/shared/components/typography'
+import { Body, H2 } from '@/shared/components/typography'
 
 import { getPathWithGeyserHero } from '../../../../../shared/constants'
 import { lightModeColors } from '../../../../../shared/styles'
 import { GrantApplicant } from '../../../../../types'
 import { useMobileMode } from '../../../../../utils'
+import { GrantItemTitle } from '../components/GrantItemTitle.tsx'
 
 interface Props {
   applicants: Array<GrantApplicant>
@@ -41,9 +42,7 @@ export const PendingApplications = ({ applicants }: Props) => {
 
   return (
     <CardLayout noMobileBorder p={{ base: '10px', lg: '20px' }} spacing={{ base: '10px', lg: '20px' }} w="full">
-      <H3 size="lg" medium>
-        {t('Pending Applications')}
-      </H3>
+      <GrantItemTitle>{t('Pending Applications')}</GrantItemTitle>
       {applicants.map(({ project }) => {
         const projectLink = getPathWithGeyserHero('project', project.name)
 

@@ -33,3 +33,8 @@ export const QUERY_USER_ACCOUNT_KEYS_UPDATE = gql`
     }
   }
 `
+export const QUERY_USER_IP_COUNTRY = gql`
+  query GetUserIpCountry {
+    userIpCountry
+  }
+`

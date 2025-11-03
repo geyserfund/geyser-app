@@ -1,7 +1,10 @@
 import { atom } from 'jotai'
 
+import { guardianRewardsAtom } from '@/modules/guardians/state/guardianRewards.ts'
+import { guardianRewardsMap, GuardianRewardType } from '@/modules/guardians/utils/constants.ts'
 import { bitcoinQuoteAtom } from '@/shared/state/btcRateAtom'
 import {
+  GuardianType,
   PaymentFeePayer,
   PaymentFeeType,
   ProjectPageWalletFragment,
@@ -48,6 +51,8 @@ export enum FundingUserInfoError {
 
 export const DEFAULT_COUNTRY_CODE = 'DEFAULT'
 
+export const DEFAULT_GEYSER_TIP_PERCENT = 5
+
 export type FundingProjectState = FundingProject & {
   wallet?: ProjectPageWalletFragment
   rewards: ProjectRewardFragment[]
@@ -76,6 +81,7 @@ export type FundFormType = {
     name?: string
   }
   geyserTipPercent: number
+  guardianBadges: GuardianType[]
 }
 
 const initialState: FundFormType = {
@@ -86,7 +92,7 @@ const initialState: FundFormType = {
   privateComment: '',
   email: '',
   media: '',
-  followProject: true,
+  followProject: false,
   subscribeToGeyserEmails: false,
   rewardsByIDAndCount: undefined,
   subscription: {
@@ -99,7 +105,8 @@ const initialState: FundFormType = {
   rewardCurrency: RewardCurrency.Usdcent,
   needsShipping: false,
   shippingDestination: ShippingDestination.National,
-  geyserTipPercent: 10,
+  geyserTipPercent: DEFAULT_GEYSER_TIP_PERCENT,
+  guardianBadges: [],
 }
 
 /** Main Funding Form state atom */
@@ -279,6 +286,27 @@ export const networkFeeAtom = atom((get) => {
   return { sats: feesSats, usdCents: feesUsdCents }
 })
 
+export const guardianBadgesCostAtoms = atom((get) => {
+  const { guardianBadges } = get(fundingFormStateAtom)
+  const guardianRewards = get(guardianRewardsAtom)
+  const bitcoinQuote = get(bitcoinQuoteAtom)
+
+  const guardianBadgesCost = guardianRewards
+    .filter((reward) =>
+      guardianRewardsMap.some(
+        (map) =>
+          map.rewardUUID === reward.uuid &&
+          map.type === GuardianRewardType.Badge &&
+          guardianBadges.includes(map.guardian as GuardianType),
+      ),
+    )
+    .reduce((acc, reward) => acc + reward.cost, 0)
+
+  const guardianBadgesCostSats = convertAmount.usdCentsToSats({ usdCents: guardianBadgesCost, bitcoinQuote })
+
+  return { sats: guardianBadgesCostSats, usdCents: guardianBadgesCost }
+})
+
 /**
  * Derived atom for the total amount in Satoshis.
  * Sums donation, rewards, subscription, shipping, and tip.
@@ -291,10 +319,17 @@ export const totalAmountSatsAtom = atom((get) => {
   const subscriptionCosts = get(subscriptionCostAtoms)
   const tip = get(tipAtoms)
   const networkFee = get(networkFeeAtom)
+  const guardianBadgesCosts = get(guardianBadgesCostAtoms)
 
   // Sum all components
   const total =
-    donationAmount + rewardsCosts.sats + subscriptionCosts.sats + shippingCosts.sats + tip.sats + networkFee.sats
+    donationAmount +
+    rewardsCosts.sats +
+    subscriptionCosts.sats +
+    shippingCosts.sats +
+    tip.sats +
+    networkFee.sats +
+    guardianBadgesCosts.sats
   return total
 })
 
@@ -584,9 +619,9 @@ export const isFundingInputAmountValidAtom = atom((get) => {
 
   const isException = isProjectAnException(fundingProjectState.name)
 
-  if (totalAmount === 0) {
+  if (totalAmount < 1000) {
     return {
-      title: `The payment minimum is 1 satoshi.`,
+      title: `The payment minimum is 1000 satoshi.`,
       description: 'Please update the amount.',
       valid: false,
     }

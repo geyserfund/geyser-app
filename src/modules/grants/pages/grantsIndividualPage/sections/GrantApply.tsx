@@ -14,14 +14,17 @@ import {
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BsCheckLg } from 'react-icons/bs'
+import { Navigate } from 'react-router'
 
 import { ConnectWithNostr } from '@/modules/auth/ConnectWithNostr.tsx'
 import { ConnectWithSocial } from '@/modules/auth/ConnectWithSocial.tsx'
 import { SocialAccountType } from '@/modules/auth/type.ts'
 import { useAuthToken } from '@/modules/auth/useAuthToken.tsx'
+import { GrantWithCustomApplicationForm } from '@/modules/grants/utils/constants.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 
@@ -32,25 +35,38 @@ import { lightModeColors } from '../../../../../shared/styles'
 import { Grant, GrantApplicant, GrantApplicantStatus, GrantApplyInput, Project } from '../../../../../types'
 import { toInt, useCustomTheme, useNotification } from '../../../../../utils'
 import { CreateAProjectButton } from '../../../../profile/pages/profilePage/components'
+import { GrantItemTitle } from '../components/GrantItemTitle.tsx'
 
 interface GrantProps {
   grant: Grant
   pendingApplicants?: GrantApplicant[]
 }
 
+const GRANT_TITLE_MAP: Record<string, string> = {
+  'grant-round-016': t('Submit Your Integration'),
+}
+
+const GRANT_SUBTITLE_MAP: Record<string, string> = {
+  'grant-round-016': t(
+    'Ready to enter your integration to the Time2Build challenge? Click “Submit” below and complete the form. As a reminder, you’ll have one month from November 16th to merge your code, to be eligible for judging. Good luck ⚡️',
+  ),
+}
+
 export const GrantApply = ({ grant, pendingApplicants }: GrantProps) => {
   const { t } = useTranslation()
 
+  const title = GRANT_TITLE_MAP[grant.name] || t('Apply')
+  const subtitle =
+    GRANT_SUBTITLE_MAP[grant.name] ||
+    t(
+      'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow',
+    ).replace('{{title}}', grant.title)
+
   return (
     <CardLayout noMobileBorder w="full" p={{ base: '10px', lg: '20px' }} alignItems="center">
-      <H3 size="lg" alignSelf="start" medium>
-        {t('Apply')}
-      </H3>
-      <Body alignSelf="start">
-        {t(
-          'Apply to participate to the {{title}} by creating your project on Geyser and then selecting it in the application flow',
-        ).replace('{{title}}', grant.title)}
-      </Body>
+      <GrantItemTitle alignSelf="start">{title}</GrantItemTitle>
+
+      <Body alignSelf="start">{subtitle}</Body>
       <ApplyGrant grant={grant} pendingApplicants={pendingApplicants} />
     </CardLayout>
   )
@@ -59,9 +75,18 @@ export const GrantApply = ({ grant, pendingApplicants }: GrantProps) => {
 export const ApplyGrant = ({ grant, pendingApplicants }: GrantProps) => {
   const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   return (
     <>
-      <Button size="lg" width="200px" variant="solid" colorScheme="primary1" onClick={onOpen} textTransform="uppercase">
+      <Button
+        size="xl"
+        width="300px"
+        variant="solid"
+        colorScheme="primary1"
+        onClick={onOpen}
+        textTransform="uppercase"
+        marginY="20px"
+      >
         {t('Apply')}
       </Button>
       <ApplyGrantModal {...{ isOpen, onOpen, onClose, grant, pendingApplicants }} />
@@ -82,6 +107,8 @@ export const ApplyGrantModal = ({ grant, isOpen, onClose, pendingApplicants }: A
 
   const [isSuccessful, setIsSuccessfull] = useState(false)
 
+  const isCustomApplicationGrant = GrantWithCustomApplicationForm[grant.name] || false
+
   const getModalTitle = () => {
     if (!isLoggedIn) {
       return 'Login to apply'
@@ -97,6 +124,10 @@ export const ApplyGrantModal = ({ grant, isOpen, onClose, pendingApplicants }: A
   const getModalContent = () => {
     if (!isLoggedIn) {
       return <LoginForGrant />
+    }
+
+    if (isCustomApplicationGrant) {
+      return <Navigate to="./apply" />
     }
 
     if (isSuccessful) {
@@ -142,7 +173,7 @@ export const ApplyGrantModal = ({ grant, isOpen, onClose, pendingApplicants }: A
 
 export const LoginForGrant = () => {
   const { t } = useTranslation()
-  useAuthToken()
+  useAuthToken(true)
   return (
     <>
       <Image src={LockedConnectAccountUrl} maxWidth="200px" />
@@ -150,7 +181,6 @@ export const LoginForGrant = () => {
       <VStack w="full">
         <ConnectWithSocial accountType={SocialAccountType.facebook} />
         <ConnectWithSocial accountType={SocialAccountType.github} />
-        <ConnectWithSocial accountType={SocialAccountType.google} />
         <ConnectWithSocial accountType={SocialAccountType.twitter} />
         <ConnectWithNostr />
       </VStack>

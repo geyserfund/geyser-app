@@ -39,13 +39,15 @@ import { DistributionChart } from './sections/DistributionChart.tsx'
 import { GrantApply } from './sections/GrantApply.tsx'
 import { GrantContribute } from './sections/GrantContribute.tsx'
 import { GrantSummary } from './sections/GrantSummary.tsx'
-import { MoreInfo } from './sections/MoreInfo.tsx'
+// import { MoreInfo } from './sections/MoreInfo.tsx'
 import { PendingApplications } from './sections/PendingApplications.tsx'
 
-export const GrantPage = () => {
+export const GrantPage = ({ grantId: propGrantId }: { grantId?: number }) => {
   const { t } = useTranslation()
   const { toast } = useNotification()
-  const { grantId } = useParams<{ grantId: string }>()
+  const { grantId: paramGrantId } = useParams<{ grantId: string }>()
+
+  const grantId = paramGrantId || propGrantId
 
   const { grant, loading, error } = useGrant(grantId)
 
@@ -92,11 +94,23 @@ export const GrantPage = () => {
       : []
 
   if (grant.name === 'grant-round-001') {
-    return <GrantsRoundOne applicants={applicants} isCompetitionVote={grant.type === GrantType.CommunityVote} />
+    return (
+      <GrantsRoundOne
+        applicants={applicants}
+        isCompetitionVote={grant.type === GrantType.CommunityVote}
+        grantName={grant.name}
+      />
+    )
   }
 
   if (grant.name === 'grant-round-002') {
-    return <GrantsRoundTwo applicants={applicants} isCompetitionVote={grant.type === GrantType.CommunityVote} />
+    return (
+      <GrantsRoundTwo
+        grantName={grant.name}
+        applicants={applicants}
+        isCompetitionVote={grant.type === GrantType.CommunityVote}
+      />
+    )
   }
 
   const winnerAnnouncement = GrantAnnouncements[grant.name]
@@ -124,7 +138,6 @@ export const GrantPage = () => {
   const grantHasVoting = GrantHasVoting[grant.name]
   const grantHasSubscribeSegment = GrantSubscribeSegment[grant.name]
   const isCompetitionVote = grant.type === GrantType.CommunityVote
-  const showCommunityVoting = applicants.length > 0
   const showDistributionChart = grant.status !== GrantStatusEnum.ApplicationsOpen && grantHasVoting
   const showGrantApply = grant.status === GrantStatusEnum.ApplicationsOpen
   const showContributeToGrant = !isCompetitionVote && !NoContributionInGrant.includes(grant.name)
@@ -163,6 +176,7 @@ export const GrantPage = () => {
         w="full"
         spacing="15px"
         alignItems="center"
+        paddingBottom={20}
       >
         <GrantSummary grant={grant} grantHasVoting={grantHasVoting} />
         <MobileDivider />
@@ -201,10 +215,17 @@ export const GrantPage = () => {
                     <MobileDivider />
                   </>
                 )}
-                {showCommunityVoting && (
+                {showGrantApply && (
+                  <>
+                    <GrantApply grant={grant} pendingApplicants={pendingApplicants} />
+                    <MobileDivider />
+                  </>
+                )}
+                {applicants.length > 0 && (
                   <>
                     <CommunityVoting
                       title={getTitle()}
+                      grantName={grant.name}
                       applicants={applicants}
                       grantHasVoting={grantHasVoting}
                       grantStatus={grant.status}
@@ -215,13 +236,6 @@ export const GrantPage = () => {
                     <MobileDivider />
                   </>
                 )}
-                {showGrantApply && (
-                  <>
-                    <GrantApply grant={grant} pendingApplicants={pendingApplicants} />
-                    <MobileDivider />
-                  </>
-                )}
-
                 {showApplicationPending && pendingApplicants.length > 0 && showGrantApply && (
                   <>
                     <PendingApplications applicants={pendingApplicants} />
@@ -268,7 +282,7 @@ export const GrantPage = () => {
             <MobileDivider mt={'2'} />
           </>
         )}
-        <MoreInfo />
+        {/* <MoreInfo /> */}
       </VStack>
     </>
   )

@@ -127,6 +127,7 @@ export const projectFundingPaymentCreatedRoutes = [
 export const projectFundingRoutes = [
   getPath('projectFunding', PathName.projectName),
   getPath('fundingDetails', PathName.projectName),
+  getPath('fundingGuardians', PathName.projectName),
   getPath('fundingStart', PathName.projectName),
   getPath('fundingPayment', PathName.projectName),
   getPath('fundingPaymentFailed', PathName.projectName),
@@ -169,6 +170,7 @@ export const discoveryRoutes = [
   getPath('discoveryLaunchpad'),
   getPath('discoveryGrants'),
   getPath('discoveryGrant', PathName.grantId),
+  // getPath('discoveryGrantApply', PathName.grantId),
   getPath('hallOfFameProjects'),
   getPath('discoveryHeroes'),
   getPath('heroesCreator'),

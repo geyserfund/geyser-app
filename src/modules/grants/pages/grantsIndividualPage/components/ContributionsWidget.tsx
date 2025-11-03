@@ -8,7 +8,7 @@ import { centsToDollars, getShortAmountLabel } from '@/utils/index.ts'
 import { BadgeIcon, ContributionsIcon, TimerIcon } from '../../../../../components/icons/index.tsx'
 import { Countdown } from '../../../../../components/ui/Countdown.tsx'
 import { primaryColorsLight } from '../../../../../shared/styles/index.ts'
-import { Grant, VotingSystem } from '../../../../../types/index.ts'
+import { Grant, GrantStatusEnum, VotingSystem } from '../../../../../types/index.ts'
 import {
   GRANT_STATUS_COUNTDOWN_TITLES,
   GRANT_STATUS_COUNTDOWN_TITLES_NON_VOTE,
@@ -55,6 +55,8 @@ export const ContributionsWidget = ({ grant }: Props) => {
 
   const isCommunityVoteGrant = grant?.__typename === 'CommunityVoteGrant'
 
+  const isGrantClosed = grant.status === GrantStatusEnum.Closed
+
   return (
     <Box borderRadius="8px" backgroundColor="neutral.100" pb={4} pt={2} my={4}>
       <Box
@@ -64,35 +66,37 @@ export const ContributionsWidget = ({ grant }: Props) => {
         gap={10}
         justifyContent={!isCommunityVoteGrant ? 'center' : 'space-around'}
       >
-        <Box
-          px={2}
-          width={{ base: '100%', lg: 'auto' }}
-          display="flex"
-          alignItems="start"
-          justifyContent="center"
-          my={2}
-        >
-          <TimerIcon mt={1} mr={2} width="36px" height="100%" color="primary.500" />
-          <WidgetItem isSatLogo={false} subtitle={endDateSubtitle}>
-            <Countdown
-              endDate={endDateTimestamp}
-              sectionProps={{
-                color: 'primary1.11',
-                fontSize: '22px',
-                fontWeight: 700,
-              }}
-              dividerProps={{
-                color: 'neutral1.11',
-                fontSize: '26px',
-                fontWeight: 700,
-              }}
-            />
-          </WidgetItem>
-        </Box>
+        {!isGrantClosed && (
+          <Box
+            px={2}
+            width={{ base: '100%', lg: 'auto' }}
+            display="flex"
+            alignItems="start"
+            justifyContent="center"
+            my={2}
+          >
+            <TimerIcon mt={1} mr={2} width="36px" height="100%" color="primary.500" />
+            <WidgetItem isSatLogo={false} subtitle={endDateSubtitle}>
+              <Countdown
+                endDate={endDateTimestamp}
+                sectionProps={{
+                  color: 'primary1.11',
+                  fontSize: '22px',
+                  fontWeight: 700,
+                }}
+                dividerProps={{
+                  color: 'neutral1.11',
+                  fontSize: '26px',
+                  fontWeight: 700,
+                }}
+              />
+            </WidgetItem>
+          </Box>
+        )}
 
         <Box px={2} display="flex" alignItems="start" my={2}>
           <BadgeIcon mt={1} mr={2} width="36px" height="100%" color="primary.500" />
-          <WidgetItem isSatLogo={false} subtitle={t('Grant amount')}>
+          <WidgetItem isSatLogo={false} subtitle={t('Prize Pool')}>
             {grantAmount}
           </WidgetItem>
         </Box>

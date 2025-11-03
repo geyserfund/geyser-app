@@ -15,6 +15,8 @@ export const isRouteForProjectCreationAtom = atom(routeMatchForAtom(allCreatorPr
 /** This atom is used to check if the current route is a private project creation route */
 export const isPrivateRouteForProjectCreationAtom = atom(routeMatchForAtom(routesForPrivateProjectLaunch))
 
+export const isProjectCreationRouteAtom = atom(routeMatchForAtom(routesForPrivateProjectLaunch))
+
 export const routesForProjectCreatorAtom = atom(routeMatchForAtom(routesForProjectCreator))
 
 export const routeMatchForProjectPageAtom = atom(routeMatchForAtom([getPath('project', PathName.projectId)]))

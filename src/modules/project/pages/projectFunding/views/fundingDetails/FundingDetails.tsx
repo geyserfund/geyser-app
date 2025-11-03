@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants'
 
 import { FundingLayout } from '../../layouts/FundingLayout'
@@ -15,6 +16,7 @@ import { FundingDetailsUserEmailAndUpdates } from './sections/FundingDetailsUser
 /** FundingDetails is the second page of funding flow, consisting of extra input from contributor like user email, comment, and private comment prompt */
 export const FundingDetails = () => {
   const { project, isFundingInputAmountValid } = useFundingFormAtom()
+  const { rewards } = useRewardsAtom()
 
   const navigate = useNavigate()
 
@@ -26,6 +28,16 @@ export const FundingDetails = () => {
     }
   }, [isFundingInputAmountValid, project.name, navigate])
 
+  const {
+    formState: { rewardsByIDAndCount },
+  } = useFundingFormAtom()
+
+  const selectedRewards = rewards.filter((reward) => rewardsByIDAndCount && rewardsByIDAndCount[reward.id])
+
+  const mergedPrivateCommentPrompts = Array.from(
+    new Set(selectedRewards.flatMap((reward) => reward.privateCommentPrompts || [])),
+  )
+
   return (
     <FundingLayout
       sideContent={<FundingDetailsSideContent addressForm={form} handleSubmit={handleSubmitWrapper} />}
@@ -34,8 +46,17 @@ export const FundingDetails = () => {
     >
       <FundingDetailsShippingAddress form={form} />
       <FundingDetailsUserEmailAndUpdates />
-      <FundingDetailsUserComment />
-      <FundingDetailsPrivateCommentPrompt />
+      {mergedPrivateCommentPrompts.length > 0 ? (
+        <>
+          <FundingDetailsPrivateCommentPrompt />
+          <FundingDetailsUserComment />
+        </>
+      ) : (
+        <>
+          <FundingDetailsUserComment />
+          <FundingDetailsPrivateCommentPrompt />
+        </>
+      )}
     </FundingLayout>
   )
 }

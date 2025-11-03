@@ -1,4 +1,4 @@
-import { Box, HStack, Image, VStack } from '@chakra-ui/react'
+import { Box, HStack, Image, StackProps, VStack } from '@chakra-ui/react'
 import { forwardRef } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 
@@ -34,52 +34,15 @@ export const ProjectShareBanner = forwardRef<HTMLDivElement, Props>(
           paddingRight={4}
           paddingTop={4}
         >
-          <VStack
-            borderColor={'neutral.1000'}
-            overflow={'hidden'}
-            _hover={{ cursor: 'pointer' }}
-            position="relative"
-            backgroundColor="utils.whiteContrast"
-            borderRadius={8}
-            gap={0}
-            pb={1}
-          >
-            <HStack
-              background="white"
-              padding="2px"
-              position={'absolute'}
-              top={`${(QR_SIZE - (LOGO_SIZE - 6) / 2) / 2}px`}
-              left={`${(QR_SIZE - (LOGO_SIZE - 6) / 2) / 2}px`}
-              borderRadius="8px"
-              width={`${LOGO_SIZE + 4}px`}
-              height={`${LOGO_SIZE + 4}px`}
-            >
-              <HStack width={`${LOGO_SIZE}px`} height={`${LOGO_SIZE}px`} borderRadius="8px" justifyContent="center">
-                <img
-                  alt="Geyser logo"
-                  style={{
-                    maxWidth: '100%',
-                    height: '100%',
-                  }}
-                  src={centerLogo}
-                />
-              </HStack>
-            </HStack>
-
-            <QRCode
-              qrStyle="dots"
-              id={lightModeColors.neutral[1000]}
-              size={QR_SIZE}
-              bgColor={lightModeColors.neutral[0]}
-              fgColor={lightModeColors.neutral[1000]}
-              value={qrCodeValue}
-              removeQrCodeBehindLogo={true}
-            />
-            <Body size="xs" light>
-              {qrCodeText}
-            </Body>
-          </VStack>
+          <ProjectShareQrCodeComponent
+            qrCodeValue={qrCodeValue}
+            qrCodeText={qrCodeText}
+            centerLogo={centerLogo}
+            qrSize={QR_SIZE}
+            logoSize={LOGO_SIZE}
+          />
         </HStack>
+
         <HStack
           position="absolute"
           bottom={0}
@@ -98,3 +61,67 @@ export const ProjectShareBanner = forwardRef<HTMLDivElement, Props>(
     )
   },
 )
+
+export const ProjectShareQrCodeComponent = ({
+  qrCodeValue,
+  qrCodeText,
+  centerLogo,
+  qrSize,
+  logoSize,
+}: {
+  qrCodeValue: string
+  qrCodeText?: string
+  centerLogo: string
+  qrSize: number
+  logoSize: number
+} & StackProps) => {
+  return (
+    <VStack
+      borderColor={'neutral.1000'}
+      overflow={'hidden'}
+      _hover={{ cursor: 'pointer' }}
+      position="relative"
+      backgroundColor="utils.whiteContrast"
+      borderRadius={8}
+      gap={0}
+      pb={1}
+    >
+      <HStack
+        background="white"
+        padding="2px"
+        position={'absolute'}
+        top={`${(qrSize - (logoSize - 6) / 2) / 2}px`}
+        left={`${(qrSize - (logoSize - 6) / 2) / 2}px`}
+        borderRadius="8px"
+        width={`${LOGO_SIZE + 4}px`}
+        height={`${LOGO_SIZE + 4}px`}
+      >
+        <HStack width={`${LOGO_SIZE}px`} height={`${LOGO_SIZE}px`} borderRadius="8px" justifyContent="center">
+          <img
+            alt="Geyser logo"
+            style={{
+              maxWidth: '100%',
+              height: '100%',
+            }}
+            src={centerLogo}
+          />
+        </HStack>
+      </HStack>
+
+      <QRCode
+        qrStyle="dots"
+        id={lightModeColors.neutral[1000]}
+        size={qrSize}
+        bgColor={lightModeColors.utils.pbg}
+        fgColor={lightModeColors.utils.text}
+        value={qrCodeValue}
+        removeQrCodeBehindLogo={true}
+      />
+      {qrCodeText && (
+        <Body size="xs" light>
+          {qrCodeText}
+        </Body>
+      )}
+    </VStack>
+  )
+}

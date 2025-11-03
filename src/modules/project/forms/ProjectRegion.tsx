@@ -1,24 +1,19 @@
 import { StackProps } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { UseFormReturn } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
 
 import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
 import { countriesAtom } from '@/shared/state/countriesAtom.ts'
 
-import { Country, Location, Maybe } from '../../../types'
+import { Country } from '../../../types'
 import { ProjectCreationVariables } from '../pages/projectCreation/hooks/useProjectForm.tsx'
-import { ProjectState } from '../state/projectAtom'
 
 interface ProjectRegionProps extends StackProps {
   form: UseFormReturn<ProjectCreationVariables>
-  location?: Maybe<Location>
-  updateProject: (project: Partial<ProjectState>) => void
 }
 
-export const ProjectRegion = ({ form, location, updateProject, ...rest }: ProjectRegionProps) => {
-  const { t } = useTranslation()
-
+export const ProjectRegion = ({ form }: ProjectRegionProps) => {
   const countriesData = useAtomValue(countriesAtom)
 
   return (

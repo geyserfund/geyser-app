@@ -10,6 +10,14 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
       title
       name
       thumbnailImage
+      keys {
+        nostrKeys {
+          publicKey {
+            hex
+            npub
+          }
+        }
+      }
     }
     resource {
       ... on Project {
@@ -22,7 +30,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         id
         title
         entryDescription: description
-        markdown
+        content
         entryImage: image
       }
       ... on Contribution {

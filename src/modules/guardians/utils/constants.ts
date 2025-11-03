@@ -1,15 +1,16 @@
 import { t } from 'i18next'
 
 import {
+  GuardianPartnerBitcoinGamesLabsUrl,
   GuardianPartnerBitcoinNewsUrl,
   GuardianPartnerBitcoinTradingCardsUrl,
   GuardianPartnerDJPUrl,
   GuardianPartnerHodlersUrl,
   GuardianPartnerInitialCapitalUrl,
+  GuardianPartnerLightningPlacesUrl,
   GuardianPartnerNoGoodUrl,
   GuardianPartnerRhinoUrl,
   GuardianPartnerSoloSatoshiUrl,
-  GuardianPartnerWalletofSatoshiUrl,
 } from '@/shared/constants/platform/url'
 import { GuardianType } from '@/types/index.ts'
 
@@ -17,11 +18,11 @@ export const PartnerUrls = [
   { image: GuardianPartnerNoGoodUrl, link: 'https://www.nogood.studio/' },
   { image: GuardianPartnerBitcoinTradingCardsUrl, link: 'https://btc-tc.com/' },
   { image: GuardianPartnerHodlersUrl, link: 'https://hodlersofficial.com/' },
-  { image: GuardianPartnerSoloSatoshiUrl, link: 'https://www.solosatoshi.com/' },
+  { image: GuardianPartnerBitcoinGamesLabsUrl, link: 'https://bitcoingameslab.com/satoshis-goal' },
 
-  { image: GuardianPartnerWalletofSatoshiUrl, link: 'https://www.walletofsatoshi.com/' },
   { image: GuardianPartnerInitialCapitalUrl, link: 'https://www.initialcapital.com/' },
   { image: GuardianPartnerRhinoUrl, link: 'https://rhinobitcoin.com/' },
+  { image: GuardianPartnerLightningPlacesUrl, link: 'https://lightningplaces.com/' },
 
   { image: GuardianPartnerDJPUrl, link: 'https://djp.pl/' },
   { image: GuardianPartnerBitcoinNewsUrl, link: 'https://bitcoinnews.com/' },
@@ -58,6 +59,12 @@ export const InvestorData = [
     name: 'Coreteq',
     image: 'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/investors/investor6-coreteq.png',
     link: 'https://coreteq.ventures/',
+  },
+  {
+    name: 'BTC Curacao',
+    image:
+      'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/investors/investor7-btc-curacao.png',
+    link: 'https://btccuracao.com/',
   },
 ]
 

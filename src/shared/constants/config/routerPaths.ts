@@ -113,8 +113,11 @@ export enum PathName {
   dashboardRewards = 'rewards',
   dashboardFundingGoal = 'goal',
 
+  grantApply = 'apply',
+
   projectFunding = 'funding',
   fundingDetails = 'details',
+  fundingGuardians = 'support',
   fundingSubscription = 'subscription',
   fundingPayment = 'payment',
   fundingLaunchPayment = 'launch',
@@ -178,6 +181,7 @@ const pathsMap = {
   discoveryActivityFollowed: () => `/${PathName.activity}/${PathName.activityFollowed}`,
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
+  discoveryGrantApply: (grantId: string) => `/${PathName.grants}/${grantId}/${PathName.grantApply}`,
   discoveryMerch: () => `/${PathName.merch}`,
   discoveryLaunchpad: () => `/${PathName.launchpad}`,
 
@@ -272,6 +276,9 @@ const pathsMap = {
   projectFunding: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectFunding}`,
   fundingDetails: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingDetails}`,
+
+  fundingGuardians: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingGuardians}`,
 
   fundingLaunchPayment: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingLaunchPayment}`,

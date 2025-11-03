@@ -3,8 +3,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { fetchFeaturedProject } from '@/api/airtable'
-import { getFeaturedProject } from '@/shared/constants'
-import { useNotification } from '@/utils'
+import { __production__ } from '@/shared/constants/index.ts'
 
 import { FeaturedCardSkeleton } from '../components/FeaturedCardLayout.tsx'
 import { FeaturedDisplayCard } from '../components/FeaturedDisplayCard.tsx'
@@ -35,10 +34,11 @@ export type FeaturedAirtableResponse = {
 }
 
 export const Featured = () => {
-  const toast = useNotification()
   const { t } = useTranslation()
 
   const [loading, setLoading] = useState(true)
+
+  const [noData, setNoData] = useState(false)
 
   const [data, setData] = useState<FeatureAirtableData>()
   const [allAirtableData, setAllAirtableData] = useState<FeatureAirtableData[]>([])
@@ -46,18 +46,20 @@ export const Featured = () => {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        const response: FeaturedAirtableResponse = await fetchFeaturedProject()
+        if (__production__) {
+          const response: FeaturedAirtableResponse = await fetchFeaturedProject()
 
-        if (response.records.length > 1) {
-          setAllAirtableData(response.records.map((record) => record.fields).filter((data) => data.Name !== ''))
-        }
+          if (response.records.length > 1) {
+            setAllAirtableData(response.records.map((record) => record.fields).filter((data) => data.Name !== ''))
+          }
 
-        const data = response?.records?.[0]?.fields
-        if (data) {
-          setData(data)
+          const data = response?.records?.[0]?.fields
+          if (data) {
+            setData(data)
+          }
         }
       } catch (error) {
-        toast.error({ title: 'Failed to fetch featured project' })
+        setNoData(true)
       }
 
       setLoading(false)
@@ -87,26 +89,12 @@ export const Featured = () => {
       return <FeaturedGrantCard grantId={data.Name} />
     }
 
-    return <FeaturedProjectCard projectName={getFeaturedProject()} />
+    return null
   }
 
-  // const rightContent = () => {
-  //   return (
-  //     <Button
-  //       as={RouterLink}
-  //       to={getPathWithGeyserPromotionsHero(
-  //         'projectRewardView',
-  //         GEYSER_PROMOTIONS_PROJECT_NAME,
-  //         GEYSER_GET_FEATURED_REWARD_ID,
-  //       )}
-  //       variant="surface"
-  //       colorScheme="primary1"
-  //       rightIcon={<PiStarFour />}
-  //     >
-  //       {t('Feature project')}
-  //     </Button>
-  //   )
-  // }
+  if (noData) {
+    return null
+  }
 
   return (
     <VStack alignItems="start" flex={1} spacing={5} width="100%" maxWidth={{ base: '100%', md: '48%' }}>

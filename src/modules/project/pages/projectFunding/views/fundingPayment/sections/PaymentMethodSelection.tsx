@@ -56,7 +56,7 @@ export const PaymentMethodSelection = () => {
 
     if (hasFiatPaymentMethod) {
       navBarItems.push({
-        name: t('Fiat'),
+        name: t('Credit Card'),
         key: PaymentMethods.fiatSwap,
         path: PathName.fundingPaymentFiatSwap,
         isDisabled: isDisabled || Boolean(fiatSwapAmountWarning) || !userId,
