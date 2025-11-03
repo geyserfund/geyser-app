@@ -28,7 +28,9 @@ export const Fundraisers = () => {
     <Tabs w="full" variant="secondary" onChange={(index) => setActiveTabIndex(index)}>
       <TabList gap={4}>
         {tabs.map((tab) => (
-          <Tab key={tab.label}>{tab.label}</Tab>
+          <Tab key={tab.label} fontSize={{ base: 'xs', sm: 'md' }}>
+            {tab.label}
+          </Tab>
         ))}
       </TabList>
       <TabPanels>

@@ -173,7 +173,7 @@ export const AnimatedNavSlide = ({
               >
                 {item.icon}
                 {
-                  <Body as="span" size="md" fontWeight={isActive ? 700 : 500} paddingTop={6}>
+                  <Body as="span" size="md" fontWeight={isActive ? 700 : 500} paddingTop={4}>
                     {t(item.name)}
                   </Body>
                 }

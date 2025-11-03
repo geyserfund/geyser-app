@@ -9,7 +9,7 @@ export const PlatformNav = () => {
   const location = useLocation()
 
   const ProjectNavigationButtons = useMemo(() => {
-    const buttonDimension = '60px'
+    const buttonDimension = '50px'
     const buttonList = [
       {
         name: 'Campaigns',

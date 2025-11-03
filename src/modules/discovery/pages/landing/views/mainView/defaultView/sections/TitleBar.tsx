@@ -22,7 +22,11 @@ export const TitleBar = () => {
   return (
     <VStack w="full" gap={0}>
       <VStack w="full" spacing={{ base: 4, lg: 4 }}>
-        <HStack flexDirection={{ base: 'column', lg: 'row' }} w="full" justifyContent="space-between">
+        <HStack
+          flexDirection={{ base: isNotLandingPage ? 'row' : 'column', lg: 'row' }}
+          w="full"
+          justifyContent="space-between"
+        >
           {isNotLandingPage ? (
             <Button
               as={Link}
@@ -30,9 +34,10 @@ export const TitleBar = () => {
               variant="surface"
               colorScheme="neutral1"
               color="utils.text"
+              minWidth={'80px'}
               leftIcon={<Icon as={PiArrowLeft} />}
             >
-              {t('Back to Home')}
+              {t('Back')}
             </Button>
           ) : (
             <H1 size={{ base: 'md', sm: 'lg', md: '2xl', xl: '3xl' }} bold color="primary1.11" textAlign="center">

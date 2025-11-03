@@ -8,8 +8,7 @@ import * as yup from 'yup'
 import { postCampaignLaunchRegistration } from '@/api/airtable.ts'
 import { ControlledTextArea } from '@/shared/components/controlledInput/ControlledTextArea.tsx'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
-import { Body } from '@/shared/components/typography/Body.tsx'
-import { H2 } from '@/shared/components/typography/Heading.tsx'
+import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { useNotification } from '@/utils/index.ts'
 
 type CampaignRegisterFormData = {
@@ -23,7 +22,7 @@ const campaignRegisterSchema = yup.object().shape({
 })
 
 /** RegisterCampaignLaunch: CTA card to register interest for campaign launch */
-export const RegisterCampaignLaunch = () => {
+export const RegisterCampaignLaunch = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
   const toast = useNotification()
   const [submitting, setSubmitting] = useState(false)
 
@@ -50,6 +49,7 @@ export const RegisterCampaignLaunch = () => {
         description: t('You will be notified when the campaign launch is available'),
       })
       reset()
+      onClose()
     } catch (error) {
       toast.error({
         title: t('Something went wrong.'),
@@ -61,15 +61,14 @@ export const RegisterCampaignLaunch = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <VStack w="full" maxW="930px" rounded="lg" p={6} gap={4} align="stretch">
-        <VStack w="full" align="center" gap={1}>
-          <H2 size={{ base: 'xl', lg: '3xl' }} bold>
-            {t('Register your campaign launch')}
-          </H2>
-          <Body size="lg">{t('Interested in launching an All or Nothing campaign? Register interest below!.')}</Body>
-        </VStack>
-
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="lg"
+      title={t('Register your campaign launch')}
+      subtitle={t('Interested in launching an All or Nothing campaign? Register interest below!.')}
+    >
+      <VStack as="form" onSubmit={handleSubmit(onSubmit)} w="full" gap={4} align="stretch">
         <VStack w="full" gap={4}>
           <ControlledTextInput
             name="email"
@@ -97,6 +96,6 @@ export const RegisterCampaignLaunch = () => {
           </Button>
         </HStack>
       </VStack>
-    </form>
+    </Modal>
   )
 }
