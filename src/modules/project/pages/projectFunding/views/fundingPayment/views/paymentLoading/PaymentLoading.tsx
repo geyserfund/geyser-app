@@ -41,12 +41,14 @@ export const PaymentLoading = () => {
     return null
   }
 
-  if (user?.id && isAllOrNothing(project) && !passwordConfirmed) {
-    return <PaymentPassword onComplete={() => setPasswordConfirmed(true)} />
-  }
+  if (isAllOrNothing(project)) {
+    if (user?.id && !passwordConfirmed) {
+      return <PaymentPassword onComplete={() => setPasswordConfirmed(true)} />
+    }
 
-  if (!user?.id && downloadRefundFile) {
-    return <PaymentDownloadRefundFile onComplete={() => setDownloadRefundFile(false)} />
+    if (!user?.id && downloadRefundFile) {
+      return <PaymentDownloadRefundFile onComplete={() => setDownloadRefundFile(false)} />
+    }
   }
 
   return <PaymentLoadingContribution onComplete={handleComplete} />
