@@ -96,6 +96,9 @@ export const LogoNameDark = 'https://storage.googleapis.com/geyser-projects-medi
 export const LogoNameLight = 'https://storage.googleapis.com/geyser-projects-media/app/logo-name-light.svg'
 export const LogoOutline = 'https://storage.googleapis.com/geyser-projects-media/app/logo-outline.png'
 
+export const LandingDescriptionBackdropUrl =
+  'https://storage.googleapis.com/geyser-projects-media/platform/landing_description_backdrop.webp'
+
 // Geyser Guide Links
 
 export const GrantsFAQUrl = 'https://guide.geyser.fund/geyser-docs/product-features/geyser-grants'
@@ -187,6 +190,12 @@ export const LaunchpadStartedCountdownIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/launchpad-started-countdown-illustration.png'
 export const DraftIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/draft-illustration.png'
 
+// ICONS
+
+export const CampaignIconUrl = 'https://storage.googleapis.com/geyser-projects-media/app/navigation/campaign_icon1.webp'
+export const FundraiserIconUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/navigation/fundraiser_icon1.webp'
+export const ProductsIconUrl = 'https://storage.googleapis.com/geyser-projects-media/app/navigation/products_icon1.webp'
 export const ContributionSuccessIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/contribution-success-illustration.png'
 export const MailIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/mail-illustration.png'
@@ -481,6 +490,8 @@ export const GuardianPartnerDJPUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-DJP.png'
 export const GuardianPartnerBitcoinNewsUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Bitcoin-News.png'
+export const CampaignsComingSoonImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/campaigns/campaigns_banner.png'
 
 // SEO
 

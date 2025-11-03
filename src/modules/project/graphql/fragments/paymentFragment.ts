@@ -1,4 +1,12 @@
 import { gql } from '@apollo/client'
+export const ContributionFeesFragment = gql`
+  fragment ContributionFees on PaymentFee {
+    feeType
+    feeAmount
+    feePayer
+    description
+  }
+`
 
 export const ContributionLightningPaymentDetailsFragment = gql`
   fragment ContributionLightningPaymentDetails on ContributionLightningPaymentDetails {
@@ -26,11 +34,39 @@ export const ContributionFiatSwapPaymentDetailsFragment = gql`
   }
 `
 
+export const ContributionLightningToRskSwapPaymentDetailsFragment = gql`
+  ${ContributionFeesFragment}
+  fragment ContributionLightningToRskSwapPaymentDetails on ContributionLightningToRskSwapPaymentDetails {
+    lightningInvoiceId
+    paymentRequest
+    swapJson
+    paymentId
+    amountToClaim
+    fees {
+      ...ContributionFees
+    }
+  }
+`
+
+export const ContributionOnChainToRskSwapPaymentDetailsFragment = gql`
+  ${ContributionFeesFragment}
+  fragment ContributionOnChainToRskSwapPaymentDetails on ContributionOnChainToRskSwapPaymentDetails {
+    address
+    swapJson
+    paymentId
+    fees {
+      ...ContributionFees
+    }
+  }
+`
+
 export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_DETAILS = gql`
   ${ContributionLightningPaymentDetailsFragment}
   ${ContributionOnChainSwapPaymentDetailsFragment}
   ${ContributionFiatPaymentDetailsFragment}
   ${ContributionFiatSwapPaymentDetailsFragment}
+  ${ContributionLightningToRskSwapPaymentDetailsFragment}
+  ${ContributionOnChainToRskSwapPaymentDetailsFragment}
   fragment FundingContributionPaymentDetails on ContributionPaymentsDetails {
     lightning {
       ...ContributionLightningPaymentDetails
@@ -43,6 +79,12 @@ export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_DETAILS = gql`
     }
     fiatSwap {
       ...ContributionFiatSwapPaymentDetails
+    }
+    lightningToRskSwap {
+      ...ContributionLightningToRskSwapPaymentDetails
+    }
+    onChainToRskSwap {
+      ...ContributionOnChainToRskSwapPaymentDetails
     }
   }
 `
@@ -62,7 +104,6 @@ export const FRAGMENT_PAYMENT_SUBSCRIPTION = gql`
     id
     status
     paymentType
-    contributionUUID
     failureReason
   }
 `

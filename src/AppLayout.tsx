@@ -1,5 +1,6 @@
 import { Box } from '@chakra-ui/react'
-import { Outlet } from 'react-router-dom'
+import { Suspense } from 'react'
+import { Outlet } from 'react-router'
 import PullToRefresh from 'react-simple-pull-to-refresh'
 
 import { PullingDownContent } from './components/ui'
@@ -7,11 +8,12 @@ import { useHistoryRoutes } from './config/routes/hooks/useHistoryRoutes'
 import { useMatchRoutes } from './config/routes/hooks/useMatchRoutes'
 import { useAuthContext } from './context'
 import { useActivityHook } from './modules/discovery/hooks/useActivityHook'
+import { LoadingPage } from './modules/general/loading/index.tsx'
 import { PlatformNavBar } from './modules/navigation/platformNavBar/PlatformNavBar'
 import { InfoBanner } from './modules/notification/InfoBanner'
 import { NoticeBanner } from './modules/notification/NoticeBanner'
-import { LoadingPage } from './modules/general/loading/index.tsx'
-import { dimensions, ID } from './shared/constants'
+import { dimensions } from './shared/constants/components/dimensions.ts'
+import { ID } from './shared/constants/components/id.ts'
 import { useLayoutAnimation } from './shared/hooks'
 import { useCountriesData } from './shared/hooks/graphqlState/useCountriesData.ts'
 import { useInitBtcRate } from './shared/hooks/platform/useInitBtcRate'
@@ -40,7 +42,7 @@ export const AppLayout = () => {
   }
 
   return (
-    <>
+    <Suspense fallback={<LoadingPage />}>
       {loading && <LoadingPage />}
       <PullToRefresh
         onRefresh={handleFunction}
@@ -78,6 +80,6 @@ export const AppLayout = () => {
           </Box>
         </Box>
       </PullToRefresh>
-    </>
+    </Suspense>
   )
 }

@@ -1,10 +1,11 @@
 import { Box, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { ScrollInvoke } from '@/helpers'
 import { Body } from '@/shared/components/typography'
-import { getPath, ID, TelescopeUrl } from '@/shared/constants'
+import { ID } from '@/shared/constants/components/id.ts'
+import { getPath, TelescopeUrl } from '@/shared/constants/index.ts'
 import { Activity, ActivityFeedName } from '@/types'
 import { useMobileMode } from '@/utils'
 

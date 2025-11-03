@@ -46,7 +46,7 @@ import { MarkdownToolbar } from './MarkdownToolbar'
 const turndownService = new TurndownService()
 turndownService.keep(['iframe'])
 
-interface Props {
+export type MarkdownFieldProps = {
   autoFocus?: boolean
   preview?: boolean
   content?: string
@@ -90,7 +90,7 @@ export const MarkdownField = ({
   noFloatingToolbar,
   toolbarMaxWidth,
   fontFamily,
-}: Props) => {
+}: MarkdownFieldProps) => {
   const isMobile = useMobileMode()
 
   const onError: InvalidContentHandler = useCallback(({ json, invalidContent, transformers }) => {

@@ -1,7 +1,7 @@
 import { Box, Button, Container, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 

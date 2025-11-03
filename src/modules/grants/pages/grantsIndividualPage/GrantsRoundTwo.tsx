@@ -1,7 +1,7 @@
 import { Box, Button, Image, Link, Text, Wrap, WrapItem } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import { SatoshiIconTilted } from '../../../../components/icons'
 import { AppFooter } from '../../../../components/molecules'

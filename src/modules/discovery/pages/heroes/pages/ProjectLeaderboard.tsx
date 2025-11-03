@@ -4,7 +4,7 @@ import { PiShare } from 'react-icons/pi'
 
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { dimensions } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { BackButton } from '@/shared/molecules/BackButton.tsx'
 import { toPx } from '@/utils'
 

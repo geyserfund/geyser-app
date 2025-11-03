@@ -1,6 +1,6 @@
 import { Box, HStack, Image, Skeleton, SkeletonCircle, VStack } from '@chakra-ui/react'
 import { PiLightning, PiRocketLaunch } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body } from '@/shared/components/typography'

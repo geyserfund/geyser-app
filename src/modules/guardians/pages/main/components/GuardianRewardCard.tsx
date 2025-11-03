@@ -2,14 +2,14 @@ import { Box, Button, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useNavigate } from 'react-router'
 
-import { GuardianRewardType, RewardMap } from '@/modules/guardians/data.ts'
+import { GuardianRewardType, RewardMap } from '@/modules/guardians/utils/constants.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
+import { GUARDIANS_PROJECT_NAME } from '@/shared/constants/platform/projectNames.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { GuardianProjectRewardFragment } from '@/types/index.ts'
 import { centsToDollars, commaFormatted } from '@/utils/index.ts'
 
-import { GUARDIANS_PROJECT_NAME } from '../../character/components/GuardiansPrice.tsx'
 import { GuardianHoverEffectImage } from './GuardianHoverEffectImage.tsx'
 import { MediaCarouselForGuardianRewards } from './MediaCarouselForGuardianRewards.tsx'
 

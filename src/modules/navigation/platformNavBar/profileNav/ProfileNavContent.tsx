@@ -1,20 +1,21 @@
 import { Box, Divider, HStack, Link as ChakraLink, MenuItem, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { PiArrowUpRight } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { PiArrowUpRight, PiUserCircle } from 'react-icons/pi'
+import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { Body } from '@/shared/components/typography'
-import { dimensions, getPath, GeyserManifestoUrl, GeyserSubscribeUrl } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { getPath, GeyserManifestoUrl, GeyserSubscribeUrl } from '@/shared/constants/index.ts'
 
 import { DiscoveryNavItemKey, discoveryNavItems } from '../../discoveryNav/discoveryNavData'
-import { ProfileNavUserInfo } from './components'
+import { CreateProjectButton } from '../components/CreateProjectButton.tsx'
 import { ModeChange } from './components/ModeChange'
 
 export const ProfileNavContent = () => {
-  const { logout, user } = useAuthContext()
+  const { logout, user, isLoggedIn } = useAuthContext()
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
   const followedActivityDot = useAtomValue(followedActivityDotAtom)
@@ -29,16 +30,16 @@ export const ProfileNavContent = () => {
       height="100%"
     >
       <VStack w="full" spacing={4}>
-        {user.id && (
-          <>
-            <MenuItem as={Link} height="fit-content" to={getPath('userProfile', user.id)}>
-              <ProfileNavUserInfo user={user} />
-            </MenuItem>
-
-            <Divider borderColor="neutral1.6" />
-          </>
-        )}
         <VStack spacing={2} w="full">
+          {isLoggedIn && (
+            <MenuItem as={Link} to={getPath('heroProfile', user.heroId)}>
+              <HStack position="relative">
+                <PiUserCircle fontSize="18px" />
+                <Body size="md">{t('Profile')}</Body>
+              </HStack>
+            </MenuItem>
+          )}
+
           {discoveryNavItems.map((discoveryNav) => {
             const activityDot =
               discoveryNav.key === DiscoveryNavItemKey.MyProjects
@@ -68,6 +69,8 @@ export const ProfileNavContent = () => {
             )
           })}
         </VStack>
+        <Divider borderColor="neutral1.6" />
+        <CreateProjectButton w="full" />
         {user.id ? (
           <>
             <Divider borderColor="neutral1.6" />

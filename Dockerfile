@@ -33,6 +33,7 @@ WORKDIR /usr/app
 COPY ./public ./public
 COPY ./src ./src
 copy ./language ./language
+COPY ./config ./config
 COPY index.html tsconfig.json tsconfig.node.json vite.config.ts eslint.config.mjs .prettierrc server.ts generateBuildVersion.cjs ./
 
 ARG VITE_APP_API_ENDPOINT
@@ -45,6 +46,8 @@ ARG VITE_APP_AUTH_SERVICE_ENDPOINT
 ARG VITE_APP_BOLTZ_SWAP_DOMAIN
 ARG VITE_APP_LNG_PORT
 ARG VITE_APP_STRIPE_API_KEY
+ARG VITE_APP_BOLTZ_ROUTER_CONTRACT_ADDRESS
+ARG VITE_APP_BOLTZ_SWAP_CONTRACT_ADDRESS
 # Combine commands to reduce layers and use build cache
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
     printenv > .env \

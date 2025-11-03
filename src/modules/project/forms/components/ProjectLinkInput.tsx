@@ -1,8 +1,17 @@
-import { Box, HStack, IconButton, Input, InputProps, StackProps } from '@chakra-ui/react'
+import {
+  Icon,
+  IconButton,
+  Input,
+  InputGroup,
+  InputGroupProps,
+  InputLeftElement,
+  InputProps,
+  InputRightElement,
+} from '@chakra-ui/react'
 import { IconType } from 'react-icons'
 import { PiX } from 'react-icons/pi'
 
-interface ProjectLinkInputProps extends StackProps {
+interface ProjectLinkInputProps extends InputGroupProps {
   leftIcon: IconType
   inputProps?: InputProps
   handleClose: () => void
@@ -21,23 +30,11 @@ export const ProjectLinkInput = ({
   ...rest
 }: ProjectLinkInputProps) => {
   return (
-    <HStack
-      w="100%"
-      size="md"
-      padding="12px 5px"
-      backgroundColor="utils.pbg"
-      borderRadius="8px"
-      border="1px solid"
-      borderColor="neutral1.6"
-      {...rest}
-    >
-      <HStack justifyContent="center" width="50px">
-        <LeftIcon fontSize="20px" />
-      </HStack>
+    <InputGroup w="full" backgroundColor="utils.pbg" {...rest}>
+      <InputLeftElement>
+        <Icon as={LeftIcon} fontSize="20px" />
+      </InputLeftElement>
       <Input
-        border="1px solid"
-        borderRadius="4px !important"
-        borderColor={'neutral1.3'}
         placeholder="https://twitter.com/halfin"
         value={value}
         onChange={onChange}
@@ -48,9 +45,17 @@ export const ProjectLinkInput = ({
         }}
         {...inputProps}
       />
-      <Box paddingX="5px" border="none">
-        <IconButton variant="ghost" aria-label="close-icon" onClick={handleClose} icon={<PiX />} />
-      </Box>
-    </HStack>
+      <InputRightElement>
+        <IconButton
+          size="md"
+          variant="ghost"
+          colorScheme="error"
+          aria-label="close-icon"
+          color="utils.text"
+          onClick={handleClose}
+          icon={<Icon as={PiX} />}
+        />
+      </InputRightElement>
+    </InputGroup>
   )
 }

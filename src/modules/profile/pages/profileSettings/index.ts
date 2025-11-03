@@ -1,5 +1,5 @@
-import { ProfileSettings } from './ProfileSettings'
-import { ProfileSettingsMain } from './ProfileSettingsMain'
+import { ProfileSettings } from './layouts/ProfileSettingsLayout.tsx'
+import { ProfileSettingsMain } from './layouts/ProfileSettingsMobileLayout.tsx'
 import { ProfileSettingsGeneral } from './views/ProfileSettingsGeneral.tsx'
 import { ProfileSettingsNotifications } from './views/ProfileSettingsNotifications.tsx'
 import { ProfileSettingsSubscriptions } from './views/ProfileSettingsSubscriptions.tsx'

@@ -1,6 +1,6 @@
 import { createUseStyles } from 'react-jss'
 
-import { dimensions } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 
 export const slideInRight = {
   '@keyframes slide-in-right': {

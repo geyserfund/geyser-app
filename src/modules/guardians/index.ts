@@ -1,6 +1,5 @@
-import { Guardians } from './Guardians'
-import { CharacterPage } from './pages/character/CharacterPage'
-import { GuardiansMainPage } from './pages/main/GuardiansMainPage'
-import { Manifesto } from './pages/Manifesto'
+import { GuardiansLayout } from './layouts/GuardiansLayout.tsx'
+import { GuardiansMainPage } from './pages/main/GuardiansMainPage.tsx'
+import { Manifesto } from './pages/Manifesto.tsx'
 
-export { CharacterPage, Guardians, GuardiansMainPage, Manifesto }
+export { GuardiansLayout, GuardiansMainPage, Manifesto }

@@ -4,6 +4,8 @@ import { PiInfo } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
 
+import { BodyProps } from '../typography/Body.tsx'
+
 export interface FieldContainerProps extends Omit<StackProps, 'title'> {
   title?: ReactNode
   subtitle?: ReactNode
@@ -11,8 +13,9 @@ export interface FieldContainerProps extends Omit<StackProps, 'title'> {
   error?: ReactNode
   children?: ReactNode
   boldTitle?: boolean
+  boldSubtitle?: boolean
   required?: boolean
-  size?: 'sm' | 'md' | 'lg'
+  size?: BodyProps['size']
 }
 
 export const FieldContainer = ({
@@ -23,20 +26,24 @@ export const FieldContainer = ({
   info,
   error = null,
   boldTitle = false,
-  size = 'md',
+  boldSubtitle = false,
+  size = 'lg',
   ...props
 }: FieldContainerProps) => {
   return (
     <VStack spacing={0} alignItems="start" w="100%" {...props}>
-      {title && (
-        <Body size={size} wordBreak="keep-all" fontWeight={boldTitle ? 700 : 500}>
-          {title}
-          {required && '*'}
-        </Body>
-      )}
-      {subtitle && (
+      {title &&
+        (typeof title === 'string' ? (
+          <Body size={size} wordBreak="keep-all" fontWeight={boldTitle ? 700 : 500}>
+            {title}
+            {required && '*'}
+          </Body>
+        ) : (
+          title
+        ))}
+      {subtitle ? (
         <HStack w="full">
-          <Body size={'sm'} light>
+          <Body size={'sm'} light fontWeight={boldSubtitle ? 700 : 400}>
             {subtitle}
           </Body>
           {info && (
@@ -47,7 +54,7 @@ export const FieldContainer = ({
             </Tooltip>
           )}
         </HStack>
-      )}
+      ) : null}
 
       {children}
 

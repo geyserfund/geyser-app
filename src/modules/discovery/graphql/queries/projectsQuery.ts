@@ -4,6 +4,7 @@ import {
   FRAGMENT_PROJECT_FOR_LANDING_PAGE,
   FRAGMENT_PROJECT_FOR_LAUNCHPAD_PAGE,
   FRAGMENT_PROJECT_FOR_MY_PROJECTS,
+  FRAGMENT_PROJECT_THUMBNAIL_IMAGE,
 } from '../fragments/projectFragment'
 
 export const QUERY_PROJECTS_SUMMARY = gql`
@@ -88,6 +89,70 @@ export const QUERY_PROJECTS_FOR_MY_PROJECTS = gql`
         project {
           ...ProjectForMyProjects
         }
+      }
+    }
+  }
+`
+
+export const QUERY_RECOMMENDED_FOR_YOU_PROJECTS = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectRecommendedGet($input: ProjectRecommendedGetInput!) {
+    projectRecommendedGet(input: $input) {
+      project {
+        ...ProjectForLandingPage
+      }
+    }
+  }
+`
+
+export const QUERY_AON_PROJECTS_MOST_FUNDED_THIS_WEEK = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectsMostFundedAllOrNothing($input: ProjectsMostFundedAllOrNothingInput!) {
+    projectsMostFundedAllOrNothing(input: $input) {
+      project {
+        ...ProjectForLandingPage
+      }
+    }
+  }
+`
+
+export const QUERY_PROJECT_THUMBNAIL_IMAGE = gql`
+  ${FRAGMENT_PROJECT_THUMBNAIL_IMAGE}
+  query ProjectThumbnailImage($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      ...ProjectThumbnailImage
+    }
+  }
+`
+
+export const QUERY_PROJECTS_ALMOST_FUNDED_ALL_OR_NOTHING = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectsAonAlmostFunded($input: ProjectsAonAlmostFundedInput) {
+    projectsAonAlmostFunded(input: $input) {
+      projects {
+        ...ProjectForLandingPage
+      }
+    }
+  }
+`
+
+export const QUERY_PROJECTS_ALMOST_OVER_ALL_OR_NOTHING = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectsAonAlmostOver($input: ProjectsAonAlmostOverInput) {
+    projectsAonAlmostOver(input: $input) {
+      projects {
+        ...ProjectForLandingPage
+      }
+    }
+  }
+`
+
+export const QUERY_PROJECTS_MOST_FUNDED_TIA = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectsMostFundedTakeItAll($input: ProjectsMostFundedTakeItAllInput!) {
+    projectsMostFundedTakeItAll(input: $input) {
+      project {
+        ...ProjectForLandingPage
       }
     }
   }

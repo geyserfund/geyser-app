@@ -3,6 +3,7 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEffect, useState } from 'react'
 
 import { authUserAtom, followedProjectsAtom, isUserAProjectCreatorAtom } from '@/modules/auth/state/authAtom'
+import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 
 import { getAuthEndPoint } from '../config/domain'
 import {
@@ -101,6 +102,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useAtom(authUserAtom)
   const setFollowedProjects = useSetAtom(followedProjectsAtom)
   const isUserAProjectCreator = useAtomValue(isUserAProjectCreatorAtom)
+  const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
+  const setUserAccountKeys = useSetAtom(userAccountKeysAtom)
 
   const [queryCurrentUser, { loading: loadingUser, error }] = useMeLazyQuery({
     fetchPolicy: 'network-only',
@@ -128,6 +131,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = useCallback(() => {
     setUser({ ...defaultUser })
+    setUserAccountKeyPair(undefined)
+    setUserAccountKeys(undefined)
     setFollowedProjects([])
     try {
       fetch(`${authServiceEndPoint}/logout`, {

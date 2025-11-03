@@ -1,11 +1,12 @@
 import { Button } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiGear } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '@/modules/profile/state'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { dimensions, getPath } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { getPath } from '@/shared/constants/index.ts'
 
 import { AccountInfo } from './views/AccountInfo'
 import { Badges } from './views/badges'

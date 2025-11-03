@@ -2,14 +2,18 @@ import { atom, useAtomValue } from 'jotai'
 
 import { getPath, PathName } from '../../../shared/constants'
 import {
-  creatorProjectCreationRoutes as routesForPrivateProjectLaunch,
+  allCreatorProjectCreationRoutes,
+  privateCreatorProjectCreationRoutes as routesForPrivateProjectLaunch,
   profileSettingsRoutes,
   projectCreatorRoutes as routesForProjectCreator,
   projectPostCreatorRoutes,
   routeMatchForAtom,
 } from '../routeGroups'
 
-const routesForPrivateProjectLaunchAtom = atom(routeMatchForAtom(routesForPrivateProjectLaunch))
+export const isRouteForProjectCreationAtom = atom(routeMatchForAtom(allCreatorProjectCreationRoutes))
+
+/** This atom is used to check if the current route is a private project creation route */
+export const isPrivateRouteForProjectCreationAtom = atom(routeMatchForAtom(routesForPrivateProjectLaunch))
 
 export const isProjectCreationRouteAtom = atom(routeMatchForAtom(routesForPrivateProjectLaunch))
 
@@ -24,7 +28,7 @@ const routesForProfileEditAtom = atom(routeMatchForAtom(profileSettingsRoutes))
 export const useRouteMatchesForPrivateRoute = () => {
   const isProjectCreatorRoute = useAtomValue(routesForProjectCreatorAtom)
   const isEntryCreationRoute = useAtomValue(routesForEntryCreationAtom)
-  const isPrivateProjectLaunchRoute = useAtomValue(routesForPrivateProjectLaunchAtom)
+  const isPrivateProjectLaunchRoute = useAtomValue(isPrivateRouteForProjectCreationAtom)
   const isProfileSettingsRoute = useAtomValue(routesForProfileEditAtom)
   return {
     isProjectCreatorRoute,

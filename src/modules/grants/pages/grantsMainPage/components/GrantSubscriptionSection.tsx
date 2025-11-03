@@ -1,7 +1,7 @@
 import { Button, Flex, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiBell, PiCoins } from 'react-icons/pi'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'

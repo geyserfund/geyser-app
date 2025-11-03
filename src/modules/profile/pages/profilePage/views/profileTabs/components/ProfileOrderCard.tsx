@@ -2,7 +2,7 @@ import { Badge, Box, HStack, Tooltip, VStack } from '@chakra-ui/react'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 
-import { getUSD } from '@/modules/project/pages1/projectDashboard/common'
+import { getUSD } from '@/modules/project/pages/projectDashboard/common'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'

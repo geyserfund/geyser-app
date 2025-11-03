@@ -1,7 +1,7 @@
 import { HStack, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
 import { ProfileText } from '@/shared/components/display/ProfileText'
@@ -15,6 +15,7 @@ import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
 import { LeaderboardPeriod } from '@/types'
 import { getShortAmountLabel } from '@/utils'
 
+import { ProjectRowLayout } from '../../landing/views/mainView/defaultView/components/ProjectRowLayout.tsx'
 import { useTopContributors } from '../hooks'
 import { useTopAmbassadors } from '../hooks/useTopAmbassadors'
 import { useTopCreators } from '../hooks/useTopCreators'
@@ -47,26 +48,33 @@ export const GeyserHeroes = () => {
   const { creators, loading: creatorsLoading } = useTopCreators(period, MAX_HEROES)
 
   return (
-    <VStack w="full" flex={1}>
-      <TitleWithPeriod
-        title={t('Top Heroes')}
-        period={period}
-        seeAllTo={getPath('heroesContributor')}
-        handlePeriodChange={handlePeriodChange}
-      />
-      <SponsorshipBanner />
-      <Stack direction={{ base: 'column', lg: 'row' }} w="full" alignItems={'start'} spacing={4}>
-        <HeroSectionWrapper title={t('Creators')} description="Lead initiatives and bring ideas to life.">
-          <RenderHeroList period={period} data={creators} loading={creatorsLoading} labels={HeroListLabels} />
-        </HeroSectionWrapper>
-        <HeroSectionWrapper title={t('Contributors')} description="Power project ideas with their sats.">
-          <RenderHeroList period={period} data={contributors} loading={contributorsLoading} labels={HeroListLabels} />
-        </HeroSectionWrapper>
-        <HeroSectionWrapper title={t('Ambassadors')} description="Spread the word to help projects grow.">
-          <RenderHeroList period={period} data={ambassadors} loading={ambassadorsLoading} labels={HeroListLabels} />
-        </HeroSectionWrapper>
-      </Stack>
-    </VStack>
+    <ProjectRowLayout
+      w="full"
+      title={t('Top Heroes')}
+      rightContent={
+        <TitleWithPeriod
+          w="auto"
+          period={period}
+          seeAllTo={getPath('heroesContributor')}
+          handlePeriodChange={handlePeriodChange}
+        />
+      }
+    >
+      <VStack w="full" flex={1}>
+        <SponsorshipBanner />
+        <Stack direction={{ base: 'column', lg: 'row' }} w="full" alignItems={'start'} spacing={4}>
+          <HeroSectionWrapper title={t('Creators')} description="Lead initiatives and bring ideas to life.">
+            <RenderHeroList period={period} data={creators} loading={creatorsLoading} labels={HeroListLabels} />
+          </HeroSectionWrapper>
+          <HeroSectionWrapper title={t('Contributors')} description="Power project ideas with their sats.">
+            <RenderHeroList period={period} data={contributors} loading={contributorsLoading} labels={HeroListLabels} />
+          </HeroSectionWrapper>
+          <HeroSectionWrapper title={t('Ambassadors')} description="Spread the word to help projects grow.">
+            <RenderHeroList period={period} data={ambassadors} loading={ambassadorsLoading} labels={HeroListLabels} />
+          </HeroSectionWrapper>
+        </Stack>
+      </VStack>
+    </ProjectRowLayout>
   )
 }
 
@@ -127,7 +135,7 @@ const RenderHeroList = ({
                 w="full"
                 flex={1}
                 overflow={'hidden'}
-                key={datum[labels?.username]}
+                key={`${datum[labels?.username]}-${index}`}
                 minWidth={'250px'}
                 maxWidth={'335px'}
                 _hover={{ cursor: 'pointer', backgroundColor: 'neutral1.3' }}

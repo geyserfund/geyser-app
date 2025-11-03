@@ -1,6 +1,6 @@
 import { Button, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 import { Head } from '@/config/Head'
 import { H2 } from '@/shared/components/typography'

@@ -1,6 +1,6 @@
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
-import { matchRoutes, useLocation } from 'react-router-dom'
+import { matchRoutes, useLocation } from 'react-router'
 
 import { platformRoutes } from '../routes'
 import { matchRoutesAtom } from '../state/routesAtom'

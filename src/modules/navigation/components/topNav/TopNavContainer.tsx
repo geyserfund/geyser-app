@@ -3,7 +3,7 @@ import { HStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { PropsWithChildren } from 'react'
 
-import { dimensions } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { standardPadding } from '@/shared/styles'
 import { discoveryPageCommonLayoutStyles } from '@/shared/styles/discoveryPageLayout'
 

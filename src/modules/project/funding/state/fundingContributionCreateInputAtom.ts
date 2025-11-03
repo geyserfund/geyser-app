@@ -10,13 +10,15 @@ import {
   FundingResourceType,
   OrderItemInput,
   OrderItemType,
+  ProjectFundingStrategy,
   ProjectRewardFragment,
   QuoteCurrency,
   UserMeFragment,
 } from '@/types/generated/graphql'
 import { toInt } from '@/utils'
 
-import { sourceResourceAtom } from '../../pages1/projectView/state/sourceActivityAtom.ts'
+import { userAccountKeysAtom } from '../../../auth/state/userAccountKeysAtom.ts'
+import { sourceResourceAtom } from '../../pages/projectView/state/sourceActivityAtom.ts'
 import {
   fundingProjectAtom,
   guardianBadgesCostAtoms,
@@ -43,6 +45,8 @@ export const formattedFundingInputAtom = atom((get) => {
   const geyserTip = get(tipAtoms)
   const guardianBadgesCosts = get(guardianBadgesCostAtoms)
   const shippingCosts = get(shippingCostAtom)
+
+  const paymentsInput = get(paymentsInputAtom)
 
   const {
     donationAmount,
@@ -82,24 +86,6 @@ export const formattedFundingInputAtom = atom((get) => {
     })
   }
 
-  const paymentsInput: ContributionPaymentsInput = {
-    fiat: {
-      create: true,
-      stripe: {
-        returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
-      },
-    },
-    lightning: {
-      create: true,
-      zapRequest: null,
-    },
-    onChainSwap: {
-      create: true,
-      boltz: {
-        swapPublicKey: '',
-      },
-    },
-  }
   const geyserTotalTipAmount = guardianBadgesCosts.sats ? geyserTip.sats + guardianBadgesCosts.sats : geyserTip.sats
   const geyserTipPercentage = guardianBadgesCosts.sats
     ? (geyserTotalTipAmount * 100) / (donationAmount + rewardsCosts.sats + shippingCosts.sats)
@@ -108,6 +94,7 @@ export const formattedFundingInputAtom = atom((get) => {
     : undefined
 
   const input: ContributionCreateInput = {
+    refundable: false,
     projectId: toInt(fundingProject?.id),
     projectGoalId,
     anonymous,
@@ -142,14 +129,80 @@ export const formattedFundingInputAtom = atom((get) => {
 })
 
 /** Funding Input after request */
-export const fundingInputAfterRequestAtom = atom<(ContributionCreateInput & { user: UserMeFragment }) | null>(null)
+export const fundingInputAfterRequestAtom = atom<
+  | (ContributionCreateInput & { user: UserMeFragment; lightningPreImageHex?: string; onChainPreImageHex?: string })
+  | null
+>(null)
 
-export const setFundingInputAfterRequestAtom = atom(null, (get, set, input: ContributionCreateInput) => {
-  const user = get(authUserAtom)
-  set(fundingInputAfterRequestAtom, { ...input, user })
-})
+export const setFundingInputAfterRequestAtom = atom(
+  null,
+  (get, set, input: ContributionCreateInput & { lightningPreImageHex?: string; onChainPreImageHex?: string }) => {
+    const user = get(authUserAtom)
+    set(fundingInputAfterRequestAtom, { ...input, user })
+  },
+)
+
+export const contributionCreatePreImagesAtom = atom<{
+  lightning?: { preimageHex: string; preimageHash: string }
+  onChain?: { preimageHex: string; preimageHash: string }
+}>({})
 
 /** Reset funding input after request */
 export const resetFundingInputAfterRequestAtom = atom(null, (_, set) => {
   set(fundingInputAfterRequestAtom, null)
+  set(contributionCreatePreImagesAtom, {
+    lightning: { preimageHex: '', preimageHash: '' },
+    onChain: { preimageHex: '', preimageHash: '' },
+  })
+})
+
+const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
+  const fundingProject = get(fundingProjectAtom)
+  const userAccountKeys = get(userAccountKeysAtom)
+
+  const paymentsInput: ContributionPaymentsInput = {}
+
+  const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
+  const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
+
+  if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
+    paymentsInput.fiat = {
+      create: true,
+      stripe: {
+        returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
+      },
+    }
+    paymentsInput.lightning = {
+      create: true,
+      zapRequest: null,
+    }
+    paymentsInput.onChainSwap = {
+      create: true,
+      boltz: {
+        swapPublicKey: claimPublicKey,
+      },
+    }
+  }
+
+  if (fundingProject.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
+    paymentsInput.lightningToRskSwap = {
+      create: true,
+      boltz: {
+        claimPublicKey,
+        claimAddress,
+        preimageHash: '',
+      },
+    }
+
+    paymentsInput.onChainToRskSwap = {
+      create: true,
+      boltz: {
+        claimPublicKey,
+        claimAddress,
+        preimageHash: '',
+      },
+    }
+  }
+
+  return paymentsInput
 })

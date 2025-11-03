@@ -51,12 +51,12 @@ export const dimensions = {
       },
     },
     leftMainContainer: {
-      width: '658px',
-      minWidth: '500px',
+      width: '758px',
+      minWidth: '400px',
     },
     rightSideNav: {
-      width: '400px',
-      gap: '20px',
+      width: '420px',
+      gap: { base: '20px', xl: '40px' },
     },
     header: {
       maxHeight: '369px',
@@ -94,13 +94,18 @@ export const dimensions = {
     maxWidth: '1920px',
     textMaxWidth: '1200px',
   },
+  creation: {
+    start: {
+      maxWidth: '900px',
+    },
+  },
 
   pullDownThreshold: 120,
-  maxWidth: 1080,
+  maxWidth: 1200,
 }
 
 export const derivedDimensions = {
   heightAfterTopNavBar: `calc(100vh - ${
-    dimensions.topNavBar.desktop.height + dimensions.projectNavBar.desktop.height
+    dimensions.topNavBar.desktop.height + dimensions.projectNavBar.desktop.height + 20
   }px)`,
 }

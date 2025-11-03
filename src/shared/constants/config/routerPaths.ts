@@ -19,6 +19,12 @@ export enum PathName {
   activityGlobal = 'global',
   activityFollowed = 'followed',
 
+  projectCategory = 'category',
+  projectSubCategory = 'subcategory',
+  allOrNothing = 'allornothing',
+  campaigns = 'campaigns',
+  fundraisers = 'fundraisers',
+
   manifesto = 'manifesto',
 
   merch = 'project/geyser/rewards',
@@ -49,16 +55,29 @@ export enum PathName {
   contributionWidget = 'contribution',
 
   refund = 'refund',
+  refundFile = 'file',
   refundInitiated = 'initiated',
 
   launchStart = 'start',
+  launchRules = 'rules',
+
   launchProject = 'launch',
+
   launchProjectDetails = 'details',
-  launchProjectStory = 'story',
+  launchProjectFunding = 'funding',
+  launchFundingStrategy = 'strategy',
+  launchFundingGoal = 'goal',
+  launchStory = 'story',
   launchProjectRewards = 'rewards',
   launchProjectRewardsNew = 'rewards/new',
   launchProjectRewardsEdit = 'rewards/edit',
   launchProjectStrategy = 'strategy',
+  launchAboutYou = 'about-you',
+  launchPayment = 'payment',
+  launchPaymentWallet = 'wallet',
+  launchPaymentAccountPassword = 'account-password',
+  launchPaymentTaxId = 'tax-id',
+  launchFinalize = 'finalize',
 
   userProfile = 'user',
   userSettings = 'settings',
@@ -91,6 +110,8 @@ export enum PathName {
   dashboardStatus = 'status',
   dashboardNostr = 'nostr',
   dashboardPromote = 'promote',
+  dashboardRewards = 'rewards',
+  dashboardFundingGoal = 'goal',
 
   grantApply = 'apply',
 
@@ -118,6 +139,8 @@ export enum PathName {
 
   projectId = ':projectId',
   projectName = ':projectName',
+  categoryName = ':category',
+  subCategoryName = ':subcategory',
   rewardId = ':rewardId',
   rewardUUID = ':rewardUUID',
   userId = ':userId',
@@ -145,9 +168,14 @@ const pathsMap = {
 
   /** Discovery Routes */
   discoveryLanding: () => '/',
+  discoveryCampaigns: () => `/${PathName.campaigns}`,
+  discoveryFundraisers: () => `/${PathName.fundraisers}`,
+  discoveryProducts: () => `/${PathName.products}`,
+  discoveryAllOrNothing: () => `/${PathName.allOrNothing}`,
+  discoveryProjectCategory: (category: string) => `/${PathName.projectCategory}/${category}`,
+  discoveryProjectSubCategory: (subCategory: string) => `/${PathName.projectSubCategory}/${subCategory}`,
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,
   discoveryMyProjects: () => `/${PathName.myProjects}`,
-  discoveryProducts: () => `/${PathName.products}`,
   discoveryActivity: () => `/${PathName.activity}`,
   discoveryActivityGlobal: () => `/${PathName.activity}/${PathName.activityGlobal}`,
   discoveryActivityFollowed: () => `/${PathName.activity}/${PathName.activityFollowed}`,
@@ -238,6 +266,10 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardSettings}`,
   dashboardPromote: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardPromote}`,
+  dashboardRewards: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardRewards}`,
+  dashboardFundingGoal: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardFundingGoal}`,
 
   /** Project Funding Routes */
 
@@ -286,6 +318,7 @@ const pathsMap = {
   /** Refund Routes */
 
   refund: () => `/${PathName.refund}`,
+  refundFile: () => `/${PathName.refund}/${PathName.refundFile}`,
   refundInitiated: () => `/${PathName.refund}/${PathName.refundInitiated}`,
 
   entry: (entryID: string) => `/${PathName.entry}/${entryID}`,
@@ -298,23 +331,44 @@ const pathsMap = {
 
   /** Project creation Routes */
 
+  // Non Creation Flow path routes ( Splash pages before creation flow )
+
   launchStart: () => `/${PathName.launchProject}/${PathName.launchStart}`,
+  launchRules: () => `/${PathName.launchProject}/${PathName.launchRules}`,
+
+  // Creation  flow path routes
+
   launch: () => `/${PathName.launchProject}`,
-  launchStartProject: (projectID: string) => `/${PathName.launchProject}/${PathName.launchStart}/${projectID}`,
-  launchProject: (projectID: string) => `/${PathName.launchProject}/${projectID}`,
-  launchProjectDetails: (projectID: string) =>
-    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectDetails}`,
-  launchProjectStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStory}`,
+  launchProject: (projectID?: string) => `/${PathName.launchProject}/${projectID || 'new'}`,
+
+  launchProjectDetails: (projectID?: string) =>
+    `/${PathName.launchProject}/${projectID || 'new'}/${PathName.launchProjectDetails}`,
+  launchProjectFunding: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectFunding}`,
+  launchFundingStrategy: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectFunding}/${PathName.launchFundingStrategy}`,
+  launchFundingGoal: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchProjectFunding}/${PathName.launchFundingGoal}`,
   launchProjectRewards: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}`,
   launchProjectRewardsCreate: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/create`,
   launchProjectRewardsEdit: (projectID: string, rewardUUID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectRewards}/edit/${rewardUUID}`,
+  launchStory: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchStory}`,
+  launchAboutYou: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchAboutYou}`,
+
+  launchPayment: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}`,
+  launchPaymentWallet: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentWallet}`,
+  launchPaymentAccountPassword: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentAccountPassword}`,
+  launchPaymentTaxId: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentTaxId}`,
+  launchFinalize: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchFinalize}`,
+
   launchProjectStrategy: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchProjectStrategy}`,
-
-  launchProjectWallet: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.node}`,
 
   projectLaunch: (projectName: string) => `/${PathName.project}/${projectName}/?launch`,
   projectLaunchDraft: (projectName: string) => `/${PathName.project}/${projectName}/${PathName.projectDraft}/?draft`,

@@ -3,22 +3,14 @@ import { Button } from '@chakra-ui/react'
 import { Link as ChakraLink } from '@chakra-ui/react'
 import { ComponentWithAs } from '@chakra-ui/system'
 import { t } from 'i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
-import {
-  FeedbackUrl,
-  getPath,
-  GeyserAboutUrl,
-  GeyserDiscordUrl,
-  GeyserGithubUrl,
-  GeyserNostrUrl,
-  GeyserPrivacyUrl,
-  GeyserTelegramUrl,
-  GeyserTermsUrl,
-  GeyserTwitterUrl,
-  GuideUrl,
-} from '@/shared/constants'
+import { SocialLinks } from '@/modules/project/pages/projectCreation/views/start/components/SocialLinks.tsx'
+import { FeedbackUrl, getPath, GeyserAboutUrl, GeyserPrivacyUrl, GeyserTermsUrl, GuideUrl } from '@/shared/constants'
 import { useMobileMode } from '@/utils/index.ts'
+
+import { Body } from '../components/typography/Body.tsx'
+import { H2 } from '../components/typography/Heading.tsx'
 
 type UserExternalLinksComponentProps = {
   noMobile?: boolean
@@ -55,50 +47,51 @@ type UserExternalLinksProps = {
 
 export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) => {
   return (
-    <HStack
-      w="full"
-      flexWrap="wrap"
-      paddingX={4}
-      spacing={{ base: 2, lg: spread ? 2 : 0, xl: 2 }}
-      justifyContent="center"
-      {...props}
-    >
-      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserDiscordUrl}>
-        {t('Discord')}
-      </UserNavExternalButton>
-      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserTwitterUrl}>
-        {t('X')}
-      </UserNavExternalButton>
-      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserTelegramUrl}>
-        {t('Telegram')}
-      </UserNavExternalButton>
-      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserNostrUrl}>
-        {t('Nostr')}
-      </UserNavExternalButton>
+    <VStack w="full" spacing={4}>
+      <HStack
+        w="full"
+        flexWrap="wrap"
+        paddingX={4}
+        spacing={{ base: 2, lg: spread ? 2 : 0, xl: 2 }}
+        justifyContent="center"
+        {...props}
+      >
+        <UserNavExternalButton as={ChakraLink} isExternal href={GeyserAboutUrl}>
+          {t('About')}
+        </UserNavExternalButton>
+        <UserNavExternalButton as={ChakraLink} isExternal href={GuideUrl}>
+          {t('Guide')}
+        </UserNavExternalButton>
+        <UserNavExternalButton as={ChakraLink} isExternal href={FeedbackUrl}>
+          {t('Feedback')}
+        </UserNavExternalButton>
 
-      <UserNavExternalButton as={ChakraLink} isExternal href={GuideUrl}>
-        {t('Guide')}
-      </UserNavExternalButton>
-      <UserNavExternalButton as={ChakraLink} isExternal href={FeedbackUrl}>
-        {t('Feedback')}
-      </UserNavExternalButton>
-      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserGithubUrl}>
-        {t('Github')}
-      </UserNavExternalButton>
-      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserAboutUrl}>
-        {t('About')}
-      </UserNavExternalButton>
+        <UserNavExternalButton as={ChakraLink} isExternal href={GeyserTermsUrl} color="neutral1.9" marginLeft={4}>
+          {t('Terms of Service')}
+        </UserNavExternalButton>
+        <UserNavExternalButton as={ChakraLink} isExternal href={GeyserPrivacyUrl} color="neutral1.9">
+          {t('Privacy Policy')}
+        </UserNavExternalButton>
+        <UserNavExternalButton as={Link} to={getPath('project', 'geyser')} color="neutral1.9">
+          {t('Support')}
+        </UserNavExternalButton>
+      </HStack>
 
-      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserTermsUrl} color="neutral1.9">
-        {t('Terms')}
-      </UserNavExternalButton>
-      <UserNavExternalButton as={ChakraLink} isExternal href={GeyserPrivacyUrl} color="neutral1.9">
-        {t('Privacy')}
-      </UserNavExternalButton>
-      <UserNavExternalButton as={Link} to={getPath('project', 'geyser')} color="neutral1.9">
-        {t('Donate')}
-      </UserNavExternalButton>
-    </HStack>
+      <VStack spacing={0}>
+        <H2 fontStyle="italic" bold>
+          Geyser
+        </H2>
+        <Body fontStyle="italic" medium>
+          {t('Bitcoin crowdfunding')}
+        </Body>
+      </VStack>
+      <VStack>
+        <SocialLinks />
+        <Body fontStyle="italic" medium>
+          {t('2025 GEYSER INC.')}
+        </Body>
+      </VStack>
+    </VStack>
   )
 }
 

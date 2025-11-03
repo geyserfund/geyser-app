@@ -1,8 +1,8 @@
 import { Box, HStack, SkeletonText, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
-import { FollowButton } from '@/modules/project/pages1/projectView/views/body/components'
+import { FollowButton } from '@/modules/project/pages/projectView/views/body/components'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'

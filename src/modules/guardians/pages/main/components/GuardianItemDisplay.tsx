@@ -1,7 +1,7 @@
 import { Box, HStack, Image, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
-import { RewardDetails, RewardMap } from '@/modules/guardians/data.ts'
+import { RewardDetails, RewardMap } from '@/modules/guardians/utils/constants.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { GuardianProjectRewardFragment } from '@/types/index.ts'
 

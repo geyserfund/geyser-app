@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
 import { H1 } from '@/shared/components/typography'

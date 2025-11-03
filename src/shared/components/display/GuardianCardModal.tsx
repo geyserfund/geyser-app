@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { Trans } from 'react-i18next'
 import Tilt from 'react-parallax-tilt'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { isWidgetAtom } from '@/modules/project/state/widgetAtom.ts'
 import { getPath } from '@/shared/constants'

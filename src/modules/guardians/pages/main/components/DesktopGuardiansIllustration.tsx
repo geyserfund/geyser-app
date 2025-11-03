@@ -15,7 +15,7 @@ import {
 import { fadeIn, fadeOut, fonts, scaleDown, scaleUp } from '@/shared/styles'
 import { GuardianType } from '@/types'
 
-import { GuardianCharacter } from '../../character/characterAssets'
+import { GuardianCharacter } from '../../../utils/characterAssets'
 
 const useStyles = createUseStyles({
   ...fadeIn,

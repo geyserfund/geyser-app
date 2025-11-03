@@ -17,21 +17,29 @@ export const routeMatchForAtom =
   }
 
 export const projectCreationRoutesThatNeedStory = [
-  getPath('launchProjectRewards', PathName.projectId),
-  getPath('launchProjectRewardsCreate', PathName.projectId),
-  getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardId),
-  getPath('launchProjectWallet', PathName.projectId),
-  getPath('launchProjectStrategy', PathName.projectId),
+  getPath('launchPayment', PathName.projectId),
+  getPath('launchPaymentWallet', PathName.projectId),
+  getPath('launchPaymentTaxId', PathName.projectId),
+  getPath('launchPaymentAccountPassword', PathName.projectId),
+  getPath('launchAboutYou', PathName.projectId),
+  getPath('launchFinalize', PathName.projectId),
 ]
 
-export const creatorProjectCreationRoutes = [
+export const privateCreatorProjectCreationRoutes = [
   getPath('launch'),
   getPath('launchProject', PathName.projectId),
-  getPath('launchStartProject', PathName.projectId),
   getPath('launchProjectDetails', PathName.projectId),
-  getPath('launchProjectStory', PathName.projectId),
+  getPath('launchProjectRewards', PathName.projectId),
+  getPath('launchProjectRewardsCreate', PathName.projectId),
+  getPath('launchProjectRewardsEdit', PathName.projectId, PathName.rewardUUID),
+  getPath('launchProjectFunding', PathName.projectId),
+  getPath('launchFundingStrategy', PathName.projectId),
+  getPath('launchFundingGoal', PathName.projectId),
+  getPath('launchStory', PathName.projectId),
   ...projectCreationRoutesThatNeedStory,
 ]
+
+export const allCreatorProjectCreationRoutes = [getPath('launchStart'), ...privateCreatorProjectCreationRoutes]
 
 export const ProjectPageDashboardInternalRoutes = [
   getPath('dashboardAnalytics', PathName.projectName),
@@ -149,8 +157,12 @@ export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath(
 
 export const discoveryRoutes = [
   getPath('discoveryLanding'),
+  getPath('discoveryProjectCategory', PathName.categoryName),
+  getPath('discoveryProjectSubCategory', PathName.subCategoryName),
   getPath('discoveryMyProjects'),
   getPath('discoveryProducts'),
+  getPath('discoveryCampaigns'),
+  getPath('discoveryFundraisers'),
   getPath('discoveryActivity'),
   getPath('discoveryActivityFollowed'),
   getPath('discoveryActivityGlobal'),

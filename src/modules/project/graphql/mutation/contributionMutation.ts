@@ -37,3 +37,12 @@ export const MUTATION_FUNDING_FIAT_SWAP_PAYMENT_CREATE = gql`
     }
   }
 `
+
+export const MUTATION_PAYMENT_SWAP_CLAIM_TX_SET = gql`
+  mutation PaymentSwapClaimTxSet($input: PaymentSwapClaimTxSetInput!) {
+    paymentSwapClaimTxSet(input: $input) {
+      id
+      success
+    }
+  }
+`

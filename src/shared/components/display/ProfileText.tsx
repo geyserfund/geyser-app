@@ -1,4 +1,4 @@
-import { HStack, Image, Tooltip } from '@chakra-ui/react'
+import { HStack, Image, StackProps, Tooltip } from '@chakra-ui/react'
 import { useMemo } from 'react'
 
 import { guardianJewels } from '@/shared/constants/assets/guardianAssets.tsx'
@@ -8,20 +8,21 @@ import { GuardianType } from '@/types'
 import { Body } from '../typography'
 import { BodyProps } from '../typography/Body'
 import { GuardianCardModal } from './GuardianCardModal.tsx'
-import { guardianGradient } from './ProfileAvatar'
+import { guardianColors } from './ProfileAvatar'
 
 type ProfileTextProps = {
   guardian?: GuardianType | null
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'xs' | 'sm' | 'md' | 'lg'
   name?: string
+  wrapperProps?: StackProps
 } & BodyProps
 
-export const ProfileText = ({ guardian, size = 'md', name, children, ...rest }: ProfileTextProps) => {
+export const ProfileText = ({ guardian, size = 'md', name, children, wrapperProps, ...rest }: ProfileTextProps) => {
   const guardianModal = useModal()
 
   const backgroundColor = useMemo(() => {
     if (guardian) {
-      return guardianGradient[guardian]
+      return guardianColors[guardian]
     }
 
     return undefined
@@ -31,16 +32,9 @@ export const ProfileText = ({ guardian, size = 'md', name, children, ...rest }: 
 
   return (
     <>
-      <HStack spacing={1} alignItems={'center'}>
+      <HStack spacing={1} alignItems={'center'} justifyContent="start" {...wrapperProps}>
         {children && (
-          <Body
-            textTransform={'capitalize'}
-            background={backgroundColor}
-            {...(backgroundColor && { backgroundClip: 'text', textFillColor: 'transparent' })}
-            fontSize={size || '20px'}
-            bold
-            {...rest}
-          >
+          <Body textTransform={'capitalize'} color={backgroundColor} fontSize={size || '20px'} bold {...rest}>
             {children}
           </Body>
         )}
@@ -49,7 +43,7 @@ export const ProfileText = ({ guardian, size = 'md', name, children, ...rest }: 
             <Image
               src={guardianJewel}
               alt={`${guardian}-jewel`}
-              width={size === 'sm' ? '20px' : size === 'md' ? '24px' : '28px'}
+              width={size === 'xs' ? '16px' : size === 'sm' ? '20px' : size === 'md' ? '24px' : '28px'}
               _hover={{ cursor: 'pointer' }}
               onClick={(e) => {
                 e.preventDefault()

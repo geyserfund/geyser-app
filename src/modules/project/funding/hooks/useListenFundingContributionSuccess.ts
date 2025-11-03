@@ -12,6 +12,8 @@ import { useFundingContributionPolling } from './useFundingContributionPolling.t
 import { useFundingContributionSubscription } from './useFundingContributionSubscription.ts'
 import { useFundingFormAtom } from './useFundingFormAtom.ts'
 
+const StatusForSuccess = [ContributionStatus.Confirmed, ContributionStatus.Pledged]
+
 /**
  * Listens for funding contribution through polling and subscription and navigates to the success page on contribution confirmed
  * @description Component specific listener, stops polling and subscription on unmount
@@ -33,7 +35,7 @@ export const useListenFundingContributionSuccess = () => {
   const fundingContribution = useAtomValue(fundingContributionAtom)
 
   useEffect(() => {
-    if (fundingContribution && fundingContribution.status === ContributionStatus.Confirmed) {
+    if (fundingContribution && StatusForSuccess.includes(fundingContribution.status)) {
       if (launchContributionProjectId) {
         setTimeout(() => {
           navigate({ pathname: getPath('launchProjectStrategy', `${launchContributionProjectId}`) }, { replace: true })

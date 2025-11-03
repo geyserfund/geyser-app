@@ -1,10 +1,12 @@
 import { atom } from 'jotai'
 
-import { guardianRewardsMap, GuardianRewardType } from '@/modules/guardians/data.ts'
 import { guardianRewardsAtom } from '@/modules/guardians/state/guardianRewards.ts'
+import { guardianRewardsMap, GuardianRewardType } from '@/modules/guardians/utils/constants.ts'
 import { bitcoinQuoteAtom } from '@/shared/state/btcRateAtom'
 import {
   GuardianType,
+  PaymentFeePayer,
+  PaymentFeeType,
   ProjectPageWalletFragment,
   ProjectRewardFragment,
   ProjectShippingConfigType,
@@ -16,6 +18,10 @@ import {
 } from '@/types'
 import { commaFormatted, convertAmount, isProjectAnException, toInt, validateEmail } from '@/utils'
 
+import {
+  paymentMethodAtom,
+  PaymentMethods,
+} from '../../pages/projectFunding/views/fundingPayment/state/paymentMethodAtom.ts'
 import { projectAtom, ProjectState } from '../../state/projectAtom'
 import { rewardsAtom } from '../../state/rewardsAtom'
 import { subscriptionsAtom } from '../../state/subscriptionAtom'
@@ -26,7 +32,15 @@ import { shippingAddressAtom, shippingCountryAtom } from './shippingAddressAtom.
 
 export type FundingProject = Pick<
   ProjectState,
-  'id' | 'name' | 'status' | 'rewardCurrency' | 'title' | 'owners' | 'paymentMethods' | 'subCategory'
+  | 'id'
+  | 'name'
+  | 'status'
+  | 'rewardCurrency'
+  | 'title'
+  | 'owners'
+  | 'paymentMethods'
+  | 'subCategory'
+  | 'fundingStrategy'
 >
 
 export enum FundingUserInfoError {
@@ -240,6 +254,38 @@ export const tipAtoms = atom((get) => {
   return { sats: tipSats, usdCents: tipUsdCent }
 })
 
+/** Derived atom for calculating network fees */
+export const networkFeeAtom = atom((get) => {
+  const paymentMethod = get(paymentMethodAtom)
+  const fundingPaymentDetails = get(fundingPaymentDetailsAtom)
+  const bitcoinQuote = get(bitcoinQuoteAtom)
+
+  let feesSats = 0
+
+  if (paymentMethod === PaymentMethods.onChain && fundingPaymentDetails.onChainToRskSwap?.fees?.length) {
+    feesSats =
+      fundingPaymentDetails.onChainToRskSwap?.fees.reduce(
+        (acc, fee) =>
+          fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip
+            ? acc + fee.feeAmount
+            : acc,
+        0,
+      ) || 0
+  } else if (paymentMethod === PaymentMethods.lightning && fundingPaymentDetails.lightningToRskSwap?.fees?.length) {
+    feesSats =
+      fundingPaymentDetails.lightningToRskSwap?.fees.reduce(
+        (acc, fee) =>
+          fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip
+            ? acc + fee.feeAmount
+            : acc,
+        0,
+      ) || 0
+  }
+
+  const feesUsdCents = feesSats > 0 ? convertAmount.satsToUsdCents({ sats: feesSats, bitcoinQuote }) : 0
+  return { sats: feesSats, usdCents: feesUsdCents }
+})
+
 export const guardianBadgesCostAtoms = atom((get) => {
   const { guardianBadges } = get(fundingFormStateAtom)
   const guardianRewards = get(guardianRewardsAtom)
@@ -272,6 +318,7 @@ export const totalAmountSatsAtom = atom((get) => {
   const shippingCosts = get(shippingCostAtom)
   const subscriptionCosts = get(subscriptionCostAtoms)
   const tip = get(tipAtoms)
+  const networkFee = get(networkFeeAtom)
   const guardianBadgesCosts = get(guardianBadgesCostAtoms)
 
   // Sum all components
@@ -281,6 +328,7 @@ export const totalAmountSatsAtom = atom((get) => {
     subscriptionCosts.sats +
     shippingCosts.sats +
     tip.sats +
+    networkFee.sats +
     guardianBadgesCosts.sats
   return total
 })
@@ -525,7 +573,7 @@ export const fundingOnchainAmountWarningAtom = atom((get) => {
     }
   }
 
-  if (!fundingPaymentDetails.onChainSwap?.address) {
+  if (!fundingPaymentDetails.onChainSwap?.address && !fundingPaymentDetails.onChainToRskSwap?.address) {
     return `Something went wrong with the onChain payment, please try using Lightning or try again`
   }
 

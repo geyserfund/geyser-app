@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router'
 
 import { lightModeColors } from '@/shared/styles'
 

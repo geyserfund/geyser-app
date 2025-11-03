@@ -2,7 +2,7 @@ import { useColorMode, VStack } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { ScopeProvider } from 'jotai-scope'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 
 import { useProjectGoalsAPI } from '@/modules/project/API/useProjectGoalsAPI.ts'
 import { initialGoalsLoadAtom } from '@/modules/project/state/goalsAtom.ts'
@@ -11,7 +11,7 @@ import { inProgressGoalsAtom } from '@/modules/project/state/goalsAtom.ts'
 import { isWidgetAtom } from '@/modules/project/state/widgetAtom.ts'
 
 import { ProjectProvider } from '../../project/context/ProjectProvider.tsx'
-import { ContributionSummary, LeaderboardSummary } from '../../project/pages1/projectView/views/body/sections/index.ts'
+import { ContributionSummary, LeaderboardSummary } from '../../project/pages/projectView/views/body/sections/index.ts'
 import {
   initialProjectDetailsLoadAtom,
   initialProjectGrantApplicationsLoadAtom,

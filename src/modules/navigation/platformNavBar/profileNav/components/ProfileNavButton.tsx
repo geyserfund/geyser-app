@@ -1,7 +1,7 @@
-import { AvatarBadge, Button, forwardRef, HStack, Icon, Image, StackProps } from '@chakra-ui/react'
+import { Avatar, AvatarBadge, Button, forwardRef, HStack, Icon, Image, StackProps } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { PiList, PiUser } from 'react-icons/pi'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
@@ -14,11 +14,10 @@ import {
   LegendJewelUrl,
   WarriorJewelUrl,
 } from '@/shared/constants'
-import { GradientBorder } from '@/shared/molecules/GradientBorder'
 import { GuardianType } from '@/types'
 
 export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) => {
-  const { user } = useAuthContext()
+  const { user, isLoggedIn } = useAuthContext()
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
   const followedActivityDot = useAtomValue(followedActivityDotAtom)
@@ -26,38 +25,50 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
   const guardianData = guardianValues(user?.guardianType)
 
   return (
-    <HStack position="relative" spacing={0}>
-      <GradientBorder
-        enable={true}
-        gradientColor={guardianData.borderColor}
-        marginRight={{ base: '-16px', lg: '-20px' }}
-      >
+    <HStack position="relative" spacing={2}>
+      {isLoggedIn && (
         <Button
           as={Link}
-          to={guardianData.path}
-          size={{ base: 'md', lg: 'lg' }}
-          height={{ base: '30px', lg: '38px' }}
-          paddingInlineStart={{ base: '6px !important', lg: '8px !important' }}
+          to={getPath('userProfile', user.id)}
           variant="ghost"
-          leftIcon={
-            <Image
-              src={guardianData.jewel}
-              alt={'guardian jewel image'}
-              width={{ base: '20px', lg: '30px' }}
-              height={{ base: '20px', lg: '30px' }}
-            />
-          }
-          background={guardianData.background}
-          _hover={{}}
-        />
-      </GradientBorder>
-
+          width="full"
+          height="full"
+          borderRadius="full"
+          padding={0}
+        >
+          <ProfileAvatar
+            src={user.imageUrl || ''}
+            height={{ base: '36px', lg: '42px' }}
+            width={{ base: '36px', lg: '42px' }}
+            guardian={user.guardianType}
+            icon={
+              user.id ? (
+                <Icon as={PiUser} color="neutral1.11" fontSize={'24px'} />
+              ) : (
+                <Icon as={PiList} color="neutral1.11" fontSize={'24px'} />
+              )
+            }
+            backgroundColor="utils.pbg"
+          >
+            {user.guardianType && (
+              <AvatarBadge placement="bottom-end" border="none">
+                <Image
+                  src={guardianData.jewel}
+                  alt={'guardian jewel image'}
+                  width={{ base: '20px', lg: '25px' }}
+                  height={{ base: '20px', lg: '25px' }}
+                />
+              </AvatarBadge>
+            )}
+          </ProfileAvatar>
+        </Button>
+      )}
       <HStack
         ref={ref}
         data-testid="platform-dropdown-menu"
         height={{ base: '40px', lg: '46px' }}
-        width={{ base: '40px', lg: '48px' }}
-        minWidth={{ base: '40px', lg: '48px' }}
+        width={{ base: '40px', lg: '46px' }}
+        minWidth={{ base: '40px', lg: '46px' }}
         variant="outline"
         backgroundColor="utils.pbg"
         zIndex={1}
@@ -71,30 +82,17 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
         alignItems={'center'}
         {...props}
       >
-        <ProfileAvatar
-          src={user.imageUrl || ''}
+        <Avatar
+          borderRadius="50%"
+          icon={<Icon as={PiList} color="neutral1.11" fontSize={'24px'} />}
           height={{ base: '38px', lg: '46px' }}
           width={{ base: '38px', lg: '46px' }}
-          guardian={user.guardianType}
-          icon={
-            user.id ? (
-              <Icon as={PiUser} color="neutral1.11" fontSize={'24px'} />
-            ) : (
-              <Icon as={PiList} color="neutral1.11" fontSize={'24px'} />
-            )
-          }
-          backgroundColor="utils.pbg"
+          backgroundColor="neutral1.3"
         >
           {(myProjectActivityDot || followedActivityDot) && (
-            <AvatarBadge
-              placement="bottom-start"
-              borderWidth="3px"
-              borderColor="utils.pbg"
-              bg="error.9"
-              boxSize="16px"
-            />
+            <AvatarBadge placement="bottom-end" borderWidth="3px" borderColor="utils.pbg" bg="error.9" boxSize="16px" />
           )}
-        </ProfileAvatar>
+        </Avatar>
       </HStack>
     </HStack>
   )

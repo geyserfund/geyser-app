@@ -6,7 +6,7 @@ import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 
 import { useProjectAtom } from '../hooks/useProjectAtom.ts'
-import { FollowButton } from '../pages1/projectView/views/body/components/FollowButton.tsx'
+import { FollowButton } from '../pages/projectView/views/body/components/FollowButton.tsx'
 import { followModalAtom } from '../state/followModalAtom.ts'
 
 export const FollowProjectModal = () => {

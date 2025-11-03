@@ -187,6 +187,7 @@ When creating forms in this project, adhere to the following guidelines in addit
 
 ## Internationalization (i18n)
 - **Use `t()`:** Ensure all user-facing strings (labels, placeholders, error messages, button text) are wrapped in the `t()` function from `i18next`.
+- When writing texts inside `t()` function, make sure to keep end punctuations like `:`,`?`,  outside the function so that the translation itself is clean text.
 
 
 # Comment Formatting Rule

@@ -39,7 +39,7 @@ export function ControlledTextArea(props: Props) {
   }
 
   const label = props.label ? (
-    <Body size={props.size || 'md'} medium>
+    <Body size={props.size || 'lg'} medium>
       {props.label}
     </Body>
   ) : null

@@ -1,10 +1,12 @@
+import { useAtomValue } from 'jotai'
 import { useCallback } from 'react'
 
-import { useBtcContext } from '../context/btc'
+import { btcRateAtom } from '@/shared/state/btcRateAtom'
+
 import { Satoshis, USDCents, USDollars } from '../types/types'
 
 export const useBTCConverter = () => {
-  const { btcRate } = useBtcContext()
+  const btcRate = useAtomValue(btcRateAtom)
 
   const getUSDAmount = useCallback(
     (satoshis: Satoshis): USDollars => {
