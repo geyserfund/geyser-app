@@ -8,31 +8,34 @@ import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { CreationLayoutCard } from '../components/CreationLayoutCard.tsx'
 
 type StoryCard = {
-  title: string
   image: string
   link: string
 }
 
 const stories: StoryCard[] = [
   {
-    title: 'Tips',
-    image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=300&h=400&fit=crop',
-    link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/tips/tips1.png',
+    link: 'https://www.instagram.com/reel/DPG4VtDjOwB/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==',
   },
   {
-    title: 'Advice ',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=400&fit=crop',
-    link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/tips/tips2.png',
+    link: 'https://youtube.com/shorts/5bcmXtR8c9I?si=Rrv89hd8oPkf_NGC',
   },
   {
-    title: 'Creator stories',
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=400&fit=crop',
-    link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/tips/tips3.png',
+    link: 'https://youtube.com/shorts/Hp9Jhxl7ZfM?feature=share',
   },
   {
-    link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=400&fit=crop',
-    title: 'Creator stories2',
+    link: 'https://www.youtube.com/watch?v=SqNPogWpmAg',
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/tips/tips4.png',
+  },
+  {
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/tips/tips5.png',
+    link: 'https://www.youtube.com/shorts/FXhDpJHfmS4',
+  },
+  {
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/tips/tips6.png',
+    link: 'https://www.youtube.com/watch?v=LxE1kx0bkhs&list=PLIDbic_KUMN2awpb22SHp2sR3o261zDZX&index=5',
   },
 ]
 
@@ -52,15 +55,20 @@ export const TipsStoriesSection = () => {
         </Body>
       </VStack>
 
-      <SimpleGrid columns={[1, 4]} spacing={6} width="100%" maxW={dimensions.creation.start.maxWidth}>
+      <SimpleGrid
+        columns={{ base: 1, xs: 2, sm: 3 }}
+        spacing={6}
+        width="100%"
+        maxW={dimensions.creation.start.maxWidth}
+      >
         {stories.map((story) => (
           <Box
             as={Link}
             isExternal
             href={story.link}
-            key={story.title}
-            height="350px"
+            key={story.link}
             width="auto"
+            aspectRatio="1/1.4"
             bg="neutral.200"
             borderRadius="8px"
             overflow="hidden"
@@ -70,7 +78,7 @@ export const TipsStoriesSection = () => {
             }}
             transition="transform 0.2s"
           >
-            <Image src={story.image} alt={story.title} width="100%" height="100%" objectFit="cover" />
+            <Image src={story.image} alt={story.link} width="100%" height="100%" objectFit="cover" />
           </Box>
         ))}
       </SimpleGrid>
