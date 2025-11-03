@@ -1,4 +1,5 @@
 import { Stack, VStack } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 
 import { ProjectCategoryList } from '@/shared/constants/platform/projectCategory.ts'
 
@@ -16,6 +17,17 @@ import { RecommendedForYou } from './sections/RecommendedForYou.tsx'
 import { TiaProjectsDisplayMostFundedThisWeek } from './sections/TiaProjectsDisplayMostFundedThisWeek.tsx'
 
 export const DefaultView = () => {
+  const [showBelowTheFold, setShowBelowTheFold] = useState(false)
+
+  useEffect(() => {
+    /** Wait for initial content to render before showing below-the-fold content */
+    const timer = setTimeout(() => {
+      setShowBelowTheFold(true)
+    }, 2000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <VStack w="full" spacing={10} paddingTop="20px">
       <VStack w="full" spacing={20} paddingBottom={40}>
@@ -29,19 +41,23 @@ export const DefaultView = () => {
 
         <RecentImpactPosts />
 
-        {ProjectCategoryList.map((category) => (
-          <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
-        ))}
-        <RecentLaunches />
-        <CharityProjects />
+        {showBelowTheFold && (
+          <>
+            {ProjectCategoryList.map((category) => (
+              <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
+            ))}
+            <RecentLaunches />
+            <CharityProjects />
 
-        <HeroesMainPage />
+            <HeroesMainPage />
 
-        <TopProjects />
+            <TopProjects />
 
-        <JoinTheMovement />
+            <JoinTheMovement />
 
-        <JoinOurMailingList />
+            <JoinOurMailingList />
+          </>
+        )}
       </VStack>
     </VStack>
   )

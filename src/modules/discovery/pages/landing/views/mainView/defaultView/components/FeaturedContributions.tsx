@@ -17,7 +17,6 @@ import {
   LandingPageFeaturedContributionsGetQueryVariables,
   OrderByOptions,
   useLandingPageFeaturedContributionsGetQuery,
-  useProjectThumbnailImageQuery,
 } from '@/types/index.ts'
 import { commaFormatted } from '@/utils/index.ts'
 
@@ -129,21 +128,11 @@ export const ContributionCard = ({
   const { user } = contribution.funder
 
   const navigate = useNavigate()
-  const { data, loading } = useProjectThumbnailImageQuery({
-    variables: {
-      where: {
-        id: contribution.projectId,
-      },
-    },
-    onError(error) {
-      console.log('error', error)
-    },
-  })
 
-  const project = data?.projectGet
+  const project = contribution.sourceResource?.__typename === 'Project' ? contribution.sourceResource : null
   const colorScheme = getContributionColorScheme(contribution.amount)
 
-  if (loading || !project) {
+  if (!project) {
     return null
   }
 

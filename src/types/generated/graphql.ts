@@ -8352,7 +8352,10 @@ export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 
 
 export type ProjectAonGoalForLandingPageFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, balance: number, goalDurationInDays: number, deployedAt?: any | null, status: ProjectAonGoalStatus };
 
-export type ContributionForLandingPageFragment = { __typename?: 'Contribution', amount: number, id: any, projectId: any, createdAt?: any | null, funder: { __typename?: 'Funder', id: any, user?: { __typename?: 'User', id: any, heroId: string, imageUrl?: string | null, guardianType?: GuardianType | null, username: string } | null } };
+export type ContributionForLandingPageFragment = { __typename?: 'Contribution', amount: number, id: any, projectId: any, createdAt?: any | null, funder: { __typename?: 'Funder', id: any, user?: { __typename?: 'User', id: any, heroId: string, imageUrl?: string | null, guardianType?: GuardianType | null, username: string } | null }, sourceResource?: { __typename?: 'Activity' } | { __typename?: 'Post' } | (
+    { __typename?: 'Project' }
+    & ProjectThumbnailImageFragment
+  ) | null };
 
 export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
 
@@ -10410,6 +10413,14 @@ export const UserMeFragmentDoc = gql`
     ${UserComplianceDetailsFragmentDoc}
 ${ExternalAccountFragmentDoc}
 ${ProjectForOwnerFragmentDoc}`;
+export const ProjectThumbnailImageFragmentDoc = gql`
+    fragment ProjectThumbnailImage on Project {
+  id
+  title
+  name
+  thumbnailImage
+}
+    `;
 export const ContributionForLandingPageFragmentDoc = gql`
     fragment ContributionForLandingPage on Contribution {
   amount
@@ -10426,8 +10437,13 @@ export const ContributionForLandingPageFragmentDoc = gql`
       username
     }
   }
+  sourceResource {
+    ... on Project {
+      ...ProjectThumbnailImage
+    }
+  }
 }
-    `;
+    ${ProjectThumbnailImageFragmentDoc}`;
 export const PostForLandingPageFragmentDoc = gql`
     fragment PostForLandingPage on Post {
   id
@@ -11939,14 +11955,6 @@ export const OnChainToRskSwapPaymentDetailsFragmentDoc = gql`
   swapPreimageHash
   onChainTxId
   onChainAddress
-}
-    `;
-export const ProjectThumbnailImageFragmentDoc = gql`
-    fragment ProjectThumbnailImage on Project {
-  id
-  title
-  name
-  thumbnailImage
 }
     `;
 export const PledgeRefundFragmentDoc = gql`
