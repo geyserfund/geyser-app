@@ -49,10 +49,10 @@ export const CharityProjects = ({ category, subCategory }: ProjectDisplayProps) 
       input: {
         where: {
           ids:
-            projectList.length > 5
+            projectList.length > 6
               ? projectList
                   .sort(() => Math.random() - 0.5)
-                  .slice(0, 5)
+                  .slice(0, 6)
                   .map((project) => project.projectId)
               : projectList.map((project) => project.projectId),
         },
