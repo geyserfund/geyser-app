@@ -95,7 +95,8 @@ export const LaunchProjectDetails = () => {
               },
             },
           })
-          navigate(getPath('launchFundingStrategy', createProject.id))
+          // navigate(getPath('launchFundingStrategy', createProject.id)) // TODO: uncomment when we release AON
+          navigate(getPath('launchFundingGoal', createProject.id))
         },
         onError(error) {
           toast.error({

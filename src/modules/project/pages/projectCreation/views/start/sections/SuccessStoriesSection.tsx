@@ -1,5 +1,6 @@
-import { Button, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Button, HStack, Link as ChakraLink, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { PiArrowRight } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -11,32 +12,26 @@ import { CreationLayoutCard } from '../components/CreationLayoutCard.tsx'
 import { CreationStoryCard } from '../components/CreationStoryCard.tsx'
 
 type StoryCard = {
-  title: string
+  link: string
   image: string
-  description?: string
 }
 
 const stories: StoryCard[] = [
   {
-    title: 'Ha Economy',
-    image: 'https://images.unsplash.com/photo-1556740758-90de374c12ad?w=300&h=200&fit=crop',
-    description: 'The Bitcoin circular economy is a system that uses Bitcoin to create a circular economy.',
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/successstory/success_story_1.png',
+    link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/btc-isla',
   },
   {
-    title: 'Sofa',
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=300&h=200&fit=crop',
-    description: 'The Bitcoin circular economy is a system that uses Bitcoin to create a circular economy.',
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/successstory/success_story_2.png',
+    link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/btc-trading-cards',
   },
   {
-    title: 'Bitcoin Trading',
-    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=300&h=200&fit=crop',
-    description: 'The Bitcoin circular economy is a system that uses Bitcoin to create a circular economy.',
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/successstory/success_story_3.png',
+    link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/givers',
   },
   {
-    title: 'Bitquoise',
-    image: 'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=300&h=200&fit=crop',
-    description:
-      'The Bitcoin circular economy is a system that uses Bitcoin to create a circular economy. asdfasd adlfna lorem ipsum dolor sit amet',
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/successstory/success_story_4.png',
+    link: ' https://guide.geyser.fund/geyser-docs/guides/success-stories/perus-bitcoin-revolution',
   },
 ]
 
@@ -56,17 +51,25 @@ export const SuccessStoriesSection = () => {
         </Body>
       </VStack>
 
-      <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4} width="100%" maxW={dimensions.creation.start.maxWidth}>
+      <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4} width="100%" maxW={'1080px'}>
         {stories.map((story) => (
-          <CreationStoryCard
-            key={story.title}
-            title={story.title}
-            image={story.image}
-            description={story.description}
-          />
+          <CreationStoryCard key={story.link} link={story.link} image={story.image} />
         ))}
       </SimpleGrid>
-
+      <HStack justifyContent="flex-start" width="100%" maxW={'1140px'}>
+        <Button
+          as={ChakraLink}
+          isExternal
+          href="https://guide.geyser.fund/geyser-docs/guides/success-stories"
+          colorScheme="neutral1"
+          variant="ghost"
+          size="xl"
+          px={8}
+          rightIcon={<PiArrowRight />}
+        >
+          {t('See all success stories')}
+        </Button>
+      </HStack>
       <Button minWidth="300px" as={Link} to={getPath('launchProjectDetails')} colorScheme="primary1" size="xl" px={8}>
         {t('Launch now')}
       </Button>

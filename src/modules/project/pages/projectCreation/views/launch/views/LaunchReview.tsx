@@ -61,31 +61,36 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
       label: t('Pending review'),
       colorScheme: 'info',
       variant: 'soft',
-      imageUrl: 'https://picsum.photos/400/200?random=1',
+      imageUrl:
+        'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/in_review_illustration.png',
     },
     [ProjectReviewStatus.Accepted]: {
       label: t('Approved'),
       colorScheme: 'success',
       variant: 'soft',
-      imageUrl: 'https://picsum.photos/400/200?random=2',
+      imageUrl:
+        'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/accepted_illustration1.png',
     },
     [ProjectReviewStatus.RevisionsRequested]: {
       label: t('Updates Requested'),
       colorScheme: 'error',
       variant: 'soft',
-      imageUrl: 'https://picsum.photos/400/200?random=3',
+      imageUrl:
+        'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/rejected_with_reason_illustration.png',
     },
     [ProjectReviewStatus.Rejected]: {
       label: t('Rejected'),
       colorScheme: 'error',
       variant: 'solid',
-      imageUrl: 'https://picsum.photos/400/200?random=4',
+      imageUrl:
+        'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/rejected_illustration.png',
     },
     NOT_SUBMITTED: {
       label: t('Not submitted yet'),
       colorScheme: 'warning',
       variant: 'soft',
-      imageUrl: 'https://picsum.photos/400/200?random=5',
+      imageUrl:
+        'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/not_submitted_illustration1.png',
     },
   }
 
@@ -250,9 +255,9 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
           <Image
             src={reviewStatusConfig[currentStatus].imageUrl}
             alt={`${reviewStatusConfig[currentStatus].label} illustration`}
-            maxWidth="400px"
+            maxWidth="250px"
             width="100%"
-            height="200px"
+            height="auto"
             objectFit="cover"
             borderRadius="lg"
           />
