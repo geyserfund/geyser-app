@@ -18,7 +18,7 @@ type FundingStyle = {
 
 const fundingStyles: FundingStyle[] = [
   {
-    title: t('Campaigns: all or nothing'),
+    title: t('Campaigns: all or nothing (Coming soon)'),
     subtitle: t('Get funded only if you reach your goal. If not, contributions return to your backers.'),
     description: '',
     image: CampaignIllurationURL,

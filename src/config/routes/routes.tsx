@@ -6,6 +6,7 @@ import { ActivityDirection } from '@/modules/discovery/pages/activity/components
 import { loadHeroesPages } from '@/modules/discovery/pages/heroes/loader.ts'
 import { loadLandingPages } from '@/modules/discovery/pages/landing/loader.ts'
 import { loadLandingMainViewPages } from '@/modules/discovery/pages/landing/views/mainView/loader.ts'
+import { MaintainancePage } from '@/modules/general/fallback/MaintainancePage.tsx'
 import { loadGrantsModule } from '@/modules/grants/loader.ts'
 import { loadGuardiansModule } from '@/modules/guardians/loader.ts'
 import { loadProfileModule } from '@/modules/profile/loader.ts'
@@ -25,6 +26,9 @@ import { NotAuthorized, NotFoundPage, NotFoundProject } from '../../modules/gene
 import { __production__, getPath, PathName } from '../../shared/constants'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { renderPrivateRoute } from './components/PrivateRoute'
+
+/** Toggle this to enable/disable maintenance mode - set to true to show maintenance page for all routes */
+const MAINTENANCE_MODE = false
 
 const Badges = () => import('../../modules/general/badges/BadgesPage')
 
@@ -1050,37 +1054,43 @@ export const platformRoutes: RouteObject[] = [
   },
 ]
 
-export const router = createBrowserRouter(
-  [
-    {
-      path: '/',
-      Component: App,
-      children: [
-        {
-          path: '/',
-          Component: AppLayout,
-          children: platformRoutes,
-          ErrorBoundary,
-          // ,
-        },
-        {
-          path: getPath('logout'),
-          Component: SignOut,
-        },
-        /** Widgets */
-        {
-          path: getPath('contributionWidget', PathName.projectName),
-          async lazy() {
-            const ContributionSummaryWidget = await loadWidgetModule().then((m) => m.ContributionSummaryWidget)
-            return { Component: ContributionSummaryWidget }
-          },
-        },
-      ],
-    },
-  ],
+export const router = createBrowserRouter([
   {
-    future: {},
+    path: '/',
+    Component: App,
+    children: MAINTENANCE_MODE
+      ? [
+          {
+            path: '/',
+            Component: MaintainancePage,
+          },
+          {
+            path: '/*',
+            Component: MaintainancePage,
+          },
+        ]
+      : [
+          {
+            path: '/',
+            Component: AppLayout,
+            children: platformRoutes,
+            ErrorBoundary,
+            // ,
+          },
+          {
+            path: getPath('logout'),
+            Component: SignOut,
+          },
+          /** Widgets */
+          {
+            path: getPath('contributionWidget', PathName.projectName),
+            async lazy() {
+              const ContributionSummaryWidget = await loadWidgetModule().then((m) => m.ContributionSummaryWidget)
+              return { Component: ContributionSummaryWidget }
+            },
+          },
+        ],
   },
-)
+])
 
 export default router

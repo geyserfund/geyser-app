@@ -23,4 +23,4 @@ export const NeedToLaunchIllustration3URL =
   'https://storage.googleapis.com/geyser-projects-media/app/creationflow/needtolaunch-illustation3.png'
 
 export const DefaultCreationImageURL =
-  'https://storage.googleapis.com/geyser-projects-media/app/creationflow/default_image.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/creationflow/main1.webp'

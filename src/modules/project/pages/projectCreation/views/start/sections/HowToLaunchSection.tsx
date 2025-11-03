@@ -62,7 +62,8 @@ export const HowToLaunchSection = () => {
       <HStack w="full" maxW={dimensions.creation.start.maxWidth}>
         <Body size="md">{t('Check out our Guide for step-by-step tutorials.')}</Body>
         <Link
-          href="#"
+          href="https://guide.geyser.fund/geyser-docs/product-features/launch-a-project"
+          isExternal
           fontSize="md"
           fontWeight="medium"
           color="primary.600"

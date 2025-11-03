@@ -28,14 +28,7 @@ export const WelcomeSection = () => {
         </Body>
       </VStack>
 
-      <Box
-        width="100%"
-        maxW={dimensions.creation.start.maxWidth}
-        height="400px"
-        borderRadius="lg"
-        overflow="hidden"
-        bg="neutral.100"
-      >
+      <Box width="100%" maxW={'700px'} height="auto" borderRadius="lg" overflow="hidden" bg="neutral.100">
         <Image
           src={DefaultCreationImageURL}
           alt={t('Community illustration')}
