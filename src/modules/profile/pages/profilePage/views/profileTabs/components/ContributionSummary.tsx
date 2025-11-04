@@ -1,5 +1,4 @@
-import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
+import { Box, HStack, Image, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 
 import { isViewingOwnProfileAtom } from '@/modules/profile/state/profileAtom.ts'
@@ -36,11 +35,11 @@ export const ContributionSummary = ({ contribution }: ContributionSummaryProps) 
 
   const refundRskModal = useModal()
 
-  const handleRefundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.stopPropagation()
-    event.preventDefault()
-    refundRskModal.onOpen()
-  }
+  // const handleRefundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   event.stopPropagation()
+  //   event.preventDefault()
+  //   refundRskModal.onOpen()
+  // }
 
   if (loading || !project) {
     return null
@@ -111,9 +110,9 @@ export const ContributionSummary = ({ contribution }: ContributionSummaryProps) 
           </VStack>
 
           <HStack height="100%" alignItems={'start'} justifyContent="end" paddingTop="2px">
-            <Button size="sm" variant="outline" onClick={handleRefundClick}>
+            {/* <Button size="sm" variant="outline" onClick={handleRefundClick}>
               {t('Refund')}
-            </Button>
+            </Button> */}
             {isViewingOwnProfile && (
               <DownloadInvoice
                 asIcon

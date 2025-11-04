@@ -5,7 +5,7 @@ import { PiArrowUpRight, PiUserCircle } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
-import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
+import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath, GeyserManifestoUrl, GeyserSubscribeUrl } from '@/shared/constants/index.ts'
@@ -18,7 +18,6 @@ export const ProfileNavContent = () => {
   const { logout, user, isLoggedIn } = useAuthContext()
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
-  const followedActivityDot = useAtomValue(followedActivityDotAtom)
 
   return (
     <VStack
@@ -41,12 +40,7 @@ export const ProfileNavContent = () => {
           )}
 
           {discoveryNavItems.map((discoveryNav) => {
-            const activityDot =
-              discoveryNav.key === DiscoveryNavItemKey.MyProjects
-                ? myProjectActivityDot
-                : discoveryNav.key === DiscoveryNavItemKey.Activity
-                ? followedActivityDot
-                : false
+            const activityDot = discoveryNav.key === DiscoveryNavItemKey.MyProjects ? myProjectActivityDot : false
 
             return (
               <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)}>
@@ -70,7 +64,9 @@ export const ProfileNavContent = () => {
           })}
         </VStack>
         <Divider borderColor="neutral1.6" />
-        <CreateProjectButton w="full" />
+        <MenuItem _active={{}} _focus={{}} _hover={{}}>
+          <CreateProjectButton w="full" />
+        </MenuItem>
         {user.id ? (
           <>
             <Divider borderColor="neutral1.6" />

@@ -1,9 +1,9 @@
 import { Button, Icon } from '@chakra-ui/react'
-import { SingleValue } from 'chakra-react-select'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import React, { useState } from 'react'
 import { PiArrowSquareOut } from 'react-icons/pi'
+import { SingleValue } from 'react-select'
 
 import { CustomSelect } from '@/components/ui/CustomSelect.tsx'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
@@ -70,7 +70,7 @@ export const FiatSwapForm: React.FC = () => {
     <>
       <FieldContainer title={t('Currency')} subtitle={t('Select a currency supported by our payment provider')}>
         <CustomSelect
-          width="100%"
+          width={'100%'}
           options={fiatSwapCurrencies}
           value={selectedCurrency}
           onChange={(value) => {

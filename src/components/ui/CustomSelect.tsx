@@ -1,102 +1,175 @@
-import { ResponsiveValue } from '@chakra-ui/react'
-import { chakraComponents, ChakraStylesConfig, Props, Select } from 'chakra-react-select'
+import { useBreakpointValue } from '@chakra-ui/react'
 import { useMemo } from 'react'
+import Select, { components, Props, StylesConfig } from 'react-select'
+
+import { useCustomTheme } from '@/utils/index.ts'
 
 export interface CustomSelectProps<Option, IsMulti extends boolean = false>
   extends Omit<Props<Option, IsMulti>, 'chakraStyles'> {
-  customChakraStyles?: ChakraStylesConfig<Option, IsMulti>
+  customChakraStyles?: StylesConfig<Option, IsMulti>
   dropdownIndicator?: React.ReactNode
   menuMinWidth?: number | string
-  width?: ResponsiveValue<number | string>
+  width?: string | number | null
+  responsiveWidth?: (string | null)[] | Partial<Record<string, string>>
   fontSize?: string
   dropdownIndicatorPosition?: 'left' | 'right'
+  isInvalid?: boolean
+  size?: 'sm' | 'md' | 'lg'
 }
 
 export function CustomSelect<Option, IsMulti extends boolean = false>({
   customChakraStyles,
   dropdownIndicator,
   width,
+  responsiveWidth,
   dropdownIndicatorPosition = 'right',
   menuMinWidth,
+  isInvalid,
+  size = 'md',
   ...props
 }: CustomSelectProps<Option, IsMulti>) {
-  const chakraStyles: ChakraStylesConfig<Option, IsMulti> = {
-    container: (provided) => ({
-      ...provided,
-      width: width || { base: '100%', lg: '200px' },
+  const { colors } = useCustomTheme()
+
+  const propWidth = useBreakpointValue(responsiveWidth || { base: '100%', lg: '200px' })
+
+  const { control, ...restStyles } = customChakraStyles || {}
+
+  const chakraStyles: StylesConfig<Option, IsMulti> = {
+    container: (base) => ({
+      ...base,
+      width: width || propWidth,
     }),
 
     menu: (provided) => ({
       ...provided,
+      backgroundColor: colors.panel.solid,
+      padding: '8px',
       minWidth: menuMinWidth,
     }),
+    menuPortal: (base) => ({ ...base, zIndex: 99999 }),
 
     option: (_, state) => ({
-      bg: 'panel.solid',
-      color: 'utils.text',
+      background: colors.panel.solid,
+      color: colors.utils.text,
       borderRadius: '8px',
       minHeight: '32px',
       fontSize: props.fontSize || '16px',
       fontWeight: '400',
-      paddingX: '12px',
+      padding: '8px 12px',
       display: 'flex',
       alignItems: 'center',
       marginY: '4px',
       cursor: 'pointer',
       ...(state.isSelected && {
-        bg: 'neutral1.3',
-        color: 'utils.text',
+        background: colors.neutral1[3],
+        color: colors.utils.text,
       }),
       ...(state.isFocused &&
         !state.isSelected && {
-          bg: 'primary1.9',
-          color: 'utils.blackContrast',
+          background: colors.primary1[9],
+          color: colors.utils.blackContrast,
         }),
-      _hover: {
-        bg: 'primary1.9',
-        color: 'utils.blackContrast',
+      '&:hover': {
+        background: colors.primary1[9],
+        color: colors.utils.blackContrast,
       },
-      _active: {
-        bg: 'primary1.10',
-        color: 'utils.blackContrast',
+      '&:active': {
+        bg: colors.primary1[10],
+        color: colors.utils.blackContrast,
       },
-      _disabled: {
-        bg: 'panel.solid',
-        color: 'neutral1.8',
+      '&:disabled': {
+        background: colors.panel.solid,
+        color: colors.neutral1[8],
         cursor: 'not-allowed',
       },
     }),
-    control: (provided) => ({
+
+    singleValue(base) {
+      return {
+        ...base,
+        color: colors.utils.text,
+      }
+    },
+    multiValue(base, props) {
+      return {
+        ...base,
+        backgroundColor: colors.neutral1[6],
+        borderRadius: '4px',
+        marginRight: '4px',
+      }
+    },
+    multiValueLabel(base, props) {
+      return {
+        ...base,
+        color: colors.utils.text,
+      }
+    },
+
+    control: (provided, props) => ({
       ...provided,
-      borderColor: 'neutral1.6',
+      borderRadius: '8px',
+      backgroundColor: `${colors.panel.solid} !important`,
+      borderColor: props.isFocused ? colors.primary1[11] : isInvalid ? colors.error[9] : colors.neutral1[6],
       flexDirection: dropdownIndicatorPosition === 'left' ? 'row-reverse' : 'row',
-      _hover: {
-        borderColor: 'neutral1.7',
+      boxShadow: 'none !important',
+      '&:hover': {
+        borderColor: props.isFocused ? colors.primary1[11] : colors.neutral1[7],
+        cursor: 'pointer',
+        boxShadow: 'none',
       },
+      '&:focus': {
+        borderColor: colors.primary1[11],
+        outline: 'none',
+        boxShadow: 'none',
+      },
+      '&:active': {
+        borderColor: colors.primary1[11],
+        outline: 'none',
+        boxShadow: 'none',
+      },
+      '&:selected': {
+        borderColor: colors.primary1[11],
+        outline: 'none',
+        boxShadow: 'none',
+      },
+      '&:disabled': {
+        borderColor: colors.neutral1[8],
+        outline: 'none',
+        boxShadow: 'none',
+      },
+      ...(control && {
+        ...control(provided, props),
+      }),
     }),
-    ...customChakraStyles,
+    input: (provided) => ({
+      ...provided,
+      color: colors.utils.text,
+    }),
+    indicatorSeparator: (provided) => ({
+      ...provided,
+      display: 'none',
+    }),
+    ...restStyles,
   }
 
-  const components = useMemo(
+  const customComponents = useMemo(
     () => ({
       DropdownIndicator: (props: any) => (
-        <chakraComponents.DropdownIndicator {...props}>{dropdownIndicator}</chakraComponents.DropdownIndicator>
+        <components.DropdownIndicator {...props}>{dropdownIndicator}</components.DropdownIndicator>
       ),
     }),
     [dropdownIndicator],
   )
 
+  console.log('CHekcing value', props.value)
+
   return (
     <Select
-      chakraStyles={chakraStyles}
-      useBasicStyles
+      styles={chakraStyles}
       {...props}
-      components={{ ...components, ...props.components }}
+      components={{ ...customComponents, ...props.components }}
       menuPortalTarget={document.body}
       menuPlacement="auto"
-      styles={{
-        menuPortal: (base) => ({ ...base, zIndex: 99999 }),
-      }}
     />
   )
 }

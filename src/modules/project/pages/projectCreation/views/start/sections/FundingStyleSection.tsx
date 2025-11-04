@@ -51,10 +51,15 @@ export const FundingStyleSection = () => {
         </Body>
       </VStack>
 
-      <SimpleGrid columns={[1, 2]} spacing={16} width="100%" maxW={dimensions.creation.start.maxWidth}>
+      <SimpleGrid
+        columns={{ base: 1, sm: 2 }}
+        spacing={{ base: 4, lg: 16 }}
+        width="100%"
+        maxW={dimensions.creation.start.maxWidth}
+      >
         {fundingStyles.map((style) => (
-          <CardLayout key={style.title} spacing={0} justifyContent="space-between">
-            <Box height="auto" width="full" borderRadius="md" overflow="hidden" objectFit={'contain'}>
+          <CardLayout key={style.title} spacing={0} justifyContent="space-between" alignItems="center">
+            <Box height="auto" width="full" maxWidth="350px" borderRadius="md" overflow="hidden" objectFit={'contain'}>
               <Image src={style.image} alt={style.title} width="100%" height="100%" objectFit="cover" />
             </Box>
 

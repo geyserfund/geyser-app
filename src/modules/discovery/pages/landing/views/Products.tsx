@@ -17,6 +17,14 @@ import {
   TrendingRewardCardSkeleton,
 } from './mainView/defaultView/components/TrendingRewardCard.tsx'
 
+const REJECTED_SUB_CATEGORIES = [
+  ProjectSubCategory.Other,
+  ProjectSubCategory.Course,
+  ProjectSubCategory.Humanitarian,
+  ProjectSubCategory.Podcast,
+  ProjectSubCategory.Fundraiser,
+  ProjectSubCategory.Promotion,
+]
 export const Products = () => {
   const toast = useNotification()
   const { data, loading } = useProjectRewardsTrendingQuarterlyGetQuery({
@@ -30,7 +38,7 @@ export const Products = () => {
 
   const rewardsBySubCategory = rewards.reduce((acc, reward) => {
     const { subCategory } = reward.projectReward.project
-    if (!subCategory || !reward.projectReward) {
+    if (!subCategory || !reward.projectReward || REJECTED_SUB_CATEGORIES.includes(subCategory as ProjectSubCategory)) {
       return acc
     }
 
@@ -77,7 +85,7 @@ export const Products = () => {
             <HStack w="full" justifyContent={'start'} alignItems={'center'}>
               <H3 size="2xl" dark bold>
                 {t('Trending in')}{' '}
-                <Body as="span" color="primary1.11" bold>
+                <Body as="span" bold>
                   {' '}
                   {ProjectSubCategoryLabel[subCategory]}
                 </Body>

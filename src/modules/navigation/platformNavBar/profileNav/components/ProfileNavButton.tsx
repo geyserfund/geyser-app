@@ -4,7 +4,7 @@ import { PiList, PiUser } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
-import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
+import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
 import {
   getPath,
@@ -20,7 +20,6 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
   const { user, isLoggedIn } = useAuthContext()
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
-  const followedActivityDot = useAtomValue(followedActivityDotAtom)
 
   const guardianData = guardianValues(user?.guardianType)
 
@@ -89,7 +88,7 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
           width={{ base: '38px', lg: '46px' }}
           backgroundColor="neutral1.3"
         >
-          {(myProjectActivityDot || followedActivityDot) && (
+          {myProjectActivityDot && (
             <AvatarBadge placement="bottom-end" borderWidth="3px" borderColor="utils.pbg" bg="error.9" boxSize="16px" />
           )}
         </Avatar>

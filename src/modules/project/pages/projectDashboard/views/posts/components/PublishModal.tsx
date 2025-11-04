@@ -1,9 +1,9 @@
 import { Button, HStack, IconButton, Switch, Tooltip, VStack } from '@chakra-ui/react'
-import { chakraComponents, MultiValue, OptionProps } from 'chakra-react-select'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { PiEnvelopeSimple, PiX } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
+import { components, MultiValue, OptionProps } from 'react-select'
 
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -145,9 +145,9 @@ export const PublishModal = ({
 
   const Option = (props: OptionProps<ProjectRewardFragment, true, any>) => {
     return (
-      <chakraComponents.Option {...props}>
+      <components.Option {...props}>
         <RewardItem imageUrl={props.data.images[0]} name={props.children} />
-      </chakraComponents.Option>
+      </components.Option>
     )
   }
 
@@ -168,7 +168,7 @@ export const PublishModal = ({
             placeholder={t('Select recipients')}
             options={sendToOptions}
             onChange={handleInput}
-            width={'full'}
+            width={'100%'}
             size="sm"
             fontSize="sm"
           />
@@ -178,7 +178,7 @@ export const PublishModal = ({
           <>
             <CustomSelect<ProjectRewardFragment, true>
               isMulti
-              width="full"
+              width={'100%'}
               onChange={handleChange}
               name="rewards"
               placeholder={t('Select products')}

@@ -1,9 +1,9 @@
 import { Box, Link } from '@chakra-ui/react'
-import { chakraComponents, OptionProps } from 'chakra-react-select'
 import { DateTime } from 'luxon'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiDownloadSimple } from 'react-icons/pi'
+import { components, OptionProps } from 'react-select'
 
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
@@ -84,9 +84,9 @@ export function ExportComponent() {
       if (data.value === ExportOptions.customRange) {
         return (
           <Box onClick={dateModal.onOpen}>
-            <chakraComponents.Option data={data} {...rest}>
+            <components.Option data={data} {...rest}>
               {children}
-            </chakraComponents.Option>
+            </components.Option>
           </Box>
         )
       }
@@ -99,9 +99,9 @@ export function ExportComponent() {
           isExternal
           href={getValuesForUrl(data.value)}
         >
-          <chakraComponents.Option data={data} {...rest}>
+          <components.Option data={data} {...rest}>
             {children}
-          </chakraComponents.Option>
+          </components.Option>
         </Link>
       )
     },

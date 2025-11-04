@@ -1,8 +1,8 @@
 import { Button, Icon, useClipboard, VStack } from '@chakra-ui/react'
-import { SingleValue } from 'chakra-react-select'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { PiCheck, PiCode } from 'react-icons/pi'
+import { SingleValue } from 'react-select'
 
 import { CustomSelect } from '@/components/ui/CustomSelect.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
@@ -62,7 +62,7 @@ export const ProjectContributionEmbed = () => {
       <Body>{t('Embed the contribute and leaderboard section of this page on your website')}</Body>
       <CustomSelect
         isSearchable={false}
-        width={'full'}
+        width={'100%'}
         options={options}
         value={options.find((option) => option.value === selectedType)}
         onChange={handleSelectChange}

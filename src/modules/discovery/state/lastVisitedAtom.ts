@@ -23,25 +23,3 @@ export const setLastVisitedMyProjectActivityAtom = atom(null, (get, set) => {
   const date = DateTime.now().toMillis()
   set(lastVistedMyProjectActivityAtom, date)
 })
-
-/** Date time in milliseconds, when the user last visited the Activity page */
-export const lastVisitedFollowedActivityAtom = atomWithStorage<number | null>('lastVisitedFollowedActivity', null)
-
-/** Set the last visited date to now */
-export const setLastVisitedFollowedActivityAtom = atom(null, (get, set) => {
-  const date = DateTime.now().toMillis()
-  set(lastVisitedFollowedActivityAtom, date)
-})
-
-/** JS Date object, when the user last visited the Activity page  or last Week which ever is sooner */
-export const lastVisitedFollowedActivityDateAtom = atom((get) => {
-  const lastVisitedFollowedActivity = get(lastVisitedFollowedActivityAtom)
-
-  const aWeekAgo = DateTime.now().minus({ days: 7 })
-
-  if (lastVisitedFollowedActivity === null || lastVisitedFollowedActivity < aWeekAgo.toMillis()) {
-    return aWeekAgo.toMillis()
-  }
-
-  return lastVisitedFollowedActivity
-})

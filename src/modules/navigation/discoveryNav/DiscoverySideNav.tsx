@@ -15,7 +15,7 @@ import { useAtomValue } from 'jotai'
 import { Link } from 'react-router'
 
 import { LogoDark, LogoLight } from '@/assets'
-import { followedActivityDotAtom, myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
+import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath, LogoNameDark, LogoNameLight } from '@/shared/constants/index.ts'
 import { UserExternalLinks } from '@/shared/molecules/UserExternalLinks'
@@ -46,7 +46,6 @@ export const DiscoverySideNav = () => {
   const currentNavItem = useAtomValue(currentPlatformNavItemAtom)
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
-  const followedActivityDot = useAtomValue(followedActivityDotAtom)
 
   if (isMobile) return null
 
@@ -73,12 +72,7 @@ export const DiscoverySideNav = () => {
         </Link>
         <VStack w="full" padding={0} spacing={3}>
           {discoveryNavItems.map((item, index) => {
-            const activityDot =
-              item.key === DiscoveryNavItemKey.MyProjects
-                ? myProjectActivityDot
-                : item.key === DiscoveryNavItemKey.Activity
-                ? followedActivityDot
-                : false
+            const activityDot = item.key === DiscoveryNavItemKey.MyProjects ? myProjectActivityDot : false
 
             return (
               <>

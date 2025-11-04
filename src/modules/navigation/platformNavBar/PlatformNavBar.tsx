@@ -18,6 +18,7 @@ import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../modules/auth/hooks'
 import { PathName } from '../../../shared/constants'
 import { BrandLogo, BrandLogoFull } from './components/BrandLogo'
+import { CreateProjectButton } from './components/CreateProjectButton.tsx'
 import { LoggedOutModal } from './components/LoggedOutModal'
 import { LoginButton } from './components/LoginButton'
 import { ProjectLogo } from './components/ProjectLogo'
@@ -106,6 +107,7 @@ export const PlatformNavBar = () => {
         {!isLoggedIn ? (
           <>
             <LoginButton />
+            <CreateProjectButton display={{ base: 'none', lg: 'flex' }} label={t('Creator')} noIcon />
           </>
         ) : isGuardiansPage ? (
           <ShareGuardiansButton />

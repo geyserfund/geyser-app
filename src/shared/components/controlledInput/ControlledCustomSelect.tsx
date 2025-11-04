@@ -1,6 +1,6 @@
 import { StackProps } from '@chakra-ui/react'
-import { MultiValue, SingleValue } from 'chakra-react-select'
 import { Control, FieldValues, Path, useController } from 'react-hook-form'
+import { MultiValue, SingleValue } from 'react-select'
 
 import { CustomSelect, CustomSelectProps } from '@/components/ui/CustomSelect.tsx'
 import { FieldContainer, FieldContainerProps } from '@/shared/components/form/FieldContainer.tsx'
@@ -19,7 +19,8 @@ export interface ControlledCustomSelectProps<FormValues extends FieldValues, Opt
   onChange?: (value: SingleValue<Option> | MultiValue<Option>) => void
   onBlur?: () => void
   required?: boolean
-  width?: string | number
+  width?: string | number | null
+  responsiveWidth?: (string | null)[] | Partial<Record<string, string>>
   options: readonly Option[]
   description?: string
   placeholder?: string
@@ -88,7 +89,6 @@ export const ControlledCustomSelect = <FormValues extends FieldValues, Option, I
           }
         }}
         isInvalid={Boolean(fieldState.error?.message)}
-        errorBorderColor="error.9"
       />
     </FieldContainer>
   )

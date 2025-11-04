@@ -491,7 +491,7 @@ export const GuardianPartnerDJPUrl =
 export const GuardianPartnerBitcoinNewsUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Bitcoin-News.png'
 export const CampaignsComingSoonImageUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/campaigns/campaigns_banner.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/campaigns/campaigns_banner1.png'
 
 // SEO
 

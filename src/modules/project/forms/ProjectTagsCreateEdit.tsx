@@ -1,10 +1,10 @@
 import { Button, StackProps, useDisclosure, VStack } from '@chakra-ui/react'
-import { chakraComponents, MenuListProps } from 'chakra-react-select'
 import { useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { Trans, useTranslation } from 'react-i18next'
 import { PiPlus } from 'react-icons/pi'
 import { createUseStyles } from 'react-jss'
+import { components, MenuListProps } from 'react-select'
 
 import { ControlledCustomSelect } from '@/shared/components/controlledInput/ControlledCustomSelect.tsx'
 
@@ -113,7 +113,7 @@ export const ProjectTagsCreateEdit = ({ form, ...rest }: ProjectTagsCreateEditPr
 
   const MenuList = (props: MenuListProps<TagsGetResult, true, any>) => {
     return (
-      <chakraComponents.MenuList {...props}>
+      <components.MenuList {...props}>
         {props.children}
         {showAddTag && (
           <Button
@@ -127,7 +127,7 @@ export const ProjectTagsCreateEdit = ({ form, ...rest }: ProjectTagsCreateEditPr
             {t('add tag')}
           </Button>
         )}
-      </chakraComponents.MenuList>
+      </components.MenuList>
     )
   }
 
