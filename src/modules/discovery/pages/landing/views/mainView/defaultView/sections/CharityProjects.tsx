@@ -28,17 +28,26 @@ type CharityProjects = {
 export const CharityProjects = ({ category, subCategory }: ProjectDisplayProps) => {
   const { t } = useTranslation()
 
-  const [projectList, setProjectList] = useState<CharityProjects[]>([])
+  const [projectList, setProjectList] = useState<number[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     setIsLoading(true)
     fetchCharityProjectsData().then((data: AirtableResponse) => {
       // Transform the Airtable response to our FeaturedWallet format
-      const wallets = data.records.map((record) => ({
+      const projects = data.records.map((record) => ({
         ...record.fields,
       }))
-      setProjectList(wallets)
+
+      const projectIds =
+        projects.length > 6
+          ? projects
+              .sort(() => Math.random() - 0.5)
+              .slice(0, 6)
+              .map((project) => project.projectId)
+          : projects.map((project) => project.projectId)
+
+      setProjectList(projectIds)
       setIsLoading(false)
     })
   }, [])
@@ -48,13 +57,7 @@ export const CharityProjects = ({ category, subCategory }: ProjectDisplayProps) 
     variables: {
       input: {
         where: {
-          ids:
-            projectList.length > 6
-              ? projectList
-                  .sort(() => Math.random() - 0.5)
-                  .slice(0, 6)
-                  .map((project) => project.projectId)
-              : projectList.map((project) => project.projectId),
+          ids: projectList,
         },
       },
     },

@@ -3,11 +3,7 @@ import { Outlet } from 'react-router'
 
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 
-import { useLastVisistedFollowedProjects } from '../../hooks/useLastVisited.ts'
-
 export const Activity = () => {
-  useLastVisistedFollowedProjects()
-
   return (
     <VStack
       h="full"

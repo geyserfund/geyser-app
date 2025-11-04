@@ -1,7 +1,7 @@
 import { Box, Divider, Radio, RadioGroup, VStack } from '@chakra-ui/react'
-import { components, OptionProps } from 'chakra-react-select'
 import { t } from 'i18next'
 import { useMemo } from 'react'
+import { components, OptionProps } from 'react-select'
 
 import { CustomSelect } from '@/components/ui/CustomSelect.tsx'
 import { useFilterContext } from '@/context/filter'

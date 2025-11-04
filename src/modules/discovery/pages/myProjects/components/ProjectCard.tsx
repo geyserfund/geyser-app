@@ -1,6 +1,6 @@
 import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiClock, PiEyeglasses, PiGear, PiNoteBlank } from 'react-icons/pi'
+import { PiClock, PiEyeglasses, PiGear, PiNoteBlank, PiNotePencil } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
 import { FOLLOWERS_NEEDED } from '@/modules/project/pages/projectView/views/body/components/PrelaunchFollowButton.tsx'
@@ -27,6 +27,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   const Direction = isMobile ? VStack : HStack
 
+  const isDraft = project.status && inDraftStatus.includes(project.status)
+
   const renderProjectCardContent = () => {
     if (project.status === ProjectStatus.PreLaunch) {
       return (
@@ -36,7 +38,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       )
     }
 
-    if (project.status && inDraftStatus.includes(project.status)) {
+    if (isDraft) {
       return (
         <Direction mt={4} spacing={4} alignItems="stretch">
           <InDraftProjectCard />
@@ -77,17 +79,29 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             {project.title}
           </Body>
         </HStack>
-
-        <Button
-          variant={'soft'}
-          colorScheme="neutral1"
-          as={RouterLink}
-          to={getPath('dashboardAnalytics', project.name)}
-          size="md"
-          leftIcon={isMobile ? undefined : <PiGear size={16} />}
-        >
-          {isMobile ? <PiGear size={16} /> : t('Dashboard')}
-        </Button>
+        {isDraft ? (
+          <Button
+            variant={'soft'}
+            colorScheme="neutral1"
+            as={RouterLink}
+            to={getPath('launchProject', project.id)}
+            size="md"
+            leftIcon={isMobile ? undefined : <PiNotePencil size={16} />}
+          >
+            {isMobile ? <PiNotePencil size={16} /> : t('Update & launch')}
+          </Button>
+        ) : (
+          <Button
+            variant={'soft'}
+            colorScheme="neutral1"
+            as={RouterLink}
+            to={getPath('dashboardAnalytics', project.name)}
+            size="md"
+            leftIcon={isMobile ? undefined : <PiGear size={16} />}
+          >
+            {isMobile ? <PiGear size={16} /> : t('Dashboard')}
+          </Button>
+        )}
       </HStack>
       {renderProjectCardContent()}
     </Box>

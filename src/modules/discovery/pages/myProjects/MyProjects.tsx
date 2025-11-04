@@ -54,8 +54,8 @@ export const MyProjects = () => {
             {inPrelaunchProjects.map((project) =>
               project ? <ProjectCard key={project.id} project={project} /> : null,
             )}
-            {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
             {activeProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+            {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
             {inReviewProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
           </>
         )}

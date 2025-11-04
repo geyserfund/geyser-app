@@ -7,9 +7,11 @@ import { getPath } from '@/shared/constants'
 
 type CreateProjectButtonProps = {
   iconOnly?: boolean
+  label?: string
+  noIcon?: boolean
 } & ButtonProps
 
-export const CreateProjectButton = ({ iconOnly, ...props }: CreateProjectButtonProps) => {
+export const CreateProjectButton = ({ iconOnly, label, noIcon, ...props }: CreateProjectButtonProps) => {
   const { t } = useTranslation()
   return (
     <Button
@@ -18,10 +20,10 @@ export const CreateProjectButton = ({ iconOnly, ...props }: CreateProjectButtonP
       size="lg"
       variant="outline"
       colorScheme="primary1"
-      leftIcon={iconOnly ? undefined : <PiRocketLaunch />}
+      leftIcon={iconOnly || noIcon ? undefined : <PiRocketLaunch />}
       {...props}
     >
-      {iconOnly ? <PiRocketLaunch /> : t('Create project')}
+      {iconOnly ? <PiRocketLaunch /> : label || t('Create project')}
     </Button>
   )
 }

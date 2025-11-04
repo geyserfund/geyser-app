@@ -1,7 +1,7 @@
 import { VStack } from '@chakra-ui/react'
-import { SingleValue } from 'chakra-react-select'
 import { t } from 'i18next'
 import { useState } from 'react'
+import { SingleValue } from 'react-select'
 
 import { CustomSelect } from '@/components/ui/CustomSelect.tsx'
 
@@ -40,7 +40,7 @@ export const ProjectBanners = () => {
     <VStack width="100%">
       <CustomSelect
         isSearchable={false}
-        width={'full'}
+        width={'100%'}
         options={options}
         value={options.find((option) => option.value === selectedType)}
         onChange={handleSelectChange}

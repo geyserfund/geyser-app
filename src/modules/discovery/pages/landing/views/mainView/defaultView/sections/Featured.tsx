@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { fetchFeaturedProject } from '@/api/airtable'
-import { __production__ } from '@/shared/constants/index.ts'
 
 import { FeaturedCardSkeleton } from '../components/FeaturedCardLayout.tsx'
 import { FeaturedDisplayCard } from '../components/FeaturedDisplayCard.tsx'
@@ -46,17 +45,15 @@ export const Featured = () => {
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
-        if (__production__) {
-          const response: FeaturedAirtableResponse = await fetchFeaturedProject()
+        const response: FeaturedAirtableResponse = await fetchFeaturedProject()
 
-          if (response.records.length > 1) {
-            setAllAirtableData(response.records.map((record) => record.fields).filter((data) => data.Name !== ''))
-          }
+        if (response.records.length > 1) {
+          setAllAirtableData(response.records.map((record) => record.fields).filter((data) => data.Name !== ''))
+        }
 
-          const data = response?.records?.[0]?.fields
-          if (data) {
-            setData(data)
-          }
+        const data = response?.records?.[0]?.fields
+        if (data) {
+          setData(data)
         }
       } catch (error) {
         setNoData(true)

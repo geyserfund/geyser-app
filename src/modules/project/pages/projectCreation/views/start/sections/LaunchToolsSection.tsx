@@ -55,7 +55,12 @@ export const LaunchToolsSection = () => {
         </Body>
       </VStack>
 
-      <SimpleGrid columns={[1, 3]} spacing={8} width="100%" maxW={dimensions.creation.start.maxWidth}>
+      <SimpleGrid
+        columns={{ base: 1, sm: 2, md: 3 }}
+        spacing={{ base: 4, lg: 8 }}
+        width="100%"
+        maxW={dimensions.creation.start.maxWidth}
+      >
         {tools.map((tool) => (
           <CreationIllustrationCard
             key={tool.title}
