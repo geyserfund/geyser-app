@@ -123,7 +123,7 @@ export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, p
     case ProjectCreationStep.FundingGoal:
       return getPath('launchFundingGoal', projectId)
     case ProjectCreationStep.FundingType:
-      return getPath('launchFundingStrategy', projectId)
+      return getPath('launchFundingGoal', projectId) // TODO change back to launchFundingStrategy when we release AON
     case ProjectCreationStep.PerksAndProducts:
       return getPath('launchProjectRewards', projectId)
     case ProjectCreationStep.Story:

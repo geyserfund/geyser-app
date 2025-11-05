@@ -57,7 +57,7 @@ export const CampaignsComingSoon = () => {
             </Body>
             <Body size="xl" lineHeight={1.6}>
               {t(
-                'This escrow mechanism makes fundraising fair, transparent and aligns incentives of contributors and creators. Geyser only ',
+                'This escrow mechanism makes fundraising fair, transparent and aligns incentives of contributors and creators. Geyser only monetizes if the project succeeds, to keep incentives aligned all the way down. ',
               )}
             </Body>
           </VStack>

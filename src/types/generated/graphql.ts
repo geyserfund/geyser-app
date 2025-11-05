@@ -8521,7 +8521,7 @@ export type ProjectsMostFundedTakeItAllQueryVariables = Exact<{
 export type ProjectsMostFundedTakeItAllQuery = { __typename?: 'Query', projectsMostFundedTakeItAll: Array<{ __typename?: 'ProjectMostFunded', project: (
       { __typename?: 'Project' }
       & ProjectForLandingPageFragment
-    ) }> };
+    ), contributionsSummary?: { __typename?: 'ContributionsSummary', contributionsTotal: number, contributionsTotalUsd: number } | null }> };
 
 export type ProjectRewardsTrendingWeeklyGetQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -13571,6 +13571,10 @@ export const ProjectsMostFundedTakeItAllDocument = gql`
   projectsMostFundedTakeItAll(input: $input) {
     project {
       ...ProjectForLandingPage
+    }
+    contributionsSummary {
+      contributionsTotal
+      contributionsTotalUsd
     }
   }
 }
