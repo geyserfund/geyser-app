@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { useNavigate } from 'react-router'
 
 import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
+import { AnimatedFire } from '@/shared/components/display/AnimatedFire.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
 import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
@@ -43,16 +44,8 @@ export const LandingCardBase = ({
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const getFires = (amount: number) => {
-    if (amount > 100) {
-      return '🔥'
-    }
-
     if (amount > 1000) {
-      return '🔥🔥'
-    }
-
-    if (amount > 10000) {
-      return '🔥🔥🔥'
+      return '🔥'
     }
 
     return ''
@@ -165,19 +158,22 @@ export const LandingCardBase = ({
             )}
           </Body>
         ) : (
-          <Body size="sm" bold color="primary1.11" isTruncated>
-            {contributionAmount ? (
-              <>
-                {fires ? `${fires} ` : ''}
-                {formatAmount(contributionAmount, 'USD')}{' '}
-                <Body as="span" regular>
-                  {isWeekly ? t('this week!') : t('raised!')}
-                </Body>
-              </>
-            ) : (
-              t('Just launched!')
-            )}
-          </Body>
+          <HStack spacing={0}>
+            {fires ? <AnimatedFire /> : ''}
+
+            <Body size="sm" bold color="primary1.11" isTruncated>
+              {contributionAmount ? (
+                <>
+                  {formatAmount(contributionAmount, 'USD')}{' '}
+                  <Body as="span" regular>
+                    {isWeekly ? t('this week!') : t('raised!')}
+                  </Body>
+                </>
+              ) : (
+                t('Just launched!')
+              )}
+            </Body>
+          </HStack>
         )}
       </HStack>
     )

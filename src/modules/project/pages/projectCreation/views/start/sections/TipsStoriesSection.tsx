@@ -17,12 +17,12 @@ type StoryCard = {
 
 const stories: StoryCard[] = [
   {
-    image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/tips/tips1.png',
-    link: 'https://www.youtube.com/shorts/y8u6wwhcG1U',
-  },
-  {
     image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/tips/tips2.png',
     link: 'https://youtube.com/shorts/5bcmXtR8c9I?si=Rrv89hd8oPkf_NGC',
+  },
+  {
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/tips/tips1.png',
+    link: 'https://www.youtube.com/shorts/y8u6wwhcG1U',
   },
   {
     image: 'https://storage.googleapis.com/geyser-projects-media/app/creationflow/tips/tips3.png',
@@ -97,7 +97,6 @@ export const TipsStoriesSection = () => {
         size="3xl"
         bodyProps={{
           height: '80vh',
-          width: '80vh',
           as: VStack,
           alignItems: 'center',
           justifyContent: 'center',

@@ -3,9 +3,7 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { ProjectCreationStep, ProjectStatus } from '@/types/index.ts'
-
-const DraftProjectStatuses = [ProjectStatus.Draft, ProjectStatus.InReview, ProjectStatus.Accepted]
+import { ProjectCreationStep } from '@/types/index.ts'
 
 export const useProjectDraftRedirect = () => {
   const navigate = useNavigate()
@@ -13,7 +11,7 @@ export const useProjectDraftRedirect = () => {
 
   const { project, loading, isProjectOwner } = useProjectAtom()
 
-  const isDraftProject = DraftProjectStatuses.includes(project?.status as ProjectStatus)
+  const isDraftProject = !project.launchedAt
   const isDraftUrl = location.pathname.includes('/draft')
 
   useEffect(() => {
@@ -30,7 +28,7 @@ export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, p
     case ProjectCreationStep.FundingGoal:
       return getPath('launchFundingGoal', projectId)
     case ProjectCreationStep.FundingType:
-      return getPath('launchFundingStrategy', projectId)
+      return getPath('launchFundingGoal', projectId) // TODO change back to launchFundingStrategy when we release AON
     case ProjectCreationStep.PerksAndProducts:
       return getPath('launchProjectRewards', projectId)
     case ProjectCreationStep.Story:

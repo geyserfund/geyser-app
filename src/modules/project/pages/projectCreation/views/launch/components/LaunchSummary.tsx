@@ -60,7 +60,8 @@ export const LaunchSummary = () => {
             variant="outline"
             colorScheme="neutral1"
             size="md"
-            onClick={() => navigate(getPath('launchFundingStrategy', project?.id))}
+            // onClick={() => navigate(getPath('launchFundingStrategy', project?.id))}
+            onClick={() => navigate(getPath('launchFundingGoal', project?.id))}
           >
             {t('Edit')}
           </Button>

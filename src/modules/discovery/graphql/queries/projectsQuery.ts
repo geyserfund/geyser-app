@@ -154,6 +154,10 @@ export const QUERY_PROJECTS_MOST_FUNDED_TIA = gql`
       project {
         ...ProjectForLandingPage
       }
+      contributionsSummary {
+        contributionsTotal
+        contributionsTotalUsd
+      }
     }
   }
 `

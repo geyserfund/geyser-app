@@ -16,7 +16,7 @@ import { getShortAmountLabel } from '@/utils'
 
 import { ProjectRowLayout } from './ProjectRowLayout.tsx'
 
-const MAX_PROJECTS = 9
+const MAX_PROJECTS = 12
 
 export const TopProjects = () => {
   const navigate = useNavigate()

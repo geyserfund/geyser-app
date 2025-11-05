@@ -3,7 +3,7 @@ import { MutableRefObject } from 'react'
 
 import { ScrollInvoke } from '@/helpers/ScrollInvoke.tsx'
 import { ID } from '@/shared/constants/components/id.ts'
-import { ProjectForLandingPageFragment } from '@/types/index.ts'
+import { ContributionsSummary, ProjectForLandingPageFragment } from '@/types/index.ts'
 
 import { LandingProjectCard } from '../../../components/LandingProjectCard.tsx'
 import { LoadingProjectGridItems } from '../../../components/LoadingProjectGridItems.tsx'
@@ -15,7 +15,9 @@ export const RenderProjectList = ({
   noMoreItems,
   fetchNext,
 }: {
-  projects: ProjectForLandingPageFragment[]
+  projects: (ProjectForLandingPageFragment & {
+    contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
+  })[]
   loading?: boolean
   isLoadingMore?: MutableRefObject<boolean>
   noMoreItems?: MutableRefObject<boolean>

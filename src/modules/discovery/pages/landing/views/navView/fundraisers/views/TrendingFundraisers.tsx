@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import {
+  ContributionsSummary,
   ProjectForLandingPageFragment,
   ProjectsMostFundedTakeItAllRange,
   useProjectsMostFundedTakeItAllQuery,
@@ -11,7 +12,11 @@ import { RenderProjectList } from '../../components/RenderProjectList.tsx'
 const NO_OF_PROJECT_TO_LOAD = 30
 
 export const TrendingFundraisers = () => {
-  const [campaignProjects, setCampaignProjects] = useState<ProjectForLandingPageFragment[]>([])
+  const [campaignProjects, setCampaignProjects] = useState<
+    (ProjectForLandingPageFragment & {
+      contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
+    })[]
+  >([])
 
   const { loading } = useProjectsMostFundedTakeItAllQuery({
     variables: {
@@ -21,7 +26,12 @@ export const TrendingFundraisers = () => {
       },
     },
     onCompleted(data) {
-      setCampaignProjects(data.projectsMostFundedTakeItAll.map((project) => project.project))
+      setCampaignProjects(
+        data.projectsMostFundedTakeItAll.map((project) => ({
+          ...project.project,
+          contributionSummary: project.contributionsSummary ?? undefined,
+        })),
+      )
     },
   })
 
