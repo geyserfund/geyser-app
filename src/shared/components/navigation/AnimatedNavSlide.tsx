@@ -5,11 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router'
 
 import { lightModeColors } from '@/shared/styles'
-import {
-  GuardiansButtonBackgroundGradientBright,
-  SuccessImageBackgroundGradient,
-  TitleHeaderGradient,
-} from '@/shared/styles/custom.ts'
+import { SuccessImageBackgroundGradient, TitleHeaderGradient } from '@/shared/styles/custom.ts'
 
 import { toInt } from '../../../utils'
 import { TooltipPopover } from '../feedback/TooltipPopover.tsx'
