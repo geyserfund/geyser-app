@@ -161,10 +161,8 @@ export function CustomSelect<Option, IsMulti extends boolean = false>({
     [dropdownIndicator],
   )
 
-  console.log('CHekcing value', props.value)
-
   return (
-    <Select
+    <Select<Option, IsMulti>
       styles={chakraStyles}
       {...props}
       components={{ ...customComponents, ...props.components }}

@@ -169,7 +169,7 @@ export const ProjectTagsCreateEdit = ({ form, ...rest }: ProjectTagsCreateEditPr
               control={form.control}
               options={tagOptions}
               getOptionLabel={(option: TagsGetResult) => option.label}
-              getOptionValue={(option: TagsGetResult) => option.label}
+              getOptionValue={(option: TagsGetResult) => option.id as any}
               onInputChange={handleInputChange}
               onKeyDown={handleKeyDown}
               inputValue={inputValue}
