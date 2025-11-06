@@ -167,9 +167,10 @@ export const AnimatedNavSlide = ({
             {item.new && (
               <Box
                 position="absolute"
-                top={-2}
+                top={-3}
                 background={TitleHeaderGradient}
                 borderRadius="10px"
+                borderBottomLeftRadius="2px"
                 padding="0px 6px 1px 6px"
               >
                 <Body as="span" size="xs" fontWeight={700} color="black !important">
