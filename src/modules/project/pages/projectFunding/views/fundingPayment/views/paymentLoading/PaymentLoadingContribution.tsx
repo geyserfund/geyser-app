@@ -9,7 +9,7 @@ import { getPath } from '@/shared/constants'
 
 import { QRCodeSizeMap } from '../../components/QRCodeComponent'
 
-export const PaymentLoadingContribution = ({ onComplete }: { onComplete: (_: string) => void }) => {
+export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: string) => void }) => {
   const { requestFundingFromContext, requestFundingOptions } = useFundingAPI()
 
   const { isFundingInputAmountValid, isFundingUserInfoValid, project } = useFundingFormAtom()

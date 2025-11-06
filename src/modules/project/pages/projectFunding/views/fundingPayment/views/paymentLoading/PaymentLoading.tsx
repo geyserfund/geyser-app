@@ -49,9 +49,11 @@ export const PaymentLoading = () => {
     if (!user?.id && downloadRefundFile) {
       return <PaymentDownloadRefundFile onComplete={() => setDownloadRefundFile(false)} />
     }
+
+    return <PaymentLoadingContribution onComplete={handleComplete} />
   }
 
-  return <PaymentLoadingContribution onComplete={handleComplete} />
+  return <PaymentLoadingContribution />
 }
 
 export const PaymentPassword = ({ onComplete }: { onComplete: () => void }) => {
