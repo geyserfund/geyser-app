@@ -5,8 +5,10 @@ import { ProjectDashboardAnalytics } from './views/analytics/ProjectDashboardAna
 import { ProjectDashboardNostr } from './views/nostr/ProjectDashboardNostr.tsx'
 import { PostCreateEdit } from './views/posts/PostCreateEdit.tsx'
 import { ProjectDashboardDetails } from './views/ProjectDashboardDetails.tsx'
+import { ProjectDashboardGoals } from './views/ProjectDashboardGoals.tsx'
 import { ProjectDashboardInfo } from './views/ProjectDashboardInfo.tsx'
 import { ProjectDashboardNotifications } from './views/ProjectDashboardNotifications.tsx'
+import { ProjectDashboardRewards } from './views/ProjectDashboardRewards.tsx'
 import { ProjectDashboardStory } from './views/ProjectDashboardStory.tsx'
 import { ProjectDashboardPromote } from './views/promote/ProjectDashboardPromote.tsx'
 import { RewardCreate } from './views/rewards/RewardCreate.tsx'
@@ -20,12 +22,14 @@ export {
   ProjectDashboardAccounting,
   ProjectDashboardAnalytics,
   ProjectDashboardDetails,
+  ProjectDashboardGoals,
   ProjectDashboardInfo,
   ProjectDashboardLayout,
   ProjectDashboardMobileLayout,
   ProjectDashboardNostr,
   ProjectDashboardNotifications,
   ProjectDashboardPromote,
+  ProjectDashboardRewards,
   ProjectDashboardSales,
   ProjectDashboardSettings,
   ProjectDashboardStory,

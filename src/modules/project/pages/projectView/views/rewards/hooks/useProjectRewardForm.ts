@@ -98,6 +98,9 @@ export const useProjectRewardForm = ({
     },
   })
 
+  // Fetch reward categories
+  const { loading: isRewardCategoriesLoading, data: rewardCategoriesData } = useRewardCategoriesQuery()
+
   const { createReward, updateReward } = useProjectRewardsAPI()
 
   const { project, projectOwner, partialUpdateProject } = useProjectAtom()
@@ -128,9 +131,6 @@ export const useProjectRewardForm = ({
   const formLoaded = rewardUUID
     ? Boolean(!rewardLoading && rewardData?.uuid && defaultValues?.uuid === rewardData.uuid)
     : true
-
-  // Fetch reward categories
-  const { loading: isRewardCategoriesLoading, data: rewardCategoriesData } = useRewardCategoriesQuery()
 
   const rewardCategories =
     rewardCategoriesData?.projectRewardCategoriesGet.map((category: string) => ({

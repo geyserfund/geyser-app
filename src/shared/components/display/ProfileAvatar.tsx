@@ -6,7 +6,7 @@ import { GuardianType } from '@/types'
 
 import { DefaultImage } from './DefaultImage'
 
-type ProfileAvatarProps = {
+export type ProfileAvatarProps = {
   guardian?: GuardianType | null
   wrapperProps?: BoxProps
 }

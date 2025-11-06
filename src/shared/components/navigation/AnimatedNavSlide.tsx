@@ -1,11 +1,11 @@
-import { Button, ButtonProps, ComponentWithAs, forwardRef, HStack, Skeleton, StackProps } from '@chakra-ui/react'
+import { Box, Button, ButtonProps, ComponentWithAs, forwardRef, HStack, Skeleton, StackProps } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router'
 
 import { lightModeColors } from '@/shared/styles'
-import { SuccessImageBackgroundGradient } from '@/shared/styles/custom.ts'
+import { SuccessImageBackgroundGradient, TitleHeaderGradient } from '@/shared/styles/custom.ts'
 
 import { toInt } from '../../../utils'
 import { TooltipPopover } from '../feedback/TooltipPopover.tsx'
@@ -24,6 +24,7 @@ export type AnimatedNavSlideItem = {
   tooltipLabel?: string
   disableClick?: boolean
   replacePath?: boolean
+  new?: boolean
 }
 
 type AnimatedNavSlideProps = {
@@ -157,7 +158,22 @@ export const AnimatedNavSlide = ({
               })}
             isDisabled={item.tooltipLabel ? false : item.isDisabled}
             disableColorMode={disableColorMode}
+            position="relative"
           >
+            {item.new && (
+              <Box
+                position="absolute"
+                top={-3}
+                background={TitleHeaderGradient}
+                borderRadius="10px"
+                borderBottomLeftRadius="2px"
+                padding="0px 6px 1px 6px"
+              >
+                <Body as="span" size="xs" fontWeight={700} color="black !important">
+                  {t('new')}
+                </Body>
+              </Box>
+            )}
             <TooltipPopover key={item.name} text={item.tooltipLabel}>
               <HStack
                 w="full"

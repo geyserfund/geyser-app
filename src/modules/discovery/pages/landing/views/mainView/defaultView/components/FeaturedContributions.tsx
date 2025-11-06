@@ -1,15 +1,14 @@
-/* eslint-disable complexity */
 import { Badge, BadgeProps, HStack, Icon, Image } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
 import { PiArrowFatLineRightFill } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
-import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
 import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHook.tsx'
+import { UserAvatar } from '@/shared/molecules/UserAvatar.tsx'
 import {
   ContributionForLandingPageFragment,
   GetContributionsOrderByInput,
@@ -125,7 +124,7 @@ export const ContributionCard = ({
   textMaxWidth?: string
   size?: 'md' | 'lg'
 } & BadgeProps) => {
-  const { user } = contribution.funder
+  const { user, id } = contribution.funder
 
   const navigate = useNavigate()
 
@@ -165,9 +164,9 @@ export const ContributionCard = ({
         {commaFormatted(contribution.amount)} sats
       </Body>
       <HStack>
-        <ProfileAvatar
-          src={user?.imageUrl || ''}
-          guardian={user?.guardianType}
+        <UserAvatar
+          id={id}
+          user={user}
           height={size === 'lg' ? '24px' : '18px'}
           width={size === 'lg' ? '24px' : '18px'}
           wrapperProps={{

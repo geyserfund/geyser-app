@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
 
-import { getPath } from '../../../../../../../shared/constants/index.ts'
 import { GeyserRewardsGuideLink } from '../../../../../../../shared/constants/platform/url.ts'
 import { RewardTemplate } from '../../../components/RewardTemplate.tsx'
 import { useProjectRewardTemplates } from '../../../hooks/useProjectRewardTemplates.tsx'
@@ -31,11 +30,11 @@ export const ProjectCreateRewardMain = () => {
   }, [rewards.length])
 
   const handleCreateRewardClick = () => {
-    navigate(getPath('launchProjectRewardsCreate', project?.id))
+    navigate('create')
   }
 
   const handleSelectRewardTemplate = (category: RewardCategory) => {
-    navigate(getPath('launchProjectRewardsCreate', project?.id), { state: { category } })
+    navigate('create', { state: { category } })
   }
 
   return (

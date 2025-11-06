@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { PiNotePencil, PiPlus } from 'react-icons/pi'
 
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useGoalsAtom, useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 
 import { useGoalsModal } from '../../../hooks'
@@ -37,6 +37,7 @@ export const CreatorGoalPageBottomBar = () => {
 
 export const CreateGoalButtons = () => {
   const { onGoalModalOpen, isGoalinEditMode, setGoalInEditMode } = useGoalsModal()
+  const { inProgressGoals } = useGoalsAtom()
 
   useEffect(() => {
     return () => {
@@ -53,6 +54,7 @@ export const CreateGoalButtons = () => {
         colorScheme="neutral1"
         leftIcon={<PiNotePencil />}
         onClick={() => setGoalInEditMode(!isGoalinEditMode)}
+        isDisabled={inProgressGoals.length === 0}
       >
         {!isGoalinEditMode ? t('Edit') : t('Finish editing')}
       </Button>

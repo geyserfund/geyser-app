@@ -3,12 +3,13 @@ import { Avatar, AvatarProps } from '@chakra-ui/react'
 import { UserAvatarFragment } from '@/types'
 import { getRandomAvatar, toInt } from '@/utils'
 
-import { ProfileAvatar } from '../components/display/ProfileAvatar'
+import { ProfileAvatar, ProfileAvatarProps } from '../components/display/ProfileAvatar'
 
 type UserAvatarProps = {
   id?: number | string
   user?: UserAvatarFragment | null
-} & AvatarProps
+} & AvatarProps &
+  ProfileAvatarProps
 
 export const UserAvatar = ({ id, user, ...props }: UserAvatarProps) => {
   if (user) {
