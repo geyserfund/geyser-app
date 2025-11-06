@@ -12,14 +12,15 @@ export const PlatformNav = () => {
     const buttonDimension = '50px'
     const buttonList = [
       {
-        name: 'Campaigns',
-        path: '/campaigns',
-        icon: <Image src={CampaignIconUrl} height={buttonDimension} width={buttonDimension} />,
-      },
-      {
         name: 'Fundraisers',
         path: '/fundraisers',
         icon: <Image src={FundraiserIconUrl} height={buttonDimension} width={buttonDimension} />,
+      },
+      {
+        name: 'Campaigns',
+        path: '/campaigns',
+        icon: <Image src={CampaignIconUrl} height={buttonDimension} width={buttonDimension} />,
+        new: true,
       },
 
       {
