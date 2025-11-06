@@ -7,7 +7,7 @@ import { getPath } from '@/shared/constants/index.ts'
 import { RenderGoals } from './common/RenderGoals'
 import { CreatorGoalPageBottomBar, CreatorGoalPageTopBar } from './components'
 
-export const ProjectGoals = () => {
+export const ProjectGoals = ({ onNoGoalsProp }: { onNoGoalsProp?: () => void }) => {
   const { project } = useProjectAtom()
   const navigate = useNavigate()
 
@@ -19,7 +19,7 @@ export const ProjectGoals = () => {
     <VStack w="full" spacing={8} paddingBottom={28}>
       <CreatorGoalPageTopBar />
       <VStack w="full" alignItems={'start'}>
-        <RenderGoals onNoGoals={onNoGoals} />
+        <RenderGoals onNoGoals={onNoGoalsProp ? onNoGoalsProp : onNoGoals} />
       </VStack>
 
       <CreatorGoalPageBottomBar />

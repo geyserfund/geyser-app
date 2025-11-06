@@ -3,7 +3,7 @@ import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector'
 import backend from 'i18next-http-backend'
 import { initReactI18next } from 'react-i18next'
 
-import { __development__, VITE_APP_LNG_PORT } from '@/shared/constants'
+import { __development__ } from '@/shared/constants'
 
 import {
   ArabicTranslations,
@@ -23,7 +23,7 @@ import {
 } from '../../language/translations'
 import { lng } from '../shared/constants'
 
-const languagePostUrl = `http://localhost:${VITE_APP_LNG_PORT}/language/{{lng}}`
+const languagePostUrl = `https://language.dev.geyser.fund/language/{{lng}}`
 
 const initOptions = __development__
   ? {

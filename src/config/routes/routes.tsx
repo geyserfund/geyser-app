@@ -567,6 +567,22 @@ export const platformRoutes: RouteObject[] = [
                   return { Component: projectDashboardPages.ProjectDashboardPromote }
                 },
               },
+              {
+                path: getPath('dashboardRewards', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardRewards = await loadProjectDashboardPages().then(
+                    (m) => m.ProjectDashboardRewards,
+                  )
+                  return { Component: ProjectDashboardRewards }
+                },
+              },
+              {
+                path: getPath('dashboardFundingGoal', PathName.projectName),
+                async lazy() {
+                  const ProjectDashboardGoals = await loadProjectDashboardPages().then((m) => m.ProjectDashboardGoals)
+                  return { Component: ProjectDashboardGoals }
+                },
+              },
             ],
           },
           /** PROJECT DASHBOARD ROUTES =========== END =========== */

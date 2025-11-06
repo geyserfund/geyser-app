@@ -51,7 +51,7 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     icon: PiFlagBannerFold,
   },
   {
-    label: 'Perks & Products',
+    label: 'Products',
     path: 'dashboardRewards',
     type: DashboardType.config,
     icon: PiHandbag,
