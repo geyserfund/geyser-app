@@ -8,7 +8,6 @@ import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { usePaginationAtomHook } from '@/shared/hooks/utils/usePaginationAtomHook.tsx'
-import { UserAvatar } from '@/shared/molecules/UserAvatar.tsx'
 import {
   ContributionForLandingPageFragment,
   GetContributionsOrderByInput,
@@ -124,7 +123,7 @@ export const ContributionCard = ({
   textMaxWidth?: string
   size?: 'md' | 'lg'
 } & BadgeProps) => {
-  const { user, id } = contribution.funder
+  const { user } = contribution.funder
 
   const navigate = useNavigate()
 
@@ -138,7 +137,7 @@ export const ContributionCard = ({
   return (
     <Badge
       as={HStack}
-      colorScheme={colorScheme}
+      colorScheme={'neutral1'}
       variant="surface"
       size={size === 'lg' ? 'xl' : 'md'}
       onClick={() => navigate(getPath('project', project.name))}
@@ -164,31 +163,13 @@ export const ContributionCard = ({
         {commaFormatted(contribution.amount)} sats
       </Body>
       <HStack>
-        <UserAvatar
-          id={id}
-          user={user}
-          height={size === 'lg' ? '24px' : '18px'}
-          width={size === 'lg' ? '24px' : '18px'}
-          wrapperProps={{
-            padding: '1px',
-            height: size === 'lg' ? '24px' : '20px',
-            width: size === 'lg' ? '24px' : '20px',
-          }}
-        />
-        <ProfileText guardian={user?.guardianType} maxWidth={textMaxWidth} isTruncated>
-          {user?.username || t('Anonymous')}
+        <ProfileText guardian={user?.guardianType} maxWidth={textMaxWidth} isTruncated textTransform="none">
+          {user?.username || t('anon')}
         </ProfileText>
       </HStack>
 
       <Icon as={PiArrowFatLineRightFill} />
-      <HStack>
-        <Image
-          src={project?.thumbnailImage || ''}
-          height={size === 'lg' ? '24px' : '18px'}
-          width={size === 'lg' ? '24px' : '18px'}
-          borderRadius="4px"
-          objectFit="cover"
-        />
+      <HStack paddingRight={2}>
         <Body size="sm" dark isTruncated maxWidth={textMaxWidth} bold>
           {project.title}
         </Body>
