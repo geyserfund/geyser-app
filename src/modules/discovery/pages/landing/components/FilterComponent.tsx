@@ -71,7 +71,6 @@ export const FilterComponent = () => {
             />
           </InputRightElement>
         </InputGroup>
-        {/* <FilterByRegionMenuMenu /> */}
       </HStack>
       <FilterModal {...filterModal} />
     </>
