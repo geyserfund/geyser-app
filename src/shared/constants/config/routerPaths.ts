@@ -19,6 +19,9 @@ export enum PathName {
   activityGlobal = 'global',
   activityFollowed = 'followed',
 
+  latest = 'latest',
+  inYourRegion = 'region',
+
   projectCategory = 'category',
   projectSubCategory = 'subcategory',
   allOrNothing = 'allornothing',
@@ -170,6 +173,8 @@ const pathsMap = {
   discoveryLanding: () => '/',
   discoveryCampaigns: () => `/${PathName.campaigns}`,
   discoveryFundraisers: () => `/${PathName.fundraisers}`,
+  discoveryFundraisersLatest: () => `/${PathName.fundraisers}/${PathName.latest}`,
+  discoveryFundraisersInYourRegion: () => `/${PathName.fundraisers}/${PathName.inYourRegion}`,
   discoveryProducts: () => `/${PathName.products}`,
   discoveryAllOrNothing: () => `/${PathName.allOrNothing}`,
   discoveryProjectCategory: (category: string) => `/${PathName.projectCategory}/${category}`,

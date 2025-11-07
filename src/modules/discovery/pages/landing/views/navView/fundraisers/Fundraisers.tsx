@@ -1,46 +1,42 @@
-import { Tab, TabList, TabPanels, Tabs, VStack } from '@chakra-ui/react'
+import { Tab, TabList, Tabs, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useState } from 'react'
+import { Outlet, useNavigate } from 'react-router'
 
-import { InYourRegionFundraisers } from './views/InYourRegionFundraisers.tsx'
-import { LatestFundraisers } from './views/LatestFundraisers.tsx'
-import { TrendingFundraisers } from './views/TrendingFundraisers.tsx'
+import { getPath } from '@/shared/constants/index.ts'
 
 const tabs = [
   {
     label: `🔥 ${t('Trending')}`,
-    Component: TrendingFundraisers,
+    path: getPath('discoveryFundraisers'),
   },
   {
     label: `${t('Latest')}`,
-    Component: LatestFundraisers,
+    path: getPath('discoveryFundraisersLatest'),
   },
   {
     label: `${t('In your region')}`,
-    Component: InYourRegionFundraisers,
+    path: getPath('discoveryFundraisersInYourRegion'),
   },
 ]
 
 export const Fundraisers = () => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0)
+  const navigate = useNavigate()
 
   return (
-    <Tabs w="full" variant="secondary" onChange={(index) => setActiveTabIndex(index)}>
-      <TabList gap={4}>
-        {tabs.map((tab) => (
-          <Tab key={tab.label} fontSize={{ base: 'xs', sm: 'md' }}>
-            {tab.label}
-          </Tab>
-        ))}
-      </TabList>
-      <TabPanels>
-        <VStack w="full" paddingTop={8}>
-          {tabs.map(({ label, Component }, index) => {
-            if (index !== activeTabIndex) return null
-            return <Component key={label} />
-          })}
+    <>
+      <Tabs w="full" variant="secondary" onChange={(index) => navigate(tabs?.[index]?.path ?? '')}>
+        <TabList gap={4}>
+          {tabs.map((tab) => (
+            <Tab key={tab.label} fontSize={{ base: 'xs', sm: 'md' }}>
+              {tab.label}
+            </Tab>
+          ))}
+        </TabList>
+
+        <VStack w="full" minHeight="100vh" paddingTop={8}>
+          <Outlet />
         </VStack>
-      </TabPanels>
-    </Tabs>
+      </Tabs>
+    </>
   )
 }

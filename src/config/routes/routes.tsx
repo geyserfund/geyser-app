@@ -847,6 +847,29 @@ export const platformRoutes: RouteObject[] = [
               const Fundraisers = await loadLandingPages().then((m) => m.Fundraisers)
               return { Component: Fundraisers }
             },
+            children: [
+              {
+                index: true,
+                async lazy() {
+                  const TrendingFundraisers = await loadLandingPages().then((m) => m.TrendingFundraisers)
+                  return { Component: TrendingFundraisers }
+                },
+              },
+              {
+                path: getPath('discoveryFundraisersLatest'),
+                async lazy() {
+                  const LatestFundraisers = await loadLandingPages().then((m) => m.LatestFundraisers)
+                  return { Component: LatestFundraisers }
+                },
+              },
+              {
+                path: getPath('discoveryFundraisersInYourRegion'),
+                async lazy() {
+                  const InYourRegionFundraisers = await loadLandingPages().then((m) => m.InYourRegionFundraisers)
+                  return { Component: InYourRegionFundraisers }
+                },
+              },
+            ],
           },
           {
             path: getPath('discoveryProducts'),

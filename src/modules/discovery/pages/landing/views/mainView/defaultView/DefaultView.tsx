@@ -11,6 +11,7 @@ import { Featured } from './sections/Featured.tsx'
 import { JoinOurMailingList } from './sections/JoinOurMailingList.tsx'
 import { JoinTheMovement } from './sections/JoinTheMovement.tsx'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
+import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
 import { RecentImpactPosts } from './sections/RecentImpactPosts.tsx'
 import { RecentLaunches } from './sections/RecentLaunches.tsx'
 import { RecommendedForYou } from './sections/RecommendedForYou.tsx'
@@ -38,6 +39,7 @@ export const DefaultView = () => {
 
         <AonProjectsDisplayMostFundedThisWeek />
         <TiaProjectsDisplayMostFundedThisWeek />
+        <ProjectsInYourRegion />
 
         <RecentImpactPosts />
 

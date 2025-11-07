@@ -154,7 +154,7 @@ export const LandingCardBase = ({
                 </Body>
               </>
             ) : (
-              t('Just launched!')
+              t('Just launched')
             )}
           </Body>
         ) : (
@@ -166,11 +166,11 @@ export const LandingCardBase = ({
                 <>
                   {formatAmount(contributionAmount, 'USD')}{' '}
                   <Body as="span" regular>
-                    {isWeekly ? t('this week!') : t('raised!')}
+                    {isWeekly ? t('this week') : t('raised')}
                   </Body>
                 </>
               ) : (
-                t('Just launched!')
+                t('Just launched')
               )}
             </Body>
           </HStack>
