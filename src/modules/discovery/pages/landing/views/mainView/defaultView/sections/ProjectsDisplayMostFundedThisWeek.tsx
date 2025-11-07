@@ -15,13 +15,20 @@ import {
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
 
 interface ProjectDisplayProps {
+  title?: string
+  noRightContent?: boolean
   category?: ProjectCategory
   subCategory?: ProjectSubCategory
 }
 
 const NO_OF_PROJECT_TO_LOAD = 6
 
-export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: ProjectDisplayProps) => {
+export const ProjectsDisplayMostFundedThisWeek = ({
+  title,
+  category,
+  subCategory,
+  noRightContent,
+}: ProjectDisplayProps) => {
   const { t } = useTranslation()
   const { updateFilter } = useFilterContext()
 
@@ -85,7 +92,9 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
           <ProjectDisplayBody
             key={projectByCategory.category}
             title={
-              category
+              title
+                ? title
+                : category
                 ? `${t('Trending in')} ${ProjectCategoryLabel[category]}`
                 : subCategory
                 ? `${t('Trending in')} ${ProjectSubCategoryLabel[subCategory]}`
@@ -94,15 +103,19 @@ export const ProjectsDisplayMostFundedThisWeek = ({ category, subCategory }: Pro
             projects={projects}
             posts={postsQueryData?.posts || []}
             rightContent={
-              <DiscoverMoreButton
-                id={category ? `discovery-see-all-${category}` : subCategory ? `discovery-see-all-${subCategory}` : ''}
-                onClick={() =>
-                  onSeeAllClick({
-                    category: projectByCategory.category,
-                    subCategory: projectByCategory.subCategory,
-                  })
-                }
-              />
+              !noRightContent && (
+                <DiscoverMoreButton
+                  id={
+                    category ? `discovery-see-all-${category}` : subCategory ? `discovery-see-all-${subCategory}` : ''
+                  }
+                  onClick={() =>
+                    onSeeAllClick({
+                      category: projectByCategory.category,
+                      subCategory: projectByCategory.subCategory,
+                    })
+                  }
+                />
+              )
             }
           />
         )

@@ -11,9 +11,10 @@ interface FilteredProjectListProps {
   projects: ProjectForLandingPageFragment[]
   error?: any
   loading?: boolean
+  isLoadingMore?: boolean
 }
 
-export const FilteredProjectList = ({ projects, error, loading }: FilteredProjectListProps) => {
+export const FilteredProjectList = ({ projects, error, loading, isLoadingMore }: FilteredProjectListProps) => {
   const renderProjects = () => {
     if (loading) {
       return <FilteredProjectListSkeleton />
@@ -43,6 +44,7 @@ export const FilteredProjectList = ({ projects, error, loading }: FilteredProjec
       ) : (
         <SimpleGrid w="full" columns={{ base: 1, lg: 5, xl: 6 }} spacing={{ base: 4, lg: 8 }}>
           {renderProjects()}
+          {isLoadingMore && <FilteredProjectListSkeleton />}
         </SimpleGrid>
       )}
     </>

@@ -1202,8 +1202,10 @@ export type LeaderboardGlobalCreatorsGetInput = {
 };
 
 export type LeaderboardGlobalProjectsGetInput = {
+  category?: InputMaybe<Scalars['String']['input']>;
   /** The period to return the leaderboard for. */
   period: LeaderboardPeriod;
+  subCategory?: InputMaybe<Scalars['String']['input']>;
   /** The number of top projects to return. */
   top: Scalars['Int']['input'];
 };
@@ -3817,7 +3819,7 @@ export type Query = {
   userBadges: Array<UserBadge>;
   userEmailIsAvailable: Scalars['Boolean']['output'];
   userEmailIsValid: UserEmailIsValidResponse;
-  userIpCountry: Scalars['String']['output'];
+  userIpCountry?: Maybe<Scalars['String']['output']>;
   userNotificationSettingsGet: ProfileNotificationSettings;
   userSubscription?: Maybe<UserSubscription>;
   userSubscriptions: Array<UserSubscription>;
@@ -7610,7 +7612,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   userBadges?: Resolver<Array<ResolversTypes['UserBadge']>, ParentType, ContextType, RequireFields<QueryUserBadgesArgs, 'input'>>;
   userEmailIsAvailable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<QueryUserEmailIsAvailableArgs, 'email'>>;
   userEmailIsValid?: Resolver<ResolversTypes['UserEmailIsValidResponse'], ParentType, ContextType, RequireFields<QueryUserEmailIsValidArgs, 'email'>>;
-  userIpCountry?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  userIpCountry?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   userNotificationSettingsGet?: Resolver<ResolversTypes['ProfileNotificationSettings'], ParentType, ContextType, RequireFields<QueryUserNotificationSettingsGetArgs, 'userId'>>;
   userSubscription?: Resolver<Maybe<ResolversTypes['UserSubscription']>, ParentType, ContextType, RequireFields<QueryUserSubscriptionArgs, 'id'>>;
   userSubscriptions?: Resolver<Array<ResolversTypes['UserSubscription']>, ParentType, ContextType, RequireFields<QueryUserSubscriptionsArgs, 'input'>>;
@@ -9982,7 +9984,7 @@ export type ShippingAddressesGetQuery = { __typename?: 'Query', shippingAddresse
 export type GetUserIpCountryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserIpCountryQuery = { __typename?: 'Query', userIpCountry: string };
+export type GetUserIpCountryQuery = { __typename?: 'Query', userIpCountry?: string | null };
 
 export type GetProjectOwnerUserForInvoiceQueryVariables = Exact<{
   where: UniqueProjectQueryInput;

@@ -217,8 +217,8 @@ export const LandingCardBase = ({
       {inActive && (
         <Box
           backgroundColor={'utils.pbg'}
-          opacity={0.5}
-          zIndex="1"
+          opacity={0.6}
+          zIndex="3"
           pointerEvents={'none'}
           position="absolute"
           width="100%"

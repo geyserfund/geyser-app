@@ -1,5 +1,6 @@
 import { Discovery } from '../../../../Discovery.tsx'
 import { Landing } from '../../Landing.tsx'
+import { CategoryView } from './categoryView/CategoryView.tsx'
 import { MainView } from './MainView.tsx'
 
-export { Discovery, Landing, MainView }
+export { CategoryView, Discovery, Landing, MainView }
