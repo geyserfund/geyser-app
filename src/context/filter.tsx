@@ -78,20 +78,17 @@ export const FilterProvider = ({ children, isLoggedIn }: { children: React.React
         }
       }
 
-      setSearchParams(newParameters)
-
       if (hasCategory) {
-        setSearchParams(newParameters)
-        navigate(getPath('discoveryProjectCategory', hasCategory), { state: null })
+        navigate(urlWithQueryParams(getPath('discoveryProjectCategory', hasCategory), newParameters), { state: null })
       } else if (hasSubCategory) {
-        setSearchParams(newParameters)
-        navigate(getPath('discoveryProjectSubCategory', hasSubCategory), { state: null })
+        navigate(urlWithQueryParams(getPath('discoveryProjectSubCategory', hasSubCategory), newParameters), {
+          state: null,
+        })
       } else {
-        navigate(getPath('discoveryLanding'), { state: null })
-        setSearchParams(newParameters)
+        navigate(urlWithQueryParams(getPath('discoveryLanding'), newParameters), { state: null })
       }
     },
-    [isLandingFeedPage, isLoggedIn, searchParams, navigate, setSearchParams, params],
+    [isLandingFeedPage, isLoggedIn, searchParams, navigate, params],
   )
 
   useEffect(() => {
@@ -150,4 +147,10 @@ const getFiltersFromUrlParams = (
     tagIds,
     activity,
   }
+}
+
+const urlWithQueryParams = (path: string, params: [string, string][]) => {
+  const searchParams = new URLSearchParams(params)
+  const url = params.length > 0 ? `${path}?${searchParams.toString()}` : path
+  return url
 }

@@ -13,7 +13,7 @@ import { FilterTopBar } from './sections/FilterTopBar'
 
 const TOTAL_PROJECTS_TO_FETCH = 20
 
-export const PaginatedView = () => {
+export const PaginatedView = ({ noTitle }: { noTitle?: boolean }) => {
   const isMobile = useMobileMode()
 
   const {
@@ -45,8 +45,8 @@ export const PaginatedView = () => {
 
   return (
     <VStack w="full" spacing={6}>
-      <FilterTopBar isLoading={isLoading} />
-      <FilteredProjectList {...{ projects, error, loading: isLoading }} />
+      {!noTitle && <FilterTopBar isLoading={isLoading} />}
+      <FilteredProjectList {...{ projects, error, loading: isLoading, isLoadingMore: isLoadingMore.current }} />
       {!isLoading && (
         <ScrollInvoke
           elementId={isMobile ? undefined : ID.root}

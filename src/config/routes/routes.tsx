@@ -823,8 +823,8 @@ export const platformRoutes: RouteObject[] = [
           {
             path: getPath('discoveryProjectCategory', PathName.categoryName),
             async lazy() {
-              const MainView = await loadLandingMainViewPages().then((m) => m.MainView)
-              return { Component: MainView }
+              const CategoryView = await loadLandingMainViewPages().then((m) => m.CategoryView)
+              return { Component: CategoryView }
             },
           },
           {

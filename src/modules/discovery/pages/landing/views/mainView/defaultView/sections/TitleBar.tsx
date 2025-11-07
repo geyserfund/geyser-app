@@ -13,7 +13,7 @@ export const TitleBar = () => {
   const location = useLocation()
 
   // TODO: Remove this once the campaigns page is implemented
-  if (location.pathname.includes('/campaigns')) {
+  if (location.pathname.includes('/campaigns') || location.pathname.includes('/category/')) {
     return null
   }
 
