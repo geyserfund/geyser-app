@@ -17,7 +17,13 @@ export const TitleBar = () => {
     return null
   }
 
-  const isNotLandingPage = ['/campaigns', '/fundraisers', '/products'].includes(location.pathname)
+  const isNotLandingPage = [
+    '/campaigns',
+    '/fundraisers',
+    '/products',
+    '/fundraisers/latest',
+    '/fundraisers/region',
+  ].includes(location.pathname)
 
   return (
     <VStack w="full" gap={0}>

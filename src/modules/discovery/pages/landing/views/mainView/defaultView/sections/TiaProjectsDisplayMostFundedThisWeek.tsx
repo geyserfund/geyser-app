@@ -4,21 +4,18 @@ import { Link } from 'react-router'
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
-import {
-  ProjectsMostFundedAllOrNothingRange,
-  useProjectsMostFundedAllOrNothingQuery,
-} from '../../../../../../../../types'
+import { ProjectsMostFundedTakeItAllRange, useProjectsMostFundedTakeItAllQuery } from '../../../../../../../../types'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
 
-const NO_OF_PROJECT_TO_LOAD = 5
+const NO_OF_PROJECT_TO_LOAD = 6
 
 export const TiaProjectsDisplayMostFundedThisWeek = () => {
   const { t } = useTranslation()
 
-  const { loading, data } = useProjectsMostFundedAllOrNothingQuery({
+  const { loading, data } = useProjectsMostFundedTakeItAllQuery({
     variables: {
       input: {
-        range: ProjectsMostFundedAllOrNothingRange.Week,
+        range: ProjectsMostFundedTakeItAllRange.Week,
         take: NO_OF_PROJECT_TO_LOAD,
       },
     },
@@ -28,7 +25,7 @@ export const TiaProjectsDisplayMostFundedThisWeek = () => {
     return <ProjectDisplayBodySkeleton />
   }
 
-  const ProjectByCategoryList = data?.projectsMostFundedAllOrNothing?.map((project) => project.project) || []
+  const ProjectByCategoryList = data?.projectsMostFundedTakeItAll?.map((project) => project.project) || []
 
   if (ProjectByCategoryList.length === 0) {
     return null
