@@ -7,6 +7,7 @@ import { lightModeColors, utilColors } from '@/shared/styles'
 import {
   ContributionForDownloadInvoiceFragment,
   FeeCurrency,
+  PaymentFeeType,
   PaymentStatus,
   ProjectOwnerUserForInvoiceFragment,
 } from '@/types/index.ts'
@@ -166,13 +167,20 @@ export const DownloadInvoicePDF = ({
   ownerUser?: ProjectOwnerUserForInvoiceFragment
 }) => {
   const datePaid = invoiceData.confirmedAt ? DateTime.fromMillis(invoiceData.confirmedAt).toFormat('LLLL d') : ''
-  const totalAmountInSats = invoiceData.donationAmount + (invoiceData.order ? invoiceData.order.totalInSats : 0)
   const bitcoinQuote = invoiceData?.bitcoinQuote?.quote || 0
 
   const { user } = invoiceData.funder
   const creator = invoiceData.creatorTaxProfile
 
   const paidPayment = invoiceData.payments.find((payment) => payment.status === PaymentStatus.Paid)
+
+  const tips = paidPayment?.fees.find((fee) => fee.feeType === PaymentFeeType.Tip)
+  const shipping = paidPayment?.fees.find((fee) => fee.feeType === PaymentFeeType.Shipping)
+  const totalAmountInSats =
+    invoiceData.donationAmount +
+    (invoiceData.order ? invoiceData.order.totalInSats : 0) +
+    (shipping ? shipping.feeAmount : 0) +
+    (tips ? tips.feeAmount : 0)
 
   return (
     <Document>

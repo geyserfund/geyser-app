@@ -78,6 +78,8 @@ export const FilterProvider = ({ children, isLoggedIn }: { children: React.React
         }
       }
 
+      setSearchParams(newParameters)
+
       if (hasCategory) {
         navigate(getPath('discoveryProjectCategory', hasCategory), { state: null })
       } else if (hasSubCategory) {
@@ -85,8 +87,6 @@ export const FilterProvider = ({ children, isLoggedIn }: { children: React.React
       } else {
         navigate(getPath('discoveryLanding'), { state: null })
       }
-
-      setSearchParams(newParameters)
     },
     [isLandingFeedPage, isLoggedIn, searchParams, navigate, setSearchParams, params],
   )
