@@ -24,7 +24,7 @@ export enum PathName {
 
   projectCategory = 'category',
   projectSubCategory = 'subcategory',
-  allOrNothing = 'allornothing',
+  allOrNothing = 'all-or-nothing',
   campaigns = 'campaigns',
   fundraisers = 'fundraisers',
 
@@ -172,11 +172,11 @@ const pathsMap = {
   /** Discovery Routes */
   discoveryLanding: () => '/',
   discoveryCampaigns: () => `/${PathName.campaigns}`,
+  discoveryAllOrNothing: () => `/${PathName.allOrNothing}`,
   discoveryFundraisers: () => `/${PathName.fundraisers}`,
   discoveryFundraisersLatest: () => `/${PathName.fundraisers}/${PathName.latest}`,
   discoveryFundraisersInYourRegion: () => `/${PathName.fundraisers}/${PathName.inYourRegion}`,
   discoveryProducts: () => `/${PathName.products}`,
-  discoveryAllOrNothing: () => `/${PathName.allOrNothing}`,
   discoveryProjectCategory: (category: string) => `/${PathName.projectCategory}/${category}`,
   discoveryProjectSubCategory: (subCategory: string) => `/${PathName.projectSubCategory}/${subCategory}`,
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,
