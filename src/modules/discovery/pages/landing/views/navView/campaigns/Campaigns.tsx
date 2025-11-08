@@ -38,7 +38,7 @@ export const Campaigns = () => {
 
   const location = useLocation()
 
-  if (location.pathname.includes('/campaigns')) {
+  if (location.pathname.includes('/campaigns') || location.pathname.includes('/all-or-nothing')) {
     return <CampaignsComingSoon />
   }
 

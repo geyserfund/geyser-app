@@ -842,6 +842,13 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
+            path: getPath('discoveryAllOrNothing'),
+            async lazy() {
+              const Campaigns = await loadLandingPages().then((m) => m.Campaigns)
+              return { Component: Campaigns }
+            },
+          },
+          {
             path: getPath('discoveryFundraisers'),
             async lazy() {
               const Fundraisers = await loadLandingPages().then((m) => m.Fundraisers)

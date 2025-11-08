@@ -162,6 +162,7 @@ export const discoveryRoutes = [
   getPath('discoveryMyProjects'),
   getPath('discoveryProducts'),
   getPath('discoveryCampaigns'),
+  getPath('discoveryAllOrNothing'),
   getPath('discoveryFundraisers'),
   getPath('discoveryFundraisersLatest'),
   getPath('discoveryFundraisersInYourRegion'),
