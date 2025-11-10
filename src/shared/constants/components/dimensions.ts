@@ -37,7 +37,7 @@ export const dimensions = {
     },
     posts: {
       view: {
-        maxWidth: 636,
+        maxWidth: 720,
       },
     },
     goals: {
