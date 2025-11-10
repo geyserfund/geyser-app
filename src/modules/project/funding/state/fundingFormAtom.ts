@@ -262,15 +262,26 @@ export const networkFeeAtom = atom((get) => {
 
   let feesSats = 0
 
-  if (paymentMethod === PaymentMethods.onChain && fundingPaymentDetails.onChainToRskSwap?.fees?.length) {
-    feesSats =
-      fundingPaymentDetails.onChainToRskSwap?.fees.reduce(
-        (acc, fee) =>
-          fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip
-            ? acc + fee.feeAmount
-            : acc,
-        0,
-      ) || 0
+  if (paymentMethod === PaymentMethods.onChain) {
+    if (fundingPaymentDetails.onChainSwap?.fees?.length) {
+      feesSats =
+        fundingPaymentDetails.onChainSwap?.fees.reduce(
+          (acc, fee) =>
+            fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip
+              ? acc + fee.feeAmount
+              : acc,
+          0,
+        ) || 0
+    } else if (fundingPaymentDetails.onChainToRskSwap?.fees?.length) {
+      feesSats =
+        fundingPaymentDetails.onChainToRskSwap?.fees.reduce(
+          (acc, fee) =>
+            fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip
+              ? acc + fee.feeAmount
+              : acc,
+          0,
+        ) || 0
+    }
   } else if (paymentMethod === PaymentMethods.lightning && fundingPaymentDetails.lightningToRskSwap?.fees?.length) {
     feesSats =
       fundingPaymentDetails.lightningToRskSwap?.fees.reduce(

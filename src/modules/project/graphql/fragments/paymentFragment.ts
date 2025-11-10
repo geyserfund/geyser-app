@@ -9,16 +9,26 @@ export const ContributionFeesFragment = gql`
 `
 
 export const ContributionLightningPaymentDetailsFragment = gql`
+  ${ContributionFeesFragment}
   fragment ContributionLightningPaymentDetails on ContributionLightningPaymentDetails {
     lightningInvoiceId
     paymentRequest
+    amountDue
+    fees {
+      ...ContributionFees
+    }
   }
 `
 
 export const ContributionOnChainSwapPaymentDetailsFragment = gql`
+  ${ContributionFeesFragment}
   fragment ContributionOnChainSwapPaymentDetails on ContributionOnChainSwapPaymentDetails {
     address
     swapJson
+    amountDue
+    fees {
+      ...ContributionFees
+    }
   }
 `
 

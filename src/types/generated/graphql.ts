@@ -9015,9 +9015,15 @@ export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, cr
 
 export type ContributionFeesFragment = { __typename?: 'PaymentFee', feeType?: PaymentFeeType | null, feeAmount: number, feePayer?: PaymentFeePayer | null, description?: string | null };
 
-export type ContributionLightningPaymentDetailsFragment = { __typename?: 'ContributionLightningPaymentDetails', lightningInvoiceId: string, paymentRequest: string };
+export type ContributionLightningPaymentDetailsFragment = { __typename?: 'ContributionLightningPaymentDetails', lightningInvoiceId: string, paymentRequest: string, amountDue: number, fees: Array<(
+    { __typename?: 'PaymentFee' }
+    & ContributionFeesFragment
+  )> };
 
-export type ContributionOnChainSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainSwapPaymentDetails', address: string, swapJson: string };
+export type ContributionOnChainSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainSwapPaymentDetails', address: string, swapJson: string, amountDue: number, fees: Array<(
+    { __typename?: 'PaymentFee' }
+    & ContributionFeesFragment
+  )> };
 
 export type ContributionFiatPaymentDetailsFragment = { __typename?: 'ContributionFiatPaymentDetails', stripeClientSecret: string };
 
@@ -11412,18 +11418,34 @@ export const OrderFragmentDoc = gql`
 }
     ${OrderItemFragmentDoc}
 ${ShippingAddressFragmentDoc}`;
+export const ContributionFeesFragmentDoc = gql`
+    fragment ContributionFees on PaymentFee {
+  feeType
+  feeAmount
+  feePayer
+  description
+}
+    `;
 export const ContributionLightningPaymentDetailsFragmentDoc = gql`
     fragment ContributionLightningPaymentDetails on ContributionLightningPaymentDetails {
   lightningInvoiceId
   paymentRequest
+  amountDue
+  fees {
+    ...ContributionFees
+  }
 }
-    `;
+    ${ContributionFeesFragmentDoc}`;
 export const ContributionOnChainSwapPaymentDetailsFragmentDoc = gql`
     fragment ContributionOnChainSwapPaymentDetails on ContributionOnChainSwapPaymentDetails {
   address
   swapJson
+  amountDue
+  fees {
+    ...ContributionFees
+  }
 }
-    `;
+    ${ContributionFeesFragmentDoc}`;
 export const ContributionFiatPaymentDetailsFragmentDoc = gql`
     fragment ContributionFiatPaymentDetails on ContributionFiatPaymentDetails {
   stripeClientSecret
@@ -11432,14 +11454,6 @@ export const ContributionFiatPaymentDetailsFragmentDoc = gql`
 export const ContributionFiatSwapPaymentDetailsFragmentDoc = gql`
     fragment ContributionFiatSwapPaymentDetails on ContributionFiatSwapPaymentDetails {
   checkoutUrl
-}
-    `;
-export const ContributionFeesFragmentDoc = gql`
-    fragment ContributionFees on PaymentFee {
-  feeType
-  feeAmount
-  feePayer
-  description
 }
     `;
 export const ContributionLightningToRskSwapPaymentDetailsFragmentDoc = gql`
