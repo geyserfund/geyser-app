@@ -21,11 +21,11 @@ export const useRefund = () => {
     async (refundFile: SwapData, label: 'userLock' | 'serverLock' = 'userLock') => {
       let transaction: BoltzTransaction & { error?: string }
 
-      if (refundFile.version === 3) {
+      if (refundFile.version === 3 || refundFile?.bip21?.includes('lightning')) {
         transaction = await getTransactionFromSwap(refundFile.id)
+      } else {
+        transaction = await getTransactionFromChainSwap(refundFile.id, label)
       }
-
-      transaction = await getTransactionFromChainSwap(refundFile.id, label)
 
       if (transaction.error) {
         removeRefundFile(refundFile.id)
@@ -33,6 +33,7 @@ export const useRefund = () => {
         throw new Error(BAD_REFUND_FILE_ERROR)
       }
 
+      console.log('transaction', transaction)
       return transaction
     },
     [removeRefundFile],

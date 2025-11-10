@@ -9,7 +9,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { Body } from '@/shared/components/typography'
 import { getPath, GeyserOnChainGuideUrl } from '@/shared/constants'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
-import { useMobileMode } from '@/utils'
+import { isAllOrNothing, useMobileMode } from '@/utils'
 
 import { useDownloadRefund } from '../hooks/useDownloadRefund'
 import { onChainRefundDownloadedAtom } from '../states/onChainStatus.ts'
@@ -26,7 +26,7 @@ export const PaymentOnchainPrompt = () => {
     navigate({ pathname: getPath('fundingPaymentOnchainQR', project.name), search: location.search }, { replace: true })
   }
 
-  if (user.id) {
+  if (user.id && isAllOrNothing(project)) {
     setOnchainRefundDownloadAtom(true)
     return <Navigate to={getPath('fundingPaymentOnchainQR', project.name)} replace />
   }
