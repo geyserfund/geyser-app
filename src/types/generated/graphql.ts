@@ -8975,7 +8975,7 @@ export type FundingContributionSubscriptionFragment = { __typename?: 'Contributi
 
 export type ContributionWithInvoiceStatusFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, status: ContributionStatus, creatorEmail?: string | null, isAnonymous: boolean };
 
-export type ContributionForDownloadInvoiceFragment = { __typename?: 'Contribution', id: any, donationAmount: number, amount: number, uuid?: string | null, creatorEmail?: string | null, projectId: any, confirmedAt?: any | null, createdAt?: any | null, status: ContributionStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string, email?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, creatorTaxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, payments: Array<{ __typename?: 'Payment', status: PaymentStatus, uuid: string, fees: Array<{ __typename?: 'PaymentFee', description?: string | null, feeType?: PaymentFeeType | null, feeAmount: number, external?: boolean | null, feeCurrency: FeeCurrency }> }> };
+export type ContributionForDownloadInvoiceFragment = { __typename?: 'Contribution', id: any, donationAmount: number, amount: number, uuid?: string | null, creatorEmail?: string | null, projectId: any, confirmedAt?: any | null, createdAt?: any | null, status: ContributionStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string, email?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, creatorTaxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, payments: Array<{ __typename?: 'Payment', status: PaymentStatus, uuid: string, fees: Array<{ __typename?: 'PaymentFee', description?: string | null, feeType?: PaymentFeeType | null, feePayer?: PaymentFeePayer | null, feeAmount: number, external?: boolean | null, feeCurrency: FeeCurrency }> }> };
 
 export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, confirmedAt?: any | null, user?: (
     { __typename?: 'User' }
@@ -9015,20 +9015,26 @@ export type OrderFragment = { __typename?: 'Order', confirmedAt?: any | null, cr
 
 export type ContributionFeesFragment = { __typename?: 'PaymentFee', feeType?: PaymentFeeType | null, feeAmount: number, feePayer?: PaymentFeePayer | null, description?: string | null };
 
-export type ContributionLightningPaymentDetailsFragment = { __typename?: 'ContributionLightningPaymentDetails', lightningInvoiceId: string, paymentRequest: string };
+export type ContributionLightningPaymentDetailsFragment = { __typename?: 'ContributionLightningPaymentDetails', lightningInvoiceId: string, paymentRequest: string, amountDue: number, fees: Array<(
+    { __typename?: 'PaymentFee' }
+    & ContributionFeesFragment
+  )> };
 
-export type ContributionOnChainSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainSwapPaymentDetails', address: string, swapJson: string };
+export type ContributionOnChainSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainSwapPaymentDetails', address: string, swapJson: string, amountDue: number, fees: Array<(
+    { __typename?: 'PaymentFee' }
+    & ContributionFeesFragment
+  )> };
 
 export type ContributionFiatPaymentDetailsFragment = { __typename?: 'ContributionFiatPaymentDetails', stripeClientSecret: string };
 
 export type ContributionFiatSwapPaymentDetailsFragment = { __typename?: 'ContributionFiatSwapPaymentDetails', checkoutUrl: string };
 
-export type ContributionLightningToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionLightningToRskSwapPaymentDetails', lightningInvoiceId: string, paymentRequest: string, swapJson: string, paymentId: any, amountToClaim: number, fees: Array<(
+export type ContributionLightningToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionLightningToRskSwapPaymentDetails', lightningInvoiceId: string, paymentRequest: string, swapJson: string, paymentId: any, amountToClaim: number, amountDue: number, fees: Array<(
     { __typename?: 'PaymentFee' }
     & ContributionFeesFragment
   )> };
 
-export type ContributionOnChainToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainToRskSwapPaymentDetails', address: string, swapJson: string, paymentId: any, fees: Array<(
+export type ContributionOnChainToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainToRskSwapPaymentDetails', address: string, swapJson: string, paymentId: any, amountDue: number, fees: Array<(
     { __typename?: 'PaymentFee' }
     & ContributionFeesFragment
   )> };
@@ -11298,6 +11304,7 @@ export const ContributionForDownloadInvoiceFragmentDoc = gql`
     fees {
       description
       feeType
+      feePayer
       feeAmount
       external
       feeCurrency
@@ -11412,18 +11419,34 @@ export const OrderFragmentDoc = gql`
 }
     ${OrderItemFragmentDoc}
 ${ShippingAddressFragmentDoc}`;
+export const ContributionFeesFragmentDoc = gql`
+    fragment ContributionFees on PaymentFee {
+  feeType
+  feeAmount
+  feePayer
+  description
+}
+    `;
 export const ContributionLightningPaymentDetailsFragmentDoc = gql`
     fragment ContributionLightningPaymentDetails on ContributionLightningPaymentDetails {
   lightningInvoiceId
   paymentRequest
+  amountDue
+  fees {
+    ...ContributionFees
+  }
 }
-    `;
+    ${ContributionFeesFragmentDoc}`;
 export const ContributionOnChainSwapPaymentDetailsFragmentDoc = gql`
     fragment ContributionOnChainSwapPaymentDetails on ContributionOnChainSwapPaymentDetails {
   address
   swapJson
+  amountDue
+  fees {
+    ...ContributionFees
+  }
 }
-    `;
+    ${ContributionFeesFragmentDoc}`;
 export const ContributionFiatPaymentDetailsFragmentDoc = gql`
     fragment ContributionFiatPaymentDetails on ContributionFiatPaymentDetails {
   stripeClientSecret
@@ -11434,14 +11457,6 @@ export const ContributionFiatSwapPaymentDetailsFragmentDoc = gql`
   checkoutUrl
 }
     `;
-export const ContributionFeesFragmentDoc = gql`
-    fragment ContributionFees on PaymentFee {
-  feeType
-  feeAmount
-  feePayer
-  description
-}
-    `;
 export const ContributionLightningToRskSwapPaymentDetailsFragmentDoc = gql`
     fragment ContributionLightningToRskSwapPaymentDetails on ContributionLightningToRskSwapPaymentDetails {
   lightningInvoiceId
@@ -11449,6 +11464,7 @@ export const ContributionLightningToRskSwapPaymentDetailsFragmentDoc = gql`
   swapJson
   paymentId
   amountToClaim
+  amountDue
   fees {
     ...ContributionFees
   }
@@ -11459,6 +11475,7 @@ export const ContributionOnChainToRskSwapPaymentDetailsFragmentDoc = gql`
   address
   swapJson
   paymentId
+  amountDue
   fees {
     ...ContributionFees
   }

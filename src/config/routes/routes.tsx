@@ -757,7 +757,7 @@ export const platformRoutes: RouteObject[] = [
   {
     path: getPath('refundInitiated'),
     async lazy() {
-      const RefundInitiatedPage = await loadRefundPages().then((m) => m.RefundInitiatedPage)
+      const RefundInitiatedPage = await loadRefundPages().then((m) => m.RefundFilePage)
       return { Component: RefundInitiatedPage }
     },
   },
@@ -770,10 +770,11 @@ export const platformRoutes: RouteObject[] = [
   },
   {
     path: getPath('refund'),
-    async lazy() {
-      const RefundPage = await loadRefundPages().then((m) => m.RefundPage)
-      return { Component: RefundPage }
-    },
+    element: <Navigate to={getPath('refundFile')} />,
+    // async lazy() {
+    //   const RefundPage = await loadRefundPages().then((m) => m.RefundPage)
+    //   return { Component: RefundPage }
+    // },
   },
 
   /** Not-Found Pages */

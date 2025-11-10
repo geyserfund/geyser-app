@@ -4,6 +4,7 @@ import { guardianRewardsAtom } from '@/modules/guardians/state/guardianRewards.t
 import { guardianRewardsMap, GuardianRewardType } from '@/modules/guardians/utils/constants.ts'
 import { bitcoinQuoteAtom } from '@/shared/state/btcRateAtom'
 import {
+  ContributionFeesFragment,
   GuardianType,
   PaymentFeePayer,
   PaymentFeeType,
@@ -254,6 +255,20 @@ export const tipAtoms = atom((get) => {
   return { sats: tipSats, usdCents: tipUsdCent }
 })
 
+const FeesPaidByContributorThatIsNotNetworkFees = [PaymentFeeType.Tip, PaymentFeeType.Shipping]
+
+export const reduceToNetworkFees = (acc: number, fee: ContributionFeesFragment) => {
+  if (
+    fee.feePayer === PaymentFeePayer.Contributor &&
+    fee.feeType &&
+    !FeesPaidByContributorThatIsNotNetworkFees.includes(fee.feeType)
+  ) {
+    return acc + fee.feeAmount
+  }
+
+  return acc
+}
+
 /** Derived atom for calculating network fees */
 export const networkFeeAtom = atom((get) => {
   const paymentMethod = get(paymentMethodAtom)
@@ -262,24 +277,14 @@ export const networkFeeAtom = atom((get) => {
 
   let feesSats = 0
 
-  if (paymentMethod === PaymentMethods.onChain && fundingPaymentDetails.onChainToRskSwap?.fees?.length) {
-    feesSats =
-      fundingPaymentDetails.onChainToRskSwap?.fees.reduce(
-        (acc, fee) =>
-          fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip
-            ? acc + fee.feeAmount
-            : acc,
-        0,
-      ) || 0
+  if (paymentMethod === PaymentMethods.onChain) {
+    if (fundingPaymentDetails.onChainSwap?.fees?.length) {
+      feesSats = fundingPaymentDetails.onChainSwap?.fees.reduce(reduceToNetworkFees, 0) || 0
+    } else if (fundingPaymentDetails.onChainToRskSwap?.fees?.length) {
+      feesSats = fundingPaymentDetails.onChainToRskSwap?.fees.reduce(reduceToNetworkFees, 0) || 0
+    }
   } else if (paymentMethod === PaymentMethods.lightning && fundingPaymentDetails.lightningToRskSwap?.fees?.length) {
-    feesSats =
-      fundingPaymentDetails.lightningToRskSwap?.fees.reduce(
-        (acc, fee) =>
-          fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip
-            ? acc + fee.feeAmount
-            : acc,
-        0,
-      ) || 0
+    feesSats = fundingPaymentDetails.lightningToRskSwap?.fees.reduce(reduceToNetworkFees, 0) || 0
   }
 
   const feesUsdCents = feesSats > 0 ? convertAmount.satsToUsdCents({ sats: feesSats, bitcoinQuote }) : 0

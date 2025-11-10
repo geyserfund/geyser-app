@@ -72,7 +72,7 @@ const refundTaproot = async (
 
   let boltzSig: PartialSignature
 
-  if (swap.version === 3) {
+  if (swap.version === 3 || ('bip21' in swap && swap?.bip21?.includes('lightning'))) {
     boltzSig = await getPartialRefundSignature(swap.id, Buffer.from(musig.getPublicNonce()), claimTx, 0)
   } else if (swap.lockupDetails.serverPublicKey) {
     boltzSig = await getPartialRefundSignatureChain(swap.id, Buffer.from(musig.getPublicNonce()), claimTx, 0)

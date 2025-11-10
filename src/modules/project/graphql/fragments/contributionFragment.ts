@@ -160,6 +160,7 @@ export const FRAGMENT_CONTRIBUTION_DOWNLOAD_INVOICE = gql`
       fees {
         description
         feeType
+        feePayer
         feeAmount
         external
         feeCurrency

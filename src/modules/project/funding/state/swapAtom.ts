@@ -37,6 +37,7 @@ export type SwapData =
           output: string
         }
       }
+      bip21?: string
       amount?: number
       fees?: number
       contributionInfo?: SwapContributionInfo
@@ -73,6 +74,8 @@ export type SwapData =
         }
         bip21?: string
       }
+      bip21?: string
+
       amount?: number
       fees?: number
       contributionInfo?: SwapContributionInfo
@@ -108,6 +111,7 @@ export type SwapData =
           }
         }
       }
+      bip21?: string
       amount?: number
       fees?: number
       contributionInfo?: SwapContributionInfo
@@ -133,6 +137,9 @@ export const parseSwapAtom = atom(
   (get, set, swap: ContributionOnChainSwapPaymentDetailsFragment, contributionInfo?: SwapContributionInfo) => {
     const userAccountKeyPair = get(userAccountKeyPairAtom)
     const keys = get(keyPairAtom)
+
+    console.log('keys', keys)
+    console.log('userAccountKeyPair', userAccountKeyPair)
 
     const swapData = get(swapAtom)
     const refundFile = JSON.parse(swap.swapJson)
