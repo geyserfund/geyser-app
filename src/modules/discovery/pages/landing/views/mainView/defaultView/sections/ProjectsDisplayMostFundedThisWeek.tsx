@@ -1,6 +1,8 @@
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFilterContext } from '@/context/filter'
+import { filterPostsByUniqueProjects } from '@/helpers/filterPostsByUniqueProjects.ts'
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 
@@ -52,7 +54,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({
           publishedAt: OrderByOptions.Desc,
         },
         pagination: {
-          take: 3,
+          take: 10,
         },
         where: {
           category,
@@ -71,12 +73,16 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     }
   }
 
+  const ProjectByCategoryList =
+    data?.projectsMostFundedByCategory?.filter((tagMap) => tagMap.projects.length >= 4) || []
+
+  const allPosts = useMemo(() => postsQueryData?.posts || [], [postsQueryData?.posts])
+
+  const filteredPosts = useMemo(() => filterPostsByUniqueProjects(allPosts, 3), [allPosts])
+
   if (loading) {
     return <ProjectDisplayBodySkeleton />
   }
-
-  const ProjectByCategoryList =
-    data?.projectsMostFundedByCategory?.filter((tagMap) => tagMap.projects.length >= 4) || []
 
   return (
     <>
@@ -101,7 +107,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({
                 : t('Recent Projects')
             }
             projects={projects}
-            posts={postsQueryData?.posts || []}
+            posts={filteredPosts}
             rightContent={
               !noRightContent && (
                 <DiscoverMoreButton

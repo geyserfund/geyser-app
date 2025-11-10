@@ -169,12 +169,18 @@ export const CampaignsComingSoon = () => {
             </VStack>
           </Feedback>
         </VStack>
-        <Image
-          src={'https://storage.googleapis.com/geyser-projects-media/app/campaigns/rootstock.png'}
-          height="200px"
-          width="auto"
-          alt="All or Nothing"
-        />
+
+        <VStack w="full" maxW="800px">
+          <H2 size={{ base: 'xl', lg: '2xl' }} bold>
+            {t('Powered by')}
+          </H2>
+          <Image
+            src={'https://storage.googleapis.com/geyser-projects-media/app/campaigns/rootstock_image.png'}
+            height="60px"
+            width="auto"
+            alt="All or Nothing"
+          />
+        </VStack>
       </VStack>
       <RegisterCampaignLaunch {...registerCampaignLaunchModal} />
     </>

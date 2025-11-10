@@ -1,7 +1,9 @@
 import { SimpleGrid } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useMemo } from 'react'
 import { Link } from 'react-router'
 
+import { filterPostsByUniqueProjects } from '@/helpers/filterPostsByUniqueProjects.ts'
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { OrderByOptions, PostType, usePostsForLandingPageQuery } from '@/types/index.ts'
@@ -17,7 +19,7 @@ export const RecentImpactPosts = () => {
           publishedAt: OrderByOptions.Desc,
         },
         pagination: {
-          take: 9,
+          take: 20,
         },
         where: {
           postType: [PostType.Impact, PostType.RewardUpdate, PostType.Announcement, PostType.GoalReached],
@@ -26,7 +28,9 @@ export const RecentImpactPosts = () => {
     },
   })
 
-  const posts = data?.posts || []
+  const allPosts = useMemo(() => data?.posts || [], [data?.posts])
+
+  const posts = useMemo(() => filterPostsByUniqueProjects(allPosts, 9), [allPosts])
 
   if (loading || !posts.length) {
     return null
