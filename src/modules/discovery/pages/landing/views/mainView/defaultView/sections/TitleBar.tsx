@@ -12,15 +12,6 @@ import { FeaturedContributions } from '../components/FeaturedContributions.tsx'
 export const TitleBar = () => {
   const location = useLocation()
 
-  // TODO: Remove this once the campaigns page is implemented
-  if (
-    location.pathname.includes('/campaigns') ||
-    location.pathname.includes('/category/') ||
-    location.pathname.includes('/all-or-nothing')
-  ) {
-    return null
-  }
-
   const isNotLandingPage = [
     '/campaigns',
     '/fundraisers',
