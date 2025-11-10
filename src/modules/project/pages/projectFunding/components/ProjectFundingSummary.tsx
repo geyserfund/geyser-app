@@ -2,7 +2,6 @@
 import { Button, HStack, Icon, useDisclosure, VStack } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useAtomValue } from 'jotai'
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCaretDown, PiCaretUp, PiInfo } from 'react-icons/pi'
 

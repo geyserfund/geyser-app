@@ -13,10 +13,14 @@ const defaultFundingPaymentDetails: FundingContributionPaymentDetailsFragment = 
   lightning: {
     lightningInvoiceId: '',
     paymentRequest: '',
+    amountDue: 0,
+    fees: [],
   },
   onChainSwap: {
     swapJson: '',
     address: '',
+    amountDue: 0,
+    fees: [],
   },
   lightningToRskSwap: {
     lightningInvoiceId: '',
@@ -24,12 +28,14 @@ const defaultFundingPaymentDetails: FundingContributionPaymentDetailsFragment = 
     swapJson: '',
     paymentId: '',
     amountToClaim: 0,
+    amountDue: 0,
     fees: [],
   },
   onChainToRskSwap: {
     address: '',
     swapJson: '',
     paymentId: '',
+    amountDue: 0,
     fees: [],
   },
 }

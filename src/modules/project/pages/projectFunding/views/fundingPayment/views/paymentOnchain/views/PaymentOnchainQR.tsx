@@ -3,7 +3,6 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { PiCopy, PiLink } from 'react-icons/pi'
 
-import { totalAmountSatsAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 import { getBip21Invoice } from '@/utils/lightning/bip21'
@@ -30,7 +29,9 @@ export const PaymentOnchainQR = () => {
 export const PaymentOnchainQRContent = ({ address }: { address: string }) => {
   useListenOnchainTransactionUpdate()
 
-  const totalAmountSats = useAtomValue(totalAmountSatsAtom)
+  const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
+  const totalAmountSats =
+    fundingPaymentDetails.onChainSwap?.amountDue || fundingPaymentDetails.onChainToRskSwap?.amountDue || 0
 
   const onChainBip21Invoice = getBip21Invoice(totalAmountSats, address)
 

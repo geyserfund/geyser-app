@@ -7,7 +7,7 @@ import { lightModeColors, utilColors } from '@/shared/styles'
 import {
   ContributionForDownloadInvoiceFragment,
   FeeCurrency,
-  PaymentFeeType,
+  PaymentFeePayer,
   PaymentStatus,
   ProjectOwnerUserForInvoiceFragment,
 } from '@/types/index.ts'
@@ -174,14 +174,17 @@ export const DownloadInvoicePDF = ({
 
   const paidPayment = invoiceData.payments.find((payment) => payment.status === PaymentStatus.Paid)
 
-  const tips = paidPayment?.fees.find((fee) => fee.feeType === PaymentFeeType.Tip)
-  const shipping = paidPayment?.fees.find((fee) => fee.feeType === PaymentFeeType.Shipping)
-  const totalAmountInSats =
-    invoiceData.donationAmount +
-    (invoiceData.order ? invoiceData.order.totalInSats : 0) +
-    (shipping ? shipping.feeAmount : 0) +
-    (tips ? tips.feeAmount : 0)
+  const fees =
+    paidPayment?.fees.reduce((acc, fee) => {
+      if (fee.feePayer === PaymentFeePayer.Contributor) {
+        return acc + fee.feeAmount
+      }
 
+      return acc
+    }, 0) || 0
+
+  const totalAmountInSats = invoiceData.donationAmount + (invoiceData.order ? invoiceData.order.totalInSats : 0) + fees
+  console.log(paidPayment)
   return (
     <Document>
       <Page style={styles.page}>
