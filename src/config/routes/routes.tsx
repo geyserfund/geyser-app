@@ -836,18 +836,52 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
+            path: getPath('discoveryAllOrNothing'),
+            element: <Navigate to={getPath('discoveryCampaigns')} />,
+          },
+          {
             path: getPath('discoveryCampaigns'),
             async lazy() {
               const Campaigns = await loadLandingPages().then((m) => m.Campaigns)
               return { Component: Campaigns }
             },
-          },
-          {
-            path: getPath('discoveryAllOrNothing'),
-            async lazy() {
-              const Campaigns = await loadLandingPages().then((m) => m.Campaigns)
-              return { Component: Campaigns }
-            },
+            children: [
+              {
+                index: true,
+                async lazy() {
+                  const TrendingCampaigns = await loadLandingPages().then((m) => m.TrendingCampaigns)
+                  return { Component: TrendingCampaigns }
+                },
+              },
+              {
+                path: getPath('discoveryCampaignsAlmostFunded'),
+                async lazy() {
+                  const AlmostFundedCampaigns = await loadLandingPages().then((m) => m.AlmostFundedCampaigns)
+                  return { Component: AlmostFundedCampaigns }
+                },
+              },
+              {
+                path: getPath('discoveryCampaignsAlmostOver'),
+                async lazy() {
+                  const AlmostOverCampaigns = await loadLandingPages().then((m) => m.AlmostOverCampaigns)
+                  return { Component: AlmostOverCampaigns }
+                },
+              },
+              {
+                path: getPath('discoveryCampaignsLatest'),
+                async lazy() {
+                  const LatestCampaigns = await loadLandingPages().then((m) => m.LatestCampaigns)
+                  return { Component: LatestCampaigns }
+                },
+              },
+              {
+                path: getPath('discoveryCampaignsInYourRegion'),
+                async lazy() {
+                  const InYourRegionCampaigns = await loadLandingPages().then((m) => m.InYourRegionCampaigns)
+                  return { Component: InYourRegionCampaigns }
+                },
+              },
+            ],
           },
           {
             path: getPath('discoveryFundraisers'),

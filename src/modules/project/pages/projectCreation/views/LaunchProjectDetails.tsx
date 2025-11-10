@@ -41,8 +41,7 @@ export const LaunchProjectDetails = () => {
 
   const { updateProjectWithLastCreationStep, loading: updateProjectLoading } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.ProjectDetails,
-    // getPath('launchFundingStrategy', project.id), // TODO: uncomment when we release AON
-    getPath('launchFundingGoal', project.id),
+    getPath('launchFundingStrategy', project.id),
   )
 
   const onLeave = () => navigate(getPath('launchStart'))
@@ -95,8 +94,7 @@ export const LaunchProjectDetails = () => {
               },
             },
           })
-          // navigate(getPath('launchFundingStrategy', createProject.id)) // TODO: uncomment when we release AON
-          navigate(getPath('launchFundingGoal', createProject.id))
+          navigate(getPath('launchFundingStrategy', createProject.id))
         },
         onError(error) {
           toast.error({
