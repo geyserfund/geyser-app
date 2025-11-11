@@ -21,7 +21,7 @@ export type ShippingAddressFormData = {
   fullName: string
   streetAddress: string
   city: string
-  state: string
+  state?: string
   postalCode: string
   country: string
 }

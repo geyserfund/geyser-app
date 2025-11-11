@@ -20,7 +20,11 @@ const shippingAddressSchema = yup.object().shape({
   fullName: yup.string().required(t('Full name is required')),
   streetAddress: yup.string().required(t('Street address is required')),
   city: yup.string().required(t('City is required')),
-  state: yup.string().required(t('State is required')),
+  state: yup.string().when('country', {
+    is: (country: string) => country === 'US',
+    then: (schema) => schema.required(t('State is required')),
+    otherwise: (schema) => schema.notRequired(),
+  }),
   postalCode: yup.string().required(t('Postal code is required')),
   country: yup.string().required(t('Country is required')),
 })
@@ -119,7 +123,7 @@ export const useShippingAddressForm = () => {
                   input: {
                     addressLines: [data.streetAddress],
                     city: data.city,
-                    state: data.state.toUpperCase(),
+                    state: data.state?.toUpperCase(),
                     postalCode: data.postalCode,
                     country: data.country,
                     fullName: data.fullName,
