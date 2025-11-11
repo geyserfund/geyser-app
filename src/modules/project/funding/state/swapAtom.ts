@@ -134,16 +134,20 @@ export const swapAtom = atomWithStorage<SwapDataStructure>('swapArray', {})
 /** Parses swap json received with Contribution and stores it in swapAtom, also sets currentSwapId */
 export const parseSwapAtom = atom(
   null,
-  (get, set, swap: ContributionOnChainSwapPaymentDetailsFragment, contributionInfo?: SwapContributionInfo) => {
+  (
+    get,
+    set,
+    swap: ContributionOnChainSwapPaymentDetailsFragment,
+    contributionInfo?: SwapContributionInfo,
+    accountKeys?: { publicKey: string; address: string; privateKey: string },
+  ) => {
     const userAccountKeyPair = get(userAccountKeyPairAtom)
     const keys = get(keyPairAtom)
 
-    console.log('keys', keys)
-    console.log('userAccountKeyPair', userAccountKeyPair)
-
     const swapData = get(swapAtom)
     const refundFile = JSON.parse(swap.swapJson)
-    refundFile.privateKey = userAccountKeyPair?.privateKey || keys?.privateKey?.toString('hex')
+    refundFile.privateKey =
+      accountKeys?.privateKey || userAccountKeyPair?.privateKey || keys?.privateKey?.toString('hex')
 
     refundFile.contributionInfo = contributionInfo
 
@@ -188,7 +192,7 @@ export const parseLightningToRskSwapAtom = atom(
 )
 
 /** Gets and sets an entry in swap atom based on currentSwapId */
-const currentSwapAtom = atom(
+export const currentSwapAtom = atom(
   (get) => {
     const currentSwapId = get(currentSwapIdAtom)
     const swapData = get(swapAtom)
@@ -197,10 +201,10 @@ const currentSwapAtom = atom(
       return currentSwap
     }
   },
-  (get, set, data: SwapData) => {
+  (get, set, data: SwapData, swapId?: string) => {
     const currentSwapId = get(currentSwapIdAtom)
     const swapData = get(swapAtom)
-    swapData[currentSwapId] = data
+    swapData[swapId || currentSwapId] = data
     set(swapAtom, swapData)
   },
 )
