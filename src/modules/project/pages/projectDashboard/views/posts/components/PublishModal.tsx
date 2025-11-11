@@ -38,7 +38,7 @@ export const PublishModal = ({
   postPublish,
   publishing,
 }: {
-  post: Pick<ProjectPostFragment, 'id' | 'sentByEmailAt' | 'status'>
+  post: Pick<ProjectPostFragment, 'id' | 'sentByEmailAt' | 'status' | 'postType'>
   postPublish: (_: PostPublishProps) => Promise<void>
   publishing: boolean
 }) => {
@@ -243,6 +243,18 @@ export const PublishModal = ({
     return null
   }
 
+  const handlePublishClick = () => {
+    if (!post.postType) {
+      toast.warning({
+        title: t('Invalid post type'),
+        description: t('Please select a post type to publish'),
+      })
+      return
+    }
+
+    publishModal.onOpen()
+  }
+
   return (
     <>
       {!isPostPublished && (
@@ -251,7 +263,7 @@ export const PublishModal = ({
             size="lg"
             variant="solid"
             colorScheme="primary1"
-            onClick={publishModal.onOpen}
+            onClick={handlePublishClick}
             isDisabled={!isActive(project.status)}
             isLoading={publishing}
           >
