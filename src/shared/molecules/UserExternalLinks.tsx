@@ -6,7 +6,15 @@ import { t } from 'i18next'
 import { Link } from 'react-router'
 
 import { SocialLinks } from '@/modules/project/pages/projectCreation/views/start/components/SocialLinks.tsx'
-import { FeedbackUrl, getPath, GeyserAboutUrl, GeyserPrivacyUrl, GeyserTermsUrl, GuideUrl } from '@/shared/constants'
+import {
+  FAQUrl,
+  FeedbackUrl,
+  getPath,
+  GeyserAboutUrl,
+  GeyserPrivacyUrl,
+  GeyserTermsUrl,
+  GuideUrl,
+} from '@/shared/constants'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { Body } from '../components/typography/Body.tsx'
@@ -64,6 +72,9 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
         </UserNavExternalButton>
         <UserNavExternalButton as={ChakraLink} isExternal href={FeedbackUrl}>
           {t('Feedback')}
+        </UserNavExternalButton>
+        <UserNavExternalButton as={ChakraLink} isExternal href={FAQUrl}>
+          {t('FAQ')}
         </UserNavExternalButton>
 
         <UserNavExternalButton as={ChakraLink} isExternal href={GeyserTermsUrl} color="neutral1.9" marginLeft={4}>
