@@ -15,6 +15,7 @@ import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
 import { RecentImpactPosts } from './sections/RecentImpactPosts.tsx'
 import { RecentLaunches } from './sections/RecentLaunches.tsx'
 import { RecommendedForYou } from './sections/RecommendedForYou.tsx'
+import { SuccessStories } from './sections/SuccessStories.tsx'
 import { TiaProjectsDisplayMostFundedThisWeek } from './sections/TiaProjectsDisplayMostFundedThisWeek.tsx'
 
 export const DefaultView = () => {
@@ -36,6 +37,8 @@ export const DefaultView = () => {
           <Featured />
           <RecommendedForYou />
         </Stack>
+
+        <SuccessStories />
 
         <AonProjectsDisplayMostFundedThisWeek />
         <TiaProjectsDisplayMostFundedThisWeek />

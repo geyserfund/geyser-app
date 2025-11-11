@@ -8,7 +8,7 @@ import { useAuthContext } from '@/context'
 import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { getPath, GeyserManifestoUrl, GeyserSubscribeUrl } from '@/shared/constants/index.ts'
+import { FAQUrl, getPath, GeyserSubscribeUrl } from '@/shared/constants/index.ts'
 
 import { DiscoveryNavItemKey, discoveryNavItems } from '../../discoveryNav/discoveryNavData'
 import { CreateProjectButton } from '../components/CreateProjectButton.tsx'
@@ -84,8 +84,8 @@ export const ProfileNavContent = () => {
 
         <Divider borderColor="neutral1.6" />
 
-        <MenuItem as={ChakraLink} isExternal href={GeyserManifestoUrl} _focusVisible={{}} gap={2}>
-          <Body size="md">{t('Geyser Manifesto')}</Body>
+        <MenuItem as={ChakraLink} isExternal href={FAQUrl} _focusVisible={{}} gap={2}>
+          <Body size="md">{t('FAQ')}</Body>
           <PiArrowUpRight fontSize="18px" />
         </MenuItem>
         <MenuItem as={ChakraLink} isExternal href={GeyserSubscribeUrl} _focusVisible={{}} gap={2}>
