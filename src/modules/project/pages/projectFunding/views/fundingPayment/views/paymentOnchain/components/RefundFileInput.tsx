@@ -6,7 +6,8 @@ import { useDropzone } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
 
 import { UploadBox } from '@/components/ui'
-import { currentSwapIdAtom, useRefundFileAdd } from '@/modules/project/funding/state'
+import { currentSwapIdAtom } from '@/modules/project/funding/state'
+import { currentSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { FieldContainer } from '@/shared/components/form'
 
 export type ImageFieldProps = {
@@ -19,27 +20,26 @@ export type ImageFieldProps = {
 export const RefundFileInput = ({ name, caption, required, label }: ImageFieldProps) => {
   const { t } = useTranslation()
 
-  const addRefundFile = useRefundFileAdd()
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
-
+  const setCurrentSwapData = useSetAtom(currentSwapAtom)
   const [isInvalid, setIsInvalid] = useState(false)
 
   const checkRefundJsonKeys = useCallback(
     async (json: any) => {
       console.log('REFUND FILE JSON', json)
       if ('id' in json && json.id !== undefined) {
-        const valid = ['id', 'asset', 'privateKey'].every((key) => key in json)
+        const valid = ['id', 'privateKey'].every((key) => key in json)
 
         if (valid) {
+          setCurrentSwapData(json, json.id)
           setCurrentSwapId(json.id)
-          addRefundFile(json)
           return
         }
       }
 
       setIsInvalid(true)
     },
-    [addRefundFile, setCurrentSwapId],
+    [setCurrentSwapData, setCurrentSwapId],
   )
 
   const handleFile = useCallback(

@@ -102,12 +102,16 @@ export const useFundingAPI = () => {
         fundingPaymentDetailsPartialUpdate({ ...data.contributionCreate.payments, fiatSwap: undefined })
 
         if (data.contributionCreate.payments.onChainSwap?.swapJson) {
-          parseResponseToSwap(data.contributionCreate.payments.onChainSwap, {
-            projectTitle: project?.title,
-            reference: data.contributionCreate.contribution.uuid,
-            bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
-            datetime: data.contributionCreate.contribution.createdAt,
-          })
+          parseResponseToSwap(
+            data.contributionCreate.payments.onChainSwap,
+            {
+              projectTitle: project?.title,
+              reference: data.contributionCreate.contribution.uuid,
+              bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
+              datetime: data.contributionCreate.contribution.createdAt,
+            },
+            currentAccountKeys,
+          )
         }
 
         if (data.contributionCreate.payments.onChainToRskSwap?.swapJson) {
@@ -199,6 +203,8 @@ export const useFundingAPI = () => {
       ) {
         const keyPair = generatePrivatePublicKeyPair()
         setKeyPair(keyPair)
+        currentAccountKeys.publicKey = keyPair.publicKey.toString('hex')
+        currentAccountKeys.privateKey = keyPair.privateKey?.toString('hex') || ''
         finalInput.paymentsInput.onChainSwap.boltz.swapPublicKey = keyPair.publicKey.toString('hex')
       }
 

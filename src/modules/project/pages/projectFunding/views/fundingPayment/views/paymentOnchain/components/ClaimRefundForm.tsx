@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
 import { currentSwapIdAtom, SwapData } from '@/modules/project/funding/state'
+import { currentSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { ControlledTextInput } from '@/shared/components/controlledInput'
 import { Body } from '@/shared/components/typography'
 import { useNotification } from '@/utils'
@@ -46,6 +47,7 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
   const { initiateRefund, loading } = useRefund()
 
   const currentSwapId = useAtomValue(currentSwapIdAtom)
+  const refundFileFromAtom = useAtomValue(currentSwapAtom)
 
   const { handleSubmit, control } = useForm<{ bitcoinAddress: string }>({
     resolver: yupResolver(schema),
@@ -53,7 +55,7 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
 
   const onSubmit = useCallback(
     async ({ bitcoinAddress }: { bitcoinAddress: string }) => {
-      const successful = await initiateRefund(bitcoinAddress, refundFile)
+      const successful = await initiateRefund(bitcoinAddress, refundFile || refundFileFromAtom)
       if (successful) {
         toast.success({
           title: 'Refund initiated successfully',
@@ -63,7 +65,7 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
         }
       }
     },
-    [refundFile, onSuccess, initiateRefund, toast],
+    [refundFile, refundFileFromAtom, onSuccess, initiateRefund, toast],
   )
 
   return (
