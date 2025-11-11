@@ -11,7 +11,7 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules'
 
 import { getPath } from '../../../../../../../shared/constants'
 import { commaFormatted } from '../../../../../../../utils'
-import { currentSwapIdAtom, swapAtom, SwapContributionInfo, useRefundFileValue } from '../../../../../funding/state'
+import { currentSwapIdAtom, swapAtom, SwapContributionInfo } from '../../../../../funding/state'
 import { RefundPolicyNote } from '../../fundingPayment/components/RefundPolicyNote'
 import { ClaimRefundForm } from '../../fundingPayment/views/paymentOnchain/components/ClaimRefundForm'
 
@@ -22,7 +22,6 @@ export const RefundFilePage = () => {
 
   const [swapData] = useAtom(swapAtom)
   const [currentSwapId, setCurrentSwapId] = useAtom(currentSwapIdAtom)
-  const refundFile = useRefundFileValue()
 
   const handleSuccess = () => {
     navigate(getPath('refundInitiated'))
@@ -84,7 +83,7 @@ export const RefundFilePage = () => {
             </VStack>
           )}
 
-          <ClaimRefundForm onSuccess={handleSuccess} showUpload={!hasRefundFile} refundFile={refundFile} />
+          <ClaimRefundForm onSuccess={handleSuccess} showUpload={!hasRefundFile} />
         </CardLayout>
 
         <Feedback variant={FeedBackVariant.INFO}>

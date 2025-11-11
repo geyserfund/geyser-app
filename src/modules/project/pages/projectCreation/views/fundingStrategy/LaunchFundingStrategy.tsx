@@ -102,7 +102,7 @@ export const LaunchFundingStrategy = () => {
         <CardLayout noborder backgroundColor="info.3" gap={0}>
           <Body medium>
             {t(`A {{launchFee}} launch fee is required to publish your project. `, {
-              launchFee: formatAmount(LAUNCH_FEE_USD_CENTS[ProjectLaunchStrategy.STARTER_LAUNCH], 'USD'),
+              launchFee: formatAmount(LAUNCH_FEE_USD_CENTS[ProjectLaunchStrategy.STARTER_LAUNCH], 'USDCENT'),
             })}
           </Body>
           <Body medium>

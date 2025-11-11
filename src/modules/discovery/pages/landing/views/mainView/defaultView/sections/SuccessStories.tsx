@@ -1,5 +1,6 @@
 import { Link, SimpleGrid } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useMemo } from 'react'
 
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { CreationStoryCard } from '@/modules/project/pages/projectCreation/views/start/components/CreationStoryCard.tsx'
@@ -59,8 +60,11 @@ const stories = [
 
 export const SuccessStories = () => {
   // Select 4 random stories for display
-  const shuffledStories = [...stories].sort(() => 0.5 - Math.random())
-  const displayedStories = shuffledStories.slice(0, 4)
+  const displayedStories = useMemo(() => {
+    const shuffledStories = [...stories].sort(() => 0.5 - Math.random())
+    return shuffledStories.slice(0, 4)
+  }, [])
+
   return (
     <ProjectRowLayout
       title={t('Success Stories')}
