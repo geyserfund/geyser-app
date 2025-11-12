@@ -1,12 +1,12 @@
 import { Box, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import ReactPlayer from 'react-player'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 
 import { CreationLayoutCard } from '../components/CreationLayoutCard.tsx'
-import { DefaultCreationImageURL } from '../utils/urls.ts'
 
 /** Welcome to Geyser section with description and illustration */
 export const WelcomeSection = () => {
@@ -28,14 +28,8 @@ export const WelcomeSection = () => {
         </Body>
       </VStack>
 
-      <Box width="100%" maxW={'700px'} height="auto" borderRadius="lg" overflow="hidden" bg="neutral.100">
-        <Image
-          src={DefaultCreationImageURL}
-          alt={t('Community illustration')}
-          width="100%"
-          height="100%"
-          objectFit="cover"
-        />
+      <Box width="100%" maxW={'800px'} height="450px" borderRadius="lg" overflow="hidden" bg="neutral.100">
+        <ReactPlayer url="https://www.youtube.com/watch?v=D6NwCQ0uLic" width="100%" height="100%" controls={true} />
       </Box>
     </CreationLayoutCard>
   )
