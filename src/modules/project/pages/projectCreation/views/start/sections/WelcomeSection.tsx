@@ -1,4 +1,4 @@
-import { Box, Image, VStack } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import ReactPlayer from 'react-player'
 
