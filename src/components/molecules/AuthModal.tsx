@@ -37,10 +37,12 @@ export type AuthModalAdditionalprops = {
 type AuthModalProps = {
   isOpen: boolean
   onClose: () => void
+  onSuccess?: () => void
 } & AuthModalAdditionalprops
 
 const ConnectAccounts = ({
   onClose,
+  onSuccess,
   showTwitter,
   showFacebook,
   showNostr,
@@ -69,27 +71,32 @@ const ConnectAccounts = ({
     }
   }, [])
 
+  const handleClose = () => {
+    onClose()
+    onSuccess?.()
+  }
+
   return (
     <VStack width="full" justifyContent="center" alignItems="center">
       <Stack width="100%" spacing="10px">
-        {!hasNostrAccount(user) && showNostr && <ConnectWithNostr onClose={onClose} />}
+        {!hasNostrAccount(user) && showNostr && <ConnectWithNostr onClose={handleClose} />}
         {!hasTwitterAccount(user) && showTwitter && (
-          <ConnectWithSocial accountType={SocialAccountType.twitter} onClose={onClose} />
+          <ConnectWithSocial accountType={SocialAccountType.twitter} onClose={handleClose} />
         )}
 
         <HStack w="full" spacing="20px">
           {!hasFacebookAccount(user) && showFacebook && (
-            <ConnectWithSocial accountType={SocialAccountType.facebook} onClose={onClose} flex={1} />
+            <ConnectWithSocial accountType={SocialAccountType.facebook} onClose={handleClose} flex={1} />
           )}
           {!hasGoogleAccount(user) && showGoogle && (
-            <ConnectWithSocial accountType={SocialAccountType.google} onClose={onClose} flex={1} />
+            <ConnectWithSocial accountType={SocialAccountType.google} onClose={handleClose} flex={1} />
           )}
         </HStack>
 
         <HStack w="full" spacing="20px">
-          {showLightning && <ConnectWithLightning flex={1} onClose={onClose} />}
+          {showLightning && <ConnectWithLightning flex={1} onClose={handleClose} />}
           {!hasGithubAccount(user) && showGithub && (
-            <ConnectWithSocial flex={1} accountType={SocialAccountType.github} onClose={onClose} />
+            <ConnectWithSocial flex={1} accountType={SocialAccountType.github} onClose={handleClose} />
           )}
         </HStack>
       </Stack>
@@ -112,6 +119,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
   const {
     isOpen,
     onClose,
+    onSuccess,
     title,
     description,
     noEmailPopup = false,
@@ -168,11 +176,11 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
         {!isOtpStarted && (
           <>
             <VStack w="full" alignItems="start" spacing={0}>
-              <Body medium>{t('Or use a social account')}</Body>
               {modalDescription && <Body size="sm">{modalDescription}</Body>}
             </VStack>
             <ConnectAccounts
               onClose={onClose}
+              onSuccess={onSuccess}
               showNostr={showNostr && window.nostr}
               showTwitter={showTwitter}
               showLightning={showLightning}

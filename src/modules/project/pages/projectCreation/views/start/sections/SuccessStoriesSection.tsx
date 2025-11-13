@@ -1,15 +1,14 @@
 import { Button, HStack, Link as ChakraLink, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiArrowRight } from 'react-icons/pi'
-import { Link } from 'react-router'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { getPath } from '@/shared/constants/index.ts'
 
 import { CreationLayoutCard } from '../components/CreationLayoutCard.tsx'
 import { CreationStoryCard } from '../components/CreationStoryCard.tsx'
+import { useLaunchNow } from '../utils/useLaunchNow.tsx'
 
 type StoryCard = {
   link: string
@@ -37,6 +36,7 @@ const stories: StoryCard[] = [
 
 /** Success Stories section with project cards */
 export const SuccessStoriesSection = () => {
+  const { handleLauchNowClick, renderModal } = useLaunchNow()
   return (
     <CreationLayoutCard bg="neutral1.3">
       <VStack maxW={dimensions.creation.start.maxWidth} alignItems="flex-start">
@@ -70,9 +70,10 @@ export const SuccessStoriesSection = () => {
           {t('See all success stories')}
         </Button>
       </HStack>
-      <Button minWidth="300px" as={Link} to={getPath('launchProjectDetails')} colorScheme="primary1" size="xl" px={8}>
+      <Button minWidth="300px" onClick={handleLauchNowClick} colorScheme="primary1" size="xl" px={8}>
         {t('Launch now')}
       </Button>
+      {renderModal()}
     </CreationLayoutCard>
   )
 }
