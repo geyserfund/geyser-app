@@ -1,11 +1,9 @@
 import { Button, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { Link } from 'react-router'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { getPath } from '@/shared/constants/index.ts'
 
 import { CreationIllustrationCard } from '../components/CreationIllustrationCard.tsx'
 import { CreationLayoutCard } from '../components/CreationLayoutCard.tsx'
@@ -14,6 +12,7 @@ import {
   NeedToLaunchIllustration2URL,
   NeedToLaunchIllustration3URL,
 } from '../utils/urls.ts'
+import { useLaunchNow } from '../utils/useLaunchNow.tsx'
 
 type Tool = {
   title: string
@@ -41,6 +40,7 @@ const tools: Tool[] = [
 
 /** Everything you need to launch section with tool icons */
 export const LaunchToolsSection = () => {
+  const { handleLauchNowClick, renderModal } = useLaunchNow()
   return (
     <CreationLayoutCard>
       <VStack w="full" spacing={0} maxW={dimensions.creation.start.maxWidth} alignItems="flex-start">
@@ -71,9 +71,10 @@ export const LaunchToolsSection = () => {
         ))}
       </SimpleGrid>
 
-      <Button minWidth="300px" as={Link} to={getPath('launchProjectDetails')} colorScheme="primary1" size="xl" px={8}>
+      <Button minWidth="300px" onClick={handleLauchNowClick} colorScheme="primary1" size="xl" px={8}>
         {t('Launch now')}
       </Button>
+      {renderModal()}
     </CreationLayoutCard>
   )
 }
