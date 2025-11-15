@@ -73,7 +73,7 @@ export const SuccessStories = () => {
         <DiscoverMoreButton as={Link} isExternal href="https://guide.geyser.fund/geyser-docs/guides/success-stories" />
       }
     >
-      <SimpleGrid w="full" columns={{ base: 1, md: 4 }} spacing={{ base: 4, lg: 8 }}>
+      <SimpleGrid w="full" columns={{ base: 1, xs: 2, md: 4 }} spacing={{ base: 4, lg: 8 }}>
         {displayedStories.map((story) => {
           return <CreationStoryCard key={story.link} link={story.link} image={story.image} />
         })}

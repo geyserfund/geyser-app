@@ -126,8 +126,8 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
 const PostAuthor = ({ post }: { post: PostForLandingPageFragment }) => {
   const navigate = useNavigate()
   return (
-    <HStack>
-      <Body size="sm" light>
+    <HStack maxWidth={'100%'}>
+      <Body size="sm" light whiteSpace="nowrap">
         {t('written by')}
       </Body>
       <ProfileAvatar
@@ -147,6 +147,7 @@ const PostAuthor = ({ post }: { post: PostForLandingPageFragment }) => {
         onClick={() => {
           navigate(`/profile/${post?.project?.owners[0]?.user.username}`)
         }}
+        isTruncated
       >
         {post?.project?.owners[0]?.user.username}
       </ProfileText>
