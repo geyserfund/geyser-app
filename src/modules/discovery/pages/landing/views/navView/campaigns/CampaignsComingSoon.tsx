@@ -24,16 +24,14 @@ export const CampaignsComingSoon = () => {
         />
         <VStack w="full" width="full" gap={4} maxW="1100px">
           <H2 size={{ base: '2xl', lg: '4xl' }} bold textAlign="center">
-            {t('The best way to launch your new Bitcoin products')} <br />
-            {t('All or Nothing is Coming soon!')}
+            {t('Launch your biggest ideas on Bitcoin with confidence.')} <br />
+            {t('All-or-Nothing Campaigns are coming soon')}
           </H2>
 
-          <Body size="xl" textAlign="center">
+          <Body size="lg" textAlign="center">
             {t(
-              'We’re building a new way to crowdfund, where creators only receive funds if their project reaches its goal.',
-            )}{' '}
-            <br />
-            {t('No more half-funded projects. No more uncertainty.')}
+              'We’re unlocking a new kind of crowdfunding on Bitcoin. One that empowers creators to go big with confidence. With All-or-Nothing, funds are only released if your campaign reaches its goal. If it doesn’t, contributors can get their sats back.',
+            )}
           </Body>
         </VStack>
 
@@ -45,21 +43,36 @@ export const CampaignsComingSoon = () => {
             {t('How it works')}
           </H2>
           <VStack w="full" gap={3} align="stretch">
-            <Body size="xl" lineHeight={1.6}>
-              {t(
-                'All-or-Nothing campaigns ensure creators only receive funds if they reach their funding target. This model protects backers and motivates creators to rally full support.',
-              )}
-            </Body>
-            <Body size="xl" lineHeight={1.6}>
-              {t(
-                'If the goal is reached by the set timeline the funds are released to the creator. If, instead, the goal is not met in time the funds are not sent to the project creator and the contributors can withdraw the funds.',
-              )}
-            </Body>
-            <Body size="xl" lineHeight={1.6}>
-              {t(
-                'This escrow mechanism makes fundraising fair, transparent and aligns incentives of contributors and creators. Geyser only monetizes if the project succeeds, to keep incentives aligned all the way down. ',
-              )}
-            </Body>
+            <VStack align="start">
+              <H3 size="xl" bold>
+                {t('Let creators think big')}
+              </H3>
+              <Body size="xl" lineHeight={1.6}>
+                {t(
+                  'Set the full budget your idea deserves. Build hardware, write books, produce board games, translate important works — with the confidence that you’ll only move forward when your community funds the entire project.',
+                )}
+              </Body>
+            </VStack>
+            <VStack align="start">
+              <H3 size="xl" bold>
+                {t('Protect contributors with trustless refunds')}
+              </H3>
+              <Body size="xl" lineHeight={1.6}>
+                {t(
+                  'Every contribution is locked in a secure, non-custodial smart contract. If the goal isn’t hit, contributors simply reclaim their funds. No platform custody, no chasing refunds, no risk.',
+                )}
+              </Body>
+            </VStack>
+            <VStack align="start">
+              <H3 size="xl" bold>
+                {t('Make momentum your superpower')}
+              </H3>
+              <Body size="xl" lineHeight={1.6}>
+                {t(
+                  'Clear goals and deadlines rally communities. Supporters share, promote, and help push your campaign over the finish line — because they know the project only succeeds if everyone makes it happen.',
+                )}
+              </Body>
+            </VStack>
           </VStack>
           <HStack w="full" gap={4} flexWrap="wrap" alignItems="stretch" justify="space-between">
             <VStack
