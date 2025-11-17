@@ -168,3 +168,24 @@ export const FRAGMENT_CONTRIBUTION_DOWNLOAD_INVOICE = gql`
     }
   }
 `
+
+export const FRAGMENT_CONTRIBUTION_FOR_REFUND = gql`
+  fragment ContributionForRefund on Contribution {
+    id
+    amount
+    bitcoinQuote {
+      quote
+      quoteCurrency
+    }
+    status
+    uuid
+    projectId
+    payments {
+      id
+      paymentType
+      status
+      paidAt
+      paymentAmount
+    }
+  }
+`

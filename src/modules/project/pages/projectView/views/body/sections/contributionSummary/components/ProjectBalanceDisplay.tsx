@@ -5,12 +5,11 @@ import { AonProjectBalanceDisplay } from './AonProjectBalanceDisplay.tsx'
 import { TiaProjectBalanceDisplay } from './TiaProjectBalanceDisplay.tsx'
 
 export const ProjectBalanceDisplay = () => {
-  const {project} = useProjectAtom()
+  const { project } = useProjectAtom()
 
- if (isAllOrNothing(project)) {
-  return <AonProjectBalanceDisplay />
- }
- return <TiaProjectBalanceDisplay />
+  if (isAllOrNothing(project)) {
+    return <AonProjectBalanceDisplay />
+  }
 
+  return <TiaProjectBalanceDisplay />
 }
-

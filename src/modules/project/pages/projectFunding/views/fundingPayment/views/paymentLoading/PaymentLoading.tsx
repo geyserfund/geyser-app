@@ -21,19 +21,25 @@ export const PaymentLoading = () => {
   const { user, loading: authLoading } = useAuthContext()
   const { project, loading: projectLoading } = useProjectAtom()
   const [passwordConfirmed, setPasswordConfirmed] = useState(false)
-  const [downloadRefundFile, setDownloadRefundFile] = useState(false)
+  const [downloadedRefundFile, setDownloadedRefundFile] = useState(false)
+  const [currentContributionId, setCurrentContributionId] = useState('')
+
+  const handleNext = (contributionId?: string) => {
+    navigate(
+      {
+        pathname: getPath('fundingPaymentLightning', project.name),
+        search: `?transactionId=${contributionId || currentContributionId}`,
+      },
+      { replace: true },
+    )
+  }
 
   const handleComplete = (contributionId: string) => {
     if (user.id) {
-      navigate(
-        {
-          pathname: getPath('fundingPaymentLightning', project.name),
-          search: `?transactionId=${contributionId}`,
-        },
-        { replace: true },
-      )
+      handleNext(contributionId)
     } else {
-      setDownloadRefundFile(true)
+      setDownloadedRefundFile(true)
+      setCurrentContributionId(contributionId)
     }
   }
 
@@ -46,8 +52,8 @@ export const PaymentLoading = () => {
       return <PaymentPassword onComplete={() => setPasswordConfirmed(true)} />
     }
 
-    if (!user?.id && downloadRefundFile) {
-      return <PaymentDownloadRefundFile onComplete={() => setDownloadRefundFile(false)} />
+    if (!user?.id && downloadedRefundFile) {
+      return <PaymentDownloadRefundFile onComplete={handleNext} />
     }
 
     return <PaymentLoadingContribution onComplete={handleComplete} />

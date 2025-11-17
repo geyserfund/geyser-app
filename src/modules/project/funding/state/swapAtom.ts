@@ -1,8 +1,8 @@
 import { ECPairInterface } from 'ecpair'
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
-import { userAccountKeyPairAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 
 import {
   BitcoinQuote,
@@ -13,10 +13,12 @@ import {
 } from '../../../../types'
 import { rskAccountKeysAtom } from './swapRskAtom.ts'
 export type SwapContributionInfo = {
+  projectId?: number
   projectTitle?: Maybe<string>
   reference?: Maybe<string>
   bitcoinQuote?: Maybe<BitcoinQuote>
   datetime?: number
+  contributionId?: number
 }
 
 export type SwapData =
@@ -42,9 +44,11 @@ export type SwapData =
       fees?: number
       contributionInfo?: SwapContributionInfo
       privateKey?: string
+      address?: string
       refundTx?: string
       preimageHash?: string
       preimageHex?: string
+      type?: RefundFileType
     }
   | {
       // Type for BTC -> RSK chain swaps (version !== 3)
@@ -80,9 +84,11 @@ export type SwapData =
       fees?: number
       contributionInfo?: SwapContributionInfo
       privateKey?: string
+      address?: string
       refundTx?: string
       preimageHash?: string
       preimageHex?: string
+      type?: RefundFileType
     }
   | {
       // Type for RSK -> BTC swaps (version !== 3)
@@ -116,9 +122,11 @@ export type SwapData =
       fees?: number
       contributionInfo?: SwapContributionInfo
       privateKey?: string
+      address?: string
       refundTx?: string
       preimageHash?: string
       preimageHex?: string
+      type?: RefundFileType
     }
 
 type SwapDataStructure = { [key: string]: SwapData }
@@ -128,8 +136,17 @@ export const keyPairAtom = atom<ECPairInterface | null>(null)
 /** Hold the swap Id for the Funding Tx in progress */
 export const currentSwapIdAtom = atom<string>('')
 
+export const currentLightningToRskSwapIdAtom = atom<string>('')
+export const currentOnChainToRskSwapIdAtom = atom<string>('')
+
 /** Holds all of the swap refund files */
 export const swapAtom = atomWithStorage<SwapDataStructure>('swapArray', {})
+
+export const enum RefundFileType {
+  ON_CHAIN_TO_LIGHTNING = 'ON_CHAIN_TO_LIGHTNING',
+  ON_CHAIN_TO_RSK = 'ON_CHAIN_TO_RSK',
+  LIGHTNING_TO_RSK = 'LIGHTNING_TO_RSK',
+}
 
 /** Parses swap json received with Contribution and stores it in swapAtom, also sets currentSwapId */
 export const parseSwapAtom = atom(
@@ -148,8 +165,10 @@ export const parseSwapAtom = atom(
     const refundFile = JSON.parse(swap.swapJson)
     refundFile.privateKey =
       accountKeys?.privateKey || userAccountKeyPair?.privateKey || keys?.privateKey?.toString('hex')
+    refundFile.address = accountKeys?.address
 
     refundFile.contributionInfo = contributionInfo
+    refundFile.type = RefundFileType.ON_CHAIN_TO_LIGHTNING
 
     set(currentSwapIdAtom, refundFile.id) // Set the current id as current swap id
     set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
@@ -158,35 +177,56 @@ export const parseSwapAtom = atom(
 
 export const parseOnChainToRskSwapAtom = atom(
   null,
-  (get, set, swap: ContributionOnChainToRskSwapPaymentDetailsFragment, contributionInfo?: SwapContributionInfo) => {
+  (
+    get,
+    set,
+    swap: ContributionOnChainToRskSwapPaymentDetailsFragment,
+    contributionInfo?: SwapContributionInfo,
+    accountKeys?: { publicKey: string; address: string; privateKey: string },
+  ) => {
     const userAccountKeyPair = get(userAccountKeyPairAtom)
+    const userAccountKeys = get(userAccountKeysAtom)
     const rskKeyPair = get(rskAccountKeysAtom)
 
     const swapData = get(swapAtom)
     const refundFile = JSON.parse(swap.swapJson)
 
-    refundFile.privateKey = userAccountKeyPair?.privateKey || rskKeyPair?.privateKey
+    refundFile.privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || rskKeyPair?.privateKey
+    refundFile.address = accountKeys?.address || userAccountKeys?.rskKeyPair.address || rskKeyPair?.address
 
     refundFile.contributionInfo = contributionInfo
+    refundFile.type = RefundFileType.ON_CHAIN_TO_RSK
 
-    set(currentSwapIdAtom, refundFile.id) // Set the current id as current swap id
+    set(currentSwapIdAtom, refundFile.id)
+    set(currentOnChainToRskSwapIdAtom, refundFile.id)
     set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
   },
 )
+
 export const parseLightningToRskSwapAtom = atom(
   null,
-  (get, set, swap: ContributionLightningToRskSwapPaymentDetailsFragment, contributionInfo?: SwapContributionInfo) => {
+  (
+    get,
+    set,
+    swap: ContributionLightningToRskSwapPaymentDetailsFragment,
+    contributionInfo?: SwapContributionInfo,
+    accountKeys?: { publicKey: string; address: string; privateKey: string },
+  ) => {
     const userAccountKeyPair = get(userAccountKeyPairAtom)
+    const userAccountKeys = get(userAccountKeysAtom)
     const rskKeyPair = get(rskAccountKeysAtom)
 
     const swapData = get(swapAtom)
     const refundFile = JSON.parse(swap.swapJson)
 
-    refundFile.privateKey = userAccountKeyPair?.privateKey || rskKeyPair?.privateKey
+    refundFile.privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || rskKeyPair?.privateKey
+    refundFile.address = accountKeys?.address || userAccountKeys?.rskKeyPair.address || rskKeyPair?.address
 
     refundFile.contributionInfo = contributionInfo
+    refundFile.type = RefundFileType.LIGHTNING_TO_RSK
 
-    set(currentSwapIdAtom, refundFile.id) // Set the current id as current swap id
+    set(currentSwapIdAtom, refundFile.id)
+    set(currentLightningToRskSwapIdAtom, refundFile.id)
     set(swapAtom, { [refundFile.id]: refundFile, ...swapData })
   },
 )
@@ -210,14 +250,14 @@ export const currentSwapAtom = atom(
 )
 
 /** Add swap data refund file to swapAtom */
-const addSwapAtom = atom(null, (get, set, data: SwapData) => {
+export const addSwapAtom = atom(null, (get, set, data: SwapData) => {
   const swapData = get(swapAtom)
   swapData[data.id] = data
   set(swapAtom, swapData)
 })
 
 /** Remove swap data from swapAtom */
-const removeRefundedSwapAtom = atom(null, (get, set, swapId: string) => {
+export const removeRefundedSwapAtom = atom(null, (get, set, swapId: string) => {
   const swapData = get(swapAtom)
   const newSwapData = {} as SwapDataStructure
   Object.values(swapData).map((swapItem) => {
@@ -228,11 +268,6 @@ const removeRefundedSwapAtom = atom(null, (get, set, swapId: string) => {
   set(currentSwapIdAtom, '')
   set(swapAtom, newSwapData)
 })
-
-// For fetching and updating refund file
-export const useRefundFileValue = () => useAtomValue(currentSwapAtom)
-export const useRefundFileAdd = () => useSetAtom(addSwapAtom)
-export const useRemoveRefundFile = () => useSetAtom(removeRefundedSwapAtom)
 
 export const refundedSwapDataAtom = atom<SwapData | undefined>(undefined)
 export const useRefundedSwapData = () => useAtom(refundedSwapDataAtom)

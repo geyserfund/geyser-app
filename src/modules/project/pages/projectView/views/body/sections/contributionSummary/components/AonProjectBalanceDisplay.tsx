@@ -2,22 +2,33 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 
+import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
+import { ProjectAonGoalStatus } from '@/types/index.ts'
+import { Satoshis } from '@/types/types.ts'
 
 import { LiveProgressAqua } from '../../../../../../../../../shared/components/feedback/LiveProgressAqua.tsx'
 
 export const AonProjectBalanceDisplay = () => {
   const { project } = useProjectAtom()
 
-  const { balance, balanceUsdCent } = project
-
   const { formatAmount } = useCurrencyFormatter()
+  const { getUSDCentsAmount } = useBTCConverter()
 
   /** Calculate time left for AON project showing only the largest time unit */
   const timeLeft = useMemo(() => aonProjectTimeLeft(project.aonGoal), [project.aonGoal])
+
+  const isAonGoalFinalized = project.aonGoal?.status === ProjectAonGoalStatus.Finalized
+
+  const balance = isAonGoalFinalized ? project.balance : project.aonGoal?.balance
+  const balanceUsdCent = isAonGoalFinalized
+    ? project.balanceUsdCent
+    : balance
+    ? getUSDCentsAmount(balance as Satoshis)
+    : 0
 
   // Don't render the component if time is up
 

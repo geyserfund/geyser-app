@@ -5,8 +5,10 @@ import { useNavigate } from 'react-router'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
+import { useModal } from '@/shared/hooks/useModal.tsx'
 import { useNotification } from '@/utils/tools/Notification.tsx'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
@@ -15,6 +17,8 @@ import { LaunchSummary } from '../components/LaunchSummary.tsx'
 export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
   const navigate = useNavigate()
   const toast = useNotification()
+
+  const projectPublishedModal = useModal()
 
   const { project } = useProjectAtom()
   const { publishProject } = useProjectAPI()
@@ -38,7 +42,7 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
               title: t('Project Published!'),
               description: t('Your project is now live and available to the public'),
             })
-            navigate(getPath('project', project.name || ''))
+            projectPublishedModal.onOpen()
           }
         },
         onError(error) {
@@ -62,6 +66,11 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
 
   const backProps = {
     onClick: handleBackClick,
+  }
+
+  const handleCloseModal = () => {
+    projectPublishedModal.onClose()
+    navigate(getPath('projectLaunch', project.name || ''))
   }
 
   return (
@@ -92,6 +101,18 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
           {t('Launch Now')}
         </Button>
       </VStack>
+      <Modal title={t('Project Published!')} isOpen={projectPublishedModal.isOpen} onClose={handleCloseModal}>
+        <VStack>
+          <Body>{t('Your project is now live and available to the public')}</Body>
+          <Button
+            variant="solid"
+            colorScheme="primary1"
+            onClick={() => navigate(getPath('projectLaunch', project.name || ''))}
+          >
+            {t('Go to project')}
+          </Button>
+        </VStack>
+      </Modal>
     </ProjectCreationPageWrapper>
   )
 }

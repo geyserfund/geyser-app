@@ -320,7 +320,6 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
         preimageHash: `0x${failedSwapPreImageHash}`,
         amount: Number(amount),
         claimAddress: claimAddress as Address,
-        refundAddress: accountKeys.address as Address,
         timelock,
         privateKey: accountKeys.privateKey as Hex,
       })

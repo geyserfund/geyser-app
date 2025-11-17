@@ -223,11 +223,10 @@ export const createAndSignRefundEIP712Message = (props: {
   preimageHash: string
   amount: number
   claimAddress: string
-  refundAddress: string
   timelock: number
   rskPrivateKey: string
 }) => {
-  const { preimageHash, amount, claimAddress, refundAddress, timelock, rskPrivateKey } = props
-  const digest = createEIP712MessageForPaymentRefund(preimageHash, amount, claimAddress, refundAddress, timelock)
+  const { preimageHash, amount, claimAddress, timelock, rskPrivateKey } = props
+  const digest = createEIP712MessageForPaymentRefund(preimageHash, amount, claimAddress, timelock)
   return signEIP712Message(digest, rskPrivateKey)
 }

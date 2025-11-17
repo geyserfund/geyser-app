@@ -8,7 +8,7 @@ import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjec
 import { getPath } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { ProjectCreationStep } from '@/types/index.ts'
-import { useNotification } from '@/utils/index.ts'
+import { isAllOrNothing, useNotification } from '@/utils/index.ts'
 
 import { VerificationModal } from '../../../../projectDashboard/components/VerificationModal.tsx'
 import { EnableFiatContributions } from '../../../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
@@ -30,6 +30,8 @@ export const LaunchPaymentWallet = () => {
     getPath('launchPaymentTaxId', project.id),
   )
 
+  const isAon = isAllOrNothing(project)
+
   const continueProps: ButtonProps = {
     onClick() {
       if (!user.isEmailVerified) {
@@ -37,7 +39,7 @@ export const LaunchPaymentWallet = () => {
         return
       }
 
-      if (!wallet?.id) {
+      if (!isAon && !wallet?.id) {
         toast.error({ title: t('Please connect a wallet to continue') })
         return
       }
@@ -61,18 +63,22 @@ export const LaunchPaymentWallet = () => {
       backButtonProps={backProps}
     >
       <UpdateVerifyEmail inputWrapperProps={{ marginTop: 2 }} />
-
       <ConnectWallet />
 
-      <EnableFiatContributions
-        paddingX={0}
-        dense
-        noborder
-        isIdentityVerified={isIdentityVerified}
-        buttonProps={{
-          onClick: verifyIntroModal.onOpen,
-        }}
-      />
+      {!isAon && (
+        <>
+          <EnableFiatContributions
+            paddingX={0}
+            dense
+            noborder
+            isIdentityVerified={isIdentityVerified}
+            buttonProps={{
+              onClick: verifyIntroModal.onOpen,
+            }}
+          />
+        </>
+      )}
+
       <VerificationModal {...verifyIntroModal} />
     </ProjectCreationPageWrapper>
   )

@@ -165,6 +165,8 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
   const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
 
+  console.log('userAccountKeys', userAccountKeys)
+
   if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
     paymentsInput.fiat = {
       create: true,
