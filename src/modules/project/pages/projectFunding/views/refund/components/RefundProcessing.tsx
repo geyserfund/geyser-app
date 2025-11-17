@@ -1,13 +1,14 @@
+import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
 import { TransactionProcessing } from '@/modules/project/pages/projectFunding/views/fundingPayment/views/paymentOnchain/components'
 import { CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 
-import { useRefundedSwapData } from '../../../../../funding/state'
+import { refundedSwapDataAtom } from '../../../../../funding/state/swapAtom.ts'
 
 export const RefundProcessing = (props: CardLayoutProps) => {
   const { t } = useTranslation()
-  const [refundedSwapData] = useRefundedSwapData()
+  const refundedSwapData = useAtomValue(refundedSwapDataAtom)
 
   return (
     <TransactionProcessing

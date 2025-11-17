@@ -1,11 +1,12 @@
 import { VStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 
-import { useRefundedSwapData } from '@/modules/project/funding/state'
+import { refundedSwapDataAtom } from '@/modules/project/funding/state'
 
 import { RefundProcessing, SafeToDeleteNotice } from '../../../../refund/components'
 
 export const PaymentOnChainRefundInitiated = () => {
-  const [refundedSwapData] = useRefundedSwapData()
+  const refundedSwapData = useAtomValue(refundedSwapDataAtom)
 
   if (!refundedSwapData) {
     return null

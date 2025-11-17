@@ -1,14 +1,15 @@
 import { HStack, VStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 
+import { refundedSwapDataAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { Body } from '@/shared/components/typography'
 
 import { commaFormatted } from '../../../../../../../utils'
-import { useRefundedSwapData } from '../../../../../funding/state'
 
 export const RefundSummary = () => {
   const { t } = useTranslation()
-  const [refundedSwapData] = useRefundedSwapData()
+  const refundedSwapData = useAtomValue(refundedSwapDataAtom)
 
   if (!refundedSwapData?.contributionInfo?.projectTitle) {
     return null

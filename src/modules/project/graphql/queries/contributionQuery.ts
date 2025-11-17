@@ -4,6 +4,7 @@ import { FRAGMENT_PAGINATION } from '@/graphqlBase/fragments/pagination.ts'
 
 import {
   FRAGMENT_CONTRIBUTION_DOWNLOAD_INVOICE,
+  FRAGMENT_CONTRIBUTION_FOR_REFUND,
   FRAGMENT_CONTRIBUTION_WITH_INVOICE_STATUS,
   FRAGMENT_ORDER_CONTRIBUTION,
   FRAGMENT_PROJECT_CONTRIBUTION,
@@ -49,6 +50,15 @@ export const QUERY_PROJECT_PAGE_CONTRIBUTIONS = gql`
       contributions {
         ...ProjectContribution
       }
+    }
+  }
+`
+
+export const QUERY_CONTRIBUTION_FOR_REFUND = gql`
+  ${FRAGMENT_CONTRIBUTION_FOR_REFUND}
+  query ContributionForRefundGet($contributionId: BigInt!) {
+    contribution(id: $contributionId) {
+      ...ContributionForRefund
     }
   }
 `

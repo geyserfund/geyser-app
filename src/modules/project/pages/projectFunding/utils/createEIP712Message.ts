@@ -11,7 +11,7 @@ export const BOLTZ_TYPEHASH_CLAIM =
 export const BOLTZ_TYPEHASH_CLAIM_CALL = 'ClaimCall(bytes32 preimage,address callee,bytes32 callData)'
 
 export const BOLTZ_TYPEHASH_PAYMENT_REFUND =
-  'Refund(bytes32 preimageHash,uint256 amount,address claimAddress,address refundAddress,uint256 timelock)'
+  'Refund(bytes32 preimageHash,uint256 amount,address claimAddress,uint256 timelock)'
 
 /**
  * @param preimage - The preimage value from swap file
@@ -92,7 +92,6 @@ export const createEIP712MessageForPaymentRefund = (
   preimageHash: string,
   amount: number,
   claimAddress: string,
-  refundAddress: string,
   timelock: number,
 ) => {
   const domainSeparator = Buffer.from(CreateBoltzEtherSwapDomainSeparator().slice(2), 'hex')
@@ -102,7 +101,6 @@ export const createEIP712MessageForPaymentRefund = (
   const preimageHashBuffer = Buffer.from(preimageHash, 'hex')
   const amountBuffer = numberToBuffer32(amount)
   const claimAddressBuffer = addressToBuffer32(claimAddress)
-  const refundAddressBuffer = addressToBuffer32(refundAddress)
   const timelockBuffer = numberToBuffer32(timelock)
 
   const structEncoded = Buffer.concat([
@@ -110,7 +108,6 @@ export const createEIP712MessageForPaymentRefund = (
     preimageHashBuffer,
     amountBuffer,
     claimAddressBuffer,
-    refundAddressBuffer,
     timelockBuffer,
   ])
 
@@ -127,13 +124,12 @@ export const createAndSignEIP712MessageForPaymentRefund = (params: {
   preimageHash: string
   amount: number
   claimAddress: string
-  refundAddress: string
   timelock: number
   privateKey: string
 }) => {
-  const { preimageHash, amount, claimAddress, refundAddress, timelock, privateKey } = params
+  const { preimageHash, amount, claimAddress, timelock, privateKey } = params
 
-  const eip712Message = createEIP712MessageForPaymentRefund(preimageHash, amount, claimAddress, refundAddress, timelock)
+  const eip712Message = createEIP712MessageForPaymentRefund(preimageHash, amount, claimAddress, timelock)
   const signature = signEIP712Message(eip712Message, privateKey)
   return signature
 }

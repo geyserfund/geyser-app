@@ -1,4 +1,5 @@
-import { Box, HStack, Image, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 
 import { isViewingOwnProfileAtom } from '@/modules/profile/state/profileAtom.ts'
@@ -8,15 +9,22 @@ import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import { useProjectForProfileContributionsQuery, UserProjectContributionFragment } from '@/types'
+import { ProjectAonGoalStatus, useProjectForProfileContributionsQuery, UserProjectContributionFragment } from '@/types'
 
 import { TransactionTime } from '../../../../../../../components/molecules'
 import { getPath } from '../../../../../../../shared/constants'
-import { commaFormatted, convertSatsToUsdFormatted, toSmallImageUrl } from '../../../../../../../utils'
+import { commaFormatted, convertSatsToUsdFormatted, isAllOrNothing, toSmallImageUrl } from '../../../../../../../utils'
 
 interface ContributionSummaryProps {
   contribution: UserProjectContributionFragment
 }
+
+const AON_REFUNDABLE_STATUSES = [
+  ProjectAonGoalStatus.Active,
+  ProjectAonGoalStatus.Failed,
+  ProjectAonGoalStatus.Cancelled,
+  ProjectAonGoalStatus.Successful,
+]
 
 export const ContributionSummary = ({ contribution }: ContributionSummaryProps) => {
   const { data, loading } = useProjectForProfileContributionsQuery({
@@ -35,15 +43,18 @@ export const ContributionSummary = ({ contribution }: ContributionSummaryProps) 
 
   const refundRskModal = useModal()
 
-  // const handleRefundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   event.stopPropagation()
-  //   event.preventDefault()
-  //   refundRskModal.onOpen()
-  // }
+  const handleRefundClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
+    event.preventDefault()
+    refundRskModal.onOpen()
+  }
 
   if (loading || !project) {
     return null
   }
+
+  const isAon = isAllOrNothing(project)
+  const isRefundable = isAon && project.aonGoal?.status && AON_REFUNDABLE_STATUSES.includes(project.aonGoal?.status)
 
   return (
     <>
@@ -110,9 +121,11 @@ export const ContributionSummary = ({ contribution }: ContributionSummaryProps) 
           </VStack>
 
           <HStack height="100%" alignItems={'start'} justifyContent="end" paddingTop="2px">
-            {/* <Button size="sm" variant="outline" onClick={handleRefundClick}>
-              {t('Refund')}
-            </Button> */}
+            {isRefundable && (
+              <Button size="sm" variant="outline" onClick={handleRefundClick}>
+                {t('Refund')}
+              </Button>
+            )}
             {isViewingOwnProfile && (
               <DownloadInvoice
                 asIcon
@@ -124,7 +137,7 @@ export const ContributionSummary = ({ contribution }: ContributionSummaryProps) 
           </HStack>
         </CardLayout>
       </CardLayout>
-      <RefundRsk {...refundRskModal} contribution={contribution} project={project} />
+      <RefundRsk {...refundRskModal} contributionUUID={contribution.uuid || ''} projectId={project.id} />
     </>
   )
 }

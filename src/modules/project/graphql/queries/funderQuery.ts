@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 
 import {
+  FRAGMENT_PROJECT_CONTRIBUTOR,
   FRAGMENT_PROJECT_CONTRIBUTOR_CONTRIBUTION_SUMMARY,
   FRAGMENT_PROJECT_FUNDER,
   FRAGMENT_PROJECT_LEADERBOARD_AMBASSADORS,
@@ -44,6 +45,15 @@ export const QUERY_PROJECT_USER_CONTRIBUTOR = gql`
       contributionsSummary(period: $period) {
         ...ContributorContributionsSummary
       }
+    }
+  }
+`
+
+export const QUERY_PROJECT_CONTRIBUTOR = gql`
+  ${FRAGMENT_PROJECT_CONTRIBUTOR}
+  query ProjectContributor($input: GetContributorInput!) {
+    contributor(input: $input) {
+      ...ProjectContributor
     }
   }
 `

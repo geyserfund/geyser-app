@@ -4,7 +4,6 @@ import { useSetAtom } from 'jotai'
 import { PiWarning } from 'react-icons/pi'
 import { Navigate, useLocation, useNavigate } from 'react-router'
 
-import { useAuthContext } from '@/context/auth.tsx'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { Body } from '@/shared/components/typography'
 import { getPath, GeyserOnChainGuideUrl } from '@/shared/constants'
@@ -16,7 +15,7 @@ import { onChainRefundDownloadedAtom } from '../states/onChainStatus.ts'
 
 export const PaymentOnchainPrompt = () => {
   const { project } = useFundingFormAtom()
-  const { user } = useAuthContext()
+
   const setOnchainRefundDownloadAtom = useSetAtom(onChainRefundDownloadedAtom)
 
   const navigate = useNavigate()
@@ -26,7 +25,7 @@ export const PaymentOnchainPrompt = () => {
     navigate({ pathname: getPath('fundingPaymentOnchainQR', project.name), search: location.search }, { replace: true })
   }
 
-  if (user.id && isAllOrNothing(project)) {
+  if (isAllOrNothing(project)) {
     setOnchainRefundDownloadAtom(true)
     return <Navigate to={getPath('fundingPaymentOnchainQR', project.name)} replace />
   }

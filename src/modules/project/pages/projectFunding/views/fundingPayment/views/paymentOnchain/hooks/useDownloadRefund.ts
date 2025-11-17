@@ -1,8 +1,13 @@
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import QRCode from 'qrcode'
 import { useTranslation } from 'react-i18next'
 
-import { useRefundFileValue } from '@/modules/project/funding/state'
+import {
+  currentLightningToRskSwapIdAtom,
+  currentOnChainToRskSwapIdAtom,
+  currentSwapIdAtom,
+  swapAtom,
+} from '@/modules/project/funding/state/swapAtom.ts'
 import { useNotification } from '@/utils'
 
 import { onChainRefundDownloadedAtom } from '../states/onChainStatus.ts'
@@ -10,15 +15,27 @@ import { download, downloadJson, isIos } from '../utils/download'
 
 const REFUND_QR_FILE_NAME = 'refundFile'
 
-export const useDownloadRefund = () => {
-  const refundFile = useRefundFileValue()
+export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
+  const allRefundFiles = useAtomValue(swapAtom)
+  const currentSwapId = useAtomValue(currentSwapIdAtom)
+  const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
+  const currentOnChainToRskSwapId = useAtomValue(currentOnChainToRskSwapIdAtom)
+
+  const onChainSwapRefundFile = allRefundFiles[currentSwapId]
+  const lightningToRskSwapRefundFile = allRefundFiles[currentLightningToRskSwapId]
+  const onChainToRskSwapRefundFile = allRefundFiles[currentOnChainToRskSwapId]
+
+  const refundFiles = props?.isAllOrNothing
+    ? { isAonRefund: true, onChainToRsk: onChainToRskSwapRefundFile, lightningToRsk: lightningToRskSwapRefundFile }
+    : onChainSwapRefundFile
+
   const toast = useNotification()
   const { t } = useTranslation()
 
   const setRefundFileDownloaded = useSetAtom(onChainRefundDownloadedAtom)
 
   const downloadRefundQr = () => {
-    QRCode.toDataURL(JSON.stringify(refundFile), { width: 400 })
+    QRCode.toDataURL(JSON.stringify(refundFiles), { width: 800 })
       .then((url: string) => {
         if (isIos) {
           // Compatibility with third party iOS browsers
@@ -46,7 +63,7 @@ export const useDownloadRefund = () => {
   }
 
   const downloadRefundJson = () => {
-    downloadJson(REFUND_QR_FILE_NAME, refundFile)
+    downloadJson(REFUND_QR_FILE_NAME, refundFiles)
     setRefundFileDownloaded(true)
   }
 

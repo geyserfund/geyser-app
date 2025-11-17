@@ -57,18 +57,11 @@ export const ProjectLeaderboard = () => {
             onChange={handlePeriodChange}
             placeholder={t('Select period...')}
             dropdownIndicator={<PiCalendarDots />}
-            dropdownIndicatorPosition="left"
             fontSize="sm"
             customChakraStyles={{
-              control: (provided) => ({
-                ...provided,
+              control: () => ({
                 height: '32px',
                 minHeight: '32px',
-              }),
-              valueContainer: (provided) => ({
-                ...provided,
-                paddingLeft: '10px',
-                paddingRight: 0,
               }),
             }}
           />

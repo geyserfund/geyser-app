@@ -1,12 +1,15 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { useEffect } from 'react'
 import { PiCopy } from 'react-icons/pi'
 
 import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess'
 import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
+import { currentLightningToRskSwapIdAtom, currentSwapIdAtom } from '@/modules/project/funding/state/swapAtom.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { useMobileMode, useNotification } from '@/utils/index.ts'
+import { isAllOrNothing, useMobileMode, useNotification } from '@/utils/index.ts'
 
 import { QRCodeComponent } from '../../components/QRCodeComponent'
 import { TotalAmountToPay } from '../../components/TotalAmountToPay'
@@ -32,6 +35,11 @@ export const PaymentLightning = () => {
 
 export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: string }) => {
   useListenFundingContributionSuccess()
+
+  const { project } = useProjectAtom()
+  const isAon = isAllOrNothing(project)
+  const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
+  const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
 
   const isMobile = useMobileMode()
 
@@ -64,6 +72,12 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
       handleCopy()
     }
   }
+
+  useEffect(() => {
+    if (isAon && currentLightningToRskSwapId) {
+      setCurrentSwapId(currentLightningToRskSwapId)
+    }
+  }, [isAon, currentLightningToRskSwapId, setCurrentSwapId])
 
   return (
     <VStack w="full">

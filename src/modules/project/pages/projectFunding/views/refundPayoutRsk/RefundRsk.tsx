@@ -12,13 +12,8 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import {
-  ProjectForProfileContributionsFragment,
-  usePledgeRefundInitiateMutation,
-  usePledgeRefundRequestMutation,
-  UserProjectContributionFragment,
-} from '@/types/index.ts'
-import { useNotification } from '@/utils/index.ts'
+import { usePledgeRefundInitiateMutation, usePledgeRefundRequestMutation } from '@/types/index.ts'
+import { commaFormatted, useNotification } from '@/utils/index.ts'
 
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
@@ -36,12 +31,13 @@ import { PayoutMethod } from './types.ts'
 type RefundRskProps = {
   isOpen: boolean
   onClose: () => void
-  contribution: UserProjectContributionFragment
-  project: ProjectForProfileContributionsFragment
+  contributionUUID: string
+  projectId?: number
+  rskAddress?: string
 }
 
 /** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
-export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribution, project }) => {
+export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contributionUUID, projectId, rskAddress }) => {
   const toast = useNotification()
 
   useUserAccountKeys()
@@ -53,6 +49,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
   const [isProcessed, setIsProcessed] = useState(false)
   const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
   const [refundAddress, setRefundAddress] = useState<string | null>(null)
+
+  const [continueRefund, setContinueRefund] = useState(false)
 
   const [
     pledgeRefundRequest,
@@ -68,14 +66,14 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
       pledgeRefundRequest({
         variables: {
           input: {
-            contributionUuid: contribution.uuid,
-            projectId: project.id,
-            rskAddress: userAccountKeys?.rskKeyPair.address,
+            contributionUuid: contributionUUID,
+            projectId,
+            rskAddress: rskAddress || userAccountKeys?.rskKeyPair.address,
           },
         },
       })
     }
-  }, [isOpen, pledgeRefundRequest, contribution.uuid, project.id, userAccountKeys?.rskKeyPair.address])
+  }, [isOpen, pledgeRefundRequest, contributionUUID, projectId, userAccountKeys?.rskKeyPair.address, rskAddress])
 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
@@ -205,6 +203,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
   const handleClose = () => {
     setIsProcessed(false)
     setIsSubmitting(false)
+    setContinueRefund(false)
     onClose()
   }
 
@@ -263,10 +262,37 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
     )
   }
 
+  const ContinueRefundContent = () => {
+    return (
+      <VStack spacing={4} alignItems="start" w="full">
+        <Body size={'md'} medium>
+          {t('Refund all of the contributions you have made to this project.')} <br />
+          {t('Are you sure you want to continue with the refund?')}
+        </Body>
+        <Body size={'xl'} bold>
+          {t('Total refund amount')}
+          {': '}
+          {commaFormatted(pledgeRefundRequestData?.pledgeRefundRequest.refund.amount)} sats
+        </Body>
+        <Body size={'md'} medium></Body>
+        <HStack spacing={4} w="full" justifyContent="space-between">
+          <Button size={'lg'} colorScheme={'neutral1'} variant={'outline'} onClick={handleClose}>
+            {t('No, cancel')}
+          </Button>
+          <Button size={'lg'} colorScheme={'primary1'} variant={'solid'} onClick={() => setContinueRefund(true)}>
+            {t('Yes, continue with the refund')}
+          </Button>
+        </HStack>
+      </VStack>
+    )
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={handleClose} size="lg" title={t('Refund you contribution')} bodyProps={{ gap: 4 }}>
       {pledgeRefundRequestLoading ? (
         <RefundRskSkeleton />
+      ) : !continueRefund ? (
+        <ContinueRefundContent />
       ) : (
         <>
           {/* Payout Method Selection */}
@@ -275,9 +301,15 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
           {/* Form Section */}
           <CardLayout w="full" p={6}>
             {selectedMethod === PayoutMethod.Lightning ? (
-              <LightningPayoutForm form={lightningForm.form} satsAmount={contribution.amount} />
+              <LightningPayoutForm
+                form={lightningForm.form}
+                satsAmount={pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0}
+              />
             ) : (
-              <BitcoinPayoutForm form={bitcoinForm.form} satsAmount={contribution.amount} />
+              <BitcoinPayoutForm
+                form={bitcoinForm.form}
+                satsAmount={pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0}
+              />
             )}
           </CardLayout>
 

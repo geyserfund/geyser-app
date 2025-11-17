@@ -6,7 +6,7 @@ import { PiHandCoins, PiWarning } from 'react-icons/pi'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useRefundFileValue } from '@/modules/project/funding/state'
+import { currentSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
@@ -26,7 +26,7 @@ export const PaymentOnChainRefund = () => {
   const { project } = useFundingFormAtom()
 
   const onChainError = useAtomValue(onChainErrorAtom)
-  const refundFile = useRefundFileValue()
+  const refundFile = useAtomValue(currentSwapAtom)
 
   const errorMessage = useMemo(() => {
     if (!onChainError) return

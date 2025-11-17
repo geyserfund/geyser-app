@@ -8,6 +8,7 @@ import {
   GuardianType,
   PaymentFeePayer,
   PaymentFeeType,
+  ProjectFundingStrategy,
   ProjectPageWalletFragment,
   ProjectRewardFragment,
   ProjectShippingConfigType,
@@ -620,9 +621,22 @@ export const fundingFiatSwapAmountWarningAtom = atom((get) => {
 export const isFundingInputAmountValidAtom = atom((get) => {
   const fundingProjectState = get(fundingProjectAtom)
   const totalAmount: number = get(totalAmountSatsAtom)
+  const { donationAmount } = get(fundingFormStateAtom)
+  const rewardsCosts = get(rewardsCostAtoms)
   const walletLimits = fundingProjectState.wallet?.limits?.contribution
 
   const isException = isProjectAnException(fundingProjectState.name)
+
+  if (
+    fundingProjectState.fundingStrategy === ProjectFundingStrategy.AllOrNothing &&
+    donationAmount + rewardsCosts.sats < 50000
+  ) {
+    return {
+      title: `Amount less than 50,000 sats.`,
+      description: 'The minimum amount for an All-or-Nothing project is 50,000 sats.',
+      valid: false,
+    }
+  }
 
   if (totalAmount < 1000) {
     return {

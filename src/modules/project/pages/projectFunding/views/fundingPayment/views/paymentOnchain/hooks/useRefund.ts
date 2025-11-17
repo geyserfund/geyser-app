@@ -1,7 +1,7 @@
 import { useSetAtom } from 'jotai'
 import { useCallback, useState } from 'react'
 
-import { refundedSwapDataAtom, SwapData, useRemoveRefundFile } from '@/modules/project/funding/state'
+import { refundedSwapDataAtom, removeRefundedSwapAtom, SwapData } from '@/modules/project/funding/state/swapAtom.ts'
 import { useNotification } from '@/utils'
 
 import { BoltzTransaction, getTransactionFromChainSwap, getTransactionFromSwap } from '../refund/api'
@@ -13,7 +13,7 @@ export const useRefund = () => {
   const toast = useNotification()
 
   const setRefundedSwapData = useSetAtom(refundedSwapDataAtom)
-  const removeRefundFile = useRemoveRefundFile()
+  const removeRefundFile = useSetAtom(removeRefundedSwapAtom)
 
   const [loading, setLoading] = useState(false)
 

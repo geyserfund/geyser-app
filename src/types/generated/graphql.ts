@@ -2982,7 +2982,7 @@ export type ProjectAmbassadorsStats = {
 
 export type ProjectAonGoal = {
   __typename?: 'ProjectAonGoal';
-  balance: Scalars['Int']['output'];
+  balance?: Maybe<Scalars['Int']['output']>;
   contractAddress?: Maybe<Scalars['String']['output']>;
   contractCreationTxId?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['Date']['output'];
@@ -2990,7 +2990,7 @@ export type ProjectAonGoal = {
   endsAt?: Maybe<Scalars['Date']['output']>;
   goalAmount: Scalars['Int']['output'];
   goalDurationInDays: Scalars['Int']['output'];
-  status: ProjectAonGoalStatus;
+  status?: Maybe<ProjectAonGoalStatus>;
   updatedAt: Scalars['Date']['output'];
 };
 
@@ -4190,7 +4190,7 @@ export type RskToLightningSwapPaymentDetailsInput = {
 
 export type RskToOnChainSwapPaymentDetails = {
   __typename?: 'RskToOnChainSwapPaymentDetails';
-  onChainAddress: Scalars['String']['output'];
+  onChainAddress?: Maybe<Scalars['String']['output']>;
   onChainTxId?: Maybe<Scalars['String']['output']>;
   swapId: Scalars['String']['output'];
   swapMetadata: Scalars['String']['output'];
@@ -7191,7 +7191,7 @@ export type ProjectAmbassadorsStatsResolvers<ContextType = any, ParentType exten
 };
 
 export type ProjectAonGoalResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectAonGoal'] = ResolversParentTypes['ProjectAonGoal']> = {
-  balance?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  balance?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   contractAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   contractCreationTxId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -7199,7 +7199,7 @@ export type ProjectAonGoalResolvers<ContextType = any, ParentType extends Resolv
   endsAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   goalAmount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   goalDurationInDays?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['ProjectAonGoalStatus'], ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['ProjectAonGoalStatus']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -7640,7 +7640,7 @@ export type RskToLightningSwapPaymentDetailsResolvers<ContextType = any, ParentT
 };
 
 export type RskToOnChainSwapPaymentDetailsResolvers<ContextType = any, ParentType extends ResolversParentTypes['RskToOnChainSwapPaymentDetails'] = ResolversParentTypes['RskToOnChainSwapPaymentDetails']> = {
-  onChainAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  onChainAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   onChainTxId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   swapId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   swapMetadata?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -8352,7 +8352,7 @@ export type MeProjectFollowsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeProjectFollowsQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: any, projectFollows: Array<{ __typename?: 'Project', id: any, title: string, status?: ProjectStatus | null, thumbnailImage?: string | null, name: string }> } | null };
 
-export type ProjectAonGoalForLandingPageFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, balance: number, goalDurationInDays: number, deployedAt?: any | null, status: ProjectAonGoalStatus };
+export type ProjectAonGoalForLandingPageFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, balance?: number | null, goalDurationInDays: number, deployedAt?: any | null, status?: ProjectAonGoalStatus | null };
 
 export type ContributionForLandingPageFragment = { __typename?: 'Contribution', amount: number, id: any, projectId: any, createdAt?: any | null, funder: { __typename?: 'Funder', id: any, user?: { __typename?: 'User', id: any, heroId: string, imageUrl?: string | null, guardianType?: GuardianType | null, username: string } | null }, sourceResource?: { __typename?: 'Activity' } | { __typename?: 'Post' } | (
     { __typename?: 'Project' }
@@ -8749,7 +8749,7 @@ export type UserNotificationsSettingsFragment = { __typename?: 'ProfileNotificat
 
 export type ProjectForProfilePageFragment = { __typename?: 'Project', id: any, name: string, balance: number, fundersCount?: number | null, thumbnailImage?: string | null, title: string, shortDescription?: string | null, createdAt: any, status?: ProjectStatus | null, rejectionReason?: string | null, rewardsCount?: number | null, wallets: Array<{ __typename?: 'Wallet', id: any, name?: string | null, state: { __typename?: 'WalletState', status: WalletStatus, statusCode: WalletStatusCode } }> };
 
-export type ProjectForProfileContributionsFragment = { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null };
+export type ProjectForProfileContributionsFragment = { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, fundingStrategy?: ProjectFundingStrategy | null, status?: ProjectStatus | null, aonGoal?: { __typename?: 'ProjectAonGoal', balance?: number | null, goalAmount: number, status?: ProjectAonGoalStatus | null } | null };
 
 export type ProjectNotificationSettingsFragment = { __typename?: 'CreatorNotificationSettings', userId: any, project: { __typename?: 'CreatorNotificationSettingsProject', id: any, title: string, image?: string | null }, notificationSettings: Array<{ __typename?: 'NotificationSettings', notificationType: string, isEnabled: boolean, configurations: Array<{ __typename?: 'NotificationConfiguration', id: any, name: string, description?: string | null, value: string, type?: SettingValueType | null, options: Array<string> }> }> };
 
@@ -8977,6 +8977,8 @@ export type ContributionWithInvoiceStatusFragment = { __typename?: 'Contribution
 
 export type ContributionForDownloadInvoiceFragment = { __typename?: 'Contribution', id: any, donationAmount: number, amount: number, uuid?: string | null, creatorEmail?: string | null, projectId: any, confirmedAt?: any | null, createdAt?: any | null, status: ContributionStatus, funder: { __typename?: 'Funder', user?: { __typename?: 'User', username: string, email?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null } | null }, order?: { __typename?: 'Order', totalInSats: number, items: Array<{ __typename?: 'OrderItem', quantity: number, unitPriceInSats: number, item: { __typename?: 'ProjectReward', name: string } }> } | null, creatorTaxProfile?: { __typename?: 'UserTaxProfile', fullName?: string | null, taxId?: string | null } | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, payments: Array<{ __typename?: 'Payment', status: PaymentStatus, uuid: string, fees: Array<{ __typename?: 'PaymentFee', description?: string | null, feeType?: PaymentFeeType | null, feePayer?: PaymentFeePayer | null, feeAmount: number, external?: boolean | null, feeCurrency: FeeCurrency }> }> };
 
+export type ContributionForRefundFragment = { __typename?: 'Contribution', id: any, amount: number, status: ContributionStatus, uuid?: string | null, projectId: any, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, payments: Array<{ __typename?: 'Payment', id: any, paymentType: PaymentType, status: PaymentStatus, paidAt?: any | null, paymentAmount: number }> };
+
 export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, confirmedAt?: any | null, user?: (
     { __typename?: 'User' }
     & UserAvatarFragment
@@ -8998,6 +9000,11 @@ export type UserContributorFragment = { __typename?: 'Funder', id: any, rank?: n
   ) | null };
 
 export type ContributorContributionsSummaryFragment = { __typename?: 'ContributorContributionsSummary', contributionsTotalUsd: number, contributionsTotal: number, contributionsCount: number, commentsCount: number };
+
+export type ProjectContributorFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, contributions: Array<(
+    { __typename?: 'Contribution' }
+    & UserProjectContributionFragment
+  )> };
 
 export type ProjectGoalsFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, progress: number, createdAt: any, updatedAt: any, completedAt?: any | null, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
 
@@ -9086,7 +9093,7 @@ export type ProjectPostViewFragment = { __typename?: 'Post', id: any, title: str
       & ProjectGoalsFragment
     )> } };
 
-export type ProjectAonGoalForProjectPageFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, balance: number, goalDurationInDays: number, deployedAt?: any | null, status: ProjectAonGoalStatus, contractAddress?: string | null };
+export type ProjectAonGoalForProjectPageFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, balance?: number | null, goalDurationInDays: number, deployedAt?: any | null, status?: ProjectAonGoalStatus | null, contractAddress?: string | null };
 
 export type ProjectAonGoalForProjectUpdateFragment = { __typename?: 'ProjectAonGoal', goalAmount: number, goalDurationInDays: number };
 
@@ -9143,7 +9150,7 @@ export type OnChainToRskSwapPaymentDetailsFragment = { __typename?: 'OnChainToRs
 export type PledgeRefundFragment = { __typename?: 'PledgeRefund', id: any, amount: number, status: PledgeRefundStatus, expiresAt: any, project: (
     { __typename?: 'Project' }
     & ProjectThumbnailImageFragment
-  ), payments: Array<{ __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | { __typename?: 'RskToLightningSwapPaymentDetails', swapId: string, swapMetadata: string, lightningInvoiceId: string, swapPreimageHash: string } | { __typename?: 'RskToOnChainSwapPaymentDetails', swapId: string, swapMetadata: string, onChainAddress: string, onChainTxId?: string | null, swapPreimageHash: string } }> };
+  ), payments: Array<{ __typename?: 'Payment', id: any, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | { __typename?: 'RskToLightningSwapPaymentDetails', swapId: string, swapMetadata: string, lightningInvoiceId: string, swapPreimageHash: string } | { __typename?: 'RskToOnChainSwapPaymentDetails', swapId: string, swapMetadata: string, onChainAddress?: string | null, onChainTxId?: string | null, swapPreimageHash: string } }> };
 
 export type PledgeRefundMetadataFragment = { __typename?: 'PledgeRefundMetadata', nonce: number, swapContractAddress: string, aonContractAddress: string };
 
@@ -9469,7 +9476,7 @@ export type PledgeRefundRetryRequestMutationVariables = Exact<{
 export type PledgeRefundRetryRequestMutation = { __typename?: 'Mutation', pledgeRefundRetryRequest: { __typename?: 'PledgeRefundRetryRequestResponse', swap: string, refund: (
       { __typename?: 'PledgeRefund' }
       & PledgeRefundFragment
-    ), payment: { __typename?: 'Payment', id: any, accountingAmountDue: number, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | { __typename?: 'RskToLightningSwapPaymentDetails', swapId: string, swapMetadata: string, lightningInvoiceId: string, swapPreimageHash: string } | { __typename?: 'RskToOnChainSwapPaymentDetails', swapId: string, swapMetadata: string, onChainAddress: string, onChainTxId?: string | null, swapPreimageHash: string } } } };
+    ), payment: { __typename?: 'Payment', id: any, accountingAmountDue: number, method?: string | null, failureReason?: string | null, paymentType: PaymentType, createdAt: any, status: PaymentStatus, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | { __typename?: 'RskToLightningSwapPaymentDetails', swapId: string, swapMetadata: string, lightningInvoiceId: string, swapPreimageHash: string } | { __typename?: 'RskToOnChainSwapPaymentDetails', swapId: string, swapMetadata: string, onChainAddress?: string | null, onChainTxId?: string | null, swapPreimageHash: string } } } };
 
 export type PledgeRefundRetryInitiateMutationVariables = Exact<{
   input: PledgeRefundRetryInitiateInput;
@@ -9646,6 +9653,16 @@ export type ProjectPageContributionsGetQuery = { __typename?: 'Query', contribut
       & ProjectContributionFragment
     )> } | null };
 
+export type ContributionForRefundGetQueryVariables = Exact<{
+  contributionId: Scalars['BigInt']['input'];
+}>;
+
+
+export type ContributionForRefundGetQuery = { __typename?: 'Query', contribution: (
+    { __typename?: 'Contribution' }
+    & ContributionForRefundFragment
+  ) };
+
 export type UserEmailIsAvailableQueryVariables = Exact<{
   email: Scalars['String']['input'];
 }>;
@@ -9705,6 +9722,16 @@ export type ProjectUserContributorQuery = { __typename?: 'Query', contributor: (
       & ContributorContributionsSummaryFragment
     ) | null }
     & UserContributorFragment
+  ) };
+
+export type ProjectContributorQueryVariables = Exact<{
+  input: GetContributorInput;
+}>;
+
+
+export type ProjectContributorQuery = { __typename?: 'Query', contributor: (
+    { __typename?: 'Funder' }
+    & ProjectContributorFragment
   ) };
 
 export type ProjectInProgressGoalsQueryVariables = Exact<{
@@ -10835,20 +10862,6 @@ export const UserProjectFunderFragmentDoc = gql`
   }
 }
     ${BitcoinQuoteFragmentDoc}`;
-export const UserProjectContributionFragmentDoc = gql`
-    fragment UserProjectContribution on Contribution {
-  id
-  uuid
-  amount
-  comment
-  media
-  confirmedAt
-  projectId
-  bitcoinQuote {
-    ...BitcoinQuote
-  }
-}
-    ${BitcoinQuoteFragmentDoc}`;
 export const ProfileOrderItemFragmentDoc = gql`
     fragment ProfileOrderItem on OrderItem {
   item {
@@ -10979,6 +10992,13 @@ export const ProjectForProfileContributionsFragmentDoc = gql`
   name
   title
   thumbnailImage
+  fundingStrategy
+  status
+  aonGoal {
+    balance
+    goalAmount
+    status
+  }
 }
     `;
 export const ProjectNotificationSettingsFragmentDoc = gql`
@@ -11312,6 +11332,26 @@ export const ContributionForDownloadInvoiceFragmentDoc = gql`
   }
 }
     `;
+export const ContributionForRefundFragmentDoc = gql`
+    fragment ContributionForRefund on Contribution {
+  id
+  amount
+  bitcoinQuote {
+    quote
+    quoteCurrency
+  }
+  status
+  uuid
+  projectId
+  payments {
+    id
+    paymentType
+    status
+    paidAt
+    paymentAmount
+  }
+}
+    `;
 export const ProjectLeaderboardContributorsFragmentDoc = gql`
     fragment ProjectLeaderboardContributors on ProjectLeaderboardContributorsRow {
   funderId
@@ -11351,6 +11391,29 @@ export const ContributorContributionsSummaryFragmentDoc = gql`
   commentsCount
 }
     `;
+export const UserProjectContributionFragmentDoc = gql`
+    fragment UserProjectContribution on Contribution {
+  id
+  uuid
+  amount
+  comment
+  media
+  confirmedAt
+  projectId
+  bitcoinQuote {
+    ...BitcoinQuote
+  }
+}
+    ${BitcoinQuoteFragmentDoc}`;
+export const ProjectContributorFragmentDoc = gql`
+    fragment ProjectContributor on Funder {
+  id
+  amountFunded
+  contributions {
+    ...UserProjectContribution
+  }
+}
+    ${UserProjectContributionFragmentDoc}`;
 export const ProjectGrantApplicantFragmentDoc = gql`
     fragment ProjectGrantApplicant on GrantApplicant {
   id
@@ -17035,6 +17098,46 @@ export type ProjectPageContributionsGetQueryHookResult = ReturnType<typeof usePr
 export type ProjectPageContributionsGetLazyQueryHookResult = ReturnType<typeof useProjectPageContributionsGetLazyQuery>;
 export type ProjectPageContributionsGetSuspenseQueryHookResult = ReturnType<typeof useProjectPageContributionsGetSuspenseQuery>;
 export type ProjectPageContributionsGetQueryResult = Apollo.QueryResult<ProjectPageContributionsGetQuery, ProjectPageContributionsGetQueryVariables>;
+export const ContributionForRefundGetDocument = gql`
+    query ContributionForRefundGet($contributionId: BigInt!) {
+  contribution(id: $contributionId) {
+    ...ContributionForRefund
+  }
+}
+    ${ContributionForRefundFragmentDoc}`;
+
+/**
+ * __useContributionForRefundGetQuery__
+ *
+ * To run a query within a React component, call `useContributionForRefundGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useContributionForRefundGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useContributionForRefundGetQuery({
+ *   variables: {
+ *      contributionId: // value for 'contributionId'
+ *   },
+ * });
+ */
+export function useContributionForRefundGetQuery(baseOptions: Apollo.QueryHookOptions<ContributionForRefundGetQuery, ContributionForRefundGetQueryVariables> & ({ variables: ContributionForRefundGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ContributionForRefundGetQuery, ContributionForRefundGetQueryVariables>(ContributionForRefundGetDocument, options);
+      }
+export function useContributionForRefundGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ContributionForRefundGetQuery, ContributionForRefundGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ContributionForRefundGetQuery, ContributionForRefundGetQueryVariables>(ContributionForRefundGetDocument, options);
+        }
+export function useContributionForRefundGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ContributionForRefundGetQuery, ContributionForRefundGetQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ContributionForRefundGetQuery, ContributionForRefundGetQueryVariables>(ContributionForRefundGetDocument, options);
+        }
+export type ContributionForRefundGetQueryHookResult = ReturnType<typeof useContributionForRefundGetQuery>;
+export type ContributionForRefundGetLazyQueryHookResult = ReturnType<typeof useContributionForRefundGetLazyQuery>;
+export type ContributionForRefundGetSuspenseQueryHookResult = ReturnType<typeof useContributionForRefundGetSuspenseQuery>;
+export type ContributionForRefundGetQueryResult = Apollo.QueryResult<ContributionForRefundGetQuery, ContributionForRefundGetQueryVariables>;
 export const UserEmailIsAvailableDocument = gql`
     query UserEmailIsAvailable($email: String!) {
   userEmailIsAvailable(email: $email)
@@ -17280,6 +17383,46 @@ export type ProjectUserContributorQueryHookResult = ReturnType<typeof useProject
 export type ProjectUserContributorLazyQueryHookResult = ReturnType<typeof useProjectUserContributorLazyQuery>;
 export type ProjectUserContributorSuspenseQueryHookResult = ReturnType<typeof useProjectUserContributorSuspenseQuery>;
 export type ProjectUserContributorQueryResult = Apollo.QueryResult<ProjectUserContributorQuery, ProjectUserContributorQueryVariables>;
+export const ProjectContributorDocument = gql`
+    query ProjectContributor($input: GetContributorInput!) {
+  contributor(input: $input) {
+    ...ProjectContributor
+  }
+}
+    ${ProjectContributorFragmentDoc}`;
+
+/**
+ * __useProjectContributorQuery__
+ *
+ * To run a query within a React component, call `useProjectContributorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectContributorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectContributorQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectContributorQuery(baseOptions: Apollo.QueryHookOptions<ProjectContributorQuery, ProjectContributorQueryVariables> & ({ variables: ProjectContributorQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectContributorQuery, ProjectContributorQueryVariables>(ProjectContributorDocument, options);
+      }
+export function useProjectContributorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectContributorQuery, ProjectContributorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectContributorQuery, ProjectContributorQueryVariables>(ProjectContributorDocument, options);
+        }
+export function useProjectContributorSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectContributorQuery, ProjectContributorQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectContributorQuery, ProjectContributorQueryVariables>(ProjectContributorDocument, options);
+        }
+export type ProjectContributorQueryHookResult = ReturnType<typeof useProjectContributorQuery>;
+export type ProjectContributorLazyQueryHookResult = ReturnType<typeof useProjectContributorLazyQuery>;
+export type ProjectContributorSuspenseQueryHookResult = ReturnType<typeof useProjectContributorSuspenseQuery>;
+export type ProjectContributorQueryResult = Apollo.QueryResult<ProjectContributorQuery, ProjectContributorQueryVariables>;
 export const ProjectInProgressGoalsDocument = gql`
     query ProjectInProgressGoals($input: GetProjectGoalsInput!) {
   projectGoals(input: $input) {
