@@ -49,6 +49,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
   const [isProcessed, setIsProcessed] = useState(false)
   const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
   const [refundAddress, setRefundAddress] = useState<string | null>(null)
+  const [refundTxId, setRefundTxId] = useState('')
 
   const [continueRefund, setContinueRefund] = useState(false)
 
@@ -130,16 +131,12 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
     setIsSubmitting(true)
     try {
       // TODO: Implement actual Bitcoin on-chain refund API call
-      console.log('Bitcoin refund data:', data)
-      console.log('checking accountKeys', accountKeys)
 
       const { preimageHash, preimageHex } = generatePreImageHash()
 
       const amount =
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
         (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
-
-      console.log('this is the amount to be sent', amount)
 
       const { signature } = createAndSignRefundMessage({
         aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
@@ -226,20 +223,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
     )
   }
 
-  if (isWaitingConfirmation) {
-    return (
-      <Modal isOpen={isOpen} size="lg" title={t('Please wait for swap confirmation')} onClose={() => {}}>
-        <BitcoinPayoutWaitingConfirmation
-          isRefund={true}
-          onClose={handleClose}
-          swapData={swapData}
-          refundAddress={refundAddress || ''}
-          setIsProcessed={setIsProcessed}
-        />
-      </Modal>
-    )
-  }
-
   // Show processed screen after successful submission
   if (isProcessed) {
     return (
@@ -256,8 +239,23 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
         {selectedMethod === PayoutMethod.Lightning ? (
           <LightningPayoutProcessed isRefund={true} onClose={handleClose} />
         ) : (
-          <BitcoinPayoutProcessed isRefund={true} onClose={handleClose} />
+          <BitcoinPayoutProcessed isRefund={true} refundTxId={refundTxId} onClose={handleClose} />
         )}
+      </Modal>
+    )
+  }
+
+  if (isWaitingConfirmation) {
+    return (
+      <Modal isOpen={isOpen} size="lg" title={t('Please wait for swap confirmation')} onClose={() => {}}>
+        <BitcoinPayoutWaitingConfirmation
+          isRefund={true}
+          onClose={handleClose}
+          swapData={swapData}
+          refundAddress={refundAddress || ''}
+          setIsProcessed={setIsProcessed}
+          setRefundTxId={setRefundTxId}
+        />
       </Modal>
     )
   }

@@ -50,6 +50,7 @@ export const ClaimForm: React.FC<ClaimFormProps> = ({ isOpen, onClose, contribut
   const [isProcessed, setIsProcessed] = useState(false)
   const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
   const [refundAddress, setRefundAddress] = useState<string | null>(null)
+  const [refundTxId, setRefundTxId] = useState('')
 
   const [pledgeRefundRequest, { data: pledgeRefundRequestData, loading: pledgeRefundRequestLoading }] =
     usePledgeRefundRequestMutation()
@@ -207,6 +208,7 @@ export const ClaimForm: React.FC<ClaimFormProps> = ({ isOpen, onClose, contribut
           swapData={swapData}
           refundAddress={refundAddress || ''}
           setIsProcessed={setIsProcessed}
+          setRefundTxId={setRefundTxId}
         />
       </Modal>
     )
@@ -228,7 +230,7 @@ export const ClaimForm: React.FC<ClaimFormProps> = ({ isOpen, onClose, contribut
         {selectedMethod === PayoutMethod.Lightning ? (
           <LightningPayoutProcessed isRefund={true} onClose={handleClose} />
         ) : (
-          <BitcoinPayoutProcessed isRefund={true} onClose={handleClose} />
+          <BitcoinPayoutProcessed isRefund={true} onClose={handleClose} refundTxId={refundTxId} />
         )}
       </Modal>
     )

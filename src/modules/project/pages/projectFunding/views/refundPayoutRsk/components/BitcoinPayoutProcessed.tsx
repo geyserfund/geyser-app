@@ -1,4 +1,4 @@
-import { Button, Text, VStack } from '@chakra-ui/react'
+import { Button, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React from 'react'
 
@@ -8,10 +8,15 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 type BitcoinPayoutProcessedProps = {
   isRefund?: boolean
   onClose: () => void
+  refundTxId: string
 }
 
 /** BitcoinPayoutProcessed: Success screen for Bitcoin on-chain payout completion */
-export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({ isRefund = false, onClose }) => {
+export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({
+  isRefund = false,
+  onClose,
+  refundTxId,
+}) => {
   return (
     <VStack w="full" spacing={6} alignItems="center">
       {/* Header */}
@@ -45,9 +50,11 @@ export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({ 
           {t(
             'On-chain transactions usually confirm within one hour, but can take longer depending on the current activity on the Bitcoin network. You can track the on-chain transaction',
           )}{' '}
-          <Text as="span" textDecoration="underline" cursor="pointer" color="primary1.9">
-            {t('here')}
-          </Text>
+          <Body as="span" textDecoration="underline" cursor="pointer" color="primary1.9">
+            <Link href={`https://mempool.space/tx/${refundTxId}`} isExternal>
+              {t('here')}
+            </Link>
+          </Body>
           .
         </Body>
 

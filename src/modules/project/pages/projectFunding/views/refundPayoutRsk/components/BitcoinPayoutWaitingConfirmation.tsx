@@ -18,6 +18,7 @@ type BitcoinPayoutWaitingConfirmationProps = {
   swapData?: any
   refundAddress: string
   setIsProcessed: (isProcessed: boolean) => void
+  setRefundTxId: (refundTxId: string) => void
 }
 
 /** BitcoinPayoutProcessed: Success screen for Bitcoin on-chain payout completion */
@@ -27,6 +28,7 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
   swapData,
   refundAddress,
   setIsProcessed,
+  setRefundTxId,
 }) => {
   const alertModalProps = useModal()
   const toast = useNotification()
@@ -53,8 +55,9 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
           },
         },
         onCompleted(data) {
-          if (data.paymentSwapClaimTxBroadcast.success) {
+          if (data.paymentSwapClaimTxBroadcast.txHash) {
             setIsProcessed(true)
+            setRefundTxId(data.paymentSwapClaimTxBroadcast.txHash)
             toast.success({
               title: t('Transaction broadcasted successfully!'),
               description: t('Your Bitcoin on-chain claim will be processed shortly'),

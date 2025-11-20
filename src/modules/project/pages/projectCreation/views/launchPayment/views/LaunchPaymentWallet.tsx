@@ -63,7 +63,7 @@ export const LaunchPaymentWallet = () => {
       backButtonProps={backProps}
     >
       <UpdateVerifyEmail inputWrapperProps={{ marginTop: 2 }} />
-      <ConnectWallet />
+      {!isAon && <ConnectWallet />}
 
       {!isAon && (
         <>
