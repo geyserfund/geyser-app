@@ -35,6 +35,7 @@ import { useRefund } from '../fundingPayment/views/paymentOnchain/hooks/useRefun
 import { getRefundSignatureForSubmarineSwap } from '../fundingPayment/views/paymentOnchain/refund/api.ts'
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
+import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.tsx'
 import { PayoutMethodSelection } from './components/PayoutMethodSelection.tsx'
@@ -62,10 +63,14 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
   const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.Lightning)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isProcessed, setIsProcessed] = useState(false)
+  const [refundTxId, setRefundTxId] = useState('')
 
   const { initiateRefundToGetRefundTx } = useRefund()
 
-  // const [swap, setSwapData] = useState()
+  const [swapData, setSwapData] = useState<any>(null)
+
+  const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
+  const [refundAddress, setRefundAddress] = useState<string | null>(null)
 
   const [
     pledgeRefundRetryRequest,
@@ -119,6 +124,7 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
       const swapObj = JSON.parse(pledgeRefundRequest?.swap)
       swapObj.privateKey = userAccountKeyPair?.privateKey
       swapObj.paymentId = pledgeRefundRequest?.payment?.id
+      setSwapData(swapObj)
 
       const amount = BigInt(satsToWei(pledgeRefundRequest?.payment.accountingAmountDue || 0))
 
@@ -266,6 +272,7 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
       swapObj.preimageHash = preimageHash
       swapObj.preimageHex = preimageHex
       swapObj.paymentId = pledgeRefundRequest?.payment?.id
+      setSwapData(swapObj)
 
       const amount = BigInt(satsToWei(pledgeRefundRequest?.payment.accountingAmountDue || 0))
 
@@ -353,8 +360,9 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
           },
         },
       })
+      setIsWaitingConfirmation(true)
+      setRefundAddress(data.bitcoinAddress)
 
-      setIsProcessed(true)
       toast.success({
         title: t('Refund initiated successfully'),
         description: t('Your Bitcoin on-chain refund will be processed shortly'),
@@ -415,8 +423,23 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
         {selectedMethod === PayoutMethod.Lightning ? (
           <LightningPayoutProcessed isRefund={true} onClose={handleClose} />
         ) : (
-          <BitcoinPayoutProcessed isRefund={true} onClose={handleClose} />
+          <BitcoinPayoutProcessed isRefund={true} onClose={handleClose} refundTxId={refundTxId} />
         )}
+      </Modal>
+    )
+  }
+
+  if (isWaitingConfirmation) {
+    return (
+      <Modal isOpen={isOpen} size="lg" title={t('Please wait for swap confirmation')} onClose={() => {}}>
+        <BitcoinPayoutWaitingConfirmation
+          isRefund={true}
+          onClose={handleClose}
+          swapData={swapData}
+          refundAddress={refundAddress || ''}
+          setIsProcessed={setIsProcessed}
+          setRefundTxId={setRefundTxId}
+        />
       </Modal>
     )
   }

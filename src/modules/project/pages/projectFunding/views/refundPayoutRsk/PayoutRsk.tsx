@@ -49,6 +49,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
   const [isProcessed, setIsProcessed] = useState(false)
   const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
   const [refundAddress, setRefundAddress] = useState<string | null>(null)
+  const [refundTxId, setRefundTxId] = useState('')
 
   const [payoutRequest, { data: payoutRequestData, loading: payoutRequestLoading }] = usePayoutRequestMutation()
 
@@ -120,8 +121,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
     setIsSubmitting(true)
     try {
       // TODO: Implement actual Bitcoin on-chain refund API call
-      console.log('Bitcoin refund data:', data)
-      console.log('checking accountKeys', accountKeys)
 
       const { preimageHash, preimageHex } = generatePreImageHash()
 
@@ -210,6 +209,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
           swapData={swapData}
           refundAddress={refundAddress || ''}
           setIsProcessed={setIsProcessed}
+          setRefundTxId={setRefundTxId}
         />
       </Modal>
     )
@@ -231,14 +231,14 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
         {selectedMethod === PayoutMethod.Lightning ? (
           <LightningPayoutProcessed isRefund={true} onClose={handleClose} />
         ) : (
-          <BitcoinPayoutProcessed isRefund={true} onClose={handleClose} />
+          <BitcoinPayoutProcessed isRefund={true} onClose={handleClose} refundTxId={refundTxId} />
         )}
       </Modal>
     )
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="lg" title={t('Refund you contribution')} bodyProps={{ gap: 4 }}>
+    <Modal isOpen={isOpen} onClose={handleClose} size="lg" title={t('Claim Payout')} bodyProps={{ gap: 4 }}>
       {payoutRequestLoading ? (
         <RefundRskSkeleton />
       ) : (
@@ -267,7 +267,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
             isDisabled={!enableSubmit}
             onClick={handleSubmit}
           >
-            {t('Claim Refund')}
+            {t('Claim Payout')}
           </Button>
         </>
       )}
