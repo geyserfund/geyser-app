@@ -105,6 +105,7 @@ export const LaunchFees = ({
             privateComment: JSON.stringify({
               paidLaunch: true,
               projectId: project?.id,
+              launchStrategy: strategy,
             }),
             followProject: true,
           },
