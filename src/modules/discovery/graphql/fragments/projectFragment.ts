@@ -79,6 +79,7 @@ export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
     rewardsCount
     followersCount
     balanceUsdCent
+    lastCreationStep
     wallets {
       id
       name

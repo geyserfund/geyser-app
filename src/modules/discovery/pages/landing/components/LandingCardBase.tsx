@@ -2,6 +2,7 @@ import { Box, Button, HStack, Tooltip, useDisclosure, VStack } from '@chakra-ui/
 import { t } from 'i18next'
 import { useNavigate } from 'react-router'
 
+import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
 import { AnimatedFire } from '@/shared/components/display/AnimatedFire.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
@@ -17,7 +18,7 @@ import { aonProjectTimeLeft, getAonGoalPercentage } from '@/shared/utils/project
 import { centsToDollars, isAllOrNothing, isInactive } from '@/utils'
 
 import { SkeletonLayout } from '../../../../../shared/components/layouts'
-import { ContributionsSummary, ProjectForLandingPageFragment } from '../../../../../types'
+import { ContributionsSummary, ProjectForLandingPageFragment, Satoshis } from '../../../../../types'
 import { AllOrNothingIcon } from './AllOrNothingIcon.tsx'
 
 export interface LandingCardBaseProps extends CardLayoutProps {
@@ -41,9 +42,16 @@ export const LandingCardBase = ({
   const inActive = isInactive(project.status)
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
+  const { getUSDAmount } = useBTCConverter()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
+
   const getFires = (amount: number) => {
+    if (isWeekly && amount > 100) {
+      return '🔥'
+    }
+
     if (amount > 1000) {
       return '🔥'
     }
@@ -51,14 +59,16 @@ export const LandingCardBase = ({
     return ''
   }
 
-  const contributionAmount =
-    project.contributionSummary?.contributionsTotalUsd || centsToDollars(project.balanceUsdCent)
-
   const isAonProject = isAllOrNothing(project)
+
+  const contributionAmount =
+    project.contributionSummary?.contributionsTotalUsd || isAonProject
+      ? getUSDAmount(project.aonGoal?.balance as Satoshis)
+      : centsToDollars(project.balanceUsdCent)
+
   const percentage = getAonGoalPercentage(project.aonGoal)
   const timeLeft = aonProjectTimeLeft(project.aonGoal)
 
-  const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
   const fires = getFires(contributionAmount)
 
   const handleContribute = (e: React.MouseEvent<HTMLButtonElement>) => {

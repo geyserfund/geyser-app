@@ -32,8 +32,11 @@ export const useBTCConverter = () => {
   )
 
   return {
+    /** Convert given amount from sats to USD */
     getUSDAmount,
+    /** Convert given amount from sats to USDCents */
     getUSDCentsAmount,
+    /** Convert given amount from USDCents to sats */
     getSatoshisFromUSDCents,
   }
 }

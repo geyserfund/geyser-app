@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiClock, PiEyeglasses, PiGear, PiNoteBlank, PiNotePencil } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
+import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
 import { FOLLOWERS_NEEDED } from '@/modules/project/pages/projectView/views/body/components/PrelaunchFollowButton.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -28,6 +29,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const Direction = isMobile ? VStack : HStack
 
   const isDraft = project.status && inDraftStatus.includes(project.status)
+
+  const draftRediredirectPath = getProjectCreationRoute(project.lastCreationStep, project.id)
 
   const renderProjectCardContent = () => {
     if (project.status === ProjectStatus.PreLaunch) {
@@ -84,7 +87,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             variant={'soft'}
             colorScheme="neutral1"
             as={RouterLink}
-            to={getPath('launchProject', project.id)}
+            to={draftRediredirectPath}
             size="md"
             leftIcon={isMobile ? undefined : <PiNotePencil size={16} />}
           >
