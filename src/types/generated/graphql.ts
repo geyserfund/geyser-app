@@ -8712,7 +8712,7 @@ export type UserProjectFunderFragment = { __typename?: 'Funder', amountFunded?: 
       & BitcoinQuoteFragment
     ) | null }> };
 
-export type UserProjectContributionFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, projectId: any, bitcoinQuote?: (
+export type UserProjectContributionFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, status: ContributionStatus, projectId: any, bitcoinQuote?: (
     { __typename?: 'BitcoinQuote' }
     & BitcoinQuoteFragment
   ) | null };
@@ -11403,6 +11403,7 @@ export const UserProjectContributionFragmentDoc = gql`
   comment
   media
   confirmedAt
+  status
   projectId
   bitcoinQuote {
     ...BitcoinQuote
