@@ -17,7 +17,6 @@ import {
   ContributionSummary,
   CreatorTools,
   Details,
-  FinalizeProjectNotice,
   Goals,
   Header,
   LeaderboardSummary,
@@ -66,7 +65,6 @@ export const ProjectBody = () => {
         paddingBottom={{ base: 24, lg: 10 }}
       >
         <ProjectPreLaunchNav />
-        <FinalizeProjectNotice />
         <CreatorVerificationNotice />
         <AonNotification />
 
