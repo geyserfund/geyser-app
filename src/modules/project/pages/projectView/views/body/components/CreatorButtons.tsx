@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { PiArrowUpRight, PiBag, PiFlagBannerFold, PiNewspaper } from 'react-icons/pi'
 import { Link } from 'react-router'
 
-import { useMobileMode } from '@/utils'
+import { isAllOrNothing, useMobileMode } from '@/utils'
 
 import { getPath, GuideStepByStepUrl } from '../../../../../../../shared/constants'
 import { ProjectStatus } from '../../../../../../../types'
@@ -14,6 +14,8 @@ export const CreatorButtons = () => {
   const { t } = useTranslation()
   const { project, isProjectOwner } = useProjectAtom()
   const isMobile = useMobileMode()
+
+  const isAon = isAllOrNothing(project)
 
   const { onGoalModalOpen } = useGoalsModal()
 
@@ -34,17 +36,19 @@ export const CreatorButtons = () => {
       >
         {isMobile ? t('Product') : t('Sell product')}
       </Button>
-      <Button
-        size={'lg'}
-        onClick={() => onGoalModalOpen()}
-        flex={1}
-        variant="outline"
-        colorScheme="neutral1"
-        minWidth={{ base: '90px', lg: '120px' }}
-        leftIcon={<PiFlagBannerFold />}
-      >
-        {isMobile ? t('Goal') : t('Create goal')}
-      </Button>
+      {!isAon && (
+        <Button
+          size={'lg'}
+          onClick={() => onGoalModalOpen()}
+          flex={1}
+          variant="outline"
+          colorScheme="neutral1"
+          minWidth={{ base: '90px', lg: '120px' }}
+          leftIcon={<PiFlagBannerFold />}
+        >
+          {isMobile ? t('Goal') : t('Create goal')}
+        </Button>
+      )}
       <Button
         size={'lg'}
         as={Link}

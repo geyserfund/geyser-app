@@ -7,6 +7,7 @@ import { ProjectPreLaunchNav } from '@/modules/project/navigation/components/Pro
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
+import { isAllOrNothing } from '@/utils/index.ts'
 
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
@@ -34,6 +35,8 @@ export const ProjectBody = () => {
 
   const location = useLocation()
   const navigate = useNavigate()
+
+  const isAon = isAllOrNothing(project)
 
   const onGoalCreated = () => {
     navigate(getPath('projectGoals', project.name))
@@ -76,7 +79,7 @@ export const ProjectBody = () => {
         {project.entriesCount && <Posts />}
         {project.goalsCount && <Goals />}
         <Details />
-        <FundNowWithLightning />
+        {!isAon && <FundNowWithLightning />}
         <SuggestedProjects
           id={'suggested-projects-project-page'}
           subCategory={project.subCategory}
