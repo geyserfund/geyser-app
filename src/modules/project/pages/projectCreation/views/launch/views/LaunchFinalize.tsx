@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { Modal } from '@/shared/components/layouts/Modal.tsx'
+import { ProjectCreateLaunchedModal } from '@/modules/project/pages/projectView/components/ProjectCreateLaunchedModal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
@@ -101,18 +101,7 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
           {t('Launch Now')}
         </Button>
       </VStack>
-      <Modal title={t('Project Published!')} isOpen={projectPublishedModal.isOpen} onClose={handleCloseModal}>
-        <VStack>
-          <Body>{t('Your project is now live and available to the public')}</Body>
-          <Button
-            variant="solid"
-            colorScheme="primary1"
-            onClick={() => navigate(getPath('projectLaunch', project.name || ''))}
-          >
-            {t('Go to project')}
-          </Button>
-        </VStack>
-      </Modal>
+      <ProjectCreateLaunchedModal {...projectPublishedModal} onClose={handleCloseModal} />
     </ProjectCreationPageWrapper>
   )
 }

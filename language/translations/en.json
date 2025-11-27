@@ -1776,5 +1776,11 @@
   "Contributions you made to campaigns that can be refunded.": "Contributions you made to campaigns that can be refunded.",
   "Contribution Refunds": "Contribution Refunds",
   "No contributions found": "No contributions found",
-  "Refunds you have initiated.": "Refunds you have initiated."
+  "Refunds you have initiated.": "Refunds you have initiated.",
+  "Goal must be at least 210,000 sats": "Goal must be at least 210,000 sats",
+  "Project name should be between 3 and 280 characters.": "Project name should be between 3 and 280 characters.",
+  "A {{launchFee}} launch fee is required to publish your project. ": "A {{launchFee}} launch fee is required to publish your project. ",
+  "The goal must be at least of 210,000 sats.": "The goal must be at least of 210,000 sats.",
+  "Schedule launch (optional)": "Schedule launch (optional)",
+  "Exit Preview": "Exit Preview"
 }
