@@ -10,18 +10,27 @@ import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { PaymentStatus, PledgeRefundFragment, PledgeRefundStatus, usePledgeRefundsQuery } from '@/types/index.ts'
 
+import { RefundRsk } from '../../../../refundPayoutRsk/RefundRsk.tsx'
 import { RetryRefundRsk } from '../../../../refundPayoutRsk/RetryRefundRsk.tsx'
 import { StatusBadge } from '../components/RefundStatusBadge.tsx'
 
 /** Pledge refunds table component */
 export const PledgeRefundsTable = () => {
   const { data, loading, error } = usePledgeRefundsQuery()
-  const pledges = data?.pledgeRefundsGet?.refunds || []
+
+  const pledges =
+    data?.pledgeRefundsGet?.refunds.filter((pledge) => pledge.status !== PledgeRefundStatus.Cancelled) || []
 
   const { props: modalProps, ...rskModalProps } = useModal<{ pledge: PledgeRefundFragment }>()
 
+  const { props: refundRskModalProps, ...refundRskModal } = useModal<{ pledge: PledgeRefundFragment }>()
+
   const handleReclaimPledge = (pledge: PledgeRefundFragment) => {
     rskModalProps.onOpen({ pledge })
+  }
+
+  const handleClaimPledge = (pledge: PledgeRefundFragment) => {
+    refundRskModal.onOpen({ pledge })
   }
 
   const renderTableRows = () => {
@@ -58,7 +67,7 @@ export const PledgeRefundsTable = () => {
           </Body>
           <Box flex="1">
             {pledge.status === PledgeRefundStatus.Pending && (
-              <Button size="sm" colorScheme="primary1" variant="solid">
+              <Button size="sm" colorScheme="primary1" variant="solid" onClick={() => handleClaimPledge(pledge)}>
                 {t('Claim')}
               </Button>
             )}
@@ -112,6 +121,13 @@ export const PledgeRefundsTable = () => {
       </VStack>
       {renderTable()}
       {rskModalProps.isOpen && <RetryRefundRsk {...rskModalProps} pledgeRefund={modalProps.pledge} />}
+      {refundRskModal.isOpen && (
+        <RefundRsk
+          {...refundRskModal}
+          contributionUUID={refundRskModalProps.pledge.payments?.[0]?.linkedEntityUUID || ''}
+          projectId={refundRskModalProps.pledge.project?.id}
+        />
+      )}
     </VStack>
   )
 }

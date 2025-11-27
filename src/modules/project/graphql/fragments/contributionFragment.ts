@@ -189,3 +189,18 @@ export const FRAGMENT_CONTRIBUTION_FOR_REFUND = gql`
     }
   }
 `
+
+export const FRAGMENT_PROJECT_CONTRIBUTION_REFUND = gql`
+  fragment ProjectContributionRefund on Contribution {
+    id
+    amount
+    uuid
+    status
+    sourceResource {
+      ... on Project {
+        id
+        name
+      }
+    }
+  }
+`
