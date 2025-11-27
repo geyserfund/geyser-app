@@ -61,7 +61,7 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
       navigate(getPath('projectNotFound'))
     },
     onCompleted(data) {
-      console.log('data', data)
+      console.log('project data', data)
       setProjectLoading(false)
 
       if (!data?.projectGet) {

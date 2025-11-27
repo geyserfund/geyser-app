@@ -9124,7 +9124,10 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
     & ProjectPaymentMethodsFragment
   ) };
 
-export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null };
+export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null, aonGoal?: (
+    { __typename?: 'ProjectAonGoal' }
+    & ProjectAonGoalForProjectPageFragment
+  ) | null };
 
 export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: string, name: string, shortDescription?: string | null, description?: string | null, images: Array<string>, thumbnailImage?: string | null, promotionsEnabled?: boolean | null, status?: ProjectStatus | null, links: Array<string>, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, rewardCurrency?: RewardCurrency | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', name: string, code: string } | null } | null, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
@@ -11870,8 +11873,11 @@ export const ProjectHeaderSummaryFragmentDoc = gql`
   followersCount
   fundersCount
   contributionsCount
+  aonGoal {
+    ...ProjectAonGoalForProjectPage
+  }
 }
-    `;
+    ${ProjectAonGoalForProjectPageFragmentDoc}`;
 export const ProjectUpdateFragmentDoc = gql`
     fragment ProjectUpdate on Project {
   id

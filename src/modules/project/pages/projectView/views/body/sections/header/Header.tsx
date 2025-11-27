@@ -79,6 +79,7 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
   }
 
   const { loading: summaryLoading } = useProjectPageHeaderSummaryQuery({
+    fetchPolicy: 'network-only',
     variables: {
       where: {
         name: project?.name,

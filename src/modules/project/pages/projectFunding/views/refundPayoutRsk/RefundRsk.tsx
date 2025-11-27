@@ -26,6 +26,7 @@ import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
 import { LightningPayoutFormData } from './hooks/usePayoutWithLightningForm.ts'
+import { MAX_SATS_FOR_LIGHTNING } from './PayoutRsk.tsx'
 import { PayoutMethod } from './types.ts'
 
 type RefundRskProps = {
@@ -44,7 +45,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
 
-  const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.Lightning)
+  const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.OnChain)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isProcessed, setIsProcessed] = useState(false)
   const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
@@ -285,8 +286,18 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
     )
   }
 
+  const totalAmount = pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0
+
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="lg" title={t('Refund you contribution')} bodyProps={{ gap: 4 }}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="lg"
+      title={t('Refund you contribution')}
+      subtitle={`${t('Total refund amount')}: ${commaFormatted(totalAmount)} sats`}
+      subtitleProps={{ bold: true }}
+      bodyProps={{ gap: 4 }}
+    >
       {pledgeRefundRequestLoading ? (
         <RefundRskSkeleton />
       ) : !continueRefund ? (
@@ -294,20 +305,18 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
       ) : (
         <>
           {/* Payout Method Selection */}
-          <PayoutMethodSelection selectedMethod={selectedMethod} setSelectedMethod={setSelectedMethod} />
+          <PayoutMethodSelection
+            selectedMethod={selectedMethod}
+            setSelectedMethod={setSelectedMethod}
+            disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING}
+          />
 
           {/* Form Section */}
           <CardLayout w="full" p={6}>
             {selectedMethod === PayoutMethod.Lightning ? (
-              <LightningPayoutForm
-                form={lightningForm.form}
-                satsAmount={pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0}
-              />
+              <LightningPayoutForm form={lightningForm.form} satsAmount={totalAmount} />
             ) : (
-              <BitcoinPayoutForm
-                form={bitcoinForm.form}
-                satsAmount={pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0}
-              />
+              <BitcoinPayoutForm form={bitcoinForm.form} satsAmount={totalAmount} />
             )}
           </CardLayout>
 

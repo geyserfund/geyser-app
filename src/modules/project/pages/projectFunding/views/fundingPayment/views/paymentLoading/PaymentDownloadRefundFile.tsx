@@ -33,7 +33,7 @@ export const PaymentDownloadRefundFile = ({ onComplete }: { onComplete: () => vo
           </Body>
           <Body size={'sm'}>
             {t(
-              'You can get a refund for your contribution if the project fails to reach its funding goal, or if you change your mind before the project is completed.',
+              'If this project does not reach its goal, or you change your mind before it is completed, you can request a refund. To make sure you can claim a refund later, please download the refund file now and store it somewhere safe.',
             )}{' '}
             <Link isExternal href={GeyserOnChainGuideUrl} color="primary1.11">
               {t('More info')}.
@@ -41,9 +41,7 @@ export const PaymentDownloadRefundFile = ({ onComplete }: { onComplete: () => vo
           </Body>
 
           <Body size={'sm'}>
-            {t(
-              'To make sure you can claim your refund in the future, please download the refund file and store it securely.',
-            )}
+            {t('By continuing, you agree that you are responsible for keeping this file and claiming any refund.')}
           </Body>
           <Divider />
 

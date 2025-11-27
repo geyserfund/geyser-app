@@ -138,10 +138,14 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
 `
 
 export const FRAGMENT_PROJECT_HEADER_SUMMARY = gql`
+  ${FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE}
   fragment ProjectHeaderSummary on Project {
     followersCount
     fundersCount
     contributionsCount
+    aonGoal {
+      ...ProjectAonGoalForProjectPage
+    }
   }
 `
 
