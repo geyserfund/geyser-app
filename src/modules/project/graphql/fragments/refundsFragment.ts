@@ -49,6 +49,8 @@ export const FRAGMENT_PLEDGE_REFUND = gql`
       paymentType
       createdAt
       status
+      linkedEntityUUID
+      linkedEntityType
       paymentDetails {
         ... on RskToOnChainSwapPaymentDetails {
           swapId
