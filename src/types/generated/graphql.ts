@@ -815,6 +815,7 @@ export type GetContributionsWhereInput = {
   projectId?: InputMaybe<Scalars['BigInt']['input']>;
   sourceResourceInput?: InputMaybe<ResourceInput>;
   status?: InputMaybe<ContributionsWhereContributionStatus>;
+  userId?: InputMaybe<Scalars['BigInt']['input']>;
 };
 
 export type GetContributorContributionsInput = {

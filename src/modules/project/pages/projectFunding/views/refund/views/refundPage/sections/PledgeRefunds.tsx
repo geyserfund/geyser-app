@@ -19,7 +19,9 @@ export const PledgeRefundsTable = () => {
   const { data, loading, error } = usePledgeRefundsQuery()
 
   const pledges =
-    data?.pledgeRefundsGet?.refunds.filter((pledge) => pledge.status !== PledgeRefundStatus.Cancelled) || []
+    data?.pledgeRefundsGet?.refunds.filter(
+      (pledge) => pledge.status !== PledgeRefundStatus.Cancelled && pledge.status !== PledgeRefundStatus.Pending,
+    ) || []
 
   const { props: modalProps, ...rskModalProps } = useModal<{ pledge: PledgeRefundFragment }>()
 
@@ -113,10 +115,10 @@ export const PledgeRefundsTable = () => {
     <VStack w="full" spacing={4} align="stretch">
       <VStack w="full" spacing={0} align="start">
         <H2 size="xl" medium>
-          {t('Pledge Refunds')}
+          {t('Refunds')}
         </H2>
         <Body size="sm" color="neutral.11">
-          {t('Pledges you made to campaigns that can be refunded.')}
+          {t('Refunds you have initiated.')}
         </Body>
       </VStack>
       {renderTable()}

@@ -9,6 +9,7 @@ import { getPath } from '@/shared/constants/index.ts'
 
 import { PaymentRefundsTable } from './sections/PaymentRefunds.tsx'
 import { PledgeRefundsTable } from './sections/PledgeRefunds.tsx'
+import { PledgesTable } from './sections/Pledges.tsx'
 
 /** Status types for refunds */
 
@@ -25,6 +26,8 @@ export const RefundPage = () => {
         <H1 size="3xl" bold>
           {t('Refunds')}
         </H1>
+
+        <PledgesTable />
 
         <PledgeRefundsTable />
 

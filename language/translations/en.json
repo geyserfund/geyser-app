@@ -1772,5 +1772,9 @@
   "Failed to fetch projects": "Failed to fetch projects",
   "Transform your idea into real world projects backed by your community.": "Transform your idea into real world projects backed by your community.",
   "Launch your new project": "Launch your new project",
-  "Re-Claim": "Re-Claim"
+  "Re-Claim": "Re-Claim",
+  "Contributions you made to campaigns that can be refunded.": "Contributions you made to campaigns that can be refunded.",
+  "Contribution Refunds": "Contribution Refunds",
+  "No contributions found": "No contributions found",
+  "Refunds you have initiated.": "Refunds you have initiated."
 }
