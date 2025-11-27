@@ -10,12 +10,13 @@ import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
+import { Body } from '@/shared/components/typography/Body.tsx'
 import {
   ProjectForProfileContributionsFragment,
   usePayoutInitiateMutation,
   usePayoutRequestMutation,
 } from '@/types/index.ts'
-import { useNotification } from '@/utils/index.ts'
+import { commaFormatted, useNotification } from '@/utils/index.ts'
 
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
@@ -34,10 +35,11 @@ type PayoutRskProps = {
   isOpen: boolean
   onClose: () => void
   project: ProjectForProfileContributionsFragment
+  rskAddress?: string
 }
 
 /** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
-export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }) => {
+export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, rskAddress }) => {
   const toast = useNotification()
 
   useUserAccountKeys()
@@ -51,6 +53,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
   const [refundAddress, setRefundAddress] = useState<string | null>(null)
   const [refundTxId, setRefundTxId] = useState('')
 
+  const [continuePayout, setContinuePayout] = useState(false)
+
   const [payoutRequest, { data: payoutRequestData, loading: payoutRequestLoading }] = usePayoutRequestMutation()
 
   const [payoutInitiate, { loading: isPayoutInitiateLoading }] = usePayoutInitiateMutation()
@@ -63,12 +67,12 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
         variables: {
           input: {
             projectId: project.id,
-            rskAddress: userAccountKeys?.rskKeyPair.address,
+            rskAddress: rskAddress || userAccountKeys?.rskKeyPair.address,
           },
         },
       })
     }
-  }, [isOpen, payoutRequest, project.id, userAccountKeys?.rskKeyPair.address])
+  }, [isOpen, payoutRequest, project.id, userAccountKeys?.rskKeyPair.address, rskAddress])
 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
@@ -159,6 +163,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
             swapObj.privateKey = accountKeys.privateKey
             swapObj.preimageHash = preimageHash
             swapObj.preimageHex = preimageHex
+            swapObj.paymentId = data.payoutInitiate.payment?.id
             setSwapData(swapObj)
           }
         },
@@ -187,6 +192,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
   const handleClose = () => {
     setIsProcessed(false)
     setIsSubmitting(false)
+    setContinuePayout(false)
     onClose()
   }
 
@@ -198,21 +204,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
     } else {
       bitcoinForm.handleSubmit()
     }
-  }
-
-  if (isWaitingConfirmation) {
-    return (
-      <Modal isOpen={isOpen} size="lg" title={t('Please wait for swap confirmation')} onClose={() => {}}>
-        <BitcoinPayoutWaitingConfirmation
-          isRefund={true}
-          onClose={handleClose}
-          swapData={swapData}
-          refundAddress={refundAddress || ''}
-          setIsProcessed={setIsProcessed}
-          setRefundTxId={setRefundTxId}
-        />
-      </Modal>
-    )
   }
 
   // Show processed screen after successful submission
@@ -237,10 +228,52 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
     )
   }
 
+  if (isWaitingConfirmation) {
+    return (
+      <Modal isOpen={isOpen} size="lg" title={t('Please wait for swap confirmation')} onClose={() => {}}>
+        <BitcoinPayoutWaitingConfirmation
+          isRefund={true}
+          onClose={handleClose}
+          swapData={swapData}
+          refundAddress={refundAddress || ''}
+          setIsProcessed={setIsProcessed}
+          setRefundTxId={setRefundTxId}
+        />
+      </Modal>
+    )
+  }
+
+  const ContinuePayoutContent = () => {
+    return (
+      <VStack spacing={4} alignItems="start" w="full">
+        <Body size={'md'} medium>
+          {t('Payout the total amount received on this project')} <br />
+          {t('Are you sure you want to continue with the payout?')}
+        </Body>
+        <Body size={'xl'} bold>
+          {t('Total payout amount')}
+          {': '}
+          {commaFormatted(payoutRequestData?.payoutRequest.payout.amount)} sats
+        </Body>
+        <Body size={'md'} medium></Body>
+        <HStack spacing={4} w="full" justifyContent="space-between">
+          <Button size={'lg'} colorScheme={'neutral1'} variant={'outline'} onClick={handleClose}>
+            {t('No, cancel')}
+          </Button>
+          <Button size={'lg'} colorScheme={'primary1'} variant={'solid'} onClick={() => setContinuePayout(true)}>
+            {t('Yes, continue with the refund')}
+          </Button>
+        </HStack>
+      </VStack>
+    )
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={handleClose} size="lg" title={t('Claim Payout')} bodyProps={{ gap: 4 }}>
       {payoutRequestLoading ? (
         <RefundRskSkeleton />
+      ) : !continuePayout ? (
+        <ContinuePayoutContent />
       ) : (
         <>
           {/* Payout Method Selection */}
@@ -251,10 +284,13 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project }
             {selectedMethod === PayoutMethod.Lightning ? (
               <LightningPayoutForm
                 form={lightningForm.form}
-                satsAmount={payoutRequestData?.payoutRequest.payout.amount}
+                satsAmount={payoutRequestData?.payoutRequest.payout.amount || 0}
               />
             ) : (
-              <BitcoinPayoutForm form={bitcoinForm.form} satsAmount={payoutRequestData?.payoutRequest.payout.amount} />
+              <BitcoinPayoutForm
+                form={bitcoinForm.form}
+                satsAmount={payoutRequestData?.payoutRequest.payout.amount || 0}
+              />
             )}
           </CardLayout>
 
