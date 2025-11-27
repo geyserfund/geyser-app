@@ -2,12 +2,14 @@ import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { useMemo } from 'react'
+import { Trans } from 'react-i18next'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { getTimeLeft } from '@/shared/utils/project/getAonData.ts'
 
 export const CampaignSuccessNotification = () => {
   const { project, isProjectOwner } = useProjectAtom()
@@ -21,23 +23,14 @@ export const CampaignSuccessNotification = () => {
     }
 
     const launchDate = DateTime.fromMillis(project.aonGoal?.deployedAt)
-    const claimDeadline = launchDate.plus({ days: project.aonGoal?.goalDurationInDays || 0 + 30 })
-    const currentDateTime = DateTime.now()
+    const claimDeadline = launchDate.plus({ days: (project.aonGoal?.goalDurationInDays || 0) + 30 })
 
-    if (currentDateTime > claimDeadline) {
+    const timeLeft = getTimeLeft(claimDeadline)
+    if (!timeLeft) {
       return '00:00:00'
     }
 
-    const duration = claimDeadline.diff(currentDateTime, ['days', 'hours', 'minutes']).toObject()
-    const days = Math.floor(duration.days || 0)
-    const hours = Math.floor(duration.hours || 0)
-    const minutes = Math.floor(duration.minutes || 0)
-
-    const formattedDays = days.toString().padStart(2, '0')
-    const formattedHours = hours.toString().padStart(2, '0')
-    const formattedMinutes = minutes.toString().padStart(2, '0')
-
-    return `${formattedDays}:${formattedHours}:${formattedMinutes}`
+    return `${timeLeft.value} ${timeLeft.label}`
   }, [project.aonGoal?.deployedAt, project.aonGoal?.goalDurationInDays])
 
   if (!isProjectOwner) {
@@ -58,8 +51,18 @@ export const CampaignSuccessNotification = () => {
             {t('Congratulations, your campaign was a success!')}
           </Body>
           <Body dark>
-            {t('You have')} {daysLeft} {t('days to claim the funds')}.
-            {t('If you do not claim the funds on time, they will be returned to the contributors')}.
+            <Trans
+              i18nKey="You have <1>{{timeLeft}}</1> to claim the funds. If you do not claim the funds on time, they will be returned to the contributors."
+              values={{ timeLeft: daysLeft }}
+            >
+              {'You have '}
+              <Body as="span" bold>
+                {'{{timeLeft}}'}
+              </Body>{' '}
+              {t(
+                'to claim the funds. If you do not claim the funds on time, they will be returned to the contributors.',
+              )}
+            </Trans>
           </Body>
           <Button colorScheme="primary1" variant="solid" size="lg" w="full" onClick={payoutRskModal.onOpen}>
             {t('Claim funds now')}

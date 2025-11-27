@@ -36,11 +36,18 @@ import {
 } from '../../../../../../../../shared/constants'
 import { VideoPlayer } from '../../../../../../../../shared/molecules/VideoPlayer'
 import { useProjectPageHeaderSummaryQuery } from '../../../../../../../../types'
-import { commaFormatted, removeProjectAmountException, toInt, useMobileMode } from '../../../../../../../../utils'
+import {
+  commaFormatted,
+  isAllOrNothing,
+  removeProjectAmountException,
+  toInt,
+  useMobileMode,
+} from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
 import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
 import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
+import { AonProjectBalanceDisplay } from '../contributionSummary/components/AonProjectBalanceDisplay.tsx'
 import { CreatorSocial } from './components/CreatorSocial'
 import { LightningAddressModal } from './components/LightningAddressModal'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
@@ -188,6 +195,30 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
 const MobileBalanceInfo = () => {
   const { formatAmount } = useCurrencyFormatter()
   const { project } = useProjectAtom()
+  const isAON = isAllOrNothing(project)
+
+  const renderBalanceInfo = () => {
+    if (isAON) {
+      return <AonProjectBalanceDisplay />
+    }
+
+    return (
+      <>
+        {project.balance > 0 && (
+          <Body size="lg" bold>
+            {commaFormatted(project.balance)}
+            <Body as="span">{' sats'}</Body>
+          </Body>
+        )}
+        <Body size="sm">
+          {`${formatAmount(project.balanceUsdCent, 'USDCENT')}`}{' '}
+          <Body as="span" light>
+            {t('raised')}
+          </Body>
+        </Body>
+      </>
+    )
+  }
 
   return (
     <VStack
@@ -201,18 +232,7 @@ const MobileBalanceInfo = () => {
       alignItems="center"
       spacing={0}
     >
-      {project.balance > 0 && (
-        <Body size="lg" bold>
-          {commaFormatted(project.balance)}
-          <Body as="span">{' sats'}</Body>
-        </Body>
-      )}
-      <Body size="sm">
-        {`${formatAmount(project.balanceUsdCent, 'USDCENT')}`}{' '}
-        <Body as="span" light>
-          {t('contributed in total')}
-        </Body>
-      </Body>
+      {renderBalanceInfo()}
     </VStack>
   )
 }
