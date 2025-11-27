@@ -1745,5 +1745,6 @@
   "Password must contain at least one uppercase letter": "Password must contain at least one uppercase letter",
   "Password must be at least 10 characters long": "Password must be at least 10 characters long",
   "Password must contain at least one lowercase letter": "Password must contain at least one lowercase letter",
-  "Password must contain at least one special character": "Password must contain at least one special character"
+  "Password must contain at least one special character": "Password must contain at least one special character",
+  "Cannot issue refund": "Cannot issue refund"
 }

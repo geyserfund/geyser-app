@@ -6,7 +6,7 @@ export const addressToBuffer32 = (address: string): Buffer => {
   console.log('cleanAddress', cleanAddress)
 
   if (cleanAddress.length !== 40) {
-    throw new Error('Invalid Ethereum address format')
+    throw new Error(`Invalid Ethereum address format address: ${cleanAddress}`)
   }
 
   Buffer.from(cleanAddress, 'hex').copy(buffer, 12)
