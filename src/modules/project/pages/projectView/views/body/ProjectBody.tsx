@@ -6,6 +6,7 @@ import { RightSideStickyLayout } from '@/modules/project/components/RightSideSti
 import { ProjectPreLaunchNav } from '@/modules/project/navigation/components/ProjectPreLaunchNav.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
+import { isAllOrNothing } from '@/utils/index.ts'
 
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
@@ -32,6 +33,8 @@ export const ProjectBody = () => {
 
   const location = useLocation()
   const navigate = useNavigate()
+
+  const isAon = isAllOrNothing(project)
 
   useEffect(() => {
     if (loading) return
@@ -70,7 +73,7 @@ export const ProjectBody = () => {
         {project.entriesCount && <Posts />}
         {project.goalsCount && <Goals />}
         <Details />
-        <FundNowWithLightning />
+        {!isAon && <FundNowWithLightning />}
         <SuggestedProjects
           id={'suggested-projects-project-page'}
           subCategory={project.subCategory}
