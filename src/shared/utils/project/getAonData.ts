@@ -12,10 +12,15 @@ export const aonProjectTimeLeft = (
 
   const launchDate = DateTime.fromMillis(aonGoal.deployedAt)
   const aonEndDate = launchDate.plus({ days: aonGoal.goalDurationInDays })
+
+  return getTimeLeft(aonEndDate)
+}
+
+export const getTimeLeft = (aonEndDate: DateTime) => {
   const currentDateTime = DateTime.now()
 
   if (currentDateTime >= aonEndDate) {
-    return null // Time is up, don't show the component
+    return null
   }
 
   const duration = aonEndDate.diff(currentDateTime, ['days', 'hours', 'minutes', 'seconds']).toObject()
@@ -24,7 +29,6 @@ export const aonProjectTimeLeft = (
   const minutes = Math.floor(duration.minutes || 0)
   const seconds = Math.floor(duration.seconds || 0)
 
-  // Show the largest available time unit
   if (days > 0) {
     return { value: days, label: days === 1 ? t('day left') : t('days left') }
   }
