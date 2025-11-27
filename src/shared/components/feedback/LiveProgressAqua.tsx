@@ -501,6 +501,10 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
   const resolvedGlow = glowColor ?? (fillColor ? fillColor : '#00E4FF')
   const percentClamped = Math.max(0, Math.min(100, value))
 
+  const removeWaveCap = useMemo(() => {
+    return value >= 100
+  }, [value])
+
   // measure only the filled area (for perfect bubble clipping)
   useEffect(() => {
     const ro = new ResizeObserver(() => {
@@ -593,9 +597,11 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
           <canvas ref={bubblesCanvasRef} className={styles.bubblesCanvas} />
 
           {/* NEW: high-contrast canvas wavecap at the right tip */}
-          <Box className={styles.capWrap}>
-            <canvas ref={capCanvasRef} className={styles.capCanvas} />
-          </Box>
+          {!removeWaveCap && (
+            <Box className={styles.capWrap}>
+              <canvas ref={capCanvasRef} className={styles.capCanvas} />
+            </Box>
+          )}
         </Box>
 
         {/* Glow + sparkles overlay */}

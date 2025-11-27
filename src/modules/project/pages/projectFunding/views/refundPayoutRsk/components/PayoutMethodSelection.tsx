@@ -8,9 +8,11 @@ import { PayoutMethod } from '../types.ts'
 export const PayoutMethodSelection = ({
   selectedMethod,
   setSelectedMethod,
+  disableLightning,
 }: {
   selectedMethod: PayoutMethod
   setSelectedMethod: (method: PayoutMethod) => void
+  disableLightning?: boolean
 }) => {
   return (
     <VStack w="full" spacing={4} alignItems="start">
@@ -29,6 +31,7 @@ export const PayoutMethodSelection = ({
           height="auto"
           justifyContent="center"
           flexDirection="column"
+          isDisabled={disableLightning}
         >
           <Body size="md" medium>
             {t('Bitcoin Lightning')}

@@ -10,7 +10,6 @@ import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
-import { Body } from '@/shared/components/typography/Body.tsx'
 import {
   ProjectForProfileContributionsFragment,
   usePayoutInitiateMutation,
@@ -38,6 +37,8 @@ type PayoutRskProps = {
   rskAddress?: string
 }
 
+export const MAX_SATS_FOR_LIGHTNING = 5000000 // 5,000,000 sats is the maximum amount for Lightning refunds
+
 /** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
 export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, rskAddress }) => {
   const toast = useNotification()
@@ -46,14 +47,12 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
 
-  const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.Lightning)
+  const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.OnChain)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isProcessed, setIsProcessed] = useState(false)
   const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
   const [refundAddress, setRefundAddress] = useState<string | null>(null)
   const [refundTxId, setRefundTxId] = useState('')
-
-  const [continuePayout, setContinuePayout] = useState(false)
 
   const [payoutRequest, { data: payoutRequestData, loading: payoutRequestLoading }] = usePayoutRequestMutation()
 
@@ -192,7 +191,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
   const handleClose = () => {
     setIsProcessed(false)
     setIsSubmitting(false)
-    setContinuePayout(false)
     onClose()
   }
 
@@ -243,54 +241,35 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
     )
   }
 
-  const ContinuePayoutContent = () => {
-    return (
-      <VStack spacing={4} alignItems="start" w="full">
-        <Body size={'md'} medium>
-          {t('Payout the total amount received on this project')} <br />
-          {t('Are you sure you want to continue with the payout?')}
-        </Body>
-        <Body size={'xl'} bold>
-          {t('Total payout amount')}
-          {': '}
-          {commaFormatted(payoutRequestData?.payoutRequest.payout.amount)} sats
-        </Body>
-        <Body size={'md'} medium></Body>
-        <HStack spacing={4} w="full" justifyContent="space-between">
-          <Button size={'lg'} colorScheme={'neutral1'} variant={'outline'} onClick={handleClose}>
-            {t('No, cancel')}
-          </Button>
-          <Button size={'lg'} colorScheme={'primary1'} variant={'solid'} onClick={() => setContinuePayout(true)}>
-            {t('Yes, continue with the refund')}
-          </Button>
-        </HStack>
-      </VStack>
-    )
-  }
+  const totalAmount = payoutRequestData?.payoutRequest.payout.amount || 0
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="lg" title={t('Claim Payout')} bodyProps={{ gap: 4 }}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="lg"
+      title={t('Claim Payout')}
+      subtitle={`${t('Total refund amount')}: ${commaFormatted(totalAmount)} sats`}
+      subtitleProps={{ bold: true }}
+      bodyProps={{ gap: 4 }}
+    >
       {payoutRequestLoading ? (
         <RefundRskSkeleton />
-      ) : !continuePayout ? (
-        <ContinuePayoutContent />
       ) : (
         <>
           {/* Payout Method Selection */}
-          <PayoutMethodSelection selectedMethod={selectedMethod} setSelectedMethod={setSelectedMethod} />
+          <PayoutMethodSelection
+            selectedMethod={selectedMethod}
+            setSelectedMethod={setSelectedMethod}
+            disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING}
+          />
 
           {/* Form Section */}
           <CardLayout w="full" p={6}>
             {selectedMethod === PayoutMethod.Lightning ? (
-              <LightningPayoutForm
-                form={lightningForm.form}
-                satsAmount={payoutRequestData?.payoutRequest.payout.amount || 0}
-              />
+              <LightningPayoutForm form={lightningForm.form} satsAmount={totalAmount} />
             ) : (
-              <BitcoinPayoutForm
-                form={bitcoinForm.form}
-                satsAmount={payoutRequestData?.payoutRequest.payout.amount || 0}
-              />
+              <BitcoinPayoutForm form={bitcoinForm.form} satsAmount={totalAmount} />
             )}
           </CardLayout>
 

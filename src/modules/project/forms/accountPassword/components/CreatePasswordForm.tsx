@@ -71,13 +71,19 @@ export const CreatePasswordForm = ({ form, isCreator }: CreatePasswordFormProps)
 }
 
 const createPasswordSchema = yup.object({
-  password: yup.string().required(t('Password is required')).min(8, t('Password must be at least 8 characters long')),
+  password: yup
+    .string()
+    .required(t('Password is required'))
+    .min(10, t('Password must be at least 10 characters long'))
+    .matches(/[a-z]/, t('Password must contain at least one lowercase letter'))
+    .matches(/[A-Z]/, t('Password must contain at least one uppercase letter'))
+    .matches(/[!@#$%^&*(),.?":{}|<>[\]\\/'`~_+=\-;]/, t('Password must contain at least one special character')),
   repeatPassword: yup
     .string()
     .required(t('Please repeat your password'))
     .oneOf([yup.ref('password')], t('Passwords must match')),
-  acknowledgePassword: yup.boolean().oneOf([true], t('required')).required(),
-  acknowledgeFundsLoss: yup.boolean().oneOf([true], t('required')).required(),
+  acknowledgePassword: yup.boolean().oneOf([true], t('Required')).required(),
+  acknowledgeFundsLoss: yup.boolean().oneOf([true], t('Required')).required(),
 })
 
 export const useCreateAccountForm = (onComplete: (_: UserAccountKeysFragment) => void) => {

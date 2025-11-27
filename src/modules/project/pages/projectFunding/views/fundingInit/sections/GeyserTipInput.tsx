@@ -63,7 +63,7 @@ export const GeyserTipInput = () => {
               key={percent}
               onClick={() => setGeyserTipPercent(percent)}
               variant={geyserTipPercent === percent ? 'surface' : 'outline'}
-              colorScheme={geyserTipPercent === percent ? 'primary1' : 'neutral.9'}
+              colorScheme={geyserTipPercent === percent ? 'primary1' : 'neutral1'}
               w={{ base: '50px', sm: '60px' }} // Fixed width for buttons
             >
               {percent}%

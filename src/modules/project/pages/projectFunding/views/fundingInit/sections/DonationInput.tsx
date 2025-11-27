@@ -71,7 +71,7 @@ export const DonationInput = () => {
             key={amount}
             size="md"
             variant="outline"
-            colorScheme="neutral1"
+            colorScheme="neutral.9"
             onClick={() => handleDefaultAmountButtonClick(amount)}
             flexGrow={1}
             minWidth="80px"
@@ -85,7 +85,7 @@ export const DonationInput = () => {
             key={PRESET_AMOUNTS[2]}
             size="md"
             variant="outline"
-            colorScheme="neutral1"
+            colorScheme="neutral.9"
             onClick={() => handleDefaultAmountButtonClick(PRESET_AMOUNTS[2]!)}
             w="full"
             zIndex={1}
@@ -116,7 +116,7 @@ export const DonationInput = () => {
             key={amount}
             size="md"
             variant="outline"
-            colorScheme="neutral1"
+            colorScheme="neutral.9"
             onClick={() => handleDefaultAmountButtonClick(amount)}
             flexGrow={1}
             minWidth="80px"
@@ -129,7 +129,7 @@ export const DonationInput = () => {
           key={PRESET_AMOUNTS.at(-1)}
           size="md"
           variant="outline"
-          colorScheme="neutral1"
+          colorScheme="neutral.9"
           onClick={() => handleDefaultAmountButtonClick(PRESET_AMOUNTS.at(-1)!)}
           flexGrow={1}
           minWidth="80px"
