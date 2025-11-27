@@ -36,6 +36,7 @@ export const FRAGMENT_USER_PROJECT_CONTRIBUTION = gql`
     comment
     media
     confirmedAt
+    status
     projectId
     bitcoinQuote {
       ...BitcoinQuote

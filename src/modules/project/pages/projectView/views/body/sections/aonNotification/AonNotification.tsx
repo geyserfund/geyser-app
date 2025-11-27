@@ -1,7 +1,6 @@
-/* eslint-disable complexity */
 import { useAuthContext } from '@/context/index.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { ProjectAonGoalStatus, useProjectContributorQuery } from '@/types/index.ts'
+import { ContributionStatus, ProjectAonGoalStatus, useProjectContributorQuery } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 
 import CampaignFailedNotification from './views/CampaignFailedNotification.tsx'
@@ -28,7 +27,9 @@ export const AonNotification = () => {
   })
 
   console.log('data', data)
-  const fundedToCampaign = data?.contributor?.amountFunded && data?.contributor?.amountFunded > 0
+  const fundedToCampaign = data?.contributor?.contributions.find(
+    (contribution) => contribution.status === ContributionStatus.Pledged,
+  )
 
   if (!isAon || loading) {
     return null
@@ -55,6 +56,6 @@ export const AonNotification = () => {
   }
 
   if (fundedToCampaign) {
-    return <FundedToCampaign contributorData={data?.contributor} />
+    return <FundedToCampaign contribution={fundedToCampaign} />
   }
 }
