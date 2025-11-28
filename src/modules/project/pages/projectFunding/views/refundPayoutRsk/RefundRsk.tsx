@@ -220,10 +220,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     onClose()
   }
 
-  const enableSubmit =
-    selectedMethod === PayoutMethod.Lightning
-      ? lightningForm.enableSubmit
-      : bitcoinForm.enableSubmit && Boolean(refundFileAccountKeys)
+  const enableSubmit = selectedMethod === PayoutMethod.Lightning ? lightningForm.enableSubmit : bitcoinForm.enableSubmit
 
   const handleSubmit = () => {
     if (selectedMethod === PayoutMethod.Lightning) {
