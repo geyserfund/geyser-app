@@ -16,7 +16,7 @@ export const AonNotification = () => {
 
   const isAon = isAllOrNothing(project)
 
-  const { data, loading } = useProjectContributorQuery({
+  const { data, loading, refetch } = useProjectContributorQuery({
     skip: !project.id || !user.id || !isAon,
     variables: {
       input: {
@@ -56,6 +56,6 @@ export const AonNotification = () => {
   }
 
   if (fundedToCampaign) {
-    return <FundedToCampaign contribution={fundedToCampaign} />
+    return <FundedToCampaign contribution={fundedToCampaign} onCompleted={() => refetch()} />
   }
 }
