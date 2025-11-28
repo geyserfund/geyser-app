@@ -22,9 +22,10 @@ export const FundedToCampaign = ({ contribution }: { contribution: UserProjectCo
       <Feedback variant={FeedBackVariant.SUCCESS} iconProps={{ fontSize: '20px', marginTop: '2px' }}>
         <HStack w="full" flexWrap="wrap" spacing={0}>
           <Body bold>{t('You contributed to this project.')}</Body>
+          <Body bold>{t('You can refund by ')}</Body>
           <Button paddingY={0} colorScheme="neutral1" variant="ghost" size="sm" onClick={refundModal.onOpen}>
             <Body size="md" bold>
-              {t('Claim refund')}
+              {t('clicking here.')}
             </Body>
           </Button>
         </HStack>
