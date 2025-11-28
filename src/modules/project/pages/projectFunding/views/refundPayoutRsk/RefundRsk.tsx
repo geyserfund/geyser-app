@@ -113,7 +113,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
           input: {
             pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
             signature,
-            rskAddress: accountKeys.address,
+            rskAddress: rskAddress || accountKeys.address,
             pledgeRefundPaymentInput: {
               rskToLightningSwap: {
                 lightningAddress: data.lightningAddress,
@@ -169,6 +169,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
           input: {
             pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
             signature,
+            rskAddress: rskAddress || accountKeys.address,
             pledgeRefundPaymentInput: {
               rskToOnChainSwap: {
                 boltz: {
