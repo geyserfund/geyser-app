@@ -320,7 +320,8 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     }, 0)
 
     const contributorFeesAmount = fees.reduce((acc, fee) => {
-      if (fee.feePayer === PaymentFeePayer.Contributor) {
+      // Swap fees never make it to the contract, so should not be counted inside the contract
+      if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
         return acc + fee.feeAmount
       }
 
@@ -373,7 +374,8 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     }, 0)
 
     const contributorFeesAmount = fees.reduce((acc, fee) => {
-      if (fee.feePayer === PaymentFeePayer.Contributor) {
+      // Swap fees never make it to the contract, so should not be counted inside the contract
+      if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
         return acc + fee.feeAmount
       }
 
