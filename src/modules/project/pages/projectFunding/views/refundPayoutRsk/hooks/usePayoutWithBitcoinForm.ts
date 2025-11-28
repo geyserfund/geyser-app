@@ -54,7 +54,7 @@ export const usePayoutWithBitcoinForm = (
     mode: 'onBlur',
     defaultValues: {
       bitcoinAddress: '',
-      accountPassword: accountKeys ? '********' : '',
+      accountPassword: '',
     },
   })
 
