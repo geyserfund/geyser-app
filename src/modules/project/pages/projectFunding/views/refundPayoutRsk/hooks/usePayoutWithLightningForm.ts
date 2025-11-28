@@ -15,14 +15,8 @@ import { useNotification } from '@/utils/index.ts'
 /** Form data interface for Lightning payout */
 export type LightningPayoutFormData = {
   lightningAddress?: string
-  accountPassword: string
+  accountPassword?: string
 }
-
-/** Validation schema for Lightning payout form */
-export const lightningPayoutSchema = yup.object({
-  lightningAddress: yup.string(),
-  accountPassword: yup.string().required(t('Account password is required')),
-})
 
 /** Custom hook for Lightning payout form management */
 export const usePayoutWithLightningForm = (
@@ -33,6 +27,11 @@ export const usePayoutWithLightningForm = (
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
+
+  const lightningPayoutSchema = yup.object({
+    lightningAddress: yup.string(),
+    accountPassword: accountKeys ? yup.string() : yup.string().required(t('Account password is required')),
+  })
 
   const form = useForm<LightningPayoutFormData>({
     resolver: yupResolver(lightningPayoutSchema),
@@ -64,7 +63,7 @@ export const usePayoutWithLightningForm = (
 
     try {
       if (!accountKeys) {
-        const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed, data.accountPassword)
+        const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed, data.accountPassword || '')
 
         const accountKeys = generateKeysFromSeedHex(decryptedSeed)
 

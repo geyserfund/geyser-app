@@ -18,27 +18,8 @@ import { validateBitcoinAddress } from '../../fundingPayment/views/paymentOnchai
 /** Form data interface for Bitcoin On-Chain payout */
 export type BitcoinPayoutFormData = {
   bitcoinAddress: string
-  accountPassword: string
+  accountPassword?: string
 }
-
-/** Validation schema for Bitcoin On-Chain payout form */
-export const bitcoinPayoutSchema = yup.object({
-  bitcoinAddress: yup
-    .string()
-    .required(t('Bitcoin address is required'))
-    .test({
-      test(value) {
-        const bitcoinAddress = getBitcoinAddress(value)
-        if (bitcoinAddress.valid && bitcoinAddress.address) {
-          return validateBitcoinAddress(bitcoinAddress.address)
-        }
-
-        return validateBitcoinAddress(value)
-      },
-      message: t('The Bitcoin address you entered is invalid'),
-    }),
-  accountPassword: yup.string().required(t('Account password is required')),
-})
 
 /** Custom hook for Bitcoin On-Chain payout form management */
 export const usePayoutWithBitcoinForm = (
@@ -49,6 +30,24 @@ export const usePayoutWithBitcoinForm = (
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
+
+  const bitcoinPayoutSchema = yup.object({
+    bitcoinAddress: yup
+      .string()
+      .required(t('Bitcoin address is required'))
+      .test({
+        test(value) {
+          const bitcoinAddress = getBitcoinAddress(value)
+          if (bitcoinAddress.valid && bitcoinAddress.address) {
+            return validateBitcoinAddress(bitcoinAddress.address)
+          }
+
+          return validateBitcoinAddress(value)
+        },
+        message: t('The Bitcoin address you entered is invalid'),
+      }),
+    accountPassword: accountKeys ? yup.string() : yup.string().required(t('Account password is required')),
+  })
 
   const form = useForm<BitcoinPayoutFormData>({
     resolver: yupResolver(bitcoinPayoutSchema),
@@ -80,7 +79,7 @@ export const usePayoutWithBitcoinForm = (
 
     try {
       if (!accountKeys) {
-        const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed, data.accountPassword)
+        const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed, data.accountPassword || '')
 
         const accountKeys = generateKeysFromSeedHex(decryptedSeed)
 

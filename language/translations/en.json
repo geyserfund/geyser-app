@@ -1783,5 +1783,9 @@
   "The goal must be at least of 210,000 sats.": "The goal must be at least of 210,000 sats.",
   "Schedule launch (optional)": "Schedule launch (optional)",
   "Exit Preview": "Exit Preview",
-  "Failed to fetch pledge refunds": "Failed to fetch pledge refunds"
+  "Failed to fetch pledge refunds": "Failed to fetch pledge refunds",
+  "You have <1>{{timeLeft}}</1> to claim the funds. If you do not claim the funds on time, they will be returned to the contributors.": "You have <1>{{timeLeft}}</1> to claim the funds. If you do not claim the funds on time, they will be returned to the contributors.",
+  "Claim Payout": "Claim Payout",
+  "to claim the funds. If you do not claim the funds on time, they will be returned to the contributors.": "to claim the funds. If you do not claim the funds on time, they will be returned to the contributors.",
+  "Claim funds now": "Claim funds now"
 }
