@@ -66,7 +66,7 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
           <ProfileText guardian={contribution.funder.user?.guardianType} size="sm" bold dark>
             {contribution.funder.user?.username || t('Anonymous')}
           </ProfileText>
-          <TimeAgo date={contribution.confirmedAt} />
+          <TimeAgo date={contribution.createdAt} />
         </HStack>
 
         <HStack spacing={2}>

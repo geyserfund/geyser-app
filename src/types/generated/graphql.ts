@@ -8967,7 +8967,7 @@ export type OrderContributionFragment = { __typename?: 'Contribution', id: any, 
       & OrderItemFragment
     )> } | null };
 
-export type ProjectContributionFragment = { __typename?: 'Contribution', id: any, amount: number, media?: string | null, comment?: string | null, confirmedAt?: any | null, projectGoalId?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, timesFunded?: number | null, user?: (
+export type ProjectContributionFragment = { __typename?: 'Contribution', id: any, amount: number, media?: string | null, comment?: string | null, confirmedAt?: any | null, createdAt?: any | null, projectGoalId?: any | null, bitcoinQuote?: { __typename?: 'BitcoinQuote', quote: number, quoteCurrency: QuoteCurrency } | null, funder: { __typename?: 'Funder', id: any, timesFunded?: number | null, user?: (
       { __typename?: 'User' }
       & UserAvatarFragment
     ) | null } };
@@ -11265,6 +11265,7 @@ export const ProjectContributionFragmentDoc = gql`
   media
   comment
   confirmedAt
+  createdAt
   projectGoalId
   bitcoinQuote {
     quote
