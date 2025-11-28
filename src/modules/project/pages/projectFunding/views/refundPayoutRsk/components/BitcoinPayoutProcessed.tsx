@@ -1,8 +1,7 @@
-import { Button, Link, VStack } from '@chakra-ui/react'
+import { Box, Button, Image, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React from 'react'
 
-import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 
 type BitcoinPayoutProcessedProps = {
@@ -24,21 +23,15 @@ export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({
         {t('Payout Processed')}
       </Body>
 
-      {/* Illustration Placeholder */}
-      <CardLayout
-        w="full"
-        maxW="300px"
-        h="200px"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        backgroundColor="neutral1.3"
-        borderColor="neutral1.6"
-      >
-        <Body size="md" color="neutral1.11">
-          {t('Illustration')}
-        </Body>
-      </CardLayout>
+      <Box w="300px" h="300px">
+        <Image
+          src={'https://storage.googleapis.com/geyser-projects-media/app/refund/claim_success.webp'}
+          alt={'Get refund'}
+          width="100%"
+          height="100%"
+          objectFit="cover"
+        />
+      </Box>
 
       {/* Success Message */}
       <VStack spacing={4} alignItems="center" w="full">

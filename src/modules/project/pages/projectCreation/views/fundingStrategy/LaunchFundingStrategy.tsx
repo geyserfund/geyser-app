@@ -159,10 +159,10 @@ const OptionButton = ({
     <VStack
       w="full"
       border="1px solid"
-      borderColor={isSelected ? 'primary1.6' : 'neutral1.6'}
-      _hover={{ borderColor: 'primary1.6' }}
+      borderColor={isSelected ? 'primary1.9' : 'neutral1.6'}
+      _hover={{ borderColor: 'primary1.9' }}
       outline={isSelected ? '1px solid' : 'none'}
-      outlineColor={isSelected ? 'primary1.6' : 'transparent'}
+      outlineColor={isSelected ? 'primary1.9' : 'transparent'}
       borderRadius="12px"
       p={4}
       cursor="pointer"

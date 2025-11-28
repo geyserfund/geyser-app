@@ -1,11 +1,9 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { Box, Button, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { useCallback, useState } from 'react'
 
-import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { useModal } from '@/shared/hooks/useModal.tsx'
-import { AlertDialogue } from '@/shared/molecules/AlertDialogue.tsx'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { usePaymentSwapClaimTxBroadcastMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
@@ -19,6 +17,7 @@ type BitcoinPayoutWaitingConfirmationProps = {
   refundAddress: string
   setIsProcessed: (isProcessed: boolean) => void
   setRefundTxId: (refundTxId: string) => void
+  onCompleted?: () => void
 }
 
 /** BitcoinPayoutProcessed: Success screen for Bitcoin on-chain payout completion */
@@ -29,11 +28,12 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
   refundAddress,
   setIsProcessed,
   setRefundTxId,
+  onCompleted,
 }) => {
-  const alertModalProps = useModal()
   const toast = useNotification()
 
   const [isReadyToBeClaimed, setIsReadyToBeClaimed] = useState(false)
+  const [isClaiming, setIsClaiming] = useState(false)
 
   useTransactionStatusUpdate({
     swapId: swapData.id,
@@ -45,6 +45,7 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
   const [paymentSwapClaimTxBroadcast] = usePaymentSwapClaimTxBroadcastMutation()
 
   const handleInitiateRefund = useCallback(async () => {
+    setIsClaiming(true)
     const refundTransactionHex = await initiateRefundToGetRefundTx(refundAddress, swapData, 'serverLock')
     if (refundTransactionHex) {
       paymentSwapClaimTxBroadcast({
@@ -58,6 +59,7 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
           if (data.paymentSwapClaimTxBroadcast.txHash) {
             setIsProcessed(true)
             setRefundTxId(data.paymentSwapClaimTxBroadcast.txHash)
+            onCompleted?.()
             toast.success({
               title: t('Transaction broadcasted successfully!'),
               description: t('Your Bitcoin on-chain claim will be processed shortly'),
@@ -71,69 +73,59 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
         description: t('Please try again'),
       })
     }
-  }, [initiateRefundToGetRefundTx, refundAddress, swapData, toast, paymentSwapClaimTxBroadcast, setIsProcessed])
+
+    setIsClaiming(false)
+  }, [
+    initiateRefundToGetRefundTx,
+    refundAddress,
+    swapData,
+    toast,
+    paymentSwapClaimTxBroadcast,
+    setIsProcessed,
+    setRefundTxId,
+    onCompleted,
+  ])
 
   return (
-    <>
-      <VStack w="full" spacing={6} alignItems="center">
-        {/* Illustration Placeholder */}
-        <CardLayout
-          w="full"
-          maxW="300px"
-          h="200px"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          backgroundColor="neutral1.3"
-          borderColor="neutral1.6"
-        >
-          <Body size="md" color="neutral1.11">
-            {t('Illustration')}
-          </Body>
-        </CardLayout>
+    <VStack w="full" spacing={6} alignItems="center">
+      {/* Illustration Placeholder */}
+      <Box w="300px" h="300px">
+        <Image
+          src={'https://storage.googleapis.com/geyser-projects-media/app/refund/get_refund.webp'}
+          alt={'Get refund'}
+          width="100%"
+          height="100%"
+          objectFit="cover"
+        />
+      </Box>
 
-        {/* Success Message */}
-        <VStack spacing={4} alignItems="center" w="full">
-          <Body size="md" textAlign="center" color="neutral1.12">
-            {t('Your payout processing has started, please wait for confirmation.')}
-          </Body>
+      {/* Success Message */}
+      <VStack spacing={4} alignItems="start" w="full">
+        <Body size="md" textAlign="center" color="neutral1.12">
+          {t('Confirm and claim your funds.')}
+        </Body>
 
-          <Body size="sm" textAlign="center" color="neutral1.10" lineHeight="1.5">
+        <Feedback variant={FeedBackVariant.WARNING}>
+          <Body>
             {t(
-              'Swap confirmation may take a few minutes. Please keep this modal open to complete the refund process. Closing this modal will cancel the refund as your password will be lost. This ensures we never have control of your funds.',
+              'It make take a few minutes to activate the claim funds button. Please keep this modal open to complete the process',
             )}
           </Body>
-        </VStack>
-
-        <Button
-          w="full"
-          maxW="300px"
-          size="lg"
-          colorScheme="primary1"
-          variant="solid"
-          isDisabled={!isReadyToBeClaimed}
-          onClick={handleInitiateRefund}
-        >
-          {t('Get refund')}
-        </Button>
-
-        {/* Action Button */}
-        <Button w="full" maxW="300px" size="lg" colorScheme="neutral1" variant="outline" onClick={onClose}>
-          {isRefund ? t('Close') : t('Go back to my project')}
-        </Button>
+        </Feedback>
       </VStack>
-      <AlertDialogue
-        {...alertModalProps}
-        title={t('Warning')}
-        description={t(
-          'Closing this modal will cancel the refund as your password will be lost. This ensures we never have control of your funds.',
-        )}
-        hasCancel={true}
-        negativeButtonProps={{
-          children: t('Close'),
-          onClick: onClose,
-        }}
-      />
-    </>
+
+      <Button
+        w="full"
+        maxW="300px"
+        size="lg"
+        colorScheme="primary1"
+        variant="solid"
+        isDisabled={!isReadyToBeClaimed}
+        onClick={handleInitiateRefund}
+        isLoading={isClaiming}
+      >
+        {t('Claim your funds')}
+      </Button>
+    </VStack>
   )
 }

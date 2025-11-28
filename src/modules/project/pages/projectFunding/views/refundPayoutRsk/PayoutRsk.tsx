@@ -35,12 +35,13 @@ type PayoutRskProps = {
   onClose: () => void
   project: ProjectForProfileContributionsFragment
   rskAddress?: string
+  onCompleted?: () => void
 }
 
 export const MAX_SATS_FOR_LIGHTNING = 5000000 // 5,000,000 sats is the maximum amount for Lightning refunds
 
 /** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
-export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, rskAddress }) => {
+export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, rskAddress, onCompleted }) => {
   const toast = useNotification()
 
   useUserAccountKeys()
@@ -105,6 +106,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
       })
 
       setIsProcessed(true)
+      onCompleted?.()
       toast.success({
         title: t('Refund initiated successfully'),
         description: t('Your Lightning refund will be processed shortly'),
@@ -236,6 +238,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
           refundAddress={refundAddress || ''}
           setIsProcessed={setIsProcessed}
           setRefundTxId={setRefundTxId}
+          onCompleted={onCompleted}
         />
       </Modal>
     )

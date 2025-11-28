@@ -4,6 +4,7 @@ import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
 
+import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -13,7 +14,7 @@ import { getTimeLeft } from '@/shared/utils/project/getAonData.ts'
 
 export const CampaignSuccessNotification = () => {
   const { project, isProjectOwner } = useProjectAtom()
-
+  const { queryProject } = useProjectAPI()
   const payoutRskModal = useModal()
 
   /** Calculate days left for claiming funds */
@@ -69,7 +70,7 @@ export const CampaignSuccessNotification = () => {
           </Button>
         </VStack>
       </Feedback>
-      <PayoutRsk {...payoutRskModal} project={project} />
+      <PayoutRsk {...payoutRskModal} project={project} onCompleted={() => queryProject.execute()} />
     </>
   )
 }
