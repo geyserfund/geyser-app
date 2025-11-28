@@ -37,6 +37,7 @@ type RefundRskProps = {
   rskAddress?: string
   privateKey?: string
   publicKey?: string
+  onCompleted?: () => void
 }
 
 /** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
@@ -48,6 +49,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   rskAddress,
   privateKey,
   publicKey,
+  onCompleted,
 }) => {
   const toast = useNotification()
 
@@ -127,6 +129,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       })
 
       setIsProcessed(true)
+      onCompleted?.()
       toast.success({
         title: t('Refund initiated successfully'),
         description: t('Your Lightning refund will be processed shortly'),
@@ -263,7 +266,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
 
   if (isWaitingConfirmation) {
     return (
-      <Modal isOpen={isOpen} size="lg" title={t('Please wait for swap confirmation')} onClose={() => {}}>
+      <Modal isOpen={isOpen} size="lg" title={t('Confirm your refund')} onClose={() => {}} noClose={true}>
         <BitcoinPayoutWaitingConfirmation
           isRefund={true}
           onClose={handleClose}
@@ -271,6 +274,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
           refundAddress={refundAddress || ''}
           setIsProcessed={setIsProcessed}
           setRefundTxId={setRefundTxId}
+          onCompleted={onCompleted}
         />
       </Modal>
     )
