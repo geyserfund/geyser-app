@@ -21,10 +21,25 @@ export type SwapContributionInfo = {
   contributionId?: number
 }
 
+/** Base type containing common fields across all swap types */
+type BaseSwapData = {
+  id: string
+  bip21?: string
+  amount?: number
+  fees?: number
+  contributionInfo?: SwapContributionInfo
+  privateKey?: string
+  publicKey?: string
+  address?: string
+  refundTx?: string
+  preimageHash?: string
+  preimageHex?: string
+  type?: RefundFileType
+}
+
 export type SwapData =
-  | {
+  | (BaseSwapData & {
       // Type for Submarine swaps (version === 3)
-      id: string
       asset: string
       version: number
       claimPublicKey: string
@@ -39,20 +54,9 @@ export type SwapData =
           output: string
         }
       }
-      bip21?: string
-      amount?: number
-      fees?: number
-      contributionInfo?: SwapContributionInfo
-      privateKey?: string
-      address?: string
-      refundTx?: string
-      preimageHash?: string
-      preimageHex?: string
-      type?: RefundFileType
-    }
-  | {
+    })
+  | (BaseSwapData & {
       // Type for BTC -> RSK chain swaps (version !== 3)
-      id: string
       referralId?: string
       version?: number
       claimDetails: {
@@ -78,21 +82,9 @@ export type SwapData =
         }
         bip21?: string
       }
-      bip21?: string
-
-      amount?: number
-      fees?: number
-      contributionInfo?: SwapContributionInfo
-      privateKey?: string
-      address?: string
-      refundTx?: string
-      preimageHash?: string
-      preimageHex?: string
-      type?: RefundFileType
-    }
-  | {
+    })
+  | (BaseSwapData & {
       // Type for RSK -> BTC swaps (version !== 3)
-      id: string
       referralId?: string
       version?: number
       lockupDetails: {
@@ -117,17 +109,7 @@ export type SwapData =
           }
         }
       }
-      bip21?: string
-      amount?: number
-      fees?: number
-      contributionInfo?: SwapContributionInfo
-      privateKey?: string
-      address?: string
-      refundTx?: string
-      preimageHash?: string
-      preimageHex?: string
-      type?: RefundFileType
-    }
+    })
 
 type SwapDataStructure = { [key: string]: SwapData }
 
@@ -165,6 +147,7 @@ export const parseSwapAtom = atom(
     const refundFile = JSON.parse(swap.swapJson)
     refundFile.privateKey =
       accountKeys?.privateKey || userAccountKeyPair?.privateKey || keys?.privateKey?.toString('hex')
+    refundFile.publicKey = accountKeys?.publicKey || userAccountKeyPair?.publicKey || keys?.publicKey?.toString('hex')
     refundFile.address = accountKeys?.address
 
     refundFile.contributionInfo = contributionInfo
@@ -193,6 +176,7 @@ export const parseOnChainToRskSwapAtom = atom(
 
     refundFile.privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || rskKeyPair?.privateKey
     refundFile.address = accountKeys?.address || userAccountKeys?.rskKeyPair.address || rskKeyPair?.address
+    refundFile.publicKey = accountKeys?.publicKey || userAccountKeyPair?.publicKey || rskKeyPair?.publicKey
 
     refundFile.contributionInfo = contributionInfo
     refundFile.type = RefundFileType.ON_CHAIN_TO_RSK
@@ -221,6 +205,7 @@ export const parseLightningToRskSwapAtom = atom(
 
     refundFile.privateKey = accountKeys?.privateKey || userAccountKeyPair?.privateKey || rskKeyPair?.privateKey
     refundFile.address = accountKeys?.address || userAccountKeys?.rskKeyPair.address || rskKeyPair?.address
+    refundFile.publicKey = accountKeys?.publicKey || userAccountKeyPair?.publicKey || rskKeyPair?.publicKey
 
     refundFile.contributionInfo = contributionInfo
     refundFile.type = RefundFileType.LIGHTNING_TO_RSK

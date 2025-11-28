@@ -27,6 +27,7 @@ export const lightningPayoutSchema = yup.object({
 /** Custom hook for Lightning payout form management */
 export const usePayoutWithLightningForm = (
   onSubmit: (data: LightningPayoutFormData, accountKeys: AccountKeys) => Promise<void> | void,
+  accountKeys?: AccountKeys,
 ) => {
   const toast = useNotification()
 
@@ -38,7 +39,7 @@ export const usePayoutWithLightningForm = (
     mode: 'onBlur',
     defaultValues: {
       lightningAddress: '',
-      accountPassword: '',
+      accountPassword: accountKeys ? '********' : '',
     },
   })
 
@@ -62,14 +63,18 @@ export const usePayoutWithLightningForm = (
     }
 
     try {
-      const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed, data.accountPassword)
+      if (!accountKeys) {
+        const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed, data.accountPassword)
 
-      const accountKeys = generateKeysFromSeedHex(decryptedSeed)
+        const accountKeys = generateKeysFromSeedHex(decryptedSeed)
 
-      setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
-      console.log('accountKeys', accountKeys)
+        setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
+        console.log('accountKeys', accountKeys)
 
-      onSubmit(data, accountKeys)
+        onSubmit(data, accountKeys)
+      } else {
+        onSubmit(data, accountKeys)
+      }
     } catch (error) {
       form.setError('accountPassword', { message: t('Invalid password') })
     }
