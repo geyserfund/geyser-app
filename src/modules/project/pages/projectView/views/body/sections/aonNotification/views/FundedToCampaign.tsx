@@ -9,7 +9,13 @@ import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { UserProjectContributionFragment } from '@/types/index.ts'
 
-export const FundedToCampaign = ({ contribution }: { contribution: UserProjectContributionFragment }) => {
+export const FundedToCampaign = ({
+  contribution,
+  onCompleted,
+}: {
+  contribution: UserProjectContributionFragment
+  onCompleted?: () => void
+}) => {
   const { project } = useProjectAtom()
   const { queryProject } = useProjectAPI()
 
@@ -38,7 +44,10 @@ export const FundedToCampaign = ({ contribution }: { contribution: UserProjectCo
         {...refundModal}
         contributionUUID={contribution.uuid || ''}
         projectId={project.id}
-        onCompleted={() => queryProject.execute()}
+        onCompleted={() => {
+          onCompleted?.()
+          queryProject.execute()
+        }}
       />
     </>
   )
