@@ -69,7 +69,7 @@ export const usePayoutWithBitcoinForm = (
   const enableSubmit = isValid && isDirty
 
   const handleFormSubmit = handleSubmit(async (data: BitcoinPayoutFormData) => {
-    if (!userAccountKeys?.encryptedSeed) {
+    if (!userAccountKeys?.encryptedSeed && !accountKeys) {
       toast.error({
         title: t('Unable to find your account keys'),
         description: t('Please refresh the page and try again.'),
@@ -79,7 +79,7 @@ export const usePayoutWithBitcoinForm = (
 
     try {
       if (!accountKeys) {
-        const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed, data.accountPassword || '')
+        const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed || '', data.accountPassword || '')
 
         const accountKeys = generateKeysFromSeedHex(decryptedSeed)
 
