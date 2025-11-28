@@ -35,15 +35,29 @@ type RefundRskProps = {
   contributionUUID: string
   projectId?: number
   rskAddress?: string
+  privateKey?: string
+  publicKey?: string
 }
 
 /** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
-export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contributionUUID, projectId, rskAddress }) => {
+export const RefundRsk: React.FC<RefundRskProps> = ({
+  isOpen,
+  onClose,
+  contributionUUID,
+  projectId,
+  rskAddress,
+  privateKey,
+  publicKey,
+}) => {
   const toast = useNotification()
 
   useUserAccountKeys()
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
+
+  const refundFileAccountKeys = privateKey
+    ? ({ derivationPath: '', address: privateKey, privateKey, publicKey } as AccountKeys)
+    : undefined
 
   const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.OnChain)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -195,8 +209,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
   }
 
   // Get form objects from both hooks
-  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit)
-  const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit)
+  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, refundFileAccountKeys)
+  const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit, refundFileAccountKeys)
 
   const handleClose = () => {
     setIsProcessed(false)
@@ -314,9 +328,17 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
           {/* Form Section */}
           <CardLayout w="full" p={6}>
             {selectedMethod === PayoutMethod.Lightning ? (
-              <LightningPayoutForm form={lightningForm.form} satsAmount={totalAmount} />
+              <LightningPayoutForm
+                form={lightningForm.form}
+                satsAmount={totalAmount}
+                disablePassword={Boolean(privateKey)}
+              />
             ) : (
-              <BitcoinPayoutForm form={bitcoinForm.form} satsAmount={totalAmount} />
+              <BitcoinPayoutForm
+                form={bitcoinForm.form}
+                satsAmount={totalAmount}
+                disablePassword={Boolean(privateKey)}
+              />
             )}
           </CardLayout>
 

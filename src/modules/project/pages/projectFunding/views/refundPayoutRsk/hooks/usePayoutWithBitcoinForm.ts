@@ -43,6 +43,7 @@ export const bitcoinPayoutSchema = yup.object({
 /** Custom hook for Bitcoin On-Chain payout form management */
 export const usePayoutWithBitcoinForm = (
   onSubmit: (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => Promise<void> | void,
+  accountKeys?: AccountKeys,
 ) => {
   const toast = useNotification()
 
@@ -54,7 +55,7 @@ export const usePayoutWithBitcoinForm = (
     mode: 'onBlur',
     defaultValues: {
       bitcoinAddress: '',
-      accountPassword: '',
+      accountPassword: accountKeys ? '********' : '',
     },
   })
 
@@ -78,14 +79,18 @@ export const usePayoutWithBitcoinForm = (
     }
 
     try {
-      const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed, data.accountPassword)
+      if (!accountKeys) {
+        const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed, data.accountPassword)
 
-      const accountKeys = generateKeysFromSeedHex(decryptedSeed)
+        const accountKeys = generateKeysFromSeedHex(decryptedSeed)
 
-      setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
-      console.log('accountKeys', accountKeys)
+        setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
+        console.log('accountKeys', accountKeys)
 
-      onSubmit(data, accountKeys)
+        onSubmit(data, accountKeys)
+      } else {
+        onSubmit(data, accountKeys)
+      }
     } catch (error) {
       form.setError('accountPassword', { message: t('Invalid password') })
     }

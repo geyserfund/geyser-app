@@ -1782,5 +1782,6 @@
   "A {{launchFee}} launch fee is required to publish your project. ": "A {{launchFee}} launch fee is required to publish your project. ",
   "The goal must be at least of 210,000 sats.": "The goal must be at least of 210,000 sats.",
   "Schedule launch (optional)": "Schedule launch (optional)",
-  "Exit Preview": "Exit Preview"
+  "Exit Preview": "Exit Preview",
+  "Failed to fetch pledge refunds": "Failed to fetch pledge refunds"
 }
