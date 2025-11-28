@@ -28,14 +28,7 @@ export const BitcoinPayoutForm: React.FC<BitcoinPayoutFormProps> = ({ form, sats
           <Body size="md" medium>
             {t('Enter your account password')}
           </Body>
-          <ControlledTextInput
-            label={t('Enter your account password')}
-            name="accountPassword"
-            control={control}
-            type="password"
-            placeholder=""
-            size="md"
-          />
+          <ControlledTextInput name="accountPassword" control={control} type="password" placeholder="" size="md" />
 
           <Body
             size="xs"

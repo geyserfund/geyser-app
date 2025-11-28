@@ -38,7 +38,7 @@ export const usePayoutWithLightningForm = (
     mode: 'onBlur',
     defaultValues: {
       lightningAddress: '',
-      accountPassword: accountKeys ? '********' : '',
+      accountPassword: '',
     },
   })
 

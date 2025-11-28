@@ -56,7 +56,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
 
   const refundFileAccountKeys = privateKey
-    ? ({ derivationPath: '', address: privateKey, privateKey, publicKey } as AccountKeys)
+    ? ({ derivationPath: '', address: rskAddress, privateKey, publicKey } as AccountKeys)
     : undefined
 
   const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.OnChain)
