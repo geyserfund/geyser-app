@@ -1,9 +1,12 @@
-import { HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
+import { HStack, Icon, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
+import { PiLockSimpleFill } from 'react-icons/pi'
 
 import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
+import { Body } from '@/shared/components/typography/Body.tsx'
 import {
   BitcoinLightingPaymentImageUrl,
   MasterCardPaymentImageUrl,
@@ -32,9 +35,15 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
     <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
       <ProjectBalanceDisplay />
 
-      <HStack w="full">
-        <ContributeButton flex="1" isWidget={isWidget} paymentMethods={paymentMethods} />
-      </HStack>
+      <VStack w="full">
+        <ContributeButton w="full" isWidget={isWidget} paymentMethods={paymentMethods} />
+        <HStack spacing={1} alignItems="center">
+          <Icon as={PiLockSimpleFill} fontSize="16px" color="primary1.9" />
+          <Body size="sm" light textAlign="center">
+            {paymentMethods.length > 1 ? t('Secure Bitcoin & Credit Card payments') : t('Secure Bitcoin payments')}
+          </Body>
+        </HStack>
+      </VStack>
     </CardLayout>
   )
 }
