@@ -1,4 +1,4 @@
-import { Button, ButtonProps, HStack, Image, Link } from '@chakra-ui/react'
+import { Button, ButtonProps, Link } from '@chakra-ui/react'
 // import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
@@ -84,11 +84,6 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
         {...props}
       >
         {t('Contribute')}
-        <HStack position="absolute" right="10px">
-          {paymentMethods?.map((method) => (
-            <Image src={method} alt={`${method} payment method image`} key={method} maxHeight="14px" />
-          ))}
-        </HStack>
       </Button>
     </>
   )
