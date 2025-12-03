@@ -101,6 +101,7 @@ export const secondaryColors = {
 export const socialColors = {
   twitter: '#000000',
   facebook: '#0866ff',
+  instagram: '#fd1979',
   google: '#4285F4',
   github: '#333333',
   nostr: '#670C8B',
@@ -110,6 +111,7 @@ export const socialColors = {
 export const socialColorsDark = {
   twitter: '#FFFFFF',
   facebook: '#0866ff',
+  instagram: '#fd1979',
   google: '#719DFD',
   github: '#DFDFDF',
   nostr: '#C54BFF',

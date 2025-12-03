@@ -1,9 +1,16 @@
-import { PiFacebookLogo, PiGithubLogo, PiXLogo } from 'react-icons/pi'
+import { PiFacebookLogo, PiGithubLogo, PiInstagramLogo, PiXLogo } from 'react-icons/pi'
 
 import { NostrIcon } from '@/shared/components/icons/NostrIcon.tsx'
 
 import { GoogleGLogoIcon } from '../../components/icons/svg/GoogleGLogoIcon'
-import { hasFacebookAccount, hasGithubAccount, hasGoogleAccount, hasNostrAccount, hasTwitterAccount } from '../../utils'
+import {
+  hasFacebookAccount,
+  hasGithubAccount,
+  hasGoogleAccount,
+  hasInstagramAccount,
+  hasNostrAccount,
+  hasTwitterAccount,
+} from '../../utils'
 import { SocialAccountType } from './type'
 
 type SocialConfigType = {
@@ -32,6 +39,11 @@ export const SocialConfig: { [key in SocialAccountType]: SocialConfigType } = {
     hasSocialAccount: (profile) => hasFacebookAccount(profile),
     icon: PiFacebookLogo,
     label: 'Facebook',
+  },
+  instagram: {
+    hasSocialAccount: (profile) => hasInstagramAccount(profile),
+    icon: PiInstagramLogo,
+    label: 'Instagram',
   },
   nostr: {
     hasSocialAccount: (profile) => hasNostrAccount(profile),

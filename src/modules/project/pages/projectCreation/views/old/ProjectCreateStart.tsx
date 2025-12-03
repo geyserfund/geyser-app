@@ -101,6 +101,7 @@ export const ProjectCreateStart = () => {
               <ConnectWithSocial accountType={SocialAccountType.twitter} w="full" />
               {!isMobile && <ConnectWithNostr w="full" />}
               <ConnectWithSocial accountType={SocialAccountType.facebook} w="full" />
+              <ConnectWithSocial accountType={SocialAccountType.instagram} w="full" />
               {/* <ConnectWithLightning w="full" /> */}
               <ConnectWithSocial accountType={SocialAccountType.github} w="full" />
             </VStack>

@@ -6,12 +6,14 @@ export enum ExternalAccountType {
   lightning = 'lnurl',
   fountain = 'Fountain',
   facebook = 'facebook',
+  instagram = 'instagram',
   google = 'google',
   github = 'github',
 }
 
 export enum SocialAccountType {
   facebook = 'facebook',
+  instagram = 'instagram',
   google = 'google',
   github = 'github',
   twitter = 'twitter',

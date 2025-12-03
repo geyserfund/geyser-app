@@ -1,6 +1,6 @@
 import { Link } from '@chakra-ui/react'
 import { nip19 } from 'nostr-tools'
-import { PiFacebookLogo, PiGithubLogo, PiGoogleLogo, PiLightning, PiXLogo } from 'react-icons/pi'
+import { PiFacebookLogo, PiGithubLogo, PiGoogleLogo, PiInstagramLogo, PiLightning, PiXLogo } from 'react-icons/pi'
 
 import { ExternalAccountType } from '../../../modules/auth'
 import { ExternalAccount } from '../../../types'
@@ -99,6 +99,21 @@ export const getExternalAccountsButtons = ({
               href: account.externalLink,
             },
           }),
+        })
+      }
+
+      const isInstagram = account.accountType === ExternalAccountType.instagram
+      if (isInstagram) {
+        returnAccounts.push({
+          key: ExternalAccountType.instagram,
+          icon: <PiInstagramLogo />,
+          username: account.externalUsername,
+          account,
+          props: {
+            as: Link,
+            isExternal: true,
+            href: `https://instagram.com/${account.externalUsername}`,
+          },
         })
       }
 

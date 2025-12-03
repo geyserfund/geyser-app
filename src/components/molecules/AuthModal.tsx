@@ -19,7 +19,14 @@ import {
   TWITTER_AUTH_ATTEMPT_MESSAGE_TIME_MILLIS,
 } from '../../modules/auth/ConnectWithSocial'
 import { useAuthToken } from '../../modules/auth/useAuthToken.tsx'
-import { hasFacebookAccount, hasGithubAccount, hasGoogleAccount, hasNostrAccount, hasTwitterAccount } from '../../utils'
+import {
+  hasFacebookAccount,
+  hasGithubAccount,
+  hasGoogleAccount,
+  hasInstagramAccount,
+  hasNostrAccount,
+  hasTwitterAccount,
+} from '../../utils'
 import { Caption } from '../typography'
 
 export type AuthModalAdditionalprops = {
@@ -30,6 +37,7 @@ export type AuthModalAdditionalprops = {
   showNostr?: boolean
   showLightning?: boolean
   showFacebook?: boolean
+  showInstagram?: boolean
   showGoogle?: boolean
   showGithub?: boolean
   privateRoute?: boolean
@@ -45,6 +53,7 @@ const ConnectAccounts = ({
   onSuccess,
   showTwitter,
   showFacebook,
+  showInstagram,
   showNostr,
   showLightning,
   showGoogle,
@@ -83,11 +92,15 @@ const ConnectAccounts = ({
         {!hasTwitterAccount(user) && showTwitter && (
           <ConnectWithSocial accountType={SocialAccountType.twitter} onClose={handleClose} />
         )}
+        {!hasInstagramAccount(user) && showInstagram && (
+          <ConnectWithSocial accountType={SocialAccountType.instagram} onClose={handleClose} />
+        )}
 
         <HStack w="full" spacing="20px">
           {!hasFacebookAccount(user) && showFacebook && (
             <ConnectWithSocial accountType={SocialAccountType.facebook} onClose={handleClose} flex={1} />
           )}
+
           {!hasGoogleAccount(user) && showGoogle && (
             <ConnectWithSocial accountType={SocialAccountType.google} onClose={handleClose} flex={1} />
           )}
@@ -127,6 +140,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
     showNostr = true,
     showLightning = true,
     showFacebook = true,
+    showInstagram = true,
     showGoogle = true,
     showGithub = true,
     privateRoute = false,
@@ -185,6 +199,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
               showTwitter={showTwitter}
               showLightning={showLightning}
               showFacebook={showFacebook}
+              showInstagram={showInstagram}
               showGoogle={showGoogle}
               showGithub={showGithub}
             />

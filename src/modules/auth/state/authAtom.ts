@@ -59,6 +59,7 @@ export const defaultLoginAdditionalProps: AuthModalAdditionalprops = {
   showNostr: true,
   showLightning: true,
   showFacebook: true,
+  showInstagram: true,
   showGoogle: true,
   showGithub: true,
   privateRoute: false,

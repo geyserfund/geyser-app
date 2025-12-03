@@ -11,6 +11,7 @@ const SocialAccountType = [
   ExternalAccountType.twitter,
   ExternalAccountType.nostr,
   ExternalAccountType.facebook,
+  ExternalAccountType.instagram,
   ExternalAccountType.github,
 ]
 

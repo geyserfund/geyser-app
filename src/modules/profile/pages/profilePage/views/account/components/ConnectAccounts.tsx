@@ -16,6 +16,7 @@ import {
   hasFacebookAccount,
   hasGithubAccount,
   hasGoogleAccount,
+  hasInstagramAccount,
   hasLightningAccount,
   hasNostrAccount,
   hasTwitterAccount,
@@ -40,6 +41,8 @@ export const ConnectAccounts = ({ user }: { user: UserForProfilePageFragment }) 
 
   const displayFacebookButton = !hasFacebookAccount(user)
 
+  const displayInstagramButton = !hasInstagramAccount(user)
+
   const displayGoogleButton = !hasGoogleAccount(user)
 
   const displayGithubButton = !hasGithubAccount(user)
@@ -50,7 +53,8 @@ export const ConnectAccounts = ({ user }: { user: UserForProfilePageFragment }) 
     displayLightningButton ||
     displayFacebookButton ||
     displayGoogleButton ||
-    displayGithubButton
+    displayGithubButton ||
+    displayInstagramButton
 
   if (!canConnectAccount || !isViewingOwnProfile) {
     return null
@@ -70,6 +74,7 @@ export const ConnectAccounts = ({ user }: { user: UserForProfilePageFragment }) 
             {displayTwitterButton && <ConnectWithSocial accountType={SocialAccountType.twitter} w="full" />}
             {displayNostrButton && <ConnectWithNostr w="full" />}
             {displayFacebookButton && <ConnectWithSocial accountType={SocialAccountType.facebook} w="full" />}
+            {displayInstagramButton && <ConnectWithSocial accountType={SocialAccountType.instagram} w="full" />}
             {displayGoogleButton && <ConnectWithSocial accountType={SocialAccountType.google} w="full" />}
 
             {displayLightningButton && <ConnectWithLightning w="full" />}

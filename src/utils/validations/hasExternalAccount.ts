@@ -33,6 +33,16 @@ export const hasFacebookAccount = (user: UserAccount) => {
   })
 }
 
+export const hasInstagramAccount = (user: UserAccount) => {
+  if (!user || !user.id) {
+    return false
+  }
+
+  return (user.externalAccounts || []).some((account) => {
+    return account?.accountType === ExternalAccountType.instagram
+  })
+}
+
 export const hasGoogleAccount = (user: UserAccount) => {
   if (!user || !user.id) {
     return false

@@ -1084,6 +1084,10 @@ export const platformRoutes: RouteObject[] = [
     Component: ExternalAuthSuccess,
   },
   {
+    path: '/auth/instagram',
+    Component: ExternalAuthSuccess,
+  },
+  {
     path: '/auth/google',
     Component: ExternalAuthSuccess,
   },

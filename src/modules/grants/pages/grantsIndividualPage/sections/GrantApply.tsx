@@ -180,6 +180,7 @@ export const LoginForGrant = () => {
       <Body>{t('To apply to a grant you need to first login into Geyser.')}</Body>
       <VStack w="full">
         <ConnectWithSocial accountType={SocialAccountType.facebook} />
+        <ConnectWithSocial accountType={SocialAccountType.instagram} />
         <ConnectWithSocial accountType={SocialAccountType.github} />
         <ConnectWithSocial accountType={SocialAccountType.twitter} />
         <ConnectWithNostr />

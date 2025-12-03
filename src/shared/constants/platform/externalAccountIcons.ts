@@ -1,4 +1,4 @@
-import { BsFacebook, BsGithub, BsGoogle } from 'react-icons/bs'
+import { BsFacebook, BsGithub, BsGoogle, BsInstagram } from 'react-icons/bs'
 import { RiTwitterXLine } from 'react-icons/ri'
 
 import { NostrIcon } from '@/shared/components/icons'
@@ -10,6 +10,7 @@ export const externalAccountIconMap = {
   [ExternalAccountType.github]: BsGithub,
   [ExternalAccountType.google]: BsGoogle,
   [ExternalAccountType.facebook]: BsFacebook,
+  [ExternalAccountType.instagram]: BsInstagram,
   [ExternalAccountType.twitter]: RiTwitterXLine,
   [ExternalAccountType.lightning]: BoltSvgIcon,
   [ExternalAccountType.nostr]: NostrIcon,
