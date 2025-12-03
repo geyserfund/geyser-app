@@ -4177,6 +4177,7 @@ export type RskToLightningSwapPaymentDetails = {
 };
 
 export type RskToLightningSwapPaymentDetailsBoltzInput = {
+  preimageHash: Scalars['String']['input'];
   refundPublicKey: Scalars['String']['input'];
 };
 

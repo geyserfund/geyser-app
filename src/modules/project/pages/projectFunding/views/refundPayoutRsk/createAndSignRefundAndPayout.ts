@@ -70,6 +70,8 @@ export const createEIP712MessageForAon = (
   amount: number,
   nonce: number,
   deadline: number,
+  processingFee: number,
+  preimageHash: string,
 ): string => {
   // Get domain separator
   const domainSeparator = Buffer.from(createAonDomainSeparator(aonContractAddress).slice(2), 'hex')
@@ -77,8 +79,8 @@ export const createEIP712MessageForAon = (
   // Create struct hash based on message type
   const structTypeString =
     messageType === EIP712MessageType.Claim
-      ? 'Claim(address creator,address swapContract,uint256 amount,uint256 nonce,uint256 deadline)'
-      : 'Refund(address contributor,address swapContract,uint256 amount,uint256 nonce,uint256 deadline)'
+      ? 'Claim(address creator,address swapContract,uint256 amount,uint256 nonce,uint256 deadline,uint256 processingFee,bytes32 preimageHash)'
+      : 'Refund(address contributor,address swapContract,uint256 amount,uint256 nonce,uint256 deadline,uint256 processingFee,bytes32 preimageHash)'
 
   const structTypeHash = Buffer.from(keccak_256(structTypeString))
 
@@ -88,6 +90,8 @@ export const createEIP712MessageForAon = (
   const amountBuffer = numberToBuffer32(amount)
   const nonceBuffer = numberToBuffer32(nonce)
   const deadlineBuffer = numberToBuffer32(deadline)
+  const processingFeeBuffer = numberToBuffer32(processingFee)
+  const preimageHashBuffer = Buffer.from(preimageHash, 'hex')
 
   // Concatenate all struct components (mimics Solidity's abi.encode)
   const structEncoded = Buffer.concat([
@@ -97,6 +101,8 @@ export const createEIP712MessageForAon = (
     amountBuffer,
     nonceBuffer,
     deadlineBuffer,
+    processingFeeBuffer,
+    preimageHashBuffer,
   ])
 
   // Hash the struct
@@ -118,6 +124,8 @@ export const createClaimMessage = (
   amount: number,
   nonce: number,
   deadline: number,
+  processingFee: number,
+  preimageHash: string,
 ) => {
   return createEIP712MessageForAon(
     EIP712MessageType.Claim,
@@ -127,6 +135,8 @@ export const createClaimMessage = (
     amount,
     nonce,
     deadline,
+    processingFee,
+    preimageHash,
   )
 }
 
@@ -138,6 +148,8 @@ export const createRefundMessage = (
   amount: number,
   nonce: number,
   deadline: number,
+  processingFee: number,
+  preimageHash: string,
 ) => {
   return createEIP712MessageForAon(
     EIP712MessageType.Refund,
@@ -147,6 +159,8 @@ export const createRefundMessage = (
     amount,
     nonce,
     deadline,
+    processingFee,
+    preimageHash,
   )
 }
 
@@ -158,10 +172,31 @@ export const createAndSignClaimMessage = (props: {
   amount: number
   nonce: number
   deadline: number
+  processingFee: number
+  preimageHash: string
   rskPrivateKey: string
 }) => {
-  const { aonContractAddress, swapContractAddress, creatorAddress, amount, nonce, deadline, rskPrivateKey } = props
-  const digest = createClaimMessage(aonContractAddress, swapContractAddress, creatorAddress, amount, nonce, deadline)
+  const {
+    aonContractAddress,
+    swapContractAddress,
+    creatorAddress,
+    amount,
+    nonce,
+    deadline,
+    processingFee,
+    preimageHash,
+    rskPrivateKey,
+  } = props
+  const digest = createClaimMessage(
+    aonContractAddress,
+    swapContractAddress,
+    creatorAddress,
+    amount,
+    nonce,
+    deadline,
+    processingFee,
+    preimageHash,
+  )
   return signEIP712Message(digest, rskPrivateKey)
 }
 
@@ -173,9 +208,21 @@ export const createAndSignRefundMessage = (props: {
   amount: number
   nonce: number
   deadline: number
+  processingFee: number
+  preimageHash: string
   rskPrivateKey: string
 }) => {
-  const { aonContractAddress, swapContractAddress, contributorAddress, amount, nonce, deadline, rskPrivateKey } = props
+  const {
+    aonContractAddress,
+    swapContractAddress,
+    contributorAddress,
+    amount,
+    nonce,
+    deadline,
+    processingFee,
+    preimageHash,
+    rskPrivateKey,
+  } = props
   const digest = createRefundMessage(
     aonContractAddress,
     swapContractAddress,
@@ -183,6 +230,8 @@ export const createAndSignRefundMessage = (props: {
     amount,
     nonce,
     deadline,
+    processingFee,
+    preimageHash,
   )
   console.log('=== Production Refund Message Debug ===')
   console.log('AON Contract Address:', aonContractAddress)
@@ -205,6 +254,8 @@ export const createAndSignEIP712Message = (
   amount: number,
   nonce: number,
   deadline: number,
+  processingFee: number,
+  preimageHash: string,
   rskPrivateKey: string,
 ) => {
   const digest = createEIP712MessageForAon(
@@ -215,6 +266,8 @@ export const createAndSignEIP712Message = (
     amount,
     nonce,
     deadline,
+    processingFee,
+    preimageHash,
   )
   return signEIP712Message(digest, rskPrivateKey)
 }
