@@ -96,6 +96,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
+      const { preimageHash, preimageHex } = generatePreImageHash()
+
       const amount =
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
         (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
@@ -107,6 +109,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         amount: satsToWei(amount),
         nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
         deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
+        processingFee: pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0,
+        preimageHash,
         rskPrivateKey: accountKeys.privateKey,
       })
 
@@ -121,10 +125,21 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
                 lightningAddress: data.lightningAddress,
                 boltz: {
                   refundPublicKey: accountKeys.publicKey,
+                  preimageHash,
                 },
               },
             },
           },
+        },
+        onCompleted(data) {
+          if (data.pledgeRefundInitiate.swap) {
+            const swapObj = JSON.parse(data.pledgeRefundInitiate.swap)
+            swapObj.privateKey = accountKeys.privateKey
+            swapObj.preimageHash = preimageHash
+            swapObj.preimageHex = preimageHex
+            swapObj.paymentId = data.pledgeRefundInitiate.payment?.id
+            setSwapData(swapObj)
+          }
         },
       })
 
@@ -163,6 +178,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         amount: satsToWei(amount),
         nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
         deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
+        processingFee: pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0,
+        preimageHash,
         rskPrivateKey: accountKeys.privateKey,
       })
 
