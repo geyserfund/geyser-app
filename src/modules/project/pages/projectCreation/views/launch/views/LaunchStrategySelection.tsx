@@ -58,8 +58,8 @@ export const LaunchStrategySelection = ({
           isSelected={isGrowthLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.GROWTH_LAUNCH)}
           title={t('Growth Launch')}
-          subtitle={t('visibility boost with expert feedback')}
-          price={t('$50')}
+          subtitle={t('visibility boost')}
+          price={t('$60')}
           highlightedText={t('Picked by 40% of Top 100 projects on Geyser')}
           points={[
             [t('Landing Page Feature'), t('1 week front-page spotlight')],
@@ -68,10 +68,6 @@ export const LaunchStrategySelection = ({
               t('get featured at the top of our monthly newsletter going out to 5000+ subscribers'),
             ],
             [t('Social Media post'), t('1 social media post on Geyser’s X account with 15k+ followers')],
-            [
-              t('Project feedback'),
-              t('Geyser Team Expert provides 1-time feedback on your project story and structure'),
-            ],
           ]}
         />
         <ProjectCreateStrategyCard
@@ -79,9 +75,9 @@ export const LaunchStrategySelection = ({
           isSelected={isProLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.PRO_LAUNCH)}
           title={t('Pro Launch')}
-          subtitle={t('hands-on support + network amplification')}
+          subtitle={t('Network amplification + Expert feedback')}
           body={t('Limited to 5 per month, subject to selection')}
-          price={t('$350')}
+          price={t('$90')}
           points={[
             [t('Everything in Growth')],
             [
@@ -89,12 +85,8 @@ export const LaunchStrategySelection = ({
               t('Your project featured in a dedicated email sent to Geyser users most interested in your category'),
             ],
             [
-              t('Personalised Launch Strategy'),
-              t('a one-on-one session to design the perfect launch plan for your project'),
-            ],
-            [
-              t('Dedicated support'),
-              t('one month of hands-on guidance from our team to keep you on path for a successful raise'),
+              t('Project feedback'),
+              t('Geyser Team Expert provides 1-time feedback on your project story and structure'),
             ],
             [t('Exclusive network'), t('tap into our podcasters, media, and creator partners')],
           ]}

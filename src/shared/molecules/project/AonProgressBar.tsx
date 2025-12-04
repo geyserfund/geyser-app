@@ -2,7 +2,7 @@ import { HStack, StackProps } from '@chakra-ui/react'
 
 import { ProgressBar, ProgressBarProps } from '@/components/ui/ProgressBar.tsx'
 import { ProjectForLandingPageFragment } from '@/types/index.ts'
-import { useProjectBalance } from '@/shared/utils/hooks/useProjectBalance'
+import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit'
 
 export const AonProgressBar = ({
   project,
@@ -12,7 +12,7 @@ export const AonProgressBar = ({
   project: ProjectForLandingPageFragment
   wrapperProps?: StackProps
 } & ProgressBarProps) => {
-  const { getAonGoalPercentage } = useProjectBalance(project)
+  const { getAonGoalPercentage } = useProjectToolkit(project)
   const percentage = getAonGoalPercentage()
 
   if (!project) {
