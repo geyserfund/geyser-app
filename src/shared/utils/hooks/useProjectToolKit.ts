@@ -2,10 +2,10 @@ import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { ProjectAonGoalStatus, ProjectForLandingPageFragment, Satoshis } from '@/types/index.ts'
 
 import { centsToDollars } from '../../../utils/index.ts'
-import { isAllOrNothing } from '../../../utils/validations/project.ts'
+import { isActive, isAllOrNothing } from '../../../utils/validations/project.ts'
 
-export const useProjectBalance = (
-  project: Pick<ProjectForLandingPageFragment, 'balance' | 'balanceUsdCent' | 'aonGoal' | 'fundingStrategy'>,
+export const useProjectToolkit = (
+  project: Pick<ProjectForLandingPageFragment, 'balance' | 'balanceUsdCent' | 'aonGoal' | 'fundingStrategy' | 'status'>,
 ) => {
   const { getUSDCentsAmount } = useBTCConverter()
 
@@ -43,8 +43,20 @@ export const useProjectBalance = (
     return 0
   }
 
+  const isFundingDisabled = () => {
+    const isAon = isAllOrNothing(project)
+    const isAonActive = isAon && project.aonGoal?.status === ProjectAonGoalStatus.Active
+
+    if (isAon && isAonActive) {
+      return true
+    }
+
+    return !isActive(project.status)
+  }
+
   return {
     getProjectBalance,
     getAonGoalPercentage,
+    isFundingDisabled,
   }
 }

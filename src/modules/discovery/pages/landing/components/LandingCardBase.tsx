@@ -13,7 +13,7 @@ import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { useProjectBalance } from '@/shared/utils/hooks/useProjectBalance.ts'
+import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
 import { isAllOrNothing, isInactive } from '@/utils'
 
@@ -43,7 +43,7 @@ export const LandingCardBase = ({
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
 
-  const { getProjectBalance, getAonGoalPercentage } = useProjectBalance(project)
+  const { getProjectBalance, getAonGoalPercentage } = useProjectToolkit(project)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
