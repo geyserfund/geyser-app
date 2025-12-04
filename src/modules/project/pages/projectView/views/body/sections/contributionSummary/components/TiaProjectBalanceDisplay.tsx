@@ -4,7 +4,7 @@ import { t } from 'i18next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSwipeable } from 'react-swipeable'
 
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 
 import { SkeletonLayout } from '../../../../../../../../../shared/components/layouts'
 import { Body } from '../../../../../../../../../shared/components/typography'

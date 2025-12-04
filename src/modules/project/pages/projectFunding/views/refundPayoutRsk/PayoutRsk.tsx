@@ -77,6 +77,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
+      const { preimageHash, preimageHex } = generatePreImageHash()
+
       const amount = payoutRequestData?.payoutRequest.payout.amount || 0
       const { signature } = createAndSignClaimMessage({
         aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
@@ -85,6 +87,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
         amount: satsToWei(amount),
         nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
         deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
+        processingFee: 0,
+        preimageHash,
         rskPrivateKey: accountKeys.privateKey,
       })
 
@@ -98,10 +102,21 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
                 lightningAddress: data.lightningAddress,
                 boltz: {
                   refundPublicKey: accountKeys.publicKey,
+                  preimageHash,
                 },
               },
             },
           },
+        },
+        onCompleted(data) {
+          if (data.payoutInitiate.swap) {
+            const swapObj = JSON.parse(data.payoutInitiate.swap)
+            swapObj.privateKey = accountKeys.privateKey
+            swapObj.preimageHash = preimageHash
+            swapObj.preimageHex = preimageHex
+            swapObj.paymentId = data.payoutInitiate.payment?.id
+            setSwapData(swapObj)
+          }
         },
       })
 
@@ -138,6 +153,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
         amount: satsToWei(amount),
         nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
         deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
+        processingFee: 0,
+        preimageHash,
         rskPrivateKey: accountKeys.privateKey,
       })
 

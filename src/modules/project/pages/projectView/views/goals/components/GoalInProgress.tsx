@@ -7,7 +7,7 @@ import { Link } from 'react-router'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { getPath } from '@/shared/constants'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 
 import { Body } from '../../../../../../../shared/components/typography'
 import { ProjectGoalCurrency, ProjectGoalFragment } from '../../../../../../../types'

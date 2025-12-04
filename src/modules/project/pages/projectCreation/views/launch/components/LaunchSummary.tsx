@@ -98,7 +98,7 @@ export const LaunchSummary = () => {
             <Body medium>{t('Launch Time')}: </Body>
             <Body bold>{getLaunchTimeDisplay()}</Body>
             <Body size="sm" bold muted>
-              ( {t('You must launch manually at the set time.')} )
+              ( {t('You must launch manually.')} )
             </Body>
           </HStack>
         )}

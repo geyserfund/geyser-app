@@ -81,6 +81,11 @@ export const PaymentPassword = ({ onComplete }: { onComplete: () => void }) => {
         {titles}
       </Body>
       {renderForm()}
+      <Body size="sm" light>
+        {t(
+          'Note: If this project does not reach its goal or the creator fails to claim the funds, you can request a refund for upto 30 days after the campaign fails.',
+        )}
+      </Body>
       <Button width="200px" size="lg" colorScheme="primary1" onClick={currentForm.onSubmit}>
         {t('Continue')}
       </Button>

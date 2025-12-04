@@ -1,4 +1,4 @@
-import { Button, Icon, VStack } from '@chakra-ui/react'
+import { Button, Icon, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiRocket } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
@@ -75,11 +75,21 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
 
   return (
     <ProjectCreationPageWrapper title={t('Ready to launch!')} backButtonProps={backProps} hideContinueButton={true}>
-      <Body>
-        {t(
-          'Your project is ready to launch! Review everything one more time and click "Launch Now" to make your project live.',
-        )}
-      </Body>
+      <VStack w="full" spacing={0}>
+        <Image
+          src={
+            'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/accepted_illustration1.png'
+          }
+          alt={t('Launch Now')}
+          height="200px"
+        />
+        <Body>
+          {t(
+            'Your project is ready to launch! Review everything one more time and click "Launch Now" to make your project live.',
+          )}
+        </Body>
+      </VStack>
+
       <LaunchSummary />
 
       <VStack w="full" alignItems="start" spacing={8}>

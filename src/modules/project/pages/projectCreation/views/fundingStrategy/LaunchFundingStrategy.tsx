@@ -20,12 +20,12 @@ const options = {
     title: t('All-or-nothing'),
     body: t('Receive funds only if you reach your goal by the deadline. Builds momentum and trust.'),
     howDoesItWork: t(
-      'You set your goal and timeline (1–60 days). If the goal is reached, funds go to your wallet. If not, contributors get refunds and the project closes.',
+      'Set a funding goal and choose a deadline from 1 to 60 days. If you hit your goal, the funds unlock and you have 30 days to withdraw them. If not, contributors can claim refunds and the campaign closes.',
     ),
     recommendedFor: t('Prototypes or projects needing a minimum amount to move forward.'),
     benefit: t('Encourages trust and often leads to more contributions.'),
     disadvantage: t(
-      'Reaching the goal can be a challenge, and not reaching it means you will not receive the funds. There will also be a time limit to reach that goal (ranging from 1 to 3 months).',
+      'Reaching the goal can be a challenge, and not reaching it means you will not receive the funds. You can set the funding period between 1 and 60 days.',
     ),
   },
   [ProjectFundingStrategy.TakeItAll]: {
@@ -87,12 +87,12 @@ export const LaunchFundingStrategy = () => {
         <Body>{t('Pick how you would like to raise funds, Unsure which to pick? We can help you choose.')}</Body>
         <HStack w="full" alignItems="stretch">
           <OptionButton
-            fundingStrategy={ProjectFundingStrategy.AllOrNothing}
+            fundingStrategy={ProjectFundingStrategy.TakeItAll}
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
           />
           <OptionButton
-            fundingStrategy={ProjectFundingStrategy.TakeItAll}
+            fundingStrategy={ProjectFundingStrategy.AllOrNothing}
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
           />

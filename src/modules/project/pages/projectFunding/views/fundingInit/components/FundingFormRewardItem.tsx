@@ -10,7 +10,7 @@ import { useRewardBuy } from '@/modules/project/pages/projectView/hooks'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 
 import { ProjectRewardFragment, RewardCurrency } from '../../../../../../../types'
 

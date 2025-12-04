@@ -7,7 +7,7 @@ import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { PostPageProjectRewardFragment, ProjectPostViewFragment, RewardCurrency, Satoshis, USDCents } from '@/types'
 
 import { GoalInProgress } from '../../goals/components'

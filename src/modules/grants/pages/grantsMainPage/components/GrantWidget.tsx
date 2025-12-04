@@ -3,7 +3,7 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { GrantBalanceCurrency } from '@/modules/grants/utils/constants'
 import { Body } from '@/shared/components/typography'
 import { useCountdown } from '@/shared/hooks/useCountdown'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { Grant, GrantStatusEnum } from '@/types'
 import { centsToDollars, getFormattedDate, getShortAmountLabel } from '@/utils'
 

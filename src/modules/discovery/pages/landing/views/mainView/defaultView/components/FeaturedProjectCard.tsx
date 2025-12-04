@@ -70,8 +70,8 @@ export const FeaturedProjectCard = ({
       >
         {isAON && project.aonGoal && (
           <VStack w="full" alignItems="start" spacing={1}>
-            <AonProgressBar aonGoal={project.aonGoal} />
-            <AonProgressData aonGoal={project.aonGoal} />
+            <AonProgressBar project={project} />
+            <AonProgressData project={project} />
           </VStack>
         )}
       </FeaturedCardLayout>

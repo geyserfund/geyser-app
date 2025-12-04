@@ -2,7 +2,6 @@ import { Box, Button, HStack, Tooltip, useDisclosure, VStack } from '@chakra-ui/
 import { t } from 'i18next'
 import { useNavigate } from 'react-router'
 
-import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
 import { AnimatedFire } from '@/shared/components/display/AnimatedFire.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
@@ -14,11 +13,12 @@ import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { aonProjectTimeLeft, getAonGoalPercentage } from '@/shared/utils/project/getAonData.ts'
-import { centsToDollars, isAllOrNothing, isInactive } from '@/utils'
+import { useProjectBalance } from '@/shared/utils/hooks/useProjectBalance.ts'
+import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
+import { isAllOrNothing, isInactive } from '@/utils'
 
 import { SkeletonLayout } from '../../../../../shared/components/layouts'
-import { ContributionsSummary, ProjectForLandingPageFragment, Satoshis } from '../../../../../types'
+import { ContributionsSummary, ProjectForLandingPageFragment } from '../../../../../types'
 import { AllOrNothingIcon } from './AllOrNothingIcon.tsx'
 
 export interface LandingCardBaseProps extends CardLayoutProps {
@@ -42,7 +42,9 @@ export const LandingCardBase = ({
   const inActive = isInactive(project.status)
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
-  const { getUSDAmount } = useBTCConverter()
+
+  const { getProjectBalance, getAonGoalPercentage } = useProjectBalance(project)
+
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
@@ -61,12 +63,9 @@ export const LandingCardBase = ({
 
   const isAonProject = isAllOrNothing(project)
 
-  const contributionAmount =
-    project.contributionSummary?.contributionsTotalUsd || isAonProject
-      ? getUSDAmount(project.aonGoal?.balance as Satoshis)
-      : centsToDollars(project.balanceUsdCent)
+  const contributionAmount = project.contributionSummary?.contributionsTotalUsd || getProjectBalance().usd
 
-  const percentage = getAonGoalPercentage(project.aonGoal)
+  const percentage = getAonGoalPercentage()
   const timeLeft = aonProjectTimeLeft(project.aonGoal)
 
   const fires = getFires(contributionAmount)
@@ -257,7 +256,7 @@ export const LandingCardBase = ({
         </Box>
         {isAonProject && (
           <AonProgressBar
-            aonGoal={project.aonGoal}
+            project={project}
             height={getResponsiveValue({ base: '10px', lg: '14px' })}
             wrapperProps={{
               position: 'absolute',

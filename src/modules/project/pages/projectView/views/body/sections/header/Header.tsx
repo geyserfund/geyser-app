@@ -24,7 +24,7 @@ import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { ID } from '@/shared/constants/components/id.ts'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 
 import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
 import { Body, H1 } from '../../../../../../../../shared/components/typography'

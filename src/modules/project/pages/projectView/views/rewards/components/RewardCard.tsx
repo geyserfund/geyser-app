@@ -11,7 +11,7 @@ import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { ProjectRewardFragment, ProjectStatus, RewardCurrency } from '@/types'
 
 import { ProjectRewardShippingEstimate } from '../../../../../forms/shippingConfigForm/ProjectRewardShippingEstimate'
