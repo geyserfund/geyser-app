@@ -10,7 +10,7 @@ export enum FormatCurrencyType {
   Usd = 'USD',
 }
 
-type TCurrency = 'BTCSAT' | 'USDCENT' | 'USD'
+export type TCurrency = 'BTCSAT' | 'USDCENT' | 'USD'
 
 /**
  * Format given amount with given currency type

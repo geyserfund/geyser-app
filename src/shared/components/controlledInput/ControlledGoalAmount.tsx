@@ -4,7 +4,7 @@ import { useController, UseControllerProps } from 'react-hook-form'
 
 import { ProjectGoalCurrency } from '../../../types'
 import { commaFormatted } from '../../utils/formatData'
-import { useCurrencyFormatter } from '../../utils/hooks'
+import { useCurrencyFormatter } from '../../utils/hooks/useCurrencyFormatter.ts'
 import { FieldContainer } from '../form'
 import { Body } from '../typography'
 

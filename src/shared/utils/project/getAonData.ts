@@ -47,13 +47,3 @@ export const getTimeLeft = (aonEndDate: DateTime) => {
 
   return null // No time left
 }
-
-export const getAonGoalPercentage = (
-  aonGoal?: Pick<ProjectAonGoalForLandingPageFragment, 'goalAmount' | 'balance'> | null,
-) => {
-  if (!aonGoal || !aonGoal?.goalAmount || !aonGoal.balance) {
-    return 0
-  }
-
-  return Math.round((aonGoal.balance / aonGoal.goalAmount) * 100)
-}

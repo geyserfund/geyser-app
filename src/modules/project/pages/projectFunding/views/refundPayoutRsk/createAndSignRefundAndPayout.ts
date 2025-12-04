@@ -37,7 +37,7 @@ export const createAonDomainSeparator = (contractAddress: string): string => {
 
   // Convert contract address to 32-byte representation (left-padded with zeros)
   const addressBuffer = Buffer.alloc(32)
-  const cleanAddress = contractAddress.replace('0x', '')
+  const cleanAddress = contractAddress.replace('0x', '').trim()
 
   // Validate address format
   if (cleanAddress.length !== 40) {

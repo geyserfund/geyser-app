@@ -109,7 +109,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         amount: satsToWei(amount),
         nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
         deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
-        processingFee: pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0,
+        processingFee: satsToWei(pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0),
         preimageHash,
         rskPrivateKey: accountKeys.privateKey,
       })
@@ -178,7 +178,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         amount: satsToWei(amount),
         nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
         deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
-        processingFee: pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0,
+        processingFee: satsToWei(pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0),
         preimageHash,
         rskPrivateKey: accountKeys.privateKey,
       })

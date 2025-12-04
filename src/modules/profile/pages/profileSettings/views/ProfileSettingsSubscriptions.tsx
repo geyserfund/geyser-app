@@ -18,7 +18,7 @@ import { useState } from 'react'
 import { useAuthContext } from '@/context'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import {
   useCancelUserSubscriptionMutation,
   UserSubscriptionFragment,

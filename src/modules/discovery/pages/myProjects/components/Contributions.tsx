@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router'
 import { useGoalsModal } from '@/modules/project/pages/projectView/hooks'
 import { Body } from '@/shared/components/typography'
 import { getPath, NoContributionImageUrl } from '@/shared/constants'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { ProjectGoalCurrency, ProjectGoalFragment, ProjectGoalStatus } from '@/types'
 import { commaFormatted, useMobileMode } from '@/utils'
 

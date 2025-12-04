@@ -8,7 +8,7 @@ import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { BronzeMedalUrl, GoldMedalUrl, SilverMedalUrl } from '@/shared/constants/platform/url'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { GlobalProjectLeaderboardRow, LeaderboardPeriod } from '@/types'
 
 import { ScrollableList } from './ScrollableList'
