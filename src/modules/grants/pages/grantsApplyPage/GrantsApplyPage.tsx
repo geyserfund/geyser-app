@@ -37,6 +37,7 @@ import {
   useCreateWalletMutation,
   useGrantApplyMutation,
   useProjectPublishMutation,
+  useUserEmailUpdateMutation,
   WalletResourceType,
 } from '@/types/index.ts'
 import { toMediumImageUrl, useNotification } from '@/utils/index.ts'
@@ -118,6 +119,8 @@ export const GrantsApplyPage = () => {
 
   const [createProject, { loading: createProjectLoading, data: createProjectData }] = useCreateProjectMutation()
 
+  const [updateUserEmail, { loading: updateUserEmailLoading }] = useUserEmailUpdateMutation()
+
   const [projectPublish, { loading: projectPublishLoading }] = useProjectPublishMutation()
 
   const [grantApply, { loading: grantApplyLoading }] = useGrantApplyMutation()
@@ -177,7 +180,7 @@ export const GrantsApplyPage = () => {
     setValue('thumbnailImage', '', { shouldDirty: true, shouldValidate: true })
   }
 
-  const onSubmit = (data: grantApplicationVariables) => {
+  const onSubmit = async (data: grantApplicationVariables) => {
     console.log('checking walletInput', createWalletInput)
     if (!createWalletInput) {
       return
@@ -190,6 +193,20 @@ export const GrantsApplyPage = () => {
       learnings: data.leanings,
       anythingElse: data.anythingElse,
     })
+
+    if (data.email && !user?.email) {
+      await updateUserEmail({
+        variables: {
+          input: { email: data.email },
+        },
+        onError() {
+          toast.error({
+            title: 'Error updating email',
+            description: 'Please update and verify your email in your profile settings prior to applying to grants.',
+          })
+        },
+      })
+    }
 
     createProject({
       variables: {
@@ -438,6 +455,7 @@ export const GrantsApplyPage = () => {
               value={watch('email')}
               placeholder={'ram@example.com'}
               error={formState.errors.email?.message}
+              isDisabled={Boolean(user?.email)}
             />
           </FieldContainer>
 
@@ -576,7 +594,13 @@ export const GrantsApplyPage = () => {
           colorScheme="primary1"
           w="full"
           type="submit"
-          isLoading={createProjectLoading || projectPublishLoading || grantApplyLoading || createWalletLoading}
+          isLoading={
+            createProjectLoading ||
+            projectPublishLoading ||
+            grantApplyLoading ||
+            createWalletLoading ||
+            updateUserEmailLoading
+          }
         >
           {t('Apply')}
         </Button>
