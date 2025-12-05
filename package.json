@@ -1,7 +1,7 @@
 {
   "name": "geyser-app",
   "private": true,
-  "version": "0.24.31",
+  "version": "0.24.32",
   "type": "module",
   "workspaces": [
     "packages/*"
