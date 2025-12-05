@@ -58,9 +58,8 @@ export const LaunchStrategySelection = ({
           isSelected={isGrowthLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.GROWTH_LAUNCH)}
           title={t('Growth Launch')}
-          subtitle={t('visibility boost')}
+          subtitle={t('Visibility boost')}
           price={t('$60')}
-          highlightedText={t('Picked by 40% of Top 100 projects on Geyser')}
           points={[
             [t('Landing Page Feature'), t('1 week front-page spotlight')],
             [
@@ -75,9 +74,10 @@ export const LaunchStrategySelection = ({
           isSelected={isProLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.PRO_LAUNCH)}
           title={t('Pro Launch')}
-          subtitle={t('Network amplification + Expert feedback')}
+          subtitle={t('Maximum visibility + product feedback')}
           body={t('Limited to 5 per month, subject to selection')}
           price={t('$90')}
+          highlightedText={t('Picked by 40% of Top 100 projects on Geyser')}
           points={[
             [t('Everything in Growth')],
             [
@@ -88,7 +88,24 @@ export const LaunchStrategySelection = ({
               t('Project feedback'),
               t('Geyser Team Expert provides 1-time feedback on your project story and structure'),
             ],
-            [t('Exclusive network'), t('tap into our podcasters, media, and creator partners')],
+          ]}
+        />
+        <ProjectCreateStrategyCard
+          flex={1}
+          isSelected={isProLaunch}
+          onClick={() => setStrategy(ProjectLaunchStrategy.PRO_LAUNCH)}
+          title={t('Geyser Partnership')}
+          subtitle={t('hands on support + network amplification')}
+          body={t('Limited to 5 per month, subject to selection')}
+          price={t('$90')}
+          highlightedText={t('Picked by 40% of Top 100 projects on Geyser')}
+          points={[
+            [
+              t(''),
+              t(
+                'Geyser becomes your partner providing personalized launch strategy, project feedback, marketing support. If you click ',
+              ),
+            ],
           ]}
         />
       </VStack>
@@ -135,8 +152,9 @@ export const ProjectCreateStrategyCard = ({
         borderColor: isSelected ? 'primary1.9' : 'neutral1.9',
         cursor: 'pointer',
       }}
-      overflow={'hidden'}
+      overflow={'visible'}
       padding={4}
+      position="relative"
     >
       <HStack w="full">
         <HStack
@@ -185,7 +203,7 @@ export const ProjectCreateStrategyCard = ({
         </VStack>
       </Collapse>
       {highlightedText && (
-        <HStack w="full" justifyContent="flex-end">
+        <HStack w="full" justifyContent="flex-end" position="absolute" bottom={-3} right={3}>
           <Body size="sm" color="primary1.11" backgroundColor="primary1.3" paddingX={2} paddingY={1} borderRadius={8}>
             {highlightedText}
           </Body>
