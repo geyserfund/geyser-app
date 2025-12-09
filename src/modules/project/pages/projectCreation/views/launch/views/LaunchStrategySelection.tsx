@@ -1,4 +1,4 @@
-import { Button, Collapse, HStack, ListItem, UnorderedList, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, Collapse, HStack, Link, ListItem, UnorderedList, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
 
@@ -93,20 +93,17 @@ export const LaunchStrategySelection = ({
         <ProjectCreateStrategyCard
           flex={1}
           isSelected={isProLaunch}
-          onClick={() => setStrategy(ProjectLaunchStrategy.PRO_LAUNCH)}
+          as={Link}
+          href={
+            'https://cal.com/metamick/geyser-partnership-hands-on-support-network-amplification?overlayCalendar=true'
+          }
+          isExternal
           title={t('Geyser Partnership')}
           subtitle={t('hands on support + network amplification')}
-          body={t('Limited to 5 per month, subject to selection')}
-          price={t('$90')}
-          highlightedText={t('Picked by 40% of Top 100 projects on Geyser')}
-          points={[
-            [
-              t(''),
-              t(
-                'Geyser becomes your partner providing personalized launch strategy, project feedback, marketing support. If you click ',
-              ),
-            ],
-          ]}
+          body={t(
+            'Geyser becomes your partner providing personalized launch strategy, project feedback, marketing support. If you click ',
+          )}
+          price={t('starting at $1,000')}
         />
       </VStack>
       <VStack w="full" alignItems="flex-start">

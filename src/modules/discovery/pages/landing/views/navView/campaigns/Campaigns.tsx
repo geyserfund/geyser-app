@@ -4,6 +4,8 @@ import { Outlet, useNavigate } from 'react-router'
 
 import { getPath } from '@/shared/constants/index.ts'
 
+import { CampaignsComingSoon } from './CampaignsComingSoon.tsx'
+
 const tabs = [
   {
     label: `🔥 ${t('Trending')}`,
@@ -27,8 +29,13 @@ const tabs = [
   },
 ]
 
+const isComingSoon = true
+
 export const Campaigns = () => {
   const navigate = useNavigate()
+  if (isComingSoon) {
+    return <CampaignsComingSoon />
+  }
 
   return (
     <Tabs w="full" variant="secondary" onChange={(index) => navigate(tabs?.[index]?.path ?? '')}>

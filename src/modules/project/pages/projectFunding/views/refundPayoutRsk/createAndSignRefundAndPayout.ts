@@ -4,7 +4,6 @@ import { Buffer } from 'buffer'
 
 import { __development__, __production__, __staging__ } from '@/shared/constants/index.ts'
 
-import { createEIP712MessageForPaymentRefund } from '../../utils/createEIP712Message.ts'
 import { addressToBuffer32, numberToBuffer32 } from '../../utils/helperFunctions.ts'
 import { signEIP712Message } from '../../utils/signEIP712Message.ts'
 

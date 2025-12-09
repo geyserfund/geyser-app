@@ -81,14 +81,17 @@ export const PaymentPassword = ({ onComplete }: { onComplete: () => void }) => {
         {titles}
       </Body>
       {renderForm()}
+
+      <Button width="200px" size="lg" colorScheme="primary1" onClick={currentForm.onSubmit}>
+        {t('Continue')}
+      </Button>
+
       <Body size="sm" light>
         {t(
           'Note: If this project does not reach its goal or the creator fails to claim the funds, you can request a refund for upto 30 days after the campaign fails.',
         )}
+        {t('If you fail to claim a refund in this time frame, the funds will be donated to charities on geyser.')}
       </Body>
-      <Button width="200px" size="lg" colorScheme="primary1" onClick={currentForm.onSubmit}>
-        {t('Continue')}
-      </Button>
     </VStack>
   )
 }

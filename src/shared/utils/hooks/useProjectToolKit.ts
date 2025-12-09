@@ -9,8 +9,9 @@ export const useProjectToolkit = (
 ) => {
   const { getUSDCentsAmount } = useBTCConverter()
 
+  const isAon = isAllOrNothing(project)
+
   const getProjectBalance = () => {
-    const isAon = isAllOrNothing(project)
     const isAonFinalized = isAon && project.aonGoal?.status === ProjectAonGoalStatus.Finalized
     if (isAon && !isAonFinalized && project.aonGoal) {
       return {
@@ -28,8 +29,6 @@ export const useProjectToolkit = (
   }
 
   const getAonGoalPercentage = () => {
-    const isAon = isAllOrNothing(project)
-
     if (!isAon) {
       return 0
     }
@@ -44,10 +43,13 @@ export const useProjectToolkit = (
   }
 
   const isFundingDisabled = () => {
-    const isAon = isAllOrNothing(project)
     const isAonActive = isAon && project.aonGoal?.status === ProjectAonGoalStatus.Active
 
     if (isAon && isAonActive) {
+      if (isAonActive) {
+        return false
+      }
+
       return true
     }
 
