@@ -25,6 +25,7 @@ import {
 import { AonNotification } from './sections/aonNotification/AonNotification.tsx'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
 import { FundNowWithLightning } from './sections/FundNowWithLightning.tsx'
+import { ProjectPromotionNotice } from './sections/ProjectPromotionNotice.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 
 export const ProjectBody = () => {
@@ -59,6 +60,7 @@ export const ProjectBody = () => {
         paddingBottom={{ base: 24, lg: 10 }}
       >
         <ProjectPreLaunchNav />
+        <ProjectPromotionNotice />
         <CreatorVerificationNotice />
         <AonNotification />
 
