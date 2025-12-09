@@ -112,7 +112,7 @@ export enum PathName {
   dashboardSettings = 'settings',
   dashboardStatus = 'status',
   dashboardNostr = 'nostr',
-  dashboardPromote = 'promote',
+  dashboardPromote = 'promotions',
   dashboardRewards = 'rewards',
   dashboardFundingGoal = 'goal',
 

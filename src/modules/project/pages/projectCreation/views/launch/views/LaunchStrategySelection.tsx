@@ -2,7 +2,7 @@ import { Button, Collapse, HStack, ListItem, UnorderedList, useDisclosure, VStac
 import { t } from 'i18next'
 import { useState } from 'react'
 
-import { GeyserPromotionSection } from '@/modules/project/pages/projectDashboard/views/promote/GeyserPromotionSection.tsx'
+import { GeyserPromotionSection } from '@/modules/project/pages/projectDashboard/views/promote/sections/GeyserPromotionSection.tsx'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { __production__, __staging__ } from '@/shared/constants/index.ts'
