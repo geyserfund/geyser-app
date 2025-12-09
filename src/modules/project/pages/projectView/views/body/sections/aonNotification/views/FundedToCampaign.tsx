@@ -1,54 +1,23 @@
 import { Button, HStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
-import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { RefundRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/RefundRsk.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { UserProjectContributionFragment } from '@/types/index.ts'
 
-export const FundedToCampaign = ({
-  contribution,
-  onCompleted,
-}: {
-  contribution: UserProjectContributionFragment
-  onCompleted?: () => void
-}) => {
-  const { project } = useProjectAtom()
-  const { queryProject } = useProjectAPI()
-
-  const refundModal = useModal()
-
-  if (!contribution) {
-    return null
-  }
-
+export const FundedToCampaign = ({ onOpen }: { onOpen: () => void }) => {
   return (
-    <>
-      <Feedback variant={FeedBackVariant.SUCCESS} iconProps={{ fontSize: '20px', marginTop: '2px' }}>
-        <HStack w="full" flexWrap="wrap" spacing={0}>
-          <Body bold>{t('You contributed to this project.')}</Body>
-          <Body bold light ml={1}>
-            {t('You can refund by ')}
+    <Feedback variant={FeedBackVariant.SUCCESS} iconProps={{ fontSize: '20px', marginTop: '2px' }}>
+      <HStack w="full" flexWrap="wrap" spacing={0}>
+        <Body bold>{t('You contributed to this project.')}</Body>
+        <Body bold light ml={1}>
+          {t('You can refund by ')}
+        </Body>
+        <Button paddingY={0} colorScheme="neutral1" variant="ghost" size="sm" onClick={onOpen}>
+          <Body size="md" bold>
+            {t('clicking here.')}
           </Body>
-          <Button paddingY={0} colorScheme="neutral1" variant="ghost" size="sm" onClick={refundModal.onOpen}>
-            <Body size="md" bold>
-              {t('clicking here.')}
-            </Body>
-          </Button>
-        </HStack>
-      </Feedback>
-      <RefundRsk
-        {...refundModal}
-        contributionUUID={contribution.uuid || ''}
-        projectId={project.id}
-        onCompleted={() => {
-          onCompleted?.()
-          queryProject.execute()
-        }}
-      />
-    </>
+        </Button>
+      </HStack>
+    </Feedback>
   )
 }

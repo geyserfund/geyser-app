@@ -93,6 +93,7 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
     launchModalShouldOpen,
     draftModalShouldOpen,
     setProject,
+    projectNameParam,
   ])
 
   const [createProject, createProjectOptions] = useCustomMutation(useCreateProjectMutation, {

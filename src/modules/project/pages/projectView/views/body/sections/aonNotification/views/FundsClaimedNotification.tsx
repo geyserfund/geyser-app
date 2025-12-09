@@ -1,4 +1,4 @@
-import { Button, HStack, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
@@ -17,17 +17,9 @@ export const FundsClaimedNotification = () => {
           </Body>
           <Body dark>
             {t(
-              'You have successfully claimed the funds. The project is still publicly visible but cannot receive contributions. If you wish to continue receiving donations, you can chose to do so now, or at any point in your Dashboard.',
+              'You have successfully claimed the funds. The project is still publicly visible but cannot receive contributions. If you wish to continue receiving donations, you can chose to do so by changing your project type to Open Funding. React out to us at support@geyser.fund, we will be happy to help you.',
             )}
           </Body>
-          <HStack w="full" justifyContent="flex-end">
-            <Button colorScheme="neutral1" variant="solid" size="lg">
-              {t('Keep Contributions Off')}
-            </Button>
-            <Button colorScheme="primary1" variant="solid" size="lg">
-              {t('Turn Contribution On')}
-            </Button>
-          </HStack>
         </VStack>
       </Feedback>
     )

@@ -5,7 +5,13 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 
-export default function CampaignFailedNotification() {
+export default function CampaignFailedNotification({
+  hasFundedToCampaign,
+  onOpen,
+}: {
+  hasFundedToCampaign: boolean
+  onOpen: () => void
+}) {
   const { isProjectOwner } = useProjectAtom()
 
   if (isProjectOwner) {
@@ -15,7 +21,7 @@ export default function CampaignFailedNotification() {
           <Body size="xl" bold>
             {t('Campaign failed!')}
           </Body>
-          <Body dark>{t('Your project was unsuccessful and the funds will be returned to contributors.')}</Body>
+          <Body dark>{t('Your project was unsuccessful and the funds will be returned to the contributors.')}</Body>
         </VStack>
       </Feedback>
     )
@@ -30,14 +36,13 @@ export default function CampaignFailedNotification() {
         <Body dark>
           {t('The project did not reach its funding goal and the funds are being returned to the contributors.')}
         </Body>
-        <HStack w="full" justifyContent="flex-end">
-          <Button colorScheme="neutral1" variant="solid" size="lg">
-            {t('Donate to matching')}
-          </Button>
-          <Button colorScheme="primary1" variant="solid" size="lg">
-            {t('Claim your funds')}
-          </Button>
-        </HStack>
+        {hasFundedToCampaign && (
+          <HStack w="full" justifyContent="flex-end">
+            <Button colorScheme="primary1" variant="solid" size="lg" onClick={onOpen}>
+              {t('Claim your funds')}
+            </Button>
+          </HStack>
+        )}
       </VStack>
     </Feedback>
   )
