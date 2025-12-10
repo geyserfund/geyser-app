@@ -59,7 +59,7 @@ export const dimensions = {
       gap: { base: '20px', xl: '40px' },
     },
     header: {
-      maxHeight: '369px',
+      maxHeight: '415px',
     },
   },
   profile: {
