@@ -104,7 +104,7 @@ export const useFundingAPI = () => {
         }
 
         fundingContributionPartialUpdate(data.contributionCreate.contribution)
-        fundingPaymentDetailsPartialUpdate({ ...data.contributionCreate.payments, fiatSwap: undefined })
+        fundingPaymentDetailsPartialUpdate({ ...data.contributionCreate.payments, fiatToLightningSwap: undefined })
 
         if (data.contributionCreate.payments.onChainSwap?.swapJson) {
           parseResponseToSwap(

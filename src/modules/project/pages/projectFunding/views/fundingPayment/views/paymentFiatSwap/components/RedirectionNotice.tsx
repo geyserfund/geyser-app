@@ -10,7 +10,7 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 
 export const RedirectionNotice = () => {
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
-  const checkoutUrl = fundingPaymentDetails.fiatSwap?.checkoutUrl
+  const checkoutUrl = fundingPaymentDetails.fiatToLightningSwap?.checkoutUrl
   return (
     <Feedback
       variant={FeedBackVariant.INFO}

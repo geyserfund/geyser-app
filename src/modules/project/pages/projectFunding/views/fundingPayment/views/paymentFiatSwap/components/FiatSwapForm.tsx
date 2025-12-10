@@ -45,7 +45,7 @@ export const FiatSwapForm: React.FC = () => {
         input: {
           contributionId: fundingContribution.id,
           paymentsInput: {
-            fiatSwap: {
+            fiatToLightningSwap: {
               create: true,
               banxa: {
                 fiatCurrency: selectedCurrency?.value || '',
@@ -57,10 +57,10 @@ export const FiatSwapForm: React.FC = () => {
       },
     })
 
-    if (data?.contributionPaymentsAdd.payments.fiatSwap?.checkoutUrl) {
-      window.open(data.contributionPaymentsAdd.payments.fiatSwap.checkoutUrl, '_blank')
+    if (data?.contributionPaymentsAdd.payments.fiatToLightningSwap?.checkoutUrl) {
+      window.open(data.contributionPaymentsAdd.payments.fiatToLightningSwap.checkoutUrl, '_blank')
       updateFundingPaymentDetails({
-        fiatSwap: data?.contributionPaymentsAdd.payments.fiatSwap,
+        fiatToLightningSwap: data?.contributionPaymentsAdd.payments.fiatToLightningSwap,
       })
       setFiatSwapStatus(FiatSwapStatus.pending)
     }

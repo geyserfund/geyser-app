@@ -39,7 +39,7 @@ export const ContributionFiatPaymentDetailsFragment = gql`
 `
 
 export const ContributionFiatSwapPaymentDetailsFragment = gql`
-  fragment ContributionFiatSwapPaymentDetails on ContributionFiatSwapPaymentDetails {
+  fragment ContributionFiatSwapPaymentDetails on ContributionFiatToLightningSwapPaymentDetails {
     checkoutUrl
   }
 `
@@ -89,7 +89,7 @@ export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_DETAILS = gql`
     fiat {
       ...ContributionFiatPaymentDetails
     }
-    fiatSwap {
+    fiatToLightningSwap {
       ...ContributionFiatSwapPaymentDetails
     }
     lightningToRskSwap {

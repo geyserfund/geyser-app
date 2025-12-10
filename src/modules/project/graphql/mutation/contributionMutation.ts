@@ -30,7 +30,7 @@ export const MUTATION_FUNDING_FIAT_SWAP_PAYMENT_CREATE = gql`
   mutation FundingFiatSwapPaymentCreate($input: ContributionPaymentsAddInput!) {
     contributionPaymentsAdd(input: $input) {
       payments {
-        fiatSwap {
+        fiatToLightningSwap {
           checkoutUrl
         }
       }
