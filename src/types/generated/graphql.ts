@@ -2366,10 +2366,12 @@ export type PaymentSetClaimableResponse = {
 
 export enum PaymentStatus {
   Canceled = 'CANCELED',
+  Claimable = 'CLAIMABLE',
   Failed = 'FAILED',
   Paid = 'PAID',
   PartiallyPaid = 'PARTIALLY_PAID',
   Pending = 'PENDING',
+  Refunded = 'REFUNDED',
   Unpaid = 'UNPAID'
 }
 

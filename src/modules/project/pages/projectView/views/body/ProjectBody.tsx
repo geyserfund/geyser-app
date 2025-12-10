@@ -10,7 +10,6 @@ import { isAllOrNothing } from '@/utils/index.ts'
 
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
-import { BodySectionPageBottomBar } from './components/BodySectionPageBottomBar'
 import {
   ContributionSummary,
   CreatorTools,
@@ -23,6 +22,7 @@ import {
   Story,
 } from './sections'
 import { AonNotification } from './sections/aonNotification/AonNotification.tsx'
+import { BodySectionPageBottomBar } from './sections/BodySectionPageBottomBar.tsx'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
 import { FundNowWithLightning } from './sections/FundNowWithLightning.tsx'
 import { ProjectPromotionNotice } from './sections/ProjectPromotionNotice.tsx'
@@ -57,7 +57,7 @@ export const ProjectBody = () => {
         maxWidth={{ base: 'unset', lg: dimensions.project.leftMainContainer.width }}
         minWidth={{ base: 'unset', lg: dimensions.project.leftMainContainer.minWidth }}
         spacing={6}
-        paddingBottom={{ base: 24, lg: 10 }}
+        paddingBottom={{ base: 28, lg: 10 }}
       >
         <ProjectPreLaunchNav />
         <ProjectPromotionNotice />

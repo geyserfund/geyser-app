@@ -1,8 +1,8 @@
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 
-import { ContributeButton } from './ContributeButton'
-import { CreatorButtons } from './CreatorButtons'
+import { ContributeButton } from '../components/ContributeButton'
+import { CreatorButtons } from './creatorTools/components/CreatorButtons'
 
 export const BodySectionPageBottomBar = () => {
   const { isProjectOwner } = useProjectAtom()

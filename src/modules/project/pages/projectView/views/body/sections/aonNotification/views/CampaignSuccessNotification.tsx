@@ -38,7 +38,7 @@ export const CampaignSuccessNotification = () => {
     return (
       <Feedback variant={FeedBackVariant.SUCCESS}>
         <Body size="xl" bold>
-          {t('Successfully funded!')}
+          {t('Successfully funded')}
         </Body>
       </Feedback>
     )
@@ -49,7 +49,7 @@ export const CampaignSuccessNotification = () => {
       <Feedback variant={FeedBackVariant.SUCCESS}>
         <VStack spacing={4} align="stretch">
           <Body size="xl" bold>
-            {t('Congratulations, your campaign was a success!')}
+            {t('Congratulations, your campaign was a success')}
           </Body>
           <Body dark>
             <Trans

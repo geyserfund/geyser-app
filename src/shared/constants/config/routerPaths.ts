@@ -103,6 +103,8 @@ export enum PathName {
   node = 'node',
   discover = 'discover',
 
+  impactFund = 'impact',
+
   projectDashboard = 'dashboard',
   dashboardAnalytics = 'analytics',
   dashboardSales = 'sales',
@@ -195,6 +197,8 @@ const pathsMap = {
   discoveryGrantApply: (grantId: string) => `/${PathName.grants}/${grantId}/${PathName.grantApply}`,
   discoveryMerch: () => `/${PathName.merch}`,
   discoveryLaunchpad: () => `/${PathName.launchpad}`,
+
+  impactFund: () => `/${PathName.impactFund}`,
 
   guardians: () => `/${PathName.guardians}`,
   guardiansCharacter: (characterId: string) => `/${PathName.guardians}/${characterId}`,

@@ -20,9 +20,11 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
+import { CreatorToolsImages } from '../constant.ts'
+import { CreatorToolButton } from './CreatorToolButton.tsx'
+
 /** Placeholder URLs for external links - to be updated later */
-const BEST_PRACTICES_URL = 'https://geyser.fund/guides'
-const GEYSER_PROMOTION_URL = 'https://geyser.fund/promotion'
+const BEST_PRACTICES_URL = 'https://guide.geyser.fund/geyser-docs/guides/step-by-step-tutorials'
 
 interface PromoteProjectMenuProps {
   projectName: string
@@ -59,7 +61,7 @@ const PromoteOptionCard = ({
       justifyContent="space-between"
       alignItems="flex-start"
       cursor="pointer"
-      _hover={{ borderColor: 'neutral1.9' }}
+      _hover={{ borderColor: 'primary1.9' }}
       transition="border-color 0.2s"
     >
       <HStack spacing={3} alignItems="flex-start" flex={1}>
@@ -114,30 +116,18 @@ export const PromoteProjectMenu = ({ projectName }: PromoteProjectMenuProps) => 
 
   return (
     <Menu isOpen={menu.isOpen} onClose={menu.onClose} placement="bottom-end" closeOnSelect={true}>
-      <MenuButton
-        onClick={(e) => {
+      <CreatorToolButton
+        as={MenuButton}
+        emoji={CreatorToolsImages.promote}
+        label={t('Promote project')}
+        mobileLabel={t('Promote')}
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault()
           e.stopPropagation()
           menu.onToggle()
         }}
-        flex={1}
-        p={4}
-        borderRadius="8px"
-        border="1px solid"
-        borderColor="neutral1.6"
-        bg="utils.pbg"
-        cursor="pointer"
-        _hover={{ borderColor: 'neutral1.9' }}
-        transition="border-color 0.2s"
-        textAlign="center"
-      >
-        <VStack spacing={1}>
-          <Text fontSize="24px">📢</Text>
-          <Body size="sm" medium>
-            {t('Promote project')}
-          </Body>
-        </VStack>
-      </MenuButton>
+      />
+
       <Portal>
         <MenuList w="400px" p={4} borderRadius="12px" zIndex="99" shadow="md">
           <HStack w="full" justifyContent="space-between" mb={2} alignItems="start">
@@ -176,8 +166,8 @@ export const PromoteProjectMenu = ({ projectName }: PromoteProjectMenuProps) => 
               emoji="📢"
               title={t('Geyser Promotion')}
               description={t('Get visibility on the Geyser landing page, emails, and much more')}
-              href={GEYSER_PROMOTION_URL}
-              isExternal
+              to={getPath('projectRewards', 'geyserpromotions')}
+              onClose={menu.onClose}
             />
           </VStack>
         </MenuList>

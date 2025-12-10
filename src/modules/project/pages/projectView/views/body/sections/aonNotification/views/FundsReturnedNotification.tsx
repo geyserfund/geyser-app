@@ -13,7 +13,7 @@ export const FundsReturnedNotification = () => {
       <Feedback variant={FeedBackVariant.NEUTRAL}>
         <VStack spacing={1} align="stretch">
           <Body size="xl" bold>
-            {t('Funds returned!')}
+            {t('Funds returned')}
           </Body>
           <Body dark>{t('Your project was unsuccessful and the funds have been returned to contributors.')}</Body>
         </VStack>
@@ -25,7 +25,7 @@ export const FundsReturnedNotification = () => {
     <Feedback variant={FeedBackVariant.NEUTRAL}>
       <VStack spacing={1} align="stretch">
         <Body size="xl" bold>
-          {t('Funds returned!')}
+          {t('Funds returned')}
         </Body>
         <Body dark>{t('The project was unsuccessful and the funds have been returned to contributors.')}</Body>
       </VStack>

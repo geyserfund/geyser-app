@@ -29,7 +29,7 @@ const creatorText = t(
 )
 
 const contributorText = t(
-  'Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds. ',
+  'This password is known only by you and ensures on one but you has access to the contributed funds. You can use this password to get a refund for those funds. ⚠️ You cannot access your contributed funds without this password. Remember to store this password somewhere safe, as Geyser does not store this password. ',
 )
 
 /** Password confirmation form component with single password field and forgot password option */

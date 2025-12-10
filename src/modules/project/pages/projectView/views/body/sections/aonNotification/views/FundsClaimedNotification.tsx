@@ -13,11 +13,11 @@ export const FundsClaimedNotification = () => {
       <Feedback variant={FeedBackVariant.SUCCESS}>
         <VStack spacing={1} align="stretch">
           <Body size="xl" bold>
-            {t('Funds claimed!')}
+            {t('Funds claimed')}
           </Body>
           <Body dark>
             {t(
-              'You have successfully claimed the funds. The project is still publicly visible but cannot receive contributions. If you wish to continue receiving donations, you can chose to do so by changing your project type to Open Funding. React out to us at support@geyser.fund, we will be happy to help you.',
+              'You have successfully claimed the funds. The project is still publicly visible but cannot receive contributions. If you wish to continue receiving contributions to this project, please reach out to us at support@geyser.fund.',
             )}
           </Body>
         </VStack>

@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
@@ -12,7 +13,12 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { usePledgeRefundInitiateMutation, usePledgeRefundRequestMutation } from '@/types/index.ts'
+import {
+  PaymentStatus,
+  PledgeRefundStatus,
+  usePledgeRefundInitiateMutation,
+  usePledgeRefundRequestMutation,
+} from '@/types/index.ts'
 import { commaFormatted, useNotification } from '@/utils/index.ts'
 
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
@@ -161,6 +167,32 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   }
 
   const handleBitcoinSubmit = async (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => {
+    if (pledgeRefundRequestData?.pledgeRefundRequest.refund.status === PledgeRefundStatus.Processing) {
+      const latestPayment = pledgeRefundRequestData?.pledgeRefundRequest.refund.payments.sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )[0]
+      if (
+        latestPayment?.paymentDetails.__typename === 'RskToOnChainSwapPaymentDetails' &&
+        latestPayment.status === PaymentStatus.Claimable
+      ) {
+        const swapObj = JSON.parse(latestPayment.paymentDetails.swapMetadata)
+        swapObj.privateKey = accountKeys.privateKey
+        swapObj.preimageHash = latestPayment.paymentDetails.swapPreimageHash
+        // swapObj.preimageHex = preimageHex
+        swapObj.paymentId = latestPayment.id
+        setSwapData(swapObj)
+
+        setIsWaitingConfirmation(true)
+        setRefundAddress(data.bitcoinAddress)
+        toast.info({
+          title: t('Refund initiated'),
+          description: t('Your Bitcoin on-chain refund will be processed shortly'),
+        })
+      }
+
+      return
+    }
+
     setIsSubmitting(true)
     try {
       // TODO: Implement actual Bitcoin on-chain refund API call
