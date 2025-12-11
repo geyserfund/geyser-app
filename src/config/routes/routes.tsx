@@ -1029,6 +1029,14 @@ export const platformRoutes: RouteObject[] = [
       */
 
       {
+        path: getPath('impactFund'),
+        async lazy() {
+          const ImpactFund = await loadDiscoveryModule().then((m) => m.ImpactFund)
+          return { Component: ImpactFund }
+        },
+      },
+
+      {
         path: getPath('discoveryLeaderboard'),
         async lazy() {
           const Leaderboard = await loadDiscoveryModule().then((m) => m.Leaderboard)

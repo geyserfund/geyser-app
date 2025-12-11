@@ -27,6 +27,7 @@ type LiveProgressAquaProps = {
   sparkleCount?: number
   sparkleDurationMs?: number
   ariaLabel?: string
+  removeLiveDot?: boolean
 }
 
 type StyleProps = {
@@ -482,6 +483,7 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
   sparkleCount = 22,
   sparkleDurationMs = 900,
   ariaLabel = 'Progress',
+  removeLiveDot = false,
 }) => {
   // Hooks called in fixed order (no conditionals)
   const trackDefault = useColorModeValue('#EDF2F7', '#2D3748')
@@ -570,7 +572,7 @@ export const LiveProgressAqua: React.FC<LiveProgressAquaProps> = ({
 
       <Flex className={styles.headerRow}>
         <Flex align="center" color={liveLabelColor}>
-          <Box className={styles.liveDot} />
+          {!removeLiveDot && <Box className={styles.liveDot} />}
           <Text fontWeight="semibold" fontSize="sm">
             {label}
           </Text>
