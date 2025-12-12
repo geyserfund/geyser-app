@@ -4,6 +4,7 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import React, { useEffect, useState } from 'react'
 import { PiWarningCircleBold } from 'react-icons/pi'
+import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
@@ -18,9 +19,11 @@ import {
   PledgeRefundStatus,
   usePledgeRefundInitiateMutation,
   usePledgeRefundRequestMutation,
+  usePledgeRefundSwapCreateMutation,
 } from '@/types/index.ts'
 import { commaFormatted, useNotification } from '@/utils/index.ts'
 
+import { createCallDataForLockCall } from '../../utils/createCallDataForLockCall.ts'
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
@@ -81,6 +84,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     { data: pledgeRefundRequestData, loading: pledgeRefundRequestLoading, error: pledgeRefundRequestError },
   ] = usePledgeRefundRequestMutation()
 
+  const [pledgeRefundSwapCreate, { loading: isPledgeRefundSwapCreateLoading }] = usePledgeRefundSwapCreateMutation()
   const [pledgeRefundInitiate, { loading: isPledgeRefundInitiateLoading }] = usePledgeRefundInitiateMutation()
 
   const [swapData, setSwapData] = useState<any>(null)
@@ -108,24 +112,10 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
         (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
 
-      const { signature } = createAndSignRefundMessage({
-        aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
-        swapContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
-        contributorAddress: accountKeys.address,
-        amount: satsToWei(amount),
-        nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
-        deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
-        processingFee: satsToWei(pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0),
-        preimageHash,
-        rskPrivateKey: accountKeys.privateKey,
-      })
-
-      await pledgeRefundInitiate({
+      const { data: swapCreateResponse } = await pledgeRefundSwapCreate({
         variables: {
           input: {
             pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
-            signature,
-            rskAddress: rskAddress || accountKeys.address,
             pledgeRefundPaymentInput: {
               rskToLightningSwap: {
                 lightningAddress: data.lightningAddress,
@@ -137,15 +127,48 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             },
           },
         },
-        onCompleted(data) {
-          if (data.pledgeRefundInitiate.swap) {
-            const swapObj = JSON.parse(data.pledgeRefundInitiate.swap)
-            swapObj.privateKey = accountKeys.privateKey
-            swapObj.preimageHash = preimageHash
-            swapObj.preimageHex = preimageHex
-            swapObj.paymentId = data.pledgeRefundInitiate.payment?.id
-            setSwapData(swapObj)
-          }
+      })
+
+      if (!swapCreateResponse?.pledgeRefundSwapCreate) {
+        throw new Error('Failed to create swap')
+      }
+
+      const { swap, payment } = swapCreateResponse.pledgeRefundSwapCreate
+
+      const swapObj = JSON.parse(swap)
+      swapObj.privateKey = accountKeys.privateKey
+      swapObj.preimageHash = preimageHash
+      swapObj.preimageHex = preimageHex
+      swapObj.paymentId = payment?.id
+      setSwapData(swapObj)
+
+      const callDataHex = createCallDataForLockCall({
+        preimageHash: `0x${preimageHash}` as Hex,
+        claimAddress: accountKeys.address as Address,
+        refundAddress: accountKeys.address as Address,
+        timelock: swapObj?.timeoutBlockHeight || 0n,
+      })
+
+      const { signature } = createAndSignRefundMessage({
+        aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
+        swapContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
+        contributorAddress: accountKeys.address,
+        amount: satsToWei(amount),
+        nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
+        deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
+        processingFee: satsToWei(pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0),
+        lockCallData: callDataHex,
+        rskPrivateKey: accountKeys.privateKey,
+      })
+
+      await pledgeRefundInitiate({
+        variables: {
+          input: {
+            pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
+            signature,
+            rskAddress: rskAddress || accountKeys.address,
+            callDataHex,
+          },
         },
       })
 
@@ -203,25 +226,10 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
         (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
 
-      const { signature } = createAndSignRefundMessage({
-        aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
-        swapContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
-        contributorAddress: accountKeys.address,
-        amount: satsToWei(amount),
-        nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
-        deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
-        processingFee: satsToWei(pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0),
-        preimageHash,
-        rskPrivateKey: accountKeys.privateKey,
-      })
-
-      // Simulate processing delay
-      await pledgeRefundInitiate({
+      const { data: swapCreateResponse } = await pledgeRefundSwapCreate({
         variables: {
           input: {
             pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
-            signature,
-            rskAddress: rskAddress || accountKeys.address,
             pledgeRefundPaymentInput: {
               rskToOnChainSwap: {
                 boltz: {
@@ -233,15 +241,49 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             },
           },
         },
-        onCompleted(data) {
-          if (data.pledgeRefundInitiate.swap) {
-            const swapObj = JSON.parse(data.pledgeRefundInitiate.swap)
-            swapObj.privateKey = accountKeys.privateKey
-            swapObj.preimageHash = preimageHash
-            swapObj.preimageHex = preimageHex
-            swapObj.paymentId = data.pledgeRefundInitiate.payment?.id
-            setSwapData(swapObj)
-          }
+      })
+
+      if (!swapCreateResponse?.pledgeRefundSwapCreate) {
+        throw new Error('Failed to create swap')
+      }
+
+      const { swap, payment } = swapCreateResponse.pledgeRefundSwapCreate
+
+      const swapObj = JSON.parse(swap)
+      swapObj.privateKey = accountKeys.privateKey
+      swapObj.preimageHash = preimageHash
+      swapObj.preimageHex = preimageHex
+      swapObj.paymentId = payment?.id
+      setSwapData(swapObj)
+
+      const callDataHex = createCallDataForLockCall({
+        preimageHash: `0x${preimageHash}` as Hex,
+        claimAddress: accountKeys.address as Address,
+        refundAddress: accountKeys.address as Address,
+        timelock: swapObj?.lockupDetails?.timeoutBlockHeight || 0n,
+      })
+
+      const { signature } = createAndSignRefundMessage({
+        aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
+        swapContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.swapContractAddress || '',
+        contributorAddress: accountKeys.address,
+        amount: satsToWei(amount),
+        nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
+        deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
+        processingFee: satsToWei(pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0),
+        lockCallData: callDataHex,
+        rskPrivateKey: accountKeys.privateKey,
+      })
+
+      // Simulate processing delay
+      await pledgeRefundInitiate({
+        variables: {
+          input: {
+            pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
+            signature,
+            rskAddress: rskAddress || accountKeys.address,
+            callDataHex,
+          },
         },
       })
       setIsWaitingConfirmation(true)
@@ -401,7 +443,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             size="lg"
             colorScheme="primary1"
             variant="solid"
-            isLoading={isSubmitting || isPledgeRefundInitiateLoading}
+            isLoading={isSubmitting || isPledgeRefundInitiateLoading || isPledgeRefundSwapCreateLoading}
             isDisabled={!enableSubmit}
             onClick={handleSubmit}
           >

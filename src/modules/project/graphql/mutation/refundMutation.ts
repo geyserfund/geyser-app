@@ -18,10 +18,9 @@ export const MUTATION_PLEDGE_REFUND_REQUEST = gql`
   }
 `
 
-export const MUTATION_PLEDGE_REFUND_INITIATE = gql`
-  ${FRAGMENT_PLEDGE_REFUND}
-  mutation PledgeRefundInitiate($input: PledgeRefundInitiateInput!) {
-    pledgeRefundInitiate(input: $input) {
+export const MUTATION_PLEDGE_REFUND_SWAP_CREATE = gql`
+  mutation PledgeRefundSwapCreate($input: PledgeRefundSwapCreateInput!) {
+    pledgeRefundSwapCreate(input: $input) {
       refund {
         ...PledgeRefund
       }
@@ -29,6 +28,18 @@ export const MUTATION_PLEDGE_REFUND_INITIATE = gql`
       payment {
         id
       }
+    }
+  }
+`
+
+export const MUTATION_PLEDGE_REFUND_INITIATE = gql`
+  ${FRAGMENT_PLEDGE_REFUND}
+  mutation PledgeRefundInitiate($input: PledgeRefundInitiateInput!) {
+    pledgeRefundInitiate(input: $input) {
+      refund {
+        ...PledgeRefund
+      }
+      txHash
     }
   }
 `

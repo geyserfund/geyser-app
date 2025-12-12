@@ -1395,11 +1395,13 @@ export type Mutation = {
   payoutRequest: PayoutRequestResponse;
   payoutRetryInitiate: PayoutRetryInitiateResponse;
   payoutRetryRequest: PayoutRetryRequestResponse;
+  payoutSwapCreate: PayoutSwapCreateResponse;
   pledgeRefundCancel: PledgeRefundResponse;
   pledgeRefundInitiate: PledgeRefundInitiateResponse;
   pledgeRefundRequest: PledgeRefundRequestResponse;
   pledgeRefundRetryInitiate: PledgeRefundRetryInitiateResponse;
   pledgeRefundRetryRequest: PledgeRefundRetryRequestResponse;
+  pledgeRefundSwapCreate: PledgeRefundSwapCreateResponse;
   podcastKeysendContributionCreate: PodcastKeysendContributionCreateResponse;
   postCreate: Post;
   postDelete: Post;
@@ -1591,6 +1593,11 @@ export type MutationPayoutRetryRequestArgs = {
 };
 
 
+export type MutationPayoutSwapCreateArgs = {
+  input: PayoutSwapCreateInput;
+};
+
+
 export type MutationPledgeRefundCancelArgs = {
   input: PledgeRefundCancelInput;
 };
@@ -1613,6 +1620,11 @@ export type MutationPledgeRefundRetryInitiateArgs = {
 
 export type MutationPledgeRefundRetryRequestArgs = {
   input: PledgeRefundRetryRequestInput;
+};
+
+
+export type MutationPledgeRefundSwapCreateArgs = {
+  input: PledgeRefundSwapCreateInput;
 };
 
 
@@ -2445,19 +2457,18 @@ export type PayoutGetResponse = {
 };
 
 export type PayoutInitiateInput = {
+  /** The call data to initiate the payout. */
+  callDataHex: Scalars['String']['input'];
   /** The payment details to refund the contributor. */
   payoutId: Scalars['BigInt']['input'];
-  /** The payment details to refund the contributor. */
-  payoutPaymentInput: PayoutPaymentInput;
   /** The signature of the contributor for RBTC payment */
   signature: Scalars['String']['input'];
 };
 
 export type PayoutInitiateResponse = {
   __typename?: 'PayoutInitiateResponse';
-  payment: Payment;
   payout: Payout;
-  swap: Scalars['String']['output'];
+  txHash: Scalars['String']['output'];
 };
 
 export type PayoutMetadata = {
@@ -2557,6 +2568,20 @@ export enum PayoutStatus {
   Processing = 'PROCESSING'
 }
 
+export type PayoutSwapCreateInput = {
+  /** The payment details to refund the contributor. */
+  payoutId: Scalars['BigInt']['input'];
+  /** The payment details to refund the contributor. */
+  payoutPaymentInput: PayoutPaymentInput;
+};
+
+export type PayoutSwapCreateResponse = {
+  __typename?: 'PayoutSwapCreateResponse';
+  payment: Payment;
+  payout: Payout;
+  swap: Scalars['String']['output'];
+};
+
 export type PledgeRefund = {
   __typename?: 'PledgeRefund';
   amount: Scalars['Int']['output'];
@@ -2585,9 +2610,9 @@ export type PledgeRefundGetResponse = {
 };
 
 export type PledgeRefundInitiateInput = {
+  /** The call data to initiate the refund. */
+  callDataHex: Scalars['String']['input'];
   pledgeRefundId: Scalars['BigInt']['input'];
-  /** The payment details to refund the contributor. */
-  pledgeRefundPaymentInput: PledgeRefundPaymentInput;
   /** The RSK address of the contributor (for anonymous contributions) */
   rskAddress?: InputMaybe<Scalars['String']['input']>;
   /** The signature of the contributor for RBTC payment */
@@ -2596,9 +2621,8 @@ export type PledgeRefundInitiateInput = {
 
 export type PledgeRefundInitiateResponse = {
   __typename?: 'PledgeRefundInitiateResponse';
-  payment: Payment;
   refund: PledgeRefund;
-  swap: Scalars['String']['output'];
+  txHash: Scalars['String']['output'];
 };
 
 export type PledgeRefundMetadata = {
@@ -2706,6 +2730,20 @@ export enum PledgeRefundStatus {
   Pending = 'PENDING',
   Processing = 'PROCESSING'
 }
+
+export type PledgeRefundSwapCreateInput = {
+  /** The payment details to refund the contributor. */
+  pledgeRefundId: Scalars['BigInt']['input'];
+  /** The payment details to refund the contributor. */
+  pledgeRefundPaymentInput: PledgeRefundPaymentInput;
+};
+
+export type PledgeRefundSwapCreateResponse = {
+  __typename?: 'PledgeRefundSwapCreateResponse';
+  payment: Payment;
+  refund: PledgeRefund;
+  swap: Scalars['String']['output'];
+};
 
 export type PledgeRefundsGetResponse = {
   __typename?: 'PledgeRefundsGetResponse';
@@ -2900,6 +2938,7 @@ export type Project = {
   keys: ProjectKeys;
   lastCreationStep: ProjectCreationStep;
   launchScheduledAt?: Maybe<Scalars['Date']['output']>;
+  launchStrategy?: Maybe<Scalars['String']['output']>;
   launchedAt?: Maybe<Scalars['Date']['output']>;
   links: Array<Scalars['String']['output']>;
   location?: Maybe<Location>;
@@ -5271,7 +5310,7 @@ export type ResolversTypes = {
   PayoutGetInput: PayoutGetInput;
   PayoutGetResponse: ResolverTypeWrapper<PayoutGetResponse>;
   PayoutInitiateInput: PayoutInitiateInput;
-  PayoutInitiateResponse: ResolverTypeWrapper<Omit<PayoutInitiateResponse, 'payment'> & { payment: ResolversTypes['Payment'] }>;
+  PayoutInitiateResponse: ResolverTypeWrapper<PayoutInitiateResponse>;
   PayoutMetadata: ResolverTypeWrapper<PayoutMetadata>;
   PayoutPaymentInput: PayoutPaymentInput;
   PayoutRequestInput: PayoutRequestInput;
@@ -5287,12 +5326,14 @@ export type ResolversTypes = {
   PayoutRetryRequestResponse: ResolverTypeWrapper<Omit<PayoutRetryRequestResponse, 'payment'> & { payment: ResolversTypes['Payment'] }>;
   PayoutRetryRequestRskToOnChainSwapPaymentDetailsInput: PayoutRetryRequestRskToOnChainSwapPaymentDetailsInput;
   PayoutStatus: PayoutStatus;
+  PayoutSwapCreateInput: PayoutSwapCreateInput;
+  PayoutSwapCreateResponse: ResolverTypeWrapper<Omit<PayoutSwapCreateResponse, 'payment'> & { payment: ResolversTypes['Payment'] }>;
   PledgeRefund: ResolverTypeWrapper<Omit<PledgeRefund, 'payments' | 'project'> & { payments: Array<ResolversTypes['Payment']>, project: ResolversTypes['Project'] }>;
   PledgeRefundCancelInput: PledgeRefundCancelInput;
   PledgeRefundGetInput: PledgeRefundGetInput;
   PledgeRefundGetResponse: ResolverTypeWrapper<Omit<PledgeRefundGetResponse, 'refund'> & { refund: ResolversTypes['PledgeRefund'] }>;
   PledgeRefundInitiateInput: PledgeRefundInitiateInput;
-  PledgeRefundInitiateResponse: ResolverTypeWrapper<Omit<PledgeRefundInitiateResponse, 'payment' | 'refund'> & { payment: ResolversTypes['Payment'], refund: ResolversTypes['PledgeRefund'] }>;
+  PledgeRefundInitiateResponse: ResolverTypeWrapper<Omit<PledgeRefundInitiateResponse, 'refund'> & { refund: ResolversTypes['PledgeRefund'] }>;
   PledgeRefundMetadata: ResolverTypeWrapper<PledgeRefundMetadata>;
   PledgeRefundPaymentInput: PledgeRefundPaymentInput;
   PledgeRefundRequestInput: PledgeRefundRequestInput;
@@ -5309,6 +5350,8 @@ export type ResolversTypes = {
   PledgeRefundRetryRequestRskToLightningSwapPaymentDetailsInput: PledgeRefundRetryRequestRskToLightningSwapPaymentDetailsInput;
   PledgeRefundRetryRequestRskToOnChainSwapPaymentDetailsInput: PledgeRefundRetryRequestRskToOnChainSwapPaymentDetailsInput;
   PledgeRefundStatus: PledgeRefundStatus;
+  PledgeRefundSwapCreateInput: PledgeRefundSwapCreateInput;
+  PledgeRefundSwapCreateResponse: ResolverTypeWrapper<Omit<PledgeRefundSwapCreateResponse, 'payment' | 'refund'> & { payment: ResolversTypes['Payment'], refund: ResolversTypes['PledgeRefund'] }>;
   PledgeRefundsGetResponse: ResolverTypeWrapper<Omit<PledgeRefundsGetResponse, 'refunds'> & { refunds: Array<ResolversTypes['PledgeRefund']> }>;
   PodcastKeysendContributionCreateInput: PodcastKeysendContributionCreateInput;
   PodcastKeysendContributionCreateResponse: ResolverTypeWrapper<PodcastKeysendContributionCreateResponse>;
@@ -5772,7 +5815,7 @@ export type ResolversParentTypes = {
   PayoutGetInput: PayoutGetInput;
   PayoutGetResponse: PayoutGetResponse;
   PayoutInitiateInput: PayoutInitiateInput;
-  PayoutInitiateResponse: Omit<PayoutInitiateResponse, 'payment'> & { payment: ResolversParentTypes['Payment'] };
+  PayoutInitiateResponse: PayoutInitiateResponse;
   PayoutMetadata: PayoutMetadata;
   PayoutPaymentInput: PayoutPaymentInput;
   PayoutRequestInput: PayoutRequestInput;
@@ -5787,12 +5830,14 @@ export type ResolversParentTypes = {
   PayoutRetryRequestPaymentInput: PayoutRetryRequestPaymentInput;
   PayoutRetryRequestResponse: Omit<PayoutRetryRequestResponse, 'payment'> & { payment: ResolversParentTypes['Payment'] };
   PayoutRetryRequestRskToOnChainSwapPaymentDetailsInput: PayoutRetryRequestRskToOnChainSwapPaymentDetailsInput;
+  PayoutSwapCreateInput: PayoutSwapCreateInput;
+  PayoutSwapCreateResponse: Omit<PayoutSwapCreateResponse, 'payment'> & { payment: ResolversParentTypes['Payment'] };
   PledgeRefund: Omit<PledgeRefund, 'payments' | 'project'> & { payments: Array<ResolversParentTypes['Payment']>, project: ResolversParentTypes['Project'] };
   PledgeRefundCancelInput: PledgeRefundCancelInput;
   PledgeRefundGetInput: PledgeRefundGetInput;
   PledgeRefundGetResponse: Omit<PledgeRefundGetResponse, 'refund'> & { refund: ResolversParentTypes['PledgeRefund'] };
   PledgeRefundInitiateInput: PledgeRefundInitiateInput;
-  PledgeRefundInitiateResponse: Omit<PledgeRefundInitiateResponse, 'payment' | 'refund'> & { payment: ResolversParentTypes['Payment'], refund: ResolversParentTypes['PledgeRefund'] };
+  PledgeRefundInitiateResponse: Omit<PledgeRefundInitiateResponse, 'refund'> & { refund: ResolversParentTypes['PledgeRefund'] };
   PledgeRefundMetadata: PledgeRefundMetadata;
   PledgeRefundPaymentInput: PledgeRefundPaymentInput;
   PledgeRefundRequestInput: PledgeRefundRequestInput;
@@ -5808,6 +5853,8 @@ export type ResolversParentTypes = {
   PledgeRefundRetryRequestResponse: Omit<PledgeRefundRetryRequestResponse, 'payment' | 'refund'> & { payment: ResolversParentTypes['Payment'], refund: ResolversParentTypes['PledgeRefund'] };
   PledgeRefundRetryRequestRskToLightningSwapPaymentDetailsInput: PledgeRefundRetryRequestRskToLightningSwapPaymentDetailsInput;
   PledgeRefundRetryRequestRskToOnChainSwapPaymentDetailsInput: PledgeRefundRetryRequestRskToOnChainSwapPaymentDetailsInput;
+  PledgeRefundSwapCreateInput: PledgeRefundSwapCreateInput;
+  PledgeRefundSwapCreateResponse: Omit<PledgeRefundSwapCreateResponse, 'payment' | 'refund'> & { payment: ResolversParentTypes['Payment'], refund: ResolversParentTypes['PledgeRefund'] };
   PledgeRefundsGetResponse: Omit<PledgeRefundsGetResponse, 'refunds'> & { refunds: Array<ResolversParentTypes['PledgeRefund']> };
   PodcastKeysendContributionCreateInput: PodcastKeysendContributionCreateInput;
   PodcastKeysendContributionCreateResponse: PodcastKeysendContributionCreateResponse;
@@ -6627,11 +6674,13 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   payoutRequest?: Resolver<ResolversTypes['PayoutRequestResponse'], ParentType, ContextType, RequireFields<MutationPayoutRequestArgs, 'input'>>;
   payoutRetryInitiate?: Resolver<ResolversTypes['PayoutRetryInitiateResponse'], ParentType, ContextType, RequireFields<MutationPayoutRetryInitiateArgs, 'input'>>;
   payoutRetryRequest?: Resolver<ResolversTypes['PayoutRetryRequestResponse'], ParentType, ContextType, RequireFields<MutationPayoutRetryRequestArgs, 'input'>>;
+  payoutSwapCreate?: Resolver<ResolversTypes['PayoutSwapCreateResponse'], ParentType, ContextType, RequireFields<MutationPayoutSwapCreateArgs, 'input'>>;
   pledgeRefundCancel?: Resolver<ResolversTypes['PledgeRefundResponse'], ParentType, ContextType, RequireFields<MutationPledgeRefundCancelArgs, 'input'>>;
   pledgeRefundInitiate?: Resolver<ResolversTypes['PledgeRefundInitiateResponse'], ParentType, ContextType, RequireFields<MutationPledgeRefundInitiateArgs, 'input'>>;
   pledgeRefundRequest?: Resolver<ResolversTypes['PledgeRefundRequestResponse'], ParentType, ContextType, RequireFields<MutationPledgeRefundRequestArgs, 'input'>>;
   pledgeRefundRetryInitiate?: Resolver<ResolversTypes['PledgeRefundRetryInitiateResponse'], ParentType, ContextType, RequireFields<MutationPledgeRefundRetryInitiateArgs, 'input'>>;
   pledgeRefundRetryRequest?: Resolver<ResolversTypes['PledgeRefundRetryRequestResponse'], ParentType, ContextType, RequireFields<MutationPledgeRefundRetryRequestArgs, 'input'>>;
+  pledgeRefundSwapCreate?: Resolver<ResolversTypes['PledgeRefundSwapCreateResponse'], ParentType, ContextType, RequireFields<MutationPledgeRefundSwapCreateArgs, 'input'>>;
   podcastKeysendContributionCreate?: Resolver<ResolversTypes['PodcastKeysendContributionCreateResponse'], ParentType, ContextType, RequireFields<MutationPodcastKeysendContributionCreateArgs, 'input'>>;
   postCreate?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationPostCreateArgs, 'input'>>;
   postDelete?: Resolver<ResolversTypes['Post'], ParentType, ContextType, RequireFields<MutationPostDeleteArgs, 'id'>>;
@@ -6981,9 +7030,8 @@ export type PayoutGetResponseResolvers<ContextType = any, ParentType extends Res
 };
 
 export type PayoutInitiateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutInitiateResponse'] = ResolversParentTypes['PayoutInitiateResponse']> = {
-  payment?: Resolver<ResolversTypes['Payment'], ParentType, ContextType>;
   payout?: Resolver<ResolversTypes['Payout'], ParentType, ContextType>;
-  swap?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  txHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7020,6 +7068,13 @@ export type PayoutRetryRequestResponseResolvers<ContextType = any, ParentType ex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PayoutSwapCreateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutSwapCreateResponse'] = ResolversParentTypes['PayoutSwapCreateResponse']> = {
+  payment?: Resolver<ResolversTypes['Payment'], ParentType, ContextType>;
+  payout?: Resolver<ResolversTypes['Payout'], ParentType, ContextType>;
+  swap?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PledgeRefundResolvers<ContextType = any, ParentType extends ResolversParentTypes['PledgeRefund'] = ResolversParentTypes['PledgeRefund']> = {
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   expiresAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
@@ -7037,9 +7092,8 @@ export type PledgeRefundGetResponseResolvers<ContextType = any, ParentType exten
 };
 
 export type PledgeRefundInitiateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PledgeRefundInitiateResponse'] = ResolversParentTypes['PledgeRefundInitiateResponse']> = {
-  payment?: Resolver<ResolversTypes['Payment'], ParentType, ContextType>;
   refund?: Resolver<ResolversTypes['PledgeRefund'], ParentType, ContextType>;
-  swap?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  txHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7071,6 +7125,13 @@ export type PledgeRefundRetryInitiateResponseResolvers<ContextType = any, Parent
 };
 
 export type PledgeRefundRetryRequestResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PledgeRefundRetryRequestResponse'] = ResolversParentTypes['PledgeRefundRetryRequestResponse']> = {
+  payment?: Resolver<ResolversTypes['Payment'], ParentType, ContextType>;
+  refund?: Resolver<ResolversTypes['PledgeRefund'], ParentType, ContextType>;
+  swap?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PledgeRefundSwapCreateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PledgeRefundSwapCreateResponse'] = ResolversParentTypes['PledgeRefundSwapCreateResponse']> = {
   payment?: Resolver<ResolversTypes['Payment'], ParentType, ContextType>;
   refund?: Resolver<ResolversTypes['PledgeRefund'], ParentType, ContextType>;
   swap?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -7157,6 +7218,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
   lastCreationStep?: Resolver<ResolversTypes['ProjectCreationStep'], ParentType, ContextType>;
   launchScheduledAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  launchStrategy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   launchedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   links?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   location?: Resolver<Maybe<ResolversTypes['Location']>, ParentType, ContextType>;
@@ -8080,6 +8142,7 @@ export type Resolvers<ContextType = any> = {
   PayoutResponse?: PayoutResponseResolvers<ContextType>;
   PayoutRetryInitiateResponse?: PayoutRetryInitiateResponseResolvers<ContextType>;
   PayoutRetryRequestResponse?: PayoutRetryRequestResponseResolvers<ContextType>;
+  PayoutSwapCreateResponse?: PayoutSwapCreateResponseResolvers<ContextType>;
   PledgeRefund?: PledgeRefundResolvers<ContextType>;
   PledgeRefundGetResponse?: PledgeRefundGetResponseResolvers<ContextType>;
   PledgeRefundInitiateResponse?: PledgeRefundInitiateResponseResolvers<ContextType>;
@@ -8088,6 +8151,7 @@ export type Resolvers<ContextType = any> = {
   PledgeRefundResponse?: PledgeRefundResponseResolvers<ContextType>;
   PledgeRefundRetryInitiateResponse?: PledgeRefundRetryInitiateResponseResolvers<ContextType>;
   PledgeRefundRetryRequestResponse?: PledgeRefundRetryRequestResponseResolvers<ContextType>;
+  PledgeRefundSwapCreateResponse?: PledgeRefundSwapCreateResponseResolvers<ContextType>;
   PledgeRefundsGetResponse?: PledgeRefundsGetResponseResolvers<ContextType>;
   PodcastKeysendContributionCreateResponse?: PodcastKeysendContributionCreateResponseResolvers<ContextType>;
   Post?: PostResolvers<ContextType>;
@@ -9325,15 +9389,25 @@ export type PayoutRequestMutation = { __typename?: 'Mutation', payoutRequest: { 
       & PayoutFragment
     ), payoutMetadata: { __typename?: 'PayoutMetadata', swapContractAddress: string, nonce: number, aonContractAddress: string } } };
 
+export type PayoutSwapCreateMutationVariables = Exact<{
+  input: PayoutSwapCreateInput;
+}>;
+
+
+export type PayoutSwapCreateMutation = { __typename?: 'Mutation', payoutSwapCreate: { __typename?: 'PayoutSwapCreateResponse', swap: string, payout: (
+      { __typename?: 'Payout' }
+      & PayoutFragment
+    ), payment: { __typename?: 'Payment', id: any } } };
+
 export type PayoutInitiateMutationVariables = Exact<{
   input: PayoutInitiateInput;
 }>;
 
 
-export type PayoutInitiateMutation = { __typename?: 'Mutation', payoutInitiate: { __typename?: 'PayoutInitiateResponse', swap: string, payout: (
+export type PayoutInitiateMutation = { __typename?: 'Mutation', payoutInitiate: { __typename?: 'PayoutInitiateResponse', txHash: string, payout: (
       { __typename?: 'Payout' }
       & PayoutFragment
-    ), payment: { __typename?: 'Payment', id: any } } };
+    ) } };
 
 export type PostDeleteMutationVariables = Exact<{
   postDeleteId: Scalars['BigInt']['input'];
@@ -9488,15 +9562,25 @@ export type PledgeRefundRequestMutation = { __typename?: 'Mutation', pledgeRefun
       & PledgeRefundMetadataFragment
     ) } };
 
+export type PledgeRefundSwapCreateMutationVariables = Exact<{
+  input: PledgeRefundSwapCreateInput;
+}>;
+
+
+export type PledgeRefundSwapCreateMutation = { __typename?: 'Mutation', pledgeRefundSwapCreate: { __typename?: 'PledgeRefundSwapCreateResponse', swap: string, refund: (
+      { __typename?: 'PledgeRefund' }
+      & PledgeRefundFragment
+    ), payment: { __typename?: 'Payment', id: any } } };
+
 export type PledgeRefundInitiateMutationVariables = Exact<{
   input: PledgeRefundInitiateInput;
 }>;
 
 
-export type PledgeRefundInitiateMutation = { __typename?: 'Mutation', pledgeRefundInitiate: { __typename?: 'PledgeRefundInitiateResponse', swap: string, refund: (
+export type PledgeRefundInitiateMutation = { __typename?: 'Mutation', pledgeRefundInitiate: { __typename?: 'PledgeRefundInitiateResponse', txHash: string, refund: (
       { __typename?: 'PledgeRefund' }
       & PledgeRefundFragment
-    ), payment: { __typename?: 'Payment', id: any } } };
+    ) } };
 
 export type PaymentSwapClaimTxBroadcastMutationVariables = Exact<{
   input: PaymentSwapClaimTxBroadcastInput;
@@ -15680,9 +15764,9 @@ export function usePayoutRequestMutation(baseOptions?: Apollo.MutationHookOption
 export type PayoutRequestMutationHookResult = ReturnType<typeof usePayoutRequestMutation>;
 export type PayoutRequestMutationResult = Apollo.MutationResult<PayoutRequestMutation>;
 export type PayoutRequestMutationOptions = Apollo.BaseMutationOptions<PayoutRequestMutation, PayoutRequestMutationVariables>;
-export const PayoutInitiateDocument = gql`
-    mutation PayoutInitiate($input: PayoutInitiateInput!) {
-  payoutInitiate(input: $input) {
+export const PayoutSwapCreateDocument = gql`
+    mutation PayoutSwapCreate($input: PayoutSwapCreateInput!) {
+  payoutSwapCreate(input: $input) {
     payout {
       ...Payout
     }
@@ -15690,6 +15774,42 @@ export const PayoutInitiateDocument = gql`
     payment {
       id
     }
+  }
+}
+    ${PayoutFragmentDoc}`;
+export type PayoutSwapCreateMutationFn = Apollo.MutationFunction<PayoutSwapCreateMutation, PayoutSwapCreateMutationVariables>;
+
+/**
+ * __usePayoutSwapCreateMutation__
+ *
+ * To run a mutation, you first call `usePayoutSwapCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePayoutSwapCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [payoutSwapCreateMutation, { data, loading, error }] = usePayoutSwapCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePayoutSwapCreateMutation(baseOptions?: Apollo.MutationHookOptions<PayoutSwapCreateMutation, PayoutSwapCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PayoutSwapCreateMutation, PayoutSwapCreateMutationVariables>(PayoutSwapCreateDocument, options);
+      }
+export type PayoutSwapCreateMutationHookResult = ReturnType<typeof usePayoutSwapCreateMutation>;
+export type PayoutSwapCreateMutationResult = Apollo.MutationResult<PayoutSwapCreateMutation>;
+export type PayoutSwapCreateMutationOptions = Apollo.BaseMutationOptions<PayoutSwapCreateMutation, PayoutSwapCreateMutationVariables>;
+export const PayoutInitiateDocument = gql`
+    mutation PayoutInitiate($input: PayoutInitiateInput!) {
+  payoutInitiate(input: $input) {
+    payout {
+      ...Payout
+    }
+    txHash
   }
 }
     ${PayoutFragmentDoc}`;
@@ -16320,9 +16440,9 @@ export function usePledgeRefundRequestMutation(baseOptions?: Apollo.MutationHook
 export type PledgeRefundRequestMutationHookResult = ReturnType<typeof usePledgeRefundRequestMutation>;
 export type PledgeRefundRequestMutationResult = Apollo.MutationResult<PledgeRefundRequestMutation>;
 export type PledgeRefundRequestMutationOptions = Apollo.BaseMutationOptions<PledgeRefundRequestMutation, PledgeRefundRequestMutationVariables>;
-export const PledgeRefundInitiateDocument = gql`
-    mutation PledgeRefundInitiate($input: PledgeRefundInitiateInput!) {
-  pledgeRefundInitiate(input: $input) {
+export const PledgeRefundSwapCreateDocument = gql`
+    mutation PledgeRefundSwapCreate($input: PledgeRefundSwapCreateInput!) {
+  pledgeRefundSwapCreate(input: $input) {
     refund {
       ...PledgeRefund
     }
@@ -16330,6 +16450,42 @@ export const PledgeRefundInitiateDocument = gql`
     payment {
       id
     }
+  }
+}
+    ${PledgeRefundFragmentDoc}`;
+export type PledgeRefundSwapCreateMutationFn = Apollo.MutationFunction<PledgeRefundSwapCreateMutation, PledgeRefundSwapCreateMutationVariables>;
+
+/**
+ * __usePledgeRefundSwapCreateMutation__
+ *
+ * To run a mutation, you first call `usePledgeRefundSwapCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePledgeRefundSwapCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [pledgeRefundSwapCreateMutation, { data, loading, error }] = usePledgeRefundSwapCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePledgeRefundSwapCreateMutation(baseOptions?: Apollo.MutationHookOptions<PledgeRefundSwapCreateMutation, PledgeRefundSwapCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PledgeRefundSwapCreateMutation, PledgeRefundSwapCreateMutationVariables>(PledgeRefundSwapCreateDocument, options);
+      }
+export type PledgeRefundSwapCreateMutationHookResult = ReturnType<typeof usePledgeRefundSwapCreateMutation>;
+export type PledgeRefundSwapCreateMutationResult = Apollo.MutationResult<PledgeRefundSwapCreateMutation>;
+export type PledgeRefundSwapCreateMutationOptions = Apollo.BaseMutationOptions<PledgeRefundSwapCreateMutation, PledgeRefundSwapCreateMutationVariables>;
+export const PledgeRefundInitiateDocument = gql`
+    mutation PledgeRefundInitiate($input: PledgeRefundInitiateInput!) {
+  pledgeRefundInitiate(input: $input) {
+    refund {
+      ...PledgeRefund
+    }
+    txHash
   }
 }
     ${PledgeRefundFragmentDoc}`;

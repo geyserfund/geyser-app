@@ -190,7 +190,7 @@ export const createCallDataForClaimCall = (
 }
 
 /** Creates an unsigned Rootstock transaction for Boltz claimCall */
-export const createTransactionForBoltzClaimCall = (params: {
+export const createCallDataForBoltzClaimCall = (params: {
   contributorAddress: string
   creatorFees: number
   contributorFees: number

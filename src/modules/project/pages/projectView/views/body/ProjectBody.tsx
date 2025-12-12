@@ -74,6 +74,7 @@ export const ProjectBody = () => {
         {project.goalsCount && <Goals />}
         <Details />
         {!isAon && <FundNowWithLightning />}
+
         <SuggestedProjects
           id={'suggested-projects-project-page'}
           subCategory={project.subCategory}

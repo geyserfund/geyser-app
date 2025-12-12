@@ -2,6 +2,7 @@ import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import React, { useEffect, useState } from 'react'
+import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
@@ -14,9 +15,11 @@ import {
   ProjectForProfileContributionsFragment,
   usePayoutInitiateMutation,
   usePayoutRequestMutation,
+  usePayoutSwapCreateMutation,
 } from '@/types/index.ts'
 import { commaFormatted, useNotification } from '@/utils/index.ts'
 
+import { createCallDataForLockCall } from '../../utils/createCallDataForLockCall.ts'
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
@@ -57,6 +60,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
 
   const [payoutRequest, { data: payoutRequestData, loading: payoutRequestLoading }] = usePayoutRequestMutation()
 
+  const [payoutSwapCreate, { loading: isPayoutSwapCreateLoading }] = usePayoutSwapCreateMutation()
   const [payoutInitiate, { loading: isPayoutInitiateLoading }] = usePayoutInitiateMutation()
 
   const [swapData, setSwapData] = useState<any>(null)
@@ -80,23 +84,11 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
       const { preimageHash, preimageHex } = generatePreImageHash()
 
       const amount = payoutRequestData?.payoutRequest.payout.amount || 0
-      const { signature } = createAndSignClaimMessage({
-        aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
-        swapContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
-        creatorAddress: accountKeys.address,
-        amount: satsToWei(amount),
-        nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
-        deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
-        processingFee: 0,
-        preimageHash,
-        rskPrivateKey: accountKeys.privateKey,
-      })
 
-      await payoutInitiate({
+      const { data: swapCreateResponse } = await payoutSwapCreate({
         variables: {
           input: {
             payoutId: payoutRequestData?.payoutRequest.payout.id,
-            signature,
             payoutPaymentInput: {
               rskToLightningSwap: {
                 lightningAddress: data.lightningAddress,
@@ -108,15 +100,47 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
             },
           },
         },
-        onCompleted(data) {
-          if (data.payoutInitiate.swap) {
-            const swapObj = JSON.parse(data.payoutInitiate.swap)
-            swapObj.privateKey = accountKeys.privateKey
-            swapObj.preimageHash = preimageHash
-            swapObj.preimageHex = preimageHex
-            swapObj.paymentId = data.payoutInitiate.payment?.id
-            setSwapData(swapObj)
-          }
+      })
+
+      if (!swapCreateResponse?.payoutSwapCreate) {
+        throw new Error('Failed to create swap')
+      }
+
+      const { swap, payment } = swapCreateResponse.payoutSwapCreate
+
+      const swapObj = JSON.parse(swap)
+      swapObj.privateKey = accountKeys.privateKey
+      swapObj.preimageHash = preimageHash
+      swapObj.preimageHex = preimageHex
+      swapObj.paymentId = payment?.id
+      setSwapData(swapObj)
+
+      const callDataHex = createCallDataForLockCall({
+        preimageHash: `0x${preimageHash}` as Hex,
+        claimAddress: accountKeys.address as Address,
+        refundAddress: accountKeys.address as Address,
+        timelock: swapObj?.timeoutBlockHeight || 0n,
+      })
+
+      const { signature } = createAndSignClaimMessage({
+        aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
+        swapContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
+        creatorAddress: accountKeys.address,
+        amount: satsToWei(amount),
+        nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
+        deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
+        processingFee: 0,
+        lockCallData: callDataHex,
+        rskPrivateKey: accountKeys.privateKey,
+      })
+
+      await payoutInitiate({
+        variables: {
+          input: {
+            payoutId: payoutRequestData?.payoutRequest.payout.id,
+            signature,
+            callDataHex,
+          },
         },
       })
 
@@ -146,24 +170,10 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
 
       const amount = payoutRequestData?.payoutRequest.payout.amount || 0
 
-      const { signature } = createAndSignClaimMessage({
-        aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
-        swapContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
-        creatorAddress: accountKeys.address,
-        amount: satsToWei(amount),
-        nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
-        deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
-        processingFee: 0,
-        preimageHash,
-        rskPrivateKey: accountKeys.privateKey,
-      })
-
-      // Simulate processing delay
-      await payoutInitiate({
+      const { data: swapCreateResponse } = await payoutSwapCreate({
         variables: {
           input: {
             payoutId: payoutRequestData?.payoutRequest.payout.id,
-            signature,
             payoutPaymentInput: {
               rskToOnChainSwap: {
                 boltz: {
@@ -175,15 +185,48 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
             },
           },
         },
-        onCompleted(data) {
-          if (data.payoutInitiate.swap) {
-            const swapObj = JSON.parse(data.payoutInitiate.swap)
-            swapObj.privateKey = accountKeys.privateKey
-            swapObj.preimageHash = preimageHash
-            swapObj.preimageHex = preimageHex
-            swapObj.paymentId = data.payoutInitiate.payment?.id
-            setSwapData(swapObj)
-          }
+      })
+
+      if (!swapCreateResponse?.payoutSwapCreate) {
+        throw new Error('Failed to create swap')
+      }
+
+      const { swap, payment } = swapCreateResponse.payoutSwapCreate
+
+      const swapObj = JSON.parse(swap)
+      swapObj.privateKey = accountKeys.privateKey
+      swapObj.preimageHash = preimageHash
+      swapObj.preimageHex = preimageHex
+      swapObj.paymentId = payment?.id
+      setSwapData(swapObj)
+
+      const callDataHex = createCallDataForLockCall({
+        preimageHash: `0x${preimageHash}` as Hex,
+        claimAddress: accountKeys.address as Address,
+        refundAddress: accountKeys.address as Address,
+        timelock: swapObj?.lockupDetails?.timeoutBlockHeight || 0n,
+      })
+
+      const { signature } = createAndSignClaimMessage({
+        aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
+        swapContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
+        creatorAddress: accountKeys.address,
+        amount: satsToWei(amount),
+        nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
+        deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
+        processingFee: 0,
+        lockCallData: callDataHex,
+        rskPrivateKey: accountKeys.privateKey,
+      })
+
+      // Simulate processing delay
+      await payoutInitiate({
+        variables: {
+          input: {
+            payoutId: payoutRequestData?.payoutRequest.payout.id,
+            signature,
+            callDataHex,
+          },
         },
       })
       setIsWaitingConfirmation(true)
@@ -298,7 +341,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
             size="lg"
             colorScheme="primary1"
             variant="solid"
-            isLoading={isSubmitting || isPayoutInitiateLoading}
+            isLoading={isSubmitting || isPayoutInitiateLoading || isPayoutSwapCreateLoading}
             isDisabled={!enableSubmit}
             onClick={handleSubmit}
           >

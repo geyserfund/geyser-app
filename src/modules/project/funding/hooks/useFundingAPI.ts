@@ -21,7 +21,7 @@ import { useNotification } from '@/utils'
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
 import { generateAccountKeys, generatePreImageHash } from '../../forms/accountPassword/keyGenerationHelper.ts'
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
-import { createTransactionForBoltzClaimCall } from '../../pages/projectFunding/utils/createCallData.ts'
+import { createCallDataForBoltzClaimCall } from '../../pages/projectFunding/utils/createCallDataForClaimCall.ts'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
@@ -332,7 +332,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
 
     console.log('contributionCreatePreImages.lightning', preImages)
 
-    const getTransactionForBoltzClaimCall = createTransactionForBoltzClaimCall({
+    const getTransactionForBoltzClaimCall = createCallDataForBoltzClaimCall({
       contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
       creatorFees: satsToWei(creatorFeesAmount),
       contributorFees: satsToWei(contributorFeesAmount),
@@ -390,7 +390,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     console.log('checking userAccountKeys', userAccountKeys)
     console.log('checking userAccountKeyPair', userAccountKeyPair)
 
-    const getTransactionForBoltzClaimCall = createTransactionForBoltzClaimCall({
+    const getCallDataForBoltzClaimCall = createCallDataForBoltzClaimCall({
       contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
       creatorFees: satsToWei(creatorFeesAmount),
       contributorFees: satsToWei(contributorFeesAmount),
@@ -401,12 +401,12 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
       aonContractAddress: project?.aonGoal?.contractAddress || '',
     })
-    console.log('getTransactionForBoltzClaimCall for ONCHAIN', getTransactionForBoltzClaimCall)
+    console.log('getTransactionForBoltzClaimCall for ONCHAIN', getCallDataForBoltzClaimCall)
     paymentSwapClaimTxSet({
       variables: {
         input: {
           paymentId: payment.paymentId,
-          claimTxCallDataHex: getTransactionForBoltzClaimCall,
+          claimTxCallDataHex: getCallDataForBoltzClaimCall,
         },
       },
     })

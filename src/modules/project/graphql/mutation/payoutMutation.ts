@@ -19,10 +19,9 @@ export const MUTATION_PAYOUT_REQUEST = gql`
   }
 `
 
-export const MUTATION_PAYOUT_INITIATE = gql`
-  ${FRAGMENT_PAYOUT}
-  mutation PayoutInitiate($input: PayoutInitiateInput!) {
-    payoutInitiate(input: $input) {
+export const MUTATION_PAYOUT_SWAP_CREATE = gql`
+  mutation PayoutSwapCreate($input: PayoutSwapCreateInput!) {
+    payoutSwapCreate(input: $input) {
       payout {
         ...Payout
       }
@@ -30,6 +29,18 @@ export const MUTATION_PAYOUT_INITIATE = gql`
       payment {
         id
       }
+    }
+  }
+`
+
+export const MUTATION_PAYOUT_INITIATE = gql`
+  ${FRAGMENT_PAYOUT}
+  mutation PayoutInitiate($input: PayoutInitiateInput!) {
+    payoutInitiate(input: $input) {
+      payout {
+        ...Payout
+      }
+      txHash
     }
   }
 `
