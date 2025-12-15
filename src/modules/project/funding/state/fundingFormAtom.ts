@@ -617,11 +617,13 @@ export const fundingFiatSwapAmountWarningAtom = atom((get) => {
   return ''
 })
 
+const MIN_AMOUNT_FOR_ALL_OR_NOTHING_PROJECT = 1000 // 10 USD in cents
+
 /** Check if the input amount is valid for the funidng flow */
 export const isFundingInputAmountValidAtom = atom((get) => {
   const fundingProjectState = get(fundingProjectAtom)
   const totalAmount: number = get(totalAmountSatsAtom)
-  const { donationAmount } = get(fundingFormStateAtom)
+  const { donationAmountUsdCent } = get(fundingFormStateAtom)
   const rewardsCosts = get(rewardsCostAtoms)
   const walletLimits = fundingProjectState.wallet?.limits?.contribution
 
@@ -629,11 +631,11 @@ export const isFundingInputAmountValidAtom = atom((get) => {
 
   if (
     fundingProjectState.fundingStrategy === ProjectFundingStrategy.AllOrNothing &&
-    donationAmount + rewardsCosts.sats < 50000
+    donationAmountUsdCent + rewardsCosts.usdCents < MIN_AMOUNT_FOR_ALL_OR_NOTHING_PROJECT
   ) {
     return {
-      title: `Amount less than 50,000 sats.`,
-      description: 'The minimum amount for an All-or-Nothing project is 50,000 sats.',
+      title: `Amount less than $10.`,
+      description: 'The minimum amount for an All-or-Nothing project is $10.',
       valid: false,
     }
   }
