@@ -1,12 +1,24 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { Trans } from 'react-i18next'
+import { Link } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { getPath } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
 
-export const FailedToClaimNotification = () => {
-  const { isProjectOwner } = useProjectAtom()
+export const FailedToClaimNotification = ({
+  hasFundedToCampaign,
+  onOpen,
+}: {
+  hasFundedToCampaign: boolean
+  onOpen: () => void
+}) => {
+  const { isProjectOwner, project } = useProjectAtom()
+
+  const daysLeft = aonProjectTimeLeft(project.aonGoal)
 
   if (isProjectOwner) {
     return (
@@ -20,14 +32,6 @@ export const FailedToClaimNotification = () => {
               'You were unsuccessful in claiming the funds. The funds of this project are being returned to contributors.',
             )}
           </Body>
-          <HStack w="full" justifyContent="flex-end">
-            <Button colorScheme="neutral1" variant="solid" size="lg">
-              {t('Keep Contributions Off')}
-            </Button>
-            <Button colorScheme="primary1" variant="solid" size="lg">
-              {t('Turn Contribution On')}
-            </Button>
-          </HStack>
         </VStack>
       </Feedback>
     )
@@ -37,19 +41,35 @@ export const FailedToClaimNotification = () => {
     <Feedback variant={FeedBackVariant.NEUTRAL}>
       <VStack spacing={1} align="stretch">
         <Body size="xl" bold>
-          {t('Funds not claimed!')}
+          {t('Creator did not claim funds')}
         </Body>
         <Body dark>
-          {t('The creator failed to claim the funds of this project and they are being returned to contributors.')}
+          {t(
+            'The creator has not claimed the funds from this successful campaign. As a result, contributors can now redeem their contributions as a refund.',
+          )}
         </Body>
-        <HStack w="full" justifyContent="flex-end">
-          <Button colorScheme="neutral1" variant="solid" size="lg">
-            {t('Donate to matching')}
-          </Button>
-          <Button colorScheme="primary1" variant="solid" size="lg">
-            {t('Claim your funds')}
-          </Button>
-        </HStack>
+        {hasFundedToCampaign && (
+          <>
+            <Body dark>
+              <Trans
+                i18nKey="You have {{time}} {{unit}}  left to claim your refund. After that, unclaimed funds are automatically sent to the <4> Geyser Impact Fund.</4>"
+                values={{ time: daysLeft?.value || 0, unit: daysLeft?.label || 'days' }}
+              >
+                {
+                  'You have {{time}} {{unit}}  left to claim your refund. After that, unclaimed funds are automatically sent to the '
+                }
+                <Body as={Link} to={getPath('impactFund')}>
+                  Geyser Impact Fund.
+                </Body>
+              </Trans>
+            </Body>
+            <HStack w="full" justifyContent="flex-end">
+              <Button colorScheme="primary1" variant="solid" size="lg" onClick={onOpen}>
+                {t('Claim your funds')}
+              </Button>
+            </HStack>
+          </>
+        )}
       </VStack>
     </Feedback>
   )

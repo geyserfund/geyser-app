@@ -313,8 +313,10 @@ const AmbassadorCard = ({
           {'Spread the word using your own'}{' '}
           <Body as="span" color={lightModeColors.neutral1[12]} textDecoration="underline">
             {'Hero link'}
-          </Body>{' '}
-          {'So far, {{ambassadorsCount}} ambassadors have enabled {{totalSats}} sats in contributions to this project.'}
+          </Body>
+          {
+            '. So far, {{ambassadorsCount}} ambassadors have enabled {{totalSats}} sats in contributions to this project.'
+          }
         </Trans>
       </Body>
 

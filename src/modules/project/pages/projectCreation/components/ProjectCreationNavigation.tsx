@@ -49,8 +49,7 @@ const ProjectCreationNavigation = (props: StackProps) => {
   const steps = useMemo(
     () => [
       { title: 'Project Details', path: getPath('launchProjectDetails', project?.id) },
-      { title: 'Funding Goal', path: getPath('launchFundingGoal', project?.id), isDisabled: !project.id }, // TODO remove when we release AON
-      // { title: 'Funding Strategy', path: getPath('launchFundingStrategy', project?.id), isDisabled: !project.id }, // TODO: uncomment when we release AON
+      { title: 'Funding Strategy', path: getPath('launchFundingStrategy', project?.id), isDisabled: !project.id },
       { title: 'Products & Perks', path: getPath('launchProjectRewards', project?.id), isDisabled: !project.id },
       { title: 'Story', path: getPath('launchStory', project?.id), isDisabled: !project.id },
       { title: 'About You', path: getPath('launchAboutYou', project?.id), isDisabled: !project.id },
@@ -123,7 +122,7 @@ export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, p
     case ProjectCreationStep.FundingGoal:
       return getPath('launchFundingGoal', projectId)
     case ProjectCreationStep.FundingType:
-      return getPath('launchFundingGoal', projectId) // TODO change back to launchFundingStrategy when we release AON
+      return getPath('launchFundingStrategy', projectId)
     case ProjectCreationStep.PerksAndProducts:
       return getPath('launchProjectRewards', projectId)
     case ProjectCreationStep.Story:

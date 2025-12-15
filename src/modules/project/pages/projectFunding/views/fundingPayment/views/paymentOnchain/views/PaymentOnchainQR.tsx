@@ -1,10 +1,15 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { useEffect } from 'react'
 import { PiCopy, PiLink } from 'react-icons/pi'
 
 import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
+import { currentOnChainToRskSwapIdAtom, currentSwapIdAtom } from '@/modules/project/funding/state/swapAtom.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { __development__ } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
+import { isAllOrNothing } from '@/utils/index.ts'
 import { getBip21Invoice } from '@/utils/lightning/bip21'
 
 import { QRCodeComponent } from '../../../components/QRCodeComponent'
@@ -29,13 +34,26 @@ export const PaymentOnchainQR = () => {
 export const PaymentOnchainQRContent = ({ address }: { address: string }) => {
   useListenOnchainTransactionUpdate()
 
+  const { project } = useProjectAtom()
+  const isAon = isAllOrNothing(project)
+  const currentOnchainToRskSwapId = useAtomValue(currentOnChainToRskSwapIdAtom)
+  const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
+
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
   const totalAmountSats =
     fundingPaymentDetails.onChainSwap?.amountDue || fundingPaymentDetails.onChainToRskSwap?.amountDue || 0
 
-  const onChainBip21Invoice = getBip21Invoice(totalAmountSats, address)
+  const onChainBip21Invoice = __development__
+    ? `address=${address} amount=${totalAmountSats}`
+    : getBip21Invoice(totalAmountSats, address)
 
   const { onCopy: onCopyBip21Invoice, hasCopied: hasCopiedBip21Invoice } = useCopyToClipboard(onChainBip21Invoice)
+
+  useEffect(() => {
+    if (isAon && currentOnchainToRskSwapId) {
+      setCurrentSwapId(currentOnchainToRskSwapId)
+    }
+  }, [isAon, currentOnchainToRskSwapId, setCurrentSwapId])
 
   return (
     <VStack flexWrap="wrap" width="100%" spacing={6}>

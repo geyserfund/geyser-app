@@ -179,7 +179,7 @@ export const ConnectedSocialAccountButton = ({ accountType }: { accountType: Soc
   const icon = <SocialIcon color={colors.social[accountType]} fontSize="20px" boxSize="20px" />
 
   return (
-    <HStack width="100%" justifyContent="space-between">
+    <HStack width="100%" justifyContent="start" spacing={4}>
       <Button
         leftIcon={icon}
         size="lg"
@@ -192,8 +192,8 @@ export const ConnectedSocialAccountButton = ({ accountType }: { accountType: Soc
         {label}
       </Button>
       <HStack>
-        <Body> {t('Connected')}</Body>
         <Icon as={PiCheckBold} color="primary1.9" />
+        <Body> {t('Connected')}</Body>
       </HStack>
     </HStack>
   )

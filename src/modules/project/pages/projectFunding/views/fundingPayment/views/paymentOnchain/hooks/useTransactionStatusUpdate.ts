@@ -22,6 +22,7 @@ const SwapStatus = [
   'invoice.failedToPay',
   'transaction.lockupFailed',
   'transaction.server.mempool',
+  'transaction.server.confirmed',
   'swap.expired',
 ] as const
 export type SwapStatusType = (typeof SwapStatus)[number]
@@ -83,7 +84,7 @@ export const useTransactionStatusUpdate = ({
             }
 
             break
-          case 'transaction.server.mempool':
+          case 'transaction.server.confirmed':
             handleClaimCoins(swapStatusUpdate)
             break
           case OnChainErrorStatuses.INVOICE_FAILED:

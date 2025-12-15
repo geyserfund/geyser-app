@@ -1,7 +1,9 @@
+/* eslint-disable complexity */
 import { ApolloError } from '@apollo/client'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 
+import { useAuthContext } from '@/context/auth.tsx'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { __development__ } from '@/shared/constants/index.ts'
 import {
@@ -19,7 +21,7 @@ import { useNotification } from '@/utils'
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
 import { generateAccountKeys, generatePreImageHash } from '../../forms/accountPassword/keyGenerationHelper.ts'
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
-import { createTransactionForBoltzClaimCall } from '../../pages/projectFunding/utils/createCallData.ts'
+import { createCallDataForBoltzClaimCall } from '../../pages/projectFunding/utils/createCallDataForClaimCall.ts'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
@@ -48,6 +50,9 @@ export const useFundingAPI = () => {
   const toast = useNotification()
 
   const { project } = useFundingFormAtom()
+
+  const { isLoggedIn } = useAuthContext()
+
   const { generateTransactionForLightningToRskSwap, generateTransactionForOnChainToRskSwap } =
     useGenerateTransactionDataForClaimingRBTCToContract()
 
@@ -99,14 +104,16 @@ export const useFundingAPI = () => {
         }
 
         fundingContributionPartialUpdate(data.contributionCreate.contribution)
-        fundingPaymentDetailsPartialUpdate({ ...data.contributionCreate.payments, fiatSwap: undefined })
+        fundingPaymentDetailsPartialUpdate({ ...data.contributionCreate.payments, fiatToLightningSwap: undefined })
 
         if (data.contributionCreate.payments.onChainSwap?.swapJson) {
           parseResponseToSwap(
             data.contributionCreate.payments.onChainSwap,
             {
               projectTitle: project?.title,
+              projectId: project?.id,
               reference: data.contributionCreate.contribution.uuid,
+              contributionId: data.contributionCreate.contribution.id,
               bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
               datetime: data.contributionCreate.contribution.createdAt,
             },
@@ -115,12 +122,18 @@ export const useFundingAPI = () => {
         }
 
         if (data.contributionCreate.payments.onChainToRskSwap?.swapJson) {
-          parseResponseToOnChainToRskSwap(data.contributionCreate.payments.onChainToRskSwap, {
-            projectTitle: project?.title,
-            reference: data.contributionCreate.contribution.uuid,
-            bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
-            datetime: data.contributionCreate.contribution.createdAt,
-          })
+          parseResponseToOnChainToRskSwap(
+            data.contributionCreate.payments.onChainToRskSwap,
+            {
+              projectTitle: project?.title,
+              projectId: project?.id,
+              reference: data.contributionCreate.contribution.uuid,
+              bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
+              contributionId: data.contributionCreate.contribution.id,
+              datetime: data.contributionCreate.contribution.createdAt,
+            },
+            currentAccountKeys,
+          )
           generateTransactionForOnChainToRskSwap({
             payment: data.contributionCreate.payments.onChainToRskSwap,
             preImages: preImages.onChain,
@@ -129,12 +142,18 @@ export const useFundingAPI = () => {
         }
 
         if (data.contributionCreate.payments.lightningToRskSwap?.swapJson) {
-          parseResponseToLightningToRskSwap(data.contributionCreate.payments.lightningToRskSwap, {
-            projectTitle: project?.title,
-            reference: data.contributionCreate.contribution.uuid,
-            bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
-            datetime: data.contributionCreate.contribution.createdAt,
-          })
+          parseResponseToLightningToRskSwap(
+            data.contributionCreate.payments.lightningToRskSwap,
+            {
+              projectTitle: project?.title,
+              projectId: project?.id,
+              reference: data.contributionCreate.contribution.uuid,
+              bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
+              datetime: data.contributionCreate.contribution.createdAt,
+              contributionId: data.contributionCreate.contribution.id,
+            },
+            currentAccountKeys,
+          )
           generateTransactionForLightningToRskSwap({
             contribution: data.contributionCreate.contribution,
             payment: data.contributionCreate.payments.lightningToRskSwap,
@@ -195,6 +214,8 @@ export const useFundingAPI = () => {
 
       resetContribution()
 
+      console.log('checking input before finalInput', input)
+
       const finalInput = { ...input }
 
       if (
@@ -224,10 +245,8 @@ export const useFundingAPI = () => {
         finalInput.paymentsInput.onChainToRskSwap.boltz.preimageHash = onChainPreImage.preimageHash
 
         // If the claim public key is not set (i.e user is not logged in or doesnot have one), generate a new account keys
-        if (
-          !finalInput.paymentsInput.lightningToRskSwap.boltz.claimPublicKey ||
-          !finalInput.paymentsInput.onChainToRskSwap.boltz.claimPublicKey
-        ) {
+        if (!isLoggedIn) {
+          console.log('generating new account keys')
           const accountKeys = generateAccountKeys()
           setRskAccountKeys(accountKeys)
 
@@ -256,6 +275,7 @@ export const useFundingAPI = () => {
       setContributionCreatePreImages,
       currentAccountKeys,
       preImages,
+      isLoggedIn,
     ],
   )
 
@@ -300,7 +320,8 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     }, 0)
 
     const contributorFeesAmount = fees.reduce((acc, fee) => {
-      if (fee.feePayer === PaymentFeePayer.Contributor) {
+      // Swap fees never make it to the contract, so should not be counted inside the contract
+      if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
         return acc + fee.feeAmount
       }
 
@@ -311,7 +332,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
 
     console.log('contributionCreatePreImages.lightning', preImages)
 
-    const getTransactionForBoltzClaimCall = createTransactionForBoltzClaimCall({
+    const getTransactionForBoltzClaimCall = createCallDataForBoltzClaimCall({
       contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
       creatorFees: satsToWei(creatorFeesAmount),
       contributorFees: satsToWei(contributorFeesAmount),
@@ -353,7 +374,8 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     }, 0)
 
     const contributorFeesAmount = fees.reduce((acc, fee) => {
-      if (fee.feePayer === PaymentFeePayer.Contributor) {
+      // Swap fees never make it to the contract, so should not be counted inside the contract
+      if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
         return acc + fee.feeAmount
       }
 
@@ -364,8 +386,11 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
 
     console.log('contributionCreatePreImages.onChain', preImages)
     console.log('swap.amount', swap)
+    console.log('checking accountKeys', accountKeys)
+    console.log('checking userAccountKeys', userAccountKeys)
+    console.log('checking userAccountKeyPair', userAccountKeyPair)
 
-    const getTransactionForBoltzClaimCall = createTransactionForBoltzClaimCall({
+    const getCallDataForBoltzClaimCall = createCallDataForBoltzClaimCall({
       contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
       creatorFees: satsToWei(creatorFeesAmount),
       contributorFees: satsToWei(contributorFeesAmount),
@@ -376,12 +401,12 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
       aonContractAddress: project?.aonGoal?.contractAddress || '',
     })
-    console.log('getTransactionForBoltzClaimCall for ONCHAIN', getTransactionForBoltzClaimCall)
+    console.log('getTransactionForBoltzClaimCall for ONCHAIN', getCallDataForBoltzClaimCall)
     paymentSwapClaimTxSet({
       variables: {
         input: {
           paymentId: payment.paymentId,
-          claimTxCallDataHex: getTransactionForBoltzClaimCall,
+          claimTxCallDataHex: getCallDataForBoltzClaimCall,
         },
       },
     })

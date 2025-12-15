@@ -1,12 +1,13 @@
 /** Convert Ethereum address to 32-byte buffer (left-padded with zeros) */
 export const addressToBuffer32 = (address: string): Buffer => {
   const buffer = Buffer.alloc(32)
-  const cleanAddress = address.replace('0x', '')
+  const cleanAddress = address.replace('0x', '').replaceAll(' ', '')
 
   console.log('cleanAddress', cleanAddress)
+  console.log('cleanAddress length', cleanAddress.length)
 
   if (cleanAddress.length !== 40) {
-    throw new Error('Invalid Ethereum address format')
+    throw new Error(`Invalid Ethereum address format address: ${cleanAddress}`)
   }
 
   Buffer.from(cleanAddress, 'hex').copy(buffer, 12)

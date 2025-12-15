@@ -8,10 +8,10 @@ import { useProjectGrantApplicationsAPI } from '@/modules/project/API/useProject
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { VotingInfoModal } from '@/shared/molecules/VotingInfoModal'
+import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 import { CommunityVoteGrant, GrantStatusEnum, VotingSystem } from '@/types'
 
-import { isActive, isPrelaunch } from '../../../../../../../utils'
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
 
 type ContributeButtonProps = ButtonProps & {
@@ -29,6 +29,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
   useProjectGrantApplicationsAPI(true)
 
   const { project } = useProjectAtom()
+  const { isFundingDisabled } = useProjectToolkit(project)
 
   // const hasFundingLimitReached = useAtomValue(hasProjectFundingLimitReachedAtom)
 
@@ -46,8 +47,6 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
     )?.grant as CommunityVoteGrant)
 
   const isStepVoting = communityVotingGrant ? communityVotingGrant.votingSystem === VotingSystem.StepLog_10 : false
-
-  const isFundingDisabled = !isActive(project.status) && !isPrelaunch(project.status)
 
   const buttonProps = isWidget
     ? {
@@ -78,7 +77,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
         size="lg"
         variant="solid"
         colorScheme="primary1"
-        isDisabled={isFundingDisabled}
+        isDisabled={isFundingDisabled()}
         position="relative"
         {...buttonProps}
         {...props}

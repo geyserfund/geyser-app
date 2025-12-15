@@ -10,7 +10,7 @@ import { ProfileText } from '@/shared/components/display/ProfileText'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { getPath, getPathWithGeyserHero } from '@/shared/constants'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import {
   Activity,
   ActivityResource,

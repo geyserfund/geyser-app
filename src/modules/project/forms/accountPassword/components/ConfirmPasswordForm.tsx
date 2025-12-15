@@ -29,7 +29,7 @@ const creatorText = t(
 )
 
 const contributorText = t(
-  'Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds. ',
+  'Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds.',
 )
 
 /** Password confirmation form component with single password field and forgot password option */

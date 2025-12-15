@@ -1,20 +1,21 @@
 import { Divider, HStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
+import { refundedSwapDataAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { H2 } from '@/shared/components/typography'
 
 import { getPath } from '../../../../../../../shared/constants'
 import { standardPadding } from '../../../../../../../shared/styles'
-import { useRefundedSwapData } from '../../../../../funding/state'
 import { RefundProcessing, RefundSummary, SafeToDeleteNotice } from '../components'
 
 export const RefundInitiatedPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const [refundedSwapData] = useRefundedSwapData()
+  const refundedSwapData = useAtomValue(refundedSwapDataAtom)
 
   useEffect(() => {
     setTimeout(() => {

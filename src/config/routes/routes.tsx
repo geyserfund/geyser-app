@@ -770,11 +770,10 @@ export const platformRoutes: RouteObject[] = [
   },
   {
     path: getPath('refund'),
-    element: <Navigate to={getPath('refundFile')} />,
-    // async lazy() {
-    //   const RefundPage = await loadRefundPages().then((m) => m.RefundPage)
-    //   return { Component: RefundPage }
-    // },
+    async lazy() {
+      const RefundPage = await loadRefundPages().then((m) => m.RefundPage)
+      return { Component: RefundPage }
+    },
   },
 
   /** Not-Found Pages */
@@ -836,18 +835,52 @@ export const platformRoutes: RouteObject[] = [
             },
           },
           {
+            path: getPath('discoveryAllOrNothing'),
+            element: <Navigate to={getPath('discoveryCampaigns')} />,
+          },
+          {
             path: getPath('discoveryCampaigns'),
             async lazy() {
               const Campaigns = await loadLandingPages().then((m) => m.Campaigns)
               return { Component: Campaigns }
             },
-          },
-          {
-            path: getPath('discoveryAllOrNothing'),
-            async lazy() {
-              const Campaigns = await loadLandingPages().then((m) => m.Campaigns)
-              return { Component: Campaigns }
-            },
+            children: [
+              {
+                index: true,
+                async lazy() {
+                  const TrendingCampaigns = await loadLandingPages().then((m) => m.TrendingCampaigns)
+                  return { Component: TrendingCampaigns }
+                },
+              },
+              {
+                path: getPath('discoveryCampaignsAlmostFunded'),
+                async lazy() {
+                  const AlmostFundedCampaigns = await loadLandingPages().then((m) => m.AlmostFundedCampaigns)
+                  return { Component: AlmostFundedCampaigns }
+                },
+              },
+              {
+                path: getPath('discoveryCampaignsAlmostOver'),
+                async lazy() {
+                  const AlmostOverCampaigns = await loadLandingPages().then((m) => m.AlmostOverCampaigns)
+                  return { Component: AlmostOverCampaigns }
+                },
+              },
+              {
+                path: getPath('discoveryCampaignsLatest'),
+                async lazy() {
+                  const LatestCampaigns = await loadLandingPages().then((m) => m.LatestCampaigns)
+                  return { Component: LatestCampaigns }
+                },
+              },
+              {
+                path: getPath('discoveryCampaignsInYourRegion'),
+                async lazy() {
+                  const InYourRegionCampaigns = await loadLandingPages().then((m) => m.InYourRegionCampaigns)
+                  return { Component: InYourRegionCampaigns }
+                },
+              },
+            ],
           },
           {
             path: getPath('discoveryFundraisers'),
@@ -994,6 +1027,14 @@ export const platformRoutes: RouteObject[] = [
       /*
         End of deprecate for hero routes
       */
+
+      {
+        path: getPath('impactFund'),
+        async lazy() {
+          const ImpactFund = await loadDiscoveryModule().then((m) => m.ImpactFund)
+          return { Component: ImpactFund }
+        },
+      },
 
       {
         path: getPath('discoveryLeaderboard'),

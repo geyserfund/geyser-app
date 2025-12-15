@@ -46,6 +46,14 @@ export const LaunchProjectKeyUrl =
 export const LaunchProjectWorldUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/launch/create-project-world.webp'
 
+export const LiveProjectsImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/accepted_illustration1.png'
+export const InReviewProjectsImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/in_review_illustration.png'
+export const DraftProjectsImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/Draft%20Illustration.webp'
+export const InactiveProjectsImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/in_active_projects.png'
 // ===============================
 
 export const GeyserAssetDomainUrl = 'https://storage.googleapis.com/'
@@ -492,7 +500,9 @@ export const GuardianPartnerDJPUrl =
 export const GuardianPartnerBitcoinNewsUrl =
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/partners/Guardian-Partner-Bitcoin-News.png'
 export const CampaignsComingSoonImageUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/campaigns/campaigns_banner1.png'
+  'https://storage.googleapis.com/geyser-projects-media/app/campaigns/all_or_nothing_campaigns.png'
+export const AllOrNothingCampaignsStartingImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/campaigns/all_or_nothing_campaigns_starting.png'
 
 // SEO
 

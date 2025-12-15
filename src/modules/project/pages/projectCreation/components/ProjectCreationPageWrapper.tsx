@@ -47,7 +47,7 @@ export const ProjectCreationPageWrapper = ({
       flex={1}
       gap={8}
       position="relative"
-      maxWidth={{ base: '100%', lg: '652px' }}
+      maxWidth={{ base: '100%', lg: '900px' }}
       minHeight={{
         base: `calc(100vh - ${dimensions.topNavBar.mobile.height}px)`,
         lg: `calc(100vh - ${dimensions.topNavBar.desktop.height}px)`,

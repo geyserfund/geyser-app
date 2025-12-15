@@ -7,7 +7,7 @@ const defaultFundingPaymentDetails: FundingContributionPaymentDetailsFragment = 
   fiat: {
     stripeClientSecret: '',
   },
-  fiatSwap: {
+  fiatToLightningSwap: {
     checkoutUrl: '',
   },
   lightning: {

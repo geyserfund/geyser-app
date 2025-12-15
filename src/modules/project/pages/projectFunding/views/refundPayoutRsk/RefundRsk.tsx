@@ -1,11 +1,14 @@
+/* eslint-disable complexity */
 import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import React, { useEffect, useState } from 'react'
 import { PiWarningCircleBold } from 'react-icons/pi'
+import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
@@ -13,13 +16,15 @@ import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import {
-  ProjectForProfileContributionsFragment,
+  PaymentStatus,
+  PledgeRefundStatus,
   usePledgeRefundInitiateMutation,
   usePledgeRefundRequestMutation,
-  UserProjectContributionFragment,
+  usePledgeRefundSwapCreateMutation,
 } from '@/types/index.ts'
-import { useNotification } from '@/utils/index.ts'
+import { commaFormatted, useNotification } from '@/utils/index.ts'
 
+import { createCallDataForLockCall } from '../../utils/createCallDataForLockCall.ts'
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
@@ -31,34 +36,56 @@ import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
 import { LightningPayoutFormData } from './hooks/usePayoutWithLightningForm.ts'
+import { MAX_SATS_FOR_LIGHTNING } from './PayoutRsk.tsx'
 import { PayoutMethod } from './types.ts'
 
 type RefundRskProps = {
   isOpen: boolean
   onClose: () => void
-  contribution: UserProjectContributionFragment
-  project: ProjectForProfileContributionsFragment
+  contributionUUID: string
+  projectId?: number
+  rskAddress?: string
+  privateKey?: string
+  publicKey?: string
+  onCompleted?: () => void
 }
 
 /** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
-export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribution, project }) => {
+export const RefundRsk: React.FC<RefundRskProps> = ({
+  isOpen,
+  onClose,
+  contributionUUID,
+  projectId,
+  rskAddress,
+  privateKey,
+  publicKey,
+  onCompleted,
+}) => {
   const toast = useNotification()
 
   useUserAccountKeys()
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
 
-  const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.Lightning)
+  const refundFileAccountKeys = privateKey
+    ? ({ derivationPath: '', address: rskAddress, privateKey, publicKey } as AccountKeys)
+    : undefined
+
+  const [selectedMethod, setSelectedMethod] = useState<PayoutMethod>(PayoutMethod.OnChain)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isProcessed, setIsProcessed] = useState(false)
   const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
   const [refundAddress, setRefundAddress] = useState<string | null>(null)
+  const [refundTxId, setRefundTxId] = useState('')
+
+  const [continueRefund, setContinueRefund] = useState(false)
 
   const [
     pledgeRefundRequest,
     { data: pledgeRefundRequestData, loading: pledgeRefundRequestLoading, error: pledgeRefundRequestError },
   ] = usePledgeRefundRequestMutation()
 
+  const [pledgeRefundSwapCreate, { loading: isPledgeRefundSwapCreateLoading }] = usePledgeRefundSwapCreateMutation()
   const [pledgeRefundInitiate, { loading: isPledgeRefundInitiateLoading }] = usePledgeRefundInitiateMutation()
 
   const [swapData, setSwapData] = useState<any>(null)
@@ -68,21 +95,60 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
       pledgeRefundRequest({
         variables: {
           input: {
-            contributionUuid: contribution.uuid,
-            projectId: project.id,
-            rskAddress: userAccountKeys?.rskKeyPair.address,
+            contributionUuid: contributionUUID,
+            projectId,
+            rskAddress: rskAddress || userAccountKeys?.rskKeyPair.address,
           },
         },
       })
     }
-  }, [isOpen, pledgeRefundRequest, contribution.uuid, project.id, userAccountKeys?.rskKeyPair.address])
+  }, [isOpen, pledgeRefundRequest, contributionUUID, projectId, userAccountKeys?.rskKeyPair.address, rskAddress])
 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
+      const { preimageHash, preimageHex } = generatePreImageHash()
+
       const amount =
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
         (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
+
+      const { data: swapCreateResponse } = await pledgeRefundSwapCreate({
+        variables: {
+          input: {
+            pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
+            pledgeRefundPaymentInput: {
+              rskToLightningSwap: {
+                lightningAddress: data.lightningAddress,
+                boltz: {
+                  refundPublicKey: accountKeys.publicKey,
+                  preimageHash,
+                },
+              },
+            },
+          },
+        },
+      })
+
+      if (!swapCreateResponse?.pledgeRefundSwapCreate) {
+        throw new Error('Failed to create swap')
+      }
+
+      const { swap, payment } = swapCreateResponse.pledgeRefundSwapCreate
+
+      const swapObj = JSON.parse(swap)
+      swapObj.privateKey = accountKeys.privateKey
+      swapObj.preimageHash = preimageHash
+      swapObj.preimageHex = preimageHex
+      swapObj.paymentId = payment?.id
+      setSwapData(swapObj)
+
+      const callDataHex = createCallDataForLockCall({
+        preimageHash: `0x${preimageHash}` as Hex,
+        claimAddress: swapObj?.claimAddress as Address,
+        refundAddress: accountKeys.address as Address,
+        timelock: swapObj?.timeoutBlockHeight || 0n,
+      })
 
       const { signature } = createAndSignRefundMessage({
         aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
@@ -91,6 +157,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
         amount: satsToWei(amount),
         nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
         deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
+        processingFee: satsToWei(pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0),
+        lockCallData: callDataHex,
         rskPrivateKey: accountKeys.privateKey,
       })
 
@@ -99,20 +167,14 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
           input: {
             pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
             signature,
-            rskAddress: accountKeys.address,
-            pledgeRefundPaymentInput: {
-              rskToLightningSwap: {
-                lightningAddress: data.lightningAddress,
-                boltz: {
-                  refundPublicKey: accountKeys.publicKey,
-                },
-              },
-            },
+            rskAddress: rskAddress || accountKeys.address,
+            callDataHex,
           },
         },
       })
 
       setIsProcessed(true)
+      onCompleted?.()
       toast.success({
         title: t('Refund initiated successfully'),
         description: t('Your Lightning refund will be processed shortly'),
@@ -129,19 +191,88 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
   }
 
   const handleBitcoinSubmit = async (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => {
+    if (pledgeRefundRequestData?.pledgeRefundRequest.refund.status === PledgeRefundStatus.Processing) {
+      const latestPayment = pledgeRefundRequestData?.pledgeRefundRequest.refund.payments.sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )[0]
+      if (
+        latestPayment?.paymentDetails.__typename === 'RskToOnChainSwapPaymentDetails' &&
+        latestPayment.status === PaymentStatus.Claimable
+      ) {
+        const swapObj = JSON.parse(latestPayment.paymentDetails.swapMetadata)
+        swapObj.privateKey = accountKeys.privateKey
+        swapObj.preimageHash = latestPayment.paymentDetails.swapPreimageHash
+        // swapObj.preimageHex = preimageHex
+        swapObj.paymentId = latestPayment.id
+        setSwapData(swapObj)
+
+        setIsWaitingConfirmation(true)
+        setRefundAddress(data.bitcoinAddress)
+        toast.info({
+          title: t('Refund initiated'),
+          description: t('Your Bitcoin on-chain refund will be processed shortly'),
+        })
+      }
+
+      return
+    }
+
     setIsSubmitting(true)
     try {
       // TODO: Implement actual Bitcoin on-chain refund API call
-      console.log('Bitcoin refund data:', data)
-      console.log('checking accountKeys', accountKeys)
 
       const { preimageHash, preimageHex } = generatePreImageHash()
+
+      const preimageHexEncrypted = await encryptString({
+        plainText: preimageHex,
+        password: data.accountPassword || '',
+      })
 
       const amount =
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
         (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
 
-      console.log('this is the amount to be sent', amount)
+      const { data: swapCreateResponse } = await pledgeRefundSwapCreate({
+        variables: {
+          input: {
+            pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
+            pledgeRefundPaymentInput: {
+              rskToOnChainSwap: {
+                boltz: {
+                  userClaimAddress: data.bitcoinAddress,
+                  claimPublicKey: accountKeys.publicKey,
+                  preimageHash,
+                  preimageHexEncrypted,
+                },
+              },
+            },
+          },
+        },
+      })
+
+      if (!swapCreateResponse?.pledgeRefundSwapCreate) {
+        throw new Error('Failed to create swap')
+      }
+
+      const { swap, payment } = swapCreateResponse.pledgeRefundSwapCreate
+
+      const swapObj = JSON.parse(swap)
+      swapObj.privateKey = accountKeys.privateKey
+      swapObj.preimageHash = preimageHash
+      swapObj.preimageHex = preimageHex
+      swapObj.paymentId = payment?.id
+      setSwapData(swapObj)
+
+      const claimAddress = swapObj?.lockupDetails?.claimAddress as Address
+      const timelock = swapObj?.lockupDetails?.timeoutBlockHeight || 0n
+      const refundAddress = accountKeys.address as Address
+
+      const callDataHex = createCallDataForLockCall({
+        preimageHash: `0x${preimageHash}` as Hex,
+        claimAddress,
+        refundAddress,
+        timelock,
+      })
 
       const { signature } = createAndSignRefundMessage({
         aonContractAddress: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.aonContractAddress || '',
@@ -150,6 +281,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
         amount: satsToWei(amount),
         nonce: pledgeRefundRequestData?.pledgeRefundRequest.refundMetadata.nonce || 0,
         deadline: pledgeRefundRequestData?.pledgeRefundRequest.refund.expiresAt || 0,
+        processingFee: satsToWei(pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0),
+        lockCallData: callDataHex,
         rskPrivateKey: accountKeys.privateKey,
       })
 
@@ -159,26 +292,9 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
           input: {
             pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
             signature,
-            pledgeRefundPaymentInput: {
-              rskToOnChainSwap: {
-                boltz: {
-                  userClaimAddress: data.bitcoinAddress,
-                  claimPublicKey: accountKeys.publicKey,
-                  preimageHash,
-                },
-              },
-            },
+            rskAddress: rskAddress || accountKeys.address,
+            callDataHex,
           },
-        },
-        onCompleted(data) {
-          if (data.pledgeRefundInitiate.swap) {
-            const swapObj = JSON.parse(data.pledgeRefundInitiate.swap)
-            swapObj.privateKey = accountKeys.privateKey
-            swapObj.preimageHash = preimageHash
-            swapObj.preimageHex = preimageHex
-            swapObj.paymentId = data.pledgeRefundInitiate.payment?.id
-            setSwapData(swapObj)
-          }
         },
       })
       setIsWaitingConfirmation(true)
@@ -199,12 +315,13 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
   }
 
   // Get form objects from both hooks
-  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit)
-  const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit)
+  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, refundFileAccountKeys)
+  const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit, refundFileAccountKeys)
 
   const handleClose = () => {
     setIsProcessed(false)
     setIsSubmitting(false)
+    setContinueRefund(false)
     onClose()
   }
 
@@ -227,20 +344,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
     )
   }
 
-  if (isWaitingConfirmation) {
-    return (
-      <Modal isOpen={isOpen} size="lg" title={t('Please wait for swap confirmation')} onClose={() => {}}>
-        <BitcoinPayoutWaitingConfirmation
-          isRefund={true}
-          onClose={handleClose}
-          swapData={swapData}
-          refundAddress={refundAddress || ''}
-          setIsProcessed={setIsProcessed}
-        />
-      </Modal>
-    )
-  }
-
   // Show processed screen after successful submission
   if (isProcessed) {
     return (
@@ -257,27 +360,92 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
         {selectedMethod === PayoutMethod.Lightning ? (
           <LightningPayoutProcessed isRefund={true} onClose={handleClose} />
         ) : (
-          <BitcoinPayoutProcessed isRefund={true} onClose={handleClose} />
+          <BitcoinPayoutProcessed isRefund={true} refundTxId={refundTxId} onClose={handleClose} />
         )}
       </Modal>
     )
   }
 
+  if (isWaitingConfirmation) {
+    return (
+      <Modal isOpen={isOpen} size="lg" title={t('Confirm your refund')} onClose={() => {}} noClose={true}>
+        <BitcoinPayoutWaitingConfirmation
+          isRefund={true}
+          onClose={handleClose}
+          swapData={swapData}
+          refundAddress={refundAddress || ''}
+          setIsProcessed={setIsProcessed}
+          setRefundTxId={setRefundTxId}
+          onCompleted={onCompleted}
+        />
+      </Modal>
+    )
+  }
+
+  const ContinueRefundContent = () => {
+    return (
+      <VStack spacing={4} alignItems="start" w="full">
+        <Body size={'md'} medium>
+          {t('Refund all of the contributions you have made to this project.')} <br />
+          {t('Are you sure you want to continue with the refund?')}
+        </Body>
+        <Body size={'xl'} bold>
+          {t('Total refund amount')}
+          {': '}
+          {commaFormatted(pledgeRefundRequestData?.pledgeRefundRequest.refund.amount)} sats
+        </Body>
+        <Body size={'md'} medium></Body>
+        <HStack spacing={4} w="full" justifyContent="space-between">
+          <Button size={'lg'} colorScheme={'neutral1'} variant={'outline'} onClick={handleClose}>
+            {t('No, cancel')}
+          </Button>
+          <Button size={'lg'} colorScheme={'primary1'} variant={'solid'} onClick={() => setContinueRefund(true)}>
+            {t('Yes, continue with the refund')}
+          </Button>
+        </HStack>
+      </VStack>
+    )
+  }
+
+  const totalAmount = pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0
+
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} size="lg" title={t('Refund you contribution')} bodyProps={{ gap: 4 }}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="lg"
+      title={t('Refund you contribution')}
+      subtitle={`${t('Total refund amount')}: ${commaFormatted(totalAmount)} sats`}
+      subtitleProps={{ bold: true }}
+      bodyProps={{ gap: 4 }}
+    >
       {pledgeRefundRequestLoading ? (
         <RefundRskSkeleton />
+      ) : !continueRefund ? (
+        <ContinueRefundContent />
       ) : (
         <>
           {/* Payout Method Selection */}
-          <PayoutMethodSelection selectedMethod={selectedMethod} setSelectedMethod={setSelectedMethod} />
+          <PayoutMethodSelection
+            selectedMethod={selectedMethod}
+            setSelectedMethod={setSelectedMethod}
+            disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING}
+          />
 
           {/* Form Section */}
           <CardLayout w="full" p={6}>
             {selectedMethod === PayoutMethod.Lightning ? (
-              <LightningPayoutForm form={lightningForm.form} satsAmount={contribution.amount} />
+              <LightningPayoutForm
+                form={lightningForm.form}
+                satsAmount={totalAmount}
+                disablePassword={Boolean(privateKey)}
+              />
             ) : (
-              <BitcoinPayoutForm form={bitcoinForm.form} satsAmount={contribution.amount} />
+              <BitcoinPayoutForm
+                form={bitcoinForm.form}
+                satsAmount={totalAmount}
+                disablePassword={Boolean(privateKey)}
+              />
             )}
           </CardLayout>
 
@@ -286,7 +454,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({ isOpen, onClose, contribut
             size="lg"
             colorScheme="primary1"
             variant="solid"
-            isLoading={isSubmitting || isPledgeRefundInitiateLoading}
+            isLoading={isSubmitting || isPledgeRefundInitiateLoading || isPledgeRefundSwapCreateLoading}
             isDisabled={!enableSubmit}
             onClick={handleSubmit}
           >

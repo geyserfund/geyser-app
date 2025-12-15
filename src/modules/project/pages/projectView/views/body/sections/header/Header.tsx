@@ -24,7 +24,7 @@ import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { ID } from '@/shared/constants/components/id.ts'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 
 import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
 import { Body, H1 } from '../../../../../../../../shared/components/typography'
@@ -36,11 +36,18 @@ import {
 } from '../../../../../../../../shared/constants'
 import { VideoPlayer } from '../../../../../../../../shared/molecules/VideoPlayer'
 import { useProjectPageHeaderSummaryQuery } from '../../../../../../../../types'
-import { commaFormatted, removeProjectAmountException, toInt, useMobileMode } from '../../../../../../../../utils'
+import {
+  commaFormatted,
+  isAllOrNothing,
+  removeProjectAmountException,
+  toInt,
+  useMobileMode,
+} from '../../../../../../../../utils'
 import { toLargeImageUrl } from '../../../../../../../../utils/tools/imageSizes'
 import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjectAtom'
 import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
+import { AonProjectBalanceDisplay } from '../contributionSummary/components/AonProjectBalanceDisplay.tsx'
 import { CreatorSocial } from './components/CreatorSocial'
 import { LightningAddressModal } from './components/LightningAddressModal'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
@@ -72,6 +79,7 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
   }
 
   const { loading: summaryLoading } = useProjectPageHeaderSummaryQuery({
+    fetchPolicy: 'network-only',
     variables: {
       where: {
         name: project?.name,
@@ -188,6 +196,30 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
 const MobileBalanceInfo = () => {
   const { formatAmount } = useCurrencyFormatter()
   const { project } = useProjectAtom()
+  const isAON = isAllOrNothing(project)
+
+  const renderBalanceInfo = () => {
+    if (isAON) {
+      return <AonProjectBalanceDisplay />
+    }
+
+    return (
+      <>
+        {project.balance > 0 && (
+          <Body size="lg" bold>
+            {commaFormatted(project.balance)}
+            <Body as="span">{' sats'}</Body>
+          </Body>
+        )}
+        <Body size="sm">
+          {`${formatAmount(project.balanceUsdCent, 'USDCENT')}`}{' '}
+          <Body as="span" light>
+            {t('raised')}
+          </Body>
+        </Body>
+      </>
+    )
+  }
 
   return (
     <VStack
@@ -201,18 +233,7 @@ const MobileBalanceInfo = () => {
       alignItems="center"
       spacing={0}
     >
-      {project.balance > 0 && (
-        <Body size="lg" bold>
-          {commaFormatted(project.balance)}
-          <Body as="span">{' sats'}</Body>
-        </Body>
-      )}
-      <Body size="sm">
-        {`${formatAmount(project.balanceUsdCent, 'USDCENT')}`}{' '}
-        <Body as="span" light>
-          {t('contributed in total')}
-        </Body>
-      </Body>
+      {renderBalanceInfo()}
     </VStack>
   )
 }

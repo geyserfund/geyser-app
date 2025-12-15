@@ -1,7 +1,7 @@
 {
   "name": "geyser-app",
   "private": true,
-  "version": "0.24.34",
+  "version": "0.25.00",
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -66,7 +66,7 @@
     "@vulpemventures/secp256k1-zkp": "^3.2.1",
     "bech32": "^2.0.0",
     "bitcoin-address-validation": "^2.2.3",
-    "bitcoinjs-lib": "^6.1.5",
+    "bitcoinjs-lib": "^6.1.7",
     "boltz-core": "^2.1.2",
     "buffer": "^6.0.3",
     "classnames": "^2.3.2",

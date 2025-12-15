@@ -15,23 +15,23 @@ import { useNotification } from '@/utils/index.ts'
 /** Form data interface for Lightning payout */
 export type LightningPayoutFormData = {
   lightningAddress?: string
-  accountPassword: string
+  accountPassword?: string
 }
-
-/** Validation schema for Lightning payout form */
-export const lightningPayoutSchema = yup.object({
-  lightningAddress: yup.string(),
-  accountPassword: yup.string().required(t('Account password is required')),
-})
 
 /** Custom hook for Lightning payout form management */
 export const usePayoutWithLightningForm = (
   onSubmit: (data: LightningPayoutFormData, accountKeys: AccountKeys) => Promise<void> | void,
+  accountKeys?: AccountKeys,
 ) => {
   const toast = useNotification()
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
+
+  const lightningPayoutSchema = yup.object({
+    lightningAddress: yup.string(),
+    accountPassword: accountKeys ? yup.string() : yup.string().required(t('Account password is required')),
+  })
 
   const form = useForm<LightningPayoutFormData>({
     resolver: yupResolver(lightningPayoutSchema),
@@ -53,7 +53,7 @@ export const usePayoutWithLightningForm = (
   const enableSubmit = isValid && isDirty
 
   const handleFormSubmit = handleSubmit(async (data: LightningPayoutFormData) => {
-    if (!userAccountKeys?.encryptedSeed) {
+    if (!userAccountKeys?.encryptedSeed && !accountKeys) {
       toast.error({
         title: t('Unable to find your account keys'),
         description: t('Please refresh the page and try again.'),
@@ -62,14 +62,18 @@ export const usePayoutWithLightningForm = (
     }
 
     try {
-      const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed, data.accountPassword)
+      if (!accountKeys) {
+        const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed || '', data.accountPassword || '')
 
-      const accountKeys = generateKeysFromSeedHex(decryptedSeed)
+        const accountKeys = generateKeysFromSeedHex(decryptedSeed)
 
-      setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
-      console.log('accountKeys', accountKeys)
+        setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
+        console.log('accountKeys', accountKeys)
 
-      onSubmit(data, accountKeys)
+        onSubmit(data, accountKeys)
+      } else {
+        onSubmit(data, accountKeys)
+      }
     } catch (error) {
       form.setError('accountPassword', { message: t('Invalid password') })
     }

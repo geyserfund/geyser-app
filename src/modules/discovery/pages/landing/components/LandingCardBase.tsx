@@ -13,8 +13,9 @@ import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { aonProjectTimeLeft, getAonGoalPercentage } from '@/shared/utils/project/getAonData.ts'
-import { centsToDollars, isAllOrNothing, isInactive } from '@/utils'
+import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
+import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
+import { isAllOrNothing, isInactive } from '@/utils'
 
 import { SkeletonLayout } from '../../../../../shared/components/layouts'
 import { ContributionsSummary, ProjectForLandingPageFragment } from '../../../../../types'
@@ -41,9 +42,18 @@ export const LandingCardBase = ({
   const inActive = isInactive(project.status)
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
+
+  const { getProjectBalance, getAonGoalPercentage } = useProjectToolkit(project)
+
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
+
   const getFires = (amount: number) => {
+    if (isWeekly && amount > 100) {
+      return '🔥'
+    }
+
     if (amount > 1000) {
       return '🔥'
     }
@@ -51,14 +61,13 @@ export const LandingCardBase = ({
     return ''
   }
 
-  const contributionAmount =
-    project.contributionSummary?.contributionsTotalUsd || centsToDollars(project.balanceUsdCent)
-
   const isAonProject = isAllOrNothing(project)
-  const percentage = getAonGoalPercentage(project.aonGoal)
+
+  const contributionAmount = project.contributionSummary?.contributionsTotalUsd || getProjectBalance().usd
+
+  const percentage = getAonGoalPercentage()
   const timeLeft = aonProjectTimeLeft(project.aonGoal)
 
-  const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
   const fires = getFires(contributionAmount)
 
   const handleContribute = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -247,7 +256,7 @@ export const LandingCardBase = ({
         </Box>
         {isAonProject && (
           <AonProgressBar
-            aonGoal={project.aonGoal}
+            project={project}
             height={getResponsiveValue({ base: '10px', lg: '14px' })}
             wrapperProps={{
               position: 'absolute',
