@@ -17,7 +17,11 @@ import { useAuthModal } from '@/modules/auth/hooks/useAuthModal.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
-import { CampaignsComingSoonImageUrl, getPath } from '@/shared/constants/index.ts'
+import {
+  AllOrNothingCampaignsStartingImageUrl,
+  CampaignsComingSoonImageUrl,
+  getPath,
+} from '@/shared/constants/index.ts'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 
 import { NewCampaigns } from './views/NewCampaigns.tsx'
@@ -51,16 +55,15 @@ export const CampaignsComingSoon = () => {
           src={CampaignsComingSoonImageUrl}
           alt="Campaigns Coming Soon"
         />
-        <VStack w="full" width="full" gap={4}>
+        <VStack w="full" width="full" gap={1} alignItems="start">
           <H2 size={{ base: 'xl', lg: '2xl' }} bold textAlign="center">
-            {t('Launch your biggest ideas on Bitcoin with confidence')} <br />
-            {t('All-or-Nothing campaigns are coming soon')}
+            {t('Fund big ideas, only if they succeed')}
           </H2>
 
-          <Body size="md" textAlign="center">
-            {t(
-              'We’re unlocking a new kind of crowdfunding on Bitcoin. One that empowers creators to go big with confidence. With All-or-Nothing funds are only released if your campaign reaches its goal. If it does not, contributors can get their sats back',
-            )}
+          <Body size="md">
+            {t('All-or-Nothing on Bitcoin means creators get the funds only if they reach the goal.')}
+            <br />
+            {t('If you do not, contributors can claim their funds back.')}
           </Body>
         </VStack>
       </Stack>
@@ -74,14 +77,22 @@ export const CampaignsComingSoon = () => {
         </VStack>
       </VStack>
 
+      <Image
+        height="auto"
+        width="full"
+        maxWidth="400px"
+        src={AllOrNothingCampaignsStartingImageUrl}
+        alt="Campaigns Coming Soon"
+      />
+
       <VStack w="full" gap={2}>
         <H2 size="2xl" bold>
           {t('Join the early launches! ')}
         </H2>
         <Body size="lg" textAlign="center">
-          {t(
-            'Create your campaign now and join the Early Launch projects.  All or Nothing will be available for anyone in the coming months.',
-          )}
+          {t('Create your campaign now and join the Early Launch projects.')}
+          <br />
+          {t('All or Nothing will be available for anyone in the coming months.')}
         </Body>
       </VStack>
 

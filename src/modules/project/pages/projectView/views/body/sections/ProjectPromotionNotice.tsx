@@ -3,10 +3,13 @@ import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { PiX } from 'react-icons/pi'
+import { Link } from 'react-router'
 
+import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { getPath } from '@/shared/constants/index.ts'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 
 const promotionsModalAtom = atomWithStorage('promotionsModal', false)
@@ -45,7 +48,14 @@ export const ProjectPromotionNotice = () => {
         <Body size="sm" color={lightModeColors.neutral1[12]}>
           {t('This Christmas we are making it cheaper to get featured on Geyser!')}
         </Body>
-        <Button variant="solid" backgroundColor="utils.blackContrast" color="utils.whiteContrast" marginTop={2}>
+        <Button
+          as={Link}
+          to={getPath('projectRewards', GEYSER_PROMOTIONS_PROJECT_NAME)}
+          variant="solid"
+          backgroundColor="utils.blackContrast"
+          color="utils.whiteContrast"
+          marginTop={2}
+        >
           {t('View promotion plans')}
         </Button>
       </VStack>

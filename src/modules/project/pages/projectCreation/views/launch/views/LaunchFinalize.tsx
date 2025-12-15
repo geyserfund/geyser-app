@@ -7,7 +7,7 @@ import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { ProjectCreateLaunchedModal } from '@/modules/project/pages/projectView/components/ProjectCreateLaunchedModal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { getPath } from '@/shared/constants/index.ts'
+import { getPath, LiveProjectsImageUrl } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { useNotification } from '@/utils/tools/Notification.tsx'
 
@@ -76,13 +76,7 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
   return (
     <ProjectCreationPageWrapper title={t('Ready to launch!')} backButtonProps={backProps} hideContinueButton={true}>
       <VStack w="full" spacing={0}>
-        <Image
-          src={
-            'https://storage.googleapis.com/geyser-projects-media/app/creationflow/review/accepted_illustration1.png'
-          }
-          alt={t('Launch Now')}
-          height="200px"
-        />
+        <Image src={LiveProjectsImageUrl} alt={t('Launch Now')} height="200px" />
         <Body>
           {t(
             'Your project is ready to launch! Review everything one more time and click "Launch Now" to make your project live.',

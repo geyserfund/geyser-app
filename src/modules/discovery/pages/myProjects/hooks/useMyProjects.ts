@@ -38,6 +38,8 @@ export const inDraftStatus = [
   ProjectStatus.Accepted,
 ] as ProjectStatus[]
 
+export const inActiveStatus = [ProjectStatus.Closed, ProjectStatus.Inactive]
+
 export const useMyProjects = (userId: number) => {
   const { toast } = useNotification()
 
@@ -47,6 +49,7 @@ export const useMyProjects = (userId: number) => {
   const [inDraftProjects, setInDraftProjects] = useState<ProjectForMyProjectsFragment[]>([])
   const [inReviewProjects, setInReviewProjects] = useState<ProjectForMyProjectsFragment[]>([])
   const [inPrelaunchProjects, setInPrelaunchProjects] = useState<ProjectForMyProjectsFragment[]>([])
+  const [inActiveProjects, setInActiveProjects] = useState<ProjectForMyProjectsFragment[]>([])
 
   const [myProjectsActivities, setMyProjectsActivities] = useState<ProjectActivitiesCount[]>([])
 
@@ -101,13 +104,13 @@ export const useMyProjects = (userId: number) => {
       // )
       setInDraftProjects(
         data.user.ownerOf
-          ?.filter((val) => val?.project?.status && inDraftStatus.includes(val?.project?.status))
+          ?.filter((val) => !val?.project?.launchedAt)
           .map((val) => val.project)
           .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
       )
       setInReviewProjects(
         data.user.ownerOf
-          ?.filter((val) => val?.project?.status === ProjectStatus.InReview)
+          ?.filter((val) => val?.project?.status === ProjectStatus.InReview && val?.project?.launchedAt)
           .map((val) => val.project)
           .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
       )
@@ -117,6 +120,13 @@ export const useMyProjects = (userId: number) => {
           .map((val) => val.project)
           .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
       )
+      setInActiveProjects(
+        data.user.ownerOf
+          ?.filter((val) => val?.project?.status && inActiveStatus.includes(val?.project?.status))
+          .map((val) => val.project)
+          .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
+      )
+
       setLoading(false)
     },
     onError(error) {
@@ -140,6 +150,7 @@ export const useMyProjects = (userId: number) => {
     inDraftProjects,
     inReviewProjects,
     inPrelaunchProjects,
+    inActiveProjects,
     isLoading,
   }
 }

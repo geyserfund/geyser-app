@@ -66,6 +66,7 @@ export const FRAGMENT_PROJECT_FOR_LAUNCHPAD_PAGE = gql`
 `
 
 export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
+  ${FRAGMENT_PROJECT_AON_GOAL_FOR_LANDING_PAGE}
   fragment ProjectForMyProjects on Project {
     id
     name
@@ -80,6 +81,11 @@ export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
     followersCount
     balanceUsdCent
     lastCreationStep
+    fundingStrategy
+    launchedAt
+    aonGoal {
+      ...ProjectAonGoalForLandingPage
+    }
     wallets {
       id
       name

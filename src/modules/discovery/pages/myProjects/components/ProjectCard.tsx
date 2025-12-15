@@ -1,6 +1,6 @@
 import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiClock, PiEyeglasses, PiGear, PiNoteBlank, PiNotePencil } from 'react-icons/pi'
+import { PiCheckCircle, PiClock, PiEyeglasses, PiGear, PiNotePencil } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
@@ -44,7 +44,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     if (isDraft) {
       return (
         <Direction mt={4} spacing={4} alignItems="stretch">
-          <InDraftProjectCard />
+          <InDraftProjectCard project={project} />
         </Direction>
       )
     }
@@ -58,8 +58,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     }
 
     return (
-      <Direction minHeight="269px" mt={4} spacing={4} alignItems="stretch">
-        <Contributions projectId={project.id} projectName={project.name} />
+      <Direction mt={4} spacing={4} alignItems="stretch">
+        <Contributions project={project} />
         {hasRewards ? <Rewards projectId={project.id} projectName={project.name} /> : null}
       </Direction>
     )
@@ -67,18 +67,18 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   return (
     <Box width="100%" py={4}>
-      <HStack spacing={4} justifyContent="space-between" alignItems="start">
-        <HStack as={RouterLink} to={getPath('project', project.name)} alignItems="start">
+      <HStack spacing={4} justifyContent="space-between" alignItems="end">
+        <HStack as={RouterLink} to={getPath('project', project.name)} alignItems="center">
           {project.thumbnailImage && (
             <Image
               src={project.thumbnailImage}
               alt={project.title}
-              boxSize="40px"
-              borderRadius="lg"
+              boxSize="20px"
+              borderRadius="md"
               objectFit="cover"
             />
           )}
-          <Body size={{ base: 'lg', lg: '2xl' }} bold>
+          <Body size="lg" bold>
             {project.title}
           </Body>
         </HStack>
@@ -111,7 +111,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   )
 }
 
-const InDraftProjectCard = () => {
+const InDraftProjectCard = ({ project }: { project: ProjectForMyProjectsFragment }) => {
   const { t } = useTranslation()
 
   return (
@@ -127,17 +127,49 @@ const InDraftProjectCard = () => {
       p={4}
       flex={1}
     >
-      <HStack justifyContent="center" alignItems="center" spacing={2}>
-        <PiNoteBlank size={24} />
-        <Body size={'lg'} regular>
-          {t('Draft')}
-        </Body>
-      </HStack>
-      <Body size={'md'} regular>
-        {t(
-          "Your project is not visible to the public and cannot receive contributions. Click Publish when you're ready to go live.",
-        )}
-      </Body>
+      {project.status === ProjectStatus.InReview ? (
+        <>
+          <HStack justifyContent="center" alignItems="center" spacing={2} color="info.10">
+            <PiEyeglasses size={24} />
+            <Body size={'lg'} regular>
+              {t('Under Review')}
+            </Body>
+          </HStack>
+          <Body size={'md'} regular textAlign="center">
+            {t(
+              "Your project is currently being reviewed by our team. You'll be notified via email once the review is complete.",
+            )}
+          </Body>
+        </>
+      ) : project.status === ProjectStatus.Accepted ? (
+        <>
+          <HStack justifyContent="center" alignItems="center" spacing={2} color="primary1.10">
+            <PiCheckCircle size={24} />
+            <Body size={'lg'} regular>
+              {t('Approved')}
+            </Body>
+          </HStack>
+          <Body size={'md'} regular textAlign="center">
+            {t(
+              'Great news! Your project has been approved. Launch it now to start receiving contributions and make it visible to the community.',
+            )}
+          </Body>
+        </>
+      ) : (
+        <>
+          <HStack justifyContent="center" alignItems="center" spacing={2} color="warning.10">
+            <PiNotePencil size={24} />
+            <Body size={'lg'} regular>
+              {t('In Progress')}
+            </Body>
+          </HStack>
+          <Body size={'md'} regular textAlign="center">
+            {t(
+              "Your project is in progress. Complete the remaining details and launch it when you're ready to go live and start accepting contributions.",
+            )}
+          </Body>
+        </>
+      )}
     </Box>
   )
 }

@@ -8,20 +8,23 @@ import { useGoalsModal } from '@/modules/project/pages/projectView/hooks'
 import { Body } from '@/shared/components/typography'
 import { getPath, NoContributionImageUrl } from '@/shared/constants'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { ProjectGoalCurrency, ProjectGoalFragment, ProjectGoalStatus } from '@/types'
-import { commaFormatted, useMobileMode } from '@/utils'
+import { ProjectForMyProjectsFragment, ProjectGoalCurrency, ProjectGoalFragment, ProjectGoalStatus } from '@/types'
+import { commaFormatted, isAllOrNothing, useMobileMode } from '@/utils'
 
 import { useProjectGoals } from '../hooks/useProjectGoals'
 import { useProjectStats } from '../hooks/useProjectStats'
 
 interface ContributionsProps {
-  projectId: string
-  projectName: string
+  project: ProjectForMyProjectsFragment
 }
 
-export const Contributions = ({ projectId, projectName }: ContributionsProps) => {
+export const Contributions = ({ project }: ContributionsProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+
+  const projectName = project.name
+  const projectId = project.id
+
   const { stats, isLoading, error } = useProjectStats(projectId)
   const { goals, isLoading: goalsLoading, error: goalsError } = useProjectGoals(projectId)
   const { onGoalModalOpen } = useGoalsModal()
@@ -34,7 +37,9 @@ export const Contributions = ({ projectId, projectName }: ContributionsProps) =>
   const noContributionsReceived = !total || total === 0
   const noGoals = goals.length === 0
 
-  if (noGoals && !noContributionsReceived) {
+  const isAon = isAllOrNothing(project)
+
+  if (noGoals && !noContributionsReceived && !isAon) {
     return (
       <Box
         display="flex"
