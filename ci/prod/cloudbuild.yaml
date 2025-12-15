@@ -65,6 +65,7 @@ steps:
         --build-arg VITE_APP_STRIPE_API_KEY=${_VITE_APP_STRIPE_API_KEY} \
         --build-arg VITE_APP_BOLTZ_ROUTER_CONTRACT_ADDRESS=${_VITE_APP_BOLTZ_ROUTER_CONTRACT_ADDRESS} \
         --build-arg VITE_APP_BOLTZ_SWAP_CONTRACT_ADDRESS=${_VITE_APP_BOLTZ_SWAP_CONTRACT_ADDRESS} \
+        --build-arg VITE_APP_ROOTSTOCK_RPC_URL=${_VITE_APP_ROOTSTOCK_RPC_URL} \
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies \
         --cache-from us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:latest . \
         && \
