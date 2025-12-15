@@ -30,5 +30,12 @@ export const FRAGMENT_PROJECT_FOR_PROFILE_CONTRIBUTIONS = gql`
     name
     title
     thumbnailImage
+    fundingStrategy
+    status
+    aonGoal {
+      balance
+      goalAmount
+      status
+    }
   }
 `

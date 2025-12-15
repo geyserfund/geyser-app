@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_USER_PROJECT_CONTRIBUTION } from '@/modules/profile/graphql/fragments/contributionFragment.ts'
+
 import { FRAGMENT_USER_AVATAR } from './userFragment'
 
 export const FRAGMENT_PROJECT_FUNDER = gql`
@@ -59,5 +61,16 @@ export const FRAGMENT_PROJECT_CONTRIBUTOR_CONTRIBUTION_SUMMARY = gql`
     contributionsTotal
     contributionsCount
     commentsCount
+  }
+`
+
+export const FRAGMENT_PROJECT_CONTRIBUTOR = gql`
+  ${FRAGMENT_USER_PROJECT_CONTRIBUTION}
+  fragment ProjectContributor on Funder {
+    id
+    amountFunded
+    contributions {
+      ...UserProjectContribution
+    }
   }
 `

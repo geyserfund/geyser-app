@@ -26,7 +26,7 @@ const formSchema = yup.object({
   amount: yup
     .number()
     .required(t('Amount is required'))
-    .min(210000, t('Goal must be at least 210,000 sats (~210$)'))
+    .min(210000, t('Goal must be at least 210,000 sats'))
     .typeError(t('Amount must be a number')),
   duration: yup
     .number()
@@ -137,7 +137,7 @@ export const AllOrNothingGoal = () => {
         <VStack w="full" h="full" align="flex-start" spacing={8}>
           <FieldContainer
             title={t('Goal amount')}
-            subtitle={t('The goal must be at least of 210,000 sats (~210$).')}
+            subtitle={t('The goal must be at least of 210,000 sats.')}
             error={formState.errors.amount?.message}
           >
             <AmountInput

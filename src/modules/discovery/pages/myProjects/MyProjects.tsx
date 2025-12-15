@@ -1,18 +1,41 @@
-import { Box, Button, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
+import { Box, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiRocket } from 'react-icons/pi'
-import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { CreateProjectButton } from '@/modules/navigation/platformNavBar/components/CreateProjectButton.tsx'
 import { Body } from '@/shared/components/typography'
-import { DiamondUrl, getPath } from '@/shared/constants'
-import { useMobileMode } from '@/utils'
+import {
+  DraftProjectsImageUrl,
+  InactiveProjectsImageUrl,
+  InReviewProjectsImageUrl,
+  LiveProjectsImageUrl,
+} from '@/shared/constants'
+import { ProjectForMyProjectsFragment, ProjectStatus } from '@/types/index.ts'
 
 import { useLastVisitedMyProjects } from '../../hooks/useLastVisited'
+import { LaunchNewProjectBanner } from './components/LaunchNewProjectBanner.tsx'
 import { ProjectCard } from './components/ProjectCard'
 import { ProjectIFollowGrid } from './components/ProjectIFollowGrid'
 import { useMyProjects } from './hooks/useMyProjects'
+
+const ProjectGroupInfo = {
+  [ProjectStatus.Active]: {
+    title: 'Live projects',
+    imageUrl: LiveProjectsImageUrl,
+  },
+  [ProjectStatus.Draft]: {
+    title: 'Draft projects',
+    imageUrl: DraftProjectsImageUrl,
+  },
+  [ProjectStatus.InReview]: {
+    title: 'Review projects',
+    imageUrl: InReviewProjectsImageUrl,
+  },
+  [ProjectStatus.Inactive]: {
+    title: 'Inactive projects',
+    imageUrl: InactiveProjectsImageUrl,
+  },
+}
 
 export const MyProjects = () => {
   const { t } = useTranslation()
@@ -20,13 +43,13 @@ export const MyProjects = () => {
   useLastVisitedMyProjects()
 
   const { user } = useAuthContext()
-  const { activeProjects, inDraftProjects, inReviewProjects, inPrelaunchProjects, isLoading } = useMyProjects(user?.id)
+  const { activeProjects, inDraftProjects, inReviewProjects, inActiveProjects, isLoading } = useMyProjects(user?.id)
 
   const hasNoProjects =
     activeProjects.length === 0 &&
     inDraftProjects.length === 0 &&
     inReviewProjects.length === 0 &&
-    inPrelaunchProjects.length === 0
+    inActiveProjects.length === 0
 
   return (
     <>
@@ -51,12 +74,14 @@ export const MyProjects = () => {
         ) : (
           <>
             {hasNoProjects && <LaunchNewProjectBanner />}
-            {inPrelaunchProjects.map((project) =>
-              project ? <ProjectCard key={project.id} project={project} /> : null,
-            )}
-            {activeProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
-            {inDraftProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
-            {inReviewProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+
+            <ProjectGroup projects={activeProjects} status={ProjectStatus.Active} />
+
+            <ProjectGroup projects={inDraftProjects} status={ProjectStatus.Draft} />
+
+            <ProjectGroup projects={inReviewProjects} status={ProjectStatus.InReview} />
+
+            <ProjectGroup projects={inActiveProjects} status={ProjectStatus.Inactive} />
           </>
         )}
       </VStack>
@@ -69,45 +94,23 @@ export const MyProjects = () => {
   )
 }
 
-const LaunchNewProjectBanner = () => {
-  const { t } = useTranslation()
+const ProjectGroup = ({ projects, status }: { projects: ProjectForMyProjectsFragment[]; status: ProjectStatus }) => {
+  if (projects.length === 0) {
+    return null
+  }
 
-  const isMobile = useMobileMode()
-
-  const Direction = isMobile ? VStack : HStack
+  const { title, imageUrl } = ProjectGroupInfo[status as keyof typeof ProjectGroupInfo]
 
   return (
-    <Direction
-      width="100%"
-      justifyContent="space-between"
-      bg="neutralAlpha.2"
-      border="1px solid"
-      borderColor="neutralAlpha.6"
-      borderRadius="8px"
-      spacing={8}
-      p={8}
-    >
-      <HStack width="100%" justifyContent="flex-start" spacing={8}>
-        <Image height="86px" src={DiamondUrl} alt="Launch new project" />
-        <VStack alignItems="flex-start">
-          <Body size="xl" medium>
-            {t('Launch your new project')}
-          </Body>
-          <Body size="sm">{t('Transform your idea into real world projects backed by your community.')}</Body>
-        </VStack>
+    <VStack align="stretch" mt={4} spacing={2}>
+      <HStack>
+        <Image src={imageUrl} alt={title} width="60px" height="auto" />
+        <Body size="2xl" bold>
+          {title}
+        </Body>
       </HStack>
-      <Button
-        as={Link}
-        to={getPath('launchStart')}
-        size="md"
-        variant="solid"
-        colorScheme="primary1"
-        rightIcon={<PiRocket size="12px" />}
-        width={{ base: '100%', lg: 'auto' }}
-      >
-        {t('Create project')}
-      </Button>
-    </Direction>
+      {projects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+    </VStack>
   )
 }
 

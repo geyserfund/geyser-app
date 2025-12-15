@@ -81,6 +81,7 @@ export const FRAGMENT_PROJECT_CONTRIBUTION = gql`
     media
     comment
     confirmedAt
+    createdAt
     projectGoalId
     bitcoinQuote {
       quote
@@ -164,6 +165,42 @@ export const FRAGMENT_CONTRIBUTION_DOWNLOAD_INVOICE = gql`
         feeAmount
         external
         feeCurrency
+      }
+    }
+  }
+`
+
+export const FRAGMENT_CONTRIBUTION_FOR_REFUND = gql`
+  fragment ContributionForRefund on Contribution {
+    id
+    amount
+    bitcoinQuote {
+      quote
+      quoteCurrency
+    }
+    status
+    uuid
+    projectId
+    payments {
+      id
+      paymentType
+      status
+      paidAt
+      paymentAmount
+    }
+  }
+`
+
+export const FRAGMENT_PROJECT_CONTRIBUTION_REFUND = gql`
+  fragment ProjectContributionRefund on Contribution {
+    id
+    amount
+    uuid
+    status
+    sourceResource {
+      ... on Project {
+        id
+        name
       }
     }
   }

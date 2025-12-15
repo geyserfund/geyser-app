@@ -22,8 +22,7 @@ export const ProgressBar = ({
   showPercentage,
   ...rest
 }: ProgressBarProps) => {
-  // const percentage = max && current ? ((current - min) / (max - min)) * 100 : value || 0
-  const percentage = 12
+  const percentage = max && current ? ((current - min) / (max - min)) * 100 : value || 0
 
   return (
     <HStack

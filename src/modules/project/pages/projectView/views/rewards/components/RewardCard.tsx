@@ -11,8 +11,9 @@ import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
-import { ProjectRewardFragment, ProjectStatus, RewardCurrency } from '@/types'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
+import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
+import { ProjectRewardFragment, RewardCurrency } from '@/types'
 
 import { ProjectRewardShippingEstimate } from '../../../../../forms/shippingConfigForm/ProjectRewardShippingEstimate'
 import { RewardEditMenu } from './RewardEditMenu'
@@ -71,6 +72,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
   const isRewardAvailable = reward.maxClaimable ? reward.maxClaimable - reward.sold > count : true
 
   const { formatUsdAmount, formatSatsAmount } = useCurrencyFormatter()
+  const { isFundingDisabled } = useProjectToolkit(project)
 
   const onBuyClick = (e: MouseEvent<HTMLButtonElement>) => {
     e?.stopPropagation()
@@ -192,7 +194,7 @@ export const RewardCard = ({ reward, hidden, noLink, isLaunch, buyReward, count 
                 colorScheme="primary1"
                 minWidth="80px"
                 onClick={onBuyClick}
-                isDisabled={!isRewardAvailable || project?.status === ProjectStatus.Inactive}
+                isDisabled={!isRewardAvailable || isFundingDisabled()}
               >
                 {t('Buy')}
               </Button>

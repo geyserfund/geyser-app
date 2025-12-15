@@ -6,15 +6,14 @@ import { RightSideStickyLayout } from '@/modules/project/components/RightSideSti
 import { ProjectPreLaunchNav } from '@/modules/project/navigation/components/ProjectPreLaunchNav.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
+import { isAllOrNothing } from '@/utils/index.ts'
 
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
-import { BodySectionPageBottomBar } from './components/BodySectionPageBottomBar'
 import {
   ContributionSummary,
   CreatorTools,
   Details,
-  FinalizeProjectNotice,
   Goals,
   Header,
   LeaderboardSummary,
@@ -23,8 +22,10 @@ import {
   Story,
 } from './sections'
 import { AonNotification } from './sections/aonNotification/AonNotification.tsx'
+import { BodySectionPageBottomBar } from './sections/BodySectionPageBottomBar.tsx'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
 import { FundNowWithLightning } from './sections/FundNowWithLightning.tsx'
+import { ProjectPromotionNotice } from './sections/ProjectPromotionNotice.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
 
 export const ProjectBody = () => {
@@ -32,6 +33,8 @@ export const ProjectBody = () => {
 
   const location = useLocation()
   const navigate = useNavigate()
+
+  const isAon = isAllOrNothing(project)
 
   useEffect(() => {
     if (loading) return
@@ -54,10 +57,10 @@ export const ProjectBody = () => {
         maxWidth={{ base: 'unset', lg: dimensions.project.leftMainContainer.width }}
         minWidth={{ base: 'unset', lg: dimensions.project.leftMainContainer.minWidth }}
         spacing={6}
-        paddingBottom={{ base: 24, lg: 10 }}
+        paddingBottom={{ base: 28, lg: 10 }}
       >
         <ProjectPreLaunchNav />
-        <FinalizeProjectNotice />
+        <ProjectPromotionNotice />
         <CreatorVerificationNotice />
         <AonNotification />
 
@@ -70,7 +73,8 @@ export const ProjectBody = () => {
         {project.entriesCount && <Posts />}
         {project.goalsCount && <Goals />}
         <Details />
-        <FundNowWithLightning />
+        {!isAon && <FundNowWithLightning />}
+
         <SuggestedProjects
           id={'suggested-projects-project-page'}
           subCategory={project.subCategory}

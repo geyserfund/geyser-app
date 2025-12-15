@@ -1,4 +1,4 @@
-import { Button, Collapse, HStack, ListItem, UnorderedList, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, Collapse, HStack, Link, ListItem, UnorderedList, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
 
@@ -58,9 +58,8 @@ export const LaunchStrategySelection = ({
           isSelected={isGrowthLaunch}
           onClick={() => setStrategy(ProjectLaunchStrategy.GROWTH_LAUNCH)}
           title={t('Growth Launch')}
-          subtitle={t('visibility boost with expert feedback')}
-          price={t('$50')}
-          highlightedText={t('Picked by 40% of Top 100 projects on Geyser')}
+          subtitle={t('Visibility boost')}
+          price={t('$60')}
           points={[
             [t('Landing Page Feature'), t('1 week front-page spotlight')],
             [
@@ -68,6 +67,23 @@ export const LaunchStrategySelection = ({
               t('get featured at the top of our monthly newsletter going out to 5000+ subscribers'),
             ],
             [t('Social Media post'), t('1 social media post on Geyser’s X account with 15k+ followers')],
+          ]}
+        />
+        <ProjectCreateStrategyCard
+          flex={1}
+          isSelected={isProLaunch}
+          onClick={() => setStrategy(ProjectLaunchStrategy.PRO_LAUNCH)}
+          title={t('Pro Launch')}
+          subtitle={t('Maximum visibility + product feedback')}
+          body={t('Limited to 5 per month, subject to selection')}
+          price={t('$90')}
+          highlightedText={t('Picked by 40% of Top 100 projects on Geyser')}
+          points={[
+            [t('Everything in Growth')],
+            [
+              t('Spotlight Email'),
+              t('Your project featured in a dedicated email sent to Geyser users most interested in your category'),
+            ],
             [
               t('Project feedback'),
               t('Geyser Team Expert provides 1-time feedback on your project story and structure'),
@@ -77,27 +93,17 @@ export const LaunchStrategySelection = ({
         <ProjectCreateStrategyCard
           flex={1}
           isSelected={isProLaunch}
-          onClick={() => setStrategy(ProjectLaunchStrategy.PRO_LAUNCH)}
-          title={t('Pro Launch')}
-          subtitle={t('hands-on support + network amplification')}
-          body={t('Limited to 5 per month, subject to selection')}
-          price={t('$350')}
-          points={[
-            [t('Everything in Growth')],
-            [
-              t('Spotlight Email'),
-              t('Your project featured in a dedicated email sent to Geyser users most interested in your category'),
-            ],
-            [
-              t('Personalised Launch Strategy'),
-              t('a one-on-one session to design the perfect launch plan for your project'),
-            ],
-            [
-              t('Dedicated support'),
-              t('one month of hands-on guidance from our team to keep you on path for a successful raise'),
-            ],
-            [t('Exclusive network'), t('tap into our podcasters, media, and creator partners')],
-          ]}
+          as={Link}
+          href={
+            'https://cal.com/metamick/geyser-partnership-hands-on-support-network-amplification?overlayCalendar=true'
+          }
+          isExternal
+          title={t('Geyser Partnership')}
+          subtitle={t('hands on support + network amplification')}
+          body={t(
+            'Geyser becomes your partner providing personalized launch strategy, project feedback, marketing support. If you click ',
+          )}
+          price={t('starting at $1,000')}
         />
       </VStack>
       <VStack w="full" alignItems="flex-start">
@@ -143,8 +149,9 @@ export const ProjectCreateStrategyCard = ({
         borderColor: isSelected ? 'primary1.9' : 'neutral1.9',
         cursor: 'pointer',
       }}
-      overflow={'hidden'}
+      overflow={'visible'}
       padding={4}
+      position="relative"
     >
       <HStack w="full">
         <HStack
@@ -193,7 +200,7 @@ export const ProjectCreateStrategyCard = ({
         </VStack>
       </Collapse>
       {highlightedText && (
-        <HStack w="full" justifyContent="flex-end">
+        <HStack w="full" justifyContent="flex-end" position="absolute" bottom={-3} right={3}>
           <Body size="sm" color="primary1.11" backgroundColor="primary1.3" paddingX={2} paddingY={1} borderRadius={8}>
             {highlightedText}
           </Body>

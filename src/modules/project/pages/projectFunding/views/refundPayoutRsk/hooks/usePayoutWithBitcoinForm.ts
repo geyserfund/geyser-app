@@ -18,36 +18,36 @@ import { validateBitcoinAddress } from '../../fundingPayment/views/paymentOnchai
 /** Form data interface for Bitcoin On-Chain payout */
 export type BitcoinPayoutFormData = {
   bitcoinAddress: string
-  accountPassword: string
+  accountPassword?: string
 }
-
-/** Validation schema for Bitcoin On-Chain payout form */
-export const bitcoinPayoutSchema = yup.object({
-  bitcoinAddress: yup
-    .string()
-    .required(t('Bitcoin address is required'))
-    .test({
-      test(value) {
-        const bitcoinAddress = getBitcoinAddress(value)
-        if (bitcoinAddress.valid && bitcoinAddress.address) {
-          return validateBitcoinAddress(bitcoinAddress.address)
-        }
-
-        return validateBitcoinAddress(value)
-      },
-      message: t('The Bitcoin address you entered is invalid'),
-    }),
-  accountPassword: yup.string().required(t('Account password is required')),
-})
 
 /** Custom hook for Bitcoin On-Chain payout form management */
 export const usePayoutWithBitcoinForm = (
   onSubmit: (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => Promise<void> | void,
+  accountKeys?: AccountKeys,
 ) => {
   const toast = useNotification()
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
+
+  const bitcoinPayoutSchema = yup.object({
+    bitcoinAddress: yup
+      .string()
+      .required(t('Bitcoin address is required'))
+      .test({
+        test(value) {
+          const bitcoinAddress = getBitcoinAddress(value)
+          if (bitcoinAddress.valid && bitcoinAddress.address) {
+            return validateBitcoinAddress(bitcoinAddress.address)
+          }
+
+          return validateBitcoinAddress(value)
+        },
+        message: t('The Bitcoin address you entered is invalid'),
+      }),
+    accountPassword: accountKeys ? yup.string() : yup.string().required(t('Account password is required')),
+  })
 
   const form = useForm<BitcoinPayoutFormData>({
     resolver: yupResolver(bitcoinPayoutSchema),
@@ -69,7 +69,7 @@ export const usePayoutWithBitcoinForm = (
   const enableSubmit = isValid && isDirty
 
   const handleFormSubmit = handleSubmit(async (data: BitcoinPayoutFormData) => {
-    if (!userAccountKeys?.encryptedSeed) {
+    if (!userAccountKeys?.encryptedSeed && !accountKeys) {
       toast.error({
         title: t('Unable to find your account keys'),
         description: t('Please refresh the page and try again.'),
@@ -78,14 +78,18 @@ export const usePayoutWithBitcoinForm = (
     }
 
     try {
-      const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed, data.accountPassword)
+      if (!accountKeys) {
+        const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed || '', data.accountPassword || '')
 
-      const accountKeys = generateKeysFromSeedHex(decryptedSeed)
+        const accountKeys = generateKeysFromSeedHex(decryptedSeed)
 
-      setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
-      console.log('accountKeys', accountKeys)
+        setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
+        console.log('accountKeys', accountKeys)
 
-      onSubmit(data, accountKeys)
+        onSubmit(data, accountKeys)
+      } else {
+        onSubmit(data, accountKeys)
+      }
     } catch (error) {
       form.setError('accountPassword', { message: t('Invalid password') })
     }

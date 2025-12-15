@@ -1,8 +1,8 @@
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { useRefundFileAdd, useRefundFileValue } from '@/modules/project/funding/state'
+import { addSwapAtom, currentSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { getPath } from '@/shared/constants'
 
 import { onChainErrorAtom, OnChainErrorStatuses } from '../states/onChainErrror.ts'
@@ -16,9 +16,9 @@ export const useListenOnchainTransactionUpdate = () => {
 
   const { project } = useFundingFormAtom()
 
-  const refundFile = useRefundFileValue()
+  const refundFile = useAtomValue(currentSwapAtom)
 
-  const addRefundFile = useRefundFileAdd()
+  const addRefundFile = useSetAtom(addSwapAtom)
 
   const setOnChainError = useSetAtom(onChainErrorAtom)
 

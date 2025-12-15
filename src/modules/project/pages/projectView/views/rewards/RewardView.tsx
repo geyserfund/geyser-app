@@ -19,7 +19,7 @@ import { getPath } from '@/shared/constants/index.ts'
 import { MarkdownField } from '@/shared/markdown/MarkdownField'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
-import { useCurrencyFormatter } from '@/shared/utils/hooks'
+import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { RewardCurrency, Satoshis, USDCents, useProjectRewardGetQuery } from '@/types'
 import { toInt, useMobileMode } from '@/utils'
 

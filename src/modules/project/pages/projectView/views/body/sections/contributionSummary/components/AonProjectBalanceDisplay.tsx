@@ -2,22 +2,34 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 
+import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
+import { ProjectAonGoalStatus } from '@/types/index.ts'
+import { Satoshis } from '@/types/types.ts'
 
 import { LiveProgressAqua } from '../../../../../../../../../shared/components/feedback/LiveProgressAqua.tsx'
 
 export const AonProjectBalanceDisplay = () => {
   const { project } = useProjectAtom()
 
-  const { balance, balanceUsdCent } = project
-
   const { formatAmount } = useCurrencyFormatter()
+  const { getUSDCentsAmount } = useBTCConverter()
 
   /** Calculate time left for AON project showing only the largest time unit */
   const timeLeft = useMemo(() => aonProjectTimeLeft(project.aonGoal), [project.aonGoal])
+
+  const isAonGoalFinalized = project.aonGoal?.status === ProjectAonGoalStatus.Finalized
+
+  const balance = isAonGoalFinalized ? project.balance : project.aonGoal?.balance
+  const goalAmount = project.aonGoal?.goalAmount
+  const balanceUsdCent = isAonGoalFinalized
+    ? project.balanceUsdCent
+    : balance
+    ? getUSDCentsAmount(balance as Satoshis)
+    : 0
 
   // Don't render the component if time is up
 
@@ -47,38 +59,46 @@ export const AonProjectBalanceDisplay = () => {
         sparkleDurationMs={950}
       />
 
-      <VStack w="100%" display="flex" justifyContent="center" alignItems="start" spacing={0}>
-        <Body size="2xl" bold dark lineHeight={1}>
-          {formatAmount(balance ?? 0, 'BTCSAT')}
-        </Body>
-
-        <Body size="md" light display="inline">
-          <Body as="span" dark medium>
-            {formatAmount(balanceUsdCent ?? 0, 'USDCENT')}
+      <HStack w="full" justifyContent="space-between">
+        <VStack display="flex" justifyContent="center" alignItems="start" spacing={0}>
+          <Body size="2xl" bold dark lineHeight={1}>
+            {formatAmount(balance ?? 0, 'BTCSAT')}
           </Body>
-          {` ${t('contributed in total')} `}
-        </Body>
-      </VStack>
 
-      <HStack w="full" justifyContent="start">
-        <VStack w="full" display="flex" justifyContent="center" alignItems="start" spacing={0}>
-          <Body size="xl" bold dark lineHeight={1}>
-            {project.fundersCount ?? 0}
-          </Body>
           <Body size="md" light display="inline">
-            {t('backers')}
+            <Body as="span" dark medium>
+              {formatAmount(balanceUsdCent ?? 0, 'USDCENT')}
+            </Body>
+            {` ${t('raised')} `}
           </Body>
-        </VStack>
-        {timeLeft && (
-          <VStack w="full" display="flex" justifyContent="center" alignItems="start" spacing={0}>
+          <VStack w="full" display="flex" justifyContent="center" alignItems="start" spacing={0} pt={6}>
             <Body size="xl" bold dark lineHeight={1}>
-              {timeLeft.value}
+              {project.fundersCount ?? 0}
             </Body>
             <Body size="md" light display="inline">
-              {timeLeft.label}
+              {t('backers')}
             </Body>
           </VStack>
-        )}
+        </VStack>
+        <VStack display="flex" justifyContent="center" alignItems="start" spacing={0}>
+          <Body size="lg" bold dark lineHeight={1}>
+            {formatAmount(goalAmount ?? 0, 'BTCSAT')}
+          </Body>
+
+          <Body size="md" light display="inline">
+            {t('goal amount')}
+          </Body>
+          {timeLeft && (
+            <VStack w="full" display="flex" justifyContent="center" alignItems="start" spacing={0} pt={6}>
+              <Body size="xl" bold dark lineHeight={1}>
+                {timeLeft.value}
+              </Body>
+              <Body size="md" light display="inline">
+                {timeLeft.label}
+              </Body>
+            </VStack>
+          )}
+        </VStack>
       </HStack>
     </VStack>
   )

@@ -11,10 +11,11 @@ import { BitcoinPayoutFormData } from '../hooks/usePayoutWithBitcoinForm.ts'
 type BitcoinPayoutFormProps = {
   form: UseFormReturn<BitcoinPayoutFormData>
   satsAmount?: number
+  disablePassword?: boolean
 }
 
 /** BitcoinPayoutForm: Form component for Bitcoin On-Chain payout with address and password fields */
-export const BitcoinPayoutForm: React.FC<BitcoinPayoutFormProps> = ({ form, satsAmount }) => {
+export const BitcoinPayoutForm: React.FC<BitcoinPayoutFormProps> = ({ form, satsAmount, disablePassword }) => {
   const { control } = form
   const [showForgotPassword, setShowForgotPassword] = useState(false)
 
@@ -22,37 +23,39 @@ export const BitcoinPayoutForm: React.FC<BitcoinPayoutFormProps> = ({ form, sats
     <VStack w="full" spacing={6} alignItems="start">
       <ControlledTextInput name="bitcoinAddress" label={t('Enter your Bitcoin address')} control={control} size="md" />
 
-      <VStack w="full" spacing={2} alignItems="start">
-        <Body size="md" medium>
-          {t('Enter your account password')}
-        </Body>
-        <ControlledTextInput name="accountPassword" control={control} type="password" placeholder="" size="md" />
+      {!disablePassword && (
+        <VStack w="full" spacing={2} alignItems="start">
+          <Body size="md" medium>
+            {t('Enter your account password')}
+          </Body>
+          <ControlledTextInput name="accountPassword" control={control} type="password" placeholder="" size="md" />
 
-        <Body
-          size="xs"
-          color="primary1.9"
-          cursor="pointer"
-          onClick={() => setShowForgotPassword(!showForgotPassword)}
-          textDecoration="underline"
-        >
-          {t('Forgot your password')}?
-        </Body>
+          <Body
+            size="xs"
+            color="primary1.9"
+            cursor="pointer"
+            onClick={() => setShowForgotPassword(!showForgotPassword)}
+            textDecoration="underline"
+          >
+            {t('Forgot your password')}?
+          </Body>
 
-        <Collapse in={showForgotPassword}>
-          <VStack spacing={2} alignItems="start" pt={2}>
-            <Body size="sm" light>
-              {t(
-                "Without your password, you won't be able to claim the funds of the project. Geyser cannot recover this password for you.",
-              )}
-            </Body>
-            <Body size="sm" light>
-              {t(
-                'If you have forgotten your password, the funds will be returned contributors after a period of 30 days.',
-              )}
-            </Body>
-          </VStack>
-        </Collapse>
-      </VStack>
+          <Collapse in={showForgotPassword}>
+            <VStack spacing={2} alignItems="start" pt={2}>
+              <Body size="sm" light>
+                {t(
+                  "Without your password, you won't be able to claim the funds of the project. Geyser cannot recover this password for you.",
+                )}
+              </Body>
+              <Body size="sm" light>
+                {t(
+                  'If you have forgotten your password, the funds will be returned contributors after a period of 30 days.',
+                )}
+              </Body>
+            </VStack>
+          </Collapse>
+        </VStack>
+      )}
     </VStack>
   )
 }

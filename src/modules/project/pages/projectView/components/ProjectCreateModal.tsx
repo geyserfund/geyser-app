@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { useModal } from '../../../../../shared/hooks'
 import { ProjectCreateDraftModal } from './ProjectCreateDraftModal'
-import { ProjectCreateLaunchedModal } from './ProjectCreateLaunchedModal'
 import { ProjectCreatePreLaunchedModal } from './ProjectCreatePreLaunchedModal.tsx'
 
 export const ProjectCreateModal = () => {
@@ -14,18 +13,12 @@ export const ProjectCreateModal = () => {
     navigate(location.pathname, { replace: true })
   }
 
-  const launchModal = useModal({ onClose: onModalClose })
   const draftModal = useModal({ onClose: onModalClose })
   const preLaunchModal = useModal({ onClose: onModalClose })
 
   useEffect(() => {
-    const launchModalShouldOpen = location.search.includes('launch') && !location.search.includes('prelaunch')
     const preLaunchModalShouldOpen = location.search.includes('prelaunch')
     const draftModalShouldOpen = location.search.includes('draft')
-
-    if (launchModalShouldOpen) {
-      return launchModal.onOpen()
-    }
 
     if (preLaunchModalShouldOpen) {
       return preLaunchModal.onOpen()
@@ -38,14 +31,9 @@ export const ProjectCreateModal = () => {
     if (draftModal.isOpen) {
       draftModal.onClose()
     }
-
-    if (launchModal.isOpen) {
-      launchModal.onClose()
-    }
-  }, [draftModal, launchModal, location.search, preLaunchModal])
+  }, [draftModal, location.search, preLaunchModal])
   return (
     <>
-      <ProjectCreateLaunchedModal {...launchModal} />
       <ProjectCreateDraftModal {...draftModal} />
       <ProjectCreatePreLaunchedModal {...preLaunchModal} />
     </>

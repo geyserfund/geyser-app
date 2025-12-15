@@ -1,12 +1,14 @@
-import { Button, Icon, VStack } from '@chakra-ui/react'
+import { Button, Icon, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiRocket } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { ProjectCreateLaunchedModal } from '@/modules/project/pages/projectView/components/ProjectCreateLaunchedModal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { getPath } from '@/shared/constants/index.ts'
+import { getPath, LiveProjectsImageUrl } from '@/shared/constants/index.ts'
+import { useModal } from '@/shared/hooks/useModal.tsx'
 import { useNotification } from '@/utils/tools/Notification.tsx'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
@@ -15,6 +17,8 @@ import { LaunchSummary } from '../components/LaunchSummary.tsx'
 export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
   const navigate = useNavigate()
   const toast = useNotification()
+
+  const projectPublishedModal = useModal()
 
   const { project } = useProjectAtom()
   const { publishProject } = useProjectAPI()
@@ -38,7 +42,7 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
               title: t('Project Published!'),
               description: t('Your project is now live and available to the public'),
             })
-            navigate(getPath('project', project.name || ''))
+            projectPublishedModal.onOpen()
           }
         },
         onError(error) {
@@ -64,13 +68,22 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
     onClick: handleBackClick,
   }
 
+  const handleCloseModal = () => {
+    projectPublishedModal.onClose()
+    navigate(getPath('projectLaunch', project.name || ''))
+  }
+
   return (
     <ProjectCreationPageWrapper title={t('Ready to launch!')} backButtonProps={backProps} hideContinueButton={true}>
-      <Body>
-        {t(
-          'Your project is ready to launch! Review everything one more time and click "Launch Now" to make your project live.',
-        )}
-      </Body>
+      <VStack w="full" spacing={0}>
+        <Image src={LiveProjectsImageUrl} alt={t('Launch Now')} height="200px" />
+        <Body>
+          {t(
+            'Your project is ready to launch! Review everything one more time and click "Launch Now" to make your project live.',
+          )}
+        </Body>
+      </VStack>
+
       <LaunchSummary />
 
       <VStack w="full" alignItems="start" spacing={8}>
@@ -92,6 +105,7 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
           {t('Launch Now')}
         </Button>
       </VStack>
+      <ProjectCreateLaunchedModal {...projectPublishedModal} onClose={handleCloseModal} />
     </ProjectCreationPageWrapper>
   )
 }

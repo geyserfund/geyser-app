@@ -25,7 +25,5 @@ export const TrendingCampaigns = () => {
     },
   })
 
-  console.log('TrendingCampaigns', campaignProjects)
-
   return <RenderProjectList projects={campaignProjects} loading={loading} />
 }

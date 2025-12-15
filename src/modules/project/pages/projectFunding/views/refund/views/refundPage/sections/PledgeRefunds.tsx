@@ -10,18 +10,29 @@ import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { PaymentStatus, PledgeRefundFragment, PledgeRefundStatus, usePledgeRefundsQuery } from '@/types/index.ts'
 
+import { RefundRsk } from '../../../../refundPayoutRsk/RefundRsk.tsx'
 import { RetryRefundRsk } from '../../../../refundPayoutRsk/RetryRefundRsk.tsx'
 import { StatusBadge } from '../components/RefundStatusBadge.tsx'
 
 /** Pledge refunds table component */
 export const PledgeRefundsTable = () => {
   const { data, loading, error } = usePledgeRefundsQuery()
-  const pledges = data?.pledgeRefundsGet?.refunds || []
+
+  const pledges =
+    data?.pledgeRefundsGet?.refunds.filter(
+      (pledge) => pledge.status !== PledgeRefundStatus.Cancelled && pledge.status !== PledgeRefundStatus.Pending,
+    ) || []
 
   const { props: modalProps, ...rskModalProps } = useModal<{ pledge: PledgeRefundFragment }>()
 
+  const { props: refundRskModalProps, ...refundRskModal } = useModal<{ pledge: PledgeRefundFragment }>()
+
   const handleReclaimPledge = (pledge: PledgeRefundFragment) => {
     rskModalProps.onOpen({ pledge })
+  }
+
+  const handleClaimPledge = (pledge: PledgeRefundFragment) => {
+    refundRskModal.onOpen({ pledge })
   }
 
   const renderTableRows = () => {
@@ -58,7 +69,7 @@ export const PledgeRefundsTable = () => {
           </Body>
           <Box flex="1">
             {pledge.status === PledgeRefundStatus.Pending && (
-              <Button size="sm" colorScheme="primary1" variant="solid">
+              <Button size="sm" colorScheme="primary1" variant="solid" onClick={() => handleClaimPledge(pledge)}>
                 {t('Claim')}
               </Button>
             )}
@@ -104,14 +115,21 @@ export const PledgeRefundsTable = () => {
     <VStack w="full" spacing={4} align="stretch">
       <VStack w="full" spacing={0} align="start">
         <H2 size="xl" medium>
-          {t('Pledge Refunds')}
+          {t('Refunds')}
         </H2>
         <Body size="sm" color="neutral.11">
-          {t('Pledges you made to campaigns that can be refunded.')}
+          {t('Refunds you have initiated.')}
         </Body>
       </VStack>
       {renderTable()}
       {rskModalProps.isOpen && <RetryRefundRsk {...rskModalProps} pledgeRefund={modalProps.pledge} />}
+      {refundRskModal.isOpen && (
+        <RefundRsk
+          {...refundRskModal}
+          contributionUUID={refundRskModalProps.pledge.payments?.[0]?.linkedEntityUUID || ''}
+          projectId={refundRskModalProps.pledge.project?.id}
+        />
+      )}
     </VStack>
   )
 }

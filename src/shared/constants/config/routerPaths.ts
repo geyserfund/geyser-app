@@ -19,14 +19,16 @@ export enum PathName {
   activityGlobal = 'global',
   activityFollowed = 'followed',
 
-  latest = 'latest',
-  inYourRegion = 'region',
-
   projectCategory = 'category',
   projectSubCategory = 'subcategory',
   allOrNothing = 'all-or-nothing',
   campaigns = 'campaigns',
   fundraisers = 'fundraisers',
+
+  latest = 'latest',
+  inYourRegion = 'region',
+  almostFunded = 'almostfunded',
+  almostOver = 'almostover',
 
   manifesto = 'manifesto',
 
@@ -101,6 +103,8 @@ export enum PathName {
   node = 'node',
   discover = 'discover',
 
+  impactFund = 'impact',
+
   projectDashboard = 'dashboard',
   dashboardAnalytics = 'analytics',
   dashboardSales = 'sales',
@@ -172,6 +176,10 @@ const pathsMap = {
   /** Discovery Routes */
   discoveryLanding: () => '/',
   discoveryCampaigns: () => `/${PathName.campaigns}`,
+  discoveryCampaignsLatest: () => `/${PathName.campaigns}/${PathName.latest}`,
+  discoveryCampaignsInYourRegion: () => `/${PathName.campaigns}/${PathName.inYourRegion}`,
+  discoveryCampaignsAlmostFunded: () => `/${PathName.campaigns}/${PathName.almostFunded}`,
+  discoveryCampaignsAlmostOver: () => `/${PathName.campaigns}/${PathName.almostOver}`,
   discoveryAllOrNothing: () => `/${PathName.allOrNothing}`,
   discoveryFundraisers: () => `/${PathName.fundraisers}`,
   discoveryFundraisersLatest: () => `/${PathName.fundraisers}/${PathName.latest}`,
@@ -189,6 +197,8 @@ const pathsMap = {
   discoveryGrantApply: (grantId: string) => `/${PathName.grants}/${grantId}/${PathName.grantApply}`,
   discoveryMerch: () => `/${PathName.merch}`,
   discoveryLaunchpad: () => `/${PathName.launchpad}`,
+
+  impactFund: () => `/${PathName.impactFund}`,
 
   guardians: () => `/${PathName.guardians}`,
   guardiansCharacter: (characterId: string) => `/${PathName.guardians}/${characterId}`,
