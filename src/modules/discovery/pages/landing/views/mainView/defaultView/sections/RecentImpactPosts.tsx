@@ -23,7 +23,7 @@ export const RecentImpactPosts = () => {
           take: 15,
         },
         where: {
-          postType: [PostType.Impact, PostType.RewardUpdate, PostType.Announcement, PostType.GoalReached],
+          postType: [PostType.Impact, PostType.Announcement],
         },
       },
     },
@@ -31,7 +31,7 @@ export const RecentImpactPosts = () => {
 
   const allPosts = useMemo(() => data?.posts || [], [data?.posts])
 
-  const posts = useMemo(() => filterPostsByUniqueProjects(allPosts, 6), [allPosts])
+  const posts = useMemo(() => filterPostsByUniqueProjects(allPosts, 3), [allPosts])
 
   if (loading || !posts.length) {
     return null
