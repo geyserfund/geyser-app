@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
@@ -6,6 +7,7 @@ import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
@@ -117,7 +119,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
 
       const callDataHex = createCallDataForLockCall({
         preimageHash: `0x${preimageHash}` as Hex,
-        claimAddress: accountKeys.address as Address,
+        claimAddress: swapObj?.claimAddress as Address,
         refundAddress: accountKeys.address as Address,
         timelock: swapObj?.timeoutBlockHeight || 0n,
       })
@@ -168,6 +170,11 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
 
       const { preimageHash, preimageHex } = generatePreImageHash()
 
+      const preimageHexEncrypted = await encryptString({
+        plainText: preimageHex,
+        password: data.accountPassword || '',
+      })
+
       const amount = payoutRequestData?.payoutRequest.payout.amount || 0
 
       const { data: swapCreateResponse } = await payoutSwapCreate({
@@ -180,6 +187,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
                   userClaimAddress: data.bitcoinAddress,
                   claimPublicKey: accountKeys.publicKey,
                   preimageHash,
+                  preimageHexEncrypted,
                 },
               },
             },
@@ -202,7 +210,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
 
       const callDataHex = createCallDataForLockCall({
         preimageHash: `0x${preimageHash}` as Hex,
-        claimAddress: accountKeys.address as Address,
+        claimAddress: swapObj?.lockupDetails?.claimAddress as Address,
         refundAddress: accountKeys.address as Address,
         timelock: swapObj?.lockupDetails?.timeoutBlockHeight || 0n,
       })

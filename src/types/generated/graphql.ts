@@ -2558,6 +2558,7 @@ export type PayoutRetryRequestResponse = {
 
 export type PayoutRetryRequestRskToOnChainSwapPaymentDetailsInput = {
   preimageHash: Scalars['String']['input'];
+  preimageHexEncrypted: Scalars['String']['input'];
 };
 
 export enum PayoutStatus {
@@ -2720,6 +2721,7 @@ export type PledgeRefundRetryRequestRskToLightningSwapPaymentDetailsInput = {
 
 export type PledgeRefundRetryRequestRskToOnChainSwapPaymentDetailsInput = {
   preimageHash: Scalars['String']['input'];
+  preimageHexEncrypted: Scalars['String']['input'];
 };
 
 export enum PledgeRefundStatus {
@@ -4259,6 +4261,7 @@ export type RskToOnChainSwapPaymentDetails = {
 export type RskToOnChainSwapPaymentDetailsBoltzInput = {
   claimPublicKey: Scalars['String']['input'];
   preimageHash: Scalars['String']['input'];
+  preimageHexEncrypted: Scalars['String']['input'];
   userClaimAddress: Scalars['String']['input'];
 };
 

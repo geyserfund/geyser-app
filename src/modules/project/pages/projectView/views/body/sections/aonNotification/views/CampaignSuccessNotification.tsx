@@ -38,7 +38,7 @@ export const CampaignSuccessNotification = () => {
     return (
       <Feedback variant={FeedBackVariant.SUCCESS}>
         <Body size="xl" bold>
-          {t('Successfully funded')}
+          {t('Campaign reached funding goal')}
         </Body>
       </Feedback>
     )

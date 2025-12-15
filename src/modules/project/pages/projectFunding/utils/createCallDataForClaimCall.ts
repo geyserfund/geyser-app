@@ -14,7 +14,7 @@ export const createCallDataForContributeForAon = (
 ): string => {
   try {
     // Step 1: Create function selector from signature
-    const functionSignature = 'contributeFor(address,uint256,uint256)'
+    const functionSignature = 'contributeFor(address,uint128,uint256)'
     const functionSelector = Buffer.from(keccak_256(functionSignature)).slice(0, 4)
 
     // Step 2: Encode parameters according to ABI encoding rules

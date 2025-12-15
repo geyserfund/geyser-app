@@ -20,6 +20,12 @@ export const TitleBar = () => {
     '/fundraisers/region',
   ].includes(location.pathname)
 
+  const removeTitleBar = location.pathname.includes('/campaigns')
+
+  if (removeTitleBar) {
+    return null
+  }
+
   return (
     <VStack w="full" gap={0}>
       <VStack w="full" spacing={{ base: 4, lg: 4 }}>

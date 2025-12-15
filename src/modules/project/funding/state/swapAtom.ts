@@ -42,6 +42,7 @@ export type SwapData =
       // Type for Submarine swaps (version === 3)
       asset: string
       version: number
+      claimAddress: string
       claimPublicKey: string
       timeoutBlockHeight: number
       swapTree: {

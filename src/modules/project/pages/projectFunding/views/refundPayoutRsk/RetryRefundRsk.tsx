@@ -9,6 +9,7 @@ import { parseSignature } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
@@ -242,6 +243,11 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
     try {
       const { preimageHash, preimageHex } = generatePreImageHash()
 
+      const preimageHexEncrypted = await encryptString({
+        plainText: preimageHex,
+        password: data.accountPassword || '',
+      })
+
       const pledgeRefundRetryRequestResponse = await pledgeRefundRetryRequest({
         variables: {
           input: {
@@ -251,6 +257,7 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
               rskPublicKey: accountKeys.publicKey,
               rskToOnChainSwap: {
                 preimageHash,
+                preimageHexEncrypted,
               },
             },
           },

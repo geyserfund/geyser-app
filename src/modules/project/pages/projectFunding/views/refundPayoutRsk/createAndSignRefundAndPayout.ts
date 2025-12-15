@@ -1,5 +1,5 @@
 import type { Address, Hex } from 'viem'
-import { hashTypedData } from 'viem'
+import { hashTypedData, keccak256 } from 'viem'
 
 import { __production__ } from '@/shared/constants/index.ts'
 
@@ -44,7 +44,7 @@ export const createEIP712MessageForAon = (
             { name: 'nonce', type: 'uint256' },
             { name: 'deadline', type: 'uint256' },
             { name: 'processingFee', type: 'uint256' },
-            { name: 'lockCallData', type: 'bytes' },
+            { name: 'lockCallDataHash', type: 'bytes32' },
           ],
         }
       : {
@@ -55,9 +55,12 @@ export const createEIP712MessageForAon = (
             { name: 'nonce', type: 'uint256' },
             { name: 'deadline', type: 'uint256' },
             { name: 'processingFee', type: 'uint256' },
-            { name: 'lockCallData', type: 'bytes' },
+            { name: 'lockCallDataHash', type: 'bytes32' },
           ],
         }
+
+  // Hash the lockCallData since the type is bytes32
+  const lockCallDataHash = keccak256(lockCallData as Hex)
 
   const message =
     messageType === EIP712MessageType.Claim
@@ -68,7 +71,7 @@ export const createEIP712MessageForAon = (
           nonce: BigInt(nonce),
           deadline: BigInt(deadline),
           processingFee: BigInt(processingFee),
-          lockCallData: lockCallData as Hex,
+          lockCallDataHash: lockCallDataHash,
         }
       : {
           contributor: userAddress as Address,
@@ -77,7 +80,7 @@ export const createEIP712MessageForAon = (
           nonce: BigInt(nonce),
           deadline: BigInt(deadline),
           processingFee: BigInt(processingFee),
-          lockCallData: lockCallData as Hex,
+          lockCallDataHash: lockCallDataHash,
         }
 
   return hashTypedData({
@@ -169,6 +172,21 @@ export const createAndSignClaimMessage = (props: {
     processingFee,
     lockCallData,
   )
+
+  console.log('=== Production Refund Message Debug ===')
+  console.log('AON Contract Address:', aonContractAddress)
+  console.log('Swap Contract Address:', swapContractAddress)
+  console.log('Creator Address:', creatorAddress)
+  console.log('Amount:', amount)
+  console.log('Nonce:', nonce)
+  console.log('Deadline:', deadline)
+  console.log('Processing Fee:', processingFee)
+  console.log('Lock Call Data:', lockCallData)
+  console.log('RSK Private Key:', rskPrivateKey)
+  console.log('===============================================')
+  console.log('Production digest:', digest)
+  console.log('=== End Production Debug ===')
+
   return signEIP712Message(digest, rskPrivateKey)
 }
 

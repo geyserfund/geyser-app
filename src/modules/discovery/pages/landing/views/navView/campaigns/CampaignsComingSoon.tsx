@@ -74,10 +74,6 @@ export const CampaignsComingSoon = () => {
         </VStack>
       </VStack>
 
-      <Button size="xl" colorScheme="primary1" onClick={handleLaunchCampaignButtonClick}>
-        {t('Launch your campaign')}
-      </Button>
-
       <VStack w="full" gap={2}>
         <H2 size="2xl" bold>
           {t('Join the early launches! ')}
@@ -89,17 +85,9 @@ export const CampaignsComingSoon = () => {
         </Body>
       </VStack>
 
-      <VStack w="full" maxW="800px">
-        <H2 size={{ base: 'xl', lg: '2xl' }} bold>
-          {t('Powered by')}
-        </H2>
-        <Image
-          src={'https://storage.googleapis.com/geyser-projects-media/app/campaigns/rootstock_image.png'}
-          height="60px"
-          width="auto"
-          alt="All or Nothing"
-        />
-      </VStack>
+      <Button size="xl" colorScheme="primary1" onClick={handleLaunchCampaignButtonClick}>
+        {t('Launch your campaign')}
+      </Button>
 
       <VStack w={'full'} alignItems="start">
         <H2 size={{ base: 'xl', lg: '2xl' }} bold>
@@ -121,6 +109,18 @@ export const CampaignsComingSoon = () => {
             ))}
           </Accordion>
         </CardLayout>
+      </VStack>
+
+      <VStack w="full" maxW="800px">
+        <H2 size={{ base: 'xl', lg: '2xl' }} bold>
+          {t('Powered by')}
+        </H2>
+        <Image
+          src={'https://storage.googleapis.com/geyser-projects-media/app/campaigns/rootstock_image.png'}
+          height="60px"
+          width="auto"
+          alt="All or Nothing"
+        />
       </VStack>
     </VStack>
   )

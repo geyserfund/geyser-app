@@ -8,6 +8,7 @@ import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
@@ -144,7 +145,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
 
       const callDataHex = createCallDataForLockCall({
         preimageHash: `0x${preimageHash}` as Hex,
-        claimAddress: accountKeys.address as Address,
+        claimAddress: swapObj?.claimAddress as Address,
         refundAddress: accountKeys.address as Address,
         timelock: swapObj?.timeoutBlockHeight || 0n,
       })
@@ -222,6 +223,11 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
 
       const { preimageHash, preimageHex } = generatePreImageHash()
 
+      const preimageHexEncrypted = await encryptString({
+        plainText: preimageHex,
+        password: data.accountPassword || '',
+      })
+
       const amount =
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
         (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
@@ -236,6 +242,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
                   userClaimAddress: data.bitcoinAddress,
                   claimPublicKey: accountKeys.publicKey,
                   preimageHash,
+                  preimageHexEncrypted,
                 },
               },
             },
@@ -256,11 +263,15 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       swapObj.paymentId = payment?.id
       setSwapData(swapObj)
 
+      const claimAddress = swapObj?.lockupDetails?.claimAddress as Address
+      const timelock = swapObj?.lockupDetails?.timeoutBlockHeight || 0n
+      const refundAddress = accountKeys.address as Address
+
       const callDataHex = createCallDataForLockCall({
         preimageHash: `0x${preimageHash}` as Hex,
-        claimAddress: accountKeys.address as Address,
-        refundAddress: accountKeys.address as Address,
-        timelock: swapObj?.lockupDetails?.timeoutBlockHeight || 0n,
+        claimAddress,
+        refundAddress,
+        timelock,
       })
 
       const { signature } = createAndSignRefundMessage({

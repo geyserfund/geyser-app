@@ -1,9 +1,17 @@
+import { useEffect, useState } from 'react'
+
 import { useAuthContext } from '@/context/index.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { RefundRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/RefundRsk.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import { ContributionStatus, ProjectAonGoalStatus, useProjectContributorQuery } from '@/types/index.ts'
+import {
+  ContributionStatus,
+  PayoutStatus,
+  ProjectAonGoalStatus,
+  usePayoutRequestMutation,
+  useProjectContributorQuery,
+} from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 
 import CampaignFailedNotification from './views/CampaignFailedNotification.tsx'
@@ -14,14 +22,14 @@ import { FundsClaimedNotification } from './views/FundsClaimedNotification.tsx'
 import { FundsReturnedNotification } from './views/FundsReturnedNotification.tsx'
 
 export const AonNotification = () => {
-  const { project } = useProjectAtom()
+  const { project, isProjectOwner } = useProjectAtom()
   const { user } = useAuthContext()
 
   const { queryProject } = useProjectAPI()
-
   const refundModal = useModal()
-
   const isAon = isAllOrNothing(project)
+
+  const [isPayoutProcessing, setIsPayoutProcessing] = useState(false)
 
   const { data, loading, refetch } = useProjectContributorQuery({
     skip: !project.id || !user.id || !isAon,
@@ -32,6 +40,35 @@ export const AonNotification = () => {
       },
     },
   })
+
+  const [payoutRequest] = usePayoutRequestMutation({
+    variables: {
+      input: {
+        projectId: project.id,
+      },
+    },
+  })
+
+  useEffect(() => {
+    if (isProjectOwner) {
+      payoutRequest({
+        variables: {
+          input: {
+            projectId: project.id,
+          },
+        },
+        onCompleted(data) {
+          const { status } = data.payoutRequest.payout
+
+          if (status === PayoutStatus.Pending || status === PayoutStatus.Processing) {
+            setIsPayoutProcessing(true)
+          } else {
+            setIsPayoutProcessing(false)
+          }
+        },
+      })
+    }
+  }, [isProjectOwner, payoutRequest, project.id])
 
   console.log('data', data)
   const fundedToCampaign = data?.contributor?.contributions.find(
@@ -47,12 +84,16 @@ export const AonNotification = () => {
       return <CampaignSuccessNotification />
     }
 
-    if (project.aonGoal?.status === ProjectAonGoalStatus.Failed) {
-      return <CampaignFailedNotification hasFundedToCampaign={Boolean(fundedToCampaign)} onOpen={refundModal.onOpen} />
+    if (project.aonGoal?.status === ProjectAonGoalStatus.Claimed) {
+      if (isPayoutProcessing) {
+        return <CampaignSuccessNotification />
+      }
+
+      return <FundsClaimedNotification />
     }
 
-    if (project.aonGoal?.status === ProjectAonGoalStatus.Claimed) {
-      return <FundsClaimedNotification />
+    if (project.aonGoal?.status === ProjectAonGoalStatus.Failed) {
+      return <CampaignFailedNotification hasFundedToCampaign={Boolean(fundedToCampaign)} onOpen={refundModal.onOpen} />
     }
 
     if (project.aonGoal?.status === ProjectAonGoalStatus.Cancelled) {
