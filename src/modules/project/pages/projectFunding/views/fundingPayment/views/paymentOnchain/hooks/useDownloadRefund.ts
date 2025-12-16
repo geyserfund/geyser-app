@@ -1,7 +1,7 @@
-import { useAtomValue, useSetAtom } from 'jotai'
-import QRCode from 'qrcode'
+import { Link } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
+import { DateTime } from 'luxon'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import {
   currentLightningToRskSwapIdAtom,
@@ -9,13 +9,6 @@ import {
   currentSwapIdAtom,
   swapAtom,
 } from '@/modules/project/funding/state/swapAtom.ts'
-import {
-  // useMobileMode,
-  useNotification,
-} from '@/utils'
-
-import { onChainRefundDownloadedAtom } from '../states/onChainStatus.ts'
-import { download, downloadJson, isIos } from '../utils/download'
 
 const REFUND_QR_FILE_NAME = 'refundFile'
 
@@ -41,65 +34,28 @@ export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
     [props?.isAllOrNothing, onChainToRskSwapRefundFile, lightningToRskSwapRefundFile, onChainSwapRefundFile],
   )
 
-  const toast = useNotification()
-  const { t } = useTranslation()
+  const refundFileName = useMemo(() => {
+    let projectTitle = ''
+    const dateTime = DateTime.now().toFormat('yyyy-MM-dd_HH-mm-ss')
 
-  const setRefundFileDownloaded = useSetAtom(onChainRefundDownloadedAtom)
+    if (props?.isAllOrNothing) {
+      projectTitle = lightningToRskSwapRefundFile?.contributionInfo?.projectTitle?.trim().slice(0, 10) || ''
+    } else {
+      projectTitle = onChainSwapRefundFile?.contributionInfo?.projectTitle?.trim().slice(0, 10) || ''
+    }
 
-  // const getQrCodeFile = useCallback(async () => {
-  //   const qrCode = await QRCode.toDataURL(JSON.stringify(refundFiles), { width: 800 })
-  //   const fileName = `${REFUND_QR_FILE_NAME}.png`
-  //   return { download: fileName, content: qrCode }
-  // }, [refundFiles])
+    return `${REFUND_QR_FILE_NAME}_for_${projectTitle}_on_${dateTime}.json`
+  }, [props?.isAllOrNothing, lightningToRskSwapRefundFile, onChainSwapRefundFile])
 
   const getJsonFile = useCallback(() => {
-    const fileName = `${REFUND_QR_FILE_NAME}.json`
+    const fileName = `${refundFileName}.json`
     const content = `data:application/json;charset=utf-8,${encodeURI(JSON.stringify(refundFiles))}`
     return { download: fileName, content }
-  }, [refundFiles])
-
-  const downloadRefundQr = useCallback(() => {
-    QRCode.toDataURL(JSON.stringify(refundFiles), { width: 800 })
-      .then((url: string) => {
-        if (isIos) {
-          // Compatibility with third party iOS browsers
-          const newTab = window.open()
-          if (newTab) {
-            newTab.document.body.innerHTML = `
-                <!DOCTYPE html>
-                <body>
-                    <img src="${url}">
-                    <h1>${t('Long press and select "Save to Photos" to download refund file')}</h1>
-                </body>`
-          }
-        } else {
-          download(`${REFUND_QR_FILE_NAME}.png`, url)
-        }
-
-        setRefundFileDownloaded(true)
-      })
-      .catch((err: Error) => {
-        toast.error({
-          title: 'Failed to download qr',
-          description: 'Failed to download qr',
-        })
-      })
-  }, [refundFiles, t, setRefundFileDownloaded, toast])
-
-  const downloadRefundJson = useCallback(() => {
-    downloadJson(REFUND_QR_FILE_NAME, refundFiles)
-    setRefundFileDownloaded(true)
-  }, [refundFiles, setRefundFileDownloaded])
+  }, [refundFiles, refundFileName])
 
   const downloadFile = useCallback(async () => {
-    // Test this in staging, if it works, remove  if all together.
-    // if (isMobile) {
-    //   const qrCodeFile = await getQrCodeFile()
-    //   setFileToDownload(qrCodeFile)
-    // } else {
     const jsonFile = getJsonFile()
     setFileToDownload(jsonFile)
-    // }
   }, [getJsonFile])
 
   useEffect(() => {
@@ -107,8 +63,12 @@ export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
   }, [downloadFile])
 
   return {
-    downloadRefundQr,
-    downloadRefundJson,
     fileToDownload,
+    buttonProps: {
+      as: Link,
+      href: fileToDownload?.content,
+      download: fileToDownload?.download,
+      isExternal: true,
+    },
   }
 }

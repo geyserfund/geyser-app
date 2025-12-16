@@ -1,5 +1,6 @@
-import { Button, Divider, Link as ChakraLink, Link, VStack } from '@chakra-ui/react'
+import { Button, Divider, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useSetAtom } from 'jotai'
 import { PiWarning } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -7,11 +8,19 @@ import { GeyserOnChainGuideUrl } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 
 import { useDownloadRefund } from '../paymentOnchain/hooks/useDownloadRefund.ts'
+import { onChainRefundDownloadedAtom } from '../paymentOnchain/states/onChainStatus.ts'
 
 export const PaymentDownloadRefundFile = ({ onComplete }: { onComplete: () => void }) => {
-  const { fileToDownload } = useDownloadRefund({
+  const setRefundFileDownloaded = useSetAtom(onChainRefundDownloadedAtom)
+
+  const { buttonProps } = useDownloadRefund({
     isAllOrNothing: true,
   })
+
+  const handleClick = () => {
+    setRefundFileDownloaded(true)
+    onComplete()
+  }
 
   return (
     <VStack w="full" spacing={4}>
@@ -35,17 +44,7 @@ export const PaymentDownloadRefundFile = ({ onComplete }: { onComplete: () => vo
           </Body>
         </VStack>
       </Feedback>
-      <Button
-        as={ChakraLink}
-        href={fileToDownload?.content}
-        download={fileToDownload?.download}
-        isExternal
-        size="lg"
-        variant="solid"
-        minWidth="310px"
-        colorScheme="primary1"
-        onClick={onComplete}
-      >
+      <Button {...buttonProps} size="lg" variant="solid" minWidth="310px" colorScheme="primary1" onClick={handleClick}>
         {t('Download & Continue')}
       </Button>
     </VStack>
