@@ -1,7 +1,7 @@
 import { Button, Divider, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Confetti from 'react-confetti'
 import { Link, useNavigate } from 'react-router'
 
@@ -11,7 +11,7 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
-import { ContributionStatus } from '@/types/index.ts'
+import { ContributionStatus, PaymentStatus } from '@/types/index.ts'
 
 import { SuggestedProjects } from '../../../projectView/views/body/sections/SuggestedProjects.tsx'
 import { ProjectFundingSummary } from '../../components/ProjectFundingSummary'
@@ -27,11 +27,17 @@ export const FundingSuccess = () => {
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
 
+  const [isPending, setIsPending] = useState(false)
+
   const navigate = useNavigate()
 
   useEffect(() => {
     if (!StatusForSuccess.includes(fundingContribution.status)) {
-      navigate(getPath('projectFunding', project.name))
+      if (fundingContribution.payments.some((payment) => payment.status === PaymentStatus.Pending)) {
+        setIsPending(true)
+      } else {
+        navigate(getPath('projectFunding', project.name))
+      }
     }
   }, [fundingContribution, navigate, project.name])
 
@@ -45,25 +51,27 @@ export const FundingSuccess = () => {
       }
     >
       <CardLayout mobileDense w="full" padding={{ base: 0, lg: 12 }} alignItems="center">
-        <Confetti
-          gravity={0.07}
-          numberOfPieces={250}
-          colors={[
-            lightModeColors.primary1[5],
-            lightModeColors.primary1[6],
-            lightModeColors.primary1[8],
-            lightModeColors.primary1[9],
-            lightModeColors.amber[6],
-            lightModeColors.amber[8],
-            lightModeColors.orange[6],
-            lightModeColors.orange[8],
-            lightModeColors.ruby[6],
-            lightModeColors.ruby[8],
-          ]}
-        />
+        {!isPending && (
+          <Confetti
+            gravity={0.07}
+            numberOfPieces={250}
+            colors={[
+              lightModeColors.primary1[5],
+              lightModeColors.primary1[6],
+              lightModeColors.primary1[8],
+              lightModeColors.primary1[9],
+              lightModeColors.amber[6],
+              lightModeColors.amber[8],
+              lightModeColors.orange[6],
+              lightModeColors.orange[8],
+              lightModeColors.ruby[6],
+              lightModeColors.ruby[8],
+            ]}
+          />
+        )}
         <VStack w="full" maxWidth="800px" alignItems="start" spacing={6}>
           <VStack w="full" alignItems="start">
-            <SuccessImageComponent />
+            <SuccessImageComponent isPending={isPending} />
           </VStack>
           {formState.subscription.cost > 0 && (
             <VStack w="full" alignItems="start" spacing={6}>

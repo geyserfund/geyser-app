@@ -14,6 +14,7 @@ import { ControlledTextInput } from '@/shared/components/controlledInput/Control
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H2, H3 } from '@/shared/components/typography'
 import {
+  ContributionSuccessIllustrationPendingUrl,
   ContributionSuccessIllustrationUrl,
   MailIllustrationUrl,
   SuccessfullySubscribedIllustrationUrl,
@@ -26,19 +27,19 @@ import { useNotification } from '@/utils'
 
 import { useNostrPostForFundingSuccess } from '../useNostrPostForFundingSuccess.tsx'
 
-export const SuccessImageComponent = () => {
+export const SuccessImageComponent = ({ isPending }: { isPending: boolean }) => {
   const { isLoggedIn } = useAuthContext()
 
   return (
     <VStack w="full" alignItems="start" spacing={12}>
-      <SuccessfulContributionBanner />
+      <SuccessfulContributionBanner isPending={isPending} />
       {!isLoggedIn && <SubscribeToGeyser />}
       <BecomeAnAmbassador />
     </VStack>
   )
 }
 
-export const SuccessfulContributionBanner = () => {
+export const SuccessfulContributionBanner = ({ isPending }: { isPending: boolean }) => {
   const { t } = useTranslation()
   const { project } = useProjectAtom()
   const { user: loggedInUser } = useAuthContext()
@@ -59,7 +60,11 @@ export const SuccessfulContributionBanner = () => {
       justifyContent="center"
       backgroundColor="utils.pbg"
     >
-      <Image height="140px" src={ContributionSuccessIllustrationUrl} alt="Contribution success" />
+      <Image
+        height="140px"
+        src={isPending ? ContributionSuccessIllustrationPendingUrl : ContributionSuccessIllustrationUrl}
+        alt="Contribution success"
+      />
       <HStack spacing={2} zIndex={1}>
         {user.imageUrl && <Avatar src={user.imageUrl || ''} size="md" />}
         <Body light size="2xl" medium>
@@ -69,7 +74,11 @@ export const SuccessfulContributionBanner = () => {
 
       <VStack w="full" spacing={1} zIndex={1}>
         <H3 light fontSize="2xl" regular w="full" textAlign={'center'}>
-          {user.username ? t('successfully contributed to') : t('You successfully contributed to')}
+          {isPending
+            ? t('Success! Your contribution is in progress to:')
+            : user.username
+            ? t('successfully contributed to')
+            : t('You successfully contributed to')}
         </H3>
         <H3 dark bold fontSize="4xl" textAlign="center">
           {project.title}

@@ -455,7 +455,6 @@ export const GrantsApplyPage = () => {
               value={watch('email')}
               placeholder={'ram@example.com'}
               error={formState.errors.email?.message}
-              isDisabled={Boolean(user?.email)}
             />
           </FieldContainer>
 

@@ -139,7 +139,8 @@ export const LockedConnectAccountUrl =
 
 export const VerifyEmailImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/enter-otp.svg'
 
-export const ProjectLaunchedImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/project-launched.svg'
+export const ProjectLaunchedImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/launch/project_launched_illustation.png'
 
 export const ProjectRewardsImageUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/gifts.png'
 
@@ -207,6 +208,8 @@ export const FundraiserIconUrl =
 export const ProductsIconUrl = 'https://storage.googleapis.com/geyser-projects-media/app/navigation/products_icon1.webp'
 export const ContributionSuccessIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/contribution-success-illustration.png'
+export const ContributionSuccessIllustrationPendingUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/funding/funsing_success_pending.png'
 export const MailIllustrationUrl = 'https://storage.googleapis.com/geyser-projects-media/utils/mail-illustration.png'
 export const SuccessfullySubscribedIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/subscribed-illustration.png'
