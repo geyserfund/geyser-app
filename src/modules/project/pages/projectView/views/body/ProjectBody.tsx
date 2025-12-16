@@ -21,6 +21,7 @@ import {
   Rewards,
   Story,
 } from './sections'
+import { AonGoToRefundPage } from './sections/AonGoToRefundPage.tsx'
 import { AonNotification } from './sections/aonNotification/AonNotification.tsx'
 import { BodySectionPageBottomBar } from './sections/BodySectionPageBottomBar.tsx'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
@@ -74,6 +75,7 @@ export const ProjectBody = () => {
         {project.goalsCount && <Goals />}
         <Details />
         {!isAon && <FundNowWithLightning />}
+        <AonGoToRefundPage />
 
         <SuggestedProjects
           id={'suggested-projects-project-page'}

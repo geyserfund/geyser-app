@@ -8,8 +8,8 @@ export const RightSideStickyLayout = ({ children, ...props }: PropsWithChildren<
     <VStack
       position="sticky"
       top={{
-        base: `${dimensions.projectNavBar.mobile.height + 20}px`,
-        lg: `${dimensions.projectNavBar.desktop.height + 20}px`,
+        base: `${dimensions.projectNavBar.mobile.height}px`,
+        lg: `${dimensions.projectNavBar.desktop.height}px`,
       }}
       height={derivedDimensions.heightAfterTopNavBar}
       display={{ base: 'none', lg: 'flex' }}
