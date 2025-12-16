@@ -18,6 +18,7 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import {
   PaymentStatus,
   PledgeRefundStatus,
+  RskToLightningSwapPaymentDetailsFragment,
   usePledgeRefundInitiateMutation,
   usePledgeRefundRequestMutation,
   usePledgeRefundSwapCreateMutation,
@@ -107,7 +108,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
-      const { preimageHash, preimageHex } = generatePreImageHash()
+      const { preimageHash } = generatePreImageHash()
 
       const amount =
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
@@ -135,16 +136,16 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       }
 
       const { swap, payment } = swapCreateResponse.pledgeRefundSwapCreate
+      const paymentDetails = payment?.paymentDetails as RskToLightningSwapPaymentDetailsFragment
 
       const swapObj = JSON.parse(swap)
       swapObj.privateKey = accountKeys.privateKey
-      swapObj.preimageHash = preimageHash
-      swapObj.preimageHex = preimageHex
+      swapObj.preimageHash = paymentDetails.swapPreimageHash
       swapObj.paymentId = payment?.id
       setSwapData(swapObj)
 
       const callDataHex = createCallDataForLockCall({
-        preimageHash: `0x${preimageHash}` as Hex,
+        preimageHash: `0x${paymentDetails.swapPreimageHash}` as Hex,
         claimAddress: swapObj?.claimAddress as Address,
         refundAddress: accountKeys.address as Address,
         timelock: swapObj?.timeoutBlockHeight || 0n,

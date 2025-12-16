@@ -15,6 +15,7 @@ import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import {
   ProjectForProfileContributionsFragment,
+  RskToLightningSwapPaymentDetailsFragment,
   usePayoutInitiateMutation,
   usePayoutRequestMutation,
   usePayoutSwapCreateMutation,
@@ -83,7 +84,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
-      const { preimageHash, preimageHex } = generatePreImageHash()
+      const { preimageHash } = generatePreImageHash()
 
       const amount = payoutRequestData?.payoutRequest.payout.amount || 0
 
@@ -110,15 +111,16 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
 
       const { swap, payment } = swapCreateResponse.payoutSwapCreate
 
+      const paymentDetails = payment?.paymentDetails as RskToLightningSwapPaymentDetailsFragment
+
       const swapObj = JSON.parse(swap)
       swapObj.privateKey = accountKeys.privateKey
-      swapObj.preimageHash = preimageHash
-      swapObj.preimageHex = preimageHex
+      swapObj.preimageHash = paymentDetails.swapPreimageHash
       swapObj.paymentId = payment?.id
       setSwapData(swapObj)
 
       const callDataHex = createCallDataForLockCall({
-        preimageHash: `0x${preimageHash}` as Hex,
+        preimageHash: `0x${paymentDetails.swapPreimageHash}` as Hex,
         claimAddress: swapObj?.claimAddress as Address,
         refundAddress: accountKeys.address as Address,
         timelock: swapObj?.timeoutBlockHeight || 0n,

@@ -30,6 +30,14 @@ export const FRAGMENT_ON_CHAIN_TO_RSK_SWAP_PAYMENT_DETAILS = gql`
   }
 `
 
+export const FRAGMENT_RSK_TO_LIGHTNING_SWAP_PAYMENT_DETAILS = gql`
+  fragment RskToLightningSwapPaymentDetails on RskToLightningSwapPaymentDetails {
+    swapId
+    swapMetadata
+    swapPreimageHash
+  }
+`
+
 export const FRAGMENT_PLEDGE_REFUND = gql`
   ${FRAGMENT_PROJECT_THUMBNAIL_IMAGE}
   ${FRAGMENT_LIGHTNING_TO_RSK_SWAP_PAYMENT_DETAILS}

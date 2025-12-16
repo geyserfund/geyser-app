@@ -9254,6 +9254,8 @@ export type LightningToRskSwapPaymentDetailsFragment = { __typename?: 'Lightning
 
 export type OnChainToRskSwapPaymentDetailsFragment = { __typename?: 'OnChainToRskSwapPaymentDetails', swapMetadata: string, swapId: string, swapPreimageHash: string, onChainTxId?: string | null, onChainAddress: string };
 
+export type RskToLightningSwapPaymentDetailsFragment = { __typename?: 'RskToLightningSwapPaymentDetails', swapId: string, swapMetadata: string, swapPreimageHash: string };
+
 export type PledgeRefundFragment = { __typename?: 'PledgeRefund', id: any, amount: number, status: PledgeRefundStatus, expiresAt: any, project: (
     { __typename?: 'Project' }
     & ProjectThumbnailImageFragment
@@ -9403,7 +9405,10 @@ export type PayoutSwapCreateMutationVariables = Exact<{
 export type PayoutSwapCreateMutation = { __typename?: 'Mutation', payoutSwapCreate: { __typename?: 'PayoutSwapCreateResponse', swap: string, payout: (
       { __typename?: 'Payout' }
       & PayoutFragment
-    ), payment: { __typename?: 'Payment', id: any } } };
+    ), payment: { __typename?: 'Payment', id: any, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | (
+        { __typename?: 'RskToLightningSwapPaymentDetails' }
+        & RskToLightningSwapPaymentDetailsFragment
+      ) | { __typename?: 'RskToOnChainSwapPaymentDetails' } } } };
 
 export type PayoutInitiateMutationVariables = Exact<{
   input: PayoutInitiateInput;
@@ -9576,7 +9581,10 @@ export type PledgeRefundSwapCreateMutationVariables = Exact<{
 export type PledgeRefundSwapCreateMutation = { __typename?: 'Mutation', pledgeRefundSwapCreate: { __typename?: 'PledgeRefundSwapCreateResponse', swap: string, refund: (
       { __typename?: 'PledgeRefund' }
       & PledgeRefundFragment
-    ), payment: { __typename?: 'Payment', id: any } } };
+    ), payment: { __typename?: 'Payment', id: any, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails' } | { __typename?: 'OnChainToLightningSwapPaymentDetails' } | { __typename?: 'OnChainToRskSwapPaymentDetails' } | (
+        { __typename?: 'RskToLightningSwapPaymentDetails' }
+        & RskToLightningSwapPaymentDetailsFragment
+      ) | { __typename?: 'RskToOnChainSwapPaymentDetails' } } } };
 
 export type PledgeRefundInitiateMutationVariables = Exact<{
   input: PledgeRefundInitiateInput;
@@ -12199,6 +12207,13 @@ export const OnChainToRskSwapPaymentDetailsFragmentDoc = gql`
   swapPreimageHash
   onChainTxId
   onChainAddress
+}
+    `;
+export const RskToLightningSwapPaymentDetailsFragmentDoc = gql`
+    fragment RskToLightningSwapPaymentDetails on RskToLightningSwapPaymentDetails {
+  swapId
+  swapMetadata
+  swapPreimageHash
 }
     `;
 export const PledgeRefundFragmentDoc = gql`
@@ -15784,10 +15799,16 @@ export const PayoutSwapCreateDocument = gql`
     swap
     payment {
       id
+      paymentDetails {
+        ... on RskToLightningSwapPaymentDetails {
+          ...RskToLightningSwapPaymentDetails
+        }
+      }
     }
   }
 }
-    ${PayoutFragmentDoc}`;
+    ${PayoutFragmentDoc}
+${RskToLightningSwapPaymentDetailsFragmentDoc}`;
 export type PayoutSwapCreateMutationFn = Apollo.MutationFunction<PayoutSwapCreateMutation, PayoutSwapCreateMutationVariables>;
 
 /**
@@ -16460,10 +16481,16 @@ export const PledgeRefundSwapCreateDocument = gql`
     swap
     payment {
       id
+      paymentDetails {
+        ... on RskToLightningSwapPaymentDetails {
+          ...RskToLightningSwapPaymentDetails
+        }
+      }
     }
   }
 }
-    ${PledgeRefundFragmentDoc}`;
+    ${PledgeRefundFragmentDoc}
+${RskToLightningSwapPaymentDetailsFragmentDoc}`;
 export type PledgeRefundSwapCreateMutationFn = Apollo.MutationFunction<PledgeRefundSwapCreateMutation, PledgeRefundSwapCreateMutationVariables>;
 
 /**
