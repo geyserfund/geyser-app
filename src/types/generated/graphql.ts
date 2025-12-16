@@ -9987,6 +9987,13 @@ export type ProjectByNameForNameCheckQueryVariables = Exact<{
 
 export type ProjectByNameForNameCheckQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, name: string } | null };
 
+export type ProjectForStatusCheckQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type ProjectForStatusCheckQuery = { __typename?: 'Query', projectGet?: { __typename?: 'Project', id: any, name: string, status?: ProjectStatus | null, launchedAt?: any | null } | null };
+
 export type ProjectNostrKeysQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
 }>;
@@ -18204,6 +18211,49 @@ export type ProjectByNameForNameCheckQueryHookResult = ReturnType<typeof useProj
 export type ProjectByNameForNameCheckLazyQueryHookResult = ReturnType<typeof useProjectByNameForNameCheckLazyQuery>;
 export type ProjectByNameForNameCheckSuspenseQueryHookResult = ReturnType<typeof useProjectByNameForNameCheckSuspenseQuery>;
 export type ProjectByNameForNameCheckQueryResult = Apollo.QueryResult<ProjectByNameForNameCheckQuery, ProjectByNameForNameCheckQueryVariables>;
+export const ProjectForStatusCheckDocument = gql`
+    query ProjectForStatusCheck($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    id
+    name
+    status
+    launchedAt
+  }
+}
+    `;
+
+/**
+ * __useProjectForStatusCheckQuery__
+ *
+ * To run a query within a React component, call `useProjectForStatusCheckQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectForStatusCheckQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectForStatusCheckQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectForStatusCheckQuery(baseOptions: Apollo.QueryHookOptions<ProjectForStatusCheckQuery, ProjectForStatusCheckQueryVariables> & ({ variables: ProjectForStatusCheckQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectForStatusCheckQuery, ProjectForStatusCheckQueryVariables>(ProjectForStatusCheckDocument, options);
+      }
+export function useProjectForStatusCheckLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectForStatusCheckQuery, ProjectForStatusCheckQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectForStatusCheckQuery, ProjectForStatusCheckQueryVariables>(ProjectForStatusCheckDocument, options);
+        }
+export function useProjectForStatusCheckSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectForStatusCheckQuery, ProjectForStatusCheckQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectForStatusCheckQuery, ProjectForStatusCheckQueryVariables>(ProjectForStatusCheckDocument, options);
+        }
+export type ProjectForStatusCheckQueryHookResult = ReturnType<typeof useProjectForStatusCheckQuery>;
+export type ProjectForStatusCheckLazyQueryHookResult = ReturnType<typeof useProjectForStatusCheckLazyQuery>;
+export type ProjectForStatusCheckSuspenseQueryHookResult = ReturnType<typeof useProjectForStatusCheckSuspenseQuery>;
+export type ProjectForStatusCheckQueryResult = Apollo.QueryResult<ProjectForStatusCheckQuery, ProjectForStatusCheckQueryVariables>;
 export const ProjectNostrKeysDocument = gql`
     query ProjectNostrKeys($where: UniqueProjectQueryInput!) {
   projectGet(where: $where) {

@@ -16,6 +16,7 @@ import { t } from 'i18next'
 import { PiArrowUpRight, PiX } from 'react-icons/pi'
 import { Link } from 'react-router'
 
+import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
@@ -147,31 +148,44 @@ export const PromoteProjectMenu = ({ projectName }: PromoteProjectMenuProps) => 
             />
           </HStack>
           <VStack w="full" spacing={3}>
-            <PromoteOptionCard
-              emoji="🔗"
-              title={t('Add affiliates')}
-              description={t('Reward others to share your project and bring contributors')}
-              isNew
-              to={getPath('dashboardPromote', projectName)}
-              onClose={menu.onClose}
-            />
-            <PromoteOptionCard
-              emoji="🧠"
-              title={t('Best practices / tips')}
-              description={t('Learn what are the best social media practices to get your project seen')}
-              href={BEST_PRACTICES_URL}
-              isExternal
-            />
-            <PromoteOptionCard
-              emoji="📢"
-              title={t('Geyser Promotion')}
-              description={t('Get visibility on the Geyser landing page, emails, and much more')}
-              to={getPath('projectRewards', 'geyserpromotions')}
-              onClose={menu.onClose}
-            />
+            <PromoteOptions projectName={projectName} onClose={menu.onClose} />
           </VStack>
         </MenuList>
       </Portal>
     </Menu>
+  )
+}
+
+interface PromoteOptionsProps {
+  projectName: string
+  onClose?: () => void
+}
+
+export const PromoteOptions = ({ projectName, onClose }: PromoteOptionsProps) => {
+  return (
+    <>
+      <PromoteOptionCard
+        emoji="🔗"
+        title={t('Add affiliates')}
+        description={t('Reward others to share your project and bring contributors')}
+        isNew
+        to={getPath('dashboardPromote', projectName)}
+        onClose={onClose}
+      />
+      <PromoteOptionCard
+        emoji="🧠"
+        title={t('Best practices / tips')}
+        description={t('Learn what are the best social media practices to get your project seen')}
+        href={BEST_PRACTICES_URL}
+        isExternal
+      />
+      <PromoteOptionCard
+        emoji="📢"
+        title={t('Geyser Promotion')}
+        description={t('Get visibility on the Geyser landing page, emails, and much more')}
+        to={getPath('projectRewards', GEYSER_PROMOTIONS_PROJECT_NAME)}
+        onClose={onClose}
+      />
+    </>
   )
 }
