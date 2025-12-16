@@ -1,6 +1,10 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_PLEDGE_REFUND, FRAGMENT_PLEDGE_REFUND_METADATA } from '../fragments/refundsFragment'
+import {
+  FRAGMENT_PLEDGE_REFUND,
+  FRAGMENT_PLEDGE_REFUND_METADATA,
+  FRAGMENT_RSK_TO_LIGHTNING_SWAP_PAYMENT_DETAILS,
+} from '../fragments/refundsFragment'
 
 export const MUTATION_PLEDGE_REFUND_REQUEST = gql`
   ${FRAGMENT_PLEDGE_REFUND}
@@ -19,6 +23,7 @@ export const MUTATION_PLEDGE_REFUND_REQUEST = gql`
 `
 
 export const MUTATION_PLEDGE_REFUND_SWAP_CREATE = gql`
+  ${FRAGMENT_RSK_TO_LIGHTNING_SWAP_PAYMENT_DETAILS}
   mutation PledgeRefundSwapCreate($input: PledgeRefundSwapCreateInput!) {
     pledgeRefundSwapCreate(input: $input) {
       refund {
@@ -27,6 +32,11 @@ export const MUTATION_PLEDGE_REFUND_SWAP_CREATE = gql`
       swap
       payment {
         id
+        paymentDetails {
+          ... on RskToLightningSwapPaymentDetails {
+            ...RskToLightningSwapPaymentDetails
+          }
+        }
       }
     }
   }

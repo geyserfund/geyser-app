@@ -1908,5 +1908,6 @@
   "You have successfully claimed the funds. The project is still publicly visible but cannot receive contributions. If you wish to continue receiving contributions to this project, please reach out to us at support@geyser.fund.": "You have successfully claimed the funds. The project is still publicly visible but cannot receive contributions. If you wish to continue receiving contributions to this project, please reach out to us at support@geyser.fund.",
   "Congratulations, your campaign was a success": "Congratulations, your campaign was a success",
   "You cannot access your contributed funds without this password. Remember to store this password somewhere safe, as Geyser does not store this password.": "You cannot access your contributed funds without this password. Remember to store this password somewhere safe, as Geyser does not store this password.",
-  "Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds.": "Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds."
+  "Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds.": "Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds.",
+  "Your Lightning refund will be processed shortly": "Your Lightning refund will be processed shortly"
 }
