@@ -1,5 +1,6 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 import QRCode from 'qrcode'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -8,7 +9,10 @@ import {
   currentSwapIdAtom,
   swapAtom,
 } from '@/modules/project/funding/state/swapAtom.ts'
-import { useNotification } from '@/utils'
+import {
+  // useMobileMode,
+  useNotification,
+} from '@/utils'
 
 import { onChainRefundDownloadedAtom } from '../states/onChainStatus.ts'
 import { download, downloadJson, isIos } from '../utils/download'
@@ -16,6 +20,10 @@ import { download, downloadJson, isIos } from '../utils/download'
 const REFUND_QR_FILE_NAME = 'refundFile'
 
 export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
+  const [fileToDownload, setFileToDownload] = useState<{ download: string; content: string } | null>(null)
+
+  // const isMobile = useMobileMode()
+
   const allRefundFiles = useAtomValue(swapAtom)
   const currentSwapId = useAtomValue(currentSwapIdAtom)
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
@@ -25,16 +33,32 @@ export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
   const lightningToRskSwapRefundFile = allRefundFiles[currentLightningToRskSwapId]
   const onChainToRskSwapRefundFile = allRefundFiles[currentOnChainToRskSwapId]
 
-  const refundFiles = props?.isAllOrNothing
-    ? { isAonRefund: true, onChainToRsk: onChainToRskSwapRefundFile, lightningToRsk: lightningToRskSwapRefundFile }
-    : onChainSwapRefundFile
+  const refundFiles = useMemo(
+    () =>
+      props?.isAllOrNothing
+        ? { isAonRefund: true, onChainToRsk: onChainToRskSwapRefundFile, lightningToRsk: lightningToRskSwapRefundFile }
+        : onChainSwapRefundFile,
+    [props?.isAllOrNothing, onChainToRskSwapRefundFile, lightningToRskSwapRefundFile, onChainSwapRefundFile],
+  )
 
   const toast = useNotification()
   const { t } = useTranslation()
 
   const setRefundFileDownloaded = useSetAtom(onChainRefundDownloadedAtom)
 
-  const downloadRefundQr = () => {
+  // const getQrCodeFile = useCallback(async () => {
+  //   const qrCode = await QRCode.toDataURL(JSON.stringify(refundFiles), { width: 800 })
+  //   const fileName = `${REFUND_QR_FILE_NAME}.png`
+  //   return { download: fileName, content: qrCode }
+  // }, [refundFiles])
+
+  const getJsonFile = useCallback(() => {
+    const fileName = `${REFUND_QR_FILE_NAME}.json`
+    const content = `data:application/json;charset=utf-8,${encodeURI(JSON.stringify(refundFiles))}`
+    return { download: fileName, content }
+  }, [refundFiles])
+
+  const downloadRefundQr = useCallback(() => {
     QRCode.toDataURL(JSON.stringify(refundFiles), { width: 800 })
       .then((url: string) => {
         if (isIos) {
@@ -60,15 +84,31 @@ export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
           description: 'Failed to download qr',
         })
       })
-  }
+  }, [refundFiles, t, setRefundFileDownloaded, toast])
 
-  const downloadRefundJson = () => {
+  const downloadRefundJson = useCallback(() => {
     downloadJson(REFUND_QR_FILE_NAME, refundFiles)
     setRefundFileDownloaded(true)
-  }
+  }, [refundFiles, setRefundFileDownloaded])
+
+  const downloadFile = useCallback(async () => {
+    // Test this in staging, if it works, remove  if all together.
+    // if (isMobile) {
+    //   const qrCodeFile = await getQrCodeFile()
+    //   setFileToDownload(qrCodeFile)
+    // } else {
+    const jsonFile = getJsonFile()
+    setFileToDownload(jsonFile)
+    // }
+  }, [getJsonFile])
+
+  useEffect(() => {
+    downloadFile()
+  }, [downloadFile])
 
   return {
     downloadRefundQr,
     downloadRefundJson,
+    fileToDownload,
   }
 }

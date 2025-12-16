@@ -1,28 +1,17 @@
-import { Button, Divider, Link, VStack } from '@chakra-ui/react'
+import { Button, Divider, Link as ChakraLink, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiWarning } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { GeyserOnChainGuideUrl } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { useMobileMode } from '@/utils/index.ts'
 
 import { useDownloadRefund } from '../paymentOnchain/hooks/useDownloadRefund.ts'
 
 export const PaymentDownloadRefundFile = ({ onComplete }: { onComplete: () => void }) => {
-  const isMobile = useMobileMode()
-
-  const { downloadRefundJson, downloadRefundQr } = useDownloadRefund({ isAllOrNothing: true })
-
-  const handleClick = () => {
-    if (isMobile) {
-      downloadRefundQr()
-    } else {
-      downloadRefundJson()
-    }
-
-    onComplete()
-  }
+  const { fileToDownload } = useDownloadRefund({
+    isAllOrNothing: true,
+  })
 
   return (
     <VStack w="full" spacing={4}>
@@ -39,16 +28,24 @@ export const PaymentDownloadRefundFile = ({ onComplete }: { onComplete: () => vo
               {t('More info')}.
             </Link>
           </Body>
+          <Divider />
 
           <Body size={'sm'}>
             {t('By continuing, you agree that you are responsible for keeping this file and claiming any refund.')}
           </Body>
-          <Divider />
-
-          <Body size={'sm'}>{t('By continuing, you acknowledge that you are responsible for claiming refunds.')}</Body>
         </VStack>
       </Feedback>
-      <Button size="lg" variant="solid" minWidth="310px" colorScheme="primary1" onClick={handleClick}>
+      <Button
+        as={ChakraLink}
+        href={fileToDownload?.content}
+        download={fileToDownload?.download}
+        isExternal
+        size="lg"
+        variant="solid"
+        minWidth="310px"
+        colorScheme="primary1"
+        onClick={onComplete}
+      >
         {t('Download & Continue')}
       </Button>
     </VStack>
