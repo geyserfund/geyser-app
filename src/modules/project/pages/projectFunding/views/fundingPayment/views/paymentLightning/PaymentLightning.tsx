@@ -1,19 +1,28 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 import { PiCopy } from 'react-icons/pi'
+import { useLocation, useNavigate } from 'react-router'
 
-import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess'
+import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess.ts'
+import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
 import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
-import { currentLightningToRskSwapIdAtom, currentSwapIdAtom } from '@/modules/project/funding/state/swapAtom.ts'
+import {
+  currentLightningToRskSwapIdAtom,
+  currentSwapIdAtom,
+  swapAtom,
+} from '@/modules/project/funding/state/swapAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
+import { PaymentStatus, PaymentType } from '@/types/index.ts'
 import { isAllOrNothing, useMobileMode, useNotification } from '@/utils/index.ts'
 
 import { QRCodeComponent } from '../../components/QRCodeComponent'
 import { TotalAmountToPay } from '../../components/TotalAmountToPay'
 import { WaitingForPayment } from '../../components/WaitingForPayment'
+import { useTransactionStatusUpdate } from '../paymentOnchain/hooks/useTransactionStatusUpdate.ts'
 
 export const PaymentLightning = () => {
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
@@ -38,6 +47,7 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
 
   const { project } = useProjectAtom()
   const isAon = isAllOrNothing(project)
+
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
 
@@ -97,6 +107,52 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
           {t('Copy invoice')}
         </Button>
       </VStack>
+      {isAon && <PaymentLightningAonComponent />}
     </VStack>
   )
+}
+
+export const PaymentLightningAonComponent = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const { project } = useProjectAtom()
+
+  const [fundingContribution, setFundingContribution] = useAtom(fundingContributionAtom)
+  const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
+
+  const allSwaps = useAtomValue(swapAtom)
+  const currentSwap = allSwaps[currentLightningToRskSwapId]
+
+  const handleConfirmed = () => {
+    const payments = fundingContribution.payments.map((payment) => {
+      if (payment.paymentType === PaymentType.LightningToRskSwap) {
+        return {
+          ...payment,
+          status: PaymentStatus.Pending,
+        }
+      }
+
+      return payment
+    })
+
+    setFundingContribution({
+      ...fundingContribution,
+      payments,
+    })
+
+    navigate({ pathname: getPath('fundingSuccess', project.name), search: location.search })
+  }
+
+  const handleFailed = () => {
+    navigate({ pathname: getPath('fundingPaymentFailed', project.name), search: location.search })
+  }
+
+  useTransactionStatusUpdate({
+    handleConfirmed,
+    handleFailed,
+    swapId: currentSwap?.id,
+  })
+
+  return null
 }

@@ -9170,7 +9170,7 @@ export type FundingContributionPaymentDetailsFragment = { __typename?: 'Contribu
     & ContributionOnChainToRskSwapPaymentDetailsFragment
   ) | null };
 
-export type FundingContributionPaymentFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, status: PaymentStatus, userSubscriptionId?: any | null };
+export type FundingContributionPaymentFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, paymentType: PaymentType, status: PaymentStatus, userSubscriptionId?: any | null };
 
 export type PaymentSubscriptionFragment = { __typename?: 'Payment', id: any, status: PaymentStatus, paymentType: PaymentType, failureReason?: string | null };
 
@@ -9766,6 +9766,16 @@ export type ContributionWithInvoiceStatusGetQueryVariables = Exact<{
 export type ContributionWithInvoiceStatusGetQuery = { __typename?: 'Query', contribution: (
     { __typename?: 'Contribution' }
     & ContributionWithInvoiceStatusFragment
+  ) };
+
+export type FundingContributionGetQueryVariables = Exact<{
+  contributionId: Scalars['BigInt']['input'];
+}>;
+
+
+export type FundingContributionGetQuery = { __typename?: 'Query', contribution: (
+    { __typename?: 'Contribution' }
+    & FundingContributionFragment
   ) };
 
 export type ContributionForDownloadInvoiceGetQueryVariables = Exact<{
@@ -11290,6 +11300,7 @@ export const FundingContributionPaymentFragmentDoc = gql`
   id
   method
   paymentAmount
+  paymentType
   status
   userSubscriptionId
 }
@@ -17279,6 +17290,46 @@ export type ContributionWithInvoiceStatusGetQueryHookResult = ReturnType<typeof 
 export type ContributionWithInvoiceStatusGetLazyQueryHookResult = ReturnType<typeof useContributionWithInvoiceStatusGetLazyQuery>;
 export type ContributionWithInvoiceStatusGetSuspenseQueryHookResult = ReturnType<typeof useContributionWithInvoiceStatusGetSuspenseQuery>;
 export type ContributionWithInvoiceStatusGetQueryResult = Apollo.QueryResult<ContributionWithInvoiceStatusGetQuery, ContributionWithInvoiceStatusGetQueryVariables>;
+export const FundingContributionGetDocument = gql`
+    query FundingContributionGet($contributionId: BigInt!) {
+  contribution(id: $contributionId) {
+    ...FundingContribution
+  }
+}
+    ${FundingContributionFragmentDoc}`;
+
+/**
+ * __useFundingContributionGetQuery__
+ *
+ * To run a query within a React component, call `useFundingContributionGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFundingContributionGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFundingContributionGetQuery({
+ *   variables: {
+ *      contributionId: // value for 'contributionId'
+ *   },
+ * });
+ */
+export function useFundingContributionGetQuery(baseOptions: Apollo.QueryHookOptions<FundingContributionGetQuery, FundingContributionGetQueryVariables> & ({ variables: FundingContributionGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FundingContributionGetQuery, FundingContributionGetQueryVariables>(FundingContributionGetDocument, options);
+      }
+export function useFundingContributionGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FundingContributionGetQuery, FundingContributionGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FundingContributionGetQuery, FundingContributionGetQueryVariables>(FundingContributionGetDocument, options);
+        }
+export function useFundingContributionGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FundingContributionGetQuery, FundingContributionGetQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FundingContributionGetQuery, FundingContributionGetQueryVariables>(FundingContributionGetDocument, options);
+        }
+export type FundingContributionGetQueryHookResult = ReturnType<typeof useFundingContributionGetQuery>;
+export type FundingContributionGetLazyQueryHookResult = ReturnType<typeof useFundingContributionGetLazyQuery>;
+export type FundingContributionGetSuspenseQueryHookResult = ReturnType<typeof useFundingContributionGetSuspenseQuery>;
+export type FundingContributionGetQueryResult = Apollo.QueryResult<FundingContributionGetQuery, FundingContributionGetQueryVariables>;
 export const ContributionForDownloadInvoiceGetDocument = gql`
     query ContributionForDownloadInvoiceGet($contributionId: BigInt!) {
   contribution(id: $contributionId) {

@@ -106,6 +106,7 @@ export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT = gql`
     id
     method
     paymentAmount
+    paymentType
     status
     userSubscriptionId
   }
