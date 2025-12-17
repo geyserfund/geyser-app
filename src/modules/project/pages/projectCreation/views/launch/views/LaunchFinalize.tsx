@@ -56,6 +56,7 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
       await publishProject.execute({
         variables: { input: { projectId: project.id } },
         onError(error) {
+          setIsPublishing(false)
           toast.error({
             title: t('Publication Failed'),
             description: error.message || t('Something went wrong. Please try again.'),
@@ -63,6 +64,7 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
         },
       })
     } catch (error) {
+      setIsPublishing(false)
       toast.error({
         title: t('Publication Failed'),
         description: t('Something went wrong. Please try again.'),
