@@ -94,13 +94,10 @@ export const useMyProjects = (userId: number) => {
       _setActiveProjects(filteredActiveProjects)
       setActiveProjects(filteredActiveProjects)
 
-      // sortProjectsByActivity(
-      //   projects
-      //     .filter((project) => project?.status === ProjectStatus.Active) ?? [],
-      //   myProjectsActivities,
-      // )
-      setInDraftProjects(projects.filter((project) => project?.status && inDraftStatus.includes(project.status)))
-      setInReviewProjects(projects.filter((project) => project?.status === ProjectStatus.InReview))
+      setInDraftProjects(projects.filter((project) => !project?.launchedAt))
+      setInReviewProjects(
+        projects.filter((project) => project?.launchedAt && project?.status === ProjectStatus.InReview),
+      )
       setInPrelaunchProjects(projects.filter((project) => project?.status === ProjectStatus.PreLaunch))
       setInActiveProjects(projects.filter((project) => project?.status && inactiveStatus.includes(project.status)))
 
