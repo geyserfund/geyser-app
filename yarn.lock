@@ -86,21 +86,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/rover@npm:^0.23.0":
-  version: 0.23.0
-  resolution: "@apollo/rover@npm:0.23.0"
-  dependencies:
-    axios: "npm:^1.6.5"
-    axios-proxy-builder: "npm:^0.1.1"
-    console.table: "npm:^0.10.0"
-    detect-libc: "npm:^2.0.0"
-    tar: "npm:^6.2.0"
-  bin:
-    rover: run.js
-  checksum: 10c0/8ff23cd3f41444f9086a479fc3708b2dd3a7b35cbd253a1328c1c0a01043767fafe725f4e020c595e133e2c04646674e33799fce1b32670fb52c0f48b1a8b900
-  languageName: node
-  linkType: hard
-
 "@ardatan/relay-compiler@npm:12.0.0":
   version: 12.0.0
   resolution: "@ardatan/relay-compiler@npm:12.0.0"
@@ -9337,26 +9322,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios-proxy-builder@npm:^0.1.1":
-  version: 0.1.2
-  resolution: "axios-proxy-builder@npm:0.1.2"
-  dependencies:
-    tunnel: "npm:^0.0.6"
-  checksum: 10c0/8724099b72efa1f114b1edf9b6dba7a5ea7518b30d0bdef93b5107ae147afb1bd94c10817580e7b53bfc675b37fe99c5c784bb9fe13481ebf9d9560c1ff68591
-  languageName: node
-  linkType: hard
-
-"axios@npm:^1.6.5":
-  version: 1.7.7
-  resolution: "axios@npm:1.7.7"
-  dependencies:
-    follow-redirects: "npm:^1.15.6"
-    form-data: "npm:^4.0.0"
-    proxy-from-env: "npm:^1.1.0"
-  checksum: 10c0/4499efc89e86b0b49ffddc018798de05fab26e3bf57913818266be73279a6418c3ce8f9e934c7d2d707ab8c095e837fc6c90608fb7715b94d357720b5f568af7
-  languageName: node
-  linkType: hard
-
 "b4a@npm:^1.6.4":
   version: 1.6.7
   resolution: "b4a@npm:1.6.7"
@@ -10718,15 +10683,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"console.table@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "console.table@npm:0.10.0"
-  dependencies:
-    easy-table: "npm:1.1.0"
-  checksum: 10c0/b1893a06b422c7e82dca03dec000beabebc26415df558a05e1b9778407a76e4caa1db286df40f72e3780ac5c5b5ef5f4b8a3bef2d22020abb86f6408dc357875
-  languageName: node
-  linkType: hard
-
 "constant-case@npm:^3.0.4":
   version: 3.0.4
   resolution: "constant-case@npm:3.0.4"
@@ -12011,18 +11967,6 @@ __metadata:
   version: 0.2.0
   resolution: "eastasianwidth@npm:0.2.0"
   checksum: 10c0/26f364ebcdb6395f95124fda411f63137a4bfb5d3a06453f7f23dfe52502905bd84e0488172e0f9ec295fdc45f05c23d5d91baf16bd26f0fe9acd777a188dc39
-  languageName: node
-  linkType: hard
-
-"easy-table@npm:1.1.0":
-  version: 1.1.0
-  resolution: "easy-table@npm:1.1.0"
-  dependencies:
-    wcwidth: "npm:>=1.0.1"
-  dependenciesMeta:
-    wcwidth:
-      optional: true
-  checksum: 10c0/0b7b03723e450c8286bd375bbe7d23247456dbb8f79df055adcfd745bfb91f7604c4e78204ff75d65d5229bec8867cbefca51c57938004f487ff800b587540bb
   languageName: node
   linkType: hard
 
@@ -13764,16 +13708,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.15.6":
-  version: 1.15.9
-  resolution: "follow-redirects@npm:1.15.9"
-  peerDependenciesMeta:
-    debug:
-      optional: true
-  checksum: 10c0/5829165bd112c3c0e82be6c15b1a58fa9dcfaede3b3c54697a82fe4a62dd5ae5e8222956b448d2f98e331525f05d00404aba7d696de9e761ef6e42fdc780244f
-  languageName: node
-  linkType: hard
-
 "fontkit@npm:^2.0.2":
   version: 2.0.4
   resolution: "fontkit@npm:2.0.4"
@@ -14113,7 +14047,6 @@ __metadata:
   resolution: "geyser-app@workspace:."
   dependencies:
     "@apollo/client": "npm:^3.11.1"
-    "@apollo/rover": "npm:^0.23.0"
     "@bitcoinerlab/secp256k1": "npm:^1.1.1"
     "@chakra-ui/cli": "npm:^2.4.1"
     "@chakra-ui/icons": "npm:^2.1.1"
@@ -18633,13 +18566,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"proxy-from-env@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "proxy-from-env@npm:1.1.0"
-  checksum: 10c0/fe7dd8b1bdbbbea18d1459107729c3e4a2243ca870d26d34c2c1bcd3e4425b7bcc5112362df2d93cc7fb9746f6142b5e272fd1cc5c86ddf8580175186f6ad42b
-  languageName: node
-  linkType: hard
-
 "psl@npm:^1.1.33":
   version: 1.9.0
   resolution: "psl@npm:1.9.0"
@@ -21451,7 +21377,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tar@npm:^6.1.11, tar@npm:^6.2.0, tar@npm:^6.2.1":
+"tar@npm:^6.1.11, tar@npm:^6.2.1":
   version: 6.2.1
   resolution: "tar@npm:6.2.1"
   dependencies:
@@ -21982,13 +21908,6 @@ __metadata:
   dependencies:
     safe-buffer: "npm:^5.0.1"
   checksum: 10c0/4c7a1b813e7beae66fdbf567a65ec6d46313643753d0beefb3c7973d66fcec3a1e7f39759f0a0b4465883499c6dc8b0750ab8b287399af2e583823e40410a17a
-  languageName: node
-  linkType: hard
-
-"tunnel@npm:^0.0.6":
-  version: 0.0.6
-  resolution: "tunnel@npm:0.0.6"
-  checksum: 10c0/e27e7e896f2426c1c747325b5f54efebc1a004647d853fad892b46d64e37591ccd0b97439470795e5262b5c0748d22beb4489a04a0a448029636670bfd801b75
   languageName: node
   linkType: hard
 
@@ -23050,7 +22969,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wcwidth@npm:>=1.0.1, wcwidth@npm:^1.0.1":
+"wcwidth@npm:^1.0.1":
   version: 1.0.1
   resolution: "wcwidth@npm:1.0.1"
   dependencies:
