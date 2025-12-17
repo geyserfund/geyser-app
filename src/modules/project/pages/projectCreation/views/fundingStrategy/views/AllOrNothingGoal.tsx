@@ -1,4 +1,13 @@
-import { Button, Input, InputGroup, InputRightElement, useDisclosure, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  HStack,
+  IconButton,
+  Input,
+  InputGroup,
+  InputRightElement,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
@@ -6,6 +15,7 @@ import { DateTime } from 'luxon'
 import { useEffect } from 'react'
 import ReactDatePicker from 'react-datepicker'
 import { useForm } from 'react-hook-form'
+import { PiX } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 import * as yup from 'yup'
 
@@ -195,7 +205,7 @@ export const AllOrNothingGoal = () => {
               <VStack align="flex-start" gap={0}>
                 <Body size="sm">
                   {t(
-                    'Pick a launch date for your project. The countdown will start from that date and time. The project will be visible but not fundable yet. You can chose to keep it private until its launch. You can also edit the launch date later.',
+                    'Pick a launch date for your project. The project will not be visible until you launch it. You can also edit the launch date later.',
                   )}
                 </Body>
                 <Body size="sm">
@@ -207,32 +217,45 @@ export const AllOrNothingGoal = () => {
               </VStack>
             }
           >
-            <ReactDatePicker
-              selected={watch('launchDate')}
-              onChange={(date) =>
-                setValue('launchDate', date || undefined, { shouldValidate: true, shouldDirty: true })
-              }
-              showTimeSelect
-              dateFormat="MM/dd/yyyy h:mm aa"
-              timeIntervals={15}
-              placeholderText={t('Select date and time')}
-              customInput={
-                <Button
-                  size="xl"
-                  borderRadius="8px"
-                  color="utils.text"
-                  borderColor="neutral1.6"
-                  w="full"
+            <HStack>
+              <ReactDatePicker
+                selected={watch('launchDate')}
+                onChange={(date) =>
+                  setValue('launchDate', date || undefined, { shouldValidate: true, shouldDirty: true })
+                }
+                showTimeSelect
+                dateFormat="MM/dd/yyyy h:mm aa"
+                timeIntervals={15}
+                placeholderText={t('Select date and time')}
+                customInput={
+                  <Button
+                    size="xl"
+                    borderRadius="8px"
+                    color="utils.text"
+                    borderColor="neutral1.6"
+                    w="full"
+                    variant="outline"
+                    colorScheme="neutral1"
+                    marginTop={4}
+                  >
+                    {launchDate
+                      ? DateTime.fromJSDate(launchDate).toFormat('MMMM dd, yyyy - h:mm a')
+                      : ' Select date and time'}
+                  </Button>
+                }
+              />
+              {launchDate && (
+                <IconButton
+                  aria-label="clear-launch-date"
                   variant="outline"
-                  colorScheme="neutral1"
+                  colorScheme="error"
+                  size="xl"
                   marginTop={4}
-                >
-                  {launchDate
-                    ? DateTime.fromJSDate(launchDate).toFormat('MMMM dd, yyyy - h:mm a')
-                    : ' Select date and time'}
-                </Button>
-              }
-            />
+                  icon={<PiX />}
+                  onClick={() => setValue('launchDate', undefined)}
+                />
+              )}
+            </HStack>
           </FieldContainer>
         </VStack>
       </ProjectCreationPageWrapper>

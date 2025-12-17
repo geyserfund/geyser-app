@@ -300,7 +300,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
 
   if (isWaitingConfirmation) {
     return (
-      <Modal isOpen={isOpen} size="lg" title={t('Please wait for swap confirmation')} onClose={() => {}}>
+      <Modal isOpen={isOpen} size="lg" title={t('Please wait for swap confirmation')} onClose={() => {}} noClose={true}>
         <BitcoinPayoutWaitingConfirmation
           isRefund={true}
           onClose={handleClose}
