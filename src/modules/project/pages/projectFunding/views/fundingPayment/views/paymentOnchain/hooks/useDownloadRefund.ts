@@ -48,7 +48,8 @@ export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
   }, [props?.isAllOrNothing, lightningToRskSwapRefundFile, onChainSwapRefundFile])
 
   const getJsonFile = useCallback(() => {
-    const content = `data:application/json;charset=utf-8,${encodeURI(JSON.stringify(refundFiles))}`
+    const blob = new Blob([JSON.stringify(refundFiles, null, 2)], { type: 'application/json' })
+    const content = URL.createObjectURL(blob)
     return { download: refundFileName, content }
   }, [refundFiles, refundFileName])
 
@@ -60,6 +61,15 @@ export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
   useEffect(() => {
     downloadFile()
   }, [downloadFile])
+
+  // Cleanup object URL when component unmounts or when a new URL is created
+  useEffect(() => {
+    return () => {
+      if (fileToDownload?.content) {
+        URL.revokeObjectURL(fileToDownload.content)
+      }
+    }
+  }, [fileToDownload?.content])
 
   return {
     fileToDownload,
