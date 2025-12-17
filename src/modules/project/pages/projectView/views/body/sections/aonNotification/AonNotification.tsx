@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
 import { useAuthContext } from '@/context/index.ts'
-import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { RefundRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/RefundRsk.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
@@ -14,6 +13,7 @@ import {
 } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 
+import { useRefetchQueriesOnContributionStatusChange } from './useRefetchQueriesOnContributionStatusChange.ts'
 import CampaignFailedNotification from './views/CampaignFailedNotification.tsx'
 import { CampaignSuccessNotification } from './views/CampaignSuccessNotification.tsx'
 import { FailedToClaimNotification } from './views/FailedToClaimNotification.tsx'
@@ -25,13 +25,19 @@ export const AonNotification = () => {
   const { project, isProjectOwner } = useProjectAtom()
   const { user } = useAuthContext()
 
-  const { queryProject } = useProjectAPI()
+  const { refetchQueries } = useRefetchQueriesOnContributionStatusChange()
+
   const refundModal = useModal()
   const isAon = isAllOrNothing(project)
 
   const [isPayoutProcessing, setIsPayoutProcessing] = useState(false)
 
-  const { data, loading, refetch } = useProjectContributorQuery({
+  console.log('isAon', isAon)
+  console.log('project', project)
+  console.log('user', user)
+  console.log('isProjectOwner', isProjectOwner)
+
+  const { data, loading } = useProjectContributorQuery({
     skip: !project.id || !user.id || !isAon,
     variables: {
       input: {
@@ -120,8 +126,7 @@ export const AonNotification = () => {
         contributionUUID={fundedToCampaign.uuid || ''}
         projectId={project.id}
         onCompleted={() => {
-          refetch()
-          queryProject.execute()
+          refetchQueries()
         }}
       />
     )

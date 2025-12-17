@@ -200,7 +200,7 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
             <Body>{t('The team reviewed your project and requested some revisions.')}</Body>
             {rejectionReasons && rejectionReasons.length > 0 && (
               <CardLayout noborder backgroundColor="neutral1.3" w="full" spacing={3}>
-                <Body bold>{t('Additional Details')}</Body>
+                <Body bold>{t('Rejection Reasons')}</Body>
                 <UnorderedList spacing={2} pl={4}>
                   {rejectionReasons.map((reason, index) => (
                     <ListItem key={index}>
@@ -208,6 +208,12 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
                     </ListItem>
                   ))}
                 </UnorderedList>
+                {latestProjectReview?.reviewNotes && (
+                  <>
+                    <Body bold>{t('Notes:')}</Body>
+                    <Body>{latestProjectReview?.reviewNotes}</Body>
+                  </>
+                )}
               </CardLayout>
             )}
           </VStack>

@@ -36,7 +36,7 @@ export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
 
   const refundFileName = useMemo(() => {
     let projectTitle = ''
-    const dateTime = DateTime.now().toFormat('yyyy-MM-dd_HH-mm-ss')
+    const dateTime = DateTime.now().toFormat('yyyy-MM-dd_HH-mm')
 
     if (props?.isAllOrNothing) {
       projectTitle = lightningToRskSwapRefundFile?.contributionInfo?.projectTitle?.trim().slice(0, 10) || ''
@@ -48,9 +48,8 @@ export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
   }, [props?.isAllOrNothing, lightningToRskSwapRefundFile, onChainSwapRefundFile])
 
   const getJsonFile = useCallback(() => {
-    const fileName = `${refundFileName}.json`
     const content = `data:application/json;charset=utf-8,${encodeURI(JSON.stringify(refundFiles))}`
-    return { download: fileName, content }
+    return { download: refundFileName, content }
   }, [refundFiles, refundFileName])
 
   const downloadFile = useCallback(async () => {

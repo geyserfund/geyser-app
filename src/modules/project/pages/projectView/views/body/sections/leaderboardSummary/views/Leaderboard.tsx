@@ -16,7 +16,7 @@ import {
   LeaderboardItem,
   LeaderboardItemSkeleton,
 } from '../../../../leaderboard/views/leaderboard/components/LeaderboardItem'
-import { NoContribution } from './NoContribution'
+import { NoContribution } from '../components/NoContribution'
 
 export const Leaderboard = () => {
   const { t } = useTranslation()

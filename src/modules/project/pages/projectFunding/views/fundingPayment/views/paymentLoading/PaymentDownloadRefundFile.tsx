@@ -1,4 +1,4 @@
-import { Button, Divider, Link, VStack } from '@chakra-ui/react'
+import { Button, Divider, HStack, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 import { PiWarning } from 'react-icons/pi'
@@ -44,9 +44,11 @@ export const PaymentDownloadRefundFile = ({ onComplete }: { onComplete: () => vo
           </Body>
         </VStack>
       </Feedback>
-      <Button {...buttonProps} size="lg" variant="solid" minWidth="310px" colorScheme="primary1" onClick={handleClick}>
-        {t('Download & Continue')}
-      </Button>
+      <HStack onClick={handleClick}>
+        <Button {...buttonProps} size="lg" variant="solid" minWidth="310px" colorScheme="primary1">
+          {t('Download & Continue')}
+        </Button>
+      </HStack>
     </VStack>
   )
 }

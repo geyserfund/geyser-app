@@ -15,7 +15,7 @@ import {
   ContributionItem,
   ContributionItemSkeleton,
 } from '../../../../leaderboard/views/contributions/components/ContributionItem'
-import { NoContribution } from './NoContribution'
+import { NoContribution } from '../components/NoContribution.tsx'
 
 export const Contributions = () => {
   const { t } = useTranslation()

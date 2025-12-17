@@ -1,9 +1,10 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { Box, Button, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React from 'react'
 
-import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+
+import { REFUND_PROCESSED_IMAGE_URL } from '../constant.ts'
 
 type LightningPayoutProcessedProps = {
   isRefund?: boolean
@@ -20,20 +21,9 @@ export const LightningPayoutProcessed: React.FC<LightningPayoutProcessedProps> =
       </Body>
 
       {/* Illustration Placeholder */}
-      <CardLayout
-        w="full"
-        maxW="300px"
-        h="200px"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        backgroundColor="neutral1.3"
-        borderColor="neutral1.6"
-      >
-        <Body size="md" color="neutral1.11">
-          {t('Illustration')}
-        </Body>
-      </CardLayout>
+      <Box w="300px" h="300px">
+        <Image src={REFUND_PROCESSED_IMAGE_URL} alt={'Get refund'} width="100%" height="100%" objectFit="cover" />
+      </Box>
 
       {/* Success Message */}
       <Body size="md" textAlign="center" color="neutral1.12">
