@@ -13,8 +13,6 @@ import { useGrants } from './hooks/useGrants'
 export const GrantsMainPage = () => {
   const { inactiveGrants, fundingOpenGrants, applicationOpenGrants } = useGrants()
 
-  console.log(inactiveGrants, fundingOpenGrants, applicationOpenGrants)
-
   return (
     <VStack align="stretch" spacing={8}>
       <Head

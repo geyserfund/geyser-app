@@ -176,9 +176,6 @@ export const AnimatedNavBar = ({
                 justifyContent="center"
                 alignItems="center"
                 fontWeight={isActive ? 500 : 400}
-                onClick={() => {
-                  console.log('clicked')
-                }}
               >
                 {(showIcon || item.showIconAlways) &&
                   (isActive && ActiveIcon ? <ActiveIcon fontSize="18px" /> : Icon ? <Icon fontSize="18px" /> : null)}

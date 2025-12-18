@@ -31,7 +31,6 @@ export const LaunchPaymentTaxId = () => {
 
   const continueProps: ButtonProps = {
     onClick() {
-      console.log(form.formState.isDirty)
       if (form.formState.isDirty) {
         handleSubmit()
       } else {

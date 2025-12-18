@@ -13,8 +13,6 @@ export const ProjectIFollowGrid = () => {
   const { t } = useTranslation()
   const { followedProjectsActivities } = useFollowedProjectsActivities()
 
-  console.log('checking my followed projects', followedProjectsActivities)
-
   if (followedProjectsActivities.length === 0) {
     return null
   }

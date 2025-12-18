@@ -210,8 +210,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
 
       const swapObj = JSON.parse(paymentDetails.swapMetadata)
 
-      console.log('chekcing swapObject', swapObj)
-
       swapObj.privateKey = accountKeys.privateKey
       swapObj.preimageHash = paymentDetails.swapPreimageHash
       swapObj.preimageHex = await decryptString({
@@ -402,11 +400,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         <Body size={'md'} medium>
           {t('Refund all of the contributions you have made to this project.')} <br />
           {t('Are you sure you want to continue with the refund?')}
-        </Body>
-        <Body size={'xl'} bold>
-          {t('Total refund amount')}
-          {': '}
-          {commaFormatted(pledgeRefundRequestData?.pledgeRefundRequest.refund.amount)} sats
         </Body>
         <Body size={'md'} medium></Body>
         <HStack spacing={4} w="full" justifyContent="space-between">

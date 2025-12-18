@@ -33,7 +33,6 @@ export const useRefund = () => {
         throw new Error(BAD_REFUND_FILE_ERROR)
       }
 
-      console.log('transaction', transaction)
       return transaction
     },
     [removeRefundFile],

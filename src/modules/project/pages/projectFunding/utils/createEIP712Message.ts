@@ -4,14 +4,10 @@ import { Buffer } from 'buffer'
 
 import { CreateBoltzEtherSwapDomainSeparator, CreateBoltzRouterDomainSeparator } from './createDomainSeparator.ts'
 import { addressToBuffer32, numberToBuffer32 } from './helperFunctions.ts'
-import { signEIP712Message } from './signEIP712Message.ts'
 
 export const BOLTZ_TYPEHASH_CLAIM =
   'Claim(bytes32 preimage,uint256 amount,address refundAddress,uint256 timelock,address destination)'
 export const BOLTZ_TYPEHASH_CLAIM_CALL = 'ClaimCall(bytes32 preimage,address callee,bytes32 callData)'
-
-export const BOLTZ_TYPEHASH_PAYMENT_REFUND =
-  'Refund(bytes32 preimageHash,uint256 amount,address claimAddress,uint256 timelock)'
 
 /**
  * @param preimage - The preimage value from swap file
@@ -80,56 +76,4 @@ export const createEIP712MessageForBoltzClaimCall = (preimage: string, callee: s
 
   const digest = keccak_256(digestData)
   return '0x' + bytesToHex(digest)
-}
-
-/**
- * @param preimageHash - The preimage hash value of the original swap that failed
- * @param amount - The amount of the original swap that failed
- * @param claimAddress - The claim address of the original swap that failed
- * @param timelock - The timelock of the original swap that failed
- */
-export const createEIP712MessageForPaymentRefund = (
-  preimageHash: string,
-  amount: number,
-  claimAddress: string,
-  timelock: number,
-) => {
-  const domainSeparator = Buffer.from(CreateBoltzEtherSwapDomainSeparator().slice(2), 'hex')
-
-  const structTypeHash = Buffer.from(keccak_256(BOLTZ_TYPEHASH_PAYMENT_REFUND))
-
-  const preimageHashBuffer = Buffer.from(preimageHash, 'hex')
-  const amountBuffer = numberToBuffer32(amount)
-  const claimAddressBuffer = addressToBuffer32(claimAddress)
-  const timelockBuffer = numberToBuffer32(timelock)
-
-  const structEncoded = Buffer.concat([
-    structTypeHash,
-    preimageHashBuffer,
-    amountBuffer,
-    claimAddressBuffer,
-    timelockBuffer,
-  ])
-
-  const structHash = Buffer.from(keccak_256(structEncoded))
-
-  const eip712Prefix = Buffer.from('1901', 'hex') // "\x19\x01"
-  const digestData = Buffer.concat([eip712Prefix, domainSeparator, structHash])
-
-  const digest = keccak_256(digestData)
-  return '0x' + bytesToHex(digest)
-}
-
-export const createAndSignEIP712MessageForPaymentRefund = (params: {
-  preimageHash: string
-  amount: number
-  claimAddress: string
-  timelock: number
-  privateKey: string
-}) => {
-  const { preimageHash, amount, claimAddress, timelock, privateKey } = params
-
-  const eip712Message = createEIP712MessageForPaymentRefund(preimageHash, amount, claimAddress, timelock)
-  const signature = signEIP712Message(eip712Message, privateKey)
-  return signature
 }

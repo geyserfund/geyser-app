@@ -182,8 +182,6 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
         },
       })
     }
-
-    console.log('handleNostrPost', event)
   }
 
   return (

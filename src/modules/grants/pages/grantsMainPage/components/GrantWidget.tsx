@@ -17,7 +17,6 @@ const GrantWidget = ({ grant, compact = false }: { grant: Grant; compact?: boole
   const votingEndDate = grant.statuses.find((s) => s.status === GrantStatusEnum.Closed)?.startAt
 
   const isSatoshi = !GrantBalanceCurrency[grant.name] || !(GrantBalanceCurrency[grant.name] === 'USDCENT')
-  console.log(GrantBalanceCurrency[grant.name])
 
   const grantPool = isSatoshi
     ? `${getShortAmountLabel(grant.balance, false, true)} sats`

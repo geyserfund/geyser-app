@@ -74,7 +74,6 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
     e.preventDefault()
     e.stopPropagation()
     const { title, description, error, valid } = isFundingUserInfoValid
-    console.log('did it get here', valid, error)
 
     if (valid) {
       if (!isLoggedIn && hasSubscription) {

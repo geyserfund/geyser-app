@@ -187,7 +187,6 @@ export const shippingCostAtom = atom((get) => {
       if (!defaultRate) return
 
       const countryRate = shippingRates.find((rate) => rate.country === country) || defaultRate
-      console.log('country', countryRate)
 
       const { baseRate, incrementRate } = countryRate.sameAsDefault ? defaultRate : countryRate
 

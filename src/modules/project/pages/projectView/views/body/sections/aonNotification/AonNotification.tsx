@@ -32,11 +32,6 @@ export const AonNotification = () => {
 
   const [isPayoutProcessing, setIsPayoutProcessing] = useState(false)
 
-  console.log('isAon', isAon)
-  console.log('project', project)
-  console.log('user', user)
-  console.log('isProjectOwner', isProjectOwner)
-
   const { data, loading } = useProjectContributorQuery({
     skip: !project.id || !user.id || !isAon,
     variables: {
@@ -76,7 +71,6 @@ export const AonNotification = () => {
     }
   }, [isProjectOwner, payoutRequest, project.id])
 
-  console.log('data', data)
   const fundedToCampaign = data?.contributor?.contributions.find(
     (contribution) => contribution.status === ContributionStatus.Pledged,
   )

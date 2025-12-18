@@ -48,8 +48,6 @@ export const RefundFilePage = () => {
     }
   }
 
-  console.log('currentSwapData', currentSwapData)
-
   return (
     <>
       <HStack w="full" h="full" justifyContent="center" alignItems="center">

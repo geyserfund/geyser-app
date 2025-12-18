@@ -88,8 +88,6 @@ export const PostView = () => {
     navigate(getPath('projectFunding', project?.name))
   }
 
-  console.log('checking project', project)
-
   const showLinkedRewardsAndGoals = post.projectGoals.inProgress.length > 0 || post.projectRewards.length > 0
 
   return (

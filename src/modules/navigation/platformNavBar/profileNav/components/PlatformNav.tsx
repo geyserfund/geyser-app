@@ -34,7 +34,6 @@ export const PlatformNav = () => {
   }, [])
 
   const activeButtonIndex = useMemo(() => {
-    console.log('location.pathname', location.pathname)
     let activeIndex = -1
     ProjectNavigationButtons.map((navButton) => {
       if (navButton.path && location.pathname.includes(navButton.path)) {

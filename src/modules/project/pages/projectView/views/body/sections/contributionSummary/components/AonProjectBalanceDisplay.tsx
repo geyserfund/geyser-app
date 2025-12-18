@@ -16,7 +16,7 @@ const aonGoalFailedStatuses = [ProjectAonGoalStatus.Failed, ProjectAonGoalStatus
 export const AonProjectBalanceDisplay = () => {
   const { project } = useProjectAtom()
 
-  const { formatAmount } = useCurrencyFormatter()
+  const { formatAmount, formatUsdAmount } = useCurrencyFormatter()
 
   const { isFundingDisabled, getProjectBalance, getAonGoalPercentage } = useProjectToolkit(project)
 
@@ -83,8 +83,12 @@ export const AonProjectBalanceDisplay = () => {
           </Body>
 
           <Body size="md" light display="inline">
-            {t('goal amount')}
+            <Body as="span" dark medium>
+              {formatUsdAmount(goalAmount ?? 0)}
+            </Body>
+            {` ${t('goal')} `}
           </Body>
+
           {timeLeft && (
             <VStack w="full" display="flex" justifyContent="center" alignItems="start" spacing={0} pt={6}>
               <Body size="xl" bold dark lineHeight={1}>

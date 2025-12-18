@@ -2,8 +2,6 @@ import * as secp256k1 from 'tiny-secp256k1'
 
 /** Signs EIP-712 message hash with RSK private key */
 export const signEIP712Message = (digest: string, rskPrivateKey: string) => {
-  console.log('checking digest', digest)
-  console.log('checking rskPrivateKey', rskPrivateKey)
   try {
     // Validate inputs
     if (!digest.startsWith('0x') || digest.length !== 66) {

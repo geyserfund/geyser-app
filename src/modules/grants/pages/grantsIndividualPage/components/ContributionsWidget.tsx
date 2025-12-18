@@ -24,7 +24,6 @@ interface Props {
 
 export const ContributionsWidget = ({ grant }: Props) => {
   const isSatoshi = !GrantBalanceCurrency[grant.name] || !(GrantBalanceCurrency[grant.name] === 'USDCENT')
-  console.log(GrantBalanceCurrency[grant.name])
 
   const grantAmount = isSatoshi
     ? `${getShortAmountLabel(grant.balance, false, true)} sats`

@@ -51,8 +51,6 @@ export const LaunchProjectDetails = () => {
   })
 
   const onSubmit = async ({ category, subCategory, location, tags, ...values }: ProjectCreationVariables) => {
-    console.log('checking is direty', form.formState.isDirty)
-
     if (isEdit && project.id) {
       const projectUpdates = !form.formState.isDirty
         ? {}

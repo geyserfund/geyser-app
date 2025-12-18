@@ -68,7 +68,6 @@ export const usePayoutWithLightningForm = (
         const accountKeys = generateKeysFromSeedHex(decryptedSeed)
 
         setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
-        console.log('accountKeys', accountKeys)
 
         onSubmit(data, accountKeys)
       } else {

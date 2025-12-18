@@ -98,7 +98,6 @@ export const useNostrPostForFundingSuccess = () => {
       // Sign the event using the Nostr extension
       const signedEvent = (await window.nostr.signEvent(eventWithId)) as NostrEvent
 
-      console.log('checking signed funding success event', signedEvent)
       return signedEvent
     } catch (error) {
       console.error('Failed to create funding success post:', error)

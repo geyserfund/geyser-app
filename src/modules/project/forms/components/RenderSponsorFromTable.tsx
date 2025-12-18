@@ -55,8 +55,6 @@ export const RenderSponsorFromTable = () => {
     }
   }, [userIpCountryData, totalWalletList])
 
-  console.log('checking userIpCountryData', userIpCountryData)
-
   return (
     <HStack width={'full'} justifyContent={'flex-start'} spacing={'10px'} flexWrap="wrap">
       {featuredWalletList.map((wallet) => {

@@ -199,8 +199,6 @@ export const ProjectDashboardWallet = () => {
     id: wallet?.id,
   }
 
-  console.log(formWalletConnectionDetails)
-
   return (
     <DashboardLayout
       desktopTitle={t('Wallet')}

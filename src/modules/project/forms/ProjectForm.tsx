@@ -45,8 +45,6 @@ export const ProjectForm = ({ form, isEdit }: ProjectFormProps) => {
 
   const { formState, setValue, watch, setError, control, clearErrors } = form
 
-  console.log(form.watch('name'))
-
   const [getProject] = useProjectByNameForNameCheckLazyQuery({
     onCompleted(data) {
       if (data && data.projectGet && data.projectGet.id && data.projectGet.name !== formState.defaultValues?.name) {

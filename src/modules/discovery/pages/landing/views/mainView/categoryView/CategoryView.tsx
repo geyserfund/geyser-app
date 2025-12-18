@@ -38,7 +38,7 @@ export const CategoryView = () => {
         title={t('Trending')}
         noRightContent
       />
-      <ProjectRowLayout title={'Must funded projects'} width="100%">
+      <ProjectRowLayout title={t('Must funded Projects')} width="100%">
         <PaginatedView noTitle />
       </ProjectRowLayout>
     </VStack>

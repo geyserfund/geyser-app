@@ -53,8 +53,6 @@ export const LaunchReview = ({ handleNext }: { handleNext: () => void }) => {
   // If there is no latestReview or if latest review is undefined, then it is not submitted yet
   const currentStatus: ReviewStatusType = latestProjectReview?.status || 'NOT_SUBMITTED'
 
-  console.log('currentStatus', currentStatus)
-
   /** Review status configurations */
   const reviewStatusConfig: Record<ReviewStatusType, ReviewStatusInfo> = {
     [ProjectReviewStatus.Pending]: {

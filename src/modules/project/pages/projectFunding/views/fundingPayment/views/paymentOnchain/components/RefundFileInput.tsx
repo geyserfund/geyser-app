@@ -131,7 +131,6 @@ export const RefundFileInput = ({ name, caption, required, label }: ImageFieldPr
 
   const handleFile = useCallback(
     (inputFile: File) => {
-      console.log('INPUT FILE', inputFile)
       if (inputFile.type === 'image/png') {
         QrScanner.scanImage(inputFile, { returnDetailedScanResult: true })
           .then((result) => {

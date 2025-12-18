@@ -59,7 +59,6 @@ export const useTaxProfileForm = ({ userId, onUpdate }: { userId: string; onUpda
       },
     },
     onCompleted(data) {
-      console.log(data)
       if (data?.user.taxProfile) {
         form.reset({
           legalEntityType: data.user.taxProfile.legalEntityType,

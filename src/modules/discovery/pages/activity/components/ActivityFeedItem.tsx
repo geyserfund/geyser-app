@@ -56,8 +56,6 @@ export const ActivityFeedItem = ({ activityType, id, createdAt, project, resourc
     }
   }
 
-  console.log('id', id)
-
   return (
     <CardLayout
       as={Link}
