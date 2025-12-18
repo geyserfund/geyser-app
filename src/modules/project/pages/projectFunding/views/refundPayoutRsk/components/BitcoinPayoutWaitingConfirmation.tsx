@@ -57,6 +57,8 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
         },
         onCompleted(data) {
           if (data.paymentSwapClaimTxBroadcast.txHash) {
+            setIsClaiming(false)
+
             setIsProcessed(true)
             setRefundTxId(data.paymentSwapClaimTxBroadcast.txHash)
             onCompleted?.()
@@ -66,15 +68,21 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
             })
           }
         },
+        onError(error) {
+          setIsClaiming(false)
+          toast.error({
+            title: t('Something went wrong'),
+            description: t('Please try again'),
+          })
+        },
       })
     } else {
+      setIsClaiming(false)
       toast.error({
         title: t('Something went wrong'),
         description: t('Please try again'),
       })
     }
-
-    setIsClaiming(false)
   }, [
     initiateRefundToGetRefundTx,
     refundAddress,
