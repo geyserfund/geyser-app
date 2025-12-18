@@ -7,7 +7,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
+import { getAonUnClaimedClaimDeadline } from '@/shared/utils/project/getAonData.ts'
 
 export const FailedToClaimNotification = ({
   hasFundedToCampaign,
@@ -18,7 +18,7 @@ export const FailedToClaimNotification = ({
 }) => {
   const { isProjectOwner, project } = useProjectAtom()
 
-  const daysLeft = aonProjectTimeLeft(project.aonGoal)
+  const daysLeft = getAonUnClaimedClaimDeadline(project.aonGoal)
 
   if (isProjectOwner) {
     return (

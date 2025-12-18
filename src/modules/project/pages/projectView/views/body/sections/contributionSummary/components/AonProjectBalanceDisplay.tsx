@@ -23,9 +23,8 @@ export const AonProjectBalanceDisplay = () => {
   /** Calculate time left for AON project showing only the largest time unit */
   const timeLeft = useMemo(() => aonProjectTimeLeft(project.aonGoal), [project.aonGoal])
 
-  const balance = getProjectBalance().sats
+  const { sats: balance, usdCents: balanceUsdCent } = getProjectBalance()
   const goalAmount = project.aonGoal?.goalAmount
-  const balanceUsdCent = getProjectBalance().usdCents
 
   const percent = getAonGoalPercentage()
 
