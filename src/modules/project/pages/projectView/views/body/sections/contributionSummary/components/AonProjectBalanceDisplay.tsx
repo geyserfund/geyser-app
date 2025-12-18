@@ -2,54 +2,50 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 
-import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
+import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
 import { ProjectAonGoalStatus } from '@/types/index.ts'
-import { Satoshis } from '@/types/types.ts'
 
 import { LiveProgressAqua } from '../../../../../../../../../shared/components/feedback/LiveProgressAqua.tsx'
+
+const aonGoalFailedStatuses = [ProjectAonGoalStatus.Failed, ProjectAonGoalStatus.Cancelled]
 
 export const AonProjectBalanceDisplay = () => {
   const { project } = useProjectAtom()
 
   const { formatAmount } = useCurrencyFormatter()
-  const { getUSDCentsAmount } = useBTCConverter()
+
+  const { isFundingDisabled, getProjectBalance, getAonGoalPercentage } = useProjectToolkit(project)
 
   /** Calculate time left for AON project showing only the largest time unit */
   const timeLeft = useMemo(() => aonProjectTimeLeft(project.aonGoal), [project.aonGoal])
 
-  const isAonGoalFinalized = project.aonGoal?.status === ProjectAonGoalStatus.Finalized
-
-  const balance = isAonGoalFinalized ? project.balance : project.aonGoal?.balance
+  const balance = getProjectBalance().sats
   const goalAmount = project.aonGoal?.goalAmount
-  const balanceUsdCent = isAonGoalFinalized
-    ? project.balanceUsdCent
-    : balance
-    ? getUSDCentsAmount(balance as Satoshis)
-    : 0
+  const balanceUsdCent = getProjectBalance().usdCents
 
-  // Don't render the component if time is up
+  const percent = getAonGoalPercentage()
 
-  const percent = useMemo(() => {
-    if (!project.aonGoal?.goalAmount || !balance) {
-      return 0
-    }
+  const fundingDisabled = isFundingDisabled()
 
-    return (balance * 100) / project.aonGoal.goalAmount
-  }, [balance, project.aonGoal?.goalAmount])
+  const failedStatus = project.aonGoal?.status && aonGoalFailedStatuses.includes(project.aonGoal.status)
+  const fillGradient = failedStatus
+    ? 'linear-gradient(90deg, #b9e8fa 0%, #c4d2e2 25%, #d4e6ef 55%, #a1b8ca 100%)'
+    : 'linear-gradient(90deg,#00E4FF 0%,#00F5D4 45%,#4ADE80 100%)'
+  const glowColor = failedStatus ? '#a1b8ca' : '#00E4FF'
 
   return (
     <VStack w="full" justifyContent={'space-between'} minHeight="128px" spacing={4}>
       <LiveProgressAqua
-        value={percent}
+        value={60}
         height={22}
         radius={16}
         label="All-or-Nothing"
-        fillGradient="linear-gradient(90deg,#00E4FF 0%,#00F5D4 45%,#4ADE80 100%)"
-        glowColor="#00E4FF"
+        fillGradient={fillGradient}
+        glowColor={glowColor}
         flowSpeedSec={15}
         waveIntensity={0.5}
         bubbleCount={Math.floor(1.2 * percent)}
@@ -57,6 +53,7 @@ export const AonProjectBalanceDisplay = () => {
         bubbleSize={[2, 7]}
         sparkleCount={50}
         sparkleDurationMs={950}
+        removeLiveDot={fundingDisabled}
       />
 
       <HStack w="full" justifyContent="space-between">
