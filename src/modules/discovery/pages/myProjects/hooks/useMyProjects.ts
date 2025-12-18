@@ -38,7 +38,7 @@ export const inDraftStatus = [
   ProjectStatus.Accepted,
 ] as ProjectStatus[]
 
-export const inactiveStatus = [ProjectStatus.Closed, ProjectStatus.Inactive]
+export const inActiveStatus = [ProjectStatus.Closed, ProjectStatus.Inactive]
 
 export const useMyProjects = (userId: number) => {
   const { toast } = useNotification()
@@ -81,25 +81,51 @@ export const useMyProjects = (userId: number) => {
 
   useProjectsForMyProjectsQuery({
     variables: {
-      input: {
-        where: {
-          ownerId: userId,
-        },
+      where: {
+        id: userId,
       },
-    } as any,
+    },
     skip: !userId,
-    onCompleted(data: any) {
-      const projects = (data.projectsGet?.projects ?? []) as ProjectForMyProjectsFragment[]
-      const filteredActiveProjects = projects.filter((project) => project?.status === ProjectStatus.Active)
+    onCompleted(data) {
+      const filteredActiveProjects =
+        data.user.ownerOf
+          ?.filter((val) => val?.project?.status === ProjectStatus.Active)
+          .map((val) => val.project)
+          .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? []
       _setActiveProjects(filteredActiveProjects)
       setActiveProjects(filteredActiveProjects)
 
-      setInDraftProjects(projects.filter((project) => !project?.launchedAt))
-      setInReviewProjects(
-        projects.filter((project) => project?.launchedAt && project?.status === ProjectStatus.InReview),
+      // sortProjectsByActivity(
+      //   data.user.ownerOf
+      //     ?.filter((val) => val?.project?.status === ProjectStatus.Active)
+      //     .map((val) => val.project)
+      //     .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
+      //   myProjectsActivities,
+      // )
+      setInDraftProjects(
+        data.user.ownerOf
+          ?.filter((val) => !val?.project?.launchedAt)
+          .map((val) => val.project)
+          .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
       )
-      setInPrelaunchProjects(projects.filter((project) => project?.status === ProjectStatus.PreLaunch))
-      setInActiveProjects(projects.filter((project) => project?.status && inactiveStatus.includes(project.status)))
+      setInReviewProjects(
+        data.user.ownerOf
+          ?.filter((val) => val?.project?.status === ProjectStatus.InReview && val?.project?.launchedAt)
+          .map((val) => val.project)
+          .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
+      )
+      setInPrelaunchProjects(
+        data.user.ownerOf
+          ?.filter((val) => val?.project?.status === ProjectStatus.PreLaunch)
+          .map((val) => val.project)
+          .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
+      )
+      setInActiveProjects(
+        data.user.ownerOf
+          ?.filter((val) => val?.project?.status && inActiveStatus.includes(val?.project?.status))
+          .map((val) => val.project)
+          .filter((project): project is ProjectForMyProjectsFragment => project !== null) ?? [],
+      )
 
       setLoading(false)
     },

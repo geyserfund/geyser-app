@@ -1,6 +1,6 @@
 import { GridItem, SimpleGrid } from '@chakra-ui/react'
 
-import { ProjectCategory, ProjectsGetWhereInputStatus, useProjectsForLaunchpadPageQuery } from '@/types/index.ts'
+import { ProjectCategory, ProjectStatus, useProjectsForLaunchpadPageQuery } from '@/types/index.ts'
 
 import { LaunchpadProjectItemSkeleton } from './LaunchpadProjectItem.tsx'
 import { LaunchpadProjectsByCategory } from './LaunchpadProjectsByCategory.tsx'
@@ -35,7 +35,7 @@ export const LaunchpadProjects = () => {
     variables: {
       input: {
         where: {
-          status: ProjectsGetWhereInputStatus.PreLaunch,
+          status: ProjectStatus.PreLaunch,
         },
       },
     },

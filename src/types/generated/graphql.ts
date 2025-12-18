@@ -18,9 +18,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** Add BigInt functionality */
   BigInt: { input: any; output: any; }
-  /** Date custom scalar type */
   Date: { input: any; output: any; }
 };
 
@@ -2971,7 +2969,7 @@ export type Project = {
   rewardsCount?: Maybe<Scalars['Int']['output']>;
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['String']['output']>;
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   sponsors: Array<Sponsor>;
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
@@ -3724,22 +3722,12 @@ export type ProjectsGetWhereInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   region?: InputMaybe<Scalars['String']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
-  status?: InputMaybe<ProjectsGetWhereInputStatus>;
-  statuses?: InputMaybe<Array<ProjectsGetWhereInputStatus>>;
+  status?: InputMaybe<ProjectStatus>;
+  statuses?: InputMaybe<Array<ProjectStatus>>;
   subCategory?: InputMaybe<ProjectSubCategory>;
   tagIds?: InputMaybe<Array<Scalars['Int']['input']>>;
   type?: InputMaybe<ProjectType>;
 };
-
-export enum ProjectsGetWhereInputStatus {
-  Accepted = 'accepted',
-  Active = 'active',
-  Closed = 'closed',
-  Draft = 'draft',
-  InReview = 'in_review',
-  Inactive = 'inactive',
-  PreLaunch = 'pre_launch'
-}
 
 export type ProjectsMostFundedAllOrNothingInput = {
   range: ProjectsMostFundedAllOrNothingRange;
@@ -3822,7 +3810,7 @@ export type Query = {
   getDashboardFunders: Array<Funder>;
   /**
    * Returns the public key of the Lightning node linked to a project, if there is one.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   getProjectPubkey?: Maybe<Scalars['String']['output']>;
   getProjectReward: ProjectReward;
@@ -4747,14 +4735,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>;
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isAmbassador: Scalars['Boolean']['output'];
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']['output'];
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isSponsor: Scalars['Boolean']['output'];
   /** Project linked to the contributions. */
@@ -5482,7 +5470,6 @@ export type ResolversTypes = {
   ProjectsAonAlmostOverResponse: ResolverTypeWrapper<Omit<ProjectsAonAlmostOverResponse, 'projects'> & { projects: Array<ResolversTypes['Project']> }>;
   ProjectsGetQueryInput: ProjectsGetQueryInput;
   ProjectsGetWhereInput: ProjectsGetWhereInput;
-  ProjectsGetWhereInputStatus: ProjectsGetWhereInputStatus;
   ProjectsMostFundedAllOrNothingInput: ProjectsMostFundedAllOrNothingInput;
   ProjectsMostFundedAllOrNothingRange: ProjectsMostFundedAllOrNothingRange;
   ProjectsMostFundedByCategoryInput: ProjectsMostFundedByCategoryInput;
@@ -8570,6 +8557,16 @@ export type ProjectsForLaunchpadPageQuery = { __typename?: 'Query', projectsGet:
       & ProjectForLaunchpadPageFragment
     )> } };
 
+export type ProjectsForMyProjectsQueryVariables = Exact<{
+  where: UserGetInput;
+}>;
+
+
+export type ProjectsForMyProjectsQuery = { __typename?: 'Query', user: { __typename?: 'User', ownerOf: Array<{ __typename?: 'OwnerOf', project?: (
+        { __typename?: 'Project' }
+        & ProjectForMyProjectsFragment
+      ) | null }> } };
+
 export type ProjectRecommendedGetQueryVariables = Exact<{
   input: ProjectRecommendedGetInput;
 }>;
@@ -8768,16 +8765,6 @@ export type ProjectStatsGetQuery = { __typename?: 'Query', projectStatsGet: (
     { __typename?: 'ProjectStats' }
     & ProjectStatsFragment
   ) };
-
-export type ProjectsForMyProjectsQueryVariables = Exact<{
-  input: ProjectsGetQueryInput;
-}>;
-
-
-export type ProjectsForMyProjectsQuery = { __typename?: 'Query', projectsGet: { __typename?: 'ProjectsResponse', projects: Array<(
-      { __typename?: 'Project' }
-      & ProjectForMyProjectsFragment
-    )> } };
 
 export type GrantProjectQueryVariables = Exact<{
   where: UniqueProjectQueryInput;
@@ -13607,6 +13594,50 @@ export type ProjectsForLaunchpadPageQueryHookResult = ReturnType<typeof useProje
 export type ProjectsForLaunchpadPageLazyQueryHookResult = ReturnType<typeof useProjectsForLaunchpadPageLazyQuery>;
 export type ProjectsForLaunchpadPageSuspenseQueryHookResult = ReturnType<typeof useProjectsForLaunchpadPageSuspenseQuery>;
 export type ProjectsForLaunchpadPageQueryResult = Apollo.QueryResult<ProjectsForLaunchpadPageQuery, ProjectsForLaunchpadPageQueryVariables>;
+export const ProjectsForMyProjectsDocument = gql`
+    query ProjectsForMyProjects($where: UserGetInput!) {
+  user(where: $where) {
+    ownerOf {
+      project {
+        ...ProjectForMyProjects
+      }
+    }
+  }
+}
+    ${ProjectForMyProjectsFragmentDoc}`;
+
+/**
+ * __useProjectsForMyProjectsQuery__
+ *
+ * To run a query within a React component, call `useProjectsForMyProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectsForMyProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectsForMyProjectsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectsForMyProjectsQuery(baseOptions: Apollo.QueryHookOptions<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables> & ({ variables: ProjectsForMyProjectsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>(ProjectsForMyProjectsDocument, options);
+      }
+export function useProjectsForMyProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>(ProjectsForMyProjectsDocument, options);
+        }
+export function useProjectsForMyProjectsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>(ProjectsForMyProjectsDocument, options);
+        }
+export type ProjectsForMyProjectsQueryHookResult = ReturnType<typeof useProjectsForMyProjectsQuery>;
+export type ProjectsForMyProjectsLazyQueryHookResult = ReturnType<typeof useProjectsForMyProjectsLazyQuery>;
+export type ProjectsForMyProjectsSuspenseQueryHookResult = ReturnType<typeof useProjectsForMyProjectsSuspenseQuery>;
+export type ProjectsForMyProjectsQueryResult = Apollo.QueryResult<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>;
 export const ProjectRecommendedGetDocument = gql`
     query ProjectRecommendedGet($input: ProjectRecommendedGetInput!) {
   projectRecommendedGet(input: $input) {
@@ -14438,48 +14469,6 @@ export type ProjectStatsGetQueryHookResult = ReturnType<typeof useProjectStatsGe
 export type ProjectStatsGetLazyQueryHookResult = ReturnType<typeof useProjectStatsGetLazyQuery>;
 export type ProjectStatsGetSuspenseQueryHookResult = ReturnType<typeof useProjectStatsGetSuspenseQuery>;
 export type ProjectStatsGetQueryResult = Apollo.QueryResult<ProjectStatsGetQuery, ProjectStatsGetQueryVariables>;
-export const ProjectsForMyProjectsDocument = gql`
-    query ProjectsForMyProjects($input: ProjectsGetQueryInput!) {
-  projectsGet(input: $input) {
-    projects {
-      ...ProjectForMyProjects
-    }
-  }
-}
-    ${ProjectForMyProjectsFragmentDoc}`;
-
-/**
- * __useProjectsForMyProjectsQuery__
- *
- * To run a query within a React component, call `useProjectsForMyProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useProjectsForMyProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useProjectsForMyProjectsQuery({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useProjectsForMyProjectsQuery(baseOptions: Apollo.QueryHookOptions<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables> & ({ variables: ProjectsForMyProjectsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>(ProjectsForMyProjectsDocument, options);
-      }
-export function useProjectsForMyProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>(ProjectsForMyProjectsDocument, options);
-        }
-export function useProjectsForMyProjectsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>(ProjectsForMyProjectsDocument, options);
-        }
-export type ProjectsForMyProjectsQueryHookResult = ReturnType<typeof useProjectsForMyProjectsQuery>;
-export type ProjectsForMyProjectsLazyQueryHookResult = ReturnType<typeof useProjectsForMyProjectsLazyQuery>;
-export type ProjectsForMyProjectsSuspenseQueryHookResult = ReturnType<typeof useProjectsForMyProjectsSuspenseQuery>;
-export type ProjectsForMyProjectsQueryResult = Apollo.QueryResult<ProjectsForMyProjectsQuery, ProjectsForMyProjectsQueryVariables>;
 export const GrantProjectDocument = gql`
     query GrantProject($where: UniqueProjectQueryInput!) {
   projectGet(where: $where) {
