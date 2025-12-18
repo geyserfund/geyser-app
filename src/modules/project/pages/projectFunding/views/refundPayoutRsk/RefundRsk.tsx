@@ -8,7 +8,7 @@ import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
-import { encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
+import { decryptString, encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
@@ -17,8 +17,10 @@ import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import {
   PaymentStatus,
+  PaymentType,
   PledgeRefundStatus,
   RskToLightningSwapPaymentDetailsFragment,
+  RskToOnChainSwapPaymentDetails,
   usePledgeRefundInitiateMutation,
   usePledgeRefundRequestMutation,
   usePledgeRefundSwapCreateMutation,
@@ -104,6 +106,17 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       })
     }
   }, [isOpen, pledgeRefundRequest, contributionUUID, projectId, userAccountKeys?.rskKeyPair.address, rskAddress])
+
+  const isProcessing = pledgeRefundRequestData?.pledgeRefundRequest.refund.status === PledgeRefundStatus.Processing
+  const latestPayment = isProcessing
+    ? pledgeRefundRequestData?.pledgeRefundRequest.refund.payments.sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )[0]
+    : null
+  const isClaimable =
+    isProcessing &&
+    latestPayment?.paymentType === PaymentType.RskToOnChainSwap &&
+    latestPayment?.status === PaymentStatus.Claimable
 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
@@ -192,28 +205,28 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   }
 
   const handleBitcoinSubmit = async (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => {
-    if (pledgeRefundRequestData?.pledgeRefundRequest.refund.status === PledgeRefundStatus.Processing) {
-      const latestPayment = pledgeRefundRequestData?.pledgeRefundRequest.refund.payments.sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      )[0]
-      if (
-        latestPayment?.paymentDetails.__typename === 'RskToOnChainSwapPaymentDetails' &&
-        latestPayment.status === PaymentStatus.Claimable
-      ) {
-        const swapObj = JSON.parse(latestPayment.paymentDetails.swapMetadata)
-        swapObj.privateKey = accountKeys.privateKey
-        swapObj.preimageHash = latestPayment.paymentDetails.swapPreimageHash
-        // swapObj.preimageHex = preimageHex
-        swapObj.paymentId = latestPayment.id
-        setSwapData(swapObj)
+    if (isProcessing && isClaimable) {
+      const paymentDetails = latestPayment?.paymentDetails as RskToOnChainSwapPaymentDetails
 
-        setIsWaitingConfirmation(true)
-        setRefundAddress(data.bitcoinAddress)
-        toast.info({
-          title: t('Refund initiated'),
-          description: t('Your Bitcoin on-chain refund will be processed shortly'),
-        })
-      }
+      const swapObj = JSON.parse(paymentDetails.swapMetadata)
+
+      console.log('chekcing swapObject', swapObj)
+
+      swapObj.privateKey = accountKeys.privateKey
+      swapObj.preimageHash = paymentDetails.swapPreimageHash
+      swapObj.preimageHex = await decryptString({
+        encryptedString: swapObj.preimageHexEncrypted || '',
+        password: data.accountPassword || '',
+      })
+      swapObj.paymentId = latestPayment.id
+      setSwapData(swapObj)
+
+      setIsWaitingConfirmation(true)
+      setRefundAddress(data.bitcoinAddress)
+      toast.info({
+        title: t('Refund initiated'),
+        description: t('Your Bitcoin on-chain refund will be processed shortly'),
+      })
 
       return
     }
@@ -430,7 +443,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
           <PayoutMethodSelection
             selectedMethod={selectedMethod}
             setSelectedMethod={setSelectedMethod}
-            disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING}
+            disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING || isClaimable}
           />
 
           {/* Form Section */}

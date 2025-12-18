@@ -27,14 +27,14 @@ export const PayoutMethodSelection = ({
           onClick={() => setSelectedMethod(PayoutMethod.Lightning)}
           borderColor="primary1.6"
           borderWidth="1px"
-          p={6}
+          p={4}
           height="auto"
           justifyContent="center"
           flexDirection="column"
           isDisabled={disableLightning}
         >
-          <Body size="md" medium>
-            {t('Bitcoin Lightning')}
+          <Body size="md" bold>
+            ⚡ {t('Bitcoin Lightning')}
           </Body>
           <Body size="sm">{t('Instant')}</Body>
         </Button>
@@ -45,15 +45,15 @@ export const PayoutMethodSelection = ({
           onClick={() => setSelectedMethod(PayoutMethod.OnChain)}
           borderColor="neutral1.6"
           borderWidth="1px"
-          p={6}
+          p={4}
           height="auto"
           justifyContent="center"
           flexDirection="column"
         >
-          <Body size="md" medium>
-            {t('Bitcoin On-Chain')}
+          <Body size="md" bold>
+            🔗 {t('Bitcoin On-Chain')}
           </Body>
-          <Body size="sm">{t('~1 hour')}</Body>
+          <Body size="sm">{t('~ 1 hour')}</Body>
         </Button>
       </HStack>
     </VStack>

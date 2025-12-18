@@ -4,8 +4,8 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { useAnimatedNavBar } from '@/shared/components/navigation/useAnimatedNavBar'
 
-import { Contributions } from './components/Contributions'
-import { Leaderboard } from './components/Leaderboard'
+import { Contributions } from './views/Contributions.tsx'
+import { Leaderboard } from './views/Leaderboard.tsx'
 
 type LeaderboardSummaryProps = StackProps
 

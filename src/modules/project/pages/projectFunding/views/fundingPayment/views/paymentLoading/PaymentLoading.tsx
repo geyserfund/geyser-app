@@ -62,7 +62,7 @@ export const PaymentLoading = () => {
   return <PaymentLoadingContribution />
 }
 
-export const PaymentPassword = ({ onComplete }: { onComplete: () => void }) => {
+const PaymentPassword = ({ onComplete }: { onComplete: () => void }) => {
   const setFundingUserAccountKeys = useSetAtom(userAccountKeysAtom)
 
   const { currentForm, renderForm, titles } = useAccountPasswordForm({
@@ -76,13 +76,13 @@ export const PaymentPassword = ({ onComplete }: { onComplete: () => void }) => {
   })
 
   return (
-    <VStack w="full" spacing={6}>
+    <VStack as="form" onSubmit={currentForm.onSubmit} w="full" spacing={6}>
       <Body size="lg" bold alignSelf="start">
         {titles}
       </Body>
       {renderForm()}
 
-      <Button width="200px" size="lg" colorScheme="primary1" onClick={currentForm.onSubmit}>
+      <Button width="200px" size="lg" colorScheme="primary1" type="submit">
         {t('Continue')}
       </Button>
     </VStack>

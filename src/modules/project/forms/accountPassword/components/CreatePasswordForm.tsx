@@ -70,14 +70,18 @@ export const CreatePasswordForm = ({ form, isCreator }: CreatePasswordFormProps)
   )
 }
 
+const passwordValidationMessage = t(
+  'Password must be at least 10 characters including one lowercase, one uppercase, and one special character.',
+)
+
 const createPasswordSchema = yup.object({
   password: yup
     .string()
     .required(t('Password is required'))
-    .min(10, t('Password must be at least 10 characters long'))
-    .matches(/[a-z]/, t('Password must contain at least one lowercase letter'))
-    .matches(/[A-Z]/, t('Password must contain at least one uppercase letter'))
-    .matches(/[!@#$%^&*(),.?":{}|<>[\]\\/'`~_+=\-;]/, t('Password must contain at least one special character')),
+    .min(10, passwordValidationMessage)
+    .matches(/[a-z]/, passwordValidationMessage)
+    .matches(/[A-Z]/, passwordValidationMessage)
+    .matches(/[!@#$%^&*(),.?":{}|<>[\]\\/'`~_+=\-;]/, passwordValidationMessage),
   repeatPassword: yup
     .string()
     .required(t('Please repeat your password'))

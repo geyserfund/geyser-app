@@ -1,39 +1,33 @@
-import { Button, HStack, Image, ModalProps, VStack } from '@chakra-ui/react'
+import { Button, Image, ModalProps, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiSealCheckBold } from 'react-icons/pi'
 
 import { Modal } from '../../../../../shared/components/layouts/Modal'
-import { Body } from '../../../../../shared/components/typography'
 import { ProjectLaunchedImageUrl } from '../../../../../shared/constants'
-import { useCustomTheme } from '../../../../../utils'
 import { useProjectAtom } from '../../../hooks/useProjectAtom'
+import { PromoteOptions } from '../views/body/sections/creatorTools/components/PromoteProjectMenu.tsx'
 
 export const ProjectCreateLaunchedModal = (props: Omit<ModalProps, 'children'>) => {
   const { t } = useTranslation()
-  const { colors } = useCustomTheme()
+
   const { project } = useProjectAtom()
 
   return (
-    <Modal size="md" title={t('Project successfully launched')} {...props}>
+    <Modal
+      size="md"
+      title={t('Your project is live')}
+      subtitle={t('Now it’s time to spread the word about this project to the community.')}
+      headerProps={{ fontSize: '2xl' }}
+      {...props}
+    >
       <VStack w="100%" spacing={6} pt={2}>
         <Image src={ProjectLaunchedImageUrl} alt={'Project successfully launched'} />
 
-        <HStack spacing="10px" p="10px 16px" bgColor="neutral.100" borderRadius={8}>
-          <PiSealCheckBold color={colors.primary[600]} />
-          <Body dark>
-            {' '}
-            {project?.name}
-            <Body as="span" dark bold>
-              @geyser.fund
-            </Body>{' '}
-          </Body>
-        </HStack>
+        <VStack>
+          <PromoteOptions projectName={project?.name} />
+        </VStack>
 
-        <Body medium dark>
-          {t('Follow us and tag us on social media at @geyserfund so we can amplify your content.')}
-        </Body>
         <VStack spacing="10px" w="full">
-          <Button w="100%" variant="outline" colorScheme={'neutral1'} onClick={props.onClose}>
+          <Button w="100%" variant="surface" colorScheme={'primary1'} onClick={props.onClose}>
             {t('Go to project')}
           </Button>
         </VStack>

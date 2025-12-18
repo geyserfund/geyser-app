@@ -1,4 +1,4 @@
-import { Button, Link, VStack } from '@chakra-ui/react'
+import { Button, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
 import { PiWarning } from 'react-icons/pi'
@@ -8,7 +8,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { Body } from '@/shared/components/typography'
 import { getPath, GeyserOnChainGuideUrl } from '@/shared/constants'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
-import { isAllOrNothing, useMobileMode } from '@/utils'
+import { isAllOrNothing } from '@/utils'
 
 import { useDownloadRefund } from '../hooks/useDownloadRefund'
 import { onChainRefundDownloadedAtom } from '../states/onChainStatus.ts'
@@ -34,20 +34,12 @@ export const PaymentOnchainPrompt = () => {
 }
 
 export const PaymentOnchainDownloadPrompt = ({ onComplete }: { onComplete: () => void }) => {
-  const isMobile = useMobileMode()
+  const setRefundFileDownloaded = useSetAtom(onChainRefundDownloadedAtom)
 
-  const setOnchainRefundDownloadAtom = useSetAtom(onChainRefundDownloadedAtom)
-
-  const { downloadRefundJson, downloadRefundQr } = useDownloadRefund()
+  const { buttonProps } = useDownloadRefund()
 
   const handleClick = () => {
-    if (isMobile) {
-      downloadRefundQr()
-    } else {
-      downloadRefundJson()
-    }
-
-    setOnchainRefundDownloadAtom(true)
+    setRefundFileDownloaded(true)
     onComplete()
   }
 
@@ -62,15 +54,15 @@ export const PaymentOnchainDownloadPrompt = ({ onComplete }: { onComplete: () =>
             {t(
               'To keep Geyser KYC-free, on-chain transactions are swapped to Lightning in a non-custodial way. So, we require you to download a Refund File as backup in the rare case a payment fails.',
             )}{' '}
-            <Link isExternal href={GeyserOnChainGuideUrl} color="primary1.11">
+            <ChakraLink isExternal href={GeyserOnChainGuideUrl} color="primary1.11">
               {t('More info')}.
-            </Link>
+            </ChakraLink>
           </Body>
 
           <Body size={'sm'}>{t('By continuing, you acknowledge that you are responsible for claiming refunds.')}</Body>
         </VStack>
       </Feedback>
-      <Button size="lg" variant="solid" minWidth="310px" colorScheme="primary1" onClick={handleClick}>
+      <Button {...buttonProps} size="lg" variant="solid" minWidth="310px" colorScheme="primary1" onClick={handleClick}>
         {t('Download & Continue')}
       </Button>
     </VStack>

@@ -4,6 +4,8 @@ import React from 'react'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 
+import { REFUND_PROCESSED_IMAGE_URL } from '../constant.ts'
+
 type BitcoinPayoutProcessedProps = {
   isRefund?: boolean
   onClose: () => void
@@ -24,13 +26,7 @@ export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({
       </Body>
 
       <Box w="300px" h="300px">
-        <Image
-          src={'https://storage.googleapis.com/geyser-projects-media/app/refund/claim_success.webp'}
-          alt={'Get refund'}
-          width="100%"
-          height="100%"
-          objectFit="cover"
-        />
+        <Image src={REFUND_PROCESSED_IMAGE_URL} alt={'Get refund'} width="100%" height="100%" objectFit="cover" />
       </Box>
 
       {/* Success Message */}

@@ -4,23 +4,14 @@ import { PiDownloadSimple, PiWarning } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
-import { useMobileMode } from '@/utils'
 
 import { RefundPolicyNote } from '../../../components/RefundPolicyNote'
 import { useDownloadRefund } from '../hooks/useDownloadRefund'
 
 export const PaymentAndRefundInstructions = () => {
   const { t } = useTranslation()
-  const isMobile = useMobileMode()
-  const { downloadRefundJson, downloadRefundQr } = useDownloadRefund()
 
-  const handleClick = () => {
-    if (isMobile) {
-      downloadRefundQr()
-    } else {
-      downloadRefundJson()
-    }
-  }
+  const { buttonProps } = useDownloadRefund()
 
   return (
     <>
@@ -65,12 +56,12 @@ export const PaymentAndRefundInstructions = () => {
       </Feedback>
       <VStack w="full">
         <Button
+          {...buttonProps}
           size="lg"
           variant="surface"
           colorScheme="primary1"
           minWidth="310px"
           rightIcon={<PiDownloadSimple />}
-          onClick={handleClick}
         >
           {t('Download refund file')}
         </Button>

@@ -18,7 +18,6 @@ export const Discovery = () => {
           position="relative"
           paddingX={standardPadding}
           paddingBottom={{ base: 28, lg: 10 }}
-          paddingTop={{ base: 2, lg: 6 }}
         >
           <Outlet />
           <UserExternalLinksComponent />

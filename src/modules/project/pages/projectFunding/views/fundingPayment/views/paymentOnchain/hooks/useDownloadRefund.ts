@@ -1,6 +1,7 @@
-import { useAtomValue, useSetAtom } from 'jotai'
-import QRCode from 'qrcode'
-import { useTranslation } from 'react-i18next'
+import { Link } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
+import { DateTime } from 'luxon'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import {
   currentLightningToRskSwapIdAtom,
@@ -8,14 +9,14 @@ import {
   currentSwapIdAtom,
   swapAtom,
 } from '@/modules/project/funding/state/swapAtom.ts'
-import { useNotification } from '@/utils'
-
-import { onChainRefundDownloadedAtom } from '../states/onChainStatus.ts'
-import { download, downloadJson, isIos } from '../utils/download'
 
 const REFUND_QR_FILE_NAME = 'refundFile'
 
 export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
+  const [fileToDownload, setFileToDownload] = useState<{ download: string; content: string } | null>(null)
+
+  // const isMobile = useMobileMode()
+
   const allRefundFiles = useAtomValue(swapAtom)
   const currentSwapId = useAtomValue(currentSwapIdAtom)
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
@@ -25,50 +26,58 @@ export const useDownloadRefund = (props?: { isAllOrNothing?: boolean }) => {
   const lightningToRskSwapRefundFile = allRefundFiles[currentLightningToRskSwapId]
   const onChainToRskSwapRefundFile = allRefundFiles[currentOnChainToRskSwapId]
 
-  const refundFiles = props?.isAllOrNothing
-    ? { isAonRefund: true, onChainToRsk: onChainToRskSwapRefundFile, lightningToRsk: lightningToRskSwapRefundFile }
-    : onChainSwapRefundFile
+  const refundFiles = useMemo(
+    () =>
+      props?.isAllOrNothing
+        ? { isAonRefund: true, onChainToRsk: onChainToRskSwapRefundFile, lightningToRsk: lightningToRskSwapRefundFile }
+        : onChainSwapRefundFile,
+    [props?.isAllOrNothing, onChainToRskSwapRefundFile, lightningToRskSwapRefundFile, onChainSwapRefundFile],
+  )
 
-  const toast = useNotification()
-  const { t } = useTranslation()
+  const refundFileName = useMemo(() => {
+    let projectTitle = ''
+    const dateTime = DateTime.now().toFormat('yyyy-MM-dd_HH-mm')
 
-  const setRefundFileDownloaded = useSetAtom(onChainRefundDownloadedAtom)
+    if (props?.isAllOrNothing) {
+      projectTitle = lightningToRskSwapRefundFile?.contributionInfo?.projectTitle?.trim().slice(0, 10) || ''
+    } else {
+      projectTitle = onChainSwapRefundFile?.contributionInfo?.projectTitle?.trim().slice(0, 10) || ''
+    }
 
-  const downloadRefundQr = () => {
-    QRCode.toDataURL(JSON.stringify(refundFiles), { width: 800 })
-      .then((url: string) => {
-        if (isIos) {
-          // Compatibility with third party iOS browsers
-          const newTab = window.open()
-          if (newTab) {
-            newTab.document.body.innerHTML = `
-                <!DOCTYPE html>
-                <body>
-                    <img src="${url}">
-                    <h1>${t('Long press and select "Save to Photos" to download refund file')}</h1>
-                </body>`
-          }
-        } else {
-          download(`${REFUND_QR_FILE_NAME}.png`, url)
-        }
+    return `${REFUND_QR_FILE_NAME}_for_${projectTitle}_on_${dateTime}.json`
+  }, [props?.isAllOrNothing, lightningToRskSwapRefundFile, onChainSwapRefundFile])
 
-        setRefundFileDownloaded(true)
-      })
-      .catch((err: Error) => {
-        toast.error({
-          title: 'Failed to download qr',
-          description: 'Failed to download qr',
-        })
-      })
-  }
+  const getJsonFile = useCallback(() => {
+    const blob = new Blob([JSON.stringify(refundFiles, null, 2)], { type: 'application/json' })
+    const content = URL.createObjectURL(blob)
+    return { download: refundFileName, content }
+  }, [refundFiles, refundFileName])
 
-  const downloadRefundJson = () => {
-    downloadJson(REFUND_QR_FILE_NAME, refundFiles)
-    setRefundFileDownloaded(true)
-  }
+  const downloadFile = useCallback(async () => {
+    const jsonFile = getJsonFile()
+    setFileToDownload(jsonFile)
+  }, [getJsonFile])
+
+  useEffect(() => {
+    downloadFile()
+  }, [downloadFile])
+
+  // Cleanup object URL when component unmounts or when a new URL is created
+  useEffect(() => {
+    return () => {
+      if (fileToDownload?.content) {
+        URL.revokeObjectURL(fileToDownload.content)
+      }
+    }
+  }, [fileToDownload?.content])
 
   return {
-    downloadRefundQr,
-    downloadRefundJson,
+    fileToDownload,
+    buttonProps: {
+      as: Link,
+      href: fileToDownload?.content,
+      download: fileToDownload?.download,
+      isExternal: true,
+    },
   }
 }

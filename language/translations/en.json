@@ -1911,5 +1911,11 @@
   "Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds.": "Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds.",
   "Your Lightning refund will be processed shortly": "Your Lightning refund will be processed shortly",
   "Success! Your contribution is being processed towards:": "Success! Your contribution is being processed towards:",
-  "Success! Your contribution is on its way to:": "Success! Your contribution is on its way to:"
+  "Success! Your contribution is on its way to:": "Success! Your contribution is on its way to:",
+  "Wallets are marked as unstable when a transaction fails (due to a transaction failure, not enough inbound liquidity, or other). The wallet status will be updated when a successful transaction is made. Make a small \"1 sat\" transaction to refresh wallet status.": "Wallets are marked as unstable when a transaction fails (due to a transaction failure, not enough inbound liquidity, or other). The wallet status will be updated when a successful transaction is made. Make a small \"1 sat\" transaction to refresh wallet status.",
+  "Now it’s time to spread the word about this project to the community.": "Now it’s time to spread the word about this project to the community.",
+  "Your project is live": "Your project is live",
+  "If you've funded this project, you can claim a refund by <1>clicking here.</1>": "If you've funded this project, you can claim a refund by <1>clicking here.</1>",
+  "If you've funded this project anonymously, you can claim a refund by <1>clicking here.</1>": "If you've funded this project anonymously, you can claim a refund by <1>clicking here.</1>",
+  "Your project is currently being reviewed by our team. You'll be notified via email once the review is complete.": "Your project is currently being reviewed by our team. You'll be notified via email once the review is complete."
 }

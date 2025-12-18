@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { PiLockSimpleFill } from 'react-icons/pi'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
@@ -22,6 +23,7 @@ type ContributionSummaryProps = StackProps & {
 
 export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryProps) => {
   const projectOwner = useAtomValue(projectOwnerAtom)
+  const { isAon } = useProjectAtom()
 
   const isVerified = Boolean(projectOwner?.user?.complianceDetails?.verifiedDetails?.identity?.verified)
   const paymentMethods = [BitcoinLightingPaymentImageUrl]
@@ -40,7 +42,9 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
         <HStack spacing={1} alignItems="center">
           <Icon as={PiLockSimpleFill} fontSize="16px" color="primary1.9" />
           <Body size="sm" light textAlign="center">
-            {paymentMethods.length > 1 ? t('Secure Bitcoin & Credit Card payments') : t('Secure Bitcoin payments')}
+            {paymentMethods.length > 1 && !isAon
+              ? t('Secure Bitcoin & Credit Card payments')
+              : t('Secure Bitcoin payments')}
           </Body>
         </HStack>
       </VStack>

@@ -17,6 +17,18 @@ export const QUERY_PROJECT_BY_NAME_FOR_NAME_CHECK = gql`
     }
   }
 `
+
+export const QUERY_PROJECT_FOR_STATUS_CHECK = gql`
+  query ProjectForStatusCheck($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      id
+      name
+      status
+      launchedAt
+    }
+  }
+`
+
 export const QUERY_PROJECT_NOSTR_KEYS = gql`
   ${FRAGMENT_PROJECT_NOSTR_KEYS}
   query ProjectNostrKeys($where: UniqueProjectQueryInput!) {

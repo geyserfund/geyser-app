@@ -1,5 +1,7 @@
 import { useAtomValue, useSetAtom } from 'jotai'
 
+import { isAllOrNothing } from '@/utils/index.ts'
+
 import { completedGoalsAtom, goalsLoadingAtom, initialGoalsLoadAtom, inProgressGoalsAtom } from '../state/goalsAtom'
 import { hasPostsAtom, postsAtom, unpublishedPostsAtom } from '../state/postsAtom'
 import {
@@ -25,8 +27,9 @@ export const useProjectAtom = () => {
   const partialUpdateProject = useSetAtom(partialUpdateProjectAtom)
   const isProjectOwner = useAtomValue(isProjectOwnerAtom)
   const projectOwner = useAtomValue(projectOwnerAtom)
+  const isAon = isAllOrNothing(project)
 
-  return { loading, project, isProjectOwner, projectOwner, partialUpdateProject }
+  return { loading, project, isProjectOwner, projectOwner, partialUpdateProject, isAon }
 }
 
 export const useWalletAtom = () => {

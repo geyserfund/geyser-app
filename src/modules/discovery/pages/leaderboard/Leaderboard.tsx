@@ -103,7 +103,7 @@ const MobileLeaderboard = ({ period }: { period: LeaderboardPeriod }) => {
         width={'100%'}
         id="leaderboard-mobile"
         wrapperId="leaderboard-mobile-wrapper"
-        offset={dimensions.projectNavBar.mobile.height + 20}
+        offset={dimensions.topNavBar.mobile.height}
       >
         <AnimatedNavBar {...animatedNavBarProps} showLabel />
       </StickToTop>

@@ -48,7 +48,7 @@ export const LaunchPaymentTaxId = () => {
 
   return (
     <ProjectCreationPageWrapper
-      title={t('Payment Tax ID')}
+      title={t('Payment Tax ID (optional)')}
       continueButtonProps={continueProps}
       backButtonProps={backProps}
     >

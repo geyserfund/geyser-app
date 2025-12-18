@@ -1,5 +1,6 @@
 import { Button, Icon, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useEffect, useState } from 'react'
 import { PiRocket } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
@@ -9,6 +10,7 @@ import { ProjectCreateLaunchedModal } from '@/modules/project/pages/projectView/
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, LiveProjectsImageUrl } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
+import { ProjectStatus, useProjectForStatusCheckQuery } from '@/types/index.ts'
 import { useNotification } from '@/utils/tools/Notification.tsx'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
@@ -18,10 +20,26 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
   const navigate = useNavigate()
   const toast = useNotification()
 
+  const [isPublishing, setIsPublishing] = useState(false)
+
   const projectPublishedModal = useModal()
 
   const { project } = useProjectAtom()
   const { publishProject } = useProjectAPI()
+
+  const { data } = useProjectForStatusCheckQuery({
+    skip: !isPublishing,
+    fetchPolicy: 'network-only',
+    variables: { where: { name: project?.name } },
+    pollInterval: 2000,
+  })
+
+  useEffect(() => {
+    if (isPublishing && data?.projectGet?.status === ProjectStatus.Active) {
+      setIsPublishing(false)
+      projectPublishedModal.onOpen()
+    }
+  }, [data, isPublishing, projectPublishedModal])
 
   /** Handle publish button click */
   const handlePublishClick = async () => {
@@ -34,18 +52,11 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
     }
 
     try {
+      setIsPublishing(true)
       await publishProject.execute({
         variables: { input: { projectId: project.id } },
-        onCompleted(data) {
-          if (data.projectPublish) {
-            toast.success({
-              title: t('Project Published!'),
-              description: t('Your project is now live and available to the public'),
-            })
-            projectPublishedModal.onOpen()
-          }
-        },
         onError(error) {
+          setIsPublishing(false)
           toast.error({
             title: t('Publication Failed'),
             description: error.message || t('Something went wrong. Please try again.'),
@@ -53,6 +64,7 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
         },
       })
     } catch (error) {
+      setIsPublishing(false)
       toast.error({
         title: t('Publication Failed'),
         description: t('Something went wrong. Please try again.'),
@@ -96,7 +108,7 @@ export const LaunchFinalize = ({ handleBack }: { handleBack: () => void }) => {
           colorScheme="primary1"
           variant="solid"
           leftIcon={<Icon as={PiRocket} fontSize="24px" />}
-          isLoading={publishProject.loading}
+          isLoading={isPublishing}
           onClick={handlePublishClick}
           loadingText={t('Publishing...')}
           fontSize="lg"

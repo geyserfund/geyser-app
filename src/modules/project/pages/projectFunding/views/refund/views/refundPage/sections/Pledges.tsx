@@ -9,7 +9,11 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import type { ProjectContributionRefundFragment } from '@/types/index.ts'
-import { ContributionStatus, useRefundPageContributionsGetQuery } from '@/types/index.ts'
+import {
+  ContributionStatus,
+  ContributionsWhereContributionStatus,
+  useRefundPageContributionsGetQuery,
+} from '@/types/index.ts'
 
 import { RefundRsk } from '../../../../refundPayoutRsk/RefundRsk.tsx'
 import { StatusBadge } from '../components/RefundStatusBadge.tsx'
@@ -28,6 +32,7 @@ export const PledgesTable = () => {
       input: {
         where: {
           userId: user.id,
+          status: ContributionsWhereContributionStatus.Pledged,
         },
       },
     },

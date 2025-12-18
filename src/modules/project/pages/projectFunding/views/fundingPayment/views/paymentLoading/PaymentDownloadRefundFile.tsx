@@ -1,26 +1,24 @@
-import { Button, Divider, Link, VStack } from '@chakra-ui/react'
+import { Button, Divider, HStack, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useSetAtom } from 'jotai'
 import { PiWarning } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { GeyserOnChainGuideUrl } from '@/shared/constants/index.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { useMobileMode } from '@/utils/index.ts'
 
 import { useDownloadRefund } from '../paymentOnchain/hooks/useDownloadRefund.ts'
+import { onChainRefundDownloadedAtom } from '../paymentOnchain/states/onChainStatus.ts'
 
 export const PaymentDownloadRefundFile = ({ onComplete }: { onComplete: () => void }) => {
-  const isMobile = useMobileMode()
+  const setRefundFileDownloaded = useSetAtom(onChainRefundDownloadedAtom)
 
-  const { downloadRefundJson, downloadRefundQr } = useDownloadRefund({ isAllOrNothing: true })
+  const { buttonProps } = useDownloadRefund({
+    isAllOrNothing: true,
+  })
 
   const handleClick = () => {
-    if (isMobile) {
-      downloadRefundQr()
-    } else {
-      downloadRefundJson()
-    }
-
+    setRefundFileDownloaded(true)
     onComplete()
   }
 
@@ -39,18 +37,18 @@ export const PaymentDownloadRefundFile = ({ onComplete }: { onComplete: () => vo
               {t('More info')}.
             </Link>
           </Body>
+          <Divider />
 
           <Body size={'sm'}>
             {t('By continuing, you agree that you are responsible for keeping this file and claiming any refund.')}
           </Body>
-          <Divider />
-
-          <Body size={'sm'}>{t('By continuing, you acknowledge that you are responsible for claiming refunds.')}</Body>
         </VStack>
       </Feedback>
-      <Button size="lg" variant="solid" minWidth="310px" colorScheme="primary1" onClick={handleClick}>
-        {t('Download & Continue')}
-      </Button>
+      <HStack onClick={handleClick}>
+        <Button {...buttonProps} size="lg" variant="solid" minWidth="310px" colorScheme="primary1">
+          {t('Download & Continue')}
+        </Button>
+      </HStack>
     </VStack>
   )
 }

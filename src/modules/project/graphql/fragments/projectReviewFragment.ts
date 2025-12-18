@@ -6,6 +6,7 @@ export const FRAGMENT_PROJECT_REVIEW = gql`
     reviewedAt
     status
     rejectionReasons
+    reviewNotes
     version
   }
 `

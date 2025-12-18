@@ -12,7 +12,7 @@ export const FundedToCampaign = ({ onOpen }: { onOpen: () => void }) => {
         <Body bold light ml={1}>
           {t('You can refund by ')}
         </Body>
-        <Button paddingY={0} colorScheme="neutral1" variant="ghost" size="sm" onClick={onOpen}>
+        <Button paddingY={0} paddingX={1} colorScheme="neutral1" variant="ghost" size="sm" onClick={onOpen}>
           <Body size="md" bold>
             {t('clicking here.')}
           </Body>

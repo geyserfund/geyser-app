@@ -314,7 +314,7 @@ export const EnableFiatContributionsImageUrl =
 
 // Helpers
 export const EmailPromptModalUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/enter-email-illustration.png'
+  'https://storage.googleapis.com/geyser-projects-media/utils/email_notification_illustation.webp'
 
 // Hero Card Backgrounds
 export const HeroCardRaisedEnabledContributed =

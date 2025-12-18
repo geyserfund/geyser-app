@@ -7,12 +7,14 @@ import { isProjectCreationRouteAtom } from '@/config/routes/state/privateRoutesA
 import { useAuthContext } from '@/context'
 import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
+import { useMobileMode } from '@/utils/index.ts'
 
 import { isProjectFundingRoutesAtom } from '../platformNavBarAtom.ts'
 import { CreateProjectButton } from './CreateProjectButton'
 
 export const ProjectSelectMenu = () => {
   const { t } = useTranslation()
+  const isMobile = useMobileMode()
 
   const { isUserAProjectCreator } = useAuthContext()
 
@@ -27,6 +29,10 @@ export const ProjectSelectMenu = () => {
   }
 
   if (!isUserAProjectCreator) {
+    if (isMobile) {
+      return null
+    }
+
     return <CreateProjectButton />
   }
 

@@ -1,9 +1,8 @@
-import { ListItem, UnorderedList, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
-import { Link } from 'react-router'
 
 import { Body, H3 } from '@/shared/components/typography'
-import { FundingErrorWalletMinUrl, getPath } from '@/shared/constants'
+import { FundingErrorWalletMinUrl } from '@/shared/constants'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
 
 import { ErrorLayout } from './ErrorLayout'
@@ -37,28 +36,7 @@ export const FundingMinLimit = ({ amount, creatorId }: { amount?: number | strin
                 'To successfully complete your transaction, please try again with an amount greater than the minimum limit.',
               )}
             </Body>
-          </VStack>
-
-          <VStack w="full" alignItems="start">
-            <H3>{t('Alternatively')}</H3>
-            <UnorderedList color="neutral.600">
-              <ListItem>
-                <Body size="sm">
-                  <Trans i18nKey={'Feel free to <1>contact the creator</1> to inform them of your funding attempt.'}>
-                    {'Feel free to '}
-                    <Link to={getPath('userProfile', `${creatorId}`)} style={{ textDecoration: 'underline' }}>
-                      contact the creator
-                    </Link>
-                    {' to inform them of your funding attempt.'}
-                  </Trans>
-                </Body>
-              </ListItem>
-              <ListItem>
-                <Body size="sm">
-                  {t("If you need assistance, please don't hesitate to reach out to us for support.")}
-                </Body>
-              </ListItem>
-            </UnorderedList>
+            <Body size="sm">{t("If you need assistance, please don't hesitate to reach out to us for support.")}</Body>
           </VStack>
         </VStack>
       </Feedback>

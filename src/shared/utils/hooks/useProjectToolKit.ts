@@ -45,7 +45,7 @@ export const useProjectToolkit = (
   const isFundingDisabled = () => {
     const isAonActive = isAon && project.aonGoal?.status === ProjectAonGoalStatus.Active
 
-    if (isAon && isAonActive) {
+    if (isAon) {
       if (isAonActive) {
         return false
       }
