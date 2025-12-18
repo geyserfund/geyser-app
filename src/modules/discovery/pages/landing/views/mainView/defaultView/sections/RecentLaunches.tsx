@@ -2,8 +2,8 @@ import { t } from 'i18next'
 
 import {
   OrderByDirection,
-  ProjectsGetWhereInputStatus,
   ProjectsOrderByField,
+  ProjectStatus,
   useProjectsForLandingPageQuery,
 } from '../../../../../../../../types'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
@@ -21,7 +21,7 @@ export const RecentLaunches = () => {
           },
         ],
         where: {
-          status: ProjectsGetWhereInputStatus.Active,
+          status: ProjectStatus.Active,
         },
         pagination: {
           take: NO_OF_PROJECT_TO_LOAD,
