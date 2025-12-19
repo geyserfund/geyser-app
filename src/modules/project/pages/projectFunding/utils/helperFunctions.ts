@@ -3,9 +3,6 @@ export const addressToBuffer32 = (address: string): Buffer => {
   const buffer = Buffer.alloc(32)
   const cleanAddress = address.replace('0x', '').replaceAll(' ', '')
 
-  console.log('cleanAddress', cleanAddress)
-  console.log('cleanAddress length', cleanAddress.length)
-
   if (cleanAddress.length !== 40) {
     throw new Error(`Invalid Ethereum address format address: ${cleanAddress}`)
   }

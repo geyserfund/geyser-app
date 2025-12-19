@@ -120,3 +120,31 @@ export const FRAGMENT_PAYMENT_SUBSCRIPTION = gql`
     failureReason
   }
 `
+
+export const FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND = gql`
+  fragment PaymentForPayoutRefund on Payment {
+    id
+    method
+    failureReason
+    paymentType
+    createdAt
+    status
+    linkedEntityUUID
+    linkedEntityType
+    paymentDetails {
+      ... on RskToOnChainSwapPaymentDetails {
+        swapId
+        swapMetadata
+        onChainAddress
+        onChainTxId
+        swapPreimageHash
+      }
+      ... on RskToLightningSwapPaymentDetails {
+        swapId
+        swapMetadata
+        lightningInvoiceId
+        swapPreimageHash
+      }
+    }
+  }
+`

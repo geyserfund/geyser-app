@@ -368,8 +368,6 @@ function useWaveCapCanvas(canvas: HTMLCanvasElement | null, width: number, heigh
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    console.log('height', height)
-
     const dpr = Math.min(2, window.devicePixelRatio || 1)
     canvas.style.width = `${width}px`
     canvas.style.height = `${height}px`

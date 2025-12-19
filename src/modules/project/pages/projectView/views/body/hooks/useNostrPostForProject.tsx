@@ -97,7 +97,6 @@ export const useNostrPostForProject = () => {
       // Sign the event using the Nostr extension
       const signedEvent = (await window.nostr.signEvent(eventWithId)) as NostrEvent
 
-      console.log('checking signed event', signedEvent)
       return signedEvent
     } catch (error) {
       console.error('Failed to create post:', error)

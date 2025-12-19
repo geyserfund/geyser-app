@@ -123,7 +123,7 @@ export const useProjectReset = () => {
 
   const resetProject = useCallback(() => {
     console.log('=================================')
-    console.log('=========RESET IS CALLED=========')
+    console.log('=========RESET PROJECT ==========')
     console.log('=================================')
 
     projectReset()

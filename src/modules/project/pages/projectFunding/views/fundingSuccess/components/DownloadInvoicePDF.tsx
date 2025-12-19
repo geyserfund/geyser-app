@@ -184,7 +184,7 @@ export const DownloadInvoicePDF = ({
     }, 0) || 0
 
   const totalAmountInSats = invoiceData.donationAmount + (invoiceData.order ? invoiceData.order.totalInSats : 0) + fees
-  console.log(paidPayment)
+
   return (
     <Document>
       <Page style={styles.page}>
@@ -272,25 +272,27 @@ export const DownloadInvoicePDF = ({
         {paidPayment?.fees.length && paidPayment?.fees.length > 0 && (
           <View style={styles.tableView}>
             <Text style={styles.subHeaderText}>Fees:</Text>
-            {paidPayment?.fees.map((fee) => {
-              return (
-                <InvoiceFiatFees
-                  key={fee.feeType}
-                  label={fee.description || fee.feeType || ''}
-                  value={
-                    fee.feeCurrency === FeeCurrency.Btcsat
-                      ? `${fee.feeAmount} sats ( ${convertSatsToUsdFormatted({
-                          sats: fee.feeAmount,
-                          bitcoinQuote: invoiceData?.bitcoinQuote,
-                        })})`
-                      : `$${fee.feeAmount} (${convertUsdCentsToSatsFormatted({
-                          usdCents: fee.feeAmount,
-                          bitcoinQuote: invoiceData?.bitcoinQuote,
-                        })})`
-                  }
-                />
-              )
-            })}
+            {paidPayment?.fees
+              .filter((fee) => fee.feePayer === PaymentFeePayer.Contributor)
+              .map((fee) => {
+                return (
+                  <InvoiceFiatFees
+                    key={fee.feeType}
+                    label={fee.description || fee.feeType || ''}
+                    value={
+                      fee.feeCurrency === FeeCurrency.Btcsat
+                        ? `${fee.feeAmount} sats ( ${convertSatsToUsdFormatted({
+                            sats: fee.feeAmount,
+                            bitcoinQuote: invoiceData?.bitcoinQuote,
+                          })})`
+                        : `$${fee.feeAmount} (${convertUsdCentsToSatsFormatted({
+                            usdCents: fee.feeAmount,
+                            bitcoinQuote: invoiceData?.bitcoinQuote,
+                          })})`
+                    }
+                  />
+                )
+              })}
           </View>
         )}
       </Page>

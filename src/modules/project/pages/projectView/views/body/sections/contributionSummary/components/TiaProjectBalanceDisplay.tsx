@@ -266,10 +266,6 @@ export const TiaProjectBalanceDisplay = () => {
     return <SkeletonLayout height="90px" width="100%" />
   }
 
-  console.log('hasGoal', hasGoal)
-  console.log('hasTotalBalance', hasTotalBalance)
-  console.log('hasPreLaunch', hasPreLaunch)
-
   if (!hasGoal && !hasTotalBalance && !hasPreLaunch) {
     return null
   }

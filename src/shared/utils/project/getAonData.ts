@@ -3,6 +3,9 @@ import { DateTime } from 'luxon'
 
 import { ProjectAonGoalForLandingPageFragment } from '@/types/index.ts'
 
+const CREATOR_CLAIM_DAYS = 30
+const CONTRIBUTOR_CLAIM_DAYS = 60
+
 export const aonProjectTimeLeft = (
   aonGoal?: Pick<ProjectAonGoalForLandingPageFragment, 'deployedAt' | 'goalDurationInDays'> | null,
 ) => {
@@ -14,6 +17,34 @@ export const aonProjectTimeLeft = (
   const aonEndDate = launchDate.plus({ days: aonGoal.goalDurationInDays })
 
   return getTimeLeft(aonEndDate)
+}
+
+export const getAonFailedClaimDeadline = (
+  aonGoal?: Pick<ProjectAonGoalForLandingPageFragment, 'deployedAt' | 'goalDurationInDays'> | null,
+) => {
+  if (!aonGoal || !aonGoal.deployedAt || !aonGoal.goalDurationInDays) {
+    return null
+  }
+
+  const launchDate = DateTime.fromMillis(aonGoal.deployedAt)
+  const aonFailedClaimEndDate = launchDate.plus({ days: aonGoal.goalDurationInDays + CONTRIBUTOR_CLAIM_DAYS })
+
+  return getTimeLeft(aonFailedClaimEndDate)
+}
+
+export const getAonUnClaimedClaimDeadline = (
+  aonGoal?: Pick<ProjectAonGoalForLandingPageFragment, 'deployedAt' | 'goalDurationInDays'> | null,
+) => {
+  if (!aonGoal || !aonGoal.deployedAt || !aonGoal.goalDurationInDays) {
+    return null
+  }
+
+  const launchDate = DateTime.fromMillis(aonGoal.deployedAt)
+  const aonSuccessCreatorNotClaimedClaimEndDate = launchDate.plus({
+    days: aonGoal.goalDurationInDays + CREATOR_CLAIM_DAYS + CONTRIBUTOR_CLAIM_DAYS,
+  })
+
+  return getTimeLeft(aonSuccessCreatorNotClaimedClaimEndDate)
 }
 
 export const getTimeLeft = (aonEndDate: DateTime) => {

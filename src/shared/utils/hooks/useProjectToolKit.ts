@@ -4,6 +4,12 @@ import { ProjectAonGoalStatus, ProjectForLandingPageFragment, Satoshis } from '@
 import { centsToDollars } from '../../../utils/index.ts'
 import { isActive, isAllOrNothing } from '../../../utils/validations/project.ts'
 
+const isAonFinalizedStatuses = [
+  ProjectAonGoalStatus.Finalized,
+  ProjectAonGoalStatus.Claimed,
+  ProjectAonGoalStatus.Successful,
+]
+
 export const useProjectToolkit = (
   project: Pick<ProjectForLandingPageFragment, 'balance' | 'balanceUsdCent' | 'aonGoal' | 'fundingStrategy' | 'status'>,
 ) => {
@@ -12,7 +18,7 @@ export const useProjectToolkit = (
   const isAon = isAllOrNothing(project)
 
   const getProjectBalance = () => {
-    const isAonFinalized = isAon && project.aonGoal?.status === ProjectAonGoalStatus.Finalized
+    const isAonFinalized = isAon && project.aonGoal?.status && isAonFinalizedStatuses.includes(project.aonGoal?.status)
     if (isAon && !isAonFinalized && project.aonGoal) {
       return {
         sats: project.aonGoal.balance,

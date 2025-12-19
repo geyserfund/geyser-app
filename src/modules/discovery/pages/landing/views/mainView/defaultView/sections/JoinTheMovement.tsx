@@ -17,15 +17,21 @@ const ImagesToRender = [
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/movement/guardians_movement_4.jpg',
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/movement/guardians_movement_5.jpg',
   'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/movement/guardians_movement_6.jpg',
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/movement/guardians_movement_7.jpeg',
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/movement/guardians_movement_8.webp',
+  'https://storage.googleapis.com/geyser-projects-media/guardians-series-one/movement/guardians_movement_9.jpeg',
 ]
 
 const imageProps = [
-  { width: '22%' },
-  { width: '44%' },
-  { width: '22%' },
-  { width: '36%' },
-  { width: '22%' },
-  { width: '30%' },
+  { width: '220px' },
+  { width: '400px' },
+  { width: '250px' },
+  { width: '350px' },
+  { width: '250px' },
+  { width: '300px' },
+  { width: '220px' },
+  { width: '350px' },
+  { width: '400px' },
 ]
 
 export const JoinTheMovement = () => {
@@ -98,7 +104,6 @@ export const JoinTheMovement = () => {
             maxWidth="300px"
             variant="solid"
             colorScheme="primary1"
-            marginTop={8}
             fontWeight={700}
           >
             {t('Become a Guardian')}

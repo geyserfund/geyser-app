@@ -124,7 +124,7 @@ export const PaymentLightningAonComponent = () => {
   const allSwaps = useAtomValue(swapAtom)
   const currentSwap = allSwaps[currentLightningToRskSwapId]
 
-  const handleConfirmed = () => {
+  const handleProcessing = () => {
     const payments = fundingContribution.payments.map((payment) => {
       if (payment.paymentType === PaymentType.LightningToRskSwap) {
         return {
@@ -149,7 +149,7 @@ export const PaymentLightningAonComponent = () => {
   }
 
   useTransactionStatusUpdate({
-    handleConfirmed,
+    handleProcessing,
     handleFailed,
     swapId: currentSwap?.id,
   })

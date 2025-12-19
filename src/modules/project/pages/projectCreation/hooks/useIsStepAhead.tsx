@@ -41,8 +41,6 @@ export const useUpdateProjectWithLastCreationStep = (step: ProjectCreationStep, 
       ApolloCache<any>
     >,
   ) => {
-    console.log('projectStepIsAhead', projectStepIsAhead, nextStep)
-
     if (!projectUpdateIput && projectStepIsAhead) {
       navigate(nextPath)
       return

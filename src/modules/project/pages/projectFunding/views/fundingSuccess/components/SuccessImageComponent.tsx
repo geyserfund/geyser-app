@@ -182,8 +182,6 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
         },
       })
     }
-
-    console.log('handleNostrPost', event)
   }
 
   return (
@@ -319,7 +317,7 @@ const AmbassadorCard = ({
             totalSats: totalSats || 0,
           }}
         >
-          {'Spread the word using your own'}{' '}
+          {'Spread the word using your own '}
           <Body as="span" color={lightModeColors.neutral1[12]} textDecoration="underline">
             {'Hero link'}
           </Body>

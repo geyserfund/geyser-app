@@ -217,8 +217,6 @@ export const ShippingConfigForm = ({ onSubmit, isSubmitting, data }: ShippingCon
     )
   }, [errors, isMobile])
 
-  console.log('errors', watch('shippingRates'))
-
   return (
     <VStack id="shipping-fees-form" as="form" onSubmit={handleOnSubmitClick} gap={6} w="full" px={2}>
       <ControlledTextInput

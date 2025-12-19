@@ -214,8 +214,6 @@ export const useFundingAPI = () => {
 
       resetContribution()
 
-      console.log('checking input before finalInput', input)
-
       const finalInput = { ...input }
 
       if (
@@ -246,7 +244,6 @@ export const useFundingAPI = () => {
 
         // If the claim public key is not set (i.e user is not logged in or doesnot have one), generate a new account keys
         if (!isLoggedIn) {
-          console.log('generating new account keys')
           const accountKeys = generateAccountKeys()
           setRskAccountKeys(accountKeys)
 
@@ -330,8 +327,6 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
 
     const swap = JSON.parse(swapJson)
 
-    console.log('contributionCreatePreImages.lightning', preImages)
-
     const getTransactionForBoltzClaimCall = createCallDataForBoltzClaimCall({
       contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
       creatorFees: satsToWei(creatorFeesAmount),
@@ -343,7 +338,6 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
       aonContractAddress: project?.aonGoal?.contractAddress || '',
     })
-    console.log('getTransactionForBoltzClaimCall for LIGHTNING', getTransactionForBoltzClaimCall)
     paymentSwapClaimTxSet({
       variables: {
         input: {
@@ -384,12 +378,6 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
 
     const swap = JSON.parse(swapJson)
 
-    console.log('contributionCreatePreImages.onChain', preImages)
-    console.log('swap.amount', swap)
-    console.log('checking accountKeys', accountKeys)
-    console.log('checking userAccountKeys', userAccountKeys)
-    console.log('checking userAccountKeyPair', userAccountKeyPair)
-
     const getCallDataForBoltzClaimCall = createCallDataForBoltzClaimCall({
       contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
       creatorFees: satsToWei(creatorFeesAmount),
@@ -401,7 +389,6 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
       aonContractAddress: project?.aonGoal?.contractAddress || '',
     })
-    console.log('getTransactionForBoltzClaimCall for ONCHAIN', getCallDataForBoltzClaimCall)
     paymentSwapClaimTxSet({
       variables: {
         input: {

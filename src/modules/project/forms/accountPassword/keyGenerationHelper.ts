@@ -129,8 +129,6 @@ export const decryptSeed = async (encryptedSeed: string, password: string): Prom
     // Parse JSON to extract components
     const encryptedObject = JSON.parse(jsonString)
 
-    console.log('checking what is encryptedObject', encryptedObject)
-
     // Validate required fields
     if (!encryptedObject.iv || !encryptedObject.tag || !encryptedObject.data || !encryptedObject.salt) {
       throw new Error('Invalid encrypted seed format: missing required fields')
@@ -169,7 +167,6 @@ export const decryptSeed = async (encryptedSeed: string, password: string): Prom
     const encryptedDataWithTag = new Uint8Array(data.length + authTag.length)
     encryptedDataWithTag.set(data, 0)
     encryptedDataWithTag.set(authTag, data.length)
-    console.log('checking what is decryptedData', encryptedDataWithTag)
 
     // Decrypt the data
     const decryptedData = await window.crypto.subtle.decrypt(
@@ -205,18 +202,11 @@ export const generateKeysFromSeedHex = (seedHex: string): AccountKeys => {
 
   const seedFromSeedHex = Buffer.from(seedHex, 'hex')
 
-  console.log('checking what is seed from SeedHex', seedFromSeedHex)
-
   // Create BIP32 root from seed
   const root = bip32.fromSeed(seedFromSeedHex, bitcoinNetwork)
 
-  console.log('checking what is root', root)
-
   // Derive child node
   const child = root.derivePath(derivationPath)
-
-  console.log('checking what is child', child)
-  console.log('checking child methods', Object.getOwnPropertyNames(child))
 
   if (!child || typeof child.toWIF !== 'function') {
     throw new Error('Failed to derive BIP32 child node')
@@ -242,13 +232,8 @@ export const generateKeysFromSeedHex = (seedHex: string): AccountKeys => {
   const hash = keccak_256(publicKeyForHashing)
   const address = '0x' + Buffer.from(hash.slice(-20)).toString('hex')
 
-  console.log('checking what is address', address)
-
   const privateKey = child.privateKey?.toString('hex')
   const publicKey = child.publicKey.toString('hex')
-
-  console.log('checking what is privateKey', privateKey)
-  console.log('checking what is publicKey', publicKey)
 
   return {
     derivationPath,

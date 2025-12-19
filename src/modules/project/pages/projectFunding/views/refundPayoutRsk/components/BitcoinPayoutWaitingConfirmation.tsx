@@ -1,19 +1,21 @@
-import { Box, Button, Image, VStack } from '@chakra-ui/react'
+import { Box, Button, Image, Link, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { useCallback, useState } from 'react'
+import { Trans } from 'react-i18next'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { getMempoolSpaceUrl } from '@/shared/utils/external/mempool.ts'
 import { usePaymentSwapClaimTxBroadcastMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { useRefund } from '../../fundingPayment/views/paymentOnchain/hooks/useRefund.ts'
 import { useTransactionStatusUpdate } from '../../fundingPayment/views/paymentOnchain/hooks/useTransactionStatusUpdate.ts'
+import { ContructingTransactionImageUrl, TransactionReadyToClaimImageUrl } from '../constant.ts'
 
 type BitcoinPayoutWaitingConfirmationProps = {
-  isRefund?: boolean
-  onClose: () => void
   swapData?: any
+  lockTxId?: string
   refundAddress: string
   setIsProcessed: (isProcessed: boolean) => void
   setRefundTxId: (refundTxId: string) => void
@@ -22,9 +24,8 @@ type BitcoinPayoutWaitingConfirmationProps = {
 
 /** BitcoinPayoutProcessed: Success screen for Bitcoin on-chain payout completion */
 export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConfirmationProps> = ({
-  isRefund = false,
-  onClose,
   swapData,
+  lockTxId,
   refundAddress,
   setIsProcessed,
   setRefundTxId,
@@ -57,6 +58,8 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
         },
         onCompleted(data) {
           if (data.paymentSwapClaimTxBroadcast.txHash) {
+            setIsClaiming(false)
+
             setIsProcessed(true)
             setRefundTxId(data.paymentSwapClaimTxBroadcast.txHash)
             onCompleted?.()
@@ -66,15 +69,21 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
             })
           }
         },
+        onError(error) {
+          setIsClaiming(false)
+          toast.error({
+            title: t('Something went wrong'),
+            description: t('Please try again'),
+          })
+        },
       })
     } else {
+      setIsClaiming(false)
       toast.error({
         title: t('Something went wrong'),
         description: t('Please try again'),
       })
     }
-
-    setIsClaiming(false)
   }, [
     initiateRefundToGetRefundTx,
     refundAddress,
@@ -91,7 +100,7 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
       {/* Illustration Placeholder */}
       <Box w="300px" h="300px">
         <Image
-          src={'https://storage.googleapis.com/geyser-projects-media/app/refund/get_refund.webp'}
+          src={isReadyToBeClaimed ? TransactionReadyToClaimImageUrl : ContructingTransactionImageUrl}
           alt={'Get refund'}
           width="100%"
           height="100%"
@@ -102,15 +111,23 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
       {/* Success Message */}
       <VStack spacing={4} alignItems="start" w="full">
         <Body size="md" textAlign="center" color="neutral1.12">
-          {t('Confirm and claim your funds.')}
+          {isReadyToBeClaimed ? (
+            t('Confirm and claim your funds.')
+          ) : (
+            <>
+              {t('We are waiting for the transaction to be confirmed before you can claim the funds.')}
+              <Trans i18nKey="You can check the transaction status by <1> clicking here.</1>">
+                {'You can check the transaction status by '}
+                <Link href={getMempoolSpaceUrl(lockTxId || '')} isExternal>
+                  {'clicking here.'}
+                </Link>
+              </Trans>
+            </>
+          )}
         </Body>
 
         <Feedback variant={FeedBackVariant.WARNING}>
-          <Body>
-            {t(
-              'It make take a few minutes to activate the claim funds button. Please keep this modal open to complete the process',
-            )}
-          </Body>
+          <Body>{t('This may take a few minutes. Please keep this window open to finish the process')}</Body>
         </Feedback>
       </VStack>
 

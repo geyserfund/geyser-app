@@ -52,8 +52,6 @@ export const SubscriptionForm = ({ title, segmentIds, customFields, isOpen, onCl
   }
 
   const onSubmit = async (data: SubscriptionFormData) => {
-    console.log('Form submitted:', data)
-
     try {
       setSubmitting(true)
       let records = {} as any

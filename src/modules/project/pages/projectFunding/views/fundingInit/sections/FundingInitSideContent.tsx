@@ -64,8 +64,6 @@ export const FundingInitSummary = () => {
 
   const isDisabled = cannotCompleteShippingForThisOrder || showCompleteVerification
 
-  console.log('cannotCompleteShippingForThisOrder', cannotCompleteShippingForThisOrder)
-
   return (
     <VStack
       as="form"

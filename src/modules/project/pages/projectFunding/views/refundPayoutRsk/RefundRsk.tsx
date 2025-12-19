@@ -79,7 +79,9 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   const [isProcessed, setIsProcessed] = useState(false)
   const [isWaitingConfirmation, setIsWaitingConfirmation] = useState(false)
   const [refundAddress, setRefundAddress] = useState<string | null>(null)
+  const [lockTxId, setLockTxId] = useState('')
   const [refundTxId, setRefundTxId] = useState('')
+  const [refundInvoiceId, setRefundInvoiceId] = useState('')
 
   const [continueRefund, setContinueRefund] = useState(false)
 
@@ -157,6 +159,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       swapObj.paymentId = payment?.id
       setSwapData(swapObj)
 
+      setRefundInvoiceId(paymentDetails.lightningInvoiceId)
+
       const callDataHex = createCallDataForLockCall({
         preimageHash: `0x${paymentDetails.swapPreimageHash}` as Hex,
         claimAddress: swapObj?.claimAddress as Address,
@@ -185,10 +189,14 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             callDataHex,
           },
         },
+        onCompleted(data) {
+          if (data.pledgeRefundInitiate.txHash) {
+            setLockTxId(data.pledgeRefundInitiate.txHash)
+          }
+        },
       })
 
       setIsProcessed(true)
-      onCompleted?.()
       toast.success({
         title: t('Refund initiated successfully'),
         description: t('Your Lightning refund will be processed shortly'),
@@ -209,8 +217,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       const paymentDetails = latestPayment?.paymentDetails as RskToOnChainSwapPaymentDetails
 
       const swapObj = JSON.parse(paymentDetails.swapMetadata)
-
-      console.log('chekcing swapObject', swapObj)
 
       swapObj.privateKey = accountKeys.privateKey
       swapObj.preimageHash = paymentDetails.swapPreimageHash
@@ -310,6 +316,11 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             callDataHex,
           },
         },
+        onCompleted(data) {
+          if (data.pledgeRefundInitiate.txHash) {
+            setLockTxId(data.pledgeRefundInitiate.txHash)
+          }
+        },
       })
       setIsWaitingConfirmation(true)
       setRefundAddress(data.bitcoinAddress)
@@ -337,6 +348,11 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     setIsSubmitting(false)
     setContinueRefund(false)
     onClose()
+  }
+
+  const handleCompleted = () => {
+    onCompleted?.()
+    handleClose()
   }
 
   const enableSubmit = selectedMethod === PayoutMethod.Lightning ? lightningForm.enableSubmit : bitcoinForm.enableSubmit
@@ -372,9 +388,9 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         }
       >
         {selectedMethod === PayoutMethod.Lightning ? (
-          <LightningPayoutProcessed isRefund={true} onClose={handleClose} />
+          <LightningPayoutProcessed isRefund={true} invoiceId={refundInvoiceId} onClose={handleCompleted} />
         ) : (
-          <BitcoinPayoutProcessed isRefund={true} refundTxId={refundTxId} onClose={handleClose} />
+          <BitcoinPayoutProcessed isRefund={true} refundTxId={refundTxId} onClose={handleCompleted} />
         )}
       </Modal>
     )
@@ -384,13 +400,11 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     return (
       <Modal isOpen={isOpen} size="lg" title={t('Confirm your refund')} onClose={() => {}} noClose={true}>
         <BitcoinPayoutWaitingConfirmation
-          isRefund={true}
-          onClose={handleClose}
           swapData={swapData}
           refundAddress={refundAddress || ''}
+          lockTxId={lockTxId}
           setIsProcessed={setIsProcessed}
           setRefundTxId={setRefundTxId}
-          onCompleted={onCompleted}
         />
       </Modal>
     )
@@ -402,11 +416,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         <Body size={'md'} medium>
           {t('Refund all of the contributions you have made to this project.')} <br />
           {t('Are you sure you want to continue with the refund?')}
-        </Body>
-        <Body size={'xl'} bold>
-          {t('Total refund amount')}
-          {': '}
-          {commaFormatted(pledgeRefundRequestData?.pledgeRefundRequest.refund.amount)} sats
         </Body>
         <Body size={'md'} medium></Body>
         <HStack spacing={4} w="full" justifyContent="space-between">

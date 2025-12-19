@@ -146,7 +146,15 @@ export const getRefundSignatureForSubmarineSwap = async (id: string) => {
       'Content-Type': 'application/json',
     },
   }).then((res) => res.json())
-  console.log('resp', resp)
+  return resp
+}
+
+export const getRefundSignatureForChainSwap = async (id: string) => {
+  const resp = await fetch(`${swapServiceEndpoint}/swap/chain/${id}/refund`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then((res) => res.json())
   return resp
 }
 

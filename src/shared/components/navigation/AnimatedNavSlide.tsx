@@ -183,9 +183,6 @@ export const AnimatedNavSlide = ({
                 spacing={0}
                 justifyContent="center"
                 alignItems="center"
-                onClick={() => {
-                  console.log('clicked')
-                }}
               >
                 {item.icon}
                 {

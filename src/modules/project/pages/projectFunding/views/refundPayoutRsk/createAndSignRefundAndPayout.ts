@@ -71,7 +71,7 @@ export const createEIP712MessageForAon = (
           nonce: BigInt(nonce),
           deadline: BigInt(deadline),
           processingFee: BigInt(processingFee),
-          lockCallDataHash: lockCallDataHash,
+          lockCallDataHash,
         }
       : {
           contributor: userAddress as Address,
@@ -80,7 +80,7 @@ export const createEIP712MessageForAon = (
           nonce: BigInt(nonce),
           deadline: BigInt(deadline),
           processingFee: BigInt(processingFee),
-          lockCallDataHash: lockCallDataHash,
+          lockCallDataHash,
         }
 
   return hashTypedData({
@@ -173,19 +173,19 @@ export const createAndSignClaimMessage = (props: {
     lockCallData,
   )
 
-  console.log('=== Production Refund Message Debug ===')
-  console.log('AON Contract Address:', aonContractAddress)
-  console.log('Swap Contract Address:', swapContractAddress)
-  console.log('Creator Address:', creatorAddress)
-  console.log('Amount:', amount)
-  console.log('Nonce:', nonce)
-  console.log('Deadline:', deadline)
-  console.log('Processing Fee:', processingFee)
-  console.log('Lock Call Data:', lockCallData)
-  console.log('RSK Private Key:', rskPrivateKey)
-  console.log('===============================================')
-  console.log('Production digest:', digest)
-  console.log('=== End Production Debug ===')
+  // console.log('=== Production Refund Message Debug ===')
+  // console.log('AON Contract Address:', aonContractAddress)
+  // console.log('Swap Contract Address:', swapContractAddress)
+  // console.log('Creator Address:', creatorAddress)
+  // console.log('Amount:', amount)
+  // console.log('Nonce:', nonce)
+  // console.log('Deadline:', deadline)
+  // console.log('Processing Fee:', processingFee)
+  // console.log('Lock Call Data:', lockCallData)
+  // console.log('RSK Private Key:', rskPrivateKey)
+  // console.log('===============================================')
+  // console.log('Production digest:', digest)
+  // console.log('=== End Production Debug ===')
 
   return signEIP712Message(digest, rskPrivateKey)
 }
@@ -223,19 +223,19 @@ export const createAndSignRefundMessage = (props: {
     processingFee,
     lockCallData,
   )
-  console.log('=== Production Refund Message Debug ===')
-  console.log('AON Contract Address:', aonContractAddress)
-  console.log('Swap Contract Address:', swapContractAddress)
-  console.log('Contributor Address:', contributorAddress)
-  console.log('Amount:', amount)
-  console.log('Nonce:', nonce)
-  console.log('Deadline:', deadline)
-  console.log('Processing Fee:', processingFee)
-  console.log('Lock Call Data:', lockCallData)
-  console.log('RSK Private Key:', rskPrivateKey)
-  console.log('===============================================')
-  console.log('Production digest:', digest)
-  console.log('=== End Production Debug ===')
+  // console.log('=== Production Refund Message Debug ===')
+  // console.log('AON Contract Address:', aonContractAddress)
+  // console.log('Swap Contract Address:', swapContractAddress)
+  // console.log('Contributor Address:', contributorAddress)
+  // console.log('Amount:', amount)
+  // console.log('Nonce:', nonce)
+  // console.log('Deadline:', deadline)
+  // console.log('Processing Fee:', processingFee)
+  // console.log('Lock Call Data:', lockCallData)
+  // console.log('RSK Private Key:', rskPrivateKey)
+  // console.log('===============================================')
+  // console.log('Production digest:', digest)
+  // console.log('=== End Production Debug ===')
   return signEIP712Message(digest, rskPrivateKey)
 }
 

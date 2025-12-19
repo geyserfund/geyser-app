@@ -93,7 +93,6 @@ export const useConfirmPasswordForm = ({
       const accountKeys = generateKeysFromSeedHex(decryptedSeed)
 
       setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
-      console.log('accountKeys', accountKeys)
 
       onComplete(accountKeys)
     } catch (error) {

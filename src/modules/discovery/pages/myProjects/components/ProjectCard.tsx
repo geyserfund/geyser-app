@@ -1,6 +1,6 @@
 import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiCheckCircle, PiClock, PiEyeglasses, PiGear, PiNotePencil } from 'react-icons/pi'
+import { PiCheckCircle, PiClock, PiEyeglasses, PiGear, PiNotePencil, PiXCircle } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
@@ -53,6 +53,14 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       return (
         <Direction mt={4} spacing={4} alignItems="stretch">
           <InReviewProjectCard />
+        </Direction>
+      )
+    }
+
+    if (project.status === ProjectStatus.Inactive) {
+      return (
+        <Direction mt={4} spacing={4} alignItems="stretch">
+          <InactiveProjectCard project={project} />
         </Direction>
       )
     }
@@ -247,6 +255,37 @@ const InPrelaunchProjectCard = ({ project }: { project: ProjectForMyProjectsFrag
         )}
       </HStack>
       <ProjectPrelaunchStatus project={project} onlyTimeLeft />
+    </Box>
+  )
+}
+
+const InactiveProjectCard = ({ project }: { project: ProjectForMyProjectsFragment }) => {
+  const { t } = useTranslation()
+
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      borderWidth={1}
+      borderRadius="lg"
+      minHeight="124px"
+      gap={2}
+      p={4}
+      flex={1}
+    >
+      <HStack justifyContent="center" alignItems="center" spacing={2} color="error.10">
+        <PiXCircle size={24} />
+        <Body size={'lg'} regular>
+          {t('Inactive')}
+        </Body>
+      </HStack>
+      <Body size={'md'} regular textAlign="center">
+        {t(
+          'Your project is inactive and cannot receive contributions, You can reactivate it in the project dashboard.',
+        )}
+      </Body>
     </Box>
   )
 }

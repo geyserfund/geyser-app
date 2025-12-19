@@ -25,7 +25,6 @@ export const SumSubVerification = ({
   const updateComplianceStatusForUser = useSetAtom(updateComplianceStatusForUserAtom)
 
   const handleError = (error: any) => {
-    console.log(error)
     toast.error({
       title: 'Failed to verify your identity',
       description: 'Please try again',

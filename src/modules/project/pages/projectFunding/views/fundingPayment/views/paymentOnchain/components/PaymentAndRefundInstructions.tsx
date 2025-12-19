@@ -2,6 +2,7 @@ import { Button, Divider, VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 import { PiDownloadSimple, PiWarning } from 'react-icons/pi'
 
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
 
@@ -10,6 +11,7 @@ import { useDownloadRefund } from '../hooks/useDownloadRefund'
 
 export const PaymentAndRefundInstructions = () => {
   const { t } = useTranslation()
+  const { isAon } = useProjectAtom()
 
   const { buttonProps } = useDownloadRefund()
 
@@ -41,32 +43,39 @@ export const PaymentAndRefundInstructions = () => {
               {' and adjust the fee rate in satoshis per byte (sat/B) to ensure your swap processes within 24 hours.'}
             </Trans>
           </Body>
-          <Divider />
-          <Body size="sm">
-            <Trans
-              i18nKey={
-                '<0>Download and securely store your Refund File;</0> if in doubt, re-download to ensure its stored safely'
-              }
-            >
-              <strong>{'Download and securely store your Refund File;'}</strong>
-              {' if in doubt, re-download to ensure its stored safely'}
-            </Trans>
-          </Body>
+          {!isAon && (
+            <>
+              {' '}
+              <Divider />
+              <Body size="sm">
+                <Trans
+                  i18nKey={
+                    '<0>Download and securely store your Refund File;</0> if in doubt, re-download to ensure its stored safely'
+                  }
+                >
+                  <strong>{'Download and securely store your Refund File;'}</strong>
+                  {' if in doubt, re-download to ensure its stored safely'}
+                </Trans>
+              </Body>
+            </>
+          )}
         </VStack>
       </Feedback>
-      <VStack w="full">
-        <Button
-          {...buttonProps}
-          size="lg"
-          variant="surface"
-          colorScheme="primary1"
-          minWidth="310px"
-          rightIcon={<PiDownloadSimple />}
-        >
-          {t('Download refund file')}
-        </Button>
-        <RefundPolicyNote />
-      </VStack>
+      {!isAon && (
+        <VStack w="full">
+          <Button
+            {...buttonProps}
+            size="lg"
+            variant="surface"
+            colorScheme="primary1"
+            minWidth="310px"
+            rightIcon={<PiDownloadSimple />}
+          >
+            {t('Download refund file')}
+          </Button>
+          <RefundPolicyNote />
+        </VStack>
+      )}
     </>
   )
 }

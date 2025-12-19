@@ -53,7 +53,6 @@ export const MediaCarouselForItemsModal = ({
         links={imageLinkList}
         altText={altText}
         onSlideChange={(index) => {
-          console.log('checking index', index)
           setCurrentIndex(index)
         }}
         wrapperProps={{

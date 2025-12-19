@@ -161,7 +161,7 @@ export const FilterTopBar = ({ isLoading, ...rest }: FilterTopBarProps) => {
         <Wrap>
           {!viewFilterSearch && (
             <Body size="xl" bold>
-              {t('Most funded projects filtered by:')}
+              {t('Most funded Projects filtered by:')}
             </Body>
           )}
 

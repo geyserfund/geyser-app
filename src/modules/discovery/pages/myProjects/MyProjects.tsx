@@ -1,5 +1,5 @@
 import { Box, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { t } from 'i18next'
 
 import { useAuthContext } from '@/context'
 import { CreateProjectButton } from '@/modules/navigation/platformNavBar/components/CreateProjectButton.tsx'
@@ -20,26 +20,24 @@ import { useMyProjects } from './hooks/useMyProjects'
 
 const ProjectGroupInfo = {
   [ProjectStatus.Active]: {
-    title: 'Live projects',
+    title: t('Live Projects'),
     imageUrl: LiveProjectsImageUrl,
   },
   [ProjectStatus.Draft]: {
-    title: 'Draft projects',
+    title: t('Draft Projects'),
     imageUrl: DraftProjectsImageUrl,
   },
   [ProjectStatus.InReview]: {
-    title: 'Review projects',
+    title: t('Review Projects'),
     imageUrl: InReviewProjectsImageUrl,
   },
   [ProjectStatus.Inactive]: {
-    title: 'Inactive projects',
+    title: t('Inactive Projects'),
     imageUrl: InactiveProjectsImageUrl,
   },
 }
 
 export const MyProjects = () => {
-  const { t } = useTranslation()
-
   useLastVisitedMyProjects()
 
   const { user } = useAuthContext()
@@ -54,17 +52,6 @@ export const MyProjects = () => {
   return (
     <>
       <VStack spacing={6} align="stretch">
-        <HStack justifyContent="space-between" alignItems="center" flexWrap="wrap">
-          <HStack>
-            <Body size="2xl" bold>
-              {t('My Projects')}
-            </Body>
-            <Body size="2xl" muted>
-              ({t('Past week')})
-            </Body>
-          </HStack>
-          <CreateProjectButton />
-        </HStack>
         {isLoading ? (
           <>
             <ProjectCardSkeleton />
@@ -101,14 +88,27 @@ const ProjectGroup = ({ projects, status }: { projects: ProjectForMyProjectsFrag
 
   const { title, imageUrl } = ProjectGroupInfo[status as keyof typeof ProjectGroupInfo]
 
+  const isActive = status === ProjectStatus.Active
+
   return (
     <VStack align="stretch" mt={4} spacing={2}>
-      <HStack>
-        <Image src={imageUrl} alt={title} width="60px" height="auto" />
-        <Body size="2xl" bold>
-          {title}
-        </Body>
+      <HStack justifyContent="space-between" alignItems="center" flexWrap="wrap">
+        <HStack>
+          <HStack>
+            <Image src={imageUrl} alt={title} width="60px" height="auto" />
+            <Body size="2xl" bold>
+              {title}
+            </Body>
+          </HStack>
+          {isActive && (
+            <Body size="2xl" muted>
+              ({t('Past week')})
+            </Body>
+          )}
+        </HStack>
+        {isActive && <CreateProjectButton />}
       </HStack>
+
       {projects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
     </VStack>
   )

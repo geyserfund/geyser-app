@@ -181,7 +181,6 @@ export const GrantsApplyPage = () => {
   }
 
   const onSubmit = async (data: grantApplicationVariables) => {
-    console.log('checking walletInput', createWalletInput)
     if (!createWalletInput) {
       return
     }
@@ -223,7 +222,6 @@ export const GrantsApplyPage = () => {
         },
       },
       onCompleted(data) {
-        console.log(data)
         createWallet({
           variables: {
             input: {
@@ -237,7 +235,6 @@ export const GrantsApplyPage = () => {
             })
           },
           onCompleted(createWalletData) {
-            console.log(createWalletData)
             projectPublish({
               variables: { input: { projectId: data.createProject.id } },
               onCompleted() {
@@ -249,7 +246,6 @@ export const GrantsApplyPage = () => {
                     },
                   },
                   onCompleted(grantApplyData) {
-                    console.log(grantApplyData)
                     setProjectAppliedToGrant(true)
                     queryCurrentUser()
                   },

@@ -23,9 +23,6 @@ export const ConnectionDetails = ({ wallet, walletConnectionDetails, ...props }:
     return null
   }
 
-  console.log(walletConnectionDetails)
-  console.log(wallet)
-
   if (walletConnectionDetails.connectionDetails.__typename === WalletConnectDetails.LightningAddressConnectionDetails) {
     return (
       <ConnectionDetailsCard connectionOption={ConnectionOption.LIGHTNING_ADDRESS} {...props}>

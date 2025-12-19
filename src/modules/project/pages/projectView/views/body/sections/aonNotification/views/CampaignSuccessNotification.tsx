@@ -12,8 +12,11 @@ import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { getTimeLeft } from '@/shared/utils/project/getAonData.ts'
 
+import { useRefetchQueries } from '../hooks/useRefetchQueries.ts'
+
 export const CampaignSuccessNotification = () => {
   const { project, isProjectOwner } = useProjectAtom()
+  const { refetchQueriesOnPayoutSuccess } = useRefetchQueries()
   const { queryProject } = useProjectAPI()
   const payoutRskModal = useModal()
 
@@ -70,7 +73,14 @@ export const CampaignSuccessNotification = () => {
           </Button>
         </VStack>
       </Feedback>
-      <PayoutRsk {...payoutRskModal} project={project} onCompleted={() => queryProject.execute()} />
+      <PayoutRsk
+        {...payoutRskModal}
+        project={project}
+        onCompleted={() => {
+          refetchQueriesOnPayoutSuccess()
+          queryProject.execute()
+        }}
+      />
     </>
   )
 }
