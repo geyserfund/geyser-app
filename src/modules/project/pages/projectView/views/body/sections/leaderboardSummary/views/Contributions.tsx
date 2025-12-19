@@ -1,5 +1,6 @@
 import { Button, ButtonProps, HStack, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { useAtom, useAtomValue } from 'jotai'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
@@ -26,7 +27,7 @@ export const Contributions = () => {
 
   const [contributions, setContributions] = useAtom(contributionsAtom)
 
-  const { loading } = useProjectPageContributionsGetQuery({
+  const { loading, data } = useProjectPageContributionsGetQuery({
     skip: !project.id,
     fetchPolicy: 'network-only',
     variables: {
@@ -42,12 +43,13 @@ export const Contributions = () => {
         },
       },
     },
-    onCompleted(data) {
-      if (data && data.contributionsGet?.contributions) {
-        setContributions(data.contributionsGet.contributions)
-      }
-    },
   })
+
+  useEffect(() => {
+    if (data?.contributionsGet?.contributions) {
+      setContributions(data?.contributionsGet?.contributions)
+    }
+  }, [data, setContributions])
 
   if (loading || projectLoading) {
     return <ContributionsSkeleton />

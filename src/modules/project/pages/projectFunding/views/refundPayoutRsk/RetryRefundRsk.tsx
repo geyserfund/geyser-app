@@ -395,12 +395,11 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
     return (
       <Modal isOpen={isOpen} size="lg" title={t('Please wait for swap confirmation')} onClose={() => {}}>
         <BitcoinPayoutWaitingConfirmation
-          isRefund={true}
-          onClose={handleClose}
           swapData={swapData}
           refundAddress={refundAddress || ''}
           setIsProcessed={setIsProcessed}
           setRefundTxId={setRefundTxId}
+          onCompleted={handleClose}
         />
       </Modal>
     )

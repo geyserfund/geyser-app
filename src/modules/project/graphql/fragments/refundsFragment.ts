@@ -2,6 +2,8 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_THUMBNAIL_IMAGE } from '@/modules/discovery/graphql/fragments/projectFragment.ts'
 
+import { FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND } from './paymentFragment.ts'
+
 export const FRAGMENT_PAYMENT_REFUND = gql`
   fragment PaymentRefund on PaymentRefund {
     id
@@ -35,6 +37,7 @@ export const FRAGMENT_RSK_TO_LIGHTNING_SWAP_PAYMENT_DETAILS = gql`
     swapId
     swapMetadata
     swapPreimageHash
+    lightningInvoiceId
   }
 `
 
@@ -42,6 +45,7 @@ export const FRAGMENT_PLEDGE_REFUND = gql`
   ${FRAGMENT_PROJECT_THUMBNAIL_IMAGE}
   ${FRAGMENT_LIGHTNING_TO_RSK_SWAP_PAYMENT_DETAILS}
   ${FRAGMENT_ON_CHAIN_TO_RSK_SWAP_PAYMENT_DETAILS}
+  ${FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND}
   fragment PledgeRefund on PledgeRefund {
     id
     amount
@@ -51,29 +55,7 @@ export const FRAGMENT_PLEDGE_REFUND = gql`
       ...ProjectThumbnailImage
     }
     payments {
-      id
-      method
-      failureReason
-      paymentType
-      createdAt
-      status
-      linkedEntityUUID
-      linkedEntityType
-      paymentDetails {
-        ... on RskToOnChainSwapPaymentDetails {
-          swapId
-          swapMetadata
-          onChainAddress
-          onChainTxId
-          swapPreimageHash
-        }
-        ... on RskToLightningSwapPaymentDetails {
-          swapId
-          swapMetadata
-          lightningInvoiceId
-          swapPreimageHash
-        }
-      }
+      ...PaymentForPayoutRefund
     }
   }
 `

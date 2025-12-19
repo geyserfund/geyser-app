@@ -13,7 +13,6 @@ export const ProjectCreationCreateReward = () => {
 
   const category = location.state?.category
 
-
   if (!project) {
     return null
   }

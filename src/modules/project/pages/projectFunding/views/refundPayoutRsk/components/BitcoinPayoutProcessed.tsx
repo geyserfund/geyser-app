@@ -3,8 +3,9 @@ import { t } from 'i18next'
 import React from 'react'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { getMempoolSpaceUrl } from '@/shared/utils/external/mempool.ts'
 
-import { REFUND_PROCESSED_IMAGE_URL } from '../constant.ts'
+import { TransactionClaimedImageUrl } from '../constant.ts'
 
 type BitcoinPayoutProcessedProps = {
   isRefund?: boolean
@@ -26,7 +27,7 @@ export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({
       </Body>
 
       <Box w="300px" h="300px">
-        <Image src={REFUND_PROCESSED_IMAGE_URL} alt={'Get refund'} width="100%" height="100%" objectFit="cover" />
+        <Image src={TransactionClaimedImageUrl} alt={'Get refund'} width="100%" height="100%" objectFit="cover" />
       </Box>
 
       {/* Success Message */}
@@ -40,7 +41,7 @@ export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({
             'On-chain transactions usually confirm within one hour, but can take longer depending on the current activity on the Bitcoin network. You can track the on-chain transaction',
           )}{' '}
           <Body as="span" textDecoration="underline" cursor="pointer" color="primary1.9">
-            <Link href={`https://mempool.space/tx/${refundTxId}`} isExternal>
+            <Link href={getMempoolSpaceUrl(refundTxId)} isExternal>
               {t('here')}
             </Link>
           </Body>

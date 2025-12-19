@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { useAuthContext } from '@/context/index.ts'
+import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { RefundRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/RefundRsk.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
@@ -13,7 +14,7 @@ import {
 } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 
-import { useRefetchQueriesOnContributionStatusChange } from './useRefetchQueriesOnContributionStatusChange.ts'
+import { useRefetchQueries } from './hooks/useRefetchQueries.ts'
 import CampaignFailedNotification from './views/CampaignFailedNotification.tsx'
 import { CampaignSuccessNotification } from './views/CampaignSuccessNotification.tsx'
 import { FailedToClaimNotification } from './views/FailedToClaimNotification.tsx'
@@ -21,11 +22,14 @@ import { FundedToCampaign } from './views/FundedToCampaign.tsx'
 import { FundsClaimedNotification } from './views/FundsClaimedNotification.tsx'
 import { FundsReturnedNotification } from './views/FundsReturnedNotification.tsx'
 
+export const AonSuccessfullStatuses = [ProjectAonGoalStatus.Successful, ProjectAonGoalStatus.Claimed]
+
 export const AonNotification = () => {
   const { project, isProjectOwner } = useProjectAtom()
   const { user } = useAuthContext()
 
-  const { refetchQueries } = useRefetchQueriesOnContributionStatusChange()
+  const { refetchQueriesOnPledgeRefund } = useRefetchQueries()
+  const { queryProject } = useProjectAPI()
 
   const refundModal = useModal()
   const isAon = isAllOrNothing(project)
@@ -34,6 +38,7 @@ export const AonNotification = () => {
 
   const { data, loading } = useProjectContributorQuery({
     skip: !project.id || !user.id || !isAon,
+    fetchPolicy: 'network-only',
     variables: {
       input: {
         projectId: project.id,
@@ -51,7 +56,7 @@ export const AonNotification = () => {
   })
 
   useEffect(() => {
-    if (isProjectOwner) {
+    if (isProjectOwner && project?.aonGoal?.status && AonSuccessfullStatuses.includes(project.aonGoal.status)) {
       payoutRequest({
         variables: {
           input: {
@@ -69,7 +74,7 @@ export const AonNotification = () => {
         },
       })
     }
-  }, [isProjectOwner, payoutRequest, project.id])
+  }, [isProjectOwner, payoutRequest, project])
 
   const fundedToCampaign = data?.contributor?.contributions.find(
     (contribution) => contribution.status === ContributionStatus.Pledged,
@@ -120,7 +125,8 @@ export const AonNotification = () => {
         contributionUUID={fundedToCampaign.uuid || ''}
         projectId={project.id}
         onCompleted={() => {
-          refetchQueries()
+          refetchQueriesOnPledgeRefund()
+          queryProject.execute()
         }}
       />
     )

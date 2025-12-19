@@ -1,5 +1,6 @@
 import { Button, HStack, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { useAtom, useAtomValue } from 'jotai'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
@@ -26,7 +27,7 @@ export const Leaderboard = () => {
   const [contributors, setContributors] = useAtom(contributorsAtom)
   const isWidget = useAtomValue(isWidgetAtom)
 
-  const { loading } = useProjectLeaderboardContributorsGetQuery({
+  const { loading, data } = useProjectLeaderboardContributorsGetQuery({
     skip: !project.id,
     fetchPolicy: 'network-only',
     variables: {
@@ -36,10 +37,13 @@ export const Leaderboard = () => {
         top: 10,
       },
     },
-    onCompleted(data) {
-      setContributors(data?.projectLeaderboardContributorsGet || [])
-    },
   })
+
+  useEffect(() => {
+    if (data?.projectLeaderboardContributorsGet) {
+      setContributors(data.projectLeaderboardContributorsGet)
+    }
+  }, [data, setContributors])
 
   const { userContributor, userAllTimeRank } = useUserContributorToCurrentProject({ contributors })
 
