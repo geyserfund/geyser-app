@@ -88,7 +88,7 @@ export const FundingSuccess = () => {
           <SafeToDeleteRefund />
           <Divider />
           <ProjectFundingSummary disableCollapse referenceCode={fundingContribution.uuid} />
-          <DownloadInvoice project={project} contributionId={fundingContribution.id} />
+          <DownloadInvoice project={project} contributionId={fundingContribution.id} isDisabled={isPending} />
           <SuggestedProjects
             id={'suggested-projects-funding-success'}
             subCategory={project.subCategory}

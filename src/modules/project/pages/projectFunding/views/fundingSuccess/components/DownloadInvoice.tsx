@@ -21,12 +21,14 @@ export const DownloadInvoice = ({
   showFee,
   asIcon,
   buttonProps,
+  isDisabled,
 }: {
   project: Pick<FundingProjectState, 'title' | 'id'>
   contributionId: BigInt
   showFee?: false
   asIcon?: boolean
   buttonProps?: ButtonProps
+  isDisabled?: boolean
 }) => {
   const [dataFetched, setDataFetched] = useState(false)
   const [invoiceData, setInvoiceData] = useState<ContributionForDownloadInvoiceFragment | null>(null)
@@ -114,6 +116,7 @@ export const DownloadInvoice = ({
             icon={<PiDownloadSimple />}
             aria-label={t('Download invoice')}
             onClick={(event) => event.stopPropagation()}
+            isDisabled={isDisabled}
             {...buttonProps}
           />
         </DownloadInvoicePopover>
@@ -125,6 +128,7 @@ export const DownloadInvoice = ({
           colorScheme="neutral1"
           rightIcon={<PiDownloadSimple />}
           onClick={(event) => event.stopPropagation()}
+          isDisabled={isDisabled}
           {...buttonProps}
         >
           {t('Download invoice')}

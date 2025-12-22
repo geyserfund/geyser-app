@@ -1940,5 +1940,8 @@
   "Payout has been sent.": "Payout has been sent.",
   "You should be receiving it in shortly.": "You should be receiving it in shortly.",
   "Payout Invoice Id:": "Payout Invoice Id:",
-  "Total payout amount": "Total payout amount"
+  "Total payout amount": "Total payout amount",
+  "hours left": "hours left",
+  "Invoice will be available after the contribution is confirmed.": "Invoice will be available after the contribution is confirmed.",
+  "Invoice will be available after the contribution is confirmed. You can check here or in your profile contributions.": "Invoice will be available after the contribution is confirmed. You can check here or in your profile contributions."
 }

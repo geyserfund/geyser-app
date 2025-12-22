@@ -22,8 +22,8 @@ import {
   RskToLightningSwapPaymentDetailsFragment,
   RskToOnChainSwapPaymentDetails,
   usePledgeRefundInitiateMutation,
+  usePledgeRefundPaymentCreateMutation,
   usePledgeRefundRequestMutation,
-  usePledgeRefundSwapCreateMutation,
 } from '@/types/index.ts'
 import { commaFormatted, useNotification } from '@/utils/index.ts'
 
@@ -90,7 +90,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     { data: pledgeRefundRequestData, loading: pledgeRefundRequestLoading, error: pledgeRefundRequestError },
   ] = usePledgeRefundRequestMutation()
 
-  const [pledgeRefundSwapCreate, { loading: isPledgeRefundSwapCreateLoading }] = usePledgeRefundSwapCreateMutation()
+  const [pledgeRefundPaymentCreate, { loading: isPledgeRefundPaymentCreateLoading }] =
+    usePledgeRefundPaymentCreateMutation()
   const [pledgeRefundInitiate, { loading: isPledgeRefundInitiateLoading }] = usePledgeRefundInitiateMutation()
 
   const [swapData, setSwapData] = useState<any>(null)
@@ -129,7 +130,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
         (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
 
-      const { data: swapCreateResponse } = await pledgeRefundSwapCreate({
+      const { data: pledgeRefundPaymentCreateResponse } = await pledgeRefundPaymentCreate({
         variables: {
           input: {
             pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
@@ -138,7 +139,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
                 lightningAddress: data.lightningAddress,
                 boltz: {
                   refundPublicKey: accountKeys.publicKey,
-                  preimageHash,
                 },
               },
             },
@@ -146,11 +146,15 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         },
       })
 
-      if (!swapCreateResponse?.pledgeRefundSwapCreate) {
-        throw new Error('Failed to create swap')
+      if (
+        !pledgeRefundPaymentCreateResponse?.pledgeRefundPaymentCreate ||
+        !pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate.payment ||
+        !pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate.swap
+      ) {
+        throw new Error('Failed to create payment')
       }
 
-      const { swap, payment } = swapCreateResponse.pledgeRefundSwapCreate
+      const { swap, payment } = pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate
       const paymentDetails = payment?.paymentDetails as RskToLightningSwapPaymentDetailsFragment
 
       const swapObj = JSON.parse(swap)
@@ -252,14 +256,13 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
         (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
 
-      const { data: swapCreateResponse } = await pledgeRefundSwapCreate({
+      const { data: pledgeRefundPaymentCreateResponse } = await pledgeRefundPaymentCreate({
         variables: {
           input: {
             pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
             pledgeRefundPaymentInput: {
               rskToOnChainSwap: {
                 boltz: {
-                  userClaimAddress: data.bitcoinAddress,
                   claimPublicKey: accountKeys.publicKey,
                   preimageHash,
                   preimageHexEncrypted,
@@ -270,11 +273,15 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         },
       })
 
-      if (!swapCreateResponse?.pledgeRefundSwapCreate) {
-        throw new Error('Failed to create swap')
+      if (
+        !pledgeRefundPaymentCreateResponse?.pledgeRefundPaymentCreate ||
+        !pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate.payment ||
+        !pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate.swap
+      ) {
+        throw new Error('Failed to create payment')
       }
 
-      const { swap, payment } = swapCreateResponse.pledgeRefundSwapCreate
+      const { swap, payment } = pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate
 
       const swapObj = JSON.parse(swap)
       swapObj.privateKey = accountKeys.privateKey
@@ -477,7 +484,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             size="lg"
             colorScheme="primary1"
             variant="solid"
-            isLoading={isSubmitting || isPledgeRefundInitiateLoading || isPledgeRefundSwapCreateLoading}
+            isLoading={isSubmitting || isPledgeRefundInitiateLoading || isPledgeRefundPaymentCreateLoading}
             isDisabled={!enableSubmit}
             onClick={handleSubmit}
           >

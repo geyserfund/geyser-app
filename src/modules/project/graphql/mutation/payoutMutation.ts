@@ -1,40 +1,34 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_PAYOUT, FRAGMENT_PAYOUT_METADATA } from '../fragments/payoutFragment.ts'
-import { FRAGMENT_RSK_TO_LIGHTNING_SWAP_PAYMENT_DETAILS } from '../fragments/refundsFragment.ts'
+import { FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND } from '../fragments/paymentFragment.ts'
+import { FRAGMENT_PAYOUT, FRAGMENT_PAYOUT_METADATA, FRAGMENT_PAYOUT_WITH_PAYMENT } from '../fragments/payoutFragment.ts'
 
 export const MUTATION_PAYOUT_REQUEST = gql`
-  ${FRAGMENT_PAYOUT}
+  ${FRAGMENT_PAYOUT_WITH_PAYMENT}
   ${FRAGMENT_PAYOUT_METADATA}
   mutation PayoutRequest($input: PayoutRequestInput!) {
     payoutRequest(input: $input) {
       payout {
-        ...Payout
+        ...PayoutWithPayment
       }
       payoutMetadata {
-        swapContractAddress
-        nonce
-        aonContractAddress
+        ...PayoutMetadata
       }
     }
   }
 `
 
-export const MUTATION_PAYOUT_SWAP_CREATE = gql`
-  ${FRAGMENT_RSK_TO_LIGHTNING_SWAP_PAYMENT_DETAILS}
-  mutation PayoutSwapCreate($input: PayoutSwapCreateInput!) {
-    payoutSwapCreate(input: $input) {
+export const MUTATION_PAYOUT_PAYMENT_CREATE = gql`
+  ${FRAGMENT_PAYOUT}
+  ${FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND}
+  mutation PayoutPaymentCreate($input: PayoutPaymentCreateInput!) {
+    payoutPaymentCreate(input: $input) {
       payout {
         ...Payout
       }
       swap
       payment {
-        id
-        paymentDetails {
-          ... on RskToLightningSwapPaymentDetails {
-            ...RskToLightningSwapPaymentDetails
-          }
-        }
+        ...PaymentForPayoutRefund
       }
     }
   }
@@ -42,6 +36,7 @@ export const MUTATION_PAYOUT_SWAP_CREATE = gql`
 
 export const MUTATION_PAYOUT_INITIATE = gql`
   ${FRAGMENT_PAYOUT}
+  ${FRAGMENT_PAYOUT_WITH_PAYMENT}
   mutation PayoutInitiate($input: PayoutInitiateInput!) {
     payoutInitiate(input: $input) {
       payout {
