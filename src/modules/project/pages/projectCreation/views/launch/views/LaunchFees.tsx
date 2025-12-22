@@ -37,8 +37,8 @@ const PROJECT_ID_FOR_GEYSER_LAUNCH = __production__ ? 3075 : __staging__ ? 839 :
 
 export const LAUNCH_FEE_USD_CENTS = {
   [ProjectLaunchStrategy.STARTER_LAUNCH]: 2500 as USDCents, // 25 USD
-  [ProjectLaunchStrategy.GROWTH_LAUNCH]: 5000 as USDCents, // 50 USD
-  [ProjectLaunchStrategy.PRO_LAUNCH]: 35000 as USDCents, // 350 USD
+  [ProjectLaunchStrategy.GROWTH_LAUNCH]: 6000 as USDCents, // 60 USD
+  [ProjectLaunchStrategy.PRO_LAUNCH]: 9000 as USDCents, // 90 USD
 }
 
 export const LaunchFees = ({
