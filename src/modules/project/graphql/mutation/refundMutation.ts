@@ -49,19 +49,3 @@ export const MUTATION_PLEDGE_REFUND_INITIATE = gql`
     }
   }
 `
-
-export const MUTATION_RETRY_PLEDGE_REFUND_INITIATE = gql`
-  ${FRAGMENT_PLEDGE_REFUND_WITH_PAYMENT}
-  mutation PledgeRefundRetryInitiate($input: PledgeRefundRetryInitiateInput!) {
-    pledgeRefundRetryInitiate(input: $input) {
-      swap
-      refund {
-        ...PledgeRefund
-      }
-      payment {
-        id
-        accountingAmountDue
-      }
-    }
-  }
-`

@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { ProjectAonGoalStatus, ProjectForLandingPageFragment, Satoshis } from '@/types/index.ts'
 
@@ -49,7 +51,11 @@ export const useProjectToolkit = (
   }
 
   const isFundingDisabled = () => {
-    const isAonActive = isAon && project.aonGoal?.status === ProjectAonGoalStatus.Active
+    const isAonActive =
+      (isAon && project.aonGoal?.status === ProjectAonGoalStatus.Active) ||
+      (project?.aonGoal?.status === ProjectAonGoalStatus.Successful &&
+        project.aonGoal?.endsAt &&
+        project.aonGoal.endsAt > DateTime.now().toMillis())
 
     if (isAon) {
       if (isAonActive) {
