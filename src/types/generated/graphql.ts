@@ -10184,7 +10184,7 @@ export type PledgeRefundsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type PledgeRefundsQuery = { __typename?: 'Query', pledgeRefundsGet?: { __typename?: 'PledgeRefundsGetResponse', refunds: Array<(
       { __typename?: 'PledgeRefund' }
-      & PledgeRefundFragment
+      & PledgeRefundWithPaymentFragment
     )> } | null };
 
 export type ProjectRewardsQueryVariables = Exact<{
@@ -18759,11 +18759,11 @@ export const PledgeRefundsDocument = gql`
     query PledgeRefunds {
   pledgeRefundsGet {
     refunds {
-      ...PledgeRefund
+      ...PledgeRefundWithPayment
     }
   }
 }
-    ${PledgeRefundFragmentDoc}`;
+    ${PledgeRefundWithPaymentFragmentDoc}`;
 
 /**
  * __usePledgeRefundsQuery__

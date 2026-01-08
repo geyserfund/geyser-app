@@ -141,7 +141,7 @@ export const PaymentLightningAonComponent = () => {
       payments,
     })
 
-    navigate({ pathname: getPath('fundingSuccess', project.name), search: location.search })
+    navigate({ pathname: getPath('fundingAwaitingSuccess', project.name), search: location.search })
   }
 
   const handleFailed = () => {

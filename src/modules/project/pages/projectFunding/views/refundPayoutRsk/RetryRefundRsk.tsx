@@ -4,7 +4,7 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import React, { useState } from 'react'
 import { PiWarningCircleBold } from 'react-icons/pi'
-import { Address, Hex } from 'viem'
+import { Address, Hex, parseSignature } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
@@ -23,13 +23,11 @@ import {
   PledgeRefundFragment,
   RskToLightningSwapPaymentDetails,
   RskToOnChainSwapPaymentDetails,
-  usePledgeRefundRetryInitiateMutation,
-  usePledgeRefundRetryRequestMutation,
+  usePledgeRefundRequestMutation,
 } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { createAndSignLockTransaction } from '../../utils/createLockTransaction.ts'
-import { signatureToVRS } from '../../utils/signEIP712Message.ts'
 import { useRefund } from '../fundingPayment/views/paymentOnchain/hooks/useRefund.ts'
 import {
   getRefundSignatureForChainSwap,
@@ -77,7 +75,7 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
   const [
     pledgeRefundRetryRequest,
     { data: pledgeRefundRequestData, loading: pledgeRefundRequestLoading, error: pledgeRefundRequestError },
-  ] = usePledgeRefundRetryRequestMutation()
+  ] = usePledgeRefundRequestMutation()
 
   const [pledgeRefundRetryInitiate, { loading: isPledgeRefundRetryInitiateLoading }] =
     usePledgeRefundRetryInitiateMutation()
@@ -155,7 +153,8 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
 
       const refundSignatureResponse = await getRefundSignatureForSubmarineSwap(failedSwapPreImageHash)
 
-      const { v: refundV, r: refundR, s: refundS } = signatureToVRS(refundSignatureResponse.signature)
+      const { v, r: refundR, s: refundS } = parseSignature(refundSignatureResponse.signature as Hex)
+      const refundV = Number(v)
 
       const lockTxHex = await createAndSignLockTransaction({
         preimageHash: `0x${newPreimageHash}`,
@@ -291,7 +290,7 @@ export const RetryRefundRsk: React.FC<RetryRefundRskProps> = ({ isOpen, onClose,
 
       const refundSignatureResponse = await getRefundSignatureForChainSwap(failedSwapPreImageHash)
 
-      const { v: refundV, r: refundR, s: refundS } = signatureToVRS(refundSignatureResponse.signature)
+      const { v: refundV, r: refundR, s: refundS } = parseSignature(refundSignatureResponse.signature)
 
       const claimTxHex = await initiateRefundToGetRefundTx(data.bitcoinAddress, swapObj)
       if (!claimTxHex) {

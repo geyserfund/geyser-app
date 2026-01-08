@@ -135,13 +135,6 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
           <TAndCs disableDesktop={true} />
         </VStack>
 
-        {referenceCode && (
-          <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Reference code')}: `}</Body>
-            <Body size={{ base: 'sm', lg: 'md' }}>{referenceCode}</Body>
-          </HStack>
-        )}
-
         {formState.donationAmount && formState.donationAmount > 0 && (
           <HStack>
             <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Donation')}: `}</Body>
@@ -285,6 +278,13 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
           </Body>
         </HStack>
       </HStack>
+
+      {referenceCode && (
+        <HStack>
+          <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Reference code')}: `}</Body>
+          <Body size={{ base: 'sm', lg: 'md' }}>{referenceCode}</Body>
+        </HStack>
+      )}
     </motion.div>
   )
 }

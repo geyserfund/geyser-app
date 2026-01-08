@@ -18,7 +18,7 @@ export const QUERY_PLEDGE_REFUNDS = gql`
   query PledgeRefunds {
     pledgeRefundsGet {
       refunds {
-        ...PledgeRefund
+        ...PledgeRefundWithPayment
       }
     }
   }

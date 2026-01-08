@@ -3,7 +3,7 @@ import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import React, { useEffect, useState } from 'react'
-import { PiWarningCircleBold } from 'react-icons/pi'
+import { PiInfoBold, PiWarningCircleBold } from 'react-icons/pi'
 import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
@@ -116,16 +116,24 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )[0]
     : null
+
+  // isClaimable is the case when the funds are in the bitcoin address, ready for the user to claim
   const isClaimable =
     isProcessing &&
     latestPayment?.paymentType === PaymentType.RskToOnChainSwap &&
     latestPayment?.status === PaymentStatus.Claimable
 
+  // isRefundable is the case when the funds are in the swap contract, user needs to wait for the funds to be refunded
+  const isRefundable =
+    isProcessing &&
+    (latestPayment?.status === PaymentStatus.Refundable || latestPayment?.status === PaymentStatus.Refunding)
+
+  // isRetryable  is the case when the funds are in the user rsk address
+  // const isRetryable = isProcessing && latestPayment?.status === PaymentStatus.Refunded
+
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
-      const { preimageHash } = generatePreImageHash()
-
       const amount =
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
         (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
@@ -377,6 +385,30 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       <Modal isOpen={isOpen} size="lg" title={t('Cannot issue refund')} onClose={handleClose}>
         <Icon as={PiWarningCircleBold} fontSize="120px" color="error.9" />
         <Body size="md">{pledgeRefundRequestError.message}</Body>
+      </Modal>
+    )
+  }
+
+  if (isRefundable) {
+    return (
+      <Modal isOpen={isOpen} size="lg" title={t('Funds are being processed')} onClose={handleClose}>
+        <Icon as={PiInfoBold} fontSize="120px" color="info.9" />
+        <VStack spacing={4} w="full" alignItems="center">
+          <Body size="md" textAlign="center">
+            {t(
+              'Your previous claim attempt encountered an issue. Your funds are currently in the swap contract and we are processing them in the background to return them to your account.',
+            )}
+          </Body>
+          <Body size="md" textAlign="center">
+            {t('Please wait while we resolve this. Once complete, you will be able to claim your funds.')}
+          </Body>
+          <Body size="sm" textAlign="center" color="neutral1.11">
+            {t('If you do not see this resolved within 24 hours, please contact us at')}{' '}
+            <Body as="span" size="sm" bold color="primary1.11">
+              support@geyser.fund
+            </Body>
+          </Body>
+        </VStack>
       </Modal>
     )
   }
