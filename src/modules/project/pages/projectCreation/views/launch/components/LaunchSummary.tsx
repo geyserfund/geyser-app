@@ -75,7 +75,12 @@ export const LaunchSummary = () => {
         {project?.aonGoal?.goalAmount && (
           <HStack>
             <Body medium>{t('Funding Goal')}: </Body>
-            <Body bold>{getFundingGoalDisplay()}</Body>
+            <Body bold>
+              {getFundingGoalDisplay()}{' '}
+              <Body as="span" size="sm" bold muted>
+                {t('( including 5% Geyser fees )')}
+              </Body>
+            </Body>
           </HStack>
         )}
 

@@ -1943,5 +1943,7 @@
   "Total payout amount": "Total payout amount",
   "hours left": "hours left",
   "Invoice will be available after the contribution is confirmed.": "Invoice will be available after the contribution is confirmed.",
-  "Invoice will be available after the contribution is confirmed. You can check here or in your profile contributions.": "Invoice will be available after the contribution is confirmed. You can check here or in your profile contributions."
+  "Invoice will be available after the contribution is confirmed. You can check here or in your profile contributions.": "Invoice will be available after the contribution is confirmed. You can check here or in your profile contributions.",
+  "The goal must be at least of 210,000 sats. ( includes 5% Geyser fees )": "The goal must be at least of 210,000 sats. ( includes 5% Geyser fees )",
+  "( including 5% Geyser fees )": "( including 5% Geyser fees )"
 }

@@ -147,7 +147,7 @@ export const AllOrNothingGoal = () => {
         <VStack w="full" h="full" align="flex-start" spacing={8}>
           <FieldContainer
             title={t('Goal amount')}
-            subtitle={t('The goal must be at least of 210,000 sats.')}
+            subtitle={t('The goal must be at least of 210,000 sats. ( includes 5% Geyser fees )')}
             error={formState.errors.amount?.message}
           >
             <AmountInput
