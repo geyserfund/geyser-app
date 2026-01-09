@@ -9135,6 +9135,14 @@ export type ContributionForRefundFragment = { __typename?: 'Contribution', id: a
 
 export type ProjectContributionRefundFragment = { __typename?: 'Contribution', id: any, amount: number, uuid?: string | null, status: ContributionStatus, sourceResource?: { __typename?: 'Activity' } | { __typename?: 'Post' } | { __typename?: 'Project', id: any, name: string } | null };
 
+export type UserProjectContributionStatusFragment = { __typename?: 'Contribution', id: any, uuid?: string | null, amount: number, comment?: string | null, media?: string | null, confirmedAt?: any | null, status: ContributionStatus, projectId: any, bitcoinQuote?: (
+    { __typename?: 'BitcoinQuote' }
+    & BitcoinQuoteFragment
+  ) | null, payments: Array<(
+    { __typename?: 'Payment' }
+    & FundingContributionPaymentStatusFragment
+  )> };
+
 export type ProjectFunderFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, timesFunded?: number | null, confirmedAt?: any | null, user?: (
     { __typename?: 'User' }
     & UserAvatarFragment
@@ -9159,7 +9167,7 @@ export type ContributorContributionsSummaryFragment = { __typename?: 'Contributo
 
 export type ProjectContributorFragment = { __typename?: 'Funder', id: any, amountFunded?: number | null, contributions: Array<(
     { __typename?: 'Contribution' }
-    & UserProjectContributionFragment
+    & UserProjectContributionStatusFragment
   )> };
 
 export type ProjectGoalsFragment = { __typename?: 'ProjectGoal', id: any, title: string, description?: string | null, targetAmount: number, currency: ProjectGoalCurrency, status: ProjectGoalStatus, projectId: any, amountContributed: number, progress: number, createdAt: any, updatedAt: any, completedAt?: any | null, hasReceivedContribution: boolean, emojiUnifiedCode?: string | null };
@@ -9230,7 +9238,9 @@ export type FundingContributionPaymentDetailsFragment = { __typename?: 'Contribu
     & ContributionOnChainToRskSwapPaymentDetailsFragment
   ) | null };
 
-export type FundingContributionPaymentFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, paymentType: PaymentType, status: PaymentStatus, userSubscriptionId?: any | null };
+export type FundingContributionPaymentFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, paymentType: PaymentType, status: PaymentStatus };
+
+export type FundingContributionPaymentStatusFragment = { __typename?: 'Payment', id: any, method?: string | null, paymentAmount: number, paymentType: PaymentType, status: PaymentStatus, paymentDetails: { __typename?: 'FiatToLightningSwapPaymentDetails' } | { __typename?: 'LightningPaymentDetails' } | { __typename?: 'LightningToRskSwapPaymentDetails', swapId: string } | { __typename?: 'OnChainToLightningSwapPaymentDetails', swapId: string } | { __typename?: 'OnChainToRskSwapPaymentDetails', swapId: string } | { __typename?: 'RskToLightningSwapPaymentDetails' } | { __typename?: 'RskToOnChainSwapPaymentDetails' } };
 
 export type PaymentSubscriptionFragment = { __typename?: 'Payment', id: any, status: PaymentStatus, paymentType: PaymentType, failureReason?: string | null };
 
@@ -11087,6 +11097,21 @@ export const UserProjectFunderFragmentDoc = gql`
   }
 }
     ${BitcoinQuoteFragmentDoc}`;
+export const UserProjectContributionFragmentDoc = gql`
+    fragment UserProjectContribution on Contribution {
+  id
+  uuid
+  amount
+  comment
+  media
+  confirmedAt
+  status
+  projectId
+  bitcoinQuote {
+    ...BitcoinQuote
+  }
+}
+    ${BitcoinQuoteFragmentDoc}`;
 export const ProfileOrderItemFragmentDoc = gql`
     fragment ProfileOrderItem on OrderItem {
   item {
@@ -11366,7 +11391,6 @@ export const FundingContributionPaymentFragmentDoc = gql`
   paymentAmount
   paymentType
   status
-  userSubscriptionId
 }
     `;
 export const UserAvatarFragmentDoc = gql`
@@ -11632,8 +11656,28 @@ export const ContributorContributionsSummaryFragmentDoc = gql`
   commentsCount
 }
     `;
-export const UserProjectContributionFragmentDoc = gql`
-    fragment UserProjectContribution on Contribution {
+export const FundingContributionPaymentStatusFragmentDoc = gql`
+    fragment FundingContributionPaymentStatus on Payment {
+  id
+  method
+  paymentAmount
+  paymentType
+  status
+  paymentDetails {
+    ... on OnChainToLightningSwapPaymentDetails {
+      swapId
+    }
+    ... on OnChainToRskSwapPaymentDetails {
+      swapId
+    }
+    ... on LightningToRskSwapPaymentDetails {
+      swapId
+    }
+  }
+}
+    `;
+export const UserProjectContributionStatusFragmentDoc = gql`
+    fragment UserProjectContributionStatus on Contribution {
   id
   uuid
   amount
@@ -11645,17 +11689,21 @@ export const UserProjectContributionFragmentDoc = gql`
   bitcoinQuote {
     ...BitcoinQuote
   }
+  payments {
+    ...FundingContributionPaymentStatus
+  }
 }
-    ${BitcoinQuoteFragmentDoc}`;
+    ${BitcoinQuoteFragmentDoc}
+${FundingContributionPaymentStatusFragmentDoc}`;
 export const ProjectContributorFragmentDoc = gql`
     fragment ProjectContributor on Funder {
   id
   amountFunded
   contributions {
-    ...UserProjectContribution
+    ...UserProjectContributionStatus
   }
 }
-    ${UserProjectContributionFragmentDoc}`;
+    ${UserProjectContributionStatusFragmentDoc}`;
 export const ProjectGrantApplicantFragmentDoc = gql`
     fragment ProjectGrantApplicant on GrantApplicant {
   id

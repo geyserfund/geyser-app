@@ -113,7 +113,27 @@ export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT = gql`
     paymentAmount
     paymentType
     status
-    userSubscriptionId
+  }
+`
+
+export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_STATUS = gql`
+  fragment FundingContributionPaymentStatus on Payment {
+    id
+    method
+    paymentAmount
+    paymentType
+    status
+    paymentDetails {
+      ... on OnChainToLightningSwapPaymentDetails {
+        swapId
+      }
+      ... on OnChainToRskSwapPaymentDetails {
+        swapId
+      }
+      ... on LightningToRskSwapPaymentDetails {
+        swapId
+      }
+    }
   }
 `
 

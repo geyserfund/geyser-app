@@ -2,7 +2,10 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_FUNDER } from './funderFragment.ts'
 import { FRAGMENT_ORDER_ITEM } from './orderFragment.ts'
-import { FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT } from './paymentFragment.ts'
+import {
+  FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT,
+  FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_STATUS,
+} from './paymentFragment.ts'
 import { FRAGMENT_USER_AVATAR } from './userFragment.ts'
 export const FRAGMENT_FUNDING_CONTRIBUTION = gql`
   ${FRAGMENT_PROJECT_FUNDER}
@@ -202,6 +205,26 @@ export const FRAGMENT_PROJECT_CONTRIBUTION_REFUND = gql`
         id
         name
       }
+    }
+  }
+`
+
+export const FRAGMENT_USER_PROJECT_CONTRIBUTION_STATUS = gql`
+  ${FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_STATUS}
+  fragment UserProjectContributionStatus on Contribution {
+    id
+    uuid
+    amount
+    comment
+    media
+    confirmedAt
+    status
+    projectId
+    bitcoinQuote {
+      ...BitcoinQuote
+    }
+    payments {
+      ...FundingContributionPaymentStatus
     }
   }
 `

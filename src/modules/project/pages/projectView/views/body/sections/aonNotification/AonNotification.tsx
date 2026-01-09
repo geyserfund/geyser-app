@@ -8,6 +8,7 @@ import { RefundRsk } from '@/modules/project/pages/projectFunding/views/refundPa
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import {
   ContributionStatus,
+  PaymentStatus,
   PayoutStatus,
   ProjectAonGoalStatus,
   usePayoutRequestMutation,
@@ -18,6 +19,7 @@ import { isAllOrNothing } from '@/utils/index.ts'
 import { useRefetchQueries } from './hooks/useRefetchQueries.ts'
 import CampaignFailedNotification from './views/CampaignFailedNotification.tsx'
 import { CampaignSuccessNotification } from './views/CampaignSuccessNotification.tsx'
+import { ContributionPendingToProjectNotification } from './views/ContributionPendingToProjectNotification.tsx'
 import { FailedToClaimNotification } from './views/FailedToClaimNotification.tsx'
 import { FundedToCampaign } from './views/FundedToCampaign.tsx'
 import { FundsClaimedNotification } from './views/FundsClaimedNotification.tsx'
@@ -79,6 +81,12 @@ export const AonNotification = () => {
     }
   }, [isProjectOwner, payoutRequest, project])
 
+  const contributionPendingToProject = data?.contributor?.contributions.find(
+    (contribution) =>
+      contribution.status === ContributionStatus.Pending &&
+      contribution.payments.some((payment) => payment.status === PaymentStatus.Pending),
+  )
+
   const fundedToCampaign = data?.contributor?.contributions.find(
     (contribution) => contribution.status === ContributionStatus.Pledged,
   )
@@ -112,6 +120,10 @@ export const AonNotification = () => {
 
     if (project.aonGoal?.status === ProjectAonGoalStatus.Finalized) {
       return <FundsReturnedNotification />
+    }
+
+    if (contributionPendingToProject) {
+      return <ContributionPendingToProjectNotification contribution={contributionPendingToProject} />
     }
 
     if (fundedToCampaign) {

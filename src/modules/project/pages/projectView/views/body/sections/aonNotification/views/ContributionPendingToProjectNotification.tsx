@@ -1,0 +1,139 @@
+import { HStack, Image, Link, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
+import { useEffect, useState } from 'react'
+
+import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
+import { useTransactionStatusUpdate } from '@/modules/project/pages/projectFunding/views/fundingPayment/views/paymentOnchain/hooks/useTransactionStatusUpdate.ts'
+import {
+  getTransactionFromChainSwap,
+  getTransactionFromSwap,
+} from '@/modules/project/pages/projectFunding/views/fundingPayment/views/paymentOnchain/refund/api.ts'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { PaymentStatus, PaymentType, UserProjectContributionStatusFragment } from '@/types/generated/graphql.ts'
+
+import { useRefetchQueries } from '../hooks/useRefetchQueries.ts'
+
+const CONTRIBUTION_PENDING_IMAGE =
+  'https://storage.googleapis.com/geyser-projects-media/app/contribution/contribution_pending.png'
+const CONTRIBUTION_CONFIRMED_IMAGE =
+  'https://storage.googleapis.com/geyser-projects-media/app/contribution/contribution_confirmed.png'
+
+type ContributionStage = 1 | 2 | 3
+
+export const ContributionPendingToProjectNotification = ({
+  contribution,
+}: {
+  contribution: UserProjectContributionStatusFragment
+}) => {
+  const [stage, setStage] = useState<ContributionStage>(1)
+  const [transactionId, setTransactionId] = useState<string | null>(null)
+
+  const { refetchQueriesOnPledgeRefund } = useRefetchQueries()
+  const { queryProject } = useProjectAPI()
+
+  /** Get latest payment from contribution */
+  const latestPayment = contribution.payments.find((payment) => payment.status === PaymentStatus.Pending)
+  const paymentType = latestPayment?.paymentType
+  const swapId =
+    latestPayment?.paymentDetails?.__typename === 'OnChainToRskSwapPaymentDetails' ||
+    latestPayment?.paymentDetails?.__typename === 'OnChainToLightningSwapPaymentDetails' ||
+    latestPayment?.paymentDetails?.__typename === 'LightningToRskSwapPaymentDetails'
+      ? latestPayment.paymentDetails.swapId
+      : undefined
+
+  /** Fetch transaction ID for mempool link (only for onchain payments) */
+  useEffect(() => {
+    const fetchTransactionId = async () => {
+      if (!swapId) return
+
+      try {
+        if (paymentType === PaymentType.OnChainToLightningSwap) {
+          const transaction = await getTransactionFromSwap(swapId)
+          setTransactionId(transaction.id)
+        } else if (paymentType === PaymentType.OnChainToRskSwap) {
+          const transaction = await getTransactionFromChainSwap(swapId, 'userLock')
+          setTransactionId(transaction.id)
+        }
+      } catch (error) {
+        console.error('Failed to fetch transaction ID:', error)
+      }
+    }
+
+    fetchTransactionId()
+  }, [swapId, paymentType, stage])
+
+  /** Listen to transaction confirmation via WebSocket */
+  useTransactionStatusUpdate({
+    swapId,
+    handleConfirmed() {
+      setStage(2)
+    },
+    handleClaimed() {
+      setStage(3)
+      // Refetch queries when transaction is claimed
+      refetchQueriesOnPledgeRefund()
+      queryProject.execute()
+    },
+  })
+
+  const getStageContent = () => {
+    switch (stage) {
+      case 1:
+        return {
+          image: CONTRIBUTION_PENDING_IMAGE,
+          text: t('Transaction broadcast (step 1 of 3). Confirmation takes ~2 min.'),
+          showMempool:
+            (paymentType === PaymentType.OnChainToRskSwap || paymentType === PaymentType.OnChainToLightningSwap) &&
+            transactionId !== null,
+        }
+      case 2:
+        return {
+          image: CONTRIBUTION_PENDING_IMAGE,
+          text: t('Swap to AON contract (step 2 of 3). Confirmation takes ~1 min.'),
+          showMempool: false,
+        }
+      case 3:
+        return {
+          image: CONTRIBUTION_CONFIRMED_IMAGE,
+          text: t('Transaction confirmed (step 3 of 3). Confirmation imminent.'),
+          showMempool: false,
+        }
+      default:
+        return {
+          image: CONTRIBUTION_PENDING_IMAGE,
+          text: t('Transaction broadcast (step 1 of 3). Confirmation takes ~2 min.'),
+          showMempool: false,
+        }
+    }
+  }
+
+  const { image, text, showMempool } = getStageContent()
+
+  return (
+    <Feedback variant={FeedBackVariant.SUCCESS} noIcon>
+      <HStack alignItems="start" spacing={4} w="full">
+        <Image src={image} alt="Contribution status" boxSize="100px" />
+        <VStack alignItems="start" spacing={0} w="full">
+          <Body size="xl" bold color="utils.text">
+            {t('Contribution status')}
+          </Body>
+          <Body size="md" medium color="utils.text">
+            {text}
+          </Body>
+          {showMempool && transactionId && (
+            <Link
+              href={`https://mempool.space/tx/${transactionId}`}
+              isExternal
+              color="primary1.11"
+              fontWeight="bold"
+              fontSize="md"
+            >
+              {t('View mempool')}
+            </Link>
+          )}
+        </VStack>
+      </HStack>
+    </Feedback>
+  )
+}
