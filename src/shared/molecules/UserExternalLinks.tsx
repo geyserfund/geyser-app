@@ -84,7 +84,7 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
           {t('Privacy Policy')}
         </UserNavExternalButton>
         <UserNavExternalButton as={Link} to={getPath('project', 'geyser')} color="neutral1.9">
-          {t('Support')}
+          {t('Donate')}
         </UserNavExternalButton>
       </HStack>
 

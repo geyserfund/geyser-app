@@ -106,9 +106,7 @@ export const LaunchFundingStrategy = () => {
             })}
           </Body>
           <Body medium>
-            {t(
-              'Certified charities and humanitarian causes may qualify for a refund. Contact us to apply for a refund.',
-            )}
+            {t('Humanitarian causes may qualify for a refund, contact us at support@geyser.fund to request it.')}
           </Body>
         </CardLayout>
       </VStack>
