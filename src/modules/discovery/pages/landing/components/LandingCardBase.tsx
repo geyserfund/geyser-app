@@ -18,8 +18,16 @@ import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
 import { isAllOrNothing, isInactive } from '@/utils'
 
 import { SkeletonLayout } from '../../../../../shared/components/layouts'
-import { ContributionsSummary, ProjectForLandingPageFragment } from '../../../../../types'
+import { ContributionsSummary, ProjectAonGoalStatus, ProjectForLandingPageFragment } from '../../../../../types'
 import { AllOrNothingIcon } from './AllOrNothingIcon.tsx'
+
+const AON_FAILED_STATUSES = [
+  ProjectAonGoalStatus.Failed,
+  ProjectAonGoalStatus.Cancelled,
+  ProjectAonGoalStatus.Unclaimed,
+  ProjectAonGoalStatus.Finalized,
+]
+const AON_SUCCESSFUL_STATUSES = [ProjectAonGoalStatus.Successful, ProjectAonGoalStatus.Claimed]
 
 export interface LandingCardBaseProps extends CardLayoutProps {
   isMobile?: boolean
@@ -62,6 +70,8 @@ export const LandingCardBase = ({
   }
 
   const isAonProject = isAllOrNothing(project)
+  const isAonProjectFailed =
+    isAonProject && AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus)
 
   const contributionAmount = project.contributionSummary?.contributionsTotalUsd || getProjectBalance().usd
 
@@ -155,15 +165,17 @@ export const LandingCardBase = ({
             color={percentage > 100 ? 'primary1.11' : timeLeft?.label !== 'days left' ? 'warning.11' : 'neutral1.12'}
             isTruncated
           >
-            {percentage ? (
+            {isAonProjectFailed ? (
+              t('Campaign Failed')
+            ) : percentage ? (
               <>
-                {timeLeft?.value} {timeLeft?.label} {' - '}
+                {timeLeft?.value} {timeLeft?.label} {timeLeft && ' - '}
                 <Body as="span" bold color={percentage >= 100 ? 'primary1.11' : 'neutral1.12'}>
                   {percentage}% {t('funded')}
                 </Body>
               </>
             ) : (
-              t('Just launched')
+              t('Campaign Ongoing')
             )}
           </Body>
         ) : (
@@ -171,16 +183,10 @@ export const LandingCardBase = ({
             {fires ? <AnimatedFire /> : ''}
 
             <Body size="sm" bold color="primary1.11" isTruncated>
-              {contributionAmount ? (
-                <>
-                  {formatAmount(contributionAmount, 'USD')}{' '}
-                  <Body as="span" regular>
-                    {isWeekly ? t('this week') : t('raised')}
-                  </Body>
-                </>
-              ) : (
-                t('Just launched')
-              )}
+              {formatAmount(contributionAmount || 0, 'USD')}{' '}
+              <Body as="span" regular>
+                {isWeekly ? t('this week') : t('raised')}
+              </Body>
             </Body>
           </HStack>
         )}
