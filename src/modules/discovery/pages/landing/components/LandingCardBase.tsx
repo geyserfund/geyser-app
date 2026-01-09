@@ -27,7 +27,6 @@ const AON_FAILED_STATUSES = [
   ProjectAonGoalStatus.Unclaimed,
   ProjectAonGoalStatus.Finalized,
 ]
-const AON_SUCCESSFUL_STATUSES = [ProjectAonGoalStatus.Successful, ProjectAonGoalStatus.Claimed]
 
 export interface LandingCardBaseProps extends CardLayoutProps {
   isMobile?: boolean

@@ -28,6 +28,7 @@ import {
 import { commaFormatted, useNotification } from '@/utils/index.ts'
 
 import { createCallDataForLockCall } from '../../utils/createCallDataForLockCall.ts'
+import { createAndSignLockTransaction } from '../../utils/createLockTransaction.ts'
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
@@ -129,14 +130,15 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     (latestPayment?.status === PaymentStatus.Refundable || latestPayment?.status === PaymentStatus.Refunding)
 
   // isRetryable  is the case when the funds are in the user rsk address
-  // const isRetryable = isProcessing && latestPayment?.status === PaymentStatus.Refunded
+  const isRetryable = isProcessing && latestPayment?.status === PaymentStatus.Refunded
 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
       const amount =
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
-        (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
+        (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0) -
+        (isRetryable ? pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0 : 0)
 
       const { data: pledgeRefundPaymentCreateResponse } = await pledgeRefundPaymentCreate({
         variables: {
@@ -173,6 +175,19 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
 
       setRefundInvoiceId(paymentDetails.lightningInvoiceId)
 
+      let userLockTxHex = ''
+
+      if (isRetryable) {
+        userLockTxHex = await createAndSignLockTransaction({
+          preimageHash: `0x${paymentDetails.swapPreimageHash}`,
+          claimAddress: swapObj.claimAddress as Address,
+          refundAddress: accountKeys.address as Address,
+          timelock: swapObj?.timeoutBlockHeight || 0,
+          amount: satsToWei(amount), // subract fees
+          privateKey: `0x${accountKeys.privateKey}`,
+        })
+      }
+
       const callDataHex = createCallDataForLockCall({
         preimageHash: `0x${paymentDetails.swapPreimageHash}` as Hex,
         claimAddress: swapObj?.claimAddress as Address,
@@ -199,6 +214,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             signature,
             rskAddress: rskAddress || accountKeys.address,
             callDataHex,
+            userLockTxHex,
           },
         },
         onCompleted(data) {
@@ -262,7 +278,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
 
       const amount =
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
-        (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
+        (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0) -
+        (isRetryable ? pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0 : 0)
 
       const { data: pledgeRefundPaymentCreateResponse } = await pledgeRefundPaymentCreate({
         variables: {
@@ -302,6 +319,18 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       const timelock = swapObj?.lockupDetails?.timeoutBlockHeight || 0n
       const refundAddress = accountKeys.address as Address
 
+      let userLockTxHex = ''
+      if (isRetryable) {
+        userLockTxHex = await createAndSignLockTransaction({
+          preimageHash: `0x${preimageHash}`,
+          claimAddress,
+          refundAddress,
+          timelock,
+          amount: satsToWei(amount),
+          privateKey: `0x${accountKeys.privateKey}`,
+        })
+      }
+
       const callDataHex = createCallDataForLockCall({
         preimageHash: `0x${preimageHash}` as Hex,
         claimAddress,
@@ -329,6 +358,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             signature,
             rskAddress: rskAddress || accountKeys.address,
             callDataHex,
+            userLockTxHex,
           },
         },
         onCompleted(data) {
