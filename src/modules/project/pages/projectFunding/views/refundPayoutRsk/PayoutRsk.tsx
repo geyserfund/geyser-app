@@ -125,7 +125,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
         !payoutPaymentCreateResponse.payoutPaymentCreate.payment ||
         !payoutPaymentCreateResponse.payoutPaymentCreate.swap
       ) {
-        throw new Error('Failed to create swap')
+        throw new Error('Failed to create payment')
       }
 
       const { swap, payment } = payoutPaymentCreateResponse.payoutPaymentCreate
