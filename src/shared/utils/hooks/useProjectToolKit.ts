@@ -6,11 +6,7 @@ import { ProjectAonGoalStatus, ProjectForLandingPageFragment, Satoshis } from '@
 import { centsToDollars } from '../../../utils/index.ts'
 import { isActive, isAllOrNothing } from '../../../utils/validations/project.ts'
 
-const isAonFinalizedStatuses = [
-  ProjectAonGoalStatus.Finalized,
-  ProjectAonGoalStatus.Claimed,
-  ProjectAonGoalStatus.Successful,
-]
+const isAonFinalizedStatuses = [ProjectAonGoalStatus.Claimed]
 
 export const useProjectToolkit = (
   project: Pick<ProjectForLandingPageFragment, 'balance' | 'balanceUsdCent' | 'aonGoal' | 'fundingStrategy' | 'status'>,
