@@ -94,7 +94,17 @@ export const useMyProjects = (userId: number) => {
       _setActiveProjects(filteredActiveProjects)
       setActiveProjects(filteredActiveProjects)
 
-      setInDraftProjects(projects.filter((project) => !project?.launchedAt))
+      setInDraftProjects(
+        projects
+          .filter((project) => !project?.launchedAt)
+          .sort((a, b) => {
+            const aIsAccepted = a?.status === ProjectStatus.Accepted
+            const bIsAccepted = b?.status === ProjectStatus.Accepted
+            if (aIsAccepted && !bIsAccepted) return -1
+            if (!aIsAccepted && bIsAccepted) return 1
+            return 0
+          }),
+      )
       setInReviewProjects(
         projects.filter((project) => project?.launchedAt && project?.status === ProjectStatus.InReview),
       )
