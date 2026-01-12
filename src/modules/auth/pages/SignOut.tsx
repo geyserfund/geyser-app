@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 
 import { getAuthEndPoint } from '@/config/domain.ts'
 import { defaultUser } from '@/context/auth.tsx'
+import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { authUserAtom, followedProjectsAtom } from '../state/index.ts'
@@ -15,6 +16,7 @@ const authServiceEndPoint = getAuthEndPoint()
 export const SignOut = () => {
   const [user, setUser] = useAtom(authUserAtom)
   const setFollowedProjects = useSetAtom(followedProjectsAtom)
+  const setAccountPassword = useSetAtom(accountPasswordAtom)
 
   const navigate = useNavigate()
   const toast = useNotification()
@@ -32,6 +34,7 @@ export const SignOut = () => {
         setTimeout(() => {
           setUser({ ...defaultUser })
           setFollowedProjects([])
+          setAccountPassword(null)
           navigate(-1)
         }, 1000)
       } catch {
@@ -47,7 +50,7 @@ export const SignOut = () => {
     }
 
     // Navigate back to the previous page
-  }, [setUser, setFollowedProjects, navigate, toast, user])
+  }, [setUser, setFollowedProjects, setAccountPassword, navigate, toast, user])
 
   return (
     <Center h="100vh">
