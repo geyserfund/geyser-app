@@ -27,7 +27,7 @@ export const RecommendedForYou = () => {
 
     return data?.projectRecommendedGet.map((project) => (
       <GridItem key={project.project.id}>
-        <LandingProjectCard project={project.project} noMobile hideContributionContent />
+        <LandingProjectCard project={project.project} noMobile />
       </GridItem>
     ))
   }

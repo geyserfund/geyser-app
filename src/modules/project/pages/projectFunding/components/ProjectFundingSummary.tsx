@@ -234,8 +234,8 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
         )}
 
         {networkFee.sats > 0 && (
-          <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Network Fees')}: `}</Body>
+          <HStack alignItems={'start'}>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Network fees')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
               {`${commaFormatted(networkFee.sats)} `}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
@@ -245,6 +245,13 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
             <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
               {`($${centsToDollars(networkFee.usdCents)})`}
             </Body>
+            <TooltipPopover
+              text={t('Network fees include mining and swapping fees on the Bitcoin and Rootstock network.')}
+            >
+              <HStack as="span" h="full" alignItems={'center'}>
+                <Icon as={PiInfo} />
+              </HStack>
+            </TooltipPopover>
           </HStack>
         )}
         {guardianBadgesCosts.sats > 0 && (

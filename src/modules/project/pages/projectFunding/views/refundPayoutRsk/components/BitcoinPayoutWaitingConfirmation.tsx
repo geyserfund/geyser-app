@@ -126,9 +126,15 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
           )}
         </Body>
 
-        <Feedback variant={FeedBackVariant.WARNING}>
-          <Body>{t('This may take a few minutes. Please keep this window open to finish the process')}</Body>
-        </Feedback>
+        {isReadyToBeClaimed ? (
+          <Feedback variant={FeedBackVariant.SUCCESS}>
+            <Body>{t('Your funds have are ready to be claimed')}</Body>
+          </Feedback>
+        ) : (
+          <Feedback variant={FeedBackVariant.WARNING}>
+            <Body>{t('This may take a few minutes. Please keep this window open to finish the process')}</Body>
+          </Feedback>
+        )}
       </VStack>
 
       <Button

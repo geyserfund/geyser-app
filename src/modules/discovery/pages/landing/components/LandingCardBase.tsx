@@ -166,15 +166,17 @@ export const LandingCardBase = ({
           >
             {isAonProjectFailed ? (
               t('Campaign Failed')
-            ) : percentage ? (
+            ) : (
               <>
                 {timeLeft?.value} {timeLeft?.label} {timeLeft && ' - '}
-                <Body as="span" bold color={percentage >= 100 ? 'primary1.11' : 'neutral1.12'}>
-                  {percentage}% {t('funded')}
-                </Body>
+                {percentage ? (
+                  <Body as="span" bold color={percentage >= 100 ? 'primary1.11' : 'neutral1.12'}>
+                    {percentage}% {t('funded')}
+                  </Body>
+                ) : (
+                  t('Campaign Ongoing')
+                )}
               </>
-            ) : (
-              t('Campaign Ongoing')
             )}
           </Body>
         ) : (

@@ -21,11 +21,6 @@ export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({
 }) => {
   return (
     <VStack w="full" spacing={6} alignItems="center">
-      {/* Header */}
-      <Body size="lg" medium textAlign="center">
-        {t('Payout Processed')}
-      </Body>
-
       <Box w="300px" h="300px">
         <Image src={TransactionClaimedImageUrl} alt={'Get refund'} width="100%" height="100%" objectFit="cover" />
       </Box>
@@ -33,7 +28,7 @@ export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({
       {/* Success Message */}
       <VStack spacing={4} alignItems="center" w="full">
         <Body size="md" textAlign="center" color="neutral1.12">
-          {t('Your payout has been successfully processed on-chain.')}
+          {t('Your claim has been successfully processed on-chain.')}
         </Body>
 
         <Body size="sm" textAlign="center" color="neutral1.10" lineHeight="1.5">

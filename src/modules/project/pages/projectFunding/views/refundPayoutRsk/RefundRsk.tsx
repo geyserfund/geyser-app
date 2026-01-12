@@ -452,8 +452,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         size="lg"
         title={
           selectedMethod === PayoutMethod.Lightning
-            ? t('Payout Processed (Off-Chain)')
-            : t('Payout Processed (On-Chain)')
+            ? t('Refund Processed (Off-Chain)')
+            : t('Refund Processed (On-Chain)')
         }
       >
         {selectedMethod === PayoutMethod.Lightning ? (

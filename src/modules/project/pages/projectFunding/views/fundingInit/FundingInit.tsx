@@ -1,10 +1,11 @@
 // import { useAtomValue } from 'jotai'
 
-import { useLocation } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 // import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { getPath } from '@/shared/constants/index.ts'
 
 // import { useNotification } from '@/utils/index.ts'
 import { FundingLayout } from '../../layouts/FundingLayout'
@@ -16,7 +17,8 @@ import { GeyserTipInput } from './sections/GeyserTipInput.tsx'
 
 /** FundingInit is the first page of funding flow, consisting of donation input and rewards selection or subscription selection */
 export const FundingInit = () => {
-  const { loading } = useProjectAtom()
+  const { loading, project } = useProjectAtom()
+  const navigate = useNavigate()
 
   // const hasFundingLimitReached = useAtomValue(hasProjectFundingLimitReachedAtom)
   // const toast = useNotification()
@@ -46,6 +48,9 @@ export const FundingInit = () => {
       sideContent={<FundingInitSideContent />}
       bottomContent={<FundingInitBottomContent />}
       containerProps={{ spacing: 6 }}
+      backButtonProps={{
+        onClick: () => navigate(getPath('project', project.name)),
+      }}
     >
       {isSub ? (
         <>
