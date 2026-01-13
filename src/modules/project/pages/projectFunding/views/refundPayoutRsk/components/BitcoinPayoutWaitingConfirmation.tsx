@@ -115,10 +115,10 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
             t('Confirm and claim your funds.')
           ) : (
             <>
-              {t('We are waiting for the transaction to be confirmed before you can claim the funds.')}
+              {t('We are waiting for the transaction to be confirmed before you can claim the funds.')}{' '}
               <Trans i18nKey="You can check the transaction status by <1> clicking here.</1>">
                 {'You can check the transaction status by '}
-                <Link href={getMempoolSpaceUrl(lockTxId || '')} isExternal>
+                <Link href={getMempoolSpaceUrl(lockTxId || '')} textDecoration="underline" isExternal>
                   {'clicking here.'}
                 </Link>
               </Trans>
@@ -128,7 +128,7 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
 
         {isReadyToBeClaimed ? (
           <Feedback variant={FeedBackVariant.SUCCESS}>
-            <Body>{t('Your funds have are ready to be claimed')}</Body>
+            <Body>{t('Your funds are ready to be claimed')}</Body>
           </Feedback>
         ) : (
           <Feedback variant={FeedBackVariant.WARNING}>

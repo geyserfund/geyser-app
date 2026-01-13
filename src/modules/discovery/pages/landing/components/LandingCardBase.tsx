@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { Box, Button, HStack, Icon, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiClockCountdown } from 'react-icons/pi'
@@ -52,7 +51,7 @@ export const LandingCardBase = ({
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
 
-  const { getProjectBalance, getAonGoalPercentage } = useProjectToolkit(project)
+  const { getProjectBalance, getAonGoalPercentage, isFundingDisabled } = useProjectToolkit(project)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -156,45 +155,54 @@ export const LandingCardBase = ({
     )
   }
 
-  const color = percentage > 100 ? 'primary1.11' : timeLeft?.label !== 'days left' ? 'warning.11' : 'neutral1.12'
+  const getAonStatusColor = () => {
+    if (percentage > 100) return 'primary1.11'
+    if (timeLeft?.label !== 'days left') return 'warning.11'
+    return 'neutral1.12'
+  }
+
+  const renderAonProjectStatus = () => {
+    const statusColor = getAonStatusColor()
+
+    if (isAonProjectFailed) {
+      return (
+        <Body size="sm" bold color={statusColor} isTruncated>
+          {t('Campaign Failed')}
+        </Body>
+      )
+    }
+
+    const percentageColor = percentage >= 100 ? 'primary1.11' : 'neutral1.12'
+
+    return (
+      <HStack spacing={1} alignItems="center" flexWrap="wrap">
+        {timeLeft && (
+          <>
+            <Icon as={PiClockCountdown} color={statusColor} />
+            <Body size="sm" bold color={statusColor} isTruncated>
+              {timeLeft.value} {timeLeft.label}
+            </Body>
+            <Box backgroundColor={statusColor} width="5px" height="5px" borderRadius="full" />
+          </>
+        )}
+        {percentage ? (
+          <Body size="sm" bold color={percentageColor} isTruncated>
+            {percentage}% {t('funded')}
+          </Body>
+        ) : (
+          <Body size="sm" bold color={statusColor} isTruncated>
+            {t('Campaign Ongoing')}
+          </Body>
+        )}
+      </HStack>
+    )
+  }
 
   const contributionContent = () => {
     return (
       <HStack w="full" justifyContent="space-between" alignItems="flex-end">
         {isAonProject ? (
-          <Body
-            size="sm"
-            bold
-            color={percentage > 100 ? 'primary1.11' : timeLeft?.label !== 'days left' ? 'warning.11' : 'neutral1.12'}
-            isTruncated
-          >
-            {isAonProjectFailed ? (
-              t('Campaign Failed')
-            ) : (
-              <>
-                {timeLeft && <Icon as={PiClockCountdown} mr="2px" pt="2px" color={color} />}
-                {timeLeft?.value} {timeLeft?.label}{' '}
-                {timeLeft && (
-                  <Box
-                    display="inline-block"
-                    backgroundColor={color}
-                    width="5px"
-                    height="5px"
-                    borderRadius="full"
-                    mb="2px"
-                    mr="1"
-                  />
-                )}
-                {percentage ? (
-                  <Body as="span" bold color={percentage >= 100 ? 'primary1.11' : 'neutral1.12'}>
-                    {percentage}% {t('funded')}
-                  </Body>
-                ) : (
-                  t('Campaign Ongoing')
-                )}
-              </>
-            )}
-          </Body>
+          renderAonProjectStatus()
         ) : (
           <HStack spacing={0}>
             {fires ? <AnimatedFire /> : ''}
@@ -236,7 +244,14 @@ export const LandingCardBase = ({
           <Body size="sm" dark isTruncated width="100%" wordBreak={'break-word'} whiteSpace={'normal'}>
             {project.shortDescription}
           </Body>
-          <Button variant="solid" colorScheme="primary1" size="md" width="100%" onClick={handleContribute}>
+          <Button
+            variant="solid"
+            colorScheme="primary1"
+            size="md"
+            width="100%"
+            onClick={handleContribute}
+            isDisabled={isFundingDisabled()}
+          >
             {t('Contribute')}
           </Button>
         </VStack>

@@ -32,7 +32,7 @@ export const CampaignSuccessNotification = ({ onOpen }: { onOpen: () => void }) 
   if (!isProjectOwner) {
     return (
       <Feedback variant={FeedBackVariant.SUCCESS}>
-        <Body size="xl" bold>
+        <Body size={{ base: 'lg', lg: 'xl' }} bold>
           {t('Campaign reached funding goal')}
         </Body>
       </Feedback>

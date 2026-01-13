@@ -41,13 +41,11 @@ export const SubscribeToGeyser = () => {
           <HStack w="full" justifyContent="start">
             <Image height="40px" src={MailIllustrationUrl} alt="Mail" />
             <H2 bold color="black">
-              {t('Don’t miss the next big Bitcoin project!')}
+              {t('The Bitcoin projects newsletter')}
             </H2>
           </HStack>
           <Body color="black">
-            {t(
-              'Get exclusive early access to new Bitcoin projects, powerful updates, and progress reports from the global Bitcoin movement. Join thousands already subscribed, and be the first to know what’s next.',
-            )}
+            {t('Get early access to new projects, updates, and progress from around the world.')}
           </Body>
           <HStack as="form" onSubmit={handleSubmit} w="full" justifyContent="start" alignItems="start">
             <ControlledTextInput
