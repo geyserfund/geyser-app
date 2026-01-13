@@ -63,7 +63,7 @@ export const CampaignsComingSoon = () => {
           <Body size="md">
             {t('All-or-Nothing on Bitcoin means creators get the funds only if they reach the goal.')}
             <br />
-            {t('If you do not, contributors can claim their funds back.')}
+            {t('If they do not, contributors can claim their funds back.')}
           </Body>
         </VStack>
       </Stack>
