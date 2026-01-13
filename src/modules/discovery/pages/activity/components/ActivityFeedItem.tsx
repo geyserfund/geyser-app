@@ -1,9 +1,10 @@
-import { Badge, Box, HStack, Image, VStack } from '@chakra-ui/react'
+import { Badge, Box, HStack, Icon, Image, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiBag, PiFlagBannerFold, PiLightning, PiNewspaper, PiSparkle } from 'react-icons/pi'
 import { Link, useNavigate } from 'react-router'
 
 import { PostShare } from '@/modules/project/pages/projectView/views/posts/components/PostShare.tsx'
+import { postTypeOptions } from '@/modules/project/pages/projectView/views/posts/utils/postTypeLabel.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar'
 import { ProfileText } from '@/shared/components/display/ProfileText'
@@ -73,7 +74,7 @@ export const ActivityFeedItem = ({ activityType, id, createdAt, project, resourc
       {isMobile ? (
         <VStack width="full" alignItems="flex-start">
           <HStack width="full" justifyContent={'space-between'}>
-            <ActivityTypeItem activityType={activityType as ActivityType} />
+            <ActivityTypeItem activityType={activityType as ActivityType} resource={resource} />
             <ActivityDate date={createdAt} />
           </HStack>
           <ProjectTitle
@@ -90,7 +91,7 @@ export const ActivityFeedItem = ({ activityType, id, createdAt, project, resourc
               projectImage={project.thumbnailImage || ''}
               projectName={project.name}
             />
-            <ActivityTypeItem activityType={activityType as ActivityType} />
+            <ActivityTypeItem activityType={activityType as ActivityType} resource={resource} />
           </HStack>
 
           <ActivityDate date={createdAt} />
@@ -166,7 +167,7 @@ const ActivityDate = ({ date }: { date: string }) => {
   )
 }
 
-const ActivityTypeItem = ({ activityType }: { activityType: ActivityType }) => {
+const ActivityTypeItem = ({ activityType, resource }: { activityType: ActivityType; resource: ActivityResource }) => {
   const { t } = useTranslation()
 
   switch (activityType) {
@@ -194,7 +195,23 @@ const ActivityTypeItem = ({ activityType }: { activityType: ActivityType }) => {
         </HStack>
       )
 
-    case ActivityType.PostPublished:
+    case ActivityType.PostPublished: {
+      const postTypeOption =
+        'postType' in resource && resource.postType
+          ? postTypeOptions.find((option) => option.value === resource.postType)
+          : null
+
+      if (postTypeOption) {
+        return (
+          <HStack color={'neutralAlpha.11'} spacing={1}>
+            <Icon as={postTypeOption.icon} size={'20px'} />
+            <Body size="lg" medium light>
+              {postTypeOption.label}
+            </Body>
+          </HStack>
+        )
+      }
+
       return (
         <HStack color={'neutralAlpha.11'} spacing={1}>
           <PiNewspaper size={'20px'} />
@@ -203,6 +220,8 @@ const ActivityTypeItem = ({ activityType }: { activityType: ActivityType }) => {
           </Body>
         </HStack>
       )
+    }
+
     case ActivityType.ProjectRewardCreated:
       return (
         <HStack color={'neutralAlpha.11'} spacing={1}>

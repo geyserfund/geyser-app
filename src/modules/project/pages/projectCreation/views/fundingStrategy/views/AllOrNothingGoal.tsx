@@ -147,7 +147,9 @@ export const AllOrNothingGoal = () => {
         <VStack w="full" h="full" align="flex-start" spacing={8}>
           <FieldContainer
             title={t('Goal amount')}
-            subtitle={t('The goal must be at least of 210,000 sats.')}
+            subtitle={t(
+              'Goals are set in sats. USD is shown for reference only and may change. Minimum: 210,000 sats (includes 5% Geyser fees)',
+            )}
             error={formState.errors.amount?.message}
           >
             <AmountInput
@@ -227,6 +229,7 @@ export const AllOrNothingGoal = () => {
                 dateFormat="MM/dd/yyyy h:mm aa"
                 timeIntervals={15}
                 placeholderText={t('Select date and time')}
+                minDate={DateTime.now().plus({ days: 1 }).toJSDate()}
                 customInput={
                   <Button
                     size="xl"

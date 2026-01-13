@@ -4,6 +4,7 @@ import { createContext, Dispatch, SetStateAction, useCallback, useContext, useEf
 
 import { authUserAtom, followedProjectsAtom, isUserAProjectCreatorAtom } from '@/modules/auth/state/authAtom'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 
 import { getAuthEndPoint } from '../config/domain'
 import {
@@ -104,6 +105,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const isUserAProjectCreator = useAtomValue(isUserAProjectCreatorAtom)
   const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
   const setUserAccountKeys = useSetAtom(userAccountKeysAtom)
+  const setAccountPassword = useSetAtom(accountPasswordAtom)
 
   const [queryCurrentUser, { loading: loadingUser, error }] = useMeLazyQuery({
     fetchPolicy: 'network-only',
@@ -134,6 +136,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUserAccountKeyPair(undefined)
     setUserAccountKeys(undefined)
     setFollowedProjects([])
+    setAccountPassword(null)
     try {
       fetch(`${authServiceEndPoint}/logout`, {
         credentials: 'include',
@@ -141,7 +144,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     } catch {
       alert('Failed to log out properly. Please clear your cookies.')
     }
-  }, [setFollowedProjects, setUser])
+  }, [setFollowedProjects, setUser, setUserAccountKeyPair, setUserAccountKeys, setAccountPassword])
 
   useEffect(() => {
     try {

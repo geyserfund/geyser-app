@@ -1,4 +1,9 @@
 import { gql } from '@apollo/client'
+
+import {
+  FRAGMENT_RSK_TO_LIGHTNING_SWAP_PAYMENT_DETAILS,
+  FRAGMENT_RSK_TO_ON_CHAIN_SWAP_PAYMENT_DETAILS,
+} from './paymentDetailsFragment.ts'
 export const ContributionFeesFragment = gql`
   fragment ContributionFees on PaymentFee {
     feeType
@@ -108,7 +113,27 @@ export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT = gql`
     paymentAmount
     paymentType
     status
-    userSubscriptionId
+  }
+`
+
+export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_STATUS = gql`
+  fragment FundingContributionPaymentStatus on Payment {
+    id
+    method
+    paymentAmount
+    paymentType
+    status
+    paymentDetails {
+      ... on OnChainToLightningSwapPaymentDetails {
+        swapId
+      }
+      ... on OnChainToRskSwapPaymentDetails {
+        swapId
+      }
+      ... on LightningToRskSwapPaymentDetails {
+        swapId
+      }
+    }
   }
 `
 
@@ -122,6 +147,8 @@ export const FRAGMENT_PAYMENT_SUBSCRIPTION = gql`
 `
 
 export const FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND = gql`
+  ${FRAGMENT_RSK_TO_ON_CHAIN_SWAP_PAYMENT_DETAILS}
+  ${FRAGMENT_RSK_TO_LIGHTNING_SWAP_PAYMENT_DETAILS}
   fragment PaymentForPayoutRefund on Payment {
     id
     method
@@ -133,17 +160,10 @@ export const FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND = gql`
     linkedEntityType
     paymentDetails {
       ... on RskToOnChainSwapPaymentDetails {
-        swapId
-        swapMetadata
-        onChainAddress
-        onChainTxId
-        swapPreimageHash
+        ...RskToOnChainSwapPaymentDetails
       }
       ... on RskToLightningSwapPaymentDetails {
-        swapId
-        swapMetadata
-        lightningInvoiceId
-        swapPreimageHash
+        ...RskToLightningSwapPaymentDetails
       }
     }
   }

@@ -95,7 +95,15 @@ const PromoteOptionCard = ({
 
   if (to) {
     return (
-      <Box as={Link} to={to} w="full" onClick={onClose} _hover={{ textDecoration: 'none' }}>
+      <Box
+        as={Link}
+        to={to}
+        target="_blank"
+        rel="noopener noreferrer"
+        w="full"
+        onClick={onClose}
+        _hover={{ textDecoration: 'none' }}
+      >
         {cardContent}
       </Box>
     )

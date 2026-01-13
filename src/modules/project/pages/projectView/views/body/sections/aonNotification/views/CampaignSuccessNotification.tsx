@@ -4,21 +4,13 @@ import { DateTime } from 'luxon'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
 
-import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { getTimeLeft } from '@/shared/utils/project/getAonData.ts'
 
-import { useRefetchQueries } from '../hooks/useRefetchQueries.ts'
-
-export const CampaignSuccessNotification = () => {
+export const CampaignSuccessNotification = ({ onOpen }: { onOpen: () => void }) => {
   const { project, isProjectOwner } = useProjectAtom()
-  const { refetchQueriesOnPayoutSuccess } = useRefetchQueries()
-  const { queryProject } = useProjectAPI()
-  const payoutRskModal = useModal()
 
   /** Calculate days left for claiming funds */
   const daysLeft = useMemo(() => {
@@ -40,7 +32,7 @@ export const CampaignSuccessNotification = () => {
   if (!isProjectOwner) {
     return (
       <Feedback variant={FeedBackVariant.SUCCESS}>
-        <Body size="xl" bold>
+        <Body size={{ base: 'lg', lg: 'xl' }} bold>
           {t('Campaign reached funding goal')}
         </Body>
       </Feedback>
@@ -68,19 +60,11 @@ export const CampaignSuccessNotification = () => {
               )}
             </Trans>
           </Body>
-          <Button colorScheme="primary1" variant="solid" size="lg" w="full" onClick={payoutRskModal.onOpen}>
+          <Button colorScheme="primary1" variant="solid" size="lg" w="full" onClick={onOpen}>
             {t('Claim funds now')}
           </Button>
         </VStack>
       </Feedback>
-      <PayoutRsk
-        {...payoutRskModal}
-        project={project}
-        onCompleted={() => {
-          refetchQueriesOnPayoutSuccess()
-          queryProject.execute()
-        }}
-      />
     </>
   )
 }

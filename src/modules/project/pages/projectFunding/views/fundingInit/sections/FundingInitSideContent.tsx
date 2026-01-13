@@ -83,7 +83,7 @@ export const FundingInitSummary = () => {
           <LaunchpadSummary disableMobile={true} />
           <TAndCs disableMobile={true} />
           <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit" isDisabled={isDisabled}>
-            {t('Checkout')}
+            {t('Continue')}
           </Button>
         </VStack>
       </FundingCheckoutWrapper>

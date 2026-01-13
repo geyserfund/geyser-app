@@ -94,7 +94,11 @@ export const ControlledTextInput = (props: ControlledTextInputProps) => {
         isInvalid={Boolean(error)}
         fontSize={props.fontSize || 'md'}
       />
-      {props.rightAddon && <InputRightAddon borderRadius="0 8px 8px 0">{props.rightAddon}</InputRightAddon>}
+      {props.rightAddon && (
+        <InputRightAddon padding={0} borderRadius="0 8px 8px 0" backgroundColor="transparent">
+          {props.rightAddon}
+        </InputRightAddon>
+      )}
     </InputGroup>
   )
 

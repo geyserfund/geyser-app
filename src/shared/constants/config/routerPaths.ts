@@ -139,6 +139,7 @@ export enum PathName {
   fundingPaymentOnchainRefund = 'refund',
   fundingPaymentOnchainRefundInitiated = 'initiated',
   fundingCallback = 'callback',
+  fundingAwaitingSuccess = 'awaiting-success',
   fundingSuccess = 'success',
   fundingFailedCallback = 'failed-callback',
   badges = 'badges',
@@ -326,6 +327,8 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}/${PathName.fundingPaymentOnchainRefund}/${PathName.fundingPaymentOnchainRefundInitiated}`,
   fundingCallback: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingCallback}`,
+  fundingAwaitingSuccess: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingAwaitingSuccess}`,
   fundingSuccess: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingSuccess}`,
   fundingFailedCallback: () => `/${PathName.fundingFailedCallback}`,

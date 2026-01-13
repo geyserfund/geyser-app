@@ -18,6 +18,7 @@ import { PaymentOnchainQR } from './views/fundingPayment/views/paymentOnchain/vi
 import { PaymentOnChainRefund } from './views/fundingPayment/views/paymentOnchain/views/PaymentOnChainRefund'
 import { PaymentOnChainRefundInitiated } from './views/fundingPayment/views/paymentOnchain/views/PaymentOnChainRefundInitiated'
 import { FundingSuccess } from './views/fundingSuccess/FundingSuccess'
+import { FundingSuccessIntermediate } from './views/fundingSuccess/FundingSuccessIntermediate'
 
 export {
   Funding,
@@ -26,6 +27,7 @@ export {
   FundingInit,
   FundingLaunchPayment,
   FundingSuccess,
+  FundingSuccessIntermediate,
   Payment,
   PaymentCard,
   PaymentFailed,

@@ -2,11 +2,10 @@ import { Box, Button, Image, Link, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 import { PiArrowUpRight } from 'react-icons/pi'
 
+import { BLOCK_EXPLORER_BASE_URL } from '@/modules/project/pages/projectFunding/utils/constants.ts'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { Body, H3 } from '@/shared/components/typography'
 import { TransactionProcessingUrl } from '@/shared/constants'
-
-export const BLOCK_EXPLORER_BASE_URL = 'https://mempool.space/tx/'
 
 interface TransactionProcessingProps extends CardLayoutProps {
   title: string

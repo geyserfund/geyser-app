@@ -211,7 +211,7 @@ export const DownloadInvoicePDF = ({
 
         <View style={styles.tableView}>
           <Text style={styles.subHeaderText}>Contribution</Text>
-          <InvoiceListItem title="Reference code: " value={invoiceData.uuid || ''} />
+          <InvoiceListItem title="Reference code" value={invoiceData.uuid || ''} />
           <View style={styles.tableHeader}>
             <View style={styles.tableType}>
               <Text style={styles.tableBoldFont}>Type</Text>

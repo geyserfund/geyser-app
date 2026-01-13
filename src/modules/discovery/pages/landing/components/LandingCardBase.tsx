@@ -1,5 +1,6 @@
-import { Box, Button, HStack, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { PiClockCountdown } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
@@ -18,8 +19,15 @@ import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
 import { isAllOrNothing, isInactive } from '@/utils'
 
 import { SkeletonLayout } from '../../../../../shared/components/layouts'
-import { ContributionsSummary, ProjectForLandingPageFragment } from '../../../../../types'
+import { ContributionsSummary, ProjectAonGoalStatus, ProjectForLandingPageFragment } from '../../../../../types'
 import { AllOrNothingIcon } from './AllOrNothingIcon.tsx'
+
+const AON_FAILED_STATUSES = [
+  ProjectAonGoalStatus.Failed,
+  ProjectAonGoalStatus.Cancelled,
+  ProjectAonGoalStatus.Unclaimed,
+  ProjectAonGoalStatus.Finalized,
+]
 
 export interface LandingCardBaseProps extends CardLayoutProps {
   isMobile?: boolean
@@ -43,7 +51,7 @@ export const LandingCardBase = ({
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
 
-  const { getProjectBalance, getAonGoalPercentage } = useProjectToolkit(project)
+  const { getProjectBalance, getAonGoalPercentage, isFundingDisabled } = useProjectToolkit(project)
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -62,6 +70,8 @@ export const LandingCardBase = ({
   }
 
   const isAonProject = isAllOrNothing(project)
+  const isAonProjectFailed =
+    isAonProject && AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus)
 
   const contributionAmount = project.contributionSummary?.contributionsTotalUsd || getProjectBalance().usd
 
@@ -145,42 +155,63 @@ export const LandingCardBase = ({
     )
   }
 
+  const getAonStatusColor = () => {
+    if (percentage > 100) return 'primary1.11'
+    if (timeLeft?.label !== 'days left') return 'warning.11'
+    return 'neutral1.12'
+  }
+
+  const renderAonProjectStatus = () => {
+    const statusColor = getAonStatusColor()
+
+    if (isAonProjectFailed) {
+      return (
+        <Body size="sm" bold color={statusColor} isTruncated>
+          {t('Campaign Failed')}
+        </Body>
+      )
+    }
+
+    const percentageColor = percentage >= 100 ? 'primary1.11' : 'neutral1.12'
+
+    return (
+      <HStack spacing={1} alignItems="center" flexWrap="wrap">
+        {timeLeft && (
+          <>
+            <Icon as={PiClockCountdown} color={statusColor} />
+            <Body size="sm" bold color={statusColor} isTruncated>
+              {timeLeft.value} {timeLeft.label}
+            </Body>
+            <Box backgroundColor={statusColor} width="5px" height="5px" borderRadius="full" />
+          </>
+        )}
+        {percentage ? (
+          <Body size="sm" bold color={percentageColor} isTruncated>
+            {percentage}% {t('funded')}
+          </Body>
+        ) : (
+          <Body size="sm" bold color={statusColor} isTruncated>
+            {t('Campaign Ongoing')}
+          </Body>
+        )}
+      </HStack>
+    )
+  }
+
   const contributionContent = () => {
     return (
       <HStack w="full" justifyContent="space-between" alignItems="flex-end">
         {isAonProject ? (
-          <Body
-            size="sm"
-            bold
-            color={percentage > 100 ? 'primary1.11' : timeLeft?.label !== 'days left' ? 'warning.11' : 'neutral1.12'}
-            isTruncated
-          >
-            {percentage ? (
-              <>
-                {timeLeft?.value} {timeLeft?.label} {' - '}
-                <Body as="span" bold color={percentage >= 100 ? 'primary1.11' : 'neutral1.12'}>
-                  {percentage}% {t('funded')}
-                </Body>
-              </>
-            ) : (
-              t('Just launched')
-            )}
-          </Body>
+          renderAonProjectStatus()
         ) : (
           <HStack spacing={0}>
             {fires ? <AnimatedFire /> : ''}
 
             <Body size="sm" bold color="primary1.11" isTruncated>
-              {contributionAmount ? (
-                <>
-                  {formatAmount(contributionAmount, 'USD')}{' '}
-                  <Body as="span" regular>
-                    {isWeekly ? t('this week') : t('raised')}
-                  </Body>
-                </>
-              ) : (
-                t('Just launched')
-              )}
+              {formatAmount(contributionAmount || 0, 'USD')}{' '}
+              <Body as="span" regular>
+                {isWeekly ? t('this week') : t('raised')}
+              </Body>
             </Body>
           </HStack>
         )}
@@ -213,7 +244,14 @@ export const LandingCardBase = ({
           <Body size="sm" dark isTruncated width="100%" wordBreak={'break-word'} whiteSpace={'normal'}>
             {project.shortDescription}
           </Body>
-          <Button variant="solid" colorScheme="primary1" size="md" width="100%" onClick={handleContribute}>
+          <Button
+            variant="solid"
+            colorScheme="primary1"
+            size="md"
+            width="100%"
+            onClick={handleContribute}
+            isDisabled={isFundingDisabled()}
+          >
             {t('Contribute')}
           </Button>
         </VStack>

@@ -3,7 +3,7 @@ import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import React, { useEffect, useState } from 'react'
-import { PiWarningCircleBold } from 'react-icons/pi'
+import { PiInfoBold, PiWarningCircleBold } from 'react-icons/pi'
 import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
@@ -22,12 +22,13 @@ import {
   RskToLightningSwapPaymentDetailsFragment,
   RskToOnChainSwapPaymentDetails,
   usePledgeRefundInitiateMutation,
+  usePledgeRefundPaymentCreateMutation,
   usePledgeRefundRequestMutation,
-  usePledgeRefundSwapCreateMutation,
 } from '@/types/index.ts'
 import { commaFormatted, useNotification } from '@/utils/index.ts'
 
 import { createCallDataForLockCall } from '../../utils/createCallDataForLockCall.ts'
+import { createAndSignLockTransaction } from '../../utils/createLockTransaction.ts'
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
@@ -90,7 +91,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     { data: pledgeRefundRequestData, loading: pledgeRefundRequestLoading, error: pledgeRefundRequestError },
   ] = usePledgeRefundRequestMutation()
 
-  const [pledgeRefundSwapCreate, { loading: isPledgeRefundSwapCreateLoading }] = usePledgeRefundSwapCreateMutation()
+  const [pledgeRefundPaymentCreate, { loading: isPledgeRefundPaymentCreateLoading }] =
+    usePledgeRefundPaymentCreateMutation()
   const [pledgeRefundInitiate, { loading: isPledgeRefundInitiateLoading }] = usePledgeRefundInitiateMutation()
 
   const [swapData, setSwapData] = useState<any>(null)
@@ -115,21 +117,30 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )[0]
     : null
+
+  // isClaimable is the case when the funds are in the bitcoin address, ready for the user to claim
   const isClaimable =
     isProcessing &&
     latestPayment?.paymentType === PaymentType.RskToOnChainSwap &&
     latestPayment?.status === PaymentStatus.Claimable
 
+  // isRefundable is the case when the funds are in the swap contract, user needs to wait for the funds to be refunded
+  const isRefundable =
+    isProcessing &&
+    (latestPayment?.status === PaymentStatus.Refundable || latestPayment?.status === PaymentStatus.Refunding)
+
+  // isRetryable  is the case when the funds are in the user rsk address
+  const isRetryable = isProcessing && latestPayment?.status === PaymentStatus.Refunded
+
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
-      const { preimageHash } = generatePreImageHash()
-
       const amount =
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
-        (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
+        (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0) -
+        (isRetryable ? pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0 : 0)
 
-      const { data: swapCreateResponse } = await pledgeRefundSwapCreate({
+      const { data: pledgeRefundPaymentCreateResponse } = await pledgeRefundPaymentCreate({
         variables: {
           input: {
             pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
@@ -138,7 +149,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
                 lightningAddress: data.lightningAddress,
                 boltz: {
                   refundPublicKey: accountKeys.publicKey,
-                  preimageHash,
                 },
               },
             },
@@ -146,11 +156,15 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         },
       })
 
-      if (!swapCreateResponse?.pledgeRefundSwapCreate) {
-        throw new Error('Failed to create swap')
+      if (
+        !pledgeRefundPaymentCreateResponse?.pledgeRefundPaymentCreate ||
+        !pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate.payment ||
+        !pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate.swap
+      ) {
+        throw new Error('Failed to create payment')
       }
 
-      const { swap, payment } = swapCreateResponse.pledgeRefundSwapCreate
+      const { swap, payment } = pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate
       const paymentDetails = payment?.paymentDetails as RskToLightningSwapPaymentDetailsFragment
 
       const swapObj = JSON.parse(swap)
@@ -160,6 +174,19 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       setSwapData(swapObj)
 
       setRefundInvoiceId(paymentDetails.lightningInvoiceId)
+
+      let userLockTxHex = ''
+
+      if (isRetryable) {
+        userLockTxHex = await createAndSignLockTransaction({
+          preimageHash: `0x${paymentDetails.swapPreimageHash}`,
+          claimAddress: swapObj.claimAddress as Address,
+          refundAddress: accountKeys.address as Address,
+          timelock: swapObj?.timeoutBlockHeight || 0,
+          amount: satsToWei(amount), // subract fees
+          privateKey: `0x${accountKeys.privateKey}`,
+        })
+      }
 
       const callDataHex = createCallDataForLockCall({
         preimageHash: `0x${paymentDetails.swapPreimageHash}` as Hex,
@@ -187,6 +214,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             signature,
             rskAddress: rskAddress || accountKeys.address,
             callDataHex,
+            userLockTxHex,
           },
         },
         onCompleted(data) {
@@ -250,16 +278,16 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
 
       const amount =
         (pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0) -
-        (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0)
+        (pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0) -
+        (isRetryable ? pledgeRefundRequestData?.pledgeRefundRequest.refundProcessingFee || 0 : 0)
 
-      const { data: swapCreateResponse } = await pledgeRefundSwapCreate({
+      const { data: pledgeRefundPaymentCreateResponse } = await pledgeRefundPaymentCreate({
         variables: {
           input: {
             pledgeRefundId: pledgeRefundRequestData?.pledgeRefundRequest.refund.id,
             pledgeRefundPaymentInput: {
               rskToOnChainSwap: {
                 boltz: {
-                  userClaimAddress: data.bitcoinAddress,
                   claimPublicKey: accountKeys.publicKey,
                   preimageHash,
                   preimageHexEncrypted,
@@ -270,11 +298,15 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         },
       })
 
-      if (!swapCreateResponse?.pledgeRefundSwapCreate) {
-        throw new Error('Failed to create swap')
+      if (
+        !pledgeRefundPaymentCreateResponse?.pledgeRefundPaymentCreate ||
+        !pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate.payment ||
+        !pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate.swap
+      ) {
+        throw new Error('Failed to create payment')
       }
 
-      const { swap, payment } = swapCreateResponse.pledgeRefundSwapCreate
+      const { swap, payment } = pledgeRefundPaymentCreateResponse.pledgeRefundPaymentCreate
 
       const swapObj = JSON.parse(swap)
       swapObj.privateKey = accountKeys.privateKey
@@ -286,6 +318,18 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
       const claimAddress = swapObj?.lockupDetails?.claimAddress as Address
       const timelock = swapObj?.lockupDetails?.timeoutBlockHeight || 0n
       const refundAddress = accountKeys.address as Address
+
+      let userLockTxHex = ''
+      if (isRetryable) {
+        userLockTxHex = await createAndSignLockTransaction({
+          preimageHash: `0x${preimageHash}`,
+          claimAddress,
+          refundAddress,
+          timelock,
+          amount: satsToWei(amount),
+          privateKey: `0x${accountKeys.privateKey}`,
+        })
+      }
 
       const callDataHex = createCallDataForLockCall({
         preimageHash: `0x${preimageHash}` as Hex,
@@ -314,6 +358,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             signature,
             rskAddress: rskAddress || accountKeys.address,
             callDataHex,
+            userLockTxHex,
           },
         },
         onCompleted(data) {
@@ -374,6 +419,30 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     )
   }
 
+  if (isRefundable) {
+    return (
+      <Modal isOpen={isOpen} size="lg" title={t('Funds are being processed')} onClose={handleClose}>
+        <Icon as={PiInfoBold} fontSize="120px" color="info.9" />
+        <VStack spacing={4} w="full" alignItems="center">
+          <Body size="md" textAlign="center">
+            {t(
+              'Your previous claim attempt encountered an issue. Your funds are currently in the swap contract and we are processing them in the background to return them to your account.',
+            )}
+          </Body>
+          <Body size="md" textAlign="center">
+            {t('Please wait while we resolve this. Once complete, you will be able to claim your funds.')}
+          </Body>
+          <Body size="sm" textAlign="center" color="neutral1.11">
+            {t('If you do not see this resolved within 24 hours, please contact us at')}{' '}
+            <Body as="span" size="sm" bold color="primary1.11">
+              support@geyser.fund
+            </Body>
+          </Body>
+        </VStack>
+      </Modal>
+    )
+  }
+
   // Show processed screen after successful submission
   if (isProcessed) {
     return (
@@ -383,8 +452,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
         size="lg"
         title={
           selectedMethod === PayoutMethod.Lightning
-            ? t('Payout Processed (Off-Chain)')
-            : t('Payout Processed (On-Chain)')
+            ? t('Refund Processed (Off-Chain)')
+            : t('Refund Processed (On-Chain)')
         }
       >
         {selectedMethod === PayoutMethod.Lightning ? (
@@ -477,7 +546,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             size="lg"
             colorScheme="primary1"
             variant="solid"
-            isLoading={isSubmitting || isPledgeRefundInitiateLoading || isPledgeRefundSwapCreateLoading}
+            isLoading={isSubmitting || isPledgeRefundInitiateLoading || isPledgeRefundPaymentCreateLoading}
             isDisabled={!enableSubmit}
             onClick={handleSubmit}
           >

@@ -1,4 +1,4 @@
-import { Button, HStack, StackProps, VStack } from '@chakra-ui/react'
+import { Button, ButtonProps, HStack, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PropsWithChildren } from 'react'
 import { PiArrowLeft } from 'react-icons/pi'
@@ -19,6 +19,8 @@ type FundingLayoutProps = {
   /** render component on the bottom, only on mobile */
   bottomContent?: React.ReactNode
   bottomContainerProps?: StackProps
+  /** render component on the top, only on desktop */
+  backButtonProps?: ButtonProps
 }
 
 export const FundingLayout = ({
@@ -29,6 +31,7 @@ export const FundingLayout = ({
   sideContainerProps,
   bottomContent,
   bottomContainerProps,
+  backButtonProps,
   children,
 }: PropsWithChildren<FundingLayoutProps>) => {
   const navigate = useNavigate()
@@ -43,6 +46,7 @@ export const FundingLayout = ({
               variant="ghost"
               colorScheme="neutral1"
               leftIcon={<PiArrowLeft />}
+              {...backButtonProps}
             >
               {t('Go back')}
             </Button>

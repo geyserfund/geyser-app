@@ -11,15 +11,17 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { lightModeColors } from '@/shared/styles/colors.ts'
+import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 
 const promotionsModalAtom = atomWithStorage('promotionsModal', false)
 
 export const ProjectPromotionNotice = () => {
-  const { isProjectOwner } = useProjectAtom()
+  const { isProjectOwner, project } = useProjectAtom()
+  const { isFundingDisabled } = useProjectToolkit(project)
 
   const [isPromotionsModalOpen, setIsPromotionsModalOpen] = useAtom(promotionsModalAtom)
 
-  if (isPromotionsModalOpen || !isProjectOwner) {
+  if (isPromotionsModalOpen || !isProjectOwner || isFundingDisabled()) {
     return null
   }
 

@@ -17,6 +17,7 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { Trans } from 'react-i18next'
 import { PiCheck, PiPencil, PiX } from 'react-icons/pi'
 import * as yup from 'yup'
 
@@ -69,6 +70,9 @@ type ProjectType = NonNullable<ProjectAmbassadorListQuery['projectGet']>
 type AmbassadorsConnectionType = NonNullable<ProjectType['ambassadors']>
 type EdgesArrayType = NonNullable<AmbassadorsConnectionType['edges']>
 type AmbassadorEdge = NonNullable<EdgesArrayType[number]>
+
+const LinkToGuideAffiliates =
+  'https://guide.geyser.fund/geyser-docs/product-features/project-features/add-project-affiliates'
 
 /** AmbassadorPayoutsSection: Displays the Ambassador Payouts table and add form with full management capabilities */
 export const AmbassadorPayoutsSection = () => {
@@ -221,7 +225,7 @@ export const AmbassadorPayoutsSection = () => {
 
       if (isNaN(numericRate) || numericRate < PAYOUT_RATE_MIN || numericRate > PAYOUT_RATE_MAX) {
         toast.error({
-          title: t('Invalid Payout Rate'),
+          title: t('Invalid Affiliate Rate'),
           description: t('Payout rate must be a number between {{min}} and {{max}}.', {
             min: PAYOUT_RATE_MIN,
             max: PAYOUT_RATE_MAX,
@@ -310,7 +314,7 @@ export const AmbassadorPayoutsSection = () => {
         colSpan: 2,
       },
       {
-        header: t('Payout Rate (%)'),
+        header: t('Affiliate Rate (%)'),
         key: 'payoutRate',
         render(ambassadorRow: AmbassadorEdge) {
           const userId = ambassadorRow.node?.user?.id
@@ -417,12 +421,16 @@ export const AmbassadorPayoutsSection = () => {
   return (
     <VStack align="start">
       <Body size="xl" medium>
-        {t('Ambassador Payouts')}
+        {t('Affiliates')}
       </Body>
       <Body size="sm" light>
-        {t(
-          'Ambassadors spread the word about your project. You can reward your most loyal ambassadors by sharing a percentage of the contributions they enable with them.',
-        )}
+        <Trans i18nKey="Add affiliates who can promote your project in exchange for a percentage of the contributions they enable. Referral link format: ?hero=USER_I. Learn more about Affiliates <1>here</1>">
+          Add affiliates who can promote your project in exchange for a percentage of the contributions they enable.
+          Referral link format: ?hero=USER_I. Learn more about Affiliates{' '}
+          <Link href={LinkToGuideAffiliates} isExternal textDecoration="underline">
+            here
+          </Link>
+        </Trans>
       </Body>
       <CardLayout w="full" spacing={4} align="start">
         <form
@@ -442,7 +450,7 @@ export const AmbassadorPayoutsSection = () => {
             <ControlledTextInput
               name="payoutRate"
               control={control}
-              placeholder={t('Payout Rate')}
+              placeholder={t('Affiliate Rate')}
               type="number"
               step="0.01"
               textAlign="left"

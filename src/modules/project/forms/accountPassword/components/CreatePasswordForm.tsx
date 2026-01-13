@@ -1,6 +1,8 @@
 import { VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
+import { useSetAtom } from 'jotai'
+import { useState } from 'react'
 import { useForm, UseFormReturn } from 'react-hook-form'
 import * as yup from 'yup'
 
@@ -10,7 +12,9 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { UserAccountKeysFragment } from '@/types/index.ts'
 
 import { useUpdateAccountPassword } from '../hooks/useUpdateAccountPassword.ts'
+import { accountPasswordAtom } from '../state/passwordStorageAtom.ts'
 import { FeedBackText } from './FeedBackText.tsx'
+import { PasswordVisibilityToggle } from './PasswordVisibilityToggle.tsx'
 
 export type CreatePasswordFormData = {
   password: string
@@ -34,6 +38,9 @@ const contributorText = t(
 /** Account password form component with password and repeat password fields */
 export const CreatePasswordForm = ({ form, isCreator }: CreatePasswordFormProps) => {
   const { control } = form
+  const [showPassword, setShowPassword] = useState(false)
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false)
+
   return (
     <VStack w="full" gap={4}>
       <VStack w="full" alignItems="start" gap={2}>
@@ -45,16 +52,25 @@ export const CreatePasswordForm = ({ form, isCreator }: CreatePasswordFormProps)
         control={control}
         label={t('Enter your password')}
         placeholder={t('Enter your password')}
-        type="password"
+        type={showPassword ? 'text' : 'password'}
         required
+        rightAddon={
+          <PasswordVisibilityToggle showPassword={showPassword} onToggle={() => setShowPassword(!showPassword)} />
+        }
       />
       <ControlledTextInput
         name="repeatPassword"
         control={control}
         label={t('Repeat password')}
         placeholder={t('Repeat your password')}
-        type="password"
+        type={showRepeatPassword ? 'text' : 'password'}
         required
+        rightAddon={
+          <PasswordVisibilityToggle
+            showPassword={showRepeatPassword}
+            onToggle={() => setShowRepeatPassword(!showRepeatPassword)}
+          />
+        }
       />
       <ControlledCheckboxInput
         name="acknowledgePassword"
@@ -91,6 +107,8 @@ const createPasswordSchema = yup.object({
 })
 
 export const useCreateAccountForm = (onComplete: (_: UserAccountKeysFragment) => void) => {
+  const setAccountPassword = useSetAtom(accountPasswordAtom)
+
   const form = useForm<CreatePasswordFormData>({
     resolver: yupResolver(createPasswordSchema),
     mode: 'onBlur',
@@ -102,11 +120,14 @@ export const useCreateAccountForm = (onComplete: (_: UserAccountKeysFragment) =>
     },
   })
 
-  const { onSubmit, isSubmitting } = useUpdateAccountPassword(onComplete)
+  const { onSubmit: updatePasswordOnSubmit, isSubmitting } = useUpdateAccountPassword((data) => {
+    setAccountPassword(form.getValues('password'))
+    onComplete(data)
+  })
 
   return {
     ...form,
-    onSubmit: form.handleSubmit(onSubmit),
+    onSubmit: form.handleSubmit(updatePasswordOnSubmit),
     isSubmitting,
   }
 }

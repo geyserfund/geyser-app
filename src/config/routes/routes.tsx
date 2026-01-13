@@ -743,6 +743,15 @@ export const platformRoutes: RouteObject[] = [
             Component: ExternalAuthSuccess,
           },
           {
+            path: getPath('fundingAwaitingSuccess', PathName.projectName),
+            async lazy() {
+              const FundingSuccessIntermediate = await loadProjectFundingPages().then(
+                (m) => m.FundingSuccessIntermediate,
+              )
+              return { Component: FundingSuccessIntermediate }
+            },
+          },
+          {
             path: getPath('fundingSuccess', PathName.projectName),
             async lazy() {
               const FundingSuccess = await loadProjectFundingPages().then((m) => m.FundingSuccess)

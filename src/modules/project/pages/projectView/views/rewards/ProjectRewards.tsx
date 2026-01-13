@@ -1,13 +1,12 @@
-import { SimpleGrid, VStack } from '@chakra-ui/react'
+import { Image, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { forwardRef, useEffect, useMemo } from 'react'
-import { useNavigate } from 'react-router'
+import { forwardRef, useMemo } from 'react'
 
 import { useAuthContext } from '@/context'
 import { useProjectRewardsAPI } from '@/modules/project/API/useProjectRewardsAPI'
 import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body, H1 } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
+import { NoRewardsSoldUrl } from '@/shared/constants'
 
 import { CreatorRewardPageBottomBar, CreatorRewardPageTopBar } from './components/CreatorRewardPageBar.tsx'
 import { RewardCardSkeleton } from './components/RewardCard.tsx'
@@ -15,28 +14,12 @@ import { RewardCardWithBuy } from './components/RewardCardWithBuy.tsx'
 
 export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
   const { loading: userLoading } = useAuthContext()
-  const { project, isProjectOwner, loading: projectLoading } = useProjectAtom()
+  const { isProjectOwner, loading: projectLoading } = useProjectAtom()
   const { activeRewards, hiddenRewards, hasRewards } = useRewardsAtom()
-
-  const navigate = useNavigate()
 
   const { queryProjectRewards } = useProjectRewardsAPI(true)
 
   const loading = projectLoading || queryProjectRewards.loading || userLoading
-
-  useEffect(() => {
-    let number: any
-
-    if (!loading && !hasRewards) {
-      number = setInterval(() => {
-        navigate(getPath('project', project.name))
-      }, 500)
-    }
-
-    return () => {
-      clearInterval(number)
-    }
-  }, [hasRewards, navigate, project, loading])
 
   const sortedActiveRewards = useMemo(() => {
     if (activeRewards.length > 0) {
@@ -59,6 +42,15 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <VStack w="full" spacing={8} alignItems="start" pb={28}>
       <CreatorRewardPageTopBar />
+
+      {!hasRewards && (
+        <VStack w="full" alignItems={'center'}>
+          <Image src={NoRewardsSoldUrl} alt="No products added yet." height="200px" width="200px" />
+          <Body size="2xl" bold>
+            {t('No products added yet.')}
+          </Body>
+        </VStack>
+      )}
 
       {sortedActiveRewards.length > 0 && (
         <VStack w="full" alignItems={'start'}>

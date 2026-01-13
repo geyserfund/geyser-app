@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react'
 import { useAuthContext } from '@/context/index.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { RefundRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/RefundRsk.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import {
   ContributionStatus,
+  PaymentStatus,
   PayoutStatus,
   ProjectAonGoalStatus,
   usePayoutRequestMutation,
@@ -17,6 +19,7 @@ import { isAllOrNothing } from '@/utils/index.ts'
 import { useRefetchQueries } from './hooks/useRefetchQueries.ts'
 import CampaignFailedNotification from './views/CampaignFailedNotification.tsx'
 import { CampaignSuccessNotification } from './views/CampaignSuccessNotification.tsx'
+import { ContributionPendingToProjectNotification } from './views/ContributionPendingToProjectNotification.tsx'
 import { FailedToClaimNotification } from './views/FailedToClaimNotification.tsx'
 import { FundedToCampaign } from './views/FundedToCampaign.tsx'
 import { FundsClaimedNotification } from './views/FundsClaimedNotification.tsx'
@@ -28,10 +31,12 @@ export const AonNotification = () => {
   const { project, isProjectOwner } = useProjectAtom()
   const { user } = useAuthContext()
 
-  const { refetchQueriesOnPledgeRefund } = useRefetchQueries()
+  const { refetchQueriesOnPledgeRefund, refetchQueriesOnPayoutSuccess } = useRefetchQueries()
   const { queryProject } = useProjectAPI()
 
+  const payoutRskModal = useModal()
   const refundModal = useModal()
+
   const isAon = isAllOrNothing(project)
 
   const [isPayoutProcessing, setIsPayoutProcessing] = useState(false)
@@ -76,9 +81,17 @@ export const AonNotification = () => {
     }
   }, [isProjectOwner, payoutRequest, project])
 
+  const contributionPendingToProject = data?.contributor?.contributions.find(
+    (contribution) =>
+      contribution.status === ContributionStatus.Pending &&
+      contribution.payments.some((payment) => payment.status === PaymentStatus.Pending),
+  )
+
   const fundedToCampaign = data?.contributor?.contributions.find(
     (contribution) => contribution.status === ContributionStatus.Pledged,
   )
+  const isPayoutRemaining =
+    (project.aonGoal?.status === ProjectAonGoalStatus.Successful || isPayoutProcessing) && isProjectOwner
 
   const renderNotification = () => {
     if (!isAon || loading) {
@@ -86,12 +99,12 @@ export const AonNotification = () => {
     }
 
     if (project.aonGoal?.status === ProjectAonGoalStatus.Successful) {
-      return <CampaignSuccessNotification />
+      return <CampaignSuccessNotification onOpen={payoutRskModal.onOpen} />
     }
 
     if (project.aonGoal?.status === ProjectAonGoalStatus.Claimed) {
       if (isPayoutProcessing) {
-        return <CampaignSuccessNotification />
+        return <CampaignSuccessNotification onOpen={payoutRskModal.onOpen} />
       }
 
       return <FundsClaimedNotification />
@@ -107,6 +120,10 @@ export const AonNotification = () => {
 
     if (project.aonGoal?.status === ProjectAonGoalStatus.Finalized) {
       return <FundsReturnedNotification />
+    }
+
+    if (contributionPendingToProject) {
+      return <ContributionPendingToProjectNotification contribution={contributionPendingToProject} />
     }
 
     if (fundedToCampaign) {
@@ -132,10 +149,29 @@ export const AonNotification = () => {
     )
   }
 
+  const renderPayoutModal = () => {
+    if (!isPayoutRemaining) {
+      return null
+    }
+
+    return (
+      <PayoutRsk
+        {...payoutRskModal}
+        project={project}
+        onCompleted={() => {
+          refetchQueriesOnPayoutSuccess()
+          queryProject.execute()
+          setIsPayoutProcessing(false)
+        }}
+      />
+    )
+  }
+
   return (
     <>
       {renderNotification()}
       {renderRefundModal()}
+      {renderPayoutModal()}
     </>
   )
 }

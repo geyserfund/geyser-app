@@ -124,7 +124,7 @@ export const GeyserPromotionSection = () => {
         {t("Let's spread the word about your project.")}
       </Body>
 
-      <Box w="full" p={4} borderWidth={1} borderRadius="lg" borderColor="primary1.11">
+      <Box w="full" p={4} borderWidth={1} borderRadius="lg" borderColor="neutral1.6">
         <HStack w="full" justifyContent="space-between" alignItems="center">
           <HStack>
             <Body size="lg" medium>
