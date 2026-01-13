@@ -1,5 +1,7 @@
-import { Box, Button, HStack, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
+/* eslint-disable complexity */
+import { Box, Button, HStack, Icon, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { PiClockCountdown } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
@@ -154,6 +156,8 @@ export const LandingCardBase = ({
     )
   }
 
+  const color = percentage > 100 ? 'primary1.11' : timeLeft?.label !== 'days left' ? 'warning.11' : 'neutral1.12'
+
   const contributionContent = () => {
     return (
       <HStack w="full" justifyContent="space-between" alignItems="flex-end">
@@ -168,7 +172,19 @@ export const LandingCardBase = ({
               t('Campaign Failed')
             ) : (
               <>
-                {timeLeft?.value} {timeLeft?.label} {timeLeft && ' - '}
+                {timeLeft && <Icon as={PiClockCountdown} mr="2px" pt="2px" color={color} />}
+                {timeLeft?.value} {timeLeft?.label}{' '}
+                {timeLeft && (
+                  <Box
+                    display="inline-block"
+                    backgroundColor={color}
+                    width="5px"
+                    height="5px"
+                    borderRadius="full"
+                    mb="2px"
+                    mr="1"
+                  />
+                )}
                 {percentage ? (
                   <Body as="span" bold color={percentage >= 100 ? 'primary1.11' : 'neutral1.12'}>
                     {percentage}% {t('funded')}
