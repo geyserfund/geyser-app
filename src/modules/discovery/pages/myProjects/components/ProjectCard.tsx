@@ -8,7 +8,7 @@ import { FOLLOWERS_NEEDED } from '@/modules/project/pages/projectView/views/body
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { ProjectPrelaunchStatus } from '@/shared/molecules/ProjectPrelaunchStatus.tsx'
-import { ProjectForMyProjectsFragment, ProjectStatus } from '@/types'
+import { ProjectForMyProjectsFragment, ProjectFundingStrategy, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { inDraftStatus } from '../hooks/useMyProjects.ts'
@@ -31,6 +31,21 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const isDraft = project.status && inDraftStatus.includes(project.status)
 
   const draftRediredirectPath = getProjectCreationRoute(project.lastCreationStep, project.id)
+
+  /** Get project type label based on funding strategy */
+  const getProjectTypeLabel = () => {
+    if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
+      return t('Campaign')
+    }
+
+    if (project.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
+      return t('Fundraiser')
+    }
+
+    return null
+  }
+
+  const projectTypeLabel = getProjectTypeLabel()
 
   const renderProjectCardContent = () => {
     if (project.status === ProjectStatus.PreLaunch) {
@@ -88,6 +103,14 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           )}
           <Body size="lg" bold>
             {project.title}
+            {projectTypeLabel && (
+              <>
+                {' '}
+                <Body as="span" size="lg" light>
+                  ({projectTypeLabel})
+                </Body>
+              </>
+            )}
           </Body>
         </HStack>
         {isDraft ? (
