@@ -3,14 +3,18 @@ import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
-import { useTransactionStatusUpdate } from '@/modules/project/pages/projectFunding/views/fundingPayment/views/paymentOnchain/hooks/useTransactionStatusUpdate.ts'
 import {
   getTransactionFromChainSwap,
   getTransactionFromSwap,
 } from '@/modules/project/pages/projectFunding/views/fundingPayment/views/paymentOnchain/refund/api.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { PaymentStatus, PaymentType, UserProjectContributionStatusFragment } from '@/types/generated/graphql.ts'
+import {
+  PaymentStatus,
+  PaymentType,
+  usePaymentStatusUpdatedSubscription,
+  UserProjectContributionStatusFragment,
+} from '@/types/generated/graphql.ts'
 
 import { useRefetchQueries } from '../hooks/useRefetchQueries.ts'
 
@@ -63,17 +67,31 @@ export const ContributionPendingToProjectNotification = ({
     fetchTransactionId()
   }, [swapId, paymentType, stage])
 
-  /** Listen to transaction confirmation via WebSocket */
-  useTransactionStatusUpdate({
-    swapId,
-    handleConfirmed() {
-      setStage(2)
+  /** Subscribe to payment status updates */
+  usePaymentStatusUpdatedSubscription({
+    variables: {
+      input: {
+        contributionUUID: contribution.uuid || '',
+      },
     },
-    handleClaimed() {
-      setStage(3)
-      // Refetch queries when transaction is claimed
-      refetchQueriesOnPledgeRefund()
-      queryProject.execute()
+    skip: !contribution.uuid,
+    onData(options) {
+      const payment = options.data.data?.paymentStatusUpdated
+
+      if (!payment) return
+
+      // Stage 2: Payment is claimable
+      if (payment.status === PaymentStatus.Claimable) {
+        setStage(2)
+      }
+
+      // Stage 3: Payment is paid
+      if (payment.status === PaymentStatus.Paid) {
+        setStage(3)
+        // Refetch queries when payment is paid
+        refetchQueriesOnPledgeRefund()
+        queryProject.execute()
+      }
     },
   })
 
@@ -83,7 +101,7 @@ export const ContributionPendingToProjectNotification = ({
         return {
           image: CONTRIBUTION_PENDING_IMAGE,
           text: t(
-            'Transaction broadcast (step 1 of 3). Confirmation takes ~2 min. If stuck here for too long, please contact us at support@geyser.fund',
+            'Transaction broadcast (step 1 of 3). Confirmation takes ~10 min. If stuck here for too long, please contact us at support@geyser.fund',
           ),
           showMempool:
             (paymentType === PaymentType.OnChainToRskSwap || paymentType === PaymentType.OnChainToLightningSwap) &&
@@ -93,7 +111,7 @@ export const ContributionPendingToProjectNotification = ({
         return {
           image: CONTRIBUTION_PENDING_IMAGE,
           text: t(
-            'Swap to AON contract (step 2 of 3). Confirmation takes ~1 min. If stuck here for too long, please contact us at support@geyser.fund',
+            'Swap to AON contract (step 2 of 3). Confirmation takes ~2 min. If stuck here for too long, please contact us at support@geyser.fund',
           ),
           showMempool: false,
         }
