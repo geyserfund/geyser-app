@@ -12,12 +12,24 @@ const isAonFinalizedStatuses = [
   ProjectAonGoalStatus.Finalized,
 ]
 
+export const getIsAonActive = (project: Pick<ProjectForLandingPageFragment, 'aonGoal' | 'fundingStrategy'>) => {
+  return (
+    isAllOrNothing(project) &&
+    (project.aonGoal?.status === ProjectAonGoalStatus.Active ||
+      (project?.aonGoal?.status === ProjectAonGoalStatus.Successful &&
+        project.aonGoal?.endsAt &&
+        project.aonGoal.endsAt > DateTime.now().toMillis()))
+  )
+}
+
 export const useProjectToolkit = (
   project: Pick<ProjectForLandingPageFragment, 'balance' | 'balanceUsdCent' | 'aonGoal' | 'fundingStrategy' | 'status'>,
 ) => {
   const { getUSDCentsAmount } = useBTCConverter()
 
   const isAon = isAllOrNothing(project)
+
+  const isAonActive = getIsAonActive(project)
 
   const getProjectBalance = () => {
     const isAonFinalized = isAon && project.aonGoal?.status && isAonFinalizedStatuses.includes(project.aonGoal?.status)
@@ -51,12 +63,6 @@ export const useProjectToolkit = (
   }
 
   const isFundingDisabled = () => {
-    const isAonActive =
-      (isAon && project.aonGoal?.status === ProjectAonGoalStatus.Active) ||
-      (project?.aonGoal?.status === ProjectAonGoalStatus.Successful &&
-        project.aonGoal?.endsAt &&
-        project.aonGoal.endsAt > DateTime.now().toMillis())
-
     if (isAon) {
       if (isAonActive) {
         return false
