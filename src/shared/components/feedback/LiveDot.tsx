@@ -3,8 +3,8 @@ import { createUseStyles } from 'react-jss'
 
 const useStyles = createUseStyles({
   liveDot: {
-    width: 8,
-    height: 8,
+    width: 12,
+    height: 12,
     borderRadius: 999,
     marginRight: 6,
     animation: '$pulse 1.6s ease-in-out infinite',
@@ -17,5 +17,5 @@ const useStyles = createUseStyles({
 
 export const LiveDot = (props: BoxProps) => {
   const styles = useStyles()
-  return <Box className={styles.liveDot} background="primary1.9" {...props} />
+  return <Box className={styles.liveDot} background="primary1.11" shadow="xl" {...props} />
 }

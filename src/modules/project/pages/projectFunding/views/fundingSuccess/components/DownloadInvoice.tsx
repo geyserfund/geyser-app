@@ -1,10 +1,11 @@
 import { Button, ButtonProps, IconButton, Popover, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { t } from 'i18next'
-import { useState } from 'react'
+import { forwardRef, useState } from 'react'
 import { PiDownloadSimple } from 'react-icons/pi'
 
 import { FundingProjectState } from '@/modules/project/funding/state/fundingFormAtom'
+import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 
 import {
@@ -21,12 +22,16 @@ export const DownloadInvoice = ({
   showFee,
   asIcon,
   buttonProps,
+  isDisabled,
+  isPending,
 }: {
   project: Pick<FundingProjectState, 'title' | 'id'>
   contributionId: BigInt
   showFee?: false
   asIcon?: boolean
   buttonProps?: ButtonProps
+  isDisabled?: boolean
+  isPending?: boolean
 }) => {
   const [dataFetched, setDataFetched] = useState(false)
   const [invoiceData, setInvoiceData] = useState<ContributionForDownloadInvoiceFragment | null>(null)
@@ -60,41 +65,30 @@ export const DownloadInvoice = ({
     return null
   }
 
-  if (!invoiceData) {
-    if (asIcon) {
-      return (
-        <IconButton
-          as="div"
-          size="lg"
-          variant="outline"
-          colorScheme="neutral1"
-          icon={<PiDownloadSimple />}
-          aria-label={t('Download invoice')}
-          onClick={(event) => {
-            event.stopPropagation()
-            handleGetInvoiceData()
-          }}
-          onMouseEnter={() => handleGetInvoiceData()}
-          isLoading={transactionQuery.loading}
-          {...buttonProps}
-        />
-      )
-    }
-
+  if (isPending) {
     return (
-      <Button
-        as="div"
-        size="lg"
-        variant="outline"
-        colorScheme="neutral1"
-        rightIcon={<PiDownloadSimple />}
-        onClick={(event) => event.stopPropagation()}
-        onMouseEnter={() => getInvoiceData()}
+      <TooltipPopover
+        content={t(
+          'Your contribution is still being confirmed. The invoice will be available for download once the confirmation is complete.',
+        )}
+      >
+        <DownloadButtons asIcon={asIcon} isDisabled={true} />
+      </TooltipPopover>
+    )
+  }
+
+  if (!invoiceData) {
+    return (
+      <DownloadButtons
+        asIcon={asIcon}
+        onClick={(event) => {
+          event.stopPropagation()
+          handleGetInvoiceData()
+        }}
+        onMouseEnter={() => handleGetInvoiceData()}
         isLoading={transactionQuery.loading}
         {...buttonProps}
-      >
-        {t('Download invoice')}
-      </Button>
+      />
     )
   }
 
@@ -114,6 +108,7 @@ export const DownloadInvoice = ({
             icon={<PiDownloadSimple />}
             aria-label={t('Download invoice')}
             onClick={(event) => event.stopPropagation()}
+            isDisabled={isDisabled}
             {...buttonProps}
           />
         </DownloadInvoicePopover>
@@ -125,6 +120,7 @@ export const DownloadInvoice = ({
           colorScheme="neutral1"
           rightIcon={<PiDownloadSimple />}
           onClick={(event) => event.stopPropagation()}
+          isDisabled={isDisabled}
           {...buttonProps}
         >
           {t('Download invoice')}
@@ -134,7 +130,40 @@ export const DownloadInvoice = ({
   )
 }
 
-export const DownloadInvoicePopover = ({ children }: { children: React.ReactNode }) => {
+const DownloadButtons = forwardRef<HTMLButtonElement | HTMLDivElement, ButtonProps & { asIcon?: boolean }>(
+  ({ asIcon, ...buttonProps }, ref) => {
+    if (asIcon) {
+      return (
+        <IconButton
+          ref={ref}
+          as="div"
+          size="lg"
+          variant="outline"
+          colorScheme="neutral1"
+          icon={<PiDownloadSimple />}
+          aria-label={t('Download invoice')}
+          {...buttonProps}
+        />
+      )
+    }
+
+    return (
+      <Button
+        ref={ref}
+        as="div"
+        size="lg"
+        variant="outline"
+        colorScheme="neutral1"
+        rightIcon={<PiDownloadSimple />}
+        {...buttonProps}
+      >
+        {t('Download invoice')}
+      </Button>
+    )
+  },
+)
+
+const DownloadInvoicePopover = ({ children }: { children: React.ReactNode }) => {
   const isMobile = useMobileMode()
   return (
     <Popover placement="left" trigger={isMobile ? 'click' : 'hover'}>

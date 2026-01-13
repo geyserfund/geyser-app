@@ -134,6 +134,7 @@ export const projectFundingRoutes = [
   getPath('fundingPayment', PathName.projectName),
   getPath('fundingPaymentFailed', PathName.projectName),
   getPath('fundingSuccess', PathName.projectName),
+  getPath('fundingAwaitingSuccess', PathName.projectName),
   ...projectFundingPaymentCreatedRoutes,
   ...projectFundingPaymentOnchainRoutes,
   ...projectFundingPaymentFiatSwapRoutes,

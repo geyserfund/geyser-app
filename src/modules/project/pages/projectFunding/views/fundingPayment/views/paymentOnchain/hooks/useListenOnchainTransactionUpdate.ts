@@ -31,7 +31,7 @@ export const useListenOnchainTransactionUpdate = () => {
       setSwapTransaction(transaction)
     }
 
-    navigate({ pathname: getPath('fundingPaymentOnchainProcessing', project.name), search: location.search })
+    navigate({ pathname: getPath('fundingAwaitingSuccess', project.name), search: location.search })
   }
 
   const handleFailed = (value: SwapStatusUpdate) => {

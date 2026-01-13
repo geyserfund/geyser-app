@@ -1,6 +1,8 @@
 import { Button, Checkbox, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
+import { useSetAtom } from 'jotai'
+import { useState } from 'react'
 import { Control, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
@@ -10,6 +12,8 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { UserAccountKeysFragment } from '@/types/index.ts'
 
 import { useUpdateAccountPassword } from '../hooks/useUpdateAccountPassword.ts'
+import { accountPasswordAtom } from '../state/passwordStorageAtom.ts'
+import { PasswordVisibilityToggle } from './PasswordVisibilityToggle.tsx'
 
 export type RecoverPasswordFormData = {
   password: string
@@ -41,6 +45,9 @@ const recoverPasswordSchema = yup.object({
 
 /** Password recovery form component with new password fields and acknowledgment checkboxes */
 export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswordFormProps) => {
+  const [showPassword, setShowPassword] = useState(false)
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false)
+
   return (
     <VStack w="full" gap={6}>
       <VStack w="full" alignItems="start" gap={4}>
@@ -65,16 +72,25 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
           control={control}
           label={t('Enter your new password')}
           placeholder={t('Enter your new password')}
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           required
+          rightAddon={
+            <PasswordVisibilityToggle showPassword={showPassword} onToggle={() => setShowPassword(!showPassword)} />
+          }
         />
         <ControlledTextInput
           name="repeatPassword"
           control={control}
           label={t('Repeat new password')}
           placeholder={t('Repeat new password')}
-          type="password"
+          type={showRepeatPassword ? 'text' : 'password'}
           required
+          rightAddon={
+            <PasswordVisibilityToggle
+              showPassword={showRepeatPassword}
+              onToggle={() => setShowRepeatPassword(!showRepeatPassword)}
+            />
+          }
         />
 
         <VStack w="full" alignItems="start" gap={3}>
@@ -104,6 +120,8 @@ export const RecoverPasswordForm = ({ control, onBackToConfirm }: RecoverPasswor
 }
 
 export const useRecoverPasswordForm = (onComplete: (_: UserAccountKeysFragment) => void) => {
+  const setAccountPassword = useSetAtom(accountPasswordAtom)
+
   const form = useForm<RecoverPasswordFormData>({
     resolver: yupResolver(recoverPasswordSchema),
     mode: 'onBlur',
@@ -115,11 +133,14 @@ export const useRecoverPasswordForm = (onComplete: (_: UserAccountKeysFragment) 
     },
   })
 
-  const { onSubmit, isSubmitting } = useUpdateAccountPassword(onComplete)
+  const { onSubmit: updatePasswordOnSubmit, isSubmitting } = useUpdateAccountPassword((data) => {
+    setAccountPassword(form.getValues('password'))
+    onComplete(data)
+  })
 
   return {
     ...form,
-    onSubmit: form.handleSubmit(onSubmit),
+    onSubmit: form.handleSubmit(updatePasswordOnSubmit),
     isSubmitting,
   }
 }

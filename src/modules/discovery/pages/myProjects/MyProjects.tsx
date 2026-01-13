@@ -102,7 +102,7 @@ const ProjectGroup = ({ projects, status }: { projects: ProjectForMyProjectsFrag
           </HStack>
           {isActive && (
             <Body size="2xl" muted>
-              ({t('Past week')})
+              ({t('Past week activity')})
             </Body>
           )}
         </HStack>

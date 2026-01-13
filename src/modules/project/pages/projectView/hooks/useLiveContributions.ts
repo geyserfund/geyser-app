@@ -2,16 +2,18 @@ import { useApolloClient } from '@apollo/client'
 import { useSetAtom } from 'jotai'
 
 import { updateProjectBalanceCache } from '@/modules/project/API/cache/projectBodyCache'
+import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { addContributionAtom, addContributorAtom } from '@/modules/project/state/contributionsAtom'
 import { addContributionToInProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
-import { useProjectContributionSubscription } from '@/types/index.ts'
+import { ContributionStatus, useProjectContributionSubscription } from '@/types/index.ts'
 import { convertSatsToCents, toInt } from '@/utils'
 
 export const useLiveContributions = () => {
   const { project, partialUpdateProject } = useProjectAtom()
 
   const client = useApolloClient()
+  const { queryProject } = useProjectAPI()
 
   const addContribution = useSetAtom(addContributionAtom)
   const addContributor = useSetAtom(addContributorAtom)
@@ -52,6 +54,12 @@ export const useLiveContributions = () => {
       addContribution(contribution)
       addContributor(contribution)
       addContributionToInProgressGoals(contribution)
+
+      // Refetch project when contribution status is PLEDGED or CONFIRMED
+      const contributionStatus = (contribution as any).status
+      if (contributionStatus === ContributionStatus.Pledged || contributionStatus === ContributionStatus.Confirmed) {
+        queryProject.execute()
+      }
     },
   })
 }

@@ -32,6 +32,7 @@ export const ACTIVITY_FEED_FRAGMENT = gql`
         entryDescription: description
         content
         entryImage: image
+        postType
       }
       ... on Contribution {
         id

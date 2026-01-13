@@ -9,8 +9,8 @@ import { lightModeColors } from '@/shared/styles/colors.ts'
 
 import { commaFormatted } from '../../../../../../../utils'
 
-export const MIN_WIDTH_AFTER_START = 50
-const PRESET_AMOUNTS = [50, 100, 210, 500, 1000]
+export const MIN_WIDTH_AFTER_START = 60
+const PRESET_AMOUNTS = [100, 210, 500, 750, 1000]
 export const DonationInput = () => {
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -66,7 +66,7 @@ export const DonationInput = () => {
       </H1>
 
       <HStack w="full" justifyContent="space-between" flexWrap="wrap" spacing={2} alignItems="flex-start">
-        {PRESET_AMOUNTS.slice(0, 2).map((amount) => (
+        {PRESET_AMOUNTS.slice(0, 1).map((amount) => (
           <Button
             key={amount}
             size="md"
@@ -82,15 +82,15 @@ export const DonationInput = () => {
 
         <VStack spacing={0} flexGrow={1} minWidth="80px" position="relative" alignItems="stretch">
           <Button
-            key={PRESET_AMOUNTS[2]}
+            key={PRESET_AMOUNTS[1]}
             size="md"
             variant="outline"
             colorScheme="neutral.9"
-            onClick={() => handleDefaultAmountButtonClick(PRESET_AMOUNTS[2]!)}
+            onClick={() => handleDefaultAmountButtonClick(PRESET_AMOUNTS[1]!)}
             w="full"
             zIndex={1}
           >
-            {`$${commaFormatted(PRESET_AMOUNTS[2])}`}
+            {`$${commaFormatted(PRESET_AMOUNTS[1])}`}
           </Button>
           <Body
             fontSize="8px"
@@ -111,7 +111,7 @@ export const DonationInput = () => {
           </Body>
         </VStack>
 
-        {PRESET_AMOUNTS.slice(3, 4).map((amount) => (
+        {PRESET_AMOUNTS.slice(2, 4).map((amount) => (
           <Button
             key={amount}
             size="md"

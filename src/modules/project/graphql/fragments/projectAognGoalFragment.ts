@@ -5,6 +5,7 @@ export const FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE = gql`
     goalAmount
     balance
     goalDurationInDays
+    endsAt
     deployedAt
     status
     contractAddress

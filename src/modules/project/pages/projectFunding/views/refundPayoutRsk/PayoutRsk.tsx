@@ -21,8 +21,8 @@ import {
   RskToLightningSwapPaymentDetailsFragment,
   RskToOnChainSwapPaymentDetails,
   usePayoutInitiateMutation,
+  usePayoutPaymentCreateMutation,
   usePayoutRequestMutation,
-  usePayoutSwapCreateMutation,
 } from '@/types/index.ts'
 import { commaFormatted, useNotification } from '@/utils/index.ts'
 
@@ -70,7 +70,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
 
   const [payoutRequest, { data: payoutRequestData, loading: payoutRequestLoading }] = usePayoutRequestMutation()
 
-  const [payoutSwapCreate, { loading: isPayoutSwapCreateLoading }] = usePayoutSwapCreateMutation()
+  const [payoutPaymentCreate, { loading: isPayoutPaymentCreateLoading }] = usePayoutPaymentCreateMutation()
   const [payoutInitiate, { loading: isPayoutInitiateLoading }] = usePayoutInitiateMutation()
 
   const [swapData, setSwapData] = useState<any>(null)
@@ -102,11 +102,9 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
     try {
-      const { preimageHash } = generatePreImageHash()
-
       const amount = payoutRequestData?.payoutRequest.payout.amount || 0
 
-      const { data: swapCreateResponse } = await payoutSwapCreate({
+      const { data: payoutPaymentCreateResponse } = await payoutPaymentCreate({
         variables: {
           input: {
             payoutId: payoutRequestData?.payoutRequest.payout.id,
@@ -115,7 +113,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
                 lightningAddress: data.lightningAddress,
                 boltz: {
                   refundPublicKey: accountKeys.publicKey,
-                  preimageHash,
                 },
               },
             },
@@ -123,11 +120,15 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
         },
       })
 
-      if (!swapCreateResponse?.payoutSwapCreate) {
-        throw new Error('Failed to create swap')
+      if (
+        !payoutPaymentCreateResponse?.payoutPaymentCreate ||
+        !payoutPaymentCreateResponse.payoutPaymentCreate.payment ||
+        !payoutPaymentCreateResponse.payoutPaymentCreate.swap
+      ) {
+        throw new Error('Failed to create payment')
       }
 
-      const { swap, payment } = swapCreateResponse.payoutSwapCreate
+      const { swap, payment } = payoutPaymentCreateResponse.payoutPaymentCreate
 
       const paymentDetails = payment?.paymentDetails as RskToLightningSwapPaymentDetailsFragment
 
@@ -228,14 +229,13 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
 
       const amount = payoutRequestData?.payoutRequest.payout.amount || 0
 
-      const { data: swapCreateResponse } = await payoutSwapCreate({
+      const { data: payoutPaymentCreateResponse } = await payoutPaymentCreate({
         variables: {
           input: {
             payoutId: payoutRequestData?.payoutRequest.payout.id,
             payoutPaymentInput: {
               rskToOnChainSwap: {
                 boltz: {
-                  userClaimAddress: data.bitcoinAddress,
                   claimPublicKey: accountKeys.publicKey,
                   preimageHash,
                   preimageHexEncrypted,
@@ -246,11 +246,15 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
         },
       })
 
-      if (!swapCreateResponse?.payoutSwapCreate) {
-        throw new Error('Failed to create swap')
+      if (
+        !payoutPaymentCreateResponse?.payoutPaymentCreate ||
+        !payoutPaymentCreateResponse.payoutPaymentCreate.payment ||
+        !payoutPaymentCreateResponse.payoutPaymentCreate.swap
+      ) {
+        throw new Error('Failed to create payment')
       }
 
-      const { swap, payment } = swapCreateResponse.payoutSwapCreate
+      const { swap, payment } = payoutPaymentCreateResponse.payoutPaymentCreate
 
       const swapObj = JSON.parse(swap)
       swapObj.privateKey = accountKeys.privateKey
@@ -408,7 +412,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
             size="lg"
             colorScheme="primary1"
             variant="solid"
-            isLoading={isSubmitting || isPayoutInitiateLoading || isPayoutSwapCreateLoading}
+            isLoading={isSubmitting || isPayoutInitiateLoading || isPayoutPaymentCreateLoading}
             isDisabled={!enableSubmit}
             onClick={handleSubmit}
           >

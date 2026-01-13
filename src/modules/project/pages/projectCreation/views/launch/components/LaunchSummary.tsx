@@ -75,7 +75,12 @@ export const LaunchSummary = () => {
         {project?.aonGoal?.goalAmount && (
           <HStack>
             <Body medium>{t('Funding Goal')}: </Body>
-            <Body bold>{getFundingGoalDisplay()}</Body>
+            <Body bold>
+              {getFundingGoalDisplay()}{' '}
+              <Body as="span" size="sm" bold muted>
+                {t('including 5% Geyser fees')}
+              </Body>
+            </Body>
           </HStack>
         )}
 
@@ -98,14 +103,14 @@ export const LaunchSummary = () => {
             <Body medium>{t('Launch Time')}: </Body>
             <Body bold>{getLaunchTimeDisplay()}</Body>
             <Body size="sm" bold muted>
-              ( {t('You must launch manually.')} )
+              {t('You must launch manually.')}
             </Body>
           </HStack>
         )}
       </CardLayout>
       <Body>
         {t(
-          'You can come back to this flow to edit your project anytime before the launch. Once the project is launched, some of the project details will not be updatable anymore, such as the funding strategy, goal and duration.',
+          'Once the project is launched, some of the project details will not be updatable anymore, such as the funding strategy, goal and duration.',
         )}
       </Body>
     </VStack>

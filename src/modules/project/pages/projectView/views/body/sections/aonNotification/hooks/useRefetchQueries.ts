@@ -7,7 +7,6 @@ export const useRefetchQueries = () => {
   const refetchQueriesOnPledgeRefund = useCallback(() => {
     client.refetchQueries({
       include: [
-        'ProjectPageBody',
         'ProjectPageContributionsGet',
         'ProjectLeaderboardContributorsGet',
         'ProjectUserContributor',
@@ -19,7 +18,6 @@ export const useRefetchQueries = () => {
   const refetchQueriesOnPayoutSuccess = useCallback(() => {
     client.refetchQueries({
       include: [
-        'ProjectPageBody',
         'ProjectPageContributionsGet',
         'ProjectLeaderboardContributorsGet',
         'ProjectUserContributor',

@@ -1,4 +1,5 @@
 import { Button, HStack, Input, InputGroup, InputRightElement } from '@chakra-ui/react'
+import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 
 import { MIN_WIDTH_AFTER_START } from '@/modules/project/pages/projectFunding/views/fundingInit/sections/DonationInput.tsx'
@@ -22,7 +23,7 @@ export const AmountInput = (props: {
       const currentText = commaFormatted(props.satoshi)
       const commaCount = (currentText.match(/,/g) || []).length
       const restCount = currentText.length - commaCount
-      const textWidth = restCount * 9 + commaCount * 5
+      const textWidth = (restCount - 1) * 28 + commaCount * 15
 
       setSatsPosition(textWidth + MIN_WIDTH_AFTER_START)
     } else {
@@ -37,19 +38,21 @@ export const AmountInput = (props: {
           ref={props.inputRef}
           data-testid="donation-input"
           borderRadius="12px"
-          size="lg"
-          fontWeight={500}
+          fontSize="5xl"
+          height="70px"
+          fontWeight={700}
+          lineHeight="1.0"
           value={
             props.satoshi > 0 ? (props.isSatoshi ? commaFormatted(props.satoshi) : commaFormatted(props.dollar)) : ''
           }
           type="text"
           onChange={props.handleInput}
           onKeyDown={props.handleKeyDown}
-          pl={7}
+          pl={props.isSatoshi ? 4 : 9}
           _placeholder={{
             color: 'neutral1.11',
           }}
-          color="neutral1.11"
+          color="utils.text"
           placeholder="0"
         />
         <InputRightElement
@@ -59,12 +62,13 @@ export const AmountInput = (props: {
           height="100%"
           display="flex"
           alignItems={'center'}
-          paddingRight={2}
+          paddingRight={3}
         >
           <Button
             data-testid="toggle-donation-input"
             w="100%"
             variant="soft"
+            size="lg"
             colorScheme="neutral1"
             onClick={props.onToggle}
           >
@@ -84,18 +88,27 @@ export const AmountInput = (props: {
         </InputRightElement>
       </InputGroup>
 
-      <Body
-        size="xl"
-        position="absolute"
-        top="49%"
-        left={props.isSatoshi ? `${satsPosition}px` : '14px'}
-        transform="translateY(-50%)"
-        pointerEvents="none"
-        transition="left 0.05s"
-        muted
+      <motion.p
+        animate={{
+          left: props.isSatoshi ? `${satsPosition}px` : '14px',
+        }}
+        transition={{
+          type: 'spring',
+          damping: 20,
+          stiffness: 200,
+        }}
+        style={{
+          fontSize: 'var(--chakra-fontSizes-3xl)',
+          fontWeight: 700,
+          color: 'var(--chakra-colors-neutral1-9)',
+          position: 'absolute',
+          top: '49%',
+          transform: 'translateY(-50%)',
+          pointerEvents: 'none',
+        }}
       >
         {props.isSatoshi ? 'sats' : '$'}
-      </Body>
+      </motion.p>
     </HStack>
   )
 }

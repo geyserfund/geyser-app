@@ -8,10 +8,14 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import { PaymentStatus, PledgeRefundFragment, PledgeRefundStatus, usePledgeRefundsQuery } from '@/types/index.ts'
+import {
+  PaymentStatus,
+  PledgeRefundStatus,
+  PledgeRefundWithPaymentFragment,
+  usePledgeRefundsQuery,
+} from '@/types/index.ts'
 
 import { RefundRsk } from '../../../../refundPayoutRsk/RefundRsk.tsx'
-import { RetryRefundRsk } from '../../../../refundPayoutRsk/RetryRefundRsk.tsx'
 import { StatusBadge } from '../components/RefundStatusBadge.tsx'
 
 /** Pledge refunds table component */
@@ -23,15 +27,15 @@ export const PledgeRefundsTable = () => {
       (pledge) => pledge.status !== PledgeRefundStatus.Cancelled && pledge.status !== PledgeRefundStatus.Pending,
     ) || []
 
-  const { props: modalProps, ...rskModalProps } = useModal<{ pledge: PledgeRefundFragment }>()
+  const { props: modalProps, ...rskModalProps } = useModal<{ pledge: PledgeRefundWithPaymentFragment }>()
 
-  const { props: refundRskModalProps, ...refundRskModal } = useModal<{ pledge: PledgeRefundFragment }>()
+  const { props: refundRskModalProps, ...refundRskModal } = useModal<{ pledge: PledgeRefundWithPaymentFragment }>()
 
-  const handleReclaimPledge = (pledge: PledgeRefundFragment) => {
+  const handleReclaimPledge = (pledge: PledgeRefundWithPaymentFragment) => {
     rskModalProps.onOpen({ pledge })
   }
 
-  const handleClaimPledge = (pledge: PledgeRefundFragment) => {
+  const handleClaimPledge = (pledge: PledgeRefundWithPaymentFragment) => {
     refundRskModal.onOpen({ pledge })
   }
 
@@ -122,7 +126,6 @@ export const PledgeRefundsTable = () => {
         </Body>
       </VStack>
       {renderTable()}
-      {rskModalProps.isOpen && <RetryRefundRsk {...rskModalProps} pledgeRefund={modalProps.pledge} />}
       {refundRskModal.isOpen && (
         <RefundRsk
           {...refundRskModal}

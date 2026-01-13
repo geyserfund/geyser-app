@@ -125,7 +125,7 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
           <LaunchpadSummary disableMobile={true} />
           <TAndCs disableMobile={true} />
           <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit">
-            {t('Checkout')}
+            {t('Continue')}
           </Button>
         </VStack>
 

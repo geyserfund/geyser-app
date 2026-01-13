@@ -40,6 +40,7 @@ type useTransactionStatusUpdateProps = {
   handleFailed?: Function
   handleProcessing?: Function
   handleClaimCoins?: Function
+  handleClaimed?: Function
 }
 
 export const useTransactionStatusUpdate = ({
@@ -48,6 +49,7 @@ export const useTransactionStatusUpdate = ({
   handleFailed = () => {},
   handleProcessing = () => {},
   handleClaimCoins = () => {},
+  handleClaimed = () => {},
 }: useTransactionStatusUpdateProps) => {
   const { sendMessage, lastJsonMessage, readyState } = useWebSocket<any>(swapServiceWsEndpoint, {
     heartbeat: {
@@ -86,6 +88,9 @@ export const useTransactionStatusUpdate = ({
             break
           case 'transaction.server.confirmed':
             handleClaimCoins(swapStatusUpdate)
+            break
+          case 'transaction.claimed':
+            handleClaimed(swapStatusUpdate)
             break
           case OnChainErrorStatuses.INVOICE_FAILED:
           case OnChainErrorStatuses.LOCKUP_FAILED:

@@ -156,7 +156,7 @@ export const createAndSignLockTransaction = async (params: {
   claimAddress: Address
   refundAddress: Address
   timelock: bigint
-  amount: bigint
+  amount: bigint | number
   privateKey: Hex
 }): Promise<Hex> => {
   const { preimageHash, claimAddress, refundAddress, timelock, amount, privateKey } = params
@@ -188,7 +188,7 @@ export const createAndSignLockTransaction = async (params: {
     // This includes all fields required for an Ethereum/RSK transaction
     const transaction = {
       to: contractAddress,
-      value: amount,
+      value: BigInt(amount),
       data,
       nonce,
       gas: gasLimit,
