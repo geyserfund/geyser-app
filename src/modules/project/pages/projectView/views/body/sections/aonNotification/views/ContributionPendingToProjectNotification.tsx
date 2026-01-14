@@ -83,7 +83,7 @@ export const ContributionPendingToProjectNotification = ({
         return {
           image: CONTRIBUTION_PENDING_IMAGE,
           text: t(
-            'Transaction broadcast (step 1 of 3). Confirmation takes ~2 min. If stuck here for too long, please contact us at support@geyser.fund',
+            'Transaction broadcast (step 1 of 3). Confirmation takes ~10 min. If stuck here for too long, please contact us at support@geyser.fund',
           ),
           showMempool:
             (paymentType === PaymentType.OnChainToRskSwap || paymentType === PaymentType.OnChainToLightningSwap) &&
@@ -93,7 +93,7 @@ export const ContributionPendingToProjectNotification = ({
         return {
           image: CONTRIBUTION_PENDING_IMAGE,
           text: t(
-            'Swap to AON contract (step 2 of 3). Confirmation takes ~1 min. If stuck here for too long, please contact us at support@geyser.fund',
+            'Swap to AON contract (step 2 of 3). Confirmation takes ~2 min. If stuck here for too long, please contact us at support@geyser.fund',
           ),
           showMempool: false,
         }
@@ -109,7 +109,7 @@ export const ContributionPendingToProjectNotification = ({
         return {
           image: CONTRIBUTION_PENDING_IMAGE,
           text: t(
-            'Transaction broadcast (step 1 of 3). Confirmation takes ~2 min. If stuck here for too long, please contact us at support@geyser.fund',
+            'Transaction broadcast (step 1 of 3). Confirmation takes ~10 min. If stuck here for too long, please contact us at support@geyser.fund',
           ),
           showMempool: false,
         }

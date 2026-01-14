@@ -6,10 +6,12 @@ import {
   AccordionPanel,
   Button,
   Image,
+  Link,
   Stack,
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { Trans } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
@@ -24,6 +26,11 @@ import {
 } from '@/shared/constants/index.ts'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 
+import {
+  CampaignsAlignIncentivesImageUrl,
+  CampaignsFailFastImageUrl,
+  CampaignsGoGlobalImageUrl,
+} from '../../../constants.ts'
 import { NewCampaigns } from './views/NewCampaigns.tsx'
 
 export const CampaignsComingSoon = () => {
@@ -46,7 +53,7 @@ export const CampaignsComingSoon = () => {
   }
 
   return (
-    <VStack w="full" gap={10} paddingBottom={8} px={standardPadding}>
+    <VStack w="full" gap={{ base: 10, lg: 16 }} paddingBottom={8} px={standardPadding}>
       <Stack w="full" gap={8} direction={{ base: 'column', lg: 'row' }} alignItems="center">
         <Image
           height="auto"
@@ -60,45 +67,128 @@ export const CampaignsComingSoon = () => {
             {t('Fund big ideas, only if they succeed')}
           </H2>
 
-          <Body size="md">
+          <Body size="lg">
             {t('All-or-Nothing on Bitcoin means creators get the funds only if they reach the goal.')}
             <br />
-            {t('If you do not, contributors can claim their funds back.')}
+            {t('If they do not, contributors can claim their funds back.')}
           </Body>
         </VStack>
       </Stack>
 
-      <VStack w="full" gap={6}>
+      <Stack w="full" gap={{ base: 4, lg: 8 }} direction={{ base: 'column', md: 'row' }} alignItems="stretch">
+        <CardLayout flex={1} backgroundColor="neutral1.3" border="none" alignItems="center" borderRadius="20px">
+          <Image src={CampaignsAlignIncentivesImageUrl} alt="Aligned incentives" boxSize={32} />
+          <VStack w="full" gap={3} alignItems="start">
+            <Body size="lg" bold>
+              {t('Align the incentives')}
+            </Body>
+            <Body size="sm">
+              {t(
+                'Creators only get paid if they fully fund the project. Contributors back ideas knowing their bitcoin is not released unless the goal is met.',
+              )}
+            </Body>
+          </VStack>
+        </CardLayout>
+
+        <CardLayout flex={1} backgroundColor="neutral1.3" border="none" alignItems="center" borderRadius="20px">
+          <Image src={CampaignsFailFastImageUrl} alt="Fail fast, without burning trust" boxSize={32} />
+          <VStack w="full" gap={3} alignItems="start">
+            <Body size="lg" bold>
+              {t('Fail fast, without burning trust')}
+            </Body>
+            <Body size="sm">
+              {t('If a campaign fails, it fails cleanly. Funds go back to contributors and reputations stay intact.')}
+            </Body>
+          </VStack>
+        </CardLayout>
+
+        <CardLayout flex={1} backgroundColor="neutral1.3" border="none" alignItems="center">
+          <Image src={CampaignsGoGlobalImageUrl} alt="Global by default, no borders" boxSize={32} />
+          <VStack w="full" gap={3} alignItems="start">
+            <Body size="lg" bold>
+              {t('Go Global with your campaign')}
+            </Body>
+            <Body size="sm">
+              {t('All-or-Nothing campaigns can be launched and funded from anywhere using Bitcoin.')}
+            </Body>
+          </VStack>
+        </CardLayout>
+      </Stack>
+
+      <VStack w="full" gap={0}>
         <H2 size={{ base: 'xl', lg: '3xl' }} bold>
-          {t('Early Launches')}
+          {t('Early Campaign Launches')}
         </H2>
-        <VStack w="full" gap={3} align="stretch">
+        <Body size="md" textAlign="center">
+          {t('The first projects to launch with All-or-Nothing')}
+        </Body>
+        <VStack w="full" gap={3} align="stretch" paddingTop={12}>
           <NewCampaigns />
         </VStack>
       </VStack>
 
-      <Image
-        height="auto"
-        width="full"
-        maxWidth="400px"
-        src={AllOrNothingCampaignsStartingImageUrl}
-        alt="Campaigns Coming Soon"
-      />
-
-      <VStack w="full" gap={2}>
+      <VStack w="full" gap={2} maxW="800px">
         <H2 size="2xl" bold>
-          {t('Join the early launches! ')}
+          {t('Over 20 projects have already registered to launch with All-or-Nothing.')}
         </H2>
         <Body size="lg" textAlign="center">
-          {t('Create your campaign now and join the Early Launch projects.')}
-          <br />
-          {t('All or Nothing will be available for anyone in the coming months.')}
+          {t(
+            'Create your campaign now to help shape how Bitcoin-native crowdfunding evolves, and get greater exposure to your project. All-or-Nothing is currently available through Early Launch and will open more broadly in the coming months.',
+          )}
+        </Body>
+        <Button size="xl" colorScheme="primary1" onClick={handleLaunchCampaignButtonClick}>
+          {t('Join the early launch')}
+        </Button>
+
+        <Image
+          height="auto"
+          width="full"
+          maxWidth="400px"
+          src={AllOrNothingCampaignsStartingImageUrl}
+          alt="Campaigns Coming Soon"
+        />
+      </VStack>
+
+      <VStack w="full" gap={4} maxW="800px">
+        <H2 size={{ base: 'xl', lg: '2xl' }} bold>
+          {t('Why contributors win with All-or-Nothing')}
+        </H2>
+        <Body size="md" textAlign="center">
+          {t(
+            'If the campaign succeeds, great.  If it fails, the project lacked sufficient demand or had unrealistic funding assumptions.  That single rule dramatically reduces risk and makes backing early-stage Bitcoin projects safer by default. Contributors can support bold ideas without fearing permanent loss when goals are not met.',
+          )}
+        </Body>
+        <Body size="md" textAlign="center" bold>
+          {t('All-or-Nothing is now available globally, without borders.')}
+          {' 🌎'}
         </Body>
       </VStack>
 
-      <Button size="xl" colorScheme="primary1" onClick={handleLaunchCampaignButtonClick}>
-        {t('Launch your campaign')}
-      </Button>
+      <VStack w="full" maxW="800px">
+        <H2 size={{ base: 'xl', lg: '2xl' }} bold>
+          {t('Powered by')}
+        </H2>
+        <Body>
+          <Trans i18nKey="Powered by an <1>open-source Rootstock smart contract</1> that can be reused by anyone.">
+            {'Powered by an '}
+            <Link
+              href="https://github.com/steliosrammos/rootstock-all-or-nothing"
+              isExternal
+              color="primary1.500"
+              textDecoration="underline"
+            >
+              open-source Rootstock smart contract
+            </Link>
+            {' that can be reused by anyone.'}
+          </Trans>
+        </Body>
+        <Image
+          src={'https://storage.googleapis.com/geyser-projects-media/app/campaigns/rootstock_image.png'}
+          height="30px"
+          width="auto"
+          alt="All or Nothing"
+        />
+      </VStack>
 
       <VStack w={'full'} alignItems="start">
         <H2 size={{ base: 'xl', lg: '2xl' }} bold>
@@ -120,18 +210,6 @@ export const CampaignsComingSoon = () => {
             ))}
           </Accordion>
         </CardLayout>
-      </VStack>
-
-      <VStack w="full" maxW="800px">
-        <H2 size={{ base: 'xl', lg: '2xl' }} bold>
-          {t('Powered by')}
-        </H2>
-        <Image
-          src={'https://storage.googleapis.com/geyser-projects-media/app/campaigns/rootstock_image.png'}
-          height="60px"
-          width="auto"
-          alt="All or Nothing"
-        />
       </VStack>
     </VStack>
   )

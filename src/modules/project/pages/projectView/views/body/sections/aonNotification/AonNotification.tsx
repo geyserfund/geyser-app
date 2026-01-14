@@ -93,6 +93,20 @@ export const AonNotification = () => {
   const isPayoutRemaining =
     (project.aonGoal?.status === ProjectAonGoalStatus.Successful || isPayoutProcessing) && isProjectOwner
 
+  const renderFunderNotification = () => {
+    if (!isAon || loading) {
+      return null
+    }
+
+    if (contributionPendingToProject) {
+      return <ContributionPendingToProjectNotification contribution={contributionPendingToProject} />
+    }
+
+    if (fundedToCampaign) {
+      return <FundedToCampaign onOpen={refundModal.onOpen} />
+    }
+  }
+
   const renderNotification = () => {
     if (!isAon || loading) {
       return null
@@ -120,14 +134,6 @@ export const AonNotification = () => {
 
     if (project.aonGoal?.status === ProjectAonGoalStatus.Finalized) {
       return <FundsReturnedNotification />
-    }
-
-    if (contributionPendingToProject) {
-      return <ContributionPendingToProjectNotification contribution={contributionPendingToProject} />
-    }
-
-    if (fundedToCampaign) {
-      return <FundedToCampaign onOpen={refundModal.onOpen} />
     }
   }
 
@@ -170,6 +176,7 @@ export const AonNotification = () => {
   return (
     <>
       {renderNotification()}
+      {renderFunderNotification()}
       {renderRefundModal()}
       {renderPayoutModal()}
     </>
