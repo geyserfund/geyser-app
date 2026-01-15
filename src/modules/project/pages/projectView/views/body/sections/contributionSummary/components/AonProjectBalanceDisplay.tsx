@@ -42,7 +42,7 @@ export const AonProjectBalanceDisplay = () => {
         value={percent}
         height={22}
         radius={16}
-        label="All-or-Nothing"
+        label="All-or-Nothing (Beta)"
         fillGradient={fillGradient}
         glowColor={glowColor}
         flowSpeedSec={15}

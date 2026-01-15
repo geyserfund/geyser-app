@@ -17,7 +17,7 @@ import { ProjectLaunchStrategy } from '../launch/views/LaunchStrategySelection.t
 
 const options = {
   [ProjectFundingStrategy.AllOrNothing]: {
-    title: t('All-or-nothing'),
+    title: t('All-or-nothing (Beta)'),
     body: t('Receive funds only if you reach your goal by the deadline. Builds momentum and trust.'),
     howDoesItWork: t(
       'Set a funding goal and choose a deadline from 1 to 60 days. If you hit your goal, the funds unlock and you have 30 days to withdraw them. If not, contributors can claim refunds and the campaign closes.',
