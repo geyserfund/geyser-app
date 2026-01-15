@@ -1,11 +1,21 @@
-import { Box, Button, ButtonProps, ComponentWithAs, forwardRef, HStack, Skeleton, StackProps } from '@chakra-ui/react'
+import {
+  Box,
+  BoxProps,
+  Button,
+  ButtonProps,
+  ComponentWithAs,
+  forwardRef,
+  HStack,
+  Skeleton,
+  StackProps,
+} from '@chakra-ui/react'
 import { motion } from 'framer-motion'
+import { t } from 'i18next'
 import { useCallback, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router'
 
 import { lightModeColors } from '@/shared/styles'
-import { SuccessImageBackgroundGradient, TitleHeaderGradient } from '@/shared/styles/custom.ts'
+import { NewBadgeGradient, SuccessImageBackgroundGradient } from '@/shared/styles/custom.ts'
 
 import { toInt } from '../../../utils'
 import { TooltipPopover } from '../feedback/TooltipPopover.tsx'
@@ -41,8 +51,6 @@ export const AnimatedNavSlide = ({
   disableColorMode,
   ...props
 }: AnimatedNavSlideProps) => {
-  const { t } = useTranslation()
-
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -160,20 +168,7 @@ export const AnimatedNavSlide = ({
             disableColorMode={disableColorMode}
             position="relative"
           >
-            {item.new && (
-              <Box
-                position="absolute"
-                top={-3}
-                background={TitleHeaderGradient}
-                borderRadius="10px"
-                borderBottomLeftRadius="2px"
-                padding="0px 6px 1px 6px"
-              >
-                <Body as="span" size="xs" fontWeight={700} color="black !important">
-                  {t('new')}
-                </Body>
-              </Box>
-            )}
+            {item.new && <NavigationNewBadge position="absolute" top={-3} />}
             <TooltipPopover key={item.name} text={item.tooltipLabel}>
               <HStack
                 w="full"
@@ -220,6 +215,22 @@ const ProjectNavigationButton: ComponentWithAs<
     />
   )
 })
+
+export const NavigationNewBadge = (props: BoxProps) => {
+  return (
+    <Box
+      background={NewBadgeGradient}
+      borderRadius="10px"
+      borderBottomLeftRadius="2px"
+      padding="0px 6px 1px 6px"
+      {...props}
+    >
+      <Body as="span" size="xs" fontWeight={700} color="black !important">
+        {t('live')}
+      </Body>
+    </Box>
+  )
+}
 
 export const AnimatedNavBarSkeleton = () => {
   return <SkeletonLayout borderRadius={'12px'} height={'44px'} width="100%" />

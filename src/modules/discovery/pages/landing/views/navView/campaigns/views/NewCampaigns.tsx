@@ -12,7 +12,7 @@ import {
 import { LandingProjectCard } from '../../../../components/LandingProjectCard.tsx'
 import { LoadingProjectGridItems } from '../../../../components/LoadingProjectGridItems.tsx'
 
-const NO_OF_PROJECT_TO_LOAD = 3
+// const NO_OF_PROJECT_TO_LOAD = 3
 
 export const NewCampaigns = () => {
   const where = {
@@ -31,9 +31,6 @@ export const NewCampaigns = () => {
       input: {
         where,
         orderBy,
-        pagination: {
-          take: NO_OF_PROJECT_TO_LOAD,
-        },
       },
     },
   })
@@ -52,8 +49,10 @@ export const NewCampaigns = () => {
     ))
   }
 
+  const projectLength = projects.length
+
   return (
-    <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 4, lg: 8 }}>
+    <SimpleGrid w="full" columns={{ base: 1, lg: projectLength > 5 ? 5 : projectLength }} spacing={{ base: 4, lg: 8 }}>
       {renderBody()}
     </SimpleGrid>
   )
