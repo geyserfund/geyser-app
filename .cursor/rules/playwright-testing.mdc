@@ -1,0 +1,534 @@
+# Playwright E2E Testing Guidelines
+
+## Architecture
+
+### Domain-Driven Design Structure
+
+This test suite follows a Domain-Driven Design (DDD) architecture where tests are organized by functional domains (auth, funding, project, etc.) rather than by page objects or technical layers.
+
+```
+packages/testing/playwright/
+├── tests/                    # Test specifications
+│   ├── auth/
+│   │   └── *.spec.ts
+│   ├── funding/
+│   │   └── *.spec.ts
+│   └── project/
+│       └── *.spec.ts
+├── domains/                  # Domain logic and utilities
+│   ├── auth/
+│   │   ├── actions.ts       # Atomic user interactions
+│   │   ├── flows.ts         # Composed multi-step flows
+│   │   ├── assertions.ts    # Verification functions
+│   │   ├── mocks.ts         # Mocking utilities
+│   │   └── fixtures.ts      # Test fixtures and contexts
+│   ├── funding/
+│   │   └── ...
+│   └── shared/              # Cross-domain utilities
+│       ├── bitcoin/
+│       ├── graphql/
+│       └── constants.ts
+├── config/
+│   ├── playwright.config.ts
+│   └── environments.ts
+└── .env.playwright
+```
+
+## File Organization
+
+### Test Files (`tests/**/*.spec.ts`)
+
+- **Location**: `tests/{domain}/{feature}.spec.ts`
+- **Purpose**: Define test scenarios and orchestrate domain utilities
+- **Keep**: Test specifications clean and readable
+- **Avoid**: Direct selector manipulation, complex logic
+
+### Actions (`domains/{domain}/actions.ts`)
+
+- **Purpose**: Atomic, reusable user interactions
+- **Pattern**: One action = one user intention
+- **Examples**: `clickSignIn()`, `enterAmount()`, `selectOption()`
+- **Always**: Use semantic selectors (`getByRole`, `getByTestId`)
+
+### Flows (`domains/{domain}/flows.ts`)
+
+- **Purpose**: Composed multi-step operations
+- **Pattern**: Combine atomic actions into business workflows
+- **Examples**: `loginWithNostr()`, `completeDonation()`, `createProject()`
+- **Include**: Setup, execution, and waiting for completion
+
+### Assertions (`domains/{domain}/assertions.ts`)
+
+- **Purpose**: Verification functions
+- **Pattern**: Use Playwright's `expect` API
+- **Naming**: Always prefix with `expect` (e.g., `expectUserLoggedIn()`)
+- **Include**: Helpful error messages and reasonable timeouts
+
+### Mocks (`domains/{domain}/mocks.ts`)
+
+- **Purpose**: Mock external dependencies
+- **Strategy**: Mock only unstable/external services (Nostr extension, payment processors)
+- **Keep**: Real API calls for most operations
+- **Use**: `page.route()` for network interception, `page.addInitScript()` for window objects
+
+### Fixtures (`domains/{domain}/fixtures.ts`)
+
+- **Purpose**: Reusable test contexts and setup
+- **Pattern**: Use Playwright's `test.extend()`
+- **Examples**: `authenticatedPage`, `guestPage`
+- **Benefit**: Clean test isolation and reusable state
+
+## Naming Conventions
+
+### Files
+
+- Test files: `{feature}.spec.ts` (e.g., `login-logout.spec.ts`)
+- Domain files: `actions.ts`, `flows.ts`, `assertions.ts`, `mocks.ts`, `fixtures.ts`
+- Use kebab-case for file names
+- Use descriptive, specific names
+
+### Functions
+
+#### Actions
+- Format: `{verb}{Noun}` (e.g., `clickSignIn`, `enterAmount`)
+- Use camelCase
+- Start with action verb: `click`, `enter`, `select`, `open`, `close`
+
+#### Flows
+- Format: `{verb}{BusinessConcept}` (e.g., `loginWithNostr`, `completeDonation`)
+- Use camelCase
+- Describe complete business operations
+- May include `With` to specify variants (e.g., `loginWithNostr`, `loginWithGoogle`)
+
+#### Assertions
+- Format: `expect{Condition}` (e.g., `expectUserLoggedIn`, `expectSuccessScreen`)
+- Always start with `expect`
+- Use present tense
+- Be specific about what is being verified
+
+#### Mocks
+- Format: `mock{Service}` or `setup{Service}Mocks` (e.g., `mockNostrExtension`, `setupAuthMocks`)
+- Start with `mock` or `setup`
+- Clearly indicate what is being mocked
+
+### Variables and Constants
+
+- Use camelCase for variables
+- Use UPPER_SNAKE_CASE for constants
+- Be descriptive and specific
+
+## Selector Strategy
+
+### Preferred Order
+
+1. **`getByRole()`** - Most semantic and accessible
+   ```typescript
+   await page.getByRole('button', { name: 'Sign in' })
+   await page.getByRole('heading', { name: 'Welcome' })
+   ```
+
+2. **`getByTestId()`** - Stable and test-specific
+   ```typescript
+   await page.getByTestId('funding-comment-input')
+   await page.getByTestId('platform-dropdown-menu')
+   ```
+
+3. **`getByLabel()` / `getByPlaceholder()`** - For form inputs
+   ```typescript
+   await page.getByLabel('Email')
+   await page.getByPlaceholder('Enter amount')
+   ```
+
+4. **CSS selectors** - Only as last resort
+   ```typescript
+   await page.locator('#specific-id')
+   ```
+
+### Selector Best Practices
+
+- Always prefer user-facing attributes (role, label, text)
+- Add `data-testid` to interactive elements in the application
+- Avoid brittle selectors (classes, DOM structure)
+- Use timeout options for elements that may take time to appear
+
+## Test Structure
+
+### Arrange-Act-Assert Pattern
+
+```typescript
+test('should complete donation', async ({ page }) => {
+  // Arrange - Setup test state
+  await page.goto('/project/test-project')
+  await loginWithNostr(page)
+  
+  // Act - Perform actions
+  const invoice = await completeLightningDonation(page, 1000, 'Test comment')
+  await payLightningInvoice(invoice)
+  
+  // Assert - Verify outcome
+  await expectSuccessScreen(page)
+})
+```
+
+### Test Organization
+
+```typescript
+test.describe('Feature Name', () => {
+  // Setup that applies to all tests
+  test.beforeEach(async ({ page }) => {
+    // Common setup
+  })
+  
+  // Individual test cases
+  test('should do specific thing', async ({ page }) => {
+    // Test implementation
+  })
+  
+  test('should handle error case', async ({ page }) => {
+    // Error case test
+  })
+})
+```
+
+### Test Independence
+
+- Each test should be independent
+- Use `beforeEach` for common setup
+- Clean up test data when necessary
+- Don't rely on test execution order
+
+## Fixtures
+
+### Using Built-in Fixtures
+
+```typescript
+test('basic test', async ({ page }) => {
+  // page is provided by Playwright
+  await page.goto('/')
+})
+```
+
+### Custom Fixtures
+
+```typescript
+// In fixtures.ts
+export const test = base.extend<{
+  authenticatedPage: Page
+}>({
+  authenticatedPage: async ({ page }, use) => {
+    await setupAuthMocks(page)
+    await page.goto('/')
+    await loginWithNostr(page)
+    await use(page)
+  },
+})
+
+// In test file
+test('authenticated test', async ({ authenticatedPage }) => {
+  // Page is already authenticated
+})
+```
+
+### When to Use Fixtures
+
+- For commonly needed test states (authenticated, guest)
+- For expensive setup operations
+- For test isolation and cleanup
+- For dependency injection
+
+## External API Integration
+
+### Lightning/Bitcoin Node
+
+```typescript
+// Use dedicated utilities from domains/shared/bitcoin
+import { payOnchain, payLightningInvoice, mineBlock } from '../../domains/shared/bitcoin/lncli'
+
+// In test
+const invoice = await getInvoiceFromUI(page)
+await payLightningInvoice(invoice)
+await mineBlock()
+```
+
+### GraphQL
+
+```typescript
+// Use interceptors for selective mocking
+import { interceptGraphql, mockGraphQLQuery } from '../../domains/shared/graphql/interceptors'
+
+// Mock specific queries
+await mockGraphQLQuery(page, 'Me', { me: mockUser })
+
+// Or intercept all with custom handling
+await interceptGraphql(page, async (route, operationName, variables) => {
+  if (operationName === 'Me') {
+    await route.fulfill(createGraphQLResponse({ me: mockUser }))
+  } else {
+    await route.continue()
+  }
+})
+```
+
+## Mocking Strategy
+
+### What to Mock
+
+✅ **DO Mock:**
+- Browser extensions (Nostr, wallet extensions)
+- Unstable external services
+- Third-party APIs
+- Time-sensitive operations (for consistency)
+
+❌ **DON'T Mock:**
+- Your own API/GraphQL endpoints
+- Database operations
+- Core application logic
+- User interface behavior
+
+### Mocking Techniques
+
+#### Window Objects
+
+```typescript
+await page.addInitScript((data) => {
+  window.nostr = {
+    signEvent: () => ({ sig: data.signature }),
+    getPublicKey: () => data.pubkey,
+  }
+}, testData)
+```
+
+#### Network Interception
+
+```typescript
+await page.route('**/auth/nostr', async (route) => {
+  await route.fulfill({
+    status: 200,
+    body: JSON.stringify({ token: 'test-token' }),
+  })
+})
+```
+
+#### GraphQL Mocking
+
+```typescript
+await page.route('**/graphql', async (route) => {
+  const body = route.request().postDataJSON()
+  if (body.operationName === 'Me') {
+    await route.fulfill({ json: { data: { me: mockUser } } })
+  } else {
+    await route.continue()
+  }
+})
+```
+
+## Error Handling and Debugging
+
+### Timeouts
+
+```typescript
+// Default timeout in config (60s)
+// Override for specific operations
+await page.getByRole('button').click({ timeout: 5000 })
+await page.waitForResponse(resp => resp.url().includes('/api'), { timeout: 10000 })
+```
+
+### Waiting Strategies
+
+```typescript
+// Wait for network to be idle
+await page.waitForLoadState('networkidle')
+
+// Wait for specific response
+await page.waitForResponse(resp => resp.url().includes('/graphql'))
+
+// Wait for element state
+await page.getByTestId('success').waitFor({ state: 'visible' })
+
+// Custom wait with retry
+await page.waitForFunction(() => document.querySelector('#element')?.textContent === 'Done')
+```
+
+### Debugging
+
+```typescript
+// Add to test for debugging
+await page.pause() // Opens Playwright Inspector
+
+// Screenshot
+await page.screenshot({ path: 'debug.png', fullPage: true })
+
+// Console logs
+page.on('console', msg => console.log('Browser:', msg.text()))
+
+// Network logs
+page.on('response', resp => console.log('Response:', resp.url(), resp.status()))
+```
+
+## Best Practices
+
+### Test Isolation
+
+- Each test should be independent
+- Use fresh page/context per test
+- Clean up test data after tests
+- Don't share state between tests
+
+### Performance
+
+- Run tests in parallel where possible
+- Use fixtures for expensive setup
+- Mock external dependencies
+- Keep tests focused and fast
+
+### Maintainability
+
+- Use semantic selectors (getByRole)
+- Extract repeated logic into flows
+- Keep tests readable (comment complex logic)
+- Update tests when UI changes
+
+### Reliability
+
+- Add proper waits (avoid arbitrary timeouts)
+- Handle async operations correctly
+- Use retry logic for flaky operations
+- Verify critical paths thoroughly
+
+## Running Tests
+
+### Commands
+
+```bash
+# Run all tests
+yarn test:playwright
+
+# Run specific test file
+yarn test:playwright tests/auth/login-logout.spec.ts
+
+# Run tests in UI mode (recommended for development)
+yarn test:playwright:ui
+
+# Run tests in debug mode
+yarn test:playwright:debug
+
+# Run only auth tests
+yarn test:playwright:auth
+
+# Run in specific browser
+yarn test:playwright --project=chromium
+```
+
+### Environment Configuration
+
+Tests use `.env.playwright` for configuration. Required variables:
+- `APP_URL` - Application URL
+- `CONTRIBUTOR_LND_ENDPOINT` - Lightning node endpoint
+- `CONTRIBUTOR_LND_ADMIN_MACAROON_HEX` - LND authentication
+- `MINE_BLOCK_ADDRESS` - Bitcoin regtest mining address
+- `BITCOIND_ENDPOINT` - Bitcoin node endpoint
+- `BITCOIND_AUTH` - Bitcoin node authentication
+
+## Common Patterns
+
+### Authentication Flow
+
+```typescript
+// Guest test
+test('guest flow', async ({ page }) => {
+  await page.goto('/projects')
+  // Test without authentication
+})
+
+// Authenticated test
+test('authenticated flow', async ({ page }) => {
+  await loginWithNostr(page)
+  // Test with authentication
+})
+
+// Using fixture
+test('with fixture', async ({ authenticatedPage }) => {
+  // Already authenticated
+})
+```
+
+### Payment Flow
+
+```typescript
+test('complete payment', async ({ page }) => {
+  // Start donation
+  const address = await completeOnchainDonation(page, 60000, 'Test')
+  
+  // Make external payment
+  await payOnchain(address, 60600)
+  await expectTransactionProcessing(page)
+  
+  // Confirm on blockchain
+  await mineBlock()
+  await expectSuccessScreen(page)
+})
+```
+
+### Error Handling
+
+```typescript
+test('handles error', async ({ page }) => {
+  // Mock error response
+  await mockGraphQLError(page, 'CreateProject', 'Project name already exists')
+  
+  // Attempt action
+  await fillProjectForm(page, { name: 'Existing Project' })
+  await clickSubmit(page)
+  
+  // Verify error is shown
+  await expectErrorMessage(page, 'Project name already exists')
+})
+```
+
+## AI Agent Guidelines
+
+### Finding Tests
+
+- Tests are organized by domain in `tests/{domain}/`
+- Look for `*.spec.ts` files
+- Each test file focuses on specific feature
+
+### Fixing Tests
+
+1. Run test to understand failure
+2. Check domain utilities (actions, flows, assertions)
+3. Update selectors if UI changed
+4. Update mocks if API changed
+5. Verify test still follows patterns
+
+### Creating Tests
+
+1. Identify the domain (auth, funding, project, etc.)
+2. Create or update domain utilities as needed
+3. Write test using existing patterns
+4. Ensure test is independent and isolated
+5. Add to appropriate test file or create new one
+
+### Architecture Questions
+
+- **Where to add new action?** → `domains/{domain}/actions.ts`
+- **Where to add new flow?** → `domains/{domain}/flows.ts`
+- **Where to add new assertion?** → `domains/{domain}/assertions.ts`
+- **Where to add new mock?** → `domains/{domain}/mocks.ts`
+- **Where to add new test?** → `tests/{domain}/{feature}.spec.ts`
+
+## Troubleshooting
+
+### Common Issues
+
+**Timeout errors**: Increase timeout or wait for specific conditions
+**Selector not found**: Update selector, add wait, check element rendering
+**Flaky tests**: Add proper waits, check for race conditions
+**Mock not working**: Verify route pattern, check mock is set up before page load
+
+### Getting Help
+
+- Check Playwright documentation: https://playwright.dev
+- Review existing tests for patterns
+- Use Playwright Inspector for debugging
+- Enable trace for detailed execution logs

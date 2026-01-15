@@ -4,11 +4,19 @@
   "scripts": {
     "test:e2e": "yarn cypress run --e2e",
     "test:watch": "yarn cypress open",
-    "test:state": "vitest run -c ../../vite.config.ts"
+    "test:state": "vitest run -c ../../vite.config.ts",
+    "test:playwright": "playwright test -c playwright/config/playwright.config.ts",
+    "test:playwright:ui": "playwright test -c playwright/config/playwright.config.ts --ui",
+    "test:playwright:debug": "playwright test -c playwright/config/playwright.config.ts --debug",
+    "test:playwright:auth": "playwright test -c playwright/config/playwright.config.ts tests/auth",
+    "test:playwright:headed": "playwright test -c playwright/config/playwright.config.ts --headed",
+    "test:playwright:chromium": "playwright test -c playwright/config/playwright.config.ts --project=chromium"
   },
   "devDependencies": {
+    "@playwright/test": "^1.57.0",
     "cypress": "13.13.2",
     "cypress-real-events": "^1.12.0",
+    "dotenv": "^17.2.3",
     "vitest": "^3.1.1"
   }
 }
