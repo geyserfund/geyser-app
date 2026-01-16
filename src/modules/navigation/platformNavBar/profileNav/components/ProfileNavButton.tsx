@@ -34,6 +34,7 @@ export const ProfileNavButton = forwardRef<StackProps, 'button'>((props, ref) =>
           height="full"
           borderRadius="full"
           padding={0}
+          data-testid="user-profile-avatar"
         >
           <ProfileAvatar
             src={user.imageUrl || ''}

@@ -111,9 +111,13 @@ export const mockGraphQLMeLoggedOut = async (page: Page) => {
   })
 }
 
-/** Setup all mocks needed for Nostr authentication */
+/** Setup initial mocks needed for Nostr authentication (before opening popup) */
 export const setupNostrAuthMocks = async (page: Page) => {
   await mockNostrExtension(page)
   await mockNostrAuthEndpoint(page)
-  await mockGraphQLMe(page)
+  // NOTE: Do NOT set up GraphQL Me mock here!
+  // The GraphQL mock should be set up AFTER opening the auth popup
+  // but BEFORE clicking the Nostr button. This ensures:
+  // 1. Initial page load gets real API response (naturally logged out)
+  // 2. After auth flow starts, mock returns logged-in user
 }

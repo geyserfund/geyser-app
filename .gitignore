@@ -19,6 +19,8 @@ packages/testing/cypress.env.json
 # Playwright
 packages/testing/playwright/test-results/
 packages/testing/playwright/playwright-report/
+packages/testing/test-results/
+packages/testing/playwright-report/
 packages/testing/playwright/.cache/
 packages/testing/playwright/.auth/
 packages/testing/playwright/trace.zip

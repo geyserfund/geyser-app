@@ -12,10 +12,16 @@ import { expect, test } from '@playwright/test'
 import { clickSignIn } from '../../domains/auth/actions'
 import { expectConnectPopup, expectUserLoggedIn, expectUserLoggedOut } from '../../domains/auth/assertions'
 import { loginWithNostr, logout } from '../../domains/auth/flows'
+import { setupNostrAuthMocks } from '../../domains/auth/mocks'
 
 test.describe('Authentication', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to landing page before each test
+    // CRITICAL: Set up browser-level mocks BEFORE page navigation
+    // This ensures window.nostr exists when components render
+    // Otherwise ConnectWithNostr will return null and button won't render
+    await setupNostrAuthMocks(page)
+
+    // Navigate to landing page after mocks are set up
     await page.goto('/')
   })
 

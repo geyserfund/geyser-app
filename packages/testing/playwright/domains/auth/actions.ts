@@ -21,25 +21,18 @@ export const openUserMenu = async (page: Page) => {
   await dropdown.click()
 }
 
-/** Click the Sign Out button in the user menu */
+/** Click the Sign Out menu item in the user menu */
 export const clickSignOut = async (page: Page) => {
-  await page.getByRole('button', { name: 'Sign Out' }).click()
+  // Sign Out is rendered as a MenuItem (role="menuitem"), not a button
+  await page.getByRole('menuitem', { name: 'Sign Out' }).click()
 }
 
-/** Get the user dropdown button element */
-export const getUserDropdown = (page: Page) => {
-  return page.getByTestId('platform-dropdown-menu')
+/** Get the user profile avatar element (visible only when logged in) */
+export const getUserAvatar = (page: Page) => {
+  return page.getByTestId('user-profile-avatar')
 }
 
-/** Check if user avatar is visible in dropdown (indicates logged in state) */
-export const isUserAvatarVisible = async (page: Page): Promise<boolean> => {
-  const dropdown = getUserDropdown(page)
-  const avatar = dropdown.locator('img')
-
-  try {
-    await avatar.waitFor({ state: 'visible', timeout: 5000 })
-    return true
-  } catch {
-    return false
-  }
+/** Get the Sign In button element (visible only when logged out) */
+export const getSignInButton = (page: Page) => {
+  return page.getByRole('button', { name: 'Sign in' })
 }
