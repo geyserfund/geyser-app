@@ -28,7 +28,7 @@ export const ProjectPromotionNotice = () => {
   return (
     <CardLayout w="full" background={lightModeColors.orange[3]} direction="row" padding={2}>
       <Image
-        src={'https://storage.googleapis.com/geyser-projects-media/utils/amplify_image.png'}
+        src={'https://storage.googleapis.com/geyser-projects-media/utils/microphone.png'}
         alt="amplify image"
         width="120px"
         height="120px"

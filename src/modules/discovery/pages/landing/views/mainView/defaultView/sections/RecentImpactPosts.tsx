@@ -1,4 +1,4 @@
-import { Box, HStack, Image, Link as ChakraLink, SimpleGrid } from '@chakra-ui/react'
+import { Box, Image, Link as ChakraLink, SimpleGrid } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 import ReactPlayer from 'react-player'
@@ -44,7 +44,6 @@ export const RecentImpactPosts = () => {
       width="100%"
       rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryActivity')} />}
     >
-      <HStack w="full" gap={4} flexWrap="wrap"></HStack>
       <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 4, lg: 8 }} paddingTop={4}>
         <Box as={ChakraLink} href={TwitterAnnouncementLinkUrl} isExternal flex={1} borderRadius="8px" overflow="hidden">
           <Image
