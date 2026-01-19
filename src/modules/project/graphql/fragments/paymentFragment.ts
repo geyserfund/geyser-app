@@ -16,6 +16,7 @@ export const ContributionFeesFragment = gql`
 export const ContributionLightningPaymentDetailsFragment = gql`
   ${ContributionFeesFragment}
   fragment ContributionLightningPaymentDetails on ContributionLightningPaymentDetails {
+    paymentId
     lightningInvoiceId
     paymentRequest
     amountDue
@@ -28,6 +29,7 @@ export const ContributionLightningPaymentDetailsFragment = gql`
 export const ContributionOnChainSwapPaymentDetailsFragment = gql`
   ${ContributionFeesFragment}
   fragment ContributionOnChainSwapPaymentDetails on ContributionOnChainSwapPaymentDetails {
+    paymentId
     address
     swapJson
     amountDue
@@ -39,12 +41,14 @@ export const ContributionOnChainSwapPaymentDetailsFragment = gql`
 
 export const ContributionFiatPaymentDetailsFragment = gql`
   fragment ContributionFiatPaymentDetails on ContributionFiatPaymentDetails {
+    paymentId
     stripeClientSecret
   }
 `
 
 export const ContributionFiatSwapPaymentDetailsFragment = gql`
   fragment ContributionFiatSwapPaymentDetails on ContributionFiatToLightningSwapPaymentDetails {
+    paymentId
     checkoutUrl
   }
 `

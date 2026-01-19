@@ -19,6 +19,7 @@ export type SwapContributionInfo = {
   bitcoinQuote?: Maybe<BitcoinQuote>
   datetime?: number
   contributionId?: number
+  paymentId?: number
 }
 
 /** Base type containing common fields across all swap types */

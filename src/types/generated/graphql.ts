@@ -2428,6 +2428,7 @@ export type PaymentSetRefundableInput = {
 export type PaymentSetRefundableResponse = {
   __typename?: 'PaymentSetRefundableResponse';
   id: Scalars['BigInt']['output'];
+  message?: Maybe<Scalars['String']['output']>;
   success: Scalars['Boolean']['output'];
 };
 
@@ -7038,6 +7039,7 @@ export type PaymentSetClaimingResponseResolvers<ContextType = any, ParentType ex
 
 export type PaymentSetRefundableResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentSetRefundableResponse'] = ResolversParentTypes['PaymentSetRefundableResponse']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -9194,19 +9196,19 @@ export type RskToOnChainSwapPaymentDetailsFragment = { __typename?: 'RskToOnChai
 
 export type ContributionFeesFragment = { __typename?: 'PaymentFee', feeType?: PaymentFeeType | null, feeAmount: number, feePayer?: PaymentFeePayer | null, description?: string | null };
 
-export type ContributionLightningPaymentDetailsFragment = { __typename?: 'ContributionLightningPaymentDetails', lightningInvoiceId: string, paymentRequest: string, amountDue: number, fees: Array<(
+export type ContributionLightningPaymentDetailsFragment = { __typename?: 'ContributionLightningPaymentDetails', paymentId: any, lightningInvoiceId: string, paymentRequest: string, amountDue: number, fees: Array<(
     { __typename?: 'PaymentFee' }
     & ContributionFeesFragment
   )> };
 
-export type ContributionOnChainSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainSwapPaymentDetails', address: string, swapJson: string, amountDue: number, fees: Array<(
+export type ContributionOnChainSwapPaymentDetailsFragment = { __typename?: 'ContributionOnChainSwapPaymentDetails', paymentId: any, address: string, swapJson: string, amountDue: number, fees: Array<(
     { __typename?: 'PaymentFee' }
     & ContributionFeesFragment
   )> };
 
-export type ContributionFiatPaymentDetailsFragment = { __typename?: 'ContributionFiatPaymentDetails', stripeClientSecret: string };
+export type ContributionFiatPaymentDetailsFragment = { __typename?: 'ContributionFiatPaymentDetails', paymentId: any, stripeClientSecret: string };
 
-export type ContributionFiatSwapPaymentDetailsFragment = { __typename?: 'ContributionFiatToLightningSwapPaymentDetails', checkoutUrl: string };
+export type ContributionFiatSwapPaymentDetailsFragment = { __typename?: 'ContributionFiatToLightningSwapPaymentDetails', paymentId: any, checkoutUrl: string };
 
 export type ContributionLightningToRskSwapPaymentDetailsFragment = { __typename?: 'ContributionLightningToRskSwapPaymentDetails', lightningInvoiceId: string, paymentRequest: string, swapJson: string, paymentId: any, amountToClaim: number, amountDue: number, fees: Array<(
     { __typename?: 'PaymentFee' }
@@ -9715,6 +9717,13 @@ export type ProjectRewardCreateMutation = { __typename?: 'Mutation', projectRewa
     { __typename?: 'ProjectReward' }
     & ProjectRewardFragment
   ) };
+
+export type PaymentSwapRefundTxBroadcastMutationVariables = Exact<{
+  input: PaymentSwapRefundTxBroadcastInput;
+}>;
+
+
+export type PaymentSwapRefundTxBroadcastMutation = { __typename?: 'Mutation', paymentSwapRefundTxBroadcast: { __typename?: 'PaymentSwapRefundTxBroadcastResponse', id: any, success: boolean, txHash?: string | null } };
 
 export type ProjectShippingConfigCreateMutationVariables = Exact<{
   input: CreateProjectShippingConfigInput;
@@ -11801,6 +11810,7 @@ export const ContributionFeesFragmentDoc = gql`
     `;
 export const ContributionLightningPaymentDetailsFragmentDoc = gql`
     fragment ContributionLightningPaymentDetails on ContributionLightningPaymentDetails {
+  paymentId
   lightningInvoiceId
   paymentRequest
   amountDue
@@ -11811,6 +11821,7 @@ export const ContributionLightningPaymentDetailsFragmentDoc = gql`
     ${ContributionFeesFragmentDoc}`;
 export const ContributionOnChainSwapPaymentDetailsFragmentDoc = gql`
     fragment ContributionOnChainSwapPaymentDetails on ContributionOnChainSwapPaymentDetails {
+  paymentId
   address
   swapJson
   amountDue
@@ -11821,11 +11832,13 @@ export const ContributionOnChainSwapPaymentDetailsFragmentDoc = gql`
     ${ContributionFeesFragmentDoc}`;
 export const ContributionFiatPaymentDetailsFragmentDoc = gql`
     fragment ContributionFiatPaymentDetails on ContributionFiatPaymentDetails {
+  paymentId
   stripeClientSecret
 }
     `;
 export const ContributionFiatSwapPaymentDetailsFragmentDoc = gql`
     fragment ContributionFiatSwapPaymentDetails on ContributionFiatToLightningSwapPaymentDetails {
+  paymentId
   checkoutUrl
 }
     `;
@@ -16823,6 +16836,41 @@ export function useProjectRewardCreateMutation(baseOptions?: Apollo.MutationHook
 export type ProjectRewardCreateMutationHookResult = ReturnType<typeof useProjectRewardCreateMutation>;
 export type ProjectRewardCreateMutationResult = Apollo.MutationResult<ProjectRewardCreateMutation>;
 export type ProjectRewardCreateMutationOptions = Apollo.BaseMutationOptions<ProjectRewardCreateMutation, ProjectRewardCreateMutationVariables>;
+export const PaymentSwapRefundTxBroadcastDocument = gql`
+    mutation PaymentSwapRefundTxBroadcast($input: PaymentSwapRefundTxBroadcastInput!) {
+  paymentSwapRefundTxBroadcast(input: $input) {
+    id
+    success
+    txHash
+  }
+}
+    `;
+export type PaymentSwapRefundTxBroadcastMutationFn = Apollo.MutationFunction<PaymentSwapRefundTxBroadcastMutation, PaymentSwapRefundTxBroadcastMutationVariables>;
+
+/**
+ * __usePaymentSwapRefundTxBroadcastMutation__
+ *
+ * To run a mutation, you first call `usePaymentSwapRefundTxBroadcastMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePaymentSwapRefundTxBroadcastMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [paymentSwapRefundTxBroadcastMutation, { data, loading, error }] = usePaymentSwapRefundTxBroadcastMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function usePaymentSwapRefundTxBroadcastMutation(baseOptions?: Apollo.MutationHookOptions<PaymentSwapRefundTxBroadcastMutation, PaymentSwapRefundTxBroadcastMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PaymentSwapRefundTxBroadcastMutation, PaymentSwapRefundTxBroadcastMutationVariables>(PaymentSwapRefundTxBroadcastDocument, options);
+      }
+export type PaymentSwapRefundTxBroadcastMutationHookResult = ReturnType<typeof usePaymentSwapRefundTxBroadcastMutation>;
+export type PaymentSwapRefundTxBroadcastMutationResult = Apollo.MutationResult<PaymentSwapRefundTxBroadcastMutation>;
+export type PaymentSwapRefundTxBroadcastMutationOptions = Apollo.BaseMutationOptions<PaymentSwapRefundTxBroadcastMutation, PaymentSwapRefundTxBroadcastMutationVariables>;
 export const ProjectShippingConfigCreateDocument = gql`
     mutation ProjectShippingConfigCreate($input: CreateProjectShippingConfigInput!) {
   projectShippingConfigCreate(input: $input) {

@@ -114,6 +114,7 @@ export const useFundingAPI = () => {
               projectId: project?.id,
               reference: data.contributionCreate.contribution.uuid,
               contributionId: data.contributionCreate.contribution.id,
+              paymentId: data.contributionCreate.payments.onChainSwap.paymentId,
               bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
               datetime: data.contributionCreate.contribution.createdAt,
             },
@@ -130,6 +131,7 @@ export const useFundingAPI = () => {
               reference: data.contributionCreate.contribution.uuid,
               bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
               contributionId: data.contributionCreate.contribution.id,
+              paymentId: data.contributionCreate.payments.onChainToRskSwap.paymentId,
               datetime: data.contributionCreate.contribution.createdAt,
             },
             currentAccountKeys,
@@ -151,6 +153,7 @@ export const useFundingAPI = () => {
               bitcoinQuote: data.contributionCreate.contribution.bitcoinQuote,
               datetime: data.contributionCreate.contribution.createdAt,
               contributionId: data.contributionCreate.contribution.id,
+              paymentId: data.contributionCreate.payments.lightningToRskSwap.paymentId,
             },
             currentAccountKeys,
           )

@@ -10,6 +10,7 @@ import { currentSwapIdAtom, SwapData } from '@/modules/project/funding/state'
 import { currentSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { ControlledTextInput } from '@/shared/components/controlledInput'
 import { Body } from '@/shared/components/typography'
+import { usePaymentSwapRefundTxBroadcastMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 import { getBitcoinAddress } from '@/utils/lightning/bip21'
 
@@ -44,10 +45,12 @@ interface ClaimRefundFormProps {
 
 export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefundFormProps) => {
   const toast = useNotification()
-  const { initiateRefund, loading } = useRefund()
+  const { initiateRefund, initiateRefundToGetRefundTx, loading } = useRefund()
 
   const currentSwapId = useAtomValue(currentSwapIdAtom)
   const refundFileFromAtom = useAtomValue(currentSwapAtom)
+
+  const [paymentSwapRefundTxBroadcast] = usePaymentSwapRefundTxBroadcastMutation()
 
   const { handleSubmit, control } = useForm<{ bitcoinAddress: string }>({
     resolver: yupResolver(schema),
@@ -55,17 +58,62 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
 
   const onSubmit = useCallback(
     async ({ bitcoinAddress }: { bitcoinAddress: string }) => {
-      const successful = await initiateRefund(bitcoinAddress, refundFile || refundFileFromAtom)
-      if (successful) {
-        toast.success({
-          title: 'Refund initiated successfully',
+      if (refundFile?.contributionInfo?.paymentId) {
+        const refundTransactionHex = await initiateRefundToGetRefundTx(bitcoinAddress, refundFile || refundFileFromAtom)
+
+        if (!refundTransactionHex) {
+          toast.error({
+            title: 'Something went wrong',
+            description: 'Please try again',
+          })
+          return
+        }
+
+        paymentSwapRefundTxBroadcast({
+          variables: {
+            input: {
+              paymentId: refundFile?.contributionInfo?.paymentId,
+              signedTxHex: refundTransactionHex,
+            },
+          },
+          onCompleted(data) {
+            if (data.paymentSwapRefundTxBroadcast.txHash) {
+              toast.success({
+                title: 'Refund initiated successfully',
+              })
+              if (onSuccess) {
+                onSuccess()
+              }
+            }
+          },
+          onError(error) {
+            toast.error({
+              title: 'Something went wrong',
+              description: 'Please try again',
+            })
+          },
         })
-        if (onSuccess) {
-          onSuccess()
+      } else {
+        const successful = await initiateRefund(bitcoinAddress, refundFile || refundFileFromAtom)
+        if (successful) {
+          toast.success({
+            title: 'Refund initiated successfully',
+          })
+          if (onSuccess) {
+            onSuccess()
+          }
         }
       }
     },
-    [refundFile, refundFileFromAtom, onSuccess, initiateRefund, toast],
+    [
+      refundFile,
+      refundFileFromAtom,
+      onSuccess,
+      initiateRefundToGetRefundTx,
+      initiateRefund,
+      paymentSwapRefundTxBroadcast,
+      toast,
+    ],
   )
 
   return (

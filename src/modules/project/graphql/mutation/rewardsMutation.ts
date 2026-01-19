@@ -25,3 +25,13 @@ export const MUTATION_CREATE_PROJECT_REWARD = gql`
     }
   }
 `
+
+export const MUTATION_CREATE_PAYMENT_SWAP_REFUND_TX_BROADCAST = gql`
+  mutation PaymentSwapRefundTxBroadcast($input: PaymentSwapRefundTxBroadcastInput!) {
+    paymentSwapRefundTxBroadcast(input: $input) {
+      id
+      success
+      txHash
+    }
+  }
+`
