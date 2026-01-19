@@ -79,6 +79,7 @@ export const ContributeButton = ({ isWidget, paymentMethods, ...props }: Contrib
         colorScheme="primary1"
         isDisabled={isFundingDisabled()}
         position="relative"
+        data-testid="contribute-button"
         {...buttonProps}
         {...props}
       >

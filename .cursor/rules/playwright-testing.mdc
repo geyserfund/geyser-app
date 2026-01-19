@@ -477,6 +477,57 @@ Configure `.env.playwright`:
 
 ---
 
+## 🎨 Project-Specific Patterns
+
+### Funding Flow Patterns
+
+**Clipboard Handling:**
+```typescript
+// Grant clipboard permissions
+await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+
+// Click copy button
+await page.locator('#copy-lightning-invoice-button').click()
+
+// Wait for clipboard
+await page.waitForTimeout(500)
+
+// Read clipboard
+const invoice = await page.evaluate(async () => {
+  return await navigator.clipboard.readText()
+})
+```
+
+**Bitcoin Payment Testing:**
+```typescript
+// Lightning: Pay invoice via LND REST API
+await payLightningInvoice(invoice)
+
+// Onchain: Parse BIP21 URI and pay
+const address = bip21Uri.split(':')[1]?.split('?')[0]
+await payOnchain(address, amount)
+
+// Mine block to confirm
+await mineBlock()
+```
+
+**Onchain Success States:**
+- **Processing**: Transaction sent, waiting for confirmations
+  - Shows `#onchain-transaction-processing-card`
+  - Success banner NOT visible yet
+- **Intermediate Success**: Transaction detected (FundingSuccessIntermediate)
+  - Shows `#successful-contribution-banner` with `isPending=true`
+  - Before block confirmation
+- **Final Success**: Transaction confirmed
+  - Shows `#successful-contribution-banner`
+  - After mining block
+
+**Lightning vs Onchain Flow:**
+- **Lightning**: Direct to final success (instant)
+- **Onchain**: Processing → Intermediate → Final (requires mining)
+
+---
+
 ## ✅ AI Agent Checklist
 
 ### When Creating Test Plans

@@ -129,6 +129,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
                 colorScheme="primary1"
                 onClick={addRewardToBasket}
                 isDisabled={!isAvailable}
+                data-testid="add-reward-button"
               >
                 {t('Buy')}
               </Button>

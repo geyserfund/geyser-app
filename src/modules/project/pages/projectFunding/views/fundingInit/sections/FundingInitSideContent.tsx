@@ -82,7 +82,15 @@ export const FundingInitSummary = () => {
           <NonProfitSummary disableMobile={true} />
           <LaunchpadSummary disableMobile={true} />
           <TAndCs disableMobile={true} />
-          <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit" isDisabled={isDisabled}>
+          <Button
+            size="lg"
+            w="full"
+            variant="solid"
+            colorScheme="primary1"
+            type="submit"
+            isDisabled={isDisabled}
+            data-testid="continue-from-init-button"
+          >
             {t('Continue')}
           </Button>
         </VStack>
