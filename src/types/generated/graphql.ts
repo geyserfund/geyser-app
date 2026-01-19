@@ -2428,6 +2428,7 @@ export type PaymentSetRefundableInput = {
 export type PaymentSetRefundableResponse = {
   __typename?: 'PaymentSetRefundableResponse';
   id: Scalars['BigInt']['output'];
+  message?: Maybe<Scalars['String']['output']>;
   success: Scalars['Boolean']['output'];
 };
 
@@ -7038,6 +7039,7 @@ export type PaymentSetClaimingResponseResolvers<ContextType = any, ParentType ex
 
 export type PaymentSetRefundableResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentSetRefundableResponse'] = ResolversParentTypes['PaymentSetRefundableResponse']> = {
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

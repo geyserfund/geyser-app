@@ -42,8 +42,8 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
 
   if ((count > 0 && showOnSelected) || (showOnEmpty && count === 0)) {
     return (
-      <CardLayout dense w="full" direction="row" spacing={0} overflowX={'hidden'}>
-        <Box width="full" maxWidth={{ base: '148px', lg: '198px' }} overflow={'hidden'}>
+      <CardLayout dense w="full" direction="column" spacing={0} overflowX={'hidden'} justifyContent="space-between">
+        <Box width="full" maxWidth={'100%'} overflow={'hidden'}>
           <ImageWithReload
             src={reward.images[0] || ''}
             alt={reward.name}
@@ -52,7 +52,7 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
             objectFit="cover"
           />
         </Box>
-        <VStack flex={1} padding={4} justifyContent="space-between" overflowX={'hidden'}>
+        <VStack padding={4} justifyContent="space-between" overflowX={'hidden'}>
           <VStack width="full" alignItems={'start'}>
             <Body width="full" size="md" medium>
               {reward.name}
@@ -86,14 +86,14 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
             </HStack>
           </VStack>
           <HStack
-            flexDirection={{ base: 'column', sm: 'row' }}
+            flexDirection={'row'}
             w="full"
             justifyContent={'space-between'}
             alignItems={{ base: 'start', sm: 'end' }}
           >
             <Box
               display={'flex'}
-              flexDirection={{ base: 'row', sm: 'row', lg: 'row' }}
+              flexDirection={'row'}
               alignItems={'start'}
               justifyContent={'end'}
               flexWrap={'nowrap'}
@@ -124,13 +124,13 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
 
             {count === 0 ? (
               <Button
-                size="sm"
+                size="md"
                 variant="surface"
                 colorScheme="primary1"
                 onClick={addRewardToBasket}
                 isDisabled={!isAvailable}
               >
-                {t('Add')}
+                {t('Buy')}
               </Button>
             ) : (
               <HStack
@@ -143,18 +143,18 @@ export const FundingFormRewardItem = ({ reward, showOnEmpty, showOnSelected, rea
               >
                 <IconButton
                   aria-label="remove-reward"
-                  size="sm"
+                  size="md"
                   width="30px"
                   variant="ghost"
                   icon={<PiMinus />}
                   onClick={removeRewardFromBasket}
                 />
-                <Body size="sm" px={1} pt="2px" medium>
+                <Body size="md" px={1} pt="2px" medium>
                   {count}
                 </Body>
                 <IconButton
                   aria-label="select-reward"
-                  size="sm"
+                  size="md"
                   width="30px"
                   variant="ghost"
                   icon={<PiPlus />}

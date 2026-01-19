@@ -3,7 +3,9 @@ import { t } from 'i18next'
 import { KeyboardEvent, useRef } from 'react'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { AmountInput } from '@/shared/components/form/AmountInput.tsx'
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H1 } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 
@@ -18,6 +20,8 @@ export const DonationInput = () => {
     formState: { donationAmount, donationAmountUsdCent },
     setState,
   } = useFundingFormAtom()
+
+  const { hasRewards } = useRewardsAtom()
 
   const satoshi = donationAmount
   const setSatoshi = (val: number) => {
@@ -60,95 +64,104 @@ export const DonationInput = () => {
   }
 
   return (
-    <VStack spacing={4} alignItems="stretch">
-      <H1 size="2xl" bold alignSelf="start">
-        {t('Make a donation')}
-      </H1>
+    <>
+      {hasRewards && (
+        <H1 size="3xl" bold alignSelf="start">
+          {t('Select a product')}
+        </H1>
+      )}
+      <CardLayout w="full" spacing={4} alignItems="stretch">
+        <H1 size="xl" bold alignSelf="start">
+          {hasRewards ? t('Contribute without a product') : t('Make a donation')}
+        </H1>
 
-      <HStack w="full" justifyContent="space-between" flexWrap="wrap" spacing={2} alignItems="flex-start">
-        {PRESET_AMOUNTS.slice(0, 1).map((amount) => (
-          <Button
-            key={amount}
-            size="md"
-            variant="outline"
-            colorScheme="neutral.9"
-            onClick={() => handleDefaultAmountButtonClick(amount)}
-            flexGrow={1}
-            minWidth="80px"
-          >
-            {`$${commaFormatted(amount)}`}
-          </Button>
-        ))}
+        {!hasRewards && (
+          <HStack w="full" justifyContent="space-between" flexWrap="wrap" spacing={2} alignItems="flex-start">
+            {PRESET_AMOUNTS.slice(0, 1).map((amount) => (
+              <Button
+                key={amount}
+                size="md"
+                variant="outline"
+                colorScheme="neutral.9"
+                onClick={() => handleDefaultAmountButtonClick(amount)}
+                flexGrow={1}
+                minWidth="80px"
+              >
+                {`$${commaFormatted(amount)}`}
+              </Button>
+            ))}
 
-        <VStack spacing={0} flexGrow={1} minWidth="80px" position="relative" alignItems="stretch">
-          <Button
-            key={PRESET_AMOUNTS[1]}
-            size="md"
-            variant="outline"
-            colorScheme="neutral.9"
-            onClick={() => handleDefaultAmountButtonClick(PRESET_AMOUNTS[1]!)}
-            w="full"
-            zIndex={1}
-          >
-            {`$${commaFormatted(PRESET_AMOUNTS[1])}`}
-          </Button>
-          <Body
-            fontSize="8px"
-            bg={lightModeColors.amber[6]}
-            color="black"
-            fontWeight="bold"
-            px={2}
-            py={0.2}
-            borderRadius="md"
-            position="absolute"
-            bottom="-8px"
-            left="50%"
-            transform="translateX(-50%)"
-            zIndex={2}
-            whiteSpace="nowrap"
-          >
-            {t('SATOSHI AMOUNT')}
-          </Body>
-        </VStack>
+            <VStack spacing={0} flexGrow={1} minWidth="80px" position="relative" alignItems="stretch">
+              <Button
+                key={PRESET_AMOUNTS[1]}
+                size="md"
+                variant="outline"
+                colorScheme="neutral.9"
+                onClick={() => handleDefaultAmountButtonClick(PRESET_AMOUNTS[1]!)}
+                w="full"
+                zIndex={1}
+              >
+                {`$${commaFormatted(PRESET_AMOUNTS[1])}`}
+              </Button>
+              <Body
+                fontSize="8px"
+                bg={lightModeColors.amber[6]}
+                color="black"
+                fontWeight="bold"
+                px={2}
+                py={0.2}
+                borderRadius="md"
+                position="absolute"
+                bottom="-8px"
+                left="50%"
+                transform="translateX(-50%)"
+                zIndex={2}
+                whiteSpace="nowrap"
+              >
+                {t('SATOSHI AMOUNT')}
+              </Body>
+            </VStack>
 
-        {PRESET_AMOUNTS.slice(2, 4).map((amount) => (
-          <Button
-            key={amount}
-            size="md"
-            variant="outline"
-            colorScheme="neutral.9"
-            onClick={() => handleDefaultAmountButtonClick(amount)}
-            flexGrow={1}
-            minWidth="80px"
-          >
-            {`$${commaFormatted(amount)}`}
-          </Button>
-        ))}
+            {PRESET_AMOUNTS.slice(2, 4).map((amount) => (
+              <Button
+                key={amount}
+                size="md"
+                variant="outline"
+                colorScheme="neutral.9"
+                onClick={() => handleDefaultAmountButtonClick(amount)}
+                flexGrow={1}
+                minWidth="80px"
+              >
+                {`$${commaFormatted(amount)}`}
+              </Button>
+            ))}
 
-        <Button
-          key={PRESET_AMOUNTS.at(-1)}
-          size="md"
-          variant="outline"
-          colorScheme="neutral.9"
-          onClick={() => handleDefaultAmountButtonClick(PRESET_AMOUNTS.at(-1)!)}
-          flexGrow={1}
-          minWidth="80px"
-          display={{ base: 'none', md: 'inline-flex' }}
-        >
-          {`$${commaFormatted(PRESET_AMOUNTS.at(-1))}`}
-        </Button>
-      </HStack>
-      <AmountInput
-        inputRef={inputRef}
-        satoshi={satoshi}
-        dollar={dollar}
-        isSatoshi={isSatoshi}
-        handleInput={handleInput}
-        handleKeyDown={handleKeyDown}
-        onToggle={onToggle}
-      />
+            <Button
+              key={PRESET_AMOUNTS.at(-1)}
+              size="md"
+              variant="outline"
+              colorScheme="neutral.9"
+              onClick={() => handleDefaultAmountButtonClick(PRESET_AMOUNTS.at(-1)!)}
+              flexGrow={1}
+              minWidth="80px"
+              display={{ base: 'none', md: 'inline-flex' }}
+            >
+              {`$${commaFormatted(PRESET_AMOUNTS.at(-1))}`}
+            </Button>
+          </HStack>
+        )}
+        <AmountInput
+          inputRef={inputRef}
+          satoshi={satoshi}
+          dollar={dollar}
+          isSatoshi={isSatoshi}
+          handleInput={handleInput}
+          handleKeyDown={handleKeyDown}
+          onToggle={onToggle}
+          size={hasRewards ? 'md' : 'lg'}
+        />
 
-      {/* <HStack w="full" position="relative">
+        {/* <HStack w="full" position="relative">
         <InputGroup>
           <Input
             ref={inputRef}
@@ -210,6 +223,7 @@ export const DonationInput = () => {
           {isSatoshi ? 'sats' : '$'}
         </Body>
       </HStack> */}
-    </VStack>
+      </CardLayout>
+    </>
   )
 }

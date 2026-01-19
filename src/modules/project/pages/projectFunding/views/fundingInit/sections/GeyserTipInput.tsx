@@ -5,7 +5,6 @@ import { PiQuestion } from 'react-icons/pi'
 
 import { Tooltip } from '@/components/ui/Tooltip.tsx'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
-import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { useGetUserIpCountryQuery } from '@/types/index.ts'
 
@@ -40,38 +39,34 @@ export const GeyserTipInput = () => {
   if (!tipOptions) return null
 
   return (
-    <CardLayout w="full" spacing={3}>
-      {/* <VStack align="start" w="full" spacing={3}> */}
-      <HStack spacing={4} align="center" justify="space-between" w="full" flexWrap="wrap">
-        <HStack>
-          <H3>{t('Tip Geyser Services')}</H3>
-          <Tooltip
-            content={t('Geyser relies primarily on the generosity of Bitcoiners like you to operate our service.')}
-          >
-            <IconButton
-              aria-label={t('Geyser relies primarily on the generosity of Bitcoiners like you to operate our service.')}
-              icon={<PiQuestion size={16} />}
-              size="xs"
-              variant="ghost"
-              isRound
-            />
-          </Tooltip>
-        </HStack>
-        <ButtonGroup size="md" variant="outline" spacing={3}>
-          {tipOptions.map((percent) => (
-            <Button
-              key={percent}
-              onClick={() => setGeyserTipPercent(percent)}
-              variant={geyserTipPercent === percent ? 'surface' : 'outline'}
-              colorScheme={geyserTipPercent === percent ? 'primary1' : 'neutral1'}
-              w={{ base: '50px', sm: '60px' }} // Fixed width for buttons
-            >
-              {percent}%
-            </Button>
-          ))}
-        </ButtonGroup>
+    <HStack spacing={4} align="center" justify="space-between" w="full" flexWrap="wrap">
+      <HStack>
+        <H3>{t('Tip Geyser Services')}</H3>
+        <Tooltip
+          content={t('Geyser relies primarily on the generosity of Bitcoiners like you to operate our service.')}
+        >
+          <IconButton
+            aria-label={t('Geyser relies primarily on the generosity of Bitcoiners like you to operate our service.')}
+            icon={<PiQuestion size={16} />}
+            size="xs"
+            variant="ghost"
+            isRound
+          />
+        </Tooltip>
       </HStack>
-      {/* </VStack> */}
-    </CardLayout>
+      <ButtonGroup size="md" variant="outline" spacing={3}>
+        {tipOptions.map((percent) => (
+          <Button
+            key={percent}
+            onClick={() => setGeyserTipPercent(percent)}
+            variant={'soft'}
+            colorScheme={geyserTipPercent === percent ? 'primary1' : 'neutral1'}
+            w={{ base: '50px', sm: '60px' }} // Fixed width for buttons
+          >
+            {percent}%
+          </Button>
+        ))}
+      </ButtonGroup>
+    </HStack>
   )
 }
