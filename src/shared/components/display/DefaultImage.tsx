@@ -4,7 +4,7 @@ import { ProjectEntryThumbnailPlaceholderUrl } from '../../constants'
 
 export const DefaultImage = ({ grey, ...rest }: { grey?: boolean } & BoxProps & ImageProps) => {
   if (grey) {
-    return <Box height="100%" width="100%" backgroundColor="neutral.200" {...rest} />
+    return <Box height="100%" width="100%" backgroundColor="neutral1.3" {...rest} />
   }
 
   return (

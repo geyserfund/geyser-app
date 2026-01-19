@@ -1,4 +1,4 @@
-import { Text, VStack } from '@chakra-ui/react'
+import { SimpleGrid, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
@@ -36,29 +36,19 @@ export const FundingInitRewards = ({ readOnly }: Props) => {
   return (
     <VStack width="100%" spacing={6}>
       <VStack w="full" spacing={2} alignItems="start">
-        <H2 size="2xl" bold>
-          {t('Basket')}
+        <H2 size="xl" bold>
+          {t('Support the project with a product ')}
         </H2>
-        {hasSelectedRewards ? (
-          <VStack w="full">
-            {rewards.map((reward) => {
+
+        <SimpleGrid w="full" columns={{ base: 1, sm: 2 }} spacing={4}>
+          {hasSelectedRewards &&
+            rewards.map((reward) => {
               return <FundingFormRewardItem showOnSelected readOnly={readOnly} key={reward.id} reward={reward} />
             })}
-          </VStack>
-        ) : (
-          <Text>{t('No products are selected')}</Text>
-        )}
-      </VStack>
-
-      <VStack w="full" spacing={2} alignItems="start">
-        <H2 size="2xl" bold>
-          {t('Available Products')}
-        </H2>
-        <VStack w="full">
           {availableRewards.map((reward) => {
             return <FundingFormRewardItem showOnEmpty readOnly={readOnly} key={reward.id} reward={reward} />
           })}
-        </VStack>
+        </SimpleGrid>
       </VStack>
     </VStack>
   )

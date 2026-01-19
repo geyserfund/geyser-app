@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 // import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { getPath } from '@/shared/constants/index.ts'
 
 // import { useNotification } from '@/utils/index.ts'
@@ -58,9 +57,8 @@ export const FundingInit = () => {
         </>
       ) : (
         <>
-          <CardLayout w="full" spacing={1}>
-            <DonationInput />
-          </CardLayout>
+          <DonationInput />
+
           <GeyserTipInput />
           <FundingInitRewards />
         </>

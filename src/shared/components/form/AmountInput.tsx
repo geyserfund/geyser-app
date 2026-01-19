@@ -8,6 +8,7 @@ import { commaFormatted } from '@/shared/utils/formatData/index.ts'
 import { Body } from '../typography'
 
 export const AmountInput = (props: {
+  size?: 'md' | 'lg'
   inputRef?: React.Ref<HTMLInputElement>
   satoshi: number
   dollar: number
@@ -18,18 +19,20 @@ export const AmountInput = (props: {
 }) => {
   const [satsPosition, setSatsPosition] = useState(MIN_WIDTH_AFTER_START)
 
+  const isSmallSize = props.size === 'md'
+
   useEffect(() => {
     if (props.satoshi) {
       const currentText = commaFormatted(props.satoshi)
       const commaCount = (currentText.match(/,/g) || []).length
       const restCount = currentText.length - commaCount
-      const textWidth = (restCount - 1) * 28 + commaCount * 15
+      const textWidth = isSmallSize ? restCount * 9 + commaCount * 5 : (restCount - 1) * 28 + commaCount * 15
 
       setSatsPosition(textWidth + MIN_WIDTH_AFTER_START)
     } else {
       setSatsPosition(MIN_WIDTH_AFTER_START)
     }
-  }, [props.satoshi])
+  }, [props.satoshi, isSmallSize])
 
   return (
     <HStack w="full" position="relative">
@@ -38,9 +41,9 @@ export const AmountInput = (props: {
           ref={props.inputRef}
           data-testid="donation-input"
           borderRadius="12px"
-          fontSize="5xl"
-          height="70px"
-          fontWeight={700}
+          fontSize={isSmallSize ? 'xl' : '5xl'}
+          height={isSmallSize ? '40px' : '70px'}
+          fontWeight={isSmallSize ? 500 : 700}
           lineHeight="1.0"
           value={
             props.satoshi > 0 ? (props.isSatoshi ? commaFormatted(props.satoshi) : commaFormatted(props.dollar)) : ''
@@ -48,7 +51,7 @@ export const AmountInput = (props: {
           type="text"
           onChange={props.handleInput}
           onKeyDown={props.handleKeyDown}
-          pl={props.isSatoshi ? 4 : 9}
+          pl={isSmallSize ? 7 : props.isSatoshi ? 4 : 9}
           _placeholder={{
             color: 'neutral1.11',
           }}
@@ -62,13 +65,13 @@ export const AmountInput = (props: {
           height="100%"
           display="flex"
           alignItems={'center'}
-          paddingRight={3}
+          paddingRight={isSmallSize ? 2 : 3}
         >
           <Button
             data-testid="toggle-donation-input"
             w="100%"
             variant="soft"
-            size="lg"
+            size={isSmallSize ? 'md' : 'lg'}
             colorScheme="neutral1"
             onClick={props.onToggle}
           >
@@ -98,8 +101,8 @@ export const AmountInput = (props: {
           stiffness: 200,
         }}
         style={{
-          fontSize: 'var(--chakra-fontSizes-3xl)',
-          fontWeight: 700,
+          fontSize: isSmallSize ? 'var(--chakra-fontSizes-xl)' : 'var(--chakra-fontSizes-3xl)',
+          fontWeight: isSmallSize ? 500 : 700,
           color: 'var(--chakra-colors-neutral1-9)',
           position: 'absolute',
           top: '49%',
