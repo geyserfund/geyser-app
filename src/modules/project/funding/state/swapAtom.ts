@@ -1,5 +1,5 @@
 import { ECPairInterface } from 'ecpair'
-import { atom, useAtom } from 'jotai'
+import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
@@ -257,7 +257,6 @@ export const removeRefundedSwapAtom = atom(null, (get, set, swapId: string) => {
 })
 
 export const refundedSwapDataAtom = atom<SwapData | undefined>(undefined)
-export const useRefundedSwapData = () => useAtom(refundedSwapDataAtom)
 
 /** Reset the currentSwapID and refundedSwapData */
 export const resetCurrentSwapAndRefundedDataAtom = atom(null, (get, set) => {

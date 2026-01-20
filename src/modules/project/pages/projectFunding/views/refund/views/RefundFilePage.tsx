@@ -1,19 +1,20 @@
 import { Button, Divider, HStack, VStack } from '@chakra-ui/react'
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { DateTime } from 'luxon'
 import { useTranslation } from 'react-i18next'
 import { PiFile, PiHandCoins } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
-import { currentSwapAtom, RefundFileType } from '@/modules/project/funding/state/swapAtom.ts'
+import { currentSwapAtom, removeRefundedSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body, H2 } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
+import { ContributionStatus, PaymentStatus, useContributionForRefundGetLazyQuery } from '@/types/index.ts'
 
 import { getPath } from '../../../../../../../shared/constants'
-import { commaFormatted } from '../../../../../../../utils'
+import { commaFormatted, useNotification } from '../../../../../../../utils'
 import { currentSwapIdAtom, swapAtom, SwapContributionInfo } from '../../../../../funding/state'
 import { RefundPolicyNote } from '../../fundingPayment/components/RefundPolicyNote'
 import { ClaimRefundForm } from '../../fundingPayment/views/paymentOnchain/components/ClaimRefundForm'
@@ -22,8 +23,11 @@ import { RefundRsk } from '../../refundPayoutRsk/RefundRsk.tsx'
 
 export const RefundFilePage = () => {
   const { t } = useTranslation()
+  const toast = useNotification()
 
   const navigate = useNavigate()
+
+  const removeRefundFile = useSetAtom(removeRefundedSwapAtom)
 
   const [swapData] = useAtom(swapAtom)
   const [currentSwapId, setCurrentSwapId] = useAtom(currentSwapIdAtom)
@@ -37,15 +41,53 @@ export const RefundFilePage = () => {
     navigate(getPath('refundInitiated'))
   }
 
+  const [getContributionForRefund] = useContributionForRefundGetLazyQuery()
+
   const swapArray = Object.values(swapData).filter((swap) => swap.id)
   const hasRefundFile = swapArray.length > 0
 
-  const handleContinue = () => {
-    if (currentSwapData?.type === RefundFileType.ON_CHAIN_TO_LIGHTNING) {
-      transactionFailedRefund.onOpen()
-    } else {
-      pledgeRefund.onOpen()
+  const handleContinue = async () => {
+    const contributionResponse = await getContributionForRefund({
+      variables: {
+        contributionId: currentSwapData?.contributionInfo?.contributionId,
+      },
+    })
+
+    const contribution = contributionResponse.data?.contribution
+
+    if (!contribution) {
+      toast.error({
+        title: 'Something went wrong',
+        description: 'Please try again',
+      })
+      return
     }
+
+    if (contribution.status === ContributionStatus.Pledged) {
+      pledgeRefund.onOpen()
+      return
+    }
+
+    const refundablePayment = contribution.payments.find((payment) => payment.status === PaymentStatus.Refundable)
+
+    if (refundablePayment) {
+      if (refundablePayment.id === currentSwapData?.contributionInfo?.paymentId) {
+        transactionFailedRefund.onOpen()
+        return
+      }
+
+      toast.info({
+        title: 'This is not the right refund file',
+        description: 'Please select the correct refund file',
+      })
+      removeRefundFile(currentSwapData?.id || '')
+      return
+    }
+
+    toast.error({
+      title: 'We cannot proceed with this refund',
+      description: 'Please contact us at support.geyser.fund',
+    })
   }
 
   return (
@@ -133,7 +175,7 @@ export const RefundFilePage = () => {
         </VStack>
       </HStack>
 
-      <Modal {...transactionFailedRefund} title={t('Claim Refund')}>
+      <Modal {...transactionFailedRefund} size="lg" title={t('Claim Refund')}>
         <ClaimRefundForm onSuccess={handleSuccess} showUpload={false} />
       </Modal>
       <RefundRsk

@@ -9433,7 +9433,7 @@ export type FundingFiatSwapPaymentCreateMutationVariables = Exact<{
 }>;
 
 
-export type FundingFiatSwapPaymentCreateMutation = { __typename?: 'Mutation', contributionPaymentsAdd: { __typename?: 'ContributionPaymentsAddResponse', payments: { __typename?: 'ContributionPaymentsDetails', fiatToLightningSwap?: { __typename?: 'ContributionFiatToLightningSwapPaymentDetails', checkoutUrl: string } | null } } };
+export type FundingFiatSwapPaymentCreateMutation = { __typename?: 'Mutation', contributionPaymentsAdd: { __typename?: 'ContributionPaymentsAddResponse', payments: { __typename?: 'ContributionPaymentsDetails', fiatToLightningSwap?: { __typename?: 'ContributionFiatToLightningSwapPaymentDetails', checkoutUrl: string, paymentId: any } | null } } };
 
 export type PaymentSwapClaimTxSetMutationVariables = Exact<{
   input: PaymentSwapClaimTxSetInput;
@@ -15750,6 +15750,7 @@ export const FundingFiatSwapPaymentCreateDocument = gql`
     payments {
       fiatToLightningSwap {
         checkoutUrl
+        paymentId
       }
     }
   }

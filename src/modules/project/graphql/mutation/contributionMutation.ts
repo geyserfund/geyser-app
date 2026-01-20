@@ -32,6 +32,7 @@ export const MUTATION_FUNDING_FIAT_SWAP_PAYMENT_CREATE = gql`
       payments {
         fiatToLightningSwap {
           checkoutUrl
+          paymentId
         }
       }
     }

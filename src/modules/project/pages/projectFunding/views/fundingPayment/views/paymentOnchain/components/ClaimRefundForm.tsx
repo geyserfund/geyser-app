@@ -1,13 +1,17 @@
 import { Button, Stack, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
 import { currentSwapIdAtom, SwapData } from '@/modules/project/funding/state'
-import { currentSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
+import {
+  currentSwapAtom,
+  refundedSwapDataAtom,
+  removeRefundedSwapAtom,
+} from '@/modules/project/funding/state/swapAtom.ts'
 import { ControlledTextInput } from '@/shared/components/controlledInput'
 import { Body } from '@/shared/components/typography'
 import { usePaymentSwapRefundTxBroadcastMutation } from '@/types/index.ts'
@@ -50,6 +54,8 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
   const currentSwapId = useAtomValue(currentSwapIdAtom)
   const refundFileFromAtom = useAtomValue(currentSwapAtom)
 
+  const setRefundedSwapData = useSetAtom(refundedSwapDataAtom)
+  const removeRefundFile = useSetAtom(removeRefundedSwapAtom)
   const [paymentSwapRefundTxBroadcast] = usePaymentSwapRefundTxBroadcastMutation()
 
   const { handleSubmit, control } = useForm<{ bitcoinAddress: string }>({
@@ -81,6 +87,11 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
               toast.success({
                 title: 'Refund initiated successfully',
               })
+              setRefundedSwapData({
+                ...refundFile,
+                refundTx: data.paymentSwapRefundTxBroadcast.txHash,
+              })
+              removeRefundFile(refundFile.id)
               if (onSuccess) {
                 onSuccess()
               }
@@ -113,6 +124,8 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
       initiateRefund,
       paymentSwapRefundTxBroadcast,
       toast,
+      setRefundedSwapData,
+      removeRefundFile,
     ],
   )
 
