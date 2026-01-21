@@ -16,7 +16,7 @@ import {
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { PaymentStatus, PaymentType } from '@/types/index.ts'
+import { PaymentStatus, PaymentType, ProjectFundingStrategy } from '@/types/index.ts'
 import { isAllOrNothing, useMobileMode, useNotification } from '@/utils/index.ts'
 
 import { QRCodeComponent } from '../../components/QRCodeComponent'
@@ -46,7 +46,9 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
   useListenFundingContributionSuccess()
 
   const { project } = useProjectAtom()
-  const isAon = isAllOrNothing(project)
+  const creatorRskAddress = project?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+  const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
+  const isRskSwapFlow = isAllOrNothing(project) || isPrismTia
 
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
@@ -84,10 +86,10 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
   }
 
   useEffect(() => {
-    if (isAon && currentLightningToRskSwapId) {
+    if (isRskSwapFlow && currentLightningToRskSwapId) {
       setCurrentSwapId(currentLightningToRskSwapId)
     }
-  }, [isAon, currentLightningToRskSwapId, setCurrentSwapId])
+  }, [isRskSwapFlow, currentLightningToRskSwapId, setCurrentSwapId])
 
   return (
     <VStack w="full">
@@ -107,7 +109,7 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
           {t('Copy invoice')}
         </Button>
       </VStack>
-      {isAon && <PaymentLightningAonComponent />}
+      {isRskSwapFlow && <PaymentLightningAonComponent />}
     </VStack>
   )
 }
@@ -117,6 +119,9 @@ export const PaymentLightningAonComponent = () => {
   const location = useLocation()
 
   const { project } = useProjectAtom()
+  const creatorRskAddress = project?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+  const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
+  const isRskSwapFlow = isAllOrNothing(project) || isPrismTia
 
   const [fundingContribution, setFundingContribution] = useAtom(fundingContributionAtom)
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
@@ -151,7 +156,7 @@ export const PaymentLightningAonComponent = () => {
   useTransactionStatusUpdate({
     handleProcessing,
     handleFailed,
-    swapId: currentSwap?.id,
+    swapId: isRskSwapFlow ? currentSwap?.id : undefined,
   })
 
   return null
