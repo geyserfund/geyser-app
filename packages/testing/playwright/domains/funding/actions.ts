@@ -7,7 +7,7 @@ export const clickContribute = async (page: Page) => {
   const contributeButton = page.getByRole('button', { name: 'Contribute' })
   await contributeButton.waitFor({ state: 'visible', timeout: 10000 })
   await contributeButton.click()
-  
+
   // Wait for funding page to load
   await page.getByRole('heading', { name: 'Make a donation' }).waitFor({ state: 'visible', timeout: 10000 })
 }
@@ -26,7 +26,7 @@ export const enterDonationAmount = async (page: Page, amount: number) => {
 }
 
 /** Click the Add button for a reward */
-export const clickAddReward = async (page: Page, rewardIndex: number = 0) => {
+export const clickAddReward = async (page: Page, rewardIndex = 0) => {
   const addButtons = page.getByRole('button', { name: 'Add' })
   await addButtons.nth(rewardIndex).click()
 }
@@ -74,9 +74,15 @@ export const clickOnchainTab = async (page: Page) => {
   await onchainButton.click()
 }
 
-/** Click Download & Continue button for onchain refund file */
+/** Click Download & Continue button for onchain refund file
+ *
+ * Note: Despite being a <Button> in JSX, this is rendered as a Link
+ * due to spread props from useDownloadRefund() containing `as: Link`.
+ * Must use getByRole('link'), not getByRole('button').
+ */
 export const clickDownloadAndContinue = async (page: Page) => {
-  const downloadButton = page.getByRole('button', { name: 'Download & Continue' })
+  // Note: This is rendered as a Link (role="link"), not Button, due to spread props
+  const downloadButton = page.getByRole('link', { name: 'Download & Continue' })
   await downloadButton.waitFor({ state: 'visible' })
   await downloadButton.scrollIntoViewIfNeeded()
   await downloadButton.click()
@@ -87,20 +93,20 @@ export const clickCopyLightningInvoice = async (page: Page): Promise<string> => 
   const copyButton = page.locator('#copy-lightning-invoice-button')
   await copyButton.waitFor({ state: 'visible' })
   await copyButton.scrollIntoViewIfNeeded()
-  
+
   // Grant clipboard permissions
   await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
-  
+
   await copyButton.click()
-  
+
   // Wait a moment for clipboard to be populated
   await page.waitForTimeout(500)
-  
+
   // Read from clipboard
   const invoice = await page.evaluate(async () => {
     return await navigator.clipboard.readText()
   })
-  
+
   return invoice
 }
 
@@ -109,20 +115,20 @@ export const clickCopyOnchainAddress = async (page: Page): Promise<string> => {
   const copyButton = page.locator('#copy-onchain-address-button')
   await copyButton.waitFor({ state: 'visible' })
   await copyButton.scrollIntoViewIfNeeded()
-  
+
   // Grant clipboard permissions
   await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
-  
+
   await copyButton.click()
-  
+
   // Wait a moment for clipboard to be populated
   await page.waitForTimeout(500)
-  
+
   // Read from clipboard
   const bip21Uri = await page.evaluate(async () => {
     return await navigator.clipboard.readText()
   })
-  
+
   return bip21Uri
 }
 

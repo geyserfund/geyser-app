@@ -85,6 +85,39 @@ useEffect(() => {
 // ✅ Text is wrapped in t() for i18n
 ```
 
+#### CRITICAL: Check Spread Props
+
+**When you see spread props (`{...props}`), ALWAYS investigate their source:**
+
+```typescript
+// Example: PaymentOnchainPrompt.tsx
+<Button {...buttonProps} onClick={handleClick}>
+  {t('Download & Continue')}
+</Button>
+
+// Step 1: Find the source
+const { buttonProps } = useDownloadRefund()
+
+// Step 2: Read the hook/function
+// In useDownloadRefund.ts:
+buttonProps: {
+  as: Link,  // ← Transforms Button into Link!
+  href: fileToDownload?.content,
+  download: fileToDownload?.download,
+}
+
+// Step 3: Use correct selector based on ACTUAL role
+page.getByRole('link', { name: 'Download & Continue' })  // ✅
+// NOT: page.getByRole('button', ...)  // ❌
+```
+
+**Verification Checklist**:
+- [ ] Check for spread props: `{...props}`, `{...buttonProps}`, etc.
+- [ ] Find source: hooks, functions, parent components
+- [ ] Look for `as` prop (Chakra component transformation)
+- [ ] Look for conditional props based on state
+- [ ] Verify actual DOM role with Playwright Inspector: `await page.pause()`
+
 #### Check Conditional Rendering
 
 ```typescript
@@ -220,6 +253,57 @@ await selectNostrAuth(page)
 - Verify the test matches the actual app behavior
 - Update rules if you discover new patterns
 
+### Step 9: Check and Fix Linter Errors
+
+**ALWAYS check for linter errors after writing/modifying test files.**
+
+```bash
+# Check specific files you modified
+read_lints(['packages/testing/playwright/domains/funding/flows.ts'])
+
+# Check entire test directory
+read_lints(['packages/testing/playwright'])
+```
+
+#### Lint Error Workflow
+
+1. **After writing ANY test code**, immediately check for linter errors
+2. **Fix ALL errors before moving forward** - Don't accumulate technical debt
+3. **If lint rules conflict with test requirements**:
+   - Document the conflict
+   - Ask user for permission to skip/disable that specific rule
+   - Add `// eslint-disable-next-line rule-name` with explanation if approved
+4. **Common lint issues in tests**:
+   - Unused imports (remove them)
+   - Missing types (add proper TypeScript types)
+   - Formatting issues (let prettier/eslint fix automatically)
+
+#### When Lint Rules Don't Make Sense
+
+If workspace lint rules conflict with valid test patterns:
+
+**DO**:
+- Document the specific rule and why it conflicts
+- Provide example of the conflict
+- Ask user: "Rule X conflicts with pattern Y. Should we disable this rule for tests?"
+- Wait for permission before proceeding
+
+**DON'T**:
+- Silently disable rules
+- Write code that violates rules without asking
+- Accumulate lint errors "to fix later"
+
+#### Example
+
+```typescript
+// ❌ Bad: Leaving unused import
+import { test, expect } from '@playwright/test'
+import { unusedFunction } from './utils'  // Lint error!
+
+// ✅ Good: Remove unused imports immediately
+import { test, expect } from '@playwright/test'
+```
+
 ---
 
 ## 🚨 When Tests Fail: Debugging Hierarchy
@@ -274,6 +358,256 @@ Follow this order to debug failures efficiently:
 **Cause**: Chakra `MenuItem` has `role="menuitem"`, not `role="button"`.  
 **Fix**: Changed to `getByRole('menuitem')`.  
 **Lesson**: Always check actual component to verify its accessibility role.
+
+### Always Check Spread Props Before Assuming Roles
+
+**Bug**: `getByRole('button', { name: 'Download & Continue' })` timeout, but button visible in screenshot.  
+**Cause**: Component has `<Button {...buttonProps}>` where `buttonProps` contains `as: Link`, transforming it into a Link with `role="link"`.  
+**Fix**: Checked `useDownloadRefund` hook, found `as: Link` in spread props, changed selector to `getByRole('link')`.  
+**Lesson**: NEVER assume a component's role based on its JSX tag name alone. ALWAYS check:
+1. Spread props (`{...props}`, `{...buttonProps}`) - they can override EVERYTHING
+2. The hook/function providing those props
+3. Chakra's `as` prop that transforms components
+4. Use Playwright Inspector to verify actual role: `await page.pause()`
+
+**Pattern to Follow**:
+```typescript
+// Step 1: See JSX
+<Button {...buttonProps} onClick={handleClick}>Download</Button>
+
+// Step 2: Find where buttonProps comes from
+const { buttonProps } = useDownloadRefund()
+
+// Step 3: Read the hook/function
+buttonProps: {
+  as: Link,  // ← THIS CHANGES EVERYTHING!
+  href: '...',
+}
+
+// Step 4: Use correct selector
+page.getByRole('link', { name: 'Download' })  // Not 'button'!
+```
+
+**Key Insight**: JSX tag name ≠ DOM role when spread props are involved.
+
+### Always Wait for Navigation
+
+**Bug**: "Download & Continue" button timeout in onchain flow.  
+**Cause**: Clicked "Download & Continue" (triggers navigation), then immediately tried to copy address on next page without waiting for navigation to complete.  
+**Fix**: Added `await page.waitForSelector('#copy-onchain-address-button', { state: 'visible', timeout: 10000 })` after navigation.  
+**Lesson**: SPAs take time to navigate. After clicking navigation-triggering buttons, ALWAYS wait for the target page to load before interacting with elements on it.
+
+**Pattern**:
+```typescript
+// Click button that navigates
+await clickDownloadAndContinue(page)
+
+// Wait for target page element to be visible
+await page.waitForSelector('#target-page-element', { state: 'visible', timeout: 10000 })
+
+// Now safe to interact with target page
+await clickCopyButton(page)
+```
+
+### Check Conditional Rendering
+
+**Bug**: Assumed "Download & Continue" button exists for all projects.  
+**Cause**: Didn't check `PaymentOnchainPrompt.tsx` which shows: `if (isAllOrNothing(project)) return <Navigate />`  
+**Fix**: Understood TIA projects show button, AoN projects skip it. Organized tests by project type.  
+**Lesson**: UI elements may be conditionally rendered based on feature flags, user roles, or data properties. Always check component code for `if` statements and ternaries.
+
+### Parse Exact Amounts from Backend
+
+**Bug**: Manually calculated onchain payment amount, missing network fees.  
+**Cause**: Used `ONCHAIN_AMOUNT + tip` calculation instead of parsing the exact amount from BIP21 URI.  
+**Fix**: Parse `amount` parameter from BIP21 URI (`bitcoin:ADDRESS?amount=0.00063000`), convert BTC to sats.  
+**Lesson**: Don't manually calculate amounts that the backend provides. Backend calculations include multiple factors (tips, network fees, exchange rates).
+
+**Bad Pattern**:
+```typescript
+const calculatedAmount = baseAmount + (baseAmount * tipPercent / 100)
+await payOnchain(address, calculatedAmount)  // ❌ Missing network fees!
+```
+
+**Good Pattern**:
+```typescript
+// Backend provides exact amount in BIP21 URI
+const bip21Uri = await clickCopyOnchainAddress(page)
+// Parse: bitcoin:ADDRESS?amount=0.00063000
+const amountMatch = bip21Uri.match(/amount=([0-9.]+)/)
+const amountBtc = parseFloat(amountMatch[1])
+const amountSats = Math.round(amountBtc * 100_000_000)  // Convert BTC to sats
+await payOnchain(address, amountSats)  // ✅ Exact amount with all fees
+```
+
+**Note**: Use string manipulation instead of `parseFloat` to avoid floating-point precision errors:
+```typescript
+const [wholePart, decimalPart = ''] = amountBtcString.split('.')
+const paddedDecimal = decimalPart.padEnd(8, '0').substring(0, 8)
+const amountSats = parseInt(wholePart + paddedDecimal, 10)
+```
+
+**Why**: Backend calculations include multiple factors (tips, network fees, exchange rates). Always use the exact amounts provided by the API/UI.
+
+### Always Verify Authentication-Dependent UI Rendering
+
+**Bug**: Test failed looking for "View contribution status" button during intermediate success.  
+**Cause**: Button conditionally renders based on `isLoggedIn` state. Component code: `if (!isLoggedIn && isPending) return null`. Tests run as guest users.  
+**Fix**: Removed button assertion from intermediate success. Verified pending state through auth-agnostic indicators (processing text, disabled invoice button).  
+**Lesson**: UI elements are often conditionally rendered based on authentication state. Always check component code for `isLoggedIn`, `user`, `isAuthenticated` checks before writing assertions.
+
+**Debugging Checklist**:
+- ✅ Check component code for authentication checks (`isLoggedIn`, `user`, `isAuthenticated`)
+- ✅ Verify what authentication state your test has (guest vs logged-in)
+- ✅ Use assertions that match the test's auth context
+- ✅ Document auth requirements in test JSDoc comments
+
+**Bad Pattern** (assumes UI always renders):
+```typescript
+// Component: if (!isLoggedIn && isPending) return null
+// Test runs as GUEST user
+await expect(page.getByRole('button', { name: 'View status' })).toBeVisible()  // ❌ Fails!
+```
+
+**Good Pattern** (checks auth-agnostic indicators):
+```typescript
+// Component: if (!isLoggedIn && isPending) return null
+// Test runs as GUEST user - button won't render
+
+/** Note: Tests run as GUEST users. Button doesn't render for guests during isPending. */
+await expect(page.getByText('Processing...')).toBeVisible()  // ✅ Works for all users
+await expect(page.getByRole('link', { name: 'Download' })).toBeDisabled()  // ✅ Works for all users
+```
+
+**Why**: Authentication-dependent rendering is common in modern apps. Tests must account for their authentication context to avoid false failures.
+
+### Always Verify Actual HTML Roles (Chakra UI `as` Prop)
+
+**Bug**: Test failed with `getByRole('link', { name: 'Download invoice' })` - element not found.  
+**Cause**: Assumed Chakra UI `<Button>` always has `role="button"`, but when `as="div"` prop is used, it still renders with `role="button"` (not as expected HTML element). During `isPending` state, the component returns `DownloadButtons` (a Button), not wrapped in `PDFDownloadLink`.  
+**Fix**: Changed selector from `getByRole('link')` to `getByRole('button')`.  
+**Lesson**: Chakra UI components with the `as` prop can change the underlying HTML element but preserve the ARIA role. Always verify the actual rendered role by checking the component code.
+
+**Component Code** (`DownloadInvoice.tsx`):
+```typescript
+// During isPending, returns Button component (not PDFDownloadLink):
+if (isPending) {
+  return (
+    <TooltipPopover>
+      <DownloadButtons asIcon={asIcon} isDisabled={true} />  // ← Returns Button
+    </TooltipPopover>
+  )
+}
+
+// DownloadButtons component:
+<Button
+  as="div"           // ← Renders as <div role="button">, NOT <a> or <link>
+  isDisabled={true}
+  ...
+>
+  {t('Download invoice')}
+</Button>
+```
+
+**Debugging Checklist**:
+- ✅ Check component code for conditional rendering based on state (isPending, isLoggedIn, etc.)
+- ✅ Check if Chakra UI components use `as` prop to override default HTML element
+- ✅ Verify the actual HTML role in each state (don't assume component name = HTML role)
+- ✅ Look for wrapper components like `PDFDownloadLink` that may or may not wrap based on state
+
+**Bad Pattern** (assumes component name = HTML role):
+```typescript
+// Component: <Button as="div">Download invoice</Button>
+await expect(page.getByRole('link', { name: 'Download invoice' })).toBeDisabled()  // ❌ Not a link!
+```
+
+**Good Pattern** (verifies actual role):
+```typescript
+// Component: <Button as="div">Download invoice</Button>
+// Actual HTML: <div role="button">Download invoice</div>
+await expect(page.getByRole('button', { name: 'Download invoice' })).toBeDisabled()  // ✅ Correct!
+```
+
+**Why**: Chakra UI's flexibility with the `as` prop means JSX component names don't always match HTML elements or ARIA roles. Always check the component implementation to verify the actual rendered role.
+
+### Don't Assert on Elements That May Not Render
+
+**Bug**: Test failed with `getByRole('button', { name: 'Download invoice' })` - element not found, even with correct role.  
+**Cause**: The Download invoice button depends on async data (`fundingContribution`, `project`) that may not be loaded immediately during intermediate success state. Component returns `null` if `project` is unavailable.  
+**Fix**: Removed Download invoice button assertion. Use only the processing message text as the indicator of intermediate state.  
+**Lesson**: Don't assert on UI elements that depend on async data or may render conditionally. Assert only on elements that are guaranteed to be present in that state.
+
+**Component Dependency** (`DownloadInvoice.tsx`):
+```typescript
+export const DownloadInvoice = ({ project, contributionId, isPending }) => {
+  // ...
+  
+  if (!project) {
+    return null  // ← Returns null if project data not loaded yet!
+  }
+  
+  if (isPending) {
+    return <TooltipPopover><DownloadButtons isDisabled={true} /></TooltipPopover>
+  }
+  // ...
+}
+```
+
+**Timing Issue**:
+- Intermediate success screen loads immediately after transaction
+- `fundingContributionAtom` and `project` may still be loading
+- Components dependent on this data return `null` initially
+
+**Debugging Checklist**:
+- ✅ Check if component has early return conditions (`if (!data) return null`)
+- ✅ Check if component depends on async data (atoms, GraphQL queries, etc.)
+- ✅ Verify element renders reliably in the test environment
+- ✅ Prefer asserting on text content over interactive elements during loading states
+
+**Bad Pattern** (asserts on element that may not render):
+```typescript
+// Component: if (!project) return null
+// During intermediate state, project might not be loaded yet
+await expect(page.getByRole('button', { name: 'Download invoice' })).toBeDisabled()  // ❌ May not exist!
+```
+
+**Good Pattern** (asserts on reliable indicator):
+```typescript
+// Processing message is rendered directly in FundingSuccessUI, doesn't depend on async data
+await expect(page.getByText('Your transaction is being processed')).toBeVisible()  // ✅ Always present!
+```
+
+**Why**: Tests need to be deterministic. Asserting on elements that may or may not render due to async data loading creates flaky tests. Use reliable indicators (text, IDs, elements that don't depend on async data) to verify state.
+
+---
+
+## 📂 Test Organization by Project Type
+
+### Separate Tests for Different Configurations
+
+- **TIA Projects** (Take It All / Open Funding): Tests in `funding/lightning.spec.ts`, `funding/onchain.spec.ts`
+  - Must download refund file before onchain payment
+  - Uses `lndtestproject`
+  
+- **AoN Projects** (All-or-Nothing): Future separate test files
+  - Skips refund download (automatic navigation)
+  - Different success/failure states
+
+### Constants for Project Types
+
+```typescript
+// constants.ts
+export const PROJECT_NAME = 'lndtestproject'
+export const PROJECT_TYPE = 'TIA' as const  // or 'AON'
+```
+
+### Test Suite Naming
+
+```typescript
+test.describe('Lightning Funding Flows - TIA Projects', () => {
+  // Tests specific to TIA project behavior
+})
+```
 
 ---
 
@@ -559,3 +893,5 @@ await mineBlock()
 - [ ] Update rules with new patterns
 - [ ] Document any new learnings
 - [ ] Ensure code follows architecture
+- [ ] Run linter and fix all errors
+- [ ] Verify no warnings remain

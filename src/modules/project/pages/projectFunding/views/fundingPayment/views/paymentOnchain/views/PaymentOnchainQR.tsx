@@ -7,7 +7,6 @@ import { PiCopy, PiLink } from 'react-icons/pi'
 import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { currentOnChainToRskSwapIdAtom, currentSwapIdAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { __development__ } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 import { PaymentFeePayer, PaymentFeeType } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
@@ -58,9 +57,7 @@ export const PaymentOnchainQRContent = ({ address }: { address: string }) => {
   console.log('fundingPaymentDetails.onChainSwap?.amountDue', fundingPaymentDetails.onChainSwap?.amountDue)
   console.log('fundingPaymentDetails.onChainToRskSwap?.amountDue', fundingPaymentDetails.onChainToRskSwap?.amountDue)
 
-  const onChainBip21Invoice = __development__
-    ? `address=${address} amount=${totalAmountSats}`
-    : getBip21Invoice(totalAmountSats, address)
+  const onChainBip21Invoice = getBip21Invoice(totalAmountSats, address)
 
   const { onCopy: onCopyBip21Invoice, hasCopied: hasCopiedBip21Invoice } = useCopyToClipboard(onChainBip21Invoice)
 

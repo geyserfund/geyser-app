@@ -1,4 +1,4 @@
-/** Lightning funding flow tests */
+/** Lightning funding flow tests for TIA (Take It All) projects */
 
 import { test } from '@playwright/test'
 
@@ -12,7 +12,7 @@ import { LIGHTNING_AMOUNT, PROJECT_NAME, TEST_COMMENT, TEST_EMAIL } from '../../
 import { completeLightningDonation, completeLightningReward } from '../../domains/funding/flows'
 import { payLightningInvoice } from '../../domains/shared/bitcoin/lncli'
 
-test.describe('Lightning Funding Flows', () => {
+test.describe('Lightning Funding Flows - TIA Projects', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to project page
     await page.goto(`/project/${PROJECT_NAME}`)

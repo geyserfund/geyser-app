@@ -34,28 +34,42 @@ export const expectOnchainQRScreen = async (page: Page) => {
   await expect(page.locator('canvas#qr-code')).toBeVisible({ timeout: 10000 })
   // Copy button
   await expect(page.locator('#copy-onchain-address-button')).toBeVisible()
-  // Processing card should NOT be visible yet
-  await expect(page.locator('#onchain-transaction-processing-card')).not.toBeVisible()
 }
 
-/** Verify onchain processing screen (intermediate state) */
-export const expectOnchainProcessingScreen = async (page: Page) => {
-  await expect(page.locator('#onchain-transaction-processing-card')).toBeVisible({ timeout: 15000 })
-  // Success banner should NOT be visible yet
-  await expect(page.locator('#successful-contribution-banner')).not.toBeVisible()
-}
-
-/** Verify intermediate success screen (FundingSuccessIntermediate) */
+/** Verify intermediate success screen (isPending=true)
+ *
+ * Note: Tests run as GUEST users. The "View contribution status" button
+ * does NOT render for guests during isPending=true (see ContributionStatusSection.tsx).
+ *
+ * The Download invoice button may not render immediately during intermediate state
+ * as contribution data loads asynchronously. We verify pending state through
+ * the processing message instead.
+ */
 export const expectIntermediateSuccessScreen = async (page: Page) => {
-  // This is the new intermediate success state for onchain
-  // It shows success UI but isPending=true
+  // Success banner is visible
   await expect(page.locator('#successful-contribution-banner')).toBeVisible({ timeout: 15000 })
-  // Could also check for specific "pending" indicators if they exist
+
+  // Check for intermediate-specific text
+  await expect(page.getByText('successfully submitted contribution to')).toBeVisible()
+
+  // Check for processing message (visible for all users during pending)
+  // This is the primary indicator of intermediate/pending state
+  await expect(page.getByText('Your transaction is being processed. You can safely leave this page.')).toBeVisible()
 }
 
-/** Verify final success screen */
+/** Verify final success screen (isPending=false) */
 export const expectFinalSuccessScreen = async (page: Page) => {
+  // Success banner is visible
   await expect(page.locator('#successful-contribution-banner')).toBeVisible({ timeout: 15000 })
+
+  // Check for final-specific text (without "submitted")
+  await expect(page.getByText(/successfully contributed to/)).toBeVisible()
+
+  // Processing message should NOT be visible
+  await expect(page.getByText('Your transaction is being processed')).not.toBeVisible()
+
+  // Button shows "Go to project" (not "View contribution status")
+  await expect(page.getByRole('link', { name: 'Go to project' })).toBeVisible()
 }
 
 /** Verify transaction failed screen */

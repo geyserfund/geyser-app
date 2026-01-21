@@ -1,4 +1,4 @@
-/** Onchain funding flow tests */
+/** Onchain funding flow tests for TIA (Take It All) projects */
 
 import { test } from '@playwright/test'
 
@@ -7,22 +7,15 @@ import {
   expectFinalSuccessScreen,
   expectFundingAmountScreen,
   expectIntermediateSuccessScreen,
-  expectOnchainProcessingScreen,
   expectRefundInitiatedScreen,
   expectTransactionFailedScreen,
 } from '../../domains/funding/assertions'
-import {
-  ONCHAIN_AMOUNT,
-  ONCHAIN_AMOUNT_WITH_TIP,
-  PROJECT_NAME,
-  TEST_COMMENT,
-  TEST_EMAIL,
-} from '../../domains/funding/constants'
+import { ONCHAIN_AMOUNT, PROJECT_NAME, TEST_COMMENT, TEST_EMAIL } from '../../domains/funding/constants'
 import { completeOnchainDonation, completeOnchainReward } from '../../domains/funding/flows'
 import { mineBlock, payOnchain } from '../../domains/shared/bitcoin/lncli'
 import { ENV } from '../../domains/shared/constants'
 
-test.describe('Onchain Funding Flows', () => {
+test.describe('Onchain Funding Flows - TIA Projects', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to project page
     await page.goto(`/project/${PROJECT_NAME}`)
@@ -33,14 +26,14 @@ test.describe('Onchain Funding Flows', () => {
     await clickContribute(page)
     await expectFundingAmountScreen(page)
 
-    // Act - Complete funding flow and get onchain address
-    const address = await completeOnchainDonation(page, ONCHAIN_AMOUNT, TEST_COMMENT)
+    // Act - Complete funding flow and get onchain address with exact amount from BIP21 URI
+    const { address, amountSats } = await completeOnchainDonation(page, ONCHAIN_AMOUNT, TEST_COMMENT)
 
-    // Pay the onchain transaction externally
-    await payOnchain(address, ONCHAIN_AMOUNT_WITH_TIP)
+    // Pay the onchain transaction externally with exact amount (includes all fees)
+    await payOnchain(address, amountSats)
 
-    // Assert - Verify intermediate success (transaction processing)
-    await expectOnchainProcessingScreen(page)
+    // Assert - Verify intermediate success (isPending=true)
+    await expectIntermediateSuccessScreen(page)
 
     // Mine a block to confirm the transaction
     await mineBlock()
@@ -48,7 +41,7 @@ test.describe('Onchain Funding Flows', () => {
     // Wait a moment for the confirmation to be detected
     await page.waitForTimeout(2000)
 
-    // Assert - Verify final success
+    // Assert - Verify final success (isPending=false)
     await expectFinalSuccessScreen(page)
   })
 
@@ -57,16 +50,14 @@ test.describe('Onchain Funding Flows', () => {
     await clickContribute(page)
     await expectFundingAmountScreen(page)
 
-    // Act - Complete funding flow with reward and get onchain address
-    const address = await completeOnchainReward(page, TEST_COMMENT, TEST_EMAIL, 0)
+    // Act - Complete funding flow with reward and get onchain address with exact amount from BIP21 URI
+    const { address, amountSats } = await completeOnchainReward(page, TEST_COMMENT, TEST_EMAIL, 0)
 
-    // Pay the onchain transaction externally
-    // For rewards, the amount is determined by the reward cost
-    // We'll use the same amount for simplicity
-    await payOnchain(address, ONCHAIN_AMOUNT_WITH_TIP)
+    // Pay the onchain transaction externally with exact amount (includes reward cost + all fees)
+    await payOnchain(address, amountSats)
 
-    // Assert - Verify intermediate success (transaction processing)
-    await expectOnchainProcessingScreen(page)
+    // Assert - Verify intermediate success (isPending=true)
+    await expectIntermediateSuccessScreen(page)
 
     // Mine a block to confirm the transaction
     await mineBlock()
@@ -74,7 +65,7 @@ test.describe('Onchain Funding Flows', () => {
     // Wait a moment for the confirmation to be detected
     await page.waitForTimeout(2000)
 
-    // Assert - Verify final success
+    // Assert - Verify final success (isPending=false)
     await expectFinalSuccessScreen(page)
   })
 
@@ -83,11 +74,11 @@ test.describe('Onchain Funding Flows', () => {
     await clickContribute(page)
     await expectFundingAmountScreen(page)
 
-    // Act - Complete funding flow and get onchain address
-    const address = await completeOnchainDonation(page, ONCHAIN_AMOUNT, TEST_COMMENT)
+    // Act - Complete funding flow and get onchain address with exact amount from BIP21 URI
+    const { address, amountSats } = await completeOnchainDonation(page, ONCHAIN_AMOUNT, TEST_COMMENT)
 
-    // Pay LESS than required (underpayment)
-    const underpaymentAmount = ONCHAIN_AMOUNT_WITH_TIP - 1000
+    // Pay LESS than required (underpayment) - subtract 1000 sats from exact amount
+    const underpaymentAmount = amountSats - 1000
     await payOnchain(address, underpaymentAmount)
 
     // Assert - Verify transaction failed screen appears
