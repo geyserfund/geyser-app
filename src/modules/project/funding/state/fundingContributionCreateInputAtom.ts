@@ -220,6 +220,9 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
 
   const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
   const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
+  const creatorRskAddress = fundingProject?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+  const usePrism =
+    fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
 
   if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
     paymentsInput.fiat = {
@@ -228,15 +231,35 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
         returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
       },
     }
-    paymentsInput.lightning = {
-      create: true,
-      zapRequest: null,
-    }
-    paymentsInput.onChainSwap = {
-      create: true,
-      boltz: {
-        swapPublicKey: claimPublicKey,
-      },
+    if (usePrism) {
+      paymentsInput.lightningToRskSwap = {
+        create: true,
+        boltz: {
+          claimPublicKey,
+          claimAddress,
+          preimageHash: '',
+        },
+      }
+
+      paymentsInput.onChainToRskSwap = {
+        create: true,
+        boltz: {
+          claimPublicKey,
+          claimAddress,
+          preimageHash: '',
+        },
+      }
+    } else {
+      paymentsInput.lightning = {
+        create: true,
+        zapRequest: null,
+      }
+      paymentsInput.onChainSwap = {
+        create: true,
+        boltz: {
+          swapPublicKey: claimPublicKey,
+        },
+      }
     }
   }
 

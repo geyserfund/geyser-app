@@ -13,6 +13,8 @@ import {
   ContributionOnChainToRskSwapPaymentDetailsFragment,
   FundingContributionFragment,
   PaymentFeePayer,
+  PaymentFeeType,
+  ProjectFundingStrategy,
   useContributionCreateMutation,
   usePaymentSwapClaimTxSetMutation,
 } from '@/types/index.ts'
@@ -21,7 +23,11 @@ import { useNotification } from '@/utils'
 import { useCustomMutation } from '../../API/custom/useCustomMutation'
 import { generateAccountKeys, generatePreImageHash } from '../../forms/accountPassword/keyGenerationHelper.ts'
 import { useProjectAtom } from '../../hooks/useProjectAtom.ts'
-import { createCallDataForBoltzClaimCall } from '../../pages/projectFunding/utils/createCallDataForClaimCall.ts'
+import {
+  createCallDataForBoltzClaimCall,
+  createCallDataForBoltzClaimCallWithCallee,
+} from '../../pages/projectFunding/utils/createCallDataForClaimCall.ts'
+import { createCallDataForPrismDepositFor } from '../../pages/projectFunding/utils/createCallDataForPrismDepositFor.ts'
 import { fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
@@ -39,10 +45,15 @@ import {
 } from '../state/swapAtom.ts'
 import { rskAccountKeysAtom } from '../state/swapRskAtom.ts'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
+import { projectIdToProjectKey } from '../utils/projectKey.ts'
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundingFormAtom } from './useFundingFormAtom'
 import { useResetContribution } from './useResetContribution.ts'
 import { useWebLNFlow } from './useWebLNFlow'
+import {
+  VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
+  VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
+} from '@/shared/constants/config/env.ts'
 
 const hasBolt11 = true
 const hasWebLN = true
@@ -317,41 +328,99 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
   }) => {
     const { swapJson, fees } = payment
 
-    const creatorFeesAmount = fees.reduce((acc, fee) => {
-      if (fee.feePayer === PaymentFeePayer.Creator) {
-        return acc + fee.feeAmount
-      }
-
-      return acc
-    }, 0)
-
-    const contributorFeesAmount = fees.reduce((acc, fee) => {
-      // Swap fees never make it to the contract, so should not be counted inside the contract
-      if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
-        return acc + fee.feeAmount
-      }
-
-      return acc
-    }, 0)
-
     const swap = JSON.parse(swapJson)
+    const claimAmountSats = payment.amountToClaim
 
-    const getTransactionForBoltzClaimCall = createCallDataForBoltzClaimCall({
-      contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
-      creatorFees: satsToWei(creatorFeesAmount),
-      contributorFees: satsToWei(contributorFeesAmount),
-      preimage: preImages.preimageHex,
-      amount: satsToWei(payment.amountToClaim),
-      refundAddress: swap.refundAddress,
-      timelock: swap.timeoutBlockHeight,
-      privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      aonContractAddress: project?.aonGoal?.contractAddress || '',
-    })
+    const contributorAddress = accountKeys?.address || userAccountKeys?.rskKeyPair?.address || ''
+    if (!contributorAddress) {
+      throw new Error('Missing contributor RSK address for swap claim')
+    }
+    const isAonProject = project?.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+    const creatorRskAddress = project?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+
+    const geyserFeeTypes = new Set([
+      PaymentFeeType.Platform,
+      PaymentFeeType.Promotion,
+      PaymentFeeType.Ambassador,
+      PaymentFeeType.Tip,
+    ])
+    const geyserFeesAmount = fees.reduce((acc, fee) => {
+      if (!fee.feeType) return acc
+      if (!geyserFeeTypes.has(fee.feeType)) return acc
+      return acc + fee.feeAmount
+    }, 0)
+
+    let claimTxCallDataHex = ''
+    if (!isAonProject && creatorRskAddress) {
+      if (!VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS || !VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS) {
+        throw new Error('Missing Prism contract or Geyser operational address configuration')
+      }
+
+      if (!project?.id) {
+        throw new Error('Missing project id for Prism deposit')
+      }
+
+      const projectKey = projectIdToProjectKey(BigInt(project.id))
+      const creatorAmountSats = claimAmountSats - geyserFeesAmount
+      if (creatorAmountSats < 0) {
+        throw new Error('Prism split amount is negative for creator')
+      }
+
+      const depositCallData = createCallDataForPrismDepositFor({
+        payer: contributorAddress as `0x${string}`,
+        receivers: [
+          creatorRskAddress as `0x${string}`,
+          VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS as `0x${string}`,
+        ],
+        amounts: [satsToWeiBigInt(creatorAmountSats), satsToWeiBigInt(geyserFeesAmount)],
+        projectKey,
+      })
+
+      claimTxCallDataHex = createCallDataForBoltzClaimCallWithCallee({
+        preimage: preImages.preimageHex,
+        amount: satsToWei(claimAmountSats),
+        refundAddress: swap.refundAddress,
+        timelock: swap.timeoutBlockHeight,
+        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
+        callee: VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS as string,
+        callData: depositCallData,
+      })
+    } else {
+      const creatorFeesAmount = fees.reduce((acc, fee) => {
+        if (fee.feePayer === PaymentFeePayer.Creator) {
+          return acc + fee.feeAmount
+        }
+
+        return acc
+      }, 0)
+
+      const contributorFeesAmount = fees.reduce((acc, fee) => {
+        // Swap fees never make it to the contract, so should not be counted inside the contract
+        if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
+          return acc + fee.feeAmount
+        }
+
+        return acc
+      }, 0)
+
+      claimTxCallDataHex = createCallDataForBoltzClaimCall({
+        contributorAddress,
+        creatorFees: satsToWei(creatorFeesAmount),
+        contributorFees: satsToWei(contributorFeesAmount),
+        preimage: preImages.preimageHex,
+        amount: satsToWei(claimAmountSats),
+        refundAddress: swap.refundAddress,
+        timelock: swap.timeoutBlockHeight,
+        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
+        aonContractAddress: project?.aonGoal?.contractAddress || '',
+      })
+    }
+
     paymentSwapClaimTxSet({
       variables: {
         input: {
           paymentId: payment.paymentId,
-          claimTxCallDataHex: getTransactionForBoltzClaimCall,
+          claimTxCallDataHex,
         },
       },
     })
@@ -368,41 +437,98 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
   }) => {
     const { swapJson, fees } = payment
 
-    const creatorFeesAmount = fees.reduce((acc, fee) => {
-      if (fee.feePayer === PaymentFeePayer.Creator) {
-        return acc + fee.feeAmount
-      }
-
-      return acc
-    }, 0)
-
-    const contributorFeesAmount = fees.reduce((acc, fee) => {
-      // Swap fees never make it to the contract, so should not be counted inside the contract
-      if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
-        return acc + fee.feeAmount
-      }
-
-      return acc
-    }, 0)
-
     const swap = JSON.parse(swapJson)
+    const claimAmountSats = swap.claimDetails.amount
+    const contributorAddress = accountKeys?.address || userAccountKeys?.rskKeyPair?.address || ''
+    if (!contributorAddress) {
+      throw new Error('Missing contributor RSK address for swap claim')
+    }
+    const isAonProject = project?.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+    const creatorRskAddress = project?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
 
-    const getCallDataForBoltzClaimCall = createCallDataForBoltzClaimCall({
-      contributorAddress: accountKeys?.address || userAccountKeys?.rskKeyPair?.address || '',
-      creatorFees: satsToWei(creatorFeesAmount),
-      contributorFees: satsToWei(contributorFeesAmount),
-      preimage: preImages.preimageHex,
-      amount: satsToWei(swap.claimDetails.amount),
-      refundAddress: swap.claimDetails.refundAddress,
-      timelock: swap.claimDetails.timeoutBlockHeight,
-      privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
-      aonContractAddress: project?.aonGoal?.contractAddress || '',
-    })
+    const geyserFeeTypes = new Set([
+      PaymentFeeType.Platform,
+      PaymentFeeType.Promotion,
+      PaymentFeeType.Ambassador,
+      PaymentFeeType.Tip,
+    ])
+    const geyserFeesAmount = fees.reduce((acc, fee) => {
+      if (!fee.feeType) return acc
+      if (!geyserFeeTypes.has(fee.feeType)) return acc
+      return acc + fee.feeAmount
+    }, 0)
+
+    let claimTxCallDataHex = ''
+    if (!isAonProject && creatorRskAddress) {
+      if (!VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS || !VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS) {
+        throw new Error('Missing Prism contract or Geyser operational address configuration')
+      }
+
+      if (!project?.id) {
+        throw new Error('Missing project id for Prism deposit')
+      }
+
+      const projectKey = projectIdToProjectKey(BigInt(project.id))
+      const creatorAmountSats = claimAmountSats - geyserFeesAmount
+      if (creatorAmountSats < 0) {
+        throw new Error('Prism split amount is negative for creator')
+      }
+
+      const depositCallData = createCallDataForPrismDepositFor({
+        payer: contributorAddress as `0x${string}`,
+        receivers: [
+          creatorRskAddress as `0x${string}`,
+          VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS as `0x${string}`,
+        ],
+        amounts: [satsToWeiBigInt(creatorAmountSats), satsToWeiBigInt(geyserFeesAmount)],
+        projectKey,
+      })
+
+      claimTxCallDataHex = createCallDataForBoltzClaimCallWithCallee({
+        preimage: preImages.preimageHex,
+        amount: satsToWei(claimAmountSats),
+        refundAddress: swap.claimDetails.refundAddress,
+        timelock: swap.claimDetails.timeoutBlockHeight,
+        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
+        callee: VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS as string,
+        callData: depositCallData,
+      })
+    } else {
+      const creatorFeesAmount = fees.reduce((acc, fee) => {
+        if (fee.feePayer === PaymentFeePayer.Creator) {
+          return acc + fee.feeAmount
+        }
+
+        return acc
+      }, 0)
+
+      const contributorFeesAmount = fees.reduce((acc, fee) => {
+        // Swap fees never make it to the contract, so should not be counted inside the contract
+        if (fee.feePayer === PaymentFeePayer.Contributor && !fee.description?.includes('Swap fee')) {
+          return acc + fee.feeAmount
+        }
+
+        return acc
+      }, 0)
+
+      claimTxCallDataHex = createCallDataForBoltzClaimCall({
+        contributorAddress,
+        creatorFees: satsToWei(creatorFeesAmount),
+        contributorFees: satsToWei(contributorFeesAmount),
+        preimage: preImages.preimageHex,
+        amount: satsToWei(claimAmountSats),
+        refundAddress: swap.claimDetails.refundAddress,
+        timelock: swap.claimDetails.timeoutBlockHeight,
+        privateKey: accountKeys?.privateKey || userAccountKeyPair?.privateKey || '',
+        aonContractAddress: project?.aonGoal?.contractAddress || '',
+      })
+    }
+
     paymentSwapClaimTxSet({
       variables: {
         input: {
           paymentId: payment.paymentId,
-          claimTxCallDataHex: getCallDataForBoltzClaimCall,
+          claimTxCallDataHex,
         },
       },
     })
@@ -416,4 +542,8 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
 
 export const satsToWei = (sats: number) => {
   return sats * 10000000000
+}
+
+export const satsToWeiBigInt = (sats: number) => {
+  return BigInt(sats) * 10000000000n
 }

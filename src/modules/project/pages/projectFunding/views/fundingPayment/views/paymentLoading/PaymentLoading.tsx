@@ -11,6 +11,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
+import { ProjectFundingStrategy } from '@/types/index.ts'
 
 import { intendedPaymentMethodAtom, PaymentMethods } from '../../state/paymentMethodAtom.ts'
 import { PaymentDownloadRefundFile } from './PaymentDownloadRefundFile.tsx'
@@ -54,7 +55,11 @@ export const PaymentLoading = () => {
     return null
   }
 
-  if (isAllOrNothing(project)) {
+  const creatorRskAddress = project?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+  const isPrismTia =
+    project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
+
+  if (isAllOrNothing(project) || isPrismTia) {
     if (user?.id && !passwordConfirmed) {
       return <PaymentPassword onComplete={() => setPasswordConfirmed(true)} />
     }

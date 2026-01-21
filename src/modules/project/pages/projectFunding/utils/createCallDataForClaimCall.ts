@@ -213,11 +213,33 @@ export const createCallDataForBoltzClaimCall = (params: {
     aonContractAddress,
   } = params
 
-  try {
-    // Step 1: Create call data for contributeFor function
-    const contributeForCallData = createCallDataForContributeForAon(contributorAddress, creatorFees, contributorFees)
+  // Step 1: Create call data for contributeFor function
+  const contributeForCallData = createCallDataForContributeForAon(contributorAddress, creatorFees, contributorFees)
 
-    // Step 2: Create and sign the Boltz claim message
+  return createCallDataForBoltzClaimCallWithCallee({
+    preimage,
+    amount,
+    refundAddress,
+    timelock,
+    privateKey,
+    callee: aonContractAddress,
+    callData: contributeForCallData,
+  })
+}
+
+export const createCallDataForBoltzClaimCallWithCallee = (params: {
+  preimage: string
+  amount: number
+  refundAddress: string
+  timelock: number
+  privateKey: string
+  callee: string
+  callData: string
+}): string => {
+  const { preimage, amount, refundAddress, timelock, privateKey, callee, callData } = params
+
+  try {
+    // Step 1: Create and sign the Boltz claim message
     const claimEIP712Message = createEIP712MessageForBoltzClaim(
       preimage,
       amount,
@@ -227,7 +249,7 @@ export const createCallDataForBoltzClaimCall = (params: {
     )
     const claimSignature = signEIP712Message(claimEIP712Message, privateKey)
 
-    // Step 3: Create Claim struct data
+    // Step 2: Create Claim struct data
     const claimStructData = createClaimStructData(
       preimage,
       amount,
@@ -238,22 +260,15 @@ export const createCallDataForBoltzClaimCall = (params: {
       claimSignature.s,
     )
 
-    // Step 3.5: Calculate hashValues for verification (replicating Solidity hashValues function)
-    // Note: Need to convert preimage to preimageHash using SHA256 (as per EtherSwap contract)
-
-    // Step 4: Create and sign the claimCall message
-    const claimCallEIP712Message = createEIP712MessageForBoltzClaimCall(
-      preimage,
-      aonContractAddress,
-      contributeForCallData,
-    )
+    // Step 3: Create and sign the claimCall message
+    const claimCallEIP712Message = createEIP712MessageForBoltzClaimCall(preimage, callee, callData)
     const claimCallSignature = signEIP712Message(claimCallEIP712Message, privateKey)
 
-    // Step 5: Create the final claimCall transaction data
+    // Step 4: Create the final claimCall transaction data
     const claimCallData = createCallDataForClaimCall(
       claimStructData,
-      aonContractAddress, // callee
-      contributeForCallData, // callData
+      callee,
+      callData,
       claimCallSignature.v,
       claimCallSignature.r,
       claimCallSignature.s,
