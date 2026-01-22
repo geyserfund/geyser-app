@@ -10,6 +10,7 @@ import { isAllOrNothing } from '@/utils/index.ts'
 
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
+import { RewardNotice } from '../../components/RewardNotice.tsx'
 import {
   ContributionSummary,
   CreatorTools,
@@ -61,13 +62,19 @@ export const ProjectBody = () => {
         paddingBottom={{ base: 28, lg: 10 }}
       >
         <ProjectPreLaunchNav />
+
         <ProjectPromotionNotice />
+
         <CreatorVerificationNotice />
+
         <AonNotification />
 
         <CreatorTools />
 
         <Header />
+
+        <RewardNotice />
+
         <Story />
 
         {project.rewardsCount && <Rewards />}

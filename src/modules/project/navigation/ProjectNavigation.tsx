@@ -52,7 +52,7 @@ export const ProjectNavigation = () => {
 
     if (project.rewardsCount) {
       buttonList.push({
-        name: 'Shop',
+        name: `Buy product (${project.rewardsCount})`,
         path: PathName.projectRewards,
         icon: PiBag,
         activeIcon: PiBagBold,

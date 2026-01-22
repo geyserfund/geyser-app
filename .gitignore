@@ -9,10 +9,23 @@
 
 # testing
 coverage
+
+# Cypress
 packages/testing/cypress/videos/*
 packages/testing/cypress/downloads/*
 packages/testing/cypress/screenshots/*
 packages/testing/cypress.env.json
+
+# Playwright
+packages/testing/playwright/test-results/
+packages/testing/playwright/playwright-report/
+packages/testing/playwright/.cache/
+packages/testing/playwright/.auth/
+packages/testing/playwright/trace.zip
+packages/testing/playwright/**/*.png
+packages/testing/playwright/**/*.webm
+packages/testing/playwright/**/*.mp4
+packages/testing/playwright/bundles/*.bundle.js
 
 
 # production
