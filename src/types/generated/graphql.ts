@@ -18,9 +18,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** Add BigInt functionality */
   BigInt: { input: any; output: any; }
-  /** Date custom scalar type */
   Date: { input: any; output: any; }
 };
 
@@ -2983,7 +2981,7 @@ export type Project = {
   rewardsCount?: Maybe<Scalars['Int']['output']>;
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['String']['output']>;
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   sponsors: Array<Sponsor>;
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
@@ -3836,7 +3834,7 @@ export type Query = {
   getDashboardFunders: Array<Funder>;
   /**
    * Returns the public key of the Lightning node linked to a project, if there is one.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   getProjectPubkey?: Maybe<Scalars['String']['output']>;
   getProjectReward: ProjectReward;
@@ -4778,14 +4776,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>;
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isAmbassador: Scalars['Boolean']['output'];
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']['output'];
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isSponsor: Scalars['Boolean']['output'];
   /** Project linked to the contributions. */
@@ -9282,7 +9280,7 @@ export type PayoutWithPaymentFragment = { __typename?: 'Payout', amount: number,
     & PaymentForPayoutRefundFragment
   )> };
 
-export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress?: string | null };
+export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress?: string | null, contractType: PayoutContractType, prismContractAddress?: string | null, prismDomainSeparator?: string | null, projectKey?: string | null };
 
 export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, content?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
 
@@ -11980,6 +11978,10 @@ export const PayoutMetadataFragmentDoc = gql`
   nonce
   swapContractAddress
   aonContractAddress
+  contractType
+  prismContractAddress
+  prismDomainSeparator
+  projectKey
 }
     `;
 export const ProjectPostFragmentDoc = gql`

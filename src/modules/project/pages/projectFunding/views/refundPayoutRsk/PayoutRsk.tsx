@@ -16,6 +16,7 @@ import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import {
   PaymentStatus,
   PaymentType,
+  PayoutContractType,
   PayoutStatus,
   ProjectForProfileContributionsFragment,
   RskToLightningSwapPaymentDetailsFragment,
@@ -33,6 +34,7 @@ import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWait
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.tsx'
 import { PayoutMethodSelection } from './components/PayoutMethodSelection.tsx'
+import { createAndSignPrismWithdrawMessage } from './createAndSignPrismPayout.ts'
 import { createAndSignClaimMessage } from './createAndSignRefundAndPayout.ts'
 import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
@@ -45,13 +47,21 @@ type PayoutRskProps = {
   onClose: () => void
   project: ProjectForProfileContributionsFragment
   rskAddress?: string
+  payoutAmountOverride?: number
   onCompleted?: () => void
 }
 
 export const MAX_SATS_FOR_LIGHTNING = 5000000 // 5,000,000 sats is the maximum amount for Lightning refunds
 
 /** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
-export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, rskAddress, onCompleted }) => {
+export const PayoutRsk: React.FC<PayoutRskProps> = ({
+  isOpen,
+  onClose,
+  project,
+  rskAddress,
+  payoutAmountOverride,
+  onCompleted,
+}) => {
   const toast = useNotification()
 
   useUserAccountKeys()
@@ -88,16 +98,58 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
     }
   }, [isOpen, payoutRequest, project.id, userAccountKeys?.rskKeyPair.address, rskAddress])
 
-  const isProcessing = payoutRequestData?.payoutRequest.payout.status === PayoutStatus.Processing
+  const payout = payoutRequestData?.payoutRequest.payout
+  const isProcessing = payout?.status === PayoutStatus.Processing
+  const payoutMetadata = payoutRequestData?.payoutRequest.payoutMetadata
+  const contractType = payoutMetadata?.contractType
   const latestPayment = isProcessing
-    ? payoutRequestData?.payoutRequest.payout.payments.sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      )[0]
+    ? payout?.payments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0]
     : null
   const isClaimable =
     isProcessing &&
     latestPayment?.paymentType === PaymentType.RskToOnChainSwap &&
     latestPayment?.status === PaymentStatus.Claimable
+
+  const createPayoutSignature = (params: { lockCallData: Hex; accountKeys: AccountKeys; amount: number }) => {
+    const { lockCallData, accountKeys, amount } = params
+
+    console.log('CONTRACT TYPE', contractType)
+    console.log('PAYOUT METADATA', JSON.stringify(payoutMetadata))
+    if (contractType === PayoutContractType.Prism) {
+      if (!payoutMetadata?.prismContractAddress) {
+        throw new Error('Missing Prism contract address for payout')
+      }
+
+      if (!payoutMetadata?.projectKey) {
+        throw new Error('Missing Prism project key for payout')
+      }
+
+      return createAndSignPrismWithdrawMessage({
+        prismContractAddress: payoutMetadata.prismContractAddress,
+        prismDomainSeparator: payoutMetadata.prismDomainSeparator || undefined,
+        swapContractAddress: payoutMetadata.swapContractAddress || '',
+        receiverAddress: accountKeys.address,
+        amount: satsToWei(amount),
+        projectKey: payoutMetadata.projectKey,
+        nonce: payoutMetadata.nonce || 0,
+        deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
+        lockCallData,
+        rskPrivateKey: accountKeys.privateKey,
+      })
+    }
+
+    return createAndSignClaimMessage({
+      aonContractAddress: payoutMetadata?.aonContractAddress || '',
+      swapContractAddress: payoutMetadata?.swapContractAddress || '',
+      creatorAddress: accountKeys.address,
+      amount: satsToWei(amount),
+      nonce: payoutMetadata?.nonce || 0,
+      deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
+      processingFee: 0,
+      lockCallData,
+      rskPrivateKey: accountKeys.privateKey,
+    })
+  }
 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
@@ -147,17 +199,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
         timelock: swapObj?.timeoutBlockHeight || 0n,
       })
 
-      const { signature } = createAndSignClaimMessage({
-        aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
-        swapContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
-        creatorAddress: accountKeys.address,
-        amount: satsToWei(amount),
-        nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
-        deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
-        processingFee: 0,
-        lockCallData: callDataHex,
-        rskPrivateKey: accountKeys.privateKey,
-      })
+      const { signature } = createPayoutSignature({ lockCallData: callDataHex, accountKeys, amount })
 
       await payoutInitiate({
         variables: {
@@ -270,17 +312,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
         timelock: swapObj?.lockupDetails?.timeoutBlockHeight || 0n,
       })
 
-      const { signature } = createAndSignClaimMessage({
-        aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
-        swapContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
-        creatorAddress: accountKeys.address,
-        amount: satsToWei(amount),
-        nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
-        deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
-        processingFee: 0,
-        lockCallData: callDataHex,
-        rskPrivateKey: accountKeys.privateKey,
-      })
+      const { signature } = createPayoutSignature({ lockCallData: callDataHex, accountKeys, amount })
 
       // Simulate processing delay
       await payoutInitiate({
@@ -330,8 +362,17 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
   }
 
   const enableSubmit = selectedMethod === PayoutMethod.Lightning ? lightningForm.enableSubmit : bitcoinForm.enableSubmit
+  const hasPayout = Boolean(payout?.id)
 
   const handleSubmit = () => {
+    if (!hasPayout) {
+      toast.error({
+        title: t('Unable to load payout details'),
+        description: t('Please wait a moment and try again.'),
+      })
+      return
+    }
+
     if (selectedMethod === PayoutMethod.Lightning) {
       lightningForm.handleSubmit()
     } else {
@@ -375,7 +416,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
     )
   }
 
-  const totalAmount = payoutRequestData?.payoutRequest.payout.amount || 0
+  const totalAmount = payout?.amount ?? payoutAmountOverride ?? 0
 
   return (
     <Modal
@@ -413,7 +454,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
             colorScheme="primary1"
             variant="solid"
             isLoading={isSubmitting || isPayoutInitiateLoading || isPayoutPaymentCreateLoading}
-            isDisabled={!enableSubmit}
+            isDisabled={!enableSubmit || payoutRequestLoading}
             onClick={handleSubmit}
           >
             {t('Claim Payout')}
