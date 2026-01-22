@@ -12,18 +12,18 @@ type LeaderboardSummaryProps = StackProps
 export const LeaderboardSummary = ({ ...props }: LeaderboardSummaryProps) => {
   const items = [
     {
-      name: 'Leaderboard',
-      key: 'leaderboard',
-      render: () => <Leaderboard />,
-    },
-    {
       name: 'Contributions',
       key: 'contributions',
       render: () => <Contributions />,
     },
+    {
+      name: 'Leaderboard',
+      key: 'leaderboard',
+      render: () => <Leaderboard />,
+    },
   ] as AnimatedNavBarItem[]
 
-  const { render, ...animatedNavbarProps } = useAnimatedNavBar({ items, defaultView: 'leaderboard' })
+  const { render, ...animatedNavbarProps } = useAnimatedNavBar({ items, defaultView: 'contributions' })
 
   return (
     <CardLayout w="full" flex={1} dense py={6} minHeight="320px" {...props}>
