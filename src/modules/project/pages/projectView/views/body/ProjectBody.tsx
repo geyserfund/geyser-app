@@ -28,6 +28,7 @@ import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.
 import { FundNowWithLightning } from './sections/FundNowWithLightning.tsx'
 import { ProjectPromotionNotice } from './sections/ProjectPromotionNotice.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
+import { TiaPayoutNotification } from './sections/tiaNotification/TiaPayoutNotification.tsx'
 
 export const ProjectBody = () => {
   const { project, loading } = useProjectAtom()
@@ -64,6 +65,7 @@ export const ProjectBody = () => {
         <ProjectPromotionNotice />
         <CreatorVerificationNotice />
         <AonNotification />
+        <TiaPayoutNotification />
 
         <CreatorTools />
 
