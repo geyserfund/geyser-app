@@ -10,18 +10,22 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
+import { ProjectFundingStrategy } from '@/types/index.ts'
 
 import { SuggestedProjects } from '../../../../projectView/views/body/sections/SuggestedProjects.tsx'
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary.tsx'
 import { FundingLayout } from '../../../layouts/FundingLayout.tsx'
 import { DownloadInvoice } from '../components/DownloadInvoice.tsx'
 import { SuccessImageComponent } from '../components/index.ts'
+import { SwapPendingStages } from '../components/SwapPendingStages.tsx'
 import { SafeToDeleteRefund } from '../components/SafeToDeleteRefund.tsx'
 
 export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
   const { project, formState } = useFundingFormAtom()
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
+  const creatorRskAddress = project?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+  const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
 
   return (
     <FundingLayout
@@ -54,6 +58,7 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
         <VStack w="full" maxWidth="800px" alignItems="start" spacing={6}>
           <VStack w="full" alignItems="start">
             <SuccessImageComponent isPending={isPending} />
+            {isPending && isPrismTia && <SwapPendingStages swapTargetLabel={t('Prism contract')} />}
           </VStack>
           {formState.subscription.cost > 0 && (
             <VStack w="full" alignItems="start" spacing={6}>
