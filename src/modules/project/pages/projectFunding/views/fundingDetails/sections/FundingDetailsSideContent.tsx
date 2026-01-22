@@ -15,6 +15,7 @@ import { useModal } from '@/shared/hooks'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { useNotification } from '@/utils'
 
+import { ContinueWithButtons } from '../../../components/ContinueWithButtons.tsx'
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
 import { LaunchpadSummary, NonProfitSummary, TAndCs } from '../../fundingInit/sections/FundingInitSideContent.tsx'
@@ -124,9 +125,13 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
           <NonProfitSummary disableMobile={true} />
           <LaunchpadSummary disableMobile={true} />
           <TAndCs disableMobile={true} />
-          <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit">
-            {t('Continue')}
-          </Button>
+          {isLoggedIn ? (
+            <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit">
+              {t('Continue')}
+            </Button>
+          ) : (
+            <ContinueWithButtons useFormSubmit={true} />
+          )}
         </VStack>
 
         <AlertDialogue

@@ -214,3 +214,62 @@ When creating forms in this project, adhere to the following guidelines in addit
 ## Linting
 - Consider adding an ESLint rule to enforce this comment style across the codebase
 - Make sure to auto-remove any unused imported files
+
+# Navigation and Form Validation Patterns
+
+## Form-Based Navigation
+When implementing navigation buttons in multi-step forms or checkout flows:
+
+### Problem
+Components may validate form state before allowing navigation. Navigating directly without triggering validation can cause users to be redirected back to previous steps.
+
+### Solution Pattern
+Use a prop-based approach to handle both form submission and direct navigation:
+
+```typescript
+type ButtonComponentProps = {
+  useFormSubmit?: boolean
+}
+
+export const ButtonComponent = ({ useFormSubmit = false }: ButtonComponentProps) => {
+  const navigate = useNavigate()
+  
+  const handleClick = () => {
+    // Set any required state
+    if (!useFormSubmit) {
+      navigate(path) // Only navigate if not using form submission
+    }
+  }
+  
+  return (
+    <Button
+      onClick={handleClick}
+      type={useFormSubmit ? 'submit' : 'button'}
+    >
+      Click Me
+    </Button>
+  )
+}
+```
+
+### Usage Guidelines
+- **Inside Forms with Validation**: Use `<ButtonComponent useFormSubmit={true} />`
+  - Button triggers form's `onSubmit` handler
+  - Form validates before navigation
+  - Button's onClick sets state but doesn't navigate
+  
+- **Standalone Navigation**: Use `<ButtonComponent />` or `<ButtonComponent useFormSubmit={false} />`
+  - Button navigates directly
+  - No form validation involved
+  
+### Example: Payment Flow
+In the funding flow, the same payment method selection buttons are used in two contexts:
+1. **FundingDetails page**: Inside a form that validates user info → `useFormSubmit={true}`
+2. **FundingGuardians page**: No form wrapper, validation already passed → `useFormSubmit={false}` (default)
+
+### Key Principles
+- Always check if parent components validate state before navigation
+- Look for `useEffect` hooks that redirect on invalid state
+- Respect existing validation flows rather than bypassing them
+- Use `type="submit"` to trigger form validation when inside a form
+- Use `type="button"` to prevent form submission when only setting state
