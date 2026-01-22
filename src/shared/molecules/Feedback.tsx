@@ -12,6 +12,7 @@ export enum FeedBackVariant {
   ERROR = 'error',
   SUCCESS = 'success',
   NEUTRAL = 'neutral',
+  PRIORITY = 'priority',
 }
 
 type FeedbackProps = {
@@ -29,6 +30,7 @@ const icons = {
   [FeedBackVariant.ERROR]: PiXCircle,
   [FeedBackVariant.SUCCESS]: PiCheckCircle,
   [FeedBackVariant.NEUTRAL]: PiInfo,
+  [FeedBackVariant.PRIORITY]: PiInfo,
 }
 
 export const Feedback = ({ variant, text, children, icon, noIcon, iconProps, ...props }: FeedbackProps) => {
@@ -60,6 +62,11 @@ export const Feedback = ({ variant, text, children, icon, noIcon, iconProps, ...
         bg: colors.neutral1[2],
         border: colors.neutral1[6],
         color: colors.neutral1[11],
+      },
+      [FeedBackVariant.PRIORITY]: {
+        bg: colors.cyan[2],
+        border: colors.cyan[6],
+        color: colors.cyan[11],
       },
     }),
     [colors],

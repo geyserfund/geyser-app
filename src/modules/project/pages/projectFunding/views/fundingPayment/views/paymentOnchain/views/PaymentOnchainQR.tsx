@@ -9,6 +9,7 @@ import { currentOnChainToRskSwapIdAtom, currentSwapIdAtom } from '@/modules/proj
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { __development__ } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
+import { PaymentFeePayer, PaymentFeeType } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 import { getBip21Invoice } from '@/utils/lightning/bip21'
 
@@ -40,8 +41,22 @@ export const PaymentOnchainQRContent = ({ address }: { address: string }) => {
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
 
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
+
+  const onChainSwapContributorFees =
+    fundingPaymentDetails.onChainSwap?.fees.reduce(
+      (acc, fee) =>
+        fee.feePayer === PaymentFeePayer.Contributor && fee.feeType !== PaymentFeeType.Tip ? acc + fee.feeAmount : acc,
+      0,
+    ) || 0
+
   const totalAmountSats =
-    fundingPaymentDetails.onChainSwap?.amountDue || fundingPaymentDetails.onChainToRskSwap?.amountDue || 0
+    (fundingPaymentDetails.onChainSwap?.amountDue || 0) + onChainSwapContributorFees ||
+    fundingPaymentDetails.onChainToRskSwap?.amountDue ||
+    0
+
+  console.log('onChainSwapContributorFees', onChainSwapContributorFees)
+  console.log('fundingPaymentDetails.onChainSwap?.amountDue', fundingPaymentDetails.onChainSwap?.amountDue)
+  console.log('fundingPaymentDetails.onChainToRskSwap?.amountDue', fundingPaymentDetails.onChainToRskSwap?.amountDue)
 
   const onChainBip21Invoice = __development__
     ? `address=${address} amount=${totalAmountSats}`
