@@ -1,12 +1,15 @@
 import { useBreakpointValue, VStack } from '@chakra-ui/react'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useFundingAPI } from '@/modules/project/funding/hooks/useFundingAPI'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
 
+import { hasFiatPaymentMethodAtom, intendedPaymentMethodAtom, PaymentMethods } from '../../state/paymentMethodAtom'
 import { QRCodeSizeMap } from '../../components/QRCodeComponent'
 
 export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: string) => void }) => {
@@ -17,6 +20,14 @@ export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: st
   const qrSize = useBreakpointValue(QRCodeSizeMap)
 
   const navigate = useNavigate()
+
+  const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
+  const setIntendedPaymentMethod = useSetAtom(intendedPaymentMethodAtom)
+  const projectOwner = useAtomValue(projectOwnerAtom)
+  const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
+
+  const isProjectOwnerVerified = projectOwner?.user.complianceDetails.verifiedDetails.identity?.verified
+  const isFiatAvailable = hasFiatPaymentMethod && isProjectOwnerVerified
 
   const data = useRef(false)
 
@@ -38,9 +49,17 @@ export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: st
           if (onComplete) {
             onComplete(contributionId)
           } else {
+            let paymentPath = getPath('fundingPaymentLightning', project.name)
+
+            if (intendedPaymentMethod === PaymentMethods.fiatSwap && isFiatAvailable) {
+              paymentPath = getPath('fundingPaymentFiatSwap', project.name)
+            }
+
+            setIntendedPaymentMethod(undefined)
+
             navigate(
               {
-                pathname: getPath('fundingPaymentLightning', project.name),
+                pathname: paymentPath,
                 search: `?transactionId=${contributionId}`,
               },
               { replace: true },

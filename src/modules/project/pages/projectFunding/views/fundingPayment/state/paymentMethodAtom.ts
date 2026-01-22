@@ -82,3 +82,6 @@ export const hasFiatPaymentMethodAtom = atom((get) => {
 
   return true
 })
+
+/** Stores the user's intended payment method selection before navigating to payment loading */
+export const intendedPaymentMethodAtom = atom<PaymentMethods | undefined>(undefined)

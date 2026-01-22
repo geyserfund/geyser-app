@@ -1,11 +1,8 @@
-import { Button, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
-import { useNavigate } from 'react-router'
+import { VStack } from '@chakra-ui/react'
 
-import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { getPath } from '@/shared/constants'
 
+import { ContinueWithButtons } from '../../../components/ContinueWithButtons.tsx'
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
 import { TAndCs } from '../../fundingInit/sections/FundingInitSideContent.tsx'
@@ -23,16 +20,6 @@ export const FundingGuardiansSideContent = () => {
 }
 
 export const FundingGuardiansSummary = () => {
-  const navigate = useNavigate()
-
-  const { project } = useFundingFormAtom()
-
-  const handleCheckout = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-    navigate(getPath('fundingStart', project.name))
-  }
-
   return (
     <VStack
       width="100%"
@@ -48,9 +35,7 @@ export const FundingGuardiansSummary = () => {
       <FundingCheckoutWrapper>
         <VStack w="full" alignItems="flex-start">
           <TAndCs disableMobile={true} />
-          <Button size="lg" w="full" variant="solid" colorScheme="primary1" onClick={handleCheckout}>
-            {t('Checkout')}
-          </Button>
+          <ContinueWithButtons />
         </VStack>
       </FundingCheckoutWrapper>
     </VStack>
