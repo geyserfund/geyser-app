@@ -19,7 +19,7 @@ export const RewardNotice = () => {
     <Feedback variant={FeedBackVariant.PRIORITY} noIcon>
       <HStack w="full" justifyContent="space-between">
         <Body>{t('Support this campaign by buying a product')}</Body>
-        <Button as={Link} to={getPath('projectRewards', project.name)} variant="solid" colorScheme="neutral1">
+        <Button as={Link} to={getPath('projectRewards', project.name)} variant="solid" colorScheme="cyan">
           {t('View products')}
         </Button>
       </HStack>
