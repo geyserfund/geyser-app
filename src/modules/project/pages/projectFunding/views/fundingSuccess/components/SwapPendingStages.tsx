@@ -4,14 +4,17 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { currentSwapAtom, RefundFileType } from '@/modules/project/funding/state/swapAtom.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 
+import {
+  SwapStatusUpdate,
+  useTransactionStatusUpdate,
+} from '../../fundingPayment/views/paymentOnchain/hooks/useTransactionStatusUpdate.ts'
 import { getTransactionFromChainSwap } from '../../fundingPayment/views/paymentOnchain/refund/api'
 import { onChainErrorAtom } from '../../fundingPayment/views/paymentOnchain/states/onChainErrror.ts'
-import { useTransactionStatusUpdate } from '../../fundingPayment/views/paymentOnchain/hooks/useTransactionStatusUpdate.ts'
 
 type ContributionStage = 1 | 2 | 3
 
@@ -53,7 +56,7 @@ export const SwapPendingStages = ({ swapTargetLabel }: { swapTargetLabel: string
     handleClaimed() {
       setStage(3)
     },
-    handleFailed(update) {
+    handleFailed(update: SwapStatusUpdate) {
       if (swap?.type === RefundFileType.ON_CHAIN_TO_RSK) {
         setOnChainError(update)
         navigate({ pathname: getPath('fundingPaymentOnchainRefund', project.name), search: location.search })
