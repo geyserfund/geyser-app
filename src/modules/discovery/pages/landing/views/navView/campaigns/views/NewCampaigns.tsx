@@ -39,7 +39,7 @@ export const NewCampaigns = () => {
 
   const renderBody = () => {
     if (loading) {
-      return <LoadingProjectGridItems length={3} />
+      return <LoadingProjectGridItems length={4} />
     }
 
     return projects.map((project) => (
@@ -49,7 +49,7 @@ export const NewCampaigns = () => {
     ))
   }
 
-  const projectLength = projects.length
+  const projectLength = projects.length || 4
 
   return (
     <SimpleGrid w="full" columns={{ base: 1, lg: projectLength > 5 ? 5 : projectLength }} spacing={{ base: 4, lg: 8 }}>
