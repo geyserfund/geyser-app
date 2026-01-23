@@ -1,5 +1,6 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { FormEvent } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { useNavigate } from 'react-router'
@@ -13,11 +14,12 @@ import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
-import { useNotification } from '@/utils'
+import { isAllOrNothing, useNotification } from '@/utils'
 
 import { ContinueWithButtons } from '../../../components/ContinueWithButtons.tsx'
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
+import { creditCardButtonClickedAtom } from '../../../views/fundingPayment/state/paymentMethodAtom'
 import { LaunchpadSummary, NonProfitSummary, TAndCs } from '../../fundingInit/sections/FundingInitSideContent.tsx'
 import { ShippingHandleSubmitType } from '../hooks/useShippingAddressForm.tsx'
 import { ShippingAddressFormData } from './FundingDetailsShippingAddress.tsx'
@@ -51,6 +53,9 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
   const { isFundingUserInfoValid, project, setErrorstate, formState } = useFundingFormAtom()
 
   const hasSubscription = Boolean(formState.subscription?.subscriptionId)
+  const isAon = isAllOrNothing(project)
+  const creditCardClicked = useAtomValue(creditCardButtonClickedAtom)
+  const setCreditCardClicked = useSetAtom(creditCardButtonClickedAtom)
 
   const onSubmitFunction = (e: FormEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -77,24 +82,37 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
     const { title, description, error, valid } = isFundingUserInfoValid
 
     if (valid) {
+      // Show toast only if credit card was clicked, validation passed, and user is not logged in
+      if (creditCardClicked && !isLoggedIn) {
+        toast.info({
+          title: t('Credit card payment not available for this project.'),
+          description: t('Please use bitcoin payments.'),
+        })
+        setCreditCardClicked(false)
+      }
+
       if (!isLoggedIn && hasSubscription) {
         warningModal.onOpen()
         return
       }
 
       handleGoNext()
-    } else if (error === FundingUserInfoError.EMAIL) {
-      setErrorstate({ key: 'email', value: 'Email is a required field' })
-      toast.error({
-        title,
-        description,
-      })
-    } else if (error === FundingUserInfoError.PRIVATE_COMMENT) {
-      setErrorstate({ key: 'privateComment', value: 'Private message is a required field' })
-      toast.error({
-        title,
-        description,
-      })
+    } else {
+      // Validation failed - don't show credit card toast, clear the flag
+      setCreditCardClicked(false)
+      if (error === FundingUserInfoError.EMAIL) {
+        setErrorstate({ key: 'email', value: 'Email is a required field' })
+        toast.error({
+          title,
+          description,
+        })
+      } else if (error === FundingUserInfoError.PRIVATE_COMMENT) {
+        setErrorstate({ key: 'privateComment', value: 'Private message is a required field' })
+        toast.error({
+          title,
+          description,
+        })
+      }
     }
   }
 
@@ -125,7 +143,7 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
           <NonProfitSummary disableMobile={true} />
           <LaunchpadSummary disableMobile={true} />
           <TAndCs disableMobile={true} />
-          {isLoggedIn ? (
+          {isLoggedIn || isAon ? (
             <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit">
               {t('Continue')}
             </Button>
