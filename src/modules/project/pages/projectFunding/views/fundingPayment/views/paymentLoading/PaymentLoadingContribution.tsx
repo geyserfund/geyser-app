@@ -1,16 +1,15 @@
 import { useBreakpointValue, VStack } from '@chakra-ui/react'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useFundingAPI } from '@/modules/project/funding/hooks/useFundingAPI'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
-import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
 
-import { hasFiatPaymentMethodAtom, intendedPaymentMethodAtom, PaymentMethods } from '../../state/paymentMethodAtom'
 import { QRCodeSizeMap } from '../../components/QRCodeComponent'
+import { intendedPaymentMethodAtom, PaymentMethods } from '../../state/paymentMethodAtom.ts'
 
 export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: string) => void }) => {
   const { requestFundingFromContext, requestFundingOptions } = useFundingAPI()
@@ -22,12 +21,6 @@ export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: st
   const navigate = useNavigate()
 
   const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
-  const setIntendedPaymentMethod = useSetAtom(intendedPaymentMethodAtom)
-  const projectOwner = useAtomValue(projectOwnerAtom)
-  const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
-
-  const isProjectOwnerVerified = projectOwner?.user.complianceDetails.verifiedDetails.identity?.verified
-  const isFiatAvailable = hasFiatPaymentMethod && isProjectOwnerVerified
 
   const data = useRef(false)
 
@@ -51,11 +44,9 @@ export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: st
           } else {
             let paymentPath = getPath('fundingPaymentLightning', project.name)
 
-            if (intendedPaymentMethod === PaymentMethods.fiatSwap && isFiatAvailable) {
+            if (intendedPaymentMethod === PaymentMethods.fiatSwap) {
               paymentPath = getPath('fundingPaymentFiatSwap', project.name)
             }
-
-            setIntendedPaymentMethod(undefined)
 
             navigate(
               {
