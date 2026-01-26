@@ -14,14 +14,13 @@ import {
   isOnchainMethodStartedAtom,
   paymentMethodAtom,
   PaymentMethods,
-} from '../state/paymentMethodAtom'
+} from '../state/paymentMethodAtom.ts'
 
 export const PaymentMethodSelection = () => {
   const { onChainAmountWarning, fiatSwapAmountWarning } = useFundingFormAtom()
 
   const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
   const user = fundingInputAfterRequest?.user
-  const userId = user?.id
 
   const userLimitReached = !user?.complianceDetails.verifiedDetails.identity?.verified
     ? user?.complianceDetails.contributionLimits.monthly.reached
@@ -59,13 +58,9 @@ export const PaymentMethodSelection = () => {
         name: t('Credit Card'),
         key: PaymentMethods.fiatSwap,
         path: PathName.fundingPaymentFiatSwap,
-        isDisabled: isDisabled || Boolean(fiatSwapAmountWarning) || !userId,
+        isDisabled: isDisabled || Boolean(fiatSwapAmountWarning),
         disableClick: isDisabled || userLimitReached || Boolean(fiatSwapAmountWarning),
-        tooltipLabel: !userId
-          ? t('Please login to use fiat payment')
-          : userLimitReached
-          ? fiatLimitMessage
-          : fiatSwapAmountWarning,
+        tooltipLabel: userLimitReached ? fiatLimitMessage : fiatSwapAmountWarning,
         replacePath: true,
       })
     }
@@ -96,7 +91,6 @@ export const PaymentMethodSelection = () => {
     hasStripePaymentOption,
     hasFiatPaymentMethod,
     paymentMethod,
-    userId,
     fiatLimitMessage,
     fiatSwapAmountWarning,
     userLimitReached,

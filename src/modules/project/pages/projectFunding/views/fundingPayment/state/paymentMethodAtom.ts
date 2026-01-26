@@ -85,6 +85,3 @@ export const hasFiatPaymentMethodAtom = atom((get) => {
 
 /** Stores the user's intended payment method selection before navigating to payment loading */
 export const intendedPaymentMethodAtom = atom<PaymentMethods | undefined>(undefined)
-
-/** Tracks if the credit card button was clicked (to show toast after validation) */
-export const creditCardButtonClickedAtom = atom<boolean>(false)

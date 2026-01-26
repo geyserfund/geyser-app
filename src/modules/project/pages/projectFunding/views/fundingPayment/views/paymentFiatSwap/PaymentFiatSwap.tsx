@@ -1,18 +1,18 @@
 import { VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
-import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router'
 
+import { useAuthContext } from '@/context'
 import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess.ts'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
-import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
 
+import { hasFiatPaymentMethodAtom } from '../../state/paymentMethodAtom.ts'
 import { FiatSwapStatus, fiatSwapStatusAtom } from './atom/fiatSwapStatusAtom.ts'
 import { FiatSwapAwaitingPayment } from './components/FiatSwapAwaitingPayment.tsx'
 import { FiatSwapContributorNotVerified } from './components/FiatSwapContributorNotVerified.tsx'
 import { FiatSwapFailed } from './components/FiatSwapFailed.tsx'
 import { FiatSwapForm } from './components/FiatSwapForm.tsx'
+import { FiatSwapLoginRequired } from './components/FiatSwapLoginRequired.tsx'
 import { FiatSwapOwnerNotVerified } from './components/FiatSwapOwnerNotVerified.tsx'
 import { FiatSwapProcessing } from './components/FiatSwapProcessing.tsx'
 import { useFiatSwapPaymentSubscription } from './useFiatSwapPaymentSubscription.tsx'
@@ -28,27 +28,23 @@ export const PaymentFiatSwap = () => {
     contributionUUID,
   })
 
-  const navigate = useNavigate()
-  const location = useLocation()
+  const { isLoggedIn } = useAuthContext()
 
   const projectOwner = useAtomValue(projectOwnerAtom)
+  const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
 
   const fiatSwapStatus = useAtomValue(fiatSwapStatusAtom)
 
   const isProjectOwnerVerified = projectOwner?.user.complianceDetails.verifiedDetails.identity?.verified
-  const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
-
-  const userId = fundingInputAfterRequest?.user?.id
-
-  useEffect(() => {
-    if (!userId) {
-      navigate({ pathname: '../lightning', search: location.search }, { replace: true })
-    }
-  }, [userId])
+  const isFiatAvailable = Boolean(hasFiatPaymentMethod && isProjectOwnerVerified)
 
   const renderFiatSwapPayment = () => {
-    if (!isProjectOwnerVerified) {
+    if (!isFiatAvailable) {
       return <FiatSwapOwnerNotVerified />
+    }
+
+    if (!isLoggedIn) {
+      return <FiatSwapLoginRequired />
     }
 
     if (fiatSwapStatus === FiatSwapStatus.initial) {
@@ -71,7 +67,7 @@ export const PaymentFiatSwap = () => {
   return (
     <VStack w="full" spacing={6}>
       {renderFiatSwapPayment()}
-      {isProjectOwnerVerified && <FiatSwapContributorNotVerified />}
+      {isFiatAvailable && isLoggedIn && <FiatSwapContributorNotVerified />}
     </VStack>
   )
 }

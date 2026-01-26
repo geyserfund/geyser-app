@@ -6,13 +6,9 @@ import { useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { getPath } from '@/shared/constants'
-import { useMobileMode, useNotification } from '@/utils'
+import { useMobileMode } from '@/utils'
 
-import {
-  creditCardButtonClickedAtom,
-  intendedPaymentMethodAtom,
-  PaymentMethods,
-} from '../views/fundingPayment/state/paymentMethodAtom'
+import { intendedPaymentMethodAtom, PaymentMethods } from '../views/fundingPayment/state/paymentMethodAtom.ts'
 
 type ContinueWithButtonsProps = {
   useFormSubmit?: boolean
@@ -21,29 +17,18 @@ type ContinueWithButtonsProps = {
 export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButtonsProps) => {
   const navigate = useNavigate()
   const isMobile = useMobileMode()
-  const toast = useNotification()
   const { project } = useFundingFormAtom()
   const setIntendedPaymentMethod = useSetAtom(intendedPaymentMethodAtom)
-  const setCreditCardClicked = useSetAtom(creditCardButtonClickedAtom)
 
   const handleCreditCardClick = () => {
-    setIntendedPaymentMethod(PaymentMethods.lightning)
-    setCreditCardClicked(true)
-    // Only show toast if NOT using form submission (direct navigation)
+    setIntendedPaymentMethod(PaymentMethods.fiatSwap)
     if (!useFormSubmit) {
-      toast.info({
-        title: t('Credit card payment not available for this project.'),
-        description: t('Please use bitcoin payments.'),
-      })
       navigate(getPath('fundingStart', project.name))
     }
-    // If useFormSubmit is true, toast will be shown after successful validation
-    // in FundingDetailsSideContent's handleCheckoutButtonPressed
   }
 
   const handleBitcoinClick = () => {
     setIntendedPaymentMethod(PaymentMethods.lightning)
-    setCreditCardClicked(false)
     if (!useFormSubmit) {
       navigate(getPath('fundingStart', project.name))
     }
