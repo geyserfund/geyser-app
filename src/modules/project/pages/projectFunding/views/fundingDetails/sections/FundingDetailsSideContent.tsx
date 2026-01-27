@@ -13,7 +13,7 @@ import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
-import { isAllOrNothing, useNotification } from '@/utils'
+import { useNotification } from '@/utils'
 
 import { ContinueWithButtons } from '../../../components/ContinueWithButtons.tsx'
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
@@ -51,7 +51,6 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
   const { isFundingUserInfoValid, project, setErrorstate, formState } = useFundingFormAtom()
 
   const hasSubscription = Boolean(formState.subscription?.subscriptionId)
-  const isAon = isAllOrNothing(project)
   const onSubmitFunction = (e: FormEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
@@ -125,7 +124,7 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
           <NonProfitSummary disableMobile={true} />
           <LaunchpadSummary disableMobile={true} />
           <TAndCs disableMobile={true} />
-          {isLoggedIn || isAon ? (
+          {isLoggedIn ? (
             <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="submit">
               {t('Continue')}
             </Button>
