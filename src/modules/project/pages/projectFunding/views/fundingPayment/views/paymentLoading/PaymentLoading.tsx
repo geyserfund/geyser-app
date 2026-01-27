@@ -1,6 +1,6 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
@@ -12,6 +12,7 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 
+import { intendedPaymentMethodAtom, PaymentMethods } from '../../state/paymentMethodAtom.ts'
 import { PaymentDownloadRefundFile } from './PaymentDownloadRefundFile.tsx'
 import { PaymentLoadingContribution } from './PaymentLoadingContribution.tsx'
 
@@ -20,14 +21,20 @@ export const PaymentLoading = () => {
 
   const { user, loading: authLoading } = useAuthContext()
   const { project, loading: projectLoading } = useProjectAtom()
+  const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
   const [passwordConfirmed, setPasswordConfirmed] = useState(false)
   const [downloadedRefundFile, setDownloadedRefundFile] = useState(false)
   const [currentContributionId, setCurrentContributionId] = useState('')
 
   const handleNext = (contributionId?: string) => {
+    const paymentPath =
+      intendedPaymentMethod === PaymentMethods.fiatSwap
+        ? getPath('fundingPaymentFiatSwap', project.name)
+        : getPath('fundingPaymentLightning', project.name)
+
     navigate(
       {
-        pathname: getPath('fundingPaymentLightning', project.name),
+        pathname: paymentPath,
         search: `?transactionId=${contributionId || currentContributionId}`,
       },
       { replace: true },

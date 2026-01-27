@@ -6,6 +6,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { PathName } from '@/shared/constants'
+import { isAllOrNothing } from '@/utils'
 
 import {
   hasFiatPaymentMethodAtom,
@@ -17,7 +18,8 @@ import {
 } from '../state/paymentMethodAtom.ts'
 
 export const PaymentMethodSelection = () => {
-  const { onChainAmountWarning, fiatSwapAmountWarning } = useFundingFormAtom()
+  const { onChainAmountWarning, fiatSwapAmountWarning, project } = useFundingFormAtom()
+  const isAon = isAllOrNothing(project)
 
   const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
   const user = fundingInputAfterRequest?.user
@@ -53,7 +55,7 @@ export const PaymentMethodSelection = () => {
       })
     }
 
-    if (hasFiatPaymentMethod) {
+    if (hasFiatPaymentMethod || isAon) {
       navBarItems.push({
         name: t('Credit Card'),
         key: PaymentMethods.fiatSwap,
@@ -90,6 +92,7 @@ export const PaymentMethodSelection = () => {
     isOnchainMethodStarted,
     hasStripePaymentOption,
     hasFiatPaymentMethod,
+    isAon,
     paymentMethod,
     fiatLimitMessage,
     fiatSwapAmountWarning,

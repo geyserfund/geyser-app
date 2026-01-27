@@ -20,11 +20,7 @@ import { useAuthModal } from '@/modules/auth/hooks/useAuthModal.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
-import {
-  AllOrNothingCampaignsStartingImageUrl,
-  CampaignsComingSoonImageUrl,
-  getPath,
-} from '@/shared/constants/index.ts'
+import { AllOrNothingCampaignsStartingImageUrl, getPath } from '@/shared/constants/index.ts'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 
 import {

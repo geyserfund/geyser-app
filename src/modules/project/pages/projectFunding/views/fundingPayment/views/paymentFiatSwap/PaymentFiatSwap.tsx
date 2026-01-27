@@ -4,7 +4,9 @@ import { useAtomValue } from 'jotai'
 import { useAuthContext } from '@/context'
 import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess.ts'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
+import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
+import { isAllOrNothing } from '@/utils'
 
 import { hasFiatPaymentMethodAtom } from '../../state/paymentMethodAtom.ts'
 import { FiatSwapStatus, fiatSwapStatusAtom } from './atom/fiatSwapStatusAtom.ts'
@@ -32,13 +34,19 @@ export const PaymentFiatSwap = () => {
 
   const projectOwner = useAtomValue(projectOwnerAtom)
   const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
+  const project = useAtomValue(fundingProjectAtom)
 
   const fiatSwapStatus = useAtomValue(fiatSwapStatusAtom)
 
+  const isAon = isAllOrNothing(project)
   const isProjectOwnerVerified = projectOwner?.user.complianceDetails.verifiedDetails.identity?.verified
   const isFiatAvailable = Boolean(hasFiatPaymentMethod && isProjectOwnerVerified)
 
   const renderFiatSwapPayment = () => {
+    if (isAon) {
+      return <FiatSwapOwnerNotVerified />
+    }
+
     if (!isFiatAvailable) {
       return <FiatSwapOwnerNotVerified />
     }
