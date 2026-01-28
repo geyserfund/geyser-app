@@ -27,6 +27,7 @@ import { ProjectRewardShippingEstimate } from '../../../../forms/shippingConfigF
 import { PostsUpdates } from '../../components/PostsUpdates.tsx'
 import { useRewardBuy } from '../../hooks/index.ts'
 import { FollowButton } from '../body/components/FollowButton.tsx'
+import { AonNotice } from './components/AonNotice.tsx'
 import { RewardEditMenu } from './components/RewardEditMenu.tsx'
 import { RewardShare } from './components/RewardShare.tsx'
 
@@ -121,6 +122,8 @@ export const RewardView = () => {
           </Button>
           {!isProjectOwner ? <FollowButton size="lg" withLabel project={project} /> : <RewardShare reward={reward} />}
         </TopNavContainerBar>
+
+        <AonNotice />
 
         <CardLayout
           w="full"

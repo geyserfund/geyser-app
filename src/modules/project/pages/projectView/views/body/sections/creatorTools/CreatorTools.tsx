@@ -46,7 +46,7 @@ export const CreatorTools = () => {
           paddingX={2}
           rightIcon={<PiArrowUpRight />}
         >
-          {t('Guides')}
+          {t('Guides & Checklist')}
         </Button>
       </HStack>
 
