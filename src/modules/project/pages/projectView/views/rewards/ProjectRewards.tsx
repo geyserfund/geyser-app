@@ -8,6 +8,7 @@ import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProje
 import { Body, H1 } from '@/shared/components/typography'
 import { NoRewardsSoldUrl } from '@/shared/constants'
 
+import { AonNotice } from './components/AonNotice.tsx'
 import { CreatorRewardPageBottomBar, CreatorRewardPageTopBar } from './components/CreatorRewardPageBar.tsx'
 import { RewardCardSkeleton } from './components/RewardCard.tsx'
 import { RewardCardWithBuy } from './components/RewardCardWithBuy.tsx'
@@ -42,6 +43,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
   return (
     <VStack w="full" spacing={8} alignItems="start" pb={28}>
       <CreatorRewardPageTopBar />
+      <AonNotice />
 
       {!hasRewards && (
         <VStack w="full" alignItems={'center'}>
