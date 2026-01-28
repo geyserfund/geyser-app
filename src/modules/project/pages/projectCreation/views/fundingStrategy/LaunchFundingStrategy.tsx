@@ -12,8 +12,7 @@ import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../hooks/useIsStepAhead.tsx'
-import { LAUNCH_FEE_USD_CENTS } from '../launch/views/LaunchFees.tsx'
-import { ProjectLaunchStrategy } from '../launch/views/LaunchStrategySelection.tsx'
+import { getLaunchFeeUsdCents, ProjectLaunchStrategy } from '../launch/views/launchConstants.ts'
 
 const options = {
   [ProjectFundingStrategy.AllOrNothing]: {
@@ -102,7 +101,7 @@ export const LaunchFundingStrategy = () => {
         <CardLayout noborder backgroundColor="info.3" gap={0}>
           <Body medium>
             {t(`A {{launchFee}} launch fee is required to publish your project. `, {
-              launchFee: formatAmount(LAUNCH_FEE_USD_CENTS[ProjectLaunchStrategy.STARTER_LAUNCH], 'USDCENT'),
+              launchFee: formatAmount(getLaunchFeeUsdCents(ProjectLaunchStrategy.STARTER_LAUNCH), 'USDCENT'),
             })}
           </Body>
           <Body medium>

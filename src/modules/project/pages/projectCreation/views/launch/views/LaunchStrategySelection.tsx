@@ -8,7 +8,6 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { commaFormatted, useMobileMode } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
-
 import {
   isStarterLaunchDiscountActive,
   LAUNCH_FEE_USD_CENTS,
