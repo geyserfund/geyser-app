@@ -15,6 +15,7 @@ import {
   LandingPageFeaturedContributionsGetQueryVariables,
   OrderByOptions,
   useLandingPageFeaturedContributionsGetQuery,
+  useProjectThumbnailImageQuery,
 } from '@/types/index.ts'
 import { commaFormatted } from '@/utils/index.ts'
 
@@ -127,10 +128,19 @@ export const ContributionCard = ({
 
   const navigate = useNavigate()
 
-  const project = contribution.sourceResource?.__typename === 'Project' ? contribution.sourceResource : null
+  const { data, loading } = useProjectThumbnailImageQuery({
+    fetchPolicy: 'cache-first',
+    skip: !contribution.projectId,
+    variables: {
+      where: {
+        id: contribution.projectId,
+      },
+    },
+  })
+  const project = data?.projectGet
   const colorScheme = getContributionColorScheme(contribution.amount)
 
-  if (!project) {
+  if (loading || !project) {
     return null
   }
 
