@@ -1,20 +1,20 @@
 import { Button, Collapse, HStack, Link, ListItem, UnorderedList, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 
 import { GeyserPromotionSection } from '@/modules/project/pages/projectDashboard/views/promote/sections/GeyserPromotionSection.tsx'
 import { CardLayout, CardLayoutProps } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { __production__, __staging__ } from '@/shared/constants/index.ts'
-import { useMobileMode } from '@/utils/index.ts'
+import { commaFormatted, useMobileMode } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 
-export enum ProjectLaunchStrategy {
-  STARTER_LAUNCH = 'STARTER_LAUNCH',
-  GROWTH_LAUNCH = 'GROWTH_LAUNCH',
-  PRO_LAUNCH = 'PRO_LAUNCH',
-}
+import {
+  isStarterLaunchDiscountActive,
+  LAUNCH_FEE_USD_CENTS,
+  ProjectLaunchStrategy,
+  STARTER_LAUNCH_DISCOUNT_USD_CENTS,
+} from './launchConstants.ts'
 
 export const LaunchStrategySelection = ({
   handleNext,
@@ -37,6 +37,11 @@ export const LaunchStrategySelection = ({
     onClick: handleBack,
   }
 
+  const formatUsdFromCents = (cents: number) => `$${commaFormatted(cents / 100)}`
+  const isStarterDiscountActive = isStarterLaunchDiscountActive()
+  const starterBasePrice = formatUsdFromCents(LAUNCH_FEE_USD_CENTS[ProjectLaunchStrategy.STARTER_LAUNCH])
+  const starterDiscountedPrice = formatUsdFromCents(STARTER_LAUNCH_DISCOUNT_USD_CENTS)
+
   return (
     <ProjectCreationPageWrapper
       title={t('Choose your Launch Plan')}
@@ -51,7 +56,20 @@ export const LaunchStrategySelection = ({
           title={t('Starter Launch')}
           subtitle={t('do it yourself, get the basic exposure')}
           body={`${t('Access to all Geyser tooling and get discovered through the Geyser platform')} `}
-          price={t('$25')}
+          price={
+            isStarterDiscountActive ? (
+              <HStack spacing={2}>
+                <Body size="lg" muted medium textDecoration="line-through">
+                  {starterBasePrice}
+                </Body>
+                <Body size="lg" medium>
+                  {starterDiscountedPrice}
+                </Body>
+              </HStack>
+            ) : (
+              starterBasePrice
+            )
+          }
         />
         <ProjectCreateStrategyCard
           flex={1}
@@ -59,7 +77,7 @@ export const LaunchStrategySelection = ({
           onClick={() => setStrategy(ProjectLaunchStrategy.GROWTH_LAUNCH)}
           title={t('Growth Launch')}
           subtitle={t('Visibility boost')}
-          price={t('$60')}
+          price={formatUsdFromCents(LAUNCH_FEE_USD_CENTS[ProjectLaunchStrategy.GROWTH_LAUNCH])}
           points={[
             [t('Landing Page Feature'), t('1 week front-page spotlight')],
             [
@@ -76,7 +94,7 @@ export const LaunchStrategySelection = ({
           title={t('Pro Launch')}
           subtitle={t('Maximum visibility + product feedback')}
           body={t('Limited to 5 per month, subject to selection')}
-          price={t('$90')}
+          price={formatUsdFromCents(LAUNCH_FEE_USD_CENTS[ProjectLaunchStrategy.PRO_LAUNCH])}
           highlightedText={t('Picked by 40% of Top 100 projects on Geyser')}
           points={[
             [t('Everything in Growth')],
@@ -117,7 +135,7 @@ type ProjectCreateStrategyCardProps = {
   title: string
   subtitle: string
   body?: string
-  price?: string
+  price?: ReactNode
   points?: string[][]
   isSelected?: boolean
   highlightedText?: string
@@ -168,9 +186,14 @@ export const ProjectCreateStrategyCard = ({
             - {subtitle}
           </Body>
         </HStack>
-        <Body size="lg" muted medium>
-          {price}
-        </Body>
+        {price &&
+          (typeof price === 'string' ? (
+            <Body size="lg" muted medium>
+              {price}
+            </Body>
+          ) : (
+            price
+          ))}
       </HStack>
 
       <Collapse in={isMobile ? isOpen : true} animateOpacity>

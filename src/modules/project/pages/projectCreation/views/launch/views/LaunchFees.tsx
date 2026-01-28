@@ -22,7 +22,6 @@ import {
   FundingContributionPaymentDetailsFragment,
   FundingResourceType,
   QuoteCurrency,
-  USDCents,
   useContributionCreateMutation,
 } from '@/types/index.ts'
 import { commaFormatted, useMobileMode, useNotification } from '@/utils/index.ts'
@@ -31,15 +30,9 @@ import { QRCodeComponent } from '../../../../projectFunding/views/fundingPayment
 import { WaitingForPayment } from '../../../../projectFunding/views/fundingPayment/components/WaitingForPayment'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useListenToContributionConfirmed } from '../hooks/useListenToContributionConfirmed.ts'
-import { ProjectLaunchStrategy } from './LaunchStrategySelection.tsx'
+import { getLaunchFeeUsdCents, ProjectLaunchStrategy } from './launchConstants.ts'
 
 const PROJECT_ID_FOR_GEYSER_LAUNCH = __production__ ? 3075 : __staging__ ? 839 : 839
-
-export const LAUNCH_FEE_USD_CENTS = {
-  [ProjectLaunchStrategy.STARTER_LAUNCH]: 2500 as USDCents, // 25 USD
-  [ProjectLaunchStrategy.GROWTH_LAUNCH]: 6000 as USDCents, // 60 USD
-  [ProjectLaunchStrategy.PRO_LAUNCH]: 9000 as USDCents, // 90 USD
-}
 
 export const LaunchFees = ({
   handleNext,
@@ -74,7 +67,8 @@ export const LaunchFees = ({
 
   const { getSatoshisFromUSDCents } = useBTCConverter()
 
-  const donationAmount = getSatoshisFromUSDCents(LAUNCH_FEE_USD_CENTS[strategy])
+  const launchFeeUsdCents = getLaunchFeeUsdCents(strategy)
+  const donationAmount = getSatoshisFromUSDCents(launchFeeUsdCents)
 
   const { hasCopied, onCopy } = useCopyToClipboard(paymentsData?.lightning?.paymentRequest || '')
 
@@ -164,8 +158,8 @@ export const LaunchFees = ({
     }
   }
 
-  const totalSats = getSatoshisFromUSDCents(LAUNCH_FEE_USD_CENTS[strategy])
-  const totalUsdCent = LAUNCH_FEE_USD_CENTS[strategy]
+  const totalSats = getSatoshisFromUSDCents(launchFeeUsdCents)
+  const totalUsdCent = launchFeeUsdCents
 
   const renderSuccessContent = () => {
     return (
