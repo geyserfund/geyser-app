@@ -1406,8 +1406,8 @@ export type Mutation = {
    */
   payoutCancel: PayoutResponse;
   /**
-   * Initiate the payout from AON contract to swap contract.
-   * Only used for the initial flow (funds coming from AON contract).
+   * Initiate the payout from the contract (AON or Prism) to swap contract.
+   * Only used for the initial flow (funds coming from the contract).
    */
   payoutInitiate: PayoutInitiateResponse;
   /**
@@ -2550,6 +2550,11 @@ export type PayoutCancelInput = {
   reason?: InputMaybe<Scalars['String']['input']>;
 };
 
+export enum PayoutContractType {
+  Aon = 'AON',
+  Prism = 'PRISM'
+}
+
 export enum PayoutCurrency {
   Btcsat = 'BTCSAT',
   Usdcent = 'USDCENT'
@@ -2588,8 +2593,12 @@ export type PayoutInitiateResponse = {
 
 export type PayoutMetadata = {
   __typename?: 'PayoutMetadata';
-  aonContractAddress: Scalars['String']['output'];
+  aonContractAddress?: Maybe<Scalars['String']['output']>;
+  contractType: PayoutContractType;
   nonce: Scalars['Int']['output'];
+  prismContractAddress?: Maybe<Scalars['String']['output']>;
+  prismDomainSeparator?: Maybe<Scalars['String']['output']>;
+  projectKey?: Maybe<Scalars['String']['output']>;
   swapContractAddress: Scalars['String']['output'];
 };
 
@@ -5351,6 +5360,7 @@ export type ResolversTypes = {
   PaymentsInProgressGetResponse: ResolverTypeWrapper<Omit<PaymentsInProgressGetResponse, 'payments'> & { payments: Array<ResolversTypes['Payment']> }>;
   Payout: ResolverTypeWrapper<Omit<Payout, 'payments'> & { payments: Array<ResolversTypes['Payment']> }>;
   PayoutCancelInput: PayoutCancelInput;
+  PayoutContractType: PayoutContractType;
   PayoutCurrency: PayoutCurrency;
   PayoutGetInput: PayoutGetInput;
   PayoutGetResponse: ResolverTypeWrapper<Omit<PayoutGetResponse, 'payout'> & { payout: ResolversTypes['Payout'] }>;
@@ -7109,8 +7119,12 @@ export type PayoutInitiateResponseResolvers<ContextType = any, ParentType extend
 };
 
 export type PayoutMetadataResolvers<ContextType = any, ParentType extends ResolversParentTypes['PayoutMetadata'] = ResolversParentTypes['PayoutMetadata']> = {
-  aonContractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  aonContractAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  contractType?: Resolver<ResolversTypes['PayoutContractType'], ParentType, ContextType>;
   nonce?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  prismContractAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  prismDomainSeparator?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  projectKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   swapContractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -9265,7 +9279,7 @@ export type PayoutWithPaymentFragment = { __typename?: 'Payout', amount: number,
     & PaymentForPayoutRefundFragment
   )> };
 
-export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress: string };
+export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress?: string | null, contractType: PayoutContractType, prismContractAddress?: string | null, prismDomainSeparator?: string | null, projectKey?: string | null };
 
 export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, content?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
 
@@ -9366,7 +9380,7 @@ export type ShippingAddressFragment = { __typename?: 'ShippingAddress', id: stri
 
 export type UserAccountKeysFragment = { __typename?: 'UserAccountKeys', id: any, encryptedSeed: string, createdAt: any, userId: any, updatedAt: any, rskKeyPair: { __typename?: 'RskKeyPair', address: string, derivationPath: string, publicKey: string } };
 
-export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: any, country?: string | null, legalEntityType: LegalEntityType, verified?: boolean | null } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } } };
+export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: any, country?: string | null, legalEntityType: LegalEntityType, verified?: boolean | null } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } }, accountKeys?: { __typename?: 'UserAccountKeys', rskKeyPair: { __typename?: 'RskKeyPair', address: string } } | null };
 
 export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null };
 
@@ -11963,6 +11977,10 @@ export const PayoutMetadataFragmentDoc = gql`
   nonce
   swapContractAddress
   aonContractAddress
+  contractType
+  prismContractAddress
+  prismDomainSeparator
+  projectKey
 }
     `;
 export const ProjectPostFragmentDoc = gql`
@@ -12146,6 +12164,11 @@ export const ProjectPageCreatorFragmentDoc = gql`
         verified
         verifiedAt
       }
+    }
+  }
+  accountKeys {
+    rskKeyPair {
+      address
     }
   }
 }

@@ -9,6 +9,7 @@ import { Body } from '@/shared/components/typography'
 import { getPath, GeyserOnChainGuideUrl } from '@/shared/constants'
 import { Feedback, FeedBackVariant } from '@/shared/molecules'
 import { isAllOrNothing } from '@/utils'
+import { ProjectFundingStrategy } from '@/types/index.ts'
 
 import { useDownloadRefund } from '../hooks/useDownloadRefund'
 import { onChainRefundDownloadedAtom } from '../states/onChainStatus.ts'
@@ -25,7 +26,11 @@ export const PaymentOnchainPrompt = () => {
     navigate({ pathname: getPath('fundingPaymentOnchainQR', project.name), search: location.search }, { replace: true })
   }
 
-  if (isAllOrNothing(project)) {
+  const creatorRskAddress = project?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+  const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
+  const isRskSwapFlow = isAllOrNothing(project) || isPrismTia
+
+  if (isRskSwapFlow) {
     setOnchainRefundDownloadAtom(true)
     return <Navigate to={getPath('fundingPaymentOnchainQR', project.name)} replace />
   }

@@ -36,6 +36,11 @@ export const FRAGMENT_PROJECT_PAGE_CREATOR = gql`
         }
       }
     }
+    accountKeys {
+      rskKeyPair {
+        address
+      }
+    }
   }
 `
 
