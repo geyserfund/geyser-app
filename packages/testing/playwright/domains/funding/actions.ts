@@ -8,8 +8,8 @@ export const clickContribute = async (page: Page) => {
   await contributeButton.waitFor({ state: 'visible', timeout: 10000 })
   await contributeButton.click()
 
-  // Wait for funding page to load
-  await page.getByRole('heading', { name: 'Make a donation' }).waitFor({ state: 'visible', timeout: 10000 })
+  // Wait for funding page to load - use input instead of conditional heading
+  await page.getByTestId('donation-input').waitFor({ state: 'visible', timeout: 10000 })
 }
 
 /** Toggle donation input between USD and sats */
@@ -25,10 +25,10 @@ export const enterDonationAmount = async (page: Page, amount: number) => {
   await input.fill(amount.toString())
 }
 
-/** Click the Add button for a reward */
+/** Click the Buy button for a reward */
 export const clickAddReward = async (page: Page, rewardIndex = 0) => {
-  const addButtons = page.getByRole('button', { name: 'Add' })
-  await addButtons.nth(rewardIndex).click()
+  const buyButtons = page.getByRole('button', { name: 'Buy' })
+  await buyButtons.nth(rewardIndex).click()
 }
 
 /** Click Continue button on FundingInit page */

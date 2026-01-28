@@ -409,6 +409,45 @@ await page.waitForSelector('#target-page-element', { state: 'visible', timeout: 
 await clickCopyButton(page)
 ```
 
+### Never Use `waitForLoadState('networkidle')`
+
+**Anti-Pattern**: Using `await page.waitForLoadState('networkidle')` after navigation.  
+**Why**: `networkidle` waits for network activity to stop, which is unreliable and slow:
+- Modern SPAs have continuous background requests (analytics, polling, websockets)
+- Network activity may never fully stop
+- Causes flaky tests that timeout unnecessarily
+- Adds unnecessary wait time even when it works
+
+**Solution**: 
+- Use `page.goto()` which already waits for `load` event by default
+- Wait for specific elements that indicate the page is ready: `await page.waitForSelector('#element')`
+- Wait for specific network responses: `await page.waitForResponse(...)`
+- Use `waitForURL()` for navigation completion: `await page.waitForURL(/pattern/)`
+
+**Bad Pattern**:
+```typescript
+await page.goto('/some-page')
+await page.waitForLoadState('networkidle')  // ❌ Unreliable and slow
+```
+
+**Good Patterns**:
+```typescript
+// Option 1: Just use goto() - it already waits for load event
+await page.goto('/some-page')
+
+// Option 2: Wait for specific element that indicates page is ready
+await page.goto('/some-page')
+await page.waitForSelector('#main-content', { state: 'visible' })
+
+// Option 3: Wait for specific network response
+await page.goto('/some-page')
+await page.waitForResponse((r) => r.url().includes('/api/data'))
+
+// Option 4: Wait for URL change after navigation
+await page.goto('/some-page')
+await page.waitForURL(/\/some-page/)
+```
+
 ### Check Conditional Rendering
 
 **Bug**: Assumed "Download & Continue" button exists for all projects.  
@@ -812,6 +851,15 @@ Configure `.env.playwright`:
 ---
 
 ## 🎨 Project-Specific Patterns
+
+### Project Creation (Launch Flow)
+
+- **Project Details ≠ Story**: The Project Details step does **not** include the full `description` field. The long description lives in the **Tell your story** step (`LaunchStory`). Tests for Project Details should not try to fill `description` there.
+- **Image uploads require crop confirmation**: `FileUpload` opens `ImageCropperModal`. Tests must click **Save** in the crop modal after setting files, then wait for preview elements (e.g., thumbnail `img[alt="uploaded image"]`, header `img[alt^="Project header image"]`).
+- **Scope menu selections**: The "Create project" link exists in multiple places (nav + profile menu). When selecting from the profile dropdown, scope to `getByRole('menu')` to avoid strict-mode collisions.
+- **Prefer semantic roles over text**: Some screens repeat the same text in navigation and headings (e.g., "Project details"). Use `getByRole('heading', { name: 'Project details' })` instead of `getByText()` to avoid strict-mode violations.
+- **React-select placeholders are text, not input placeholders**: `getByPlaceholder('Select category')` will fail. Click the placeholder text (e.g., `getByText('Select category', { exact: true })`) or target the combobox role.
+- **Add test IDs for unstable selects**: For react-select fields that intercept clicks, add `data-testid` to the FieldContainer and target `getByRole('combobox')` within that container.
 
 ### Funding Flow Patterns
 

@@ -4,8 +4,10 @@ import { expect, Page } from '@playwright/test'
 
 /** Verify funding amount screen is visible */
 export const expectFundingAmountScreen = async (page: Page) => {
-  await expect(page.getByRole('heading', { name: 'Make a donation' })).toBeVisible({ timeout: 10000 })
-  await expect(page.getByTestId('donation-input')).toBeVisible()
+  // Check for the donation input (reliable across projects with/without rewards)
+  await expect(page.getByTestId('donation-input')).toBeVisible({ timeout: 10000 })
+  // Verify Continue button is also present as a secondary check
+  await expect(page.getByRole('button', { name: 'Continue' }).first()).toBeVisible()
 }
 
 /** Verify comment screen (FundingDetails) is visible */

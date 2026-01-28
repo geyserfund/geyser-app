@@ -65,6 +65,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
       </Button>
       <Button
         id="continue-with-bitcoin"
+        data-testid="continue-from-details-button"
         size="lg"
         w="full"
         variant="solid"
