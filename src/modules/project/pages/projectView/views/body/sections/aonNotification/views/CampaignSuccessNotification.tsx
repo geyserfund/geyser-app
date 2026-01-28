@@ -60,6 +60,12 @@ export const CampaignSuccessNotification = ({ onOpen }: { onOpen: () => void }) 
               )}
             </Trans>
           </Body>
+          <Body>
+            {' '}
+            {t(
+              'Note: You can keep raising the funds until the project deadline, if you withdraw the funds before the deadline, the project will be marked as completed and cannot accept any more contributions.',
+            )}
+          </Body>
           <Button colorScheme="primary1" variant="solid" size="lg" w="full" onClick={onOpen}>
             {t('Claim funds now')}
           </Button>
