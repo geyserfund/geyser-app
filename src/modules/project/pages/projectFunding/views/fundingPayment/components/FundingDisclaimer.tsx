@@ -7,9 +7,9 @@ import { Body, BodyProps } from '@/shared/components/typography/Body.tsx'
 export const FundingDisclaimer = (props: BodyProps) => {
   return (
     <VStack w="full" spacing={0}>
-      <Body light size="xs" textAlign="center" {...props}>
+      <Body light size="xs" {...props}>
         {t(
-          'Geyser helps fund projects, causes, and initiatives with Bitcoin. Contributions support ideas in progress, and outcomes are not guaranteed.',
+          'Geyser helps fund valuable projects with Bitcoin. Contributions support ideas in progress, and outcomes are not guaranteed.',
         )}
       </Body>
     </VStack>

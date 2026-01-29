@@ -47,7 +47,7 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
             ) : (
               <>
                 <Icon as={AiFillApple} fontSize="16px" color="utils.text" />
-                <Icon as={FaBitcoin} fontSize="16px" color="orange.9" />
+                <Icon as={FaBitcoin} fontSize="16px" color="utils.text" />
               </>
             )}
 
