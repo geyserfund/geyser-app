@@ -299,6 +299,7 @@ export type ContributionFiatToLightningSwapPaymentDetails = {
 
 export type ContributionFiatToLightningSwapPaymentDetailsBanxaInput = {
   fiatCurrency: Scalars['String']['input'];
+  paymentMethodId: Scalars['String']['input'];
   returnUrl: Scalars['String']['input'];
 };
 

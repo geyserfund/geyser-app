@@ -1,7 +1,9 @@
 import { atom } from 'jotai'
 
 import {
+  projectFundingPaymentApplePayRoutes,
   projectFundingPaymentCardRoutes,
+  projectFundingPaymentCreditCardRoutes,
   projectFundingPaymentFiatSwapRoutes,
   projectFundingPaymentLightingRoutes,
   projectFundingPaymentOnchainRoutes,
@@ -19,6 +21,16 @@ export enum PaymentMethods {
   card = 'CARD',
   fiatSwap = 'FIAT_SWAP',
 }
+
+export const fiatCheckoutMethods = {
+  creditCard: 'creditCard',
+  applePay: 'applePay',
+} as const
+
+export type FiatCheckoutMethod = (typeof fiatCheckoutMethods)[keyof typeof fiatCheckoutMethods]
+
+/** Stores the selected fiat checkout method for the credit card/apple pay flow */
+export const fiatPaymentMethodAtom = atom<FiatCheckoutMethod>(fiatCheckoutMethods.creditCard)
 
 export const paymentMethodAtom = atom((get) => {
   if (get(isLightingMethodAtom)) {
@@ -44,6 +56,11 @@ export const isLightingMethodAtom = atom(routeMatchForAtom(projectFundingPayment
 export const isCardMethodAtom = atom(routeMatchForAtom(projectFundingPaymentCardRoutes))
 export const isOnchainMethodAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainRoutes))
 export const isFiatSwapMethodAtom = atom(routeMatchForAtom(projectFundingPaymentFiatSwapRoutes))
+export const isCreditCardMethodAtom = atom(routeMatchForAtom(projectFundingPaymentCreditCardRoutes))
+export const isApplePayMethodAtom = atom(routeMatchForAtom(projectFundingPaymentApplePayRoutes))
+export const isFiatPaymentRouteAtom = atom(
+  (get) => get(isFiatSwapMethodAtom) || get(isCreditCardMethodAtom) || get(isApplePayMethodAtom),
+)
 
 export const isOnchainMethodStartedAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainStartedRoutes))
 
@@ -67,16 +84,10 @@ export const hasStripePaymentMethodAtom = atom((get) => {
   return false
 })
 
-const listOfProjectToRemoveFiatPaymentMethod = ['launch']
-
 export const hasFiatPaymentMethodAtom = atom((get) => {
   const project = get(fundingProjectAtom)
 
   if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
-    return false
-  }
-
-  if (listOfProjectToRemoveFiatPaymentMethod.includes(project.name)) {
     return false
   }
 

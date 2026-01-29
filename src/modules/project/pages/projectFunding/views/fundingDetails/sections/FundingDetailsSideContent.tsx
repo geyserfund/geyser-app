@@ -1,5 +1,6 @@
 import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { FormEvent } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { useNavigate } from 'react-router'
@@ -19,6 +20,13 @@ import { ContinueWithButtons } from '../../../components/ContinueWithButtons.tsx
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary'
 import { FundingCheckoutWrapper, FundingSummaryWrapper } from '../../../layouts/FundingSummaryWrapper'
 import { LaunchpadSummary, NonProfitSummary, TAndCs } from '../../fundingInit/sections/FundingInitSideContent.tsx'
+import {
+  fiatCheckoutMethods,
+  fiatPaymentMethodAtom,
+  hasFiatPaymentMethodAtom,
+  intendedPaymentMethodAtom,
+  PaymentMethods,
+} from '../../fundingPayment/state/paymentMethodAtom.ts'
 import { ShippingHandleSubmitType } from '../hooks/useShippingAddressForm.tsx'
 import { ShippingAddressFormData } from './FundingDetailsShippingAddress.tsx'
 
@@ -49,6 +57,9 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
   const { loginOnOpen } = useAuthModal()
 
   const { isFundingUserInfoValid, project, setErrorstate, formState } = useFundingFormAtom()
+  const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
+  const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
+  const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
 
   const hasSubscription = Boolean(formState.subscription?.subscriptionId)
   const onSubmitFunction = (e: FormEvent<HTMLDivElement>) => {
@@ -101,6 +112,15 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
     if (isLoggedIn) {
       navigate(getPath('fundingGuardians', project.name))
     } else {
+      if (intendedPaymentMethod === PaymentMethods.fiatSwap && hasFiatPaymentMethod) {
+        const paymentPath =
+          fiatPaymentMethod === fiatCheckoutMethods.applePay
+            ? getPath('fundingPaymentApplePay', project.name)
+            : getPath('fundingPaymentCreditCard', project.name)
+        navigate(paymentPath)
+        return
+      }
+
       navigate(getPath('fundingStart', project.name))
     }
   }

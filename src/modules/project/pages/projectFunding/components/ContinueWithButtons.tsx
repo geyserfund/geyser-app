@@ -1,17 +1,39 @@
-import { Button, Icon, VStack } from '@chakra-ui/react'
+import { Button, Icon, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useSetAtom } from 'jotai'
-import { FaBitcoin, FaRegCreditCard } from 'react-icons/fa'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { AiFillApple } from 'react-icons/ai'
+import { FaBitcoin, FaCreditCard } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { getPath } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
-import { intendedPaymentMethodAtom, PaymentMethods } from '../views/fundingPayment/state/paymentMethodAtom.ts'
+import {
+  fiatCheckoutMethods,
+  fiatPaymentMethodAtom,
+  hasFiatPaymentMethodAtom,
+  intendedPaymentMethodAtom,
+  PaymentMethods,
+} from '../views/fundingPayment/state/paymentMethodAtom.ts'
 
 type ContinueWithButtonsProps = {
   useFormSubmit?: boolean
+}
+
+const getIsApplePayVisible = () => {
+  if (typeof navigator === 'undefined') {
+    return false
+  }
+
+  const platform = navigator.platform || ''
+  const userAgent = navigator.userAgent || ''
+
+  if (platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
+    return true
+  }
+
+  return /Mac|iPhone|iPad|iPod/.test(platform) || /Macintosh|iPhone|iPad|iPod/.test(userAgent)
 }
 
 export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButtonsProps) => {
@@ -19,11 +41,34 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   const isMobile = useMobileMode()
   const { project } = useFundingFormAtom()
   const setIntendedPaymentMethod = useSetAtom(intendedPaymentMethodAtom)
+  const setFiatPaymentMethod = useSetAtom(fiatPaymentMethodAtom)
+  const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
+  const isApplePayVisible = hasFiatPaymentMethod && getIsApplePayVisible()
+  const applePayButtonBg = useColorModeValue('neutral.1000', 'neutral.1000')
+  const applePayButtonText = useColorModeValue('neutral.0', 'neutral.0')
+  const creditCardIcon = <Icon as={FaCreditCard} color="blue.700" />
+  const bitcoinIcon = <Icon as={FaBitcoin} color="orange.500" />
+  const applePayIcon = <Icon as={AiFillApple} />
 
   const handleCreditCardClick = () => {
     setIntendedPaymentMethod(PaymentMethods.fiatSwap)
+    setFiatPaymentMethod(fiatCheckoutMethods.creditCard)
     if (!useFormSubmit) {
-      navigate(getPath('fundingStart', project.name))
+      const paymentPath = hasFiatPaymentMethod
+        ? getPath('fundingPaymentCreditCard', project.name)
+        : getPath('fundingStart', project.name)
+      navigate(paymentPath)
+    }
+  }
+
+  const handleApplePayClick = () => {
+    setIntendedPaymentMethod(PaymentMethods.fiatSwap)
+    setFiatPaymentMethod(fiatCheckoutMethods.applePay)
+    if (!useFormSubmit) {
+      const paymentPath = hasFiatPaymentMethod
+        ? getPath('fundingPaymentApplePay', project.name)
+        : getPath('fundingStart', project.name)
+      navigate(paymentPath)
     }
   }
 
@@ -36,6 +81,23 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
 
   return (
     <VStack flexDirection={{ base: 'row', lg: 'column' }} w="full" spacing={3}>
+      {isApplePayVisible && (
+        <Button
+          id="continue-with-apple-pay"
+          size="lg"
+          w="full"
+          variant="solid"
+          bg={applePayButtonBg}
+          color={applePayButtonText}
+          _hover={{ bg: applePayButtonBg, opacity: 0.9 }}
+          onClick={handleApplePayClick}
+          type={useFormSubmit ? 'submit' : 'button'}
+          rightIcon={isMobile ? undefined : applePayIcon}
+          aria-label={t('Continue with Apple Pay')}
+        >
+          {isMobile ? applePayIcon : t('Continue with Apple Pay')}
+        </Button>
+      )}
       <Button
         id="continue-with-credit-card"
         size="lg"
@@ -44,9 +106,10 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
         colorScheme="primary1"
         onClick={handleCreditCardClick}
         type={useFormSubmit ? 'submit' : 'button'}
-        rightIcon={<Icon as={FaRegCreditCard} color="blue.500" />}
+        rightIcon={isMobile ? undefined : creditCardIcon}
+        aria-label={t('Continue with Credit Card')}
       >
-        {isMobile ? 'Continue with' : t('Continue with Credit Card')}
+        {isMobile ? creditCardIcon : t('Continue with Credit Card')}
       </Button>
       <Button
         id="continue-with-bitcoin"
@@ -56,9 +119,10 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
         colorScheme="primary1"
         onClick={handleBitcoinClick}
         type={useFormSubmit ? 'submit' : 'button'}
-        rightIcon={<Icon as={FaBitcoin} color="orange.500" />}
+        rightIcon={isMobile ? undefined : bitcoinIcon}
+        aria-label={t('Continue with Bitcoin')}
       >
-        {isMobile ? 'Continue with' : t('Continue with Bitcoin')}
+        {isMobile ? bitcoinIcon : t('Continue with Bitcoin')}
       </Button>
     </VStack>
   )

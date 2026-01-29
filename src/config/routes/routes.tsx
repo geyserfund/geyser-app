@@ -646,6 +646,20 @@ export const platformRoutes: RouteObject[] = [
                   return { Component: Subscription }
                 },
               },
+              {
+                path: getPath('fundingPaymentCreditCard', PathName.projectName),
+                async lazy() {
+                  const PaymentCreditCard = await loadProjectFundingPages().then((m) => m.PaymentCreditCard)
+                  return { Component: PaymentCreditCard }
+                },
+              },
+              {
+                path: getPath('fundingPaymentApplePay', PathName.projectName),
+                async lazy() {
+                  const PaymentCreditCard = await loadProjectFundingPages().then((m) => m.PaymentCreditCard)
+                  return { Component: PaymentCreditCard }
+                },
+              },
 
               {
                 path: getPath('fundingPayment', PathName.projectName),

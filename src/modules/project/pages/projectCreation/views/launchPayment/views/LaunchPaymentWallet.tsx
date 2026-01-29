@@ -6,11 +6,9 @@ import { useAuthContext } from '@/context/auth.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
 import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { useModal } from '@/shared/hooks/useModal.tsx'
 import { ProjectCreationStep } from '@/types/index.ts'
 import { isAllOrNothing, useNotification } from '@/utils/index.ts'
 
-import { VerificationModal } from '../../../../projectDashboard/components/VerificationModal.tsx'
 import { EnableFiatContributions } from '../../../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
@@ -23,7 +21,6 @@ export const LaunchPaymentWallet = () => {
   const navigate = useNavigate()
 
   const { wallet } = useWalletAtom()
-  const verifyIntroModal = useModal()
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.Wallet,
@@ -67,19 +64,9 @@ export const LaunchPaymentWallet = () => {
 
       {!isAon && (
         <>
-          <EnableFiatContributions
-            paddingX={0}
-            dense
-            noborder
-            isIdentityVerified={isIdentityVerified}
-            buttonProps={{
-              onClick: verifyIntroModal.onOpen,
-            }}
-          />
+          <EnableFiatContributions isIdentityVerified={isIdentityVerified} />
         </>
       )}
-
-      <VerificationModal {...verifyIntroModal} />
     </ProjectCreationPageWrapper>
   )
 }
