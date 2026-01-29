@@ -1,10 +1,10 @@
 import { HStack, Icon, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
+import { AiFillApple } from 'react-icons/ai'
+import { FaBitcoin } from 'react-icons/fa'
 import { PiLockSimpleFill } from 'react-icons/pi'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -23,13 +23,11 @@ type ContributionSummaryProps = StackProps & {
 }
 
 export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryProps) => {
-  const projectOwner = useAtomValue(projectOwnerAtom)
   const { isAon, project } = useProjectAtom()
 
-  const isVerified = Boolean(projectOwner?.user?.complianceDetails?.verifiedDetails?.identity?.verified)
   const paymentMethods = [BitcoinLightingPaymentImageUrl]
 
-  if (isVerified) {
+  if (!isAon) {
     paymentMethods.push(VisaPaymentImageUrl)
     paymentMethods.push(MasterCardPaymentImageUrl)
   }
@@ -44,11 +42,17 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
         <VStack w="full">
           <ContributeButton w="full" isWidget={isWidget} paymentMethods={paymentMethods} />
           <HStack spacing={1} alignItems="center">
-            <Icon as={PiLockSimpleFill} fontSize="16px" color="primary1.9" />
+            {isAon ? (
+              <Icon as={PiLockSimpleFill} fontSize="16px" color="primary1.9" />
+            ) : (
+              <>
+                <Icon as={AiFillApple} fontSize="16px" color="utils.text" />
+                <Icon as={FaBitcoin} fontSize="16px" color="orange.9" />
+              </>
+            )}
+
             <Body size="sm" light textAlign="center">
-              {paymentMethods.length > 1 && !isAon
-                ? t('Secure Bitcoin & Credit Card payments')
-                : t('Secure Bitcoin payments')}
+              {!isAon ? t('Pay with Apple Pay, Bitcoin & 20+ methods') : t('Secure Bitcoin payments')}
             </Body>
           </HStack>
         </VStack>

@@ -10,7 +10,7 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 export const BitcoinPurchaseNotice = () => {
   return (
     <Feedback
-      variant={FeedBackVariant.WARNING}
+      variant={FeedBackVariant.NEUTRAL}
       icon={<Icon as={PiInfo} title={t('Important')} fontSize="30px" />}
       title={t('Important')}
     >

@@ -7,9 +7,16 @@ import { useFundingAPI } from '@/modules/project/funding/hooks/useFundingAPI'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
+import { isAllOrNothing } from '@/utils'
 
 import { QRCodeSizeMap } from '../../components/QRCodeComponent'
-import { intendedPaymentMethodAtom, PaymentMethods } from '../../state/paymentMethodAtom.ts'
+import {
+  fiatCheckoutMethods,
+  fiatPaymentMethodAtom,
+  hasFiatPaymentMethodAtom,
+  intendedPaymentMethodAtom,
+  PaymentMethods,
+} from '../../state/paymentMethodAtom.ts'
 
 export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: string) => void }) => {
   const { requestFundingFromContext, requestFundingOptions } = useFundingAPI()
@@ -21,6 +28,8 @@ export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: st
   const navigate = useNavigate()
 
   const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
+  const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
+  const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
 
   const data = useRef(false)
 
@@ -45,7 +54,14 @@ export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: st
             let paymentPath = getPath('fundingPaymentLightning', project.name)
 
             if (intendedPaymentMethod === PaymentMethods.fiatSwap) {
-              paymentPath = getPath('fundingPaymentFiatSwap', project.name)
+              if (!isAllOrNothing(project) && hasFiatPaymentMethod) {
+                paymentPath =
+                  fiatPaymentMethod === fiatCheckoutMethods.applePay
+                    ? getPath('fundingPaymentApplePay', project.name)
+                    : getPath('fundingPaymentCreditCard', project.name)
+              } else {
+                paymentPath = getPath('fundingPaymentFiatSwap', project.name)
+              }
             }
 
             navigate(

@@ -1,76 +1,32 @@
 import { VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
+import { Navigate } from 'react-router'
 
-import { useAuthContext } from '@/context'
-import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess.ts'
-import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
 import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
-import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
+import { getPath } from '@/shared/constants'
 import { isAllOrNothing } from '@/utils'
 
-import { hasFiatPaymentMethodAtom } from '../../state/paymentMethodAtom.ts'
-import { fiatSwapStatusAtom } from './atom/fiatSwapStatusAtom.ts'
-import { FiatSwapAwaitingPayment } from './components/FiatSwapAwaitingPayment.tsx'
-import { FiatSwapContributorNotVerified } from './components/FiatSwapContributorNotVerified.tsx'
-import { FiatSwapFailed } from './components/FiatSwapFailed.tsx'
-import { FiatSwapForm } from './components/FiatSwapForm.tsx'
-import { FiatSwapLoginRequired } from './components/FiatSwapLoginRequired.tsx'
+import { fiatCheckoutMethods, fiatPaymentMethodAtom } from '../../state/paymentMethodAtom.ts'
 import { FiatSwapOwnerNotVerified } from './components/FiatSwapOwnerNotVerified.tsx'
-import { FiatSwapProcessing } from './components/FiatSwapProcessing.tsx'
-import { FiatSwapStatusView } from './components/FiatSwapStatusView.tsx'
-import { useFiatSwapPaymentSubscription } from './useFiatSwapPaymentSubscription.tsx'
 
 export const PaymentFiatSwap = () => {
-  useListenFundingContributionSuccess()
-
-  const contribution = useAtomValue(fundingContributionAtom)
-
-  const contributionUUID = contribution?.uuid
-
-  useFiatSwapPaymentSubscription({
-    contributionUUID,
-  })
-
-  const { isLoggedIn } = useAuthContext()
-
-  const projectOwner = useAtomValue(projectOwnerAtom)
-  const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
   const project = useAtomValue(fundingProjectAtom)
-
-  const fiatSwapStatus = useAtomValue(fiatSwapStatusAtom)
+  const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
 
   const isAon = isAllOrNothing(project)
-  const isProjectOwnerVerified = projectOwner?.user.complianceDetails.verifiedDetails.identity?.verified
-  const isFiatAvailable = Boolean(hasFiatPaymentMethod && isProjectOwnerVerified)
 
-  const renderFiatSwapPayment = () => {
-    if (isAon) {
-      return <FiatSwapOwnerNotVerified />
-    }
+  if (!isAon) {
+    const paymentPath =
+      fiatPaymentMethod === fiatCheckoutMethods.applePay
+        ? getPath('fundingPaymentApplePay', project.name)
+        : getPath('fundingPaymentCreditCard', project.name)
 
-    if (!isFiatAvailable) {
-      return <FiatSwapOwnerNotVerified />
-    }
-
-    if (!isLoggedIn) {
-      return <FiatSwapLoginRequired />
-    }
-
-    return (
-      <FiatSwapStatusView
-        status={fiatSwapStatus}
-        renderInitial={() => <FiatSwapForm />}
-        renderPending={() => <FiatSwapAwaitingPayment />}
-        renderProcessing={() => <FiatSwapProcessing />}
-        renderFailed={() => <FiatSwapFailed />}
-      />
-    )
+    return <Navigate to={paymentPath} replace />
   }
 
   return (
     <VStack w="full" spacing={6}>
-      {renderFiatSwapPayment()}
-      {isFiatAvailable && isLoggedIn && <FiatSwapContributorNotVerified />}
+      <FiatSwapOwnerNotVerified />
     </VStack>
   )
 }

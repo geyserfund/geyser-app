@@ -9,7 +9,6 @@ import { PathName } from '@/shared/constants'
 import { isAllOrNothing } from '@/utils'
 
 import {
-  hasFiatPaymentMethodAtom,
   hasStripePaymentMethodAtom,
   isFiatSwapMethodStartedAtom,
   isOnchainMethodStartedAtom,
@@ -38,7 +37,6 @@ export const PaymentMethodSelection = () => {
   const isOnchainMethodStarted = useAtomValue(isOnchainMethodStartedAtom)
   const isFiatSwapMethodStarted = useAtomValue(isFiatSwapMethodStartedAtom)
   const hasStripePaymentOption = useAtomValue(hasStripePaymentMethodAtom)
-  const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
   const isDisabled = isOnchainMethodStarted || isFiatSwapMethodStarted || Boolean(!paymentMethod)
 
   const items: AnimatedNavBarItem[] = useMemo(() => {
@@ -55,7 +53,7 @@ export const PaymentMethodSelection = () => {
       })
     }
 
-    if (hasFiatPaymentMethod || isAon) {
+    if (isAon) {
       navBarItems.push({
         name: t('Credit Card'),
         key: PaymentMethods.fiatSwap,
@@ -91,7 +89,6 @@ export const PaymentMethodSelection = () => {
     onChainAmountWarning,
     isOnchainMethodStarted,
     hasStripePaymentOption,
-    hasFiatPaymentMethod,
     isAon,
     paymentMethod,
     fiatLimitMessage,

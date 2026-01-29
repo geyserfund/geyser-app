@@ -15,7 +15,6 @@ import { useResetContribution } from '@/modules/project/funding/hooks/useResetCo
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
 import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
-import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
@@ -35,8 +34,6 @@ import { FiatSwapProcessing } from '../paymentFiatSwap/components/FiatSwapProces
 import { FiatSwapStatusView } from '../paymentFiatSwap/components/FiatSwapStatusView.tsx'
 import { banxaPaymentMethodIds, fiatSwapCurrencies } from '../paymentFiatSwap/data.ts'
 import { useFiatSwapPaymentSubscription } from '../paymentFiatSwap/useFiatSwapPaymentSubscription.tsx'
-
-const applePayCurrencies = ['USD', 'EUR', 'GBP']
 
 /** PaymentCreditCard: handles credit card and apple pay Banxa flow without the payment method selection UI */
 export const PaymentCreditCard = () => {
@@ -167,7 +164,7 @@ export const PaymentCreditCard = () => {
         </VStack>
       </VStack>
 
-      <VStack w="full" spacing={3}>
+      <VStack w="full" spacing={0}>
         <ReachOutForHelpButton />
         <FundingDisclaimer />
       </VStack>
@@ -234,11 +231,8 @@ const FiatPaymentForm = ({ isApplePay, selectedCurrency, onCurrencyChange }: Fia
 
   return (
     <VStack w="full" spacing={6} alignItems="start">
-      {isApplePay ? (
-        <ApplePayCurrencySelect selectedCurrency={selectedCurrency} onCurrencyChange={onCurrencyChange} />
-      ) : (
-        <CreditCardCurrencySelect selectedCurrencyOption={selectedCurrencyOption} onCurrencyChange={onCurrencyChange} />
-      )}
+      <CreditCardCurrencySelect selectedCurrencyOption={selectedCurrencyOption} onCurrencyChange={onCurrencyChange} />
+      <BitcoinPurchaseNotice />
       <VStack w="full" alignItems="start" spacing={3}>
         <Button
           width="100%"
@@ -250,12 +244,10 @@ const FiatPaymentForm = ({ isApplePay, selectedCurrency, onCurrencyChange }: Fia
           onClick={handleCreateFiatSwapPayment}
           isLoading={isLoading}
           alignSelf="center"
-          mt={6}
+          mt={2}
         >
-          {isLoading ? t('Redirecting you to fiat payment') : t('Open payment portal')}
+          {isLoading ? t('Redirecting you to fiat payment') : t('Continue to payment')}
         </Button>
-        <Body size="sm">{t('You will be re-directed to our third-party payment provider.')}</Body>
-        <BitcoinPurchaseNotice />
       </VStack>
     </VStack>
   )
@@ -269,7 +261,13 @@ type CreditCardCurrencySelectProps = {
 /** CreditCardCurrencySelect: renders the fiat currency dropdown for card payments */
 const CreditCardCurrencySelect = ({ selectedCurrencyOption, onCurrencyChange }: CreditCardCurrencySelectProps) => {
   return (
-    <FieldContainer title={t('Currency')} subtitle={t('Your card will be charged in this currency')}>
+    <HStack w="full" alignItems="start" spacing={3} justifyContent="space-between" paddingTop={4}>
+      <VStack w="full" alignItems="start" spacing={0}>
+        <Body bold>{t('Currency')}</Body>
+        <Body size="sm" light lineHeight="1.2">
+          {t('You will be charged in this currency')}
+        </Body>
+      </VStack>
       <CustomSelect
         width={'100%'}
         options={fiatSwapCurrencies}
@@ -278,55 +276,22 @@ const CreditCardCurrencySelect = ({ selectedCurrencyOption, onCurrencyChange }: 
           onCurrencyChange(value?.value || '')
         }}
       />
-    </FieldContainer>
-  )
-}
-
-type ApplePayCurrencySelectProps = {
-  selectedCurrency: string
-  onCurrencyChange: (currency: string) => void
-}
-
-/** ApplePayCurrencySelect: renders the segmented Apple Pay currency selector */
-const ApplePayCurrencySelect = ({ selectedCurrency, onCurrencyChange }: ApplePayCurrencySelectProps) => {
-  return (
-    <VStack w="full" alignItems="start" spacing={3}>
-      <VStack w="full" alignItems="start" spacing={1}>
-        <Body bold>{t('Currency')}</Body>
-        <Body size="sm" light>
-          {t('Your card will be charged in this currency')}
-        </Body>
-      </VStack>
-      <HStack w="full" spacing={3} flexWrap="wrap">
-        {applePayCurrencies.map((currency) => {
-          const isSelected = selectedCurrency === currency
-          return (
-            <Button
-              key={currency}
-              size="lg"
-              minWidth="96px"
-              variant={isSelected ? 'solid' : 'outline'}
-              colorScheme={isSelected ? 'primary1' : 'neutral1'}
-              onClick={() => {
-                onCurrencyChange(currency)
-              }}
-            >
-              {currency}
-            </Button>
-          )
-        })}
-      </HStack>
-    </VStack>
+    </HStack>
   )
 }
 
 /** PaymentCreditCardLoading: skeleton view while contribution is being created */
 const PaymentCreditCardLoading = () => {
   return (
-    <VStack w="full" spacing={4} alignItems="start">
-      <SkeletonLayout height="26px" width="120px" />
-      <SkeletonLayout height="44px" width="full" />
-      <SkeletonLayout height="40px" width="220px" />
+    <VStack w="full" spacing={8} alignItems="center">
+      <HStack w="full" alignItems="start" spacing={3} justifyContent="space-between" paddingTop={4}>
+        <VStack w="full" alignItems="start" spacing={1}>
+          <SkeletonLayout height="26px" width="120px" />
+          <SkeletonLayout height="16px" width="200px" />
+        </VStack>
+        <SkeletonLayout height="40px" width="220px" />
+      </HStack>
+      <SkeletonLayout height="40px" width="420px" />
     </VStack>
   )
 }

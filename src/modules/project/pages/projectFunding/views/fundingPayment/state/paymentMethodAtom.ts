@@ -84,16 +84,10 @@ export const hasStripePaymentMethodAtom = atom((get) => {
   return false
 })
 
-const listOfProjectToRemoveFiatPaymentMethod = ['launch']
-
 export const hasFiatPaymentMethodAtom = atom((get) => {
   const project = get(fundingProjectAtom)
 
   if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
-    return false
-  }
-
-  if (listOfProjectToRemoveFiatPaymentMethod.includes(project.name)) {
     return false
   }
 

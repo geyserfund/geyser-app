@@ -1,8 +1,8 @@
 import { Button, Icon, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
+import { AiFillApple } from 'react-icons/ai'
 import { FaBitcoin, FaCreditCard } from 'react-icons/fa'
-import { PiAppleLogoFill } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
@@ -48,7 +48,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   const applePayButtonText = useColorModeValue('neutral.0', 'neutral.0')
   const creditCardIcon = <Icon as={FaCreditCard} color="blue.700" />
   const bitcoinIcon = <Icon as={FaBitcoin} color="orange.500" />
-  const applePayIcon = <Icon as={PiAppleLogoFill} />
+  const applePayIcon = <Icon as={AiFillApple} />
 
   const handleCreditCardClick = () => {
     setIntendedPaymentMethod(PaymentMethods.fiatSwap)
