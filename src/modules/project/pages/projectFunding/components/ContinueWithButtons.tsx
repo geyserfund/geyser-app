@@ -79,9 +79,11 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
     }
   }
 
+  const disableApplePay = true
+
   return (
     <VStack flexDirection={{ base: 'row', lg: 'column' }} w="full" spacing={3}>
-      {isApplePayVisible && (
+      {isApplePayVisible && !disableApplePay && (
         <Button
           id="continue-with-apple-pay"
           size="lg"

@@ -3,39 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo-brand.svg" />
-    <link rel="apple-touch-icon" type="image/svg+xml" href="/logo-brand.svg">
-    <link rel="apple-touch-icon" type="image/png" href="/icons/192.png" sizes="192x192">
-    <link rel="mask-icon" type="image/svg+xml" href="/safari-pinned-tab.svg" color="#20ECC7">
+    <link rel="apple-touch-icon" type="image/svg+xml" href="/logo-brand.svg" />
+    <link rel="apple-touch-icon" type="image/png" href="/icons/192.png" sizes="192x192" />
+    <link rel="mask-icon" type="image/svg+xml" href="/safari-pinned-tab.svg" color="#20ECC7" />
     <link rel="canonical" href="https://geyser.fund/" />
 
-    <link rel="dns-prefetch" href="//api.airtable.com">
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="//api.airtable.com" />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://storage.googleapis.com" crossorigin>
-    <link rel="preconnect" href="https://api.geyser.fund" crossorigin>
-    <link rel="preconnect" href="https://blockchain.info" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://storage.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://api.geyser.fund" crossorigin />
+    <link rel="preconnect" href="https://blockchain.info" crossorigin />
 
-    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no,viewport-fit=cover">
+    <meta
+      name="viewport"
+      content="width=device-width,height=device-height,initial-scale=1,maximum-scale=1,user-scalable=no,shrink-to-fit=no,viewport-fit=cover"
+    />
 
     <meta name="facebook-domain-verification" content="9v55mpg109nm9wxh9i2tsrga9u1bhq" />
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta
       name="description"
       content="A Bitcoin crowdfunding platform where creators raise funds for causes, sell products, manage campaigns, and engage with their community."
-      />
+    />
     <meta
       name="keywords"
       content="Bitcoin crowdfunding, lightning donations, Bitcoin fundraising, Bitcoin creators, Bitcoin projects, Bitcoin products, Bitcoin books, Bitcoin community, Bitcoin grants, open-source funding, humanitarian Bitcoin, creator economy Bitcoin, crypto, cryptocurrency, crypto funding, crypto crowdfunding"
-    
-      />
+    />
     <style>
       html {
         height: 100%;
       }
-  
+
       #root {
         display: flex;
         flex-direction: column;
@@ -61,33 +63,50 @@
 
   <!-- 100% privacy friendly analytics -->
   <script async defer src="https://sa.geyser.fund/latest.js"></script>
-  <noscript><img src="https://sa.geyser.fund/noscript.gif" alt=""
-      referrerpolicy="no-referrer-when-downgrade" /></noscript>
-  <script>window.twttr = (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0],
-      t = window.twttr || {};
-    if (d.getElementById(id)) return t;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://platform.twitter.com/widgets.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  
-    t._e = [];
-    t.ready = function(f) {
-      t._e.push(f);
-    };
-  
-    return t;
-  }(document, "script", "twitter-wjs"));</script>
+  <noscript
+    ><img src="https://sa.geyser.fund/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade"
+  /></noscript>
+  <script>
+    window.twttr = (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {}
+      if (d.getElementById(id)) return t
+      js = d.createElement(s)
+      js.id = id
+      js.src = 'https://platform.twitter.com/widgets.js'
+      fjs.parentNode.insertBefore(js, fjs)
+
+      t._e = []
+      t.ready = function (f) {
+        t._e.push(f)
+      }
+
+      return t
+    })(document, 'script', 'twitter-wjs')
+  </script>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script type="text/javascript">
+      var Tawk_API = Tawk_API || {},
+        Tawk_LoadStart = new Date()
+      ;(function () {
+        var s1 = document.createElement('script'),
+          s0 = document.getElementsByTagName('script')[0]
+        s1.async = true
+        s1.src = 'https://embed.tawk.to/697a91c22893b51c32bbcce6/1jg3cioe9'
+        s1.charset = 'UTF-8'
+        s1.setAttribute('crossorigin', '*')
+        s0.parentNode.insertBefore(s1, s0)
+      })()
+    </script>
   </body>
   <script>
-    function useColor(light="white", dark="#111110"){
-      return window.localStorage.getItem("chakra-ui-color-mode") === "dark" ? dark : light
+    function useColor(light = 'white', dark = '#111110') {
+      return window.localStorage.getItem('chakra-ui-color-mode') === 'dark' ? dark : light
     }
-    document.body.style.background = useColor();
-</script>
+    document.body.style.background = useColor()
+  </script>
 </html>
