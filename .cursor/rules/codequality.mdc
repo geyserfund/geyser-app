@@ -45,3 +45,6 @@ Always provide links to the real files, not x.md.
 
 ## No Current Implementation
 Don't show or discuss the current implementation unless specifically requested.
+
+## Learnings
+- When introducing shared helpers, add explicit type imports to avoid dependency issues, and avoid adding redundant derived atoms if an existing atom already covers the needed state.

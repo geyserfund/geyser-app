@@ -26,6 +26,7 @@ import { fundingFlowErrorAtom, fundingRequestErrorAtom } from '../state'
 import { fundingContributionPartialUpdateAtom } from '../state/fundingContributionAtom.ts'
 import {
   contributionCreatePreImagesAtom,
+  fiatOnlyPaymentsInputAtom,
   formattedFundingInputAtom,
   setFundingInputAfterRequestAtom,
 } from '../state/fundingContributionCreateInputAtom.ts'
@@ -57,6 +58,7 @@ export const useFundingAPI = () => {
     useGenerateTransactionDataForClaimingRBTCToContract()
 
   const formattedFundingInput = useAtomValue(formattedFundingInputAtom)
+  const fiatOnlyPaymentsInput = useAtomValue(fiatOnlyPaymentsInputAtom)
 
   const setFundingInputAfterRequest = useSetAtom(setFundingInputAfterRequestAtom)
   const setContributionCreatePreImages = useSetAtom(contributionCreatePreImagesAtom)
@@ -281,10 +283,17 @@ export const useFundingAPI = () => {
     [requestFunding, formattedFundingInput],
   )
 
+  const requestFiatOnlyFundingFromContext = useCallback(
+    (onCompleted?: (data: ContributionCreateMutation) => void) =>
+      requestFunding({ ...formattedFundingInput, paymentsInput: fiatOnlyPaymentsInput }, onCompleted),
+    [requestFunding, formattedFundingInput, fiatOnlyPaymentsInput],
+  )
+
   return {
     requestFundingOptions,
     requestFunding,
     requestFundingFromContext,
+    requestFiatOnlyFundingFromContext,
   }
 }
 

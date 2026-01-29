@@ -91,6 +91,8 @@ export const projectStoryCreatorRoutes = [getPath('projectStoryEdit', PathName.p
 
 export const projectFundingPaymentLightingRoutes = [getPath('fundingPaymentLightning', PathName.projectName)]
 export const projectFundingPaymentCardRoutes = [getPath('fundingPaymentCard', PathName.projectName)]
+export const projectFundingPaymentCreditCardRoutes = [getPath('fundingPaymentCreditCard', PathName.projectName)]
+export const projectFundingPaymentApplePayRoutes = [getPath('fundingPaymentApplePay', PathName.projectName)]
 
 /** Routes after onchain payment went into refund processing */
 export const projectFundingOnchainRefundRoutes = [
@@ -123,6 +125,8 @@ export const projectFundingPaymentCreatedRoutes = [
   ...projectFundingPaymentLightingRoutes,
   ...projectFundingPaymentCardRoutes,
   ...projectFundingPaymentFiatSwapRoutes,
+  ...projectFundingPaymentCreditCardRoutes,
+  ...projectFundingPaymentApplePayRoutes,
   ...projectFundingPaymentOnchainInitialRoutes,
 ]
 
@@ -138,6 +142,8 @@ export const projectFundingRoutes = [
   ...projectFundingPaymentCreatedRoutes,
   ...projectFundingPaymentOnchainRoutes,
   ...projectFundingPaymentFiatSwapRoutes,
+  ...projectFundingPaymentCreditCardRoutes,
+  ...projectFundingPaymentApplePayRoutes,
 ]
 
 export const ProjectPageRoutesWithNavBarForDesktop = [...projectBaseRoutes, ...projectDashboardRoutes]

@@ -13,6 +13,7 @@ import {
   ProjectFundingStrategy,
   ProjectRewardFragment,
   QuoteCurrency,
+  ShippingAddress,
   UserMeFragment,
 } from '@/types/generated/graphql'
 import { toInt } from '@/utils'
@@ -27,27 +28,43 @@ import {
   tipAtoms,
 } from './fundingFormAtom'
 import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAtom'
+import type { FundFormType, FundingProjectState } from './fundingFormAtom.ts'
 import { selectedGoalIdAtom } from './selectedGoalAtom'
 import { shippingAddressAtom } from './shippingAddressAtom.ts'
 
-/** Formatted Funding Input data, for Fund Mutation */
-export const formattedFundingInputAtom = atom((get) => {
-  const formState = get(fundingFormStateAtom)
-  const fundingProject = get(fundingProjectAtom)
-  const shippingAddress = get(shippingAddressAtom)
-  const hasSelectedRewards = get(fundingFormHasRewardsAtom)
-  const user = get(authUserAtom)
-  const usdRate = get(usdRateAtom)
-  const projectGoalId = get(selectedGoalIdAtom)
-  const sourceResource = get(sourceResourceAtom)
-  const referrerHeroId = get(referrerHeroIdAtom)
-  const rewardsCosts = get(rewardsCostAtoms)
-  const geyserTip = get(tipAtoms)
-  const guardianBadgesCosts = get(guardianBadgesCostAtoms)
-  const shippingCosts = get(shippingCostAtom)
+type BuildContributionCreateInputArgs = {
+  formState: FundFormType
+  fundingProject: FundingProjectState
+  shippingAddress?: Omit<ShippingAddress, 'id'> & { id?: ShippingAddress['id'] }
+  hasSelectedRewards: boolean
+  user?: UserMeFragment | null
+  usdRate: number
+  projectGoalId?: string | null
+  sourceResource: { resourceId?: string | number; resourceType?: FundingResourceType }
+  referrerHeroId?: string | null
+  rewardsCosts: { sats: number; usdCents: number; base: number }
+  geyserTip: { sats: number }
+  guardianBadgesCosts: { sats: number }
+  shippingCosts: { sats: number; usdCents: number }
+  paymentsInput: ContributionPaymentsInput
+}
 
-  const paymentsInput = get(paymentsInputAtom)
-
+const buildContributionCreateInput = ({
+  formState,
+  fundingProject,
+  shippingAddress,
+  hasSelectedRewards,
+  user,
+  usdRate,
+  projectGoalId,
+  sourceResource,
+  referrerHeroId,
+  rewardsCosts,
+  geyserTip,
+  guardianBadgesCosts,
+  shippingCosts,
+  paymentsInput,
+}: BuildContributionCreateInputArgs): ContributionCreateInput => {
   const {
     donationAmount,
     rewardsByIDAndCount,
@@ -126,6 +143,42 @@ export const formattedFundingInputAtom = atom((get) => {
   }
 
   return input
+}
+
+/** Formatted Funding Input data, for Fund Mutation */
+export const formattedFundingInputAtom = atom((get) => {
+  const formState = get(fundingFormStateAtom)
+  const fundingProject = get(fundingProjectAtom)
+  const shippingAddress = get(shippingAddressAtom)
+  const hasSelectedRewards = get(fundingFormHasRewardsAtom)
+  const user = get(authUserAtom)
+  const usdRate = get(usdRateAtom)
+  const projectGoalId = get(selectedGoalIdAtom)
+  const sourceResource = get(sourceResourceAtom)
+  const referrerHeroId = get(referrerHeroIdAtom)
+  const rewardsCosts = get(rewardsCostAtoms)
+  const geyserTip = get(tipAtoms)
+  const guardianBadgesCosts = get(guardianBadgesCostAtoms)
+  const shippingCosts = get(shippingCostAtom)
+
+  const paymentsInput = get(paymentsInputAtom)
+
+  return buildContributionCreateInput({
+    formState,
+    fundingProject,
+    shippingAddress,
+    hasSelectedRewards: hasSelectedRewards || false,
+    user,
+    usdRate,
+    projectGoalId,
+    sourceResource,
+    referrerHeroId,
+    rewardsCosts,
+    geyserTip,
+    guardianBadgesCosts,
+    shippingCosts,
+    paymentsInput,
+  })
 })
 
 /** Funding Input after request */
@@ -155,6 +208,9 @@ export const resetFundingInputAfterRequestAtom = atom(null, (_, set) => {
     onChain: { preimageHex: '', preimageHash: '' },
   })
 })
+
+/** Payments input for fiat-only contribution creation */
+export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>(() => ({}))
 
 const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const fundingProject = get(fundingProjectAtom)

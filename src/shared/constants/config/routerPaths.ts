@@ -134,6 +134,8 @@ export enum PathName {
   fundingPaymentOnchain = 'onchain',
   fundingPaymentCard = 'card',
   fundingPaymentFiatSwap = 'fiat-swap',
+  fundingPaymentCreditCard = 'creditCard',
+  fundingPaymentApplePay = 'applepay',
   fundingPaymentOnchainQR = 'qr',
   fundingPaymentOnchainProcessing = 'processing',
   fundingPaymentOnchainRefund = 'refund',
@@ -315,6 +317,10 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentCard}`,
   fundingPaymentFiatSwap: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentFiatSwap}`,
+  fundingPaymentCreditCard: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentCreditCard}`,
+  fundingPaymentApplePay: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentApplePay}`,
   fundingPaymentOnchain: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}`,
   fundingPaymentOnchainQR: (projectName: string) =>

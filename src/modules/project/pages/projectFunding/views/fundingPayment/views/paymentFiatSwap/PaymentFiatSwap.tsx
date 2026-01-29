@@ -9,7 +9,7 @@ import { projectOwnerAtom } from '@/modules/project/state/projectAtom.ts'
 import { isAllOrNothing } from '@/utils'
 
 import { hasFiatPaymentMethodAtom } from '../../state/paymentMethodAtom.ts'
-import { FiatSwapStatus, fiatSwapStatusAtom } from './atom/fiatSwapStatusAtom.ts'
+import { fiatSwapStatusAtom } from './atom/fiatSwapStatusAtom.ts'
 import { FiatSwapAwaitingPayment } from './components/FiatSwapAwaitingPayment.tsx'
 import { FiatSwapContributorNotVerified } from './components/FiatSwapContributorNotVerified.tsx'
 import { FiatSwapFailed } from './components/FiatSwapFailed.tsx'
@@ -17,6 +17,7 @@ import { FiatSwapForm } from './components/FiatSwapForm.tsx'
 import { FiatSwapLoginRequired } from './components/FiatSwapLoginRequired.tsx'
 import { FiatSwapOwnerNotVerified } from './components/FiatSwapOwnerNotVerified.tsx'
 import { FiatSwapProcessing } from './components/FiatSwapProcessing.tsx'
+import { FiatSwapStatusView } from './components/FiatSwapStatusView.tsx'
 import { useFiatSwapPaymentSubscription } from './useFiatSwapPaymentSubscription.tsx'
 
 export const PaymentFiatSwap = () => {
@@ -55,21 +56,15 @@ export const PaymentFiatSwap = () => {
       return <FiatSwapLoginRequired />
     }
 
-    if (fiatSwapStatus === FiatSwapStatus.initial) {
-      return <FiatSwapForm />
-    }
-
-    if (fiatSwapStatus === FiatSwapStatus.pending) {
-      return <FiatSwapAwaitingPayment />
-    }
-
-    if (fiatSwapStatus === FiatSwapStatus.processing) {
-      return <FiatSwapProcessing />
-    }
-
-    if (fiatSwapStatus === FiatSwapStatus.failed) {
-      return <FiatSwapFailed />
-    }
+    return (
+      <FiatSwapStatusView
+        status={fiatSwapStatus}
+        renderInitial={() => <FiatSwapForm />}
+        renderPending={() => <FiatSwapAwaitingPayment />}
+        renderProcessing={() => <FiatSwapProcessing />}
+        renderFailed={() => <FiatSwapFailed />}
+      />
+    )
   }
 
   return (

@@ -1,19 +1,18 @@
 import { VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useTranslation } from 'react-i18next'
 
 import { Body, BodyProps } from '@/shared/components/typography/Body.tsx'
 
-import { isFiatSwapMethodAtom } from '../state/paymentMethodAtom.ts'
+import { isFiatPaymentRouteAtom } from '../state/paymentMethodAtom.ts'
 
 /** Displays the standard funding disclaimer text used across the application */
 export const FundingDisclaimer = (props: BodyProps) => {
-  const { t } = useTranslation()
-  const isFiatSwapMethod = useAtomValue(isFiatSwapMethodAtom)
+  const isFiatPaymentRoute = useAtomValue(isFiatPaymentRouteAtom)
 
   return (
     <VStack w="full">
-      {isFiatSwapMethod && (
+      {isFiatPaymentRoute && (
         <Body light size="xs" {...props}>
           {t(
             'Any sensitive information shared during the verification process is securly handled by the verification provider.',
