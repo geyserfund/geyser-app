@@ -1,13 +1,12 @@
 import { Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { PiArrowSquareOut } from 'react-icons/pi'
 import { useLocation, useNavigate } from 'react-router'
 import { SingleValue } from 'react-select'
 
 import { CustomSelect } from '@/components/ui/CustomSelect.tsx'
-import { useAuthContext } from '@/context/auth.tsx'
 import { useFundingAPI } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
 import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess.ts'
@@ -19,7 +18,7 @@ import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
 import { getPath, PathName } from '@/shared/constants/index.ts'
-import { useFundingFiatSwapPaymentCreateMutation } from '@/types/index.ts'
+import { useFundingFiatSwapPaymentCreateMutation, useGetUserIpCountryQuery } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { FundingDisclaimer } from '../../components/FundingDisclaimer.tsx'
@@ -28,7 +27,6 @@ import { fiatCheckoutMethods, fiatPaymentMethodAtom, hasFiatPaymentMethodAtom } 
 import { FiatSwapStatus, fiatSwapStatusAtom } from '../paymentFiatSwap/atom/fiatSwapStatusAtom.ts'
 import { BitcoinPurchaseNotice } from '../paymentFiatSwap/components/BitcoinPurchaseNotice.tsx'
 import { FiatSwapAwaitingPayment } from '../paymentFiatSwap/components/FiatSwapAwaitingPayment.tsx'
-import { FiatSwapContributorNotVerified } from '../paymentFiatSwap/components/FiatSwapContributorNotVerified.tsx'
 import { FiatSwapFailed } from '../paymentFiatSwap/components/FiatSwapFailed.tsx'
 import { FiatSwapProcessing } from '../paymentFiatSwap/components/FiatSwapProcessing.tsx'
 import { FiatSwapStatusView } from '../paymentFiatSwap/components/FiatSwapStatusView.tsx'
@@ -42,7 +40,6 @@ export const PaymentCreditCard = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { isLoggedIn } = useAuthContext()
   const { isFundingInputAmountValid, isFundingUserInfoValid, project } = useFundingFormAtom()
 
   const { requestFiatOnlyFundingFromContext, requestFundingOptions } = useFundingAPI()
@@ -83,12 +80,6 @@ export const PaymentCreditCard = () => {
       setFiatPaymentMethod(fiatCheckoutMethods.creditCard)
     }
   }, [location.pathname, setFiatPaymentMethod])
-
-  useEffect(() => {
-    if (isApplePay && !selectedCurrency) {
-      setSelectedCurrency('USD')
-    }
-  }, [isApplePay, selectedCurrency])
 
   useEffect(() => {
     if (!hasFiatPaymentMethod) {
@@ -160,7 +151,6 @@ export const PaymentCreditCard = () => {
         </H1>
         <VStack w="full" spacing={6}>
           {renderContent()}
-          {hasContribution && isLoggedIn && <FiatSwapContributorNotVerified />}
         </VStack>
       </VStack>
 
@@ -258,8 +248,66 @@ type CreditCardCurrencySelectProps = {
   onCurrencyChange: (currency: string) => void
 }
 
+const euroCountryCodes = new Set([
+  'AT',
+  'BE',
+  'HR',
+  'CY',
+  'EE',
+  'FI',
+  'FR',
+  'DE',
+  'GR',
+  'IE',
+  'IT',
+  'LV',
+  'LT',
+  'LU',
+  'MT',
+  'NL',
+  'PT',
+  'SK',
+  'SI',
+  'ES',
+])
+
 /** CreditCardCurrencySelect: renders the fiat currency dropdown for card payments */
 const CreditCardCurrencySelect = ({ selectedCurrencyOption, onCurrencyChange }: CreditCardCurrencySelectProps) => {
+  const hasDefaultCurrency = useRef(false)
+
+  const applyDefaultCurrency = useCallback(
+    (currency: string) => {
+      if (selectedCurrencyOption?.value || hasDefaultCurrency.current) {
+        return
+      }
+
+      hasDefaultCurrency.current = true
+      onCurrencyChange(currency)
+    },
+    [onCurrencyChange, selectedCurrencyOption?.value],
+  )
+
+  useGetUserIpCountryQuery({
+    onCompleted(data) {
+      const countryCode = data.userIpCountry?.toUpperCase() || ''
+
+      if (countryCode === 'GB' || countryCode === 'UK') {
+        applyDefaultCurrency('GBP')
+        return
+      }
+
+      if (countryCode && euroCountryCodes.has(countryCode)) {
+        applyDefaultCurrency('EUR')
+        return
+      }
+
+      applyDefaultCurrency('USD')
+    },
+    onError() {
+      applyDefaultCurrency('USD')
+    },
+  })
+
   return (
     <HStack w="full" alignItems="start" spacing={3} justifyContent="space-between" paddingTop={4}>
       <VStack w="full" alignItems="start" spacing={0}>
