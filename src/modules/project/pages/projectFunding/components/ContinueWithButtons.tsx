@@ -28,6 +28,13 @@ const getIsApplePayVisible = () => {
 
   const platform = navigator.platform || ''
   const userAgent = navigator.userAgent || ''
+  const vendor = navigator.vendor || ''
+
+  const isSafari = vendor.includes('Apple') || (/Safari/.test(userAgent) && !/Chrome|Chromium|CriOS/.test(userAgent))
+
+  if (!isSafari) {
+    return false
+  }
 
   if (platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
     return true
@@ -79,7 +86,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
     }
   }
 
-  const disableApplePay = true
+  const disableApplePay = false
 
   return (
     <VStack flexDirection={{ base: 'row', lg: 'column' }} w="full" spacing={3}>
