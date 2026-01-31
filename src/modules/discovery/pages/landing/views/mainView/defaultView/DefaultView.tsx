@@ -17,6 +17,7 @@ import { RecentLaunches } from './sections/RecentLaunches.tsx'
 import { RecommendedForYou } from './sections/RecommendedForYou.tsx'
 import { SuccessStories } from './sections/SuccessStories.tsx'
 import { TiaProjectsDisplayMostFundedThisWeek } from './sections/TiaProjectsDisplayMostFundedThisWeek.tsx'
+import { TitleBar } from './sections/TitleBar.tsx'
 
 export const DefaultView = () => {
   const [showBelowTheFold, setShowBelowTheFold] = useState(false)
@@ -33,6 +34,8 @@ export const DefaultView = () => {
   return (
     <VStack w="full" spacing={10} paddingTop="20px">
       <VStack w="full" spacing={20} paddingBottom={40}>
+        <TitleBar />
+
         <Stack direction={{ base: 'column', md: 'row' }} w="full" alignItems="stretch" spacing={{ base: 4, lg: 12 }}>
           <Featured />
           <RecommendedForYou />

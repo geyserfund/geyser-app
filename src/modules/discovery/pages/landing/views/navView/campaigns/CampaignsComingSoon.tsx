@@ -5,10 +5,8 @@ import {
   AccordionItem,
   AccordionPanel,
   Button,
-  HStack,
   Image,
   Link,
-  Stack,
   VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
@@ -21,13 +19,14 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { AllOrNothingCampaignsStartingImageUrl, getPath } from '@/shared/constants/index.ts'
-import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 
 import {
   CampaignsAlignIncentivesImageUrl,
   CampaignsFailFastImageUrl,
   CampaignsGoGlobalImageUrl,
 } from '../../../constants.ts'
+import { type CampaignCardProps } from '../components/CampaignCard.tsx'
+import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
 import { NewCampaigns } from './views/NewCampaigns.tsx'
 
 export const CampaignsComingSoon = () => {
@@ -50,27 +49,12 @@ export const CampaignsComingSoon = () => {
   }
 
   return (
-    <VStack w="full" gap={{ base: 10, lg: 12 }} paddingBottom={8} px={standardPadding}>
-      <VStack w="full" width="full" gap={1} alignItems="start">
-        <H2 size={{ base: 'xl', lg: '3xl' }} bold>
-          {t('All or Nothing Campaigns')}
-        </H2>
-        <Body size="md" textAlign="center">
-          {t('Fund big ideas, only if they Succeed')}
-        </Body>
-
-        <Stack
-          w="full"
-          gap={{ base: 4, lg: 8 }}
-          direction={{ base: 'column', md: 'row' }}
-          alignItems="stretch"
-          paddingTop={8}
-        >
-          {campaignCards.map((card) => (
-            <CampaignCard key={card.title} {...card} />
-          ))}
-        </Stack>
-      </VStack>
+    <VStack w="full" gap={{ base: 10, lg: 12 }} paddingBottom={8}>
+      <CampaignTitleBlock
+        title={t('All or Nothing Campaigns')}
+        description={t('Fund big ideas, only if they Succeed')}
+        campaignCards={campaignCards}
+      />
 
       <VStack w="full" gap={0} alignItems="start">
         <H2 size={{ base: 'xl', lg: '3xl' }} bold>
@@ -172,46 +156,24 @@ export const CampaignsComingSoon = () => {
   )
 }
 
-interface CampaignCardProps {
-  imageUrl: string
-  alt: string
-  title: string
-  description: string
-}
-
-const CampaignCard = ({ imageUrl, alt, title, description }: CampaignCardProps) => {
-  return (
-    <CardLayout flex={1} backgroundColor="neutral1.3" border="none" alignItems="center" borderRadius="20px">
-      <HStack gap={2} w="full" alignItems="start">
-        <Image src={imageUrl} alt={alt} boxSize={8} />
-        <Body size={{ ase: 'md', lg: 'lg' }} bold>
-          {t(title)}
-        </Body>
-      </HStack>
-
-      <Body size="sm">{t(description)}</Body>
-    </CardLayout>
-  )
-}
-
 const campaignCards: CampaignCardProps[] = [
   {
     imageUrl: CampaignsAlignIncentivesImageUrl,
     alt: 'Aligned incentives',
     title: 'Align the incentives',
-    description: 'Creators are paid only if the project is fully funded. If not, Contributors’ bitcoin is returned.',
+    description: 'Paid only if fully funded.',
   },
   {
     imageUrl: CampaignsFailFastImageUrl,
     alt: 'Fail fast, without burning trust',
-    title: 'Fail fast, without burning trust',
-    description: 'If a campaign fails, it fails cleanly. Funds go back to contributors and reputations stay intact.',
+    title: 'Fail without burning trust',
+    description: 'Refunds if it fails.',
   },
   {
     imageUrl: CampaignsGoGlobalImageUrl,
-    alt: 'Global by default, no borders',
-    title: 'Go Global with your campaign',
-    description: 'All-or-Nothing campaigns can be launched and funded from anywhere using Bitcoin.',
+    alt: 'Global, no borders',
+    title: 'Go Global',
+    description: 'Fund from anywhere.',
   },
 ]
 
