@@ -78,7 +78,7 @@ export const CampaignsComingSoon = () => {
           )}
         </Body>
         <Button size="xl" colorScheme="primary1" onClick={handleLaunchCampaignButtonClick}>
-          {t('Join the early launch')}
+          {t('Launch an All-or-Nothing campaign')}
         </Button>
 
         <Image

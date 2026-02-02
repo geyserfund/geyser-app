@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { Outlet, useNavigate } from 'react-router'
 
 import { getPath } from '@/shared/constants/index.ts'
+import { ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
 
 import { CampaignsGoGlobalImageUrl, FundraiserInstantImageUrl, FundraiserShopImageUrl } from '../../../constants.ts'
 import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
@@ -19,6 +20,14 @@ const tabs = [
   {
     label: `${t('In your region')}`,
     path: getPath('discoveryFundraisersInYourRegion'),
+  },
+  {
+    label: `⛏️ ${t(' Hardware products')}`,
+    path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.Hardware),
+  },
+  {
+    label: `🎵 ${t('Culture')}`,
+    path: getPath('discoveryFundraisersCategory', ProjectCategory.Culture),
   },
 ]
 

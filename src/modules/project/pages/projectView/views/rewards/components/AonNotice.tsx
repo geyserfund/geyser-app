@@ -16,11 +16,7 @@ export const AonNotice = () => {
 
   return (
     <Feedback variant={FeedBackVariant.PRIORITY} icon={<Icon as={PiClockCountdownFill} boxSize={7} />}>
-      <Body>
-        {t(
-          'These products are sold as part of an all-or-nothing campaign. The purchase will only complete if the project reaches its goal.',
-        )}
-      </Body>
+      <Body>{t('These products are part of an all-or-nothing campaign. You’re only charged if it’s funded.')}</Body>
     </Feedback>
   )
 }
