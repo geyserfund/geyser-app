@@ -1,9 +1,11 @@
 import { Button, HStack, Icon, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiHouse } from 'react-icons/pi'
+import { Link } from 'react-router'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
+import { getPath } from '@/shared/constants/index.ts'
 
 import { type CampaignCardProps, CampaignCard } from './CampaignCard.tsx'
 
@@ -25,7 +27,14 @@ export const CampaignTitleBlock = ({ campaignCards, title, description }: Campai
             {description}
           </Body>
         </VStack>
-        <Button variant="ghost" colorScheme="neutral1" size="lg" leftIcon={<Icon as={PiHouse} />}>
+        <Button
+          as={Link}
+          to={getPath('discoveryLanding')}
+          variant="ghost"
+          colorScheme="neutral1"
+          size="lg"
+          leftIcon={<Icon as={PiHouse} />}
+        >
           {t('Home')}
         </Button>
       </HStack>
