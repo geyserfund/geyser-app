@@ -34,20 +34,20 @@ const tabs = [
 const campaignCards = [
   {
     imageUrl: FundraiserInstantImageUrl,
-    alt: 'Aligned incentives',
-    title: 'Get funded instantly',
+    alt: 'Get funded instantly',
+    title: 'Receive instantly',
     description: 'Funds hit your wallet immediately',
   },
   {
     imageUrl: FundraiserShopImageUrl,
-    alt: 'Fail fast, without burning trust',
-    title: 'Sell & fund ongoing',
-    description: 'Sell products or raise continuously',
+    alt: 'Sell products',
+    title: 'Sell products',
+    description: 'Easily launch your own storefront',
   },
   {
     imageUrl: CampaignsGoGlobalImageUrl,
     alt: 'Go Global',
-    title: 'Go global',
+    title: 'Go Global',
     description: 'Fund from anywhere.',
   },
 ]
@@ -62,9 +62,16 @@ export const Fundraisers = () => {
         campaignCards={campaignCards}
       />
       <Tabs w="full" variant="secondary" onChange={(index) => navigate(tabs?.[index]?.path ?? '')}>
-        <TabList gap={4}>
+        <TabList gap={4} overflowX="auto">
           {tabs.map((tab) => (
-            <Tab key={tab.label} fontSize={{ base: 'xs', sm: 'md' }}>
+            <Tab
+              key={tab.label}
+              fontSize={{ base: 'xs', sm: 'md' }}
+              whiteSpace="nowrap"
+              overflow="visible"
+              maxW="none"
+              title={tab.label}
+            >
               {tab.label}
             </Tab>
           ))}

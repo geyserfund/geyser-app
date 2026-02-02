@@ -20,6 +20,7 @@ export const CampaignCard = ({ imageUrl, alt, title, description }: CampaignCard
       border="none"
       alignItems="left"
       borderRadius="8px"
+      minWidth="320px"
       padding={'8px 12px'}
     >
       <Image src={imageUrl} alt={alt} boxSize={14} />

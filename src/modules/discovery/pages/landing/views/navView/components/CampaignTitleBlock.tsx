@@ -30,7 +30,7 @@ export const CampaignTitleBlock = ({ campaignCards, title, description }: Campai
         </Button>
       </HStack>
 
-      <Stack w="full" gap={{ base: 4, lg: 8 }} direction={{ base: 'column', md: 'row' }} alignItems="stretch">
+      <Stack w="full" gap={{ base: 4, lg: 8 }} direction="row" alignItems="stretch" overflowX="auto">
         {campaignCards.map((card) => (
           <CampaignCard key={card.title} {...card} />
         ))}
