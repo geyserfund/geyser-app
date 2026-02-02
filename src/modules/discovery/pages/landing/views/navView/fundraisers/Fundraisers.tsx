@@ -3,6 +3,10 @@ import { t } from 'i18next'
 import { Outlet, useNavigate } from 'react-router'
 
 import { getPath } from '@/shared/constants/index.ts'
+import { ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
+
+import { CampaignsGoGlobalImageUrl, FundraiserInstantImageUrl, FundraiserShopImageUrl } from '../../../constants.ts'
+import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
 
 const tabs = [
   {
@@ -17,17 +21,57 @@ const tabs = [
     label: `${t('In your region')}`,
     path: getPath('discoveryFundraisersInYourRegion'),
   },
+  {
+    label: `⛏️ ${t(' Hardware products')}`,
+    path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.Hardware),
+  },
+  {
+    label: `🎵 ${t('Culture')}`,
+    path: getPath('discoveryFundraisersCategory', ProjectCategory.Culture),
+  },
 ]
 
+const campaignCards = [
+  {
+    imageUrl: FundraiserInstantImageUrl,
+    alt: 'Get funded instantly',
+    title: 'Receive instantly',
+    description: 'Funds hit your wallet immediately',
+  },
+  {
+    imageUrl: FundraiserShopImageUrl,
+    alt: 'Sell products',
+    title: 'Sell products',
+    description: 'Easily launch your own storefront',
+  },
+  {
+    imageUrl: CampaignsGoGlobalImageUrl,
+    alt: 'Go Global',
+    title: 'Go Global',
+    description: 'Fund from anywhere.',
+  },
+]
 export const Fundraisers = () => {
   const navigate = useNavigate()
 
   return (
     <>
+      <CampaignTitleBlock
+        title={t('Open Fundraisers')}
+        description={t('Fund your project as it grows')}
+        campaignCards={campaignCards}
+      />
       <Tabs w="full" variant="secondary" onChange={(index) => navigate(tabs?.[index]?.path ?? '')}>
-        <TabList gap={4}>
+        <TabList gap={4} overflowX="auto">
           {tabs.map((tab) => (
-            <Tab key={tab.label} fontSize={{ base: 'xs', sm: 'md' }}>
+            <Tab
+              key={tab.label}
+              fontSize={{ base: 'xs', sm: 'md' }}
+              whiteSpace="nowrap"
+              overflow="visible"
+              maxW="none"
+              title={tab.label}
+            >
               {tab.label}
             </Tab>
           ))}

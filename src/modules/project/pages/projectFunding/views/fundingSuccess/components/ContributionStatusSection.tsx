@@ -15,7 +15,7 @@ import { swapTransactionAtom } from '../../fundingPayment/views/paymentOnchain/s
 export const ContributionStatusSection = ({ isPending }: { isPending: boolean }) => {
   return (
     <VStack w="full" spacing={2} zIndex={1}>
-      {isPending && <Body size="md">{t('Your transaction is being processed. You can safely leave this page.')}</Body>}
+      {isPending && <Body size="md">{t("Your transaction is on it's way. Feel free to close this page.")}</Body>}
       <ViewContributionStatusButton isPending={isPending} />
       <ViewMempoolSpaceTransactionButton />
     </VStack>

@@ -147,6 +147,9 @@ export enum PathName {
   badges = 'badges',
   about = 'about',
 
+  category = 'category',
+  subCategory = 'subcategory',
+
   projectId = ':projectId',
   projectName = ':projectName',
   categoryName = ':category',
@@ -187,6 +190,8 @@ const pathsMap = {
   discoveryFundraisers: () => `/${PathName.fundraisers}`,
   discoveryFundraisersLatest: () => `/${PathName.fundraisers}/${PathName.latest}`,
   discoveryFundraisersInYourRegion: () => `/${PathName.fundraisers}/${PathName.inYourRegion}`,
+  discoveryFundraisersCategory: (category: string) => `/${PathName.fundraisers}/${PathName.category}/${category}`,
+  discoveryFundraisersSubCategory: (subCategory: string) => `/${PathName.fundraisers}/${PathName.subCategory}/${subCategory}`,
   discoveryProducts: () => `/${PathName.products}`,
   discoveryProjectCategory: (category: string) => `/${PathName.projectCategory}/${category}`,
   discoveryProjectSubCategory: (subCategory: string) => `/${PathName.projectSubCategory}/${subCategory}`,

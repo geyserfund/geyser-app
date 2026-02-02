@@ -933,6 +933,20 @@ export const platformRoutes: RouteObject[] = [
                   return { Component: InYourRegionFundraisers }
                 },
               },
+              {
+                path: getPath('discoveryFundraisersCategory', PathName.categoryName),
+                async lazy() {
+                  const CategoryFundraisers = await loadLandingPages().then((m) => m.CategoryFundraisers)
+                  return { Component: CategoryFundraisers }
+                },
+              },
+              {
+                path: getPath('discoveryFundraisersSubCategory', PathName.subCategoryName),
+                async lazy() {
+                  const CategoryFundraisers = await loadLandingPages().then((m) => m.CategoryFundraisers)
+                  return { Component: CategoryFundraisers }
+                },
+              },
             ],
           },
           {

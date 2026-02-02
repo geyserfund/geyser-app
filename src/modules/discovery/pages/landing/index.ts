@@ -5,6 +5,7 @@ import { InYourRegionCampaigns } from './views/navView/campaigns/views/InYourReg
 import { LatestCampaigns } from './views/navView/campaigns/views/LatestCampaigns.tsx'
 import { TrendingCampaigns } from './views/navView/campaigns/views/TrendingCampaigns.tsx'
 import { Fundraisers } from './views/navView/fundraisers/Fundraisers.tsx'
+import { CategoryFundraisers } from './views/navView/fundraisers/views/CategoryFundraisers.tsx'
 import { InYourRegionFundraisers } from './views/navView/fundraisers/views/InYourRegionFundraisers.tsx'
 import { LatestFundraisers } from './views/navView/fundraisers/views/LatestFundraisers.tsx'
 import { TrendingFundraisers } from './views/navView/fundraisers/views/TrendingFundraisers.tsx'
@@ -15,6 +16,7 @@ export {
   AlmostFundedCampaigns,
   AlmostOverCampaigns,
   Campaigns,
+  CategoryFundraisers,
   Fundraisers,
   InYourRegionCampaigns,
   InYourRegionFundraisers,

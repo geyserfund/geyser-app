@@ -53,8 +53,8 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   const isApplePayVisible = hasFiatPaymentMethod && getIsApplePayVisible()
   const applePayButtonBg = useColorModeValue('neutral.1000', 'neutral.1000')
   const applePayButtonText = useColorModeValue('neutral.0', 'neutral.0')
-  const creditCardIcon = <Icon as={FaCreditCard} color="blue.700" />
-  const bitcoinIcon = <Icon as={FaBitcoin} color="orange.500" />
+  const creditCardIcon = <Icon as={FaCreditCard} color="utils.text" />
+  const bitcoinIcon = <Icon as={FaBitcoin} color="utils.text" />
   const applePayIcon = <Icon as={AiFillApple} />
 
   const handleCreditCardClick = () => {
