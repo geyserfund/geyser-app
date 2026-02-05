@@ -12,7 +12,7 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { derivedDimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath } from '@/shared/constants/config/routerPaths.ts'
 
-import { ProjectLaunchStrategy } from '../../../projectCreation/views/launch/views/LaunchStrategySelection.tsx'
+import { ProjectLaunchStrategy } from '../../../projectCreation/views/launch/views/launchConstants.ts'
 import { FundingLayout } from '../../layouts/FundingLayout.tsx'
 import { QRCodeSizeMap } from './components/QRCodeComponent.tsx'
 
