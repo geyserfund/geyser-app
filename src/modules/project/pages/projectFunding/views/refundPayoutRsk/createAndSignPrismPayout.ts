@@ -116,8 +116,5 @@ export const createAndSignPrismWithdrawMessage = (params: {
 }) => {
   const { rskPrivateKey, ...messageParams } = params
   const digest = createPrismWithdrawMessage(messageParams)
-  console.log('=== Production Prism Withdraw Message Debug ===')
-  console.log('params', JSON.stringify(params))
-  console.log('=== End Production Prism Withdraw Message Debug ===')
   return signEIP712Message(digest, rskPrivateKey)
 }

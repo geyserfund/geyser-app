@@ -116,7 +116,9 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const payoutMetadata = payoutRequestData?.payoutRequest.payoutMetadata
   const contractType = payoutMetadata?.contractType
   const latestPayment = isProcessing
-    ? payout?.payments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0]
+    ? [...(payout?.payments ?? [])].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[
+        0
+      ]
     : null
   const isClaimable =
     isProcessing &&
