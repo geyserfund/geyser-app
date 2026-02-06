@@ -10,10 +10,15 @@ import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { isAllOrNothing } from '@/utils/index.ts'
 import { ProjectFundingStrategy } from '@/types/index.ts'
+import { isAllOrNothing } from '@/utils/index.ts'
 
-import { intendedPaymentMethodAtom, PaymentMethods } from '../../state/paymentMethodAtom.ts'
+import {
+  fiatCheckoutMethods,
+  fiatPaymentMethodAtom,
+  intendedPaymentMethodAtom,
+  PaymentMethods,
+} from '../../state/paymentMethodAtom.ts'
 import { PaymentDownloadRefundFile } from './PaymentDownloadRefundFile.tsx'
 import { PaymentLoadingContribution } from './PaymentLoadingContribution.tsx'
 
@@ -23,6 +28,7 @@ export const PaymentLoading = () => {
   const { user, loading: authLoading } = useAuthContext()
   const { project, loading: projectLoading } = useProjectAtom()
   const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
+  const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
   const [passwordConfirmed, setPasswordConfirmed] = useState(false)
   const [downloadedRefundFile, setDownloadedRefundFile] = useState(false)
   const [currentContributionId, setCurrentContributionId] = useState('')
@@ -30,7 +36,9 @@ export const PaymentLoading = () => {
   const handleNext = (contributionId?: string) => {
     const paymentPath =
       intendedPaymentMethod === PaymentMethods.fiatSwap
-        ? getPath('fundingPaymentFiatSwap', project.name)
+        ? fiatPaymentMethod === fiatCheckoutMethods.applePay
+          ? getPath('fundingPaymentApplePay', project.name)
+          : getPath('fundingPaymentCreditCard', project.name)
         : getPath('fundingPaymentLightning', project.name)
 
     navigate(
@@ -56,8 +64,7 @@ export const PaymentLoading = () => {
   }
 
   const creatorRskAddress = project?.rskEoa || ''
-  const isPrismTia =
-    project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
+  const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
 
   if (isAllOrNothing(project) || isPrismTia) {
     if (user?.id && !passwordConfirmed) {

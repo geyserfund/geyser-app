@@ -692,8 +692,8 @@ export const platformRoutes: RouteObject[] = [
                   {
                     path: getPath('fundingPaymentCard', PathName.projectName),
                     async lazy() {
-                      const PaymentCard = await loadProjectFundingPages().then((m) => m.PaymentCard)
-                      return { Component: PaymentCard }
+                      const PaymentFiatSwap = await loadProjectFundingPages().then((m) => m.PaymentFiatSwap)
+                      return { Component: PaymentFiatSwap }
                     },
                   },
                   {

@@ -16,13 +16,23 @@ export const useFiatSwapPaymentSubscription = ({ contributionUUID }: { contribut
     },
     onData(options) {
       if (options.data.data?.paymentStatusUpdated) {
-        if (options.data.data?.paymentStatusUpdated.paymentType === PaymentType.FiatToLightningSwap) {
-          if (options.data.data?.paymentStatusUpdated.status === PaymentStatus.Pending) {
-            setFiatSwapStatus(FiatSwapStatus.processing)
-          } else if (options.data.data?.paymentStatusUpdated.status === PaymentStatus.Failed) {
-            setFiatSwapStatus(FiatSwapStatus.failed)
-            setFiatFailureReason(options.data.data?.paymentStatusUpdated.failureReason || null)
-          }
+        const statusUpdated = options.data.data.paymentStatusUpdated
+
+        if (
+          statusUpdated.paymentType === PaymentType.FiatToLightningSwap &&
+          statusUpdated.status === PaymentStatus.Pending
+        ) {
+          setFiatSwapStatus(FiatSwapStatus.processing)
+          return
+        }
+
+        if (
+          (statusUpdated.paymentType === PaymentType.FiatToLightningSwap ||
+            statusUpdated.paymentType === PaymentType.LightningToRskSwap) &&
+          statusUpdated.status === PaymentStatus.Failed
+        ) {
+          setFiatSwapStatus(FiatSwapStatus.failed)
+          setFiatFailureReason(statusUpdated.failureReason || null)
         }
       }
     },
