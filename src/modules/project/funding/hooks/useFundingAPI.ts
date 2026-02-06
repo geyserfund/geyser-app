@@ -308,7 +308,7 @@ export const useFundingAPI = () => {
 }
 
 export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
-  const { project, projectOwner } = useProjectAtom()
+  const { project } = useProjectAtom()
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const userAccountKeyPair = useAtomValue(userAccountKeyPairAtom)

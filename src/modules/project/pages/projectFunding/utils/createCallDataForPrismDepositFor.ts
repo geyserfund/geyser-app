@@ -1,4 +1,4 @@
-import { type Address, encodeFunctionData } from 'viem'
+import { type Address, encodeFunctionData, type Hex } from 'viem'
 
 const PRISM_DEPOSIT_FOR_ABI = [
   {

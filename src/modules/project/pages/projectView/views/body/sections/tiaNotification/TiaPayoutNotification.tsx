@@ -8,7 +8,7 @@ import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
-import { ProjectFundingStrategy } from '@/types/index.ts'
+import { ProjectFundingStrategy, Satoshis } from '@/types/index.ts'
 
 import { useRefetchQueries } from '../aonNotification/hooks/useRefetchQueries.ts'
 import { usePrismWithdrawable } from './usePrismWithdrawable.ts'
@@ -25,7 +25,7 @@ export const TiaPayoutNotification = () => {
     rskAddress: projectRskEoa,
   })
   const withdrawableSats = withdrawable ? Number(withdrawable / 10000000000n) : 0
-  const withdrawableUsdCents = getUSDCentsAmount(withdrawableSats)
+  const withdrawableUsdCents = getUSDCentsAmount(withdrawableSats as Satoshis)
   const withdrawableUsd = withdrawableUsdCents / 100
   const hasMinimumNotice = withdrawableUsd >= 1 && withdrawableUsd < 10
 
