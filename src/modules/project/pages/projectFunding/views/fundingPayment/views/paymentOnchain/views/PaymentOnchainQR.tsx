@@ -37,7 +37,7 @@ export const PaymentOnchainQRContent = ({ address }: { address: string }) => {
   useListenOnchainTransactionUpdate()
 
   const { project } = useProjectAtom()
-  const creatorRskAddress = project?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+  const creatorRskAddress = project?.rskEoa || ''
   const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
   const isRskSwapFlow = isAllOrNothing(project) || isPrismTia
   const currentOnchainToRskSwapId = useAtomValue(currentOnChainToRskSwapIdAtom)

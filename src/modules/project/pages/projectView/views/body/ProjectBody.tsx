@@ -29,6 +29,7 @@ import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.
 import { FundNowWithLightning } from './sections/FundNowWithLightning.tsx'
 import { ProjectPromotionNotice } from './sections/ProjectPromotionNotice.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
+import { TiaRskEoaSetupNotice } from './sections/tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { TiaPayoutNotification } from './sections/tiaNotification/TiaPayoutNotification.tsx'
 
 export const ProjectBody = () => {
@@ -69,6 +70,7 @@ export const ProjectBody = () => {
         <CreatorVerificationNotice />
 
         <AonNotification />
+        <TiaRskEoaSetupNotice />
         <TiaPayoutNotification />
 
         <CreatorTools />

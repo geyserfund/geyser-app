@@ -1,4 +1,4 @@
-import { Button, Link, VStack } from '@chakra-ui/react'
+import { Button, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
@@ -7,54 +7,35 @@ import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPa
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { ProjectFundingStrategy } from '@/types/index.ts'
 
 import { useRefetchQueries } from '../aonNotification/hooks/useRefetchQueries.ts'
 import { usePrismWithdrawable } from './usePrismWithdrawable.ts'
 
-const KEY_CONFIG_DEADLINE = '30th of June 2026'
-const KEY_CONFIG_URL = 'https://guides.geyser.fund'
-
 export const TiaPayoutNotification = () => {
-  const { project, isProjectOwner, projectOwner } = useProjectAtom()
+  const { project, isProjectOwner } = useProjectAtom()
   const payoutRskModal = useModal()
   const { refetchQueriesOnPayoutSuccess } = useRefetchQueries()
   const { queryProject } = useProjectAPI()
+  const { getUSDCentsAmount } = useBTCConverter()
 
-  const creatorRskAddress = projectOwner?.user?.accountKeys?.rskKeyPair?.address || ''
+  const projectRskEoa = project?.rskEoa || ''
   const { withdrawable, isLoading } = usePrismWithdrawable({
-    projectId: project?.id,
-    receiver: creatorRskAddress,
+    rskAddress: projectRskEoa,
   })
   const withdrawableSats = withdrawable ? Number(withdrawable / 10000000000n) : 0
+  const withdrawableUsdCents = getUSDCentsAmount(withdrawableSats)
+  const withdrawableUsd = withdrawableUsdCents / 100
+  const hasMinimumNotice = withdrawableUsd >= 1 && withdrawableUsd < 10
 
   if (!project || !isProjectOwner || project.fundingStrategy !== ProjectFundingStrategy.TakeItAll) {
     return null
   }
 
-  const hasRskAddress = Boolean(creatorRskAddress)
+  const hasWithdrawable = withdrawable !== null && withdrawable > 0n && withdrawableUsd >= 1
 
-  const hasWithdrawable = withdrawable !== null && withdrawable > 0n
-
-  if (!hasRskAddress) {
-    return (
-      <Feedback variant={FeedBackVariant.INFO}>
-        <VStack spacing={4} align="stretch">
-          <Body size="xl" bold>
-            {t('Configure your account keys')}
-          </Body>
-          <Body dark>
-            {t(`Configure your account keys before ${KEY_CONFIG_DEADLINE} to continue receiving contributions after that date.`)}{' '}
-            <Link href={KEY_CONFIG_URL} isExternal textDecoration="underline">
-              {t('More information here.')}
-            </Link>
-          </Body>
-        </VStack>
-      </Feedback>
-    )
-  }
-
-  if (isLoading || !hasWithdrawable) {
+  if (!projectRskEoa || isLoading || !hasWithdrawable) {
     return null
   }
 
@@ -62,19 +43,43 @@ export const TiaPayoutNotification = () => {
     <>
       <Feedback variant={FeedBackVariant.SUCCESS}>
         <VStack spacing={4} align="stretch">
-          <Body size="xl" bold>
-            {t('Funds available to withdraw')}
-          </Body>
-          <Body dark>{t('You have funds ready in the Prism contract.')}</Body>
-          <Button colorScheme="primary1" variant="solid" size="lg" w="full" onClick={payoutRskModal.onOpen}>
-            {t('Withdraw funds')}
-          </Button>
+          <Stack
+            direction={{ base: 'column', md: 'row' }}
+            align={{ base: 'stretch', md: 'center' }}
+            justify="space-between"
+            spacing={3}
+            w="full"
+            flex="1"
+          >
+            <VStack align="start" spacing={2} flex="1">
+              <Body size="xl" bold>
+                {t('Funds available to withdraw')}
+              </Body>
+              <Body dark>
+                {hasMinimumNotice
+                  ? t('Minimum withdrawal is $10. You currently have funds below the minimum in your project wallet.')
+                  : t('You have funds ready in your project wallet.')}
+              </Body>
+            </VStack>
+            <Button
+              colorScheme="primary1"
+              variant="solid"
+              size="lg"
+              w={{ base: 'full', md: 'auto' }}
+              alignSelf={{ base: 'stretch', md: 'center' }}
+              ml={{ base: 0, md: 'auto' }}
+              onClick={payoutRskModal.onOpen}
+            >
+              {t('Withdraw funds')}
+            </Button>
+          </Stack>
         </VStack>
       </Feedback>
 
       <PayoutRsk
         {...payoutRskModal}
         project={project}
+        rskAddress={projectRskEoa}
         payoutAmountOverride={withdrawableSats}
         onCompleted={() => {
           refetchQueriesOnPayoutSuccess()

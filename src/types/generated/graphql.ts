@@ -2597,8 +2597,6 @@ export type PayoutMetadata = {
   aonContractAddress?: Maybe<Scalars['String']['output']>;
   contractType: PayoutContractType;
   nonce: Scalars['Int']['output'];
-  prismContractAddress?: Maybe<Scalars['String']['output']>;
-  prismDomainSeparator?: Maybe<Scalars['String']['output']>;
   projectKey?: Maybe<Scalars['String']['output']>;
   swapContractAddress: Scalars['String']['output'];
 };
@@ -4670,6 +4668,7 @@ export type UserProjectsArgs = {
 export type UserAccountKeys = {
   __typename?: 'UserAccountKeys';
   createdAt: Scalars['Date']['output'];
+  encryptedMnemonic?: Maybe<Scalars['String']['output']>;
   encryptedSeed: Scalars['String']['output'];
   id: Scalars['BigInt']['output'];
   rskKeyPair: RskKeyPair;
@@ -4678,6 +4677,7 @@ export type UserAccountKeys = {
 };
 
 export type UserAccountKeysUpdateInput = {
+  encryptedMnemonic: Scalars['String']['input'];
   encryptedSeed: Scalars['String']['input'];
   rskKeyPair: RskKeyPairInput;
 };
@@ -7123,8 +7123,6 @@ export type PayoutMetadataResolvers<ContextType = any, ParentType extends Resolv
   aonContractAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   contractType?: Resolver<ResolversTypes['PayoutContractType'], ParentType, ContextType>;
   nonce?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  prismContractAddress?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  prismDomainSeparator?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   projectKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   swapContractAddress?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -9280,7 +9278,7 @@ export type PayoutWithPaymentFragment = { __typename?: 'Payout', amount: number,
     & PaymentForPayoutRefundFragment
   )> };
 
-export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress?: string | null, contractType: PayoutContractType, prismContractAddress?: string | null, prismDomainSeparator?: string | null, projectKey?: string | null };
+export type PayoutMetadataFragment = { __typename?: 'PayoutMetadata', nonce: number, swapContractAddress: string, aonContractAddress?: string | null, contractType: PayoutContractType, projectKey?: string | null };
 
 export type ProjectPostFragment = { __typename?: 'Post', id: any, title: string, description: string, image?: string | null, content?: string | null, postType?: PostType | null, fundersCount: number, amountFunded: number, status: PostStatus, createdAt: string, publishedAt?: string | null, sentByEmailAt?: any | null };
 
@@ -9309,7 +9307,7 @@ export type ProjectLocationFragment = { __typename?: 'Location', region?: string
 
 export type ProjectKeysFragment = { __typename?: 'ProjectKeys', nostrKeys: { __typename?: 'NostrKeys', publicKey: { __typename?: 'NostrPublicKey', hex: string, npub: string } } };
 
-export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonGoal?: (
+export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
     & ProjectAonGoalForProjectPageFragment
   ) | null, location?: (
@@ -9379,7 +9377,7 @@ export type ShippingConfigFragment = { __typename?: 'ShippingConfig', id?: any |
 
 export type ShippingAddressFragment = { __typename?: 'ShippingAddress', id: string, postalCode: string, state?: string | null, fullName: string, country: string, city: string, addressLines: Array<string> };
 
-export type UserAccountKeysFragment = { __typename?: 'UserAccountKeys', id: any, encryptedSeed: string, createdAt: any, userId: any, updatedAt: any, rskKeyPair: { __typename?: 'RskKeyPair', address: string, derivationPath: string, publicKey: string } };
+export type UserAccountKeysFragment = { __typename?: 'UserAccountKeys', id: any, encryptedMnemonic?: string | null, encryptedSeed: string, createdAt: any, userId: any, updatedAt: any, rskKeyPair: { __typename?: 'RskKeyPair', address: string, derivationPath: string, publicKey: string } };
 
 export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: any, country?: string | null, legalEntityType: LegalEntityType, verified?: boolean | null } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } }, accountKeys?: { __typename?: 'UserAccountKeys', rskKeyPair: { __typename?: 'RskKeyPair', address: string } } | null };
 
@@ -9448,7 +9446,7 @@ export type FundingFiatSwapPaymentCreateMutationVariables = Exact<{
 }>;
 
 
-export type FundingFiatSwapPaymentCreateMutation = { __typename?: 'Mutation', contributionPaymentsAdd: { __typename?: 'ContributionPaymentsAddResponse', payments: { __typename?: 'ContributionPaymentsDetails', fiatToLightningSwap?: { __typename?: 'ContributionFiatToLightningSwapPaymentDetails', checkoutUrl: string } | null } } };
+export type FundingFiatSwapPaymentCreateMutation = { __typename?: 'Mutation', contributionPaymentsAdd: { __typename?: 'ContributionPaymentsAddResponse', payments: { __typename?: 'ContributionPaymentsDetails', fiatToLightningSwap?: { __typename?: 'ContributionFiatToLightningSwapPaymentDetails', checkoutUrl: string } | null, lightningToRskSwap?: { __typename?: 'ContributionLightningToRskSwapPaymentDetails' } & ContributionLightningToRskSwapPaymentDetailsFragment | null } } };
 
 export type PaymentSwapClaimTxSetMutationVariables = Exact<{
   input: PaymentSwapClaimTxSetInput;
@@ -11979,8 +11977,6 @@ export const PayoutMetadataFragmentDoc = gql`
   swapContractAddress
   aonContractAddress
   contractType
-  prismContractAddress
-  prismDomainSeparator
   projectKey
 }
     `;
@@ -12208,6 +12204,7 @@ export const ProjectPageBodyFragmentDoc = gql`
   followersCount
   rejectionReason
   fundingStrategy
+  rskEoa
   lastCreationStep
   launchScheduledAt
   category
@@ -12499,6 +12496,7 @@ export const UserAccountKeysFragmentDoc = gql`
     derivationPath
     publicKey
   }
+  encryptedMnemonic
   encryptedSeed
   createdAt
   userId
@@ -15764,10 +15762,13 @@ export const FundingFiatSwapPaymentCreateDocument = gql`
       fiatToLightningSwap {
         checkoutUrl
       }
+      lightningToRskSwap {
+        ...ContributionLightningToRskSwapPaymentDetails
+      }
     }
   }
 }
-    `;
+    ${ContributionLightningToRskSwapPaymentDetailsFragmentDoc}`;
 export type FundingFiatSwapPaymentCreateMutationFn = Apollo.MutationFunction<FundingFiatSwapPaymentCreateMutation, FundingFiatSwapPaymentCreateMutationVariables>;
 
 /**

@@ -24,7 +24,7 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
   const { project, formState } = useFundingFormAtom()
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
-  const creatorRskAddress = project?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+  const creatorRskAddress = project?.rskEoa || ''
   const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
 
   return (

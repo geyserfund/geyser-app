@@ -1,45 +1,19 @@
-import { useEffect, useMemo, useState } from 'react'
-import type { Address, Hex } from 'viem'
+import { useEffect, useState } from 'react'
+import type { Address } from 'viem'
 
-import { projectIdToProjectKey } from '@/modules/project/funding/utils/projectKey.ts'
 import { rootstockPublicClient } from '@/modules/project/pages/projectFunding/utils/viemClient.ts'
-import { VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS } from '@/shared/constants/config/env.ts'
-
-const prismWithdrawableAbi = [
-  {
-    name: 'withdrawable',
-    type: 'function',
-    stateMutability: 'view',
-    inputs: [
-      { name: 'receiver', type: 'address' },
-      { name: 'projectKey', type: 'bytes32' },
-    ],
-    outputs: [{ name: '', type: 'uint256' }],
-  },
-] as const
 
 type UsePrismWithdrawableParams = {
-  projectId?: number | string | bigint
-  receiver?: string
+  rskAddress?: string
 }
 
-export const usePrismWithdrawable = ({ projectId, receiver }: UsePrismWithdrawableParams) => {
+export const usePrismWithdrawable = ({ rskAddress }: UsePrismWithdrawableParams) => {
   const [withdrawable, setWithdrawable] = useState<bigint | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
 
-  const projectKey = useMemo(() => {
-    if (projectId === undefined || projectId === null) return null
-    try {
-      return projectIdToProjectKey(BigInt(projectId))
-    } catch (err) {
-      return null
-    }
-  }, [projectId])
-
   useEffect(() => {
-    const contractAddress = VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS?.trim()
-    if (!receiver || !projectKey || !contractAddress) {
+    if (!rskAddress) {
       setWithdrawable(null)
       return
     }
@@ -49,11 +23,8 @@ export const usePrismWithdrawable = ({ projectId, receiver }: UsePrismWithdrawab
     setError(null)
 
     rootstockPublicClient
-      .readContract({
-        address: contractAddress as Address,
-        abi: prismWithdrawableAbi,
-        functionName: 'withdrawable',
-        args: [receiver as Address, projectKey as Hex],
+      .getBalance({
+        address: rskAddress as Address,
       })
       .then((value) => {
         if (isMounted) {
@@ -75,7 +46,7 @@ export const usePrismWithdrawable = ({ projectId, receiver }: UsePrismWithdrawab
     return () => {
       isMounted = false
     }
-  }, [projectKey, receiver])
+  }, [rskAddress])
 
   return { withdrawable, isLoading, error }
 }

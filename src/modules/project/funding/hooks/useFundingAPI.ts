@@ -45,7 +45,6 @@ import {
 } from '../state/swapAtom.ts'
 import { rskAccountKeysAtom } from '../state/swapRskAtom.ts'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
-import { projectIdToProjectKey } from '../utils/projectKey.ts'
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundingFormAtom } from './useFundingFormAtom'
 import { useResetContribution } from './useResetContribution.ts'
@@ -308,7 +307,7 @@ export const useFundingAPI = () => {
   }
 }
 
-const useGenerateTransactionDataForClaimingRBTCToContract = () => {
+export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
   const { project, projectOwner } = useProjectAtom()
 
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
@@ -335,7 +334,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     claimAmountSats: number
     geyserFeesAmount: number
     contributorAddress: string
-    creatorRskAddress: string
+    projectRskEoa: string
     refundAddress: string
     timelock: number
     preimage: string
@@ -345,7 +344,7 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       claimAmountSats,
       geyserFeesAmount,
       contributorAddress,
-      creatorRskAddress,
+      projectRskEoa,
       refundAddress,
       timelock,
       preimage,
@@ -356,24 +355,21 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       throw new Error('Missing Prism contract or Geyser operational address configuration')
     }
 
-    if (!project?.id) {
-      throw new Error('Missing project id for Prism deposit')
-    }
-
-    const projectKey = projectIdToProjectKey(BigInt(project.id))
     const creatorAmountSats = claimAmountSats - geyserFeesAmount
     if (creatorAmountSats < 0) {
       throw new Error('Prism split amount is negative for creator')
+    }
+    if (creatorAmountSats + geyserFeesAmount !== claimAmountSats) {
+      throw new Error('Prism split amounts do not sum to claim amount')
     }
 
     const depositCallData = createCallDataForPrismDepositFor({
       payer: contributorAddress as `0x${string}`,
       receivers: [
-        creatorRskAddress as `0x${string}`,
+        projectRskEoa as `0x${string}`,
         VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS as `0x${string}`,
       ],
       amounts: [satsToWeiBigInt(creatorAmountSats), satsToWeiBigInt(geyserFeesAmount)],
-      projectKey,
     })
 
     return createCallDataForBoltzClaimCallWithCallee({
@@ -448,16 +444,16 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       throw new Error('Missing contributor RSK address for swap claim')
     }
     const isAonProject = project?.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-    const creatorRskAddress = projectOwner?.user?.accountKeys?.rskKeyPair?.address || ''
+    const projectRskEoa = project?.rskEoa || ''
     const geyserFeesAmount = getGeyserFeesAmount(fees)
 
     let claimTxCallDataHex = ''
-    if (!isAonProject && creatorRskAddress) {
+    if (!isAonProject && projectRskEoa) {
       claimTxCallDataHex = buildPrismClaimTxCallData({
         claimAmountSats,
         geyserFeesAmount,
         contributorAddress,
-        creatorRskAddress,
+        projectRskEoa,
         refundAddress: swap.refundAddress,
         timelock: swap.timeoutBlockHeight,
         preimage: preImages.preimageHex,
@@ -503,16 +499,16 @@ const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       throw new Error('Missing contributor RSK address for swap claim')
     }
     const isAonProject = project?.fundingStrategy === ProjectFundingStrategy.AllOrNothing
-    const creatorRskAddress = projectOwner?.user?.accountKeys?.rskKeyPair?.address || ''
+    const projectRskEoa = project?.rskEoa || ''
     const geyserFeesAmount = getGeyserFeesAmount(fees)
 
     let claimTxCallDataHex = ''
-    if (!isAonProject && creatorRskAddress) {
+    if (!isAonProject && projectRskEoa) {
       claimTxCallDataHex = buildPrismClaimTxCallData({
         claimAmountSats,
         geyserFeesAmount,
         contributorAddress,
-        creatorRskAddress,
+        projectRskEoa,
         refundAddress: swap.claimDetails.refundAddress,
         timelock: swap.claimDetails.timeoutBlockHeight,
         preimage: preImages.preimageHex,

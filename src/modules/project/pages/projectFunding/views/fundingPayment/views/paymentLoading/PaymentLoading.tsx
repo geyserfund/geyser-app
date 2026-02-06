@@ -55,7 +55,7 @@ export const PaymentLoading = () => {
     return null
   }
 
-  const creatorRskAddress = project?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+  const creatorRskAddress = project?.rskEoa || ''
   const isPrismTia =
     project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
 

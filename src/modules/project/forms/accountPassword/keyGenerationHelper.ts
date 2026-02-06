@@ -20,7 +20,12 @@ const derivationPathMapRSK = {
   [Network.MAINNET]: "m/44'/137'/0'/0/0",
 }
 
-const getEntropy = (bytes = 16) => {
+const projectDerivationPathMapRSK = {
+  [Network.TESTNET]: "m/44'/37310'/0'/1",
+  [Network.MAINNET]: "m/44'/137'/0'/1",
+}
+
+const getEntropy = (bytes = 32) => {
   const entropy = new Uint8Array(bytes)
   window.crypto.getRandomValues(entropy)
   return entropy
@@ -31,9 +36,8 @@ export const generateMnemonic = () => {
   return bip39.entropyToMnemonic(entropy, wordlist)
 }
 
-export const generateSeedHexForUser = () => {
+export const generateSeedDataForUser = () => {
   const mnemonic = generateMnemonic()
-  // console.log('checking what is mnemonic', mnemonic)
 
   if (!bip39.validateMnemonic(mnemonic, wordlist)) {
     throw new Error('Invalid mnemonic')
@@ -42,11 +46,14 @@ export const generateSeedHexForUser = () => {
   const seed = bip39.mnemonicToSeedSync(mnemonic)
   const seedHex = Buffer.from(seed).toString('hex')
 
-  return seedHex
+  return { mnemonic, seedHex }
 }
 
-/** Encrypts seed hex using AES-256-GCM with PBKDF2 key derivation */
-export const encryptSeed = async (seedHex: string, password: string): Promise<string> => {
+export const generateSeedHexForUser = () => {
+  return generateSeedDataForUser().seedHex
+}
+
+const encryptPayload = async (payload: Record<string, unknown>, password: string): Promise<string> => {
   try {
     // Generate random salt (16 bytes)
     const salt = window.crypto.getRandomValues(new Uint8Array(16))
@@ -77,16 +84,16 @@ export const encryptSeed = async (seedHex: string, password: string): Promise<st
       ['encrypt'],
     )
 
-    // Create JSON structure containing the seed
-    const seedJson = JSON.stringify({
-      seed: seedHex,
+    // Create JSON structure containing the payload
+    const payloadJson = JSON.stringify({
+      ...payload,
       version: '1.0',
       algorithm: 'AES-256-GCM',
       timestamp: Date.now(),
     })
 
     // Convert JSON string to bytes
-    const seedJsonBytes = new TextEncoder().encode(seedJson)
+    const payloadBytes = new TextEncoder().encode(payloadJson)
 
     // Encrypt the JSON data
     const encryptedData = await window.crypto.subtle.encrypt(
@@ -95,7 +102,7 @@ export const encryptSeed = async (seedHex: string, password: string): Promise<st
         iv,
       },
       key,
-      seedJsonBytes,
+      payloadBytes,
     )
 
     // Convert encrypted data to Uint8Array
@@ -116,22 +123,21 @@ export const encryptSeed = async (seedHex: string, password: string): Promise<st
     // Return as base64 encoded JSON string
     return Buffer.from(JSON.stringify(encryptedObject)).toString('base64')
   } catch (error) {
-    throw new Error(`Failed to encrypt seed: ${error instanceof Error ? error.message : 'Unknown error'}`)
+    throw new Error(`Failed to encrypt payload: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
 
-/** Decrypts seed hex using AES-256-GCM with PBKDF2 key derivation */
-export const decryptSeed = async (encryptedSeed: string, password: string): Promise<string> => {
+const decryptPayload = async (encryptedPayload: string, password: string): Promise<Record<string, unknown>> => {
   try {
     // Decode base64 to get JSON string
-    const jsonString = Buffer.from(encryptedSeed, 'base64').toString('utf8')
+    const jsonString = Buffer.from(encryptedPayload, 'base64').toString('utf8')
 
     // Parse JSON to extract components
     const encryptedObject = JSON.parse(jsonString)
 
     // Validate required fields
     if (!encryptedObject.iv || !encryptedObject.tag || !encryptedObject.data || !encryptedObject.salt) {
-      throw new Error('Invalid encrypted seed format: missing required fields')
+      throw new Error('Invalid encrypted payload format: missing required fields')
     }
 
     // Decode base64 components
@@ -181,25 +187,112 @@ export const decryptSeed = async (encryptedSeed: string, password: string): Prom
     // Convert decrypted bytes back to JSON string
     const decryptedJson = new TextDecoder().decode(decryptedData)
 
-    // Parse JSON and extract seed
-    const seedData = JSON.parse(decryptedJson)
+    // Parse JSON and extract payload
+    const payload = JSON.parse(decryptedJson)
 
-    // Validate the JSON structure
-    if (!seedData || typeof seedData.seed !== 'string') {
+    if (!payload || typeof payload !== 'object') {
+      throw new Error('Invalid encrypted payload format')
+    }
+
+    return payload as Record<string, unknown>
+  } catch (error) {
+    throw new Error(`Failed to decrypt payload: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+
+/** Encrypts seed hex using AES-256-GCM with PBKDF2 key derivation */
+export const encryptSeed = async (seedHex: string, password: string, mnemonic?: string): Promise<string> => {
+  return encryptPayload(
+    {
+      seed: seedHex,
+      ...(mnemonic ? { mnemonic } : {}),
+    },
+    password,
+  )
+}
+
+export type DecryptedSeedPayload = {
+  seed: string
+  mnemonic?: string
+}
+
+export const decryptSeedPayload = async (encryptedSeed: string, password: string): Promise<DecryptedSeedPayload> => {
+  try {
+    const seedData = await decryptPayload(encryptedSeed, password)
+    if (typeof seedData.seed !== 'string') {
       throw new Error('Invalid encrypted seed format: missing seed property')
     }
 
-    return seedData.seed
+    const mnemonic = typeof seedData.mnemonic === 'string' ? seedData.mnemonic : undefined
+    return {
+      seed: seedData.seed,
+      mnemonic,
+    }
   } catch (error) {
     throw new Error(`Failed to decrypt seed: ${error instanceof Error ? error.message : 'Unknown error'}`)
   }
 }
 
-export const generateKeysFromSeedHex = (seedHex: string): AccountKeys => {
-  const network = __production__ ? Network.MAINNET : Network.TESTNET
-  const derivationPath = derivationPathMapRSK[network]
+/** Decrypts seed hex using AES-256-GCM with PBKDF2 key derivation */
+export const decryptSeed = async (encryptedSeed: string, password: string): Promise<string> => {
+  const seedPayload = await decryptSeedPayload(encryptedSeed, password)
+  return seedPayload.seed
+}
+
+export const encryptMnemonic = async (mnemonic: string, password: string): Promise<string> => {
+  return encryptPayload({ mnemonic }, password)
+}
+
+export const decryptMnemonic = async (encryptedMnemonic: string, password: string): Promise<string> => {
+  try {
+    const payload = await decryptPayload(encryptedMnemonic, password)
+    if (typeof payload.mnemonic !== 'string') {
+      throw new Error('Invalid encrypted mnemonic format: missing mnemonic property')
+    }
+    return payload.mnemonic
+  } catch (error) {
+    throw new Error(`Failed to decrypt mnemonic: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
+}
+
+const normalizeMnemonic = (value: string) => value.trim().replace(/\s+/g, ' ')
+
+const seedInputToSeedHex = (seedInput: string) => {
+  const normalizedSeedInput = seedInput.trim()
+  const normalizedMnemonic = normalizeMnemonic(normalizedSeedInput)
+
+  if (bip39.validateMnemonic(normalizedMnemonic, wordlist)) {
+    return Buffer.from(bip39.mnemonicToSeedSync(normalizedMnemonic)).toString('hex')
+  }
+
+  const isHexSeed = /^[0-9a-fA-F]+$/.test(normalizedSeedInput)
+  if (isHexSeed && normalizedSeedInput.length % 2 === 0) {
+    return normalizedSeedInput
+  }
+
+  throw new Error('Invalid seed format')
+}
+
+export const getSeedWords = (seed: string, mnemonic?: string): string[] => {
+  if (mnemonic) {
+    const normalizedMnemonic = normalizeMnemonic(mnemonic)
+    if (bip39.validateMnemonic(normalizedMnemonic, wordlist)) {
+      return normalizedMnemonic.split(' ')
+    }
+  }
+
+  const normalizedSeed = normalizeMnemonic(seed)
+  if (bip39.validateMnemonic(normalizedSeed, wordlist)) {
+    return normalizedSeed.split(' ')
+  }
+
+  return []
+}
+
+const generateKeysFromSeedHexWithPath = (seedInput: string, derivationPath: string): AccountKeys => {
   const bitcoinNetwork = __production__ ? bitcoin.networks.bitcoin : bitcoin.networks.testnet
 
+  const seedHex = seedInputToSeedHex(seedInput)
   const seedFromSeedHex = Buffer.from(seedHex, 'hex')
 
   // Create BIP32 root from seed
@@ -241,6 +334,29 @@ export const generateKeysFromSeedHex = (seedHex: string): AccountKeys => {
     privateKey,
     publicKey,
   }
+}
+
+export const generateKeysFromSeedHex = (seedHex: string): AccountKeys => {
+  const network = __production__ ? Network.MAINNET : Network.TESTNET
+  const derivationPath = derivationPathMapRSK[network]
+  return generateKeysFromSeedHexWithPath(seedHex, derivationPath)
+}
+
+export const generateProjectKeysFromSeedHex = (seedHex: string, projectId: number | string | bigint): AccountKeys => {
+  const network = __production__ ? Network.MAINNET : Network.TESTNET
+  const projectIndex =
+    typeof projectId === 'bigint'
+      ? Number(projectId)
+      : typeof projectId === 'string'
+      ? Number.parseInt(projectId, 10)
+      : projectId
+
+  if (!Number.isFinite(projectIndex) || projectIndex < 0) {
+    throw new Error('Invalid project id for derivation path')
+  }
+
+  const derivationPath = `${projectDerivationPathMapRSK[network]}/${projectIndex}`
+  return generateKeysFromSeedHexWithPath(seedHex, derivationPath)
 }
 
 export const generateAccountKeys = (): AccountKeys => {

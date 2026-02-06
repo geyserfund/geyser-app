@@ -12,6 +12,7 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
+import { ProjectFundingStrategy } from '@/types/index.ts'
 
 const promotionsModalAtom = atomWithStorage('promotionsModal', false)
 
@@ -21,7 +22,10 @@ export const ProjectPromotionNotice = () => {
 
   const [isPromotionsModalOpen, setIsPromotionsModalOpen] = useAtom(promotionsModalAtom)
 
-  if (isPromotionsModalOpen || !isProjectOwner || isFundingDisabled()) {
+  const hasMigrationNotice =
+    isProjectOwner && project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project?.rskEoa
+
+  if (hasMigrationNotice || isPromotionsModalOpen || !isProjectOwner || isFundingDisabled()) {
     return null
   }
 

@@ -53,7 +53,7 @@ const ProjectCreationNavigation = (props: StackProps) => {
       { title: 'Products & Perks', path: getPath('launchProjectRewards', project?.id), isDisabled: !project.id },
       { title: 'Story', path: getPath('launchStory', project?.id), isDisabled: !project.id },
       { title: 'About You', path: getPath('launchAboutYou', project?.id), isDisabled: !project.id },
-      { title: 'Payment', path: getPath('launchPayment', project?.id), isDisabled: !project.id },
+      { title: 'Wallet', path: getPath('launchPayment', project?.id), isDisabled: !project.id },
       { title: 'Launch', path: getPath('launchFinalize', project?.id), isDisabled: !project.id },
     ],
     [project?.id],

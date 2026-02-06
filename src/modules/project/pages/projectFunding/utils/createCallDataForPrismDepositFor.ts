@@ -1,4 +1,4 @@
-import { type Address, encodeFunctionData, type Hex } from 'viem'
+import { type Address, encodeFunctionData } from 'viem'
 
 const PRISM_DEPOSIT_FOR_ABI = [
   {
@@ -9,7 +9,6 @@ const PRISM_DEPOSIT_FOR_ABI = [
       { name: 'payer', type: 'address' },
       { name: 'receivers', type: 'address[]' },
       { name: 'amounts', type: 'uint256[]' },
-      { name: 'projectKey', type: 'bytes32' },
     ],
     outputs: [],
   },
@@ -19,9 +18,8 @@ export const createCallDataForPrismDepositFor = (params: {
   payer: Address
   receivers: Address[]
   amounts: bigint[]
-  projectKey: Hex
 }): Hex => {
-  const { payer, receivers, amounts, projectKey } = params
+  const { payer, receivers, amounts } = params
 
   if (receivers.length !== amounts.length) {
     throw new Error('Receivers and amounts length mismatch for Prism deposit')
@@ -30,6 +28,6 @@ export const createCallDataForPrismDepositFor = (params: {
   return encodeFunctionData({
     abi: PRISM_DEPOSIT_FOR_ABI,
     functionName: 'depositFor',
-    args: [payer, receivers, amounts, projectKey],
+    args: [payer, receivers, amounts],
   })
 }

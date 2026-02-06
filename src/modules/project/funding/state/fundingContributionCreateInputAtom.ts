@@ -21,6 +21,10 @@ import { toInt } from '@/utils'
 import { userAccountKeysAtom } from '../../../auth/state/userAccountKeysAtom.ts'
 import { sourceResourceAtom } from '../../pages/projectView/state/sourceActivityAtom.ts'
 import {
+  intendedPaymentMethodAtom,
+  PaymentMethods,
+} from '../../pages/projectFunding/views/fundingPayment/state/paymentMethodAtom.ts'
+import {
   fundingProjectAtom,
   guardianBadgesCostAtoms,
   rewardsCostAtoms,
@@ -215,21 +219,26 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>(() => (
 const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const fundingProject = get(fundingProjectAtom)
   const userAccountKeys = get(userAccountKeysAtom)
+  const intendedPaymentMethod = get(intendedPaymentMethodAtom)
 
   const paymentsInput: ContributionPaymentsInput = {}
 
   const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
   const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
-  const creatorRskAddress = fundingProject?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+  const creatorRskAddress = fundingProject?.rskEoa || ''
   const usePrism =
     fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
+  const shouldIncludeFiat =
+    intendedPaymentMethod === PaymentMethods.fiatSwap || intendedPaymentMethod === PaymentMethods.card
 
   if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
-    paymentsInput.fiat = {
-      create: true,
-      stripe: {
-        returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
-      },
+    if (shouldIncludeFiat) {
+      paymentsInput.fiat = {
+        create: true,
+        stripe: {
+          returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
+        },
+      }
     }
     if (usePrism) {
       paymentsInput.lightningToRskSwap = {

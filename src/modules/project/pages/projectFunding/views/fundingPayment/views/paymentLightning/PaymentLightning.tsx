@@ -46,7 +46,7 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
   useListenFundingContributionSuccess()
 
   const { project } = useProjectAtom()
-  const creatorRskAddress = project?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+  const creatorRskAddress = project?.rskEoa || ''
   const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
   const isRskSwapFlow = isAllOrNothing(project) || isPrismTia
 
@@ -119,7 +119,7 @@ export const PaymentLightningAonComponent = () => {
   const location = useLocation()
 
   const { project } = useProjectAtom()
-  const creatorRskAddress = project?.owners?.[0]?.user?.accountKeys?.rskKeyPair?.address || ''
+  const creatorRskAddress = project?.rskEoa || ''
   const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
   const isRskSwapFlow = isAllOrNothing(project) || isPrismTia
 
