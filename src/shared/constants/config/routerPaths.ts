@@ -81,6 +81,7 @@ export enum PathName {
   launchPayment = 'payment',
   launchPaymentWallet = 'wallet',
   launchPaymentAccountPassword = 'account-password',
+  launchPaymentSeedWords = 'seed-words',
   launchPaymentTaxId = 'tax-id',
   launchFinalize = 'finalize',
 
@@ -191,7 +192,8 @@ const pathsMap = {
   discoveryFundraisersLatest: () => `/${PathName.fundraisers}/${PathName.latest}`,
   discoveryFundraisersInYourRegion: () => `/${PathName.fundraisers}/${PathName.inYourRegion}`,
   discoveryFundraisersCategory: (category: string) => `/${PathName.fundraisers}/${PathName.category}/${category}`,
-  discoveryFundraisersSubCategory: (subCategory: string) => `/${PathName.fundraisers}/${PathName.subCategory}/${subCategory}`,
+  discoveryFundraisersSubCategory: (subCategory: string) =>
+    `/${PathName.fundraisers}/${PathName.subCategory}/${subCategory}`,
   discoveryProducts: () => `/${PathName.products}`,
   discoveryProjectCategory: (category: string) => `/${PathName.projectCategory}/${category}`,
   discoveryProjectSubCategory: (subCategory: string) => `/${PathName.projectSubCategory}/${subCategory}`,
@@ -392,6 +394,8 @@ const pathsMap = {
     `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentWallet}`,
   launchPaymentAccountPassword: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentAccountPassword}`,
+  launchPaymentSeedWords: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentSeedWords}`,
   launchPaymentTaxId: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentTaxId}`,
   launchFinalize: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchFinalize}`,

@@ -181,8 +181,8 @@ export const platformRoutes: RouteObject[] = [
               {
                 path: getPath('launchPaymentWallet', PathName.projectId),
                 async lazy() {
-                  const LaunchPaymentWallet = await loadProjectCreationPages().then((m) => m.LaunchPaymentWallet)
-                  return { Component: LaunchPaymentWallet }
+                  const LaunchPaymentEmail = await loadProjectCreationPages().then((m) => m.LaunchPaymentEmail)
+                  return { Component: LaunchPaymentEmail }
                 },
               },
               {
@@ -192,6 +192,13 @@ export const platformRoutes: RouteObject[] = [
                     (m) => m.LaunchPaymentAccountPassword,
                   )
                   return { Component: LaunchPaymentAccountPassword }
+                },
+              },
+              {
+                path: getPath('launchPaymentSeedWords', PathName.projectId),
+                async lazy() {
+                  const LaunchPaymentSeedWords = await loadProjectCreationPages().then((m) => m.LaunchPaymentSeedWords)
+                  return { Component: LaunchPaymentSeedWords }
                 },
               },
               {
@@ -685,8 +692,8 @@ export const platformRoutes: RouteObject[] = [
                   {
                     path: getPath('fundingPaymentCard', PathName.projectName),
                     async lazy() {
-                      const PaymentCard = await loadProjectFundingPages().then((m) => m.PaymentCard)
-                      return { Component: PaymentCard }
+                      const PaymentFiatSwap = await loadProjectFundingPages().then((m) => m.PaymentFiatSwap)
+                      return { Component: PaymentFiatSwap }
                     },
                   },
                   {

@@ -5,10 +5,12 @@ import { useSetAtom } from 'jotai'
 import { useState } from 'react'
 import { useForm, UseFormReturn } from 'react-hook-form'
 import * as yup from 'yup'
+import { ReactNode } from 'react'
 
 import { ControlledCheckboxInput } from '@/shared/components/controlledInput/ControlledCheckboxInput.tsx'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import type { BodyProps } from '@/shared/components/typography/Body.tsx'
 import { UserAccountKeysFragment } from '@/types/index.ts'
 
 import { useUpdateAccountPassword } from '../hooks/useUpdateAccountPassword.ts'
@@ -26,6 +28,11 @@ export type CreatePasswordFormData = {
 export type CreatePasswordFormProps = {
   isCreator?: boolean
   form: UseFormReturn<CreatePasswordFormData>
+  introText?: string
+  introSize?: BodyProps['size']
+  importantContent?: ReactNode
+  showFeedback?: boolean
+  hidePasswordLabel?: boolean
 }
 
 const creatorText = t(
@@ -36,22 +43,36 @@ const contributorText = t(
 )
 
 /** Account password form component with password and repeat password fields */
-export const CreatePasswordForm = ({ form, isCreator }: CreatePasswordFormProps) => {
+export const CreatePasswordForm = ({
+  form,
+  isCreator,
+  introText,
+  introSize,
+  importantContent,
+  showFeedback,
+  hidePasswordLabel,
+}: CreatePasswordFormProps) => {
   const { control } = form
   const [showPassword, setShowPassword] = useState(false)
   const [showRepeatPassword, setShowRepeatPassword] = useState(false)
 
+  const bodyText = introText ?? (isCreator ? creatorText : contributorText)
+  const shouldRenderFeedback = !importantContent && showFeedback !== false
+  const passwordLabel = hidePasswordLabel ? undefined : t('Enter your password')
+  const passwordAriaLabel = hidePasswordLabel ? t('Enter your password') : undefined
+
   return (
     <VStack w="full" gap={4}>
       <VStack w="full" alignItems="start" gap={2}>
-        <Body>{isCreator ? creatorText : contributorText}</Body>
-        <FeedBackText isCreator={isCreator} />
+        <Body size={introSize}>{bodyText}</Body>
+        {importantContent || (shouldRenderFeedback ? <FeedBackText isCreator={isCreator} /> : null)}
       </VStack>
       <ControlledTextInput
         name="password"
         control={control}
-        label={t('Enter your password')}
+        label={passwordLabel}
         placeholder={t('Enter your password')}
+        aria-label={passwordAriaLabel}
         type={showPassword ? 'text' : 'password'}
         required
         rightAddon={

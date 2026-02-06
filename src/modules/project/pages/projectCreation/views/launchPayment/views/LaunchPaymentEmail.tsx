@@ -4,40 +4,32 @@ import { useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
-import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCreationStep } from '@/types/index.ts'
-import { isAllOrNothing, useNotification } from '@/utils/index.ts'
+import { useNotification } from '@/utils/index.ts'
 
-import { EnableFiatContributions } from '../../../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
-import { ConnectWallet } from '../components/ConnectWallet.tsx'
 
-export const LaunchPaymentWallet = () => {
+export const LaunchPaymentEmail = () => {
   const { user } = useAuthContext()
   const toast = useNotification()
   const { project } = useProjectAtom()
   const navigate = useNavigate()
-
-  const { wallet } = useWalletAtom()
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.Wallet,
     getPath('launchPaymentTaxId', project.id),
   )
 
-  const isAon = isAllOrNothing(project)
+  const hasEmail = Boolean(user.email)
+  const stepTitle = hasEmail ? t('Confirm your email') : t('Configure your email')
 
   const continueProps: ButtonProps = {
     onClick() {
       if (!user.isEmailVerified) {
         toast.error({ title: t('Creator email must be verified to continue') })
-        return
-      }
-
-      if (!isAon && !wallet?.id) {
-        toast.error({ title: t('Please connect a wallet to continue') })
         return
       }
 
@@ -51,22 +43,9 @@ export const LaunchPaymentWallet = () => {
     },
   }
 
-  const isIdentityVerified = Boolean(user.complianceDetails.verifiedDetails.identity?.verified)
-
   return (
-    <ProjectCreationPageWrapper
-      title={t('Payment Wallet')}
-      continueButtonProps={continueProps}
-      backButtonProps={backProps}
-    >
+    <ProjectCreationPageWrapper title={stepTitle} continueButtonProps={continueProps} backButtonProps={backProps}>
       <UpdateVerifyEmail inputWrapperProps={{ marginTop: 2 }} />
-      {!isAon && <ConnectWallet />}
-
-      {!isAon && (
-        <>
-          <EnableFiatContributions isIdentityVerified={isIdentityVerified} />
-        </>
-      )}
     </ProjectCreationPageWrapper>
   )
 }

@@ -21,6 +21,7 @@ export const projectCreationRoutesThatNeedStory = [
   getPath('launchPaymentWallet', PathName.projectId),
   getPath('launchPaymentTaxId', PathName.projectId),
   getPath('launchPaymentAccountPassword', PathName.projectId),
+  getPath('launchPaymentSeedWords', PathName.projectId),
   getPath('launchAboutYou', PathName.projectId),
   getPath('launchFinalize', PathName.projectId),
 ]

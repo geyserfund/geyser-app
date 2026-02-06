@@ -22,13 +22,23 @@ export type ProjectState = ProjectPageBodyFragment &
     grantApplications?: ProjectGrantApplicantFragment[]
   }
 
+export const normalizeProjectState = (project: Partial<ProjectState>): ProjectState => {
+  return {
+    ...(project as ProjectState),
+    images: Array.isArray(project.images) ? project.images : [],
+    links: Array.isArray(project.links) ? project.links : [],
+    owners: Array.isArray(project.owners) ? project.owners : [],
+    grantApplications: Array.isArray(project.grantApplications) ? project.grantApplications : [],
+  }
+}
+
 /** Project atom is the root project store */
 export const projectAtom = atom<ProjectState>({} as ProjectState)
 
 /** Partially Update the project atom with a project */
 export const partialUpdateProjectAtom = atom(null, (get, set, updateProject: Partial<ProjectState>) => {
   const projectData = get(projectAtom)
-  set(projectAtom, { ...projectData, ...updateProject })
+  set(projectAtom, normalizeProjectState({ ...projectData, ...updateProject }))
 })
 
 /** Update count of rewards, posts and entries */

@@ -41,7 +41,7 @@ export const paymentMethodAtom = atom((get) => {
     return PaymentMethods.onChain
   }
 
-  if (get(isCardMethodAtom)) {
+  if (get(isCardMethodAtom) || get(isCreditCardMethodAtom) || get(isApplePayMethodAtom)) {
     return PaymentMethods.card
   }
 
@@ -84,15 +84,7 @@ export const hasStripePaymentMethodAtom = atom((get) => {
   return false
 })
 
-export const hasFiatPaymentMethodAtom = atom((get) => {
-  const project = get(fundingProjectAtom)
-
-  if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
-    return false
-  }
-
-  return true
-})
+export const hasFiatPaymentMethodAtom = atom(() => true)
 
 /** Stores the user's intended payment method selection before navigating to payment loading */
 export const intendedPaymentMethodAtom = atom<PaymentMethods | undefined>(undefined)

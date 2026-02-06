@@ -12,25 +12,24 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess.ts'
 import { useResetContribution } from '@/modules/project/funding/hooks/useResetContribution.ts'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
-import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
-import { fundingPaymentDetailsPartialUpdateAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
 import { getPath, PathName } from '@/shared/constants/index.ts'
-import { useFundingFiatSwapPaymentCreateMutation, useGetUserIpCountryQuery } from '@/types/index.ts'
+import { useGetUserIpCountryQuery } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { FundingDisclaimer } from '../../components/FundingDisclaimer.tsx'
 import { ReachOutForHelpButton } from '../../components/ReachOutForHelpButton.tsx'
 import { fiatCheckoutMethods, fiatPaymentMethodAtom, hasFiatPaymentMethodAtom } from '../../state/paymentMethodAtom.ts'
-import { FiatSwapStatus, fiatSwapStatusAtom } from '../paymentFiatSwap/atom/fiatSwapStatusAtom.ts'
+import { fiatSwapStatusAtom } from '../paymentFiatSwap/atom/fiatSwapStatusAtom.ts'
 import { BitcoinPurchaseNotice } from '../paymentFiatSwap/components/BitcoinPurchaseNotice.tsx'
 import { FiatSwapAwaitingPayment } from '../paymentFiatSwap/components/FiatSwapAwaitingPayment.tsx'
 import { FiatSwapFailed } from '../paymentFiatSwap/components/FiatSwapFailed.tsx'
 import { FiatSwapProcessing } from '../paymentFiatSwap/components/FiatSwapProcessing.tsx'
 import { FiatSwapStatusView } from '../paymentFiatSwap/components/FiatSwapStatusView.tsx'
 import { banxaPaymentMethodIds, fiatSwapCurrencies } from '../paymentFiatSwap/data.ts'
+import { useCreateFiatSwapPayment } from '../paymentFiatSwap/hooks/useCreateFiatSwapPayment.ts'
 import { useFiatSwapPaymentSubscription } from '../paymentFiatSwap/useFiatSwapPaymentSubscription.tsx'
 
 /** PaymentCreditCard: handles credit card and apple pay Banxa flow without the payment method selection UI */
@@ -171,13 +170,7 @@ type FiatPaymentFormProps = {
 /** FiatPaymentForm: renders the currency selector and Banxa redirect action */
 const FiatPaymentForm = ({ isApplePay, selectedCurrency, onCurrencyChange }: FiatPaymentFormProps) => {
   const toast = useNotification()
-
-  const fundingContribution = useAtomValue(fundingContributionAtom)
-  const project = useAtomValue(fundingProjectAtom)
-  const updateFundingPaymentDetails = useSetAtom(fundingPaymentDetailsPartialUpdateAtom)
-  const setFiatSwapStatus = useSetAtom(fiatSwapStatusAtom)
-
-  const [createFiatSwapPayment, { loading: isLoading }] = useFundingFiatSwapPaymentCreateMutation()
+  const { createFiatSwapPayment, loading: isLoading } = useCreateFiatSwapPayment()
 
   const selectedCurrencyOption = useMemo(
     () => fiatSwapCurrencies.find((currency) => currency.value === selectedCurrency),
@@ -192,31 +185,10 @@ const FiatPaymentForm = ({ isApplePay, selectedCurrency, onCurrencyChange }: Fia
       return
     }
 
-    const { data } = await createFiatSwapPayment({
-      variables: {
-        input: {
-          contributionId: fundingContribution.id,
-          paymentsInput: {
-            fiatToLightningSwap: {
-              create: true,
-              banxa: {
-                fiatCurrency: selectedCurrency,
-                paymentMethodId: isApplePay ? banxaPaymentMethodIds.applePay : '',
-                returnUrl: `${window.location.origin}${getPath('fundingCallback', project.name)}`,
-              },
-            },
-          },
-        },
-      },
+    await createFiatSwapPayment({
+      fiatCurrency: selectedCurrency,
+      paymentMethodId: isApplePay ? banxaPaymentMethodIds.applePay : '',
     })
-
-    if (data?.contributionPaymentsAdd.payments.fiatToLightningSwap?.checkoutUrl) {
-      window.open(data.contributionPaymentsAdd.payments.fiatToLightningSwap.checkoutUrl, '_blank')
-      updateFundingPaymentDetails({
-        fiatToLightningSwap: data?.contributionPaymentsAdd.payments.fiatToLightningSwap,
-      })
-      setFiatSwapStatus(FiatSwapStatus.pending)
-    }
   }
 
   return (

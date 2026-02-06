@@ -19,6 +19,10 @@ import {
 import { toInt } from '@/utils'
 
 import { userAccountKeysAtom } from '../../../auth/state/userAccountKeysAtom.ts'
+import {
+  intendedPaymentMethodAtom,
+  PaymentMethods,
+} from '../../pages/projectFunding/views/fundingPayment/state/paymentMethodAtom.ts'
 import { sourceResourceAtom } from '../../pages/projectView/state/sourceActivityAtom.ts'
 import {
   fundingProjectAtom,
@@ -200,12 +204,19 @@ export const contributionCreatePreImagesAtom = atom<{
   onChain?: { preimageHex: string; preimageHash: string }
 }>({})
 
+export const contributionAddPaymentPreImagesAtom = atom<{
+  lightning?: { preimageHex: string; preimageHash: string }
+}>({})
+
 /** Reset funding input after request */
 export const resetFundingInputAfterRequestAtom = atom(null, (_, set) => {
   set(fundingInputAfterRequestAtom, null)
   set(contributionCreatePreImagesAtom, {
     lightning: { preimageHex: '', preimageHash: '' },
     onChain: { preimageHex: '', preimageHash: '' },
+  })
+  set(contributionAddPaymentPreImagesAtom, {
+    lightning: { preimageHex: '', preimageHash: '' },
   })
 })
 
@@ -215,28 +226,56 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>(() => (
 const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const fundingProject = get(fundingProjectAtom)
   const userAccountKeys = get(userAccountKeysAtom)
+  const intendedPaymentMethod = get(intendedPaymentMethodAtom)
 
   const paymentsInput: ContributionPaymentsInput = {}
 
   const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
   const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
+  const creatorRskAddress = fundingProject?.rskEoa || ''
+  const usePrism = fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
+  const shouldIncludeFiat =
+    intendedPaymentMethod === PaymentMethods.fiatSwap || intendedPaymentMethod === PaymentMethods.card
 
   if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
-    paymentsInput.fiat = {
-      create: true,
-      stripe: {
-        returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
-      },
+    if (shouldIncludeFiat) {
+      paymentsInput.fiat = {
+        create: true,
+        stripe: {
+          returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
+        },
+      }
     }
-    paymentsInput.lightning = {
-      create: true,
-      zapRequest: null,
-    }
-    paymentsInput.onChainSwap = {
-      create: true,
-      boltz: {
-        swapPublicKey: claimPublicKey,
-      },
+
+    if (usePrism) {
+      paymentsInput.lightningToRskSwap = {
+        create: true,
+        boltz: {
+          claimPublicKey,
+          claimAddress,
+          preimageHash: '',
+        },
+      }
+
+      paymentsInput.onChainToRskSwap = {
+        create: true,
+        boltz: {
+          claimPublicKey,
+          claimAddress,
+          preimageHash: '',
+        },
+      }
+    } else {
+      paymentsInput.lightning = {
+        create: true,
+        zapRequest: null,
+      }
+      paymentsInput.onChainSwap = {
+        create: true,
+        boltz: {
+          swapPublicKey: claimPublicKey,
+        },
+      }
     }
   }
 

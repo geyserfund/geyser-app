@@ -1,8 +1,10 @@
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { ReactNode } from 'react'
 
 import { UserAccountKeysFragment } from '@/types/index.ts'
+import type { BodyProps } from '@/shared/components/typography/Body.tsx'
 
 import { userAccountKeysAtom } from '../../../auth/state/userAccountKeysAtom.ts'
 import { ConfirmPasswordForm, useConfirmPasswordForm } from './components/ConfirmPasswordForm.tsx'
@@ -25,9 +27,18 @@ const FormTitles = {
 export const useAccountPasswordForm = ({
   onComplete,
   isCreator,
+  copy,
 }: {
   onComplete: (data?: UserAccountKeysFragment) => void
   isCreator?: boolean
+  copy?: {
+    titles?: Partial<Record<AccountPasswordTypes, string>>
+    introText?: Partial<Record<AccountPasswordTypes, string>>
+    introSize?: Partial<Record<AccountPasswordTypes, BodyProps['size']>>
+    importantContent?: ReactNode
+    showFeedback?: boolean
+    hidePasswordLabel?: boolean
+  }
 }): { renderForm: () => JSX.Element | null; currentForm: any; titles: string } => {
   const [accountPasswordType, setAccountPasswordType] = useState<AccountPasswordTypes>(AccountPasswordTypes.CREATE)
 
@@ -58,6 +69,12 @@ export const useAccountPasswordForm = ({
   })
   const recoverPasswordForm = useRecoverPasswordForm(handleRecoverPasswordSubmit)
 
+  const introText = copy?.introText?.[accountPasswordType]
+  const introSize = copy?.introSize?.[accountPasswordType]
+  const importantContent = copy?.importantContent
+  const showFeedback = copy?.showFeedback
+  const hidePasswordLabel = copy?.hidePasswordLabel
+
   const currentForm = useMemo(() => {
     switch (accountPasswordType) {
       case AccountPasswordTypes.CREATE:
@@ -82,13 +99,28 @@ export const useAccountPasswordForm = ({
   const renderForm = useCallback(() => {
     switch (accountPasswordType) {
       case AccountPasswordTypes.CREATE:
-        return <CreatePasswordForm form={createPasswordForm} isCreator={isCreator} />
+        return (
+          <CreatePasswordForm
+            form={createPasswordForm}
+            isCreator={isCreator}
+            introText={introText}
+            introSize={introSize}
+            importantContent={importantContent}
+            showFeedback={showFeedback}
+            hidePasswordLabel={hidePasswordLabel}
+          />
+        )
       case AccountPasswordTypes.CONFIRM:
         return (
           <ConfirmPasswordForm
             control={passwordConfirmationForm.control}
             onForgotPassword={handleForgotPassword}
             isCreator={isCreator}
+            introText={introText}
+            introSize={introSize}
+            importantContent={importantContent}
+            showFeedback={showFeedback}
+            hidePasswordLabel={hidePasswordLabel}
           />
         )
       case AccountPasswordTypes.RECOVER:
@@ -96,9 +128,20 @@ export const useAccountPasswordForm = ({
       default:
         return null
     }
-  }, [accountPasswordType, createPasswordForm, passwordConfirmationForm, recoverPasswordForm, isCreator])
+  }, [
+    accountPasswordType,
+    createPasswordForm,
+    passwordConfirmationForm,
+    recoverPasswordForm,
+    isCreator,
+    introText,
+    introSize,
+    importantContent,
+    showFeedback,
+    hidePasswordLabel,
+  ])
 
-  const titles = FormTitles[accountPasswordType]
+  const titles = copy?.titles?.[accountPasswordType] || FormTitles[accountPasswordType]
 
   return {
     renderForm,

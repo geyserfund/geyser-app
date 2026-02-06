@@ -60,6 +60,7 @@ interface HeaderDetailsProps extends StackProps {
 
 const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
   const { project, projectOwner, partialUpdateProject } = useProjectAtom()
+  const projectImages = project.images || []
 
   const [subscribers, setSubscribers] = useState(0)
   const isProjectSubscriptionEnabled = project && projectsWithSubscription.includes(project?.name)
@@ -119,7 +120,7 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
       {...props}
     >
       <Box
-        position={{ base: project.images[0] ? 'absolute' : 'unset', lg: 'unset' }}
+        position={{ base: projectImages[0] ? 'absolute' : 'unset', lg: 'unset' }}
         top={'-48px'}
         left={'16px'}
         zIndex={1}
@@ -241,12 +242,14 @@ const MobileBalanceInfo = () => {
 export const Header = () => {
   const { project, isProjectOwner, loading } = useProjectAtom()
   const { wallet } = useWalletAtom()
+  const projectImages = project.images || []
 
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const renderImageOrVideo = () => {
-    const isImage = validateImageUrl(project.images[0])
+    const primaryProjectImage = projectImages[0]
+    const isImage = validateImageUrl(primaryProjectImage)
 
     if (isImage) {
       return (
@@ -255,13 +258,13 @@ export const Header = () => {
           height="100%"
           maxHeight={dimensions.project.header.maxHeight}
           objectFit="contain"
-          src={project.images[0] || undefined}
+          src={primaryProjectImage || undefined}
           alt={`${project.title} project image`}
         />
       )
     }
 
-    return <VideoPlayer url={project.images[0]} />
+    return <VideoPlayer url={primaryProjectImage} />
   }
 
   if (loading) {
@@ -282,9 +285,9 @@ export const Header = () => {
       <CardLayout id={'HEADER_ITEM'} w="full" dense spacing={0} position="relative">
         <ProjectStatusBar project={project} wallet={wallet} isProjectOwner={isProjectOwner} />
 
-        {project.images.length === 1 && <Box>{renderImageOrVideo()}</Box>}
+        {projectImages.length === 1 && <Box>{renderImageOrVideo()}</Box>}
 
-        {project.images.length > 1 && <MediaCarousel altText={'Project header image'} links={project.images} />}
+        {projectImages.length > 1 && <MediaCarousel altText={'Project header image'} links={projectImages} />}
         <HeaderDetails onOpen={onOpen} />
         {isMobile && !hideProjectAmount && <MobileBalanceInfo />}
       </CardLayout>

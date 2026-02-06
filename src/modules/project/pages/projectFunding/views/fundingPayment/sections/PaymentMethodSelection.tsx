@@ -6,10 +6,11 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
 import { PathName } from '@/shared/constants'
-import { isAllOrNothing } from '@/utils'
 
 import {
-  hasStripePaymentMethodAtom,
+  fiatCheckoutMethods,
+  fiatPaymentMethodAtom,
+  hasFiatPaymentMethodAtom,
   isFiatSwapMethodStartedAtom,
   isOnchainMethodStartedAtom,
   paymentMethodAtom,
@@ -17,8 +18,7 @@ import {
 } from '../state/paymentMethodAtom.ts'
 
 export const PaymentMethodSelection = () => {
-  const { onChainAmountWarning, fiatSwapAmountWarning, project } = useFundingFormAtom()
-  const isAon = isAllOrNothing(project)
+  const { onChainAmountWarning, fiatSwapAmountWarning } = useFundingFormAtom()
 
   const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
   const user = fundingInputAfterRequest?.user
@@ -34,30 +34,23 @@ export const PaymentMethodSelection = () => {
     : ''
 
   const paymentMethod = useAtomValue(paymentMethodAtom)
+  const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
   const isOnchainMethodStarted = useAtomValue(isOnchainMethodStartedAtom)
   const isFiatSwapMethodStarted = useAtomValue(isFiatSwapMethodStartedAtom)
-  const hasStripePaymentOption = useAtomValue(hasStripePaymentMethodAtom)
+  const hasFiatPaymentOption = useAtomValue(hasFiatPaymentMethodAtom)
   const isDisabled = isOnchainMethodStarted || isFiatSwapMethodStarted || Boolean(!paymentMethod)
 
   const items: AnimatedNavBarItem[] = useMemo(() => {
     const navBarItems = [] as AnimatedNavBarItem[]
 
-    if (hasStripePaymentOption) {
+    if (hasFiatPaymentOption) {
       navBarItems.push({
         name: t('Card'),
         key: PaymentMethods.card,
-        path: PathName.fundingPaymentCard,
-        isDisabled,
-        disableClick: isDisabled,
-        replacePath: true,
-      })
-    }
-
-    if (isAon) {
-      navBarItems.push({
-        name: t('Credit Card'),
-        key: PaymentMethods.fiatSwap,
-        path: PathName.fundingPaymentFiatSwap,
+        path:
+          fiatPaymentMethod === fiatCheckoutMethods.applePay
+            ? PathName.fundingPaymentApplePay
+            : PathName.fundingPaymentCreditCard,
         isDisabled: isDisabled || Boolean(fiatSwapAmountWarning),
         disableClick: isDisabled || userLimitReached || Boolean(fiatSwapAmountWarning),
         tooltipLabel: userLimitReached ? fiatLimitMessage : fiatSwapAmountWarning,
@@ -88,8 +81,8 @@ export const PaymentMethodSelection = () => {
   }, [
     onChainAmountWarning,
     isOnchainMethodStarted,
-    hasStripePaymentOption,
-    isAon,
+    hasFiatPaymentOption,
+    fiatPaymentMethod,
     paymentMethod,
     fiatLimitMessage,
     fiatSwapAmountWarning,

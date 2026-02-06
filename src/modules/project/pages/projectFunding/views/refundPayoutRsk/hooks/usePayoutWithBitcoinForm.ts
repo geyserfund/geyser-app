@@ -21,10 +21,16 @@ export type BitcoinPayoutFormData = {
   accountPassword?: string
 }
 
+type PayoutKeyDerivationOptions = {
+  deriveKeysFromSeed?: (seedHex: string) => AccountKeys
+  storeKeyPair?: boolean
+}
+
 /** Custom hook for Bitcoin On-Chain payout form management */
 export const usePayoutWithBitcoinForm = (
   onSubmit: (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => Promise<void> | void,
   accountKeys?: AccountKeys,
+  keyDerivationOptions?: PayoutKeyDerivationOptions,
 ) => {
   const toast = useNotification()
 
@@ -81,12 +87,14 @@ export const usePayoutWithBitcoinForm = (
       if (!accountKeys) {
         const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed || '', data.accountPassword || '')
 
-        const accountKeys = generateKeysFromSeedHex(decryptedSeed)
+        const deriveKeysFromSeed = keyDerivationOptions?.deriveKeysFromSeed || generateKeysFromSeedHex
+        const derivedKeys = deriveKeysFromSeed(decryptedSeed)
 
-        setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
-        console.log('accountKeys', accountKeys)
+        if (keyDerivationOptions?.storeKeyPair !== false) {
+          setUserAccountKeyPair({ privateKey: derivedKeys.privateKey, publicKey: derivedKeys.publicKey })
+        }
 
-        onSubmit(data, accountKeys)
+        onSubmit(data, derivedKeys)
       } else {
         onSubmit(data, accountKeys)
       }

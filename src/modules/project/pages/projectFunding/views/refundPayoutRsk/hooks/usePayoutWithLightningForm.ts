@@ -18,10 +18,16 @@ export type LightningPayoutFormData = {
   accountPassword?: string
 }
 
+type PayoutKeyDerivationOptions = {
+  deriveKeysFromSeed?: (seedHex: string) => AccountKeys
+  storeKeyPair?: boolean
+}
+
 /** Custom hook for Lightning payout form management */
 export const usePayoutWithLightningForm = (
   onSubmit: (data: LightningPayoutFormData, accountKeys: AccountKeys) => Promise<void> | void,
   accountKeys?: AccountKeys,
+  keyDerivationOptions?: PayoutKeyDerivationOptions,
 ) => {
   const toast = useNotification()
 
@@ -65,11 +71,14 @@ export const usePayoutWithLightningForm = (
       if (!accountKeys) {
         const decryptedSeed = await decryptSeed(userAccountKeys?.encryptedSeed || '', data.accountPassword || '')
 
-        const accountKeys = generateKeysFromSeedHex(decryptedSeed)
+        const deriveKeysFromSeed = keyDerivationOptions?.deriveKeysFromSeed || generateKeysFromSeedHex
+        const derivedKeys = deriveKeysFromSeed(decryptedSeed)
 
-        setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
+        if (keyDerivationOptions?.storeKeyPair !== false) {
+          setUserAccountKeyPair({ privateKey: derivedKeys.privateKey, publicKey: derivedKeys.publicKey })
+        }
 
-        onSubmit(data, accountKeys)
+        onSubmit(data, derivedKeys)
       } else {
         onSubmit(data, accountKeys)
       }
