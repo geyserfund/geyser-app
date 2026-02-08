@@ -6,7 +6,7 @@ import { H1 } from '@/shared/components/typography'
 
 import { FundingDisclaimer } from './components/FundingDisclaimer.tsx'
 import { ReachOutForHelpButton } from './components/ReachOutForHelpButton'
-import { PaymentCard } from './views/PaymentCard'
+import { PaymentStripe } from './views/PaymentStripe'
 
 export const Subscription = () => {
   useListenFundingContributionSuccess()
@@ -17,7 +17,7 @@ export const Subscription = () => {
           {t('Subscribe')}
         </H1>
         <VStack w="full" spacing={6}>
-          <PaymentCard />
+          <PaymentStripe />
         </VStack>
       </VStack>
 

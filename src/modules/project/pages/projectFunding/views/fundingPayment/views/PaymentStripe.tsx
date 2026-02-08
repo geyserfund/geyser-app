@@ -21,7 +21,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   },
 }))
 
-export const PaymentCard = () => {
+export const PaymentStripe = () => {
   const classes = useStyles()
 
   useListenFundingContributionSuccess()

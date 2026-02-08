@@ -91,7 +91,6 @@ export const projectPostCreatorRoutes = [
 export const projectStoryCreatorRoutes = [getPath('projectStoryEdit', PathName.projectName)]
 
 export const projectFundingPaymentLightingRoutes = [getPath('fundingPaymentLightning', PathName.projectName)]
-export const projectFundingPaymentCardRoutes = [getPath('fundingPaymentCard', PathName.projectName)]
 export const projectFundingPaymentCreditCardRoutes = [getPath('fundingPaymentCreditCard', PathName.projectName)]
 export const projectFundingPaymentApplePayRoutes = [getPath('fundingPaymentApplePay', PathName.projectName)]
 
@@ -124,7 +123,6 @@ export const projectFundingPaymentFiatSwapRoutes = [getPath('fundingPaymentFiatS
 export const projectFundingPaymentCreatedRoutes = [
   getPath('fundingPayment', PathName.projectName),
   ...projectFundingPaymentLightingRoutes,
-  ...projectFundingPaymentCardRoutes,
   ...projectFundingPaymentFiatSwapRoutes,
   ...projectFundingPaymentCreditCardRoutes,
   ...projectFundingPaymentApplePayRoutes,

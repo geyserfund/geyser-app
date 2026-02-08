@@ -6,7 +6,6 @@ import { Funding } from './views/fundingPayment/Funding'
 import { FundingLaunchPayment } from './views/fundingPayment/FundingLaunchPayment.tsx'
 import { Payment } from './views/fundingPayment/Payment'
 import { Subscription } from './views/fundingPayment/Subscription'
-import { PaymentCard } from './views/fundingPayment/views/PaymentCard'
 import { PaymentCreditCard } from './views/fundingPayment/views/paymentCreditCard/PaymentCreditCard.tsx'
 import { PaymentFailed } from './views/fundingPayment/views/paymentFailed/PaymentFailed'
 import { PaymentFiatSwap } from './views/fundingPayment/views/paymentFiatSwap/PaymentFiatSwap.tsx'
@@ -18,6 +17,7 @@ import { PaymentOnchainPrompt } from './views/fundingPayment/views/paymentOnchai
 import { PaymentOnchainQR } from './views/fundingPayment/views/paymentOnchain/views/PaymentOnchainQR'
 import { PaymentOnChainRefund } from './views/fundingPayment/views/paymentOnchain/views/PaymentOnChainRefund'
 import { PaymentOnChainRefundInitiated } from './views/fundingPayment/views/paymentOnchain/views/PaymentOnChainRefundInitiated'
+import { PaymentStripe } from './views/fundingPayment/views/PaymentStripe'
 import { FundingSuccess } from './views/fundingSuccess/FundingSuccess'
 import { FundingSuccessIntermediate } from './views/fundingSuccess/FundingSuccessIntermediate'
 
@@ -30,7 +30,6 @@ export {
   FundingSuccess,
   FundingSuccessIntermediate,
   Payment,
-  PaymentCard,
   PaymentCreditCard,
   PaymentFailed,
   PaymentFiatSwap,
@@ -42,6 +41,7 @@ export {
   PaymentOnchainQR,
   PaymentOnChainRefund,
   PaymentOnChainRefundInitiated,
+  PaymentStripe,
   ProjectFunding,
   Subscription,
 }

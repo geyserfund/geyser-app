@@ -116,9 +116,9 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
         onClick={handleCreditCardClick}
         type={useFormSubmit ? 'submit' : 'button'}
         rightIcon={isMobile ? undefined : creditCardIcon}
-        aria-label={t('Continue with Credit Card')}
+        aria-label={t('Continue with Card or Bank Transfer')}
       >
-        {isMobile ? creditCardIcon : t('Continue with Credit Card')}
+        {isMobile ? creditCardIcon : t('Continue with Card or Bank Transfer')}
       </Button>
       <Button
         id="continue-with-bitcoin"

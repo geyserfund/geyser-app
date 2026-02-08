@@ -21,7 +21,12 @@ import { useNotification } from '@/utils/index.ts'
 
 import { FundingDisclaimer } from '../../components/FundingDisclaimer.tsx'
 import { ReachOutForHelpButton } from '../../components/ReachOutForHelpButton.tsx'
-import { fiatCheckoutMethods, fiatPaymentMethodAtom, hasFiatPaymentMethodAtom } from '../../state/paymentMethodAtom.ts'
+import {
+  fiatCheckoutMethods,
+  fiatPaymentMethodAtom,
+  hasFiatPaymentMethodAtom,
+  hasStripePaymentMethodAtom,
+} from '../../state/paymentMethodAtom.ts'
 import { fiatSwapStatusAtom } from '../paymentFiatSwap/atom/fiatSwapStatusAtom.ts'
 import { BitcoinPurchaseNotice } from '../paymentFiatSwap/components/BitcoinPurchaseNotice.tsx'
 import { FiatSwapAwaitingPayment } from '../paymentFiatSwap/components/FiatSwapAwaitingPayment.tsx'
@@ -31,6 +36,7 @@ import { FiatSwapStatusView } from '../paymentFiatSwap/components/FiatSwapStatus
 import { banxaPaymentMethodIds, fiatSwapCurrencies } from '../paymentFiatSwap/data.ts'
 import { useCreateFiatSwapPayment } from '../paymentFiatSwap/hooks/useCreateFiatSwapPayment.ts'
 import { useFiatSwapPaymentSubscription } from '../paymentFiatSwap/useFiatSwapPaymentSubscription.tsx'
+import { PaymentStripe } from '../PaymentStripe.tsx'
 
 /** PaymentCreditCard: handles credit card and apple pay Banxa flow without the payment method selection UI */
 export const PaymentCreditCard = () => {
@@ -41,7 +47,7 @@ export const PaymentCreditCard = () => {
 
   const { isFundingInputAmountValid, isFundingUserInfoValid, project } = useFundingFormAtom()
 
-  const { requestFiatOnlyFundingFromContext, requestFundingOptions } = useFundingAPI()
+  const { requestFiatOnlyFundingFromContext, requestFundingFromContext, requestFundingOptions } = useFundingAPI()
   const resetContribution = useResetContribution()
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
@@ -51,6 +57,7 @@ export const PaymentCreditCard = () => {
   const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
   const setFiatPaymentMethod = useSetAtom(fiatPaymentMethodAtom)
   const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
+  const hasStripePaymentMethod = useAtomValue(hasStripePaymentMethodAtom)
 
   const [selectedCurrency, setSelectedCurrency] = useState('')
 
@@ -97,7 +104,10 @@ export const PaymentCreditCard = () => {
 
     if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid && !hasRequestedContribution.current) {
       hasRequestedContribution.current = true
-      requestFiatOnlyFundingFromContext((data) => {
+      const requestFundingMethod = hasStripePaymentMethod
+        ? requestFundingFromContext
+        : requestFiatOnlyFundingFromContext
+      requestFundingMethod((data) => {
         const contributionId = data.contributionCreate.contribution.uuid
 
         if (contributionId && data.contributionCreate.contribution.isSubscription) {
@@ -111,8 +121,16 @@ export const PaymentCreditCard = () => {
         }
       })
     }
-    // NOTE: adding `requestFiatOnlyFundingFromContext` to dependencies causes rerender loops, do not add until resolved
-  }, [isFundingInputAmountValid, isFundingUserInfoValid, navigate, project.name, hasContribution, hasFiatPaymentMethod])
+    // NOTE: adding request funding callbacks to dependencies causes rerender loops, do not add until resolved
+  }, [
+    isFundingInputAmountValid,
+    isFundingUserInfoValid,
+    navigate,
+    project.name,
+    hasContribution,
+    hasFiatPaymentMethod,
+    hasStripePaymentMethod,
+  ])
 
   useEffect(() => {
     if (requestFundingOptions.error) {
@@ -123,6 +141,10 @@ export const PaymentCreditCard = () => {
   const renderContent = () => {
     if (!hasContribution) {
       return <PaymentCreditCardLoading />
+    }
+
+    if (hasStripePaymentMethod) {
+      return <PaymentStripe />
     }
 
     return (
@@ -146,7 +168,7 @@ export const PaymentCreditCard = () => {
     <>
       <VStack flex={1} w="full" alignItems="start">
         <H1 size="2xl" bold>
-          {isApplePay ? t('Apple Pay Payment') : t('Credit Card or Bank Transfer')}
+          {isApplePay ? t('Apple Pay Payment') : t('Card or Bank Transfer')}
         </H1>
         <VStack w="full" spacing={6}>
           {renderContent()}

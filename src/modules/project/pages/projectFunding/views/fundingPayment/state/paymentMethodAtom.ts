@@ -2,7 +2,6 @@ import { atom } from 'jotai'
 
 import {
   projectFundingPaymentApplePayRoutes,
-  projectFundingPaymentCardRoutes,
   projectFundingPaymentCreditCardRoutes,
   projectFundingPaymentFiatSwapRoutes,
   projectFundingPaymentLightingRoutes,
@@ -41,7 +40,7 @@ export const paymentMethodAtom = atom((get) => {
     return PaymentMethods.onChain
   }
 
-  if (get(isCardMethodAtom) || get(isCreditCardMethodAtom) || get(isApplePayMethodAtom)) {
+  if (get(isCreditCardMethodAtom) || get(isApplePayMethodAtom)) {
     return PaymentMethods.card
   }
 
@@ -53,7 +52,6 @@ export const paymentMethodAtom = atom((get) => {
 })
 
 export const isLightingMethodAtom = atom(routeMatchForAtom(projectFundingPaymentLightingRoutes))
-export const isCardMethodAtom = atom(routeMatchForAtom(projectFundingPaymentCardRoutes))
 export const isOnchainMethodAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainRoutes))
 export const isFiatSwapMethodAtom = atom(routeMatchForAtom(projectFundingPaymentFiatSwapRoutes))
 export const isCreditCardMethodAtom = atom(routeMatchForAtom(projectFundingPaymentCreditCardRoutes))
