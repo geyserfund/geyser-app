@@ -221,7 +221,22 @@ export const resetFundingInputAfterRequestAtom = atom(null, (_, set) => {
 })
 
 /** Payments input for fiat-only contribution creation */
-export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>(() => ({}))
+export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
+  const fundingProject = get(fundingProjectAtom)
+
+  if (fundingProject.fundingStrategy !== ProjectFundingStrategy.TakeItAll) {
+    return {}
+  }
+
+  return {
+    fiat: {
+      create: true,
+      stripe: {
+        returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
+      },
+    },
+  }
+})
 
 const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const fundingProject = get(fundingProjectAtom)

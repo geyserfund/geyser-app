@@ -47,7 +47,7 @@ export const PaymentCreditCard = () => {
 
   const { isFundingInputAmountValid, isFundingUserInfoValid, project } = useFundingFormAtom()
 
-  const { requestFiatOnlyFundingFromContext, requestFundingFromContext, requestFundingOptions } = useFundingAPI()
+  const { requestFiatOnlyFundingFromContext, requestFundingOptions } = useFundingAPI()
   const resetContribution = useResetContribution()
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
@@ -104,10 +104,7 @@ export const PaymentCreditCard = () => {
 
     if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid && !hasRequestedContribution.current) {
       hasRequestedContribution.current = true
-      const requestFundingMethod = hasStripePaymentMethod
-        ? requestFundingFromContext
-        : requestFiatOnlyFundingFromContext
-      requestFundingMethod((data) => {
+      requestFiatOnlyFundingFromContext((data) => {
         const contributionId = data.contributionCreate.contribution.uuid
 
         if (contributionId && data.contributionCreate.contribution.isSubscription) {
@@ -122,15 +119,7 @@ export const PaymentCreditCard = () => {
       })
     }
     // NOTE: adding request funding callbacks to dependencies causes rerender loops, do not add until resolved
-  }, [
-    isFundingInputAmountValid,
-    isFundingUserInfoValid,
-    navigate,
-    project.name,
-    hasContribution,
-    hasFiatPaymentMethod,
-    hasStripePaymentMethod,
-  ])
+  }, [isFundingInputAmountValid, isFundingUserInfoValid, navigate, project.name, hasContribution, hasFiatPaymentMethod])
 
   useEffect(() => {
     if (requestFundingOptions.error) {

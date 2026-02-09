@@ -3,7 +3,7 @@ import { EmbeddedCheckout, EmbeddedCheckoutProvider } from '@stripe/react-stripe
 import { loadStripe } from '@stripe/stripe-js'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { AppTheme } from '@/context'
@@ -29,8 +29,19 @@ export const PaymentStripe = () => {
   const [isCompleted, setIsCompleted] = useState(false)
 
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
+  const stripeClientSecret = useMemo(() => {
+    const clientSecret = fundingPaymentDetails.fiat?.stripeClientSecret
+    if (!clientSecret) return ''
+    if (!clientSecret.includes('%')) return clientSecret
 
-  if (!fundingPaymentDetails.fiat?.stripeClientSecret) {
+    try {
+      return decodeURIComponent(clientSecret)
+    } catch {
+      return clientSecret
+    }
+  }, [fundingPaymentDetails.fiat?.stripeClientSecret])
+
+  if (!stripeClientSecret) {
     return null
   }
 
@@ -39,7 +50,7 @@ export const PaymentStripe = () => {
       <EmbeddedCheckoutProvider
         stripe={stripePromise}
         options={{
-          clientSecret: fundingPaymentDetails.fiat.stripeClientSecret,
+          clientSecret: stripeClientSecret,
           onComplete() {
             setIsCompleted(true)
           },
@@ -47,6 +58,9 @@ export const PaymentStripe = () => {
       >
         <EmbeddedCheckout className={classes.container} />
       </EmbeddedCheckoutProvider>
+      <Body size="sm" light>
+        {t('This checkout is charged in USD. Your bank or card issuer may convert the amount to your local currency.')}
+      </Body>
       {isCompleted && (
         <Body size="sm" light>
           {t(
