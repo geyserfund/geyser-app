@@ -256,6 +256,7 @@ export type ContributionCreateInput = {
   geyserTipPercentage?: InputMaybe<Scalars['Float']['input']>;
   metadataInput?: InputMaybe<ContributionMetadataInput>;
   orderInput?: InputMaybe<OrderContributionInput>;
+  /** Optional payment instructions. If omitted or if no payment methods are requested, no payments will be created. */
   paymentsInput?: InputMaybe<ContributionPaymentsInput>;
   projectGoalId?: InputMaybe<Scalars['BigInt']['input']>;
   projectId: Scalars['BigInt']['input'];
@@ -299,7 +300,7 @@ export type ContributionFiatToLightningSwapPaymentDetails = {
 
 export type ContributionFiatToLightningSwapPaymentDetailsBanxaInput = {
   fiatCurrency: Scalars['String']['input'];
-  paymentMethodId: Scalars['String']['input'];
+  paymentMethodId?: InputMaybe<Scalars['String']['input']>;
   returnUrl: Scalars['String']['input'];
 };
 
@@ -1383,12 +1384,14 @@ export type Mutation = {
   contributionPaymentsAdd: ContributionPaymentsAddResponse;
   /** @deprecated Use projectCreate instead */
   createProject: Project;
+  createStripeConnectAccount: StripeConnectOnboardingPayload;
   creatorNotificationConfigurationValueUpdate?: Maybe<Scalars['Boolean']['output']>;
   grantApply: GrantApplicant;
   orderStatusUpdate?: Maybe<Order>;
   paymentCancel: PaymentCancelResponse;
   paymentConfirm: PaymentConfirmResponse;
   paymentFail: PaymentFailResponse;
+  paymentFeeUpsert: PaymentFeeUpsertResponse;
   paymentInvoiceCancel: PaymentInvoiceCancelResponse;
   paymentPend: PaymentPendResponse;
   paymentRefundComplete: PaymentRefundCompleteResponse;
@@ -1407,8 +1410,8 @@ export type Mutation = {
    */
   payoutCancel: PayoutResponse;
   /**
-   * Initiate the payout from the contract (AON or Prism) to swap contract.
-   * Only used for the initial flow (funds coming from the contract).
+   * Initiate the payout to swap contract.
+   * For AON this calls the contract; for Prism this broadcasts the user lock tx.
    */
   payoutInitiate: PayoutInitiateResponse;
   /**
@@ -1462,6 +1465,7 @@ export type Mutation = {
   /** Soft deletes the reward. */
   projectRewardDelete: Scalars['Boolean']['output'];
   projectRewardUpdate: ProjectReward;
+  projectRskEoaSet: Project;
   projectShippingConfigCreate: ShippingConfig;
   projectShippingConfigUpdate: ShippingConfig;
   projectStatusUpdate: Project;
@@ -1471,6 +1475,7 @@ export type Mutation = {
   projectUnfollow: Scalars['Boolean']['output'];
   projectUpdate: Project;
   publishNostrEvent?: Maybe<Scalars['Boolean']['output']>;
+  refreshStripeConnectOnboardingLink: StripeConnectOnboardingPayload;
   /**
    * Sends an OTP to the user's email address and responds with a token that can be used, together with the OTP, to two-factor authenticate
    * a request made by the client.
@@ -1535,6 +1540,11 @@ export type MutationCreateProjectArgs = {
 };
 
 
+export type MutationCreateStripeConnectAccountArgs = {
+  projectId: Scalars['BigInt']['input'];
+};
+
+
 export type MutationCreatorNotificationConfigurationValueUpdateArgs = {
   creatorNotificationConfigurationId: Scalars['BigInt']['input'];
   value: Scalars['String']['input'];
@@ -1563,6 +1573,11 @@ export type MutationPaymentConfirmArgs = {
 
 export type MutationPaymentFailArgs = {
   input: PaymentFailInput;
+};
+
+
+export type MutationPaymentFeeUpsertArgs = {
+  input: PaymentFeeUpsertInput;
 };
 
 
@@ -1801,6 +1816,11 @@ export type MutationProjectRewardUpdateArgs = {
 };
 
 
+export type MutationProjectRskEoaSetArgs = {
+  input: ProjectRskEoaSetInput;
+};
+
+
 export type MutationProjectShippingConfigCreateArgs = {
   input: CreateProjectShippingConfigInput;
 };
@@ -1843,6 +1863,11 @@ export type MutationProjectUpdateArgs = {
 
 export type MutationPublishNostrEventArgs = {
   event: Scalars['String']['input'];
+};
+
+
+export type MutationRefreshStripeConnectOnboardingLinkArgs = {
+  projectId: Scalars['BigInt']['input'];
 };
 
 
@@ -2311,6 +2336,22 @@ export enum PaymentFeeType {
   Tip = 'TIP'
 }
 
+export type PaymentFeeUpsertInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  external?: InputMaybe<Scalars['Boolean']['input']>;
+  feeAmount: Scalars['Int']['input'];
+  feeCurrency: FeeCurrency;
+  feePayer: PaymentFeePayer;
+  feeType: PaymentFeeType;
+  paymentId: Scalars['BigInt']['input'];
+};
+
+export type PaymentFeeUpsertResponse = {
+  __typename?: 'PaymentFeeUpsertResponse';
+  id: Scalars['BigInt']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
 export type PaymentGetInput = {
   invoiceId?: InputMaybe<Scalars['String']['input']>;
   onChainSwapId?: InputMaybe<Scalars['String']['input']>;
@@ -2573,7 +2614,7 @@ export type PayoutGetResponse = {
 };
 
 export type PayoutInitiateInput = {
-  /** The call data to initiate the payout. */
+  /** The call data to initiate the payout (AON only). */
   callDataHex: Scalars['String']['input'];
   /** Optional: The claim transaction hex (for RSK to on-chain swaps only) */
   claimTxHex?: InputMaybe<Scalars['String']['input']>;
@@ -2582,7 +2623,7 @@ export type PayoutInitiateInput = {
   rskAddress?: InputMaybe<Scalars['String']['input']>;
   /** The signature of the creator for RBTC payment */
   signature: Scalars['String']['input'];
-  /** Optional: The user lock transaction hex (for setting in payment details) */
+  /** Optional: The user lock transaction hex (required for Prism payouts) */
   userLockTxHex?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -2977,6 +3018,7 @@ export type Project = {
   rewardCurrency?: Maybe<RewardCurrency>;
   rewards: Array<ProjectReward>;
   rewardsCount?: Maybe<Scalars['Int']['output']>;
+  rskEoa?: Maybe<Scalars['String']['output']>;
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['String']['output']>;
   /** @deprecated No longer supported */
@@ -3556,6 +3598,11 @@ export type ProjectRewardsStats = {
   count: Scalars['Int']['output'];
 };
 
+export type ProjectRskEoaSetInput = {
+  projectId: Scalars['BigInt']['input'];
+  rskEoa: Scalars['String']['input'];
+};
+
 export enum ProjectShippingConfigType {
   Flat = 'FLAT',
   Incremental = 'INCREMENTAL',
@@ -3886,6 +3933,7 @@ export type Query = {
   projectRewardsTrendingWeeklyGet: Array<ProjectRewardTrendingWeeklyGetRow>;
   projectShippingConfigsGet: Array<ShippingConfig>;
   projectStatsGet: ProjectStats;
+  projectStripeConnectStatus: StripeConnectStatus;
   projectSubscriptionPlan?: Maybe<ProjectSubscriptionPlan>;
   projectSubscriptionPlans: Array<ProjectSubscriptionPlan>;
   projectsAonAlmostFunded: ProjectsAonAlmostFundedResponse;
@@ -4120,6 +4168,11 @@ export type QueryProjectShippingConfigsGetArgs = {
 
 export type QueryProjectStatsGetArgs = {
   input: GetProjectStatsInput;
+};
+
+
+export type QueryProjectStripeConnectStatusArgs = {
+  projectId: Scalars['BigInt']['input'];
 };
 
 
@@ -4395,6 +4448,23 @@ export type StatsInterface = {
 
 export type StripeCheckoutSessionInput = {
   returnUrl: Scalars['String']['input'];
+};
+
+export type StripeConnectOnboardingPayload = {
+  __typename?: 'StripeConnectOnboardingPayload';
+  accountId: Scalars['String']['output'];
+  onboardingUrl: Scalars['String']['output'];
+  status: StripeConnectStatus;
+};
+
+export type StripeConnectStatus = {
+  __typename?: 'StripeConnectStatus';
+  accountId?: Maybe<Scalars['String']['output']>;
+  chargesEnabled: Scalars['Boolean']['output'];
+  detailsSubmitted: Scalars['Boolean']['output'];
+  disabledReason?: Maybe<Scalars['String']['output']>;
+  isReady: Scalars['Boolean']['output'];
+  payoutsEnabled: Scalars['Boolean']['output'];
 };
 
 export type Subscription = {
@@ -5322,6 +5392,8 @@ export type ResolversTypes = {
   PaymentFee: ResolverTypeWrapper<PaymentFee>;
   PaymentFeePayer: PaymentFeePayer;
   PaymentFeeType: PaymentFeeType;
+  PaymentFeeUpsertInput: PaymentFeeUpsertInput;
+  PaymentFeeUpsertResponse: ResolverTypeWrapper<PaymentFeeUpsertResponse>;
   PaymentGetInput: PaymentGetInput;
   PaymentInvoiceCancelResponse: ResolverTypeWrapper<PaymentInvoiceCancelResponse>;
   PaymentInvoiceSanctionCheckStatus: PaymentInvoiceSanctionCheckStatus;
@@ -5483,6 +5555,7 @@ export type ResolversTypes = {
   ProjectRewardsGroupedByRewardIdStats: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStats>;
   ProjectRewardsGroupedByRewardIdStatsProjectReward: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStatsProjectReward>;
   ProjectRewardsStats: ResolverTypeWrapper<ProjectRewardsStats>;
+  ProjectRskEoaSetInput: ProjectRskEoaSetInput;
   ProjectShippingConfigType: ProjectShippingConfigType;
   ProjectShippingConfigsGetInput: ProjectShippingConfigsGetInput;
   ProjectShippingRate: ResolverTypeWrapper<ProjectShippingRate>;
@@ -5545,6 +5618,8 @@ export type ResolversTypes = {
   StatsInterface: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['StatsInterface']>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   StripeCheckoutSessionInput: StripeCheckoutSessionInput;
+  StripeConnectOnboardingPayload: ResolverTypeWrapper<StripeConnectOnboardingPayload>;
+  StripeConnectStatus: ResolverTypeWrapper<StripeConnectStatus>;
   Subscription: ResolverTypeWrapper<{}>;
   SubscriptionCurrencyType: SubscriptionCurrencyType;
   SubscriptionPaymentConfirmationInput: SubscriptionPaymentConfirmationInput;
@@ -5827,6 +5902,8 @@ export type ResolversParentTypes = {
   PaymentFailInput: PaymentFailInput;
   PaymentFailResponse: PaymentFailResponse;
   PaymentFee: PaymentFee;
+  PaymentFeeUpsertInput: PaymentFeeUpsertInput;
+  PaymentFeeUpsertResponse: PaymentFeeUpsertResponse;
   PaymentGetInput: PaymentGetInput;
   PaymentInvoiceCancelResponse: PaymentInvoiceCancelResponse;
   PaymentInvoiceSanctionCheckStatusGetInput: PaymentInvoiceSanctionCheckStatusGetInput;
@@ -5964,6 +6041,7 @@ export type ResolversParentTypes = {
   ProjectRewardsGroupedByRewardIdStats: ProjectRewardsGroupedByRewardIdStats;
   ProjectRewardsGroupedByRewardIdStatsProjectReward: ProjectRewardsGroupedByRewardIdStatsProjectReward;
   ProjectRewardsStats: ProjectRewardsStats;
+  ProjectRskEoaSetInput: ProjectRskEoaSetInput;
   ProjectShippingConfigsGetInput: ProjectShippingConfigsGetInput;
   ProjectShippingRate: ProjectShippingRate;
   ProjectStatistics: ProjectStatistics;
@@ -6010,6 +6088,8 @@ export type ResolversParentTypes = {
   StatsInterface: ResolversInterfaceTypes<ResolversParentTypes>['StatsInterface'];
   String: Scalars['String']['output'];
   StripeCheckoutSessionInput: StripeCheckoutSessionInput;
+  StripeConnectOnboardingPayload: StripeConnectOnboardingPayload;
+  StripeConnectStatus: StripeConnectStatus;
   Subscription: {};
   SubscriptionPaymentConfirmationInput: SubscriptionPaymentConfirmationInput;
   Swap: Swap;
@@ -6691,12 +6771,14 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   contributionEmailUpdate?: Resolver<ResolversTypes['Contribution'], ParentType, ContextType, Partial<MutationContributionEmailUpdateArgs>>;
   contributionPaymentsAdd?: Resolver<ResolversTypes['ContributionPaymentsAddResponse'], ParentType, ContextType, RequireFields<MutationContributionPaymentsAddArgs, 'input'>>;
   createProject?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationCreateProjectArgs, 'input'>>;
+  createStripeConnectAccount?: Resolver<ResolversTypes['StripeConnectOnboardingPayload'], ParentType, ContextType, RequireFields<MutationCreateStripeConnectAccountArgs, 'projectId'>>;
   creatorNotificationConfigurationValueUpdate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreatorNotificationConfigurationValueUpdateArgs, 'creatorNotificationConfigurationId' | 'value'>>;
   grantApply?: Resolver<ResolversTypes['GrantApplicant'], ParentType, ContextType, Partial<MutationGrantApplyArgs>>;
   orderStatusUpdate?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationOrderStatusUpdateArgs, 'input'>>;
   paymentCancel?: Resolver<ResolversTypes['PaymentCancelResponse'], ParentType, ContextType, RequireFields<MutationPaymentCancelArgs, 'input'>>;
   paymentConfirm?: Resolver<ResolversTypes['PaymentConfirmResponse'], ParentType, ContextType, RequireFields<MutationPaymentConfirmArgs, 'input'>>;
   paymentFail?: Resolver<ResolversTypes['PaymentFailResponse'], ParentType, ContextType, RequireFields<MutationPaymentFailArgs, 'input'>>;
+  paymentFeeUpsert?: Resolver<ResolversTypes['PaymentFeeUpsertResponse'], ParentType, ContextType, RequireFields<MutationPaymentFeeUpsertArgs, 'input'>>;
   paymentInvoiceCancel?: Resolver<ResolversTypes['PaymentInvoiceCancelResponse'], ParentType, ContextType, RequireFields<MutationPaymentInvoiceCancelArgs, 'invoiceId'>>;
   paymentPend?: Resolver<ResolversTypes['PaymentPendResponse'], ParentType, ContextType, RequireFields<MutationPaymentPendArgs, 'input'>>;
   paymentRefundComplete?: Resolver<ResolversTypes['PaymentRefundCompleteResponse'], ParentType, ContextType, RequireFields<MutationPaymentRefundCompleteArgs, 'input'>>;
@@ -6744,6 +6826,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectRewardCurrencyUpdate?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<MutationProjectRewardCurrencyUpdateArgs, 'input'>>;
   projectRewardDelete?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectRewardDeleteArgs, 'input'>>;
   projectRewardUpdate?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<MutationProjectRewardUpdateArgs, 'input'>>;
+  projectRskEoaSet?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectRskEoaSetArgs, 'input'>>;
   projectShippingConfigCreate?: Resolver<ResolversTypes['ShippingConfig'], ParentType, ContextType, RequireFields<MutationProjectShippingConfigCreateArgs, 'input'>>;
   projectShippingConfigUpdate?: Resolver<ResolversTypes['ShippingConfig'], ParentType, ContextType, RequireFields<MutationProjectShippingConfigUpdateArgs, 'input'>>;
   projectStatusUpdate?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectStatusUpdateArgs, 'input'>>;
@@ -6753,6 +6836,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   projectUnfollow?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationProjectUnfollowArgs, 'input'>>;
   projectUpdate?: Resolver<ResolversTypes['Project'], ParentType, ContextType, RequireFields<MutationProjectUpdateArgs, 'input'>>;
   publishNostrEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationPublishNostrEventArgs, 'event'>>;
+  refreshStripeConnectOnboardingLink?: Resolver<ResolversTypes['StripeConnectOnboardingPayload'], ParentType, ContextType, RequireFields<MutationRefreshStripeConnectOnboardingLinkArgs, 'projectId'>>;
   sendOTPByEmail?: Resolver<ResolversTypes['OTPResponse'], ParentType, ContextType, RequireFields<MutationSendOtpByEmailArgs, 'input'>>;
   shippingAddressCreate?: Resolver<ResolversTypes['ShippingAddress'], ParentType, ContextType, RequireFields<MutationShippingAddressCreateArgs, 'input'>>;
   tagCreate?: Resolver<ResolversTypes['Tag'], ParentType, ContextType, RequireFields<MutationTagCreateArgs, 'input'>>;
@@ -6992,6 +7076,12 @@ export type PaymentFeeResolvers<ContextType = any, ParentType extends ResolversP
   feeCurrency?: Resolver<ResolversTypes['FeeCurrency'], ParentType, ContextType>;
   feePayer?: Resolver<Maybe<ResolversTypes['PaymentFeePayer']>, ParentType, ContextType>;
   feeType?: Resolver<Maybe<ResolversTypes['PaymentFeeType']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PaymentFeeUpsertResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PaymentFeeUpsertResponse'] = ResolversParentTypes['PaymentFeeUpsertResponse']> = {
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7295,6 +7385,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   rewardCurrency?: Resolver<Maybe<ResolversTypes['RewardCurrency']>, ParentType, ContextType>;
   rewards?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType>;
   rewardsCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  rskEoa?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   shortDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   sponsors?: Resolver<Array<ResolversTypes['Sponsor']>, ParentType, ContextType>;
   statistics?: Resolver<Maybe<ResolversTypes['ProjectStatistics']>, ParentType, ContextType>;
@@ -7745,6 +7836,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectRewardsTrendingWeeklyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingWeeklyGetRow']>, ParentType, ContextType>;
   projectShippingConfigsGet?: Resolver<Array<ResolversTypes['ShippingConfig']>, ParentType, ContextType, RequireFields<QueryProjectShippingConfigsGetArgs, 'input'>>;
   projectStatsGet?: Resolver<ResolversTypes['ProjectStats'], ParentType, ContextType, RequireFields<QueryProjectStatsGetArgs, 'input'>>;
+  projectStripeConnectStatus?: Resolver<ResolversTypes['StripeConnectStatus'], ParentType, ContextType, RequireFields<QueryProjectStripeConnectStatusArgs, 'projectId'>>;
   projectSubscriptionPlan?: Resolver<Maybe<ResolversTypes['ProjectSubscriptionPlan']>, ParentType, ContextType, RequireFields<QueryProjectSubscriptionPlanArgs, 'id'>>;
   projectSubscriptionPlans?: Resolver<Array<ResolversTypes['ProjectSubscriptionPlan']>, ParentType, ContextType, RequireFields<QueryProjectSubscriptionPlansArgs, 'input'>>;
   projectsAonAlmostFunded?: Resolver<ResolversTypes['ProjectsAonAlmostFundedResponse'], ParentType, ContextType, Partial<QueryProjectsAonAlmostFundedArgs>>;
@@ -7856,6 +7948,23 @@ export type StatsInterfaceResolvers<ContextType = any, ParentType extends Resolv
   totalUsd?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
 };
 
+export type StripeConnectOnboardingPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['StripeConnectOnboardingPayload'] = ResolversParentTypes['StripeConnectOnboardingPayload']> = {
+  accountId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  onboardingUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['StripeConnectStatus'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type StripeConnectStatusResolvers<ContextType = any, ParentType extends ResolversParentTypes['StripeConnectStatus'] = ResolversParentTypes['StripeConnectStatus']> = {
+  accountId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  chargesEnabled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  detailsSubmitted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  disabledReason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isReady?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  payoutsEnabled?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
   _?: SubscriptionResolver<Maybe<ResolversTypes['Boolean']>, "_", ParentType, ContextType>;
   activityCreated?: SubscriptionResolver<ResolversTypes['Activity'], "activityCreated", ParentType, ContextType, Partial<SubscriptionActivityCreatedArgs>>;
@@ -7922,6 +8031,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type UserAccountKeysResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserAccountKeys'] = ResolversParentTypes['UserAccountKeys']> = {
   createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  encryptedMnemonic?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   encryptedSeed?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   rskKeyPair?: Resolver<ResolversTypes['RskKeyPair'], ParentType, ContextType>;
@@ -8191,6 +8301,7 @@ export type Resolvers<ContextType = any> = {
   PaymentDetails?: PaymentDetailsResolvers<ContextType>;
   PaymentFailResponse?: PaymentFailResponseResolvers<ContextType>;
   PaymentFee?: PaymentFeeResolvers<ContextType>;
+  PaymentFeeUpsertResponse?: PaymentFeeUpsertResponseResolvers<ContextType>;
   PaymentInvoiceCancelResponse?: PaymentInvoiceCancelResponseResolvers<ContextType>;
   PaymentInvoiceSanctionCheckStatusResponse?: PaymentInvoiceSanctionCheckStatusResponseResolvers<ContextType>;
   PaymentMethods?: PaymentMethodsResolvers<ContextType>;
@@ -8289,6 +8400,8 @@ export type Resolvers<ContextType = any> = {
   SourceResource?: SourceResourceResolvers<ContextType>;
   Sponsor?: SponsorResolvers<ContextType>;
   StatsInterface?: StatsInterfaceResolvers<ContextType>;
+  StripeConnectOnboardingPayload?: StripeConnectOnboardingPayloadResolvers<ContextType>;
+  StripeConnectStatus?: StripeConnectStatusResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   Swap?: SwapResolvers<ContextType>;
   Tag?: TagResolvers<ContextType>;
@@ -9267,7 +9380,7 @@ export type PaymentForPayoutRefundFragment = { __typename?: 'Payment', id: any, 
     & RskToOnChainSwapPaymentDetailsFragment
   ) };
 
-export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', stripe: boolean } };
+export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fiat: { __typename?: 'FiatPaymentMethods', enabled: boolean, stripe: boolean } };
 
 export type ProjectSubscriptionPlansFragment = { __typename?: 'ProjectSubscriptionPlan', cost: number, currency: SubscriptionCurrencyType, description?: string | null, id: any, name: string, interval: UserSubscriptionInterval, projectId: any };
 
@@ -9446,7 +9559,10 @@ export type FundingFiatSwapPaymentCreateMutationVariables = Exact<{
 }>;
 
 
-export type FundingFiatSwapPaymentCreateMutation = { __typename?: 'Mutation', contributionPaymentsAdd: { __typename?: 'ContributionPaymentsAddResponse', payments: { __typename?: 'ContributionPaymentsDetails', fiatToLightningSwap?: { __typename?: 'ContributionFiatToLightningSwapPaymentDetails', checkoutUrl: string } | null, lightningToRskSwap?: { __typename?: 'ContributionLightningToRskSwapPaymentDetails' } & ContributionLightningToRskSwapPaymentDetailsFragment | null } } };
+export type FundingFiatSwapPaymentCreateMutation = { __typename?: 'Mutation', contributionPaymentsAdd: { __typename?: 'ContributionPaymentsAddResponse', payments: { __typename?: 'ContributionPaymentsDetails', fiatToLightningSwap?: { __typename?: 'ContributionFiatToLightningSwapPaymentDetails', checkoutUrl: string } | null, lightningToRskSwap?: (
+        { __typename?: 'ContributionLightningToRskSwapPaymentDetails' }
+        & ContributionLightningToRskSwapPaymentDetailsFragment
+      ) | null } } };
 
 export type PaymentSwapClaimTxSetMutationVariables = Exact<{
   input: PaymentSwapClaimTxSetInput;
@@ -9650,6 +9766,13 @@ export type ProjectUnfollowMutationVariables = Exact<{
 
 
 export type ProjectUnfollowMutation = { __typename?: 'Mutation', projectUnfollow: boolean };
+
+export type ProjectRskEoaSetMutationVariables = Exact<{
+  input: ProjectRskEoaSetInput;
+}>;
+
+
+export type ProjectRskEoaSetMutation = { __typename?: 'Mutation', projectRskEoaSet: { __typename?: 'Project', id: any, rskEoa?: string | null } };
 
 export type ProjectReviewRequestMutationVariables = Exact<{
   input: ProjectReviewRequestInput;
@@ -12173,6 +12296,7 @@ export const ProjectPageCreatorFragmentDoc = gql`
 export const ProjectPaymentMethodsFragmentDoc = gql`
     fragment ProjectPaymentMethods on PaymentMethods {
   fiat {
+    enabled
     stripe
   }
 }
@@ -16573,6 +16697,40 @@ export function useProjectUnfollowMutation(baseOptions?: Apollo.MutationHookOpti
 export type ProjectUnfollowMutationHookResult = ReturnType<typeof useProjectUnfollowMutation>;
 export type ProjectUnfollowMutationResult = Apollo.MutationResult<ProjectUnfollowMutation>;
 export type ProjectUnfollowMutationOptions = Apollo.BaseMutationOptions<ProjectUnfollowMutation, ProjectUnfollowMutationVariables>;
+export const ProjectRskEoaSetDocument = gql`
+    mutation ProjectRskEoaSet($input: ProjectRskEoaSetInput!) {
+  projectRskEoaSet(input: $input) {
+    id
+    rskEoa
+  }
+}
+    `;
+export type ProjectRskEoaSetMutationFn = Apollo.MutationFunction<ProjectRskEoaSetMutation, ProjectRskEoaSetMutationVariables>;
+
+/**
+ * __useProjectRskEoaSetMutation__
+ *
+ * To run a mutation, you first call `useProjectRskEoaSetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useProjectRskEoaSetMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [projectRskEoaSetMutation, { data, loading, error }] = useProjectRskEoaSetMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectRskEoaSetMutation(baseOptions?: Apollo.MutationHookOptions<ProjectRskEoaSetMutation, ProjectRskEoaSetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ProjectRskEoaSetMutation, ProjectRskEoaSetMutationVariables>(ProjectRskEoaSetDocument, options);
+      }
+export type ProjectRskEoaSetMutationHookResult = ReturnType<typeof useProjectRskEoaSetMutation>;
+export type ProjectRskEoaSetMutationResult = Apollo.MutationResult<ProjectRskEoaSetMutation>;
+export type ProjectRskEoaSetMutationOptions = Apollo.BaseMutationOptions<ProjectRskEoaSetMutation, ProjectRskEoaSetMutationVariables>;
 export const ProjectReviewRequestDocument = gql`
     mutation ProjectReviewRequest($input: ProjectReviewRequestInput!) {
   projectReviewRequest(input: $input) {
