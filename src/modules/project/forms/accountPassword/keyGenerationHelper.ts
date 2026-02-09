@@ -344,15 +344,30 @@ export const generateKeysFromSeedHex = (seedHex: string): AccountKeys => {
 
 export const generateProjectKeysFromSeedHex = (seedHex: string, projectId: number | string | bigint): AccountKeys => {
   const network = __production__ ? Network.MAINNET : Network.TESTNET
-  const projectIndex =
-    typeof projectId === 'bigint'
-      ? Number(projectId)
-      : typeof projectId === 'string'
-      ? Number.parseInt(projectId, 10)
-      : projectId
+  const MIN_PROJECT_DERIVATION_INDEX = 0n
+  const MAX_PROJECT_DERIVATION_INDEX = 2147483647n
 
-  if (!Number.isFinite(projectIndex) || projectIndex < 0) {
-    throw new Error('Invalid project id for derivation path')
+  let projectIndex: number
+  if (typeof projectId === 'bigint') {
+    if (projectId < MIN_PROJECT_DERIVATION_INDEX || projectId > MAX_PROJECT_DERIVATION_INDEX) {
+      throw new Error('Invalid project id for derivation path')
+    }
+    projectIndex = Number(projectId)
+  } else if (typeof projectId === 'string') {
+    const normalizedProjectId = projectId.trim()
+    if (!/^-?\d+$/.test(normalizedProjectId)) {
+      throw new Error('Invalid project id for derivation path')
+    }
+    const parsedProjectId = BigInt(normalizedProjectId)
+    if (parsedProjectId < MIN_PROJECT_DERIVATION_INDEX || parsedProjectId > MAX_PROJECT_DERIVATION_INDEX) {
+      throw new Error('Invalid project id for derivation path')
+    }
+    projectIndex = Number(parsedProjectId)
+  } else {
+    if (!Number.isInteger(projectId) || projectId < 0 || projectId > Number(MAX_PROJECT_DERIVATION_INDEX)) {
+      throw new Error('Invalid project id for derivation path')
+    }
+    projectIndex = projectId
   }
 
   const derivationPath = `${projectDerivationPathMapRSK[network]}/${projectIndex}`
