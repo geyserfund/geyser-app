@@ -9,8 +9,8 @@ import { signEIP712Message } from './signEIP712Message.ts'
 /** Creates call data equivalent to Solidity's abi.encodeWithSignature("contributeFor(address, uint256, uint256)", contributorAddress, creatorFees, contributorFees) */
 export const createCallDataForContributeForAon = (
   contributorAddress: string,
-  creatorFees: number,
-  contributorFees: number,
+  creatorFees: bigint,
+  contributorFees: bigint,
 ): string => {
   try {
     // Step 1: Create function selector from signature
@@ -40,7 +40,7 @@ export const createCallDataForContributeForAon = (
 /** Creates encoded Claim struct data for use in claimCall function */
 export const createClaimStructData = (
   preimage: string,
-  amount: number,
+  amount: bigint,
   refundAddress: string,
   timelock: number,
   v: number,
@@ -192,10 +192,10 @@ export const createCallDataForClaimCall = (
 /** Creates an unsigned Rootstock transaction for Boltz claimCall */
 export const createCallDataForBoltzClaimCall = (params: {
   contributorAddress: string
-  creatorFees: number
-  contributorFees: number
+  creatorFees: bigint
+  contributorFees: bigint
   preimage: string
-  amount: number
+  amount: bigint
   refundAddress: string
   timelock: number
   privateKey: string
@@ -229,7 +229,7 @@ export const createCallDataForBoltzClaimCall = (params: {
 
 export const createCallDataForBoltzClaimCallWithCallee = (params: {
   preimage: string
-  amount: number
+  amount: bigint
   refundAddress: string
   timelock: number
   privateKey: string

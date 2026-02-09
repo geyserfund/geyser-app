@@ -543,9 +543,12 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
 }
 
 export const satsToWei = (sats: number) => {
-  return sats * 10000000000
+  if (!Number.isSafeInteger(sats)) {
+    throw new Error('Invalid sat amount for wei conversion')
+  }
+  return BigInt(sats) * 10000000000n
 }
 
 export const satsToWeiBigInt = (sats: number) => {
-  return BigInt(sats) * 10000000000n
+  return satsToWei(sats)
 }

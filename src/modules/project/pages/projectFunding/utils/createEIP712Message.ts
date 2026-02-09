@@ -18,7 +18,7 @@ export const BOLTZ_TYPEHASH_CLAIM_CALL = 'ClaimCall(bytes32 preimage,address cal
  */
 export const createEIP712MessageForBoltzClaim = (
   preimage: string,
-  amount: number,
+  amount: bigint,
   refundAddress: string,
   timelock: number,
   destination: string,
