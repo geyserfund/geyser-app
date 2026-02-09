@@ -19,7 +19,7 @@ import {
 } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
-import { FiatSwapStatus, fiatSwapStatusAtom } from '../atom/fiatSwapStatusAtom.ts'
+import { fiatFailureReasonAtom, FiatSwapStatus, fiatSwapStatusAtom } from '../atom/fiatSwapStatusAtom.ts'
 
 type CreateFiatSwapPaymentParams = {
   fiatCurrency: string
@@ -34,6 +34,7 @@ export const useCreateFiatSwapPayment = () => {
 
   const updateFundingPaymentDetails = useSetAtom(fundingPaymentDetailsPartialUpdateAtom)
   const setFiatSwapStatus = useSetAtom(fiatSwapStatusAtom)
+  const setFiatFailureReason = useSetAtom(fiatFailureReasonAtom)
   const setRskAccountKeys = useSetAtom(rskAccountKeysAtom)
   const setContributionAddPaymentPreImages = useSetAtom(contributionAddPaymentPreImagesAtom)
 
@@ -71,7 +72,7 @@ export const useCreateFiatSwapPayment = () => {
     throw new Error('Missing Rootstock account keys')
   }
 
-  const processFiatSwapPaymentCreationResponse = ({
+  const processFiatSwapPaymentCreationResponse = async ({
     checkoutUrl,
     lightningToRskSwap,
     lightningPreImage,
@@ -100,13 +101,26 @@ export const useCreateFiatSwapPayment = () => {
       lightningToRskSwap,
     })
     setFiatSwapStatus(FiatSwapStatus.pending)
+    setFiatFailureReason(null)
 
-    generateTransactionForLightningToRskSwap({
-      contribution: fundingContribution,
-      payment: lightningToRskSwap,
-      preImages: lightningPreImage,
-      accountKeys,
-    })
+    try {
+      await generateTransactionForLightningToRskSwap({
+        contribution: fundingContribution,
+        payment: lightningToRskSwap,
+        preImages: lightningPreImage,
+        accountKeys,
+      })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Please try again'
+      console.error('Failed to generate Lightning-to-RSK claim transaction', error)
+      setFiatSwapStatus(FiatSwapStatus.failed)
+      setFiatFailureReason(message)
+
+      toast.error({
+        title: 'Unable to prepare swap claim transaction',
+        description: message,
+      })
+    }
   }
 
   const createFiatSwapPayment = async ({ fiatCurrency, paymentMethodId = '' }: CreateFiatSwapPaymentParams) => {
@@ -149,7 +163,7 @@ export const useCreateFiatSwapPayment = () => {
         },
       })
 
-      processFiatSwapPaymentCreationResponse({
+      await processFiatSwapPaymentCreationResponse({
         checkoutUrl: data?.contributionPaymentsAdd.payments.fiatToLightningSwap?.checkoutUrl,
         lightningToRskSwap: data?.contributionPaymentsAdd.payments.lightningToRskSwap,
         lightningPreImage,

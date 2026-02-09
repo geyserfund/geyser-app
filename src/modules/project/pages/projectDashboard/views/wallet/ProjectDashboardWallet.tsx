@@ -22,6 +22,7 @@ import {
   LightningAddressConnectionDetails,
   LndConnectionDetailsPrivate,
   LndNodeType,
+  ProjectFundingStrategy,
   MfaAction,
   NwcConnectionDetailsPrivate,
   OtpResponseFragment,
@@ -209,7 +210,9 @@ export const ProjectDashboardWallet = () => {
         <WalletLimitsAndVerification />
         <EnableFiatContributions
           isIdentityVerified={Boolean(isIdentityVerified)}
-          buttonProps={{ onClick: verifyIntroModal.onOpen }}
+          isTiaProject={project.fundingStrategy === ProjectFundingStrategy.TakeItAll}
+          projectId={project.id}
+          onRequireVerification={verifyIntroModal.onOpen}
         />
       </VStack>
       <HStack w="full" paddingX={{ base: 0, lg: 6 }} paddingTop={4}>

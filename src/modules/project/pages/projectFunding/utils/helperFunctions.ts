@@ -11,9 +11,16 @@ export const addressToBuffer32 = (address: string): Buffer => {
   return buffer
 }
 
-/** Convert number to 32-byte big-endian buffer */
-export const numberToBuffer32 = (num: number): Buffer => {
+/** Convert numeric value to 32-byte big-endian buffer */
+export const numberToBuffer32 = (num: number | bigint): Buffer => {
+  if (typeof num === 'number' && !Number.isSafeInteger(num)) {
+    throw new Error(`Invalid number for uint256 encoding: ${num}`)
+  }
+
   const bigIntValue = BigInt(num)
+  if (bigIntValue < 0n) {
+    throw new Error(`Negative value cannot be encoded as uint256: ${bigIntValue}`)
+  }
 
   // Handle the full 256-bit number, not just 64-bit
   // Convert BigInt to hex string, pad to 64 characters (32 bytes)

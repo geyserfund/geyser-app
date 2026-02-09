@@ -135,7 +135,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       amount: satsToWei(amount),
       nonce: payoutMetadata?.nonce || 0,
       deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
-      processingFee: 0,
+      processingFee: 0n,
       lockCallData,
       rskPrivateKey: accountKeys.privateKey,
     })

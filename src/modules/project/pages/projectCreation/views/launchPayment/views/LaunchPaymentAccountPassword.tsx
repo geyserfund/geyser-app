@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client'
 import { ButtonProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
@@ -15,28 +14,18 @@ import {
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
-import { MUTATION_PROJECT_RSK_EOA_SET } from '@/modules/project/graphql/mutation/projectMutation.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { ProjectCreationStep, ProjectFundingStrategy, UserAccountKeysFragment } from '@/types/index.ts'
+import {
+  ProjectCreationStep,
+  ProjectFundingStrategy,
+  useProjectRskEoaSetMutation,
+  UserAccountKeysFragment,
+} from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
-
-type ProjectRskEoaSetMutation = {
-  projectRskEoaSet: {
-    id: string
-    rskEoa?: string | null
-  }
-}
-
-type ProjectRskEoaSetMutationVariables = {
-  input: {
-    projectId: string | number
-    rskEoa: string
-  }
-}
 
 export const LaunchPaymentAccountPassword = () => {
   const { project, partialUpdateProject } = useProjectAtom()
@@ -49,9 +38,7 @@ export const LaunchPaymentAccountPassword = () => {
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
   const accountPassword = useAtomValue(accountPasswordAtom)
 
-  const [projectRskEoaSet] = useMutation<ProjectRskEoaSetMutation, ProjectRskEoaSetMutationVariables>(
-    MUTATION_PROJECT_RSK_EOA_SET,
-  )
+  const [projectRskEoaSet] = useProjectRskEoaSetMutation()
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.IdentityVerification,
     getPath('launchFinalize', project.id),

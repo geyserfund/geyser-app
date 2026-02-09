@@ -21,10 +21,10 @@ export const createEIP712MessageForAon = (
   aonContractAddress: string,
   swapContractAddress: string,
   userAddress: string, // creatorAddress for Claim, contributorAddress for Refund
-  amount: number,
+  amount: bigint,
   nonce: number,
   deadline: number,
-  processingFee: number,
+  processingFee: bigint,
   lockCallData: string,
 ): string => {
   const domain = {
@@ -96,10 +96,10 @@ export const createClaimMessage = (
   aonContractAddress: string,
   swapContractAddress: string,
   creatorAddress: string,
-  amount: number,
+  amount: bigint,
   nonce: number,
   deadline: number,
-  processingFee: number,
+  processingFee: bigint,
   lockCallData: string,
 ) => {
   return createEIP712MessageForAon(
@@ -120,10 +120,10 @@ export const createRefundMessage = (
   aonContractAddress: string,
   swapContractAddress: string,
   contributorAddress: string,
-  amount: number,
+  amount: bigint,
   nonce: number,
   deadline: number,
-  processingFee: number,
+  processingFee: bigint,
   lockCallData: string,
 ) => {
   return createEIP712MessageForAon(
@@ -144,10 +144,10 @@ export const createAndSignClaimMessage = (props: {
   aonContractAddress: string
   swapContractAddress: string
   creatorAddress: string
-  amount: number
+  amount: bigint
   nonce: number
   deadline: number
-  processingFee: number
+  processingFee: bigint
   lockCallData: string
   rskPrivateKey: string
 }) => {
@@ -181,10 +181,10 @@ export const createAndSignRefundMessage = (props: {
   aonContractAddress: string
   swapContractAddress: string
   contributorAddress: string
-  amount: number
+  amount: bigint
   nonce: number
   deadline: number
-  processingFee: number
+  processingFee: bigint
   lockCallData: string
   rskPrivateKey: string
 }) => {
@@ -231,10 +231,10 @@ export const createAndSignEIP712Message = (
   aonContractAddress: string,
   swapContractAddress: string,
   userAddress: string,
-  amount: number,
+  amount: bigint,
   nonce: number,
   deadline: number,
-  processingFee: number,
+  processingFee: bigint,
   lockCallData: string,
   rskPrivateKey: string,
 ) => {

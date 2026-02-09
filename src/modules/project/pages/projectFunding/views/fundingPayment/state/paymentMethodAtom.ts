@@ -82,7 +82,10 @@ export const hasStripePaymentMethodAtom = atom((get) => {
   return false
 })
 
-export const hasFiatPaymentMethodAtom = atom(() => true)
+export const hasFiatPaymentMethodAtom = atom((get) => {
+  const project = get(fundingProjectAtom)
+  return Boolean(project.paymentMethods.fiat.stripe) || project.fundingStrategy === ProjectFundingStrategy.AllOrNothing
+})
 
 /** Stores the user's intended payment method selection before navigating to payment loading */
 export const intendedPaymentMethodAtom = atom<PaymentMethods | undefined>(undefined)

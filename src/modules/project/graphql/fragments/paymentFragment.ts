@@ -4,7 +4,7 @@ import {
   FRAGMENT_RSK_TO_LIGHTNING_SWAP_PAYMENT_DETAILS,
   FRAGMENT_RSK_TO_ON_CHAIN_SWAP_PAYMENT_DETAILS,
 } from './paymentDetailsFragment.ts'
-export const ContributionFeesFragment = gql`
+export const FRAGMENT_CONTRIBUTION_FEES = gql`
   fragment ContributionFees on PaymentFee {
     feeType
     feeAmount
@@ -13,8 +13,8 @@ export const ContributionFeesFragment = gql`
   }
 `
 
-export const ContributionLightningPaymentDetailsFragment = gql`
-  ${ContributionFeesFragment}
+export const FRAGMENT_CONTRIBUTION_LIGHTNING_PAYMENT_DETAILS = gql`
+  ${FRAGMENT_CONTRIBUTION_FEES}
   fragment ContributionLightningPaymentDetails on ContributionLightningPaymentDetails {
     lightningInvoiceId
     paymentRequest
@@ -25,8 +25,8 @@ export const ContributionLightningPaymentDetailsFragment = gql`
   }
 `
 
-export const ContributionOnChainSwapPaymentDetailsFragment = gql`
-  ${ContributionFeesFragment}
+export const FRAGMENT_CONTRIBUTION_ON_CHAIN_SWAP_PAYMENT_DETAILS = gql`
+  ${FRAGMENT_CONTRIBUTION_FEES}
   fragment ContributionOnChainSwapPaymentDetails on ContributionOnChainSwapPaymentDetails {
     address
     swapJson
@@ -37,20 +37,20 @@ export const ContributionOnChainSwapPaymentDetailsFragment = gql`
   }
 `
 
-export const ContributionFiatPaymentDetailsFragment = gql`
+export const FRAGMENT_CONTRIBUTION_FIAT_PAYMENT_DETAILS = gql`
   fragment ContributionFiatPaymentDetails on ContributionFiatPaymentDetails {
     stripeClientSecret
   }
 `
 
-export const ContributionFiatSwapPaymentDetailsFragment = gql`
+export const FRAGMENT_CONTRIBUTION_FIAT_SWAP_PAYMENT_DETAILS = gql`
   fragment ContributionFiatSwapPaymentDetails on ContributionFiatToLightningSwapPaymentDetails {
     checkoutUrl
   }
 `
 
-export const ContributionLightningToRskSwapPaymentDetailsFragment = gql`
-  ${ContributionFeesFragment}
+export const FRAGMENT_CONTRIBUTION_LIGHTNING_TO_RSK_SWAP_PAYMENT_DETAILS = gql`
+  ${FRAGMENT_CONTRIBUTION_FEES}
   fragment ContributionLightningToRskSwapPaymentDetails on ContributionLightningToRskSwapPaymentDetails {
     lightningInvoiceId
     paymentRequest
@@ -64,8 +64,8 @@ export const ContributionLightningToRskSwapPaymentDetailsFragment = gql`
   }
 `
 
-export const ContributionOnChainToRskSwapPaymentDetailsFragment = gql`
-  ${ContributionFeesFragment}
+export const FRAGMENT_CONTRIBUTION_ON_CHAIN_TO_RSK_SWAP_PAYMENT_DETAILS = gql`
+  ${FRAGMENT_CONTRIBUTION_FEES}
   fragment ContributionOnChainToRskSwapPaymentDetails on ContributionOnChainToRskSwapPaymentDetails {
     address
     swapJson
@@ -78,12 +78,12 @@ export const ContributionOnChainToRskSwapPaymentDetailsFragment = gql`
 `
 
 export const FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_DETAILS = gql`
-  ${ContributionLightningPaymentDetailsFragment}
-  ${ContributionOnChainSwapPaymentDetailsFragment}
-  ${ContributionFiatPaymentDetailsFragment}
-  ${ContributionFiatSwapPaymentDetailsFragment}
-  ${ContributionLightningToRskSwapPaymentDetailsFragment}
-  ${ContributionOnChainToRskSwapPaymentDetailsFragment}
+  ${FRAGMENT_CONTRIBUTION_LIGHTNING_PAYMENT_DETAILS}
+  ${FRAGMENT_CONTRIBUTION_ON_CHAIN_SWAP_PAYMENT_DETAILS}
+  ${FRAGMENT_CONTRIBUTION_FIAT_PAYMENT_DETAILS}
+  ${FRAGMENT_CONTRIBUTION_FIAT_SWAP_PAYMENT_DETAILS}
+  ${FRAGMENT_CONTRIBUTION_LIGHTNING_TO_RSK_SWAP_PAYMENT_DETAILS}
+  ${FRAGMENT_CONTRIBUTION_ON_CHAIN_TO_RSK_SWAP_PAYMENT_DETAILS}
   fragment FundingContributionPaymentDetails on ContributionPaymentsDetails {
     lightning {
       ...ContributionLightningPaymentDetails
