@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_FUNDING_CONTRIBUTION } from '../fragments/contributionFragment.ts'
 import {
-  ContributionLightningToRskSwapPaymentDetailsFragment,
+  FRAGMENT_CONTRIBUTION_LIGHTNING_TO_RSK_SWAP_PAYMENT_DETAILS,
   FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_DETAILS,
 } from '../fragments/paymentFragment.ts'
 export const MUTATION_CONTRIBUTION_CREATE = gql`
@@ -30,7 +30,7 @@ export const MUTATION_FUNDING_EMAIL_UPDATE = gql`
 `
 
 export const MUTATION_FUNDING_FIAT_SWAP_PAYMENT_CREATE = gql`
-  ${ContributionLightningToRskSwapPaymentDetailsFragment}
+  ${FRAGMENT_CONTRIBUTION_LIGHTNING_TO_RSK_SWAP_PAYMENT_DETAILS}
   mutation FundingFiatSwapPaymentCreate($input: ContributionPaymentsAddInput!) {
     contributionPaymentsAdd(input: $input) {
       payments {
