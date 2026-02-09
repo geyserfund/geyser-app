@@ -63,7 +63,8 @@ export const TiaRskEoaSetupNotice = () => {
   const shouldShow = Boolean(user?.id && isProjectOwner && isTiaProject && needsProjectKey)
 
   const message = t(
-    `Configure your new project wallet before the ${KEY_CONFIG_DEADLINE} to continue receiving contributions after that date.`,
+    'Configure your new project wallet before the {{keyConfigDeadline}} to continue receiving contributions after that date.',
+    { keyConfigDeadline: KEY_CONFIG_DEADLINE },
   )
 
   const buttonLabel = t('Configure project wallet')
