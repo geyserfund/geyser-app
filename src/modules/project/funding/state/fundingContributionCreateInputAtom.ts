@@ -4,6 +4,7 @@ import { atom } from 'jotai'
 import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom'
 import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
+import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import {
   ContributionCreateInput,
   ContributionPaymentsInput,
@@ -14,6 +15,7 @@ import {
   ProjectRewardFragment,
   QuoteCurrency,
   ShippingAddress,
+  StripeEmbeddedTheme,
   UserMeFragment,
 } from '@/types/generated/graphql'
 import { toInt } from '@/utils'
@@ -51,6 +53,16 @@ type BuildContributionCreateInputArgs = {
   guardianBadgesCosts: { sats: number }
   shippingCosts: { sats: number; usdCents: number }
   paymentsInput: ContributionPaymentsInput
+}
+
+const getStripeEmbeddedTheme = (): StripeEmbeddedTheme => {
+  if (typeof window === 'undefined') {
+    return StripeEmbeddedTheme.Light
+  }
+
+  return window.localStorage.getItem('chakra-ui-color-mode') === 'dark'
+    ? StripeEmbeddedTheme.Dark
+    : StripeEmbeddedTheme.Light
 }
 
 const buildContributionCreateInput = ({
@@ -233,6 +245,7 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) =
       create: true,
       stripe: {
         returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
+        theme: getStripeEmbeddedTheme(),
       },
     },
   }
@@ -247,8 +260,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
 
   const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
   const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
-  const creatorRskAddress = fundingProject?.rskEoa || ''
-  const usePrism = fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
+  const usePrism = isPrismEnabled(fundingProject)
   const shouldIncludeFiat = intendedPaymentMethod === PaymentMethods.fiatSwap
 
   if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
@@ -257,6 +269,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
         create: true,
         stripe: {
           returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
+          theme: getStripeEmbeddedTheme(),
         },
       }
     }

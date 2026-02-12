@@ -287,6 +287,7 @@ export type ContributionFiatPaymentDetailsInput = {
 
 export type ContributionFiatPaymentDetailsStripeInput = {
   returnUrl: Scalars['String']['input'];
+  theme?: InputMaybe<StripeEmbeddedTheme>;
 };
 
 export type ContributionFiatToLightningSwapPaymentDetails = {
@@ -4450,6 +4451,11 @@ export type StripeCheckoutSessionInput = {
   returnUrl: Scalars['String']['input'];
 };
 
+export enum StripeEmbeddedTheme {
+  Dark = 'DARK',
+  Light = 'LIGHT'
+}
+
 export type StripeConnectOnboardingPayload = {
   __typename?: 'StripeConnectOnboardingPayload';
   accountId: Scalars['String']['output'];
@@ -5618,6 +5624,7 @@ export type ResolversTypes = {
   StatsInterface: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['StatsInterface']>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   StripeCheckoutSessionInput: StripeCheckoutSessionInput;
+  StripeEmbeddedTheme: StripeEmbeddedTheme;
   StripeConnectOnboardingPayload: ResolverTypeWrapper<StripeConnectOnboardingPayload>;
   StripeConnectStatus: ResolverTypeWrapper<StripeConnectStatus>;
   Subscription: ResolverTypeWrapper<{}>;
@@ -6088,6 +6095,7 @@ export type ResolversParentTypes = {
   StatsInterface: ResolversInterfaceTypes<ResolversParentTypes>['StatsInterface'];
   String: Scalars['String']['output'];
   StripeCheckoutSessionInput: StripeCheckoutSessionInput;
+  StripeEmbeddedTheme: StripeEmbeddedTheme;
   StripeConnectOnboardingPayload: StripeConnectOnboardingPayload;
   StripeConnectStatus: StripeConnectStatus;
   Subscription: {};

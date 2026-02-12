@@ -10,7 +10,7 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { lightModeColors } from '@/shared/styles'
-import { ProjectFundingStrategy } from '@/types/index.ts'
+import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 
 import { SuggestedProjects } from '../../../../projectView/views/body/sections/SuggestedProjects.tsx'
 import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary.tsx'
@@ -24,8 +24,7 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
   const { project, formState } = useFundingFormAtom()
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
-  const creatorRskAddress = project?.rskEoa || ''
-  const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
+  const isPrismTia = isPrismEnabled(project)
 
   return (
     <FundingLayout

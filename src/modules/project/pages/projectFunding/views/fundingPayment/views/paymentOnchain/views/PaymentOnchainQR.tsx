@@ -11,7 +11,6 @@ import { __development__ } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 import { PaymentFeePayer, PaymentFeeType } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
-import { ProjectFundingStrategy } from '@/types/index.ts'
 import { getBip21Invoice } from '@/utils/lightning/bip21'
 
 import { QRCodeComponent } from '../../../components/QRCodeComponent'
@@ -36,10 +35,8 @@ export const PaymentOnchainQR = () => {
 export const PaymentOnchainQRContent = ({ address }: { address: string }) => {
   useListenOnchainTransactionUpdate()
 
-  const { project } = useProjectAtom()
-  const creatorRskAddress = project?.rskEoa || ''
-  const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
-  const isRskSwapFlow = isAllOrNothing(project) || isPrismTia
+  const { project, isPrismEnabled } = useProjectAtom()
+  const isRskSwapFlow = isAllOrNothing(project) || isPrismEnabled
   const currentOnchainToRskSwapId = useAtomValue(currentOnChainToRskSwapIdAtom)
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
 

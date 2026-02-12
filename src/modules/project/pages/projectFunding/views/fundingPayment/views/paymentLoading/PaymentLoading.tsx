@@ -26,7 +26,7 @@ export const PaymentLoading = () => {
   const navigate = useNavigate()
 
   const { user, loading: authLoading } = useAuthContext()
-  const { project, loading: projectLoading } = useProjectAtom()
+  const { project, loading: projectLoading, isPrismEnabled } = useProjectAtom()
   const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
   const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
   const [passwordConfirmed, setPasswordConfirmed] = useState(false)
@@ -67,10 +67,7 @@ export const PaymentLoading = () => {
     return null
   }
 
-  const creatorRskAddress = project?.rskEoa || ''
-  const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
-
-  if (isAllOrNothing(project) || isPrismTia) {
+  if (isAllOrNothing(project) || isPrismEnabled) {
     if (user?.id && !passwordConfirmed) {
       return <PaymentPassword onComplete={() => setPasswordConfirmed(true)} />
     }

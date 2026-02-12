@@ -1,7 +1,8 @@
-import { Button, HStack, Link, Tag, VStack } from '@chakra-ui/react'
+import { Button, HStack, Icon, Link, Tag, VStack } from '@chakra-ui/react'
 import { gql, useMutation, useQuery } from '@apollo/client'
 import { t } from 'i18next'
 import { useEffect } from 'react'
+import { PiClock, PiWarningFill } from 'react-icons/pi'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -72,7 +73,9 @@ const getStripeDisabledReasonLabel = (reason?: string | null) => {
   if (!reason) return null
 
   const reasonMap: Record<string, string> = {
-    'requirements.past_due': t('Stripe needs additional details to activate this account. Click "Resume onboarding".'),
+    'requirements.past_due': t(
+      'Stripe needs additional details to activate this account. Click "Resume\u00A0onboarding".',
+    ),
     'requirements.pending_verification': t('Stripe verification is still in progress. Please check again shortly.'),
     under_review: t('Stripe is reviewing this account.'),
   }
@@ -123,6 +126,9 @@ export const StripeConnectOnboardingCard = ({
   const hasAccount = Boolean(status?.accountId)
   const isSelected = selected || isReady
   const disabledReasonLabel = getStripeDisabledReasonLabel(status?.disabledReason)
+  const isActionRequired = status?.disabledReason === 'requirements.past_due'
+  const isProcessing =
+    status?.disabledReason === 'requirements.pending_verification' || status?.disabledReason === 'under_review'
   const isBusy =
     loading || createStripeConnectAccountOptions.loading || refreshStripeConnectOnboardingLinkOptions.loading
 
@@ -142,13 +148,40 @@ export const StripeConnectOnboardingCard = ({
       return
     }
 
+    if (isProcessing) {
+      refetch()
+      return
+    }
+
     refreshStripeConnectOnboardingLink({ variables: { projectId } })
   }
+
+  const statusIndicator = isReady ? (
+    <Body size="sm" medium color="primary1.9">
+      {t('Enabled')}
+    </Body>
+  ) : isActionRequired ? (
+    <HStack spacing={1} color="orange.9">
+      <Icon as={PiWarningFill} boxSize={4} />
+      <Body size="sm" medium color="orange.9">
+        {t('Action Required')}
+      </Body>
+    </HStack>
+  ) : isProcessing ? (
+    <HStack spacing={1} color="orange.9">
+      <Icon as={PiClock} boxSize={4} />
+      <Body size="sm" medium color="orange.9">
+        {t('Processing')}
+      </Body>
+    </HStack>
+  ) : null
 
   const actionLabel = !isTiaProject
     ? t('TIA only')
     : isReady
     ? t('Connected')
+    : isProcessing
+    ? t('Re-sync')
     : hasAccount
     ? t('Resume onboarding')
     : t('Connect Stripe')
@@ -159,11 +192,7 @@ export const StripeConnectOnboardingCard = ({
         <Body size="lg" medium>
           {t('Receive in your bank account')}
         </Body>
-        {isReady && (
-          <Body size="sm" medium color="primary1.9">
-            {t('Enabled')}
-          </Body>
-        )}
+        {statusIndicator}
       </HStack>
 
       <Body size="md" light>
@@ -180,26 +209,60 @@ export const StripeConnectOnboardingCard = ({
           : t('Available only for Take It All projects.')}
       </Body>
 
-      {disabledReasonLabel && (
-        <Body size="xs" color="secondary.red" medium>
-          {t('Action required')}: {disabledReasonLabel}
-        </Body>
-      )}
-
-      <HStack w="full" justifyContent={{ base: 'stretch', md: 'flex-end' }}>
-        <Button
-          size="md"
-          variant={isReady ? 'solid' : 'outline'}
-          colorScheme="primary1"
-          onClick={handleClick}
-          isDisabled={!isTiaProject || isBusy}
-          isLoading={isBusy}
-          width={{ base: '100%', md: 'auto' }}
-          minW={{ base: 'unset', md: '240px' }}
+      {(disabledReasonLabel && (isActionRequired || isProcessing) && !isReady) ? (
+        <HStack
+          w="full"
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={4}
+          flexWrap={{ base: 'wrap', md: 'nowrap' }}
         >
-          {isReady ? t('Manage Stripe Connect') : hasAccount ? t('Resume onboarding') : t('Configure Stripe Connect')}
-        </Button>
-      </HStack>
+          <Body size="xs" color="secondary.red" medium flex={1} minW="220px">
+            {disabledReasonLabel}
+          </Body>
+          <Button
+            size="md"
+            variant="outline"
+            colorScheme="primary1"
+            onClick={handleClick}
+            isDisabled={!isTiaProject || isBusy}
+            isLoading={isBusy}
+            width={{ base: '100%', md: 'auto' }}
+            minW={{ base: 'unset', md: '240px' }}
+          >
+            {isProcessing ? t('Re-sync') : t('Resume onboarding')}
+          </Button>
+        </HStack>
+      ) : (
+        <>
+          {disabledReasonLabel && (
+            <Body size="xs" color="secondary.red" medium>
+              {disabledReasonLabel}
+            </Body>
+          )}
+
+          <HStack w="full" justifyContent={{ base: 'stretch', md: 'flex-end' }}>
+            <Button
+              size="md"
+              variant={isReady ? 'solid' : 'outline'}
+              colorScheme="primary1"
+              onClick={handleClick}
+              isDisabled={!isTiaProject || isBusy}
+              isLoading={isBusy}
+              width={{ base: '100%', md: 'auto' }}
+              minW={{ base: 'unset', md: '240px' }}
+            >
+              {isReady
+                ? t('Manage Stripe Connect')
+                : isProcessing
+                ? t('Re-sync')
+                : hasAccount
+                ? t('Resume onboarding')
+                : t('Configure Stripe Connect')}
+            </Button>
+          </HStack>
+        </>
+      )}
     </VStack>
   )
 
@@ -237,7 +300,7 @@ export const StripeConnectOnboardingCard = ({
 
       {disabledReasonLabel && (
         <Body size="xs" color="secondary.red" medium>
-          {t('Action required')}: {disabledReasonLabel}
+          {disabledReasonLabel}
         </Body>
       )}
 

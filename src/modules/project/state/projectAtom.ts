@@ -2,6 +2,7 @@ import { atom, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
 import { authUserAtom, followedProjectsAtom } from '@/modules/auth/state/authAtom.ts'
+import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import { toInt } from '@/utils'
 
 import { ProjectGrantApplicantFragment, ProjectHeaderSummaryFragment, ProjectPageBodyFragment } from '../../../types'
@@ -100,6 +101,12 @@ export const userFollowsProjectAtom = atom((get) => {
   const followedProjects = get(followedProjectsAtom)
 
   return followedProjects.length > 0 && followedProjects.some((followedProject) => followedProject.id === project.id)
+})
+
+export const isPrismEnabledAtom = atom((get) => {
+  const project = get(projectAtom)
+
+  return isPrismEnabled(project)
 })
 
 /** Initial load for project details, set to true after loaded */

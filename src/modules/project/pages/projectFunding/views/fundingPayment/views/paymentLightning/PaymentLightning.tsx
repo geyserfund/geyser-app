@@ -16,7 +16,7 @@ import {
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { PaymentStatus, PaymentType, ProjectFundingStrategy } from '@/types/index.ts'
+import { PaymentStatus, PaymentType } from '@/types/index.ts'
 import { isAllOrNothing, useMobileMode, useNotification } from '@/utils/index.ts'
 
 import { QRCodeComponent } from '../../components/QRCodeComponent'
@@ -45,10 +45,8 @@ export const PaymentLightning = () => {
 export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: string }) => {
   useListenFundingContributionSuccess()
 
-  const { project } = useProjectAtom()
-  const creatorRskAddress = project?.rskEoa || ''
-  const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
-  const isRskSwapFlow = isAllOrNothing(project) || isPrismTia
+  const { project, isPrismEnabled } = useProjectAtom()
+  const isRskSwapFlow = isAllOrNothing(project) || isPrismEnabled
 
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
@@ -118,10 +116,8 @@ export const PaymentLightningAonComponent = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { project } = useProjectAtom()
-  const creatorRskAddress = project?.rskEoa || ''
-  const isPrismTia = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
-  const isRskSwapFlow = isAllOrNothing(project) || isPrismTia
+  const { project, isPrismEnabled } = useProjectAtom()
+  const isRskSwapFlow = isAllOrNothing(project) || isPrismEnabled
 
   const [fundingContribution, setFundingContribution] = useAtom(fundingContributionAtom)
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
