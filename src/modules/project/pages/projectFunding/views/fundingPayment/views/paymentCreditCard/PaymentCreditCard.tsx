@@ -50,7 +50,7 @@ export const PaymentCreditCard = ({ provider, banxaCheckoutMode = 'creditCard' }
 
   const { isFundingInputAmountValid, isFundingUserInfoValid, project } = useFundingFormAtom()
 
-  const { requestFiatOnlyFundingFromContext, requestFundingFromContext, requestFundingOptions } = useFundingAPI()
+  const { requestFiatOnlyFundingFromContext, requestFundingOptions } = useFundingAPI()
   const resetContribution = useResetContribution()
 
   const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
@@ -117,8 +117,7 @@ export const PaymentCreditCard = ({ provider, banxaCheckoutMode = 'creditCard' }
 
     if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid && !hasRequestedContribution.current) {
       hasRequestedContribution.current = true
-      const requestFunding = isStripeProvider ? requestFundingFromContext : requestFiatOnlyFundingFromContext
-      requestFunding((data) => {
+      requestFiatOnlyFundingFromContext((data) => {
         const contributionId = data.contributionCreate.contribution.uuid
 
         if (contributionId && data.contributionCreate.contribution.isSubscription) {

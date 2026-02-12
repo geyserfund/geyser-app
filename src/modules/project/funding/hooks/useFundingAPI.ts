@@ -5,6 +5,10 @@ import { useCallback, useMemo } from 'react'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import {
+  VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
+  VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
+} from '@/shared/constants/config/env.ts'
 import { __development__ } from '@/shared/constants/index.ts'
 import {
   ContributionCreateInput,
@@ -49,10 +53,6 @@ import { webln } from '../utils/requestWebLNPayment'
 import { useFundingFormAtom } from './useFundingFormAtom'
 import { useResetContribution } from './useResetContribution.ts'
 import { useWebLNFlow } from './useWebLNFlow'
-import {
-  VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
-  VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
-} from '@/shared/constants/config/env.ts'
 
 const hasBolt11 = true
 const hasWebLN = true
@@ -359,16 +359,14 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     if (creatorAmountSats < 0) {
       throw new Error('Prism split amount is negative for creator')
     }
+
     if (creatorAmountSats + geyserFeesAmount !== claimAmountSats) {
       throw new Error('Prism split amounts do not sum to claim amount')
     }
 
     const depositCallData = createCallDataForPrismDepositFor({
       payer: contributorAddress as `0x${string}`,
-      receivers: [
-        projectRskEoa as `0x${string}`,
-        VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS as `0x${string}`,
-      ],
+      receivers: [projectRskEoa as `0x${string}`, VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS as `0x${string}`],
       amounts: [satsToWeiBigInt(creatorAmountSats), satsToWeiBigInt(geyserFeesAmount)],
     })
 
@@ -443,6 +441,7 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     if (!contributorAddress) {
       throw new Error('Missing contributor RSK address for swap claim')
     }
+
     const isAonProject = project?.fundingStrategy === ProjectFundingStrategy.AllOrNothing
     const projectRskEoa = project?.rskEoa || ''
     const geyserFeesAmount = getGeyserFeesAmount(fees)
@@ -498,6 +497,7 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     if (!contributorAddress) {
       throw new Error('Missing contributor RSK address for swap claim')
     }
+
     const isAonProject = project?.fundingStrategy === ProjectFundingStrategy.AllOrNothing
     const projectRskEoa = project?.rskEoa || ''
     const geyserFeesAmount = getGeyserFeesAmount(fees)
@@ -546,6 +546,7 @@ export const satsToWei = (sats: number) => {
   if (!Number.isSafeInteger(sats)) {
     throw new Error('Invalid sat amount for wei conversion')
   }
+
   return BigInt(sats) * 10000000000n
 }
 
