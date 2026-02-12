@@ -35,7 +35,7 @@ import { ConnectWalletModal } from '../../../projectCreation/views/launchPayment
 import { DashboardLayout } from '../../common/index.ts'
 import { VerificationModal } from '../../components/VerificationModal.tsx'
 import { EnableFiatContributions } from './components/EnableFiatContributions.tsx'
-import { WalletLimitsAndVerification } from './components/WalletLimitsAndVerification.tsx'
+import { TiaRskEoaSetupNotice } from '../../../projectView/views/body/sections/tiaNotification/TiaRskEoaSetupNotice.tsx'
 export const ProjectDashboardWallet = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -202,12 +202,12 @@ export const ProjectDashboardWallet = () => {
 
   return (
     <DashboardLayout
-      desktopTitle={t('Wallet')}
+      desktopTitle={t('Payment Settings')}
       mobileTopNavRightComponent={<SaveButton />}
       deskTopBottomComponent={<SaveButton w="full" />}
     >
       <VStack spacing="20px" paddingX={{ base: 0, lg: 6 }}>
-        <WalletLimitsAndVerification />
+        <TiaRskEoaSetupNotice />
         <EnableFiatContributions
           isIdentityVerified={Boolean(isIdentityVerified)}
           isTiaProject={project.fundingStrategy === ProjectFundingStrategy.TakeItAll}

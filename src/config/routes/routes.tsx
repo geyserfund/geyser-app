@@ -547,6 +547,13 @@ export const platformRoutes: RouteObject[] = [
                 },
               },
               {
+                path: getPath('dashboardLimitsVerification', PathName.projectName),
+                async lazy() {
+                  const projectDashboardPages = await loadProjectDashboardPages()
+                  return { Component: projectDashboardPages.ProjectDashboardLimitsVerification }
+                },
+              },
+              {
                 path: getPath('dashboardNostr', PathName.projectName),
                 async lazy() {
                   const projectDashboardPages = await loadProjectDashboardPages()

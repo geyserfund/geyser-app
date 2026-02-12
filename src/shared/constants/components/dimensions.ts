@@ -47,7 +47,7 @@ export const dimensions = {
     },
     dashboard: {
       menu: {
-        width: 165,
+        width: 220,
       },
     },
     leftMainContainer: {

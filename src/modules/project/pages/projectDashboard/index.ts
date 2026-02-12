@@ -15,6 +15,7 @@ import { RewardCreate } from './views/rewards/RewardCreate.tsx'
 import { RewardEdit } from './views/rewards/RewardEdit.tsx'
 import { ProjectDashboardSales } from './views/sales/ProjectDashboardSales.tsx'
 import { ProjectDashboardSettings } from './views/settings/ProjectDashboardSettings.tsx'
+import { ProjectDashboardLimitsVerification } from './views/wallet/ProjectDashboardLimitsVerification.tsx'
 import { ProjectDashboardWallet } from './views/wallet/ProjectDashboardWallet.tsx'
 
 export {
@@ -25,6 +26,7 @@ export {
   ProjectDashboardGoals,
   ProjectDashboardInfo,
   ProjectDashboardLayout,
+  ProjectDashboardLimitsVerification,
   ProjectDashboardMobileLayout,
   ProjectDashboardNostr,
   ProjectDashboardNotifications,

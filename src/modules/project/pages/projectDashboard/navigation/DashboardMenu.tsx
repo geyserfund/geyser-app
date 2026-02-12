@@ -37,6 +37,7 @@ const DashboardMenuContent = (props: ButtonProps) => {
   const currentDashboardItem = useAtomValue(currentDashboardItemAtom)
 
   const dashboardAnalyticsItems = projectDashboardItems.filter((item) => item.type === DashboardType.analytics)
+  const dashboardPaymentsItems = projectDashboardItems.filter((item) => item.type === DashboardType.payments)
   const dashboardSettingsItems = projectDashboardItems.filter((item) => item.type === DashboardType.settings)
   const dashboardConfigItems = projectDashboardItems.filter((item) => item.type === DashboardType.config)
 
@@ -67,6 +68,19 @@ const DashboardMenuContent = (props: ButtonProps) => {
           />
 
           {index === dashboardAnalyticsItems.length - 1 && <Divider />}
+        </React.Fragment>
+      ))}
+      {dashboardPaymentsItems.map((item, index) => (
+        <React.Fragment key={item.label}>
+          <DashboardMenuButton
+            key={item.label}
+            item={item}
+            currentDashboardItem={currentDashboardItem}
+            isMobile={isMobile}
+            project={project}
+            {...props}
+          />
+          {index === dashboardPaymentsItems.length - 1 && <Divider />}
         </React.Fragment>
       ))}
       {dashboardSettingsItems.map((item) => {

@@ -63,7 +63,7 @@ export const TiaRskEoaSetupNotice = () => {
   const shouldShow = Boolean(user?.id && isProjectOwner && isTiaProject && needsProjectKey)
 
   const message = t(
-    'Configure your new project wallet before the {{keyConfigDeadline}} to continue receiving contributions after that date.',
+    'Geyser is migrating to a new payment processing infrastructure. Configure your new project wallet before the {{keyConfigDeadline}} to continue receiving contributions after that date. You can read more about it',
     { keyConfigDeadline: KEY_CONFIG_DEADLINE },
   )
 
@@ -203,7 +203,19 @@ export const TiaRskEoaSetupNotice = () => {
           <Body size="xl" bold>
             {t('Configure your project wallet')}
           </Body>
-          <Body dark>{message}</Body>
+          <Body dark>
+            {message}{' '}
+            <ChakraLink
+              href="https://guides.geyser.fund"
+              isExternal
+              color="amber1.900"
+              textDecoration="underline"
+              _hover={{ color: 'amber1.1000', textDecoration: 'underline' }}
+            >
+              {t('here')}
+            </ChakraLink>
+            {'.'}
+          </Body>
           <Button colorScheme="warning" variant="solid" size="lg" w="full" onClick={modal.onOpen}>
             {buttonLabel}
           </Button>
