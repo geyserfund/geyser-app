@@ -32,13 +32,17 @@ export const PaymentLoading = () => {
   const [passwordConfirmed, setPasswordConfirmed] = useState(false)
   const [downloadedRefundFile, setDownloadedRefundFile] = useState(false)
   const [currentContributionId, setCurrentContributionId] = useState('')
+  const hasStripePaymentMethod =
+    project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(project?.paymentMethods?.fiat?.stripe)
 
-  const handleNext = (contributionId?: string) => {
+  const handleNext = (contributionId?: string, forceCardRoute?: boolean) => {
     const paymentPath =
-      intendedPaymentMethod === PaymentMethods.fiatSwap
-        ? fiatPaymentMethod === fiatCheckoutMethods.applePay
-          ? getPath('fundingPaymentApplePay', project.name)
-          : getPath('fundingPaymentCreditCard', project.name)
+      forceCardRoute || intendedPaymentMethod === PaymentMethods.fiatSwap
+        ? hasStripePaymentMethod
+          ? getPath('fundingPaymentFiatStripe', project.name)
+          : fiatPaymentMethod === fiatCheckoutMethods.applePay
+          ? getPath('fundingPaymentFiatBanxaApplePay', project.name)
+          : getPath('fundingPaymentFiatBanxa', project.name)
         : getPath('fundingPaymentLightning', project.name)
 
     navigate(
@@ -50,9 +54,9 @@ export const PaymentLoading = () => {
     )
   }
 
-  const handleComplete = (contributionId: string) => {
+  const handleComplete = (contributionId: string, forceCardRoute?: boolean) => {
     if (user.id) {
-      handleNext(contributionId)
+      handleNext(contributionId, forceCardRoute)
     } else {
       setDownloadedRefundFile(true)
       setCurrentContributionId(contributionId)

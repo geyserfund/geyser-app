@@ -3,7 +3,7 @@ import { EmbeddedCheckout, EmbeddedCheckoutProvider } from '@stripe/react-stripe
 import { loadStripe } from '@stripe/stripe-js'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { AppTheme } from '@/context'
@@ -41,21 +41,26 @@ export const PaymentStripe = () => {
     }
   }, [fundingPaymentDetails.fiat?.stripeClientSecret])
 
-  if (!stripeClientSecret) {
+  const handleStripeComplete = useCallback(() => {
+    setIsCompleted(true)
+  }, [])
+
+  const stripeOptions = useMemo(() => {
+    if (!stripeClientSecret) return undefined
+
+    return {
+      clientSecret: stripeClientSecret,
+      onComplete: handleStripeComplete,
+    }
+  }, [stripeClientSecret, handleStripeComplete])
+
+  if (!stripeClientSecret || !stripeOptions) {
     return null
   }
 
   return (
     <VStack w="full">
-      <EmbeddedCheckoutProvider
-        stripe={stripePromise}
-        options={{
-          clientSecret: stripeClientSecret,
-          onComplete() {
-            setIsCompleted(true)
-          },
-        }}
-      >
+      <EmbeddedCheckoutProvider stripe={stripePromise} options={stripeOptions}>
         <EmbeddedCheckout className={classes.container} />
       </EmbeddedCheckoutProvider>
       <Body size="sm" light>

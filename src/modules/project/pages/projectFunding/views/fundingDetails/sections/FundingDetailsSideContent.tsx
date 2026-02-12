@@ -24,6 +24,7 @@ import {
   fiatCheckoutMethods,
   fiatPaymentMethodAtom,
   hasFiatPaymentMethodAtom,
+  hasStripePaymentMethodAtom,
   intendedPaymentMethodAtom,
   PaymentMethods,
 } from '../../fundingPayment/state/paymentMethodAtom.ts'
@@ -60,6 +61,7 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
   const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
   const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
   const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
+  const hasStripePaymentMethod = useAtomValue(hasStripePaymentMethodAtom)
 
   const hasSubscription = Boolean(formState.subscription?.subscriptionId)
   const onSubmitFunction = (e: FormEvent<HTMLDivElement>) => {
@@ -113,10 +115,11 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
       navigate(getPath('fundingGuardians', project.name))
     } else {
       if (intendedPaymentMethod === PaymentMethods.fiatSwap && hasFiatPaymentMethod) {
-        const paymentPath =
-          fiatPaymentMethod === fiatCheckoutMethods.applePay
-            ? getPath('fundingPaymentApplePay', project.name)
-            : getPath('fundingPaymentCreditCard', project.name)
+        const paymentPath = hasStripePaymentMethod
+          ? getPath('fundingPaymentFiatStripe', project.name)
+          : fiatPaymentMethod === fiatCheckoutMethods.applePay
+          ? getPath('fundingPaymentFiatBanxaApplePay', project.name)
+          : getPath('fundingPaymentFiatBanxa', project.name)
         navigate(paymentPath)
         return
       }

@@ -61,7 +61,6 @@ type StripeConnectOnboardingCardProps = {
   withCard?: boolean
   compact?: boolean
   selected?: boolean
-  onSelect?: () => void
   onReadyStateChange?: (isReady: boolean) => void
 }
 
@@ -89,7 +88,6 @@ export const StripeConnectOnboardingCard = ({
   withCard = true,
   compact = false,
   selected = false,
-  onSelect,
   onReadyStateChange,
 }: StripeConnectOnboardingCardProps) => {
   const { data, loading, refetch } = useQuery(QUERY_PROJECT_STRIPE_CONNECT_STATUS, {
@@ -159,7 +157,7 @@ export const StripeConnectOnboardingCard = ({
     <VStack w="full" alignItems="start" spacing={4}>
       <HStack w="full" justifyContent="space-between" alignItems="start">
         <Body size="lg" medium>
-          {t('Receive in Fiat through Stripe Connect')}
+          {t('Receive in your bank account')}
         </Body>
         {isReady && (
           <Body size="sm" medium color="primary1.9">
@@ -170,7 +168,15 @@ export const StripeConnectOnboardingCard = ({
 
       <Body size="md" light>
         {isTiaProject
-          ? t('Configure Stripe Connect to receive payments in fiat. Checkout is charged in USD and card issuers may convert to local currency.')
+          ? t('Configure Stripe Connect to receive payments directly in your bank account.')
+          : t('Available only for Take It All projects.')}
+      </Body>
+
+      <Body size="md" light>
+        {isTiaProject
+          ? t(
+              'Contributions will be charged an additional processing fee of 3.5% + 30c per contribution. Payout time is dependent on card issuers.',
+            )
           : t('Available only for Take It All projects.')}
       </Body>
 
@@ -254,8 +260,6 @@ export const StripeConnectOnboardingCard = ({
         p={6}
         alignItems="start"
         spacing={0}
-        cursor="pointer"
-        onClick={onSelect}
       >
         {compactContent}
       </VStack>

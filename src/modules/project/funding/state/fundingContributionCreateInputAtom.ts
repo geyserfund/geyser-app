@@ -249,8 +249,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
   const creatorRskAddress = fundingProject?.rskEoa || ''
   const usePrism = fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(creatorRskAddress)
-  const shouldIncludeFiat =
-    intendedPaymentMethod === PaymentMethods.fiatSwap || intendedPaymentMethod === PaymentMethods.card
+  const shouldIncludeFiat = intendedPaymentMethod === PaymentMethods.fiatSwap
 
   if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
     if (shouldIncludeFiat) {

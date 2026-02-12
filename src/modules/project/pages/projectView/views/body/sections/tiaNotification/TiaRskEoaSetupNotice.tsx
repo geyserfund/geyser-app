@@ -63,7 +63,7 @@ export const TiaRskEoaSetupNotice = () => {
   const shouldShow = Boolean(user?.id && isProjectOwner && isTiaProject && needsProjectKey)
 
   const message = t(
-    'Geyser is migrating to a new payment processing infrastructure. Configure your new project wallet before the {{keyConfigDeadline}} to continue receiving contributions after that date. You can read more about it',
+    'Geyser is migrating to a new payment infrastructure. Configure your new project wallet before the {{keyConfigDeadline}} to continue receiving contributions after that date. You can read more about it',
     { keyConfigDeadline: KEY_CONFIG_DEADLINE },
   )
 

@@ -7,6 +7,14 @@ import { FundingLaunchPayment } from './views/fundingPayment/FundingLaunchPaymen
 import { Payment } from './views/fundingPayment/Payment'
 import { Subscription } from './views/fundingPayment/Subscription'
 import { PaymentCreditCard } from './views/fundingPayment/views/paymentCreditCard/PaymentCreditCard.tsx'
+import {
+  PaymentFiatBanxa,
+  PaymentFiatBanxaApplePay,
+  PaymentFiatLegacyApplePayRedirect,
+  PaymentFiatLegacyBanxaRedirect,
+  PaymentFiatLegacyCreditCardRedirect,
+  PaymentFiatStripe,
+} from './views/fundingPayment/views/paymentCreditCard/PaymentFiatRouteViews.tsx'
 import { PaymentFailed } from './views/fundingPayment/views/paymentFailed/PaymentFailed'
 import { PaymentFiatSwap } from './views/fundingPayment/views/paymentFiatSwap/PaymentFiatSwap.tsx'
 import { PaymentLightning } from './views/fundingPayment/views/paymentLightning/PaymentLightning.tsx'
@@ -32,6 +40,12 @@ export {
   Payment,
   PaymentCreditCard,
   PaymentFailed,
+  PaymentFiatBanxa,
+  PaymentFiatBanxaApplePay,
+  PaymentFiatLegacyApplePayRedirect,
+  PaymentFiatLegacyBanxaRedirect,
+  PaymentFiatLegacyCreditCardRedirect,
+  PaymentFiatStripe,
   PaymentFiatSwap,
   PaymentLightning,
   PaymentLoading,

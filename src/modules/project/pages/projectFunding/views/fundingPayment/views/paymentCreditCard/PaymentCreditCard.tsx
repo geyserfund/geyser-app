@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { PiArrowSquareOut } from 'react-icons/pi'
-import { useLocation, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { SingleValue } from 'react-select'
 
 import { CustomSelect } from '@/components/ui/CustomSelect.tsx'
@@ -12,21 +12,17 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess.ts'
 import { useResetContribution } from '@/modules/project/funding/hooks/useResetContribution.ts'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
+import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
-import { getPath, PathName } from '@/shared/constants/index.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import { useGetUserIpCountryQuery } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { FundingDisclaimer } from '../../components/FundingDisclaimer.tsx'
 import { ReachOutForHelpButton } from '../../components/ReachOutForHelpButton.tsx'
-import {
-  fiatCheckoutMethods,
-  fiatPaymentMethodAtom,
-  hasFiatPaymentMethodAtom,
-  hasStripePaymentMethodAtom,
-} from '../../state/paymentMethodAtom.ts'
+import { fiatCheckoutMethods, fiatPaymentMethodAtom, hasFiatPaymentMethodAtom } from '../../state/paymentMethodAtom.ts'
 import { fiatSwapStatusAtom } from '../paymentFiatSwap/atom/fiatSwapStatusAtom.ts'
 import { BitcoinPurchaseNotice } from '../paymentFiatSwap/components/BitcoinPurchaseNotice.tsx'
 import { FiatSwapAwaitingPayment } from '../paymentFiatSwap/components/FiatSwapAwaitingPayment.tsx'
@@ -38,60 +34,77 @@ import { useCreateFiatSwapPayment } from '../paymentFiatSwap/hooks/useCreateFiat
 import { useFiatSwapPaymentSubscription } from '../paymentFiatSwap/useFiatSwapPaymentSubscription.tsx'
 import { PaymentStripe } from '../PaymentStripe.tsx'
 
-/** PaymentCreditCard: handles credit card and apple pay Banxa flow without the payment method selection UI */
-export const PaymentCreditCard = () => {
+type FiatPaymentProvider = 'stripe' | 'banxa'
+type BanxaCheckoutMode = 'creditCard' | 'applePay'
+
+type PaymentCreditCardProps = {
+  provider: FiatPaymentProvider
+  banxaCheckoutMode?: BanxaCheckoutMode
+}
+
+/** PaymentCreditCard: renders provider-specific fiat flows on canonical fiat routes */
+export const PaymentCreditCard = ({ provider, banxaCheckoutMode = 'creditCard' }: PaymentCreditCardProps) => {
   useListenFundingContributionSuccess()
 
   const navigate = useNavigate()
-  const location = useLocation()
 
   const { isFundingInputAmountValid, isFundingUserInfoValid, project } = useFundingFormAtom()
 
-  const { requestFiatOnlyFundingFromContext, requestFundingOptions } = useFundingAPI()
+  const { requestFiatOnlyFundingFromContext, requestFundingFromContext, requestFundingOptions } = useFundingAPI()
   const resetContribution = useResetContribution()
 
+  const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
   const fundingContribution = useAtomValue(fundingContributionAtom)
   const contributionUUID = fundingContribution?.uuid
 
   const fiatSwapStatus = useAtomValue(fiatSwapStatusAtom)
-  const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
   const setFiatPaymentMethod = useSetAtom(fiatPaymentMethodAtom)
   const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
-  const hasStripePaymentMethod = useAtomValue(hasStripePaymentMethodAtom)
 
   const [selectedCurrency, setSelectedCurrency] = useState('')
 
   const hasContribution = Boolean(fundingContribution?.id)
   const hasRequestedContribution = useRef(false)
 
-  const isApplePay = fiatPaymentMethod === fiatCheckoutMethods.applePay
+  const isStripeProvider = provider === 'stripe'
+  const isBanxaApplePay = !isStripeProvider && banxaCheckoutMode === 'applePay'
 
-  useFiatSwapPaymentSubscription({
-    contributionUUID,
-  })
+  const user = fundingInputAfterRequest?.user
+  const isBanxaUserLimitReached = Boolean(
+    !isStripeProvider &&
+      !user?.complianceDetails.verifiedDetails.identity?.verified &&
+      user?.complianceDetails.contributionLimits.monthly.reached,
+  )
+  const banxaFiatLimitMessage = t(
+    "You've reached your monthly fiat contribution Limit. Please verify your identity to remove all restrictions or wait for 30 days.",
+  )
+
+  useFiatSwapPaymentSubscription({ contributionUUID: isStripeProvider ? undefined : contributionUUID })
 
   useEffect(() => {
     resetContribution()
     hasRequestedContribution.current = false
     setSelectedCurrency('')
-  }, [location.pathname, resetContribution])
+  }, [provider, banxaCheckoutMode, resetContribution])
 
   useEffect(() => {
-    if (location.pathname.includes(PathName.fundingPaymentApplePay)) {
+    if (isStripeProvider) {
+      return
+    }
+
+    if (isBanxaApplePay) {
       setFiatPaymentMethod(fiatCheckoutMethods.applePay)
       return
     }
 
-    if (location.pathname.includes(PathName.fundingPaymentCreditCard)) {
-      setFiatPaymentMethod(fiatCheckoutMethods.creditCard)
-    }
-  }, [location.pathname, setFiatPaymentMethod])
+    setFiatPaymentMethod(fiatCheckoutMethods.creditCard)
+  }, [isStripeProvider, isBanxaApplePay, setFiatPaymentMethod])
 
   useEffect(() => {
     if (!hasFiatPaymentMethod) {
       navigate(getPath('fundingStart', project.name), { replace: true })
     }
-  }, [hasFiatPaymentMethod, project.name, navigate])
+  }, [hasFiatPaymentMethod, project.name, navigate, provider])
 
   useEffect(() => {
     if (hasContribution) {
@@ -104,7 +117,8 @@ export const PaymentCreditCard = () => {
 
     if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid && !hasRequestedContribution.current) {
       hasRequestedContribution.current = true
-      requestFiatOnlyFundingFromContext((data) => {
+      const requestFunding = isStripeProvider ? requestFundingFromContext : requestFiatOnlyFundingFromContext
+      requestFunding((data) => {
         const contributionId = data.contributionCreate.contribution.uuid
 
         if (contributionId && data.contributionCreate.contribution.isSubscription) {
@@ -119,7 +133,15 @@ export const PaymentCreditCard = () => {
       })
     }
     // NOTE: adding request funding callbacks to dependencies causes rerender loops, do not add until resolved
-  }, [isFundingInputAmountValid, isFundingUserInfoValid, navigate, project.name, hasContribution, hasFiatPaymentMethod])
+  }, [
+    isFundingInputAmountValid,
+    isFundingUserInfoValid,
+    navigate,
+    project.name,
+    hasContribution,
+    hasFiatPaymentMethod,
+    isStripeProvider,
+  ])
 
   useEffect(() => {
     if (requestFundingOptions.error) {
@@ -132,8 +154,16 @@ export const PaymentCreditCard = () => {
       return <PaymentCreditCardLoading />
     }
 
-    if (hasStripePaymentMethod) {
+    if (isStripeProvider) {
       return <PaymentStripe />
+    }
+
+    if (isBanxaUserLimitReached) {
+      return (
+        <VStack w="full" spacing={3}>
+          <Body color="secondary.red1">{banxaFiatLimitMessage}</Body>
+        </VStack>
+      )
     }
 
     return (
@@ -141,9 +171,10 @@ export const PaymentCreditCard = () => {
         status={fiatSwapStatus}
         renderInitial={() => (
           <FiatPaymentForm
-            isApplePay={isApplePay}
+            isApplePay={isBanxaApplePay}
             selectedCurrency={selectedCurrency}
             onCurrencyChange={setSelectedCurrency}
+            disablePayButton={isBanxaUserLimitReached}
           />
         )}
         renderPending={() => <FiatSwapAwaitingPayment />}
@@ -157,7 +188,7 @@ export const PaymentCreditCard = () => {
     <>
       <VStack flex={1} w="full" alignItems="start">
         <H1 size="2xl" bold>
-          {isApplePay ? t('Apple Pay Payment') : t('Card or Bank Transfer')}
+          {isBanxaApplePay ? t('Apple Pay Payment') : t('Card or Bank Transfer')}
         </H1>
         <VStack w="full" spacing={6}>
           {renderContent()}
@@ -176,10 +207,16 @@ type FiatPaymentFormProps = {
   isApplePay: boolean
   selectedCurrency: string
   onCurrencyChange: (currency: string) => void
+  disablePayButton?: boolean
 }
 
 /** FiatPaymentForm: renders the currency selector and Banxa redirect action */
-const FiatPaymentForm = ({ isApplePay, selectedCurrency, onCurrencyChange }: FiatPaymentFormProps) => {
+const FiatPaymentForm = ({
+  isApplePay,
+  selectedCurrency,
+  onCurrencyChange,
+  disablePayButton,
+}: FiatPaymentFormProps) => {
   const toast = useNotification()
   const { createFiatSwapPayment, loading: isLoading } = useCreateFiatSwapPayment()
 
@@ -216,6 +253,7 @@ const FiatPaymentForm = ({ isApplePay, selectedCurrency, onCurrencyChange }: Fia
           rightIcon={<Icon as={PiArrowSquareOut} />}
           onClick={handleCreateFiatSwapPayment}
           isLoading={isLoading}
+          isDisabled={Boolean(disablePayButton)}
           alignSelf="center"
           mt={2}
         >

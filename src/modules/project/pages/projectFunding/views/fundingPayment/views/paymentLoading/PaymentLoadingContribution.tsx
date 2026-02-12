@@ -17,7 +17,11 @@ import {
   PaymentMethods,
 } from '../../state/paymentMethodAtom.ts'
 
-export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: string) => void }) => {
+export const PaymentLoadingContribution = ({
+  onComplete,
+}: {
+  onComplete?: (_: string, forceCardRoute?: boolean) => void
+}) => {
   const { requestFundingFromContext, requestFundingOptions } = useFundingAPI()
 
   const { isFundingInputAmountValid, isFundingUserInfoValid, project } = useFundingFormAtom()
@@ -36,9 +40,14 @@ export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: st
     if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid && !data.current) {
       data.current = true
       requestFundingFromContext((data) => {
-        const contributionId = data.contributionCreate.contribution.uuid
+        const {
+          contributionCreate: {
+            contribution: { uuid: contributionId, isSubscription },
+            payments,
+          },
+        } = data
 
-        if (contributionId && data.contributionCreate.contribution.isSubscription) {
+        if (contributionId && isSubscription) {
           navigate(
             {
               pathname: getPath('fundingSubscription', project.name),
@@ -48,16 +57,18 @@ export const PaymentLoadingContribution = ({ onComplete }: { onComplete?: (_: st
           )
         } else if (contributionId) {
           if (onComplete) {
-            onComplete(contributionId)
+            onComplete(contributionId, Boolean(payments.fiat?.stripeClientSecret))
           } else {
             let paymentPath = getPath('fundingPaymentLightning', project.name)
 
-            if (intendedPaymentMethod === PaymentMethods.fiatSwap) {
+            if (payments.fiat?.stripeClientSecret) {
+              paymentPath = getPath('fundingPaymentFiatStripe', project.name)
+            } else if (intendedPaymentMethod === PaymentMethods.fiatSwap) {
               if (hasFiatPaymentMethod) {
                 paymentPath =
                   fiatPaymentMethod === fiatCheckoutMethods.applePay
-                    ? getPath('fundingPaymentApplePay', project.name)
-                    : getPath('fundingPaymentCreditCard', project.name)
+                    ? getPath('fundingPaymentFiatBanxaApplePay', project.name)
+                    : getPath('fundingPaymentFiatBanxa', project.name)
               } else {
                 paymentPath = getPath('fundingStart', project.name)
               }

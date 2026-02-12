@@ -22,20 +22,23 @@ import {
   LightningAddressConnectionDetails,
   LndConnectionDetailsPrivate,
   LndNodeType,
-  ProjectFundingStrategy,
   MfaAction,
   NwcConnectionDetailsPrivate,
   OtpResponseFragment,
+  ProjectFundingStrategy,
   UpdateWalletInput,
 } from '../../../../../../types/index.ts'
 import { isDraft, isPrelaunch, useCustomTheme, useNotification } from '../../../../../../utils/index.ts'
 import { ConnectionOption, useWalletForm } from '../../../projectCreation/hooks/useWalletForm.tsx'
 import { ConnectionDetails } from '../../../projectCreation/views/launchPayment/components/ConnectionDetails.tsx'
 import { ConnectWalletModal } from '../../../projectCreation/views/launchPayment/components/ConnectWalletModal.tsx'
+import { TiaRskEoaSetupNotice } from '../../../projectView/views/body/sections/tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { DashboardLayout } from '../../common/index.ts'
 import { VerificationModal } from '../../components/VerificationModal.tsx'
 import { EnableFiatContributions } from './components/EnableFiatContributions.tsx'
-import { TiaRskEoaSetupNotice } from '../../../projectView/views/body/sections/tiaNotification/TiaRskEoaSetupNotice.tsx'
+
+const KEY_CONFIG_DEADLINE = '30th of June 2026'
+
 export const ProjectDashboardWallet = () => {
   const { t } = useTranslation()
   const { toast } = useNotification()
@@ -217,7 +220,12 @@ export const ProjectDashboardWallet = () => {
       </VStack>
       <HStack w="full" paddingX={{ base: 0, lg: 6 }} paddingTop={4}>
         <Body size="xl" medium>
-          {t('Configure Wallet')}
+          {t('Configure Wallet')}{' '}
+          <Body as="span" size="xl" light color="neutral1.8">
+            {t('(deprecation on {{keyConfigDeadline}})', {
+              keyConfigDeadline: KEY_CONFIG_DEADLINE,
+            })}
+          </Body>
         </Body>
       </HStack>
 

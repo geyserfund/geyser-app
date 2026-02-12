@@ -13,6 +13,7 @@ import {
   fiatCheckoutMethods,
   fiatPaymentMethodAtom,
   hasFiatPaymentMethodAtom,
+  hasStripePaymentMethodAtom,
   intendedPaymentMethodAtom,
   PaymentMethods,
 } from '../views/fundingPayment/state/paymentMethodAtom.ts'
@@ -50,7 +51,8 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   const setIntendedPaymentMethod = useSetAtom(intendedPaymentMethodAtom)
   const setFiatPaymentMethod = useSetAtom(fiatPaymentMethodAtom)
   const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
-  const isApplePayVisible = hasFiatPaymentMethod && getIsApplePayVisible()
+  const hasStripePaymentMethod = useAtomValue(hasStripePaymentMethodAtom)
+  const isApplePayVisible = hasFiatPaymentMethod && !hasStripePaymentMethod && getIsApplePayVisible()
   const applePayButtonBg = useColorModeValue('neutral.1000', 'neutral.1000')
   const applePayButtonText = useColorModeValue('neutral.0', 'neutral.0')
   const creditCardIcon = <Icon as={FaCreditCard} color="utils.text" />
@@ -62,7 +64,9 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
     setFiatPaymentMethod(fiatCheckoutMethods.creditCard)
     if (!useFormSubmit) {
       const paymentPath = hasFiatPaymentMethod
-        ? getPath('fundingPaymentCreditCard', project.name)
+        ? hasStripePaymentMethod
+          ? getPath('fundingPaymentFiatStripe', project.name)
+          : getPath('fundingPaymentFiatBanxa', project.name)
         : getPath('fundingStart', project.name)
       navigate(paymentPath)
     }
@@ -73,7 +77,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
     setFiatPaymentMethod(fiatCheckoutMethods.applePay)
     if (!useFormSubmit) {
       const paymentPath = hasFiatPaymentMethod
-        ? getPath('fundingPaymentApplePay', project.name)
+        ? getPath('fundingPaymentFiatBanxaApplePay', project.name)
         : getPath('fundingStart', project.name)
       navigate(paymentPath)
     }

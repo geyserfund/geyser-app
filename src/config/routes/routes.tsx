@@ -663,15 +663,51 @@ export const platformRoutes: RouteObject[] = [
               {
                 path: getPath('fundingPaymentCreditCard', PathName.projectName),
                 async lazy() {
-                  const PaymentCreditCard = await loadProjectFundingPages().then((m) => m.PaymentCreditCard)
-                  return { Component: PaymentCreditCard }
+                  const PaymentFiatLegacyCreditCardRedirect = await loadProjectFundingPages().then(
+                    (m) => m.PaymentFiatLegacyCreditCardRedirect,
+                  )
+                  return { Component: PaymentFiatLegacyCreditCardRedirect }
+                },
+              },
+              {
+                path: getPath('fundingPaymentCard', PathName.projectName),
+                async lazy() {
+                  const PaymentFiatLegacyCreditCardRedirect = await loadProjectFundingPages().then(
+                    (m) => m.PaymentFiatLegacyCreditCardRedirect,
+                  )
+                  return { Component: PaymentFiatLegacyCreditCardRedirect }
                 },
               },
               {
                 path: getPath('fundingPaymentApplePay', PathName.projectName),
                 async lazy() {
-                  const PaymentCreditCard = await loadProjectFundingPages().then((m) => m.PaymentCreditCard)
-                  return { Component: PaymentCreditCard }
+                  const PaymentFiatLegacyApplePayRedirect = await loadProjectFundingPages().then(
+                    (m) => m.PaymentFiatLegacyApplePayRedirect,
+                  )
+                  return { Component: PaymentFiatLegacyApplePayRedirect }
+                },
+              },
+              {
+                path: getPath('fundingPaymentFiatStripe', PathName.projectName),
+                async lazy() {
+                  const PaymentFiatStripe = await loadProjectFundingPages().then((m) => m.PaymentFiatStripe)
+                  return { Component: PaymentFiatStripe }
+                },
+              },
+              {
+                path: getPath('fundingPaymentFiatBanxa', PathName.projectName),
+                async lazy() {
+                  const PaymentFiatBanxa = await loadProjectFundingPages().then((m) => m.PaymentFiatBanxa)
+                  return { Component: PaymentFiatBanxa }
+                },
+              },
+              {
+                path: getPath('fundingPaymentFiatBanxaApplePay', PathName.projectName),
+                async lazy() {
+                  const PaymentFiatBanxaApplePay = await loadProjectFundingPages().then(
+                    (m) => m.PaymentFiatBanxaApplePay,
+                  )
+                  return { Component: PaymentFiatBanxaApplePay }
                 },
               },
 
@@ -699,8 +735,10 @@ export const platformRoutes: RouteObject[] = [
                   {
                     path: getPath('fundingPaymentFiatSwap', PathName.projectName),
                     async lazy() {
-                      const PaymentFiatSwap = await loadProjectFundingPages().then((m) => m.PaymentFiatSwap)
-                      return { Component: PaymentFiatSwap }
+                      const PaymentFiatLegacyBanxaRedirect = await loadProjectFundingPages().then(
+                        (m) => m.PaymentFiatLegacyBanxaRedirect,
+                      )
+                      return { Component: PaymentFiatLegacyBanxaRedirect }
                     },
                   },
                   {

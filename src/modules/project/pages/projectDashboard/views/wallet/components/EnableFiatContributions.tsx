@@ -19,9 +19,8 @@ export const EnableFiatContributions = ({
   projectId,
   onRequireVerification,
 }: EnableFiatContributionsProps) => {
-  const [payoutMode, setPayoutMode] = useState<'BTC' | 'USD'>('BTC')
   const [isStripeReady, setIsStripeReady] = useState(false)
-  const isBitcoinMode = payoutMode === 'BTC' && !isStripeReady
+  const isBitcoinMode = !isStripeReady
 
   return (
     <VStack w="full" alignItems="start" spacing={4}>
@@ -53,8 +52,6 @@ export const EnableFiatContributions = ({
           p={6}
           alignItems="start"
           spacing={3}
-          cursor="pointer"
-          onClick={() => setPayoutMode('BTC')}
         >
           <HStack w="full" justifyContent="space-between">
             <Body size="lg" medium>
@@ -68,7 +65,7 @@ export const EnableFiatContributions = ({
           </HStack>
           <Body size="md" light>
             {t(
-              'Contributors pay with fiat through credit card or bank transfer, and you receive Bitcoin in your wallet. A third-party processing fee applies.',
+              'Contributors pay with fiat through credit card or bank transfer, and you receive Bitcoin in your wallet. A 3.5% third-party processing fee applies.',
             )}
           </Body>
         </VStack>
@@ -77,7 +74,6 @@ export const EnableFiatContributions = ({
           compact
           withCard
           selected={!isBitcoinMode}
-          onSelect={() => setPayoutMode('USD')}
           isIdentityVerified={Boolean(isIdentityVerified)}
           isTiaProject={isTiaProject}
           projectId={projectId}
