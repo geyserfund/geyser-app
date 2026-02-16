@@ -37,6 +37,7 @@ export const QUERY_IMPACT_FUND = gql`
         name
         image
         url
+        amountContributedInSats
         status
       }
       archivedSponsors {
@@ -44,6 +45,7 @@ export const QUERY_IMPACT_FUND = gql`
         name
         image
         url
+        amountContributedInSats
         status
       }
       fundedApplications {

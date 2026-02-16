@@ -2,6 +2,7 @@ import { HStack, Image } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { useLocation } from 'react-router'
 
+import MarketplaceNavIcon from '@/assets/marketplace-nav.png'
 import { AnimatedNavSlide, AnimatedNavSlideItem } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
 import { CampaignIconUrl, FundraiserIconUrl, ProductsIconUrl } from '@/shared/constants/index.ts'
 
@@ -11,6 +12,7 @@ export const PlatformNav = () => {
   const ProjectNavigationButtons = useMemo(() => {
     const buttonDimension = '50px'
     const campaignButtonDimension = '58px'
+    const marketplaceButtonDimension = '55px'
     const buttonList = [
       {
         name: 'Fundraisers',
@@ -23,6 +25,11 @@ export const PlatformNav = () => {
         icon: <Image src={CampaignIconUrl} height={campaignButtonDimension} width={campaignButtonDimension} />,
       },
 
+      {
+        name: 'Shops',
+        path: '/products',
+        icon: <Image src={MarketplaceNavIcon} height={marketplaceButtonDimension} width={marketplaceButtonDimension} />,
+      },
       {
         name: 'Impact Funds',
         path: '/impact-funds',

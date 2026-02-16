@@ -84,7 +84,7 @@ export const DonationSponsorCTA = ({ title, description, donateProjectName }: Do
                   </Body>
                   <Button
                     as={ChakraLink}
-                    href="https://cal.com/geyser"
+                    href="https://cal.com/metamick/thirtymin?overlayCalendar=true"
                     isExternal
                     colorScheme="primary1"
                     size="md"
@@ -96,7 +96,7 @@ export const DonationSponsorCTA = ({ title, description, donateProjectName }: Do
               </Box>
 
               <Body size="sm" color="gray.500">
-                {t('You can also reach out to us directly at')} <strong>sponsors@geyser.fund</strong>
+                {t('You can also reach out to us directly at')} <strong>hello@geyser.fund</strong>
               </Body>
             </VStack>
           </ModalBody>

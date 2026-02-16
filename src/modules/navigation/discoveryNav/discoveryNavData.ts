@@ -1,6 +1,7 @@
 import { IconType } from 'react-icons'
-import { PiClockCountdown, PiHandCoins, PiHouse, PiRocket, PiTrophy } from 'react-icons/pi'
+import { PiBag, PiClockCountdown, PiHandCoins, PiHouse, PiRocket, PiTrophy } from 'react-icons/pi'
 
+import MarketplaceNavIcon from '@/assets/marketplace-nav.png'
 import { PathsMap } from '@/shared/constants'
 
 export enum DiscoveryNavItemKey {
@@ -53,6 +54,14 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.MyProjects,
     path: 'discoveryMyProjects',
     icon: PiRocket,
+    bottomNav: true,
+  },
+  {
+    label: 'Shops',
+    key: DiscoveryNavItemKey.Merch,
+    path: 'discoveryProducts',
+    icon: PiBag,
+    image: MarketplaceNavIcon,
     bottomNav: true,
   },
   {

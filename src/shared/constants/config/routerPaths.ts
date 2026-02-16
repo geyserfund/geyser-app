@@ -201,6 +201,7 @@ const pathsMap = {
   discoveryFundraisersSubCategory: (subCategory: string) =>
     `/${PathName.fundraisers}/${PathName.subCategory}/${subCategory}`,
   discoveryProducts: () => `/${PathName.products}`,
+  discoveryProductsCategory: (category: string) => `/${PathName.products}/${PathName.category}/${category}`,
   discoveryProjectCategory: (category: string) => `/${PathName.projectCategory}/${category}`,
   discoveryProjectSubCategory: (subCategory: string) => `/${PathName.projectSubCategory}/${subCategory}`,
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,

@@ -55,8 +55,20 @@ type ImpactFundDetail = {
     id: string
     name: string
   } | null
-  liveSponsors: Array<{ id: string; name: string; image?: string | null; url?: string | null }>
-  archivedSponsors: Array<{ id: string; name: string; image?: string | null; url?: string | null }>
+  liveSponsors: Array<{
+    id: string
+    name: string
+    image?: string | null
+    url?: string | null
+    amountContributedInSats: number
+  }>
+  archivedSponsors: Array<{
+    id: string
+    name: string
+    image?: string | null
+    url?: string | null
+    amountContributedInSats: number
+  }>
   fundedApplications: Array<{
     id: string
     amountAwardedInSats?: number | null
@@ -167,22 +179,19 @@ export const ImpactFundDetailPage = () => {
           />
         )}
         <VStack align="stretch" spacing={4}>
-          <HStack align="center" spacing={2} flexWrap="wrap">
-            <H2 size="2xl" bold>
+          <Flex justify="space-between" align="center" gap={4} flexWrap="wrap">
+            <Text fontSize="3xl" fontWeight="bold" color="gray.900">
               {impactFund.title}
-            </H2>
-            {impactFund.amountCommitted ? (
-              <>
-                <Body size="2xl" color="gray.500" display={{ base: 'none', sm: 'block' }}>
-                  ·
-                </Body>
-                <Body size="lg" bold color="primary1.500">
-                  {`₿ ${new Intl.NumberFormat().format(impactFund.amountCommitted)}`}
-                </Body>
-              </>
-            ) : null}
-            {impactFund.tags.length > 0 &&
-              impactFund.tags.map((tag) => (
+            </Text>
+            {impactFund.amountCommitted && (
+              <Text fontSize="3xl" fontWeight="bold" color="orange.500">
+                ₿ {new Intl.NumberFormat().format(impactFund.amountCommitted)}
+              </Text>
+            )}
+          </Flex>
+          {impactFund.tags.length > 0 && (
+            <HStack spacing={2} flexWrap="wrap">
+              {impactFund.tags.map((tag) => (
                 <Box
                   key={tag}
                   px={3}
@@ -198,7 +207,8 @@ export const ImpactFundDetailPage = () => {
                   </Body>
                 </Box>
               ))}
-          </HStack>
+            </HStack>
+          )}
           {impactFund.description && (
             <Body size="lg" color="gray.600">
               {impactFund.description}

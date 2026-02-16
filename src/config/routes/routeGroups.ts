@@ -181,6 +181,7 @@ export const discoveryRoutes = [
   getPath('discoveryProjectSubCategory', PathName.subCategoryName),
   getPath('discoveryMyProjects'),
   getPath('discoveryProducts'),
+  getPath('discoveryProductsCategory', PathName.categoryName),
   getPath('discoveryCampaigns'),
   getPath('discoveryAllOrNothing'),
   getPath('discoveryCampaignsAlmostFunded'),

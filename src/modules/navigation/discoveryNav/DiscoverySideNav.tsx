@@ -25,6 +25,8 @@ import { currentPlatformNavItemAtom } from './discoveryNavAtom'
 import { DiscoveryNavItem, DiscoveryNavItemKey, discoveryNavItems } from './discoveryNavData'
 
 const InsertDividerAfterIndex = [2, 4, 6]
+const marketplaceIconHeight = '24.2px'
+const defaultNavIconHeight = '18px'
 
 const glowAnimation = keyframes`
   0% { filter: drop-shadow(0 0 0px #3182ce); }
@@ -126,7 +128,15 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
         {...rest}
       >
         <>
-          {item.image ? <Image height="18px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />}
+          {item.image ? (
+            <Image
+              height={item.key === DiscoveryNavItemKey.Merch ? marketplaceIconHeight : defaultNavIconHeight}
+              src={item.image}
+              alt={item.label}
+            />
+          ) : (
+            <item.icon fontSize="18px" />
+          )}
           {activityDot ? (
             <Box
               position="absolute"
@@ -150,7 +160,17 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
       size="lg"
       width={'full'}
       key={item.label}
-      leftIcon={item.image ? <Image height="18px" src={item.image} alt={item.label} /> : <item.icon fontSize="18px" />}
+      leftIcon={
+        item.image ? (
+          <Image
+            height={item.key === DiscoveryNavItemKey.Merch ? marketplaceIconHeight : defaultNavIconHeight}
+            src={item.image}
+            alt={item.label}
+          />
+        ) : (
+          <item.icon fontSize="18px" />
+        )
+      }
       rightIcon={
         activityDot ? (
           <Box

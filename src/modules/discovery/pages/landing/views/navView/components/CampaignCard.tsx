@@ -31,7 +31,7 @@ export const CampaignCard = ({ imageUrl, alt, title, description }: CampaignCard
       padding="10px 14px"
       boxShadow={shadow}
     >
-      <Image src={imageUrl} alt={alt} boxSize={14} flexShrink={0} />
+      <Image src={imageUrl} alt={alt} boxSize={14} objectFit="contain" flexShrink={0} />
       <VStack gap={0} w="full" alignItems="start">
         <Body size={{ base: 'md', lg: 'lg' }} bold>
           {t(title)}

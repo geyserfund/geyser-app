@@ -1000,6 +1000,22 @@ export const platformRoutes: RouteObject[] = [
               const Products = await loadLandingPages().then((m) => m.Products)
               return { Component: Products }
             },
+            children: [
+              {
+                index: true,
+                async lazy() {
+                  const TrendingProducts = await loadLandingPages().then((m) => m.TrendingProducts)
+                  return { Component: TrendingProducts }
+                },
+              },
+              {
+                path: getPath('discoveryProductsCategory', PathName.categoryName),
+                async lazy() {
+                  const CategoryProducts = await loadLandingPages().then((m) => m.CategoryProducts)
+                  return { Component: CategoryProducts }
+                },
+              },
+            ],
           },
         ],
       },
