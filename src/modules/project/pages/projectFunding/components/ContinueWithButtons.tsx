@@ -23,25 +23,17 @@ type ContinueWithButtonsProps = {
 }
 
 const getIsApplePayVisible = () => {
-  if (typeof navigator === 'undefined') {
+  if (typeof window === 'undefined') {
     return false
   }
 
-  const platform = navigator.platform || ''
-  const userAgent = navigator.userAgent || ''
-  const vendor = navigator.vendor || ''
-
-  const isSafari = vendor.includes('Apple') || (/Safari/.test(userAgent) && !/Chrome|Chromium|CriOS/.test(userAgent))
-
-  if (!isSafari) {
-    return false
+  const { ApplePaySession } = window as Window & {
+    ApplePaySession?: {
+      canMakePayments: () => boolean
+    }
   }
 
-  if (platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
-    return true
-  }
-
-  return /Mac|iPhone|iPad|iPod/.test(platform) || /Macintosh|iPhone|iPad|iPod/.test(userAgent)
+  return Boolean(ApplePaySession?.canMakePayments())
 }
 
 export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButtonsProps) => {
