@@ -13,7 +13,7 @@ import { currentBottomNavItemAtom } from './discoveryNavAtom'
 export enum BottomNavItemKey {
   campaigns = 'campaigns',
   fundraisers = 'fundraisers',
-  products = 'products',
+  impactFunds = 'impactFunds',
 }
 
 export type BottomNavItem = {
@@ -25,6 +25,7 @@ export type BottomNavItem = {
 }
 
 const imageDimension = { base: '40px', sm: '45px', md: '50px' }
+const campaignImageDimension = { base: '46px', sm: '53px', md: '58px' }
 
 export const bottomNavItems = [
   {
@@ -37,13 +38,12 @@ export const bottomNavItems = [
     label: 'Campaigns',
     key: BottomNavItemKey.campaigns,
     path: 'discoveryCampaigns',
-    IconComponent: <Image src={CampaignIconUrl} height={imageDimension} width={imageDimension} />,
-    new: true,
+    IconComponent: <Image src={CampaignIconUrl} height={campaignImageDimension} width={campaignImageDimension} />,
   },
   {
-    label: 'Shop',
-    key: BottomNavItemKey.products,
-    path: 'discoveryProducts',
+    label: 'Impact Funds',
+    key: BottomNavItemKey.impactFunds,
+    path: 'discoveryImpactFunds',
     IconComponent: <Image src={ProductsIconUrl} height={imageDimension} width={imageDimension} marginRight={2} />,
   },
 ] as BottomNavItem[]

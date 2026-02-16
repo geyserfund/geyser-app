@@ -7,8 +7,8 @@ import { loadHeroesPages } from '@/modules/discovery/pages/heroes/loader.ts'
 import { loadLandingPages } from '@/modules/discovery/pages/landing/loader.ts'
 import { loadLandingMainViewPages } from '@/modules/discovery/pages/landing/views/mainView/loader.ts'
 import { MaintainancePage } from '@/modules/general/fallback/MaintainancePage.tsx'
-import { loadGrantsModule } from '@/modules/grants/loader.ts'
 import { loadGuardiansModule } from '@/modules/guardians/loader.ts'
+import { loadImpactFundsModule } from '@/modules/impactFunds/loader.ts'
 import { loadProfileModule } from '@/modules/profile/loader.ts'
 import { loadProfileSettingsModule } from '@/modules/profile/pages/profileSettings/loader.ts'
 import { loadProjectModule } from '@/modules/project/loader.ts'
@@ -1112,10 +1112,7 @@ export const platformRoutes: RouteObject[] = [
 
       {
         path: getPath('impactFund'),
-        async lazy() {
-          const ImpactFund = await loadDiscoveryModule().then((m) => m.ImpactFund)
-          return { Component: ImpactFund }
-        },
+        element: <Navigate to={getPath('impactFunds')} replace />,
       },
 
       {
@@ -1127,23 +1124,27 @@ export const platformRoutes: RouteObject[] = [
       },
       {
         path: getPath('discoveryGrants'),
+        element: <Navigate to={getPath('impactFunds')} replace />,
+      },
+      {
+        path: getPath('discoveryImpactFunds'),
         async lazy() {
-          const grantsModule = await loadGrantsModule()
-          return { Component: grantsModule.GrantsMainPage }
+          const impactFundsModule = await loadImpactFundsModule()
+          return { Component: impactFundsModule.ImpactFundsMainPage }
         },
       },
       {
         path: getPath('discoveryGrant', PathName.grantId),
         async lazy() {
-          const grantsModule = await loadGrantsModule()
-          return { Component: grantsModule.GrantPage }
+          const impactFundsModule = await loadImpactFundsModule()
+          return { Component: impactFundsModule.LegacyGrantRedirectPage }
         },
       },
       {
-        path: getPath('discoveryGrant', PathName.grantId),
+        path: getPath('discoveryImpactFund', PathName.impactFundSlug),
         async lazy() {
-          const GrantPage = await loadGrantsModule().then((m) => m.GrantPage)
-          return { Component: GrantPage }
+          const impactFundsModule = await loadImpactFundsModule()
+          return { Component: impactFundsModule.ImpactFundDetailPage }
         },
       },
     ],
@@ -1151,18 +1152,12 @@ export const platformRoutes: RouteObject[] = [
 
   {
     path: getPath('discoveryGrantApply', PathName.grantId),
-    async lazy() {
-      const GrantsApplyPage = await loadGrantsModule().then((m) => m.GrantsApplyPage)
-      return { Component: GrantsApplyPage }
-    },
+    element: <Navigate to={getPath('impactFunds')} replace />,
   },
 
   {
     path: '/time2build',
-    async lazy() {
-      const GrantPage = await loadGrantsModule().then((m) => m.GrantPage)
-      return { element: <GrantPage grantId={20} /> }
-    },
+    element: <Navigate to={getPath('impactFunds')} replace />,
   },
 
   {

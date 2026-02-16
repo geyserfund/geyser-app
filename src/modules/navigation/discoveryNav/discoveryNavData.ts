@@ -1,5 +1,5 @@
 import { IconType } from 'react-icons'
-import { PiClockCountdown, PiHandbag, PiHandCoins, PiHouse, PiRocket, PiTrophy } from 'react-icons/pi'
+import { PiClockCountdown, PiHandCoins, PiHouse, PiRocket, PiTrophy } from 'react-icons/pi'
 
 import { PathsMap } from '@/shared/constants'
 
@@ -7,9 +7,8 @@ export enum DiscoveryNavItemKey {
   Campaigns = 'campaigns',
   Fundraisers = 'fundraisers',
   MyProjects = 'myProjects',
-  Products = 'products',
+  ImpactFunds = 'impactFunds',
   Activity = 'activity',
-  Grants = 'grants',
   Merch = 'merch',
   Guardians = 'guardians',
   Launchpad = 'launchpad',
@@ -57,17 +56,10 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     bottomNav: true,
   },
   {
-    label: 'Shop',
-    key: DiscoveryNavItemKey.Products,
-    path: 'discoveryProducts',
-    icon: PiHandbag,
-    bottomNav: true,
-  },
-  {
-    label: 'Grants',
-    key: DiscoveryNavItemKey.Grants,
-    path: 'discoveryGrants',
+    label: 'Impact Funds',
+    key: DiscoveryNavItemKey.ImpactFunds,
+    path: 'discoveryImpactFunds',
     icon: PiTrophy,
-    bottomNav: false,
+    bottomNav: true,
   },
 ]

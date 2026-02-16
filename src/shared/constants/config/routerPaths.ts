@@ -10,6 +10,7 @@ export enum PathName {
   creator = 'creator',
   contributor = 'contributor',
   grants = 'grants',
+  impactFunds = 'impact-funds',
   grantsRoundOne = 'roundone',
   grantsRoundTwo = 'roundtwo',
   myProjects = 'my-projects',
@@ -167,6 +168,7 @@ export enum PathName {
   postId = ':postId',
   goalId = ':goalId',
   grantId = ':grantId',
+  impactFundSlug = ':impactFundSlug',
   characterId = ':characterId',
   legalTerms = 'T&C',
   legalPrivacy = 'Privacy',
@@ -209,6 +211,8 @@ const pathsMap = {
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
   discoveryGrantApply: (grantId: string) => `/${PathName.grants}/${grantId}/${PathName.grantApply}`,
+  discoveryImpactFunds: () => `/${PathName.impactFunds}`,
+  discoveryImpactFund: (impactFundSlug: string) => `/${PathName.impactFunds}/${impactFundSlug}`,
   discoveryMerch: () => `/${PathName.merch}`,
   discoveryLaunchpad: () => `/${PathName.launchpad}`,
 
@@ -233,6 +237,8 @@ const pathsMap = {
   /** Grants Routes */
 
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
+  impactFunds: (impactFundSlug?: string) =>
+    impactFundSlug ? `/${PathName.impactFunds}/${impactFundSlug}` : `/${PathName.impactFunds}`,
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
   grantsRoundTwo: () => `/${PathName.grants}/${PathName.grantsRoundTwo}`,
 

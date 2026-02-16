@@ -10,6 +10,7 @@ export const PlatformNav = () => {
 
   const ProjectNavigationButtons = useMemo(() => {
     const buttonDimension = '50px'
+    const campaignButtonDimension = '58px'
     const buttonList = [
       {
         name: 'Fundraisers',
@@ -19,13 +20,12 @@ export const PlatformNav = () => {
       {
         name: 'Campaigns',
         path: '/campaigns',
-        icon: <Image src={CampaignIconUrl} height={buttonDimension} width={buttonDimension} />,
-        new: true,
+        icon: <Image src={CampaignIconUrl} height={campaignButtonDimension} width={campaignButtonDimension} />,
       },
 
       {
-        name: 'Shop',
-        path: '/products',
+        name: 'Impact Funds',
+        path: '/impact-funds',
         icon: <Image src={ProductsIconUrl} height={buttonDimension} width={buttonDimension} />,
       },
     ] as AnimatedNavSlideItem[]
