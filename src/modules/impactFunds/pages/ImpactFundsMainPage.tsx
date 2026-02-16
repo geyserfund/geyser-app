@@ -10,12 +10,14 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
 
+import { DonationSponsorCTA } from '../components/DonationSponsorCTA'
 import { ImpactFlowStrip } from '../components/ImpactFlowStrip'
 import { QUERY_IMPACT_FUNDS } from '../graphql/impactFunds'
 
 type ImpactFundListItem = {
   id: string
-  slug: string
+  name: string
+  tags: string[]
   title: string
   subtitle?: string | null
   heroImage?: string | null
@@ -26,6 +28,9 @@ export const ImpactFundsMainPage = () => {
   const { data } = useQuery<{ impactFunds: ImpactFundListItem[] }>(QUERY_IMPACT_FUNDS)
 
   const impactFunds = data?.impactFunds || []
+
+  // Hardcoded Geyser Impact Fund project ID
+  const geyserImpactFundProjectId = '1'
 
   return (
     <VStack align="stretch" spacing={{ base: 10, lg: 12 }} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
@@ -56,6 +61,13 @@ export const ImpactFundsMainPage = () => {
         <ImpactFlowStrip />
       </VStack>
 
+      {/* Donation & Sponsor Section */}
+      <DonationSponsorCTA
+        title={t('Support Impact Funds')}
+        description={t('Help us fund more impactful projects by donating to the fund or becoming a sponsor.')}
+        donateProjectName={geyserImpactFundProjectId}
+      />
+
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
         {impactFunds.map((fund) => (
           <CardLayout
@@ -78,7 +90,7 @@ export const ImpactFundsMainPage = () => {
                 <VStack w="full" bg="utils.pbg" pt={5} pb={5} align="start" spacing={3}>
                   <HStack w="full" justifyContent="space-between" alignItems="baseline" spacing={3} px={5}>
                     <H2 size="xl" bold lineHeight={1.2} flex={1}>
-                      <LinkOverlay as={Link} to={getPath('impactFunds', fund.slug)}>
+                      <LinkOverlay as={Link} to={getPath('impactFunds', encodeURIComponent(fund.name))}>
                         {fund.title}
                       </LinkOverlay>
                     </H2>
@@ -96,7 +108,7 @@ export const ImpactFundsMainPage = () => {
                   <HStack w="full" px={5} spacing={3}>
                     <Button
                       as={Link}
-                      to={getPath('impactFunds', fund.slug)}
+                      to={getPath('impactFunds', encodeURIComponent(fund.name))}
                       size="md"
                       flex={1}
                       variant="outline"
@@ -107,7 +119,7 @@ export const ImpactFundsMainPage = () => {
                     </Button>
                     <Button
                       as={Link}
-                      to={getPath('impactFunds', fund.slug)}
+                      to={getPath('impactFunds', encodeURIComponent(fund.name))}
                       size="md"
                       flex={1}
                       colorScheme="primary1"

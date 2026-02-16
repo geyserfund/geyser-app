@@ -171,7 +171,7 @@ export const projectCreatorRoutes = [
 ]
 
 export const grantRoutes = [getPath('grants'), getPath('grants', PathName.grantId)]
-export const impactFundRoutes = [getPath('impactFunds'), getPath('impactFunds', PathName.impactFundSlug)]
+export const impactFundRoutes = [getPath('impactFunds'), getPath('impactFunds', PathName.impactFundName)]
 
 export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath('landingFeed')]
 
@@ -198,7 +198,7 @@ export const discoveryRoutes = [
   getPath('discoveryLeaderboard'),
   getPath('discoveryLaunchpad'),
   getPath('discoveryImpactFunds'),
-  getPath('discoveryImpactFund', PathName.impactFundSlug),
+  getPath('discoveryImpactFund', PathName.impactFundName),
   // getPath('discoveryGrantApply', PathName.grantId),
   getPath('hallOfFameProjects'),
   getPath('discoveryHeroes'),

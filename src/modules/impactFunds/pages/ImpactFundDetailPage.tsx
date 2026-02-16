@@ -1,10 +1,14 @@
 import { useMutation, useQuery } from '@apollo/client'
 import {
+  Box,
   Button,
   Card,
+  Flex,
   HStack,
+  Icon,
   Image,
   Link as ChakraLink,
+  ListItem,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,38 +18,47 @@ import {
   ModalOverlay,
   Select,
   SimpleGrid,
+  Text,
+  UnorderedList,
   useDisclosure,
   useToast,
   VStack,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo, useState } from 'react'
+import { PiCoinsDuotone, PiNewspaperDuotone, PiRocketLaunchDuotone } from 'react-icons/pi'
 import { Link, useNavigate, useParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useAuthContext } from '@/context'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal'
-import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
 
+import { DonationSponsorCTA } from '../components/DonationSponsorCTA'
 import { MUTATION_IMPACT_FUND_APPLY, QUERY_IMPACT_FUND } from '../graphql/impactFunds'
 
 type ImpactFundDetail = {
   id: string
-  slug: string
+  name: string
+  tags: string[]
   title: string
   subtitle?: string | null
   description?: string | null
   heroImage?: string | null
   amountCommitted?: number | null
-  donateProjectName?: string | null
+  donateProjectId?: string | null
+  donateProject?: {
+    id: string
+    name: string
+  } | null
   liveSponsors: Array<{ id: string; name: string; image?: string | null; url?: string | null }>
   archivedSponsors: Array<{ id: string; name: string; image?: string | null; url?: string | null }>
   fundedApplications: Array<{
     id: string
-    projectId: string
     amountAwardedInSats?: number | null
     awardedAt?: string | null
     contributionUuid?: string | null
@@ -58,14 +71,20 @@ type ImpactFundDetail = {
     }
   }>
   metrics: {
-    awardedThisYearSats: number
+    awardedTotalSats: number
     projectsFundedCount: number
-    reportsLabel: string
   }
 }
 
+const getQuarterFromDate = (dateString: string): string => {
+  const date = new Date(dateString)
+  const quarter = Math.floor(date.getMonth() / 3) + 1
+  const year = date.getFullYear()
+  return `Q${quarter} ${year}`
+}
+
 export const ImpactFundDetailPage = () => {
-  const { impactFundSlug } = useParams<{ impactFundSlug: string }>()
+  const { impactFundName } = useParams<{ impactFundName: string }>()
   const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
   const toast = useToast()
@@ -75,8 +94,8 @@ export const ImpactFundDetailPage = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<string>('')
 
   const { data } = useQuery<{ impactFund: ImpactFundDetail }>(QUERY_IMPACT_FUND, {
-    variables: { input: { where: { slug: impactFundSlug } } },
-    skip: !impactFundSlug,
+    variables: { input: { where: { name: impactFundName ? decodeURIComponent(impactFundName) : '' } } },
+    skip: !impactFundName,
   })
 
   const [apply, { loading: applying }] = useMutation(MUTATION_IMPACT_FUND_APPLY)
@@ -128,153 +147,387 @@ export const ImpactFundDetailPage = () => {
   }
 
   return (
-    <VStack align="stretch" spacing={8}>
+    <VStack align="stretch" spacing={14}>
       <Head
         title={impactFund.title}
         description={impactFund.subtitle || undefined}
         image={impactFund.heroImage || undefined}
       />
 
-      <CardLayout p={0} overflow="hidden">
+      {/* Hero Section */}
+      <VStack align="stretch" spacing={6}>
         {impactFund.heroImage && (
-          <Image src={impactFund.heroImage} alt={impactFund.title} w="full" h="320px" objectFit="cover" />
+          <Image
+            src={impactFund.heroImage}
+            alt={impactFund.title}
+            w="full"
+            maxH="300px"
+            objectFit="cover"
+            borderRadius="lg"
+          />
         )}
-        <VStack align="start" p={6} spacing={3}>
-          <H2 size="2xl" bold>
-            {impactFund.title}
-          </H2>
-          {impactFund.subtitle && <Body>{impactFund.subtitle}</Body>}
-          {impactFund.amountCommitted ? (
-            <Body bold>{`${new Intl.NumberFormat().format(impactFund.amountCommitted)} sats committed`}</Body>
-          ) : null}
-          {impactFund.description && <Body>{impactFund.description}</Body>}
-          <HStack>
-            <Button colorScheme="primary1" onClick={handleApplyClick}>
-              {t('Submit Application')}
-            </Button>
-            {impactFund.donateProjectName && (
-              <Button
-                as={Link}
-                to={getPath('fundingStart', impactFund.donateProjectName)}
-                variant="outline"
-                colorScheme="primary1"
-              >
-                {t('Donate')}
-              </Button>
-            )}
+        <VStack align="stretch" spacing={4}>
+          <HStack align="center" spacing={2} flexWrap="wrap">
+            <H2 size="2xl" bold>
+              {impactFund.title}
+            </H2>
+            {impactFund.amountCommitted ? (
+              <>
+                <Body size="2xl" color="gray.500" display={{ base: 'none', sm: 'block' }}>
+                  ·
+                </Body>
+                <Body size="lg" bold color="primary1.500">
+                  {`₿ ${new Intl.NumberFormat().format(impactFund.amountCommitted)}`}
+                </Body>
+              </>
+            ) : null}
+            {impactFund.tags.length > 0 &&
+              impactFund.tags.map((tag) => (
+                <Box
+                  key={tag}
+                  px={3}
+                  py={1}
+                  borderRadius="full"
+                  bg="primary1.100"
+                  color="primary1.800"
+                  border="1px solid"
+                  borderColor="primary1.200"
+                >
+                  <Body size="sm" bold>
+                    {tag}
+                  </Body>
+                </Box>
+              ))}
           </HStack>
+          {impactFund.description && (
+            <Body size="lg" color="gray.600">
+              {impactFund.description}
+            </Body>
+          )}
         </VStack>
-      </CardLayout>
+      </VStack>
 
-      <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
-        <CardLayout>
-          <H2 size="lg" bold>
-            {t('Live Sponsors')}
-          </H2>
-          <VStack align="start" mt={4} spacing={3}>
-            {impactFund.liveSponsors.map((sponsor) => (
-              <HStack key={sponsor.id} spacing={3}>
-                {sponsor.image ? <Image src={sponsor.image} alt={sponsor.name} boxSize="40px" /> : null}
-                {sponsor.url ? (
-                  <ChakraLink href={sponsor.url} isExternal>
-                    <Body>{sponsor.name}</Body>
-                  </ChakraLink>
-                ) : (
-                  <Body>{sponsor.name}</Body>
-                )}
-              </HStack>
-            ))}
-          </VStack>
-        </CardLayout>
-
-        <CardLayout>
-          <H2 size="lg" bold>
-            {t('Previous Sponsors')}
-          </H2>
-          <VStack align="start" mt={4} spacing={3}>
-            {impactFund.archivedSponsors.map((sponsor) => (
-              <Body key={sponsor.id}>{sponsor.name}</Body>
-            ))}
-          </VStack>
-        </CardLayout>
+      {/* Impact Metrics Section */}
+      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+        <Box
+          p={6}
+          bg="gray.50"
+          borderRadius="lg"
+          transition="all 0.3s"
+          _hover={{ bg: 'gray.100', transform: 'translateY(-2px)' }}
+        >
+          <HStack spacing={4}>
+            <Flex w="48px" h="48px" align="center" justify="center" bg="primary1.100" borderRadius="lg" flexShrink={0}>
+              <Icon as={PiCoinsDuotone} boxSize={6} color="primary1.600" />
+            </Flex>
+            <VStack align="start" spacing={0}>
+              <Text fontSize="2xl" fontWeight="bold" color="gray.900">
+                ₿ {new Intl.NumberFormat().format(impactFund.metrics.awardedTotalSats)}
+              </Text>
+              <Body size="xs" color="gray.500" textTransform="uppercase" letterSpacing="wide" fontWeight="medium">
+                {t('Awarded so far')}
+              </Body>
+            </VStack>
+          </HStack>
+        </Box>
+        <Box
+          p={6}
+          bg="gray.50"
+          borderRadius="lg"
+          transition="all 0.3s"
+          _hover={{ bg: 'gray.100', transform: 'translateY(-2px)' }}
+        >
+          <HStack spacing={4}>
+            <Flex w="48px" h="48px" align="center" justify="center" bg="primary1.100" borderRadius="lg" flexShrink={0}>
+              <Icon as={PiRocketLaunchDuotone} boxSize={6} color="primary1.600" />
+            </Flex>
+            <VStack align="start" spacing={0}>
+              <Text fontSize="2xl" fontWeight="bold" color="gray.900">
+                {impactFund.metrics.projectsFundedCount}
+              </Text>
+              <Body size="xs" color="gray.500" textTransform="uppercase" letterSpacing="wide" fontWeight="medium">
+                {t('Projects funded')}
+              </Body>
+            </VStack>
+          </HStack>
+        </Box>
+        <Box
+          p={6}
+          bg="gray.50"
+          borderRadius="lg"
+          transition="all 0.3s"
+          _hover={{ bg: 'gray.100', transform: 'translateY(-2px)' }}
+        >
+          <HStack spacing={4}>
+            <Flex w="48px" h="48px" align="center" justify="center" bg="primary1.100" borderRadius="lg" flexShrink={0}>
+              <Icon as={PiNewspaperDuotone} boxSize={6} color="primary1.600" />
+            </Flex>
+            <VStack align="start" spacing={0}>
+              <Text fontSize="2xl" fontWeight="bold" color="gray.900">
+                {t('Yearly')}
+              </Text>
+              <Body size="xs" color="gray.500" textTransform="uppercase" letterSpacing="wide" fontWeight="medium">
+                {t('Impact & Transparency Report')}
+              </Body>
+            </VStack>
+          </HStack>
+        </Box>
       </SimpleGrid>
 
-      <CardLayout>
-        <H2 size="lg" bold>
+      {/* Application Submission Section */}
+      <Box p={8} bg="gray.50" borderRadius="xl" borderWidth="1px" borderColor="gray.200">
+        <Flex
+          direction={{ base: 'column', md: 'row' }}
+          justify="space-between"
+          align={{ base: 'stretch', md: 'center' }}
+          gap={6}
+        >
+          <VStack align="start" spacing={2} flex={1}>
+            <H2 size="lg" bold>
+              {t('Apply for funding')}
+            </H2>
+            <Body color="gray.600">
+              {t('Submit your project to be considered for funding. Share your vision and impact potential.')}
+            </Body>
+          </VStack>
+          <Button size="lg" colorScheme="primary1" onClick={handleApplyClick} flexShrink={0}>
+            {t('Submit Your Application')}
+          </Button>
+        </Flex>
+      </Box>
+
+      {/* Projects Awarded Section */}
+      <VStack align="stretch" spacing={6}>
+        <H2 size="xl" bold>
           {t('Projects Awarded')}
         </H2>
-        <VStack align="stretch" mt={4} spacing={4}>
-          {impactFund.fundedApplications.map((application) => (
-            <Card key={application.id} p={4}>
-              <HStack align="start" spacing={4}>
+        {impactFund.fundedApplications.length > 0 ? (
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+            {impactFund.fundedApplications.map((application) => (
+              <Card
+                key={application.id}
+                as={Link}
+                to={getPath('project', application.project.id)}
+                overflow="hidden"
+                cursor="pointer"
+                transition="all 0.3s"
+                _hover={{
+                  transform: 'translateY(-4px)',
+                  shadow: 'xl',
+                }}
+                borderWidth="0"
+                bg="white"
+              >
                 {application.project.thumbnailImage && (
                   <Image
                     src={application.project.thumbnailImage}
                     alt={application.project.title}
-                    boxSize="88px"
+                    w="full"
+                    h="200px"
                     objectFit="cover"
-                    borderRadius="md"
                   />
                 )}
-                <VStack align="start" spacing={1}>
-                  <H2 size="md" bold>
-                    {application.project.title}
-                  </H2>
-                  {application.amountAwardedInSats !== null && application.amountAwardedInSats !== undefined && (
-                    <Body bold>{`${new Intl.NumberFormat().format(application.amountAwardedInSats)} sats`}</Body>
+                <VStack align="stretch" spacing={3} p={5}>
+                  <Flex align="baseline" gap={2} flexWrap="wrap">
+                    <H2 size="md" bold flex="1" minW="0">
+                      {application.project.title}
+                    </H2>
+                    {application.amountAwardedInSats !== null && application.amountAwardedInSats !== undefined && (
+                      <Body bold color="primary1.600" size="sm" flexShrink={0}>
+                        ₿ {new Intl.NumberFormat().format(application.amountAwardedInSats)}
+                      </Body>
+                    )}
+                    {application.awardedAt && (
+                      <>
+                        <Body color="gray.400" size="sm">
+                          •
+                        </Body>
+                        <Body size="sm" color="gray.500" flexShrink={0}>
+                          {getQuarterFromDate(application.awardedAt)}
+                        </Body>
+                      </>
+                    )}
+                  </Flex>
+                  {application.project.shortDescription && (
+                    <Body size="sm" color="gray.600" noOfLines={2}>
+                      {application.project.shortDescription}
+                    </Body>
                   )}
-                  {application.awardedAt && (
-                    <Body size="sm">{new Date(application.awardedAt).toLocaleDateString()}</Body>
-                  )}
-                  {application.project.shortDescription && <Body>{application.project.shortDescription}</Body>}
                 </VStack>
-              </HStack>
-            </Card>
-          ))}
-        </VStack>
-      </CardLayout>
+              </Card>
+            ))}
+          </SimpleGrid>
+        ) : (
+          <Box p={8} bg="gray.50" borderRadius="lg">
+            <VStack spacing={2}>
+              <Body size="lg" color="gray.500">
+                {t('No projects have been awarded yet')}
+              </Body>
+              <Body size="sm" color="gray.400">
+                {t('Check back soon to see funded projects')}
+              </Body>
+            </VStack>
+          </Box>
+        )}
+      </VStack>
 
-      <CardLayout>
-        <H2 size="lg" bold>
-          {t('Impact & Transparency')}
+      {/* Sponsors Section */}
+      <VStack align="stretch" spacing={8}>
+        <H2 size="xl" bold>
+          {t('Sponsors')}
         </H2>
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4} mt={4}>
-          <Card p={4}>
-            <Body bold>{new Intl.NumberFormat().format(impactFund.metrics.awardedThisYearSats)} sats</Body>
-            <Body size="sm">{t('Awarded this year')}</Body>
-          </Card>
-          <Card p={4}>
-            <Body bold>{impactFund.metrics.projectsFundedCount}</Body>
-            <Body size="sm">{t('Projects funded')}</Body>
-          </Card>
-          <Card p={4}>
-            <Body bold>{impactFund.metrics.reportsLabel}</Body>
-            <Body size="sm">{t('Reporting cadence')}</Body>
-          </Card>
-        </SimpleGrid>
-      </CardLayout>
 
-      <Modal isOpen={projectModal.isOpen} onClose={projectModal.onClose}>
+        <VStack align="stretch" spacing={10}>
+          {/* Current Sponsors */}
+          {impactFund.liveSponsors.length > 0 ? (
+            <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing={6}>
+              {impactFund.liveSponsors.map((sponsor) => (
+                <Box key={sponsor.id}>
+                  {sponsor.url ? (
+                    <ChakraLink href={sponsor.url} isExternal _hover={{ textDecoration: 'none' }}>
+                      <Box
+                        p={5}
+                        bg="white"
+                        borderRadius="lg"
+                        transition="all 0.3s"
+                        _hover={{
+                          transform: 'translateY(-4px)',
+                          shadow: 'lg',
+                        }}
+                        cursor="pointer"
+                        height="full"
+                      >
+                        {sponsor.image && (
+                          <Box w="full" h="80px" display="flex" alignItems="center" justifyContent="center">
+                            <Image src={sponsor.image} alt={sponsor.name} maxW="full" maxH="80px" objectFit="contain" />
+                          </Box>
+                        )}
+                      </Box>
+                    </ChakraLink>
+                  ) : (
+                    <Box p={5} bg="white" borderRadius="lg" height="full">
+                      {sponsor.image && (
+                        <Box w="full" h="80px" display="flex" alignItems="center" justifyContent="center">
+                          <Image src={sponsor.image} alt={sponsor.name} maxW="full" maxH="80px" objectFit="contain" />
+                        </Box>
+                      )}
+                    </Box>
+                  )}
+                </Box>
+              ))}
+            </SimpleGrid>
+          ) : (
+            <Box p={6} bg="gray.50" borderRadius="lg">
+              <Body color="gray.500">{t('No active sponsors at the moment')}</Body>
+            </Box>
+          )}
+
+          {/* Past Sponsors */}
+          {impactFund.archivedSponsors.length > 0 && (
+            <VStack align="stretch" spacing={5}>
+              <H2 size="lg" color="gray.700">
+                {t('Past')}
+              </H2>
+              <Wrap spacing={4}>
+                {impactFund.archivedSponsors.map((sponsor) => (
+                  <WrapItem key={sponsor.id}>
+                    <Box px={4} py={2} bg="gray.100" borderRadius="md" borderWidth="1px" borderColor="gray.200">
+                      <Body size="sm" color="gray.600" fontWeight="medium">
+                        {sponsor.name}
+                      </Body>
+                    </Box>
+                  </WrapItem>
+                ))}
+              </Wrap>
+            </VStack>
+          )}
+        </VStack>
+      </VStack>
+
+      {/* Donation & Sponsor Section */}
+      <DonationSponsorCTA
+        title={t('Support this fund')}
+        description={t(
+          'This fund is open for donations. Support impactful projects by donating or becoming a sponsor.',
+        )}
+        donateProjectName={impactFund.donateProject?.name}
+      />
+
+      <Modal isOpen={projectModal.isOpen} onClose={projectModal.onClose} size="lg">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{t('Select project')}</ModalHeader>
+          <ModalHeader>{t('Submit your application')}</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
-            <Select value={selectedProjectId} onChange={(e) => setSelectedProjectId(e.target.value)}>
-              {ownedProjects.map((project) => (
-                <option key={String(project.id)} value={String(project.id)}>
-                  {project.title}
-                </option>
-              ))}
-            </Select>
+          <ModalBody pb={6}>
+            <VStack align="stretch" spacing={5}>
+              <Body color="gray.700">
+                {t('You must submit your Geyser project as the application. Your project should include')}:
+              </Body>
+
+              <UnorderedList spacing={3} ml={4} color="gray.600">
+                <ListItem>
+                  <Body size="sm" color="gray.600">
+                    {t('A clear description of your project vision and goals')}
+                  </Body>
+                </ListItem>
+                <ListItem>
+                  <Body size="sm" color="gray.600">
+                    {t('The intended impact and how it aligns with the fund')}
+                  </Body>
+                </ListItem>
+                <ListItem>
+                  <Body size="sm" color="gray.600">
+                    {t('Examples of past work or relevant experience')}
+                  </Body>
+                </ListItem>
+              </UnorderedList>
+
+              {ownedProjects.length > 0 ? (
+                <VStack align="stretch" spacing={3}>
+                  <Body fontWeight="semibold" color="gray.800">
+                    {t('Select your project')}:
+                  </Body>
+                  <Select value={selectedProjectId} onChange={(e) => setSelectedProjectId(e.target.value)} size="lg">
+                    {ownedProjects.map((project) => (
+                      <option key={String(project.id)} value={String(project.id)}>
+                        {project.title}
+                      </option>
+                    ))}
+                  </Select>
+                </VStack>
+              ) : (
+                <Box
+                  p={6}
+                  bg="primary1.50"
+                  borderRadius="lg"
+                  borderWidth="1px"
+                  borderColor="primary1.200"
+                  textAlign="center"
+                >
+                  <VStack spacing={4}>
+                    <Body color="gray.700">
+                      {t("You don't have any projects yet. Create a project to apply for funding.")}
+                    </Body>
+                    <Button
+                      as={Link}
+                      to={getPath('launchStart')}
+                      colorScheme="primary1"
+                      size="md"
+                      onClick={projectModal.onClose}
+                    >
+                      {t('Create a Project')}
+                    </Button>
+                  </VStack>
+                </Box>
+              )}
+            </VStack>
           </ModalBody>
           <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={projectModal.onClose}>
-              {t('Cancel')}
-            </Button>
-            <Button colorScheme="primary1" isLoading={applying} onClick={submitApplication}>
-              {t('Apply')}
-            </Button>
+            {ownedProjects.length > 0 && (
+              <Button w="full" colorScheme="primary1" isLoading={applying} onClick={submitApplication} size="lg">
+                {t('Submit Application')}
+              </Button>
+            )}
           </ModalFooter>
         </ModalContent>
       </Modal>

@@ -1141,7 +1141,7 @@ export const platformRoutes: RouteObject[] = [
         },
       },
       {
-        path: getPath('discoveryImpactFund', PathName.impactFundSlug),
+        path: getPath('discoveryImpactFund', PathName.impactFundName),
         async lazy() {
           const impactFundsModule = await loadImpactFundsModule()
           return { Component: impactFundsModule.ImpactFundDetailPage }

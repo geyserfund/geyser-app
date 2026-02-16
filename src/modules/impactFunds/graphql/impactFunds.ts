@@ -4,7 +4,8 @@ export const QUERY_IMPACT_FUNDS = gql`
   query ImpactFunds {
     impactFunds(status: LIVE) {
       id
-      slug
+      name
+      tags
       title
       subtitle
       heroImage
@@ -18,13 +19,18 @@ export const QUERY_IMPACT_FUND = gql`
   query ImpactFund($input: ImpactFundGetInput!) {
     impactFund(input: $input) {
       id
-      slug
+      name
+      tags
       title
       subtitle
       description
       heroImage
       amountCommitted
-      donateProjectName
+      donateProjectId
+      donateProject {
+        id
+        name
+      }
       status
       liveSponsors {
         id
@@ -42,7 +48,6 @@ export const QUERY_IMPACT_FUND = gql`
       }
       fundedApplications {
         id
-        projectId
         amountAwardedInSats
         awardedAt
         contributionUuid
@@ -55,9 +60,8 @@ export const QUERY_IMPACT_FUND = gql`
         }
       }
       metrics {
-        awardedThisYearSats
+        awardedTotalSats
         projectsFundedCount
-        reportsLabel
       }
     }
   }
@@ -68,7 +72,6 @@ export const MUTATION_IMPACT_FUND_APPLY = gql`
     impactFundApply(input: $input) {
       id
       impactFundId
-      projectId
       status
     }
   }
