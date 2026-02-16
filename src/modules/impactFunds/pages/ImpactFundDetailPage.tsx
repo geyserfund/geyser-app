@@ -1,4 +1,3 @@
-import { useMutation, useQuery } from '@apollo/client'
 import {
   Box,
   Button,
@@ -18,10 +17,10 @@ import {
   ModalOverlay,
   Select,
   SimpleGrid,
-  Text,
+  Spinner,
   UnorderedList,
+  useColorModeValue,
   useDisclosure,
-  useToast,
   VStack,
   Wrap,
   WrapItem,
@@ -36,57 +35,11 @@ import { useAuthContext } from '@/context'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
-import { getPath } from '@/shared/constants'
+import { getPath } from '@/shared/constants/index.ts'
+import { useImpactFundApplyMutation, useImpactFundQuery } from '@/types'
+import { useNotification } from '@/utils'
 
-import { DonationSponsorCTA } from '../components/DonationSponsorCTA'
-import { MUTATION_IMPACT_FUND_APPLY, QUERY_IMPACT_FUND } from '../graphql/impactFunds'
-
-type ImpactFundDetail = {
-  id: string
-  name: string
-  tags: string[]
-  title: string
-  subtitle?: string | null
-  description?: string | null
-  heroImage?: string | null
-  amountCommitted?: number | null
-  donateProjectId?: string | null
-  donateProject?: {
-    id: string
-    name: string
-  } | null
-  liveSponsors: Array<{
-    id: string
-    name: string
-    image?: string | null
-    url?: string | null
-    amountContributedInSats: number
-  }>
-  archivedSponsors: Array<{
-    id: string
-    name: string
-    image?: string | null
-    url?: string | null
-    amountContributedInSats: number
-  }>
-  fundedApplications: Array<{
-    id: string
-    amountAwardedInSats?: number | null
-    awardedAt?: string | null
-    contributionUuid?: string | null
-    status: string
-    project: {
-      id: string
-      title: string
-      thumbnailImage?: string | null
-      shortDescription?: string | null
-    }
-  }>
-  metrics: {
-    awardedTotalSats: number
-    projectsFundedCount: number
-  }
-}
+import { DonationSponsorCTA } from '../components/DonationSponsorCTA.tsx'
 
 const getQuarterFromDate = (dateString: string): string => {
   const date = new Date(dateString)
@@ -99,18 +52,23 @@ export const ImpactFundDetailPage = () => {
   const { impactFundName } = useParams<{ impactFundName: string }>()
   const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
-  const toast = useToast()
+  const { success, error: notifyError } = useNotification()
   const navigate = useNavigate()
+  const surfaceBg = useColorModeValue('neutral1.1', 'neutral1.8')
+  const mutedBg = useColorModeValue('neutral1.2', 'neutral1.7')
+  const primaryTextColor = useColorModeValue('neutral1.11', 'neutral1.1')
+  const secondaryTextColor = useColorModeValue('neutral1.9', 'neutral1.7')
+  const emphasisTextColor = useColorModeValue('primary1.9', 'primary1.6')
 
   const projectModal = useDisclosure()
   const [selectedProjectId, setSelectedProjectId] = useState<string>('')
 
-  const { data } = useQuery<{ impactFund: ImpactFundDetail }>(QUERY_IMPACT_FUND, {
+  const { data, loading, error } = useImpactFundQuery({
     variables: { input: { where: { name: impactFundName ? decodeURIComponent(impactFundName) : '' } } },
     skip: !impactFundName,
   })
 
-  const [apply, { loading: applying }] = useMutation(MUTATION_IMPACT_FUND_APPLY)
+  const [apply, { loading: applying }] = useImpactFundApplyMutation()
 
   const impactFund = data?.impactFund
 
@@ -147,11 +105,33 @@ export const ImpactFundDetailPage = () => {
         },
       })
 
-      toast({ status: 'success', title: t('Application submitted') })
+      success({ title: t('Application submitted') })
       projectModal.onClose()
     } catch (error) {
-      toast({ status: 'error', title: t('Failed to apply to impact fund') })
+      notifyError({ title: t('Failed to apply to impact fund') })
     }
+  }
+
+  if (loading) {
+    return (
+      <VStack align="stretch" spacing={14}>
+        <Card p={8}>
+          <VStack py={8}>
+            <Spinner />
+          </VStack>
+        </Card>
+      </VStack>
+    )
+  }
+
+  if (error) {
+    return (
+      <VStack align="stretch" spacing={14}>
+        <Card p={8}>
+          <Body>{t('Failed to load impact fund.')}</Body>
+        </Card>
+      </VStack>
+    )
   }
 
   if (!impactFund) {
@@ -180,13 +160,13 @@ export const ImpactFundDetailPage = () => {
         )}
         <VStack align="stretch" spacing={4}>
           <Flex justify="space-between" align="center" gap={4} flexWrap="wrap">
-            <Text fontSize="3xl" fontWeight="bold" color="gray.900">
+            <H2 size="3xl" bold color={primaryTextColor}>
               {impactFund.title}
-            </Text>
-            {impactFund.amountCommitted && (
-              <Text fontSize="3xl" fontWeight="bold" color="orange.500">
+            </H2>
+            {impactFund.amountCommitted !== null && impactFund.amountCommitted !== undefined && (
+              <H2 size="3xl" bold color={emphasisTextColor}>
                 ₿ {new Intl.NumberFormat().format(impactFund.amountCommitted)}
-              </Text>
+              </H2>
             )}
           </Flex>
           {impactFund.tags.length > 0 && (
@@ -210,7 +190,7 @@ export const ImpactFundDetailPage = () => {
             </HStack>
           )}
           {impactFund.description && (
-            <Body size="lg" color="gray.600">
+            <Body size="lg" color={secondaryTextColor}>
               {impactFund.description}
             </Body>
           )}
@@ -221,7 +201,7 @@ export const ImpactFundDetailPage = () => {
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
         <Box
           p={6}
-          bg="gray.50"
+          bg={mutedBg}
           borderRadius="lg"
           transition="all 0.3s"
           _hover={{ bg: 'gray.100', transform: 'translateY(-2px)' }}
@@ -231,9 +211,9 @@ export const ImpactFundDetailPage = () => {
               <Icon as={PiCoinsDuotone} boxSize={6} color="primary1.600" />
             </Flex>
             <VStack align="start" spacing={0}>
-              <Text fontSize="2xl" fontWeight="bold" color="gray.900">
+              <H2 size="xl" bold color={primaryTextColor}>
                 ₿ {new Intl.NumberFormat().format(impactFund.metrics.awardedTotalSats)}
-              </Text>
+              </H2>
               <Body size="xs" color="gray.500" textTransform="uppercase" letterSpacing="wide" fontWeight="medium">
                 {t('Awarded so far')}
               </Body>
@@ -242,7 +222,7 @@ export const ImpactFundDetailPage = () => {
         </Box>
         <Box
           p={6}
-          bg="gray.50"
+          bg={mutedBg}
           borderRadius="lg"
           transition="all 0.3s"
           _hover={{ bg: 'gray.100', transform: 'translateY(-2px)' }}
@@ -252,9 +232,9 @@ export const ImpactFundDetailPage = () => {
               <Icon as={PiRocketLaunchDuotone} boxSize={6} color="primary1.600" />
             </Flex>
             <VStack align="start" spacing={0}>
-              <Text fontSize="2xl" fontWeight="bold" color="gray.900">
+              <H2 size="xl" bold color={primaryTextColor}>
                 {impactFund.metrics.projectsFundedCount}
-              </Text>
+              </H2>
               <Body size="xs" color="gray.500" textTransform="uppercase" letterSpacing="wide" fontWeight="medium">
                 {t('Projects funded')}
               </Body>
@@ -263,7 +243,7 @@ export const ImpactFundDetailPage = () => {
         </Box>
         <Box
           p={6}
-          bg="gray.50"
+          bg={mutedBg}
           borderRadius="lg"
           transition="all 0.3s"
           _hover={{ bg: 'gray.100', transform: 'translateY(-2px)' }}
@@ -273,9 +253,9 @@ export const ImpactFundDetailPage = () => {
               <Icon as={PiNewspaperDuotone} boxSize={6} color="primary1.600" />
             </Flex>
             <VStack align="start" spacing={0}>
-              <Text fontSize="2xl" fontWeight="bold" color="gray.900">
+              <H2 size="xl" bold color={primaryTextColor}>
                 {t('Yearly')}
-              </Text>
+              </H2>
               <Body size="xs" color="gray.500" textTransform="uppercase" letterSpacing="wide" fontWeight="medium">
                 {t('Impact & Transparency Report')}
               </Body>
@@ -285,7 +265,7 @@ export const ImpactFundDetailPage = () => {
       </SimpleGrid>
 
       {/* Application Submission Section */}
-      <Box p={8} bg="gray.50" borderRadius="xl" borderWidth="1px" borderColor="gray.200">
+      <Box p={8} bg={mutedBg} borderRadius="xl" borderWidth="1px" borderColor="gray.200">
         <Flex
           direction={{ base: 'column', md: 'row' }}
           justify="space-between"
@@ -296,7 +276,7 @@ export const ImpactFundDetailPage = () => {
             <H2 size="lg" bold>
               {t('Apply for funding')}
             </H2>
-            <Body color="gray.600">
+            <Body color={secondaryTextColor}>
               {t('Submit your project to be considered for funding. Share your vision and impact potential.')}
             </Body>
           </VStack>
@@ -326,7 +306,7 @@ export const ImpactFundDetailPage = () => {
                   shadow: 'xl',
                 }}
                 borderWidth="0"
-                bg="white"
+                bg={surfaceBg}
               >
                 {application.project.thumbnailImage && (
                   <Image
@@ -359,7 +339,7 @@ export const ImpactFundDetailPage = () => {
                     )}
                   </Flex>
                   {application.project.shortDescription && (
-                    <Body size="sm" color="gray.600" noOfLines={2}>
+                    <Body size="sm" color={secondaryTextColor} noOfLines={2}>
                       {application.project.shortDescription}
                     </Body>
                   )}
@@ -368,7 +348,7 @@ export const ImpactFundDetailPage = () => {
             ))}
           </SimpleGrid>
         ) : (
-          <Box p={8} bg="gray.50" borderRadius="lg">
+          <Box p={8} bg={mutedBg} borderRadius="lg">
             <VStack spacing={2}>
               <Body size="lg" color="gray.500">
                 {t('No projects have been awarded yet')}
@@ -397,7 +377,7 @@ export const ImpactFundDetailPage = () => {
                     <ChakraLink href={sponsor.url} isExternal _hover={{ textDecoration: 'none' }}>
                       <Box
                         p={5}
-                        bg="white"
+                        bg={surfaceBg}
                         borderRadius="lg"
                         transition="all 0.3s"
                         _hover={{
@@ -415,7 +395,7 @@ export const ImpactFundDetailPage = () => {
                       </Box>
                     </ChakraLink>
                   ) : (
-                    <Box p={5} bg="white" borderRadius="lg" height="full">
+                    <Box p={5} bg={surfaceBg} borderRadius="lg" height="full">
                       {sponsor.image && (
                         <Box w="full" h="80px" display="flex" alignItems="center" justifyContent="center">
                           <Image src={sponsor.image} alt={sponsor.name} maxW="full" maxH="80px" objectFit="contain" />
@@ -427,7 +407,7 @@ export const ImpactFundDetailPage = () => {
               ))}
             </SimpleGrid>
           ) : (
-            <Box p={6} bg="gray.50" borderRadius="lg">
+            <Box p={6} bg={mutedBg} borderRadius="lg">
               <Body color="gray.500">{t('No active sponsors at the moment')}</Body>
             </Box>
           )}
@@ -442,7 +422,7 @@ export const ImpactFundDetailPage = () => {
                 {impactFund.archivedSponsors.map((sponsor) => (
                   <WrapItem key={sponsor.id}>
                     <Box px={4} py={2} bg="gray.100" borderRadius="md" borderWidth="1px" borderColor="gray.200">
-                      <Body size="sm" color="gray.600" fontWeight="medium">
+                      <Body size="sm" color={secondaryTextColor} fontWeight="medium">
                         {sponsor.name}
                       </Body>
                     </Box>
@@ -474,19 +454,19 @@ export const ImpactFundDetailPage = () => {
                 {t('You must submit your Geyser project as the application. Your project should include')}:
               </Body>
 
-              <UnorderedList spacing={3} ml={4} color="gray.600">
+              <UnorderedList spacing={3} ml={4} color={secondaryTextColor}>
                 <ListItem>
-                  <Body size="sm" color="gray.600">
+                  <Body size="sm" color={secondaryTextColor}>
                     {t('A clear description of your project vision and goals')}
                   </Body>
                 </ListItem>
                 <ListItem>
-                  <Body size="sm" color="gray.600">
+                  <Body size="sm" color={secondaryTextColor}>
                     {t('The intended impact and how it aligns with the fund')}
                   </Body>
                 </ListItem>
                 <ListItem>
-                  <Body size="sm" color="gray.600">
+                  <Body size="sm" color={secondaryTextColor}>
                     {t('Examples of past work or relevant experience')}
                   </Body>
                 </ListItem>

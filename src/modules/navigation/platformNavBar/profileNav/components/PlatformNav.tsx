@@ -4,7 +4,7 @@ import { useLocation } from 'react-router'
 
 import MarketplaceNavIcon from '@/assets/marketplace-nav.png'
 import { AnimatedNavSlide, AnimatedNavSlideItem } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
-import { CampaignIconUrl, FundraiserIconUrl, ProductsIconUrl } from '@/shared/constants/index.ts'
+import { CampaignIconUrl, FundraiserIconUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
 
 export const PlatformNav = () => {
   const location = useLocation()
@@ -33,7 +33,7 @@ export const PlatformNav = () => {
       {
         name: 'Impact Funds',
         path: '/impact-funds',
-        icon: <Image src={ProductsIconUrl} height={buttonDimension} width={buttonDimension} />,
+        icon: <Image src={ImpactFundsIconUrl} height={buttonDimension} width={buttonDimension} />,
       },
     ] as AnimatedNavSlideItem[]
 

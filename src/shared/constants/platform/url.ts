@@ -204,7 +204,7 @@ export const DraftIllustrationUrl = 'https://storage.googleapis.com/geyser-proje
 
 export const CampaignIconUrl = '/icons/campaign-icon.png'
 export const FundraiserIconUrl = '/icons/fundraiser-icon.png'
-export const ProductsIconUrl = '/icons/impact-funds-icon.png'
+export const ImpactFundsIconUrl = '/icons/impact-funds-icon.png'
 export const ContributionSuccessIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/contribution-success-illustration.png'
 export const ContributionSuccessIllustrationPendingUrl =

@@ -1,5 +1,4 @@
-import { useQuery } from '@apollo/client'
-import { Box, Button, HStack, Icon, LinkBox, LinkOverlay, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, LinkBox, LinkOverlay, SimpleGrid, Spinner, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiHouse } from 'react-icons/pi'
 import { Link } from 'react-router'
@@ -9,32 +8,46 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
+import { useImpactFundsQuery } from '@/types'
 
-import { DonationSponsorCTA } from '../components/DonationSponsorCTA'
-import { ImpactFlowStrip } from '../components/ImpactFlowStrip'
-import { QUERY_IMPACT_FUNDS } from '../graphql/impactFunds'
-
-type ImpactFundListItem = {
-  id: string
-  name: string
-  tags: string[]
-  title: string
-  subtitle?: string | null
-  heroImage?: string | null
-  amountCommitted?: number | null
-}
+import { DonationSponsorCTA } from '../components/DonationSponsorCTA.tsx'
+import { ImpactFlowStrip } from '../components/ImpactFlowStrip.tsx'
 
 export const ImpactFundsMainPage = () => {
-  const { data } = useQuery<{ impactFunds: ImpactFundListItem[] }>(QUERY_IMPACT_FUNDS)
-
-  const impactFunds = data?.impactFunds || []
+  const { data, loading, error } = useImpactFundsQuery()
 
   // Hardcoded Geyser Impact Fund project ID
   const geyserImpactFundProjectId = '1'
 
+  if (loading) {
+    return (
+      <VStack align="stretch" spacing={{ base: 10, lg: 12 }} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
+        <Head title={t('Impact Funds')} description={t('Support and apply to Geyser Impact Funds.')} />
+        <CardLayout>
+          <VStack py={8}>
+            <Spinner />
+          </VStack>
+        </CardLayout>
+      </VStack>
+    )
+  }
+
+  if (error) {
+    return (
+      <VStack align="stretch" spacing={{ base: 10, lg: 12 }} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
+        <Head title={t('Impact Funds')} description={t('Support and apply to Geyser Impact Funds.')} />
+        <CardLayout>
+          <Body>{t('Failed to load impact funds.')}</Body>
+        </CardLayout>
+      </VStack>
+    )
+  }
+
+  const impactFunds = data?.impactFunds || []
+
   return (
     <VStack align="stretch" spacing={{ base: 10, lg: 12 }} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
-      <Head title="Impact Funds" description="Support and apply to Geyser Impact Funds." />
+      <Head title={t('Impact Funds')} description={t('Support and apply to Geyser Impact Funds.')} />
 
       <VStack w="full" gap={4} alignItems="start">
         <HStack w="full" justifyContent="space-between" alignItems="start">

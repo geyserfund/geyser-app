@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
 import { Box, HStack, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 
-import { fetchFeaturedShops } from '@/api/airtable'
-import { __development__, __staging__, VITE_APP_AIR_TABLE_KEY } from '@/shared/constants/config/env'
+import { fetchFeaturedShops } from '@/api/airtable.ts'
+import { __development__, __staging__, VITE_APP_AIR_TABLE_KEY } from '@/shared/constants/config/env.ts'
 
 import { FeaturedCardSkeleton } from '../../../mainView/defaultView/components/FeaturedCardLayout.tsx'
 import { FeaturedDisplayCard } from '../../../mainView/defaultView/components/FeaturedDisplayCard.tsx'
@@ -66,8 +66,6 @@ const normalizeProductRecord = (record: FeaturedProductRecord): FeatureAirtableD
 }
 
 export const ShopsFeatured = () => {
-  const { t } = useTranslation()
-
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState<FeatureAirtableData[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)

@@ -6,7 +6,7 @@ import { Link } from 'react-router'
 import MarketplaceNavIcon from '@/assets/marketplace-nav.png'
 import { NavigationNewBadge } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { CampaignIconUrl, FundraiserIconUrl, getPath, PathsMap, ProductsIconUrl } from '@/shared/constants/index.ts'
+import { CampaignIconUrl, FundraiserIconUrl, getPath, ImpactFundsIconUrl, PathsMap } from '@/shared/constants/index.ts'
 
 import { BottomNavBarContainer } from '../components/bottomNav'
 import { currentBottomNavItemAtom } from './discoveryNavAtom'
@@ -54,7 +54,7 @@ export const bottomNavItems = [
     label: 'Impact Funds',
     key: BottomNavItemKey.impactFunds,
     path: 'discoveryImpactFunds',
-    IconComponent: <Image src={ProductsIconUrl} height={imageDimension} width={imageDimension} />,
+    IconComponent: <Image src={ImpactFundsIconUrl} height={imageDimension} width={imageDimension} />,
   },
 ] as BottomNavItem[]
 

@@ -11,25 +11,25 @@ type ImpactFlowStep = {
   subtitle: string
 }
 
-const flowSteps: ImpactFlowStep[] = [
-  {
-    icon: PiWallet,
-    title: t('Fund Growth'),
-    subtitle: t('Growth from new sponsors and donations.'),
-  },
-  {
-    icon: PiStack,
-    title: t('Continuous Distribution'),
-    subtitle: t('Funds are distributed on a regular basis.'),
-  },
-  {
-    icon: PiCheckCircle,
-    title: t('Verified Impact'),
-    subtitle: t('Verified and proven track record of impact.'),
-  },
-]
-
 export const ImpactFlowStrip = () => {
+  const flowSteps: ImpactFlowStep[] = [
+    {
+      icon: PiWallet,
+      title: t('Fund Growth'),
+      subtitle: t('Growth from new sponsors and donations.'),
+    },
+    {
+      icon: PiStack,
+      title: t('Continuous Distribution'),
+      subtitle: t('Funds are distributed on a regular basis.'),
+    },
+    {
+      icon: PiCheckCircle,
+      title: t('Verified Impact'),
+      subtitle: t('Verified and proven track record of impact.'),
+    },
+  ]
+
   const cardBackground = useColorModeValue(
     'linear-gradient(130deg, var(--chakra-colors-primary1-50) 0%, var(--chakra-colors-primary1-100) 100%)',
     'linear-gradient(130deg, var(--chakra-colors-primary1-700) 0%, var(--chakra-colors-primary1-800) 100%)',
@@ -39,15 +39,7 @@ export const ImpactFlowStrip = () => {
   const subtitleColor = useColorModeValue('neutral1.7', 'neutral1.8')
 
   return (
-    <HStack
-      w="full"
-      spacing={4}
-      align="stretch"
-      overflowX="auto"
-      overflowY="visible"
-      px={1}
-      py={2}
-    >
+    <HStack w="full" spacing={4} align="stretch" overflowX="auto" overflowY="visible" px={1} py={2}>
       {flowSteps.map((step) => (
         <Box
           key={step.title}

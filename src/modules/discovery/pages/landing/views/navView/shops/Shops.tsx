@@ -1,6 +1,6 @@
 import { HStack, IconButton, Tab, TabList, Tabs, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PiCaretLeft, PiCaretRight } from 'react-icons/pi'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 
@@ -10,27 +10,6 @@ import { useRewardCategoriesQuery } from '@/types/index.ts'
 
 import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
 import { ShopsFeatured } from './components/ShopsFeatured.tsx'
-
-const campaignCards = [
-  {
-    imageUrl: PhysicalProductImageUrl,
-    alt: 'Limited Edition',
-    title: 'Limited Edition',
-    description: 'Get limited edition items',
-  },
-  {
-    imageUrl: MerchImageUrl,
-    alt: 'Rare finds',
-    title: 'Rare finds',
-    description: 'Find creative indie products and rare finds',
-  },
-  {
-    imageUrl: CollectibleImageUrl,
-    alt: 'Collectibles',
-    title: 'Collectibles',
-    description: 'Buy unique Bitcoin collectibles',
-  },
-]
 
 const rewardCategoryEmojiMap: Record<string, string> = {
   Collectible: '🧩',
@@ -54,12 +33,34 @@ const rewardCategoryEmojiMap: Record<string, string> = {
 }
 
 export const Shops = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
   const { data } = useRewardCategoriesQuery()
   const tabListRef = useRef<HTMLDivElement | null>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
+
+  const campaignCards = [
+    {
+      imageUrl: PhysicalProductImageUrl,
+      alt: t('shops.limitedEdition.alt'),
+      title: t('shops.limitedEdition.title'),
+      description: t('shops.limitedEdition.description'),
+    },
+    {
+      imageUrl: MerchImageUrl,
+      alt: t('shops.rareFinds.alt'),
+      title: t('shops.rareFinds.title'),
+      description: t('shops.rareFinds.description'),
+    },
+    {
+      imageUrl: CollectibleImageUrl,
+      alt: t('shops.collectibles.alt'),
+      title: t('shops.collectibles.title'),
+      description: t('shops.collectibles.description'),
+    },
+  ]
 
   const tabs = useMemo(() => {
     const categories = data?.projectRewardCategoriesGet ?? []
@@ -74,7 +75,7 @@ export const Shops = () => {
         path: getPath('discoveryProductsCategory', encodeURIComponent(category)),
       })),
     ]
-  }, [data?.projectRewardCategoriesGet])
+  }, [data?.projectRewardCategoriesGet, t])
 
   const currentTabIndex = Math.max(
     tabs.findIndex((tab) => tab.path === location.pathname),
@@ -124,7 +125,11 @@ export const Shops = () => {
         w="full"
         variant="secondary"
         index={currentTabIndex}
-        onChange={(index) => navigate(tabs?.[index]?.path ?? getPath('discoveryProducts'))}
+        onChange={(index) =>
+          navigate(tabs?.[index]?.path ?? getPath('discoveryProducts'), {
+            preventScrollReset: true,
+          })
+        }
       >
         <HStack w="full" spacing={2} alignItems="center">
           {canScrollLeft ? (
