@@ -20,9 +20,9 @@ const campaignCards = [
   },
   {
     imageUrl: MerchImageUrl,
-    alt: 'Early Backing',
-    title: 'Early Backing',
-    description: 'Be the early backer of a new Bitcoin product',
+    alt: 'Rare finds',
+    title: 'Rare finds',
+    description: 'Find creative indie products and rare finds',
   },
   {
     imageUrl: CollectibleImageUrl,
@@ -150,6 +150,11 @@ export const Shops = () => {
               <Tab
                 key={tab.label}
                 fontSize={{ base: 'xs', sm: 'md' }}
+                color="neutral1.11"
+                _selected={{
+                  color: 'neutral1.11',
+                  borderColor: 'neutral1.8',
+                }}
                 whiteSpace="nowrap"
                 overflow="visible"
                 maxW="none"

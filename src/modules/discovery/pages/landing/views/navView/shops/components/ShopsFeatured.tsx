@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { Box, Button, HStack, VStack } from '@chakra-ui/react'
+import { Box, HStack, VStack } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -51,15 +51,14 @@ const hasAirtableKey = Boolean(VITE_APP_AIR_TABLE_KEY)
 const usePlaceholderForMissingAirtable = !hasAirtableKey && (__development__ || __staging__)
 
 const normalizeProductRecord = (record: FeaturedProductRecord): FeatureAirtableData | null => {
-  const name = record.fields.Name?.trim()
-  if (!name) {
-    return null
-  }
+  const name = record.fields.Name?.trim() || 'Featured Product'
+  const featuredComment =
+    record.fields.Featured_Comment?.trim() || 'Discover this featured item from the Geyser marketplace.'
 
   return {
     Name: name,
     Type: 'display',
-    Featured_Comment: record.fields.Featured_Comment ?? '',
+    Featured_Comment: featuredComment,
     Featured_Author: record.fields.Featured_Author ?? record.fields.Featured_Author_ ?? '',
     imageUrl: record.fields.imageUrl,
     link: record.fields.link,
@@ -134,18 +133,7 @@ export const ShopsFeatured = () => {
       <LandingPageSectionTitle>{t('Featured')}</LandingPageSectionTitle>
 
       <Box w="full">
-        <FeaturedDisplayCard data={featuredRecord}>
-          <Button
-            as="a"
-            href={featuredRecord.link || '/products'}
-            variant="outline"
-            colorScheme="neutral1"
-            size="lg"
-            minW="180px"
-          >
-            {t('Get in now')}
-          </Button>
-        </FeaturedDisplayCard>
+        <FeaturedDisplayCard data={featuredRecord} />
       </Box>
 
       {records.length > 1 ? (

@@ -60,36 +60,28 @@ export const FeaturedCardLayout = ({
         />
         {imageContent}
       </HStack>
-      <VStack width="100%" height="100%" minWidth="200px" alignItems="start" spacing="10px" overflow="hidden">
+      <VStack
+        width="100%"
+        height="100%"
+        minWidth="200px"
+        alignItems="start"
+        spacing="10px"
+        overflow="hidden"
+        justifyContent={{ base: 'start', sm: 'space-between' }}
+      >
         <H2 size="2xl" bold width="100%" isTruncated>
           {title}
         </H2>
 
-        {children ? (
-          <HStack w="full" justifyContent="space-between" alignItems="end" spacing={4}>
-            {(comment || author) && (
-              <VStack alignItems="start">
-                <Body size="xl" fontStyle="italic" bold light>
-                  {comment}
-                </Body>
-                {/* <Body>{author}</Body> */}
-              </VStack>
-            )}
-            {children}
-          </HStack>
-        ) : (
-          <>
-            {(comment || author) && (
-              <VStack alignItems="start">
-                <Body size="xl" fontStyle="italic" bold light>
-                  {comment}
-                </Body>
-                {/* <Body>{author}</Body> */}
-              </VStack>
-            )}
-            {children}
-          </>
+        {(comment || author) && (
+          <VStack alignItems="start">
+            <Body size="xl" fontStyle="italic" bold light>
+              {comment}
+            </Body>
+            {/* <Body>{author}</Body> */}
+          </VStack>
         )}
+        {children}
       </VStack>
     </CardLayout>
   )

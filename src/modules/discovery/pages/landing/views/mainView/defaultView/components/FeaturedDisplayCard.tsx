@@ -10,16 +10,9 @@ type FeaturedDisplayCardProps = {
   data: FeatureAirtableData
   showMini?: boolean
   startAnimating?: boolean
-  children?: React.ReactNode
 } & CardLayoutProps
 
-export const FeaturedDisplayCard = ({
-  data,
-  showMini,
-  startAnimating,
-  children,
-  ...rest
-}: FeaturedDisplayCardProps) => {
+export const FeaturedDisplayCard = ({ data, showMini, startAnimating, ...rest }: FeaturedDisplayCardProps) => {
   if (showMini) {
     return (
       <MiniProjectCard
@@ -42,9 +35,7 @@ export const FeaturedDisplayCard = ({
         author={data.Featured_Author}
         as={Link}
         href={data.link}
-      >
-        {children}
-      </FeaturedCardLayout>
+      />
     </>
   )
 }
