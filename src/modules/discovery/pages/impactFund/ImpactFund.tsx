@@ -31,7 +31,7 @@ export const ImpactFund = () => {
         </HStack>
 
         <H2 size={{ base: 'lg', lg: 'xl' }} bold>
-          {t('Powering Bitcoin adoption through high-impact Geyser initiatives')}
+          {t('Powering Bitcoin adoption through funding high-impact Geyser initiatives.')}
         </H2>
         <Body size="md" muted textAlign="center" maxW="700px">
           {t(

@@ -11,6 +11,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useColorModeValue,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
@@ -29,10 +30,21 @@ type DonationSponsorCTAPropsType = {
 
 export const DonationSponsorCTA = ({ title, description, donateProjectName }: DonationSponsorCTAPropsType) => {
   const sponsorModal = useDisclosure()
+  const highlightedSurfaceBg = useColorModeValue('primary1.50', 'primary1.700')
+  const highlightedSurfaceBorderColor = useColorModeValue('primary1.200', 'primary1.600')
+  const bodyTextColor = useColorModeValue('neutral1.9', 'neutral1.7')
+  const titleTextColor = useColorModeValue('neutral1.11', 'neutral1.1')
+  const secondaryTextColor = useColorModeValue('neutral1.8', 'neutral1.6')
 
   return (
     <>
-      <Box p={8} bg="primary1.50" borderRadius="xl" borderWidth="1px" borderColor="primary1.200">
+      <Box
+        p={8}
+        bg={highlightedSurfaceBg}
+        borderRadius="xl"
+        borderWidth="1px"
+        borderColor={highlightedSurfaceBorderColor}
+      >
         <Flex
           direction={{ base: 'column', md: 'row' }}
           justify="space-between"
@@ -43,7 +55,7 @@ export const DonationSponsorCTA = ({ title, description, donateProjectName }: Do
             <H2 size="lg" bold>
               {title}
             </H2>
-            <Body color="gray.700">{description}</Body>
+            <Body color={bodyTextColor}>{description}</Body>
           </VStack>
           <HStack spacing={3} flexShrink={0}>
             {donateProjectName && (
@@ -66,18 +78,24 @@ export const DonationSponsorCTA = ({ title, description, donateProjectName }: Do
           <ModalCloseButton />
           <ModalBody pb={6}>
             <VStack align="stretch" spacing={5}>
-              <Body color="gray.700">
+              <Body color={bodyTextColor}>
                 {t(
                   'Thank you for your interest in sponsoring this fund! We would love to discuss partnership opportunities with you.',
                 )}
               </Body>
 
-              <Box p={5} bg="primary1.50" borderRadius="lg" borderWidth="1px" borderColor="primary1.200">
+              <Box
+                p={5}
+                bg={highlightedSurfaceBg}
+                borderRadius="lg"
+                borderWidth="1px"
+                borderColor={highlightedSurfaceBorderColor}
+              >
                 <VStack align="stretch" spacing={3}>
-                  <Body fontWeight="semibold" color="gray.800">
+                  <Body fontWeight="semibold" color={titleTextColor}>
                     {t('Schedule a call with us')}
                   </Body>
-                  <Body size="sm" color="gray.600">
+                  <Body size="sm" color={bodyTextColor}>
                     {t(
                       'Book a time to speak with our team about sponsorship benefits, visibility opportunities, and how we can work together to support impactful projects.',
                     )}
@@ -95,7 +113,7 @@ export const DonationSponsorCTA = ({ title, description, donateProjectName }: Do
                 </VStack>
               </Box>
 
-              <Body size="sm" color="gray.500">
+              <Body size="sm" color={secondaryTextColor}>
                 {t('You can also reach out to us directly at')} <strong>hello@geyser.fund</strong>
               </Body>
             </VStack>

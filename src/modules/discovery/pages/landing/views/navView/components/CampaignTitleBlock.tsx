@@ -50,7 +50,7 @@ export const CampaignTitleBlock = ({ campaignCards, title, description }: Campai
         py={2}
       >
         {campaignCards.map((card) => (
-          <CampaignCard key={card.title} {...card} />
+          <CampaignCard key={card.titleKey} {...card} />
         ))}
       </Stack>
     </VStack>

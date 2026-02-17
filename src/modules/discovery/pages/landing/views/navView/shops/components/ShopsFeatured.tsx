@@ -48,9 +48,10 @@ const PLACEHOLDER_FEATURED_PRODUCTS: FeatureAirtableData[] = [
 ]
 
 const hasAirtableKey = Boolean(VITE_APP_AIR_TABLE_KEY)
-const usePlaceholderForMissingAirtable = !hasAirtableKey && (__development__ || __staging__)
+const isDevelopmentOrStaging = __development__ || __staging__
+const usePlaceholderForMissingAirtable = !hasAirtableKey && isDevelopmentOrStaging
 
-const normalizeProductRecord = (record: FeaturedProductRecord): FeatureAirtableData | null => {
+const normalizeProductRecord = (record: FeaturedProductRecord): FeatureAirtableData => {
   const name = record.fields.Name?.trim() || 'Featured Product'
   const featuredComment =
     record.fields.Featured_Comment?.trim() || 'Discover this featured item from the Geyser marketplace.'
@@ -80,17 +81,15 @@ export const ShopsFeatured = () => {
     const fetchFeatured = async () => {
       try {
         const response: FeaturedProductsResponse = await fetchFeaturedShops()
-        const normalizedRecords = (response.records ?? [])
-          .map(normalizeProductRecord)
-          .filter(Boolean) as FeatureAirtableData[]
+        const normalizedRecords = (response.records ?? []).map(normalizeProductRecord)
 
         if (normalizedRecords.length) {
           setRecords(normalizedRecords)
-        } else if (__development__ || __staging__) {
+        } else if (isDevelopmentOrStaging) {
           setRecords(PLACEHOLDER_FEATURED_PRODUCTS)
         }
       } catch {
-        if (__development__ || __staging__) {
+        if (isDevelopmentOrStaging) {
           setRecords(PLACEHOLDER_FEATURED_PRODUCTS)
         }
       } finally {

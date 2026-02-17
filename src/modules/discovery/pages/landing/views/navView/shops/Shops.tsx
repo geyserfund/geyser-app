@@ -1,11 +1,10 @@
 import { HStack, IconButton, Tab, TabList, Tabs, VStack } from '@chakra-ui/react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiCaretLeft, PiCaretRight } from 'react-icons/pi'
+import { PiCaretLeft, PiCaretRight, PiCube, PiMagnifyingGlass, PiSparkle } from 'react-icons/pi'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 
 import { getPath } from '@/shared/constants/index.ts'
-import { CollectibleImageUrl, MerchImageUrl, PhysicalProductImageUrl } from '@/shared/constants/platform/url.ts'
 import { useRewardCategoriesQuery } from '@/types/index.ts'
 
 import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
@@ -31,6 +30,8 @@ const rewardCategoryEmojiMap: Record<string, string> = {
   Experience: '✨',
   'Mining Hardware': '⛏️',
 }
+const DEFAULT_CATEGORY_EMOJI = '📦'
+const TAB_SCROLL_OFFSET = 280
 
 export const Shops = () => {
   const { t } = useTranslation()
@@ -43,22 +44,25 @@ export const Shops = () => {
 
   const campaignCards = [
     {
-      imageUrl: PhysicalProductImageUrl,
-      alt: t('shops.limitedEdition.alt'),
-      title: t('shops.limitedEdition.title'),
-      description: t('shops.limitedEdition.description'),
+      icon: PiCube,
+      titleKey: 'shops.limitedEdition.title',
+      descriptionKey: 'shops.limitedEdition.description',
+      fallbackTitle: 'Limited Edition',
+      fallbackDescription: 'Get limited edition items',
     },
     {
-      imageUrl: MerchImageUrl,
-      alt: t('shops.rareFinds.alt'),
-      title: t('shops.rareFinds.title'),
-      description: t('shops.rareFinds.description'),
+      icon: PiMagnifyingGlass,
+      titleKey: 'shops.rareFinds.title',
+      descriptionKey: 'shops.rareFinds.description',
+      fallbackTitle: 'Rare finds',
+      fallbackDescription: 'Find creative indie products and rare finds',
     },
     {
-      imageUrl: CollectibleImageUrl,
-      alt: t('shops.collectibles.alt'),
-      title: t('shops.collectibles.title'),
-      description: t('shops.collectibles.description'),
+      icon: PiSparkle,
+      titleKey: 'shops.collectibles.title',
+      descriptionKey: 'shops.collectibles.description',
+      fallbackTitle: 'Collectibles',
+      fallbackDescription: 'Buy unique Bitcoin collectibles',
     },
   ]
 
@@ -71,7 +75,7 @@ export const Shops = () => {
         path: getPath('discoveryProducts'),
       },
       ...categories.map((category) => ({
-        label: `${rewardCategoryEmojiMap[category] || '📦'} ${category}`,
+        label: `${rewardCategoryEmojiMap[category] ?? DEFAULT_CATEGORY_EMOJI} ${category}`,
         path: getPath('discoveryProductsCategory', encodeURIComponent(category)),
       })),
     ]
@@ -106,7 +110,7 @@ export const Shops = () => {
     if (!element) return
 
     element.scrollBy({
-      left: direction === 'left' ? -280 : 280,
+      left: direction === 'left' ? -TAB_SCROLL_OFFSET : TAB_SCROLL_OFFSET,
       behavior: 'smooth',
     })
   }
@@ -115,7 +119,7 @@ export const Shops = () => {
     <VStack w="full" spacing={8} alignItems="start">
       <CampaignTitleBlock
         title={t('Shops')}
-        description={t('Discover Bitcoin products from active projects')}
+        description={t('Discover Bitcoin products from active projects.')}
         campaignCards={campaignCards}
       />
 
@@ -126,7 +130,7 @@ export const Shops = () => {
         variant="secondary"
         index={currentTabIndex}
         onChange={(index) =>
-          navigate(tabs?.[index]?.path ?? getPath('discoveryProducts'), {
+          navigate(tabs[index]?.path ?? getPath('discoveryProducts'), {
             preventScrollReset: true,
           })
         }
@@ -153,7 +157,7 @@ export const Shops = () => {
           >
             {tabs.map((tab) => (
               <Tab
-                key={tab.label}
+                key={tab.path}
                 fontSize={{ base: 'xs', sm: 'md' }}
                 color="neutral1.11"
                 _selected={{

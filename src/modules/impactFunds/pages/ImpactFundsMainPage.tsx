@@ -15,14 +15,16 @@ import { ImpactFlowStrip } from '../components/ImpactFlowStrip.tsx'
 
 export const ImpactFundsMainPage = () => {
   const { data, loading, error } = useImpactFundsQuery()
+  const pageSpacing = { base: 10, lg: 12 }
 
   // Hardcoded Geyser Impact Fund project ID
   const geyserImpactFundProjectId = '1'
+  const pageHead = <Head title={t('Impact Funds')} description={t('Support and apply to Geyser Impact Funds.')} />
 
   if (loading) {
     return (
-      <VStack align="stretch" spacing={{ base: 10, lg: 12 }} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
-        <Head title={t('Impact Funds')} description={t('Support and apply to Geyser Impact Funds.')} />
+      <VStack align="stretch" spacing={pageSpacing} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
+        {pageHead}
         <CardLayout>
           <VStack py={8}>
             <Spinner />
@@ -34,8 +36,8 @@ export const ImpactFundsMainPage = () => {
 
   if (error) {
     return (
-      <VStack align="stretch" spacing={{ base: 10, lg: 12 }} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
-        <Head title={t('Impact Funds')} description={t('Support and apply to Geyser Impact Funds.')} />
+      <VStack align="stretch" spacing={pageSpacing} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
+        {pageHead}
         <CardLayout>
           <Body>{t('Failed to load impact funds.')}</Body>
         </CardLayout>
@@ -46,8 +48,8 @@ export const ImpactFundsMainPage = () => {
   const impactFunds = data?.impactFunds || []
 
   return (
-    <VStack align="stretch" spacing={{ base: 10, lg: 12 }} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
-      <Head title={t('Impact Funds')} description={t('Support and apply to Geyser Impact Funds.')} />
+    <VStack align="stretch" spacing={pageSpacing} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
+      {pageHead}
 
       <VStack w="full" gap={4} alignItems="start">
         <HStack w="full" justifyContent="space-between" alignItems="start">
@@ -56,7 +58,7 @@ export const ImpactFundsMainPage = () => {
               {t('Impact Funds')}
             </H2>
             <Body size="md" textAlign="center">
-              {t('Powering Bitcoin adoption through high-impact initiatives on Geyser.')}
+              {t('Powering Bitcoin adoption through funding high-impact initiatives on Geyser.')}
             </Body>
           </VStack>
           <Button

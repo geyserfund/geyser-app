@@ -15,18 +15,22 @@ export const ImpactFlowStrip = () => {
   const flowSteps: ImpactFlowStep[] = [
     {
       icon: PiWallet,
-      title: t('Fund Growth'),
-      subtitle: t('Growth from new sponsors and donations.'),
+      title: t('impactFunds.flow.fundGrowth.title', { defaultValue: 'Fund Growth' }),
+      subtitle: t('impactFunds.flow.fundGrowth.subtitle', { defaultValue: 'Growth from new sponsors and donations.' }),
     },
     {
       icon: PiStack,
-      title: t('Continuous Distribution'),
-      subtitle: t('Funds are distributed on a regular basis.'),
+      title: t('impactFunds.flow.continuousDistribution.title', { defaultValue: 'Continuous Distribution' }),
+      subtitle: t('impactFunds.flow.continuousDistribution.subtitle', {
+        defaultValue: 'Funds are distributed on a regular basis.',
+      }),
     },
     {
       icon: PiCheckCircle,
-      title: t('Verified Impact'),
-      subtitle: t('Verified and proven track record of impact.'),
+      title: t('impactFunds.flow.verifiedImpact.title', { defaultValue: 'Verified Impact' }),
+      subtitle: t('impactFunds.flow.verifiedImpact.subtitle', {
+        defaultValue: 'Verified and proven track record of impact.',
+      }),
     },
   ]
 
@@ -34,7 +38,9 @@ export const ImpactFlowStrip = () => {
     'linear-gradient(130deg, var(--chakra-colors-primary1-50) 0%, var(--chakra-colors-primary1-100) 100%)',
     'linear-gradient(130deg, var(--chakra-colors-primary1-700) 0%, var(--chakra-colors-primary1-800) 100%)',
   )
-  const shadow = useColorModeValue('0 2px 10px rgba(16,24,40,0.08)', '0 4px 14px rgba(0,0,0,0.30)')
+  const shadow = useColorModeValue('0 3px 10px rgba(16,24,40,0.08)', '0 4px 14px rgba(0,0,0,0.28)')
+  const borderColor = useColorModeValue('neutral1.5', 'neutral1.6')
+  const iconContainerBg = useColorModeValue('primary1.100', 'primary1.700')
   const iconColor = useColorModeValue('primary1.700', 'primary1.100')
   const subtitleColor = useColorModeValue('neutral1.7', 'neutral1.8')
 
@@ -43,18 +49,30 @@ export const ImpactFlowStrip = () => {
       {flowSteps.map((step) => (
         <Box
           key={step.title}
-          flex={{ base: '0 0 280px', md: 1 }}
-          minW={{ base: '280px', md: 'auto' }}
-          px={4}
-          py={3}
-          borderRadius="8px"
+          flex={1}
+          minW="320px"
+          px="14px"
+          py="10px"
+          borderRadius="12px"
           bg={cardBackground}
+          borderWidth="1px"
+          borderColor={borderColor}
           boxShadow={shadow}
         >
           <HStack spacing={3} align="center">
-            <Icon as={step.icon} boxSize={5} color={iconColor} flexShrink={0} />
+            <Box
+              boxSize={12}
+              borderRadius="10px"
+              bg={iconContainerBg}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              flexShrink={0}
+            >
+              <Icon as={step.icon} boxSize={6} color={iconColor} />
+            </Box>
             <VStack spacing={0} align="start" flex={1}>
-              <Body bold size="md">
+              <Body size={{ base: 'md', lg: 'lg' }} bold>
                 {step.title}
               </Body>
               <Body size="sm" color={subtitleColor}>

@@ -1,13 +1,12 @@
 import { HStack, IconButton, Tab, TabList, Tabs, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
-import { PiCaretLeft, PiCaretRight } from 'react-icons/pi'
+import { PiCaretLeft, PiCaretRight, PiGlobeHemisphereWest, PiMoneyWavy, PiStorefront } from 'react-icons/pi'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
 
-import { CampaignsGoGlobalImageUrl, FundraiserInstantImageUrl, FundraiserShopImageUrl } from '../../../constants.ts'
 import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
 
 const tabs = [
@@ -35,22 +34,25 @@ const tabs = [
 
 const campaignCards = [
   {
-    imageUrl: FundraiserInstantImageUrl,
-    alt: 'Get funded instantly',
-    title: 'Receive instantly',
-    description: 'Funds hit your wallet immediately',
+    icon: PiMoneyWavy,
+    titleKey: 'fundraisers.cards.receiveInstantly.title',
+    descriptionKey: 'fundraisers.cards.receiveInstantly.description',
+    fallbackTitle: 'Receive instantly',
+    fallbackDescription: 'Funds hit your wallet immediately',
   },
   {
-    imageUrl: FundraiserShopImageUrl,
-    alt: 'Sell products',
-    title: 'Sell products',
-    description: 'Easily launch your own storefront',
+    icon: PiStorefront,
+    titleKey: 'fundraisers.cards.sellProducts.title',
+    descriptionKey: 'fundraisers.cards.sellProducts.description',
+    fallbackTitle: 'Sell products',
+    fallbackDescription: 'Easily launch your own storefront',
   },
   {
-    imageUrl: CampaignsGoGlobalImageUrl,
-    alt: 'Go Global',
-    title: 'Go Global',
-    description: 'Fund from anywhere.',
+    icon: PiGlobeHemisphereWest,
+    titleKey: 'fundraisers.cards.goGlobal.title',
+    descriptionKey: 'fundraisers.cards.goGlobal.description',
+    fallbackTitle: 'Go Global',
+    fallbackDescription: 'Fund from anywhere.',
   },
 ]
 export const Fundraisers = () => {
@@ -98,7 +100,7 @@ export const Fundraisers = () => {
     <>
       <CampaignTitleBlock
         title={t('Open Fundraisers')}
-        description={t('Fund your project as it grows')}
+        description={t('Fund your project as it grows.')}
         campaignCards={campaignCards}
       />
       <Tabs
