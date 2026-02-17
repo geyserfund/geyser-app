@@ -171,6 +171,7 @@ export const projectCreatorRoutes = [
 ]
 
 export const grantRoutes = [getPath('grants'), getPath('grants', PathName.grantId)]
+export const impactFundRoutes = [getPath('impactFunds'), getPath('impactFunds', PathName.impactFundName)]
 
 export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath('landingFeed')]
 
@@ -180,6 +181,7 @@ export const discoveryRoutes = [
   getPath('discoveryProjectSubCategory', PathName.subCategoryName),
   getPath('discoveryMyProjects'),
   getPath('discoveryProducts'),
+  getPath('discoveryProductsCategory', PathName.categoryName),
   getPath('discoveryCampaigns'),
   getPath('discoveryAllOrNothing'),
   getPath('discoveryCampaignsAlmostFunded'),
@@ -196,8 +198,8 @@ export const discoveryRoutes = [
   getPath('discoveryActivityGlobal'),
   getPath('discoveryLeaderboard'),
   getPath('discoveryLaunchpad'),
-  getPath('discoveryGrants'),
-  getPath('discoveryGrant', PathName.grantId),
+  getPath('discoveryImpactFunds'),
+  getPath('discoveryImpactFund', PathName.impactFundName),
   // getPath('discoveryGrantApply', PathName.grantId),
   getPath('hallOfFameProjects'),
   getPath('discoveryHeroes'),

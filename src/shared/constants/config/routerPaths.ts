@@ -10,6 +10,7 @@ export enum PathName {
   creator = 'creator',
   contributor = 'contributor',
   grants = 'grants',
+  impactFunds = 'impact-funds',
   grantsRoundOne = 'roundone',
   grantsRoundTwo = 'roundtwo',
   myProjects = 'my-projects',
@@ -167,6 +168,7 @@ export enum PathName {
   postId = ':postId',
   goalId = ':goalId',
   grantId = ':grantId',
+  impactFundName = ':impactFundName',
   characterId = ':characterId',
   legalTerms = 'T&C',
   legalPrivacy = 'Privacy',
@@ -199,6 +201,7 @@ const pathsMap = {
   discoveryFundraisersSubCategory: (subCategory: string) =>
     `/${PathName.fundraisers}/${PathName.subCategory}/${subCategory}`,
   discoveryProducts: () => `/${PathName.products}`,
+  discoveryProductsCategory: (category: string) => `/${PathName.products}/${PathName.category}/${category}`,
   discoveryProjectCategory: (category: string) => `/${PathName.projectCategory}/${category}`,
   discoveryProjectSubCategory: (subCategory: string) => `/${PathName.projectSubCategory}/${subCategory}`,
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,
@@ -209,6 +212,8 @@ const pathsMap = {
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
   discoveryGrantApply: (grantId: string) => `/${PathName.grants}/${grantId}/${PathName.grantApply}`,
+  discoveryImpactFunds: () => `/${PathName.impactFunds}`,
+  discoveryImpactFund: (impactFundName: string) => `/${PathName.impactFunds}/${impactFundName}`,
   discoveryMerch: () => `/${PathName.merch}`,
   discoveryLaunchpad: () => `/${PathName.launchpad}`,
 
@@ -233,6 +238,8 @@ const pathsMap = {
   /** Grants Routes */
 
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
+  impactFunds: (impactFundName?: string) =>
+    impactFundName ? `/${PathName.impactFunds}/${impactFundName}` : `/${PathName.impactFunds}`,
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
   grantsRoundTwo: () => `/${PathName.grants}/${PathName.grantsRoundTwo}`,
 

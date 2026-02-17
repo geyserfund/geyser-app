@@ -11,6 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { Trans } from 'react-i18next'
+import { PiCheckCircle, PiGlobeHemisphereWest, PiShieldCheck } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
@@ -20,11 +21,6 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { AllOrNothingCampaignsStartingImageUrl, getPath } from '@/shared/constants/index.ts'
 
-import {
-  CampaignsAlignIncentivesImageUrl,
-  CampaignsFailFastImageUrl,
-  CampaignsGoGlobalImageUrl,
-} from '../../../constants.ts'
 import { type CampaignCardProps } from '../components/CampaignCard.tsx'
 import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
 import { NewCampaigns } from './views/NewCampaigns.tsx'
@@ -52,7 +48,7 @@ export const CampaignsComingSoon = () => {
     <VStack w="full" gap={{ base: 10, lg: 12 }} paddingBottom={8}>
       <CampaignTitleBlock
         title={t('All or Nothing Campaigns')}
-        description={t('Fund big ideas, only if they Succeed')}
+        description={t('Fund big ideas, only if they succeed within the deadline.')}
         campaignCards={campaignCards}
       />
 
@@ -158,22 +154,19 @@ export const CampaignsComingSoon = () => {
 
 const campaignCards: CampaignCardProps[] = [
   {
-    imageUrl: CampaignsAlignIncentivesImageUrl,
-    alt: 'Aligned incentives',
-    title: 'Align the incentives',
-    description: 'Paid only if fully funded.',
+    icon: PiShieldCheck,
+    titleKey: 'campaigns.cards.alignIncentives.title',
+    descriptionKey: 'campaigns.cards.alignIncentives.description',
   },
   {
-    imageUrl: CampaignsFailFastImageUrl,
-    alt: 'Fail fast, without burning trust',
-    title: 'Fail without burning trust',
-    description: 'Refunds if it fails.',
+    icon: PiCheckCircle,
+    titleKey: 'campaigns.cards.failWithoutBurningTrust.title',
+    descriptionKey: 'campaigns.cards.failWithoutBurningTrust.description',
   },
   {
-    imageUrl: CampaignsGoGlobalImageUrl,
-    alt: 'Global, no borders',
-    title: 'Go Global',
-    description: 'Fund from anywhere.',
+    icon: PiGlobeHemisphereWest,
+    titleKey: 'campaigns.cards.goGlobal.title',
+    descriptionKey: 'campaigns.cards.goGlobal.description',
   },
 ]
 

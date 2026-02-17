@@ -74,8 +74,8 @@ export const FeaturedCardLayout = ({
         </H2>
 
         {(comment || author) && (
-          <VStack alignItems={'start'}>
-            <Body size="xl" fontStyle={'italic'} bold light>
+          <VStack alignItems="start">
+            <Body size="xl" fontStyle="italic" bold light>
               {comment}
             </Body>
             {/* <Body>{author}</Body> */}

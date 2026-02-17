@@ -6,10 +6,7 @@ import { useState } from 'react'
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { useUserWalletForm } from '@/modules/profile/hooks/useUserWalletForm'
-import {
-  decryptMnemonic,
-  getSeedWords,
-} from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
+import { decryptMnemonic, getSeedWords } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -85,6 +82,86 @@ export const ProfileWalletSettings = () => {
     }
   }
 
+  const renderSeedWordsFeedback = () => (
+    <>
+      <Feedback variant={FeedBackVariant.WARNING}>
+        <Body size="sm">
+          {t(
+            'Store them somewhere secure and offline, like a paper backup. Never share them. Anyone with these words can access your Bitcoin.',
+          )}
+        </Body>
+      </Feedback>
+      <Feedback variant={FeedBackVariant.INFO}>
+        <Body size="sm">
+          {t('These recovery words store your Bitcoin on the Rootstock sidechain or on base-chain.')}
+        </Body>
+      </Feedback>
+    </>
+  )
+
+  const renderSeedWordsListView = () => (
+    <VStack w="full" spacing={4} align="stretch">
+      <VStack align="stretch" spacing={3}>
+        <HStack justify="space-between">
+          <Body medium>{t('Recovery words')}</Body>
+          <Button size="sm" variant="soft" colorScheme="primary1" onClick={() => setShowSeedWords((prev) => !prev)}>
+            {showSeedWords ? t('Hide words') : t('Show words')}
+          </Button>
+        </HStack>
+        <SimpleGrid w="full" columns={{ base: 2, md: 3 }} spacing={2}>
+          {seedWords.map((word, index) => (
+            <HStack key={`${word}-${index}`} borderWidth="1px" borderColor="neutral1.4" borderRadius="md" p={2}>
+              <Body size="sm" muted>
+                {index + 1}.
+              </Body>
+              <Body size="sm">{showSeedWords ? word : '••••••••'}</Body>
+            </HStack>
+          ))}
+        </SimpleGrid>
+        {renderSeedWordsFeedback()}
+      </VStack>
+    </VStack>
+  )
+
+  const renderSeedWordsPasswordView = () => (
+    <VStack w="full" spacing={4} align="stretch">
+      <Body size="sm">
+        {t('Enter your account password to view your seed words. Keep them private and store them in a secure place.')}
+      </Body>
+
+      <VStack align="stretch" spacing={2}>
+        <InputGroup>
+          <Input
+            type={showPassword ? 'text' : 'password'}
+            placeholder={t('Enter your password')}
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <InputRightElement width="4.5rem">
+            <Button h="1.75rem" size="sm" variant="ghost" onClick={() => setShowPassword((prev) => !prev)}>
+              {showPassword ? t('Hide') : t('Show')}
+            </Button>
+          </InputRightElement>
+        </InputGroup>
+        {passwordError ? (
+          <Body size="sm" color="red.400">
+            {passwordError}
+          </Body>
+        ) : null}
+      </VStack>
+
+      <Button
+        size="md"
+        colorScheme="primary1"
+        onClick={handleViewSeedWords}
+        isLoading={isDecryptingSeed}
+        isDisabled={isDecryptingSeed}
+      >
+        {t('Show seed words')}
+      </Button>
+    </VStack>
+  )
+
   return (
     <VStack p={8} spacing={8} overflowY="auto" align="flex-start" w="full">
       <H2>{t('Wallet Connection')}</H2>
@@ -127,18 +204,7 @@ export const ProfileWalletSettings = () => {
               'These recovery words back up your Bitcoin wallet on Geyser. They are the only way to recover your funds if you lose access.',
             )}
           </Body>
-          <Feedback variant={FeedBackVariant.WARNING}>
-            <Body size="sm">
-              {t(
-                'Store them somewhere secure and offline, like a paper backup. Never share them. Anyone with these words can access your Bitcoin.',
-              )}
-            </Body>
-          </Feedback>
-          <Feedback variant={FeedBackVariant.INFO}>
-            <Body size="sm">
-              {t('These recovery words store your Bitcoin on the Rootstock sidechain or on base-chain.')}
-            </Body>
-          </Feedback>
+          {renderSeedWordsFeedback()}
           <Button size="md" colorScheme="primary1" variant="outline" onClick={seedWordsModal.onOpen}>
             {t('View seed words')}
           </Button>
@@ -146,84 +212,7 @@ export const ProfileWalletSettings = () => {
       ) : null}
 
       <Modal isOpen={seedWordsModal.isOpen} onClose={handleCloseSeedWordsModal} title={t('View seed words')} size="md">
-        {isSeedWordsView ? (
-          <VStack w="full" spacing={4} align="stretch">
-            <VStack align="stretch" spacing={3}>
-              <HStack justify="space-between">
-                <Body medium>{t('Recovery words')}</Body>
-                <Button
-                  size="sm"
-                  variant="soft"
-                  colorScheme="primary1"
-                  onClick={() => setShowSeedWords((prev) => !prev)}
-                >
-                  {showSeedWords ? t('Hide words') : t('Show words')}
-                </Button>
-              </HStack>
-              <SimpleGrid w="full" columns={{ base: 2, md: 3 }} spacing={2}>
-                {seedWords.map((word, index) => (
-                  <HStack key={`${word}-${index}`} borderWidth="1px" borderColor="neutral1.4" borderRadius="md" p={2}>
-                    <Body size="sm" muted>
-                      {index + 1}.
-                    </Body>
-                    <Body size="sm">{showSeedWords ? word : '••••••••'}</Body>
-                  </HStack>
-                ))}
-              </SimpleGrid>
-              <Feedback variant={FeedBackVariant.WARNING}>
-                <Body size="sm">
-                  {t(
-                    'Store them somewhere secure and offline, like a paper backup. Never share them. Anyone with these words can access your Bitcoin.',
-                  )}
-                </Body>
-              </Feedback>
-              <Feedback variant={FeedBackVariant.INFO}>
-                <Body size="sm">
-                  {t('These recovery words store your Bitcoin on the Rootstock sidechain or on base-chain.')}
-                </Body>
-              </Feedback>
-            </VStack>
-          </VStack>
-        ) : (
-          <VStack w="full" spacing={4} align="stretch">
-            <Body size="sm">
-              {t(
-                'Enter your account password to view your seed words. Keep them private and store them in a secure place.',
-              )}
-            </Body>
-
-            <VStack align="stretch" spacing={2}>
-              <InputGroup>
-                <Input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder={t('Enter your password')}
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                />
-                <InputRightElement width="4.5rem">
-                  <Button h="1.75rem" size="sm" variant="ghost" onClick={() => setShowPassword((prev) => !prev)}>
-                    {showPassword ? t('Hide') : t('Show')}
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-              {passwordError ? (
-                <Body size="sm" color="red.400">
-                  {passwordError}
-                </Body>
-              ) : null}
-            </VStack>
-
-            <Button
-              size="md"
-              colorScheme="primary1"
-              onClick={handleViewSeedWords}
-              isLoading={isDecryptingSeed}
-              isDisabled={isDecryptingSeed}
-            >
-              {t('Show seed words')}
-            </Button>
-          </VStack>
-        )}
+        {isSeedWordsView ? renderSeedWordsListView() : renderSeedWordsPasswordView()}
       </Modal>
     </VStack>
   )
