@@ -1256,6 +1256,7 @@ export type ImpactFundMetrics = {
 
 export type ImpactFundSponsor = {
   __typename?: 'ImpactFundSponsor';
+  amountContributedInSats: Scalars['Int']['output'];
   id: Scalars['BigInt']['output'];
   image?: Maybe<Scalars['String']['output']>;
   impactFundId: Scalars['BigInt']['output'];
@@ -6920,6 +6921,7 @@ export type ImpactFundMetricsResolvers<ContextType = any, ParentType extends Res
 };
 
 export type ImpactFundSponsorResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundSponsor'] = ResolversParentTypes['ImpactFundSponsor']> = {
+  amountContributedInSats?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   impactFundId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -9280,7 +9282,7 @@ export type ImpactFundQueryVariables = Exact<{
 }>;
 
 
-export type ImpactFundQuery = { __typename?: 'Query', impactFund: { __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, description?: string | null, heroImage?: string | null, amountCommitted?: number | null, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, status: ImpactFundSponsorStatus }>, archivedSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, status: ImpactFundSponsorStatus }>, fundedApplications: Array<{ __typename?: 'ImpactFundApplication', id: any, amountAwardedInSats?: number | null, awardedAt?: any | null, contributionUuid?: string | null, status: ImpactFundApplicationStatus, project: { __typename?: 'Project', id: any, title: string, thumbnailImage?: string | null, shortDescription?: string | null } }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } } };
+export type ImpactFundQuery = { __typename?: 'Query', impactFund: { __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, description?: string | null, heroImage?: string | null, amountCommitted?: number | null, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, status: ImpactFundSponsorStatus }>, archivedSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, status: ImpactFundSponsorStatus }>, fundedApplications: Array<{ __typename?: 'ImpactFundApplication', id: any, amountAwardedInSats?: number | null, awardedAt?: any | null, contributionUuid?: string | null, status: ImpactFundApplicationStatus, project: { __typename?: 'Project', id: any, title: string, thumbnailImage?: string | null, shortDescription?: string | null } }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } } };
 
 export type ImpactFundApplyMutationVariables = Exact<{
   input: ImpactFundApplyInput;
@@ -10186,6 +10188,20 @@ export type ShippingAddressCreateMutation = { __typename?: 'Mutation', shippingA
     & ShippingAddressFragment
   ) };
 
+export type CreateStripeConnectAccountMutationVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type CreateStripeConnectAccountMutation = { __typename?: 'Mutation', createStripeConnectAccount: { __typename?: 'StripeConnectOnboardingPayload', accountId: string, onboardingUrl: string, status: { __typename?: 'StripeConnectStatus', accountId?: string | null, chargesEnabled: boolean, payoutsEnabled: boolean, detailsSubmitted: boolean, disabledReason?: string | null, isReady: boolean } } };
+
+export type RefreshStripeConnectOnboardingLinkMutationVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type RefreshStripeConnectOnboardingLinkMutation = { __typename?: 'Mutation', refreshStripeConnectOnboardingLink: { __typename?: 'StripeConnectOnboardingPayload', accountId: string, onboardingUrl: string, status: { __typename?: 'StripeConnectStatus', accountId?: string | null, chargesEnabled: boolean, payoutsEnabled: boolean, detailsSubmitted: boolean, disabledReason?: string | null, isReady: boolean } } };
+
 export type ProjectTagCreateMutationVariables = Exact<{
   input: TagCreateInput;
 }>;
@@ -10681,6 +10697,13 @@ export type ShippingAddressesGetQuery = { __typename?: 'Query', shippingAddresse
     { __typename?: 'ShippingAddress' }
     & ShippingAddressFragment
   )> };
+
+export type ProjectStripeConnectStatusQueryVariables = Exact<{
+  projectId: Scalars['BigInt']['input'];
+}>;
+
+
+export type ProjectStripeConnectStatusQuery = { __typename?: 'Query', projectStripeConnectStatus: { __typename?: 'StripeConnectStatus', accountId?: string | null, chargesEnabled: boolean, payoutsEnabled: boolean, detailsSubmitted: boolean, disabledReason?: string | null, isReady: boolean } };
 
 export type GetUserIpCountryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -15333,6 +15356,7 @@ export const ImpactFundDocument = gql`
       name
       image
       url
+      amountContributedInSats
       status
     }
     archivedSponsors {
@@ -15340,6 +15364,7 @@ export const ImpactFundDocument = gql`
       name
       image
       url
+      amountContributedInSats
       status
     }
     fundedApplications {
@@ -17618,6 +17643,90 @@ export function useShippingAddressCreateMutation(baseOptions?: Apollo.MutationHo
 export type ShippingAddressCreateMutationHookResult = ReturnType<typeof useShippingAddressCreateMutation>;
 export type ShippingAddressCreateMutationResult = Apollo.MutationResult<ShippingAddressCreateMutation>;
 export type ShippingAddressCreateMutationOptions = Apollo.BaseMutationOptions<ShippingAddressCreateMutation, ShippingAddressCreateMutationVariables>;
+export const CreateStripeConnectAccountDocument = gql`
+    mutation CreateStripeConnectAccount($projectId: BigInt!) {
+  createStripeConnectAccount(projectId: $projectId) {
+    accountId
+    onboardingUrl
+    status {
+      accountId
+      chargesEnabled
+      payoutsEnabled
+      detailsSubmitted
+      disabledReason
+      isReady
+    }
+  }
+}
+    `;
+export type CreateStripeConnectAccountMutationFn = Apollo.MutationFunction<CreateStripeConnectAccountMutation, CreateStripeConnectAccountMutationVariables>;
+
+/**
+ * __useCreateStripeConnectAccountMutation__
+ *
+ * To run a mutation, you first call `useCreateStripeConnectAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateStripeConnectAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createStripeConnectAccountMutation, { data, loading, error }] = useCreateStripeConnectAccountMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useCreateStripeConnectAccountMutation(baseOptions?: Apollo.MutationHookOptions<CreateStripeConnectAccountMutation, CreateStripeConnectAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateStripeConnectAccountMutation, CreateStripeConnectAccountMutationVariables>(CreateStripeConnectAccountDocument, options);
+      }
+export type CreateStripeConnectAccountMutationHookResult = ReturnType<typeof useCreateStripeConnectAccountMutation>;
+export type CreateStripeConnectAccountMutationResult = Apollo.MutationResult<CreateStripeConnectAccountMutation>;
+export type CreateStripeConnectAccountMutationOptions = Apollo.BaseMutationOptions<CreateStripeConnectAccountMutation, CreateStripeConnectAccountMutationVariables>;
+export const RefreshStripeConnectOnboardingLinkDocument = gql`
+    mutation RefreshStripeConnectOnboardingLink($projectId: BigInt!) {
+  refreshStripeConnectOnboardingLink(projectId: $projectId) {
+    accountId
+    onboardingUrl
+    status {
+      accountId
+      chargesEnabled
+      payoutsEnabled
+      detailsSubmitted
+      disabledReason
+      isReady
+    }
+  }
+}
+    `;
+export type RefreshStripeConnectOnboardingLinkMutationFn = Apollo.MutationFunction<RefreshStripeConnectOnboardingLinkMutation, RefreshStripeConnectOnboardingLinkMutationVariables>;
+
+/**
+ * __useRefreshStripeConnectOnboardingLinkMutation__
+ *
+ * To run a mutation, you first call `useRefreshStripeConnectOnboardingLinkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRefreshStripeConnectOnboardingLinkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [refreshStripeConnectOnboardingLinkMutation, { data, loading, error }] = useRefreshStripeConnectOnboardingLinkMutation({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useRefreshStripeConnectOnboardingLinkMutation(baseOptions?: Apollo.MutationHookOptions<RefreshStripeConnectOnboardingLinkMutation, RefreshStripeConnectOnboardingLinkMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RefreshStripeConnectOnboardingLinkMutation, RefreshStripeConnectOnboardingLinkMutationVariables>(RefreshStripeConnectOnboardingLinkDocument, options);
+      }
+export type RefreshStripeConnectOnboardingLinkMutationHookResult = ReturnType<typeof useRefreshStripeConnectOnboardingLinkMutation>;
+export type RefreshStripeConnectOnboardingLinkMutationResult = Apollo.MutationResult<RefreshStripeConnectOnboardingLinkMutation>;
+export type RefreshStripeConnectOnboardingLinkMutationOptions = Apollo.BaseMutationOptions<RefreshStripeConnectOnboardingLinkMutation, RefreshStripeConnectOnboardingLinkMutationVariables>;
 export const ProjectTagCreateDocument = gql`
     mutation ProjectTagCreate($input: TagCreateInput!) {
   tagCreate(input: $input) {
@@ -19738,6 +19847,51 @@ export type ShippingAddressesGetQueryHookResult = ReturnType<typeof useShippingA
 export type ShippingAddressesGetLazyQueryHookResult = ReturnType<typeof useShippingAddressesGetLazyQuery>;
 export type ShippingAddressesGetSuspenseQueryHookResult = ReturnType<typeof useShippingAddressesGetSuspenseQuery>;
 export type ShippingAddressesGetQueryResult = Apollo.QueryResult<ShippingAddressesGetQuery, ShippingAddressesGetQueryVariables>;
+export const ProjectStripeConnectStatusDocument = gql`
+    query ProjectStripeConnectStatus($projectId: BigInt!) {
+  projectStripeConnectStatus(projectId: $projectId) {
+    accountId
+    chargesEnabled
+    payoutsEnabled
+    detailsSubmitted
+    disabledReason
+    isReady
+  }
+}
+    `;
+
+/**
+ * __useProjectStripeConnectStatusQuery__
+ *
+ * To run a query within a React component, call `useProjectStripeConnectStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectStripeConnectStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectStripeConnectStatusQuery({
+ *   variables: {
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useProjectStripeConnectStatusQuery(baseOptions: Apollo.QueryHookOptions<ProjectStripeConnectStatusQuery, ProjectStripeConnectStatusQueryVariables> & ({ variables: ProjectStripeConnectStatusQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectStripeConnectStatusQuery, ProjectStripeConnectStatusQueryVariables>(ProjectStripeConnectStatusDocument, options);
+      }
+export function useProjectStripeConnectStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectStripeConnectStatusQuery, ProjectStripeConnectStatusQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectStripeConnectStatusQuery, ProjectStripeConnectStatusQueryVariables>(ProjectStripeConnectStatusDocument, options);
+        }
+export function useProjectStripeConnectStatusSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectStripeConnectStatusQuery, ProjectStripeConnectStatusQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectStripeConnectStatusQuery, ProjectStripeConnectStatusQueryVariables>(ProjectStripeConnectStatusDocument, options);
+        }
+export type ProjectStripeConnectStatusQueryHookResult = ReturnType<typeof useProjectStripeConnectStatusQuery>;
+export type ProjectStripeConnectStatusLazyQueryHookResult = ReturnType<typeof useProjectStripeConnectStatusLazyQuery>;
+export type ProjectStripeConnectStatusSuspenseQueryHookResult = ReturnType<typeof useProjectStripeConnectStatusSuspenseQuery>;
+export type ProjectStripeConnectStatusQueryResult = Apollo.QueryResult<ProjectStripeConnectStatusQuery, ProjectStripeConnectStatusQueryVariables>;
 export const GetUserIpCountryDocument = gql`
     query GetUserIpCountry {
   userIpCountry
