@@ -113,7 +113,7 @@ export const Shops = () => {
     <VStack w="full" spacing={8} alignItems="start">
       <CampaignTitleBlock
         title={t('Shops')}
-        description={t('Discover Bitcoin products from active projects.')}
+        description={t('Discover and shop Bitcoin products.')}
         campaignCards={campaignCards}
       />
 
