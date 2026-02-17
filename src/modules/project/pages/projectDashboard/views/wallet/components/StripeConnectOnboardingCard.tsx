@@ -1,5 +1,5 @@
-import { Button, HStack, Icon, Link, Tag, VStack } from '@chakra-ui/react'
 import { gql, useMutation, useQuery } from '@apollo/client'
+import { Button, HStack, Icon, Link, Tag, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect } from 'react'
 import { PiClock, PiWarningFill } from 'react-icons/pi'
@@ -197,7 +197,7 @@ export const StripeConnectOnboardingCard = ({
 
       <Body size="md" light>
         {isTiaProject
-          ? t('Configure Stripe Connect to receive payments directly in your bank account.')
+          ? t('Configure Stripe Connect to receive fiat payments directly in your bank account.')
           : t('Available only for Take It All projects.')}
       </Body>
 
@@ -209,7 +209,7 @@ export const StripeConnectOnboardingCard = ({
           : t('Available only for Take It All projects.')}
       </Body>
 
-      {(disabledReasonLabel && (isActionRequired || isProcessing) && !isReady) ? (
+      {disabledReasonLabel && (isActionRequired || isProcessing) && !isReady ? (
         <HStack
           w="full"
           justifyContent="space-between"
@@ -286,7 +286,9 @@ export const StripeConnectOnboardingCard = ({
 
       <Body size="sm" light>
         {isTiaProject
-          ? t('Enable fiat card contributions for this project. Checkout is charged in USD; card issuers may convert to local currency.')
+          ? t(
+              'Enable fiat card contributions for this project. Checkout is charged in USD; card issuers may convert to local currency.',
+            )
           : t('Stripe Connect is available only for Take It All projects.')}
       </Body>
 
@@ -333,9 +335,5 @@ export const StripeConnectOnboardingCard = ({
     return content
   }
 
-  return (
-    <CardLayout padding={4}>
-      {content}
-    </CardLayout>
-  )
+  return <CardLayout padding={4}>{content}</CardLayout>
 }

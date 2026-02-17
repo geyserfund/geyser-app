@@ -10,6 +10,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
+import { FEATURE_FLAGS } from '@/shared/constants/config'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { ProjectFundingStrategy } from '@/types/index.ts'
@@ -23,7 +24,10 @@ export const ProjectPromotionNotice = () => {
   const [isPromotionsModalOpen, setIsPromotionsModalOpen] = useAtom(promotionsModalAtom)
 
   const hasMigrationNotice =
-    isProjectOwner && project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project?.rskEoa
+    FEATURE_FLAGS.TIA_PRISM_PAYMENTS_ENABLED &&
+    isProjectOwner &&
+    project?.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
+    !project?.rskEoa
 
   if (hasMigrationNotice || isPromotionsModalOpen || !isProjectOwner || isFundingDisabled()) {
     return null

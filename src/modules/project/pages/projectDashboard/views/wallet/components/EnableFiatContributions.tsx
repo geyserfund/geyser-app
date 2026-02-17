@@ -26,12 +26,14 @@ export const EnableFiatContributions = ({
     <VStack w="full" alignItems="start" spacing={4}>
       <HStack w="full" justifyContent="space-between">
         <Body size="xl" medium>
-          {t('Fiat contributions')}
+          {t('Fiat contributions') + ' (' + t('optional') + ')'}
         </Body>
       </HStack>
 
       <Body size="sm" light>
-        {t('Enable contributors to pay with debit/credit card, Apple Pay, bank transfer or 20+ fiat methods.')}
+        {t(
+          'Enable contributors to pay with debit/credit card, Apple Pay, bank transfer or 20+ fiat methods. This can also be configured later from your project dashboard.',
+        )}
       </Body>
 
       <VStack w="full" alignItems="start" spacing={3}>
