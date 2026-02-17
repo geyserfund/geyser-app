@@ -1,58 +1,15 @@
 import { Button, HStack, Icon, Link, Tag, VStack } from '@chakra-ui/react'
-import { gql, useMutation, useQuery } from '@apollo/client'
 import { t } from 'i18next'
 import { useEffect } from 'react'
 import { PiClock, PiWarningFill } from 'react-icons/pi'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-
-const QUERY_PROJECT_STRIPE_CONNECT_STATUS = gql`
-  query ProjectStripeConnectStatus($projectId: BigInt!) {
-    projectStripeConnectStatus(projectId: $projectId) {
-      accountId
-      chargesEnabled
-      payoutsEnabled
-      detailsSubmitted
-      disabledReason
-      isReady
-    }
-  }
-`
-
-const MUTATION_CREATE_STRIPE_CONNECT_ACCOUNT = gql`
-  mutation CreateStripeConnectAccount($projectId: BigInt!) {
-    createStripeConnectAccount(projectId: $projectId) {
-      accountId
-      onboardingUrl
-      status {
-        accountId
-        chargesEnabled
-        payoutsEnabled
-        detailsSubmitted
-        disabledReason
-        isReady
-      }
-    }
-  }
-`
-
-const MUTATION_REFRESH_STRIPE_CONNECT_ONBOARDING_LINK = gql`
-  mutation RefreshStripeConnectOnboardingLink($projectId: BigInt!) {
-    refreshStripeConnectOnboardingLink(projectId: $projectId) {
-      accountId
-      onboardingUrl
-      status {
-        accountId
-        chargesEnabled
-        payoutsEnabled
-        detailsSubmitted
-        disabledReason
-        isReady
-      }
-    }
-  }
-`
+import {
+  useCreateStripeConnectAccountMutation,
+  useProjectStripeConnectStatusQuery,
+  useRefreshStripeConnectOnboardingLinkMutation,
+} from '@/types'
 
 type StripeConnectOnboardingCardProps = {
   isIdentityVerified: boolean
@@ -93,33 +50,28 @@ export const StripeConnectOnboardingCard = ({
   selected = false,
   onReadyStateChange,
 }: StripeConnectOnboardingCardProps) => {
-  const { data, loading, refetch } = useQuery(QUERY_PROJECT_STRIPE_CONNECT_STATUS, {
+  const { data, loading, refetch } = useProjectStripeConnectStatusQuery({
     variables: { projectId },
     skip: !projectId || !isTiaProject,
     fetchPolicy: 'network-only',
   })
 
-  const [createStripeConnectAccount, createStripeConnectAccountOptions] = useMutation(
-    MUTATION_CREATE_STRIPE_CONNECT_ACCOUNT,
-    {
-      onCompleted(result) {
-        const url = result?.createStripeConnectAccount?.onboardingUrl
-        if (url) openOnboardingUrl(url)
-        refetch()
-      },
+  const [createStripeConnectAccount, createStripeConnectAccountOptions] = useCreateStripeConnectAccountMutation({
+    onCompleted(result) {
+      const url = result?.createStripeConnectAccount?.onboardingUrl
+      if (url) openOnboardingUrl(url)
+      refetch()
     },
-  )
+  })
 
-  const [refreshStripeConnectOnboardingLink, refreshStripeConnectOnboardingLinkOptions] = useMutation(
-    MUTATION_REFRESH_STRIPE_CONNECT_ONBOARDING_LINK,
-    {
+  const [refreshStripeConnectOnboardingLink, refreshStripeConnectOnboardingLinkOptions] =
+    useRefreshStripeConnectOnboardingLinkMutation({
       onCompleted(result) {
         const url = result?.refreshStripeConnectOnboardingLink?.onboardingUrl
         if (url) openOnboardingUrl(url)
         refetch()
       },
-    },
-  )
+    })
 
   const status = data?.projectStripeConnectStatus
   const isReady = Boolean(status?.isReady)
@@ -209,7 +161,7 @@ export const StripeConnectOnboardingCard = ({
           : t('Available only for Take It All projects.')}
       </Body>
 
-      {(disabledReasonLabel && (isActionRequired || isProcessing) && !isReady) ? (
+      {disabledReasonLabel && (isActionRequired || isProcessing) && !isReady ? (
         <HStack
           w="full"
           justifyContent="space-between"
@@ -286,7 +238,9 @@ export const StripeConnectOnboardingCard = ({
 
       <Body size="sm" light>
         {isTiaProject
-          ? t('Enable fiat card contributions for this project. Checkout is charged in USD; card issuers may convert to local currency.')
+          ? t(
+              'Enable fiat card contributions for this project. Checkout is charged in USD; card issuers may convert to local currency.',
+            )
           : t('Stripe Connect is available only for Take It All projects.')}
       </Body>
 
@@ -333,9 +287,5 @@ export const StripeConnectOnboardingCard = ({
     return content
   }
 
-  return (
-    <CardLayout padding={4}>
-      {content}
-    </CardLayout>
-  )
+  return <CardLayout padding={4}>{content}</CardLayout>
 }

@@ -12,6 +12,7 @@ import { contributionAddPaymentPreImagesAtom } from '@/modules/project/funding/s
 import { fundingProjectAtom } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { fundingPaymentDetailsPartialUpdateAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { rskAccountKeysAtom } from '@/modules/project/funding/state/swapRskAtom.ts'
+import { ORIGIN } from '@/shared/constants/config/env.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
   ContributionFiatToLightningSwapPaymentDetailsBanxaInput,
@@ -137,7 +138,7 @@ export const useCreateFiatSwapPayment = () => {
     const banxaInput = {
       fiatCurrency,
       paymentMethodId,
-      returnUrl: `${window.location.origin}${getPath('fundingCallback', project.name)}`,
+      returnUrl: `${ORIGIN}${getPath('fundingCallback', project.name)}`,
     } as ContributionFiatToLightningSwapPaymentDetailsBanxaInput
 
     try {

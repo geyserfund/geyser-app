@@ -6,6 +6,7 @@ import { useCallback, useMemo } from 'react'
 import { useAuthContext } from '@/context/auth.tsx'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import {
+  ORIGIN,
   VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
   VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
 } from '@/shared/constants/config/env.ts'
@@ -52,6 +53,7 @@ import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/hel
 import { webln } from '../utils/requestWebLNPayment'
 import { useFundingFormAtom } from './useFundingFormAtom'
 import { useResetContribution } from './useResetContribution.ts'
+import { useStripeEmbeddedTheme } from './useStripeEmbeddedTheme.ts'
 import { useWebLNFlow } from './useWebLNFlow'
 
 const hasBolt11 = true
@@ -61,6 +63,7 @@ export const useFundingAPI = () => {
   const toast = useNotification()
 
   const { project } = useFundingFormAtom()
+  const stripeEmbeddedTheme = useStripeEmbeddedTheme()
 
   const { isLoggedIn } = useAuthContext()
 
@@ -89,6 +92,30 @@ export const useFundingAPI = () => {
 
   const setKeyPair = useSetAtom(keyPairAtom)
   const setRskAccountKeys = useSetAtom(rskAccountKeysAtom)
+
+  const applyStripePaymentConfig = useCallback(
+    (input: ContributionCreateInput): ContributionCreateInput => {
+      if (!project?.name || !input.paymentsInput?.fiat?.stripe) {
+        return input
+      }
+
+      return {
+        ...input,
+        paymentsInput: {
+          ...input.paymentsInput,
+          fiat: {
+            ...input.paymentsInput.fiat,
+            stripe: {
+              ...input.paymentsInput.fiat.stripe,
+              returnUrl: `${ORIGIN}/project/${project.name}/funding/success`,
+              theme: stripeEmbeddedTheme,
+            },
+          },
+        },
+      }
+    },
+    [project?.name, stripeEmbeddedTheme],
+  )
 
   const preImages = useMemo(
     () => ({
@@ -270,15 +297,17 @@ export const useFundingAPI = () => {
         }
       }
 
-      setFundingInputAfterRequest(finalInput)
+      const inputWithStripePaymentConfig = applyStripePaymentConfig(finalInput)
+      setFundingInputAfterRequest(inputWithStripePaymentConfig)
 
-      await contributionCreate({ variables: { input: finalInput }, onCompleted })
+      await contributionCreate({ variables: { input: inputWithStripePaymentConfig }, onCompleted })
     },
     [
       contributionCreate,
       toast,
       setKeyPair,
       setFundingInputAfterRequest,
+      applyStripePaymentConfig,
       resetContribution,
       setRskAccountKeys,
       setContributionCreatePreImages,
