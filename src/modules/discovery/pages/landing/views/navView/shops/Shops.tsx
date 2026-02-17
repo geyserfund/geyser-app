@@ -47,22 +47,16 @@ export const Shops = () => {
       icon: PiCube,
       titleKey: 'shops.limitedEdition.title',
       descriptionKey: 'shops.limitedEdition.description',
-      fallbackTitle: 'Limited Edition',
-      fallbackDescription: 'Get limited edition items',
     },
     {
       icon: PiMagnifyingGlass,
       titleKey: 'shops.rareFinds.title',
       descriptionKey: 'shops.rareFinds.description',
-      fallbackTitle: 'Rare finds',
-      fallbackDescription: 'Find creative indie products and rare finds',
     },
     {
       icon: PiSparkle,
       titleKey: 'shops.collectibles.title',
       descriptionKey: 'shops.collectibles.description',
-      fallbackTitle: 'Collectibles',
-      fallbackDescription: 'Buy unique Bitcoin collectibles',
     },
   ]
 

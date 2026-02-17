@@ -157,22 +157,16 @@ const campaignCards: CampaignCardProps[] = [
     icon: PiShieldCheck,
     titleKey: 'campaigns.cards.alignIncentives.title',
     descriptionKey: 'campaigns.cards.alignIncentives.description',
-    fallbackTitle: 'Align the incentives',
-    fallbackDescription: 'Paid only if fully funded.',
   },
   {
     icon: PiCheckCircle,
     titleKey: 'campaigns.cards.failWithoutBurningTrust.title',
     descriptionKey: 'campaigns.cards.failWithoutBurningTrust.description',
-    fallbackTitle: 'Fail without burning trust',
-    fallbackDescription: 'Refunds if it fails.',
   },
   {
     icon: PiGlobeHemisphereWest,
     titleKey: 'campaigns.cards.goGlobal.title',
     descriptionKey: 'campaigns.cards.goGlobal.description',
-    fallbackTitle: 'Go Global',
-    fallbackDescription: 'Fund from anywhere.',
   },
 ]
 

@@ -15,22 +15,18 @@ export const ImpactFlowStrip = () => {
   const flowSteps: ImpactFlowStep[] = [
     {
       icon: PiWallet,
-      title: t('impactFunds.flow.fundGrowth.title', { defaultValue: 'Fund Growth' }),
-      subtitle: t('impactFunds.flow.fundGrowth.subtitle', { defaultValue: 'Growth from new sponsors and donations.' }),
+      title: t('impactFunds.flow.fundGrowth.title'),
+      subtitle: t('impactFunds.flow.fundGrowth.subtitle'),
     },
     {
       icon: PiStack,
-      title: t('impactFunds.flow.continuousDistribution.title', { defaultValue: 'Continuous Distribution' }),
-      subtitle: t('impactFunds.flow.continuousDistribution.subtitle', {
-        defaultValue: 'Funds are distributed on a regular basis.',
-      }),
+      title: t('impactFunds.flow.continuousDistribution.title'),
+      subtitle: t('impactFunds.flow.continuousDistribution.subtitle'),
     },
     {
       icon: PiCheckCircle,
-      title: t('impactFunds.flow.verifiedImpact.title', { defaultValue: 'Verified Impact' }),
-      subtitle: t('impactFunds.flow.verifiedImpact.subtitle', {
-        defaultValue: 'Verified and proven track record of impact.',
-      }),
+      title: t('impactFunds.flow.verifiedImpact.title'),
+      subtitle: t('impactFunds.flow.verifiedImpact.subtitle'),
     },
   ]
 

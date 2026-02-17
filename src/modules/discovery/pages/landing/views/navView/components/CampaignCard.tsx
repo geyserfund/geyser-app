@@ -9,17 +9,9 @@ export type CampaignCardProps = {
   icon: IconType
   titleKey: string
   descriptionKey: string
-  fallbackTitle: string
-  fallbackDescription: string
 }
 
-export const CampaignCard = ({
-  icon,
-  titleKey,
-  descriptionKey,
-  fallbackTitle,
-  fallbackDescription,
-}: CampaignCardProps) => {
+export const CampaignCard = ({ icon, titleKey, descriptionKey }: CampaignCardProps) => {
   const background = useColorModeValue(
     'linear-gradient(130deg, var(--chakra-colors-primary1-50) 0%, var(--chakra-colors-primary1-100) 100%)',
     'linear-gradient(130deg, var(--chakra-colors-primary1-700) 0%, var(--chakra-colors-primary1-800) 100%)',
@@ -55,10 +47,10 @@ export const CampaignCard = ({
       </Box>
       <VStack gap={0} w="full" alignItems="start">
         <Body size={{ base: 'md', lg: 'lg' }} bold>
-          {t(titleKey, { defaultValue: fallbackTitle })}
+          {t(titleKey)}
         </Body>
         <Body size="sm" color={subtitleColor}>
-          {t(descriptionKey, { defaultValue: fallbackDescription })}
+          {t(descriptionKey)}
         </Body>
       </VStack>
     </CardLayout>

@@ -37,22 +37,16 @@ const campaignCards = [
     icon: PiMoneyWavy,
     titleKey: 'fundraisers.cards.receiveInstantly.title',
     descriptionKey: 'fundraisers.cards.receiveInstantly.description',
-    fallbackTitle: 'Receive instantly',
-    fallbackDescription: 'Funds hit your wallet immediately',
   },
   {
     icon: PiStorefront,
     titleKey: 'fundraisers.cards.sellProducts.title',
     descriptionKey: 'fundraisers.cards.sellProducts.description',
-    fallbackTitle: 'Sell products',
-    fallbackDescription: 'Easily launch your own storefront',
   },
   {
     icon: PiGlobeHemisphereWest,
     titleKey: 'fundraisers.cards.goGlobal.title',
     descriptionKey: 'fundraisers.cards.goGlobal.description',
-    fallbackTitle: 'Go Global',
-    fallbackDescription: 'Fund from anywhere.',
   },
 ]
 export const Fundraisers = () => {
