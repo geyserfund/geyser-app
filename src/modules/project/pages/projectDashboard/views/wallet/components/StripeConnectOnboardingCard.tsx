@@ -149,7 +149,7 @@ export const StripeConnectOnboardingCard = ({
 
       <Body size="md" light>
         {isTiaProject
-          ? t('Configure Stripe Connect to receive payments directly in your bank account.')
+          ? t('Configure Stripe Connect to receive fiat payments directly in your bank account.')
           : t('Available only for Take It All projects.')}
       </Body>
 

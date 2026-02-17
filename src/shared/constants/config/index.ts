@@ -12,3 +12,4 @@ export {
   VITE_APP_LNG_PORT,
 } from './env'
 export * from './routerPaths'
+export * from './featureFlags'

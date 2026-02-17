@@ -181,8 +181,8 @@ export const platformRoutes: RouteObject[] = [
               {
                 path: getPath('launchPaymentWallet', PathName.projectId),
                 async lazy() {
-                  const LaunchPaymentEmail = await loadProjectCreationPages().then((m) => m.LaunchPaymentEmail)
-                  return { Component: LaunchPaymentEmail }
+                  const LaunchPaymentWallet = await loadProjectCreationPages().then((m) => m.LaunchPaymentWallet)
+                  return { Component: LaunchPaymentWallet }
                 },
               },
               {
