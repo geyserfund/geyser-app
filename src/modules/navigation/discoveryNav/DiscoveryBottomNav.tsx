@@ -26,10 +26,10 @@ export type BottomNavItem = {
   new?: boolean
 }
 
-const imageDimension = { base: '40px', sm: '45px', md: '50px' }
-const campaignImageDimension = { base: '46px', sm: '53px', md: '58px' }
-const merchImageDimension = { base: '44px', sm: '49.5px', md: '55px' }
-const iconSlotHeight = { base: '46px', sm: '53px', md: '58px' }
+const imageDimension = { base: '44px', sm: '49.5px', md: '55px' }
+const campaignImageDimension = { base: '44px', sm: '49.5px', md: '55px' }
+const merchImageDimension = { base: '48.4px', sm: '54.45px', md: '60.5px' }
+const iconSlotHeight = { base: '50.6px', sm: '58.3px', md: '63.8px' }
 
 export const bottomNavItems = [
   {

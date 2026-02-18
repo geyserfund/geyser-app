@@ -11,7 +11,7 @@ export const PlatformNav = () => {
 
   const ProjectNavigationButtons = useMemo(() => {
     const buttonDimension = '50px'
-    const campaignButtonDimension = '58px'
+    const campaignButtonDimension = buttonDimension
     const marketplaceButtonDimension = '55px'
     const buttonList = [
       {

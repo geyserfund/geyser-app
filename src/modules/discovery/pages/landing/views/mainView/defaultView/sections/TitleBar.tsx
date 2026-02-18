@@ -49,11 +49,8 @@ export const TitleBar = () => {
           ) : (
             <VStack w="full" spacing={2} alignItems="flex-start">
               <H1 size={{ base: 'md', sm: 'lg', md: '2xl', xl: '3xl' }} bold color="primary1.11" textAlign="center">
-                {t('Fuel the grassroots Bitcoin economy.')}
+                {t('Support fundraisers, back projects early, and shop Bitcoin goods')}
               </H1>
-              <H2 size={{ base: 'sm', sm: 'md', md: 'xl', xl: '2xl' }} color="primary1.11" textAlign="center">
-                {t('Support fundraisers, back projects early, and shop Bitcoin goods.')}
-              </H2>
             </VStack>
           )}
 

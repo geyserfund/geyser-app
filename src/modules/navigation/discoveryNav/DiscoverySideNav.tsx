@@ -25,8 +25,10 @@ import { currentPlatformNavItemAtom } from './discoveryNavAtom'
 import { DiscoveryNavItem, DiscoveryNavItemKey, discoveryNavItems } from './discoveryNavData'
 
 const InsertDividerAfterIndex = [2, 4, 6]
-const marketplaceIconHeight = '24.2px'
-const defaultNavIconHeight = '18px'
+const marketplaceIconHeight = '26.62px'
+const defaultNavIconHeight = '19.8px'
+const defaultNavIconFontSize = '19.8px'
+const campaignNavIconFontSize = '16px'
 
 const glowAnimation = keyframes`
   0% { filter: drop-shadow(0 0 0px #3182ce); }
@@ -104,6 +106,7 @@ type DiscoverySideNavButtonProps = {
 const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: DiscoverySideNavButtonProps) => {
   const isActive = currentNavItem?.path === item.path
   const isTabletSize = useBreakpointValue({ xl: false, lg: true })
+  const navIconFontSize = item.key === DiscoveryNavItemKey.Campaigns ? campaignNavIconFontSize : defaultNavIconFontSize
 
   if (isTabletSize) {
     return (
@@ -135,7 +138,7 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
               alt={item.label}
             />
           ) : (
-            <item.icon fontSize="18px" />
+            <item.icon fontSize={navIconFontSize} />
           )}
           {activityDot ? (
             <Box
@@ -168,7 +171,7 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
             alt={item.label}
           />
         ) : (
-          <item.icon fontSize="18px" />
+          <item.icon fontSize={navIconFontSize} />
         )
       }
       rightIcon={
