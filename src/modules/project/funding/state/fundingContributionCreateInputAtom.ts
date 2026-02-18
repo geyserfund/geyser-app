@@ -2,8 +2,10 @@
 import { atom } from 'jotai'
 
 import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
+import { ORIGIN } from '@/shared/constants/config/env.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom'
 import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
+import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import {
   ContributionCreateInput,
   ContributionPaymentsInput,
@@ -19,6 +21,10 @@ import {
 import { toInt } from '@/utils'
 
 import { userAccountKeysAtom } from '../../../auth/state/userAccountKeysAtom.ts'
+import {
+  intendedPaymentMethodAtom,
+  PaymentMethods,
+} from '../../pages/projectFunding/views/fundingPayment/state/paymentMethodAtom.ts'
 import { sourceResourceAtom } from '../../pages/projectView/state/sourceActivityAtom.ts'
 import {
   fundingProjectAtom,
@@ -200,6 +206,10 @@ export const contributionCreatePreImagesAtom = atom<{
   onChain?: { preimageHex: string; preimageHash: string }
 }>({})
 
+export const contributionAddPaymentPreImagesAtom = atom<{
+  lightning?: { preimageHex: string; preimageHash: string }
+}>({})
+
 /** Reset funding input after request */
 export const resetFundingInputAfterRequestAtom = atom(null, (_, set) => {
   set(fundingInputAfterRequestAtom, null)
@@ -207,36 +217,80 @@ export const resetFundingInputAfterRequestAtom = atom(null, (_, set) => {
     lightning: { preimageHex: '', preimageHash: '' },
     onChain: { preimageHex: '', preimageHash: '' },
   })
+  set(contributionAddPaymentPreImagesAtom, {
+    lightning: { preimageHex: '', preimageHash: '' },
+  })
 })
 
 /** Payments input for fiat-only contribution creation */
-export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>(() => ({}))
+export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
+  const fundingProject = get(fundingProjectAtom)
+
+  if (fundingProject.fundingStrategy !== ProjectFundingStrategy.TakeItAll) {
+    return {}
+  }
+
+  return {
+    fiat: {
+      create: true,
+      stripe: {
+        returnUrl: `${ORIGIN}/project/${fundingProject?.name}/funding/success`,
+      },
+    },
+  }
+})
 
 const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
   const fundingProject = get(fundingProjectAtom)
   const userAccountKeys = get(userAccountKeysAtom)
+  const intendedPaymentMethod = get(intendedPaymentMethodAtom)
 
   const paymentsInput: ContributionPaymentsInput = {}
 
   const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
   const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
+  const usePrism = isPrismEnabled(fundingProject)
+  const shouldIncludeFiat = intendedPaymentMethod === PaymentMethods.fiatSwap
 
   if (fundingProject.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
-    paymentsInput.fiat = {
-      create: true,
-      stripe: {
-        returnUrl: `${window.location.origin}/project/${fundingProject?.name}/funding/success`,
-      },
+    if (shouldIncludeFiat) {
+      paymentsInput.fiat = {
+        create: true,
+        stripe: {
+          returnUrl: `${ORIGIN}/project/${fundingProject?.name}/funding/success`,
+        },
+      }
     }
-    paymentsInput.lightning = {
-      create: true,
-      zapRequest: null,
-    }
-    paymentsInput.onChainSwap = {
-      create: true,
-      boltz: {
-        swapPublicKey: claimPublicKey,
-      },
+
+    if (usePrism) {
+      paymentsInput.lightningToRskSwap = {
+        create: true,
+        boltz: {
+          claimPublicKey,
+          claimAddress,
+          preimageHash: '',
+        },
+      }
+
+      paymentsInput.onChainToRskSwap = {
+        create: true,
+        boltz: {
+          claimPublicKey,
+          claimAddress,
+          preimageHash: '',
+        },
+      }
+    } else {
+      paymentsInput.lightning = {
+        create: true,
+        zapRequest: null,
+      }
+      paymentsInput.onChainSwap = {
+        create: true,
+        boltz: {
+          swapPublicKey: claimPublicKey,
+        },
+      }
     }
   }
 

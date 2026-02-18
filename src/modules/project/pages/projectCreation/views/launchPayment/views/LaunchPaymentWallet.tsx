@@ -6,7 +6,7 @@ import { useAuthContext } from '@/context/auth.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
 import { useProjectAtom, useWalletAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { ProjectCreationStep } from '@/types/index.ts'
+import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
 import { isAllOrNothing, useNotification } from '@/utils/index.ts'
 
 import { EnableFiatContributions } from '../../../../projectDashboard/views/wallet/components/EnableFiatContributions.tsx'
@@ -64,7 +64,14 @@ export const LaunchPaymentWallet = () => {
 
       {!isAon && (
         <>
-          <EnableFiatContributions isIdentityVerified={isIdentityVerified} />
+          <EnableFiatContributions
+            isIdentityVerified={isIdentityVerified}
+            isTiaProject={project.fundingStrategy === ProjectFundingStrategy.TakeItAll}
+            projectId={project.id}
+            onRequireVerification={() => {
+              toast.error({ title: t('Identity verification is required to enable fiat contributions') })
+            }}
+          />
         </>
       )}
     </ProjectCreationPageWrapper>

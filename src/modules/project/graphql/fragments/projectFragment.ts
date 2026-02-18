@@ -106,6 +106,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     followersCount
     rejectionReason
     fundingStrategy
+    rskEoa
     lastCreationStep
     launchScheduledAt
     category

@@ -8,14 +8,20 @@ import { Address, Hex } from 'viem'
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { decryptString, encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
-import { AccountKeys, generatePreImageHash } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
+import {
+  AccountKeys,
+  generatePreImageHash,
+  generateProjectKeysFromSeedHex,
+} from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import {
   PaymentStatus,
   PaymentType,
+  PayoutContractType,
   PayoutStatus,
   ProjectForProfileContributionsFragment,
   RskToLightningSwapPaymentDetailsFragment,
@@ -27,6 +33,7 @@ import {
 import { commaFormatted, useNotification } from '@/utils/index.ts'
 
 import { createCallDataForLockCall } from '../../utils/createCallDataForLockCall.ts'
+import { createAndSignLockTransaction } from '../../utils/createLockTransaction.ts'
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
@@ -45,13 +52,21 @@ type PayoutRskProps = {
   onClose: () => void
   project: ProjectForProfileContributionsFragment
   rskAddress?: string
+  payoutAmountOverride?: number
   onCompleted?: () => void
 }
 
 export const MAX_SATS_FOR_LIGHTNING = 5000000 // 5,000,000 sats is the maximum amount for Lightning refunds
 
 /** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
-export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, rskAddress, onCompleted }) => {
+export const PayoutRsk: React.FC<PayoutRskProps> = ({
+  isOpen,
+  onClose,
+  project,
+  rskAddress,
+  payoutAmountOverride,
+  onCompleted,
+}) => {
   const toast = useNotification()
 
   useUserAccountKeys()
@@ -74,9 +89,11 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
   const [payoutInitiate, { loading: isPayoutInitiateLoading }] = usePayoutInitiateMutation()
 
   const [swapData, setSwapData] = useState<any>(null)
+  const [payoutRequestError, setPayoutRequestError] = useState<string | null>(null)
 
   useEffect(() => {
     if (isOpen) {
+      setPayoutRequestError(null)
       payoutRequest({
         variables: {
           input: {
@@ -84,20 +101,45 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
             rskAddress: rskAddress || userAccountKeys?.rskKeyPair.address,
           },
         },
+      }).catch((error) => {
+        const message =
+          error?.graphQLErrors?.[0]?.message ||
+          error?.message ||
+          t('Please wait a moment and try again.')
+        setPayoutRequestError(message)
       })
     }
   }, [isOpen, payoutRequest, project.id, userAccountKeys?.rskKeyPair.address, rskAddress])
 
-  const isProcessing = payoutRequestData?.payoutRequest.payout.status === PayoutStatus.Processing
+  const payout = payoutRequestData?.payoutRequest.payout
+  const isProcessing = payout?.status === PayoutStatus.Processing
+  const payoutMetadata = payoutRequestData?.payoutRequest.payoutMetadata
+  const contractType = payoutMetadata?.contractType
   const latestPayment = isProcessing
-    ? payoutRequestData?.payoutRequest.payout.payments.sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      )[0]
+    ? [...(payout?.payments ?? [])].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[
+        0
+      ]
     : null
   const isClaimable =
     isProcessing &&
     latestPayment?.paymentType === PaymentType.RskToOnChainSwap &&
     latestPayment?.status === PaymentStatus.Claimable
+
+  const createPayoutSignature = (params: { lockCallData: Hex; accountKeys: AccountKeys; amount: number }) => {
+    const { lockCallData, accountKeys, amount } = params
+
+    return createAndSignClaimMessage({
+      aonContractAddress: payoutMetadata?.aonContractAddress || '',
+      swapContractAddress: payoutMetadata?.swapContractAddress || '',
+      creatorAddress: accountKeys.address,
+      amount: satsToWei(amount),
+      nonce: payoutMetadata?.nonce || 0,
+      deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
+      processingFee: 0n,
+      lockCallData,
+      rskPrivateKey: accountKeys.privateKey,
+    })
+  }
 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
@@ -147,17 +189,25 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
         timelock: swapObj?.timeoutBlockHeight || 0n,
       })
 
-      const { signature } = createAndSignClaimMessage({
-        aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
-        swapContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
-        creatorAddress: accountKeys.address,
-        amount: satsToWei(amount),
-        nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
-        deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
-        processingFee: 0,
-        lockCallData: callDataHex,
-        rskPrivateKey: accountKeys.privateKey,
-      })
+      const isPrismPayout = contractType === PayoutContractType.Prism
+      const lockAmountSats = Number(swapObj?.expectedAmount ?? amount)
+      const gasPriceWei = swapObj?.geyserGasPriceWei ? BigInt(swapObj.geyserGasPriceWei) : undefined
+      const gasLimit = swapObj?.geyserGasLimit ? BigInt(swapObj.geyserGasLimit) : undefined
+      const signature = isPrismPayout
+        ? '0x'
+        : createPayoutSignature({ lockCallData: callDataHex, accountKeys, amount }).signature
+      const userLockTxHex = isPrismPayout
+        ? await createAndSignLockTransaction({
+            preimageHash: `0x${paymentDetails.swapPreimageHash}`,
+            claimAddress: swapObj?.claimAddress as Address,
+            refundAddress: accountKeys.address as Address,
+            timelock: swapObj?.timeoutBlockHeight || 0n,
+            amount: satsToWei(lockAmountSats),
+            privateKey: `0x${accountKeys.privateKey}`,
+            gasPrice: gasPriceWei,
+            gasLimit,
+          })
+        : ''
 
       await payoutInitiate({
         variables: {
@@ -165,6 +215,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
             payoutId: payoutRequestData?.payoutRequest.payout.id,
             signature,
             callDataHex,
+            userLockTxHex: userLockTxHex || undefined,
+            rskAddress: isPrismPayout ? accountKeys.address : undefined,
           },
         },
         onCompleted(data) {
@@ -270,17 +322,25 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
         timelock: swapObj?.lockupDetails?.timeoutBlockHeight || 0n,
       })
 
-      const { signature } = createAndSignClaimMessage({
-        aonContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.aonContractAddress || '',
-        swapContractAddress: payoutRequestData?.payoutRequest.payoutMetadata.swapContractAddress || '',
-        creatorAddress: accountKeys.address,
-        amount: satsToWei(amount),
-        nonce: payoutRequestData?.payoutRequest.payoutMetadata.nonce || 0,
-        deadline: payoutRequestData?.payoutRequest.payout.expiresAt || 0,
-        processingFee: 0,
-        lockCallData: callDataHex,
-        rskPrivateKey: accountKeys.privateKey,
-      })
+      const isPrismPayout = contractType === PayoutContractType.Prism
+      const lockAmountSats = Number(swapObj?.lockupDetails?.amount ?? amount)
+      const gasPriceWei = swapObj?.geyserGasPriceWei ? BigInt(swapObj.geyserGasPriceWei) : undefined
+      const gasLimit = swapObj?.geyserGasLimit ? BigInt(swapObj.geyserGasLimit) : undefined
+      const signature = isPrismPayout
+        ? '0x'
+        : createPayoutSignature({ lockCallData: callDataHex, accountKeys, amount }).signature
+      const userLockTxHex = isPrismPayout
+        ? await createAndSignLockTransaction({
+            preimageHash: `0x${preimageHash}` as Hex,
+            claimAddress: swapObj?.lockupDetails?.claimAddress as Address,
+            refundAddress: accountKeys.address as Address,
+            timelock: swapObj?.lockupDetails?.timeoutBlockHeight || 0n,
+            amount: satsToWei(lockAmountSats),
+            privateKey: `0x${accountKeys.privateKey}`,
+            gasPrice: gasPriceWei,
+            gasLimit,
+          })
+        : ''
 
       // Simulate processing delay
       await payoutInitiate({
@@ -289,6 +349,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
             payoutId: payoutRequestData?.payoutRequest.payout.id,
             signature,
             callDataHex,
+            userLockTxHex: userLockTxHex || undefined,
+            rskAddress: isPrismPayout ? accountKeys.address : undefined,
           },
         },
         onCompleted(data) {
@@ -315,8 +377,16 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
   }
 
   // Get form objects from both hooks
-  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit)
-  const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit)
+  const isPrismPayout = contractType === PayoutContractType.Prism
+  const keyDerivationOptions = isPrismPayout
+    ? {
+        deriveKeysFromSeed: (seedHex: string) => generateProjectKeysFromSeedHex(seedHex, project.id),
+        storeKeyPair: false,
+      }
+    : undefined
+
+  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, undefined, keyDerivationOptions)
+  const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit, undefined, keyDerivationOptions)
 
   const handleClose = () => {
     setIsProcessed(false)
@@ -330,8 +400,25 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
   }
 
   const enableSubmit = selectedMethod === PayoutMethod.Lightning ? lightningForm.enableSubmit : bitcoinForm.enableSubmit
+  const hasPayout = Boolean(payout?.id)
 
   const handleSubmit = () => {
+    if (payoutRequestError) {
+      toast.error({
+        title: t('Unable to load payout details'),
+        description: payoutRequestError,
+      })
+      return
+    }
+
+    if (!hasPayout) {
+      toast.error({
+        title: t('Unable to load payout details'),
+        description: t('Please wait a moment and try again.'),
+      })
+      return
+    }
+
     if (selectedMethod === PayoutMethod.Lightning) {
       lightningForm.handleSubmit()
     } else {
@@ -375,7 +462,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
     )
   }
 
-  const totalAmount = payoutRequestData?.payoutRequest.payout.amount || 0
+  const totalAmount = payout?.amount ?? payoutAmountOverride ?? 0
 
   return (
     <Modal
@@ -389,6 +476,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
     >
       {payoutRequestLoading ? (
         <RefundRskSkeleton />
+      ) : payoutRequestError ? (
+        <Feedback variant={FeedBackVariant.ERROR} text={payoutRequestError} />
       ) : (
         <>
           {/* Payout Method Selection */}
@@ -413,7 +502,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({ isOpen, onClose, project, 
             colorScheme="primary1"
             variant="solid"
             isLoading={isSubmitting || isPayoutInitiateLoading || isPayoutPaymentCreateLoading}
-            isDisabled={!enableSubmit}
+            isDisabled={!enableSubmit || payoutRequestLoading || !hasPayout || Boolean(payoutRequestError)}
             onClick={handleSubmit}
           >
             {t('Claim Payout')}

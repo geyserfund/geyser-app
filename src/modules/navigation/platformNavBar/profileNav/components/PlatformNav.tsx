@@ -2,14 +2,17 @@ import { HStack, Image } from '@chakra-ui/react'
 import { useMemo } from 'react'
 import { useLocation } from 'react-router'
 
+import MarketplaceNavIcon from '@/assets/marketplace-nav.png'
 import { AnimatedNavSlide, AnimatedNavSlideItem } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
-import { CampaignIconUrl, FundraiserIconUrl, ProductsIconUrl } from '@/shared/constants/index.ts'
+import { CampaignIconUrl, FundraiserIconUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
 
 export const PlatformNav = () => {
   const location = useLocation()
 
   const ProjectNavigationButtons = useMemo(() => {
     const buttonDimension = '50px'
+    const campaignButtonDimension = buttonDimension
+    const marketplaceButtonDimension = '55px'
     const buttonList = [
       {
         name: 'Fundraisers',
@@ -19,14 +22,18 @@ export const PlatformNav = () => {
       {
         name: 'Campaigns',
         path: '/campaigns',
-        icon: <Image src={CampaignIconUrl} height={buttonDimension} width={buttonDimension} />,
-        new: true,
+        icon: <Image src={CampaignIconUrl} height={campaignButtonDimension} width={campaignButtonDimension} />,
       },
 
       {
-        name: 'Shop',
+        name: 'Shops',
         path: '/products',
-        icon: <Image src={ProductsIconUrl} height={buttonDimension} width={buttonDimension} />,
+        icon: <Image src={MarketplaceNavIcon} height={marketplaceButtonDimension} width={marketplaceButtonDimension} />,
+      },
+      {
+        name: 'Impact Funds',
+        path: '/impact-funds',
+        icon: <Image src={ImpactFundsIconUrl} height={buttonDimension} width={buttonDimension} />,
       },
     ] as AnimatedNavSlideItem[]
 

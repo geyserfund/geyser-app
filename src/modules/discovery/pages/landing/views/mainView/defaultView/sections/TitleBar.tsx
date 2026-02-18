@@ -47,9 +47,11 @@ export const TitleBar = () => {
               {t('Back')}
             </Button>
           ) : (
-            <H1 size={{ base: 'md', sm: 'lg', md: '2xl', xl: '3xl' }} bold color="primary1.11" textAlign="center">
-              {t('Discover and fund Bitcoin projects worldwide')}
-            </H1>
+            <VStack w="full" spacing={2} alignItems="flex-start">
+              <H1 size={{ base: 'md', sm: 'lg', md: '2xl', xl: '3xl' }} bold color="primary1.11" textAlign="center">
+                {t('Support fundraisers, back projects early, and shop Bitcoin goods')}
+              </H1>
+            </VStack>
           )}
 
           <FilterComponent />

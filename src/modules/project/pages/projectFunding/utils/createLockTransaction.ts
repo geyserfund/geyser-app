@@ -158,12 +158,15 @@ export const createAndSignLockTransaction = async (params: {
   timelock: bigint
   amount: bigint | number
   privateKey: Hex
+  gasLimit?: bigint
+  gasPrice?: bigint
+  contractAddress?: Address
 }): Promise<Hex> => {
   const { preimageHash, claimAddress, refundAddress, timelock, amount, privateKey } = params
 
-  const gasPrice = await rootstockPublicClient.getGasPrice()
-  const gasLimit = DEFAULT_GAS_LIMIT
-  const contractAddress = VITE_APP_BOLTZ_SWAP_CONTRACT_ADDRESS
+  const gasPrice = params.gasPrice ?? (await rootstockPublicClient.getGasPrice())
+  const gasLimit = params.gasLimit ?? DEFAULT_GAS_LIMIT
+  const contractAddress = params.contractAddress ?? CONTRACT_ADDRESS
 
   try {
     // Step 1: Create account from private key

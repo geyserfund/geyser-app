@@ -13,6 +13,7 @@ import {
   fiatCheckoutMethods,
   fiatPaymentMethodAtom,
   hasFiatPaymentMethodAtom,
+  hasStripePaymentMethodAtom,
   intendedPaymentMethodAtom,
   PaymentMethods,
 } from '../views/fundingPayment/state/paymentMethodAtom.ts'
@@ -22,25 +23,17 @@ type ContinueWithButtonsProps = {
 }
 
 const getIsApplePayVisible = () => {
-  if (typeof navigator === 'undefined') {
+  if (typeof window === 'undefined') {
     return false
   }
 
-  const platform = navigator.platform || ''
-  const userAgent = navigator.userAgent || ''
-  const vendor = navigator.vendor || ''
-
-  const isSafari = vendor.includes('Apple') || (/Safari/.test(userAgent) && !/Chrome|Chromium|CriOS/.test(userAgent))
-
-  if (!isSafari) {
-    return false
+  const { ApplePaySession } = window as Window & {
+    ApplePaySession?: {
+      canMakePayments: () => boolean
+    }
   }
 
-  if (platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
-    return true
-  }
-
-  return /Mac|iPhone|iPad|iPod/.test(platform) || /Macintosh|iPhone|iPad|iPod/.test(userAgent)
+  return Boolean(ApplePaySession?.canMakePayments())
 }
 
 export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButtonsProps) => {
@@ -50,7 +43,8 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   const setIntendedPaymentMethod = useSetAtom(intendedPaymentMethodAtom)
   const setFiatPaymentMethod = useSetAtom(fiatPaymentMethodAtom)
   const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
-  const isApplePayVisible = hasFiatPaymentMethod && getIsApplePayVisible()
+  const hasStripePaymentMethod = useAtomValue(hasStripePaymentMethodAtom)
+  const isApplePayVisible = hasFiatPaymentMethod && !hasStripePaymentMethod && getIsApplePayVisible()
   const applePayButtonBg = useColorModeValue('neutral.1000', 'neutral.1000')
   const applePayButtonText = useColorModeValue('neutral.0', 'neutral.0')
   const creditCardIcon = <Icon as={FaCreditCard} color="utils.text" />
@@ -62,7 +56,9 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
     setFiatPaymentMethod(fiatCheckoutMethods.creditCard)
     if (!useFormSubmit) {
       const paymentPath = hasFiatPaymentMethod
-        ? getPath('fundingPaymentCreditCard', project.name)
+        ? hasStripePaymentMethod
+          ? getPath('fundingPaymentFiatStripe', project.name)
+          : getPath('fundingPaymentFiatBanxa', project.name)
         : getPath('fundingStart', project.name)
       navigate(paymentPath)
     }
@@ -73,7 +69,7 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
     setFiatPaymentMethod(fiatCheckoutMethods.applePay)
     if (!useFormSubmit) {
       const paymentPath = hasFiatPaymentMethod
-        ? getPath('fundingPaymentApplePay', project.name)
+        ? getPath('fundingPaymentFiatBanxaApplePay', project.name)
         : getPath('fundingStart', project.name)
       navigate(paymentPath)
     }
@@ -116,9 +112,9 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
         onClick={handleCreditCardClick}
         type={useFormSubmit ? 'submit' : 'button'}
         rightIcon={isMobile ? undefined : creditCardIcon}
-        aria-label={t('Continue with Credit Card')}
+        aria-label={t('Continue with Card or Bank Transfer')}
       >
-        {isMobile ? creditCardIcon : t('Continue with Credit Card')}
+        {isMobile ? creditCardIcon : t('Continue with Card or Bank Transfer')}
       </Button>
       <Button
         id="continue-with-bitcoin"

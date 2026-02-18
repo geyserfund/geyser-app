@@ -23,6 +23,7 @@ export const AUTH_SERVICE_ENDPOINT = __production__
   ? import.meta.env.VITE_APP_AUTH_SERVICE_ENDPOINT
   : `${API_SERVICE_ENDPOINT}/auth`
 export const BOLTZ_DOMAIN = import.meta.env.VITE_APP_BOLTZ_SWAP_DOMAIN as string
+export const ORIGIN = typeof window === 'undefined' ? '' : window.location.origin
 /*
  Other environment vars
 */
@@ -59,6 +60,14 @@ if (!import.meta.env.VITE_APP_ROOTSTOCK_RPC_URL) {
   console.warn('Missing VITE_APP_ROOTSTOCK_RPC_URL from environment variables')
 }
 
+if (!import.meta.env.VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS) {
+  console.warn('Missing VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS from environment variables')
+}
+
+if (!import.meta.env.VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS) {
+  console.warn('Missing VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS from environment variables')
+}
+
 export const {
   VITE_APP_FLODESK_API_KEY,
   VITE_APP_GIPHY_API_KEY,
@@ -69,4 +78,6 @@ export const {
   VITE_APP_BOLTZ_ROUTER_CONTRACT_ADDRESS,
   VITE_APP_BOLTZ_SWAP_CONTRACT_ADDRESS,
   VITE_APP_ROOTSTOCK_RPC_URL,
+  VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
+  VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
 } = import.meta.env

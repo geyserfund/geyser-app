@@ -16,7 +16,7 @@ import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/compo
 import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { hasProjectFundingLimitAlmostReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { Body, H3 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { halfStandardPadding } from '@/shared/styles/reponsiveValues.ts'
 import { UserVerificationLevelInput } from '@/types/index.ts'
@@ -79,17 +79,13 @@ export const WalletLimitsAndVerification = () => {
 
   return (
     <>
-      <CardLayout width="100%">
-        <VStack spacing={6} alignItems="flex-start" width="100%">
-          <VStack spacing={1} alignItems="flex-start" width="100%">
-            <H3 size="md">{t('Funding Limits & Verification')}</H3>
-            <Body size="sm" color="neutral1.9">
-              {t(
-                'Limits are in place to prevent abuse, scams or fraudulent activity. It provides an additional level of trust to the contributors of your project.',
-              )}
-            </Body>
-          </VStack>
-          <Box />
+      <VStack spacing={6} alignItems="flex-start" width="100%">
+        <Body size="sm" color="neutral1.9">
+          {t(
+            'Limits are in place to prevent abuse, scams or fraudulent activity. It provides an additional level of trust to the contributors of your project.',
+          )}
+        </Body>
+        <Box />
 
           {/* Progress Bar */}
           <Box
@@ -263,8 +259,7 @@ export const WalletLimitsAndVerification = () => {
               </Flex>
             </CardLayout>
           </Stack>
-        </VStack>
-      </CardLayout>
+      </VStack>
 
       <UserVerificationModal
         userVerificationModal={userVerificationModal}

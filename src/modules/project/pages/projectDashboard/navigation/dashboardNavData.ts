@@ -5,18 +5,20 @@ import {
   PiFlagBannerFold,
   PiGear,
   PiHandbag,
+  PiIdentificationCard,
   PiInvoice,
   PiMegaphone,
   PiPlanet,
   PiPlugs,
   PiProjectorScreenChart,
-  PiWallet,
+  PiCreditCard,
 } from 'react-icons/pi'
 
 export enum DashboardType {
   config = 'config',
-  settings = 'settings',
   analytics = 'analytics',
+  payments = 'payments',
+  settings = 'settings',
 }
 
 import { IconType } from 'react-icons'
@@ -57,10 +59,16 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     icon: PiHandbag,
   },
   {
-    label: 'Wallet',
+    label: 'Payment Settings',
     path: 'dashboardWallet',
-    type: DashboardType.config,
-    icon: PiWallet,
+    type: DashboardType.payments,
+    icon: PiCreditCard,
+  },
+  {
+    label: 'Limits & Verification',
+    path: 'dashboardLimitsVerification',
+    type: DashboardType.payments,
+    icon: PiIdentificationCard,
   },
   // ------------------------------------------------------------ //
   {

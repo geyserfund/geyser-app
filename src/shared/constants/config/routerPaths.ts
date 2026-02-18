@@ -10,6 +10,7 @@ export enum PathName {
   creator = 'creator',
   contributor = 'contributor',
   grants = 'grants',
+  impactFunds = 'impact-funds',
   grantsRoundOne = 'roundone',
   grantsRoundTwo = 'roundtwo',
   myProjects = 'my-projects',
@@ -81,6 +82,7 @@ export enum PathName {
   launchPayment = 'payment',
   launchPaymentWallet = 'wallet',
   launchPaymentAccountPassword = 'account-password',
+  launchPaymentSeedWords = 'seed-words',
   launchPaymentTaxId = 'tax-id',
   launchFinalize = 'finalize',
 
@@ -112,6 +114,7 @@ export enum PathName {
   dashboardInfo = 'description',
   dashboardDetails = 'details',
   dashboardWallet = 'wallet',
+  dashboardLimitsVerification = 'limits-verification',
   dashboardNotifications = 'notifications',
   dashboardSettings = 'settings',
   dashboardStatus = 'status',
@@ -136,6 +139,9 @@ export enum PathName {
   fundingPaymentFiatSwap = 'fiat-swap',
   fundingPaymentCreditCard = 'creditCard',
   fundingPaymentApplePay = 'applepay',
+  fundingPaymentFiatStripe = 'fiat/stripe',
+  fundingPaymentFiatBanxa = 'fiat/banxa',
+  fundingPaymentFiatBanxaApplePay = 'fiat/banxa/applepay',
   fundingPaymentOnchainQR = 'qr',
   fundingPaymentOnchainProcessing = 'processing',
   fundingPaymentOnchainRefund = 'refund',
@@ -162,6 +168,7 @@ export enum PathName {
   postId = ':postId',
   goalId = ':goalId',
   grantId = ':grantId',
+  impactFundName = ':impactFundName',
   characterId = ':characterId',
   legalTerms = 'T&C',
   legalPrivacy = 'Privacy',
@@ -191,8 +198,10 @@ const pathsMap = {
   discoveryFundraisersLatest: () => `/${PathName.fundraisers}/${PathName.latest}`,
   discoveryFundraisersInYourRegion: () => `/${PathName.fundraisers}/${PathName.inYourRegion}`,
   discoveryFundraisersCategory: (category: string) => `/${PathName.fundraisers}/${PathName.category}/${category}`,
-  discoveryFundraisersSubCategory: (subCategory: string) => `/${PathName.fundraisers}/${PathName.subCategory}/${subCategory}`,
+  discoveryFundraisersSubCategory: (subCategory: string) =>
+    `/${PathName.fundraisers}/${PathName.subCategory}/${subCategory}`,
   discoveryProducts: () => `/${PathName.products}`,
+  discoveryProductsCategory: (category: string) => `/${PathName.products}/${PathName.category}/${category}`,
   discoveryProjectCategory: (category: string) => `/${PathName.projectCategory}/${category}`,
   discoveryProjectSubCategory: (subCategory: string) => `/${PathName.projectSubCategory}/${subCategory}`,
   discoveryLeaderboard: () => `/${PathName.leaderboard}`,
@@ -203,6 +212,8 @@ const pathsMap = {
   discoveryGrants: () => `/${PathName.grants}`,
   discoveryGrant: (grantId: string) => `/${PathName.grants}/${grantId}`,
   discoveryGrantApply: (grantId: string) => `/${PathName.grants}/${grantId}/${PathName.grantApply}`,
+  discoveryImpactFunds: () => `/${PathName.impactFunds}`,
+  discoveryImpactFund: (impactFundName: string) => `/${PathName.impactFunds}/${impactFundName}`,
   discoveryMerch: () => `/${PathName.merch}`,
   discoveryLaunchpad: () => `/${PathName.launchpad}`,
 
@@ -227,6 +238,8 @@ const pathsMap = {
   /** Grants Routes */
 
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
+  impactFunds: (impactFundName?: string) =>
+    impactFundName ? `/${PathName.impactFunds}/${impactFundName}` : `/${PathName.impactFunds}`,
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
   grantsRoundTwo: () => `/${PathName.grants}/${PathName.grantsRoundTwo}`,
 
@@ -281,6 +294,8 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardDetails}`,
   dashboardWallet: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardWallet}`,
+  dashboardLimitsVerification: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardLimitsVerification}`,
   dashboardNostr: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectDashboard}/${PathName.dashboardNostr}`,
   dashboardNotifications: (projectName: string) =>
@@ -326,6 +341,12 @@ const pathsMap = {
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentCreditCard}`,
   fundingPaymentApplePay: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentApplePay}`,
+  fundingPaymentFiatStripe: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentFiatStripe}`,
+  fundingPaymentFiatBanxa: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentFiatBanxa}`,
+  fundingPaymentFiatBanxaApplePay: (projectName: string) =>
+    `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentFiatBanxaApplePay}`,
   fundingPaymentOnchain: (projectName: string) =>
     `/${PathName.project}/${projectName}/${PathName.projectFunding}/${PathName.fundingStart}/${PathName.fundingPayment}/${PathName.fundingPaymentOnchain}`,
   fundingPaymentOnchainQR: (projectName: string) =>
@@ -392,6 +413,8 @@ const pathsMap = {
     `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentWallet}`,
   launchPaymentAccountPassword: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentAccountPassword}`,
+  launchPaymentSeedWords: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentSeedWords}`,
   launchPaymentTaxId: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentTaxId}`,
   launchFinalize: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchFinalize}`,

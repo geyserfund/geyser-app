@@ -25,3 +25,15 @@ export const QUERY_TRENDING_REWARDS_FOR_PRODUCTS_PAGE = gql`
     }
   }
 `
+
+export const QUERY_PROJECT_REWARDS_MOST_SOLD = gql`
+  ${FRAGMENT_REWARD_FOR_PRODUCTS_PAGE}
+  query ProjectRewardsMostSoldGet($input: GetProjectRewardsMostSoldInput!) {
+    projectRewardsMostSoldGet(input: $input) {
+      count
+      projectReward {
+        ...RewardForProductsPage
+      }
+    }
+  }
+`

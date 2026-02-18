@@ -29,5 +29,7 @@ export const FRAGMENT_PAYOUT_METADATA = gql`
     nonce
     swapContractAddress
     aonContractAddress
+    contractType
+    projectKey
   }
 `

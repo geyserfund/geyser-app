@@ -1962,5 +1962,70 @@
   "Add affiliates who can promote your project in exchange for a percentage of the contributions they enable. Referral link format: ?hero=USER_I. Learn more about Affiliates here": "Add affiliates who can promote your project in exchange for a percentage of the contributions they enable. Referral link format: ?hero=USER_I. Learn more about Affiliates here",
   "Add affiliates who can promote your project in exchange for a percentage of the contributions they enable. Referral link format: ?hero=USER_I. Learn more about Affiliates <1>here</1>": "Add affiliates who can promote your project in exchange for a percentage of the contributions they enable. Referral link format: ?hero=USER_I. Learn more about Affiliates <1>here</1>",
   "Affiliate Rate (%)": "Affiliate Rate (%)",
-  "Affiliate Rate": "Affiliate Rate"
+  "Affiliate Rate": "Affiliate Rate",
+  "shops": {
+    "limitedEdition": {
+      "alt": "Limited edition icon",
+      "title": "Limited Edition",
+      "description": "Get limited edition items"
+    },
+    "rareFinds": {
+      "alt": "Rare finds icon",
+      "title": "Rare finds",
+      "description": "Find creative indie products and rare finds"
+    },
+    "collectibles": {
+      "alt": "Collectibles icon",
+      "title": "Collectibles",
+      "description": "Buy unique Bitcoin collectibles"
+    }
+  },
+  "fundraisers": {
+    "cards": {
+      "receiveInstantly": {
+        "title": "Receive instantly",
+        "description": "Funds hit your wallet immediately"
+      },
+      "sellProducts": {
+        "title": "Sell products",
+        "description": "Easily launch your own storefront"
+      },
+      "goGlobal": {
+        "title": "Go Global",
+        "description": "Fund from anywhere."
+      }
+    }
+  },
+  "campaigns": {
+    "cards": {
+      "alignIncentives": {
+        "title": "Align the incentives",
+        "description": "Paid only if fully funded."
+      },
+      "failWithoutBurningTrust": {
+        "title": "Fail without burning trust",
+        "description": "Refunds if it fails."
+      },
+      "goGlobal": {
+        "title": "Go Global",
+        "description": "Fund from anywhere."
+      }
+    }
+  },
+  "impactFunds": {
+    "flow": {
+      "fundGrowth": {
+        "title": "Fund Growth",
+        "subtitle": "Growth from new sponsors and donations."
+      },
+      "continuousDistribution": {
+        "title": "Continuous Distribution",
+        "subtitle": "Funds are distributed on a regular basis."
+      },
+      "verifiedImpact": {
+        "title": "Verified Impact",
+        "subtitle": "Verified and proven track record of impact."
+      }
+    }
+  }
 }

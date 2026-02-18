@@ -35,8 +35,8 @@ export const PaymentOnchainQR = () => {
 export const PaymentOnchainQRContent = ({ address }: { address: string }) => {
   useListenOnchainTransactionUpdate()
 
-  const { project } = useProjectAtom()
-  const isAon = isAllOrNothing(project)
+  const { project, isPrismEnabled } = useProjectAtom()
+  const isRskSwapFlow = isAllOrNothing(project) || isPrismEnabled
   const currentOnchainToRskSwapId = useAtomValue(currentOnChainToRskSwapIdAtom)
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
 
@@ -65,10 +65,10 @@ export const PaymentOnchainQRContent = ({ address }: { address: string }) => {
   const { onCopy: onCopyBip21Invoice, hasCopied: hasCopiedBip21Invoice } = useCopyToClipboard(onChainBip21Invoice)
 
   useEffect(() => {
-    if (isAon && currentOnchainToRskSwapId) {
+    if (isRskSwapFlow && currentOnchainToRskSwapId) {
       setCurrentSwapId(currentOnchainToRskSwapId)
     }
-  }, [isAon, currentOnchainToRskSwapId, setCurrentSwapId])
+  }, [isRskSwapFlow, currentOnchainToRskSwapId, setCurrentSwapId])
 
   return (
     <VStack flexWrap="wrap" width="100%" spacing={6}>

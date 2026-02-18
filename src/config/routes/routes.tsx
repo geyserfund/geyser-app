@@ -7,8 +7,8 @@ import { loadHeroesPages } from '@/modules/discovery/pages/heroes/loader.ts'
 import { loadLandingPages } from '@/modules/discovery/pages/landing/loader.ts'
 import { loadLandingMainViewPages } from '@/modules/discovery/pages/landing/views/mainView/loader.ts'
 import { MaintainancePage } from '@/modules/general/fallback/MaintainancePage.tsx'
-import { loadGrantsModule } from '@/modules/grants/loader.ts'
 import { loadGuardiansModule } from '@/modules/guardians/loader.ts'
+import { loadImpactFundsModule } from '@/modules/impactFunds/loader.ts'
 import { loadProfileModule } from '@/modules/profile/loader.ts'
 import { loadProfileSettingsModule } from '@/modules/profile/pages/profileSettings/loader.ts'
 import { loadProjectModule } from '@/modules/project/loader.ts'
@@ -192,6 +192,13 @@ export const platformRoutes: RouteObject[] = [
                     (m) => m.LaunchPaymentAccountPassword,
                   )
                   return { Component: LaunchPaymentAccountPassword }
+                },
+              },
+              {
+                path: getPath('launchPaymentSeedWords', PathName.projectId),
+                async lazy() {
+                  const LaunchPaymentSeedWords = await loadProjectCreationPages().then((m) => m.LaunchPaymentSeedWords)
+                  return { Component: LaunchPaymentSeedWords }
                 },
               },
               {
@@ -540,6 +547,13 @@ export const platformRoutes: RouteObject[] = [
                 },
               },
               {
+                path: getPath('dashboardLimitsVerification', PathName.projectName),
+                async lazy() {
+                  const projectDashboardPages = await loadProjectDashboardPages()
+                  return { Component: projectDashboardPages.ProjectDashboardLimitsVerification }
+                },
+              },
+              {
                 path: getPath('dashboardNostr', PathName.projectName),
                 async lazy() {
                   const projectDashboardPages = await loadProjectDashboardPages()
@@ -649,15 +663,51 @@ export const platformRoutes: RouteObject[] = [
               {
                 path: getPath('fundingPaymentCreditCard', PathName.projectName),
                 async lazy() {
-                  const PaymentCreditCard = await loadProjectFundingPages().then((m) => m.PaymentCreditCard)
-                  return { Component: PaymentCreditCard }
+                  const PaymentFiatLegacyCreditCardRedirect = await loadProjectFundingPages().then(
+                    (m) => m.PaymentFiatLegacyCreditCardRedirect,
+                  )
+                  return { Component: PaymentFiatLegacyCreditCardRedirect }
+                },
+              },
+              {
+                path: getPath('fundingPaymentCard', PathName.projectName),
+                async lazy() {
+                  const PaymentFiatLegacyCreditCardRedirect = await loadProjectFundingPages().then(
+                    (m) => m.PaymentFiatLegacyCreditCardRedirect,
+                  )
+                  return { Component: PaymentFiatLegacyCreditCardRedirect }
                 },
               },
               {
                 path: getPath('fundingPaymentApplePay', PathName.projectName),
                 async lazy() {
-                  const PaymentCreditCard = await loadProjectFundingPages().then((m) => m.PaymentCreditCard)
-                  return { Component: PaymentCreditCard }
+                  const PaymentFiatLegacyApplePayRedirect = await loadProjectFundingPages().then(
+                    (m) => m.PaymentFiatLegacyApplePayRedirect,
+                  )
+                  return { Component: PaymentFiatLegacyApplePayRedirect }
+                },
+              },
+              {
+                path: getPath('fundingPaymentFiatStripe', PathName.projectName),
+                async lazy() {
+                  const PaymentFiatStripe = await loadProjectFundingPages().then((m) => m.PaymentFiatStripe)
+                  return { Component: PaymentFiatStripe }
+                },
+              },
+              {
+                path: getPath('fundingPaymentFiatBanxa', PathName.projectName),
+                async lazy() {
+                  const PaymentFiatBanxa = await loadProjectFundingPages().then((m) => m.PaymentFiatBanxa)
+                  return { Component: PaymentFiatBanxa }
+                },
+              },
+              {
+                path: getPath('fundingPaymentFiatBanxaApplePay', PathName.projectName),
+                async lazy() {
+                  const PaymentFiatBanxaApplePay = await loadProjectFundingPages().then(
+                    (m) => m.PaymentFiatBanxaApplePay,
+                  )
+                  return { Component: PaymentFiatBanxaApplePay }
                 },
               },
 
@@ -683,17 +733,12 @@ export const platformRoutes: RouteObject[] = [
                     },
                   },
                   {
-                    path: getPath('fundingPaymentCard', PathName.projectName),
-                    async lazy() {
-                      const PaymentCard = await loadProjectFundingPages().then((m) => m.PaymentCard)
-                      return { Component: PaymentCard }
-                    },
-                  },
-                  {
                     path: getPath('fundingPaymentFiatSwap', PathName.projectName),
                     async lazy() {
-                      const PaymentFiatSwap = await loadProjectFundingPages().then((m) => m.PaymentFiatSwap)
-                      return { Component: PaymentFiatSwap }
+                      const PaymentFiatLegacyBanxaRedirect = await loadProjectFundingPages().then(
+                        (m) => m.PaymentFiatLegacyBanxaRedirect,
+                      )
+                      return { Component: PaymentFiatLegacyBanxaRedirect }
                     },
                   },
                   {
@@ -955,6 +1000,22 @@ export const platformRoutes: RouteObject[] = [
               const Products = await loadLandingPages().then((m) => m.Products)
               return { Component: Products }
             },
+            children: [
+              {
+                index: true,
+                async lazy() {
+                  const TrendingProducts = await loadLandingPages().then((m) => m.TrendingProducts)
+                  return { Component: TrendingProducts }
+                },
+              },
+              {
+                path: getPath('discoveryProductsCategory', PathName.categoryName),
+                async lazy() {
+                  const CategoryProducts = await loadLandingPages().then((m) => m.CategoryProducts)
+                  return { Component: CategoryProducts }
+                },
+              },
+            ],
           },
         ],
       },
@@ -1067,10 +1128,7 @@ export const platformRoutes: RouteObject[] = [
 
       {
         path: getPath('impactFund'),
-        async lazy() {
-          const ImpactFund = await loadDiscoveryModule().then((m) => m.ImpactFund)
-          return { Component: ImpactFund }
-        },
+        element: <Navigate to={getPath('impactFunds')} replace />,
       },
 
       {
@@ -1082,23 +1140,27 @@ export const platformRoutes: RouteObject[] = [
       },
       {
         path: getPath('discoveryGrants'),
+        element: <Navigate to={getPath('impactFunds')} replace />,
+      },
+      {
+        path: getPath('discoveryImpactFunds'),
         async lazy() {
-          const grantsModule = await loadGrantsModule()
-          return { Component: grantsModule.GrantsMainPage }
+          const impactFundsModule = await loadImpactFundsModule()
+          return { Component: impactFundsModule.ImpactFundsMainPage }
         },
       },
       {
         path: getPath('discoveryGrant', PathName.grantId),
         async lazy() {
-          const grantsModule = await loadGrantsModule()
-          return { Component: grantsModule.GrantPage }
+          const impactFundsModule = await loadImpactFundsModule()
+          return { Component: impactFundsModule.LegacyGrantRedirectPage }
         },
       },
       {
-        path: getPath('discoveryGrant', PathName.grantId),
+        path: getPath('discoveryImpactFund', PathName.impactFundName),
         async lazy() {
-          const GrantPage = await loadGrantsModule().then((m) => m.GrantPage)
-          return { Component: GrantPage }
+          const impactFundsModule = await loadImpactFundsModule()
+          return { Component: impactFundsModule.ImpactFundDetailPage }
         },
       },
     ],
@@ -1106,18 +1168,12 @@ export const platformRoutes: RouteObject[] = [
 
   {
     path: getPath('discoveryGrantApply', PathName.grantId),
-    async lazy() {
-      const GrantsApplyPage = await loadGrantsModule().then((m) => m.GrantsApplyPage)
-      return { Component: GrantsApplyPage }
-    },
+    element: <Navigate to={getPath('impactFunds')} replace />,
   },
 
   {
     path: '/time2build',
-    async lazy() {
-      const GrantPage = await loadGrantsModule().then((m) => m.GrantPage)
-      return { element: <GrantPage grantId={20} /> }
-    },
+    element: <Navigate to={getPath('impactFunds')} replace />,
   },
 
   {
