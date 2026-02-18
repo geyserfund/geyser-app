@@ -3,7 +3,7 @@ import { useSetAtom } from 'jotai'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { UserAccountKeysFragment, useUserAccountKeysUpdateMutation } from '@/types/index.ts'
 
-import { encryptSeed, generateKeysFromSeedHex, generateSeedHexForUser } from '../keyGenerationHelper.ts'
+import { encryptMnemonic, encryptSeed, generateKeysFromSeedHex, generateSeedDataForUser } from '../keyGenerationHelper.ts'
 
 export const useUpdateAccountPassword = (onComplete?: (_: UserAccountKeysFragment) => void) => {
   const [userAccountKeysUpdate, { loading: isUserAccountKeysCreateLoading }] = useUserAccountKeysUpdateMutation()
@@ -12,11 +12,12 @@ export const useUpdateAccountPassword = (onComplete?: (_: UserAccountKeysFragmen
   const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
 
   const onSubmit = async (data: { password: string; repeatPassword: string }) => {
-    const seedHex = generateSeedHexForUser()
+    const { seedHex, mnemonic } = generateSeedDataForUser()
 
     const { privateKey, publicKey, address, derivationPath } = generateKeysFromSeedHex(seedHex)
 
-    const encryptedSeed = await encryptSeed(seedHex, data.password)
+    const encryptedSeed = await encryptSeed(seedHex, data.password, mnemonic)
+    const encryptedMnemonic = await encryptMnemonic(mnemonic, data.password)
 
     if (!address && !privateKey && !publicKey && !derivationPath) {
       return
@@ -26,6 +27,7 @@ export const useUpdateAccountPassword = (onComplete?: (_: UserAccountKeysFragmen
       variables: {
         input: {
           encryptedSeed,
+          encryptedMnemonic,
           rskKeyPair: {
             address: address || '',
             derivationPath,

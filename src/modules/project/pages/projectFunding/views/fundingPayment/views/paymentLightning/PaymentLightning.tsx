@@ -45,8 +45,8 @@ export const PaymentLightning = () => {
 export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: string }) => {
   useListenFundingContributionSuccess()
 
-  const { project } = useProjectAtom()
-  const isAon = isAllOrNothing(project)
+  const { project, isPrismEnabled } = useProjectAtom()
+  const isRskSwapFlow = isAllOrNothing(project) || isPrismEnabled
 
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
   const setCurrentSwapId = useSetAtom(currentSwapIdAtom)
@@ -84,10 +84,10 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
   }
 
   useEffect(() => {
-    if (isAon && currentLightningToRskSwapId) {
+    if (isRskSwapFlow && currentLightningToRskSwapId) {
       setCurrentSwapId(currentLightningToRskSwapId)
     }
-  }, [isAon, currentLightningToRskSwapId, setCurrentSwapId])
+  }, [isRskSwapFlow, currentLightningToRskSwapId, setCurrentSwapId])
 
   return (
     <VStack w="full">
@@ -107,7 +107,7 @@ export const PaymentLightningContent = ({ paymentRequest }: { paymentRequest: st
           {t('Copy invoice')}
         </Button>
       </VStack>
-      {isAon && <PaymentLightningAonComponent />}
+      {isRskSwapFlow && <PaymentLightningAonComponent />}
     </VStack>
   )
 }
@@ -116,7 +116,8 @@ export const PaymentLightningAonComponent = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const { project } = useProjectAtom()
+  const { project, isPrismEnabled } = useProjectAtom()
+  const isRskSwapFlow = isAllOrNothing(project) || isPrismEnabled
 
   const [fundingContribution, setFundingContribution] = useAtom(fundingContributionAtom)
   const currentLightningToRskSwapId = useAtomValue(currentLightningToRskSwapIdAtom)
@@ -151,7 +152,7 @@ export const PaymentLightningAonComponent = () => {
   useTransactionStatusUpdate({
     handleProcessing,
     handleFailed,
-    swapId: currentSwap?.id,
+    swapId: isRskSwapFlow ? currentSwap?.id : undefined,
   })
 
   return null

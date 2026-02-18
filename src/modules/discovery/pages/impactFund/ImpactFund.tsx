@@ -1,6 +1,6 @@
 import { Box, Button, HStack, Icon, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowUpRight, PiCheckCircle, PiStack, PiTagChevronFill, PiWallet } from 'react-icons/pi'
+import { PiArrowUpRight } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { LiveProgressAqua } from '@/shared/components/feedback/LiveProgressAqua.tsx'
@@ -18,24 +18,6 @@ const CURRENT_SATS = 4334234
 const GOAL_SATS = 10000000
 const PROGRESS_PERCENTAGE = (CURRENT_SATS / GOAL_SATS) * 100
 
-const howItWorksItems = [
-  {
-    icon: PiWallet,
-    title: t('Sats flow in'),
-    description: t('Guardians, refunds, donations'),
-  },
-  {
-    icon: PiStack,
-    title: t('Pool grows'),
-    description: t('Transparent live wallet'),
-  },
-  {
-    icon: PiCheckCircle,
-    title: t('We deploy'),
-    description: t('To verified impact'),
-  },
-]
-
 export const ImpactFund = () => {
   return (
     <VStack w="full" gap={10} mx="auto">
@@ -49,7 +31,7 @@ export const ImpactFund = () => {
         </HStack>
 
         <H2 size={{ base: 'lg', lg: 'xl' }} bold>
-          {t('Powering Bitcoin adoption through high-impact Geyser initiatives')}
+          {t('Powering Bitcoin adoption through funding high-impact Geyser initiatives.')}
         </H2>
         <Body size="md" muted textAlign="center" maxW="700px">
           {t(
@@ -57,48 +39,6 @@ export const ImpactFund = () => {
           )}
         </Body>
       </VStack>
-
-      {/* How It Works Section */}
-      <CardLayout
-        w="full"
-        justifyContent="center"
-        direction={{ base: 'column', md: 'row' }}
-        gap={-4}
-        padding={0}
-        dense
-        noborder
-      >
-        {howItWorksItems.map((item, index) => (
-          <VStack
-            key={item.title}
-            flex={1}
-            gap={2}
-            paddingY={6}
-            maxWidth="300px"
-            position="relative"
-            overflow="visible"
-          >
-            <VStack zIndex={1}>
-              <Icon as={item.icon} boxSize={6} color="neutral1.11" />
-              <Body size="md" bold>
-                {item.title}
-              </Body>
-              <Body size="sm" muted>
-                {item.description}
-              </Body>
-            </VStack>
-
-            <Icon
-              as={PiTagChevronFill}
-              position="absolute"
-              top={'-130px'}
-              left={'-70px'}
-              boxSize="400px"
-              color="neutral1.3"
-            />
-          </VStack>
-        ))}
-      </CardLayout>
 
       {/* Live Wallet Section */}
       <CardLayout w="full" gap={6} padding={6}>

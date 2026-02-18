@@ -21,6 +21,7 @@ export const projectCreationRoutesThatNeedStory = [
   getPath('launchPaymentWallet', PathName.projectId),
   getPath('launchPaymentTaxId', PathName.projectId),
   getPath('launchPaymentAccountPassword', PathName.projectId),
+  getPath('launchPaymentSeedWords', PathName.projectId),
   getPath('launchAboutYou', PathName.projectId),
   getPath('launchFinalize', PathName.projectId),
 ]
@@ -90,9 +91,13 @@ export const projectPostCreatorRoutes = [
 export const projectStoryCreatorRoutes = [getPath('projectStoryEdit', PathName.projectName)]
 
 export const projectFundingPaymentLightingRoutes = [getPath('fundingPaymentLightning', PathName.projectName)]
-export const projectFundingPaymentCardRoutes = [getPath('fundingPaymentCard', PathName.projectName)]
 export const projectFundingPaymentCreditCardRoutes = [getPath('fundingPaymentCreditCard', PathName.projectName)]
 export const projectFundingPaymentApplePayRoutes = [getPath('fundingPaymentApplePay', PathName.projectName)]
+export const projectFundingPaymentFiatStripeRoutes = [getPath('fundingPaymentFiatStripe', PathName.projectName)]
+export const projectFundingPaymentFiatBanxaRoutes = [getPath('fundingPaymentFiatBanxa', PathName.projectName)]
+export const projectFundingPaymentFiatBanxaApplePayRoutes = [
+  getPath('fundingPaymentFiatBanxaApplePay', PathName.projectName),
+]
 
 /** Routes after onchain payment went into refund processing */
 export const projectFundingOnchainRefundRoutes = [
@@ -123,10 +128,12 @@ export const projectFundingPaymentFiatSwapRoutes = [getPath('fundingPaymentFiatS
 export const projectFundingPaymentCreatedRoutes = [
   getPath('fundingPayment', PathName.projectName),
   ...projectFundingPaymentLightingRoutes,
-  ...projectFundingPaymentCardRoutes,
   ...projectFundingPaymentFiatSwapRoutes,
   ...projectFundingPaymentCreditCardRoutes,
   ...projectFundingPaymentApplePayRoutes,
+  ...projectFundingPaymentFiatStripeRoutes,
+  ...projectFundingPaymentFiatBanxaRoutes,
+  ...projectFundingPaymentFiatBanxaApplePayRoutes,
   ...projectFundingPaymentOnchainInitialRoutes,
 ]
 
@@ -144,6 +151,9 @@ export const projectFundingRoutes = [
   ...projectFundingPaymentFiatSwapRoutes,
   ...projectFundingPaymentCreditCardRoutes,
   ...projectFundingPaymentApplePayRoutes,
+  ...projectFundingPaymentFiatStripeRoutes,
+  ...projectFundingPaymentFiatBanxaRoutes,
+  ...projectFundingPaymentFiatBanxaApplePayRoutes,
 ]
 
 export const ProjectPageRoutesWithNavBarForDesktop = [...projectBaseRoutes, ...projectDashboardRoutes]
@@ -161,6 +171,7 @@ export const projectCreatorRoutes = [
 ]
 
 export const grantRoutes = [getPath('grants'), getPath('grants', PathName.grantId)]
+export const impactFundRoutes = [getPath('impactFunds'), getPath('impactFunds', PathName.impactFundName)]
 
 export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath('landingFeed')]
 
@@ -170,6 +181,7 @@ export const discoveryRoutes = [
   getPath('discoveryProjectSubCategory', PathName.subCategoryName),
   getPath('discoveryMyProjects'),
   getPath('discoveryProducts'),
+  getPath('discoveryProductsCategory', PathName.categoryName),
   getPath('discoveryCampaigns'),
   getPath('discoveryAllOrNothing'),
   getPath('discoveryCampaignsAlmostFunded'),
@@ -186,8 +198,8 @@ export const discoveryRoutes = [
   getPath('discoveryActivityGlobal'),
   getPath('discoveryLeaderboard'),
   getPath('discoveryLaunchpad'),
-  getPath('discoveryGrants'),
-  getPath('discoveryGrant', PathName.grantId),
+  getPath('discoveryImpactFunds'),
+  getPath('discoveryImpactFund', PathName.impactFundName),
   // getPath('discoveryGrantApply', PathName.grantId),
   getPath('hallOfFameProjects'),
   getPath('discoveryHeroes'),

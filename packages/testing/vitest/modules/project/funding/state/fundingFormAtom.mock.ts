@@ -228,7 +228,7 @@ export const mockProjectDataUsd: FundingProjectState = {
   title: 'USD Project',
   rewardCurrency: RewardCurrency.Usdcent,
   paymentMethods: {
-    fiat: { stripe: false, __typename: 'FiatPaymentMethods' },
+    fiat: { enabled: false, stripe: false, __typename: 'FiatPaymentMethods' },
     __typename: 'PaymentMethods',
   },
   owners: [],

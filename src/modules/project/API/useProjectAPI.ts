@@ -11,7 +11,13 @@ import {
   useProjectStatusUpdateMutation,
   useUpdateProjectMutation,
 } from '../../../types'
-import { partialUpdateProjectAtom, projectAtom, projectLoadingAtom, ProjectState } from '../state/projectAtom'
+import {
+  normalizeProjectState,
+  partialUpdateProjectAtom,
+  projectAtom,
+  projectLoadingAtom,
+  ProjectState,
+} from '../state/projectAtom'
 import { useCustomMutation } from './custom/useCustomMutation'
 import { useProjectWalletAPI } from './useProjectWalletAPI'
 
@@ -80,7 +86,7 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
         }
 
         const { projectGet: project } = data
-        setProject(project as ProjectState)
+        setProject(normalizeProjectState(project as ProjectState))
       },
     })
   }, [

@@ -78,3 +78,12 @@ export const MUTATION_UNFOLLOW_PROJECT = gql`
     projectUnfollow(input: $input)
   }
 `
+
+export const MUTATION_PROJECT_RSK_EOA_SET = gql`
+  mutation ProjectRskEoaSet($input: ProjectRskEoaSetInput!) {
+    projectRskEoaSet(input: $input) {
+      id
+      rskEoa
+    }
+  }
+`

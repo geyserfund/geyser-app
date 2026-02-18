@@ -10,9 +10,15 @@ import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
+import { ProjectFundingStrategy } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 
-import { intendedPaymentMethodAtom, PaymentMethods } from '../../state/paymentMethodAtom.ts'
+import {
+  fiatCheckoutMethods,
+  fiatPaymentMethodAtom,
+  intendedPaymentMethodAtom,
+  PaymentMethods,
+} from '../../state/paymentMethodAtom.ts'
 import { PaymentDownloadRefundFile } from './PaymentDownloadRefundFile.tsx'
 import { PaymentLoadingContribution } from './PaymentLoadingContribution.tsx'
 
@@ -20,16 +26,23 @@ export const PaymentLoading = () => {
   const navigate = useNavigate()
 
   const { user, loading: authLoading } = useAuthContext()
-  const { project, loading: projectLoading } = useProjectAtom()
+  const { project, loading: projectLoading, isPrismEnabled } = useProjectAtom()
   const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
+  const fiatPaymentMethod = useAtomValue(fiatPaymentMethodAtom)
   const [passwordConfirmed, setPasswordConfirmed] = useState(false)
   const [downloadedRefundFile, setDownloadedRefundFile] = useState(false)
   const [currentContributionId, setCurrentContributionId] = useState('')
+  const hasStripePaymentMethod =
+    project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(project?.paymentMethods?.fiat?.stripe)
 
-  const handleNext = (contributionId?: string) => {
+  const handleNext = (contributionId?: string, forceCardRoute?: boolean) => {
     const paymentPath =
-      intendedPaymentMethod === PaymentMethods.fiatSwap
-        ? getPath('fundingPaymentFiatSwap', project.name)
+      forceCardRoute || intendedPaymentMethod === PaymentMethods.fiatSwap
+        ? hasStripePaymentMethod
+          ? getPath('fundingPaymentFiatStripe', project.name)
+          : fiatPaymentMethod === fiatCheckoutMethods.applePay
+          ? getPath('fundingPaymentFiatBanxaApplePay', project.name)
+          : getPath('fundingPaymentFiatBanxa', project.name)
         : getPath('fundingPaymentLightning', project.name)
 
     navigate(
@@ -41,9 +54,9 @@ export const PaymentLoading = () => {
     )
   }
 
-  const handleComplete = (contributionId: string) => {
+  const handleComplete = (contributionId: string, forceCardRoute?: boolean) => {
     if (user.id) {
-      handleNext(contributionId)
+      handleNext(contributionId, forceCardRoute)
     } else {
       setDownloadedRefundFile(true)
       setCurrentContributionId(contributionId)
@@ -54,7 +67,7 @@ export const PaymentLoading = () => {
     return null
   }
 
-  if (isAllOrNothing(project)) {
+  if (isAllOrNothing(project) || isPrismEnabled) {
     if (user?.id && !passwordConfirmed) {
       return <PaymentPassword onComplete={() => setPasswordConfirmed(true)} />
     }

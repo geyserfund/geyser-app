@@ -43,6 +43,7 @@ export type FundingProject = Pick<
   | 'paymentMethods'
   | 'subCategory'
   | 'fundingStrategy'
+  | 'rskEoa'
 >
 
 export enum FundingUserInfoError {

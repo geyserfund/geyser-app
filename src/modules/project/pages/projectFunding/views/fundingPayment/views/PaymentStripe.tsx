@@ -3,7 +3,7 @@ import { EmbeddedCheckout, EmbeddedCheckoutProvider } from '@stripe/react-stripe
 import { loadStripe } from '@stripe/stripe-js'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { createUseStyles } from 'react-jss'
 
 import { AppTheme } from '@/context'
@@ -21,7 +21,7 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   },
 }))
 
-export const PaymentCard = () => {
+export const PaymentStripe = () => {
   const classes = useStyles()
 
   useListenFundingContributionSuccess()
@@ -29,24 +29,43 @@ export const PaymentCard = () => {
   const [isCompleted, setIsCompleted] = useState(false)
 
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
+  const stripeClientSecret = useMemo(() => {
+    const clientSecret = fundingPaymentDetails.fiat?.stripeClientSecret
+    if (!clientSecret) return ''
+    if (!clientSecret.includes('%')) return clientSecret
 
-  if (!fundingPaymentDetails.fiat?.stripeClientSecret) {
+    try {
+      return decodeURIComponent(clientSecret)
+    } catch {
+      return clientSecret
+    }
+  }, [fundingPaymentDetails.fiat?.stripeClientSecret])
+
+  const handleStripeComplete = useCallback(() => {
+    setIsCompleted(true)
+  }, [])
+
+  const stripeOptions = useMemo(() => {
+    if (!stripeClientSecret) return undefined
+
+    return {
+      clientSecret: stripeClientSecret,
+      onComplete: handleStripeComplete,
+    }
+  }, [stripeClientSecret, handleStripeComplete])
+
+  if (!stripeClientSecret || !stripeOptions) {
     return null
   }
 
   return (
     <VStack w="full">
-      <EmbeddedCheckoutProvider
-        stripe={stripePromise}
-        options={{
-          clientSecret: fundingPaymentDetails.fiat.stripeClientSecret,
-          onComplete() {
-            setIsCompleted(true)
-          },
-        }}
-      >
+      <EmbeddedCheckoutProvider stripe={stripePromise} options={stripeOptions}>
         <EmbeddedCheckout className={classes.container} />
       </EmbeddedCheckoutProvider>
+      <Body size="sm" light>
+        {t('This checkout is charged in USD. Your bank or card issuer may convert the amount to your local currency.')}
+      </Body>
       {isCompleted && (
         <Body size="sm" light>
           {t(

@@ -2,8 +2,10 @@ import { atom } from 'jotai'
 
 import {
   projectFundingPaymentApplePayRoutes,
-  projectFundingPaymentCardRoutes,
   projectFundingPaymentCreditCardRoutes,
+  projectFundingPaymentFiatBanxaApplePayRoutes,
+  projectFundingPaymentFiatBanxaRoutes,
+  projectFundingPaymentFiatStripeRoutes,
   projectFundingPaymentFiatSwapRoutes,
   projectFundingPaymentLightingRoutes,
   projectFundingPaymentOnchainRoutes,
@@ -18,7 +20,6 @@ import { FiatSwapStatus, fiatSwapStatusAtom } from '../views/paymentFiatSwap/ato
 export enum PaymentMethods {
   lightning = 'LIGHTNING',
   onChain = 'ONCHAIN',
-  card = 'CARD',
   fiatSwap = 'FIAT_SWAP',
 }
 
@@ -41,10 +42,6 @@ export const paymentMethodAtom = atom((get) => {
     return PaymentMethods.onChain
   }
 
-  if (get(isCardMethodAtom)) {
-    return PaymentMethods.card
-  }
-
   if (get(isFiatSwapMethodAtom)) {
     return PaymentMethods.fiatSwap
   }
@@ -53,13 +50,21 @@ export const paymentMethodAtom = atom((get) => {
 })
 
 export const isLightingMethodAtom = atom(routeMatchForAtom(projectFundingPaymentLightingRoutes))
-export const isCardMethodAtom = atom(routeMatchForAtom(projectFundingPaymentCardRoutes))
 export const isOnchainMethodAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainRoutes))
 export const isFiatSwapMethodAtom = atom(routeMatchForAtom(projectFundingPaymentFiatSwapRoutes))
 export const isCreditCardMethodAtom = atom(routeMatchForAtom(projectFundingPaymentCreditCardRoutes))
 export const isApplePayMethodAtom = atom(routeMatchForAtom(projectFundingPaymentApplePayRoutes))
+export const isFiatBanxaMethodAtom = atom(routeMatchForAtom(projectFundingPaymentFiatBanxaRoutes))
+export const isFiatBanxaApplePayMethodAtom = atom(routeMatchForAtom(projectFundingPaymentFiatBanxaApplePayRoutes))
+export const isFiatStripeMethodAtom = atom(routeMatchForAtom(projectFundingPaymentFiatStripeRoutes))
 export const isFiatPaymentRouteAtom = atom(
-  (get) => get(isFiatSwapMethodAtom) || get(isCreditCardMethodAtom) || get(isApplePayMethodAtom),
+  (get) =>
+    get(isFiatSwapMethodAtom) ||
+    get(isCreditCardMethodAtom) ||
+    get(isApplePayMethodAtom) ||
+    get(isFiatBanxaMethodAtom) ||
+    get(isFiatBanxaApplePayMethodAtom) ||
+    get(isFiatStripeMethodAtom),
 )
 
 export const isOnchainMethodStartedAtom = atom(routeMatchForAtom(projectFundingPaymentOnchainStartedRoutes))
@@ -84,15 +89,7 @@ export const hasStripePaymentMethodAtom = atom((get) => {
   return false
 })
 
-export const hasFiatPaymentMethodAtom = atom((get) => {
-  const project = get(fundingProjectAtom)
-
-  if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
-    return false
-  }
-
-  return true
-})
+export const hasFiatPaymentMethodAtom = atom(() => true)
 
 /** Stores the user's intended payment method selection before navigating to payment loading */
 export const intendedPaymentMethodAtom = atom<PaymentMethods | undefined>(undefined)

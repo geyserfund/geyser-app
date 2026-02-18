@@ -1,4 +1,4 @@
-export const DefaultMetaTitle = 'Geyser | Bitcoin Crowdfunding Platform'
+export const DefaultMetaTitle = 'Geyser | The #1 Bitcoin Crowdfunding and Fundraising Platform'
 export const DefaultMetaImage = 'https://storage.googleapis.com/geyser-projects-media/app/seo.png'
 export const DefaultMetaDescription = 'Support bitcoin projects you want to see come to life. Join the crowdfund now!'
 export const DefaultMetaType = 'website'

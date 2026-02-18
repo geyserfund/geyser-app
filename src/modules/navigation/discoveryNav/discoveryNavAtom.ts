@@ -16,6 +16,10 @@ export const currentPlatformNavItemAtom = atom((get) => {
       return currentMatchRoute.path?.includes(getPath(item.path, PathName.projectName))
     }
 
+    if (item.path === 'discoveryProducts') {
+      return currentMatchRoute.path?.startsWith(getPath(item.path))
+    }
+
     return currentMatchRoute.path === getPath(item.path, PathName.projectName)
   })
   return currentItem
@@ -27,6 +31,10 @@ export const currentBottomNavItemAtom = atom((get) => {
   if (!currentMatchRoute) return
 
   const currentItem = bottomNavItems.find((item) => {
+    if (item.path === 'discoveryProducts') {
+      return currentMatchRoute.path?.startsWith(getPath(item.path as keyof PathsMap))
+    }
+
     return currentMatchRoute.path === getPath(item.path as keyof PathsMap, PathName.projectName)
   })
   return currentItem

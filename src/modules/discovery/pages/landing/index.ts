@@ -10,6 +10,8 @@ import { InYourRegionFundraisers } from './views/navView/fundraisers/views/InYou
 import { LatestFundraisers } from './views/navView/fundraisers/views/LatestFundraisers.tsx'
 import { TrendingFundraisers } from './views/navView/fundraisers/views/TrendingFundraisers.tsx'
 import { NavView } from './views/navView/NavView.tsx'
+import { CategoryProducts } from './views/navView/shops/views/CategoryProducts.tsx'
+import { TrendingProducts } from './views/navView/shops/views/TrendingProducts.tsx'
 import { Products } from './views/Products.tsx'
 
 export {
@@ -17,6 +19,7 @@ export {
   AlmostOverCampaigns,
   Campaigns,
   CategoryFundraisers,
+  CategoryProducts,
   Fundraisers,
   InYourRegionCampaigns,
   InYourRegionFundraisers,
@@ -26,4 +29,5 @@ export {
   Products,
   TrendingCampaigns,
   TrendingFundraisers,
+  TrendingProducts,
 }

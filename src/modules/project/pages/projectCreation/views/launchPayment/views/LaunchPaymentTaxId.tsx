@@ -8,7 +8,8 @@ import { useTaxProfileForm } from '@/modules/profile/pages/profileSettings/views
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { ProjectCreationStep } from '@/types/index.ts'
+import { FEATURE_FLAGS } from '@/shared/constants/config'
+import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
@@ -19,8 +20,14 @@ export const LaunchPaymentTaxId = () => {
   const { project } = useProjectAtom()
   const navigate = useNavigate()
 
-  const isAon = isAllOrNothing(project)
-  const nextPath = isAon ? getPath('launchPaymentAccountPassword', project.id) : getPath('launchFinalize', project.id)
+  const shouldConfigureProjectWallet =
+    FEATURE_FLAGS.TIA_PRISM_PAYMENTS_ENABLED &&
+    project.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
+    !project.rskEoa
+  const shouldShowAccountPasswordStep = isAllOrNothing(project) || shouldConfigureProjectWallet
+  const nextPath = shouldShowAccountPasswordStep
+    ? getPath('launchPaymentAccountPassword', project.id)
+    : getPath('launchFinalize', project.id)
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.Wallet,
@@ -47,7 +54,7 @@ export const LaunchPaymentTaxId = () => {
 
   return (
     <ProjectCreationPageWrapper
-      title={t('Payment Tax ID (optional)')}
+      title={t('Wallet Tax ID (optional)')}
       continueButtonProps={continueProps}
       backButtonProps={backProps}
     >
