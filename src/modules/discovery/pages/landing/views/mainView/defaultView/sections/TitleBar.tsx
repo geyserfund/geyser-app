@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link, useLocation } from 'react-router'
 
-import { H1, H2 } from '@/shared/components/typography/Heading.tsx'
+import { H1 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
 import { FilterComponent } from '../../../../components/FilterComponent.tsx'
