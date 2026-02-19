@@ -1,4 +1,5 @@
 import { Box } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { Suspense } from 'react'
 import { Outlet } from 'react-router'
 import PullToRefresh from 'react-simple-pull-to-refresh'
@@ -9,6 +10,10 @@ import { useMatchRoutes } from './config/routes/hooks/useMatchRoutes'
 import { useAuthContext } from './context'
 import { useActivityHook } from './modules/discovery/hooks/useActivityHook'
 import { LoadingPage } from './modules/general/loading/index.tsx'
+import {
+  isProjectFundingRoutesAtom,
+  isProjectRoutesAtom,
+} from './modules/navigation/platformNavBar/platformNavBarAtom'
 import { PlatformNavBar } from './modules/navigation/platformNavBar/PlatformNavBar'
 import { InfoBanner } from './modules/notification/InfoBanner'
 import { NoticeBanner } from './modules/notification/NoticeBanner'
@@ -29,6 +34,10 @@ export const AppLayout = () => {
   const { loading } = useAuthContext()
 
   const isMobile = useMobileMode()
+  const isProjectRoutes = useAtomValue(isProjectRoutesAtom)
+  const isProjectFundingRoutes = useAtomValue(isProjectFundingRoutesAtom)
+
+  const shouldShowMobilePlatformNav = isMobile && isProjectRoutes && !isProjectFundingRoutes
 
   useMatchRoutes()
   useHistoryRoutes()
@@ -68,7 +77,7 @@ export const AppLayout = () => {
               width="100%"
               flex="1"
               paddingTop={{
-                base: `${dimensions.topNavBar.mobile.height}px`,
+                base: `${dimensions.topNavBar.mobile.height + (shouldShowMobilePlatformNav ? dimensions.topNavBarFilterOffset.mobile.height : 0)}px`,
                 lg: `${dimensions.topNavBar.desktop.height}px`,
               }}
               overflowY={{ base: 'initial', lg: 'auto' }}

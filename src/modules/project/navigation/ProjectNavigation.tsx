@@ -19,14 +19,18 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
-import { PathName } from '@/shared/constants'
+import { getPath } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
 import { TopNavContainer } from '../../navigation/components/topNav/TopNavContainer'
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from './projectNavigationAtom'
 
-export const ProjectNavigation = () => {
+type ProjectNavigationProps = {
+  inBottomBar?: boolean
+}
+
+export const ProjectNavigation = ({ inBottomBar = false }: ProjectNavigationProps) => {
   const location = useLocation()
   const isDraftUrl = location.pathname.includes('/draft')
   const navigate = useNavigate()
@@ -44,7 +48,7 @@ export const ProjectNavigation = () => {
     const buttonList = [
       {
         name: 'Story',
-        path: '',
+        path: getPath('project', project.name),
         icon: PiRocketLaunch,
         activeIcon: PiRocketLaunchBold,
       },
@@ -53,7 +57,7 @@ export const ProjectNavigation = () => {
     if (project.rewardsCount) {
       buttonList.push({
         name: `Buy product (${project.rewardsCount})`,
-        path: PathName.projectRewards,
+        path: getPath('projectRewards', project.name),
         icon: PiBag,
         activeIcon: PiBagBold,
       })
@@ -62,7 +66,7 @@ export const ProjectNavigation = () => {
     if (project.entriesCount) {
       buttonList.push({
         name: 'Updates',
-        path: PathName.projectPosts,
+        path: getPath('projectPosts', project.name),
         icon: PiNewspaper,
         activeIcon: PiNewspaperBold,
       })
@@ -71,7 +75,7 @@ export const ProjectNavigation = () => {
     if (project.goalsCount) {
       buttonList.push({
         name: 'Goals',
-        path: PathName.projectGoals,
+        path: getPath('projectGoals', project.name),
         icon: PiFlagBannerFold,
         activeIcon: PiFlagBannerFoldBold,
       })
@@ -80,7 +84,7 @@ export const ProjectNavigation = () => {
     if (!isDraftUrl) {
       buttonList.push({
         name: 'Community',
-        path: PathName.projectLeaderboard,
+        path: getPath('projectLeaderboard', project.name),
         icon: PiMedalMilitary,
         activeIcon: PiMedalMilitaryBold,
       })
@@ -99,7 +103,7 @@ export const ProjectNavigation = () => {
     if (isProjectOwner && !isDraftUrl) {
       buttonList.push({
         name: 'Dashboard',
-        path: PathName.projectDashboard,
+        path: getPath('projectDashboard', project.name),
         icon: PiGear,
         activeIcon: PiGearBold,
         showIconAlways: true,
@@ -120,7 +124,28 @@ export const ProjectNavigation = () => {
     return activeIndex
   }, [location.pathname, ProjectNavigationButtons])
 
+  if (inBottomBar) {
+    if (!isMobile || isProjectOwner) {
+      return null
+    }
+
+    return (
+      <AnimatedNavBar
+        items={ProjectNavigationButtons}
+        activeIndex={activeButtonIndex}
+        showIcon
+        showLabel={false}
+        loading={loading || userLoading}
+        zIndex={9}
+      />
+    )
+  }
+
   if ((isMobile && !showProjectNavBarForMobile) || (!isMobile && !showProjectNavBarForDesktop)) {
+    return null
+  }
+
+  if (isMobile && !isProjectOwner) {
     return null
   }
 

@@ -1,9 +1,12 @@
 import { Box, VStack } from '@chakra-ui/react'
+import { useAtomValue } from 'jotai'
 import { Outlet } from 'react-router'
 
 import { Head } from '@/config/Head'
+import { showProjectNavBarForMobileAtom } from '@/modules/project/navigation/projectNavigationAtom.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { standardPadding } from '@/shared/styles'
+import { useMobileMode } from '@/utils/index.ts'
 
 import { FollowProjectModal } from '../components/FollowProjectModal.tsx'
 import { useFundingFlowCleanup } from '../hooks/useFollowOnBackModal.ts'
@@ -17,8 +20,13 @@ export const ProjectLayout = () => {
   useFundingFlowCleanup()
   useProjectDraftRedirect()
 
-  const { project, loading } = useProjectAtom()
+  const { isProjectOwner, project, loading } = useProjectAtom()
   const { rewards, initialRewardsLoading } = useRewardsAtom()
+  const isMobile = useMobileMode()
+  const showProjectNavBarForMobile = useAtomValue(showProjectNavBarForMobileAtom)
+
+  const mobileProjectNavOffset =
+    isMobile && showProjectNavBarForMobile && isProjectOwner ? dimensions.projectNavBar.mobile.height : 0
 
   return (
     <Box
@@ -46,7 +54,7 @@ export const ProjectLayout = () => {
         width="100%"
         height="100%"
         paddingTop={{
-          base: `${dimensions.projectNavBar.mobile.height}px`,
+          base: `${mobileProjectNavOffset}px`,
           lg: `${dimensions.projectNavBar.desktop.height}px`,
         }}
         paddingX={standardPadding}

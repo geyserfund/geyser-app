@@ -89,7 +89,8 @@ export const PlatformNavBar = () => {
     return <BrandLogo showOutline={isGuardiansPage} />
   }, [isProjectFundingRoutes, isGuardiansPage])
 
-  const shouldShowPlatformNav = (isPlatformRoutes || isProjectRoutes) && !isProjectFundingRoutes && !isMobileMode
+  const shouldShowDesktopPlatformNav = (isPlatformRoutes || isProjectRoutes) && !isProjectFundingRoutes && !isMobileMode
+  const shouldShowMobilePlatformNav = isProjectRoutes && !isProjectFundingRoutes && isMobileMode
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {
@@ -142,10 +143,16 @@ export const PlatformNavBar = () => {
             {renderLeftSide()}
           </HStack>
 
-          {shouldShowPlatformNav && <PlatformNav />}
+          {shouldShowDesktopPlatformNav && <PlatformNav />}
 
           {renderRightSide()}
         </HStack>
+
+        {shouldShowMobilePlatformNav && (
+          <HStack w="100%" justifyContent="center">
+            <PlatformNav />
+          </HStack>
+        )}
       </VStack>
 
       <LoggedOutModal isOpen={isLoginAlertModalOpen} onClose={onLoginAlertModalClose} />

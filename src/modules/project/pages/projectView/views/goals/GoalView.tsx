@@ -6,6 +6,7 @@ import { Link, useNavigate, useParams } from 'react-router'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { ProjectNavigation } from '@/modules/project/navigation/ProjectNavigation.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { Body } from '@/shared/components/typography'
@@ -112,8 +113,9 @@ export const GoalView = () => {
           )}
         </VStack>
       </CardLayout>
-      <BottomNavBarContainer direction="column">
+      <BottomNavBarContainer direction="column" paddingBottom={2}>
         <GoalContributeButton projectGoalId={goal.id} isNavButton displayOnMobile />
+        <ProjectNavigation inBottomBar />
       </BottomNavBarContainer>
       <GoalModal />
     </VStack>

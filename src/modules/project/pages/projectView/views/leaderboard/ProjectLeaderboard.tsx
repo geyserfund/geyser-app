@@ -10,6 +10,7 @@ import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { ProjectLeaderboardPeriod } from '@/types'
 import { toPx, useMobileMode } from '@/utils'
 
+import { ProjectVisitorBottomBar } from '../../components/ProjectVisitorBottomBar.tsx'
 import { Contributions, Leaderboard } from './views'
 
 export const periodOptions: StandardOption<ProjectLeaderboardPeriod>[] = [
@@ -30,8 +31,8 @@ export const ProjectLeaderboard = () => {
   }
 
   return (
-    <HStack w="full" h="full" alignItems="start" spacing={dimensions.project.rightSideNav.gap} pb={6}>
-      <VStack h="full" flex={1} alignItems="start" pt={{ base: '32px', lg: '0' }}>
+    <HStack w="full" h="full" alignItems="start" spacing={dimensions.project.rightSideNav.gap} pb={{ base: 28, lg: 6 }}>
+      <VStack h="full" flex={1} alignItems="start" pt={{ base: '32px', lg: '0' }} pb={{ base: 28, lg: 0 }}>
         <HStack
           w="full"
           justifyContent={'space-between'}
@@ -76,6 +77,7 @@ export const ProjectLeaderboard = () => {
           <Contributions />
         </VStack>
       )}
+      <ProjectVisitorBottomBar />
     </HStack>
   )
 }

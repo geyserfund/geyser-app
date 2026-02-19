@@ -12,7 +12,7 @@ export const dimensions = {
       height: 0, // no filter component row for desktop
     },
     mobile: {
-      height: 60, // 40 (fitler component) + 20 ( spacing)
+      height: 74, // mobile platform nav row + spacing
     },
   },
   projectNavBar: {

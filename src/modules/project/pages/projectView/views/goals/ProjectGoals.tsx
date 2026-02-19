@@ -6,6 +6,7 @@ import { getPath } from '@/shared/constants/index.ts'
 
 import { RenderGoals } from './common/RenderGoals'
 import { CreatorGoalPageBottomBar, CreatorGoalPageTopBar } from './components'
+import { ProjectVisitorBottomBar } from '../../components/ProjectVisitorBottomBar.tsx'
 
 export const ProjectGoals = ({ onNoGoalsProp }: { onNoGoalsProp?: () => void }) => {
   const { project } = useProjectAtom()
@@ -23,6 +24,7 @@ export const ProjectGoals = ({ onNoGoalsProp }: { onNoGoalsProp?: () => void }) 
       </VStack>
 
       <CreatorGoalPageBottomBar />
+      <ProjectVisitorBottomBar />
     </VStack>
   )
 }

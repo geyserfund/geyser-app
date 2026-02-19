@@ -10,6 +10,7 @@ import { NoRewardsSoldUrl } from '@/shared/constants'
 
 import { AonNotice } from './components/AonNotice.tsx'
 import { CreatorRewardPageBottomBar, CreatorRewardPageTopBar } from './components/CreatorRewardPageBar.tsx'
+import { ProjectVisitorBottomBar } from '../../components/ProjectVisitorBottomBar.tsx'
 import { RewardCardSkeleton } from './components/RewardCard.tsx'
 import { RewardCardWithBuy } from './components/RewardCardWithBuy.tsx'
 
@@ -79,6 +80,7 @@ export const ProjectRewards = forwardRef<HTMLDivElement>((_, ref) => {
         </VStack>
       )}
       <CreatorRewardPageBottomBar />
+      <ProjectVisitorBottomBar />
     </VStack>
   )
 })

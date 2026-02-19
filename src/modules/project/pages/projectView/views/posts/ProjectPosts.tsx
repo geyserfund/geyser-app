@@ -15,6 +15,7 @@ import { PostType } from '@/types'
 import { truthyFilter } from '@/utils/array'
 
 import { CreatorPostPageBottomBar, CreatorPostPageTopBar } from './components/CreatorPostPageBar.tsx'
+import { ProjectVisitorBottomBar } from '../../components/ProjectVisitorBottomBar.tsx'
 import { PostTypeFilterBar } from './components/PostTypeFilterBar.tsx'
 import { ProjectPostCard } from './components/ProjectPostCard.tsx'
 import { ProjectPostCardSkeleton } from './components/ProjectPostCard.tsx'
@@ -88,6 +89,7 @@ export const ProjectPosts = () => {
         </VStack>
       </CardLayout>
       <CreatorPostPageBottomBar />
+      <ProjectVisitorBottomBar />
     </VStack>
   )
 }
@@ -115,6 +117,7 @@ const ProjectPostsSkeleton = () => {
         </VStack>
       </CardLayout>
       <CreatorPostPageBottomBar />
+      <ProjectVisitorBottomBar />
     </VStack>
   )
 }

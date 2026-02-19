@@ -1,18 +1,21 @@
-import { HStack, Image } from '@chakra-ui/react'
+import { Button, HStack, Image, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useMemo } from 'react'
-import { useLocation } from 'react-router'
+import { Link, useLocation } from 'react-router'
 
 import MarketplaceNavIcon from '@/assets/marketplace-nav.png'
 import { AnimatedNavSlide, AnimatedNavSlideItem } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
 import { CampaignIconUrl, FundraiserIconUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
+import { useMobileMode } from '@/utils/index.ts'
 
 export const PlatformNav = () => {
   const location = useLocation()
+  const isMobileMode = useMobileMode()
 
   const ProjectNavigationButtons = useMemo(() => {
-    const buttonDimension = '50px'
+    const buttonDimension = isMobileMode ? '34px' : '50px'
     const campaignButtonDimension = buttonDimension
-    const marketplaceButtonDimension = '55px'
+    const marketplaceButtonDimension = isMobileMode ? '38px' : '55px'
     const buttonList = [
       {
         name: 'Fundraisers',
@@ -38,7 +41,7 @@ export const PlatformNav = () => {
     ] as AnimatedNavSlideItem[]
 
     return buttonList
-  }, [])
+  }, [isMobileMode])
 
   const activeButtonIndex = useMemo(() => {
     let activeIndex = -1
@@ -49,6 +52,35 @@ export const PlatformNav = () => {
     })
     return activeIndex
   }, [location.pathname, ProjectNavigationButtons])
+
+  if (isMobileMode) {
+    return (
+      <HStack w="full" spacing={1}>
+        {ProjectNavigationButtons.map((item, index) => {
+          const isActive = index === activeButtonIndex
+          return (
+            <Button
+              key={item.name}
+              as={Link}
+              to={item.path || ''}
+              aria-label={t(item.name)}
+              variant={isActive ? 'surface' : 'ghost'}
+              colorScheme="primary1"
+              flex={1}
+              minWidth={0}
+              height="58px"
+              padding={1}
+            >
+              <VStack spacing={0} lineHeight={1} alignItems="center" justifyContent="center">
+                {item.icon}
+                <span style={{ fontSize: '10px', fontWeight: 600 }}>{t(item.name)}</span>
+              </VStack>
+            </Button>
+          )
+        })}
+      </HStack>
+    )
+  }
 
   return (
     <HStack h="full" alignItems="start">

@@ -11,6 +11,7 @@ import { Head } from '@/config/Head'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { ProjectNavigation } from '@/modules/project/navigation/ProjectNavigation.tsx'
 import { generatePostJsonLd } from '@/modules/project/tools/generateProjectJsonLD.ts'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
@@ -209,13 +210,16 @@ export const PostView = () => {
             {showLinkedRewardsAndGoals && <LinkedRewardsAndGoals post={post} />}
           </VStack>
         </CardLayout>
-        <BottomNavBarContainer direction="column">
+        <BottomNavBarContainer direction="column" paddingBottom={2}>
           {isProjectOwner ? (
             <PostEditMenu size="lg" w="full" post={post} />
           ) : (
-            <Button size="lg" variant="solid" colorScheme="primary1" width="full" onClick={onContributeClick}>
-              {t('Contribute')}
-            </Button>
+            <>
+              <Button size="lg" variant="solid" colorScheme="primary1" width="full" onClick={onContributeClick}>
+                {t('Contribute')}
+              </Button>
+              <ProjectNavigation inBottomBar />
+            </>
           )}
         </BottomNavBarContainer>
       </VStack>
@@ -254,7 +258,7 @@ export const PostViewSkeleton = () => {
           <SkeletonText noOfLines={40} width="100%" />
         </VStack>
       </CardLayout>
-      <BottomNavBarContainer direction="column">
+      <BottomNavBarContainer direction="column" paddingBottom={2}>
         <SkeletonLayout height="28px" w={'100%'} />
       </BottomNavBarContainer>
     </VStack>
