@@ -46,7 +46,9 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import {
+  ImpactFundApplicationsQuery,
   ImpactFundApplicationStatus,
+  ImpactFundQuery,
   useImpactFundApplicationsQuery,
   useImpactFundApplyMutation,
   useImpactFundQuery,
@@ -55,11 +57,33 @@ import { useNotification } from '@/utils'
 
 import { DonationSponsorCTA } from '../components/DonationSponsorCTA.tsx'
 
-const getQuarterFromDate = (dateString: string): string => {
+const APPLICATIONS_PAGE_SIZE = 15
+const btcNumberFormatter = new Intl.NumberFormat()
+const fundedStatus = [ImpactFundApplicationStatus.Funded]
+type ImpactFundDetails = ImpactFundQuery['impactFund']
+type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
+type OwnedProject = { id: unknown; title: string }
+
+function getQuarterFromDate(dateString: string): string {
   const date = new Date(dateString)
   const quarter = Math.floor(date.getMonth() / 3) + 1
   const year = date.getFullYear()
   return `Q${quarter} ${year}`
+}
+
+function buildFundedApplicationsInput(impactFundId: number, cursorId?: string) {
+  return {
+    impactFundId,
+    statusIn: fundedStatus,
+    pagination: {
+      take: APPLICATIONS_PAGE_SIZE,
+      ...(cursorId ? { cursor: { id: cursorId } } : {}),
+    },
+  }
+}
+
+function hasValue<T>(value: T | null | undefined): value is T {
+  return value !== null && value !== undefined
 }
 
 const howItWorksItems = [
@@ -93,37 +117,19 @@ const howItWorksItems = [
   },
 ]
 
-export const ImpactFundDetailPage = () => {
-  const APPLICATIONS_PAGE_SIZE = 15
+export function ImpactFundDetailPage(): JSX.Element | null {
   const { impactFundName } = useParams<{ impactFundName: string }>()
+  const decodedImpactFundName = impactFundName ? decodeURIComponent(impactFundName) : ''
   const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
   const { success, error: notifyError } = useNotification()
   const navigate = useNavigate()
-  const surfaceBg = useColorModeValue('neutral1.3', 'neutral1.3')
-  const mutedBg = useColorModeValue('neutral1.2', 'neutral1.2')
-  const primaryTextColor = useColorModeValue('neutral1.11', 'neutral1.11')
-  const secondaryTextColor = useColorModeValue('neutral1.9', 'neutral1.10')
-  const subtleTextColor = useColorModeValue('neutral1.8', 'neutral1.10')
-  const tertiaryTextColor = useColorModeValue('neutral1.7', 'neutral1.9')
-  const emphasisTextColor = useColorModeValue('primary1.9', 'primary1.9')
-  const metricHoverBg = useColorModeValue('neutral1.3', 'neutral1.4')
-  const mutedBorderColor = useColorModeValue('neutral1.4', 'neutral1.5')
-  const highlightedSurfaceBg = useColorModeValue('primary1.50', 'primary1.900')
-  const highlightedSurfaceBorderColor = useColorModeValue('primary1.200', 'primary1.700')
-  const archivedBadgeBg = useColorModeValue('neutral1.3', 'neutral1.4')
-  const archivedBadgeBorderColor = useColorModeValue('neutral1.4', 'neutral1.5')
-  const tagBg = useColorModeValue('primary1.100', 'primary1.900')
-  const tagColor = useColorModeValue('primary1.800', 'primary1.100')
-  const tagBorderColor = useColorModeValue('primary1.200', 'primary1.800')
-  const iconBg = useColorModeValue('primary1.100', 'primary1.900')
-  const iconColor = useColorModeValue('primary1.600', 'primary1.300')
 
   const projectModal = useDisclosure()
   const [selectedProjectId, setSelectedProjectId] = useState<string>('')
 
   const { data, loading, error } = useImpactFundQuery({
-    variables: { input: { where: { name: impactFundName ? decodeURIComponent(impactFundName) : '' } } },
+    variables: { input: { where: { name: decodedImpactFundName } } },
     skip: !impactFundName,
   })
 
@@ -141,17 +147,13 @@ export const ImpactFundDetailPage = () => {
     skip: !impactFund?.id,
     variables: {
       input: {
-        impactFundId: impactFund?.id ?? 0,
-        statusIn: [ImpactFundApplicationStatus.Funded],
-        pagination: {
-          take: APPLICATIONS_PAGE_SIZE,
-        },
+        ...buildFundedApplicationsInput(impactFund?.id ?? 0),
       },
     },
   })
 
-  const fundedApplications = applicationsData?.impactFundApplications?.applications || []
-  const fundedApplicationsCount = applicationsData?.impactFundApplications?.totalCount || 0
+  const fundedApplications = applicationsData?.impactFundApplications?.applications ?? []
+  const fundedApplicationsCount = applicationsData?.impactFundApplications?.totalCount ?? 0
   const hasMoreFundedApplications = fundedApplications.length < fundedApplicationsCount
 
   const ownedProjects = useMemo(
@@ -173,7 +175,8 @@ export const ImpactFundDetailPage = () => {
       return
     }
 
-    setSelectedProjectId(String(ownedProjects[0]?.id || ''))
+    const firstOwnedProjectId = String(ownedProjects[0]?.id || '')
+    setSelectedProjectId(firstOwnedProjectId)
     projectModal.onOpen()
   }
 
@@ -207,12 +210,7 @@ export const ImpactFundDetailPage = () => {
       await fetchMoreApplications({
         variables: {
           input: {
-            impactFundId: impactFund.id,
-            statusIn: [ImpactFundApplicationStatus.Funded],
-            pagination: {
-              take: APPLICATIONS_PAGE_SIZE,
-              cursor: { id: lastApplication.id },
-            },
+            ...buildFundedApplicationsInput(impactFund.id, lastApplication.id),
           },
         },
         updateQuery(previousResult, { fetchMoreResult }) {
@@ -263,6 +261,81 @@ export const ImpactFundDetailPage = () => {
   }
 
   return (
+    <ImpactFundDetailContent
+      impactFund={impactFund}
+      fundedApplications={fundedApplications}
+      applicationsLoading={applicationsLoading}
+      applicationsError={Boolean(applicationsError)}
+      hasMoreFundedApplications={hasMoreFundedApplications}
+      isLoadingMoreApplications={isLoadingMoreApplications}
+      onLoadMoreApplications={loadMoreApplications}
+      onApplyClick={handleApplyClick}
+      ownedProjects={ownedProjects}
+      selectedProjectId={selectedProjectId}
+      onSelectedProjectIdChange={setSelectedProjectId}
+      isProjectModalOpen={projectModal.isOpen}
+      onProjectModalClose={projectModal.onClose}
+      applying={applying}
+      onSubmitApplication={submitApplication}
+    />
+  )
+}
+
+type ImpactFundDetailContentProps = {
+  impactFund: ImpactFundDetails
+  fundedApplications: FundedApplication[]
+  applicationsLoading: boolean
+  applicationsError: boolean
+  hasMoreFundedApplications: boolean
+  isLoadingMoreApplications: boolean
+  onLoadMoreApplications: () => Promise<void>
+  onApplyClick: () => void
+  ownedProjects: OwnedProject[]
+  selectedProjectId: string
+  onSelectedProjectIdChange: (projectId: string) => void
+  isProjectModalOpen: boolean
+  onProjectModalClose: () => void
+  applying: boolean
+  onSubmitApplication: () => Promise<void>
+}
+
+function ImpactFundDetailContent({
+  impactFund,
+  fundedApplications,
+  applicationsLoading,
+  applicationsError,
+  hasMoreFundedApplications,
+  isLoadingMoreApplications,
+  onLoadMoreApplications,
+  onApplyClick,
+  ownedProjects,
+  selectedProjectId,
+  onSelectedProjectIdChange,
+  isProjectModalOpen,
+  onProjectModalClose,
+  applying,
+  onSubmitApplication,
+}: ImpactFundDetailContentProps): JSX.Element {
+  const surfaceBg = useColorModeValue('neutral1.3', 'neutral1.3')
+  const mutedBg = useColorModeValue('neutral1.2', 'neutral1.2')
+  const primaryTextColor = useColorModeValue('neutral1.11', 'neutral1.11')
+  const secondaryTextColor = useColorModeValue('neutral1.9', 'neutral1.10')
+  const subtleTextColor = useColorModeValue('neutral1.8', 'neutral1.10')
+  const tertiaryTextColor = useColorModeValue('neutral1.7', 'neutral1.9')
+  const emphasisTextColor = useColorModeValue('primary1.9', 'primary1.9')
+  const metricHoverBg = useColorModeValue('neutral1.3', 'neutral1.4')
+  const mutedBorderColor = useColorModeValue('neutral1.4', 'neutral1.5')
+  const highlightedSurfaceBg = useColorModeValue('primary1.50', 'primary1.900')
+  const highlightedSurfaceBorderColor = useColorModeValue('primary1.200', 'primary1.700')
+  const archivedBadgeBg = useColorModeValue('neutral1.3', 'neutral1.4')
+  const archivedBadgeBorderColor = useColorModeValue('neutral1.4', 'neutral1.5')
+  const tagBg = useColorModeValue('primary1.100', 'primary1.900')
+  const tagColor = useColorModeValue('primary1.800', 'primary1.100')
+  const tagBorderColor = useColorModeValue('primary1.200', 'primary1.800')
+  const iconBg = useColorModeValue('primary1.100', 'primary1.900')
+  const iconColor = useColorModeValue('primary1.600', 'primary1.300')
+
+  return (
     <VStack align="stretch" spacing={14}>
       <Head
         title={impactFund.title}
@@ -270,7 +343,6 @@ export const ImpactFundDetailPage = () => {
         image={impactFund.heroImage || undefined}
       />
 
-      {/* Hero Section */}
       <VStack align="stretch" spacing={6}>
         {impactFund.heroImage && (
           <Image
@@ -287,9 +359,9 @@ export const ImpactFundDetailPage = () => {
             <H2 size="3xl" bold color={primaryTextColor}>
               {impactFund.title}
             </H2>
-            {impactFund.amountCommitted !== null && impactFund.amountCommitted !== undefined && (
+            {hasValue(impactFund.amountCommitted) && (
               <H2 size="3xl" bold color={emphasisTextColor}>
-                ₿ {new Intl.NumberFormat().format(impactFund.amountCommitted)}
+                ₿ {btcNumberFormatter.format(impactFund.amountCommitted)}
               </H2>
             )}
           </Flex>
@@ -321,7 +393,6 @@ export const ImpactFundDetailPage = () => {
         </VStack>
       </VStack>
 
-      {/* Impact Metrics Section */}
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
         <Box
           p={6}
@@ -336,7 +407,7 @@ export const ImpactFundDetailPage = () => {
             </Flex>
             <VStack align="start" spacing={0}>
               <H2 size="xl" bold color={primaryTextColor}>
-                ₿ {new Intl.NumberFormat().format(impactFund.metrics.awardedTotalSats)}
+                ₿ {btcNumberFormatter.format(impactFund.metrics.awardedTotalSats)}
               </H2>
               <Body
                 size="xs"
@@ -406,7 +477,6 @@ export const ImpactFundDetailPage = () => {
         </Box>
       </SimpleGrid>
 
-      {/* Application Submission Section */}
       <Box p={8} bg={mutedBg} borderRadius="xl" borderWidth="1px" borderColor={mutedBorderColor}>
         <Flex
           direction={{ base: 'column', md: 'row' }}
@@ -422,13 +492,12 @@ export const ImpactFundDetailPage = () => {
               {t('Submit your project to be considered for funding. Share your vision and impact potential.')}
             </Body>
           </VStack>
-          <Button size="lg" colorScheme="primary1" onClick={handleApplyClick} flexShrink={0}>
+          <Button size="lg" colorScheme="primary1" onClick={onApplyClick} flexShrink={0}>
             {t('Submit Your Application')}
           </Button>
         </Flex>
       </Box>
 
-      {/* How It Works */}
       <VStack align="stretch" spacing={6}>
         <H2 size="xl" bold>
           {t('How It Works')}
@@ -454,7 +523,6 @@ export const ImpactFundDetailPage = () => {
         </SimpleGrid>
       </VStack>
 
-      {/* Projects Awarded Section */}
       <VStack align="stretch" spacing={6}>
         <H2 size="xl" bold>
           {t('Projects Awarded')}
@@ -498,9 +566,9 @@ export const ImpactFundDetailPage = () => {
                     <H2 size="md" bold flex="1" minW="0">
                       {application.project.title}
                     </H2>
-                    {application.amountAwardedInSats !== null && application.amountAwardedInSats !== undefined && (
+                    {hasValue(application.amountAwardedInSats) && (
                       <Body bold color={emphasisTextColor} size="sm" flexShrink={0}>
-                        ₿ {new Intl.NumberFormat().format(application.amountAwardedInSats)}
+                        ₿ {btcNumberFormatter.format(application.amountAwardedInSats)}
                       </Body>
                     )}
                     {application.awardedAt && (
@@ -537,7 +605,7 @@ export const ImpactFundDetailPage = () => {
         )}
         {hasMoreFundedApplications && (
           <Button
-            onClick={loadMoreApplications}
+            onClick={onLoadMoreApplications}
             isLoading={isLoadingMoreApplications}
             alignSelf="center"
             size="lg"
@@ -549,14 +617,12 @@ export const ImpactFundDetailPage = () => {
         )}
       </VStack>
 
-      {/* Sponsors Section */}
       <VStack align="stretch" spacing={8}>
         <H2 size="xl" bold>
           {t('Sponsors')}
         </H2>
 
         <VStack align="stretch" spacing={10}>
-          {/* Current Sponsors */}
           {impactFund.liveSponsors.length > 0 ? (
             <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing={6}>
               {impactFund.liveSponsors.map((sponsor) => (
@@ -600,7 +666,6 @@ export const ImpactFundDetailPage = () => {
             </Box>
           )}
 
-          {/* Past Sponsors */}
           {impactFund.archivedSponsors.length > 0 && (
             <VStack align="stretch" spacing={5}>
               <H2 size="lg" color={secondaryTextColor}>
@@ -629,7 +694,6 @@ export const ImpactFundDetailPage = () => {
         </VStack>
       </VStack>
 
-      {/* Donation & Sponsor Section */}
       <DonationSponsorCTA
         title={t('Support this fund')}
         description={t(
@@ -638,7 +702,7 @@ export const ImpactFundDetailPage = () => {
         donateProjectName={impactFund.donateProject?.name}
       />
 
-      <Modal isOpen={projectModal.isOpen} onClose={projectModal.onClose} size="lg">
+      <Modal isOpen={isProjectModalOpen} onClose={onProjectModalClose} size="lg">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{t('Submit your application')}</ModalHeader>
@@ -672,7 +736,11 @@ export const ImpactFundDetailPage = () => {
                   <Body fontWeight="semibold" color={primaryTextColor}>
                     {t('Select your project')}:
                   </Body>
-                  <Select value={selectedProjectId} onChange={(e) => setSelectedProjectId(e.target.value)} size="lg">
+                  <Select
+                    value={selectedProjectId}
+                    onChange={(event) => onSelectedProjectIdChange(event.target.value)}
+                    size="lg"
+                  >
                     {ownedProjects.map((project) => (
                       <option key={String(project.id)} value={String(project.id)}>
                         {project.title}
@@ -698,7 +766,7 @@ export const ImpactFundDetailPage = () => {
                       to={getPath('launchStart')}
                       colorScheme="primary1"
                       size="md"
-                      onClick={projectModal.onClose}
+                      onClick={onProjectModalClose}
                     >
                       {t('Create a Project')}
                     </Button>
@@ -709,7 +777,7 @@ export const ImpactFundDetailPage = () => {
           </ModalBody>
           <ModalFooter>
             {ownedProjects.length > 0 && (
-              <Button w="full" colorScheme="primary1" isLoading={applying} onClick={submitApplication} size="lg">
+              <Button w="full" colorScheme="primary1" isLoading={applying} onClick={onSubmitApplication} size="lg">
                 {t('Submit Application')}
               </Button>
             )}
