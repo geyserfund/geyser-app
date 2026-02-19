@@ -43,4 +43,5 @@
 - For production deployment prep, follow `docs/DEPLOYMENT.md`.
 - Use `yarn version [minor|major|patch]` for version updates.
 - Run `yarn changelog` after version updates.
+- Create and push the release tag for each version bump (`git tag -a vX.Y.Z <release-commit-sha> -m "Release vX.Y.Z"` and `git push origin vX.Y.Z`) before generating the next release changelog.
 - Create the PR from `staging` to `production`.

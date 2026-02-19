@@ -14,6 +14,7 @@ import { fundingPaymentDetailsPartialUpdateAtom } from '@/modules/project/fundin
 import { rskAccountKeysAtom } from '@/modules/project/funding/state/swapRskAtom.ts'
 import { ORIGIN } from '@/shared/constants/config/env.ts'
 import { getPath } from '@/shared/constants/index.ts'
+import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import {
   ContributionFiatToLightningSwapPaymentDetailsBanxaInput,
   useFundingFiatSwapPaymentCreateMutation,
@@ -79,6 +80,7 @@ export const useCreateFiatSwapPayment = () => {
     lightningPreImage,
     accountKeys,
     fiatToLightningSwap,
+    prismEnabled,
   }: {
     checkoutUrl?: string
     lightningToRskSwap?: NonNullable<
@@ -86,23 +88,32 @@ export const useCreateFiatSwapPayment = () => {
         Awaited<ReturnType<typeof createFiatSwapPaymentMutation>>['data']
       >['contributionPaymentsAdd']['payments']['lightningToRskSwap']
     > | null
-    lightningPreImage: { preimageHex: string; preimageHash: string }
-    accountKeys: { publicKey: string; address: string; privateKey: string }
+    lightningPreImage?: { preimageHex: string; preimageHash: string }
+    accountKeys?: { publicKey: string; address: string; privateKey: string }
     fiatToLightningSwap?: NonNullable<
       Awaited<ReturnType<typeof createFiatSwapPaymentMutation>>['data']
     >['contributionPaymentsAdd']['payments']['fiatToLightningSwap']
+    prismEnabled: boolean
   }) => {
-    if (!checkoutUrl || !lightningToRskSwap) {
-      throw new Error('Could not initialize fiat-to-RSK payment')
+    if (!checkoutUrl) {
+      throw new Error('Could not initialize fiat swap payment')
     }
 
     window.open(checkoutUrl, '_blank')
     updateFundingPaymentDetails({
       fiatToLightningSwap,
-      lightningToRskSwap,
+      ...(prismEnabled && { lightningToRskSwap }),
     })
     setFiatSwapStatus(FiatSwapStatus.pending)
     setFiatFailureReason(null)
+
+    if (!prismEnabled) {
+      return
+    }
+
+    if (!lightningToRskSwap || !lightningPreImage || !accountKeys) {
+      throw new Error('Could not initialize fiat-to-RSK payment')
+    }
 
     try {
       await generateTransactionForLightningToRskSwap({
@@ -129,11 +140,16 @@ export const useCreateFiatSwapPayment = () => {
       throw new Error('Please select a currency')
     }
 
-    const lightningPreImage = generatePreImageHash()
-    setContributionAddPaymentPreImages({ lightning: lightningPreImage })
+    const prismEnabled = isPrismEnabled(project)
+    const lightningPreImage = prismEnabled ? generatePreImageHash() : undefined
+    if (lightningPreImage) {
+      setContributionAddPaymentPreImages({ lightning: lightningPreImage })
+    }
 
-    const accountKeys = resolveAccountKeys()
-    assertAccountKeysAreAvailable(accountKeys)
+    const accountKeys = prismEnabled ? resolveAccountKeys() : undefined
+    if (accountKeys) {
+      assertAccountKeysAreAvailable(accountKeys)
+    }
 
     const banxaInput = {
       fiatCurrency,
@@ -151,14 +167,18 @@ export const useCreateFiatSwapPayment = () => {
                 create: true,
                 banxa: banxaInput,
               },
-              lightningToRskSwap: {
-                create: true,
-                boltz: {
-                  claimPublicKey: accountKeys.publicKey,
-                  claimAddress: accountKeys.address,
-                  preimageHash: lightningPreImage.preimageHash,
-                },
-              },
+              ...(prismEnabled &&
+                lightningPreImage &&
+                accountKeys && {
+                  lightningToRskSwap: {
+                    create: true,
+                    boltz: {
+                      claimPublicKey: accountKeys.publicKey,
+                      claimAddress: accountKeys.address,
+                      preimageHash: lightningPreImage.preimageHash,
+                    },
+                  },
+                }),
             },
           },
         },
@@ -170,6 +190,7 @@ export const useCreateFiatSwapPayment = () => {
         lightningPreImage,
         accountKeys,
         fiatToLightningSwap: data?.contributionPaymentsAdd.payments.fiatToLightningSwap,
+        prismEnabled,
       })
     } catch (error) {
       const err = error as ApolloError

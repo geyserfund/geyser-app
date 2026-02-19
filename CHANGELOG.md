@@ -1,3 +1,10 @@
+## [0.26.2](https://github.com/geyserfund/geyser-app/compare/v0.26.1...v0.26.2) (2026-02-19)
+
+
+### Bug Fixes
+
+* non-prism tia fiat funding flow ([d13b510](https://github.com/geyserfund/geyser-app/commit/d13b510ded33c579b178c5973a144fcf4c975864))
+
 ## [0.26.0](https://github.com/geyserfund/geyser-app/compare/v0.25.0...v0.26.0) (2026-02-19)
 
 
