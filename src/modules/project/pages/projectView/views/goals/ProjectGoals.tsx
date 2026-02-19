@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { getPath } from '@/shared/constants/index.ts'
 
+import { ProjectVisitorBottomBar } from '../../components/ProjectVisitorBottomBar.tsx'
 import { RenderGoals } from './common/RenderGoals'
 import { CreatorGoalPageBottomBar, CreatorGoalPageTopBar } from './components'
-import { ProjectVisitorBottomBar } from '../../components/ProjectVisitorBottomBar.tsx'
 
 export const ProjectGoals = ({ onNoGoalsProp }: { onNoGoalsProp?: () => void }) => {
   const { project } = useProjectAtom()

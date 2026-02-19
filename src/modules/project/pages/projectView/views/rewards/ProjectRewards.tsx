@@ -8,9 +8,9 @@ import { useProjectAtom, useRewardsAtom } from '@/modules/project/hooks/useProje
 import { Body, H1 } from '@/shared/components/typography'
 import { NoRewardsSoldUrl } from '@/shared/constants'
 
+import { ProjectVisitorBottomBar } from '../../components/ProjectVisitorBottomBar.tsx'
 import { AonNotice } from './components/AonNotice.tsx'
 import { CreatorRewardPageBottomBar, CreatorRewardPageTopBar } from './components/CreatorRewardPageBar.tsx'
-import { ProjectVisitorBottomBar } from '../../components/ProjectVisitorBottomBar.tsx'
 import { RewardCardSkeleton } from './components/RewardCard.tsx'
 import { RewardCardWithBuy } from './components/RewardCardWithBuy.tsx'
 
