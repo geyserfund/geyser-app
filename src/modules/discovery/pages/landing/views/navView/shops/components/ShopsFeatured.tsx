@@ -32,7 +32,7 @@ const PLACEHOLDER_FEATURED_PRODUCTS: FeatureAirtableData[] = [
   {
     Name: 'Featured product preview',
     Type: 'display',
-    Featured_Comment: 'Connect an Airtable key to load featured products from your base.',
+    Featured_Comment: '',
     Featured_Author: 'Geyser',
     imageUrl: 'https://storage.googleapis.com/geyser-projects-media/app/campaigns/shop.png',
     link: '/products',
@@ -40,7 +40,7 @@ const PLACEHOLDER_FEATURED_PRODUCTS: FeatureAirtableData[] = [
   {
     Name: 'Local testing card',
     Type: 'display',
-    Featured_Comment: 'This placeholder appears when Airtable data is unavailable in local/staging.',
+    Featured_Comment: '',
     Featured_Author: 'Geyser',
     imageUrl: 'https://storage.googleapis.com/geyser-projects-media/app/campaigns/globe.png',
     link: '/products',
@@ -53,8 +53,7 @@ const usePlaceholderForMissingAirtable = !hasAirtableKey && isDevelopmentOrStagi
 
 const normalizeProductRecord = (record: FeaturedProductRecord): FeatureAirtableData => {
   const name = record.fields.Name?.trim() || 'Featured Product'
-  const featuredComment =
-    record.fields.Featured_Comment?.trim() || 'Discover this featured item from the Geyser marketplace.'
+  const featuredComment = record.fields.Featured_Comment?.trim() || ''
 
   return {
     Name: name,
