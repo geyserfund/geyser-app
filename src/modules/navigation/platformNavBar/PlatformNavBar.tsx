@@ -17,7 +17,7 @@ import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../modules/auth/hooks'
 import { PathName } from '../../../shared/constants'
-import { BrandLogo, BrandLogoFull } from './components/BrandLogo'
+import { BrandLogo } from './components/BrandLogo'
 import { CreateProjectButton } from './components/CreateProjectButton.tsx'
 import { LoggedOutModal } from './components/LoggedOutModal'
 import { LoginButton } from './components/LoginButton'
@@ -25,8 +25,8 @@ import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
 import {
   isDiscoveryRoutesAtom,
-  shouldShowGeyserLogoAtom,
-  shouldShowProjectLogoAtom,
+  isProjectFundingRoutesAtom,
+  isProjectRoutesAtom,
   useIsManifestoPage,
 } from './platformNavBarAtom'
 import { PlatformNav } from './profileNav/components/PlatformNav.tsx'
@@ -40,9 +40,9 @@ export const PlatformNavBar = () => {
 
   const isManifestoPage = useIsManifestoPage()
 
-  const shouldShowProjectLogo = useAtomValue(shouldShowProjectLogoAtom)
-  const shouldShowGeyserLogo = useAtomValue(shouldShowGeyserLogoAtom)
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
+  const isProjectRoutes = useAtomValue(isProjectRoutesAtom)
+  const isProjectFundingRoutes = useAtomValue(isProjectFundingRoutesAtom)
 
   const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
 
@@ -82,20 +82,14 @@ export const PlatformNavBar = () => {
   }, [state])
 
   const renderLeftSide = useCallback(() => {
-    if (isPlatformRoutes) {
-      return <BrandLogoFull />
-    }
-
-    if (shouldShowProjectLogo) {
+    if (isProjectFundingRoutes) {
       return <ProjectLogo />
     }
 
-    if (shouldShowGeyserLogo) {
-      return <BrandLogo showOutline={isGuardiansPage} />
-    }
-
     return <BrandLogo showOutline={isGuardiansPage} />
-  }, [shouldShowGeyserLogo, shouldShowProjectLogo, isPlatformRoutes, isGuardiansPage])
+  }, [isProjectFundingRoutes, isGuardiansPage])
+
+  const shouldShowPlatformNav = (isPlatformRoutes || isProjectRoutes) && !isProjectFundingRoutes && !isMobileMode
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {
@@ -148,7 +142,7 @@ export const PlatformNavBar = () => {
             {renderLeftSide()}
           </HStack>
 
-          {isPlatformRoutes && !isMobileMode && <PlatformNav />}
+          {shouldShowPlatformNav && <PlatformNav />}
 
           {renderRightSide()}
         </HStack>

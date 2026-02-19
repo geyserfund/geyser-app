@@ -175,7 +175,7 @@ export const AnimatedNavBar = ({
                 spacing={2}
                 justifyContent="center"
                 alignItems="center"
-                fontWeight={700}
+                fontWeight={isActive ? 700 : 500}
               >
                 {(showIcon || item.showIconAlways) &&
                   (isActive && ActiveIcon ? <ActiveIcon fontSize="18px" /> : Icon ? <Icon fontSize="18px" /> : null)}
