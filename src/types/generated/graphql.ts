@@ -1232,7 +1232,9 @@ export enum ImpactFundApplicationStatus {
 
 export type ImpactFundApplicationsInput = {
   impactFundId: Scalars['BigInt']['input'];
+  pagination?: InputMaybe<PaginationInput>;
   projectId?: InputMaybe<Scalars['BigInt']['input']>;
+  statusIn?: InputMaybe<Array<ImpactFundApplicationStatus>>;
 };
 
 export type ImpactFundApplyInput = {
@@ -9282,7 +9284,14 @@ export type ImpactFundQueryVariables = Exact<{
 }>;
 
 
-export type ImpactFundQuery = { __typename?: 'Query', impactFund: { __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, description?: string | null, heroImage?: string | null, amountCommitted?: number | null, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, status: ImpactFundSponsorStatus }>, archivedSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, status: ImpactFundSponsorStatus }>, fundedApplications: Array<{ __typename?: 'ImpactFundApplication', id: any, amountAwardedInSats?: number | null, awardedAt?: any | null, contributionUuid?: string | null, status: ImpactFundApplicationStatus, project: { __typename?: 'Project', id: any, title: string, thumbnailImage?: string | null, shortDescription?: string | null } }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } } };
+export type ImpactFundQuery = { __typename?: 'Query', impactFund: { __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, description?: string | null, heroImage?: string | null, amountCommitted?: number | null, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, status: ImpactFundSponsorStatus }>, archivedSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, status: ImpactFundSponsorStatus }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } } };
+
+export type ImpactFundApplicationsQueryVariables = Exact<{
+  input: ImpactFundApplicationsInput;
+}>;
+
+
+export type ImpactFundApplicationsQuery = { __typename?: 'Query', impactFundApplications: { __typename?: 'ImpactFundApplicationsGetResponse', totalCount: number, applications: Array<{ __typename?: 'ImpactFundApplication', id: any, amountAwardedInSats?: number | null, awardedAt?: any | null, contributionUuid?: string | null, status: ImpactFundApplicationStatus, project: { __typename?: 'Project', id: any, title: string, thumbnailImage?: string | null, shortDescription?: string | null } }> } };
 
 export type ImpactFundApplyMutationVariables = Exact<{
   input: ImpactFundApplyInput;
@@ -15367,19 +15376,6 @@ export const ImpactFundDocument = gql`
       amountContributedInSats
       status
     }
-    fundedApplications {
-      id
-      amountAwardedInSats
-      awardedAt
-      contributionUuid
-      status
-      project {
-        id
-        title
-        thumbnailImage
-        shortDescription
-      }
-    }
     metrics {
       awardedTotalSats
       projectsFundedCount
@@ -15420,6 +15416,59 @@ export type ImpactFundQueryHookResult = ReturnType<typeof useImpactFundQuery>;
 export type ImpactFundLazyQueryHookResult = ReturnType<typeof useImpactFundLazyQuery>;
 export type ImpactFundSuspenseQueryHookResult = ReturnType<typeof useImpactFundSuspenseQuery>;
 export type ImpactFundQueryResult = Apollo.QueryResult<ImpactFundQuery, ImpactFundQueryVariables>;
+export const ImpactFundApplicationsDocument = gql`
+    query ImpactFundApplications($input: ImpactFundApplicationsInput!) {
+  impactFundApplications(input: $input) {
+    totalCount
+    applications {
+      id
+      amountAwardedInSats
+      awardedAt
+      contributionUuid
+      status
+      project {
+        id
+        title
+        thumbnailImage
+        shortDescription
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useImpactFundApplicationsQuery__
+ *
+ * To run a query within a React component, call `useImpactFundApplicationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useImpactFundApplicationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useImpactFundApplicationsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useImpactFundApplicationsQuery(baseOptions: Apollo.QueryHookOptions<ImpactFundApplicationsQuery, ImpactFundApplicationsQueryVariables> & ({ variables: ImpactFundApplicationsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ImpactFundApplicationsQuery, ImpactFundApplicationsQueryVariables>(ImpactFundApplicationsDocument, options);
+      }
+export function useImpactFundApplicationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ImpactFundApplicationsQuery, ImpactFundApplicationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ImpactFundApplicationsQuery, ImpactFundApplicationsQueryVariables>(ImpactFundApplicationsDocument, options);
+        }
+export function useImpactFundApplicationsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ImpactFundApplicationsQuery, ImpactFundApplicationsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ImpactFundApplicationsQuery, ImpactFundApplicationsQueryVariables>(ImpactFundApplicationsDocument, options);
+        }
+export type ImpactFundApplicationsQueryHookResult = ReturnType<typeof useImpactFundApplicationsQuery>;
+export type ImpactFundApplicationsLazyQueryHookResult = ReturnType<typeof useImpactFundApplicationsLazyQuery>;
+export type ImpactFundApplicationsSuspenseQueryHookResult = ReturnType<typeof useImpactFundApplicationsSuspenseQuery>;
+export type ImpactFundApplicationsQueryResult = Apollo.QueryResult<ImpactFundApplicationsQuery, ImpactFundApplicationsQueryVariables>;
 export const ImpactFundApplyDocument = gql`
     mutation ImpactFundApply($input: ImpactFundApplyInput!) {
   impactFundApply(input: $input) {

@@ -45,7 +45,12 @@ import { useAuthModal } from '@/modules/auth/hooks/useAuthModal'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { useImpactFundApplyMutation, useImpactFundQuery } from '@/types'
+import {
+  ImpactFundApplicationStatus,
+  useImpactFundApplicationsQuery,
+  useImpactFundApplyMutation,
+  useImpactFundQuery,
+} from '@/types'
 import { useNotification } from '@/utils'
 
 import { DonationSponsorCTA } from '../components/DonationSponsorCTA.tsx'
@@ -89,6 +94,7 @@ const howItWorksItems = [
 ]
 
 export const ImpactFundDetailPage = () => {
+  const APPLICATIONS_PAGE_SIZE = 15
   const { impactFundName } = useParams<{ impactFundName: string }>()
   const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
@@ -122,8 +128,31 @@ export const ImpactFundDetailPage = () => {
   })
 
   const [apply, { loading: applying }] = useImpactFundApplyMutation()
+  const [isLoadingMoreApplications, setIsLoadingMoreApplications] = useState(false)
 
   const impactFund = data?.impactFund
+
+  const {
+    data: applicationsData,
+    loading: applicationsLoading,
+    error: applicationsError,
+    fetchMore: fetchMoreApplications,
+  } = useImpactFundApplicationsQuery({
+    skip: !impactFund?.id,
+    variables: {
+      input: {
+        impactFundId: impactFund?.id ?? 0,
+        statusIn: [ImpactFundApplicationStatus.Funded],
+        pagination: {
+          take: APPLICATIONS_PAGE_SIZE,
+        },
+      },
+    },
+  })
+
+  const fundedApplications = applicationsData?.impactFundApplications?.applications || []
+  const fundedApplicationsCount = applicationsData?.impactFundApplications?.totalCount || 0
+  const hasMoreFundedApplications = fundedApplications.length < fundedApplicationsCount
 
   const ownedProjects = useMemo(
     () =>
@@ -162,6 +191,48 @@ export const ImpactFundDetailPage = () => {
       projectModal.onClose()
     } catch (error) {
       notifyError({ title: t('Failed to apply to impact fund') })
+    }
+  }
+
+  const loadMoreApplications = async () => {
+    if (!impactFund || fundedApplications.length === 0 || !hasMoreFundedApplications || isLoadingMoreApplications) {
+      return
+    }
+
+    const lastApplication = fundedApplications[fundedApplications.length - 1]
+    if (!lastApplication) return
+
+    setIsLoadingMoreApplications(true)
+    try {
+      await fetchMoreApplications({
+        variables: {
+          input: {
+            impactFundId: impactFund.id,
+            statusIn: [ImpactFundApplicationStatus.Funded],
+            pagination: {
+              take: APPLICATIONS_PAGE_SIZE,
+              cursor: { id: lastApplication.id },
+            },
+          },
+        },
+        updateQuery(previousResult, { fetchMoreResult }) {
+          if (!fetchMoreResult?.impactFundApplications) {
+            return previousResult
+          }
+
+          return {
+            impactFundApplications: {
+              ...fetchMoreResult.impactFundApplications,
+              applications: [
+                ...previousResult.impactFundApplications.applications,
+                ...fetchMoreResult.impactFundApplications.applications,
+              ],
+            },
+          }
+        },
+      })
+    } finally {
+      setIsLoadingMoreApplications(false)
     }
   }
 
@@ -388,9 +459,17 @@ export const ImpactFundDetailPage = () => {
         <H2 size="xl" bold>
           {t('Projects Awarded')}
         </H2>
-        {impactFund.fundedApplications.length > 0 ? (
+        {applicationsLoading ? (
+          <VStack py={8}>
+            <Spinner />
+          </VStack>
+        ) : applicationsError ? (
+          <Box p={8} bg={mutedBg} borderRadius="lg">
+            <Body>{t('Failed to load applications.')}</Body>
+          </Box>
+        ) : fundedApplications.length > 0 ? (
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-            {impactFund.fundedApplications.map((application) => (
+            {fundedApplications.map((application) => (
               <Card
                 key={application.id}
                 as={Link}
@@ -455,6 +534,18 @@ export const ImpactFundDetailPage = () => {
               </Body>
             </VStack>
           </Box>
+        )}
+        {hasMoreFundedApplications && (
+          <Button
+            onClick={loadMoreApplications}
+            isLoading={isLoadingMoreApplications}
+            alignSelf="center"
+            size="lg"
+            variant="outline"
+            colorScheme="neutral1"
+          >
+            {t('View More')}
+          </Button>
         )}
       </VStack>
 
