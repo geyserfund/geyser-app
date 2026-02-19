@@ -37,3 +37,10 @@
 ## Money Precision
 
 - Never use `number` for wei/uint256 values; use `bigint` end-to-end.
+
+## Deployment
+
+- For production deployment prep, follow `docs/DEPLOYMENT.md`.
+- Use `yarn version [minor|major|patch]` for version updates.
+- Run `yarn changelog` after version updates.
+- Create the PR from `staging` to `production`.

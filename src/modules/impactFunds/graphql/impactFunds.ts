@@ -48,7 +48,19 @@ export const QUERY_IMPACT_FUND = gql`
         amountContributedInSats
         status
       }
-      fundedApplications {
+      metrics {
+        awardedTotalSats
+        projectsFundedCount
+      }
+    }
+  }
+`
+
+export const QUERY_IMPACT_FUND_APPLICATIONS = gql`
+  query ImpactFundApplications($input: ImpactFundApplicationsInput!) {
+    impactFundApplications(input: $input) {
+      totalCount
+      applications {
         id
         amountAwardedInSats
         awardedAt
@@ -60,10 +72,6 @@ export const QUERY_IMPACT_FUND = gql`
           thumbnailImage
           shortDescription
         }
-      }
-      metrics {
-        awardedTotalSats
-        projectsFundedCount
       }
     }
   }

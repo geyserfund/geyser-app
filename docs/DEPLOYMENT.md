@@ -8,13 +8,6 @@ The Geyser Front-End
 
 1. We create a PR to production from staging branch.
 
-### Translations
-
-We push the latest translation to staging branch, via poEditor console.
-
-1. Geyser Project -> Integrations -> Github
-2. Select languages to update -> Export to Github -> Confirm
-
 ### Update app version and changelog.md
 
 1. Update app version:

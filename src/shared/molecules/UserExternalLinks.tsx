@@ -93,7 +93,7 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
           Geyser
         </H2>
         <Body fontStyle="italic" medium>
-          {t('Bitcoin crowdfunding')}
+          {t('Support fundraisers, back projects early, and shop Bitcoin goods')}
         </Body>
       </VStack>
       <VStack>

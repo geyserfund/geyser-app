@@ -230,6 +230,10 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) =
     return {}
   }
 
+  if (!fundingProject.paymentMethods?.fiat?.stripe) {
+    return {}
+  }
+
   return {
     fiat: {
       create: true,
