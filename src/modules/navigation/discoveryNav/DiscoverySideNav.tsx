@@ -16,6 +16,7 @@ import { Link } from 'react-router'
 
 import { LogoDark, LogoLight } from '@/assets'
 import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
+import { NavigationNewBadge } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { getPath, LogoNameDark, LogoNameLight } from '@/shared/constants/index.ts'
 import { UserExternalLinks } from '@/shared/molecules/UserExternalLinks'
@@ -151,6 +152,7 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
               width="6px"
             />
           ) : null}
+          {item.new && <NavigationNewBadge position="absolute" top={-2} right={-2} />}
         </>
       </Button>
     )
@@ -199,7 +201,10 @@ const DiscoverySideNavButton = ({ item, currentNavItem, activityDot, ...rest }: 
       }}
       {...rest}
     >
-      {t(item.label)}
+      <Box position="relative" display="inline-flex" alignItems="center">
+        {t(item.label)}
+        {item.new && <NavigationNewBadge position="absolute" top={-2} right={-8} />}
+      </Box>
     </Button>
   )
 }

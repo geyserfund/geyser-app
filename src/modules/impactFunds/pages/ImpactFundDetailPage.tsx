@@ -4,6 +4,7 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  Avatar,
   Box,
   Button,
   Card,
@@ -40,7 +41,6 @@ import {
   PiChartBarBold,
   PiCoinsBold,
   PiCoinsDuotone,
-  PiNewspaperDuotone,
   PiRocketLaunchDuotone,
   PiScalesBold,
 } from 'react-icons/pi'
@@ -56,16 +56,18 @@ import { getPath } from '@/shared/constants/index.ts'
 import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import {
+  ImpactFundApplicationFundingModel,
   ImpactFundApplicationsQuery,
   ImpactFundApplicationStatus,
   ImpactFundQuery,
+  ImpactFundSponsorTier,
+  OrderByOptions,
   useImpactFundApplicationsQuery,
   useImpactFundApplyMutation,
   useImpactFundQuery,
+  useProjectPageFundersQuery,
 } from '@/types'
 import { getShortAmountLabel, useNotification } from '@/utils'
-
-import { DonationSponsorCTA } from '../components/DonationSponsorCTA.tsx'
 
 const APPLICATIONS_PAGE_SIZE = 15
 const DESCRIPTION_PREVIEW_CHAR_LIMIT = 500
@@ -79,6 +81,23 @@ const fundedStatus = [ImpactFundApplicationStatus.Funded]
 type ImpactFundDetails = ImpactFundQuery['impactFund']
 type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
 type OwnedProject = { id: unknown; title: string }
+type CommunitySupporter = {
+  id: string
+  username: string
+  imageUrl: string | null
+}
+
+const fundingModelLabels: Record<ImpactFundApplicationFundingModel, string> = {
+  [ImpactFundApplicationFundingModel.DirectGrant]: 'Direct Grant',
+  [ImpactFundApplicationFundingModel.Matching]: 'Matching',
+  [ImpactFundApplicationFundingModel.AonCofunding]: 'AON Co-Funding',
+}
+
+const fundingModelPillStyles: Record<ImpactFundApplicationFundingModel, { bg: string; textColor: string }> = {
+  [ImpactFundApplicationFundingModel.DirectGrant]: { bg: 'blue.100', textColor: 'blue.800' },
+  [ImpactFundApplicationFundingModel.Matching]: { bg: 'green.100', textColor: 'green.800' },
+  [ImpactFundApplicationFundingModel.AonCofunding]: { bg: 'purple.100', textColor: 'purple.800' },
+}
 
 function truncateDescription(text: string, limit: number, expanded: boolean): string {
   return !expanded && text.length > limit ? `${text.slice(0, limit)}...` : text
@@ -104,6 +123,10 @@ function buildFundedApplicationsInput(impactFundId: number, cursorId?: string) {
 
 function hasValue<T>(value: T | null | undefined): value is T {
   return value !== null && value !== undefined
+}
+
+function getFundingModelLabel(fundingModel: ImpactFundApplicationFundingModel): string {
+  return fundingModelLabels[fundingModel] ?? fundingModel
 }
 
 function getCommittedAmountDisplay({
@@ -265,6 +288,47 @@ export function ImpactFundDetailPage(): JSX.Element | null {
   const fundedApplications = applicationsData?.impactFundApplications?.applications ?? []
   const fundedApplicationsCount = applicationsData?.impactFundApplications?.totalCount ?? 0
   const hasMoreFundedApplications = fundedApplications.length < fundedApplicationsCount
+  const {
+    data: communitySupportersData,
+    loading: communitySupportersLoading,
+    error: communitySupportersError,
+  } = useProjectPageFundersQuery({
+    skip: !impactFund?.donateProjectId,
+    variables: {
+      input: {
+        where: {
+          projectId: impactFund?.donateProjectId,
+          anonymous: false,
+          confirmed: true,
+        },
+        orderBy: {
+          amountFunded: OrderByOptions.Desc,
+        },
+        pagination: {
+          take: 100,
+        },
+      },
+    },
+  })
+  const communitySupporters = useMemo<CommunitySupporter[]>(() => {
+    const uniqueSupporters = new Map<string, CommunitySupporter>()
+
+    for (const funder of communitySupportersData?.fundersGet ?? []) {
+      const { user } = funder
+      if (!user?.id) continue
+
+      const userId = String(user.id)
+      if (uniqueSupporters.has(userId)) continue
+
+      uniqueSupporters.set(userId, {
+        id: userId,
+        username: user.username || 'User',
+        imageUrl: user.imageUrl ?? null,
+      })
+    }
+
+    return Array.from(uniqueSupporters.values())
+  }, [communitySupportersData?.fundersGet])
 
   const ownedProjects = useMemo(
     () =>
@@ -379,6 +443,9 @@ export function ImpactFundDetailPage(): JSX.Element | null {
       hasMoreFundedApplications={hasMoreFundedApplications}
       isLoadingMoreApplications={isLoadingMoreApplications}
       onLoadMoreApplications={loadMoreApplications}
+      communitySupporters={communitySupporters}
+      communitySupportersLoading={communitySupportersLoading}
+      communitySupportersError={Boolean(communitySupportersError)}
       onApplyClick={handleApplyClick}
       ownedProjects={ownedProjects}
       selectedProjectId={selectedProjectId}
@@ -399,6 +466,9 @@ type ImpactFundDetailContentProps = {
   hasMoreFundedApplications: boolean
   isLoadingMoreApplications: boolean
   onLoadMoreApplications: () => Promise<void>
+  communitySupporters: CommunitySupporter[]
+  communitySupportersLoading: boolean
+  communitySupportersError: boolean
   onApplyClick: () => void
   ownedProjects: OwnedProject[]
   selectedProjectId: string
@@ -475,7 +545,7 @@ type FundedApplicationsSectionProps = {
   hasMoreFundedApplications: boolean
   isLoadingMoreApplications: boolean
   onLoadMoreApplications: () => Promise<void>
-  surfaceBg: string
+  cardBg: string
   mutedBg: string
   emphasisTextColor: string
   secondaryTextColor: string
@@ -490,7 +560,7 @@ function FundedApplicationsSection({
   hasMoreFundedApplications,
   isLoadingMoreApplications,
   onLoadMoreApplications,
-  surfaceBg,
+  cardBg,
   mutedBg,
   emphasisTextColor,
   secondaryTextColor,
@@ -535,23 +605,45 @@ function FundedApplicationsSection({
           <Card
             key={application.id}
             as={Link}
-            to={getPath('project', application.project.id)}
+            to={getPath('project', application.project.name)}
             overflow="hidden"
             cursor="pointer"
             transition="all 0.3s"
             _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
-            borderWidth="0"
-            bg={surfaceBg}
+            borderWidth="1px"
+            borderColor="neutral1.4"
+            boxShadow="0 2px 8px rgba(0, 0, 0, 0.08)"
+            bg={cardBg}
           >
-            {application.project.thumbnailImage && (
-              <Image
-                src={application.project.thumbnailImage}
-                alt={application.project.title}
-                w="full"
-                h="200px"
-                objectFit="cover"
-              />
-            )}
+            <Box position="relative">
+              {application.project.thumbnailImage && (
+                <Image
+                  src={application.project.thumbnailImage}
+                  alt={application.project.title}
+                  w="full"
+                  h="200px"
+                  objectFit="cover"
+                />
+              )}
+              <Box
+                position="absolute"
+                top={3}
+                right={3}
+                px={2.5}
+                py={1}
+                borderRadius="full"
+                bg={fundingModelPillStyles[application.fundingModel]?.bg ?? 'gray.100'}
+                flexShrink={0}
+              >
+                <Body
+                  size="xs"
+                  fontWeight="semibold"
+                  color={fundingModelPillStyles[application.fundingModel]?.textColor ?? 'gray.800'}
+                >
+                  {t(getFundingModelLabel(application.fundingModel))}
+                </Body>
+              </Box>
+            </Box>
             <VStack align="stretch" spacing={3} p={5}>
               <Flex align="baseline" gap={2} flexWrap="wrap">
                 <H2 size="md" bold flex="1" minW="0">
@@ -598,290 +690,307 @@ function FundedApplicationsSection({
   )
 }
 
-function ImpactFundDetailContent({
-  impactFund,
-  fundedApplications,
-  applicationsLoading,
-  applicationsError,
-  hasMoreFundedApplications,
-  isLoadingMoreApplications,
-  onLoadMoreApplications,
-  onApplyClick,
-  ownedProjects,
-  selectedProjectId,
-  onSelectedProjectIdChange,
-  isProjectModalOpen,
-  onProjectModalClose,
-  applying,
-  onSubmitApplication,
-}: ImpactFundDetailContentProps): JSX.Element {
-  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
-  const [expandedFundingModel, setExpandedFundingModel] = useState<string | null>(null)
-  const usdRate = useAtomValue(usdRateAtom)
-  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
+type ImpactFundThemeColors = {
+  surfaceBg: string
+  mutedBg: string
+  primaryTextColor: string
+  secondaryTextColor: string
+  subtleTextColor: string
+  tertiaryTextColor: string
+  emphasisTextColor: string
+  metricHoverBg: string
+  highlightedSurfaceBg: string
+  highlightedSurfaceBorderColor: string
+  cardBg: string
+  archivedBadgeBg: string
+  archivedBadgeBorderColor: string
+  tagBg: string
+  tagColor: string
+  tagBorderColor: string
+  iconBg: string
+  iconColor: string
+}
 
-  const surfaceBg = useColorModeValue('neutral1.3', 'neutral1.3')
-  const mutedBg = useColorModeValue('neutral1.2', 'neutral1.2')
-  const primaryTextColor = useColorModeValue('neutral1.11', 'neutral1.11')
-  const secondaryTextColor = useColorModeValue('neutral1.9', 'neutral1.10')
-  const subtleTextColor = useColorModeValue('neutral1.8', 'neutral1.10')
-  const tertiaryTextColor = useColorModeValue('neutral1.7', 'neutral1.9')
-  const emphasisTextColor = useColorModeValue('primary1.9', 'primary1.9')
-  const metricHoverBg = useColorModeValue('neutral1.3', 'neutral1.4')
-  const highlightedSurfaceBg = useColorModeValue('primary1.50', 'primary1.900')
-  const highlightedSurfaceBorderColor = useColorModeValue('primary1.200', 'primary1.700')
-  const archivedBadgeBg = useColorModeValue('neutral1.3', 'neutral1.4')
-  const archivedBadgeBorderColor = useColorModeValue('neutral1.4', 'neutral1.5')
-  const tagBg = useColorModeValue('primary1.100', 'primary1.900')
-  const tagColor = useColorModeValue('primary1.800', 'primary1.100')
-  const tagBorderColor = useColorModeValue('primary1.200', 'primary1.800')
-  const iconBg = useColorModeValue('primary1.100', 'primary1.900')
-  const iconColor = useColorModeValue('primary1.600', 'primary1.300')
-  const committedAmountDisplay = getCommittedAmountDisplay({
-    amountCommitted: impactFund.amountCommitted,
-    amountCommittedCurrency: impactFund.amountCommittedCurrency,
-    usdRate,
-    getUSDAmount,
-    getSatoshisFromUSDCents,
-  })
+function useImpactFundThemeColors(): ImpactFundThemeColors {
+  return {
+    surfaceBg: useColorModeValue('neutral1.3', 'neutral1.3'),
+    mutedBg: useColorModeValue('neutral1.2', 'neutral1.2'),
+    primaryTextColor: useColorModeValue('neutral1.11', 'neutral1.11'),
+    secondaryTextColor: useColorModeValue('neutral1.9', 'neutral1.10'),
+    subtleTextColor: useColorModeValue('neutral1.8', 'neutral1.10'),
+    tertiaryTextColor: useColorModeValue('neutral1.7', 'neutral1.9'),
+    emphasisTextColor: useColorModeValue('primary1.9', 'primary1.9'),
+    metricHoverBg: useColorModeValue('neutral1.3', 'neutral1.4'),
+    highlightedSurfaceBg: useColorModeValue('primary1.50', 'primary1.900'),
+    highlightedSurfaceBorderColor: useColorModeValue('primary1.200', 'primary1.700'),
+    cardBg: useColorModeValue('white', 'neutral1.3'),
+    archivedBadgeBg: useColorModeValue('neutral1.3', 'neutral1.4'),
+    archivedBadgeBorderColor: useColorModeValue('neutral1.4', 'neutral1.5'),
+    tagBg: useColorModeValue('primary1.100', 'primary1.900'),
+    tagColor: useColorModeValue('primary1.800', 'primary1.100'),
+    tagBorderColor: useColorModeValue('primary1.200', 'primary1.800'),
+    iconBg: useColorModeValue('primary1.100', 'primary1.900'),
+    iconColor: useColorModeValue('primary1.600', 'primary1.300'),
+  }
+}
+
+type ImpactFundOverviewSectionProps = {
+  impactFund: ImpactFundDetails
+  committedAmountDisplay: ReturnType<typeof getCommittedAmountDisplay>
+  onApplyClick: () => void
+  colors: ImpactFundThemeColors
+}
+
+function ImpactFundOverviewSection({
+  impactFund,
+  committedAmountDisplay,
+  onApplyClick,
+  colors,
+}: ImpactFundOverviewSectionProps): JSX.Element {
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
   const descriptionText = impactFund.description || ''
   const hasLongDescription = descriptionText.length > DESCRIPTION_PREVIEW_CHAR_LIMIT
   const descriptionContent = truncateDescription(descriptionText, DESCRIPTION_PREVIEW_CHAR_LIMIT, isDescriptionExpanded)
 
   return (
-    <VStack align="stretch" spacing={14}>
-      <Head
-        title={impactFund.title}
-        description={impactFund.subtitle || undefined}
-        image={impactFund.heroImage || undefined}
-      />
-
-      <VStack align="stretch" spacing={6}>
-        {impactFund.heroImage && (
-          <Image
-            src={impactFund.heroImage}
-            alt={impactFund.title}
-            w="full"
-            maxH="300px"
-            objectFit="cover"
-            borderRadius="lg"
-          />
-        )}
-        <VStack align="stretch" spacing={4}>
-          <Flex justify="space-between" align={{ base: 'stretch', md: 'baseline' }} gap={4} flexWrap="wrap">
-            <HStack align={{ base: 'start', md: 'baseline' }} spacing={3} flexWrap="wrap">
-              <H2 size="3xl" bold color={primaryTextColor} lineHeight={1}>
-                {impactFund.title}
-              </H2>
-              {committedAmountDisplay && (
-                <H2 display={{ base: 'none', md: 'block' }} size="2xl" bold color={emphasisTextColor} lineHeight={1}>
-                  {committedAmountDisplay.primary}
-                </H2>
-              )}
-              {committedAmountDisplay?.secondary && (
-                <H2
-                  display={{ base: 'none', md: 'block' }}
-                  size="2xl"
-                  color={tertiaryTextColor}
-                  whiteSpace="nowrap"
-                  lineHeight={1}
-                >
-                  {committedAmountDisplay.secondary}
-                </H2>
-              )}
-            </HStack>
-            <Button
-              display={{ base: 'none', md: 'inline-flex' }}
-              size="lg"
-              colorScheme="primary1"
-              onClick={onApplyClick}
-              flexShrink={0}
-              px={8}
-              minW="210px"
-              fontWeight="semibold"
-              fontSize="lg"
-            >
-              {t('Apply for funding')}
-            </Button>
-          </Flex>
-          <Flex display={{ base: 'flex', md: 'none' }} justify="space-between" align="stretch" gap={3}>
-            {committedAmountDisplay && (
-              <VStack align="start" spacing={0}>
-                <H2 size="xl" bold color={emphasisTextColor}>
-                  {committedAmountDisplay.primary}
-                </H2>
-                {committedAmountDisplay.secondary && (
-                  <H2 size="xl" color={tertiaryTextColor}>
-                    {committedAmountDisplay.secondary}
-                  </H2>
-                )}
-              </VStack>
-            )}
-            <Button
-              size="md"
-              colorScheme="primary1"
-              onClick={onApplyClick}
-              flexShrink={0}
-              alignSelf="stretch"
-              h="auto"
-              minH="unset"
-              whiteSpace="nowrap"
-              px={7}
-              fontWeight="semibold"
-              fontSize="lg"
-            >
-              {t('Apply for funding')}
-            </Button>
-          </Flex>
-          {impactFund.tags.length > 0 && (
-            <HStack spacing={2} flexWrap="wrap">
-              {impactFund.tags.map((tag) => (
-                <Box
-                  key={tag}
-                  px={3}
-                  py={1}
-                  borderRadius="full"
-                  bg={tagBg}
-                  color={tagColor}
-                  border="1px solid"
-                  borderColor={tagBorderColor}
-                >
-                  <Body size="xs" bold whiteSpace="nowrap">
-                    {tag}
-                  </Body>
-                </Box>
-              ))}
-            </HStack>
-          )}
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-            <Box
-              p={6}
-              bg={mutedBg}
-              borderRadius="lg"
-              transition="all 0.3s"
-              _hover={{ bg: metricHoverBg, transform: 'translateY(-2px)' }}
-            >
-              <HStack spacing={4}>
-                <Flex w="48px" h="48px" align="center" justify="center" bg={iconBg} borderRadius="lg" flexShrink={0}>
-                  <Icon as={PiCoinsDuotone} boxSize={6} color={iconColor} />
-                </Flex>
-                <VStack align="start" spacing={0}>
-                  <H2 size="xl" bold color={primaryTextColor}>
-                    ₿ {btcNumberFormatter.format(impactFund.metrics.awardedTotalSats)}
-                  </H2>
-                  <Body
-                    size="xs"
-                    fontSize={{ base: '10px', md: '12px' }}
-                    color={subtleTextColor}
-                    textTransform="uppercase"
-                    letterSpacing="wide"
-                    fontWeight="medium"
-                    noOfLines={1}
-                    whiteSpace="nowrap"
-                  >
-                    {t('Awarded so far')}
-                  </Body>
-                </VStack>
-              </HStack>
-            </Box>
-            <Box
-              p={6}
-              bg={mutedBg}
-              borderRadius="lg"
-              transition="all 0.3s"
-              _hover={{ bg: metricHoverBg, transform: 'translateY(-2px)' }}
-            >
-              <HStack spacing={4}>
-                <Flex w="48px" h="48px" align="center" justify="center" bg={iconBg} borderRadius="lg" flexShrink={0}>
-                  <Icon as={PiRocketLaunchDuotone} boxSize={6} color={iconColor} />
-                </Flex>
-                <VStack align="start" spacing={0}>
-                  <H2 size="xl" bold color={primaryTextColor}>
-                    {impactFund.metrics.projectsFundedCount}
-                  </H2>
-                  <Body
-                    size="xs"
-                    fontSize={{ base: '10px', md: '12px' }}
-                    color={subtleTextColor}
-                    textTransform="uppercase"
-                    letterSpacing="wide"
-                    fontWeight="medium"
-                    noOfLines={1}
-                    whiteSpace="nowrap"
-                  >
-                    {t('Projects funded')}
-                  </Body>
-                </VStack>
-              </HStack>
-            </Box>
-            <Box
-              p={6}
-              bg={mutedBg}
-              borderRadius="lg"
-              transition="all 0.3s"
-              _hover={{ bg: metricHoverBg, transform: 'translateY(-2px)' }}
-            >
-              <HStack spacing={4}>
-                <Flex w="48px" h="48px" align="center" justify="center" bg={iconBg} borderRadius="lg" flexShrink={0}>
-                  <Icon as={PiNewspaperDuotone} boxSize={6} color={iconColor} />
-                </Flex>
-                <VStack align="start" spacing={0}>
-                  <H2 size="xl" bold color={primaryTextColor}>
-                    {t('Yearly')}
-                  </H2>
-                  <Body
-                    size="xs"
-                    fontSize={{ base: '10px', md: '12px' }}
-                    color={subtleTextColor}
-                    textTransform="uppercase"
-                    letterSpacing="wide"
-                    fontWeight="medium"
-                    noOfLines={1}
-                    whiteSpace="nowrap"
-                  >
-                    {t('Impact & Transparency Report')}
-                  </Body>
-                </VStack>
-              </HStack>
-            </Box>
-          </SimpleGrid>
-          {impactFund.description && (
-            <VStack align="stretch" spacing={2}>
-              <Box color={secondaryTextColor}>
-                <MarkdownField preview content={descriptionContent} />
+    <VStack align="stretch" spacing={6}>
+      {impactFund.heroImage && (
+        <Image
+          src={impactFund.heroImage}
+          alt={impactFund.title}
+          w="full"
+          maxH="300px"
+          objectFit="cover"
+          borderRadius="lg"
+        />
+      )}
+      <VStack align="stretch" spacing={4}>
+        <Flex justify="space-between" align={{ base: 'stretch', md: 'baseline' }} gap={4} flexWrap="wrap">
+          <H2 size="3xl" bold color={colors.primaryTextColor} lineHeight={1}>
+            {impactFund.title}
+          </H2>
+          <Button
+            display={{ base: 'none', md: 'inline-flex' }}
+            size="lg"
+            colorScheme="primary1"
+            onClick={onApplyClick}
+            flexShrink={0}
+            px={8}
+            minW="210px"
+            fontWeight="semibold"
+            fontSize="lg"
+          >
+            {t('Apply for funding')}
+          </Button>
+        </Flex>
+        <Button
+          display={{ base: 'flex', md: 'none' }}
+          size="md"
+          colorScheme="primary1"
+          onClick={onApplyClick}
+          w="full"
+          fontWeight="semibold"
+          fontSize="lg"
+        >
+          {t('Apply for funding')}
+        </Button>
+        {impactFund.tags.length > 0 && (
+          <HStack spacing={2} flexWrap="wrap">
+            {impactFund.tags.map((tag) => (
+              <Box
+                key={tag}
+                px={3}
+                py={1}
+                borderRadius="full"
+                bg={colors.tagBg}
+                color={colors.tagColor}
+                border="1px solid"
+                borderColor={colors.tagBorderColor}
+              >
+                <Body size="xs" bold whiteSpace="nowrap">
+                  {tag}
+                </Body>
               </Box>
-              {hasLongDescription && (
-                <Button
-                  onClick={() => setIsDescriptionExpanded((current) => !current)}
-                  alignSelf="flex-start"
-                  variant="ghost"
-                  colorScheme="primary1"
-                  size="sm"
+            ))}
+          </HStack>
+        )}
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+          {committedAmountDisplay && (
+            <Box
+              p={6}
+              bg={colors.mutedBg}
+              borderRadius="lg"
+              transition="all 0.3s"
+              _hover={{ bg: colors.metricHoverBg, transform: 'translateY(-2px)' }}
+            >
+              <HStack spacing={4}>
+                <Flex
+                  w="48px"
+                  h="48px"
+                  align="center"
+                  justify="center"
+                  bg={colors.iconBg}
+                  borderRadius="lg"
+                  flexShrink={0}
                 >
-                  {isDescriptionExpanded ? t('Read less') : t('Read more')}
-                </Button>
-              )}
-            </VStack>
+                  <Icon as={PiCoinsBold} boxSize={6} color={colors.iconColor} />
+                </Flex>
+                <VStack align="start" spacing={0}>
+                  <HStack spacing={2} align="baseline">
+                    <H2 size="xl" bold color={colors.emphasisTextColor}>
+                      {committedAmountDisplay.primary}
+                    </H2>
+                    {committedAmountDisplay.secondary && (
+                      <Body size="xs" color={colors.tertiaryTextColor}>
+                        {committedAmountDisplay.secondary}
+                      </Body>
+                    )}
+                  </HStack>
+                  <Body
+                    size="xs"
+                    fontSize={{ base: '10px', md: '12px' }}
+                    color={colors.subtleTextColor}
+                    textTransform="uppercase"
+                    letterSpacing="wide"
+                    fontWeight="medium"
+                    noOfLines={1}
+                    whiteSpace="nowrap"
+                  >
+                    {t('Amount committed')}
+                  </Body>
+                </VStack>
+              </HStack>
+            </Box>
           )}
-        </VStack>
+          <Box
+            p={6}
+            bg={colors.mutedBg}
+            borderRadius="lg"
+            transition="all 0.3s"
+            _hover={{ bg: colors.metricHoverBg, transform: 'translateY(-2px)' }}
+          >
+            <HStack spacing={4}>
+              <Flex
+                w="48px"
+                h="48px"
+                align="center"
+                justify="center"
+                bg={colors.iconBg}
+                borderRadius="lg"
+                flexShrink={0}
+              >
+                <Icon as={PiCoinsDuotone} boxSize={6} color={colors.iconColor} />
+              </Flex>
+              <VStack align="start" spacing={0}>
+                <H2 size="xl" bold color={colors.primaryTextColor}>
+                  ₿ {btcNumberFormatter.format(impactFund.metrics.awardedTotalSats)}
+                </H2>
+                <Body
+                  size="xs"
+                  fontSize={{ base: '10px', md: '12px' }}
+                  color={colors.subtleTextColor}
+                  textTransform="uppercase"
+                  letterSpacing="wide"
+                  fontWeight="medium"
+                  noOfLines={1}
+                  whiteSpace="nowrap"
+                >
+                  {t('Awarded so far')}
+                </Body>
+              </VStack>
+            </HStack>
+          </Box>
+          <Box
+            p={6}
+            bg={colors.mutedBg}
+            borderRadius="lg"
+            transition="all 0.3s"
+            _hover={{ bg: colors.metricHoverBg, transform: 'translateY(-2px)' }}
+          >
+            <HStack spacing={4}>
+              <Flex
+                w="48px"
+                h="48px"
+                align="center"
+                justify="center"
+                bg={colors.iconBg}
+                borderRadius="lg"
+                flexShrink={0}
+              >
+                <Icon as={PiRocketLaunchDuotone} boxSize={6} color={colors.iconColor} />
+              </Flex>
+              <VStack align="start" spacing={0}>
+                <H2 size="xl" bold color={colors.primaryTextColor}>
+                  {impactFund.metrics.projectsFundedCount}
+                </H2>
+                <Body
+                  size="xs"
+                  fontSize={{ base: '10px', md: '12px' }}
+                  color={colors.subtleTextColor}
+                  textTransform="uppercase"
+                  letterSpacing="wide"
+                  fontWeight="medium"
+                  noOfLines={1}
+                  whiteSpace="nowrap"
+                >
+                  {t('Projects funded')}
+                </Body>
+              </VStack>
+            </HStack>
+          </Box>
+        </SimpleGrid>
+        {impactFund.description && (
+          <VStack align="stretch" spacing={2}>
+            <Box color={colors.secondaryTextColor}>
+              <MarkdownField preview content={descriptionContent} />
+            </Box>
+            {hasLongDescription && (
+              <Button
+                onClick={() => setIsDescriptionExpanded((current) => !current)}
+                alignSelf="flex-start"
+                variant="ghost"
+                colorScheme="primary1"
+                size="sm"
+              >
+                {isDescriptionExpanded ? t('Read less') : t('Read more')}
+              </Button>
+            )}
+          </VStack>
+        )}
       </VStack>
+    </VStack>
+  )
+}
 
+function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColors }): JSX.Element {
+  const [expandedFundingModel, setExpandedFundingModel] = useState<string | null>(null)
+
+  return (
+    <>
       <VStack align="stretch" spacing={6}>
         <H2 size="xl" bold>
           {t('How It Works')}
         </H2>
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
           {howItWorksItems.map((item) => (
-            <Box key={item.title} p={5} bg={surfaceBg} borderRadius="lg">
+            <Box key={item.title} p={5} bg={colors.surfaceBg} borderRadius="lg">
               <HStack align="start" spacing={4}>
-                <Flex w="42px" h="42px" borderRadius="md" bg={iconBg} align="center" justify="center" flexShrink={0}>
-                  <Icon as={item.icon} boxSize={5} color={iconColor} />
+                <Flex
+                  w="42px"
+                  h="42px"
+                  borderRadius="md"
+                  bg={colors.iconBg}
+                  align="center"
+                  justify="center"
+                  flexShrink={0}
+                >
+                  <Icon as={item.icon} boxSize={5} color={colors.iconColor} />
                 </Flex>
                 <VStack align="stretch" spacing={1}>
-                  <Body bold color={primaryTextColor}>
+                  <Body bold color={colors.primaryTextColor}>
                     {t(item.title)}
                   </Body>
-                  <Body size="sm" color={secondaryTextColor}>
+                  <Body size="sm" color={colors.secondaryTextColor}>
                     {t(item.description)}
                   </Body>
                 </VStack>
@@ -897,16 +1006,24 @@ function ImpactFundDetailContent({
         </H2>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
           {fundingOverviewItems.map((item) => (
-            <Box key={item.title} p={5} bg={surfaceBg} borderRadius="lg">
+            <Box key={item.title} p={5} bg={colors.surfaceBg} borderRadius="lg">
               <HStack align="start" spacing={4}>
-                <Flex w="42px" h="42px" borderRadius="md" bg={iconBg} align="center" justify="center" flexShrink={0}>
-                  <Icon as={item.icon} boxSize={5} color={iconColor} />
+                <Flex
+                  w="42px"
+                  h="42px"
+                  borderRadius="md"
+                  bg={colors.iconBg}
+                  align="center"
+                  justify="center"
+                  flexShrink={0}
+                >
+                  <Icon as={item.icon} boxSize={5} color={colors.iconColor} />
                 </Flex>
                 <VStack align="stretch" spacing={1}>
-                  <Body bold color={primaryTextColor}>
+                  <Body bold color={colors.primaryTextColor}>
                     {t(item.title)}
                   </Body>
-                  <Body size="sm" color={secondaryTextColor}>
+                  <Body size="sm" color={colors.secondaryTextColor}>
                     {t(item.description)}
                   </Body>
                 </VStack>
@@ -916,7 +1033,7 @@ function ImpactFundDetailContent({
         </SimpleGrid>
 
         <VStack align="stretch" spacing={3} pt={2}>
-          <H2 size="lg" bold color={secondaryTextColor}>
+          <H2 size="lg" bold color={colors.secondaryTextColor}>
             {t('Funding Models')}
           </H2>
           <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4} alignItems="start">
@@ -926,17 +1043,568 @@ function ImpactFundDetailContent({
                 item={item}
                 isOpen={expandedFundingModel === item.title}
                 onToggle={() => setExpandedFundingModel(expandedFundingModel === item.title ? null : item.title)}
-                surfaceBg={surfaceBg}
-                highlightedSurfaceBg={highlightedSurfaceBg}
-                highlightedSurfaceBorderColor={highlightedSurfaceBorderColor}
-                metricHoverBg={metricHoverBg}
-                primaryTextColor={primaryTextColor}
-                secondaryTextColor={secondaryTextColor}
+                surfaceBg={colors.surfaceBg}
+                highlightedSurfaceBg={colors.highlightedSurfaceBg}
+                highlightedSurfaceBorderColor={colors.highlightedSurfaceBorderColor}
+                metricHoverBg={colors.metricHoverBg}
+                primaryTextColor={colors.primaryTextColor}
+                secondaryTextColor={colors.secondaryTextColor}
               />
             ))}
           </SimpleGrid>
         </VStack>
       </VStack>
+    </>
+  )
+}
+
+type SponsorLogoProps = {
+  sponsor: ImpactFundDetails['liveSponsors'][number]
+  imageMaxHeight: string
+}
+
+function SponsorLogo({ sponsor, imageMaxHeight }: SponsorLogoProps): JSX.Element {
+  const content = (
+    <Box w="full" h={imageMaxHeight} display="flex" alignItems="center" justifyContent="center">
+      {sponsor.image && (
+        <Image
+          src={sponsor.image}
+          alt={sponsor.name}
+          maxW="full"
+          maxH={imageMaxHeight}
+          objectFit="contain"
+          transition="transform 0.2s"
+          _hover={{ transform: 'scale(1.03)' }}
+        />
+      )}
+    </Box>
+  )
+
+  if (!sponsor.url) {
+    return content
+  }
+
+  return (
+    <ChakraLink href={sponsor.url} isExternal _hover={{ textDecoration: 'none' }}>
+      {content}
+    </ChakraLink>
+  )
+}
+
+type SponsorTierListProps = {
+  title: string
+  sponsors: ImpactFundDetails['liveSponsors']
+  imageMaxHeight: string
+  secondaryTextColor: string
+}
+
+function SponsorTierList({
+  title,
+  sponsors,
+  imageMaxHeight,
+  secondaryTextColor,
+}: SponsorTierListProps): JSX.Element | null {
+  if (sponsors.length === 0) {
+    return null
+  }
+
+  return (
+    <VStack align="stretch" spacing={5}>
+      <H2 size="lg" color={secondaryTextColor}>
+        {t(title)}
+      </H2>
+      <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing={6}>
+        {sponsors.map((sponsor) => (
+          <Box key={sponsor.id}>
+            <SponsorLogo sponsor={sponsor} imageMaxHeight={imageMaxHeight} />
+          </Box>
+        ))}
+      </SimpleGrid>
+    </VStack>
+  )
+}
+
+type ImpactFundSponsorsSectionProps = {
+  impactFund: ImpactFundDetails
+  onBecomeSponsor: () => void
+  colors: ImpactFundThemeColors
+}
+
+function ImpactFundSponsorsSection({
+  impactFund,
+  onBecomeSponsor,
+  colors,
+}: ImpactFundSponsorsSectionProps): JSX.Element {
+  const foundingSponsors = impactFund.liveSponsors.filter((sponsor) => sponsor.tier === ImpactFundSponsorTier.Tier1)
+  const supportingSponsors = impactFund.liveSponsors.filter((sponsor) => sponsor.tier === ImpactFundSponsorTier.Tier2)
+  const hasAnyLiveSponsors = foundingSponsors.length > 0 || supportingSponsors.length > 0
+
+  return (
+    <VStack align="stretch" spacing={8}>
+      <VStack align="stretch" spacing={1}>
+        <Flex justify="space-between" align="center" gap={3}>
+          <H2 size="2xl" bold>
+            {t('Sponsors')}
+          </H2>
+          <Button
+            display={{ base: 'none', md: 'inline-flex' }}
+            size="lg"
+            variant="outline"
+            colorScheme="primary1"
+            onClick={onBecomeSponsor}
+            fontSize="lg"
+            fontWeight="semibold"
+            px={8}
+          >
+            {t('Become a Sponsor')}
+          </Button>
+        </Flex>
+        <Body size="sm" color={colors.secondaryTextColor}>
+          {t('Sponsors have made significant contributions to the fund and are part of the allocation commitee.')}
+        </Body>
+        <Button
+          display={{ base: 'flex', md: 'none' }}
+          size="lg"
+          variant="outline"
+          colorScheme="primary1"
+          onClick={onBecomeSponsor}
+          w="full"
+          mt={2}
+          fontSize="lg"
+          fontWeight="semibold"
+        >
+          {t('Become a Sponsor')}
+        </Button>
+      </VStack>
+
+      <VStack align="stretch" spacing={10}>
+        {hasAnyLiveSponsors ? (
+          <VStack align="stretch" spacing={8}>
+            <SponsorTierList
+              title="Founding Sponsors"
+              sponsors={foundingSponsors}
+              imageMaxHeight="80px"
+              secondaryTextColor={colors.secondaryTextColor}
+            />
+            <SponsorTierList
+              title="Supporting Sponsors"
+              sponsors={supportingSponsors}
+              imageMaxHeight="64px"
+              secondaryTextColor={colors.secondaryTextColor}
+            />
+          </VStack>
+        ) : (
+          <Box p={6} bg={colors.mutedBg} borderRadius="lg">
+            <Body color={colors.subtleTextColor}>{t('No active sponsors at the moment')}</Body>
+          </Box>
+        )}
+
+        {impactFund.archivedSponsors.length > 0 && (
+          <VStack align="stretch" spacing={5}>
+            <H2 size="lg" color={colors.secondaryTextColor}>
+              {t('Past')}
+            </H2>
+            <Wrap spacing={4}>
+              {impactFund.archivedSponsors.map((sponsor) => (
+                <WrapItem key={sponsor.id}>
+                  <Box
+                    px={4}
+                    py={2}
+                    bg={colors.archivedBadgeBg}
+                    borderRadius="md"
+                    borderWidth="1px"
+                    borderColor={colors.archivedBadgeBorderColor}
+                  >
+                    <Body size="sm" color={colors.secondaryTextColor} fontWeight="medium">
+                      {sponsor.name}
+                    </Body>
+                  </Box>
+                </WrapItem>
+              ))}
+            </Wrap>
+          </VStack>
+        )}
+      </VStack>
+    </VStack>
+  )
+}
+
+type CommunitySupportersSectionProps = {
+  showSection: boolean
+  donateProjectName?: string
+  communitySupporters: CommunitySupporter[]
+  communitySupportersLoading: boolean
+  communitySupportersError: boolean
+  colors: ImpactFundThemeColors
+}
+
+function CommunitySupportersSection({
+  showSection,
+  donateProjectName,
+  communitySupporters,
+  communitySupportersLoading,
+  communitySupportersError,
+  colors,
+}: CommunitySupportersSectionProps): JSX.Element | null {
+  if (!showSection) {
+    return null
+  }
+
+  let supportersContent: JSX.Element
+
+  if (communitySupportersLoading) {
+    supportersContent = (
+      <VStack py={6}>
+        <Spinner />
+      </VStack>
+    )
+  } else if (communitySupportersError) {
+    supportersContent = (
+      <Box p={6} bg={colors.mutedBg} borderRadius="lg">
+        <Body color={colors.subtleTextColor}>{t('Failed to load community supporters.')}</Body>
+      </Box>
+    )
+  } else if (communitySupporters.length > 0) {
+    supportersContent = (
+      <Wrap spacing={4}>
+        {communitySupporters.map((supporter) => (
+          <WrapItem key={supporter.id}>
+            <Avatar
+              size="md"
+              src={supporter.imageUrl || undefined}
+              name={supporter.username}
+              title={supporter.username}
+              bg={colors.mutedBg}
+            />
+          </WrapItem>
+        ))}
+      </Wrap>
+    )
+  } else {
+    supportersContent = (
+      <Box p={6} bg={colors.mutedBg} borderRadius="lg">
+        <Body color={colors.subtleTextColor}>{t('No community supporters yet.')}</Body>
+      </Box>
+    )
+  }
+
+  return (
+    <VStack align="stretch" spacing={6}>
+      <VStack align="stretch" spacing={1}>
+        <Flex justify="space-between" align="center" gap={3}>
+          <H2 size="2xl" bold>
+            {t('Community Supporters')}
+          </H2>
+          {donateProjectName && (
+            <Button
+              as={Link}
+              to={getPath('fundingStart', donateProjectName)}
+              display={{ base: 'none', md: 'inline-flex' }}
+              size="lg"
+              colorScheme="primary1"
+              fontSize="lg"
+              fontWeight="semibold"
+              px={8}
+            >
+              {t('Donate to this Impact Fund')}
+            </Button>
+          )}
+        </Flex>
+        <Body size="sm" color={colors.secondaryTextColor}>
+          {t('Individuals that have donated to this impact fund.')}
+        </Body>
+        {donateProjectName && (
+          <Button
+            as={Link}
+            to={getPath('fundingStart', donateProjectName)}
+            display={{ base: 'flex', md: 'none' }}
+            size="lg"
+            colorScheme="primary1"
+            w="full"
+            mt={2}
+            fontSize="lg"
+            fontWeight="semibold"
+          >
+            {t('Donate to this Impact Fund')}
+          </Button>
+        )}
+      </VStack>
+      {supportersContent}
+    </VStack>
+  )
+}
+
+function ImpactFundFaqSection({
+  primaryTextColor,
+  secondaryTextColor,
+  borderColor,
+}: {
+  primaryTextColor: string
+  secondaryTextColor: string
+  borderColor: string
+}): JSX.Element {
+  return (
+    <VStack align="stretch" spacing={4}>
+      <H2 size="xl" bold>
+        {t('FAQ')}
+      </H2>
+      <Accordion allowToggle>
+        {faqItems.map((item) => (
+          <AccordionItem key={item.question} borderColor={borderColor}>
+            <h3>
+              <AccordionButton py={4}>
+                <Box as="span" flex="1" textAlign="left">
+                  <Body bold color={primaryTextColor}>
+                    {t(item.question)}
+                  </Body>
+                </Box>
+                <AccordionIcon />
+              </AccordionButton>
+            </h3>
+            <AccordionPanel pb={4}>
+              <Body size="sm" color={secondaryTextColor}>
+                {t(item.answer)}
+              </Body>
+            </AccordionPanel>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </VStack>
+  )
+}
+
+type SponsorInquiryModalProps = {
+  isOpen: boolean
+  onClose: () => void
+  primaryTextColor: string
+  secondaryTextColor: string
+  tertiaryTextColor: string
+  highlightedSurfaceBg: string
+  highlightedSurfaceBorderColor: string
+}
+
+function SponsorInquiryModal({
+  isOpen,
+  onClose,
+  primaryTextColor,
+  secondaryTextColor,
+  tertiaryTextColor,
+  highlightedSurfaceBg,
+  highlightedSurfaceBorderColor,
+}: SponsorInquiryModalProps): JSX.Element {
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} size="md">
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>{t('Become a Sponsor')}</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+          <VStack align="stretch" spacing={5}>
+            <Body color={secondaryTextColor}>
+              {t(
+                'Thank you for your interest in sponsoring this fund! We would love to discuss partnership opportunities with you.',
+              )}
+            </Body>
+
+            <Box
+              p={5}
+              bg={highlightedSurfaceBg}
+              borderRadius="lg"
+              borderWidth="1px"
+              borderColor={highlightedSurfaceBorderColor}
+            >
+              <VStack align="stretch" spacing={3}>
+                <Body fontWeight="semibold" color={primaryTextColor}>
+                  {t('Schedule a call with us')}
+                </Body>
+                <Body size="sm" color={secondaryTextColor}>
+                  {t(
+                    'Book a time to speak with our team about sponsorship benefits, visibility opportunities, and how we can work together to support impactful projects.',
+                  )}
+                </Body>
+                <Button
+                  as={ChakraLink}
+                  href="https://cal.com/metamick/thirtymin?overlayCalendar=true"
+                  isExternal
+                  colorScheme="primary1"
+                  size="md"
+                  mt={2}
+                >
+                  {t('Schedule Call')}
+                </Button>
+              </VStack>
+            </Box>
+
+            <Body size="sm" color={tertiaryTextColor}>
+              {t('You can also reach out to us directly at')} <strong>hello@geyser.fund</strong>
+            </Body>
+          </VStack>
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="ghost" onClick={onClose}>
+            {t('Close')}
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  )
+}
+
+type ApplicationSubmissionModalProps = {
+  isOpen: boolean
+  onClose: () => void
+  ownedProjects: OwnedProject[]
+  selectedProjectId: string
+  onSelectedProjectIdChange: (projectId: string) => void
+  applying: boolean
+  onSubmitApplication: () => Promise<void>
+  primaryTextColor: string
+  secondaryTextColor: string
+  highlightedSurfaceBg: string
+  highlightedSurfaceBorderColor: string
+}
+
+function ApplicationSubmissionModal({
+  isOpen,
+  onClose,
+  ownedProjects,
+  selectedProjectId,
+  onSelectedProjectIdChange,
+  applying,
+  onSubmitApplication,
+  primaryTextColor,
+  secondaryTextColor,
+  highlightedSurfaceBg,
+  highlightedSurfaceBorderColor,
+}: ApplicationSubmissionModalProps): JSX.Element {
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>{t('Submit your application')}</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+          <VStack align="stretch" spacing={5}>
+            <Body color={secondaryTextColor}>
+              {t('You must submit your Geyser project as the application. Your project should include')}:
+            </Body>
+
+            <UnorderedList spacing={3} ml={4} color={secondaryTextColor}>
+              <ListItem>
+                <Body size="sm" color={secondaryTextColor}>
+                  {t('A clear description of your project vision and goals')}
+                </Body>
+              </ListItem>
+              <ListItem>
+                <Body size="sm" color={secondaryTextColor}>
+                  {t('The intended impact and how it aligns with the fund')}
+                </Body>
+              </ListItem>
+              <ListItem>
+                <Body size="sm" color={secondaryTextColor}>
+                  {t('Examples of past work or relevant experience')}
+                </Body>
+              </ListItem>
+            </UnorderedList>
+
+            {ownedProjects.length > 0 ? (
+              <VStack align="stretch" spacing={3}>
+                <Body fontWeight="semibold" color={primaryTextColor}>
+                  {t('Select your project')}:
+                </Body>
+                <Select
+                  value={selectedProjectId}
+                  onChange={(event) => onSelectedProjectIdChange(event.target.value)}
+                  size="lg"
+                >
+                  {ownedProjects.map((project) => (
+                    <option key={String(project.id)} value={String(project.id)}>
+                      {project.title}
+                    </option>
+                  ))}
+                </Select>
+              </VStack>
+            ) : (
+              <Box
+                p={6}
+                bg={highlightedSurfaceBg}
+                borderRadius="lg"
+                borderWidth="1px"
+                borderColor={highlightedSurfaceBorderColor}
+                textAlign="center"
+              >
+                <VStack spacing={4}>
+                  <Body color={secondaryTextColor}>
+                    {t("You don't have any projects yet. Create a project to apply for funding.")}
+                  </Body>
+                  <Button as={Link} to={getPath('launchStart')} colorScheme="primary1" size="md" onClick={onClose}>
+                    {t('Create a Project')}
+                  </Button>
+                </VStack>
+              </Box>
+            )}
+          </VStack>
+        </ModalBody>
+        <ModalFooter>
+          {ownedProjects.length > 0 && (
+            <Button w="full" colorScheme="primary1" isLoading={applying} onClick={onSubmitApplication} size="lg">
+              {t('Submit Application')}
+            </Button>
+          )}
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  )
+}
+
+function ImpactFundDetailContent({
+  impactFund,
+  fundedApplications,
+  applicationsLoading,
+  applicationsError,
+  hasMoreFundedApplications,
+  isLoadingMoreApplications,
+  onLoadMoreApplications,
+  communitySupporters,
+  communitySupportersLoading,
+  communitySupportersError,
+  onApplyClick,
+  ownedProjects,
+  selectedProjectId,
+  onSelectedProjectIdChange,
+  isProjectModalOpen,
+  onProjectModalClose,
+  applying,
+  onSubmitApplication,
+}: ImpactFundDetailContentProps): JSX.Element {
+  const sponsorModal = useDisclosure()
+  const usdRate = useAtomValue(usdRateAtom)
+  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
+  const colors = useImpactFundThemeColors()
+  const committedAmountDisplay = getCommittedAmountDisplay({
+    amountCommitted: impactFund.amountCommitted,
+    amountCommittedCurrency: impactFund.amountCommittedCurrency,
+    usdRate,
+    getUSDAmount,
+    getSatoshisFromUSDCents,
+  })
+
+  return (
+    <VStack align="stretch" spacing={14}>
+      <Head
+        title={impactFund.title}
+        description={impactFund.subtitle || undefined}
+        image={impactFund.heroImage || undefined}
+      />
+
+      <ImpactFundOverviewSection
+        impactFund={impactFund}
+        committedAmountDisplay={committedAmountDisplay}
+        onApplyClick={onApplyClick}
+        colors={colors}
+      />
+
+      <ImpactFundInformationSection colors={colors} />
 
       <VStack align="stretch" spacing={6}>
         <H2 size="xl" bold>
@@ -949,209 +1617,76 @@ function ImpactFundDetailContent({
           hasMoreFundedApplications={hasMoreFundedApplications}
           isLoadingMoreApplications={isLoadingMoreApplications}
           onLoadMoreApplications={onLoadMoreApplications}
-          surfaceBg={surfaceBg}
-          mutedBg={mutedBg}
-          emphasisTextColor={emphasisTextColor}
-          secondaryTextColor={secondaryTextColor}
-          subtleTextColor={subtleTextColor}
-          tertiaryTextColor={tertiaryTextColor}
+          cardBg={colors.cardBg}
+          mutedBg={colors.mutedBg}
+          emphasisTextColor={colors.emphasisTextColor}
+          secondaryTextColor={colors.secondaryTextColor}
+          subtleTextColor={colors.subtleTextColor}
+          tertiaryTextColor={colors.tertiaryTextColor}
         />
       </VStack>
 
-      <VStack align="stretch" spacing={8}>
-        <H2 size="xl" bold>
-          {t('Sponsors')}
-        </H2>
+      <ImpactFundSponsorsSection impactFund={impactFund} onBecomeSponsor={sponsorModal.onOpen} colors={colors} />
 
-        <VStack align="stretch" spacing={10}>
-          {impactFund.liveSponsors.length > 0 ? (
-            <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing={6}>
-              {impactFund.liveSponsors.map((sponsor) => (
-                <Box key={sponsor.id}>
-                  {sponsor.url ? (
-                    <ChakraLink href={sponsor.url} isExternal _hover={{ textDecoration: 'none' }}>
-                      <Box
-                        p={5}
-                        bg={surfaceBg}
-                        borderRadius="lg"
-                        transition="all 0.3s"
-                        _hover={{
-                          transform: 'translateY(-4px)',
-                          shadow: 'lg',
-                        }}
-                        cursor="pointer"
-                        height="full"
-                      >
-                        {sponsor.image && (
-                          <Box w="full" h="80px" display="flex" alignItems="center" justifyContent="center">
-                            <Image src={sponsor.image} alt={sponsor.name} maxW="full" maxH="80px" objectFit="contain" />
-                          </Box>
-                        )}
-                      </Box>
-                    </ChakraLink>
-                  ) : (
-                    <Box p={5} bg={surfaceBg} borderRadius="lg" height="full">
-                      {sponsor.image && (
-                        <Box w="full" h="80px" display="flex" alignItems="center" justifyContent="center">
-                          <Image src={sponsor.image} alt={sponsor.name} maxW="full" maxH="80px" objectFit="contain" />
-                        </Box>
-                      )}
-                    </Box>
-                  )}
-                </Box>
-              ))}
-            </SimpleGrid>
-          ) : (
-            <Box p={6} bg={mutedBg} borderRadius="lg">
-              <Body color={subtleTextColor}>{t('No active sponsors at the moment')}</Body>
-            </Box>
-          )}
-
-          {impactFund.archivedSponsors.length > 0 && (
-            <VStack align="stretch" spacing={5}>
-              <H2 size="lg" color={secondaryTextColor}>
-                {t('Past')}
-              </H2>
-              <Wrap spacing={4}>
-                {impactFund.archivedSponsors.map((sponsor) => (
-                  <WrapItem key={sponsor.id}>
-                    <Box
-                      px={4}
-                      py={2}
-                      bg={archivedBadgeBg}
-                      borderRadius="md"
-                      borderWidth="1px"
-                      borderColor={archivedBadgeBorderColor}
-                    >
-                      <Body size="sm" color={secondaryTextColor} fontWeight="medium">
-                        {sponsor.name}
-                      </Body>
-                    </Box>
-                  </WrapItem>
-                ))}
-              </Wrap>
-            </VStack>
-          )}
-        </VStack>
-      </VStack>
-
-      <DonationSponsorCTA
-        title={t('Support this fund')}
-        description={t(
-          'This fund is open for donations. Support impactful projects by donating or becoming a sponsor.',
-        )}
-        donateProjectName={impactFund.donateProject?.name}
+      <CommunitySupportersSection
+        showSection={Boolean(impactFund.donateProjectId)}
+        donateProjectName={impactFund.donateProject?.name || undefined}
+        communitySupporters={communitySupporters}
+        communitySupportersLoading={communitySupportersLoading}
+        communitySupportersError={communitySupportersError}
+        colors={colors}
       />
 
-      <VStack align="stretch" spacing={4}>
-        <H2 size="xl" bold>
-          {t('FAQ')}
-        </H2>
-        <Accordion allowToggle>
-          {faqItems.map((item) => (
-            <AccordionItem key={item.question} borderColor={archivedBadgeBorderColor}>
-              <h3>
-                <AccordionButton py={4}>
-                  <Box as="span" flex="1" textAlign="left">
-                    <Body bold color={primaryTextColor}>
-                      {t(item.question)}
-                    </Body>
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h3>
-              <AccordionPanel pb={4}>
-                <Body size="sm" color={secondaryTextColor}>
-                  {t(item.answer)}
-                </Body>
-              </AccordionPanel>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </VStack>
+      <ImpactFundFaqSection
+        primaryTextColor={colors.primaryTextColor}
+        secondaryTextColor={colors.secondaryTextColor}
+        borderColor={colors.archivedBadgeBorderColor}
+      />
 
-      <Modal isOpen={isProjectModalOpen} onClose={onProjectModalClose} size="lg">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{t('Submit your application')}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <VStack align="stretch" spacing={5}>
-              <Body color={secondaryTextColor}>
-                {t('You must submit your Geyser project as the application. Your project should include')}:
-              </Body>
+      <Box
+        p={8}
+        bg={colors.highlightedSurfaceBg}
+        border="1px solid"
+        borderColor={colors.highlightedSurfaceBorderColor}
+        borderRadius="xl"
+        textAlign="center"
+      >
+        <VStack spacing={4}>
+          <H2 size="2xl" bold color={colors.primaryTextColor}>
+            {t('Ready to make an impact?')}
+          </H2>
+          <Body size="md" color={colors.secondaryTextColor} maxW="480px">
+            {t('Submit your project application and join the growing community of Bitcoin-funded initiatives.')}
+          </Body>
+          <Button size="lg" colorScheme="primary1" onClick={onApplyClick} px={10} fontWeight="semibold" fontSize="lg">
+            {t('Apply for funding')}
+          </Button>
+        </VStack>
+      </Box>
 
-              <UnorderedList spacing={3} ml={4} color={secondaryTextColor}>
-                <ListItem>
-                  <Body size="sm" color={secondaryTextColor}>
-                    {t('A clear description of your project vision and goals')}
-                  </Body>
-                </ListItem>
-                <ListItem>
-                  <Body size="sm" color={secondaryTextColor}>
-                    {t('The intended impact and how it aligns with the fund')}
-                  </Body>
-                </ListItem>
-                <ListItem>
-                  <Body size="sm" color={secondaryTextColor}>
-                    {t('Examples of past work or relevant experience')}
-                  </Body>
-                </ListItem>
-              </UnorderedList>
+      <SponsorInquiryModal
+        isOpen={sponsorModal.isOpen}
+        onClose={sponsorModal.onClose}
+        primaryTextColor={colors.primaryTextColor}
+        secondaryTextColor={colors.secondaryTextColor}
+        tertiaryTextColor={colors.tertiaryTextColor}
+        highlightedSurfaceBg={colors.highlightedSurfaceBg}
+        highlightedSurfaceBorderColor={colors.highlightedSurfaceBorderColor}
+      />
 
-              {ownedProjects.length > 0 ? (
-                <VStack align="stretch" spacing={3}>
-                  <Body fontWeight="semibold" color={primaryTextColor}>
-                    {t('Select your project')}:
-                  </Body>
-                  <Select
-                    value={selectedProjectId}
-                    onChange={(event) => onSelectedProjectIdChange(event.target.value)}
-                    size="lg"
-                  >
-                    {ownedProjects.map((project) => (
-                      <option key={String(project.id)} value={String(project.id)}>
-                        {project.title}
-                      </option>
-                    ))}
-                  </Select>
-                </VStack>
-              ) : (
-                <Box
-                  p={6}
-                  bg={highlightedSurfaceBg}
-                  borderRadius="lg"
-                  borderWidth="1px"
-                  borderColor={highlightedSurfaceBorderColor}
-                  textAlign="center"
-                >
-                  <VStack spacing={4}>
-                    <Body color={secondaryTextColor}>
-                      {t("You don't have any projects yet. Create a project to apply for funding.")}
-                    </Body>
-                    <Button
-                      as={Link}
-                      to={getPath('launchStart')}
-                      colorScheme="primary1"
-                      size="md"
-                      onClick={onProjectModalClose}
-                    >
-                      {t('Create a Project')}
-                    </Button>
-                  </VStack>
-                </Box>
-              )}
-            </VStack>
-          </ModalBody>
-          <ModalFooter>
-            {ownedProjects.length > 0 && (
-              <Button w="full" colorScheme="primary1" isLoading={applying} onClick={onSubmitApplication} size="lg">
-                {t('Submit Application')}
-              </Button>
-            )}
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <ApplicationSubmissionModal
+        isOpen={isProjectModalOpen}
+        onClose={onProjectModalClose}
+        ownedProjects={ownedProjects}
+        selectedProjectId={selectedProjectId}
+        onSelectedProjectIdChange={onSelectedProjectIdChange}
+        applying={applying}
+        onSubmitApplication={onSubmitApplication}
+        primaryTextColor={colors.primaryTextColor}
+        secondaryTextColor={colors.secondaryTextColor}
+        highlightedSurfaceBg={colors.highlightedSurfaceBg}
+        highlightedSurfaceBorderColor={colors.highlightedSurfaceBorderColor}
+      />
     </VStack>
   )
 }

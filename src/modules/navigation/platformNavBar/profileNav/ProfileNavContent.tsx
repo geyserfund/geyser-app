@@ -6,6 +6,7 @@ import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
+import { NavigationNewBadge } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
 import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { FAQUrl, getPath, GeyserHackathonsUrl, GeyserSubscribeUrl } from '@/shared/constants/index.ts'
@@ -46,7 +47,10 @@ export const ProfileNavContent = () => {
               <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)}>
                 <HStack position="relative">
                   <discoveryNav.icon fontSize="18px" />
-                  <Body size="md">{t(discoveryNav.label)}</Body>
+                  <Box position="relative" display="inline-flex" alignItems="center">
+                    <Body size="md">{t(discoveryNav.label)}</Body>
+                    {discoveryNav.new && <NavigationNewBadge position="absolute" top={-2} right={-8} />}
+                  </Box>
                   {activityDot ? (
                     <Box
                       position="absolute"

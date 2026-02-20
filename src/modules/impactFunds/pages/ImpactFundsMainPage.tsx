@@ -1,16 +1,28 @@
-import { Box, Button, HStack, Icon, LinkBox, LinkOverlay, SimpleGrid, Spinner, VStack } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Icon,
+  LinkBox,
+  LinkOverlay,
+  SimpleGrid,
+  Spinner,
+  useColorModeValue,
+  VStack,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { PiHouse } from 'react-icons/pi'
+import { PiCoinsDuotone, PiHouse, PiRocketLaunchDuotone } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useBTCConverter } from '@/helpers'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
-import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
+import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import { useImpactFundsQuery } from '@/types'
 import { getShortAmountLabel } from '@/utils'
 
@@ -71,7 +83,14 @@ export const ImpactFundsMainPage = () => {
   const { data, loading, error } = useImpactFundsQuery()
   const usdRate = useAtomValue(usdRateAtom)
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
-  const pageSpacing = { base: 10, lg: 12 }
+  const pageSpacing = { base: 6, lg: 8 }
+  const statMutedBg = useColorModeValue('neutral1.2', 'neutral1.2')
+  const statMetricHoverBg = useColorModeValue('neutral1.3', 'neutral1.4')
+  const statIconBg = useColorModeValue('primary1.100', 'primary1.900')
+  const statIconColor = useColorModeValue('primary1.600', 'primary1.300')
+  const statPrimaryTextColor = useColorModeValue('neutral1.11', 'neutral1.11')
+  const statSubtleColor = useColorModeValue('neutral1.8', 'neutral1.10')
+  const statTertiaryColor = useColorModeValue('neutral1.7', 'neutral1.9')
 
   // Hardcoded Geyser Impact Fund project ID
   const geyserImpactFundProjectId = '1'
@@ -104,6 +123,8 @@ export const ImpactFundsMainPage = () => {
   const impactFunds = data?.impactFunds || []
   const totalDistributedSats = impactFunds.reduce((total, fund) => total + (fund.metrics.awardedTotalSats || 0), 0)
   const totalProjectsFunded = impactFunds.reduce((total, fund) => total + (fund.metrics.projectsFundedCount || 0), 0)
+  const totalDistributedUsd =
+    usdRate > 0 ? usdFormatter.format(getUSDAmount(totalDistributedSats as Parameters<typeof getUSDAmount>[0])) : null
 
   return (
     <VStack align="stretch" spacing={pageSpacing} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
@@ -134,35 +155,98 @@ export const ImpactFundsMainPage = () => {
         <ImpactFlowStrip />
       </VStack>
 
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+        <Box
+          p={6}
+          bg={statMutedBg}
+          borderRadius="lg"
+          transition="all 0.3s"
+          _hover={{ bg: statMetricHoverBg, transform: 'translateY(-2px)' }}
+        >
+          <HStack spacing={4}>
+            <Flex
+              w="48px"
+              h="48px"
+              flexShrink={0}
+              borderRadius="lg"
+              alignItems="center"
+              justifyContent="center"
+              bg={statIconBg}
+            >
+              <Icon as={PiCoinsDuotone} boxSize={6} color={statIconColor} />
+            </Flex>
+            <VStack align="start" spacing={0}>
+              <HStack spacing={2} align="baseline">
+                <H2 size="xl" bold lineHeight={1.2} color={statPrimaryTextColor}>
+                  {`${numberFormatter.format(totalDistributedSats)} sats`}
+                </H2>
+                {totalDistributedUsd && (
+                  <Body size="xs" color={statTertiaryColor}>
+                    {totalDistributedUsd}
+                  </Body>
+                )}
+              </HStack>
+              <Body
+                size="xs"
+                fontSize={{ base: '10px', md: '12px' }}
+                color={statSubtleColor}
+                textTransform="uppercase"
+                letterSpacing="wide"
+                fontWeight="medium"
+                noOfLines={1}
+                whiteSpace="nowrap"
+              >
+                {t('Total distributed')}
+              </Body>
+            </VStack>
+          </HStack>
+        </Box>
+        <Box
+          p={6}
+          bg={statMutedBg}
+          borderRadius="lg"
+          transition="all 0.3s"
+          _hover={{ bg: statMetricHoverBg, transform: 'translateY(-2px)' }}
+        >
+          <HStack spacing={4}>
+            <Flex
+              w="48px"
+              h="48px"
+              flexShrink={0}
+              borderRadius="lg"
+              alignItems="center"
+              justifyContent="center"
+              bg={statIconBg}
+            >
+              <Icon as={PiRocketLaunchDuotone} boxSize={6} color={statIconColor} />
+            </Flex>
+            <VStack align="start" spacing={0}>
+              <H2 size="xl" bold lineHeight={1.2} color={statPrimaryTextColor}>
+                {numberFormatter.format(totalProjectsFunded)}
+              </H2>
+              <Body
+                size="xs"
+                fontSize={{ base: '10px', md: '12px' }}
+                color={statSubtleColor}
+                textTransform="uppercase"
+                letterSpacing="wide"
+                fontWeight="medium"
+                noOfLines={1}
+                whiteSpace="nowrap"
+              >
+                {t('Total funded projects')}
+              </Body>
+            </VStack>
+          </HStack>
+        </Box>
+      </SimpleGrid>
+
       {/* Donation & Sponsor Section */}
       <DonationSponsorCTA
         title={t('Support Impact Funds')}
         description={t('Help us fund more impactful projects by donating to the fund or becoming a sponsor.')}
         donateProjectName={geyserImpactFundProjectId}
       />
-
-      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-        <CardLayout dense borderRadius="12px" border="1px solid" borderColor="neutral1.6">
-          <VStack align="start" spacing={1}>
-            <Body size="xs" color="neutral1.8" textTransform="uppercase" letterSpacing="wide" fontWeight="medium">
-              {t('Total distributed')}
-            </Body>
-            <H2 size="lg" bold>
-              {`${numberFormatter.format(totalDistributedSats)} sats`}
-            </H2>
-          </VStack>
-        </CardLayout>
-        <CardLayout dense borderRadius="12px" border="1px solid" borderColor="neutral1.6">
-          <VStack align="start" spacing={1}>
-            <Body size="xs" color="neutral1.8" textTransform="uppercase" letterSpacing="wide" fontWeight="medium">
-              {t('Total funded projects')}
-            </Body>
-            <H2 size="lg" bold>
-              {numberFormatter.format(totalProjectsFunded)}
-            </H2>
-          </VStack>
-        </CardLayout>
-      </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
         {impactFunds.map((fund) => {

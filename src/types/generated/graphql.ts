@@ -1217,16 +1217,25 @@ export type ImpactFundApplication = {
   amountAwardedInSats?: Maybe<Scalars['Int']['output']>;
   awardedAt?: Maybe<Scalars['Date']['output']>;
   contributionUuid?: Maybe<Scalars['String']['output']>;
+  fundingModel: ImpactFundApplicationFundingModel;
   id: Scalars['BigInt']['output'];
   impactFundId: Scalars['BigInt']['output'];
   project: Project;
   status: ImpactFundApplicationStatus;
 };
 
+export enum ImpactFundApplicationFundingModel {
+  AonCofunding = 'AON_COFUNDING',
+  DirectGrant = 'DIRECT_GRANT',
+  Matching = 'MATCHING'
+}
+
 export enum ImpactFundApplicationStatus {
   Accepted = 'ACCEPTED',
   Canceled = 'CANCELED',
   Funded = 'FUNDED',
+  InReview = 'IN_REVIEW',
+  Ongoing = 'ONGOING',
   Pending = 'PENDING',
   Rejected = 'REJECTED'
 }
@@ -1270,12 +1279,18 @@ export type ImpactFundSponsor = {
   impactFundId: Scalars['BigInt']['output'];
   name: Scalars['String']['output'];
   status: ImpactFundSponsorStatus;
+  tier: ImpactFundSponsorTier;
   url?: Maybe<Scalars['String']['output']>;
 };
 
 export enum ImpactFundSponsorStatus {
   Archived = 'ARCHIVED',
   Live = 'LIVE'
+}
+
+export enum ImpactFundSponsorTier {
+  Tier1 = 'TIER_1',
+  Tier2 = 'TIER_2'
 }
 
 export enum ImpactFundStatus {
@@ -5494,6 +5509,7 @@ export type ResolversTypes = {
   HeroStats: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['HeroStats']>;
   ImpactFund: ResolverTypeWrapper<Omit<ImpactFund, 'applications' | 'donateProject' | 'fundedApplications'> & { applications: Array<ResolversTypes['ImpactFundApplication']>, donateProject?: Maybe<ResolversTypes['Project']>, fundedApplications: Array<ResolversTypes['ImpactFundApplication']> }>;
   ImpactFundApplication: ResolverTypeWrapper<Omit<ImpactFundApplication, 'project'> & { project: ResolversTypes['Project'] }>;
+  ImpactFundApplicationFundingModel: ImpactFundApplicationFundingModel;
   ImpactFundApplicationStatus: ImpactFundApplicationStatus;
   ImpactFundApplicationsInput: ImpactFundApplicationsInput;
   ImpactFundApplyInput: ImpactFundApplyInput;
@@ -5502,6 +5518,7 @@ export type ResolversTypes = {
   ImpactFundMetrics: ResolverTypeWrapper<ImpactFundMetrics>;
   ImpactFundSponsor: ResolverTypeWrapper<ImpactFundSponsor>;
   ImpactFundSponsorStatus: ImpactFundSponsorStatus;
+  ImpactFundSponsorTier: ImpactFundSponsorTier;
   ImpactFundStatus: ImpactFundStatus;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   LeaderboardGlobalAmbassadorsGetInput: LeaderboardGlobalAmbassadorsGetInput;
@@ -6915,6 +6932,7 @@ export type ImpactFundApplicationResolvers<ContextType = any, ParentType extends
   amountAwardedInSats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   awardedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
   contributionUuid?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  fundingModel?: Resolver<ResolversTypes['ImpactFundApplicationFundingModel'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   impactFundId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
@@ -6935,6 +6953,7 @@ export type ImpactFundSponsorResolvers<ContextType = any, ParentType extends Res
   impactFundId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ImpactFundSponsorStatus'], ParentType, ContextType>;
+  tier?: Resolver<ResolversTypes['ImpactFundSponsorTier'], ParentType, ContextType>;
   url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -9290,14 +9309,14 @@ export type ImpactFundQueryVariables = Exact<{
 }>;
 
 
-export type ImpactFundQuery = { __typename?: 'Query', impactFund: { __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, description?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, status: ImpactFundSponsorStatus }>, archivedSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, status: ImpactFundSponsorStatus }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } } };
+export type ImpactFundQuery = { __typename?: 'Query', impactFund: { __typename?: 'ImpactFund', id: any, name: string, tags: Array<string>, title: string, subtitle?: string | null, description?: string | null, heroImage?: string | null, amountCommitted?: number | null, amountCommittedCurrency: ImpactFundAmountCommittedCurrency, donateProjectId?: any | null, status: ImpactFundStatus, donateProject?: { __typename?: 'Project', id: any, name: string } | null, liveSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, archivedSponsors: Array<{ __typename?: 'ImpactFundSponsor', id: any, name: string, image?: string | null, url?: string | null, amountContributedInSats: number, tier: ImpactFundSponsorTier, status: ImpactFundSponsorStatus }>, metrics: { __typename?: 'ImpactFundMetrics', awardedTotalSats: number, projectsFundedCount: number } } };
 
 export type ImpactFundApplicationsQueryVariables = Exact<{
   input: ImpactFundApplicationsInput;
 }>;
 
 
-export type ImpactFundApplicationsQuery = { __typename?: 'Query', impactFundApplications: { __typename?: 'ImpactFundApplicationsGetResponse', totalCount: number, applications: Array<{ __typename?: 'ImpactFundApplication', id: any, amountAwardedInSats?: number | null, awardedAt?: any | null, contributionUuid?: string | null, status: ImpactFundApplicationStatus, project: { __typename?: 'Project', id: any, title: string, thumbnailImage?: string | null, shortDescription?: string | null } }> } };
+export type ImpactFundApplicationsQuery = { __typename?: 'Query', impactFundApplications: { __typename?: 'ImpactFundApplicationsGetResponse', totalCount: number, applications: Array<{ __typename?: 'ImpactFundApplication', id: any, amountAwardedInSats?: number | null, awardedAt?: any | null, contributionUuid?: string | null, status: ImpactFundApplicationStatus, fundingModel: ImpactFundApplicationFundingModel, project: { __typename?: 'Project', id: any, name: string, title: string, thumbnailImage?: string | null, shortDescription?: string | null } }> } };
 
 export type ImpactFundApplyMutationVariables = Exact<{
   input: ImpactFundApplyInput;
@@ -15378,6 +15397,7 @@ export const ImpactFundDocument = gql`
       image
       url
       amountContributedInSats
+      tier
       status
     }
     archivedSponsors {
@@ -15386,6 +15406,7 @@ export const ImpactFundDocument = gql`
       image
       url
       amountContributedInSats
+      tier
       status
     }
     metrics {
@@ -15438,8 +15459,10 @@ export const ImpactFundApplicationsDocument = gql`
       awardedAt
       contributionUuid
       status
+      fundingModel
       project {
         id
+        name
         title
         thumbnailImage
         shortDescription
