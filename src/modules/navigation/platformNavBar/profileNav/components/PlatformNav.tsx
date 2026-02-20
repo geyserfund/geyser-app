@@ -34,6 +34,7 @@ export const PlatformNav = () => {
         name: 'Impact Funds',
         path: '/impact-funds',
         icon: <Image src={ImpactFundsIconUrl} height={buttonDimension} width={buttonDimension} />,
+        new: true,
       },
     ] as AnimatedNavSlideItem[]
 

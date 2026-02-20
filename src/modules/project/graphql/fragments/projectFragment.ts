@@ -144,6 +144,14 @@ export const FRAGMENT_PROJECT_HEADER_SUMMARY = gql`
     followersCount
     fundersCount
     contributionsCount
+    impactFundRecipient {
+      impactFundId
+      impactFundName
+      impactFundTitle
+      fundingModel
+      amountAwardedInSats
+      awardedAt
+    }
     aonGoal {
       ...ProjectAonGoalForProjectPage
     }

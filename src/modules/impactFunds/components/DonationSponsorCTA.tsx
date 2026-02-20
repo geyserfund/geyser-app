@@ -32,9 +32,9 @@ export const DonationSponsorCTA = ({ title, description, donateProjectName }: Do
   const sponsorModal = useDisclosure()
   const highlightedSurfaceBg = useColorModeValue('primary1.50', 'primary1.700')
   const highlightedSurfaceBorderColor = useColorModeValue('primary1.200', 'primary1.600')
-  const bodyTextColor = useColorModeValue('neutral1.9', 'neutral1.7')
-  const titleTextColor = useColorModeValue('neutral1.11', 'neutral1.1')
-  const secondaryTextColor = useColorModeValue('neutral1.8', 'neutral1.6')
+  const bodyTextColor = useColorModeValue('neutral1.9', 'neutral1.9')
+  const titleTextColor = useColorModeValue('neutral1.11', 'neutral1.11')
+  const secondaryTextColor = useColorModeValue('neutral1.8', 'neutral1.9')
 
   return (
     <>

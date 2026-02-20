@@ -5,6 +5,7 @@ export const FAQUrl = 'https://guide.geyser.fund/geyser-docs/resources/faq'
 export const GeyserAboutUrl = 'https://about.geyser.fund'
 export const GeyserManifestoUrl = 'https://about.geyser.fund/manifesto'
 export const GeyserSubscribeUrl = 'https://about.geyser.fund/subscribe'
+export const GeyserHackathonsUrl = 'https://loot.fund'
 export const GeyserPrivacyUrl = 'https://about.geyser.fund/Privacy'
 export const GeyserTermsUrl = 'https://about.geyser.fund/T&C'
 // Geyser footer Links

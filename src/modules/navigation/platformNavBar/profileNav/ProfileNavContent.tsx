@@ -6,9 +6,10 @@ import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
+import { NavigationNewBadge } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
 import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { FAQUrl, getPath, GeyserSubscribeUrl } from '@/shared/constants/index.ts'
+import { FAQUrl, getPath, GeyserHackathonsUrl, GeyserSubscribeUrl } from '@/shared/constants/index.ts'
 
 import { DiscoveryNavItemKey, discoveryNavItems } from '../../discoveryNav/discoveryNavData'
 import { CreateProjectButton } from '../components/CreateProjectButton.tsx'
@@ -46,7 +47,10 @@ export const ProfileNavContent = () => {
               <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)}>
                 <HStack position="relative">
                   <discoveryNav.icon fontSize="18px" />
-                  <Body size="md">{t(discoveryNav.label)}</Body>
+                  <Box position="relative" display="inline-flex" alignItems="center">
+                    <Body size="md">{t(discoveryNav.label)}</Body>
+                    {discoveryNav.new && <NavigationNewBadge position="absolute" top={-2} right={-8} />}
+                  </Box>
                   {activityDot ? (
                     <Box
                       position="absolute"
@@ -90,6 +94,10 @@ export const ProfileNavContent = () => {
         </MenuItem>
         <MenuItem as={ChakraLink} isExternal href={GeyserSubscribeUrl} _focusVisible={{}} gap={2}>
           <Body size="md">{t('Subscribe')}</Body>
+          <PiArrowUpRight fontSize="18px" />
+        </MenuItem>
+        <MenuItem as={ChakraLink} isExternal href={GeyserHackathonsUrl} _focusVisible={{}} gap={2}>
+          <Body size="md">{t('Hackathons')}</Body>
           <PiArrowUpRight fontSize="18px" />
         </MenuItem>
       </VStack>
