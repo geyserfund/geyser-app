@@ -8,7 +8,7 @@ import { useAuthContext } from '@/context'
 import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { FAQUrl, getPath, GeyserSubscribeUrl } from '@/shared/constants/index.ts'
+import { FAQUrl, getPath, GeyserHackathonsUrl, GeyserSubscribeUrl } from '@/shared/constants/index.ts'
 
 import { DiscoveryNavItemKey, discoveryNavItems } from '../../discoveryNav/discoveryNavData'
 import { CreateProjectButton } from '../components/CreateProjectButton.tsx'
@@ -90,6 +90,10 @@ export const ProfileNavContent = () => {
         </MenuItem>
         <MenuItem as={ChakraLink} isExternal href={GeyserSubscribeUrl} _focusVisible={{}} gap={2}>
           <Body size="md">{t('Subscribe')}</Body>
+          <PiArrowUpRight fontSize="18px" />
+        </MenuItem>
+        <MenuItem as={ChakraLink} isExternal href={GeyserHackathonsUrl} _focusVisible={{}} gap={2}>
+          <Body size="md">{t('Hackathons')}</Body>
           <PiArrowUpRight fontSize="18px" />
         </MenuItem>
       </VStack>

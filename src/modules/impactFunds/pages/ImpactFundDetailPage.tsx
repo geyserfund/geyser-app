@@ -1,4 +1,9 @@
 import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
   Box,
   Button,
   Card,
@@ -26,10 +31,12 @@ import {
   WrapItem,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import { useMemo, useState } from 'react'
 import {
   PiArrowsClockwiseBold,
   PiCalendarBold,
+  PiCaretDownBold,
   PiChartBarBold,
   PiCoinsBold,
   PiCoinsDuotone,
@@ -41,10 +48,13 @@ import { Link, useNavigate, useParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useAuthContext } from '@/context'
+import { useBTCConverter } from '@/helpers'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
+import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
+import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import {
   ImpactFundApplicationsQuery,
   ImpactFundApplicationStatus,
@@ -53,16 +63,26 @@ import {
   useImpactFundApplyMutation,
   useImpactFundQuery,
 } from '@/types'
-import { useNotification } from '@/utils'
+import { getShortAmountLabel, useNotification } from '@/utils'
 
 import { DonationSponsorCTA } from '../components/DonationSponsorCTA.tsx'
 
 const APPLICATIONS_PAGE_SIZE = 15
+const DESCRIPTION_PREVIEW_CHAR_LIMIT = 500
 const btcNumberFormatter = new Intl.NumberFormat()
+const usdNumberFormatter = new Intl.NumberFormat(undefined, {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+})
 const fundedStatus = [ImpactFundApplicationStatus.Funded]
 type ImpactFundDetails = ImpactFundQuery['impactFund']
 type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
 type OwnedProject = { id: unknown; title: string }
+
+function truncateDescription(text: string, limit: number, expanded: boolean): string {
+  return !expanded && text.length > limit ? `${text.slice(0, limit)}...` : text
+}
 
 function getQuarterFromDate(dateString: string): string {
   const date = new Date(dateString)
@@ -86,12 +106,68 @@ function hasValue<T>(value: T | null | undefined): value is T {
   return value !== null && value !== undefined
 }
 
+function getCommittedAmountDisplay({
+  amountCommitted,
+  amountCommittedCurrency,
+  usdRate,
+  getUSDAmount,
+  getSatoshisFromUSDCents,
+}: {
+  amountCommitted?: number | null
+  amountCommittedCurrency?: string
+  usdRate: number
+  getUSDAmount: ReturnType<typeof useBTCConverter>['getUSDAmount']
+  getSatoshisFromUSDCents: ReturnType<typeof useBTCConverter>['getSatoshisFromUSDCents']
+}) {
+  if (!hasValue(amountCommitted)) {
+    return null
+  }
+
+  if (amountCommittedCurrency === 'USDCENT') {
+    const primary = usdNumberFormatter.format(amountCommitted / 100)
+
+    if (usdRate <= 0) {
+      return { primary }
+    }
+
+    const convertedSats = getSatoshisFromUSDCents(amountCommitted as Parameters<typeof getSatoshisFromUSDCents>[0])
+    return {
+      primary,
+      secondary: `${getShortAmountLabel(convertedSats, true)} sats`,
+    }
+  }
+
+  const primary = `${btcNumberFormatter.format(amountCommitted)} sats`
+
+  if (usdRate <= 0) {
+    return { primary }
+  }
+
+  return {
+    primary,
+    secondary: usdNumberFormatter.format(getUSDAmount(amountCommitted as Parameters<typeof getUSDAmount>[0])),
+  }
+}
+
 const howItWorksItems = [
   {
     title: 'Annual Commitment',
-    description: 'A dedicated pool of capital is committed each year by founding partners and supporting sponsors.',
+    description: 'A dedicated pool of capital is committed each year by founding and supporting sponsors.',
     icon: PiCalendarBold,
   },
+  {
+    title: 'Allocation Committee',
+    description: 'An independent review panel evaluates applications and allocates funding.',
+    icon: PiScalesBold,
+  },
+  {
+    title: 'Transparency & Reporting',
+    description: 'Impact reports are published outlining funded projects, outcomes, and fund performance.',
+    icon: PiChartBarBold,
+  },
+]
+
+const fundingOverviewItems = [
   {
     title: 'Funding Cycles',
     description: 'Applications are reviewed and selected on a recurring basis.',
@@ -99,21 +175,55 @@ const howItWorksItems = [
   },
   {
     title: 'Funding Range',
-    description:
-      'Selected projects receive grants within a defined range, based on scope, impact, and stage of development.',
+    description: 'From $2.5k to $20k, depending on scope, impact and stage of development.',
+    icon: PiCoinsBold,
+  },
+]
+
+const fundingModelItems = [
+  {
+    title: 'Direct Grants',
+    description: 'Full requested amount allocated after committee approval.',
     icon: PiCoinsBold,
   },
   {
-    title: 'Allocation Committee',
+    title: 'Capped Matching Fund',
     description:
-      'An independent review panel evaluates applications and allocates funding according to transparent criteria and strategic priorities.',
-    icon: PiScalesBold,
+      'The fund matches independently raised capital up to a predefined cap to incentivize traction and community participation.',
+    icon: PiArrowsClockwiseBold,
   },
   {
-    title: 'Transparency & Reporting',
+    title: 'All-or-Nothing Co-Funding',
     description:
-      'An annual impact report is published outlining funded projects, outcomes, and overall fund performance.',
-    icon: PiChartBarBold,
+      'Conditional commitment released only if full funding is reached within a fixed timeframe (for example, 60 days).',
+    icon: PiScalesBold,
+  },
+]
+
+const faqItems = [
+  {
+    question: 'Who can apply for funding?',
+    answer:
+      'Any project owner with an active or pre-launch project on Geyser can apply by submitting their project through the application flow.',
+  },
+  {
+    question: 'How are projects selected?',
+    answer:
+      'Applications are reviewed by an independent allocation committee based on scope, expected impact, and stage of development.',
+  },
+  {
+    question: 'What funding options are available?',
+    answer:
+      'Projects can be supported through direct grants, capped matching funds, and all-or-nothing co-funding commitments.',
+  },
+  {
+    question: 'Can projects receive support in multiple cycles?',
+    answer:
+      'Funding is organized in recurring cycles, and projects can be reconsidered based on progress and alignment with current priorities.',
+  },
+  {
+    question: 'How long does review take after I apply?',
+    answer: 'Pending confirmation. Please provide the expected review timeline so we can publish it here.',
   },
 ]
 
@@ -299,6 +409,195 @@ type ImpactFundDetailContentProps = {
   onSubmitApplication: () => Promise<void>
 }
 
+type FundingModelCardProps = {
+  item: (typeof fundingModelItems)[number]
+  isOpen: boolean
+  onToggle: () => void
+  surfaceBg: string
+  highlightedSurfaceBg: string
+  highlightedSurfaceBorderColor: string
+  metricHoverBg: string
+  primaryTextColor: string
+  secondaryTextColor: string
+}
+
+function FundingModelCard({
+  item,
+  isOpen,
+  onToggle,
+  surfaceBg,
+  highlightedSurfaceBg,
+  highlightedSurfaceBorderColor,
+  metricHoverBg,
+  primaryTextColor,
+  secondaryTextColor,
+}: FundingModelCardProps): JSX.Element {
+  return (
+    <Box
+      p={4}
+      bg={isOpen ? highlightedSurfaceBg : surfaceBg}
+      borderRadius="lg"
+      border="1px solid"
+      borderColor={isOpen ? highlightedSurfaceBorderColor : 'transparent'}
+      cursor="pointer"
+      onClick={onToggle}
+      transition="all 0.2s"
+      _hover={{ bg: isOpen ? highlightedSurfaceBg : metricHoverBg }}
+    >
+      <VStack align="stretch" spacing={2}>
+        <HStack justify="space-between" align="center">
+          <Body bold color={primaryTextColor}>
+            {t(item.title)}
+          </Body>
+          <Icon
+            as={PiCaretDownBold}
+            boxSize={4}
+            color={secondaryTextColor}
+            transform={isOpen ? 'rotate(180deg)' : 'none'}
+            transition="transform 0.2s"
+            flexShrink={0}
+          />
+        </HStack>
+        {isOpen && (
+          <Body size="sm" color={secondaryTextColor}>
+            {t(item.description)}
+          </Body>
+        )}
+      </VStack>
+    </Box>
+  )
+}
+
+type FundedApplicationsSectionProps = {
+  applicationsLoading: boolean
+  applicationsError: boolean
+  fundedApplications: FundedApplication[]
+  hasMoreFundedApplications: boolean
+  isLoadingMoreApplications: boolean
+  onLoadMoreApplications: () => Promise<void>
+  surfaceBg: string
+  mutedBg: string
+  emphasisTextColor: string
+  secondaryTextColor: string
+  subtleTextColor: string
+  tertiaryTextColor: string
+}
+
+function FundedApplicationsSection({
+  applicationsLoading,
+  applicationsError,
+  fundedApplications,
+  hasMoreFundedApplications,
+  isLoadingMoreApplications,
+  onLoadMoreApplications,
+  surfaceBg,
+  mutedBg,
+  emphasisTextColor,
+  secondaryTextColor,
+  subtleTextColor,
+  tertiaryTextColor,
+}: FundedApplicationsSectionProps): JSX.Element {
+  if (applicationsLoading) {
+    return (
+      <VStack py={8}>
+        <Spinner />
+      </VStack>
+    )
+  }
+
+  if (applicationsError) {
+    return (
+      <Box p={8} bg={mutedBg} borderRadius="lg">
+        <Body>{t('Failed to load applications.')}</Body>
+      </Box>
+    )
+  }
+
+  if (fundedApplications.length === 0) {
+    return (
+      <Box p={8} bg={mutedBg} borderRadius="lg">
+        <VStack spacing={2}>
+          <Body size="lg" color={subtleTextColor}>
+            {t('No projects have been awarded yet')}
+          </Body>
+          <Body size="sm" color={tertiaryTextColor}>
+            {t('Check back soon to see funded projects')}
+          </Body>
+        </VStack>
+      </Box>
+    )
+  }
+
+  return (
+    <VStack align="stretch" spacing={6}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+        {fundedApplications.map((application) => (
+          <Card
+            key={application.id}
+            as={Link}
+            to={getPath('project', application.project.id)}
+            overflow="hidden"
+            cursor="pointer"
+            transition="all 0.3s"
+            _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+            borderWidth="0"
+            bg={surfaceBg}
+          >
+            {application.project.thumbnailImage && (
+              <Image
+                src={application.project.thumbnailImage}
+                alt={application.project.title}
+                w="full"
+                h="200px"
+                objectFit="cover"
+              />
+            )}
+            <VStack align="stretch" spacing={3} p={5}>
+              <Flex align="baseline" gap={2} flexWrap="wrap">
+                <H2 size="md" bold flex="1" minW="0">
+                  {application.project.title}
+                </H2>
+                {hasValue(application.amountAwardedInSats) && (
+                  <Body bold color={emphasisTextColor} size="sm" flexShrink={0}>
+                    ₿ {btcNumberFormatter.format(application.amountAwardedInSats)}
+                  </Body>
+                )}
+                {application.awardedAt && (
+                  <>
+                    <Body color={tertiaryTextColor} size="sm">
+                      •
+                    </Body>
+                    <Body size="sm" color={subtleTextColor} flexShrink={0}>
+                      {getQuarterFromDate(application.awardedAt)}
+                    </Body>
+                  </>
+                )}
+              </Flex>
+              {application.project.shortDescription && (
+                <Body size="sm" color={secondaryTextColor} noOfLines={2}>
+                  {application.project.shortDescription}
+                </Body>
+              )}
+            </VStack>
+          </Card>
+        ))}
+      </SimpleGrid>
+      {hasMoreFundedApplications && (
+        <Button
+          onClick={onLoadMoreApplications}
+          isLoading={isLoadingMoreApplications}
+          alignSelf="center"
+          size="lg"
+          variant="outline"
+          colorScheme="neutral1"
+        >
+          {t('View More')}
+        </Button>
+      )}
+    </VStack>
+  )
+}
+
 function ImpactFundDetailContent({
   impactFund,
   fundedApplications,
@@ -316,6 +615,11 @@ function ImpactFundDetailContent({
   applying,
   onSubmitApplication,
 }: ImpactFundDetailContentProps): JSX.Element {
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
+  const [expandedFundingModel, setExpandedFundingModel] = useState<string | null>(null)
+  const usdRate = useAtomValue(usdRateAtom)
+  const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
+
   const surfaceBg = useColorModeValue('neutral1.3', 'neutral1.3')
   const mutedBg = useColorModeValue('neutral1.2', 'neutral1.2')
   const primaryTextColor = useColorModeValue('neutral1.11', 'neutral1.11')
@@ -324,7 +628,6 @@ function ImpactFundDetailContent({
   const tertiaryTextColor = useColorModeValue('neutral1.7', 'neutral1.9')
   const emphasisTextColor = useColorModeValue('primary1.9', 'primary1.9')
   const metricHoverBg = useColorModeValue('neutral1.3', 'neutral1.4')
-  const mutedBorderColor = useColorModeValue('neutral1.4', 'neutral1.5')
   const highlightedSurfaceBg = useColorModeValue('primary1.50', 'primary1.900')
   const highlightedSurfaceBorderColor = useColorModeValue('primary1.200', 'primary1.700')
   const archivedBadgeBg = useColorModeValue('neutral1.3', 'neutral1.4')
@@ -334,6 +637,16 @@ function ImpactFundDetailContent({
   const tagBorderColor = useColorModeValue('primary1.200', 'primary1.800')
   const iconBg = useColorModeValue('primary1.100', 'primary1.900')
   const iconColor = useColorModeValue('primary1.600', 'primary1.300')
+  const committedAmountDisplay = getCommittedAmountDisplay({
+    amountCommitted: impactFund.amountCommitted,
+    amountCommittedCurrency: impactFund.amountCommittedCurrency,
+    usdRate,
+    getUSDAmount,
+    getSatoshisFromUSDCents,
+  })
+  const descriptionText = impactFund.description || ''
+  const hasLongDescription = descriptionText.length > DESCRIPTION_PREVIEW_CHAR_LIMIT
+  const descriptionContent = truncateDescription(descriptionText, DESCRIPTION_PREVIEW_CHAR_LIMIT, isDescriptionExpanded)
 
   return (
     <VStack align="stretch" spacing={14}>
@@ -355,15 +668,70 @@ function ImpactFundDetailContent({
           />
         )}
         <VStack align="stretch" spacing={4}>
-          <Flex justify="space-between" align="center" gap={4} flexWrap="wrap">
-            <H2 size="3xl" bold color={primaryTextColor}>
-              {impactFund.title}
-            </H2>
-            {hasValue(impactFund.amountCommitted) && (
-              <H2 size="3xl" bold color={emphasisTextColor}>
-                ₿ {btcNumberFormatter.format(impactFund.amountCommitted)}
+          <Flex justify="space-between" align={{ base: 'stretch', md: 'baseline' }} gap={4} flexWrap="wrap">
+            <HStack align={{ base: 'start', md: 'baseline' }} spacing={3} flexWrap="wrap">
+              <H2 size="3xl" bold color={primaryTextColor} lineHeight={1}>
+                {impactFund.title}
               </H2>
+              {committedAmountDisplay && (
+                <H2 display={{ base: 'none', md: 'block' }} size="2xl" bold color={emphasisTextColor} lineHeight={1}>
+                  {committedAmountDisplay.primary}
+                </H2>
+              )}
+              {committedAmountDisplay?.secondary && (
+                <H2
+                  display={{ base: 'none', md: 'block' }}
+                  size="2xl"
+                  color={tertiaryTextColor}
+                  whiteSpace="nowrap"
+                  lineHeight={1}
+                >
+                  {committedAmountDisplay.secondary}
+                </H2>
+              )}
+            </HStack>
+            <Button
+              display={{ base: 'none', md: 'inline-flex' }}
+              size="lg"
+              colorScheme="primary1"
+              onClick={onApplyClick}
+              flexShrink={0}
+              px={8}
+              minW="210px"
+              fontWeight="semibold"
+              fontSize="lg"
+            >
+              {t('Apply for funding')}
+            </Button>
+          </Flex>
+          <Flex display={{ base: 'flex', md: 'none' }} justify="space-between" align="stretch" gap={3}>
+            {committedAmountDisplay && (
+              <VStack align="start" spacing={0}>
+                <H2 size="xl" bold color={emphasisTextColor}>
+                  {committedAmountDisplay.primary}
+                </H2>
+                {committedAmountDisplay.secondary && (
+                  <H2 size="xl" color={tertiaryTextColor}>
+                    {committedAmountDisplay.secondary}
+                  </H2>
+                )}
+              </VStack>
             )}
+            <Button
+              size="md"
+              colorScheme="primary1"
+              onClick={onApplyClick}
+              flexShrink={0}
+              alignSelf="stretch"
+              h="auto"
+              minH="unset"
+              whiteSpace="nowrap"
+              px={7}
+              fontWeight="semibold"
+              fontSize="lg"
+            >
+              {t('Apply for funding')}
+            </Button>
           </Flex>
           {impactFund.tags.length > 0 && (
             <HStack spacing={2} flexWrap="wrap">
@@ -378,131 +746,131 @@ function ImpactFundDetailContent({
                   border="1px solid"
                   borderColor={tagBorderColor}
                 >
-                  <Body size="sm" bold>
+                  <Body size="xs" bold whiteSpace="nowrap">
                     {tag}
                   </Body>
                 </Box>
               ))}
             </HStack>
           )}
+          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+            <Box
+              p={6}
+              bg={mutedBg}
+              borderRadius="lg"
+              transition="all 0.3s"
+              _hover={{ bg: metricHoverBg, transform: 'translateY(-2px)' }}
+            >
+              <HStack spacing={4}>
+                <Flex w="48px" h="48px" align="center" justify="center" bg={iconBg} borderRadius="lg" flexShrink={0}>
+                  <Icon as={PiCoinsDuotone} boxSize={6} color={iconColor} />
+                </Flex>
+                <VStack align="start" spacing={0}>
+                  <H2 size="xl" bold color={primaryTextColor}>
+                    ₿ {btcNumberFormatter.format(impactFund.metrics.awardedTotalSats)}
+                  </H2>
+                  <Body
+                    size="xs"
+                    fontSize={{ base: '10px', md: '12px' }}
+                    color={subtleTextColor}
+                    textTransform="uppercase"
+                    letterSpacing="wide"
+                    fontWeight="medium"
+                    noOfLines={1}
+                    whiteSpace="nowrap"
+                  >
+                    {t('Awarded so far')}
+                  </Body>
+                </VStack>
+              </HStack>
+            </Box>
+            <Box
+              p={6}
+              bg={mutedBg}
+              borderRadius="lg"
+              transition="all 0.3s"
+              _hover={{ bg: metricHoverBg, transform: 'translateY(-2px)' }}
+            >
+              <HStack spacing={4}>
+                <Flex w="48px" h="48px" align="center" justify="center" bg={iconBg} borderRadius="lg" flexShrink={0}>
+                  <Icon as={PiRocketLaunchDuotone} boxSize={6} color={iconColor} />
+                </Flex>
+                <VStack align="start" spacing={0}>
+                  <H2 size="xl" bold color={primaryTextColor}>
+                    {impactFund.metrics.projectsFundedCount}
+                  </H2>
+                  <Body
+                    size="xs"
+                    fontSize={{ base: '10px', md: '12px' }}
+                    color={subtleTextColor}
+                    textTransform="uppercase"
+                    letterSpacing="wide"
+                    fontWeight="medium"
+                    noOfLines={1}
+                    whiteSpace="nowrap"
+                  >
+                    {t('Projects funded')}
+                  </Body>
+                </VStack>
+              </HStack>
+            </Box>
+            <Box
+              p={6}
+              bg={mutedBg}
+              borderRadius="lg"
+              transition="all 0.3s"
+              _hover={{ bg: metricHoverBg, transform: 'translateY(-2px)' }}
+            >
+              <HStack spacing={4}>
+                <Flex w="48px" h="48px" align="center" justify="center" bg={iconBg} borderRadius="lg" flexShrink={0}>
+                  <Icon as={PiNewspaperDuotone} boxSize={6} color={iconColor} />
+                </Flex>
+                <VStack align="start" spacing={0}>
+                  <H2 size="xl" bold color={primaryTextColor}>
+                    {t('Yearly')}
+                  </H2>
+                  <Body
+                    size="xs"
+                    fontSize={{ base: '10px', md: '12px' }}
+                    color={subtleTextColor}
+                    textTransform="uppercase"
+                    letterSpacing="wide"
+                    fontWeight="medium"
+                    noOfLines={1}
+                    whiteSpace="nowrap"
+                  >
+                    {t('Impact & Transparency Report')}
+                  </Body>
+                </VStack>
+              </HStack>
+            </Box>
+          </SimpleGrid>
           {impactFund.description && (
-            <Body size="lg" color={secondaryTextColor}>
-              {impactFund.description}
-            </Body>
+            <VStack align="stretch" spacing={2}>
+              <Box color={secondaryTextColor}>
+                <MarkdownField preview content={descriptionContent} />
+              </Box>
+              {hasLongDescription && (
+                <Button
+                  onClick={() => setIsDescriptionExpanded((current) => !current)}
+                  alignSelf="flex-start"
+                  variant="ghost"
+                  colorScheme="primary1"
+                  size="sm"
+                >
+                  {isDescriptionExpanded ? t('Read less') : t('Read more')}
+                </Button>
+              )}
+            </VStack>
           )}
         </VStack>
       </VStack>
-
-      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-        <Box
-          p={6}
-          bg={mutedBg}
-          borderRadius="lg"
-          transition="all 0.3s"
-          _hover={{ bg: metricHoverBg, transform: 'translateY(-2px)' }}
-        >
-          <HStack spacing={4}>
-            <Flex w="48px" h="48px" align="center" justify="center" bg={iconBg} borderRadius="lg" flexShrink={0}>
-              <Icon as={PiCoinsDuotone} boxSize={6} color={iconColor} />
-            </Flex>
-            <VStack align="start" spacing={0}>
-              <H2 size="xl" bold color={primaryTextColor}>
-                ₿ {btcNumberFormatter.format(impactFund.metrics.awardedTotalSats)}
-              </H2>
-              <Body
-                size="xs"
-                color={subtleTextColor}
-                textTransform="uppercase"
-                letterSpacing="wide"
-                fontWeight="medium"
-              >
-                {t('Awarded so far')}
-              </Body>
-            </VStack>
-          </HStack>
-        </Box>
-        <Box
-          p={6}
-          bg={mutedBg}
-          borderRadius="lg"
-          transition="all 0.3s"
-          _hover={{ bg: metricHoverBg, transform: 'translateY(-2px)' }}
-        >
-          <HStack spacing={4}>
-            <Flex w="48px" h="48px" align="center" justify="center" bg={iconBg} borderRadius="lg" flexShrink={0}>
-              <Icon as={PiRocketLaunchDuotone} boxSize={6} color={iconColor} />
-            </Flex>
-            <VStack align="start" spacing={0}>
-              <H2 size="xl" bold color={primaryTextColor}>
-                {impactFund.metrics.projectsFundedCount}
-              </H2>
-              <Body
-                size="xs"
-                color={subtleTextColor}
-                textTransform="uppercase"
-                letterSpacing="wide"
-                fontWeight="medium"
-              >
-                {t('Projects funded')}
-              </Body>
-            </VStack>
-          </HStack>
-        </Box>
-        <Box
-          p={6}
-          bg={mutedBg}
-          borderRadius="lg"
-          transition="all 0.3s"
-          _hover={{ bg: metricHoverBg, transform: 'translateY(-2px)' }}
-        >
-          <HStack spacing={4}>
-            <Flex w="48px" h="48px" align="center" justify="center" bg={iconBg} borderRadius="lg" flexShrink={0}>
-              <Icon as={PiNewspaperDuotone} boxSize={6} color={iconColor} />
-            </Flex>
-            <VStack align="start" spacing={0}>
-              <H2 size="xl" bold color={primaryTextColor}>
-                {t('Yearly')}
-              </H2>
-              <Body
-                size="xs"
-                color={subtleTextColor}
-                textTransform="uppercase"
-                letterSpacing="wide"
-                fontWeight="medium"
-              >
-                {t('Impact & Transparency Report')}
-              </Body>
-            </VStack>
-          </HStack>
-        </Box>
-      </SimpleGrid>
-
-      <Box p={8} bg={mutedBg} borderRadius="xl" borderWidth="1px" borderColor={mutedBorderColor}>
-        <Flex
-          direction={{ base: 'column', md: 'row' }}
-          justify="space-between"
-          align={{ base: 'stretch', md: 'center' }}
-          gap={6}
-        >
-          <VStack align="start" spacing={2} flex={1}>
-            <H2 size="lg" bold>
-              {t('Apply for funding')}
-            </H2>
-            <Body color={secondaryTextColor}>
-              {t('Submit your project to be considered for funding. Share your vision and impact potential.')}
-            </Body>
-          </VStack>
-          <Button size="lg" colorScheme="primary1" onClick={onApplyClick} flexShrink={0}>
-            {t('Submit Your Application')}
-          </Button>
-        </Flex>
-      </Box>
 
       <VStack align="stretch" spacing={6}>
         <H2 size="xl" bold>
           {t('How It Works')}
         </H2>
-        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
           {howItWorksItems.map((item) => (
             <Box key={item.title} p={5} bg={surfaceBg} borderRadius="lg">
               <HStack align="start" spacing={4}>
@@ -525,96 +893,69 @@ function ImpactFundDetailContent({
 
       <VStack align="stretch" spacing={6}>
         <H2 size="xl" bold>
-          {t('Projects Awarded')}
+          {t('How Funding Works')}
         </H2>
-        {applicationsLoading ? (
-          <VStack py={8}>
-            <Spinner />
-          </VStack>
-        ) : applicationsError ? (
-          <Box p={8} bg={mutedBg} borderRadius="lg">
-            <Body>{t('Failed to load applications.')}</Body>
-          </Box>
-        ) : fundedApplications.length > 0 ? (
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-            {fundedApplications.map((application) => (
-              <Card
-                key={application.id}
-                as={Link}
-                to={getPath('project', application.project.id)}
-                overflow="hidden"
-                cursor="pointer"
-                transition="all 0.3s"
-                _hover={{
-                  transform: 'translateY(-4px)',
-                  shadow: 'xl',
-                }}
-                borderWidth="0"
-                bg={surfaceBg}
-              >
-                {application.project.thumbnailImage && (
-                  <Image
-                    src={application.project.thumbnailImage}
-                    alt={application.project.title}
-                    w="full"
-                    h="200px"
-                    objectFit="cover"
-                  />
-                )}
-                <VStack align="stretch" spacing={3} p={5}>
-                  <Flex align="baseline" gap={2} flexWrap="wrap">
-                    <H2 size="md" bold flex="1" minW="0">
-                      {application.project.title}
-                    </H2>
-                    {hasValue(application.amountAwardedInSats) && (
-                      <Body bold color={emphasisTextColor} size="sm" flexShrink={0}>
-                        ₿ {btcNumberFormatter.format(application.amountAwardedInSats)}
-                      </Body>
-                    )}
-                    {application.awardedAt && (
-                      <>
-                        <Body color={tertiaryTextColor} size="sm">
-                          •
-                        </Body>
-                        <Body size="sm" color={subtleTextColor} flexShrink={0}>
-                          {getQuarterFromDate(application.awardedAt)}
-                        </Body>
-                      </>
-                    )}
-                  </Flex>
-                  {application.project.shortDescription && (
-                    <Body size="sm" color={secondaryTextColor} noOfLines={2}>
-                      {application.project.shortDescription}
-                    </Body>
-                  )}
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
+          {fundingOverviewItems.map((item) => (
+            <Box key={item.title} p={5} bg={surfaceBg} borderRadius="lg">
+              <HStack align="start" spacing={4}>
+                <Flex w="42px" h="42px" borderRadius="md" bg={iconBg} align="center" justify="center" flexShrink={0}>
+                  <Icon as={item.icon} boxSize={5} color={iconColor} />
+                </Flex>
+                <VStack align="stretch" spacing={1}>
+                  <Body bold color={primaryTextColor}>
+                    {t(item.title)}
+                  </Body>
+                  <Body size="sm" color={secondaryTextColor}>
+                    {t(item.description)}
+                  </Body>
                 </VStack>
-              </Card>
+              </HStack>
+            </Box>
+          ))}
+        </SimpleGrid>
+
+        <VStack align="stretch" spacing={3} pt={2}>
+          <H2 size="lg" bold color={secondaryTextColor}>
+            {t('Funding Models')}
+          </H2>
+          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4} alignItems="start">
+            {fundingModelItems.map((item) => (
+              <FundingModelCard
+                key={item.title}
+                item={item}
+                isOpen={expandedFundingModel === item.title}
+                onToggle={() => setExpandedFundingModel(expandedFundingModel === item.title ? null : item.title)}
+                surfaceBg={surfaceBg}
+                highlightedSurfaceBg={highlightedSurfaceBg}
+                highlightedSurfaceBorderColor={highlightedSurfaceBorderColor}
+                metricHoverBg={metricHoverBg}
+                primaryTextColor={primaryTextColor}
+                secondaryTextColor={secondaryTextColor}
+              />
             ))}
           </SimpleGrid>
-        ) : (
-          <Box p={8} bg={mutedBg} borderRadius="lg">
-            <VStack spacing={2}>
-              <Body size="lg" color={subtleTextColor}>
-                {t('No projects have been awarded yet')}
-              </Body>
-              <Body size="sm" color={tertiaryTextColor}>
-                {t('Check back soon to see funded projects')}
-              </Body>
-            </VStack>
-          </Box>
-        )}
-        {hasMoreFundedApplications && (
-          <Button
-            onClick={onLoadMoreApplications}
-            isLoading={isLoadingMoreApplications}
-            alignSelf="center"
-            size="lg"
-            variant="outline"
-            colorScheme="neutral1"
-          >
-            {t('View More')}
-          </Button>
-        )}
+        </VStack>
+      </VStack>
+
+      <VStack align="stretch" spacing={6}>
+        <H2 size="xl" bold>
+          {t('Projects Awarded')}
+        </H2>
+        <FundedApplicationsSection
+          applicationsLoading={applicationsLoading}
+          applicationsError={applicationsError}
+          fundedApplications={fundedApplications}
+          hasMoreFundedApplications={hasMoreFundedApplications}
+          isLoadingMoreApplications={isLoadingMoreApplications}
+          onLoadMoreApplications={onLoadMoreApplications}
+          surfaceBg={surfaceBg}
+          mutedBg={mutedBg}
+          emphasisTextColor={emphasisTextColor}
+          secondaryTextColor={secondaryTextColor}
+          subtleTextColor={subtleTextColor}
+          tertiaryTextColor={tertiaryTextColor}
+        />
       </VStack>
 
       <VStack align="stretch" spacing={8}>
@@ -701,6 +1042,33 @@ function ImpactFundDetailContent({
         )}
         donateProjectName={impactFund.donateProject?.name}
       />
+
+      <VStack align="stretch" spacing={4}>
+        <H2 size="xl" bold>
+          {t('FAQ')}
+        </H2>
+        <Accordion allowToggle>
+          {faqItems.map((item) => (
+            <AccordionItem key={item.question} borderColor={archivedBadgeBorderColor}>
+              <h3>
+                <AccordionButton py={4}>
+                  <Box as="span" flex="1" textAlign="left">
+                    <Body bold color={primaryTextColor}>
+                      {t(item.question)}
+                    </Body>
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h3>
+              <AccordionPanel pb={4}>
+                <Body size="sm" color={secondaryTextColor}>
+                  {t(item.answer)}
+                </Body>
+              </AccordionPanel>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </VStack>
 
       <Modal isOpen={isProjectModalOpen} onClose={onProjectModalClose} size="lg">
         <ModalOverlay />

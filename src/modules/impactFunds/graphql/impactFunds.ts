@@ -10,6 +10,11 @@ export const QUERY_IMPACT_FUNDS = gql`
       subtitle
       heroImage
       amountCommitted
+      amountCommittedCurrency
+      metrics {
+        awardedTotalSats
+        projectsFundedCount
+      }
       status
     }
   }
@@ -26,6 +31,7 @@ export const QUERY_IMPACT_FUND = gql`
       description
       heroImage
       amountCommitted
+      amountCommittedCurrency
       donateProjectId
       donateProject {
         id
