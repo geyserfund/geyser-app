@@ -19,6 +19,7 @@
     "format": "prettier --config .prettierrc 'src/**/*.{ts, js, tsx, jsx, css}' --write",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint src/**/*.{ts,tsx} --fix",
+    "typecheck:affected": "yarn node scripts/typecheck-affected.mjs",
     "version": "yarn conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md",
     "graph:format": "prettier --write \"src/types/generated/graphql.ts\"",
     "graph:fetch": "rover graph fetch geyser-graph@$@ > ./schema.graphql;",
