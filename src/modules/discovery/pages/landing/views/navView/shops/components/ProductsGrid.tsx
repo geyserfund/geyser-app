@@ -10,7 +10,11 @@ import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { ID } from '@/shared/constants/components/id.ts'
 import { useListenerState } from '@/shared/hooks/useListenerState.tsx'
-import { RewardForProductsPageFragment } from '@/types/index.ts'
+import {
+  ProjectRewardsMostSoldRange,
+  RewardForProductsPageFragment,
+  useProjectRewardsMostSoldGetQuery,
+} from '@/types/index.ts'
 import { useMobileMode, useNotification } from '@/utils/index.ts'
 
 import {
@@ -57,6 +61,7 @@ const getSortByApi = (sort: SortOption): SortByApi => (sort === 'most_recent' ? 
 export const ProductsGrid = ({ category }: ProductsGridProps) => {
   const isMobile = useMobileMode()
   const toast = useNotification()
+  const isTrendingMode = !category
   const [searchParams, setSearchParams] = useSearchParams()
   const [rewards, setRewards] = useState<ProjectRewardsCatalogRow[]>([])
   const [isInitialLoading, setIsInitialLoading] = useState(true)
@@ -68,9 +73,25 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
   const sort: SortOption = sortFromUrl === 'most_recent' ? 'most_recent' : 'most_sold'
   const sortBy = getSortByApi(sort)
 
+  const { data: trendingData, loading: isTrendingLoading } = useProjectRewardsMostSoldGetQuery({
+    fetchPolicy: 'network-only',
+    skip: !isTrendingMode,
+    variables: {
+      input: {
+        range: ProjectRewardsMostSoldRange.Quarter,
+        take: PAGE_SIZE,
+      },
+    },
+    onError() {
+      toast.error({ title: t('Failed to fetch products') })
+    },
+  })
+  const trendingRewards = trendingData?.projectRewardsMostSoldGet || []
+
   const { fetchMore } = useQuery<ProjectRewardsCatalogGetResponse, ProjectRewardsCatalogGetVariables>(
     QUERY_PROJECT_REWARDS_CATALOG,
     {
+      skip: isTrendingMode,
       fetchPolicy: 'network-only',
       notifyOnNetworkStatusChange: true,
       variables: {
@@ -83,6 +104,10 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
         },
       },
       onCompleted(completedData) {
+        if (isTrendingMode) {
+          return
+        }
+
         const firstPage = completedData.projectRewardsCatalogGet?.rewards || []
         setRewards(firstPage)
         setNoMoreItems(firstPage.length < PAGE_SIZE)
@@ -96,10 +121,14 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
   )
 
   useEffect(() => {
+    if (isTrendingMode) {
+      return
+    }
+
     setIsInitialLoading(true)
     setNoMoreItems(false)
     setRewards([])
-  }, [category, sort, setNoMoreItems])
+  }, [category, isTrendingMode, sort, setNoMoreItems])
 
   const handleSortChange = (nextSort: SortOption) => {
     const nextSearchParams = new URLSearchParams(searchParams)
@@ -114,6 +143,10 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
   }
 
   const fetchNext = async () => {
+    if (isTrendingMode) {
+      return
+    }
+
     if (isLoadingMore.current || noMoreItems.current) {
       return
     }
@@ -160,6 +193,28 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
     } finally {
       setIsLoadingMore(false)
     }
+  }
+
+  if (isTrendingMode) {
+    if (isTrendingLoading) {
+      return <ProductsGridSkeleton />
+    }
+
+    if (!trendingRewards.length) {
+      return <Body>{t('No products found')}</Body>
+    }
+
+    return (
+      <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacing={{ base: 4, lg: 8 }}>
+        {trendingRewards.map((reward) => {
+          return (
+            <GridItem key={reward.projectReward.id}>
+              <TrendingRewardCard reward={reward.projectReward} sold={reward.count} />
+            </GridItem>
+          )
+        })}
+      </SimpleGrid>
+    )
   }
 
   if (isInitialLoading) {
