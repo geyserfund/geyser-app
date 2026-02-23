@@ -80,6 +80,8 @@ const checkAffectedFiles = (changedFiles) => {
     .filter(isTsSource)
     .map((file) => path.resolve(projectRoot, file))
     .filter((file) => includedFiles.has(file));
+  const declarationRoots = parsed.fileNames.filter((file) => file.endsWith('.d.ts')).map((file) => path.resolve(file));
+  const rootNames = Array.from(new Set([...affectedFiles, ...declarationRoots]));
 
   if (affectedFiles.length === 0) {
     console.log('[typecheck-affected] No changed TypeScript files in tsconfig scope. Skipping.');
@@ -94,7 +96,7 @@ const checkAffectedFiles = (changedFiles) => {
   };
 
   const program = ts.createIncrementalProgram({
-    rootNames: affectedFiles,
+    rootNames,
     options,
     projectReferences: parsed.projectReferences,
   });
