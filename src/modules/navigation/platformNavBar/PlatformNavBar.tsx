@@ -25,6 +25,7 @@ import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
 import {
   isDiscoveryRoutesAtom,
+  isProjectDashboardRoutesAtom,
   isProjectFundingRoutesAtom,
   isProjectRoutesAtom,
   useIsManifestoPage,
@@ -42,6 +43,7 @@ export const PlatformNavBar = () => {
 
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
   const isProjectRoutes = useAtomValue(isProjectRoutesAtom)
+  const isProjectDashboardRoutes = useAtomValue(isProjectDashboardRoutesAtom)
   const isProjectFundingRoutes = useAtomValue(isProjectFundingRoutesAtom)
 
   const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
@@ -89,7 +91,8 @@ export const PlatformNavBar = () => {
     return <BrandLogo showOutline={isGuardiansPage} />
   }, [isProjectFundingRoutes, isGuardiansPage])
 
-  const shouldShowPlatformNav = (isPlatformRoutes || isProjectRoutes) && !isProjectFundingRoutes && !isMobileMode
+  const shouldShowPlatformNav =
+    (isPlatformRoutes || isProjectRoutes) && !isProjectFundingRoutes && !isProjectDashboardRoutes && !isMobileMode
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {

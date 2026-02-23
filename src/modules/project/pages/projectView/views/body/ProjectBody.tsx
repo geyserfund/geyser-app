@@ -27,10 +27,14 @@ import { AonNotification } from './sections/aonNotification/AonNotification.tsx'
 import { BodySectionPageBottomBar } from './sections/BodySectionPageBottomBar.tsx'
 import { CreatorVerificationNotice } from './sections/CreatorVerificationNotice.tsx'
 import { FundNowWithLightning } from './sections/FundNowWithLightning.tsx'
+import {
+  type ProjectImpactFundRecipient,
+  ImpactFundRecipientBanner,
+} from './sections/header/components/ImpactFundRecipientBadge.tsx'
 import { ProjectPromotionNotice } from './sections/ProjectPromotionNotice.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
-import { TiaRskEoaSetupNotice } from './sections/tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { TiaPayoutNotification } from './sections/tiaNotification/TiaPayoutNotification.tsx'
+import { TiaRskEoaSetupNotice } from './sections/tiaNotification/TiaRskEoaSetupNotice.tsx'
 
 export const ProjectBody = () => {
   const { project, loading } = useProjectAtom()
@@ -39,6 +43,9 @@ export const ProjectBody = () => {
   const navigate = useNavigate()
 
   const isAon = isAllOrNothing(project)
+  const { impactFundRecipient } = project as typeof project & {
+    impactFundRecipient?: ProjectImpactFundRecipient | null
+  }
 
   useEffect(() => {
     if (loading) return
@@ -76,7 +83,7 @@ export const ProjectBody = () => {
         <CreatorTools />
 
         <Header />
-
+        <ImpactFundRecipientBanner recipient={impactFundRecipient} />
         <RewardNotice />
 
         <Story />

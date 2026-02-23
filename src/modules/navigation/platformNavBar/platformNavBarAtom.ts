@@ -30,6 +30,8 @@ export const isProjectRoutesAtom = atom(
   ]),
 )
 
+export const isProjectDashboardRoutesAtom = atom(routeMatchForAtom(projectDashboardRoutes))
+
 export const isProjectFundingRoutesAtom = atom(routeMatchForAtom(projectFundingRoutes))
 
 const isProjectMainPageAtom = atom(

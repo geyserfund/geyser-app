@@ -25,6 +25,7 @@ import { ID } from '@/shared/constants/components/id.ts'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
+import { useProjectPageHeaderSummaryQuery } from '@/types'
 
 import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
 import { Body, H1 } from '../../../../../../../../shared/components/typography'
@@ -35,7 +36,6 @@ import {
   projectsWithSubscription,
 } from '../../../../../../../../shared/constants'
 import { VideoPlayer } from '../../../../../../../../shared/molecules/VideoPlayer'
-import { useProjectPageHeaderSummaryQuery } from '../../../../../../../../types'
 import {
   commaFormatted,
   isAllOrNothing,
@@ -49,17 +49,18 @@ import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
 import { AonProjectBalanceDisplay } from '../contributionSummary/components/AonProjectBalanceDisplay.tsx'
 import { CreatorSocial } from './components/CreatorSocial'
-import { LightningAddressModal } from './components/LightningAddressModal'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
 import { PostOnNostr } from './components/PostOnNostr.tsx'
 import { ShareProjectButton } from './components/ShareProjectButton'
 
 interface HeaderDetailsProps extends StackProps {
   onOpen: () => void
+  summaryLoading: boolean
+  summaryError: boolean
 }
 
-const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
-  const { project, projectOwner, partialUpdateProject } = useProjectAtom()
+const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: HeaderDetailsProps) => {
+  const { project, projectOwner } = useProjectAtom()
   const projectImages = project.images || []
 
   const [subscribers, setSubscribers] = useState(0)
@@ -78,21 +79,6 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
     const value = await fetch(`${FlashMembershipCountUrl}?geyser_flash_id=${flashId}`).then((res) => res.json())
     setSubscribers(toInt(`${value.membership_count}`))
   }
-
-  const { loading: summaryLoading } = useProjectPageHeaderSummaryQuery({
-    fetchPolicy: 'network-only',
-    variables: {
-      where: {
-        name: project?.name,
-      },
-    },
-    skip: !project.name,
-    onCompleted(data) {
-      if (data.projectGet) {
-        partialUpdateProject(data.projectGet)
-      }
-    },
-  })
 
   const handleClickDetails = () => {
     const element = document.getElementById(ID.project.details.container)
@@ -141,18 +127,23 @@ const HeaderDetails = ({ onOpen, ...props }: HeaderDetailsProps) => {
         />
       </Box>
       <VStack maxWidth="full" flex={1} spacing={2} alignItems="start">
-        <H1 size={'2xl'} width="100%" medium>
-          {project.title}
+        <HStack w="full" alignItems="center" gap={2}>
+          <H1 size={'2xl'} medium>
+            {project.title}
+          </H1>
           <NonProjectProjectIcon taxProfile={projectOwner?.user?.taxProfile} />
-        </H1>
+        </HStack>
 
         <HStack w="full" flexWrap={'wrap'}>
-          <LightningAddressModal name={`${project.name}`} npub={project?.keys?.nostrKeys.publicKey.npub} />
           <CreatorSocial />
         </HStack>
 
         {summaryLoading ? (
           <SkeletonLayout height="20px" w="250px" />
+        ) : summaryError ? (
+          <Body size="md" medium light>
+            {t('Unable to load project summary right now')}
+          </Body>
         ) : (
           <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
             <Body size="md" medium light>
@@ -240,13 +231,26 @@ const MobileBalanceInfo = () => {
 }
 
 export const Header = () => {
-  const { project, isProjectOwner, loading } = useProjectAtom()
+  const { project, isProjectOwner, loading, partialUpdateProject } = useProjectAtom()
   const { wallet } = useWalletAtom()
   const projectImages = project.images || []
 
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
-
+  const { loading: summaryLoading, error: summaryError } = useProjectPageHeaderSummaryQuery({
+    fetchPolicy: 'network-only',
+    variables: {
+      where: {
+        name: project?.name || '',
+      },
+    },
+    skip: !project.name,
+    onCompleted(data) {
+      if (data.projectGet) {
+        partialUpdateProject(data.projectGet)
+      }
+    },
+  })
   const renderImageOrVideo = () => {
     const primaryProjectImage = projectImages[0]
     const isImage = validateImageUrl(primaryProjectImage)
@@ -288,7 +292,7 @@ export const Header = () => {
         {projectImages.length === 1 && <Box>{renderImageOrVideo()}</Box>}
 
         {projectImages.length > 1 && <MediaCarousel altText={'Project header image'} links={projectImages} />}
-        <HeaderDetails onOpen={onOpen} />
+        <HeaderDetails onOpen={onOpen} summaryLoading={summaryLoading} summaryError={Boolean(summaryError)} />
         {isMobile && !hideProjectAmount && <MobileBalanceInfo />}
       </CardLayout>
     </>

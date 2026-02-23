@@ -24,6 +24,7 @@ export type DiscoveryNavItem = {
   path: keyof PathsMap
   icon: IconType
   image?: string
+  new?: boolean
   bottomNav: boolean
 }
 
@@ -69,6 +70,7 @@ export const discoveryNavItems: DiscoveryNavItem[] = [
     key: DiscoveryNavItemKey.ImpactFunds,
     path: 'discoveryImpactFunds',
     icon: PiTrophy,
+    new: true,
     bottomNav: true,
   },
 ]

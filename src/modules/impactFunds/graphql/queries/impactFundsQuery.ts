@@ -10,6 +10,11 @@ export const QUERY_IMPACT_FUNDS = gql`
       subtitle
       heroImage
       amountCommitted
+      amountCommittedCurrency
+      metrics {
+        awardedTotalSats
+        projectsFundedCount
+      }
       status
     }
   }
@@ -26,6 +31,7 @@ export const QUERY_IMPACT_FUND = gql`
       description
       heroImage
       amountCommitted
+      amountCommittedCurrency
       donateProjectId
       donateProject {
         id
@@ -38,6 +44,7 @@ export const QUERY_IMPACT_FUND = gql`
         image
         url
         amountContributedInSats
+        tier
         status
       }
       archivedSponsors {
@@ -46,6 +53,7 @@ export const QUERY_IMPACT_FUND = gql`
         image
         url
         amountContributedInSats
+        tier
         status
       }
       metrics {
@@ -66,23 +74,15 @@ export const QUERY_IMPACT_FUND_APPLICATIONS = gql`
         awardedAt
         contributionUuid
         status
+        fundingModel
         project {
           id
+          name
           title
           thumbnailImage
           shortDescription
         }
       }
-    }
-  }
-`
-
-export const MUTATION_IMPACT_FUND_APPLY = gql`
-  mutation ImpactFundApply($input: ImpactFundApplyInput!) {
-    impactFundApply(input: $input) {
-      id
-      impactFundId
-      status
     }
   }
 `
