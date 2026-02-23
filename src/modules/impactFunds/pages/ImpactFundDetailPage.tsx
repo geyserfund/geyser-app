@@ -48,7 +48,7 @@ import { Link, useNavigate, useParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useAuthContext } from '@/context'
-import { useBTCConverter } from '@/helpers'
+import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal'
 import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -56,11 +56,10 @@ import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
+import type { ImpactFundApplicationsQuery, ImpactFundQuery } from '@/types'
 import {
   ImpactFundApplicationFundingModel,
-  ImpactFundApplicationsQuery,
   ImpactFundApplicationStatus,
-  ImpactFundQuery,
   ImpactFundSponsorTier,
   OrderByOptions,
   useImpactFundApplicationsQuery,
@@ -72,6 +71,8 @@ import { useNotification } from '@/utils'
 
 const APPLICATIONS_PAGE_SIZE = 15
 const DESCRIPTION_PREVIEW_CHAR_LIMIT = 500
+const DESCRIPTION_COLLAPSED_MAX_HEIGHT = '240px'
+const SPONSOR_INQUIRY_CALENDAR_URL = 'https://cal.com/metamick/thirtymin?overlayCalendar=true'
 const btcNumberFormatter = new Intl.NumberFormat()
 const fundedStatus = [ImpactFundApplicationStatus.Funded]
 type ImpactFundDetails = ImpactFundQuery['impactFund']
@@ -90,10 +91,6 @@ const fundingModelLabels: Record<ImpactFundApplicationFundingModel, string> = {
 }
 type FundingModelPillStyle = { bg: string; textColor: string }
 type FundingModelPillStyles = Record<ImpactFundApplicationFundingModel, FundingModelPillStyle>
-
-function truncateDescription(text: string, limit: number, expanded: boolean): string {
-  return !expanded && text.length > limit ? `${text.slice(0, limit)}...` : text
-}
 
 function getQuarterFromDate(dateString: string): string {
   const date = new Date(dateString)
@@ -731,7 +728,11 @@ function ImpactFundOverviewSection({
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
   const descriptionText = impactFund.description || ''
   const hasLongDescription = descriptionText.length > DESCRIPTION_PREVIEW_CHAR_LIMIT
-  const descriptionContent = truncateDescription(descriptionText, DESCRIPTION_PREVIEW_CHAR_LIMIT, isDescriptionExpanded)
+  const isDescriptionCollapsed = hasLongDescription && !isDescriptionExpanded
+  const descriptionFadeGradient = useColorModeValue(
+    'linear(to-b, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%)',
+    'linear(to-b, rgba(23, 25, 35, 0) 0%, rgba(23, 25, 35, 1) 100%)',
+  )
   const primaryAmountDisplay = showAwardedAsPrimaryMetric ? awardedAmountDisplay : committedAmountDisplay
   const primaryAmountLabel = showAwardedAsPrimaryMetric ? t('Awarded so far') : t('Amount committed')
 
@@ -926,8 +927,24 @@ function ImpactFundOverviewSection({
         </SimpleGrid>
         {impactFund.description && (
           <VStack align="stretch" spacing={2}>
-            <Box color={colors.secondaryTextColor}>
-              <MarkdownField preview content={descriptionContent} />
+            <Box color={colors.secondaryTextColor} position="relative">
+              <Box
+                maxH={isDescriptionCollapsed ? DESCRIPTION_COLLAPSED_MAX_HEIGHT : undefined}
+                overflow={isDescriptionCollapsed ? 'hidden' : undefined}
+              >
+                <MarkdownField preview content={descriptionText} />
+              </Box>
+              {isDescriptionCollapsed && (
+                <Box
+                  position="absolute"
+                  bottom={0}
+                  left={0}
+                  right={0}
+                  h="80px"
+                  pointerEvents="none"
+                  bgGradient={descriptionFadeGradient}
+                />
+              )}
             </Box>
             {hasLongDescription && (
               <Button
@@ -1409,7 +1426,7 @@ function SponsorInquiryModal({
                 </Body>
                 <Button
                   as={ChakraLink}
-                  href="https://cal.com/metamick/thirtymin?overlayCalendar=true"
+                  href={SPONSOR_INQUIRY_CALENDAR_URL}
                   isExternal
                   colorScheme="primary1"
                   size="md"

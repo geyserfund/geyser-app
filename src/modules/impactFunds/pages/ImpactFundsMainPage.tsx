@@ -17,7 +17,7 @@ import { PiCoinsDuotone, PiHouse, PiRocketLaunchDuotone } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
-import { useBTCConverter } from '@/helpers'
+import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -264,29 +264,19 @@ export const ImpactFundsMainPage = () => {
                         {fund.subtitle}
                       </Body>
                     )}
-                    <HStack w="full" px={5} spacing={3}>
+                    <Box w="full" px={5}>
                       <Button
                         as={Link}
                         to={getPath('impactFunds', encodeURIComponent(fund.name))}
                         size="md"
-                        flex={1}
+                        w="full"
                         variant="outline"
                         colorScheme="neutral1"
                         borderRadius="8px"
                       >
                         {t('Learn More')}
                       </Button>
-                      <Button
-                        as={Link}
-                        to={getPath('impactFunds', encodeURIComponent(fund.name))}
-                        size="md"
-                        flex={1}
-                        colorScheme="primary1"
-                        borderRadius="8px"
-                      >
-                        {t('Submit your application')}
-                      </Button>
-                    </HStack>
+                    </Box>
                   </VStack>
                 </VStack>
               </LinkBox>

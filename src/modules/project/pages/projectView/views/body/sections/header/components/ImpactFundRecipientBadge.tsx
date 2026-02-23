@@ -4,7 +4,7 @@ import { Link } from 'react-router'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { ImpactFundApplicationFundingModel } from '@/types'
+import type { ImpactFundApplicationFundingModel } from '@/types'
 
 export type ProjectImpactFundRecipient = {
   impactFundId: string
@@ -52,7 +52,7 @@ export const ImpactFundRecipientBanner = ({ recipient }: ImpactFundRecipientBann
     >
       <Image
         src={awardImageSrc}
-        alt="Impact Fund Recipient award"
+        alt={t('Impact Fund Recipient award')}
         maxW={{ base: '88px', md: '115px' }}
         h="auto"
         objectFit="contain"

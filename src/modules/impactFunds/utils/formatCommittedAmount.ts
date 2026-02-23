@@ -1,4 +1,4 @@
-import { getShortAmountLabel } from '@/utils'
+import { getShortAmountLabel } from '@/utils/index.ts'
 
 const satsFormatter = new Intl.NumberFormat()
 const usdFormatter = new Intl.NumberFormat(undefined, {
@@ -7,24 +7,18 @@ const usdFormatter = new Intl.NumberFormat(undefined, {
   maximumFractionDigits: 0,
 })
 
-type GetUSDAmountFn = (value: any) => number
-type GetSatoshisFromUSDCentsFn = (value: any) => number
-
-type GetCommittedAmountDisplayArgs<
-  TGetUSDAmount extends GetUSDAmountFn,
-  TGetSatoshisFromUSDCents extends GetSatoshisFromUSDCentsFn,
-> = {
+type GetCommittedAmountDisplayArgs<TUsdAmount extends number, TSatoshisFromUSDCentsAmount extends number> = {
   amountCommitted?: number | null
   amountCommittedCurrency?: string | null
   usdRate: number
-  getUSDAmount: TGetUSDAmount
-  getSatoshisFromUSDCents: TGetSatoshisFromUSDCents
+  getUSDAmount: (value: TUsdAmount) => number
+  getSatoshisFromUSDCents: (value: TSatoshisFromUSDCentsAmount) => number
 }
 
-type GetSatsAmountDisplayArgs<TGetUSDAmount extends GetUSDAmountFn> = {
+type GetSatsAmountDisplayArgs<TUsdAmount extends number> = {
   amountSats?: number | null
   usdRate: number
-  getUSDAmount: TGetUSDAmount
+  getUSDAmount: (value: TUsdAmount) => number
 }
 
 export type CommittedAmountDisplay = {
@@ -32,11 +26,11 @@ export type CommittedAmountDisplay = {
   secondary?: string
 } | null
 
-export function getSatsAmountDisplay<TGetUSDAmount extends GetUSDAmountFn>({
+export function getSatsAmountDisplay<TUsdAmount extends number>({
   amountSats,
   usdRate,
   getUSDAmount,
-}: GetSatsAmountDisplayArgs<TGetUSDAmount>): CommittedAmountDisplay {
+}: GetSatsAmountDisplayArgs<TUsdAmount>): CommittedAmountDisplay {
   if (amountSats === null || amountSats === undefined) {
     return null
   }
@@ -49,20 +43,17 @@ export function getSatsAmountDisplay<TGetUSDAmount extends GetUSDAmountFn>({
 
   return {
     primary,
-    secondary: usdFormatter.format(getUSDAmount(amountSats as Parameters<TGetUSDAmount>[0])),
+    secondary: usdFormatter.format(getUSDAmount(amountSats as TUsdAmount)),
   }
 }
 
-export function getCommittedAmountDisplay<
-  TGetUSDAmount extends GetUSDAmountFn,
-  TGetSatoshisFromUSDCents extends GetSatoshisFromUSDCentsFn,
->({
+export function getCommittedAmountDisplay<TUsdAmount extends number, TSatoshisFromUSDCentsAmount extends number>({
   amountCommitted,
   amountCommittedCurrency,
   usdRate,
   getUSDAmount,
   getSatoshisFromUSDCents,
-}: GetCommittedAmountDisplayArgs<TGetUSDAmount, TGetSatoshisFromUSDCents>): CommittedAmountDisplay {
+}: GetCommittedAmountDisplayArgs<TUsdAmount, TSatoshisFromUSDCentsAmount>): CommittedAmountDisplay {
   if (amountCommitted === null || amountCommitted === undefined) {
     return null
   }
@@ -78,7 +69,7 @@ export function getCommittedAmountDisplay<
       return { primary }
     }
 
-    const convertedSats = getSatoshisFromUSDCents(amountCommitted as Parameters<TGetSatoshisFromUSDCents>[0])
+    const convertedSats = getSatoshisFromUSDCents(amountCommitted as TSatoshisFromUSDCentsAmount)
     return {
       primary,
       secondary: `${getShortAmountLabel(convertedSats, true)} sats`,
