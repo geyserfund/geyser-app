@@ -35,13 +35,13 @@ const CULTURE_IMPACT_FUND_SUBCATEGORIES = new Set<ProjectSubCategory>([
   ProjectSubCategory.Hardware,
 ])
 
-export function getEligibleImpactFund({
+export const getEligibleImpactFund = ({
   region,
   subCategory,
 }: {
   region?: string | null
   subCategory?: ProjectSubCategory | null
-}): EligibleImpactFund | null {
+}): EligibleImpactFund | null => {
   if (region === 'South America') {
     return IMPACT_FUNDS.LATAM
   }

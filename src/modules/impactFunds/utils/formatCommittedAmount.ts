@@ -47,13 +47,13 @@ export function getSatsAmountDisplay<TUsdAmount extends number>({
   }
 }
 
-export function getCommittedAmountDisplay<TUsdAmount extends number, TSatoshisFromUSDCentsAmount extends number>({
+export const getCommittedAmountDisplay = <TUsdAmount extends number, TSatoshisFromUSDCentsAmount extends number>({
   amountCommitted,
   amountCommittedCurrency,
   usdRate,
   getUSDAmount,
   getSatoshisFromUSDCents,
-}: GetCommittedAmountDisplayArgs<TUsdAmount, TSatoshisFromUSDCentsAmount>): CommittedAmountDisplay {
+}: GetCommittedAmountDisplayArgs<TUsdAmount, TSatoshisFromUSDCentsAmount>): CommittedAmountDisplay => {
   if (amountCommitted === null || amountCommitted === undefined) {
     return null
   }
