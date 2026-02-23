@@ -195,7 +195,8 @@ const faqItems = [
   },
   {
     question: 'How long does review take after I apply?',
-    answer: 'Pending confirmation. Please provide the expected review timeline so we can publish it here.',
+    answer:
+      'Applications are reviewed on a continuous basis, and all reviews are typically completed within a quarter.',
   },
 ]
 
