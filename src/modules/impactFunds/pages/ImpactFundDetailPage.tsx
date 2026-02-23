@@ -120,51 +120,53 @@ function getFundingModelLabel(fundingModel: ImpactFundApplicationFundingModel): 
 
 const howItWorksItems = [
   {
-    title: 'Annual Commitment',
-    description: 'A dedicated pool of capital is committed each year by founding and supporting sponsors.',
+    title: t('Annual Commitment'),
+    description: t('A dedicated pool of capital is committed each year by founding and supporting sponsors.'),
     icon: PiCalendarBold,
   },
   {
-    title: 'Allocation Committee',
-    description: 'An independent review panel evaluates applications and allocates funding.',
+    title: t('Allocation Committee'),
+    description: t('An independent review panel evaluates applications and allocates funding.'),
     icon: PiScalesBold,
   },
   {
-    title: 'Transparency & Reporting',
-    description: 'Impact reports are published outlining funded projects, outcomes, and fund performance.',
+    title: t('Transparency & Reporting'),
+    description: t('Impact reports are published outlining funded projects, outcomes, and fund performance.'),
     icon: PiChartBarBold,
   },
 ]
 
 const fundingOverviewItems = [
   {
-    title: 'Funding Cycles',
-    description: 'Applications are reviewed and selected on a recurring basis.',
+    title: t('Funding Cycles'),
+    description: t('Applications are reviewed and selected on a recurring basis.'),
     icon: PiArrowsClockwiseBold,
   },
   {
-    title: 'Funding Range',
-    description: 'From $2.5k to $20k, depending on scope, impact and stage of development.',
+    title: t('Funding Range'),
+    description: t('From $2.5k to $20k, depending on scope, impact and stage of development.'),
     icon: PiCoinsBold,
   },
 ]
 
 const fundingModelItems = [
   {
-    title: 'Direct Grants',
-    description: 'Full requested amount allocated after committee approval.',
+    title: t('Direct Grants'),
+    description: t('Full requested amount allocated after committee approval.'),
     icon: PiCoinsBold,
   },
   {
-    title: 'Capped Matching Fund',
-    description:
+    title: t('Capped Matching Fund'),
+    description: t(
       'The fund matches independently raised capital up to a predefined cap to incentivize traction and community participation.',
+    ),
     icon: PiArrowsClockwiseBold,
   },
   {
-    title: 'All-or-Nothing Co-Funding',
-    description:
+    title: t('All-or-Nothing Co-Funding'),
+    description: t(
       'Conditional commitment released only if full funding is reached within a fixed timeframe (for example, 60 days).',
+    ),
     icon: PiScalesBold,
   },
 ]
@@ -269,7 +271,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
 
       uniqueSupporters.set(userId, {
         id: userId,
-        username: funderUser.username || 'User',
+        username: funderUser.username || t('User'),
         imageUrl: funderUser.imageUrl ?? null,
       })
     }
@@ -464,7 +466,7 @@ function FundingModelCard({
       <VStack align="stretch" spacing={2}>
         <HStack justify="space-between" align="center">
           <Body bold color={primaryTextColor}>
-            {t(item.title)}
+            {item.title}
           </Body>
           <Icon
             as={PiCaretDownBold}
@@ -477,7 +479,7 @@ function FundingModelCard({
         </HStack>
         {isOpen && (
           <Body size="sm" color={secondaryTextColor}>
-            {t(item.description)}
+            {item.description}
           </Body>
         )}
       </VStack>
@@ -990,10 +992,10 @@ function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColor
                 </Flex>
                 <VStack align="stretch" spacing={1}>
                   <Body bold color={colors.primaryTextColor}>
-                    {t(item.title)}
+                    {item.title}
                   </Body>
                   <Body size="sm" color={colors.secondaryTextColor}>
-                    {t(item.description)}
+                    {item.description}
                   </Body>
                 </VStack>
               </HStack>
@@ -1023,10 +1025,10 @@ function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColor
                 </Flex>
                 <VStack align="stretch" spacing={1}>
                   <Body bold color={colors.primaryTextColor}>
-                    {t(item.title)}
+                    {item.title}
                   </Body>
                   <Body size="sm" color={colors.secondaryTextColor}>
-                    {t(item.description)}
+                    {item.description}
                   </Body>
                 </VStack>
               </HStack>

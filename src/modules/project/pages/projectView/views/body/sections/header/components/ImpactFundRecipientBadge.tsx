@@ -1,5 +1,6 @@
 import { HStack, Image, Link as ChakraLink, useColorModeValue } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { Trans } from 'react-i18next'
 import { Link } from 'react-router'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -60,15 +61,22 @@ export const ImpactFundRecipientBanner = ({ recipient }: ImpactFundRecipientBann
       />
 
       <Body color={textColor} fontWeight={500} size={{ base: 'sm', lg: 'md' }} lineHeight={1.35}>
-        {t('This project has been vetted and received funds from the')}{' '}
-        <Body as="span" color={fundTitleColor} fontWeight={700} fontSize="inherit" lineHeight="inherit">
-          {impactFundTitle}
-        </Body>
-        . {t('Learn more about Impact Funds')}{' '}
-        <ChakraLink as={Link} to={impactFundPath} textDecoration="underline" color={linkColor}>
-          {t('here')}
-        </ChakraLink>
-        .
+        <Trans
+          i18nKey={
+            'This project has been vetted and received funds from the <1>{{impactFundTitle}}</1>. Learn more about Impact Funds <3>here</3>.'
+          }
+          values={{ impactFundTitle }}
+        >
+          {'This project has been vetted and received funds from the '}
+          <Body as="span" color={fundTitleColor} fontWeight={700} fontSize="inherit" lineHeight="inherit">
+            {impactFundTitle}
+          </Body>
+          {'. Learn more about Impact Funds '}
+          <ChakraLink as={Link} to={impactFundPath} textDecoration="underline" color={linkColor}>
+            here
+          </ChakraLink>
+          .
+        </Trans>
       </Body>
     </HStack>
   )
