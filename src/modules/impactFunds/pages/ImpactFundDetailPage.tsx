@@ -50,6 +50,7 @@ import { Head } from '@/config/Head.tsx'
 import { useAuthContext } from '@/context'
 import { useBTCConverter } from '@/helpers'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal'
+import { getCommittedAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
@@ -67,16 +68,11 @@ import {
   useImpactFundQuery,
   useProjectPageFundersQuery,
 } from '@/types'
-import { getShortAmountLabel, useNotification } from '@/utils'
+import { useNotification } from '@/utils'
 
 const APPLICATIONS_PAGE_SIZE = 15
 const DESCRIPTION_PREVIEW_CHAR_LIMIT = 500
 const btcNumberFormatter = new Intl.NumberFormat()
-const usdNumberFormatter = new Intl.NumberFormat(undefined, {
-  style: 'currency',
-  currency: 'USD',
-  maximumFractionDigits: 0,
-})
 const fundedStatus = [ImpactFundApplicationStatus.Funded]
 type ImpactFundDetails = ImpactFundQuery['impactFund']
 type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
@@ -92,12 +88,8 @@ const fundingModelLabels: Record<ImpactFundApplicationFundingModel, string> = {
   [ImpactFundApplicationFundingModel.Matching]: 'Matching',
   [ImpactFundApplicationFundingModel.AonCofunding]: 'AON Co-Funding',
 }
-
-const fundingModelPillStyles: Record<ImpactFundApplicationFundingModel, { bg: string; textColor: string }> = {
-  [ImpactFundApplicationFundingModel.DirectGrant]: { bg: 'blue.100', textColor: 'blue.800' },
-  [ImpactFundApplicationFundingModel.Matching]: { bg: 'green.100', textColor: 'green.800' },
-  [ImpactFundApplicationFundingModel.AonCofunding]: { bg: 'purple.100', textColor: 'purple.800' },
-}
+type FundingModelPillStyle = { bg: string; textColor: string }
+type FundingModelPillStyles = Record<ImpactFundApplicationFundingModel, FundingModelPillStyle>
 
 function truncateDescription(text: string, limit: number, expanded: boolean): string {
   return !expanded && text.length > limit ? `${text.slice(0, limit)}...` : text
@@ -127,49 +119,6 @@ function hasValue<T>(value: T | null | undefined): value is T {
 
 function getFundingModelLabel(fundingModel: ImpactFundApplicationFundingModel): string {
   return fundingModelLabels[fundingModel] ?? fundingModel
-}
-
-function getCommittedAmountDisplay({
-  amountCommitted,
-  amountCommittedCurrency,
-  usdRate,
-  getUSDAmount,
-  getSatoshisFromUSDCents,
-}: {
-  amountCommitted?: number | null
-  amountCommittedCurrency?: string
-  usdRate: number
-  getUSDAmount: ReturnType<typeof useBTCConverter>['getUSDAmount']
-  getSatoshisFromUSDCents: ReturnType<typeof useBTCConverter>['getSatoshisFromUSDCents']
-}) {
-  if (!hasValue(amountCommitted)) {
-    return null
-  }
-
-  if (amountCommittedCurrency === 'USDCENT') {
-    const primary = usdNumberFormatter.format(amountCommitted / 100)
-
-    if (usdRate <= 0) {
-      return { primary }
-    }
-
-    const convertedSats = getSatoshisFromUSDCents(amountCommitted as Parameters<typeof getSatoshisFromUSDCents>[0])
-    return {
-      primary,
-      secondary: `${getShortAmountLabel(convertedSats, true)} sats`,
-    }
-  }
-
-  const primary = `${btcNumberFormatter.format(amountCommitted)} sats`
-
-  if (usdRate <= 0) {
-    return { primary }
-  }
-
-  return {
-    primary,
-    secondary: usdNumberFormatter.format(getUSDAmount(amountCommitted as Parameters<typeof getUSDAmount>[0])),
-  }
 }
 
 const howItWorksItems = [
@@ -551,6 +500,7 @@ type FundedApplicationsSectionProps = {
   secondaryTextColor: string
   subtleTextColor: string
   tertiaryTextColor: string
+  fundingModelPillStyles: FundingModelPillStyles
 }
 
 function FundedApplicationsSection({
@@ -566,7 +516,11 @@ function FundedApplicationsSection({
   secondaryTextColor,
   subtleTextColor,
   tertiaryTextColor,
+  fundingModelPillStyles,
 }: FundedApplicationsSectionProps): JSX.Element {
+  const fallbackPillBg = useColorModeValue('gray.100', 'gray.700')
+  const fallbackPillTextColor = useColorModeValue('gray.800', 'gray.100')
+
   if (applicationsLoading) {
     return (
       <VStack py={8}>
@@ -632,13 +586,13 @@ function FundedApplicationsSection({
                 px={2.5}
                 py={1}
                 borderRadius="full"
-                bg={fundingModelPillStyles[application.fundingModel]?.bg ?? 'gray.100'}
+                bg={fundingModelPillStyles[application.fundingModel]?.bg ?? fallbackPillBg}
                 flexShrink={0}
               >
                 <Body
                   size="xs"
                   fontWeight="semibold"
-                  color={fundingModelPillStyles[application.fundingModel]?.textColor ?? 'gray.800'}
+                  color={fundingModelPillStyles[application.fundingModel]?.textColor ?? fallbackPillTextColor}
                 >
                   {t(getFundingModelLabel(application.fundingModel))}
                 </Body>
@@ -709,9 +663,17 @@ type ImpactFundThemeColors = {
   tagBorderColor: string
   iconBg: string
   iconColor: string
+  fundingModelPillStyles: FundingModelPillStyles
 }
 
 function useImpactFundThemeColors(): ImpactFundThemeColors {
+  const directGrantPillBg = useColorModeValue('blue.100', 'blue.900')
+  const directGrantPillTextColor = useColorModeValue('blue.800', 'blue.100')
+  const matchingPillBg = useColorModeValue('green.100', 'green.900')
+  const matchingPillTextColor = useColorModeValue('green.800', 'green.100')
+  const aonCofundingPillBg = useColorModeValue('purple.100', 'purple.900')
+  const aonCofundingPillTextColor = useColorModeValue('purple.800', 'purple.100')
+
   return {
     surfaceBg: useColorModeValue('neutral1.3', 'neutral1.3'),
     mutedBg: useColorModeValue('neutral1.2', 'neutral1.2'),
@@ -731,6 +693,20 @@ function useImpactFundThemeColors(): ImpactFundThemeColors {
     tagBorderColor: useColorModeValue('primary1.200', 'primary1.800'),
     iconBg: useColorModeValue('primary1.100', 'primary1.900'),
     iconColor: useColorModeValue('primary1.600', 'primary1.300'),
+    fundingModelPillStyles: {
+      [ImpactFundApplicationFundingModel.DirectGrant]: {
+        bg: directGrantPillBg,
+        textColor: directGrantPillTextColor,
+      },
+      [ImpactFundApplicationFundingModel.Matching]: {
+        bg: matchingPillBg,
+        textColor: matchingPillTextColor,
+      },
+      [ImpactFundApplicationFundingModel.AonCofunding]: {
+        bg: aonCofundingPillBg,
+        textColor: aonCofundingPillTextColor,
+      },
+    },
   }
 }
 
@@ -1160,7 +1136,7 @@ function ImpactFundSponsorsSection({
           </Button>
         </Flex>
         <Body size="sm" color={colors.secondaryTextColor}>
-          {t('Sponsors have made significant contributions to the fund and are part of the allocation commitee.')}
+          {t('Sponsors have made significant contributions to the fund and are part of the allocation committee.')}
         </Body>
         <Button
           display={{ base: 'flex', md: 'none' }}
@@ -1623,6 +1599,7 @@ function ImpactFundDetailContent({
           secondaryTextColor={colors.secondaryTextColor}
           subtleTextColor={colors.subtleTextColor}
           tertiaryTextColor={colors.tertiaryTextColor}
+          fundingModelPillStyles={colors.fundingModelPillStyles}
         />
       </VStack>
 

@@ -18,13 +18,13 @@ import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useBTCConverter } from '@/helpers'
+import { getCommittedAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import { useImpactFundsQuery } from '@/types'
-import { getShortAmountLabel } from '@/utils'
 
 import { DonationSponsorCTA } from '../components/DonationSponsorCTA.tsx'
 import { ImpactFlowStrip } from '../components/ImpactFlowStrip.tsx'
@@ -35,49 +35,6 @@ const usdFormatter = new Intl.NumberFormat(undefined, {
   currency: 'USD',
   maximumFractionDigits: 0,
 })
-
-const getCommittedAmountDisplay = ({
-  amountCommitted,
-  amountCommittedCurrency,
-  usdRate,
-  getUSDAmount,
-  getSatoshisFromUSDCents,
-}: {
-  amountCommitted?: number | null
-  amountCommittedCurrency?: string
-  usdRate: number
-  getUSDAmount: ReturnType<typeof useBTCConverter>['getUSDAmount']
-  getSatoshisFromUSDCents: ReturnType<typeof useBTCConverter>['getSatoshisFromUSDCents']
-}) => {
-  if (amountCommitted === null || amountCommitted === undefined) {
-    return null
-  }
-
-  if (amountCommittedCurrency === 'USDCENT') {
-    const primary = usdFormatter.format(amountCommitted / 100)
-
-    if (usdRate <= 0) {
-      return { primary }
-    }
-
-    const convertedSats = getSatoshisFromUSDCents(amountCommitted as Parameters<typeof getSatoshisFromUSDCents>[0])
-    return {
-      primary,
-      secondary: `${getShortAmountLabel(convertedSats, true)} sats`,
-    }
-  }
-
-  const primary = `${numberFormatter.format(amountCommitted)} sats`
-
-  if (usdRate <= 0) {
-    return { primary }
-  }
-
-  return {
-    primary,
-    secondary: usdFormatter.format(getUSDAmount(amountCommitted as Parameters<typeof getUSDAmount>[0])),
-  }
-}
 
 export const ImpactFundsMainPage = () => {
   const { data, loading, error } = useImpactFundsQuery()

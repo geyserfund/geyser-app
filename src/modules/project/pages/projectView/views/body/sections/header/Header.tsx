@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client'
 import {
   Box,
   HStack,
@@ -19,8 +18,6 @@ import { PiCaretDoubleDown, PiQrCode } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { ProjectStatusBar } from '@/components/ui'
-import { QUERY_PROJECT_HEADER_SUMMARY } from '@/modules/project/graphql/queries/projectQuery.ts'
-import type { ProjectState } from '@/modules/project/state/projectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
@@ -28,6 +25,7 @@ import { ID } from '@/shared/constants/components/id.ts'
 import { validateImageUrl } from '@/shared/markdown/validations/image'
 import { MediaCarousel } from '@/shared/molecules/MediaCarousel'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
+import { useProjectPageHeaderSummaryQuery } from '@/types'
 
 import { ImageWithReload } from '../../../../../../../../shared/components/display/ImageWithReload'
 import { Body, H1 } from '../../../../../../../../shared/components/typography'
@@ -51,7 +49,6 @@ import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
 import { AonProjectBalanceDisplay } from '../contributionSummary/components/AonProjectBalanceDisplay.tsx'
 import { CreatorSocial } from './components/CreatorSocial'
-import { type ProjectImpactFundRecipient } from './components/ImpactFundRecipientBadge.tsx'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
 import { PostOnNostr } from './components/PostOnNostr.tsx'
 import { ShareProjectButton } from './components/ShareProjectButton'
@@ -59,17 +56,10 @@ import { ShareProjectButton } from './components/ShareProjectButton'
 interface HeaderDetailsProps extends StackProps {
   onOpen: () => void
   summaryLoading: boolean
+  summaryError: boolean
 }
 
-type ProjectPageHeaderSummaryQueryData = {
-  projectGet?:
-    | (Partial<ProjectState> & {
-        impactFundRecipient?: ProjectImpactFundRecipient | null
-      })
-    | null
-}
-
-const HeaderDetails = ({ onOpen, summaryLoading, ...props }: HeaderDetailsProps) => {
+const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: HeaderDetailsProps) => {
   const { project, projectOwner } = useProjectAtom()
   const projectImages = project.images || []
 
@@ -150,6 +140,10 @@ const HeaderDetails = ({ onOpen, summaryLoading, ...props }: HeaderDetailsProps)
 
         {summaryLoading ? (
           <SkeletonLayout height="20px" w="250px" />
+        ) : summaryError ? (
+          <Body size="md" medium light>
+            {t('Unable to load project summary right now')}
+          </Body>
         ) : (
           <HStack w="full" flexWrap={'wrap'} paddingTop={1}>
             <Body size="md" medium light>
@@ -243,11 +237,11 @@ export const Header = () => {
 
   const isMobile = useMobileMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { loading: summaryLoading } = useQuery<ProjectPageHeaderSummaryQueryData>(QUERY_PROJECT_HEADER_SUMMARY, {
+  const { loading: summaryLoading, error: summaryError } = useProjectPageHeaderSummaryQuery({
     fetchPolicy: 'network-only',
     variables: {
       where: {
-        name: project?.name,
+        name: project?.name || '',
       },
     },
     skip: !project.name,
@@ -298,7 +292,7 @@ export const Header = () => {
         {projectImages.length === 1 && <Box>{renderImageOrVideo()}</Box>}
 
         {projectImages.length > 1 && <MediaCarousel altText={'Project header image'} links={projectImages} />}
-        <HeaderDetails onOpen={onOpen} summaryLoading={summaryLoading} />
+        <HeaderDetails onOpen={onOpen} summaryLoading={summaryLoading} summaryError={Boolean(summaryError)} />
         {isMobile && !hideProjectAmount && <MobileBalanceInfo />}
       </CardLayout>
     </>

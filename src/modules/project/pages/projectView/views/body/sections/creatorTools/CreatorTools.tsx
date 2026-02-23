@@ -6,12 +6,8 @@ import { Link, useLocation } from 'react-router'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, GuideStepByStepUrl } from '@/shared/constants/index.ts'
+import { ProjectStatus, useImpactFundApplicationsQuery, useImpactFundQuery } from '@/types'
 
-import {
-  ProjectStatus,
-  useImpactFundApplicationsQuery,
-  useImpactFundQuery,
-} from '../../../../../../../../types/index.ts'
 import { useProjectAtom } from '../../../../../../hooks/useProjectAtom.ts'
 import { getEligibleImpactFund } from '../impactFundEligibility.ts'
 import { CreatorButtons } from './components/CreatorButtons.tsx'
@@ -107,7 +103,7 @@ export const CreatorTools = () => {
             colorScheme="primary1"
             flexShrink={0}
           >
-            {'Learn more'}
+            {t('Learn more')}
           </Button>
         </HStack>
       )}
