@@ -1,10 +1,17 @@
-import { GridItem, SimpleGrid, Stack, VStack } from '@chakra-ui/react'
+import { useQuery } from '@apollo/client'
+import { GridItem, HStack, Select, SimpleGrid, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router'
 
+import { ScrollInvoke } from '@/helpers/ScrollInvoke.tsx'
+import { QUERY_PROJECT_REWARDS_CATALOG } from '@/modules/discovery/graphql/queries/rewardsQuery.ts'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { ProjectRewardsMostSoldRange, useProjectRewardsMostSoldGetQuery } from '@/types/index.ts'
-import { useNotification } from '@/utils/index.ts'
+import { ID } from '@/shared/constants/components/id.ts'
+import { useListenerState } from '@/shared/hooks/useListenerState.tsx'
+import { RewardForProductsPageFragment } from '@/types/index.ts'
+import { useMobileMode, useNotification } from '@/utils/index.ts'
 
 import {
   TrendingRewardCard,
@@ -15,42 +22,225 @@ type ProductsGridProps = {
   category?: string
 }
 
+type SortOption = 'most_sold' | 'most_recent'
+type SortByApi = 'MOST_SOLD' | 'MOST_RECENT'
+
+type ProjectRewardsCatalogRow = {
+  id: bigint
+  count: number
+  projectReward: RewardForProductsPageFragment
+}
+
+type ProjectRewardsCatalogGetResponse = {
+  projectRewardsCatalogGet: {
+    rewards: ProjectRewardsCatalogRow[]
+  }
+}
+
+type ProjectRewardsCatalogGetVariables = {
+  input: {
+    category?: string
+    sortBy: SortByApi
+    pagination: {
+      take: number
+      cursor?: {
+        id: bigint
+      }
+    }
+  }
+}
+
+const PAGE_SIZE = 24
+const SORT_SEARCH_PARAM = 'sort'
+const getSortByApi = (sort: SortOption): SortByApi => (sort === 'most_recent' ? 'MOST_RECENT' : 'MOST_SOLD')
+
 export const ProductsGrid = ({ category }: ProductsGridProps) => {
+  const isMobile = useMobileMode()
   const toast = useNotification()
-  const { data, loading } = useProjectRewardsMostSoldGetQuery({
-    fetchPolicy: 'network-only',
-    variables: {
-      input: {
-        category,
-        range: ProjectRewardsMostSoldRange.Quarter,
-        take: 24,
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [rewards, setRewards] = useState<ProjectRewardsCatalogRow[]>([])
+  const [hasHydratedInitialPage, setHasHydratedInitialPage] = useState(false)
+  const [isInitialLoading, setIsInitialLoading] = useState(true)
+
+  const [isLoadingMore, setIsLoadingMore] = useListenerState(false)
+  const [noMoreItems, setNoMoreItems] = useListenerState(false)
+
+  const sortFromUrl = searchParams.get(SORT_SEARCH_PARAM)
+  const sort: SortOption = sortFromUrl === 'most_recent' ? 'most_recent' : 'most_sold'
+  const sortBy = getSortByApi(sort)
+
+  const { data, fetchMore } = useQuery<ProjectRewardsCatalogGetResponse, ProjectRewardsCatalogGetVariables>(
+    QUERY_PROJECT_REWARDS_CATALOG,
+    {
+      fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        input: {
+          category,
+          sortBy,
+          pagination: {
+            take: PAGE_SIZE,
+          },
+        },
+      },
+      onError() {
+        setIsInitialLoading(false)
+        toast.error({ title: t('Failed to fetch products') })
       },
     },
-    onError() {
+  )
+
+  useEffect(() => {
+    setIsInitialLoading(true)
+    setHasHydratedInitialPage(false)
+    setNoMoreItems(false)
+    setRewards([])
+  }, [category, sort, setNoMoreItems])
+
+  useEffect(() => {
+    if (!data || hasHydratedInitialPage) {
+      return
+    }
+
+    const firstPage = data.projectRewardsCatalogGet?.rewards || []
+    setRewards(firstPage)
+    setNoMoreItems(firstPage.length < PAGE_SIZE)
+    setHasHydratedInitialPage(true)
+    setIsInitialLoading(false)
+  }, [data, hasHydratedInitialPage, setNoMoreItems])
+
+  const handleSortChange = (nextSort: SortOption) => {
+    const nextSearchParams = new URLSearchParams(searchParams)
+
+    if (nextSort === 'most_sold') {
+      nextSearchParams.delete(SORT_SEARCH_PARAM)
+    } else {
+      nextSearchParams.set(SORT_SEARCH_PARAM, nextSort)
+    }
+
+    setSearchParams(nextSearchParams, { replace: true })
+  }
+
+  const fetchNext = async () => {
+    if (isLoadingMore.current || noMoreItems.current) {
+      return
+    }
+
+    const lastReward = rewards[rewards.length - 1]
+    if (!lastReward) {
+      setNoMoreItems(true)
+      return
+    }
+
+    setIsLoadingMore(true)
+
+    try {
+      const { data: fetchMoreData } = await fetchMore({
+        variables: {
+          input: {
+            category,
+            sortBy,
+            pagination: {
+              take: PAGE_SIZE,
+              cursor: {
+                id: lastReward.id,
+              },
+            },
+          },
+        },
+        updateQuery(previousResult) {
+          return previousResult
+        },
+      })
+
+      const nextPage = fetchMoreData?.projectRewardsCatalogGet?.rewards || []
+      if (nextPage.length < PAGE_SIZE) {
+        setNoMoreItems(true)
+      }
+
+      if (nextPage.length === 0) {
+        return
+      }
+
+      setRewards((currentRewards) => [...currentRewards, ...nextPage])
+    } catch {
       toast.error({ title: t('Failed to fetch products') })
-    },
-  })
+    } finally {
+      setIsLoadingMore(false)
+    }
+  }
 
-  const rewards = data?.projectRewardsMostSoldGet || []
-
-  if (loading) {
-    return <ProductsGridSkeleton />
+  if (isInitialLoading) {
+    return (
+      <>
+        <ProductSortSelect selectedSort={sort} onChange={handleSortChange} />
+        <ProductsGridSkeleton />
+      </>
+    )
   }
 
   if (!rewards.length) {
-    return <Body>{t('No products found')}</Body>
+    return (
+      <>
+        <ProductSortSelect selectedSort={sort} onChange={handleSortChange} />
+        <Body>{t('No products found')}</Body>
+      </>
+    )
   }
 
   return (
-    <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacing={{ base: 4, lg: 8 }}>
-      {rewards.map((reward) => {
-        return (
-          <GridItem key={reward.projectReward.id}>
-            <TrendingRewardCard reward={reward.projectReward} sold={reward.count} />
-          </GridItem>
-        )
-      })}
-    </SimpleGrid>
+    <>
+      <ProductSortSelect selectedSort={sort} onChange={handleSortChange} />
+      <SimpleGrid w="full" columns={{ base: 1, lg: 4 }} spacing={{ base: 4, lg: 8 }}>
+        {rewards.map((reward) => {
+          return (
+            <GridItem key={reward.id}>
+              <TrendingRewardCard reward={reward.projectReward} sold={reward.count} />
+            </GridItem>
+          )
+        })}
+
+        {isLoadingMore.current &&
+          [1, 2, 3, 4].map((id) => (
+            <GridItem key={`loading-${id}`}>
+              <TrendingRewardCardSkeleton />
+            </GridItem>
+          ))}
+      </SimpleGrid>
+
+      <ScrollInvoke
+        elementId={!isMobile ? ID.root : undefined}
+        onScrollEnd={fetchNext}
+        isLoading={isLoadingMore}
+        noMoreItems={noMoreItems}
+      />
+    </>
+  )
+}
+
+const ProductSortSelect = ({
+  selectedSort,
+  onChange,
+}: {
+  selectedSort: SortOption
+  onChange: (nextSort: SortOption) => void
+}) => {
+  return (
+    <HStack w="full" justifyContent="end" spacing={2}>
+      <Body size="sm" light>
+        {t('Sort by')}
+      </Body>
+      <Select
+        size="sm"
+        maxW="200px"
+        borderColor="neutral1.6"
+        value={selectedSort}
+        onChange={(event) => onChange(event.target.value as SortOption)}
+      >
+        <option value="most_sold">{t('Most sold')}</option>
+        <option value="most_recent">{t('Most recent')}</option>
+      </Select>
+    </HStack>
   )
 }
 

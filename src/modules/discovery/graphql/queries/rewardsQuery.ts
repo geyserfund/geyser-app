@@ -37,3 +37,25 @@ export const QUERY_PROJECT_REWARDS_MOST_SOLD = gql`
     }
   }
 `
+
+export const QUERY_PROJECT_REWARDS_CATALOG = gql`
+  ${FRAGMENT_REWARD_FOR_PRODUCTS_PAGE}
+  query ProjectRewardsCatalogGet($input: GetProjectRewardsCatalogInput!) {
+    projectRewardsCatalogGet(input: $input) {
+      rewards {
+        id
+        count
+        projectReward {
+          ...RewardForProductsPage
+        }
+      }
+      pagination {
+        take
+        count
+        cursor {
+          id
+        }
+      }
+    }
+  }
+`

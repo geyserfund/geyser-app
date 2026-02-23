@@ -124,9 +124,15 @@ export const Shops = () => {
         variant="secondary"
         index={currentTabIndex}
         onChange={(index) =>
-          navigate(tabs[index]?.path ?? getPath('discoveryProducts'), {
-            preventScrollReset: true,
-          })
+          navigate(
+            {
+              pathname: tabs[index]?.path ?? getPath('discoveryProducts'),
+              search: location.search,
+            },
+            {
+              preventScrollReset: true,
+            },
+          )
         }
       >
         <HStack w="full" spacing={2} alignItems="center">
