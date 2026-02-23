@@ -21,10 +21,37 @@ type GetCommittedAmountDisplayArgs<
   getSatoshisFromUSDCents: TGetSatoshisFromUSDCents
 }
 
+type GetSatsAmountDisplayArgs<TGetUSDAmount extends GetUSDAmountFn> = {
+  amountSats?: number | null
+  usdRate: number
+  getUSDAmount: TGetUSDAmount
+}
+
 export type CommittedAmountDisplay = {
   primary: string
   secondary?: string
 } | null
+
+export function getSatsAmountDisplay<TGetUSDAmount extends GetUSDAmountFn>({
+  amountSats,
+  usdRate,
+  getUSDAmount,
+}: GetSatsAmountDisplayArgs<TGetUSDAmount>): CommittedAmountDisplay {
+  if (amountSats === null || amountSats === undefined) {
+    return null
+  }
+
+  const primary = `${satsFormatter.format(amountSats)} sats`
+
+  if (usdRate <= 0) {
+    return { primary }
+  }
+
+  return {
+    primary,
+    secondary: usdFormatter.format(getUSDAmount(amountSats as Parameters<TGetUSDAmount>[0])),
+  }
+}
 
 export function getCommittedAmountDisplay<
   TGetUSDAmount extends GetUSDAmountFn,
@@ -37,6 +64,10 @@ export function getCommittedAmountDisplay<
   getSatoshisFromUSDCents,
 }: GetCommittedAmountDisplayArgs<TGetUSDAmount, TGetSatoshisFromUSDCents>): CommittedAmountDisplay {
   if (amountCommitted === null || amountCommitted === undefined) {
+    return null
+  }
+
+  if (amountCommitted === 0) {
     return null
   }
 
@@ -54,14 +85,9 @@ export function getCommittedAmountDisplay<
     }
   }
 
-  const primary = `${satsFormatter.format(amountCommitted)} sats`
-
-  if (usdRate <= 0) {
-    return { primary }
-  }
-
-  return {
-    primary,
-    secondary: usdFormatter.format(getUSDAmount(amountCommitted as Parameters<TGetUSDAmount>[0])),
-  }
+  return getSatsAmountDisplay({
+    amountSats: amountCommitted,
+    usdRate,
+    getUSDAmount,
+  })
 }

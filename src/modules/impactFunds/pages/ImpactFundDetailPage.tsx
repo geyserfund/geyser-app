@@ -50,7 +50,7 @@ import { Head } from '@/config/Head.tsx'
 import { useAuthContext } from '@/context'
 import { useBTCConverter } from '@/helpers'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal'
-import { getCommittedAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
+import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
@@ -714,6 +714,8 @@ function useImpactFundThemeColors(): ImpactFundThemeColors {
 type ImpactFundOverviewSectionProps = {
   impactFund: ImpactFundDetails
   committedAmountDisplay: ReturnType<typeof getCommittedAmountDisplay>
+  awardedAmountDisplay: ReturnType<typeof getSatsAmountDisplay>
+  showAwardedAsPrimaryMetric: boolean
   onApplyClick: () => void
   colors: ImpactFundThemeColors
 }
@@ -721,6 +723,8 @@ type ImpactFundOverviewSectionProps = {
 function ImpactFundOverviewSection({
   impactFund,
   committedAmountDisplay,
+  awardedAmountDisplay,
+  showAwardedAsPrimaryMetric,
   onApplyClick,
   colors,
 }: ImpactFundOverviewSectionProps): JSX.Element {
@@ -728,6 +732,8 @@ function ImpactFundOverviewSection({
   const descriptionText = impactFund.description || ''
   const hasLongDescription = descriptionText.length > DESCRIPTION_PREVIEW_CHAR_LIMIT
   const descriptionContent = truncateDescription(descriptionText, DESCRIPTION_PREVIEW_CHAR_LIMIT, isDescriptionExpanded)
+  const primaryAmountDisplay = showAwardedAsPrimaryMetric ? awardedAmountDisplay : committedAmountDisplay
+  const primaryAmountLabel = showAwardedAsPrimaryMetric ? t('Awarded so far') : t('Amount committed')
 
   return (
     <VStack align="stretch" spacing={6}>
@@ -792,7 +798,7 @@ function ImpactFundOverviewSection({
           </HStack>
         )}
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
-          {committedAmountDisplay && (
+          {primaryAmountDisplay && (
             <Box
               p={6}
               bg={colors.mutedBg}
@@ -815,11 +821,11 @@ function ImpactFundOverviewSection({
                 <VStack align="start" spacing={0}>
                   <HStack spacing={2} align="baseline">
                     <H2 size="xl" bold color={colors.emphasisTextColor}>
-                      {committedAmountDisplay.primary}
+                      {primaryAmountDisplay.primary}
                     </H2>
-                    {committedAmountDisplay.secondary && (
+                    {primaryAmountDisplay.secondary && (
                       <Body size="xs" color={colors.tertiaryTextColor}>
-                        {committedAmountDisplay.secondary}
+                        {primaryAmountDisplay.secondary}
                       </Body>
                     )}
                   </HStack>
@@ -833,50 +839,52 @@ function ImpactFundOverviewSection({
                     noOfLines={1}
                     whiteSpace="nowrap"
                   >
-                    {t('Amount committed')}
+                    {primaryAmountLabel}
                   </Body>
                 </VStack>
               </HStack>
             </Box>
           )}
-          <Box
-            p={6}
-            bg={colors.mutedBg}
-            borderRadius="lg"
-            transition="all 0.3s"
-            _hover={{ bg: colors.metricHoverBg, transform: 'translateY(-2px)' }}
-          >
-            <HStack spacing={4}>
-              <Flex
-                w="48px"
-                h="48px"
-                align="center"
-                justify="center"
-                bg={colors.iconBg}
-                borderRadius="lg"
-                flexShrink={0}
-              >
-                <Icon as={PiCoinsDuotone} boxSize={6} color={colors.iconColor} />
-              </Flex>
-              <VStack align="start" spacing={0}>
-                <H2 size="xl" bold color={colors.primaryTextColor}>
-                  ₿ {btcNumberFormatter.format(impactFund.metrics.awardedTotalSats)}
-                </H2>
-                <Body
-                  size="xs"
-                  fontSize={{ base: '10px', md: '12px' }}
-                  color={colors.subtleTextColor}
-                  textTransform="uppercase"
-                  letterSpacing="wide"
-                  fontWeight="medium"
-                  noOfLines={1}
-                  whiteSpace="nowrap"
+          {!showAwardedAsPrimaryMetric && (
+            <Box
+              p={6}
+              bg={colors.mutedBg}
+              borderRadius="lg"
+              transition="all 0.3s"
+              _hover={{ bg: colors.metricHoverBg, transform: 'translateY(-2px)' }}
+            >
+              <HStack spacing={4}>
+                <Flex
+                  w="48px"
+                  h="48px"
+                  align="center"
+                  justify="center"
+                  bg={colors.iconBg}
+                  borderRadius="lg"
+                  flexShrink={0}
                 >
-                  {t('Awarded so far')}
-                </Body>
-              </VStack>
-            </HStack>
-          </Box>
+                  <Icon as={PiCoinsDuotone} boxSize={6} color={colors.iconColor} />
+                </Flex>
+                <VStack align="start" spacing={0}>
+                  <H2 size="xl" bold color={colors.primaryTextColor}>
+                    ₿ {btcNumberFormatter.format(impactFund.metrics.awardedTotalSats)}
+                  </H2>
+                  <Body
+                    size="xs"
+                    fontSize={{ base: '10px', md: '12px' }}
+                    color={colors.subtleTextColor}
+                    textTransform="uppercase"
+                    letterSpacing="wide"
+                    fontWeight="medium"
+                    noOfLines={1}
+                    whiteSpace="nowrap"
+                  >
+                    {t('Awarded so far')}
+                  </Body>
+                </VStack>
+              </HStack>
+            </Box>
+          )}
           <Box
             p={6}
             bg={colors.mutedBg}
@@ -1565,6 +1573,12 @@ function ImpactFundDetailContent({
     getUSDAmount,
     getSatoshisFromUSDCents,
   })
+  const awardedAmountDisplay = getSatsAmountDisplay({
+    amountSats: impactFund.metrics.awardedTotalSats,
+    usdRate,
+    getUSDAmount,
+  })
+  const showAwardedAsPrimaryMetric = impactFund.amountCommitted === 0
 
   return (
     <VStack align="stretch" spacing={14}>
@@ -1577,6 +1591,8 @@ function ImpactFundDetailContent({
       <ImpactFundOverviewSection
         impactFund={impactFund}
         committedAmountDisplay={committedAmountDisplay}
+        awardedAmountDisplay={awardedAmountDisplay}
+        showAwardedAsPrimaryMetric={showAwardedAsPrimaryMetric}
         onApplyClick={onApplyClick}
         colors={colors}
       />

@@ -18,7 +18,7 @@ import { Link } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
 import { useBTCConverter } from '@/helpers'
-import { getCommittedAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
+import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
@@ -214,6 +214,12 @@ export const ImpactFundsMainPage = () => {
             getUSDAmount,
             getSatoshisFromUSDCents,
           })
+          const awardedAmountDisplay = getSatsAmountDisplay({
+            amountSats: fund.metrics.awardedTotalSats,
+            usdRate,
+            getUSDAmount,
+          })
+          const amountDisplay = fund.amountCommitted === 0 ? awardedAmountDisplay : committedAmountDisplay
 
           return (
             <CardLayout
@@ -240,14 +246,14 @@ export const ImpactFundsMainPage = () => {
                           {fund.title}
                         </LinkOverlay>
                       </H2>
-                      {committedAmountDisplay && (
+                      {amountDisplay && (
                         <VStack align="end" spacing={0} flexShrink={0}>
                           <Body size="md" bold whiteSpace="nowrap" lineHeight={1.2} textAlign="right">
-                            {committedAmountDisplay.primary}
+                            {amountDisplay.primary}
                           </Body>
-                          {committedAmountDisplay.secondary && (
+                          {amountDisplay.secondary && (
                             <Body size="xs" whiteSpace="nowrap" lineHeight={1.2} textAlign="right" color="neutral1.8">
-                              {committedAmountDisplay.secondary}
+                              {amountDisplay.secondary}
                             </Body>
                           )}
                         </VStack>
