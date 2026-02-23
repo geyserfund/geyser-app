@@ -264,16 +264,16 @@ export function ImpactFundDetailPage(): JSX.Element | null {
     const uniqueSupporters = new Map<string, CommunitySupporter>()
 
     for (const funder of communitySupportersData?.fundersGet ?? []) {
-      const { user } = funder
-      if (!user?.id) continue
+      const funderUser = funder.user
+      if (!funderUser?.id) continue
 
-      const userId = String(user.id)
+      const userId = String(funderUser.id)
       if (uniqueSupporters.has(userId)) continue
 
       uniqueSupporters.set(userId, {
         id: userId,
-        username: user.username || 'User',
-        imageUrl: user.imageUrl ?? null,
+        username: funderUser.username || 'User',
+        imageUrl: funderUser.imageUrl ?? null,
       })
     }
 

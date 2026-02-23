@@ -231,7 +231,7 @@ export const ImpactFundsMainPage = () => {
               border="1px solid"
               borderColor="neutral1.6"
               boxShadow="0 4px 16px rgba(0, 0, 0, 0.1)"
-              bgImage={fund.heroImage || ''}
+              bgImage={fund.heroImage || undefined}
               bgSize="cover"
               bgPosition="center"
               bgRepeat="no-repeat"

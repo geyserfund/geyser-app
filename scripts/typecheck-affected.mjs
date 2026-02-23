@@ -95,6 +95,8 @@ const checkAffectedFiles = (changedFiles) => {
     tsBuildInfoFile,
   };
 
+  // We intentionally typecheck changed files (+ ambient d.ts roots) for speed.
+  // This does not validate reverse dependencies that import changed files; CI runs full tsc.
   const program = ts.createIncrementalProgram({
     rootNames,
     options,
