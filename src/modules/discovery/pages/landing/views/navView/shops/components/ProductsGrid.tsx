@@ -59,7 +59,6 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
   const toast = useNotification()
   const [searchParams, setSearchParams] = useSearchParams()
   const [rewards, setRewards] = useState<ProjectRewardsCatalogRow[]>([])
-  const [hasHydratedInitialPage, setHasHydratedInitialPage] = useState(false)
   const [isInitialLoading, setIsInitialLoading] = useState(true)
 
   const [isLoadingMore, setIsLoadingMore] = useListenerState(false)
@@ -69,7 +68,7 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
   const sort: SortOption = sortFromUrl === 'most_recent' ? 'most_recent' : 'most_sold'
   const sortBy = getSortByApi(sort)
 
-  const { data, fetchMore } = useQuery<ProjectRewardsCatalogGetResponse, ProjectRewardsCatalogGetVariables>(
+  const { fetchMore } = useQuery<ProjectRewardsCatalogGetResponse, ProjectRewardsCatalogGetVariables>(
     QUERY_PROJECT_REWARDS_CATALOG,
     {
       fetchPolicy: 'network-only',
@@ -83,6 +82,12 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
           },
         },
       },
+      onCompleted(completedData) {
+        const firstPage = completedData.projectRewardsCatalogGet?.rewards || []
+        setRewards(firstPage)
+        setNoMoreItems(firstPage.length < PAGE_SIZE)
+        setIsInitialLoading(false)
+      },
       onError() {
         setIsInitialLoading(false)
         toast.error({ title: t('Failed to fetch products') })
@@ -92,22 +97,9 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
 
   useEffect(() => {
     setIsInitialLoading(true)
-    setHasHydratedInitialPage(false)
     setNoMoreItems(false)
     setRewards([])
   }, [category, sort, setNoMoreItems])
-
-  useEffect(() => {
-    if (!data || hasHydratedInitialPage) {
-      return
-    }
-
-    const firstPage = data.projectRewardsCatalogGet?.rewards || []
-    setRewards(firstPage)
-    setNoMoreItems(firstPage.length < PAGE_SIZE)
-    setHasHydratedInitialPage(true)
-    setIsInitialLoading(false)
-  }, [data, hasHydratedInitialPage, setNoMoreItems])
 
   const handleSortChange = (nextSort: SortOption) => {
     const nextSearchParams = new URLSearchParams(searchParams)
