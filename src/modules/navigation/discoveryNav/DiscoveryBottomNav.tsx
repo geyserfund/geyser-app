@@ -55,6 +55,7 @@ export const bottomNavItems = [
     key: BottomNavItemKey.impactFunds,
     path: 'discoveryImpactFunds',
     IconComponent: <Image src={ImpactFundsIconUrl} height={imageDimension} width={imageDimension} />,
+    new: true,
   },
 ] as BottomNavItem[]
 
@@ -100,13 +101,15 @@ const DiscoveryBottomNavButton = ({ item, currentNavItem, ...rest }: DiscoveryBo
       {...rest}
       position="relative"
     >
-      {item.new && <NavigationNewBadge position="absolute" top={-1} marginLeft={2} />}
       <Box display="flex" justifyContent="center" alignItems="center" w="full" h={iconSlotHeight}>
         {item.IconComponent}
       </Box>
-      <Body fontWeight={600} textAlign="center" lineHeight="1">
-        {t(item.label)}
-      </Body>
+      <Box position="relative" display="inline-flex" alignItems="center">
+        <Body fontWeight={600} textAlign="center" lineHeight="1">
+          {t(item.label)}
+        </Body>
+        {item.new && <NavigationNewBadge position="absolute" top={-1} right={-3} />}
+      </Box>
     </Button>
   )
 }
