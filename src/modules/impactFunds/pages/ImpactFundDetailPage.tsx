@@ -1139,8 +1139,8 @@ function ImpactFundSponsorsSection({
   onBecomeSponsor,
   colors,
 }: ImpactFundSponsorsSectionProps): JSX.Element {
-  const foundingSponsors = impactFund.liveSponsors.filter((sponsor) => sponsor.tier === ImpactFundSponsorTier.Tier1)
-  const supportingSponsors = impactFund.liveSponsors.filter((sponsor) => sponsor.tier === ImpactFundSponsorTier.Tier2)
+  const foundingSponsors = impactFund.liveSponsors.filter((sponsor) => sponsor.tier === ImpactFundSponsorTier.Tier_1)
+  const supportingSponsors = impactFund.liveSponsors.filter((sponsor) => sponsor.tier === ImpactFundSponsorTier.Tier_2)
   const hasAnyLiveSponsors = foundingSponsors.length > 0 || supportingSponsors.length > 0
 
   return (
