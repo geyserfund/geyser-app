@@ -1,3 +1,11 @@
+## [0.27.2](https://github.com/geyserfund/geyser-app/compare/v0.27.1...v0.27.2) (2026-02-24)
+
+
+### Bug Fixes
+
+* **impact-funds:** match past sponsor styling ([2f876a6](https://github.com/geyserfund/geyser-app/commit/2f876a6843d7e48c18bb1619011ba63eb1541746))
+* shop category order ([4b5373e](https://github.com/geyserfund/geyser-app/commit/4b5373ea0c75da1cd2528486535bc61e949c49e4))
+
 ## [0.27.1](https://github.com/geyserfund/geyser-app/compare/v0.27.0...v0.27.1) (2026-02-24)
 
 
