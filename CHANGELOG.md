@@ -1,3 +1,11 @@
+## [0.27.1](https://github.com/geyserfund/geyser-app/compare/v0.27.0...v0.27.1) (2026-02-24)
+
+
+### Bug Fixes
+
+* **impact-funds:** improve impact fund card image fit ([f6becf6](https://github.com/geyserfund/geyser-app/commit/f6becf63cd5936ca94683f7abdfab8f79eac70a7))
+* **impact-funds:** use correct sponsor tier enum keys ([92bfc81](https://github.com/geyserfund/geyser-app/commit/92bfc812951326abc8b5892cd557db533196b4b7))
+
 ## [0.26.2](https://github.com/geyserfund/geyser-app/compare/v0.26.1...v0.26.2) (2026-02-19)
 
 
@@ -6375,4 +6383,3 @@
 ### Reverts
 
 * Revert "hot fix: cookies" ([d81a7b7](https://github.com/geyserfund/geyser-app/commit/d81a7b7e445c6a6064e28478e36bfc77813926e0))
-
