@@ -1,3 +1,30 @@
+## [0.27.0](https://github.com/geyserfund/geyser-app/compare/v0.26.1...v0.27.0) (2026-02-24)
+
+
+### Features
+
+* add shops sort and infinite scroll catalog ([0a126f3](https://github.com/geyserfund/geyser-app/commit/0a126f3c38fa38c028ec1e223a1e38da8d9860d1))
+* impact fund improvements ([7caf9a6](https://github.com/geyserfund/geyser-app/commit/7caf9a65bea50043638293065b4de11f7c030cfb))
+* impact fund improvements (WIP) ([f952a48](https://github.com/geyserfund/geyser-app/commit/f952a487862be71e910863dcf6660e06d075b0b5))
+* show amount awarded if amount committed is 0 ([f206a43](https://github.com/geyserfund/geyser-app/commit/f206a43155eea45438edb7452a672b7cf2d6851d))
+
+
+### Bug Fixes
+
+* changelog ([8af67a5](https://github.com/geyserfund/geyser-app/commit/8af67a52fcefa694596289f3fdf1db7a1fa5fd98))
+* copy edit ([1f342c4](https://github.com/geyserfund/geyser-app/commit/1f342c4388e0bf059cc746ce878eb8cf0d42e928))
+* custom hook for products grid ([b99d2be](https://github.com/geyserfund/geyser-app/commit/b99d2be4151e29ae26ca0cb7bd1cf3c7263fbc42))
+* **impact-funds:** address latest pr comments ([798c9e9](https://github.com/geyserfund/geyser-app/commit/798c9e9effdbee44387615280c9177a9054d3231))
+* **impact-funds:** address pr review comments ([108f4d2](https://github.com/geyserfund/geyser-app/commit/108f4d280c6806c8fb3bca612fe9f187ff06e1f0))
+* **impact-funds:** address remaining unresolved comments ([d7612d2](https://github.com/geyserfund/geyser-app/commit/d7612d276118c299fee47423f280b5e9e10b39d3))
+* **impact-funds:** address unresolved pr comments ([e543fa6](https://github.com/geyserfund/geyser-app/commit/e543fa6f9b17b3b058b6d1ad810382f4cd4a14cb))
+* nav bar in project ([b8116ed](https://github.com/geyserfund/geyser-app/commit/b8116ed7b6ee8cfdea2d54d725426baba16dba5e))
+* non-prism tia fiat funding flow ([d13b510](https://github.com/geyserfund/geyser-app/commit/d13b510ded33c579b178c5973a144fcf4c975864))
+* restore quarterly most sold query for trending shops ([41ac808](https://github.com/geyserfund/geyser-app/commit/41ac808d335ffcdda32bf028e1062e4edb7665fe))
+* stop shops catalog loading/empty flicker ([5581e75](https://github.com/geyserfund/geyser-app/commit/5581e75011ef175ff4f581b84347c9b1aaf007a4))
+* typecheck script ([33d2c2e](https://github.com/geyserfund/geyser-app/commit/33d2c2e17ae02e835d61afdec536275d1afa620f))
+* ui bug on impact fund cards ([55cc788](https://github.com/geyserfund/geyser-app/commit/55cc788a325fee9bd4eee7a5b0ae39d419e02767))
+
 ## [0.26.2](https://github.com/geyserfund/geyser-app/compare/v0.26.1...v0.26.2) (2026-02-19)
 
 
