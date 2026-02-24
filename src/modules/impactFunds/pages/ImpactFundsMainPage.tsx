@@ -226,6 +226,7 @@ export const ImpactFundsMainPage = () => {
               key={fund.id}
               dense
               p={0}
+              h="full"
               overflow="hidden"
               borderRadius="12px"
               border="1px solid"
@@ -236,10 +237,10 @@ export const ImpactFundsMainPage = () => {
               bgPosition="center"
               bgRepeat="no-repeat"
             >
-              <LinkBox w="full">
-                <VStack w="full" spacing={0} align="stretch">
+              <LinkBox w="full" h="full">
+                <VStack w="full" h="full" spacing={0} align="stretch">
                   <Box h={{ base: '240px', lg: '380px' }} />
-                  <VStack w="full" bg="utils.pbg" pt={5} pb={5} align="start" spacing={3}>
+                  <VStack w="full" bg="utils.pbg" pt={5} pb={5} align="start" spacing={3} flex={1}>
                     <HStack w="full" justifyContent="space-between" alignItems="baseline" spacing={3} px={5}>
                       <H2 size="xl" bold lineHeight={1.2} flex={1}>
                         <LinkOverlay as={Link} to={getPath('impactFunds', encodeURIComponent(fund.name))}>
@@ -264,7 +265,7 @@ export const ImpactFundsMainPage = () => {
                         {fund.subtitle}
                       </Body>
                     )}
-                    <Box w="full" px={5}>
+                    <Box w="full" px={5} mt="auto" pt={3}>
                       <Button
                         as={Link}
                         to={getPath('impactFunds', encodeURIComponent(fund.name))}
