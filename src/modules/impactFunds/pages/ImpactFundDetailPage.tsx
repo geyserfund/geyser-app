@@ -73,7 +73,7 @@ const APPLICATIONS_PAGE_SIZE = 15
 const DESCRIPTION_PREVIEW_CHAR_LIMIT = 500
 const DESCRIPTION_COLLAPSED_MAX_HEIGHT = '240px'
 const SPONSOR_INQUIRY_CALENDAR_URL = 'https://cal.com/metamick/thirtymin?overlayCalendar=true'
-const btcNumberFormatter = new Intl.NumberFormat()
+const satsNumberFormatter = new Intl.NumberFormat()
 const fundedStatus = [ImpactFundApplicationStatus.Funded]
 type ImpactFundDetails = ImpactFundQuery['impactFund']
 type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
@@ -606,7 +606,7 @@ function FundedApplicationsSection({
                 </H2>
                 {hasValue(application.amountAwardedInSats) && (
                   <Body bold color={emphasisTextColor} size="sm" flexShrink={0}>
-                    ₿ {btcNumberFormatter.format(application.amountAwardedInSats)}
+                    {`${satsNumberFormatter.format(application.amountAwardedInSats)} sats`}
                   </Body>
                 )}
                 {application.awardedAt && (
@@ -871,7 +871,7 @@ function ImpactFundOverviewSection({
                 </Flex>
                 <VStack align="start" spacing={0}>
                   <H2 size="xl" bold color={colors.primaryTextColor}>
-                    ₿ {btcNumberFormatter.format(impactFund.metrics.awardedTotalSats)}
+                    {`${satsNumberFormatter.format(impactFund.metrics.awardedTotalSats)} sats`}
                   </H2>
                   <Body
                     size="xs"
