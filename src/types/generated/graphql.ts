@@ -899,6 +899,12 @@ export type GetProjectRewardWhereInput = {
   uuid?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type GetProjectRewardsCatalogInput = {
+  category?: InputMaybe<Scalars['String']['input']>;
+  pagination?: InputMaybe<PaginationInput>;
+  sortBy: ProjectRewardsCatalogSortBy;
+};
+
 export type GetProjectRewardsInput = {
   where: GetProjectRewardsWhereInput;
 };
@@ -1212,6 +1218,11 @@ export type ImpactFund = {
   title: Scalars['String']['output'];
 };
 
+export enum ImpactFundAmountCommittedCurrency {
+  Btcsat = 'BTCSAT',
+  Usdcent = 'USDCENT'
+}
+
 export type ImpactFundApplication = {
   __typename?: 'ImpactFundApplication';
   amountAwardedInSats?: Maybe<Scalars['Int']['output']>;
@@ -1240,10 +1251,12 @@ export enum ImpactFundApplicationStatus {
   Rejected = 'REJECTED'
 }
 
-export enum ImpactFundAmountCommittedCurrency {
-  Btcsat = 'BTCSAT',
-  Usdcent = 'USDCENT'
-}
+export type ImpactFundApplicationsGetResponse = {
+  __typename?: 'ImpactFundApplicationsGetResponse';
+  applications: Array<ImpactFundApplication>;
+  pagination?: Maybe<CursorPaginationResponse>;
+  totalCount: Scalars['Int']['output'];
+};
 
 export type ImpactFundApplicationsInput = {
   impactFundId: Scalars['BigInt']['input'];
@@ -1289,8 +1302,8 @@ export enum ImpactFundSponsorStatus {
 }
 
 export enum ImpactFundSponsorTier {
-  Tier1 = 'TIER_1',
-  Tier2 = 'TIER_2'
+  Tier_1 = 'TIER_1',
+  Tier_2 = 'TIER_2'
 }
 
 export enum ImpactFundStatus {
@@ -3133,6 +3146,7 @@ export type Project = {
   id: Scalars['BigInt']['output'];
   /** Project header images. */
   images: Array<Scalars['String']['output']>;
+  impactFundRecipient?: Maybe<ProjectImpactFundRecipient>;
   keys: ProjectKeys;
   lastCreationStep: ProjectCreationStep;
   launchScheduledAt?: Maybe<Scalars['Date']['output']>;
@@ -3478,6 +3492,17 @@ export enum ProjectGrantApplicationsWhereInputEnum {
   FundingOpen = 'FUNDING_OPEN'
 }
 
+export type ProjectImpactFundRecipient = {
+  __typename?: 'ProjectImpactFundRecipient';
+  amountAwardedInSats?: Maybe<Scalars['Int']['output']>;
+  applicationId: Scalars['BigInt']['output'];
+  awardedAt?: Maybe<Scalars['Date']['output']>;
+  fundingModel: ImpactFundApplicationFundingModel;
+  impactFundId: Scalars['BigInt']['output'];
+  impactFundName: Scalars['String']['output'];
+  impactFundTitle: Scalars['String']['output'];
+};
+
 export type ProjectKeys = {
   __typename?: 'ProjectKeys';
   nostrKeys: NostrKeys;
@@ -3693,6 +3718,13 @@ export type ProjectReward = {
   uuid: Scalars['String']['output'];
 };
 
+export type ProjectRewardCatalogRow = {
+  __typename?: 'ProjectRewardCatalogRow';
+  count: Scalars['Int']['output'];
+  id: Scalars['BigInt']['output'];
+  projectReward: ProjectReward;
+};
+
 export type ProjectRewardCurrencyUpdate = {
   projectId: Scalars['BigInt']['input'];
   rewardCurrency: RewardCurrency;
@@ -3726,6 +3758,17 @@ export type ProjectRewardTrendingWeeklyGetRow = {
   count: Scalars['Int']['output'];
   projectReward: ProjectReward;
 };
+
+export type ProjectRewardsCatalogGetResponse = {
+  __typename?: 'ProjectRewardsCatalogGetResponse';
+  pagination?: Maybe<CursorPaginationResponse>;
+  rewards: Array<ProjectRewardCatalogRow>;
+};
+
+export enum ProjectRewardsCatalogSortBy {
+  MostRecent = 'MOST_RECENT',
+  MostSold = 'MOST_SOLD'
+}
 
 export type ProjectRewardsGroupedByRewardIdStats = {
   __typename?: 'ProjectRewardsGroupedByRewardIdStats';
@@ -4048,7 +4091,7 @@ export type Query = {
   grants: Array<Grant>;
   guardianUsersGet?: Maybe<GuardianUsersGetResponse>;
   impactFund: ImpactFund;
-  impactFundApplications: Array<ImpactFundApplication>;
+  impactFundApplications: ImpactFundApplicationsGetResponse;
   impactFunds: Array<ImpactFund>;
   leaderboardGlobalAmbassadorsGet: Array<GlobalAmbassadorLeaderboardRow>;
   leaderboardGlobalContributorsGet: Array<GlobalContributorLeaderboardRow>;
@@ -4088,6 +4131,7 @@ export type Query = {
   projectRegionsGet: Array<ProjectRegionsGetResult>;
   projectRewardCategoriesGet: Array<Scalars['String']['output']>;
   projectRewardGet: ProjectReward;
+  projectRewardsCatalogGet: ProjectRewardsCatalogGetResponse;
   projectRewardsGet: Array<ProjectReward>;
   projectRewardsMostSoldGet: Array<ProjectRewardMostSoldGetRow>;
   projectRewardsTrendingMonthlyGet: Array<ProjectRewardTrendingMonthlyGetRow>;
@@ -4338,6 +4382,11 @@ export type QueryProjectRewardGetArgs = {
 };
 
 
+export type QueryProjectRewardsCatalogGetArgs = {
+  input: GetProjectRewardsCatalogInput;
+};
+
+
 export type QueryProjectRewardsGetArgs = {
   input: GetProjectRewardsInput;
 };
@@ -4462,12 +4511,14 @@ export type RefundablePaymentsGetResponse = {
 };
 
 export enum RejectionReason {
+  IllegalContentOrActivity = 'ILLEGAL_CONTENT_OR_ACTIVITY',
   IncompleteProject = 'INCOMPLETE_PROJECT',
   RestrictedProjectType = 'RESTRICTED_PROJECT_TYPE',
   Scam = 'SCAM',
   SellingSecurity = 'SELLING_SECURITY',
   Spam = 'SPAM',
-  UnsupportedRegion = 'UNSUPPORTED_REGION'
+  UnsupportedRegion = 'UNSUPPORTED_REGION',
+  WalletSanctionCheckFailed = 'WALLET_SANCTION_CHECK_FAILED'
 }
 
 export type ResourceInput = {
@@ -5463,6 +5514,7 @@ export type ResolversTypes = {
   GetProjectOrdersStatsWhereInput: GetProjectOrdersStatsWhereInput;
   GetProjectRewardInput: GetProjectRewardInput;
   GetProjectRewardWhereInput: GetProjectRewardWhereInput;
+  GetProjectRewardsCatalogInput: GetProjectRewardsCatalogInput;
   GetProjectRewardsInput: GetProjectRewardsInput;
   GetProjectRewardsMostSoldInput: GetProjectRewardsMostSoldInput;
   GetProjectRewardsWhereInput: GetProjectRewardsWhereInput;
@@ -5508,9 +5560,11 @@ export type ResolversTypes = {
   GuardianUsersGetWhereInput: GuardianUsersGetWhereInput;
   HeroStats: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['HeroStats']>;
   ImpactFund: ResolverTypeWrapper<Omit<ImpactFund, 'applications' | 'donateProject' | 'fundedApplications'> & { applications: Array<ResolversTypes['ImpactFundApplication']>, donateProject?: Maybe<ResolversTypes['Project']>, fundedApplications: Array<ResolversTypes['ImpactFundApplication']> }>;
+  ImpactFundAmountCommittedCurrency: ImpactFundAmountCommittedCurrency;
   ImpactFundApplication: ResolverTypeWrapper<Omit<ImpactFundApplication, 'project'> & { project: ResolversTypes['Project'] }>;
   ImpactFundApplicationFundingModel: ImpactFundApplicationFundingModel;
   ImpactFundApplicationStatus: ImpactFundApplicationStatus;
+  ImpactFundApplicationsGetResponse: ResolverTypeWrapper<Omit<ImpactFundApplicationsGetResponse, 'applications'> & { applications: Array<ResolversTypes['ImpactFundApplication']> }>;
   ImpactFundApplicationsInput: ImpactFundApplicationsInput;
   ImpactFundApplyInput: ImpactFundApplyInput;
   ImpactFundGetInput: ImpactFundGetInput;
@@ -5732,6 +5786,7 @@ export type ResolversTypes = {
   ProjectGrantApplicationsInput: ProjectGrantApplicationsInput;
   ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput;
   ProjectGrantApplicationsWhereInputEnum: ProjectGrantApplicationsWhereInputEnum;
+  ProjectImpactFundRecipient: ResolverTypeWrapper<ProjectImpactFundRecipient>;
   ProjectKeys: ResolverTypeWrapper<ProjectKeys>;
   ProjectLeaderboardAmbassadorsGetInput: ProjectLeaderboardAmbassadorsGetInput;
   ProjectLeaderboardAmbassadorsRow: ResolverTypeWrapper<Omit<ProjectLeaderboardAmbassadorsRow, 'user'> & { user?: Maybe<ResolversTypes['User']> }>;
@@ -5757,12 +5812,15 @@ export type ResolversTypes = {
   ProjectReviewStatusInput: ProjectReviewStatusInput;
   ProjectReviewSubmitInput: ProjectReviewSubmitInput;
   ProjectReward: ResolverTypeWrapper<Omit<ProjectReward, 'project'> & { project: ResolversTypes['Project'] }>;
+  ProjectRewardCatalogRow: ResolverTypeWrapper<ProjectRewardCatalogRow>;
   ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
   ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput;
   ProjectRewardMostSoldGetRow: ResolverTypeWrapper<ProjectRewardMostSoldGetRow>;
   ProjectRewardTrendingMonthlyGetRow: ResolverTypeWrapper<ProjectRewardTrendingMonthlyGetRow>;
   ProjectRewardTrendingQuarterlyGetRow: ResolverTypeWrapper<ProjectRewardTrendingQuarterlyGetRow>;
   ProjectRewardTrendingWeeklyGetRow: ResolverTypeWrapper<ProjectRewardTrendingWeeklyGetRow>;
+  ProjectRewardsCatalogGetResponse: ResolverTypeWrapper<ProjectRewardsCatalogGetResponse>;
+  ProjectRewardsCatalogSortBy: ProjectRewardsCatalogSortBy;
   ProjectRewardsGroupedByRewardIdStats: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStats>;
   ProjectRewardsGroupedByRewardIdStatsProjectReward: ResolverTypeWrapper<ProjectRewardsGroupedByRewardIdStatsProjectReward>;
   ProjectRewardsMostSoldRange: ProjectRewardsMostSoldRange;
@@ -6014,6 +6072,7 @@ export type ResolversParentTypes = {
   GetProjectOrdersStatsWhereInput: GetProjectOrdersStatsWhereInput;
   GetProjectRewardInput: GetProjectRewardInput;
   GetProjectRewardWhereInput: GetProjectRewardWhereInput;
+  GetProjectRewardsCatalogInput: GetProjectRewardsCatalogInput;
   GetProjectRewardsInput: GetProjectRewardsInput;
   GetProjectRewardsMostSoldInput: GetProjectRewardsMostSoldInput;
   GetProjectRewardsWhereInput: GetProjectRewardsWhereInput;
@@ -6054,6 +6113,7 @@ export type ResolversParentTypes = {
   HeroStats: ResolversInterfaceTypes<ResolversParentTypes>['HeroStats'];
   ImpactFund: Omit<ImpactFund, 'applications' | 'donateProject' | 'fundedApplications'> & { applications: Array<ResolversParentTypes['ImpactFundApplication']>, donateProject?: Maybe<ResolversParentTypes['Project']>, fundedApplications: Array<ResolversParentTypes['ImpactFundApplication']> };
   ImpactFundApplication: Omit<ImpactFundApplication, 'project'> & { project: ResolversParentTypes['Project'] };
+  ImpactFundApplicationsGetResponse: Omit<ImpactFundApplicationsGetResponse, 'applications'> & { applications: Array<ResolversParentTypes['ImpactFundApplication']> };
   ImpactFundApplicationsInput: ImpactFundApplicationsInput;
   ImpactFundApplyInput: ImpactFundApplyInput;
   ImpactFundGetInput: ImpactFundGetInput;
@@ -6237,6 +6297,7 @@ export type ResolversParentTypes = {
   ProjectGoals: ProjectGoals;
   ProjectGrantApplicationsInput: ProjectGrantApplicationsInput;
   ProjectGrantApplicationsWhereInput: ProjectGrantApplicationsWhereInput;
+  ProjectImpactFundRecipient: ProjectImpactFundRecipient;
   ProjectKeys: ProjectKeys;
   ProjectLeaderboardAmbassadorsGetInput: ProjectLeaderboardAmbassadorsGetInput;
   ProjectLeaderboardAmbassadorsRow: Omit<ProjectLeaderboardAmbassadorsRow, 'user'> & { user?: Maybe<ResolversParentTypes['User']> };
@@ -6259,12 +6320,14 @@ export type ResolversParentTypes = {
   ProjectReviewRequestInput: ProjectReviewRequestInput;
   ProjectReviewSubmitInput: ProjectReviewSubmitInput;
   ProjectReward: Omit<ProjectReward, 'project'> & { project: ResolversParentTypes['Project'] };
+  ProjectRewardCatalogRow: ProjectRewardCatalogRow;
   ProjectRewardCurrencyUpdate: ProjectRewardCurrencyUpdate;
   ProjectRewardCurrencyUpdateRewardsInput: ProjectRewardCurrencyUpdateRewardsInput;
   ProjectRewardMostSoldGetRow: ProjectRewardMostSoldGetRow;
   ProjectRewardTrendingMonthlyGetRow: ProjectRewardTrendingMonthlyGetRow;
   ProjectRewardTrendingQuarterlyGetRow: ProjectRewardTrendingQuarterlyGetRow;
   ProjectRewardTrendingWeeklyGetRow: ProjectRewardTrendingWeeklyGetRow;
+  ProjectRewardsCatalogGetResponse: ProjectRewardsCatalogGetResponse;
   ProjectRewardsGroupedByRewardIdStats: ProjectRewardsGroupedByRewardIdStats;
   ProjectRewardsGroupedByRewardIdStatsProjectReward: ProjectRewardsGroupedByRewardIdStatsProjectReward;
   ProjectRewardsStats: ProjectRewardsStats;
@@ -6909,6 +6972,7 @@ export type HeroStatsResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type ImpactFundResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFund'] = ResolversParentTypes['ImpactFund']> = {
   amountCommitted?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  amountCommittedCurrency?: Resolver<ResolversTypes['ImpactFundAmountCommittedCurrency'], ParentType, ContextType>;
   applications?: Resolver<Array<ResolversTypes['ImpactFundApplication']>, ParentType, ContextType>;
   archivedSponsors?: Resolver<Array<ResolversTypes['ImpactFundSponsor']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -6937,6 +7001,13 @@ export type ImpactFundApplicationResolvers<ContextType = any, ParentType extends
   impactFundId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   project?: Resolver<ResolversTypes['Project'], ParentType, ContextType>;
   status?: Resolver<ResolversTypes['ImpactFundApplicationStatus'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ImpactFundApplicationsGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ImpactFundApplicationsGetResponse'] = ResolversParentTypes['ImpactFundApplicationsGetResponse']> = {
+  applications?: Resolver<Array<ResolversTypes['ImpactFundApplication']>, ParentType, ContextType>;
+  pagination?: Resolver<Maybe<ResolversTypes['CursorPaginationResponse']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -7648,6 +7719,7 @@ export type ProjectResolvers<ContextType = any, ParentType extends ResolversPare
   grantApplications?: Resolver<Array<ResolversTypes['GrantApplicant']>, ParentType, ContextType, Partial<ProjectGrantApplicationsArgs>>;
   id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   images?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
+  impactFundRecipient?: Resolver<Maybe<ResolversTypes['ProjectImpactFundRecipient']>, ParentType, ContextType>;
   keys?: Resolver<ResolversTypes['ProjectKeys'], ParentType, ContextType>;
   lastCreationStep?: Resolver<ResolversTypes['ProjectCreationStep'], ParentType, ContextType>;
   launchScheduledAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
@@ -7831,6 +7903,17 @@ export type ProjectGoalsResolvers<ContextType = any, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProjectImpactFundRecipientResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectImpactFundRecipient'] = ResolversParentTypes['ProjectImpactFundRecipient']> = {
+  amountAwardedInSats?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  applicationId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  awardedAt?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>;
+  fundingModel?: Resolver<ResolversTypes['ImpactFundApplicationFundingModel'], ParentType, ContextType>;
+  impactFundId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  impactFundName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  impactFundTitle?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ProjectKeysResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectKeys'] = ResolversParentTypes['ProjectKeys']> = {
   nostrKeys?: Resolver<ResolversTypes['NostrKeys'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -7941,6 +8024,13 @@ export type ProjectRewardResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProjectRewardCatalogRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardCatalogRow'] = ResolversParentTypes['ProjectRewardCatalogRow']> = {
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  projectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ProjectRewardMostSoldGetRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardMostSoldGetRow'] = ResolversParentTypes['ProjectRewardMostSoldGetRow']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   projectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>;
@@ -7962,6 +8052,12 @@ export type ProjectRewardTrendingQuarterlyGetRowResolvers<ContextType = any, Par
 export type ProjectRewardTrendingWeeklyGetRowResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardTrendingWeeklyGetRow'] = ResolversParentTypes['ProjectRewardTrendingWeeklyGetRow']> = {
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   projectReward?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProjectRewardsCatalogGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProjectRewardsCatalogGetResponse'] = ResolversParentTypes['ProjectRewardsCatalogGetResponse']> = {
+  pagination?: Resolver<Maybe<ResolversTypes['CursorPaginationResponse']>, ParentType, ContextType>;
+  rewards?: Resolver<Array<ResolversTypes['ProjectRewardCatalogRow']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -8091,7 +8187,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   grants?: Resolver<Array<ResolversTypes['Grant']>, ParentType, ContextType>;
   guardianUsersGet?: Resolver<Maybe<ResolversTypes['GuardianUsersGetResponse']>, ParentType, ContextType, RequireFields<QueryGuardianUsersGetArgs, 'input'>>;
   impactFund?: Resolver<ResolversTypes['ImpactFund'], ParentType, ContextType, RequireFields<QueryImpactFundArgs, 'input'>>;
-  impactFundApplications?: Resolver<Array<ResolversTypes['ImpactFundApplication']>, ParentType, ContextType, RequireFields<QueryImpactFundApplicationsArgs, 'input'>>;
+  impactFundApplications?: Resolver<ResolversTypes['ImpactFundApplicationsGetResponse'], ParentType, ContextType, RequireFields<QueryImpactFundApplicationsArgs, 'input'>>;
   impactFunds?: Resolver<Array<ResolversTypes['ImpactFund']>, ParentType, ContextType, Partial<QueryImpactFundsArgs>>;
   leaderboardGlobalAmbassadorsGet?: Resolver<Array<ResolversTypes['GlobalAmbassadorLeaderboardRow']>, ParentType, ContextType, RequireFields<QueryLeaderboardGlobalAmbassadorsGetArgs, 'input'>>;
   leaderboardGlobalContributorsGet?: Resolver<Array<ResolversTypes['GlobalContributorLeaderboardRow']>, ParentType, ContextType, RequireFields<QueryLeaderboardGlobalContributorsGetArgs, 'input'>>;
@@ -8125,6 +8221,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   projectRegionsGet?: Resolver<Array<ResolversTypes['ProjectRegionsGetResult']>, ParentType, ContextType>;
   projectRewardCategoriesGet?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   projectRewardGet?: Resolver<ResolversTypes['ProjectReward'], ParentType, ContextType, RequireFields<QueryProjectRewardGetArgs, 'input'>>;
+  projectRewardsCatalogGet?: Resolver<ResolversTypes['ProjectRewardsCatalogGetResponse'], ParentType, ContextType, RequireFields<QueryProjectRewardsCatalogGetArgs, 'input'>>;
   projectRewardsGet?: Resolver<Array<ResolversTypes['ProjectReward']>, ParentType, ContextType, RequireFields<QueryProjectRewardsGetArgs, 'input'>>;
   projectRewardsMostSoldGet?: Resolver<Array<ResolversTypes['ProjectRewardMostSoldGetRow']>, ParentType, ContextType, RequireFields<QueryProjectRewardsMostSoldGetArgs, 'input'>>;
   projectRewardsTrendingMonthlyGet?: Resolver<Array<ResolversTypes['ProjectRewardTrendingMonthlyGetRow']>, ParentType, ContextType>;
@@ -8560,6 +8657,7 @@ export type Resolvers<ContextType = any> = {
   HeroStats?: HeroStatsResolvers<ContextType>;
   ImpactFund?: ImpactFundResolvers<ContextType>;
   ImpactFundApplication?: ImpactFundApplicationResolvers<ContextType>;
+  ImpactFundApplicationsGetResponse?: ImpactFundApplicationsGetResponseResolvers<ContextType>;
   ImpactFundMetrics?: ImpactFundMetricsResolvers<ContextType>;
   ImpactFundSponsor?: ImpactFundSponsorResolvers<ContextType>;
   LightningAddressConnectionDetails?: LightningAddressConnectionDetailsResolvers<ContextType>;
@@ -8662,6 +8760,7 @@ export type Resolvers<ContextType = any> = {
   ProjectGoal?: ProjectGoalResolvers<ContextType>;
   ProjectGoalDeleteResponse?: ProjectGoalDeleteResponseResolvers<ContextType>;
   ProjectGoals?: ProjectGoalsResolvers<ContextType>;
+  ProjectImpactFundRecipient?: ProjectImpactFundRecipientResolvers<ContextType>;
   ProjectKeys?: ProjectKeysResolvers<ContextType>;
   ProjectLeaderboardAmbassadorsRow?: ProjectLeaderboardAmbassadorsRowResolvers<ContextType>;
   ProjectLeaderboardContributorsRow?: ProjectLeaderboardContributorsRowResolvers<ContextType>;
@@ -8673,10 +8772,12 @@ export type Resolvers<ContextType = any> = {
   ProjectRegionsGetResult?: ProjectRegionsGetResultResolvers<ContextType>;
   ProjectReview?: ProjectReviewResolvers<ContextType>;
   ProjectReward?: ProjectRewardResolvers<ContextType>;
+  ProjectRewardCatalogRow?: ProjectRewardCatalogRowResolvers<ContextType>;
   ProjectRewardMostSoldGetRow?: ProjectRewardMostSoldGetRowResolvers<ContextType>;
   ProjectRewardTrendingMonthlyGetRow?: ProjectRewardTrendingMonthlyGetRowResolvers<ContextType>;
   ProjectRewardTrendingQuarterlyGetRow?: ProjectRewardTrendingQuarterlyGetRowResolvers<ContextType>;
   ProjectRewardTrendingWeeklyGetRow?: ProjectRewardTrendingWeeklyGetRowResolvers<ContextType>;
+  ProjectRewardsCatalogGetResponse?: ProjectRewardsCatalogGetResponseResolvers<ContextType>;
   ProjectRewardsGroupedByRewardIdStats?: ProjectRewardsGroupedByRewardIdStatsResolvers<ContextType>;
   ProjectRewardsGroupedByRewardIdStatsProjectReward?: ProjectRewardsGroupedByRewardIdStatsProjectRewardResolvers<ContextType>;
   ProjectRewardsStats?: ProjectRewardsStatsResolvers<ContextType>;
@@ -9124,6 +9225,16 @@ export type ProjectRewardsMostSoldGetQuery = { __typename?: 'Query', projectRewa
       { __typename?: 'ProjectReward' }
       & RewardForProductsPageFragment
     ) }> };
+
+export type ProjectRewardsCatalogGetQueryVariables = Exact<{
+  input: GetProjectRewardsCatalogInput;
+}>;
+
+
+export type ProjectRewardsCatalogGetQuery = { __typename?: 'Query', projectRewardsCatalogGet: { __typename?: 'ProjectRewardsCatalogGetResponse', rewards: Array<{ __typename?: 'ProjectRewardCatalogRow', id: any, count: number, projectReward: (
+        { __typename?: 'ProjectReward' }
+        & RewardForProductsPageFragment
+      ) }>, pagination?: { __typename?: 'CursorPaginationResponse', take?: number | null, count?: number | null, cursor?: { __typename?: 'PaginationCursor', id?: any | null } | null } | null } };
 
 export type TagsGetQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -9775,7 +9886,7 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
     & ProjectPaymentMethodsFragment
   ) };
 
-export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null, aonGoal?: (
+export type ProjectHeaderSummaryFragment = { __typename?: 'Project', followersCount?: number | null, fundersCount?: number | null, contributionsCount?: number | null, impactFundRecipient?: { __typename?: 'ProjectImpactFundRecipient', impactFundId: any, impactFundName: string, impactFundTitle: string, fundingModel: ImpactFundApplicationFundingModel, amountAwardedInSats?: number | null, awardedAt?: any | null } | null, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
     & ProjectAonGoalForProjectPageFragment
   ) | null };
@@ -12728,6 +12839,14 @@ export const ProjectHeaderSummaryFragmentDoc = gql`
   followersCount
   fundersCount
   contributionsCount
+  impactFundRecipient {
+    impactFundId
+    impactFundName
+    impactFundTitle
+    fundingModel
+    amountAwardedInSats
+    awardedAt
+  }
   aonGoal {
     ...ProjectAonGoalForProjectPage
   }
@@ -14615,6 +14734,59 @@ export type ProjectRewardsMostSoldGetQueryHookResult = ReturnType<typeof useProj
 export type ProjectRewardsMostSoldGetLazyQueryHookResult = ReturnType<typeof useProjectRewardsMostSoldGetLazyQuery>;
 export type ProjectRewardsMostSoldGetSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsMostSoldGetSuspenseQuery>;
 export type ProjectRewardsMostSoldGetQueryResult = Apollo.QueryResult<ProjectRewardsMostSoldGetQuery, ProjectRewardsMostSoldGetQueryVariables>;
+export const ProjectRewardsCatalogGetDocument = gql`
+    query ProjectRewardsCatalogGet($input: GetProjectRewardsCatalogInput!) {
+  projectRewardsCatalogGet(input: $input) {
+    rewards {
+      id
+      count
+      projectReward {
+        ...RewardForProductsPage
+      }
+    }
+    pagination {
+      take
+      count
+      cursor {
+        id
+      }
+    }
+  }
+}
+    ${RewardForProductsPageFragmentDoc}`;
+
+/**
+ * __useProjectRewardsCatalogGetQuery__
+ *
+ * To run a query within a React component, call `useProjectRewardsCatalogGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardsCatalogGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectRewardsCatalogGetQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useProjectRewardsCatalogGetQuery(baseOptions: Apollo.QueryHookOptions<ProjectRewardsCatalogGetQuery, ProjectRewardsCatalogGetQueryVariables> & ({ variables: ProjectRewardsCatalogGetQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectRewardsCatalogGetQuery, ProjectRewardsCatalogGetQueryVariables>(ProjectRewardsCatalogGetDocument, options);
+      }
+export function useProjectRewardsCatalogGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRewardsCatalogGetQuery, ProjectRewardsCatalogGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectRewardsCatalogGetQuery, ProjectRewardsCatalogGetQueryVariables>(ProjectRewardsCatalogGetDocument, options);
+        }
+export function useProjectRewardsCatalogGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRewardsCatalogGetQuery, ProjectRewardsCatalogGetQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectRewardsCatalogGetQuery, ProjectRewardsCatalogGetQueryVariables>(ProjectRewardsCatalogGetDocument, options);
+        }
+export type ProjectRewardsCatalogGetQueryHookResult = ReturnType<typeof useProjectRewardsCatalogGetQuery>;
+export type ProjectRewardsCatalogGetLazyQueryHookResult = ReturnType<typeof useProjectRewardsCatalogGetLazyQuery>;
+export type ProjectRewardsCatalogGetSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsCatalogGetSuspenseQuery>;
+export type ProjectRewardsCatalogGetQueryResult = Apollo.QueryResult<ProjectRewardsCatalogGetQuery, ProjectRewardsCatalogGetQueryVariables>;
 export const TagsGetDocument = gql`
     query TagsGet {
   tagsGet {
