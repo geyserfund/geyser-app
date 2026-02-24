@@ -32,6 +32,26 @@ const rewardCategoryEmojiMap: Record<string, string> = {
 }
 const DEFAULT_CATEGORY_EMOJI = '📦'
 const TAB_SCROLL_OFFSET = 280
+const REWARD_CATEGORY_DISPLAY_ORDER = [
+  'collectible',
+  'mining hardware',
+  'book',
+  'artwork',
+  'digital content',
+  'physical product',
+  'merch',
+  'game',
+  'membership',
+  'experience',
+  'service',
+  'nostr badge',
+  'gift',
+  'course',
+  'ticket',
+  'raffle',
+  'sponsorship',
+  'shoutout',
+]
 
 export const Shops = () => {
   const { t } = useTranslation()
@@ -62,13 +82,26 @@ export const Shops = () => {
 
   const tabs = useMemo(() => {
     const categories = data?.projectRewardCategoriesGet ?? []
+    const getCategoryOrder = (category: string) => {
+      const index = REWARD_CATEGORY_DISPLAY_ORDER.indexOf(category.toLowerCase())
+
+      return index === -1 ? Number.POSITIVE_INFINITY : index
+    }
+
+    const orderedCategories = [...categories].sort((a, b) => {
+      const aIndex = getCategoryOrder(a)
+      const bIndex = getCategoryOrder(b)
+
+      if (aIndex === bIndex) return a.localeCompare(b)
+      return aIndex - bIndex
+    })
 
     return [
       {
         label: `🔥 ${t('Trending')}`,
         path: getPath('discoveryProducts'),
       },
-      ...categories.map((category) => ({
+      ...orderedCategories.map((category) => ({
         label: `${rewardCategoryEmojiMap[category] ?? DEFAULT_CATEGORY_EMOJI} ${category}`,
         path: getPath('discoveryProductsCategory', encodeURIComponent(category)),
       })),
