@@ -1,18 +1,19 @@
-import { useQuery } from '@apollo/client'
 import { GridItem, HStack, Select, SimpleGrid, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router'
 
 import { ScrollInvoke } from '@/helpers/ScrollInvoke.tsx'
-import { QUERY_PROJECT_REWARDS_CATALOG } from '@/modules/discovery/graphql/queries/rewardsQuery.ts'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { ID } from '@/shared/constants/components/id.ts'
 import { useListenerState } from '@/shared/hooks/useListenerState.tsx'
 import {
+  ProjectRewardsCatalogGetQuery,
+  ProjectRewardsCatalogSortBy,
+  ProjectRewardsCatalogGetQueryVariables,
   ProjectRewardsMostSoldRange,
-  RewardForProductsPageFragment,
+  useProjectRewardsCatalogGetQuery,
   useProjectRewardsMostSoldGetQuery,
 } from '@/types/index.ts'
 import { useMobileMode, useNotification } from '@/utils/index.ts'
@@ -27,36 +28,13 @@ type ProductsGridProps = {
 }
 
 type SortOption = 'most_sold' | 'most_recent'
-type SortByApi = 'MOST_SOLD' | 'MOST_RECENT'
-
-type ProjectRewardsCatalogRow = {
-  id: bigint
-  count: number
-  projectReward: RewardForProductsPageFragment
-}
-
-type ProjectRewardsCatalogGetResponse = {
-  projectRewardsCatalogGet: {
-    rewards: ProjectRewardsCatalogRow[]
-  }
-}
-
-type ProjectRewardsCatalogGetVariables = {
-  input: {
-    category?: string
-    sortBy: SortByApi
-    pagination: {
-      take: number
-      cursor?: {
-        id: bigint
-      }
-    }
-  }
-}
+type SortByApi = ProjectRewardsCatalogGetQueryVariables['input']['sortBy']
+type ProjectRewardsCatalogRow = ProjectRewardsCatalogGetQuery['projectRewardsCatalogGet']['rewards'][number]
 
 const PAGE_SIZE = 24
 const SORT_SEARCH_PARAM = 'sort'
-const getSortByApi = (sort: SortOption): SortByApi => (sort === 'most_recent' ? 'MOST_RECENT' : 'MOST_SOLD')
+const getSortByApi = (sort: SortOption): SortByApi =>
+  sort === 'most_recent' ? ProjectRewardsCatalogSortBy.MostRecent : ProjectRewardsCatalogSortBy.MostSold
 
 export const ProductsGrid = ({ category }: ProductsGridProps) => {
   const isMobile = useMobileMode()
@@ -65,6 +43,7 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [rewards, setRewards] = useState<ProjectRewardsCatalogRow[]>([])
   const [isInitialLoading, setIsInitialLoading] = useState(true)
+  const [hasCatalogError, setHasCatalogError] = useState(false)
 
   const [isLoadingMore, setIsLoadingMore] = useListenerState(false)
   const [noMoreItems, setNoMoreItems] = useListenerState(false)
@@ -73,24 +52,24 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
   const sort: SortOption = sortFromUrl === 'most_recent' ? 'most_recent' : 'most_sold'
   const sortBy = getSortByApi(sort)
 
-  const { data: trendingData, loading: isTrendingLoading } = useProjectRewardsMostSoldGetQuery({
-    fetchPolicy: 'network-only',
-    skip: !isTrendingMode,
-    variables: {
-      input: {
-        range: ProjectRewardsMostSoldRange.Quarter,
+  const { data: trendingData, loading: isTrendingLoading, error: trendingError } = useProjectRewardsMostSoldGetQuery(
+    {
+      fetchPolicy: 'network-only',
+      skip: !isTrendingMode,
+      variables: {
+        input: {
+          range: ProjectRewardsMostSoldRange.Quarter,
         take: PAGE_SIZE,
       },
     },
-    onError() {
-      toast.error({ title: t('Failed to fetch products') })
+      onError() {
+        toast.error({ title: t('Failed to fetch products') })
+      },
     },
-  })
+  )
   const trendingRewards = trendingData?.projectRewardsMostSoldGet || []
 
-  const { fetchMore } = useQuery<ProjectRewardsCatalogGetResponse, ProjectRewardsCatalogGetVariables>(
-    QUERY_PROJECT_REWARDS_CATALOG,
-    {
+  const { fetchMore } = useProjectRewardsCatalogGetQuery({
       skip: isTrendingMode,
       fetchPolicy: 'network-only',
       notifyOnNetworkStatusChange: true,
@@ -112,13 +91,14 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
         setRewards(firstPage)
         setNoMoreItems(firstPage.length < PAGE_SIZE)
         setIsInitialLoading(false)
+        setHasCatalogError(false)
       },
       onError() {
         setIsInitialLoading(false)
+        setHasCatalogError(true)
         toast.error({ title: t('Failed to fetch products') })
       },
-    },
-  )
+  })
 
   useEffect(() => {
     if (isTrendingMode) {
@@ -128,6 +108,7 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
     setIsInitialLoading(true)
     setNoMoreItems(false)
     setRewards([])
+    setHasCatalogError(false)
   }, [category, isTrendingMode, sort, setNoMoreItems])
 
   const handleSortChange = (nextSort: SortOption) => {
@@ -200,6 +181,10 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
       return <ProductsGridSkeleton />
     }
 
+    if (trendingError) {
+      return <Body>{t('Failed to fetch products')}</Body>
+    }
+
     if (!trendingRewards.length) {
       return <Body>{t('No products found')}</Body>
     }
@@ -222,6 +207,15 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
       <>
         <ProductSortSelect selectedSort={sort} onChange={handleSortChange} />
         <ProductsGridSkeleton />
+      </>
+    )
+  }
+
+  if (hasCatalogError) {
+    return (
+      <>
+        <ProductSortSelect selectedSort={sort} onChange={handleSortChange} />
+        <Body>{t('Failed to fetch products')}</Body>
       </>
     )
   }
