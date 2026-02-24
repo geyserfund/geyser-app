@@ -1,3 +1,10 @@
+## [0.27.3](https://github.com/geyserfund/geyser-app/compare/v0.27.2...v0.27.3) (2026-02-24)
+
+
+### Bug Fixes
+
+* **impact-funds:** replace bitcoin symbol with sats ([97a676c](https://github.com/geyserfund/geyser-app/commit/97a676cd9746b4dcb4fc64bc4ee81dc0f914a956))
+
 ## [0.27.2](https://github.com/geyserfund/geyser-app/compare/v0.27.1...v0.27.2) (2026-02-24)
 
 
