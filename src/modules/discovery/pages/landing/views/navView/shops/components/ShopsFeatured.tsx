@@ -30,7 +30,7 @@ type FeaturedProductsResponse = {
 
 const PLACEHOLDER_FEATURED_PRODUCTS: FeatureAirtableData[] = [
   {
-    Name: 'Featured product preview',
+    Name: '',
     Type: 'display',
     Featured_Comment: '',
     Featured_Author: 'Geyser',
@@ -38,7 +38,7 @@ const PLACEHOLDER_FEATURED_PRODUCTS: FeatureAirtableData[] = [
     link: '/products',
   },
   {
-    Name: 'Local testing card',
+    Name: '',
     Type: 'display',
     Featured_Comment: '',
     Featured_Author: 'Geyser',
@@ -52,7 +52,7 @@ const isDevelopmentOrStaging = __development__ || __staging__
 const usePlaceholderForMissingAirtable = !hasAirtableKey && isDevelopmentOrStaging
 
 const normalizeProductRecord = (record: FeaturedProductRecord): FeatureAirtableData => {
-  const name = record.fields.Name?.trim() || 'Featured Product'
+  const name = record.fields.Name?.trim() || ''
   const featuredComment = record.fields.Featured_Comment?.trim() || ''
 
   return {
@@ -136,7 +136,7 @@ export const ShopsFeatured = () => {
         <HStack w="full">
           {records.map((record, index) => (
             <FeaturedDisplayCard
-              key={`${record.Name}-${index}`}
+              key={`${record.link ?? record.imageUrl ?? 'featured-record'}-${index}`}
               data={record}
               showMini
               startAnimating={index === currentIndex}
