@@ -3,6 +3,7 @@ import {
   Button,
   Flex,
   HStack,
+  Image,
   Icon,
   LinkBox,
   LinkOverlay,
@@ -49,6 +50,7 @@ export const ImpactFundsMainPage = () => {
   const statPrimaryTextColor = useColorModeValue('neutral1.11', 'neutral1.11')
   const statSubtleColor = useColorModeValue('neutral1.8', 'neutral1.10')
   const statTertiaryColor = useColorModeValue('neutral1.7', 'neutral1.9')
+  const cardImageBg = useColorModeValue('neutral1.2', 'neutral1.3')
 
   // Hardcoded Geyser Impact Fund project ID
   const geyserImpactFundProjectId = '1'
@@ -239,14 +241,23 @@ export const ImpactFundsMainPage = () => {
               border="1px solid"
               borderColor="neutral1.6"
               boxShadow="0 4px 16px rgba(0, 0, 0, 0.1)"
-              bgImage={fund.heroImage || undefined}
-              bgSize="cover"
-              bgPosition="center"
-              bgRepeat="no-repeat"
             >
               <LinkBox w="full" h="full">
                 <VStack w="full" h="full" spacing={0} align="stretch">
-                  <Box h={{ base: '240px', lg: '380px' }} />
+                  <Box h={{ base: '240px', lg: '380px' }} bg={cardImageBg} overflow="hidden">
+                    {fund.heroImage && (
+                      <Image
+                        src={fund.heroImage}
+                        alt=""
+                        w="full"
+                        h="full"
+                        display="block"
+                        objectFit="contain"
+                        objectPosition="center"
+                        transform={{ base: 'scale(1.08)', md: 'scale(1.02)' }}
+                      />
+                    )}
+                  </Box>
                   <VStack w="full" bg="utils.pbg" pt={5} pb={5} align="start" spacing={3} flex={1}>
                     <HStack w="full" justifyContent="space-between" alignItems="baseline" spacing={3} px={5}>
                       <H2 size="xl" bold lineHeight={1.2} flex={1}>

@@ -1,3 +1,26 @@
+## [0.27.3](https://github.com/geyserfund/geyser-app/compare/v0.27.2...v0.27.3) (2026-02-24)
+
+
+### Bug Fixes
+
+* **impact-funds:** replace bitcoin symbol with sats ([97a676c](https://github.com/geyserfund/geyser-app/commit/97a676cd9746b4dcb4fc64bc4ee81dc0f914a956))
+
+## [0.27.2](https://github.com/geyserfund/geyser-app/compare/v0.27.1...v0.27.2) (2026-02-24)
+
+
+### Bug Fixes
+
+* **impact-funds:** match past sponsor styling ([2f876a6](https://github.com/geyserfund/geyser-app/commit/2f876a6843d7e48c18bb1619011ba63eb1541746))
+* shop category order ([4b5373e](https://github.com/geyserfund/geyser-app/commit/4b5373ea0c75da1cd2528486535bc61e949c49e4))
+
+## [0.27.1](https://github.com/geyserfund/geyser-app/compare/v0.27.0...v0.27.1) (2026-02-24)
+
+
+### Bug Fixes
+
+* **impact-funds:** improve impact fund card image fit ([f6becf6](https://github.com/geyserfund/geyser-app/commit/f6becf63cd5936ca94683f7abdfab8f79eac70a7))
+* **impact-funds:** use correct sponsor tier enum keys ([92bfc81](https://github.com/geyserfund/geyser-app/commit/92bfc812951326abc8b5892cd557db533196b4b7))
+
 ## [0.26.2](https://github.com/geyserfund/geyser-app/compare/v0.26.1...v0.26.2) (2026-02-19)
 
 
@@ -6375,4 +6398,3 @@
 ### Reverts
 
 * Revert "hot fix: cookies" ([d81a7b7](https://github.com/geyserfund/geyser-app/commit/d81a7b7e445c6a6064e28478e36bfc77813926e0))
-

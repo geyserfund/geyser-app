@@ -73,11 +73,12 @@ const APPLICATIONS_PAGE_SIZE = 15
 const DESCRIPTION_PREVIEW_CHAR_LIMIT = 500
 const DESCRIPTION_COLLAPSED_MAX_HEIGHT = '240px'
 const SPONSOR_INQUIRY_CALENDAR_URL = 'https://cal.com/metamick/thirtymin?overlayCalendar=true'
-const btcNumberFormatter = new Intl.NumberFormat()
+const satsNumberFormatter = new Intl.NumberFormat()
 const fundedStatus = [ImpactFundApplicationStatus.Funded]
 type ImpactFundDetails = ImpactFundQuery['impactFund']
 type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
 type OwnedProject = { id: unknown; title: string }
+type SponsorItem = Pick<ImpactFundDetails['liveSponsors'][number], 'id' | 'name' | 'image' | 'url'>
 type CommunitySupporter = {
   id: string
   username: string
@@ -605,7 +606,7 @@ function FundedApplicationsSection({
                 </H2>
                 {hasValue(application.amountAwardedInSats) && (
                   <Body bold color={emphasisTextColor} size="sm" flexShrink={0}>
-                    ₿ {btcNumberFormatter.format(application.amountAwardedInSats)}
+                    {`${satsNumberFormatter.format(application.amountAwardedInSats)} sats`}
                   </Body>
                 )}
                 {application.awardedAt && (
@@ -870,7 +871,7 @@ function ImpactFundOverviewSection({
                 </Flex>
                 <VStack align="start" spacing={0}>
                   <H2 size="xl" bold color={colors.primaryTextColor}>
-                    ₿ {btcNumberFormatter.format(impactFund.metrics.awardedTotalSats)}
+                    {`${satsNumberFormatter.format(impactFund.metrics.awardedTotalSats)} sats`}
                   </H2>
                   <Body
                     size="xs"
@@ -1063,14 +1064,15 @@ function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColor
 }
 
 type SponsorLogoProps = {
-  sponsor: ImpactFundDetails['liveSponsors'][number]
+  sponsor: SponsorItem
   imageMaxHeight: string
+  fallbackTextColor: string
 }
 
-function SponsorLogo({ sponsor, imageMaxHeight }: SponsorLogoProps): JSX.Element {
+function SponsorLogo({ sponsor, imageMaxHeight, fallbackTextColor }: SponsorLogoProps): JSX.Element {
   const content = (
     <Box w="full" h={imageMaxHeight} display="flex" alignItems="center" justifyContent="center">
-      {sponsor.image && (
+      {sponsor.image ? (
         <Image
           src={sponsor.image}
           alt={sponsor.name}
@@ -1080,6 +1082,10 @@ function SponsorLogo({ sponsor, imageMaxHeight }: SponsorLogoProps): JSX.Element
           transition="transform 0.2s"
           _hover={{ transform: 'scale(1.03)' }}
         />
+      ) : (
+        <Body size="sm" color={fallbackTextColor} fontWeight="medium">
+          {sponsor.name}
+        </Body>
       )}
     </Box>
   )
@@ -1097,7 +1103,7 @@ function SponsorLogo({ sponsor, imageMaxHeight }: SponsorLogoProps): JSX.Element
 
 type SponsorTierListProps = {
   title: string
-  sponsors: ImpactFundDetails['liveSponsors']
+  sponsors: SponsorItem[]
   imageMaxHeight: string
   secondaryTextColor: string
 }
@@ -1120,7 +1126,7 @@ function SponsorTierList({
       <SimpleGrid columns={{ base: 2, sm: 3, md: 4, lg: 5 }} spacing={6}>
         {sponsors.map((sponsor) => (
           <Box key={sponsor.id}>
-            <SponsorLogo sponsor={sponsor} imageMaxHeight={imageMaxHeight} />
+            <SponsorLogo sponsor={sponsor} imageMaxHeight={imageMaxHeight} fallbackTextColor={secondaryTextColor} />
           </Box>
         ))}
       </SimpleGrid>
@@ -1204,29 +1210,12 @@ function ImpactFundSponsorsSection({
         )}
 
         {impactFund.archivedSponsors.length > 0 && (
-          <VStack align="stretch" spacing={5}>
-            <H2 size="lg" color={colors.secondaryTextColor}>
-              {t('Past')}
-            </H2>
-            <Wrap spacing={4}>
-              {impactFund.archivedSponsors.map((sponsor) => (
-                <WrapItem key={sponsor.id}>
-                  <Box
-                    px={4}
-                    py={2}
-                    bg={colors.archivedBadgeBg}
-                    borderRadius="md"
-                    borderWidth="1px"
-                    borderColor={colors.archivedBadgeBorderColor}
-                  >
-                    <Body size="sm" color={colors.secondaryTextColor} fontWeight="medium">
-                      {sponsor.name}
-                    </Body>
-                  </Box>
-                </WrapItem>
-              ))}
-            </Wrap>
-          </VStack>
+          <SponsorTierList
+            title="Past"
+            sponsors={impactFund.archivedSponsors}
+            imageMaxHeight="56px"
+            secondaryTextColor={colors.secondaryTextColor}
+          />
         )}
       </VStack>
     </VStack>
