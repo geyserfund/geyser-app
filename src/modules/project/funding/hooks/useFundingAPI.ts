@@ -58,6 +58,22 @@ import { useWebLNFlow } from './useWebLNFlow'
 
 const hasBolt11 = true
 const hasWebLN = true
+const PAYMENT_SWAP_CLAIM_TX_SET_MAX_ATTEMPTS = 3
+const PAYMENT_SWAP_CLAIM_TX_SET_RETRY_DELAY_MS = 400
+
+const delay = async (ms: number) => {
+  await new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
+}
+
+const isRetryableClaimTxSetError = (error: unknown) => {
+  if (!(error instanceof ApolloError)) return false
+
+  return error.graphQLErrors.some(
+    ({ message }) => message.includes('version conflict detected') || message.includes('OptimisticLockError'),
+  )
+}
 
 export const useFundingAPI = () => {
   const toast = useNotification()
@@ -177,6 +193,12 @@ export const useFundingAPI = () => {
             payment: data.contributionCreate.payments.onChainToRskSwap,
             preImages: preImages.onChain,
             accountKeys: currentAccountKeys,
+          }).catch((error) => {
+            setFundingRequestErrored(true)
+            toast.error({
+              title: 'Unable to prepare on-chain-to-RSK claim transaction',
+              description: error instanceof Error ? error.message : 'Please refresh and try again',
+            })
           })
         }
 
@@ -198,6 +220,12 @@ export const useFundingAPI = () => {
             payment: data.contributionCreate.payments.lightningToRskSwap,
             preImages: preImages.lightning,
             accountKeys: currentAccountKeys,
+          }).catch((error) => {
+            setFundingRequestErrored(true)
+            toast.error({
+              title: 'Unable to prepare Lightning-to-RSK claim transaction',
+              description: error instanceof Error ? error.message : 'Please refresh and try again',
+            })
           })
         }
 
@@ -454,7 +482,41 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
     })
   }
 
-  const generateTransactionForLightningToRskSwap = ({
+  const setPaymentSwapClaimTx = async (params: { paymentId: string; claimTxCallDataHex: string }) => {
+    const { paymentId, claimTxCallDataHex } = params
+
+    const attemptSet = async (attempt: number): Promise<void> => {
+      try {
+        const response = await paymentSwapClaimTxSet({
+          variables: {
+            input: {
+              paymentId,
+              claimTxCallDataHex,
+            },
+          },
+        })
+
+        if (!response.data?.paymentSwapClaimTxSet?.success) {
+          throw new Error(`Failed to set swap claim transaction for payment ${paymentId}`)
+        }
+      } catch (error) {
+        const canRetry = attempt < PAYMENT_SWAP_CLAIM_TX_SET_MAX_ATTEMPTS && isRetryableClaimTxSetError(error)
+
+        if (!canRetry) {
+          throw error instanceof Error
+            ? error
+            : new Error(`Failed to set swap claim transaction for payment ${paymentId}`)
+        }
+
+        await delay(PAYMENT_SWAP_CLAIM_TX_SET_RETRY_DELAY_MS * attempt)
+        await attemptSet(attempt + 1)
+      }
+    }
+
+    await attemptSet(1)
+  }
+
+  const generateTransactionForLightningToRskSwap = async ({
     payment,
     preImages,
     accountKeys,
@@ -502,17 +564,13 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       })
     }
 
-    paymentSwapClaimTxSet({
-      variables: {
-        input: {
-          paymentId: payment.paymentId,
-          claimTxCallDataHex,
-        },
-      },
+    await setPaymentSwapClaimTx({
+      paymentId: payment.paymentId,
+      claimTxCallDataHex,
     })
   }
 
-  const generateTransactionForOnChainToRskSwap = ({
+  const generateTransactionForOnChainToRskSwap = async ({
     payment,
     preImages,
     accountKeys,
@@ -558,13 +616,9 @@ export const useGenerateTransactionDataForClaimingRBTCToContract = () => {
       })
     }
 
-    paymentSwapClaimTxSet({
-      variables: {
-        input: {
-          paymentId: payment.paymentId,
-          claimTxCallDataHex,
-        },
-      },
+    await setPaymentSwapClaimTx({
+      paymentId: payment.paymentId,
+      claimTxCallDataHex,
     })
   }
 
