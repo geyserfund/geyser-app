@@ -17,7 +17,6 @@ import { MUTATION_PROJECT_RSK_EOA_SET } from '@/modules/project/graphql/mutation
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { FEATURE_FLAGS } from '@/shared/constants/config'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { ProjectFundingStrategy, UserAccountKeysFragment } from '@/types/index.ts'
@@ -61,9 +60,7 @@ export const TiaRskEoaSetupNotice = () => {
   const needsProjectKey = !project?.rskEoa
   const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
 
-  const shouldShow = Boolean(
-    FEATURE_FLAGS.TIA_PRISM_PAYMENTS_ENABLED && user?.id && isProjectOwner && isTiaProject && needsProjectKey,
-  )
+  const shouldShow = Boolean(user?.id && isProjectOwner && isTiaProject && needsProjectKey)
 
   const message = t(
     'Geyser is migrating to a new payment infrastructure. Configure your new project wallet before the {{keyConfigDeadline}} to continue receiving contributions after that date. You can read more about it',
