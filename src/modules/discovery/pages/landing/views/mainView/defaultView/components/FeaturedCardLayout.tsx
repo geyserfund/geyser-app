@@ -25,6 +25,8 @@ export const FeaturedCardLayout = ({
   children?: React.ReactNode
   imageContent?: React.ReactNode
 } & CardLayoutProps) => {
+  const hasTitle = title.trim().length > 0
+
   if (loading) {
     return <FeaturedCardSkeleton />
   }
@@ -69,9 +71,11 @@ export const FeaturedCardLayout = ({
         overflow="hidden"
         justifyContent={{ base: 'start', sm: 'space-between' }}
       >
-        <H2 size="2xl" bold width="100%" isTruncated>
-          {title}
-        </H2>
+        {hasTitle ? (
+          <H2 size="2xl" bold width="100%" isTruncated>
+            {title}
+          </H2>
+        ) : null}
 
         {(comment || author) && (
           <VStack alignItems="start">
