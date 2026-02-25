@@ -28,6 +28,7 @@ import { useImpactFundsQuery } from '@/types'
 
 import { DonationSponsorCTA } from '../components/DonationSponsorCTA.tsx'
 import { ImpactFlowStrip } from '../components/ImpactFlowStrip.tsx'
+import { IMPACT_FUNDS_IMAGE_URL } from '../utils/constants.ts'
 
 const numberFormatter = new Intl.NumberFormat()
 const usdFormatter = new Intl.NumberFormat(undefined, {
@@ -51,7 +52,13 @@ export const ImpactFundsMainPage = () => {
 
   // Hardcoded Geyser Impact Fund project ID
   const geyserImpactFundProjectId = '1'
-  const pageHead = <Head title={t('Impact Funds')} description={t('Support and apply to Geyser Impact Funds.')} />
+  const pageHead = (
+    <Head
+      title={t('Impact Funds')}
+      description={t('Support and apply to Geyser Impact Funds.')}
+      image={IMPACT_FUNDS_IMAGE_URL}
+    />
+  )
 
   if (loading) {
     return (
