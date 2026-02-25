@@ -22,7 +22,7 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { ProjectFundingStrategy, UserAccountKeysFragment } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
-const KEY_CONFIG_DEADLINE = '30th of June 2026'
+const KEY_CONFIG_DEADLINE = '30th of April 2026'
 
 type ProjectRskEoaSetMutation = {
   projectRskEoaSet: {
