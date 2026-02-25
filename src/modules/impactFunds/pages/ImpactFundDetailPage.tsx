@@ -69,6 +69,8 @@ import {
 } from '@/types'
 import { useNotification } from '@/utils'
 
+import { IMPACT_FUND_DETAILS_SEO_IMAGES } from '../utils/constants.ts'
+
 const APPLICATIONS_PAGE_SIZE = 15
 const DESCRIPTION_PREVIEW_CHAR_LIMIT = 500
 const DESCRIPTION_COLLAPSED_MAX_HEIGHT = '240px'
@@ -1588,12 +1590,14 @@ function ImpactFundDetailContent({
   })
   const showAwardedAsPrimaryMetric = impactFund.amountCommitted === 0
 
+  const seoImage = IMPACT_FUND_DETAILS_SEO_IMAGES[impactFund.name as keyof typeof IMPACT_FUND_DETAILS_SEO_IMAGES]
+
   return (
     <VStack align="stretch" spacing={14}>
       <Head
         title={impactFund.title}
         description={impactFund.subtitle || undefined}
-        image={impactFund.heroImage || undefined}
+        image={seoImage || impactFund.heroImage || undefined}
       />
 
       <ImpactFundOverviewSection
