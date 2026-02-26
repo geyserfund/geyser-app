@@ -7,17 +7,13 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { StripeConnectOnboardingCard } from './StripeConnectOnboardingCard.tsx'
 
 type EnableFiatContributionsProps = {
-  isIdentityVerified?: boolean
   isTiaProject: boolean
   projectId?: string | number | bigint
-  onRequireVerification: () => void
 }
 
 export const EnableFiatContributions = ({
-  isIdentityVerified,
   isTiaProject,
   projectId,
-  onRequireVerification,
 }: EnableFiatContributionsProps) => {
   const [isStripeReady, setIsStripeReady] = useState(false)
   const isBitcoinMode = !isStripeReady
@@ -76,10 +72,8 @@ export const EnableFiatContributions = ({
           compact
           withCard
           selected={!isBitcoinMode}
-          isIdentityVerified={Boolean(isIdentityVerified)}
           isTiaProject={isTiaProject}
           projectId={projectId}
-          onRequireVerification={onRequireVerification}
           onReadyStateChange={setIsStripeReady}
         />
       </VStack>

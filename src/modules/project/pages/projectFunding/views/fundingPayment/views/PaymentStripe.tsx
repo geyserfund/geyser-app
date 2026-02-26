@@ -12,7 +12,17 @@ import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundi
 import { Body } from '@/shared/components/typography'
 import { VITE_APP_STRIPE_API_KEY } from '@/shared/constants/config/env'
 
-const stripePromise = loadStripe(VITE_APP_STRIPE_API_KEY)
+const stripePromiseByAccount = new Map<string, ReturnType<typeof loadStripe>>()
+
+const getStripePromiseForAccount = (stripeAccountId: string) => {
+  let stripePromise = stripePromiseByAccount.get(stripeAccountId)
+  if (!stripePromise) {
+    stripePromise = loadStripe(VITE_APP_STRIPE_API_KEY, { stripeAccount: stripeAccountId })
+    stripePromiseByAccount.set(stripeAccountId, stripePromise)
+  }
+
+  return stripePromise
+}
 
 const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   container: {
@@ -29,6 +39,7 @@ export const PaymentStripe = () => {
   const [isCompleted, setIsCompleted] = useState(false)
 
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
+  const stripeAccountId = fundingPaymentDetails.fiat?.stripeAccountId || ''
   const stripeClientSecret = useMemo(() => {
     const clientSecret = fundingPaymentDetails.fiat?.stripeClientSecret
     if (!clientSecret) return ''
@@ -54,7 +65,25 @@ export const PaymentStripe = () => {
     }
   }, [stripeClientSecret, handleStripeComplete])
 
+  const stripePromise = useMemo(() => {
+    if (!stripeAccountId) return undefined
+    return getStripePromiseForAccount(stripeAccountId)
+  }, [stripeAccountId])
+
   if (!stripeClientSecret || !stripeOptions) {
+    return null
+  }
+
+  if (!stripeAccountId) {
+    console.error('Missing stripeAccountId for Stripe direct-charge checkout initialization')
+    return (
+      <Body size="sm" light>
+        {t('Unable to initialize card checkout. Please refresh and try again.')}
+      </Body>
+    )
+  }
+
+  if (!stripePromise) {
     return null
   }
 

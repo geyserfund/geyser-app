@@ -277,6 +277,7 @@ export type ContributionFiatPaymentDetails = {
   amountDueCurrency: PaymentCurrency;
   fees: Array<PaymentFee>;
   paymentId: Scalars['BigInt']['output'];
+  stripeAccountId: Scalars['String']['output'];
   stripeClientSecret: Scalars['String']['output'];
 };
 
@@ -4740,6 +4741,7 @@ export enum SubscriptionCurrencyType {
 }
 
 export type SubscriptionPaymentConfirmationInput = {
+  stripeAccountId?: InputMaybe<Scalars['String']['input']>;
   stripeSubscriptionId?: InputMaybe<Scalars['String']['input']>;
   userSubscriptionUuid: Scalars['String']['input'];
 };
@@ -6587,6 +6589,7 @@ export type ContributionFiatPaymentDetailsResolvers<ContextType = any, ParentTyp
   amountDueCurrency?: Resolver<ResolversTypes['PaymentCurrency'], ParentType, ContextType>;
   fees?: Resolver<Array<ResolversTypes['PaymentFee']>, ParentType, ContextType>;
   paymentId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  stripeAccountId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   stripeClientSecret?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -9781,7 +9784,7 @@ export type ContributionOnChainSwapPaymentDetailsFragment = { __typename?: 'Cont
     & ContributionFeesFragment
   )> };
 
-export type ContributionFiatPaymentDetailsFragment = { __typename?: 'ContributionFiatPaymentDetails', stripeClientSecret: string };
+export type ContributionFiatPaymentDetailsFragment = { __typename?: 'ContributionFiatPaymentDetails', stripeClientSecret: string, stripeAccountId: string };
 
 export type ContributionFiatSwapPaymentDetailsFragment = { __typename?: 'ContributionFiatToLightningSwapPaymentDetails', checkoutUrl: string };
 
@@ -12431,6 +12434,7 @@ export const ContributionOnChainSwapPaymentDetailsFragmentDoc = gql`
 export const ContributionFiatPaymentDetailsFragmentDoc = gql`
     fragment ContributionFiatPaymentDetails on ContributionFiatPaymentDetails {
   stripeClientSecret
+  stripeAccountId
 }
     `;
 export const ContributionFiatSwapPaymentDetailsFragmentDoc = gql`

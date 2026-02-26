@@ -51,8 +51,6 @@ export const LaunchPaymentWallet = () => {
     },
   }
 
-  const isIdentityVerified = Boolean(user.complianceDetails.verifiedDetails.identity?.verified)
-
   return (
     <ProjectCreationPageWrapper
       title={t('Payment Wallet')}
@@ -65,12 +63,8 @@ export const LaunchPaymentWallet = () => {
       {!isAon && (
         <>
           <EnableFiatContributions
-            isIdentityVerified={isIdentityVerified}
             isTiaProject={project.fundingStrategy === ProjectFundingStrategy.TakeItAll}
             projectId={project.id}
-            onRequireVerification={() => {
-              toast.error({ title: t('Identity verification is required to enable fiat contributions') })
-            }}
           />
         </>
       )}

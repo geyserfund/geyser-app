@@ -42,7 +42,7 @@ export const TiaPayoutNotification = () => {
   return (
     <>
       <Feedback variant={FeedBackVariant.SUCCESS}>
-        <VStack spacing={4} align="stretch">
+        <VStack spacing={4} align="stretch" w="full">
           <Stack
             direction={{ base: 'column', md: 'row' }}
             align={{ base: 'stretch', md: 'center' }}

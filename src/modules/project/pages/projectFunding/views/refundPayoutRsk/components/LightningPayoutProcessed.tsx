@@ -32,7 +32,7 @@ export const LightningPayoutProcessed: React.FC<LightningPayoutProcessedProps> =
 
       {/* Success Message */}
       <Body size="md" textAlign="center" color="neutral1.12">
-        {t('Payout has been sent.')} {t('You should be receiving it in shortly.')}
+        {t('Payout has been sent.')} {t('You should be receiving it shortly.')}
       </Body>
       {invoiceId && (
         <Body size="sm" textAlign="center" color="neutral1.10">

@@ -9,7 +9,7 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { getTimeLeft } from '@/shared/utils/project/getAonData.ts'
 
-export const CampaignSuccessNotification = ({ onOpen }: { onOpen: () => void }) => {
+export const CampaignSuccessNotification = ({ onOpen }: { onOpen?: () => void }) => {
   const { project, isProjectOwner } = useProjectAtom()
 
   /** Calculate days left for claiming funds */
@@ -66,9 +66,11 @@ export const CampaignSuccessNotification = ({ onOpen }: { onOpen: () => void }) 
               'Note: You can keep raising the funds until the project deadline, if you withdraw the funds before the deadline, the project will be marked as completed and cannot accept any more contributions.',
             )}
           </Body>
-          <Button colorScheme="primary1" variant="solid" size="lg" w="full" onClick={onOpen}>
-            {t('Claim funds now')}
-          </Button>
+          {onOpen && (
+            <Button colorScheme="primary1" variant="solid" size="lg" w="full" onClick={onOpen}>
+              {t('Claim funds now')}
+            </Button>
+          )}
         </VStack>
       </Feedback>
     </>

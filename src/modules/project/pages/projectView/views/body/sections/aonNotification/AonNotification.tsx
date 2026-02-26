@@ -1,17 +1,12 @@
-import { useEffect, useState } from 'react'
-
 import { useAuthContext } from '@/context/index.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { RefundRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/RefundRsk.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import {
   ContributionStatus,
   PaymentStatus,
-  PayoutStatus,
   ProjectAonGoalStatus,
-  usePayoutRequestMutation,
   useProjectContributorQuery,
 } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
@@ -28,18 +23,15 @@ import { FundsReturnedNotification } from './views/FundsReturnedNotification.tsx
 export const AonSuccessfullStatuses = [ProjectAonGoalStatus.Successful, ProjectAonGoalStatus.Claimed]
 
 export const AonNotification = () => {
-  const { project, isProjectOwner } = useProjectAtom()
+  const { project } = useProjectAtom()
   const { user } = useAuthContext()
 
-  const { refetchQueriesOnPledgeRefund, refetchQueriesOnPayoutSuccess } = useRefetchQueries()
+  const { refetchQueriesOnPledgeRefund } = useRefetchQueries()
   const { queryProject } = useProjectAPI()
 
-  const payoutRskModal = useModal()
   const refundModal = useModal()
 
   const isAon = isAllOrNothing(project)
-
-  const [isPayoutProcessing, setIsPayoutProcessing] = useState(false)
 
   const { data, loading } = useProjectContributorQuery({
     skip: !project.id || !user.id || !isAon,
@@ -52,35 +44,6 @@ export const AonNotification = () => {
     },
   })
 
-  const [payoutRequest] = usePayoutRequestMutation({
-    variables: {
-      input: {
-        projectId: project.id,
-      },
-    },
-  })
-
-  useEffect(() => {
-    if (isProjectOwner && project?.aonGoal?.status && AonSuccessfullStatuses.includes(project.aonGoal.status)) {
-      payoutRequest({
-        variables: {
-          input: {
-            projectId: project.id,
-          },
-        },
-        onCompleted(data) {
-          const { status } = data.payoutRequest.payout
-
-          if (status === PayoutStatus.Pending || status === PayoutStatus.Processing) {
-            setIsPayoutProcessing(true)
-          } else {
-            setIsPayoutProcessing(false)
-          }
-        },
-      })
-    }
-  }, [isProjectOwner, payoutRequest, project])
-
   const contributionPendingToProject = data?.contributor?.contributions.find(
     (contribution) =>
       contribution.status === ContributionStatus.Pending &&
@@ -90,8 +53,6 @@ export const AonNotification = () => {
   const fundedToCampaign = data?.contributor?.contributions.find(
     (contribution) => contribution.status === ContributionStatus.Pledged,
   )
-  const isPayoutRemaining =
-    (project.aonGoal?.status === ProjectAonGoalStatus.Successful || isPayoutProcessing) && isProjectOwner
 
   const renderFunderNotification = () => {
     if (!isAon || loading) {
@@ -113,14 +74,10 @@ export const AonNotification = () => {
     }
 
     if (project.aonGoal?.status === ProjectAonGoalStatus.Successful) {
-      return <CampaignSuccessNotification onOpen={payoutRskModal.onOpen} />
+      return <CampaignSuccessNotification />
     }
 
     if (project.aonGoal?.status === ProjectAonGoalStatus.Claimed) {
-      if (isPayoutProcessing) {
-        return <CampaignSuccessNotification onOpen={payoutRskModal.onOpen} />
-      }
-
       return <FundsClaimedNotification />
     }
 
@@ -155,30 +112,11 @@ export const AonNotification = () => {
     )
   }
 
-  const renderPayoutModal = () => {
-    if (!isPayoutRemaining) {
-      return null
-    }
-
-    return (
-      <PayoutRsk
-        {...payoutRskModal}
-        project={project}
-        onCompleted={() => {
-          refetchQueriesOnPayoutSuccess()
-          queryProject.execute()
-          setIsPayoutProcessing(false)
-        }}
-      />
-    )
-  }
-
   return (
     <>
       {renderNotification()}
       {renderFunderNotification()}
       {renderRefundModal()}
-      {renderPayoutModal()}
     </>
   )
 }
