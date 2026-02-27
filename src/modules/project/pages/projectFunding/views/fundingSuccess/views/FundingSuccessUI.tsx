@@ -17,8 +17,8 @@ import { ProjectFundingSummary } from '../../../components/ProjectFundingSummary
 import { FundingLayout } from '../../../layouts/FundingLayout.tsx'
 import { DownloadInvoice } from '../components/DownloadInvoice.tsx'
 import { SuccessImageComponent } from '../components/index.ts'
-import { SwapPendingStages } from '../components/SwapPendingStages.tsx'
 import { SafeToDeleteRefund } from '../components/SafeToDeleteRefund.tsx'
+import { SwapPendingStages } from '../components/SwapPendingStages.tsx'
 
 export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
   const { project, formState } = useFundingFormAtom()

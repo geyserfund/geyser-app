@@ -1,8 +1,8 @@
 import { HStack, StackProps } from '@chakra-ui/react'
 
 import { ProgressBar, ProgressBarProps } from '@/components/ui/ProgressBar.tsx'
-import { ProjectForLandingPageFragment } from '@/types/index.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit'
+import { ProjectForLandingPageFragment } from '@/types/index.ts'
 
 export const AonProgressBar = ({
   project,

@@ -45,7 +45,13 @@ export const BrandLogo = ({ showOutline = false }: { showOutline?: boolean }) =>
     <Link to={getPath('landingPage')} style={{ height: '100%' }}>
       <HStack h="100%" spacing={{ base: 1, lg: 2 }}>
         <Box h="100%">
-          <Image src={showOutline ? LogoOutline : imagesrc} height="100%" width="auto" objectFit="contain" alt="Geyser logo" />
+          <Image
+            src={showOutline ? LogoOutline : imagesrc}
+            height="100%"
+            width="auto"
+            objectFit="contain"
+            alt="Geyser logo"
+          />
         </Box>
         <EnvironmentTag />
       </HStack>

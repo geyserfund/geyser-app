@@ -2,10 +2,7 @@ import { t } from 'i18next'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useAuthContext } from '@/context'
-import {
-  ConnectionOption,
-  LNAddressEvaluationState,
-} from '@/modules/project/pages/projectCreation/hooks/useWalletForm'
+import { ConnectionOption, LNAddressEvaluationState } from '@/modules/project/pages/projectCreation/hooks/useWalletForm'
 import { WalletConnectDetails } from '@/shared/constants'
 import { useDebounce } from '@/shared/hooks'
 import {

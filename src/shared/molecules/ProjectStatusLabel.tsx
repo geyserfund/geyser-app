@@ -75,7 +75,11 @@ export const ProjectStatusBar = ({ isProjectOwner, project, wallet, ...props }: 
 
   const cta = ProjectStatusCTA[projectStatus]
 
-  if (projectStatus === ProjectStatusLabels.RUNNING) {
+  if (
+    projectStatus === ProjectStatusLabels.RUNNING ||
+    projectStatus === ProjectStatusLabels.INACTIVE_WALLET ||
+    projectStatus === ProjectStatusLabels.UNSTABLE_WALLET
+  ) {
     return null
   }
 

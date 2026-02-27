@@ -1,13 +1,13 @@
 import { Button, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
+import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
+import { Body } from '@/shared/components/typography/Body.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { Body } from '@/shared/components/typography/Body.tsx'
-import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { ProjectFundingStrategy, Satoshis } from '@/types/index.ts'
 
 import { useRefetchQueries } from '../aonNotification/hooks/useRefetchQueries.ts'

@@ -249,6 +249,7 @@ export const decryptMnemonic = async (encryptedMnemonic: string, password: strin
     if (typeof payload.mnemonic !== 'string') {
       throw new Error('Invalid encrypted mnemonic format: missing mnemonic property')
     }
+
     return payload.mnemonic
   } catch (error) {
     throw new Error(`Failed to decrypt mnemonic: ${error instanceof Error ? error.message : 'Unknown error'}`)
@@ -352,21 +353,25 @@ export const generateProjectKeysFromSeedHex = (seedHex: string, projectId: numbe
     if (projectId < MIN_PROJECT_DERIVATION_INDEX || projectId > MAX_PROJECT_DERIVATION_INDEX) {
       throw new Error('Invalid project id for derivation path')
     }
+
     projectIndex = Number(projectId)
   } else if (typeof projectId === 'string') {
     const normalizedProjectId = projectId.trim()
     if (!/^-?\d+$/.test(normalizedProjectId)) {
       throw new Error('Invalid project id for derivation path')
     }
+
     const parsedProjectId = BigInt(normalizedProjectId)
     if (parsedProjectId < MIN_PROJECT_DERIVATION_INDEX || parsedProjectId > MAX_PROJECT_DERIVATION_INDEX) {
       throw new Error('Invalid project id for derivation path')
     }
+
     projectIndex = Number(parsedProjectId)
   } else {
     if (!Number.isInteger(projectId) || projectId < 0 || projectId > Number(MAX_PROJECT_DERIVATION_INDEX)) {
       throw new Error('Invalid project id for derivation path')
     }
+
     projectIndex = projectId
   }
 

@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_REVIEW } from '@/modules/project/graphql/fragments/projectReviewFragment.ts'
+
 import { FRAGMENT_PROJECT_AON_GOAL_FOR_LANDING_PAGE } from './aonGoalFragment.ts'
 
 export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
@@ -67,6 +69,7 @@ export const FRAGMENT_PROJECT_FOR_LAUNCHPAD_PAGE = gql`
 
 export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
   ${FRAGMENT_PROJECT_AON_GOAL_FOR_LANDING_PAGE}
+  ${FRAGMENT_PROJECT_REVIEW}
   fragment ProjectForMyProjects on Project {
     id
     name
@@ -83,6 +86,11 @@ export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
     lastCreationStep
     fundingStrategy
     launchedAt
+    rskEoa
+    subCategory
+    location {
+      region
+    }
     aonGoal {
       ...ProjectAonGoalForLandingPage
     }
@@ -93,6 +101,9 @@ export const FRAGMENT_PROJECT_FOR_MY_PROJECTS = gql`
         status
         statusCode
       }
+    }
+    reviews {
+      ...ProjectReview
     }
   }
 `

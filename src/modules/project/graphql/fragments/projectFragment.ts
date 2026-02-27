@@ -2,6 +2,7 @@ import { gql } from '@apollo/client'
 
 import { FRAGMENT_PROJECT_PAYMENT_METHODS } from './paymentMethodsFragment'
 import { FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE } from './projectAognGoalFragment.ts'
+import { FRAGMENT_PROJECT_REVIEW } from './projectReviewFragment.ts'
 import { FRAGMENT_PROJECT_PAGE_CREATOR } from './userFragment'
 
 export const FRAGMENT_PROJECT = gql`
@@ -80,6 +81,7 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
   ${FRAGMENT_PROJECT_KEYS}
   ${FRAGMENT_PROJECT_PAYMENT_METHODS}
   ${FRAGMENT_PROJECT_AON_GOAL_FOR_PROJECT_PAGE}
+  ${FRAGMENT_PROJECT_REVIEW}
   fragment ProjectPageBody on Project {
     id
     name
@@ -134,6 +136,9 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     }
     paymentMethods {
       ...ProjectPaymentMethods
+    }
+    reviews {
+      ...ProjectReview
     }
   }
 `

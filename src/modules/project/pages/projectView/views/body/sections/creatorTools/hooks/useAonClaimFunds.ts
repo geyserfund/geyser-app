@@ -35,8 +35,7 @@ export const useAonClaimFunds = () => {
   }, [isProjectOwner, isAon, project?.aonGoal?.status, project.id, payoutRequest])
 
   const goalReached = project.aonGoal?.status === ProjectAonGoalStatus.Successful
-  const claimedButProcessing =
-    project.aonGoal?.status === ProjectAonGoalStatus.Claimed && isPayoutProcessing
+  const claimedButProcessing = project.aonGoal?.status === ProjectAonGoalStatus.Claimed && isPayoutProcessing
 
   const showClaim = isAon && isProjectOwner && (goalReached || claimedButProcessing)
 

@@ -1,19 +1,20 @@
-import { Box, Button, HStack, Image, VStack } from '@chakra-ui/react'
+import { Badge, Button, HStack, Icon, Image, Tooltip, VStack } from '@chakra-ui/react'
 import { useTranslation } from 'react-i18next'
-import { PiCheckCircle, PiClock, PiEyeglasses, PiGear, PiNotePencil, PiXCircle } from 'react-icons/pi'
+import { PiArrowUpRight, PiHandHeart, PiInfo, PiNotePencil, PiRocketLaunch, PiStorefront } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
-import { FOLLOWERS_NEEDED } from '@/modules/project/pages/projectView/views/body/components/PrelaunchFollowButton.tsx'
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
-import { ProjectPrelaunchStatus } from '@/shared/molecules/ProjectPrelaunchStatus.tsx'
-import { ProjectForMyProjectsFragment, ProjectFundingStrategy, ProjectStatus } from '@/types'
+import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
+import { ProjectForMyProjectsFragment, ProjectFundingStrategy, ProjectReviewStatus, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
 
 import { inDraftStatus } from '../hooks/useMyProjects.ts'
-import { Contributions } from './Contributions'
-import { Rewards } from './Rewards'
+import { useProjectWithdrawalStatus } from '../hooks/useProjectWithdrawalStatus.ts'
+import { ImpactFundNotification } from './ImpactFundNotification.tsx'
+import { WalletConfigurationPrompt } from './WalletConfigurationPrompt.tsx'
 
 interface ProjectCardProps {
   project: ProjectForMyProjectsFragment
@@ -21,294 +22,251 @@ interface ProjectCardProps {
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
   const { t } = useTranslation()
-
   const isMobile = useMobileMode()
 
-  const hasRewards = project.rewardsCount && project.rewardsCount > 0
+  const isInReview = project.status === ProjectStatus.InReview
+  const isDraft = project.status && inDraftStatus.includes(project.status) && !isInReview
+  const isInactive = project.status === ProjectStatus.Inactive
+  const isActive = project.status === ProjectStatus.Active
 
-  const Direction = isMobile ? VStack : HStack
+  const draftRedirectPath = getProjectCreationRoute(project.lastCreationStep, project.id)
 
-  const isDraft = project.status && inDraftStatus.includes(project.status)
+  const { status: withdrawalStatus } = useProjectWithdrawalStatus({ project })
 
-  const draftRediredirectPath = getProjectCreationRoute(project.lastCreationStep, project.id)
+  /** Get latest review for status display */
+  const latestReview =
+    project.reviews && project.reviews.length > 0
+      ? [...project.reviews].sort((a, b) => (b.version ?? 0) - (a.version ?? 0))[0]
+      : undefined
 
-  /** Get project type label based on funding strategy */
-  const getProjectTypeLabel = () => {
+  const hasRevisionsRequested = latestReview?.status === ProjectReviewStatus.RevisionsRequested
+
+  /** Get project type badge configuration */
+  const getProjectTypeBadge = () => {
     if (project.fundingStrategy === ProjectFundingStrategy.AllOrNothing) {
-      return t('Campaign')
+      return { label: t('Campaign'), colorScheme: 'success', icon: PiRocketLaunch }
     }
 
     if (project.fundingStrategy === ProjectFundingStrategy.TakeItAll) {
-      return t('Fundraiser')
+      return { label: t('Fundraiser'), colorScheme: 'info', icon: PiHandHeart }
+    }
+
+    return { label: t('Shop'), colorScheme: 'neutral1', icon: PiStorefront }
+  }
+
+  const projectTypeBadge = getProjectTypeBadge()
+
+  /** Get status badge configuration */
+  const getStatusBadge = () => {
+    if (isDraft) {
+      if (project.status === ProjectStatus.Accepted) {
+        return { label: t('Approved'), colorScheme: 'success' }
+      }
+
+      return { label: t('Draft'), colorScheme: 'neutral1' }
+    }
+
+    if (isInReview) {
+      if (hasRevisionsRequested) {
+        return { label: t('Updates Requested'), colorScheme: 'warning' }
+      }
+
+      return { label: t('Under Review'), colorScheme: 'info' }
+    }
+
+    if (isInactive) {
+      return { label: t('Inactive'), colorScheme: 'neutral1' }
     }
 
     return null
   }
 
-  const projectTypeLabel = getProjectTypeLabel()
+  const statusBadge = getStatusBadge()
 
-  const renderProjectCardContent = () => {
-    if (project.status === ProjectStatus.PreLaunch) {
+  /** Format balance display */
+  const balanceSats = project.balance || 0
+  const balanceUsd = ((project.balanceUsdCent || 0) / 100).toFixed(2)
+
+  /** Check if project needs wallet configuration */
+  const needsWalletConfig = !project.rskEoa && project.fundingStrategy === ProjectFundingStrategy.TakeItAll
+
+  /** Get context message or action */
+  const renderContextContent = () => {
+    // Check review status first
+    if (isInReview) {
+      if (hasRevisionsRequested) {
+        return (
+          <HStack
+            w="full"
+            spacing={2}
+            px={3}
+            py={2}
+            bg="warning.1"
+            borderRadius="6px"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <HStack spacing={2} flex={1} alignItems="center">
+              <Icon as={PiInfo} color="warning.11" boxSize="16px" flexShrink={0} />
+              <Body size="sm" color="neutral1.11">
+                <Body as="span" bold size="sm">
+                  {t('Updates requested.')}
+                </Body>{' '}
+                {t('Review feedback and resubmit your project.')}
+              </Body>
+            </HStack>
+          </HStack>
+        )
+      }
+
       return (
-        <Direction mt={4} spacing={4} alignItems="stretch">
-          <InPrelaunchProjectCard project={project} />
-        </Direction>
+        <Body size="sm" color="neutral1.11">
+          {t("Under review - you'll be notified once approved.")}
+        </Body>
       )
     }
 
     if (isDraft) {
       return (
-        <Direction mt={4} spacing={4} alignItems="stretch">
-          <InDraftProjectCard project={project} />
-        </Direction>
+        <Body size="sm" color="neutral1.11">
+          {project.status === ProjectStatus.Accepted
+            ? t('Approved! Launch your project to start receiving contributions.')
+            : t('Complete your project details to launch.')}
+        </Body>
       )
     }
 
-    if (project.status === ProjectStatus.InReview) {
+    if (isInactive) {
       return (
-        <Direction mt={4} spacing={4} alignItems="stretch">
-          <InReviewProjectCard />
-        </Direction>
+        <Body size="sm" color="neutral1.11">
+          {t('Inactive - reactivate in project dashboard to receive contributions.')}
+        </Body>
       )
     }
 
-    if (project.status === ProjectStatus.Inactive) {
+    // Active project - show withdrawal threshold message if below
+    if (isActive && withdrawalStatus === 'below_threshold') {
       return (
-        <Direction mt={4} spacing={4} alignItems="stretch">
-          <InactiveProjectCard project={project} />
-        </Direction>
+        <Body size="sm" color="neutral1.11">
+          {t('$10 minimum required to withdraw.')}
+        </Body>
       )
     }
+
+    return null
+  }
+
+  /** Get primary action button */
+  const renderActionButton = () => {
+    if (isDraft || hasRevisionsRequested) {
+      return (
+        <Button
+          variant="soft"
+          colorScheme="neutral1"
+          as={RouterLink}
+          to={hasRevisionsRequested ? getPath('launchFinalize', project.id) : draftRedirectPath}
+          size="md"
+          leftIcon={isMobile ? undefined : <PiNotePencil size={16} />}
+        >
+          {isMobile ? <PiNotePencil size={16} /> : t('Finalize')}
+        </Button>
+      )
+    }
+
+    // Show withdraw button for active projects with funds
+    const canWithdraw = isActive && (withdrawalStatus === 'ready' || withdrawalStatus === 'below_threshold')
+    const isWithdrawDisabled = withdrawalStatus === 'below_threshold'
 
     return (
-      <Direction mt={4} spacing={4} alignItems="stretch">
-        <Contributions project={project} />
-        {hasRewards ? <Rewards projectId={project.id} projectName={project.name} /> : null}
-      </Direction>
+      <HStack spacing={2}>
+        {canWithdraw && (
+          <Tooltip
+            label={isWithdrawDisabled ? t('Minimum $10 required to withdraw') : ''}
+            isDisabled={!isWithdrawDisabled}
+            placement="top"
+            hasArrow
+          >
+            <Button
+              variant="solid"
+              colorScheme="primary1"
+              as={RouterLink}
+              to={`${getPath('project', project.name)}?action=withdraw`}
+              size="md"
+              isDisabled={isWithdrawDisabled}
+              pointerEvents={isWithdrawDisabled ? 'auto' : undefined}
+            >
+              {t('Withdraw Funds')}
+            </Button>
+          </Tooltip>
+        )}
+        <Button
+          variant="soft"
+          colorScheme="neutral1"
+          as={RouterLink}
+          to={getPath('project', project.name)}
+          size="md"
+          leftIcon={isMobile ? undefined : <PiArrowUpRight size={16} />}
+        >
+          {isMobile ? <PiArrowUpRight size={16} /> : t('Go to project')}
+        </Button>
+      </HStack>
     )
   }
 
   return (
-    <Box width="100%" py={4}>
-      <HStack spacing={4} justifyContent="space-between" alignItems="end">
-        <HStack as={RouterLink} to={getPath('project', project.name)} alignItems="center">
-          {project.thumbnailImage && (
-            <Image
-              src={project.thumbnailImage}
-              alt={project.title}
-              boxSize="20px"
-              borderRadius="md"
-              objectFit="cover"
-            />
-          )}
-          <Body size="lg" bold>
-            {project.title}
-            {projectTypeLabel && (
-              <>
-                {' '}
-                <Body as="span" size="lg" light>
-                  ({projectTypeLabel})
-                </Body>
-              </>
+    <CardLayout width="100%" py={4} px={6}>
+      <VStack align="stretch" spacing={3}>
+        {/* Row 1: Header with title and action button */}
+        <HStack spacing={4} justifyContent="space-between" alignItems="start">
+          <HStack as={RouterLink} to={getPath('project', project.name)} alignItems="center" flex={1} spacing={2}>
+            {project.thumbnailImage && (
+              <Image
+                src={project.thumbnailImage}
+                alt={project.title}
+                boxSize="20px"
+                borderRadius="md"
+                objectFit="cover"
+              />
             )}
-          </Body>
+            <Body size="lg" bold>
+              {project.title}
+            </Body>
+            <Badge colorScheme={projectTypeBadge.colorScheme} variant="soft" size="sm">
+              <HStack spacing={1}>
+                <Icon as={projectTypeBadge.icon} boxSize="12px" />
+                <span>{projectTypeBadge.label}</span>
+              </HStack>
+            </Badge>
+            {statusBadge && (
+              <Badge colorScheme={statusBadge.colorScheme} variant="soft" size="sm">
+                {statusBadge.label}
+              </Badge>
+            )}
+          </HStack>
+          {renderActionButton()}
         </HStack>
-        {isDraft ? (
-          <Button
-            variant={'soft'}
-            colorScheme="neutral1"
-            as={RouterLink}
-            to={draftRediredirectPath}
-            size="md"
-            leftIcon={isMobile ? undefined : <PiNotePencil size={16} />}
-          >
-            {isMobile ? <PiNotePencil size={16} /> : t('Update & launch')}
-          </Button>
+
+        {/* Row 2: Balance or Wallet Configuration */}
+        {needsWalletConfig ? (
+          <WalletConfigurationPrompt projectId={project.id} compact />
         ) : (
-          <Button
-            variant={'soft'}
-            colorScheme="neutral1"
-            as={RouterLink}
-            to={getPath('dashboardAnalytics', project.name)}
-            size="md"
-            leftIcon={isMobile ? undefined : <PiGear size={16} />}
-          >
-            {isMobile ? <PiGear size={16} /> : t('Dashboard')}
-          </Button>
-        )}
-      </HStack>
-      {renderProjectCardContent()}
-    </Box>
-  )
-}
-
-const InDraftProjectCard = ({ project }: { project: ProjectForMyProjectsFragment }) => {
-  const { t } = useTranslation()
-
-  return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      borderWidth={1}
-      borderRadius="lg"
-      minHeight="124px"
-      gap={2}
-      p={4}
-      flex={1}
-    >
-      {project.status === ProjectStatus.InReview ? (
-        <>
-          <HStack justifyContent="center" alignItems="center" spacing={2} color="info.10">
-            <PiEyeglasses size={24} />
-            <Body size={'lg'} regular>
-              {t('Under Review')}
-            </Body>
-          </HStack>
-          <Body size={'md'} regular textAlign="center">
-            {t(
-              "Your project is currently being reviewed by our team. You'll be notified via email once the review is complete.",
-            )}
-          </Body>
-        </>
-      ) : project.status === ProjectStatus.Accepted ? (
-        <>
-          <HStack justifyContent="center" alignItems="center" spacing={2} color="primary1.10">
-            <PiCheckCircle size={24} />
-            <Body size={'lg'} regular>
-              {t('Approved')}
-            </Body>
-          </HStack>
-          <Body size={'md'} regular textAlign="center">
-            {t(
-              'Great news! Your project has been approved. Launch it now to start receiving contributions and make it visible to the community.',
-            )}
-          </Body>
-        </>
-      ) : (
-        <>
-          <HStack justifyContent="center" alignItems="center" spacing={2} color="warning.10">
-            <PiNotePencil size={24} />
-            <Body size={'lg'} regular>
-              {t('In Progress')}
-            </Body>
-          </HStack>
-          <Body size={'md'} regular textAlign="center">
-            {t(
-              "Your project is in progress. Complete the remaining details and launch it when you're ready to go live and start accepting contributions.",
-            )}
-          </Body>
-        </>
-      )}
-    </Box>
-  )
-}
-
-const InReviewProjectCard = () => {
-  const { t } = useTranslation()
-
-  return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      borderWidth={1}
-      borderRadius="lg"
-      minHeight="124px"
-      gap={2}
-      p={4}
-      flex={1}
-    >
-      <HStack justifyContent="center" alignItems="center" spacing={2}>
-        <PiEyeglasses size={24} />
-        <Body size={'lg'} regular>
-          {t('In review')}
-        </Body>
-      </HStack>
-      <Body size={'md'} regular>
-        {t('Your project is in review and therefore cannot receive contributions, and is not visible by the public. ')}
-      </Body>
-    </Box>
-  )
-}
-
-const InPrelaunchProjectCard = ({ project }: { project: ProjectForMyProjectsFragment }) => {
-  const { t } = useTranslation()
-
-  const { followersCount } = project
-  const followersNeeded = FOLLOWERS_NEEDED - (followersCount ?? 0)
-  const enoughFollowers = followersNeeded <= 0
-
-  return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      borderWidth={1}
-      borderRadius="lg"
-      minHeight="124px"
-      gap={2}
-      p={4}
-      flex={1}
-    >
-      <HStack justifyContent="center" alignItems="center" spacing={2}>
-        <PiClock size={24} />
-        <Body size={'lg'} regular>
-          {t('Prelaunch')}
-        </Body>
-      </HStack>
-      <HStack>
-        <Body size="2xl" bold dark>
-          {followersCount ?? 0}{' '}
-          <Body as="span" size="md" light medium>
-            {t('followers')}
-          </Body>
-        </Body>
-
-        {!enoughFollowers && (
-          <Body size="2xl" dark bold display="inline">
-            {`${followersNeeded}`}{' '}
-            <Body as="span" size="md" light>
-              {t(`more to launch`)}
+          <Body size="sm" color="neutral1.11">
+            {t('Amount in Wallet')}:{' '}
+            <Body as="span" size="sm" bold color="neutral1.12">
+              {commaFormatted(balanceSats)} {t('Sats')}
+            </Body>{' '}
+            <Body as="span" size="sm" color="neutral1.9">
+              ${balanceUsd}
             </Body>
           </Body>
         )}
-      </HStack>
-      <ProjectPrelaunchStatus project={project} onlyTimeLeft />
-    </Box>
-  )
-}
 
-const InactiveProjectCard = ({ project }: { project: ProjectForMyProjectsFragment }) => {
-  const { t } = useTranslation()
+        {/* Row 3: Context message or action */}
+        {!needsWalletConfig && renderContextContent()}
 
-  return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      borderWidth={1}
-      borderRadius="lg"
-      minHeight="124px"
-      gap={2}
-      p={4}
-      flex={1}
-    >
-      <HStack justifyContent="center" alignItems="center" spacing={2} color="error.10">
-        <PiXCircle size={24} />
-        <Body size={'lg'} regular>
-          {t('Inactive')}
-        </Body>
-      </HStack>
-      <Body size={'md'} regular textAlign="center">
-        {t(
-          'Your project is inactive and cannot receive contributions, You can reactivate it in the project dashboard.',
-        )}
-      </Body>
-    </Box>
+        {/* Impact Fund Notification */}
+        {isActive && <ImpactFundNotification project={project} />}
+      </VStack>
+    </CardLayout>
   )
 }

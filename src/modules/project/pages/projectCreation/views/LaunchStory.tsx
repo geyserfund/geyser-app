@@ -10,9 +10,9 @@ import { getPath, ProjectValidations } from '@/shared/constants/index.ts'
 import { MarkdownField } from '@/shared/markdown/MarkdownField.tsx'
 import { ProjectCreationStep } from '@/types/index.ts'
 
+import { ProjectCreationPageWrapper } from '../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../hooks/useIsStepAhead.tsx'
 import { useProjectStoryForm } from '../hooks/useProjectStoryForm.tsx'
-import { ProjectCreationPageWrapper } from '../components/ProjectCreationPageWrapper.tsx'
 
 export const LaunchStory = () => {
   const { t } = useTranslation()

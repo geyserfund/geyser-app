@@ -11,10 +11,7 @@ type EnableFiatContributionsProps = {
   projectId?: string | number | bigint
 }
 
-export const EnableFiatContributions = ({
-  isTiaProject,
-  projectId,
-}: EnableFiatContributionsProps) => {
+export const EnableFiatContributions = ({ isTiaProject, projectId }: EnableFiatContributionsProps) => {
   const [isStripeReady, setIsStripeReady] = useState(false)
   const isBitcoinMode = !isStripeReady
 

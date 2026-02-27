@@ -102,10 +102,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
           },
         },
       }).catch((error) => {
-        const message =
-          error?.graphQLErrors?.[0]?.message ||
-          error?.message ||
-          t('Please wait a moment and try again.')
+        const message = error?.graphQLErrors?.[0]?.message || error?.message || t('Please wait a moment and try again.')
         setPayoutRequestError(message)
       })
     }
@@ -116,9 +113,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const payoutMetadata = payoutRequestData?.payoutRequest.payoutMetadata
   const contractType = payoutMetadata?.contractType
   const latestPayment = isProcessing
-    ? [...(payout?.payments ?? [])].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[
-        0
-      ]
+    ? [...(payout?.payments ?? [])].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0]
     : null
   const isClaimable =
     isProcessing &&

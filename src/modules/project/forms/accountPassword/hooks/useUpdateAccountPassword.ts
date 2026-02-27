@@ -3,7 +3,12 @@ import { useSetAtom } from 'jotai'
 import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { UserAccountKeysFragment, useUserAccountKeysUpdateMutation } from '@/types/index.ts'
 
-import { encryptMnemonic, encryptSeed, generateKeysFromSeedHex, generateSeedDataForUser } from '../keyGenerationHelper.ts'
+import {
+  encryptMnemonic,
+  encryptSeed,
+  generateKeysFromSeedHex,
+  generateSeedDataForUser,
+} from '../keyGenerationHelper.ts'
 
 export const useUpdateAccountPassword = (onComplete?: (_: UserAccountKeysFragment) => void) => {
   const [userAccountKeysUpdate, { loading: isUserAccountKeysCreateLoading }] = useUserAccountKeysUpdateMutation()

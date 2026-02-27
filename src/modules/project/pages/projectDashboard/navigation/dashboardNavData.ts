@@ -2,6 +2,7 @@ import {
   PiBag,
   PiBell,
   PiBookOpen,
+  PiCreditCard,
   PiFlagBannerFold,
   PiGear,
   PiHandbag,
@@ -11,7 +12,6 @@ import {
   PiPlanet,
   PiPlugs,
   PiProjectorScreenChart,
-  PiCreditCard,
 } from 'react-icons/pi'
 
 export enum DashboardType {

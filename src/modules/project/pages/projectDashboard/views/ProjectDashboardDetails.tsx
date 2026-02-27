@@ -9,8 +9,8 @@ import { useTranslation } from 'react-i18next'
 import { projectFormErrorAtom } from '@/modules/project/state/projectFormAtom'
 import { useNotification } from '@/utils'
 
-import { ProjectCountryCodesThatAreRestricted } from '../../projectCreation/utils/constants'
 import { useProjectDetailsForm } from '../../projectCreation/hooks/useProjectDetailsForm'
+import { ProjectCountryCodesThatAreRestricted } from '../../projectCreation/utils/constants'
 import { DashboardLayout } from '../common'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../common/ProjectUnsavedModal'
 

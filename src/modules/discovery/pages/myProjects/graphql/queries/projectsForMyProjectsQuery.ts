@@ -12,4 +12,3 @@ export const QUERY_PROJECTS_FOR_MY_PROJECTS = gql`
     }
   }
 `
-

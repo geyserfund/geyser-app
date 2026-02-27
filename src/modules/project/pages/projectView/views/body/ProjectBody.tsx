@@ -74,7 +74,9 @@ export const ProjectBody = () => {
         <CreatorVerificationNotice />
 
         <AonNotification />
-        <TiaRskEoaSetupNotice />
+        <Box display={{ base: 'block', lg: 'none' }}>
+          <TiaRskEoaSetupNotice />
+        </Box>
         <Box display={{ base: 'block', lg: 'none' }}>
           <TiaPayoutNotification />
         </Box>

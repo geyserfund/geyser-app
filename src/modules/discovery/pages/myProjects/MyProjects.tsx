@@ -1,16 +1,11 @@
-import { Box, HStack, Image, Skeleton, VStack } from '@chakra-ui/react'
+import { Box, HStack, Skeleton, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useMemo } from 'react'
 
 import { useAuthContext } from '@/context'
 import { CreateProjectButton } from '@/modules/navigation/platformNavBar/components/CreateProjectButton.tsx'
 import { Body } from '@/shared/components/typography'
-import {
-  DraftProjectsImageUrl,
-  InactiveProjectsImageUrl,
-  InReviewProjectsImageUrl,
-  LiveProjectsImageUrl,
-} from '@/shared/constants'
-import { ProjectForMyProjectsFragment, ProjectStatus } from '@/types/index.ts'
+import { ProjectForMyProjectsFragment, ProjectReviewStatus, ProjectStatus } from '@/types/index.ts'
 
 import { useLastVisitedMyProjects } from '../../hooks/useLastVisited'
 import { LaunchNewProjectBanner } from './components/LaunchNewProjectBanner.tsx'
@@ -18,36 +13,40 @@ import { ProjectCard } from './components/ProjectCard'
 import { ProjectIFollowGrid } from './components/ProjectIFollowGrid'
 import { useMyProjects } from './hooks/useMyProjects'
 
-const ProjectGroupInfo = {
-  [ProjectStatus.Active]: {
-    title: t('Live Projects'),
-    imageUrl: LiveProjectsImageUrl,
-  },
-  [ProjectStatus.Draft]: {
-    title: t('Draft Projects'),
-    imageUrl: DraftProjectsImageUrl,
-  },
-  [ProjectStatus.InReview]: {
-    title: t('Review Projects'),
-    imageUrl: InReviewProjectsImageUrl,
-  },
-  [ProjectStatus.Inactive]: {
-    title: t('Inactive Projects'),
-    imageUrl: InactiveProjectsImageUrl,
-  },
-}
-
 export const MyProjects = () => {
   useLastVisitedMyProjects()
 
   const { user } = useAuthContext()
   const { activeProjects, inDraftProjects, inReviewProjects, inActiveProjects, isLoading } = useMyProjects(user?.id)
 
-  const hasNoProjects =
-    activeProjects.length === 0 &&
-    inDraftProjects.length === 0 &&
-    inReviewProjects.length === 0 &&
-    inActiveProjects.length === 0
+  /** Sort and combine all projects into a single list */
+  const sortedProjects = useMemo(() => {
+    const allProjects = [...activeProjects, ...inReviewProjects, ...inDraftProjects, ...inActiveProjects]
+
+    // Custom sort order: Active > InReview/RevisionsRequested > Draft > Inactive > Closed
+    return allProjects.sort((a, b) => {
+      const getStatusPriority = (project: ProjectForMyProjectsFragment) => {
+        if (project.status === ProjectStatus.Active) return 1
+        if (project.status === ProjectStatus.InReview) {
+          // Check if has revisions requested
+          const latestReview =
+            project.reviews && project.reviews.length > 0
+              ? [...project.reviews].sort((x, y) => (y.version ?? 0) - (x.version ?? 0))[0]
+              : undefined
+          return latestReview?.status === ProjectReviewStatus.RevisionsRequested ? 2 : 3
+        }
+
+        if (project.status === ProjectStatus.Draft || project.status === ProjectStatus.Accepted) return 4
+        if (project.status === ProjectStatus.Inactive) return 5
+        if (project.status === ProjectStatus.Closed) return 6
+        return 7
+      }
+
+      return getStatusPriority(a) - getStatusPriority(b)
+    })
+  }, [activeProjects, inReviewProjects, inDraftProjects, inActiveProjects])
+
+  const hasNoProjects = sortedProjects.length === 0
 
   return (
     <>
@@ -62,13 +61,18 @@ export const MyProjects = () => {
           <>
             {hasNoProjects && <LaunchNewProjectBanner />}
 
-            <ProjectGroup projects={activeProjects} status={ProjectStatus.Active} />
+            {!hasNoProjects && (
+              <>
+                <HStack justifyContent="space-between" alignItems="center" width="100%">
+                  <Body size="2xl" bold>
+                    {t('My Projects')}
+                  </Body>
+                  <CreateProjectButton />
+                </HStack>
 
-            <ProjectGroup projects={inDraftProjects} status={ProjectStatus.Draft} />
-
-            <ProjectGroup projects={inReviewProjects} status={ProjectStatus.InReview} />
-
-            <ProjectGroup projects={inActiveProjects} status={ProjectStatus.Inactive} />
+                {sortedProjects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
+              </>
+            )}
           </>
         )}
       </VStack>
@@ -81,51 +85,20 @@ export const MyProjects = () => {
   )
 }
 
-const ProjectGroup = ({ projects, status }: { projects: ProjectForMyProjectsFragment[]; status: ProjectStatus }) => {
-  if (projects.length === 0) {
-    return null
-  }
-
-  const { title, imageUrl } = ProjectGroupInfo[status as keyof typeof ProjectGroupInfo]
-
-  const isActive = status === ProjectStatus.Active
-
-  return (
-    <VStack align="stretch" mt={4} spacing={2}>
-      <HStack justifyContent="space-between" alignItems="center" flexWrap="wrap">
-        <HStack>
-          <HStack>
-            <Image src={imageUrl} alt={title} width="60px" height="auto" />
-            <Body size="2xl" bold>
-              {title}
-            </Body>
-          </HStack>
-          {isActive && (
-            <Body size="2xl" muted>
-              ({t('Past week activity')})
-            </Body>
-          )}
-        </HStack>
-        {isActive && <CreateProjectButton />}
-      </HStack>
-
-      {projects.map((project) => (project ? <ProjectCard key={project.id} project={project} /> : null))}
-    </VStack>
-  )
-}
-
 const ProjectCardSkeleton = () => {
   return (
-    <Box width="100%" py={4} minHeight="269px">
+    <Box width="100%" py={4} minHeight="150px">
       <HStack spacing={4} alignItems="center" justifyContent="space-between">
         <HStack>
-          <Skeleton width="40px" height="40px" borderRadius="lg" />
-          <Skeleton height="24px" width="150px" />
+          <Skeleton width="20px" height="20px" borderRadius="md" />
+          <Skeleton height="24px" width="200px" />
+          <Skeleton height="20px" width="80px" borderRadius="full" />
         </HStack>
-        <Skeleton height="30px" width="100px" />
+        <Skeleton height="36px" width="120px" />
       </HStack>
-      <VStack align="stretch" mt={4} spacing={2}>
-        <Skeleton height="200px" width="100%" />
+      <VStack align="stretch" mt={3} spacing={2}>
+        <Skeleton height="16px" width="250px" />
+        <Skeleton height="16px" width="300px" />
       </VStack>
     </Box>
   )

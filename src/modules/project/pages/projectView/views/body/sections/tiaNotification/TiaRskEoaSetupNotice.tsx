@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { Button, Link as ChakraLink, VStack } from '@chakra-ui/react'
+import { Button, HStack, Image, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'
@@ -38,7 +38,11 @@ type ProjectRskEoaSetMutationVariables = {
   }
 }
 
-export const TiaRskEoaSetupNotice = () => {
+type TiaRskEoaSetupNoticeProps = {
+  compact?: boolean
+}
+
+export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticeProps) => {
   const { user } = useAuthContext()
   const toast = useNotification()
   const modal = useModal()
@@ -196,32 +200,8 @@ export const TiaRskEoaSetupNotice = () => {
     return null
   }
 
-  return (
+  const modals = (
     <>
-      <Feedback variant={FeedBackVariant.WARNING}>
-        <VStack spacing={4} align="stretch">
-          <Body size="xl" bold>
-            {t('Configure your project wallet')}
-          </Body>
-          <Body dark>
-            {message}{' '}
-            <ChakraLink
-              href="https://guides.geyser.fund"
-              isExternal
-              color="amber1.900"
-              textDecoration="underline"
-              _hover={{ color: 'amber1.1000', textDecoration: 'underline' }}
-            >
-              {t('here')}
-            </ChakraLink>
-            {'.'}
-          </Body>
-          <Button colorScheme="warning" variant="solid" size="lg" w="full" onClick={modal.onOpen}>
-            {buttonLabel}
-          </Button>
-        </VStack>
-      </Feedback>
-
       <Modal isOpen={modal.isOpen} onClose={modal.onClose} title={titles} size="md">
         <VStack as="form" w="full" spacing={6} onSubmit={currentForm.onSubmit}>
           {renderForm()}
@@ -249,6 +229,88 @@ export const TiaRskEoaSetupNotice = () => {
           </Button>
         </VStack>
       </Modal>
+    </>
+  )
+
+  if (compact) {
+    return (
+      <>
+        <HStack
+          w="full"
+          justifyContent="space-between"
+          alignItems="center"
+          bg="utils.pbg"
+          border="1px solid"
+          borderColor="warning.9"
+          borderRadius="8px"
+          px={4}
+          py={4}
+          spacing={4}
+        >
+          <HStack spacing={3} flex={1} alignItems="center">
+            <Image
+              src="/icons/creator_tools_wallet.png"
+              alt="wallet"
+              boxSize="52px"
+              objectFit="contain"
+              flexShrink={0}
+              // filter="grayscale(1)"
+            />
+            <VStack align="start" spacing={0}>
+              <Body size="md" bold>
+                {t('Configure your project wallet')}
+              </Body>
+              <Body size="sm" color="neutral1.11">
+                {t('Set up before')} {KEY_CONFIG_DEADLINE} {t('to continue receiving contributions.')}{' '}
+                {t('You can read more about this migration')}{' '}
+                <ChakraLink
+                  href="https://guides.geyser.fund"
+                  isExternal
+                  color="warning.10"
+                  textDecoration="underline"
+                  _hover={{ color: 'warning.11' }}
+                >
+                  {t('here')}
+                </ChakraLink>
+                {'.'}
+              </Body>
+            </VStack>
+          </HStack>
+          <Button colorScheme="warning" variant="solid" size="md" flexShrink={0} onClick={modal.onOpen}>
+            {t('Configure')}
+          </Button>
+        </HStack>
+        {modals}
+      </>
+    )
+  }
+
+  return (
+    <>
+      <Feedback variant={FeedBackVariant.WARNING}>
+        <VStack spacing={4} align="stretch">
+          <Body size="xl" bold>
+            {t('Configure your project wallet')}
+          </Body>
+          <Body dark>
+            {message}{' '}
+            <ChakraLink
+              href="https://guides.geyser.fund"
+              isExternal
+              color="amber1.900"
+              textDecoration="underline"
+              _hover={{ color: 'amber1.1000', textDecoration: 'underline' }}
+            >
+              {t('here')}
+            </ChakraLink>
+            {'.'}
+          </Body>
+          <Button colorScheme="warning" variant="solid" size="lg" w="full" onClick={modal.onOpen}>
+            {buttonLabel}
+          </Button>
+        </VStack>
+      </Feedback>
+      {modals}
     </>
   )
 }

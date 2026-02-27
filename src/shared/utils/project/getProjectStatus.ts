@@ -5,6 +5,7 @@ import { ProjectState } from '@/modules/project/state/projectAtom'
 import { lightModeColors } from '@/shared/styles'
 import { ProjectWalletFragment, WalletStatus } from '@/types'
 import { isActive, isClosed, isDraft, isInactive, isInReview } from '@/utils'
+
 import { isPrismEnabled } from './isPrismEnabled'
 
 export enum ProjectStatusLabels {
