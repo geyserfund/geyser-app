@@ -3,6 +3,7 @@ import { Button, Image, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'
+import { Trans } from 'react-i18next'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
@@ -249,20 +250,21 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
           }
           title={t('Configure your project wallet')}
           description={
-            <>
-              {t('Set up before')} {KEY_CONFIG_DEADLINE} {t('to continue receiving contributions.')}{' '}
-              {t('You can read more about this migration')}{' '}
-              <ChakraLink
-                href="https://guides.geyser.fund"
-                isExternal
-                color="warning.10"
-                textDecoration="underline"
-                _hover={{ color: 'warning.11' }}
-              >
-                {t('here')}
-              </ChakraLink>
-              {'.'}
-            </>
+            <Trans
+              i18nKey="Set up before {{keyConfigDeadline}} to continue receiving contributions. You can read more about this migration <link>here</link>"
+              values={{ keyConfigDeadline: KEY_CONFIG_DEADLINE }}
+              components={{
+                link: (
+                  <ChakraLink
+                    href="https://guides.geyser.fund"
+                    isExternal
+                    color="warning.10"
+                    textDecoration="underline"
+                    _hover={{ color: 'warning.11' }}
+                  />
+                ),
+              }}
+            />
           }
           actionButton={
             <Button colorScheme="warning" variant="solid" size="sm" flexShrink={0} onClick={modal.onOpen}>

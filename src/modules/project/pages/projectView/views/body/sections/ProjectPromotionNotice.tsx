@@ -1,7 +1,6 @@
 import { Button, IconButton, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
-import { atomWithStorage } from 'jotai/utils'
 import { PiX } from 'react-icons/pi'
 import { Link } from 'react-router'
 
@@ -14,13 +13,17 @@ import { lightModeColors } from '@/shared/styles/colors.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { ProjectFundingStrategy } from '@/types/index.ts'
 
-const promotionsModalAtom = atomWithStorage('promotionsModal', false)
+import { promotionsNoticeClosedByProjectAtom } from './noticeAtom.ts'
 
 export const ProjectPromotionNotice = () => {
   const { isProjectOwner, project } = useProjectAtom()
   const { isFundingDisabled } = useProjectToolkit(project)
+  const projectNoticeKey = String(project.id)
 
-  const [isPromotionsModalOpen, setIsPromotionsModalOpen] = useAtom(promotionsModalAtom)
+  const [promotionsNoticeClosedByProject, setPromotionsNoticeClosedByProject] = useAtom(
+    promotionsNoticeClosedByProjectAtom,
+  )
+  const isPromotionsModalOpen = Boolean(promotionsNoticeClosedByProject[projectNoticeKey])
 
   const hasMigrationNotice =
     isProjectOwner && project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project?.rskEoa
@@ -45,7 +48,12 @@ export const ProjectPromotionNotice = () => {
         top="5px"
         icon={<PiX />}
         aria-label="close"
-        onClick={() => setIsPromotionsModalOpen(true)}
+        onClick={() =>
+          setPromotionsNoticeClosedByProject((current) => ({
+            ...current,
+            [projectNoticeKey]: true,
+          }))
+        }
       />
       <VStack flex={1} spacing={0} alignItems="start" paddingY={2}>
         <Body size="lg" bold color={lightModeColors.neutral1[12]}>

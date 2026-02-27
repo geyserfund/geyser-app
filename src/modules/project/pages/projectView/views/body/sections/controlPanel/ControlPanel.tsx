@@ -1,7 +1,6 @@
 import { Box, Button, HStack, Icon, Image, Link as ChakraLink, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
-import { atomWithStorage } from 'jotai/utils'
 import { useEffect, useMemo } from 'react'
 import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiWarning } from 'react-icons/pi'
 import { Link, useLocation, useSearchParams } from 'react-router'
@@ -16,6 +15,7 @@ import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { ProjectReviewStatus, ProjectStatus } from '@/types'
 
 import { useProjectAtom } from '../../../../../../hooks/useProjectAtom.ts'
+import { promotionsNoticeClosedByProjectAtom } from '../noticeAtom.ts'
 import { TiaRskEoaSetupNotice } from '../tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { ControlPanelButtons } from './components/ControlPanelButtons.tsx'
 import { ControlPanelNotification } from './components/ControlPanelNotification.tsx'
@@ -23,16 +23,18 @@ import { useAonClaimFunds } from './hooks/useAonClaimFunds.ts'
 import { useImpactFundEligibility } from './hooks/useImpactFundEligibility.ts'
 import { useWithdrawFunds } from './hooks/useWithdrawFunds.ts'
 
-const promotionsModalAtom = atomWithStorage('promotionsModal', false)
-
 export const ControlPanel = () => {
   const { project, isProjectOwner } = useProjectAtom()
   const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
   const isDraftUrl = location.pathname.includes('/draft')
+  const projectNoticeKey = String(project.id)
 
   const { isFundingDisabled } = useProjectToolkit(project)
-  const [isPromotionsModalOpen, setIsPromotionsModalOpen] = useAtom(promotionsModalAtom)
+  const [promotionsNoticeClosedByProject, setPromotionsNoticeClosedByProject] = useAtom(
+    promotionsNoticeClosedByProjectAtom,
+  )
+  const isPromotionsModalOpen = Boolean(promotionsNoticeClosedByProject[projectNoticeKey])
 
   const { eligibleImpactFund } = useImpactFundEligibility()
   const { payoutRskModal, projectRskEoa, withdrawableSats, withdrawableUsd, showWithdraw, onCompleted } =
@@ -242,7 +244,12 @@ export const ControlPanel = () => {
               {t('View promotion plans')}
             </Button>
           }
-          onClose={() => setIsPromotionsModalOpen(true)}
+          onClose={() =>
+            setPromotionsNoticeClosedByProject((current) => ({
+              ...current,
+              [projectNoticeKey]: true,
+            }))
+          }
           variant="info"
         />
       )}
