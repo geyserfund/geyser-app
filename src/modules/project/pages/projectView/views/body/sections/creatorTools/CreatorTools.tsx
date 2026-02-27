@@ -1,7 +1,7 @@
-import { Box, Button, HStack, Image, Link as ChakraLink, ListItem, UnorderedList, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, Image, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useMemo } from 'react'
-import { PiArrowUpRight, PiFlagCheckeredDuotone } from 'react-icons/pi'
+import { PiArrowUpRight, PiFlagCheckeredDuotone, PiInfo, PiWarning } from 'react-icons/pi'
 import { Link, useLocation, useSearchParams } from 'react-router'
 
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
@@ -86,50 +86,27 @@ export const CreatorTools = () => {
       {hasRevisionsRequested && (
         <HStack
           w="full"
-          justifyContent="space-between"
+          spacing={2}
+          px={3}
+          py={2}
+          bg="warning.1"
+          borderRadius="6px"
           alignItems="center"
-          bg="utils.pbg"
-          border="1px solid"
-          borderColor="error.9"
-          borderRadius="8px"
-          px={4}
-          py={4}
-          spacing={4}
+          justifyContent="space-between"
         >
-          <VStack align="start" spacing={2} flex={1}>
-            <Body size="md" bold color="error.11">
-              {t('Updates Requested')}
-            </Body>
+          <HStack spacing={2} flex={1} alignItems="center">
+            <Icon as={PiWarning} color="warning.11" boxSize="16px" flexShrink={0} />
             <Body size="sm" color="neutral1.11">
-              {t('The team reviewed your project and requested some revisions.')}
+              <Body as="span" bold size="sm">
+                {t('Updates requested.')}
+              </Body>{' '}
+              {t('Review feedback and resubmit your project.')}
             </Body>
-            {latestReview?.rejectionReasons && latestReview.rejectionReasons.length > 0 && (
-              <Box w="full" mt={2}>
-                <Body size="sm" bold>
-                  {t('Reasons')}:
-                </Body>
-                <UnorderedList spacing={1} pl={4} mt={1}>
-                  {latestReview.rejectionReasons.map((reason, index) => (
-                    <ListItem key={index}>
-                      <Body size="sm">{reason}</Body>
-                    </ListItem>
-                  ))}
-                </UnorderedList>
-                {latestReview.reviewNotes && (
-                  <Box mt={2}>
-                    <Body size="sm" bold>
-                      {t('Notes')}:
-                    </Body>
-                    <Body size="sm">{latestReview.reviewNotes}</Body>
-                  </Box>
-                )}
-              </Box>
-            )}
-          </VStack>
+          </HStack>
           <Button
-            colorScheme="error"
-            variant="solid"
-            size="md"
+            colorScheme="warning"
+            variant="soft"
+            size="sm"
             flexShrink={0}
             as={Link}
             to={getPath('launchFinalize', project.id)}
@@ -139,116 +116,106 @@ export const CreatorTools = () => {
         </HStack>
       )}
 
-      {showClaim && (
-        <HStack
-          w="full"
-          justifyContent="space-between"
-          alignItems="center"
-          bg="utils.pbg"
-          border="1px solid"
-          borderColor="neutral1.6"
-          borderRadius="8px"
-          px={4}
-          py={4}
-          spacing={4}
-        >
-          <HStack spacing={3} flex={1} alignItems="center">
-            <Box color="primary1.9" flexShrink={0}>
-              <PiFlagCheckeredDuotone size={28} />
-            </Box>
-            <VStack align="start" spacing={0}>
-              <Body size="md" bold>
-                {t('Claim funds')}
-              </Body>
-              <Body size="sm" color="neutral1.11">
-                {t('Your campaign reached its goal')}
-              </Body>
-            </VStack>
-          </HStack>
-          <Button colorScheme="primary1" variant="solid" size="md" flexShrink={0} onClick={aonPayoutModal.onOpen}>
-            {t('Claim')}
-          </Button>
-        </HStack>
-      )}
+      {/* Financial Actions Section */}
+      {(showClaim || showWithdraw) && (
+        <VStack w="full" spacing={3} align="stretch">
+          {showClaim && (
+            <HStack
+              w="full"
+              justifyContent="space-between"
+              alignItems="center"
+              bg="utils.pbg"
+              border="1px solid"
+              borderColor="neutral1.6"
+              borderRadius="8px"
+              px={4}
+              py={4}
+              spacing={4}
+            >
+              <HStack spacing={3} flex={1} alignItems="center">
+                <Box color="primary1.9" flexShrink={0}>
+                  <PiFlagCheckeredDuotone size={28} />
+                </Box>
+                <VStack align="start" spacing={0}>
+                  <Body size="md" bold>
+                    {t('Claim funds')}
+                  </Body>
+                  <Body size="sm" color="neutral1.11">
+                    {t('Your campaign reached its goal')}
+                  </Body>
+                </VStack>
+              </HStack>
+              <Button colorScheme="primary1" variant="solid" size="md" flexShrink={0} onClick={aonPayoutModal.onOpen}>
+                {t('Claim')}
+              </Button>
+            </HStack>
+          )}
 
-      {showWithdraw && (
-        <HStack
-          w="full"
-          justifyContent="space-between"
-          alignItems="center"
-          bg="utils.pbg"
-          border="1px solid"
-          borderColor="neutral1.6"
-          borderRadius="8px"
-          px={4}
-          py={4}
-          spacing={4}
-        >
-          <HStack spacing={3} flex={1} alignItems="center">
-            <Image
-              src="/icons/creator_tools_bitcoin_coins.png"
-              alt="coins"
-              boxSize="52px"
-              objectFit="contain"
-              flexShrink={0}
-            />
-            <VStack align="start" spacing={0}>
-              <Body size="md" bold>
-                {t('Withdraw funds')}
-              </Body>
-              <Body size="sm" color="neutral1.11">
-                {t('Available to withdraw')}{' '}
-                <Body as="span" size="sm" bold color="neutral1.12">
-                  {commaFormatted(withdrawableSats)} {t('sats')}
-                </Body>{' '}
-                <Body as="span" size="sm" color="neutral1.9">
-                  (≈${withdrawableUsd.toFixed(0)})
+          {showWithdraw && (
+            <HStack
+              w="full"
+              justifyContent="space-between"
+              alignItems="center"
+              bg="utils.pbg"
+              border="1px solid"
+              borderColor="neutral1.6"
+              borderRadius="8px"
+              px={4}
+              py={4}
+              spacing={4}
+            >
+              <HStack spacing={3} flex={1} alignItems="center">
+                <Image
+                  src="/icons/creator_tools_bitcoin_coins.png"
+                  alt="coins"
+                  boxSize="52px"
+                  objectFit="contain"
+                  flexShrink={0}
+                />
+                <Body size="md" color="neutral1.11">
+                  {t('Funds available to withdraw')}:{' '}
+                  <Body as="span" size="md" bold color="neutral1.12">
+                    {commaFormatted(withdrawableSats)} {t('sats')}
+                  </Body>{' '}
+                  <Body as="span" size="md" color="neutral1.9">
+                    ${withdrawableUsd.toFixed(0)}
+                  </Body>
                 </Body>
-              </Body>
-            </VStack>
-          </HStack>
-          <Button colorScheme="primary1" variant="solid" size="md" flexShrink={0} onClick={payoutRskModal.onOpen}>
-            {t('Withdraw')}
-          </Button>
-        </HStack>
+              </HStack>
+              <Button colorScheme="primary1" variant="solid" size="md" flexShrink={0} onClick={payoutRskModal.onOpen}>
+                {t('Withdraw')}
+              </Button>
+            </HStack>
+          )}
+        </VStack>
       )}
 
+      {/* Notifications */}
       {eligibleImpactFund && (
         <HStack
           w="full"
-          justifyContent="space-between"
+          spacing={2}
+          px={3}
+          py={2}
+          bg="neutral1.2"
+          borderRadius="6px"
           alignItems="center"
-          bg="utils.pbg"
-          border="1px solid"
-          borderColor="neutral1.6"
-          borderRadius="8px"
-          px={4}
-          py={4}
-          spacing={4}
+          justifyContent="space-between"
         >
-          <HStack spacing={3} flex={1} alignItems="center">
-            <Image
-              src="/icons/creator_tools_bitcoin_coins.png"
-              alt="coins"
-              boxSize="52px"
-              objectFit="contain"
-              flexShrink={0}
-              filter="grayscale(1)"
-            />
-            <VStack align="start" spacing={0}>
-              <Body size="md" bold>
-                {eligibleImpactFund.title}
-              </Body>
-              <Body size="sm" color="neutral1.11">
-                {t('Your project may be eligible for additional funding.')}
-              </Body>
-            </VStack>
+          <HStack spacing={2} flex={1} alignItems="center">
+            <Icon as={PiInfo} color="neutral1.11" boxSize="16px" flexShrink={0} />
+            <Body size="sm" bold color="neutral1.11">
+              {t('Eligible for {{fundName}}.', { fundName: eligibleImpactFund.title })}
+            </Body>
+            <Body size="sm" color="neutral1.11">
+              {t('Your project may be eligible for funding.')}
+            </Body>
           </HStack>
           <Button
             as={Link}
             to={getPath('impactFunds', encodeURIComponent(eligibleImpactFund.name))}
-            size="md"
-            variant="solid"
+            size="sm"
+            variant="soft"
             colorScheme="neutral1"
             flexShrink={0}
           >

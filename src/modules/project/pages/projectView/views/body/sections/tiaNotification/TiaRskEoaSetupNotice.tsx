@@ -90,7 +90,7 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
               textDecoration="underline"
               _hover={{ color: 'amber1.1000', textDecoration: 'underline' }}
             >
-              {t('Learn more.')}
+              {t('Learn more')}
             </ChakraLink>
           </Body>
         </VStack>
