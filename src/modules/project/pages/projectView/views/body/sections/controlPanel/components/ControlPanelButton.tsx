@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useMobileMode } from '@/utils/index.ts'
 
-export const CreatorToolButton: ChakraComponent<
+export const ControlPanelButton: ChakraComponent<
   'div',
   {
     emoji: string

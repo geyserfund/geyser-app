@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Modal } from '../../../../../shared/components/layouts/Modal'
 import { ProjectLaunchedImageUrl } from '../../../../../shared/constants'
 import { useProjectAtom } from '../../../hooks/useProjectAtom'
-import { PromoteOptions } from '../views/body/sections/creatorTools/components/PromoteProjectMenu.tsx'
+import { PromoteOptions } from '../views/body/sections/controlPanel/components/PromoteProjectMenu.tsx'
 
 export const ProjectCreateLaunchedModal = (props: Omit<ModalProps, 'children'>) => {
   const { t } = useTranslation()

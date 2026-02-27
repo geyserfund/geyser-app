@@ -1,4 +1,4 @@
-import { Box, Stack, VStack } from '@chakra-ui/react'
+import { Stack, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 
@@ -12,7 +12,7 @@ import { useProjectAtom } from '../../../../hooks/useProjectAtom'
 import { RewardNotice } from '../../components/RewardNotice.tsx'
 import {
   ContributionSummary,
-  CreatorTools,
+  ControlPanel,
   Details,
   Goals,
   Header,
@@ -29,10 +29,7 @@ import {
   type ProjectImpactFundRecipient,
   ImpactFundRecipientBanner,
 } from './sections/header/components/ImpactFundRecipientBadge.tsx'
-import { ProjectPromotionNotice } from './sections/ProjectPromotionNotice.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
-import { TiaPayoutNotification } from './sections/tiaNotification/TiaPayoutNotification.tsx'
-import { TiaRskEoaSetupNotice } from './sections/tiaNotification/TiaRskEoaSetupNotice.tsx'
 
 export const ProjectBody = () => {
   const { project, loading } = useProjectAtom()
@@ -69,19 +66,11 @@ export const ProjectBody = () => {
       >
         <ProjectPreLaunchNav />
 
-        <ProjectPromotionNotice />
-
         <CreatorVerificationNotice />
 
         <AonNotification />
-        <Box display={{ base: 'block', lg: 'none' }}>
-          <TiaRskEoaSetupNotice />
-        </Box>
-        <Box display={{ base: 'block', lg: 'none' }}>
-          <TiaPayoutNotification />
-        </Box>
 
-        <CreatorTools />
+        <ControlPanel />
 
         <Header />
         <ImpactFundRecipientBanner recipient={impactFundRecipient} />

@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { Button, HStack, Image, Link as ChakraLink, VStack } from '@chakra-ui/react'
+import { Button, Image, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'
@@ -21,6 +21,8 @@ import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { ProjectFundingStrategy, UserAccountKeysFragment } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
+
+import { ControlPanelNotification } from '../controlPanel/components/ControlPanelNotification.tsx'
 
 const KEY_CONFIG_DEADLINE = '30th of April 2026'
 
@@ -235,51 +237,40 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
   if (compact) {
     return (
       <>
-        <HStack
-          w="full"
-          justifyContent="space-between"
-          alignItems="center"
-          bg="utils.pbg"
-          border="1px solid"
-          borderColor="warning.9"
-          borderRadius="8px"
-          px={4}
-          py={4}
-          spacing={4}
-        >
-          <HStack spacing={3} flex={1} alignItems="center">
+        <ControlPanelNotification
+          icon={
             <Image
               src="/icons/creator_tools_wallet.png"
               alt="wallet"
               boxSize="52px"
               objectFit="contain"
               flexShrink={0}
-              // filter="grayscale(1)"
             />
-            <VStack align="start" spacing={0}>
-              <Body size="md" bold>
-                {t('Configure your project wallet')}
-              </Body>
-              <Body size="sm" color="neutral1.11">
-                {t('Set up before')} {KEY_CONFIG_DEADLINE} {t('to continue receiving contributions.')}{' '}
-                {t('You can read more about this migration')}{' '}
-                <ChakraLink
-                  href="https://guides.geyser.fund"
-                  isExternal
-                  color="warning.10"
-                  textDecoration="underline"
-                  _hover={{ color: 'warning.11' }}
-                >
-                  {t('here')}
-                </ChakraLink>
-                {'.'}
-              </Body>
-            </VStack>
-          </HStack>
-          <Button colorScheme="warning" variant="solid" size="md" flexShrink={0} onClick={modal.onOpen}>
-            {t('Configure')}
-          </Button>
-        </HStack>
+          }
+          title={t('Configure your project wallet')}
+          description={
+            <>
+              {t('Set up before')} {KEY_CONFIG_DEADLINE} {t('to continue receiving contributions.')}{' '}
+              {t('You can read more about this migration')}{' '}
+              <ChakraLink
+                href="https://guides.geyser.fund"
+                isExternal
+                color="warning.10"
+                textDecoration="underline"
+                _hover={{ color: 'warning.11' }}
+              >
+                {t('here')}
+              </ChakraLink>
+              {'.'}
+            </>
+          }
+          actionButton={
+            <Button colorScheme="warning" variant="solid" size="sm" flexShrink={0} onClick={modal.onOpen}>
+              {t('Configure')}
+            </Button>
+          }
+          variant="warning"
+        />
         {modals}
       </>
     )
