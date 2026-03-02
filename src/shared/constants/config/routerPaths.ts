@@ -17,6 +17,8 @@ export enum PathName {
   activity = 'activity',
   products = 'products',
   launchpad = 'launchpad',
+  giveaways = 'giveaways',
+  acelerandoBitcoinVip = 'acelerando-bitcoin-vip',
   activityGlobal = 'global',
   activityFollowed = 'followed',
 
@@ -172,6 +174,7 @@ export enum PathName {
   characterId = ':characterId',
   legalTerms = 'T&C',
   legalPrivacy = 'Privacy',
+  legal = 'legal',
 }
 
 export const AboutGeyserOrigin = 'https://about.geyser.fund'
@@ -216,6 +219,8 @@ const pathsMap = {
   discoveryImpactFund: (impactFundName: string) => `/${PathName.impactFunds}/${impactFundName}`,
   discoveryMerch: () => `/${PathName.merch}`,
   discoveryLaunchpad: () => `/${PathName.launchpad}`,
+  giveawayAcelerandoVip: () => `/${PathName.giveaways}/${PathName.acelerandoBitcoinVip}`,
+  legalGiveawayAcelerandoVipTerms: () => `/${PathName.legal}/${PathName.giveaways}/${PathName.acelerandoBitcoinVip}`,
 
   impactFund: () => `/${PathName.impactFund}`,
 

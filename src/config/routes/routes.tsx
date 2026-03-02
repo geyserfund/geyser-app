@@ -1162,6 +1162,22 @@ export const platformRoutes: RouteObject[] = [
           return { Component: impactFundsModule.ImpactFundDetailPage }
         },
       },
+
+      {
+        path: getPath('giveawayAcelerandoVip'),
+        async lazy() {
+          const GiveawayPage = await loadDiscoveryModule().then((m) => m.GiveawayPage)
+          return { Component: GiveawayPage }
+        },
+      },
+
+      {
+        path: getPath('legalGiveawayAcelerandoVipTerms'),
+        async lazy() {
+          const GiveawayTermsPage = await loadDiscoveryModule().then((m) => m.GiveawayTermsPage)
+          return { Component: GiveawayTermsPage }
+        },
+      },
     ],
   },
 
