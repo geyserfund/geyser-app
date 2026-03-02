@@ -39,7 +39,7 @@ const creatorText = t(
   'Configure your account password. Only you will know this password, and no one but you has access to the project funds.',
 )
 const contributorText = t(
-  'Configure your account password. Only you will know this password, and it will be required to refund your contribution.',
+  'Configure your account password. Only you will know this password, and it will be required for refunds in case the contribution fails.',
 )
 
 /** Account password form component with password and repeat password fields */

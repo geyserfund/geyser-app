@@ -15,7 +15,6 @@ const rewardCategoryEmojiMap: Record<string, string> = {
   Merch: '👕',
   'Physical Product': '📦',
   Hardware: '🛠',
-  'Mining Hardware': '🛠',
   Book: '📚',
   'Nostr Badge': '🏷️',
   'Digital Content': '💾',
@@ -83,13 +82,16 @@ export const Shops = () => {
 
   const tabs = useMemo(() => {
     const categories = data?.projectRewardCategoriesGet ?? []
+    const normalizeCategory = (category: string) => (category === 'Mining Hardware' ? 'Hardware' : category)
     const getCategoryOrder = (category: string) => {
       const index = REWARD_CATEGORY_DISPLAY_ORDER.indexOf(category.toLowerCase())
 
       return index === -1 ? Number.POSITIVE_INFINITY : index
     }
 
-    const orderedCategories = [...categories].sort((a, b) => {
+    const normalizedCategories = [...new Set(categories.map((category) => normalizeCategory(category)))]
+
+    const orderedCategories = [...normalizedCategories].sort((a, b) => {
       const aIndex = getCategoryOrder(a)
       const bIndex = getCategoryOrder(b)
 
