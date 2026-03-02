@@ -1,4 +1,5 @@
 import { Button, HStack, Icon, Skeleton, useColorModeValue, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { PiCheckCircleBold, PiTicketBold } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
@@ -19,6 +20,7 @@ type GiveawayProgressProps = {
 export const GiveawayProgress = ({ data, isLoading, isError, onRetry, onViewFeatured }: GiveawayProgressProps) => {
   const mutedText = useColorModeValue('neutral1.9', 'neutral1.10')
   const winningBg = useColorModeValue('orange.50', 'rgba(245,158,11,0.08)')
+  const ticketColor = 'warning.9'
 
   if (isLoading) {
     return (
@@ -33,11 +35,11 @@ export const GiveawayProgress = ({ data, isLoading, isError, onRetry, onViewFeat
     return (
       <VStack align="stretch" spacing={4}>
         <H2 size="xl" bold>
-          Your Progress
+          {t('Your Progress')}
         </H2>
-        <Body color={mutedText}>We could not load your position right now.</Body>
+        <Body color={mutedText}>{t('We could not load your position right now.')}</Body>
         <Button size="sm" onClick={onRetry} variant="outline" colorScheme="neutral1" alignSelf="flex-start">
-          Retry
+          {t('Retry')}
         </Button>
       </VStack>
     )
@@ -50,7 +52,7 @@ export const GiveawayProgress = ({ data, isLoading, isError, onRetry, onViewFeat
   return (
     <VStack align="stretch" spacing={3}>
       <H2 size="xl" bold>
-        Your Progress
+        {t('Your Progress')}
       </H2>
 
       <HStack
@@ -61,26 +63,27 @@ export const GiveawayProgress = ({ data, isLoading, isError, onRetry, onViewFeat
         py={data.inTop3 ? 3 : 0}
         flexWrap="wrap"
       >
-        <Icon as={PiTicketBold} boxSize={5} color={data.inTop3 ? '#F59E0B' : mutedText} flexShrink={0} />
+        <Icon as={PiTicketBold} boxSize={5} color={data.inTop3 ? ticketColor : mutedText} flexShrink={0} />
         <HStack flex={1} spacing={2}>
           {data.inTop3 ? (
             <HStack spacing={2}>
-              <Icon as={PiCheckCircleBold} boxSize={4} color="#F59E0B" />
-              <Body bold>You&apos;re in the top 3 — you&apos;re winning a ticket!</Body>
+              <Icon as={PiCheckCircleBold} boxSize={4} color={ticketColor} />
+              <Body bold>{t("You're in the top 3 — you're winning a ticket!")}</Body>
             </HStack>
           ) : (
             <Body color={mutedText}>
-              Contribute <strong>{formatSats(data.distanceToTop3Sats)}</strong> more to reach the top 3 and win a
-              ticket.
+              {t('Contribute {{amount}} more to reach the top 3 and win a ticket.', {
+                amount: formatSats(data.distanceToTop3Sats),
+              })}
             </Body>
           )}
         </HStack>
         <HStack spacing={3} flexShrink={0}>
           <Button size="md" variant="outline" colorScheme="neutral1" onClick={onViewFeatured} py={6}>
-            View Featured Projects
+            {t('View Featured Projects')}
           </Button>
           <Button as={RouterLink} to={getPath('projectDiscovery')} size="md" colorScheme="primary1" py={6}>
-            Discover Projects
+            {t('Discover Projects')}
           </Button>
         </HStack>
       </HStack>

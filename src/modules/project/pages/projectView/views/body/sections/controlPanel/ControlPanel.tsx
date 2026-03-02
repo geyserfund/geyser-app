@@ -9,7 +9,7 @@ import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landin
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { getPath, GuideStepByStepUrl } from '@/shared/constants/index.ts'
+import { getPath, GuideStepByStepUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { ProjectReviewStatus, ProjectStatus } from '@/types'
@@ -79,12 +79,10 @@ export const ControlPanel = () => {
             size="md"
             as={Link}
             to={getPath('projectDashboard', project.name)}
-            variant="solid"
-            bg="white"
-            color="neutral1.12"
+            variant="soft"
+            colorScheme="neutral1"
             paddingX={3}
             leftIcon={<PiGear />}
-            _hover={{ bg: 'neutral1.2' }}
           >
             {t('Go to Dashboard')}
           </Button>
@@ -100,12 +98,10 @@ export const ControlPanel = () => {
           size="md"
           as={Link}
           to={getPath('projectDashboard', project.name)}
-          variant="solid"
-          bg="white"
-          color="neutral1.12"
+          variant="soft"
+          colorScheme="neutral1"
           paddingX={3}
           leftIcon={<PiGear />}
-          _hover={{ bg: 'neutral1.2' }}
         >
           {t('Go to Dashboard')}
         </Button>
@@ -258,12 +254,11 @@ export const ControlPanel = () => {
         <ControlPanelNotification
           icon={
             <Image
-              src="/icons/impact-funds-icon.png"
+              src={ImpactFundsIconUrl}
               alt="impact fund"
-              width="48px"
-              height="48px"
+              width="50px"
+              height="50px"
               flexShrink={0}
-              filter="grayscale(1)"
             />
           }
           title={t('Eligible for {{fundName}}.', { fundName: eligibleImpactFund.title })}

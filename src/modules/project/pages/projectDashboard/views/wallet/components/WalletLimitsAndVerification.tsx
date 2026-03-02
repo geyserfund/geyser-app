@@ -2,6 +2,7 @@
 import { Box, Button, Flex, HStack, Icon, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
+import type { ReactNode } from 'react'
 import {
   PiCheckCircle,
   PiCheckCircleFill,
@@ -25,6 +26,28 @@ import { VerificationModal } from '../../../components/VerificationModal.tsx'
 import { useUserVerificationModal } from '../hooks/useUserVerificationModal.ts'
 import { useWalletLimitProgressData } from '../hooks/useWalletLimitProgressData.ts'
 import { UserVerificationModal } from './UserVerificationModal.tsx'
+
+type VerificationFooterProps = {
+  isVerified: boolean
+  action: ReactNode
+}
+
+const VerificationFooter = ({ isVerified, action }: VerificationFooterProps) => {
+  return (
+    <Flex justify="center" align="center" width="100%">
+      {isVerified ? (
+        <HStack spacing={1}>
+          <Icon as={PiCheckCircleFill} color="primary1.9" />
+          <Body medium color="neutral1.11">
+            {t('Verified')}
+          </Body>
+        </HStack>
+      ) : (
+        action
+      )}
+    </Flex>
+  )
+}
 
 /** Component that displays funding limits and verification options for the user */
 export const WalletLimitsAndVerification = () => {
@@ -117,14 +140,14 @@ export const WalletLimitsAndVerification = () => {
               bottom="60px"
             >
               <Box position="absolute" left="30%">
-                <Body fontSize="sm" fontWeight="medium" color="neutral1.11">
+                <Body size="sm" medium color="neutral1.11">
                   $10,000
                 </Body>
                 <Box height="5px" width="5px" bg="neutral1.11" borderRadius="full" transform="translateX(-1.5px)" />
                 <Box width="2px" height="33px" bg="neutral1.11" />
               </Box>
               <Box position="absolute" left="100%">
-                <Body fontSize="sm" fontWeight="medium" color="neutral1.11">
+                <Body size="sm" medium color="neutral1.11">
                   $100,000
                 </Body>
                 <Box height="5px" width="5px" bg="neutral1.11" borderRadius="full" transform="translateX(-1.5px)" />
@@ -154,18 +177,10 @@ export const WalletLimitsAndVerification = () => {
                 </HStack>
               </VStack>
             </VStack>
-            <Flex justify="center" align="center" width="100%">
-              {isEmailVerified ? (
-                <HStack spacing={1}>
-                  <PiCheckCircleFill color="primary1.9" />
-                  <Body fontWeight="medium" color="neutral1.11">
-                    {t('Verified')}
-                  </Body>
-                </HStack>
-              ) : (
-                <UpdateVerifyEmail verifyButtonMode verifyButtonProps={{ size: 'md', width: '100%' }} />
-              )}
-            </Flex>
+            <VerificationFooter
+              isVerified={Boolean(isEmailVerified)}
+              action={<UpdateVerifyEmail verifyButtonMode verifyButtonProps={{ size: 'md', width: '100%' }} />}
+            />
           </CardLayout>
 
           {/* Phone Verification */}
@@ -193,15 +208,9 @@ export const WalletLimitsAndVerification = () => {
                 </HStack>
               </VStack>
             </VStack>
-            <Flex justify="center" align="center" width="100%">
-              {isPhoneVerified ? (
-                <HStack spacing={1}>
-                  <PiCheckCircleFill color="primary1.9" />
-                  <Body fontWeight="medium" color="neutral1.11">
-                    {t('Verified')}
-                  </Body>
-                </HStack>
-              ) : (
+            <VerificationFooter
+              isVerified={Boolean(isPhoneVerified)}
+              action={
                 <Button
                   variant="solid"
                   colorScheme={level2ColorScheme}
@@ -212,8 +221,8 @@ export const WalletLimitsAndVerification = () => {
                 >
                   {t('Increase my limit')}
                 </Button>
-              )}
-            </Flex>
+              }
+            />
           </CardLayout>
 
           {/* Gov ID Verification */}
@@ -237,15 +246,9 @@ export const WalletLimitsAndVerification = () => {
                 </HStack>
               </VStack>
             </VStack>
-            <Flex justify="center" align="center" width="100%">
-              {isIdentityVerified ? (
-                <HStack spacing={1}>
-                  <PiCheckCircleFill color="primary1.9" />
-                  <Body fontWeight="medium" color="neutral1.11">
-                    {t('Verified')}
-                  </Body>
-                </HStack>
-              ) : (
+            <VerificationFooter
+              isVerified={Boolean(isIdentityVerified)}
+              action={
                 <Button
                   colorScheme={level3ColorScheme}
                   size="md"
@@ -255,8 +258,8 @@ export const WalletLimitsAndVerification = () => {
                 >
                   {t('Go limitless')}
                 </Button>
-              )}
-            </Flex>
+              }
+            />
           </CardLayout>
         </Stack>
       </VStack>

@@ -1,4 +1,4 @@
-import { Button, HStack } from '@chakra-ui/react'
+import { Button, HStack, Icon } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
@@ -31,7 +31,8 @@ import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from 
 export const ProjectNavigation = () => {
   const location = useLocation()
   const isDraftUrl = location.pathname.includes('/draft')
-  const isDashboardUrl = location.pathname.includes('/dashboard')
+  const pathnameSegments = location.pathname.split('/').filter(Boolean)
+  const isDashboardUrl = pathnameSegments.includes('dashboard')
   const navigate = useNavigate()
 
   const isMobile = useMobileMode()
@@ -136,7 +137,7 @@ export const ProjectNavigation = () => {
             size="sm"
             variant="ghost"
             colorScheme="neutral1"
-            leftIcon={<PiArrowLeft />}
+            leftIcon={<Icon as={PiArrowLeft} />}
           >
             {t('Back to project')}
           </Button>

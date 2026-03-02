@@ -1,4 +1,5 @@
-import { Badge, Button, HStack, Icon, Image, Tooltip, VStack } from '@chakra-ui/react'
+import { Badge, Button, HStack, Icon, Image, Tooltip, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiArrowUpRight, PiHandHeart, PiInfo, PiNotePencil, PiRocketLaunch, PiStorefront } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
@@ -23,6 +24,7 @@ interface ProjectCardProps {
 export const ProjectCard = ({ project }: ProjectCardProps) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
+  const [configuredRskEoa, setConfiguredRskEoa] = useState(project.rskEoa)
 
   const isInReview = project.status === ProjectStatus.InReview
   const isDraft = project.status && inDraftStatus.includes(project.status) && !isInReview
@@ -88,7 +90,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const balanceUsd = ((project.balanceUsdCent || 0) / 100).toFixed(2)
 
   /** Check if project needs wallet configuration */
-  const needsWalletConfig = !project.rskEoa && project.fundingStrategy === ProjectFundingStrategy.TakeItAll
+  const effectiveRskEoa = configuredRskEoa || project.rskEoa
+  const needsWalletConfig = !effectiveRskEoa && project.fundingStrategy === ProjectFundingStrategy.TakeItAll
 
   /** Get context message or action */
   const renderContextContent = () => {
@@ -165,8 +168,9 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           colorScheme="neutral1"
           as={RouterLink}
           to={hasRevisionsRequested ? getPath('launchFinalize', project.id) : draftRedirectPath}
-          size="md"
+          size={isMobile ? 'sm' : 'md'}
           leftIcon={isMobile ? undefined : <PiNotePencil size={16} />}
+          aria-label={isMobile ? t('Finalize') : undefined}
         >
           {isMobile ? <PiNotePencil size={16} /> : t('Finalize')}
         </Button>
@@ -191,7 +195,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               colorScheme="primary1"
               as={RouterLink}
               to={`${getPath('project', project.name)}?action=withdraw`}
-              size="md"
+              size={isMobile ? 'sm' : 'md'}
               isDisabled={isWithdrawDisabled}
               pointerEvents={isWithdrawDisabled ? 'auto' : undefined}
             >
@@ -204,8 +208,9 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           colorScheme="neutral1"
           as={RouterLink}
           to={getPath('project', project.name)}
-          size="md"
+          size={isMobile ? 'sm' : 'md'}
           leftIcon={isMobile ? undefined : <PiArrowUpRight size={16} />}
+          aria-label={isMobile ? t('Go to project') : undefined}
         >
           {isMobile ? <PiArrowUpRight size={16} /> : t('Go to project')}
         </Button>
@@ -217,38 +222,49 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     <CardLayout width="100%" py={4} px={6}>
       <VStack align="stretch" spacing={3}>
         {/* Row 1: Header with title and action button */}
-        <HStack spacing={4} justifyContent="space-between" alignItems="start">
-          <HStack as={RouterLink} to={getPath('project', project.name)} alignItems="center" flex={1} spacing={2}>
-            {project.thumbnailImage && (
-              <Image
-                src={project.thumbnailImage}
-                alt={project.title}
-                boxSize="20px"
-                borderRadius="md"
-                objectFit="cover"
-              />
-            )}
-            <Body size="lg" bold>
-              {project.title}
-            </Body>
-            <Badge colorScheme={projectTypeBadge.colorScheme} variant="soft" size="sm">
-              <HStack spacing={1}>
-                <Icon as={projectTypeBadge.icon} boxSize="12px" />
-                <span>{projectTypeBadge.label}</span>
-              </HStack>
-            </Badge>
-            {statusBadge && (
-              <Badge colorScheme={statusBadge.colorScheme} variant="soft" size="sm">
-                {statusBadge.label}
-              </Badge>
-            )}
-          </HStack>
+        <HStack spacing={3} justifyContent="space-between" alignItems="start">
+          <VStack as={RouterLink} to={getPath('project', project.name)} align="start" flex={1} spacing={2} minW={0}>
+            <HStack alignItems="center" spacing={2} minW={0} w="full">
+              {project.thumbnailImage && (
+                <Image
+                  src={project.thumbnailImage}
+                  alt={project.title}
+                  boxSize="20px"
+                  borderRadius="md"
+                  objectFit="cover"
+                  flexShrink={0}
+                />
+              )}
+              <Body size="lg" bold>
+                {project.title}
+              </Body>
+            </HStack>
+            <Wrap spacing={2}>
+              <WrapItem>
+                <Badge colorScheme={projectTypeBadge.colorScheme} variant="soft" size="sm">
+                  <HStack spacing={1}>
+                    <Icon as={projectTypeBadge.icon} boxSize="12px" />
+                    <Body as="span" size="sm">
+                      {projectTypeBadge.label}
+                    </Body>
+                  </HStack>
+                </Badge>
+              </WrapItem>
+              {statusBadge && (
+                <WrapItem>
+                  <Badge colorScheme={statusBadge.colorScheme} variant="soft" size="sm">
+                    {statusBadge.label}
+                  </Badge>
+                </WrapItem>
+              )}
+            </Wrap>
+          </VStack>
           {renderActionButton()}
         </HStack>
 
         {/* Row 2: Balance or Wallet Configuration */}
         {needsWalletConfig ? (
-          <WalletConfigurationPrompt projectId={project.id} compact />
+          <WalletConfigurationPrompt projectId={project.id} compact onConfigured={setConfiguredRskEoa} />
         ) : (
           <Body size="sm" color="neutral1.11">
             {t('Amount in Wallet')}:{' '}

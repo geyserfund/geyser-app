@@ -18,17 +18,17 @@ import { promotionsNoticeClosedByProjectAtom } from './noticeAtom.ts'
 export const ProjectPromotionNotice = () => {
   const { isProjectOwner, project } = useProjectAtom()
   const { isFundingDisabled } = useProjectToolkit(project)
-  const projectNoticeKey = String(project.id)
+  const projectNoticeKey = project?.id ? String(project.id) : ''
 
   const [promotionsNoticeClosedByProject, setPromotionsNoticeClosedByProject] = useAtom(
     promotionsNoticeClosedByProjectAtom,
   )
-  const isPromotionsModalOpen = Boolean(promotionsNoticeClosedByProject[projectNoticeKey])
+  const isPromotionsNoticeClosed = projectNoticeKey ? Boolean(promotionsNoticeClosedByProject[projectNoticeKey]) : false
 
   const hasMigrationNotice =
     isProjectOwner && project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project?.rskEoa
 
-  if (hasMigrationNotice || isPromotionsModalOpen || !isProjectOwner || isFundingDisabled()) {
+  if (!project || hasMigrationNotice || isPromotionsNoticeClosed || !isProjectOwner || isFundingDisabled()) {
     return null
   }
 
@@ -47,7 +47,7 @@ export const ProjectPromotionNotice = () => {
         right="5px"
         top="5px"
         icon={<PiX />}
-        aria-label="close"
+        aria-label={t('Close')}
         onClick={() =>
           setPromotionsNoticeClosedByProject((current) => ({
             ...current,

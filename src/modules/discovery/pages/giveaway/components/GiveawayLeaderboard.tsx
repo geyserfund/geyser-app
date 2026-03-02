@@ -15,6 +15,7 @@ import {
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { PiCrownBold, PiTicketBold } from 'react-icons/pi'
 
 import { Body, H2 } from '@/shared/components/typography'
@@ -46,7 +47,7 @@ const LeaderboardSkeleton = () => (
   </VStack>
 )
 
-const TICKET_COLOR = '#F59E0B'
+const TICKET_COLOR = 'warning.9'
 
 export const GiveawayLeaderboard = ({
   entries,
@@ -68,17 +69,17 @@ export const GiveawayLeaderboard = ({
           <HStack spacing={2}>
             <Icon as={PiCrownBold} boxSize={5} color="warning.9" />
             <H2 size="xl" bold>
-              Current Winners
+              {t('Current Winners')}
             </H2>
           </HStack>
           {lastUpdatedAt && timezone ? (
             <Body size="xs" color={subtleText}>
-              Updated {formatDateTimeWithTimezone(lastUpdatedAt, timezone)}
+              {t('Updated {{dateTime}}', { dateTime: formatDateTimeWithTimezone(lastUpdatedAt, timezone) })}
             </Body>
           ) : null}
         </HStack>
         <Body size="sm" color={mutedText}>
-          Top 3 contributors by eligible sats — they win a VIP ticket.
+          {t('Top 3 contributors by eligible sats — they win a VIP ticket.')}
         </Body>
       </VStack>
 
@@ -86,16 +87,16 @@ export const GiveawayLeaderboard = ({
 
       {!isLoading && isError ? (
         <VStack align="start" spacing={3}>
-          <Body color={mutedText}>We could not load the leaderboard right now.</Body>
+          <Body color={mutedText}>{t('We could not load the leaderboard right now.')}</Body>
           <Button size="sm" onClick={onRetry} variant="outline" colorScheme="neutral1">
-            Retry
+            {t('Retry')}
           </Button>
         </VStack>
       ) : null}
 
       {!isLoading && !isError && entries.length === 0 ? (
         <Box p={6} bg={headerBg} borderRadius="lg" textAlign="center">
-          <Body color={subtleText}>No contributions yet. Be the first!</Body>
+          <Body color={subtleText}>{t('No contributions yet. Be the first!')}</Body>
         </Box>
       ) : null}
 
@@ -104,9 +105,9 @@ export const GiveawayLeaderboard = ({
           <Table variant="simple" size="md">
             <Thead>
               <Tr bg={headerBg}>
-                <Th w="80px">Rank</Th>
-                <Th>Contributor</Th>
-                <Th isNumeric>Score (sats)</Th>
+                <Th w="80px">{t('Rank')}</Th>
+                <Th>{t('Contributor')}</Th>
+                <Th isNumeric>{t('Score (sats)')}</Th>
               </Tr>
             </Thead>
             <Tbody>

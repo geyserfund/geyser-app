@@ -1,22 +1,24 @@
-import { useQuery } from '@apollo/client'
-import { Box, BoxProps, Button, HStack, Icon, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, Button, HStack, Icon, VStack, useColorModeValue } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { PiArrowRight } from 'react-icons/pi'
 import { Link } from 'react-router'
 
-import { QUERY_ACELERANDO_VIP_LEADERBOARD } from '@/modules/discovery/graphql/queries/giveawayQuery'
 import { GiveawayCountdown } from '@/modules/discovery/pages/giveaway/components/GiveawayCountdown'
-import { AcelerandoVipLeaderboardQueryData } from '@/modules/discovery/pages/giveaway/types'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { useAcelerandoVipLeaderboardQuery } from '@/types'
 
 const REFRESH_INTERVAL_MS = 60_000
 
 export const GiveawayBanner = (props: BoxProps) => {
-  const { data, loading } = useQuery<AcelerandoVipLeaderboardQueryData>(QUERY_ACELERANDO_VIP_LEADERBOARD, {
+  const { data, loading } = useAcelerandoVipLeaderboardQuery({
     pollInterval: REFRESH_INTERVAL_MS,
     notifyOnNetworkStatusChange: true,
   })
   const leaderboard = data?.acelerandoVipLeaderboard
+  const ctaButtonBg = useColorModeValue('white', 'neutral1.2')
+  const ctaButtonHoverBg = useColorModeValue('neutral1.2', 'neutral1.3')
+  const ctaButtonColor = useColorModeValue('gray.900', 'neutral1.12')
 
   return (
     <Box w="full" position="relative" overflow="hidden" borderRadius="xl" {...props}>
@@ -38,22 +40,22 @@ export const GiveawayBanner = (props: BoxProps) => {
         flexWrap="wrap"
       >
         <VStack alignItems="flex-start" spacing={1} flex={1} minW="200px">
-          <H3 color="white">VIP Ticket Giveaway: Acelerando Bitcoin 2026 Conference</H3>
+          <H3 color="white">{t('VIP Ticket Giveaway: Acelerando Bitcoin 2026 Conference')}</H3>
           <Body size="sm" color="whiteAlpha.800">
-            We&apos;re giving 3 VIP tickets to the top contributors on Geyser. Ends May 30.
+            {t("We're giving 3 VIP tickets to the top contributors on Geyser. Ends May 30.")}
           </Body>
           <Box pt={2}>
             <Button
               as={Link}
               to={getPath('giveawayAcelerandoVip')}
-              bg="white"
-              color="gray.900"
-              _hover={{ bg: 'whiteAlpha.900' }}
+              bg={ctaButtonBg}
+              color={ctaButtonColor}
+              _hover={{ bg: ctaButtonHoverBg }}
               size="sm"
               fontWeight="semibold"
               rightIcon={<Icon as={PiArrowRight} />}
             >
-              View giveaway
+              {t('View giveaway')}
             </Button>
           </Box>
         </VStack>

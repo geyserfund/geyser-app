@@ -15,11 +15,11 @@ const tabs = [
     path: getPath('discoveryFundraisers'),
   },
   {
-    label: `${t('Latest')}`,
+    label: `🆕 ${t('Latest')}`,
     path: getPath('discoveryFundraisersLatest'),
   },
   {
-    label: `${t('In your region')}`,
+    label: `📍 ${t('In your region')}`,
     path: getPath('discoveryFundraisersInYourRegion'),
   },
   {

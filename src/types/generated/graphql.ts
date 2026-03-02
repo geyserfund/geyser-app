@@ -22,6 +22,44 @@ export type Scalars = {
   Date: { input: any; output: any; }
 };
 
+export type AcelerandoVipLeaderboardEntry = {
+  __typename?: 'AcelerandoVipLeaderboardEntry';
+  avatarUrl?: Maybe<Scalars['String']['output']>;
+  displayName: Scalars['String']['output'];
+  eligibleContributionsCount: Scalars['Int']['output'];
+  rank: Scalars['Int']['output'];
+  scoreSats: Scalars['BigInt']['output'];
+  uniqueProjectsBacked: Scalars['Int']['output'];
+  userId: Scalars['BigInt']['output'];
+};
+
+export type AcelerandoVipLeaderboardResponse = {
+  __typename?: 'AcelerandoVipLeaderboardResponse';
+  endAt: Scalars['Date']['output'];
+  entries: Array<AcelerandoVipLeaderboardEntry>;
+  giveawayId: Scalars['ID']['output'];
+  leaderboardSize: Scalars['Int']['output'];
+  startAt: Scalars['Date']['output'];
+  timezone: Scalars['String']['output'];
+  topCutoffScore: Scalars['BigInt']['output'];
+  updatedAt: Scalars['Date']['output'];
+};
+
+export type AcelerandoVipMyPositionResponse = {
+  __typename?: 'AcelerandoVipMyPositionResponse';
+  distanceToNextRankSats?: Maybe<Scalars['BigInt']['output']>;
+  distanceToTop3Sats: Scalars['BigInt']['output'];
+  eligibleContributionsCount: Scalars['Int']['output'];
+  excludedSelfContributionsCount: Scalars['Int']['output'];
+  inTop3: Scalars['Boolean']['output'];
+  progressToTop3: Scalars['Float']['output'];
+  rank?: Maybe<Scalars['Int']['output']>;
+  scoreSats: Scalars['BigInt']['output'];
+  top3CutoffScore: Scalars['BigInt']['output'];
+  uniqueProjectsBacked: Scalars['Int']['output'];
+  userId: Scalars['BigInt']['output'];
+};
+
 export type ActivitiesCountGroupedByProjectInput = {
   createdAt: DateRangeInput;
   feed: ActivityFeedName;
@@ -4068,6 +4106,8 @@ export type ProjectsSummary = {
 export type Query = {
   __typename?: 'Query';
   _?: Maybe<Scalars['Boolean']['output']>;
+  acelerandoVipLeaderboard: AcelerandoVipLeaderboardResponse;
+  acelerandoVipMyPosition?: Maybe<AcelerandoVipMyPositionResponse>;
   activitiesCountGroupedByProject: Array<ProjectActivitiesCount>;
   /** Returns all activities. */
   activitiesGet: ActivitiesGetResponse;
@@ -5395,6 +5435,9 @@ export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = 
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AcelerandoVipLeaderboardEntry: ResolverTypeWrapper<AcelerandoVipLeaderboardEntry>;
+  AcelerandoVipLeaderboardResponse: ResolverTypeWrapper<AcelerandoVipLeaderboardResponse>;
+  AcelerandoVipMyPositionResponse: ResolverTypeWrapper<AcelerandoVipMyPositionResponse>;
   ActivitiesCountGroupedByProjectInput: ActivitiesCountGroupedByProjectInput;
   ActivitiesGetResponse: ResolverTypeWrapper<Omit<ActivitiesGetResponse, 'activities'> & { activities: Array<ResolversTypes['Activity']> }>;
   Activity: ResolverTypeWrapper<Omit<Activity, 'project' | 'resource'> & { project: ResolversTypes['Project'], resource: ResolversTypes['ActivityResource'] }>;
@@ -5561,6 +5604,7 @@ export type ResolversTypes = {
   GuardianUsersGetResponse: ResolverTypeWrapper<GuardianUsersGetResponse>;
   GuardianUsersGetWhereInput: GuardianUsersGetWhereInput;
   HeroStats: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['HeroStats']>;
+  ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   ImpactFund: ResolverTypeWrapper<Omit<ImpactFund, 'applications' | 'donateProject' | 'fundedApplications'> & { applications: Array<ResolversTypes['ImpactFundApplication']>, donateProject?: Maybe<ResolversTypes['Project']>, fundedApplications: Array<ResolversTypes['ImpactFundApplication']> }>;
   ImpactFundAmountCommittedCurrency: ImpactFundAmountCommittedCurrency;
   ImpactFundApplication: ResolverTypeWrapper<Omit<ImpactFundApplication, 'project'> & { project: ResolversTypes['Project'] }>;
@@ -5966,6 +6010,9 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AcelerandoVipLeaderboardEntry: AcelerandoVipLeaderboardEntry;
+  AcelerandoVipLeaderboardResponse: AcelerandoVipLeaderboardResponse;
+  AcelerandoVipMyPositionResponse: AcelerandoVipMyPositionResponse;
   ActivitiesCountGroupedByProjectInput: ActivitiesCountGroupedByProjectInput;
   ActivitiesGetResponse: Omit<ActivitiesGetResponse, 'activities'> & { activities: Array<ResolversParentTypes['Activity']> };
   Activity: Omit<Activity, 'project' | 'resource'> & { project: ResolversParentTypes['Project'], resource: ResolversParentTypes['ActivityResource'] };
@@ -6113,6 +6160,7 @@ export type ResolversParentTypes = {
   GuardianUsersGetResponse: GuardianUsersGetResponse;
   GuardianUsersGetWhereInput: GuardianUsersGetWhereInput;
   HeroStats: ResolversInterfaceTypes<ResolversParentTypes>['HeroStats'];
+  ID: Scalars['ID']['output'];
   ImpactFund: Omit<ImpactFund, 'applications' | 'donateProject' | 'fundedApplications'> & { applications: Array<ResolversParentTypes['ImpactFundApplication']>, donateProject?: Maybe<ResolversParentTypes['Project']>, fundedApplications: Array<ResolversParentTypes['ImpactFundApplication']> };
   ImpactFundApplication: Omit<ImpactFundApplication, 'project'> & { project: ResolversParentTypes['Project'] };
   ImpactFundApplicationsGetResponse: Omit<ImpactFundApplicationsGetResponse, 'applications'> & { applications: Array<ResolversParentTypes['ImpactFundApplication']> };
@@ -6438,6 +6486,44 @@ export type ResolversParentTypes = {
   WalletResourceInput: WalletResourceInput;
   WalletState: WalletState;
   dashboardFundersGetInput: DashboardFundersGetInput;
+};
+
+export type AcelerandoVipLeaderboardEntryResolvers<ContextType = any, ParentType extends ResolversParentTypes['AcelerandoVipLeaderboardEntry'] = ResolversParentTypes['AcelerandoVipLeaderboardEntry']> = {
+  avatarUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  eligibleContributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  rank?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  scoreSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  uniqueProjectsBacked?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AcelerandoVipLeaderboardResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AcelerandoVipLeaderboardResponse'] = ResolversParentTypes['AcelerandoVipLeaderboardResponse']> = {
+  endAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  entries?: Resolver<Array<ResolversTypes['AcelerandoVipLeaderboardEntry']>, ParentType, ContextType>;
+  giveawayId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  leaderboardSize?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  startAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  timezone?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  topCutoffScore?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AcelerandoVipMyPositionResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AcelerandoVipMyPositionResponse'] = ResolversParentTypes['AcelerandoVipMyPositionResponse']> = {
+  distanceToNextRankSats?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
+  distanceToTop3Sats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  eligibleContributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  excludedSelfContributionsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  inTop3?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  progressToTop3?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  rank?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  scoreSats?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  top3CutoffScore?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  uniqueProjectsBacked?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ActivitiesGetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ActivitiesGetResponse'] = ResolversParentTypes['ActivitiesGetResponse']> = {
@@ -8171,6 +8257,8 @@ export type ProjectsSummaryResolvers<ContextType = any, ParentType extends Resol
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  acelerandoVipLeaderboard?: Resolver<ResolversTypes['AcelerandoVipLeaderboardResponse'], ParentType, ContextType>;
+  acelerandoVipMyPosition?: Resolver<Maybe<ResolversTypes['AcelerandoVipMyPositionResponse']>, ParentType, ContextType>;
   activitiesCountGroupedByProject?: Resolver<Array<ResolversTypes['ProjectActivitiesCount']>, ParentType, ContextType, RequireFields<QueryActivitiesCountGroupedByProjectArgs, 'input'>>;
   activitiesGet?: Resolver<ResolversTypes['ActivitiesGetResponse'], ParentType, ContextType, Partial<QueryActivitiesGetArgs>>;
   badges?: Resolver<Array<ResolversTypes['Badge']>, ParentType, ContextType>;
@@ -8594,6 +8682,9 @@ export type WalletStateResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type Resolvers<ContextType = any> = {
+  AcelerandoVipLeaderboardEntry?: AcelerandoVipLeaderboardEntryResolvers<ContextType>;
+  AcelerandoVipLeaderboardResponse?: AcelerandoVipLeaderboardResponseResolvers<ContextType>;
+  AcelerandoVipMyPositionResponse?: AcelerandoVipMyPositionResponseResolvers<ContextType>;
   ActivitiesGetResponse?: ActivitiesGetResponseResolvers<ContextType>;
   Activity?: ActivityResolvers<ContextType>;
   ActivityResource?: ActivityResourceResolvers<ContextType>;
@@ -9083,6 +9174,16 @@ export type LandingPageFeaturedContributionsGetQuery = { __typename?: 'Query', c
       { __typename?: 'Contribution' }
       & ContributionForLandingPageFragment
     )> } | null };
+
+export type AcelerandoVipLeaderboardQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AcelerandoVipLeaderboardQuery = { __typename?: 'Query', acelerandoVipLeaderboard: { __typename?: 'AcelerandoVipLeaderboardResponse', giveawayId: string, updatedAt: any, startAt: any, endAt: any, timezone: string, leaderboardSize: number, topCutoffScore: any, entries: Array<{ __typename?: 'AcelerandoVipLeaderboardEntry', rank: number, userId: any, displayName: string, avatarUrl?: string | null, scoreSats: any, eligibleContributionsCount: number, uniqueProjectsBacked: number }> } };
+
+export type AcelerandoVipMyPositionQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AcelerandoVipMyPositionQuery = { __typename?: 'Query', acelerandoVipMyPosition?: { __typename?: 'AcelerandoVipMyPositionResponse', userId: any, rank?: number | null, scoreSats: any, inTop3: boolean, top3CutoffScore: any, distanceToTop3Sats: any, distanceToNextRankSats?: any | null, progressToTop3: number, eligibleContributionsCount: number, uniqueProjectsBacked: number, excludedSelfContributionsCount: number } | null };
 
 export type PostsForLandingPageQueryVariables = Exact<{
   input?: InputMaybe<GetPostsInput>;
@@ -9892,6 +9993,26 @@ export type ProjectPageBodyFragment = { __typename?: 'Project', id: any, name: s
     & ProjectPaymentMethodsFragment
   ), reviews: Array<(
     { __typename?: 'ProjectReview' }
+    & ProjectReviewPublicFragment
+  )> };
+
+export type ProjectPageBodyCreatorFragment = { __typename?: 'Project', id: any, name: string, title: string, type: ProjectType, thumbnailImage?: string | null, images: Array<string>, shortDescription?: string | null, description?: string | null, balance: number, balanceUsdCent: number, defaultGoalId?: any | null, status?: ProjectStatus | null, rewardCurrency?: RewardCurrency | null, createdAt: any, launchedAt?: any | null, preLaunchedAt?: any | null, preLaunchExpiresAt?: any | null, paidLaunch?: boolean | null, goalsCount?: number | null, rewardsCount?: number | null, entriesCount?: number | null, promotionsEnabled?: boolean | null, followersCount?: number | null, rejectionReason?: string | null, fundingStrategy?: ProjectFundingStrategy | null, rskEoa?: string | null, lastCreationStep: ProjectCreationStep, launchScheduledAt?: any | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, links: Array<string>, aonGoal?: (
+    { __typename?: 'ProjectAonGoal' }
+    & ProjectAonGoalForProjectPageFragment
+  ) | null, location?: (
+    { __typename?: 'Location' }
+    & ProjectLocationFragment
+  ) | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, keys: (
+    { __typename?: 'ProjectKeys' }
+    & ProjectKeysFragment
+  ), owners: Array<{ __typename?: 'Owner', id: any, user: (
+      { __typename?: 'User' }
+      & ProjectPageCreatorFragment
+    ) }>, paymentMethods: (
+    { __typename?: 'PaymentMethods' }
+    & ProjectPaymentMethodsFragment
+  ), reviews: Array<(
+    { __typename?: 'ProjectReview' }
     & ProjectReviewFragment
   )> };
 
@@ -9904,6 +10025,8 @@ export type ProjectUpdateFragment = { __typename?: 'Project', id: any, title: st
     { __typename?: 'ProjectAonGoal' }
     & ProjectAonGoalForProjectPageFragment
   ) | null };
+
+export type ProjectReviewPublicFragment = { __typename?: 'ProjectReview', id: any, reviewedAt?: any | null, status: ProjectReviewStatus, version: number };
 
 export type ProjectReviewFragment = { __typename?: 'ProjectReview', id: any, reviewedAt?: any | null, status: ProjectReviewStatus, rejectionReasons: Array<string>, reviewNotes?: string | null, version: number };
 
@@ -10170,7 +10293,7 @@ export type CreateProjectMutationVariables = Exact<{
 
 export type CreateProjectMutation = { __typename?: 'Mutation', createProject: (
     { __typename?: 'Project' }
-    & ProjectPageBodyFragment
+    & ProjectPageBodyCreatorFragment
   ) };
 
 export type UpdateProjectMutationVariables = Exact<{
@@ -10688,6 +10811,16 @@ export type ProjectPageBodyQueryVariables = Exact<{
 export type ProjectPageBodyQuery = { __typename?: 'Query', projectGet?: (
     { __typename?: 'Project' }
     & ProjectPageBodyFragment
+  ) | null };
+
+export type ProjectPageBodyCreatorQueryVariables = Exact<{
+  where: UniqueProjectQueryInput;
+}>;
+
+
+export type ProjectPageBodyCreatorQuery = { __typename?: 'Query', projectGet?: (
+    { __typename?: 'Project' }
+    & ProjectPageBodyCreatorFragment
   ) | null };
 
 export type ProjectGrantApplicationsQueryVariables = Exact<{
@@ -12801,8 +12934,82 @@ export const ProjectPaymentMethodsFragmentDoc = gql`
   }
 }
     `;
+export const ProjectReviewPublicFragmentDoc = gql`
+    fragment ProjectReviewPublic on ProjectReview {
+  id
+  reviewedAt
+  status
+  version
+}
+    `;
 export const ProjectPageBodyFragmentDoc = gql`
     fragment ProjectPageBody on Project {
+  id
+  name
+  title
+  type
+  thumbnailImage
+  images
+  shortDescription
+  description
+  balance
+  balanceUsdCent
+  defaultGoalId
+  status
+  rewardCurrency
+  createdAt
+  launchedAt
+  preLaunchedAt
+  preLaunchExpiresAt
+  paidLaunch
+  goalsCount
+  rewardsCount
+  entriesCount
+  promotionsEnabled
+  followersCount
+  rejectionReason
+  fundingStrategy
+  rskEoa
+  lastCreationStep
+  launchScheduledAt
+  category
+  subCategory
+  links
+  aonGoal {
+    ...ProjectAonGoalForProjectPage
+  }
+  launchScheduledAt
+  location {
+    ...ProjectLocation
+  }
+  tags {
+    id
+    label
+  }
+  keys {
+    ...ProjectKeys
+  }
+  owners {
+    id
+    user {
+      ...ProjectPageCreator
+    }
+  }
+  paymentMethods {
+    ...ProjectPaymentMethods
+  }
+  reviews {
+    ...ProjectReviewPublic
+  }
+}
+    ${ProjectAonGoalForProjectPageFragmentDoc}
+${ProjectLocationFragmentDoc}
+${ProjectKeysFragmentDoc}
+${ProjectPageCreatorFragmentDoc}
+${ProjectPaymentMethodsFragmentDoc}
+${ProjectReviewPublicFragmentDoc}`;
+export const ProjectPageBodyCreatorFragmentDoc = gql`
+    fragment ProjectPageBodyCreator on Project {
   id
   name
   title
@@ -14055,6 +14262,109 @@ export type LandingPageFeaturedContributionsGetQueryHookResult = ReturnType<type
 export type LandingPageFeaturedContributionsGetLazyQueryHookResult = ReturnType<typeof useLandingPageFeaturedContributionsGetLazyQuery>;
 export type LandingPageFeaturedContributionsGetSuspenseQueryHookResult = ReturnType<typeof useLandingPageFeaturedContributionsGetSuspenseQuery>;
 export type LandingPageFeaturedContributionsGetQueryResult = Apollo.QueryResult<LandingPageFeaturedContributionsGetQuery, LandingPageFeaturedContributionsGetQueryVariables>;
+export const AcelerandoVipLeaderboardDocument = gql`
+    query AcelerandoVipLeaderboard {
+  acelerandoVipLeaderboard {
+    giveawayId
+    updatedAt
+    startAt
+    endAt
+    timezone
+    leaderboardSize
+    topCutoffScore
+    entries {
+      rank
+      userId
+      displayName
+      avatarUrl
+      scoreSats
+      eligibleContributionsCount
+      uniqueProjectsBacked
+    }
+  }
+}
+    `;
+
+/**
+ * __useAcelerandoVipLeaderboardQuery__
+ *
+ * To run a query within a React component, call `useAcelerandoVipLeaderboardQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAcelerandoVipLeaderboardQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAcelerandoVipLeaderboardQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAcelerandoVipLeaderboardQuery(baseOptions?: Apollo.QueryHookOptions<AcelerandoVipLeaderboardQuery, AcelerandoVipLeaderboardQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AcelerandoVipLeaderboardQuery, AcelerandoVipLeaderboardQueryVariables>(AcelerandoVipLeaderboardDocument, options);
+      }
+export function useAcelerandoVipLeaderboardLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AcelerandoVipLeaderboardQuery, AcelerandoVipLeaderboardQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AcelerandoVipLeaderboardQuery, AcelerandoVipLeaderboardQueryVariables>(AcelerandoVipLeaderboardDocument, options);
+        }
+export function useAcelerandoVipLeaderboardSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AcelerandoVipLeaderboardQuery, AcelerandoVipLeaderboardQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AcelerandoVipLeaderboardQuery, AcelerandoVipLeaderboardQueryVariables>(AcelerandoVipLeaderboardDocument, options);
+        }
+export type AcelerandoVipLeaderboardQueryHookResult = ReturnType<typeof useAcelerandoVipLeaderboardQuery>;
+export type AcelerandoVipLeaderboardLazyQueryHookResult = ReturnType<typeof useAcelerandoVipLeaderboardLazyQuery>;
+export type AcelerandoVipLeaderboardSuspenseQueryHookResult = ReturnType<typeof useAcelerandoVipLeaderboardSuspenseQuery>;
+export type AcelerandoVipLeaderboardQueryResult = Apollo.QueryResult<AcelerandoVipLeaderboardQuery, AcelerandoVipLeaderboardQueryVariables>;
+export const AcelerandoVipMyPositionDocument = gql`
+    query AcelerandoVipMyPosition {
+  acelerandoVipMyPosition {
+    userId
+    rank
+    scoreSats
+    inTop3
+    top3CutoffScore
+    distanceToTop3Sats
+    distanceToNextRankSats
+    progressToTop3
+    eligibleContributionsCount
+    uniqueProjectsBacked
+    excludedSelfContributionsCount
+  }
+}
+    `;
+
+/**
+ * __useAcelerandoVipMyPositionQuery__
+ *
+ * To run a query within a React component, call `useAcelerandoVipMyPositionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAcelerandoVipMyPositionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAcelerandoVipMyPositionQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAcelerandoVipMyPositionQuery(baseOptions?: Apollo.QueryHookOptions<AcelerandoVipMyPositionQuery, AcelerandoVipMyPositionQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AcelerandoVipMyPositionQuery, AcelerandoVipMyPositionQueryVariables>(AcelerandoVipMyPositionDocument, options);
+      }
+export function useAcelerandoVipMyPositionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AcelerandoVipMyPositionQuery, AcelerandoVipMyPositionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AcelerandoVipMyPositionQuery, AcelerandoVipMyPositionQueryVariables>(AcelerandoVipMyPositionDocument, options);
+        }
+export function useAcelerandoVipMyPositionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AcelerandoVipMyPositionQuery, AcelerandoVipMyPositionQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<AcelerandoVipMyPositionQuery, AcelerandoVipMyPositionQueryVariables>(AcelerandoVipMyPositionDocument, options);
+        }
+export type AcelerandoVipMyPositionQueryHookResult = ReturnType<typeof useAcelerandoVipMyPositionQuery>;
+export type AcelerandoVipMyPositionLazyQueryHookResult = ReturnType<typeof useAcelerandoVipMyPositionLazyQuery>;
+export type AcelerandoVipMyPositionSuspenseQueryHookResult = ReturnType<typeof useAcelerandoVipMyPositionSuspenseQuery>;
+export type AcelerandoVipMyPositionQueryResult = Apollo.QueryResult<AcelerandoVipMyPositionQuery, AcelerandoVipMyPositionQueryVariables>;
 export const PostsForLandingPageDocument = gql`
     query PostsForLandingPage($input: GetPostsInput) {
   posts(input: $input) {
@@ -17250,10 +17560,10 @@ export type ProjectRewardCurrencyUpdateMutationOptions = Apollo.BaseMutationOpti
 export const CreateProjectDocument = gql`
     mutation CreateProject($input: CreateProjectInput!) {
   createProject(input: $input) {
-    ...ProjectPageBody
+    ...ProjectPageBodyCreator
   }
 }
-    ${ProjectPageBodyFragmentDoc}`;
+    ${ProjectPageBodyCreatorFragmentDoc}`;
 export type CreateProjectMutationFn = Apollo.MutationFunction<CreateProjectMutation, CreateProjectMutationVariables>;
 
 /**
@@ -19438,6 +19748,46 @@ export type ProjectPageBodyQueryHookResult = ReturnType<typeof useProjectPageBod
 export type ProjectPageBodyLazyQueryHookResult = ReturnType<typeof useProjectPageBodyLazyQuery>;
 export type ProjectPageBodySuspenseQueryHookResult = ReturnType<typeof useProjectPageBodySuspenseQuery>;
 export type ProjectPageBodyQueryResult = Apollo.QueryResult<ProjectPageBodyQuery, ProjectPageBodyQueryVariables>;
+export const ProjectPageBodyCreatorDocument = gql`
+    query ProjectPageBodyCreator($where: UniqueProjectQueryInput!) {
+  projectGet(where: $where) {
+    ...ProjectPageBodyCreator
+  }
+}
+    ${ProjectPageBodyCreatorFragmentDoc}`;
+
+/**
+ * __useProjectPageBodyCreatorQuery__
+ *
+ * To run a query within a React component, call `useProjectPageBodyCreatorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectPageBodyCreatorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectPageBodyCreatorQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProjectPageBodyCreatorQuery(baseOptions: Apollo.QueryHookOptions<ProjectPageBodyCreatorQuery, ProjectPageBodyCreatorQueryVariables> & ({ variables: ProjectPageBodyCreatorQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectPageBodyCreatorQuery, ProjectPageBodyCreatorQueryVariables>(ProjectPageBodyCreatorDocument, options);
+      }
+export function useProjectPageBodyCreatorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectPageBodyCreatorQuery, ProjectPageBodyCreatorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectPageBodyCreatorQuery, ProjectPageBodyCreatorQueryVariables>(ProjectPageBodyCreatorDocument, options);
+        }
+export function useProjectPageBodyCreatorSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectPageBodyCreatorQuery, ProjectPageBodyCreatorQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectPageBodyCreatorQuery, ProjectPageBodyCreatorQueryVariables>(ProjectPageBodyCreatorDocument, options);
+        }
+export type ProjectPageBodyCreatorQueryHookResult = ReturnType<typeof useProjectPageBodyCreatorQuery>;
+export type ProjectPageBodyCreatorLazyQueryHookResult = ReturnType<typeof useProjectPageBodyCreatorLazyQuery>;
+export type ProjectPageBodyCreatorSuspenseQueryHookResult = ReturnType<typeof useProjectPageBodyCreatorSuspenseQuery>;
+export type ProjectPageBodyCreatorQueryResult = Apollo.QueryResult<ProjectPageBodyCreatorQuery, ProjectPageBodyCreatorQueryVariables>;
 export const ProjectGrantApplicationsDocument = gql`
     query ProjectGrantApplications($where: UniqueProjectQueryInput!, $input: ProjectGrantApplicationsInput) {
   projectGet(where: $where) {

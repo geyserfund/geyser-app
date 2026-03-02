@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client'
 import { Box, Button, Circle, HStack, Icon, Link as ChakraLink, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
@@ -13,36 +12,27 @@ import {
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
-import { MUTATION_PROJECT_RSK_EOA_SET } from '@/modules/project/graphql/mutation/projectMutation.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { UserAccountKeysFragment } from '@/types/index.ts'
+import { useProjectRskEoaSetMutation } from '@/types/index.ts'
+import type { UserAccountKeysFragment } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const KEY_CONFIG_DEADLINE = '30th of April 2026'
 
-type ProjectRskEoaSetMutation = {
-  projectRskEoaSet: {
-    id: string
-    rskEoa?: string | null
-  }
-}
-
-type ProjectRskEoaSetMutationVariables = {
-  input: {
-    projectId: string | number
-    rskEoa: string
-  }
-}
-
 type WalletConfigurationPromptProps = {
   projectId: string | number
   compact?: boolean
+  onConfigured?: (rskEoa: string) => void
 }
 
-export const WalletConfigurationPrompt = ({ projectId, compact = false }: WalletConfigurationPromptProps) => {
+export const WalletConfigurationPrompt = ({
+  projectId,
+  compact = false,
+  onConfigured,
+}: WalletConfigurationPromptProps) => {
   const toast = useNotification()
   const modal = useModal()
 
@@ -54,12 +44,10 @@ export const WalletConfigurationPrompt = ({ projectId, compact = false }: Wallet
   const [isSettingProjectKey, setIsSettingProjectKey] = useState(false)
   const successModal = useModal()
 
-  const [projectRskEoaSet] = useMutation<ProjectRskEoaSetMutation, ProjectRskEoaSetMutationVariables>(
-    MUTATION_PROJECT_RSK_EOA_SET,
-    {
-      refetchQueries: ['ProjectsForMyProjects'],
-    },
-  )
+  const [projectRskEoaSet] = useProjectRskEoaSetMutation({
+    refetchQueries: ['ProjectsForMyProjects'],
+    awaitRefetchQueries: true,
+  })
 
   const importantContent = (
     <Feedback variant={FeedBackVariant.WARNING} noIcon>
@@ -131,7 +119,7 @@ export const WalletConfigurationPrompt = ({ projectId, compact = false }: Wallet
         const decryptedSeed = await decryptSeed(encryptedSeed, password)
         const projectKeys = generateProjectKeysFromSeedHex(decryptedSeed, projectId)
 
-        await projectRskEoaSet({
+        const result = await projectRskEoaSet({
           variables: {
             input: {
               projectId,
@@ -139,6 +127,9 @@ export const WalletConfigurationPrompt = ({ projectId, compact = false }: Wallet
             },
           },
         })
+
+        const rskEoa = result.data?.projectRskEoaSet?.rskEoa || projectKeys.address
+        onConfigured?.(rskEoa)
 
         toast.success({
           title: t('Project key configured'),
@@ -154,7 +145,16 @@ export const WalletConfigurationPrompt = ({ projectId, compact = false }: Wallet
         setIsSettingProjectKey(false)
       }
     },
-    [accountPassword, modal, projectId, projectRskEoaSet, successModal, toast, userAccountKeys?.encryptedSeed],
+    [
+      accountPassword,
+      modal,
+      onConfigured,
+      projectId,
+      projectRskEoaSet,
+      successModal,
+      toast,
+      userAccountKeys?.encryptedSeed,
+    ],
   )
 
   const { renderForm, currentForm, titles } = useAccountPasswordForm({

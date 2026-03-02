@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client'
 import {
   Accordion,
   AccordionButton,
@@ -15,16 +14,13 @@ import {
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useMemo, useRef } from 'react'
 import { PiArrowRight, PiHandshakeBold, PiListNumbersBold, PiTrophyBold } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
 import { Head } from '@/config/Head'
 import { useAuthContext } from '@/context/auth'
-import {
-  QUERY_ACELERANDO_VIP_LEADERBOARD,
-  QUERY_ACELERANDO_VIP_MY_POSITION,
-} from '@/modules/discovery/graphql/queries/giveawayQuery'
 import { LandingProjectCard } from '@/modules/discovery/pages/landing/components/LandingProjectCard.tsx'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -33,58 +29,59 @@ import {
   ProjectCategory,
   ProjectsGetWhereInputStatus,
   ProjectsOrderByField,
+  useAcelerandoVipLeaderboardQuery,
+  useAcelerandoVipMyPositionQuery,
   useProjectsForLandingPageQuery,
 } from '@/types/index.ts'
 
 import { GiveawayHero } from './components/GiveawayHero.tsx'
 import { GiveawayLeaderboard } from './components/GiveawayLeaderboard'
 import { GiveawayProgress } from './components/GiveawayProgress'
-import { AcelerandoVipLeaderboardQueryData, AcelerandoVipMyPositionQueryData } from './types'
 
 const REFRESH_INTERVAL_MS = 60_000
 
 const howItWorksSteps = [
   {
-    title: 'Contribute while logged in',
-    description: 'Make contributions to any project on Geyser while signed into your account.',
+    title: t('Contribute while logged in'),
+    description: t('Make contributions to any project on Geyser while signed into your account.'),
     icon: PiHandshakeBold,
   },
   {
-    title: 'Back projects you don\u2019t own',
-    description: 'Self-contributions are excluded. Support projects created by other people.',
+    title: t("Back projects you don't own"),
+    description: t('Self-contributions are excluded. Support projects created by other people.'),
     icon: PiTrophyBold,
   },
   {
-    title: 'Reach the Top 3 by May 30',
-    description: 'The 3 contributors with the most eligible sats on the leaderboard win.',
+    title: t('Reach the Top 3 by May 30'),
+    description: t('The 3 contributors with the most eligible sats on the leaderboard win.'),
     icon: PiListNumbersBold,
   },
 ]
 
 const faqItems = [
   {
-    question: 'Why don\u2019t I see my contribution?',
-    answer: 'It may be from a logged-out session, still pending, excluded, or delayed by indexing.',
+    question: t("Why don't I see my contribution"),
+    answer: t('It may be from a logged-out session, still pending, excluded, or delayed by indexing.'),
   },
   {
-    question: 'Do contributions to my own projects count?',
-    answer: 'No. Self-contributions are excluded.',
+    question: t('Do contributions to my own projects count'),
+    answer: t('No. Self-contributions are excluded.'),
   },
   {
-    question: 'What if I refund or charge back?',
-    answer: 'Refunded or chargeback-related contributions are excluded.',
+    question: t('What if I refund or charge back'),
+    answer: t('Refunded or chargeback-related contributions are excluded.'),
   },
   {
-    question: 'How are ties broken?',
-    answer: 'Higher score wins; ties go to whoever reached that score first, then lower user ID.',
+    question: t('How are ties broken'),
+    answer: t('Higher score wins; ties go to whoever reached that score first, then lower user ID.'),
   },
   {
-    question: 'Can I win more than one ticket?',
-    answer: 'No. One ticket per person.',
+    question: t('Can I win more than one ticket'),
+    answer: t('No. One ticket per person.'),
   },
   {
-    question: 'Where will winners be announced?',
-    answer: 'On this page, plus email and inbox notifications.',
+    question: t('Where will winners be announced'),
+    answer: t('On this page, plus email and inbox notifications.'),
   },
 ]
 
@@ -103,6 +100,9 @@ export const GiveawayPage = () => {
   const iconBg = useColorModeValue('primary1.3', 'primary1.4')
   const iconColor = useColorModeValue('primary1.11', 'primary1.9')
   const accordionBorder = useColorModeValue('neutral1.4', 'neutral1.5')
+  const ctaButtonBg = useColorModeValue('white', 'neutral1.2')
+  const ctaButtonColor = useColorModeValue('gray.900', 'neutral1.12')
+  const ctaButtonHoverBg = useColorModeValue('neutral1.2', 'neutral1.3')
 
   const { data: causesData } = useProjectsForLandingPageQuery({
     variables: {
@@ -128,7 +128,7 @@ export const GiveawayPage = () => {
     loading: leaderboardLoading,
     error: leaderboardError,
     refetch: refetchLeaderboard,
-  } = useQuery<AcelerandoVipLeaderboardQueryData>(QUERY_ACELERANDO_VIP_LEADERBOARD, {
+  } = useAcelerandoVipLeaderboardQuery({
     pollInterval: REFRESH_INTERVAL_MS,
     notifyOnNetworkStatusChange: true,
   })
@@ -138,7 +138,7 @@ export const GiveawayPage = () => {
     loading: myPositionLoading,
     error: myPositionError,
     refetch: refetchMyPosition,
-  } = useQuery<AcelerandoVipMyPositionQueryData>(QUERY_ACELERANDO_VIP_MY_POSITION, {
+  } = useAcelerandoVipMyPositionQuery({
     pollInterval: REFRESH_INTERVAL_MS,
     notifyOnNetworkStatusChange: true,
     skip: !isLoggedIn,
@@ -149,8 +149,8 @@ export const GiveawayPage = () => {
   return (
     <>
       <Head
-        title="VIP Ticket Giveaway: Acelerando Bitcoin"
-        description="Win 1 of 3 VIP tickets by becoming a top contributor on Geyser before May 30."
+        title={t('VIP Ticket Giveaway: Acelerando Bitcoin')}
+        description={t('Win 1 of 3 VIP tickets by becoming a top contributor on Geyser before May 30.')}
         url={`https://geyser.fund${getPath('giveawayAcelerandoVip')}`}
       />
 
@@ -166,7 +166,7 @@ export const GiveawayPage = () => {
         {/* How it works */}
         <VStack align="stretch" spacing={6}>
           <H2 size="xl" bold>
-            How It Works
+            {t('How It Works')}
           </H2>
           <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
             {howItWorksSteps.map((step, index) => (
@@ -205,10 +205,18 @@ export const GiveawayPage = () => {
           </SimpleGrid>
           <HStack spacing={4} flexWrap="wrap" pt={1}>
             <Body size="sm" color={subtleText}>
-              <strong>Includes:</strong> VIP conference pass
+              <Body as="span" bold>
+                {t('Includes')}
+              </Body>
+              {': '}
+              {t('VIP conference pass')}
             </Body>
             <Body size="sm" color={subtleText}>
-              <strong>Excludes:</strong> travel & accommodation
+              <Body as="span" bold>
+                {t('Excludes')}
+              </Body>
+              {': '}
+              {t('travel & accommodation')}
             </Body>
           </HStack>
         </VStack>
@@ -245,10 +253,10 @@ export const GiveawayPage = () => {
           <VStack ref={featuredSectionRef} align="stretch" spacing={6}>
             <VStack align="stretch" spacing={1}>
               <H2 size="xl" bold>
-                Featured Projects
+                {t('Featured Projects')}
               </H2>
               <Body size="sm" color={mutedText}>
-                Support these causes — every contribution counts toward your score.
+                {t('Support these causes — every contribution counts toward your score.')}
               </Body>
             </VStack>
             <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 5 }} spacing={5}>
@@ -262,7 +270,7 @@ export const GiveawayPage = () => {
         {/* FAQ */}
         <VStack align="stretch" spacing={4}>
           <H2 size="xl" bold>
-            FAQ
+            {t('FAQ')}
           </H2>
           <Accordion allowToggle>
             {faqItems.map((item) => (
@@ -270,7 +278,10 @@ export const GiveawayPage = () => {
                 <h3>
                   <AccordionButton py={4}>
                     <Box as="span" flex="1" textAlign="left">
-                      <Body bold>{item.question}</Body>
+                      <Body bold>
+                        {item.question}
+                        {'?'}
+                      </Body>
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
@@ -288,8 +299,9 @@ export const GiveawayPage = () => {
         {/* Terms */}
         <VStack align="stretch" spacing={2}>
           <Body size="sm" color={subtleText}>
-            We may review suspicious activity and disqualify ineligible entries. Final eligibility decisions are made at
-            our discretion.
+            {t(
+              'We may review suspicious activity and disqualify ineligible entries. Final eligibility decisions are made at our discretion.',
+            )}
           </Body>
           <ChakraLink
             as={RouterLink}
@@ -298,7 +310,7 @@ export const GiveawayPage = () => {
             fontWeight="medium"
             fontSize="sm"
           >
-            Read full terms &rarr;
+            {t('Read full terms')} &rarr;
           </ChakraLink>
         </VStack>
 
@@ -315,23 +327,23 @@ export const GiveawayPage = () => {
           <Box position="relative" p={{ base: 8, md: 12 }} textAlign="center">
             <VStack spacing={4}>
               <H2 size="2xl" bold color="white">
-                Fund Bitcoin ideas and win a ticket
+                {t('Fund Bitcoin ideas and win a ticket')}
               </H2>
               <Body color="whiteAlpha.800" maxW="480px">
-                Start contributing to projects on Geyser now to climb the leaderboard and win a VIP ticket.
+                {t('Start contributing to projects on Geyser now to climb the leaderboard and win a VIP ticket.')}
               </Body>
               <Button
                 as={RouterLink}
                 to={getPath('projectDiscovery')}
                 size="lg"
-                bg="white"
-                color="gray.900"
-                _hover={{ bg: 'whiteAlpha.900' }}
+                bg={ctaButtonBg}
+                color={ctaButtonColor}
+                _hover={{ bg: ctaButtonHoverBg }}
                 fontWeight="semibold"
                 px={10}
                 rightIcon={<Icon as={PiArrowRight} />}
               >
-                Browse projects
+                {t('Browse projects')}
               </Button>
             </VStack>
           </Box>

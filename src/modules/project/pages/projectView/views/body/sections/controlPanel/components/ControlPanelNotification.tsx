@@ -1,5 +1,6 @@
 import { Box, HStack, IconButton, Stack, VStack } from '@chakra-ui/react'
-import { ReactNode } from 'react'
+import { t } from 'i18next'
+import type { ReactNode } from 'react'
 import { PiX } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -70,7 +71,7 @@ export const ControlPanelNotification = ({
           top="5px"
           size="sm"
           icon={<PiX />}
-          aria-label="close"
+          aria-label={t('Close')}
           onClick={onClose}
         />
       )}

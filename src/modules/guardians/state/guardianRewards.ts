@@ -3,7 +3,8 @@ import { atom } from 'jotai'
 import { GuardianProjectRewardFragment } from '@/types'
 
 import { guardianRewardUUIDs } from '../utils/characterAssets.ts'
-import { GuardianRewardDetails, guardianRewardsMap, RewardDetails, RewardMap } from '../utils/constants.ts'
+import { GuardianRewardDetails, guardianRewardsMap } from '../utils/constants.ts'
+import type { RewardDetails, RewardMap } from '../utils/constants.ts'
 
 export const guardianRewardsAtom = atom<GuardianProjectRewardFragment[]>([])
 

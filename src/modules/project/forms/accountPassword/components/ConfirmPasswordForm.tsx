@@ -2,8 +2,7 @@ import { Button, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useState } from 'react'
-import { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { Control, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
@@ -11,7 +10,7 @@ import { userAccountKeyPairAtom } from '@/modules/auth/state/userAccountKeysAtom
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import type { BodyProps } from '@/shared/components/typography/Body.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { Maybe, UserAccountKeysFragment } from '@/types/index.ts'
+import type { Maybe, UserAccountKeysFragment } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { AccountKeys, decryptSeed, generateKeysFromSeedHex } from '../keyGenerationHelper.ts'

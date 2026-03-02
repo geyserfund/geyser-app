@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { FRAGMENT_PROJECT_PAGE_BODY, FRAGMENT_PROJECT_UPDATE } from '../fragments/projectFragment'
+import { FRAGMENT_PROJECT_PAGE_BODY_CREATOR, FRAGMENT_PROJECT_UPDATE } from '../fragments/projectFragment'
 import { FRAGMENT_PROJECT_REWARD } from '../fragments/rewardsFragment'
 
 export const MUTATION_UPDATE_PROJECT_CURRENCY = gql`
@@ -13,10 +13,10 @@ export const MUTATION_UPDATE_PROJECT_CURRENCY = gql`
 `
 
 export const MUTATION_CREATE_PROJECT = gql`
-  ${FRAGMENT_PROJECT_PAGE_BODY}
+  ${FRAGMENT_PROJECT_PAGE_BODY_CREATOR}
   mutation CreateProject($input: CreateProjectInput!) {
     createProject(input: $input) {
-      ...ProjectPageBody
+      ...ProjectPageBodyCreator
     }
   }
 `

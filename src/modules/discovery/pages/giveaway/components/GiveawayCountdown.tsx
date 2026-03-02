@@ -1,4 +1,5 @@
 import { Box, HStack, Skeleton, VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 
 import { Body } from '@/shared/components/typography'
@@ -17,10 +18,10 @@ type TimeSegment = { value: number; label: string }
 const getSegments = (millisecondsRemaining: number): TimeSegment[] => {
   const totalSeconds = Math.max(0, Math.floor(millisecondsRemaining / 1000))
   return [
-    { value: Math.floor(totalSeconds / 86400), label: 'Days' },
-    { value: Math.floor((totalSeconds % 86400) / 3600), label: 'Hours' },
-    { value: Math.floor((totalSeconds % 3600) / 60), label: 'Min' },
-    { value: totalSeconds % 60, label: 'Sec' },
+    { value: Math.floor(totalSeconds / 86400), label: t('Days') },
+    { value: Math.floor((totalSeconds % 86400) / 3600), label: t('Hours') },
+    { value: Math.floor((totalSeconds % 3600) / 60), label: t('Min') },
+    { value: totalSeconds % 60, label: t('Sec') },
   ]
 }
 
@@ -82,7 +83,11 @@ export const GiveawayCountdown = ({ startAt, endAt, timezone, isLoading, compact
   }
 
   return (
-    <HStack spacing={compact ? 1.5 : { base: 2, md: 3 }} aria-live="polite" aria-label="Countdown to giveaway end">
+    <HStack
+      spacing={compact ? 1.5 : { base: 2, md: 3 }}
+      aria-live="polite"
+      aria-label={t('Countdown to giveaway end')}
+    >
       {segments.map((seg) => (
         <CountdownDigit key={seg.label} {...seg} compact={compact} />
       ))}

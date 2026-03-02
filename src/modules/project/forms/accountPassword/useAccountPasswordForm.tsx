@@ -1,10 +1,9 @@
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 
 import type { BodyProps } from '@/shared/components/typography/Body.tsx'
-import { UserAccountKeysFragment } from '@/types/index.ts'
+import type { UserAccountKeysFragment } from '@/types/index.ts'
 
 import { userAccountKeysAtom } from '../../../auth/state/userAccountKeysAtom.ts'
 import { ConfirmPasswordForm, useConfirmPasswordForm } from './components/ConfirmPasswordForm.tsx'

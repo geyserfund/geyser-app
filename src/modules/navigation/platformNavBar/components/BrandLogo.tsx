@@ -50,7 +50,7 @@ export const BrandLogo = ({ showOutline = false }: { showOutline?: boolean }) =>
             height="100%"
             width="auto"
             objectFit="contain"
-            alt="Geyser logo"
+            alt={t('Geyser logo')}
           />
         </Box>
         <EnvironmentTag />

@@ -1,9 +1,9 @@
 import { t } from 'i18next'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit'
+import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
-import { ProjectForLandingPageFragment } from '@/types/index.ts'
+import type { ProjectForLandingPageFragment } from '@/types/index.ts'
 
 export const AonProgressData = ({ project }: { project: ProjectForLandingPageFragment }) => {
   const { getAonGoalPercentage } = useProjectToolkit(project)

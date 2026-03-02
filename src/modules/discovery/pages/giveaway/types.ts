@@ -1,4 +1,4 @@
-export type BigIntScalar = string | number
+export type BigIntScalar = string
 
 export type AcelerandoVipLeaderboardEntry = {
   rank: number

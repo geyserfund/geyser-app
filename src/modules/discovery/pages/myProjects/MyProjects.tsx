@@ -24,24 +24,24 @@ export const MyProjects = () => {
     const allProjects = [...activeProjects, ...inReviewProjects, ...inDraftProjects, ...inActiveProjects]
 
     // Custom sort order: Active > InReview/RevisionsRequested > Draft > Inactive > Closed
-    return allProjects.sort((a, b) => {
-      const getStatusPriority = (project: ProjectForMyProjectsFragment) => {
-        if (project.status === ProjectStatus.Active) return 1
-        if (project.status === ProjectStatus.InReview) {
-          // Check if has revisions requested
-          const latestReview =
-            project.reviews && project.reviews.length > 0
-              ? [...project.reviews].sort((x, y) => (y.version ?? 0) - (x.version ?? 0))[0]
-              : undefined
-          return latestReview?.status === ProjectReviewStatus.RevisionsRequested ? 2 : 3
-        }
-
-        if (project.status === ProjectStatus.Draft || project.status === ProjectStatus.Accepted) return 4
-        if (project.status === ProjectStatus.Inactive) return 5
-        if (project.status === ProjectStatus.Closed) return 6
-        return 7
+    const getStatusPriority = (project: ProjectForMyProjectsFragment) => {
+      if (project.status === ProjectStatus.Active) return 1
+      if (project.status === ProjectStatus.InReview) {
+        const latestReview = project.reviews?.reduce((latest, current) => {
+          const latestVersion = latest?.version ?? 0
+          const currentVersion = current?.version ?? 0
+          return currentVersion > latestVersion ? current : latest
+        }, project.reviews?.[0])
+        return latestReview?.status === ProjectReviewStatus.RevisionsRequested ? 2 : 3
       }
 
+      if (project.status === ProjectStatus.Draft || project.status === ProjectStatus.Accepted) return 4
+      if (project.status === ProjectStatus.Inactive) return 5
+      if (project.status === ProjectStatus.Closed) return 6
+      return 7
+    }
+
+    return allProjects.sort((a, b) => {
       return getStatusPriority(a) - getStatusPriority(b)
     })
   }, [activeProjects, inReviewProjects, inDraftProjects, inActiveProjects])

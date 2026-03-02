@@ -1,4 +1,5 @@
-import { Box, Button, HStack, Icon, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, VStack, useColorModeValue } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { PiArrowRight, PiMapPinBold } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
@@ -19,6 +20,9 @@ type GiveawayHeroProps = {
 
 export const GiveawayHero = ({ leaderboard, leaderboardLoading, backgroundImage }: GiveawayHeroProps) => {
   const hasDates = leaderboard?.startAt && leaderboard?.endAt && leaderboard?.timezone
+  const primaryButtonBg = useColorModeValue('white', 'neutral1.2')
+  const primaryButtonColor = useColorModeValue('gray.900', 'neutral1.12')
+  const primaryButtonHoverBg = useColorModeValue('neutral1.2', 'neutral1.3')
 
   return (
     <Box w="100%" position="relative" overflow="hidden" ml="50%" transform="translateX(-50%)" borderRadius={'xl'}>
@@ -50,17 +54,18 @@ export const GiveawayHero = ({ leaderboard, leaderboardLoading, backgroundImage 
               textTransform="uppercase"
               letterSpacing="wider"
             >
-              Bitcoin-only conference &middot; Paraguay
+              {t('Bitcoin-only conference · Paraguay')}
             </Body>
           </HStack>
 
           <VStack align="stretch" spacing={3}>
             <H2 size="3xl" bold lineHeight={1.1} color="white">
-              Win a VIP Ticket to Acelerando Bitcoin 2026 in Paraguay
+              {t('Win a VIP Ticket to Acelerando Bitcoin 2026 in Paraguay')}
             </H2>
             <Body size="lg" color="whiteAlpha.800">
-              We&apos;re partnering with Acelerando Bitcoin to give away 3 VIP conference passes to the top
-              contributors on Geyser. Contribute to any project and climb the leaderboard before May 30.
+              {t(
+                "We're partnering with Acelerando Bitcoin to give away 3 VIP conference passes to the top contributors on Geyser. Contribute to any project and climb the leaderboard before May 30.",
+              )}
             </Body>
           </VStack>
 
@@ -85,19 +90,19 @@ export const GiveawayHero = ({ leaderboard, leaderboardLoading, backgroundImage 
                 borderColor="whiteAlpha.400"
                 _hover={{ bg: 'whiteAlpha.100', borderColor: 'whiteAlpha.600' }}
               >
-                About the conference
+                {t('About the conference')}
               </Button>
               <Button
                 as={RouterLink}
                 to={getPath('projectDiscovery')}
-                bg="white"
-                color="gray.900"
-                _hover={{ bg: 'whiteAlpha.900' }}
+                bg={primaryButtonBg}
+                color={primaryButtonColor}
+                _hover={{ bg: primaryButtonHoverBg }}
                 size="lg"
                 fontWeight="semibold"
                 rightIcon={<Icon as={PiArrowRight} />}
               >
-                Start contributing
+                {t('Start contributing')}
               </Button>
             </HStack>
           </HStack>
