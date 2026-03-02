@@ -23,12 +23,32 @@ const tabs = [
     path: getPath('discoveryFundraisersInYourRegion'),
   },
   {
-    label: `⛏️ ${t(' Hardware products')}`,
-    path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.Hardware),
+    label: `🌊 ${t('Circular Economies')}`,
+    path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.CircularEconomy),
   },
   {
-    label: `🎵 ${t('Culture')}`,
-    path: getPath('discoveryFundraisersCategory', ProjectCategory.Culture),
+    label: `🎓 ${t('Education')}`,
+    path: getPath('discoveryFundraisersCategory', ProjectCategory.Education),
+  },
+  {
+    label: `🛠 ${t('Open Source')}`,
+    path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.OsSoftware),
+  },
+  {
+    label: `🌍 ${t('Humanitarian')}`,
+    path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.Humanitarian),
+  },
+  {
+    label: `🤲 ${t('Causes')}`,
+    path: getPath('discoveryFundraisersCategory', ProjectCategory.Cause),
+  },
+  {
+    label: `⚖️ ${t('Legal & Advocacy')}`,
+    path: getPath('discoveryFundraisersCategory', ProjectCategory.Advocacy),
+  },
+  {
+    label: `🤝 ${t('Community')}`,
+    path: getPath('discoveryFundraisersCategory', ProjectCategory.Community),
   },
 ]
 
