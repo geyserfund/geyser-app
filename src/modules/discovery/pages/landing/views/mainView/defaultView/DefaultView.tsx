@@ -36,7 +36,7 @@ export const DefaultView = () => {
     <VStack w="full" spacing={10} paddingTop="20px">
       <VStack w="full" spacing={20} paddingBottom={40}>
         <TitleBar />
-        <GiveawayBanner mt={-10} mb={-10} />
+        <GiveawayBanner mt={{ base: -14, md: -10 }} mb={{ base: -14, md: -10 }} />
 
         <Stack direction={{ base: 'column', md: 'row' }} w="full" alignItems="stretch" spacing={{ base: 4, lg: 12 }}>
           <Featured />

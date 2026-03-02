@@ -52,7 +52,7 @@ const howItWorksSteps = [
     icon: PiTrophyBold,
   },
   {
-    title: t('Reach the Top 3 by May 30'),
+    title: t('Be in the top 3 of contributors'),
     description: t('The 3 contributors with the most eligible sats on the leaderboard win.'),
     icon: PiListNumbersBold,
   },

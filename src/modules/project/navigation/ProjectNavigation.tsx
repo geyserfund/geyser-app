@@ -1,9 +1,6 @@
-import { Button, HStack, Icon } from '@chakra-ui/react'
-import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import {
-  PiArrowLeft,
   PiBag,
   PiBagBold,
   PiFlagBannerFold,
@@ -16,14 +13,14 @@ import {
   PiRocketLaunchBold,
   PiSignOut,
 } from 'react-icons/pi'
-import { Link, useLocation, useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigation/AnimatedNavBar'
-import { getPath, PathName } from '@/shared/constants'
-import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { PathName } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
+import { BackToProjectRow } from './components/BackToProjectRow'
 import { TopNavContainer } from '../../navigation/components/topNav/TopNavContainer'
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from './projectNavigationAtom'
@@ -117,32 +114,12 @@ export const ProjectNavigation = () => {
     return null
   }
 
-  // Show Back to project button when in dashboard
+  // Show Back to project row when in dashboard
   if (isDashboardUrl && isProjectOwner) {
     return (
-      <HStack
-        position="fixed"
-        top={{ base: `${dimensions.topNavBar.mobile.height}px`, lg: `${dimensions.topNavBar.desktop.height}px` }}
-        left={{ base: 0, lg: `${dimensions.project.dashboard.menu.width}px` }}
-        width={{ base: '100%', lg: `calc(100% - ${dimensions.project.dashboard.menu.width + 24 * 2 + 1}px)` }}
-        paddingX={{ base: 3, lg: 6 }}
-        bg="neutral1.3"
-        borderRadius={8}
-        zIndex={9}
-      >
-        <HStack borderRadius="8px" paddingX={4} paddingY={2} w="full">
-          <Button
-            as={Link}
-            to={getPath('project', project.name)}
-            size="sm"
-            variant="ghost"
-            colorScheme="neutral1"
-            leftIcon={<Icon as={PiArrowLeft} />}
-          >
-            {t('Back to project')}
-          </Button>
-        </HStack>
-      </HStack>
+      <TopNavContainer zIndex={9}>
+        <BackToProjectRow projectName={project.name} />
+      </TopNavContainer>
     )
   }
 

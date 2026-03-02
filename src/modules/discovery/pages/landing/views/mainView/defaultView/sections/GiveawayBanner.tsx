@@ -36,15 +36,45 @@ export const GiveawayBanner = (props: BoxProps) => {
         p={{ base: 5, md: 6 }}
         spacing={{ base: 4, md: 8 }}
         justify="space-between"
-        align="center"
+        align={{ base: 'flex-start', md: 'center' }}
         flexWrap="wrap"
       >
         <VStack alignItems="flex-start" spacing={1} flex={1} minW="200px">
           <H3 color="white">{t('VIP Ticket Giveaway: Acelerando Bitcoin 2026 Conference')}</H3>
-          <Body size="sm" color="whiteAlpha.800">
+          <Body size="sm" color="whiteAlpha.800" display={{ base: 'none', md: 'block' }}>
             {t("We're giving 3 VIP tickets to the top contributors on Geyser. Ends May 30.")}
           </Body>
-          <Box pt={2}>
+          <HStack
+            pt={2}
+            w="full"
+            display={{ base: 'flex', md: 'none' }}
+            justify="space-between"
+            align="center"
+            spacing={3}
+          >
+            <Box flexShrink={0}>
+              <GiveawayCountdown
+                compact
+                isLoading={loading && !leaderboard}
+                startAt={leaderboard?.startAt}
+                endAt={leaderboard?.endAt}
+                timezone={leaderboard?.timezone}
+              />
+            </Box>
+            <Button
+              as={Link}
+              to={getPath('giveawayAcelerandoVip')}
+              bg={ctaButtonBg}
+              color={ctaButtonColor}
+              _hover={{ bg: ctaButtonHoverBg }}
+              size="sm"
+              fontWeight="semibold"
+              rightIcon={<Icon as={PiArrowRight} />}
+            >
+              {t('View giveaway')}
+            </Button>
+          </HStack>
+          <Box pt={2} display={{ base: 'none', md: 'block' }}>
             <Button
               as={Link}
               to={getPath('giveawayAcelerandoVip')}
@@ -60,7 +90,7 @@ export const GiveawayBanner = (props: BoxProps) => {
           </Box>
         </VStack>
 
-        <Box flexShrink={0}>
+        <Box flexShrink={0} display={{ base: 'none', md: 'block' }}>
           <GiveawayCountdown
             compact
             isLoading={loading && !leaderboard}

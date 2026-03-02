@@ -7,7 +7,7 @@ export const CampaignsFailFastImageUrl =
 export const TwitterAnnouncementImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/campaigns/twitter_anouncement.webp'
 
-export const TwitterAnnouncementLinkUrl = 'https://x.com/geyserfund/status/2011827027137962033'
+export const TwitterAnnouncementLinkUrl = 'https://x.com/geyserfund/status/2026664217634549904'
 
 export const FundraiserInstantImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/campaigns/instant.png'

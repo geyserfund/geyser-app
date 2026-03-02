@@ -1,15 +1,13 @@
-import { Box, Button, HStack, Icon, VStack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowRight, PiMapPinBold } from 'react-icons/pi'
-import { Link as RouterLink } from 'react-router'
+import { PiMapPinBold } from 'react-icons/pi'
 
 import { Body, H2 } from '@/shared/components/typography'
-import { getPath } from '@/shared/constants'
 import { dimensions } from '@/shared/constants/components/dimensions'
 import { standardPadding } from '@/shared/styles'
+
 import type { AcelerandoVipLeaderboardResponse } from '../types.ts'
 import { formatDateTimeWithTimezone } from '../utils.ts'
-
 import { GiveawayCountdown } from './GiveawayCountdown.tsx'
 
 type GiveawayHeroProps = {
@@ -20,9 +18,6 @@ type GiveawayHeroProps = {
 
 export const GiveawayHero = ({ leaderboard, leaderboardLoading, backgroundImage }: GiveawayHeroProps) => {
   const hasDates = leaderboard?.startAt && leaderboard?.endAt && leaderboard?.timezone
-  const primaryButtonBg = useColorModeValue('white', 'neutral1.2')
-  const primaryButtonColor = useColorModeValue('gray.900', 'neutral1.12')
-  const primaryButtonHoverBg = useColorModeValue('neutral1.2', 'neutral1.3')
 
   return (
     <Box w="100%" position="relative" overflow="hidden" ml="50%" transform="translateX(-50%)" borderRadius={'xl'}>
@@ -69,8 +64,12 @@ export const GiveawayHero = ({ leaderboard, leaderboardLoading, backgroundImage 
             </Body>
           </VStack>
 
-          <HStack spacing={4} pt={2} flexWrap="wrap" align="center">
-            <Box flex={1}>
+          <HStack spacing={4} pt={2} flexWrap="wrap" align="center" justify={{ base: 'center', md: 'space-between' }}>
+            <Box
+              flex={{ base: '0 0 100%', md: 1 }}
+              display="flex"
+              justifyContent={{ base: 'center', md: 'flex-start' }}
+            >
               <GiveawayCountdown
                 isLoading={leaderboardLoading && !leaderboard}
                 startAt={leaderboard?.startAt}
@@ -78,7 +77,13 @@ export const GiveawayHero = ({ leaderboard, leaderboardLoading, backgroundImage 
                 timezone={leaderboard?.timezone}
               />
             </Box>
-            <HStack spacing={3} flexShrink={0} flexWrap="wrap" justify="flex-end">
+            <HStack
+              spacing={3}
+              flexShrink={0}
+              flexWrap="wrap"
+              justify={{ base: 'center', md: 'flex-end' }}
+              w={{ base: 'full', md: 'auto' }}
+            >
               <Button
                 as="a"
                 href="https://acelerandobitcoin.com/"
@@ -90,19 +95,7 @@ export const GiveawayHero = ({ leaderboard, leaderboardLoading, backgroundImage 
                 borderColor="whiteAlpha.400"
                 _hover={{ bg: 'whiteAlpha.100', borderColor: 'whiteAlpha.600' }}
               >
-                {t('About the conference')}
-              </Button>
-              <Button
-                as={RouterLink}
-                to={getPath('projectDiscovery')}
-                bg={primaryButtonBg}
-                color={primaryButtonColor}
-                _hover={{ bg: primaryButtonHoverBg }}
-                size="lg"
-                fontWeight="semibold"
-                rightIcon={<Icon as={PiArrowRight} />}
-              >
-                {t('Start contributing')}
+                {t('Learn more about the conference')}
               </Button>
             </HStack>
           </HStack>
