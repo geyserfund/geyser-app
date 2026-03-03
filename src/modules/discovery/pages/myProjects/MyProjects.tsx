@@ -21,7 +21,14 @@ export const MyProjects = () => {
 
   /** Sort and combine all projects into a single list */
   const sortedProjects = useMemo(() => {
-    const allProjects = [...activeProjects, ...inReviewProjects, ...inDraftProjects, ...inActiveProjects]
+    const allProjects = Array.from(
+      new Map(
+        [...activeProjects, ...inReviewProjects, ...inDraftProjects, ...inActiveProjects].map((project) => [
+          String(project.id),
+          project,
+        ]),
+      ).values(),
+    )
 
     // Custom sort order: Active > InReview/RevisionsRequested > Draft > Inactive > Closed
     const getStatusPriority = (project: ProjectForMyProjectsFragment) => {

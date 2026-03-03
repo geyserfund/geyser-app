@@ -65,7 +65,7 @@ export const BrandLogoFull = () => {
     <Link to={getPath('landingPage')} style={{ height: '100%' }}>
       <HStack h="100%" spacing={{ base: 1, lg: 2 }}>
         <Box h="100%">
-          <Image src={imageUrl} alt={'Brand logo image'} height="100%" width="auto" objectFit="contain" />
+          <Image src={imageUrl} alt={t('Brand logo image')} height="100%" width="auto" objectFit="contain" />
         </Box>
         <EnvironmentTag />
       </HStack>

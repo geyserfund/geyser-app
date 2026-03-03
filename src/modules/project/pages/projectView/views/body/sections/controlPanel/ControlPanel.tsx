@@ -7,7 +7,7 @@ import { Link, useLocation, useSearchParams } from 'react-router'
 
 import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, GuideStepByStepUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
@@ -55,8 +55,9 @@ export const ControlPanel = () => {
     if (action === 'withdraw' && showWithdraw && !payoutRskModal.isOpen) {
       payoutRskModal.onOpen()
       // Remove the query param after opening the modal
-      searchParams.delete('action')
-      setSearchParams(searchParams, { replace: true })
+      const nextSearchParams = new URLSearchParams(searchParams)
+      nextSearchParams.delete('action')
+      setSearchParams(nextSearchParams, { replace: true })
     }
   }, [searchParams, setSearchParams, showWithdraw, payoutRskModal])
 
@@ -182,7 +183,7 @@ export const ControlPanel = () => {
               <HStack spacing={3} alignItems="center" flex={{ base: 'none', md: 1 }}>
                 <Image
                   src="/icons/creator_tools_bitcoin_coins.png"
-                  alt="coins"
+                  alt={t('Coins')}
                   boxSize="52px"
                   objectFit="contain"
                   flexShrink={0}
@@ -218,7 +219,7 @@ export const ControlPanel = () => {
           icon={
             <Image
               src={'https://storage.googleapis.com/geyser-projects-media/utils/microphone.png'}
-              alt="amplify image"
+              alt={t('Amplify image')}
               width="48px"
               height="48px"
               flexShrink={0}
@@ -255,7 +256,7 @@ export const ControlPanel = () => {
           icon={
             <Image
               src={ImpactFundsIconUrl}
-              alt="impact fund"
+              alt={t('Impact fund')}
               width="50px"
               height="50px"
               flexShrink={0}

@@ -117,7 +117,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY = gql`
     aonGoal {
       ...ProjectAonGoalForProjectPage
     }
-    launchScheduledAt
     location {
       ...ProjectLocation
     }
@@ -185,7 +184,6 @@ export const FRAGMENT_PROJECT_PAGE_BODY_CREATOR = gql`
     aonGoal {
       ...ProjectAonGoalForProjectPage
     }
-    launchScheduledAt
     location {
       ...ProjectLocation
     }

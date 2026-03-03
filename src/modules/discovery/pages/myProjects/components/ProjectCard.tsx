@@ -9,6 +9,7 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
+import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { ProjectForMyProjectsFragment, ProjectFundingStrategy, ProjectReviewStatus, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
 
@@ -32,6 +33,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const isActive = project.status === ProjectStatus.Active
 
   const draftRedirectPath = getProjectCreationRoute(project.lastCreationStep, project.id)
+  const { formatAmount } = useCurrencyFormatter()
 
   const { status: withdrawalStatus } = useProjectWithdrawalStatus({ project })
 
@@ -87,7 +89,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
   /** Format balance display */
   const balanceSats = project.balance || 0
-  const balanceUsd = ((project.balanceUsdCent || 0) / 100).toFixed(2)
+  const balanceUsd = formatAmount(project.balanceUsdCent || 0, FormatCurrencyType.Usdcent)
 
   /** Check if project needs wallet configuration */
   const effectiveRskEoa = configuredRskEoa || project.rskEoa
@@ -272,7 +274,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               {commaFormatted(balanceSats)} {t('Sats')}
             </Body>{' '}
             <Body as="span" size="sm" color="neutral1.9">
-              ${balanceUsd}
+              {balanceUsd}
             </Body>
           </Body>
         )}

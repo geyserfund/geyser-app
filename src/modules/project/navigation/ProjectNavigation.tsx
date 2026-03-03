@@ -20,7 +20,7 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { PathName } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
-import { BackToProjectRow } from './components/BackToProjectRow'
+import { BackToProjectRow } from './components/BackToProjectRow.tsx'
 import { TopNavContainer } from '../../navigation/components/topNav/TopNavContainer'
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from './projectNavigationAtom'

@@ -14,8 +14,10 @@ import {
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { UpdateVerifyEmail } from '@/modules/profile/pages/profileSettings/components/UpdateVerifyEmail.tsx'
-import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
-import { hasProjectFundingLimitAlmostReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
+import {
+  hasProjectFundingLimitAlmostReachedAtom,
+  hasProjectFundingLimitReachedAtom,
+} from '@/modules/project/state/projectVerificationAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body } from '@/shared/components/typography'
 import { useModal } from '@/shared/hooks/useModal.tsx'
@@ -108,7 +110,6 @@ export const WalletLimitsAndVerification = () => {
             'Limits are in place to prevent abuse, scams or fraudulent activity. It provides an additional level of trust to the contributors of your project.',
           )}
         </Body>
-        <Box />
 
         {/* Progress Bar */}
         <Box

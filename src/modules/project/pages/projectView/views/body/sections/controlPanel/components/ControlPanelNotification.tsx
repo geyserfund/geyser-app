@@ -7,7 +7,7 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 
 export type NotificationVariant = 'info' | 'warning' | 'success' | 'error'
 
-interface ControlPanelNotificationProps {
+type ControlPanelNotificationProps = {
   icon: ReactNode
   title: string
   description: string | ReactNode

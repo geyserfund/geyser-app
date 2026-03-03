@@ -59,9 +59,13 @@ export const GiveawayCountdown = ({ startAt, endAt, timezone, isLoading, compact
   const [now, setNow] = useState(() => Date.now())
 
   useEffect(() => {
+    if (isLoading || !startAt || !endAt || !timezone) {
+      return
+    }
+
     const interval = setInterval(() => setNow(Date.now()), 1000)
     return () => clearInterval(interval)
-  }, [])
+  }, [endAt, isLoading, startAt, timezone])
 
   const segments = useMemo(() => {
     if (!endAt) return getSegments(0)

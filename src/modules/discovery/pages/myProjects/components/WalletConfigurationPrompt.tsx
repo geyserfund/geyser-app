@@ -53,7 +53,9 @@ export const WalletConfigurationPrompt = ({
     <Feedback variant={FeedBackVariant.WARNING} noIcon>
       <VStack spacing={1} align="start">
         <Body size="sm">
-          <strong>{t('Important')}</strong>
+          <Body as="span" bold size="sm">
+            {t('Important')}
+          </Body>
           {': '}
           {t(
             "this password is required to claim your funds. Store it somewhere safe, like a password manager. We can't recover it for you.",
@@ -128,7 +130,10 @@ export const WalletConfigurationPrompt = ({
           },
         })
 
-        const rskEoa = result.data?.projectRskEoaSet?.rskEoa || projectKeys.address
+        const rskEoa = result.data?.projectRskEoaSet?.rskEoa
+        if (!rskEoa) {
+          throw new Error('Project wallet configuration was not persisted')
+        }
         onConfigured?.(rskEoa)
 
         toast.success({

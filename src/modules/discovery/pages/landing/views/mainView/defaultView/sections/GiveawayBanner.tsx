@@ -10,12 +10,20 @@ import { useAcelerandoVipLeaderboardQuery } from '@/types'
 
 const REFRESH_INTERVAL_MS = 60_000
 
+/** Displays the giveaway promotional banner on the discovery landing page. */
 export const GiveawayBanner = (props: BoxProps) => {
   const { data, loading } = useAcelerandoVipLeaderboardQuery({
     pollInterval: REFRESH_INTERVAL_MS,
     notifyOnNetworkStatusChange: true,
   })
   const leaderboard = data?.acelerandoVipLeaderboard
+  const endDateLabel = leaderboard?.endAt
+    ? new Intl.DateTimeFormat(undefined, {
+        month: 'short',
+        day: 'numeric',
+        timeZone: leaderboard?.timezone ?? 'UTC',
+      }).format(new Date(leaderboard.endAt))
+    : t('soon')
   const ctaButtonBg = useColorModeValue('white', 'neutral1.2')
   const ctaButtonHoverBg = useColorModeValue('neutral1.2', 'neutral1.3')
   const ctaButtonColor = useColorModeValue('gray.900', 'neutral1.12')
@@ -42,7 +50,9 @@ export const GiveawayBanner = (props: BoxProps) => {
         <VStack alignItems="flex-start" spacing={1} flex={1} minW="200px">
           <H3 color="white">{t('VIP Ticket Giveaway: Acelerando Bitcoin 2026 Conference')}</H3>
           <Body size="sm" color="whiteAlpha.800" display={{ base: 'none', md: 'block' }}>
-            {t("We're giving 3 VIP tickets to the top contributors on Geyser. Ends May 30.")}
+            {t("We're giving 3 VIP tickets to the top contributors on Geyser. Ends {{endDate}}.", {
+              endDate: endDateLabel,
+            })}
           </Body>
           <HStack
             pt={2}

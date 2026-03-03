@@ -35,8 +35,8 @@ import {
 } from '@/types/index.ts'
 
 import { GiveawayHero } from './components/GiveawayHero.tsx'
-import { GiveawayLeaderboard } from './components/GiveawayLeaderboard'
-import { GiveawayProgress } from './components/GiveawayProgress'
+import { GiveawayLeaderboard } from './components/GiveawayLeaderboard.tsx'
+import { GiveawayProgress } from './components/GiveawayProgress.tsx'
 
 const REFRESH_INTERVAL_MS = 60_000
 
@@ -104,7 +104,12 @@ export const GiveawayPage = () => {
   const ctaButtonColor = useColorModeValue('gray.900', 'neutral1.12')
   const ctaButtonHoverBg = useColorModeValue('neutral1.2', 'neutral1.3')
 
-  const { data: causesData } = useProjectsForLandingPageQuery({
+  const {
+    data: causesData,
+    loading: causesLoading,
+    error: causesError,
+    refetch: refetchCauses,
+  } = useProjectsForLandingPageQuery({
     variables: {
       input: {
         where: {
@@ -249,7 +254,27 @@ export const GiveawayPage = () => {
         />
 
         {/* Featured Causes */}
-        {featuredProjects.length > 0 && (
+        {causesLoading ? (
+          <Body size="sm" color={mutedText}>
+            {t('Loading featured projects...')}
+          </Body>
+        ) : causesError ? (
+          <VStack align="start" spacing={2}>
+            <Body size="sm" color={mutedText}>
+              {t('We could not load featured projects right now.')}
+            </Body>
+            <Button
+              size="sm"
+              variant="outline"
+              colorScheme="neutral1"
+              onClick={() => {
+                refetchCauses().catch(() => undefined)
+              }}
+            >
+              {t('Retry')}
+            </Button>
+          </VStack>
+        ) : featuredProjects.length > 0 ? (
           <VStack ref={featuredSectionRef} align="stretch" spacing={6}>
             <VStack align="stretch" spacing={1}>
               <H2 size="xl" bold>
@@ -265,7 +290,7 @@ export const GiveawayPage = () => {
               ))}
             </SimpleGrid>
           </VStack>
-        )}
+        ) : null}
 
         {/* FAQ */}
         <VStack align="stretch" spacing={4}>
@@ -275,7 +300,7 @@ export const GiveawayPage = () => {
           <Accordion allowToggle>
             {faqItems.map((item) => (
               <AccordionItem key={item.question} borderColor={accordionBorder}>
-                <h3>
+                <Box as="h3">
                   <AccordionButton py={4}>
                     <Box as="span" flex="1" textAlign="left">
                       <Body bold>
@@ -285,7 +310,7 @@ export const GiveawayPage = () => {
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
-                </h3>
+                </Box>
                 <AccordionPanel pb={4}>
                   <Body size="sm" color={mutedText}>
                     {item.answer}

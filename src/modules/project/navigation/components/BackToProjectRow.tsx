@@ -3,13 +3,14 @@ import { t } from 'i18next'
 import { PiArrowLeft } from 'react-icons/pi'
 import { Link } from 'react-router'
 
-import { Body } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
 type BackToProjectRowProps = {
   projectName: string
 }
 
+/** Renders a back-navigation row to the project page. @param projectName Project route name. */
 export const BackToProjectRow = ({ projectName }: BackToProjectRowProps) => {
   return (
     <HStack
