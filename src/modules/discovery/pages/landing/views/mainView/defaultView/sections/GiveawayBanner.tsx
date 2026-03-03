@@ -1,4 +1,4 @@
-import { Box, BoxProps, Button, HStack, Icon, VStack, useColorModeValue } from '@chakra-ui/react'
+import { Box, BoxProps, Button, HStack, Icon, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiArrowRight } from 'react-icons/pi'
 import { Link } from 'react-router'
