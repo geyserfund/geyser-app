@@ -7,6 +7,8 @@ import { ProjectFundingStrategy, Satoshis } from '@/types'
 import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom.ts'
 import { useRefetchQueries } from '../../aonNotification/hooks/useRefetchQueries.ts'
 
+const MIN_WITHDRAW_USD = 10
+
 export const useWithdrawFunds = () => {
   const { project } = useProjectAtom()
   const payoutRskModal = useModal()
@@ -15,19 +17,22 @@ export const useWithdrawFunds = () => {
   const { getUSDCentsAmount } = useBTCConverter()
 
   const projectRskEoa = project?.rskEoa || ''
-  const { withdrawable, isLoading } = usePrismWithdrawable({ rskAddress: projectRskEoa })
+  const { withdrawable, isLoading, refetch: refetchWithdrawable } = usePrismWithdrawable({ rskAddress: projectRskEoa })
 
   const withdrawableSats = withdrawable ? Number(withdrawable / 10000000000n) : 0
   const withdrawableUsdCents = getUSDCentsAmount(withdrawableSats as Satoshis)
   const withdrawableUsd = withdrawableUsdCents / 100
 
   const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
-  const hasWithdrawable = withdrawable !== null && withdrawable > 0n && withdrawableUsd >= 1
-  const showWithdraw = isTiaProject && Boolean(projectRskEoa) && !isLoading && hasWithdrawable
+  const showWithdrawableBalance = isTiaProject && Boolean(projectRskEoa) && !isLoading
+  const hasWithdrawableBalance = withdrawable !== null && withdrawable > 0n
+  const isBelowMinWithdrawThreshold = withdrawableUsd < MIN_WITHDRAW_USD
+  const showWithdraw = showWithdrawableBalance && hasWithdrawableBalance && !isBelowMinWithdrawThreshold
 
   const onCompleted = () => {
     refetchQueriesOnPayoutSuccess()
     queryProject.execute()
+    void refetchWithdrawable()
   }
 
   return {
@@ -35,6 +40,8 @@ export const useWithdrawFunds = () => {
     projectRskEoa,
     withdrawableSats,
     withdrawableUsd,
+    showWithdrawableBalance,
+    isBelowMinWithdrawThreshold,
     showWithdraw,
     onCompleted,
   }

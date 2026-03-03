@@ -390,7 +390,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   }
 
   const handleCompleted = () => {
-    onCompleted?.()
     handleClose()
   }
 
@@ -452,6 +451,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
           refundAddress={refundAddress || ''}
           setIsProcessed={setIsProcessed}
           setRefundTxId={setRefundTxId}
+          onCompleted={onCompleted}
         />
       </Modal>
     )

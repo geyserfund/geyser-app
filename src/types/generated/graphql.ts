@@ -9156,7 +9156,7 @@ export type ProjectThumbnailImageFragment = { __typename?: 'Project', id: any, t
 
 export type RewardForLandingPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, images: Array<string>, cost: number, name: string, shortDescription?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null } };
 
-export type RewardForProductsPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, category?: string | null, images: Array<string>, cost: number, name: string, shortDescription?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null } };
+export type RewardForProductsPageFragment = { __typename?: 'ProjectReward', id: any, uuid: string, category?: string | null, images: Array<string>, cost: number, name: string, shortDescription?: string | null, project: { __typename?: 'Project', rewardCurrency?: RewardCurrency | null, id: any, name: string, title: string, thumbnailImage?: string | null, fundingStrategy?: ProjectFundingStrategy | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null } };
 
 export type ActivitiesGetQueryVariables = Exact<{
   input?: InputMaybe<GetActivitiesInput>;
@@ -11634,6 +11634,7 @@ export const RewardForProductsPageFragmentDoc = gql`
     name
     title
     thumbnailImage
+    fundingStrategy
     category
     subCategory
   }
@@ -12978,7 +12979,6 @@ export const ProjectPageBodyFragmentDoc = gql`
   aonGoal {
     ...ProjectAonGoalForProjectPage
   }
-  launchScheduledAt
   location {
     ...ProjectLocation
   }
@@ -13044,7 +13044,6 @@ export const ProjectPageBodyCreatorFragmentDoc = gql`
   aonGoal {
     ...ProjectAonGoalForProjectPage
   }
-  launchScheduledAt
   location {
     ...ProjectLocation
   }

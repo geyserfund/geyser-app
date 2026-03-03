@@ -9,7 +9,6 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
-import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { ProjectForMyProjectsFragment, ProjectFundingStrategy, ProjectReviewStatus, ProjectStatus } from '@/types'
 import { useMobileMode } from '@/utils'
 
@@ -33,9 +32,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const isActive = project.status === ProjectStatus.Active
 
   const draftRedirectPath = getProjectCreationRoute(project.lastCreationStep, project.id)
-  const { formatAmount } = useCurrencyFormatter()
-
-  const { status: withdrawalStatus } = useProjectWithdrawalStatus({ project })
+  const { status: withdrawalStatus, withdrawableSats, withdrawableUsd } = useProjectWithdrawalStatus({ project })
 
   /** Get latest review for status display */
   const latestReview =
@@ -86,10 +83,6 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   }
 
   const statusBadge = getStatusBadge()
-
-  /** Format balance display */
-  const balanceSats = project.balance || 0
-  const balanceUsd = formatAmount(project.balanceUsdCent || 0, FormatCurrencyType.Usdcent)
 
   /** Check if project needs wallet configuration */
   const effectiveRskEoa = configuredRskEoa || project.rskEoa
@@ -149,12 +142,20 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       )
     }
 
-    // Active project - show withdrawal threshold message if below
-    if (isActive && withdrawalStatus === 'below_threshold') {
+    // Active TIA project - always show withdrawable balance, even when it is 0
+    if (isActive && project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !needsWalletConfig) {
       return (
-        <Body size="sm" color="neutral1.11">
-          {t('$10 minimum required to withdraw.')}
-        </Body>
+        <VStack align="start" spacing={1}>
+          <Body size="sm" color="neutral1.11">
+            {t('Funds available to withdraw')}:{' '}
+            <Body as="span" size="sm" bold color="neutral1.12">
+              {commaFormatted(withdrawableSats)} {t('sats')}
+            </Body>{' '}
+            <Body as="span" size="sm" color="neutral1.9">
+              ≈${withdrawableUsd.toFixed(0)}
+            </Body>
+          </Body>
+        </VStack>
       )
     }
 
@@ -187,7 +188,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       <HStack spacing={2}>
         {canWithdraw && (
           <Tooltip
-            label={isWithdrawDisabled ? t('Minimum $10 required to withdraw') : ''}
+            label={isWithdrawDisabled ? t('$10 minimum required to withdraw.') : ''}
             isDisabled={!isWithdrawDisabled}
             placement="top"
             hasArrow
@@ -265,18 +266,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         </HStack>
 
         {/* Row 2: Balance or Wallet Configuration */}
-        {needsWalletConfig ? (
+        {needsWalletConfig && (
           <WalletConfigurationPrompt projectId={project.id} compact onConfigured={setConfiguredRskEoa} />
-        ) : (
-          <Body size="sm" color="neutral1.11">
-            {t('Amount in Wallet')}:{' '}
-            <Body as="span" size="sm" bold color="neutral1.12">
-              {commaFormatted(balanceSats)} {t('Sats')}
-            </Body>{' '}
-            <Body as="span" size="sm" color="neutral1.9">
-              {balanceUsd}
-            </Body>
-          </Body>
         )}
 
         {/* Row 3: Context message or action */}

@@ -13,3 +13,7 @@ export const promotionsNoticeClosedByProjectAtom = atomWithStorage<Record<string
   'promotionsNoticeClosedByProject',
   {},
 )
+export const stripeConnectNoticeClosedByProjectAtom = atomWithStorage<Record<string, boolean>>(
+  'stripeConnectNoticeClosedByProject',
+  {},
+)

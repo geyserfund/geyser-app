@@ -79,6 +79,10 @@ export const ProjectStatusBar = ({ isProjectOwner, project, wallet, ...props }: 
     return null
   }
 
+  if (isProjectOwner && projectStatus === ProjectStatusLabels.INACTIVE) {
+    return null
+  }
+
   return (
     <VStack
       w="full"

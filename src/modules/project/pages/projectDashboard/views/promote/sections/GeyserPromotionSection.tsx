@@ -115,7 +115,7 @@ export const GeyserPromotionSection = () => {
 
   return (
     <VStack w="full" spacing={4} align="start">
-      <HStack w="full" justifyContent="space-between">
+      <HStack display="none" w="full" justifyContent="space-between">
         <Body size="xl" medium>
           {t('Promotions')}
         </Body>

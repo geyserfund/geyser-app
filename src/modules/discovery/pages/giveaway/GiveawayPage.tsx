@@ -39,6 +39,8 @@ import { GiveawayLeaderboard } from './components/GiveawayLeaderboard.tsx'
 import { GiveawayProgress } from './components/GiveawayProgress.tsx'
 
 const REFRESH_INTERVAL_MS = 60_000
+const MIN_FEATURED_PROJECT_DONATIONS_USD_CENTS = 1_000
+const FEATURED_PROJECTS_LIMIT = 5
 
 const howItWorksSteps = [
   {
@@ -124,8 +126,11 @@ export const GiveawayPage = () => {
 
   const featuredProjects = useMemo(() => {
     const all = causesData?.projectsGet?.projects ?? []
-    const shuffled = [...all].sort(() => Math.random() - 0.5)
-    return shuffled.slice(0, 5)
+    const eligibleProjects = all.filter(
+      (project) => (project.balanceUsdCent ?? 0) >= MIN_FEATURED_PROJECT_DONATIONS_USD_CENTS,
+    )
+    const shuffled = [...eligibleProjects].sort(() => Math.random() - 0.5)
+    return shuffled.slice(0, FEATURED_PROJECTS_LIMIT)
   }, [causesData])
 
   const {
@@ -276,14 +281,26 @@ export const GiveawayPage = () => {
           </VStack>
         ) : featuredProjects.length > 0 ? (
           <VStack ref={featuredSectionRef} align="stretch" spacing={6}>
-            <VStack align="stretch" spacing={1}>
-              <H2 size="xl" bold>
-                {t('Featured Projects')}
-              </H2>
-              <Body size="sm" color={mutedText}>
-                {t('Support these causes — every contribution counts toward your score.')}
-              </Body>
-            </VStack>
+            <HStack w="full" justifyContent="space-between" alignItems={{ base: 'start', md: 'end' }} spacing={4}>
+              <VStack align="stretch" spacing={1}>
+                <H2 size="xl" bold>
+                  {t('Featured Projects')}
+                </H2>
+                <Body size="sm" color={mutedText}>
+                  {t('Support these causes — every contribution counts toward your score.')}
+                </Body>
+              </VStack>
+              <Button
+                as={RouterLink}
+                to={getPath('projectDiscovery')}
+                size="md"
+                variant="solid"
+                colorScheme="primary1"
+                flexShrink={0}
+              >
+                {t('View more projects')}
+              </Button>
+            </HStack>
             <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 5 }} spacing={5}>
               {featuredProjects.map((project) => (
                 <LandingProjectCard key={project.id} project={project} />

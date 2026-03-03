@@ -12,17 +12,27 @@ import { getPath, getPathWithGeyserHero } from '@/shared/constants'
 import { ImageCropAspectRatio } from '@/shared/molecules/ImageCropperModal'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { GuardianType, RewardCurrency, RewardForLandingPageFragment } from '@/types'
+import {
+  GuardianType,
+  ProjectFundingStrategy,
+  RewardCurrency,
+  RewardForLandingPageFragment,
+  RewardForProductsPageFragment,
+} from '@/types'
 import { toMediumImageUrl } from '@/utils/index.ts'
 
+type TrendingRewardCardReward = RewardForLandingPageFragment | RewardForProductsPageFragment
+
 type TrendingRewardCardProps = {
-  reward: RewardForLandingPageFragment
+  reward: TrendingRewardCardReward
   sold?: number
 } & StackProps
 
 export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCardProps) => {
   const { formatSatsAmount, formatUsdAmount, formatAmount } = useCurrencyFormatter(true)
   const navigate = useNavigate()
+  const isAonProject =
+    'fundingStrategy' in reward.project && reward.project.fundingStrategy === ProjectFundingStrategy.AllOrNothing
 
   const handleBuy = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -125,11 +135,18 @@ export const TrendingRewardCard = ({ reward, sold, ...rest }: TrendingRewardCard
               </>
             )}
           </Body>
-          {sold ? (
-            <Badge size="sm" variant="soft" colorScheme="neutral1">
-              {sold} {t('sold')}
-            </Badge>
-          ) : null}
+          <HStack spacing={1} flexWrap="wrap" justifyContent="end">
+            {isAonProject ? (
+              <Badge size="sm" variant="soft" colorScheme="warning">
+                {t('All-or-nothing')}
+              </Badge>
+            ) : null}
+            {sold ? (
+              <Badge size="sm" variant="soft" colorScheme="neutral1">
+                {sold} {t('sold')}
+              </Badge>
+            ) : null}
+          </HStack>
         </HStack>
       </VStack>
     </InteractiveCardLayout>

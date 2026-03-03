@@ -1,3 +1,25 @@
+## [0.28.3](https://github.com/geyserfund/geyser-app/compare/v0.28.2...v0.28.3) (2026-03-03)
+
+## [0.28.2](https://github.com/geyserfund/geyser-app/compare/v0.28.1...v0.28.2) (2026-03-03)
+
+
+### Bug Fixes
+
+* making banner clickable ([634c614](https://github.com/geyserfund/geyser-app/commit/634c61470c2bc0a0caccae7e263ff406fa7181d5))
+
+## [Unreleased]
+
+### Bug Fixes
+
+* make giveaway banner fully clickable on discovery landing page ([634c614](https://github.com/geyserfund/geyser-app/commit/634c614709cdd8d006099a800af9c449cf5f8985))
+
+## [0.28.1](https://github.com/geyserfund/geyser-app/compare/v0.28.0...v0.28.1) (2026-03-03)
+
+
+### Bug Fixes
+
+* **discovery:** update giveaway featured filters and project creator panels ([6f36e9f](https://github.com/geyserfund/geyser-app/commit/6f36e9f18d6d8c0fc395096712e9870862718832))
+
 ## [0.28.0](https://github.com/geyserfund/geyser-app/compare/v0.27.6...v0.28.0) (2026-03-03)
 
 ## [0.27.6](https://github.com/geyserfund/geyser-app/compare/v0.27.3...v0.27.6) (2026-03-03)

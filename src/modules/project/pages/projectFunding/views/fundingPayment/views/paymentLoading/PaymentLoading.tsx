@@ -73,7 +73,7 @@ export const PaymentLoading = () => {
     }
 
     if (!user?.id && downloadedRefundFile) {
-      return <PaymentDownloadRefundFile onComplete={handleNext} />
+      return <PaymentDownloadRefundFile isPrismContribution={isPrismEnabled} onComplete={handleNext} />
     }
 
     return <PaymentLoadingContribution onComplete={handleComplete} />

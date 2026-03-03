@@ -21,7 +21,7 @@ export const TiaPayoutNotification = () => {
   const { getUSDCentsAmount } = useBTCConverter()
 
   const projectRskEoa = project?.rskEoa || ''
-  const { withdrawable, isLoading } = usePrismWithdrawable({
+  const { withdrawable, isLoading, refetch: refetchWithdrawable } = usePrismWithdrawable({
     rskAddress: projectRskEoa,
   })
   const withdrawableSats = withdrawable ? Number(withdrawable / 10000000000n) : 0
@@ -84,6 +84,7 @@ export const TiaPayoutNotification = () => {
         onCompleted={() => {
           refetchQueriesOnPayoutSuccess()
           queryProject.execute()
+          void refetchWithdrawable()
         }}
       />
     </>

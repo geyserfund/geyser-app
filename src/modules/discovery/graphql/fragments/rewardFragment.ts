@@ -33,6 +33,7 @@ export const FRAGMENT_REWARD_FOR_PRODUCTS_PAGE = gql`
       name
       title
       thumbnailImage
+      fundingStrategy
       category
       subCategory
     }

@@ -1,4 +1,4 @@
-import { Box, BoxProps, Button, HStack, Icon, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, HStack, Icon, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiArrowRight } from 'react-icons/pi'
 import { Link } from 'react-router'
@@ -27,9 +27,21 @@ export const GiveawayBanner = (props: BoxProps) => {
   const ctaButtonBg = useColorModeValue('white', 'neutral1.2')
   const ctaButtonHoverBg = useColorModeValue('neutral1.2', 'neutral1.3')
   const ctaButtonColor = useColorModeValue('gray.900', 'neutral1.12')
+  const giveawayPath = getPath('giveawayAcelerandoVip')
 
   return (
-    <Box w="full" position="relative" overflow="hidden" borderRadius="xl" {...props}>
+    <Box
+      as={Link}
+      to={giveawayPath}
+      w="full"
+      display="block"
+      position="relative"
+      overflow="hidden"
+      borderRadius="xl"
+      role="group"
+      _hover={{ textDecoration: 'none' }}
+      {...props}
+    >
       <Box
         position="absolute"
         inset={0}
@@ -71,32 +83,35 @@ export const GiveawayBanner = (props: BoxProps) => {
                 timezone={leaderboard?.timezone}
               />
             </Box>
-            <Button
-              as={Link}
-              to={getPath('giveawayAcelerandoVip')}
+            <HStack
               bg={ctaButtonBg}
               color={ctaButtonColor}
-              _hover={{ bg: ctaButtonHoverBg }}
-              size="sm"
+              _groupHover={{ bg: ctaButtonHoverBg }}
+              borderRadius="md"
+              h="32px"
+              px={3}
               fontWeight="semibold"
-              rightIcon={<Icon as={PiArrowRight} />}
+              spacing={1}
             >
               {t('View giveaway')}
-            </Button>
+              <Icon as={PiArrowRight} />
+            </HStack>
           </HStack>
           <Box pt={2} display={{ base: 'none', md: 'block' }}>
-            <Button
-              as={Link}
-              to={getPath('giveawayAcelerandoVip')}
+            <HStack
+              as="span"
               bg={ctaButtonBg}
               color={ctaButtonColor}
-              _hover={{ bg: ctaButtonHoverBg }}
-              size="sm"
+              _groupHover={{ bg: ctaButtonHoverBg }}
+              borderRadius="md"
+              h="32px"
+              px={3}
               fontWeight="semibold"
-              rightIcon={<Icon as={PiArrowRight} />}
+              spacing={1}
             >
               {t('View giveaway')}
-            </Button>
+              <Icon as={PiArrowRight} />
+            </HStack>
           </Box>
         </VStack>
 
