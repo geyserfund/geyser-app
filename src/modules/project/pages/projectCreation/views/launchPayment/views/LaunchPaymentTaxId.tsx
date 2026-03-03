@@ -8,7 +8,6 @@ import { useTaxProfileForm } from '@/modules/profile/pages/profileSettings/views
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { FEATURE_FLAGS } from '@/shared/constants/config'
 import { ProjectCreationStep, ProjectFundingStrategy } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 
@@ -20,10 +19,7 @@ export const LaunchPaymentTaxId = () => {
   const { project } = useProjectAtom()
   const navigate = useNavigate()
 
-  const shouldConfigureProjectWallet =
-    FEATURE_FLAGS.TIA_PRISM_PAYMENTS_ENABLED &&
-    project.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
-    !project.rskEoa
+  const shouldConfigureProjectWallet = project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project.rskEoa
   const shouldShowAccountPasswordStep = isAllOrNothing(project) || shouldConfigureProjectWallet
   const nextPath = shouldShowAccountPasswordStep
     ? getPath('launchPaymentAccountPassword', project.id)
@@ -48,7 +44,7 @@ export const LaunchPaymentTaxId = () => {
 
   const backProps: ButtonProps = {
     onClick() {
-      navigate(getPath('launchPaymentWallet', project.id))
+      navigate(getPath('launchPayment', project.id))
     },
   }
 

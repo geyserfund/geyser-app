@@ -21,8 +21,8 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
-import { CreatorToolsImages } from '../constant.ts'
-import { CreatorToolButton } from './CreatorToolButton.tsx'
+import { ControlPanelImages } from '../constant.ts'
+import { ControlPanelButton } from './ControlPanelButton.tsx'
 
 /** Placeholder URLs for external links - to be updated later */
 const BEST_PRACTICES_URL = 'https://guide.geyser.fund/geyser-docs/guides/step-by-step-tutorials'
@@ -125,9 +125,9 @@ export const PromoteProjectMenu = ({ projectName }: PromoteProjectMenuProps) => 
 
   return (
     <Menu isOpen={menu.isOpen} onClose={menu.onClose} placement="bottom-end" closeOnSelect={true}>
-      <CreatorToolButton
+      <ControlPanelButton
         as={MenuButton}
-        emoji={CreatorToolsImages.promote}
+        emoji={ControlPanelImages.promote}
         label={t('Promote project')}
         mobileLabel={t('Promote')}
         onClick={(e: React.MouseEvent<HTMLButtonElement>) => {

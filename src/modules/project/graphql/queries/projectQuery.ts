@@ -5,6 +5,7 @@ import {
   FRAGMENT_PROJECT_HEADER_SUMMARY,
   FRAGMENT_PROJECT_NOSTR_KEYS,
   FRAGMENT_PROJECT_PAGE_BODY,
+  FRAGMENT_PROJECT_PAGE_BODY_CREATOR,
 } from '../fragments/projectFragment'
 import { FRAGMENT_PROJECT_REVIEW } from '../fragments/projectReviewFragment.ts'
 import { FRAGMENT_PROJECT_PAGE_WALLET, FRAGMENT_PROJECT_WALLET_CONNECTION_DETAILS } from '../fragments/walletFragment'
@@ -43,6 +44,15 @@ export const QUERY_PROJECT_PAGE_BODY = gql`
   query ProjectPageBody($where: UniqueProjectQueryInput!) {
     projectGet(where: $where) {
       ...ProjectPageBody
+    }
+  }
+`
+
+export const QUERY_PROJECT_PAGE_BODY_CREATOR = gql`
+  ${FRAGMENT_PROJECT_PAGE_BODY_CREATOR}
+  query ProjectPageBodyCreator($where: UniqueProjectQueryInput!) {
+    projectGet(where: $where) {
+      ...ProjectPageBodyCreator
     }
   }
 `

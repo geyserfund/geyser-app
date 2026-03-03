@@ -9,3 +9,7 @@ export const secondFundingLimitAlmostReachedNoticeClosedAtom = atomWithStorage(
   false,
 )
 export const becomeVerifiedNoticeAtom = atomWithStorage('becomeVerifiedNotice', false)
+export const promotionsNoticeClosedByProjectAtom = atomWithStorage<Record<string, boolean>>(
+  'promotionsNoticeClosedByProject',
+  {},
+)

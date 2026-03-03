@@ -12,10 +12,8 @@ import {
 } from '@/types'
 
 type StripeConnectOnboardingCardProps = {
-  isIdentityVerified: boolean
   isTiaProject: boolean
   projectId?: string | number | bigint
-  onRequireVerification: () => void
   withCard?: boolean
   compact?: boolean
   selected?: boolean
@@ -38,10 +36,8 @@ const STRIPE_DISABLED_REASONS = {
 type StripeClickHandlerParams = {
   projectId?: string | number | bigint
   isTiaProject: boolean
-  isIdentityVerified: boolean
   hasAccount: boolean
   isProcessing: boolean
-  onRequireVerification: () => void
   createStripeConnectAccount: ReturnType<typeof useCreateStripeConnectAccountMutation>[0]
   refreshStripeConnectOnboardingLink: ReturnType<typeof useRefreshStripeConnectOnboardingLinkMutation>[0]
   refetch: () => void
@@ -160,20 +156,14 @@ function StripeStatusIndicator({ statusType }: { statusType: StripeStatusType })
 function createStripeClickHandler({
   projectId,
   isTiaProject,
-  isIdentityVerified,
   hasAccount,
   isProcessing,
-  onRequireVerification,
   createStripeConnectAccount,
   refreshStripeConnectOnboardingLink,
   refetch,
 }: StripeClickHandlerParams): () => void {
   return () => {
     if (!projectId || !isTiaProject) return
-    if (!isIdentityVerified) {
-      onRequireVerification()
-      return
-    }
 
     if (!hasAccount) {
       createStripeConnectAccount({ variables: { projectId } })
@@ -335,10 +325,8 @@ function StripeMainContent({
 }
 
 export const StripeConnectOnboardingCard = ({
-  isIdentityVerified,
   isTiaProject,
   projectId,
-  onRequireVerification,
   withCard = true,
   compact = false,
   selected = false,
@@ -385,10 +373,8 @@ export const StripeConnectOnboardingCard = ({
   const handleClick = createStripeClickHandler({
     projectId,
     isTiaProject,
-    isIdentityVerified,
     hasAccount,
     isProcessing,
-    onRequireVerification,
     createStripeConnectAccount,
     refreshStripeConnectOnboardingLink,
     refetch,

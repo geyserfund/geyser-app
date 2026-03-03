@@ -13,6 +13,7 @@ vi.mock('@/shared/constants/config/env.ts', () => ({
   API_SERVICE_ENDPOINT: 'mock_api_endpoint_test',
   AUTH_SERVICE_ENDPOINT: 'mock_auth_endpoint_test',
   BOLTZ_DOMAIN: 'mock_boltz_domain_test',
+  ORIGIN: 'http://localhost:3000',
   VITE_APP_FLODESK_API_KEY: 'mock_flodesk_key_test',
   VITE_APP_GIPHY_API_KEY: 'mock_giphy_key_test',
   VITE_APP_GEYSER_NOSTR_PUBKEY: 'mock_nostr_pubkey_test',

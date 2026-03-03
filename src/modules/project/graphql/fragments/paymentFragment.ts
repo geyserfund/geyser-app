@@ -40,6 +40,7 @@ export const FRAGMENT_CONTRIBUTION_ON_CHAIN_SWAP_PAYMENT_DETAILS = gql`
 export const FRAGMENT_CONTRIBUTION_FIAT_PAYMENT_DETAILS = gql`
   fragment ContributionFiatPaymentDetails on ContributionFiatPaymentDetails {
     stripeClientSecret
+    stripeAccountId
   }
 `
 

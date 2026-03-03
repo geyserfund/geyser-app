@@ -173,17 +173,16 @@ export const platformRoutes: RouteObject[] = [
               return { Component: LaunchPayment }
             },
             children: [
-              // TODO remove and add this logic to LaunchPayment component
               {
                 index: true,
-                element: <Navigate to={PathName.launchPaymentWallet} />,
+                async lazy() {
+                  const LaunchPaymentEmail = await loadProjectCreationPages().then((m) => m.LaunchPaymentEmail)
+                  return { Component: LaunchPaymentEmail }
+                },
               },
               {
                 path: getPath('launchPaymentWallet', PathName.projectId),
-                async lazy() {
-                  const LaunchPaymentWallet = await loadProjectCreationPages().then((m) => m.LaunchPaymentWallet)
-                  return { Component: LaunchPaymentWallet }
-                },
+                element: <Navigate to=".." relative="path" replace />,
               },
               {
                 path: getPath('launchPaymentAccountPassword', PathName.projectId),
@@ -1161,6 +1160,22 @@ export const platformRoutes: RouteObject[] = [
         async lazy() {
           const impactFundsModule = await loadImpactFundsModule()
           return { Component: impactFundsModule.ImpactFundDetailPage }
+        },
+      },
+
+      {
+        path: getPath('giveawayAcelerandoVip'),
+        async lazy() {
+          const GiveawayPage = await loadDiscoveryModule().then((m) => m.GiveawayPage)
+          return { Component: GiveawayPage }
+        },
+      },
+
+      {
+        path: getPath('legalGiveawayAcelerandoVipTerms'),
+        async lazy() {
+          const GiveawayTermsPage = await loadDiscoveryModule().then((m) => m.GiveawayTermsPage)
+          return { Component: GiveawayTermsPage }
         },
       },
     ],

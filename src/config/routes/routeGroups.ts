@@ -207,6 +207,8 @@ export const discoveryRoutes = [
   getPath('heroesCreator'),
   getPath('heroesAmbassador'),
   getPath('heroesContributor'),
+  getPath('giveawayAcelerandoVip'),
+  getPath('legalGiveawayAcelerandoVipTerms'),
 ]
 
 export const profileSettingsRoutes = [

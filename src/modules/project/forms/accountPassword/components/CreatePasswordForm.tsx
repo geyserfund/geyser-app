@@ -2,15 +2,14 @@ import { VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useSetAtom } from 'jotai'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useForm, UseFormReturn } from 'react-hook-form'
 import * as yup from 'yup'
-import { ReactNode } from 'react'
 
 import { ControlledCheckboxInput } from '@/shared/components/controlledInput/ControlledCheckboxInput.tsx'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
-import { Body } from '@/shared/components/typography/Body.tsx'
 import type { BodyProps } from '@/shared/components/typography/Body.tsx'
+import { Body } from '@/shared/components/typography/Body.tsx'
 import { UserAccountKeysFragment } from '@/types/index.ts'
 
 import { useUpdateAccountPassword } from '../hooks/useUpdateAccountPassword.ts'
@@ -39,7 +38,7 @@ const creatorText = t(
   'Configure your account password. Only you will know this password, and no one but you has access to the project funds.',
 )
 const contributorText = t(
-  'Configure your account password. Only you will know this password, and it will be required to refund your contribution.',
+  'Configure your account password. Only you will know this password, and it will be required for refunds in case the contribution fails.',
 )
 
 /** Account password form component with password and repeat password fields */

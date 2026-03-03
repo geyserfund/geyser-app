@@ -10,8 +10,8 @@ import { ID } from '@/shared/constants/components/id.ts'
 import { useListenerState } from '@/shared/hooks/useListenerState.tsx'
 import {
   ProjectRewardsCatalogGetQuery,
-  ProjectRewardsCatalogSortBy,
   ProjectRewardsCatalogGetQueryVariables,
+  ProjectRewardsCatalogSortBy,
   ProjectRewardsMostSoldRange,
   useProjectRewardsCatalogGetQuery,
   useProjectRewardsMostSoldGetQuery,
@@ -52,52 +52,54 @@ export const ProductsGrid = ({ category }: ProductsGridProps) => {
   const sort: SortOption = sortFromUrl === 'most_recent' ? 'most_recent' : 'most_sold'
   const sortBy = getSortByApi(sort)
 
-  const { data: trendingData, loading: isTrendingLoading, error: trendingError } = useProjectRewardsMostSoldGetQuery(
-    {
-      fetchPolicy: 'network-only',
-      skip: !isTrendingMode,
-      variables: {
-        input: {
-          range: ProjectRewardsMostSoldRange.Quarter,
+  const {
+    data: trendingData,
+    loading: isTrendingLoading,
+    error: trendingError,
+  } = useProjectRewardsMostSoldGetQuery({
+    fetchPolicy: 'network-only',
+    skip: !isTrendingMode,
+    variables: {
+      input: {
+        range: ProjectRewardsMostSoldRange.Quarter,
         take: PAGE_SIZE,
       },
     },
-      onError() {
-        toast.error({ title: t('Failed to fetch products') })
-      },
+    onError() {
+      toast.error({ title: t('Failed to fetch products') })
     },
-  )
+  })
   const trendingRewards = trendingData?.projectRewardsMostSoldGet || []
 
   const { fetchMore } = useProjectRewardsCatalogGetQuery({
-      skip: isTrendingMode,
-      fetchPolicy: 'network-only',
-      notifyOnNetworkStatusChange: true,
-      variables: {
-        input: {
-          category,
-          sortBy,
-          pagination: {
-            take: PAGE_SIZE,
-          },
+    skip: isTrendingMode,
+    fetchPolicy: 'network-only',
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      input: {
+        category,
+        sortBy,
+        pagination: {
+          take: PAGE_SIZE,
         },
       },
-      onCompleted(completedData) {
-        if (isTrendingMode) {
-          return
-        }
+    },
+    onCompleted(completedData) {
+      if (isTrendingMode) {
+        return
+      }
 
-        const firstPage = completedData.projectRewardsCatalogGet?.rewards || []
-        setRewards(firstPage)
-        setNoMoreItems(firstPage.length < PAGE_SIZE)
-        setIsInitialLoading(false)
-        setHasCatalogError(false)
-      },
-      onError() {
-        setIsInitialLoading(false)
-        setHasCatalogError(true)
-        toast.error({ title: t('Failed to fetch products') })
-      },
+      const firstPage = completedData.projectRewardsCatalogGet?.rewards || []
+      setRewards(firstPage)
+      setNoMoreItems(firstPage.length < PAGE_SIZE)
+      setIsInitialLoading(false)
+      setHasCatalogError(false)
+    },
+    onError() {
+      setIsInitialLoading(false)
+      setHasCatalogError(true)
+      toast.error({ title: t('Failed to fetch products') })
+    },
   })
 
   useEffect(() => {

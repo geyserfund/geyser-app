@@ -5,8 +5,6 @@ import {
   PiBagBold,
   PiFlagBannerFold,
   PiFlagBannerFoldBold,
-  PiGear,
-  PiGearBold,
   PiMedalMilitary,
   PiMedalMilitaryBold,
   PiNewspaper,
@@ -22,6 +20,7 @@ import { AnimatedNavBar, AnimatedNavBarItem } from '@/shared/components/navigati
 import { PathName } from '@/shared/constants'
 import { useMobileMode } from '@/utils'
 
+import { BackToProjectRow } from './components/BackToProjectRow.tsx'
 import { TopNavContainer } from '../../navigation/components/topNav/TopNavContainer'
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from './projectNavigationAtom'
@@ -29,6 +28,8 @@ import { showProjectNavBarForDesktopAtom, showProjectNavBarForMobileAtom } from 
 export const ProjectNavigation = () => {
   const location = useLocation()
   const isDraftUrl = location.pathname.includes('/draft')
+  const pathnameSegments = location.pathname.split('/').filter(Boolean)
+  const isDashboardUrl = pathnameSegments.includes('dashboard')
   const navigate = useNavigate()
 
   const isMobile = useMobileMode()
@@ -96,17 +97,6 @@ export const ProjectNavigation = () => {
       })
     }
 
-    if (isProjectOwner && !isDraftUrl) {
-      buttonList.push({
-        name: 'Dashboard',
-        path: PathName.projectDashboard,
-        icon: PiGear,
-        activeIcon: PiGearBold,
-        showIconAlways: true,
-        isBordered: true,
-      })
-    }
-
     return buttonList
   }, [project, isProjectOwner, isDraftUrl, navigate])
 
@@ -122,6 +112,15 @@ export const ProjectNavigation = () => {
 
   if ((isMobile && !showProjectNavBarForMobile) || (!isMobile && !showProjectNavBarForDesktop)) {
     return null
+  }
+
+  // Show Back to project row when in dashboard
+  if (isDashboardUrl && isProjectOwner) {
+    return (
+      <TopNavContainer zIndex={9}>
+        <BackToProjectRow projectName={project.name} />
+      </TopNavContainer>
+    )
   }
 
   return (

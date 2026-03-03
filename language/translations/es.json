@@ -1578,7 +1578,7 @@
   "Without your account password you will not be able to refund your contribution. Store this password in a safe, permanent place like a password manager. Geyser cannot recover this password for you.": "Sin la contraseña de tu cuenta, no podrás reembolsar tu contribución. Guarda esta contraseña en un lugar seguro y permanente, como un administrador de contraseñas. Geyser no puede recuperar esta contraseña por ti.",
   "Confirm the password you have previously set. This password is known only by you and ensures no one but you has access to the contributed funds. ": "Confirma la contraseña que has establecido previamente. Esta contraseña solo la conoces tú y asegura que nadie más que tú tenga acceso a los fondos contribuidos.",
   "Configure your account password. Only you will know this password, and no one but you has access to the project funds.": "Configura la contraseña de tu cuenta. Solo tú conocerás esta contraseña, y nadie más que tú tiene acceso a los fondos del proyecto.",
-  "Configure your account password. Only you will know this password, and it will be required to refund your contribution.": "Configura la contraseña de tu cuenta. Solo tú conocerás esta contraseña, y será necesaria para reembolsar tu contribución.",
+  "Configure your account password. Only you will know this password, and it will be required for refunds in case the contribution fails.": "Configura la contraseña de tu cuenta. Solo tú conocerás esta contraseña, y será necesaria para reembolsos en caso de que la contribución falle.",
   "required": "requerido",
   "Discover and fund Bitcoin projects worldwide": "Descubre y financia proyectos de Bitcoin en todo el mundo",
   "search projects": "buscar proyectos",

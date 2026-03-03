@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useMobileMode } from '@/utils/index.ts'
 
-export const CreatorToolButton: ChakraComponent<
+export const ControlPanelButton: ChakraComponent<
   'div',
   {
     emoji: string
@@ -18,7 +18,13 @@ export const CreatorToolButton: ChakraComponent<
 
   const buttonContent = (
     <VStack spacing={0}>
-      <Image src={emoji} alt={label} height={{ base: '30px', lg: '50px' }} width={{ base: '30px', lg: '50px' }} />
+      <Image
+        src={emoji}
+        alt={label}
+        height={{ base: '30px', lg: '50px' }}
+        width={{ base: '30px', lg: '50px' }}
+        filter="grayscale(1)"
+      />
       <Body size={{ base: 'sm', lg: 'md' }} medium>
         {isMobile ? mobileLabel || label : label}
       </Body>

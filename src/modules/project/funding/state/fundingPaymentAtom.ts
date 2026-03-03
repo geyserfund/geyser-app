@@ -6,6 +6,7 @@ import { FundingContributionPaymentDetailsFragment } from '@/types/index.ts'
 const defaultFundingPaymentDetails: FundingContributionPaymentDetailsFragment = {
   fiat: {
     stripeClientSecret: '',
+    stripeAccountId: '',
   },
   fiatToLightningSwap: {
     checkoutUrl: '',
