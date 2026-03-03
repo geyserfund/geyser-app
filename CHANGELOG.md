@@ -1,3 +1,5 @@
+## [0.28.0](https://github.com/geyserfund/geyser-app/compare/v0.27.6...v0.28.0) (2026-03-03)
+
 ## [0.27.6](https://github.com/geyserfund/geyser-app/compare/v0.27.3...v0.27.6) (2026-03-03)
 
 
