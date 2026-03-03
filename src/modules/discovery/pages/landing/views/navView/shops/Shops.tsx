@@ -11,45 +11,47 @@ import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
 import { ShopsFeatured } from './components/ShopsFeatured.tsx'
 
 const rewardCategoryEmojiMap: Record<string, string> = {
-  Collectible: '🧩',
-  Book: '📚',
-  Course: '🎓',
-  Ticket: '🎟️',
-  Gift: '🎁',
-  Game: '🎮',
-  Membership: '💎',
-  Merch: '👕',
-  'Nostr Badge': '🏅',
-  Raffle: '🎲',
-  Sponsorship: '🤝',
-  Service: '🛠️',
-  Shoutout: '📣',
-  'Digital Content': '💾',
-  Artwork: '🎨',
-  'Physical Product': '📦',
-  Experience: '✨',
-  'Mining Hardware': '⛏️',
+  collectible: '🧩',
+  merch: '👕',
+  'physical product': '📦',
+  hardware: '🛠',
+  'mining hardware': '🛠',
+  book: '📚',
+  'nostr badge': '🏷️',
+  'digital content': '💾',
+  course: '🎓',
+  game: '🎮',
+  ticket: '🎟️',
+  experience: '✨',
+  membership: '🔐',
+  gift: '🎁',
+  artwork: '🎨',
+  service: '🤝',
+  sponsorship: '📢',
+  raffle: '🎲',
+  shoutout: '📣',
 }
 const DEFAULT_CATEGORY_EMOJI = '📦'
 const TAB_SCROLL_OFFSET = 280
 const REWARD_CATEGORY_DISPLAY_ORDER = [
   'collectible',
+  'merch',
+  'physical product',
+  'hardware',
   'mining hardware',
   'book',
-  'artwork',
-  'digital content',
-  'physical product',
-  'merch',
-  'game',
-  'membership',
-  'experience',
-  'service',
   'nostr badge',
-  'gift',
+  'digital content',
   'course',
+  'game',
   'ticket',
-  'raffle',
+  'experience',
+  'membership',
+  'gift',
+  'artwork',
+  'service',
   'sponsorship',
+  'raffle',
   'shoutout',
 ]
 
@@ -82,17 +84,26 @@ export const Shops = () => {
 
   const tabs = useMemo(() => {
     const categories = data?.projectRewardCategoriesGet ?? []
+    const normalizeCategory = (category: string) => category.trim().toLowerCase()
     const getCategoryOrder = (category: string) => {
-      const index = REWARD_CATEGORY_DISPLAY_ORDER.indexOf(category.toLowerCase())
+      const index = REWARD_CATEGORY_DISPLAY_ORDER.indexOf(category)
 
       return index === -1 ? Number.POSITIVE_INFINITY : index
     }
 
-    const orderedCategories = [...categories].sort((a, b) => {
-      const aIndex = getCategoryOrder(a)
-      const bIndex = getCategoryOrder(b)
+    const canonicalCategoryByLowercase = new Map<string, string>()
+    categories.forEach((category) => {
+      const normalizedCategory = normalizeCategory(category)
+      if (!canonicalCategoryByLowercase.has(normalizedCategory)) {
+        canonicalCategoryByLowercase.set(normalizedCategory, category.trim())
+      }
+    })
 
-      if (aIndex === bIndex) return a.localeCompare(b)
+    const orderedCategories = [...canonicalCategoryByLowercase.entries()].sort((a, b) => {
+      const aIndex = getCategoryOrder(a[0])
+      const bIndex = getCategoryOrder(b[0])
+
+      if (aIndex === bIndex) return a[1].localeCompare(b[1])
       return aIndex - bIndex
     })
 
@@ -101,9 +112,9 @@ export const Shops = () => {
         label: `🔥 ${t('Trending')}`,
         path: getPath('discoveryProducts'),
       },
-      ...orderedCategories.map((category) => ({
-        label: `${rewardCategoryEmojiMap[category] ?? DEFAULT_CATEGORY_EMOJI} ${category}`,
-        path: getPath('discoveryProductsCategory', encodeURIComponent(category)),
+      ...orderedCategories.map(([normalizedCategory, displayCategory]) => ({
+        label: `${rewardCategoryEmojiMap[normalizedCategory] ?? DEFAULT_CATEGORY_EMOJI} ${displayCategory}`,
+        path: getPath('discoveryProductsCategory', encodeURIComponent(displayCategory)),
       })),
     ]
   }, [data?.projectRewardCategoriesGet, t])

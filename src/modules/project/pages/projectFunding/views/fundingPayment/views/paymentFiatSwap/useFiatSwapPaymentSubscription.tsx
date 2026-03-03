@@ -56,10 +56,7 @@ export const useFiatSwapPaymentSubscription = ({ contributionUUID }: { contribut
           return
         }
 
-        if (
-          (isFiatToLightningSwap || isLightningToRskSwap) &&
-          statusUpdated.status === PaymentStatus.Failed
-        ) {
+        if ((isFiatToLightningSwap || isLightningToRskSwap) && statusUpdated.status === PaymentStatus.Failed) {
           setFiatSwapStatus(FiatSwapStatus.failed)
           setFiatFailureReason(statusUpdated.failureReason || null)
         }

@@ -19,8 +19,7 @@ export const LaunchPaymentTaxId = () => {
   const { project } = useProjectAtom()
   const navigate = useNavigate()
 
-  const shouldConfigureProjectWallet =
-    project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project.rskEoa
+  const shouldConfigureProjectWallet = project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project.rskEoa
   const shouldShowAccountPasswordStep = isAllOrNothing(project) || shouldConfigureProjectWallet
   const nextPath = shouldShowAccountPasswordStep
     ? getPath('launchPaymentAccountPassword', project.id)

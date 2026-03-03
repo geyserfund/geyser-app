@@ -3,12 +3,7 @@ import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { RefundRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/RefundRsk.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import {
-  ContributionStatus,
-  PaymentStatus,
-  ProjectAonGoalStatus,
-  useProjectContributorQuery,
-} from '@/types/index.ts'
+import { ContributionStatus, PaymentStatus, ProjectAonGoalStatus, useProjectContributorQuery } from '@/types/index.ts'
 import { isAllOrNothing } from '@/utils/index.ts'
 
 import { useRefetchQueries } from './hooks/useRefetchQueries.ts'
