@@ -1,3 +1,10 @@
+## [0.28.1](https://github.com/geyserfund/geyser-app/compare/v0.28.0...v0.28.1) (2026-03-03)
+
+
+### Bug Fixes
+
+* **discovery:** update giveaway featured filters and project creator panels ([6f36e9f](https://github.com/geyserfund/geyser-app/commit/6f36e9f18d6d8c0fc395096712e9870862718832))
+
 ## [0.28.0](https://github.com/geyserfund/geyser-app/compare/v0.27.6...v0.28.0) (2026-03-03)
 
 ## [0.27.6](https://github.com/geyserfund/geyser-app/compare/v0.27.3...v0.27.6) (2026-03-03)
