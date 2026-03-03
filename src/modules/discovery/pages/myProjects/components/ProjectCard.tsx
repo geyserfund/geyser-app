@@ -155,11 +155,6 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               ≈${withdrawableUsd.toFixed(0)}
             </Body>
           </Body>
-          {withdrawalStatus === 'below_threshold' && (
-            <Body size="sm" color="neutral1.11">
-              {t('$10 minimum required to withdraw.')}
-            </Body>
-          )}
         </VStack>
       )
     }
@@ -193,7 +188,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       <HStack spacing={2}>
         {canWithdraw && (
           <Tooltip
-            label={isWithdrawDisabled ? t('Minimum $10 required to withdraw') : ''}
+            label={isWithdrawDisabled ? t('$10 minimum required to withdraw.') : ''}
             isDisabled={!isWithdrawDisabled}
             placement="top"
             hasArrow

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import type { Address } from 'viem'
 
 import { rootstockPublicClient } from '@/modules/project/pages/projectFunding/utils/viemClient.ts'
@@ -12,41 +12,33 @@ export const usePrismWithdrawable = ({ rskAddress }: UsePrismWithdrawableParams)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<Error | null>(null)
 
-  useEffect(() => {
+  const refetch = useCallback(async () => {
     if (!rskAddress) {
       setWithdrawable(null)
-      return
+      return null
     }
 
-    let isMounted = true
     setIsLoading(true)
     setError(null)
 
-    rootstockPublicClient
-      .getBalance({
+    try {
+      const value = await rootstockPublicClient.getBalance({
         address: rskAddress as Address,
       })
-      .then((value) => {
-        if (isMounted) {
-          setWithdrawable(value as bigint)
-        }
-      })
-      .catch((err: Error) => {
-        if (isMounted) {
-          setError(err)
-          setWithdrawable(null)
-        }
-      })
-      .finally(() => {
-        if (isMounted) {
-          setIsLoading(false)
-        }
-      })
-
-    return () => {
-      isMounted = false
+      setWithdrawable(value as bigint)
+      return value as bigint
+    } catch (err) {
+      setError(err as Error)
+      setWithdrawable(null)
+      return null
+    } finally {
+      setIsLoading(false)
     }
   }, [rskAddress])
 
-  return { withdrawable, isLoading, error }
+  useEffect(() => {
+    void refetch()
+  }, [refetch])
+
+  return { withdrawable, isLoading, error, refetch }
 }

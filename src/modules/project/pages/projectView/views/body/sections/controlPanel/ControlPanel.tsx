@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Icon, Image, Link as ChakraLink, Stack, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, Image, Link as ChakraLink, Stack, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
@@ -30,6 +30,7 @@ type FinancialActionsProps = {
   payoutRskModal: { onOpen: () => void }
   withdrawableSats: number
   withdrawableUsd: number
+  isBelowMinWithdrawThreshold: boolean
   showWithdraw: boolean
 }
 
@@ -41,6 +42,7 @@ const ControlPanelFinancialActions = ({
   payoutRskModal,
   withdrawableSats,
   withdrawableUsd,
+  isBelowMinWithdrawThreshold,
   showWithdraw,
 }: FinancialActionsProps) => {
   if (!showClaim && !showWithdrawableBalance) return null
@@ -110,17 +112,24 @@ const ControlPanelFinancialActions = ({
               </Body>
             </Body>
           </HStack>
-          <Button
-            colorScheme="primary1"
-            variant="solid"
-            size="md"
-            w={{ base: 'full', md: 'auto' }}
-            flexShrink={0}
-            onClick={payoutRskModal.onOpen}
-            isDisabled={!showWithdraw}
+          <Tooltip
+            label={t('Minimum withdrawal is $10. Increase your balance to enable withdrawals.')}
+            hasArrow
+            shouldWrapChildren
+            isDisabled={!isBelowMinWithdrawThreshold}
           >
-            {t('Withdraw')}
-          </Button>
+            <Button
+              colorScheme={showWithdraw ? 'primary1' : 'neutral1'}
+              variant="solid"
+              size="md"
+              w={{ base: 'full', md: 'auto' }}
+              flexShrink={0}
+              onClick={payoutRskModal.onOpen}
+              isDisabled={!showWithdraw}
+            >
+              {t('Withdraw')}
+            </Button>
+          </Tooltip>
         </Stack>
       )}
     </VStack>
@@ -156,6 +165,7 @@ export const ControlPanel = () => {
     withdrawableSats,
     withdrawableUsd,
     showWithdrawableBalance,
+    isBelowMinWithdrawThreshold,
     showWithdraw,
     onCompleted,
   } = useWithdrawFunds()
@@ -260,6 +270,7 @@ export const ControlPanel = () => {
         payoutRskModal={payoutRskModal}
         withdrawableSats={withdrawableSats}
         withdrawableUsd={withdrawableUsd}
+        isBelowMinWithdrawThreshold={isBelowMinWithdrawThreshold}
         showWithdraw={showWithdraw}
       />
 
