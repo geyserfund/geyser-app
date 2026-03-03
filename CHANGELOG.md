@@ -1,3 +1,10 @@
+## [0.28.2](https://github.com/geyserfund/geyser-app/compare/v0.28.1...v0.28.2) (2026-03-03)
+
+
+### Bug Fixes
+
+* making banner clickable ([634c614](https://github.com/geyserfund/geyser-app/commit/634c61470c2bc0a0caccae7e263ff406fa7181d5))
+
 ## [Unreleased]
 
 ### Bug Fixes

@@ -8,14 +8,20 @@ import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
+import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 
 import { BLOCK_EXPLORER_BASE_URL } from '../../../utils/constants.ts'
 import { swapTransactionAtom } from '../../fundingPayment/views/paymentOnchain/states/onChainTransaction.ts'
+import { SwapPendingStages } from './SwapPendingStages.tsx'
 
 export const ContributionStatusSection = ({ isPending }: { isPending: boolean }) => {
+  const { project } = useProjectAtom()
+  const isPrismTia = isPrismEnabled(project)
+
   return (
     <VStack w="full" spacing={2} zIndex={1}>
       {isPending && <Body size="md">{t("Your transaction is on it's way. Feel free to close this page.")}</Body>}
+      {isPending && isPrismTia && <SwapPendingStages swapTargetLabel={t('Prism contract')} />}
       <ViewContributionStatusButton isPending={isPending} />
       <ViewMempoolSpaceTransactionButton />
     </VStack>

@@ -10,12 +10,25 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { useDownloadRefund } from '../paymentOnchain/hooks/useDownloadRefund.ts'
 import { onChainRefundDownloadedAtom } from '../paymentOnchain/states/onChainStatus.ts'
 
-export const PaymentDownloadRefundFile = ({ onComplete }: { onComplete: () => void }) => {
+type PaymentDownloadRefundFileProps = {
+  isPrismContribution?: boolean
+  onComplete: () => void
+}
+
+export const PaymentDownloadRefundFile = ({ isPrismContribution, onComplete }: PaymentDownloadRefundFileProps) => {
   const setRefundFileDownloaded = useSetAtom(onChainRefundDownloadedAtom)
 
   const { buttonProps } = useDownloadRefund({
     isAllOrNothing: true,
   })
+
+  const refundNoticeText = isPrismContribution
+    ? t(
+        'If the contribution fails you can claim a refund. To make sure you can claim a refund later, please download the refund file now and store it somewhere safe.',
+      )
+    : t(
+        'If this project does not reach its goal, or you change your mind before it is completed, you can request a refund. To make sure you can claim a refund later, please download the refund file now and store it somewhere safe.',
+      )
 
   const handleClick = () => {
     setRefundFileDownloaded(true)
@@ -30,9 +43,7 @@ export const PaymentDownloadRefundFile = ({ onComplete }: { onComplete: () => vo
             {t('Download refund file before proceeding')}
           </Body>
           <Body size={'sm'}>
-            {t(
-              'If this project does not reach its goal, or you change your mind before it is completed, you can request a refund. To make sure you can claim a refund later, please download the refund file now and store it somewhere safe.',
-            )}{' '}
+            {refundNoticeText}{' '}
             <Link isExternal href={GeyserOnChainGuideUrl} color="primary1.11">
               {t('More info')}.
             </Link>

@@ -33,7 +33,7 @@ export const DefaultView = () => {
   }, [])
 
   return (
-    <VStack w="full" spacing={10} paddingTop="20px">
+    <VStack w="full" spacing={10} paddingTop={{ base: '8px', lg: '10px' }}>
       <VStack w="full" spacing={20} paddingBottom={40}>
         <TitleBar />
         <GiveawayBanner mt={{ base: -14, md: -10 }} mb={{ base: -14, md: -10 }} />

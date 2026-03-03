@@ -2,7 +2,7 @@ import { Box, Button, HStack, Icon, Image, Link as ChakraLink, Stack, VStack } f
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
-import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiWarning, PiXCircle } from 'react-icons/pi'
+import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiWarning } from 'react-icons/pi'
 import { Link, useLocation, useSearchParams } from 'react-router'
 
 import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
@@ -12,16 +12,120 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath, GuideStepByStepUrl, ImpactFundsIconUrl } from '@/shared/constants/index.ts'
 import { commaFormatted } from '@/shared/utils/formatData/helperFunctions.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
-import { ProjectReviewStatus, ProjectStatus } from '@/types'
+import { ProjectFundingStrategy, ProjectReviewStatus, ProjectStatus } from '@/types'
 
 import { useProjectAtom } from '../../../../../../hooks/useProjectAtom.ts'
-import { promotionsNoticeClosedByProjectAtom } from '../noticeAtom.ts'
+import { promotionsNoticeClosedByProjectAtom, stripeConnectNoticeClosedByProjectAtom } from '../noticeAtom.ts'
 import { TiaRskEoaSetupNotice } from '../tiaNotification/TiaRskEoaSetupNotice.tsx'
 import { ControlPanelButtons } from './components/ControlPanelButtons.tsx'
 import { ControlPanelNotification } from './components/ControlPanelNotification.tsx'
 import { useAonClaimFunds } from './hooks/useAonClaimFunds.ts'
 import { useImpactFundEligibility } from './hooks/useImpactFundEligibility.ts'
 import { useWithdrawFunds } from './hooks/useWithdrawFunds.ts'
+
+type FinancialActionsProps = {
+  showClaim: boolean
+  showWithdrawableBalance: boolean
+  aonPayoutModal: { onOpen: () => void }
+  payoutRskModal: { onOpen: () => void }
+  withdrawableSats: number
+  withdrawableUsd: number
+  showWithdraw: boolean
+}
+
+/** Renders the financial action rows (claim / withdraw) for the control panel. */
+const ControlPanelFinancialActions = ({
+  showClaim,
+  showWithdrawableBalance,
+  aonPayoutModal,
+  payoutRskModal,
+  withdrawableSats,
+  withdrawableUsd,
+  showWithdraw,
+}: FinancialActionsProps) => {
+  if (!showClaim && !showWithdrawableBalance) return null
+  return (
+    <VStack w="full" spacing={3} align="stretch">
+      {showClaim && (
+        <HStack
+          w="full"
+          justifyContent="space-between"
+          alignItems="center"
+          bg="utils.pbg"
+          border="1px solid"
+          borderColor="neutral1.6"
+          borderRadius="8px"
+          px={4}
+          py={4}
+          spacing={4}
+        >
+          <HStack spacing={3} flex={1} alignItems="center">
+            <Box color="primary1.9" flexShrink={0}>
+              <PiFlagCheckeredDuotone size={28} />
+            </Box>
+            <VStack align="start" spacing={0}>
+              <Body size="md" bold>
+                {t('Claim funds')}
+              </Body>
+              <Body size="sm" color="neutral1.11">
+                {t('Your campaign reached its goal')}
+              </Body>
+            </VStack>
+          </HStack>
+          <Button colorScheme="primary1" variant="solid" size="md" flexShrink={0} onClick={aonPayoutModal.onOpen}>
+            {t('Claim')}
+          </Button>
+        </HStack>
+      )}
+
+      {showWithdrawableBalance && (
+        <Stack
+          w="full"
+          direction={{ base: 'column', md: 'row' }}
+          spacing={{ base: 3, md: 4 }}
+          justifyContent={{ base: 'flex-start', md: 'space-between' }}
+          alignItems={{ base: 'stretch', md: 'center' }}
+          bg="utils.pbg"
+          border="1px solid"
+          borderColor="neutral1.6"
+          borderRadius="8px"
+          px={4}
+          py={4}
+        >
+          <HStack spacing={3} alignItems="center" flex={{ base: 'none', md: 1 }}>
+            <Image
+              src="/icons/creator_tools_bitcoin_coins.png"
+              alt={t('Coins')}
+              boxSize="52px"
+              objectFit="contain"
+              flexShrink={0}
+            />
+            <Body size="md" color="neutral1.11">
+              {t('Funds available to withdraw')}:{' '}
+              <Body as="span" size="md" bold color="neutral1.12">
+                {commaFormatted(withdrawableSats)} {t('sats')}
+              </Body>{' '}
+              <Body as="span" size="md" color="neutral1.9">
+                ≈${withdrawableUsd.toFixed(0)}
+              </Body>
+            </Body>
+          </HStack>
+          <Button
+            colorScheme="primary1"
+            variant="solid"
+            size="md"
+            w={{ base: 'full', md: 'auto' }}
+            flexShrink={0}
+            onClick={payoutRskModal.onOpen}
+            isDisabled={!showWithdraw}
+          >
+            {t('Withdraw')}
+          </Button>
+        </Stack>
+      )}
+    </VStack>
+  )
+}
 
 export const ControlPanel = () => {
   const { project, isProjectOwner } = useProjectAtom()
@@ -35,6 +139,15 @@ export const ControlPanel = () => {
     promotionsNoticeClosedByProjectAtom,
   )
   const isPromotionsModalOpen = Boolean(promotionsNoticeClosedByProject[projectNoticeKey])
+  const [stripeConnectNoticeClosedByProject, setStripeConnectNoticeClosedByProject] = useAtom(
+    stripeConnectNoticeClosedByProjectAtom,
+  )
+  const isStripeConnectNoticeClosed = Boolean(stripeConnectNoticeClosedByProject[projectNoticeKey])
+  const hasStripeConnectConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
+  const shouldShowStripeConnectNotice =
+    project?.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
+    !hasStripeConnectConfigured &&
+    !isStripeConnectNoticeClosed
 
   const { eligibleImpactFund } = useImpactFundEligibility()
   const {
@@ -139,9 +252,29 @@ export const ControlPanel = () => {
         />
       )}
 
+      {/* Financial Actions Section */}
+      <ControlPanelFinancialActions
+        showClaim={showClaim}
+        showWithdrawableBalance={showWithdrawableBalance}
+        aonPayoutModal={aonPayoutModal}
+        payoutRskModal={payoutRskModal}
+        withdrawableSats={withdrawableSats}
+        withdrawableUsd={withdrawableUsd}
+        showWithdraw={showWithdraw}
+      />
+
+      {/* Notifications */}
       {isInactiveProject && (
         <ControlPanelNotification
-          icon={<Icon as={PiXCircle} color="warning.11" boxSize="16px" flexShrink={0} />}
+          icon={
+            <Image
+              src="/icons/creator_tools_inactive_warning.png"
+              alt={t('Inactive project warning')}
+              width="48px"
+              height="48px"
+              flexShrink={0}
+            />
+          }
           title={t('Inactive Project')}
           description={t(
             'Your project cannot receive contributions but is visible to the public. To reactivate your project go to settings',
@@ -162,90 +295,35 @@ export const ControlPanel = () => {
         />
       )}
 
-      {/* Financial Actions Section */}
-      {(showClaim || showWithdrawableBalance) && (
-        <VStack w="full" spacing={3} align="stretch">
-          {showClaim && (
-            <HStack
-              w="full"
-              justifyContent="space-between"
-              alignItems="center"
-              bg="utils.pbg"
-              border="1px solid"
-              borderColor="neutral1.6"
-              borderRadius="8px"
-              px={4}
-              py={4}
-              spacing={4}
-            >
-              <HStack spacing={3} flex={1} alignItems="center">
-                <Box color="primary1.9" flexShrink={0}>
-                  <PiFlagCheckeredDuotone size={28} />
-                </Box>
-                <VStack align="start" spacing={0}>
-                  <Body size="md" bold>
-                    {t('Claim funds')}
-                  </Body>
-                  <Body size="sm" color="neutral1.11">
-                    {t('Your campaign reached its goal')}
-                  </Body>
-                </VStack>
-              </HStack>
-              <Button colorScheme="primary1" variant="solid" size="md" flexShrink={0} onClick={aonPayoutModal.onOpen}>
-                {t('Claim')}
-              </Button>
-            </HStack>
+      {shouldShowStripeConnectNotice && (
+        <ControlPanelNotification
+          icon={<Image src="/icons/creator_tools_stripe.webp" alt={t('Stripe icon')} width="48px" height="48px" />}
+          title={t('Receive fiat payments directly')}
+          description={t(
+            'Connect Stripe and get paid in fiat straight to your bank account, alongside Bitcoin funding.',
           )}
-
-          {showWithdrawableBalance && (
-            <Stack
-              w="full"
-              direction={{ base: 'column', md: 'row' }}
-              spacing={{ base: 3, md: 4 }}
-              justifyContent={{ base: 'flex-start', md: 'space-between' }}
-              alignItems={{ base: 'stretch', md: 'center' }}
-              bg="utils.pbg"
-              border="1px solid"
-              borderColor="neutral1.6"
-              borderRadius="8px"
-              px={4}
-              py={4}
+          actionButton={
+            <Button
+              as={Link}
+              to={getPath('dashboardWallet', project.name)}
+              variant="soft"
+              colorScheme="neutral1"
+              size="sm"
+              flexShrink={0}
             >
-              <HStack spacing={3} alignItems="center" flex={{ base: 'none', md: 1 }}>
-                <Image
-                  src="/icons/creator_tools_bitcoin_coins.png"
-                  alt={t('Coins')}
-                  boxSize="52px"
-                  objectFit="contain"
-                  flexShrink={0}
-                />
-                <Body size="md" color="neutral1.11">
-                  {t('Funds available to withdraw')}:{' '}
-                  <Body as="span" size="md" bold color="neutral1.12">
-                    {commaFormatted(withdrawableSats)} {t('sats')}
-                  </Body>{' '}
-                  <Body as="span" size="md" color="neutral1.9">
-                    ≈${withdrawableUsd.toFixed(0)}
-                  </Body>
-                </Body>
-              </HStack>
-              <Button
-                colorScheme="primary1"
-                variant="solid"
-                size="md"
-                w={{ base: 'full', md: 'auto' }}
-                flexShrink={0}
-                onClick={payoutRskModal.onOpen}
-                isDisabled={!showWithdraw}
-              >
-                {t('Withdraw')}
-              </Button>
-            </Stack>
-          )}
-        </VStack>
+              {t('Configure Stripe Connect')}
+            </Button>
+          }
+          onClose={() =>
+            setStripeConnectNoticeClosedByProject((current) => ({
+              ...current,
+              [projectNoticeKey]: true,
+            }))
+          }
+          variant="info"
+        />
       )}
 
-      {/* Notifications */}
       {!isPromotionsModalOpen && !isFundingDisabled() && (
         <ControlPanelNotification
           icon={

@@ -112,16 +112,16 @@ export const WalletLimitsAndVerification = () => {
         </Body>
 
         {/* Progress Bar */}
-        <Box
-          position="relative"
-          width="100%"
-          height="20px"
-          bgGradient="linear(to-r, neutral1.3 95%, transparent 100%)"
-          borderRadius="full"
-          borderTopRightRadius={0}
-          borderBottomRightRadius={0}
-        >
-          <Box width="70%">
+        <Box position="relative" width="100%" pt={{ base: 12, md: 14 }}>
+          <Box
+            position="relative"
+            width="100%"
+            height="20px"
+            bgGradient="linear(to-r, neutral1.3 95%, transparent 100%)"
+            borderRadius="full"
+            borderTopRightRadius={0}
+            borderBottomRightRadius={0}
+          >
             <Box
               position="relative"
               width={`${percentage}%`}
@@ -131,30 +131,22 @@ export const WalletLimitsAndVerification = () => {
               borderTopRightRadius={0}
               borderBottomRightRadius={0}
             />
-            {/* Markers */}
-            <Flex
-              width="100%"
-              direction="row"
-              justifyContent="space-between"
-              position="relative"
-              height="100%"
-              bottom="60px"
-            >
-              <Box position="absolute" left="30%">
-                <Body size="sm" medium color="neutral1.11">
-                  $10,000
-                </Body>
-                <Box height="5px" width="5px" bg="neutral1.11" borderRadius="full" transform="translateX(-1.5px)" />
-                <Box width="2px" height="33px" bg="neutral1.11" />
-              </Box>
-              <Box position="absolute" left="100%">
-                <Body size="sm" medium color="neutral1.11">
-                  $100,000
-                </Body>
-                <Box height="5px" width="5px" bg="neutral1.11" borderRadius="full" transform="translateX(-1.5px)" />
-                <Box width="2px" height="33px" bg="neutral1.11" />
-              </Box>
-            </Flex>
+          </Box>
+
+          {/* Markers */}
+          <Box position="absolute" top={0} left="30%" transform="translateX(-50%)">
+            <Body size="sm" medium color="neutral1.11">
+              $10,000
+            </Body>
+            <Box height="5px" width="5px" bg="neutral1.11" borderRadius="full" marginX="auto" />
+            <Box width="2px" height="19px" bg="neutral1.11" marginX="auto" />
+          </Box>
+          <Box position="absolute" top={0} left="70%" transform="translateX(-50%)">
+            <Body size="sm" medium color="neutral1.11">
+              $100,000
+            </Body>
+            <Box height="5px" width="5px" bg="neutral1.11" borderRadius="full" marginX="auto" />
+            <Box width="2px" height="19px" bg="neutral1.11" marginX="auto" />
           </Box>
         </Box>
 
