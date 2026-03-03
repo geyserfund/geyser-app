@@ -2,7 +2,7 @@ import { Box, Button, HStack, Icon, Image, Link as ChakraLink, Stack, VStack } f
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
-import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiWarning } from 'react-icons/pi'
+import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiWarning, PiXCircle } from 'react-icons/pi'
 import { Link, useLocation, useSearchParams } from 'react-router'
 
 import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
@@ -37,8 +37,15 @@ export const ControlPanel = () => {
   const isPromotionsModalOpen = Boolean(promotionsNoticeClosedByProject[projectNoticeKey])
 
   const { eligibleImpactFund } = useImpactFundEligibility()
-  const { payoutRskModal, projectRskEoa, withdrawableSats, withdrawableUsd, showWithdraw, onCompleted } =
-    useWithdrawFunds()
+  const {
+    payoutRskModal,
+    projectRskEoa,
+    withdrawableSats,
+    withdrawableUsd,
+    showWithdrawableBalance,
+    showWithdraw,
+    onCompleted,
+  } = useWithdrawFunds()
   const { showClaim, payoutRskModal: aonPayoutModal, onCompleted: onAonCompleted } = useAonClaimFunds()
 
   /** Get latest review for revisions requested check */
@@ -48,6 +55,7 @@ export const ControlPanel = () => {
   }, [project.reviews])
 
   const hasRevisionsRequested = latestReview?.status === ProjectReviewStatus.RevisionsRequested
+  const isInactiveProject = project.status === ProjectStatus.Inactive
 
   /** Handle ?action=withdraw query param to auto-open withdrawal modal */
   useEffect(() => {
@@ -131,8 +139,31 @@ export const ControlPanel = () => {
         />
       )}
 
+      {isInactiveProject && (
+        <ControlPanelNotification
+          icon={<Icon as={PiXCircle} color="warning.11" boxSize="16px" flexShrink={0} />}
+          title={t('Inactive Project')}
+          description={t(
+            'Your project cannot receive contributions but is visible to the public. To reactivate your project go to settings',
+          )}
+          actionButton={
+            <Button
+              colorScheme="warning"
+              variant="soft"
+              size="sm"
+              flexShrink={0}
+              as={Link}
+              to={getPath('dashboardSettings', project.name)}
+            >
+              {t('Settings')}
+            </Button>
+          }
+          variant="warning"
+        />
+      )}
+
       {/* Financial Actions Section */}
-      {(showClaim || showWithdraw) && (
+      {(showClaim || showWithdrawableBalance) && (
         <VStack w="full" spacing={3} align="stretch">
           {showClaim && (
             <HStack
@@ -166,7 +197,7 @@ export const ControlPanel = () => {
             </HStack>
           )}
 
-          {showWithdraw && (
+          {showWithdrawableBalance && (
             <Stack
               w="full"
               direction={{ base: 'column', md: 'row' }}
@@ -205,6 +236,7 @@ export const ControlPanel = () => {
                 w={{ base: 'full', md: 'auto' }}
                 flexShrink={0}
                 onClick={payoutRskModal.onOpen}
+                isDisabled={!showWithdraw}
               >
                 {t('Withdraw')}
               </Button>
@@ -253,15 +285,7 @@ export const ControlPanel = () => {
 
       {eligibleImpactFund && (
         <ControlPanelNotification
-          icon={
-            <Image
-              src={ImpactFundsIconUrl}
-              alt={t('Impact fund')}
-              width="50px"
-              height="50px"
-              flexShrink={0}
-            />
-          }
+          icon={<Image src={ImpactFundsIconUrl} alt={t('Impact fund')} width="50px" height="50px" flexShrink={0} />}
           title={t('Eligible for {{fundName}}.', { fundName: eligibleImpactFund.title })}
           description={t('Your project may be eligible for funding.')}
           actionButton={

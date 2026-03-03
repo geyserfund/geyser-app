@@ -22,8 +22,9 @@ export const useWithdrawFunds = () => {
   const withdrawableUsd = withdrawableUsdCents / 100
 
   const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
+  const showWithdrawableBalance = isTiaProject && Boolean(projectRskEoa) && !isLoading
   const hasWithdrawable = withdrawable !== null && withdrawable > 0n && withdrawableUsd >= 1
-  const showWithdraw = isTiaProject && Boolean(projectRskEoa) && !isLoading && hasWithdrawable
+  const showWithdraw = showWithdrawableBalance && hasWithdrawable
 
   const onCompleted = () => {
     refetchQueriesOnPayoutSuccess()
@@ -35,6 +36,7 @@ export const useWithdrawFunds = () => {
     projectRskEoa,
     withdrawableSats,
     withdrawableUsd,
+    showWithdrawableBalance,
     showWithdraw,
     onCompleted,
   }
