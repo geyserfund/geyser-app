@@ -1,3 +1,31 @@
+## [0.27.6](https://github.com/geyserfund/geyser-app/compare/v0.27.3...v0.27.6) (2026-03-03)
+
+
+### Features
+
+* enable prism ([9ac2b00](https://github.com/geyserfund/geyser-app/commit/9ac2b00fd5ddada713dcdf8dfef80964012f02cd))
+* giveaway page and banner ([3ef7f00](https://github.com/geyserfund/geyser-app/commit/3ef7f00a3dfadac2d950878f4d255b175eb370c2))
+* new categories ([942be67](https://github.com/geyserfund/geyser-app/commit/942be6713644f50fa8c34d66f0755f9fa2991043))
+* new creator tool + stripe connect flow ([9c0927c](https://github.com/geyserfund/geyser-app/commit/9c0927c428abdb115ca16d1ccde895bf1141f78f))
+* rework creator tools (control panel) ([76f523f](https://github.com/geyserfund/geyser-app/commit/76f523f7cd3169c36f04cb6ae5dc27b4d2919167))
+
+
+### Bug Fixes
+
+* add explicit error and retry on claim tx set ([507f9b6](https://github.com/geyserfund/geyser-app/commit/507f9b6e3701ff451b9540c5eea5d43fc91deffb))
+* address coderabbit review comments ([d703fd3](https://github.com/geyserfund/geyser-app/commit/d703fd388dea8b1232572d3af4fad9e025038534))
+* address QA feedback and bugs ([06304e5](https://github.com/geyserfund/geyser-app/commit/06304e50368a8e25634aa3c02b4a28b8da6194a3))
+* bump version to 0.27.5 and add SEO images for impact funds ([859de79](https://github.com/geyserfund/geyser-app/commit/859de7957824b8e375aab121b105edc47a69005c))
+* category ([5fc94fa](https://github.com/geyserfund/geyser-app/commit/5fc94fad9048690f907b5050be4281d9a30bf944))
+* creation flow and remove prism feature flag ([593dcdc](https://github.com/geyserfund/geyser-app/commit/593dcdcdd46e3aee231d543c7b8718e06cc9a5bb))
+* formatting ([0b9ce93](https://github.com/geyserfund/geyser-app/commit/0b9ce93fa2ef926fe206fe89d4dfd4fe2a048f8f))
+* missing origin env var ([18cac8e](https://github.com/geyserfund/geyser-app/commit/18cac8e69e055603f9d75dd98a79a04b61b03129))
+* more QA feedback ([62ed036](https://github.com/geyserfund/geyser-app/commit/62ed0369362814f8e07c3d706164942e8c017426))
+* prism env vars ([488480f](https://github.com/geyserfund/geyser-app/commit/488480f611b8933757af68a5fe0f6578e5364173))
+* remove config wallet and update deadline ([fe2347f](https://github.com/geyserfund/geyser-app/commit/fe2347fdb0b17b5939d529f855348369ea847cc9))
+* remove default text in featured section ([04fc335](https://github.com/geyserfund/geyser-app/commit/04fc335816a33df4018e6cc0c8767cd099723584))
+* update announcement image and formatting ([f939708](https://github.com/geyserfund/geyser-app/commit/f9397087a6855274740f342ed9d4a1c13e832b1e))
+
 ## [0.27.3](https://github.com/geyserfund/geyser-app/compare/v0.27.2...v0.27.3) (2026-02-24)
 
 
