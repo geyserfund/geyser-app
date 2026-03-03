@@ -1,3 +1,9 @@
+## [Unreleased]
+
+### Bug Fixes
+
+* make giveaway banner fully clickable on discovery landing page ([634c614](https://github.com/geyserfund/geyser-app/commit/634c614709cdd8d006099a800af9c449cf5f8985))
+
 ## [0.28.1](https://github.com/geyserfund/geyser-app/compare/v0.28.0...v0.28.1) (2026-03-03)
 
 
