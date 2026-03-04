@@ -130,6 +130,9 @@ export const GeyserOnChainGuideUrl =
 export const GeyserOnChainFeesGuideUrl =
   'https://guide.geyser.fund/geyser-docs/product-features/getting-started/how-onchain-contributions-work#fees-for-onchain-donations'
 
+export const GeyserConfigureWalletGuideUrl =
+  'https://guide.geyser.fund/geyser-docs/product-features/launch-a-project/configure-your-wallet-and-withdraw-funds'
+
 // UTILS
 
 export const CannotConnectAccountUrl =
