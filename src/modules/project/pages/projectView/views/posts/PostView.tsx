@@ -3,7 +3,7 @@ import { Badge, Box, Button, HStack, Icon, Link as ChakraLink, SkeletonText, VSt
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import { DateTime } from 'luxon'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { PiArrowLeft, PiCopy, PiEnvelope, PiShareFat } from 'react-icons/pi'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
 
@@ -22,7 +22,7 @@ import { getPath } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { FundingResourceType, useProjectPostLazyQuery } from '@/types'
+import { FundingResourceType, useProjectPostQuery } from '@/types'
 import { toInt, useNotification } from '@/utils'
 
 import { MarkdownField } from '../../../../../../shared/markdown/MarkdownField.tsx'
@@ -39,36 +39,19 @@ export const PostView = () => {
   const navigate = useNavigate()
 
   const toast = useNotification()
-
-  const [loading, setLoading] = useState(false)
-
-  const [queryPost, { data }] = useProjectPostLazyQuery({
+  const { data, loading } = useProjectPostQuery({
     fetchPolicy: 'cache-first',
     variables: {
-      postId,
+      postId: postId || '',
+    },
+    skip: !postId,
+    onError() {
+      toast.error({
+        title: t('Something went wrong'),
+        description: t('Failed to fetch the post, please try again.'),
+      })
     },
   })
-
-  useEffect(() => {
-    if (postId) {
-      const handlePostQuery = async () => {
-        setLoading(true)
-
-        try {
-          await queryPost()
-        } catch {
-          toast.error({
-            title: t('Something went wrong'),
-            description: t('Failed to fetch the post, please try again.'),
-          })
-        }
-
-        setLoading(false)
-      }
-
-      handlePostQuery()
-    }
-  }, [postId])
 
   const post = data?.post
 

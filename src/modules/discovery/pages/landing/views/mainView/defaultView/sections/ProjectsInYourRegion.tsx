@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 
@@ -20,16 +19,8 @@ const NO_OF_PROJECT_TO_LOAD = 6
 
 export const ProjectsInYourRegion = () => {
   const { t } = useTranslation()
-  const [loading, setLoading] = useState(true)
 
-  const { data: userIpCountryData } = useGetUserIpCountryQuery({
-    onCompleted() {
-      setLoading(false)
-    },
-    onError() {
-      setLoading(false)
-    },
-  })
+  const { data: userIpCountryData, loading: loadingCountry } = useGetUserIpCountryQuery()
 
   const where = {
     fundingStrategy: ProjectFundingStrategy.TakeItAll,
@@ -48,7 +39,7 @@ export const ProjectsInYourRegion = () => {
   ] as ProjectsOrderByInput[]
 
   const { data, loading: loadingProjects } = useProjectsForLandingPageQuery({
-    skip: loading || !userIpCountryData?.userIpCountry,
+    skip: loadingCountry || !userIpCountryData?.userIpCountry,
     variables: {
       input: {
         where,
@@ -60,7 +51,7 @@ export const ProjectsInYourRegion = () => {
     },
   })
 
-  if (loading || loadingProjects) {
+  if (loadingCountry || loadingProjects) {
     return <ProjectDisplayBodySkeleton />
   }
 

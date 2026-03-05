@@ -29,6 +29,7 @@ export const Head: React.FC<HeadProps> = (tags) => {
     url,
   } = tags
   const location = useLocation()
+  const pageOrigin = typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.host}` : 'https://geyser.fund'
   return (
     <Helmet>
       <title>{title} | Geyser</title>
@@ -36,7 +37,7 @@ export const Head: React.FC<HeadProps> = (tags) => {
       {description && <meta property="og:description" content={description} />}
       {description && <meta property="description" content={description} />}
       {image && <meta property="og:image" content={image} />}
-      <meta property="og:url" content={`${window.location.protocol}//${window.location.host}${location.pathname}`} />
+      <meta property="og:url" content={`${pageOrigin}${location.pathname}`} />
       <meta property="og:type" content={type} />
       <meta property="twitter:card" content={DefaultMetaTwitterCard} />
       <meta property="twitter:site" content={DefaultMetaTwitterSite} />

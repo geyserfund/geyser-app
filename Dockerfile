@@ -70,7 +70,7 @@ COPY package.json yarn.lock ./
 # Copy production dependencies over
 COPY --from=build /usr/app/prod_node_modules ./node_modules
 COPY --from=build /usr/app/dist ./dist
-COPY --from=build /usr/app/meta.json ./dist/meta.json
+COPY --from=build /usr/app/meta.json ./dist/client/meta.json
 COPY --from=build /usr/app/server.js ./server.cjs
 
 # RUN yarn global add serve

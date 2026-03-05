@@ -9,7 +9,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 import { pwaOptions } from './config/pwaOptions'
 
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ command, mode, isSsrBuild }) => {
   // Load env file based on `mode` in the current working directory.
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
   const env = loadEnv(mode, process.cwd(), '')
@@ -53,19 +53,24 @@ export default defineConfig(({ command, mode }) => {
 
   const pwaOptionsMode = env.APP_ENV === 'development' ? 'development' : 'production'
   const plugins: PluginOption[] = [
-    VitePWA({ ...pwaOptions, mode: pwaOptionsMode }),
+    !isSsrBuild && VitePWA({ ...pwaOptions, mode: pwaOptionsMode }),
     react(),
     tsconfigPaths(),
     loadVersion(),
     wasm(),
     topLevelAwait(),
-  ]
+  ].filter(Boolean) as PluginOption[]
 
   return {
     plugins,
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
+        ...(isSsrBuild
+          ? {
+              'virtual:pwa-register/react': path.resolve(__dirname, './src/ssr/pwaRegisterStub.ts'),
+            }
+          : {}),
       },
     },
     server,

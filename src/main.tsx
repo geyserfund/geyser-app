@@ -1,13 +1,15 @@
 import './config/i18next'
 
+import { ApolloProvider, NormalizedCacheObject } from '@apollo/client'
 import { ColorModeScript } from '@chakra-ui/react'
 import * as Sentry from '@sentry/react'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createRoutesFromChildren, matchRoutes, RouterProvider, useLocation, useNavigationType } from 'react-router'
 
+import { getBrowserApolloClient } from './config/apollo-client'
 import GlobalStyles from './config/GlobalStyles.tsx'
-import { router } from './config/routes/index.ts'
+import { createAppRouter } from './config/routes/index.ts'
 import { __production__, __staging__ } from './shared/constants/index.ts'
 
 const SENTRY_DSN = 'https://2355dca8304c4e32b35bf421d3cf4d87@o4504351883984896.ingest.sentry.io/4505088829292544'
@@ -44,10 +46,29 @@ if (typeof window !== 'undefined') {
   ;(window as any).Buffer = Buffer
 }
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+declare global {
+  interface Window {
+    __APOLLO_STATE__?: NormalizedCacheObject
+  }
+}
+
+const router = createAppRouter()
+const apolloClient = getBrowserApolloClient(window.__APOLLO_STATE__)
+
+const appTree = (
   <React.StrictMode>
     <ColorModeScript initialColorMode="system" type="localStorage" />
     <GlobalStyles />
-    <RouterProvider router={router} />
-  </React.StrictMode>,
+    <ApolloProvider client={apolloClient}>
+      <RouterProvider router={router} />
+    </ApolloProvider>
+  </React.StrictMode>
 )
+
+const rootElement = document.getElementById('root') as HTMLElement
+
+if (rootElement.hasChildNodes()) {
+  ReactDOM.hydrateRoot(rootElement, appTree)
+} else {
+  ReactDOM.createRoot(rootElement).render(appTree)
+}

@@ -1,11 +1,13 @@
 import { captureException } from '@sentry/react'
 import { useSetAtom } from 'jotai'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 
 import { getPath } from '../../../shared/constants'
 import {
+  ProjectPageBodyQuery,
   useCreateProjectMutation,
+  useProjectPageBodyQuery,
   useProjectPageBodyLazyQuery,
   useProjectPublishMutation,
   useProjectStatusUpdateMutation,
@@ -51,54 +53,74 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
   const partialUpdateProject = useSetAtom(partialUpdateProjectAtom)
 
   const { load, projectId, projectName, initializeWallet } = props || {}
+  const queryProjectName = projectName || projectNameParam
+  const shouldAutoLoadProject = Boolean(load && (projectId || queryProjectName))
 
   const [queryProject, queryProjectOptions] = useProjectPageBodyLazyQuery()
+
+  const handleProjectQueryError = useCallback(
+    (error: unknown) => {
+      setProjectLoading(false)
+      captureException(error, {
+        tags: {
+          'not-found': 'projectGet',
+          'error.on': 'query error',
+        },
+      })
+
+      navigate(getPath('projectNotFound'))
+    },
+    [setProjectLoading, navigate],
+  )
+
+  const handleProjectQueryCompleted = useCallback(
+    (data: ProjectPageBodyQuery) => {
+      setProjectLoading(false)
+
+      if (!data?.projectGet) {
+        captureException(data, {
+          tags: {
+            'not-found': 'projectGet',
+            'error.on': 'invalid data',
+          },
+        })
+        navigate(getPath('projectNotFound'))
+        return
+      }
+
+      const { projectGet: project } = data
+      setProject(normalizeProjectState(project as ProjectState))
+    },
+    [setProjectLoading, navigate, setProject],
+  )
+
+  useProjectPageBodyQuery({
+    skip: !shouldAutoLoadProject,
+    variables: {
+      where: { name: queryProjectName, id: projectId },
+    },
+    fetchPolicy: launchModalShouldOpen || draftModalShouldOpen ? 'network-only' : 'cache-and-network',
+    onError: handleProjectQueryError,
+    onCompleted: handleProjectQueryCompleted,
+  })
 
   const queryProjectMethod = useCallback(() => {
     queryProject({
       variables: {
-        where: { name: projectName || projectNameParam, id: projectId },
+        where: { name: queryProjectName, id: projectId },
       },
       fetchPolicy: launchModalShouldOpen || draftModalShouldOpen ? 'network-only' : 'cache-and-network',
-      onError(error) {
-        setProjectLoading(false)
-        captureException(error, {
-          tags: {
-            'not-found': 'projectGet',
-            'error.on': 'query error',
-          },
-        })
-
-        navigate(getPath('projectNotFound'))
-      },
-      onCompleted(data) {
-        setProjectLoading(false)
-
-        if (!data?.projectGet) {
-          captureException(data, {
-            tags: {
-              'not-found': 'projectGet',
-              'error.on': 'invalid data',
-            },
-          })
-          navigate(getPath('projectNotFound'))
-          return
-        }
-
-        const { projectGet: project } = data
-        setProject(normalizeProjectState(project as ProjectState))
-      },
+      onError: handleProjectQueryError,
+      onCompleted: handleProjectQueryCompleted,
     })
   }, [
     queryProject,
-    projectName,
+    queryProjectName,
     projectId,
-    setProjectLoading,
-    navigate,
     launchModalShouldOpen,
     draftModalShouldOpen,
-    setProject,
-    projectNameParam,
+    handleProjectQueryError,
+    handleProjectQueryCompleted,
   ])
 
   const [createProject, createProjectOptions] = useCustomMutation(useCreateProjectMutation, {
@@ -132,12 +154,6 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
       }
     },
   })
-
-  useEffect(() => {
-    if (load && (projectId || projectName)) {
-      queryProjectMethod()
-    }
-  }, [load, projectId, projectName, queryProjectMethod])
 
   useProjectWalletAPI(initializeWallet)
 

@@ -33,32 +33,35 @@ const mergeIdentifiableCollectionUsingCursorIDs = (
 //   return merged;
 // };
 
-export const cache: InMemoryCache = new InMemoryCache({
-  // See https://www.apollographql.com/docs/react/pagination/core-api/#defining-a-field-policy for tips on defining custom GraphQL field policies.
-  typePolicies: {
-    Query: {
-      fields: {
-        getEntries: {
-          // Don't cache separate results based on
-          // any of this field's arguments.
-          // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
-          keyArgs: false,
+export const createApolloCache = () =>
+  new InMemoryCache({
+    // See https://www.apollographql.com/docs/react/pagination/core-api/#defining-a-field-policy for tips on defining custom GraphQL field policies.
+    typePolicies: {
+      Query: {
+        fields: {
+          getEntries: {
+            // Don't cache separate results based on
+            // any of this field's arguments.
+            // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
+            keyArgs: false,
 
-          merge: mergeIdentifiableCollectionUsingCursorIDs,
-        },
-        projects: {
-          // Don't cache separate results based on
-          // any of this field's arguments.
-          // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
-          keyArgs: ['input', ['where', 'orderBy', 'pagination']],
-          merge: false,
-        },
-        projectGet: {
-          // Normalize cache keys so queries with same project are cached together
-          keyArgs: ['where', ['id', 'name', 'nostrPublicKey']],
-          merge: false,
+            merge: mergeIdentifiableCollectionUsingCursorIDs,
+          },
+          projects: {
+            // Don't cache separate results based on
+            // any of this field's arguments.
+            // See: https://www.apollographql.com/docs/react/caching/cache-field-behavior/#specifying-key-arguments
+            keyArgs: ['input', ['where', 'orderBy', 'pagination']],
+            merge: false,
+          },
+          projectGet: {
+            // Normalize cache keys so queries with same project are cached together
+            keyArgs: ['where', ['id', 'name', 'nostrPublicKey']],
+            merge: false,
+          },
         },
       },
     },
-  },
-})
+  })
+
+export const cache: InMemoryCache = createApolloCache()

@@ -1,7 +1,6 @@
 import { useAtom, useSetAtom } from 'jotai'
-import { useEffect } from 'react'
 
-import { useProjectSubscriptionPlansLazyQuery } from '@/types'
+import { useProjectSubscriptionPlansLazyQuery, useProjectSubscriptionPlansQuery } from '@/types'
 
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { initialSubscriptionLoadAtom, subscriptionsAtom } from '../state/subscriptionAtom'
@@ -34,11 +33,23 @@ export const useProjectSubscriptionsAPI = (load?: boolean) => {
     },
   })
 
-  useEffect(() => {
-    if (project.id && !loading && load && !initialSubscriptionLoad) {
-      queryProjectSubscriptions()
-    }
-  }, [project.id, load, loading, initialSubscriptionLoad, queryProjectSubscriptions])
+  useProjectSubscriptionPlansQuery({
+    skip: !project.id || loading || !load || initialSubscriptionLoad,
+    fetchPolicy: 'network-only',
+    variables: {
+      input: {
+        where: {
+          projectId: project.id,
+        },
+      },
+    },
+    onCompleted(data) {
+      if (data?.projectSubscriptionPlans) {
+        setSubscriptions(data?.projectSubscriptionPlans)
+        setInitialSubscriptionLoad(true)
+      }
+    },
+  })
 
   return {
     queryProjectSubscriptions: {

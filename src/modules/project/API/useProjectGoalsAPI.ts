@@ -1,10 +1,11 @@
 import { useAtom, useSetAtom } from 'jotai'
-import { useEffect } from 'react'
 
 import {
+  useProjectCompletedGoalsQuery,
   useProjectCompletedGoalsLazyQuery,
   useProjectGoalCreateMutation,
   useProjectGoalDeleteMutation,
+  useProjectInProgressGoalsQuery,
   useProjectGoalUpdateMutation,
   useProjectInProgressGoalsLazyQuery,
 } from '@/types'
@@ -109,12 +110,38 @@ export const useProjectGoalsAPI = (load?: boolean) => {
     },
   })
 
-  useEffect(() => {
-    if (project.id && !loading && load && !initialGoalsLoad) {
-      queryInProgressGoals()
-      queryCompletedGoals()
-    }
-  }, [project.id, loading, load, queryCompletedGoals, initialGoalsLoad, queryInProgressGoals])
+  useProjectInProgressGoalsQuery({
+    skip: !project.id || loading || !load || initialGoalsLoad,
+    fetchPolicy: 'network-only',
+    variables: {
+      input: {
+        projectId: project.id,
+      },
+    },
+    onCompleted(data) {
+      const inProgressGoals = data?.projectGoals.inProgress || []
+      setInProgressGoals(inProgressGoals)
+      setInitialGoalsLoad(true)
+      setGoalsLoading(false)
+    },
+    onError() {
+      setGoalsLoading(false)
+    },
+  })
+
+  useProjectCompletedGoalsQuery({
+    skip: !project.id || loading || !load,
+    fetchPolicy: 'cache-first',
+    variables: {
+      input: {
+        projectId: project.id,
+      },
+    },
+    onCompleted(data) {
+      const completedGoals = data?.projectGoals.completed || []
+      setCompletedGoals(completedGoals)
+    },
+  })
 
   return {
     queryInProgressGoals: {

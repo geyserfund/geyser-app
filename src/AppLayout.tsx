@@ -22,6 +22,8 @@ import { useMobileMode } from './utils'
 import { useScrollToTop } from './utils/tools/useScrollToTop'
 
 export const AppLayout = () => {
+  const isBrowser = typeof window !== 'undefined'
+
   useInitBtcRate()
   useInitiateSpeedWalletParams()
   useCountriesData()
@@ -38,48 +40,58 @@ export const AppLayout = () => {
   const layoutAnimationClassName = useLayoutAnimation()
 
   const handleFunction = async () => {
-    window.location.reload()
+    if (isBrowser) {
+      window.location.reload()
+    }
   }
+
+  const pageContent = (
+    <Box w="full" h={'100%'} position="relative" className={layoutAnimationClassName}>
+      <Box
+        w="full"
+        minHeight="100vh"
+        height={{ base: '100%', lg: '100vh' }}
+        display="flex"
+        alignItems="center"
+        flexDir="column"
+        backgroundColor="utils.pbg"
+      >
+        <PlatformNavBar />
+        <Box
+          id={ID.root}
+          maxHeight="100%"
+          width="100%"
+          flex="1"
+          paddingTop={{
+            base: `${dimensions.topNavBar.mobile.height}px`,
+            lg: `${dimensions.topNavBar.desktop.height}px`,
+          }}
+          overflowY={{ base: 'initial', lg: 'auto' }}
+        >
+          <Outlet />
+        </Box>
+        <InfoBanner />
+        <NoticeBanner />
+      </Box>
+    </Box>
+  )
 
   return (
     <Suspense fallback={<LoadingPage />}>
       {loading && <LoadingPage />}
-      <PullToRefresh
-        onRefresh={handleFunction}
-        pullingContent={<PullingDownContent />}
-        pullDownThreshold={dimensions.pullDownThreshold}
-        isPullable={isMobile}
-        maxPullDownDistance={dimensions.pullDownThreshold}
-      >
-        <Box w="full" h={'100%'} position="relative" className={layoutAnimationClassName}>
-          <Box
-            w="full"
-            minHeight="100vh"
-            height={{ base: '100%', lg: '100vh' }}
-            display="flex"
-            alignItems="center"
-            flexDir="column"
-            backgroundColor="utils.pbg"
-          >
-            <PlatformNavBar />
-            <Box
-              id={ID.root}
-              maxHeight="100%"
-              width="100%"
-              flex="1"
-              paddingTop={{
-                base: `${dimensions.topNavBar.mobile.height}px`,
-                lg: `${dimensions.topNavBar.desktop.height}px`,
-              }}
-              overflowY={{ base: 'initial', lg: 'auto' }}
-            >
-              <Outlet />
-            </Box>
-            <InfoBanner />
-            <NoticeBanner />
-          </Box>
-        </Box>
-      </PullToRefresh>
+      {isBrowser ? (
+        <PullToRefresh
+          onRefresh={handleFunction}
+          pullingContent={<PullingDownContent />}
+          pullDownThreshold={dimensions.pullDownThreshold}
+          isPullable={isMobile}
+          maxPullDownDistance={dimensions.pullDownThreshold}
+        >
+          {pageContent}
+        </PullToRefresh>
+      ) : (
+        pageContent
+      )}
     </Suspense>
   )
 }

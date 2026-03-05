@@ -1,5 +1,4 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { useEffect } from 'react'
 
 import {
   usePostCreateMutation,
@@ -7,7 +6,9 @@ import {
   usePostPublishMutation,
   usePostUpdateMutation,
   useProjectPostsLazyQuery,
+  useProjectPostsQuery,
   useProjectUnplublishedPostsLazyQuery,
+  useProjectUnplublishedPostsQuery,
 } from '@/types'
 
 import { useProjectAtom } from '../hooks/useProjectAtom'
@@ -67,17 +68,34 @@ export const useProjectPostsAPI = (load?: boolean) => {
     },
   })
 
-  useEffect(() => {
-    if (project.id && !loading && load) {
-      if (!initialPostsLoad) {
-        queryProjectPosts()
-      }
+  useProjectPostsQuery({
+    skip: !project.id || loading || !load || initialPostsLoad,
+    fetchPolicy: 'cache-first',
+    variables: {
+      where: {
+        id: project.id,
+      },
+    },
+    onCompleted(data) {
+      const posts = data?.projectGet?.posts || []
+      setposts(posts)
+      setInitialPostsLoad(true)
+    },
+  })
 
-      if (isProjectOwner) {
-        queryUnpublishedProjectPosts()
-      }
-    }
-  }, [project.id, loading, load, initialPostsLoad, queryUnpublishedProjectPosts, queryProjectPosts, isProjectOwner])
+  useProjectUnplublishedPostsQuery({
+    skip: !project.id || loading || !load || !isProjectOwner,
+    fetchPolicy: 'cache-first',
+    variables: {
+      where: {
+        id: project.id,
+      },
+    },
+    onCompleted(data) {
+      const unpublishedPosts = data?.projectGet?.posts || []
+      setunpublishedPosts(unpublishedPosts)
+    },
+  })
 
   const [postCreate, postCreateOptions] = useCustomMutation(usePostCreateMutation, {
     onCompleted(data) {

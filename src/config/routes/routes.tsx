@@ -1250,7 +1250,7 @@ export const platformRoutes: RouteObject[] = [
   },
 ]
 
-export const router = createBrowserRouter([
+export const createAppRoutes = (): RouteObject[] => [
   {
     path: '/',
     Component: App,
@@ -1287,6 +1287,10 @@ export const router = createBrowserRouter([
           },
         ],
   },
-])
+]
+
+export const createAppRouter = () => createBrowserRouter(createAppRoutes())
+
+export const router = createAppRouter()
 
 export default router

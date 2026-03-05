@@ -43,7 +43,7 @@ const SEARCH_PARAM_KEYS: SearchParamKeys = {
 export const useInitiateSpeedWalletParams = () => {
   const [searchParams] = useSearchParams()
 
-  const isSpeedWalletApp = window.navigator.userAgent.includes('Speed Wallet')
+  const isSpeedWalletApp = typeof window !== 'undefined' && window.navigator.userAgent.includes('Speed Wallet')
 
   const [walletParams, setWalletParams] = useAtom(speedWalletParamsAtom)
   const setIsSpeedWalletApp = useSetAtom(isSpeedWalletAppAtom)

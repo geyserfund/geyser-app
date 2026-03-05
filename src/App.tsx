@@ -1,10 +1,8 @@
-import { ApolloProvider } from '@apollo/client'
 import { ChakraProvider } from '@chakra-ui/react'
 import { Provider } from 'jotai'
 import { useEffect } from 'react'
 import { Outlet } from 'react-router'
 
-import { client } from './config/apollo-client'
 import { CacheBuster } from './config/CacheBuster.tsx'
 import { Head } from './config/Head'
 import { configMatomo } from './config/matomo'
@@ -13,28 +11,33 @@ import { FilterProvider } from './context/filter'
 import { ReferralCapture } from './shared/components/ReferralCapture.tsx'
 
 export const App = () => {
+  const isBrowser = typeof window !== 'undefined'
+
   useEffect(() => {
     configMatomo()
   }, [])
 
+  const appContent = (
+    <AuthProvider>
+      <FilterProvider>
+        <Head />
+        {isBrowser && <ReferralCapture />}
+        <Outlet />
+      </FilterProvider>
+    </AuthProvider>
+  )
+
+  const withCacheBuster = isBrowser ? <CacheBuster>{appContent}</CacheBuster> : appContent
+  const withServiceWorker = isBrowser ? (
+    <ServiceWorkerProvider>{withCacheBuster}</ServiceWorkerProvider>
+  ) : (
+    withCacheBuster
+  )
+
   return (
     <Provider>
       <ChakraProvider>
-        <ChakraThemeProvider>
-          <ServiceWorkerProvider>
-            <CacheBuster>
-              <ApolloProvider client={client}>
-                <AuthProvider>
-                  <FilterProvider>
-                    <Head />
-                    <ReferralCapture />
-                    <Outlet />
-                  </FilterProvider>
-                </AuthProvider>
-              </ApolloProvider>
-            </CacheBuster>
-          </ServiceWorkerProvider>
-        </ChakraThemeProvider>
+        <ChakraThemeProvider>{withServiceWorker}</ChakraThemeProvider>
       </ChakraProvider>
     </Provider>
   )

@@ -84,11 +84,19 @@ const initOptions = __development__
       },
     }
 
-i18next
+const isBrowser = typeof window !== 'undefined'
+
+if (isBrowser) {
   // detect user language
   // learn more: https://github.com/i18next/i18next-browser-languageDetector
-  .use(I18nextBrowserLanguageDetector)
-  .use(backend)
+  i18next.use(I18nextBrowserLanguageDetector)
+}
+
+if (isBrowser && __development__) {
+  i18next.use(backend)
+}
+
+i18next
   // pass the i18n instance to react-i18next.
   .use(initReactI18next)
   // init i18next
