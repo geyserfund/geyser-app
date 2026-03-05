@@ -1,8 +1,20 @@
 # SSR Fetchable Public Data Plan (Phase 2)
 
+## Related docs
+
+- `docs/PLAN_SSR_APOLLO_CACHE_MIGRATION.md`
+- `docs/PLAN_SSR_SEO_HEAD_ARCHITECTURE.md`
+- `docs/SEO_METADATA_STANDARD.md`
+
 ## Objective
 
 Make currently non-SSR-fetchable public page data SSR-fetchable using the existing React Router v7 + Apollo SSR pipeline, without changing architecture or functional behavior.
+
+## Implementation Status (March 2026)
+
+- Case A (project root bootstrap) is now partially implemented: `useProjectAPI` includes a render-time `useProjectPageBodyQuery` path while preserving imperative `queryProject.execute`.
+- This unblocks SSR fetchability for project context-dependent metadata and content on public project routes.
+- Remaining cases in this document are still valid follow-up scope.
 
 This plan explicitly follows `docs/ARCHITECTURE.md`:
 - keep domain logic in `src/modules/*/hooks` and `src/modules/*/API`

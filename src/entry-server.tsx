@@ -4,6 +4,7 @@ import { ApolloProvider, NormalizedCacheObject } from '@apollo/client'
 import { getDataFromTree } from '@apollo/client/react/ssr'
 import { ColorModeScript } from '@chakra-ui/react'
 import { renderToString } from 'react-dom/server'
+import { Helmet } from 'react-helmet'
 import { createStaticHandler, createStaticRouter, StaticRouterProvider } from 'react-router'
 
 import { createServerApolloClient } from './config/apollo-client'
@@ -26,6 +27,7 @@ export type ServerRenderResult =
       kind: 'render'
       status: number
       html: string
+      headHtml: string
       apolloState: NormalizedCacheObject
     }
 
@@ -65,11 +67,22 @@ export const renderServerApp = async ({
   )
 
   await getDataFromTree(app)
+  const html = renderToString(app)
+  const helmet = Helmet.renderStatic()
+  const headHtml = [
+    helmet.title.toString(),
+    helmet.meta.toString(),
+    helmet.link.toString(),
+    helmet.script.toString(),
+  ]
+    .filter(Boolean)
+    .join('\n')
 
   return {
     kind: 'render',
     status: context.statusCode || 200,
-    html: renderToString(app),
+    html,
+    headHtml,
     apolloState: apolloClient.extract(),
   }
 }

@@ -30,18 +30,27 @@ export const Head: React.FC<HeadProps> = (tags) => {
   } = tags
   const location = useLocation()
   const pageOrigin = typeof window !== 'undefined' ? `${window.location.protocol}//${window.location.host}` : 'https://geyser.fund'
+  const cleanTitle = title?.trim() || DefaultMetaTitle
+  const cleanDescription = description?.trim() || DefaultMetaDescription
+  const cleanImage = image?.trim() || DefaultMetaImage
+  const pageUrl = url || `${pageOrigin}${location.pathname}`
+  const documentTitle = cleanTitle.includes('Geyser') ? cleanTitle : `${cleanTitle} | Geyser`
+
   return (
     <Helmet>
-      <title>{title} | Geyser</title>
-      <meta property="og:title" content={title} />
-      {description && <meta property="og:description" content={description} />}
-      {description && <meta property="description" content={description} />}
-      {image && <meta property="og:image" content={image} />}
-      <meta property="og:url" content={`${pageOrigin}${location.pathname}`} />
+      <title>{documentTitle}</title>
+      <meta name="description" content={cleanDescription} />
+      <meta property="og:title" content={cleanTitle} />
+      <meta property="og:description" content={cleanDescription} />
+      <meta property="og:image" content={cleanImage} />
+      <meta property="og:url" content={pageUrl} />
       <meta property="og:type" content={type} />
-      <meta property="twitter:card" content={DefaultMetaTwitterCard} />
-      <meta property="twitter:site" content={DefaultMetaTwitterSite} />
-      {url && <link rel="canonical" href={url} />}
+      <meta name="twitter:card" content={DefaultMetaTwitterCard} />
+      <meta name="twitter:site" content={DefaultMetaTwitterSite} />
+      <meta name="twitter:title" content={cleanTitle} />
+      <meta name="twitter:description" content={cleanDescription} />
+      <meta name="twitter:image" content={cleanImage} />
+      <link rel="canonical" href={pageUrl} />
       {children}
     </Helmet>
   )

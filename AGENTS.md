@@ -67,3 +67,13 @@
 - Run `yarn changelog` after version updates.
 - Create and push the release tag for each version bump (`git tag -a vX.Y.Z <release-commit-sha> -m "Release vX.Y.Z"` and `git push origin vX.Y.Z`) before generating the next release changelog.
 - Create the PR from `staging` to `production`.
+
+## Documentation Discipline (Core Rule)
+
+- For any architectural, infra, SSR/SEO, routing, or data-layer refactor, update docs in the same change set; do not leave documentation as a follow-up task.
+- Minimum doc deliverables for non-trivial refactors:
+  1. an implementation plan in `docs/PLAN_*.md`
+  2. a persistent standard/contract doc when introducing reusable patterns
+  3. a concise "what changed" summary for reviewers.
+- When user feedback is added directly inside plan docs, incorporate it into the plan text and explicitly summarize deltas in the response.
+- Keep linked docs in sync when one changes (for example SEO plan + SEO standard).

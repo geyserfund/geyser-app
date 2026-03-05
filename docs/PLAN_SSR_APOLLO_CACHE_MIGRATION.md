@@ -1,5 +1,11 @@
 # SSR + Apollo Cache Migration Plan (Minimal, Production-Oriented)
 
+## Related docs
+
+- `docs/PLAN_SSR_FETCHABLE_PUBLIC_DATA.md`
+- `docs/PLAN_SSR_SEO_HEAD_ARCHITECTURE.md`
+- `docs/SEO_METADATA_STANDARD.md`
+
 ## Goals and constraints
 
 - Replace `prerender-node` with native server-side rendering for public pages.

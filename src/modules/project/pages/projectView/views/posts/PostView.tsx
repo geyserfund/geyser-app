@@ -79,7 +79,7 @@ export const PostView = () => {
         title={post?.title || ''}
         description={post?.description || ''}
         image={post?.image || project.thumbnailImage || ''}
-        url={`https://geyser.fund/project/${project?.name}/post/${post?.id}`}
+        url={`https://geyser.fund/project/${project?.name}/posts/${post?.id}`}
         type="article"
       >
         {!loading && !projectLoading && <script type="application/ld+json">{generatePostJsonLd(post, project)}</script>}

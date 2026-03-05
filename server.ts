@@ -17,6 +17,7 @@ type SsrRenderResult =
       kind: 'render'
       status: number
       html: string
+      headHtml: string
       apolloState: Record<string, unknown>
     }
 
@@ -165,9 +166,22 @@ const serializeForInlineScript = (value: unknown) =>
     .replace(/\u2028/g, '\\u2028')
     .replace(/\u2029/g, '\\u2029')
 
-const injectSsrMarkup = (template: string, appHtml: string, apolloState: Record<string, unknown>) => {
+const HEAD_INJECTION_MARKER = '<!--app-head-->'
+
+const injectSsrMarkup = (
+  template: string,
+  appHtml: string,
+  apolloState: Record<string, unknown>,
+  headHtml: string,
+) => {
   const apolloStateScript = `<script>window.__APOLLO_STATE__=${serializeForInlineScript(apolloState)};</script>`
-  return template.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>\n    ${apolloStateScript}`)
+  const withAppHtml = template.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>\n    ${apolloStateScript}`)
+
+  if (withAppHtml.includes(HEAD_INJECTION_MARKER)) {
+    return withAppHtml.replace(HEAD_INJECTION_MARKER, headHtml)
+  }
+
+  return withAppHtml.replace('</head>', `${headHtml}\n</head>`)
 }
 
 const createGraphqlCachingFetch = ({ allowCache }: { allowCache: boolean }): typeof fetch => {
@@ -323,7 +337,7 @@ app.get('*', async (request, response) => {
       return
     }
 
-    const html = injectSsrMarkup(indexTemplate, ssrResult.html, ssrResult.apolloState)
+    const html = injectSsrMarkup(indexTemplate, ssrResult.html, ssrResult.apolloState, ssrResult.headHtml)
     response.status(ssrResult.status)
     response.setHeader('content-type', 'text/html; charset=utf-8')
     response.send(html)
