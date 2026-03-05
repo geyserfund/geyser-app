@@ -1,6 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router'
 
+import { Head } from '@/config/Head.tsx'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 
 export const Activity = () => {
@@ -14,6 +15,11 @@ export const Activity = () => {
       borderTopRadius="xl"
       bg="neutralAlpha.1"
     >
+      <Head
+        title="Activity feed"
+        description="See the latest global activity, updates, and contributions happening across Geyser."
+        type="website"
+      />
       <Outlet />
     </VStack>
   )

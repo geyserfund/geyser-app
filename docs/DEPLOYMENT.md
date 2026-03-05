@@ -21,8 +21,10 @@ The Geyser Front-End
 
 Use this checklist for any SSR/SEO-related release:
 
-1. Confirm Cloud Build trigger substitutions include `_SSR_ENABLED` for the target environment.
-2. Confirm Cloud Run deploy step still passes `SSR_ENABLED=${_SSR_ENABLED}`.
+1. Confirm environment policy:
+   - staging: `SSR_ENABLED=true` (always on)
+   - production: `SSR_ENABLED=${_SSR_ENABLED}` (feature-gated)
+2. Confirm Cloud Run deploy step matches the policy above.
 3. Validate one public project URL with `view-source` after deploy:
    - `<title>`
    - `meta[name="description"]`

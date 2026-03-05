@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 
+import { Head } from '@/config/Head.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 
 import BadgeItem from './BadgeItem'
@@ -36,6 +37,11 @@ export const BadgesPage = () => {
 
   return (
     <Container maxWidth="5xl" pt={10}>
+      <Head
+        title={t('Geyser badges')}
+        description={t('Explore contributor, creator, and grant badges earned in the Geyser ecosystem.')}
+        type="website"
+      />
       <Button mt={4} size="sm" bg="neutral.0" variant="outline" gap={2} onClick={() => navigate(-1)} fontSize="sm">
         <FaArrowLeft /> {t('Back')}
       </Button>

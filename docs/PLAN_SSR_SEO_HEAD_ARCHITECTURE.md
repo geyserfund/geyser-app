@@ -163,6 +163,7 @@ Deliverable: broad and consistent SSR SEO coverage.
 This plan is backed by:
 
 - `docs/PLAN_SSR_SEO_HEAD_ARCHITECTURE.md` (implementation plan)
+- `docs/PLAN_PUBLIC_SEO_DIRECT_QUERY_MIGRATION.md` (public-route direct query SEO rollout)
 - `docs/SEO_METADATA_STANDARD.md` (shared metadata contract and required tags)
 
 Both docs must be updated together when SEO/head architecture changes.

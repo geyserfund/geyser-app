@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { PiHouse } from 'react-icons/pi'
 import { Link, Navigate, useParams } from 'react-router'
 
+import { Head } from '@/config/Head.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
@@ -22,6 +23,11 @@ export const CategoryView = () => {
 
   return (
     <VStack w="full" alignItems="flex-start" spacing={16}>
+      <Head
+        title={`${category} projects`}
+        description={`Discover ${category} Bitcoin projects and campaigns on Geyser.`}
+        type="website"
+      />
       <HStack w="full" justifyContent="space-between">
         <H1 size="3xl" bold>
           {category}

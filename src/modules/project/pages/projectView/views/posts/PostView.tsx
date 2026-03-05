@@ -11,6 +11,7 @@ import { Head } from '@/config/Head'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useProjectSeoData } from '@/modules/project/hooks/useProjectSeoData.ts'
 import { generatePostJsonLd } from '@/modules/project/tools/generateProjectJsonLD.ts'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
@@ -34,7 +35,8 @@ import { postTypeOptions } from './utils/postTypeLabel.ts'
 
 export const PostView = () => {
   const { project, isProjectOwner, loading: projectLoading } = useProjectAtom()
-  const { postId } = useParams<{ postId: string }>()
+  const { postId, projectName } = useParams<{ postId: string; projectName: string }>()
+  const { descriptor: projectSeoDescriptor, project: projectFromSeoQuery } = useProjectSeoData({ projectName })
   const [sourceResource, setSourceResource] = useAtom(sourceResourceAtom)
   const navigate = useNavigate()
 
@@ -54,6 +56,8 @@ export const PostView = () => {
   })
 
   const post = data?.post
+  const canonicalProjectName = projectFromSeoQuery?.name || projectSeoDescriptor.projectName || projectName || project?.name
+  const projectForPostJsonLd = projectFromSeoQuery || (project?.id ? project : undefined)
 
   if (loading) {
     return <PostViewSkeleton />
@@ -78,11 +82,13 @@ export const PostView = () => {
       <Head
         title={post?.title || ''}
         description={post?.description || ''}
-        image={post?.image || project.thumbnailImage || ''}
-        url={`https://geyser.fund/project/${project?.name}/posts/${post?.id}`}
+        image={post?.image || projectSeoDescriptor.image || ''}
+        url={`https://geyser.fund/project/${canonicalProjectName}/posts/${post?.id}`}
         type="article"
       >
-        {!loading && !projectLoading && <script type="application/ld+json">{generatePostJsonLd(post, project)}</script>}
+        {!loading && !projectLoading && projectForPostJsonLd && (
+          <script type="application/ld+json">{generatePostJsonLd(post, projectForPostJsonLd)}</script>
+        )}
       </Head>
 
       <VStack w="full" paddingBottom="80px">

@@ -9,6 +9,7 @@ import { Head } from '@/config/Head'
 import { BottomNavBarContainer } from '@/modules/navigation/components/bottomNav'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { useProjectSeoData } from '@/modules/project/hooks/useProjectSeoData.ts'
 import { isNumericString } from '@/modules/project/utils/checkId.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
@@ -33,7 +34,8 @@ import { RewardShare } from './components/RewardShare.tsx'
 
 export const RewardView = () => {
   const { project, isProjectOwner, loading: projectLoading } = useProjectAtom()
-  const { rewardUUID } = useParams<{ rewardUUID: string }>()
+  const { rewardUUID, projectName } = useParams<{ rewardUUID: string; projectName: string }>()
+  const { descriptor: projectSeoDescriptor, project: projectFromSeoQuery } = useProjectSeoData({ projectName })
   const location = useLocation()
   const isMobileMode = useMobileMode()
 
@@ -103,10 +105,17 @@ export const RewardView = () => {
   }
 
   const isBuyDisabled = !isAvailable
+  const canonicalProjectName = projectFromSeoQuery?.name || projectSeoDescriptor.projectName || projectName || project?.name
 
   return (
     <>
-      <Head title={reward.name} description={reward.shortDescription || ''} image={reward.images[0]} />
+      <Head
+        title={reward.name}
+        description={reward.shortDescription || ''}
+        image={reward.images[0] || projectSeoDescriptor.image || ''}
+        type="article"
+        url={`https://geyser.fund/project/${canonicalProjectName}/rewards/${reward.uuid || rewardUUID}`}
+      />
       <VStack w="full" paddingBottom="120px">
         <TopNavContainerBar>
           <Button

@@ -1,5 +1,6 @@
 import { HStack, VStack } from '@chakra-ui/react'
 
+import { Head } from '@/config/Head.tsx'
 import { Body, H1 } from '@/shared/components/typography'
 import { standardPadding } from '@/shared/styles'
 import { fonts } from '@/shared/styles/fonts'
@@ -17,6 +18,11 @@ export const Manifesto = () => {
         paddingBottom={10}
         spacing={6}
       >
+        <Head
+          title="Geyser Manifesto"
+          description="Read the Geyser manifesto and our vision for accelerating Bitcoin adoption."
+          type="article"
+        />
         <H1 fontSize={'60px'}> GEYSER MANIFESTO </H1>
         <Body fontSize={'28px'}>
           In a world where nihilism and pessimism about the future prevail, Bitcoin brought us hope. Not just hope for a
