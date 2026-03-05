@@ -87,7 +87,7 @@ steps:
       - '--region'
       - 'us-central1'
       - '--set-env-vars'
-      - 'NODE_ENV=${_NODE_ENV}'
+      - 'NODE_ENV=${_NODE_ENV},SSR_ENABLED=${_SSR_ENABLED}'
       - '--set-secrets'
       - 'PRERENDER_TOKEN=prerender-api-key:latest'
 images:
