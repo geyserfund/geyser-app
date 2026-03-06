@@ -5,7 +5,7 @@ import { NavLink } from 'react-router'
 
 import { ExternalAccountType } from '@/modules/auth'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
-import { Body, H2 } from '@/shared/components/typography'
+import { H2 } from '@/shared/components/typography'
 import { guardianJewels, guardianText } from '@/shared/constants/assets/guardianAssets.tsx'
 import { getExternalAccountsButtons } from '@/shared/utils/user/getExternalAccountsButtons'
 import { ProjectPageCreatorFragment } from '@/types'

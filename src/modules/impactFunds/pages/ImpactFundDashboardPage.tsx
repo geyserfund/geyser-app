@@ -61,10 +61,6 @@ function buildDashboardApplicationsInput(impactFundId: number, cursorId?: string
   }
 }
 
-function getFundingModelLabel(fundingModel: DashboardApplication['fundingModel']) {
-  return fundingModelLabels[fundingModel] ?? fundingModel
-}
-
 function getApplicationStatusLabel(status: DashboardApplication['status']) {
   return applicationStatusLabels[status] ?? status
 }
