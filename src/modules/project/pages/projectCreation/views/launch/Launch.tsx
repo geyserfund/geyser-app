@@ -11,7 +11,8 @@ import { projectReviewsAtom } from '../../states/projectReviewAtom.ts'
 import { LaunchFees } from './views/LaunchFees.tsx'
 import { LaunchFinalize } from './views/LaunchFinalize.tsx'
 import { LaunchReview } from './views/LaunchReview.tsx'
-import { LaunchStrategySelection, ProjectLaunchStrategy } from './views/LaunchStrategySelection.tsx'
+import { LaunchStrategySelection } from './views/LaunchStrategySelection.tsx'
+import { ProjectLaunchStrategy } from './views/launchConstants.ts'
 
 enum LaunchStep {
   Review = 'review',
