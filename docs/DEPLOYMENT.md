@@ -32,3 +32,4 @@ Use this checklist for any SSR/SEO-related release:
    - canonical URL
 4. Validate one CSR-only route (funding/refund) still behaves client-side.
 5. Check Cloud Run logs for SSR bundle load issues (`Cannot find module ... entry-server`); if present, SSR is falling back to SPA shell.
+6. Confirm runtime image contains both `dist/client` and `dist/server` artifacts (SSR server bundle must be present).

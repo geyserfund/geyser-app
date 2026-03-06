@@ -76,7 +76,34 @@ const findEntryServerFile = (directory: string): string | undefined => {
   return undefined
 }
 
-const resolveServerEntryPath = () => {
+const findServerModuleCandidates = (directory: string): string[] => {
+  if (!fs.existsSync(directory)) return []
+
+  const discoveredFiles: string[] = []
+  const entries = fs.readdirSync(directory, { withFileTypes: true })
+
+  for (const entry of entries) {
+    const absolutePath = path.join(directory, entry.name)
+    if (entry.isDirectory()) {
+      discoveredFiles.push(...findServerModuleCandidates(absolutePath))
+      continue
+    }
+
+    if (!entry.isFile()) continue
+    if (!/\.(js|mjs|cjs)$/.test(entry.name)) continue
+    discoveredFiles.push(absolutePath)
+  }
+
+  return discoveredFiles.sort((left, right) => {
+    const leftIsEntryServer = left.includes('entry-server')
+    const rightIsEntryServer = right.includes('entry-server')
+    if (leftIsEntryServer && !rightIsEntryServer) return -1
+    if (!leftIsEntryServer && rightIsEntryServer) return 1
+    return left.localeCompare(right)
+  })
+}
+
+const getServerEntryCandidates = () => {
   const explicitCandidates = [
     path.resolve(__dirname, 'dist/server/entry-server.js'),
     path.resolve(__dirname, 'dist/server/entry-server.mjs'),
@@ -86,6 +113,13 @@ const resolveServerEntryPath = () => {
     path.resolve(__dirname, 'dist/entry-server.js'),
     path.resolve(__dirname, 'dist/entry-server.mjs'),
   ]
+
+  const discoveredCandidates = findServerModuleCandidates(path.resolve(__dirname, 'dist/server'))
+  return Array.from(new Set([...explicitCandidates, ...discoveredCandidates]))
+}
+
+const resolveServerEntryPath = () => {
+  const explicitCandidates = getServerEntryCandidates()
 
   for (const candidate of explicitCandidates) {
     if (fs.existsSync(candidate)) {
@@ -299,13 +333,37 @@ const createGraphqlCachingFetch = ({ allowCache }: { allowCache: boolean }): typ
 
 const loadRenderServerApp = async () => {
   if (!renderServerAppPromise) {
-    renderServerAppPromise = import(pathToFileURL(serverEntryPath).href).then((module) => {
-      if (typeof module.renderServerApp !== 'function') {
-        throw new Error(`renderServerApp was not found in ${serverEntryPath}`)
+    renderServerAppPromise = (async () => {
+      const entryCandidates = getServerEntryCandidates()
+      const attemptedCandidates: string[] = []
+      let lastError: unknown = null
+
+      for (const candidatePath of entryCandidates) {
+        if (!fs.existsSync(candidatePath)) continue
+
+        attemptedCandidates.push(candidatePath)
+        try {
+          const module = await import(pathToFileURL(candidatePath).href)
+          if (typeof module.renderServerApp === 'function') {
+            if (candidatePath !== serverEntryPath) {
+              console.warn(`SSR entry fallback selected: ${candidatePath}`)
+            }
+            return module.renderServerApp as SsrRenderApp
+          }
+        } catch (error) {
+          lastError = error
+        }
       }
 
-      return module.renderServerApp as SsrRenderApp
-    })
+      const candidateMessage = attemptedCandidates.length > 0 ? attemptedCandidates.join(', ') : '(none found)'
+      if (lastError instanceof Error) {
+        throw new Error(
+          `Unable to load renderServerApp from SSR bundle. Tried: ${candidateMessage}. Last error: ${lastError.message}`,
+        )
+      }
+
+      throw new Error(`Unable to load renderServerApp from SSR bundle. Tried: ${candidateMessage}`)
+    })()
   }
 
   try {
