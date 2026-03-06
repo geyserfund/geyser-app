@@ -55,8 +55,54 @@ const resolveClientDistDir = () => {
   return path.resolve(__dirname, 'dist')
 }
 
+const findEntryServerFile = (directory: string): string | undefined => {
+  if (!fs.existsSync(directory)) return undefined
+
+  const entries = fs.readdirSync(directory, { withFileTypes: true })
+  for (const entry of entries) {
+    const absolutePath = path.join(directory, entry.name)
+    if (entry.isDirectory()) {
+      const nestedPath = findEntryServerFile(absolutePath)
+      if (nestedPath) return nestedPath
+      continue
+    }
+
+    if (!entry.isFile()) continue
+    if (entry.name === 'entry-server.js' || entry.name === 'entry-server.mjs' || entry.name === 'entry-server.cjs') {
+      return absolutePath
+    }
+  }
+
+  return undefined
+}
+
+const resolveServerEntryPath = () => {
+  const explicitCandidates = [
+    path.resolve(__dirname, 'dist/server/entry-server.js'),
+    path.resolve(__dirname, 'dist/server/entry-server.mjs'),
+    path.resolve(__dirname, 'dist/server/entry-server.cjs'),
+    path.resolve(__dirname, 'dist/server/src/entry-server.js'),
+    path.resolve(__dirname, 'dist/server/src/entry-server.mjs'),
+    path.resolve(__dirname, 'dist/entry-server.js'),
+    path.resolve(__dirname, 'dist/entry-server.mjs'),
+  ]
+
+  for (const candidate of explicitCandidates) {
+    if (fs.existsSync(candidate)) {
+      return candidate
+    }
+  }
+
+  const discoveredPath = findEntryServerFile(path.resolve(__dirname, 'dist/server'))
+  if (discoveredPath) {
+    return discoveredPath
+  }
+
+  return explicitCandidates[0]
+}
+
 const clientDistDir = resolveClientDistDir()
-const serverEntryPath = path.resolve(__dirname, 'dist/server/entry-server.js')
+const serverEntryPath = resolveServerEntryPath()
 const indexHtmlPath = path.resolve(clientDistDir, 'index.html')
 const indexTemplate = fs.readFileSync(indexHtmlPath, 'utf8')
 
@@ -356,7 +402,7 @@ app.get('*', async (request, response) => {
   }
 })
 
-console.log(`ENV VAR CHECK:\n\tPORT: ${PORT}\n\tSSR_ENABLED: ${SSR_ENABLED}`)
+console.log(`ENV VAR CHECK:\n\tPORT: ${PORT}\n\tSSR_ENABLED: ${SSR_ENABLED}\n\tSSR_ENTRY: ${serverEntryPath}`)
 
 app.listen(PORT, () => {
   console.log(`Geyser app listening on port ${PORT}`)

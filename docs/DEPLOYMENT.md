@@ -31,3 +31,4 @@ Use this checklist for any SSR/SEO-related release:
    - OG/Twitter tags
    - canonical URL
 4. Validate one CSR-only route (funding/refund) still behaves client-side.
+5. Check Cloud Run logs for SSR bundle load issues (`Cannot find module ... entry-server`); if present, SSR is falling back to SPA shell.
