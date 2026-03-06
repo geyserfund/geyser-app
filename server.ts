@@ -118,6 +118,59 @@ const serverEntryPath = resolveServerEntryPath()
 const indexHtmlPath = path.resolve(clientDistDir, 'index.html')
 const indexTemplate = fs.readFileSync(indexHtmlPath, 'utf8')
 
+const getErrorDetails = (error: unknown) => {
+  if (error instanceof Error) {
+    const stackTop = error.stack?.split('\n')[0] || ''
+    const withCode = error as Error & { code?: string }
+    return {
+      name: error.name,
+      message: error.message,
+      code: withCode.code || '',
+      stackTop,
+    }
+  }
+
+  return {
+    name: typeof error,
+    message: String(error),
+    code: '',
+    stackTop: '',
+  }
+}
+
+const logSsrEntryDiagnostics = () => {
+  const serverDistDir = path.resolve(__dirname, 'dist/server')
+  const entryExists = fs.existsSync(serverEntryPath)
+  let entrySize = 0
+  let entryMtime = ''
+  let serverDirSample = ''
+
+  if (entryExists) {
+    try {
+      const stat = fs.statSync(serverEntryPath)
+      entrySize = stat.size
+      entryMtime = stat.mtime.toISOString()
+    } catch (error) {
+      console.warn('SSR_ENTRY_STAT_ERROR:', getErrorDetails(error))
+    }
+  }
+
+  if (fs.existsSync(serverDistDir)) {
+    try {
+      const sampleEntries = fs.readdirSync(serverDistDir).slice(0, 20)
+      serverDirSample = sampleEntries.join(',')
+    } catch (error) {
+      console.warn('SSR_DIR_READ_ERROR:', getErrorDetails(error))
+    }
+  }
+
+  console.log(
+    `SSR_ENTRY_DIAG: cwd=${process.cwd()} dirname=${__dirname} entryPath=${serverEntryPath} entryExists=${entryExists} entrySize=${entrySize} entryMtime=${entryMtime} serverDistDir=${serverDistDir} serverDistExists=${fs.existsSync(
+      serverDistDir,
+    )} serverDirSample=${serverDirSample}`,
+  )
+}
+
 const htmlCache = new Map<string, HtmlCacheEntry>()
 const graphqlCache = new Map<string, GraphqlCacheEntry>()
 
@@ -319,8 +372,10 @@ const loadRenderServerApp = async () => {
         if (!fs.existsSync(candidatePath)) continue
 
         attemptedCandidates.push(candidatePath)
+        const candidateFileUrl = pathToFileURL(candidatePath).href
+        console.log(`SSR_IMPORT_ATTEMPT: candidate=${candidatePath} url=${candidateFileUrl}`)
         try {
-          const module = await import(pathToFileURL(candidatePath).href)
+          const module = await import(candidateFileUrl)
           if (typeof module.renderServerApp === 'function') {
             if (candidatePath !== serverEntryPath) {
               console.warn(`SSR entry fallback selected: ${candidatePath}`)
@@ -328,11 +383,14 @@ const loadRenderServerApp = async () => {
 
             return module.renderServerApp as SsrRenderApp
           }
+
+          console.warn(`SSR_IMPORT_MISSING_EXPORT: candidate=${candidatePath} hasRenderServerApp=false`)
         } catch (error) {
           if (!firstError) {
             firstError = error
           }
 
+          console.error(`SSR_IMPORT_ERROR: candidate=${candidatePath} url=${candidateFileUrl}`, getErrorDetails(error))
           lastError = error
         }
       }
@@ -446,6 +504,7 @@ app.get('*', async (request, response) => {
 })
 
 console.log(`ENV VAR CHECK:\n\tPORT: ${PORT}\n\tSSR_ENABLED: ${SSR_ENABLED}\n\tSSR_ENTRY: ${serverEntryPath}`)
+logSsrEntryDiagnostics()
 
 app.listen(PORT, () => {
   console.log(`Geyser app listening on port ${PORT}`)
