@@ -1,7 +1,5 @@
-import { ProjectFundingStrategy } from '@/types/index.ts'
-
-import { PaginatedView } from '../../../mainView/paginatedView/PaginatedView.tsx'
+import { FundraisersProjects } from '../components/FundraisersProjects.tsx'
 
 export const CategoryFundraisers = () => {
-  return <PaginatedView noTitle fundingStrategy={ProjectFundingStrategy.TakeItAll} />
+  return <FundraisersProjects />
 }

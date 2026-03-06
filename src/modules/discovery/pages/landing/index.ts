@@ -4,11 +4,10 @@ import { AlmostOverCampaigns } from './views/navView/campaigns/views/AlmostOverC
 import { InYourRegionCampaigns } from './views/navView/campaigns/views/InYourRegionCampaigns.tsx'
 import { LatestCampaigns } from './views/navView/campaigns/views/LatestCampaigns.tsx'
 import { TrendingCampaigns } from './views/navView/campaigns/views/TrendingCampaigns.tsx'
+import { FundraisersProjects } from './views/navView/fundraisers/components/FundraisersProjects.tsx'
 import { Fundraisers } from './views/navView/fundraisers/Fundraisers.tsx'
 import { CategoryFundraisers } from './views/navView/fundraisers/views/CategoryFundraisers.tsx'
 import { InYourRegionFundraisers } from './views/navView/fundraisers/views/InYourRegionFundraisers.tsx'
-import { LatestFundraisers } from './views/navView/fundraisers/views/LatestFundraisers.tsx'
-import { TrendingFundraisers } from './views/navView/fundraisers/views/TrendingFundraisers.tsx'
 import { NavView } from './views/navView/NavView.tsx'
 import { CategoryProducts } from './views/navView/shops/views/CategoryProducts.tsx'
 import { TrendingProducts } from './views/navView/shops/views/TrendingProducts.tsx'
@@ -21,13 +20,12 @@ export {
   CategoryFundraisers,
   CategoryProducts,
   Fundraisers,
+  FundraisersProjects,
   InYourRegionCampaigns,
   InYourRegionFundraisers,
   LatestCampaigns,
-  LatestFundraisers,
   NavView,
   Products,
   TrendingCampaigns,
-  TrendingFundraisers,
   TrendingProducts,
 }

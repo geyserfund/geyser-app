@@ -22,6 +22,8 @@ import { getPath } from '@/shared/constants/index.ts'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
 import { ProjectCreationStep } from '@/types/index.ts'
 
+export { getProjectCreationRoute } from '../utils/getProjectCreationRoute.ts'
+
 export const ProjectCreationNavigationMobile = () => {
   return (
     <HStack w="full" paddingX={standardPadding}>
@@ -115,34 +117,6 @@ const ProjectCreationNavigation = (props: StackProps) => {
   )
 }
 
-export const getProjectCreationRoute = (lastCreationStep: ProjectCreationStep, projectId: string) => {
-  switch (lastCreationStep) {
-    case ProjectCreationStep.ProjectDetails:
-      return getPath('launchProjectDetails', projectId)
-    case ProjectCreationStep.FundingGoal:
-      return getPath('launchFundingGoal', projectId)
-    case ProjectCreationStep.FundingType:
-      return getPath('launchFundingStrategy', projectId)
-    case ProjectCreationStep.PerksAndProducts:
-      return getPath('launchProjectRewards', projectId)
-    case ProjectCreationStep.Story:
-      return getPath('launchStory', projectId)
-    case ProjectCreationStep.AboutYou:
-      return getPath('launchAboutYou', projectId)
-    case ProjectCreationStep.Wallet:
-      return getPath('launchPayment', projectId)
-    case ProjectCreationStep.TaxId:
-      return getPath('launchPaymentTaxId', projectId)
-    case ProjectCreationStep.IdentityVerification:
-      return getPath('launchPaymentAccountPassword', projectId)
-    case ProjectCreationStep.Launch:
-      return getPath('launchFinalize', projectId)
-
-    default:
-      return getPath('launchProjectDetails', projectId)
-  }
-}
-
 const projectCreationStepIndex = {
   [ProjectCreationStep.ProjectDetails]: 0,
   [ProjectCreationStep.FundingGoal]: 1,
@@ -153,5 +127,6 @@ const projectCreationStepIndex = {
   [ProjectCreationStep.Wallet]: 5,
   [ProjectCreationStep.TaxId]: 5,
   [ProjectCreationStep.IdentityVerification]: 5,
+  [ProjectCreationStep.FiatContributions]: 5,
   [ProjectCreationStep.Launch]: 6,
 }

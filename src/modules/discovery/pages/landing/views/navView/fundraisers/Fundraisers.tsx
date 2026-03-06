@@ -1,6 +1,6 @@
 import { HStack, IconButton, Tab, TabList, Tabs, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PiCaretLeft, PiCaretRight, PiGlobeHemisphereWest, PiMoneyWavy, PiStorefront } from 'react-icons/pi'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 
@@ -8,49 +8,6 @@ import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
 
 import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
-
-const tabs = [
-  {
-    label: `🔥 ${t('Trending')}`,
-    path: getPath('discoveryFundraisers'),
-  },
-  {
-    label: `🆕 ${t('Latest')}`,
-    path: getPath('discoveryFundraisersLatest'),
-  },
-  {
-    label: `📍 ${t('In your region')}`,
-    path: getPath('discoveryFundraisersInYourRegion'),
-  },
-  {
-    label: `🌊 ${t('Circular Economies')}`,
-    path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.CircularEconomy),
-  },
-  {
-    label: `🎓 ${t('Education')}`,
-    path: getPath('discoveryFundraisersCategory', ProjectCategory.Education),
-  },
-  {
-    label: `🛠 ${t('Open Source')}`,
-    path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.OsSoftware),
-  },
-  {
-    label: `🌍 ${t('Humanitarian')}`,
-    path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.Humanitarian),
-  },
-  {
-    label: `🤲 ${t('Causes')}`,
-    path: getPath('discoveryFundraisersCategory', ProjectCategory.Cause),
-  },
-  {
-    label: `⚖️ ${t('Legal & Advocacy')}`,
-    path: getPath('discoveryFundraisersCategory', ProjectCategory.Advocacy),
-  },
-  {
-    label: `🤝 ${t('Community')}`,
-    path: getPath('discoveryFundraisersCategory', ProjectCategory.Community),
-  },
-]
 
 const campaignCards = [
   {
@@ -70,11 +27,51 @@ const campaignCards = [
   },
 ]
 export const Fundraisers = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
   const tabListRef = useRef<HTMLDivElement | null>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
+
+  const tabs = [
+    {
+      label: `💸 ${t('Fundraisers')}`,
+      path: getPath('discoveryFundraisers'),
+    },
+    {
+      label: `📍 ${t('In your region')}`,
+      path: getPath('discoveryFundraisersInYourRegion'),
+    },
+    {
+      label: `🌊 ${t('Circular Economies')}`,
+      path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.CircularEconomy),
+    },
+    {
+      label: `🎓 ${t('Education')}`,
+      path: getPath('discoveryFundraisersCategory', ProjectCategory.Education),
+    },
+    {
+      label: `🛠 ${t('Open Source')}`,
+      path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.OsSoftware),
+    },
+    {
+      label: `🌍 ${t('Humanitarian')}`,
+      path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.Humanitarian),
+    },
+    {
+      label: `🤲 ${t('Causes')}`,
+      path: getPath('discoveryFundraisersCategory', ProjectCategory.Cause),
+    },
+    {
+      label: `⚖️ ${t('Legal & Advocacy')}`,
+      path: getPath('discoveryFundraisersCategory', ProjectCategory.Advocacy),
+    },
+    {
+      label: `🤝 ${t('Community')}`,
+      path: getPath('discoveryFundraisersCategory', ProjectCategory.Community),
+    },
+  ]
 
   const currentTabIndex = Math.max(
     tabs.findIndex((tab) => tab.path === location.pathname),
@@ -121,7 +118,17 @@ export const Fundraisers = () => {
         w="full"
         variant="secondary"
         index={currentTabIndex}
-        onChange={(index) => navigate(tabs?.[index]?.path ?? '')}
+        onChange={(index) =>
+          navigate(
+            {
+              pathname: tabs[index]?.path ?? getPath('discoveryFundraisers'),
+              search: location.search,
+            },
+            {
+              preventScrollReset: true,
+            },
+          )
+        }
       >
         <HStack w="full" spacing={2} alignItems="center">
           {canScrollLeft ? (
@@ -172,7 +179,7 @@ export const Fundraisers = () => {
           ) : null}
         </HStack>
 
-        <VStack w="full" minHeight="100vh" paddingTop={8}>
+        <VStack w="full" minHeight="100vh" paddingTop={7} alignItems="start">
           <Outlet />
         </VStack>
       </Tabs>

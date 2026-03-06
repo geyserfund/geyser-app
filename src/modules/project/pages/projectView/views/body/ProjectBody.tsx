@@ -13,6 +13,7 @@ import { RewardNotice } from '../../components/RewardNotice.tsx'
 import {
   ContributionSummary,
   ControlPanel,
+  Creator,
   Details,
   Goals,
   Header,
@@ -73,6 +74,7 @@ export const ProjectBody = () => {
         <ControlPanel />
 
         <Header />
+        <Creator />
         <ImpactFundRecipientBanner recipient={impactFundRecipient} />
         <RewardNotice />
 

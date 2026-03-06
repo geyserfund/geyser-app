@@ -83,6 +83,12 @@ export const ProjectDashboardInfo = () => {
     handleUpdateProject(values)
   }
 
+  const onInvalidSubmit = () => {
+    toast.error({
+      title: t('One or more fields are missing') + '.',
+    })
+  }
+
   const SaveButton = (props: ButtonProps) => {
     return (
       <Button
@@ -101,7 +107,7 @@ export const ProjectDashboardInfo = () => {
   return (
     <DashboardLayout
       as={'form'}
-      onSubmit={form.handleSubmit(onSubmit)}
+      onSubmit={form.handleSubmit(onSubmit, onInvalidSubmit)}
       mobileTopNavRightComponent={<SaveButton />}
       deskTopBottomComponent={<SaveButton w="full" />}
       desktopTitle={t('Project info')}
