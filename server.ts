@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import type { Request as ExpressRequest, Response as ExpressResponse } from 'express'
 
@@ -76,33 +77,6 @@ const findEntryServerFile = (directory: string): string | undefined => {
   return undefined
 }
 
-const findServerModuleCandidates = (directory: string): string[] => {
-  if (!fs.existsSync(directory)) return []
-
-  const discoveredFiles: string[] = []
-  const entries = fs.readdirSync(directory, { withFileTypes: true })
-
-  for (const entry of entries) {
-    const absolutePath = path.join(directory, entry.name)
-    if (entry.isDirectory()) {
-      discoveredFiles.push(...findServerModuleCandidates(absolutePath))
-      continue
-    }
-
-    if (!entry.isFile()) continue
-    if (!/\.(js|mjs|cjs)$/.test(entry.name)) continue
-    discoveredFiles.push(absolutePath)
-  }
-
-  return discoveredFiles.sort((left, right) => {
-    const leftIsEntryServer = left.includes('entry-server')
-    const rightIsEntryServer = right.includes('entry-server')
-    if (leftIsEntryServer && !rightIsEntryServer) return -1
-    if (!leftIsEntryServer && rightIsEntryServer) return 1
-    return left.localeCompare(right)
-  })
-}
-
 const getServerEntryCandidates = () => {
   const explicitCandidates = [
     path.resolve(__dirname, 'dist/server/entry-server.js'),
@@ -114,8 +88,12 @@ const getServerEntryCandidates = () => {
     path.resolve(__dirname, 'dist/entry-server.mjs'),
   ]
 
-  const discoveredCandidates = findServerModuleCandidates(path.resolve(__dirname, 'dist/server'))
-  return Array.from(new Set([...explicitCandidates, ...discoveredCandidates]))
+  const discoveredEntry = findEntryServerFile(path.resolve(__dirname, 'dist/server'))
+  if (!discoveredEntry) {
+    return explicitCandidates
+  }
+
+  return Array.from(new Set([...explicitCandidates, discoveredEntry]))
 }
 
 const resolveServerEntryPath = () => {
@@ -248,14 +226,12 @@ const serializeForInlineScript = (value: unknown) =>
 
 const HEAD_INJECTION_MARKER = '<!--app-head-->'
 
-const injectSsrMarkup = (
-  template: string,
-  appHtml: string,
-  apolloState: Record<string, unknown>,
-  headHtml: string,
-) => {
+const injectSsrMarkup = (template: string, appHtml: string, apolloState: Record<string, unknown>, headHtml: string) => {
   const apolloStateScript = `<script>window.__APOLLO_STATE__=${serializeForInlineScript(apolloState)};</script>`
-  const withAppHtml = template.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>\n    ${apolloStateScript}`)
+  const withAppHtml = template.replace(
+    '<div id="root"></div>',
+    `<div id="root">${appHtml}</div>\n    ${apolloStateScript}`,
+  )
 
   if (withAppHtml.includes(HEAD_INJECTION_MARKER)) {
     return withAppHtml.replace(HEAD_INJECTION_MARKER, headHtml)
@@ -336,6 +312,7 @@ const loadRenderServerApp = async () => {
     renderServerAppPromise = (async () => {
       const entryCandidates = getServerEntryCandidates()
       const attemptedCandidates: string[] = []
+      let firstError: unknown = null
       let lastError: unknown = null
 
       for (const candidatePath of entryCandidates) {
@@ -348,17 +325,25 @@ const loadRenderServerApp = async () => {
             if (candidatePath !== serverEntryPath) {
               console.warn(`SSR entry fallback selected: ${candidatePath}`)
             }
+
             return module.renderServerApp as SsrRenderApp
           }
         } catch (error) {
+          if (!firstError) {
+            firstError = error
+          }
+
           lastError = error
         }
       }
 
       const candidateMessage = attemptedCandidates.length > 0 ? attemptedCandidates.join(', ') : '(none found)'
+      const formatError = (error: unknown) => (error instanceof Error ? error.message : String(error))
       if (lastError instanceof Error) {
         throw new Error(
-          `Unable to load renderServerApp from SSR bundle. Tried: ${candidateMessage}. Last error: ${lastError.message}`,
+          `Unable to load renderServerApp from SSR bundle. Tried: ${candidateMessage}. First error: ${formatError(
+            firstError,
+          )}. Last error: ${formatError(lastError)}`,
         )
       }
 

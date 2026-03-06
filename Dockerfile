@@ -55,7 +55,7 @@ ARG VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
     printenv > .env \
     && NODE_OPTIONS=--max-old-space-size=8192 yarn build \
-    && SSR_ENTRY_CANDIDATE=$(find dist/server -type f \( -name 'entry-server.js' -o -name 'entry-server.mjs' -o -name 'entry-server.cjs' -o -name '*.mjs' -o -name '*.js' -o -name '*.cjs' \) | head -n 1) \
+    && SSR_ENTRY_CANDIDATE=$(find dist/server -type f \( -name 'entry-server.js' -o -name 'entry-server.mjs' -o -name 'entry-server.cjs' \) | head -n 1) \
     && if [ -z "$SSR_ENTRY_CANDIDATE" ]; then echo "SSR bundle missing under dist/server"; find dist -maxdepth 4 -type f | sort; exit 1; fi \
     && echo "SSR bundle candidate: $SSR_ENTRY_CANDIDATE" \
     && yarn tsc server.ts \

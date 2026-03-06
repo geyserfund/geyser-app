@@ -73,6 +73,10 @@ export default defineConfig(({ command, mode, isSsrBuild }) => {
           : {}),
       },
     },
+    ssr: {
+      // Apollo is published as CommonJS in this install layout; bundling it avoids Node ESM named-export failures.
+      noExternal: ['@apollo/client', '@apollo/client/*'],
+    },
     server,
     // Use the conditionally populated define object
     define,
