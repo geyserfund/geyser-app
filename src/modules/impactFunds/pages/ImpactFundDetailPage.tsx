@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client'
 import {
   Accordion,
   AccordionButton,
@@ -64,11 +65,11 @@ import {
   OrderByOptions,
   useImpactFundApplicationsQuery,
   useImpactFundApplyMutation,
-  useImpactFundQuery,
   useProjectPageFundersQuery,
 } from '@/types'
 import { useNotification } from '@/utils'
 
+import { QUERY_IMPACT_FUND } from '../graphql/queries/impactFundsQuery.ts'
 import { IMPACT_FUND_DETAILS_SEO_IMAGES } from '../utils/constants.ts'
 
 const APPLICATIONS_PAGE_SIZE = 15
@@ -77,7 +78,7 @@ const DESCRIPTION_COLLAPSED_MAX_HEIGHT = '240px'
 const SPONSOR_INQUIRY_CALENDAR_URL = 'https://cal.com/metamick/thirtymin?overlayCalendar=true'
 const satsNumberFormatter = new Intl.NumberFormat()
 const fundedStatus = [ImpactFundApplicationStatus.Funded]
-type ImpactFundDetails = ImpactFundQuery['impactFund']
+type ImpactFundDetails = ImpactFundQuery['impactFund'] & { canAccessDashboard: boolean }
 type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
 type OwnedProject = { id: unknown; title: string }
 type SponsorItem = Pick<ImpactFundDetails['liveSponsors'][number], 'id' | 'name' | 'image' | 'url'>
@@ -213,7 +214,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
   const projectModal = useDisclosure()
   const [selectedProjectId, setSelectedProjectId] = useState<string>('')
 
-  const { data, loading, error } = useImpactFundQuery({
+  const { data, loading, error } = useQuery<{ impactFund: ImpactFundDetails }>(QUERY_IMPACT_FUND, {
     variables: { input: { where: { name: decodedImpactFundName } } },
     skip: !impactFundName,
   })
@@ -758,20 +759,54 @@ function ImpactFundOverviewSection({
           <H2 size="3xl" bold color={colors.primaryTextColor} lineHeight={1}>
             {impactFund.title}
           </H2>
+          <HStack spacing={3} align="center" flexWrap="wrap" justify={{ base: 'stretch', md: 'flex-end' }}>
+            {impactFund.canAccessDashboard && (
+              <Button
+                as={Link}
+                to={getPath('impactFundDashboard', impactFund.name)}
+                display={{ base: 'none', md: 'inline-flex' }}
+                size="lg"
+                variant="outline"
+                colorScheme="primary1"
+                flexShrink={0}
+                px={8}
+                minW="210px"
+                fontWeight="semibold"
+                fontSize="lg"
+              >
+                {t('Access Moderator Dashboard')}
+              </Button>
+            )}
+            <Button
+              display={{ base: 'none', md: 'inline-flex' }}
+              size="lg"
+              colorScheme="primary1"
+              onClick={onApplyClick}
+              flexShrink={0}
+              px={8}
+              minW="210px"
+              fontWeight="semibold"
+              fontSize="lg"
+            >
+              {t('Apply for funding')}
+            </Button>
+          </HStack>
+        </Flex>
+        {impactFund.canAccessDashboard && (
           <Button
-            display={{ base: 'none', md: 'inline-flex' }}
-            size="lg"
+            as={Link}
+            to={getPath('impactFundDashboard', impactFund.name)}
+            display={{ base: 'flex', md: 'none' }}
+            size="md"
+            variant="outline"
             colorScheme="primary1"
-            onClick={onApplyClick}
-            flexShrink={0}
-            px={8}
-            minW="210px"
+            w="full"
             fontWeight="semibold"
             fontSize="lg"
           >
-            {t('Apply for funding')}
+            {t('Access Moderator Dashboard')}
           </Button>
-        </Flex>
+        )}
         <Button
           display={{ base: 'flex', md: 'none' }}
           size="md"

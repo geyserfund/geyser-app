@@ -60,6 +60,7 @@ export const QUERY_IMPACT_FUND = gql`
         awardedTotalSats
         projectsFundedCount
       }
+      canAccessDashboard
     }
   }
 `
@@ -82,6 +83,32 @@ export const QUERY_IMPACT_FUND_APPLICATIONS = gql`
           thumbnailImage
           shortDescription
         }
+      }
+    }
+  }
+`
+
+export const QUERY_IMPACT_FUND_DASHBOARD_APPLICATIONS = gql`
+  query ImpactFundDashboardApplications($input: ImpactFundDashboardApplicationsInput!) {
+    impactFundDashboardApplications(input: $input) {
+      totalCount
+      applications {
+        applicationId
+        status
+        fundingModel
+        project {
+          id
+          name
+          title
+          thumbnailImage
+          shortDescription
+        }
+        creator {
+          id
+          username
+          email
+        }
+        projectPath
       }
     }
   }

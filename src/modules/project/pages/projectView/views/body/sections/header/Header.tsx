@@ -48,7 +48,6 @@ import { useProjectAtom, useWalletAtom } from '../../../../../../hooks/useProjec
 import { FollowButton } from '../../components'
 import { CreatorEditButton } from '../../components/CreatorEditButton'
 import { AonProjectBalanceDisplay } from '../contributionSummary/components/AonProjectBalanceDisplay.tsx'
-import { CreatorSocial } from './components/CreatorSocial'
 import { NonProjectProjectIcon } from './components/NonProjectProjectIcon.tsx'
 import { PostOnNostr } from './components/PostOnNostr.tsx'
 import { ShareProjectButton } from './components/ShareProjectButton'
@@ -132,10 +131,6 @@ const HeaderDetails = ({ onOpen, summaryLoading, summaryError, ...props }: Heade
             {project.title}
           </H1>
           <NonProjectProjectIcon taxProfile={projectOwner?.user?.taxProfile} />
-        </HStack>
-
-        <HStack w="full" flexWrap={'wrap'}>
-          <CreatorSocial />
         </HStack>
 
         {summaryLoading ? (
@@ -331,13 +326,6 @@ export const HeaderSkeleton = () => {
         </Box>
         <VStack flex={1} spacing={2} alignItems="start">
           <SkeletonLayout width="70%" height="20px" />
-
-          <HStack w="full">
-            <SkeletonLayout height="20px" width="150px" />
-            <SkeletonLayout height="20px" width="100px" />
-            <SkeletonLayout height="20px" width="20px" />
-            <SkeletonLayout height="20px" width="20px" />
-          </HStack>
 
           <SkeletonText noOfLines={2} w="40%" />
 

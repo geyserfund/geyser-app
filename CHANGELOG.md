@@ -1,3 +1,17 @@
+## [0.29.0](https://github.com/geyserfund/geyser-app/compare/v0.28.4...v0.29.0) (2026-03-06)
+
+
+### Features
+
+* stripe connect in creation flow, fundraisers sorting and more ([e8b3d2b](https://github.com/geyserfund/geyser-app/commit/e8b3d2bae7ef9228738c6277f4fc51c78896396c))
+
+
+### Bug Fixes
+
+* typecheck ([7fbc0cb](https://github.com/geyserfund/geyser-app/commit/7fbc0cb51c893b5fe6de9185d415baed3bbbec6c))
+
+## [0.28.4](https://github.com/geyserfund/geyser-app/compare/v0.28.3...v0.28.4) (2026-03-04)
+
 ## [0.28.3](https://github.com/geyserfund/geyser-app/compare/v0.28.2...v0.28.3) (2026-03-03)
 
 ## [0.28.2](https://github.com/geyserfund/geyser-app/compare/v0.28.1...v0.28.2) (2026-03-03)

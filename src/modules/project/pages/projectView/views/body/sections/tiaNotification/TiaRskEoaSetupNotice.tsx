@@ -18,6 +18,7 @@ import { MUTATION_PROJECT_RSK_EOA_SET } from '@/modules/project/graphql/mutation
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { GeyserConfigureWalletGuideUrl } from '@/shared/constants/platform/url.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { ProjectFundingStrategy, UserAccountKeysFragment } from '@/types/index.ts'
@@ -87,7 +88,7 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
               "this password is required to claim your funds. Store it somewhere safe, like a password manager. We can't recover it for you.",
             )}{' '}
             <ChakraLink
-              href="https://guides.geyser.fund"
+              href={GeyserConfigureWalletGuideUrl}
               isExternal
               color="amber1.900"
               textDecoration="underline"
@@ -193,7 +194,7 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
   const { renderForm, currentForm, titles } = useAccountPasswordForm({
     onComplete(data) {
       const password = currentForm.getValues?.('password') || ''
-      void handleConfigureProjectKey(data, password)
+      handleConfigureProjectKey(data, password)
     },
     isCreator: true,
     copy: passwordCopy,
@@ -256,7 +257,7 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
               components={{
                 link: (
                   <ChakraLink
-                    href="https://guides.geyser.fund"
+                    href={GeyserConfigureWalletGuideUrl}
                     isExternal
                     color="warning.10"
                     textDecoration="underline"
@@ -288,7 +289,7 @@ export const TiaRskEoaSetupNotice = ({ compact = false }: TiaRskEoaSetupNoticePr
           <Body dark>
             {message}{' '}
             <ChakraLink
-              href="https://guides.geyser.fund"
+              href={GeyserConfigureWalletGuideUrl}
               isExternal
               color="amber1.900"
               textDecoration="underline"

@@ -1710,6 +1710,7 @@ export type MutationCreateProjectArgs = {
 
 export type MutationCreateStripeConnectAccountArgs = {
   projectId: Scalars['BigInt']['input'];
+  returnUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -2041,6 +2042,7 @@ export type MutationPublishNostrEventArgs = {
 
 export type MutationRefreshStripeConnectOnboardingLinkArgs = {
   projectId: Scalars['BigInt']['input'];
+  returnUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -3408,6 +3410,7 @@ export enum ProjectCreationStep {
   FundingGoal = 'FUNDING_GOAL',
   FundingType = 'FUNDING_TYPE',
   IdentityVerification = 'IDENTITY_VERIFICATION',
+  FiatContributions = 'FIAT_CONTRIBUTIONS',
   Launch = 'LAUNCH',
   PerksAndProducts = 'PERKS_AND_PRODUCTS',
   ProjectDetails = 'PROJECT_DETAILS',
@@ -10073,7 +10076,7 @@ export type ShippingAddressFragment = { __typename?: 'ShippingAddress', id: stri
 
 export type UserAccountKeysFragment = { __typename?: 'UserAccountKeys', id: any, encryptedMnemonic?: string | null, encryptedSeed: string, createdAt: any, userId: any, updatedAt: any, rskKeyPair: { __typename?: 'RskKeyPair', address: string, derivationPath: string, publicKey: string } };
 
-export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: any, country?: string | null, legalEntityType: LegalEntityType, verified?: boolean | null } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } }, accountKeys?: { __typename?: 'UserAccountKeys', rskKeyPair: { __typename?: 'RskKeyPair', address: string } } | null };
+export type ProjectPageCreatorFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, bio?: string | null, email?: string | null, guardianType?: GuardianType | null, externalAccounts: Array<{ __typename?: 'ExternalAccount', accountType: string, externalUsername: string, externalId: string, id: any, public: boolean }>, taxProfile?: { __typename?: 'UserTaxProfile', id: any, country?: string | null, legalEntityType: LegalEntityType, verified?: boolean | null } | null, complianceDetails: { __typename?: 'UserComplianceDetails', verifiedDetails: { __typename?: 'UserVerifiedDetails', email?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, identity?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null, phoneNumber?: { __typename?: 'VerificationResult', verified?: boolean | null, verifiedAt?: any | null } | null } }, accountKeys?: { __typename?: 'UserAccountKeys', rskKeyPair: { __typename?: 'RskKeyPair', address: string } } | null };
 
 export type UserAvatarFragment = { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null };
 
@@ -10467,6 +10470,7 @@ export type ShippingAddressCreateMutation = { __typename?: 'Mutation', shippingA
 
 export type CreateStripeConnectAccountMutationVariables = Exact<{
   projectId: Scalars['BigInt']['input'];
+  returnUrl?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -10474,6 +10478,7 @@ export type CreateStripeConnectAccountMutation = { __typename?: 'Mutation', crea
 
 export type RefreshStripeConnectOnboardingLinkMutationVariables = Exact<{
   projectId: Scalars['BigInt']['input'];
+  returnUrl?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
@@ -12889,6 +12894,7 @@ export const ProjectPageCreatorFragmentDoc = gql`
   id
   imageUrl
   username
+  bio
   email
   guardianType
   externalAccounts {
@@ -18232,8 +18238,8 @@ export type ShippingAddressCreateMutationHookResult = ReturnType<typeof useShipp
 export type ShippingAddressCreateMutationResult = Apollo.MutationResult<ShippingAddressCreateMutation>;
 export type ShippingAddressCreateMutationOptions = Apollo.BaseMutationOptions<ShippingAddressCreateMutation, ShippingAddressCreateMutationVariables>;
 export const CreateStripeConnectAccountDocument = gql`
-    mutation CreateStripeConnectAccount($projectId: BigInt!) {
-  createStripeConnectAccount(projectId: $projectId) {
+    mutation CreateStripeConnectAccount($projectId: BigInt!, $returnUrl: String) {
+  createStripeConnectAccount(projectId: $projectId, returnUrl: $returnUrl) {
     accountId
     onboardingUrl
     status {
@@ -18274,8 +18280,8 @@ export type CreateStripeConnectAccountMutationHookResult = ReturnType<typeof use
 export type CreateStripeConnectAccountMutationResult = Apollo.MutationResult<CreateStripeConnectAccountMutation>;
 export type CreateStripeConnectAccountMutationOptions = Apollo.BaseMutationOptions<CreateStripeConnectAccountMutation, CreateStripeConnectAccountMutationVariables>;
 export const RefreshStripeConnectOnboardingLinkDocument = gql`
-    mutation RefreshStripeConnectOnboardingLink($projectId: BigInt!) {
-  refreshStripeConnectOnboardingLink(projectId: $projectId) {
+    mutation RefreshStripeConnectOnboardingLink($projectId: BigInt!, $returnUrl: String) {
+  refreshStripeConnectOnboardingLink(projectId: $projectId, returnUrl: $returnUrl) {
     accountId
     onboardingUrl
     status {

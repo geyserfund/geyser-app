@@ -14,8 +14,11 @@ import {
 type StripeConnectOnboardingCardProps = {
   isTiaProject: boolean
   projectId?: string | number | bigint
+  returnUrl?: string
   withCard?: boolean
   compact?: boolean
+  minimal?: boolean
+  minimalShowTitle?: boolean
   selected?: boolean
   onReadyStateChange?: (isReady: boolean) => void
 }
@@ -35,6 +38,7 @@ const STRIPE_DISABLED_REASONS = {
 
 type StripeClickHandlerParams = {
   projectId?: string | number | bigint
+  returnUrl?: string
   isTiaProject: boolean
   hasAccount: boolean
   isProcessing: boolean
@@ -70,6 +74,15 @@ type StripeMainContentProps = {
   disabledReasonLabel: string | null
 }
 
+type StripeMinimalContentProps = {
+  statusType: StripeStatusType
+  isBusy: boolean
+  onClick: () => void
+  statusMessage: string
+  actionLabel: string
+  showTitle?: boolean
+}
+
 function getStripeStatusType(reason?: string | null, isReady?: boolean): StripeStatusType {
   if (isReady) return 'enabled'
   if (reason === STRIPE_DISABLED_REASONS.pastDue) return 'action_required'
@@ -101,6 +114,13 @@ const getStripeDisabledReasonLabel = (reason?: string | null) => {
 }
 
 function getCompactActionLabel(statusType: StripeStatusType, hasAccount: boolean): string {
+  if (statusType === 'processing') return t('Re-sync')
+  if (hasAccount) return t('Resume onboarding')
+  return t('Configure Stripe Connect')
+}
+
+function getMinimalActionLabel(statusType: StripeStatusType, hasAccount: boolean, isReady: boolean): string {
+  if (isReady) return t('Manage Stripe Connect')
   if (statusType === 'processing') return t('Re-sync')
   if (hasAccount) return t('Resume onboarding')
   return t('Configure Stripe Connect')
@@ -155,6 +175,7 @@ function StripeStatusIndicator({ statusType }: { statusType: StripeStatusType })
 
 function createStripeClickHandler({
   projectId,
+  returnUrl,
   isTiaProject,
   hasAccount,
   isProcessing,
@@ -166,7 +187,7 @@ function createStripeClickHandler({
     if (!projectId || !isTiaProject) return
 
     if (!hasAccount) {
-      createStripeConnectAccount({ variables: { projectId } })
+      createStripeConnectAccount({ variables: { projectId, returnUrl } })
       return
     }
 
@@ -175,7 +196,7 @@ function createStripeClickHandler({
       return
     }
 
-    refreshStripeConnectOnboardingLink({ variables: { projectId } })
+    refreshStripeConnectOnboardingLink({ variables: { projectId, returnUrl } })
   }
 }
 
@@ -324,14 +345,69 @@ function StripeMainContent({
   )
 }
 
-export const StripeConnectOnboardingCard = ({
+function getMinimalStatusMessage(statusType: StripeStatusType, disabledReasonLabel: string | null) {
+  if (disabledReasonLabel) {
+    return disabledReasonLabel
+  }
+
+  if (statusType === 'enabled') {
+    return t('Stripe Connect is enabled for this project.')
+  }
+
+  return ''
+}
+
+function StripeMinimalContent({
+  statusType,
+  isBusy,
+  onClick,
+  statusMessage,
+  actionLabel,
+  showTitle = true,
+}: StripeMinimalContentProps) {
+  return (
+    <VStack w="full" alignItems="start" spacing={4}>
+      {showTitle ? (
+        <HStack w="full" justifyContent="space-between" alignItems="start">
+          <Body size="lg" medium>
+            {t('Stripe Connect')}
+          </Body>
+          <StripeStatusIndicator statusType={statusType} />
+        </HStack>
+      ) : (
+        <HStack w="full" justifyContent="flex-end" alignItems="center" spacing={4}>
+          <StripeStatusIndicator statusType={statusType} />
+        </HStack>
+      )}
+
+      <Body size="md" light w="full">
+        {statusMessage}
+      </Body>
+
+      <HStack w="full" justifyContent={{ base: 'stretch', md: 'flex-end' }}>
+        <Button
+          size="md"
+          variant="outline"
+          colorScheme="primary1"
+          onClick={onClick}
+          isLoading={isBusy}
+          width={{ base: '100%', md: 'auto' }}
+          minW={{ base: 'unset', md: '240px' }}
+        >
+          {actionLabel}
+        </Button>
+      </HStack>
+    </VStack>
+  )
+}
+
+/** Shared Stripe onboarding state for dashboard and project-creation payment setup surfaces. */
+export const useStripeConnectOnboardingState = ({
   isTiaProject,
   projectId,
-  withCard = true,
-  compact = false,
-  selected = false,
+  returnUrl,
   onReadyStateChange,
-}: StripeConnectOnboardingCardProps) => {
+}: Pick<StripeConnectOnboardingCardProps, 'isTiaProject' | 'projectId' | 'returnUrl' | 'onReadyStateChange'>) => {
   const { data, loading, refetch } = useProjectStripeConnectStatusQuery({
     variables: { projectId },
     skip: !projectId || !isTiaProject,
@@ -358,7 +434,6 @@ export const StripeConnectOnboardingCard = ({
   const status = data?.projectStripeConnectStatus
   const isReady = Boolean(status?.isReady)
   const hasAccount = Boolean(status?.accountId)
-  const isSelected = selected || isReady
   const statusType = getStripeStatusType(status?.disabledReason, isReady)
   const disabledReasonLabel = getStripeDisabledReasonLabel(status?.disabledReason)
   const isActionRequired = statusType === 'action_required'
@@ -372,6 +447,7 @@ export const StripeConnectOnboardingCard = ({
 
   const handleClick = createStripeClickHandler({
     projectId,
+    returnUrl,
     isTiaProject,
     hasAccount,
     isProcessing,
@@ -380,11 +456,57 @@ export const StripeConnectOnboardingCard = ({
     refetch,
   })
 
-  const actionLabel = getCardActionLabel(isTiaProject, isReady, statusType, hasAccount)
-  const compactActionLabel = getCompactActionLabel(statusType, hasAccount)
-  const compactIntroCopy = isTiaProject
-    ? t('Configure Stripe Connect to receive fiat payments directly in your bank account.')
-    : t('Stripe Connect is only available for take-it-all projects.')
+  return {
+    status,
+    isReady,
+    hasAccount,
+    statusType,
+    disabledReasonLabel,
+    isActionRequired,
+    isProcessing,
+    isBusy,
+    handleClick,
+    actionLabel: getCardActionLabel(isTiaProject, isReady, statusType, hasAccount),
+    compactActionLabel: getCompactActionLabel(statusType, hasAccount),
+    minimalActionLabel: getMinimalActionLabel(statusType, hasAccount, isReady),
+    compactIntroCopy: isTiaProject
+      ? t('Configure Stripe Connect to receive fiat payments directly in your bank account.')
+      : t('Stripe Connect is only available for take-it-all projects.'),
+    minimalStatusMessage: getMinimalStatusMessage(statusType, disabledReasonLabel),
+  }
+}
+
+export const StripeConnectOnboardingCard = ({
+  isTiaProject,
+  projectId,
+  returnUrl,
+  withCard = true,
+  compact = false,
+  minimal = false,
+  minimalShowTitle = true,
+  selected = false,
+  onReadyStateChange,
+}: StripeConnectOnboardingCardProps) => {
+  const {
+    status,
+    isReady,
+    statusType,
+    disabledReasonLabel,
+    isActionRequired,
+    isProcessing,
+    isBusy,
+    handleClick,
+    actionLabel,
+    compactActionLabel,
+    compactIntroCopy,
+    minimalStatusMessage,
+  } = useStripeConnectOnboardingState({
+    isTiaProject,
+    projectId,
+    returnUrl,
+    onReadyStateChange,
+  })
+  const isSelected = selected || isReady
 
   const compactContent = (
     <StripeCompactContent
@@ -412,6 +534,22 @@ export const StripeConnectOnboardingCard = ({
       disabledReasonLabel={disabledReasonLabel}
     />
   )
+
+  const minimalContent = (
+    <StripeMinimalContent
+      statusType={statusType}
+      isBusy={isBusy}
+      onClick={handleClick}
+      statusMessage={minimalStatusMessage}
+      actionLabel={getMinimalActionLabel(statusType, Boolean(status?.accountId), isReady)}
+      showTitle={minimalShowTitle}
+    />
+  )
+
+  if (minimal) {
+    if (!withCard) return minimalContent
+    return <CardLayout padding={4}>{minimalContent}</CardLayout>
+  }
 
   if (compact) {
     if (!withCard) return compactContent

@@ -1,6 +1,6 @@
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 import type { BodyProps } from '@/shared/components/typography/Body.tsx'
 import type { UserAccountKeysFragment } from '@/types/index.ts'
@@ -38,7 +38,12 @@ export const useAccountPasswordForm = ({
     showFeedback?: boolean
     hidePasswordLabel?: boolean
   }
-}): { renderForm: () => JSX.Element | null; currentForm: any; titles: string } => {
+}): {
+  renderForm: () => JSX.Element | null
+  currentForm: any
+  titles: string
+  accountPasswordType: 'create' | 'confirm' | 'recover'
+} => {
   const [accountPasswordType, setAccountPasswordType] = useState<AccountPasswordTypes>(AccountPasswordTypes.CREATE)
 
   const keys = useAtomValue(userAccountKeysAtom)
@@ -146,5 +151,6 @@ export const useAccountPasswordForm = ({
     renderForm,
     currentForm,
     titles,
+    accountPasswordType,
   }
 }

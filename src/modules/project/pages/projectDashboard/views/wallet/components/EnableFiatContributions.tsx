@@ -9,25 +9,35 @@ import { StripeConnectOnboardingCard } from './StripeConnectOnboardingCard.tsx'
 type EnableFiatContributionsProps = {
   isTiaProject: boolean
   projectId?: string | number | bigint
+  context?: 'dashboard' | 'creation'
 }
 
-export const EnableFiatContributions = ({ isTiaProject, projectId }: EnableFiatContributionsProps) => {
+export const EnableFiatContributions = ({
+  isTiaProject,
+  projectId,
+  context = 'dashboard',
+}: EnableFiatContributionsProps) => {
   const [isStripeReady, setIsStripeReady] = useState(false)
   const isBitcoinMode = !isStripeReady
+  const isDashboardContext = context === 'dashboard'
 
   return (
     <VStack w="full" alignItems="start" spacing={4}>
-      <HStack w="full" justifyContent="space-between">
-        <Body size="xl" medium>
-          {t('Fiat contributions') + ' (' + t('optional') + ')'}
-        </Body>
-      </HStack>
+      {isDashboardContext && (
+        <>
+          <HStack w="full" justifyContent="space-between">
+            <Body size="xl" medium>
+              {t('Fiat contributions') + ' (' + t('optional') + ')'}
+            </Body>
+          </HStack>
 
-      <Body size="sm" light>
-        {t(
-          'Enable contributors to pay with debit/credit card, Apple Pay, bank transfer or 20+ fiat methods. This can also be configured later from your project dashboard.',
-        )}
-      </Body>
+          <Body size="sm" light>
+            {t(
+              'Enable contributors to pay with debit/credit card, Apple Pay, bank transfer or 20+ fiat methods. This can also be configured later from your project dashboard.',
+            )}
+          </Body>
+        </>
+      )}
 
       <VStack w="full" alignItems="start" spacing={3}>
         <HStack spacing={2}>

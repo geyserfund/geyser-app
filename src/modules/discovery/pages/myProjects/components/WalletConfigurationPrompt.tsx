@@ -14,10 +14,11 @@ import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/sta
 import { useAccountPasswordForm } from '@/modules/project/forms/accountPassword/useAccountPasswordForm.tsx'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { GeyserConfigureWalletGuideUrl } from '@/shared/constants/platform/url.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { useProjectRskEoaSetMutation } from '@/types/index.ts'
 import type { UserAccountKeysFragment } from '@/types/index.ts'
+import { useProjectRskEoaSetMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const KEY_CONFIG_DEADLINE = '30th of April 2026'
@@ -134,6 +135,7 @@ export const WalletConfigurationPrompt = ({
         if (!rskEoa) {
           throw new Error('Project wallet configuration was not persisted')
         }
+
         onConfigured?.(rskEoa)
 
         toast.success({
@@ -250,7 +252,7 @@ export const WalletConfigurationPrompt = ({
                 keyConfigDeadline: KEY_CONFIG_DEADLINE,
               })}{' '}
               <ChakraLink
-                href="https://guides.geyser.fund"
+                href={GeyserConfigureWalletGuideUrl}
                 isExternal
                 color="warning.11"
                 textDecoration="underline"
@@ -282,7 +284,7 @@ export const WalletConfigurationPrompt = ({
               { keyConfigDeadline: KEY_CONFIG_DEADLINE },
             )}{' '}
             <ChakraLink
-              href="https://guides.geyser.fund"
+              href={GeyserConfigureWalletGuideUrl}
               isExternal
               color="amber1.900"
               textDecoration="underline"

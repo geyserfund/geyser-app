@@ -11,6 +11,7 @@ import { ProjectCreationStep } from '@/types/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
+import { shouldShowCreationFiatStep } from '../utils/stripeConnect.ts'
 
 type LaunchPaymentSeedWordsState = {
   seedWords?: string[]
@@ -24,15 +25,23 @@ export const LaunchPaymentSeedWords = () => {
   const seedWords = state.seedWords || []
   const [showSeedWords, setShowSeedWords] = useState(false)
   const [seedWordsSaved, setSeedWordsSaved] = useState(false)
+  const shouldShowFiatContributionsStep = shouldShowCreationFiatStep(project)
+  const nextPathAfterSeedWords = shouldShowFiatContributionsStep
+    ? `${getPath('launchPaymentFiatContributions', project.id)}?fromSeedWords=1`
+    : getPath('launchFinalize', project.id)
 
   const { updateProjectWithLastCreationStep, loading } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.IdentityVerification,
-    getPath('launchFinalize', project.id),
+    nextPathAfterSeedWords,
   )
 
   const continueProps: ButtonProps = {
     onClick() {
-      updateProjectWithLastCreationStep()
+      updateProjectWithLastCreationStep(
+        undefined,
+        undefined,
+        shouldShowFiatContributionsStep ? undefined : ProjectCreationStep.Launch,
+      )
     },
     isDisabled: !seedWordsSaved,
     isLoading: loading,

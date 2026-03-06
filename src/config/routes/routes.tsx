@@ -201,6 +201,15 @@ export const platformRoutes: RouteObject[] = [
                 },
               },
               {
+                path: getPath('launchPaymentFiatContributions', PathName.projectId),
+                async lazy() {
+                  const LaunchPaymentFiatContributions = await loadProjectCreationPages().then(
+                    (m) => m.LaunchPaymentFiatContributions,
+                  )
+                  return { Component: LaunchPaymentFiatContributions }
+                },
+              },
+              {
                 path: getPath('launchPaymentTaxId', PathName.projectId),
                 async lazy() {
                   const LaunchPaymentTaxId = await loadProjectCreationPages().then((m) => m.LaunchPaymentTaxId)
@@ -959,16 +968,21 @@ export const platformRoutes: RouteObject[] = [
               {
                 index: true,
                 async lazy() {
-                  const TrendingFundraisers = await loadLandingPages().then((m) => m.TrendingFundraisers)
-                  return { Component: TrendingFundraisers }
+                  const FundraisersProjects = await loadLandingPages().then((m) => m.FundraisersProjects)
+                  return { Component: FundraisersProjects }
                 },
               },
               {
                 path: getPath('discoveryFundraisersLatest'),
-                async lazy() {
-                  const LatestFundraisers = await loadLandingPages().then((m) => m.LatestFundraisers)
-                  return { Component: LatestFundraisers }
-                },
+                element: (
+                  <Navigate
+                    to={{
+                      pathname: getPath('discoveryFundraisers'),
+                      search: '?sort=most_recent',
+                    }}
+                    replace
+                  />
+                ),
               },
               {
                 path: getPath('discoveryFundraisersInYourRegion'),
@@ -1160,6 +1174,13 @@ export const platformRoutes: RouteObject[] = [
         async lazy() {
           const impactFundsModule = await loadImpactFundsModule()
           return { Component: impactFundsModule.ImpactFundDetailPage }
+        },
+      },
+      {
+        path: getPath('impactFundDashboard', PathName.impactFundName),
+        async lazy() {
+          const impactFundsModule = await loadImpactFundsModule()
+          return { element: renderPrivateRoute(impactFundsModule.ImpactFundDashboardPage) }
         },
       },
 

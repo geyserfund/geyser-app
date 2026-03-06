@@ -1,5 +1,6 @@
 export { ContributionSummary, ContributionSummarySkeleton } from './contributionSummary/ContributionSummary'
 export { ControlPanel } from './controlPanel/ControlPanel'
+export { Creator } from './Creator'
 export { Details } from './Details'
 export { Goals } from './Goals'
 export { Header, HeaderSkeleton } from './header/Header'

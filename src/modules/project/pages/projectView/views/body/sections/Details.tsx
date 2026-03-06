@@ -18,7 +18,6 @@ import {
 } from '@/shared/constants/platform/projectCategory.ts'
 
 import { BodySectionLayout, ProjectLinks } from '../components'
-import { CreatorSocial } from './header/components/CreatorSocial'
 
 const REPORT_PROJECT_AIRTABLE_URL = 'https://airtable.com/appyM7XlNIWVypuP5/pagpNDtO12bhTK6hQ/form'
 
@@ -33,10 +32,6 @@ export const Details = () => {
   return (
     <BodySectionLayout title={t('Project details')}>
       <CardLayout w="full" id={ID.project.details.container}>
-        <DetailLine title={t('Creator')}>
-          <CreatorSocial />
-        </DetailLine>
-
         {project.links && (
           <DetailLine title={t('Project links')} empty={!project?.links?.length}>
             <ProjectLinks links={project.links} />

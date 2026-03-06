@@ -26,12 +26,17 @@ import { useNotification } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
+import { shouldShowCreationFiatStep } from '../utils/stripeConnect.ts'
 
 export const LaunchPaymentAccountPassword = () => {
   const { project, partialUpdateProject } = useProjectAtom()
   const toast = useNotification()
   const navigate = useNavigate()
   const [isSettingProjectWallet, setIsSettingProjectWallet] = useState(false)
+  const shouldShowFiatContributionsStep = shouldShowCreationFiatStep(project)
+  const nextPathAfterIdentityVerification = shouldShowFiatContributionsStep
+    ? getPath('launchPaymentFiatContributions', project.id)
+    : getPath('launchFinalize', project.id)
 
   useUserAccountKeys()
 
@@ -41,7 +46,7 @@ export const LaunchPaymentAccountPassword = () => {
   const [projectRskEoaSet] = useProjectRskEoaSetMutation()
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.IdentityVerification,
-    getPath('launchFinalize', project.id),
+    nextPathAfterIdentityVerification,
   )
 
   const shouldConfigureProjectWallet = project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project.rskEoa
@@ -114,7 +119,11 @@ export const LaunchPaymentAccountPassword = () => {
       }
 
       if (seedWords.length === 0) {
-        updateProjectWithLastCreationStep()
+        updateProjectWithLastCreationStep(
+          undefined,
+          undefined,
+          shouldShowFiatContributionsStep ? undefined : ProjectCreationStep.Launch,
+        )
         return
       }
 
