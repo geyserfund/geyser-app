@@ -1,6 +1,7 @@
 import { Stack, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
+import { Head } from '@/config/Head.tsx'
 import { ProjectCategoryList } from '@/shared/constants/platform/projectCategory.ts'
 
 import { HeroesMainPage } from '../../../../heroes/index.ts'
@@ -34,6 +35,11 @@ export const DefaultView = () => {
 
   return (
     <VStack w="full" spacing={10} paddingTop={{ base: '8px', lg: '10px' }}>
+      <Head
+        title="Discover Bitcoin projects"
+        description="Explore trending Bitcoin campaigns, fundraisers, products, and stories on Geyser."
+        type="website"
+      />
       <VStack w="full" spacing={20} paddingBottom={40}>
         <TitleBar />
         <GiveawayBanner mt={{ base: -14, md: -10 }} mb={{ base: -14, md: -10 }} />

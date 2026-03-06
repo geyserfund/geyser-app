@@ -55,6 +55,9 @@ ARG VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS
 RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
     printenv > .env \
     && NODE_OPTIONS=--max-old-space-size=8192 yarn build \
+    && SSR_ENTRY_CANDIDATE=$(find dist/server -type f \( -name 'entry-server.js' -o -name 'entry-server.mjs' -o -name 'entry-server.cjs' \) | head -n 1) \
+    && if [ -z "$SSR_ENTRY_CANDIDATE" ]; then echo "SSR bundle missing under dist/server"; find dist -maxdepth 4 -type f | sort; exit 1; fi \
+    && echo "SSR bundle candidate: $SSR_ENTRY_CANDIDATE" \
     && yarn tsc server.ts \
     && node generateBuildVersion.cjs \
     && rm -rf ./src
@@ -69,8 +72,9 @@ COPY package.json yarn.lock ./
 
 # Copy production dependencies over
 COPY --from=build /usr/app/prod_node_modules ./node_modules
-COPY --from=build /usr/app/dist ./dist
-COPY --from=build /usr/app/meta.json ./dist/meta.json
+COPY --from=build /usr/app/dist/client ./dist/client
+COPY --from=build /usr/app/dist/server ./dist/server
+COPY --from=build /usr/app/meta.json ./dist/client/meta.json
 COPY --from=build /usr/app/server.js ./server.cjs
 
 # RUN yarn global add serve

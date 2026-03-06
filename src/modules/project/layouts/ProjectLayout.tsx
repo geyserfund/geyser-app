@@ -8,6 +8,7 @@ import { standardPadding } from '@/shared/styles'
 import { FollowProjectModal } from '../components/FollowProjectModal.tsx'
 import { useFundingFlowCleanup } from '../hooks/useFollowOnBackModal.ts'
 import { useProjectAtom, useRewardsAtom } from '../hooks/useProjectAtom.ts'
+import { useProjectSeoData } from '../hooks/useProjectSeoData.ts'
 import { ProjectNavigation } from '../navigation/ProjectNavigation.tsx'
 import { ProjectCreateModal } from '../pages/projectView/components/ProjectCreateModal.tsx'
 import { useProjectDraftRedirect } from '../pages/projectView/views/body/hooks/useProjectDraftRedirect.tsx'
@@ -17,8 +18,9 @@ export const ProjectLayout = () => {
   useFundingFlowCleanup()
   useProjectDraftRedirect()
 
-  const { project, loading } = useProjectAtom()
+  const { loading } = useProjectAtom()
   const { rewards, initialRewardsLoading } = useRewardsAtom()
+  const { descriptor, project: seoProject, loading: seoLoading } = useProjectSeoData()
 
   return (
     <Box
@@ -31,14 +33,14 @@ export const ProjectLayout = () => {
       bg="utils.pbg"
     >
       <Head
-        title={project?.title || ''}
-        description={project?.shortDescription || ''}
-        image={project?.thumbnailImage || ''}
-        type="article"
-        url={`https://geyser.fund/project/${project?.name}`}
+        title={descriptor.title}
+        description={descriptor.description}
+        image={descriptor.image}
+        type={descriptor.type}
+        url={descriptor.url}
       >
-        {!loading && !initialRewardsLoading && (
-          <script type="application/ld+json">{buildProjectJsonLd(project, rewards)}</script>
+        {!seoLoading && !loading && !initialRewardsLoading && seoProject && (
+          <script type="application/ld+json">{buildProjectJsonLd(seoProject, rewards)}</script>
         )}
       </Head>
       <ProjectNavigation />

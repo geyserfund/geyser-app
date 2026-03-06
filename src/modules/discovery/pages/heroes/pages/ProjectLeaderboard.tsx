@@ -2,6 +2,7 @@ import { Button, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiShare } from 'react-icons/pi'
 
+import { Head } from '@/config/Head.tsx'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
@@ -21,6 +22,11 @@ export const ProjectLeaderboard = () => {
         lg: toPx(dimensions.projectNavBar.desktop.height),
       }}
     >
+      <Head
+        title={t('Top Bitcoin projects')}
+        description={t('Explore top-performing Bitcoin projects in the Geyser Hall of Fame leaderboard.')}
+        type="website"
+      />
       <TopNavContainerBar>
         <BackButton />
         <Button size="lg" variant="soft" colorScheme="neutral1" leftIcon={<PiShare />}>

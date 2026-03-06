@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCalendarDots } from 'react-icons/pi'
 
+import { Head } from '@/config/Head.tsx'
 import { CustomSelect } from '@/components/ui/CustomSelect'
 import { Banner } from '@/shared/components/display/Banner'
 import { StickToTop } from '@/shared/components/layouts'
@@ -46,6 +47,11 @@ export const Leaderboard = () => {
 
   return (
     <VStack spacing={4} width="full">
+      <Head
+        title={t('Leaderboard')}
+        description={t('Track top Bitcoin projects and contributors on Geyser.')}
+        type="website"
+      />
       <Banner
         title={t('The projects and contributors making world-changing ideas a reality')}
         items={bannerItems}

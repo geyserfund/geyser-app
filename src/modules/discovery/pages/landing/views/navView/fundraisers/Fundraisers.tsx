@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { PiCaretLeft, PiCaretRight, PiGlobeHemisphereWest, PiMoneyWavy, PiStorefront } from 'react-icons/pi'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 
+import { Head } from '@/config/Head.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
 
@@ -112,6 +113,11 @@ export const Fundraisers = () => {
 
   return (
     <>
+      <Head
+        title={t('Open fundraisers')}
+        description={t('Discover open Bitcoin fundraisers and support projects as they grow.')}
+        type="website"
+      />
       <CampaignTitleBlock
         title={t('Open Fundraisers')}
         description={t('Fund your project as it grows.')}

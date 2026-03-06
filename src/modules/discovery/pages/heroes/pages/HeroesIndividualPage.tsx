@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { PiShare } from 'react-icons/pi'
 
+import { Head } from '@/config/Head.tsx'
 import { ShareView } from '@/components/molecules/ShareView'
 import { useAuthContext } from '@/context'
 import { TopNavContainerBar } from '@/modules/navigation/components/topNav'
@@ -69,6 +70,11 @@ export const HeroesIndividualPage = () => {
   if (!heroType) return null
 
   const shareUrl = `${process.env.APP_URL}${pathsMap[heroType]}${user?.heroId ? `?hero=${user?.heroId}` : ''}`
+  const seoTitles = {
+    [HeroType.Contributors]: t('Top Bitcoin contributors'),
+    [HeroType.Creators]: t('Top Bitcoin creators'),
+    [HeroType.Ambassadors]: t('Top Bitcoin ambassadors'),
+  }
 
   return (
     <VStack
@@ -79,6 +85,7 @@ export const HeroesIndividualPage = () => {
         lg: toPx(dimensions.projectNavBar.desktop.height),
       }}
     >
+      <Head title={seoTitles[heroType]} description={heroDescriptions[heroType]} type="website" />
       <TopNavContainerBar>
         <BackButton />
         <Button size="lg" variant="soft" colorScheme="neutral1" leftIcon={<PiShare />} onClick={onOpen}>

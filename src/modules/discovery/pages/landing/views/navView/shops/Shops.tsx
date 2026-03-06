@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { PiCaretLeft, PiCaretRight, PiCube, PiMagnifyingGlass, PiSparkle } from 'react-icons/pi'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 
+import { Head } from '@/config/Head.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 import { useRewardCategoriesQuery } from '@/types/index.ts'
 
@@ -155,6 +156,11 @@ export const Shops = () => {
 
   return (
     <VStack w="full" spacing={8} alignItems="start">
+      <Head
+        title={t('Bitcoin shops')}
+        description={t('Discover and shop Bitcoin products, collectibles, and experiences on Geyser.')}
+        type="website"
+      />
       <CampaignTitleBlock
         title={t('Shops')}
         description={t('Discover and shop Bitcoin products.')}

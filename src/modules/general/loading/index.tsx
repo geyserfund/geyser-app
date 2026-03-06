@@ -5,6 +5,10 @@ import { LogoNameBrand } from '@/shared/constants'
 import { neutralColorsDark, neutralColorsLight } from '@/shared/styles'
 
 function useColor(light = neutralColorsLight[0], dark = neutralColorsDark[0]) {
+  if (typeof window === 'undefined') {
+    return light
+  }
+
   return window.localStorage.getItem('chakra-ui-color-mode') === 'dark' ? dark : light
 }
 

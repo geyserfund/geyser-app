@@ -1,10 +1,10 @@
 import { captureException } from '@sentry/react'
 import { useSetAtom } from 'jotai'
-import { useEffect } from 'react'
 
 import {
   useCreateWalletMutation,
   useProjectPageWalletsLazyQuery,
+  useProjectPageWalletsQuery,
   useProjectWalletConnectionDetailsLazyQuery,
   useUpdateWalletMutation,
 } from '../../../types'
@@ -31,6 +31,26 @@ export const useProjectWalletAPI = (load?: boolean) => {
         id: project.id,
       },
     },
+    onError(error) {
+      setWalletLoading(false)
+      captureException(error)
+    },
+    onCompleted(data) {
+      setWalletLoading(false)
+      if (data?.projectGet?.wallets[0]) {
+        setWallet(data?.projectGet?.wallets[0])
+      }
+    },
+  })
+
+  useProjectPageWalletsQuery({
+    fetchPolicy: 'network-only',
+    variables: {
+      where: {
+        id: project.id,
+      },
+    },
+    skip: !project.id || loading || !load,
     onError(error) {
       setWalletLoading(false)
       captureException(error)
@@ -74,12 +94,6 @@ export const useProjectWalletAPI = (load?: boolean) => {
       }
     },
   })
-
-  useEffect(() => {
-    if (project.id && !loading && load) {
-      queryProjectWallet()
-    }
-  }, [project.id, loading, load, queryProjectWallet])
 
   return {
     queryProjectWallet: {

@@ -1,7 +1,10 @@
 import { useAtom, useSetAtom } from 'jotai'
-import { useEffect } from 'react'
 
-import { ProjectGrantApplicationsWhereInputEnum, useProjectGrantApplicationsLazyQuery } from '../../../types'
+import {
+  ProjectGrantApplicationsWhereInputEnum,
+  useProjectGrantApplicationsLazyQuery,
+  useProjectGrantApplicationsQuery,
+} from '../../../types'
 import { useProjectAtom } from '../hooks/useProjectAtom'
 import { initialProjectGrantApplicationsLoadAtom, partialUpdateProjectAtom } from '../state/projectAtom'
 
@@ -38,11 +41,26 @@ export const useProjectGrantApplicationsAPI = (load?: boolean) => {
     },
   })
 
-  useEffect(() => {
-    if (project.id && !loading && load && !initialProjectGrantApplicationsLoad) {
-      queryProjectGrantApplications()
-    }
-  }, [project.id, loading, load, queryProjectGrantApplications, initialProjectGrantApplicationsLoad])
+  useProjectGrantApplicationsQuery({
+    skip: !project.id || loading || !load || initialProjectGrantApplicationsLoad,
+    fetchPolicy: 'cache-first',
+    variables: {
+      where: { id: project.id },
+      input: {
+        where: {
+          grantStatus: ProjectGrantApplicationsWhereInputEnum.FundingOpen,
+        },
+      },
+    },
+    onCompleted(data) {
+      if (!data.projectGet) {
+        return
+      }
+
+      partialUpdateProject(data.projectGet)
+      setInitialProjectGrantApplicationsLoad(true)
+    },
+  })
 
   return {
     queryProjectGrantApplications: {

@@ -1,9 +1,9 @@
 import { useAtom, useSetAtom } from 'jotai'
-import { useEffect } from 'react'
 
 import {
   useProjectRewardCreateMutation,
   useProjectRewardsLazyQuery,
+  useProjectRewardsQuery,
   useRewardDeleteMutation,
   useRewardUpdateMutation,
 } from '@/types'
@@ -99,12 +99,28 @@ export const useProjectRewardsAPI = (load?: boolean) => {
     },
   })
 
-  useEffect(() => {
-    if (project.id && !loading && load && !initialRewardsLoad) {
-      setInitialRewardsLoading(true)
-      queryProjectRewards()
-    }
-  }, [project.id, load, loading, initialRewardsLoad, queryProjectRewards, setInitialRewardsLoading])
+  useProjectRewardsQuery({
+    skip: !project.id || loading || !load || initialRewardsLoad,
+    fetchPolicy: 'network-only',
+    variables: {
+      input: {
+        where: {
+          projectId: project.id,
+        },
+      },
+    },
+    onCompleted(data) {
+      if (data?.projectRewardsGet) {
+        setRewards(data?.projectRewardsGet)
+        setInitialRewardsLoad(true)
+      }
+
+      setInitialRewardsLoading(false)
+    },
+    onError() {
+      setInitialRewardsLoading(false)
+    },
+  })
 
   return {
     queryProjectRewards: {

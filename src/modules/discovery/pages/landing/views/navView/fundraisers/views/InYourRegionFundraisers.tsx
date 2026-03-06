@@ -19,16 +19,7 @@ const NO_OF_PROJECT_TO_LOAD = 20
 export const InYourRegionFundraisers = () => {
   const [campaignProjects, setCampaignProjects] = useState<ProjectForLandingPageFragment[]>([])
 
-  const [loading, setLoading] = useState(true)
-
-  const { data: userIpCountryData } = useGetUserIpCountryQuery({
-    onCompleted() {
-      setLoading(false)
-    },
-    onError() {
-      setLoading(false)
-    },
-  })
+  const { data: userIpCountryData, loading: loadingCountry } = useGetUserIpCountryQuery()
 
   const where = {
     fundingStrategy: ProjectFundingStrategy.TakeItAll,
@@ -47,7 +38,7 @@ export const InYourRegionFundraisers = () => {
   ] as ProjectsOrderByInput[]
 
   const { fetchMore, loading: loadingProjects } = useProjectsForLandingPageQuery({
-    skip: loading,
+    skip: loadingCountry || !userIpCountryData?.userIpCountry,
     variables: {
       input: {
         where,
@@ -76,7 +67,7 @@ export const InYourRegionFundraisers = () => {
   return (
     <RenderProjectList
       projects={campaignProjects}
-      loading={loading || loadingProjects}
+      loading={loadingCountry || loadingProjects}
       isLoadingMore={isLoadingMore}
       noMoreItems={noMoreItems}
       fetchNext={fetchNext}
