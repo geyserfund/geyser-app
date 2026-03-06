@@ -28,6 +28,10 @@ type SsrRenderApp = (options: {
   fetchImplementation?: typeof fetch
 }) => Promise<SsrRenderResult>
 
+type ImportedServerModule = {
+  renderServerApp?: unknown
+}
+
 type HtmlCacheEntry = {
   expiresAt: number
   status: number
@@ -175,6 +179,9 @@ const htmlCache = new Map<string, HtmlCacheEntry>()
 const graphqlCache = new Map<string, GraphqlCacheEntry>()
 
 let renderServerAppPromise: Promise<SsrRenderApp> | null = null
+const importServerModule = new Function('specifier', 'return import(specifier)') as (
+  specifier: string,
+) => Promise<ImportedServerModule>
 
 const app = express()
 
@@ -375,7 +382,7 @@ const loadRenderServerApp = async () => {
         const candidateFileUrl = pathToFileURL(candidatePath).href
         console.log(`SSR_IMPORT_ATTEMPT: candidate=${candidatePath} url=${candidateFileUrl}`)
         try {
-          const module = await import(candidateFileUrl)
+          const module = await importServerModule(candidateFileUrl)
           if (typeof module.renderServerApp === 'function') {
             if (candidatePath !== serverEntryPath) {
               console.warn(`SSR entry fallback selected: ${candidatePath}`)
