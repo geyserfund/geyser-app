@@ -30,6 +30,7 @@ type SsrRenderApp = (options: {
 
 type ImportedServerModule = {
   renderServerApp?: unknown
+  __tla?: unknown
 }
 
 type HtmlCacheEntry = {
@@ -140,6 +141,12 @@ const getErrorDetails = (error: unknown) => {
     code: '',
     stackTop: '',
   }
+}
+
+const waitForServerModuleReady = async (module: ImportedServerModule) => {
+  if (!module.__tla) return
+  if (typeof (module.__tla as { then?: unknown }).then !== 'function') return
+  await (module.__tla as Promise<unknown>)
 }
 
 const logSsrEntryDiagnostics = () => {
@@ -383,6 +390,7 @@ const loadRenderServerApp = async () => {
         console.log(`SSR_IMPORT_ATTEMPT: candidate=${candidatePath} url=${candidateFileUrl}`)
         try {
           const module = await importServerModule(candidateFileUrl)
+          await waitForServerModuleReady(module)
           if (typeof module.renderServerApp === 'function') {
             if (candidatePath !== serverEntryPath) {
               console.warn(`SSR entry fallback selected: ${candidatePath}`)

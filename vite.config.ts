@@ -58,7 +58,7 @@ export default defineConfig(({ command, mode, isSsrBuild }) => {
     tsconfigPaths(),
     loadVersion(),
     wasm(),
-    topLevelAwait(),
+    !isSsrBuild && topLevelAwait(),
   ].filter(Boolean) as PluginOption[]
 
   return {

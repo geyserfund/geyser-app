@@ -59,7 +59,7 @@ RUN --mount=type=cache,target=/usr/local/share/.cache/yarn \
     && if [ -z "$SSR_ENTRY_CANDIDATE" ]; then echo "SSR bundle missing under dist/server"; find dist -maxdepth 4 -type f | sort; exit 1; fi \
     && echo "SSR bundle candidate: $SSR_ENTRY_CANDIDATE" \
     && SSR_ENTRY_ABS="$(pwd)/$SSR_ENTRY_CANDIDATE" \
-    && SSR_ENTRY_ABS="$SSR_ENTRY_ABS" node -e "const entry = process.env.SSR_ENTRY_ABS; import('file://' + entry).then((mod) => { if (typeof mod.renderServerApp !== 'function') { throw new Error('renderServerApp export missing from SSR bundle'); } console.log('SSR smoke test passed:', entry); }).catch((error) => { console.error('SSR smoke test failed for', entry, error); process.exit(1); });" \
+    && SSR_ENTRY_ABS="$SSR_ENTRY_ABS" node -e "const entry = process.env.SSR_ENTRY_ABS; import('file://' + entry).then(async (mod) => { if (mod && mod.__tla && typeof mod.__tla.then === 'function') { await mod.__tla; } if (typeof mod.renderServerApp !== 'function') { throw new Error('renderServerApp export missing from SSR bundle'); } console.log('SSR smoke test passed:', entry); }).catch((error) => { console.error('SSR smoke test failed for', entry, error); process.exit(1); });" \
     && yarn tsc server.ts \
     && node generateBuildVersion.cjs \
     && rm -rf ./src
