@@ -42,6 +42,13 @@ export const FRAGMENT_PROJECT_PAGE_CREATOR = gql`
         address
       }
     }
+    creatorTrustStats {
+      totalFunding
+      totalFundingUsd
+      backersCount
+      publishedPostsCount
+      joinedYear
+    }
   }
 `
 

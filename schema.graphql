@@ -569,6 +569,7 @@ type User {
   badges: [UserBadge!]!
   orders: [Order!]
   heroStats: UserHeroStats!
+  creatorTrustStats: CreatorTrustStats!
   guardianType: GuardianType
   ranking: BigInt @deprecated(reason: "Use heroStats.rank instead")
   taxProfile: UserTaxProfile
@@ -985,6 +986,14 @@ type UserHeroStats {
   creatorStats: CreatorStats!
   ambassadorStats: AmbassadorStats!
   contributorStats: ContributorStats!
+}
+
+type CreatorTrustStats {
+  totalFunding: Int!
+  totalFundingUsd: Float!
+  backersCount: Int!
+  publishedPostsCount: Int!
+  joinedYear: Int!
 }
 
 interface HeroStats {
