@@ -35,7 +35,7 @@ export const useNostrRepost = () => {
 
   /** Creates and signs a repost event for a NIP-23 article using only the event ID */
   const createRepost = async (nostrEventId: string, options: NostrRepostOptions = {}): Promise<NostrEvent | null> => {
-    if (!window.nostr) {
+    if (typeof window === 'undefined' || !window.nostr) {
       toast.error({
         title: t('Repost failed'),
         description: t('Nostr extension not found. Please install a Nostr browser extension.'),

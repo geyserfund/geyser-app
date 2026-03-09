@@ -1,5 +1,7 @@
+const hasNostr = () => typeof window !== 'undefined' && Boolean(window.nostr)
+
 export const signMessage = async (secret: string) => {
-  if (window.nostr) {
+  if (hasNostr()) {
     try {
       const sig = await window.nostr.signSchnorr(secret)
       return sig
@@ -10,7 +12,7 @@ export const signMessage = async (secret: string) => {
 }
 
 export const getPubkey = async () => {
-  if (window.nostr) {
+  if (hasNostr()) {
     const pubkey = await window.nostr.getPublicKey()
     return pubkey
   }
@@ -20,7 +22,7 @@ export const getPubkey = async () => {
 
 // Deprecate in favour of signEvent
 export const signEventToBeDeprecated = async (event: { [x: string]: unknown; content: string }) => {
-  if (window.nostr) {
+  if (hasNostr()) {
     try {
       const { sig } = await window.nostr.signEvent(event)
       return sig
@@ -31,7 +33,7 @@ export const signEventToBeDeprecated = async (event: { [x: string]: unknown; con
 }
 
 export const signEvent = async (event: { [x: string]: unknown; content: string }) => {
-  if (window.nostr) {
+  if (hasNostr()) {
     try {
       const signedEvent = await window.nostr.signEvent(event)
       return signedEvent

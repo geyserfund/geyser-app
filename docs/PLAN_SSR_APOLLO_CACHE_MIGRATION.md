@@ -106,6 +106,11 @@
   - `src/config/apollo-client/apolloClient.ts` (after factory split)
   - `src/AppLayout.tsx`
   - public project share components/hooks under `src/modules/project/pages/projectView/**`
+- Guardrails (must hold for all SSR-public paths):
+  - no direct `window.*` reads in component render output (for example `showNostr={...window.nostr}` or `{window.nostr && ...}`).
+  - no module-scope browser client initialization (for example Apollo/browser sockets).
+  - utility guards must use `typeof window !== 'undefined'` (never `if (!window)`).
+  - URL building for SEO/share should use SSR-safe origin helpers (`src/shared/utils/project/getRuntimeOrigin.ts`).
 
 7. Build + CI/CD updates
 

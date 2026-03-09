@@ -6,6 +6,7 @@ import { useAuthContext } from '@/context/auth.tsx'
 import { ExternalAccountType } from '@/modules/auth/type.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { VITE_APP_GEYSER_NOSTR_PUBKEY } from '@/shared/constants'
+import { getRuntimeOrigin } from '@/shared/utils/project/getRuntimeOrigin.ts'
 import { useNotification } from '@/utils/tools/Notification.tsx'
 
 export interface NostrEvent {
@@ -47,7 +48,7 @@ export const useNostrPostForFundingSuccess = () => {
     projectHex: string,
     contributionAmountSats: number,
   ): Promise<NostrEvent | null> => {
-    if (!window.nostr) {
+    if (typeof window === 'undefined' || !window.nostr) {
       toast.error({
         title: t('Post failed'),
         description: t('Nostr extension not found. Please install a Nostr browser extension.'),
@@ -62,7 +63,7 @@ export const useNostrPostForFundingSuccess = () => {
       const pubkey = await window.nostr.getPublicKey()
 
       // Get project link
-      const projectLink = `${window.location.origin}/project/${projectName}${
+      const projectLink = `${getRuntimeOrigin()}/project/${projectName}${
         user?.heroId ? `?heroId=${user?.heroId}` : ''
       }`
 

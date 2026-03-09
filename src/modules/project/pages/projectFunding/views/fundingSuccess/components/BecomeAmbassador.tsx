@@ -29,6 +29,7 @@ type LinkActionsSectionProps = {
 const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: LinkActionsSectionProps) => {
   const { t } = useTranslation()
   const toast = useNotification()
+  const hasNostr = typeof window !== 'undefined' && Boolean(window.nostr)
 
   const { createPostEvent, isPosting } = useNostrPostForFundingSuccess()
   const [publishNostrEvent, { loading: isPublishingNostrEvent }] = usePublishNostrEventMutation()
@@ -85,7 +86,7 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
       </HStack>
 
       <HStack w="full" justifyContent="center" spacing={4} zIndex={1}>
-        {window.nostr && (
+        {hasNostr && (
           <Button
             size="lg"
             variant="soft"

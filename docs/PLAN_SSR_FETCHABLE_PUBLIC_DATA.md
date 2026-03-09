@@ -62,6 +62,11 @@ In this codebase, this means:
 4. Keep private/auth-sensitive fetches client-first when needed.
 - If data depends on auth/cookies and SSR server intentionally omits auth headers, keep behavior as-is unless explicitly promoted later.
 
+5. Keep SSR query paths browser-global safe.
+- Any hook moved to render-time query execution must avoid direct render-time reads of `window`/`document`/storage.
+- For origin-dependent links, use shared SSR-safe helpers (`getRuntimeOrigin`) instead of `window.location.origin`.
+- For extension checks (for example `window.nostr`), derive a guarded boolean (`typeof window !== 'undefined' && ...`) before render use.
+
 ## Case-by-case plan
 
 ### Case A: Project root bootstrap (highest impact)

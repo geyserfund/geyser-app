@@ -22,9 +22,10 @@ export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectW
 
   const failedModal = useModal()
   const nostrHelpModal = useModal()
+  const hasNostr = typeof window !== 'undefined' && Boolean(window.nostr)
 
   const handleClick = async () => {
-    if (!window.nostr) {
+    if (!hasNostr) {
       return nostrHelpModal.onOpen()
     }
 
@@ -56,7 +57,7 @@ export const ConnectWithNostr = ({ onClose, isIconOnly, ...rest }: Omit<ConnectW
         leftIcon: <NostrIcon boxSize={'16px'} />,
       }
 
-  if (!window.nostr) {
+  if (!hasNostr) {
     return null
   }
 

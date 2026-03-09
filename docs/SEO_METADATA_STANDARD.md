@@ -77,6 +77,7 @@ Example:
 - SSR pipeline must serialize/inject head tags in server HTML for crawlers.
 - Request-scoped head context (`react-helmet-async`) is the preferred hardening target.
 - Final HTML cache payload must include injected head output.
+- Metadata/url helpers used during SSR must not rely on unguarded browser globals; use SSR-safe origin helpers.
 
 ## Validation Checklist
 

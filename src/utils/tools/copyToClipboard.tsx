@@ -1,4 +1,8 @@
 export const fallbackCopyTextToClipboard = (text: string) => {
+  if (typeof document === 'undefined') {
+    return
+  }
+
   const textArea = document.createElement('textarea')
   textArea.value = text
 
@@ -19,7 +23,11 @@ export const fallbackCopyTextToClipboard = (text: string) => {
 }
 
 export const copyTextToClipboard = (text: string) => {
-  if (!window || !window.navigator || !window.navigator.clipboard) {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return
+  }
+
+  if (!window.navigator?.clipboard) {
     fallbackCopyTextToClipboard(text)
     return
   }

@@ -134,6 +134,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
 
   const navigate = useNavigate()
   const location = useLocation()
+  const hasNostr = typeof window !== 'undefined' && Boolean(window.nostr)
 
   useAuthToken(isOpen)
 
@@ -181,7 +182,7 @@ export const AuthModal = (authModalProps: AuthModalProps) => {
             <ConnectAccounts
               onClose={onClose}
               onSuccess={onSuccess}
-              showNostr={showNostr && window.nostr}
+              showNostr={showNostr && hasNostr}
               showTwitter={showTwitter}
               showLightning={showLightning}
               showFacebook={showFacebook}
