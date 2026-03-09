@@ -186,5 +186,3 @@ export const createServerApolloClient = (options: Omit<CreateApolloClientOptions
     ...options,
     ssr: true,
   })
-
-export const client = getBrowserApolloClient()

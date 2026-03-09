@@ -1,1 +1,1 @@
-export { client, createServerApolloClient, getBrowserApolloClient } from './apolloClient'
+export { createServerApolloClient, getBrowserApolloClient } from './apolloClient'
