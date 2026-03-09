@@ -1,3 +1,5 @@
+import { getRuntimeOrigin } from '@/shared/utils/project/getRuntimeOrigin.ts'
+
 export const generateTwitterShareUrl = (text: string) => {
   return `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`
 }
@@ -25,7 +27,7 @@ const projectTweetTemplatesContributor = [
 ]
 
 export const shareOnTwitter = (projectName: string, t: any) => {
-  const projectLink = `${window.location.origin}/project/${projectName}`
+  const projectLink = `${getRuntimeOrigin()}/project/${projectName}`
 
   const randomKey = projectTweetTemplates[Math.floor(Math.random() * projectTweetTemplates.length)] || ''
   const tweetTemplate = t(randomKey)

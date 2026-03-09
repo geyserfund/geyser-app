@@ -8,6 +8,7 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { Body } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
+import { getRuntimeOrigin } from '@/shared/utils/project/getRuntimeOrigin.ts'
 import { useProjectAmbassadorStatsQuery } from '@/types'
 import { commaFormatted } from '@/utils'
 
@@ -20,7 +21,7 @@ export const ProjectShareView = () => {
   const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
 
   const heroId = user?.heroId
-  const heroLink = `${window.location.origin || 'https://geyser.fund'}/project/${project.name}${
+  const heroLink = `${getRuntimeOrigin()}/project/${project.name}${
     heroId ? `?hero=${heroId}` : ''
   }`
   const twitterShareText = `Help make this project happen! Check it out: ${heroLink}`

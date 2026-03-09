@@ -12,6 +12,7 @@ export const PostOnNostr = (props: Omit<IconButtonProps, 'aria-label'>) => {
   const { project } = useProjectAtom()
   const { createPostEvent, isPosting } = useNostrPostForProject()
   const toast = useNotification()
+  const hasNostr = typeof window !== 'undefined' && Boolean(window.nostr)
 
   const [publishNostrEvent, { loading: isPublishing }] = usePublishNostrEventMutation()
 
@@ -43,7 +44,7 @@ export const PostOnNostr = (props: Omit<IconButtonProps, 'aria-label'>) => {
     }
   }
 
-  if (!project?.keys?.nostrKeys?.publicKey?.hex || !window.nostr) {
+  if (!project?.keys?.nostrKeys?.publicKey?.hex || !hasNostr) {
     return null
   }
 

@@ -81,7 +81,7 @@ export const tableHandler = (props: any) => {
 }
 
 export const FrameHandler = (props: any) => {
-  const colorMode = localStorage.getItem('chakra-ui-color-mode')
+  const colorMode = typeof window !== 'undefined' ? window.localStorage.getItem('chakra-ui-color-mode') : 'light'
 
   const ref = useRef<HTMLIFrameElement>(null)
   const [height, setHeight] = useState('0px')

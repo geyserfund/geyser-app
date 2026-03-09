@@ -23,6 +23,7 @@ import { getPath } from '@/shared/constants/index.ts'
 import { useModal } from '@/shared/hooks'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
+import { getRuntimeOrigin } from '@/shared/utils/project/getRuntimeOrigin.ts'
 import { FundingResourceType, useProjectPostQuery } from '@/types'
 import { toInt, useNotification } from '@/utils'
 
@@ -256,7 +257,7 @@ const PostJustPublishedModal = () => {
 
   const modalProps = useModal()
 
-  const postLink = `${window.location.origin}${location.pathname}`
+  const postLink = `${getRuntimeOrigin()}${location.pathname}`
 
   const { onCopy, hasCopied } = useCopyToClipboard(postLink)
 

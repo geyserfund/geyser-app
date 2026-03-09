@@ -13,6 +13,7 @@ import {
   GeyserTwitterUrl,
   LaunchpadStartedCountdownIllustrationUrl,
 } from '@/shared/constants/index.ts'
+import { getRuntimeOrigin } from '@/shared/utils/project/getRuntimeOrigin.ts'
 
 import { Modal } from '../../../../../shared/components/layouts/Modal'
 import { Body } from '../../../../../shared/components/typography'
@@ -21,7 +22,7 @@ export const ProjectCreatePreLaunchedModal = (props: Omit<ModalProps, 'children'
   const { t } = useTranslation()
   const { project } = useProjectAtom()
 
-  const projectLink = `${window.location.origin}${getPath('projectPreLaunch', project.name)}`
+  const projectLink = `${getRuntimeOrigin()}${getPath('projectPreLaunch', project.name)}`
 
   const { onCopy, hasCopied } = useClipboard(projectLink)
 

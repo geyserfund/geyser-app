@@ -69,6 +69,7 @@ export const PostShare = ({ post, project, ...props }: PostShareProps) => {
 
   const content = post.content ? JSON.parse(post.content) : ''
   const showRepostOnNostr = Boolean(content.nostrEventId) && Boolean(content.nostrEventNoteId)
+  const hasNostr = typeof window !== 'undefined' && Boolean(window.nostr)
 
   return (
     <HStack spacing={2}>
@@ -82,7 +83,7 @@ export const PostShare = ({ post, project, ...props }: PostShareProps) => {
       >
         {t('Share')}
       </Button>
-      {showRepostOnNostr && window.nostr && (
+      {showRepostOnNostr && hasNostr && (
         <Tooltip label={t('Repost on nostr')}>
           <Button
             aria-label={t('Repost on nostr')}
@@ -139,7 +140,7 @@ export const PostShare = ({ post, project, ...props }: PostShareProps) => {
               {t('Copy link')}
             </CopyButton>
           </HStack>
-          {showRepostOnNostr && window.nostr && (
+          {showRepostOnNostr && hasNostr && (
             <Button
               aria-label={t('Repost on nostr')}
               width="full"

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { getPath } from '@/shared/constants'
+import { getRuntimeOrigin } from '@/shared/utils/project/getRuntimeOrigin.ts'
 import { ProjectPostFragment, ProjectReward } from '@/types'
 
 import { useAuthContext } from '../../../../../context'
@@ -73,6 +74,7 @@ export const useProjectShare = () => {
   const [copied, setCopied] = useState(false)
 
   const getShareProjectUrl = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
+    const origin = getRuntimeOrigin()
     const campaignUrlSuffix = getProjectShareUrlSuffix({
       creator: isProjectOwner,
       isLoggedIn,
@@ -80,7 +82,7 @@ export const useProjectShare = () => {
       clickedFrom,
       heroId: user?.heroId,
     })
-    return `${window.location.origin}/project/${project?.name}${campaignUrlSuffix}`
+    return `${origin}/project/${project?.name}${campaignUrlSuffix}`
   }
 
   const copyProjectLinkToClipboard = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
@@ -104,21 +106,23 @@ export const useRewardShare = ({ uuid, name }: Pick<ProjectReward, 'uuid' | 'nam
   const [copied, setCopied] = useState(false)
 
   const getShareRewardUrlWithHeroId = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
+    const origin = getRuntimeOrigin()
     if (user && user.heroId) {
-      return `${window.location.origin}${getPath('projectRewardView', project.name, `${uuid}`)}?hero=${user.heroId}`
+      return `${origin}${getPath('projectRewardView', project.name, `${uuid}`)}?hero=${user.heroId}`
     }
 
     return getShareRewardUrl({ clickedFrom })
   }
 
   const getShareRewardUrl = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
+    const origin = getRuntimeOrigin()
     const campaignUrlSuffix = getProjectShareUrlSuffix({
       creator: isProjectOwner,
       isLoggedIn,
       keyword: `${project?.name}-reward-${name}`,
       clickedFrom,
     })
-    return `${window.location.origin}${getPath('projectRewardView', project.name, `${uuid}`)}${campaignUrlSuffix}`
+    return `${origin}${getPath('projectRewardView', project.name, `${uuid}`)}${campaignUrlSuffix}`
   }
 
   const copyRewardLinkToClipboard = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
@@ -142,21 +146,23 @@ export const usePostShare = ({ id }: Pick<ProjectPostFragment, 'id'>) => {
   const [copied, setCopied] = useState(false)
 
   const getSharePostUrlWithHeroId = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
+    const origin = getRuntimeOrigin()
     if (user && user.heroId) {
-      return `${window.location.origin}${getPath('projectPostView', project.name, `${id}`)}?hero=${user.heroId}`
+      return `${origin}${getPath('projectPostView', project.name, `${id}`)}?hero=${user.heroId}`
     }
 
     return getSharePostUrl({ clickedFrom })
   }
 
   const getSharePostUrl = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
+    const origin = getRuntimeOrigin()
     const campaignUrlSuffix = getProjectShareUrlSuffix({
       creator: isProjectOwner,
       isLoggedIn,
       keyword: `${project?.name}-post-${id}`,
       clickedFrom,
     })
-    return `${window.location.origin}${getPath('projectPostView', project.name, `${id}`)}${campaignUrlSuffix}`
+    return `${origin}${getPath('projectPostView', project.name, `${id}`)}${campaignUrlSuffix}`
   }
 
   const copyPostLinkToClipboard = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
@@ -180,21 +186,23 @@ export const useGoalShare = ({ id, name }: { id: string; name: string }) => {
   const [copied, setCopied] = useState(false)
 
   const getShareGoalUrlWithHeroId = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
+    const origin = getRuntimeOrigin()
     if (user && user.heroId) {
-      return `${window.location.origin}${getPath('projectGoalView', project.name, `${id}`)}?hero=${user.heroId}`
+      return `${origin}${getPath('projectGoalView', project.name, `${id}`)}?hero=${user.heroId}`
     }
 
     return getShareGoalUrl({ clickedFrom })
   }
 
   const getShareGoalUrl = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {
+    const origin = getRuntimeOrigin()
     const campaignUrlSuffix = getProjectShareUrlSuffix({
       creator: isProjectOwner,
       isLoggedIn,
       keyword: `${project?.name}-goal-${name}`,
       clickedFrom,
     })
-    return `${window.location.origin}${getPath('projectGoalView', project.name, `${id}`)}${campaignUrlSuffix}`
+    return `${origin}${getPath('projectGoalView', project.name, `${id}`)}${campaignUrlSuffix}`
   }
 
   const copyGoalLinkToClipboard = ({ clickedFrom }: { clickedFrom: CampaignContent }) => {

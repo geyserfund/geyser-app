@@ -11,6 +11,7 @@ import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
 import { useNotificationPromptModal } from '@/modules/auth/hooks/useNotificationPromptModal'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
+import { getRuntimeOrigin } from '@/shared/utils/project/getRuntimeOrigin.ts'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { AuthModal } from '../../../components/molecules'
@@ -191,9 +192,10 @@ const CloseGoBackButton = () => {
 
 const ShareGuardiansButton = () => {
   const { user } = useAuthContext()
+  const origin = getRuntimeOrigin()
 
   const { onCopy, hasCopied } = useCopyToClipboard(
-    `${window.location.origin}/${PathName.guardians}${user.heroId ? `?hero=${user.heroId}` : ''}`,
+    `${origin}/${PathName.guardians}${user.heroId ? `?hero=${user.heroId}` : ''}`,
   )
   return (
     <Button

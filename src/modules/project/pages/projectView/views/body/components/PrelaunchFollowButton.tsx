@@ -13,6 +13,7 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { EmailPromptModalUrl, FollowBellIllurationsUrl } from '@/shared/constants/index.ts'
 import { useFollowProject } from '@/shared/hooks/graphqlState/useFollowProject.tsx'
 import { useModal } from '@/shared/hooks/useModal.tsx'
+import { getRuntimeOrigin } from '@/shared/utils/project/getRuntimeOrigin.ts'
 import {
   Project,
   useUserNotificationsSettingsQuery,
@@ -41,7 +42,7 @@ export const PrelaunchFollowButton = ({ project, onFollowCompleted, ...props }: 
 
   const [loginWithFollow, setLoginWithFollow] = useState(false)
 
-  const projectUrl = `${window.location.origin}/project/${project.name}`
+  const projectUrl = `${getRuntimeOrigin()}/project/${project.name}`
 
   const { onCopy, hasCopied } = useClipboard(projectUrl)
 
@@ -135,7 +136,7 @@ const FollowSuccessModal = ({
 
   const enoughFollowers = followersNeeded <= 0
 
-  const projectUrl = `${window.location.origin}/project/${project.name}`
+  const projectUrl = `${getRuntimeOrigin()}/project/${project.name}`
 
   const { onCopy, hasCopied } = useClipboard(projectUrl)
   return (
