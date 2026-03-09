@@ -5,9 +5,14 @@ import { sha256 } from '../../../../utils'
 
 export const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
 
-export const { webln }: { webln: WebLNProvider } = window as any
+const getWebLnProvider = (): WebLNProvider | null => {
+  if (typeof window === 'undefined') return null
+  return ((window as any).webln as WebLNProvider | undefined) || null
+}
 
 export const requestWebLNPayment = async (paymentLightning: ContributionLightningPaymentDetailsFragment) => {
+  const webln = getWebLnProvider()
+
   if (!webln) {
     throw new Error('no provider')
   }

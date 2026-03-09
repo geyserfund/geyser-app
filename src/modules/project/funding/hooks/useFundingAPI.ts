@@ -50,14 +50,12 @@ import {
 } from '../state/swapAtom.ts'
 import { rskAccountKeysAtom } from '../state/swapRskAtom.ts'
 import { generatePrivatePublicKeyPair, validateFundingInput } from '../utils/helpers'
-import { webln } from '../utils/requestWebLNPayment'
 import { useFundingFormAtom } from './useFundingFormAtom'
 import { useResetContribution } from './useResetContribution.ts'
 import { useStripeEmbeddedTheme } from './useStripeEmbeddedTheme.ts'
 import { useWebLNFlow } from './useWebLNFlow'
 
 const hasBolt11 = true
-const hasWebLN = true
 const PAYMENT_SWAP_CLAIM_TX_SET_MAX_ATTEMPTS = 3
 const PAYMENT_SWAP_CLAIM_TX_SET_RETRY_DELAY_MS = 400
 
@@ -65,6 +63,11 @@ const delay = async (ms: number) => {
   await new Promise((resolve) => {
     setTimeout(resolve, ms)
   })
+}
+
+const hasWebLnProvider = () => {
+  if (typeof window === 'undefined') return false
+  return Boolean((window as any).webln)
 }
 
 const isRetryableClaimTxSetError = (error: unknown) => {
@@ -231,8 +234,7 @@ export const useFundingAPI = () => {
 
         if (
           hasBolt11 &&
-          hasWebLN &&
-          webln &&
+          hasWebLnProvider() &&
           data.contributionCreate.payments.lightning &&
           !data.contributionCreate.contribution.isSubscription &&
           !__development__

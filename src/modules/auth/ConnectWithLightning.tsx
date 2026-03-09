@@ -41,11 +41,16 @@ interface WebLNAuthProvider extends WebLNProvider {
   lnurl: (lnurl: string) => Promise<LNURLResponse>
 }
 
-const { webln }: { webln: WebLNAuthProvider } = window as any
+const getWebLnProvider = (): WebLNAuthProvider | null => {
+  if (typeof window === 'undefined') return null
+  return ((window as any).webln as WebLNAuthProvider | undefined) || null
+}
 
 const WEBLN_ENABLE_ERROR = 'Failed to enable webln'
 
 const requestWebLNUrlAuth = async (paymentRequest: string) => {
+  const webln = getWebLnProvider()
+
   if (!webln) {
     throw new Error('no provider')
   }
