@@ -1,9 +1,10 @@
-import { Badge, Box, HStack, Wrap, WrapItem, useColorModeValue } from '@chakra-ui/react'
+/* eslint-disable complexity */
+import { Badge, Box, HStack, useColorModeValue, Wrap, WrapItem } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
-import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { Body } from '@/shared/components/typography'
+import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { commaFormatted } from '@/utils'
 
 import { useProjectAtom } from '../../../../../hooks/useProjectAtom'
@@ -84,13 +85,7 @@ export const Creator = () => {
   )
 }
 
-const CreatorTrustStat = ({
-  label,
-  value,
-}: {
-  label: string
-  value: string
-}) => {
+const CreatorTrustStat = ({ label, value }: { label: string; value: string }) => {
   const statBackgroundColor = useColorModeValue('neutral1.2', 'neutral1.4')
   const statLabelColor = useColorModeValue('neutral1.8', 'neutral1.8')
   const statValueColor = useColorModeValue('neutral1.11', 'neutral1.11')

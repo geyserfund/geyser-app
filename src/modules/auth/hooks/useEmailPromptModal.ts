@@ -1,16 +1,37 @@
 import { useAtom } from 'jotai'
 
-import { emailPromptOnCloseActionAtom, isEmailPromptModalOpenAtom } from '../state/emailPromptAtom'
+import type { EmailPromptVariant } from '../state/emailPromptAtom'
+import {
+  emailPromptOnCloseActionAtom,
+  emailPromptVariantAtom,
+  isEmailPromptModalOpenAtom,
+} from '../state/emailPromptAtom'
 
 export const useEmailPromptModal = () => {
   const [emailPromptIsOpen, setEmailPromptIsOpen] = useAtom(isEmailPromptModalOpenAtom)
   const [emailPromptOnCloseAction, setEmailPromptOnCloseAction] = useAtom(emailPromptOnCloseActionAtom)
+  const [emailPromptVariant, setEmailPromptVariant] = useAtom(emailPromptVariantAtom)
 
-  const emailPromptOnOpen = () => setEmailPromptIsOpen(true)
-  const emailPromptOnClose = () => {
-    setEmailPromptIsOpen(false)
-    emailPromptOnCloseAction?.()
+  const emailPromptOnOpen = (variant: EmailPromptVariant = 'default') => {
+    setEmailPromptVariant(variant)
+    setEmailPromptIsOpen(true)
   }
 
-  return { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose, setEmailPromptOnCloseAction }
+  const emailPromptOnClose = ({ runOnCloseAction = true }: { runOnCloseAction?: boolean } = {}) => {
+    setEmailPromptIsOpen(false)
+    if (runOnCloseAction) {
+      emailPromptOnCloseAction?.()
+    }
+
+    setEmailPromptOnCloseAction(null)
+    setEmailPromptVariant('default')
+  }
+
+  return {
+    emailPromptIsOpen,
+    emailPromptOnOpen,
+    emailPromptOnClose,
+    emailPromptVariant,
+    setEmailPromptOnCloseAction,
+  }
 }

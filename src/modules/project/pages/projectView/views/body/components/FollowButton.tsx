@@ -38,7 +38,7 @@ export const FollowButton = ({ project, withLabel, ...rest }: FollowButtonProps)
 
     if (shouldPrompt && !isFollowed) {
       setEmailPromptOnCloseAction(handleFollowUnfollow)
-      emailPromptOnOpen()
+      emailPromptOnOpen('default')
       return
     }
 
