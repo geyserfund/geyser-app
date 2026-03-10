@@ -23,12 +23,17 @@ import { useNotification } from '@/utils'
 
 import { EmailPromptModalUrl } from '../../../shared/constants'
 
+const PRODUCT_UPDATES_NOTIFICATION_TYPE = 'user.productUpdates'
+const PROJECT_UPDATES_SUMMARY_NOTIFICATION_TYPE = 'user.projectUpdatesSummary'
+const IS_ENABLED_CONFIG_NAME = 'is_enabled'
+
 type EmailPromptModalProps = {
   onClose: (options?: { runOnCloseAction?: boolean }) => void
   isOpen: boolean
   variant: EmailPromptVariant
 }
 
+/** Prompt users without email to secure account and opt in to updates after login. */
 export const EmailPromptModal = ({ onClose, isOpen, variant }: EmailPromptModalProps) => {
   const { logout, user } = useAuthContext()
   const toast = useNotification()
@@ -36,11 +41,11 @@ export const EmailPromptModal = ({ onClose, isOpen, variant }: EmailPromptModalP
   const isMandatory = variant === 'mandatory_after_login'
   const [otpData, setOtpData] = useState<OtpResponseFragment | null>(null)
   const [otpEmail, setOtpEmail] = useState<string>('')
+  const [userNotificationSettings, setUserNotificationSettings] = useState<NotificationSettings[]>([])
 
   const { control, handleSubmit, onSubmit, enableSave, reset, shouldPrompt } = useEmailPrompt({
     emailRequired: isMandatory,
   })
-  const [productUpdatesNotificationSetting, setProductUpdatesNotificationSetting] = useState<NotificationSettings>()
 
   useUserNotificationsSettingsQuery({
     skip: !user?.id,
@@ -48,10 +53,7 @@ export const EmailPromptModal = ({ onClose, isOpen, variant }: EmailPromptModalP
       userId: user?.id,
     },
     onCompleted(data) {
-      const productUpdatesSetting = data?.userNotificationSettingsGet.userSettings.notificationSettings.find(
-        (setting: NotificationSettings) => setting.notificationType === 'user.productUpdates',
-      )
-      setProductUpdatesNotificationSetting(productUpdatesSetting)
+      setUserNotificationSettings(data?.userNotificationSettingsGet.userSettings.notificationSettings || [])
     },
   })
 
@@ -83,11 +85,16 @@ export const EmailPromptModal = ({ onClose, isOpen, variant }: EmailPromptModalP
     })
   }
 
-  const updateProductUpdatesNotification = async (data: EmailPromptFormValues) => {
-    const configId = productUpdatesNotificationSetting?.configurations.find(
-      (config) => config.name === 'is_enabled',
-    )?.id
-    if (!configId) return
+  const getIsEnabledConfigId = (notificationType: string) => {
+    const setting = userNotificationSettings.find((config) => config.notificationType === notificationType)
+    return setting?.configurations.find((config) => config.name === IS_ENABLED_CONFIG_NAME)?.id
+  }
+
+  const updateDefaultProductUpdatesNotification = async (data: EmailPromptFormValues) => {
+    const configId = getIsEnabledConfigId(PRODUCT_UPDATES_NOTIFICATION_TYPE)
+    if (!configId) {
+      return
+    }
 
     const value = data.email ? 'true' : 'false'
 
@@ -102,6 +109,37 @@ export const EmailPromptModal = ({ onClose, isOpen, variant }: EmailPromptModalP
       toast.error({
         title: t('Update failed'),
         description: t('Failed to update product updates notification setting. Please try again.'),
+      })
+    }
+  }
+
+  const updateMandatoryNotificationPreferences = async (receiveGeyserUpdates: boolean) => {
+    const value = receiveGeyserUpdates ? 'true' : 'false'
+
+    const configIds = [
+      getIsEnabledConfigId(PRODUCT_UPDATES_NOTIFICATION_TYPE),
+      getIsEnabledConfigId(PROJECT_UPDATES_SUMMARY_NOTIFICATION_TYPE),
+    ].filter((configId): configId is NonNullable<typeof configId> => Boolean(configId))
+
+    if (configIds.length === 0) {
+      return
+    }
+
+    const results = await Promise.allSettled(
+      configIds.map((configId) =>
+        updateNotificationSetting({
+          variables: {
+            userNotificationConfigurationId: configId,
+            value,
+          },
+        }),
+      ),
+    )
+
+    if (results.some((result) => result.status === 'rejected')) {
+      toast.error({
+        title: t('Update failed'),
+        description: t('Failed to update one or more notification settings. You can update them in settings.'),
       })
     }
   }
@@ -128,7 +166,11 @@ export const EmailPromptModal = ({ onClose, isOpen, variant }: EmailPromptModalP
       return
     }
 
-    await updateProductUpdatesNotification(data)
+    if (isMandatory) {
+      await updateMandatoryNotificationPreferences(Boolean(data.receiveGeyserUpdates ?? true))
+    } else {
+      await updateDefaultProductUpdatesNotification(data)
+    }
 
     const submittedEmail = data.email?.trim()
     if (submittedEmail) {
@@ -159,7 +201,7 @@ export const EmailPromptModal = ({ onClose, isOpen, variant }: EmailPromptModalP
     <Modal
       isOpen={isOpen && shouldShowPrompt}
       onClose={() => onClose()}
-      title={isMandatory ? t('Add your email') : t('Email')}
+      title={isMandatory ? t('Secure your account with an email') : t('Email')}
       size="lg"
       noClose={isMandatory}
       closeOnEsc={!isMandatory}
@@ -198,33 +240,48 @@ export const EmailPromptModal = ({ onClose, isOpen, variant }: EmailPromptModalP
               <Image height="100%" src={EmailPromptModalUrl} alt="Email illustration" objectFit="contain" />
             </Box>
             <VStack justifyContent="flex-start" alignItems="flex-start" w="100%" gap={1}>
-              <Body size="sm" medium>
-                {isMandatory ? t('Add your email') : t('Receive email notifications for projects you follow')}
-              </Body>
-              <Body size="sm" light>
-                {isMandatory
-                  ? t(
-                      'We need your email to better support you and keep you informed about important account activity.',
-                    )
-                  : t(
+              {isMandatory ? (
+                <>
+                  <Body size="sm" medium>
+                    {t('Add an email so we can help you recover your account and notify you about important activity.')}
+                  </Body>
+                  <Body size="sm" light>
+                    {t('Your email is never shared.')}
+                  </Body>
+                </>
+              ) : (
+                <>
+                  <Body size="sm" medium>
+                    {t('Receive email notifications for projects you follow')}
+                  </Body>
+                  <Body size="sm" light>
+                    {t(
                       'Stay up to date with projects you follow by receiving recurring project updates and Geyser product announcements. Drop email below, and unsubscribe anytime.',
                     )}
-              </Body>
-              {isMandatory && (
-                <Body size="sm" color="warning.10">
-                  {t('If you choose to close this step, you will be logged out.')}
-                </Body>
+                  </Body>
+                </>
               )}
             </VStack>
             <VStack w="100%" gap={2}>
-              <ControlledTextInput control={control} name="email" label="" placeholder="satoshi@gmx.com" />
-              {!isMandatory && (
+              <ControlledTextInput
+                control={control}
+                name="email"
+                label=""
+                placeholder={isMandatory ? 'you@email.com' : 'satoshi@gmx.com'}
+              />
+              {isMandatory ? (
+                <ControlledCheckboxInput
+                  control={control}
+                  name="receiveGeyserUpdates"
+                  label={t('Send me occasional updates about new projects, grants, and features on Geyser')}
+                />
+              ) : (
                 <ControlledCheckboxInput control={control} name="dontAskAgain" label={t("Don't ask again")} />
               )}
             </VStack>
             <VStack w="100%" gap={2}>
               <Button w="100%" variant="solid" colorScheme="primary1" type="submit" isDisabled={!enableSave}>
-                {t('Save')}
+                {isMandatory ? t('Save email') : t('Save')}
               </Button>
               {isMandatory && (
                 <Button w="100%" variant="outline" colorScheme="neutral1" onClick={handleMandatoryLogout}>

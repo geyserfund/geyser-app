@@ -15,6 +15,7 @@ type UseEmailPromptProps = {
 export type EmailPromptFormValues = {
   dontAskAgain?: boolean
   email?: string
+  receiveGeyserUpdates?: boolean
 }
 
 const getEmailSchema = (emailRequired: boolean) =>
@@ -48,6 +49,7 @@ export const useEmailPrompt = ({ afterEmailUpdate, emailRequired = false }: UseE
     defaultValues: {
       email: user.email || '',
       dontAskAgain: false,
+      receiveGeyserUpdates: true,
     },
   })
 
