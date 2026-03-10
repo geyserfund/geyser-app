@@ -208,6 +208,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         variables: {
           input: {
             payoutId: payoutRequestData?.payoutRequest.payout.id,
+            paymentId: payment.id,
             signature,
             callDataHex,
             userLockTxHex: userLockTxHex || undefined,
@@ -342,6 +343,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         variables: {
           input: {
             payoutId: payoutRequestData?.payoutRequest.payout.id,
+            paymentId: payment.id,
             signature,
             callDataHex,
             userLockTxHex: userLockTxHex || undefined,

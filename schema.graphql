@@ -4142,6 +4142,7 @@ type Payout {
 
 input PayoutGetInput {
   payoutId: BigInt
+  projectId: BigInt
   swapId: String
 }
 
@@ -4169,6 +4170,7 @@ input PayoutPaymentCreateInput {
 
 input PayoutInitiateInput {
   payoutId: BigInt!
+  paymentId: BigInt!
 
   """
   The RSK address of the creator (optional, for storing in payment for later refund if needed)
@@ -4211,4 +4213,5 @@ enum PayoutStatus {
   COMPLETED
   FAILED
   EXPIRED
+  CANCELLED
 }

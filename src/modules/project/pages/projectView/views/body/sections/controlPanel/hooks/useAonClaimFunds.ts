@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
+import { useApolloClient } from '@apollo/client'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
+import { QUERY_PAYOUT_GET } from '@/modules/project/graphql/query/payoutQuery.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import { PayoutStatus, ProjectAonGoalStatus, usePayoutRequestMutation } from '@/types'
+import { PayoutStatus, ProjectAonGoalStatus } from '@/types'
 import { isAllOrNothing } from '@/utils/index.ts'
 
 import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom.ts'
@@ -15,24 +17,26 @@ export const useAonClaimFunds = () => {
   const payoutRskModal = useModal()
   const { refetchQueriesOnPayoutSuccess } = useRefetchQueries()
   const { queryProject } = useProjectAPI()
+  const apolloClient = useApolloClient()
 
   const isAon = isAllOrNothing(project)
   const [isPayoutProcessing, setIsPayoutProcessing] = useState(false)
-
-  const [payoutRequest] = usePayoutRequestMutation()
 
   useEffect(() => {
     if (!isProjectOwner || !isAon || !project?.aonGoal?.status) return
     if (!AON_CLAIMABLE_STATUSES.includes(project.aonGoal.status)) return
 
-    payoutRequest({
+    apolloClient.query({
+      query: QUERY_PAYOUT_GET,
       variables: { input: { projectId: project.id } },
-      onCompleted(data) {
-        const { status } = data.payoutRequest.payout
-        setIsPayoutProcessing(status === PayoutStatus.Pending || status === PayoutStatus.Processing)
-      },
+      fetchPolicy: 'network-only',
+    }).then(({ data }) => {
+      const status = data?.payoutGet?.payout?.status
+      setIsPayoutProcessing(status === PayoutStatus.Pending || status === PayoutStatus.Processing)
+    }).catch(() => {
+      setIsPayoutProcessing(false)
     })
-  }, [isProjectOwner, isAon, project?.aonGoal?.status, project.id, payoutRequest])
+  }, [apolloClient, isProjectOwner, isAon, project?.aonGoal?.status, project.id])
 
   const goalReached = project.aonGoal?.status === ProjectAonGoalStatus.Successful
   const claimedButProcessing = project.aonGoal?.status === ProjectAonGoalStatus.Claimed && isPayoutProcessing

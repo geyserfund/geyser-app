@@ -2851,6 +2851,7 @@ export enum PayoutCurrency {
 
 export type PayoutGetInput = {
   payoutId?: InputMaybe<Scalars['BigInt']['input']>;
+  projectId?: InputMaybe<Scalars['BigInt']['input']>;
   swapId?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -2865,6 +2866,7 @@ export type PayoutInitiateInput = {
   callDataHex: Scalars['String']['input'];
   /** Optional: The claim transaction hex (for RSK to on-chain swaps only) */
   claimTxHex?: InputMaybe<Scalars['String']['input']>;
+  paymentId: Scalars['BigInt']['input'];
   payoutId: Scalars['BigInt']['input'];
   /** The RSK address of the creator (optional, for storing in payment for later refund if needed) */
   rskAddress?: InputMaybe<Scalars['String']['input']>;
@@ -2931,6 +2933,7 @@ export type PayoutResponse = {
 };
 
 export enum PayoutStatus {
+  Cancelled = 'CANCELLED',
   Completed = 'COMPLETED',
   Expired = 'EXPIRED',
   Failed = 'FAILED',
