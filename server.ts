@@ -18,13 +18,16 @@ app.use(
 )
 
 app.use(
-  prerender.set('prerenderToken', process.env.PRERENDER_TOKEN).set('afterRender', (err) => {
-    // If the request to prerender server fails, just return the normal static files.
-    if (err) {
-      console.error('Prerender Error', err)
-      return { cancelRender: true }
-    }
-  }),
+  prerender
+    .set('prerenderToken', process.env.PRERENDER_TOKEN)
+    .set('prerenderServiceUrl', process.env.PRERENDER_SERVICE_URL)
+    .set('afterRender', (err) => {
+      // If the request to prerender server fails, just return the normal static files.
+      if (err) {
+        console.error('Prerender Error', err)
+        return { cancelRender: true }
+      }
+    }),
 )
 
 app.use((request, response) => {
