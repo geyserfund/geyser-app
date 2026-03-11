@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
@@ -36,7 +36,7 @@ export const useWithdrawFunds = () => {
   const isBelowMinWithdrawThreshold = withdrawableUsd < MIN_WITHDRAW_USD
   const showWithdraw = showWithdrawableBalance && (hasOngoingWithdraw || (hasWithdrawableBalance && !isBelowMinWithdrawThreshold))
 
-  const refetchActivePayout = () => {
+  const refetchActivePayout = useCallback(() => {
     return apolloClient.query({
       query: QUERY_PAYOUT_ACTIVE,
       variables: { projectId: project.id },
@@ -47,7 +47,7 @@ export const useWithdrawFunds = () => {
     }).catch(() => {
       setHasOngoingWithdraw(false)
     })
-  }
+  }, [apolloClient, project.id])
 
   useEffect(() => {
     if (!isProjectOwner || !isTiaProject || !projectRskEoa) {
@@ -56,7 +56,7 @@ export const useWithdrawFunds = () => {
     }
 
     void refetchActivePayout()
-  }, [apolloClient, isProjectOwner, isTiaProject, project.id, projectRskEoa])
+  }, [isProjectOwner, isTiaProject, project.id, projectRskEoa, refetchActivePayout])
 
   const onCompleted = () => {
     setHasOngoingWithdraw(false)

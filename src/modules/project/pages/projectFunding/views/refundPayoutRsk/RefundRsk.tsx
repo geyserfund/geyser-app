@@ -44,7 +44,7 @@ import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
 import { LightningPayoutFormData } from './hooks/usePayoutWithLightningForm.ts'
-import { PayoutMethod } from './types.ts'
+import { PayoutFlowSwapData, PayoutMethod } from './types.ts'
 
 type RefundRskProps = {
   isOpen: boolean
@@ -184,6 +184,17 @@ function getRefundProgressSteps(params: {
   ]
 }
 
+const ContinueRefundContent = () => {
+  return (
+    <VStack spacing={4} alignItems="start" w="full">
+      <Body size={'md'} medium>
+        {t('Refund all of the contributions you have made to this project.')} <br />
+        {t('Are you sure you want to continue with the refund?')}
+      </Body>
+    </VStack>
+  )
+}
+
 /** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
 export const RefundRsk: React.FC<RefundRskProps> = ({
   isOpen,
@@ -228,7 +239,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     usePledgeRefundPaymentCreateMutation()
   const [pledgeRefundInitiate, { loading: isPledgeRefundInitiateLoading }] = usePledgeRefundInitiateMutation()
 
-  const [swapData, setSwapData] = useState<any>(null)
+  const [swapData, setSwapData] = useState<PayoutFlowSwapData | null>(null)
   const waitingNotice = isWaitingClaimReady ? (
     t('Your funds are ready to be claimed')
   ) : (
@@ -295,15 +306,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   // isRetryable  is the case when the funds are in the user rsk address
   const isRetryable = isProcessing && latestPayment?.status === PaymentStatus.Refunded
 
-  useEffect(() => {
-    if (isOpen && shouldResumeOnChainRefund) {
-      bitcoinForm.form.reset({
-        bitcoinAddress: persistedOnChainAddress,
-        accountPassword: '',
-      })
-    }
-  }, [isOpen, shouldResumeOnChainRefund, persistedOnChainAddress])
-
   const totalAmount = pledgeRefundRequestData?.pledgeRefundRequest.refund.amount || 0
   const shouldShowProcessedScreen = isProcessed || Boolean(activeLightningPayment)
   const progressMethod = shouldShowProcessedScreen
@@ -352,32 +354,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     setSelectedMethod(totalAmount < DEFAULT_LIGHTNING_PAYOUT_MAX_SATS ? PayoutMethod.Lightning : PayoutMethod.OnChain)
     hasDefaultedMethodRef.current = true
   }, [continueRefund, latestPayment, shouldResumeOnChainRefund, isClaimable, isOpen, totalAmount])
-
-  useEffect(() => {
-    if (!isOpen) {
-      return
-    }
-
-    if (activeLightningPayment) {
-      setSelectedMethod(PayoutMethod.Lightning)
-      setRefundInvoiceId(activeLightningInvoiceId)
-      return
-    }
-
-    if (latestOnChainPaymentDetails) {
-      setSelectedMethod(PayoutMethod.OnChain)
-      bitcoinForm.form.reset({
-        bitcoinAddress: persistedOnChainAddress,
-        accountPassword: '',
-      })
-    }
-  }, [
-    isOpen,
-    activeLightningPayment?.id,
-    activeLightningInvoiceId,
-    activeOnChainPayment?.id,
-    persistedOnChainAddress,
-  ])
 
   const handleLightningSubmit = async (data: LightningPayoutFormData, accountKeys: AccountKeys) => {
     setIsSubmitting(true)
@@ -644,6 +620,42 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     requireBitcoinAddress: !shouldResumeOnChainRefund || shouldRequestBitcoinAddressOnResume,
   })
 
+  useEffect(() => {
+    if (isOpen && shouldResumeOnChainRefund) {
+      bitcoinForm.form.reset({
+        bitcoinAddress: persistedOnChainAddress,
+        accountPassword: '',
+      })
+    }
+  }, [isOpen, shouldResumeOnChainRefund, persistedOnChainAddress, bitcoinForm.form])
+
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    if (activeLightningPayment) {
+      setSelectedMethod(PayoutMethod.Lightning)
+      setRefundInvoiceId(activeLightningInvoiceId)
+      return
+    }
+
+    if (latestOnChainPaymentDetails) {
+      setSelectedMethod(PayoutMethod.OnChain)
+      bitcoinForm.form.reset({
+        bitcoinAddress: persistedOnChainAddress,
+        accountPassword: '',
+      })
+    }
+  }, [
+    isOpen,
+    activeLightningPayment?.id,
+    activeLightningInvoiceId,
+    activeOnChainPayment?.id,
+    persistedOnChainAddress,
+    bitcoinForm.form,
+  ])
+
   const handleClose = () => {
     setIsProcessed(false)
     setIsSubmitting(false)
@@ -746,17 +758,6 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
           ),
         })}
       </Modal>
-    )
-  }
-
-  function ContinueRefundContent() {
-    return (
-      <VStack spacing={4} alignItems="start" w="full">
-        <Body size={'md'} medium>
-          {t('Refund all of the contributions you have made to this project.')} <br />
-          {t('Are you sure you want to continue with the refund?')}
-        </Body>
-      </VStack>
     )
   }
 

@@ -19,6 +19,7 @@ type PayoutProgressSidebarProps = {
   label?: string
 }
 
+/** PayoutProgressSidebar: Displays the pending amount and the current step-based progress for payout and refund flows */
 export const PayoutProgressSidebar = ({ amount, steps, label = t('Pending payout') }: PayoutProgressSidebarProps) => {
   return (
     <VStack
@@ -37,7 +38,7 @@ export const PayoutProgressSidebar = ({ amount, steps, label = t('Pending payout
           {label}
         </Body>
         <Body size="2xl" bold color="neutral1.12">
-          {commaFormatted(amount)} sats
+          {t('{{amount}} sats', { amount: commaFormatted(amount) })}
         </Body>
       </VStack>
 

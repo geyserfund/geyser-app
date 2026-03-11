@@ -9,10 +9,11 @@ import { useNotification } from '@/utils/index.ts'
 import { useRefund } from '../../fundingPayment/views/paymentOnchain/hooks/useRefund.ts'
 import { useTransactionStatusUpdate } from '../../fundingPayment/views/paymentOnchain/hooks/useTransactionStatusUpdate.ts'
 import { ContructingTransactionImageUrl, TransactionReadyToClaimImageUrl } from '../constant.ts'
+import { PayoutFlowSwapData } from '../types.ts'
 import { PayoutStepLayout } from './PayoutStepLayout.tsx'
 
 type BitcoinPayoutWaitingConfirmationProps = {
-  swapData?: any
+  swapData?: PayoutFlowSwapData | null
   refundAddress?: string
   setIsProcessed: (isProcessed: boolean) => void
   setRefundTxId: (refundTxId: string) => void
@@ -70,6 +71,14 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
       return
     }
 
+    if (!swapData) {
+      toast.error({
+        title: t('Missing swap details'),
+        description: t('Please reopen the payout flow and try again.'),
+      })
+      return
+    }
+
     setIsClaiming(true)
     const refundTransactionHex = await initiateRefundToGetRefundTx(refundAddress, swapData, 'serverLock')
     if (refundTransactionHex) {
@@ -116,7 +125,7 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
         <Box w="300px" h="300px">
           <Image
             src={isReadyToBeClaimed ? TransactionReadyToClaimImageUrl : ContructingTransactionImageUrl}
-            alt={'Get refund'}
+            alt={t('Get refund')}
             width="100%"
             height="100%"
             objectFit="cover"

@@ -8,7 +8,8 @@ type PayoutStepLayoutProps = {
   action: ReactNode
 }
 
-export function PayoutStepLayout({ notice, illustration, content, action }: PayoutStepLayoutProps) {
+/** PayoutStepLayout: Wrapper for payout and refund step screens with notice, illustration, content, and action sections */
+export const PayoutStepLayout = ({ notice, illustration, content, action }: PayoutStepLayoutProps) => {
   return (
     <VStack w="full" spacing={6} alignItems="center">
       {notice}

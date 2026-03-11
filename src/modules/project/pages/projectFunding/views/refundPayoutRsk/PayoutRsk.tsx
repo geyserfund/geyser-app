@@ -49,7 +49,7 @@ import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
 import { LightningPayoutFormData } from './hooks/usePayoutWithLightningForm.ts'
-import { PayoutMethod } from './types.ts'
+import { PayoutFlowSwapData, PayoutMethod } from './types.ts'
 
 type PayoutRskProps = {
   isOpen: boolean
@@ -192,6 +192,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   isOpen,
   onClose,
   project,
+  rskAddress,
   payoutAmountOverride,
   onCompleted,
 }) => {
@@ -218,7 +219,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const [payoutPaymentPrepare, { loading: isPayoutPaymentPrepareLoading }] = usePayoutPaymentPrepareMutation()
   const [payoutPaymentInitiate, { loading: isPayoutPaymentInitiateLoading }] = usePayoutPaymentInitiateMutation()
 
-  const [swapData, setSwapData] = useState<any>(null)
+  const [swapData, setSwapData] = useState<PayoutFlowSwapData | null>(null)
   const [payoutPrepareError, setPayoutPrepareError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -326,32 +327,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     hasDefaultedMethodRef.current = true
   }, [isOpen, latestPayment, shouldResumeOnChainPayout, totalAmount])
 
-  useEffect(() => {
-    if (!isOpen) {
-      return
-    }
-
-    if (activeLightningPayment) {
-      setSelectedMethod(PayoutMethod.Lightning)
-      setPayoutInvoiceId(activeLightningInvoiceId)
-      return
-    }
-
-    if (activeOnChainPaymentDetails) {
-      setSelectedMethod(PayoutMethod.OnChain)
-      bitcoinForm.form.reset({
-        bitcoinAddress: persistedOnChainAddress,
-        accountPassword: '',
-      })
-    }
-  }, [
-    isOpen,
-    activeLightningPayment?.id,
-    activeLightningInvoiceId,
-    activeOnChainPayment?.id,
-    persistedOnChainAddress,
-  ])
-
   const createPayoutSignature = (params: { lockCallData: Hex; accountKeys: AccountKeys; amount: number }) => {
     const { lockCallData, accountKeys, amount } = params
 
@@ -444,7 +419,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
             signature,
             callDataHex,
             userLockTxHex: userLockTxHex || undefined,
-            rskAddress: isPrismPayout ? accountKeys.address : undefined,
+            rskAddress: isPrismPayout ? rskAddress || accountKeys.address : undefined,
           },
         },
         onCompleted(data) {
@@ -456,11 +431,11 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
 
       setIsProcessed(true)
       toast.success({
-        title: t('Refund initiated successfully'),
-        description: t('Your Lightning refund will be processed shortly'),
+        title: t('Payout initiated successfully'),
+        description: t('Your Lightning payout will be processed shortly'),
       })
     } catch (error) {
-      console.error('Lightning refund error:', error)
+      console.error('Lightning payout error:', error)
       toast.error({
         title: t('Something went wrong'),
         description: t('Please try again'),
@@ -492,8 +467,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       setIsWaitingConfirmation(true)
       setRefundAddress(paymentDetails.onChainAddress || data.bitcoinAddress || null)
       toast.info({
-        title: t('Refund initiated'),
-        description: t('Your Bitcoin on-chain refund will be processed shortly'),
+        title: t('Payout initiated'),
+        description: t('Your Bitcoin on-chain payout will be processed shortly'),
       })
 
       return
@@ -585,7 +560,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
             signature,
             callDataHex,
             userLockTxHex: userLockTxHex || undefined,
-            rskAddress: isPrismPayout ? accountKeys.address : undefined,
+            rskAddress: isPrismPayout ? rskAddress || accountKeys.address : undefined,
           },
         },
         onCompleted(data) {
@@ -598,11 +573,11 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       setIsWaitingClaimReady(false)
       setRefundAddress(data.bitcoinAddress || null)
       toast.info({
-        title: t('Refund initiated'),
-        description: t('Your Bitcoin on-chain refund will be processed shortly'),
+        title: t('Payout initiated'),
+        description: t('Your Bitcoin on-chain payout will be processed shortly'),
       })
     } catch (error) {
-      console.error('Bitcoin refund error:', error)
+      console.error('Bitcoin payout error:', error)
       toast.error({
         title: t('Something went wrong'),
         description: t('Please try again'),
@@ -626,6 +601,33 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
 
   const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, undefined, keyDerivationOptions)
   const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit, undefined, keyDerivationOptions)
+
+  useEffect(() => {
+    if (!isOpen) {
+      return
+    }
+
+    if (activeLightningPayment) {
+      setSelectedMethod(PayoutMethod.Lightning)
+      setPayoutInvoiceId(activeLightningInvoiceId)
+      return
+    }
+
+    if (activeOnChainPaymentDetails) {
+      setSelectedMethod(PayoutMethod.OnChain)
+      bitcoinForm.form.reset({
+        bitcoinAddress: persistedOnChainAddress,
+        accountPassword: '',
+      })
+    }
+  }, [
+    isOpen,
+    activeLightningPayment?.id,
+    activeLightningInvoiceId,
+    activeOnChainPayment?.id,
+    persistedOnChainAddress,
+    bitcoinForm.form,
+  ])
 
   const handleClose = () => {
     setIsProcessed(false)
@@ -822,7 +824,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
           title: modalTitle,
           subtitle: modalSubtitle,
           description: modalDescription,
-          content: <RefundRskSkeleton />,
+          content: <PayoutRskSkeleton />,
         })
       ) : payoutPrepareError ? (
         renderModalContent({
@@ -968,8 +970,8 @@ function getPayoutSubmitButtonLabel(params: {
   return t('Confirm my password')
 }
 
-/** RefundRskSkeleton: Loading skeleton for the refund modal with payout method selection */
-export const RefundRskSkeleton = () => {
+/** PayoutRskSkeleton: Loading skeleton for the payout modal with payout method selection */
+export const PayoutRskSkeleton = () => {
   return (
     <VStack w="full" spacing={4} alignItems="start">
       {/* Payout Method Buttons Skeleton */}

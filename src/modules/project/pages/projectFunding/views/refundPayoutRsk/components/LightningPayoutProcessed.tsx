@@ -37,7 +37,7 @@ export const LightningPayoutProcessed: React.FC<LightningPayoutProcessedProps> =
           </Body>
           {invoiceId && (
             <Body size="sm" textAlign="center" color="neutral1.10">
-              {t('Payout Invoice Id:')} {invoiceId}
+              {t('Payout Invoice Id')}: {invoiceId}
             </Body>
           )}
         </VStack>

@@ -36,7 +36,6 @@ export const MUTATION_PAYOUT_PAYMENT_PREPARE = gql`
 
 export const MUTATION_PAYOUT_PAYMENT_INITIATE = gql`
   ${FRAGMENT_PAYOUT}
-  ${FRAGMENT_PAYOUT_WITH_PAYMENT}
   mutation PayoutPaymentInitiate($input: PayoutInitiateInput!) {
     payoutPaymentInitiate(input: $input) {
       payout {
