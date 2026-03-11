@@ -1,10 +1,8 @@
-import { Box, Button, Image, Link, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Image, Spinner } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { useCallback, useEffect, useState } from 'react'
-import { Trans } from 'react-i18next'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { getMempoolSpaceUrl } from '@/shared/utils/external/mempool.ts'
 import { usePaymentSwapClaimTxBroadcastMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
@@ -15,7 +13,6 @@ import { PayoutStepLayout } from './PayoutStepLayout.tsx'
 
 type BitcoinPayoutWaitingConfirmationProps = {
   swapData?: any
-  lockTxId?: string
   refundAddress?: string
   setIsProcessed: (isProcessed: boolean) => void
   setRefundTxId: (refundTxId: string) => void
@@ -26,7 +23,6 @@ type BitcoinPayoutWaitingConfirmationProps = {
 /** BitcoinPayoutProcessed: Success screen for Bitcoin on-chain payout completion */
 export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConfirmationProps> = ({
   swapData,
-  lockTxId,
   refundAddress,
   setIsProcessed,
   setRefundTxId,
@@ -34,6 +30,7 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
   onReadyToBeClaimed,
 }) => {
   const toast = useNotification()
+  const swapId = swapData?.id || swapData?.swapId
 
   const [isReadyToBeClaimed, setIsReadyToBeClaimed] = useState(initialReadyToBeClaimed)
   const [isClaiming, setIsClaiming] = useState(false)
@@ -45,7 +42,7 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
   }, [initialReadyToBeClaimed])
 
   useTransactionStatusUpdate({
-    swapId: swapData.id,
+    swapId,
     handleClaimCoins: () => {
       setIsReadyToBeClaimed(true)
       onReadyToBeClaimed?.()
@@ -55,6 +52,14 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
   const { initiateRefundToGetRefundTx } = useRefund()
 
   const [paymentSwapClaimTxBroadcast] = usePaymentSwapClaimTxBroadcastMutation()
+
+  const handleClaimError = useCallback(() => {
+    setIsClaiming(false)
+    toast.error({
+      title: t('Something went wrong'),
+      description: t('Please try again'),
+    })
+  }, [toast])
 
   const handleInitiateRefund = useCallback(async () => {
     if (!refundAddress) {
@@ -87,22 +92,15 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
             })
           }
         },
-        onError(error) {
-          setIsClaiming(false)
-          toast.error({
-            title: t('Something went wrong'),
-            description: t('Please try again'),
-          })
+        onError() {
+          handleClaimError()
         },
       })
     } else {
-      setIsClaiming(false)
-      toast.error({
-        title: t('Something went wrong'),
-        description: t('Please try again'),
-      })
+      handleClaimError()
     }
   }, [
+    handleClaimError,
     initiateRefundToGetRefundTx,
     refundAddress,
     swapData,
@@ -126,34 +124,29 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
         </Box>
       }
       content={
-        <VStack spacing={4} alignItems="start" w="full">
-          {!isReadyToBeClaimed && (
-            <Body size="md" textAlign="center" color="neutral1.12">
-              <>
-                {t('We are waiting for the transaction to be confirmed before you can claim the funds.')}{' '}
-                <Trans i18nKey="You can check the transaction status by <1> clicking here.</1>">
-                  {'You can check the transaction status by '}
-                  <Link href={getMempoolSpaceUrl(lockTxId || '')} textDecoration="underline" isExternal>
-                    {'clicking here.'}
-                  </Link>
-                </Trans>
-              </>
+        !isReadyToBeClaimed ? (
+          <HStack spacing={3} alignItems="center" justifyContent="center" w="full" mt={-2}>
+            <Spinner color="primary1.9" size="md" thickness="3px" sx={{ animationDuration: '1.8s' }} />
+            <Body size="md" color="neutral1.11" textAlign="center">
+              {t('Waiting for transaction confirmation...')}
             </Body>
-          )}
-        </VStack>
+          </HStack>
+        ) : null
       }
       action={
-        <Button
-          w="full"
-          size="lg"
-          colorScheme="primary1"
-          variant="solid"
-          isDisabled={!isReadyToBeClaimed || !refundAddress}
-          onClick={handleInitiateRefund}
-          isLoading={isClaiming}
-        >
-          {t('Claim my funds')}
-        </Button>
+        isReadyToBeClaimed ? (
+          <Button
+            w="full"
+            size="lg"
+            colorScheme="primary1"
+            variant="solid"
+            isDisabled={!refundAddress}
+            onClick={handleInitiateRefund}
+            isLoading={isClaiming}
+          >
+            {t('Claim my funds')}
+          </Button>
+        ) : undefined
       }
     />
   )

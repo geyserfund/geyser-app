@@ -1,8 +1,9 @@
 /* eslint-disable complexity */
-import { Button, HStack, IconButton, Stack, VStack } from '@chakra-ui/react'
+import { Button, HStack, IconButton, Link as ChakraLink, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { PiCheck, PiCopy } from 'react-icons/pi'
+import { Trans } from 'react-i18next'
 import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
@@ -17,6 +18,7 @@ import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { getRootstockExplorerTxUrl } from '@/shared/utils/external/rootstock.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton.ts'
 import {
   PaymentStatus,
@@ -37,6 +39,7 @@ import { createAndSignLockTransaction } from '../../utils/createLockTransaction.
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
+import { DEFAULT_LIGHTNING_PAYOUT_MAX_SATS, MAX_SATS_FOR_LIGHTNING } from './constant.ts'
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.tsx'
 import { PayoutProgressSidebar, PayoutProgressStep } from './components/PayoutProgressSidebar.tsx'
@@ -56,9 +59,6 @@ type PayoutRskProps = {
   payoutAmountOverride?: number
   onCompleted?: () => void
 }
-
-export const MAX_SATS_FOR_LIGHTNING = 5000000 // 5,000,000 sats is the maximum amount for Lightning refunds
-export const DEFAULT_LIGHTNING_PAYOUT_MAX_SATS = 1000000
 
 type PayoutProgressStage = 'setup' | 'waiting_confirmation' | 'claim_ready' | 'completed'
 
@@ -97,7 +97,7 @@ const getPayoutProgressSteps = (params: {
       },
       {
         title: t('Wait for confirmations'),
-        description: t('Bitcoin network confirmations are required before claiming.'),
+        description: t('Bitcoin Rootstock network confirmations are required before claiming.'),
         status: 'complete',
       },
       {
@@ -122,7 +122,7 @@ const getPayoutProgressSteps = (params: {
       },
       {
         title: t('Wait for confirmations'),
-        description: t('Bitcoin network confirmations are required before claiming.'),
+        description: t('Bitcoin Rootstock network confirmations are required before claiming.'),
         status: 'complete',
       },
       {
@@ -147,7 +147,7 @@ const getPayoutProgressSteps = (params: {
       },
       {
         title: t('Wait for confirmations'),
-        description: t('Bitcoin network confirmations are required before claiming.'),
+        description: t('Bitcoin Rootstock network confirmations are required before claiming.'),
         status: 'current',
       },
       {
@@ -171,7 +171,7 @@ const getPayoutProgressSteps = (params: {
     },
     {
       title: t('Wait for confirmations'),
-      description: t('Bitcoin network confirmations are required before claiming.'),
+      description: t('Bitcoin Rootstock network confirmations are required before claiming.'),
       status: 'upcoming',
     },
     {
@@ -268,23 +268,19 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   )
   const shouldRequestBitcoinAddressOnResume = shouldResumeOnChainPayout && !persistedOnChainAddress
   const shouldShowProcessedScreen = isProcessed || Boolean(activeLightningPayment) || isClaiming
-  const processedMethod = isProcessed
-    ? selectedMethod
-    : activeLightningPayment
-      ? PayoutMethod.Lightning
-      : PayoutMethod.OnChain
+  const processedMethod = getProcessedMethod({
+    isProcessed,
+    selectedMethod,
+    activeLightningPayment,
+  })
   const progressMethod = shouldShowProcessedScreen ? processedMethod : selectedMethod
-  const progressStage: PayoutProgressStage = shouldShowProcessedScreen
-    ? 'completed'
-    : shouldResumeOnChainPayout
-      ? isClaimable
-        ? 'claim_ready'
-        : 'waiting_confirmation'
-    : isWaitingConfirmation
-      ? isWaitingClaimReady
-        ? 'claim_ready'
-        : 'waiting_confirmation'
-      : 'setup'
+  const progressStage = getProgressStage({
+    shouldShowProcessedScreen,
+    isWaitingConfirmation,
+    isWaitingClaimReady,
+    shouldResumeOnChainPayout,
+    isClaimable,
+  })
   const progressSteps = getPayoutProgressSteps({
     method: progressMethod,
     stage: progressStage,
@@ -297,6 +293,25 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     [...progressSteps].reverse().find((step) => step.status === 'complete')
   const activeProgressDescription = activeProgressStep?.description
   const shouldShowMethodSelectionStep = !latestPayment && !shouldResumeOnChainPayout
+  const waitingNotice = isWaitingClaimReady ? (
+    t('Your funds are ready to be claimed')
+  ) : (
+    <Trans i18nKey="We are waiting for the transaction to be confirmed before you can claim the funds. You can check the transaction status by <1>clicking here</1>.">
+      {'We are waiting for the transaction to be confirmed before you can claim the funds. You can check the transaction status by '}
+      <ChakraLink href={getRootstockExplorerTxUrl(lockTxId || '')} textDecoration="underline" isExternal>
+        {'clicking here'}
+      </ChakraLink>
+      {'.'}
+    </Trans>
+  )
+  const modalTitle = getPayoutModalTitle({
+    shouldResumeOnChainPayout,
+    shouldRequestBitcoinAddressOnResume,
+  })
+  const submitButtonLabel = getPayoutSubmitButtonLabel({
+    shouldResumeOnChainPayout,
+    shouldRequestBitcoinAddressOnResume,
+  })
 
   useEffect(() => {
     if (!isOpen || latestPayment || shouldResumeOnChainPayout || hasDefaultedMethodRef.current) {
@@ -461,6 +476,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       const paymentDetails = activeOnChainPaymentDetails
       const swapObj = JSON.parse(paymentDetails.swapMetadata)
 
+      swapObj.id = swapObj.id || paymentDetails.swapId
       swapObj.privateKey = accountKeys.privateKey
       swapObj.preimageHash = paymentDetails.swapPreimageHash
       if (isClaimable) {
@@ -524,8 +540,10 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       }
 
       const { swap, payment } = payoutPaymentPrepareResponse.payoutPaymentPrepare
+      const paymentDetails = payment?.paymentDetails as RskToOnChainSwapPaymentDetails
 
       const swapObj = JSON.parse(swap)
+      swapObj.id = swapObj.id || paymentDetails.swapId
       swapObj.privateKey = accountKeys.privateKey
       swapObj.preimageHash = preimageHash
       swapObj.preimageHex = preimageHex
@@ -655,46 +673,46 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     }
   }
 
-  const renderModalContent = (params: {
+  function renderModalContent(params: {
     notice?: ReactNode
     title?: ReactNode
     subtitle?: ReactNode
     description?: ReactNode
     content: ReactNode
     footer?: ReactNode
-  }) => {
+  }) {
     const { notice, title, subtitle, description, content, footer } = params
 
     return (
-    <Stack direction={{ base: 'column', lg: 'row' }} spacing={6} align="stretch" w="full">
-      <PayoutProgressSidebar amount={totalAmount} steps={progressSteps} />
-      <VStack flex={1} spacing={4} align="stretch" minH="100%">
-        {(title || subtitle || description) && (
-          <VStack spacing={2} align="stretch">
-            {title && (
-              <Body as="h2" size="2xl" bold color="neutral1.12">
-                {title}
-              </Body>
-            )}
-            {subtitle && (
-              <Body size="md" bold color="neutral1.12">
-                {subtitle}
-              </Body>
-            )}
-            {description && (
-              <Body size="md" color="neutral1.10">
-                {description}
-              </Body>
-            )}
+      <Stack direction={{ base: 'column', lg: 'row' }} spacing={6} align="stretch" w="full">
+        <PayoutProgressSidebar amount={totalAmount} steps={progressSteps} />
+        <VStack flex={1} spacing={4} align="stretch" minH="100%">
+          {(title || subtitle || description) && (
+            <VStack spacing={2} align="stretch">
+              {title && (
+                <Body as="h2" size="2xl" bold color="neutral1.12">
+                  {title}
+                </Body>
+              )}
+              {subtitle && (
+                <Body size="md" bold color="neutral1.12">
+                  {subtitle}
+                </Body>
+              )}
+              {description && (
+                <Body size="md" color="neutral1.10">
+                  {description}
+                </Body>
+              )}
+            </VStack>
+          )}
+          {notice}
+          <VStack flex={1} spacing={4} align="stretch">
+            {content}
           </VStack>
-        )}
-        {notice}
-        <VStack flex={1} spacing={4} align="stretch">
-          {content}
+          {footer}
         </VStack>
-        {footer}
-      </VStack>
-    </Stack>
+      </Stack>
     )
   }
 
@@ -746,12 +764,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       >
         {renderModalContent({
           notice: (
-            <Feedback variant={isWaitingClaimReady ? FeedBackVariant.SUCCESS : FeedBackVariant.WARNING} w="full">
-              <Body>
-                {isWaitingClaimReady
-                  ? t('Your funds are ready to be claimed')
-                  : t('This may take a few minutes. Please keep this window open to finish the process')}
-              </Body>
+            <Feedback variant={isWaitingClaimReady ? FeedBackVariant.SUCCESS : FeedBackVariant.INFO} w="full">
+              <Body>{waitingNotice}</Body>
             </Feedback>
           ),
           title: isWaitingClaimReady ? t('Claim payout') : t('Please wait for swap confirmation'),
@@ -759,7 +773,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
           content: (
             <BitcoinPayoutWaitingConfirmation
               swapData={swapData}
-              lockTxId={lockTxId}
               refundAddress={refundAddress || ''}
               initialReadyToBeClaimed={isWaitingClaimReady}
               onReadyToBeClaimed={() => setIsWaitingClaimReady(true)}
@@ -772,11 +785,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     )
   }
 
-  const modalTitle = shouldResumeOnChainPayout
-    ? shouldRequestBitcoinAddressOnResume
-      ? t('Resume your payout')
-      : t('Confirm your password to resume the payout')
-    : t('Choose a payout method')
   const modalDescription = shouldResumeOnChainPayout ? undefined : activeProgressDescription
   const modalSubtitle = payoutUuid ? (
     <HStack spacing={6} align="center" justify="space-between" w="full">
@@ -872,17 +880,95 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
               isDisabled={!enableSubmit || payoutPrepareLoading || !hasPayout || Boolean(payoutPrepareError)}
               onClick={handleSubmit}
             >
-              {shouldResumeOnChainPayout
-                ? shouldRequestBitcoinAddressOnResume
-                  ? t('Resume my payout')
-                  : t('Confirm my password')
-                : t('Confirm payout method')}
+              {submitButtonLabel}
             </Button>
           ),
         })
       )}
     </Modal>
   )
+}
+
+function getProcessedMethod(params: {
+  isProcessed: boolean
+  selectedMethod: PayoutMethod
+  activeLightningPayment: unknown
+}): PayoutMethod {
+  const { isProcessed, selectedMethod, activeLightningPayment } = params
+
+  if (isProcessed) {
+    return selectedMethod
+  }
+
+  if (activeLightningPayment) {
+    return PayoutMethod.Lightning
+  }
+
+  return PayoutMethod.OnChain
+}
+
+function getProgressStage(params: {
+  shouldShowProcessedScreen: boolean
+  isWaitingConfirmation: boolean
+  isWaitingClaimReady: boolean
+  shouldResumeOnChainPayout: boolean
+  isClaimable: boolean
+}): PayoutProgressStage {
+  const {
+    shouldShowProcessedScreen,
+    isWaitingConfirmation,
+    isWaitingClaimReady,
+    shouldResumeOnChainPayout,
+    isClaimable,
+  } = params
+
+  if (shouldShowProcessedScreen) {
+    return 'completed'
+  }
+
+  if (isWaitingConfirmation) {
+    return isWaitingClaimReady ? 'claim_ready' : 'waiting_confirmation'
+  }
+
+  if (shouldResumeOnChainPayout) {
+    return isClaimable ? 'claim_ready' : 'waiting_confirmation'
+  }
+
+  return 'setup'
+}
+
+function getPayoutModalTitle(params: {
+  shouldResumeOnChainPayout: boolean
+  shouldRequestBitcoinAddressOnResume: boolean
+}): string {
+  const { shouldResumeOnChainPayout, shouldRequestBitcoinAddressOnResume } = params
+
+  if (!shouldResumeOnChainPayout) {
+    return t('Choose a payout method')
+  }
+
+  if (shouldRequestBitcoinAddressOnResume) {
+    return t('Resume your payout')
+  }
+
+  return t('Confirm your password to resume the payout')
+}
+
+function getPayoutSubmitButtonLabel(params: {
+  shouldResumeOnChainPayout: boolean
+  shouldRequestBitcoinAddressOnResume: boolean
+}): string {
+  const { shouldResumeOnChainPayout, shouldRequestBitcoinAddressOnResume } = params
+
+  if (!shouldResumeOnChainPayout) {
+    return t('Confirm payout method')
+  }
+
+  if (shouldRequestBitcoinAddressOnResume) {
+    return t('Resume my payout')
+  }
+
+  return t('Confirm my password')
 }
 
 /** RefundRskSkeleton: Loading skeleton for the refund modal with payout method selection */
