@@ -1,6 +1,5 @@
 import { Button, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-
 import { Body } from '@/shared/components/typography/Body.tsx'
 
 import { PayoutMethod } from '../types.ts'
@@ -16,9 +15,6 @@ export const PayoutMethodSelection = ({
 }) => {
   return (
     <VStack w="full" spacing={4} alignItems="start">
-      <Body size="md" medium>
-        {t('Select a payout method')}
-      </Body>
       <HStack w="full" spacing={4}>
         <Button
           flex={1}

@@ -13,6 +13,7 @@ import { InteractiveCardLayout } from '@/shared/components/layouts/InteractiveCa
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
 import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'
+import { ProjectPaymentMethodsHint } from '@/shared/molecules/project/ProjectPaymentMethodsHint.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
@@ -254,6 +255,7 @@ export const LandingCardBase = ({
           >
             {t('Contribute')}
           </Button>
+          <ProjectPaymentMethodsHint textSize="xs" />
         </VStack>
       }
       isOpen={isOpen}

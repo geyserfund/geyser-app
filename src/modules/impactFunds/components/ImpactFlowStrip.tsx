@@ -34,8 +34,7 @@ export const ImpactFlowStrip = () => {
     'linear-gradient(130deg, var(--chakra-colors-primary1-50) 0%, var(--chakra-colors-primary1-100) 100%)',
     'linear-gradient(130deg, var(--chakra-colors-primary1-700) 0%, var(--chakra-colors-primary1-800) 100%)',
   )
-  const shadow = useColorModeValue('0 3px 10px rgba(16,24,40,0.08)', '0 4px 14px rgba(0,0,0,0.28)')
-  const borderColor = useColorModeValue('neutral1.5', 'neutral1.6')
+  const shadow = useColorModeValue('0 2px 8px rgba(16,24,40,0.06)', '0 3px 10px rgba(0,0,0,0.22)')
   const iconContainerBg = useColorModeValue('primary1.100', 'primary1.700')
   const iconColor = useColorModeValue('primary1.700', 'primary1.100')
   const subtitleColor = useColorModeValue('neutral1.7', 'neutral1.8')
@@ -51,8 +50,6 @@ export const ImpactFlowStrip = () => {
           py="10px"
           borderRadius="12px"
           bg={cardBackground}
-          borderWidth="1px"
-          borderColor={borderColor}
           boxShadow={shadow}
         >
           <HStack spacing={3} align="center">

@@ -130,6 +130,9 @@ export const GeyserOnChainGuideUrl =
 export const GeyserOnChainFeesGuideUrl =
   'https://guide.geyser.fund/geyser-docs/product-features/getting-started/how-onchain-contributions-work#fees-for-onchain-donations'
 
+export const GeyserConfigureWalletGuideUrl =
+  'https://guide.geyser.fund/geyser-docs/product-features/launch-a-project/configure-your-wallet-and-withdraw-funds'
+
 // UTILS
 
 export const CannotConnectAccountUrl =
@@ -205,7 +208,7 @@ export const DraftIllustrationUrl = 'https://storage.googleapis.com/geyser-proje
 
 export const CampaignIconUrl = '/icons/campaign-icon.png'
 export const FundraiserIconUrl = '/icons/fundraiser-icon.png'
-export const ImpactFundsIconUrl = '/icons/impact-funds-icon.png'
+export const ImpactFundsIconUrl = '/icons/impact-funds-icon.webp'
 export const ContributionSuccessIllustrationUrl =
   'https://storage.googleapis.com/geyser-projects-media/utils/contribution-success-illustration.png'
 export const ContributionSuccessIllustrationPendingUrl =

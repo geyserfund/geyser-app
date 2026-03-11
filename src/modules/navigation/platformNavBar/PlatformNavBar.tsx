@@ -46,7 +46,7 @@ export const PlatformNavBar = () => {
   const isProjectDashboardRoutes = useAtomValue(isProjectDashboardRoutesAtom)
   const isProjectFundingRoutes = useAtomValue(isProjectFundingRoutesAtom)
 
-  const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose } = useEmailPromptModal()
+  const { emailPromptIsOpen, emailPromptOnOpen, emailPromptOnClose, emailPromptVariant } = useEmailPromptModal()
 
   const { notificationPromptIsOpen, dontAskNotificationAgain, notificationPromptOnClose } = useNotificationPromptModal()
 
@@ -158,11 +158,11 @@ export const PlatformNavBar = () => {
         onClose={() => {
           loginOnClose()
           onLoginAlertModalClose()
-          emailPromptOnOpen()
+          emailPromptOnOpen('mandatory_after_login')
         }}
         {...loginModalAdditionalProps}
       />
-      <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} />
+      <EmailPromptModal isOpen={emailPromptIsOpen} onClose={emailPromptOnClose} variant={emailPromptVariant} />
       {!dontAskNotificationAgain && (
         <NotificationPromptModal isOpen={notificationPromptIsOpen} onClose={notificationPromptOnClose} />
       )}

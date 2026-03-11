@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 export const MUTATION_CREATE_STRIPE_CONNECT_ACCOUNT = gql`
-  mutation CreateStripeConnectAccount($projectId: BigInt!) {
-    createStripeConnectAccount(projectId: $projectId) {
+  mutation CreateStripeConnectAccount($projectId: BigInt!, $returnUrl: String) {
+    createStripeConnectAccount(projectId: $projectId, returnUrl: $returnUrl) {
       accountId
       onboardingUrl
       status {
@@ -18,8 +18,8 @@ export const MUTATION_CREATE_STRIPE_CONNECT_ACCOUNT = gql`
 `
 
 export const MUTATION_REFRESH_STRIPE_CONNECT_ONBOARDING_LINK = gql`
-  mutation RefreshStripeConnectOnboardingLink($projectId: BigInt!) {
-    refreshStripeConnectOnboardingLink(projectId: $projectId) {
+  mutation RefreshStripeConnectOnboardingLink($projectId: BigInt!, $returnUrl: String) {
+    refreshStripeConnectOnboardingLink(projectId: $projectId, returnUrl: $returnUrl) {
       accountId
       onboardingUrl
       status {

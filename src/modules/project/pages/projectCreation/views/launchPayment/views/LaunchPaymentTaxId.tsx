@@ -13,6 +13,7 @@ import { isAllOrNothing } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { useUpdateProjectWithLastCreationStep } from '../../../hooks/useIsStepAhead.tsx'
+import { shouldShowCreationFiatStep } from '../utils/stripeConnect.ts'
 
 export const LaunchPaymentTaxId = () => {
   const { user } = useAuthContext()
@@ -21,23 +22,35 @@ export const LaunchPaymentTaxId = () => {
 
   const shouldConfigureProjectWallet = project.fundingStrategy === ProjectFundingStrategy.TakeItAll && !project.rskEoa
   const shouldShowAccountPasswordStep = isAllOrNothing(project) || shouldConfigureProjectWallet
-  const nextPath = shouldShowAccountPasswordStep
-    ? getPath('launchPaymentAccountPassword', project.id)
-    : getPath('launchFinalize', project.id)
+  const shouldShowFiatContributionsStep = shouldShowCreationFiatStep(project)
+  let nextPath = getPath('launchFinalize', project.id)
+  let lastCreationStepOverride: ProjectCreationStep | undefined = ProjectCreationStep.Launch
+
+  if (shouldShowAccountPasswordStep) {
+    nextPath = getPath('launchPaymentAccountPassword', project.id)
+    lastCreationStepOverride = undefined
+  } else if (shouldShowFiatContributionsStep) {
+    nextPath = getPath('launchPaymentFiatContributions', project.id)
+    lastCreationStepOverride = ProjectCreationStep.FiatContributions
+  }
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(
     ProjectCreationStep.Wallet,
     nextPath,
   )
 
-  const { form, handleSubmit } = useTaxProfileForm({ userId: user.id, onUpdate: updateProjectWithLastCreationStep })
+  const handleTaxIdComplete = () => {
+    updateProjectWithLastCreationStep(undefined, undefined, lastCreationStepOverride)
+  }
+
+  const { form, handleSubmit } = useTaxProfileForm({ userId: user.id, onUpdate: handleTaxIdComplete })
 
   const continueProps: ButtonProps = {
     onClick() {
       if (form.formState.isDirty) {
         handleSubmit()
       } else {
-        updateProjectWithLastCreationStep()
+        handleTaxIdComplete()
       }
     },
   }

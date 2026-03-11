@@ -7,7 +7,7 @@ const creatorText = t(
 )
 
 const contributorText = t(
-  'You cannot access your contributed funds without this password. Remember to store this password somewhere safe, as Geyser does not store this password.',
+  'This password is known only by you and is required in case of refunds. Remember to store this password somewhere safe, as Geyser does not store it.',
 )
 
 export const FeedBackText = ({ isCreator }: { isCreator?: boolean }) => {

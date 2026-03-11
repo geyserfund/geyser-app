@@ -5,6 +5,7 @@ export const FRAGMENT_PROJECT_PAGE_CREATOR = gql`
     id
     imageUrl
     username
+    bio
     email
     guardianType
     externalAccounts {
@@ -40,6 +41,13 @@ export const FRAGMENT_PROJECT_PAGE_CREATOR = gql`
       rskKeyPair {
         address
       }
+    }
+    creatorTrustStats {
+      totalFunding
+      totalFundingUsd
+      backersCount
+      publishedPostsCount
+      joinedYear
     }
   }
 `

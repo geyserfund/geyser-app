@@ -1,3 +1,4 @@
+import { useQuery } from '@apollo/client'
 import {
   Accordion,
   AccordionButton,
@@ -34,16 +35,7 @@ import {
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useMemo, useState } from 'react'
-import {
-  PiArrowsClockwiseBold,
-  PiCalendarBold,
-  PiCaretDownBold,
-  PiChartBarBold,
-  PiCoinsBold,
-  PiCoinsDuotone,
-  PiRocketLaunchDuotone,
-  PiScalesBold,
-} from 'react-icons/pi'
+import { PiCoinsBold, PiCoinsDuotone, PiRocketLaunchDuotone } from 'react-icons/pi'
 import { Link, useNavigate, useParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
@@ -64,11 +56,17 @@ import {
   OrderByOptions,
   useImpactFundApplicationsQuery,
   useImpactFundApplyMutation,
-  useImpactFundQuery,
   useProjectPageFundersQuery,
 } from '@/types'
 import { useNotification } from '@/utils'
 
+import { FundingModelsShowcase } from '../components/FundingModelsShowcase.tsx'
+import { QUERY_IMPACT_FUND } from '../graphql/queries/impactFundsQuery.ts'
+import {
+  impactFundFundingModelItems,
+  impactFundFundingOverviewItems,
+  impactFundHowItWorksItems,
+} from '../utils/informationContent.ts'
 import { IMPACT_FUND_DETAILS_SEO_IMAGES } from '../utils/constants.ts'
 
 const APPLICATIONS_PAGE_SIZE = 15
@@ -77,7 +75,7 @@ const DESCRIPTION_COLLAPSED_MAX_HEIGHT = '240px'
 const SPONSOR_INQUIRY_CALENDAR_URL = 'https://cal.com/metamick/thirtymin?overlayCalendar=true'
 const satsNumberFormatter = new Intl.NumberFormat()
 const fundedStatus = [ImpactFundApplicationStatus.Funded]
-type ImpactFundDetails = ImpactFundQuery['impactFund']
+type ImpactFundDetails = ImpactFundQuery['impactFund'] & { canAccessDashboard: boolean }
 type FundedApplication = ImpactFundApplicationsQuery['impactFundApplications']['applications'][number]
 type OwnedProject = { id: unknown; title: string }
 type SponsorItem = Pick<ImpactFundDetails['liveSponsors'][number], 'id' | 'name' | 'image' | 'url'>
@@ -121,59 +119,6 @@ function getFundingModelLabel(fundingModel: ImpactFundApplicationFundingModel): 
   return fundingModelLabels[fundingModel] ?? fundingModel
 }
 
-const howItWorksItems = [
-  {
-    title: t('Annual Commitment'),
-    description: t('A dedicated pool of capital is committed each year by founding and supporting sponsors.'),
-    icon: PiCalendarBold,
-  },
-  {
-    title: t('Allocation Committee'),
-    description: t('An independent review panel evaluates applications and allocates funding.'),
-    icon: PiScalesBold,
-  },
-  {
-    title: t('Transparency & Reporting'),
-    description: t('Impact reports are published outlining funded projects, outcomes, and fund performance.'),
-    icon: PiChartBarBold,
-  },
-]
-
-const fundingOverviewItems = [
-  {
-    title: t('Funding Cycles'),
-    description: t('Applications are reviewed and selected on a recurring basis.'),
-    icon: PiArrowsClockwiseBold,
-  },
-  {
-    title: t('Funding Range'),
-    description: t('From $2.5k to $20k, depending on scope, impact and stage of development.'),
-    icon: PiCoinsBold,
-  },
-]
-
-const fundingModelItems = [
-  {
-    title: t('Direct Grants'),
-    description: t('Full requested amount allocated after committee approval.'),
-    icon: PiCoinsBold,
-  },
-  {
-    title: t('Capped Matching Fund'),
-    description: t(
-      'The fund matches independently raised capital up to a predefined cap to incentivize traction and community participation.',
-    ),
-    icon: PiArrowsClockwiseBold,
-  },
-  {
-    title: t('All-or-Nothing Co-Funding'),
-    description: t(
-      'Conditional commitment released only if full funding is reached within a fixed timeframe (for example, 60 days).',
-    ),
-    icon: PiScalesBold,
-  },
-]
-
 const faqItems = [
   {
     question: 'Who can apply for funding?',
@@ -213,7 +158,7 @@ export function ImpactFundDetailPage(): JSX.Element | null {
   const projectModal = useDisclosure()
   const [selectedProjectId, setSelectedProjectId] = useState<string>('')
 
-  const { data, loading, error } = useImpactFundQuery({
+  const { data, loading, error } = useQuery<{ impactFund: ImpactFundDetails }>(QUERY_IMPACT_FUND, {
     variables: { input: { where: { name: decodedImpactFundName } } },
     skip: !impactFundName,
   })
@@ -431,65 +376,6 @@ type ImpactFundDetailContentProps = {
   onSubmitApplication: () => Promise<void>
 }
 
-type FundingModelCardProps = {
-  item: (typeof fundingModelItems)[number]
-  isOpen: boolean
-  onToggle: () => void
-  surfaceBg: string
-  highlightedSurfaceBg: string
-  highlightedSurfaceBorderColor: string
-  metricHoverBg: string
-  primaryTextColor: string
-  secondaryTextColor: string
-}
-
-function FundingModelCard({
-  item,
-  isOpen,
-  onToggle,
-  surfaceBg,
-  highlightedSurfaceBg,
-  highlightedSurfaceBorderColor,
-  metricHoverBg,
-  primaryTextColor,
-  secondaryTextColor,
-}: FundingModelCardProps): JSX.Element {
-  return (
-    <Box
-      p={4}
-      bg={isOpen ? highlightedSurfaceBg : surfaceBg}
-      borderRadius="lg"
-      border="1px solid"
-      borderColor={isOpen ? highlightedSurfaceBorderColor : 'transparent'}
-      cursor="pointer"
-      onClick={onToggle}
-      transition="all 0.2s"
-      _hover={{ bg: isOpen ? highlightedSurfaceBg : metricHoverBg }}
-    >
-      <VStack align="stretch" spacing={2}>
-        <HStack justify="space-between" align="center">
-          <Body bold color={primaryTextColor}>
-            {item.title}
-          </Body>
-          <Icon
-            as={PiCaretDownBold}
-            boxSize={4}
-            color={secondaryTextColor}
-            transform={isOpen ? 'rotate(180deg)' : 'none'}
-            transition="transform 0.2s"
-            flexShrink={0}
-          />
-        </HStack>
-        {isOpen && (
-          <Body size="sm" color={secondaryTextColor}>
-            {item.description}
-          </Body>
-        )}
-      </VStack>
-    </Box>
-  )
-}
-
 type FundedApplicationsSectionProps = {
   applicationsLoading: boolean
   applicationsError: boolean
@@ -567,9 +453,7 @@ function FundedApplicationsSection({
             cursor="pointer"
             transition="all 0.3s"
             _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
-            borderWidth="1px"
-            borderColor="neutral1.4"
-            boxShadow="0 2px 8px rgba(0, 0, 0, 0.08)"
+            boxShadow="0 8px 24px rgba(15, 23, 42, 0.08)"
             bg={cardBg}
           >
             <Box position="relative">
@@ -758,20 +642,54 @@ function ImpactFundOverviewSection({
           <H2 size="3xl" bold color={colors.primaryTextColor} lineHeight={1}>
             {impactFund.title}
           </H2>
+          <HStack spacing={3} align="center" flexWrap="wrap" justify={{ base: 'stretch', md: 'flex-end' }}>
+            {impactFund.canAccessDashboard && (
+              <Button
+                as={Link}
+                to={getPath('impactFundDashboard', impactFund.name)}
+                display={{ base: 'none', md: 'inline-flex' }}
+                size="lg"
+                variant="outline"
+                colorScheme="primary1"
+                flexShrink={0}
+                px={8}
+                minW="210px"
+                fontWeight="semibold"
+                fontSize="lg"
+              >
+                {t('Access Moderator Dashboard')}
+              </Button>
+            )}
+            <Button
+              display={{ base: 'none', md: 'inline-flex' }}
+              size="lg"
+              colorScheme="primary1"
+              onClick={onApplyClick}
+              flexShrink={0}
+              px={8}
+              minW="210px"
+              fontWeight="semibold"
+              fontSize="lg"
+            >
+              {t('Apply for funding')}
+            </Button>
+          </HStack>
+        </Flex>
+        {impactFund.canAccessDashboard && (
           <Button
-            display={{ base: 'none', md: 'inline-flex' }}
-            size="lg"
+            as={Link}
+            to={getPath('impactFundDashboard', impactFund.name)}
+            display={{ base: 'flex', md: 'none' }}
+            size="md"
+            variant="outline"
             colorScheme="primary1"
-            onClick={onApplyClick}
-            flexShrink={0}
-            px={8}
-            minW="210px"
+            w="full"
             fontWeight="semibold"
             fontSize="lg"
           >
-            {t('Apply for funding')}
+            {t('Access Moderator Dashboard')}
           </Button>
-        </Flex>
+        )}
         <Button
           display={{ base: 'flex', md: 'none' }}
           size="md"
@@ -970,7 +888,7 @@ function ImpactFundOverviewSection({
 }
 
 function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColors }): JSX.Element {
-  const [expandedFundingModel, setExpandedFundingModel] = useState<string | null>(null)
+  const sectionCardShadow = '0 8px 24px rgba(15, 23, 42, 0.08)'
 
   return (
     <>
@@ -979,7 +897,7 @@ function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColor
           {t('How It Works')}
         </H2>
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={5}>
-          {howItWorksItems.map((item) => (
+          {impactFundHowItWorksItems.map((item) => (
             <Box key={item.title} p={5} bg={colors.surfaceBg} borderRadius="lg">
               <HStack align="start" spacing={4}>
                 <Flex
@@ -1009,11 +927,11 @@ function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColor
 
       <VStack align="stretch" spacing={6}>
         <H2 size="xl" bold>
-          {t('How Funding Works')}
+          {t('How Are Funds Distributed')}
         </H2>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
-          {fundingOverviewItems.map((item) => (
-            <Box key={item.title} p={5} bg={colors.surfaceBg} borderRadius="lg">
+          {impactFundFundingOverviewItems.map((item) => (
+            <Box key={item.title} p={5} bg={colors.cardBg} borderRadius="xl" boxShadow={sectionCardShadow}>
               <HStack align="start" spacing={4}>
                 <Flex
                   w="42px"
@@ -1043,22 +961,20 @@ function ImpactFundInformationSection({ colors }: { colors: ImpactFundThemeColor
           <H2 size="lg" bold color={colors.secondaryTextColor}>
             {t('Funding Models')}
           </H2>
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4} alignItems="start">
-            {fundingModelItems.map((item) => (
-              <FundingModelCard
-                key={item.title}
-                item={item}
-                isOpen={expandedFundingModel === item.title}
-                onToggle={() => setExpandedFundingModel(expandedFundingModel === item.title ? null : item.title)}
-                surfaceBg={colors.surfaceBg}
-                highlightedSurfaceBg={colors.highlightedSurfaceBg}
-                highlightedSurfaceBorderColor={colors.highlightedSurfaceBorderColor}
-                metricHoverBg={colors.metricHoverBg}
-                primaryTextColor={colors.primaryTextColor}
-                secondaryTextColor={colors.secondaryTextColor}
-              />
-            ))}
-          </SimpleGrid>
+          <Body size="sm" color={colors.secondaryTextColor} maxW="3xl">
+            {t(
+              'The funds are deployed using different models, based on the type of initiative and the amount to distribute.',
+            )}
+          </Body>
+          <FundingModelsShowcase
+            items={impactFundFundingModelItems}
+            surfaceBg={colors.cardBg}
+            primaryTextColor={colors.primaryTextColor}
+            secondaryTextColor={colors.secondaryTextColor}
+            mutedTextColor={colors.tertiaryTextColor}
+            highlightedSurfaceBg={colors.highlightedSurfaceBg}
+            highlightedSurfaceBorderColor={colors.highlightedSurfaceBorderColor}
+          />
         </VStack>
       </VStack>
     </>
@@ -1652,10 +1568,9 @@ function ImpactFundDetailContent({
       <Box
         p={8}
         bg={colors.highlightedSurfaceBg}
-        border="1px solid"
-        borderColor={colors.highlightedSurfaceBorderColor}
         borderRadius="xl"
         textAlign="center"
+        boxShadow="0 8px 24px rgba(15, 23, 42, 0.08)"
       >
         <VStack spacing={4}>
           <H2 size="2xl" bold color={colors.primaryTextColor}>

@@ -2,7 +2,7 @@ import { Button, VStack } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useState, type ReactNode } from 'react'
+import { type ReactNode, useState } from 'react'
 import { Control, useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
@@ -55,6 +55,7 @@ export const ConfirmPasswordForm = ({
   const [showPassword, setShowPassword] = useState(false)
 
   const bodyText = introText ?? (isCreator ? creatorText : contributorText)
+  const hasBodyText = Boolean(bodyText?.trim())
   const shouldRenderFeedback = !importantContent && showFeedback !== false
   const passwordLabel = hidePasswordLabel ? undefined : t('Enter your password')
   const passwordAriaLabel = hidePasswordLabel ? t('Enter your password') : undefined
@@ -62,7 +63,7 @@ export const ConfirmPasswordForm = ({
   return (
     <VStack w="full" gap={4}>
       <VStack w="full" alignItems="start" gap={2}>
-        <Body size={introSize}>{bodyText}</Body>
+        {hasBodyText ? <Body size={introSize}>{bodyText}</Body> : null}
         {importantContent || (shouldRenderFeedback ? <FeedBackText isCreator={isCreator} /> : null)}
       </VStack>
       <ControlledTextInput
@@ -78,7 +79,8 @@ export const ConfirmPasswordForm = ({
         }
       />
       <Button variant="link" size="sm" onClick={onForgotPassword} alignSelf="flex-start" color="primary1.11">
-        {t('Forgotten your password?')}
+        {t('Forgot your password')}
+        {'?'}
       </Button>
     </VStack>
   )

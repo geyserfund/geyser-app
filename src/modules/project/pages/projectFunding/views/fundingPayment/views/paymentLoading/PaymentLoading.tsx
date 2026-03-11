@@ -1,4 +1,4 @@
-import { Button, VStack } from '@chakra-ui/react'
+import { Button, HStack, Tooltip, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
@@ -84,8 +84,9 @@ export const PaymentLoading = () => {
 
 const PaymentPassword = ({ onComplete }: { onComplete: () => void }) => {
   const setFundingUserAccountKeys = useSetAtom(userAccountKeysAtom)
+  const passwordHelpTextColor = useColorModeValue('gray.500', 'gray.400')
 
-  const { currentForm, renderForm, titles } = useAccountPasswordForm({
+  const { accountPasswordType, currentForm, renderForm, titles } = useAccountPasswordForm({
     onComplete(data) {
       if (data) {
         setFundingUserAccountKeys(data)
@@ -93,13 +94,43 @@ const PaymentPassword = ({ onComplete }: { onComplete: () => void }) => {
 
       onComplete()
     },
+    copy: {
+      introText: {
+        confirm: '',
+      },
+    },
   })
 
   return (
     <VStack as="form" onSubmit={currentForm.onSubmit} w="full" spacing={6}>
-      <Body size="lg" bold alignSelf="start">
-        {titles}
-      </Body>
+      <HStack w="full" justifyContent="space-between" alignItems="baseline" gap={3}>
+        <Body size="lg" bold>
+          {titles}
+        </Body>
+        {accountPasswordType === 'confirm' ? (
+          <Tooltip
+            label={t(
+              'Contributions on Geyser require a private key. This password encrypts and decrypts your private key so it can be stored securely, and only be known by you.',
+            )}
+            placement="top"
+            hasArrow
+            shouldWrapChildren
+          >
+            <Body
+              as="span"
+              size="12px"
+              color={passwordHelpTextColor}
+              textDecoration="underline"
+              textDecorationStyle="dashed"
+              cursor="help"
+              whiteSpace="nowrap"
+            >
+              {t('Why is a password needed')}
+              {'?'}
+            </Body>
+          </Tooltip>
+        ) : null}
+      </HStack>
       {renderForm()}
 
       <Button width="200px" size="lg" colorScheme="primary1" type="submit">

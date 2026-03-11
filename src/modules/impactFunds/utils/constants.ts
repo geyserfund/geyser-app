@@ -1,5 +1,4 @@
-export const IMPACT_FUNDS_IMAGE_URL =
-  'https://storage.googleapis.com/geyser-projects-media/app/impactfunds/impact_funds.webp'
+export const IMPACT_FUNDS_IMAGE_URL = 'https://pbs.twimg.com/media/HCAkLUmaMAQhj5E?format=jpg&name=large'
 
 export const IMPACT_FUND_DETAILS_SEO_IMAGES = {
   'culture-impact-fund': 'https://storage.googleapis.com/geyser-projects-media/app/impactfunds/culture_impact.png',

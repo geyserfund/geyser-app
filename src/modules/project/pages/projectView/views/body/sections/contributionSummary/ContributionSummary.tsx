@@ -1,18 +1,14 @@
-import { HStack, Icon, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
-import { t } from 'i18next'
-import { AiFillApple } from 'react-icons/ai'
-import { FaBitcoin } from 'react-icons/fa'
-import { PiLockSimpleFill } from 'react-icons/pi'
+import { HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
-import { Body } from '@/shared/components/typography/Body.tsx'
 import {
   BitcoinLightingPaymentImageUrl,
   MasterCardPaymentImageUrl,
   VisaPaymentImageUrl,
 } from '@/shared/constants/platform/url.ts'
+import { ProjectPaymentMethodsHint } from '@/shared/molecules/project/ProjectPaymentMethodsHint.tsx'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 
 import { ContributeButton } from '../../components'
@@ -41,20 +37,7 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
       {!isFundingDisabled() && (
         <VStack w="full">
           <ContributeButton w="full" isWidget={isWidget} paymentMethods={paymentMethods} />
-          <HStack spacing={1} alignItems="center">
-            {isAon ? (
-              <Icon as={PiLockSimpleFill} fontSize="16px" color="primary1.9" />
-            ) : (
-              <>
-                <Icon as={AiFillApple} fontSize="16px" color="utils.text" />
-                <Icon as={FaBitcoin} fontSize="16px" color="utils.text" />
-              </>
-            )}
-
-            <Body size="sm" light textAlign="center">
-              {!isAon ? t('Pay with Apple Pay, Bitcoin & 20+ methods') : t('Secure Bitcoin payments')}
-            </Body>
-          </HStack>
+          <ProjectPaymentMethodsHint justifyContent="center" />
         </VStack>
       )}
     </CardLayout>

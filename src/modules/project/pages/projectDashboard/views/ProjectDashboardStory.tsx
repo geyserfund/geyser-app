@@ -51,6 +51,12 @@ export const ProjectDashboardStory = () => {
     })
   }
 
+  const onInvalidSubmit = () => {
+    toast.error({
+      title: t('One or more fields are missing') + '.',
+    })
+  }
+
   const SaveButton = (props: ButtonProps) => {
     return (
       <Button
@@ -68,7 +74,13 @@ export const ProjectDashboardStory = () => {
 
   return (
     <>
-      <VStack as={'form'} onSubmit={form.handleSubmit(onSubmit)} w="full" height="full" paddingBottom={20}>
+      <VStack
+        as={'form'}
+        onSubmit={form.handleSubmit(onSubmit, onInvalidSubmit)}
+        w="full"
+        height="full"
+        paddingBottom={20}
+      >
         <TopNavContainerBar>
           <BackButton />
           <SaveButton />

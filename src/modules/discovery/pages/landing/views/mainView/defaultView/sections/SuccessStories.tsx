@@ -2,6 +2,7 @@ import { Link, SimpleGrid } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 
+import BringSuccessStoryImage from '@/assets/bring-success-story.webp'
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { CreationStoryCard } from '@/modules/project/pages/projectCreation/views/start/components/CreationStoryCard.tsx'
 
@@ -55,6 +56,10 @@ const stories = [
   {
     image: 'https://storage.googleapis.com/geyser-projects-media/app/success_stories/success_stories_12.png',
     link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/nostr-booth',
+  },
+  {
+    image: BringSuccessStoryImage,
+    link: 'https://guide.geyser.fund/geyser-docs/guides/take-brindon-to-btc-prague',
   },
 ]
 

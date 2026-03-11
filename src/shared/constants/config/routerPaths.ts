@@ -86,6 +86,7 @@ export enum PathName {
   launchPaymentAccountPassword = 'account-password',
   launchPaymentSeedWords = 'seed-words',
   launchPaymentTaxId = 'tax-id',
+  launchPaymentFiatContributions = 'fiat-contributions',
   launchFinalize = 'finalize',
 
   userProfile = 'user',
@@ -245,6 +246,8 @@ const pathsMap = {
   grants: (grantId?: string) => (grantId ? `/${PathName.grants}/${grantId}` : `/${PathName.grants}`),
   impactFunds: (impactFundName?: string) =>
     impactFundName ? `/${PathName.impactFunds}/${impactFundName}` : `/${PathName.impactFunds}`,
+  impactFundDashboard: (impactFundName: string) =>
+    `/${PathName.impactFunds}/${impactFundName}/${PathName.projectDashboard}`,
   grantsRoundOne: () => `/${PathName.grants}/${PathName.grantsRoundOne}`,
   grantsRoundTwo: () => `/${PathName.grants}/${PathName.grantsRoundTwo}`,
 
@@ -422,6 +425,8 @@ const pathsMap = {
     `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentSeedWords}`,
   launchPaymentTaxId: (projectID: string) =>
     `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentTaxId}`,
+  launchPaymentFiatContributions: (projectID: string) =>
+    `/${PathName.launchProject}/${projectID}/${PathName.launchPayment}/${PathName.launchPaymentFiatContributions}`,
   launchFinalize: (projectID: string) => `/${PathName.launchProject}/${projectID}/${PathName.launchFinalize}`,
 
   launchProjectStrategy: (projectID: string) =>
