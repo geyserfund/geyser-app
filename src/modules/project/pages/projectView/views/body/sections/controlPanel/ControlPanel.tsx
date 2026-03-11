@@ -31,6 +31,7 @@ type FinancialActionsProps = {
   withdrawableSats: number
   withdrawableUsd: number
   isBelowMinWithdrawThreshold: boolean
+  hasOngoingWithdraw: boolean
   showWithdraw: boolean
 }
 
@@ -43,6 +44,7 @@ const ControlPanelFinancialActions = ({
   withdrawableSats,
   withdrawableUsd,
   isBelowMinWithdrawThreshold,
+  hasOngoingWithdraw,
   showWithdraw,
 }: FinancialActionsProps) => {
   if (!showClaim && !showWithdrawableBalance) return null
@@ -102,21 +104,28 @@ const ControlPanelFinancialActions = ({
               objectFit="contain"
               flexShrink={0}
             />
-            <Body size="md" color="neutral1.11">
-              {t('Funds available to withdraw')}:{' '}
-              <Body as="span" size="md" bold color="neutral1.12">
-                {commaFormatted(withdrawableSats)} {t('sats')}
-              </Body>{' '}
-              <Body as="span" size="md" color="neutral1.9">
-                ≈${withdrawableUsd.toFixed(0)}
+            <VStack align="start" spacing={0}>
+              <Body size="md" color="neutral1.11">
+                {t('Funds available to withdraw')}:{' '}
+                <Body as="span" size="md" bold color="neutral1.12">
+                  {commaFormatted(withdrawableSats)} {t('sats')}
+                </Body>{' '}
+                <Body as="span" size="md" color="neutral1.9">
+                  ≈${withdrawableUsd.toFixed(0)}
+                </Body>
               </Body>
-            </Body>
+              {hasOngoingWithdraw && (
+                <Body size="sm" color="neutral1.11">
+                  {t('You have an ongoing payout. Continue to finish the withdrawal flow.')}
+                </Body>
+              )}
+            </VStack>
           </HStack>
           <Tooltip
             label={t('Minimum withdrawal is $10. Increase your balance to enable withdrawals.')}
             hasArrow
             shouldWrapChildren
-            isDisabled={!isBelowMinWithdrawThreshold}
+            isDisabled={hasOngoingWithdraw || !isBelowMinWithdrawThreshold}
           >
             <Button
               colorScheme={showWithdraw ? 'primary1' : 'neutral1'}
@@ -127,7 +136,7 @@ const ControlPanelFinancialActions = ({
               onClick={payoutRskModal.onOpen}
               isDisabled={!showWithdraw}
             >
-              {t('Withdraw')}
+              {hasOngoingWithdraw ? t('Continue withdraw') : t('Withdraw')}
             </Button>
           </Tooltip>
         </Stack>
@@ -166,6 +175,7 @@ export const ControlPanel = () => {
     withdrawableUsd,
     showWithdrawableBalance,
     isBelowMinWithdrawThreshold,
+    hasOngoingWithdraw,
     showWithdraw,
     onCompleted,
   } = useWithdrawFunds()
@@ -271,6 +281,7 @@ export const ControlPanel = () => {
         withdrawableSats={withdrawableSats}
         withdrawableUsd={withdrawableUsd}
         isBelowMinWithdrawThreshold={isBelowMinWithdrawThreshold}
+        hasOngoingWithdraw={hasOngoingWithdraw}
         showWithdraw={showWithdraw}
       />
 

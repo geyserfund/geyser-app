@@ -1,4 +1,4 @@
-import { Box, Divider, HStack, Link as ChakraLink, MenuItem, VStack } from '@chakra-ui/react'
+import { Box, Divider, HStack, Image as ChakraImage, Link as ChakraLink, MenuItem, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { PiArrowUpRight, PiUserCircle } from 'react-icons/pi'
@@ -46,7 +46,11 @@ export const ProfileNavContent = () => {
             return (
               <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)}>
                 <HStack position="relative">
-                  <discoveryNav.icon fontSize="18px" />
+                  {discoveryNav.image ? (
+                    <ChakraImage src={discoveryNav.image} alt={t(discoveryNav.label)} boxSize="18px" />
+                  ) : (
+                    <discoveryNav.icon fontSize="18px" />
+                  )}
                   <Box position="relative" display="inline-flex" alignItems="center">
                     <Body size="md">{t(discoveryNav.label)}</Body>
                     {discoveryNav.new && <NavigationNewBadge position="absolute" top={-2} right={-8} />}

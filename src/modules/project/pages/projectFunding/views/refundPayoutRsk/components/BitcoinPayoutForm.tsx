@@ -1,6 +1,7 @@
-import { Collapse, VStack } from '@chakra-ui/react'
+import { Collapse, HStack, Icon, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { useState } from 'react'
+import { PiQuestion } from 'react-icons/pi'
 import { UseFormReturn } from 'react-hook-form'
 
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
@@ -12,22 +13,45 @@ type BitcoinPayoutFormProps = {
   form: UseFormReturn<BitcoinPayoutFormData>
   satsAmount?: number
   disablePassword?: boolean
+  disableBitcoinAddress?: boolean
+  showBitcoinAddress?: boolean
 }
 
 /** BitcoinPayoutForm: Form component for Bitcoin On-Chain payout with address and password fields */
-export const BitcoinPayoutForm: React.FC<BitcoinPayoutFormProps> = ({ form, satsAmount, disablePassword }) => {
+export const BitcoinPayoutForm: React.FC<BitcoinPayoutFormProps> = ({
+  form,
+  satsAmount,
+  disablePassword,
+  disableBitcoinAddress,
+  showBitcoinAddress = true,
+}) => {
   const { control } = form
   const [showForgotPassword, setShowForgotPassword] = useState(false)
 
   return (
     <VStack w="full" spacing={6} alignItems="start">
-      <ControlledTextInput name="bitcoinAddress" label={t('Enter your Bitcoin address')} control={control} size="md" />
+      {showBitcoinAddress && (
+        <ControlledTextInput
+          name="bitcoinAddress"
+          label={t('Enter your Bitcoin address')}
+          control={control}
+          size="md"
+          isDisabled={disableBitcoinAddress}
+        />
+      )}
 
       {!disablePassword && (
         <VStack w="full" spacing={2} alignItems="start">
-          <Body size="md" medium>
-            {t('Enter your account password')}
-          </Body>
+          <HStack spacing={2} alignItems="center">
+            <Body size="md" medium>
+              {t('Enter your account password')}
+            </Body>
+            <Tooltip label={t('This is the password you configured during your project setup.')} hasArrow>
+              <span>
+                <Icon as={PiQuestion} color="neutral1.9" boxSize={4} cursor="help" />
+              </span>
+            </Tooltip>
+          </HStack>
           <ControlledTextInput name="accountPassword" control={control} type="password" placeholder="" size="md" />
 
           <Body

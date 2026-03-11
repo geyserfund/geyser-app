@@ -17,13 +17,14 @@ import { validateBitcoinAddress } from '../../fundingPayment/views/paymentOnchai
 
 /** Form data interface for Bitcoin On-Chain payout */
 export type BitcoinPayoutFormData = {
-  bitcoinAddress: string
+  bitcoinAddress?: string
   accountPassword?: string
 }
 
 type PayoutKeyDerivationOptions = {
   deriveKeysFromSeed?: (seedHex: string) => AccountKeys
   storeKeyPair?: boolean
+  requireBitcoinAddress?: boolean
 }
 
 /** Custom hook for Bitcoin On-Chain payout form management */
@@ -38,20 +39,22 @@ export const usePayoutWithBitcoinForm = (
   const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
 
   const bitcoinPayoutSchema = yup.object({
-    bitcoinAddress: yup
-      .string()
-      .required(t('Bitcoin address is required'))
-      .test({
-        test(value) {
-          const bitcoinAddress = getBitcoinAddress(value)
-          if (bitcoinAddress.valid && bitcoinAddress.address) {
-            return validateBitcoinAddress(bitcoinAddress.address)
-          }
+    bitcoinAddress: (keyDerivationOptions?.requireBitcoinAddress ?? true)
+      ? yup
+          .string()
+          .required(t('Bitcoin address is required'))
+          .test({
+            test(value) {
+              const bitcoinAddress = getBitcoinAddress(value)
+              if (bitcoinAddress.valid && bitcoinAddress.address) {
+                return validateBitcoinAddress(bitcoinAddress.address)
+              }
 
-          return validateBitcoinAddress(value)
-        },
-        message: t('The Bitcoin address you entered is invalid'),
-      }),
+              return validateBitcoinAddress(value)
+            },
+            message: t('The Bitcoin address you entered is invalid'),
+          })
+      : yup.string(),
     accountPassword: accountKeys ? yup.string() : yup.string().required(t('Account password is required')),
   })
 

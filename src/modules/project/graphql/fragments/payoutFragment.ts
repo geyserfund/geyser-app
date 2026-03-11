@@ -5,6 +5,7 @@ import { FRAGMENT_PAYMENT_FOR_PAYOUT_REFUND } from './paymentFragment.ts'
 export const FRAGMENT_PAYOUT = gql`
   fragment Payout on Payout {
     id
+    uuid
     status
     amount
     expiresAt
@@ -17,6 +18,7 @@ export const FRAGMENT_PAYOUT_WITH_PAYMENT = gql`
     amount
     expiresAt
     id
+    uuid
     status
     payments {
       ...PaymentForPayoutRefund

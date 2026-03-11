@@ -49,21 +49,23 @@ export const Modal = ({
       <ModalOverlay />
       <ModalContent bg="transparent" boxShadow={0} {...contentProps}>
         <Box borderRadius="12px" bg="utils.pbg" paddingY={6} {...wrapperProps}>
-          <VStack
-            pb={3}
-            spacing={0}
-            w="full"
-            alignItems="flex-start"
-            paddingLeft={standardPadding}
-            paddingRight={noClose ? standardPadding : { base: 9, lg: 12 }}
-          >
-            {title && (
-              <ModalHeader padding={0} {...headerProps}>
-                {title}
-              </ModalHeader>
-            )}
-            {subtitle && <Body {...subtitleProps}>{subtitle}</Body>}
-          </VStack>
+          {(title || subtitle) && (
+            <VStack
+              pb={3}
+              spacing={0}
+              w="full"
+              alignItems="flex-start"
+              paddingLeft={standardPadding}
+              paddingRight={noClose ? standardPadding : { base: 9, lg: 12 }}
+            >
+              {title && (
+                <ModalHeader padding={0} {...headerProps}>
+                  {title}
+                </ModalHeader>
+              )}
+              {subtitle && <Body {...subtitleProps}>{subtitle}</Body>}
+            </VStack>
+          )}
 
           {!noClose && (
             <ModalCloseButton padding="0" size="sm" top={6} right={{ base: 3, lg: 6 }}>

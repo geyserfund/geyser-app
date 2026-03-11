@@ -106,6 +106,7 @@ type Query {
   pledgeRefundsGet: PledgeRefundsGetResponse
   paymentRefundsGet: PaymentRefundsGetResponse
   payoutGet(input: PayoutGetInput!): PayoutGetResponse
+  payoutActive(projectId: BigInt!): PayoutGetResponse
 }
 
 type Mutation {
@@ -224,18 +225,21 @@ type Mutation {
   """Cancel a pledge refund."""
   pledgeRefundCancel(input: PledgeRefundCancelInput!): PledgeRefundResponse!
   paymentRefundComplete(input: PaymentRefundCompleteInput!): PaymentRefundCompleteResponse!
+  payoutPrepare(input: PayoutRequestInput!): PayoutRequestResponse!
   payoutRequest(input: PayoutRequestInput!): PayoutRequestResponse!
 
   """
   Create a payment for a payout. 
   Can be used for both initial and retry flows - the backend auto-detects based on existing payments.
   """
+  payoutPaymentPrepare(input: PayoutPaymentCreateInput!): PayoutPaymentCreateResponse!
   payoutPaymentCreate(input: PayoutPaymentCreateInput!): PayoutPaymentCreateResponse!
 
   """
   Initiate the payout from AON contract to swap contract.
   Only used for the initial flow (funds coming from AON contract).
   """
+  payoutPaymentInitiate(input: PayoutInitiateInput!): PayoutInitiateResponse!
   payoutInitiate(input: PayoutInitiateInput!): PayoutInitiateResponse!
 
   """
@@ -4142,6 +4146,7 @@ type Payout {
 
 input PayoutGetInput {
   payoutId: BigInt
+  projectId: BigInt
   swapId: String
 }
 
@@ -4169,6 +4174,7 @@ input PayoutPaymentCreateInput {
 
 input PayoutInitiateInput {
   payoutId: BigInt!
+  paymentId: BigInt!
 
   """
   The RSK address of the creator (optional, for storing in payment for later refund if needed)
@@ -4211,4 +4217,5 @@ enum PayoutStatus {
   COMPLETED
   FAILED
   EXPIRED
+  CANCELLED
 }

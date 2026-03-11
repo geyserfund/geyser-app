@@ -6,6 +6,8 @@ import { H2 } from '@/shared/components/typography/Heading.tsx'
 
 import type { ImpactFundFundingModelItem } from '../utils/informationContent.ts'
 
+const visualAccentTextColor = 'utils.blackContrast'
+
 type FundingModelsShowcaseProps = {
   items: readonly ImpactFundFundingModelItem[]
   surfaceBg: string
@@ -33,8 +35,8 @@ function VisualAccentChip({ icon, label }: VisualAccentChipProps): JSX.Element {
       backdropFilter="blur(10px)"
       boxShadow="0 8px 20px rgba(15, 23, 42, 0.12)"
     >
-      <Icon as={icon} boxSize={3.5} color="neutral1.11" />
-      <Body size="xs" bold color="neutral1.11">
+      <Icon as={icon} boxSize={3.5} color={visualAccentTextColor} />
+      <Body size="xs" bold color={visualAccentTextColor}>
         {label}
       </Body>
     </HStack>
@@ -59,7 +61,7 @@ function FundingModelIllustration({ item }: { item: ImpactFundFundingModelItem }
               justify="center"
               boxShadow="0 12px 24px rgba(15, 23, 42, 0.14)"
             >
-              <Icon as={item.icon} boxSize={8} color="neutral1.11" />
+              <Icon as={item.icon} boxSize={8} color={visualAccentTextColor} />
             </Flex>
             <VStack align="start" spacing={2}>
               <Box w="78px" h="10px" borderRadius="full" bg="whiteAlpha.850" />
@@ -83,7 +85,7 @@ function FundingModelIllustration({ item }: { item: ImpactFundFundingModelItem }
               justify="center"
               boxShadow="0 12px 24px rgba(15, 23, 42, 0.14)"
             >
-              <Body bold color="neutral1.11">
+              <Body bold color={visualAccentTextColor}>
                 2x
               </Body>
             </Flex>
@@ -106,7 +108,7 @@ function FundingModelIllustration({ item }: { item: ImpactFundFundingModelItem }
               justify="center"
               boxShadow="0 12px 24px rgba(15, 23, 42, 0.14)"
             >
-              <Icon as={item.icon} boxSize={8} color="neutral1.11" />
+              <Icon as={item.icon} boxSize={8} color={visualAccentTextColor} />
             </Flex>
           </Flex>
         </>
@@ -120,17 +122,17 @@ function FundingModelIllustration({ item }: { item: ImpactFundFundingModelItem }
           <Box position="absolute" left={6} right={6} bottom={5}>
             <HStack spacing={2}>
               <Box px={2.5} py={1} borderRadius="full" bg="whiteAlpha.900">
-                <Body size="xs" bold color="neutral1.11">
+                <Body size="xs" bold color={visualAccentTextColor}>
                   Learn
                 </Body>
               </Box>
               <Box px={2.5} py={1} borderRadius="full" bg="whiteAlpha.900">
-                <Body size="xs" bold color="neutral1.11">
+                <Body size="xs" bold color={visualAccentTextColor}>
                   Build
                 </Body>
               </Box>
               <Box px={2.5} py={1} borderRadius="full" bg="whiteAlpha.900">
-                <Body size="xs" bold color="neutral1.11">
+                <Body size="xs" bold color={visualAccentTextColor}>
                   Reward
                 </Body>
               </Box>
@@ -138,6 +140,8 @@ function FundingModelIllustration({ item }: { item: ImpactFundFundingModelItem }
           </Box>
         </>
       )
+    default:
+      return <></>
   }
 }
 
