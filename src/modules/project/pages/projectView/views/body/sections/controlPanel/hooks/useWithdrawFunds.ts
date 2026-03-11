@@ -59,6 +59,7 @@ export const useWithdrawFunds = () => {
   }, [apolloClient, isProjectOwner, isTiaProject, project.id, projectRskEoa])
 
   const onCompleted = () => {
+    setHasOngoingWithdraw(false)
     refetchQueriesOnPayoutSuccess()
     queryProject.execute()
     void refetchWithdrawable()

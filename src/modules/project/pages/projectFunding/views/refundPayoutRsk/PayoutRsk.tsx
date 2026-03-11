@@ -455,7 +455,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
       })
 
       setIsProcessed(true)
-      onCompleted?.()
       toast.success({
         title: t('Refund initiated successfully'),
         description: t('Your Lightning refund will be processed shortly'),
