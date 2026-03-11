@@ -1,3 +1,24 @@
+## [0.30.0](https://github.com/geyserfund/geyser-app/compare/v0.29.0...v0.30.0) (2026-03-11)
+
+
+### Features
+
+* add creator stats and new payment method copy ([406dac9](https://github.com/geyserfund/geyser-app/commit/406dac9d7827327efb5de7aa58e831c0cf7e6f96))
+* enhance EmailPromptModal with user notification settings and update preferences ([ed83c8f](https://github.com/geyserfund/geyser-app/commit/ed83c8f26470784aba71cb7fe4d35bb6e5300675))
+
+
+### Bug Fixes
+
+* address pr comments ([7133b2a](https://github.com/geyserfund/geyser-app/commit/7133b2a1da9e5082bef830459b492db81b1d8d36))
+* address pr comments ([4a050da](https://github.com/geyserfund/geyser-app/commit/4a050da55a38e353124bd10dd1c8140c05b5cd35))
+* design and qa fixes ([9f4204a](https://github.com/geyserfund/geyser-app/commit/9f4204a0d622f752b202a88f111b0a786a013e6a))
+* lightning payout ([f21db0d](https://github.com/geyserfund/geyser-app/commit/f21db0da43f566cc5fed940a90c7ccd53df62ac8))
+* payout (WIP) ([e351d4f](https://github.com/geyserfund/geyser-app/commit/e351d4f655e888d49685ef3e9e8f2dd31de16244))
+* payout flow ([b7c6544](https://github.com/geyserfund/geyser-app/commit/b7c6544f7b3823eb11211c7a7727c366193f6c51))
+* update landing page and footer ([a804ca5](https://github.com/geyserfund/geyser-app/commit/a804ca5fb8ade63180a8a2adbd031fb948541e6d))
+* update refund flow ([b091c0f](https://github.com/geyserfund/geyser-app/commit/b091c0f1feeecfe664216403e32a4d048e441dae))
+* update the default flows ([93e039c](https://github.com/geyserfund/geyser-app/commit/93e039c4839f7785897957127d003151dd9dff72))
+
 ## [0.29.0](https://github.com/geyserfund/geyser-app/compare/v0.28.4...v0.29.0) (2026-03-06)
 
 
