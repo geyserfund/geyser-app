@@ -267,7 +267,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
 
   const isProcessing = pledgeRefundRequestData?.pledgeRefundRequest.refund.status === PledgeRefundStatus.Processing
   const latestPayment = isProcessing
-    ? [...pledgeRefundRequestData?.pledgeRefundRequest.refund.payments].sort(
+    ? [...(pledgeRefundRequestData?.pledgeRefundRequest.refund.payments ?? [])].sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )[0]
     : null

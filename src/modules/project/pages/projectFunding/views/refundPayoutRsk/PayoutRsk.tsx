@@ -187,7 +187,7 @@ const getPayoutProgressSteps = (params: {
   ]
 }
 
-/** RefundRsk: Component for handling refund payouts with Lightning or On-Chain Bitcoin */
+/** PayoutRsk: Component for handling payouts with Lightning or On-Chain Bitcoin */
 export const PayoutRsk: React.FC<PayoutRskProps> = ({
   isOpen,
   onClose,
@@ -732,7 +732,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
           description: activeProgressDescription,
           content: processedMethod === PayoutMethod.Lightning ? (
             <LightningPayoutProcessed
-              isRefund={true}
               invoiceId={
                 isProcessed
                   ? payoutInvoiceId
@@ -742,7 +741,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
             />
           ) : (
             <BitcoinPayoutProcessed
-              isRefund={true}
               onClose={handleCompleted}
               refundTxId={isProcessed ? refundTxId : undefined}
             />
