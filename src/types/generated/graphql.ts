@@ -2832,6 +2832,7 @@ export type Payout = {
   id: Scalars['BigInt']['output'];
   payments: Array<Payment>;
   status: PayoutStatus;
+  uuid: Scalars['String']['output'];
 };
 
 export type PayoutCancelInput = {
@@ -4694,6 +4695,8 @@ export type RskToOnChainSwapPaymentDetailsBoltzInput = {
 export type RskToOnChainSwapPaymentDetailsInput = {
   /** Boltz swap parameters. Required for initial flow (from AON), optional for retry flow. */
   boltz?: InputMaybe<RskToOnChainSwapPaymentDetailsBoltzInput>;
+  /** The Bitcoin address where the claimed funds should be sent. */
+  onChainAddress?: InputMaybe<Scalars['String']['input']>;
   /** Preimage hash for the swap. Required for retry flow when boltz is not provided. */
   preimageHash?: InputMaybe<Scalars['String']['input']>;
   /** Encrypted preimage hex. Required for retry flow when boltz is not provided. */
@@ -10070,9 +10073,9 @@ export type ProjectPaymentMethodsFragment = { __typename?: 'PaymentMethods', fia
 
 export type ProjectSubscriptionPlansFragment = { __typename?: 'ProjectSubscriptionPlan', cost: number, currency: SubscriptionCurrencyType, description?: string | null, id: any, name: string, interval: UserSubscriptionInterval, projectId: any };
 
-export type PayoutFragment = { __typename?: 'Payout', id: any, status: PayoutStatus, amount: number, expiresAt: any };
+export type PayoutFragment = { __typename?: 'Payout', id: any, uuid: string, status: PayoutStatus, amount: number, expiresAt: any };
 
-export type PayoutWithPaymentFragment = { __typename?: 'Payout', amount: number, expiresAt: any, id: any, status: PayoutStatus, payments: Array<(
+export type PayoutWithPaymentFragment = { __typename?: 'Payout', amount: number, expiresAt: any, id: any, uuid: string, status: PayoutStatus, payments: Array<(
     { __typename?: 'Payment' }
     & PaymentForPayoutRefundFragment
   )> };
@@ -10323,6 +10326,10 @@ export type PayoutRequestMutationVariables = Exact<{
   input: PayoutRequestInput;
 }>;
 
+export type PayoutPrepareMutationVariables = Exact<{
+  input: PayoutRequestInput;
+}>;
+
 
 export type PayoutRequestMutation = { __typename?: 'Mutation', payoutRequest: { __typename?: 'PayoutRequestResponse', payout: (
       { __typename?: 'Payout' }
@@ -10332,7 +10339,19 @@ export type PayoutRequestMutation = { __typename?: 'Mutation', payoutRequest: { 
       & PayoutMetadataFragment
     ) } };
 
+export type PayoutPrepareMutation = { __typename?: 'Mutation', payoutPrepare: { __typename?: 'PayoutRequestResponse', payout: (
+      { __typename?: 'Payout' }
+      & PayoutWithPaymentFragment
+    ), payoutMetadata: (
+      { __typename?: 'PayoutMetadata' }
+      & PayoutMetadataFragment
+    ) } };
+
 export type PayoutPaymentCreateMutationVariables = Exact<{
+  input: PayoutPaymentCreateInput;
+}>;
+
+export type PayoutPaymentPrepareMutationVariables = Exact<{
   input: PayoutPaymentCreateInput;
 }>;
 
@@ -10345,12 +10364,29 @@ export type PayoutPaymentCreateMutation = { __typename?: 'Mutation', payoutPayme
       & PaymentForPayoutRefundFragment
     ) } };
 
+export type PayoutPaymentPrepareMutation = { __typename?: 'Mutation', payoutPaymentPrepare: { __typename?: 'PayoutPaymentCreateResponse', swap?: string | null, payout: (
+      { __typename?: 'Payout' }
+      & PayoutFragment
+    ), payment: (
+      { __typename?: 'Payment' }
+      & PaymentForPayoutRefundFragment
+    ) } };
+
 export type PayoutInitiateMutationVariables = Exact<{
+  input: PayoutInitiateInput;
+}>;
+
+export type PayoutPaymentInitiateMutationVariables = Exact<{
   input: PayoutInitiateInput;
 }>;
 
 
 export type PayoutInitiateMutation = { __typename?: 'Mutation', payoutInitiate: { __typename?: 'PayoutInitiateResponse', txHash: string, payout: (
+      { __typename?: 'Payout' }
+      & PayoutFragment
+    ) } };
+
+export type PayoutPaymentInitiateMutation = { __typename?: 'Mutation', payoutPaymentInitiate: { __typename?: 'PayoutInitiateResponse', txHash: string, payout: (
       { __typename?: 'Payout' }
       & PayoutFragment
     ) } };
@@ -12806,6 +12842,7 @@ export const ProjectSubscriptionPlansFragmentDoc = gql`
 export const PayoutFragmentDoc = gql`
     fragment Payout on Payout {
   id
+  uuid
   status
   amount
   expiresAt
@@ -12854,6 +12891,7 @@ export const PayoutWithPaymentFragmentDoc = gql`
   amount
   expiresAt
   id
+  uuid
   status
   payments {
     ...PaymentForPayoutRefund
@@ -17674,6 +17712,39 @@ export function usePayoutRequestMutation(baseOptions?: Apollo.MutationHookOption
 export type PayoutRequestMutationHookResult = ReturnType<typeof usePayoutRequestMutation>;
 export type PayoutRequestMutationResult = Apollo.MutationResult<PayoutRequestMutation>;
 export type PayoutRequestMutationOptions = Apollo.BaseMutationOptions<PayoutRequestMutation, PayoutRequestMutationVariables>;
+export const PayoutPrepareDocument = gql`
+    mutation PayoutPrepare($input: PayoutRequestInput!) {
+  payoutPrepare(input: $input) {
+    payout {
+      ...PayoutWithPayment
+    }
+    payoutMetadata {
+      ...PayoutMetadata
+    }
+  }
+}
+    ${PayoutWithPaymentFragmentDoc}
+${PayoutMetadataFragmentDoc}`;
+export type PayoutPrepareMutationFn = Apollo.MutationFunction<PayoutPrepareMutation, PayoutPrepareMutationVariables>;
+
+/**
+ * __usePayoutPrepareMutation__
+ *
+ * To run a mutation, you first call `usePayoutPrepareMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePayoutPrepareMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ */
+export function usePayoutPrepareMutation(baseOptions?: Apollo.MutationHookOptions<PayoutPrepareMutation, PayoutPrepareMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PayoutPrepareMutation, PayoutPrepareMutationVariables>(PayoutPrepareDocument, options);
+      }
+
+export type PayoutPrepareMutationHookResult = ReturnType<typeof usePayoutPrepareMutation>;
+export type PayoutPrepareMutationResult = Apollo.MutationResult<PayoutPrepareMutation>;
+export type PayoutPrepareMutationOptions = Apollo.BaseMutationOptions<PayoutPrepareMutation, PayoutPrepareMutationVariables>;
 export const PayoutPaymentCreateDocument = gql`
     mutation PayoutPaymentCreate($input: PayoutPaymentCreateInput!) {
   payoutPaymentCreate(input: $input) {
@@ -17715,6 +17786,40 @@ export function usePayoutPaymentCreateMutation(baseOptions?: Apollo.MutationHook
 export type PayoutPaymentCreateMutationHookResult = ReturnType<typeof usePayoutPaymentCreateMutation>;
 export type PayoutPaymentCreateMutationResult = Apollo.MutationResult<PayoutPaymentCreateMutation>;
 export type PayoutPaymentCreateMutationOptions = Apollo.BaseMutationOptions<PayoutPaymentCreateMutation, PayoutPaymentCreateMutationVariables>;
+export const PayoutPaymentPrepareDocument = gql`
+    mutation PayoutPaymentPrepare($input: PayoutPaymentCreateInput!) {
+  payoutPaymentPrepare(input: $input) {
+    payout {
+      ...Payout
+    }
+    swap
+    payment {
+      ...PaymentForPayoutRefund
+    }
+  }
+}
+    ${PayoutFragmentDoc}
+${PaymentForPayoutRefundFragmentDoc}`;
+export type PayoutPaymentPrepareMutationFn = Apollo.MutationFunction<PayoutPaymentPrepareMutation, PayoutPaymentPrepareMutationVariables>;
+
+/**
+ * __usePayoutPaymentPrepareMutation__
+ *
+ * To run a mutation, you first call `usePayoutPaymentPrepareMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePayoutPaymentPrepareMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ */
+export function usePayoutPaymentPrepareMutation(baseOptions?: Apollo.MutationHookOptions<PayoutPaymentPrepareMutation, PayoutPaymentPrepareMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PayoutPaymentPrepareMutation, PayoutPaymentPrepareMutationVariables>(PayoutPaymentPrepareDocument, options);
+      }
+
+export type PayoutPaymentPrepareMutationHookResult = ReturnType<typeof usePayoutPaymentPrepareMutation>;
+export type PayoutPaymentPrepareMutationResult = Apollo.MutationResult<PayoutPaymentPrepareMutation>;
+export type PayoutPaymentPrepareMutationOptions = Apollo.BaseMutationOptions<PayoutPaymentPrepareMutation, PayoutPaymentPrepareMutationVariables>;
 export const PayoutInitiateDocument = gql`
     mutation PayoutInitiate($input: PayoutInitiateInput!) {
   payoutInitiate(input: $input) {
@@ -17752,6 +17857,36 @@ export function usePayoutInitiateMutation(baseOptions?: Apollo.MutationHookOptio
 export type PayoutInitiateMutationHookResult = ReturnType<typeof usePayoutInitiateMutation>;
 export type PayoutInitiateMutationResult = Apollo.MutationResult<PayoutInitiateMutation>;
 export type PayoutInitiateMutationOptions = Apollo.BaseMutationOptions<PayoutInitiateMutation, PayoutInitiateMutationVariables>;
+export const PayoutPaymentInitiateDocument = gql`
+    mutation PayoutPaymentInitiate($input: PayoutInitiateInput!) {
+  payoutPaymentInitiate(input: $input) {
+    payout {
+      ...Payout
+    }
+    txHash
+  }
+}
+    ${PayoutFragmentDoc}`;
+export type PayoutPaymentInitiateMutationFn = Apollo.MutationFunction<PayoutPaymentInitiateMutation, PayoutPaymentInitiateMutationVariables>;
+
+/**
+ * __usePayoutPaymentInitiateMutation__
+ *
+ * To run a mutation, you first call `usePayoutPaymentInitiateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePayoutPaymentInitiateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ */
+export function usePayoutPaymentInitiateMutation(baseOptions?: Apollo.MutationHookOptions<PayoutPaymentInitiateMutation, PayoutPaymentInitiateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PayoutPaymentInitiateMutation, PayoutPaymentInitiateMutationVariables>(PayoutPaymentInitiateDocument, options);
+      }
+
+export type PayoutPaymentInitiateMutationHookResult = ReturnType<typeof usePayoutPaymentInitiateMutation>;
+export type PayoutPaymentInitiateMutationResult = Apollo.MutationResult<PayoutPaymentInitiateMutation>;
+export type PayoutPaymentInitiateMutationOptions = Apollo.BaseMutationOptions<PayoutPaymentInitiateMutation, PayoutPaymentInitiateMutationVariables>;
 export const PostDeleteDocument = gql`
     mutation PostDelete($postDeleteId: BigInt!) {
   postDelete(id: $postDeleteId) {

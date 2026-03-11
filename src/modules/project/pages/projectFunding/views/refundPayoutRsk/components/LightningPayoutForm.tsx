@@ -1,6 +1,7 @@
-import { Collapse, VStack } from '@chakra-ui/react'
+import { Collapse, HStack, Icon, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { useState } from 'react'
+import { PiQuestion } from 'react-icons/pi'
 import { UseFormReturn } from 'react-hook-form'
 
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
@@ -30,9 +31,16 @@ export const LightningPayoutForm: React.FC<LightningPayoutFormProps> = ({ form, 
 
       {!disablePassword && (
         <VStack w="full" spacing={2} alignItems="start">
-          <Body size="md" medium>
-            {t('Enter your account password')}
-          </Body>
+          <HStack spacing={2} alignItems="center">
+            <Body size="md" medium>
+              {t('Enter your account password')}
+            </Body>
+            <Tooltip label={t('This is the password you configured during your project setup.')} hasArrow>
+              <span>
+                <Icon as={PiQuestion} color="neutral1.9" boxSize={4} cursor="help" />
+              </span>
+            </Tooltip>
+          </HStack>
           <ControlledTextInput name="accountPassword" control={control} type="password" placeholder="" size="md" />
 
           <Body

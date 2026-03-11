@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useApolloClient } from '@apollo/client'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
-import { QUERY_PAYOUT_GET } from '@/modules/project/graphql/query/payoutQuery.ts'
+import { QUERY_PAYOUT_ACTIVE } from '@/modules/project/graphql/query/payoutQuery.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
 import { PayoutStatus, ProjectAonGoalStatus } from '@/types'
 import { isAllOrNothing } from '@/utils/index.ts'
@@ -27,11 +27,11 @@ export const useAonClaimFunds = () => {
     if (!AON_CLAIMABLE_STATUSES.includes(project.aonGoal.status)) return
 
     apolloClient.query({
-      query: QUERY_PAYOUT_GET,
-      variables: { input: { projectId: project.id } },
+      query: QUERY_PAYOUT_ACTIVE,
+      variables: { projectId: project.id },
       fetchPolicy: 'network-only',
     }).then(({ data }) => {
-      const status = data?.payoutGet?.payout?.status
+      const status = data?.payoutActive?.payout?.status
       setIsPayoutProcessing(status === PayoutStatus.Pending || status === PayoutStatus.Processing)
     }).catch(() => {
       setIsPayoutProcessing(false)
