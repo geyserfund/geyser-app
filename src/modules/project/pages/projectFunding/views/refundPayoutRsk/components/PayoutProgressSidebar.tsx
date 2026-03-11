@@ -16,9 +16,10 @@ export type PayoutProgressStep = {
 type PayoutProgressSidebarProps = {
   amount: number
   steps: PayoutProgressStep[]
+  label?: string
 }
 
-export const PayoutProgressSidebar = ({ amount, steps }: PayoutProgressSidebarProps) => {
+export const PayoutProgressSidebar = ({ amount, steps, label = t('Pending payout') }: PayoutProgressSidebarProps) => {
   return (
     <VStack
       align="stretch"
@@ -33,7 +34,7 @@ export const PayoutProgressSidebar = ({ amount, steps }: PayoutProgressSidebarPr
     >
       <VStack align="start" spacing={1}>
         <Body size="sm" color="neutral1.10" textTransform="uppercase" letterSpacing="0.08em">
-          {t('Pending payout')}
+          {label}
         </Body>
         <Body size="2xl" bold color="neutral1.12">
           {commaFormatted(amount)} sats
