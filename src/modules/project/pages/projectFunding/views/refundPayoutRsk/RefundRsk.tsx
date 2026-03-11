@@ -711,7 +711,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
             selectedMethod === PayoutMethod.Lightning
               ? t('Refund Processed (Off-Chain)')
               : t('Refund Processed (On-Chain)'),
-          description: activeProgressDescription,
+          description: selectedMethod === PayoutMethod.OnChain ? undefined : activeProgressDescription,
           content:
             selectedMethod === PayoutMethod.Lightning ? (
               <LightningPayoutProcessed isRefund={true} invoiceId={refundInvoiceId} onClose={handleCompleted} />

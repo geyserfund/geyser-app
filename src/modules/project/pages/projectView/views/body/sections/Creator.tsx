@@ -47,7 +47,7 @@ export const Creator = () => {
         {creatorStats.length > 0 ? (
           <Box w="full">
             <Box display={{ base: 'block', md: 'none' }}>
-              <Body size="xs" muted medium lineHeight={1}>
+              <Body size="md" muted medium lineHeight={1}>
                 {t('Creator stats')}
               </Body>
               <Wrap w="full" spacing={2} mt={2}>
@@ -60,7 +60,7 @@ export const Creator = () => {
             </Box>
 
             <HStack display={{ base: 'none', md: 'flex' }} w="full" spacing={2} alignItems="center">
-              <Body size="xs" muted medium lineHeight={1} whiteSpace="nowrap" flexShrink={0}>
+              <Body size="md" muted medium lineHeight={1} whiteSpace="nowrap" flexShrink={0}>
                 {t('Creator stats')}
               </Body>
               <Wrap w="full" spacing={2} align="center">
@@ -102,10 +102,10 @@ const CreatorTrustStat = ({ label, value }: { label: string; value: string }) =>
       textTransform="none"
       fontWeight="normal"
     >
-      <Body size="11px" medium color={statLabelColor} lineHeight={1} whiteSpace="nowrap">
+      <Body size="md" medium color={statLabelColor} lineHeight={1} whiteSpace="nowrap">
         {label}
       </Body>
-      <Body size="11px" medium color={statValueColor} lineHeight={1} whiteSpace="nowrap">
+      <Body size="md" medium color={statValueColor} lineHeight={1} whiteSpace="nowrap">
         {value}
       </Body>
     </Badge>

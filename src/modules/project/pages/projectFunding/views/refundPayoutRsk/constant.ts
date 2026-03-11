@@ -9,4 +9,4 @@ export const ContructingTransactionImageUrl =
 export const TransactionReadyToClaimImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/refund/transaction_ready_to_claim.png'
 export const TransactionClaimedImageUrl =
-  'https://storage.googleapis.com/geyser-projects-media/app/refund/transaction_claimed.png'
+  '/images/refund/transaction-claimed.webp'

@@ -729,7 +729,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
             processedMethod === PayoutMethod.Lightning
               ? t('Payout Processed (Off-Chain)')
               : t('Payout Processed (On-Chain)'),
-          description: activeProgressDescription,
+          description: processedMethod === PayoutMethod.OnChain ? undefined : activeProgressDescription,
           content: processedMethod === PayoutMethod.Lightning ? (
             <LightningPayoutProcessed
               invoiceId={

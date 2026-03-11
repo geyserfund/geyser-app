@@ -142,23 +142,29 @@ export const ImpactFundsMainPage = () => {
   const statMutedBg = useColorModeValue('neutral1.2', 'neutral1.2')
   const statIconBg = useColorModeValue('primary1.100', 'primary1.900')
   const statIconColor = useColorModeValue('primary1.600', 'primary1.300')
-  const statPrimaryTextColor = useColorModeValue('neutral1.11', 'neutral1.11')
-  const statSubtleColor = useColorModeValue('neutral1.8', 'neutral1.10')
-  const statTertiaryColor = useColorModeValue('neutral1.7', 'neutral1.9')
+  const statPrimaryTextColor = useColorModeValue('neutral1.11', 'neutral1.12')
+  const statSubtleColor = useColorModeValue('neutral1.8', 'neutral1.11')
+  const statTertiaryColor = useColorModeValue('neutral1.7', 'neutral1.10')
   const cardImageBg = useColorModeValue('neutral1.2', 'neutral1.3')
   const cardSurfaceBg = useColorModeValue('white', 'neutral1.3')
-  const sectionPrimaryTextColor = useColorModeValue('neutral1.11', 'neutral1.11')
-  const sectionSecondaryTextColor = useColorModeValue('neutral1.9', 'neutral1.10')
-  const sectionMutedTextColor = useColorModeValue('neutral1.8', 'neutral1.9')
+  const sectionPrimaryTextColor = useColorModeValue('neutral1.11', 'neutral1.12')
+  const sectionSecondaryTextColor = useColorModeValue('neutral1.9', 'neutral1.11')
+  const sectionMutedTextColor = useColorModeValue('neutral1.8', 'neutral1.10')
   const highlightedSurfaceBg = useColorModeValue('primary1.50', 'primary1.900')
   const highlightedSurfaceBorderColor = useColorModeValue('primary1.200', 'primary1.700')
+  const partnerSectionBg = useColorModeValue('transparent', 'rgba(18, 19, 19, 0.96)')
+  const partnerSectionPrimaryTextColor = useColorModeValue('neutral1.11', 'neutral1.12')
+  const partnerSectionSecondaryTextColor = useColorModeValue('neutral1.9', 'neutral1.11')
+  const partnerSectionMutedTextColor = useColorModeValue('neutral1.8', 'neutral1.10')
   const sectionCardShadow = '0 4px 14px rgba(15, 23, 42, 0.05)'
   const interactiveCardShadow = '0 4px 14px rgba(15, 23, 42, 0.05)'
   const interactiveCardHoverShadow = '0 10px 24px rgba(15, 23, 42, 0.10)'
   const partnerSectionBgGradient = useColorModeValue(
     'radial-gradient(circle at top left, rgba(251, 211, 141, 0.55), transparent 32%), radial-gradient(circle at top right, rgba(125, 211, 252, 0.4), transparent 28%), linear-gradient(135deg, rgba(255, 247, 237, 1) 0%, rgba(255, 251, 235, 1) 46%, rgba(239, 246, 255, 1) 100%)',
-    'radial-gradient(circle at top left, rgba(251, 191, 36, 0.18), transparent 30%), radial-gradient(circle at top right, rgba(56, 189, 248, 0.16), transparent 28%), linear-gradient(135deg, rgba(67, 20, 7, 0.92) 0%, rgba(30, 41, 59, 0.92) 100%)',
+    'radial-gradient(circle at 10% 18%, rgba(249, 115, 22, 0.18), transparent 24%), radial-gradient(circle at 84% 16%, rgba(56, 189, 248, 0.14), transparent 22%), radial-gradient(circle at 55% 100%, rgba(168, 85, 247, 0.08), transparent 30%), linear-gradient(135deg, rgba(18, 19, 19, 0.98) 0%, rgba(25, 27, 31, 0.98) 52%, rgba(17, 22, 28, 0.98) 100%)',
   )
+  const partnerSectionBorderColor = useColorModeValue('transparent', 'whiteAlpha.100')
+  const partnerSectionHighlightBg = useColorModeValue('whiteAlpha.300', 'rgba(148, 163, 184, 0.14)')
   const noiseOpacity = useColorModeValue(0.18, 0.12)
 
   const pageHead = (
@@ -410,7 +416,13 @@ export const ImpactFundsMainPage = () => {
                               {amountDisplay.primary}
                             </Body>
                             {amountDisplay.secondary && (
-                              <Body size="xs" whiteSpace="nowrap" lineHeight={1.2} textAlign="right" color="neutral1.8">
+                              <Body
+                                size="xs"
+                                whiteSpace="nowrap"
+                                lineHeight={1.2}
+                                textAlign="right"
+                                color={sectionMutedTextColor}
+                              >
                                 {amountDisplay.secondary}
                               </Body>
                             )}
@@ -424,7 +436,7 @@ export const ImpactFundsMainPage = () => {
                       )}
                       <HStack w="full" px={5} mt="auto" pt={3} justifyContent="space-between" alignItems="center">
                         {fund.metrics.projectsFundedCount > 0 ? (
-                          <Body size="sm" color="neutral1.8">
+                          <Body size="sm" color={sectionMutedTextColor}>
                             {t('{{projectCount}} projects supported', {
                               projectCount: numberFormatter.format(fund.metrics.projectsFundedCount),
                             })}
@@ -505,8 +517,11 @@ export const ImpactFundsMainPage = () => {
       </VStack>
 
       <Box
+        bg={partnerSectionBg}
         bgImage={partnerSectionBgGradient}
         borderRadius="2xl"
+        borderWidth="1px"
+        borderColor={partnerSectionBorderColor}
         px={{ base: 5, md: 7 }}
         py={{ base: 6, md: 7 }}
         position="relative"
@@ -518,8 +533,8 @@ export const ImpactFundsMainPage = () => {
           top={{ base: -10, md: -12 }}
           boxSize={{ base: '120px', md: '180px' }}
           borderRadius="full"
-          bg="whiteAlpha.300"
-          filter="blur(8px)"
+          bg={partnerSectionHighlightBg}
+          filter="blur(18px)"
           pointerEvents="none"
         />
         <Box position="absolute" inset={0} pointerEvents="none" opacity={noiseOpacity} overflow="hidden">
@@ -551,11 +566,11 @@ export const ImpactFundsMainPage = () => {
                 alignSelf={{ base: 'stretch', md: 'auto' }}
                 rightIcon={<Icon as={PiArrowUpRightBold} />}
                 bg={cardSurfaceBg}
-                color={sectionPrimaryTextColor}
+                color={partnerSectionPrimaryTextColor}
                 boxShadow="0 8px 20px rgba(15, 23, 42, 0.10)"
                 _hover={{
                   bg: 'white',
-                  color: sectionPrimaryTextColor,
+                  color: partnerSectionPrimaryTextColor,
                   transform: 'translateY(-1px)',
                   boxShadow: '0 12px 24px rgba(15, 23, 42, 0.14)',
                 }}
@@ -563,7 +578,7 @@ export const ImpactFundsMainPage = () => {
                 {t('Schedule a call')}
               </Button>
             </Flex>
-            <Body color={sectionSecondaryTextColor}>
+            <Body color={partnerSectionSecondaryTextColor}>
               {t(
                 'Sponsors make meaningful commitments to an Impact Fund, help guide allocation, and expand the number of projects we can support.',
               )}
@@ -586,10 +601,10 @@ export const ImpactFundsMainPage = () => {
                     <Icon as={item.icon} boxSize={5} color={statIconColor} />
                   </Flex>
                   <VStack align="stretch" spacing={1}>
-                    <Body bold color={sectionPrimaryTextColor}>
+                    <Body bold color={partnerSectionPrimaryTextColor}>
                       {item.title}
                     </Body>
-                    <Body size="sm" color={sectionSecondaryTextColor}>
+                    <Body size="sm" color={partnerSectionSecondaryTextColor}>
                       {item.description}
                     </Body>
                   </VStack>
@@ -600,9 +615,13 @@ export const ImpactFundsMainPage = () => {
 
           <Box p={{ base: 2, md: 2.5 }} bg={highlightedSurfaceBg} borderRadius="xl">
             <Flex direction="row" justify="flex-start" align="center" gap={1}>
-              <Body size="sm" color={sectionMutedTextColor}>
+              <Body size="sm" color={partnerSectionMutedTextColor}>
                 {t('You can also reach out to us directly at')}{' '}
-                <ChakraLink href="mailto:hello@geyser.fund" color={sectionPrimaryTextColor} textDecoration="underline">
+                <ChakraLink
+                  href="mailto:hello@geyser.fund"
+                  color={partnerSectionPrimaryTextColor}
+                  textDecoration="underline"
+                >
                   hello@geyser.fund
                 </ChakraLink>
               </Body>

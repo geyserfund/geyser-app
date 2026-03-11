@@ -29,15 +29,9 @@ export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({
       }
       content={
         <VStack spacing={4} alignItems="center" w="full">
-          <Body size="md" textAlign="center" color="neutral1.12">
-            {t('Your claim has been successfully processed on-chain.')}
-          </Body>
-
-          {refundTxId ? (
+          {refundTxId && (
             <Body size="sm" textAlign="center" color="neutral1.10" lineHeight="1.5">
-              {t(
-                'On-chain transactions usually confirm within one hour, but can take longer depending on the current activity on the Bitcoin network. You can track the on-chain transaction',
-              )}{' '}
+              {t('You can track the on-chain transaction')}{' '}
               <Body as="span" textDecoration="underline" cursor="pointer" color="primary1.9">
                 <Link href={getMempoolSpaceUrl(refundTxId)} isExternal>
                   {t('here')}
@@ -45,17 +39,7 @@ export const BitcoinPayoutProcessed: React.FC<BitcoinPayoutProcessedProps> = ({
               </Body>
               .
             </Body>
-          ) : (
-            <Body size="sm" textAlign="center" color="neutral1.10" lineHeight="1.5">
-              {t(
-                'On-chain transactions usually confirm within one hour, but can take longer depending on the current activity on the Bitcoin network.',
-              )}
-            </Body>
           )}
-
-          <Body size="sm" textAlign="center" color="neutral1.10">
-            {t('You can safely close this modal.')}
-          </Body>
         </VStack>
       }
       action={
