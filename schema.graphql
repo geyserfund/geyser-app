@@ -577,6 +577,9 @@ type User {
   guardianType: GuardianType
   ranking: BigInt @deprecated(reason: "Use heroStats.rank instead")
   taxProfile: UserTaxProfile
+  affiliatePartnerTerms: AffiliatePartnerTerms!
+  affiliatePartnerPayoutSummary: AffiliatePartnerPayoutSummary!
+  affiliatePartnerPayouts: [AffiliatePartnerPayout!]!
   accountKeys: UserAccountKeys
 
   """Returns a user's contributions across all projects."""
@@ -589,6 +592,38 @@ type User {
   """
   posts(input: UserPostsGetInput): [Post!]!
   complianceDetails: UserComplianceDetails!
+}
+
+type AffiliatePartnerPayoutSummary {
+  totalEarned: Int!
+  totalPending: Int!
+}
+
+type AffiliatePartnerTerms {
+  contributionReferralPayoutRate: Float!
+  projectReferralPayoutRate: Float!
+  projectReferralPayoutCapSats: Int!
+}
+
+type AffiliatePartnerPayout {
+  id: BigInt!
+  uuid: String!
+  amount: Int!
+  status: AffiliatePayoutStatus!
+  source: AffiliatePartnerPayoutSource!
+  project: Project
+  createdAt: Date!
+  paidAt: Date
+}
+
+enum AffiliatePayoutStatus {
+  PENDING
+  PAID
+}
+
+enum AffiliatePartnerPayoutSource {
+  CONTRIBUTION_REFERRAL
+  PROJECT_REFERRAL
 }
 
 type ProjectsSummary {

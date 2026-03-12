@@ -309,6 +309,13 @@ export const platformRoutes: RouteObject[] = [
               return { Component: ProfileWalletSettings }
             },
           },
+          {
+            path: getPath('userProfileSettingsAffiliate', PathName.userId),
+            async lazy() {
+              const ProfileSettingsAffiliate = await loadProfileSettingsModule().then((m) => m.ProfileSettingsAffiliate)
+              return { Component: ProfileSettingsAffiliate }
+            },
+          },
         ],
       },
     ],
