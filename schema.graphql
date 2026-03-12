@@ -678,6 +678,7 @@ input CreateProjectInput {
 
   """Project tags"""
   tagIds: [Int!]
+  referrerHeroId: String
 }
 
 input UpdateProjectInput {

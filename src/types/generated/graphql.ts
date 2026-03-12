@@ -550,6 +550,7 @@ export type CreateProjectInput = {
   name: Scalars['String']['input'];
   /** Boolean flag to indicate if the project can be promoted. */
   promotionsEnabled?: InputMaybe<Scalars['Boolean']['input']>;
+  referrerHeroId?: InputMaybe<Scalars['String']['input']>;
   /** Project region */
   region?: InputMaybe<Scalars['String']['input']>;
   /** The currency used to price rewards for the project. Currently only USDCENT supported. */

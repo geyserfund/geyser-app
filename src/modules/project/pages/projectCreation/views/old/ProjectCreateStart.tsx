@@ -23,6 +23,7 @@ import { ConnectWithSocial } from '../../../../../auth/ConnectWithSocial'
 import { useAuthToken } from '../../../../../auth/useAuthToken'
 import { FormContinueButton } from '../../components/FormContinueButton'
 import { ProjectCreateLayout } from '../../components/ProjectCreateLayout'
+import { ProjectCreationReferralCapture } from '../../components/ProjectCreationReferralCapture.tsx'
 
 export const ProjectCreateStart = () => {
   const isMobile = useMobileMode()
@@ -43,22 +44,24 @@ export const ProjectCreateStart = () => {
   useAuthToken(!isLoggedIn || !userHasProjectCreatableAccounts)
 
   return (
-    <ProjectCreateLayout
-      title={
-        <H1 size="2xl" bold>
-          {t('Create a new project')}
-        </H1>
-      }
-      continueButton={
-        <FormContinueButton
-          flexGrow={1}
-          onClick={handleNext}
-          isDisabled={!isLoggedIn || !userHasProjectCreatableAccounts}
-        />
-      }
-      onBackClick={handleBack}
-    >
-      <VStack spacing={6} w="100%">
+    <>
+      <ProjectCreationReferralCapture />
+      <ProjectCreateLayout
+        title={
+          <H1 size="2xl" bold>
+            {t('Create a new project')}
+          </H1>
+        }
+        continueButton={
+          <FormContinueButton
+            flexGrow={1}
+            onClick={handleNext}
+            isDisabled={!isLoggedIn || !userHasProjectCreatableAccounts}
+          />
+        }
+        onBackClick={handleBack}
+      >
+        <VStack spacing={6} w="100%">
         <H3 size="lg" medium>
           {t('Transform your ideas into real world projects backed by your community')}, {t('with following features')}:
         </H3>
@@ -114,8 +117,9 @@ export const ProjectCreateStart = () => {
             ) : null}
           </VStack>
         ) : null}
-      </VStack>
-    </ProjectCreateLayout>
+        </VStack>
+      </ProjectCreateLayout>
+    </>
   )
 }
 
