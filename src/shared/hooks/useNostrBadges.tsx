@@ -53,26 +53,68 @@ export const useNostrBadges = (pubKey: string) => {
   // }
 
   useEffect(() => {
+    if (!pubKey) {
+      setRelay(undefined)
+      setBadgeIds([])
+      setLoading(false)
+      return
+    }
+
+    let cancelled = false
+    let relayInstance: Relay | undefined
+
+    setLoading(true)
+    setRelay(undefined)
+
     const handleEventsInit = async () => {
-      const relayInstance = relayInit(relayUri)
-      relayInstance.on('connect', async () => {
-        setRelay(relayInstance)
-        const event = await relayInstance.get({
+      const currentRelayInstance = relayInit(relayUri)
+      relayInstance = currentRelayInstance
+
+      currentRelayInstance.on('connect', async () => {
+        if (cancelled) {
+          return
+        }
+
+        setRelay(currentRelayInstance)
+        const event = await currentRelayInstance.get({
           kinds: [30008],
           authors: [pubKey],
         })
+
+        if (cancelled) {
+          return
+        }
+
         const parsedBadges = event ? parseBadgesFromProfileEvents(event) : []
         setBadgeIds(parsedBadges)
 
         setLoading(false)
       })
-      relayInstance.on('error', () => {
+      currentRelayInstance.on('error', () => {
+        if (cancelled) {
+          return
+        }
+
         setLoading(false)
       })
-      await relayInstance.connect()
+
+      try {
+        await currentRelayInstance.connect()
+      } catch {
+        if (cancelled) {
+          return
+        }
+
+        setLoading(false)
+      }
     }
 
     handleEventsInit()
+
+    return () => {
+      cancelled = true
+      relayInstance?.close()
+    }
   }, [pubKey])
 
   const handleErrorToast = () => {
