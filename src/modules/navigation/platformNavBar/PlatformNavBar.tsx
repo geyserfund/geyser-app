@@ -1,8 +1,8 @@
-import { Button, HStack, IconButton, useDisclosure, VStack } from '@chakra-ui/react'
+import { HStack, IconButton, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
-import { PiArrowLeft, PiCopy, PiShareFat, PiX } from 'react-icons/pi'
+import { PiX } from 'react-icons/pi'
 import { Location, useLocation, useNavigate } from 'react-router'
 
 import { EmailPromptModal } from '@/modules/auth/components/EmailPromptModal'
@@ -10,13 +10,11 @@ import { NotificationPromptModal } from '@/modules/auth/components/NotificationP
 import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
 import { useNotificationPromptModal } from '@/modules/auth/hooks/useNotificationPromptModal'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../modules/auth/hooks'
-import { PathName } from '../../../shared/constants'
 import { BrandLogo } from './components/BrandLogo'
 import { CreateProjectButton } from './components/CreateProjectButton.tsx'
 import { LoggedOutModal } from './components/LoggedOutModal'
@@ -28,17 +26,20 @@ import {
   isProjectDashboardRoutesAtom,
   isProjectFundingRoutesAtom,
   isProjectRoutesAtom,
+  useIsGuardiansPage,
   useIsManifestoPage,
 } from './platformNavBarAtom'
 import { PlatformNav } from './profileNav/components/PlatformNav.tsx'
 import { ProfileNav } from './profileNav/ProfileNav'
 
+/** Renders the fixed top platform navigation shared across platform pages. */
 export const PlatformNavBar = () => {
   const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
 
   const isMobileMode = useMobileMode()
 
+  const isGuardiansPage = useIsGuardiansPage()
   const isManifestoPage = useIsManifestoPage()
 
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
@@ -58,8 +59,6 @@ export const PlatformNavBar = () => {
       refresh?: boolean
     }
   } = useLocation()
-  const isGuardiansPage = location.pathname.includes('/guardians')
-
   const { state } = location
 
   const {
@@ -88,11 +87,14 @@ export const PlatformNavBar = () => {
       return <ProjectLogo />
     }
 
-    return <BrandLogo showOutline={isGuardiansPage} />
-  }, [isProjectFundingRoutes, isGuardiansPage])
+    return <BrandLogo />
+  }, [isProjectFundingRoutes])
 
   const shouldShowPlatformNav =
-    (isPlatformRoutes || isProjectRoutes) && !isProjectFundingRoutes && !isProjectDashboardRoutes && !isMobileMode
+    (isPlatformRoutes || isProjectRoutes || isGuardiansPage) &&
+    !isProjectFundingRoutes &&
+    !isProjectDashboardRoutes &&
+    !isMobileMode
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {
@@ -106,15 +108,13 @@ export const PlatformNavBar = () => {
             <LoginButton />
             <CreateProjectButton display={{ base: 'none', lg: 'flex' }} label={t('Creator')} noIcon />
           </>
-        ) : isGuardiansPage ? (
-          <ShareGuardiansButton />
         ) : (
           <ProjectSelectMenu />
         )}
         <ProfileNav />
       </HStack>
     )
-  }, [isGuardiansPage, isLoggedIn, isManifestoPage])
+  }, [isLoggedIn, isManifestoPage])
 
   return (
     <HStack
@@ -123,14 +123,14 @@ export const PlatformNavBar = () => {
       top={0}
       justifyContent={'center'}
       zIndex={99}
-      bgColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
+      bgColor="utils.pbg"
     >
       <VStack
         paddingY={{ base: 5, lg: 8 }}
         paddingX={{ base: 3, lg: 6, xl: 12 }}
         maxWidth={dimensions.guardians.maxWidth}
         width="100%"
-        backgroundColor={isGuardiansPage ? 'transparent' : 'utils.pbg'}
+        backgroundColor="utils.pbg"
         justifySelf={'center'}
         spacing={4}
       >
@@ -140,10 +140,7 @@ export const PlatformNavBar = () => {
           justifyContent={'space-between'}
           spacing={{ base: 2, lg: 4 }}
         >
-          <HStack height="full">
-            {isGuardiansPage && <BackButton />}
-            {renderLeftSide()}
-          </HStack>
+          <HStack height="full">{renderLeftSide()}</HStack>
 
           {shouldShowPlatformNav && <PlatformNav />}
 
@@ -182,50 +179,8 @@ const CloseGoBackButton = () => {
       minWidth={{ base: '40px', lg: '48px' }}
       height={{ base: '40px', lg: '48px' }}
       borderRadius="50% !important"
-      aria-label="go-back"
+      aria-label={t('Go back')}
       icon={<PiX fontSize={'24px'} />}
-      onClick={() => navigate(-1)}
-    />
-  )
-}
-
-const ShareGuardiansButton = () => {
-  const { user } = useAuthContext()
-
-  const { onCopy, hasCopied } = useCopyToClipboard(
-    `${window.location.origin}/${PathName.guardians}${user.heroId ? `?hero=${user.heroId}` : ''}`,
-  )
-  return (
-    <Button
-      variant={hasCopied ? 'solid' : 'outline'}
-      colorScheme={hasCopied ? 'primary1' : 'neutral1'}
-      size={{ base: 'md', lg: 'lg' }}
-      rightIcon={hasCopied ? <PiCopy /> : <PiShareFat />}
-      onClick={() => onCopy()}
-      backgroundColor={hasCopied ? undefined : 'utils.pbg'}
-    >
-      {hasCopied ? t('Copied') : t('Share')}
-    </Button>
-  )
-}
-
-const BackButton = () => {
-  const navigate = useNavigate()
-
-  return (
-    <IconButton
-      variant="outline"
-      colorScheme="neutral1"
-      size={{ base: 'md', lg: 'lg' }}
-      width={{ base: '32px', lg: '40px' }}
-      minWidth={{ base: '32px', lg: '40px' }}
-      height={{ base: '32px', lg: '40px' }}
-      paddingInlineStart={'4px !important'}
-      paddingInlineEnd={'4px !important'}
-      borderRadius="50% !important"
-      backgroundColor="utils.pbg"
-      aria-label="go-back"
-      icon={<PiArrowLeft fontSize={'16px'} />}
       onClick={() => navigate(-1)}
     />
   )
