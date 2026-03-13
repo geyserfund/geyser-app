@@ -17,6 +17,7 @@ type BitcoinPayoutWaitingConfirmationProps = {
   refundAddress?: string
   setIsProcessed: (isProcessed: boolean) => void
   setRefundTxId: (refundTxId: string) => void
+  setLockTxId?: (lockTxId: string) => void
   initialReadyToBeClaimed?: boolean
   onReadyToBeClaimed?: () => void
 }
@@ -27,6 +28,7 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
   refundAddress,
   setIsProcessed,
   setRefundTxId,
+  setLockTxId,
   initialReadyToBeClaimed = false,
   onReadyToBeClaimed,
 }) => {
@@ -44,7 +46,21 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
 
   useTransactionStatusUpdate({
     swapId,
-    handleClaimCoins: () => {
+    handleProcessing(swapStatusUpdate) {
+      if (swapStatusUpdate.transaction?.id) {
+        setLockTxId?.(swapStatusUpdate.transaction.id)
+      }
+    },
+    handleConfirmed(swapStatusUpdate) {
+      if (swapStatusUpdate.transaction?.id) {
+        setLockTxId?.(swapStatusUpdate.transaction.id)
+      }
+    },
+    handleClaimCoins(swapStatusUpdate) {
+      if (swapStatusUpdate.transaction?.id) {
+        setLockTxId?.(swapStatusUpdate.transaction.id)
+      }
+
       setIsReadyToBeClaimed(true)
       onReadyToBeClaimed?.()
     },

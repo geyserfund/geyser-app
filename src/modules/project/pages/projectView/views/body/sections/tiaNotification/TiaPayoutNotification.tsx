@@ -3,6 +3,7 @@ import { t } from 'i18next'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
+import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -21,13 +22,11 @@ export const TiaPayoutNotification = () => {
   const { getUSDCentsAmount } = useBTCConverter()
 
   const projectRskEoa = project?.rskEoa || ''
-  const { withdrawable, isLoading, refetch: refetchWithdrawable } = usePrismWithdrawable({
-    rskAddress: projectRskEoa,
-  })
+  const { withdrawable, isLoading, refetch: refetchWithdrawable } = usePrismWithdrawable({ rskAddress: projectRskEoa })
   const withdrawableSats = withdrawable ? Number(withdrawable / 10000000000n) : 0
   const withdrawableUsdCents = getUSDCentsAmount(withdrawableSats as Satoshis)
   const withdrawableUsd = withdrawableUsdCents / 100
-  const hasMinimumNotice = withdrawableUsd >= 1 && withdrawableUsd < 10
+  const hasMinimumNotice = withdrawableUsd >= 1 && withdrawableUsd < MIN_BITCOIN_PAYOUT_USD
 
   if (!project || !isProjectOwner || project.fundingStrategy !== ProjectFundingStrategy.TakeItAll) {
     return null
@@ -57,7 +56,12 @@ export const TiaPayoutNotification = () => {
               </Body>
               <Body dark>
                 {hasMinimumNotice
-                  ? t('Minimum withdrawal is $10. You currently have funds below the minimum in your project wallet.')
+                  ? t(
+                      'Minimum withdrawal is {{amount}} USD. You currently have funds below the minimum in your project wallet.',
+                      {
+                        amount: MIN_BITCOIN_PAYOUT_USD,
+                      },
+                    )
                   : t('You have funds ready in your project wallet.')}
               </Body>
             </VStack>
@@ -69,6 +73,7 @@ export const TiaPayoutNotification = () => {
               alignSelf={{ base: 'stretch', md: 'center' }}
               ml={{ base: 0, md: 'auto' }}
               onClick={payoutRskModal.onOpen}
+              isDisabled={hasMinimumNotice}
             >
               {t('Withdraw funds')}
             </Button>
@@ -84,7 +89,7 @@ export const TiaPayoutNotification = () => {
         onCompleted={() => {
           refetchQueriesOnPayoutSuccess()
           queryProject.execute()
-          void refetchWithdrawable()
+          refetchWithdrawable().catch(() => undefined)
         }}
       />
     </>

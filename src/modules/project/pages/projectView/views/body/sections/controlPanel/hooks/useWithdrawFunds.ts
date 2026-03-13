@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
+import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
 import { QUERY_PAYOUT_ACTIVE } from '@/modules/project/graphql/query/payoutQuery.ts'
 import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
@@ -11,7 +12,6 @@ import { PayoutStatus, ProjectFundingStrategy, Satoshis } from '@/types'
 import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom.ts'
 import { useRefetchQueries } from '../../aonNotification/hooks/useRefetchQueries.ts'
 
-const MIN_WITHDRAW_USD = 10
 const ACTIVE_WITHDRAW_PAYOUT_STATUSES = [PayoutStatus.Pending, PayoutStatus.Processing]
 
 export const useWithdrawFunds = () => {
@@ -33,20 +33,24 @@ export const useWithdrawFunds = () => {
   const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
   const showWithdrawableBalance = isTiaProject && Boolean(projectRskEoa) && !isLoading
   const hasWithdrawableBalance = withdrawable !== null && withdrawable > 0n
-  const isBelowMinWithdrawThreshold = withdrawableUsd < MIN_WITHDRAW_USD
-  const showWithdraw = showWithdrawableBalance && (hasOngoingWithdraw || (hasWithdrawableBalance && !isBelowMinWithdrawThreshold))
+  const isBelowMinWithdrawThreshold = withdrawableUsd < MIN_BITCOIN_PAYOUT_USD
+  const showWithdraw =
+    showWithdrawableBalance && !isBelowMinWithdrawThreshold && (hasOngoingWithdraw || hasWithdrawableBalance)
 
   const refetchActivePayout = useCallback(() => {
-    return apolloClient.query({
-      query: QUERY_PAYOUT_ACTIVE,
-      variables: { projectId: project.id },
-      fetchPolicy: 'network-only',
-    }).then(({ data }) => {
-      const status = data?.payoutActive?.payout?.status
-      setHasOngoingWithdraw(Boolean(status && ACTIVE_WITHDRAW_PAYOUT_STATUSES.includes(status)))
-    }).catch(() => {
-      setHasOngoingWithdraw(false)
-    })
+    return apolloClient
+      .query({
+        query: QUERY_PAYOUT_ACTIVE,
+        variables: { projectId: project.id },
+        fetchPolicy: 'network-only',
+      })
+      .then(({ data }) => {
+        const status = data?.payoutActive?.payout?.status
+        setHasOngoingWithdraw(Boolean(status && ACTIVE_WITHDRAW_PAYOUT_STATUSES.includes(status)))
+      })
+      .catch(() => {
+        setHasOngoingWithdraw(false)
+      })
   }, [apolloClient, project.id])
 
   useEffect(() => {
@@ -55,15 +59,15 @@ export const useWithdrawFunds = () => {
       return
     }
 
-    void refetchActivePayout()
+    refetchActivePayout().catch(() => undefined)
   }, [isProjectOwner, isTiaProject, project.id, projectRskEoa, refetchActivePayout])
 
   const onCompleted = () => {
     setHasOngoingWithdraw(false)
     refetchQueriesOnPayoutSuccess()
     queryProject.execute()
-    void refetchWithdrawable()
-    void refetchActivePayout()
+    refetchWithdrawable().catch(() => undefined)
+    refetchActivePayout().catch(() => undefined)
   }
 
   return {

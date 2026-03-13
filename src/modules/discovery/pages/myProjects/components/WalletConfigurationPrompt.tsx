@@ -6,6 +6,7 @@ import { PiCheckCircle, PiInfo, PiWarning } from 'react-icons/pi'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
 import {
   decryptSeed,
   generateProjectKeysFromSeedHex,
@@ -214,7 +215,8 @@ export const WalletConfigurationPrompt = ({
                 </Body>
                 <Body size="sm" color="neutral1.11">
                   {t(
-                    'Payouts are no longer automatic. You will need to claim them manually to your own wallet. You can do so anytime, as long as the withdrawable balance is at least $10 worth.',
+                    'Payouts are no longer automatic. You will need to claim them manually to your own wallet. You can do so anytime, as long as the withdrawable balance is at least {{amount}} USD worth.',
+                    { amount: MIN_BITCOIN_PAYOUT_USD },
                   )}
                 </Body>
               </VStack>
