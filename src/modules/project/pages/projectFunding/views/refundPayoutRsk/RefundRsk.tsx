@@ -613,7 +613,7 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
   }
 
   // Get form objects from both hooks
-  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, refundFileAccountKeys)
+  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, refundFileAccountKeys, undefined, totalAmount)
   const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit, refundFileAccountKeys, {
     requireBitcoinAddress: !shouldResumeOnChainRefund || shouldRequestBitcoinAddressOnResume,
   })
@@ -647,8 +647,10 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
     }
   }, [
     isOpen,
+    activeLightningPayment,
     activeLightningPayment?.id,
     activeLightningInvoiceId,
+    latestOnChainPaymentDetails,
     activeOnChainPayment?.id,
     persistedOnChainAddress,
     bitcoinForm.form,
@@ -875,8 +877,8 @@ export const RefundRsk: React.FC<RefundRskProps> = ({
                 ) : selectedMethod === PayoutMethod.Lightning ? (
                   <LightningPayoutForm
                     form={lightningForm.form}
-                    satsAmount={totalAmount}
                     disablePassword={Boolean(privateKey)}
+                    lightningAddress={lightningForm.lightningAddress}
                   />
                 ) : (
                   <BitcoinPayoutForm

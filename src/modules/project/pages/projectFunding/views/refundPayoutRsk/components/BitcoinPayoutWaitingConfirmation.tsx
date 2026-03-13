@@ -7,7 +7,10 @@ import { usePaymentSwapClaimTxBroadcastMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { useRefund } from '../../fundingPayment/views/paymentOnchain/hooks/useRefund.ts'
-import { useTransactionStatusUpdate } from '../../fundingPayment/views/paymentOnchain/hooks/useTransactionStatusUpdate.ts'
+import {
+  SwapStatusUpdate,
+  useTransactionStatusUpdate,
+} from '../../fundingPayment/views/paymentOnchain/hooks/useTransactionStatusUpdate.ts'
 import { ContructingTransactionImageUrl, TransactionReadyToClaimImageUrl } from '../constant.ts'
 import { PayoutFlowSwapData } from '../types.ts'
 import { PayoutStepLayout } from './PayoutStepLayout.tsx'
@@ -46,17 +49,17 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
 
   useTransactionStatusUpdate({
     swapId,
-    handleProcessing(swapStatusUpdate) {
+    handleProcessing(swapStatusUpdate: SwapStatusUpdate) {
       if (swapStatusUpdate.transaction?.id) {
         setLockTxId?.(swapStatusUpdate.transaction.id)
       }
     },
-    handleConfirmed(swapStatusUpdate) {
+    handleConfirmed(swapStatusUpdate: SwapStatusUpdate) {
       if (swapStatusUpdate.transaction?.id) {
         setLockTxId?.(swapStatusUpdate.transaction.id)
       }
     },
-    handleClaimCoins(swapStatusUpdate) {
+    handleClaimCoins(swapStatusUpdate: SwapStatusUpdate) {
       if (swapStatusUpdate.transaction?.id) {
         setLockTxId?.(swapStatusUpdate.transaction.id)
       }

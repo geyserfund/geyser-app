@@ -599,7 +599,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         requireBitcoinAddress: !shouldResumeOnChainPayout || shouldRequestBitcoinAddressOnResume,
       }
 
-  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, undefined, keyDerivationOptions)
+  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, undefined, keyDerivationOptions, totalAmount)
   const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit, undefined, keyDerivationOptions)
 
   useEffect(() => {
@@ -622,8 +622,10 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     }
   }, [
     isOpen,
+    activeLightningPayment,
     activeLightningPayment?.id,
     activeLightningInvoiceId,
+    activeOnChainPaymentDetails,
     activeOnChainPayment?.id,
     persistedOnChainAddress,
     bitcoinForm.form,
@@ -833,7 +835,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
                     showBitcoinAddress={shouldRequestBitcoinAddressOnResume}
                   />
                 ) : selectedMethod === PayoutMethod.Lightning ? (
-                  <LightningPayoutForm form={lightningForm.form} satsAmount={totalAmount} />
+                  <LightningPayoutForm form={lightningForm.form} lightningAddress={lightningForm.lightningAddress} />
                 ) : (
                   <BitcoinPayoutForm
                     form={bitcoinForm.form}
