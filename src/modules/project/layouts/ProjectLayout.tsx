@@ -3,6 +3,7 @@ import { Outlet } from 'react-router'
 
 import { Head } from '@/config/Head'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { validateImageUrl } from '@/shared/markdown/validations/image.ts'
 import { standardPadding } from '@/shared/styles'
 
 import { FollowProjectModal } from '../components/FollowProjectModal.tsx'
@@ -19,6 +20,9 @@ export const ProjectLayout = () => {
 
   const { project, loading } = useProjectAtom()
   const { rewards, initialRewardsLoading } = useRewardsAtom()
+  const projectSeoImage = validateImageUrl(project?.thumbnailImage)
+    ? project.thumbnailImage
+    : project?.images?.find((image) => validateImageUrl(image))
 
   return (
     <Box
@@ -31,11 +35,11 @@ export const ProjectLayout = () => {
       bg="utils.pbg"
     >
       <Head
-        title={project?.title || ''}
-        description={project?.shortDescription || ''}
-        image={project?.thumbnailImage || ''}
+        title={project?.title || undefined}
+        description={project?.shortDescription || project?.description || undefined}
+        image={projectSeoImage}
         type="article"
-        url={`https://geyser.fund/project/${project?.name}`}
+        url={project?.name ? `https://geyser.fund/project/${project.name}` : undefined}
       >
         {!loading && !initialRewardsLoading && (
           <script type="application/ld+json">{buildProjectJsonLd(project, rewards)}</script>
