@@ -21,8 +21,8 @@ export const ProjectLayout = () => {
   const { project, loading } = useProjectAtom()
   const { rewards, initialRewardsLoading } = useRewardsAtom()
   const projectSeoImage = validateImageUrl(project?.thumbnailImage)
-    ? project.thumbnailImage
-    : project?.images?.find((image) => validateImageUrl(image))
+    ? project.thumbnailImage || ''
+    : project?.images?.find((image) => validateImageUrl(image)) || ''
 
   return (
     <Box
