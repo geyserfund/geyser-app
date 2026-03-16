@@ -16,6 +16,7 @@ export const AmountInput = (props: {
   handleInput?: (e: React.ChangeEvent<HTMLInputElement>) => void
   handleKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
   onToggle: () => void
+  isDisabled?: boolean
 }) => {
   const [satsPosition, setSatsPosition] = useState(MIN_WIDTH_AFTER_START)
 
@@ -51,6 +52,7 @@ export const AmountInput = (props: {
           type="text"
           onChange={props.handleInput}
           onKeyDown={props.handleKeyDown}
+          isDisabled={props.isDisabled}
           pl={isSmallSize ? 7 : props.isSatoshi ? 4 : 9}
           _placeholder={{
             color: 'neutral1.11',
@@ -74,6 +76,7 @@ export const AmountInput = (props: {
             size={isSmallSize ? 'md' : 'lg'}
             colorScheme="neutral1"
             onClick={props.onToggle}
+            isDisabled={props.isDisabled}
           >
             {props.isSatoshi ? (
               <>

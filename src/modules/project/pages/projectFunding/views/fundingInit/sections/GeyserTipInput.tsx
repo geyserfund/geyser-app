@@ -1,11 +1,13 @@
 import { Button, ButtonGroup, HStack, IconButton } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { PiQuestion } from 'react-icons/pi'
 
 import { Tooltip } from '@/components/ui/Tooltip.tsx'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
-import { H3 } from '@/shared/components/typography/Heading.tsx'
+import { isRecurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
+import { recurringFundingModes } from '@/modules/project/recurring/graphql'
+import { H3 } from '@/shared/components/typography'
 import { useGetUserIpCountryQuery } from '@/types/index.ts'
 
 import { tipsAtom } from '../../../state/tipsAtom.tsx'
@@ -16,9 +18,18 @@ const DEFAULT_TIP_PERCENT = 5
 /** GeyserTipInput component for selecting a tip percentage for Geyser */
 export const GeyserTipInput = () => {
   const { formState, setGeyserTipPercent } = useFundingFormAtom()
-  const { geyserTipPercent } = formState
+  const { geyserTipPercent, fundingMode } = formState
+  const isRecurringRenewal = useAtomValue(isRecurringContributionRenewalAtom)
+  const tooltipContent =
+    fundingMode === recurringFundingModes.recurringDonation
+      ? t(
+          'Geyser relies primarily on the generosity of Bitcoiners like you to operate our service. This tip is applied only to the first payment.',
+        )
+      : t('Geyser relies primarily on the generosity of Bitcoiners like you to operate our service.')
 
   const [tipOptions, setTipOptions] = useAtom(tipsAtom)
+
+  if (isRecurringRenewal) return null
 
   useGetUserIpCountryQuery({
     onCompleted(data) {
@@ -42,11 +53,9 @@ export const GeyserTipInput = () => {
     <HStack spacing={4} align="center" justify="space-between" w="full" flexWrap="wrap">
       <HStack>
         <H3>{t('Tip Geyser Services')}</H3>
-        <Tooltip
-          content={t('Geyser relies primarily on the generosity of Bitcoiners like you to operate our service.')}
-        >
+        <Tooltip content={tooltipContent}>
           <IconButton
-            aria-label={t('Geyser relies primarily on the generosity of Bitcoiners like you to operate our service.')}
+            aria-label={tooltipContent}
             icon={<PiQuestion size={16} />}
             size="xs"
             variant="ghost"
@@ -61,7 +70,7 @@ export const GeyserTipInput = () => {
             onClick={() => setGeyserTipPercent(percent)}
             variant={'soft'}
             colorScheme={geyserTipPercent === percent ? 'primary1' : 'neutral1'}
-            w={{ base: '50px', sm: '60px' }} // Fixed width for buttons
+            w={{ base: '50px', sm: '60px' }}
           >
             {percent}%
           </Button>

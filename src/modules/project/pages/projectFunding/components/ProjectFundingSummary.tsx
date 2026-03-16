@@ -18,10 +18,10 @@ import {
 } from '@/modules/project/funding/state/fundingFormAtom.ts'
 import { shippingCountryAtom } from '@/modules/project/funding/state/shippingAddressAtom.ts'
 import { useGoalsAtom, useRewardsAtom } from '@/modules/project/hooks/useProjectAtom'
+import { recurringFundingModes } from '@/modules/project/recurring/graphql'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
 import { Body, H2 } from '@/shared/components/typography'
-import { SubscriptionCurrencyType } from '@/types/generated/graphql'
 
 import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../../../utils'
 import { LaunchpadSummary, NonProfitSummary, TAndCs } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
@@ -135,25 +135,29 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
           <TAndCs disableDesktop={true} />
         </VStack>
 
-        {formState.donationAmount && formState.donationAmount > 0 && (
-          <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Donation')}: `}</Body>
-            <Body size={{ base: 'sm', lg: 'md' }}>
-              {`${commaFormatted(formState.donationAmount)} `}
-              <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
-                sats
+        {formState.donationAmount &&
+          formState.donationAmount > 0 &&
+          formState.fundingMode !== recurringFundingModes.membership && (
+            <HStack>
+              <Body size={{ base: 'sm', lg: 'md' }} light>{`${t(
+                formState.fundingMode === recurringFundingModes.recurringDonation ? 'Recurring donation' : 'Donation',
+              )}: `}</Body>
+              <Body size={{ base: 'sm', lg: 'md' }}>
+                {`${commaFormatted(formState.donationAmount)} `}
+                <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
+                  sats
+                </Body>
               </Body>
-            </Body>
-          </HStack>
-        )}
+            </HStack>
+          )}
 
-        {formState.subscription && formState.subscription.cost > 0 && (
+        {formState.subscription && formState.subscription.subscriptionId && (
           <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Subscription')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Membership')}: `}</Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
-              {`${centsToDollars(formState.subscription.cost)}`}
+              {`${centsToDollars(formState.subscription.amountUsdCent)}`}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
-                {`${formState.subscription.currency === SubscriptionCurrencyType.Usdcent ? '$' : ' sats'} / ${
+                {` USD / ${commaFormatted(formState.subscription.amountBtcSat)} sats / ${
                   PaymentIntervalLabelMap[formState.subscription.interval]
                 }`}
               </Body>
@@ -220,7 +224,13 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
         )}
         {tip.sats > 0 && (
           <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Geyser tip')}: `}</Body>
+            <Body size={{ base: 'sm', lg: 'md' }} light>
+              {`${t(
+                formState.fundingMode === recurringFundingModes.recurringDonation
+                  ? 'Geyser tip (first payment only)'
+                  : 'Geyser tip',
+              )}: `}
+            </Body>
             <Body size={{ base: 'sm', lg: 'md' }}>
               {`${commaFormatted(tip.sats)} `}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>

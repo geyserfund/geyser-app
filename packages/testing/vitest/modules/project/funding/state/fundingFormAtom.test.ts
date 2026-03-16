@@ -587,11 +587,11 @@ describe('fundingFormAtom Tests', () => {
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
       const expectedSubCostUsdCent = 500
-      const expectedSubCostSats = Math.round((expectedSubCostUsdCent / 100 / mockUsdRate) * SATOSHIS_IN_BTC)
+      const expectedSubCostSats = 20000
 
       expect(state.subscription.subscriptionId).toBe(201)
-      expect(state.subscription.cost).toBe(expectedSubCostUsdCent)
-      expect(state.subscription.currency).toBe('USDCENT')
+      expect(state.subscription.amountUsdCent).toBe(expectedSubCostUsdCent)
+      expect(state.subscription.amountBtcSat).toBe(expectedSubCostSats)
       expect(state.subscription.interval).toBe(UserSubscriptionInterval.Monthly)
       expect(state.subscription.name).toBe('Monthly USD Supporter')
       expect(derivedSubCosts).toEqual({ sats: expectedSubCostSats, usdCents: expectedSubCostUsdCent, base: 500 })
@@ -607,16 +607,17 @@ describe('fundingFormAtom Tests', () => {
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
+      const expectedSubCostUsdCent = 2500
       const expectedSubCostSats = 100000
 
       expect(state.subscription.subscriptionId).toBe(202)
-      expect(state.subscription.cost).toBe(expectedSubCostSats)
-      expect(state.subscription.currency).toBe('BTCSAT')
+      expect(state.subscription.amountUsdCent).toBe(expectedSubCostUsdCent)
+      expect(state.subscription.amountBtcSat).toBe(expectedSubCostSats)
       expect(state.subscription.interval).toBe(UserSubscriptionInterval.Yearly)
       expect(state.subscription.name).toBe('Annual SATS Backer')
-      expect(derivedSubCosts).toEqual({ sats: 0, usdCents: 0, base: 100000 })
-      expect(totalSats).toBe(state.donationAmount + tip.sats)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + tip.usdCents)
+      expect(derivedSubCosts).toEqual({ sats: expectedSubCostSats, usdCents: expectedSubCostUsdCent, base: 2500 })
+      expect(totalSats).toBe(state.donationAmount + derivedSubCosts.sats + tip.sats)
+      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedSubCosts.usdCents + tip.usdCents)
     })
 
     it('updateFundingFormSubscriptionAtom should overwrite previous subscription', () => {
@@ -628,14 +629,15 @@ describe('fundingFormAtom Tests', () => {
       const totalSats = store.get(totalAmountSatsAtom)
       const totalUsdCent = store.get(totalAmountUsdCentAtom)
 
+      const expectedSubCostUsdCent = 2500
       const expectedSubCostSats = 100000
 
       expect(state.subscription.subscriptionId).toBe(202)
-      expect(state.subscription.cost).toBe(expectedSubCostSats)
-      expect(state.subscription.currency).toBe('BTCSAT')
-      expect(derivedSubCosts).toEqual({ sats: 0, usdCents: 0, base: 100000 })
-      expect(totalSats).toBe(state.donationAmount + tip.sats)
-      expect(totalUsdCent).toBe(state.donationAmountUsdCent + tip.usdCents)
+      expect(state.subscription.amountUsdCent).toBe(expectedSubCostUsdCent)
+      expect(state.subscription.amountBtcSat).toBe(expectedSubCostSats)
+      expect(derivedSubCosts).toEqual({ sats: expectedSubCostSats, usdCents: expectedSubCostUsdCent, base: 2500 })
+      expect(totalSats).toBe(state.donationAmount + derivedSubCosts.sats + tip.sats)
+      expect(totalUsdCent).toBe(state.donationAmountUsdCent + derivedSubCosts.usdCents + tip.usdCents)
     })
 
     it('updateFundingFormSubscriptionAtom totals reflect subscription cost over reward cost', () => {
