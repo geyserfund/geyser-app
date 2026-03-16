@@ -1,27 +1,45 @@
-import { Button, HStack, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { KeyboardEvent, useRef } from 'react'
+import { PiHeartFill } from 'react-icons/pi'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { isRecurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
 import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom.ts'
+import { recurringFundingModes, recurringIntervals } from '@/modules/project/recurring/graphql'
 import { AmountInput } from '@/shared/components/form/AmountInput.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H1 } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 
 import { commaFormatted } from '../../../../../../../utils'
+import {
+  hasFiatPaymentMethodAtom,
+  hasStripePaymentMethodAtom,
+  intendedPaymentMethodAtom,
+  PaymentMethods,
+} from '../../fundingPayment/state/paymentMethodAtom.ts'
 
 export const MIN_WIDTH_AFTER_START = 60
 const PRESET_AMOUNTS = [100, 210, 500, 750, 1000]
+const highlightedPresetAmount = PRESET_AMOUNTS[1] ?? 210
+const finalPresetAmount = PRESET_AMOUNTS[PRESET_AMOUNTS.length - 1] ?? 1000
 export const DonationInput = () => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const {
-    formState: { donationAmount, donationAmountUsdCent },
+    canUseRecurringFunding,
+    formState: { donationAmount, donationAmountUsdCent, fundingMode },
     setState,
   } = useFundingFormAtom()
 
   const { hasRewards } = useRewardsAtom()
+  const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
+  const isRecurringRenewal = useAtomValue(isRecurringContributionRenewalAtom)
+  const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
+  const hasStripePaymentMethod = useAtomValue(hasStripePaymentMethodAtom)
+  const setIntendedPaymentMethod = useSetAtom(intendedPaymentMethodAtom)
 
   const satoshi = donationAmount
   const setSatoshi = (val: number) => {
@@ -33,8 +51,24 @@ export const DonationInput = () => {
     setState('donationAmountUsdCent', val * 100)
   }
 
-  const { isOpen: isSatoshi, onToggle } = useDisclosure({ defaultIsOpen: false })
+  const isRecurringMode = fundingMode === recurringFundingModes.recurringDonation
+  const prefersUsd = intendedPaymentMethod === PaymentMethods.fiatSwap || !intendedPaymentMethod
+  const { isOpen: isSatoshi, onToggle } = useDisclosure({ defaultIsOpen: !prefersUsd && isRecurringMode })
   const isDollar = !isSatoshi
+  const selectedOuterGradient = `linear(to-r, ${lightModeColors.primary1[4]}, ${lightModeColors.primary1[2]})`
+  const selectedInnerGradient = 'linear(to-br, rgba(233, 255, 251, 0.98), rgba(183, 255, 242, 0.58))'
+  const selectedHoverGradient = 'linear(to-br, rgba(233, 255, 251, 0.98), rgba(183, 255, 242, 0.7))'
+  const recurringHelperCopy = !hasFiatPaymentMethod
+    ? t('Bitcoin recurring payments are manual. We will email you when the next payment is due.')
+    : intendedPaymentMethod === PaymentMethods.fiatSwap
+    ? hasStripePaymentMethod
+      ? t('Card payments are billed automatically in USD each cycle.')
+      : t('Card or bank transfer recurring payments are fixed in USD. We will email you when the next payment is due.')
+    : intendedPaymentMethod
+    ? t('Bitcoin recurring payments are manual. We will email you when the next payment is due.')
+    : hasStripePaymentMethod
+    ? t('You can pay automatically by card in USD, or choose Bitcoin later and renew from reminder emails.')
+    : null
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.replaceAll(',', '')
@@ -65,17 +99,95 @@ export const DonationInput = () => {
 
   return (
     <>
-      {hasRewards && (
+      {hasRewards && fundingMode === recurringFundingModes.oneTime && (
         <H1 size="3xl" bold alignSelf="start">
           {t('Select a product')}
         </H1>
       )}
       <CardLayout w="full" spacing={4} alignItems="stretch">
         <H1 size="xl" bold alignSelf="start">
-          {hasRewards ? t('Contribute without a product') : t('Make a donation')}
+          {hasRewards && fundingMode === recurringFundingModes.oneTime
+            ? t('Contribute without a product')
+            : t('Make a donation')}
         </H1>
 
-        {!hasRewards && (
+        {canUseRecurringFunding && (
+          <VStack alignItems="stretch" spacing={2}>
+            <HStack spacing={3} alignItems="stretch">
+              <Box
+                flex={1}
+                p="1px"
+                borderRadius="2xl"
+                bgGradient={!isRecurringMode ? selectedOuterGradient : `linear(to-r, ${lightModeColors.neutral1[4]}, ${lightModeColors.neutral1[3]})`}
+              >
+                <Button
+                  w="full"
+                  h="calc(3.5rem - 2px)"
+                  borderRadius="calc(var(--chakra-radii-2xl) - 1px)"
+                  variant="ghost"
+                  bgGradient={!isRecurringMode ? selectedInnerGradient : `linear(to-br, #FFFFFF, ${lightModeColors.neutral1[1]})`}
+                  color={!isRecurringMode ? lightModeColors.primary1[11] : lightModeColors.neutral1[11]}
+                  boxShadow={!isRecurringMode ? 'sm' : 'none'}
+                  _hover={{
+                    bgGradient: !isRecurringMode
+                      ? selectedHoverGradient
+                      : `linear(to-br, #FFFFFF, ${lightModeColors.neutral1[2]})`,
+                  }}
+                  _active={{
+                    bgGradient: !isRecurringMode
+                      ? selectedHoverGradient
+                      : `linear(to-br, ${lightModeColors.neutral1[2]}, ${lightModeColors.neutral1[3]})`,
+                  }}
+                  isDisabled={isRecurringRenewal}
+                  onClick={() => {
+                    setState('fundingMode', recurringFundingModes.oneTime)
+                    setIntendedPaymentMethod(undefined)
+                  }}
+                >
+                  {t('Give once')}
+                </Button>
+              </Box>
+
+              <Box
+                flex={1}
+                p="1px"
+                borderRadius="2xl"
+                bgGradient={isRecurringMode ? selectedOuterGradient : `linear(to-r, ${lightModeColors.neutral1[4]}, ${lightModeColors.neutral1[3]})`}
+              >
+                <Button
+                  w="full"
+                  h="calc(3.5rem - 2px)"
+                  borderRadius="calc(var(--chakra-radii-2xl) - 1px)"
+                  variant="ghost"
+                  leftIcon={<Icon as={PiHeartFill} color={lightModeColors.secondary.green} boxSize={4} />}
+                  bgGradient={isRecurringMode ? selectedInnerGradient : `linear(to-br, #FFFFFF, ${lightModeColors.neutral1[1]})`}
+                  color={isRecurringMode ? lightModeColors.primary1[11] : lightModeColors.neutral1[11]}
+                  boxShadow={isRecurringMode ? 'sm' : 'none'}
+                  _hover={{
+                    bgGradient: isRecurringMode
+                      ? selectedHoverGradient
+                      : `linear(to-br, #FFFFFF, ${lightModeColors.neutral1[2]})`,
+                  }}
+                  _active={{
+                    bgGradient: isRecurringMode
+                      ? selectedHoverGradient
+                      : `linear(to-br, ${lightModeColors.neutral1[2]}, ${lightModeColors.neutral1[3]})`,
+                  }}
+                  isDisabled={isRecurringRenewal}
+                  onClick={() => {
+                    setState('fundingMode', recurringFundingModes.recurringDonation)
+                    setState('recurringInterval', recurringIntervals.monthly)
+                    setIntendedPaymentMethod(undefined)
+                  }}
+                >
+                  {t('Make monthly')}
+                </Button>
+              </Box>
+            </HStack>
+          </VStack>
+        )}
+
+        {(!hasRewards || isRecurringMode) && (
           <HStack w="full" justifyContent="space-between" flexWrap="wrap" spacing={2} alignItems="flex-start">
             {PRESET_AMOUNTS.slice(0, 1).map((amount) => (
               <Button
@@ -83,6 +195,7 @@ export const DonationInput = () => {
                 size="md"
                 variant="outline"
                 colorScheme="neutral.9"
+                isDisabled={isRecurringRenewal}
                 onClick={() => handleDefaultAmountButtonClick(amount)}
                 flexGrow={1}
                 minWidth="80px"
@@ -97,11 +210,12 @@ export const DonationInput = () => {
                 size="md"
                 variant="outline"
                 colorScheme="neutral.9"
-                onClick={() => handleDefaultAmountButtonClick(PRESET_AMOUNTS[1]!)}
+                isDisabled={isRecurringRenewal}
+                onClick={() => handleDefaultAmountButtonClick(highlightedPresetAmount)}
                 w="full"
                 zIndex={1}
               >
-                {`$${commaFormatted(PRESET_AMOUNTS[1])}`}
+                {`$${commaFormatted(highlightedPresetAmount)}`}
               </Button>
               <Body
                 fontSize="8px"
@@ -128,6 +242,7 @@ export const DonationInput = () => {
                 size="md"
                 variant="outline"
                 colorScheme="neutral.9"
+                isDisabled={isRecurringRenewal}
                 onClick={() => handleDefaultAmountButtonClick(amount)}
                 flexGrow={1}
                 minWidth="80px"
@@ -137,16 +252,17 @@ export const DonationInput = () => {
             ))}
 
             <Button
-              key={PRESET_AMOUNTS.at(-1)}
+              key={finalPresetAmount}
               size="md"
               variant="outline"
               colorScheme="neutral.9"
-              onClick={() => handleDefaultAmountButtonClick(PRESET_AMOUNTS.at(-1)!)}
+              isDisabled={isRecurringRenewal}
+              onClick={() => handleDefaultAmountButtonClick(finalPresetAmount)}
               flexGrow={1}
               minWidth="80px"
               display={{ base: 'none', md: 'inline-flex' }}
             >
-              {`$${commaFormatted(PRESET_AMOUNTS.at(-1))}`}
+              {`$${commaFormatted(finalPresetAmount)}`}
             </Button>
           </HStack>
         )}
@@ -159,7 +275,16 @@ export const DonationInput = () => {
           handleKeyDown={handleKeyDown}
           onToggle={onToggle}
           size={hasRewards ? 'md' : 'lg'}
+          isDisabled={isRecurringRenewal}
         />
+
+        {isRecurringMode && recurringHelperCopy && (
+          <VStack alignItems="start" spacing={2}>
+            <Body size="sm" light>
+              {recurringHelperCopy}
+            </Body>
+          </VStack>
+        )}
 
         {/* <HStack w="full" position="relative">
         <InputGroup>

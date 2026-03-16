@@ -5,8 +5,14 @@ import { useNavigate } from 'react-router'
 
 import { useFundingAPI } from '@/modules/project/funding/hooks/useFundingAPI'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import {
+  ProjectSubscriptionStartMutation,
+  RecurringContributionRenewalCreateMutation,
+  RecurringDonationCreateMutation,
+} from '@/modules/project/recurring/graphql'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { getPath } from '@/shared/constants'
+import { ContributionCreateMutation } from '@/types'
 
 import { QRCodeSizeMap } from '../../components/QRCodeComponent'
 import {
@@ -36,26 +42,38 @@ export const PaymentLoadingContribution = ({
 
   const data = useRef(false)
 
+  const getCheckoutPayload = (
+    response:
+      | ContributionCreateMutation
+      | RecurringDonationCreateMutation
+      | ProjectSubscriptionStartMutation
+      | RecurringContributionRenewalCreateMutation,
+  ) => {
+    if ('contributionCreate' in response) {
+      return response.contributionCreate
+    }
+
+    if ('recurringDonationCreate' in response) {
+      return response.recurringDonationCreate
+    }
+
+    if ('recurringContributionRenewalCreate' in response) {
+      return response.recurringContributionRenewalCreate
+    }
+
+    return response.projectSubscriptionStart
+  }
+
   useEffect(() => {
     if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid && !data.current) {
       data.current = true
       requestFundingFromContext((data) => {
         const {
-          contributionCreate: {
-            contribution: { uuid: contributionId, isSubscription },
-            payments,
-          },
-        } = data
+          contribution: { uuid: contributionId },
+          payments,
+        } = getCheckoutPayload(data)
 
-        if (contributionId && isSubscription) {
-          navigate(
-            {
-              pathname: getPath('fundingSubscription', project.name),
-              search: `?transactionId=${contributionId}`,
-            },
-            { replace: true },
-          )
-        } else if (contributionId) {
+        if (contributionId) {
           if (onComplete) {
             onComplete(contributionId, Boolean(payments.fiat?.stripeClientSecret))
           } else {
@@ -86,6 +104,7 @@ export const PaymentLoadingContribution = ({
       })
     }
     // NOTE: adding `requestFundingFromContext` to dependencies causes rerender loops, do not add until resolved
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFundingInputAmountValid, isFundingUserInfoValid, navigate, project.name])
 
   useEffect(() => {

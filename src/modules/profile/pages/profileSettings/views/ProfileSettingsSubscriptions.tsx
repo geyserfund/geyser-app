@@ -1,316 +1,130 @@
-import {
-  Button,
-  Flex,
-  HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useToast,
-} from '@chakra-ui/react'
-import { Box, Card, CardBody, Stack } from '@chakra-ui/react'
+import { useQuery } from '@apollo/client'
+import { Box, Card, CardBody, HStack, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useState } from 'react'
 
-import { useAuthContext } from '@/context'
+import {
+  QUERY_RECURRING_CONTRIBUTIONS,
+  RecurringContribution,
+  RecurringContributionsQuery,
+} from '@/modules/project/recurring/graphql'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body } from '@/shared/components/typography'
-import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import {
-  useCancelUserSubscriptionMutation,
-  UserSubscriptionFragment,
-  UserSubscriptionInterval,
-  UserSubscriptionStatus,
-  useUserSubscriptionsQuery,
-} from '@/types/generated/graphql'
+import { centsToDollars, commaFormatted } from '@/utils'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout.tsx'
 
-const FormattedSubscriptionInterval: Record<UserSubscriptionInterval, string> = {
-  [UserSubscriptionInterval.Monthly]: 'Monthly',
-  [UserSubscriptionInterval.Yearly]: 'Yearly',
-  [UserSubscriptionInterval.Quarterly]: 'Quarterly',
-  [UserSubscriptionInterval.Weekly]: 'Weekly',
+const intervalLabel: Record<string, string> = {
+  MONTHLY: 'Monthly',
+  YEARLY: 'Yearly',
 }
 
-const SubscriptionDetail = ({ label, value }: { label: string; value: string }) => (
-  <HStack>
+const statusTitle: Record<string, string> = {
+  ACTIVE: 'Active recurring payments',
+  PAUSED: 'Paused recurring payments',
+  CANCELED: 'Canceled recurring payments',
+  PENDING: 'Pending recurring payments',
+}
+
+const RecurringDetail = ({ label, value }: { label: string; value: string }) => (
+  <HStack flexWrap="wrap">
     <Body color="neutralAlpha.9">{label}</Body>
     <Body color="black">{value}</Body>
   </HStack>
 )
 
-interface ActiveSubscriptionCardProps {
-  userSubscription: UserSubscriptionFragment
-  handleCancelUserSubscription: (id: string) => void
+const formatAmount = (item: RecurringContribution) => {
+  if (item.currency.toUpperCase().includes('USD')) {
+    return `${centsToDollars(item.amount)} USD`
+  }
+
+  return `${commaFormatted(item.amount)} sats`
 }
 
-const ActiveSubscriptionCard = (props: ActiveSubscriptionCardProps) => {
-  const { userSubscription, handleCancelUserSubscription } = props
-  const { formatAmount } = useCurrencyFormatter()
-  const [isOpen, setIsOpen] = useState(false)
+const railLabel: Record<string, string> = {
+  STRIPE: 'Card',
+  BANXA: 'Card / Bank Transfer',
+  BITCOIN: 'Bitcoin',
+}
 
-  const formattedStartDate = new Date(Number(userSubscription.startDate)).toLocaleDateString()
-  const formattedNextBillingDate = new Date(Number(userSubscription.nextBillingDate)).toLocaleDateString()
-  const formattedAmount = formatAmount(
-    userSubscription.projectSubscriptionPlan.cost,
-    userSubscription.projectSubscriptionPlan.currency,
-  )
-  const formattedInterval = FormattedSubscriptionInterval[userSubscription.projectSubscriptionPlan.interval]
+const RecurringContributionCard = ({ item }: { item: RecurringContribution }) => {
+  const title = item.project?.title || t('Recurring donation')
 
   return (
     <Card variant="outline" borderRadius="xl" borderColor="neutralAlpha.6">
       <CardBody>
-        <Flex justify="space-between" align="center" direction={{ base: 'column', md: 'row' }}>
-          <Box width="100%">
-            <Body size="lg" mb={2}>
-              {userSubscription.projectSubscriptionPlan.name}
+        <VStack alignItems="start" spacing={3}>
+          <Body size="lg">{title}</Body>
+          <Stack direction={{ base: 'column', md: 'row' }} spacing={4} color="neutralAlpha.11">
+            <RecurringDetail label={t('Status:')} value={item.status.toLowerCase()} />
+            <RecurringDetail label={t('Amount:')} value={formatAmount(item)} />
+            <RecurringDetail label={t('Interval:')} value={intervalLabel[item.interval] || item.interval} />
+            <RecurringDetail label={t('Rail:')} value={t(railLabel[item.paymentMethod] || item.paymentMethod)} />
+            {item.nextBillingAt && (
+              <RecurringDetail label={t('Next billing:')} value={new Date(item.nextBillingAt).toLocaleDateString()} />
+            )}
+          </Stack>
+          {item.lastChargeFailureMessage && (
+            <Body size="sm" color="secondary.red1">
+              {item.lastChargeFailureMessage}
             </Body>
-            <Stack
-              direction={{ base: 'column', md: 'row' }}
-              spacing={4}
-              color="neutralAlpha.11"
-              width="100%"
-              align={{ base: 'stretch', md: 'center' }}
-              justify="space-between"
-            >
-              <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
-                <SubscriptionDetail label="Started:" value={formattedStartDate} />
-                <SubscriptionDetail label="Next Payment:" value={formattedNextBillingDate} />
-                <SubscriptionDetail label="Amount:" value={formattedAmount} />
-                <SubscriptionDetail label="Interval:" value={formattedInterval} />
-              </Stack>
-              <Button variant="outline" colorScheme="neutral1" size="sm" onClick={() => setIsOpen(true)}>
-                {t('Cancel')}
-              </Button>
-            </Stack>
-          </Box>
-        </Flex>
-      </CardBody>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} isCentered>
-        <ModalOverlay />
-        <ModalContent borderRadius={12} maxW="600px">
-          <ModalHeader fontSize="md">Cancel subscription</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody w="full" fontSize="sm">
-            <Body>
-              {` ${t('Are you sure you want to cancel your subscription to')} ${
-                userSubscription.projectSubscriptionPlan.name
-              } ?`}
-            </Body>
-          </ModalBody>
-
-          <ModalFooter gap={3} w="full">
-            <Button size="lg" w="full" variant="soft" colorScheme="neutral1" onClick={() => setIsOpen(false)}>
-              {t('Nevermind')}
-            </Button>
-            <Button
-              w="full"
-              size="lg"
-              colorScheme="primary1"
-              onClick={() => {
-                handleCancelUserSubscription(userSubscription.id)
-                setIsOpen(false)
-              }}
-            >
-              {t('Yes, cancel the subscription')}
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </Card>
-  )
-}
-
-const CanceledSubscriptionCard = (userSubscription: UserSubscriptionFragment) => {
-  const { formatAmount } = useCurrencyFormatter()
-  const formattedCanceledDate = new Date(Number(userSubscription.canceledAt)).toLocaleDateString()
-  const formattedStartDate = new Date(Number(userSubscription.startDate)).toLocaleDateString()
-  const formattedAmount = formatAmount(
-    userSubscription.projectSubscriptionPlan.cost,
-    userSubscription.projectSubscriptionPlan.currency,
-  )
-  const formattedInterval = FormattedSubscriptionInterval[userSubscription.projectSubscriptionPlan.interval]
-
-  return (
-    <Card variant="outline" borderRadius="xl" borderColor="neutralAlpha.6">
-      <CardBody>
-        <Flex justify="space-between" align="center" direction={{ base: 'column', md: 'row' }}>
-          <Box width="100%">
-            <Body size="lg" mb={2}>
-              {userSubscription.projectSubscriptionPlan.name}
-            </Body>
-            <Stack
-              direction={{ base: 'column', md: 'row' }}
-              spacing={4}
-              color="neutralAlpha.11"
-              width="100%"
-              align={{ base: 'stretch', md: 'center' }}
-              justify="space-between"
-            >
-              <Stack direction={{ base: 'column', md: 'row' }} spacing={4}>
-                <SubscriptionDetail label="Started:" value={formattedStartDate} />
-                <SubscriptionDetail label="Ended:" value={formattedCanceledDate} />
-                <SubscriptionDetail label="Amount:" value={formattedAmount} />
-                <SubscriptionDetail label="Interval:" value={formattedInterval} />
-              </Stack>
-              <Button variant="outline" colorScheme="neutral1" size="sm" onClick={() => {}}>
-                {t('Re-new')}
-              </Button>
-            </Stack>
-          </Box>
-        </Flex>
+          )}
+        </VStack>
       </CardBody>
     </Card>
   )
 }
 
 export const ProfileSettingsSubscriptions = () => {
-  const { user } = useAuthContext()
-
-  const { data, loading } = useUserSubscriptionsQuery({
+  const { data, loading } = useQuery<RecurringContributionsQuery>(QUERY_RECURRING_CONTRIBUTIONS, {
     fetchPolicy: 'cache-and-network',
-    variables: {
-      input: {
-        where: {
-          userId: user?.id,
-        },
-      },
-    },
-  })
-  const toast = useToast()
-  const [cancelUserSubscription] = useCancelUserSubscriptionMutation({
-    onError(error) {
-      toast({
-        title: t('Error canceling subscription'),
-        description: error.message,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      })
-    },
-    onCompleted() {
-      toast({
-        title: t('Subscription canceled'),
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
-    },
   })
 
-  if (!user) return null
-
-  let activeSubscriptions =
-    data?.userSubscriptions.filter(
-      (subscription: UserSubscriptionFragment) => subscription.status === UserSubscriptionStatus.Active,
-    ) || []
-  const canceledSubscriptions =
-    data?.userSubscriptions.filter(
-      (subscription: UserSubscriptionFragment) => subscription.status === UserSubscriptionStatus.Canceled,
-    ) || []
-
-  const handleCancelUserSubscription = async (id: string) => {
-    const cancelSubscriptionResult = await cancelUserSubscription({ variables: { id } })
-    activeSubscriptions = activeSubscriptions?.filter(
-      (subscription: UserSubscriptionFragment) => subscription.id !== id,
-    )
-
-    if (cancelSubscriptionResult.data?.userSubscriptionCancel) {
-      canceledSubscriptions?.push(cancelSubscriptionResult.data.userSubscriptionCancel)
-    }
-  }
+  const recurringContributions = (data?.me?.recurringContributions ?? []).filter((item) => item.kind === 'DONATION')
+  const grouped = recurringContributions.reduce<Record<string, RecurringContribution[]>>((accumulator, item) => {
+    const bucket = accumulator[item.status] || []
+    bucket.push(item)
+    accumulator[item.status] = bucket
+    return accumulator
+  }, {})
 
   return (
-    <ProfileSettingsLayout desktopTitle={t('Subscriptions')}>
+    <ProfileSettingsLayout desktopTitle={t('Recurring Payments')}>
       <Stack spacing={8} px={{ base: 0, lg: 6 }} w="full">
         <Body size="sm" color="neutralAlpha.11" regular>
-          {t('View, adjust, and manage all your subscriptions.')}
+          {t('View the recurring donations you have started across Geyser.')}
         </Body>
 
         {loading ? (
           <Stack spacing={8} m={8} w="full">
-            <Box>
-              <SkeletonLayout height="40px" width="300px" mb={2} />
-              <SkeletonLayout height="20px" width="400px" />
-            </Box>
-
-            <Stack spacing={8}>
-              <Box>
+            {[1, 2].map((section) => (
+              <Box key={section}>
                 <SkeletonLayout height="24px" width="200px" mb={2} />
                 <SkeletonLayout height="120px" borderRadius="xl" />
               </Box>
-
-              <Box>
-                <SkeletonLayout height="24px" width="200px" mb={2} />
-                <SkeletonLayout height="120px" borderRadius="xl" />
-              </Box>
-            </Stack>
+            ))}
           </Stack>
+        ) : recurringContributions.length === 0 ? (
+          <Card variant="outline" borderRadius="xl" borderColor="neutralAlpha.6">
+            <CardBody>
+              <Body size="sm" light>
+                {t('You do not have any recurring payments yet.')}
+              </Body>
+            </CardBody>
+          </Card>
         ) : (
           <Stack spacing={8}>
-            <Box>
-              <Body size="md" mb={2}>
-                {t('Active subscriptions')}
-              </Body>
-              {activeSubscriptions?.length && activeSubscriptions?.length > 0 ? (
+            {Object.entries(grouped).map(([status, items]) => (
+              <Box key={status}>
+                <Body size="md" mb={2}>
+                  {t(statusTitle[status] || status)}
+                </Body>
                 <Stack spacing={4}>
-                  {activeSubscriptions.map((subscription: UserSubscriptionFragment) => (
-                    <ActiveSubscriptionCard
-                      key={subscription.id}
-                      userSubscription={subscription}
-                      handleCancelUserSubscription={handleCancelUserSubscription}
-                    />
+                  {items.map((item) => (
+                    <RecurringContributionCard key={item.id} item={item} />
                   ))}
                 </Stack>
-              ) : (
-                <Card variant="outline" bg="neutralAlpha.1" borderColor="neutralAlpha.6" h="120px" borderRadius="xl">
-                  <CardBody>
-                    <Body
-                      color="neutralAlpha.11"
-                      textAlign="center"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      h="full"
-                    >
-                      {t("You don't have any active subscriptions.")}
-                    </Body>
-                  </CardBody>
-                </Card>
-              )}
-            </Box>
-
-            <Box>
-              <Body size="md" mb={2}>
-                {t('Canceled subscriptions')}
-              </Body>
-              {canceledSubscriptions?.length && canceledSubscriptions?.length > 0 ? (
-                <Stack spacing={4}>
-                  {canceledSubscriptions.map((subscription: UserSubscriptionFragment) => (
-                    <CanceledSubscriptionCard key={subscription.id} {...subscription} />
-                  ))}
-                </Stack>
-              ) : (
-                <Card variant="outline" bg="neutralAlpha.3" borderColor="neutralAlpha.6" h="120px" borderRadius="xl">
-                  <CardBody>
-                    <Body
-                      color="neutralAlpha.11"
-                      textAlign="center"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      h="full"
-                    >
-                      {t("You don't have any paused subscriptions.")}
-                    </Body>
-                  </CardBody>
-                </Card>
-              )}
-            </Box>
+              </Box>
+            ))}
           </Stack>
         )}
       </Stack>

@@ -1,8 +1,11 @@
-// import { useAtomValue } from 'jotai'
-
+import { useEffect } from 'react'
+import { useAtomValue } from 'jotai'
 import { useLocation, useNavigate } from 'react-router'
 
+import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { recurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import { recurringFundingModes, recurringIntervals } from '@/modules/project/recurring/graphql'
 // import { hasProjectFundingLimitReachedAtom } from '@/modules/project/state/projectVerificationAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
 
@@ -11,12 +14,13 @@ import { FundingLayout } from '../../layouts/FundingLayout'
 import { DonationInput } from './sections/DonationInput'
 import { FundingInitRewards } from './sections/FundingInitRewards'
 import { FundingInitBottomContent, FundingInitSideContent } from './sections/FundingInitSideContent'
-import { FundingSubscription } from './sections/FundingSubscription'
 import { GeyserTipInput } from './sections/GeyserTipInput.tsx'
 
 /** FundingInit is the first page of funding flow, consisting of donation input and rewards selection or subscription selection */
 export const FundingInit = () => {
   const { loading, project } = useProjectAtom()
+  const { fundingMode, setState } = useFundingFormAtom()
+  const recurringContributionRenewal = useAtomValue(recurringContributionRenewalAtom)
   const navigate = useNavigate()
 
   // const hasFundingLimitReached = useAtomValue(hasProjectFundingLimitReachedAtom)
@@ -24,7 +28,21 @@ export const FundingInit = () => {
 
   const location = useLocation()
   const queryParams = new URLSearchParams(location.search)
-  const isSub = queryParams.get('isSub') === 'true'
+  const mode = queryParams.get('mode')
+
+  useEffect(() => {
+    if (recurringContributionRenewal) {
+      return
+    }
+
+    if (mode === 'recurring') {
+      setState('fundingMode', recurringFundingModes.recurringDonation)
+      setState('recurringInterval', recurringIntervals.monthly)
+      return
+    }
+
+    setState('fundingMode', recurringFundingModes.oneTime)
+  }, [mode, recurringContributionRenewal, setState])
 
   // useEffect(() => {
   //   if (hasFundingLimitReached) {
@@ -51,18 +69,17 @@ export const FundingInit = () => {
         onClick: () => navigate(getPath('project', project.name)),
       }}
     >
-      {isSub ? (
-        <>
-          <FundingSubscription />
-        </>
-      ) : (
-        <>
-          <DonationInput />
+      <>
+        <DonationInput />
 
-          <GeyserTipInput />
-          <FundingInitRewards />
-        </>
-      )}
+        {!recurringContributionRenewal && <GeyserTipInput />}
+
+        {fundingMode === recurringFundingModes.oneTime && (
+          <>
+            <FundingInitRewards />
+          </>
+        )}
+      </>
     </FundingLayout>
   )
 }
