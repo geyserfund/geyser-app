@@ -7,11 +7,10 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state/selectedGoalAtom'
-import { useSubscriptionBuy } from '@/modules/project/pages/projectView/hooks/useSubscriptionBuy'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
-import { SubscriptionCurrencyType, UserSubscriptionInterval } from '@/types'
-import { centsToDollars } from '@/utils'
+import { UserSubscriptionInterval } from '@/types'
+import { centsToDollars, commaFormatted } from '@/utils'
 
 export const PaymentIntervalLabelMap = {
   [UserSubscriptionInterval.Monthly]: 'month',
@@ -25,7 +24,7 @@ interface LocationState {
 }
 
 export const FundingSubscription = () => {
-  const { project, formState } = useFundingFormAtom()
+  const { project, formState, updateSubscription } = useFundingFormAtom()
   const setSelectedGoalId = useSetAtom(selectedGoalIdAtom)
 
   const location = useLocation()
@@ -34,10 +33,8 @@ export const FundingSubscription = () => {
 
   const { subscriptions } = project
 
-  const { addSubscriptionToBasket } = useSubscriptionBuy()
-
   const handleSubscriptionChange = (id: string) => {
-    addSubscriptionToBasket(id)
+    updateSubscription({ id: Number(id) })
   }
 
   useEffect(() => {
@@ -54,11 +51,11 @@ export const FundingSubscription = () => {
   return (
     <CardLayout width="100%" spacing={6}>
       <H2 size="2xl" bold>
-        {t('Make a recurring contribution')}
+        {t('Choose a membership')}
       </H2>
 
       {subscriptions ? (
-        <RadioGroup defaultValue={currentSubscriptionId} onChange={handleSubscriptionChange}>
+        <RadioGroup value={currentSubscriptionId} onChange={handleSubscriptionChange}>
           <HStack spacing={5} direction="row" alignItems="stretch">
             {subscriptions.map((sub) => {
               return (
@@ -68,7 +65,7 @@ export const FundingSubscription = () => {
                   justifyContent="space-between"
                   border="1px solid"
                   borderColor={'neutral1.6'}
-                  background={sub.id === currentSubscriptionId ? 'primary1.2' : 'transparent'}
+                  background={sub.id.toString() === currentSubscriptionId ? 'primary1.2' : 'transparent'}
                   padding={4}
                   borderRadius={'12px'}
                 >
@@ -76,16 +73,23 @@ export const FundingSubscription = () => {
                     display="flex"
                     w="full"
                     justifyContent="space-between"
-                    value={sub.id}
+                    value={sub.id.toString()}
                     flexDirection="row-reverse"
                     placeContent={'space-between'}
                     placeItems={'center'}
                   >
                     <VStack flex={1} alignItems="flex-start">
                       <Body size="sm">{sub.name}</Body>
-                      <Body size="sm" light>{`${centsToDollars(sub.cost)}${
-                        sub.currency === SubscriptionCurrencyType.Usdcent ? '$' : ' sats'
-                      } / ${PaymentIntervalLabelMap[sub.interval]}`}</Body>
+                      <Body size="sm" light>
+                        {`${centsToDollars(sub.amountUsdCent)} / ${commaFormatted(sub.amountBtcSat)} sats / ${
+                          PaymentIntervalLabelMap[sub.interval]
+                        }`}
+                      </Body>
+                      {sub.description && (
+                        <Body size="xs" light color="neutral1.10">
+                          {sub.description}
+                        </Body>
+                      )}
                     </VStack>
                   </Radio>
                 </HStack>

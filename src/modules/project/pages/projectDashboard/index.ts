@@ -7,6 +7,7 @@ import { PostCreateEdit } from './views/posts/PostCreateEdit.tsx'
 import { ProjectDashboardDetails } from './views/ProjectDashboardDetails.tsx'
 import { ProjectDashboardGoals } from './views/ProjectDashboardGoals.tsx'
 import { ProjectDashboardInfo } from './views/ProjectDashboardInfo.tsx'
+import { ProjectDashboardMemberships } from './views/ProjectDashboardMemberships.tsx'
 import { ProjectDashboardNotifications } from './views/ProjectDashboardNotifications.tsx'
 import { ProjectDashboardRewards } from './views/ProjectDashboardRewards.tsx'
 import { ProjectDashboardStory } from './views/ProjectDashboardStory.tsx'
@@ -27,6 +28,7 @@ export {
   ProjectDashboardInfo,
   ProjectDashboardLayout,
   ProjectDashboardLimitsVerification,
+  ProjectDashboardMemberships,
   ProjectDashboardMobileLayout,
   ProjectDashboardNostr,
   ProjectDashboardNotifications,
