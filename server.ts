@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import type { NextFunction, Request, Response } from 'express'
-
 const express = require('express')
 const handler = require('serve-handler')
 const prerender = require('prerender-node')
@@ -13,48 +11,23 @@ console.log(
 const PORT = process.env.PORT || 3000
 const app = express()
 
-const prerenderBlockedPathPatterns = [
-  /^\/logout\/?$/,
-  /^\/launch(?:\/.*)?$/,
-  /^\/project\/[^/]+\/dashboard(?:\/.*)?$/,
-  /^\/project\/[^/]+\/funding(?:\/.*)?$/,
-  /^\/project\/[^/]+\/story\/?$/,
-  /^\/project\/[^/]+\/(posts|rewards)\/(create|edit)(?:\/[^/]+)?\/?$/,
-  /^\/project\/[^/]+\/entry(?:\/.*)?$/,
-  /^\/(user|hero)\/[^/]+\/settings(?:\/.*)?$/,
-  /^\/refund(?:\/.*)?$/,
-]
-
-const shouldSkipPrerenderPath = (url = '') => {
-  const pathname = url.split('?')[0] || '/'
-  return prerenderBlockedPathPatterns.some((pattern) => pattern.test(pathname))
-}
-
 app.use(
   cors({
     credentials: true,
   }),
 )
 
-const prerenderMiddleware = prerender
-  .set('prerenderToken', process.env.PRERENDER_TOKEN)
-  .set('afterRender', (err: unknown) => {
+app.use(
+  prerender.set('prerenderToken', process.env.PRERENDER_TOKEN).set('afterRender', (err) => {
     // If the request to prerender server fails, just return the normal static files.
     if (err) {
       console.error('Prerender Error', err)
       return { cancelRender: true }
     }
-  })
+  }),
+)
 
-app.use((request: Request, response: Response, next: NextFunction) => {
-  if (shouldSkipPrerenderPath(request.url)) {
-    return next()
-  }
-
-  return prerenderMiddleware(request, response, next)
-})
-
-app.use((request: Request, response: Response) => {
+app.use((request, response) => {
   return handler(request, response, {
     public: './dist',
     rewrites: [{ source: '*', destination: '/index.html' }],
