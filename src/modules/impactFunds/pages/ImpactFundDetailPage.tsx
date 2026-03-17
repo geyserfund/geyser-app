@@ -62,12 +62,12 @@ import { useNotification } from '@/utils'
 
 import { FundingModelsShowcase } from '../components/FundingModelsShowcase.tsx'
 import { QUERY_IMPACT_FUND } from '../graphql/queries/impactFundsQuery.ts'
+import { IMPACT_FUND_DETAILS_SEO_IMAGES } from '../utils/constants.ts'
 import {
   impactFundFundingModelItems,
   impactFundFundingOverviewItems,
   impactFundHowItWorksItems,
 } from '../utils/informationContent.ts'
-import { IMPACT_FUND_DETAILS_SEO_IMAGES } from '../utils/constants.ts'
 
 const APPLICATIONS_PAGE_SIZE = 15
 const DESCRIPTION_PREVIEW_CHAR_LIMIT = 500
@@ -76,7 +76,8 @@ const SPONSOR_INQUIRY_CALENDAR_URL = 'https://cal.com/metamick/thirtymin?overlay
 const CIRCULAR_ECONOMY_IMPACT_FUND_NAME = 'circular-economies-impact-fund'
 const CIRCULAR_ECONOMY_REPORT_BANNER_URL =
   'https://storage.googleapis.com/geyser-media/impact-funds/ce-report-banner.png'
-const CIRCULAR_ECONOMY_REPORT_PDF_URL = 'https://river.com/learn/files/river-bitcoin-adoption-report-2026.pdf'
+const CIRCULAR_ECONOMY_REPORT_PDF_URL =
+  'https://storage.googleapis.com/geyser-media/impact-funds/Circular-Economies-Report.pdf'
 const satsNumberFormatter = new Intl.NumberFormat()
 const fundedStatus = [ImpactFundApplicationStatus.Funded]
 type ImpactFundDetails = ImpactFundQuery['impactFund'] & { canAccessDashboard: boolean }
