@@ -1,20 +1,24 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IconType } from 'react-icons'
-import { PiLightning, PiMegaphone, PiRocketLaunch } from 'react-icons/pi'
+import { PiCoins, PiLightning, PiMegaphone, PiRocketLaunch } from 'react-icons/pi'
+import { Link } from 'react-router'
 
 import { heroCardAtom } from '@/modules/profile/state/heroCardAtom'
-import { Body } from '@/shared/components/typography'
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
+import { Body, H2 } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 
 import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
 import { HeroStats, useUserHeroStatsQuery } from '../../../../../../../types'
 import { getShortAmountLabel } from '../../../../../../../utils'
-import { useUserProfileAtom } from '../../../../../state'
+import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 
 export const Summary = () => {
   const { userProfile, isLoading: userProfileLoading } = useUserProfileAtom()
+  const isViewingOwnProfile = useViewingOwnProfileAtomValue()
 
   const setHeroCard = useSetAtom(heroCardAtom)
 
@@ -60,6 +64,10 @@ export const Summary = () => {
 
   return (
     <VStack w="full" alignItems={'start'}>
+      {isViewingOwnProfile && userProfile.id ? (
+        <AffiliatePromoCard affiliateDashboardPath={getPath('userProfileSettingsAffiliate', String(userProfile.id))} />
+      ) : null}
+
       <Body size="xl" medium>
         {t('Hero Rank')}
       </Body>
@@ -124,6 +132,61 @@ export const Summary = () => {
         />,
       )}
     </VStack>
+  )
+}
+
+const NOISE_TEXTURE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`
+
+const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath: string }) => {
+  const { t } = useTranslation()
+
+  return (
+    <CardLayout
+      w="full"
+      spacing={4}
+      borderColor="transparent"
+      background="linear-gradient(135deg, #8FFFDA 0%, #C4FFE9 30%, #FFF8E1 60%, #FFE4C0 100%)"
+      mb={2}
+      px={{ base: 4, lg: 5 }}
+      py={4}
+    >
+      <Box
+        position="absolute"
+        inset={0}
+        backgroundImage={NOISE_TEXTURE}
+        backgroundSize="256px 256px"
+        backgroundRepeat="repeat"
+        opacity={0.14}
+        pointerEvents="none"
+        mixBlendMode="overlay"
+      />
+
+      <VStack alignItems="start" spacing={3} position="relative" zIndex={1} w="full">
+        <HStack spacing={2} alignItems="center" flexWrap="wrap">
+          <Icon as={PiCoins} color="warning.9" boxSize={5} />
+          <H2 size="lg">{t('Geyser Affiliate Program')}</H2>
+          <Body size="xs" medium px={2.5} py={0.5} borderRadius="full" bgColor="#F0DFC0" color="#8B6914">
+            {t('New')}
+          </Body>
+        </HStack>
+
+        <Body size="sm" color="neutralAlpha.11" whiteSpace="nowrap">
+          {t('Help projects launch or get funded, earn Bitcoin.')}
+        </Body>
+
+        <Button
+          as={Link}
+          to={affiliateDashboardPath}
+          bg="white"
+          color="neutral1.12"
+          _hover={{ bg: 'gray.100' }}
+          size="md"
+          w="full"
+        >
+          {t('Learn more')}
+        </Button>
+      </VStack>
+    </CardLayout>
   )
 }
 

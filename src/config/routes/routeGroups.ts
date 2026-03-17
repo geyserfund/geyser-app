@@ -216,6 +216,10 @@ export const profileSettingsRoutes = [
   getPath('userProfileSettings', PathName.userId),
   getPath('userProfileSettingsGeneral', PathName.userId),
   getPath('userProfileSettingsNotifications', PathName.userId),
+  getPath('userProfileSettingsSubscriptions', PathName.userId),
+  getPath('userProfileSettingsVerifications', PathName.userId),
+  getPath('userProfileSettingsWallet', PathName.userId),
+  getPath('userProfileSettingsAffiliate', PathName.userId),
 ]
 
 export const heroProfileSettingsRoutes = [

@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate, RouteObject } from 'react-router'
+import { createBrowserRouter, Navigate, RouteObject, useLocation } from 'react-router'
 
 import { SignOut } from '@/modules/auth/pages/SignOut.tsx'
 import { loadDiscoveryModule } from '@/modules/discovery/loader.ts'
@@ -32,6 +32,12 @@ const MAINTENANCE_MODE = false
 
 const Badges = () => import('../../modules/general/badges/BadgesPage')
 
+const LaunchRedirect = () => {
+  const { search } = useLocation()
+
+  return <Navigate to={{ pathname: getPath('launchStart'), search }} replace />
+}
+
 export const platformRoutes: RouteObject[] = [
   {
     path: getPath('launchStart'),
@@ -52,7 +58,7 @@ export const platformRoutes: RouteObject[] = [
 
   {
     path: getPath('launch'),
-    element: <Navigate to={getPath('launchStart')} />,
+    element: <LaunchRedirect />,
   },
 
   {
@@ -301,6 +307,13 @@ export const platformRoutes: RouteObject[] = [
             async lazy() {
               const ProfileWalletSettings = await loadProfileSettingsModule().then((m) => m.ProfileWalletSettings)
               return { Component: ProfileWalletSettings }
+            },
+          },
+          {
+            path: getPath('userProfileSettingsAffiliate', PathName.userId),
+            async lazy() {
+              const ProfileSettingsAffiliate = await loadProfileSettingsModule().then((m) => m.ProfileSettingsAffiliate)
+              return { Component: ProfileSettingsAffiliate }
             },
           },
         ],

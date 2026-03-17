@@ -1,3 +1,17 @@
+## [0.32.0](https://github.com/geyserfund/geyser-app/compare/v0.31.0...v0.32.0) (2026-03-17)
+
+
+### Features
+
+* project referrals ([3504fc8](https://github.com/geyserfund/geyser-app/commit/3504fc83c65220f4a269cb40bc8e5f2fccf4bb8f))
+* referral updates, dashboard and profile banner ([419f7be](https://github.com/geyserfund/geyser-app/commit/419f7be173478d4a0c9f817abd80881617816cce))
+
+
+### Bug Fixes
+
+* infinite scroll on fundraisers page ([6e1c7cf](https://github.com/geyserfund/geyser-app/commit/6e1c7cff7f17a3978991a80ca8de6a60100f0921))
+* nostr badge load on profile ([345a3f3](https://github.com/geyserfund/geyser-app/commit/345a3f3c2cba89529bc5aeabefcb6a180842942c))
+
 ## [0.31.0](https://github.com/geyserfund/geyser-app/compare/v0.30.0...v0.31.0) (2026-03-17)
 
 
