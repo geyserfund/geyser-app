@@ -1,4 +1,5 @@
 import { Box, VStack } from '@chakra-ui/react'
+import { useEffect } from 'react'
 import { Outlet } from 'react-router'
 
 import { Head } from '@/config/Head'
@@ -23,6 +24,13 @@ export const ProjectLayout = () => {
   const projectSeoImage = validateImageUrl(project?.thumbnailImage)
     ? project.thumbnailImage || ''
     : project?.images?.find((image) => validateImageUrl(image)) || ''
+  const seoReady = !loading && Boolean(project?.id)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const prerenderWindow = window as Window & { prerenderReady?: boolean }
+    prerenderWindow.prerenderReady = seoReady
+  }, [seoReady])
 
   return (
     <Box

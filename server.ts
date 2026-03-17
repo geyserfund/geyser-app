@@ -3,7 +3,6 @@ const express = require('express')
 const handler = require('serve-handler')
 const prerender = require('prerender-node')
 const cors = require('cors')
-const { getPrerenderFallbackReason } = require('./prerender-fallback')
 
 console.log(
   `ENV VAR CHECK:\n\tPORT: ${process.env.PORT}\nPRERENDER_TOKEN: not null -> ${Boolean(process.env.PRERENDER_TOKEN)}`,
@@ -11,6 +10,38 @@ console.log(
 
 const PORT = process.env.PORT || 3000
 const app = express()
+
+const isHtmlContentType = (headers = {}) => {
+  const contentType = headers['content-type'] || headers['Content-Type'] || ''
+  if (!contentType) return true
+  return /(text\/html|application\/xhtml\+xml)/i.test(String(contentType))
+}
+
+const hasRenderableBody = (body) => {
+  if (Buffer.isBuffer(body)) return body.length > 0
+  if (typeof body === 'string') return body.trim().length > 0
+  return false
+}
+
+const getPrerenderFallbackReason = (err, prerenderedResponse) => {
+  if (err) return 'transport-error'
+  if (!prerenderedResponse) return 'missing-response'
+
+  const statusCode = Number(prerenderedResponse.statusCode || 0)
+  if (!Number.isFinite(statusCode) || statusCode >= 500) {
+    return `upstream-status-${statusCode || 'invalid'}`
+  }
+
+  if (!isHtmlContentType(prerenderedResponse.headers)) {
+    return 'non-html-content'
+  }
+
+  if (!hasRenderableBody(prerenderedResponse.body)) {
+    return 'empty-body'
+  }
+
+  return null
+}
 
 app.use(
   cors({

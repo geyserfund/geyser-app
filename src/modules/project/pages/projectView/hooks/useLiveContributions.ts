@@ -9,6 +9,8 @@ import { addContributionToInProgressGoalsAtom } from '@/modules/project/state/go
 import { ContributionStatus, useProjectContributionSubscription } from '@/types/index.ts'
 import { convertSatsToCents, toInt } from '@/utils'
 
+const prerenderUserAgentPattern = /prerender|discordbot|slackbot|twitterbot|facebookexternalhit/i
+
 export const useLiveContributions = () => {
   const { project, partialUpdateProject } = useProjectAtom()
 
@@ -19,7 +21,9 @@ export const useLiveContributions = () => {
   const addContributor = useSetAtom(addContributorAtom)
   const addContributionToInProgressGoals = useSetAtom(addContributionToInProgressGoalsAtom)
 
-  const skipSubscription = !project.id
+  const isPrerenderRuntime =
+    typeof navigator !== 'undefined' && prerenderUserAgentPattern.test(navigator.userAgent || '')
+  const skipSubscription = !project.id || isPrerenderRuntime
 
   useProjectContributionSubscription({
     variables: {
