@@ -6,6 +6,7 @@ import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiWarning } from 'react
 import { Link, useLocation, useSearchParams } from 'react-router'
 
 import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
+import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -122,7 +123,9 @@ const ControlPanelFinancialActions = ({
             </VStack>
           </HStack>
           <Tooltip
-            label={t('Minimum withdrawal is $10. Increase your balance to enable withdrawals.')}
+            label={t('Minimum withdrawal is {{amount}} USD. Increase your balance to enable withdrawals.', {
+              amount: MIN_BITCOIN_PAYOUT_USD,
+            })}
             hasArrow
             shouldWrapChildren
             isDisabled={hasOngoingWithdraw || !isBelowMinWithdrawThreshold}

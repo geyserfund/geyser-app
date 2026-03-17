@@ -5,6 +5,7 @@ import {
   InputGroup,
   InputProps,
   InputRightAddon,
+  InputRightElement,
   StackProps,
   VStack,
 } from '@chakra-ui/react'
@@ -30,6 +31,7 @@ export type ControlledTextInputProps = UseControllerProps<any, any> &
     numberOnly?: boolean
     minimal?: boolean
     containerProps?: StackProps
+    rightElement?: React.ReactNode
   }
 
 export const ControlledTextInput = (props: ControlledTextInputProps) => {
@@ -99,6 +101,7 @@ export const ControlledTextInput = (props: ControlledTextInputProps) => {
           {props.rightAddon}
         </InputRightAddon>
       )}
+      {props.rightElement && <InputRightElement>{props.rightElement}</InputRightElement>}
     </InputGroup>
   )
 

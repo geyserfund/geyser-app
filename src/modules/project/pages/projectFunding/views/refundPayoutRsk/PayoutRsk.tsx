@@ -2,8 +2,8 @@
 import { Button, HStack, IconButton, Link as ChakraLink, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
-import { PiCheck, PiCopy } from 'react-icons/pi'
 import { Trans } from 'react-i18next'
+import { PiCheck, PiCopy } from 'react-icons/pi'
 import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
@@ -18,7 +18,7 @@ import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
-import { getRootstockExplorerTxUrl } from '@/shared/utils/external/rootstock.ts'
+import { getMempoolSpaceUrl } from '@/shared/utils/external/mempool.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton.ts'
 import {
   PaymentStatus,
@@ -39,11 +39,11 @@ import { createAndSignLockTransaction } from '../../utils/createLockTransaction.
 import { BitcoinPayoutForm } from './components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from './components/BitcoinPayoutProcessed.tsx'
 import { BitcoinPayoutWaitingConfirmation } from './components/BitcoinPayoutWaitingConfirmation.tsx'
-import { DEFAULT_LIGHTNING_PAYOUT_MAX_SATS, MAX_SATS_FOR_LIGHTNING } from './constant.ts'
 import { LightningPayoutForm } from './components/LightningPayoutForm.tsx'
 import { LightningPayoutProcessed } from './components/LightningPayoutProcessed.tsx'
-import { PayoutProgressSidebar, PayoutProgressStep } from './components/PayoutProgressSidebar.tsx'
 import { PayoutMethodSelection } from './components/PayoutMethodSelection.tsx'
+import { PayoutProgressSidebar, PayoutProgressStep } from './components/PayoutProgressSidebar.tsx'
+import { DEFAULT_LIGHTNING_PAYOUT_MAX_SATS, MAX_SATS_FOR_LIGHTNING } from './constant.ts'
 import { createAndSignClaimMessage } from './createAndSignRefundAndPayout.ts'
 import { usePayoutWithBitcoinForm } from './hooks/usePayoutWithBitcoinForm.ts'
 import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
@@ -62,10 +62,7 @@ type PayoutRskProps = {
 
 type PayoutProgressStage = 'setup' | 'waiting_confirmation' | 'claim_ready' | 'completed'
 
-const getPayoutProgressSteps = (params: {
-  method: PayoutMethod
-  stage: PayoutProgressStage
-}): PayoutProgressStep[] => {
+const getPayoutProgressSteps = (params: { method: PayoutMethod; stage: PayoutProgressStage }): PayoutProgressStep[] => {
   const { method, stage } = params
 
   if (method === PayoutMethod.Lightning) {
@@ -97,7 +94,7 @@ const getPayoutProgressSteps = (params: {
       },
       {
         title: t('Wait for confirmations'),
-        description: t('Bitcoin Rootstock network confirmations are required before claiming.'),
+        description: t('Bitcoin network confirmations are required before claiming.'),
         status: 'complete',
       },
       {
@@ -122,7 +119,7 @@ const getPayoutProgressSteps = (params: {
       },
       {
         title: t('Wait for confirmations'),
-        description: t('Bitcoin Rootstock network confirmations are required before claiming.'),
+        description: t('Bitcoin network confirmations are required before claiming.'),
         status: 'complete',
       },
       {
@@ -147,7 +144,7 @@ const getPayoutProgressSteps = (params: {
       },
       {
         title: t('Wait for confirmations'),
-        description: t('Bitcoin Rootstock network confirmations are required before claiming.'),
+        description: t('Bitcoin network confirmations are required before claiming.'),
         status: 'current',
       },
       {
@@ -171,7 +168,7 @@ const getPayoutProgressSteps = (params: {
     },
     {
       title: t('Wait for confirmations'),
-      description: t('Bitcoin Rootstock network confirmations are required before claiming.'),
+      description: t('Bitcoin network confirmations are required before claiming.'),
       status: 'upcoming',
     },
     {
@@ -297,10 +294,12 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const waitingNotice = isWaitingClaimReady ? (
     t('Your funds are ready to be claimed')
   ) : (
-    <Trans i18nKey="We are waiting for the transaction to be confirmed before you can claim the funds. You can check the transaction status by <1>clicking here</1>.">
-      {'We are waiting for the transaction to be confirmed before you can claim the funds. You can check the transaction status by '}
-      <ChakraLink href={getRootstockExplorerTxUrl(lockTxId || '')} textDecoration="underline" isExternal>
-        {'clicking here'}
+    <Trans i18nKey="We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on <1>mempool.space</1>.">
+      {
+        'We are waiting for the Bitcoin lockup transaction to be confirmed before you can claim the funds. You can check its status on '
+      }
+      <ChakraLink href={getMempoolSpaceUrl(lockTxId || '')} textDecoration="underline" isExternal>
+        {'mempool.space'}
       </ChakraLink>
       {'.'}
     </Trans>
@@ -459,6 +458,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
           password: data.accountPassword || '',
         })
       }
+
       swapObj.paymentId = activeOnChainPayment.id
       setSwapData(swapObj)
 
@@ -599,7 +599,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         requireBitcoinAddress: !shouldResumeOnChainPayout || shouldRequestBitcoinAddressOnResume,
       }
 
-  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, undefined, keyDerivationOptions)
+  const lightningForm = usePayoutWithLightningForm(handleLightningSubmit, undefined, keyDerivationOptions, totalAmount)
   const bitcoinForm = usePayoutWithBitcoinForm(handleBitcoinSubmit, undefined, keyDerivationOptions)
 
   useEffect(() => {
@@ -622,8 +622,10 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     }
   }, [
     isOpen,
+    activeLightningPayment,
     activeLightningPayment?.id,
     activeLightningInvoiceId,
+    activeOnChainPaymentDetails,
     activeOnChainPayment?.id,
     persistedOnChainAddress,
     bitcoinForm.form,
@@ -720,33 +722,22 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   // Show processed screen after successful submission
   if (shouldShowProcessedScreen) {
     return (
-      <Modal
-        isOpen={isOpen}
-        onClose={handleCompleted}
-        size="4xl"
-        contentProps={{ maxW: '980px' }}
-      >
+      <Modal isOpen={isOpen} onClose={handleCompleted} size="4xl" contentProps={{ maxW: '980px' }}>
         {renderModalContent({
           title:
             processedMethod === PayoutMethod.Lightning
               ? t('Payout Processed (Off-Chain)')
               : t('Payout Processed (On-Chain)'),
           description: processedMethod === PayoutMethod.OnChain ? undefined : activeProgressDescription,
-          content: processedMethod === PayoutMethod.Lightning ? (
-            <LightningPayoutProcessed
-              invoiceId={
-                isProcessed
-                  ? payoutInvoiceId
-                  : activeLightningInvoiceId
-              }
-              onClose={handleCompleted}
-            />
-          ) : (
-            <BitcoinPayoutProcessed
-              onClose={handleCompleted}
-              refundTxId={isProcessed ? refundTxId : undefined}
-            />
-          ),
+          content:
+            processedMethod === PayoutMethod.Lightning ? (
+              <LightningPayoutProcessed
+                invoiceId={isProcessed ? payoutInvoiceId : activeLightningInvoiceId}
+                onClose={handleCompleted}
+              />
+            ) : (
+              <BitcoinPayoutProcessed onClose={handleCompleted} refundTxId={isProcessed ? refundTxId : undefined} />
+            ),
         })}
       </Modal>
     )
@@ -754,13 +745,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
 
   if (isWaitingConfirmation) {
     return (
-      <Modal
-        isOpen={isOpen}
-        size="4xl"
-        onClose={() => {}}
-        noClose={true}
-        contentProps={{ maxW: '980px' }}
-      >
+      <Modal isOpen={isOpen} size="4xl" onClose={() => {}} noClose={true} contentProps={{ maxW: '980px' }}>
         {renderModalContent({
           notice: (
             <Feedback variant={isWaitingClaimReady ? FeedBackVariant.SUCCESS : FeedBackVariant.INFO} w="full">
@@ -773,6 +758,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
             <BitcoinPayoutWaitingConfirmation
               swapData={swapData}
               refundAddress={refundAddress || ''}
+              setLockTxId={setLockTxId}
               initialReadyToBeClaimed={isWaitingClaimReady}
               onReadyToBeClaimed={() => setIsWaitingClaimReady(true)}
               setIsProcessed={setIsProcessed}
@@ -812,52 +798,44 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   ) : undefined
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleClose}
-      size="4xl"
-      bodyProps={{ gap: 4 }}
-      contentProps={{ maxW: '980px' }}
-    >
-      {payoutPrepareLoading ? (
-        renderModalContent({
-          title: modalTitle,
-          subtitle: modalSubtitle,
-          description: modalDescription,
-          content: <PayoutRskSkeleton />,
-        })
-      ) : payoutPrepareError ? (
-        renderModalContent({
-          title: modalTitle,
-          subtitle: modalSubtitle,
-          description: modalDescription,
-          content: <Feedback variant={FeedBackVariant.ERROR} text={payoutPrepareError} />,
-        })
-      ) : (
-        renderModalContent({
-          title: modalTitle,
-          subtitle: modalSubtitle,
-          description: modalDescription,
-          content: (
-            <>
-              {shouldShowMethodSelectionStep && (
-                <PayoutMethodSelection
-                  selectedMethod={selectedMethod}
-                  setSelectedMethod={setSelectedMethod}
-                  disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING || isClaimable}
-                />
-              )}
+    <Modal isOpen={isOpen} onClose={handleClose} size="4xl" bodyProps={{ gap: 4 }} contentProps={{ maxW: '980px' }}>
+      {payoutPrepareLoading
+        ? renderModalContent({
+            title: modalTitle,
+            subtitle: modalSubtitle,
+            description: modalDescription,
+            content: <PayoutRskSkeleton />,
+          })
+        : payoutPrepareError
+        ? renderModalContent({
+            title: modalTitle,
+            subtitle: modalSubtitle,
+            description: modalDescription,
+            content: <Feedback variant={FeedBackVariant.ERROR} text={payoutPrepareError} />,
+          })
+        : renderModalContent({
+            title: modalTitle,
+            subtitle: modalSubtitle,
+            description: modalDescription,
+            content: (
+              <>
+                {shouldShowMethodSelectionStep && (
+                  <PayoutMethodSelection
+                    selectedMethod={selectedMethod}
+                    setSelectedMethod={setSelectedMethod}
+                    disableLightning={totalAmount > MAX_SATS_FOR_LIGHTNING || isClaimable}
+                  />
+                )}
 
-              {shouldResumeOnChainPayout ? (
-                <BitcoinPayoutForm
-                  form={bitcoinForm.form}
-                  satsAmount={totalAmount}
-                  disableBitcoinAddress={!shouldRequestBitcoinAddressOnResume}
-                  showBitcoinAddress={shouldRequestBitcoinAddressOnResume}
-                />
-              ) : (
-                selectedMethod === PayoutMethod.Lightning ? (
-                  <LightningPayoutForm form={lightningForm.form} satsAmount={totalAmount} />
+                {shouldResumeOnChainPayout ? (
+                  <BitcoinPayoutForm
+                    form={bitcoinForm.form}
+                    satsAmount={totalAmount}
+                    disableBitcoinAddress={!shouldRequestBitcoinAddressOnResume}
+                    showBitcoinAddress={shouldRequestBitcoinAddressOnResume}
+                  />
+                ) : selectedMethod === PayoutMethod.Lightning ? (
+                  <LightningPayoutForm form={lightningForm.form} lightningAddress={lightningForm.lightningAddress} />
                 ) : (
                   <BitcoinPayoutForm
                     form={bitcoinForm.form}
@@ -865,25 +843,23 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
                     disableBitcoinAddress={false}
                     showBitcoinAddress={true}
                   />
-                )
-              )}
-            </>
-          ),
-          footer: (
-            <Button
-              w="full"
-              size="lg"
-              colorScheme="primary1"
-              variant="solid"
-              isLoading={isSubmitting || isPayoutPaymentInitiateLoading || isPayoutPaymentPrepareLoading}
-              isDisabled={!enableSubmit || payoutPrepareLoading || !hasPayout || Boolean(payoutPrepareError)}
-              onClick={handleSubmit}
-            >
-              {submitButtonLabel}
-            </Button>
-          ),
-        })
-      )}
+                )}
+              </>
+            ),
+            footer: (
+              <Button
+                w="full"
+                size="lg"
+                colorScheme="primary1"
+                variant="solid"
+                isLoading={isSubmitting || isPayoutPaymentInitiateLoading || isPayoutPaymentPrepareLoading}
+                isDisabled={!enableSubmit || payoutPrepareLoading || !hasPayout || Boolean(payoutPrepareError)}
+                onClick={handleSubmit}
+              >
+                {submitButtonLabel}
+              </Button>
+            ),
+          })}
     </Modal>
   )
 }

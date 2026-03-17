@@ -5,10 +5,11 @@ import { InvestorData } from '@/modules/guardians/utils/constants.ts'
 
 import { GuardianBody } from '../GuardiansMainPage.tsx'
 
+/** Renders the investors supporting the Guardians initiative. */
 export const Investors = () => {
   return (
     <>
-      <GuardianBody>{t('Investors committed to Bitcoin’s mission of openness, freedom, and innovation.')}</GuardianBody>
+      <GuardianBody>{t('Investors backing the Guardians mission and the next wave of Bitcoin adoption.')}</GuardianBody>
       <HStack flexWrap={'wrap'} spacing={10} justifyContent={'center'}>
         {InvestorData.map((partner) => (
           <Tooltip label={partner.name} key={partner.image}>

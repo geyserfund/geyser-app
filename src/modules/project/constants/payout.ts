@@ -1,0 +1,1 @@
+export const MIN_BITCOIN_PAYOUT_USD = 20

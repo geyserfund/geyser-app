@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
+import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
 import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
 import { ProjectForMyProjectsFragment, ProjectFundingStrategy, Satoshis } from '@/types'
 
@@ -40,7 +41,7 @@ export const useProjectWithdrawalStatus = ({
       return 'no_funds'
     }
 
-    if (withdrawableUsd < 10) {
+    if (withdrawableUsd < MIN_BITCOIN_PAYOUT_USD) {
       return 'below_threshold'
     }
 
