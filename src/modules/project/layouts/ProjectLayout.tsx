@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Box, VStack } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { Outlet } from 'react-router'
@@ -24,7 +25,9 @@ export const ProjectLayout = () => {
   const projectSeoImage = validateImageUrl(project?.thumbnailImage)
     ? project.thumbnailImage || ''
     : project?.images?.find((image) => validateImageUrl(image)) || ''
-  const seoReady = !loading && Boolean(project?.id)
+  const hasSeoTitle = Boolean((project?.title || '').trim())
+  const hasSeoDescription = Boolean((project?.shortDescription || project?.description || '').trim())
+  const seoReady = !loading && Boolean(project?.id) && hasSeoTitle && hasSeoDescription
 
   useEffect(() => {
     if (typeof window === 'undefined') return

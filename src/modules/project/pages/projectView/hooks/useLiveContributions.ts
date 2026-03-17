@@ -9,7 +9,7 @@ import { addContributionToInProgressGoalsAtom } from '@/modules/project/state/go
 import { ContributionStatus, useProjectContributionSubscription } from '@/types/index.ts'
 import { convertSatsToCents, toInt } from '@/utils'
 
-const prerenderUserAgentPattern = /prerender|discordbot|slackbot|twitterbot|facebookexternalhit/i
+const prerenderUserAgentPattern = /prerender|bot|crawler|spider|discordbot|slackbot|twitterbot|facebookexternalhit/i
 
 export const useLiveContributions = () => {
   const { project, partialUpdateProject } = useProjectAtom()

@@ -43,6 +43,56 @@ const getPrerenderFallbackReason = (err, prerenderedResponse) => {
   return null
 }
 
+const prerenderAllowedRoutePatterns = [
+  /^\/$/i,
+  /^\/project\/[^/]+(?:\/.*)?$/i,
+  /^\/products(?:\/|$)/i,
+  /^\/grants(?:\/|$)/i,
+  /^\/leaderboard\/?$/i,
+  /^\/activity\/global\/?$/i,
+]
+
+const prerenderBlockedRoutePatterns = [
+  /^\/(?:api|auth|graphql|cache|healthz)(?:\/|$)/i,
+  /^\/(?:user|settings|wallet|account|messages|notifications|admin|dashboard)(?:\/|$)/i,
+]
+
+const prerenderBlockedExactPaths = new Set(['/meta.json', '/sw.js', '/manifest.json', '/favicon.ico'])
+
+const prerenderBlockedAssetExtensionPattern =
+  /\.(?:json|xml|txt|js|css|map|ico|png|jpe?g|gif|webp|svg|woff2?|ttf|otf|eot|pdf|zip|gz|mp4|webm)$/i
+
+const getPrerenderPathname = (requestUrl = '/') => {
+  try {
+    return new URL(requestUrl, 'http://localhost').pathname || '/'
+  } catch (_error) {
+    return '/'
+  }
+}
+
+const getPrerenderRouteDecision = (requestUrl = '/') => {
+  const pathname = getPrerenderPathname(requestUrl)
+  const normalizedPathname = pathname.toLowerCase()
+
+  if (prerenderBlockedExactPaths.has(normalizedPathname)) {
+    return { allow: false, reason: 'non-indexable-route', pathname }
+  }
+
+  if (prerenderBlockedAssetExtensionPattern.test(pathname)) {
+    return { allow: false, reason: 'non-html-route', pathname }
+  }
+
+  if (prerenderBlockedRoutePatterns.some((pattern) => pattern.test(pathname))) {
+    return { allow: false, reason: 'private-route', pathname }
+  }
+
+  if (!prerenderAllowedRoutePatterns.some((pattern) => pattern.test(pathname))) {
+    return { allow: false, reason: 'route-not-allowlisted', pathname }
+  }
+
+  return { allow: true, reason: 'public-indexable-route', pathname }
+}
+
 app.use(
   cors({
     credentials: true,
@@ -53,6 +103,18 @@ app.use(
   prerender
     .set('prerenderToken', process.env.PRERENDER_TOKEN)
     .set('prerenderServiceUrl', process.env.PRERENDER_SERVICE_URL)
+    .set('beforeRender', (req, done) => {
+      const routeDecision = getPrerenderRouteDecision(req?.url || '/')
+      if (routeDecision.allow) return done()
+
+      console.info('Prerender route bypass', {
+        reason: routeDecision.reason,
+        path: routeDecision.pathname,
+        url: req?.url,
+      })
+
+      return done(null, { status: 204, body: '' })
+    })
     .set('afterRender', (err, req, prerenderedResponse) => {
       const fallbackReason = getPrerenderFallbackReason(err, prerenderedResponse)
       if (!fallbackReason) return
