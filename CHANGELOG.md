@@ -1,3 +1,16 @@
+## [0.31.0](https://github.com/geyserfund/geyser-app/compare/v0.30.0...v0.31.0) (2026-03-17)
+
+
+### Features
+
+* add lighting address validation in payout and refund forms ([54c62eb](https://github.com/geyserfund/geyser-app/commit/54c62eb2c90d6248525ef3ab73b121168f607bb3))
+
+
+### Bug Fixes
+
+* payout flow min and on-chain pending screen ([ab0cb93](https://github.com/geyserfund/geyser-app/commit/ab0cb93ac3db6c183809ae7c9aab68e15bf3a902))
+* update ce report pdf url ([1f445c6](https://github.com/geyserfund/geyser-app/commit/1f445c6f3f33998decea48c3adf8e6702af0097b))
+
 ## [0.30.0](https://github.com/geyserfund/geyser-app/compare/v0.29.0...v0.30.0) (2026-03-11)
 
 
