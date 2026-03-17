@@ -96,6 +96,7 @@ export enum PathName {
   userSettingsSubscriptions = 'subscriptions',
   userSettingsVerifications = 'verifications',
   userSettingsWallet = 'wallet',
+  userSettingsAffiliate = 'affiliate',
 
   heroProfile = 'hero',
   heroSettings = 'settings',
@@ -454,6 +455,8 @@ const pathsMap = {
     `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsVerifications}`,
   userProfileSettingsWallet: (userId: string) =>
     `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsWallet}`,
+  userProfileSettingsAffiliate: (userId: string) =>
+    `/${PathName.userProfile}/${userId}/${PathName.userSettings}/${PathName.userSettingsAffiliate}`,
 
   heroProfile: (heroId: string) => `/${PathName.heroProfile}/${heroId}`,
   heroProfileSettings: (heroId: string) => `/${PathName.heroProfile}/${heroId}/${PathName.heroSettings}`,

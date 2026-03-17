@@ -3,11 +3,13 @@ import { ProfileSettingsMain } from './layouts/ProfileSettingsMobileLayout.tsx'
 import { ProfileSettingsGeneral } from './views/ProfileSettingsGeneral.tsx'
 import { ProfileSettingsNotifications } from './views/ProfileSettingsNotifications.tsx'
 import { ProfileSettingsSubscriptions } from './views/ProfileSettingsSubscriptions.tsx'
+import { ProfileSettingsAffiliate } from './views/ProfileSettingsAffiliate.tsx'
 import { ProfileSettingsVerifications } from './views/ProfileSettingsVerification/ProfileSettingsVerifications.tsx'
 import { ProfileWalletSettings } from './views/ProfileSettingsWallet'
 
 export {
   ProfileSettings,
+  ProfileSettingsAffiliate,
   ProfileSettingsGeneral,
   ProfileSettingsMain,
   ProfileSettingsNotifications,
