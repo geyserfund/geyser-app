@@ -1,12 +1,14 @@
 /* eslint-disable complexity */
+import { useApolloClient } from '@apollo/client'
 import { Button, HStack, IconButton, Link as ChakraLink, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { Trans } from 'react-i18next'
-import { PiCheck, PiCopy } from 'react-icons/pi'
+import { PiCheck, PiCopy, PiInfoBold } from 'react-icons/pi'
 import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
+import { QUERY_PAYOUT_LATEST } from '@/modules/project/graphql/query/payoutQuery.ts'
 import { decryptString, encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import {
   AccountKeys,
@@ -194,6 +196,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   onCompleted,
 }) => {
   const toast = useNotification()
+  const apolloClient = useApolloClient()
 
   useUserAccountKeys()
 
@@ -218,11 +221,13 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
 
   const [swapData, setSwapData] = useState<PayoutFlowSwapData | null>(null)
   const [payoutPrepareError, setPayoutPrepareError] = useState<string | null>(null)
+  const [isInternalRetryPayout, setIsInternalRetryPayout] = useState(false)
 
   useEffect(() => {
     if (!isOpen) {
       hasPreparedPayoutRef.current = false
       hasDefaultedMethodRef.current = false
+      setIsInternalRetryPayout(false)
       return
     }
 
@@ -232,18 +237,34 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
 
     hasPreparedPayoutRef.current = true
     setPayoutPrepareError(null)
-    payoutPrepare({
-      variables: {
-        input: {
-          projectId: project.id,
-        },
-      },
-    }).catch((error) => {
-      hasPreparedPayoutRef.current = false
-      const message = error?.graphQLErrors?.[0]?.message || error?.message || t('Please wait a moment and try again.')
-      setPayoutPrepareError(message)
-    })
-  }, [isOpen, payoutPrepare, project.id])
+    const preparePayout = async () => {
+      try {
+        const latestPayoutResult = await apolloClient
+          .query({
+            query: QUERY_PAYOUT_LATEST,
+            variables: { projectId: project.id },
+            fetchPolicy: 'network-only',
+          })
+          .catch(() => null)
+
+        setIsInternalRetryPayout(Boolean(latestPayoutResult?.data?.payoutLatest?.payoutMetadata?.requiresUserLockTx))
+
+        await payoutPrepare({
+          variables: {
+            input: {
+              projectId: project.id,
+            },
+          },
+        })
+      } catch (error: any) {
+        hasPreparedPayoutRef.current = false
+        const message = error?.graphQLErrors?.[0]?.message || error?.message || t('Please wait a moment and try again.')
+        setPayoutPrepareError(message)
+      }
+    }
+
+    preparePayout().catch(() => undefined)
+  }, [apolloClient, isOpen, payoutPrepare, project.id])
 
   const payout = payoutPrepareData?.payoutPrepare.payout
   const isProcessing = payout?.status === PayoutStatus.Processing
@@ -261,6 +282,9 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const persistedOnChainAddress = activeOnChainPaymentDetails?.onChainAddress || ''
   const isClaimable = activeOnChainPayment?.status === PaymentStatus.Claimable
   const isClaiming = activeOnChainPayment?.status === PaymentStatus.Claiming
+  const isRefundableRecovery =
+    isProcessing &&
+    (latestPayment?.status === PaymentStatus.Refundable || latestPayment?.status === PaymentStatus.Refunding)
   const shouldResumeOnChainPayout = Boolean(
     activeOnChainPayment && [PaymentStatus.Pending, PaymentStatus.Claimable].includes(activeOnChainPayment.status),
   )
@@ -312,6 +336,8 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     shouldResumeOnChainPayout,
     shouldRequestBitcoinAddressOnResume,
   })
+  const isPrismPayout = contractType === PayoutContractType.Prism
+  const requiresInternalLock = isPrismPayout || isInternalRetryPayout
 
   useEffect(() => {
     if (!isOpen || latestPayment || shouldResumeOnChainPayout || hasDefaultedMethodRef.current) {
@@ -390,14 +416,13 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         timelock: swapObj?.timeoutBlockHeight || 0n,
       })
 
-      const isPrismPayout = contractType === PayoutContractType.Prism
       const lockAmountSats = Number(swapObj?.expectedAmount ?? amount)
       const gasPriceWei = swapObj?.geyserGasPriceWei ? BigInt(swapObj.geyserGasPriceWei) : undefined
       const gasLimit = swapObj?.geyserGasLimit ? BigInt(swapObj.geyserGasLimit) : undefined
-      const signature = isPrismPayout
+      const signature = requiresInternalLock
         ? '0x'
         : createPayoutSignature({ lockCallData: callDataHex, accountKeys, amount }).signature
-      const userLockTxHex = isPrismPayout
+      const userLockTxHex = requiresInternalLock
         ? await createAndSignLockTransaction({
             preimageHash: `0x${paymentDetails.swapPreimageHash}`,
             claimAddress: swapObj?.claimAddress as Address,
@@ -418,7 +443,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
             signature,
             callDataHex,
             userLockTxHex: userLockTxHex || undefined,
-            rskAddress: isPrismPayout ? rskAddress || accountKeys.address : undefined,
+            rskAddress: requiresInternalLock ? rskAddress || accountKeys.address : undefined,
           },
         },
         onCompleted(data) {
@@ -531,14 +556,13 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         timelock: swapObj?.lockupDetails?.timeoutBlockHeight || 0n,
       })
 
-      const isPrismPayout = contractType === PayoutContractType.Prism
       const lockAmountSats = Number(swapObj?.lockupDetails?.amount ?? amount)
       const gasPriceWei = swapObj?.geyserGasPriceWei ? BigInt(swapObj.geyserGasPriceWei) : undefined
       const gasLimit = swapObj?.geyserGasLimit ? BigInt(swapObj.geyserGasLimit) : undefined
-      const signature = isPrismPayout
+      const signature = requiresInternalLock
         ? '0x'
         : createPayoutSignature({ lockCallData: callDataHex, accountKeys, amount }).signature
-      const userLockTxHex = isPrismPayout
+      const userLockTxHex = requiresInternalLock
         ? await createAndSignLockTransaction({
             preimageHash: `0x${preimageHash}` as Hex,
             claimAddress: swapObj?.lockupDetails?.claimAddress as Address,
@@ -560,7 +584,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
             signature,
             callDataHex,
             userLockTxHex: userLockTxHex || undefined,
-            rskAddress: isPrismPayout ? rskAddress || accountKeys.address : undefined,
+            rskAddress: requiresInternalLock ? rskAddress || accountKeys.address : undefined,
           },
         },
         onCompleted(data) {
@@ -588,7 +612,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   }
 
   // Get form objects from both hooks
-  const isPrismPayout = contractType === PayoutContractType.Prism
   const keyDerivationOptions = isPrismPayout
     ? {
         deriveKeysFromSeed: (seedHex: string) => generateProjectKeysFromSeedHex(seedHex, project.id),
@@ -641,6 +664,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     setRefundTxId('')
     setPayoutInvoiceId('')
     setRefundAddress(null)
+    setIsInternalRetryPayout(false)
     onClose()
   }
 
@@ -716,6 +740,30 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
           {footer}
         </VStack>
       </Stack>
+    )
+  }
+
+  if (isRefundableRecovery) {
+    return (
+      <Modal isOpen={isOpen} size="lg" title={t('Funds are being recovered')} onClose={handleClose}>
+        <VStack spacing={4} w="full" alignItems="center">
+          <PiInfoBold fontSize="120px" color="var(--chakra-colors-info-9)" />
+          <Body size="md" textAlign="center">
+            {t(
+              'Your previous payout claim expired. The swap is being recovered in the background and the funds are on their way back to your Rootstock wallet.',
+            )}
+          </Body>
+          <Body size="md" textAlign="center">
+            {t('Once that refund completes, this payout will reset and you can start again.')}
+          </Body>
+          <Body size="sm" textAlign="center" color="neutral1.11">
+            {t('If this has not cleared within 24 hours, please contact us at')}{' '}
+            <Body as="span" size="sm" bold color="primary1.11">
+              support@geyser.fund
+            </Body>
+          </Body>
+        </VStack>
+      </Modal>
     )
   }
 
