@@ -3,6 +3,7 @@ const express = require('express')
 const handler = require('serve-handler')
 const prerender = require('prerender-node')
 const cors = require('cors')
+const { getPrerenderFallbackReason } = require('./prerender-fallback')
 
 console.log(
   `ENV VAR CHECK:\n\tPORT: ${process.env.PORT}\nPRERENDER_TOKEN: not null -> ${Boolean(process.env.PRERENDER_TOKEN)}`,
@@ -21,12 +22,21 @@ app.use(
   prerender
     .set('prerenderToken', process.env.PRERENDER_TOKEN)
     .set('prerenderServiceUrl', process.env.PRERENDER_SERVICE_URL)
-    .set('afterRender', (err) => {
-      // If the request to prerender server fails, just return the normal static files.
+    .set('afterRender', (err, req, prerenderedResponse) => {
+      const fallbackReason = getPrerenderFallbackReason(err, prerenderedResponse)
+      if (!fallbackReason) return
+
       if (err) {
         console.error('Prerender Error', err)
-        return { cancelRender: true }
+      } else {
+        console.warn('Prerender fallback', {
+          reason: fallbackReason,
+          statusCode: prerenderedResponse?.statusCode,
+          url: req?.url,
+        })
       }
+
+      return { cancelRender: true }
     }),
 )
 
