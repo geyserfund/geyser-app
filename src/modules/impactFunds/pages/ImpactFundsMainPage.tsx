@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Button,
   Flex,
@@ -12,6 +13,8 @@ import {
   Spinner,
   useColorModeValue,
   VStack,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
@@ -35,7 +38,7 @@ import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
-import { useImpactFundsQuery } from '@/types'
+import { type ImpactFundsQuery, ImpactFundSponsorTier, useImpactFundsQuery } from '@/types'
 
 import { FundingModelsShowcase } from '../components/FundingModelsShowcase.tsx'
 import { ImpactFlowStrip } from '../components/ImpactFlowStrip.tsx'
@@ -87,6 +90,10 @@ const otherFunds = [
     imageFit: 'contain' as const,
   },
 ] as const
+
+const LATAM_IMPACT_FUND_NAME = 'latam-impact-fund'
+
+type ImpactFundListItem = ImpactFundsQuery['impactFunds'][number]
 
 type CardCtaProps = {
   href?: string
@@ -200,6 +207,23 @@ export const ImpactFundsMainPage = () => {
   }
 
   const impactFunds = data?.impactFunds || []
+  const getFundAmountDisplay = (fund: ImpactFundListItem) => {
+    const committedAmountDisplay = getCommittedAmountDisplay({
+      amountCommitted: fund.amountCommitted,
+      amountCommittedCurrency: fund.amountCommittedCurrency,
+      usdRate,
+      getUSDAmount,
+      getSatoshisFromUSDCents,
+    })
+    const awardedAmountDisplay = getSatsAmountDisplay({
+      amountSats: fund.metrics.awardedTotalSats,
+      usdRate,
+      getUSDAmount,
+    })
+
+    return fund.amountCommitted === 0 ? awardedAmountDisplay : committedAmountDisplay
+  }
+
   const totalDistributedSats = impactFunds.reduce((total, fund) => total + (fund.metrics.awardedTotalSats || 0), 0)
   const totalProjectsFunded = impactFunds.reduce((total, fund) => total + (fund.metrics.projectsFundedCount || 0), 0)
   const totalDistributedUsd =
@@ -353,19 +377,160 @@ export const ImpactFundsMainPage = () => {
         </H2>
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
           {impactFunds.map((fund) => {
-            const committedAmountDisplay = getCommittedAmountDisplay({
-              amountCommitted: fund.amountCommitted,
-              amountCommittedCurrency: fund.amountCommittedCurrency,
-              usdRate,
-              getUSDAmount,
-              getSatoshisFromUSDCents,
-            })
-            const awardedAmountDisplay = getSatsAmountDisplay({
-              amountSats: fund.metrics.awardedTotalSats,
-              usdRate,
-              getUSDAmount,
-            })
-            const amountDisplay = fund.amountCommitted === 0 ? awardedAmountDisplay : committedAmountDisplay
+            const amountDisplay = getFundAmountDisplay(fund)
+            const isLatamImpactFund = fund.name === LATAM_IMPACT_FUND_NAME
+            const foundingSponsors = isLatamImpactFund
+              ? fund.liveSponsors.filter((sponsor) => sponsor.tier === ImpactFundSponsorTier.Tier_1)
+              : []
+
+            if (isLatamImpactFund) {
+              return (
+                <CardLayout
+                  key={fund.id}
+                  dense
+                  noborder
+                  p={0}
+                  minH={{ base: '620px', lg: '680px' }}
+                  overflow="hidden"
+                  borderRadius="12px"
+                  transition="all 0.25s"
+                  boxShadow={interactiveCardShadow}
+                  _hover={{
+                    transform: 'translateY(-4px)',
+                    boxShadow: interactiveCardHoverShadow,
+                    '.learn-more-arrow': {
+                      opacity: 1,
+                      transform: 'translateX(0)',
+                    },
+                  }}
+                >
+                  <LinkBox w="full" h="full">
+                    <VStack w="full" h="full" spacing={0} align="stretch">
+                      <Box h={{ base: '240px', lg: '380px' }} bg={cardImageBg} overflow="hidden" position="relative">
+                        {fund.heroImage && (
+                          <Image
+                            src={fund.heroImage}
+                            alt=""
+                            w="full"
+                            h="full"
+                            display="block"
+                            objectFit="cover"
+                            objectPosition="calc(50% + 40px) center"
+                          />
+                        )}
+                        <Badge
+                          position="absolute"
+                          top={4}
+                          right={4}
+                          zIndex={1}
+                          variant="soft"
+                          colorScheme="primary1"
+                          size="md"
+                          borderRadius="full"
+                          px={3}
+                          py={1}
+                          textTransform="none"
+                        >
+                          {t('Next funds deployment soon')}
+                        </Badge>
+                      </Box>
+                      <VStack w="full" bg="utils.pbg" pt={5} pb={5} align="start" spacing={3} flex={1}>
+                        <HStack w="full" justifyContent="space-between" alignItems="baseline" spacing={3} px={5}>
+                          <H2 size="xl" bold lineHeight={1.2} flex={1}>
+                            <LinkOverlay as={Link} to={getPath('impactFunds', encodeURIComponent(fund.name))}>
+                              {fund.title}
+                            </LinkOverlay>
+                          </H2>
+                          {amountDisplay && (
+                            <VStack align="end" spacing={0} flexShrink={0}>
+                              <Body size="md" bold whiteSpace="nowrap" lineHeight={1.2} textAlign="right">
+                                {amountDisplay.primary}
+                              </Body>
+                              {amountDisplay.secondary && (
+                                <Body
+                                  size="xs"
+                                  whiteSpace="nowrap"
+                                  lineHeight={1.2}
+                                  textAlign="right"
+                                  color={sectionMutedTextColor}
+                                >
+                                  {amountDisplay.secondary}
+                                </Body>
+                              )}
+                            </VStack>
+                          )}
+                        </HStack>
+
+                        {fund.subtitle && (
+                          <Body size="md" lineHeight={1.4} px={5}>
+                            {fund.subtitle}
+                          </Body>
+                        )}
+
+                        {fund.metrics.projectsFundedCount > 0 && (
+                          <Body size="sm" color={sectionMutedTextColor} px={5}>
+                            {t('{{projectCount}} projects supported', {
+                              projectCount: numberFormatter.format(fund.metrics.projectsFundedCount),
+                            })}
+                          </Body>
+                        )}
+
+                        <Flex
+                          w="full"
+                          px={5}
+                          mt="auto"
+                          pt={3}
+                          justifyContent="space-between"
+                          alignItems={{ base: 'stretch', md: 'center' }}
+                          gap={4}
+                          flexWrap="wrap"
+                        >
+                          {foundingSponsors.length > 0 ? (
+                            <Wrap spacing={3} align="center" justify="flex-start" flex="1 1 auto">
+                              {foundingSponsors.map((sponsor) => {
+                                const sponsorContent = sponsor.image ? (
+                                  <Image src={sponsor.image} alt={sponsor.name} w="full" h="full" objectFit="contain" />
+                                ) : (
+                                  <Body size="sm" bold color={sectionPrimaryTextColor}>
+                                    {sponsor.name}
+                                  </Body>
+                                )
+
+                                const sponsorCard = (
+                                  <Flex
+                                    w={{ base: '96px', sm: '111px' }}
+                                    h={{ base: '42px', sm: '48px' }}
+                                    align="center"
+                                    justify="center"
+                                  >
+                                    {sponsorContent}
+                                  </Flex>
+                                )
+
+                                return (
+                                  <WrapItem key={sponsor.id}>
+                                    {sponsor.url ? (
+                                      <ChakraLink href={sponsor.url} isExternal _hover={{ textDecoration: 'none' }}>
+                                        {sponsorCard}
+                                      </ChakraLink>
+                                    ) : (
+                                      sponsorCard
+                                    )}
+                                  </WrapItem>
+                                )
+                              })}
+                            </Wrap>
+                          ) : (
+                            <Box flex={1} />
+                          )}
+                          <CardCta to={getPath('impactFunds', encodeURIComponent(fund.name))} />
+                        </Flex>
+                      </VStack>
+                    </VStack>
+                  </LinkBox>
+                </CardLayout>
+              )
+            }
 
             return (
               <CardLayout
