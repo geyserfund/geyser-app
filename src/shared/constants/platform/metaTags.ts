@@ -1,5 +1,7 @@
+import { GeyserMainSeoImageUrl } from './url.ts'
+
 export const DefaultMetaTitle = 'Geyser | The #1 Bitcoin Crowdfunding and Fundraising Platform'
-export const DefaultMetaImage = 'https://storage.googleapis.com/geyser-projects-media/app/seo.png'
+export const DefaultMetaImage = GeyserMainSeoImageUrl
 export const DefaultMetaDescription = 'Support bitcoin projects you want to see come to life. Join the crowdfund now!'
 export const DefaultMetaType = 'website'
 export const DefaultMetaTwitterCard = 'summary_large_image'

@@ -525,3 +525,10 @@ export const LaunchpadSeoImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/seo/geyser-launchpad-seo.png'
 export const GrantsSeoImageUrl =
   'https://storage.googleapis.com/geyser-projects-media/app/seo/geyser-grants-seo-image.jpg'
+export const GeyserMainSeoImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/seo/Geyser_main.png'
+export const FundraisersSeoImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/seo/fundraisers.png'
+export const CampaignsSeoImageUrl =
+  'https://storage.googleapis.com/geyser-projects-media/app/seo/campaigns.png'
+export const ShopsSeoImageUrl = 'https://storage.googleapis.com/geyser-projects-media/app/seo/shops.png'
