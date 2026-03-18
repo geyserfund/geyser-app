@@ -12,7 +12,8 @@ import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
-import { __production__, __staging__, FundingErrorUrl } from '@/shared/constants/index.ts'
+import { GEYSER_LAUNCH_PROJECT_ID } from '@/shared/constants/config/env.ts'
+import { FundingErrorUrl } from '@/shared/constants/index.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom.ts'
@@ -22,7 +23,6 @@ import {
   FundingContributionPaymentDetailsFragment,
   FundingResourceType,
   QuoteCurrency,
-  USDCents,
   useContributionCreateMutation,
 } from '@/types/index.ts'
 import { commaFormatted, useMobileMode, useNotification } from '@/utils/index.ts'
@@ -30,25 +30,23 @@ import { commaFormatted, useMobileMode, useNotification } from '@/utils/index.ts
 import { QRCodeComponent } from '../../../../projectFunding/views/fundingPayment/components/QRCodeComponent'
 import { WaitingForPayment } from '../../../../projectFunding/views/fundingPayment/components/WaitingForPayment'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
+import { LAUNCH_FEE_USD_CENTS } from '../constants/launchFees.ts'
 import { useListenToContributionConfirmed } from '../hooks/useListenToContributionConfirmed.ts'
+import { LaunchPaymentMethod, LaunchPaymentMethodTabs } from './LaunchPaymentMethodSelection.tsx'
 import { ProjectLaunchStrategy } from './LaunchStrategySelection.tsx'
-
-const PROJECT_ID_FOR_GEYSER_LAUNCH = __production__ ? 3075 : __staging__ ? 839 : 839
-
-export const LAUNCH_FEE_USD_CENTS = {
-  [ProjectLaunchStrategy.STARTER_LAUNCH]: 2500 as USDCents, // 25 USD
-  [ProjectLaunchStrategy.GROWTH_LAUNCH]: 6000 as USDCents, // 60 USD
-  [ProjectLaunchStrategy.PRO_LAUNCH]: 9000 as USDCents, // 90 USD
-}
 
 export const LaunchFees = ({
   handleNext,
   handleBack,
   strategy,
+  selectedMethod,
+  onSelectMethod,
 }: {
   handleNext: () => void
   handleBack: () => void
   strategy: ProjectLaunchStrategy
+  selectedMethod: LaunchPaymentMethod
+  onSelectMethod: (method: LaunchPaymentMethod) => void
 }) => {
   const { user } = useAuthContext()
   const isMobile = useMobileMode()
@@ -96,7 +94,7 @@ export const LaunchFees = ({
     contributionCreate({
       variables: {
         input: {
-          projectId: PROJECT_ID_FOR_GEYSER_LAUNCH,
+          projectId: GEYSER_LAUNCH_PROJECT_ID,
           anonymous: false,
           refundable: false,
           donationAmount,
@@ -135,7 +133,7 @@ export const LaunchFees = ({
         })
       },
     })
-  }, [contributionCreate, donationAmount, project?.id, usdRate, user])
+  }, [contributionCreate, donationAmount, project?.id, strategy, toast, usdRate, user])
 
   const handleCopy = () => {
     onCopy()
@@ -295,8 +293,10 @@ export const LaunchFees = ({
       backButtonProps={backButtonProps}
     >
       <HStack w="full" justifyContent="space-between">
-        <Body>{t('Please pay the launch fee with lightning to continue.')}</Body>
+        <Body>{t('Choose your payment method. Lightning is the default option.')}</Body>
       </HStack>
+      <LaunchPaymentMethodTabs selectedMethod={selectedMethod} onSelectMethod={onSelectMethod} />
+      <Body>{t('Please pay the launch fee with Lightning to continue.')}</Body>
       {isPaid ? renderSuccessContent() : renderPaymentContent()}
     </ProjectCreationPageWrapper>
   )

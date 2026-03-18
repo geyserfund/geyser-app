@@ -9,14 +9,18 @@ import { ProjectReviewFragment, useProjectLaunchReviewsQuery } from '@/types/ind
 
 import { projectReviewsAtom } from '../../states/projectReviewAtom.ts'
 import { LaunchFees } from './views/LaunchFees.tsx'
+import { LaunchFeesStripe } from './views/LaunchFeesStripe.tsx'
 import { LaunchFinalize } from './views/LaunchFinalize.tsx'
+import { LaunchPaymentMethod, LaunchPaymentMethodSelection } from './views/LaunchPaymentMethodSelection.tsx'
 import { LaunchReview } from './views/LaunchReview.tsx'
 import { LaunchStrategySelection, ProjectLaunchStrategy } from './views/LaunchStrategySelection.tsx'
 
 enum LaunchStep {
   Review = 'review',
   Strategy = 'strategy',
-  Fees = 'fees',
+  PaymentMethod = 'payment-method',
+  FeesLightning = 'fees-lightning',
+  FeesStripe = 'fees-stripe',
   Finalize = 'finalize',
 }
 
@@ -26,6 +30,8 @@ export const Launch = () => {
 
   const [step, setStep] = useState<LaunchStep>(LaunchStep.Review)
   const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(ProjectLaunchStrategy.STARTER_LAUNCH)
+  const [paymentMethod, setPaymentMethod] = useState<LaunchPaymentMethod>(LaunchPaymentMethod.Lightning)
+  const [paymentMethodError, setPaymentMethodError] = useState('')
 
   const setProjectReviews = useSetAtom(projectReviewsAtom)
 
@@ -59,7 +65,7 @@ export const Launch = () => {
       }
     }
 
-    if (step === LaunchStep.Fees) {
+    if (step === LaunchStep.FeesLightning || step === LaunchStep.FeesStripe) {
       setStep(LaunchStep.Finalize)
     }
   }, [project.paidLaunch, step])
@@ -69,7 +75,11 @@ export const Launch = () => {
       navigate(getPath('launchPayment', project?.id))
     }
 
-    if (step === LaunchStep.Fees) {
+    if (step === LaunchStep.FeesLightning || step === LaunchStep.FeesStripe) {
+      setStep(LaunchStep.PaymentMethod)
+    }
+
+    if (step === LaunchStep.PaymentMethod) {
       setStep(LaunchStep.Strategy)
     }
 
@@ -80,7 +90,18 @@ export const Launch = () => {
 
   const handleNextStrategy = useCallback((strategy: ProjectLaunchStrategy) => {
     setStrategy(strategy)
-    setStep(LaunchStep.Fees)
+    setStep(LaunchStep.PaymentMethod)
+  }, [])
+
+  const handleSelectPaymentMethod = useCallback((method: LaunchPaymentMethod) => {
+    setPaymentMethod(method)
+    setStep(method === LaunchPaymentMethod.Lightning ? LaunchStep.FeesLightning : LaunchStep.FeesStripe)
+    setPaymentMethodError('')
+  }, [])
+
+  const handleStripeUnavailable = useCallback((message: string) => {
+    setPaymentMethodError(message)
+    setStep(LaunchStep.PaymentMethod)
   }, [])
 
   if (projectLoading || loading) return <Loader />
@@ -90,8 +111,37 @@ export const Launch = () => {
       return <LaunchReview handleNext={handleNext} />
     case LaunchStep.Strategy:
       return <LaunchStrategySelection handleNext={handleNextStrategy} handleBack={handleBack} />
-    case LaunchStep.Fees:
-      return <LaunchFees handleNext={handleNext} handleBack={handleBack} strategy={strategy} />
+    case LaunchStep.PaymentMethod:
+      return (
+        <LaunchPaymentMethodSelection
+          selectedMethod={paymentMethod}
+          paymentMethodError={paymentMethodError}
+          handleNext={handleSelectPaymentMethod}
+          onSelectMethod={setPaymentMethod}
+          handleBack={handleBack}
+        />
+      )
+    case LaunchStep.FeesLightning:
+      return (
+        <LaunchFees
+          handleNext={handleNext}
+          handleBack={handleBack}
+          strategy={strategy}
+          selectedMethod={paymentMethod}
+          onSelectMethod={handleSelectPaymentMethod}
+        />
+      )
+    case LaunchStep.FeesStripe:
+      return (
+        <LaunchFeesStripe
+          handleNext={handleNext}
+          handleBack={handleBack}
+          strategy={strategy}
+          selectedMethod={paymentMethod}
+          onSelectMethod={handleSelectPaymentMethod}
+          onStripeUnavailable={handleStripeUnavailable}
+        />
+      )
     case LaunchStep.Finalize:
       return <LaunchFinalize handleBack={handleBack} />
     default:
