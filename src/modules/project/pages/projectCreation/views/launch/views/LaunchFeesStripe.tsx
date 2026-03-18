@@ -2,37 +2,29 @@ import { HStack, VStack } from '@chakra-ui/react'
 import { EmbeddedCheckout, EmbeddedCheckoutProvider } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import Confetti from 'react-confetti'
 import { createUseStyles } from 'react-jss'
 
-import Loader from '@/components/ui/Loader.tsx'
 import { AppTheme } from '@/context'
-import { useAuthContext } from '@/context/auth.tsx'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
-import { useStripeEmbeddedTheme } from '@/modules/project/funding/hooks/useStripeEmbeddedTheme.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
-import { GEYSER_LAUNCH_PROJECT_ID, ORIGIN, VITE_APP_STRIPE_API_KEY } from '@/shared/constants/config/env.ts'
-import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
+import { VITE_APP_STRIPE_API_KEY } from '@/shared/constants/config/env.ts'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom.ts'
 import {
   ContributionFiatPaymentDetailsFragment,
   FundingContributionFragment,
-  FundingResourceType,
-  QuoteCurrency,
-  useContributionCreateMutation,
+  FundingContributionPaymentDetailsFragment,
 } from '@/types/index.ts'
-import { commaFormatted, useNotification } from '@/utils/index.ts'
+import { commaFormatted } from '@/utils/index.ts'
 
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { LAUNCH_FEE_USD_CENTS } from '../constants/launchFees.ts'
 import { useListenToContributionConfirmed } from '../hooks/useListenToContributionConfirmed.ts'
-import { LaunchPaymentMethod, LaunchPaymentMethodTabs } from './LaunchPaymentMethodSelection.tsx'
 import { ProjectLaunchStrategy } from './LaunchStrategySelection.tsx'
 
 const stripePromiseByAccount = new Map<string, ReturnType<typeof loadStripe>>()
@@ -54,70 +46,27 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
   },
 }))
 
+/** Stripe payment screen for the launch fee. Receives already-created contribution data from Launch.tsx. */
 export const LaunchFeesStripe = ({
   handleNext,
   handleBack,
   strategy,
-  selectedMethod,
-  onSelectMethod,
-  onStripeUnavailable,
+  contributionData,
+  paymentsData,
 }: {
   handleNext: () => void
   handleBack: () => void
   strategy: ProjectLaunchStrategy
-  selectedMethod: LaunchPaymentMethod
-  onSelectMethod: (method: LaunchPaymentMethod) => void
-  onStripeUnavailable: (message: string) => void
+  contributionData: FundingContributionFragment
+  paymentsData: FundingContributionPaymentDetailsFragment
 }) => {
   const classes = useStyles()
-  const toast = useNotification()
-  const stripeEmbeddedTheme = useStripeEmbeddedTheme()
 
-  const { user } = useAuthContext()
   const { project, partialUpdateProject } = useProjectAtom()
+  const { getSatoshisFromUSDCents } = useBTCConverter()
 
-  const [contributionData, setContributionData] = useState<FundingContributionFragment>()
-  const [paymentDetails, setPaymentDetails] = useState<ContributionFiatPaymentDetailsFragment>()
   const [isPaid, setIsPaid] = useState(false)
   const [isCheckoutCompleted, setIsCheckoutCompleted] = useState(false)
-
-  const usdRate = useAtomValue(usdRateAtom)
-  const { getSatoshisFromUSDCents } = useBTCConverter()
-  const donationAmount = getSatoshisFromUSDCents(LAUNCH_FEE_USD_CENTS[strategy])
-
-  const handleUnavailable = useCallback(
-    (description: string) => {
-      toast.error({
-        title: t('Stripe checkout unavailable'),
-        description,
-      })
-      onStripeUnavailable(description)
-    },
-    [onStripeUnavailable, toast],
-  )
-
-  const [contributionCreate, { loading }] = useContributionCreateMutation({
-    onCompleted(data) {
-      if (!data.contributionCreate) return
-
-      setContributionData(data.contributionCreate.contribution)
-
-      const fiatPayment = data.contributionCreate.payments.fiat
-      if (!fiatPayment?.stripeClientSecret || !fiatPayment?.stripeAccountId) {
-        handleUnavailable(t('Unable to initialize card checkout. Please choose Lightning or try again.'))
-        return
-      }
-
-      setPaymentDetails({
-        stripeClientSecret: fiatPayment.stripeClientSecret,
-        stripeAccountId: fiatPayment.stripeAccountId,
-      })
-    },
-    onError(error) {
-      console.error(error)
-      handleUnavailable(error.message || t('Something went wrong. Please try again.'))
-    },
-  })
 
   const onCompleted = useCallback(() => {
     setIsPaid(true)
@@ -125,9 +74,15 @@ export const LaunchFeesStripe = ({
   }, [partialUpdateProject])
 
   useListenToContributionConfirmed({
-    contributionId: contributionData?.id,
+    contributionId: contributionData.id,
     onCompleted,
   })
+
+  const paymentDetails = useMemo<ContributionFiatPaymentDetailsFragment | null>(() => {
+    const { fiat } = paymentsData
+    if (!fiat?.stripeClientSecret || !fiat?.stripeAccountId) return null
+    return { stripeClientSecret: fiat.stripeClientSecret, stripeAccountId: fiat.stripeAccountId }
+  }, [paymentsData])
 
   const stripeClientSecret = useMemo(() => {
     const clientSecret = paymentDetails?.stripeClientSecret
@@ -157,75 +112,8 @@ export const LaunchFeesStripe = ({
     return getStripePromiseForAccount(stripeAccountId)
   }, [stripeAccountId])
 
-  const returnUrl = useMemo(() => {
-    if (project.name) {
-      return `${ORIGIN}/project/${project.name}/funding/success`
-    }
-
-    return `${ORIGIN}/`
-  }, [project.name])
-
   const launchFeeInSats = getSatoshisFromUSDCents(LAUNCH_FEE_USD_CENTS[strategy])
   const launchFeeInUsd = LAUNCH_FEE_USD_CENTS[strategy] / 100
-
-  const createContribution = useCallback(() => {
-    if (!project?.id || !user?.id || !usdRate) {
-      return
-    }
-
-    contributionCreate({
-      variables: {
-        input: {
-          projectId: GEYSER_LAUNCH_PROJECT_ID,
-          anonymous: false,
-          refundable: false,
-          donationAmount,
-          metadataInput: {
-            email: user?.email,
-            privateComment: JSON.stringify({
-              paidLaunch: true,
-              projectId: project?.id,
-              launchStrategy: strategy,
-            }),
-            followProject: true,
-          },
-          orderInput: {
-            bitcoinQuote: {
-              quote: usdRate,
-              quoteCurrency: QuoteCurrency.Usd,
-            },
-            items: [],
-          },
-          sourceResourceInput: { resourceId: project.id.toString(), resourceType: FundingResourceType.Project },
-          paymentsInput: {
-            fiat: {
-              create: true,
-              stripe: {
-                returnUrl,
-                theme: stripeEmbeddedTheme,
-              },
-            },
-          },
-        },
-      },
-    })
-  }, [
-    contributionCreate,
-    donationAmount,
-    project?.id,
-    returnUrl,
-    strategy,
-    stripeEmbeddedTheme,
-    usdRate,
-    user?.email,
-    user?.id,
-  ])
-
-  useEffect(() => {
-    if (!user?.id || !project?.id || !usdRate) return
-    if (contributionData?.id || paymentDetails || loading) return
-    createContribution()
-  }, [contributionData?.id, createContribution, loading, paymentDetails, project?.id, usdRate, user?.id])
 
   const renderSuccessContent = () => {
     return (
@@ -280,12 +168,8 @@ export const LaunchFeesStripe = ({
   }
 
   const renderStripePayment = () => {
-    if (loading) {
-      return <Loader />
-    }
-
     if (!stripeClientSecret || !stripeOptions || !stripePromise) {
-      return <Loader />
+      return null
     }
 
     return (
@@ -332,10 +216,6 @@ export const LaunchFeesStripe = ({
       continueButtonProps={continueButtonProps}
       backButtonProps={backButtonProps}
     >
-      <HStack w="full" justifyContent="space-between">
-        <Body>{t('Choose your payment method. Lightning is the default option.')}</Body>
-      </HStack>
-      <LaunchPaymentMethodTabs selectedMethod={selectedMethod} onSelectMethod={onSelectMethod} />
       <Body>{t('Pay the launch fee with credit card to continue.')}</Body>
       {isPaid ? renderSuccessContent() : renderStripePayment()}
     </ProjectCreationPageWrapper>

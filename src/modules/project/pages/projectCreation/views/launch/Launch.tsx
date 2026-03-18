@@ -5,9 +5,15 @@ import { useNavigate } from 'react-router'
 import Loader from '@/components/ui/Loader.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { ProjectReviewFragment, useProjectLaunchReviewsQuery } from '@/types/index.ts'
+import {
+  FundingContributionFragment,
+  FundingContributionPaymentDetailsFragment,
+  ProjectReviewFragment,
+  useProjectLaunchReviewsQuery,
+} from '@/types/index.ts'
 
 import { projectReviewsAtom } from '../../states/projectReviewAtom.ts'
+import { useLaunchContributionCreate } from './hooks/useLaunchContributionCreate.ts'
 import { LaunchFees } from './views/LaunchFees.tsx'
 import { LaunchFeesStripe } from './views/LaunchFeesStripe.tsx'
 import { LaunchFinalize } from './views/LaunchFinalize.tsx'
@@ -32,6 +38,11 @@ export const Launch = () => {
   const [strategy, setStrategy] = useState<ProjectLaunchStrategy>(ProjectLaunchStrategy.STARTER_LAUNCH)
   const [paymentMethod, setPaymentMethod] = useState<LaunchPaymentMethod>(LaunchPaymentMethod.Lightning)
   const [paymentMethodError, setPaymentMethodError] = useState('')
+
+  const [contributionData, setContributionData] = useState<FundingContributionFragment>()
+  const [paymentsData, setPaymentsData] = useState<FundingContributionPaymentDetailsFragment>()
+
+  const { createContribution, loading: contributionLoading } = useLaunchContributionCreate(strategy)
 
   const setProjectReviews = useSetAtom(projectReviewsAtom)
 
@@ -76,6 +87,8 @@ export const Launch = () => {
     }
 
     if (step === LaunchStep.FeesLightning || step === LaunchStep.FeesStripe) {
+      setContributionData(undefined)
+      setPaymentsData(undefined)
       setStep(LaunchStep.PaymentMethod)
     }
 
@@ -88,21 +101,29 @@ export const Launch = () => {
     }
   }, [step, project?.id, navigate])
 
-  const handleNextStrategy = useCallback((strategy: ProjectLaunchStrategy) => {
-    setStrategy(strategy)
+  const handleNextStrategy = useCallback((selectedStrategy: ProjectLaunchStrategy) => {
+    setStrategy(selectedStrategy)
     setStep(LaunchStep.PaymentMethod)
   }, [])
 
-  const handleSelectPaymentMethod = useCallback((method: LaunchPaymentMethod) => {
-    setPaymentMethod(method)
-    setStep(method === LaunchPaymentMethod.Lightning ? LaunchStep.FeesLightning : LaunchStep.FeesStripe)
-    setPaymentMethodError('')
-  }, [])
+  const handleSelectPaymentMethod = useCallback(
+    async (method: LaunchPaymentMethod) => {
+      setPaymentMethod(method)
+      setPaymentMethodError('')
 
-  const handleStripeUnavailable = useCallback((message: string) => {
-    setPaymentMethodError(message)
-    setStep(LaunchStep.PaymentMethod)
-  }, [])
+      const result = await createContribution(method)
+
+      if (!result.ok) {
+        setPaymentMethodError(result.error)
+        return
+      }
+
+      setContributionData(result.contribution)
+      setPaymentsData(result.payments)
+      setStep(method === LaunchPaymentMethod.Lightning ? LaunchStep.FeesLightning : LaunchStep.FeesStripe)
+    },
+    [createContribution],
+  )
 
   if (projectLoading || loading) return <Loader />
 
@@ -116,32 +137,32 @@ export const Launch = () => {
         <LaunchPaymentMethodSelection
           selectedMethod={paymentMethod}
           paymentMethodError={paymentMethodError}
+          isLoading={contributionLoading}
           handleNext={handleSelectPaymentMethod}
           onSelectMethod={setPaymentMethod}
           handleBack={handleBack}
         />
       )
     case LaunchStep.FeesLightning:
-      return (
+      return contributionData && paymentsData ? (
         <LaunchFees
           handleNext={handleNext}
           handleBack={handleBack}
           strategy={strategy}
-          selectedMethod={paymentMethod}
-          onSelectMethod={handleSelectPaymentMethod}
+          contributionData={contributionData}
+          paymentsData={paymentsData}
         />
-      )
+      ) : null
     case LaunchStep.FeesStripe:
-      return (
+      return contributionData && paymentsData ? (
         <LaunchFeesStripe
           handleNext={handleNext}
           handleBack={handleBack}
           strategy={strategy}
-          selectedMethod={paymentMethod}
-          onSelectMethod={handleSelectPaymentMethod}
-          onStripeUnavailable={handleStripeUnavailable}
+          contributionData={contributionData}
+          paymentsData={paymentsData}
         />
-      )
+      ) : null
     case LaunchStep.Finalize:
       return <LaunchFinalize handleBack={handleBack} />
     default:

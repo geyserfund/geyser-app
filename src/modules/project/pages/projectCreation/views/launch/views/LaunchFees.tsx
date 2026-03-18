@@ -1,30 +1,19 @@
 import { Button, HStack, Image, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Confetti from 'react-confetti'
 import { PiCopy } from 'react-icons/pi'
 
-import Loader from '@/components/ui/Loader.tsx'
-import { useAuthContext } from '@/context/auth.tsx'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
-import { GEYSER_LAUNCH_PROJECT_ID } from '@/shared/constants/config/env.ts'
 import { FundingErrorUrl } from '@/shared/constants/index.ts'
-import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom.ts'
 import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import {
-  FundingContributionFragment,
-  FundingContributionPaymentDetailsFragment,
-  FundingResourceType,
-  QuoteCurrency,
-  useContributionCreateMutation,
-} from '@/types/index.ts'
+import { FundingContributionFragment, FundingContributionPaymentDetailsFragment } from '@/types/index.ts'
 import { commaFormatted, useMobileMode, useNotification } from '@/utils/index.ts'
 
 import { QRCodeComponent } from '../../../../projectFunding/views/fundingPayment/components/QRCodeComponent'
@@ -32,49 +21,28 @@ import { WaitingForPayment } from '../../../../projectFunding/views/fundingPayme
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { LAUNCH_FEE_USD_CENTS } from '../constants/launchFees.ts'
 import { useListenToContributionConfirmed } from '../hooks/useListenToContributionConfirmed.ts'
-import { LaunchPaymentMethod, LaunchPaymentMethodTabs } from './LaunchPaymentMethodSelection.tsx'
 import { ProjectLaunchStrategy } from './LaunchStrategySelection.tsx'
 
+/** Lightning payment screen for the launch fee. Receives already-created contribution data from Launch.tsx. */
 export const LaunchFees = ({
   handleNext,
   handleBack,
   strategy,
-  selectedMethod,
-  onSelectMethod,
+  contributionData,
+  paymentsData,
 }: {
   handleNext: () => void
   handleBack: () => void
   strategy: ProjectLaunchStrategy
-  selectedMethod: LaunchPaymentMethod
-  onSelectMethod: (method: LaunchPaymentMethod) => void
+  contributionData: FundingContributionFragment
+  paymentsData: FundingContributionPaymentDetailsFragment
 }) => {
-  const { user } = useAuthContext()
   const isMobile = useMobileMode()
   const toast = useNotification()
 
   const { project, partialUpdateProject } = useProjectAtom()
 
-  const [contributionData, setContributionData] = useState<FundingContributionFragment>()
-  const [paymentsData, setPaymentsData] = useState<FundingContributionPaymentDetailsFragment>()
-
   const [isPaid, setIsPaid] = useState(false)
-
-  const [contributionCreate, { loading }] = useContributionCreateMutation({
-    onCompleted(data) {
-      if (data.contributionCreate) {
-        setContributionData(data.contributionCreate.contribution)
-        setPaymentsData(data.contributionCreate.payments)
-      }
-    },
-  })
-
-  const usdRate = useAtomValue(usdRateAtom)
-
-  const { getSatoshisFromUSDCents } = useBTCConverter()
-
-  const donationAmount = getSatoshisFromUSDCents(LAUNCH_FEE_USD_CENTS[strategy])
-
-  const { hasCopied, onCopy } = useCopyToClipboard(paymentsData?.lightning?.paymentRequest || '')
 
   // Update project state to mark it as paid
   const onCompleted = () => {
@@ -84,56 +52,13 @@ export const LaunchFees = ({
 
   // Listen for funding success using the custom hook
   useListenToContributionConfirmed({
-    contributionId: contributionData?.id,
+    contributionId: contributionData.id,
     onCompleted,
   })
 
-  useEffect(() => {
-    if (!user.id || !project.id || !usdRate) return
+  const { getSatoshisFromUSDCents } = useBTCConverter()
 
-    contributionCreate({
-      variables: {
-        input: {
-          projectId: GEYSER_LAUNCH_PROJECT_ID,
-          anonymous: false,
-          refundable: false,
-          donationAmount,
-          metadataInput: {
-            email: user?.email,
-            privateComment: JSON.stringify({
-              paidLaunch: true,
-              projectId: project?.id,
-              launchStrategy: strategy,
-            }),
-            followProject: true,
-          },
-          orderInput: {
-            bitcoinQuote: {
-              quote: usdRate,
-              quoteCurrency: QuoteCurrency.Usd,
-            },
-            items: [],
-          },
-          sourceResourceInput: {
-            resourceId: project?.id.toString(),
-            resourceType: FundingResourceType.Project,
-          },
-          paymentsInput: {
-            lightning: {
-              create: true,
-            },
-          },
-        },
-      },
-      onError(error) {
-        console.error(error)
-        toast.error({
-          title: t('Error creating contribution'),
-          description: error.message || t('Something went wrong. Please try again.'),
-        })
-      },
-    })
-  }, [contributionCreate, donationAmount, project?.id, strategy, toast, usdRate, user])
+  const { hasCopied, onCopy } = useCopyToClipboard(paymentsData?.lightning?.paymentRequest || '')
 
   const handleCopy = () => {
     onCopy()
@@ -147,10 +72,8 @@ export const LaunchFees = ({
     const paymentRequest = paymentsData?.lightning?.paymentRequest
     if (!paymentRequest) return
 
-    // Lightning invoice URI scheme
     const lightningUri = `lightning:${paymentRequest}`
 
-    // Only attempt to open lightning wallets on mobile devices
     if (isMobile) {
       const a = document.createElement('a')
       a.href = lightningUri
@@ -218,10 +141,6 @@ export const LaunchFees = ({
   }
 
   const renderPaymentContent = () => {
-    if (loading) {
-      return <Loader />
-    }
-
     if (!paymentsData?.lightning?.paymentRequest) {
       return (
         <VStack w="full" spacing={6}>
@@ -292,10 +211,6 @@ export const LaunchFees = ({
       continueButtonProps={continueButtonProps}
       backButtonProps={backButtonProps}
     >
-      <HStack w="full" justifyContent="space-between">
-        <Body>{t('Choose your payment method. Lightning is the default option.')}</Body>
-      </HStack>
-      <LaunchPaymentMethodTabs selectedMethod={selectedMethod} onSelectMethod={onSelectMethod} />
       <Body>{t('Please pay the launch fee with Lightning to continue.')}</Body>
       {isPaid ? renderSuccessContent() : renderPaymentContent()}
     </ProjectCreationPageWrapper>

@@ -53,12 +53,14 @@ export const LaunchPaymentMethodTabs = ({
 export const LaunchPaymentMethodSelection = ({
   selectedMethod,
   paymentMethodError,
+  isLoading,
   onSelectMethod,
   handleBack,
   handleNext,
 }: {
   selectedMethod: LaunchPaymentMethod
   paymentMethodError?: string
+  isLoading?: boolean
   onSelectMethod: (method: LaunchPaymentMethod) => void
   handleBack: () => void
   handleNext: (method: LaunchPaymentMethod) => void
@@ -67,6 +69,8 @@ export const LaunchPaymentMethodSelection = ({
 
   const continueButtonProps = {
     onClick: () => handleNext(selectedMethod),
+    isLoading,
+    isDisabled: isLoading,
   }
 
   const backButtonProps = {
