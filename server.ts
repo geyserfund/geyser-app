@@ -44,8 +44,16 @@ const getPrerenderFallbackReason = (err, prerenderedResponse) => {
 }
 
 const prerenderBlockedRoutePatterns = [
+  // Internal API and system routes
   /^\/(?:api|auth|graphql|cache|healthz)(?:\/|$)/i,
-  /^\/(?:user|settings|wallet|account|messages|notifications|admin|dashboard)(?:\/|$)/i,
+  // Project creation/launch flow (requires auth)
+  /^\/launch(?:\/|$)/i,
+  // User and hero profile settings pages (requires auth)
+  /^\/user\/[^/]+\/settings(?:\/|$)/i,
+  /^\/hero\/[^/]+\/settings(?:\/|$)/i,
+  // Project creator-only sub-routes under /project/:name/
+  /^\/project\/[^/]+\/dashboard(?:\/|$)/i,
+  /^\/project\/[^/]+\/(?:story|posts\/(?:create|edit)|rewards\/(?:create|edit))(?:\/|$)/i,
 ]
 
 const prerenderBlockedExactPaths = new Set(['/meta.json', '/sw.js', '/manifest.json', '/favicon.ico'])
