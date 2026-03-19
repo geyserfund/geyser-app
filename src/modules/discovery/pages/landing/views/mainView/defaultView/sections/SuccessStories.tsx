@@ -61,6 +61,23 @@ const stories = [
     image: BringSuccessStoryImage,
     link: 'https://guide.geyser.fund/geyser-docs/guides/take-brindon-to-btc-prague',
   },
+  {
+    image:
+      'https://storage.googleapis.com/geyser-projects-media/app/success_stories/success_story_love_is_the_cure.png',
+    link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/love-is-the-cure',
+  },
+  {
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/success_stories/success_story_Node_runners.png',
+    link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/noderunners-bitcoin-blitz',
+  },
+  {
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/success_stories/success_story_wall_axe.png',
+    link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/wallaxe',
+  },
+  {
+    image: 'https://storage.googleapis.com/geyser-projects-media/app/success_stories/success_story_we_satoshi.png',
+    link: 'https://guide.geyser.fund/geyser-docs/guides/success-stories/wesatoshis',
+  },
 ]
 
 export const SuccessStories = () => {
