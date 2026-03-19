@@ -1,10 +1,10 @@
 /* eslint-disable complexity */
 import { Box, VStack } from '@chakra-ui/react'
-import { useEffect } from 'react'
 import { Outlet } from 'react-router'
 
 import { Head } from '@/config/Head'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { usePrerenderReady } from '@/shared/hooks/platform/usePrerenderReady.ts'
 import { validateImageUrl } from '@/shared/markdown/validations/image.ts'
 import { standardPadding } from '@/shared/styles'
 
@@ -26,14 +26,8 @@ export const ProjectLayout = () => {
     ? project.thumbnailImage || ''
     : project?.images?.find((image) => validateImageUrl(image)) || ''
   const hasSeoTitle = Boolean((project?.title || '').trim())
-  const hasSeoDescription = Boolean((project?.shortDescription || project?.description || '').trim())
-  const seoReady = !loading && Boolean(project?.id) && hasSeoTitle && hasSeoDescription
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const prerenderWindow = window as Window & { prerenderReady?: boolean }
-    prerenderWindow.prerenderReady = seoReady
-  }, [seoReady])
+  const hasCoreSeoData = !loading && Boolean(project?.id) && hasSeoTitle
+  const { isPrerenderRuntime } = usePrerenderReady({ prerenderReady: hasCoreSeoData })
 
   return (
     <Box
@@ -52,7 +46,7 @@ export const ProjectLayout = () => {
         type="article"
         url={project?.name ? `https://geyser.fund/project/${project.name}` : undefined}
       >
-        {!loading && !initialRewardsLoading && (
+        {!loading && (!initialRewardsLoading || isPrerenderRuntime) && (
           <script type="application/ld+json">{buildProjectJsonLd(project, rewards)}</script>
         )}
       </Head>

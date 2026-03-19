@@ -6,10 +6,9 @@ import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { addContributionAtom, addContributorAtom } from '@/modules/project/state/contributionsAtom'
 import { addContributionToInProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
+import { useIsPrerenderRuntime } from '@/shared/hooks/platform/usePrerenderReady.ts'
 import { ContributionStatus, useProjectContributionSubscription } from '@/types/index.ts'
 import { convertSatsToCents, toInt } from '@/utils'
-
-const prerenderUserAgentPattern = /prerender|bot|crawler|spider|discordbot|slackbot|twitterbot|facebookexternalhit/i
 
 export const useLiveContributions = () => {
   const { project, partialUpdateProject } = useProjectAtom()
@@ -21,8 +20,7 @@ export const useLiveContributions = () => {
   const addContributor = useSetAtom(addContributorAtom)
   const addContributionToInProgressGoals = useSetAtom(addContributionToInProgressGoalsAtom)
 
-  const isPrerenderRuntime =
-    typeof navigator !== 'undefined' && prerenderUserAgentPattern.test(navigator.userAgent || '')
+  const isPrerenderRuntime = useIsPrerenderRuntime()
   const skipSubscription = !project.id || isPrerenderRuntime
 
   useProjectContributionSubscription({
