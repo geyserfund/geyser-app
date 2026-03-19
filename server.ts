@@ -43,15 +43,6 @@ const getPrerenderFallbackReason = (err, prerenderedResponse) => {
   return null
 }
 
-const prerenderAllowedRoutePatterns = [
-  /^\/$/i,
-  /^\/project\/[^/]+(?:\/.*)?$/i,
-  /^\/products(?:\/|$)/i,
-  /^\/grants(?:\/|$)/i,
-  /^\/leaderboard\/?$/i,
-  /^\/activity\/global\/?$/i,
-]
-
 const prerenderBlockedRoutePatterns = [
   /^\/(?:api|auth|graphql|cache|healthz)(?:\/|$)/i,
   /^\/(?:user|settings|wallet|account|messages|notifications|admin|dashboard)(?:\/|$)/i,
@@ -84,10 +75,6 @@ const getPrerenderRouteDecision = (requestUrl = '/') => {
 
   if (prerenderBlockedRoutePatterns.some((pattern) => pattern.test(pathname))) {
     return { allow: false, reason: 'private-route', pathname }
-  }
-
-  if (!prerenderAllowedRoutePatterns.some((pattern) => pattern.test(pathname))) {
-    return { allow: false, reason: 'route-not-allowlisted', pathname }
   }
 
   return { allow: true, reason: 'public-indexable-route', pathname }
