@@ -7,7 +7,8 @@ import { useNavigate, useParams } from 'react-router'
 import { TextInputBox } from '@/components/ui'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { Country, ProjectCategory, ProjectCreationStep, ProjectSubCategory } from '@/types/index.ts'
+import { ProjectCreationStep } from '@/types/index.ts'
+import type { Country, CreateProjectInput, ProjectCategory, ProjectSubCategory, UpdateProjectInput } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
 import { useAuthContext } from '../../../../../context'
@@ -22,7 +23,7 @@ import { ProjectCreationReferralCapture } from '../components/ProjectCreationRef
 import { ProjectExitConfirmModal } from '../components/ProjectExitConfirmModal'
 import { useUpdateProjectWithLastCreationStep } from '../hooks/useIsStepAhead.tsx'
 import { useProjectForm } from '../hooks/useProjectForm'
-import { ProjectCreationVariables } from '../hooks/useProjectForm.tsx'
+import type { ProjectCreationVariables } from '../hooks/useProjectForm.tsx'
 
 export const LaunchProjectDetails = () => {
   const { t } = useTranslation()
@@ -94,10 +95,9 @@ export const LaunchProjectDetails = () => {
     const normalizedReferrerHeroId = referrerHeroId.trim() || undefined
 
     if (isEdit && project.id) {
-      const projectUpdates = !form.formState.isDirty
-        ? {}
+      const projectUpdates: Omit<UpdateProjectInput, 'projectId'> | undefined = !form.formState.isDirty
+        ? undefined
         : {
-            projectId: Number(project.id),
             category: category as ProjectCategory,
             subCategory: subCategory as ProjectSubCategory,
             countryCode: location as Country['code'],
@@ -114,16 +114,18 @@ export const LaunchProjectDetails = () => {
         },
       })
     } else {
+      const createProjectInput: CreateProjectInput = {
+        ...values,
+        countryCode: location as Country['code'],
+        category: category as ProjectCategory,
+        subCategory: subCategory as ProjectSubCategory,
+        tagIds: tags,
+        ...(normalizedReferrerHeroId ? { referrerHeroId: normalizedReferrerHeroId } : {}),
+      }
+
       createProject.execute({
         variables: {
-          input: {
-            ...values,
-            countryCode: location as Country['code'],
-            category: category as ProjectCategory,
-            subCategory: subCategory as ProjectSubCategory,
-            tagIds: tags,
-            ...(normalizedReferrerHeroId ? { referrerHeroId: normalizedReferrerHeroId } : {}),
-          },
+          input: createProjectInput,
         },
         onCompleted({ createProject }) {
           setProjectReferrerHeroId(null)
