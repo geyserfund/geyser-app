@@ -222,12 +222,14 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const [swapData, setSwapData] = useState<PayoutFlowSwapData | null>(null)
   const [payoutPrepareError, setPayoutPrepareError] = useState<string | null>(null)
   const [isInternalRetryPayout, setIsInternalRetryPayout] = useState(false)
+  const [hasFailedPreviousPayout, setHasFailedPreviousPayout] = useState(false)
 
   useEffect(() => {
     if (!isOpen) {
       hasPreparedPayoutRef.current = false
       hasDefaultedMethodRef.current = false
       setIsInternalRetryPayout(false)
+      setHasFailedPreviousPayout(false)
       return
     }
 
@@ -247,6 +249,14 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
           })
           .catch(() => null)
 
+        const latestPayout = latestPayoutResult?.data?.payoutLatest?.payout
+        const latestPayoutPayment = [...(latestPayout?.payments ?? [])].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        )[0]
+
+        setHasFailedPreviousPayout(
+          Boolean(latestPayout?.status === PayoutStatus.Failed && latestPayoutPayment?.status === PaymentStatus.Refunded),
+        )
         setIsInternalRetryPayout(Boolean(latestPayoutResult?.data?.payoutLatest?.payoutMetadata?.requiresUserLockTx))
 
         await payoutPrepare({
@@ -296,12 +306,15 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     activeLightningPayment,
   })
   const progressMethod = shouldShowProcessedScreen ? processedMethod : selectedMethod
+  const shouldShowFailedRetryState =
+    hasFailedPreviousPayout && !isRefundableRecovery && !shouldShowProcessedScreen && !isWaitingConfirmation
   const progressStage = getProgressStage({
     shouldShowProcessedScreen,
     isWaitingConfirmation,
     isWaitingClaimReady,
     shouldResumeOnChainPayout,
     isClaimable,
+    shouldShowFailedRetryState,
   })
   const progressSteps = getPayoutProgressSteps({
     method: progressMethod,
@@ -331,10 +344,12 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const modalTitle = getPayoutModalTitle({
     shouldResumeOnChainPayout,
     shouldRequestBitcoinAddressOnResume,
+    shouldShowFailedRetryState,
   })
   const submitButtonLabel = getPayoutSubmitButtonLabel({
     shouldResumeOnChainPayout,
     shouldRequestBitcoinAddressOnResume,
+    shouldShowFailedRetryState,
   })
   const isPrismPayout = contractType === PayoutContractType.Prism
   const requiresInternalLock = isPrismPayout || isInternalRetryPayout
@@ -665,6 +680,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     setPayoutInvoiceId('')
     setRefundAddress(null)
     setIsInternalRetryPayout(false)
+    setHasFailedPreviousPayout(false)
     onClose()
   }
 
@@ -819,6 +835,18 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   }
 
   const modalDescription = shouldResumeOnChainPayout ? undefined : activeProgressDescription
+  const failedRetryNotice = shouldShowFailedRetryState ? (
+    <Feedback variant={FeedBackVariant.ERROR} w="full">
+      <Body>
+        {t(
+          'Your previous payout attempt failed after the claim window expired. The funds have been returned to your Rootstock wallet, and you can try again now.',
+        )}
+      </Body>
+    </Feedback>
+  ) : undefined
+  const resolvedModalDescription = shouldShowFailedRetryState
+    ? t('Choose a payout method below to start a new payout.')
+    : modalDescription
   const modalSubtitle = payoutUuid ? (
     <HStack spacing={6} align="center" justify="space-between" w="full">
       <HStack spacing={6} align="center" flexWrap="wrap">
@@ -851,20 +879,21 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
         ? renderModalContent({
             title: modalTitle,
             subtitle: modalSubtitle,
-            description: modalDescription,
+            description: resolvedModalDescription,
             content: <PayoutRskSkeleton />,
           })
         : payoutPrepareError
         ? renderModalContent({
             title: modalTitle,
             subtitle: modalSubtitle,
-            description: modalDescription,
+            description: resolvedModalDescription,
             content: <Feedback variant={FeedBackVariant.ERROR} text={payoutPrepareError} />,
           })
         : renderModalContent({
             title: modalTitle,
             subtitle: modalSubtitle,
-            description: modalDescription,
+            description: resolvedModalDescription,
+            notice: failedRetryNotice,
             content: (
               <>
                 {shouldShowMethodSelectionStep && (
@@ -936,6 +965,7 @@ function getProgressStage(params: {
   isWaitingClaimReady: boolean
   shouldResumeOnChainPayout: boolean
   isClaimable: boolean
+  shouldShowFailedRetryState: boolean
 }): PayoutProgressStage {
   const {
     shouldShowProcessedScreen,
@@ -943,10 +973,15 @@ function getProgressStage(params: {
     isWaitingClaimReady,
     shouldResumeOnChainPayout,
     isClaimable,
+    shouldShowFailedRetryState,
   } = params
 
   if (shouldShowProcessedScreen) {
     return 'completed'
+  }
+
+  if (shouldShowFailedRetryState) {
+    return 'setup'
   }
 
   if (isWaitingConfirmation) {
@@ -963,8 +998,13 @@ function getProgressStage(params: {
 function getPayoutModalTitle(params: {
   shouldResumeOnChainPayout: boolean
   shouldRequestBitcoinAddressOnResume: boolean
+  shouldShowFailedRetryState: boolean
 }): string {
-  const { shouldResumeOnChainPayout, shouldRequestBitcoinAddressOnResume } = params
+  const { shouldResumeOnChainPayout, shouldRequestBitcoinAddressOnResume, shouldShowFailedRetryState } = params
+
+  if (shouldShowFailedRetryState) {
+    return t('Previous payout attempt failed')
+  }
 
   if (!shouldResumeOnChainPayout) {
     return t('Choose a payout method')
@@ -980,8 +1020,13 @@ function getPayoutModalTitle(params: {
 function getPayoutSubmitButtonLabel(params: {
   shouldResumeOnChainPayout: boolean
   shouldRequestBitcoinAddressOnResume: boolean
+  shouldShowFailedRetryState: boolean
 }): string {
-  const { shouldResumeOnChainPayout, shouldRequestBitcoinAddressOnResume } = params
+  const { shouldResumeOnChainPayout, shouldRequestBitcoinAddressOnResume, shouldShowFailedRetryState } = params
+
+  if (shouldShowFailedRetryState) {
+    return t('Try again')
+  }
 
   if (!shouldResumeOnChainPayout) {
     return t('Confirm payout method')

@@ -13,6 +13,35 @@ export const QUERY_PAYMENT_REFUNDS = gql`
   }
 `
 
+export const QUERY_PAYMENTS_REFUNDABLE = gql`
+  query PaymentsRefundable {
+    paymentsRefundableGet {
+      refundablePayments {
+        project {
+          id
+          name
+        }
+        payments {
+          id
+          uuid
+          accountingAmountDue
+          paymentType
+          status
+          paymentDetails {
+            __typename
+            ... on OnChainToLightningSwapPaymentDetails {
+              swapMetadata
+            }
+            ... on OnChainToRskSwapPaymentDetails {
+              swapMetadata
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
 export const QUERY_PLEDGE_REFUNDS = gql`
   ${FRAGMENT_PLEDGE_REFUND_WITH_PAYMENT}
   query PledgeRefunds {
