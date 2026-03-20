@@ -1,4 +1,4 @@
-import { Button, ButtonProps, HStack, StackProps } from '@chakra-ui/react'
+import { Button, ButtonProps, Stack, StackProps } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useState } from 'react'
@@ -21,11 +21,14 @@ type SubscriptionFormData = {
 }
 
 type SubscribeFormProps = StackProps & {
+  /** Flodesk segment IDs to assign the subscriber to on creation. */
+  segmentIds?: string[]
   buttonProps?: ButtonProps
   inputProps?: Omit<ControlledTextInputProps, 'control' | 'name' | 'error'>
 }
 
-export const SubscribeForm = ({ buttonProps, inputProps, ...props }: SubscribeFormProps) => {
+/** Inline email subscription form that creates a Flodesk subscriber. */
+export const SubscribeForm = ({ segmentIds, buttonProps, inputProps, ...props }: SubscribeFormProps) => {
   const toast = useNotification()
 
   const [submitting, setSubmitting] = useState(false)
@@ -43,41 +46,39 @@ export const SubscribeForm = ({ buttonProps, inputProps, ...props }: SubscribeFo
   const onSubmit = async (data: SubscriptionFormData) => {
     try {
       setSubmitting(true)
-      let records = {} as any
 
-      records = {
+      await createSubscriber({
         email: data.email,
-      }
-
-      await createSubscriber(records)
+        ...(segmentIds?.length ? { segment_ids: segmentIds } : {}),
+      })
 
       reset()
 
       toast.success({
-        title: t('Succesfully subscribed'),
+        title: t('Successfully subscribed'),
       })
-    } catch (error) {
+    } catch {
       toast.error({
         title: t('Something went wrong.'),
         description: t('Please try again'),
       })
+    } finally {
+      setSubmitting(false)
     }
-
-    setSubmitting(false)
   }
 
   return (
-    <HStack
+    <Stack
       as="form"
       style={{ width: '100%' }}
       onSubmit={handleSubmit(onSubmit)}
       maxWidth="800px"
       spacing={4}
       alignItems="flex-start"
+      direction={{ base: 'column', md: 'row' }}
       {...props}
     >
       <ControlledTextInput
-        flex={1}
         name="email"
         size="lg"
         control={control}
@@ -85,11 +86,13 @@ export const SubscribeForm = ({ buttonProps, inputProps, ...props }: SubscribeFo
         error={errors.email?.message}
         required
         {...inputProps}
+        containerProps={{ flex: 1, w: 'full', ...(inputProps?.containerProps ?? {}) }}
       />
       <Button
         size="xl"
         variant="outline"
-        minWidth="150px"
+        width={{ base: 'full', md: 'auto' }}
+        minWidth={{ md: '150px' }}
         colorScheme="gray"
         type="submit"
         isLoading={submitting}
@@ -97,6 +100,6 @@ export const SubscribeForm = ({ buttonProps, inputProps, ...props }: SubscribeFo
       >
         {buttonProps?.children ?? t('Get Updates')}
       </Button>
-    </HStack>
+    </Stack>
   )
 }

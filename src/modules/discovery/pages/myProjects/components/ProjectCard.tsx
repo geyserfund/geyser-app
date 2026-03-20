@@ -1,9 +1,18 @@
-import { Badge, Button, HStack, Icon, Image, Tooltip, VStack, Wrap, WrapItem } from '@chakra-ui/react'
+import { Badge, Button, HStack, Icon, Image, Stack, Tooltip, VStack, Wrap, WrapItem } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { PiArrowUpRight, PiHandHeart, PiInfo, PiNotePencil, PiRocketLaunch, PiStorefront } from 'react-icons/pi'
+import {
+  PiArrowUpRight,
+  PiHandHeart,
+  PiInfo,
+  PiNotePencil,
+  PiRocketLaunch,
+  PiStorefront,
+  PiWarning,
+} from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
+import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
@@ -31,9 +40,18 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const isDraft = project.status && inDraftStatus.includes(project.status) && !isInReview
   const isInactive = project.status === ProjectStatus.Inactive
   const isActive = project.status === ProjectStatus.Active
+  const isTiaProject = project.fundingStrategy === ProjectFundingStrategy.TakeItAll
 
   const draftRedirectPath = getProjectCreationRoute(project.lastCreationStep, project.id)
   const { status: withdrawalStatus, withdrawableSats, withdrawableUsd } = useProjectWithdrawalStatus({ project })
+  const {
+    isIncomplete: isStripeConnectIncomplete,
+    isProcessing: isStripeConnectProcessing,
+    disabledReasonLabel: stripeConnectDisabledReasonLabel,
+  } = useStripeConnectStatus({
+    projectId: project.id,
+    isTiaProject,
+  })
 
   /** Get latest review for status display */
   const latestReview =
@@ -88,6 +106,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   /** Check if project needs wallet configuration */
   const effectiveRskEoa = configuredRskEoa || project.rskEoa
   const needsWalletConfig = !effectiveRskEoa && project.fundingStrategy === ProjectFundingStrategy.TakeItAll
+  const shouldShowStripeConnectNotification = isStripeConnectIncomplete
 
   /** Get context message or action */
   const renderContextContent = () => {
@@ -277,6 +296,50 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
 
         {/* Row 3: Context message or action */}
         {!needsWalletConfig && renderContextContent()}
+
+        {shouldShowStripeConnectNotification && (
+          <Stack
+            w="full"
+            direction={{ base: 'column', md: 'row' }}
+            spacing={3}
+            px={3}
+            py={2}
+            bg={isStripeConnectProcessing ? 'neutral1.2' : 'warning.1'}
+            borderRadius="6px"
+            alignItems={{ base: 'stretch', md: 'center' }}
+            justifyContent={{ base: 'flex-start', md: 'space-between' }}
+          >
+            <HStack spacing={2} flex={1} alignItems="start">
+              <Icon
+                as={isStripeConnectProcessing ? PiInfo : PiWarning}
+                color={isStripeConnectProcessing ? 'neutral1.11' : 'warning.11'}
+                boxSize="16px"
+                flexShrink={0}
+                mt={0.5}
+              />
+              <VStack align="start" spacing={0} flex={1} minW={0}>
+                <Body size="sm" bold color={isStripeConnectProcessing ? 'neutral1.11' : 'warning.11'}>
+                  {t('Complete your Stripe Connect configuration')}
+                </Body>
+                <Body size="sm" color={isStripeConnectProcessing ? 'neutral1.11' : 'warning.11'}>
+                  {stripeConnectDisabledReasonLabel ||
+                    t('Open Stripe Connect to finish your configuration and enable fiat contributions.')}
+                </Body>
+              </VStack>
+            </HStack>
+            <Button
+              as={RouterLink}
+              to={getPath('dashboardWallet', project.name)}
+              size="sm"
+              variant="soft"
+              colorScheme="neutral1"
+              flexShrink={0}
+              alignSelf={{ base: 'flex-start', md: 'center' }}
+            >
+              {t('Manage Stripe Connect')}
+            </Button>
+          </Stack>
+        )}
 
         {/* Impact Fund Notification */}
         {isActive && <ImpactFundNotification project={project} />}

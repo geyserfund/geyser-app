@@ -8,6 +8,7 @@ import { Products } from './pages/landing/views/Products.tsx'
 import { Launchpad } from './pages/Launchpad/Launchpad.tsx'
 import { Leaderboard } from './pages/leaderboard/Leaderboard.tsx'
 import { MyProjects } from './pages/myProjects/MyProjects.tsx'
+import { NewsletterPage } from './pages/newsletter/NewsletterPage.tsx'
 
 export {
   Activity,
@@ -18,6 +19,7 @@ export {
   Launchpad,
   Leaderboard,
   MyProjects,
+  NewsletterPage,
   Products,
   ProjectsIFollow,
 }

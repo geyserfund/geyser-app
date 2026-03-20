@@ -1212,6 +1212,13 @@ export const platformRoutes: RouteObject[] = [
           return { Component: GiveawayTermsPage }
         },
       },
+      {
+        path: getPath('newsletter'),
+        async lazy() {
+          const NewsletterPage = await loadDiscoveryModule().then((m) => m.NewsletterPage)
+          return { Component: NewsletterPage }
+        },
+      },
     ],
   },
 

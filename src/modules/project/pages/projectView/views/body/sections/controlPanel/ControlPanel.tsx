@@ -7,6 +7,7 @@ import { Link, useLocation, useSearchParams } from 'react-router'
 
 import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
 import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
+import { useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -154,6 +155,7 @@ export const ControlPanel = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const isDraftUrl = location.pathname.includes('/draft')
   const projectNoticeKey = String(project.id)
+  const isTiaProject = project?.fundingStrategy === ProjectFundingStrategy.TakeItAll
 
   const { isFundingDisabled } = useProjectToolkit(project)
   const [promotionsNoticeClosedByProject, setPromotionsNoticeClosedByProject] = useAtom(
@@ -163,12 +165,24 @@ export const ControlPanel = () => {
   const [stripeConnectNoticeClosedByProject, setStripeConnectNoticeClosedByProject] = useAtom(
     stripeConnectNoticeClosedByProjectAtom,
   )
-  const isStripeConnectNoticeClosed = Boolean(stripeConnectNoticeClosedByProject[projectNoticeKey])
+  const {
+    isReady: isStripeConnectReady,
+    isIncomplete: isStripeConnectIncomplete,
+    disabledReasonLabel: stripeConnectDisabledReasonLabel,
+    loading: isStripeConnectStatusLoading,
+  } = useStripeConnectStatus({
+    projectId: project?.id,
+    isTiaProject,
+    fetchPolicy: 'network-only',
+  })
   const hasStripeConnectConfigured = Boolean(project?.paymentMethods?.fiat?.stripe)
+  const stripeConnectNoticeKey = `${project.id}:${isStripeConnectIncomplete ? 'incomplete' : 'setup'}`
+  const isStripeConnectNoticeClosed = Boolean(stripeConnectNoticeClosedByProject[stripeConnectNoticeKey])
   const shouldShowStripeConnectNotice =
-    project?.fundingStrategy === ProjectFundingStrategy.TakeItAll &&
-    !hasStripeConnectConfigured &&
-    !isStripeConnectNoticeClosed
+    isTiaProject &&
+    !isStripeConnectNoticeClosed &&
+    !isStripeConnectReady &&
+    (!isStripeConnectStatusLoading || isStripeConnectIncomplete || !hasStripeConnectConfigured)
 
   const { eligibleImpactFund } = useImpactFundEligibility()
   const {
@@ -323,10 +337,17 @@ export const ControlPanel = () => {
       {shouldShowStripeConnectNotice && (
         <ControlPanelNotification
           icon={<Image src="/icons/creator_tools_stripe.webp" alt={t('Stripe icon')} width="48px" height="48px" />}
-          title={t('Receive fiat payments directly')}
-          description={t(
-            'Connect Stripe and get paid in fiat straight to your bank account, alongside Bitcoin funding.',
-          )}
+          title={
+            isStripeConnectIncomplete
+              ? t('Complete your Stripe Connect configuration')
+              : t('Receive fiat payments directly')
+          }
+          description={
+            isStripeConnectIncomplete
+              ? stripeConnectDisabledReasonLabel ||
+                t('Open Stripe Connect to finish your configuration and enable fiat contributions.')
+              : t('Connect Stripe and get paid in fiat straight to your bank account, alongside Bitcoin funding.')
+          }
           actionButton={
             <Button
               as={Link}
@@ -336,14 +357,17 @@ export const ControlPanel = () => {
               size="sm"
               flexShrink={0}
             >
-              {t('Configure Stripe Connect')}
+              {isStripeConnectIncomplete ? t('Manage Stripe Connect') : t('Configure Stripe Connect')}
             </Button>
           }
-          onClose={() =>
-            setStripeConnectNoticeClosedByProject((current) => ({
-              ...current,
-              [projectNoticeKey]: true,
-            }))
+          onClose={
+            isStripeConnectIncomplete
+              ? undefined
+              : () =>
+                  setStripeConnectNoticeClosedByProject((current) => ({
+                    ...current,
+                    [stripeConnectNoticeKey]: true,
+                  }))
           }
           variant="info"
         />

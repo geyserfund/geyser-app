@@ -18,6 +18,7 @@ export enum PathName {
   products = 'products',
   launchpad = 'launchpad',
   giveaways = 'giveaways',
+  newsletter = 'newsletter',
   acelerandoBitcoinVip = 'acelerando-bitcoin-vip',
   activityGlobal = 'global',
   activityFollowed = 'followed',
@@ -222,6 +223,7 @@ const pathsMap = {
   discoveryMerch: () => `/${PathName.merch}`,
   discoveryLaunchpad: () => `/${PathName.launchpad}`,
   giveawayAcelerandoVip: () => `/${PathName.giveaways}/${PathName.acelerandoBitcoinVip}`,
+  newsletter: () => `/${PathName.newsletter}`,
   legalGiveawayAcelerandoVipTerms: () => `/${PathName.legal}/${PathName.giveaways}/${PathName.acelerandoBitcoinVip}`,
 
   impactFund: () => `/${PathName.impactFund}`,
