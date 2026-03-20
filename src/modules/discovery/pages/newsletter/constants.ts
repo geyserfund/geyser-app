@@ -1,14 +1,10 @@
 import { t } from 'i18next'
 import { PiLightning, PiRocketLaunch, PiUsers } from 'react-icons/pi'
 
-/**
- * Flodesk segment definitions.
- * Replace the `id` values with actual segment IDs from the Flodesk dashboard.
- */
 export const NEWSLETTER_SEGMENTS = [
-  { id: 'monthly_updates', label: t('Monthly updates') },
-  { id: 'weekly_stories', label: t('Weekly stories') },
-  { id: 'product_launches', label: t('Product launches') },
+  { id: '69bd8362f0fdf1e8292b3f87', label: t('Monthly updates') },
+  { id: '69bd832ada18913fd40f2afd', label: t('Weekly stories') },
+  { id: '69bd83041b4c64389ab7aa54', label: t('Product updates') },
 ] as const
 
 export const CONTENT_PILLARS = [

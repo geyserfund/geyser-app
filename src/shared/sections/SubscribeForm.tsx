@@ -47,10 +47,16 @@ export const SubscribeForm = ({ segmentIds, buttonProps, inputProps, ...props }:
     try {
       setSubmitting(true)
 
-      await createSubscriber({
+      const subscriberPayload: Parameters<typeof createSubscriber>[0] = {
         email: data.email,
-        ...(segmentIds?.length ? { segment_ids: segmentIds } : {}),
-      })
+      }
+
+      if (segmentIds?.length) {
+        // eslint-disable-next-line camelcase
+        subscriberPayload.segment_ids = segmentIds
+      }
+
+      await createSubscriber(subscriberPayload)
 
       reset()
 
