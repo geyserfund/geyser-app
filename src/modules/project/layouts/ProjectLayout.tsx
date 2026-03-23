@@ -1,11 +1,8 @@
-/* eslint-disable complexity */
 import { Box, VStack } from '@chakra-ui/react'
 import { Outlet } from 'react-router'
 
 import { Head } from '@/config/Head'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { usePrerenderReady } from '@/shared/hooks/platform/usePrerenderReady.ts'
-import { validateImageUrl } from '@/shared/markdown/validations/image.ts'
 import { standardPadding } from '@/shared/styles'
 
 import { FollowProjectModal } from '../components/FollowProjectModal.tsx'
@@ -15,6 +12,7 @@ import { ProjectNavigation } from '../navigation/ProjectNavigation.tsx'
 import { ProjectCreateModal } from '../pages/projectView/components/ProjectCreateModal.tsx'
 import { useProjectDraftRedirect } from '../pages/projectView/views/body/hooks/useProjectDraftRedirect.tsx'
 import { buildProjectJsonLd } from '../tools/generateProjectJsonLD.ts'
+import { useProjectPrerenderSeo } from './hooks/useProjectPrerenderSeo.ts'
 
 export const ProjectLayout = () => {
   useFundingFlowCleanup()
@@ -22,12 +20,12 @@ export const ProjectLayout = () => {
 
   const { project, loading } = useProjectAtom()
   const { rewards, initialRewardsLoading } = useRewardsAtom()
-  const projectSeoImage = validateImageUrl(project?.thumbnailImage)
-    ? project.thumbnailImage || ''
-    : project?.images?.find((image) => validateImageUrl(image)) || ''
-  const hasSeoTitle = Boolean((project?.title || '').trim())
-  const hasCoreSeoData = !loading && Boolean(project?.id) && hasSeoTitle
-  const { isPrerenderRuntime } = usePrerenderReady({ prerenderReady: hasCoreSeoData })
+
+  const { shouldRenderJsonLd, seoCanonicalUrl, seoDescription, seoImage, seoTitle } = useProjectPrerenderSeo({
+    project,
+    loading,
+    initialRewardsLoading,
+  })
 
   return (
     <Box
@@ -39,16 +37,8 @@ export const ProjectLayout = () => {
       position="relative"
       bg="utils.pbg"
     >
-      <Head
-        title={project?.title || undefined}
-        description={project?.shortDescription || project?.description || undefined}
-        image={projectSeoImage}
-        type="article"
-        url={project?.name ? `https://geyser.fund/project/${project.name}` : undefined}
-      >
-        {!loading && (!initialRewardsLoading || isPrerenderRuntime) && (
-          <script type="application/ld+json">{buildProjectJsonLd(project, rewards)}</script>
-        )}
+      <Head title={seoTitle} description={seoDescription} image={seoImage} type="article" url={seoCanonicalUrl}>
+        {shouldRenderJsonLd && <script type="application/ld+json">{buildProjectJsonLd(project, rewards)}</script>}
       </Head>
       <ProjectNavigation />
       <VStack

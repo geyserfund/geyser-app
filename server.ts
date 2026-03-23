@@ -59,7 +59,7 @@ const prerenderBlockedRoutePatterns = [
 const prerenderBlockedExactPaths = new Set(['/meta.json', '/sw.js', '/manifest.json', '/favicon.ico'])
 
 const prerenderBlockedAssetExtensionPattern =
-  /\.(?:json|xml|txt|js|css|map|ico|png|jpe?g|gif|webp|svg|woff2?|ttf|otf|eot|pdf|zip|gz|mp4|webm)$/i
+  /\.(?:json|xml|txt|js|css|map|ico|png|jpe?g|gif|webp|svg|woff2?|ttf|otf|eot|pdf|zip|gz|mp4|webm|wasm)$/i
 
 const getPrerenderPathname = (requestUrl = '/') => {
   try {
