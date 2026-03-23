@@ -139,6 +139,14 @@ const NOISE_TEXTURE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmln
 
 const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath: string }) => {
   const { t } = useTranslation()
+  const titleColor = '#1F2937'
+  const subtitleColor = '#5B6472'
+  const badgeBackground = 'rgba(255, 244, 214, 0.82)'
+  const badgeColor = '#9A6700'
+  const buttonBackground = 'rgba(255, 255, 255, 0.88)'
+  const buttonColor = '#1F2937'
+  const buttonBorderColor = 'rgba(31, 41, 55, 0.10)'
+  const buttonHoverBackground = 'rgba(255, 255, 255, 0.96)'
 
   return (
     <CardLayout
@@ -164,22 +172,28 @@ const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath
       <VStack alignItems="start" spacing={3} position="relative" zIndex={1} w="full">
         <HStack spacing={2} alignItems="center" flexWrap="wrap">
           <Icon as={PiCoins} color="warning.9" boxSize={5} />
-          <H2 size="lg">{t('Geyser Affiliate Program')}</H2>
-          <Body size="xs" medium px={2.5} py={0.5} borderRadius="full" bgColor="#F0DFC0" color="#8B6914">
+          <H2 size="lg" color={titleColor}>
+            {t('Geyser Affiliate Program')}
+          </H2>
+          <Body size="xs" medium px={2.5} py={0.5} borderRadius="full" bgColor={badgeBackground} color={badgeColor}>
             {t('New')}
           </Body>
         </HStack>
 
-        <Body size="sm" color="neutralAlpha.11" whiteSpace="nowrap">
+        <Body size="sm" color={subtitleColor} whiteSpace="nowrap">
           {t('Help projects launch or get funded, earn Bitcoin.')}
         </Body>
 
         <Button
           as={Link}
           to={affiliateDashboardPath}
-          bg="white"
-          color="neutral1.12"
-          _hover={{ bg: 'gray.100' }}
+          bg={buttonBackground}
+          color={buttonColor}
+          borderWidth="1px"
+          borderColor={buttonBorderColor}
+          _hover={{ bg: buttonHoverBackground }}
+          backdropFilter="blur(8px)"
+          boxShadow="0 8px 24px rgba(31, 41, 55, 0.08)"
           size="md"
           w="full"
         >

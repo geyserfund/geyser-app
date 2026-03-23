@@ -127,6 +127,5 @@ const projectCreationStepIndex = {
   [ProjectCreationStep.Wallet]: 5,
   [ProjectCreationStep.TaxId]: 5,
   [ProjectCreationStep.IdentityVerification]: 5,
-  [ProjectCreationStep.FiatContributions]: 5,
   [ProjectCreationStep.Launch]: 6,
 }
