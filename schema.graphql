@@ -107,6 +107,7 @@ type Query {
   paymentRefundsGet: PaymentRefundsGetResponse
   payoutGet(input: PayoutGetInput!): PayoutGetResponse
   payoutActive(projectId: BigInt!): PayoutGetResponse
+  payoutLatest(projectId: BigInt!): PayoutGetResponse
 }
 
 type Mutation {
@@ -4154,6 +4155,7 @@ type PayoutMetadata {
   nonce: Int!
   aonContractAddress: String!
   swapContractAddress: String!
+  requiresUserLockTx: Boolean!
 }
 
 type PayoutInitiateResponse {

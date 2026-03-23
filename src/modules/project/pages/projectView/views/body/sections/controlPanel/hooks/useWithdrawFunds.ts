@@ -1,18 +1,31 @@
-import { useApolloClient } from '@apollo/client'
-import { useCallback, useEffect, useState } from 'react'
+import { useQuery } from '@apollo/client'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
-import { QUERY_PAYOUT_ACTIVE } from '@/modules/project/graphql/query/payoutQuery.ts'
+import { QUERY_PAYOUT_LATEST } from '@/modules/project/graphql/query/payoutQuery.ts'
 import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
 import { useModal } from '@/shared/hooks/useModal.tsx'
-import { PayoutStatus, ProjectFundingStrategy, Satoshis } from '@/types'
+import { PaymentStatus, PayoutStatus, ProjectFundingStrategy, Satoshis } from '@/types'
 
 import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom.ts'
 import { useRefetchQueries } from '../../aonNotification/hooks/useRefetchQueries.ts'
 
 const ACTIVE_WITHDRAW_PAYOUT_STATUSES = [PayoutStatus.Pending, PayoutStatus.Processing]
+const LATEST_PAYOUT_POLL_INTERVAL_MS = 10_000
+
+type PayoutLatestQueryResult = {
+  payoutLatest?: {
+    payout?: {
+      status?: PayoutStatus | null
+      payments?: Array<{
+        status?: PaymentStatus | null
+        createdAt: string
+      }> | null
+    } | null
+  } | null
+}
 
 export const useWithdrawFunds = () => {
   const { project, isProjectOwner } = useProjectAtom()
@@ -20,8 +33,8 @@ export const useWithdrawFunds = () => {
   const { refetchQueriesOnPayoutSuccess } = useRefetchQueries()
   const { queryProject } = useProjectAPI()
   const { getUSDCentsAmount } = useBTCConverter()
-  const apolloClient = useApolloClient()
   const [hasOngoingWithdraw, setHasOngoingWithdraw] = useState(false)
+  const [hasFailedWithdraw, setHasFailedWithdraw] = useState(false)
 
   const projectRskEoa = project?.rskEoa || ''
   const { withdrawable, isLoading, refetch: refetchWithdrawable } = usePrismWithdrawable({ rskAddress: projectRskEoa })
@@ -35,39 +48,69 @@ export const useWithdrawFunds = () => {
   const hasWithdrawableBalance = withdrawable !== null && withdrawable > 0n
   const isBelowMinWithdrawThreshold = withdrawableUsd < MIN_BITCOIN_PAYOUT_USD
   const showWithdraw =
-    showWithdrawableBalance && !isBelowMinWithdrawThreshold && (hasOngoingWithdraw || hasWithdrawableBalance)
+    showWithdrawableBalance &&
+    !isBelowMinWithdrawThreshold &&
+    (hasOngoingWithdraw || hasFailedWithdraw || hasWithdrawableBalance)
 
-  const refetchActivePayout = useCallback(() => {
-    return apolloClient
-      .query({
-        query: QUERY_PAYOUT_ACTIVE,
-        variables: { projectId: project.id },
-        fetchPolicy: 'network-only',
-      })
-      .then(({ data }) => {
-        const status = data?.payoutActive?.payout?.status
-        setHasOngoingWithdraw(Boolean(status && ACTIVE_WITHDRAW_PAYOUT_STATUSES.includes(status)))
-      })
-      .catch(() => {
-        setHasOngoingWithdraw(false)
-      })
-  }, [apolloClient, project.id])
+  const shouldTrackLatestPayout = isProjectOwner && isTiaProject && Boolean(projectRskEoa)
+  const {
+    data: latestPayoutData,
+    refetch: refetchLatestPayout,
+    startPolling,
+    stopPolling,
+  } = useQuery<PayoutLatestQueryResult>(QUERY_PAYOUT_LATEST, {
+    variables: { projectId: project.id },
+    skip: !shouldTrackLatestPayout,
+    fetchPolicy: 'network-only',
+  })
+
+  const latestPayout = latestPayoutData?.payoutLatest?.payout
+  const latestPayment = useMemo(
+    () =>
+      [...(latestPayout?.payments ?? [])].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )[0],
+    [latestPayout?.payments],
+  )
 
   useEffect(() => {
-    if (!isProjectOwner || !isTiaProject || !projectRskEoa) {
+    if (!shouldTrackLatestPayout) {
+      stopPolling()
       setHasOngoingWithdraw(false)
+      setHasFailedWithdraw(false)
       return
     }
 
-    refetchActivePayout().catch(() => undefined)
-  }, [isProjectOwner, isTiaProject, project.id, projectRskEoa, refetchActivePayout])
+    const status = latestPayout?.status
+    setHasOngoingWithdraw(Boolean(status && ACTIVE_WITHDRAW_PAYOUT_STATUSES.includes(status)))
+    setHasFailedWithdraw(Boolean(status === PayoutStatus.Failed && latestPayment?.status === PaymentStatus.Refunded))
+  }, [latestPayment?.status, latestPayout?.status, shouldTrackLatestPayout, stopPolling])
+
+  useEffect(() => {
+    if (!shouldTrackLatestPayout) {
+      return
+    }
+
+    const shouldPoll = !latestPayoutData || hasOngoingWithdraw
+
+    if (shouldPoll) {
+      startPolling(LATEST_PAYOUT_POLL_INTERVAL_MS)
+    } else {
+      stopPolling()
+    }
+
+    return () => {
+      stopPolling()
+    }
+  }, [hasOngoingWithdraw, latestPayoutData, shouldTrackLatestPayout, startPolling, stopPolling])
 
   const onCompleted = () => {
     setHasOngoingWithdraw(false)
+    setHasFailedWithdraw(false)
     refetchQueriesOnPayoutSuccess()
     queryProject.execute()
     refetchWithdrawable().catch(() => undefined)
-    refetchActivePayout().catch(() => undefined)
+    refetchLatestPayout().catch(() => undefined)
   }
 
   return {
@@ -78,6 +121,7 @@ export const useWithdrawFunds = () => {
     showWithdrawableBalance,
     isBelowMinWithdrawThreshold,
     hasOngoingWithdraw,
+    hasFailedWithdraw,
     showWithdraw,
     onCompleted,
   }

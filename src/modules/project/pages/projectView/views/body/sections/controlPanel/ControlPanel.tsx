@@ -34,6 +34,7 @@ type FinancialActionsProps = {
   withdrawableUsd: number
   isBelowMinWithdrawThreshold: boolean
   hasOngoingWithdraw: boolean
+  hasFailedWithdraw: boolean
   showWithdraw: boolean
 }
 
@@ -47,6 +48,7 @@ const ControlPanelFinancialActions = ({
   withdrawableUsd,
   isBelowMinWithdrawThreshold,
   hasOngoingWithdraw,
+  hasFailedWithdraw,
   showWithdraw,
 }: FinancialActionsProps) => {
   if (!showClaim && !showWithdrawableBalance) return null
@@ -116,11 +118,15 @@ const ControlPanelFinancialActions = ({
                   ≈${withdrawableUsd.toFixed(0)}
                 </Body>
               </Body>
-              {hasOngoingWithdraw && (
+              {hasOngoingWithdraw ? (
                 <Body size="sm" color="neutral1.11">
                   {t('You have an ongoing payout. Continue to finish the withdrawal flow.')}
                 </Body>
-              )}
+              ) : hasFailedWithdraw ? (
+                <Body size="sm" color="neutral1.11">
+                  {t('Your previous withdraw attempt failed. You can try again.')}
+                </Body>
+              ) : null}
             </VStack>
           </HStack>
           <Tooltip
@@ -140,7 +146,7 @@ const ControlPanelFinancialActions = ({
               onClick={payoutRskModal.onOpen}
               isDisabled={!showWithdraw}
             >
-              {hasOngoingWithdraw ? t('Continue withdraw') : t('Withdraw')}
+              {hasOngoingWithdraw ? t('Continue withdraw') : hasFailedWithdraw ? t('Try again') : t('Withdraw')}
             </Button>
           </Tooltip>
         </Stack>
@@ -193,6 +199,7 @@ export const ControlPanel = () => {
     showWithdrawableBalance,
     isBelowMinWithdrawThreshold,
     hasOngoingWithdraw,
+    hasFailedWithdraw,
     showWithdraw,
     onCompleted,
   } = useWithdrawFunds()
@@ -299,6 +306,7 @@ export const ControlPanel = () => {
         withdrawableUsd={withdrawableUsd}
         isBelowMinWithdrawThreshold={isBelowMinWithdrawThreshold}
         hasOngoingWithdraw={hasOngoingWithdraw}
+        hasFailedWithdraw={hasFailedWithdraw}
         showWithdraw={showWithdraw}
       />
 
