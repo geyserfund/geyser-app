@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import * as yup from 'yup'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
@@ -76,6 +76,8 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
     resolver: yupResolver(schema),
   })
   const { handleSubmit, control, setError } = form
+  const watchedAccountPassword = useWatch({ control, name: 'accountPassword' })
+  const canSubmit = Boolean(resolvedRefundFile) && (!requiresAccountPassword || Boolean(watchedAccountPassword?.trim()))
 
   const initiateRefundViaBackend = useCallback(
     async (refundAddress: string, nextRefundFile: SwapData) => {
@@ -173,6 +175,11 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
       }
 
       if (requiresAccountPassword) {
+        if (!accountPassword?.trim()) {
+          setError('accountPassword', { message: t('Account password is required') })
+          return
+        }
+
         if (!userAccountKeys?.encryptedSeed) {
           toast.error({
             title: t('Unable to find your account keys'),
@@ -271,7 +278,7 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
             variant="solid"
             colorScheme="primary1"
             isLoading={loading || isSubmittingBackend}
-            isDisabled={!resolvedRefundFile}
+            isDisabled={!canSubmit}
           >
             {t('Initiate refund')}
           </Button>
