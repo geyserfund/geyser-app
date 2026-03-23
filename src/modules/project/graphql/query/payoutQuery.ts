@@ -31,3 +31,18 @@ export const QUERY_PAYOUT_ACTIVE = gql`
     }
   }
 `
+
+export const QUERY_PAYOUT_LATEST = gql`
+  ${FRAGMENT_PAYOUT_WITH_PAYMENT}
+  ${FRAGMENT_PAYOUT_METADATA}
+  query PayoutLatest($projectId: BigInt!) {
+    payoutLatest(projectId: $projectId) {
+      payout {
+        ...PayoutWithPayment
+      }
+      payoutMetadata {
+        ...PayoutMetadata
+      }
+    }
+  }
+`

@@ -1,20 +1,28 @@
 import { Badge } from '@chakra-ui/react'
 
-import { ContributionStatus, PaymentRefundStatus, PledgeRefundStatus } from '@/types/index.ts'
+import { ContributionStatus, PaymentRefundStatus, PaymentStatus, PledgeRefundStatus } from '@/types/index.ts'
 
 /** Status badge component */
-export const StatusBadge = ({ status }: { status: PledgeRefundStatus | PaymentRefundStatus | ContributionStatus }) => {
-  const getStatusColor = (status: PledgeRefundStatus | PaymentRefundStatus | ContributionStatus) => {
+export const StatusBadge = ({
+  status,
+}: {
+  status: PledgeRefundStatus | PaymentRefundStatus | PaymentStatus | ContributionStatus
+}) => {
+  const getStatusColor = (status: PledgeRefundStatus | PaymentRefundStatus | PaymentStatus | ContributionStatus) => {
     switch (status) {
       case 'PENDING':
+      case PaymentStatus.Refundable:
         return 'warning'
       case 'FAILED':
-        return 'error'
-      case 'PROCESSING':
-        return 'info'
       case 'EXPIRED':
         return 'error'
+      case 'PROCESSING':
+      case PaymentStatus.Refunding:
+      case PaymentStatus.Claiming:
+        return 'info'
       case 'COMPLETED':
+      case PaymentStatus.Refunded:
+      case PaymentStatus.Claimable:
       case ContributionStatus.Confirmed:
         return 'success'
       case ContributionStatus.Pledged:
