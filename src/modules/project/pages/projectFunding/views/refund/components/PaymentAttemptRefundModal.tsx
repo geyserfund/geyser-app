@@ -14,13 +14,16 @@ import { useNotification } from '@/utils/index.ts'
 import { BitcoinPayoutForm } from '../../refundPayoutRsk/components/BitcoinPayoutForm.tsx'
 import { BitcoinPayoutProcessed } from '../../refundPayoutRsk/components/BitcoinPayoutProcessed.tsx'
 import { PayoutProgressSidebar, PayoutProgressStep } from '../../refundPayoutRsk/components/PayoutProgressSidebar.tsx'
-import { BitcoinPayoutFormData, usePayoutWithBitcoinForm } from '../../refundPayoutRsk/hooks/usePayoutWithBitcoinForm.ts'
+import {
+  BitcoinPayoutFormData,
+  usePayoutWithBitcoinForm,
+} from '../../refundPayoutRsk/hooks/usePayoutWithBitcoinForm.ts'
 
 type PaymentAttemptRefundModalProps = {
   isOpen: boolean
   onClose: () => void
   amount: number
-  paymentId: string | number | bigint
+  paymentId?: string | bigint
   paymentUuid?: string
   refundFile?: SwapData
   onCompleted?: () => void | Promise<void>
@@ -61,6 +64,7 @@ export const PaymentAttemptRefundModal = ({
   const [isProcessed, setIsProcessed] = useState(false)
   const [refundTxId, setRefundTxId] = useState<string>()
   const [paymentSwapRefundTxBroadcast] = useMutation(MUTATION_PAYMENT_SWAP_REFUND_TX_BROADCAST)
+  const normalizedPaymentId = typeof paymentId === 'bigint' ? paymentId.toString() : paymentId
 
   const refundFileAccountKeys = refundFile?.privateKey
     ? ({
@@ -71,56 +75,53 @@ export const PaymentAttemptRefundModal = ({
       } as AccountKeys)
     : undefined
 
-  const bitcoinForm = usePayoutWithBitcoinForm(
-    async (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => {
-      if (!refundFile || !data.bitcoinAddress || !paymentId) {
+  const bitcoinForm = usePayoutWithBitcoinForm(async (data: BitcoinPayoutFormData, accountKeys: AccountKeys) => {
+    if (!refundFile || !data.bitcoinAddress || !normalizedPaymentId) {
+      return
+    }
+
+    const nextRefundFile: SwapData = {
+      ...refundFile,
+      privateKey: refundFile.privateKey || accountKeys.privateKey,
+      publicKey: refundFile.publicKey || accountKeys.publicKey,
+      address: refundFile.address || accountKeys.address,
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const signedTxHex = await initiateRefundToGetRefundTx(data.bitcoinAddress, nextRefundFile)
+
+      if (!signedTxHex) {
         return
       }
 
-      const nextRefundFile: SwapData = {
-        ...refundFile,
-        privateKey: refundFile.privateKey || accountKeys.privateKey,
-        publicKey: refundFile.publicKey || accountKeys.publicKey,
-        address: refundFile.address || accountKeys.address,
-      }
-
-      setIsSubmitting(true)
-
-      try {
-        const signedTxHex = await initiateRefundToGetRefundTx(data.bitcoinAddress, nextRefundFile)
-
-        if (!signedTxHex) {
-          return
-        }
-
-        const { data: broadcastData } = await paymentSwapRefundTxBroadcast({
-          variables: {
-            input: {
-              paymentId,
-              signedTxHex,
-            },
+      const { data: broadcastData } = await paymentSwapRefundTxBroadcast({
+        variables: {
+          input: {
+            paymentId: normalizedPaymentId,
+            signedTxHex,
           },
-        })
+        },
+      })
 
-        if (!broadcastData?.paymentSwapRefundTxBroadcast.success) {
-          throw new Error('Failed to broadcast refund transaction')
-        }
-
-        setRefundTxId(broadcastData.paymentSwapRefundTxBroadcast.txHash || nextRefundFile.refundTx)
-        setIsProcessed(true)
-      } catch (error) {
-        toast.error({
-          title: t('Something went wrong'),
-          description: t('Please try again'),
-        })
-      } finally {
-        setIsSubmitting(false)
+      if (!broadcastData?.paymentSwapRefundTxBroadcast.success) {
+        throw new Error('Failed to broadcast refund transaction')
       }
-    },
-    refundFileAccountKeys,
-  )
 
-  const progressSteps = useMemo< PayoutProgressStep[] >(() => {
+      setRefundTxId(broadcastData.paymentSwapRefundTxBroadcast.txHash || nextRefundFile.refundTx)
+      setIsProcessed(true)
+    } catch (error) {
+      toast.error({
+        title: t('Something went wrong'),
+        description: t('Please try again'),
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, refundFileAccountKeys)
+
+  const progressSteps = useMemo<PayoutProgressStep[]>(() => {
     if (isProcessed) {
       return getPaymentAttemptRefundSteps('completed')
     }
@@ -144,8 +145,16 @@ export const PaymentAttemptRefundModal = ({
   }
 
   const handleCompleted = async () => {
-    await onCompleted?.()
-    handleClose()
+    try {
+      await onCompleted?.()
+    } catch (error) {
+      toast.error({
+        title: t('Something went wrong'),
+        description: t('Please refresh the page and try again.'),
+      })
+    } finally {
+      handleClose()
+    }
   }
 
   function renderModalContent(params: {
@@ -214,7 +223,9 @@ export const PaymentAttemptRefundModal = ({
             </Body>
           </HStack>
         ) : undefined,
-        description: t('Enter the Bitcoin address where you want to receive your refund and authorize the transaction.'),
+        description: t(
+          'Enter the Bitcoin address where you want to receive your refund and authorize the transaction.',
+        ),
         content: (
           <>
             <BitcoinPayoutForm
@@ -233,7 +244,7 @@ export const PaymentAttemptRefundModal = ({
             colorScheme="primary1"
             variant="solid"
             isLoading={isSubmitting}
-            isDisabled={!bitcoinForm.enableSubmit}
+            isDisabled={!refundFile || !normalizedPaymentId || !bitcoinForm.enableSubmit}
             onClick={bitcoinForm.handleSubmit}
           >
             {t('Initiate refund')}

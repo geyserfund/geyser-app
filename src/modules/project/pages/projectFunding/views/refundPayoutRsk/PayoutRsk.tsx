@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import { useApolloClient } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import { Button, HStack, IconButton, Link as ChakraLink, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
@@ -8,7 +8,6 @@ import { PiCheck, PiCopy, PiInfoBold } from 'react-icons/pi'
 import { Address, Hex } from 'viem'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
-import { QUERY_PAYOUT_LATEST } from '@/modules/project/graphql/query/payoutQuery.ts'
 import { decryptString, encryptString } from '@/modules/project/forms/accountPassword/encryptDecrptString.ts'
 import {
   AccountKeys,
@@ -16,6 +15,7 @@ import {
   generateProjectKeysFromSeedHex,
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { satsToWei } from '@/modules/project/funding/hooks/useFundingAPI.ts'
+import { QUERY_PAYOUT_LATEST } from '@/modules/project/graphql/query/payoutQuery.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -52,6 +52,21 @@ import { BitcoinPayoutFormData } from './hooks/usePayoutWithBitcoinForm.ts'
 import { usePayoutWithLightningForm } from './hooks/usePayoutWithLightningForm.ts'
 import { LightningPayoutFormData } from './hooks/usePayoutWithLightningForm.ts'
 import { PayoutFlowSwapData, PayoutMethod } from './types.ts'
+
+type PayoutLatestPreflightQuery = {
+  payoutLatest?: {
+    payout?: {
+      status?: PayoutStatus | null
+      payments?: Array<{
+        status?: PaymentStatus | null
+        createdAt: string
+      }> | null
+    } | null
+    payoutMetadata?: {
+      requiresUserLockTx?: boolean | null
+    } | null
+  } | null
+}
 
 type PayoutRskProps = {
   isOpen: boolean
@@ -196,7 +211,6 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   onCompleted,
 }) => {
   const toast = useNotification()
-  const apolloClient = useApolloClient()
 
   useUserAccountKeys()
 
@@ -215,6 +229,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
   const hasDefaultedMethodRef = useRef(false)
 
   const [payoutPrepare, { data: payoutPrepareData, loading: payoutPrepareLoading }] = usePayoutPrepareMutation()
+  const [loadLatestPayout] = useLazyQuery<PayoutLatestPreflightQuery>(QUERY_PAYOUT_LATEST)
 
   const [payoutPaymentPrepare, { loading: isPayoutPaymentPrepareLoading }] = usePayoutPaymentPrepareMutation()
   const [payoutPaymentInitiate, { loading: isPayoutPaymentInitiateLoading }] = usePayoutPaymentInitiateMutation()
@@ -241,23 +256,26 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     setPayoutPrepareError(null)
     const preparePayout = async () => {
       try {
-        const latestPayoutResult = await apolloClient
-          .query({
-            query: QUERY_PAYOUT_LATEST,
-            variables: { projectId: project.id },
-            fetchPolicy: 'network-only',
-          })
-          .catch(() => null)
+        const latestPayoutResult = await loadLatestPayout({
+          variables: { projectId: project.id },
+          fetchPolicy: 'network-only',
+        })
 
-        const latestPayout = latestPayoutResult?.data?.payoutLatest?.payout
+        if (latestPayoutResult.error) {
+          throw latestPayoutResult.error
+        }
+
+        const latestPayout = latestPayoutResult.data?.payoutLatest?.payout
         const latestPayoutPayment = [...(latestPayout?.payments ?? [])].sort(
           (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         )[0]
 
         setHasFailedPreviousPayout(
-          Boolean(latestPayout?.status === PayoutStatus.Failed && latestPayoutPayment?.status === PaymentStatus.Refunded),
+          Boolean(
+            latestPayout?.status === PayoutStatus.Failed && latestPayoutPayment?.status === PaymentStatus.Refunded,
+          ),
         )
-        setIsInternalRetryPayout(Boolean(latestPayoutResult?.data?.payoutLatest?.payoutMetadata?.requiresUserLockTx))
+        setIsInternalRetryPayout(Boolean(latestPayoutResult.data?.payoutLatest?.payoutMetadata?.requiresUserLockTx))
 
         await payoutPrepare({
           variables: {
@@ -274,7 +292,7 @@ export const PayoutRsk: React.FC<PayoutRskProps> = ({
     }
 
     preparePayout().catch(() => undefined)
-  }, [apolloClient, isOpen, payoutPrepare, project.id])
+  }, [isOpen, loadLatestPayout, payoutPrepare, project.id])
 
   const payout = payoutPrepareData?.payoutPrepare.payout
   const isProcessing = payout?.status === PayoutStatus.Processing

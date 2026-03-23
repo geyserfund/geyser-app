@@ -8,9 +8,9 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
-import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
+import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import { decryptSeed, generateKeysFromSeedHex } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
-import { currentSwapIdAtom, SwapData } from '@/modules/project/funding/state'
+import { SwapData } from '@/modules/project/funding/state'
 import { currentSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { refundedSwapDataAtom, removeRefundedSwapAtom } from '@/modules/project/funding/state/swapAtom.ts'
 import { MUTATION_PAYMENT_SWAP_REFUND_TX_BROADCAST } from '@/modules/project/graphql/mutation/TxBroadcastMutation.ts'
@@ -52,7 +52,7 @@ interface ClaimRefundFormProps {
 
 type PaymentByOnChainSwapIdQuery = {
   payment?: {
-    id: string | number | bigint
+    id: string | bigint
   } | null
 }
 
@@ -62,10 +62,8 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
   const { initiateRefund, initiateRefundToGetRefundTx, loading } = useRefund()
   useUserAccountKeys()
 
-  const currentSwapId = useAtomValue(currentSwapIdAtom)
   const refundFileFromAtom = useAtomValue(currentSwapAtom)
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
-  const setUserAccountKeyPair = useSetAtom(userAccountKeyPairAtom)
   const setRefundedSwapData = useSetAtom(refundedSwapDataAtom)
   const removeRefundFile = useSetAtom(removeRefundedSwapAtom)
   const [isSubmittingBackend, setIsSubmittingBackend] = useState(false)
@@ -90,7 +88,7 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
       setIsSubmittingBackend(true)
 
       try {
-        let paymentId: string | number | bigint | undefined
+        let paymentId: string | bigint | undefined
 
         try {
           const { data } = await apolloClient.query<PaymentByOnChainSwapIdQuery>({
@@ -118,10 +116,12 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
           return null
         }
 
+        const normalizedPaymentId = typeof paymentId === 'bigint' ? paymentId.toString() : paymentId
+
         const { data: broadcastData } = await paymentSwapRefundTxBroadcast({
           variables: {
             input: {
-              paymentId,
+              paymentId: normalizedPaymentId,
               signedTxHex,
             },
           },
@@ -150,18 +150,29 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
         setIsSubmittingBackend(false)
       }
     },
-    [apolloClient, initiateRefundToGetRefundTx, paymentSwapRefundTxBroadcast, removeRefundFile, setRefundedSwapData, toast],
+    [
+      apolloClient,
+      initiateRefundToGetRefundTx,
+      paymentSwapRefundTxBroadcast,
+      removeRefundFile,
+      setRefundedSwapData,
+      toast,
+    ],
   )
 
   const onSubmit = useCallback(
     async ({ bitcoinAddress, accountPassword }: { bitcoinAddress: string; accountPassword?: string }) => {
       let nextRefundFile = resolvedRefundFile
 
-      if (requiresAccountPassword) {
-        if (!resolvedRefundFile) {
-          return
-        }
+      if (!nextRefundFile) {
+        toast.error({
+          title: t('Refund file missing'),
+          description: t('Please upload or select a refund file before continuing.'),
+        })
+        return
+      }
 
+      if (requiresAccountPassword) {
         if (!userAccountKeys?.encryptedSeed) {
           toast.error({
             title: t('Unable to find your account keys'),
@@ -174,10 +185,8 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
           const decryptedSeed = await decryptSeed(userAccountKeys.encryptedSeed, accountPassword || '')
           const accountKeys = generateKeysFromSeedHex(decryptedSeed)
 
-          setUserAccountKeyPair({ privateKey: accountKeys.privateKey, publicKey: accountKeys.publicKey })
-
           nextRefundFile = {
-            ...resolvedRefundFile,
+            ...nextRefundFile,
             privateKey: accountKeys.privateKey,
             publicKey: accountKeys.publicKey,
             address: accountKeys.address,
@@ -218,7 +227,6 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
       requiresAccountPassword,
       resolvedRefundFile,
       setError,
-      setUserAccountKeyPair,
       toast,
       userAccountKeys?.encryptedSeed,
     ],
@@ -263,7 +271,7 @@ export const ClaimRefundForm = ({ onSuccess, showUpload, refundFile }: ClaimRefu
             variant="solid"
             colorScheme="primary1"
             isLoading={loading || isSubmittingBackend}
-            isDisabled={!showUpload && !resolvedRefundFile && !currentSwapId}
+            isDisabled={!resolvedRefundFile}
           >
             {t('Initiate refund')}
           </Button>

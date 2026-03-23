@@ -1,10 +1,10 @@
-import { Button, Stack, VStack } from '@chakra-ui/react'
 import { useQuery } from '@apollo/client'
+import { Button, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { useAuthContext } from '@/context/auth.tsx'
-import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { QUERY_PAYMENTS_REFUNDABLE } from '@/modules/project/graphql/queries/refundsQuery.ts'
+import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { PaymentAttemptRefundModal } from '@/modules/project/pages/projectFunding/views/refund/components/PaymentAttemptRefundModal.tsx'
 import { getRefundFileFromPayment } from '@/modules/project/pages/projectFunding/views/refund/utils/paymentRefund.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -13,7 +13,7 @@ import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { PaymentStatus, RefundablePaymentsGetResponse } from '@/types/index.ts'
 
 type RefundableProjectPayment = {
-  paymentId: string | number | bigint
+  paymentId: string | bigint
   amount: number
   paymentUuid: string
   refundFile?: ReturnType<typeof getRefundFileFromPayment>
@@ -24,9 +24,12 @@ export const TiaContributionRefundNotification = () => {
   const { project } = useProjectAtom()
   const refundModal = useModal<{ payment: RefundableProjectPayment }>()
 
-  const { data, refetch } = useQuery<{ paymentsRefundableGet: RefundablePaymentsGetResponse }>(QUERY_PAYMENTS_REFUNDABLE, {
-    skip: !user.id || !project.id,
-  })
+  const { data, refetch } = useQuery<{ paymentsRefundableGet: RefundablePaymentsGetResponse }>(
+    QUERY_PAYMENTS_REFUNDABLE,
+    {
+      skip: !user.id || !project.id,
+    },
+  )
 
   const projectPayments =
     data?.paymentsRefundableGet?.refundablePayments
@@ -90,7 +93,7 @@ export const TiaContributionRefundNotification = () => {
         isOpen={refundModal.isOpen}
         onClose={refundModal.onClose}
         amount={selectedPayment?.amount || 0}
-        paymentId={selectedPayment?.paymentId || 0}
+        paymentId={selectedPayment?.paymentId}
         paymentUuid={selectedPayment?.paymentUuid}
         refundFile={selectedPayment?.refundFile}
         onCompleted={handleCompleted}

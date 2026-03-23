@@ -1,5 +1,5 @@
-import { useApolloClient } from '@apollo/client'
-import { useCallback, useEffect, useState } from 'react'
+import { useQuery } from '@apollo/client'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
@@ -13,6 +13,19 @@ import { useProjectAtom } from '../../../../../../../hooks/useProjectAtom.ts'
 import { useRefetchQueries } from '../../aonNotification/hooks/useRefetchQueries.ts'
 
 const ACTIVE_WITHDRAW_PAYOUT_STATUSES = [PayoutStatus.Pending, PayoutStatus.Processing]
+const LATEST_PAYOUT_POLL_INTERVAL_MS = 10_000
+
+type PayoutLatestQueryResult = {
+  payoutLatest?: {
+    payout?: {
+      status?: PayoutStatus | null
+      payments?: Array<{
+        status?: PaymentStatus | null
+        createdAt: string
+      }> | null
+    } | null
+  } | null
+}
 
 export const useWithdrawFunds = () => {
   const { project, isProjectOwner } = useProjectAtom()
@@ -20,7 +33,6 @@ export const useWithdrawFunds = () => {
   const { refetchQueriesOnPayoutSuccess } = useRefetchQueries()
   const { queryProject } = useProjectAPI()
   const { getUSDCentsAmount } = useBTCConverter()
-  const apolloClient = useApolloClient()
   const [hasOngoingWithdraw, setHasOngoingWithdraw] = useState(false)
   const [hasFailedWithdraw, setHasFailedWithdraw] = useState(false)
 
@@ -40,38 +52,57 @@ export const useWithdrawFunds = () => {
     !isBelowMinWithdrawThreshold &&
     (hasOngoingWithdraw || hasFailedWithdraw || hasWithdrawableBalance)
 
-  const refetchLatestPayout = useCallback(() => {
-    return apolloClient
-      .query({
-        query: QUERY_PAYOUT_LATEST,
-        variables: { projectId: project.id },
-        fetchPolicy: 'network-only',
-      })
-      .then(({ data }) => {
-        const payout = data?.payoutLatest?.payout
-        const latestPayment = [...(payout?.payments ?? [])].sort(
-          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        )[0]
-        const status = payout?.status
+  const shouldTrackLatestPayout = isProjectOwner && isTiaProject && Boolean(projectRskEoa)
+  const {
+    data: latestPayoutData,
+    refetch: refetchLatestPayout,
+    startPolling,
+    stopPolling,
+  } = useQuery<PayoutLatestQueryResult>(QUERY_PAYOUT_LATEST, {
+    variables: { projectId: project.id },
+    skip: !shouldTrackLatestPayout,
+    fetchPolicy: 'network-only',
+  })
 
-        setHasOngoingWithdraw(Boolean(status && ACTIVE_WITHDRAW_PAYOUT_STATUSES.includes(status)))
-        setHasFailedWithdraw(Boolean(status === PayoutStatus.Failed && latestPayment?.status === PaymentStatus.Refunded))
-      })
-      .catch(() => {
-        setHasOngoingWithdraw(false)
-        setHasFailedWithdraw(false)
-      })
-  }, [apolloClient, project.id])
+  const latestPayout = latestPayoutData?.payoutLatest?.payout
+  const latestPayment = useMemo(
+    () =>
+      [...(latestPayout?.payments ?? [])].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )[0],
+    [latestPayout?.payments],
+  )
 
   useEffect(() => {
-    if (!isProjectOwner || !isTiaProject || !projectRskEoa) {
+    if (!shouldTrackLatestPayout) {
+      stopPolling()
       setHasOngoingWithdraw(false)
       setHasFailedWithdraw(false)
       return
     }
 
-    refetchLatestPayout().catch(() => undefined)
-  }, [isProjectOwner, isTiaProject, project.id, projectRskEoa, refetchLatestPayout])
+    const status = latestPayout?.status
+    setHasOngoingWithdraw(Boolean(status && ACTIVE_WITHDRAW_PAYOUT_STATUSES.includes(status)))
+    setHasFailedWithdraw(Boolean(status === PayoutStatus.Failed && latestPayment?.status === PaymentStatus.Refunded))
+  }, [latestPayment?.status, latestPayout?.status, shouldTrackLatestPayout, stopPolling])
+
+  useEffect(() => {
+    if (!shouldTrackLatestPayout) {
+      return
+    }
+
+    const shouldPoll = !latestPayoutData || hasOngoingWithdraw
+
+    if (shouldPoll) {
+      startPolling(LATEST_PAYOUT_POLL_INTERVAL_MS)
+    } else {
+      stopPolling()
+    }
+
+    return () => {
+      stopPolling()
+    }
+  }, [hasOngoingWithdraw, latestPayoutData, shouldTrackLatestPayout, startPolling, stopPolling])
 
   const onCompleted = () => {
     setHasOngoingWithdraw(false)

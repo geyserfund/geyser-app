@@ -130,7 +130,7 @@ export const PaymentRefundsTable = () => {
         isOpen={refundModal.isOpen}
         onClose={refundModal.onClose}
         amount={refundModalProps.payment?.amount || 0}
-        paymentId={refundModalProps.payment?.paymentId || 0}
+        paymentId={refundModalProps.payment?.paymentId}
         paymentUuid={refundModalProps.payment?.paymentUuid}
         refundFile={refundModalProps.payment?.refundFile}
         onCompleted={handleRefundSuccess}
