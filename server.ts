@@ -28,7 +28,7 @@ const getPrerenderFallbackReason = (err, prerenderedResponse) => {
   if (!prerenderedResponse) return 'missing-response'
 
   const statusCode = Number(prerenderedResponse.statusCode || 0)
-  if (!Number.isFinite(statusCode) || statusCode >= 500) {
+  if (!Number.isFinite(statusCode) || statusCode >= 400) {
     return `upstream-status-${statusCode || 'invalid'}`
   }
 

@@ -88,7 +88,7 @@ steps:
       - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:$COMMIT_SHA'
       - '--region'
       - 'us-central1'
-      - '--set-env-vars'
+      - '--update-env-vars'
       - 'PRERENDER_SERVICE_URL=${_PRERENDER_SERVICE_URL}'
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/geyser-docker-repo/${_SERVICE_NAME}:dependencies'

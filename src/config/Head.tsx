@@ -39,7 +39,7 @@ export const Head: React.FC<HeadProps> = (tags) => {
       {description && <meta name="description" content={description} />}
       {image && <meta property="og:image" content={image} />}
       {image && <meta property="og:image:secure_url" content={image} />}
-      <meta property="og:url" content={pageUrl} />
+      <meta property="og:url" content={url || pageUrl} />
       <meta property="og:type" content={type} />
       <meta name="twitter:card" content={DefaultMetaTwitterCard} />
       <meta name="twitter:site" content={DefaultMetaTwitterSite} />
