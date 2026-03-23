@@ -1,3 +1,19 @@
+## [0.33.0](https://github.com/geyserfund/geyser-app/compare/v0.32.0...v0.33.0) (2026-03-23)
+
+
+### Features
+
+*  add new success stories ([c6929c6](https://github.com/geyserfund/geyser-app/commit/c6929c6d3fc20fb51ecc914c2821f9a5f17fa9a8))
+
+
+### Bug Fixes
+
+* address PR comment ([2a96572](https://github.com/geyserfund/geyser-app/commit/2a96572e78ef9c571b733bfe3f434f644efb268a))
+* address PR comments ([e2465aa](https://github.com/geyserfund/geyser-app/commit/e2465aafebaee2004a7bd1bdd4c4b07dac1eb9e4))
+* payment refund flow (WIP) ([27263f7](https://github.com/geyserfund/geyser-app/commit/27263f7d059fc01004dac50ec5697d8007ba5534))
+* payout refund flow (WIP) ([9531ab7](https://github.com/geyserfund/geyser-app/commit/9531ab75cba5c5d46d6233d7310451a236c104e9))
+* project update mutation ([f2fd12c](https://github.com/geyserfund/geyser-app/commit/f2fd12cc3dc4ace7a55fd4d8e45c3d4e21ff2a61))
+
 ## [0.32.0](https://github.com/geyserfund/geyser-app/compare/v0.31.0...v0.32.0) (2026-03-17)
 
 
