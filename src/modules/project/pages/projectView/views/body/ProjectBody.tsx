@@ -31,6 +31,7 @@ import {
   ImpactFundRecipientBanner,
 } from './sections/header/components/ImpactFundRecipientBadge.tsx'
 import { SuggestedProjects } from './sections/SuggestedProjects.tsx'
+import { TiaContributionRefundNotification } from './sections/tiaNotification/TiaContributionRefundNotification.tsx'
 
 export const ProjectBody = () => {
   const { project, loading } = useProjectAtom()
@@ -70,6 +71,7 @@ export const ProjectBody = () => {
         <CreatorVerificationNotice />
 
         <AonNotification />
+        <TiaContributionRefundNotification />
 
         <ControlPanel />
 
