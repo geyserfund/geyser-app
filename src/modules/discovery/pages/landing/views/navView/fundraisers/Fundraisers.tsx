@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { PiCaretLeft, PiCaretRight, PiGlobeHemisphereWest, PiMoneyWavy, PiStorefront } from 'react-icons/pi'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 
-import { getPath } from '@/shared/constants/index.ts'
+import { Head } from '@/config/Head.tsx'
+import { FundraisersSeoImageUrl, getPath } from '@/shared/constants/index.ts'
 import { ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
 
 import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
@@ -109,6 +110,11 @@ export const Fundraisers = () => {
 
   return (
     <>
+      <Head
+        title={t('Fundraisers')}
+        description={t('Discover open fundraisers on Geyser. Fund Bitcoin projects you want to see come to life.')}
+        image={FundraisersSeoImageUrl}
+      />
       <CampaignTitleBlock
         title={t('Open Fundraisers')}
         description={t('Fund your project as it grows.')}

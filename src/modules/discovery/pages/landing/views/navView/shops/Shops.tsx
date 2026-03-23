@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next'
 import { PiCaretLeft, PiCaretRight, PiCube, PiMagnifyingGlass, PiSparkle } from 'react-icons/pi'
 import { Outlet, useLocation, useNavigate } from 'react-router'
 
-import { getPath } from '@/shared/constants/index.ts'
+import { Head } from '@/config/Head.tsx'
+import { getPath, ShopsSeoImageUrl } from '@/shared/constants/index.ts'
 import { useRewardCategoriesQuery } from '@/types/index.ts'
 
 import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
@@ -155,6 +156,11 @@ export const Shops = () => {
 
   return (
     <VStack w="full" spacing={8} alignItems="start">
+      <Head
+        title={t('Shops')}
+        description={t('Discover and shop Bitcoin products. Find limited edition collectibles, merch, and more on Geyser.')}
+        image={ShopsSeoImageUrl}
+      />
       <CampaignTitleBlock
         title={t('Shops')}
         description={t('Discover and shop Bitcoin products.')}

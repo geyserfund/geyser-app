@@ -56,6 +56,10 @@ if (!import.meta.env.VITE_APP_STRIPE_API_KEY) {
   console.warn('Missing VITE_APP_STRIPE_API_KEY from environment variables')
 }
 
+if (!import.meta.env.VITE_APP_GEYSER_LAUNCH_PROJECT_ID) {
+  console.warn('Missing VITE_APP_GEYSER_LAUNCH_PROJECT_ID from environment variables, using environment defaults')
+}
+
 if (!import.meta.env.VITE_APP_ROOTSTOCK_RPC_URL) {
   console.warn('Missing VITE_APP_ROOTSTOCK_RPC_URL from environment variables')
 }
@@ -81,3 +85,12 @@ export const {
   VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
   VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
 } = import.meta.env
+
+const parsedGeyserLaunchProjectId = Number(import.meta.env.VITE_APP_GEYSER_LAUNCH_PROJECT_ID)
+const defaultGeyserLaunchProjectId = __production__ ? 3075 : __staging__ ? 839 : 10
+
+/** Target project id used for launch-fee contributions in creation flow. */
+export const GEYSER_LAUNCH_PROJECT_ID =
+  Number.isFinite(parsedGeyserLaunchProjectId) && parsedGeyserLaunchProjectId > 0
+    ? parsedGeyserLaunchProjectId
+    : defaultGeyserLaunchProjectId

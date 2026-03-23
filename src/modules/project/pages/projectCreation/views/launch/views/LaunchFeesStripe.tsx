@@ -1,30 +1,53 @@
-import { Button, HStack, Image, VStack } from '@chakra-ui/react'
+import { HStack, VStack } from '@chakra-ui/react'
+import { EmbeddedCheckout, EmbeddedCheckoutProvider } from '@stripe/react-stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
 import { t } from 'i18next'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import Confetti from 'react-confetti'
-import { PiCopy } from 'react-icons/pi'
+import { createUseStyles } from 'react-jss'
 
+import { AppTheme } from '@/context'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H3 } from '@/shared/components/typography/Heading.tsx'
-import { FundingErrorUrl } from '@/shared/constants/index.ts'
+import { VITE_APP_STRIPE_API_KEY } from '@/shared/constants/config/env.ts'
 import { lightModeColors } from '@/shared/styles/colors.ts'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom.ts'
-import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton'
-import { FundingContributionFragment, FundingContributionPaymentDetailsFragment } from '@/types/index.ts'
-import { commaFormatted, useMobileMode, useNotification } from '@/utils/index.ts'
+import {
+  ContributionFiatPaymentDetailsFragment,
+  FundingContributionFragment,
+  FundingContributionPaymentDetailsFragment,
+} from '@/types/index.ts'
+import { commaFormatted } from '@/utils/index.ts'
 
-import { QRCodeComponent } from '../../../../projectFunding/views/fundingPayment/components/QRCodeComponent'
-import { WaitingForPayment } from '../../../../projectFunding/views/fundingPayment/components/WaitingForPayment'
 import { ProjectCreationPageWrapper } from '../../../components/ProjectCreationPageWrapper.tsx'
 import { LAUNCH_FEE_USD_CENTS } from '../constants/launchFees.ts'
 import { useListenToContributionConfirmed } from '../hooks/useListenToContributionConfirmed.ts'
 import { ProjectLaunchStrategy } from './LaunchStrategySelection.tsx'
 
-/** Lightning payment screen for the launch fee. Receives already-created contribution data from Launch.tsx. */
-export const LaunchFees = ({
+const stripePromiseByAccount = new Map<string, ReturnType<typeof loadStripe>>()
+
+const getStripePromiseForAccount = (stripeAccountId: string) => {
+  let stripePromise = stripePromiseByAccount.get(stripeAccountId)
+  if (!stripePromise) {
+    stripePromise = loadStripe(VITE_APP_STRIPE_API_KEY, { stripeAccount: stripeAccountId })
+    stripePromiseByAccount.set(stripeAccountId, stripePromise)
+  }
+
+  return stripePromise
+}
+
+const useStyles = createUseStyles(({ colors }: AppTheme) => ({
+  container: {
+    backgroundColor: colors.utils.pbg,
+    width: '100%',
+  },
+}))
+
+/** Stripe payment screen for the launch fee. Receives already-created contribution data from Launch.tsx. */
+export const LaunchFeesStripe = ({
   handleNext,
   handleBack,
   strategy,
@@ -37,56 +60,60 @@ export const LaunchFees = ({
   contributionData: FundingContributionFragment
   paymentsData: FundingContributionPaymentDetailsFragment
 }) => {
-  const isMobile = useMobileMode()
-  const toast = useNotification()
+  const classes = useStyles()
 
   const { project, partialUpdateProject } = useProjectAtom()
+  const { getSatoshisFromUSDCents } = useBTCConverter()
 
   const [isPaid, setIsPaid] = useState(false)
+  const [isCheckoutCompleted, setIsCheckoutCompleted] = useState(false)
 
-  // Update project state to mark it as paid
-  const onCompleted = () => {
+  const onCompleted = useCallback(() => {
     setIsPaid(true)
     partialUpdateProject({ paidLaunch: true })
-  }
+  }, [partialUpdateProject])
 
-  // Listen for funding success using the custom hook
   useListenToContributionConfirmed({
     contributionId: contributionData.id,
     onCompleted,
   })
 
-  const { getSatoshisFromUSDCents } = useBTCConverter()
+  const paymentDetails = useMemo<ContributionFiatPaymentDetailsFragment | null>(() => {
+    const { fiat } = paymentsData
+    if (!fiat?.stripeClientSecret || !fiat?.stripeAccountId) return null
+    return { stripeClientSecret: fiat.stripeClientSecret, stripeAccountId: fiat.stripeAccountId }
+  }, [paymentsData])
 
-  const { hasCopied, onCopy } = useCopyToClipboard(paymentsData?.lightning?.paymentRequest || '')
+  const stripeClientSecret = useMemo(() => {
+    const clientSecret = paymentDetails?.stripeClientSecret
+    if (!clientSecret) return ''
+    if (!clientSecret.includes('%')) return clientSecret
 
-  const handleCopy = () => {
-    onCopy()
-    toast.success({
-      title: t('Invoice copied to clipboard'),
-    })
-  }
-
-  /** Handles opening lightning payment in mobile wallets */
-  const handleLightningPayment = () => {
-    const paymentRequest = paymentsData?.lightning?.paymentRequest
-    if (!paymentRequest) return
-
-    const lightningUri = `lightning:${paymentRequest}`
-
-    if (isMobile) {
-      const a = document.createElement('a')
-      a.href = lightningUri
-      a.rel = 'noopener noreferrer'
-      a.click()
-      a.remove()
-    } else {
-      handleCopy()
+    try {
+      return decodeURIComponent(clientSecret)
+    } catch {
+      return clientSecret
     }
-  }
+  }, [paymentDetails?.stripeClientSecret])
 
-  const totalSats = getSatoshisFromUSDCents(LAUNCH_FEE_USD_CENTS[strategy])
-  const totalUsdCent = LAUNCH_FEE_USD_CENTS[strategy]
+  const stripeAccountId = paymentDetails?.stripeAccountId || ''
+
+  const stripeOptions = useMemo(() => {
+    if (!stripeClientSecret) return undefined
+
+    return {
+      clientSecret: stripeClientSecret,
+      onComplete: () => setIsCheckoutCompleted(true),
+    }
+  }, [stripeClientSecret])
+
+  const stripePromise = useMemo(() => {
+    if (!stripeAccountId) return undefined
+    return getStripePromiseForAccount(stripeAccountId)
+  }, [stripeAccountId])
+
+  const launchFeeInSats = getSatoshisFromUSDCents(LAUNCH_FEE_USD_CENTS[strategy])
+  const launchFeeInUsd = LAUNCH_FEE_USD_CENTS[strategy] / 100
 
   const renderSuccessContent = () => {
     return (
@@ -140,59 +167,36 @@ export const LaunchFees = ({
     )
   }
 
-  const renderPaymentContent = () => {
-    if (!paymentsData?.lightning?.paymentRequest) {
-      return (
-        <VStack w="full" spacing={6}>
-          <Image
-            src={FundingErrorUrl}
-            height="200px"
-            width="auto"
-            objectFit="contain"
-            alt={t('No payment request found')}
-          />
-          <VStack w="full" spacing={0} alignItems="center">
-            <Body>{t('We were unable to generate a payment request. Please try again.')}</Body>
-            <Body>{t('If the problem persists, please contact us for support.')}</Body>
-            <Body>{t('Email: hello@geyser.fund')}</Body>
-          </VStack>
-        </VStack>
-      )
+  const renderStripePayment = () => {
+    if (!stripeClientSecret || !stripeOptions || !stripePromise) {
+      return null
     }
 
     return (
       <VStack w="full" spacing={6}>
-        <QRCodeComponent
-          value={paymentsData.lightning.paymentRequest}
-          onClick={handleLightningPayment}
-          isColored={hasCopied}
-        />
         <HStack w="full" justifyContent="center">
           <Body light>{t(' Total to pay')}: </Body>
-
           <Body>
-            {`${commaFormatted(totalSats)} `}
-
+            {`${commaFormatted(launchFeeInSats)} `}
             <Body as="span" light>
               sats
             </Body>
           </Body>
-          <Body light>{`($${commaFormatted(totalUsdCent / 100)})`}</Body>
+          <Body light>{`($${commaFormatted(launchFeeInUsd)})`}</Body>
         </HStack>
-        <VStack w="full" spacing={6} pt={4}>
-          <WaitingForPayment title={t('Scan and pay invoice with Bitcoin Lightning.')} />
-          <Button
-            id={'copy-lightning-invoice-button'}
-            width="310px"
-            size="lg"
-            variant="solid"
-            colorScheme="primary1"
-            onClick={handleCopy}
-            rightIcon={<PiCopy />}
-          >
-            {t('Copy Lightning invoice')}
-          </Button>
-        </VStack>
+
+        <EmbeddedCheckoutProvider stripe={stripePromise} options={stripeOptions}>
+          <EmbeddedCheckout className={classes.container} />
+        </EmbeddedCheckoutProvider>
+
+        <Body size="sm" light>
+          {t('This checkout is charged in USD. Your bank or card issuer may convert to your local currency.')}
+        </Body>
+        {isCheckoutCompleted ? (
+          <Body size="sm" light>
+            {t('Payment submitted. We will unlock launch once Stripe confirmation is received.')}
+          </Body>
+        ) : null}
       </VStack>
     )
   }
@@ -201,6 +205,7 @@ export const LaunchFees = ({
     onClick: handleNext,
     isDisabled: !project.paidLaunch,
   }
+
   const backButtonProps = {
     onClick: handleBack,
   }
@@ -211,8 +216,8 @@ export const LaunchFees = ({
       continueButtonProps={continueButtonProps}
       backButtonProps={backButtonProps}
     >
-      <Body>{t('Please pay the launch fee with Lightning to continue.')}</Body>
-      {isPaid ? renderSuccessContent() : renderPaymentContent()}
+      <Body>{t('Pay the launch fee with credit card to continue.')}</Body>
+      {isPaid ? renderSuccessContent() : renderStripePayment()}
     </ProjectCreationPageWrapper>
   )
 }
