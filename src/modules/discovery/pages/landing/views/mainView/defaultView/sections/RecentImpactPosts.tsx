@@ -40,7 +40,10 @@ export const RecentImpactPosts = () => {
 
   return (
     <ProjectRowLayout
+      id="landing-whats-happening"
       title={t("What's happening")}
+      subtext={t('Fresh videos, announcements, and project updates from across the Bitcoin ecosystem')}
+      scrollMarginTop={{ base: '110px', lg: '140px' }}
       width="100%"
       rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryActivity')} />}
     >

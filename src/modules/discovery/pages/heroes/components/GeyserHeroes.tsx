@@ -1,4 +1,4 @@
-import { HStack, Stack, VStack } from '@chakra-ui/react'
+import { HStack, SimpleGrid, Stack, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
 import { Link } from 'react-router'
@@ -13,12 +13,13 @@ import { getPath } from '@/shared/constants'
 import { FormatCurrencyType } from '@/shared/utils/hooks/useCurrencyFormatter'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { LeaderboardPeriod } from '@/types'
-import { getShortAmountLabel } from '@/utils'
+import { getBitcoinAmount, getShortAmountLabel } from '@/utils'
 
 import { ProjectRowLayout } from '../../landing/views/mainView/defaultView/components/ProjectRowLayout.tsx'
 import { useTopContributors } from '../hooks'
 import { useTopAmbassadors } from '../hooks/useTopAmbassadors'
 import { useTopCreators } from '../hooks/useTopCreators'
+import { useSummaryBannerStats } from '../hooks/useSummaryBanner'
 import { StandardOption } from '../types'
 import { SponsorshipBanner } from './SponsorshipBanner'
 import { TitleWithPeriod } from './TitleWithPeriod'
@@ -34,6 +35,7 @@ const HeroListLabels = {
 
 export const GeyserHeroes = () => {
   const [period, setPeriod] = useState<LeaderboardPeriod>(LeaderboardPeriod.Month)
+  const mutedSurface = useColorModeValue('gray.50', 'gray.800')
 
   const handlePeriodChange = (selectedOption: StandardOption<LeaderboardPeriod> | null) => {
     if (selectedOption) {
@@ -41,16 +43,39 @@ export const GeyserHeroes = () => {
     }
   }
 
+  const { contributorsCount, bitcoinsRaised, projectsCount, loading: summaryLoading } = useSummaryBannerStats()
+
   const { contributors, loading: contributorsLoading } = useTopContributors(period, MAX_HEROES)
 
   const { ambassadors, loading: ambassadorsLoading } = useTopAmbassadors(period, MAX_HEROES)
 
   const { creators, loading: creatorsLoading } = useTopCreators(period, MAX_HEROES)
 
+  const summaryItems = [
+    {
+      label: t('Contributors'),
+      value: summaryLoading ? '...' : contributorsCount.toLocaleString(),
+    },
+    {
+      label: t('BTC raised'),
+      value: summaryLoading ? '...' : `${getBitcoinAmount(bitcoinsRaised, true)} ₿`,
+    },
+    {
+      label: t('Projects'),
+      value: summaryLoading ? '...' : projectsCount.toLocaleString(),
+    },
+  ]
+  const communityTitle = summaryLoading
+    ? t('Join a community of Bitcoin contributors')
+    : t('Join a community of {{count}} contributors', {
+        count: contributorsCount,
+      })
+
   return (
     <ProjectRowLayout
       w="full"
-      title={t('Top Heroes')}
+      title={communityTitle}
+      subtext={t('Creators, contributors, and ambassadors moving Bitcoin adoption forward every day')}
       rightContent={
         <TitleWithPeriod
           w="auto"
@@ -61,6 +86,18 @@ export const GeyserHeroes = () => {
       }
     >
       <VStack w="full" flex={1}>
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={3} width="100%" paddingBottom={4}>
+          {summaryItems.map((item) => (
+            <VStack key={item.label} align="start" spacing={1} p={4} borderRadius="24px" backgroundColor={mutedSurface}>
+              <Body size="sm" color="neutral1.10" textTransform="uppercase" letterSpacing="0.08em">
+                {item.label}
+              </Body>
+              <Body size="xl" bold>
+                {item.value}
+              </Body>
+            </VStack>
+          ))}
+        </SimpleGrid>
         <SponsorshipBanner />
         <Stack direction={{ base: 'column', lg: 'row' }} w="full" alignItems={'start'} spacing={4}>
           <HeroSectionWrapper title={t('Creators')} description="Lead initiatives and bring ideas to life.">

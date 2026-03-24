@@ -17,12 +17,14 @@ import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../modules/auth/hooks'
 import { BrandLogo } from './components/BrandLogo'
 import { CreateProjectButton } from './components/CreateProjectButton.tsx'
+import { LandingDesktopNav } from './components/LandingDesktopNav.tsx'
 import { LoggedOutModal } from './components/LoggedOutModal'
 import { LoginButton } from './components/LoginButton'
 import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
 import {
   isDiscoveryRoutesAtom,
+  isLandingPageRouteAtom,
   isProjectDashboardRoutesAtom,
   isProjectFundingRoutesAtom,
   isProjectRoutesAtom,
@@ -43,6 +45,7 @@ export const PlatformNavBar = () => {
   const isManifestoPage = useIsManifestoPage()
 
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
+  const isLandingPageRoute = useAtomValue(isLandingPageRouteAtom)
   const isProjectRoutes = useAtomValue(isProjectRoutesAtom)
   const isProjectDashboardRoutes = useAtomValue(isProjectDashboardRoutesAtom)
   const isProjectFundingRoutes = useAtomValue(isProjectFundingRoutesAtom)
@@ -95,26 +98,46 @@ export const PlatformNavBar = () => {
     !isProjectFundingRoutes &&
     !isProjectDashboardRoutes &&
     !isMobileMode
+  const shouldShowLandingDesktopNav = shouldShowPlatformNav && isLandingPageRoute
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {
       return <CloseGoBackButton />
     }
 
+    const landingCreateButton = shouldShowLandingDesktopNav ? (
+      <CreateProjectButton
+        display={{ base: 'none', lg: 'flex' }}
+        label={t('Start your project')}
+        noIcon
+        size="md"
+        minWidth="190px"
+        variant="solid"
+        colorScheme="primary1"
+        borderRadius="full"
+      />
+    ) : null
+
     return (
       <HStack position="relative">
         {!isLoggedIn ? (
           <>
+            {landingCreateButton}
             <LoginButton />
-            <CreateProjectButton display={{ base: 'none', lg: 'flex' }} label={t('Creator')} noIcon />
+            {!shouldShowLandingDesktopNav && (
+              <CreateProjectButton display={{ base: 'none', lg: 'flex' }} label={t('Creator')} noIcon />
+            )}
           </>
         ) : (
-          <ProjectSelectMenu />
+          <>
+            {landingCreateButton}
+            <ProjectSelectMenu />
+          </>
         )}
         <ProfileNav />
       </HStack>
     )
-  }, [isLoggedIn, isManifestoPage])
+  }, [isLoggedIn, isManifestoPage, shouldShowLandingDesktopNav])
 
   return (
     <HStack
@@ -142,7 +165,7 @@ export const PlatformNavBar = () => {
         >
           <HStack height="full">{renderLeftSide()}</HStack>
 
-          {shouldShowPlatformNav && <PlatformNav />}
+          {shouldShowLandingDesktopNav ? <LandingDesktopNav /> : shouldShowPlatformNav ? <PlatformNav /> : null}
 
           {renderRightSide()}
         </HStack>

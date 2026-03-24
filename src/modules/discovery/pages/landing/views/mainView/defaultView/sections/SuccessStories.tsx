@@ -1,10 +1,11 @@
-import { Link, SimpleGrid } from '@chakra-ui/react'
+import { Box, HStack, Link, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 
 import BringSuccessStoryImage from '@/assets/bring-success-story.webp'
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { CreationStoryCard } from '@/modules/project/pages/projectCreation/views/start/components/CreationStoryCard.tsx'
+import { Body } from '@/shared/components/typography/Body.tsx'
 
 import { ProjectRowLayout } from '../components/ProjectRowLayout.tsx'
 
@@ -81,24 +82,49 @@ const stories = [
 ]
 
 export const SuccessStories = () => {
-  // Select 4 random stories for display
+  const surfaceColor = useColorModeValue('gray.50', 'gray.800')
+
   const displayedStories = useMemo(() => {
     const shuffledStories = [...stories].sort(() => 0.5 - Math.random())
-    return shuffledStories.slice(0, 4)
+    return shuffledStories.slice(0, 3)
   }, [])
 
   return (
     <ProjectRowLayout
-      title={t('Success Stories')}
+      title={t('Impact stories')}
+      subtext={t('Snapshots from projects and communities using Bitcoin to create real change')}
       width="100%"
       rightContent={
         <DiscoverMoreButton as={Link} isExternal href="https://guide.geyser.fund/geyser-docs/guides/success-stories" />
       }
     >
-      <SimpleGrid w="full" columns={{ base: 1, xs: 2, md: 4 }} spacing={{ base: 4, lg: 8 }}>
-        {displayedStories.map((story) => {
-          return <CreationStoryCard key={story.link} link={story.link} image={story.image} />
-        })}
+      <SimpleGrid w="full" columns={{ base: 1, md: 3 }} spacing={{ base: 4, lg: 6 }}>
+        {displayedStories.map((story, index) => (
+          <VStack
+            key={story.link}
+            align="stretch"
+            spacing={3}
+            padding={{ base: 3, lg: 4 }}
+            borderRadius="28px"
+            backgroundColor={surfaceColor}
+          >
+            <CreationStoryCard link={story.link} image={story.image} />
+            <HStack justify="space-between" align="start" spacing={3}>
+              <Body size="sm" color="neutral1.10">
+                {index === 0
+                  ? t('Community-led adoption stories from around the world.')
+                  : index === 1
+                  ? t('Creator campaigns turning ideas into lasting Bitcoin impact.')
+                  : t('Grassroots efforts supported directly by Bitcoin contributors.')}
+              </Body>
+              <Box flexShrink={0}>
+                <Body size="sm" bold color="primary1.11">
+                  {t('Read')}
+                </Body>
+              </Box>
+            </HStack>
+          </VStack>
+        ))}
       </SimpleGrid>
     </ProjectRowLayout>
   )

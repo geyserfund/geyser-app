@@ -1,76 +1,32 @@
-import { Stack, VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { VStack } from '@chakra-ui/react'
 
 import { Head } from '@/config/Head.tsx'
 import { GeyserMainSeoImageUrl } from '@/shared/constants/index.ts'
-import { ProjectCategoryList } from '@/shared/constants/platform/projectCategory.ts'
 
 import { HeroesMainPage } from '../../../../heroes/index.ts'
-import { TopProjects } from './components/TopProjects.tsx'
-import { AnnouncementBanner } from './sections/AnnouncementBanner.tsx'
-import { AonProjectsDisplayMostFundedThisWeek } from './sections/AonProjectsDisplayMostFundedThisWeek.tsx'
-import { CharityProjects } from './sections/CharityProjects.tsx'
-import { Featured } from './sections/Featured.tsx'
+import { BitcoinersStatement } from './sections/BitcoinersStatement.tsx'
+import { HowItWorks } from './sections/HowItWorks.tsx'
 import { JoinOurMailingList } from './sections/JoinOurMailingList.tsx'
 import { JoinTheMovement } from './sections/JoinTheMovement.tsx'
-import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
-import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
+import { LandingHero } from './sections/LandingHero.tsx'
+import { LandingProjectShowcaseCarousel } from './sections/LandingProjectShowcaseCarousel.tsx'
 import { RecentImpactPosts } from './sections/RecentImpactPosts.tsx'
-import { RecentLaunches } from './sections/RecentLaunches.tsx'
-import { RecommendedForYou } from './sections/RecommendedForYou.tsx'
 import { SuccessStories } from './sections/SuccessStories.tsx'
-import { TiaProjectsDisplayMostFundedThisWeek } from './sections/TiaProjectsDisplayMostFundedThisWeek.tsx'
-import { TitleBar } from './sections/TitleBar.tsx'
 
 export const DefaultView = () => {
-  const [showBelowTheFold, setShowBelowTheFold] = useState(false)
-
-  useEffect(() => {
-    /** Wait for initial content to render before showing below-the-fold content */
-    const timer = setTimeout(() => {
-      setShowBelowTheFold(true)
-    }, 2000)
-
-    return () => clearTimeout(timer)
-  }, [])
-
   return (
     <VStack w="full" spacing={10} paddingTop={{ base: '8px', lg: '10px' }}>
       <Head image={GeyserMainSeoImageUrl} />
-      <VStack w="full" spacing={20} paddingBottom={40}>
-        <TitleBar />
-        <AnnouncementBanner mt={{ base: -14, md: -10 }} mb={{ base: -14, md: -10 }} />
-
-        <Stack direction={{ base: 'column', md: 'row' }} w="full" alignItems="stretch" spacing={{ base: 4, lg: 12 }}>
-          <Featured />
-          <RecommendedForYou />
-        </Stack>
-
+      <VStack w="full" spacing={{ base: 14, lg: 18 }} paddingBottom={40}>
+        <LandingHero />
+        <LandingProjectShowcaseCarousel />
         <SuccessStories />
-
-        <AonProjectsDisplayMostFundedThisWeek />
-        <TiaProjectsDisplayMostFundedThisWeek />
-        <ProjectsInYourRegion />
-
+        <HeroesMainPage />
+        <HowItWorks />
+        <BitcoinersStatement />
+        <JoinOurMailingList />
         <RecentImpactPosts />
-
-        {showBelowTheFold && (
-          <>
-            {ProjectCategoryList.map((category) => (
-              <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
-            ))}
-            <RecentLaunches />
-            <CharityProjects />
-
-            <HeroesMainPage />
-
-            <TopProjects />
-
-            <JoinTheMovement />
-
-            <JoinOurMailingList />
-          </>
-        )}
+        <JoinTheMovement />
       </VStack>
     </VStack>
   )

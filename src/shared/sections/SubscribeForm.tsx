@@ -1,4 +1,4 @@
-import { Button, ButtonProps, HStack, StackProps } from '@chakra-ui/react'
+import { Button, ButtonProps, Stack, StackProps } from '@chakra-ui/react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from 'i18next'
 import { useState } from 'react'
@@ -67,11 +67,12 @@ export const SubscribeForm = ({ buttonProps, inputProps, ...props }: SubscribeFo
   }
 
   return (
-    <HStack
+    <Stack
       as="form"
       style={{ width: '100%' }}
       onSubmit={handleSubmit(onSubmit)}
       maxWidth="800px"
+      direction={{ base: 'column', md: 'row' }}
       spacing={4}
       alignItems="flex-start"
       {...props}
@@ -97,6 +98,6 @@ export const SubscribeForm = ({ buttonProps, inputProps, ...props }: SubscribeFo
       >
         {buttonProps?.children ?? t('Get Updates')}
       </Button>
-    </HStack>
+    </Stack>
   )
 }
