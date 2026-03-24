@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { PiArrowUpRight, PiHandHeart, PiInfo, PiNotePencil, PiRocketLaunch, PiStorefront } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
+import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
 import { getProjectCreationRoute } from '@/modules/project/pages/projectCreation/components/ProjectCreationNavigation.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
@@ -188,7 +189,11 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       <HStack spacing={2}>
         {canWithdraw && (
           <Tooltip
-            label={isWithdrawDisabled ? t('$10 minimum required to withdraw.') : ''}
+            label={
+              isWithdrawDisabled
+                ? t('{{amount}} USD minimum required to withdraw.', { amount: MIN_BITCOIN_PAYOUT_USD })
+                : ''
+            }
             isDisabled={!isWithdrawDisabled}
             placement="top"
             hasArrow

@@ -7,7 +7,7 @@ import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { useGeyserPromotionsContributionStatsQuery } from '@/types/index.ts'
+import { useGeyserPromotionsContributionStatsQuery, usePromotionNetworkContributionStatsQuery } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const PROMOTION_LOGOS = {
@@ -105,11 +105,28 @@ export const GeyserPromotionSection = () => {
     skip: !project.id || !project.promotionsEnabled,
     fetchPolicy: 'cache-and-network',
   })
+  const { data: promotionNetworkStatsData, loading: promotionNetworkStatsLoading } =
+    usePromotionNetworkContributionStatsQuery({
+    fetchPolicy: 'cache-and-network',
+    })
 
-  const hasPromotionContributions =
+  const projectPromotionContributionSumUsd = promotionStatsData?.geyserPromotionsContributionStats?.contributionsSumUsd
+  const hasProjectPromotionContributions =
     !promotionStatsLoading &&
-    promotionStatsData?.geyserPromotionsContributionStats?.contributionsSumUsd !== undefined &&
-    promotionStatsData?.geyserPromotionsContributionStats?.contributionsSumUsd > 0
+    projectPromotionContributionSumUsd !== undefined &&
+    projectPromotionContributionSumUsd > 0
+  const promotionNetworkContributionSumUsd = promotionNetworkStatsData?.promotionNetworkContributionStats?.contributionsSumUsd
+  const hasPromotionNetworkContributions =
+    !promotionNetworkStatsLoading &&
+    promotionNetworkContributionSumUsd !== undefined &&
+    promotionNetworkContributionSumUsd > 0
+  const shouldShowContributionSummary = hasProjectPromotionContributions || hasPromotionNetworkContributions
+  const displayedContributionSumUsd = hasProjectPromotionContributions
+    ? projectPromotionContributionSumUsd
+    : promotionNetworkContributionSumUsd
+  const contributionSummaryCopy = hasProjectPromotionContributions
+    ? t('has been enabled through Geyser promotions on this project so far.')
+    : t('has been enabled through the Promotion Network so far.')
 
   const { promotionsEnabled } = project
 
@@ -166,14 +183,10 @@ export const GeyserPromotionSection = () => {
             />
           ))}
         </HStack>
-        {hasPromotionContributions && (
+        {shouldShowContributionSummary && displayedContributionSumUsd !== undefined && (
           <Box bg="green.100" p={3} borderRadius="md" mb={4} w="fit-content">
             <Body size="sm" bold color="green.900">
-              {formatAmount(
-                promotionStatsData.geyserPromotionsContributionStats.contributionsSumUsd,
-                FormatCurrencyType.Usd,
-              )}{' '}
-              {t('has been enabled through Geyser promotions on this project so far.')}
+              {formatAmount(displayedContributionSumUsd, FormatCurrencyType.Usd)} {contributionSummaryCopy}
             </Body>
           </Box>
         )}

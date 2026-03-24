@@ -1,24 +1,47 @@
 import { Collapse, HStack, Icon, Tooltip, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { useState } from 'react'
-import { PiQuestion } from 'react-icons/pi'
 import { UseFormReturn } from 'react-hook-form'
+import { BsFillCheckCircleFill, BsFillXCircleFill } from 'react-icons/bs'
+import { PiQuestion } from 'react-icons/pi'
 
+import Loader from '@/components/ui/Loader'
+import { LNAddressEvaluationState } from '@/modules/project/pages/projectCreation/hooks/useWalletForm.tsx'
 import { ControlledTextInput } from '@/shared/components/controlledInput/ControlledTextInput.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
+import { lightModeColors } from '@/shared/styles'
 
-import { LightningPayoutFormData } from '../hooks/usePayoutWithLightningForm.ts'
+import { LightningAddressValidation, LightningPayoutFormData } from '../hooks/usePayoutWithLightningForm.ts'
 
 type LightningPayoutFormProps = {
   form: UseFormReturn<LightningPayoutFormData>
-  satsAmount?: number
   disablePassword?: boolean
+  lightningAddress: LightningAddressValidation
 }
 
 /** LightningPayoutForm: Form component for Lightning payout with address and password fields */
-export const LightningPayoutForm: React.FC<LightningPayoutFormProps> = ({ form, satsAmount, disablePassword }) => {
+export const LightningPayoutForm: React.FC<LightningPayoutFormProps> = ({
+  form,
+  disablePassword,
+  lightningAddress,
+}) => {
   const { control } = form
   const [showForgotPassword, setShowForgotPassword] = useState(false)
+
+  const renderLightningAddressRightElement = () => {
+    if (lightningAddress.evaluating) {
+      return <Loader size="md" />
+    }
+
+    switch (lightningAddress.state) {
+      case LNAddressEvaluationState.FAILED:
+        return <BsFillXCircleFill color={lightModeColors.secondary.red} size="20px" />
+      case LNAddressEvaluationState.SUCCEEDED:
+        return <BsFillCheckCircleFill color={lightModeColors.primary[500]} size="20px" />
+      default:
+        return null
+    }
+  }
 
   return (
     <VStack w="full" spacing={6} alignItems="start">
@@ -27,6 +50,12 @@ export const LightningPayoutForm: React.FC<LightningPayoutFormProps> = ({ form, 
         label={t('Enter your lightning address')}
         control={control}
         size="md"
+        type="email"
+        onBlur={() => {
+          lightningAddress.validate().catch(() => undefined)
+        }}
+        error={lightningAddress.error}
+        rightElement={renderLightningAddressRightElement()}
       />
 
       {!disablePassword && (

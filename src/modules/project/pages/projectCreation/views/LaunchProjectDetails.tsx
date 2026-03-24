@@ -1,28 +1,36 @@
 import { VStack } from '@chakra-ui/react'
+import { useAtom } from 'jotai'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 
+import { TextInputBox } from '@/components/ui'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
-import { Country, ProjectCategory, ProjectCreationStep, ProjectSubCategory } from '@/types/index.ts'
+import { ProjectCreationStep } from '@/types/index.ts'
+import type { Country, CreateProjectInput, ProjectCategory, ProjectSubCategory, UpdateProjectInput } from '@/types/index.ts'
 import { useNotification } from '@/utils'
 
 import { useAuthContext } from '../../../../../context'
+import { FieldContainer } from '../../../../../shared/components/form/FieldContainer.tsx'
 import { getPath } from '../../../../../shared/constants'
 import { useModal } from '../../../../../shared/hooks'
+import { projectCreationReferrerHeroIdAtom } from '../../../../../shared/state/projectReferralAtom.ts'
 import { ProjectForm } from '../../../forms/ProjectForm'
 import { ProjectUnsavedModal, useProjectUnsavedModal } from '../../projectDashboard/common/ProjectUnsavedModal'
 import { ProjectCreationPageWrapper } from '../components/ProjectCreationPageWrapper.tsx'
+import { ProjectCreationReferralCapture } from '../components/ProjectCreationReferralCapture.tsx'
 import { ProjectExitConfirmModal } from '../components/ProjectExitConfirmModal'
 import { useUpdateProjectWithLastCreationStep } from '../hooks/useIsStepAhead.tsx'
 import { useProjectForm } from '../hooks/useProjectForm'
-import { ProjectCreationVariables } from '../hooks/useProjectForm.tsx'
+import type { ProjectCreationVariables } from '../hooks/useProjectForm.tsx'
 
 export const LaunchProjectDetails = () => {
   const { t } = useTranslation()
   const params = useParams<{ projectId: string }>()
   const navigate = useNavigate()
   const toast = useNotification()
+  const [projectReferrerHeroId, setProjectReferrerHeroId] = useAtom(projectCreationReferrerHeroIdAtom)
 
   const { queryCurrentUser } = useAuthContext()
 
@@ -36,6 +44,7 @@ export const LaunchProjectDetails = () => {
     isEdit,
     project,
   })
+  const referrerHeroId = form.watch('referrerHeroId')
 
   const { createProject, updateProject } = useProjectAPI()
 
@@ -50,12 +59,45 @@ export const LaunchProjectDetails = () => {
     hasUnsaved: form.formState.isDirty,
   })
 
-  const onSubmit = async ({ category, subCategory, location, tags, ...values }: ProjectCreationVariables) => {
+  useEffect(() => {
+    if (isEdit) {
+      return
+    }
+
+    if (!form.getValues('referrerHeroId') && projectReferrerHeroId) {
+      form.setValue('referrerHeroId', projectReferrerHeroId, {
+        shouldDirty: false,
+        shouldTouch: false,
+        shouldValidate: false,
+      })
+    }
+  }, [form, isEdit, projectReferrerHeroId])
+
+  useEffect(() => {
+    if (isEdit) {
+      return
+    }
+
+    const normalizedReferrerHeroId = referrerHeroId.trim() || null
+    if (normalizedReferrerHeroId !== projectReferrerHeroId) {
+      setProjectReferrerHeroId(normalizedReferrerHeroId)
+    }
+  }, [isEdit, projectReferrerHeroId, referrerHeroId, setProjectReferrerHeroId])
+
+  const onSubmit = async ({
+    category,
+    subCategory,
+    location,
+    tags,
+    referrerHeroId,
+    ...values
+  }: ProjectCreationVariables) => {
+    const normalizedReferrerHeroId = referrerHeroId.trim() || undefined
+
     if (isEdit && project.id) {
-      const projectUpdates = !form.formState.isDirty
-        ? {}
+      const projectUpdates: Omit<UpdateProjectInput, 'projectId'> | undefined = !form.formState.isDirty
+        ? undefined
         : {
-            projectId: Number(project.id),
             category: category as ProjectCategory,
             subCategory: subCategory as ProjectSubCategory,
             countryCode: location as Country['code'],
@@ -72,17 +114,21 @@ export const LaunchProjectDetails = () => {
         },
       })
     } else {
+      const createProjectInput: CreateProjectInput = {
+        ...values,
+        countryCode: location as Country['code'],
+        category: category as ProjectCategory,
+        subCategory: subCategory as ProjectSubCategory,
+        tagIds: tags,
+        ...(normalizedReferrerHeroId ? { referrerHeroId: normalizedReferrerHeroId } : {}),
+      }
+
       createProject.execute({
         variables: {
-          input: {
-            ...values,
-            countryCode: location as Country['code'],
-            category: category as ProjectCategory,
-            subCategory: subCategory as ProjectSubCategory,
-            tagIds: tags,
-          },
+          input: createProjectInput,
         },
         onCompleted({ createProject }) {
+          setProjectReferrerHeroId(null)
           queryCurrentUser()
           updateProject.execute({
             variables: {
@@ -130,6 +176,7 @@ export const LaunchProjectDetails = () => {
         console.log(errors)
       })}
     >
+      <ProjectCreationReferralCapture />
       <ProjectCreationPageWrapper
         title={t('Project details')}
         continueButtonProps={continueProps}
@@ -137,6 +184,24 @@ export const LaunchProjectDetails = () => {
       >
         <VStack width="100%" alignItems="flex-start" spacing={6}>
           <ProjectForm form={form} isEdit={isEdit} />
+          {!isEdit ? (
+            <FieldContainer
+              title={t('Referral code')}
+              subtitle={t('Optional. If someone referred you, enter their code here.')}
+            >
+              <TextInputBox
+                name="referrerHeroId"
+                onChange={(event) => {
+                  form.setValue('referrerHeroId', event.target.value, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }}
+                value={referrerHeroId}
+                placeholder="Referral Hero ID"
+              />
+            </FieldContainer>
+          ) : null}
         </VStack>
       </ProjectCreationPageWrapper>
 

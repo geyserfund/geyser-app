@@ -4,10 +4,12 @@ import { MutableRefObject } from 'react'
 import { ScrollInvoke } from '@/helpers/ScrollInvoke.tsx'
 import { ID } from '@/shared/constants/components/id.ts'
 import { ContributionsSummary, ProjectForLandingPageFragment } from '@/types/index.ts'
+import { useMobileMode } from '@/utils'
 
 import { LandingProjectCard } from '../../../components/LandingProjectCard.tsx'
 import { LoadingProjectGridItems } from '../../../components/LoadingProjectGridItems.tsx'
 
+/** Renders discovery project cards and invokes pagination when the active scroll container nears the end. */
 export const RenderProjectList = ({
   projects,
   loading,
@@ -23,6 +25,8 @@ export const RenderProjectList = ({
   noMoreItems?: MutableRefObject<boolean>
   fetchNext?: (count?: number) => Promise<void>
 }) => {
+  const isMobile = useMobileMode()
+
   const renderBody = () => {
     if (loading) {
       return <LoadingProjectGridItems />
@@ -46,7 +50,12 @@ export const RenderProjectList = ({
         {renderBody()}
       </SimpleGrid>
       {fetchNext && isLoadingMore && noMoreItems && (
-        <ScrollInvoke elementId={ID.root} onScrollEnd={fetchNext} isLoading={isLoadingMore} noMoreItems={noMoreItems} />
+        <ScrollInvoke
+          elementId={!isMobile ? ID.root : undefined}
+          onScrollEnd={fetchNext}
+          isLoading={isLoadingMore}
+          noMoreItems={noMoreItems}
+        />
       )}
     </>
   )

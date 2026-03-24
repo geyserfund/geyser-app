@@ -6,6 +6,7 @@ import { PiArrowUpRight, PiFlagCheckeredDuotone, PiGear, PiWarning } from 'react
 import { Link, useLocation, useSearchParams } from 'react-router'
 
 import { GEYSER_PROMOTIONS_PROJECT_NAME } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Featured.tsx'
+import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
 import { PayoutRsk } from '@/modules/project/pages/projectFunding/views/refundPayoutRsk/PayoutRsk.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -32,6 +33,7 @@ type FinancialActionsProps = {
   withdrawableUsd: number
   isBelowMinWithdrawThreshold: boolean
   hasOngoingWithdraw: boolean
+  hasFailedWithdraw: boolean
   showWithdraw: boolean
 }
 
@@ -45,6 +47,7 @@ const ControlPanelFinancialActions = ({
   withdrawableUsd,
   isBelowMinWithdrawThreshold,
   hasOngoingWithdraw,
+  hasFailedWithdraw,
   showWithdraw,
 }: FinancialActionsProps) => {
   if (!showClaim && !showWithdrawableBalance) return null
@@ -114,15 +117,21 @@ const ControlPanelFinancialActions = ({
                   ≈${withdrawableUsd.toFixed(0)}
                 </Body>
               </Body>
-              {hasOngoingWithdraw && (
+              {hasOngoingWithdraw ? (
                 <Body size="sm" color="neutral1.11">
                   {t('You have an ongoing payout. Continue to finish the withdrawal flow.')}
                 </Body>
-              )}
+              ) : hasFailedWithdraw ? (
+                <Body size="sm" color="neutral1.11">
+                  {t('Your previous withdraw attempt failed. You can try again.')}
+                </Body>
+              ) : null}
             </VStack>
           </HStack>
           <Tooltip
-            label={t('Minimum withdrawal is $10. Increase your balance to enable withdrawals.')}
+            label={t('Minimum withdrawal is {{amount}} USD. Increase your balance to enable withdrawals.', {
+              amount: MIN_BITCOIN_PAYOUT_USD,
+            })}
             hasArrow
             shouldWrapChildren
             isDisabled={hasOngoingWithdraw || !isBelowMinWithdrawThreshold}
@@ -136,7 +145,7 @@ const ControlPanelFinancialActions = ({
               onClick={payoutRskModal.onOpen}
               isDisabled={!showWithdraw}
             >
-              {hasOngoingWithdraw ? t('Continue withdraw') : t('Withdraw')}
+              {hasOngoingWithdraw ? t('Continue withdraw') : hasFailedWithdraw ? t('Try again') : t('Withdraw')}
             </Button>
           </Tooltip>
         </Stack>
@@ -176,6 +185,7 @@ export const ControlPanel = () => {
     showWithdrawableBalance,
     isBelowMinWithdrawThreshold,
     hasOngoingWithdraw,
+    hasFailedWithdraw,
     showWithdraw,
     onCompleted,
   } = useWithdrawFunds()
@@ -282,6 +292,7 @@ export const ControlPanel = () => {
         withdrawableUsd={withdrawableUsd}
         isBelowMinWithdrawThreshold={isBelowMinWithdrawThreshold}
         hasOngoingWithdraw={hasOngoingWithdraw}
+        hasFailedWithdraw={hasFailedWithdraw}
         showWithdraw={showWithdraw}
       />
 

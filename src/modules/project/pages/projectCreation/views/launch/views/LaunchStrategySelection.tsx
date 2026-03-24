@@ -92,7 +92,6 @@ export const LaunchStrategySelection = ({
         />
         <ProjectCreateStrategyCard
           flex={1}
-          isSelected={isProLaunch}
           as={Link}
           href={
             'https://cal.com/metamick/geyser-partnership-hands-on-support-network-amplification?overlayCalendar=true'

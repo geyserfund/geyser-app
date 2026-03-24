@@ -31,7 +31,7 @@ export const LaunchPaymentTaxId = () => {
     lastCreationStepOverride = undefined
   } else if (shouldShowFiatContributionsStep) {
     nextPath = getPath('launchPaymentFiatContributions', project.id)
-    lastCreationStepOverride = ProjectCreationStep.FiatContributions
+    lastCreationStepOverride = ProjectCreationStep.Launch
   }
 
   const { updateProjectWithLastCreationStep } = useUpdateProjectWithLastCreationStep(

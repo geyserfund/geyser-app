@@ -7,7 +7,10 @@ import { usePaymentSwapClaimTxBroadcastMutation } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 import { useRefund } from '../../fundingPayment/views/paymentOnchain/hooks/useRefund.ts'
-import { useTransactionStatusUpdate } from '../../fundingPayment/views/paymentOnchain/hooks/useTransactionStatusUpdate.ts'
+import {
+  SwapStatusUpdate,
+  useTransactionStatusUpdate,
+} from '../../fundingPayment/views/paymentOnchain/hooks/useTransactionStatusUpdate.ts'
 import { ContructingTransactionImageUrl, TransactionReadyToClaimImageUrl } from '../constant.ts'
 import { PayoutFlowSwapData } from '../types.ts'
 import { PayoutStepLayout } from './PayoutStepLayout.tsx'
@@ -17,6 +20,7 @@ type BitcoinPayoutWaitingConfirmationProps = {
   refundAddress?: string
   setIsProcessed: (isProcessed: boolean) => void
   setRefundTxId: (refundTxId: string) => void
+  setLockTxId?: (lockTxId: string) => void
   initialReadyToBeClaimed?: boolean
   onReadyToBeClaimed?: () => void
 }
@@ -27,6 +31,7 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
   refundAddress,
   setIsProcessed,
   setRefundTxId,
+  setLockTxId,
   initialReadyToBeClaimed = false,
   onReadyToBeClaimed,
 }) => {
@@ -44,7 +49,21 @@ export const BitcoinPayoutWaitingConfirmation: React.FC<BitcoinPayoutWaitingConf
 
   useTransactionStatusUpdate({
     swapId,
-    handleClaimCoins: () => {
+    handleProcessing(swapStatusUpdate: SwapStatusUpdate) {
+      if (swapStatusUpdate.transaction?.id) {
+        setLockTxId?.(swapStatusUpdate.transaction.id)
+      }
+    },
+    handleConfirmed(swapStatusUpdate: SwapStatusUpdate) {
+      if (swapStatusUpdate.transaction?.id) {
+        setLockTxId?.(swapStatusUpdate.transaction.id)
+      }
+    },
+    handleClaimCoins(swapStatusUpdate: SwapStatusUpdate) {
+      if (swapStatusUpdate.transaction?.id) {
+        setLockTxId?.(swapStatusUpdate.transaction.id)
+      }
+
       setIsReadyToBeClaimed(true)
       onReadyToBeClaimed?.()
     },

@@ -9,14 +9,14 @@ import { ProjectShareModal } from '../shareModal'
 export const ShareProjectButton = () => {
   const { t } = useTranslation()
 
-  const { project } = useProjectAtom()
+  const { project, isProjectOwner } = useProjectAtom()
 
   const { isOpen, onClose, onOpen } = useDisclosure()
 
   return (
     <>
       <Button variant="soft" colorScheme="neutral1" rightIcon={<PiShareFat />} onClick={onOpen}>
-        {t('Share')}
+        {isProjectOwner ? t('Share') : t('Share & Earn')}
       </Button>
       <ProjectShareModal isOpen={isOpen} onClose={onClose} projectId={project.id} title={project.title} />
     </>

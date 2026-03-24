@@ -35,7 +35,7 @@ import {
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useMemo, useState } from 'react'
-import { PiCoinsBold, PiCoinsDuotone, PiRocketLaunchDuotone } from 'react-icons/pi'
+import { PiArrowUpRightBold, PiCoinsBold, PiCoinsDuotone, PiRocketLaunchDuotone } from 'react-icons/pi'
 import { Link, useNavigate, useParams } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
@@ -62,17 +62,22 @@ import { useNotification } from '@/utils'
 
 import { FundingModelsShowcase } from '../components/FundingModelsShowcase.tsx'
 import { QUERY_IMPACT_FUND } from '../graphql/queries/impactFundsQuery.ts'
+import { IMPACT_FUND_DETAILS_SEO_IMAGES } from '../utils/constants.ts'
 import {
   impactFundFundingModelItems,
   impactFundFundingOverviewItems,
   impactFundHowItWorksItems,
 } from '../utils/informationContent.ts'
-import { IMPACT_FUND_DETAILS_SEO_IMAGES } from '../utils/constants.ts'
 
 const APPLICATIONS_PAGE_SIZE = 15
 const DESCRIPTION_PREVIEW_CHAR_LIMIT = 500
 const DESCRIPTION_COLLAPSED_MAX_HEIGHT = '240px'
 const SPONSOR_INQUIRY_CALENDAR_URL = 'https://cal.com/metamick/thirtymin?overlayCalendar=true'
+const CIRCULAR_ECONOMY_IMPACT_FUND_NAME = 'circular-economies-impact-fund'
+const CIRCULAR_ECONOMY_REPORT_BANNER_URL =
+  'https://storage.googleapis.com/geyser-media/impact-funds/ce-report-banner.png'
+const CIRCULAR_ECONOMY_REPORT_PDF_URL =
+  'https://storage.googleapis.com/geyser-media/impact-funds/Circular-Economies-Report.pdf'
 const satsNumberFormatter = new Intl.NumberFormat()
 const fundedStatus = [ImpactFundApplicationStatus.Funded]
 type ImpactFundDetails = ImpactFundQuery['impactFund'] & { canAccessDashboard: boolean }
@@ -1284,6 +1289,87 @@ function ImpactFundFaqSection({
   )
 }
 
+function ImpactReportsSection({
+  bannerAlt,
+  bannerUrl,
+  primaryTextColor,
+  reportUrl,
+  secondaryTextColor,
+}: {
+  bannerAlt: string
+  bannerUrl: string
+  primaryTextColor: string
+  reportUrl: string
+  secondaryTextColor: string
+}): JSX.Element {
+  const buttonBg = useColorModeValue('white', 'white')
+  const buttonColor = useColorModeValue('neutral1.11', 'neutral1.11')
+  const buttonHoverBg = useColorModeValue('neutral1.2', 'neutral1.2')
+
+  return (
+    <VStack align="stretch" spacing={4}>
+      <VStack align="stretch" spacing={1}>
+        <H2 size="xl" bold color={primaryTextColor}>
+          {t('Impact Reports')}
+        </H2>
+        <Body size="sm" color={secondaryTextColor}>
+          {t('Open the latest report for this impact fund.')}
+        </Body>
+      </VStack>
+
+      <ChakraLink
+        href={reportUrl}
+        isExternal
+        aria-label={t('Open Circular Economy impact report')}
+        display="block"
+        _hover={{
+          textDecoration: 'none',
+          '.impact-report-card': {
+            transform: 'translateY(-2px)',
+            boxShadow: '0 12px 28px rgba(15, 23, 42, 0.14)',
+          },
+          '.impact-report-button': {
+            bg: buttonHoverBg,
+          },
+        }}
+      >
+        <Box
+          className="impact-report-card"
+          overflow="hidden"
+          borderRadius="xl"
+          bg="transparent"
+          boxShadow="0 8px 24px rgba(15, 23, 42, 0.08)"
+          position="relative"
+          transition="transform 0.2s ease, box-shadow 0.2s ease"
+        >
+          <Image src={bannerUrl} alt={bannerAlt} w="full" h="auto" display="block" />
+          <Flex
+            className="impact-report-button"
+            position="absolute"
+            right={4}
+            top={4}
+            px={5}
+            h="48px"
+            align="center"
+            borderRadius="md"
+            bg={buttonBg}
+            color={buttonColor}
+            boxShadow="0 10px 24px rgba(15, 23, 42, 0.18)"
+            transition="background-color 0.2s ease"
+            gap={2}
+            fontWeight="semibold"
+          >
+            <Body color="inherit" fontWeight="inherit">
+              {t('View full report')}
+            </Body>
+            <Icon as={PiArrowUpRightBold} />
+          </Flex>
+        </Box>
+      </ChakraLink>
+    </VStack>
+  )
+}
+
 type SponsorInquiryModalProps = {
   isOpen: boolean
   onClose: () => void
@@ -1505,6 +1591,7 @@ function ImpactFundDetailContent({
     getUSDAmount,
   })
   const showAwardedAsPrimaryMetric = impactFund.amountCommitted === 0
+  const showImpactReportsSection = impactFund.name === CIRCULAR_ECONOMY_IMPACT_FUND_NAME
 
   const seoImage = IMPACT_FUND_DETAILS_SEO_IMAGES[impactFund.name as keyof typeof IMPACT_FUND_DETAILS_SEO_IMAGES]
 
@@ -1558,6 +1645,16 @@ function ImpactFundDetailContent({
         communitySupportersError={communitySupportersError}
         colors={colors}
       />
+
+      {showImpactReportsSection && (
+        <ImpactReportsSection
+          bannerAlt={t('Circular Economy impact report banner')}
+          bannerUrl={CIRCULAR_ECONOMY_REPORT_BANNER_URL}
+          primaryTextColor={colors.primaryTextColor}
+          reportUrl={CIRCULAR_ECONOMY_REPORT_PDF_URL}
+          secondaryTextColor={colors.secondaryTextColor}
+        />
+      )}
 
       <ImpactFundFaqSection
         primaryTextColor={colors.primaryTextColor}

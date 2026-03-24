@@ -2,7 +2,8 @@ import { Tab, TabList, Tabs, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { Outlet, useNavigate } from 'react-router'
 
-import { getPath } from '@/shared/constants/index.ts'
+import { Head } from '@/config/Head.tsx'
+import { CampaignsSeoImageUrl, getPath } from '@/shared/constants/index.ts'
 
 import { CampaignsComingSoon } from './CampaignsComingSoon.tsx'
 
@@ -33,22 +34,41 @@ const isComingSoon = true
 
 export const Campaigns = () => {
   const navigate = useNavigate()
+
+  const head = (
+    <Head
+      title={t('Campaigns')}
+      description={t(
+        'Explore All-or-Nothing Bitcoin crowdfunding campaigns on Geyser. Back bold ideas that only succeed when their goal is met.',
+      )}
+      image={CampaignsSeoImageUrl}
+    />
+  )
+
   if (isComingSoon) {
-    return <CampaignsComingSoon />
+    return (
+      <>
+        {head}
+        <CampaignsComingSoon />
+      </>
+    )
   }
 
   return (
-    <Tabs w="full" variant="secondary" onChange={(index) => navigate(tabs?.[index]?.path ?? '')}>
-      <TabList gap={4} overflowX="auto">
-        {tabs.map((tab) => (
-          <Tab key={tab.label} whiteSpace="nowrap" overflow="visible" maxW="none" title={tab.label}>
-            {tab.label}
-          </Tab>
-        ))}
-      </TabList>
-      <VStack w="full" minHeight="100vh" paddingTop={8}>
-        <Outlet />
-      </VStack>
-    </Tabs>
+    <>
+      {head}
+      <Tabs w="full" variant="secondary" onChange={(index) => navigate(tabs?.[index]?.path ?? '')}>
+        <TabList gap={4} overflowX="auto">
+          {tabs.map((tab) => (
+            <Tab key={tab.label} whiteSpace="nowrap" overflow="visible" maxW="none" title={tab.label}>
+              {tab.label}
+            </Tab>
+          ))}
+        </TabList>
+        <VStack w="full" minHeight="100vh" paddingTop={8}>
+          <Outlet />
+        </VStack>
+      </Tabs>
+    </>
   )
 }

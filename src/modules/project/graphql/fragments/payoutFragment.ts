@@ -32,6 +32,7 @@ export const FRAGMENT_PAYOUT_METADATA = gql`
     swapContractAddress
     aonContractAddress
     contractType
+    requiresUserLockTx
     projectKey
   }
 `

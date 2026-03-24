@@ -38,7 +38,10 @@ type Query {
   leaderboardGlobalCreatorsGet(input: LeaderboardGlobalCreatorsGetInput!): [GlobalCreatorLeaderboardRow!]!
   leaderboardGlobalAmbassadorsGet(input: LeaderboardGlobalAmbassadorsGetInput!): [GlobalAmbassadorLeaderboardRow!]!
   leaderboardGlobalProjectsGet(input: LeaderboardGlobalProjectsGetInput!): [GlobalProjectLeaderboardRow!]!
+  acelerandoVipLeaderboard: AcelerandoVipLeaderboardResponse!
+  acelerandoVipMyPosition: AcelerandoVipMyPositionResponse
   payment(input: PaymentGetInput!): Payment!
+  paymentsGet(input: PaymentsGetInput): PaymentsGetResponse!
 
   """Get all refundable payments for the logged in user."""
   paymentsRefundableGet: RefundablePaymentsGetResponse!
@@ -82,6 +85,10 @@ type Query {
   grant(input: GrantGetInput!): Grant!
   grants: [Grant!]!
   grantStatistics: GrantStatistics!
+  impactFunds(status: ImpactFundStatus): [ImpactFund!]!
+  impactFund(input: ImpactFundGetInput!): ImpactFund!
+  impactFundApplications(input: ImpactFundApplicationsInput!): ImpactFundApplicationsGetResponse!
+  impactFundDashboardApplications(input: ImpactFundDashboardApplicationsInput!): ImpactFundDashboardApplicationsResponse!
   badges: [Badge!]!
   userBadge(userBadgeId: BigInt!): UserBadge
   userBadges(input: BadgesGetInput!): [UserBadge!]!
@@ -95,11 +102,15 @@ type Query {
   projectRewardsTrendingWeeklyGet: [ProjectRewardTrendingWeeklyGetRow!]!
   projectRewardsTrendingMonthlyGet: [ProjectRewardTrendingMonthlyGetRow!]!
   projectRewardsTrendingQuarterlyGet: [ProjectRewardTrendingQuarterlyGetRow!]!
+  projectRewardsMostSoldGet(input: GetProjectRewardsMostSoldInput!): [ProjectRewardMostSoldGetRow!]!
+  projectRewardsCatalogGet(input: GetProjectRewardsCatalogInput!): ProjectRewardsCatalogGetResponse!
   userSubscription(id: BigInt!): UserSubscription
   userSubscriptions(input: UserSubscriptionsInput!): [UserSubscription!]!
   projectSubscriptionPlan(id: BigInt!): ProjectSubscriptionPlan
   projectSubscriptionPlans(input: ProjectSubscriptionPlansInput!): [ProjectSubscriptionPlan!]!
+  projectStripeConnectStatus(projectId: BigInt!): StripeConnectStatus!
   geyserPromotionsContributionStats(input: GeyserPromotionsContributionStatsInput!): GeyserPromotionsContributionStats!
+  promotionNetworkContributionStats: GeyserPromotionsContributionStats!
   projectShippingConfigsGet(input: ProjectShippingConfigsGetInput!): [ShippingConfig!]!
   shippingAddressesGet(input: ShippingAddressesGetInput!): [ShippingAddress!]!
   pledgeRefundGet(input: PledgeRefundGetInput!): PledgeRefundGetResponse
@@ -107,6 +118,7 @@ type Query {
   paymentRefundsGet: PaymentRefundsGetResponse
   payoutGet(input: PayoutGetInput!): PayoutGetResponse
   payoutActive(projectId: BigInt!): PayoutGetResponse
+  payoutLatest(projectId: BigInt!): PayoutGetResponse
 }
 
 type Mutation {
@@ -122,6 +134,7 @@ type Mutation {
   projectPublish(input: ProjectPublishMutationInput!): Project!
   projectPreLaunch(input: ProjectPreLaunchMutationInput!): Project!
   projectRewardCurrencyUpdate(input: ProjectRewardCurrencyUpdate!): [ProjectReward!]!
+  projectRskEoaSet(input: ProjectRskEoaSetInput!): Project!
   projectPutInReview(input: ProjectPutInReviewMutationInput!): Project!
   projectClose(input: ProjectCloseMutationInput!): Project!
   updateUser(input: UpdateUserInput!): User!
@@ -138,6 +151,7 @@ type Mutation {
   paymentPend(input: PaymentPendInput!): PaymentPendResponse!
   paymentCancel(input: PaymentCancelInput!): PaymentCancelResponse!
   paymentFail(input: PaymentFailInput!): PaymentFailResponse!
+  paymentFeeUpsert(input: PaymentFeeUpsertInput!): PaymentFeeUpsertResponse!
   paymentSetClaimable(input: PaymentSetClaimableInput!): PaymentSetClaimableResponse!
   paymentSetClaiming(input: PaymentSetClaimingInput!): PaymentSetClaimingResponse!
   paymentSetRefundable(input: PaymentSetRefundableInput!): PaymentSetRefundableResponse!
@@ -182,6 +196,7 @@ type Mutation {
   walletDelete(id: BigInt!): Boolean!
   tagCreate(input: TagCreateInput!): Tag!
   grantApply(input: GrantApplyInput): GrantApplicant!
+  impactFundApply(input: ImpactFundApplyInput!): ImpactFundApplication!
   userBadgeAward(userBadgeId: BigInt!): UserBadge!
   claimBadge(input: BadgeClaimInput!): UserBadge!
 
@@ -205,6 +220,8 @@ type Mutation {
   projectSubscriptionPlanCreate(input: CreateProjectSubscriptionPlanInput!): ProjectSubscriptionPlan!
   projectSubscriptionPlanUpdate(input: UpdateProjectSubscriptionPlanInput!): ProjectSubscriptionPlan!
   projectSubscriptionPlanDelete(id: BigInt!): Boolean!
+  createStripeConnectAccount(projectId: BigInt!, returnUrl: String): StripeConnectOnboardingPayload!
+  refreshStripeConnectOnboardingLink(projectId: BigInt!, returnUrl: String): StripeConnectOnboardingPayload!
   projectShippingConfigCreate(input: CreateProjectShippingConfigInput!): ShippingConfig!
   projectShippingConfigUpdate(input: UpdateProjectShippingConfigInput!): ShippingConfig!
   shippingAddressCreate(input: ShippingAddressCreateInput!): ShippingAddress!
@@ -236,8 +253,8 @@ type Mutation {
   payoutPaymentCreate(input: PayoutPaymentCreateInput!): PayoutPaymentCreateResponse!
 
   """
-  Initiate the payout from AON contract to swap contract.
-  Only used for the initial flow (funds coming from AON contract).
+  Initiate the payout to swap contract.
+  For AON this calls the contract; for Prism this broadcasts the user lock tx.
   """
   payoutPaymentInitiate(input: PayoutInitiateInput!): PayoutInitiateResponse!
   payoutInitiate(input: PayoutInitiateInput!): PayoutInitiateResponse!
@@ -342,6 +359,11 @@ input ProjectPutInReviewMutationInput {
 input ProjectCloseMutationInput {
   projectId: BigInt!
   reason: String
+}
+
+input ProjectRskEoaSetInput {
+  projectId: BigInt!
+  rskEoa: String!
 }
 
 type ProjectDeleteResponse implements MutationResponse {
@@ -489,6 +511,8 @@ type Project {
   fundingStrategy: ProjectFundingStrategy
   launchStrategy: String
   aonGoal: ProjectAonGoal
+  impactFundRecipient: ProjectImpactFundRecipient
+  rskEoa: String
 
   """
   By default, returns all the posts of a project, both published and unpublished but not deleted.
@@ -499,6 +523,16 @@ type Project {
   reviews: [ProjectReview!]!
   ambassadors: ProjectAmbassadorsConnection!
   paymentMethods: PaymentMethods!
+}
+
+type ProjectImpactFundRecipient {
+  applicationId: BigInt!
+  impactFundId: BigInt!
+  impactFundName: String!
+  impactFundTitle: String!
+  fundingModel: ImpactFundApplicationFundingModel!
+  amountAwardedInSats: Int
+  awardedAt: Date
 }
 
 type ProjectAonGoal {
@@ -577,6 +611,9 @@ type User {
   guardianType: GuardianType
   ranking: BigInt @deprecated(reason: "Use heroStats.rank instead")
   taxProfile: UserTaxProfile
+  affiliatePartnerTerms: AffiliatePartnerTerms!
+  affiliatePartnerPayoutSummary: AffiliatePartnerPayoutSummary!
+  affiliatePartnerPayouts: [AffiliatePartnerPayout!]!
   accountKeys: UserAccountKeys
 
   """Returns a user's contributions across all projects."""
@@ -678,6 +715,7 @@ input CreateProjectInput {
 
   """Project tags"""
   tagIds: [Int!]
+  referrerHeroId: String
 }
 
 input UpdateProjectInput {
@@ -912,7 +950,6 @@ enum ProjectCreationStep {
   WALLET
   TAX_ID
   IDENTITY_VERIFICATION
-  FIAT_CONTRIBUTIONS
   LAUNCH
 }
 
@@ -929,6 +966,46 @@ input OTPLoginInput {
 type DeleteUserResponse implements MutationResponse {
   success: Boolean!
   message: String
+}
+
+type AffiliatePartnerTerms {
+  contributionReferralPayoutRate: Float!
+  projectReferralPayoutRate: Float!
+  projectReferralPayoutCapSats: Int!
+}
+
+type AffiliatePartnerPayoutSummary {
+  totalEarned: Int!
+  totalPending: Int!
+}
+
+type AffiliatePartnerPayout {
+  id: BigInt!
+  uuid: String!
+  amount: Int!
+  status: AffiliatePayoutStatus!
+  source: AffiliatePartnerPayoutSource!
+  project: Project
+  createdAt: Date!
+  paidAt: Date
+}
+
+enum AffiliatePayoutStatus {
+  PENDING
+  PAID
+}
+
+enum AffiliatePartnerPayoutSource {
+  CONTRIBUTION_REFERRAL
+  PROJECT_REFERRAL
+}
+
+type CreatorTrustStats {
+  totalFunding: Int!
+  totalFundingUsd: Float!
+  backersCount: Int!
+  publishedPostsCount: Int!
+  joinedYear: Int!
 }
 
 input UpdateUserInput {
@@ -990,14 +1067,6 @@ type UserHeroStats {
   creatorStats: CreatorStats!
   ambassadorStats: AmbassadorStats!
   contributorStats: ContributorStats!
-}
-
-type CreatorTrustStats {
-  totalFunding: Int!
-  totalFundingUsd: Float!
-  backersCount: Int!
-  publishedPostsCount: Int!
-  joinedYear: Int!
 }
 
 interface HeroStats {
@@ -1064,6 +1133,7 @@ enum GuardianType {
 
 input UserAccountKeysUpdateInput {
   encryptedSeed: String!
+  encryptedMnemonic: String!
   rskKeyPair: RskKeyPairInput!
 }
 
@@ -1077,6 +1147,7 @@ type UserAccountKeys {
   id: BigInt!
   userId: BigInt!
   encryptedSeed: String!
+  encryptedMnemonic: String
   rskKeyPair: RskKeyPair!
   createdAt: Date!
   updatedAt: Date!
@@ -1280,6 +1351,7 @@ type ContributionPaymentsDetails {
 
 type ContributionFiatPaymentDetails {
   stripeClientSecret: String!
+  stripeAccountId: String!
   fees: [PaymentFee!]!
   paymentId: BigInt!
   amountDue: Int!
@@ -1362,6 +1434,10 @@ input ContributionCreateInput {
   geyserTipPercentage: Float
   orderInput: OrderContributionInput
   metadataInput: ContributionMetadataInput
+
+  """
+  Optional payment instructions. If omitted or if no payment methods are requested, no payments will be created.
+  """
   paymentsInput: ContributionPaymentsInput
 
   """The resource from which the contribution is being created."""
@@ -1426,10 +1502,12 @@ input ContributionLightningPaymentDetailsInput {
 
 input ContributionFiatPaymentDetailsStripeInput {
   returnUrl: String!
+  theme: StripeEmbeddedTheme
 }
 
 input ContributionFiatToLightningSwapPaymentDetailsBanxaInput {
   fiatCurrency: String!
+  paymentMethodId: String
   returnUrl: String!
 }
 
@@ -1449,6 +1527,11 @@ input ContributionMetadataInput {
 
 input StripeCheckoutSessionInput {
   returnUrl: String!
+}
+
+enum StripeEmbeddedTheme {
+  LIGHT
+  DARK
 }
 
 input OrderContributionInput {
@@ -1524,6 +1607,7 @@ input GetContributionsOrderByInput {
 input SubscriptionPaymentConfirmationInput {
   userSubscriptionUuid: String!
   stripeSubscriptionId: String
+  stripeAccountId: String
 }
 
 input PodcastKeysendContributionCreateInput {
@@ -1545,6 +1629,41 @@ input ContributionStatusUpdatedInput {
 input ContributionEmailUpdateInput {
   contributionId: BigInt!
   email: String!
+}
+
+type AcelerandoVipLeaderboardResponse {
+  giveawayId: ID!
+  updatedAt: Date!
+  startAt: Date!
+  endAt: Date!
+  timezone: String!
+  leaderboardSize: Int!
+  topCutoffScore: BigInt!
+  entries: [AcelerandoVipLeaderboardEntry!]!
+}
+
+type AcelerandoVipLeaderboardEntry {
+  rank: Int!
+  userId: BigInt!
+  displayName: String!
+  avatarUrl: String
+  scoreSats: BigInt!
+  eligibleContributionsCount: Int!
+  uniqueProjectsBacked: Int!
+}
+
+type AcelerandoVipMyPositionResponse {
+  userId: BigInt!
+  rank: Int
+  scoreSats: BigInt!
+  inTop3: Boolean!
+  top3CutoffScore: BigInt!
+  distanceToTop3Sats: BigInt!
+  distanceToNextRankSats: BigInt
+  progressToTop3: Float!
+  eligibleContributionsCount: Int!
+  uniqueProjectsBacked: Int!
+  excludedSelfContributionsCount: Int!
 }
 
 type GlobalProjectLeaderboardRow {
@@ -1713,6 +1832,21 @@ type PaymentSetClaimableResponse {
   success: Boolean!
 }
 
+input PaymentFeeUpsertInput {
+  paymentId: BigInt!
+  feeAmount: Int!
+  feeCurrency: FeeCurrency!
+  feeType: PaymentFeeType!
+  feePayer: PaymentFeePayer!
+  description: String
+  external: Boolean
+}
+
+type PaymentFeeUpsertResponse {
+  id: BigInt!
+  success: Boolean!
+}
+
 input PaymentSetClaimingInput {
   paymentId: BigInt!
 
@@ -1804,6 +1938,8 @@ input PaymentStatusUpdatedInput {
 }
 
 input PaymentGetInput {
+  id: BigInt
+  uuid: String
   onChainSwapId: String
   invoiceId: String
 }
@@ -1854,6 +1990,27 @@ type ProjectRefundablePayment {
 
 type PaymentsInProgressGetResponse {
   payments: [Payment!]!
+}
+
+type PaymentsGetResponse {
+  payments: [Payment!]!
+  pagination: CursorPaginationResponse
+}
+
+input PaymentsGetInput {
+  where: PaymentsGetWhereInput
+  orderBy: PaymentsGetOrderByInput
+  pagination: PaginationInput
+}
+
+input PaymentsGetWhereInput {
+  status: PaymentStatus
+  projectId: BigInt
+  linkedEntityUUID: String
+}
+
+input PaymentsGetOrderByInput {
+  createdAt: OrderByDirection
 }
 
 type PaymentCancelResponse {
@@ -3241,6 +3398,151 @@ enum DistributionSystem {
   WINNER_TAKE_ALL
 }
 
+input ImpactFundGetInput {
+  where: ImpactFundGetWhereInput!
+}
+
+input ImpactFundGetWhereInput {
+  name: String!
+}
+
+input ImpactFundApplyInput {
+  impactFundId: BigInt!
+  projectId: BigInt!
+}
+
+input ImpactFundApplicationsInput {
+  impactFundId: BigInt!
+  projectId: BigInt
+  statusIn: [ImpactFundApplicationStatus!]
+  pagination: PaginationInput
+}
+
+input ImpactFundDashboardApplicationsInput {
+  impactFundId: BigInt!
+  pagination: PaginationInput
+}
+
+type ImpactFundApplicationsGetResponse {
+  applications: [ImpactFundApplication!]!
+  pagination: CursorPaginationResponse
+  totalCount: Int!
+}
+
+type ImpactFundDashboardApplicationsResponse {
+  applications: [ImpactFundDashboardApplicationRow!]!
+  pagination: CursorPaginationResponse
+  totalCount: Int!
+}
+
+type ImpactFund {
+  id: BigInt!
+  name: String!
+  tags: [String!]!
+  title: String!
+  subtitle: String
+  description: String
+  heroImage: String
+  amountCommitted: Int
+  amountCommittedCurrency: ImpactFundAmountCommittedCurrency!
+  donateProjectId: BigInt
+  donateProject: Project
+  status: ImpactFundStatus!
+  sponsors: [ImpactFundSponsor!]!
+  liveSponsors: [ImpactFundSponsor!]!
+  archivedSponsors: [ImpactFundSponsor!]!
+  applications: [ImpactFundApplication!]!
+  fundedApplications: [ImpactFundApplication!]!
+  metrics: ImpactFundMetrics!
+  canAccessDashboard: Boolean!
+}
+
+type ImpactFundSponsor {
+  id: BigInt!
+  impactFundId: BigInt!
+  name: String!
+  image: String
+  url: String
+  amountContributedInSats: Int!
+  tier: ImpactFundSponsorTier!
+  status: ImpactFundSponsorStatus!
+}
+
+type ImpactFundApplication {
+  id: BigInt!
+  impactFundId: BigInt!
+  status: ImpactFundApplicationStatus!
+  fundingModel: ImpactFundApplicationFundingModel!
+  amountAwardedInSats: Int
+  contributionUuid: String
+  awardedAt: Date
+  project: Project!
+}
+
+type ImpactFundDashboardApplicationRow {
+  applicationId: BigInt!
+  status: ImpactFundApplicationStatus!
+  fundingModel: ImpactFundApplicationFundingModel!
+  project: ImpactFundDashboardProject!
+  creator: ImpactFundDashboardCreator
+  projectPath: String!
+}
+
+type ImpactFundDashboardProject {
+  id: BigInt!
+  name: String!
+  title: String!
+  thumbnailImage: String
+  shortDescription: String
+}
+
+type ImpactFundDashboardCreator {
+  id: BigInt!
+  username: String!
+  email: String
+}
+
+type ImpactFundMetrics {
+  awardedTotalSats: Int!
+  projectsFundedCount: Int!
+}
+
+enum ImpactFundStatus {
+  LIVE
+  ARCHIVED
+}
+
+enum ImpactFundAmountCommittedCurrency {
+  USDCENT
+  BTCSAT
+}
+
+enum ImpactFundSponsorStatus {
+  LIVE
+  ARCHIVED
+}
+
+enum ImpactFundSponsorTier {
+  TIER_1
+  TIER_2
+}
+
+enum ImpactFundApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  CANCELED
+  FUNDED
+  ONGOING
+  IN_REVIEW
+}
+
+enum ImpactFundApplicationFundingModel {
+  DIRECT_GRANT
+  MATCHING
+  AON_COFUNDING
+}
+
 type Sponsor {
   id: BigInt!
   name: String!
@@ -3618,8 +3920,10 @@ enum RejectionReason {
   UNSUPPORTED_REGION
   SCAM
   SPAM
+  ILLEGAL_CONTENT_OR_ACTIVITY
   INCOMPLETE_PROJECT
   RESTRICTED_PROJECT_TYPE
+  WALLET_SANCTION_CHECK_FAILED
 }
 
 input AmbassadorAddInput {
@@ -3684,6 +3988,29 @@ input GetProjectOrdersStatsWhereInput {
   projectId: BigInt!
 }
 
+input GetProjectRewardsMostSoldInput {
+  range: ProjectRewardsMostSoldRange!
+  category: String
+  take: Int
+}
+
+input GetProjectRewardsCatalogInput {
+  category: String
+  sortBy: ProjectRewardsCatalogSortBy!
+  pagination: PaginationInput
+}
+
+enum ProjectRewardsMostSoldRange {
+  WEEK
+  MONTH
+  QUARTER
+}
+
+enum ProjectRewardsCatalogSortBy {
+  MOST_SOLD
+  MOST_RECENT
+}
+
 type OrdersStatsBase {
   projectRewards: ProjectRewardsStats!
   projectRewardsGroupedByProjectRewardId: [ProjectRewardsGroupedByRewardIdStats!]!
@@ -3711,6 +4038,22 @@ type ProjectRewardTrendingMonthlyGetRow {
 type ProjectRewardTrendingQuarterlyGetRow {
   projectReward: ProjectReward!
   count: Int!
+}
+
+type ProjectRewardMostSoldGetRow {
+  projectReward: ProjectReward!
+  count: Int!
+}
+
+type ProjectRewardCatalogRow {
+  id: BigInt!
+  count: Int!
+  projectReward: ProjectReward!
+}
+
+type ProjectRewardsCatalogGetResponse {
+  rewards: [ProjectRewardCatalogRow!]!
+  pagination: CursorPaginationResponse
 }
 
 type ProjectRewardsGroupedByRewardIdStatsProjectReward {
@@ -3831,6 +4174,21 @@ type LightningPaymentMethods {
 type OnChainPaymentMethods {
   boltzSwap: Boolean!
   native: Boolean!
+}
+
+type StripeConnectStatus {
+  accountId: String
+  chargesEnabled: Boolean!
+  payoutsEnabled: Boolean!
+  detailsSubmitted: Boolean!
+  disabledReason: String
+  isReady: Boolean!
+}
+
+type StripeConnectOnboardingPayload {
+  accountId: String!
+  onboardingUrl: String!
+  status: StripeConnectStatus!
 }
 
 input GeyserPromotionsContributionStatsWhereInput {
@@ -4068,6 +4426,9 @@ input RskToLightningSwapPaymentDetailsBoltzInput {
 }
 
 input RskToOnChainSwapPaymentDetailsInput {
+  """The Bitcoin address where the claimed funds should be sent."""
+  onChainAddress: String
+
   """
   Boltz swap parameters. Required for initial flow (from AON), optional for retry flow.
   """
@@ -4114,10 +4475,18 @@ type PayoutRequestResponse {
   payoutMetadata: PayoutMetadata!
 }
 
+enum PayoutContractType {
+  AON
+  PRISM
+}
+
 type PayoutMetadata {
   nonce: Int!
-  aonContractAddress: String!
+  contractType: PayoutContractType!
+  aonContractAddress: String
+  projectKey: String
   swapContractAddress: String!
+  requiresUserLockTx: Boolean!
 }
 
 type PayoutInitiateResponse {
@@ -4138,6 +4507,7 @@ type PayoutPaymentCreateResponse {
 
 type Payout {
   id: BigInt!
+  uuid: String!
   status: PayoutStatus!
   amount: Int!
   expiresAt: Date!
@@ -4184,12 +4554,10 @@ input PayoutInitiateInput {
   """The signature of the creator for RBTC payment"""
   signature: String!
 
-  """The call data to initiate the payout."""
+  """The call data to initiate the payout (AON only)."""
   callDataHex: String!
 
-  """
-  Optional: The user lock transaction hex (for setting in payment details)
-  """
+  """Optional: The user lock transaction hex (required for Prism payouts)"""
   userLockTxHex: String
 
   """Optional: The claim transaction hex (for RSK to on-chain swaps only)"""

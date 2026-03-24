@@ -44,7 +44,7 @@ export const LaunchPaymentFiatContributions = () => {
   )
 
   const { updateProjectWithLastCreationStep, loading } = useUpdateProjectWithLastCreationStep(
-    ProjectCreationStep.FiatContributions,
+    ProjectCreationStep.IdentityVerification,
     getPath('launchFinalize', project.id),
   )
 

@@ -11,6 +11,13 @@ export const QUERY_IMPACT_FUNDS = gql`
       heroImage
       amountCommitted
       amountCommittedCurrency
+      liveSponsors {
+        id
+        name
+        image
+        url
+        tier
+      }
       metrics {
         awardedTotalSats
         projectsFundedCount

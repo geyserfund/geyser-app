@@ -1,9 +1,8 @@
-import { Button, HStack } from '@chakra-ui/react'
-import { useTranslation } from 'react-i18next'
+import { Button, HStack, useColorModeValue } from '@chakra-ui/react'
+import { t } from 'i18next'
 
 import { fonts } from '@/shared/styles/fonts.ts'
 
-/** Helper function to scroll element to the top of viewport */
 /** Helper function to scroll element into view */
 const scrollToElement = (elementId: string) => {
   const element = document.getElementById(elementId)
@@ -12,71 +11,42 @@ const scrollToElement = (elementId: string) => {
   }
 }
 
+const BUTTONS = [
+  { elementId: 'guardians-badge', label: 'Nostr Badges' },
+  { elementId: 'guardians-card', label: 'Collectible Cards' },
+  { elementId: 'guardians-jersey', label: 'Jerseys' },
+  { elementId: 'guardians-tshirt', label: 'T-Shirts' },
+  { elementId: 'guardians-bitaxe', label: 'BitAxe' },
+] as const
+
+/** Displays the in-page merch category shortcuts for the Guardians rewards grid. */
 export const ButtonArray = () => {
-  const { t } = useTranslation()
+  const buttonBg = useColorModeValue('white', 'gray.800')
+  const buttonBorderColor = useColorModeValue('blackAlpha.100', 'whiteAlpha.200')
+  const buttonHoverBg = useColorModeValue('gray.50', 'gray.700')
 
   return (
-    <HStack spacing={{ base: 2, lg: 8 }} justify="center" w="full" flexWrap="wrap">
-      <Button
-        size={{ base: 'sm', lg: 'lg' }}
-        onClick={() => scrollToElement('guardians-badge')}
-        variant="soft"
-        paddingX="4"
-        fontFamily={fonts.cormorant}
-        textTransform="uppercase"
-        color="neutral1.12"
-        fontWeight={600}
-      >
-        {t('Nostr Badges')}
-      </Button>
-      <Button
-        size={{ base: 'sm', lg: 'lg' }}
-        onClick={() => scrollToElement('guardians-card')}
-        variant="soft"
-        paddingX="4"
-        fontFamily={fonts.cormorant}
-        textTransform="uppercase"
-        color="neutral1.12"
-        fontWeight={600}
-      >
-        {t('Collectible Cards')}
-      </Button>
-      <Button
-        size={{ base: 'sm', lg: 'lg' }}
-        onClick={() => scrollToElement('guardians-jersey')}
-        variant="soft"
-        paddingX="4"
-        fontFamily={fonts.cormorant}
-        textTransform="uppercase"
-        color="neutral1.12"
-        fontWeight={600}
-      >
-        {t('Jerseys')}
-      </Button>
-      <Button
-        size={{ base: 'sm', lg: 'lg' }}
-        onClick={() => scrollToElement('guardians-tshirt')}
-        variant="soft"
-        paddingX="4"
-        fontFamily={fonts.cormorant}
-        textTransform="uppercase"
-        color="neutral1.12"
-        fontWeight={600}
-      >
-        {t('T-Shirts')}
-      </Button>
-      <Button
-        size={{ base: 'sm', lg: 'lg' }}
-        onClick={() => scrollToElement('guardians-bitaxe')}
-        variant="soft"
-        paddingX="4"
-        fontFamily={fonts.cormorant}
-        textTransform="uppercase"
-        color="neutral1.12"
-        fontWeight={600}
-      >
-        {t('BitAxe')}
-      </Button>
+    <HStack spacing={3} justify="center" w="full" flexWrap="wrap">
+      {BUTTONS.map((button) => (
+        <Button
+          key={button.elementId}
+          size={{ base: 'sm', lg: 'md' }}
+          onClick={() => scrollToElement(button.elementId)}
+          bg={buttonBg}
+          border="1px solid"
+          borderColor={buttonBorderColor}
+          borderRadius="full"
+          paddingX={5}
+          fontFamily={fonts.cormorant}
+          textTransform="uppercase"
+          color="neutral1.12"
+          fontWeight={700}
+          _hover={{ bg: buttonHoverBg, transform: 'translateY(-1px)' }}
+          transition="all 0.2s ease"
+        >
+          {t(button.label)}
+        </Button>
+      ))}
     </HStack>
   )
 }
