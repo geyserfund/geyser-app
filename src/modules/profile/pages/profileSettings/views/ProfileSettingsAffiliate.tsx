@@ -1,5 +1,6 @@
 import {
   Badge,
+  Button,
   Icon,
   HStack,
   Link as ChakraLink,
@@ -14,35 +15,46 @@ import {
   Thead,
   Tr,
   VStack,
+  useDisclosure,
 } from '@chakra-ui/react'
-import { useQuery } from '@apollo/client'
 import { t } from 'i18next'
+import { useAtomValue } from 'jotai'
 import type { ElementType } from 'react'
 import { Link, useParams } from 'react-router'
-import { PiCopy, PiLightning, PiRocketLaunch } from 'react-icons/pi'
+import { PiLightning, PiRocketLaunch } from 'react-icons/pi'
 
+import { CopyableLinkCard } from '@/components/molecules/CopyableLinkCard.tsx'
+import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
+import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import {
   AffiliatePartnerPayoutSourceValue,
   AffiliatePayoutStatusValue,
-  QUERY_USER_AFFILIATE_PAYOUTS,
-  UserAffiliatePayoutsQueryResult,
-  UserAffiliatePayoutsQueryVariables,
 } from '@/modules/profile/graphql/queries/affiliatePayoutsQuery.ts'
+import {
+  ConfigureUserWalletModal,
+  hasConfiguredUserWallet,
+} from '@/modules/profile/pages/profileSettings/components/ConfigureUserWalletModal.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import {
+  formatEffectiveAffiliatePayoutRate,
+  GEYSER_PLATFORM_FEE_RATE,
+  GEYSER_PROMOTION_FEE_RATE,
+} from '@/shared/utils/affiliatePayout.ts'
 import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { CopyButton } from '@/shared/molecules/CopyButton.tsx'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { type UserAffiliatePayoutsQuery, useUserAffiliatePayoutsQuery } from '@/types'
 import { toInt } from '@/utils'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout'
 
-type AffiliatePartnerPayoutRow = NonNullable<UserAffiliatePayoutsQueryResult['user']>['affiliatePartnerPayouts'][number]
+type AffiliatePartnerPayoutRow = NonNullable<UserAffiliatePayoutsQuery['user']>['affiliatePartnerPayouts'][number]
 
 const formatPayoutSource = (source: AffiliatePartnerPayoutSourceValue) => {
-  if (source === 'PROJECT_REFERRAL') return t('Project referral')
-  return t('Contribution referral')
+  if (source === 'PROJECT_REFERRAL') return t('Enabling project launches')
+  return t('Enabling contributions')
 }
 
 const formatPayoutStatus = (status: AffiliatePayoutStatusValue) => {
@@ -60,8 +72,6 @@ const formatPayoutDate = (date: string | null | undefined) => {
   return new Date(date).toLocaleDateString()
 }
 
-const formatPayoutRate = (rate: number | null | undefined) => `${Math.round((rate ?? 0) * 100)}%`
-
 const SummaryCard = ({
   label,
   value,
@@ -74,14 +84,14 @@ const SummaryCard = ({
   isLoading: boolean
 }) => (
   <CardLayout spacing={2} borderColor="neutral1.6" height="100%">
-    <Body size="sm" color="neutralAlpha.11">
+    <Body size="sm" color="neutral1.11">
       {label}
     </Body>
     <Skeleton isLoaded={!isLoading}>
       <H2 size="2xl">{value}</H2>
     </Skeleton>
     <Skeleton isLoaded={!isLoading}>
-      <Body size="sm" color="neutralAlpha.11">
+      <Body size="sm" color="neutral1.11">
         {helper}
       </Body>
     </Skeleton>
@@ -94,15 +104,21 @@ const ReferralProgramCard = ({
   icon,
   payoutHighlight,
   linkValue,
-  copyLabel,
 }: {
   title: string
   description: string
   icon: ElementType
   payoutHighlight: string
   linkValue: string
-  copyLabel: string
 }) => {
+  const referralLinkContent = linkValue ? (
+    <CopyableLinkCard label={t('Ambassador link')} linkValue={linkValue} />
+  ) : (
+    <Body size="sm" color="neutral1.11">
+      {t('Your hero ID is required before sharing ambassador links.')}
+    </Body>
+  )
+
   return (
     <CardLayout spacing={4} borderColor="neutral1.6" height="100%">
       <VStack spacing={3} alignItems="stretch">
@@ -116,25 +132,13 @@ const ReferralProgramCard = ({
               </Body>
             </Badge>
           </HStack>
-          {linkValue ? (
-            <CopyButton
-              alignSelf={{ base: 'stretch', sm: 'flex-start' }}
-              variant="ghost"
-              rightIcon={<PiCopy />}
-              copyText={linkValue}
-            >
-              {copyLabel}
-            </CopyButton>
-          ) : (
-            <Body size="sm" color="neutralAlpha.11">
-              {t('Your hero ID is required before sharing affiliate links.')}
-            </Body>
-          )}
         </HStack>
 
-        <Body color="neutralAlpha.11" w="100%">
+        <Body color="neutral1.11" w="100%">
           {description}
         </Body>
+
+        {referralLinkContent}
       </VStack>
     </CardLayout>
   )
@@ -166,25 +170,27 @@ export const ProfileSettingsAffiliate = () => {
   const params = useParams<{ userId: string }>()
   const userId = params.userId
   const { formatAmount, formatUsdAmount } = useCurrencyFormatter()
+  const configureWalletModal = useDisclosure()
+  const userAccountKeys = useAtomValue(userAccountKeysAtom)
 
-  const { data, loading } = useQuery<UserAffiliatePayoutsQueryResult, UserAffiliatePayoutsQueryVariables>(
-    QUERY_USER_AFFILIATE_PAYOUTS,
-    {
-      skip: !userId,
-      fetchPolicy: 'cache-and-network',
-      variables: {
-        where: {
-          id: userId ? toInt(userId) : 0,
-        },
+  useUserAccountKeys()
+
+  const { data, loading } = useUserAffiliatePayoutsQuery({
+    skip: !userId,
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: {
+        id: userId ? toInt(userId) : 0,
       },
-    }
-  )
+    },
+  })
 
   const affiliateData = data?.user
   const affiliatePartnerTerms = affiliateData?.affiliatePartnerTerms
   const payoutSummary = affiliateData?.affiliatePartnerPayoutSummary
   const payouts = affiliateData?.affiliatePartnerPayouts ?? []
   const heroId = affiliateData?.heroId ?? ''
+  const hasUserWalletConfigured = hasConfiguredUserWallet(userAccountKeys ?? affiliateData?.accountKeys)
 
   const totalEarned = payoutSummary?.totalEarned ?? 0
   const totalPending = payoutSummary?.totalPending ?? 0
@@ -195,37 +201,11 @@ export const ProfileSettingsAffiliate = () => {
   const projectReferralLink = heroId ? getFullDomainUrl(`/launch?hero=${encodeURIComponent(heroId)}`) : ''
 
   return (
-    <ProfileSettingsLayout desktopTitle={t('Affiliate')}>
+    <ProfileSettingsLayout desktopTitle={t('Ambassador Earnings')}>
       <VStack w="100%" spacing={6} alignItems="stretch" px={{ base: 0, lg: 6 }}>
-        <VStack spacing={4} alignItems="stretch">
-          <H2 size="lg">{t('How does it work?')}</H2>
-
-          <Stack spacing={4} w="100%">
-            <ReferralProgramCard
-              icon={PiLightning}
-              title={t('Contribution referrals')}
-              description={t("Share your contribution link with supporters. Payouts come from Geyser's promotion fee whenever a referred contribution is completed.")}
-              payoutHighlight={t('{{rate}} payout rate', {
-                rate: formatPayoutRate(contributionReferralPayoutRate),
-              })}
-              linkValue={contributionReferralLink}
-              copyLabel={t('Copy referral link')}
-            />
-            <ReferralProgramCard
-              icon={PiRocketLaunch}
-              title={t('Project referrals')}
-              description={t('Share your launch link with creators. You will receive a fixed 5k sats when the project launches, and {{rate}} of the Geyser platform fee, up to {{cap}} sats per project.', {
-                rate: formatPayoutRate(projectReferralPayoutRate),
-                cap: projectReferralPayoutCapSats.toLocaleString(),
-              })}
-              payoutHighlight={t('5,000 sats + {{rate}} payout rate', {
-                rate: formatPayoutRate(projectReferralPayoutRate),
-              })}
-              linkValue={projectReferralLink}
-              copyLabel={t('Copy launch referral link')}
-            />
-          </Stack>
-        </VStack>
+        <Body color="neutral1.11" px={{ base: 0, lg: 0 }}>
+          {t('Earn Bitcoin by helping projects launch or get funded')}
+        </Body>
 
         <VStack spacing={4} alignItems="stretch">
           <H2 size="lg">{t('My Earnings')}</H2>
@@ -244,24 +224,87 @@ export const ProfileSettingsAffiliate = () => {
               isLoading={loading}
             />
           </SimpleGrid>
+        </VStack>
 
+        <VStack spacing={4} alignItems="stretch">
+          <H2 size="lg">{t('How does it work?')}</H2>
+
+          <Stack spacing={4} w="100%">
+            <ReferralProgramCard
+              icon={PiLightning}
+              title={t('Enabling contributions')}
+              description={t(
+                'Share your contribution link with supporters. You will earn {{rate}} of contribution enabled, paid out from Geyser promotion network contributions.',
+                {
+                  rate: formatEffectiveAffiliatePayoutRate(
+                    contributionReferralPayoutRate,
+                    GEYSER_PROMOTION_FEE_RATE,
+                  ),
+                },
+              )}
+              payoutHighlight={t('{{rate}} of contribution enabled', {
+                rate: formatEffectiveAffiliatePayoutRate(
+                  contributionReferralPayoutRate,
+                  GEYSER_PROMOTION_FEE_RATE,
+                ),
+              })}
+              linkValue={contributionReferralLink}
+            />
+            <ReferralProgramCard
+              icon={PiRocketLaunch}
+              title={t('Enabling project launches')}
+              description={t(
+                'Share your launch link with creators. You will receive a fixed 5k sats when the project launches, plus {{rate}} of contribution enabled from the Geyser platform fee, up to {{cap}} sats per project.',
+                {
+                  rate: formatEffectiveAffiliatePayoutRate(projectReferralPayoutRate, GEYSER_PLATFORM_FEE_RATE),
+                  cap: projectReferralPayoutCapSats.toLocaleString(),
+                },
+              )}
+              payoutHighlight={t('5,000 sats + {{rate}} of contribution enabled', {
+                rate: formatEffectiveAffiliatePayoutRate(projectReferralPayoutRate, GEYSER_PLATFORM_FEE_RATE),
+              })}
+              linkValue={projectReferralLink}
+            />
+          </Stack>
+        </VStack>
+
+        <VStack spacing={4} alignItems="stretch">
           <CardLayout spacing={3} borderColor="neutral1.6">
             <H2 size="lg">{t('Payout instructions')}</H2>
-            <Body color="neutralAlpha.11">
-              {t('Affiliate payouts are processed manually. Reach out to ')}
-              <ChakraLink href="mailto:hello@geyser.fund" color="primary1.9">
-                hello@geyser.fund
-              </ChakraLink>
-              {t(' with your lightning address or BTC address to receive payment.')}
+            <Body color="neutral1.11">
+              {t('Affiliate payouts are processed monthly. Only payouts above $10 will be processed.')}
             </Body>
-            <Body color="neutralAlpha.11">{t('Only payouts above $10 will be processed.')}</Body>
+            {!hasUserWalletConfigured ? (
+              <Feedback variant={FeedBackVariant.WARNING} noIcon>
+                <HStack
+                  w="full"
+                  justifyContent="space-between"
+                  alignItems={{ base: 'flex-start', md: 'center' }}
+                  flexDirection={{ base: 'column', md: 'row' }}
+                  spacing={3}
+                >
+                  <Body size="sm">
+                    {t('Configure your wallet so you can receive the payouts.')}
+                  </Body>
+                  <Button
+                    colorScheme="warning"
+                    variant="soft"
+                    size="sm"
+                    flexShrink={0}
+                    onClick={configureWalletModal.onOpen}
+                  >
+                    {t('Configure your user wallet')}
+                  </Button>
+                </HStack>
+              </Feedback>
+            ) : null}
           </CardLayout>
 
           <CardLayout spacing={4} borderColor="neutral1.6">
             <HStack justifyContent="space-between" alignItems="center" flexWrap="wrap" spacing={2}>
               <H2 size="lg">{t('Payout history')}</H2>
               {!loading && (
-                <Body size="sm" color="neutralAlpha.11">
+                <Body size="sm" color="neutral1.11">
                   {t('{{count}} payouts', { count: payouts.length })}
                 </Body>
               )}
@@ -274,7 +317,7 @@ export const ProfileSettingsAffiliate = () => {
                 <Skeleton height="48px" />
               </Stack>
             ) : payouts.length === 0 ? (
-              <Body color="neutralAlpha.11">{t('No affiliate payouts yet.')}</Body>
+              <Body color="neutral1.11">{t('No affiliate payouts yet.')}</Body>
             ) : (
               <TableContainer w="100%" overflowX="auto">
                 <Table variant="simple" size="md">
@@ -298,6 +341,11 @@ export const ProfileSettingsAffiliate = () => {
           </CardLayout>
         </VStack>
       </VStack>
+      <ConfigureUserWalletModal
+        isOpen={configureWalletModal.isOpen}
+        onClose={configureWalletModal.onClose}
+        onConfigured={configureWalletModal.onClose}
+      />
     </ProfileSettingsLayout>
   )
 }

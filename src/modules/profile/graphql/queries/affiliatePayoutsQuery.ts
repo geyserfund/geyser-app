@@ -13,6 +13,15 @@ export type UserAffiliatePayoutsQueryResult = {
   user: {
     id: string
     heroId: string
+    accountKeys?: {
+      id: string
+      encryptedMnemonic?: string | null
+      rskKeyPair: {
+        address: string
+        publicKey: string
+        derivationPath: string
+      }
+    } | null
     affiliatePartnerTerms: {
       contributionReferralPayoutRate: number
       projectReferralPayoutRate: number
@@ -44,6 +53,15 @@ export const QUERY_USER_AFFILIATE_PAYOUTS = gql`
     user(where: $where) {
       id
       heroId
+      accountKeys {
+        id
+        encryptedMnemonic
+        rskKeyPair {
+          address
+          publicKey
+          derivationPath
+        }
+      }
       affiliatePartnerTerms {
         contributionReferralPayoutRate
         projectReferralPayoutRate

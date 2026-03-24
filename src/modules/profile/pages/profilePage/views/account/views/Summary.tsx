@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Icon, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, VStack, useColorModeValue } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -139,6 +139,14 @@ const NOISE_TEXTURE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmln
 
 const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath: string }) => {
   const { t } = useTranslation()
+  const titleColor = useColorModeValue('neutral1.11', 'neutral1.12')
+  const subtitleColor = useColorModeValue('neutral1.9', 'neutral1.11')
+  const badgeBackground = useColorModeValue('warning.2', 'warning.3')
+  const badgeColor = useColorModeValue('warning.11', 'warning.11')
+  const buttonBackground = useColorModeValue('neutralAlpha.1', 'neutralAlpha.3')
+  const buttonColor = useColorModeValue('neutral1.11', 'neutral1.12')
+  const buttonBorderColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
+  const buttonHoverBackground = useColorModeValue('neutralAlpha.2', 'neutralAlpha.4')
 
   return (
     <CardLayout
@@ -164,22 +172,28 @@ const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath
       <VStack alignItems="start" spacing={3} position="relative" zIndex={1} w="full">
         <HStack spacing={2} alignItems="center" flexWrap="wrap">
           <Icon as={PiCoins} color="warning.9" boxSize={5} />
-          <H2 size="lg">{t('Geyser Affiliate Program')}</H2>
-          <Body size="xs" medium px={2.5} py={0.5} borderRadius="full" bgColor="#F0DFC0" color="#8B6914">
+          <H2 size="lg" color={titleColor}>
+            {t('Geyser Affiliate Program')}
+          </H2>
+          <Body size="xs" medium px={2.5} py={0.5} borderRadius="full" bgColor={badgeBackground} color={badgeColor}>
             {t('New')}
           </Body>
         </HStack>
 
-        <Body size="sm" color="neutralAlpha.11" whiteSpace="nowrap">
+        <Body size="sm" color={subtitleColor} whiteSpace={{ base: 'normal', md: 'nowrap' }}>
           {t('Help projects launch or get funded, earn Bitcoin.')}
         </Body>
 
         <Button
           as={Link}
           to={affiliateDashboardPath}
-          bg="white"
-          color="neutral1.12"
-          _hover={{ bg: 'gray.100' }}
+          bg={buttonBackground}
+          color={buttonColor}
+          borderWidth="1px"
+          borderColor={buttonBorderColor}
+          _hover={{ bg: buttonHoverBackground }}
+          backdropFilter="blur(8px)"
+          boxShadow="0 8px 24px rgba(31, 41, 55, 0.08)"
           size="md"
           w="full"
         >
