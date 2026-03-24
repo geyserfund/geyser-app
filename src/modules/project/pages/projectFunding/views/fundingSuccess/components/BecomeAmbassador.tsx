@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client'
 import { Button, HStack, IconButton, Link, useClipboard, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
@@ -7,7 +6,6 @@ import { PiArrowClockwiseBold, PiCopy, PiShareFat } from 'react-icons/pi'
 import { useAuthContext } from '@/context'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
-import { QUERY_USER_AFFILIATE_PARTNER_TERMS } from '@/modules/project/graphql/queries/affiliateQuery.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages/projectView/hooks'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
@@ -19,7 +17,7 @@ import {
   formatEffectiveAffiliatePayoutRate,
   GEYSER_PROMOTION_FEE_RATE,
 } from '@/shared/utils/affiliatePayout.ts'
-import { useProjectAmbassadorStatsQuery, usePublishNostrEventMutation } from '@/types'
+import { useProjectAmbassadorStatsQuery, usePublishNostrEventMutation, useUserAffiliatePartnerTermsQuery } from '@/types'
 import { commaFormatted, useNotification } from '@/utils'
 
 import { useNostrPostForFundingSuccess } from '../useNostrPostForFundingSuccess.tsx'
@@ -222,9 +220,7 @@ export const BecomeAnAmbassador = () => {
   const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
 
   const user = loggedInUser || fundingInputAfterRequest?.user
-  const { data: affiliateTermsData } = useQuery<{
-    user: { affiliatePartnerTerms?: { contributionReferralPayoutRate: number } | null } | null
-  }>(QUERY_USER_AFFILIATE_PARTNER_TERMS, {
+  const { data: affiliateTermsData } = useUserAffiliatePartnerTermsQuery({
     skip: !user?.id,
     variables: { where: { id: user?.id } },
   })

@@ -1,15 +1,13 @@
-import { useQuery } from '@apollo/client'
 import { Box, HStack, Icon, Image, Switch, Tooltip, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import React, { useCallback } from 'react'
 import { PiInfo } from 'react-icons/pi'
 
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
-import { QUERY_PROMOTION_NETWORK_CONTRIBUTION_STATS } from '@/modules/project/graphql/queries/affiliateQuery.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { useGeyserPromotionsContributionStatsQuery } from '@/types/index.ts'
+import { useGeyserPromotionsContributionStatsQuery, usePromotionNetworkContributionStatsQuery } from '@/types/index.ts'
 import { useNotification } from '@/utils/index.ts'
 
 const PROMOTION_LOGOS = {
@@ -107,15 +105,10 @@ export const GeyserPromotionSection = () => {
     skip: !project.id || !project.promotionsEnabled,
     fetchPolicy: 'cache-and-network',
   })
-  const { data: promotionNetworkStatsData, loading: promotionNetworkStatsLoading } = useQuery<{
-    promotionNetworkContributionStats: {
-      contributionsCount: number
-      contributionsSum: number
-      contributionsSumUsd: number
-    }
-  }>(QUERY_PROMOTION_NETWORK_CONTRIBUTION_STATS, {
+  const { data: promotionNetworkStatsData, loading: promotionNetworkStatsLoading } =
+    usePromotionNetworkContributionStatsQuery({
     fetchPolicy: 'cache-and-network',
-  })
+    })
 
   const projectPromotionContributionSumUsd = promotionStatsData?.geyserPromotionsContributionStats?.contributionsSumUsd
   const hasProjectPromotionContributions =

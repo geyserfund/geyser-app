@@ -17,7 +17,6 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useQuery } from '@apollo/client'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import type { ElementType } from 'react'
@@ -30,9 +29,6 @@ import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts
 import {
   AffiliatePartnerPayoutSourceValue,
   AffiliatePayoutStatusValue,
-  QUERY_USER_AFFILIATE_PAYOUTS,
-  UserAffiliatePayoutsQueryResult,
-  UserAffiliatePayoutsQueryVariables,
 } from '@/modules/profile/graphql/queries/affiliatePayoutsQuery.ts'
 import {
   ConfigureUserWalletModal,
@@ -49,11 +45,12 @@ import {
 import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { type UserAffiliatePayoutsQuery, useUserAffiliatePayoutsQuery } from '@/types'
 import { toInt } from '@/utils'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout'
 
-type AffiliatePartnerPayoutRow = NonNullable<UserAffiliatePayoutsQueryResult['user']>['affiliatePartnerPayouts'][number]
+type AffiliatePartnerPayoutRow = NonNullable<UserAffiliatePayoutsQuery['user']>['affiliatePartnerPayouts'][number]
 
 const formatPayoutSource = (source: AffiliatePartnerPayoutSourceValue) => {
   if (source === 'PROJECT_REFERRAL') return t('Enabling project launches')
@@ -178,18 +175,15 @@ export const ProfileSettingsAffiliate = () => {
 
   useUserAccountKeys()
 
-  const { data, loading } = useQuery<UserAffiliatePayoutsQueryResult, UserAffiliatePayoutsQueryVariables>(
-    QUERY_USER_AFFILIATE_PAYOUTS,
-    {
-      skip: !userId,
-      fetchPolicy: 'cache-and-network',
-      variables: {
-        where: {
-          id: userId ? toInt(userId) : 0,
-        },
+  const { data, loading } = useUserAffiliatePayoutsQuery({
+    skip: !userId,
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: {
+        id: userId ? toInt(userId) : 0,
       },
-    }
-  )
+    },
+  })
 
   const affiliateData = data?.user
   const affiliatePartnerTerms = affiliateData?.affiliatePartnerTerms

@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Icon, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, VStack, useColorModeValue } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -139,14 +139,14 @@ const NOISE_TEXTURE = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmln
 
 const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath: string }) => {
   const { t } = useTranslation()
-  const titleColor = '#1F2937'
-  const subtitleColor = '#5B6472'
-  const badgeBackground = 'rgba(255, 244, 214, 0.82)'
-  const badgeColor = '#9A6700'
-  const buttonBackground = 'rgba(255, 255, 255, 0.88)'
-  const buttonColor = '#1F2937'
-  const buttonBorderColor = 'rgba(31, 41, 55, 0.10)'
-  const buttonHoverBackground = 'rgba(255, 255, 255, 0.96)'
+  const titleColor = useColorModeValue('neutral1.11', 'neutral1.12')
+  const subtitleColor = useColorModeValue('neutral1.9', 'neutral1.11')
+  const badgeBackground = useColorModeValue('warning.2', 'warning.3')
+  const badgeColor = useColorModeValue('warning.11', 'warning.11')
+  const buttonBackground = useColorModeValue('neutralAlpha.1', 'neutralAlpha.3')
+  const buttonColor = useColorModeValue('neutral1.11', 'neutral1.12')
+  const buttonBorderColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
+  const buttonHoverBackground = useColorModeValue('neutralAlpha.2', 'neutralAlpha.4')
 
   return (
     <CardLayout
@@ -180,7 +180,7 @@ const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath
           </Body>
         </HStack>
 
-        <Body size="sm" color={subtitleColor} whiteSpace="nowrap">
+        <Body size="sm" color={subtitleColor} whiteSpace={{ base: 'normal', md: 'nowrap' }}>
           {t('Help projects launch or get funded, earn Bitcoin.')}
         </Body>
 
