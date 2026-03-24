@@ -1,3 +1,35 @@
+## [0.34.0](https://github.com/geyserfund/geyser-app/compare/v0.33.0...v0.34.0) (2026-03-24)
+
+
+### Features
+
+* add SEO metadata and improve header integration across landing views ([6f0ce69](https://github.com/geyserfund/geyser-app/commit/6f0ce6930a4ec16286fbd19ca8aa66469afaef19))
+* affiliate updates ([8f35ebd](https://github.com/geyserfund/geyser-app/commit/8f35ebdb81f363939d4cf813fbe1e8f2579e3a83))
+* fixes and ambassador program page ([cd3b621](https://github.com/geyserfund/geyser-app/commit/cd3b62152b541c8057d52002873c155c0094f104))
+* implement Stripe payment method for project launch fees ([c496e54](https://github.com/geyserfund/geyser-app/commit/c496e5473e78cc07c13caa34157a17d6aab1966c))
+* integrate contribution creation logic for launch fees with Lightning and Stripe payment methods ([0aebb77](https://github.com/geyserfund/geyser-app/commit/0aebb771ba5feb9530a32d348624bf4259bbbf81))
+
+
+### Bug Fixes
+
+* address pr comments ([0bcc0a0](https://github.com/geyserfund/geyser-app/commit/0bcc0a0b3e1bb772d4df04c0ab0777b1c67e8e24))
+
+## [0.33.0](https://github.com/geyserfund/geyser-app/compare/v0.32.0...v0.33.0) (2026-03-23)
+
+
+### Features
+
+*  add new success stories ([c6929c6](https://github.com/geyserfund/geyser-app/commit/c6929c6d3fc20fb51ecc914c2821f9a5f17fa9a8))
+
+
+### Bug Fixes
+
+* address PR comment ([2a96572](https://github.com/geyserfund/geyser-app/commit/2a96572e78ef9c571b733bfe3f434f644efb268a))
+* address PR comments ([e2465aa](https://github.com/geyserfund/geyser-app/commit/e2465aafebaee2004a7bd1bdd4c4b07dac1eb9e4))
+* payment refund flow (WIP) ([27263f7](https://github.com/geyserfund/geyser-app/commit/27263f7d059fc01004dac50ec5697d8007ba5534))
+* payout refund flow (WIP) ([9531ab7](https://github.com/geyserfund/geyser-app/commit/9531ab75cba5c5d46d6233d7310451a236c104e9))
+* project update mutation ([f2fd12c](https://github.com/geyserfund/geyser-app/commit/f2fd12cc3dc4ace7a55fd4d8e45c3d4e21ff2a61))
+
 ## [0.32.0](https://github.com/geyserfund/geyser-app/compare/v0.31.0...v0.32.0) (2026-03-17)
 
 

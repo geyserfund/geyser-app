@@ -39,7 +39,7 @@ export const profileSettingsItems: ProfileSettingsItem[] = [
     icon: PiWallet,
   },
   {
-    label: 'Affiliate',
+    label: 'Ambassador Earnings',
     path: 'userProfileSettingsAffiliate',
     type: ProfileSettingsType.affiliate,
     icon: PiCoins,

@@ -1262,6 +1262,16 @@ export const platformRoutes: RouteObject[] = [
   },
 
   {
+    path: getPath('ambassadorProgram'),
+    async lazy() {
+      const AmbassadorProgramPage = await import('@/modules/general/pages/AmbassadorProgramPage.tsx').then(
+        (m) => m.AmbassadorProgramPage,
+      )
+      return { Component: AmbassadorProgramPage }
+    },
+  },
+
+  {
     path: '/auth/twitter',
     Component: ExternalAuthSuccess,
   },

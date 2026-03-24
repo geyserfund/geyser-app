@@ -35,6 +35,7 @@ export enum PathName {
   almostOver = 'almostover',
 
   manifesto = 'manifesto',
+  ambassadorProgram = 'ambassador-program',
 
   merch = 'project/geyser/rewards',
 
@@ -232,6 +233,7 @@ const pathsMap = {
   guardiansCharacter: (characterId: string) => `/${PathName.guardians}/${characterId}`,
 
   manifesto: () => `/${PathName.manifesto}`,
+  ambassadorProgram: () => `/${PathName.ambassadorProgram}`,
 
   discoveryHallOfFame: () => `/${PathName.hallOfFame}`,
   hallOfFameProjects: () => `/${PathName.hallOfFame}/${PathName.projects}`,
