@@ -11,11 +11,13 @@ export const ShareView = ({
   shareOnXUrl,
   shareUrl,
   shareUrlLabel,
+  copyDescription,
   children,
 }: {
-  shareOnXUrl: string
+  shareOnXUrl?: string
   shareUrl: string
   shareUrlLabel: string
+  copyDescription?: string
   children: React.ReactNode
 }) => {
   const { onCopy } = useClipboard(shareUrl)
@@ -26,7 +28,7 @@ export const ShareView = ({
     onCopy()
     toast.success({
       title: t('Copied!'),
-      description: t('Hero link copied to clipboard'),
+      description: copyDescription ?? t('Link copied to clipboard'),
     })
   }
 
@@ -77,18 +79,20 @@ export const ShareView = ({
           </>
         </HStack>
         <HStack w="full" justifyContent="center" spacing={2}>
-          <Button
-            variant="soft"
-            colorScheme="neutral1"
-            borderRadius={8}
-            rightIcon={<PiShareFat />}
-            as={Link}
-            isExternal
-            href={shareOnXUrl}
-            w="full"
-          >
-            {t('Share on X')}
-          </Button>
+          {shareOnXUrl ? (
+            <Button
+              variant="soft"
+              colorScheme="neutral1"
+              borderRadius={8}
+              rightIcon={<PiShareFat />}
+              as={Link}
+              isExternal
+              href={shareOnXUrl}
+              w="full"
+            >
+              {t('Share on X')}
+            </Button>
+          ) : null}
           <Button
             variant="solid"
             colorScheme="primary1"

@@ -1,14 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { AnimatedNavBarItem } from './AnimatedNavBar'
 
 type useAnimatedNavBarProps = {
   items: AnimatedNavBarItem[]
   defaultView?: any
+  resetKey?: unknown
 }
 
-export const useAnimatedNavBar = ({ items, defaultView }: useAnimatedNavBarProps) => {
+export const useAnimatedNavBar = ({ items, defaultView, resetKey }: useAnimatedNavBarProps) => {
   const [view, setView] = useState(defaultView)
+
+  useEffect(() => {
+    setView(defaultView)
+  }, [defaultView, resetKey])
 
   const newItems = items.map((item, index) => {
     return {

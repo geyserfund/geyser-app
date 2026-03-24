@@ -1,5 +1,4 @@
 import {
-  Box,
   Badge,
   Button,
   Icon,
@@ -23,8 +22,9 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import type { ElementType } from 'react'
 import { Link, useParams } from 'react-router'
-import { PiCopy, PiLightning, PiRocketLaunch } from 'react-icons/pi'
+import { PiLightning, PiRocketLaunch } from 'react-icons/pi'
 
+import { CopyableLinkCard } from '@/components/molecules/CopyableLinkCard.tsx'
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import {
@@ -47,7 +47,6 @@ import {
   GEYSER_PROMOTION_FEE_RATE,
 } from '@/shared/utils/affiliatePayout.ts'
 import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
-import { useCopyToClipboard } from '@/shared/utils/hooks/useCopyButton.ts'
 import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import { toInt } from '@/utils'
@@ -57,8 +56,8 @@ import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout'
 type AffiliatePartnerPayoutRow = NonNullable<UserAffiliatePayoutsQueryResult['user']>['affiliatePartnerPayouts'][number]
 
 const formatPayoutSource = (source: AffiliatePartnerPayoutSourceValue) => {
-  if (source === 'PROJECT_REFERRAL') return t('Project referral')
-  return t('Contribution referral')
+  if (source === 'PROJECT_REFERRAL') return t('Enabling project launches')
+  return t('Enabling contributions')
 }
 
 const formatPayoutStatus = (status: AffiliatePayoutStatusValue) => {
@@ -115,61 +114,11 @@ const ReferralProgramCard = ({
   payoutHighlight: string
   linkValue: string
 }) => {
-  const { onCopy, hasCopied } = useCopyToClipboard(linkValue)
   const referralLinkContent = linkValue ? (
-    <HStack
-      as="button"
-      type="button"
-      onClick={onCopy}
-      w="100%"
-      p={4}
-      bg="neutral1.1"
-      borderWidth="1px"
-      borderColor={hasCopied ? 'primary1.6' : 'neutral1.5'}
-      borderRadius="xl"
-      spacing={4}
-      justifyContent="space-between"
-      alignItems="center"
-      cursor="pointer"
-      transition="border-color 0.2s ease, background-color 0.2s ease"
-      _hover={{
-        borderColor: hasCopied ? 'primary1.6' : 'neutral1.6',
-        bg: 'neutral1.2',
-      }}
-      _active={{
-        bg: 'neutral1.2',
-      }}
-    >
-      <VStack spacing={1} alignItems="flex-start" flex={1} minW={0}>
-        <Body size="xs" medium color={hasCopied ? 'primary1.9' : 'neutral1.9'}>
-          {t('Referral link')}
-        </Body>
-        <Box w="100%" overflowWrap="anywhere">
-          <Body size="sm" color="neutral1.12" textAlign="left" medium>
-            {linkValue.replace('https://', '')}
-          </Body>
-        </Box>
-      </VStack>
-
-      <HStack
-        spacing={2}
-        px={3}
-        py={2}
-        borderRadius="full"
-        bg={hasCopied ? 'primary1.3' : 'neutral1.3'}
-        borderWidth="1px"
-        borderColor={hasCopied ? 'primary1.5' : 'neutral1.5'}
-        flexShrink={0}
-      >
-        <Body size="sm" medium color={hasCopied ? 'primary1.10' : 'neutral1.11'}>
-          {hasCopied ? t('Copied') : t('Copy')}
-        </Body>
-        <Icon as={PiCopy} boxSize={5} color={hasCopied ? 'primary1.10' : 'neutral1.11'} />
-      </HStack>
-    </HStack>
+    <CopyableLinkCard label={t('Ambassador link')} linkValue={linkValue} />
   ) : (
     <Body size="sm" color="neutral1.11">
-      {t('Your hero ID is required before sharing affiliate links.')}
+      {t('Your hero ID is required before sharing ambassador links.')}
     </Body>
   )
 
@@ -258,8 +207,12 @@ export const ProfileSettingsAffiliate = () => {
   const projectReferralLink = heroId ? getFullDomainUrl(`/launch?hero=${encodeURIComponent(heroId)}`) : ''
 
   return (
-    <ProfileSettingsLayout desktopTitle={t('Affiliate')}>
+    <ProfileSettingsLayout desktopTitle={t('Ambassador Earnings')}>
       <VStack w="100%" spacing={6} alignItems="stretch" px={{ base: 0, lg: 6 }}>
+        <Body color="neutral1.11" px={{ base: 0, lg: 0 }}>
+          {t('Earn Bitcoin by helping projects launch or get funded')}
+        </Body>
+
         <VStack spacing={4} alignItems="stretch">
           <H2 size="lg">{t('My Earnings')}</H2>
 
@@ -285,7 +238,7 @@ export const ProfileSettingsAffiliate = () => {
           <Stack spacing={4} w="100%">
             <ReferralProgramCard
               icon={PiLightning}
-              title={t('Contribution referrals')}
+              title={t('Enabling contributions')}
               description={t(
                 'Share your contribution link with supporters. You will earn {{rate}} of contribution enabled, paid out from Geyser promotion network contributions.',
                 {
@@ -305,7 +258,7 @@ export const ProfileSettingsAffiliate = () => {
             />
             <ReferralProgramCard
               icon={PiRocketLaunch}
-              title={t('Project referrals')}
+              title={t('Enabling project launches')}
               description={t(
                 'Share your launch link with creators. You will receive a fixed 5k sats when the project launches, plus {{rate}} of contribution enabled from the Geyser platform fee, up to {{cap}} sats per project.',
                 {

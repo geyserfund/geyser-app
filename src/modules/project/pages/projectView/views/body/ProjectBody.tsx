@@ -9,7 +9,6 @@ import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks
 
 import { ProjectStatus } from '../../../../../../types'
 import { useProjectAtom } from '../../../../hooks/useProjectAtom'
-import { AmbassadorNotice } from '../../components/AmbassadorNotice.tsx'
 import { RewardNotice } from '../../components/RewardNotice.tsx'
 import {
   ContributionSummary,
@@ -80,7 +79,6 @@ export const ProjectBody = () => {
         <Creator />
         <ImpactFundRecipientBanner recipient={impactFundRecipient} />
         <RewardNotice />
-        <AmbassadorNotice />
 
         <Story />
 
