@@ -1,3 +1,19 @@
+## [0.34.0](https://github.com/geyserfund/geyser-app/compare/v0.33.0...v0.34.0) (2026-03-24)
+
+
+### Features
+
+* add SEO metadata and improve header integration across landing views ([6f0ce69](https://github.com/geyserfund/geyser-app/commit/6f0ce6930a4ec16286fbd19ca8aa66469afaef19))
+* affiliate updates ([8f35ebd](https://github.com/geyserfund/geyser-app/commit/8f35ebdb81f363939d4cf813fbe1e8f2579e3a83))
+* fixes and ambassador program page ([cd3b621](https://github.com/geyserfund/geyser-app/commit/cd3b62152b541c8057d52002873c155c0094f104))
+* implement Stripe payment method for project launch fees ([c496e54](https://github.com/geyserfund/geyser-app/commit/c496e5473e78cc07c13caa34157a17d6aab1966c))
+* integrate contribution creation logic for launch fees with Lightning and Stripe payment methods ([0aebb77](https://github.com/geyserfund/geyser-app/commit/0aebb771ba5feb9530a32d348624bf4259bbbf81))
+
+
+### Bug Fixes
+
+* address pr comments ([0bcc0a0](https://github.com/geyserfund/geyser-app/commit/0bcc0a0b3e1bb772d4df04c0ab0777b1c67e8e24))
+
 ## [0.33.0](https://github.com/geyserfund/geyser-app/compare/v0.32.0...v0.33.0) (2026-03-23)
 
 
