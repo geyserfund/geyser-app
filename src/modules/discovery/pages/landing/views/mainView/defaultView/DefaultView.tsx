@@ -1,4 +1,4 @@
-import { Stack, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { Head } from '@/config/Head.tsx'
@@ -11,16 +11,14 @@ import { AnnouncementBanner } from './sections/AnnouncementBanner.tsx'
 import { CommunityHero } from './sections/CommunityHero.tsx'
 import { AonProjectsDisplayMostFundedThisWeek } from './sections/AonProjectsDisplayMostFundedThisWeek.tsx'
 import { CharityProjects } from './sections/CharityProjects.tsx'
-import { Featured } from './sections/Featured.tsx'
-import { JoinOurMailingList } from './sections/JoinOurMailingList.tsx'
+import { CuratedProjects } from './sections/CuratedProjects.tsx'
 import { JoinTheMovement } from './sections/JoinTheMovement.tsx'
+import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
 import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
 import { RecentImpactPosts } from './sections/RecentImpactPosts.tsx'
 import { RecentLaunches } from './sections/RecentLaunches.tsx'
-import { RecommendedForYou } from './sections/RecommendedForYou.tsx'
 import { SuccessStories } from './sections/SuccessStories.tsx'
-import { TitleBar } from './sections/TitleBar.tsx'
 
 export const DefaultView = () => {
   const [showBelowTheFold, setShowBelowTheFold] = useState(false)
@@ -38,13 +36,9 @@ export const DefaultView = () => {
     <VStack w="full" spacing={10} paddingTop={{ base: '8px', lg: '10px' }}>
       <Head image={GeyserMainSeoImageUrl} />
       <VStack w="full" spacing={20} paddingBottom={40}>
-        <TitleBar />
-        <AnnouncementBanner mt={{ base: -14, md: -10 }} mb={{ base: -14, md: -10 }} />
+        <AnnouncementBanner mt={{ base: 0, md: 0 }} mb={{ base: 0, md: 0 }} />
 
-        <Stack direction={{ base: 'column', md: 'row' }} w="full" alignItems="stretch" spacing={{ base: 4, lg: 12 }}>
-          <Featured />
-          <RecommendedForYou />
-        </Stack>
+        <CuratedProjects />
 
         <SuccessStories />
 
@@ -52,6 +46,8 @@ export const DefaultView = () => {
         <ProjectsInYourRegion />
 
         <CommunityHero />
+
+        <NewsletterSignup marginTop={-10} marginBottom={-10} />
 
         <RecentImpactPosts />
 
@@ -68,8 +64,6 @@ export const DefaultView = () => {
             <TopProjects />
 
             <JoinTheMovement />
-
-            <JoinOurMailingList />
           </>
         )}
       </VStack>
