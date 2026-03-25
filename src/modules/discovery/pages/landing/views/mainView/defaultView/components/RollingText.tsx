@@ -25,8 +25,8 @@ const ANIMATION_NAME = 'rolling-text'
 
 /** Builds the phrase array for a strip lane, adding a duplicate first item for seamless looping. */
 const getStripPhrases = (offset: number): string[] => {
-  const items = PHRASES.map((_, i) => PHRASES[(i + offset + PHRASES.length) % PHRASES.length])
-  return [...items, items[0]]
+  const items = PHRASES.map((_, i) => PHRASES[(i + offset + PHRASES.length) % PHRASES.length]!)
+  return [...items, items[0]!]
 }
 
 const FONT_SIZE = { base: 'xl', md: '2xl', lg: '3xl' }

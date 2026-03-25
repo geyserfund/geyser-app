@@ -1,10 +1,10 @@
-import { useColorModeValue, VStack, VStackProps } from '@chakra-ui/react'
+import { StackProps, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { Body, H2 } from '@/shared/components/typography/index.ts'
 import { SubscribeForm } from '@/shared/sections/SubscribeForm.tsx'
 
-export const NewsletterSignup = (props: VStackProps) => {
+export const NewsletterSignup = (props: StackProps) => {
   const borderColor = useColorModeValue('gray.200', 'gray.600')
   const bgColor = useColorModeValue('white', 'gray.800')
 

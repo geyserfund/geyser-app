@@ -1,4 +1,4 @@
-import { VStack } from '@chakra-ui/react'
+import { Box, VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { Head } from '@/config/Head.tsx'
@@ -45,10 +45,16 @@ export const DefaultView = () => {
 
         <SuccessStories />
 
-        <AonProjectsDisplayMostFundedThisWeek marginTop={-10} />
-        <ProjectsInYourRegion marginTop={-10} />
+        <Box marginTop={-10} w="full">
+          <AonProjectsDisplayMostFundedThisWeek />
+        </Box>
+        <Box marginTop={-10} w="full">
+          <ProjectsInYourRegion />
+        </Box>
 
-        <CommunityHero marginTop={-10} />
+        <Box marginTop={-10} w="full">
+          <CommunityHero />
+        </Box>
 
         <NewsletterSignup marginTop={-10} marginBottom={-10} />
 
