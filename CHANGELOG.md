@@ -1,3 +1,10 @@
+## [0.35.0](https://github.com/geyserfund/geyser-app/compare/v0.34.0...v0.35.0) (2026-03-25)
+
+
+### Bug Fixes
+
+* ambassadors updates ([03acbba](https://github.com/geyserfund/geyser-app/commit/03acbba61b9f23cccb3f948d961716371aa1e42b))
+
 ## [0.34.0](https://github.com/geyserfund/geyser-app/compare/v0.33.0...v0.34.0) (2026-03-24)
 
 
