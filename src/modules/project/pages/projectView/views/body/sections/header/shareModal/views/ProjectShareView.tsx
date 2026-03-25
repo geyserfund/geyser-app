@@ -1,4 +1,4 @@
-import { HStack, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { CopyableLinkCard } from '@/components/molecules/CopyableLinkCard.tsx'
@@ -6,17 +6,13 @@ import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { Body } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
-import { formatEffectiveAffiliatePayoutRate, GEYSER_PROMOTION_FEE_RATE } from '@/shared/utils/affiliatePayout.ts'
+import {
+  DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
+  formatEffectiveAffiliatePayoutRate,
+  GEYSER_PROMOTION_FEE_RATE,
+} from '@/shared/utils/affiliatePayout.ts'
 import { useProjectAmbassadorStatsQuery, useUserAffiliatePartnerTermsQuery, useUserHeroStatsQuery } from '@/types'
 import { commaFormatted } from '@/utils'
-
-const StatPill = ({ label }: { label: string }) => (
-  <HStack px={3} py={1.5} borderRadius="full" bg="amber.1" border="1px solid" borderColor="amber.4" width="fit-content">
-    <Body size="sm" medium color="amber.11">
-      {label}
-    </Body>
-  </HStack>
-)
 
 export const ProjectShareView = () => {
   const { t } = useTranslation()
@@ -38,7 +34,8 @@ export const ProjectShareView = () => {
     heroId ? `?hero=${heroId}` : ''
   }`
   const effectiveContributionPayout = formatEffectiveAffiliatePayoutRate(
-    affiliateTermsData?.user?.affiliatePartnerTerms?.contributionReferralPayoutRate ?? 0.25,
+    affiliateTermsData?.user?.affiliatePartnerTerms?.contributionReferralPayoutRate ??
+      DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
     GEYSER_PROMOTION_FEE_RATE,
   )
 
@@ -86,12 +83,28 @@ export const ProjectShareView = () => {
 
     if (ambassadorsCount) {
       return (
-        <HStack w="100%" spacing={2} flexWrap="wrap">
-          <StatPill
-            label={ambassadorsCount === 1 ? t('1 ambassador') : t('{{count}} ambassadors', { count: ambassadorsCount })}
-          />
-          <StatPill label={t('{{amount}} sats enabled', { amount: commaFormatted(satAmount) })} />
-        </HStack>
+        <Body color="amber.11" size="sm" regular textAlign="left">
+          {ambassadorsCount === 1 ? (
+            <Trans
+              i18nKey="So far, <0>1</0> ambassador has enabled <1>{{amount}}</1> sats in contributions to this project"
+              values={{ amount: commaFormatted(satAmount ?? 0) }}
+              components={[
+                <Body as="span" bold display="inline" color="amber.11" />,
+                <Body as="span" bold display="inline" color="amber.11" />,
+              ]}
+            />
+          ) : (
+            <Trans
+              i18nKey="So far, <0>{{count}}</0> ambassadors have enabled <1>{{amount}}</1> sats in contributions to this project"
+              values={{ count: ambassadorsCount, amount: commaFormatted(satAmount ?? 0) }}
+              components={[
+                <Body as="span" bold display="inline" color="amber.11" />,
+                <Body as="span" bold display="inline" color="amber.11" />,
+              ]}
+            />
+          )}
+          .
+        </Body>
       )
     }
 

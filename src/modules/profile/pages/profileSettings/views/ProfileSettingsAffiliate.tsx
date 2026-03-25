@@ -1,7 +1,6 @@
 import {
   Badge,
   Button,
-  Icon,
   HStack,
   Link as ChakraLink,
   SimpleGrid,
@@ -14,16 +13,15 @@ import {
   Th,
   Thead,
   Tr,
-  VStack,
   useDisclosure,
+  VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import type { ElementType } from 'react'
-import { Link, useParams } from 'react-router'
 import { PiLightning, PiRocketLaunch } from 'react-icons/pi'
+import { Link, useParams } from 'react-router'
 
-import { CopyableLinkCard } from '@/components/molecules/CopyableLinkCard.tsx'
+import { AffiliateReferralProgramCard } from '@/components/molecules/AffiliateReferralProgramCard.tsx'
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
 import {
@@ -37,14 +35,15 @@ import {
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
 import {
+  DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
   formatEffectiveAffiliatePayoutRate,
   GEYSER_PLATFORM_FEE_RATE,
   GEYSER_PROMOTION_FEE_RATE,
 } from '@/shared/utils/affiliatePayout.ts'
-import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 import { FormatCurrencyType, useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
-import { Feedback, FeedBackVariant } from '@/shared/molecules/Feedback.tsx'
+import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 import { type UserAffiliatePayoutsQuery, useUserAffiliatePayoutsQuery } from '@/types'
 import { toInt } from '@/utils'
 
@@ -98,52 +97,6 @@ const SummaryCard = ({
   </CardLayout>
 )
 
-const ReferralProgramCard = ({
-  title,
-  description,
-  icon,
-  payoutHighlight,
-  linkValue,
-}: {
-  title: string
-  description: string
-  icon: ElementType
-  payoutHighlight: string
-  linkValue: string
-}) => {
-  const referralLinkContent = linkValue ? (
-    <CopyableLinkCard label={t('Ambassador link')} linkValue={linkValue} />
-  ) : (
-    <Body size="sm" color="neutral1.11">
-      {t('Your hero ID is required before sharing ambassador links.')}
-    </Body>
-  )
-
-  return (
-    <CardLayout spacing={4} borderColor="neutral1.6" height="100%">
-      <VStack spacing={3} alignItems="stretch">
-        <HStack justifyContent="space-between" alignItems="center" spacing={4} flexWrap="wrap">
-          <HStack spacing={3} alignItems="center" minW={0} flexWrap="wrap">
-            <Icon as={icon} boxSize={5} color="primary1.9" />
-            <H2 size="md">{title}</H2>
-            <Badge colorScheme="primary1" variant="soft" borderRadius="full" px={3} py={1.5}>
-              <Body size="md" medium>
-                {payoutHighlight}
-              </Body>
-            </Badge>
-          </HStack>
-        </HStack>
-
-        <Body color="neutral1.11" w="100%">
-          {description}
-        </Body>
-
-        {referralLinkContent}
-      </VStack>
-    </CardLayout>
-  )
-}
-
 const PayoutRow = ({ payout }: { payout: AffiliatePartnerPayoutRow }) => (
   <Tr key={payout.uuid}>
     <Td whiteSpace="nowrap">{formatPayoutDate(payout.paidAt ?? payout.createdAt)}</Td>
@@ -168,7 +121,7 @@ const PayoutRow = ({ payout }: { payout: AffiliatePartnerPayoutRow }) => (
 
 export const ProfileSettingsAffiliate = () => {
   const params = useParams<{ userId: string }>()
-  const userId = params.userId
+  const { userId } = params
   const { formatAmount, formatUsdAmount } = useCurrencyFormatter()
   const configureWalletModal = useDisclosure()
   const userAccountKeys = useAtomValue(userAccountKeysAtom)
@@ -194,7 +147,8 @@ export const ProfileSettingsAffiliate = () => {
 
   const totalEarned = payoutSummary?.totalEarned ?? 0
   const totalPending = payoutSummary?.totalPending ?? 0
-  const contributionReferralPayoutRate = affiliatePartnerTerms?.contributionReferralPayoutRate ?? 0
+  const contributionReferralPayoutRate =
+    affiliatePartnerTerms?.contributionReferralPayoutRate ?? DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE
   const projectReferralPayoutRate = affiliatePartnerTerms?.projectReferralPayoutRate ?? 0
   const projectReferralPayoutCapSats = affiliatePartnerTerms?.projectReferralPayoutCapSats ?? 0
   const contributionReferralLink = heroId ? getFullDomainUrl(`/?hero=${encodeURIComponent(heroId)}`) : ''
@@ -230,27 +184,21 @@ export const ProfileSettingsAffiliate = () => {
           <H2 size="lg">{t('How does it work?')}</H2>
 
           <Stack spacing={4} w="100%">
-            <ReferralProgramCard
+            <AffiliateReferralProgramCard
               icon={PiLightning}
               title={t('Enabling contributions')}
               description={t(
                 'Share your contribution link with supporters. You will earn {{rate}} of contribution enabled, paid out from Geyser promotion network contributions.',
                 {
-                  rate: formatEffectiveAffiliatePayoutRate(
-                    contributionReferralPayoutRate,
-                    GEYSER_PROMOTION_FEE_RATE,
-                  ),
+                  rate: formatEffectiveAffiliatePayoutRate(contributionReferralPayoutRate, GEYSER_PROMOTION_FEE_RATE),
                 },
               )}
               payoutHighlight={t('{{rate}} of contribution enabled', {
-                rate: formatEffectiveAffiliatePayoutRate(
-                  contributionReferralPayoutRate,
-                  GEYSER_PROMOTION_FEE_RATE,
-                ),
+                rate: formatEffectiveAffiliatePayoutRate(contributionReferralPayoutRate, GEYSER_PROMOTION_FEE_RATE),
               })}
               linkValue={contributionReferralLink}
             />
-            <ReferralProgramCard
+            <AffiliateReferralProgramCard
               icon={PiRocketLaunch}
               title={t('Enabling project launches')}
               description={t(
@@ -283,9 +231,7 @@ export const ProfileSettingsAffiliate = () => {
                   flexDirection={{ base: 'column', md: 'row' }}
                   spacing={3}
                 >
-                  <Body size="sm">
-                    {t('Configure your wallet so you can receive the payouts.')}
-                  </Body>
+                  <Body size="sm">{t('Configure your wallet so you can receive the payouts.')}</Body>
                   <Button
                     colorScheme="warning"
                     variant="soft"

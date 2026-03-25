@@ -1,5 +1,6 @@
 export const GEYSER_PLATFORM_FEE_RATE = 0.05
 export const GEYSER_PROMOTION_FEE_RATE = 0.1
+export const DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE = 0.5
 
 const percentFormatter = new Intl.NumberFormat(undefined, {
   maximumFractionDigits: 2,

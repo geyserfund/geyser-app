@@ -11,12 +11,14 @@ import {
 } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
+import { CopyableLinkCard } from '@/components/molecules/CopyableLinkCard.tsx'
 import { Head } from '@/config/Head.tsx'
 import { useAuthContext } from '@/context'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H1, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 
 const stepItems = [
   {
@@ -70,6 +72,12 @@ export const AmbassadorProgramPage = () => {
   const principleIconColor = useColorModeValue('primary1.9', 'primary1.9')
   const stepNumberBg = useColorModeValue('primary1.3', 'primary1.4')
   const stepNumberColor = useColorModeValue('primary1.11', 'primary1.9')
+  const promotionBg = useColorModeValue('amber.2', 'amber.3')
+  const promotionBorderColor = useColorModeValue('amber.6', 'amber.7')
+  const promotionLabelBg = useColorModeValue('amber.4', 'amber.5')
+  const promotionLabelColor = useColorModeValue('amber.11', 'amber.11')
+  const contributionReferralLink = user?.heroId ? getFullDomainUrl(`/?hero=${encodeURIComponent(user.heroId)}`) : ''
+  const projectReferralLink = user?.heroId ? getFullDomainUrl(`/launch?hero=${encodeURIComponent(user.heroId)}`) : ''
 
   const handleStartSharing = () => {
     if (!isLoggedIn) {
@@ -107,102 +115,153 @@ export const AmbassadorProgramPage = () => {
             {t('Share projects. Enable funding. Earn sats.')}
           </H1>
 
-          <Body size={{ base: 'md', lg: 'lg' }} color="neutral1.11" lineHeight={1.6} maxW="680px">
+          <Body size={{ base: 'md', lg: 'lg' }} color="neutral1.11" lineHeight={1.6}>
             {t(
               'Ambassadors help projects get funded by sharing a trackable ambassador link. When that sharing leads to contributions, the ambassador earns for the value they enabled.',
             )}
           </Body>
-
-          <Button
-            onClick={handleStartSharing}
-            size="lg"
-            width={{ base: '100%', sm: 'auto' }}
-            minW={{ sm: '220px' }}
-            colorScheme="primary1"
-            fontWeight={700}
-            borderRadius="10px"
-            boxShadow="0 4px 14px 0 rgba(0, 198, 163, 0.30)"
-            transition="all 0.2s ease"
-            _hover={{ transform: 'translateY(-2px)', boxShadow: '0 6px 20px 0 rgba(0, 198, 163, 0.40)' }}
-            _active={{ transform: 'translateY(0)', boxShadow: '0 2px 8px 0 rgba(0, 198, 163, 0.25)' }}
-            rightIcon={<Icon as={PiArrowRight} />}
-          >
-            {t('Start sharing')}
-          </Button>
         </VStack>
+
+        <CardLayout spacing={3} bg={promotionBg} borderColor={promotionBorderColor}>
+          <HStack spacing={3} alignItems="center" flexWrap="wrap">
+            <Badge
+              bg={promotionLabelBg}
+              color={promotionLabelColor}
+              borderRadius="full"
+              px={3}
+              py={1}
+              textTransform="none"
+            >
+              <Body size="sm" medium>
+                {t('Limited-time promotion')}
+              </Body>
+            </Badge>
+            <Body size="sm" bold color="neutral1.12">
+              {t('Until April 30, 2026, each contribution you enable earns 10% instead of 5%.')}
+            </Body>
+          </HStack>
+        </CardLayout>
 
         {/* Rewards */}
         <VStack align="stretch" spacing={4}>
-          <H2 size="xl" bold>
-            {t('What you earn')}
-          </H2>
+          <HStack
+            justifyContent="space-between"
+            alignItems={{ base: 'stretch', sm: 'center' }}
+            flexDirection={{ base: 'column', sm: 'row' }}
+            spacing={3}
+          >
+            <H2 size="xl" bold>
+              {t('What you earn')}
+            </H2>
+            {isLoggedIn ? (
+              <Button
+                onClick={handleStartSharing}
+                size="md"
+                width={{ base: '100%', sm: 'auto' }}
+                colorScheme="primary1"
+                fontWeight={700}
+                borderRadius="10px"
+                rightIcon={<Icon as={PiArrowRight} />}
+              >
+                {t('View Earnings')}
+              </Button>
+            ) : (
+              <Button
+                onClick={handleStartSharing}
+                size="md"
+                width={{ base: '100%', sm: 'auto' }}
+                colorScheme="primary1"
+                fontWeight={700}
+                borderRadius="10px"
+                rightIcon={<Icon as={PiArrowRight} />}
+              >
+                {t('Start earning')}
+              </Button>
+            )}
+          </HStack>
 
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
             <CardLayout spacing={4} height="100%">
-              <HStack spacing={4} alignItems="start">
-                <Flex
-                  w="48px"
-                  h="48px"
-                  flexShrink={0}
-                  borderRadius="lg"
-                  alignItems="center"
-                  justifyContent="center"
-                  bg={rewardIconBg}
-                >
-                  <Icon as={PiLightningDuotone} boxSize={6} color={rewardIconColor} />
-                </Flex>
-                <VStack align="start" spacing={1} flex={1}>
-                  <HStack spacing={2} alignItems="center" flexWrap="wrap">
-                    <H2 size="md" bold>
-                      {t('Enabling contributions')}
-                    </H2>
-                    <Badge colorScheme="amber" variant="soft" borderRadius="full" px={3} py={1} textTransform="none">
-                      <Body size="sm" medium>
-                        {t('5% of contribution')}
-                      </Body>
-                    </Badge>
-                  </HStack>
-                  <Body color="neutral1.11" size="sm">
-                    {t('Share projects you believe in and earn when your link drives real funding.')}
-                  </Body>
-                </VStack>
-              </HStack>
+              <VStack align="stretch" spacing={4} height="100%">
+                <HStack spacing={4} alignItems="start" flex={1}>
+                  <Flex
+                    w="48px"
+                    h="48px"
+                    flexShrink={0}
+                    borderRadius="lg"
+                    alignItems="center"
+                    justifyContent="center"
+                    bg={rewardIconBg}
+                  >
+                    <Icon as={PiLightningDuotone} boxSize={6} color={rewardIconColor} />
+                  </Flex>
+                  <VStack align="start" spacing={1} flex={1}>
+                    <HStack spacing={2} alignItems="center" flexWrap="wrap">
+                      <H2 size="md" bold>
+                        {t('Enabling contributions')}
+                      </H2>
+                      <Badge colorScheme="amber" variant="soft" borderRadius="full" px={3} py={1} textTransform="none">
+                        <Body size="sm" medium>
+                          {t('5% of contribution')}
+                        </Body>
+                      </Badge>
+                    </HStack>
+                    <Body color="neutral1.11" size="sm">
+                      {t('Share projects you believe in and earn when your link drives real funding.')}
+                    </Body>
+                  </VStack>
+                </HStack>
+
+                {isLoggedIn ? (
+                  <Box mt="auto">
+                    <CopyableLinkCard label={t('Ambassador link')} linkValue={contributionReferralLink} />
+                  </Box>
+                ) : null}
+              </VStack>
             </CardLayout>
 
             <CardLayout spacing={4} height="100%">
-              <HStack spacing={4} alignItems="start">
-                <Flex
-                  w="48px"
-                  h="48px"
-                  flexShrink={0}
-                  borderRadius="lg"
-                  alignItems="center"
-                  justifyContent="center"
-                  bg={rewardIconBg}
-                >
-                  <Icon as={PiRocketLaunchDuotone} boxSize={6} color={rewardIconColor} />
-                </Flex>
-                <VStack align="start" spacing={1} flex={1}>
-                  <HStack spacing={2} alignItems="center" flexWrap="wrap">
-                    <H2 size="md" bold>
-                      {t('Enabling launches')}
-                    </H2>
-                    <Badge colorScheme="amber" variant="soft" borderRadius="full" px={3} py={1} textTransform="none">
-                      <Body size="sm" medium>
-                        {t('5,000 sats + 5%')}
-                      </Body>
-                    </Badge>
-                  </HStack>
-                  <Body color="neutral1.11" size="sm">
-                    {t(
-                      'Use your launch link to help strong projects get off the ground and keep earning as funding comes in.',
-                    )}
-                  </Body>
-                  <Body size="xs" color="neutral1.9">
-                    {t('* Up to 100k sats per project')}
-                  </Body>
-                </VStack>
-              </HStack>
+              <VStack align="stretch" spacing={4} height="100%">
+                <HStack spacing={4} alignItems="start" flex={1}>
+                  <Flex
+                    w="48px"
+                    h="48px"
+                    flexShrink={0}
+                    borderRadius="lg"
+                    alignItems="center"
+                    justifyContent="center"
+                    bg={rewardIconBg}
+                  >
+                    <Icon as={PiRocketLaunchDuotone} boxSize={6} color={rewardIconColor} />
+                  </Flex>
+                  <VStack align="start" spacing={1} flex={1}>
+                    <HStack spacing={2} alignItems="center" flexWrap="wrap">
+                      <H2 size="md" bold>
+                        {t('Enabling launches')}
+                      </H2>
+                      <Badge colorScheme="amber" variant="soft" borderRadius="full" px={3} py={1} textTransform="none">
+                        <Body size="sm" medium>
+                          {t('5,000 sats + 5%')}
+                        </Body>
+                      </Badge>
+                    </HStack>
+                    <Body color="neutral1.11" size="sm">
+                      {t(
+                        'Use your launch link to help strong projects get off the ground and keep earning as funding comes in.',
+                      )}
+                    </Body>
+                    <Body size="xs" color="neutral1.9">
+                      {t('* Up to 100k sats per project')}
+                    </Body>
+                  </VStack>
+                </HStack>
+
+                {isLoggedIn ? (
+                  <Box mt="auto">
+                    <CopyableLinkCard label={t('Ambassador link')} linkValue={projectReferralLink} />
+                  </Box>
+                ) : null}
+              </VStack>
             </CardLayout>
           </SimpleGrid>
         </VStack>
