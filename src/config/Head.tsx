@@ -29,17 +29,23 @@ export const Head: React.FC<HeadProps> = (tags) => {
     url,
   } = tags
   const location = useLocation()
+  const pageUrl = `${window.location.protocol}//${window.location.host}${location.pathname}`
+
   return (
     <Helmet>
       <title>{title} | Geyser</title>
       <meta property="og:title" content={title} />
       {description && <meta property="og:description" content={description} />}
-      {description && <meta property="description" content={description} />}
+      {description && <meta name="description" content={description} />}
       {image && <meta property="og:image" content={image} />}
-      <meta property="og:url" content={`${window.location.protocol}//${window.location.host}${location.pathname}`} />
+      {image && <meta property="og:image:secure_url" content={image} />}
+      <meta property="og:url" content={url || pageUrl} />
       <meta property="og:type" content={type} />
-      <meta property="twitter:card" content={DefaultMetaTwitterCard} />
-      <meta property="twitter:site" content={DefaultMetaTwitterSite} />
+      <meta name="twitter:card" content={DefaultMetaTwitterCard} />
+      <meta name="twitter:site" content={DefaultMetaTwitterSite} />
+      <meta name="twitter:title" content={title} />
+      {description && <meta name="twitter:description" content={description} />}
+      {image && <meta name="twitter:image" content={image} />}
       {url && <link rel="canonical" href={url} />}
       {children}
     </Helmet>

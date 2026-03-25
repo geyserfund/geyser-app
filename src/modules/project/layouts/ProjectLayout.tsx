@@ -12,6 +12,7 @@ import { ProjectNavigation } from '../navigation/ProjectNavigation.tsx'
 import { ProjectCreateModal } from '../pages/projectView/components/ProjectCreateModal.tsx'
 import { useProjectDraftRedirect } from '../pages/projectView/views/body/hooks/useProjectDraftRedirect.tsx'
 import { buildProjectJsonLd } from '../tools/generateProjectJsonLD.ts'
+import { useProjectPrerenderSeo } from './hooks/useProjectPrerenderSeo.ts'
 
 export const ProjectLayout = () => {
   useFundingFlowCleanup()
@@ -19,6 +20,12 @@ export const ProjectLayout = () => {
 
   const { project, loading } = useProjectAtom()
   const { rewards, initialRewardsLoading } = useRewardsAtom()
+
+  const { shouldRenderJsonLd, seoCanonicalUrl, seoDescription, seoImage, seoTitle } = useProjectPrerenderSeo({
+    project,
+    loading,
+    initialRewardsLoading,
+  })
 
   return (
     <Box
@@ -30,16 +37,8 @@ export const ProjectLayout = () => {
       position="relative"
       bg="utils.pbg"
     >
-      <Head
-        title={project?.title || ''}
-        description={project?.shortDescription || ''}
-        image={project?.thumbnailImage || ''}
-        type="article"
-        url={`https://geyser.fund/project/${project?.name}`}
-      >
-        {!loading && !initialRewardsLoading && (
-          <script type="application/ld+json">{buildProjectJsonLd(project, rewards)}</script>
-        )}
+      <Head title={seoTitle} description={seoDescription} image={seoImage} type="article" url={seoCanonicalUrl}>
+        {shouldRenderJsonLd && <script type="application/ld+json">{buildProjectJsonLd(project, rewards)}</script>}
       </Head>
       <ProjectNavigation />
       <VStack
