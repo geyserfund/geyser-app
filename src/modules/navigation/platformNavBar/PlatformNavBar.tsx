@@ -24,14 +24,13 @@ import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
 import {
   isDiscoveryRoutesAtom,
-  isLandingPageRouteAtom,
   isProjectDashboardRoutesAtom,
   isProjectFundingRoutesAtom,
   isProjectRoutesAtom,
   useIsGuardiansPage,
   useIsManifestoPage,
+  useIsProfilePage,
 } from './platformNavBarAtom'
-import { PlatformNav } from './profileNav/components/PlatformNav.tsx'
 import { ProfileNav } from './profileNav/ProfileNav'
 
 /** Renders the fixed top platform navigation shared across platform pages. */
@@ -43,9 +42,9 @@ export const PlatformNavBar = () => {
 
   const isGuardiansPage = useIsGuardiansPage()
   const isManifestoPage = useIsManifestoPage()
+  const isProfilePage = useIsProfilePage()
 
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
-  const isLandingPageRoute = useAtomValue(isLandingPageRouteAtom)
   const isProjectRoutes = useAtomValue(isProjectRoutesAtom)
   const isProjectDashboardRoutes = useAtomValue(isProjectDashboardRoutesAtom)
   const isProjectFundingRoutes = useAtomValue(isProjectFundingRoutesAtom)
@@ -94,27 +93,26 @@ export const PlatformNavBar = () => {
   }, [isProjectFundingRoutes])
 
   const shouldShowPlatformNav =
-    (isPlatformRoutes || isProjectRoutes || isGuardiansPage) &&
+    (isPlatformRoutes || isProjectRoutes || isGuardiansPage || isProfilePage) &&
     !isProjectFundingRoutes &&
     !isProjectDashboardRoutes &&
     !isMobileMode
-  const shouldShowLandingDesktopNav = shouldShowPlatformNav && isLandingPageRoute
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {
       return <CloseGoBackButton />
     }
 
-    const landingCreateButton = shouldShowLandingDesktopNav ? (
+    const landingCreateButton = shouldShowPlatformNav ? (
       <CreateProjectButton
         display={{ base: 'none', lg: 'flex' }}
         label={t('Start your project')}
         noIcon
-        size="md"
+        size={{ base: 'md', lg: 'lg' }}
         minWidth="190px"
         variant="solid"
         colorScheme="primary1"
-        borderRadius="full"
+        borderRadius={{ base: '8px', lg: '10px' }}
       />
     ) : null
 
@@ -124,7 +122,7 @@ export const PlatformNavBar = () => {
           <>
             {landingCreateButton}
             <LoginButton />
-            {!shouldShowLandingDesktopNav && (
+            {!shouldShowPlatformNav && (
               <CreateProjectButton display={{ base: 'none', lg: 'flex' }} label={t('Creator')} noIcon />
             )}
           </>
@@ -137,7 +135,7 @@ export const PlatformNavBar = () => {
         <ProfileNav />
       </HStack>
     )
-  }, [isLoggedIn, isManifestoPage, shouldShowLandingDesktopNav])
+  }, [isLoggedIn, isManifestoPage, shouldShowPlatformNav])
 
   return (
     <HStack
@@ -165,7 +163,7 @@ export const PlatformNavBar = () => {
         >
           <HStack height="full">{renderLeftSide()}</HStack>
 
-          {shouldShowLandingDesktopNav ? <LandingDesktopNav /> : shouldShowPlatformNav ? <PlatformNav /> : null}
+          {shouldShowPlatformNav ? <LandingDesktopNav /> : null}
 
           {renderRightSide()}
         </HStack>

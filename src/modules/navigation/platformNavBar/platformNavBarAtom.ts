@@ -67,6 +67,7 @@ export const shouldShowProjectLogoAtom = atom((get) => {
 
 /** True if current route is one of the profile routes */
 const isProfileRoutesAtom = atom(routeMatchForAtom(profileRoutes))
+export const useIsProfilePage = () => useAtomValue(isProfileRoutesAtom)
 
 /** True if shoudl show geyser logo on left of topNavBar */
 export const shouldShowGeyserLogoAtom = atom((get) => {

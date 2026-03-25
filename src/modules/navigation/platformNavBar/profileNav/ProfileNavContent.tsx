@@ -11,11 +11,15 @@ import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { FAQUrl, getPath, GeyserHackathonsUrl, GeyserSubscribeUrl } from '@/shared/constants/index.ts'
 
-import { DiscoveryNavItemKey, discoveryNavItems } from '../../discoveryNav/discoveryNavData'
+import { discoveryNavItems } from '../../discoveryNav/discoveryNavData'
 import { CreateProjectButton } from '../components/CreateProjectButton.tsx'
 import { ModeChange } from './components/ModeChange'
 
-export const ProfileNavContent = () => {
+type ProfileNavContentProps = {
+  onNavigate?: () => void
+}
+
+export const ProfileNavContent = ({ onNavigate }: ProfileNavContentProps) => {
   const { logout, user, isLoggedIn } = useAuthContext()
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
@@ -32,7 +36,7 @@ export const ProfileNavContent = () => {
       <VStack w="full" spacing={4}>
         <VStack spacing={2} w="full">
           {isLoggedIn && (
-            <MenuItem as={Link} to={getPath('heroProfile', user.heroId)}>
+            <MenuItem as={Link} to={getPath('heroProfile', user.heroId)} onClick={onNavigate}>
               <HStack position="relative">
                 <PiUserCircle fontSize="18px" />
                 <Body size="md">{t('Profile')}</Body>
@@ -41,10 +45,10 @@ export const ProfileNavContent = () => {
           )}
 
           {discoveryNavItems.map((discoveryNav) => {
-            const activityDot = discoveryNav.key === DiscoveryNavItemKey.MyProjects ? myProjectActivityDot : false
+            const activityDot = discoveryNav.path === 'discoveryMyProjects' ? myProjectActivityDot : false
 
             return (
-              <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)}>
+              <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)} onClick={onNavigate}>
                 <HStack position="relative">
                   {discoveryNav.image ? (
                     <ChakraImage src={discoveryNav.image} alt={t(discoveryNav.label)} boxSize="18px" />
@@ -80,10 +84,15 @@ export const ProfileNavContent = () => {
             <Divider borderColor="neutral1.6" />
 
             <VStack spacing={2} w="full">
-              <MenuItem as={Link} to={getPath('userProfileSettings', user.id)}>
+              <MenuItem as={Link} to={getPath('userProfileSettings', user.id)} onClick={onNavigate}>
                 <Body size="md">{t('Profile settings')}</Body>
               </MenuItem>
-              <MenuItem onClick={logout}>
+              <MenuItem
+                onClick={() => {
+                  onNavigate?.()
+                  logout()
+                }}
+              >
                 <Body size="md">{t('Sign Out')}</Body>
               </MenuItem>
             </VStack>

@@ -61,7 +61,7 @@ export const LandingSearchInput = ({ width = { base: 'full', lg: '280px' } }: La
         onChange={handleSearchUpdate}
         placeholder={t('Search projects')}
         aria-label={t('Search projects')}
-        borderRadius="full"
+        borderRadius={{ base: '8px', lg: '10px' }}
         borderColor={borderColor}
         backgroundColor={backgroundColor}
         _hover={{ borderColor: 'primary1.6' }}

@@ -43,6 +43,7 @@ export const ProjectSelectMenu = () => {
       size="md"
       variant="outline"
       colorScheme="neutral1"
+      borderRadius={{ base: '8px', lg: '10px' }}
       position="relative"
     >
       {t('My projects')}

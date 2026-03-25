@@ -1,14 +1,19 @@
 import { Badge, Box, Button, HStack, Menu, MenuButton, MenuList, Portal, SimpleGrid, VStack, useColorModeValue } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiCaretDown } from 'react-icons/pi'
-import { Link } from 'react-router'
+import { Link, useLocation, useNavigate } from 'react-router'
 
 import { LandingSearchInput } from '@/modules/discovery/pages/landing/components/LandingSearchInput.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
-/** LandingDesktopNav renders the landing-specific desktop navigation cluster. */
+/** LandingDesktopNav renders the shared desktop platform navigation cluster. */
 export const LandingDesktopNav = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const navButtonRadius = { base: '8px', lg: '10px' }
+  const navButtonSize = { base: 'md', lg: 'lg' }
+
   const buttonColor = useColorModeValue('gray.800', 'whiteAlpha.900')
   const menuBorderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
   const menuBackgroundColor = useColorModeValue('white', 'gray.800')
@@ -45,25 +50,31 @@ export const LandingDesktopNav = () => {
   ]
 
   const handleScrollToNews = () => {
-    window.document.getElementById('landing-whats-happening')?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    })
+    const newsSection = window.document.getElementById('landing-whats-happening')
+
+    if (location.pathname === getPath('discoveryLanding') && newsSection) {
+      newsSection.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+      return
+    }
+
+    navigate({ pathname: getPath('discoveryLanding'), hash: '#landing-whats-happening' })
   }
 
   return (
     <HStack flex={1} spacing={0} minWidth={0}>
-      <HStack spacing={1} flexShrink={0} minWidth="290px" paddingLeft={{ lg: 2, xl: 3 }}>
+      <HStack spacing={1} flexShrink={0} minWidth="390px" paddingLeft={{ lg: 2, xl: 3 }}>
         <Menu placement="bottom-start" strategy="fixed">
           <MenuButton
             as={Button}
             variant="ghost"
+            size={navButtonSize}
             color={buttonColor}
-            borderRadius="full"
+            borderRadius={navButtonRadius}
             fontSize="lg"
             fontWeight={400}
-            minHeight="48px"
-            paddingX={6}
             rightIcon={<PiCaretDown />}
           >
             {t('Donate')}
@@ -72,18 +83,18 @@ export const LandingDesktopNav = () => {
             <MenuList
               borderRadius="9px"
               overflow="hidden"
-              p={4}
+              p={5}
               minWidth="805px"
               borderColor={menuBorderColor}
               backgroundColor={menuBackgroundColor}
             >
-              <SimpleGrid columns={2} columnGap={6} rowGap={2}>
+              <SimpleGrid columns={2} columnGap={8} rowGap={3}>
                 {donateItems.map((item) => {
                   const content = (
-                    <VStack align="stretch" spacing={1} width="100%">
-                      <HStack align="center" justify="flex-start" spacing={2}>
+                    <VStack align="stretch" spacing={1.5} width="100%">
+                      <HStack align="center" justify="flex-start" spacing={2.5}>
                         <Body
-                          fontSize="lg"
+                          fontSize="md"
                           dark={!item.disabled}
                           color={item.disabled ? disabledColor : undefined}
                           fontWeight={400}
@@ -95,7 +106,7 @@ export const LandingDesktopNav = () => {
                           <Badge
                             px={2.5}
                             py={0.5}
-                            minWidth="58px"
+                            minWidth="54px"
                             textAlign="center"
                             borderRadius="5px"
                             textTransform="lowercase"
@@ -112,7 +123,7 @@ export const LandingDesktopNav = () => {
                         fontSize="sm"
                         color={item.disabled ? disabledColor : mutedColor}
                         fontWeight={300}
-                        lineHeight={1.3}
+                        lineHeight={1.4}
                       >
                         {item.description}
                       </Body>
@@ -124,7 +135,7 @@ export const LandingDesktopNav = () => {
                       <Box
                         key={item.title}
                         paddingX={4}
-                        paddingY={3}
+                        paddingY={3.5}
                         backgroundColor="transparent"
                         display="flex"
                         alignItems="flex-start"
@@ -143,7 +154,7 @@ export const LandingDesktopNav = () => {
                       as={Link}
                       to={item.to}
                       paddingX={4}
-                      paddingY={3}
+                      paddingY={3.5}
                       display="flex"
                       alignItems="flex-start"
                       justifyContent="flex-start"
@@ -164,10 +175,24 @@ export const LandingDesktopNav = () => {
 
         <Button
           as={Link}
+          to={getPath('ambassadorProgram')}
+          variant="ghost"
+          size={navButtonSize}
+          color={buttonColor}
+          borderRadius={navButtonRadius}
+          fontSize="lg"
+          fontWeight={400}
+        >
+          {t('Earn')}
+        </Button>
+
+        <Button
+          as={Link}
           to={getPath('discoveryImpactFunds')}
           variant="ghost"
+          size={navButtonSize}
           color={buttonColor}
-          borderRadius="full"
+          borderRadius={navButtonRadius}
           fontSize="lg"
           fontWeight={400}
         >
@@ -176,8 +201,9 @@ export const LandingDesktopNav = () => {
 
         <Button
           variant="ghost"
+          size={navButtonSize}
           color={buttonColor}
-          borderRadius="full"
+          borderRadius={navButtonRadius}
           fontSize="lg"
           fontWeight={400}
           onClick={handleScrollToNews}
