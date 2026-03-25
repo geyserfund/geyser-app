@@ -6,6 +6,7 @@ import { useProjectAPI } from '@/modules/project/API/useProjectAPI.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { addContributionAtom, addContributorAtom } from '@/modules/project/state/contributionsAtom'
 import { addContributionToInProgressGoalsAtom } from '@/modules/project/state/goalsAtom'
+import { useIsPrerenderRuntime } from '@/shared/hooks/platform/usePrerenderReady.ts'
 import { ContributionStatus, useProjectContributionSubscription } from '@/types/index.ts'
 import { convertSatsToCents, toInt } from '@/utils'
 
@@ -19,7 +20,8 @@ export const useLiveContributions = () => {
   const addContributor = useSetAtom(addContributorAtom)
   const addContributionToInProgressGoals = useSetAtom(addContributionToInProgressGoalsAtom)
 
-  const skipSubscription = !project.id
+  const isPrerenderRuntime = useIsPrerenderRuntime()
+  const skipSubscription = !project.id || isPrerenderRuntime
 
   useProjectContributionSubscription({
     variables: {
