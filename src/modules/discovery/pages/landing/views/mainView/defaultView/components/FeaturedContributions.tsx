@@ -31,7 +31,7 @@ const getContributionColorScheme = (amount: number): string => {
   return 'blue'
 }
 
-export const FeaturedContributions = () => {
+export const FeaturedContributions = ({ size = 'md' }: { size?: 'md' | 'lg' }) => {
   const [contributions, setContributions] = useState<ContributionForLandingPageFragment[]>([])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -108,7 +108,7 @@ export const FeaturedContributions = () => {
       spacing={6}
     >
       {contributions.map((contribution) => (
-        <ContributionCard key={contribution.id} contribution={contribution} />
+        <ContributionCard key={contribution.id} contribution={contribution} size={size} />
       ))}
     </HStack>
   )
@@ -154,9 +154,9 @@ export const ContributionCard = ({
       _hover={{
         cursor: 'pointer',
       }}
-      height="28px"
+      height={size === 'lg' ? '38px' : '28px'}
       alignItems="center"
-      paddingLeft={2}
+      paddingX={size === 'lg' ? 3 : 2}
       {...rest}
     >
       {colorScheme === 'orange' && (

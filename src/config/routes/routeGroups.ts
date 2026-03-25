@@ -230,6 +230,7 @@ export const heroProfileSettingsRoutes = [
 
 export const profileRoutes = [getPath('userProfile', PathName.userId), ...profileSettingsRoutes]
 export const heroProfileRoutes = [getPath('heroProfile', PathName.heroId), ...heroProfileSettingsRoutes]
+export const ambassadorProgramRoutes = [getPath('ambassadorProgram')]
 
 export const guardiansRoutes = [
   getPath('guardians'),

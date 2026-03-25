@@ -27,6 +27,7 @@ import {
   isProjectDashboardRoutesAtom,
   isProjectFundingRoutesAtom,
   isProjectRoutesAtom,
+  useIsAmbassadorProgramPage,
   useIsGuardiansPage,
   useIsManifestoPage,
   useIsProfilePage,
@@ -43,6 +44,7 @@ export const PlatformNavBar = () => {
   const isGuardiansPage = useIsGuardiansPage()
   const isManifestoPage = useIsManifestoPage()
   const isProfilePage = useIsProfilePage()
+  const isAmbassadorProgramPage = useIsAmbassadorProgramPage()
 
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
   const isProjectRoutes = useAtomValue(isProjectRoutesAtom)
@@ -93,7 +95,7 @@ export const PlatformNavBar = () => {
   }, [isProjectFundingRoutes])
 
   const shouldShowPlatformNav =
-    (isPlatformRoutes || isProjectRoutes || isGuardiansPage || isProfilePage) &&
+    (isPlatformRoutes || isProjectRoutes || isGuardiansPage || isProfilePage || isAmbassadorProgramPage) &&
     !isProjectFundingRoutes &&
     !isProjectDashboardRoutes &&
     !isMobileMode
