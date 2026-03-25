@@ -14,6 +14,7 @@ import { Body, H2 } from '@/shared/components/typography'
 import { lightModeColors, standardPadding } from '@/shared/styles'
 import { SuccessImageBackgroundGradient } from '@/shared/styles/custom'
 import {
+  DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
   formatEffectiveAffiliatePayoutRate,
   GEYSER_PROMOTION_FEE_RATE,
 } from '@/shared/utils/affiliatePayout.ts'
@@ -235,7 +236,8 @@ export const BecomeAnAmbassador = () => {
   const toast = useNotification()
   const { getShareProjectUrl } = useProjectShare()
   const effectiveContributionPayout = formatEffectiveAffiliatePayoutRate(
-    affiliateTermsData?.user?.affiliatePartnerTerms?.contributionReferralPayoutRate ?? 0.25,
+    affiliateTermsData?.user?.affiliatePartnerTerms?.contributionReferralPayoutRate ??
+      DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
     GEYSER_PROMOTION_FEE_RATE,
   )
 
