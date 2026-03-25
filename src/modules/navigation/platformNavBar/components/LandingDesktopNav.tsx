@@ -1,7 +1,7 @@
 import { Badge, Box, Button, HStack, Menu, MenuButton, MenuList, Portal, SimpleGrid, VStack, useColorModeValue } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiCaretDown } from 'react-icons/pi'
-import { Link, useLocation, useNavigate } from 'react-router'
+import { Link } from 'react-router'
 
 import { LandingSearchInput } from '@/modules/discovery/pages/landing/components/LandingSearchInput.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -9,8 +9,6 @@ import { getPath } from '@/shared/constants/index.ts'
 
 /** LandingDesktopNav renders the shared desktop platform navigation cluster. */
 export const LandingDesktopNav = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
   const navButtonRadius = { base: '8px', lg: '10px' }
   const navButtonSize = { base: 'md', lg: 'lg' }
 
@@ -48,20 +46,6 @@ export const LandingDesktopNav = () => {
       badge: { label: t('soon'), backgroundColor: soonBadgeBackgroundColor, textColor: soonBadgeTextColor },
     },
   ]
-
-  const handleScrollToNews = () => {
-    const newsSection = window.document.getElementById('landing-whats-happening')
-
-    if (location.pathname === getPath('discoveryLanding') && newsSection) {
-      newsSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      })
-      return
-    }
-
-    navigate({ pathname: getPath('discoveryLanding'), hash: '#landing-whats-happening' })
-  }
 
   return (
     <HStack flex={1} spacing={0} minWidth={0}>
@@ -200,13 +184,14 @@ export const LandingDesktopNav = () => {
         </Button>
 
         <Button
+          as={Link}
+          to={getPath('discoveryNews')}
           variant="ghost"
           size={navButtonSize}
           color={buttonColor}
           borderRadius={navButtonRadius}
           fontSize="lg"
           fontWeight={400}
-          onClick={handleScrollToNews}
         >
           {t('News')}
         </Button>

@@ -28,6 +28,8 @@ export enum PathName {
   campaigns = 'campaigns',
   fundraisers = 'fundraisers',
 
+  news = 'news',
+
   latest = 'latest',
   inYourRegion = 'region',
   almostFunded = 'almostfunded',
@@ -220,6 +222,7 @@ const pathsMap = {
   discoveryGrantApply: (grantId: string) => `/${PathName.grants}/${grantId}/${PathName.grantApply}`,
   discoveryImpactFunds: () => `/${PathName.impactFunds}`,
   discoveryImpactFund: (impactFundName: string) => `/${PathName.impactFunds}/${impactFundName}`,
+  discoveryNews: () => `/${PathName.news}`,
   discoveryMerch: () => `/${PathName.merch}`,
   discoveryLaunchpad: () => `/${PathName.launchpad}`,
   giveawayAcelerandoVip: () => `/${PathName.giveaways}/${PathName.acelerandoBitcoinVip}`,

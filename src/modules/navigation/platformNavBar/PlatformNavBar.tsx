@@ -149,7 +149,8 @@ export const PlatformNavBar = () => {
       bgColor="utils.pbg"
     >
       <VStack
-        paddingY={{ base: 5, lg: 8 }}
+        paddingTop={{ base: 5, lg: 8 }}
+        paddingBottom={{ base: 2, lg: 3 }}
         paddingX={{ base: 3, lg: 6, xl: 12 }}
         maxWidth={dimensions.guardians.maxWidth}
         width="100%"

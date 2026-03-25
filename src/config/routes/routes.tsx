@@ -1085,6 +1085,14 @@ export const platformRoutes: RouteObject[] = [
       },
 
       {
+        path: getPath('discoveryNews'),
+        async lazy() {
+          const NewsPage = await loadDiscoveryModule().then((m) => m.NewsPage)
+          return { Component: NewsPage }
+        },
+      },
+
+      {
         path: getPath('discoveryLaunchpad'),
         element: <Navigate to={getPath('discoveryLanding')} />,
       },

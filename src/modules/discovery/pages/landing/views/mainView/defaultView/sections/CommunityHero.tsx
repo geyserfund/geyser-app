@@ -37,7 +37,7 @@ export const CommunityHero = () => {
   const fadeBg = useColorModeValue('neutral1.1', 'neutral1.2')
 
   return (
-    <VStack w="full" spacing={10} py={6}>
+    <VStack w="full" spacing={6} py={2}>
       {/* Rolling mission statement */}
       <RollingText />
 

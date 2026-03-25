@@ -210,6 +210,7 @@ export const discoveryRoutes = [
   getPath('heroesContributor'),
   getPath('giveawayAcelerandoVip'),
   getPath('legalGiveawayAcelerandoVipTerms'),
+  getPath('discoveryNews'),
 ]
 
 export const profileSettingsRoutes = [

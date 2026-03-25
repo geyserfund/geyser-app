@@ -67,7 +67,7 @@ export const RollingText = () => {
   )
 
   return (
-    <VStack spacing={0} textAlign="center" py={6} w="full">
+    <VStack spacing={0} textAlign="center" py={2} w="full">
       {/* Top blurred row: invisible static "Bitcoiners" + scrolling phrase */}
       <HStack
         spacing={2}

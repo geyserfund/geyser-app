@@ -12,6 +12,7 @@ import { CommunityHero } from './sections/CommunityHero.tsx'
 import { AonProjectsDisplayMostFundedThisWeek } from './sections/AonProjectsDisplayMostFundedThisWeek.tsx'
 import { CharityProjects } from './sections/CharityProjects.tsx'
 import { CuratedProjects } from './sections/CuratedProjects.tsx'
+import { Hero } from './sections/Hero.tsx'
 import { JoinTheMovement } from './sections/JoinTheMovement.tsx'
 import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
@@ -33,19 +34,21 @@ export const DefaultView = () => {
   }, [])
 
   return (
-    <VStack w="full" spacing={10} paddingTop={{ base: '8px', lg: '10px' }}>
+    <VStack w="full" spacing={10} paddingTop={{ base: '4px', lg: '6px' }}>
       <Head image={GeyserMainSeoImageUrl} />
       <VStack w="full" spacing={20} paddingBottom={40}>
-        <AnnouncementBanner mt={{ base: 0, md: 0 }} mb={{ base: 0, md: 0 }} />
+        <AnnouncementBanner mt={{ base: -4, md: -6 }} mb={{ base: 0, md: 0 }} />
+
+        <Hero marginTop={-14} marginBottom={-14} />
 
         <CuratedProjects />
 
         <SuccessStories />
 
-        <AonProjectsDisplayMostFundedThisWeek />
-        <ProjectsInYourRegion />
+        <AonProjectsDisplayMostFundedThisWeek marginTop={-10} />
+        <ProjectsInYourRegion marginTop={-10} />
 
-        <CommunityHero />
+        <CommunityHero marginTop={-10} />
 
         <NewsletterSignup marginTop={-10} marginBottom={-10} />
 

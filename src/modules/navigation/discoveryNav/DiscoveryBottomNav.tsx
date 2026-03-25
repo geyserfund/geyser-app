@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiCaretUp } from 'react-icons/pi'
-import { Link, useLocation, useNavigate } from 'react-router'
+import { Link, useLocation } from 'react-router'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
@@ -65,27 +65,12 @@ const mobileDonateItems = [
 
 export const DiscoveryBottomNav = () => {
   const location = useLocation()
-  const navigate = useNavigate()
 
   const menuBorderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
   const menuBackgroundColor = useColorModeValue('white', 'gray.800')
   const menuHoverColor = useColorModeValue('gray.50', 'whiteAlpha.100')
   const mutedColor = useColorModeValue('gray.700', 'gray.300')
   const disabledColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400')
-
-  const handleScrollToNews = () => {
-    const newsSection = window.document.getElementById('landing-whats-happening')
-
-    if (location.pathname === getPath('discoveryLanding') && newsSection) {
-      newsSection.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      })
-      return
-    }
-
-    navigate({ pathname: getPath('discoveryLanding'), hash: '#landing-whats-happening' })
-  }
 
   const bottomNavItems: BottomNavItem[] = [
     {
@@ -110,8 +95,8 @@ export const DiscoveryBottomNav = () => {
     {
       label: t('News'),
       key: BottomNavItemKey.news,
-      onClick: handleScrollToNews,
-      isActive: location.pathname === getPath('discoveryLanding') && location.hash === '#landing-whats-happening',
+      path: getPath('discoveryNews'),
+      isActive: matchesRoute(location.pathname, getPath('discoveryNews')),
     },
   ]
 
