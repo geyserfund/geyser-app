@@ -30,6 +30,9 @@ const getStripPhrases = (offset: number): string[] => {
 }
 
 const FONT_SIZE = { base: 'xl', md: '2xl', lg: '3xl' }
+const TRAILING_TEXT = 'Join a community of 85,000+ contributors.'
+
+const formatPhrase = (phrase: string) => `${phrase}.`
 
 /** Vertically rolling text carousel driven by CSS keyframes for GPU-accelerated smoothness. */
 export const RollingText = () => {
@@ -47,7 +50,12 @@ export const RollingText = () => {
   const animation = `${ANIMATION_NAME} ${TOTAL_SECONDS}s cubic-bezier(0.4, 0, 0.2, 1) infinite`
 
   /** Phrase-only animated strip, clipped to one line height */
-  const PhraseStrip = ({ phrases, color, fontWeight, fontStyle }: {
+  const PhraseStrip = ({
+    phrases,
+    color,
+    fontWeight,
+    fontStyle,
+  }: {
     phrases: string[]
     color?: string
     fontWeight?: number
@@ -58,7 +66,7 @@ export const RollingText = () => {
         {phrases.map((phrase, i) => (
           <Box key={i} height={`${LINE_HEIGHT}px`} display="flex" alignItems="center">
             <Text fontSize={FONT_SIZE} color={color} fontWeight={fontWeight} fontStyle={fontStyle}>
-              {phrase}
+              {formatPhrase(phrase)}
             </Text>
           </Box>
         ))}
@@ -67,37 +75,54 @@ export const RollingText = () => {
   )
 
   return (
-    <VStack spacing={0} textAlign="center" py={2} w="full">
+    <VStack spacing={0} textAlign="center" pt={0} pb={2} w="full" alignItems="center">
       {/* Top blurred row: invisible static "Bitcoiners" + scrolling phrase */}
       <HStack
         spacing={2}
         justifyContent="center"
-        height={`${LINE_HEIGHT}px`}
+        minHeight={`${LINE_HEIGHT}px`}
         alignItems="center"
         opacity={0.35}
+        flexWrap="wrap"
         sx={{ filter: 'blur(1.5px)' }}
       >
-        <Text fontSize={FONT_SIZE} visibility="hidden" aria-hidden="true">Bitcoiners</Text>
+        <Text fontSize={FONT_SIZE} visibility="hidden" aria-hidden="true">
+          Bitcoiners
+        </Text>
         <PhraseStrip phrases={topPhrases} color={mutedColor} fontStyle="italic" />
+        <Text fontSize={FONT_SIZE} visibility="hidden" aria-hidden="true">
+          {TRAILING_TEXT}
+        </Text>
       </HStack>
 
-      {/* Center row: static "Bitcoiners" + scrolling bold phrase */}
-      <HStack spacing={2} justifyContent="center" height={`${LINE_HEIGHT}px`} alignItems="center">
-        <Text fontSize={FONT_SIZE} color={mutedColor}>Bitcoiners</Text>
+      {/* Center row: static "Bitcoiners" + scrolling bold phrase + supporting copy */}
+      <HStack spacing={2} justifyContent="center" minHeight={`${LINE_HEIGHT}px`} alignItems="center" flexWrap="wrap">
+        <Text fontSize={FONT_SIZE} color={mutedColor}>
+          Bitcoiners
+        </Text>
         <PhraseStrip phrases={centerPhrases} fontWeight={700} />
+        <Text fontSize={FONT_SIZE} color={mutedColor}>
+          {TRAILING_TEXT}
+        </Text>
       </HStack>
 
       {/* Bottom blurred row: invisible static "Bitcoiners" + scrolling phrase */}
       <HStack
         spacing={2}
         justifyContent="center"
-        height={`${LINE_HEIGHT}px`}
+        minHeight={`${LINE_HEIGHT}px`}
         alignItems="center"
         opacity={0.35}
+        flexWrap="wrap"
         sx={{ filter: 'blur(1.5px)' }}
       >
-        <Text fontSize={FONT_SIZE} visibility="hidden" aria-hidden="true">Bitcoiners</Text>
+        <Text fontSize={FONT_SIZE} visibility="hidden" aria-hidden="true">
+          Bitcoiners
+        </Text>
         <PhraseStrip phrases={bottomPhrases} color={mutedColor} fontStyle="italic" />
+        <Text fontSize={FONT_SIZE} visibility="hidden" aria-hidden="true">
+          {TRAILING_TEXT}
+        </Text>
       </HStack>
     </VStack>
   )

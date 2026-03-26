@@ -1,4 +1,4 @@
-import { Box, Button, Circle, HStack, Icon, Text, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, Button, Circle, HStack, Icon, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiArrowRight } from 'react-icons/pi'
 import { Link } from 'react-router'
@@ -25,11 +25,6 @@ const HOW_IT_WORKS_STEPS = [
   },
 ] as const
 
-const STATS = [
-  { value: '2,500+', label: 'projects across 158 countries' },
-  { value: '41+', label: 'BTC funded' },
-] as const
-
 /** Landing hero showcasing community stats, how-it-works flow, and rolling mission statement. */
 export const CommunityHero = () => {
   const circleBg = useColorModeValue('primary1.3', 'primary1.4')
@@ -37,17 +32,12 @@ export const CommunityHero = () => {
   const fadeBg = useColorModeValue('neutral1.1', 'neutral1.2')
 
   return (
-    <VStack w="full" spacing={6} py={2}>
+    <VStack w="full" spacing={6} py={0} alignItems="flex-start">
       {/* Rolling mission statement */}
       <RollingText />
 
-      {/* Community header */}
-      <H2 size={{ base: 'lg', md: 'xl', lg: '2xl' }} bold textAlign="center">
-        {t('Join a community of 85,000+ contributors')}
-      </H2>
-
       {/* Scrolling contributions */}
-      <Box position="relative" w="full">
+      <Box position="relative" w="full" visibility="hidden" aria-hidden="true">
         <FeaturedContributions size="lg" />
 
         <Box
@@ -71,27 +61,6 @@ export const CommunityHero = () => {
           zIndex={1}
         />
       </Box>
-
-      {/* Platform stats */}
-      <HStack
-        spacing={{ base: 4, md: 8, lg: 12 }}
-        justify="center"
-        align="center"
-        flexDirection={{ base: 'column', md: 'row' }}
-        w="full"
-        py={4}
-      >
-        {STATS.map((stat, index) => (
-          <HStack key={index} spacing={1}>
-            <Text fontSize={{ base: 'md', md: 'lg' }} fontWeight={700}>
-              {stat.value}
-            </Text>
-            <Text fontSize={{ base: 'md', md: 'lg' }} color="neutral1.9">
-              {stat.label}
-            </Text>
-          </HStack>
-        ))}
-      </HStack>
 
       {/* How it works */}
       <VStack w="full" spacing={8} align="center" maxW="800px" mx="auto">

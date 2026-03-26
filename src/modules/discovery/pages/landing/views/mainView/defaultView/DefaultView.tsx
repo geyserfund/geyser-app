@@ -12,7 +12,6 @@ import { CommunityHero } from './sections/CommunityHero.tsx'
 import { AonProjectsDisplayMostFundedThisWeek } from './sections/AonProjectsDisplayMostFundedThisWeek.tsx'
 import { CharityProjects } from './sections/CharityProjects.tsx'
 import { CuratedProjects } from './sections/CuratedProjects.tsx'
-import { Hero } from './sections/Hero.tsx'
 import { JoinTheMovement } from './sections/JoinTheMovement.tsx'
 import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
@@ -37,11 +36,9 @@ export const DefaultView = () => {
     <VStack w="full" spacing={10} paddingTop={{ base: '4px', lg: '6px' }}>
       <Head image={GeyserMainSeoImageUrl} />
       <VStack w="full" spacing={20} paddingBottom={40}>
-        <AnnouncementBanner mt={{ base: -4, md: -6 }} mb={{ base: 0, md: 0 }} />
-
-        <Hero marginTop={-14} marginBottom={-14} />
-
         <CuratedProjects />
+
+        <AnnouncementBanner mt={-8} mb={-8} />
 
         <SuccessStories />
 
@@ -52,7 +49,7 @@ export const DefaultView = () => {
           <ProjectsInYourRegion />
         </Box>
 
-        <Box marginTop={-10} w="full">
+        <Box marginTop={-14} w="full">
           <CommunityHero />
         </Box>
 
