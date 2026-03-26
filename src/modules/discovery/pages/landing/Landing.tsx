@@ -1,15 +1,19 @@
 import { Box, VStack } from '@chakra-ui/react'
-import { Outlet } from 'react-router'
+import { Outlet, useLocation } from 'react-router'
 
 import { Hero } from '@/modules/discovery/pages/landing/views/mainView/defaultView/sections/Hero.tsx'
+import { getPath } from '@/shared/constants/index.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 import { standardPadding } from '@/shared/styles'
 
 export const Landing = () => {
+  const location = useLocation()
+  const isLandingPage = location.pathname === getPath('discoveryLanding')
+
   return (
-    <VStack w="full" spacing={4} paddingTop={{ base: 1, lg: 3 }}>
-      <Hero />
+    <VStack w="full" spacing={4}>
+      {isLandingPage ? <Hero /> : null}
 
       <Box
         w="100%"

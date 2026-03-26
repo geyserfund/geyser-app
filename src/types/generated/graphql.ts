@@ -18,9 +18,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** Add BigInt functionality */
   BigInt: { input: any; output: any; }
-  /** Date custom scalar type */
   Date: { input: any; output: any; }
 };
 
@@ -3330,7 +3328,7 @@ export type Project = {
   rskEoa?: Maybe<Scalars['String']['output']>;
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['String']['output']>;
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   sponsors: Array<Sponsor>;
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
@@ -4231,7 +4229,7 @@ export type Query = {
   getDashboardFunders: Array<Funder>;
   /**
    * Returns the public key of the Lightning node linked to a project, if there is one.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   getProjectPubkey?: Maybe<Scalars['String']['output']>;
   getProjectReward: ProjectReward;
@@ -5267,14 +5265,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>;
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isAmbassador: Scalars['Boolean']['output'];
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']['output'];
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isSponsor: Scalars['Boolean']['output'];
   /** Project linked to the contributions. */
@@ -9382,7 +9380,7 @@ export type ContributionForLandingPageFragment = { __typename?: 'Contribution', 
 
 export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
 
-export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, launchedAt?: any | null, aonGoal?: (
+export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
     & ProjectAonGoalForLandingPageFragment
   ) | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
@@ -11844,9 +11842,20 @@ export const ProjectForLandingPageFragmentDoc = gql`
   shortDescription
   title
   status
-  balance
-  balanceUsdCent
   fundingStrategy
+  category
+  subCategory
+  location {
+    country {
+      code
+      name
+    }
+    region
+  }
+  tags {
+    id
+    label
+  }
   aonGoal {
     ...ProjectAonGoalForLandingPage
   }

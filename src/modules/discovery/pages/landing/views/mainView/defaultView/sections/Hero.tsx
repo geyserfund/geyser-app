@@ -12,7 +12,7 @@ const STATS = [
 
 export const Hero = (props: BoxProps) => {
   const subtitleColor = useColorModeValue('neutral1.11', 'neutral1.10')
-  const overlayBg = useColorModeValue('rgba(255, 255, 255, 0.85)', 'rgba(0, 0, 0, 0.7)')
+  const overlayBg = useColorModeValue('rgba(236, 251, 250, 0.92)', 'rgba(0, 0, 0, 0.7)')
   const statLabelColor = useColorModeValue('neutral1.9', 'neutral1.8')
 
   return (
@@ -20,12 +20,7 @@ export const Hero = (props: BoxProps) => {
       <Box
         position="absolute"
         inset={0}
-        backgroundImage="url('/images/hero-background.png')"
-        backgroundPosition="center"
-        backgroundSize="cover"
-        backgroundRepeat="no-repeat"
-        filter="blur(1px)"
-        transform="scale(1.05)"
+        backgroundImage="none"
       />
       <Box position="absolute" inset={0} bg={overlayBg} />
 
@@ -44,12 +39,11 @@ export const Hero = (props: BoxProps) => {
           textAlign="left"
           alignItems="flex-start"
           justifyContent="flex-start"
-          maxWidth="900px"
         >
           <H1 size={{ base: 'xl', md: '2xl', lg: '4xl' }} bold lineHeight={1.2} letterSpacing="-0.01em">
             {t('Accelerate global Bitcoin adoption')}
           </H1>
-          <Body size={{ base: 'lg', lg: 'xl' }} color={subtitleColor} lineHeight={1.6} maxWidth="700px">
+          <Body size={{ base: 'lg', lg: 'xl' }} color={subtitleColor} lineHeight={1.6} w="full">
             {t('Contribute to causes, initiatives and creators that push Bitcoin adoption around the world.')}
           </Body>
         </VStack>
@@ -64,10 +58,10 @@ export const Hero = (props: BoxProps) => {
         >
           {STATS.map((stat) => (
             <HStack key={stat.value} spacing={1.5}>
-              <Text fontSize={{ base: 'sm', md: 'md' }} fontWeight={700}>
+              <Text fontSize={{ base: 'sm', md: 'md', lg: 'lg' }} fontWeight={700}>
                 {stat.value}
               </Text>
-              <Text fontSize={{ base: 'sm', md: 'md' }} color={statLabelColor}>
+              <Text fontSize={{ base: 'sm', md: 'md', lg: 'lg' }} color={statLabelColor}>
                 {stat.label}
               </Text>
             </HStack>

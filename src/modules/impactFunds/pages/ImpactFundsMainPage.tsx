@@ -24,7 +24,6 @@ import {
   PiCalendarBold,
   PiChartBarBold,
   PiCoinsDuotone,
-  PiHouse,
   PiRocketLaunchDuotone,
   PiScalesBold,
 } from 'react-icons/pi'
@@ -34,6 +33,7 @@ import { Head } from '@/config/Head.tsx'
 import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { getCommittedAmountDisplay, getSatsAmountDisplay } from '@/modules/impactFunds/utils/formatCommittedAmount.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
+import { PageSectionHeader } from '@/shared/components/layouts/PageSectionHeader.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants'
@@ -184,7 +184,7 @@ export const ImpactFundsMainPage = () => {
 
   if (loading) {
     return (
-      <VStack align="stretch" spacing={pageSpacing} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
+      <VStack align="stretch" spacing={pageSpacing} paddingBottom={8}>
         {pageHead}
         <CardLayout>
           <VStack py={8}>
@@ -197,7 +197,7 @@ export const ImpactFundsMainPage = () => {
 
   if (error) {
     return (
-      <VStack align="stretch" spacing={pageSpacing} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
+      <VStack align="stretch" spacing={pageSpacing} paddingBottom={8}>
         {pageHead}
         <CardLayout>
           <Body>{t('Failed to load impact funds.')}</Body>
@@ -230,32 +230,16 @@ export const ImpactFundsMainPage = () => {
     usdRate > 0 ? usdFormatter.format(getUSDAmount(totalDistributedSats as Parameters<typeof getUSDAmount>[0])) : null
 
   return (
-    <VStack align="stretch" spacing={pageSpacing} paddingTop={{ base: 2, lg: 6 }} paddingBottom={8}>
+    <VStack align="stretch" spacing={pageSpacing} paddingBottom={8}>
       {pageHead}
 
       <VStack w="full" gap={4} alignItems="start">
-        <HStack w="full" justifyContent="space-between" alignItems="start">
-          <VStack gap={0} alignItems="start">
-            <H2 size={{ base: 'xl', lg: '3xl' }} bold>
-              {t('Impact Funds')}
-            </H2>
-            <Body size="md" textAlign="start">
-              {t(
-                'Impact Funds combine committed sponsor capital with a transparent process for selecting and supporting small to medium size projects in the Bitcoin ecosystem.',
-              )}
-            </Body>
-          </VStack>
-          <Button
-            as={Link}
-            to={getPath('discoveryLanding')}
-            variant="ghost"
-            colorScheme="neutral1"
-            size="lg"
-            leftIcon={<Icon as={PiHouse} />}
-          >
-            {t('Home')}
-          </Button>
-        </HStack>
+        <PageSectionHeader
+          title={t('Impact Funds')}
+          subtitle={t(
+            'Impact Funds combine committed sponsor capital with a transparent process for selecting and supporting small to medium size projects in the Bitcoin ecosystem.',
+          )}
+        />
 
         <ImpactFlowStrip />
       </VStack>

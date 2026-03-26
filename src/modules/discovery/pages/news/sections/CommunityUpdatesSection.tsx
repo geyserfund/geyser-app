@@ -4,9 +4,9 @@ import { useCallback, useMemo, useState } from 'react'
 
 import { LandingPostCard } from '@/modules/discovery/pages/landing/views/mainView/defaultView/components/LandingPostCard.tsx'
 import { H2 } from '@/shared/components/typography/index.ts'
-import { OrderByOptions, usePostsForLandingPageQuery } from '@/types/index.ts'
+import { OrderByOptions, PostType, usePostsForLandingPageQuery } from '@/types/index.ts'
 
-const PAGE_SIZE = 4
+const PAGE_SIZE = 8
 
 /** Displays the most recent community posts across all projects. */
 export const CommunityUpdatesSection = () => {
@@ -17,6 +17,15 @@ export const CommunityUpdatesSection = () => {
       input: {
         orderBy: { publishedAt: OrderByOptions.Desc },
         pagination: { take: visibleCount + PAGE_SIZE },
+        where: {
+          postType: [
+            PostType.Announcement,
+            PostType.BehindTheScenes,
+            PostType.Impact,
+            PostType.GoalUpdate,
+            PostType.GoalReached,
+          ],
+        },
       },
     },
   })

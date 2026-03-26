@@ -16,8 +16,11 @@ import { Head } from '@/config/Head.tsx'
 import { useAuthContext } from '@/context'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
-import { Body, H1, H2 } from '@/shared/components/typography'
+import { PageSectionHeader } from '@/shared/components/layouts/PageSectionHeader.tsx'
+import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { standardPadding } from '@/shared/styles'
 import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 
 const stepItems = [
@@ -63,7 +66,6 @@ export const AmbassadorProgramPage = () => {
   const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
 
-  const eyebrowColor = useColorModeValue('neutral1.8', 'neutral1.10')
   const iconBg = useColorModeValue('primary1.3', 'primary1.4')
   const iconColor = useColorModeValue('primary1.11', 'primary1.9')
   const rewardIconBg = useColorModeValue('amber.3', 'amber.4')
@@ -98,29 +100,19 @@ export const AmbassadorProgramPage = () => {
 
       <VStack
         w="full"
-        maxWidth="1040px"
+        maxWidth={`${dimensions.maxWidth + 24 * 2}px`}
         marginX="auto"
-        paddingX={{ base: 4, lg: 6 }}
+        paddingX={standardPadding}
         spacing={{ base: 6, lg: 8 }}
         alignItems="stretch"
         paddingBottom={10}
       >
-        {/* Hero */}
-        <VStack alignItems="start" spacing={5} pt={{ base: 2, lg: 4 }}>
-          <Body size="sm" color={eyebrowColor} textTransform="uppercase" letterSpacing="0.1em" fontWeight={600}>
-            {t('Ambassador Program')}
-          </Body>
-
-          <H1 size={{ base: '2xl', lg: '4xl' }} bold lineHeight={1.15}>
-            {t('Share projects. Enable funding. Earn sats.')}
-          </H1>
-
-          <Body size={{ base: 'md', lg: 'lg' }} color="neutral1.11" lineHeight={1.6}>
-            {t(
-              'Ambassadors help projects get funded by sharing a trackable ambassador link. When that sharing leads to contributions, the ambassador earns for the value they enabled.',
-            )}
-          </Body>
-        </VStack>
+        <PageSectionHeader
+          title={t('Ambassador Program')}
+          subtitle={t(
+            'Ambassadors help projects get funded by sharing a trackable ambassador link. When that sharing leads to contributions, the ambassador earns for the value they enabled.',
+          )}
+        />
 
         <CardLayout spacing={3} bg={promotionBg} borderColor={promotionBorderColor}>
           <HStack spacing={3} alignItems="center" flexWrap="wrap">

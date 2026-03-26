@@ -9,15 +9,12 @@ import { HeroesMainPage } from '../../../../heroes/index.ts'
 import { TopProjects } from './components/TopProjects.tsx'
 import { AnnouncementBanner } from './sections/AnnouncementBanner.tsx'
 import { CommunityHero } from './sections/CommunityHero.tsx'
-import { AonProjectsDisplayMostFundedThisWeek } from './sections/AonProjectsDisplayMostFundedThisWeek.tsx'
 import { CharityProjects } from './sections/CharityProjects.tsx'
 import { CuratedProjects } from './sections/CuratedProjects.tsx'
 import { JoinTheMovement } from './sections/JoinTheMovement.tsx'
-import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
 import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
 import { RecentImpactPosts } from './sections/RecentImpactPosts.tsx'
-import { RecentLaunches } from './sections/RecentLaunches.tsx'
 import { SuccessStories } from './sections/SuccessStories.tsx'
 
 export const DefaultView = () => {
@@ -43,17 +40,12 @@ export const DefaultView = () => {
         <SuccessStories />
 
         <Box marginTop={-10} w="full">
-          <AonProjectsDisplayMostFundedThisWeek />
-        </Box>
-        <Box marginTop={-10} w="full">
           <ProjectsInYourRegion />
         </Box>
 
         <Box marginTop={{ base: -20, lg: -14 }} w="full">
           <CommunityHero />
         </Box>
-
-        <NewsletterSignup marginTop={-10} marginBottom={-10} />
 
         <RecentImpactPosts />
 
@@ -62,7 +54,6 @@ export const DefaultView = () => {
             {ProjectCategoryList.map((category) => (
               <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
             ))}
-            <RecentLaunches />
             <CharityProjects />
 
             <HeroesMainPage />

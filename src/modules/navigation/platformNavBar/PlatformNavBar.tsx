@@ -10,12 +10,13 @@ import { NotificationPromptModal } from '@/modules/auth/components/NotificationP
 import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
 import { useNotificationPromptModal } from '@/modules/auth/hooks/useNotificationPromptModal'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { standardPadding } from '@/shared/styles'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { AuthModal } from '../../../components/molecules'
 import { useAuthContext } from '../../../context'
 import { useAuthModal } from '../../../modules/auth/hooks'
-import { BrandLogo } from './components/BrandLogo'
+import { BrandLogoFull } from './components/BrandLogo'
 import { CreateProjectButton } from './components/CreateProjectButton.tsx'
 import { LandingDesktopNav } from './components/LandingDesktopNav.tsx'
 import { LoggedOutModal } from './components/LoggedOutModal'
@@ -36,7 +37,7 @@ import { ProfileNav } from './profileNav/ProfileNav'
 
 /** Renders the fixed top platform navigation shared across platform pages. */
 export const PlatformNavBar = () => {
-  const { isLoggedIn, logout, queryCurrentUser } = useAuthContext()
+  const { isLoggedIn, isUserAProjectCreator, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
 
   const isMobileMode = useMobileMode()
@@ -91,7 +92,7 @@ export const PlatformNavBar = () => {
       return <ProjectLogo />
     }
 
-    return <BrandLogo />
+    return <BrandLogoFull />
   }, [isProjectFundingRoutes])
 
   const shouldShowPlatformNav =
@@ -105,17 +106,34 @@ export const PlatformNavBar = () => {
       return <CloseGoBackButton />
     }
 
-    const landingCreateButton = shouldShowPlatformNav ? (
-      <CreateProjectButton
-        display={{ base: 'none', lg: 'flex' }}
-        label={t('Start your project')}
-        noIcon
-        size={{ base: 'md', lg: 'lg' }}
-        minWidth="190px"
-        variant="solid"
-        colorScheme="primary1"
-        borderRadius={{ base: '8px', lg: '10px' }}
-      />
+    const shouldShowLandingCreateButton = shouldShowPlatformNav && (!isLoggedIn || !isUserAProjectCreator)
+    const shouldShowProjectSelectMenu = isLoggedIn && (!shouldShowPlatformNav || isUserAProjectCreator)
+
+    const landingCreateButton = shouldShowLandingCreateButton ? (
+      <>
+        <CreateProjectButton
+          display={{ base: 'none', lg: 'flex', xl: 'none' }}
+          iconOnly
+          aria-label={t('Start your project')}
+          size="md"
+          width="40px"
+          minWidth="40px"
+          paddingX={0}
+          variant="solid"
+          colorScheme="primary1"
+          borderRadius="8px"
+        />
+        <CreateProjectButton
+          display={{ base: 'none', xl: 'flex' }}
+          label={t('Start your project')}
+          noIcon
+          size={{ base: 'md', lg: 'lg' }}
+          minWidth="190px"
+          variant="solid"
+          colorScheme="primary1"
+          borderRadius={{ base: '8px', lg: '10px' }}
+        />
+      </>
     ) : null
 
     return (
@@ -131,13 +149,13 @@ export const PlatformNavBar = () => {
         ) : (
           <>
             {landingCreateButton}
-            <ProjectSelectMenu />
+            {shouldShowProjectSelectMenu ? <ProjectSelectMenu /> : null}
           </>
         )}
         <ProfileNav />
       </HStack>
     )
-  }, [isLoggedIn, isManifestoPage, shouldShowPlatformNav])
+  }, [isLoggedIn, isManifestoPage, isUserAProjectCreator, shouldShowPlatformNav])
 
   return (
     <HStack
@@ -158,18 +176,42 @@ export const PlatformNavBar = () => {
         justifySelf={'center'}
         spacing={4}
       >
-        <HStack
-          w="100%"
-          height={{ base: '40px', lg: '48px' }}
-          justifyContent={'space-between'}
-          spacing={{ base: 2, lg: 4 }}
-        >
-          <HStack height="full">{renderLeftSide()}</HStack>
+        <VStack w="100%" spacing={0} position="relative">
+          <HStack
+            w="100%"
+            height={{ base: '40px', lg: '48px' }}
+            justifyContent={'space-between'}
+            spacing={{ base: 2, lg: 4 }}
+            position="relative"
+            zIndex={1}
+          >
+            <HStack height="full" flexShrink={0}>
+              {renderLeftSide()}
+            </HStack>
+            {renderRightSide()}
+          </HStack>
 
-          {shouldShowPlatformNav ? <LandingDesktopNav /> : null}
-
-          {renderRightSide()}
-        </HStack>
+          {shouldShowPlatformNav ? (
+            <HStack
+              position="absolute"
+              inset={0}
+              justifyContent="center"
+              alignItems="center"
+              pointerEvents="none"
+              zIndex={2}
+            >
+              <HStack
+                w="100%"
+                maxWidth={`${dimensions.maxWidth + 24 * 2}px`}
+                paddingX={standardPadding}
+                height={{ base: '40px', lg: '48px' }}
+                pointerEvents="auto"
+              >
+                <LandingDesktopNav />
+              </HStack>
+            </HStack>
+          ) : null}
+        </VStack>
       </VStack>
 
       <LoggedOutModal isOpen={isLoginAlertModalOpen} onClose={onLoginAlertModalClose} />

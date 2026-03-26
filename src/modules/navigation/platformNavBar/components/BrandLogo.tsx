@@ -6,13 +6,13 @@ import LogoDark from '@/assets/logo-dark.svg'
 import LogoLight from '@/assets/logo-light.svg'
 import { __development__, __staging__, getPath, LogoNameDark, LogoNameLight, LogoOutline } from '@/shared/constants'
 
-const EnvironmentTag = () => {
+const EnvironmentTag = ({ compact = false }: { compact?: boolean }) => {
   if (!(__development__ || __staging__)) {
     return null
   }
 
   const isDevelopment = __development__
-  const desktopLabel = isDevelopment ? t('Development') : t('Staging')
+  const desktopLabel = isDevelopment ? 'DEV' : 'STG'
   const mobileLabel = isDevelopment ? 'DEV' : 'STG'
 
   return (
@@ -20,9 +20,9 @@ const EnvironmentTag = () => {
       colorScheme={isDevelopment ? 'blue' : 'orange'}
       variant="subtle"
       borderRadius="full"
-      px={{ base: 2, lg: 3 }}
-      py={1}
-      fontSize={{ base: '2xs', lg: 'xs' }}
+      px={compact ? { base: 1.5, lg: 1.5 } : { base: 2, lg: 3 }}
+      py={compact ? 0.5 : 1}
+      fontSize={compact ? '3xs' : { base: '2xs', lg: 'xs' }}
       fontWeight={700}
       lineHeight={1}
       textTransform="uppercase"
@@ -63,11 +63,13 @@ export const BrandLogoFull = () => {
   const imageUrl = useColorModeValue(LogoNameDark, LogoNameLight)
   return (
     <Link to={getPath('landingPage')} style={{ height: '100%' }}>
-      <HStack h="100%" spacing={{ base: 1, lg: 2 }}>
+      <HStack h="100%" spacing={0}>
         <Box h="100%">
-          <Image src={imageUrl} alt={t('Brand logo image')} height="100%" width="auto" objectFit="contain" />
+          <Image src={imageUrl} alt={t('Geyser logo')} height="100%" width="auto" objectFit="contain" />
         </Box>
-        <EnvironmentTag />
+        <Box marginLeft={{ base: -3, lg: -4 }} marginTop={{ base: -3.5, lg: -4.5 }} alignSelf="flex-start">
+          <EnvironmentTag compact />
+        </Box>
       </HStack>
     </Link>
   )

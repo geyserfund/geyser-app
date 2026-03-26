@@ -1,4 +1,4 @@
-import { Icon, Input, InputGroup, InputLeftElement, useColorModeValue } from '@chakra-ui/react'
+import { Icon, Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import { useDebouncedCallback } from '@react-hookz/web'
 import { t } from 'i18next'
 import { useEffect, useRef, useState } from 'react'
@@ -38,9 +38,6 @@ export const LandingSearchInput = ({ width = { base: 'full', lg: '280px' } }: La
     updateSearchFilterDebounced(event.target.value)
   }
 
-  const borderColor = useColorModeValue('blackAlpha.200', 'whiteAlpha.300')
-  const backgroundColor = useColorModeValue('white', 'gray.800')
-
   return (
     <InputGroup
       as="form"
@@ -52,7 +49,7 @@ export const LandingSearchInput = ({ width = { base: 'full', lg: '280px' } }: La
         inputRef.current?.blur()
       }}
     >
-      <InputLeftElement color="neutral1.10">
+      <InputLeftElement color="neutral1.9">
         <Icon as={PiMagnifyingGlass} fontSize="18px" />
       </InputLeftElement>
       <Input
@@ -62,10 +59,10 @@ export const LandingSearchInput = ({ width = { base: 'full', lg: '280px' } }: La
         placeholder={t('Search projects')}
         aria-label={t('Search projects')}
         borderRadius={{ base: '8px', lg: '10px' }}
-        borderColor={borderColor}
-        backgroundColor={backgroundColor}
+        borderColor="neutral1.5"
+        backgroundColor="utils.surface"
         _hover={{ borderColor: 'primary1.6' }}
-        _focusVisible={{ borderColor: 'primary1.8', boxShadow: '0 0 0 1px var(--chakra-colors-primary1-8)' }}
+        _focusVisible={{ borderColor: 'primary1.8', boxShadow: 'none' }}
       />
     </InputGroup>
   )

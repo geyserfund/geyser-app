@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, HStack, IconButton, Select, Tab, TabList, Tabs, VStack } from '@chakra-ui/react'
+import { Button, ButtonGroup, Divider, HStack, IconButton, Select, Tab, TabList, Tabs, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router'
@@ -7,6 +7,7 @@ import { PiCaretLeft, PiCaretRight } from 'react-icons/pi'
 import { Head } from '@/config/Head.tsx'
 import { useFilterContext } from '@/context/filter.tsx'
 import { QUERY_PROJECTS_FOR_LANDING_PAGE } from '@/modules/discovery/graphql/queries/projectsQuery.ts'
+import { PageSectionHeader } from '@/shared/components/layouts/PageSectionHeader.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import {
   CampaignsSeoImageUrl,
@@ -34,6 +35,7 @@ import {
 } from '@/types/index.ts'
 
 import { RenderProjectList } from './navView/components/RenderProjectList.tsx'
+import { ProjectsRegionCountryFilter } from './ProjectsRegionCountryFilter.tsx'
 
 type SortOption = 'most_funded' | 'most_recent'
 type ProjectTypeFilter = 'all' | 'fundraisers' | 'campaigns'
@@ -311,6 +313,8 @@ export const Projects = () => {
   const countryCode = shouldFilterByUserRegion ? userIpCountryData?.userIpCountry || undefined : undefined
   const sortParam = searchParams.get(SORT_SEARCH_PARAM)
   const sort: SortOption = sortParam === 'most_recent' ? 'most_recent' : 'most_funded'
+  const hasRegionCountryFilter = Boolean(filterCountryCode || region)
+  const shouldUseTrendingResults = isTrendingTab && !hasRegionCountryFilter
 
   const where = useMemo(
     () => ({
@@ -357,7 +361,7 @@ export const Projects = () => {
       itemLimit: PAGE_SIZE,
       orderBy,
       options: {
-        skip: isTrendingTab || (shouldFilterByUserRegion && loadingCountryCode),
+        skip: shouldUseTrendingResults || (shouldFilterByUserRegion && loadingCountryCode),
       },
       query: QUERY_PROJECTS_FOR_LANDING_PAGE,
       queryName: ['projectsGet', 'projects'],
@@ -370,7 +374,7 @@ export const Projects = () => {
     loading: isTrendingCampaignsLoading,
     refetch: refetchTrendingCampaigns,
   } = useProjectsMostFundedAllOrNothingQuery({
-    skip: !isTrendingTab || projectTypeFilter === 'fundraisers',
+    skip: !shouldUseTrendingResults || projectTypeFilter === 'fundraisers',
     variables: {
       input: {
         range: ProjectsMostFundedAllOrNothingRange.Week,
@@ -385,7 +389,7 @@ export const Projects = () => {
     loading: isTrendingFundraisersLoading,
     refetch: refetchTrendingFundraisers,
   } = useProjectsMostFundedTakeItAllQuery({
-    skip: !isTrendingTab || projectTypeFilter === 'campaigns',
+    skip: !shouldUseTrendingResults || projectTypeFilter === 'campaigns',
     variables: {
       input: {
         range: ProjectsMostFundedTakeItAllRange.Week,
@@ -427,12 +431,12 @@ export const Projects = () => {
 
   const trendingError = trendingCampaignsError ?? trendingFundraisersError
   const isTrendingLoading =
-    isTrendingTab &&
+    shouldUseTrendingResults &&
     ((projectTypeFilter !== 'fundraisers' && isTrendingCampaignsLoading) ||
       (projectTypeFilter !== 'campaigns' && isTrendingFundraisersLoading))
-  const projects = isTrendingTab ? trendingProjects : data
-  const projectsError = isTrendingTab ? trendingError : error
-  const projectsLoading = isTrendingTab ? isTrendingLoading : isLoading
+  const projects = shouldUseTrendingResults ? trendingProjects : data
+  const projectsError = shouldUseTrendingResults ? trendingError : error
+  const projectsLoading = shouldUseTrendingResults ? isTrendingLoading : isLoading
 
   useEffect(() => {
     const element = tabListRef.current
@@ -463,6 +467,47 @@ export const Projects = () => {
     }
 
     setSearchParams(nextSearchParams, { replace: true })
+  }
+
+  const handleRegionCountryChange = ({
+    countryCode,
+    region,
+  }: {
+    countryCode?: string
+    region?: string
+  }) => {
+    const nextSearchParams = new URLSearchParams(searchParams)
+
+    if (countryCode) {
+      nextSearchParams.set('countryCode', countryCode)
+      nextSearchParams.delete('region')
+    } else if (region) {
+      nextSearchParams.set('region', region)
+      nextSearchParams.delete('countryCode')
+    } else {
+      nextSearchParams.delete('countryCode')
+      nextSearchParams.delete('region')
+    }
+
+    const nextPathname =
+      shouldFilterByUserRegion && (countryCode || region)
+        ? getProjectTypePath({
+            category,
+            isCategoryRoute,
+            isSubCategoryRoute,
+            nextProjectTypeFilter: projectTypeFilter,
+            shouldFilterByUserRegion: false,
+            subCategory,
+          })
+        : location.pathname
+
+    navigate(
+      {
+        pathname: nextPathname,
+        search: nextSearchParams.toString() ? `?${nextSearchParams.toString()}` : '',
+      },
+      { preventScrollReset: true },
+    )
   }
 
   const handleProjectTypeChange = (nextProjectTypeFilter: ProjectTypeFilter) => {
@@ -509,7 +554,7 @@ export const Projects = () => {
   }
 
   const handleRetry = () => {
-    if (isTrendingTab) {
+    if (shouldUseTrendingResults) {
       if (projectTypeFilter !== 'fundraisers') {
         void refetchTrendingCampaigns()
       }
@@ -531,6 +576,8 @@ export const Projects = () => {
       <Head title={headContent.title} description={headContent.description} image={headContent.image} />
 
       <VStack w="full" spacing={7} alignItems="start">
+        <PageSectionHeader title={headContent.title} subtitle={headContent.description} />
+
         <Tabs
           w="full"
           variant="secondary"
@@ -628,6 +675,12 @@ export const Projects = () => {
               <option value="most_funded">{t('Most funded')}</option>
               <option value="most_recent">{t('Most recent')}</option>
             </Select>
+            <Divider orientation="vertical" height="24px" borderColor="blackAlpha.300" />
+            <ProjectsRegionCountryFilter
+              countryCode={filterCountryCode}
+              region={region}
+              onChange={handleRegionCountryChange}
+            />
           </HStack>
         </HStack>
 
@@ -646,9 +699,9 @@ export const Projects = () => {
           <RenderProjectList
             projects={projects}
             loading={projectsLoading}
-            isLoadingMore={isTrendingTab ? undefined : isLoadingMore}
-            noMoreItems={isTrendingTab ? undefined : noMoreItems}
-            fetchNext={isTrendingTab ? undefined : fetchNext}
+            isLoadingMore={shouldUseTrendingResults ? undefined : isLoadingMore}
+            noMoreItems={shouldUseTrendingResults ? undefined : noMoreItems}
+            fetchNext={shouldUseTrendingResults ? undefined : fetchNext}
           />
         ) : null}
       </VStack>

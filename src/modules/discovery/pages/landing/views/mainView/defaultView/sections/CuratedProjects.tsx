@@ -1,24 +1,22 @@
-import { Button, HStack, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Button, HStack, SimpleGrid, VStack, useColorModeValue } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { fetchFeaturedProject } from '@/api/airtable.ts'
-import { Body } from '@/shared/components/typography/index.ts'
+import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
   ProjectCategory,
-  ProjectForLandingPageFragment,
   ProjectsMostFundedByCategoryRange,
   useFeaturedProjectForLandingPageQuery,
-  useProjectRewardsTrendingMonthlyGetQuery,
   useProjectsMostFundedByCategoryQuery,
 } from '@/types/index.ts'
 
-import { CuratedProjectCard } from '../components/CuratedProjectCard.tsx'
+import { LandingProjectCard } from '../../../../components/LandingProjectCard.tsx'
 import { FeatureAirtableData, FeaturedAirtableResponse } from './Featured.tsx'
 
-type CategoryKey = 'featured' | 'education' | 'culture' | 'causes' | 'productLaunches'
+type CategoryKey = 'featured' | 'education' | 'culture' | 'community' | 'tools'
 
 type CategoryButton = {
   key: CategoryKey
@@ -30,16 +28,16 @@ const CATEGORY_BUTTONS: CategoryButton[] = [
   { key: 'featured', label: 'Featured', emoji: '⭐' },
   { key: 'education', label: 'Education', emoji: '🎓' },
   { key: 'culture', label: 'Culture', emoji: '🎨' },
-  { key: 'causes', label: 'Causes', emoji: '🤝' },
-  { key: 'productLaunches', label: 'Product Launches', emoji: '🚀' },
+  { key: 'community', label: 'Community', emoji: '🤝' },
+  { key: 'tools', label: 'Tools', emoji: '🛠' },
 ]
 
 const CATEGORY_COPY: Record<CategoryKey, string> = {
   featured: 'Support promising and curated projects',
   education: 'Support Bitcoin education initiatives around the world',
   culture: 'Support Bitcoin culture such as music, film and games',
-  causes: 'Support promising and curated projects',
-  productLaunches: 'Discover and buy Bitcoin collectibles and unique items',
+  community: 'Support communities, meetups, and local Bitcoin initiatives',
+  tools: 'Discover Bitcoin tools, apps, hardware, and open-source software',
 }
 
 export const CuratedProjects = () => {
@@ -48,11 +46,12 @@ export const CuratedProjects = () => {
   const [featuredProjectNames, setFeaturedProjectNames] = useState<string[]>([])
   const [loadingFeatured, setLoadingFeatured] = useState(true)
 
-  const inactiveBg = useColorModeValue('white', 'gray.700')
-  const activeBg = useColorModeValue('gray.100', 'gray.600')
-  const inactiveShadow = useColorModeValue('md', '0 4px 6px rgba(255, 255, 255, 0.1)')
-  const activeShadow = useColorModeValue('lg', '0 10px 15px rgba(255, 255, 255, 0.15)')
-  const hoverShadow = useColorModeValue('lg', '0 10px 15px rgba(255, 255, 255, 0.15)')
+  const inactiveBg = useColorModeValue('utils.pbg', 'utils.surface')
+  const activeBg = useColorModeValue('neutral1.2', 'neutral1.3')
+  const hoverBg = useColorModeValue('neutral1.2', 'neutral1.3')
+  const inactiveBorderColor = useColorModeValue('neutral1.5', 'neutral1.6')
+  const activeBorderColor = useColorModeValue('neutral1.6', 'neutral1.7')
+  const buttonTextColor = useColorModeValue('neutral1.11', 'neutral1.11')
 
   useEffect(() => {
     const loadFeaturedProjects = async () => {
@@ -100,19 +99,26 @@ export const CuratedProjects = () => {
     },
   })
 
-  const { data: causesData, loading: causesLoading } = useProjectsMostFundedByCategoryQuery({
-    skip: activeCategory !== 'causes',
+  const { data: communityData, loading: communityLoading } = useProjectsMostFundedByCategoryQuery({
+    skip: activeCategory !== 'community',
     variables: {
       input: {
         take: 6,
         range: ProjectsMostFundedByCategoryRange.Week,
-        category: ProjectCategory.Cause,
+        category: ProjectCategory.Community,
       },
     },
   })
 
-  const { data: productLaunchesData, loading: productLaunchesLoading } = useProjectRewardsTrendingMonthlyGetQuery({
-    skip: activeCategory !== 'productLaunches',
+  const { data: toolsData, loading: toolsLoading } = useProjectsMostFundedByCategoryQuery({
+    skip: activeCategory !== 'tools',
+    variables: {
+      input: {
+        take: 6,
+        range: ProjectsMostFundedByCategoryRange.Week,
+        category: ProjectCategory.Tool,
+      },
+    },
   })
 
   const getCategoryProjects = () => {
@@ -130,23 +136,14 @@ export const CuratedProjects = () => {
       return { projects, loading: cultureLoading }
     }
 
-    if (activeCategory === 'causes') {
-      const projects = causesData?.projectsMostFundedByCategory?.[0]?.projects.map((p) => p.project) || []
-      return { projects, loading: causesLoading }
+    if (activeCategory === 'community') {
+      const projects = communityData?.projectsMostFundedByCategory?.[0]?.projects.map((p) => p.project) || []
+      return { projects, loading: communityLoading }
     }
 
-    if (activeCategory === 'productLaunches') {
-      const projectMap = new Map<ProjectForLandingPageFragment['id'], ProjectForLandingPageFragment>()
-
-      productLaunchesData?.projectRewardsTrendingMonthlyGet.forEach((reward) => {
-        const { project } = reward.projectReward
-
-        if (!projectMap.has(project.id)) {
-          projectMap.set(project.id, project)
-        }
-      })
-
-      return { projects: Array.from(projectMap.values()).slice(0, 6), loading: productLaunchesLoading }
+    if (activeCategory === 'tools') {
+      const projects = toolsData?.projectsMostFundedByCategory?.[0]?.projects.map((p) => p.project) || []
+      return { projects, loading: toolsLoading }
     }
 
     return { projects: [], loading: false }
@@ -175,26 +172,33 @@ export const CuratedProjects = () => {
         {CATEGORY_BUTTONS.map((button) => (
           <Button
             key={button.key}
-            size="lg"
-            height="48px"
+            size="xl"
+            height="56px"
             flexShrink={0}
             variant="ghost"
+            color={buttonTextColor}
+            border="1px solid"
+            borderColor={activeCategory === button.key ? activeBorderColor : inactiveBorderColor}
             onClick={() => setActiveCategory(button.key)}
             leftIcon={<span>{button.emoji}</span>}
             bg={activeCategory === button.key ? activeBg : inactiveBg}
-            boxShadow={activeCategory === button.key ? activeShadow : inactiveShadow}
+            fontSize={{ base: 'md', lg: 'lg' }}
+            fontWeight={600}
+            paddingX={{ base: 5, lg: 6 }}
             _hover={{
-              boxShadow: hoverShadow,
+              bg: hoverBg,
+              borderColor: activeBorderColor,
             }}
+            _active={{ bg: hoverBg }}
           >
             {button.label}
           </Button>
         ))}
       </HStack>
 
-      <Body size="2xl" medium>
+      <H3 size={{ base: 'md', lg: '2xl' }} dark bold>
         {CATEGORY_COPY[activeCategory]}
-      </Body>
+      </H3>
 
       {loading ? (
         <Body>{t('Loading...')}</Body>
@@ -203,16 +207,16 @@ export const CuratedProjects = () => {
           {activeCategory === 'featured' && projectNames && <FeaturedProjectsList projectNames={projectNames} />}
 
           {activeCategory !== 'featured' && projects && projects.length > 0 && (
-            <SimpleGrid w="full" columns={{ base: 1, sm: 2, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
+            <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
               {projects.map((project) => (
-                <CuratedProjectCard key={project.id} project={project} />
+                <LandingProjectCard key={project.id} project={project} />
               ))}
             </SimpleGrid>
           )}
 
-          {activeCategory === 'productLaunches' && projects.length === 0 && (
+          {activeCategory === 'tools' && projects.length === 0 && (
             <VStack w="full" spacing={4} py={8}>
-              <Body color="neutral1.11">{t('No trending products found')}</Body>
+              <Body color="neutral1.11">{t('No tools found')}</Body>
             </VStack>
           )}
         </>
@@ -229,7 +233,7 @@ export const CuratedProjects = () => {
 
 const FeaturedProjectsList = ({ projectNames }: { projectNames: string[] }) => {
   return (
-    <SimpleGrid w="full" columns={{ base: 1, sm: 2, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
+    <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
       {projectNames.map((projectName) => (
         <FeaturedProjectItem key={projectName} projectName={projectName} />
       ))}
@@ -253,5 +257,5 @@ const FeaturedProjectItem = ({ projectName }: { projectName: string }) => {
     return null
   }
 
-  return <CuratedProjectCard project={project} />
+  return <LandingProjectCard project={project} />
 }

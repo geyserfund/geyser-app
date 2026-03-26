@@ -25,6 +25,8 @@ import { getPath } from '@/shared/constants/index.ts'
 export const LandingDesktopNav = () => {
   const navButtonRadius = { base: '8px', lg: '10px' }
   const navButtonSize = { base: 'md', lg: 'lg' }
+  const navButtonFontSize = { lg: 'sm', xl: 'md' }
+  const navButtonPaddingX = { lg: 2, xl: 4 }
 
   const buttonColor = useColorModeValue('gray.800', 'whiteAlpha.900')
   const menuBorderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
@@ -84,8 +86,14 @@ export const LandingDesktopNav = () => {
   ]
 
   return (
-    <HStack flex={1} spacing={0} minWidth={0}>
-      <HStack spacing={1} flexShrink={0} minWidth="390px" paddingLeft={{ lg: 2, xl: 3 }}>
+    <HStack flex={1} spacing={0} minWidth={0} align="flex-end">
+      <HStack
+        spacing={{ lg: 0.5, xl: 1 }}
+        flexShrink={0}
+        minWidth={{ lg: 'auto', xl: '390px' }}
+        paddingLeft={{ lg: '180px', xl: 3 }}
+        align="flex-end"
+      >
         <Menu isOpen={isOpen} onClose={onClose} placement="bottom-start" strategy="fixed">
           <MenuButton
             as={Button}
@@ -93,9 +101,10 @@ export const LandingDesktopNav = () => {
             size={navButtonSize}
             color={buttonColor}
             borderRadius={navButtonRadius}
-            fontSize="lg"
-            fontWeight={400}
+            fontSize={navButtonFontSize}
+            fontWeight={600}
             rightIcon={<PiCaretDown />}
+            paddingX={navButtonPaddingX}
             onMouseEnter={handleMenuOpen}
             onMouseLeave={handleMenuClose}
             onClick={isOpen ? onClose : handleMenuOpen}
@@ -200,28 +209,30 @@ export const LandingDesktopNav = () => {
 
         <Button
           as={Link}
-          to={getPath('ambassadorProgram')}
-          variant="ghost"
-          size={navButtonSize}
-          color={buttonColor}
-          borderRadius={navButtonRadius}
-          fontSize="lg"
-          fontWeight={400}
-        >
-          {t('Earn')}
-        </Button>
-
-        <Button
-          as={Link}
           to={getPath('discoveryImpactFunds')}
           variant="ghost"
           size={navButtonSize}
           color={buttonColor}
           borderRadius={navButtonRadius}
-          fontSize="lg"
-          fontWeight={400}
+          fontSize={navButtonFontSize}
+          fontWeight={600}
+          paddingX={navButtonPaddingX}
         >
           {t('Impact')}
+        </Button>
+
+        <Button
+          as={Link}
+          to={getPath('ambassadorProgram')}
+          variant="ghost"
+          size={navButtonSize}
+          color={buttonColor}
+          borderRadius={navButtonRadius}
+          fontSize={navButtonFontSize}
+          fontWeight={600}
+          paddingX={navButtonPaddingX}
+        >
+          {t('Earn')}
         </Button>
 
         <Button
@@ -231,15 +242,16 @@ export const LandingDesktopNav = () => {
           size={navButtonSize}
           color={buttonColor}
           borderRadius={navButtonRadius}
-          fontSize="lg"
-          fontWeight={400}
+          fontSize={navButtonFontSize}
+          fontWeight={600}
+          paddingX={navButtonPaddingX}
         >
           {t('News')}
         </Button>
       </HStack>
 
-      <HStack flex={1} justify="center" minWidth={0}>
-        <LandingSearchInput width={{ lg: '360px', xl: '420px' }} />
+      <HStack flex={1} justify="center" minWidth={0} align="flex-end">
+        <LandingSearchInput width={{ lg: '150px', xl: '420px' }} />
       </HStack>
     </HStack>
   )

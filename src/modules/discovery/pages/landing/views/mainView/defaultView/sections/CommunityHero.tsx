@@ -1,126 +1,161 @@
-import { Box, Button, Circle, HStack, Icon, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Button, Circle, Icon, SimpleGrid, VStack, useColorModeValue } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiArrowRight } from 'react-icons/pi'
+import { PiGlobeSimple, PiLightbulb } from 'react-icons/pi'
 import { Link } from 'react-router'
 
+import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
+import { SubscribeForm } from '@/shared/sections/SubscribeForm.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
-import { FeaturedContributions } from '../components/FeaturedContributions.tsx'
-import { RollingText } from '../components/RollingText.tsx'
-
-const HOW_IT_WORKS_STEPS = [
+const pathCards = [
   {
-    title: 'Choose category',
-    description: 'Find projects in categories you want to support',
+    title: t('Projects'),
+    description: t('Support individual creators and initiatives'),
+    supportingText: t('One-time backing, rewards, campaigns'),
+    buttonLabel: t('Explore Projects'),
+    to: getPath('projectDiscovery'),
+    icon: PiLightbulb,
+    variant: 'solid' as const,
   },
   {
-    title: 'Donate',
-    description: 'Make a one-off or recurring donation',
-  },
-  {
-    title: 'View Impact',
-    description: 'Get regular updates by email',
+    title: t('Impact Funds'),
+    description: t('Support long-term thematic initiatives'),
+    supportingText: t('Ongoing pooled support for categories you care about'),
+    buttonLabel: t('Explore Impact Funds'),
+    to: getPath('discoveryImpactFunds'),
+    icon: PiGlobeSimple,
+    variant: 'outline' as const,
   },
 ] as const
 
-/** Landing hero showcasing community stats, how-it-works flow, and rolling mission statement. */
+const howItWorksSteps = [
+  {
+    title: t('Discover a project or fund'),
+    description: t('Find campaigns and pools to back'),
+  },
+  {
+    title: t('Contribute once or monthly'),
+    description: t('Support your favorite causes'),
+  },
+  {
+    title: t('Receive updates and track impact'),
+    description: t('See how your contributions make a difference'),
+  },
+] as const
+
+/** Landing section guiding users toward projects or funds, with a simple contribution flow and signup CTA. */
 export const CommunityHero = () => {
-  const circleBg = useColorModeValue('primary1.3', 'primary1.4')
-  const circleColor = useColorModeValue('primary1.11', 'primary1.11')
-  const fadeBg = useColorModeValue('neutral1.1', 'neutral1.2')
+  const iconCircleBg = useColorModeValue('primary1.50', 'primary1.900')
+  const iconColor = useColorModeValue('primary1.500', 'primary1.300')
+  const mutedTextColor = useColorModeValue('neutral1.9', 'neutral1.10')
+  const stepCircleBg = useColorModeValue('primary1.50', 'primary1.900')
+  const stepCircleColor = useColorModeValue('primary1.600', 'primary1.300')
 
   return (
-    <VStack w="full" spacing={{ base: 4, md: 6 }} py={0} alignItems="flex-start">
-      {/* Rolling mission statement */}
-      <RollingText />
+    <VStack w="full" spacing={{ base: 10, lg: 14 }} align="center">
+      <VStack w="full" spacing={6} maxW="980px">
+        <H2 size={{ base: 'xl', md: '2xl' }} bold textAlign="center">
+          {t('Choose your path')}
+        </H2>
 
-      {/* Scrolling contributions */}
-      <Box position="relative" w="full" visibility="hidden" aria-hidden="true" display={{ base: 'none', md: 'block' }}>
-        <FeaturedContributions size="lg" />
+        <SimpleGrid w="full" columns={{ base: 1, md: 2 }} spacing={4}>
+          {pathCards.map((card) => (
+            <CardLayout
+              key={card.title}
+              spacing={5}
+              alignItems="center"
+              textAlign="center"
+              minH="100%"
+              height="100%"
+            >
+              <Circle size="56px" bg={iconCircleBg} color={iconColor}>
+                <Icon as={card.icon} boxSize={6} />
+              </Circle>
 
-        <Box
-          position="absolute"
-          top={0}
-          left={0}
-          bottom={0}
-          w="40px"
-          bgGradient={`linear(to-r, ${fadeBg}, transparent)`}
-          pointerEvents="none"
-          zIndex={1}
-        />
-        <Box
-          position="absolute"
-          top={0}
-          right={0}
-          bottom={0}
-          w="40px"
-          bgGradient={`linear(to-l, ${fadeBg}, transparent)`}
-          pointerEvents="none"
-          zIndex={1}
-        />
-      </Box>
+              <VStack spacing={2} minH={{ base: '120px', md: '144px' }}>
+                <H2 size="xl" bold>
+                  {card.title}
+                </H2>
+                <Body size="md" color={mutedTextColor} maxW="260px">
+                  {card.description}
+                </Body>
+                <Body size="md" color={mutedTextColor} maxW="280px">
+                  {card.supportingText}
+                </Body>
+              </VStack>
 
-      {/* How it works */}
-      <VStack w="full" spacing={{ base: 6, md: 8 }} align="center" maxW="900px" mx="auto">
-        <H2 size={{ base: 'xl', md: '2xl', lg: '3xl' }} bold>
+              <Button
+                as={Link}
+                to={card.to}
+                variant={card.variant}
+                colorScheme={card.variant === 'solid' ? 'primary1' : 'neutral1'}
+                size="lg"
+                borderRadius="10px"
+                fontWeight={600}
+                width={{ base: '100%', sm: '240px' }}
+                whiteSpace="nowrap"
+              >
+                {card.buttonLabel}
+              </Button>
+            </CardLayout>
+          ))}
+        </SimpleGrid>
+      </VStack>
+
+      <VStack w="full" spacing={6} maxW="980px">
+        <H2 size={{ base: 'xl', md: '2xl' }} bold textAlign="center">
           {t('How it works')}
         </H2>
 
-        <HStack
-          spacing={{ base: 6, md: 12 }}
-          justify="center"
-          align="flex-start"
-          flexDirection={{ base: 'column', sm: 'row' }}
-          w="full"
-        >
-          {HOW_IT_WORKS_STEPS.map((step, index) => (
-            <VStack key={index} spacing={3} flex={1} align="center" textAlign="center" maxW="220px" mx="auto">
-              <Circle size="40px" bg={circleBg} color={circleColor} fontWeight={700} fontSize="md">
-                {index + 1}
+        <SimpleGrid w="full" columns={{ base: 1, md: 3 }} spacing={{ base: 6, md: 8 }}>
+          {howItWorksSteps.map((step, index) => (
+            <VStack key={step.title} spacing={3} textAlign="center" align="center">
+              <Circle size="40px" bg={stepCircleBg} color={stepCircleColor}>
+                <Body bold>{index + 1}</Body>
               </Circle>
-              <Body size="md" bold>
-                {t(step.title)}
-              </Body>
-              <Body size="sm" muted>
-                {t(step.description)}
-              </Body>
+              <VStack spacing={2}>
+                <Body size="lg" bold>
+                  {step.title}
+                </Body>
+                <Body size="md" color={mutedTextColor} maxW="240px">
+                  {step.description}
+                </Body>
+              </VStack>
             </VStack>
           ))}
-        </HStack>
-
-        {/* CTA Buttons */}
-        <HStack spacing={4} pt={2} flexDirection={{ base: 'column', sm: 'row' }} align="stretch" w="full">
-          <Button
-            as={Link}
-            to={getPath('projectDiscovery')}
-            variant="solid"
-            colorScheme="primary1"
-            size="lg"
-            borderRadius="10px"
-            fontWeight={600}
-            rightIcon={<Icon as={PiArrowRight} />}
-            w="full"
-            flex={{ sm: 1 }}
-          >
-            {t('Discover Projects')}
-          </Button>
-          <Button
-            as={Link}
-            to={getPath('discoveryImpactFunds')}
-            variant="outline"
-            colorScheme="neutral1"
-            size="lg"
-            borderRadius="10px"
-            fontWeight={600}
-            w="full"
-            flex={{ sm: 1 }}
-          >
-            {t('Discover Impact Funds')}
-          </Button>
-        </HStack>
+        </SimpleGrid>
       </VStack>
+
+      <CardLayout w="full" maxW="980px" spacing={6} alignItems="center" textAlign="center">
+        <VStack spacing={3}>
+          <H2 size={{ base: 'xl', md: '2xl' }} medium>
+            {t('Get stories and updates in your inbox')}
+          </H2>
+          <Body size="md" color={mutedTextColor} maxW="720px">
+            {t(
+              'Stay up to date with the latest adoption news. Fresh stories of progress in education, culture, circular economies, and more.',
+            )}
+          </Body>
+        </VStack>
+
+        <SubscribeForm
+          w="full"
+          maxWidth="640px"
+          inputProps={{
+            placeholder: t('satoshi@gmx.com'),
+          }}
+          buttonProps={{
+            children: t('Join'),
+            variant: 'solid',
+            colorScheme: 'neutral1',
+            minWidth: { base: '100%', sm: '120px' },
+          }}
+          flexDirection={{ base: 'column', sm: 'row' }}
+          alignItems={{ base: 'stretch', sm: 'flex-start' }}
+        />
+      </CardLayout>
     </VStack>
   )
 }

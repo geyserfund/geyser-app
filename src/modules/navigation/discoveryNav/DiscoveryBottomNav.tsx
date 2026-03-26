@@ -66,6 +66,9 @@ const mobileDonateItems = [
 export const DiscoveryBottomNav = () => {
   const location = useLocation()
 
+  const bottomNavLabelColor = useColorModeValue('gray.800', 'whiteAlpha.900')
+  const bottomNavLabelFontSize = 'sm'
+  const bottomNavLabelFontWeight = 600
   const menuBorderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
   const menuBackgroundColor = useColorModeValue('white', 'gray.800')
   const menuHoverColor = useColorModeValue('gray.50', 'whiteAlpha.100')
@@ -82,16 +85,16 @@ export const DiscoveryBottomNav = () => {
         matchesRoute(location.pathname, getPath('discoveryCampaigns')),
     },
     {
-      label: t('Earn'),
-      key: BottomNavItemKey.earn,
-      path: getPath('ambassadorProgram'),
-      isActive: matchesRoute(location.pathname, getPath('ambassadorProgram')),
-    },
-    {
       label: t('Impact'),
       key: BottomNavItemKey.impact,
       path: getPath('discoveryImpactFunds'),
       isActive: matchesRoute(location.pathname, getPath('discoveryImpactFunds')),
+    },
+    {
+      label: t('Earn'),
+      key: BottomNavItemKey.earn,
+      path: getPath('ambassadorProgram'),
+      isActive: matchesRoute(location.pathname, getPath('ambassadorProgram')),
     },
     {
       label: t('News'),
@@ -114,6 +117,9 @@ export const DiscoveryBottomNav = () => {
                 minHeight="56px"
                 borderRadius={{ base: '8px', lg: '10px' }}
                 colorScheme="primary1"
+                color={bottomNavLabelColor}
+                fontSize={bottomNavLabelFontSize}
+                fontWeight={bottomNavLabelFontWeight}
                 isActive={item.isActive}
                 rightIcon={<PiCaretUp />}
               >
@@ -220,10 +226,13 @@ type DiscoveryBottomNavButtonProps = {
 } & ButtonProps
 
 const DiscoveryBottomNavButton = ({ item, ...rest }: DiscoveryBottomNavButtonProps) => {
+  const bottomNavLabelColor = useColorModeValue('gray.800', 'whiteAlpha.900')
+
   return (
     <Button
       variant="ghost"
       colorScheme="primary1"
+      color={bottomNavLabelColor}
       flex={1}
       key={item.label}
       as={item.path ? Link : 'button'}
@@ -238,7 +247,7 @@ const DiscoveryBottomNavButton = ({ item, ...rest }: DiscoveryBottomNavButtonPro
       {...rest}
       position="relative"
     >
-      <Body fontWeight={600} textAlign="center" lineHeight="1">
+      <Body fontSize="sm" color={bottomNavLabelColor} fontWeight={600} textAlign="center" lineHeight="1">
         {item.label}
       </Body>
     </Button>
