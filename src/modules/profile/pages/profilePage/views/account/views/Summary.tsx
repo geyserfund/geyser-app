@@ -147,7 +147,7 @@ const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath
     'linear-gradient(135deg, #0F3B35 0%, #134E4A 30%, #3F3A17 65%, #4A2F1F 100%)',
   )
   const textureOpacity = useColorModeValue(0.14, 0.1)
-  const textureBlendMode = useColorModeValue<'overlay' | 'soft-light'>('overlay', 'soft-light')
+  const textureBlendMode = useColorModeValue('overlay' as const, 'soft-light' as const)
   const badgeBackground = useColorModeValue('warning.2', 'warning.3')
   const badgeColor = useColorModeValue('warning.11', 'warning.11')
   const buttonBackground = useColorModeValue('neutralAlpha.1', 'neutralAlpha.3')
