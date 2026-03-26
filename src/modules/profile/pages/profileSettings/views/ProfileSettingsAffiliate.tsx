@@ -202,7 +202,7 @@ export const ProfileSettingsAffiliate = () => {
               icon={PiRocketLaunch}
               title={t('Enabling project launches')}
               description={t(
-                'Share your launch link with creators. You will receive a fixed 5k sats when the project launches, plus {{rate}} of contribution enabled from the Geyser platform fee, up to {{cap}} sats per project.',
+                'Share your launch link with creators. You will receive a fixed 5k sats when the project launches, plus {{rate}} of contribution enabled from the Geyser platform fee, up to 25,000 sats per project.',
                 {
                   rate: formatEffectiveAffiliatePayoutRate(projectReferralPayoutRate, GEYSER_PLATFORM_FEE_RATE),
                   cap: projectReferralPayoutCapSats.toLocaleString(),

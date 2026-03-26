@@ -202,7 +202,7 @@ export const AmbassadorProgramPage = () => {
                       </H2>
                       <Badge colorScheme="amber" variant="soft" borderRadius="full" px={3} py={1} textTransform="none">
                         <Body size="sm" medium>
-                          {t('5% of contribution')}
+                          {t('Up to 10% of contribution')}
                         </Body>
                       </Badge>
                     </HStack>
@@ -214,7 +214,11 @@ export const AmbassadorProgramPage = () => {
 
                 {isLoggedIn ? (
                   <Box mt="auto">
-                    <CopyableLinkCard label={t('Ambassador link')} linkValue={contributionReferralLink} />
+                    <CopyableLinkCard
+                      label={t('Ambassador link')}
+                      linkValue={contributionReferralLink}
+                      showAmbassadorTerms
+                    />
                   </Box>
                 ) : null}
               </VStack>
@@ -241,7 +245,7 @@ export const AmbassadorProgramPage = () => {
                       </H2>
                       <Badge colorScheme="amber" variant="soft" borderRadius="full" px={3} py={1} textTransform="none">
                         <Body size="sm" medium>
-                          {t('5,000 sats + 5%')}
+                          {t('5,000 sats + up to 10%')}
                         </Body>
                       </Badge>
                     </HStack>
@@ -251,14 +255,18 @@ export const AmbassadorProgramPage = () => {
                       )}
                     </Body>
                     <Body size="xs" color="neutral1.9">
-                      {t('* Up to 100k sats per project')}
+                      {t('* Up to 25k sats per project')}
                     </Body>
                   </VStack>
                 </HStack>
 
                 {isLoggedIn ? (
                   <Box mt="auto">
-                    <CopyableLinkCard label={t('Ambassador link')} linkValue={projectReferralLink} />
+                    <CopyableLinkCard
+                      label={t('Ambassador link')}
+                      linkValue={projectReferralLink}
+                      showAmbassadorTerms
+                    />
                   </Box>
                 ) : null}
               </VStack>
