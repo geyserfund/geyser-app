@@ -21,6 +21,7 @@ import { useGoalsAtom, useRewardsAtom } from '@/modules/project/hooks/useProject
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
 import { Body, H2 } from '@/shared/components/typography'
+import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
 import { SubscriptionCurrencyType } from '@/types/generated/graphql'
 
 import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../../../utils'
@@ -49,6 +50,7 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
   const totalSats = useAtomValue(totalAmountSatsAtom)
   const totalUsdCent = useAtomValue(totalAmountUsdCentAtom)
   const guardianBadgesCosts = useAtomValue(guardianBadgesCostAtoms)
+  const referrerHeroId = useAtomValue(referrerHeroIdAtom)
 
   const currentGoal =
     inProgressGoals.length > 0
@@ -134,6 +136,15 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
           <LaunchpadSummary disableDesktop={true} />
           <TAndCs disableDesktop={true} />
         </VStack>
+
+        {referrerHeroId && (
+          <HStack>
+            <Body size={{ base: 'sm', lg: 'md' }} light>
+              {t('Referred by')}:
+            </Body>
+            <Body size={{ base: 'sm', lg: 'md' }}>{referrerHeroId}</Body>
+          </HStack>
+        )}
 
         {formState.donationAmount && formState.donationAmount > 0 && (
           <HStack>

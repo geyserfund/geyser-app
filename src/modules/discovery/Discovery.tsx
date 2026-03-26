@@ -1,8 +1,10 @@
 import { Box, VStack } from '@chakra-ui/react'
-import { matchPath, Outlet, useLocation } from 'react-router'
+import { useEffect } from 'react'
+import { matchPath, Outlet, useLocation, useSearchParams } from 'react-router'
 
-import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { useAuthContext } from '@/context/auth.tsx'
 import { getPath, PathName } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { UserExternalLinksComponent } from '@/shared/molecules/UserExternalLinks.tsx'
 import { standardPadding } from '@/shared/styles'
 
@@ -21,8 +23,20 @@ const LANDING_LAYOUT_PATTERNS = [
 
 export const Discovery = () => {
   const { pathname } = useLocation()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { user } = useAuthContext()
 
   const usesLandingLayout = LANDING_LAYOUT_PATTERNS.some((pattern) => matchPath(pattern, pathname))
+
+  useEffect(() => {
+    if (!usesLandingLayout || !user.heroId || searchParams.get('hero')) {
+      return
+    }
+
+    const nextSearchParams = new URLSearchParams(searchParams)
+    nextSearchParams.set('hero', user.heroId)
+    setSearchParams(nextSearchParams, { replace: true })
+  }, [usesLandingLayout, user.heroId, searchParams, setSearchParams])
 
   return (
     <>
