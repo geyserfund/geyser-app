@@ -16,13 +16,7 @@ export const Hero = (props: BoxProps) => {
   const statLabelColor = useColorModeValue('neutral1.9', 'neutral1.8')
 
   return (
-    <Box
-      w="full"
-      position="relative"
-      overflow="hidden"
-      borderRadius={0}
-      {...props}
-    >
+    <Box w="full" position="relative" overflow="hidden" borderRadius={0} {...props}>
       <Box
         position="absolute"
         inset={0}
@@ -53,7 +47,7 @@ export const Hero = (props: BoxProps) => {
           maxWidth="900px"
         >
           <H1 size={{ base: 'xl', md: '2xl', lg: '4xl' }} bold lineHeight={1.2} letterSpacing="-0.01em">
-            {t('Accelerate global Bitcoin Adoption')}
+            {t('Accelerate global Bitcoin adoption')}
           </H1>
           <Body size={{ base: 'lg', lg: 'xl' }} color={subtitleColor} lineHeight={1.6} maxWidth="700px">
             {t('Contribute to causes, initiatives and creators that push Bitcoin adoption around the world.')}
