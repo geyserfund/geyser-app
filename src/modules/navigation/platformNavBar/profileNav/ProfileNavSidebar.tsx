@@ -1,5 +1,5 @@
 import { Menu, MenuList } from '@chakra-ui/react'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useLocation } from 'react-router'
 
 import { NavigationBase, NavigationDirection } from '../../components/sideNavBase'
@@ -10,10 +10,27 @@ import { useProfileSideNavAtom } from './profileSideNavAtom'
 export const ProfileNavSidebar = () => {
   const [isProjectSideNavOpen, changeProjectSideNavOpen] = useProfileSideNavAtom()
   const location = useLocation()
+  const previousLocationRef = useRef({
+    hash: location.hash,
+    pathname: location.pathname,
+    search: location.search,
+  })
 
   useEffect(() => {
-    if (isProjectSideNavOpen) {
+    const previousLocation = previousLocationRef.current
+    const hasLocationChanged =
+      previousLocation.pathname !== location.pathname ||
+      previousLocation.search !== location.search ||
+      previousLocation.hash !== location.hash
+
+    if (isProjectSideNavOpen && hasLocationChanged) {
       changeProjectSideNavOpen(false)
+    }
+
+    previousLocationRef.current = {
+      hash: location.hash,
+      pathname: location.pathname,
+      search: location.search,
     }
   }, [changeProjectSideNavOpen, isProjectSideNavOpen, location.hash, location.pathname, location.search])
 

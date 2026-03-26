@@ -145,17 +145,18 @@ const CardFooter = ({
   isDisabled: boolean
 }) => {
   const contributeButton = (
-    <Button
-      variant="solid"
-      colorScheme="primary1"
-      size="lg"
-      height="44px"
-      onClick={onContribute}
-      isDisabled={isDisabled}
-      flexShrink={0}
-    >
-      {t('Contribute')}
-    </Button>
+    <Box flexShrink={0} opacity={0} _groupHover={{ opacity: isDisabled ? 0 : 1 }} transition="opacity 0.2s ease">
+      <Button
+        variant="solid"
+        colorScheme="primary1"
+        size="lg"
+        height="44px"
+        onClick={onContribute}
+        isDisabled={isDisabled}
+      >
+        {t('Contribute')}
+      </Button>
+    </Box>
   )
 
   if (isAonProject) {
@@ -183,24 +184,16 @@ const CardImage = ({
   project,
   countryName,
   categoryLabel,
-  responsive,
 }: {
   project: ProjectForLandingPageFragment
   countryName?: string
   categoryLabel?: string
-  responsive: (v: { base: any; lg: any }) => any
 }) => (
-  <Box
-    width={responsive({ base: '240px', lg: 'full' })}
-    height={responsive({ base: '240px', lg: 'auto' })}
-    position="relative"
-    flexShrink={0}
-    padding={2}
-  >
+  <Box width="full" position="relative" flexShrink={0} padding={2}>
     <ImageWithReload
       width="100%"
       height="100%"
-      aspectRatio={responsive({ base: undefined, lg: 1.45 })}
+      aspectRatio={1.45}
       objectFit="cover"
       borderRadius="8px"
       src={project.thumbnailImage || ''}
@@ -277,16 +270,15 @@ export const LandingCardBase = ({
     navigate(getPath('userProfile', projectOwner?.id))
   }
 
-  const r = ({ base, lg }: { base: any; lg: any }) => (noMobile ? lg : { base, lg })
-
   return (
     <InteractiveCardLayout
+      role="group"
       padding="0px"
       width="full"
       height="100%"
-      direction={r({ base: 'row', lg: 'column' })}
+      direction="column"
       spacing={0}
-      flex={r({ base: 'unset', lg: 1 })}
+      flex={1}
       position="relative"
       background="transparent"
       boxShadow="0px 2px 12px rgba(0, 0, 0, 0.08)"
@@ -306,12 +298,11 @@ export const LandingCardBase = ({
         />
       )}
 
-      <CardImage project={project} countryName={countryName} categoryLabel={categoryLabel} responsive={r} />
+      <CardImage project={project} countryName={countryName} categoryLabel={categoryLabel} />
 
       <VStack
         flex={1}
-        width={r({ base: 'auto', lg: '100%' })}
-        minWidth={r({ base: '280px', lg: 'auto' })}
+        width="100%"
         alignItems="start"
         overflow="hidden"
         spacing={3}
@@ -381,27 +372,19 @@ export const LandingCardBase = ({
   )
 }
 
-export const LandingCardBaseSkeleton = ({ noMobile }: { noMobile?: boolean }) => {
-  const r = ({ base, lg }: { base: any; lg: any }) => (noMobile ? lg : { base, lg })
-
+export const LandingCardBaseSkeleton = () => {
   return (
-    <InteractiveCardLayout
-      padding="0px"
-      width={r({ base: 'full', lg: 'auto' })}
-      height="100%"
-      direction={r({ base: 'row', lg: 'column' })}
-      spacing={0}
-      flex={r({ base: 'unset', lg: 1 })}
-    >
-      <Box width={r({ base: '240px', lg: 'auto' })} height={r({ base: '240px', lg: 'auto' })} aspectRatio={2}>
-        <SkeletonLayout width="100%" height="100%" />
+    <InteractiveCardLayout padding="0px" width="full" height="100%" direction="column" spacing={0} flex={1}>
+      <Box width="full" padding={2}>
+        <SkeletonLayout width="100%" aspectRatio={1.45} borderRadius="8px" />
       </Box>
 
       <VStack
         flex={1}
-        width={r({ base: 'auto', lg: '100%' })}
-        minWidth={r({ base: '280px', lg: 'auto' })}
-        padding={4}
+        width="100%"
+        paddingX={2}
+        paddingTop={0}
+        paddingBottom={2}
         alignItems="start"
         justifyContent="space-between"
         overflow="hidden"
@@ -411,7 +394,7 @@ export const LandingCardBaseSkeleton = ({ noMobile }: { noMobile?: boolean }) =>
           <SkeletonLayout width="55%" height="20px" />
           <SkeletonLayout width="30%" height="16px" />
         </HStack>
-        <SkeletonLayout width="100%" height="40px" />
+        <SkeletonLayout width="100%" height="68px" />
 
         <HStack w="full" justifyContent="space-between" marginTop="auto">
           <SkeletonLayout width="80px" height="18px" />

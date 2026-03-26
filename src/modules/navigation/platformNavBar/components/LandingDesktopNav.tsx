@@ -13,7 +13,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { PiCaretDown } from 'react-icons/pi'
 import { Link } from 'react-router'
 
@@ -38,7 +38,10 @@ export const LandingDesktopNav = () => {
   const soonBadgeBackgroundColor = useColorModeValue('#d7d7d7', '#a3a3a3')
   const soonBadgeTextColor = useColorModeValue('#555555', '#4a4a4a')
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [showSearchContent, setShowSearchContent] = useState(false)
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const searchRevealTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const clearCloseTimeout = useCallback(() => {
     if (closeTimeoutRef.current) {
@@ -46,6 +49,29 @@ export const LandingDesktopNav = () => {
       closeTimeoutRef.current = null
     }
   }, [])
+
+  const clearSearchRevealTimeout = useCallback(() => {
+    if (searchRevealTimeoutRef.current) {
+      clearTimeout(searchRevealTimeoutRef.current)
+      searchRevealTimeoutRef.current = null
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!isSearchOpen) {
+      clearSearchRevealTimeout()
+      setShowSearchContent(false)
+      return
+    }
+
+    clearSearchRevealTimeout()
+    searchRevealTimeoutRef.current = setTimeout(() => {
+      setShowSearchContent(true)
+      searchRevealTimeoutRef.current = null
+    }, 140)
+
+    return clearSearchRevealTimeout
+  }, [clearSearchRevealTimeout, isSearchOpen])
 
   const handleMenuOpen = useCallback(() => {
     clearCloseTimeout()
@@ -86,15 +112,14 @@ export const LandingDesktopNav = () => {
   ]
 
   return (
-    <HStack flex={1} spacing={0} minWidth={0} align="flex-end">
+    <HStack flex={1} spacing={0} minWidth={0} justify="center">
       <HStack
         spacing={{ lg: 0.5, xl: 1 }}
+        align="center"
+        justify="center"
         flexShrink={0}
-        minWidth={{ lg: 'auto', xl: '390px' }}
-        paddingLeft={{ lg: '180px', xl: 3 }}
-        align="flex-end"
       >
-        <Menu isOpen={isOpen} onClose={onClose} placement="bottom-start" strategy="fixed">
+        <Menu isOpen={isOpen} onClose={onClose} placement="bottom" strategy="fixed">
           <MenuButton
             as={Button}
             variant="ghost"
@@ -115,14 +140,16 @@ export const LandingDesktopNav = () => {
             <MenuList
               borderRadius="9px"
               overflow="hidden"
-              p={5}
-              minWidth="805px"
+              py={5}
+              px={8}
+              width="fit-content"
+              maxWidth="calc(100vw - 32px)"
               borderColor={menuBorderColor}
               backgroundColor={menuBackgroundColor}
               onMouseEnter={handleMenuOpen}
               onMouseLeave={handleMenuClose}
             >
-              <SimpleGrid columns={2} columnGap={8} rowGap={3}>
+              <SimpleGrid templateColumns="repeat(2, max-content)" columnGap={8} rowGap={3}>
                 {donateItems.map((item) => {
                   const content = (
                     <VStack align="stretch" spacing={1.5} width="100%">
@@ -168,7 +195,6 @@ export const LandingDesktopNav = () => {
                     return (
                       <Box
                         key={item.title}
-                        paddingX={4}
                         paddingY={3.5}
                         backgroundColor="transparent"
                         display="flex"
@@ -187,7 +213,6 @@ export const LandingDesktopNav = () => {
                       key={item.title}
                       as={Link}
                       to={item.to}
-                      paddingX={4}
                       paddingY={3.5}
                       display="flex"
                       alignItems="flex-start"
@@ -248,10 +273,34 @@ export const LandingDesktopNav = () => {
         >
           {t('News')}
         </Button>
-      </HStack>
 
-      <HStack flex={1} justify="center" minWidth={0} align="flex-end">
-        <LandingSearchInput width={{ lg: '150px', xl: '420px' }} />
+        <Box position="relative" width="40px" minWidth="40px" height={{ base: '40px', lg: '44px' }}>
+          <Box
+            position="absolute"
+            left={0}
+            top="50%"
+            transform="translateY(-50%)"
+            width={isSearchOpen ? { lg: '220px', xl: '280px' } : '40px'}
+            transformOrigin="left center"
+            transition="width 0.42s ease"
+            overflow="hidden"
+            willChange="width"
+            zIndex={3}
+            onClick={() => {
+              if (!isSearchOpen) {
+                setIsSearchOpen(true)
+              }
+            }}
+          >
+            <LandingSearchInput
+              autoFocus={showSearchContent}
+              compact={!isSearchOpen}
+              onBlur={() => setIsSearchOpen(false)}
+              showContent={showSearchContent}
+              width="full"
+            />
+          </Box>
+        </Box>
       </HStack>
     </HStack>
   )

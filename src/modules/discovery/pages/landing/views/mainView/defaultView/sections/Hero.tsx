@@ -31,16 +31,16 @@ export const Hero = (props: BoxProps) => {
         mx="auto"
         paddingX={standardPadding}
         paddingTop={{ base: 8, lg: 10 }}
-        paddingBottom={{ base: 4, lg: 5 }}
+        paddingBottom={{ base: 8, lg: 10 }}
       >
         <VStack
           w="full"
-          spacing={6}
-          textAlign="left"
-          alignItems="flex-start"
+          spacing={{ base: 4, lg: 5 }}
+          textAlign="center"
+          alignItems="center"
           justifyContent="flex-start"
         >
-          <H1 size={{ base: 'xl', md: '2xl', lg: '4xl' }} bold lineHeight={1.2} letterSpacing="-0.01em">
+          <H1 size={{ base: '2xl', md: '4xl', lg: '5xl' }} bold lineHeight={1.2} letterSpacing="-0.01em">
             {t('Accelerate global Bitcoin adoption')}
           </H1>
           <Body size={{ base: 'lg', lg: 'xl' }} color={subtitleColor} lineHeight={1.6} w="full">
@@ -54,7 +54,7 @@ export const Hero = (props: BoxProps) => {
           align="center"
           flexDirection={{ base: 'column', sm: 'row' }}
           w="full"
-          pt={{ base: 8, lg: 10 }}
+          pt={{ base: 5, lg: 6 }}
         >
           {STATS.map((stat) => (
             <HStack key={stat.value} spacing={1.5}>

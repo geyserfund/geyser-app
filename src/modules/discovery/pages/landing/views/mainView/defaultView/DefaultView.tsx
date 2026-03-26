@@ -35,16 +35,16 @@ export const DefaultView = () => {
       <VStack w="full" spacing={20} paddingBottom={40}>
         <CuratedProjects />
 
+        <SuccessStories />
+
         <AnnouncementBanner mt={-8} mb={-8} />
 
-        <SuccessStories />
+        <Box marginTop={{ base: 4, lg: 6 }} w="full">
+          <CommunityHero />
+        </Box>
 
         <Box marginTop={-10} w="full">
           <ProjectsInYourRegion />
-        </Box>
-
-        <Box marginTop={{ base: -20, lg: -14 }} w="full">
-          <CommunityHero />
         </Box>
 
         <RecentImpactPosts />

@@ -7,11 +7,21 @@ import { PiMagnifyingGlass } from 'react-icons/pi'
 import { useFilterContext } from '@/context/filter.tsx'
 
 type LandingSearchInputProps = {
+  autoFocus?: boolean
+  compact?: boolean
+  onBlur?: React.FocusEventHandler<HTMLInputElement>
+  showContent?: boolean
   width?: string | Record<string, string>
 }
 
 /** LandingSearchInput syncs the navbar search field with discovery filters. */
-export const LandingSearchInput = ({ width = { base: 'full', lg: '280px' } }: LandingSearchInputProps) => {
+export const LandingSearchInput = ({
+  autoFocus,
+  compact = false,
+  onBlur,
+  showContent = true,
+  width = { base: 'full', lg: '280px' },
+}: LandingSearchInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [search, setSearch] = useState('')
@@ -26,6 +36,12 @@ export const LandingSearchInput = ({ width = { base: 'full', lg: '280px' } }: La
 
     setSearch(filters.search)
   }, [filters.search])
+
+  useEffect(() => {
+    if (autoFocus) {
+      inputRef.current?.focus()
+    }
+  }, [autoFocus])
 
   const updateSearchFilterDebounced = useDebouncedCallback(
     (value: string) => updateFilter({ search: value }),
@@ -54,15 +70,22 @@ export const LandingSearchInput = ({ width = { base: 'full', lg: '280px' } }: La
       </InputLeftElement>
       <Input
         ref={inputRef}
+        autoFocus={autoFocus}
         value={search}
         onChange={handleSearchUpdate}
+        onBlur={onBlur}
         placeholder={t('Search projects')}
         aria-label={t('Search projects')}
         borderRadius={{ base: '8px', lg: '10px' }}
-        borderColor="neutral1.5"
-        backgroundColor="utils.surface"
-        _hover={{ borderColor: 'primary1.6' }}
-        _focusVisible={{ borderColor: 'primary1.8', boxShadow: 'none' }}
+        borderColor={compact ? 'transparent' : 'gray.300'}
+        backgroundColor={compact ? 'transparent' : 'utils.surface'}
+        color={compact || !showContent ? 'transparent' : undefined}
+        cursor={compact ? 'pointer' : 'text'}
+        transition="background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease"
+        _placeholder={{ color: compact || !showContent ? 'transparent' : undefined }}
+        _hover={{ borderColor: compact ? 'transparent' : 'gray.400' }}
+        _focusVisible={{ borderColor: compact ? 'transparent' : 'gray.400', boxShadow: 'none' }}
+        sx={{ caretColor: compact || !showContent ? 'transparent' : undefined }}
       />
     </InputGroup>
   )

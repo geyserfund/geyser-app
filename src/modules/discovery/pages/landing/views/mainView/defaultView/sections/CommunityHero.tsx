@@ -54,8 +54,32 @@ export const CommunityHero = () => {
   const stepCircleColor = useColorModeValue('primary1.600', 'primary1.300')
 
   return (
-    <VStack w="full" spacing={{ base: 10, lg: 14 }} align="center">
-      <VStack w="full" spacing={6} maxW="980px">
+    <VStack w="full" spacing={{ base: 8, lg: 10 }} align="center">
+      <VStack w="full" spacing={5} maxW="980px">
+        <H2 size={{ base: 'xl', md: '2xl' }} bold textAlign="center">
+          {t('How it works')}
+        </H2>
+
+        <SimpleGrid w="full" columns={{ base: 1, md: 3 }} spacing={{ base: 6, md: 8 }}>
+          {howItWorksSteps.map((step, index) => (
+            <VStack key={step.title} spacing={3} textAlign="center" align="center">
+              <Circle size="40px" bg={stepCircleBg} color={stepCircleColor}>
+                <Body bold>{index + 1}</Body>
+              </Circle>
+              <VStack spacing={2}>
+                <Body size="lg" bold>
+                  {step.title}
+                </Body>
+                <Body size="md" color={mutedTextColor} maxW="240px">
+                  {step.description}
+                </Body>
+              </VStack>
+            </VStack>
+          ))}
+        </SimpleGrid>
+      </VStack>
+
+      <VStack w="full" spacing={5} maxW="980px">
         <H2 size={{ base: 'xl', md: '2xl' }} bold textAlign="center">
           {t('Choose your path')}
         </H2>
@@ -100,30 +124,6 @@ export const CommunityHero = () => {
                 {card.buttonLabel}
               </Button>
             </CardLayout>
-          ))}
-        </SimpleGrid>
-      </VStack>
-
-      <VStack w="full" spacing={6} maxW="980px">
-        <H2 size={{ base: 'xl', md: '2xl' }} bold textAlign="center">
-          {t('How it works')}
-        </H2>
-
-        <SimpleGrid w="full" columns={{ base: 1, md: 3 }} spacing={{ base: 6, md: 8 }}>
-          {howItWorksSteps.map((step, index) => (
-            <VStack key={step.title} spacing={3} textAlign="center" align="center">
-              <Circle size="40px" bg={stepCircleBg} color={stepCircleColor}>
-                <Body bold>{index + 1}</Body>
-              </Circle>
-              <VStack spacing={2}>
-                <Body size="lg" bold>
-                  {step.title}
-                </Body>
-                <Body size="md" color={mutedTextColor} maxW="240px">
-                  {step.description}
-                </Body>
-              </VStack>
-            </VStack>
           ))}
         </SimpleGrid>
       </VStack>

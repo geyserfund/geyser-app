@@ -1,4 +1,4 @@
-import { Button, HStack, SimpleGrid, VStack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button, HStack, SimpleGrid, VStack, useColorModeValue } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -157,44 +157,56 @@ export const CuratedProjects = () => {
 
   return (
     <VStack w="full" spacing={8} alignItems="start">
-      <HStack
-        spacing={3}
-        flexWrap={{ base: 'nowrap', md: 'wrap' }}
-        justifyContent={{ base: 'flex-start', md: 'center' }}
-        overflowX={{ base: 'auto', md: 'visible' }}
+      <Box
         w="full"
+        overflowX={{ base: 'auto', md: 'visible' }}
+        overflowY="hidden"
         py={2}
+        px={1}
         sx={{
+          touchAction: 'pan-x',
+          WebkitOverflowScrolling: 'touch',
+          overscrollBehaviorX: 'contain',
+          scrollSnapType: 'x proximity',
           '&::-webkit-scrollbar': { display: 'none' },
           scrollbarWidth: 'none',
         }}
       >
-        {CATEGORY_BUTTONS.map((button) => (
-          <Button
-            key={button.key}
-            size="xl"
-            height="56px"
-            flexShrink={0}
-            variant="ghost"
-            color={buttonTextColor}
-            border="1px solid"
-            borderColor={activeCategory === button.key ? activeBorderColor : inactiveBorderColor}
-            onClick={() => setActiveCategory(button.key)}
-            leftIcon={<span>{button.emoji}</span>}
-            bg={activeCategory === button.key ? activeBg : inactiveBg}
-            fontSize={{ base: 'md', lg: 'lg' }}
-            fontWeight={600}
-            paddingX={{ base: 5, lg: 6 }}
-            _hover={{
-              bg: hoverBg,
-              borderColor: activeBorderColor,
-            }}
-            _active={{ bg: hoverBg }}
-          >
-            {button.label}
-          </Button>
-        ))}
-      </HStack>
+        <HStack
+          spacing={3}
+          flexWrap={{ base: 'nowrap', md: 'wrap' }}
+          justifyContent={{ base: 'flex-start', md: 'center' }}
+          w={{ base: 'max-content', md: 'full' }}
+          minW={{ md: 'full' }}
+        >
+          {CATEGORY_BUTTONS.map((button) => (
+            <Button
+              key={button.key}
+              size="xl"
+              height="56px"
+              flexShrink={0}
+              scrollSnapAlign="start"
+              variant="ghost"
+              color={buttonTextColor}
+              border="1px solid"
+              borderColor={activeCategory === button.key ? activeBorderColor : inactiveBorderColor}
+              onClick={() => setActiveCategory(button.key)}
+              leftIcon={<span>{button.emoji}</span>}
+              bg={activeCategory === button.key ? activeBg : inactiveBg}
+              fontSize={{ base: 'md', lg: 'lg' }}
+              fontWeight={600}
+              paddingX={{ base: 5, lg: 6 }}
+              _hover={{
+                bg: hoverBg,
+                borderColor: activeBorderColor,
+              }}
+              _active={{ bg: hoverBg }}
+            >
+              {button.label}
+            </Button>
+          ))}
+        </HStack>
+      </Box>
 
       <H3 size={{ base: 'md', lg: '2xl' }} dark bold>
         {CATEGORY_COPY[activeCategory]}

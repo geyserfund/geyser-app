@@ -46,11 +46,15 @@ export const ProfileNavContent = ({ onNavigate }: ProfileNavContentProps) => {
 
           {discoveryNavItems.map((discoveryNav) => {
             const activityDot = discoveryNav.path === 'discoveryMyProjects' ? myProjectActivityDot : false
+            const shouldUseImageIcon =
+              Boolean(discoveryNav.image) &&
+              discoveryNav.path !== 'discoveryProducts' &&
+              discoveryNav.path !== 'discoveryImpactFunds'
 
             return (
               <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)} onClick={onNavigate}>
                 <HStack position="relative">
-                  {discoveryNav.image ? (
+                  {shouldUseImageIcon ? (
                     <ChakraImage src={discoveryNav.image} alt={t(discoveryNav.label)} boxSize="18px" />
                   ) : (
                     <discoveryNav.icon fontSize="18px" />
