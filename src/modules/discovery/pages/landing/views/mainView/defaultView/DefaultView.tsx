@@ -49,7 +49,7 @@ export const DefaultView = () => {
           <ProjectsInYourRegion />
         </Box>
 
-        <Box marginTop={-14} w="full">
+        <Box marginTop={{ base: -20, lg: -14 }} w="full">
           <CommunityHero />
         </Box>
 

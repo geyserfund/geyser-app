@@ -928,97 +928,120 @@ export const platformRoutes: RouteObject[] = [
             element: <Navigate to={getPath('discoveryCampaigns')} />,
           },
           {
+            path: getPath('discoveryProjects'),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryProjectsInYourRegion'),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryProjectsCategory', PathName.categoryName),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryProjectsSubCategory', PathName.subCategoryName),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
             path: getPath('discoveryCampaigns'),
             async lazy() {
-              const Campaigns = await loadLandingPages().then((m) => m.Campaigns)
-              return { Component: Campaigns }
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
             },
-            children: [
-              {
-                index: true,
-                async lazy() {
-                  const TrendingCampaigns = await loadLandingPages().then((m) => m.TrendingCampaigns)
-                  return { Component: TrendingCampaigns }
-                },
-              },
-              {
-                path: getPath('discoveryCampaignsAlmostFunded'),
-                async lazy() {
-                  const AlmostFundedCampaigns = await loadLandingPages().then((m) => m.AlmostFundedCampaigns)
-                  return { Component: AlmostFundedCampaigns }
-                },
-              },
-              {
-                path: getPath('discoveryCampaignsAlmostOver'),
-                async lazy() {
-                  const AlmostOverCampaigns = await loadLandingPages().then((m) => m.AlmostOverCampaigns)
-                  return { Component: AlmostOverCampaigns }
-                },
-              },
-              {
-                path: getPath('discoveryCampaignsLatest'),
-                async lazy() {
-                  const LatestCampaigns = await loadLandingPages().then((m) => m.LatestCampaigns)
-                  return { Component: LatestCampaigns }
-                },
-              },
-              {
-                path: getPath('discoveryCampaignsInYourRegion'),
-                async lazy() {
-                  const InYourRegionCampaigns = await loadLandingPages().then((m) => m.InYourRegionCampaigns)
-                  return { Component: InYourRegionCampaigns }
-                },
-              },
-            ],
+          },
+          {
+            path: getPath('discoveryCampaignsLatest'),
+            element: (
+              <Navigate
+                to={{
+                  pathname: getPath('discoveryCampaigns'),
+                  search: '?sort=most_recent',
+                }}
+                replace
+              />
+            ),
+          },
+          {
+            path: getPath('discoveryCampaignsInYourRegion'),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryCampaignsCategory', PathName.categoryName),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryCampaignsSubCategory', PathName.subCategoryName),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryCampaignsAlmostFunded'),
+            element: <Navigate to={getPath('discoveryCampaigns')} replace />,
+          },
+          {
+            path: getPath('discoveryCampaignsAlmostOver'),
+            element: <Navigate to={getPath('discoveryCampaigns')} replace />,
           },
           {
             path: getPath('discoveryFundraisers'),
             async lazy() {
-              const Fundraisers = await loadLandingPages().then((m) => m.Fundraisers)
-              return { Component: Fundraisers }
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
             },
-            children: [
-              {
-                index: true,
-                async lazy() {
-                  const FundraisersProjects = await loadLandingPages().then((m) => m.FundraisersProjects)
-                  return { Component: FundraisersProjects }
-                },
-              },
-              {
-                path: getPath('discoveryFundraisersLatest'),
-                element: (
-                  <Navigate
-                    to={{
-                      pathname: getPath('discoveryFundraisers'),
-                      search: '?sort=most_recent',
-                    }}
-                    replace
-                  />
-                ),
-              },
-              {
-                path: getPath('discoveryFundraisersInYourRegion'),
-                async lazy() {
-                  const InYourRegionFundraisers = await loadLandingPages().then((m) => m.InYourRegionFundraisers)
-                  return { Component: InYourRegionFundraisers }
-                },
-              },
-              {
-                path: getPath('discoveryFundraisersCategory', PathName.categoryName),
-                async lazy() {
-                  const CategoryFundraisers = await loadLandingPages().then((m) => m.CategoryFundraisers)
-                  return { Component: CategoryFundraisers }
-                },
-              },
-              {
-                path: getPath('discoveryFundraisersSubCategory', PathName.subCategoryName),
-                async lazy() {
-                  const CategoryFundraisers = await loadLandingPages().then((m) => m.CategoryFundraisers)
-                  return { Component: CategoryFundraisers }
-                },
-              },
-            ],
+          },
+          {
+            path: getPath('discoveryFundraisersLatest'),
+            element: (
+              <Navigate
+                to={{
+                  pathname: getPath('discoveryFundraisers'),
+                  search: '?sort=most_recent',
+                }}
+                replace
+              />
+            ),
+          },
+          {
+            path: getPath('discoveryFundraisersInYourRegion'),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryFundraisersCategory', PathName.categoryName),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
+          },
+          {
+            path: getPath('discoveryFundraisersSubCategory', PathName.subCategoryName),
+            async lazy() {
+              const Projects = await loadLandingPages().then((m) => m.Projects)
+              return { Component: Projects }
+            },
           },
           {
             path: getPath('discoveryProducts'),

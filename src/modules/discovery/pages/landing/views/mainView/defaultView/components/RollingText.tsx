@@ -29,7 +29,7 @@ const getStripPhrases = (offset: number): string[] => {
   return [...items, items[0]!]
 }
 
-const FONT_SIZE = { base: 'xl', md: '2xl', lg: '3xl' }
+const FONT_SIZE = { base: 'lg', sm: 'xl', md: '2xl', lg: '3xl' }
 const TRAILING_TEXT = 'Join a community of 85,000+ contributors.'
 
 const formatPhrase = (phrase: string) => `${phrase}.`
@@ -65,7 +65,7 @@ export const RollingText = () => {
       <Box animation={animation} willChange="transform" sx={stripSx}>
         {phrases.map((phrase, i) => (
           <Box key={i} height={`${LINE_HEIGHT}px`} display="flex" alignItems="center">
-            <Text fontSize={FONT_SIZE} color={color} fontWeight={fontWeight} fontStyle={fontStyle}>
+            <Text fontSize={FONT_SIZE} color={color} fontWeight={fontWeight} fontStyle={fontStyle} whiteSpace="nowrap">
               {formatPhrase(phrase)}
             </Text>
           </Box>
@@ -74,56 +74,91 @@ export const RollingText = () => {
     </Box>
   )
 
+  const PhraseRow = ({
+    phrases,
+    color,
+    fontWeight,
+    fontStyle,
+    mutedTextVisibility,
+  }: {
+    phrases: string[]
+    color?: string
+    fontWeight?: number
+    fontStyle?: string
+    mutedTextVisibility?: 'visible' | 'hidden'
+  }) => (
+    <HStack spacing={2} justifyContent="center" minHeight={`${LINE_HEIGHT}px`} alignItems="center">
+      <Text fontSize={FONT_SIZE} color={color} visibility={mutedTextVisibility}>
+        Bitcoiners
+      </Text>
+      <PhraseStrip phrases={phrases} color={color} fontWeight={fontWeight} fontStyle={fontStyle} />
+      <Text fontSize={FONT_SIZE} color={color} visibility={mutedTextVisibility}>
+        {TRAILING_TEXT}
+      </Text>
+    </HStack>
+  )
+
+  const MobilePhraseOnlyRow = ({
+    phrases,
+    color,
+    fontStyle,
+  }: {
+    phrases: string[]
+    color?: string
+    fontStyle?: string
+  }) => (
+    <HStack spacing={1} alignItems="center">
+      <Text fontSize={FONT_SIZE} color={color} visibility="hidden" whiteSpace="nowrap" aria-hidden="true">
+        Bitcoiners
+      </Text>
+      <PhraseStrip phrases={phrases} color={color} fontStyle={fontStyle} />
+    </HStack>
+  )
+
   return (
-    <VStack spacing={0} textAlign="center" pt={0} pb={2} w="full" alignItems="center">
-      {/* Top blurred row: invisible static "Bitcoiners" + scrolling phrase */}
-      <HStack
-        spacing={2}
-        justifyContent="center"
-        minHeight={`${LINE_HEIGHT}px`}
-        alignItems="center"
-        opacity={0.35}
-        flexWrap="wrap"
-        sx={{ filter: 'blur(1.5px)' }}
-      >
-        <Text fontSize={FONT_SIZE} visibility="hidden" aria-hidden="true">
-          Bitcoiners
-        </Text>
-        <PhraseStrip phrases={topPhrases} color={mutedColor} fontStyle="italic" />
-        <Text fontSize={FONT_SIZE} visibility="hidden" aria-hidden="true">
-          {TRAILING_TEXT}
-        </Text>
-      </HStack>
+    <VStack
+      spacing={{ base: 0, sm: 0 }}
+      textAlign="center"
+      pt={0}
+      pb={2}
+      w="full"
+      alignItems="center"
+    >
+      <VStack display={{ base: 'flex', sm: 'none' }} spacing={0} w="full" alignItems="center">
+        <Box opacity={0.35} sx={{ filter: 'blur(1.5px)' }} aria-hidden="true" mb={{ base: '-18px', sm: 0 }}>
+          <MobilePhraseOnlyRow phrases={topPhrases} color={mutedColor} fontStyle="italic" />
+        </Box>
 
-      {/* Center row: static "Bitcoiners" + scrolling bold phrase + supporting copy */}
-      <HStack spacing={2} justifyContent="center" minHeight={`${LINE_HEIGHT}px`} alignItems="center" flexWrap="wrap">
-        <Text fontSize={FONT_SIZE} color={mutedColor}>
-          Bitcoiners
-        </Text>
-        <PhraseStrip phrases={centerPhrases} fontWeight={700} />
+        <HStack spacing={1} alignItems="center" justifyContent="center">
+          <Text fontSize={FONT_SIZE} color={mutedColor} whiteSpace="nowrap">
+            Bitcoiners
+          </Text>
+          <PhraseStrip phrases={centerPhrases} fontWeight={700} color={mutedColor} />
+        </HStack>
+
+        <Box opacity={0.35} sx={{ filter: 'blur(1.5px)' }} aria-hidden="true" mt={{ base: '-18px', sm: 0 }}>
+          <MobilePhraseOnlyRow phrases={bottomPhrases} color={mutedColor} fontStyle="italic" />
+        </Box>
+
         <Text fontSize={FONT_SIZE} color={mutedColor}>
           {TRAILING_TEXT}
         </Text>
-      </HStack>
+      </VStack>
 
-      {/* Bottom blurred row: invisible static "Bitcoiners" + scrolling phrase */}
-      <HStack
-        spacing={2}
-        justifyContent="center"
-        minHeight={`${LINE_HEIGHT}px`}
-        alignItems="center"
-        opacity={0.35}
-        flexWrap="wrap"
-        sx={{ filter: 'blur(1.5px)' }}
-      >
-        <Text fontSize={FONT_SIZE} visibility="hidden" aria-hidden="true">
-          Bitcoiners
-        </Text>
-        <PhraseStrip phrases={bottomPhrases} color={mutedColor} fontStyle="italic" />
-        <Text fontSize={FONT_SIZE} visibility="hidden" aria-hidden="true">
-          {TRAILING_TEXT}
-        </Text>
-      </HStack>
+      <VStack display={{ base: 'none', sm: 'flex' }} spacing={0} textAlign="center" w="full" alignItems="center">
+        {/* Top blurred row: invisible static "Bitcoiners" + scrolling phrase */}
+        <Box opacity={0.35} sx={{ filter: 'blur(1.5px)' }} aria-hidden="true">
+          <PhraseRow phrases={topPhrases} color={mutedColor} fontStyle="italic" mutedTextVisibility="hidden" />
+        </Box>
+
+        {/* Center row: static "Bitcoiners" + scrolling bold phrase + supporting copy */}
+        <PhraseRow phrases={centerPhrases} fontWeight={700} color={mutedColor} />
+
+        {/* Bottom blurred row: invisible static "Bitcoiners" + scrolling phrase */}
+        <Box opacity={0.35} sx={{ filter: 'blur(1.5px)' }} aria-hidden="true">
+          <PhraseRow phrases={bottomPhrases} color={mutedColor} fontStyle="italic" mutedTextVisibility="hidden" />
+        </Box>
+      </VStack>
     </VStack>
   )
 }

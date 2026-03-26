@@ -18,7 +18,9 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** Add BigInt functionality */
   BigInt: { input: any; output: any; }
+  /** Date custom scalar type */
   Date: { input: any; output: any; }
 };
 
@@ -3328,7 +3330,7 @@ export type Project = {
   rskEoa?: Maybe<Scalars['String']['output']>;
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['String']['output']>;
-  /** @deprecated No longer supported */
+  /** @deprecated Field no longer supported */
   sponsors: Array<Sponsor>;
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
@@ -4229,7 +4231,7 @@ export type Query = {
   getDashboardFunders: Array<Funder>;
   /**
    * Returns the public key of the Lightning node linked to a project, if there is one.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   getProjectPubkey?: Maybe<Scalars['String']['output']>;
   getProjectReward: ProjectReward;
@@ -5265,14 +5267,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>;
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isAmbassador: Scalars['Boolean']['output'];
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']['output'];
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isSponsor: Scalars['Boolean']['output'];
   /** Project linked to the contributions. */
@@ -9557,6 +9559,14 @@ export type ProjectRewardsTrendingWeeklyGetQuery = { __typename?: 'Query', proje
       { __typename?: 'ProjectReward' }
       & RewardForLandingPageFragment
     ) }> };
+
+export type ProjectRewardsTrendingMonthlyGetQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProjectRewardsTrendingMonthlyGetQuery = { __typename?: 'Query', projectRewardsTrendingMonthlyGet: Array<{ __typename?: 'ProjectRewardTrendingMonthlyGetRow', projectReward: { __typename?: 'ProjectReward', project: (
+        { __typename?: 'Project' }
+        & ProjectForLandingPageFragment
+      ) } }> };
 
 export type ProjectRewardsTrendingQuarterlyGetQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -15323,6 +15333,49 @@ export type ProjectRewardsTrendingWeeklyGetQueryHookResult = ReturnType<typeof u
 export type ProjectRewardsTrendingWeeklyGetLazyQueryHookResult = ReturnType<typeof useProjectRewardsTrendingWeeklyGetLazyQuery>;
 export type ProjectRewardsTrendingWeeklyGetSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsTrendingWeeklyGetSuspenseQuery>;
 export type ProjectRewardsTrendingWeeklyGetQueryResult = Apollo.QueryResult<ProjectRewardsTrendingWeeklyGetQuery, ProjectRewardsTrendingWeeklyGetQueryVariables>;
+export const ProjectRewardsTrendingMonthlyGetDocument = gql`
+    query ProjectRewardsTrendingMonthlyGet {
+  projectRewardsTrendingMonthlyGet {
+    projectReward {
+      project {
+        ...ProjectForLandingPage
+      }
+    }
+  }
+}
+    ${ProjectForLandingPageFragmentDoc}`;
+
+/**
+ * __useProjectRewardsTrendingMonthlyGetQuery__
+ *
+ * To run a query within a React component, call `useProjectRewardsTrendingMonthlyGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardsTrendingMonthlyGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectRewardsTrendingMonthlyGetQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useProjectRewardsTrendingMonthlyGetQuery(baseOptions?: Apollo.QueryHookOptions<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>(ProjectRewardsTrendingMonthlyGetDocument, options);
+      }
+export function useProjectRewardsTrendingMonthlyGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>(ProjectRewardsTrendingMonthlyGetDocument, options);
+        }
+export function useProjectRewardsTrendingMonthlyGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>(ProjectRewardsTrendingMonthlyGetDocument, options);
+        }
+export type ProjectRewardsTrendingMonthlyGetQueryHookResult = ReturnType<typeof useProjectRewardsTrendingMonthlyGetQuery>;
+export type ProjectRewardsTrendingMonthlyGetLazyQueryHookResult = ReturnType<typeof useProjectRewardsTrendingMonthlyGetLazyQuery>;
+export type ProjectRewardsTrendingMonthlyGetSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsTrendingMonthlyGetSuspenseQuery>;
+export type ProjectRewardsTrendingMonthlyGetQueryResult = Apollo.QueryResult<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>;
 export const ProjectRewardsTrendingQuarterlyGetDocument = gql`
     query ProjectRewardsTrendingQuarterlyGet {
   projectRewardsTrendingQuarterlyGet {

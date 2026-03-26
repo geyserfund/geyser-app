@@ -9,19 +9,36 @@ import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
 import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-import { PostForLandingPageFragment } from '@/types/index.ts'
+import { ProjectCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
+import type { PostForLandingPageFragment } from '@/types/index.ts'
 import { toInt } from '@/utils/index.ts'
 
 type LandingPostCardProps = {
   post: PostForLandingPageFragment
   isMobile?: boolean
+  showProjectCategory?: boolean
 } & StackProps
 
-export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProps) => {
+/** Shared landing and discovery card for displaying a post preview. */
+export const LandingPostCard = ({
+  post,
+  isMobile,
+  showProjectCategory = false,
+  ...rest
+}: LandingPostCardProps) => {
   const navigate = useNavigate()
+  const categoryLabel = post.project?.category ? ProjectCategoryLabel[post.project.category] : null
 
   const getResponsiveValue = (prop: { base: any; lg: any }) => {
     return isMobile ? prop.base : prop
+  }
+
+  const handleCardClick = () => {
+    if (!post.project?.name) {
+      return
+    }
+
+    navigate(getPath('projectPostView', post.project.name, post.id))
   }
 
   const renderProjectContent = () => {
@@ -57,7 +74,7 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
       _hover={{
         cursor: 'pointer',
       }}
-      onClick={() => navigate(getPath('projectPostView', post.project?.name || '', post.id))}
+      onClick={handleCardClick}
       {...rest}
       position="relative"
       role="group"
@@ -89,7 +106,7 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
           maxHeight={isMobile ? '200px' : '150px'}
         >
           <ImageWithReload
-            src={post.image || ''}
+            src={post.image || post.project?.thumbnailImage || ''}
             alt={post.title}
             width="100%"
             borderRadius={'8px'}
@@ -112,6 +129,11 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
             {post.postType && (
               <Badge variant="soft" colorScheme="neutral1" size="sm">
                 {postTypeOptions.find((option) => option.value === post.postType)?.label}
+              </Badge>
+            )}
+            {showProjectCategory && categoryLabel && (
+              <Badge variant="soft" colorScheme="cyan" size="sm">
+                {categoryLabel}
               </Badge>
             )}
             <PostAuthor post={post} />

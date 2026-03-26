@@ -10,6 +10,7 @@ import { DiscoveryBottomNav } from '../navigation/discoveryNav/DiscoveryBottomNa
 
 const LANDING_LAYOUT_PATTERNS = [
   { path: getPath('discoveryLanding'), end: true },
+  { path: `${getPath('discoveryProjects')}/*`, end: false },
   { path: getPath('discoveryProjectCategory', PathName.categoryName), end: true },
   { path: getPath('discoveryProjectSubCategory', PathName.subCategoryName), end: true },
   { path: `${getPath('discoveryAllOrNothing')}/*`, end: false },

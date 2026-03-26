@@ -2,14 +2,13 @@ import { Button, SimpleGrid, Skeleton, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useCallback, useMemo, useState } from 'react'
 
+import { LandingPostCard } from '@/modules/discovery/pages/landing/views/mainView/defaultView/components/LandingPostCard.tsx'
 import { H2 } from '@/shared/components/typography/index.ts'
 import {
   OrderByOptions,
   useFeaturedProjectForLandingPageQuery,
   usePostsForLandingPageQuery,
 } from '@/types/index.ts'
-
-import { NewsPostCard } from '../components/NewsPostCard.tsx'
 
 const GEYSER_PROJECT_NAME = 'geyser'
 const PAGE_SIZE = 4
@@ -63,7 +62,7 @@ export const GeyserNewsSection = () => {
         <>
           <SimpleGrid w="full" columns={{ base: 1, md: 2 }} spacing={6}>
             {displayedPosts.map((post) => (
-              <NewsPostCard key={post.id} post={post} />
+              <LandingPostCard key={post.id} post={post} isMobile showProjectCategory />
             ))}
           </SimpleGrid>
 

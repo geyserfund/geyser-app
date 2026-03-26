@@ -8,8 +8,10 @@ import { Body } from '@/shared/components/typography/index.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
   ProjectCategory,
+  ProjectForLandingPageFragment,
   ProjectsMostFundedByCategoryRange,
   useFeaturedProjectForLandingPageQuery,
+  useProjectRewardsTrendingMonthlyGetQuery,
   useProjectsMostFundedByCategoryQuery,
 } from '@/types/index.ts'
 
@@ -29,7 +31,7 @@ const CATEGORY_BUTTONS: CategoryButton[] = [
   { key: 'education', label: 'Education', emoji: '🎓' },
   { key: 'culture', label: 'Culture', emoji: '🎨' },
   { key: 'causes', label: 'Causes', emoji: '🤝' },
-  { key: 'productLaunches', label: 'Product launches', emoji: '🚀' },
+  { key: 'productLaunches', label: 'Product Launches', emoji: '🚀' },
 ]
 
 const CATEGORY_COPY: Record<CategoryKey, string> = {
@@ -109,6 +111,10 @@ export const CuratedProjects = () => {
     },
   })
 
+  const { data: productLaunchesData, loading: productLaunchesLoading } = useProjectRewardsTrendingMonthlyGetQuery({
+    skip: activeCategory !== 'productLaunches',
+  })
+
   const getCategoryProjects = () => {
     if (activeCategory === 'featured') {
       return { projectNames: featuredProjectNames, loading: loadingFeatured }
@@ -130,25 +136,48 @@ export const CuratedProjects = () => {
     }
 
     if (activeCategory === 'productLaunches') {
-      return { projects: [], loading: false }
+      const projectMap = new Map<ProjectForLandingPageFragment['id'], ProjectForLandingPageFragment>()
+
+      productLaunchesData?.projectRewardsTrendingMonthlyGet.forEach((reward) => {
+        const { project } = reward.projectReward
+
+        if (!projectMap.has(project.id)) {
+          projectMap.set(project.id, project)
+        }
+      })
+
+      return { projects: Array.from(projectMap.values()).slice(0, 6), loading: productLaunchesLoading }
     }
 
     return { projects: [], loading: false }
   }
 
-  const { projects, projectNames, loading } = getCategoryProjects()
+  const { projects = [], projectNames, loading } = getCategoryProjects()
 
   const handleDiscoverMore = () => {
-    navigate(getPath('discoveryFundraisers'))
+    navigate(getPath('discoveryProjects'))
   }
 
   return (
     <VStack w="full" spacing={8} alignItems="start">
-      <HStack spacing={3} flexWrap="wrap" justifyContent="center" w="full">
+      <HStack
+        spacing={3}
+        flexWrap={{ base: 'nowrap', md: 'wrap' }}
+        justifyContent={{ base: 'flex-start', md: 'center' }}
+        overflowX={{ base: 'auto', md: 'visible' }}
+        w="full"
+        py={2}
+        sx={{
+          '&::-webkit-scrollbar': { display: 'none' },
+          scrollbarWidth: 'none',
+        }}
+      >
         {CATEGORY_BUTTONS.map((button) => (
           <Button
             key={button.key}
-            size="xl"
+            size="lg"
+            height="48px"
+            flexShrink={0}
             variant="ghost"
             onClick={() => setActiveCategory(button.key)}
             leftIcon={<span>{button.emoji}</span>}
@@ -173,7 +202,7 @@ export const CuratedProjects = () => {
         <>
           {activeCategory === 'featured' && projectNames && <FeaturedProjectsList projectNames={projectNames} />}
 
-          {activeCategory !== 'featured' && activeCategory !== 'productLaunches' && projects && (
+          {activeCategory !== 'featured' && projects && projects.length > 0 && (
             <SimpleGrid w="full" columns={{ base: 1, sm: 2, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
               {projects.map((project) => (
                 <CuratedProjectCard key={project.id} project={project} />
@@ -181,9 +210,9 @@ export const CuratedProjects = () => {
             </SimpleGrid>
           )}
 
-          {activeCategory === 'productLaunches' && (
+          {activeCategory === 'productLaunches' && projects.length === 0 && (
             <VStack w="full" spacing={4} py={8}>
-              <Body color="neutral1.11">{t('Product launches coming soon')}</Body>
+              <Body color="neutral1.11">{t('No trending products found')}</Body>
             </VStack>
           )}
         </>

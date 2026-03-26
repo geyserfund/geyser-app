@@ -77,6 +77,7 @@ export const DiscoveryBottomNav = () => {
       label: t('Donate'),
       key: BottomNavItemKey.donate,
       isActive:
+        matchesRoute(location.pathname, getPath('discoveryProjects')) ||
         matchesRoute(location.pathname, getPath('discoveryFundraisers')) ||
         matchesRoute(location.pathname, getPath('discoveryCampaigns')),
     },

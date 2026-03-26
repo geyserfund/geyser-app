@@ -179,6 +179,10 @@ export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath(
 
 export const discoveryRoutes = [
   getPath('discoveryLanding'),
+  getPath('discoveryProjects'),
+  getPath('discoveryProjectsInYourRegion'),
+  getPath('discoveryProjectsCategory', PathName.categoryName),
+  getPath('discoveryProjectsSubCategory', PathName.subCategoryName),
   getPath('discoveryProjectCategory', PathName.categoryName),
   getPath('discoveryProjectSubCategory', PathName.subCategoryName),
   getPath('discoveryMyProjects'),
@@ -190,6 +194,8 @@ export const discoveryRoutes = [
   getPath('discoveryCampaignsAlmostOver'),
   getPath('discoveryCampaignsLatest'),
   getPath('discoveryCampaignsInYourRegion'),
+  getPath('discoveryCampaignsCategory', PathName.categoryName),
+  getPath('discoveryCampaignsSubCategory', PathName.subCategoryName),
   getPath('discoveryFundraisers'),
   getPath('discoveryFundraisersLatest'),
   getPath('discoveryFundraisersInYourRegion'),

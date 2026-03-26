@@ -32,12 +32,12 @@ export const CommunityHero = () => {
   const fadeBg = useColorModeValue('neutral1.1', 'neutral1.2')
 
   return (
-    <VStack w="full" spacing={6} py={0} alignItems="flex-start">
+    <VStack w="full" spacing={{ base: 4, md: 6 }} py={0} alignItems="flex-start">
       {/* Rolling mission statement */}
       <RollingText />
 
       {/* Scrolling contributions */}
-      <Box position="relative" w="full" visibility="hidden" aria-hidden="true">
+      <Box position="relative" w="full" visibility="hidden" aria-hidden="true" display={{ base: 'none', md: 'block' }}>
         <FeaturedContributions size="lg" />
 
         <Box
@@ -63,7 +63,7 @@ export const CommunityHero = () => {
       </Box>
 
       {/* How it works */}
-      <VStack w="full" spacing={8} align="center" maxW="800px" mx="auto">
+      <VStack w="full" spacing={{ base: 6, md: 8 }} align="center" maxW="900px" mx="auto">
         <H2 size={{ base: 'xl', md: '2xl', lg: '3xl' }} bold>
           {t('How it works')}
         </H2>
@@ -91,7 +91,7 @@ export const CommunityHero = () => {
         </HStack>
 
         {/* CTA Buttons */}
-        <HStack spacing={4} pt={2}>
+        <HStack spacing={4} pt={2} flexDirection={{ base: 'column', sm: 'row' }} align="stretch" w="full">
           <Button
             as={Link}
             to={getPath('projectDiscovery')}
@@ -101,6 +101,8 @@ export const CommunityHero = () => {
             borderRadius="10px"
             fontWeight={600}
             rightIcon={<Icon as={PiArrowRight} />}
+            w="full"
+            flex={{ sm: 1 }}
           >
             {t('Discover Projects')}
           </Button>
@@ -112,6 +114,8 @@ export const CommunityHero = () => {
             size="lg"
             borderRadius="10px"
             fontWeight={600}
+            w="full"
+            flex={{ sm: 1 }}
           >
             {t('Discover Impact Funds')}
           </Button>

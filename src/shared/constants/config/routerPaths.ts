@@ -196,9 +196,15 @@ const pathsMap = {
 
   /** Discovery Routes */
   discoveryLanding: () => '/',
+  discoveryProjects: () => `/${PathName.projects}`,
+  discoveryProjectsInYourRegion: () => `/${PathName.projects}/${PathName.inYourRegion}`,
+  discoveryProjectsCategory: (category: string) => `/${PathName.projects}/${PathName.category}/${category}`,
+  discoveryProjectsSubCategory: (subCategory: string) => `/${PathName.projects}/${PathName.subCategory}/${subCategory}`,
   discoveryCampaigns: () => `/${PathName.campaigns}`,
   discoveryCampaignsLatest: () => `/${PathName.campaigns}/${PathName.latest}`,
   discoveryCampaignsInYourRegion: () => `/${PathName.campaigns}/${PathName.inYourRegion}`,
+  discoveryCampaignsCategory: (category: string) => `/${PathName.campaigns}/${PathName.category}/${category}`,
+  discoveryCampaignsSubCategory: (subCategory: string) => `/${PathName.campaigns}/${PathName.subCategory}/${subCategory}`,
   discoveryCampaignsAlmostFunded: () => `/${PathName.campaigns}/${PathName.almostFunded}`,
   discoveryCampaignsAlmostOver: () => `/${PathName.campaigns}/${PathName.almostOver}`,
   discoveryAllOrNothing: () => `/${PathName.allOrNothing}`,

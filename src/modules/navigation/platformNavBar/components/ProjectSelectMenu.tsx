@@ -40,7 +40,7 @@ export const ProjectSelectMenu = () => {
     <Button
       as={Link}
       to={getPath('discoveryMyProjects')}
-      size="md"
+      size={{ base: 'md', lg: 'lg' }}
       variant="outline"
       colorScheme="neutral1"
       borderRadius={{ base: '8px', lg: '10px' }}

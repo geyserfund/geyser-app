@@ -11,7 +11,10 @@ export const TopNavContainer = ({ children, ...props }: PropsWithChildren<StackP
     <HStack
       w="full"
       position="fixed"
-      top={{ base: `${dimensions.topNavBar.mobile.height}px`, lg: `${dimensions.topNavBar.desktop.height}px` }}
+      top={{
+        base: `${dimensions.topNavBar.mobile.stickyOffset}px`,
+        lg: `${dimensions.topNavBar.desktop.stickyOffset}px`,
+      }}
       left={0}
       justifyContent={'center'}
       zIndex={9}
