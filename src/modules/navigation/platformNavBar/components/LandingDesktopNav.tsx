@@ -1,5 +1,19 @@
-import { Badge, Box, Button, HStack, Menu, MenuButton, MenuList, Portal, SimpleGrid, VStack, useColorModeValue } from '@chakra-ui/react'
+import {
+  Badge,
+  Box,
+  Button,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuList,
+  Portal,
+  SimpleGrid,
+  VStack,
+  useColorModeValue,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useCallback, useRef } from 'react'
 import { PiCaretDown } from 'react-icons/pi'
 import { Link } from 'react-router'
 
@@ -21,6 +35,28 @@ export const LandingDesktopNav = () => {
   const newBadgeTextColor = useColorModeValue('gray.900', 'gray.900')
   const soonBadgeBackgroundColor = useColorModeValue('#d7d7d7', '#a3a3a3')
   const soonBadgeTextColor = useColorModeValue('#555555', '#4a4a4a')
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const clearCloseTimeout = useCallback(() => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current)
+      closeTimeoutRef.current = null
+    }
+  }, [])
+
+  const handleMenuOpen = useCallback(() => {
+    clearCloseTimeout()
+    onOpen()
+  }, [clearCloseTimeout, onOpen])
+
+  const handleMenuClose = useCallback(() => {
+    clearCloseTimeout()
+    closeTimeoutRef.current = setTimeout(() => {
+      onClose()
+      closeTimeoutRef.current = null
+    }, 120)
+  }, [clearCloseTimeout, onClose])
 
   const donateItems = [
     {
@@ -50,7 +86,7 @@ export const LandingDesktopNav = () => {
   return (
     <HStack flex={1} spacing={0} minWidth={0}>
       <HStack spacing={1} flexShrink={0} minWidth="390px" paddingLeft={{ lg: 2, xl: 3 }}>
-        <Menu placement="bottom-start" strategy="fixed">
+        <Menu isOpen={isOpen} onClose={onClose} placement="bottom-start" strategy="fixed">
           <MenuButton
             as={Button}
             variant="ghost"
@@ -60,6 +96,9 @@ export const LandingDesktopNav = () => {
             fontSize="lg"
             fontWeight={400}
             rightIcon={<PiCaretDown />}
+            onMouseEnter={handleMenuOpen}
+            onMouseLeave={handleMenuClose}
+            onClick={isOpen ? onClose : handleMenuOpen}
           >
             {t('Donate')}
           </MenuButton>
@@ -71,6 +110,8 @@ export const LandingDesktopNav = () => {
               minWidth="805px"
               borderColor={menuBorderColor}
               backgroundColor={menuBackgroundColor}
+              onMouseEnter={handleMenuOpen}
+              onMouseLeave={handleMenuClose}
             >
               <SimpleGrid columns={2} columnGap={8} rowGap={3}>
                 {donateItems.map((item) => {
