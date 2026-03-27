@@ -64,10 +64,10 @@ export const BrandLogoFull = () => {
   return (
     <Link to={getPath('landingPage')} style={{ height: '100%' }}>
       <HStack h="100%" spacing={0}>
-        <Box h="100%">
+        <Box h={{ base: '34px', lg: '40px' }}>
           <Image src={imageUrl} alt={t('Geyser logo')} height="100%" width="auto" objectFit="contain" />
         </Box>
-        <Box marginLeft={{ base: -3, lg: -4 }} marginTop={{ base: -3.5, lg: -4.5 }} alignSelf="flex-start">
+        <Box marginLeft={{ base: -2.5, lg: -3.5 }} marginTop={{ base: -3, lg: -4 }} alignSelf="flex-start">
           <EnvironmentTag compact />
         </Box>
       </HStack>

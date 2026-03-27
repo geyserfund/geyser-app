@@ -1296,6 +1296,14 @@ export const platformRoutes: RouteObject[] = [
   },
 
   {
+    path: getPath('legalTerms'),
+    async lazy() {
+      const TermsPage = await import('@/modules/general/pages/TermsPage.tsx').then((m) => m.TermsPage)
+      return { Component: TermsPage }
+    },
+  },
+
+  {
     path: '/auth/twitter',
     Component: ExternalAuthSuccess,
   },

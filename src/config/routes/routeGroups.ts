@@ -216,6 +216,7 @@ export const discoveryRoutes = [
   getPath('heroesContributor'),
   getPath('giveawayAcelerandoVip'),
   getPath('legalGiveawayAcelerandoVipTerms'),
+  getPath('legalTerms'),
   getPath('discoveryNews'),
 ]
 

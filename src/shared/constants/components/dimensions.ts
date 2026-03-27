@@ -1,12 +1,12 @@
 export const dimensions = {
   topNavBar: {
     desktop: {
-      height: 112, // 32 * 2 + 48,
-      stickyOffset: 92, // 32 + 48 + 12
+      height: 88, // 20 * 2 + 48
+      stickyOffset: 80, // 20 + 48 + 12
     },
     mobile: {
-      height: 80, // 20 * 2 + 40
-      stickyOffset: 68, // 20 + 40 + 8
+      height: 64, // 12 * 2 + 40
+      stickyOffset: 60, // 12 + 40 + 8
     },
   },
   topNavBarFilterOffset: {

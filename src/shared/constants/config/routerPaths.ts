@@ -481,7 +481,7 @@ const pathsMap = {
   badges: () => `/${PathName.badges}`,
 
   about: () => `${AboutGeyserOrigin}`,
-  legalTerms: () => `${AboutGeyserOrigin}/${PathName.legalTerms}`,
+  legalTerms: () => `/${PathName.legal}/terms`,
   legalPrivacy: () => `${AboutGeyserOrigin}/${PathName.legalPrivacy}`,
 }
 
