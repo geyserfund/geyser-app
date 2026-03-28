@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_FOR_LANDING_PAGE } from '../fragments/projectFragment'
 import { FRAGMENT_REWARD_FOR_LANDING_PAGE, FRAGMENT_REWARD_FOR_PRODUCTS_PAGE } from '../fragments/rewardFragment'
 
 export const QUERY_TRENDING_REWARDS_FOR_LANDING_PAGE = gql`
@@ -9,6 +10,19 @@ export const QUERY_TRENDING_REWARDS_FOR_LANDING_PAGE = gql`
       count
       projectReward {
         ...RewardForLandingPage
+      }
+    }
+  }
+`
+
+export const QUERY_TRENDING_REWARD_PROJECTS_MONTHLY_FOR_LANDING_PAGE = gql`
+  ${FRAGMENT_PROJECT_FOR_LANDING_PAGE}
+  query ProjectRewardsTrendingMonthlyGet {
+    projectRewardsTrendingMonthlyGet {
+      projectReward {
+        project {
+          ...ProjectForLandingPage
+        }
       }
     }
   }

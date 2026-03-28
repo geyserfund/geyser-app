@@ -1,4 +1,4 @@
-import { Stack, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { Head } from '@/config/Head.tsx'
@@ -8,19 +8,13 @@ import { ProjectCategoryList } from '@/shared/constants/platform/projectCategory
 import { HeroesMainPage } from '../../../../heroes/index.ts'
 import { TopProjects } from './components/TopProjects.tsx'
 import { AnnouncementBanner } from './sections/AnnouncementBanner.tsx'
-import { AonProjectsDisplayMostFundedThisWeek } from './sections/AonProjectsDisplayMostFundedThisWeek.tsx'
 import { CharityProjects } from './sections/CharityProjects.tsx'
-import { Featured } from './sections/Featured.tsx'
-import { JoinOurMailingList } from './sections/JoinOurMailingList.tsx'
-import { JoinTheMovement } from './sections/JoinTheMovement.tsx'
+import { CuratedProjects } from './sections/CuratedProjects.tsx'
+import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
 import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
 import { RecentImpactPosts } from './sections/RecentImpactPosts.tsx'
-import { RecentLaunches } from './sections/RecentLaunches.tsx'
-import { RecommendedForYou } from './sections/RecommendedForYou.tsx'
 import { SuccessStories } from './sections/SuccessStories.tsx'
-import { TiaProjectsDisplayMostFundedThisWeek } from './sections/TiaProjectsDisplayMostFundedThisWeek.tsx'
-import { TitleBar } from './sections/TitleBar.tsx'
 
 export const DefaultView = () => {
   const [showBelowTheFold, setShowBelowTheFold] = useState(false)
@@ -35,21 +29,15 @@ export const DefaultView = () => {
   }, [])
 
   return (
-    <VStack w="full" spacing={10} paddingTop={{ base: '8px', lg: '10px' }}>
+    <VStack w="full" spacing={10} paddingTop={{ base: '4px', lg: '6px' }}>
       <Head image={GeyserMainSeoImageUrl} />
       <VStack w="full" spacing={20} paddingBottom={40}>
-        <TitleBar />
-        <AnnouncementBanner mt={{ base: -14, md: -10 }} mb={{ base: -14, md: -10 }} />
-
-        <Stack direction={{ base: 'column', md: 'row' }} w="full" alignItems="stretch" spacing={{ base: 4, lg: 12 }}>
-          <Featured />
-          <RecommendedForYou />
-        </Stack>
+        <CuratedProjects />
 
         <SuccessStories />
 
-        <AonProjectsDisplayMostFundedThisWeek />
-        <TiaProjectsDisplayMostFundedThisWeek />
+        <AnnouncementBanner my={-8} />
+
         <ProjectsInYourRegion />
 
         <RecentImpactPosts />
@@ -59,16 +47,13 @@ export const DefaultView = () => {
             {ProjectCategoryList.map((category) => (
               <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
             ))}
-            <RecentLaunches />
             <CharityProjects />
 
             <HeroesMainPage />
 
             <TopProjects />
 
-            <JoinTheMovement />
-
-            <JoinOurMailingList />
+            <NewsletterSignup />
           </>
         )}
       </VStack>

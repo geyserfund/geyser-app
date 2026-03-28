@@ -1,9 +1,8 @@
 import { atom } from 'jotai'
 
 import { currentRouteAtom } from '@/config/routes'
-import { getPath, PathName, PathsMap } from '@/shared/constants'
+import { getPath, PathName } from '@/shared/constants'
 
-import { bottomNavItems } from './DiscoveryBottomNav.tsx'
 import { DiscoveryNavItemKey, discoveryNavItems } from './discoveryNavData'
 
 export const currentPlatformNavItemAtom = atom((get) => {
@@ -21,21 +20,6 @@ export const currentPlatformNavItemAtom = atom((get) => {
     }
 
     return currentMatchRoute.path === getPath(item.path, PathName.projectName)
-  })
-  return currentItem
-})
-
-export const currentBottomNavItemAtom = atom((get) => {
-  const currentMatchRoute = get(currentRouteAtom)
-
-  if (!currentMatchRoute) return
-
-  const currentItem = bottomNavItems.find((item) => {
-    if (item.path === 'discoveryProducts') {
-      return currentMatchRoute.path?.startsWith(getPath(item.path as keyof PathsMap))
-    }
-
-    return currentMatchRoute.path === getPath(item.path as keyof PathsMap, PathName.projectName)
   })
   return currentItem
 })

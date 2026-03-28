@@ -46,7 +46,7 @@ export const RenderProjectList = ({
 
   return (
     <>
-      <SimpleGrid w="full" columns={{ base: 1, lg: 6 }} spacing={{ base: 4, lg: 8 }}>
+      <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 4, lg: 8 }}>
         {renderBody()}
       </SimpleGrid>
       {fetchNext && isLoadingMore && noMoreItems && (

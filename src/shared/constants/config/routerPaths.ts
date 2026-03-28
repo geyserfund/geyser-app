@@ -28,6 +28,8 @@ export enum PathName {
   campaigns = 'campaigns',
   fundraisers = 'fundraisers',
 
+  news = 'news',
+
   latest = 'latest',
   inYourRegion = 'region',
   almostFunded = 'almostfunded',
@@ -194,9 +196,15 @@ const pathsMap = {
 
   /** Discovery Routes */
   discoveryLanding: () => '/',
+  discoveryProjects: () => `/${PathName.projects}`,
+  discoveryProjectsInYourRegion: () => `/${PathName.projects}/${PathName.inYourRegion}`,
+  discoveryProjectsCategory: (category: string) => `/${PathName.projects}/${PathName.category}/${category}`,
+  discoveryProjectsSubCategory: (subCategory: string) => `/${PathName.projects}/${PathName.subCategory}/${subCategory}`,
   discoveryCampaigns: () => `/${PathName.campaigns}`,
   discoveryCampaignsLatest: () => `/${PathName.campaigns}/${PathName.latest}`,
   discoveryCampaignsInYourRegion: () => `/${PathName.campaigns}/${PathName.inYourRegion}`,
+  discoveryCampaignsCategory: (category: string) => `/${PathName.campaigns}/${PathName.category}/${category}`,
+  discoveryCampaignsSubCategory: (subCategory: string) => `/${PathName.campaigns}/${PathName.subCategory}/${subCategory}`,
   discoveryCampaignsAlmostFunded: () => `/${PathName.campaigns}/${PathName.almostFunded}`,
   discoveryCampaignsAlmostOver: () => `/${PathName.campaigns}/${PathName.almostOver}`,
   discoveryAllOrNothing: () => `/${PathName.allOrNothing}`,
@@ -220,6 +228,7 @@ const pathsMap = {
   discoveryGrantApply: (grantId: string) => `/${PathName.grants}/${grantId}/${PathName.grantApply}`,
   discoveryImpactFunds: () => `/${PathName.impactFunds}`,
   discoveryImpactFund: (impactFundName: string) => `/${PathName.impactFunds}/${impactFundName}`,
+  discoveryNews: () => `/${PathName.news}`,
   discoveryMerch: () => `/${PathName.merch}`,
   discoveryLaunchpad: () => `/${PathName.launchpad}`,
   giveawayAcelerandoVip: () => `/${PathName.giveaways}/${PathName.acelerandoBitcoinVip}`,
@@ -472,7 +481,7 @@ const pathsMap = {
   badges: () => `/${PathName.badges}`,
 
   about: () => `${AboutGeyserOrigin}`,
-  legalTerms: () => `${AboutGeyserOrigin}/${PathName.legalTerms}`,
+  legalTerms: () => `/${PathName.legal}/terms`,
   legalPrivacy: () => `${AboutGeyserOrigin}/${PathName.legalPrivacy}`,
 }
 

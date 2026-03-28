@@ -179,6 +179,10 @@ export const landingRoutes = [getPath('index'), getPath('landingPage'), getPath(
 
 export const discoveryRoutes = [
   getPath('discoveryLanding'),
+  getPath('discoveryProjects'),
+  getPath('discoveryProjectsInYourRegion'),
+  getPath('discoveryProjectsCategory', PathName.categoryName),
+  getPath('discoveryProjectsSubCategory', PathName.subCategoryName),
   getPath('discoveryProjectCategory', PathName.categoryName),
   getPath('discoveryProjectSubCategory', PathName.subCategoryName),
   getPath('discoveryMyProjects'),
@@ -190,6 +194,8 @@ export const discoveryRoutes = [
   getPath('discoveryCampaignsAlmostOver'),
   getPath('discoveryCampaignsLatest'),
   getPath('discoveryCampaignsInYourRegion'),
+  getPath('discoveryCampaignsCategory', PathName.categoryName),
+  getPath('discoveryCampaignsSubCategory', PathName.subCategoryName),
   getPath('discoveryFundraisers'),
   getPath('discoveryFundraisersLatest'),
   getPath('discoveryFundraisersInYourRegion'),
@@ -210,6 +216,8 @@ export const discoveryRoutes = [
   getPath('heroesContributor'),
   getPath('giveawayAcelerandoVip'),
   getPath('legalGiveawayAcelerandoVipTerms'),
+  getPath('legalTerms'),
+  getPath('discoveryNews'),
 ]
 
 export const profileSettingsRoutes = [
@@ -230,6 +238,7 @@ export const heroProfileSettingsRoutes = [
 
 export const profileRoutes = [getPath('userProfile', PathName.userId), ...profileSettingsRoutes]
 export const heroProfileRoutes = [getPath('heroProfile', PathName.heroId), ...heroProfileSettingsRoutes]
+export const ambassadorProgramRoutes = [getPath('ambassadorProgram')]
 
 export const guardiansRoutes = [
   getPath('guardians'),

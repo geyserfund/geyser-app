@@ -8,6 +8,7 @@ import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFo
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { CampaignContent, useProjectShare } from '@/modules/project/pages/projectView/hooks'
+import { AmbassadorReferralTermsNotice } from '@/components/molecules/AmbassadorReferralTermsNotice.tsx'
 import { generateTwitterShareUrl } from '@/modules/project/utils'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H2 } from '@/shared/components/typography'
@@ -210,6 +211,7 @@ const AmbassadorCard = ({
         twitterShareText={twitterShareText}
         handleCopy={handleCopy}
       />
+      <AmbassadorReferralTermsNotice />
     </VStack>
   )
 }

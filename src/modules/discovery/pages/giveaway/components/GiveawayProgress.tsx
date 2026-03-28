@@ -82,7 +82,7 @@ export const GiveawayProgress = ({ data, isLoading, isError, onRetry, onViewFeat
           <Button size="md" variant="outline" colorScheme="neutral1" onClick={onViewFeatured} py={6}>
             {t('View Featured Projects')}
           </Button>
-          <Button as={RouterLink} to={getPath('projectDiscovery')} size="md" colorScheme="primary1" py={6}>
+          <Button as={RouterLink} to={getPath('discoveryProjects')} size="md" colorScheme="primary1" py={6}>
             {t('Discover Projects')}
           </Button>
         </HStack>

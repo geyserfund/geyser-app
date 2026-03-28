@@ -42,9 +42,7 @@ export const GeyserHeroes = () => {
   }
 
   const { contributors, loading: contributorsLoading } = useTopContributors(period, MAX_HEROES)
-
   const { ambassadors, loading: ambassadorsLoading } = useTopAmbassadors(period, MAX_HEROES)
-
   const { creators, loading: creatorsLoading } = useTopCreators(period, MAX_HEROES)
 
   return (

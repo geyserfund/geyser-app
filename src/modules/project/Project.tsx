@@ -15,20 +15,16 @@ export const Project = () => {
 
   const { projectName } = params
   const setSourceResource = useSetAtom(sourceResourceAtom)
-  const [, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams()
   const { user } = useAuthContext()
 
   const location = useLocation()
 
   useEffect(() => {
-    if (user && user.heroId) {
-      setSearchParams(
-        (params) => {
-          params.set('hero', user.heroId)
-          return params
-        },
-        { replace: true, state: location.state },
-      )
+    if (user && user.heroId && !searchParams.get('hero')) {
+      const nextSearchParams = new URLSearchParams(searchParams)
+      nextSearchParams.set('hero', user.heroId)
+      setSearchParams(nextSearchParams, { replace: true, state: location.state })
     }
 
     if (location.state?.sourceActivityId) {
@@ -37,7 +33,7 @@ export const Project = () => {
         resourceType: FundingResourceType.Activity,
       })
     }
-  }, [user, setSearchParams, location.state, setSourceResource])
+  }, [user, searchParams, setSearchParams, location.state, setSourceResource])
 
   return (
     <ProjectProvider projectName={projectName || ''} initializeWallet>

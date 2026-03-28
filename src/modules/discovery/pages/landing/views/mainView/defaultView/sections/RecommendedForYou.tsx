@@ -37,8 +37,8 @@ export const RecommendedForYou = () => {
       <LandingPageSectionTitle>{t('Recommended for you')}</LandingPageSectionTitle>
       <SimpleGrid
         width="100%"
-        columns={{ base: 1, xs: 2 }}
-        spacingX={{ base: 4, lg: 12 }}
+        columns={{ base: 1, lg: 2 }}
+        spacingX={{ base: 4, lg: 6 }}
         spacingY={{ base: 4, lg: 6 }}
       >
         {renderProjects()}

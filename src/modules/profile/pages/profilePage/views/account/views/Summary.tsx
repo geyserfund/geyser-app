@@ -1,8 +1,8 @@
-import { Box, Button, HStack, Icon, VStack, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, useColorModeValue, VStack } from '@chakra-ui/react'
 import { useSetAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { IconType } from 'react-icons'
+import type { IconType } from 'react-icons'
 import { PiCoins, PiLightning, PiMegaphone, PiRocketLaunch } from 'react-icons/pi'
 import { Link } from 'react-router'
 
@@ -12,7 +12,8 @@ import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 
 import { SkeletonLayout } from '../../../../../../../shared/components/layouts'
-import { HeroStats, useUserHeroStatsQuery } from '../../../../../../../types'
+import type { HeroStats } from '../../../../../../../types'
+import { useUserHeroStatsQuery } from '../../../../../../../types'
 import { getShortAmountLabel } from '../../../../../../../utils'
 import { useUserProfileAtom, useViewingOwnProfileAtomValue } from '../../../../../state'
 
@@ -141,19 +142,26 @@ const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath
   const { t } = useTranslation()
   const titleColor = useColorModeValue('neutral1.11', 'neutral1.12')
   const subtitleColor = useColorModeValue('neutral1.9', 'neutral1.11')
+  const cardBackground = useColorModeValue(
+    'linear-gradient(135deg, #8FFFDA 0%, #C4FFE9 30%, #FFF8E1 60%, #FFE4C0 100%)',
+    'linear-gradient(135deg, #0F3B35 0%, #134E4A 30%, #3F3A17 65%, #4A2F1F 100%)',
+  )
+  const textureOpacity = useColorModeValue(0.14, 0.1)
+  const textureBlendMode = useColorModeValue('overlay' as const, 'soft-light' as const)
   const badgeBackground = useColorModeValue('warning.2', 'warning.3')
   const badgeColor = useColorModeValue('warning.11', 'warning.11')
   const buttonBackground = useColorModeValue('neutralAlpha.1', 'neutralAlpha.3')
   const buttonColor = useColorModeValue('neutral1.11', 'neutral1.12')
   const buttonBorderColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
   const buttonHoverBackground = useColorModeValue('neutralAlpha.2', 'neutralAlpha.4')
+  const buttonBoxShadow = useColorModeValue('0 8px 24px rgba(31, 41, 55, 0.08)', '0 10px 28px rgba(0, 0, 0, 0.32)')
 
   return (
     <CardLayout
       w="full"
       spacing={4}
       borderColor="transparent"
-      background="linear-gradient(135deg, #8FFFDA 0%, #C4FFE9 30%, #FFF8E1 60%, #FFE4C0 100%)"
+      background={cardBackground}
       mb={2}
       px={{ base: 4, lg: 5 }}
       py={4}
@@ -164,16 +172,16 @@ const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath
         backgroundImage={NOISE_TEXTURE}
         backgroundSize="256px 256px"
         backgroundRepeat="repeat"
-        opacity={0.14}
+        opacity={textureOpacity}
         pointerEvents="none"
-        mixBlendMode="overlay"
+        mixBlendMode={textureBlendMode}
       />
 
       <VStack alignItems="start" spacing={3} position="relative" zIndex={1} w="full">
         <HStack spacing={2} alignItems="center" flexWrap="wrap">
           <Icon as={PiCoins} color="warning.9" boxSize={5} />
           <H2 size="lg" color={titleColor}>
-            {t('Geyser Affiliate Program')}
+            {t('Ambassador Program')}
           </H2>
           <Body size="xs" medium px={2.5} py={0.5} borderRadius="full" bgColor={badgeBackground} color={badgeColor}>
             {t('New')}
@@ -193,7 +201,7 @@ const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath
           borderColor={buttonBorderColor}
           _hover={{ bg: buttonHoverBackground }}
           backdropFilter="blur(8px)"
-          boxShadow="0 8px 24px rgba(31, 41, 55, 0.08)"
+          boxShadow={buttonBoxShadow}
           size="md"
           w="full"
         >

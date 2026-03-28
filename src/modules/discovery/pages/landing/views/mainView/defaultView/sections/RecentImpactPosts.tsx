@@ -40,9 +40,11 @@ export const RecentImpactPosts = () => {
 
   return (
     <ProjectRowLayout
+      id="landing-whats-happening"
       title={t("What's happening")}
+      scrollMarginTop={{ base: '110px', lg: '140px' }}
       width="100%"
-      rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryActivity')} />}
+      rightContent={<DiscoverMoreButton as={Link} to={getPath('discoveryNews')} />}
     >
       <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 4, lg: 8 }} paddingTop={4}>
         <Box as={ChakraLink} href={TwitterAnnouncementLinkUrl} isExternal flex={1} borderRadius="8px" overflow="hidden">

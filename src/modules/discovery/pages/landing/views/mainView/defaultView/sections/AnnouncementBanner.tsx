@@ -1,11 +1,11 @@
-import { Box, BoxProps, Button, HStack, Icon, Text, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, HStack, Icon, Text, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { startTransition, useEffect, useState } from 'react'
 import { PiArrowRight } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { GiveawayCountdown } from '@/modules/discovery/pages/giveaway/components/GiveawayCountdown'
-import { Body, H3 } from '@/shared/components/typography'
+import { Body } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { useAcelerandoVipLeaderboardQuery } from '@/types'
 
@@ -18,7 +18,7 @@ const GUARDIANS_ANNOUNCEMENT_BACKGROUND_URL =
 /** Displays rotating landing-page announcements for active campaigns and programs. */
 export const AnnouncementBanner = (props: BoxProps) => {
   const [activeIndex, setActiveIndex] = useState(0)
-  const { data, error, loading, refetch } = useAcelerandoVipLeaderboardQuery({
+  const { data, error, loading } = useAcelerandoVipLeaderboardQuery({
     pollInterval: GIVEAWAY_REFRESH_INTERVAL_MS,
     notifyOnNetworkStatusChange: true,
   })
@@ -34,10 +34,6 @@ export const AnnouncementBanner = (props: BoxProps) => {
   }, [])
 
   const leaderboard = data?.acelerandoVipLeaderboard
-  const giveawayCtaBg = useColorModeValue('white', 'neutral1.2')
-  const giveawayCtaHoverBg = useColorModeValue('neutral1.2', 'neutral1.3')
-  const giveawayCtaColor = useColorModeValue('gray.900', 'neutral1.12')
-  const secondaryButtonColor = useColorModeValue('whiteAlpha.900', 'whiteAlpha.900')
   const giveawayPath = getPath('giveawayAcelerandoVip')
   const guardiansPath = getPath('guardians')
 
@@ -46,55 +42,22 @@ export const AnnouncementBanner = (props: BoxProps) => {
       <Box display="grid" w="full">
         <AnnouncementSlide
           isActive={activeIndex === 0}
+          to={giveawayPath}
           backgroundImage="linear-gradient(120deg, rgba(27, 9, 57, 0.86) 12%, rgba(43, 14, 91, 0.62) 64%, rgba(25, 8, 57, 0.8) 100%), url('/images/acelerando-bitcoin-banner.webp')"
         >
-          <VStack alignItems="flex-start" spacing={2} flex={1} minW="220px">
+          <VStack alignItems="flex-start" spacing={1} flex={1} minW="220px">
             <Body size="xs" color="whiteAlpha.800" textTransform="uppercase" letterSpacing="0.14em" fontWeight={700}>
               {t('Announcement')}
             </Body>
-            <H3 color="white" textShadow="0 1px 12px rgba(0,0,0,0.3)">
-              {t('VIP Ticket Giveaway: Acelerando Bitcoin 2026 Conference')}
-            </H3>
-
-            <HStack pt={2} spacing={3} flexWrap="wrap" align="center">
-              <Button
-                as={Link}
-                to={giveawayPath}
-                bg={giveawayCtaBg}
-                color={giveawayCtaColor}
-                fontWeight={600}
-                _hover={{ bg: giveawayCtaHoverBg, textDecoration: 'none', transform: 'translateY(-1px)' }}
-                transition="all 0.2s ease"
-                rightIcon={<Icon as={PiArrowRight} />}
-                tabIndex={activeIndex === 0 ? undefined : -1}
-              >
-                {t('View giveaway')}
-              </Button>
-              {error ? (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  color={secondaryButtonColor}
-                  onClick={() => void refetch()}
-                  tabIndex={activeIndex === 0 ? undefined : -1}
-                >
-                  {t('Retry leaderboard')}
-                </Button>
-              ) : (
-                <Box display={{ base: 'block', md: 'none' }}>
-                  <GiveawayCountdown
-                    compact
-                    isLoading={loading && !leaderboard}
-                    startAt={leaderboard?.startAt}
-                    endAt={leaderboard?.endAt}
-                    timezone={leaderboard?.timezone}
-                  />
-                </Box>
-              )}
+            <HStack spacing={3} flexWrap="wrap" alignItems="center">
+              <Body size="md" color="white" fontWeight={600}>
+                {t('VIP Ticket Giveaway: Acelerando Bitcoin 2026 Conference. View giveaway')}
+              </Body>
+              <Icon as={PiArrowRight} color="white" />
             </HStack>
           </VStack>
 
-          <Box flexShrink={0} display={{ base: 'none', md: 'block' }}>
+          <Box flexShrink={0} display={{ base: 'none', md: 'block' }} marginLeft="auto">
             {error ? (
               <Body size="sm" color="whiteAlpha.800">
                 {t('Live leaderboard unavailable')}
@@ -113,10 +76,11 @@ export const AnnouncementBanner = (props: BoxProps) => {
 
         <AnnouncementSlide
           isActive={activeIndex === 1}
+          to={guardiansPath}
           backgroundImage={`url(${GUARDIANS_ANNOUNCEMENT_BACKGROUND_URL})`}
           backgroundPosition={{ base: '62% 66%', md: 'center 72%' }}
         >
-          <VStack alignItems="flex-start" spacing={2} flex={1} minW="220px" position="relative">
+          <VStack alignItems="flex-start" spacing={1} flex={1} minW="220px">
             <Text
               fontSize="xs"
               fontWeight={700}
@@ -129,24 +93,11 @@ export const AnnouncementBanner = (props: BoxProps) => {
               {' · '}
               {t('Merch')}
             </Text>
-            <H3 color="white" textShadow="0 1px 12px rgba(0,0,0,0.3)">
-              {t('Wear the mission. Fund the future.')}
-            </H3>
-
-            <HStack pt={2} spacing={3} flexWrap="wrap" align="center">
-              <Button
-                as={Link}
-                to={guardiansPath}
-                bg={giveawayCtaBg}
-                color={giveawayCtaColor}
-                fontWeight={600}
-                _hover={{ bg: giveawayCtaHoverBg, textDecoration: 'none', transform: 'translateY(-1px)' }}
-                transition="all 0.2s ease"
-                rightIcon={<Icon as={PiArrowRight} />}
-                tabIndex={activeIndex === 1 ? undefined : -1}
-              >
-                {t('Browse the Guardian Merch')}
-              </Button>
+            <HStack spacing={3} flexWrap="wrap" alignItems="center">
+              <Body size="md" color="white" fontWeight={600}>
+                {t('Wear the mission. Fund the future. Browse the Guardian Merch')}
+              </Body>
+              <Icon as={PiArrowRight} color="white" />
             </HStack>
           </VStack>
         </AnnouncementSlide>
@@ -170,10 +121,12 @@ export const AnnouncementBanner = (props: BoxProps) => {
 
 type AnnouncementSlideProps = BoxProps & {
   isActive: boolean
+  to: string
 }
 
 const AnnouncementSlide = ({
   isActive,
+  to,
   children,
   backgroundImage,
   backgroundPosition,
@@ -181,6 +134,8 @@ const AnnouncementSlide = ({
 }: AnnouncementSlideProps) => {
   return (
     <Box
+      as={Link}
+      to={to}
       gridArea="1 / 1"
       position="relative"
       overflow="hidden"
@@ -191,6 +146,9 @@ const AnnouncementSlide = ({
       transition="opacity 0.7s ease, transform 0.7s ease"
       pointerEvents={isActive ? 'auto' : 'none'}
       boxShadow="0 2px 20px rgba(0,0,0,0.15)"
+      cursor="pointer"
+      _hover={{ transform: isActive ? 'translateY(0) scale(1.005)' : 'translateY(8px) scale(0.985)' }}
+      textDecoration="none"
       {...props}
     >
       <Box
@@ -215,12 +173,12 @@ const AnnouncementSlide = ({
 
       <HStack
         position="relative"
-        p={{ base: 5, md: 6 }}
+        p={{ base: 4, md: 5 }}
         spacing={{ base: 4, md: 8 }}
-        justify="space-between"
-        align={{ base: 'flex-start', md: 'center' }}
+        justify="flex-start"
+        align="center"
         flexWrap="wrap"
-        minH={{ base: '208px', md: '182px' }}
+        minH={{ base: '80px', md: '90px' }}
         zIndex={1}
       >
         {children}

@@ -23,7 +23,7 @@ export const AffiliateReferralProgramCard = ({
   linkValue,
 }: AffiliateReferralProgramCardProps) => {
   const referralLinkContent = linkValue ? (
-    <CopyableLinkCard label={t('Ambassador link')} linkValue={linkValue} />
+    <CopyableLinkCard label={t('Ambassador link')} linkValue={linkValue} showAmbassadorTerms />
   ) : (
     <Body size="sm" color="neutral1.11">
       {t('Your hero ID is required before sharing ambassador links.')}
