@@ -1,4 +1,4 @@
-import { Box, HStack, IconButton, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, HStack, IconButton, VStack, useColorModeValue, useDisclosure } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
@@ -39,6 +39,7 @@ import { ProfileNav } from './profileNav/ProfileNav'
 export const PlatformNavBar = () => {
   const { isLoggedIn, isUserAProjectCreator, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
+  const navShadow = useColorModeValue('0 2px 12px rgba(15, 23, 42, 0.08)', '0 2px 14px rgba(0, 0, 0, 0.28)')
 
   const isMobileMode = useMobileMode()
 
@@ -175,6 +176,7 @@ export const PlatformNavBar = () => {
       justifyContent={'center'}
       zIndex={99}
       bgColor="utils.pbg"
+      boxShadow={navShadow}
     >
       <VStack
         paddingTop={{ base: 3, lg: 5 }}
