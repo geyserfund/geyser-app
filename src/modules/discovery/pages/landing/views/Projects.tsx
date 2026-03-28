@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Divider, HStack, IconButton, Select, Tab, TabList, Tabs, VStack } from '@chakra-ui/react'
+import { Button, Divider, HStack, IconButton, Select, Tab, TabList, Tabs, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router'
@@ -45,7 +45,7 @@ const SORT_SEARCH_PARAM = 'sort'
 const TRENDING_PAGE_SIZE = 30
 
 const projectTypeFilters: Array<{ key: ProjectTypeFilter; label: string; path: string }> = [
-  { key: 'all', label: t('All'), path: getPath('discoveryProjects') },
+  { key: 'all', label: t('Project Type'), path: getPath('discoveryProjects') },
   { key: 'fundraisers', label: t('Fundraisers'), path: getPath('discoveryFundraisers') },
   { key: 'campaigns', label: t('Campaigns'), path: getPath('discoveryCampaigns') },
 ]
@@ -647,19 +647,27 @@ export const Projects = () => {
         </Tabs>
 
         <HStack w="full" justifyContent="space-between" spacing={4} alignItems="center" flexWrap="wrap">
-          <ButtonGroup spacing={2} flexWrap="wrap">
-            {projectTypeFilters.map((filter) => (
-              <Button
-                key={filter.key}
-                variant={projectTypeFilter === filter.key ? 'soft' : 'outline'}
-                colorScheme="neutral1"
-                whiteSpace="nowrap"
-                onClick={() => handleProjectTypeChange(filter.key)}
-              >
-                {filter.label}
-              </Button>
-            ))}
-          </ButtonGroup>
+          <HStack spacing={2} whiteSpace="nowrap" flexShrink={0}>
+            <ProjectsRegionCountryFilter
+              countryCode={filterCountryCode}
+              region={region}
+              onChange={handleRegionCountryChange}
+            />
+            <Divider orientation="vertical" height="24px" borderColor="blackAlpha.300" />
+            <Select
+              size="sm"
+              maxW="180px"
+              borderColor="neutral1.6"
+              value={projectTypeFilter}
+              onChange={(event) => handleProjectTypeChange(event.target.value as ProjectTypeFilter)}
+            >
+              {projectTypeFilters.map((filter) => (
+                <option key={filter.key} value={filter.key}>
+                  {filter.label}
+                </option>
+              ))}
+            </Select>
+          </HStack>
 
           <HStack spacing={2} marginLeft={{ base: 0, md: 'auto' }} whiteSpace="nowrap" flexShrink={0}>
             <Body size="sm" light whiteSpace="nowrap">
@@ -675,12 +683,6 @@ export const Projects = () => {
               <option value="most_funded">{t('Most funded')}</option>
               <option value="most_recent">{t('Most recent')}</option>
             </Select>
-            <Divider orientation="vertical" height="24px" borderColor="blackAlpha.300" />
-            <ProjectsRegionCountryFilter
-              countryCode={filterCountryCode}
-              region={region}
-              onChange={handleRegionCountryChange}
-            />
           </HStack>
         </HStack>
 

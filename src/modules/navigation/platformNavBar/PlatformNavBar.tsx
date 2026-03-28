@@ -1,4 +1,4 @@
-import { HStack, IconButton, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, HStack, IconButton, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
@@ -119,8 +119,13 @@ export const PlatformNavBar = () => {
           width="40px"
           minWidth="40px"
           paddingX={0}
-          variant="solid"
-          colorScheme="primary1"
+          variant="outline"
+          bg="white"
+          color="black"
+          borderColor="black"
+          borderWidth="1px"
+          _hover={{ bg: 'gray.50' }}
+          _active={{ bg: 'gray.100' }}
           borderRadius="8px"
         />
         <CreateProjectButton
@@ -129,8 +134,13 @@ export const PlatformNavBar = () => {
           noIcon
           size={{ base: 'md', lg: 'lg' }}
           minWidth="190px"
-          variant="solid"
-          colorScheme="primary1"
+          variant="outline"
+          bg="white"
+          color="black"
+          borderColor="black"
+          borderWidth="1px"
+          _hover={{ bg: 'gray.50' }}
+          _active={{ bg: 'gray.100' }}
           borderRadius={{ base: '8px', lg: '10px' }}
         />
       </>
@@ -183,12 +193,13 @@ export const PlatformNavBar = () => {
             justifyContent={'space-between'}
             spacing={{ base: 2, lg: 4 }}
             position="relative"
-            zIndex={1}
+            zIndex={3}
+            pointerEvents="none"
           >
-            <HStack height="full" flexShrink={0}>
+            <HStack height="full" flexShrink={0} pointerEvents="auto">
               {renderLeftSide()}
             </HStack>
-            {renderRightSide()}
+            <Box pointerEvents="auto">{renderRightSide()}</Box>
           </HStack>
 
           {shouldShowPlatformNav ? (
@@ -205,9 +216,12 @@ export const PlatformNavBar = () => {
                 maxWidth={`${dimensions.maxWidth + 24 * 2}px`}
                 paddingX={standardPadding}
                 height={{ base: '40px', lg: '48px' }}
-                pointerEvents="auto"
+                pointerEvents="none"
+                justifyContent="center"
               >
-                <LandingDesktopNav />
+                <Box pointerEvents="auto">
+                  <LandingDesktopNav />
+                </Box>
               </HStack>
             </HStack>
           ) : null}

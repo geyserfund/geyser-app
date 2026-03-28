@@ -1,4 +1,4 @@
-import { Box, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
 import { Head } from '@/config/Head.tsx'
@@ -8,10 +8,9 @@ import { ProjectCategoryList } from '@/shared/constants/platform/projectCategory
 import { HeroesMainPage } from '../../../../heroes/index.ts'
 import { TopProjects } from './components/TopProjects.tsx'
 import { AnnouncementBanner } from './sections/AnnouncementBanner.tsx'
-import { CommunityHero } from './sections/CommunityHero.tsx'
 import { CharityProjects } from './sections/CharityProjects.tsx'
 import { CuratedProjects } from './sections/CuratedProjects.tsx'
-import { JoinTheMovement } from './sections/JoinTheMovement.tsx'
+import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
 import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
 import { RecentImpactPosts } from './sections/RecentImpactPosts.tsx'
@@ -37,15 +36,9 @@ export const DefaultView = () => {
 
         <SuccessStories />
 
-        <AnnouncementBanner mt={-8} mb={-8} />
+        <AnnouncementBanner my={-8} />
 
-        <Box marginTop={{ base: 4, lg: 6 }} w="full">
-          <CommunityHero />
-        </Box>
-
-        <Box marginTop={-10} w="full">
-          <ProjectsInYourRegion />
-        </Box>
+        <ProjectsInYourRegion />
 
         <RecentImpactPosts />
 
@@ -60,7 +53,7 @@ export const DefaultView = () => {
 
             <TopProjects />
 
-            <JoinTheMovement />
+            <NewsletterSignup />
           </>
         )}
       </VStack>

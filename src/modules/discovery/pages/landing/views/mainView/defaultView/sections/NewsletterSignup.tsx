@@ -11,7 +11,6 @@ export const NewsletterSignup = (props: StackProps) => {
   return (
     <VStack
       w="full"
-      maxWidth="900px"
       alignSelf="center"
       spacing={6}
       padding={8}
@@ -34,7 +33,7 @@ export const NewsletterSignup = (props: StackProps) => {
 
       <SubscribeForm
         w="full"
-        maxWidth="600px"
+        maxWidth="full"
         inputProps={{
           placeholder: t('satoshi@gmx.com'),
         }}

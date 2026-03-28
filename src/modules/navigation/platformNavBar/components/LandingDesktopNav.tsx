@@ -196,6 +196,7 @@ export const LandingDesktopNav = () => {
                       <Box
                         key={item.title}
                         paddingY={3.5}
+                        paddingX={3}
                         backgroundColor="transparent"
                         display="flex"
                         alignItems="flex-start"
@@ -214,6 +215,7 @@ export const LandingDesktopNav = () => {
                       as={Link}
                       to={item.to}
                       paddingY={3.5}
+                      paddingX={3}
                       display="flex"
                       alignItems="flex-start"
                       justifyContent="flex-start"

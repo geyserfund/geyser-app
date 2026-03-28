@@ -1,72 +1,61 @@
-import { Box, BoxProps, HStack, Text, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { Body, H1 } from '@/shared/components/typography/index.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
 import { standardPadding } from '@/shared/styles'
 
-const STATS = [
-  { value: '2,500+', label: 'projects across 158 countries' },
-  { value: '41+', label: 'BTC funded' },
-] as const
-
 export const Hero = (props: BoxProps) => {
-  const subtitleColor = useColorModeValue('neutral1.11', 'neutral1.10')
-  const overlayBg = useColorModeValue('rgba(236, 251, 250, 0.92)', 'rgba(0, 0, 0, 0.7)')
-  const statLabelColor = useColorModeValue('neutral1.9', 'neutral1.8')
-
   return (
-    <Box w="full" position="relative" overflow="hidden" borderRadius={0} {...props}>
+    <Box w="full" position="relative" overflow="hidden" borderRadius={0} minHeight={{ base: '270px', lg: '390px' }} {...props}>
       <Box
         position="absolute"
         inset={0}
-        backgroundImage="none"
+        backgroundImage="url('/images/landing-hero-market.png')"
+        backgroundPosition={{ base: 'center', lg: 'center right' }}
+        backgroundSize="cover"
+        backgroundRepeat="no-repeat"
       />
-      <Box position="absolute" inset={0} bg={overlayBg} />
+      <Box
+        position="absolute"
+        inset={0}
+        background="linear-gradient(90deg, rgba(0, 0, 0, 0.86) 0%, rgba(0, 0, 0, 0.78) 26%, rgba(0, 0, 0, 0.58) 40%, rgba(0, 0, 0, 0.18) 62%, rgba(0, 0, 0, 0.04) 100%)"
+      />
 
       <Box
         position="relative"
         w="full"
         maxWidth={`${dimensions.maxWidth + 24 * 2}px`}
+        minHeight={{ base: '270px', lg: '390px' }}
         mx="auto"
         paddingX={standardPadding}
-        paddingTop={{ base: 8, lg: 10 }}
-        paddingBottom={{ base: 8, lg: 10 }}
+        paddingTop={{ base: 10, lg: 13 }}
+        paddingBottom={{ base: 10, lg: 13 }}
+        display="flex"
+        alignItems="center"
       >
         <VStack
           w="full"
+          maxWidth={{ base: 'full', lg: '38%' }}
           spacing={{ base: 4, lg: 5 }}
-          textAlign="center"
-          alignItems="center"
+          textAlign={{ base: 'center', lg: 'left' }}
+          alignItems={{ base: 'center', lg: 'flex-start' }}
           justifyContent="flex-start"
         >
-          <H1 size={{ base: '2xl', md: '4xl', lg: '5xl' }} bold lineHeight={1.2} letterSpacing="-0.01em">
+          <H1
+            size={{ base: '2xl', md: '4xl', lg: '5xl' }}
+            bold
+            lineHeight={1.2}
+            letterSpacing="-0.01em"
+            color="white"
+            w="full"
+          >
             {t('Accelerate global Bitcoin adoption')}
           </H1>
-          <Body size={{ base: 'lg', lg: 'xl' }} color={subtitleColor} lineHeight={1.6} w="full">
+          <Body size={{ base: 'lg', lg: 'xl' }} color="whiteAlpha.900" lineHeight={1.6} w="full">
             {t('Contribute to causes, initiatives and creators that push Bitcoin adoption around the world.')}
           </Body>
         </VStack>
-
-        <HStack
-          spacing={{ base: 4, md: 8 }}
-          justify="center"
-          align="center"
-          flexDirection={{ base: 'column', sm: 'row' }}
-          w="full"
-          pt={{ base: 5, lg: 6 }}
-        >
-          {STATS.map((stat) => (
-            <HStack key={stat.value} spacing={1.5}>
-              <Text fontSize={{ base: 'sm', md: 'md', lg: 'lg' }} fontWeight={700}>
-                {stat.value}
-              </Text>
-              <Text fontSize={{ base: 'sm', md: 'md', lg: 'lg' }} color={statLabelColor}>
-                {stat.label}
-              </Text>
-            </HStack>
-          ))}
-        </HStack>
       </Box>
     </Box>
   )

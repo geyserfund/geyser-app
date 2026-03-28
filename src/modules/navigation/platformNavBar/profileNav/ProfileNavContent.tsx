@@ -5,6 +5,7 @@ import { PiArrowUpRight, PiUserCircle } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
+import { LandingSearchInput } from '@/modules/discovery/pages/landing/components/LandingSearchInput.tsx'
 import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
 import { NavigationNewBadge } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
 import { Body } from '@/shared/components/typography'
@@ -17,9 +18,10 @@ import { ModeChange } from './components/ModeChange'
 
 type ProfileNavContentProps = {
   onNavigate?: () => void
+  showSearch?: boolean
 }
 
-export const ProfileNavContent = ({ onNavigate }: ProfileNavContentProps) => {
+export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNavContentProps) => {
   const { logout, user, isLoggedIn } = useAuthContext()
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
@@ -34,6 +36,11 @@ export const ProfileNavContent = ({ onNavigate }: ProfileNavContentProps) => {
       height="100%"
     >
       <VStack w="full" spacing={4}>
+        {showSearch ? (
+          <Box w="full">
+            <LandingSearchInput width="full" />
+          </Box>
+        ) : null}
         <VStack spacing={2} w="full">
           {isLoggedIn && (
             <MenuItem as={Link} to={getPath('heroProfile', user.heroId)} onClick={onNavigate}>
