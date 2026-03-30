@@ -8,6 +8,7 @@ import { standardPadding } from '@/shared/styles'
 
 import { CommunityUpdatesSection } from './sections/CommunityUpdatesSection.tsx'
 import { GeyserNewsSection } from './sections/GeyserNewsSection.tsx'
+import { NewsNewsletterSection } from './sections/NewsNewsletterSection.tsx'
 
 /** Top-level page at /news showing Geyser announcements and community posts. */
 export const NewsPage = () => {
@@ -28,6 +29,7 @@ export const NewsPage = () => {
         title={t('News')}
         subtitle={t('Read updates from Geyser and discover recent community posts across the platform.')}
       />
+      <NewsNewsletterSection />
       <GeyserNewsSection />
       <CommunityUpdatesSection />
     </VStack>

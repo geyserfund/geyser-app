@@ -1,18 +1,26 @@
-import { Box, Divider, HStack, Image as ChakraImage, Link as ChakraLink, MenuItem, VStack } from '@chakra-ui/react'
+import { Badge, Box, Divider, HStack, Link as ChakraLink, MenuItem, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { PiArrowUpRight, PiUserCircle } from 'react-icons/pi'
+import {
+  PiArrowUpRight,
+  PiClockCountdown,
+  PiCoins,
+  PiHandCoins,
+  PiHouse,
+  PiNewspaper,
+  PiRocket,
+  PiTrophy,
+  PiUserCircle,
+} from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { LandingSearchInput } from '@/modules/discovery/pages/landing/components/LandingSearchInput.tsx'
 import { myProjectsActivityDotAtom } from '@/modules/discovery/state/activityDotAtom'
-import { NavigationNewBadge } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
 import { Body } from '@/shared/components/typography'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { FAQUrl, getPath, GeyserHackathonsUrl, GeyserSubscribeUrl } from '@/shared/constants/index.ts'
+import { FAQUrl, getPath, GeyserHackathonsUrl } from '@/shared/constants/index.ts'
 
-import { discoveryNavItems } from '../../discoveryNav/discoveryNavData'
 import { CreateProjectButton } from '../components/CreateProjectButton.tsx'
 import { ModeChange } from './components/ModeChange'
 
@@ -25,6 +33,26 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
   const { logout, user, isLoggedIn } = useAuthContext()
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
+  const newBadgeTextColor = useColorModeValue('gray.900', 'gray.900')
+  const mobileNavigationItems = [
+    { label: 'Home', path: getPath('discoveryLanding'), icon: PiHouse },
+    { label: 'My projects', path: getPath('discoveryMyProjects'), icon: PiRocket },
+    { label: 'Fundraisers', path: getPath('discoveryFundraisers'), icon: PiHandCoins },
+    { label: 'Campaigns', path: getPath('discoveryCampaigns'), icon: PiClockCountdown },
+    {
+      label: 'Impact funds',
+      path: getPath('discoveryImpactFunds'),
+      icon: PiTrophy,
+      badge: { label: t('new'), backgroundColor: '#58efd9', textColor: newBadgeTextColor },
+    },
+    {
+      label: 'Earn',
+      path: getPath('ambassadorProgram'),
+      icon: PiCoins,
+      badge: { label: t('new'), backgroundColor: '#58efd9', textColor: newBadgeTextColor },
+    },
+    { label: 'News', path: getPath('discoveryNews'), icon: PiNewspaper },
+  ] as const
 
   return (
     <VStack
@@ -51,25 +79,32 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
             </MenuItem>
           )}
 
-          {discoveryNavItems.map((discoveryNav) => {
-            const activityDot = discoveryNav.path === 'discoveryMyProjects' ? myProjectActivityDot : false
-            const shouldUseImageIcon =
-              Boolean(discoveryNav.image) &&
-              discoveryNav.path !== 'discoveryProducts' &&
-              discoveryNav.path !== 'discoveryImpactFunds'
+          {mobileNavigationItems.map((item) => {
+            const activityDot = item.label === 'My projects' ? myProjectActivityDot : false
 
             return (
-              <MenuItem key={discoveryNav.label} as={Link} to={getPath(discoveryNav.path)} onClick={onNavigate}>
-                <HStack position="relative">
-                  {shouldUseImageIcon ? (
-                    <ChakraImage src={discoveryNav.image} alt={t(discoveryNav.label)} boxSize="18px" />
-                  ) : (
-                    <discoveryNav.icon fontSize="18px" />
-                  )}
-                  <Box position="relative" display="inline-flex" alignItems="center">
-                    <Body size="md">{t(discoveryNav.label)}</Body>
-                    {discoveryNav.new && <NavigationNewBadge position="absolute" top={-2} right={-8} />}
-                  </Box>
+              <MenuItem key={item.label} as={Link} to={item.path} onClick={onNavigate}>
+                <HStack position="relative" w="full" justify="space-between" spacing={3}>
+                  <HStack spacing={2.5}>
+                    <item.icon fontSize="18px" />
+                    <Body size="md">{t(item.label)}</Body>
+                  </HStack>
+                  {item.badge ? (
+                    <Badge
+                      px={2.5}
+                      py={0.5}
+                      minWidth="54px"
+                      textAlign="center"
+                      borderRadius="5px"
+                      textTransform="lowercase"
+                      fontSize="xs"
+                      fontWeight={600}
+                      backgroundColor={item.badge.backgroundColor}
+                      color={item.badge.textColor}
+                    >
+                      {item.badge.label}
+                    </Badge>
+                  ) : null}
                   {activityDot ? (
                     <Box
                       position="absolute"
@@ -88,7 +123,13 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
         </VStack>
         <Divider borderColor="neutral1.6" />
         <MenuItem _active={{}} _focus={{}} _hover={{}}>
-          <CreateProjectButton w="full" />
+          <CreateProjectButton
+            w="full"
+            color="black"
+            borderColor="black"
+            _hover={{ color: 'black', borderColor: 'black' }}
+            _active={{ color: 'black', borderColor: 'black' }}
+          />
         </MenuItem>
         {user.id ? (
           <>
@@ -112,12 +153,17 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
 
         <Divider borderColor="neutral1.6" />
 
+        <MenuItem
+          as={ChakraLink}
+          href="/newsletter"
+          onClick={() => {
+            onNavigate?.()
+          }}
+        >
+          <Body size="md">{t('Subscribe')}</Body>
+        </MenuItem>
         <MenuItem as={ChakraLink} isExternal href={FAQUrl} _focusVisible={{}} gap={2}>
           <Body size="md">{t('FAQ')}</Body>
-          <PiArrowUpRight fontSize="18px" />
-        </MenuItem>
-        <MenuItem as={ChakraLink} isExternal href={GeyserSubscribeUrl} _focusVisible={{}} gap={2}>
-          <Body size="md">{t('Subscribe')}</Body>
           <PiArrowUpRight fontSize="18px" />
         </MenuItem>
         <MenuItem as={ChakraLink} isExternal href={GeyserHackathonsUrl} _focusVisible={{}} gap={2}>

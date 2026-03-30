@@ -15,6 +15,7 @@ import { CopyableLinkCard } from '@/components/molecules/CopyableLinkCard.tsx'
 import { Head } from '@/config/Head.tsx'
 import { useAuthContext } from '@/context'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal.ts'
+import { DiscoveryBottomNav } from '@/modules/navigation/discoveryNav/DiscoveryBottomNav.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { PageSectionHeader } from '@/shared/components/layouts/PageSectionHeader.tsx'
 import { Body, H2 } from '@/shared/components/typography'
@@ -105,7 +106,7 @@ export const AmbassadorProgramPage = () => {
         paddingX={standardPadding}
         spacing={{ base: 6, lg: 8 }}
         alignItems="stretch"
-        paddingBottom={10}
+        paddingBottom={{ base: 28, lg: 10 }}
       >
         <PageSectionHeader
           title={t('Ambassador Program')}
@@ -331,6 +332,8 @@ export const AmbassadorProgramPage = () => {
           </VStack>
         </Box>
       </VStack>
+
+      <DiscoveryBottomNav />
     </>
   )
 }

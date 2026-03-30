@@ -374,7 +374,7 @@ export const ImpactFundsMainPage = () => {
                   dense
                   noborder
                   p={0}
-                  minH={{ base: '620px', lg: '680px' }}
+                  minH={{ base: '540px', lg: '620px' }}
                   overflow="hidden"
                   borderRadius="12px"
                   transition="all 0.25s"
@@ -462,15 +462,14 @@ export const ImpactFundsMainPage = () => {
                         <Flex
                           w="full"
                           px={5}
-                          mt="auto"
                           pt={3}
                           justifyContent="space-between"
-                          alignItems={{ base: 'stretch', md: 'center' }}
+                          alignItems="center"
                           gap={4}
                           flexWrap="wrap"
                         >
                           {foundingSponsors.length > 0 ? (
-                            <Wrap spacing={3} align="center" justify="flex-start" flex="1 1 auto">
+                            <Wrap spacing={3} align="center" justify="flex-start" flex="0 1 auto">
                               {foundingSponsors.map((sponsor) => {
                                 const sponsorContent = sponsor.image ? (
                                   <Image src={sponsor.image} alt={sponsor.name} w="full" h="full" objectFit="contain" />
@@ -507,7 +506,9 @@ export const ImpactFundsMainPage = () => {
                           ) : (
                             <Box flex={1} />
                           )}
-                          <CardCta to={getPath('impactFunds', encodeURIComponent(fund.name))} />
+                          <Box ml="auto" flexShrink={0}>
+                            <CardCta to={getPath('impactFunds', encodeURIComponent(fund.name))} />
+                          </Box>
                         </Flex>
                       </VStack>
                     </VStack>
@@ -583,7 +584,7 @@ export const ImpactFundsMainPage = () => {
                           {fund.subtitle}
                         </Body>
                       )}
-                      <HStack w="full" px={5} mt="auto" pt={3} justifyContent="space-between" alignItems="center">
+                      <Flex w="full" px={5} pt={3} justifyContent="space-between" alignItems="center" gap={4} flexWrap="wrap">
                         {fund.metrics.projectsFundedCount > 0 ? (
                           <Body size="sm" color={sectionMutedTextColor}>
                             {t('{{projectCount}} projects supported', {
@@ -591,10 +592,12 @@ export const ImpactFundsMainPage = () => {
                             })}
                           </Body>
                         ) : (
-                          <Box />
+                          <Box flex={1} />
                         )}
-                        <CardCta to={getPath('impactFunds', encodeURIComponent(fund.name))} />
-                      </HStack>
+                        <Box ml="auto" flexShrink={0}>
+                          <CardCta to={getPath('impactFunds', encodeURIComponent(fund.name))} />
+                        </Box>
+                      </Flex>
                     </VStack>
                   </VStack>
                 </LinkBox>

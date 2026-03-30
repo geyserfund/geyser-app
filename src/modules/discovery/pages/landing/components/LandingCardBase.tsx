@@ -17,7 +17,7 @@ import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
-import { isAllOrNothing, isInactive } from '@/utils'
+import { isAllOrNothing, isInactive, useMobileMode } from '@/utils/index.ts'
 
 import { SkeletonLayout } from '../../../../../shared/components/layouts'
 import { ContributionsSummary, ProjectAonGoalStatus, ProjectForLandingPageFragment } from '../../../../../types'
@@ -60,10 +60,14 @@ const AonStatusDisplay = ({
   percentage,
   timeLeft,
   isFailed,
+  size = 'sm',
+  wrap = true,
 }: {
   percentage: number
   timeLeft: ReturnType<typeof aonProjectTimeLeft>
   isFailed: boolean
+  size?: 'xs' | 'sm'
+  wrap?: boolean
 }) => {
   const getStatusColor = () => {
     if (percentage > 100) return 'primary1.11'
@@ -75,7 +79,7 @@ const AonStatusDisplay = ({
 
   if (isFailed) {
     return (
-      <Body size="sm" bold color={statusColor} isTruncated>
+      <Body size={size} bold color={statusColor} isTruncated>
         {t('Campaign Failed')}
       </Body>
     )
@@ -84,22 +88,22 @@ const AonStatusDisplay = ({
   const percentageColor = percentage >= 100 ? 'primary1.11' : 'neutral1.12'
 
   return (
-    <HStack spacing={1} alignItems="center" flexWrap="wrap" overflow="hidden">
+    <HStack spacing={1} alignItems="center" flexWrap={wrap ? 'wrap' : 'nowrap'} overflow="hidden">
       {timeLeft && (
         <>
           <Icon as={PiClockCountdown} color={statusColor} />
-          <Body size="sm" bold color={statusColor} isTruncated>
+          <Body size={size} bold color={statusColor} isTruncated>
             {timeLeft.value} {timeLeft.label}
           </Body>
           <Box backgroundColor={statusColor} width="5px" height="5px" borderRadius="full" flexShrink={0} />
         </>
       )}
       {percentage ? (
-        <Body size="sm" bold color={percentageColor} isTruncated>
+        <Body size={size} bold color={percentageColor} isTruncated>
           {percentage}% {t('funded')}
         </Body>
       ) : (
-        <Body size="sm" bold color={statusColor} isTruncated>
+        <Body size={size} bold color={statusColor} isTruncated>
           {t('Ongoing')}
         </Body>
       )}
@@ -108,12 +112,22 @@ const AonStatusDisplay = ({
 }
 
 /** Amount raised with optional fire emoji for trending projects. */
-const ContributionAmount = ({ amount, hasFire, isWeekly }: { amount: string; hasFire: boolean; isWeekly: boolean }) => (
+const ContributionAmount = ({
+  amount,
+  hasFire,
+  isWeekly,
+  size = 'sm',
+}: {
+  amount: string
+  hasFire: boolean
+  isWeekly: boolean
+  size?: 'xs' | 'sm'
+}) => (
   <HStack spacing={0} overflow="hidden">
     {hasFire && <AnimatedFire />}
-    <Body size="sm" bold color="primary1.11" isTruncated>
+    <Body size={size} bold color="primary1.11" isTruncated>
       {amount}{' '}
-      <Body as="span" regular>
+      <Body as="span" size={size} regular>
         {isWeekly ? t('this week') : t('raised')}
       </Body>
     </Body>
@@ -184,27 +198,35 @@ const CardImage = ({
   project,
   countryName,
   categoryLabel,
+  compact,
 }: {
   project: ProjectForLandingPageFragment
   countryName?: string
   categoryLabel?: string
+  compact?: boolean
 }) => (
-  <Box width="full" position="relative" flexShrink={0} padding={2}>
+  <Box
+    width={compact ? '128px' : 'full'}
+    minWidth={compact ? '128px' : undefined}
+    position="relative"
+    flexShrink={0}
+    padding={compact ? 0 : 2}
+  >
     <ImageWithReload
       width="100%"
       height="100%"
-      aspectRatio={1.45}
+      aspectRatio={compact ? 1 : 1.45}
       objectFit="cover"
       borderRadius="8px"
       src={project.thumbnailImage || ''}
       alt={`${project.title}-header-image`}
     />
-    <Box position="absolute" top={4} right={4}>
+    <Box position="absolute" top={compact ? 2 : 4} right={compact ? 2 : 4}>
       <NonProjectProjectIcon taxProfile={project.owners?.[0]?.user?.taxProfile} />
       <AllOrNothingIcon project={project} />
     </Box>
 
-    {(countryName || categoryLabel) && (
+    {!compact && (countryName || categoryLabel) && (
       <HStack position="absolute" bottom={4} left={4} spacing={1} overflow="hidden" maxWidth="calc(100% - 32px)">
         {countryName && (
           <ImagePill>
@@ -240,10 +262,12 @@ export const LandingCardBase = ({
   hideContributionContent,
   ...rest
 }: LandingCardBaseProps) => {
+  const isMobileMode = useMobileMode()
   const inActive = isInactive(project.status)
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
   const { getProjectBalance, getAonGoalPercentage, isFundingDisabled } = useProjectToolkit(project)
+  const useCompactLayout = !noMobile && Boolean(isMobile ?? isMobileMode)
 
   const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
   const isAonProject = isAllOrNothing(project)
@@ -273,17 +297,18 @@ export const LandingCardBase = ({
   return (
     <InteractiveCardLayout
       role="group"
-      padding="0px"
+      padding={useCompactLayout ? 0 : '0px'}
       width="full"
       height="100%"
-      direction="column"
+      direction={useCompactLayout ? 'row' : 'column'}
       spacing={0}
       flex={1}
       position="relative"
       background="transparent"
-      boxShadow="0px 2px 12px rgba(0, 0, 0, 0.08)"
+      boxShadow={useCompactLayout ? 'none' : '0px 2px 12px rgba(0, 0, 0, 0.08)'}
       borderRadius="12px"
       overflow="hidden"
+      alignItems={useCompactLayout ? 'stretch' : undefined}
       {...rest}
     >
       {inActive && (
@@ -298,81 +323,149 @@ export const LandingCardBase = ({
         />
       )}
 
-      <CardImage project={project} countryName={countryName} categoryLabel={categoryLabel} />
+      <CardImage project={project} countryName={countryName} categoryLabel={categoryLabel} compact={useCompactLayout} />
 
       <VStack
         flex={1}
         width="100%"
+        minWidth={0}
         alignItems="start"
         overflow="hidden"
-        spacing={3}
-        paddingX={2}
-        paddingTop={0}
-        paddingBottom={2}
+        justifyContent={useCompactLayout ? 'space-between' : undefined}
+        spacing={useCompactLayout ? 2 : 3}
+        paddingX={useCompactLayout ? 3 : 2}
+        paddingTop={useCompactLayout ? 3 : 0}
+        paddingBottom={useCompactLayout ? 3 : 2}
       >
-        <HStack width="100%" alignItems="baseline" spacing={2} overflow="hidden">
-          <H3 size="md" medium flex={1} isTruncated>
-            {project.title}
-          </H3>
-          <HStack spacing={1} flexShrink={0}>
-            <Body size="xs" muted>
-              {t('by')}
-            </Body>
-            <ProfileAvatar
-              guardian={projectOwner?.guardianType}
-              src={projectOwner?.imageUrl || ''}
-              height="16px"
-              width="16px"
-              wrapperProps={{ padding: '1px', height: '18px', width: '18px' }}
-              onClick={handleProfileClick}
-            />
-            <ProfileText
-              size="xs"
-              guardian={projectOwner?.guardianType}
-              _hover={{ textDecoration: 'underline' }}
-              onClick={handleProfileClick}
-              maxWidth="120px"
-              isTruncated
+        {useCompactLayout ? (
+          <VStack width="100%" alignItems="start" spacing={2} overflow="hidden">
+            <H3 size="sm" medium width="100%" noOfLines={2}>
+              {project.title}
+            </H3>
+
+            <Body
+              size="sm"
+              dark
+              noOfLines={2}
+              width="100%"
+              wordBreak="break-word"
+              whiteSpace="normal"
+              lineHeight="1.4"
+              overflow="hidden"
             >
-              {projectOwner?.username}
-            </ProfileText>
+              {project.shortDescription}
+            </Body>
+          </VStack>
+        ) : (
+          <HStack width="100%" alignItems="baseline" spacing={2} overflow="hidden">
+            <H3 size="md" medium flex={1} isTruncated>
+              {project.title}
+            </H3>
+            <HStack spacing={1} flexShrink={0}>
+              <Body size="xs" muted>
+                {t('by')}
+              </Body>
+              <ProfileAvatar
+                guardian={projectOwner?.guardianType}
+                src={projectOwner?.imageUrl || ''}
+                height="16px"
+                width="16px"
+                wrapperProps={{ padding: '1px', height: '18px', width: '18px' }}
+                onClick={handleProfileClick}
+              />
+              <ProfileText
+                size="xs"
+                guardian={projectOwner?.guardianType}
+                _hover={{ textDecoration: 'underline' }}
+                onClick={handleProfileClick}
+                maxWidth="120px"
+                isTruncated
+              >
+                {projectOwner?.username}
+              </ProfileText>
+            </HStack>
           </HStack>
-        </HStack>
-
-        <Body
-          size="md"
-          dark
-          noOfLines={3}
-          height="68px"
-          width="100%"
-          wordBreak="break-word"
-          whiteSpace="normal"
-          lineHeight="1.4"
-          overflow="hidden"
-        >
-          {project.shortDescription}
-        </Body>
-
-        {!hideContributionContent && (
-          <CardFooter
-            project={project}
-            isAonProject={isAonProject}
-            isAonFailed={isAonFailed}
-            percentage={percentage}
-            timeLeft={timeLeft}
-            formattedAmount={formatAmount(contributionAmount || 0, 'USD')}
-            hasFire={hasFire}
-            isWeekly={isWeekly}
-            onContribute={handleContribute}
-            isDisabled={isFundingDisabled()}
-          />
         )}
+
+        {!useCompactLayout && (
+          <Body
+            size="md"
+            dark
+            noOfLines={3}
+            height="68px"
+            width="100%"
+            wordBreak="break-word"
+            whiteSpace="normal"
+            lineHeight="1.4"
+            overflow="hidden"
+          >
+            {project.shortDescription}
+          </Body>
+        )}
+
+        {!hideContributionContent &&
+          (useCompactLayout ? (
+            isAonProject ? (
+              <AonStatusDisplay
+                percentage={percentage}
+                timeLeft={timeLeft}
+                isFailed={isAonFailed}
+                size="xs"
+                wrap={false}
+              />
+            ) : (
+              <ContributionAmount
+                amount={formatAmount(contributionAmount || 0, 'USD')}
+                hasFire={hasFire}
+                isWeekly={isWeekly}
+                size="xs"
+              />
+            )
+          ) : (
+            <CardFooter
+              project={project}
+              isAonProject={isAonProject}
+              isAonFailed={isAonFailed}
+              percentage={percentage}
+              timeLeft={timeLeft}
+              formattedAmount={formatAmount(contributionAmount || 0, 'USD')}
+              hasFire={hasFire}
+              isWeekly={isWeekly}
+              onContribute={handleContribute}
+              isDisabled={isFundingDisabled()}
+            />
+          ))}
       </VStack>
     </InteractiveCardLayout>
   )
 }
 
 export const LandingCardBaseSkeleton = () => {
+  const isMobile = useMobileMode()
+
+  if (isMobile) {
+    return (
+      <InteractiveCardLayout padding={0} width="full" height="100%" direction="row" spacing={0} flex={1}>
+        <SkeletonLayout width="128px" minWidth="128px" aspectRatio={1} />
+
+        <VStack
+          flex={1}
+          minWidth={0}
+          alignItems="start"
+          justifyContent="center"
+          overflow="hidden"
+          spacing={2}
+          paddingX={3}
+          paddingY={3}
+        >
+          <SkeletonLayout width="85%" height="18px" />
+          <SkeletonLayout width="100%" height="48px" />
+          <SkeletonLayout width="72px" height="14px" />
+        </VStack>
+      </InteractiveCardLayout>
+    )
+  }
+
   return (
     <InteractiveCardLayout padding="0px" width="full" height="100%" direction="column" spacing={0} flex={1}>
       <Box width="full" padding={2}>

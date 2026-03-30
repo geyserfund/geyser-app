@@ -77,7 +77,8 @@ export const ProjectsRegionCountryFilter = ({
   }, [region, regions, searchValue])
 
   const selectedCountry = countryCode ? countries.find((entry) => entry.country.code === countryCode) : undefined
-  const buttonLabel = selectedCountry?.country.name ?? region ?? t('Region/Country')
+  const isWorldwideSelected = !selectedCountry && !region
+  const buttonLabel = selectedCountry?.country.name ?? region ?? t('Worldwide')
   const isLoading = countriesLoading || regionsLoading
 
   const handleClose = () => {
@@ -117,6 +118,7 @@ export const ProjectsRegionCountryFilter = ({
           variant="ghost"
           colorScheme="neutral1"
           size="sm"
+          leftIcon={isWorldwideSelected ? <Icon as={PiGlobe} /> : undefined}
           rightIcon={<Icon as={PiCaretDown} />}
           fontSize="sm"
           fontWeight={400}

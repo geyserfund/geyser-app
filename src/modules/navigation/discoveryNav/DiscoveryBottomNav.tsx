@@ -109,109 +109,112 @@ export const DiscoveryBottomNav = () => {
       {bottomNavItems.map((item) => {
         if (item.key === BottomNavItemKey.donate) {
           return (
-            <Menu key={item.key} placement="top-start" strategy="fixed">
-              <MenuButton
-                as={Button}
-                variant="ghost"
-                flex={1}
-                minHeight="56px"
-                borderRadius={{ base: '8px', lg: '10px' }}
-                colorScheme="primary1"
-                color={bottomNavLabelColor}
-                fontSize={bottomNavLabelFontSize}
-                fontWeight={bottomNavLabelFontWeight}
-                isActive={item.isActive}
-                rightIcon={<PiCaretUp />}
-              >
-                {item.label}
-              </MenuButton>
-              <Portal>
-                <MenuList
-                  borderRadius="12px"
-                  overflow="hidden"
-                  p={2.5}
-                  minWidth="260px"
-                  borderColor={menuBorderColor}
-                  backgroundColor={menuBackgroundColor}
-                  marginBottom={2}
+            <Box key={item.key} flex={1.2}>
+              <Menu placement="top-start" strategy="fixed">
+                <MenuButton
+                  as={Button}
+                  variant="ghost"
+                  width="full"
+                  paddingX={4}
+                  minHeight="56px"
+                  borderRadius={{ base: '8px', lg: '10px' }}
+                  colorScheme="primary1"
+                  color={bottomNavLabelColor}
+                  fontSize={bottomNavLabelFontSize}
+                  fontWeight={bottomNavLabelFontWeight}
+                  isActive={item.isActive}
+                  rightIcon={<PiCaretUp />}
                 >
-                  {mobileDonateItems.map((donateItem) => {
-                    const content = (
-                      <VStack align="stretch" spacing={1.5} width="100%">
-                        <HStack align="center" justify="flex-start" spacing={2.5}>
-                          <Body
-                            fontSize="sm"
-                            dark={!donateItem.disabled}
-                            color={donateItem.disabled ? disabledColor : undefined}
-                            fontWeight={400}
-                            lineHeight={1.2}
-                          >
-                            {donateItem.title}
-                          </Body>
-                          {donateItem.badge ? (
-                            <Badge
-                              px={2}
-                              py={0.5}
-                              borderRadius="5px"
-                              textTransform="lowercase"
-                              fontSize="xs"
-                              fontWeight={600}
-                              backgroundColor={donateItem.badge.backgroundColor}
-                              color={donateItem.badge.textColor}
+                  {item.label}
+                </MenuButton>
+                <Portal>
+                  <MenuList
+                    borderRadius="12px"
+                    overflow="hidden"
+                    p={2.5}
+                    minWidth="260px"
+                    borderColor={menuBorderColor}
+                    backgroundColor={menuBackgroundColor}
+                    marginBottom={2}
+                  >
+                    {mobileDonateItems.map((donateItem) => {
+                      const content = (
+                        <VStack align="stretch" spacing={1.5} width="100%">
+                          <HStack align="center" justify="flex-start" spacing={2.5}>
+                            <Body
+                              fontSize="sm"
+                              dark={!donateItem.disabled}
+                              color={donateItem.disabled ? disabledColor : undefined}
+                              fontWeight={400}
+                              lineHeight={1.2}
                             >
-                              {donateItem.badge.label}
-                            </Badge>
-                          ) : null}
-                        </HStack>
-                        <Body
-                          fontSize="xs"
-                          color={donateItem.disabled ? disabledColor : mutedColor}
-                          fontWeight={300}
-                          lineHeight={1.4}
-                        >
-                          {donateItem.description}
-                        </Body>
-                      </VStack>
-                    )
+                              {donateItem.title}
+                            </Body>
+                            {donateItem.badge ? (
+                              <Badge
+                                px={2}
+                                py={0.5}
+                                borderRadius="5px"
+                                textTransform="lowercase"
+                                fontSize="xs"
+                                fontWeight={600}
+                                backgroundColor={donateItem.badge.backgroundColor}
+                                color={donateItem.badge.textColor}
+                              >
+                                {donateItem.badge.label}
+                              </Badge>
+                            ) : null}
+                          </HStack>
+                          <Body
+                            fontSize="xs"
+                            color={donateItem.disabled ? disabledColor : mutedColor}
+                            fontWeight={300}
+                            lineHeight={1.4}
+                          >
+                            {donateItem.description}
+                          </Body>
+                        </VStack>
+                      )
 
-                    if (donateItem.disabled) {
+                      if (donateItem.disabled) {
+                        return (
+                          <Box
+                            key={donateItem.title}
+                            paddingX={3}
+                            paddingY={3}
+                            display="flex"
+                            alignItems="flex-start"
+                            justifyContent="flex-start"
+                            cursor="not-allowed"
+                            borderRadius="8px"
+                          >
+                            {content}
+                          </Box>
+                        )
+                      }
+
                       return (
-                        <Box
+                        <MenuItem
                           key={donateItem.title}
+                          as={Link}
+                          to={donateItem.to}
+                          alignItems="flex-start"
+                          borderRadius="8px"
                           paddingX={3}
                           paddingY={3}
-                          display="flex"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          cursor="not-allowed"
-                          borderRadius="8px"
+                          height="auto"
+                          whiteSpace="normal"
+                          _hover={{ backgroundColor: menuHoverColor }}
+                          _focusVisible={{ backgroundColor: menuHoverColor }}
                         >
                           {content}
-                        </Box>
+                        </MenuItem>
                       )
-                    }
-
-                    return (
-                      <MenuItem
-                        key={donateItem.title}
-                        as={Link}
-                        to={donateItem.to}
-                        alignItems="flex-start"
-                        borderRadius="8px"
-                        paddingX={3}
-                        paddingY={3}
-                        height="auto"
-                        whiteSpace="normal"
-                        _hover={{ backgroundColor: menuHoverColor }}
-                        _focusVisible={{ backgroundColor: menuHoverColor }}
-                      >
-                        {content}
-                      </MenuItem>
-                    )
-                  })}
-                </MenuList>
-              </Portal>
-            </Menu>
+                    })}
+                  </MenuList>
+                </Portal>
+              </Menu>
+            </Box>
           )
         }
 

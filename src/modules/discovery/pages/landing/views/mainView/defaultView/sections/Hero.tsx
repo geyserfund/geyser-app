@@ -19,7 +19,10 @@ export const Hero = (props: BoxProps) => {
       <Box
         position="absolute"
         inset={0}
-        background="linear-gradient(90deg, rgba(0, 0, 0, 0.86) 0%, rgba(0, 0, 0, 0.78) 26%, rgba(0, 0, 0, 0.58) 40%, rgba(0, 0, 0, 0.18) 62%, rgba(0, 0, 0, 0.04) 100%)"
+        background={{
+          base: 'linear-gradient(90deg, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.88) 34%, rgba(0, 0, 0, 0.68) 52%, rgba(0, 0, 0, 0.28) 74%, rgba(0, 0, 0, 0.08) 100%)',
+          lg: 'linear-gradient(90deg, rgba(0, 0, 0, 0.86) 0%, rgba(0, 0, 0, 0.78) 26%, rgba(0, 0, 0, 0.58) 40%, rgba(0, 0, 0, 0.18) 62%, rgba(0, 0, 0, 0.04) 100%)',
+        }}
       />
 
       <Box
@@ -38,8 +41,8 @@ export const Hero = (props: BoxProps) => {
           w="full"
           maxWidth={{ base: 'full', lg: '38%' }}
           spacing={{ base: 4, lg: 5 }}
-          textAlign={{ base: 'center', lg: 'left' }}
-          alignItems={{ base: 'center', lg: 'flex-start' }}
+          textAlign="left"
+          alignItems="flex-start"
           justifyContent="flex-start"
         >
           <H1
