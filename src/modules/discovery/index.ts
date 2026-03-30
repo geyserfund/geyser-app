@@ -9,6 +9,7 @@ import { Launchpad } from './pages/Launchpad/Launchpad.tsx'
 import { Leaderboard } from './pages/leaderboard/Leaderboard.tsx'
 import { MyProjects } from './pages/myProjects/MyProjects.tsx'
 import { NewsPage } from './pages/news/NewsPage.tsx'
+import { NewsletterPage } from './pages/newsletter/NewsletterPage.tsx'
 
 export {
   Activity,
@@ -20,6 +21,7 @@ export {
   Leaderboard,
   MyProjects,
   NewsPage,
+  NewsletterPage,
   Products,
   ProjectsIFollow,
 }

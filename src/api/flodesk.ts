@@ -2,14 +2,25 @@ import { VITE_APP_FLODESK_API_KEY } from '../shared/constants'
 
 const FLODESK_BASE_API_ENDPOINT = 'https://api.flodesk.com/v1'
 
-export const createSubscriber = async (data: any) => {
-  fetch(`${FLODESK_BASE_API_ENDPOINT}/subscribers`, {
+const flodeskHeaders = {
+  'User-Agent': 'geyser.fund',
+  Authorization: `Basic ${VITE_APP_FLODESK_API_KEY}`,
+  'Content-Type': 'application/json',
+} as const
+
+type CreateSubscriberData = {
+  email: string
+  first_name?: string
+  last_name?: string
+  segment_ids?: string[]
+}
+
+/** Creates or updates a Flodesk subscriber, optionally assigning them to segments. */
+export const createSubscriber = async (data: CreateSubscriberData) => {
+  const response = await fetch(`${FLODESK_BASE_API_ENDPOINT}/subscribers`, {
     method: 'POST',
-    headers: {
-      'User-Agent': 'geyser.fund',
-      Authorization: `Basic ${VITE_APP_FLODESK_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
+    headers: flodeskHeaders,
     body: JSON.stringify(data),
-  }).then((response) => response.json())
+  })
+  return response.json()
 }
