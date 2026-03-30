@@ -18,9 +18,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** Add BigInt functionality */
   BigInt: { input: any; output: any; }
-  /** Date custom scalar type */
   Date: { input: any; output: any; }
 };
 
@@ -3330,7 +3328,7 @@ export type Project = {
   rskEoa?: Maybe<Scalars['String']['output']>;
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['String']['output']>;
-  /** @deprecated Field no longer supported */
+  /** @deprecated No longer supported */
   sponsors: Array<Sponsor>;
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
@@ -4231,7 +4229,7 @@ export type Query = {
   getDashboardFunders: Array<Funder>;
   /**
    * Returns the public key of the Lightning node linked to a project, if there is one.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   getProjectPubkey?: Maybe<Scalars['String']['output']>;
   getProjectReward: ProjectReward;
@@ -5267,14 +5265,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>;
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isAmbassador: Scalars['Boolean']['output'];
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']['output'];
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated Field no longer supported
+   * @deprecated No longer supported
    */
   isSponsor: Scalars['Boolean']['output'];
   /** Project linked to the contributions. */
@@ -9380,9 +9378,9 @@ export type ContributionForLandingPageFragment = { __typename?: 'Contribution', 
     & ProjectThumbnailImageFragment
   ) | null };
 
-export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
+export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
 
-export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, launchedAt?: any | null, aonGoal?: (
+export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
     & ProjectAonGoalForLandingPageFragment
   ) | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, guardianType?: GuardianType | null, username: string, imageUrl?: string | null, taxProfile?: { __typename?: 'UserTaxProfile', legalEntityType: LegalEntityType, verified?: boolean | null, country?: string | null } | null } }> };
@@ -9435,7 +9433,7 @@ export type PostsForLandingPageQueryVariables = Exact<{
 }>;
 
 
-export type PostsForLandingPageQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null }> };
+export type PostsForLandingPageQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null }> };
 
 export type ProjectsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -9559,6 +9557,14 @@ export type ProjectRewardsTrendingWeeklyGetQuery = { __typename?: 'Query', proje
       { __typename?: 'ProjectReward' }
       & RewardForLandingPageFragment
     ) }> };
+
+export type ProjectRewardsTrendingMonthlyGetQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ProjectRewardsTrendingMonthlyGetQuery = { __typename?: 'Query', projectRewardsTrendingMonthlyGet: Array<{ __typename?: 'ProjectRewardTrendingMonthlyGetRow', projectReward: { __typename?: 'ProjectReward', project: (
+        { __typename?: 'Project' }
+        & ProjectForLandingPageFragment
+      ) } }> };
 
 export type ProjectRewardsTrendingQuarterlyGetQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -11800,6 +11806,8 @@ export const PostForLandingPageFragmentDoc = gql`
     title
     name
     id
+    category
+    subCategory
     thumbnailImage
     owners {
       id
@@ -11835,9 +11843,20 @@ export const ProjectForLandingPageFragmentDoc = gql`
   shortDescription
   title
   status
-  balance
-  balanceUsdCent
   fundingStrategy
+  category
+  subCategory
+  location {
+    country {
+      code
+      name
+    }
+    region
+  }
+  tags {
+    id
+    label
+  }
   aonGoal {
     ...ProjectAonGoalForLandingPage
   }
@@ -14719,6 +14738,8 @@ export const PostsForLandingPageDocument = gql`
       title
       name
       id
+      category
+      subCategory
       thumbnailImage
       owners {
         id
@@ -15323,6 +15344,49 @@ export type ProjectRewardsTrendingWeeklyGetQueryHookResult = ReturnType<typeof u
 export type ProjectRewardsTrendingWeeklyGetLazyQueryHookResult = ReturnType<typeof useProjectRewardsTrendingWeeklyGetLazyQuery>;
 export type ProjectRewardsTrendingWeeklyGetSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsTrendingWeeklyGetSuspenseQuery>;
 export type ProjectRewardsTrendingWeeklyGetQueryResult = Apollo.QueryResult<ProjectRewardsTrendingWeeklyGetQuery, ProjectRewardsTrendingWeeklyGetQueryVariables>;
+export const ProjectRewardsTrendingMonthlyGetDocument = gql`
+    query ProjectRewardsTrendingMonthlyGet {
+  projectRewardsTrendingMonthlyGet {
+    projectReward {
+      project {
+        ...ProjectForLandingPage
+      }
+    }
+  }
+}
+    ${ProjectForLandingPageFragmentDoc}`;
+
+/**
+ * __useProjectRewardsTrendingMonthlyGetQuery__
+ *
+ * To run a query within a React component, call `useProjectRewardsTrendingMonthlyGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProjectRewardsTrendingMonthlyGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProjectRewardsTrendingMonthlyGetQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useProjectRewardsTrendingMonthlyGetQuery(baseOptions?: Apollo.QueryHookOptions<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>(ProjectRewardsTrendingMonthlyGetDocument, options);
+      }
+export function useProjectRewardsTrendingMonthlyGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>(ProjectRewardsTrendingMonthlyGetDocument, options);
+        }
+export function useProjectRewardsTrendingMonthlyGetSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>(ProjectRewardsTrendingMonthlyGetDocument, options);
+        }
+export type ProjectRewardsTrendingMonthlyGetQueryHookResult = ReturnType<typeof useProjectRewardsTrendingMonthlyGetQuery>;
+export type ProjectRewardsTrendingMonthlyGetLazyQueryHookResult = ReturnType<typeof useProjectRewardsTrendingMonthlyGetLazyQuery>;
+export type ProjectRewardsTrendingMonthlyGetSuspenseQueryHookResult = ReturnType<typeof useProjectRewardsTrendingMonthlyGetSuspenseQuery>;
+export type ProjectRewardsTrendingMonthlyGetQueryResult = Apollo.QueryResult<ProjectRewardsTrendingMonthlyGetQuery, ProjectRewardsTrendingMonthlyGetQueryVariables>;
 export const ProjectRewardsTrendingQuarterlyGetDocument = gql`
     query ProjectRewardsTrendingQuarterlyGet {
   projectRewardsTrendingQuarterlyGet {

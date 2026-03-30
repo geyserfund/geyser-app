@@ -30,6 +30,11 @@ export const ProjectShareModal = ({ isOpen, onClose }: IProjectShareModal) => {
   const items = (isProjectOwner
     ? [
         {
+          name: t('Share'),
+          key: ProjectShareModalView.share,
+          render: () => <ProjectShareView />,
+        },
+        {
           name: t('Banner'),
           key: ProjectShareModalView.banner,
           render: () => <ProjectBanners />,
@@ -50,7 +55,7 @@ export const ProjectShareModal = ({ isOpen, onClose }: IProjectShareModal) => {
 
   const { render, ...animatedNavBarProps } = useAnimatedNavBar({
     items,
-    defaultView: isProjectOwner ? ProjectShareModalView.banner : ProjectShareModalView.share,
+    defaultView: ProjectShareModalView.share,
     resetKey: isOpen,
   })
 

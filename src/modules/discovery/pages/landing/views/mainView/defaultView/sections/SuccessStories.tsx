@@ -81,7 +81,6 @@ const stories = [
 ]
 
 export const SuccessStories = () => {
-  // Select 4 random stories for display
   const displayedStories = useMemo(() => {
     const shuffledStories = [...stories].sort(() => 0.5 - Math.random())
     return shuffledStories.slice(0, 4)

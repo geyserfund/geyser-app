@@ -301,7 +301,7 @@ export const GiveawayPage = () => {
                 {t('View more projects')}
               </Button>
             </HStack>
-            <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 5 }} spacing={5}>
+            <SimpleGrid columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
               {featuredProjects.map((project) => (
                 <LandingProjectCard key={project.id} project={project} />
               ))}

@@ -3,23 +3,31 @@ import { useCallback } from 'react'
 
 import { btcRateAtom } from '@/shared/state/btcRateAtom'
 
-import { Satoshis, USDCents, USDollars } from '../types/types'
+import type { Satoshis, USDCents, USDollars } from '../types/types'
+
+const toSatoshisNumber = (satoshis: number | bigint): number => {
+  return typeof satoshis === 'bigint' ? Number(satoshis) : satoshis
+}
 
 export const useBTCConverter = () => {
   const btcRate = useAtomValue(btcRateAtom)
 
   const getUSDAmount = useCallback(
-    (satoshis: Satoshis): USDollars => {
-      return satoshis * btcRate > 0
-        ? (Math.round(satoshis * btcRate) as USDollars)
-        : ((satoshis * btcRate) as USDollars)
+    (satoshis: number | bigint): USDollars => {
+      const satoshisNumber = toSatoshisNumber(satoshis)
+
+      return satoshisNumber * btcRate > 0
+        ? (Math.round(satoshisNumber * btcRate) as USDollars)
+        : ((satoshisNumber * btcRate) as USDollars)
     },
     [btcRate],
   )
 
   const getUSDCentsAmount = useCallback(
-    (satoshis: Satoshis): USDCents => {
-      return (satoshis * btcRate * 100) as USDCents
+    (satoshis: number | bigint): USDCents => {
+      const satoshisNumber = toSatoshisNumber(satoshis)
+
+      return (satoshisNumber * btcRate * 100) as USDCents
     },
     [btcRate],
   )

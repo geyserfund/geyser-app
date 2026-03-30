@@ -62,7 +62,7 @@ export const ProfileFollowed = () => {
               <Body medium>
                 {t('Check out some trending projects this week that you can follow in the discovery view!')}
               </Body>
-              <Button size="lg" colorScheme="primary1" as={Link} to={getPath('discoveryLanding')}>
+              <Button size="lg" colorScheme="primary1" as={Link} to={getPath('discoveryProjects')}>
                 {t('Discover projects')}
               </Button>
             </>

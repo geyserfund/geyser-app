@@ -1,6 +1,6 @@
-import { Box, Button, HStack, Icon, Tooltip, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { PiClockCountdown } from 'react-icons/pi'
+import { PiClockCountdown, PiMapPin } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
@@ -12,12 +12,12 @@ import { CardLayoutProps } from '@/shared/components/layouts/CardLayout'
 import { InteractiveCardLayout } from '@/shared/components/layouts/InteractiveCardLayout.tsx'
 import { Body, H3 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants/index.ts'
+import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 import { AonProgressBar } from '@/shared/molecules/project/AonProgressBar.tsx'
-import { ProjectPaymentMethodsHint } from '@/shared/molecules/project/ProjectPaymentMethodsHint.tsx'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import { useProjectToolkit } from '@/shared/utils/hooks/useProjectToolKit.ts'
 import { aonProjectTimeLeft } from '@/shared/utils/project/getAonData.ts'
-import { isAllOrNothing, isInactive } from '@/utils'
+import { isAllOrNothing, isInactive, useMobileMode } from '@/utils/index.ts'
 
 import { SkeletonLayout } from '../../../../../shared/components/layouts'
 import { ContributionsSummary, ProjectAonGoalStatus, ProjectForLandingPageFragment } from '../../../../../types'
@@ -40,6 +40,225 @@ export interface LandingCardBaseProps extends CardLayoutProps {
   hasSubscribe?: boolean
 }
 
+/** Shared pill style used for location and category overlays on the image. */
+const ImagePill = ({ children }: { children: React.ReactNode }) => (
+  <HStack
+    backgroundColor="utils.pbg"
+    borderRadius="md"
+    paddingX={2}
+    paddingY={1}
+    spacing={1}
+    boxShadow="sm"
+    flexShrink={0}
+  >
+    {children}
+  </HStack>
+)
+
+/** AON campaign status line (time left, percentage funded, failed). */
+const AonStatusDisplay = ({
+  percentage,
+  timeLeft,
+  isFailed,
+  size = 'sm',
+  wrap = true,
+}: {
+  percentage: number
+  timeLeft: ReturnType<typeof aonProjectTimeLeft>
+  isFailed: boolean
+  size?: 'xs' | 'sm'
+  wrap?: boolean
+}) => {
+  const getStatusColor = () => {
+    if (percentage > 100) return 'primary1.11'
+    if (timeLeft?.label !== 'days left') return 'warning.11'
+    return 'neutral1.12'
+  }
+
+  const statusColor = getStatusColor()
+
+  if (isFailed) {
+    return (
+      <Body size={size} bold color={statusColor} isTruncated>
+        {t('Campaign Failed')}
+      </Body>
+    )
+  }
+
+  const percentageColor = percentage >= 100 ? 'primary1.11' : 'neutral1.12'
+
+  return (
+    <HStack spacing={1} alignItems="center" flexWrap={wrap ? 'wrap' : 'nowrap'} overflow="hidden">
+      {timeLeft && (
+        <>
+          <Icon as={PiClockCountdown} color={statusColor} />
+          <Body size={size} bold color={statusColor} isTruncated>
+            {timeLeft.value} {timeLeft.label}
+          </Body>
+          <Box backgroundColor={statusColor} width="5px" height="5px" borderRadius="full" flexShrink={0} />
+        </>
+      )}
+      {Number.isFinite(percentage) ? (
+        <Body size={size} bold color={percentageColor} isTruncated>
+          {percentage}% {t('funded')}
+        </Body>
+      ) : (
+        <Body size={size} bold color={statusColor} isTruncated>
+          {t('Ongoing')}
+        </Body>
+      )}
+    </HStack>
+  )
+}
+
+/** Amount raised with optional fire emoji for trending projects. */
+const ContributionAmount = ({
+  amount,
+  hasFire,
+  isWeekly,
+  size = 'sm',
+}: {
+  amount: string
+  hasFire: boolean
+  isWeekly: boolean
+  size?: 'xs' | 'sm'
+}) => (
+  <HStack spacing={0} overflow="hidden">
+    {hasFire && <AnimatedFire />}
+    <Body size={size} bold color="primary1.11" isTruncated>
+      {amount}{' '}
+      <Body as="span" size={size} regular>
+        {isWeekly ? t('this week') : t('raised')}
+      </Body>
+    </Body>
+  </HStack>
+)
+
+/** Bottom section: status/amount + progress bar (AON) + Contribute CTA. */
+const CardFooter = ({
+  project,
+  isAonProject,
+  isAonFailed,
+  percentage,
+  timeLeft,
+  formattedAmount,
+  hasFire,
+  isWeekly,
+  onContribute,
+  isDisabled,
+}: {
+  project: ProjectForLandingPageFragment
+  isAonProject: boolean
+  isAonFailed: boolean
+  percentage: number
+  timeLeft: ReturnType<typeof aonProjectTimeLeft>
+  formattedAmount: string
+  hasFire: boolean
+  isWeekly: boolean
+  onContribute: (e: React.MouseEvent<HTMLButtonElement>) => void
+  isDisabled: boolean
+}) => {
+  const contributeButton = (
+    <Box
+      flexShrink={0}
+      opacity={isDisabled ? 0 : { base: 1, md: 0 }}
+      _groupHover={{ opacity: isDisabled ? 0 : 1 }}
+      transition="opacity 0.2s ease"
+    >
+      <Button
+        variant="solid"
+        colorScheme="primary1"
+        size="lg"
+        height="44px"
+        onClick={onContribute}
+        isDisabled={isDisabled}
+      >
+        {t('Contribute')}
+      </Button>
+    </Box>
+  )
+
+  if (isAonProject) {
+    return (
+      <HStack width="100%" alignItems="center" spacing={3} marginTop="auto">
+        <VStack flex={1} spacing={1} alignItems="start" justifyContent="center">
+          <AonStatusDisplay percentage={percentage} timeLeft={timeLeft} isFailed={isAonFailed} />
+          <AonProgressBar project={project} height="8px" />
+        </VStack>
+        {contributeButton}
+      </HStack>
+    )
+  }
+
+  return (
+    <HStack width="100%" justifyContent="space-between" alignItems="center" marginTop="auto">
+      <ContributionAmount amount={formattedAmount} hasFire={hasFire} isWeekly={isWeekly} />
+      {contributeButton}
+    </HStack>
+  )
+}
+
+/** Thumbnail image with location + category pills overlayed at the bottom, and status icons at top-right. */
+const CardImage = ({
+  project,
+  countryName,
+  categoryLabel,
+  compact,
+}: {
+  project: ProjectForLandingPageFragment
+  countryName?: string
+  categoryLabel?: string
+  compact?: boolean
+}) => (
+  <Box
+    width={compact ? '128px' : 'full'}
+    minWidth={compact ? '128px' : undefined}
+    position="relative"
+    flexShrink={0}
+    padding={compact ? 0 : 2}
+  >
+    <ImageWithReload
+      width="100%"
+      height="100%"
+      aspectRatio={compact ? 1 : 1.45}
+      objectFit="cover"
+      borderRadius="8px"
+      src={project.thumbnailImage || ''}
+      alt={`${project.title}-header-image`}
+    />
+    <Box position="absolute" top={compact ? 2 : 4} right={compact ? 2 : 4}>
+      <NonProjectProjectIcon taxProfile={project.owners?.[0]?.user?.taxProfile} />
+      <AllOrNothingIcon project={project} />
+    </Box>
+
+    {!compact && (countryName || categoryLabel) && (
+      <HStack position="absolute" bottom={4} left={4} spacing={1} overflow="hidden" maxWidth="calc(100% - 32px)">
+        {countryName && (
+          <ImagePill>
+            <Icon as={PiMapPin} boxSize={3} color="neutral1.11" />
+            <Body size="xs" medium isTruncated maxWidth="120px">
+              {countryName}
+            </Body>
+          </ImagePill>
+        )}
+        {categoryLabel && (
+          <ImagePill>
+            <Body size="xs" medium isTruncated maxWidth="120px">
+              {categoryLabel}
+            </Body>
+          </ImagePill>
+        )}
+      </HStack>
+    )}
+  </Box>
+)
+
+function getCategoryLabel(project: ProjectForLandingPageFragment): string | undefined {
+  if (project.subCategory) return ProjectSubCategoryLabel[project.subCategory]
+  if (project.category) return ProjectCategoryLabel[project.category]
+  return undefined
+}
+
 export const LandingCardBase = ({
   isMobile,
   project,
@@ -48,38 +267,27 @@ export const LandingCardBase = ({
   hideContributionContent,
   ...rest
 }: LandingCardBaseProps) => {
+  const isMobileMode = useMobileMode()
   const inActive = isInactive(project.status)
   const navigate = useNavigate()
   const { formatAmount } = useCurrencyFormatter(true)
-
   const { getProjectBalance, getAonGoalPercentage, isFundingDisabled } = useProjectToolkit(project)
+  const useCompactLayout = !noMobile && Boolean(isMobile ?? isMobileMode)
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
-
-  const getFires = (amount: number) => {
-    if (isWeekly && amount > 100) {
-      return '🔥'
-    }
-
-    if (amount > 1000) {
-      return '🔥'
-    }
-
-    return ''
-  }
-
+  const weeklyContributionUsd = project.contributionSummary?.contributionsTotalUsd
+  const isWeekly = weeklyContributionUsd !== null && weeklyContributionUsd !== undefined
   const isAonProject = isAllOrNothing(project)
-  const isAonProjectFailed =
-    isAonProject && AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus)
+  const isAonFailed = isAonProject && AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus)
 
-  const contributionAmount = project.contributionSummary?.contributionsTotalUsd || getProjectBalance().usd
-
+  const contributionAmount = weeklyContributionUsd ?? getProjectBalance().usd
   const percentage = getAonGoalPercentage()
   const timeLeft = aonProjectTimeLeft(project.aonGoal)
+  const hasFire = (isWeekly && contributionAmount > 100) || contributionAmount > 1000
 
-  const fires = getFires(contributionAmount)
+  const projectOwner = project.owners?.[0]?.user
+  const hasProjectOwner = Boolean(projectOwner?.id)
+  const countryName = project.location?.country?.name
+  const categoryLabel = getCategoryLabel(project)
 
   const handleContribute = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
@@ -87,297 +295,217 @@ export const LandingCardBase = ({
     navigate(getPath('projectFunding', project.name))
   }
 
-  const projectOwner = project.owners?.[0]?.user
-
   const handleProfileClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    navigate(getPath('userProfile', projectOwner?.id))
-  }
 
-  const getResponsiveValue = ({ base, lg }: { base: any; lg: any }) => {
-    return noMobile ? lg : { base, lg }
-  }
-
-  const headerContent = (props?: { alwaysTruncate?: boolean; highlight?: boolean }) => {
-    const { alwaysTruncate } = props || {}
-
-    return (
-      <HStack w="full" overflow="hidden" alignItems="start">
-        <Tooltip label={projectOwner?.username}>
-          <Box display={getResponsiveValue({ base: 'none', lg: 'block' })} paddingY={'2px'}>
-            <ProfileAvatar
-              guardian={projectOwner?.guardianType}
-              src={projectOwner?.imageUrl || ''}
-              onClick={handleProfileClick}
-              height="28px"
-              width="28px"
-              wrapperProps={{
-                padding: '2px',
-                height: '32px',
-                width: '32px',
-              }}
-            />
-          </Box>
-        </Tooltip>
-        <VStack flex={1} alignItems="start" spacing={0} overflow="hidden">
-          <H3 size="md" medium width="100%" isTruncated={alwaysTruncate || !isOpen}>
-            {project.title}
-          </H3>
-          <HStack w="full" spacing={1}>
-            <Box display={getResponsiveValue({ base: 'block', lg: 'none' })}>
-              <ProfileAvatar
-                guardian={projectOwner?.guardianType}
-                src={projectOwner?.imageUrl || ''}
-                height="16px"
-                width="16px"
-                wrapperProps={{
-                  padding: '1px',
-                  height: '18px',
-                  width: '18px',
-                }}
-                onClick={handleProfileClick}
-              />
-            </Box>
-            <ProfileText
-              size="xs"
-              guardian={projectOwner?.guardianType}
-              _hover={{ textDecoration: 'underline' }}
-              onClick={handleProfileClick}
-              maxWidth="100%"
-              wrapperProps={{ width: '100%' }}
-              isTruncated={alwaysTruncate || !isOpen}
-            >
-              {projectOwner?.username}
-            </ProfileText>
-          </HStack>
-        </VStack>
-      </HStack>
-    )
-  }
-
-  const getAonStatusColor = () => {
-    if (percentage > 100) return 'primary1.11'
-    if (timeLeft?.label !== 'days left') return 'warning.11'
-    return 'neutral1.12'
-  }
-
-  const renderAonProjectStatus = () => {
-    const statusColor = getAonStatusColor()
-
-    if (isAonProjectFailed) {
-      return (
-        <Body size="sm" bold color={statusColor} isTruncated>
-          {t('Campaign Failed')}
-        </Body>
-      )
+    if (!projectOwner?.id) {
+      return
     }
 
-    const percentageColor = percentage >= 100 ? 'primary1.11' : 'neutral1.12'
-
-    return (
-      <HStack spacing={1} alignItems="center" flexWrap="wrap">
-        {timeLeft && (
-          <>
-            <Icon as={PiClockCountdown} color={statusColor} />
-            <Body size="sm" bold color={statusColor} isTruncated>
-              {timeLeft.value} {timeLeft.label}
-            </Body>
-            <Box backgroundColor={statusColor} width="5px" height="5px" borderRadius="full" />
-          </>
-        )}
-        {percentage ? (
-          <Body size="sm" bold color={percentageColor} isTruncated>
-            {percentage}% {t('funded')}
-          </Body>
-        ) : (
-          <Body size="sm" bold color={statusColor} isTruncated>
-            {t('Campaign Ongoing')}
-          </Body>
-        )}
-      </HStack>
-    )
-  }
-
-  const contributionContent = () => {
-    return (
-      <HStack w="full" justifyContent="space-between" alignItems="flex-end">
-        {isAonProject ? (
-          renderAonProjectStatus()
-        ) : (
-          <HStack spacing={0}>
-            {fires ? <AnimatedFire /> : ''}
-
-            <Body size="sm" bold color="primary1.11" isTruncated>
-              {formatAmount(contributionAmount || 0, 'USD')}{' '}
-              <Body as="span" regular>
-                {isWeekly ? t('this week') : t('raised')}
-              </Body>
-            </Body>
-          </HStack>
-        )}
-      </HStack>
-    )
+    navigate(getPath('userProfile', projectOwner.id))
   }
 
   return (
     <InteractiveCardLayout
-      padding="0px"
-      width={'full'}
-      direction={getResponsiveValue({ base: 'row', lg: 'column' })}
-      spacing={2}
-      flex={getResponsiveValue({ base: 'unset', lg: 1 })}
+      role="group"
+      padding={useCompactLayout ? 0 : '0px'}
+      width="full"
+      height="100%"
+      direction={useCompactLayout ? 'row' : 'column'}
+      spacing={0}
+      flex={1}
       position="relative"
       background="transparent"
-      hoverContent={
-        <VStack
-          paddingX={getResponsiveValue({ base: 3, lg: 4 })}
-          paddingBottom={getResponsiveValue({ base: 3, lg: 4 })}
-          width="100%"
-          alignItems="start"
-          marginTop={hideContributionContent ? '-49px' : '-70px'}
-        >
-          <VStack w="full" spacing={0} opacity={!isOpen ? 0 : 1}>
-            {headerContent({ highlight: true })}
-            {contributionContent()}
-          </VStack>
-
-          <Body size="sm" dark isTruncated width="100%" wordBreak={'break-word'} whiteSpace={'normal'}>
-            {project.shortDescription}
-          </Body>
-          <Button
-            variant="solid"
-            colorScheme="primary1"
-            size="md"
-            width="100%"
-            onClick={handleContribute}
-            isDisabled={isFundingDisabled()}
-          >
-            {t('Contribute')}
-          </Button>
-          <ProjectPaymentMethodsHint textSize="xs" />
-        </VStack>
-      }
-      isOpen={isOpen}
-      onOpen={onOpen}
-      onClose={onClose}
+      boxShadow={useCompactLayout ? 'none' : '0px 2px 12px rgba(0, 0, 0, 0.08)'}
+      borderRadius="12px"
+      overflow="hidden"
+      alignItems={useCompactLayout ? 'stretch' : undefined}
       {...rest}
     >
       {inActive && (
         <Box
-          backgroundColor={'utils.pbg'}
+          backgroundColor="utils.pbg"
           opacity={0.6}
           zIndex="3"
-          pointerEvents={'none'}
+          pointerEvents="none"
           position="absolute"
           width="100%"
           height="100%"
         />
       )}
-      <HStack
-        width={getResponsiveValue({ base: '120px', lg: 'auto' })}
-        height={getResponsiveValue({ base: '120px', lg: 'auto' })}
-        position="relative"
-        justifyContent="center"
-        zIndex={1}
-      >
-        <ImageWithReload
-          width="100%"
-          height="100%"
-          aspectRatio={getResponsiveValue({ base: undefined, lg: 1 })}
-          objectFit="cover"
-          borderRadius="8px"
-          src={project.thumbnailImage || ''}
-          alt={`${project.title}-header-image`}
-        />
-        <Box position="absolute" top={2} right={2}>
-          <NonProjectProjectIcon taxProfile={project.owners?.[0]?.user?.taxProfile} />
-          <AllOrNothingIcon project={project} />
-        </Box>
-        {isAonProject && (
-          <AonProgressBar
-            project={project}
-            height={getResponsiveValue({ base: '10px', lg: '14px' })}
-            wrapperProps={{
-              position: 'absolute',
-              width: 'calc(100% - 6px)',
-              bottom: '3px',
-            }}
-          />
-        )}
-      </HStack>
+
+      <CardImage project={project} countryName={countryName} categoryLabel={categoryLabel} compact={useCompactLayout} />
 
       <VStack
         flex={1}
-        width={getResponsiveValue({ base: 'auto', lg: '100%' })}
-        minWidth={getResponsiveValue({ base: '170px', lg: 'auto' })}
+        width="100%"
+        minWidth={0}
         alignItems="start"
         overflow="hidden"
-        spacing={getResponsiveValue({ base: 1, lg: 0 })}
-        opacity={isOpen ? 0 : 1}
+        justifyContent={useCompactLayout ? 'space-between' : undefined}
+        spacing={useCompactLayout ? 2 : 3}
+        paddingX={useCompactLayout ? 3 : 2}
+        paddingTop={useCompactLayout ? 3 : 0}
+        paddingBottom={useCompactLayout ? 3 : 2}
       >
-        {headerContent({ alwaysTruncate: true })}
+        {useCompactLayout ? (
+          <VStack width="100%" alignItems="start" spacing={2} overflow="hidden">
+            <H3 size="sm" medium width="100%" noOfLines={2}>
+              {project.title}
+            </H3>
 
-        <Body
-          size="sm"
-          height="34px"
-          dark
-          noOfLines={2}
-          isTruncated
-          width="100%"
-          wordBreak={'break-word'}
-          whiteSpace={'normal'}
-          lineHeight="1.2"
-          display={getResponsiveValue({ base: 'block', lg: 'none' })}
-        >
-          {project.shortDescription}
-        </Body>
-        {!hideContributionContent && contributionContent()}
+            <Body
+              size="sm"
+              dark
+              noOfLines={2}
+              width="100%"
+              wordBreak="break-word"
+              whiteSpace="normal"
+              lineHeight="1.4"
+              overflow="hidden"
+            >
+              {project.shortDescription}
+            </Body>
+          </VStack>
+        ) : (
+          <HStack width="100%" alignItems="baseline" spacing={2} overflow="hidden">
+            <H3 size="md" medium flex={1} isTruncated>
+              {project.title}
+            </H3>
+            <HStack spacing={1} flexShrink={0}>
+              <Body size="xs" muted>
+                {t('by')}
+              </Body>
+              <ProfileAvatar
+                guardian={projectOwner?.guardianType}
+                src={projectOwner?.imageUrl || ''}
+                height="16px"
+                width="16px"
+                wrapperProps={{ padding: '1px', height: '18px', width: '18px' }}
+                onClick={hasProjectOwner ? handleProfileClick : undefined}
+              />
+              <ProfileText
+                size="xs"
+                guardian={projectOwner?.guardianType}
+                _hover={hasProjectOwner ? { textDecoration: 'underline' } : undefined}
+                onClick={hasProjectOwner ? handleProfileClick : undefined}
+                maxWidth="120px"
+                isTruncated
+              >
+                {projectOwner?.username}
+              </ProfileText>
+            </HStack>
+          </HStack>
+        )}
+
+        {!useCompactLayout && (
+          <Body
+            size="md"
+            dark
+            noOfLines={3}
+            height="68px"
+            width="100%"
+            wordBreak="break-word"
+            whiteSpace="normal"
+            lineHeight="1.4"
+            overflow="hidden"
+          >
+            {project.shortDescription}
+          </Body>
+        )}
+
+        {!hideContributionContent &&
+          (useCompactLayout ? (
+            isAonProject ? (
+              <AonStatusDisplay
+                percentage={percentage}
+                timeLeft={timeLeft}
+                isFailed={isAonFailed}
+                size="xs"
+                wrap={false}
+              />
+            ) : (
+              <ContributionAmount
+                amount={formatAmount(contributionAmount || 0, 'USD')}
+                hasFire={hasFire}
+                isWeekly={isWeekly}
+                size="xs"
+              />
+            )
+          ) : (
+            <CardFooter
+              project={project}
+              isAonProject={isAonProject}
+              isAonFailed={isAonFailed}
+              percentage={percentage}
+              timeLeft={timeLeft}
+              formattedAmount={formatAmount(contributionAmount || 0, 'USD')}
+              hasFire={hasFire}
+              isWeekly={isWeekly}
+              onContribute={handleContribute}
+              isDisabled={isFundingDisabled()}
+            />
+          ))}
       </VStack>
     </InteractiveCardLayout>
   )
 }
 
-export const LandingCardBaseSkeleton = ({ isMobile, noMobile }: { isMobile?: boolean; noMobile?: boolean }) => {
-  const getResponsiveValue = ({ base, lg }: { base: any; lg: any }) => {
-    return noMobile ? lg : { base, lg }
+export const LandingCardBaseSkeleton = () => {
+  const isMobile = useMobileMode()
+
+  if (isMobile) {
+    return (
+      <InteractiveCardLayout padding={0} width="full" height="100%" direction="row" spacing={0} flex={1}>
+        <SkeletonLayout width="128px" minWidth="128px" aspectRatio={1} />
+
+        <VStack
+          flex={1}
+          minWidth={0}
+          alignItems="start"
+          justifyContent="center"
+          overflow="hidden"
+          spacing={2}
+          paddingX={3}
+          paddingY={3}
+        >
+          <SkeletonLayout width="85%" height="18px" />
+          <SkeletonLayout width="100%" height="48px" />
+          <SkeletonLayout width="72px" height="14px" />
+        </VStack>
+      </InteractiveCardLayout>
+    )
   }
 
   return (
-    <>
-      <InteractiveCardLayout
-        padding="0px"
-        width={getResponsiveValue({ base: 'full', lg: 'auto' })}
-        direction={getResponsiveValue({ base: 'row', lg: 'column' })}
-        spacing={0}
-        flex={getResponsiveValue({ base: 'unset', lg: 1 })}
+    <InteractiveCardLayout padding="0px" width="full" height="100%" direction="column" spacing={0} flex={1}>
+      <Box width="full" padding={2}>
+        <SkeletonLayout width="100%" aspectRatio={1.45} borderRadius="8px" />
+      </Box>
+
+      <VStack
+        flex={1}
+        width="100%"
+        paddingX={2}
+        paddingTop={0}
+        paddingBottom={2}
+        alignItems="start"
+        justifyContent="space-between"
+        overflow="hidden"
+        spacing={3}
       >
-        <Box
-          width={getResponsiveValue({ base: '96px', lg: 'auto' })}
-          height={getResponsiveValue({ base: '96px', lg: 'auto' })}
-          aspectRatio={1}
-        >
-          <SkeletonLayout width="100%" height="100%"></SkeletonLayout>
-        </Box>
-        <VStack
-          flex={1}
-          width={getResponsiveValue({ base: 'auto', lg: '100%' })}
-          minWidth={getResponsiveValue({ base: '170px', lg: 'auto' })}
-          padding={4}
-          alignItems="start"
-          justifyContent="space-between"
-          overflow="hidden"
-          spacing={1}
-        >
-          <SkeletonLayout width="100%" height="22px" />
+        <HStack w="full" justifyContent="space-between">
+          <SkeletonLayout width="55%" height="20px" />
+          <SkeletonLayout width="30%" height="16px" />
+        </HStack>
+        <SkeletonLayout width="100%" height="68px" />
 
-          <HStack w="full" justifyContent={'start'} spacing={3}>
-            <SkeletonLayout width="30px" height="22px" />
-
-            <SkeletonLayout width="60px" height="22px" />
-          </HStack>
-        </VStack>
-      </InteractiveCardLayout>
-    </>
+        <HStack w="full" justifyContent="space-between" marginTop="auto">
+          <SkeletonLayout width="80px" height="18px" />
+          <SkeletonLayout width="100px" height="44px" borderRadius="md" />
+        </HStack>
+      </VStack>
+    </InteractiveCardLayout>
   )
 }

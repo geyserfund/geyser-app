@@ -66,7 +66,10 @@ export const Leaderboard = ({ period }: { period: ProjectLeaderboardPeriod }) =>
         w="full"
         paddingX={{ base: 3, lg: 6 }}
         position={{ base: 'fixed', lg: 'absolute' }}
-        top={{ base: toPx(dimensions.topNavBar.mobile.height + dimensions.projectNavBar.mobile.height + 40), lg: 6 }}
+        top={{
+          base: toPx(dimensions.topNavBar.mobile.height + dimensions.projectNavBar.mobile.height + 40),
+          lg: 6,
+        }}
         left={{ base: 0, lg: 'unset' }}
         background="utils.pbg"
         paddingBottom={2}

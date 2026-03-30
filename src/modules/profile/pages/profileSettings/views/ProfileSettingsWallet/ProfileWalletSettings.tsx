@@ -1,16 +1,31 @@
-import { Box, Button, HStack, Input, InputGroup, InputRightElement, Link as ChakraLink, SimpleGrid, VStack, useDisclosure } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  HStack,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Link as ChakraLink,
+  SimpleGrid,
+  Skeleton,
+  useDisclosure,
+  VStack,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useState } from 'react'
 
+import { useBTCConverter } from '@/helpers/useBTCConverter.ts'
 import { useUserAccountKeys } from '@/modules/auth/hooks/useUserAccountKeys.ts'
 import { userAccountKeysAtom } from '@/modules/auth/state/userAccountKeysAtom.ts'
-import { decryptMnemonic, getSeedWords } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
-import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
 import {
   ConfigureUserWalletModal,
   hasConfiguredUserWallet,
 } from '@/modules/profile/pages/profileSettings/components/ConfigureUserWalletModal.tsx'
+import { MIN_BITCOIN_PAYOUT_USD } from '@/modules/project/constants/payout.ts'
+import { decryptMnemonic, getSeedWords } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
+import { accountPasswordAtom } from '@/modules/project/forms/accountPassword/state/passwordStorageAtom.ts'
+import { usePrismWithdrawable } from '@/modules/project/pages/projectView/views/body/sections/tiaNotification/usePrismWithdrawable.ts'
 import { Modal } from '@/shared/components/layouts/Modal.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
@@ -37,6 +52,12 @@ export const ProfileWalletSettings = () => {
   const [isSeedWordsView, setIsSeedWordsView] = useState(false)
 
   const hasWalletConfigured = hasConfiguredUserWallet(userAccountKeys)
+  const rskAddress = userAccountKeys?.rskKeyPair?.address || ''
+  const { getUSDCentsAmount } = useBTCConverter()
+  const { withdrawable, isLoading: isWithdrawableLoading } = usePrismWithdrawable({ rskAddress })
+  const withdrawableSats = withdrawable ? withdrawable / 10000000000n : 0n
+  const withdrawableUsd = getUSDCentsAmount(withdrawableSats) / 100
+  const isBelowMinimumWithdrawal = withdrawableUsd > 0 && withdrawableUsd < MIN_BITCOIN_PAYOUT_USD
 
   const handleCloseSeedWordsModal = () => {
     seedWordsModal.onClose()
@@ -166,15 +187,7 @@ export const ProfileWalletSettings = () => {
             <Body size="md" medium color="neutral1.11">
               {t('Rootstock address')}
             </Body>
-            <Box
-              w="full"
-              px={4}
-              py={3}
-              borderWidth="1px"
-              borderColor="neutral1.6"
-              borderRadius="xl"
-              bg="neutral1.1"
-            >
+            <Box w="full" px={4} py={3} borderWidth="1px" borderColor="neutral1.6" borderRadius="xl" bg="neutral1.1">
               <HStack
                 w="full"
                 justifyContent="space-between"
@@ -199,6 +212,38 @@ export const ProfileWalletSettings = () => {
                   </Button>
                 ) : null}
               </HStack>
+            </Box>
+          </VStack>
+
+          <VStack spacing={3} align="flex-start" w="full">
+            <Body size="md" medium color="neutral1.11">
+              {t('Withdrawable funds')}
+            </Body>
+            <Box w="full" px={4} py={3} borderWidth="1px" borderColor="neutral1.6" borderRadius="xl" bg="neutral1.1">
+              <VStack w="full" align="stretch" spacing={3}>
+                <Skeleton isLoaded={!isWithdrawableLoading}>
+                  <HStack justifyContent="space-between" alignItems={{ base: 'flex-start', md: 'center' }}>
+                    <VStack align="flex-start" spacing={1}>
+                      <Body size="lg" medium color="neutral1.12">
+                        {t('{{amount}} sats', { amount: withdrawableSats.toLocaleString() })}
+                      </Body>
+                      <Body size="sm" color="neutral1.10">
+                        {t('≈ {{amount}} USD', { amount: `$${withdrawableUsd.toFixed(2)}` })}
+                      </Body>
+                    </VStack>
+                    <Button size="sm" colorScheme="primary1" isDisabled>
+                      {t('Withdraw')}
+                    </Button>
+                  </HStack>
+                </Skeleton>
+                {isBelowMinimumWithdrawal ? (
+                  <Body size="sm" color="neutral1.9">
+                    {t('{{amount}} USD minimum required before withdrawals are enabled.', {
+                      amount: MIN_BITCOIN_PAYOUT_USD,
+                    })}
+                  </Body>
+                ) : null}
+              </VStack>
             </Box>
           </VStack>
 

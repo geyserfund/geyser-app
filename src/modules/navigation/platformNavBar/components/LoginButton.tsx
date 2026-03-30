@@ -9,9 +9,14 @@ export const LoginButton = (props: ButtonProps) => {
   return (
     <Button
       size={{ base: 'md', lg: 'lg' }}
-      variant="outline"
-      colorScheme="neutral1"
-      backgroundColor="utils.pbg"
+      variant="ghost"
+      color="black"
+      backgroundColor="transparent"
+      fontWeight={600}
+      fontSize={{ lg: 'sm', xl: 'md' }}
+      borderWidth={0}
+      _hover={{ backgroundColor: 'blackAlpha.50' }}
+      _active={{ backgroundColor: 'blackAlpha.100' }}
       onClick={() => loginOnOpen()}
       {...props}
     >

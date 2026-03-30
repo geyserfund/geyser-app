@@ -20,7 +20,7 @@ import { FieldContainer } from '@/shared/components/form/FieldContainer.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
-import { GeyserTermsUrl } from '@/shared/constants/index.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import { ProjectValidations } from '@/shared/constants/validations/project.ts'
 import { FileUpload } from '@/shared/molecules/FileUpload.tsx'
 import { LightningAddressInputField } from '@/shared/molecules/forms/WalletConnectionForm.tsx'
@@ -580,7 +580,7 @@ export const GrantsApplyPage = () => {
         <Body>
           {' '}
           {t('By submitting this project, you agree to our')}{' '}
-          <Link isExternal href={GeyserTermsUrl}>
+          <Link isExternal href={getPath('legalTerms')}>
             {t('T&Cs')}
           </Link>
         </Body>

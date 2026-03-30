@@ -1,9 +1,15 @@
 import { VStack } from '@chakra-ui/react'
 import { Trans, useTranslation } from 'react-i18next'
 
+import { AmbassadorReferralTermsNotice } from '@/components/molecules/AmbassadorReferralTermsNotice.tsx'
 import { CopyableLinkCard } from '@/components/molecules/CopyableLinkCard.tsx'
 import { useAuthContext } from '@/context'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
+import {
+  CampaignContent,
+  getProjectShareUrlSuffix,
+  useProjectShare,
+} from '@/modules/project/pages/projectView/hooks/useProjectShare.ts'
 import { Body } from '@/shared/components/typography'
 import { lightModeColors } from '@/shared/styles'
 import {
@@ -17,7 +23,8 @@ import { commaFormatted } from '@/utils'
 export const ProjectShareView = () => {
   const { t } = useTranslation()
   const { user, isLoggedIn } = useAuthContext()
-  const { project } = useProjectAtom()
+  const { project, isProjectOwner } = useProjectAtom()
+  const { getShareProjectUrl } = useProjectShare()
 
   const { data } = useProjectAmbassadorStatsQuery({ variables: { where: { id: project.id } } })
   const { data: affiliateTermsData } = useUserAffiliatePartnerTermsQuery({
@@ -33,6 +40,14 @@ export const ProjectShareView = () => {
   const heroLink = `${window.location.origin || 'https://geyser.fund'}/project/${project.name}${
     heroId ? `?hero=${heroId}` : ''
   }`
+  const projectShareLink = isProjectOwner
+    ? `${window.location.origin}/project/${project.name}${getProjectShareUrlSuffix({
+        creator: true,
+        isLoggedIn,
+        keyword: project.name,
+        clickedFrom: CampaignContent.projectShareModal,
+      })}`
+    : getShareProjectUrl({ clickedFrom: CampaignContent.projectShareModal })
   const effectiveContributionPayout = formatEffectiveAffiliatePayoutRate(
     affiliateTermsData?.user?.affiliatePartnerTerms?.contributionReferralPayoutRate ??
       DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
@@ -112,6 +127,14 @@ export const ProjectShareView = () => {
   }
 
   const renderAmbassadorCopy = () => {
+    if (isProjectOwner) {
+      return (
+        <Body zIndex={1} color={lightModeColors.neutral1[12]} size="md" regular textAlign="left">
+          {t('Share your project with your community, friends and family to spread the word about it and gain momentum.')}
+        </Body>
+      )
+    }
+
     if (!isLoggedIn) {
       return (
         <Body zIndex={1} color={lightModeColors.neutral1[12]} size="md" regular textAlign="left">
@@ -137,7 +160,12 @@ export const ProjectShareView = () => {
       <VStack p={1} width="100%" spacing={2} position="relative" alignItems="stretch">
         {renderAmbassadorCopy()}
       </VStack>
-      <CopyableLinkCard label={t('Ambassador link')} linkValue={heroLink} colorScheme="amber" />
+      <CopyableLinkCard
+        label={isProjectOwner ? t('Share link') : t('Ambassador link')}
+        linkValue={isProjectOwner ? projectShareLink : heroLink}
+        colorScheme="amber"
+      />
+      {!isProjectOwner ? <AmbassadorReferralTermsNotice /> : null}
     </VStack>
   )
 }

@@ -1,47 +1,52 @@
-import { Badge, Box, HStack, Stack, StackProps, VStack } from '@chakra-ui/react'
+import { type StackProps, Box, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { useNavigate } from 'react-router'
 
 import { postTypeOptions } from '@/modules/project/pages/projectView/views/posts/utils/postTypeLabel.ts'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload.tsx'
-import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
-import { ProfileText } from '@/shared/components/display/ProfileText.tsx'
-import { Body } from '@/shared/components/typography/Body.tsx'
+import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPath } from '@/shared/constants/index.ts'
-import { PostForLandingPageFragment } from '@/types/index.ts'
+import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
+import type { PostForLandingPageFragment } from '@/types/index.ts'
 import { toInt } from '@/utils/index.ts'
+import { useMobileMode } from '@/utils/info/useMobileMode.ts'
 
 type LandingPostCardProps = {
   post: PostForLandingPageFragment
   isMobile?: boolean
+  showProjectCategory?: boolean
 } & StackProps
 
-export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProps) => {
+/** Shared landing and discovery card for displaying a post preview. */
+export const LandingPostCard = ({ post, isMobile, showProjectCategory = false, ...rest }: LandingPostCardProps) => {
+  const isMobileMode = useMobileMode()
   const navigate = useNavigate()
+  const useCompactLayout = isMobile ?? Boolean(isMobileMode)
+  const projectLabel = post.project?.subCategory
+    ? ProjectSubCategoryLabel[post.project.subCategory]
+    : post.project?.category
+    ? ProjectCategoryLabel[post.project.category]
+    : null
+  const postTypeLabel = post.postType ? postTypeOptions.find((option) => option.value === post.postType)?.label : null
 
-  const getResponsiveValue = (prop: { base: any; lg: any }) => {
-    return isMobile ? prop.base : prop
+  const handleCardClick = () => {
+    if (!post.project?.name) {
+      return
+    }
+
+    navigate(getPath('projectPostView', post.project.name, post.id))
   }
 
   const renderProjectContent = () => {
     return (
       <HStack w="full" justifyContent="space-between">
-        <HStack flex={1} spacing={1} w="full">
-          <ImageWithReload
-            width="16px"
-            height="16px"
-            borderRadius={'4px'}
-            objectFit="cover"
-            src={post?.project?.thumbnailImage}
-            alt={`${post?.project?.name}-header-image`}
-          />
-          <Body size="sm" light isTruncated maxWidth="200px">
-            {post?.project?.title}
-          </Body>
-        </HStack>
-        {post.publishedAt && (
-          <Body size="sm" light>
+        <Body size="sm" light flex={1} minWidth={0} isTruncated>
+          {postTypeLabel ? `${t('{{type}} in', { type: postTypeLabel })} ` : ''}
+          {post?.project?.title}
+        </Body>
+        {useCompactLayout && post.publishedAt && (
+          <Body size="sm" light flexShrink={0}>
             {DateTime.fromMillis(toInt(post.publishedAt)).toFormat('dd LLL, yyyy')}
           </Body>
         )}
@@ -49,15 +54,52 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
     )
   }
 
+  const renderPostImage = (compact?: boolean) => (
+    <Box
+      width={compact ? '128px' : 'full'}
+      minWidth={compact ? '128px' : undefined}
+      position="relative"
+      padding={compact ? 0 : 2}
+      flexShrink={0}
+    >
+      <ImageWithReload
+        src={post.image || post.project?.thumbnailImage || ''}
+        alt={post.title}
+        width="100%"
+        borderRadius="8px"
+        aspectRatio={compact ? 1 : 1.45}
+        objectFit="cover"
+      />
+      {showProjectCategory && projectLabel ? (
+        <HStack
+          position="absolute"
+          bottom={compact ? 2 : 4}
+          left={compact ? 2 : 4}
+          backgroundColor="utils.pbg"
+          borderRadius="md"
+          paddingX={2}
+          paddingY={1}
+          boxShadow="sm"
+          maxWidth={compact ? 'calc(100% - 16px)' : 'calc(100% - 32px)'}
+        >
+          <Body size="xs" medium isTruncated>
+            {projectLabel}
+          </Body>
+        </HStack>
+      ) : null}
+    </Box>
+  )
+
   return (
     <VStack
       width="100%"
+      height="100%"
       alignItems="start"
       outlineColor="neutralAlpha.3"
       _hover={{
         cursor: 'pointer',
       }}
-      onClick={() => navigate(getPath('projectPostView', post.project?.name || '', post.id))}
+      onClick={handleCardClick}
       {...rest}
       position="relative"
       role="group"
@@ -79,78 +121,61 @@ export const LandingPostCard = ({ post, isMobile, ...rest }: LandingPostCardProp
         }}
       />
 
-      <Stack width="100%" direction={getResponsiveValue({ base: 'column', lg: 'row' })}>
-        <Box w="full" display={getResponsiveValue({ base: 'block', lg: 'none' })}>
-          {renderProjectContent()}
-        </Box>
-        <Box
-          width={getResponsiveValue({ base: '100%', lg: '55%' })}
-          height="200px"
-          maxHeight={isMobile ? '200px' : '150px'}
-        >
-          <ImageWithReload
-            src={post.image || ''}
-            alt={post.title}
-            width="100%"
-            borderRadius={'8px'}
-            height="100%"
-            objectFit="cover"
-          />
-        </Box>
-        <VStack flex={1} alignItems="start" overflow="hidden" spacing={0}>
-          <Box w="full" display={getResponsiveValue({ base: 'none', lg: 'block' })}>
+      {useCompactLayout ? (
+        <HStack width="100%" height="100%" alignItems="stretch" spacing={0}>
+          {renderPostImage(true)}
+          <VStack
+            flex={1}
+            minWidth={0}
+            alignItems="start"
+            justifyContent="space-between"
+            overflow="hidden"
+            spacing={2}
+            paddingX={3}
+            paddingY={3}
+          >
+            <VStack width="100%" alignItems="start" spacing={2} overflow="hidden">
+              <Box w="full">{renderProjectContent()}</Box>
+              <H3 size="sm" medium width="100%" noOfLines={2}>
+                {post.title}
+              </H3>
+              <Body
+                size="sm"
+                dark
+                wordBreak="break-word"
+                whiteSpace="normal"
+                lineHeight="1.4"
+                width="100%"
+                noOfLines={2}
+              >
+                {post.description}
+              </Body>
+            </VStack>
+          </VStack>
+        </HStack>
+      ) : (
+        <VStack width="100%" height="100%" alignItems="start" spacing={3}>
+          <Box w="full" paddingX={2}>
             {renderProjectContent()}
           </Box>
-
-          <Body size="md" bold dark>
-            {post.title}
-          </Body>
-          <Body size="sm" medium dark wordBreak={'break-all'} noOfLines={3}>
-            {post.description}
-          </Body>
-          <HStack w={'full'} paddingTop={2} flexWrap="wrap">
-            {post.postType && (
-              <Badge variant="soft" colorScheme="neutral1" size="sm">
-                {postTypeOptions.find((option) => option.value === post.postType)?.label}
-              </Badge>
-            )}
-            <PostAuthor post={post} />
-          </HStack>
+          {renderPostImage()}
+          <VStack flex={1} width="100%" alignItems="start" overflow="hidden" spacing={3} paddingX={2} paddingBottom={2}>
+            <HStack width="100%" justifyContent="space-between" alignItems="baseline" spacing={3}>
+              <H3 size="md" medium flex={1} minWidth={0} noOfLines={1}>
+                {post.title}
+              </H3>
+              {post.publishedAt && (
+                <Body size="sm" light flexShrink={0} textAlign="right">
+                  {DateTime.fromMillis(toInt(post.publishedAt)).toFormat('dd LLL, yyyy')}
+                </Body>
+              )}
+            </HStack>
+            <Body size="md" dark wordBreak="break-word" whiteSpace="normal" lineHeight="1.4" width="100%" noOfLines={3}>
+              {post.description}
+            </Body>
+          </VStack>
         </VStack>
-      </Stack>
+      )}
     </VStack>
-  )
-}
-
-/** Component for displaying post author information */
-const PostAuthor = ({ post }: { post: PostForLandingPageFragment }) => {
-  const navigate = useNavigate()
-  return (
-    <HStack maxWidth={'100%'}>
-      <Body size="sm" light whiteSpace="nowrap">
-        {t('written by')}
-      </Body>
-      <ProfileAvatar
-        src={post?.project?.owners[0]?.user.imageUrl || ''}
-        height="16px"
-        width="16px"
-        wrapperProps={{
-          padding: '1px',
-          height: '18px',
-          width: '18px',
-        }}
-      />
-      <ProfileText
-        size="sm"
-        name={post?.project?.owners[0]?.user.username}
-        _hover={{ textDecoration: 'underline', cursor: 'pointer' }}
-        onClick={() => {
-          navigate(`/profile/${post?.project?.owners[0]?.user.username}`)
-        }}
-        isTruncated
-      >
-        {post?.project?.owners[0]?.user.username}
-      </ProfileText>
-    </HStack>
   )
 }

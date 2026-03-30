@@ -11,16 +11,16 @@ import {
 
 export const NoAmbassadors = () => {
   const { t } = useTranslation()
+  const rate = formatEffectiveAffiliatePayoutRate(DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE, GEYSER_PROMOTION_FEE_RATE)
+
   return (
     <VStack w="full" justifyContent="center" flex={1} padding={6}>
       <Image src={MegaphoneUrl} alt={'no ambassadors image'} height="auto" width="300px" py={4} />
       <Body size="md" medium muted>
-        {t('No contributions have been enabled through sharing yet. Share the project and earn {{rate}} of each contribution you enable.', {
-          rate: formatEffectiveAffiliatePayoutRate(
-            DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
-            GEYSER_PROMOTION_FEE_RATE,
-          ),
-        })}
+        {t(
+          'No contributions have been enabled through sharing yet. Share the project and earn up to {{rate}} of each contribution you enable.',
+          { rate },
+        )}
       </Body>
     </VStack>
   )

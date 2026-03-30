@@ -16,9 +16,20 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     shortDescription
     title
     status
-    balance
-    balanceUsdCent
     fundingStrategy
+    category
+    subCategory
+    location {
+      country {
+        code
+        name
+      }
+      region
+    }
+    tags {
+      id
+      label
+    }
     aonGoal {
       ...ProjectAonGoalForLandingPage
     }
