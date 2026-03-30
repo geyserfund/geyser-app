@@ -1457,8 +1457,11 @@ export type LeaderboardGlobalCreatorsGetInput = {
 
 export type LeaderboardGlobalProjectsGetInput = {
   category?: InputMaybe<Scalars['String']['input']>;
+  countryCode?: InputMaybe<Scalars['String']['input']>;
+  fundingStrategy?: InputMaybe<ProjectFundingStrategy>;
   /** The period to return the leaderboard for. */
   period: LeaderboardPeriod;
+  region?: InputMaybe<Scalars['String']['input']>;
   subCategory?: InputMaybe<Scalars['String']['input']>;
   /** The number of top projects to return. */
   top: Scalars['Int']['input'];

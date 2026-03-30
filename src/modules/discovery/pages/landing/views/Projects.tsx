@@ -363,11 +363,9 @@ export const Projects = () => {
 
   const countryCode = shouldFilterByUserRegion ? userIpCountryData?.userIpCountry?.trim() || undefined : undefined
   const isRegionLookupFailed = shouldFilterByUserRegion && !loadingCountryCode && !countryCode
-  const hasLocationFilter = shouldFilterByUserRegion || Boolean(filterCountryCode || region)
   const hasSearchFilter = Boolean(search?.trim())
   const tagFiltersCount = tagIds?.length ?? 0
-  const supportsMostFundedThisMonth =
-    projectTypeFilter === 'all' && !hasLocationFilter && !hasSearchFilter && tagFiltersCount === 0 && !subCategory
+  const supportsMostFundedThisMonth = !hasSearchFilter && tagFiltersCount === 0
   const sort = getSortOption(searchParams.get(SORT_SEARCH_PARAM), supportsMostFundedThisMonth)
   const sortOptions = useMemo<FilterDropdownOption<SortOption>[]>(
     () =>
@@ -443,12 +441,16 @@ export const Projects = () => {
     loading: isMostFundedThisMonthLoading,
     refetch: refetchMostFundedThisMonth,
   } = useLeaderboardGlobalProjectsQuery({
-    skip: !shouldUseMostFundedThisMonth,
+    skip: !shouldUseMostFundedThisMonth || (shouldFilterByUserRegion && (!countryCode || loadingCountryCode)),
     variables: {
       input: {
         period: LeaderboardPeriod.Month,
         top: MOST_FUNDED_THIS_MONTH_PAGE_SIZE,
+        fundingStrategy: getFundingStrategy(projectTypeFilter),
+        countryCode: countryCode ?? filterCountryCode,
+        region,
         category,
+        subCategory,
       },
     },
   })

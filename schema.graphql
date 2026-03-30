@@ -1745,6 +1745,9 @@ input LeaderboardGlobalProjectsGetInput {
 
   """The number of top projects to return."""
   top: Int!
+  fundingStrategy: ProjectFundingStrategy
+  countryCode: String
+  region: String
   category: String
   subCategory: String
 }
