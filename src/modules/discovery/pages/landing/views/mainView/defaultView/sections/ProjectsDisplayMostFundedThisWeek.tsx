@@ -2,17 +2,18 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFilterContext } from '@/context/filter'
-import { filterPostsByUniqueProjects } from '@/helpers/filterPostsByUniqueProjects.ts'
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
 import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 
 import {
+  OrderByDirection,
   OrderByOptions,
   ProjectCategory,
-  ProjectsMostFundedByCategoryRange,
+  ProjectsGetWhereInputStatus,
+  ProjectsOrderByField,
   ProjectSubCategory,
   usePostsForLandingPageQuery,
-  useProjectsMostFundedByCategoryQuery,
+  useProjectsForLandingPageQuery,
 } from '../../../../../../../../types'
 import { ProjectDisplayBody, ProjectDisplayBodySkeleton } from '../components/ProjectDisplayBody'
 
@@ -23,7 +24,7 @@ interface ProjectDisplayProps {
   subCategory?: ProjectSubCategory
 }
 
-const NO_OF_PROJECT_TO_LOAD = 6
+const NO_OF_ITEMS_TO_LOAD = 3
 
 export const ProjectsDisplayMostFundedThisWeek = ({
   title,
@@ -34,14 +35,24 @@ export const ProjectsDisplayMostFundedThisWeek = ({
   const { t } = useTranslation()
   const { updateFilter } = useFilterContext()
 
-  const { loading, data } = useProjectsMostFundedByCategoryQuery({
+  const { loading, data } = useProjectsForLandingPageQuery({
     skip: !category && !subCategory,
     variables: {
       input: {
-        take: NO_OF_PROJECT_TO_LOAD,
-        range: ProjectsMostFundedByCategoryRange.Week,
-        category,
-        subCategory,
+        orderBy: [
+          {
+            direction: OrderByDirection.Desc,
+            field: ProjectsOrderByField.LaunchedAt,
+          },
+        ],
+        where: {
+          category,
+          status: ProjectsGetWhereInputStatus.Active,
+          subCategory,
+        },
+        pagination: {
+          take: NO_OF_ITEMS_TO_LOAD,
+        },
       },
     },
   })
@@ -54,7 +65,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({
           publishedAt: OrderByOptions.Desc,
         },
         pagination: {
-          take: 10,
+          take: NO_OF_ITEMS_TO_LOAD,
         },
         where: {
           category,
@@ -73,59 +84,47 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     }
   }
 
-  const ProjectByCategoryList =
-    data?.projectsMostFundedByCategory?.filter((tagMap) => tagMap.projects.length >= 4) || []
-
-  const allPosts = useMemo(() => postsQueryData?.posts || [], [postsQueryData?.posts])
-
-  const filteredPosts = useMemo(() => filterPostsByUniqueProjects(allPosts, 3), [allPosts])
+  const projects = useMemo(() => data?.projectsGet.projects ?? [], [data?.projectsGet.projects])
+  const posts = useMemo(() => postsQueryData?.posts ?? [], [postsQueryData?.posts])
 
   if (loading) {
     return <ProjectDisplayBodySkeleton />
   }
 
+  if (projects.length === 0) {
+    return null
+  }
+
+  const sectionLabel = category
+    ? ProjectCategoryLabel[category]
+    : subCategory
+    ? ProjectSubCategoryLabel[subCategory]
+    : ''
+
   return (
-    <>
-      {ProjectByCategoryList.map((projectByCategory) => {
-        if (projectByCategory.projects.length === 0) return null
-
-        const projects = projectByCategory.projects.map((project) => ({
-          ...project.project,
-          contributionSummary: project.contributionsSummary || undefined,
-        }))
-
-        return (
-          <ProjectDisplayBody
-            key={projectByCategory.category}
-            title={
-              title
-                ? title
-                : category
-                ? `${t('Trending in')} ${ProjectCategoryLabel[category]}`
-                : subCategory
-                ? `${t('Trending in')} ${ProjectSubCategoryLabel[subCategory]}`
-                : t('Recent Projects')
-            }
-            projects={projects}
-            posts={filteredPosts}
-            rightContent={
-              !noRightContent && (
-                <DiscoverMoreButton
-                  id={
-                    category ? `discovery-see-all-${category}` : subCategory ? `discovery-see-all-${subCategory}` : ''
-                  }
-                  onClick={() =>
-                    onSeeAllClick({
-                      category: projectByCategory.category,
-                      subCategory: projectByCategory.subCategory,
-                    })
-                  }
-                />
-              )
+    <ProjectDisplayBody
+      title={
+        title
+          ? title
+          : sectionLabel
+          ? t("What's happening in {{label}}", { label: sectionLabel })
+          : t('Recent Projects')
+      }
+      projects={projects}
+      posts={posts}
+      rightContent={
+        !noRightContent && (
+          <DiscoverMoreButton
+            id={category ? `discovery-see-all-${category}` : subCategory ? `discovery-see-all-${subCategory}` : ''}
+            onClick={() =>
+              onSeeAllClick({
+                category,
+                subCategory,
+              })
             }
           />
         )
-      })}
-    </>
+      }
+    />
   )
 }

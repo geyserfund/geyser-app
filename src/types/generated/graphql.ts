@@ -9378,7 +9378,7 @@ export type ContributionForLandingPageFragment = { __typename?: 'Contribution', 
     & ProjectThumbnailImageFragment
   ) | null };
 
-export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
+export type PostForLandingPageFragment = { __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null };
 
 export type ProjectForLandingPageFragment = { __typename?: 'Project', id: any, name: string, balance: number, balanceUsdCent: number, fundersCount?: number | null, thumbnailImage?: string | null, shortDescription?: string | null, title: string, status?: ProjectStatus | null, fundingStrategy?: ProjectFundingStrategy | null, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, launchedAt?: any | null, location?: { __typename?: 'Location', region?: string | null, country?: { __typename?: 'Country', code: string, name: string } | null } | null, tags: Array<{ __typename?: 'Tag', id: number, label: string }>, aonGoal?: (
     { __typename?: 'ProjectAonGoal' }
@@ -9433,7 +9433,7 @@ export type PostsForLandingPageQueryVariables = Exact<{
 }>;
 
 
-export type PostsForLandingPageQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null }> };
+export type PostsForLandingPageQuery = { __typename?: 'Query', posts: Array<{ __typename?: 'Post', id: any, postType?: PostType | null, publishedAt?: string | null, title: string, image?: string | null, description: string, project?: { __typename?: 'Project', title: string, name: string, id: any, category?: ProjectCategory | null, subCategory?: ProjectSubCategory | null, thumbnailImage?: string | null, owners: Array<{ __typename?: 'Owner', id: any, user: { __typename?: 'User', id: any, imageUrl?: string | null, username: string, heroId: string, guardianType?: GuardianType | null } }> } | null }> };
 
 export type ProjectsSummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -11807,6 +11807,7 @@ export const PostForLandingPageFragmentDoc = gql`
     name
     id
     category
+    subCategory
     thumbnailImage
     owners {
       id
@@ -14738,6 +14739,7 @@ export const PostsForLandingPageDocument = gql`
       name
       id
       category
+      subCategory
       thumbnailImage
       owners {
         id

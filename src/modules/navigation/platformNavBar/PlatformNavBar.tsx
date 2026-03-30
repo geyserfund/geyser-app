@@ -1,4 +1,4 @@
-import { Box, HStack, IconButton, VStack, useColorModeValue, useDisclosure } from '@chakra-ui/react'
+import { Box, HStack, IconButton, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
@@ -10,7 +10,7 @@ import { NotificationPromptModal } from '@/modules/auth/components/NotificationP
 import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
 import { useNotificationPromptModal } from '@/modules/auth/hooks/useNotificationPromptModal'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { standardPadding } from '@/shared/styles'
+import { standardPadding } from '@/shared/styles/index.ts'
 import { useMobileMode } from '@/utils/index.ts'
 
 import { AuthModal } from '../../../components/molecules'
@@ -39,7 +39,13 @@ import { ProfileNav } from './profileNav/ProfileNav'
 export const PlatformNavBar = () => {
   const { isLoggedIn, isUserAProjectCreator, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
-  const navShadow = useColorModeValue('0 2px 12px rgba(15, 23, 42, 0.08)', '0 2px 14px rgba(0, 0, 0, 0.28)')
+  const defaultNavShadow = useColorModeValue('0 2px 12px rgba(15, 23, 42, 0.08)', '0 2px 14px rgba(0, 0, 0, 0.28)')
+  const landingButtonSurface = useColorModeValue('white', 'gray.800')
+  const landingButtonForeground = useColorModeValue('black', 'white')
+  const landingButtonBorder = useColorModeValue('black', 'gray.600')
+  const landingButtonHover = useColorModeValue('gray.50', 'gray.700')
+  const landingButtonActive = useColorModeValue('gray.100', 'gray.600')
+  const landingNavMaxWidth = `${dimensions.maxWidth + 24 * 2}px`
 
   const isMobileMode = useMobileMode()
 
@@ -101,6 +107,7 @@ export const PlatformNavBar = () => {
     !isProjectFundingRoutes &&
     !isProjectDashboardRoutes &&
     !isMobileMode
+  const navShadow = isProjectRoutes ? 'none' : defaultNavShadow
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {
@@ -121,12 +128,12 @@ export const PlatformNavBar = () => {
           minWidth="40px"
           paddingX={0}
           variant="outline"
-          bg="white"
-          color="black"
-          borderColor="black"
+          bg={landingButtonSurface}
+          color={landingButtonForeground}
+          borderColor={landingButtonBorder}
           borderWidth="1px"
-          _hover={{ bg: 'gray.50' }}
-          _active={{ bg: 'gray.100' }}
+          _hover={{ bg: landingButtonHover }}
+          _active={{ bg: landingButtonActive }}
           borderRadius="8px"
         />
         <CreateProjectButton
@@ -136,12 +143,12 @@ export const PlatformNavBar = () => {
           size={{ base: 'md', lg: 'lg' }}
           minWidth="190px"
           variant="outline"
-          bg="white"
-          color="black"
-          borderColor="black"
+          bg={landingButtonSurface}
+          color={landingButtonForeground}
+          borderColor={landingButtonBorder}
           borderWidth="1px"
-          _hover={{ bg: 'gray.50' }}
-          _active={{ bg: 'gray.100' }}
+          _hover={{ bg: landingButtonHover }}
+          _active={{ bg: landingButtonActive }}
           borderRadius={{ base: '8px', lg: '10px' }}
         />
       </>
@@ -166,7 +173,17 @@ export const PlatformNavBar = () => {
         <ProfileNav />
       </HStack>
     )
-  }, [isLoggedIn, isManifestoPage, isUserAProjectCreator, shouldShowPlatformNav])
+  }, [
+    isLoggedIn,
+    isManifestoPage,
+    isUserAProjectCreator,
+    landingButtonActive,
+    landingButtonBorder,
+    landingButtonForeground,
+    landingButtonHover,
+    landingButtonSurface,
+    shouldShowPlatformNav,
+  ])
 
   return (
     <HStack
@@ -215,7 +232,7 @@ export const PlatformNavBar = () => {
             >
               <HStack
                 w="100%"
-                maxWidth={`${dimensions.maxWidth + 24 * 2}px`}
+                maxWidth={landingNavMaxWidth}
                 paddingX={standardPadding}
                 height={{ base: '40px', lg: '48px' }}
                 pointerEvents="none"

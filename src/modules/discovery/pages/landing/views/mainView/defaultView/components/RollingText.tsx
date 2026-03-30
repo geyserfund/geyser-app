@@ -1,13 +1,14 @@
 import { Box, HStack, Text, useColorModeValue, VStack } from '@chakra-ui/react'
+import { useTranslation } from 'react-i18next'
 
-const PHRASES = ['support each other', 'fund what matters', 'make ideas happen']
+const PHRASE_KEYS = ['support each other', 'fund what matters', 'make ideas happen'] as const
 
 const LINE_HEIGHT = 52
 const STEP_SECONDS = 3
 const TRANSITION_SECONDS = 0.6
-const TOTAL_SECONDS = STEP_SECONDS * PHRASES.length
+const TOTAL_SECONDS = STEP_SECONDS * PHRASE_KEYS.length
 
-const STEP_PCT = 100 / PHRASES.length
+const STEP_PCT = 100 / PHRASE_KEYS.length
 const TRANS_PCT = (TRANSITION_SECONDS / TOTAL_SECONDS) * 100
 const PAUSE_PCT = STEP_PCT - TRANS_PCT
 
@@ -25,17 +26,18 @@ const ANIMATION_NAME = 'rolling-text'
 
 /** Builds the phrase array for a strip lane, adding a duplicate first item for seamless looping. */
 const getStripPhrases = (offset: number): string[] => {
-  const items = PHRASES.map((_, i) => PHRASES[(i + offset + PHRASES.length) % PHRASES.length]!)
-  return [...items, items[0]!]
+  const items = PHRASE_KEYS.map(
+    (_, i) => PHRASE_KEYS[(i + offset + PHRASE_KEYS.length) % PHRASE_KEYS.length] ?? PHRASE_KEYS[0],
+  )
+
+  return [...items, items[0] ?? PHRASE_KEYS[0]]
 }
 
 const FONT_SIZE = { base: 'lg', sm: 'xl', md: '2xl', lg: '3xl' }
-const TRAILING_TEXT = 'Join a community of 85,000+ contributors.'
-
-const formatPhrase = (phrase: string) => `${phrase}.`
 
 /** Vertically rolling text carousel driven by CSS keyframes for GPU-accelerated smoothness. */
 export const RollingText = () => {
+  const { t } = useTranslation()
   const mutedColor = useColorModeValue('neutral1.9', 'neutral1.7')
 
   const centerPhrases = getStripPhrases(0)
@@ -66,7 +68,7 @@ export const RollingText = () => {
         {phrases.map((phrase, i) => (
           <Box key={i} height={`${LINE_HEIGHT}px`} display="flex" alignItems="center">
             <Text fontSize={FONT_SIZE} color={color} fontWeight={fontWeight} fontStyle={fontStyle} whiteSpace="nowrap">
-              {formatPhrase(phrase)}
+              {`${t(phrase)}.`}
             </Text>
           </Box>
         ))}
@@ -93,7 +95,7 @@ export const RollingText = () => {
       </Text>
       <PhraseStrip phrases={phrases} color={color} fontWeight={fontWeight} fontStyle={fontStyle} />
       <Text fontSize={FONT_SIZE} color={color} visibility={mutedTextVisibility}>
-        {TRAILING_TEXT}
+        {t('Join a community of 85,000+ contributors.')}
       </Text>
     </HStack>
   )
@@ -116,14 +118,7 @@ export const RollingText = () => {
   )
 
   return (
-    <VStack
-      spacing={{ base: 0, sm: 0 }}
-      textAlign="center"
-      pt={0}
-      pb={2}
-      w="full"
-      alignItems="center"
-    >
+    <VStack spacing={{ base: 0, sm: 0 }} textAlign="center" pt={0} pb={2} w="full" alignItems="center">
       <VStack display={{ base: 'flex', sm: 'none' }} spacing={0} w="full" alignItems="center">
         <Box opacity={0.35} sx={{ filter: 'blur(1.5px)' }} aria-hidden="true" mb={{ base: '-18px', sm: 0 }}>
           <MobilePhraseOnlyRow phrases={topPhrases} color={mutedColor} fontStyle="italic" />
@@ -141,7 +136,7 @@ export const RollingText = () => {
         </Box>
 
         <Text fontSize={FONT_SIZE} color={mutedColor}>
-          {TRAILING_TEXT}
+          {t('Join a community of 85,000+ contributors.')}
         </Text>
       </VStack>
 

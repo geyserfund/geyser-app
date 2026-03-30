@@ -47,7 +47,7 @@ export const Discovery = () => {
         ) : (
           <Box
             w="100%"
-            maxWidth={`${dimensions.maxWidth + 24 * 2}`}
+            maxWidth={`${dimensions.maxWidth + 24 * 2}px`}
             position="relative"
             paddingX={standardPadding}
             paddingBottom={{ base: 28, lg: 10 }}

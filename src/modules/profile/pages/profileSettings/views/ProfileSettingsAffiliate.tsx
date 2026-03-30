@@ -150,7 +150,6 @@ export const ProfileSettingsAffiliate = () => {
   const contributionReferralPayoutRate =
     affiliatePartnerTerms?.contributionReferralPayoutRate ?? DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE
   const projectReferralPayoutRate = affiliatePartnerTerms?.projectReferralPayoutRate ?? 0
-  const projectReferralPayoutCapSats = affiliatePartnerTerms?.projectReferralPayoutCapSats ?? 0
   const contributionReferralLink = heroId ? getFullDomainUrl(`/?hero=${encodeURIComponent(heroId)}`) : ''
   const projectReferralLink = heroId ? getFullDomainUrl(`/launch?hero=${encodeURIComponent(heroId)}`) : ''
 
@@ -205,7 +204,6 @@ export const ProfileSettingsAffiliate = () => {
                 'Share your launch link with creators. You will receive a fixed 5k sats when the project launches, plus {{rate}} of contribution enabled from the Geyser platform fee, up to 25,000 sats per project.',
                 {
                   rate: formatEffectiveAffiliatePayoutRate(projectReferralPayoutRate, GEYSER_PLATFORM_FEE_RATE),
-                  cap: projectReferralPayoutCapSats.toLocaleString(),
                 },
               )}
               payoutHighlight={t('5,000 sats + {{rate}} of contribution enabled', {

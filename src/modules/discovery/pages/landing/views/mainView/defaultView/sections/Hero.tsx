@@ -1,13 +1,61 @@
-import { Box, BoxProps, VStack } from '@chakra-ui/react'
+import type { BoxProps } from '@chakra-ui/react'
+import { Box, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { Body, H1 } from '@/shared/components/typography/index.ts'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { standardPadding } from '@/shared/styles'
+import { standardPadding } from '@/shared/styles/index.ts'
 
-export const Hero = (props: BoxProps) => {
+/** Renders the landing page hero section over the marketplace background image. */
+export const Hero = (props: BoxProps): JSX.Element => {
+  const overlayGradient = useColorModeValue(
+    {
+      base: `linear-gradient(
+        90deg,
+        var(--chakra-colors-blackAlpha-900) 0%,
+        var(--chakra-colors-blackAlpha-800) 34%,
+        var(--chakra-colors-blackAlpha-700) 52%,
+        var(--chakra-colors-blackAlpha-400) 74%,
+        var(--chakra-colors-blackAlpha-200) 100%
+      )`,
+      lg: `linear-gradient(
+        90deg,
+        var(--chakra-colors-blackAlpha-800) 0%,
+        var(--chakra-colors-blackAlpha-700) 26%,
+        var(--chakra-colors-blackAlpha-600) 40%,
+        var(--chakra-colors-blackAlpha-300) 62%,
+        var(--chakra-colors-blackAlpha-100) 100%
+      )`,
+    },
+    {
+      base: `linear-gradient(
+        90deg,
+        var(--chakra-colors-blackAlpha-800) 0%,
+        var(--chakra-colors-blackAlpha-700) 34%,
+        var(--chakra-colors-blackAlpha-600) 52%,
+        var(--chakra-colors-blackAlpha-400) 74%,
+        var(--chakra-colors-blackAlpha-200) 100%
+      )`,
+      lg: `linear-gradient(
+        90deg,
+        var(--chakra-colors-blackAlpha-700) 0%,
+        var(--chakra-colors-blackAlpha-600) 26%,
+        var(--chakra-colors-blackAlpha-500) 40%,
+        var(--chakra-colors-blackAlpha-300) 62%,
+        var(--chakra-colors-blackAlpha-100) 100%
+      )`,
+    },
+  )
+
   return (
-    <Box w="full" position="relative" overflow="hidden" borderRadius={0} minHeight={{ base: '270px', lg: '390px' }} {...props}>
+    <Box
+      w="full"
+      position="relative"
+      overflow="hidden"
+      borderRadius={0}
+      minHeight={{ base: '270px', lg: '390px' }}
+      {...props}
+    >
       <Box
         position="absolute"
         inset={0}
@@ -16,14 +64,7 @@ export const Hero = (props: BoxProps) => {
         backgroundSize="cover"
         backgroundRepeat="no-repeat"
       />
-      <Box
-        position="absolute"
-        inset={0}
-        background={{
-          base: 'linear-gradient(90deg, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.88) 34%, rgba(0, 0, 0, 0.68) 52%, rgba(0, 0, 0, 0.28) 74%, rgba(0, 0, 0, 0.08) 100%)',
-          lg: 'linear-gradient(90deg, rgba(0, 0, 0, 0.86) 0%, rgba(0, 0, 0, 0.78) 26%, rgba(0, 0, 0, 0.58) 40%, rgba(0, 0, 0, 0.18) 62%, rgba(0, 0, 0, 0.04) 100%)',
-        }}
-      />
+      <Box position="absolute" inset={0} background={overlayGradient} />
 
       <Box
         position="relative"

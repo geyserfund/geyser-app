@@ -12,8 +12,7 @@ const EnvironmentTag = ({ compact = false }: { compact?: boolean }) => {
   }
 
   const isDevelopment = __development__
-  const desktopLabel = isDevelopment ? 'DEV' : 'STG'
-  const mobileLabel = isDevelopment ? 'DEV' : 'STG'
+  const label = isDevelopment ? 'DEV' : 'STG'
 
   return (
     <Badge
@@ -28,12 +27,7 @@ const EnvironmentTag = ({ compact = false }: { compact?: boolean }) => {
       textTransform="uppercase"
       whiteSpace="nowrap"
     >
-      <Box as="span" display={{ base: 'none', sm: 'inline' }}>
-        {desktopLabel}
-      </Box>
-      <Box as="span" display={{ base: 'inline', sm: 'none' }}>
-        {mobileLabel}
-      </Box>
+      {label}
     </Badge>
   )
 }

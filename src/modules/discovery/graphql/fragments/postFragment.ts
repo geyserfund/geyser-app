@@ -13,6 +13,7 @@ export const FRAGMENT_POST_FOR_LANDING_PAGE = gql`
       name
       id
       category
+      subCategory
       thumbnailImage
       owners {
         id

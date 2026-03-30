@@ -1,57 +1,65 @@
-import { Button, Circle, Icon, SimpleGrid, VStack, useColorModeValue } from '@chakra-ui/react'
-import { t } from 'i18next'
+import { Button, Circle, Icon, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PiGlobeSimple, PiLightbulb } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
-import { SubscribeForm } from '@/shared/sections/SubscribeForm.tsx'
 import { getPath } from '@/shared/constants/index.ts'
-
-const pathCards = [
-  {
-    title: t('Projects'),
-    description: t('Support individual creators and initiatives'),
-    supportingText: t('One-time backing, rewards, campaigns'),
-    buttonLabel: t('Explore Projects'),
-    to: getPath('projectDiscovery'),
-    icon: PiLightbulb,
-    variant: 'solid' as const,
-  },
-  {
-    title: t('Impact Funds'),
-    description: t('Support long-term thematic initiatives'),
-    supportingText: t('Ongoing pooled support for categories you care about'),
-    buttonLabel: t('Explore Impact Funds'),
-    to: getPath('discoveryImpactFunds'),
-    icon: PiGlobeSimple,
-    variant: 'outline' as const,
-  },
-] as const
-
-const howItWorksSteps = [
-  {
-    title: t('Discover a project or fund'),
-    description: t('Find campaigns and pools to back'),
-  },
-  {
-    title: t('Contribute once or monthly'),
-    description: t('Support your favorite causes'),
-  },
-  {
-    title: t('Receive updates and track impact'),
-    description: t('See how your contributions make a difference'),
-  },
-] as const
+import { SubscribeForm } from '@/shared/sections/SubscribeForm.tsx'
 
 /** Landing section guiding users toward projects or funds, with a simple contribution flow and signup CTA. */
 export const CommunityHero = () => {
+  const { t } = useTranslation()
   const iconCircleBg = useColorModeValue('primary1.50', 'primary1.900')
   const iconColor = useColorModeValue('primary1.500', 'primary1.300')
   const mutedTextColor = useColorModeValue('neutral1.9', 'neutral1.10')
   const stepCircleBg = useColorModeValue('primary1.50', 'primary1.900')
   const stepCircleColor = useColorModeValue('primary1.600', 'primary1.300')
+  const pathCards = useMemo(
+    () =>
+      [
+        {
+          title: t('Projects'),
+          description: t('Support individual creators and initiatives'),
+          supportingText: t('One-time backing, rewards, campaigns'),
+          buttonLabel: t('Explore Projects'),
+          to: getPath('projectDiscovery'),
+          icon: PiLightbulb,
+          variant: 'solid' as const,
+        },
+        {
+          title: t('Impact Funds'),
+          description: t('Support long-term thematic initiatives'),
+          supportingText: t('Ongoing pooled support for categories you care about'),
+          buttonLabel: t('Explore Impact Funds'),
+          to: getPath('discoveryImpactFunds'),
+          icon: PiGlobeSimple,
+          variant: 'outline' as const,
+        },
+      ] as const,
+    [t],
+  )
+  const howItWorksSteps = useMemo(
+    () =>
+      [
+        {
+          title: t('Discover a project or fund'),
+          description: t('Find campaigns and pools to back'),
+        },
+        {
+          title: t('Contribute once or monthly'),
+          description: t('Support your favorite causes'),
+        },
+        {
+          title: t('Receive updates and track impact'),
+          description: t('See how your contributions make a difference'),
+        },
+      ] as const,
+    [t],
+  )
 
   return (
     <VStack w="full" spacing={{ base: 8, lg: 10 }} align="center">
@@ -86,14 +94,7 @@ export const CommunityHero = () => {
 
         <SimpleGrid w="full" columns={{ base: 1, md: 2 }} spacing={4}>
           {pathCards.map((card) => (
-            <CardLayout
-              key={card.title}
-              spacing={5}
-              alignItems="center"
-              textAlign="center"
-              minH="100%"
-              height="100%"
-            >
+            <CardLayout key={card.title} spacing={5} alignItems="center" textAlign="center" minH="100%" height="100%">
               <Circle size="56px" bg={iconCircleBg} color={iconColor}>
                 <Icon as={card.icon} boxSize={6} />
               </Circle>

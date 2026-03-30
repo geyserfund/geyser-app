@@ -16,7 +16,7 @@ export const CuratedProjectCard = ({ project }: CuratedProjectCardProps) => {
 
   const borderColor = useColorModeValue('gray.200', 'gray.700')
   const bgColor = useColorModeValue('white', 'gray.800')
-  const hoverBgColor = useColorModeValue('gray.50', 'gray.750')
+  const hoverBgColor = useColorModeValue('gray.50', 'gray.700')
 
   const handleViewProject = () => {
     navigate(getPath('project', project.name))
@@ -72,14 +72,7 @@ export const CuratedProjectCard = ({ project }: CuratedProjectCardProps) => {
             {project.title}
           </H3>
           {fundingLabel && (
-            <Badge
-              colorScheme="purple"
-              fontSize="xs"
-              paddingX={2}
-              paddingY={1}
-              borderRadius="md"
-              textTransform="none"
-            >
+            <Badge colorScheme="purple" fontSize="xs" paddingX={2} paddingY={1} borderRadius="md" textTransform="none">
               {fundingLabel}
             </Badge>
           )}
@@ -94,7 +87,10 @@ export const CuratedProjectCard = ({ project }: CuratedProjectCardProps) => {
           colorScheme="primary1"
           size="md"
           width="100%"
-          onClick={handleViewProject}
+          onClick={(event) => {
+            event.stopPropagation()
+            handleViewProject()
+          }}
         >
           {t('View Project')}
         </Button>

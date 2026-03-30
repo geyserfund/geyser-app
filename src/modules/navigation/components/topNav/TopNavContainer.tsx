@@ -1,9 +1,10 @@
-import { StackProps, VStack } from '@chakra-ui/react'
+import type { StackProps } from '@chakra-ui/react'
 import { HStack } from '@chakra-ui/react'
-import { PropsWithChildren } from 'react'
+import { VStack } from '@chakra-ui/react'
+import type { PropsWithChildren } from 'react'
 
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
-import { standardPadding } from '@/shared/styles'
+import { standardPadding } from '@/shared/styles/index.ts'
 
 /** Wrap any top nav bar with this, to have it placed at the top, same palce as project navbar */
 export const TopNavContainer = ({ children, ...props }: PropsWithChildren<StackProps>) => {
@@ -12,8 +13,8 @@ export const TopNavContainer = ({ children, ...props }: PropsWithChildren<StackP
       w="full"
       position="fixed"
       top={{
-        base: `${dimensions.topNavBar.mobile.stickyOffset}px`,
-        lg: `${dimensions.topNavBar.desktop.stickyOffset}px`,
+        base: `${dimensions.topNavBar.mobile.height}px`,
+        lg: `${dimensions.topNavBar.desktop.height}px`,
       }}
       left={0}
       justifyContent={'center'}

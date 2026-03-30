@@ -98,7 +98,7 @@ const AonStatusDisplay = ({
           <Box backgroundColor={statusColor} width="5px" height="5px" borderRadius="full" flexShrink={0} />
         </>
       )}
-      {percentage ? (
+      {Number.isFinite(percentage) ? (
         <Body size={size} bold color={percentageColor} isTruncated>
           {percentage}% {t('funded')}
         </Body>
@@ -159,7 +159,12 @@ const CardFooter = ({
   isDisabled: boolean
 }) => {
   const contributeButton = (
-    <Box flexShrink={0} opacity={0} _groupHover={{ opacity: isDisabled ? 0 : 1 }} transition="opacity 0.2s ease">
+    <Box
+      flexShrink={0}
+      opacity={isDisabled ? 0 : { base: 1, md: 0 }}
+      _groupHover={{ opacity: isDisabled ? 0 : 1 }}
+      transition="opacity 0.2s ease"
+    >
       <Button
         variant="solid"
         colorScheme="primary1"
@@ -269,16 +274,18 @@ export const LandingCardBase = ({
   const { getProjectBalance, getAonGoalPercentage, isFundingDisabled } = useProjectToolkit(project)
   const useCompactLayout = !noMobile && Boolean(isMobile ?? isMobileMode)
 
-  const isWeekly = Boolean(project.contributionSummary?.contributionsTotalUsd)
+  const weeklyContributionUsd = project.contributionSummary?.contributionsTotalUsd
+  const isWeekly = weeklyContributionUsd !== null && weeklyContributionUsd !== undefined
   const isAonProject = isAllOrNothing(project)
   const isAonFailed = isAonProject && AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus)
 
-  const contributionAmount = project.contributionSummary?.contributionsTotalUsd || getProjectBalance().usd
+  const contributionAmount = weeklyContributionUsd ?? getProjectBalance().usd
   const percentage = getAonGoalPercentage()
   const timeLeft = aonProjectTimeLeft(project.aonGoal)
   const hasFire = (isWeekly && contributionAmount > 100) || contributionAmount > 1000
 
   const projectOwner = project.owners?.[0]?.user
+  const hasProjectOwner = Boolean(projectOwner?.id)
   const countryName = project.location?.country?.name
   const categoryLabel = getCategoryLabel(project)
 
@@ -291,7 +298,12 @@ export const LandingCardBase = ({
   const handleProfileClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    navigate(getPath('userProfile', projectOwner?.id))
+
+    if (!projectOwner?.id) {
+      return
+    }
+
+    navigate(getPath('userProfile', projectOwner.id))
   }
 
   return (
@@ -371,13 +383,13 @@ export const LandingCardBase = ({
                 height="16px"
                 width="16px"
                 wrapperProps={{ padding: '1px', height: '18px', width: '18px' }}
-                onClick={handleProfileClick}
+                onClick={hasProjectOwner ? handleProfileClick : undefined}
               />
               <ProfileText
                 size="xs"
                 guardian={projectOwner?.guardianType}
-                _hover={{ textDecoration: 'underline' }}
-                onClick={handleProfileClick}
+                _hover={hasProjectOwner ? { textDecoration: 'underline' } : undefined}
+                onClick={hasProjectOwner ? handleProfileClick : undefined}
                 maxWidth="120px"
                 isTruncated
               >

@@ -56,15 +56,14 @@ export const GeyserPromotionSection = () => {
   })
   const { data: promotionNetworkStatsData, loading: promotionNetworkStatsLoading } =
     usePromotionNetworkContributionStatsQuery({
-    fetchPolicy: 'cache-and-network',
+      fetchPolicy: 'cache-and-network',
     })
 
   const projectPromotionContributionSumUsd = promotionStatsData?.geyserPromotionsContributionStats?.contributionsSumUsd
   const hasProjectPromotionContributions =
-    !promotionStatsLoading &&
-    projectPromotionContributionSumUsd !== undefined &&
-    projectPromotionContributionSumUsd > 0
-  const promotionNetworkContributionSumUsd = promotionNetworkStatsData?.promotionNetworkContributionStats?.contributionsSumUsd
+    !promotionStatsLoading && projectPromotionContributionSumUsd !== undefined && projectPromotionContributionSumUsd > 0
+  const promotionNetworkContributionSumUsd =
+    promotionNetworkStatsData?.promotionNetworkContributionStats?.contributionsSumUsd
   const hasPromotionNetworkContributions =
     !promotionNetworkStatsLoading &&
     promotionNetworkContributionSumUsd !== undefined &&
@@ -73,14 +72,17 @@ export const GeyserPromotionSection = () => {
   const displayedContributionSumUsd = hasProjectPromotionContributions
     ? projectPromotionContributionSumUsd
     : promotionNetworkContributionSumUsd
-  const contributionSummary =
-    displayedContributionSumUsd !== undefined
-      ? `${formatAmount(displayedContributionSumUsd, FormatCurrencyType.Usd)} ${
-          hasProjectPromotionContributions
-            ? t('has been enabled through Geyser promotions on this project so far.')
-            : t('has been enabled through the Promotion Network so far.')
-        }`
-      : null
+  const formattedContributionAmount =
+    displayedContributionSumUsd !== undefined ? formatAmount(displayedContributionSumUsd, FormatCurrencyType.Usd) : null
+  const contributionSummary = formattedContributionAmount
+    ? hasProjectPromotionContributions
+      ? t('{{amount}} has been enabled through Geyser promotions on this project so far.', {
+          amount: formattedContributionAmount,
+        })
+      : t('{{amount}} has been enabled through the Promotion Network so far.', {
+          amount: formattedContributionAmount,
+        })
+    : null
 
   const { promotionsEnabled } = project
 

@@ -1,9 +1,10 @@
-import { Box, Button, HStack, SimpleGrid, VStack, useColorModeValue } from '@chakra-ui/react'
-import { t } from 'i18next'
-import { useEffect, useState } from 'react'
+import { Box, Button, HStack, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 import { fetchFeaturedProject } from '@/api/airtable.ts'
+import { LandingCardBaseSkeleton } from '@/shared/components/layouts/index.ts'
 import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
@@ -19,20 +20,20 @@ import { FeatureAirtableData, FeaturedAirtableResponse } from './Featured.tsx'
 type CategoryKey = 'featured' | 'education' | 'culture' | 'community' | 'tools'
 
 type CategoryButton = {
-  key: CategoryKey
-  label: string
   emoji: string
+  key: CategoryKey
+  labelKey: string
 }
 
 const CATEGORY_BUTTONS: CategoryButton[] = [
-  { key: 'featured', label: 'Featured', emoji: '⭐' },
-  { key: 'education', label: 'Education', emoji: '🎓' },
-  { key: 'culture', label: 'Culture', emoji: '🎨' },
-  { key: 'community', label: 'Community', emoji: '🤝' },
-  { key: 'tools', label: 'Tools', emoji: '🛠' },
+  { key: 'featured', labelKey: 'Featured', emoji: '⭐' },
+  { key: 'education', labelKey: 'Education', emoji: '🎓' },
+  { key: 'culture', labelKey: 'Culture', emoji: '🎨' },
+  { key: 'community', labelKey: 'Community', emoji: '🤝' },
+  { key: 'tools', labelKey: 'Tools', emoji: '🛠' },
 ]
 
-const CATEGORY_COPY: Record<CategoryKey, string> = {
+const CATEGORY_COPY_KEYS: Record<CategoryKey, string> = {
   featured: 'Support promising and curated projects',
   education: 'Support Bitcoin education initiatives around the world',
   culture: 'Support Bitcoin culture such as music, film and games',
@@ -41,10 +42,12 @@ const CATEGORY_COPY: Record<CategoryKey, string> = {
 }
 
 export const CuratedProjects = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [activeCategory, setActiveCategory] = useState<CategoryKey>('featured')
   const [featuredProjectNames, setFeaturedProjectNames] = useState<string[]>([])
   const [loadingFeatured, setLoadingFeatured] = useState(true)
+  const [featuredError, setFeaturedError] = useState(false)
 
   const inactiveBg = useColorModeValue('utils.pbg', 'utils.surface')
   const activeBg = useColorModeValue('neutral1.2', 'neutral1.3')
@@ -53,31 +56,51 @@ export const CuratedProjects = () => {
   const activeBorderColor = useColorModeValue('neutral1.6', 'neutral1.7')
   const buttonTextColor = useColorModeValue('neutral1.11', 'neutral1.11')
 
-  useEffect(() => {
-    const loadFeaturedProjects = async () => {
-      setLoadingFeatured(true)
-      try {
-        const response: FeaturedAirtableResponse = await fetchFeaturedProject()
-        const projectNames = response.records
-          .map((record) => record.fields)
-          .filter((data: FeatureAirtableData) => data.Type === 'project' && data.Name)
-          .map((data: FeatureAirtableData) => data.Name)
-          .slice(0, 6)
+  const categoryButtons = useMemo(
+    () => CATEGORY_BUTTONS.map((button) => ({ ...button, label: t(button.labelKey) })),
+    [t],
+  )
+  const categoryCopy = useMemo(
+    () =>
+      Object.fromEntries(Object.entries(CATEGORY_COPY_KEYS).map(([key, labelKey]) => [key, t(labelKey)])) as Record<
+        CategoryKey,
+        string
+      >,
+    [t],
+  )
 
-        setFeaturedProjectNames(projectNames)
-      } catch (error) {
-        console.error('Failed to fetch featured projects:', error)
-      } finally {
-        setLoadingFeatured(false)
-      }
+  const loadFeaturedProjects = useCallback(async () => {
+    setLoadingFeatured(true)
+    setFeaturedError(false)
+    try {
+      const response: FeaturedAirtableResponse = await fetchFeaturedProject()
+      const projectNames = response.records
+        .map((record) => record.fields)
+        .filter((data: FeatureAirtableData) => data.Type === 'project' && data.Name)
+        .map((data: FeatureAirtableData) => data.Name)
+        .slice(0, 6)
+
+      setFeaturedProjectNames(projectNames)
+    } catch (_error) {
+      setFeaturedError(true)
+      setFeaturedProjectNames([])
+    } finally {
+      setLoadingFeatured(false)
     }
+  }, [])
 
+  useEffect(() => {
     if (activeCategory === 'featured') {
       loadFeaturedProjects()
     }
-  }, [activeCategory])
+  }, [activeCategory, loadFeaturedProjects])
 
-  const { data: educationData, loading: educationLoading } = useProjectsMostFundedByCategoryQuery({
+  const {
+    data: educationData,
+    loading: educationLoading,
+    error: educationError,
+    refetch: refetchEducation,
+  } = useProjectsMostFundedByCategoryQuery({
     skip: activeCategory !== 'education',
     variables: {
       input: {
@@ -88,7 +111,12 @@ export const CuratedProjects = () => {
     },
   })
 
-  const { data: cultureData, loading: cultureLoading } = useProjectsMostFundedByCategoryQuery({
+  const {
+    data: cultureData,
+    loading: cultureLoading,
+    error: cultureError,
+    refetch: refetchCulture,
+  } = useProjectsMostFundedByCategoryQuery({
     skip: activeCategory !== 'culture',
     variables: {
       input: {
@@ -99,7 +127,12 @@ export const CuratedProjects = () => {
     },
   })
 
-  const { data: communityData, loading: communityLoading } = useProjectsMostFundedByCategoryQuery({
+  const {
+    data: communityData,
+    loading: communityLoading,
+    error: communityError,
+    refetch: refetchCommunity,
+  } = useProjectsMostFundedByCategoryQuery({
     skip: activeCategory !== 'community',
     variables: {
       input: {
@@ -110,7 +143,12 @@ export const CuratedProjects = () => {
     },
   })
 
-  const { data: toolsData, loading: toolsLoading } = useProjectsMostFundedByCategoryQuery({
+  const {
+    data: toolsData,
+    loading: toolsLoading,
+    error: toolsError,
+    refetch: refetchTools,
+  } = useProjectsMostFundedByCategoryQuery({
     skip: activeCategory !== 'tools',
     variables: {
       input: {
@@ -123,33 +161,69 @@ export const CuratedProjects = () => {
 
   const getCategoryProjects = () => {
     if (activeCategory === 'featured') {
-      return { projectNames: featuredProjectNames, loading: loadingFeatured }
+      return {
+        emptyStateMessage: t('No featured projects found'),
+        error: featuredError,
+        loading: loadingFeatured,
+        projectNames: featuredProjectNames,
+        retry: loadFeaturedProjects,
+      }
     }
 
     if (activeCategory === 'education') {
       const projects = educationData?.projectsMostFundedByCategory?.[0]?.projects.map((p) => p.project) || []
-      return { projects, loading: educationLoading }
+      return {
+        emptyStateMessage: t('No projects found'),
+        error: educationError,
+        loading: educationLoading,
+        projects,
+        retry: refetchEducation,
+      }
     }
 
     if (activeCategory === 'culture') {
       const projects = cultureData?.projectsMostFundedByCategory?.[0]?.projects.map((p) => p.project) || []
-      return { projects, loading: cultureLoading }
+      return {
+        emptyStateMessage: t('No projects found'),
+        error: cultureError,
+        loading: cultureLoading,
+        projects,
+        retry: refetchCulture,
+      }
     }
 
     if (activeCategory === 'community') {
       const projects = communityData?.projectsMostFundedByCategory?.[0]?.projects.map((p) => p.project) || []
-      return { projects, loading: communityLoading }
+      return {
+        emptyStateMessage: t('No projects found'),
+        error: communityError,
+        loading: communityLoading,
+        projects,
+        retry: refetchCommunity,
+      }
     }
 
     if (activeCategory === 'tools') {
       const projects = toolsData?.projectsMostFundedByCategory?.[0]?.projects.map((p) => p.project) || []
-      return { projects, loading: toolsLoading }
+      return {
+        emptyStateMessage: t('No tools found'),
+        error: toolsError,
+        loading: toolsLoading,
+        projects,
+        retry: refetchTools,
+      }
     }
 
-    return { projects: [], loading: false }
+    return {
+      emptyStateMessage: t('No projects found'),
+      error: undefined,
+      loading: false,
+      projects: [],
+      retry: undefined,
+    }
   }
 
-  const { projects = [], projectNames, loading } = getCategoryProjects()
+  const { projects = [], projectNames, loading, error, retry, emptyStateMessage } = getCategoryProjects()
 
   const handleDiscoverMore = () => {
     navigate(getPath('discoveryProjects'))
@@ -179,7 +253,7 @@ export const CuratedProjects = () => {
           w={{ base: 'max-content', md: 'full' }}
           minW={{ md: 'full' }}
         >
-          {CATEGORY_BUTTONS.map((button) => (
+          {categoryButtons.map((button) => (
             <Button
               key={button.key}
               size="xl"
@@ -209,11 +283,20 @@ export const CuratedProjects = () => {
       </Box>
 
       <H3 size={{ base: 'md', lg: '2xl' }} dark bold>
-        {CATEGORY_COPY[activeCategory]}
+        {categoryCopy[activeCategory]}
       </H3>
 
       {loading ? (
         <Body>{t('Loading...')}</Body>
+      ) : error ? (
+        <VStack w="full" spacing={4} py={8}>
+          <Body color="neutral1.11">{t('Failed to load curated projects')}</Body>
+          {retry ? (
+            <Button size="sm" variant="outline" colorScheme="neutral1" onClick={() => retry()}>
+              {t('Retry')}
+            </Button>
+          ) : null}
+        </VStack>
       ) : (
         <>
           {activeCategory === 'featured' && projectNames && <FeaturedProjectsList projectNames={projectNames} />}
@@ -229,6 +312,18 @@ export const CuratedProjects = () => {
           {activeCategory === 'tools' && projects.length === 0 && (
             <VStack w="full" spacing={4} py={8}>
               <Body color="neutral1.11">{t('No tools found')}</Body>
+            </VStack>
+          )}
+
+          {activeCategory !== 'featured' && activeCategory !== 'tools' && projects.length === 0 && (
+            <VStack w="full" spacing={4} py={8}>
+              <Body color="neutral1.11">{emptyStateMessage}</Body>
+            </VStack>
+          )}
+
+          {activeCategory === 'featured' && projectNames?.length === 0 && (
+            <VStack w="full" spacing={4} py={8}>
+              <Body color="neutral1.11">{emptyStateMessage}</Body>
             </VStack>
           )}
         </>
@@ -254,7 +349,8 @@ const FeaturedProjectsList = ({ projectNames }: { projectNames: string[] }) => {
 }
 
 const FeaturedProjectItem = ({ projectName }: { projectName: string }) => {
-  const { data, loading } = useFeaturedProjectForLandingPageQuery({
+  const { t } = useTranslation()
+  const { data, loading, error, refetch } = useFeaturedProjectForLandingPageQuery({
     variables: {
       where: {
         name: projectName,
@@ -265,7 +361,22 @@ const FeaturedProjectItem = ({ projectName }: { projectName: string }) => {
 
   const project = data?.projectGet
 
-  if (loading || !project) {
+  if (loading) {
+    return <LandingCardBaseSkeleton />
+  }
+
+  if (error) {
+    return (
+      <VStack w="full" spacing={4} py={8}>
+        <Body color="neutral1.11">{t('Failed to load curated project')}</Body>
+        <Button size="sm" variant="outline" colorScheme="neutral1" onClick={() => refetch()}>
+          {t('Retry')}
+        </Button>
+      </VStack>
+    )
+  }
+
+  if (!project) {
     return null
   }
 

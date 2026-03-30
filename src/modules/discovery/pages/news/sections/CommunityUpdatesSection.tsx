@@ -63,12 +63,7 @@ export const CommunityUpdatesSection = () => {
           </SimpleGrid>
 
           {hasMore && (
-            <Button
-              variant="outline"
-              colorScheme="neutral1"
-              alignSelf="center"
-              onClick={handleViewMore}
-            >
+            <Button variant="outline" colorScheme="neutral1" alignSelf="center" onClick={handleViewMore}>
               {t('View more')}
             </Button>
           )}

@@ -1,5 +1,5 @@
 import { VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import { Head } from '@/config/Head.tsx'
 import { GeyserMainSeoImageUrl } from '@/shared/constants/index.ts'
@@ -7,17 +7,33 @@ import { ProjectCategoryList } from '@/shared/constants/platform/projectCategory
 
 import { HeroesMainPage } from '../../../../heroes/index.ts'
 import { TopProjects } from './components/TopProjects.tsx'
-import { AnnouncementBanner } from './sections/AnnouncementBanner.tsx'
 import { CharityProjects } from './sections/CharityProjects.tsx'
 import { CuratedProjects } from './sections/CuratedProjects.tsx'
+import { GeyserNewsAndAnnouncements } from './sections/GeyserNewsAndAnnouncements.tsx'
 import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
 import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
-import { RecentImpactPosts } from './sections/RecentImpactPosts.tsx'
 import { SuccessStories } from './sections/SuccessStories.tsx'
+
+const CATEGORY_SECTION_GROUP_SIZE = 2
 
 export const DefaultView = () => {
   const [showBelowTheFold, setShowBelowTheFold] = useState(false)
+
+  const categoryGroups = ProjectCategoryList.reduce<(typeof ProjectCategoryList)[number][][]>(
+    (groups, category, index) => {
+      const groupIndex = Math.floor(index / CATEGORY_SECTION_GROUP_SIZE)
+
+      if (!groups[groupIndex]) {
+        groups[groupIndex] = []
+      }
+
+      groups[groupIndex].push(category)
+
+      return groups
+    },
+    [],
+  )
 
   useEffect(() => {
     /** Wait for initial content to render before showing below-the-fold content */
@@ -36,23 +52,21 @@ export const DefaultView = () => {
 
         <SuccessStories />
 
-        <AnnouncementBanner my={-8} />
-
         <ProjectsInYourRegion />
-
-        <RecentImpactPosts />
 
         {showBelowTheFold && (
           <>
-            {ProjectCategoryList.map((category) => (
-              <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
+            {categoryGroups.map((categoryGroup, index) => (
+              <Fragment key={`landing-category-group-${index}`}>
+                {categoryGroup.map((category) => (
+                  <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
+                ))}
+                {index === 0 && <GeyserNewsAndAnnouncements />}
+                {index === 1 && <CharityProjects />}
+                {index === 2 && <HeroesMainPage />}
+                {index === 3 && <TopProjects />}
+              </Fragment>
             ))}
-            <CharityProjects />
-
-            <HeroesMainPage />
-
-            <TopProjects />
-
             <NewsletterSignup />
           </>
         )}

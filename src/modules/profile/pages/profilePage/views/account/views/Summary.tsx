@@ -143,8 +143,8 @@ const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath
   const titleColor = useColorModeValue('neutral1.11', 'neutral1.12')
   const subtitleColor = useColorModeValue('neutral1.9', 'neutral1.11')
   const cardBackground = useColorModeValue(
-    'linear-gradient(135deg, #8FFFDA 0%, #C4FFE9 30%, #FFF8E1 60%, #FFE4C0 100%)',
-    'linear-gradient(135deg, #0F3B35 0%, #134E4A 30%, #3F3A17 65%, #4A2F1F 100%)',
+    'linear-gradient(135deg, var(--chakra-colors-primary1-200) 0%, var(--chakra-colors-primary1-100) 30%, var(--chakra-colors-warning-100) 60%, var(--chakra-colors-warning-200) 100%)',
+    'linear-gradient(135deg, var(--chakra-colors-primary1-900) 0%, var(--chakra-colors-primary1-800) 30%, var(--chakra-colors-warning-900) 65%, var(--chakra-colors-warning-800) 100%)',
   )
   const textureOpacity = useColorModeValue(0.14, 0.1)
   const textureBlendMode = useColorModeValue('overlay' as const, 'soft-light' as const)
@@ -154,7 +154,10 @@ const AffiliatePromoCard = ({ affiliateDashboardPath }: { affiliateDashboardPath
   const buttonColor = useColorModeValue('neutral1.11', 'neutral1.12')
   const buttonBorderColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
   const buttonHoverBackground = useColorModeValue('neutralAlpha.2', 'neutralAlpha.4')
-  const buttonBoxShadow = useColorModeValue('0 8px 24px rgba(31, 41, 55, 0.08)', '0 10px 28px rgba(0, 0, 0, 0.32)')
+  const buttonBoxShadow = useColorModeValue(
+    '0 8px 24px var(--chakra-colors-blackAlpha-200)',
+    '0 10px 28px var(--chakra-colors-blackAlpha-500)',
+  )
 
   return (
     <CardLayout

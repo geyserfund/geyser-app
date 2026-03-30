@@ -8,9 +8,9 @@ import {
   MenuList,
   Portal,
   SimpleGrid,
-  VStack,
   useColorModeValue,
   useDisclosure,
+  VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -35,8 +35,9 @@ export const LandingDesktopNav = () => {
   const mutedColor = useColorModeValue('gray.700', 'gray.300')
   const disabledColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400')
   const newBadgeTextColor = useColorModeValue('gray.900', 'gray.900')
-  const soonBadgeBackgroundColor = useColorModeValue('#d7d7d7', '#a3a3a3')
-  const soonBadgeTextColor = useColorModeValue('#555555', '#4a4a4a')
+  const newBadgeBackgroundColor = useColorModeValue('primary1.4', 'primary1.5')
+  const soonBadgeBackgroundColor = useColorModeValue('neutral1.4', 'neutral1.5')
+  const soonBadgeTextColor = useColorModeValue('neutral1.10', 'neutral1.11')
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [showSearchContent, setShowSearchContent] = useState(false)
@@ -73,6 +74,13 @@ export const LandingDesktopNav = () => {
     return clearSearchRevealTimeout
   }, [clearSearchRevealTimeout, isSearchOpen])
 
+  useEffect(() => {
+    return () => {
+      clearCloseTimeout()
+      clearSearchRevealTimeout()
+    }
+  }, [clearCloseTimeout, clearSearchRevealTimeout])
+
   const handleMenuOpen = useCallback(() => {
     clearCloseTimeout()
     onOpen()
@@ -96,7 +104,7 @@ export const LandingDesktopNav = () => {
       title: t('Impact Funds'),
       description: t('Fund a category through curated funds.'),
       to: getPath('discoveryImpactFunds'),
-      badge: { label: t('new'), backgroundColor: '#58efd9', textColor: newBadgeTextColor },
+      badge: { label: t('new'), backgroundColor: newBadgeBackgroundColor, textColor: newBadgeTextColor },
     },
     {
       title: t('Campaigns'),
@@ -113,12 +121,7 @@ export const LandingDesktopNav = () => {
 
   return (
     <HStack flex={1} spacing={0} minWidth={0} justify="center">
-      <HStack
-        spacing={{ lg: 0.5, xl: 1 }}
-        align="center"
-        justify="center"
-        flexShrink={0}
-      >
+      <HStack spacing={{ lg: 0.5, xl: 1 }} align="center" justify="center" flexShrink={0}>
         <Menu isOpen={isOpen} onClose={onClose} placement="bottom" strategy="fixed">
           <MenuButton
             as={Button}
@@ -155,7 +158,7 @@ export const LandingDesktopNav = () => {
                     <VStack align="stretch" spacing={1.5} width="100%">
                       <HStack align="center" justify="flex-start" spacing={2.5}>
                         <Body
-                          fontSize="md"
+                          size="md"
                           dark={!item.disabled}
                           color={item.disabled ? disabledColor : undefined}
                           fontWeight={400}
@@ -181,7 +184,7 @@ export const LandingDesktopNav = () => {
                         ) : null}
                       </HStack>
                       <Body
-                        fontSize="sm"
+                        size="sm"
                         color={item.disabled ? disabledColor : mutedColor}
                         fontWeight={300}
                         lineHeight={1.4}

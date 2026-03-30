@@ -1,4 +1,6 @@
-import { Avatar, AvatarBadge, Button, ButtonProps, forwardRef, HStack, Icon, Image } from '@chakra-ui/react'
+import type { ButtonProps } from '@chakra-ui/react'
+import { Avatar, AvatarBadge, Button, forwardRef, HStack, Icon, Image } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { PiList, PiUser } from 'react-icons/pi'
 import { Link } from 'react-router'
@@ -65,6 +67,7 @@ export const ProfileNavButton = forwardRef<ButtonProps, 'button'>((props, ref) =
       <Button
         ref={ref}
         data-testid="platform-dropdown-menu"
+        aria-label={t('Open profile menu')}
         height={{ base: '40px', lg: '46px' }}
         width={{ base: '40px', lg: '46px' }}
         minWidth={{ base: '40px', lg: '46px' }}

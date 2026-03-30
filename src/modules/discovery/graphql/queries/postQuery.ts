@@ -26,6 +26,7 @@ export const QUERY_POSTS_FOR_LANDING_PAGE = gql`
         name
         id
         category
+        subCategory
         thumbnailImage
         owners {
           id

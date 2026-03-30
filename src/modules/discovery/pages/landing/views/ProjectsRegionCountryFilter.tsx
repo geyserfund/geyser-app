@@ -13,18 +13,15 @@ import {
   PopoverContent,
   PopoverTrigger,
   Skeleton,
-  VStack,
   useDisclosure,
+  VStack,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo, useState } from 'react'
 import { PiCaretDown, PiCheck, PiGlobe, PiMagnifyingGlass, PiX } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
-import {
-  useProjectCountriesGetQuery,
-  useProjectRegionsGetQuery,
-} from '@/types'
+import { useProjectCountriesGetQuery, useProjectRegionsGetQuery } from '@/types'
 
 type ProjectsRegionCountryFilterProps = {
   countryCode?: string
@@ -33,16 +30,22 @@ type ProjectsRegionCountryFilterProps = {
 }
 
 /** Projects toolbar filter for selecting either a project region or country from a searchable dropdown. */
-export const ProjectsRegionCountryFilter = ({
-  countryCode,
-  region,
-  onChange,
-}: ProjectsRegionCountryFilterProps) => {
+export const ProjectsRegionCountryFilter = ({ countryCode, region, onChange }: ProjectsRegionCountryFilterProps) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const [searchValue, setSearchValue] = useState('')
 
-  const { data: countriesData, loading: countriesLoading } = useProjectCountriesGetQuery()
-  const { data: regionsData, loading: regionsLoading } = useProjectRegionsGetQuery()
+  const {
+    data: countriesData,
+    loading: countriesLoading,
+    error: countriesError,
+    refetch: refetchCountries,
+  } = useProjectCountriesGetQuery()
+  const {
+    data: regionsData,
+    loading: regionsLoading,
+    error: regionsError,
+    refetch: refetchRegions,
+  } = useProjectRegionsGetQuery()
 
   const countries = useMemo(
     () => [...(countriesData?.projectCountriesGet ?? [])].sort((a, b) => b.count - a.count),
@@ -154,13 +157,7 @@ export const ProjectsRegionCountryFilter = ({
               />
             </InputGroup>
 
-            <VStack
-              align="stretch"
-              spacing={1}
-              maxHeight="360px"
-              overflowY="auto"
-              paddingRight={1}
-            >
+            <VStack align="stretch" spacing={1} maxHeight="360px" overflowY="auto" paddingRight={1}>
               <RegionCountryOption
                 label={t('Worldwide')}
                 countLabel=""
@@ -169,32 +166,65 @@ export const ProjectsRegionCountryFilter = ({
                 onClick={handleWorldwideSelect}
               />
 
-              {filteredRegions.map((entry) => (
-                <RegionCountryOption
-                  key={entry.region}
-                  label={entry.region}
-                  countLabel={`(${entry.count})`}
-                  isSelected={entry.region === region}
-                  onClick={() => handleRegionSelect(entry.region)}
+              {regionsError ? (
+                <QueryErrorState
+                  message={t('Failed to load regions')}
+                  onRetry={() => {
+                    refetchRegions()
+                  }}
                 />
-              ))}
+              ) : (
+                filteredRegions.map((entry) => (
+                  <RegionCountryOption
+                    key={entry.region}
+                    label={entry.region}
+                    countLabel={`(${entry.count})`}
+                    isSelected={entry.region === region}
+                    onClick={() => handleRegionSelect(entry.region)}
+                  />
+                ))
+              )}
 
-              {filteredRegions.length > 0 && filteredCountries.length > 0 ? <Divider borderColor="blackAlpha.200" /> : null}
+              {!regionsError && !countriesError && filteredRegions.length > 0 && filteredCountries.length > 0 ? (
+                <Divider borderColor="blackAlpha.200" />
+              ) : null}
 
-              {filteredCountries.map((entry) => (
-                <RegionCountryOption
-                  key={entry.country.code}
-                  label={entry.country.name}
-                  countLabel={`(${entry.count})`}
-                  isSelected={entry.country.code === countryCode}
-                  onClick={() => handleCountrySelect(entry.country.code)}
+              {countriesError ? (
+                <QueryErrorState
+                  message={t('Failed to load countries')}
+                  onRetry={() => {
+                    refetchCountries()
+                  }}
                 />
-              ))}
+              ) : (
+                filteredCountries.map((entry) => (
+                  <RegionCountryOption
+                    key={entry.country.code}
+                    label={entry.country.name}
+                    countLabel={`(${entry.count})`}
+                    isSelected={entry.country.code === countryCode}
+                    onClick={() => handleCountrySelect(entry.country.code)}
+                  />
+                ))
+              )}
             </VStack>
           </VStack>
         </PopoverBody>
       </PopoverContent>
     </Popover>
+  )
+}
+
+const QueryErrorState = ({ message, onRetry }: { message: string; onRetry: () => void }) => {
+  return (
+    <VStack align="stretch" spacing={2} px={1} py={2}>
+      <Body size="sm" color="neutral1.11">
+        {message}
+      </Body>
+      <Button size="sm" variant="outline" colorScheme="neutral1" onClick={onRetry} alignSelf="start">
+        {t('Retry')}
+      </Button>
+    </VStack>
   )
 }
 

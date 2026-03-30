@@ -12,11 +12,12 @@ import {
   Tab,
   TabList,
   Tabs,
+  useColorModeValue,
   useDisclosure,
   VStack,
 } from '@chakra-ui/react'
-import { t } from 'i18next'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { PiCaretDown, PiCaretLeft, PiCaretRight, PiCheck } from 'react-icons/pi'
 import { useLocation, useNavigate, useSearchParams } from 'react-router'
 
@@ -66,21 +67,11 @@ type FilterDropdownOption<T extends string> = {
   label: string
   value: T
 }
+type TranslateFn = (key: string) => string
 
 const PAGE_SIZE = 20
 const SORT_SEARCH_PARAM = 'sort'
 const MOST_FUNDED_THIS_WEEK_PAGE_SIZE = 30
-
-const projectTypeFilters: Array<{ key: ProjectTypeFilter; label: string; path: string }> = [
-  { key: 'all', label: t('All project types'), path: getPath('discoveryProjects') },
-  { key: 'fundraisers', label: t('Fundraisers'), path: getPath('discoveryFundraisers') },
-  { key: 'campaigns', label: t('Campaigns'), path: getPath('discoveryCampaigns') },
-]
-const sortOptions: FilterDropdownOption<SortOption>[] = [
-  { value: 'most_funded_this_week', label: t('Most funded this week') },
-  { value: 'most_funded', label: t('Most funded') },
-  { value: 'most_recent', label: t('Most recent') },
-]
 
 const getProjectTypeFilter = (pathname: string): ProjectTypeFilter => {
   const rootSegment = pathname.split('/').filter(Boolean)[0]
@@ -135,7 +126,7 @@ const filterWeeklyProjectsByType = (projects: WeeklyProject[], projectTypeFilter
   return projects.filter((project) => project.fundingStrategy === fundingStrategy)
 }
 
-const getHeadContent = (projectTypeFilter: ProjectTypeFilter) => {
+const getHeadContent = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) => {
   if (projectTypeFilter === 'campaigns') {
     return {
       title: t('Campaigns'),
@@ -173,7 +164,7 @@ const getSortOption = (sortParam: string | null): SortOption => {
   return 'most_funded_this_week'
 }
 
-const getCategoryTabs = (projectTypeFilter: ProjectTypeFilter) => {
+const getCategoryTabs = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) => {
   if (projectTypeFilter === 'campaigns') {
     return [
       {
@@ -347,11 +338,20 @@ const getProjectTypePath = ({
     return getPath('discoveryProjectsCategory', category)
   }
 
-  return projectTypeFilters.find((filter) => filter.key === nextProjectTypeFilter)?.path ?? getPath('discoveryProjects')
+  if (nextProjectTypeFilter === 'campaigns') {
+    return getPath('discoveryCampaigns')
+  }
+
+  if (nextProjectTypeFilter === 'fundraisers') {
+    return getPath('discoveryFundraisers')
+  }
+
+  return getPath('discoveryProjects')
 }
 
 /** Renders the unified discovery projects page with funding-strategy URL filters. */
 export const Projects = () => {
+  const { t } = useTranslation()
   const location = useLocation()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -363,6 +363,22 @@ export const Projects = () => {
   } = useFilterContext()
 
   const projectTypeFilter = getProjectTypeFilter(location.pathname)
+  const projectTypeFilters = useMemo<Array<{ key: ProjectTypeFilter; label: string; path: string }>>(
+    () => [
+      { key: 'all', label: t('All project types'), path: getPath('discoveryProjects') },
+      { key: 'fundraisers', label: t('Fundraisers'), path: getPath('discoveryFundraisers') },
+      { key: 'campaigns', label: t('Campaigns'), path: getPath('discoveryCampaigns') },
+    ],
+    [t],
+  )
+  const sortOptions = useMemo<FilterDropdownOption<SortOption>[]>(
+    () => [
+      { value: 'most_funded_this_week', label: t('Most funded this week') },
+      { value: 'most_funded', label: t('Most funded') },
+      { value: 'most_recent', label: t('Most recent') },
+    ],
+    [t],
+  )
   const shouldFilterByUserRegion =
     location.pathname === getPath('discoveryProjectsInYourRegion') ||
     location.pathname === getPath('discoveryFundraisersInYourRegion') ||
@@ -370,17 +386,23 @@ export const Projects = () => {
   const pathSegments = location.pathname.split('/').filter(Boolean)
   const isCategoryRoute = pathSegments.includes(PathName.category)
   const isSubCategoryRoute = pathSegments.includes(PathName.subCategory)
-  const categoryTabs = useMemo(() => getCategoryTabs(projectTypeFilter), [projectTypeFilter])
+  const categoryTabs = useMemo(() => getCategoryTabs(projectTypeFilter, t), [projectTypeFilter, t])
   const currentTabIndex = Math.max(
     categoryTabs.findIndex((tab) => tab.path === location.pathname),
     0,
   )
 
-  const { data: userIpCountryData, loading: loadingCountryCode } = useGetUserIpCountryQuery({
+  const {
+    data: userIpCountryData,
+    error: userIpCountryError,
+    loading: loadingCountryCode,
+    refetch: refetchUserIpCountry,
+  } = useGetUserIpCountryQuery({
     skip: !shouldFilterByUserRegion,
   })
 
-  const countryCode = shouldFilterByUserRegion ? userIpCountryData?.userIpCountry || undefined : undefined
+  const countryCode = shouldFilterByUserRegion ? userIpCountryData?.userIpCountry?.trim() || undefined : undefined
+  const isRegionLookupFailed = shouldFilterByUserRegion && !loadingCountryCode && !countryCode
   const sort = getSortOption(searchParams.get(SORT_SEARCH_PARAM))
   const hasCategoryOrSubCategoryFilter = Boolean(category || subCategory)
   const hasLocationFilter = shouldFilterByUserRegion || Boolean(filterCountryCode || region)
@@ -443,7 +465,7 @@ export const Projects = () => {
       itemLimit: PAGE_SIZE,
       orderBy,
       options: {
-        skip: shouldUseMostFundedThisWeek || (shouldFilterByUserRegion && loadingCountryCode),
+        skip: shouldUseMostFundedThisWeek || (shouldFilterByUserRegion && (!countryCode || loadingCountryCode)),
       },
       query: QUERY_PROJECTS_FOR_LANDING_PAGE,
       queryName: ['projectsGet', 'projects'],
@@ -582,6 +604,7 @@ export const Projects = () => {
   const projects = shouldUseMostFundedThisWeek ? mostFundedThisWeekProjects : data
   const projectsError = shouldUseMostFundedThisWeek ? mostFundedThisWeekError : error
   const projectsLoading = shouldUseMostFundedThisWeek ? isMostFundedThisWeekLoading : isLoading
+  const toolbarDividerColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
 
   useEffect(() => {
     const element = tabListRef.current
@@ -693,6 +716,11 @@ export const Projects = () => {
   }
 
   const handleRetry = () => {
+    if (shouldFilterByUserRegion && !countryCode) {
+      refetchUserIpCountry()
+      return
+    }
+
     if (shouldUseMostFundedThisWeekByCategory) {
       refetchMostFundedThisWeekByCategory()
       return
@@ -718,7 +746,7 @@ export const Projects = () => {
     refetch()
   }
 
-  const headContent = getHeadContent(projectTypeFilter)
+  const headContent = getHeadContent(projectTypeFilter, t)
 
   return (
     <>
@@ -766,7 +794,7 @@ export const Projects = () => {
             >
               {categoryTabs.map((tab) => (
                 <Tab
-                  key={tab.label}
+                  key={tab.path}
                   fontSize={{ base: 'xs', sm: 'md' }}
                   color="neutral1.11"
                   _selected={{
@@ -808,17 +836,6 @@ export const Projects = () => {
           }}
         >
           <HStack spacing={2} whiteSpace="nowrap" flexShrink={0}>
-            <ProjectsRegionCountryFilter
-              countryCode={filterCountryCode}
-              region={region}
-              onChange={handleRegionCountryChange}
-            />
-            <Divider
-              display={{ base: 'none', md: 'block' }}
-              orientation="vertical"
-              height="24px"
-              borderColor="blackAlpha.300"
-            />
             <ProjectsToolbarSelect
               options={projectTypeFilters.map((filter) => ({
                 label: filter.label,
@@ -827,6 +844,17 @@ export const Projects = () => {
               value={projectTypeFilter}
               onChange={handleProjectTypeChange}
             />
+            <Divider
+              display={{ base: 'none', md: 'block' }}
+              orientation="vertical"
+              height="24px"
+              borderColor={toolbarDividerColor}
+            />
+            <ProjectsRegionCountryFilter
+              countryCode={filterCountryCode}
+              region={region}
+              onChange={handleRegionCountryChange}
+            />
           </HStack>
 
           <HStack spacing={2} whiteSpace="nowrap" flexShrink={0}>
@@ -834,7 +862,7 @@ export const Projects = () => {
               display={{ base: 'none', md: 'block' }}
               orientation="vertical"
               height="24px"
-              borderColor="blackAlpha.300"
+              borderColor={toolbarDividerColor}
             />
             <ProjectsToolbarSelect options={sortOptions} value={sort} onChange={handleSortChange} />
           </HStack>
@@ -842,7 +870,18 @@ export const Projects = () => {
 
         {shouldFilterByUserRegion && loadingCountryCode ? <RenderProjectList projects={[]} loading /> : null}
 
-        {!loadingCountryCode && projectsError ? (
+        {!loadingCountryCode && isRegionLookupFailed ? (
+          <VStack alignItems="start" spacing={3}>
+            <Body>
+              {userIpCountryError ? t('Failed to determine your region') : t('We could not determine your region')}
+            </Body>
+            <Button size="sm" variant="outline" colorScheme="neutral1" onClick={handleRetry}>
+              {t('Retry')}
+            </Button>
+          </VStack>
+        ) : null}
+
+        {!loadingCountryCode && !isRegionLookupFailed && projectsError ? (
           <VStack alignItems="start" spacing={3}>
             <Body>{t('Failed to fetch projects')}</Body>
             <Button size="sm" variant="outline" colorScheme="neutral1" onClick={handleRetry}>
@@ -851,7 +890,7 @@ export const Projects = () => {
           </VStack>
         ) : null}
 
-        {!loadingCountryCode && !projectsError ? (
+        {!loadingCountryCode && !isRegionLookupFailed && !projectsError ? (
           <RenderProjectList
             projects={projects}
             loading={projectsLoading}

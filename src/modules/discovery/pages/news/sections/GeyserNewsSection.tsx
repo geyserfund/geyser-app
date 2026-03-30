@@ -4,11 +4,7 @@ import { useCallback, useMemo, useState } from 'react'
 
 import { LandingPostCard } from '@/modules/discovery/pages/landing/views/mainView/defaultView/components/LandingPostCard.tsx'
 import { H2 } from '@/shared/components/typography/index.ts'
-import {
-  OrderByOptions,
-  useFeaturedProjectForLandingPageQuery,
-  usePostsForLandingPageQuery,
-} from '@/types/index.ts'
+import { OrderByOptions, useFeaturedProjectForLandingPageQuery, usePostsForLandingPageQuery } from '@/types/index.ts'
 
 const GEYSER_PROJECT_NAME = 'geyser'
 const PAGE_SIZE = 4
@@ -67,12 +63,7 @@ export const GeyserNewsSection = () => {
           </SimpleGrid>
 
           {hasMore && (
-            <Button
-              variant="outline"
-              colorScheme="neutral1"
-              alignSelf="center"
-              onClick={handleViewMore}
-            >
+            <Button variant="outline" colorScheme="neutral1" alignSelf="center" onClick={handleViewMore}>
               {t('View more')}
             </Button>
           )}
