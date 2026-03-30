@@ -32,7 +32,8 @@
     "dev:language": "tsx language/languageServer.ts",
     "storybook": "yarn workspace @geyser-app/storybook storybook",
     "storybook:build": "yarn workspace @geyser-app/storybook storybook:build",
-    "knip": "knip"
+    "knip": "knip",
+    "sitemap:generate": "node generate-sitemap.js"
   },
   "dependencies": {
     "@apollo/client": "^3.11.1",

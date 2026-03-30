@@ -36,9 +36,10 @@ import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { PageSectionHeader } from '@/shared/components/layouts/PageSectionHeader.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
-import { getPath } from '@/shared/constants'
+import { getAiSeoPageContent, getPath } from '@/shared/constants'
 import { usdRateAtom } from '@/shared/state/btcRateAtom.ts'
-import { type ImpactFundsQuery, ImpactFundSponsorTier, useImpactFundsQuery } from '@/types'
+import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
+import { type ImpactFundsQuery, ImpactFundSponsorTier, ProjectSubCategory, useImpactFundsQuery } from '@/types'
 
 import { FundingModelsShowcase } from '../components/FundingModelsShowcase.tsx'
 import { ImpactFlowStrip } from '../components/ImpactFlowStrip.tsx'
@@ -143,6 +144,7 @@ function CardCta({ href, isExternal, to }: CardCtaProps): JSX.Element {
 /** Main landing page for browsing live Impact Funds and understanding how the program works. */
 export const ImpactFundsMainPage = () => {
   const { data, loading, error } = useImpactFundsQuery()
+  const impactFundsSeoContent = getAiSeoPageContent('impactFunds')
   const usdRate = useAtomValue(usdRateAtom)
   const { getUSDAmount, getSatoshisFromUSDCents } = useBTCConverter()
   const pageSpacing = { base: 6, lg: 8 }
@@ -176,10 +178,39 @@ export const ImpactFundsMainPage = () => {
 
   const pageHead = (
     <Head
-      title={t('Impact Funds')}
-      description={t('Support and apply to Geyser Impact Funds.')}
+      title={impactFundsSeoContent.title}
+      description={impactFundsSeoContent.description}
       image={IMPACT_FUNDS_IMAGE_URL}
-    />
+      keywords={impactFundsSeoContent.keywords}
+      url={`https://geyser.fund${getPath('discoveryImpactFunds')}`}
+    >
+      <script type="application/ld+json">
+        {buildCollectionPageJsonLd({
+          name: 'Geyser Impact Funds',
+          description: impactFundsSeoContent.description,
+          path: getPath('discoveryImpactFunds'),
+          about: impactFundsSeoContent.about,
+          keywords: impactFundsSeoContent.keywords,
+          items: [
+            {
+              name: 'Impact Funds',
+              path: getPath('discoveryImpactFunds'),
+              description: 'Find Bitcoin-backed impact funds and sponsor programs.',
+            },
+            {
+              name: 'Humanitarian Fundraisers',
+              path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.Humanitarian),
+              description: 'Support humanitarian causes backed by bitcoiners worldwide.',
+            },
+            {
+              name: 'New Campaign Ideas',
+              path: getPath('discoveryCampaigns'),
+              description: 'Discover all-or-nothing campaigns launching new Bitcoin projects.',
+            },
+          ],
+        })}
+      </script>
+    </Head>
   )
 
   if (loading) {
@@ -584,7 +615,15 @@ export const ImpactFundsMainPage = () => {
                           {fund.subtitle}
                         </Body>
                       )}
-                      <Flex w="full" px={5} pt={3} justifyContent="space-between" alignItems="center" gap={4} flexWrap="wrap">
+                      <Flex
+                        w="full"
+                        px={5}
+                        pt={3}
+                        justifyContent="space-between"
+                        alignItems="center"
+                        gap={4}
+                        flexWrap="wrap"
+                      >
                         {fund.metrics.projectsFundedCount > 0 ? (
                           <Body size="sm" color={sectionMutedTextColor}>
                             {t('{{projectCount}} projects supported', {
