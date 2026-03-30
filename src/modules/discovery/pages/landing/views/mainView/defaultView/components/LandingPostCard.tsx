@@ -10,6 +10,7 @@ import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 import type { PostForLandingPageFragment } from '@/types/index.ts'
 import { toInt } from '@/utils/index.ts'
+import { useMobileMode } from '@/utils/info/useMobileMode.ts'
 
 type LandingPostCardProps = {
   post: PostForLandingPageFragment
@@ -19,7 +20,9 @@ type LandingPostCardProps = {
 
 /** Shared landing and discovery card for displaying a post preview. */
 export const LandingPostCard = ({ post, isMobile, showProjectCategory = false, ...rest }: LandingPostCardProps) => {
+  const isMobileMode = useMobileMode()
   const navigate = useNavigate()
+  const useCompactLayout = isMobile ?? Boolean(isMobileMode)
   const projectLabel = post.project?.subCategory
     ? ProjectSubCategoryLabel[post.project.subCategory]
     : post.project?.category
@@ -42,7 +45,7 @@ export const LandingPostCard = ({ post, isMobile, showProjectCategory = false, .
           {postTypeLabel ? `${t('{{type}} in', { type: postTypeLabel })} ` : ''}
           {post?.project?.title}
         </Body>
-        {post.publishedAt && (
+        {useCompactLayout && post.publishedAt && (
           <Body size="sm" light flexShrink={0}>
             {DateTime.fromMillis(toInt(post.publishedAt)).toFormat('dd LLL, yyyy')}
           </Body>
@@ -118,7 +121,7 @@ export const LandingPostCard = ({ post, isMobile, showProjectCategory = false, .
         }}
       />
 
-      {isMobile ? (
+      {useCompactLayout ? (
         <HStack width="100%" height="100%" alignItems="stretch" spacing={0}>
           {renderPostImage(true)}
           <VStack
@@ -152,12 +155,21 @@ export const LandingPostCard = ({ post, isMobile, showProjectCategory = false, .
         </HStack>
       ) : (
         <VStack width="100%" height="100%" alignItems="start" spacing={3}>
-          <Box w="full">{renderProjectContent()}</Box>
+          <Box w="full" paddingX={2}>
+            {renderProjectContent()}
+          </Box>
           {renderPostImage()}
           <VStack flex={1} width="100%" alignItems="start" overflow="hidden" spacing={3} paddingX={2} paddingBottom={2}>
-            <H3 size="md" medium width="100%" noOfLines={1}>
-              {post.title}
-            </H3>
+            <HStack width="100%" justifyContent="space-between" alignItems="baseline" spacing={3}>
+              <H3 size="md" medium flex={1} minWidth={0} noOfLines={1}>
+                {post.title}
+              </H3>
+              {post.publishedAt && (
+                <Body size="sm" light flexShrink={0} textAlign="right">
+                  {DateTime.fromMillis(toInt(post.publishedAt)).toFormat('dd LLL, yyyy')}
+                </Body>
+              )}
+            </HStack>
             <Body size="md" dark wordBreak="break-word" whiteSpace="normal" lineHeight="1.4" width="100%" noOfLines={3}>
               {post.description}
             </Body>
