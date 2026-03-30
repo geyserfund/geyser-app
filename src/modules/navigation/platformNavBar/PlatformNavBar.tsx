@@ -40,11 +40,11 @@ export const PlatformNavBar = () => {
   const { isLoggedIn, isUserAProjectCreator, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
   const defaultNavShadow = useColorModeValue('0 2px 12px rgba(15, 23, 42, 0.08)', '0 2px 14px rgba(0, 0, 0, 0.28)')
-  const landingButtonSurface = useColorModeValue('white', 'gray.800')
+  const landingButtonSurface = useColorModeValue('white', 'neutral1.3')
   const landingButtonForeground = useColorModeValue('black', 'white')
-  const landingButtonBorder = useColorModeValue('black', 'gray.600')
-  const landingButtonHover = useColorModeValue('gray.50', 'gray.700')
-  const landingButtonActive = useColorModeValue('gray.100', 'gray.600')
+  const landingButtonBorder = useColorModeValue('black', 'neutral1.6')
+  const landingButtonHover = useColorModeValue('gray.50', 'neutral1.2')
+  const landingButtonActive = useColorModeValue('gray.100', 'neutral1.2')
   const landingNavMaxWidth = `${dimensions.maxWidth + 24 * 2}px`
 
   const isMobileMode = useMobileMode()

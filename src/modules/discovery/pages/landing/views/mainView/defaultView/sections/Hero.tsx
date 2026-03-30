@@ -13,35 +13,35 @@ export const Hero = (props: BoxProps): JSX.Element => {
       base: `linear-gradient(
         90deg,
         var(--chakra-colors-blackAlpha-900) 0%,
-        var(--chakra-colors-blackAlpha-800) 34%,
-        var(--chakra-colors-blackAlpha-700) 52%,
-        var(--chakra-colors-blackAlpha-400) 74%,
-        var(--chakra-colors-blackAlpha-200) 100%
+        var(--chakra-colors-blackAlpha-900) 22%,
+        var(--chakra-colors-blackAlpha-800) 42%,
+        var(--chakra-colors-blackAlpha-600) 64%,
+        var(--chakra-colors-blackAlpha-300) 100%
       )`,
       lg: `linear-gradient(
         90deg,
-        var(--chakra-colors-blackAlpha-800) 0%,
-        var(--chakra-colors-blackAlpha-700) 26%,
-        var(--chakra-colors-blackAlpha-600) 40%,
-        var(--chakra-colors-blackAlpha-300) 62%,
+        var(--chakra-colors-blackAlpha-900) 0%,
+        var(--chakra-colors-blackAlpha-800) 22%,
+        var(--chakra-colors-blackAlpha-700) 38%,
+        var(--chakra-colors-blackAlpha-500) 58%,
         var(--chakra-colors-blackAlpha-100) 100%
       )`,
     },
     {
       base: `linear-gradient(
         90deg,
-        var(--chakra-colors-blackAlpha-800) 0%,
-        var(--chakra-colors-blackAlpha-700) 34%,
-        var(--chakra-colors-blackAlpha-600) 52%,
-        var(--chakra-colors-blackAlpha-400) 74%,
-        var(--chakra-colors-blackAlpha-200) 100%
+        var(--chakra-colors-blackAlpha-900) 0%,
+        var(--chakra-colors-blackAlpha-800) 22%,
+        var(--chakra-colors-blackAlpha-700) 42%,
+        var(--chakra-colors-blackAlpha-500) 64%,
+        var(--chakra-colors-blackAlpha-300) 100%
       )`,
       lg: `linear-gradient(
         90deg,
-        var(--chakra-colors-blackAlpha-700) 0%,
-        var(--chakra-colors-blackAlpha-600) 26%,
-        var(--chakra-colors-blackAlpha-500) 40%,
-        var(--chakra-colors-blackAlpha-300) 62%,
+        var(--chakra-colors-blackAlpha-900) 0%,
+        var(--chakra-colors-blackAlpha-800) 22%,
+        var(--chakra-colors-blackAlpha-700) 38%,
+        var(--chakra-colors-blackAlpha-500) 58%,
         var(--chakra-colors-blackAlpha-100) 100%
       )`,
     },

@@ -45,9 +45,11 @@ const AnnouncementCard = ({
   to,
 }: AnnouncementCardProps) => {
   const navigate = useNavigate()
-  const borderColor = useColorModeValue('gray.200', 'gray.700')
-  const cardBackground = useColorModeValue('white', 'gray.800')
-  const descriptionColor = useColorModeValue('neutral1.11', 'gray.300')
+  const borderColor = useColorModeValue('neutral1.5', 'neutral1.6')
+  const cardBackground = useColorModeValue('utils.pbg', 'neutral1.3')
+  const descriptionColor = useColorModeValue('neutral1.9', 'neutral1.10')
+  const eyebrowBackground = useColorModeValue('utils.pbg', 'neutral1.2')
+  const eyebrowColor = useColorModeValue('neutral1.11', 'neutral1.12')
 
   const handleNavigate = () => {
     if (href) {
@@ -100,14 +102,16 @@ const AnnouncementCard = ({
             position="absolute"
             left={4}
             bottom={4}
-            backgroundColor="utils.pbg"
+            backgroundColor={eyebrowBackground}
             borderRadius="md"
             paddingX={2}
             paddingY={1}
             boxShadow="sm"
+            borderWidth="1px"
+            borderColor={borderColor}
             maxWidth="calc(100% - 32px)"
           >
-            <Body size="xs" medium isTruncated>
+            <Body size="xs" medium color={eyebrowColor} isTruncated>
               {eyebrow}
             </Body>
           </HStack>
@@ -140,15 +144,19 @@ const AnnouncementCard = ({
 /** Landing section surfacing Geyser-managed announcements in the standard card layout. */
 export const GeyserNewsAndAnnouncements = () => {
   const { data, error, loading, refetch } = useAcelerandoVipLeaderboardQuery()
-  const accentColor = useColorModeValue('primary1.11', 'primary1.5')
-  const mutedTextColor = useColorModeValue('neutral1.11', 'gray.400')
+  const accentColor = useColorModeValue('primary1.11', 'primary1.9')
+  const mutedTextColor = useColorModeValue('neutral1.11', 'neutral1.9')
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
   const [hasOverflow, setHasOverflow] = useState(false)
 
   const giveawayEndDate = data?.acelerandoVipLeaderboard?.endAt
-    ? DateTime.fromISO(data.acelerandoVipLeaderboard.endAt).toFormat('dd LLL, yyyy')
+    ? (() => {
+        const parsedDate = DateTime.fromISO(data.acelerandoVipLeaderboard.endAt)
+
+        return parsedDate.isValid ? parsedDate.toFormat('dd LLL, yyyy') : undefined
+      })()
     : undefined
 
   useEffect(() => {
@@ -306,7 +314,7 @@ export const GeyserNewsAndAnnouncements = () => {
               isDisabled={!canScrollLeft}
               _disabled={{
                 background: 'transparent',
-                color: 'gray.400',
+                color: 'neutral1.8',
                 cursor: 'default',
                 opacity: 1,
               }}
@@ -321,7 +329,7 @@ export const GeyserNewsAndAnnouncements = () => {
               isDisabled={!canScrollRight}
               _disabled={{
                 background: 'transparent',
-                color: 'gray.400',
+                color: 'neutral1.8',
                 cursor: 'default',
                 opacity: 1,
               }}

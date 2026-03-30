@@ -1,4 +1,4 @@
-import { type StackProps, Box, HStack, VStack } from '@chakra-ui/react'
+import { type StackProps, Box, Button, HStack, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { DateTime } from 'luxon'
 import { useNavigate } from 'react-router'
@@ -23,6 +23,7 @@ export const LandingPostCard = ({ post, isMobile, showProjectCategory = false, .
   const isMobileMode = useMobileMode()
   const navigate = useNavigate()
   const useCompactLayout = isMobile ?? Boolean(isMobileMode)
+  const readMoreColor = useColorModeValue('primary1.11', 'primary1.9')
   const projectLabel = post.project?.subCategory
     ? ProjectSubCategoryLabel[post.project.subCategory]
     : post.project?.category
@@ -173,6 +174,30 @@ export const LandingPostCard = ({ post, isMobile, showProjectCategory = false, .
             <Body size="md" dark wordBreak="break-word" whiteSpace="normal" lineHeight="1.4" width="100%" noOfLines={3}>
               {post.description}
             </Body>
+            <Button
+              size="sm"
+              variant="ghost"
+              color={readMoreColor}
+              alignSelf="flex-end"
+              paddingX={0}
+              minHeight="auto"
+              height="auto"
+              marginTop="auto"
+              opacity={0}
+              pointerEvents="none"
+              transform="translateY(4px)"
+              transition="opacity 0.2s ease, transform 0.2s ease"
+              _groupHover={{ opacity: 1, pointerEvents: 'auto', transform: 'translateY(0)' }}
+              _groupFocusWithin={{ opacity: 1, pointerEvents: 'auto', transform: 'translateY(0)' }}
+              _hover={{ background: 'transparent' }}
+              _active={{ background: 'transparent' }}
+              onClick={(event) => {
+                event.stopPropagation()
+                handleCardClick()
+              }}
+            >
+              {t('Read more')}
+            </Button>
           </VStack>
         </VStack>
       )}

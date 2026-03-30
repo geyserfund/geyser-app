@@ -28,12 +28,14 @@ export const LandingDesktopNav = () => {
   const navButtonFontSize = { lg: 'sm', xl: 'md' }
   const navButtonPaddingX = { lg: 2, xl: 4 }
 
-  const buttonColor = useColorModeValue('gray.800', 'whiteAlpha.900')
-  const menuBorderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
-  const menuBackgroundColor = useColorModeValue('white', 'gray.800')
-  const menuHoverColor = useColorModeValue('gray.50', 'whiteAlpha.100')
-  const mutedColor = useColorModeValue('gray.700', 'gray.300')
-  const disabledColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400')
+  const buttonColor = useColorModeValue('black', 'white')
+  const buttonHoverBackground = useColorModeValue('blackAlpha.50', 'neutral1.3')
+  const buttonActiveBackground = useColorModeValue('blackAlpha.100', 'neutral1.2')
+  const menuBorderColor = useColorModeValue('neutral1.5', 'neutral1.6')
+  const menuBackgroundColor = useColorModeValue('white', 'neutral1.3')
+  const menuHoverColor = useColorModeValue('gray.50', 'neutral1.2')
+  const mutedColor = useColorModeValue('gray.700', 'neutral1.10')
+  const disabledColor = useColorModeValue('blackAlpha.400', 'neutral1.8')
   const newBadgeTextColor = useColorModeValue('gray.900', 'gray.900')
   const newBadgeBackgroundColor = useColorModeValue('primary1.4', 'primary1.5')
   const soonBadgeBackgroundColor = useColorModeValue('neutral1.4', 'neutral1.5')
@@ -133,6 +135,9 @@ export const LandingDesktopNav = () => {
             fontWeight={600}
             rightIcon={<PiCaretDown />}
             paddingX={navButtonPaddingX}
+            _hover={{ backgroundColor: buttonHoverBackground }}
+            _active={{ backgroundColor: buttonActiveBackground }}
+            _expanded={{ backgroundColor: buttonHoverBackground }}
             onMouseEnter={handleMenuOpen}
             onMouseLeave={handleMenuClose}
             onClick={isOpen ? onClose : handleMenuOpen}
@@ -247,6 +252,8 @@ export const LandingDesktopNav = () => {
           fontSize={navButtonFontSize}
           fontWeight={600}
           paddingX={navButtonPaddingX}
+          _hover={{ backgroundColor: buttonHoverBackground }}
+          _active={{ backgroundColor: buttonActiveBackground }}
         >
           {t('Impact')}
         </Button>
@@ -261,6 +268,8 @@ export const LandingDesktopNav = () => {
           fontSize={navButtonFontSize}
           fontWeight={600}
           paddingX={navButtonPaddingX}
+          _hover={{ backgroundColor: buttonHoverBackground }}
+          _active={{ backgroundColor: buttonActiveBackground }}
         >
           {t('Earn')}
         </Button>
@@ -275,6 +284,8 @@ export const LandingDesktopNav = () => {
           fontSize={navButtonFontSize}
           fontWeight={600}
           paddingX={navButtonPaddingX}
+          _hover={{ backgroundColor: buttonHoverBackground }}
+          _active={{ backgroundColor: buttonActiveBackground }}
         >
           {t('News')}
         </Button>

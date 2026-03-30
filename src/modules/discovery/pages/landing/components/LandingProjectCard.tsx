@@ -11,14 +11,16 @@ interface LandingProjectCardProps extends CardLayoutProps {
   isMobile?: boolean
   noMobile?: boolean
   hideContributionContent?: boolean
+  trendingAmountLabel?: string
 }
 
-export const LandingProjectCard = ({ project, isMobile, ...rest }: LandingProjectCardProps) => {
+export const LandingProjectCard = ({ project, isMobile, trendingAmountLabel, ...rest }: LandingProjectCardProps) => {
   return (
     <LandingCardBase
       to={getPathWithGeyserPromotionsHero('project', project.name)}
       project={project}
       raiseOnHover
+      trendingAmountLabel={trendingAmountLabel}
       {...rest}
     />
   )

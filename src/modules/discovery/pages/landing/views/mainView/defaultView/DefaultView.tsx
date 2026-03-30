@@ -3,7 +3,7 @@ import { Fragment, useEffect, useState } from 'react'
 
 import { Head } from '@/config/Head.tsx'
 import { GeyserMainSeoImageUrl } from '@/shared/constants/index.ts'
-import { ProjectCategoryList } from '@/shared/constants/platform/projectCategory.ts'
+import { ProjectCategory } from '@/types/index.ts'
 
 import { HeroesMainPage } from '../../../../heroes/index.ts'
 import { TopProjects } from './components/TopProjects.tsx'
@@ -16,11 +16,19 @@ import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
 import { SuccessStories } from './sections/SuccessStories.tsx'
 
 const CATEGORY_SECTION_GROUP_SIZE = 2
+const LANDING_CATEGORY_ORDER = [
+  ProjectCategory.Education,
+  ProjectCategory.Community,
+  ProjectCategory.Culture,
+  ProjectCategory.Tool,
+  ProjectCategory.Cause,
+  ProjectCategory.Advocacy,
+] as const
 
 export const DefaultView = () => {
   const [showBelowTheFold, setShowBelowTheFold] = useState(false)
 
-  const categoryGroups = ProjectCategoryList.reduce<(typeof ProjectCategoryList)[number][][]>(
+  const categoryGroups = LANDING_CATEGORY_ORDER.reduce<(typeof LANDING_CATEGORY_ORDER)[number][][]>(
     (groups, category, index) => {
       const groupIndex = Math.floor(index / CATEGORY_SECTION_GROUP_SIZE)
 

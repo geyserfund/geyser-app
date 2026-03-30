@@ -8,10 +8,11 @@ import { LandingCardBaseSkeleton } from '@/shared/components/layouts/index.ts'
 import { Body, H3 } from '@/shared/components/typography/index.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import {
+  type GlobalProjectLeaderboardRow,
+  LeaderboardPeriod,
   ProjectCategory,
-  ProjectsMostFundedByCategoryRange,
   useFeaturedProjectForLandingPageQuery,
-  useProjectsMostFundedByCategoryQuery,
+  useLeaderboardGlobalProjectsQuery,
 } from '@/types/index.ts'
 
 import { LandingProjectCard } from '../../../../components/LandingProjectCard.tsx'
@@ -40,6 +41,7 @@ const CATEGORY_COPY_KEYS: Record<CategoryKey, string> = {
   community: 'Support communities, meetups, and local Bitcoin initiatives',
   tools: 'Discover Bitcoin tools, apps, hardware, and open-source software',
 }
+const CURATED_PROJECTS_COUNT = 6
 
 export const CuratedProjects = () => {
   const { t } = useTranslation()
@@ -100,14 +102,10 @@ export const CuratedProjects = () => {
     loading: educationLoading,
     error: educationError,
     refetch: refetchEducation,
-  } = useProjectsMostFundedByCategoryQuery({
+  } = useLeaderboardGlobalProjectsQuery({
     skip: activeCategory !== 'education',
     variables: {
-      input: {
-        take: 6,
-        range: ProjectsMostFundedByCategoryRange.Week,
-        category: ProjectCategory.Education,
-      },
+      input: { top: CURATED_PROJECTS_COUNT, period: LeaderboardPeriod.Month, category: ProjectCategory.Education },
     },
   })
 
@@ -116,14 +114,10 @@ export const CuratedProjects = () => {
     loading: cultureLoading,
     error: cultureError,
     refetch: refetchCulture,
-  } = useProjectsMostFundedByCategoryQuery({
+  } = useLeaderboardGlobalProjectsQuery({
     skip: activeCategory !== 'culture',
     variables: {
-      input: {
-        take: 6,
-        range: ProjectsMostFundedByCategoryRange.Week,
-        category: ProjectCategory.Culture,
-      },
+      input: { top: CURATED_PROJECTS_COUNT, period: LeaderboardPeriod.Month, category: ProjectCategory.Culture },
     },
   })
 
@@ -132,14 +126,10 @@ export const CuratedProjects = () => {
     loading: communityLoading,
     error: communityError,
     refetch: refetchCommunity,
-  } = useProjectsMostFundedByCategoryQuery({
+  } = useLeaderboardGlobalProjectsQuery({
     skip: activeCategory !== 'community',
     variables: {
-      input: {
-        take: 6,
-        range: ProjectsMostFundedByCategoryRange.Week,
-        category: ProjectCategory.Community,
-      },
+      input: { top: CURATED_PROJECTS_COUNT, period: LeaderboardPeriod.Month, category: ProjectCategory.Community },
     },
   })
 
@@ -148,14 +138,10 @@ export const CuratedProjects = () => {
     loading: toolsLoading,
     error: toolsError,
     refetch: refetchTools,
-  } = useProjectsMostFundedByCategoryQuery({
+  } = useLeaderboardGlobalProjectsQuery({
     skip: activeCategory !== 'tools',
     variables: {
-      input: {
-        take: 6,
-        range: ProjectsMostFundedByCategoryRange.Week,
-        category: ProjectCategory.Tool,
-      },
+      input: { top: CURATED_PROJECTS_COUNT, period: LeaderboardPeriod.Month, category: ProjectCategory.Tool },
     },
   })
 
@@ -171,45 +157,45 @@ export const CuratedProjects = () => {
     }
 
     if (activeCategory === 'education') {
-      const projects = educationData?.projectsMostFundedByCategory?.[0]?.projects.map((p) => p.project) || []
+      const projectRows = educationData?.leaderboardGlobalProjectsGet || []
       return {
         emptyStateMessage: t('No projects found'),
         error: educationError,
         loading: educationLoading,
-        projects,
+        projectRows,
         retry: refetchEducation,
       }
     }
 
     if (activeCategory === 'culture') {
-      const projects = cultureData?.projectsMostFundedByCategory?.[0]?.projects.map((p) => p.project) || []
+      const projectRows = cultureData?.leaderboardGlobalProjectsGet || []
       return {
         emptyStateMessage: t('No projects found'),
         error: cultureError,
         loading: cultureLoading,
-        projects,
+        projectRows,
         retry: refetchCulture,
       }
     }
 
     if (activeCategory === 'community') {
-      const projects = communityData?.projectsMostFundedByCategory?.[0]?.projects.map((p) => p.project) || []
+      const projectRows = communityData?.leaderboardGlobalProjectsGet || []
       return {
         emptyStateMessage: t('No projects found'),
         error: communityError,
         loading: communityLoading,
-        projects,
+        projectRows,
         retry: refetchCommunity,
       }
     }
 
     if (activeCategory === 'tools') {
-      const projects = toolsData?.projectsMostFundedByCategory?.[0]?.projects.map((p) => p.project) || []
+      const projectRows = toolsData?.leaderboardGlobalProjectsGet || []
       return {
         emptyStateMessage: t('No tools found'),
         error: toolsError,
         loading: toolsLoading,
-        projects,
+        projectRows,
         retry: refetchTools,
       }
     }
@@ -218,12 +204,12 @@ export const CuratedProjects = () => {
       emptyStateMessage: t('No projects found'),
       error: undefined,
       loading: false,
-      projects: [],
+      projectRows: [],
       retry: undefined,
     }
   }
 
-  const { projects = [], projectNames, loading, error, retry, emptyStateMessage } = getCategoryProjects()
+  const { projectRows = [], projectNames, loading, error, retry, emptyStateMessage } = getCategoryProjects()
 
   const handleDiscoverMore = () => {
     navigate(getPath('discoveryProjects'))
@@ -287,7 +273,7 @@ export const CuratedProjects = () => {
       </H3>
 
       {loading ? (
-        <Body>{t('Loading...')}</Body>
+        <CuratedProjectsSkeletonGrid />
       ) : error ? (
         <VStack w="full" spacing={4} py={8}>
           <Body color="neutral1.11">{t('Failed to load curated projects')}</Body>
@@ -301,21 +287,17 @@ export const CuratedProjects = () => {
         <>
           {activeCategory === 'featured' && projectNames && <FeaturedProjectsList projectNames={projectNames} />}
 
-          {activeCategory !== 'featured' && projects && projects.length > 0 && (
-            <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
-              {projects.map((project) => (
-                <LandingProjectCard key={project.id} project={project} />
-              ))}
-            </SimpleGrid>
+          {activeCategory !== 'featured' && projectRows.length > 0 && (
+            <MonthlyTrendingProjectsList projectRows={projectRows} />
           )}
 
-          {activeCategory === 'tools' && projects.length === 0 && (
+          {activeCategory === 'tools' && projectRows.length === 0 && (
             <VStack w="full" spacing={4} py={8}>
               <Body color="neutral1.11">{t('No tools found')}</Body>
             </VStack>
           )}
 
-          {activeCategory !== 'featured' && activeCategory !== 'tools' && projects.length === 0 && (
+          {activeCategory !== 'featured' && activeCategory !== 'tools' && projectRows.length === 0 && (
             <VStack w="full" spacing={4} py={8}>
               <Body color="neutral1.11">{emptyStateMessage}</Body>
             </VStack>
@@ -335,6 +317,73 @@ export const CuratedProjects = () => {
         </Button>
       </HStack>
     </VStack>
+  )
+}
+
+const CuratedProjectsSkeletonGrid = () => {
+  return (
+    <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
+      {Array.from({ length: CURATED_PROJECTS_COUNT }).map((_, index) => (
+        <LandingCardBaseSkeleton key={`curated-skeleton-${index}`} />
+      ))}
+    </SimpleGrid>
+  )
+}
+
+const MonthlyTrendingProjectsList = ({ projectRows }: { projectRows: GlobalProjectLeaderboardRow[] }) => {
+  return (
+    <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
+      {projectRows.map((projectRow) => (
+        <MonthlyTrendingProjectItem key={projectRow.projectName} projectRow={projectRow} />
+      ))}
+    </SimpleGrid>
+  )
+}
+
+const MonthlyTrendingProjectItem = ({ projectRow }: { projectRow: GlobalProjectLeaderboardRow }) => {
+  const { t } = useTranslation()
+  const { data, loading, error, refetch } = useFeaturedProjectForLandingPageQuery({
+    variables: {
+      where: {
+        name: projectRow.projectName,
+      },
+    },
+    skip: !projectRow.projectName,
+  })
+
+  const project = data?.projectGet
+
+  if (loading) {
+    return <LandingCardBaseSkeleton />
+  }
+
+  if (error) {
+    return (
+      <VStack w="full" spacing={4} py={8}>
+        <Body color="neutral1.11">{t('Failed to load curated project')}</Body>
+        <Button size="sm" variant="outline" colorScheme="neutral1" onClick={() => refetch()}>
+          {t('Retry')}
+        </Button>
+      </VStack>
+    )
+  }
+
+  if (!project) {
+    return null
+  }
+
+  return (
+    <LandingProjectCard
+      project={{
+        ...project,
+        contributionSummary: {
+          contributionsTotal: projectRow.contributionsTotal,
+          contributionsTotalUsd: projectRow.contributionsTotalUsd,
+        },
+      }}
+      hideContributionContent={projectRow.contributionsTotalUsd <= 100}
+      trendingAmountLabel={t('raised this month')}
+    />
   )
 }
 

@@ -38,6 +38,7 @@ export interface LandingCardBaseProps extends CardLayoutProps {
   hideContributionContent?: boolean
   noMobile?: boolean
   hasSubscribe?: boolean
+  trendingAmountLabel?: string
 }
 
 /** Shared pill style used for location and category overlays on the image. */
@@ -115,12 +116,12 @@ const AonStatusDisplay = ({
 const ContributionAmount = ({
   amount,
   hasFire,
-  isWeekly,
+  label,
   size = 'sm',
 }: {
   amount: string
   hasFire: boolean
-  isWeekly: boolean
+  label: string
   size?: 'xs' | 'sm'
 }) => (
   <HStack spacing={0} overflow="hidden">
@@ -128,7 +129,7 @@ const ContributionAmount = ({
     <Body size={size} bold color="primary1.11" isTruncated>
       {amount}{' '}
       <Body as="span" size={size} regular>
-        {isWeekly ? t('this week') : t('raised')}
+        {label}
       </Body>
     </Body>
   </HStack>
@@ -143,7 +144,7 @@ const CardFooter = ({
   timeLeft,
   formattedAmount,
   hasFire,
-  isWeekly,
+  contributionLabel,
   onContribute,
   isDisabled,
 }: {
@@ -154,7 +155,7 @@ const CardFooter = ({
   timeLeft: ReturnType<typeof aonProjectTimeLeft>
   formattedAmount: string
   hasFire: boolean
-  isWeekly: boolean
+  contributionLabel: string
   onContribute: (e: React.MouseEvent<HTMLButtonElement>) => void
   isDisabled: boolean
 }) => {
@@ -192,7 +193,7 @@ const CardFooter = ({
 
   return (
     <HStack width="100%" justifyContent="space-between" alignItems="center" marginTop="auto">
-      <ContributionAmount amount={formattedAmount} hasFire={hasFire} isWeekly={isWeekly} />
+      <ContributionAmount amount={formattedAmount} hasFire={hasFire} label={contributionLabel} />
       {contributeButton}
     </HStack>
   )
@@ -265,6 +266,7 @@ export const LandingCardBase = ({
   hasSubscribe,
   noMobile,
   hideContributionContent,
+  trendingAmountLabel,
   ...rest
 }: LandingCardBaseProps) => {
   const isMobileMode = useMobileMode()
@@ -274,15 +276,16 @@ export const LandingCardBase = ({
   const { getProjectBalance, getAonGoalPercentage, isFundingDisabled } = useProjectToolkit(project)
   const useCompactLayout = !noMobile && Boolean(isMobile ?? isMobileMode)
 
-  const weeklyContributionUsd = project.contributionSummary?.contributionsTotalUsd
-  const isWeekly = weeklyContributionUsd !== null && weeklyContributionUsd !== undefined
+  const trendingContributionUsd = project.contributionSummary?.contributionsTotalUsd
+  const hasTrendingContribution = trendingContributionUsd !== null && trendingContributionUsd !== undefined
   const isAonProject = isAllOrNothing(project)
   const isAonFailed = isAonProject && AON_FAILED_STATUSES.includes(project.aonGoal?.status as ProjectAonGoalStatus)
 
-  const contributionAmount = weeklyContributionUsd ?? getProjectBalance().usd
+  const contributionAmount = trendingContributionUsd ?? getProjectBalance().usd
   const percentage = getAonGoalPercentage()
   const timeLeft = aonProjectTimeLeft(project.aonGoal)
-  const hasFire = (isWeekly && contributionAmount > 100) || contributionAmount > 1000
+  const hasFire = (hasTrendingContribution && contributionAmount > 100) || contributionAmount > 1000
+  const contributionLabel = hasTrendingContribution ? trendingAmountLabel ?? t('this week') : t('raised')
 
   const projectOwner = project.owners?.[0]?.user
   const hasProjectOwner = Boolean(projectOwner?.id)
@@ -429,7 +432,7 @@ export const LandingCardBase = ({
               <ContributionAmount
                 amount={formatAmount(contributionAmount || 0, 'USD')}
                 hasFire={hasFire}
-                isWeekly={isWeekly}
+                label={contributionLabel}
                 size="xs"
               />
             )
@@ -442,7 +445,7 @@ export const LandingCardBase = ({
               timeLeft={timeLeft}
               formattedAmount={formatAmount(contributionAmount || 0, 'USD')}
               hasFire={hasFire}
-              isWeekly={isWeekly}
+              contributionLabel={contributionLabel}
               onContribute={handleContribute}
               isDisabled={isFundingDisabled()}
             />
