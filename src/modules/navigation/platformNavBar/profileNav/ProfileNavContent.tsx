@@ -1,6 +1,7 @@
 import { Badge, Box, Divider, HStack, Link as ChakraLink, MenuItem, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
+import type { IconType } from 'react-icons'
 import {
   PiArrowUpRight,
   PiClockCountdown,
@@ -29,12 +30,23 @@ type ProfileNavContentProps = {
   showSearch?: boolean
 }
 
+type MobileNavigationItem = {
+  badge?: {
+    backgroundColor: string
+    label: string
+    textColor: string
+  }
+  icon: IconType
+  label: string
+  path: string
+}
+
 export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNavContentProps) => {
   const { logout, user, isLoggedIn } = useAuthContext()
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
   const newBadgeTextColor = useColorModeValue('gray.900', 'gray.900')
-  const mobileNavigationItems = [
+  const mobileNavigationItems: MobileNavigationItem[] = [
     { label: 'Home', path: getPath('discoveryLanding'), icon: PiHouse },
     { label: 'My projects', path: getPath('discoveryMyProjects'), icon: PiRocket },
     { label: 'Fundraisers', path: getPath('discoveryFundraisers'), icon: PiHandCoins },
@@ -52,7 +64,7 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
       badge: { label: t('new'), backgroundColor: '#58efd9', textColor: newBadgeTextColor },
     },
     { label: 'News', path: getPath('discoveryNews'), icon: PiNewspaper },
-  ] as const
+  ]
 
   return (
     <VStack
