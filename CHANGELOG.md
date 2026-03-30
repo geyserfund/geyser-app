@@ -1,3 +1,34 @@
+## [0.36.0](https://github.com/geyserfund/geyser-app/compare/v0.35.0...v0.36.0) (2026-03-30)
+
+
+### Features
+
+* add how it works and stats in landing page ([70a802c](https://github.com/geyserfund/geyser-app/commit/70a802c01ea8a15976fd01be448ed9126b94bca2))
+* add light shadow on the navbar ([fe8c46f](https://github.com/geyserfund/geyser-app/commit/fe8c46f27cd14aa066bd8bacb68cded5bcf81e00))
+* add terms, privacy and other fixes ([470a746](https://github.com/geyserfund/geyser-app/commit/470a74617799200a8faf2527dcd3aba5317e7ac4))
+* **affiliate:** update ambassador sharing and payouts ([26fc130](https://github.com/geyserfund/geyser-app/commit/26fc130b4e7310bc0909c26e378f6df302f7e7b4))
+* apply landing page updates ([977271c](https://github.com/geyserfund/geyser-app/commit/977271c51f947d67f376a017945970fe1e49d2fe))
+* implement news page (WIP) ([4187e45](https://github.com/geyserfund/geyser-app/commit/4187e4536a97bcd97160a2a6486358dd79f247e0))
+* nav bar updates ([5488e13](https://github.com/geyserfund/geyser-app/commit/5488e13d925a8de8072a9d30622acf76a5b284da))
+* update landing page (WIP) ([ab6d9f2](https://github.com/geyserfund/geyser-app/commit/ab6d9f265d8931033125d8dbdbf4d049f37f0160))
+* updated landing page (WIP) ([e3eee26](https://github.com/geyserfund/geyser-app/commit/e3eee269e0b8dc3ce9e54ae645ac33d8e0f8e482))
+
+
+### Bug Fixes
+
+* address PR comments and QA ([4224d1f](https://github.com/geyserfund/geyser-app/commit/4224d1fb47fb92d26cdbd9ff454886d1de13b958))
+* apply all qa feedback ([e9ba538](https://github.com/geyserfund/geyser-app/commit/e9ba538638e8801ff18c98aae8e0d26e97e2f374))
+* apply landing page qa feedback ([7ea6ed5](https://github.com/geyserfund/geyser-app/commit/7ea6ed5c780cc8da85d13a0bedac538fbfa43fd0))
+* compile issues ([fdfe56b](https://github.com/geyserfund/geyser-app/commit/fdfe56be0778dda1899a126c4cb11590b47540a1))
+* impact page layout ([e3a4dfa](https://github.com/geyserfund/geyser-app/commit/e3a4dfaa1c3f0f6428cb2fd73e66b653a2f08ba8))
+* landing page qa feedback ([30f1ad8](https://github.com/geyserfund/geyser-app/commit/30f1ad8a110a524f65f59dc55a0fa844d2d6b141))
+* post formatting issues ([54a949d](https://github.com/geyserfund/geyser-app/commit/54a949df8ba9a9705ec9ef01199d88c625582b0b))
+* referrer hero id logic and funding summary ([e531f0a](https://github.com/geyserfund/geyser-app/commit/e531f0a09ddddae68de041bc702971c07d7f13a2))
+* show donate dropdown on hover ([fe08552](https://github.com/geyserfund/geyser-app/commit/fe08552446df9416866c49c9dbd52e35bca6ad98))
+* tsc errors ([58efb1b](https://github.com/geyserfund/geyser-app/commit/58efb1bfb0201acc1bb137933fa2c7f42313f752))
+* tsc issues ([dc4b2a3](https://github.com/geyserfund/geyser-app/commit/dc4b2a3661ebadd3bf2e2b0b220a20468d1770cb))
+* ui improvements and fixes ([ed0ddda](https://github.com/geyserfund/geyser-app/commit/ed0dddafc1a33bab699fb4e884e1a6bbbeaeb8d5))
+
 ## [0.35.0](https://github.com/geyserfund/geyser-app/compare/v0.34.0...v0.35.0) (2026-03-25)
 
 
