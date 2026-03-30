@@ -35,34 +35,25 @@ import {
 } from '@/shared/constants/index.ts'
 import { useQueryWithPagination } from '@/shared/hooks/useQueryWithPagination.tsx'
 import {
-  ContributionsSummary,
+  type GlobalProjectLeaderboardRow,
+  type ProjectForLandingPageFragment,
+  LeaderboardPeriod,
   OrderByDirection,
   ProjectCategory,
-  ProjectForLandingPageFragment,
   ProjectFundingStrategy,
   ProjectsGetWhereInputStatus,
-  ProjectsMostFundedAllOrNothingRange,
-  ProjectsMostFundedByCategoryRange,
-  ProjectsMostFundedByTagRange,
-  ProjectsMostFundedTakeItAllRange,
   ProjectsOrderByField,
   ProjectsOrderByInput,
   ProjectSubCategory,
   useGetUserIpCountryQuery,
-  useProjectsMostFundedAllOrNothingQuery,
-  useProjectsMostFundedByCategoryQuery,
-  useProjectsMostFundedByTagQuery,
-  useProjectsMostFundedTakeItAllQuery,
+  useLeaderboardGlobalProjectsQuery,
 } from '@/types/index.ts'
 
 import { RenderProjectList } from './navView/components/RenderProjectList.tsx'
 import { ProjectsRegionCountryFilter } from './ProjectsRegionCountryFilter.tsx'
 
-type SortOption = 'most_funded_this_week' | 'most_funded' | 'most_recent'
+type SortOption = 'most_funded_this_month' | 'most_funded' | 'most_recent'
 type ProjectTypeFilter = 'all' | 'fundraisers' | 'campaigns'
-type WeeklyProject = ProjectForLandingPageFragment & {
-  contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
-}
 type FilterDropdownOption<T extends string> = {
   label: string
   value: T
@@ -71,7 +62,7 @@ type TranslateFn = (key: string) => string
 
 const PAGE_SIZE = 20
 const SORT_SEARCH_PARAM = 'sort'
-const MOST_FUNDED_THIS_WEEK_PAGE_SIZE = 30
+const MOST_FUNDED_THIS_MONTH_PAGE_SIZE = 30
 
 const getProjectTypeFilter = (pathname: string): ProjectTypeFilter => {
   const rootSegment = pathname.split('/').filter(Boolean)[0]
@@ -97,33 +88,6 @@ const getFundingStrategy = (projectTypeFilter: ProjectTypeFilter) => {
   }
 
   return undefined
-}
-
-const getWeeklyFundingScore = (project: WeeklyProject) =>
-  project.contributionSummary?.contributionsTotalUsd ?? project.balanceUsdCent ?? 0
-
-const dedupeAndSortWeeklyProjects = (projects: WeeklyProject[]) => {
-  const uniqueProjectsById = new Map<string, WeeklyProject>()
-
-  for (const project of projects) {
-    const existingProject = uniqueProjectsById.get(project.id)
-
-    if (!existingProject || getWeeklyFundingScore(project) > getWeeklyFundingScore(existingProject)) {
-      uniqueProjectsById.set(project.id, project)
-    }
-  }
-
-  return [...uniqueProjectsById.values()].sort((a, b) => getWeeklyFundingScore(b) - getWeeklyFundingScore(a))
-}
-
-const filterWeeklyProjectsByType = (projects: WeeklyProject[], projectTypeFilter: ProjectTypeFilter) => {
-  const fundingStrategy = getFundingStrategy(projectTypeFilter)
-
-  if (!fundingStrategy) {
-    return projects
-  }
-
-  return projects.filter((project) => project.fundingStrategy === fundingStrategy)
 }
 
 const getHeadContent = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) => {
@@ -152,7 +116,7 @@ const getHeadContent = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) =>
   }
 }
 
-const getSortOption = (sortParam: string | null): SortOption => {
+const getSortOption = (sortParam: string | null, supportsMostFundedThisMonth: boolean): SortOption => {
   if (sortParam === 'most_funded') {
     return 'most_funded'
   }
@@ -161,7 +125,11 @@ const getSortOption = (sortParam: string | null): SortOption => {
     return 'most_recent'
   }
 
-  return 'most_funded_this_week'
+  if (sortParam === 'most_funded_this_week' || sortParam === 'most_funded_this_month') {
+    return supportsMostFundedThisMonth ? 'most_funded_this_month' : 'most_funded'
+  }
+
+  return supportsMostFundedThisMonth ? 'most_funded_this_month' : 'most_funded'
 }
 
 const getCategoryTabs = (projectTypeFilter: ProjectTypeFilter, t: TranslateFn) => {
@@ -371,14 +339,6 @@ export const Projects = () => {
     ],
     [t],
   )
-  const sortOptions = useMemo<FilterDropdownOption<SortOption>[]>(
-    () => [
-      { value: 'most_funded_this_week', label: t('Most funded this week') },
-      { value: 'most_funded', label: t('Most funded') },
-      { value: 'most_recent', label: t('Most recent') },
-    ],
-    [t],
-  )
   const shouldFilterByUserRegion =
     location.pathname === getPath('discoveryProjectsInYourRegion') ||
     location.pathname === getPath('discoveryFundraisersInYourRegion') ||
@@ -403,22 +363,27 @@ export const Projects = () => {
 
   const countryCode = shouldFilterByUserRegion ? userIpCountryData?.userIpCountry?.trim() || undefined : undefined
   const isRegionLookupFailed = shouldFilterByUserRegion && !loadingCountryCode && !countryCode
-  const sort = getSortOption(searchParams.get(SORT_SEARCH_PARAM))
-  const hasCategoryOrSubCategoryFilter = Boolean(category || subCategory)
   const hasLocationFilter = shouldFilterByUserRegion || Boolean(filterCountryCode || region)
   const hasSearchFilter = Boolean(search?.trim())
   const tagFiltersCount = tagIds?.length ?? 0
-  const hasSingleTagFilter = tagFiltersCount === 1
-  const supportsMostFundedThisWeek =
-    !hasLocationFilter &&
-    !hasSearchFilter &&
-    tagFiltersCount <= 1 &&
-    !(hasCategoryOrSubCategoryFilter && tagFiltersCount > 0)
-  const shouldUseMostFundedThisWeek = sort === 'most_funded_this_week' && supportsMostFundedThisWeek
-  const shouldUseMostFundedThisWeekByCategory = shouldUseMostFundedThisWeek && hasCategoryOrSubCategoryFilter
-  const shouldUseMostFundedThisWeekByTag = shouldUseMostFundedThisWeek && hasSingleTagFilter
-  const shouldUseMostFundedThisWeekByStrategy =
-    shouldUseMostFundedThisWeek && !shouldUseMostFundedThisWeekByCategory && !shouldUseMostFundedThisWeekByTag
+  const supportsMostFundedThisMonth =
+    projectTypeFilter === 'all' && !hasLocationFilter && !hasSearchFilter && tagFiltersCount === 0 && !subCategory
+  const sort = getSortOption(searchParams.get(SORT_SEARCH_PARAM), supportsMostFundedThisMonth)
+  const sortOptions = useMemo<FilterDropdownOption<SortOption>[]>(
+    () =>
+      supportsMostFundedThisMonth
+        ? [
+            { value: 'most_funded_this_month', label: t('Most funded this month') },
+            { value: 'most_funded', label: t('Most funded') },
+            { value: 'most_recent', label: t('Most recent') },
+          ]
+        : [
+            { value: 'most_funded', label: t('Most funded') },
+            { value: 'most_recent', label: t('Most recent') },
+          ],
+    [supportsMostFundedThisMonth, t],
+  )
+  const shouldUseMostFundedThisMonth = sort === 'most_funded_this_month' && supportsMostFundedThisMonth
 
   const where = useMemo(
     () => ({
@@ -465,7 +430,7 @@ export const Projects = () => {
       itemLimit: PAGE_SIZE,
       orderBy,
       options: {
-        skip: shouldUseMostFundedThisWeek || (shouldFilterByUserRegion && (!countryCode || loadingCountryCode)),
+        skip: shouldUseMostFundedThisMonth || (shouldFilterByUserRegion && (!countryCode || loadingCountryCode)),
       },
       query: QUERY_PROJECTS_FOR_LANDING_PAGE,
       queryName: ['projectsGet', 'projects'],
@@ -473,137 +438,28 @@ export const Projects = () => {
     })
 
   const {
-    data: mostFundedThisWeekCampaignsData,
-    error: mostFundedThisWeekCampaignsError,
-    loading: isMostFundedThisWeekCampaignsLoading,
-    refetch: refetchMostFundedThisWeekCampaigns,
-  } = useProjectsMostFundedAllOrNothingQuery({
-    skip: !shouldUseMostFundedThisWeekByStrategy || projectTypeFilter === 'fundraisers',
+    data: mostFundedThisMonthData,
+    error: mostFundedThisMonthError,
+    loading: isMostFundedThisMonthLoading,
+    refetch: refetchMostFundedThisMonth,
+  } = useLeaderboardGlobalProjectsQuery({
+    skip: !shouldUseMostFundedThisMonth,
     variables: {
       input: {
-        range: ProjectsMostFundedAllOrNothingRange.Week,
-        take: MOST_FUNDED_THIS_WEEK_PAGE_SIZE,
-      },
-    },
-  })
-
-  const {
-    data: mostFundedThisWeekFundraisersData,
-    error: mostFundedThisWeekFundraisersError,
-    loading: isMostFundedThisWeekFundraisersLoading,
-    refetch: refetchMostFundedThisWeekFundraisers,
-  } = useProjectsMostFundedTakeItAllQuery({
-    skip: !shouldUseMostFundedThisWeekByStrategy || projectTypeFilter === 'campaigns',
-    variables: {
-      input: {
-        range: ProjectsMostFundedTakeItAllRange.Week,
-        take: MOST_FUNDED_THIS_WEEK_PAGE_SIZE,
-      },
-    },
-  })
-
-  const {
-    data: mostFundedThisWeekByCategoryData,
-    error: mostFundedThisWeekByCategoryError,
-    loading: isMostFundedThisWeekByCategoryLoading,
-    refetch: refetchMostFundedThisWeekByCategory,
-  } = useProjectsMostFundedByCategoryQuery({
-    skip: !shouldUseMostFundedThisWeekByCategory,
-    variables: {
-      input: {
+        period: LeaderboardPeriod.Month,
+        top: MOST_FUNDED_THIS_MONTH_PAGE_SIZE,
         category,
-        range: ProjectsMostFundedByCategoryRange.Week,
-        subCategory,
-        take: MOST_FUNDED_THIS_WEEK_PAGE_SIZE,
       },
     },
   })
-
-  const {
-    data: mostFundedThisWeekByTagData,
-    error: mostFundedThisWeekByTagError,
-    loading: isMostFundedThisWeekByTagLoading,
-    refetch: refetchMostFundedThisWeekByTag,
-  } = useProjectsMostFundedByTagQuery({
-    skip: !shouldUseMostFundedThisWeekByTag,
-    variables: {
-      input: {
-        range: ProjectsMostFundedByTagRange.Week,
-        tagIds: tagIds ?? [],
-        take: MOST_FUNDED_THIS_WEEK_PAGE_SIZE,
-      },
-    },
-  })
-
-  const mostFundedThisWeekByStrategyProjects = useMemo<WeeklyProject[]>(() => {
-    const fundraiserProjects =
-      mostFundedThisWeekFundraisersData?.projectsMostFundedTakeItAll.map((project) => ({
-        ...project.project,
-        contributionSummary: project.contributionsSummary ?? undefined,
-      })) ?? []
-    const campaignProjects =
-      mostFundedThisWeekCampaignsData?.projectsMostFundedAllOrNothing.map((project) => ({
-        ...project.project,
-        contributionSummary: undefined,
-      })) ?? []
-
-    return filterWeeklyProjectsByType(
-      dedupeAndSortWeeklyProjects([...fundraiserProjects, ...campaignProjects]),
-      projectTypeFilter,
-    )
-  }, [mostFundedThisWeekCampaignsData, mostFundedThisWeekFundraisersData, projectTypeFilter])
-
-  const mostFundedThisWeekByCategoryProjects = useMemo<WeeklyProject[]>(() => {
-    const projects =
-      mostFundedThisWeekByCategoryData?.projectsMostFundedByCategory.flatMap((entry) =>
-        entry.projects.map((project) => ({
-          ...project.project,
-          contributionSummary: project.contributionsSummary ?? undefined,
-        })),
-      ) ?? []
-
-    return filterWeeklyProjectsByType(dedupeAndSortWeeklyProjects(projects), projectTypeFilter)
-  }, [mostFundedThisWeekByCategoryData, projectTypeFilter])
-
-  const mostFundedThisWeekByTagProjects = useMemo<WeeklyProject[]>(() => {
-    const projects =
-      mostFundedThisWeekByTagData?.projectsMostFundedByTag[0]?.projects.map((project) => project.project) ?? []
-
-    return filterWeeklyProjectsByType(projects, projectTypeFilter)
-  }, [mostFundedThisWeekByTagData, projectTypeFilter])
-
-  const mostFundedThisWeekProjects = useMemo<WeeklyProject[]>(() => {
-    if (shouldUseMostFundedThisWeekByCategory) {
-      return mostFundedThisWeekByCategoryProjects
-    }
-
-    if (shouldUseMostFundedThisWeekByTag) {
-      return mostFundedThisWeekByTagProjects
-    }
-
-    return mostFundedThisWeekByStrategyProjects
-  }, [
-    mostFundedThisWeekByCategoryProjects,
-    mostFundedThisWeekByStrategyProjects,
-    mostFundedThisWeekByTagProjects,
-    shouldUseMostFundedThisWeekByCategory,
-    shouldUseMostFundedThisWeekByTag,
-  ])
-
-  const mostFundedThisWeekError = shouldUseMostFundedThisWeekByCategory
-    ? mostFundedThisWeekByCategoryError
-    : shouldUseMostFundedThisWeekByTag
-    ? mostFundedThisWeekByTagError
-    : mostFundedThisWeekCampaignsError ?? mostFundedThisWeekFundraisersError
-  const isMostFundedThisWeekLoading = shouldUseMostFundedThisWeekByCategory
-    ? isMostFundedThisWeekByCategoryLoading
-    : shouldUseMostFundedThisWeekByTag
-    ? isMostFundedThisWeekByTagLoading
-    : (projectTypeFilter !== 'fundraisers' && isMostFundedThisWeekCampaignsLoading) ||
-      (projectTypeFilter !== 'campaigns' && isMostFundedThisWeekFundraisersLoading)
-  const projects = shouldUseMostFundedThisWeek ? mostFundedThisWeekProjects : data
-  const projectsError = shouldUseMostFundedThisWeek ? mostFundedThisWeekError : error
-  const projectsLoading = shouldUseMostFundedThisWeek ? isMostFundedThisWeekLoading : isLoading
+  const mostFundedThisMonthProjects = useMemo<GlobalProjectLeaderboardRow[]>(
+    () => mostFundedThisMonthData?.leaderboardGlobalProjectsGet || [],
+    [mostFundedThisMonthData?.leaderboardGlobalProjectsGet],
+  )
+  const projects = shouldUseMostFundedThisMonth ? [] : data
+  const projectRows = shouldUseMostFundedThisMonth ? mostFundedThisMonthProjects : undefined
+  const projectsError = shouldUseMostFundedThisMonth ? mostFundedThisMonthError : error
+  const projectsLoading = shouldUseMostFundedThisMonth ? isMostFundedThisMonthLoading : isLoading
   const toolbarDividerColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
 
   useEffect(() => {
@@ -628,7 +484,11 @@ export const Projects = () => {
   const handleSortChange = (nextSort: SortOption) => {
     const nextSearchParams = new URLSearchParams(searchParams)
 
-    if (nextSort === 'most_funded_this_week') {
+    const shouldClearSortParam =
+      (supportsMostFundedThisMonth && nextSort === 'most_funded_this_month') ||
+      (!supportsMostFundedThisMonth && nextSort === 'most_funded')
+
+    if (shouldClearSortParam) {
       nextSearchParams.delete(SORT_SEARCH_PARAM)
     } else {
       nextSearchParams.set(SORT_SEARCH_PARAM, nextSort)
@@ -721,25 +581,8 @@ export const Projects = () => {
       return
     }
 
-    if (shouldUseMostFundedThisWeekByCategory) {
-      refetchMostFundedThisWeekByCategory()
-      return
-    }
-
-    if (shouldUseMostFundedThisWeekByTag) {
-      refetchMostFundedThisWeekByTag()
-      return
-    }
-
-    if (shouldUseMostFundedThisWeekByStrategy) {
-      if (projectTypeFilter !== 'fundraisers') {
-        refetchMostFundedThisWeekCampaigns()
-      }
-
-      if (projectTypeFilter !== 'campaigns') {
-        refetchMostFundedThisWeekFundraisers()
-      }
-
+    if (shouldUseMostFundedThisMonth) {
+      refetchMostFundedThisMonth()
       return
     }
 
@@ -894,9 +737,12 @@ export const Projects = () => {
           <RenderProjectList
             projects={projects}
             loading={projectsLoading}
-            isLoadingMore={shouldUseMostFundedThisWeek ? undefined : isLoadingMore}
-            noMoreItems={shouldUseMostFundedThisWeek ? undefined : noMoreItems}
-            fetchNext={shouldUseMostFundedThisWeek ? undefined : fetchNext}
+            projectRows={projectRows}
+            trendingAmountLabel={t('raised this month')}
+            hideTrendingBelowUsd={100}
+            isLoadingMore={shouldUseMostFundedThisMonth ? undefined : isLoadingMore}
+            noMoreItems={shouldUseMostFundedThisMonth ? undefined : noMoreItems}
+            fetchNext={shouldUseMostFundedThisMonth ? undefined : fetchNext}
           />
         ) : null}
       </VStack>

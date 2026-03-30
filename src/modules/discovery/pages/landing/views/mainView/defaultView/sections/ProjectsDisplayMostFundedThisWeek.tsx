@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 
-import { useFilterContext } from '@/context/filter'
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
+import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 
 import {
@@ -33,7 +34,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({
   noRightContent,
 }: ProjectDisplayProps) => {
   const { t } = useTranslation()
-  const { updateFilter } = useFilterContext()
+  const navigate = useNavigate()
 
   const { loading, data } = useProjectsForLandingPageQuery({
     skip: !category && !subCategory,
@@ -76,11 +77,12 @@ export const ProjectsDisplayMostFundedThisWeek = ({
 
   const onSeeAllClick = ({ category, subCategory }: { category?: string | null; subCategory?: string | null }) => {
     if (category) {
-      updateFilter({ category })
+      navigate(getPath('discoveryProjectsCategory', category))
+      return
     }
 
     if (subCategory) {
-      updateFilter({ subCategory })
+      navigate(getPath('discoveryProjectsSubCategory', subCategory))
     }
   }
 
