@@ -1,71 +1,224 @@
-import { Box, Button, ButtonProps, Image } from '@chakra-ui/react'
+import {
+  Badge,
+  Box,
+  Button,
+  ButtonProps,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Portal,
+  VStack,
+  useColorModeValue,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useAtomValue } from 'jotai'
-import { Link } from 'react-router'
+import { PiCaretUp } from 'react-icons/pi'
+import { Link, useLocation } from 'react-router'
 
-import MarketplaceNavIcon from '@/assets/marketplace-nav.png'
-import { NavigationNewBadge } from '@/shared/components/navigation/AnimatedNavSlide.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
-import { CampaignIconUrl, FundraiserIconUrl, getPath, ImpactFundsIconUrl, PathsMap } from '@/shared/constants/index.ts'
+import { getPath } from '@/shared/constants/index.ts'
 
 import { BottomNavBarContainer } from '../components/bottomNav'
-import { currentBottomNavItemAtom } from './discoveryNavAtom'
 
 export enum BottomNavItemKey {
-  campaigns = 'campaigns',
-  fundraisers = 'fundraisers',
-  impactFunds = 'impactFunds',
-  marketplace = 'marketplace',
+  donate = 'donate',
+  earn = 'earn',
+  impact = 'impact',
+  news = 'news',
 }
 
 export type BottomNavItem = {
   label: string
   key: BottomNavItemKey
-  path: keyof PathsMap
-  IconComponent: React.ReactNode
-  new?: boolean
+  path?: string
+  onClick?: () => void
+  isActive: boolean
 }
 
-const imageDimension = { base: '44px', sm: '49.5px', md: '55px' }
-const campaignImageDimension = { base: '44px', sm: '49.5px', md: '55px' }
-const merchImageDimension = { base: '48.4px', sm: '54.45px', md: '60.5px' }
-const iconSlotHeight = { base: '50.6px', sm: '58.3px', md: '63.8px' }
+const matchesRoute = (pathname: string, route: string) => pathname === route || pathname.startsWith(`${route}/`)
 
-export const bottomNavItems = [
+const mobileDonateItems = [
   {
-    label: 'Fundraisers',
-    key: BottomNavItemKey.fundraisers,
-    path: 'discoveryFundraisers',
-    IconComponent: <Image src={FundraiserIconUrl} height={imageDimension} width={imageDimension} />,
+    title: t('Fundraisers'),
+    description: t('Browse ongoing causes and initiatives.'),
+    to: getPath('discoveryFundraisers'),
   },
   {
-    label: 'Campaigns',
-    key: BottomNavItemKey.campaigns,
-    path: 'discoveryCampaigns',
-    IconComponent: <Image src={CampaignIconUrl} height={campaignImageDimension} width={campaignImageDimension} />,
+    title: t('Campaigns'),
+    description: t('Browse time-bound campaigns.'),
+    to: getPath('discoveryCampaigns'),
   },
   {
-    label: 'Shops',
-    key: BottomNavItemKey.marketplace,
-    path: 'discoveryProducts',
-    IconComponent: <Image src={MarketplaceNavIcon} height={merchImageDimension} width={merchImageDimension} />,
+    title: t('Impact Funds'),
+    description: t('Fund a category through curated funds.'),
+    to: getPath('discoveryImpactFunds'),
+    badge: { label: t('new'), backgroundColor: '#58efd9', textColor: 'gray.900' },
   },
   {
-    label: 'Impact Funds',
-    key: BottomNavItemKey.impactFunds,
-    path: 'discoveryImpactFunds',
-    IconComponent: <Image src={ImpactFundsIconUrl} height={imageDimension} width={imageDimension} />,
-    new: true,
+    title: t('Micro-Lending'),
+    description: t('Browse loans supporting small businesses.'),
+    disabled: true,
+    badge: { label: t('soon'), backgroundColor: '#d7d7d7', textColor: '#555555' },
   },
-] as BottomNavItem[]
+]
 
 export const DiscoveryBottomNav = () => {
-  const currentNavItem = useAtomValue(currentBottomNavItemAtom)
+  const location = useLocation()
+
+  const bottomNavLabelColor = useColorModeValue('gray.800', 'whiteAlpha.900')
+  const bottomNavLabelFontSize = 'sm'
+  const bottomNavLabelFontWeight = 600
+  const menuBorderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
+  const menuBackgroundColor = useColorModeValue('white', 'gray.800')
+  const menuHoverColor = useColorModeValue('gray.50', 'whiteAlpha.100')
+  const mutedColor = useColorModeValue('gray.700', 'gray.300')
+  const disabledColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400')
+
+  const bottomNavItems: BottomNavItem[] = [
+    {
+      label: t('Donate'),
+      key: BottomNavItemKey.donate,
+      isActive:
+        matchesRoute(location.pathname, getPath('discoveryProjects')) ||
+        matchesRoute(location.pathname, getPath('discoveryFundraisers')) ||
+        matchesRoute(location.pathname, getPath('discoveryCampaigns')),
+    },
+    {
+      label: t('Impact'),
+      key: BottomNavItemKey.impact,
+      path: getPath('discoveryImpactFunds'),
+      isActive: matchesRoute(location.pathname, getPath('discoveryImpactFunds')),
+    },
+    {
+      label: t('Earn'),
+      key: BottomNavItemKey.earn,
+      path: getPath('ambassadorProgram'),
+      isActive: matchesRoute(location.pathname, getPath('ambassadorProgram')),
+    },
+    {
+      label: t('News'),
+      key: BottomNavItemKey.news,
+      path: getPath('discoveryNews'),
+      isActive: matchesRoute(location.pathname, getPath('discoveryNews')),
+    },
+  ]
 
   return (
-    <BottomNavBarContainer spacing={1} w="full" marginX={0} padding={2} paddingBottom={3}>
+    <BottomNavBarContainer spacing={2} w="full" marginX={0} padding={2} paddingBottom={3}>
       {bottomNavItems.map((item) => {
-        return <DiscoveryBottomNavButton key={item.label} item={item} currentNavItem={currentNavItem} />
+        if (item.key === BottomNavItemKey.donate) {
+          return (
+            <Box key={item.key} flex={1.2}>
+              <Menu placement="top-start" strategy="fixed">
+                <MenuButton
+                  as={Button}
+                  variant="ghost"
+                  width="full"
+                  paddingX={4}
+                  minHeight="56px"
+                  borderRadius={{ base: '8px', lg: '10px' }}
+                  colorScheme="primary1"
+                  color={bottomNavLabelColor}
+                  fontSize={bottomNavLabelFontSize}
+                  fontWeight={bottomNavLabelFontWeight}
+                  isActive={item.isActive}
+                  rightIcon={<PiCaretUp />}
+                >
+                  {item.label}
+                </MenuButton>
+                <Portal>
+                  <MenuList
+                    borderRadius="12px"
+                    overflow="hidden"
+                    p={2.5}
+                    minWidth="260px"
+                    borderColor={menuBorderColor}
+                    backgroundColor={menuBackgroundColor}
+                    marginBottom={2}
+                  >
+                    {mobileDonateItems.map((donateItem) => {
+                      const content = (
+                        <VStack align="stretch" spacing={1.5} width="100%">
+                          <HStack align="center" justify="flex-start" spacing={2.5}>
+                            <Body
+                              fontSize="sm"
+                              dark={!donateItem.disabled}
+                              color={donateItem.disabled ? disabledColor : undefined}
+                              fontWeight={400}
+                              lineHeight={1.2}
+                            >
+                              {donateItem.title}
+                            </Body>
+                            {donateItem.badge ? (
+                              <Badge
+                                px={2}
+                                py={0.5}
+                                borderRadius="5px"
+                                textTransform="lowercase"
+                                fontSize="xs"
+                                fontWeight={600}
+                                backgroundColor={donateItem.badge.backgroundColor}
+                                color={donateItem.badge.textColor}
+                              >
+                                {donateItem.badge.label}
+                              </Badge>
+                            ) : null}
+                          </HStack>
+                          <Body
+                            fontSize="xs"
+                            color={donateItem.disabled ? disabledColor : mutedColor}
+                            fontWeight={300}
+                            lineHeight={1.4}
+                          >
+                            {donateItem.description}
+                          </Body>
+                        </VStack>
+                      )
+
+                      if (donateItem.disabled) {
+                        return (
+                          <Box
+                            key={donateItem.title}
+                            paddingX={3}
+                            paddingY={3}
+                            display="flex"
+                            alignItems="flex-start"
+                            justifyContent="flex-start"
+                            cursor="not-allowed"
+                            borderRadius="8px"
+                          >
+                            {content}
+                          </Box>
+                        )
+                      }
+
+                      return (
+                        <MenuItem
+                          key={donateItem.title}
+                          as={Link}
+                          to={donateItem.to}
+                          alignItems="flex-start"
+                          borderRadius="8px"
+                          paddingX={3}
+                          paddingY={3}
+                          height="auto"
+                          whiteSpace="normal"
+                          _hover={{ backgroundColor: menuHoverColor }}
+                          _focusVisible={{ backgroundColor: menuHoverColor }}
+                        >
+                          {content}
+                        </MenuItem>
+                      )
+                    })}
+                  </MenuList>
+                </Portal>
+              </Menu>
+            </Box>
+          )
+        }
+
+        return <DiscoveryBottomNavButton key={item.label} item={item} />
       })}
     </BottomNavBarContainer>
   )
@@ -73,43 +226,33 @@ export const DiscoveryBottomNav = () => {
 
 type DiscoveryBottomNavButtonProps = {
   item: BottomNavItem
-  currentNavItem?: BottomNavItem
 } & ButtonProps
 
-const DiscoveryBottomNavButton = ({ item, currentNavItem, ...rest }: DiscoveryBottomNavButtonProps) => {
-  const isActive = currentNavItem?.path === item.path
+const DiscoveryBottomNavButton = ({ item, ...rest }: DiscoveryBottomNavButtonProps) => {
+  const bottomNavLabelColor = useColorModeValue('gray.800', 'whiteAlpha.900')
 
   return (
     <Button
-      variant="menu"
+      variant="ghost"
       colorScheme="primary1"
-      size="xl"
+      color={bottomNavLabelColor}
       flex={1}
       key={item.label}
-      as={Link}
+      as={item.path ? Link : 'button'}
+      to={item.path}
+      onClick={item.onClick}
       paddingX={4}
-      paddingY={1}
-      minHeight={{ base: '72px', sm: '80px', md: '88px' }}
-      height="auto"
-      to={getPath(item.path)}
-      isActive={isActive}
+      minHeight="56px"
+      borderRadius={{ base: '8px', lg: '10px' }}
+      isActive={item.isActive}
       justifyContent={'center'}
       alignItems="center"
-      flexDirection="column"
-      gap={0.5}
-      fontSize={{ base: '12px', sm: '16px', md: '18px' }}
       {...rest}
       position="relative"
     >
-      <Box display="flex" justifyContent="center" alignItems="center" w="full" h={iconSlotHeight}>
-        {item.IconComponent}
-      </Box>
-      <Box position="relative" display="inline-flex" alignItems="center">
-        <Body fontWeight={600} textAlign="center" lineHeight="1">
-          {t(item.label)}
-        </Body>
-        {item.new && <NavigationNewBadge position="absolute" top={-1} right={-3} />}
-      </Box>
+      <Body fontSize="sm" color={bottomNavLabelColor} fontWeight={600} textAlign="center" lineHeight="1">
+        {item.label}
+      </Body>
     </Button>
   )
 }

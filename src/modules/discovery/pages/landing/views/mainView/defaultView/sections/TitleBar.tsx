@@ -7,7 +7,6 @@ import { H1 } from '@/shared/components/typography/Heading.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
 import { FilterComponent } from '../../../../components/FilterComponent.tsx'
-import { FeaturedContributions } from '../components/FeaturedContributions.tsx'
 
 export const TitleBar = () => {
   const location = useLocation()
@@ -56,7 +55,6 @@ export const TitleBar = () => {
 
           <FilterComponent />
         </HStack>
-        <FeaturedContributions />
       </VStack>
     </VStack>
   )

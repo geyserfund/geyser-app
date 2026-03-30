@@ -88,7 +88,7 @@ const postTypeOptions: PostTypeOption[] = [
   { label: t('Feedback Request'), value: 'FEEDBACK_REQUEST' },
   { label: t('Goal Reached'), value: 'GOAL_REACHED' },
   { label: t('Goal Update'), value: 'GOAL_UPDATE' },
-  { label: t('Impact'), value: 'IMPACT' },
+  { label: t('Impact Update'), value: 'IMPACT' },
   { label: t('New Goal'), value: 'NEW_GOAL' },
   { label: t('New Reward'), value: 'NEW_REWARD' },
   { label: t('Reward Update'), value: 'REWARD_UPDATE' },

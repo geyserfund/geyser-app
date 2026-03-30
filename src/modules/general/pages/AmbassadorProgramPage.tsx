@@ -15,9 +15,13 @@ import { CopyableLinkCard } from '@/components/molecules/CopyableLinkCard.tsx'
 import { Head } from '@/config/Head.tsx'
 import { useAuthContext } from '@/context'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal.ts'
+import { DiscoveryBottomNav } from '@/modules/navigation/discoveryNav/DiscoveryBottomNav.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
-import { Body, H1, H2 } from '@/shared/components/typography'
+import { PageSectionHeader } from '@/shared/components/layouts/PageSectionHeader.tsx'
+import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
+import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { standardPadding } from '@/shared/styles'
 import { getFullDomainUrl } from '@/shared/utils/project/getFullDomainUrl.ts'
 
 const stepItems = [
@@ -63,7 +67,6 @@ export const AmbassadorProgramPage = () => {
   const { user, isLoggedIn } = useAuthContext()
   const { loginOnOpen } = useAuthModal()
 
-  const eyebrowColor = useColorModeValue('neutral1.8', 'neutral1.10')
   const iconBg = useColorModeValue('primary1.3', 'primary1.4')
   const iconColor = useColorModeValue('primary1.11', 'primary1.9')
   const rewardIconBg = useColorModeValue('amber.3', 'amber.4')
@@ -98,29 +101,19 @@ export const AmbassadorProgramPage = () => {
 
       <VStack
         w="full"
-        maxWidth="1040px"
+        maxWidth={`${dimensions.maxWidth + 24 * 2}px`}
         marginX="auto"
-        paddingX={{ base: 4, lg: 6 }}
+        paddingX={standardPadding}
         spacing={{ base: 6, lg: 8 }}
         alignItems="stretch"
-        paddingBottom={10}
+        paddingBottom={{ base: 28, lg: 10 }}
       >
-        {/* Hero */}
-        <VStack alignItems="start" spacing={5} pt={{ base: 2, lg: 4 }}>
-          <Body size="sm" color={eyebrowColor} textTransform="uppercase" letterSpacing="0.1em" fontWeight={600}>
-            {t('Ambassador Program')}
-          </Body>
-
-          <H1 size={{ base: '2xl', lg: '4xl' }} bold lineHeight={1.15}>
-            {t('Share projects. Enable funding. Earn sats.')}
-          </H1>
-
-          <Body size={{ base: 'md', lg: 'lg' }} color="neutral1.11" lineHeight={1.6}>
-            {t(
-              'Ambassadors help projects get funded by sharing a trackable ambassador link. When that sharing leads to contributions, the ambassador earns for the value they enabled.',
-            )}
-          </Body>
-        </VStack>
+        <PageSectionHeader
+          title={t('Ambassador Program')}
+          subtitle={t(
+            'Ambassadors help projects get funded by sharing a trackable ambassador link. When that sharing leads to contributions, the ambassador earns for the value they enabled.',
+          )}
+        />
 
         <CardLayout spacing={3} bg={promotionBg} borderColor={promotionBorderColor}>
           <HStack spacing={3} alignItems="center" flexWrap="wrap">
@@ -202,7 +195,7 @@ export const AmbassadorProgramPage = () => {
                       </H2>
                       <Badge colorScheme="amber" variant="soft" borderRadius="full" px={3} py={1} textTransform="none">
                         <Body size="sm" medium>
-                          {t('5% of contribution')}
+                          {t('Up to 10% of contribution')}
                         </Body>
                       </Badge>
                     </HStack>
@@ -214,7 +207,11 @@ export const AmbassadorProgramPage = () => {
 
                 {isLoggedIn ? (
                   <Box mt="auto">
-                    <CopyableLinkCard label={t('Ambassador link')} linkValue={contributionReferralLink} />
+                    <CopyableLinkCard
+                      label={t('Ambassador link')}
+                      linkValue={contributionReferralLink}
+                      showAmbassadorTerms
+                    />
                   </Box>
                 ) : null}
               </VStack>
@@ -241,7 +238,7 @@ export const AmbassadorProgramPage = () => {
                       </H2>
                       <Badge colorScheme="amber" variant="soft" borderRadius="full" px={3} py={1} textTransform="none">
                         <Body size="sm" medium>
-                          {t('5,000 sats + 5%')}
+                          {t('5,000 sats + up to 10%')}
                         </Body>
                       </Badge>
                     </HStack>
@@ -251,14 +248,18 @@ export const AmbassadorProgramPage = () => {
                       )}
                     </Body>
                     <Body size="xs" color="neutral1.9">
-                      {t('* Up to 100k sats per project')}
+                      {t('* Up to 25k sats per project')}
                     </Body>
                   </VStack>
                 </HStack>
 
                 {isLoggedIn ? (
                   <Box mt="auto">
-                    <CopyableLinkCard label={t('Ambassador link')} linkValue={projectReferralLink} />
+                    <CopyableLinkCard
+                      label={t('Ambassador link')}
+                      linkValue={projectReferralLink}
+                      showAmbassadorTerms
+                    />
                   </Box>
                 ) : null}
               </VStack>
@@ -331,6 +332,8 @@ export const AmbassadorProgramPage = () => {
           </VStack>
         </Box>
       </VStack>
+
+      <DiscoveryBottomNav />
     </>
   )
 }

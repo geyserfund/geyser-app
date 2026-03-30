@@ -3,6 +3,7 @@ import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { PiArrowClockwiseBold, PiCopy, PiShareFat } from 'react-icons/pi'
 
+import { AmbassadorReferralTermsNotice } from '@/components/molecules/AmbassadorReferralTermsNotice.tsx'
 import { useAuthContext } from '@/context'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
@@ -18,7 +19,11 @@ import {
   formatEffectiveAffiliatePayoutRate,
   GEYSER_PROMOTION_FEE_RATE,
 } from '@/shared/utils/affiliatePayout.ts'
-import { useProjectAmbassadorStatsQuery, usePublishNostrEventMutation, useUserAffiliatePartnerTermsQuery } from '@/types'
+import {
+  useProjectAmbassadorStatsQuery,
+  usePublishNostrEventMutation,
+  useUserAffiliatePartnerTermsQuery,
+} from '@/types'
 import { commaFormatted, useNotification } from '@/utils'
 
 import { useNostrPostForFundingSuccess } from '../useNostrPostForFundingSuccess.tsx'
@@ -81,7 +86,7 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
           {heroLink.replace('https://', '')}
         </Body>
         <IconButton
-          aria-label={heroId ? 'Copy hero link' : 'Copy link'}
+          aria-label={heroId ? t('Copy hero link') : t('Copy link')}
           icon={<PiCopy />}
           variant="ghost"
           size="md"
@@ -192,12 +197,10 @@ const AmbassadorCard = ({
         </H2>
       </HStack>
       <Body color="black">
-        {t('Become an Ambassador for this project by spreading the word using your Hero link.')}
-        {' '}
+        {t('Become an Ambassador for this project by spreading the word using your Hero link.')}{' '}
         {t('You will earn {{rate}} of each contribution you enable.', {
           rate: effectiveContributionPayout,
-        })}
-        {' '}
+        })}{' '}
         {t('So far, {{count}} ambassadors have enabled {{amount}} sats in contributions to this project.', {
           count: ambassadorsCount || 0,
           amount: commaFormatted(totalSats || 0),
@@ -210,6 +213,7 @@ const AmbassadorCard = ({
         twitterShareText={twitterShareText}
         handleCopy={handleCopy}
       />
+      <AmbassadorReferralTermsNotice />
     </VStack>
   )
 }

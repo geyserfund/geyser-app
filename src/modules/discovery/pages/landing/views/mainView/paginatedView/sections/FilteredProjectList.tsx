@@ -22,7 +22,7 @@ export const FilteredProjectList = ({ projects, error, loading, isLoadingMore }:
 
     if (projects.length === 0) {
       return (
-        <GridItem colSpan={{ base: 1, lg: 4 }} overflow="hidden">
+        <GridItem colSpan={{ base: 1, lg: 3 }} overflow="hidden">
           <NoSearchResults />
         </GridItem>
       )
@@ -42,7 +42,7 @@ export const FilteredProjectList = ({ projects, error, loading, isLoadingMore }:
       {error ? (
         <NoDataError />
       ) : (
-        <SimpleGrid w="full" columns={{ base: 1, lg: 5, xl: 6 }} spacing={{ base: 4, lg: 8 }}>
+        <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
           {renderProjects()}
           {isLoadingMore && <FilteredProjectListSkeleton />}
         </SimpleGrid>

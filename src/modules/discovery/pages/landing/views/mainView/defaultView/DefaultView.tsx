@@ -1,5 +1,5 @@
-import { Stack, VStack } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { VStack } from '@chakra-ui/react'
+import { Fragment, useEffect, useState } from 'react'
 
 import { Head } from '@/config/Head.tsx'
 import { GeyserMainSeoImageUrl } from '@/shared/constants/index.ts'
@@ -7,23 +7,33 @@ import { ProjectCategoryList } from '@/shared/constants/platform/projectCategory
 
 import { HeroesMainPage } from '../../../../heroes/index.ts'
 import { TopProjects } from './components/TopProjects.tsx'
-import { AnnouncementBanner } from './sections/AnnouncementBanner.tsx'
-import { AonProjectsDisplayMostFundedThisWeek } from './sections/AonProjectsDisplayMostFundedThisWeek.tsx'
 import { CharityProjects } from './sections/CharityProjects.tsx'
-import { Featured } from './sections/Featured.tsx'
-import { JoinOurMailingList } from './sections/JoinOurMailingList.tsx'
-import { JoinTheMovement } from './sections/JoinTheMovement.tsx'
+import { CuratedProjects } from './sections/CuratedProjects.tsx'
+import { GeyserNewsAndAnnouncements } from './sections/GeyserNewsAndAnnouncements.tsx'
+import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
 import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
-import { RecentImpactPosts } from './sections/RecentImpactPosts.tsx'
-import { RecentLaunches } from './sections/RecentLaunches.tsx'
-import { RecommendedForYou } from './sections/RecommendedForYou.tsx'
 import { SuccessStories } from './sections/SuccessStories.tsx'
-import { TiaProjectsDisplayMostFundedThisWeek } from './sections/TiaProjectsDisplayMostFundedThisWeek.tsx'
-import { TitleBar } from './sections/TitleBar.tsx'
+
+const CATEGORY_SECTION_GROUP_SIZE = 2
 
 export const DefaultView = () => {
   const [showBelowTheFold, setShowBelowTheFold] = useState(false)
+
+  const categoryGroups = ProjectCategoryList.reduce<(typeof ProjectCategoryList)[number][][]>(
+    (groups, category, index) => {
+      const groupIndex = Math.floor(index / CATEGORY_SECTION_GROUP_SIZE)
+
+      if (!groups[groupIndex]) {
+        groups[groupIndex] = []
+      }
+
+      groups[groupIndex].push(category)
+
+      return groups
+    },
+    [],
+  )
 
   useEffect(() => {
     /** Wait for initial content to render before showing below-the-fold content */
@@ -35,40 +45,29 @@ export const DefaultView = () => {
   }, [])
 
   return (
-    <VStack w="full" spacing={10} paddingTop={{ base: '8px', lg: '10px' }}>
+    <VStack w="full" spacing={10} paddingTop={{ base: '4px', lg: '6px' }}>
       <Head image={GeyserMainSeoImageUrl} />
       <VStack w="full" spacing={20} paddingBottom={40}>
-        <TitleBar />
-        <AnnouncementBanner mt={{ base: -14, md: -10 }} mb={{ base: -14, md: -10 }} />
-
-        <Stack direction={{ base: 'column', md: 'row' }} w="full" alignItems="stretch" spacing={{ base: 4, lg: 12 }}>
-          <Featured />
-          <RecommendedForYou />
-        </Stack>
+        <CuratedProjects />
 
         <SuccessStories />
 
-        <AonProjectsDisplayMostFundedThisWeek />
-        <TiaProjectsDisplayMostFundedThisWeek />
         <ProjectsInYourRegion />
-
-        <RecentImpactPosts />
 
         {showBelowTheFold && (
           <>
-            {ProjectCategoryList.map((category) => (
-              <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
+            {categoryGroups.map((categoryGroup, index) => (
+              <Fragment key={`landing-category-group-${index}`}>
+                {categoryGroup.map((category) => (
+                  <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
+                ))}
+                {index === 0 && <GeyserNewsAndAnnouncements />}
+                {index === 1 && <CharityProjects />}
+                {index === 2 && <HeroesMainPage />}
+                {index === 3 && <TopProjects />}
+              </Fragment>
             ))}
-            <RecentLaunches />
-            <CharityProjects />
-
-            <HeroesMainPage />
-
-            <TopProjects />
-
-            <JoinTheMovement />
-
-            <JoinOurMailingList />
+            <NewsletterSignup />
           </>
         )}
       </VStack>

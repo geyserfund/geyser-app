@@ -24,6 +24,7 @@ export type ProjectCreationVariables = {
   links: string[]
   tags: number[]
   referrerHeroId: string
+  promotionsEnabled: boolean
 }
 
 const DEFAULT_VALUES: ProjectCreationVariables = {
@@ -39,6 +40,7 @@ const DEFAULT_VALUES: ProjectCreationVariables = {
   links: [],
   tags: [],
   referrerHeroId: '',
+  promotionsEnabled: true,
 }
 
 const schema = yup
@@ -92,6 +94,7 @@ const schema = yup
     links: yup.array().of(yup.string().matches(validUrl, 'Please enter a valid URL')),
     tags: yup.array().of(yup.number()),
     referrerHeroId: yup.string(),
+    promotionsEnabled: yup.boolean().required(),
   })
   .required()
 
@@ -120,6 +123,7 @@ export const useProjectForm = ({ isEdit, project }: UseProjectFormProps) => {
           links: project.links || [],
           tags: project?.tags?.map((tag) => tag.id) || [],
           referrerHeroId: '',
+          promotionsEnabled: project.promotionsEnabled ?? true,
         }
       }
 

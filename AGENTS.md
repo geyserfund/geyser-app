@@ -5,6 +5,7 @@
 - For translatable strings with dynamic values, never use template literals in `t(...)`; use interpolation (`t('... {{var}} ...', { var: value })`) or `Trans`.
 - When writing texts inside `t()` function, make sure to keep end punctuations like `:`,`?`,  outside the function so that the translation itself is clean text.
 - Prefer `import { t } from 'i18next'` for simple static translations (instead of `useTranslation`), and use explicit `.ts`/`.tsx` extensions on local alias imports when lint requires it.
+- If translated arrays/objects are used in rendered UI, build them inside the component or a `useMemo`; do not call `t()` at module scope for UI content that must react to language changes.
 - Icon-only interactive elements must include a localized `aria-label` (for example, `aria-label={t('Close')}`).
 - For dates/times coming from API data, interpolate formatted values in `t(...)`; do not hardcode date text in copy.
 
@@ -33,11 +34,16 @@
 - Do not hardcode surface/background colors like `bg="white"` or `bg="gray.50"` in feature UI.
 - Use `useColorModeValue(...)` or semantic tokens for all container/card/surface backgrounds.
 - For paired surfaces, prefer a primary surface token (e.g., `white`/`gray.800`) and a muted surface token (e.g., `gray.50`/`gray.700`) defined once per component.
+- Apply the same rule to gradients, shadows, badge fills/text, borders, overlays, and CTA hover/active states; avoid raw hex/rgba values in feature UI when a palette token or color-mode token can be used.
+- Respect the existing dark mode design system: do not invent local one-off colors for borders, dividers, badges, shadows, or states when an existing semantic token or established `useColorModeValue(...)` pair already covers that UI pattern.
+- When a reviewer flags a theme deviation, audit the whole component in both light and dark mode instead of fixing only the commented line. Check cards, pills, promotional banners, nav buttons, and any “special” surfaces for token drift.
+- For theme-heavy components, define the light/dark tokens once near the top of the component and reuse them across all related elements so card/button states stay visually consistent.
 
 ## Query & Notifications
 
 - For page-level GraphQL queries, handle `loading` and `error` explicitly before rendering data-dependent UI; do not rely on `return null` for in-flight/error states.
 - Apply the same `loading`/`error` handling standard to section-level data-dependent queries and provide a clear retry path where appropriate.
+- Do not silently fall back to unrelated/global data when a scoped lookup fails (for example, region-specific discovery pages). Block rendering of the scoped result and show an explicit retry/error state instead.
 - Prefer project `useNotification` over raw Chakra `useToast` in feature code.
 - Prefer shared typography components (`H2`, `Body`, etc.) over raw Chakra `Text` for user-facing page copy.
 

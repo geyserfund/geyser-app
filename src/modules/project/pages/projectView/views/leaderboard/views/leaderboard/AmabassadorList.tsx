@@ -24,6 +24,7 @@ type AmabassadorListProps = {
 
 export const AmabassadorList = ({ period, dateTime, ...props }: AmabassadorListProps) => {
   const { project } = useProjectAtom()
+  const rate = formatEffectiveAffiliatePayoutRate(DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE, GEYSER_PROMOTION_FEE_RATE)
 
   const { data, loading } = useProjectLeaderboardAmbassadorsGetQuery({
     skip: !project.id,
@@ -60,12 +61,10 @@ export const AmabassadorList = ({ period, dateTime, ...props }: AmabassadorListP
   return (
     <VStack w="full" h="full" id={id} overflowY={{ base: undefined, lg: 'auto' }} {...props}>
       <Body size="sm" light w={'full'} textAlign={'left'} paddingX={{ base: 0, lg: 6 }}>
-        {t('Individuals who spread the word about Geyser projects by sharing and earn {{rate}} of each contribution they enable.', {
-          rate: formatEffectiveAffiliatePayoutRate(
-            DEFAULT_CONTRIBUTION_REFERRAL_PAYOUT_RATE,
-            GEYSER_PROMOTION_FEE_RATE,
-          ),
-        })}
+        {t(
+          'Individuals who spread the word about Geyser projects by sharing can earn up to {{rate}} of each contribution they enable.',
+          { rate },
+        )}
       </Body>
       {ambassadors.map((ambassador, index) => {
         return (

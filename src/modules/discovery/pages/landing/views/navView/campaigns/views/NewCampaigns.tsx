@@ -49,10 +49,8 @@ export const NewCampaigns = () => {
     ))
   }
 
-  const projectLength = projects.length || 4
-
   return (
-    <SimpleGrid w="full" columns={{ base: 1, lg: projectLength > 5 ? 5 : projectLength }} spacing={{ base: 4, lg: 8 }}>
+    <SimpleGrid w="full" columns={{ base: 1, lg: 3 }} spacing={{ base: 6, lg: 8 }}>
       {renderBody()}
     </SimpleGrid>
   )

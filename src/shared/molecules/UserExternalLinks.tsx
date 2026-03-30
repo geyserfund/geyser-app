@@ -12,7 +12,6 @@ import {
   getPath,
   GeyserAboutUrl,
   GeyserPrivacyUrl,
-  GeyserTermsUrl,
   GuideUrl,
 } from '@/shared/constants'
 import { useMobileMode } from '@/utils/index.ts'
@@ -77,7 +76,7 @@ export const UserExternalLinks = ({ spread, ...props }: UserExternalLinksProps) 
           {t('FAQ')}
         </UserNavExternalButton>
 
-        <UserNavExternalButton as={ChakraLink} isExternal href={GeyserTermsUrl} color="neutral1.9" marginLeft={4}>
+        <UserNavExternalButton as={ChakraLink} isExternal href={getPath('legalTerms')} color="neutral1.9" marginLeft={4}>
           {t('Terms of Service')}
         </UserNavExternalButton>
         <UserNavExternalButton as={ChakraLink} isExternal href={GeyserPrivacyUrl} color="neutral1.9">

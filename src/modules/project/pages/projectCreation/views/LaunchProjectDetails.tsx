@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router'
 
 import { TextInputBox } from '@/components/ui'
 import { useProjectAPI } from '@/modules/project/API/useProjectAPI'
+import { PromotionNetworkSettingsCard } from '@/modules/project/components/PromotionNetworkSettingsCard.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import { ProjectCreationStep } from '@/types/index.ts'
 import type { Country, CreateProjectInput, ProjectCategory, ProjectSubCategory, UpdateProjectInput } from '@/types/index.ts'
@@ -202,6 +203,16 @@ export const LaunchProjectDetails = () => {
               />
             </FieldContainer>
           ) : null}
+          <PromotionNetworkSettingsCard
+            promotionsEnabled={form.watch('promotionsEnabled')}
+            onToggle={(isEnabled) =>
+              form.setValue('promotionsEnabled', isEnabled, {
+                shouldDirty: true,
+                shouldTouch: true,
+                shouldValidate: true,
+              })
+            }
+          />
         </VStack>
       </ProjectCreationPageWrapper>
 
