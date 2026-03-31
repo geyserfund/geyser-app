@@ -53,13 +53,13 @@ const mobileDonateItems = [
     title: t('Impact Funds'),
     description: t('Fund a category through curated funds.'),
     to: getPath('discoveryImpactFunds'),
-    badge: { label: t('new'), backgroundColor: '#58efd9', textColor: 'gray.900' },
+    badge: { label: t('new'), tone: 'new' },
   },
   {
     title: t('Micro-Lending'),
     description: t('Browse loans supporting small businesses.'),
     disabled: true,
-    badge: { label: t('soon'), backgroundColor: '#d7d7d7', textColor: '#555555' },
+    badge: { label: t('soon'), tone: 'soon' },
   },
 ]
 
@@ -69,11 +69,15 @@ export const DiscoveryBottomNav = () => {
   const bottomNavLabelColor = useColorModeValue('gray.800', 'whiteAlpha.900')
   const bottomNavLabelFontSize = 'sm'
   const bottomNavLabelFontWeight = 600
-  const menuBorderColor = useColorModeValue('blackAlpha.300', 'whiteAlpha.300')
-  const menuBackgroundColor = useColorModeValue('white', 'gray.800')
-  const menuHoverColor = useColorModeValue('gray.50', 'whiteAlpha.100')
-  const mutedColor = useColorModeValue('gray.700', 'gray.300')
-  const disabledColor = useColorModeValue('blackAlpha.400', 'whiteAlpha.400')
+  const menuBorderColor = useColorModeValue('neutral1.5', 'neutral1.6')
+  const menuBackgroundColor = useColorModeValue('white', 'neutral1.3')
+  const menuHoverColor = useColorModeValue('gray.50', 'neutral1.2')
+  const mutedColor = useColorModeValue('gray.700', 'neutral1.10')
+  const disabledColor = useColorModeValue('blackAlpha.400', 'neutral1.8')
+  const newBadgeTextColor = useColorModeValue('gray.900', 'gray.900')
+  const newBadgeBackgroundColor = useColorModeValue('primary1.4', 'primary1.5')
+  const soonBadgeBackgroundColor = useColorModeValue('neutral1.4', 'neutral1.5')
+  const soonBadgeTextColor = useColorModeValue('neutral1.10', 'neutral1.11')
 
   const bottomNavItems: BottomNavItem[] = [
     {
@@ -158,8 +162,12 @@ export const DiscoveryBottomNav = () => {
                                 textTransform="lowercase"
                                 fontSize="xs"
                                 fontWeight={600}
-                                backgroundColor={donateItem.badge.backgroundColor}
-                                color={donateItem.badge.textColor}
+                                backgroundColor={
+                                  donateItem.badge.tone === 'new'
+                                    ? newBadgeBackgroundColor
+                                    : soonBadgeBackgroundColor
+                                }
+                                color={donateItem.badge.tone === 'new' ? newBadgeTextColor : soonBadgeTextColor}
                               >
                                 {donateItem.badge.label}
                               </Badge>
@@ -198,6 +206,7 @@ export const DiscoveryBottomNav = () => {
                           key={donateItem.title}
                           as={Link}
                           to={donateItem.to}
+                          backgroundColor="transparent"
                           alignItems="flex-start"
                           borderRadius="8px"
                           paddingX={3}
@@ -205,6 +214,7 @@ export const DiscoveryBottomNav = () => {
                           height="auto"
                           whiteSpace="normal"
                           _hover={{ backgroundColor: menuHoverColor }}
+                          _active={{ backgroundColor: menuHoverColor }}
                           _focusVisible={{ backgroundColor: menuHoverColor }}
                         >
                           {content}

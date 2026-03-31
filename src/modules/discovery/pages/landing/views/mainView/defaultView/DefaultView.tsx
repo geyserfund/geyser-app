@@ -13,6 +13,7 @@ import { GeyserNewsAndAnnouncements } from './sections/GeyserNewsAndAnnouncement
 import { NewsletterSignup } from './sections/NewsletterSignup.tsx'
 import { ProjectsDisplayMostFundedThisWeek } from './sections/ProjectsDisplayMostFundedThisWeek.tsx'
 import { ProjectsInYourRegion } from './sections/ProjectsInYourRegion.tsx'
+import { HowGeyserWorks } from './sections/HowGeyserWorks.tsx'
 import { SuccessStories } from './sections/SuccessStories.tsx'
 
 const CATEGORY_SECTION_GROUP_SIZE = 2
@@ -60,6 +61,8 @@ export const DefaultView = () => {
 
         <SuccessStories />
 
+        <HowGeyserWorks />
+
         <ProjectsInYourRegion />
 
         {showBelowTheFold && (
@@ -69,7 +72,12 @@ export const DefaultView = () => {
                 {categoryGroup.map((category) => (
                   <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
                 ))}
-                {index === 0 && <GeyserNewsAndAnnouncements />}
+                {index === 0 && (
+                  <>
+                    <GeyserNewsAndAnnouncements />
+                    <NewsletterSignup />
+                  </>
+                )}
                 {index === 1 && <CharityProjects />}
                 {index === 2 && <HeroesMainPage />}
                 {index === 3 && <TopProjects />}

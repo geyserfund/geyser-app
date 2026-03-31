@@ -46,6 +46,7 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
   const newBadgeTextColor = useColorModeValue('gray.900', 'gray.900')
+  const createProjectButtonColor = useColorModeValue('black', 'white')
   const mobileNavigationItems: MobileNavigationItem[] = [
     { label: 'Home', path: getPath('discoveryLanding'), icon: PiHouse },
     { label: 'My projects', path: getPath('discoveryMyProjects'), icon: PiRocket },
@@ -137,10 +138,10 @@ export const ProfileNavContent = ({ onNavigate, showSearch = false }: ProfileNav
         <MenuItem _active={{}} _focus={{}} _hover={{}}>
           <CreateProjectButton
             w="full"
-            color="black"
-            borderColor="black"
-            _hover={{ color: 'black', borderColor: 'black' }}
-            _active={{ color: 'black', borderColor: 'black' }}
+            color={createProjectButtonColor}
+            borderColor={createProjectButtonColor}
+            _hover={{ color: createProjectButtonColor, borderColor: createProjectButtonColor }}
+            _active={{ color: createProjectButtonColor, borderColor: createProjectButtonColor }}
           />
         </MenuItem>
         {user.id ? (
