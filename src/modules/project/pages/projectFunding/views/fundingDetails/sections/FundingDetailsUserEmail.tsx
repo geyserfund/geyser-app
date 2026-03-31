@@ -51,6 +51,8 @@ export const FundingDetailsUserEmailAndUpdates = () => {
     project,
     formState: { followProject, subscribeToGeyserEmails, email },
     hasSelectedRewards,
+    isRecurringDonationMode,
+    isMembershipFundingMode,
     setTarget,
     setState,
     fundingFormError,
@@ -69,6 +71,8 @@ export const FundingDetailsUserEmailAndUpdates = () => {
   const [emailValidationState, setEmailValidationState] = useState(EMAIL_VALIDATION_STATE.IDLE)
 
   const showEmailComponent = !user?.email || !followsProject || !subscribedToGeyserEmails
+  const requiresEmailForCurrentFlow = hasSelectedRewards || isRecurringDonationMode || isMembershipFundingMode
+  const shouldShowGuestFollowOption = !isLoggedIn && (isRecurringDonationMode || isMembershipFundingMode)
 
   const isEmailValidated = emailValidationState === EMAIL_VALIDATION_STATE.SUCCEEDED
 
@@ -156,112 +160,118 @@ export const FundingDetailsUserEmailAndUpdates = () => {
     }
   }
 
-  if (!isLoggedIn && !hasSelectedRewards) return <ConnectProfileCard />
+  if (!isLoggedIn && !requiresEmailForCurrentFlow) {
+    return <ConnectProfileCard onChange={() => loginOnOpen()} />
+  }
 
-  if (!showEmailComponent) return null
+  if (!showEmailComponent && !shouldShowGuestFollowOption) return null
 
   return (
-    <CardLayout mobileDense width="100%" position="relative">
-      <VStack w="full" alignItems="flex-start" spacing={0}>
-        <H1 size="2xl" bold>
-          {t('Add Email')}
-        </H1>
-        <Body size="sm" light>
-          {t('Add your email to receive project updates from the creator.')}
-        </Body>
-      </VStack>
+    <VStack w="full" spacing={4}>
+      {showEmailComponent && (
+        <CardLayout mobileDense width="100%" position="relative">
+          <VStack w="full" alignItems="flex-start" spacing={0}>
+            <H1 size="2xl" bold>
+              {t('Add Email')}
+            </H1>
+            <Body size="sm" light>
+              {t('Add your email to receive project updates from the creator.')}
+            </Body>
+          </VStack>
 
-      <FieldContainer>
-        <FormControl isInvalid={Boolean(fundingFormError.email)}>
-          <InputGroup>
-            <Input
-              disabled={Boolean(user?.email)}
-              required={hasSelectedRewards}
-              type="email"
-              name="email"
-              placeholder="funderemail@gmail.com"
-              value={email}
-              inputMode="email"
-              onChange={(e) => {
-                setTarget({ target: { name: 'email', value: e.target.value } })
-                setEmailValidationState(EMAIL_VALIDATION_STATE.LOADING)
-                debouncedEmailValidation(e.target.value)
-              }}
-              isInvalid={Boolean(fundingFormError.email)}
-              onFocus={() => {
-                setErrorstate({ key: 'email', value: '' })
-                setWarningstate({ key: 'email', value: '' })
-              }}
-            />
-            <InputRightElement>{renderEmailInputRightElement()}</InputRightElement>
-          </InputGroup>
-          {fundingFormError.email && <FormErrorMessage>{fundingFormError.email}</FormErrorMessage>}
-          {fundingFormWarning.email && <FormHelperText color="orange.9">{fundingFormWarning.email}</FormHelperText>}
-          {!fundingFormWarning.email && !fundingFormError.email && !isLoggedIn && (
-            <FormHelperText color="neutral1.11">
-              <Trans i18nKey="You're funding anonymously. <1>Sign in</1> to connect your contribution to your profile.">
-                {"You're funding anonymously. "}
-                <Box
-                  as="span"
-                  onClick={() => loginOnOpen()}
-                  color="primary.600"
-                  fontWeight="bold"
-                  _hover={{ cursor: 'pointer' }}
+          <FieldContainer>
+            <FormControl isInvalid={Boolean(fundingFormError.email)}>
+              <InputGroup>
+                <Input
+                  disabled={Boolean(user?.email)}
+                  required={requiresEmailForCurrentFlow}
+                  type="email"
+                  name="email"
+                  placeholder="funderemail@gmail.com"
+                  value={email}
+                  inputMode="email"
+                  onChange={(e) => {
+                    setTarget({ target: { name: 'email', value: e.target.value } })
+                    setEmailValidationState(EMAIL_VALIDATION_STATE.LOADING)
+                    debouncedEmailValidation(e.target.value)
+                  }}
+                  isInvalid={Boolean(fundingFormError.email)}
+                  onFocus={() => {
+                    setErrorstate({ key: 'email', value: '' })
+                    setWarningstate({ key: 'email', value: '' })
+                  }}
+                />
+                <InputRightElement>{renderEmailInputRightElement()}</InputRightElement>
+              </InputGroup>
+              {fundingFormError.email && <FormErrorMessage>{fundingFormError.email}</FormErrorMessage>}
+              {fundingFormWarning.email && <FormHelperText color="orange.9">{fundingFormWarning.email}</FormHelperText>}
+              {!fundingFormWarning.email && !fundingFormError.email && !isLoggedIn && (
+                <FormHelperText color="neutral1.11">
+                  <Trans i18nKey="You're funding anonymously. <1>Sign in</1> to connect your contribution to your profile.">
+                    {"You're funding anonymously. "}
+                    <Box
+                      as="span"
+                      onClick={() => loginOnOpen()}
+                      color="primary.600"
+                      fontWeight="bold"
+                      _hover={{ cursor: 'pointer' }}
+                    >
+                      Sign in
+                    </Box>
+                    {' to connect your profile to contribution'}
+                  </Trans>
+                </FormHelperText>
+              )}
+            </FormControl>
+          </FieldContainer>
+          {(isEmailValidated || user.email) && isLoggedIn && (
+            <>
+              {!followsProject && (
+                <HorizontalFormField
+                  label="Follow Project: receive this project’s updates directly by email."
+                  htmlFor="creator-email-toggle"
                 >
-                  Sign in
-                </Box>
-                {' to connect your profile to contribution'}
-              </Trans>
-            </FormHelperText>
+                  <Switch
+                    id="creator-email-toggle"
+                    isChecked={followProject}
+                    onChange={(e) => {
+                      setState('followProject', e.target.checked)
+                    }}
+                  />
+                </HorizontalFormField>
+              )}
+              {!subscribedToGeyserEmails && (
+                <HorizontalFormField
+                  label="Subscribe to Geyser newsletter to discover new projects."
+                  htmlFor="geyser-email-toggle"
+                >
+                  <Switch
+                    id="geyser-email-toggle"
+                    isChecked={subscribeToGeyserEmails}
+                    onChange={(e) => {
+                      setState('subscribeToGeyserEmails', e.target.checked)
+                    }}
+                  />
+                </HorizontalFormField>
+              )}
+            </>
           )}
-        </FormControl>
-      </FieldContainer>
-      {(isEmailValidated || user.email) && (
-        <>
-          {!followsProject && (
-            <HorizontalFormField
-              label="Follow Project: receive this project’s updates directly by email."
-              htmlFor="creator-email-toggle"
-            >
-              <Switch
-                id="creator-email-toggle"
-                isChecked={followProject}
-                onChange={(e) => {
-                  if (user.id) {
-                    setState('followProject', e.target.checked)
-                  } else {
-                    loginOnOpen()
-                  }
-                }}
-              />
-            </HorizontalFormField>
-          )}
-          {!subscribedToGeyserEmails && (
-            <HorizontalFormField
-              label="Subscribe to Geyser newsletter to discover new projects."
-              htmlFor="geyser-email-toggle"
-            >
-              <Switch
-                id="geyser-email-toggle"
-                isChecked={subscribeToGeyserEmails}
-                onChange={(e) => {
-                  if (user.id) {
-                    setState('subscribeToGeyserEmails', e.target.checked)
-                  } else {
-                    loginOnOpen()
-                  }
-                }}
-              />
-            </HorizontalFormField>
-          )}
-        </>
+        </CardLayout>
       )}
-    </CardLayout>
+      {shouldShowGuestFollowOption && (
+        <ConnectProfileCard isChecked={followProject} onChange={(checked) => setState('followProject', checked)} />
+      )}
+    </VStack>
   )
 }
 
-export const ConnectProfileCard = () => {
-  const { loginOnOpen } = useAuthModal()
+export const ConnectProfileCard = ({
+  isChecked = false,
+  onChange,
+}: {
+  isChecked?: boolean
+  onChange: (checked: boolean) => void
+}) => {
   return (
     <CardLayout mobileDense width="100%" position="relative">
       <VStack w="full" alignItems="flex-start" spacing={0}>
@@ -271,8 +281,9 @@ export const ConnectProfileCard = () => {
           </H1>
           <Switch
             size="lg"
-            onChange={() => {
-              loginOnOpen()
+            isChecked={isChecked}
+            onChange={(e) => {
+              onChange(e.target.checked)
             }}
           />
         </HStack>
