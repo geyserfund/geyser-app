@@ -47,7 +47,7 @@ const AnnouncementCard = ({
   const navigate = useNavigate()
   const borderColor = useColorModeValue('neutral1.5', 'neutral1.6')
   const cardBackground = useColorModeValue('utils.pbg', 'neutral1.3')
-  const descriptionColor = useColorModeValue('neutral1.9', 'neutral1.10')
+  const descriptionColor = 'neutralAlpha.11'
   const eyebrowBackground = useColorModeValue('utils.pbg', 'neutral1.2')
   const eyebrowColor = useColorModeValue('neutral1.11', 'neutral1.12')
 
@@ -145,7 +145,7 @@ const AnnouncementCard = ({
 export const GeyserNewsAndAnnouncements = () => {
   const { data, error, loading, refetch } = useAcelerandoVipLeaderboardQuery()
   const accentColor = useColorModeValue('primary1.11', 'primary1.9')
-  const mutedTextColor = useColorModeValue('neutral1.11', 'neutral1.9')
+  const mutedTextColor = 'neutralAlpha.11'
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
@@ -280,7 +280,7 @@ export const GeyserNewsAndAnnouncements = () => {
         title: t('More from Geyser on YouTube'),
       },
     ]
-  }, [accentColor, error, giveawayEndDate, loading, mutedTextColor, refetch])
+  }, [accentColor, error, giveawayEndDate, loading, refetch])
 
   const scrollCards = (direction: 'left' | 'right') => {
     const element = scrollContainerRef.current

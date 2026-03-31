@@ -11,7 +11,7 @@ import { LandingPageSectionTitle } from '../components/LandingPageSectionTitle.t
 
 const FundProjectsSteps = () => {
   const arrowColor = useColorModeValue('neutral1.9', 'neutral1.8')
-  const stepColor = useColorModeValue('neutral1.11', 'neutral1.10')
+  const stepColor = 'neutralAlpha.11'
   const isMobile = useBreakpointValue({ base: true, md: false })
 
   const steps = [
@@ -51,7 +51,7 @@ const FundProjectsSteps = () => {
 
 const ImpactFundPills = () => {
   const pillBorderColor = useColorModeValue('neutral1.6', 'neutral1.5')
-  const pillColor = useColorModeValue('neutral1.11', 'neutral1.10')
+  const pillColor = 'neutralAlpha.11'
   const isMobile = useBreakpointValue({ base: true, md: false })
 
   const features = [t('Support vetted projects'), t('Back more than 20 projects at once'), t('Receive impact reports')]
@@ -104,7 +104,7 @@ const ImpactFundPills = () => {
 export const HowGeyserWorks = () => {
   const cardBg = useColorModeValue('white', 'neutral1.3')
   const cardBorderColor = useColorModeValue('neutral1.6', 'neutral1.4')
-  const subtitleColor = useColorModeValue('neutral1.11', 'neutral1.10')
+  const subtitleColor = 'neutralAlpha.11'
 
   return (
     <VStack w="full" spacing={6} align="start">
