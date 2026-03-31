@@ -23,8 +23,6 @@ import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
 import { Body, H2 } from '@/shared/components/typography'
 import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
-import { SubscriptionCurrencyType } from '@/types/generated/graphql'
-
 import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../../../utils'
 import { LaunchpadSummary, NonProfitSummary, TAndCs } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
