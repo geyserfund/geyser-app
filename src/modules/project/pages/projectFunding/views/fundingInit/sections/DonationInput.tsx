@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Icon, useDisclosure, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { KeyboardEvent, useRef } from 'react'
@@ -11,9 +11,10 @@ import { recurringFundingModes, recurringIntervals } from '@/modules/project/rec
 import { AmountInput } from '@/shared/components/form/AmountInput.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H1 } from '@/shared/components/typography'
-import { lightModeColors } from '@/shared/styles/colors.ts'
+import { darkModeColors, lightModeColors } from '@/shared/styles/colors.ts'
 
 import { commaFormatted } from '../../../../../../../utils'
+import { FundingMatchingBanner } from '../components/FundingMatchingBanner.tsx'
 import {
   hasFiatPaymentMethodAtom,
   hasStripePaymentMethodAtom,
@@ -55,9 +56,32 @@ export const DonationInput = () => {
   const prefersUsd = intendedPaymentMethod === PaymentMethods.fiatSwap || !intendedPaymentMethod
   const { isOpen: isSatoshi, onToggle } = useDisclosure({ defaultIsOpen: !prefersUsd && isRecurringMode })
   const isDollar = !isSatoshi
-  const selectedOuterGradient = `linear(to-r, ${lightModeColors.primary1[4]}, ${lightModeColors.primary1[2]})`
-  const selectedInnerGradient = 'linear(to-br, rgba(233, 255, 251, 0.98), rgba(183, 255, 242, 0.58))'
-  const selectedHoverGradient = 'linear(to-br, rgba(233, 255, 251, 0.98), rgba(183, 255, 242, 0.7))'
+  const selectedBorderColor = useColorModeValue(lightModeColors.primary1[6], darkModeColors.primary1[8])
+  const selectedInnerGradient = useColorModeValue(
+    'linear(to-br, rgba(233, 255, 251, 0.98), rgba(183, 255, 242, 0.58))',
+    `linear(to-br, ${darkModeColors.primary1[4]}, ${darkModeColors.primary1[3]})`,
+  )
+  const selectedHoverGradient = useColorModeValue(
+    'linear(to-br, rgba(233, 255, 251, 0.98), rgba(183, 255, 242, 0.7))',
+    `linear(to-br, ${darkModeColors.primary1[5]}, ${darkModeColors.primary1[4]})`,
+  )
+  const unselectedBorderColor = useColorModeValue(lightModeColors.neutral1[4], darkModeColors.neutral1[4])
+  const unselectedInnerGradient = useColorModeValue(
+    `linear(to-br, #FFFFFF, ${lightModeColors.neutral1[1]})`,
+    `linear(to-br, ${darkModeColors.neutral1[2]}, ${darkModeColors.neutral1[1]})`,
+  )
+  const unselectedHoverGradient = useColorModeValue(
+    `linear(to-br, #FFFFFF, ${lightModeColors.neutral1[2]})`,
+    `linear(to-br, ${darkModeColors.neutral1[3]}, ${darkModeColors.neutral1[2]})`,
+  )
+  const unselectedActiveGradient = useColorModeValue(
+    `linear(to-br, ${lightModeColors.neutral1[2]}, ${lightModeColors.neutral1[3]})`,
+    `linear(to-br, ${darkModeColors.neutral1[4]}, ${darkModeColors.neutral1[3]})`,
+  )
+  const selectedTextColor = useColorModeValue('primary1.11', 'primary1.12')
+  const unselectedTextColor = useColorModeValue('neutral1.11', 'neutral1.12')
+  const satoshiBadgeBg = useColorModeValue(lightModeColors.primary1[4], darkModeColors.primary1[7])
+  const satoshiBadgeColor = useColorModeValue('primary1.12', 'neutral1.12')
   const recurringHelperCopy = !hasFiatPaymentMethod
     ? t('Bitcoin recurring payments are manual. We will email you when the next payment is due.')
     : intendedPaymentMethod === PaymentMethods.fiatSwap
@@ -117,26 +141,24 @@ export const DonationInput = () => {
               <Box
                 flex={1}
                 p="1px"
-                borderRadius="2xl"
-                bgGradient={!isRecurringMode ? selectedOuterGradient : `linear(to-r, ${lightModeColors.neutral1[4]}, ${lightModeColors.neutral1[3]})`}
+                borderRadius="xl"
+                bg={!isRecurringMode ? selectedBorderColor : unselectedBorderColor}
               >
                 <Button
                   w="full"
                   h="calc(3.5rem - 2px)"
-                  borderRadius="calc(var(--chakra-radii-2xl) - 1px)"
+                  fontSize="lg"
+                  fontWeight="700"
+                  borderRadius="calc(var(--chakra-radii-xl) - 1px)"
                   variant="ghost"
-                  bgGradient={!isRecurringMode ? selectedInnerGradient : `linear(to-br, #FFFFFF, ${lightModeColors.neutral1[1]})`}
-                  color={!isRecurringMode ? lightModeColors.primary1[11] : lightModeColors.neutral1[11]}
+                  bgGradient={!isRecurringMode ? selectedInnerGradient : unselectedInnerGradient}
+                  color={!isRecurringMode ? selectedTextColor : unselectedTextColor}
                   boxShadow={!isRecurringMode ? 'sm' : 'none'}
                   _hover={{
-                    bgGradient: !isRecurringMode
-                      ? selectedHoverGradient
-                      : `linear(to-br, #FFFFFF, ${lightModeColors.neutral1[2]})`,
+                    bgGradient: !isRecurringMode ? selectedHoverGradient : unselectedHoverGradient,
                   }}
                   _active={{
-                    bgGradient: !isRecurringMode
-                      ? selectedHoverGradient
-                      : `linear(to-br, ${lightModeColors.neutral1[2]}, ${lightModeColors.neutral1[3]})`,
+                    bgGradient: !isRecurringMode ? selectedHoverGradient : unselectedActiveGradient,
                   }}
                   isDisabled={isRecurringRenewal}
                   onClick={() => {
@@ -151,27 +173,25 @@ export const DonationInput = () => {
               <Box
                 flex={1}
                 p="1px"
-                borderRadius="2xl"
-                bgGradient={isRecurringMode ? selectedOuterGradient : `linear(to-r, ${lightModeColors.neutral1[4]}, ${lightModeColors.neutral1[3]})`}
+                borderRadius="xl"
+                bg={isRecurringMode ? selectedBorderColor : unselectedBorderColor}
               >
                 <Button
                   w="full"
                   h="calc(3.5rem - 2px)"
-                  borderRadius="calc(var(--chakra-radii-2xl) - 1px)"
+                  fontSize="lg"
+                  fontWeight="700"
+                  borderRadius="calc(var(--chakra-radii-xl) - 1px)"
                   variant="ghost"
-                  leftIcon={<Icon as={PiHeartFill} color={lightModeColors.secondary.green} boxSize={4} />}
-                  bgGradient={isRecurringMode ? selectedInnerGradient : `linear(to-br, #FFFFFF, ${lightModeColors.neutral1[1]})`}
-                  color={isRecurringMode ? lightModeColors.primary1[11] : lightModeColors.neutral1[11]}
+                  leftIcon={<Icon as={PiHeartFill} color="primary1.9" boxSize={4} />}
+                  bgGradient={isRecurringMode ? selectedInnerGradient : unselectedInnerGradient}
+                  color={isRecurringMode ? selectedTextColor : unselectedTextColor}
                   boxShadow={isRecurringMode ? 'sm' : 'none'}
                   _hover={{
-                    bgGradient: isRecurringMode
-                      ? selectedHoverGradient
-                      : `linear(to-br, #FFFFFF, ${lightModeColors.neutral1[2]})`,
+                    bgGradient: isRecurringMode ? selectedHoverGradient : unselectedHoverGradient,
                   }}
                   _active={{
-                    bgGradient: isRecurringMode
-                      ? selectedHoverGradient
-                      : `linear(to-br, ${lightModeColors.neutral1[2]}, ${lightModeColors.neutral1[3]})`,
+                    bgGradient: isRecurringMode ? selectedHoverGradient : unselectedActiveGradient,
                   }}
                   isDisabled={isRecurringRenewal}
                   onClick={() => {
@@ -180,7 +200,7 @@ export const DonationInput = () => {
                     setIntendedPaymentMethod(undefined)
                   }}
                 >
-                  {t('Make monthly')}
+                  {t('Make it monthly')}
                 </Button>
               </Box>
             </HStack>
@@ -219,8 +239,8 @@ export const DonationInput = () => {
               </Button>
               <Body
                 fontSize="8px"
-                bg={lightModeColors.amber[6]}
-                color="black"
+                bg={satoshiBadgeBg}
+                color={satoshiBadgeColor}
                 fontWeight="bold"
                 px={2}
                 py={0.2}
@@ -277,6 +297,8 @@ export const DonationInput = () => {
           size={hasRewards ? 'md' : 'lg'}
           isDisabled={isRecurringRenewal}
         />
+
+        <FundingMatchingBanner isSatoshi={isSatoshi} size={hasRewards ? 'md' : 'lg'} />
 
         {isRecurringMode && recurringHelperCopy && (
           <VStack alignItems="start" spacing={2}>

@@ -1,11 +1,13 @@
 /* eslint-disable complexity */
-import { Button, HStack, Icon, useDisclosure, VStack } from '@chakra-ui/react'
+import { Button, Divider, Grid, HStack, Icon, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react'
 import { motion } from 'framer-motion'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { PiCaretDown, PiCaretUp, PiInfo } from 'react-icons/pi'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { useProjectMatchingPreview } from '@/modules/project/funding/hooks/useProjectMatchingPreview.ts'
+import { getProjectMatchingAmountBreakdown } from '@/modules/project/matching/utils/projectMatching.ts'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state'
 import {
   guardianBadgesCostAtoms,
@@ -22,7 +24,9 @@ import { recurringFundingModes } from '@/modules/project/recurring/graphql'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
 import { Body, H2 } from '@/shared/components/typography'
+import { bitcoinQuoteAtom } from '@/shared/state/btcRateAtom.ts'
 import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
+import { ProjectMatchingCurrency } from '@/types'
 import { centsToDollars, commaFormatted, toInt, useMobileMode } from '../../../../../utils'
 import { LaunchpadSummary, NonProfitSummary, TAndCs } from '../views/fundingInit/sections/FundingInitSideContent.tsx'
 import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSubscription'
@@ -30,12 +34,41 @@ import { PaymentIntervalLabelMap } from '../views/fundingInit/sections/FundingSu
 type ProjectFundingSummaryProps = {
   disableCollapse?: boolean
   referenceCode?: string | null
+  matchedAmountOverride?: { sats: number; usdCents: number } | null
 }
 
-export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: ProjectFundingSummaryProps) => {
+type SummaryRowProps = {
+  label: React.ReactNode
+  children: React.ReactNode
+}
+
+const SummaryRow = ({ label, children }: SummaryRowProps) => {
+  return (
+    <Grid w="full" templateColumns="minmax(0, 1fr) max-content" columnGap={3} alignItems="start">
+      <Body size={{ base: 'sm', lg: 'md' }} light textAlign="left" whiteSpace="nowrap">
+        {label}
+      </Body>
+      <HStack minW={0} alignItems="start" justifyContent="flex-end" flexWrap="wrap">
+        {children}
+      </HStack>
+    </Grid>
+  )
+}
+
+export const ProjectFundingSummary = ({
+  disableCollapse,
+  referenceCode,
+  matchedAmountOverride,
+}: ProjectFundingSummaryProps) => {
   const { t } = useTranslation()
 
   const isMobileMode = useMobileMode()
+  const bitcoinQuote = useAtomValue(bitcoinQuoteAtom)
+  const formatUsdEstimate = (usdCents: number) =>
+    `$${centsToDollars(usdCents).toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })}`
 
   const { rewards } = useRewardsAtom()
   const { inProgressGoals } = useGoalsAtom()
@@ -58,7 +91,8 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
         : inProgressGoals[0]
       : undefined
 
-  const { formState, hasSelectedRewards } = useFundingFormAtom()
+  const { formState, hasSelectedRewards, project } = useFundingFormAtom()
+  const matchingPreview = useProjectMatchingPreview()
 
   const { isOpen: isMobileDetailsOpen, onToggle: onMobileDetailsToggle } = useDisclosure()
 
@@ -88,6 +122,50 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
   const hasDetails = disableCollapse
     ? false
     : formState.donationAmount > 0 || numberOfRewardsSelected > 0 || totalUsdCent >= 10
+
+  const matchingAmountBreakdown = formState.fundingMode
+    ? getProjectMatchingAmountBreakdown({
+        amount: project.activeMatching?.remainingCapAmount || 0,
+        referenceCurrency: project.activeMatching?.referenceCurrency || ProjectMatchingCurrency.Btcsat,
+        bitcoinQuote,
+      })
+    : { sats: 0, usdCents: 0 }
+
+  const matchingRow = matchedAmountOverride
+    ? {
+        label: t('Matched amount'),
+        sats: matchedAmountOverride.sats,
+        usdCents: matchedAmountOverride.usdCents,
+      }
+    : project.activeMatching && matchingPreview.hasActiveMatching && matchingPreview.matchedAmountSats > 0
+    ? {
+        label: t('Matched amount'),
+        sats: matchingPreview.matchedAmountSats,
+        usdCents: matchingPreview.matchedAmountUsdCents,
+      }
+    : null
+
+  const matchingAvailableRow =
+    project.activeMatching && matchingPreview.hasActiveMatching
+      ? {
+          label: t('Matching available'),
+          sats: matchingAmountBreakdown.sats,
+          usdCents: matchingAmountBreakdown.usdCents,
+        }
+      : null
+  const hasMatchingSection = Boolean(matchingAvailableRow || matchingRow)
+  const hasContributionSection = Boolean(
+    (formState.donationAmount && formState.donationAmount > 0 && formState.fundingMode !== recurringFundingModes.membership) ||
+      (formState.subscription && formState.subscription.subscriptionId) ||
+      numberOfRewardsSelected > 0 ||
+      rewardsCosts.sats > 0 ||
+      shippingCosts.sats > 0 ||
+      tip.sats > 0 ||
+      networkFee.sats > 0 ||
+      guardianBadgesCosts.sats > 0 ||
+      currentGoal,
+  )
+  const sectionDividerColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
 
   const mobileDisplayStyle = disableCollapse
     ? 'flex'
@@ -125,7 +203,7 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
       >
         {isMobileDetailsOpen ? t('Collapse') : t('Details')}
       </Button>
-      <VStack w="full" alignItems="start" spacing={{ base: 0, lg: 3 }} display={mobileDisplayStyle}>
+      <VStack w="full" alignItems="start" spacing={{ base: 2, lg: 3 }} display={mobileDisplayStyle}>
         <VStack w="full" alignItems="start" display={{ base: 'flex', lg: 'none' }} spacing={3} marginBottom={3}>
           <H2 size="xl" bold>
             {t('Summary')}
@@ -137,46 +215,86 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
         </VStack>
 
         {referrerHeroId && (
-          <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>
-              {t('Referred by')}:
-            </Body>
+          <SummaryRow label={t('Referred by')}>
             <Body size={{ base: 'sm', lg: 'md' }}>{referrerHeroId}</Body>
-          </HStack>
+          </SummaryRow>
         )}
+
+        {referrerHeroId && (hasMatchingSection || hasContributionSection) && <Divider borderColor={sectionDividerColor} />}
+
+        {matchingAvailableRow && (
+          <SummaryRow label={matchingAvailableRow.label}>
+            <Body size={{ base: 'sm', lg: 'md' }} wordBreak="break-all">
+              {`${commaFormatted(matchingAvailableRow.sats)} `}
+              <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
+                sats
+              </Body>
+            </Body>
+            <Body as="span" size={{ base: 'sm', lg: 'md' }} light wordBreak="break-all">
+              {`(${formatUsdEstimate(matchingAvailableRow.usdCents)})`}
+            </Body>
+          </SummaryRow>
+        )}
+
+        {matchingRow && (
+          <SummaryRow label={matchingRow.label}>
+            <Body size={{ base: 'sm', lg: 'md' }} wordBreak="break-all">
+              {`${commaFormatted(matchingRow.sats)} `}
+              <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
+                sats
+              </Body>
+            </Body>
+            <Body as="span" size={{ base: 'sm', lg: 'md' }} light wordBreak="break-all">
+              {`(${formatUsdEstimate(matchingRow.usdCents)})`}
+            </Body>
+          </SummaryRow>
+        )}
+
+        {hasMatchingSection && hasContributionSection && <Divider borderColor={sectionDividerColor} />}
 
         {formState.donationAmount &&
           formState.donationAmount > 0 &&
           formState.fundingMode !== recurringFundingModes.membership && (
-            <HStack>
-              <Body size={{ base: 'sm', lg: 'md' }} light>{`${t(
-                formState.fundingMode === recurringFundingModes.recurringDonation ? 'Recurring donation' : 'Donation',
-              )}: `}</Body>
-              <Body size={{ base: 'sm', lg: 'md' }}>
-                {`${commaFormatted(formState.donationAmount)} `}
-                <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
-                  sats
+            <VStack w="full" alignItems="start" spacing={{ base: 2, lg: 3 }}>
+              <SummaryRow
+                label={t(formState.fundingMode === recurringFundingModes.recurringDonation ? 'Recurring donation' : 'Donation')}
+              >
+                <Body size={{ base: 'sm', lg: 'md' }}>
+                  {`${commaFormatted(formState.donationAmount)} `}
+                  <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
+                    sats
+                  </Body>
                 </Body>
-              </Body>
-            </HStack>
+                <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak="break-all">
+                  {`(${formatUsdEstimate(formState.donationAmountUsdCent)})`}
+                </Body>
+              </SummaryRow>
+            </VStack>
           )}
 
         {formState.subscription && formState.subscription.subscriptionId && (
-          <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Membership')}: `}</Body>
+          <SummaryRow label={t('Membership')}>
             <Body size={{ base: 'sm', lg: 'md' }}>
-              {`${centsToDollars(formState.subscription.amountUsdCent)}`}
+              {formatUsdEstimate(formState.subscription.amountUsdCent)}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
-                {` USD / ${commaFormatted(formState.subscription.amountBtcSat)} sats / ${
+                {` / ${commaFormatted(formState.subscription.amountBtcSat)} sats / ${
                   PaymentIntervalLabelMap[formState.subscription.interval]
                 }`}
               </Body>
             </Body>
-          </HStack>
+          </SummaryRow>
         )}
         {numberOfRewardsSelected > 0 && (
-          <VStack w="full" alignItems={'start'} spacing={1}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Products')}: `}</Body>
+          <Grid
+            w="full"
+            templateColumns="minmax(0, 1fr) max-content"
+            columnGap={3}
+            alignItems="start"
+          >
+            <Body size={{ base: 'sm', lg: 'md' }} light textAlign="left" whiteSpace="nowrap">
+              {t('Products')}
+            </Body>
+            <VStack w="full" alignItems={'start'} spacing={1}>
             {items.map((item) => {
               return (
                 <HStack w="full" key={item?.label} alignItems="center">
@@ -194,12 +312,12 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
                 </HStack>
               )
             })}
-          </VStack>
+            </VStack>
+          </Grid>
         )}
 
         {rewardsCosts.sats > 0 && (
-          <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Products cost')}: `}</Body>
+          <SummaryRow label={t('Products cost')}>
             <Body size={{ base: 'sm', lg: 'md' }}>
               {commaFormatted(rewardsCosts.sats)}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
@@ -207,13 +325,12 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
               </Body>
             </Body>
             <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
-              {`($${centsToDollars(rewardsCosts.usdCents)})`}
+              {`(${formatUsdEstimate(rewardsCosts.usdCents)})`}
             </Body>
-          </HStack>
+          </SummaryRow>
         )}
         {shippingCosts.sats > 0 && (
-          <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Shipping cost')}: `}</Body>
+          <SummaryRow label={t('Shipping cost')}>
             <Body size={{ base: 'sm', lg: 'md' }}>
               {commaFormatted(shippingCosts.sats)}{' '}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
@@ -221,7 +338,7 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
               </Body>
             </Body>
             <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
-              {`($${centsToDollars(shippingCosts.usdCents)})`}
+              {`(${formatUsdEstimate(shippingCosts.usdCents)})`}
             </Body>
             {!shippingCountry && (
               <TooltipPopover text={t('Shipping cost is an estimate and may vary depending on the shipping address.')}>
@@ -230,17 +347,27 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
                 </HStack>
               </TooltipPopover>
             )}
-          </HStack>
+          </SummaryRow>
         )}
         {tip.sats > 0 && (
-          <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>
-              {`${t(
-                formState.fundingMode === recurringFundingModes.recurringDonation
-                  ? 'Geyser tip (first payment only)'
-                  : 'Geyser tip',
-              )}: `}
-            </Body>
+          <SummaryRow
+            label={
+              formState.fundingMode === recurringFundingModes.recurringDonation ? (
+                <HStack spacing={1}>
+                  <Body as="span" size={{ base: 'sm', lg: 'md' }} light>
+                    {t('Geyser tip')}
+                  </Body>
+                  <TooltipPopover text={t('Applies to the first payment only.')}>
+                    <HStack as="span" h="full" alignItems={'center'}>
+                      <Icon as={PiInfo} />
+                    </HStack>
+                  </TooltipPopover>
+                </HStack>
+              ) : (
+                t('Geyser tip')
+              )
+            }
+          >
             <Body size={{ base: 'sm', lg: 'md' }}>
               {`${commaFormatted(tip.sats)} `}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
@@ -248,14 +375,13 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
               </Body>
             </Body>
             <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
-              {`($${centsToDollars(tip.usdCents)})`}
+              {`(${formatUsdEstimate(tip.usdCents)})`}
             </Body>
-          </HStack>
+          </SummaryRow>
         )}
 
         {networkFee.sats > 0 && (
-          <HStack alignItems={'start'}>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Network fees')}: `}</Body>
+          <SummaryRow label={t('Network fees')}>
             <Body size={{ base: 'sm', lg: 'md' }}>
               {`${commaFormatted(networkFee.sats)} `}
               <Body size={{ base: 'sm', lg: 'md' }} as="span" light>
@@ -263,7 +389,7 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
               </Body>
             </Body>
             <Body as="span" size={{ base: 'sm', lg: 'md' }} medium light wordBreak={'break-all'}>
-              {`($${centsToDollars(networkFee.usdCents)})`}
+              {`(${formatUsdEstimate(networkFee.usdCents)})`}
             </Body>
             <TooltipPopover
               text={t('Network fees include mining and swapping fees on the Bitcoin and Rootstock network.')}
@@ -272,28 +398,28 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
                 <Icon as={PiInfo} />
               </HStack>
             </TooltipPopover>
-          </HStack>
+          </SummaryRow>
         )}
         {guardianBadgesCosts.sats > 0 && (
-          <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Guardian badges')}: `}</Body>
+          <SummaryRow label={t('Guardian badges')}>
             <Body size={{ base: 'sm', lg: 'md' }}>{`${commaFormatted(guardianBadgesCosts.sats)} `}</Body>
-          </HStack>
+          </SummaryRow>
         )}
 
         {currentGoal && (
-          <HStack>
-            <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('To a goal')}: `}</Body>
+          <SummaryRow label={t('To a goal')}>
             <Body size={{ base: 'sm', lg: 'md' }}>{currentGoal?.title}</Body>
-          </HStack>
+          </SummaryRow>
         )}
       </VStack>
 
-      <HStack as={motion.div} layout alignItems="start">
-        <Body size={{ base: 'md', lg: 'xl' }} light>
+      {(hasMatchingSection || hasContributionSection || referrerHeroId) && <Divider borderColor={sectionDividerColor} />}
+
+      <Grid as={motion.div} layout w="full" templateColumns="minmax(0, 1fr) max-content" columnGap={3} alignItems="start">
+        <Body size={{ base: 'md', lg: 'xl' }} light textAlign="left" whiteSpace="nowrap">
           {`${t('Total')}: `}
         </Body>
-        <HStack flex={1} flexWrap={'wrap'}>
+        <HStack minW={0} justifyContent="flex-end" flexWrap={'wrap'}>
           <Body size={{ base: 'md', lg: 'xl' }} medium wordBreak={'break-all'}>
             {`${commaFormatted(totalSats)} `}
           </Body>
@@ -301,16 +427,15 @@ export const ProjectFundingSummary = ({ disableCollapse, referenceCode }: Projec
             sats
           </Body>
           <Body as="span" size={{ base: 'md', lg: 'xl' }} medium light wordBreak={'break-all'}>
-            {`($${commaFormatted(centsToDollars(totalUsdCent))})`}
+            {`(${formatUsdEstimate(totalUsdCent)})`}
           </Body>
         </HStack>
-      </HStack>
+      </Grid>
 
       {referenceCode && (
-        <HStack>
-          <Body size={{ base: 'sm', lg: 'md' }} light>{`${t('Reference code')}: `}</Body>
+        <SummaryRow label={t('Reference code')}>
           <Body size={{ base: 'sm', lg: 'md' }}>{referenceCode}</Body>
-        </HStack>
+        </SummaryRow>
       )}
     </motion.div>
   )

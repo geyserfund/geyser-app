@@ -6,6 +6,7 @@ import { useLocation, useNavigate, useParams } from 'react-router'
 import { getPath } from '../../../shared/constants'
 import {
   useCreateProjectMutation,
+  useProjectActiveMatchingGetLazyQuery,
   useProjectPageBodyLazyQuery,
   useProjectPublishMutation,
   useProjectStatusUpdateMutation,
@@ -53,6 +54,7 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
   const { load, projectId, projectName, initializeWallet } = props || {}
 
   const [queryProject, queryProjectOptions] = useProjectPageBodyLazyQuery()
+  const [queryProjectActiveMatching] = useProjectActiveMatchingGetLazyQuery()
 
   const queryProjectMethod = useCallback(() => {
     queryProject({
@@ -87,10 +89,33 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
 
         const { projectGet: project } = data
         setProject(normalizeProjectState(project as ProjectState))
+
+        queryProjectActiveMatching({
+          variables: {
+            where: { name: projectName || projectNameParam, id: projectId },
+          },
+          fetchPolicy: 'cache-and-network',
+          errorPolicy: 'all',
+          onCompleted(activeMatchingData) {
+            if (activeMatchingData?.projectGet) {
+              partialUpdateProject({ activeMatching: activeMatchingData.projectGet.activeMatching })
+            }
+          },
+          onError(error) {
+            captureException(error, {
+              tags: {
+                'project-matching': 'projectGet.activeMatching',
+                'error.on': 'query error',
+              },
+            })
+          },
+        })
       },
     })
   }, [
+    partialUpdateProject,
     queryProject,
+    queryProjectActiveMatching,
     projectName,
     projectId,
     setProjectLoading,
