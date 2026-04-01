@@ -10,51 +10,53 @@ export type AiSeoPageContent = {
 }
 
 const BASE_KEYWORDS = [
-  'bitcoin crowdfunding',
+  'bitcoin crowdfunding platform',
+  'bitcoin donations',
+  'bitcoin campaigns',
+  'fund bitcoin projects and causes',
+  'launch bitcoin campaigns',
   'bitcoin fundraising',
-  'bitcoin project ideas',
-  'upcoming bitcoin projects',
-  'bitcoin humanitarian fundraisers',
-  'bitcoin adoption',
-  'lightning donations',
+  'pledge with bitcoin',
+  'global donations',
   'open-source bitcoin funding',
+  'bitcoin adoption projects',
 ]
 
 const pageContentByContext: Record<AiSeoPageContext, AiSeoPageContent> = {
   default: {
-    title: 'Bitcoin Crowdfunding for New Ideas and Humanitarian Causes',
+    title: 'Geyser - Fund Bitcoin Projects, Ideas, and Causes',
     description:
-      'Geyser helps people launch new Bitcoin project ideas and fund humanitarian causes worldwide, accelerating Bitcoin adoption through transparent crowdfunding.',
+      'Geyser is the home of Bitcoin crowdfunding and donations. Launch projects, fund ideas, and support humanitarian causes worldwide using Bitcoin and Lightning rails.',
     keywords: BASE_KEYWORDS.join(', '),
-    about: ['Bitcoin adoption', 'Crowdfunding', 'Humanitarian support'],
+    about: ['Bitcoin crowdfunding', 'Donations', 'Projects and causes'],
   },
   campaigns: {
-    title: 'All-or-Nothing Bitcoin Campaigns for New Project Ideas',
+    title: 'Launch Bitcoin Campaigns for Projects, Ideas, and Causes',
     description:
-      'Discover and launch upcoming all-or-nothing Bitcoin campaigns on Geyser to fund bold project ideas that accelerate adoption.',
-    keywords: [...BASE_KEYWORDS, 'all-or-nothing campaigns', 'bitcoin campaign launches'].join(', '),
-    about: ['All-or-nothing crowdfunding', 'Bitcoin innovation', 'Early-stage project launches'],
+      'Geyser is the launchpad for all-or-nothing Bitcoin campaigns. Fund new ideas, support meaningful causes, and help impactful projects reach their funding goals.',
+    keywords: [...BASE_KEYWORDS, 'all-or-nothing bitcoin campaigns', 'bitcoin campaign launches'].join(', '),
+    about: ['Campaign launches', 'Ideas and causes', 'Community funding'],
   },
   fundraisers: {
-    title: 'Bitcoin Fundraisers for Builders and Humanitarian Causes',
+    title: 'Bitcoin Fundraisers and Donations for Global Impact',
     description:
-      'Support open Bitcoin fundraisers on Geyser, from new creator projects to humanitarian causes helping communities around the world.',
-    keywords: [...BASE_KEYWORDS, 'bitcoin causes', 'humanitarian bitcoin donations'].join(', '),
-    about: ['Direct fundraising', 'Bitcoin creators', 'Humanitarian support'],
+      'Support Bitcoin community fundraisers on Geyser - from independent creators and open-source builders to humanitarian causes helping communities worldwide through direct donations.',
+    keywords: [...BASE_KEYWORDS, 'bitcoin donations for causes', 'humanitarian bitcoin fundraising'].join(', '),
+    about: ['Direct donations', 'Creators and communities', 'Humanitarian impact'],
   },
   grants: {
-    title: 'Bitcoin Grants for Builders, Educators, and Impact Initiatives',
+    title: 'Bitcoin Grants for Builders, Education, and Community Initiatives',
     description:
-      'Explore grants and funding programs on Geyser that support Bitcoin builders, educators, and high-impact initiatives worldwide.',
-    keywords: [...BASE_KEYWORDS, 'bitcoin grants', 'bitcoin education funding'].join(', '),
-    about: ['Bitcoin grants', 'Education', 'Community impact'],
+      'Explore Bitcoin grants on Geyser supporting builders, educators, and grassroots initiatives advancing adoption and real-world impact.',
+    keywords: [...BASE_KEYWORDS, 'bitcoin grants', 'bitcoin education funding', 'community bitcoin funding'].join(', '),
+    about: ['Bitcoin grants', 'Builders and educators', 'Community initiatives'],
   },
   impactFunds: {
-    title: 'Bitcoin Impact Funds Supporting Real-World Causes',
+    title: 'Bitcoin Impact Funds',
     description:
-      'Explore Geyser Impact Funds supporting high-impact Bitcoin and humanitarian initiatives with transparent allocation and global community backing.',
-    keywords: [...BASE_KEYWORDS, 'bitcoin impact funds', 'bitcoin social impact'].join(', '),
-    about: ['Impact funds', 'Bitcoin adoption', 'Humanitarian causes'],
+      'Impact Funds on Geyser channel Bitcoin donations into high-impact projects and causes, supporting communities and advancing adoption worldwide.',
+    keywords: [...BASE_KEYWORDS, 'impact funds', 'bitcoin donations for impact', 'bitcoin grants'].join(', '),
+    about: ['Impact funds', 'Donations', 'Causes and communities'],
   },
 }
 
