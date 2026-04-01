@@ -5,7 +5,12 @@ import { authUserAtom, followedProjectsAtom } from '@/modules/auth/state/authAto
 import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
 import { toInt } from '@/utils'
 
-import { ProjectGrantApplicantFragment, ProjectHeaderSummaryFragment, ProjectPageBodyFragment } from '../../../types'
+import {
+  ProjectGrantApplicantFragment,
+  ProjectHeaderSummaryFragment,
+  ProjectMatchingFragment,
+  ProjectPageBodyFragment,
+} from '../../../types'
 import { resetRewardsAtom } from '../pages/projectDashboard/views/sales/state/rewardsAtom'
 import { resetSourceResourceAtom } from '../pages/projectView/state/sourceActivityAtom.ts'
 import { contributionAtomReset } from './contributionsAtom'
@@ -19,6 +24,7 @@ import { resetIsWidgetAtom } from './widgetAtom.ts'
 
 export type ProjectState = ProjectPageBodyFragment &
   ProjectHeaderSummaryFragment & {
+    activeMatching?: ProjectMatchingFragment | null
     promotionsEnabled?: boolean | null
     grantApplications?: ProjectGrantApplicantFragment[]
   }

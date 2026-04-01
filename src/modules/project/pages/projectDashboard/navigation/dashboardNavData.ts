@@ -3,6 +3,7 @@ import {
   PiBell,
   PiBookOpen,
   PiCreditCard,
+  PiCoins,
   PiFlagBannerFold,
   PiGear,
   PiHandbag,
@@ -16,6 +17,7 @@ import {
 
 export enum DashboardType {
   config = 'config',
+  growth = 'growth',
   analytics = 'analytics',
   payments = 'payments',
   settings = 'settings',
@@ -59,6 +61,18 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     icon: PiHandbag,
   },
   {
+    label: 'Promote',
+    path: 'dashboardPromote',
+    type: DashboardType.growth,
+    icon: PiMegaphone,
+  },
+  {
+    label: 'Matching',
+    path: 'dashboardMatching',
+    type: DashboardType.growth,
+    icon: PiCoins,
+  },
+  {
     label: 'Payment Settings',
     path: 'dashboardWallet',
     type: DashboardType.payments,
@@ -88,12 +102,6 @@ export const projectDashboardItems: ProjectDashboardItem[] = [
     path: 'dashboardAccounting',
     type: DashboardType.analytics,
     icon: PiInvoice,
-  },
-  {
-    label: 'Promote',
-    path: 'dashboardPromote',
-    type: DashboardType.analytics,
-    icon: PiMegaphone,
   },
   // ------------------------------------------------------------ //
 

@@ -4,6 +4,7 @@ import { PiClockCountdown, PiMapPin } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
 import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
+import { ProjectMatchingPublicBadge } from '@/modules/project/matching/components/ProjectMatchingPublicBadge.tsx'
 import { AnimatedFire } from '@/shared/components/display/AnimatedFire.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
 import { ProfileAvatar } from '@/shared/components/display/ProfileAvatar.tsx'
@@ -232,7 +233,7 @@ const CardImage = ({
       <AllOrNothingIcon project={project} />
     </Box>
 
-    {!compact && (countryName || categoryLabel) && (
+    {!compact && (countryName || categoryLabel || project.activeMatching) && (
       <HStack position="absolute" bottom={4} left={4} spacing={1} overflow="hidden" maxWidth="calc(100% - 32px)">
         {countryName && (
           <ImagePill>
@@ -248,6 +249,9 @@ const CardImage = ({
               {categoryLabel}
             </Body>
           </ImagePill>
+        )}
+        {project.activeMatching && (
+          <ProjectMatchingPublicBadge matching={project.activeMatching} variant="discovery" />
         )}
       </HStack>
     )}
@@ -358,6 +362,10 @@ export const LandingCardBase = ({
               {project.title}
             </H3>
 
+            {project.activeMatching && (
+              <ProjectMatchingPublicBadge matching={project.activeMatching} variant="discovery" />
+            )}
+
             <Body
               size="sm"
               dark
@@ -372,34 +380,37 @@ export const LandingCardBase = ({
             </Body>
           </VStack>
         ) : (
-          <HStack width="100%" alignItems="baseline" spacing={2} overflow="hidden">
-            <H3 size="md" medium flex={1} isTruncated>
-              {project.title}
-            </H3>
-            <HStack spacing={1} flexShrink={0}>
-              <Body size="xs" muted>
-                {t('by')}
-              </Body>
-              <ProfileAvatar
-                guardian={projectOwner?.guardianType}
-                src={projectOwner?.imageUrl || ''}
-                height="16px"
-                width="16px"
-                wrapperProps={{ padding: '1px', height: '18px', width: '18px' }}
-                onClick={hasProjectOwner ? handleProfileClick : undefined}
-              />
-              <ProfileText
-                size="xs"
-                guardian={projectOwner?.guardianType}
-                _hover={hasProjectOwner ? { textDecoration: 'underline' } : undefined}
-                onClick={hasProjectOwner ? handleProfileClick : undefined}
-                maxWidth="120px"
-                isTruncated
-              >
-                {projectOwner?.username}
-              </ProfileText>
+          <VStack width="100%" alignItems="start" spacing={2}>
+            <HStack width="100%" alignItems="baseline" spacing={2} overflow="hidden">
+              <H3 size="md" medium flex={1} isTruncated>
+                {project.title}
+              </H3>
+              <HStack spacing={1} flexShrink={0}>
+                <Body size="xs" muted>
+                  {t('by')}
+                </Body>
+                <ProfileAvatar
+                  guardian={projectOwner?.guardianType}
+                  src={projectOwner?.imageUrl || ''}
+                  height="16px"
+                  width="16px"
+                  wrapperProps={{ padding: '1px', height: '18px', width: '18px' }}
+                  onClick={hasProjectOwner ? handleProfileClick : undefined}
+                />
+                <ProfileText
+                  size="xs"
+                  guardian={projectOwner?.guardianType}
+                  _hover={hasProjectOwner ? { textDecoration: 'underline' } : undefined}
+                  onClick={hasProjectOwner ? handleProfileClick : undefined}
+                  maxWidth="120px"
+                  isTruncated
+                >
+                  {projectOwner?.username}
+                </ProfileText>
+              </HStack>
             </HStack>
-          </HStack>
+
+          </VStack>
         )}
 
         {!useCompactLayout && (

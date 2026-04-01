@@ -5,6 +5,7 @@ import Confetti from 'react-confetti'
 import { Link } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { useProjectMatchingPreview } from '@/modules/project/funding/hooks/useProjectMatchingPreview.ts'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
 import { recurringFundingModes } from '@/modules/project/recurring/graphql'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
@@ -21,8 +22,22 @@ import { SafeToDeleteRefund } from '../components/SafeToDeleteRefund.tsx'
 
 export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
   const { project, formState } = useFundingFormAtom()
+  const matchingPreview = useProjectMatchingPreview()
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
+
+  const matchedAmountOverride =
+    !isPending && fundingContribution.matching
+      ? {
+          sats: fundingContribution.matchedAmountSats,
+          usdCents: fundingContribution.matchedAmountUsdCent,
+        }
+      : project.activeMatching && matchingPreview.hasActiveMatching
+      ? {
+          sats: matchingPreview.matchedAmountSats,
+          usdCents: matchingPreview.matchedAmountUsdCents,
+        }
+      : null
 
   return (
     <FundingLayout
@@ -70,7 +85,11 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
           )}
           <SafeToDeleteRefund />
           <Divider />
-          <ProjectFundingSummary disableCollapse referenceCode={fundingContribution.uuid} />
+          <ProjectFundingSummary
+            disableCollapse
+            referenceCode={fundingContribution.uuid}
+            matchedAmountOverride={matchedAmountOverride}
+          />
           <DownloadInvoice project={project} contributionId={fundingContribution.id} isPending={isPending} />
           <SuggestedProjects
             id={'suggested-projects-funding-success'}

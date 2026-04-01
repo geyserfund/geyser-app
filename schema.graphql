@@ -4590,3 +4590,75 @@ enum PayoutStatus {
   EXPIRED
   CANCELLED
 }
+
+extend type Mutation {
+  projectMatchingCreate(input: ProjectMatchingCreateInput!): ProjectMatching!
+  projectMatchingUpdate(input: ProjectMatchingUpdateInput!): ProjectMatching!
+  projectMatchingDelete(input: ProjectMatchingDeleteInput!): ProjectMatchingDeleteResponse!
+}
+
+extend type Project {
+  activeMatching: ProjectMatching
+  matchings: [ProjectMatching!]!
+}
+
+extend type Contribution {
+  matching: ProjectMatching
+  matchedAmountSats: Int!
+  matchedAmountUsdCent: Int!
+}
+
+type ProjectMatching {
+  id: BigInt!
+  projectId: BigInt!
+  ownerUserId: BigInt!
+  sponsorName: String!
+  sponsorUrl: String
+  referenceCurrency: ProjectMatchingCurrency!
+  matchingType: ProjectMatchingType!
+  maxCapAmount: Int!
+  status: ProjectMatchingStatus!
+  startDate: Date!
+  totalMatchedAmount: Int!
+  totalMatchedAmountSats: Int!
+  totalMatchedAmountUsdCent: Int!
+  remainingCapAmount: Int!
+}
+
+type ProjectMatchingDeleteResponse implements MutationResponse {
+  success: Boolean!
+  message: String
+  matchingId: BigInt!
+}
+
+input ProjectMatchingCreateInput {
+  projectId: BigInt!
+  sponsorName: String!
+  sponsorUrl: String
+  referenceCurrency: ProjectMatchingCurrency!
+  maxCapAmount: Int!
+}
+
+input ProjectMatchingUpdateInput {
+  matchingId: BigInt!
+  maxCapAmount: Int!
+}
+
+input ProjectMatchingDeleteInput {
+  matchingId: BigInt!
+}
+
+enum ProjectMatchingStatus {
+  ACTIVE
+  COMPLETED
+  DELETED
+}
+
+enum ProjectMatchingType {
+  ONE_TO_ONE
+}
+
+enum ProjectMatchingCurrency {
+  BTCSAT
+  USDCENT
+}

@@ -6,10 +6,12 @@ import {
   FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT,
   FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT_STATUS,
 } from './paymentFragment.ts'
+import { FRAGMENT_PROJECT_MATCHING } from './projectMatchingFragment'
 import { FRAGMENT_USER_AVATAR } from './userFragment.ts'
 export const FRAGMENT_FUNDING_CONTRIBUTION = gql`
   ${FRAGMENT_PROJECT_FUNDER}
   ${FRAGMENT_FUNDING_CONTRIBUTION_PAYMENT}
+  ${FRAGMENT_PROJECT_MATCHING}
   fragment FundingContribution on Contribution {
     id
     uuid
@@ -23,9 +25,14 @@ export const FRAGMENT_FUNDING_CONTRIBUTION = gql`
     createdAt
     isAnonymous
     isSubscription
+    matchedAmountSats
+    matchedAmountUsdCent
     bitcoinQuote {
       quote
       quoteCurrency
+    }
+    matching {
+      ...ProjectMatching
     }
     payments {
       ...FundingContributionPayment
@@ -101,21 +108,33 @@ export const FRAGMENT_PROJECT_CONTRIBUTION = gql`
 `
 
 export const FRAGMENT_FUNDING_CONTRIBUTION_SUBSCRIPTION = gql`
+  ${FRAGMENT_PROJECT_MATCHING}
   fragment FundingContributionSubscription on Contribution {
     id
     uuid
     status
     projectGoalId
+    matchedAmountSats
+    matchedAmountUsdCent
+    matching {
+      ...ProjectMatching
+    }
   }
 `
 
 export const FRAGMENT_CONTRIBUTION_WITH_INVOICE_STATUS = gql`
+  ${FRAGMENT_PROJECT_MATCHING}
   fragment ContributionWithInvoiceStatus on Contribution {
     id
     uuid
     status
     creatorEmail
     isAnonymous
+    matchedAmountSats
+    matchedAmountUsdCent
+    matching {
+      ...ProjectMatching
+    }
   }
 `
 
