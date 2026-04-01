@@ -1,4 +1,4 @@
-import { Box, HStack, Icon } from '@chakra-ui/react'
+import { Box, HStack, Icon, useColorModeValue } from '@chakra-ui/react'
 import { PiInfoBold } from 'react-icons/pi'
 
 import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
@@ -13,7 +13,7 @@ import { getProjectMatchingBadgeLabel } from '../utils/projectMatching'
 type ProjectMatchingPublicBadgeProps = {
   matching: ProjectMatchingFragment
   showTooltip?: boolean
-  variant?: 'default' | 'prominent' | 'discovery' | 'summaryBanner'
+  variant?: 'default' | 'prominent' | 'discovery' | 'summaryBanner' | 'mobileBottomBanner'
 }
 
 export const ProjectMatchingPublicBadge = ({
@@ -22,6 +22,10 @@ export const ProjectMatchingPublicBadge = ({
   variant = 'default',
 }: ProjectMatchingPublicBadgeProps) => {
   const { formatAmount } = useCurrencyFormatter()
+  const summaryBannerBg = useColorModeValue('primary1.3', 'primary1.4')
+  const summaryBannerColor = useColorModeValue('primary1.12', 'primary1.12')
+  const discoveryBadgeBg = useColorModeValue('primary1.3', 'primary1.4')
+  const discoveryBadgeColor = useColorModeValue('primary1.12', 'primary1.12')
 
   const badge =
     variant === 'prominent' ? (
@@ -31,7 +35,7 @@ export const ProjectMatchingPublicBadge = ({
         borderRadius="full"
         px={5}
         py={2}
-        spacing={2}
+        spacing={0.5}
         alignItems="center"
       >
         <Body size="md" bold color="amber.11" lineHeight="1">
@@ -44,18 +48,18 @@ export const ProjectMatchingPublicBadge = ({
             fontWeight="inherit"
           />
         </Body>
-        {showTooltip && <Icon as={PiInfoBold} boxSize={4} color="amber.11" flexShrink={0} />}
+        {showTooltip && <Icon as={PiInfoBold} boxSize={4} color="amber.11" flexShrink={0} ml={-0.5} />}
       </HStack>
     ) : variant === 'summaryBanner' ? (
       <HStack
         w="full"
-        bg="#FFC53D"
-        color="black"
+        bg={summaryBannerBg}
+        color={summaryBannerColor}
         borderTopRadius="8px"
         borderBottomRadius="0"
         px={4}
         py={2}
-        spacing={2}
+        spacing={0.5}
         justifyContent="center"
         alignItems="center"
       >
@@ -71,12 +75,39 @@ export const ProjectMatchingPublicBadge = ({
             fontWeight="inherit"
           />
         </Body>
-        {showTooltip && <Icon as={PiInfoBold} boxSize={3.5} color="inherit" flexShrink={0} />}
+        {showTooltip && <Icon as={PiInfoBold} boxSize={3.5} color="inherit" flexShrink={0} ml={-0.5} />}
+      </HStack>
+    ) : variant === 'mobileBottomBanner' ? (
+      <HStack
+        w="calc(100% + 24px)"
+        marginX="-12px"
+        bg={summaryBannerBg}
+        color={summaryBannerColor}
+        borderRadius="0"
+        px={3}
+        py={1}
+        spacing={0.5}
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Body size="sm" bold color="inherit" lineHeight="1">
+          <ProjectMatchingBadge
+            matchingType={matching.matchingType}
+            bg="transparent"
+            color="inherit"
+            p={0}
+            minH="unset"
+            lineHeight="1"
+            fontSize="inherit"
+            fontWeight="inherit"
+          />
+        </Body>
+        {showTooltip && <Icon as={PiInfoBold} boxSize={3} color="inherit" flexShrink={0} ml={-0.5} />}
       </HStack>
     ) : variant === 'discovery' ? (
       <HStack
-        bg="#FFC53D"
-        color="black"
+        bg={discoveryBadgeBg}
+        color={discoveryBadgeColor}
         borderRadius="md"
         px={2}
         py={1}
