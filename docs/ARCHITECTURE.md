@@ -41,7 +41,7 @@ We will have a module per domain, and a domain would consist of multiple pages, 
 	6. ` views`
         1.  *…recursive ( pages )*
 
-Below are the planned modules and the pages that would go in them based on the pages that are currently in the app. 
+Below is the current official module set for the app. New domains may still be added over time, but should be documented here first and implemented under `src/modules/<domain>`.
 
 1.  **project**
   Project module will contain all the pages relating to creating, viewing, updating, and contributing to a project, including entries for the project.
@@ -60,6 +60,27 @@ Below are the planned modules and the pages that would go in them based on the p
 
 6.  **general**
   General module consists of any pages that don't fall under the above categories, mostly static pages.
+
+7. **embed**
+  Embed module contains embeddable/project embed experiences and related entry points.
+
+8. **guardians**
+  Guardians module contains all pages, data, and UX for the guardians program.
+
+9. **hackathon**
+  Hackathon module contains hackathon-specific experiences and supporting UI flows.
+
+10. **impactFunds**
+  Impact funds module contains the impact-fund program pages, dashboards, and related contribution/program flows.
+
+11. **navigation**
+  Navigation module contains shared navigation shells and navigation domain components (top nav, side nav, profile nav, discovery nav).
+
+12. **notification**
+  Notification module contains platform-level notification/banner experiences.
+
+13. **widget**
+  Widget module contains embeddable widget surfaces and related shared widget UI.
 
 
 ### Guiding Principles
