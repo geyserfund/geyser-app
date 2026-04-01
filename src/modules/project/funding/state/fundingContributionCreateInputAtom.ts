@@ -115,6 +115,7 @@ const buildContributionCreateInput = ({
     : geyserTipPercent > 0
     ? geyserTipPercent
     : undefined
+  const sanitizedReferrerHeroId = user?.heroId && referrerHeroId === user.heroId ? undefined : referrerHeroId
 
   const input: ContributionCreateInput = {
     refundable: false,
@@ -123,7 +124,7 @@ const buildContributionCreateInput = ({
     anonymous,
     donationAmount: toInt(donationAmount),
     geyserTipPercentage,
-    referrerHeroId,
+    referrerHeroId: sanitizedReferrerHeroId,
     metadataInput: {
       ...(email && { email }),
       ...(media && { media }),

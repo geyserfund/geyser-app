@@ -5,6 +5,7 @@ import {
   discoveryRoutes,
   guardianCharacterRoutes,
   guardiansRoutes,
+  heroProfileRoutes,
   manifestoRoutes,
   profileRoutes,
   projectDashboardRoutes,
@@ -67,7 +68,7 @@ export const shouldShowProjectLogoAtom = atom((get) => {
 })
 
 /** True if current route is one of the profile routes */
-const isProfileRoutesAtom = atom(routeMatchForAtom(profileRoutes))
+const isProfileRoutesAtom = atom(routeMatchForAtom([...profileRoutes, ...heroProfileRoutes]))
 export const useIsProfilePage = () => useAtomValue(isProfileRoutesAtom)
 
 const isAmbassadorProgramRoutesAtom = atom(routeMatchForAtom(ambassadorProgramRoutes))

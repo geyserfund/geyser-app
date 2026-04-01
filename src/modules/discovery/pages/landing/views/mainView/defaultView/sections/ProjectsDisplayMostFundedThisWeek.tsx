@@ -22,6 +22,7 @@ interface ProjectDisplayProps {
   title?: string
   noRightContent?: boolean
   category?: ProjectCategory
+  categories?: ProjectCategory[]
   subCategory?: ProjectSubCategory
 }
 
@@ -30,14 +31,17 @@ const NO_OF_ITEMS_TO_LOAD = 3
 export const ProjectsDisplayMostFundedThisWeek = ({
   title,
   category,
+  categories,
   subCategory,
   noRightContent,
 }: ProjectDisplayProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const primaryCategory = categories?.[0] ?? category
+  const secondaryCategory = categories?.[1]
 
-  const { loading, data } = useProjectsForLandingPageQuery({
-    skip: !category && !subCategory,
+  const { loading: primaryLoading, data: primaryData } = useProjectsForLandingPageQuery({
+    skip: !primaryCategory && !subCategory,
     variables: {
       input: {
         orderBy: [
@@ -47,7 +51,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({
           },
         ],
         where: {
-          category,
+          category: primaryCategory,
           status: ProjectsGetWhereInputStatus.Active,
           subCategory,
         },
@@ -58,8 +62,29 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     },
   })
 
-  const { data: postsQueryData } = usePostsForLandingPageQuery({
-    skip: !category,
+  const { loading: secondaryLoading, data: secondaryData } = useProjectsForLandingPageQuery({
+    skip: !secondaryCategory,
+    variables: {
+      input: {
+        orderBy: [
+          {
+            direction: OrderByDirection.Desc,
+            field: ProjectsOrderByField.LaunchedAt,
+          },
+        ],
+        where: {
+          category: secondaryCategory,
+          status: ProjectsGetWhereInputStatus.Active,
+        },
+        pagination: {
+          take: NO_OF_ITEMS_TO_LOAD,
+        },
+      },
+    },
+  })
+
+  const { data: primaryPostsQueryData } = usePostsForLandingPageQuery({
+    skip: !primaryCategory,
     variables: {
       input: {
         orderBy: {
@@ -69,7 +94,24 @@ export const ProjectsDisplayMostFundedThisWeek = ({
           take: NO_OF_ITEMS_TO_LOAD,
         },
         where: {
-          category,
+          category: primaryCategory,
+        },
+      },
+    },
+  })
+
+  const { data: secondaryPostsQueryData } = usePostsForLandingPageQuery({
+    skip: !secondaryCategory,
+    variables: {
+      input: {
+        orderBy: {
+          publishedAt: OrderByOptions.Desc,
+        },
+        pagination: {
+          take: NO_OF_ITEMS_TO_LOAD,
+        },
+        where: {
+          category: secondaryCategory,
         },
       },
     },
@@ -86,8 +128,27 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     }
   }
 
-  const projects = useMemo(() => data?.projectsGet.projects ?? [], [data?.projectsGet.projects])
-  const posts = useMemo(() => postsQueryData?.posts ?? [], [postsQueryData?.posts])
+  const loading = primaryLoading || secondaryLoading
+  const projects = useMemo(() => {
+    const combinedProjects = [...(primaryData?.projectsGet.projects ?? []), ...(secondaryData?.projectsGet.projects ?? [])]
+    const uniqueProjects = combinedProjects.filter(
+      (project, index, array) => array.findIndex((candidate) => candidate.id === project.id) === index,
+    )
+
+    return uniqueProjects
+      .sort((left, right) => new Date(right.launchedAt ?? 0).getTime() - new Date(left.launchedAt ?? 0).getTime())
+      .slice(0, NO_OF_ITEMS_TO_LOAD)
+  }, [primaryData?.projectsGet.projects, secondaryData?.projectsGet.projects])
+  const posts = useMemo(() => {
+    const combinedPosts = [...(primaryPostsQueryData?.posts ?? []), ...(secondaryPostsQueryData?.posts ?? [])]
+    const uniquePosts = combinedPosts.filter(
+      (post, index, array) => array.findIndex((candidate) => candidate.id === post.id) === index,
+    )
+
+    return uniquePosts
+      .sort((left, right) => new Date(right.publishedAt ?? 0).getTime() - new Date(left.publishedAt ?? 0).getTime())
+      .slice(0, NO_OF_ITEMS_TO_LOAD)
+  }, [primaryPostsQueryData?.posts, secondaryPostsQueryData?.posts])
 
   if (loading) {
     return <ProjectDisplayBodySkeleton />
@@ -97,8 +158,8 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     return null
   }
 
-  const sectionLabel = category
-    ? ProjectCategoryLabel[category]
+  const sectionLabel = primaryCategory && !secondaryCategory
+    ? ProjectCategoryLabel[primaryCategory]
     : subCategory
     ? ProjectSubCategoryLabel[subCategory]
     : ''
@@ -117,10 +178,10 @@ export const ProjectsDisplayMostFundedThisWeek = ({
       rightContent={
         !noRightContent && (
           <DiscoverMoreButton
-            id={category ? `discovery-see-all-${category}` : subCategory ? `discovery-see-all-${subCategory}` : ''}
+            id={primaryCategory ? `discovery-see-all-${primaryCategory}` : subCategory ? `discovery-see-all-${subCategory}` : ''}
             onClick={() =>
               onSeeAllClick({
-                category,
+                category: primaryCategory,
                 subCategory,
               })
             }

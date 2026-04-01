@@ -1,4 +1,5 @@
 import { VStack } from '@chakra-ui/react'
+import { t } from 'i18next'
 import { Fragment, useEffect, useState } from 'react'
 
 import { Head } from '@/config/Head.tsx'
@@ -23,7 +24,6 @@ const LANDING_CATEGORY_ORDER = [
   ProjectCategory.Culture,
   ProjectCategory.Tool,
   ProjectCategory.Cause,
-  ProjectCategory.Advocacy,
 ] as const
 
 export const DefaultView = () => {
@@ -72,6 +72,13 @@ export const DefaultView = () => {
                 {categoryGroup.map((category) => (
                   <ProjectsDisplayMostFundedThisWeek key={category} category={category} />
                 ))}
+                {index === categoryGroups.length - 1 && (
+                  <ProjectsDisplayMostFundedThisWeek
+                    title={t('Other fundraisers')}
+                    categories={[ProjectCategory.Advocacy, ProjectCategory.Other]}
+                    noRightContent
+                  />
+                )}
                 {index === 0 && (
                   <>
                     <GeyserNewsAndAnnouncements />

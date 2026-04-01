@@ -8,11 +8,15 @@ import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
 /** Component to handle capturing the referring hero ID from URL */
 export const ReferralCapture = () => {
   const { pathname } = useLocation()
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams] = useSearchParams()
   const [referrerHeroId, setReferrerHeroId] = useAtom(referrerHeroIdAtom)
   const { user } = useAuthContext()
 
   useEffect(() => {
+    if (user.heroId && referrerHeroId === user.heroId) {
+      setReferrerHeroId(null)
+    }
+
     if (pathname.startsWith('/launch')) {
       return
     }
@@ -27,13 +31,10 @@ export const ReferralCapture = () => {
     }
 
     // Capture First logic: only set if a heroId is in URL and we haven't captured one yet.
-    if (referrerHeroId === null) {
-      const nextSearchParams = new URLSearchParams(searchParams)
-      nextSearchParams.delete('hero')
+    if (referrerHeroId === null || referrerHeroId === user.heroId) {
       setReferrerHeroId(heroIdFromUrl)
-      setSearchParams(nextSearchParams, { replace: true })
     }
-  }, [pathname, referrerHeroId, searchParams, setReferrerHeroId, setSearchParams, user.heroId])
+  }, [pathname, referrerHeroId, searchParams, setReferrerHeroId, user.heroId])
 
   // This component doesn't render anything itself
   return null

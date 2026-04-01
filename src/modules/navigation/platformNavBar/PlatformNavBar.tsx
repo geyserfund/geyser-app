@@ -107,7 +107,7 @@ export const PlatformNavBar = () => {
     !isProjectFundingRoutes &&
     !isProjectDashboardRoutes &&
     !isMobileMode
-  const navShadow = isProjectRoutes ? 'none' : defaultNavShadow
+  const navShadow = isProjectRoutes || isProfilePage ? 'none' : defaultNavShadow
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {
