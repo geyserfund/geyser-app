@@ -165,6 +165,7 @@ export const ProjectFundingSummary = ({
       guardianBadgesCosts.sats > 0 ||
       currentGoal,
   )
+  const hasProductSection = Boolean(numberOfRewardsSelected > 0 || rewardsCosts.sats > 0 || shippingCosts.sats > 0)
   const sectionDividerColor = useColorModeValue('neutralAlpha.4', 'neutralAlpha.6')
 
   const mobileDisplayStyle = disableCollapse
@@ -272,6 +273,11 @@ export const ProjectFundingSummary = ({
             </VStack>
           )}
 
+        {formState.donationAmount &&
+          formState.donationAmount > 0 &&
+          formState.fundingMode !== recurringFundingModes.membership &&
+          hasProductSection && <Divider borderColor={sectionDividerColor} />}
+
         {formState.subscription && formState.subscription.subscriptionId && (
           <SummaryRow label={t('Membership')}>
             <Body size={{ base: 'sm', lg: 'md' }}>
@@ -349,6 +355,11 @@ export const ProjectFundingSummary = ({
             )}
           </SummaryRow>
         )}
+
+        {hasProductSection && (tip.sats > 0 || networkFee.sats > 0 || guardianBadgesCosts.sats > 0 || currentGoal) && (
+          <Divider borderColor={sectionDividerColor} />
+        )}
+
         {tip.sats > 0 && (
           <SummaryRow
             label={
