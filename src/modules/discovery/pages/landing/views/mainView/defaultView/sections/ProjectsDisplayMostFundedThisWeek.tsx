@@ -37,11 +37,10 @@ export const ProjectsDisplayMostFundedThisWeek = ({
 }: ProjectDisplayProps) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const primaryCategory = categories?.[0] ?? category
-  const secondaryCategory = categories?.[1]
+  const hasCategories = Boolean(categories?.length)
 
-  const { loading: primaryLoading, data: primaryData } = useProjectsForLandingPageQuery({
-    skip: !primaryCategory && !subCategory,
+  const { loading, data } = useProjectsForLandingPageQuery({
+    skip: !category && !hasCategories && !subCategory,
     variables: {
       input: {
         orderBy: [
@@ -51,7 +50,8 @@ export const ProjectsDisplayMostFundedThisWeek = ({
           },
         ],
         where: {
-          category: primaryCategory,
+          category,
+          categories,
           status: ProjectsGetWhereInputStatus.Active,
           subCategory,
         },
@@ -62,29 +62,8 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     },
   })
 
-  const { loading: secondaryLoading, data: secondaryData } = useProjectsForLandingPageQuery({
-    skip: !secondaryCategory,
-    variables: {
-      input: {
-        orderBy: [
-          {
-            direction: OrderByDirection.Desc,
-            field: ProjectsOrderByField.LaunchedAt,
-          },
-        ],
-        where: {
-          category: secondaryCategory,
-          status: ProjectsGetWhereInputStatus.Active,
-        },
-        pagination: {
-          take: NO_OF_ITEMS_TO_LOAD,
-        },
-      },
-    },
-  })
-
-  const { data: primaryPostsQueryData } = usePostsForLandingPageQuery({
-    skip: !primaryCategory,
+  const { data: postsQueryData } = usePostsForLandingPageQuery({
+    skip: !category && !hasCategories,
     variables: {
       input: {
         orderBy: {
@@ -94,24 +73,8 @@ export const ProjectsDisplayMostFundedThisWeek = ({
           take: NO_OF_ITEMS_TO_LOAD,
         },
         where: {
-          category: primaryCategory,
-        },
-      },
-    },
-  })
-
-  const { data: secondaryPostsQueryData } = usePostsForLandingPageQuery({
-    skip: !secondaryCategory,
-    variables: {
-      input: {
-        orderBy: {
-          publishedAt: OrderByOptions.Desc,
-        },
-        pagination: {
-          take: NO_OF_ITEMS_TO_LOAD,
-        },
-        where: {
-          category: secondaryCategory,
+          category,
+          categories,
         },
       },
     },
@@ -128,27 +91,8 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     }
   }
 
-  const loading = primaryLoading || secondaryLoading
-  const projects = useMemo(() => {
-    const combinedProjects = [...(primaryData?.projectsGet.projects ?? []), ...(secondaryData?.projectsGet.projects ?? [])]
-    const uniqueProjects = combinedProjects.filter(
-      (project, index, array) => array.findIndex((candidate) => candidate.id === project.id) === index,
-    )
-
-    return uniqueProjects
-      .sort((left, right) => new Date(right.launchedAt ?? 0).getTime() - new Date(left.launchedAt ?? 0).getTime())
-      .slice(0, NO_OF_ITEMS_TO_LOAD)
-  }, [primaryData?.projectsGet.projects, secondaryData?.projectsGet.projects])
-  const posts = useMemo(() => {
-    const combinedPosts = [...(primaryPostsQueryData?.posts ?? []), ...(secondaryPostsQueryData?.posts ?? [])]
-    const uniquePosts = combinedPosts.filter(
-      (post, index, array) => array.findIndex((candidate) => candidate.id === post.id) === index,
-    )
-
-    return uniquePosts
-      .sort((left, right) => new Date(right.publishedAt ?? 0).getTime() - new Date(left.publishedAt ?? 0).getTime())
-      .slice(0, NO_OF_ITEMS_TO_LOAD)
-  }, [primaryPostsQueryData?.posts, secondaryPostsQueryData?.posts])
+  const projects = useMemo(() => data?.projectsGet.projects ?? [], [data?.projectsGet.projects])
+  const posts = useMemo(() => postsQueryData?.posts ?? [], [postsQueryData?.posts])
 
   if (loading) {
     return <ProjectDisplayBodySkeleton />
@@ -158,30 +102,28 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     return null
   }
 
-  const sectionLabel = primaryCategory && !secondaryCategory
-    ? ProjectCategoryLabel[primaryCategory]
-    : subCategory
-    ? ProjectSubCategoryLabel[subCategory]
-    : ''
+  let sectionLabel = ''
+  if (category) {
+    sectionLabel = ProjectCategoryLabel[category] || ''
+  } else if (subCategory) {
+    sectionLabel = ProjectSubCategoryLabel[subCategory] || ''
+  }
+
+  const titleContent = title || (sectionLabel ? t("What's happening in {{label}}", { label: sectionLabel }) : t('Recent Projects'))
+  const discoverMoreId = category ? `discovery-see-all-${category}` : subCategory ? `discovery-see-all-${subCategory}` : ''
 
   return (
     <ProjectDisplayBody
-      title={
-        title
-          ? title
-          : sectionLabel
-          ? t("What's happening in {{label}}", { label: sectionLabel })
-          : t('Recent Projects')
-      }
+      title={titleContent}
       projects={projects}
       posts={posts}
       rightContent={
         !noRightContent && (
           <DiscoverMoreButton
-            id={primaryCategory ? `discovery-see-all-${primaryCategory}` : subCategory ? `discovery-see-all-${subCategory}` : ''}
+            id={discoverMoreId}
             onClick={() =>
               onSeeAllClick({
-                category: primaryCategory,
+                category,
                 subCategory,
               })
             }

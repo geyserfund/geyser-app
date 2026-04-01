@@ -18,7 +18,9 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** Add BigInt functionality */
   BigInt: { input: any; output: any; }
+  /** Date custom scalar type */
   Date: { input: any; output: any; }
 };
 
@@ -955,6 +957,7 @@ export type GetPostsOrderByInput = {
 };
 
 export type GetPostsWhereInput = {
+  categories?: InputMaybe<Array<ProjectCategory>>;
   category?: InputMaybe<ProjectCategory>;
   postType?: InputMaybe<Array<PostType>>;
   projectFundingStrategy?: InputMaybe<ProjectFundingStrategy>;
@@ -3331,7 +3334,7 @@ export type Project = {
   rskEoa?: Maybe<Scalars['String']['output']>;
   /** Short description of the project. */
   shortDescription?: Maybe<Scalars['String']['output']>;
-  /** @deprecated No longer supported */
+  /** @deprecated Field no longer supported */
   sponsors: Array<Sponsor>;
   /** Returns summary statistics on the Project views and visitors. */
   statistics?: Maybe<ProjectStatistics>;
@@ -4122,6 +4125,7 @@ export type ProjectsGetQueryInput = {
 };
 
 export type ProjectsGetWhereInput = {
+  categories?: InputMaybe<Array<ProjectCategory>>;
   category?: InputMaybe<ProjectCategory>;
   countryCode?: InputMaybe<Scalars['String']['input']>;
   fundingStrategy?: InputMaybe<ProjectFundingStrategy>;
@@ -4232,7 +4236,7 @@ export type Query = {
   getDashboardFunders: Array<Funder>;
   /**
    * Returns the public key of the Lightning node linked to a project, if there is one.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   getProjectPubkey?: Maybe<Scalars['String']['output']>;
   getProjectReward: ProjectReward;
@@ -5268,14 +5272,14 @@ export type UserProjectContribution = {
   funder?: Maybe<Funder>;
   /**
    * Boolean value indicating if the User was an ambassador of the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isAmbassador: Scalars['Boolean']['output'];
   /** Boolean value indicating if the User funded the project. */
   isFunder: Scalars['Boolean']['output'];
   /**
    * Boolean value indicating if the User was a sponsor for the project.
-   * @deprecated No longer supported
+   * @deprecated Field no longer supported
    */
   isSponsor: Scalars['Boolean']['output'];
   /** Project linked to the contributions. */

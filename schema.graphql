@@ -831,6 +831,7 @@ input ProjectsGetWhereInput {
   tagIds: [Int!]
   search: String
   category: ProjectCategory
+  categories: [ProjectCategory!]
   subCategory: ProjectSubCategory
   fundingStrategy: ProjectFundingStrategy
   ownerId: BigInt
@@ -2874,6 +2875,7 @@ input GetPostsWhereInput {
   projectId: BigInt
   postType: [PostType!]
   category: ProjectCategory
+  categories: [ProjectCategory!]
   projectFundingStrategy: ProjectFundingStrategy
 }
 
