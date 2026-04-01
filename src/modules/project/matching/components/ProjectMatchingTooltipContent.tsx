@@ -32,7 +32,7 @@ export const ProjectMatchingTooltipContent = ({
         .
       </Body>
       <Body size="sm" light whiteSpace="normal">
-        The sponsor has committed to double every contribution up to a total of {committedAmountLabel}.
+        The sponsor has committed to doubling every contribution up to a total of {committedAmountLabel}.
       </Body>
     </VStack>
   )

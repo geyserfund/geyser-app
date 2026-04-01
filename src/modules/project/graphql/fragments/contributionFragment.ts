@@ -88,6 +88,7 @@ export const FRAGMENT_PROJECT_CONTRIBUTION = gql`
   fragment ProjectContribution on Contribution {
     id
     amount
+    matchedAmountSats
     media
     comment
     confirmedAt

@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   HStack,
   Image,
@@ -80,6 +81,21 @@ export const ContributionItem = ({ contribution, ...props }: ContributionItemPro
               })})`}
             </Body>
           </Body>
+          {contribution.matchedAmountSats > 0 && (
+            <Badge
+              colorScheme="primary1"
+              variant="soft"
+              borderRadius="full"
+              px={2}
+              py={0.5}
+              fontSize="11px"
+              fontWeight="semibold"
+              textTransform="none"
+              lineHeight="1"
+            >
+              2x match
+            </Badge>
+          )}
         </HStack>
         {contribution.comment && (
           <Body size="sm" dark wordBreak="break-all">

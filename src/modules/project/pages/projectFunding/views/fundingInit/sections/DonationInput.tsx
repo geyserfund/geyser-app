@@ -14,13 +14,13 @@ import { Body, H1 } from '@/shared/components/typography'
 import { darkModeColors, lightModeColors } from '@/shared/styles/colors.ts'
 
 import { commaFormatted } from '../../../../../../../utils'
-import { FundingMatchingBanner } from '../components/FundingMatchingBanner.tsx'
 import {
   hasFiatPaymentMethodAtom,
   hasStripePaymentMethodAtom,
   intendedPaymentMethodAtom,
   PaymentMethods,
 } from '../../fundingPayment/state/paymentMethodAtom.ts'
+import { FundingMatchingBanner } from '../components/FundingMatchingBanner.tsx'
 
 export const MIN_WIDTH_AFTER_START = 60
 const PRESET_AMOUNTS = [100, 210, 500, 750, 1000]
@@ -91,7 +91,7 @@ export const DonationInput = () => {
     : intendedPaymentMethod
     ? t('Bitcoin recurring payments are manual. We will email you when the next payment is due.')
     : hasStripePaymentMethod
-    ? t('You can pay automatically by card in USD, or choose Bitcoin later and renew from reminder emails.')
+    ? t('Set up automatic monthly payments by credit card, or pay with Bitcoin and receive monthly reminders.')
     : null
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {

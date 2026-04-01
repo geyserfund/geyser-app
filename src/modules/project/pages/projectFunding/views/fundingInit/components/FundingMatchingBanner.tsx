@@ -21,6 +21,7 @@ export const FundingMatchingBanner = ({ isSatoshi, size = 'lg' }: FundingMatchin
   const borderColor = useColorModeValue(lightModeColors.primary1[6], darkModeColors.primary1[8])
   const backgroundColor = useColorModeValue(lightModeColors.primary1[2], darkModeColors.primary1[2])
   const headlineColor = useColorModeValue('primary1.11', 'primary1.12')
+  const supportingCopyColor = useColorModeValue('primary1.11', 'primary1.12')
 
   if (!project.activeMatching || !matchingPreview.hasActiveMatching) {
     return null
@@ -52,8 +53,8 @@ export const FundingMatchingBanner = ({ isSatoshi, size = 'lg' }: FundingMatchin
         {headline}
       </Body>
       <VStack alignItems="start" spacing={0}>
-        <Body size="sm">
-          <Body as="span" bold size="sm">
+        <Body size="sm" color={supportingCopyColor}>
+          <Body as="span" bold size="sm" color="inherit">
             {project.activeMatching.sponsorName}
           </Body>{' '}
           {supportingCopy}
