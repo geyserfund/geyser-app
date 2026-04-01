@@ -9,7 +9,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useToast,
 } from '@chakra-ui/react'
 import { Box, Card, CardBody, Stack } from '@chakra-ui/react'
 import { t } from 'i18next'
@@ -26,6 +25,7 @@ import {
   UserSubscriptionStatus,
   useUserSubscriptionsQuery,
 } from '@/types/generated/graphql'
+import { useNotification } from '@/utils/tools/Notification.tsx'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout.tsx'
 
@@ -181,23 +181,17 @@ export const ProfileSettingsSubscriptions = () => {
       },
     },
   })
-  const toast = useToast()
+  const notification = useNotification()
   const [cancelUserSubscription] = useCancelUserSubscriptionMutation({
     onError(error) {
-      toast({
+      notification.error({
         title: t('Error canceling subscription'),
         description: error.message,
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
       })
     },
     onCompleted() {
-      toast({
+      notification.success({
         title: t('Subscription canceled'),
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
       })
     },
   })
