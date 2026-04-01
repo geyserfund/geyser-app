@@ -2,10 +2,12 @@ import { HStack, IconButton, Tab, TabList, Tabs, VStack } from '@chakra-ui/react
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PiCaretLeft, PiCaretRight, PiGlobeHemisphereWest, PiMoneyWavy, PiStorefront } from 'react-icons/pi'
-import { Outlet, useLocation, useNavigate } from 'react-router'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
-import { FundraisersSeoImageUrl, getPath } from '@/shared/constants/index.ts'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { FundraisersSeoImageUrl, getAiSeoPageContent, getPath } from '@/shared/constants/index.ts'
+import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
 import { ProjectCategory, ProjectSubCategory } from '@/types/index.ts'
 
 import { CampaignTitleBlock } from '../components/CampaignTitleBlock.tsx'
@@ -31,6 +33,7 @@ export const Fundraisers = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
+  const fundraisersSeoContent = getAiSeoPageContent('fundraisers')
   const tabListRef = useRef<HTMLDivElement | null>(null)
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
@@ -111,15 +114,59 @@ export const Fundraisers = () => {
   return (
     <>
       <Head
-        title={t('Fundraisers')}
-        description={t('Discover open fundraisers on Geyser. Fund Bitcoin projects you want to see come to life.')}
+        title={fundraisersSeoContent.title}
+        description={fundraisersSeoContent.description}
         image={FundraisersSeoImageUrl}
-      />
+        keywords={fundraisersSeoContent.keywords}
+        url={`https://geyser.fund${getPath('discoveryFundraisers')}`}
+      >
+        <script type="application/ld+json">
+          {buildCollectionPageJsonLd({
+            name: 'Geyser Fundraisers',
+            description: fundraisersSeoContent.description,
+            path: getPath('discoveryFundraisers'),
+            about: fundraisersSeoContent.about,
+            keywords: fundraisersSeoContent.keywords,
+            items: [
+              {
+                name: 'Humanitarian Fundraisers',
+                path: getPath('discoveryFundraisersSubCategory', ProjectSubCategory.Humanitarian),
+                description: 'Support Bitcoin-powered humanitarian causes around the world.',
+              },
+              {
+                name: 'Cause Fundraisers',
+                path: getPath('discoveryFundraisersCategory', ProjectCategory.Cause),
+                description: 'Discover mission-driven fundraisers backed by the Bitcoin community.',
+              },
+              {
+                name: 'Upcoming Campaign Ideas',
+                path: getPath('discoveryCampaigns'),
+                description: 'Explore all-or-nothing campaigns for new Bitcoin project ideas.',
+              },
+            ],
+          })}
+        </script>
+      </Head>
       <CampaignTitleBlock
         title={t('Open Fundraisers')}
-        description={t('Fund your project as it grows.')}
+        description={t('Back builders and humanitarian causes with open Bitcoin funding.')}
         campaignCards={campaignCards}
       />
+      <VStack w="full" spacing={2} alignItems="start">
+        <Body size="md">
+          {t(
+            'Fundraisers on Geyser connect bitcoiners with both upcoming builders and urgent causes, creating transparent support flows across regions.',
+          )}
+        </Body>
+        <HStack spacing={4} flexWrap="wrap">
+          <Body as={Link} to={getPath('discoveryCampaigns')} underline bold>
+            {t('Explore upcoming campaign ideas')}
+          </Body>
+          <Body as={Link} to={getPath('discoveryImpactFunds')} underline bold>
+            {t('See impact fund opportunities')}
+          </Body>
+        </HStack>
+      </VStack>
       <Tabs
         w="full"
         variant="secondary"

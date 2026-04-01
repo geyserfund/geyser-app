@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionPanel,
   Button,
+  HStack,
   Image,
   Link,
   VStack,
@@ -12,7 +13,7 @@ import {
 import { t } from 'i18next'
 import { Trans } from 'react-i18next'
 import { PiCheckCircle, PiGlobeHemisphereWest, PiShieldCheck } from 'react-icons/pi'
-import { useNavigate } from 'react-router'
+import { Link as RouterLink, useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context/auth.tsx'
 import { useAuthModal } from '@/modules/auth/hooks/useAuthModal.ts'
@@ -48,9 +49,24 @@ export const CampaignsComingSoon = () => {
     <VStack w="full" gap={{ base: 10, lg: 12 }} paddingBottom={8}>
       <CampaignTitleBlock
         title={t('All or Nothing Campaigns')}
-        description={t('Fund big ideas, only if they succeed within the deadline.')}
+        description={t('Launch and back new Bitcoin project ideas that only fund when targets are met.')}
         campaignCards={campaignCards}
       />
+      <VStack w="full" gap={2} alignItems="start" maxW="900px">
+        <Body size="md">
+          {t(
+            'Campaigns on Geyser help communities discover upcoming Bitcoin ideas early, while keeping contributor trust high through milestone-driven funding.',
+          )}
+        </Body>
+        <HStack spacing={4} flexWrap="wrap">
+          <Body as={RouterLink} to={getPath('discoveryFundraisers')} underline bold>
+            {t('Explore humanitarian fundraisers')}
+          </Body>
+          <Body as={RouterLink} to={getPath('discoveryImpactFunds')} underline bold>
+            {t('See impact funds')}
+          </Body>
+        </HStack>
+      </VStack>
 
       <VStack w="full" gap={0} alignItems="start">
         <H2 size={{ base: 'xl', lg: '3xl' }} bold>

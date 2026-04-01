@@ -1,8 +1,13 @@
+import { getAiSeoPageContent } from './aiSeo.ts'
 import { GeyserMainSeoImageUrl } from './url.ts'
 
-export const DefaultMetaTitle = 'Geyser | The #1 Bitcoin Crowdfunding and Fundraising Platform'
+const defaultSeoContent = getAiSeoPageContent('default')
+
+export const DefaultMetaTitle = defaultSeoContent.title
 export const DefaultMetaImage = GeyserMainSeoImageUrl
-export const DefaultMetaDescription = 'Support bitcoin projects you want to see come to life. Join the crowdfund now!'
+export const DefaultMetaDescription = defaultSeoContent.description
+export const DefaultMetaKeywords = defaultSeoContent.keywords
 export const DefaultMetaType = 'website'
 export const DefaultMetaTwitterCard = 'summary_large_image'
 export const DefaultMetaTwitterSite = 'geyserfund'
+export const DefaultMetaRobots = 'index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1'

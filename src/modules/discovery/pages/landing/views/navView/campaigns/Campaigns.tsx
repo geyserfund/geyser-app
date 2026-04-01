@@ -3,7 +3,8 @@ import { t } from 'i18next'
 import { Outlet, useNavigate } from 'react-router'
 
 import { Head } from '@/config/Head.tsx'
-import { CampaignsSeoImageUrl, getPath } from '@/shared/constants/index.ts'
+import { CampaignsSeoImageUrl, getAiSeoPageContent, getPath } from '@/shared/constants/index.ts'
+import { buildCollectionPageJsonLd } from '@/shared/utils/seo.ts'
 
 import { CampaignsComingSoon } from './CampaignsComingSoon.tsx'
 
@@ -34,15 +35,43 @@ const isComingSoon = true
 
 export const Campaigns = () => {
   const navigate = useNavigate()
+  const campaignsSeoContent = getAiSeoPageContent('campaigns')
 
   const head = (
     <Head
-      title={t('Campaigns')}
-      description={t(
-        'Explore All-or-Nothing Bitcoin crowdfunding campaigns on Geyser. Back bold ideas that only succeed when their goal is met.',
-      )}
+      title={campaignsSeoContent.title}
+      description={campaignsSeoContent.description}
       image={CampaignsSeoImageUrl}
-    />
+      keywords={campaignsSeoContent.keywords}
+      url={`https://geyser.fund${getPath('discoveryCampaigns')}`}
+    >
+      <script type="application/ld+json">
+        {buildCollectionPageJsonLd({
+          name: 'Geyser Campaigns',
+          description: campaignsSeoContent.description,
+          path: getPath('discoveryCampaigns'),
+          about: campaignsSeoContent.about,
+          keywords: campaignsSeoContent.keywords,
+          items: [
+            {
+              name: 'New Campaign Launches',
+              path: getPath('discoveryCampaignsLatest'),
+              description: 'Track fresh all-or-nothing campaign launches on Geyser.',
+            },
+            {
+              name: 'Bitcoin Fundraisers',
+              path: getPath('discoveryFundraisers'),
+              description: 'Support ongoing Bitcoin fundraisers and humanitarian causes.',
+            },
+            {
+              name: 'Impact Funds',
+              path: getPath('discoveryImpactFunds'),
+              description: 'Discover impact funds supporting adoption-focused projects.',
+            },
+          ],
+        })}
+      </script>
+    </Head>
   )
 
   if (isComingSoon) {
