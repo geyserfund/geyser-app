@@ -1114,6 +1114,13 @@ export const platformRoutes: RouteObject[] = [
           return { Component: NewsPage }
         },
       },
+      {
+        path: getPath('discoveryCreator'),
+        async lazy() {
+          const CreatorPage = await loadDiscoveryModule().then((m) => m.CreatorPage)
+          return { Component: CreatorPage }
+        },
+      },
 
       {
         path: getPath('discoveryLaunchpad'),

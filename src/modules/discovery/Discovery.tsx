@@ -27,6 +27,9 @@ export const Discovery = () => {
   const { user } = useAuthContext()
 
   const usesLandingLayout = LANDING_LAYOUT_PATTERNS.some((pattern) => matchPath(pattern, pathname))
+  const creatorRoute = getPath('discoveryCreator')
+  const isCreatorRoute = pathname === creatorRoute || pathname.startsWith(`${creatorRoute}/`)
+  const usesFullWidthLayout = usesLandingLayout || isCreatorRoute
 
   useEffect(() => {
     if (!usesLandingLayout || !user.heroId || searchParams.get('hero')) {
@@ -42,7 +45,7 @@ export const Discovery = () => {
     <>
       {/* <DiscoverySideNav /> */}
       <VStack w="full" h="full">
-        {usesLandingLayout ? (
+        {usesFullWidthLayout ? (
           <Outlet />
         ) : (
           <Box

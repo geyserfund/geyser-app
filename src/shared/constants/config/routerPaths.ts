@@ -205,7 +205,8 @@ const pathsMap = {
   discoveryCampaignsLatest: () => `/${PathName.campaigns}/${PathName.latest}`,
   discoveryCampaignsInYourRegion: () => `/${PathName.campaigns}/${PathName.inYourRegion}`,
   discoveryCampaignsCategory: (category: string) => `/${PathName.campaigns}/${PathName.category}/${category}`,
-  discoveryCampaignsSubCategory: (subCategory: string) => `/${PathName.campaigns}/${PathName.subCategory}/${subCategory}`,
+  discoveryCampaignsSubCategory: (subCategory: string) =>
+    `/${PathName.campaigns}/${PathName.subCategory}/${subCategory}`,
   discoveryCampaignsAlmostFunded: () => `/${PathName.campaigns}/${PathName.almostFunded}`,
   discoveryCampaignsAlmostOver: () => `/${PathName.campaigns}/${PathName.almostOver}`,
   discoveryAllOrNothing: () => `/${PathName.allOrNothing}`,
@@ -229,6 +230,7 @@ const pathsMap = {
   discoveryGrantApply: (grantId: string) => `/${PathName.grants}/${grantId}/${PathName.grantApply}`,
   discoveryImpactFunds: () => `/${PathName.impactFunds}`,
   discoveryImpactFund: (impactFundName: string) => `/${PathName.impactFunds}/${impactFundName}`,
+  discoveryCreator: () => `/${PathName.creator}`,
   discoveryNews: () => `/${PathName.news}`,
   discoveryMerch: () => `/${PathName.merch}`,
   discoveryLaunchpad: () => `/${PathName.launchpad}`,

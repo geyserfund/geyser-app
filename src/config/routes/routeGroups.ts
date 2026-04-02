@@ -208,6 +208,7 @@ export const discoveryRoutes = [
   getPath('discoveryLaunchpad'),
   getPath('discoveryImpactFunds'),
   getPath('discoveryImpactFund', PathName.impactFundName),
+  getPath('discoveryCreator'),
   // getPath('discoveryGrantApply', PathName.grantId),
   getPath('hallOfFameProjects'),
   getPath('discoveryHeroes'),

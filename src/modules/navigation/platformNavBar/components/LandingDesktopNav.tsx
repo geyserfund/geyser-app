@@ -1,57 +1,33 @@
-import {
-  Badge,
-  Box,
-  Button,
-  HStack,
-  Menu,
-  MenuButton,
-  MenuList,
-  Portal,
-  SimpleGrid,
-  useColorModeValue,
-  useDisclosure,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Button, HStack, useColorModeValue } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { PiCaretDown } from 'react-icons/pi'
 import { Link } from 'react-router'
 
 import { LandingSearchInput } from '@/modules/discovery/pages/landing/components/LandingSearchInput.tsx'
-import { Body } from '@/shared/components/typography/Body.tsx'
+import {
+  getDonateNavDropdownItems,
+  getFundraiseNavDropdownItems,
+  NavDropdownMenu,
+} from '@/modules/navigation/components/navDropdown/index.ts'
 import { getPath } from '@/shared/constants/index.ts'
 
 /** LandingDesktopNav renders the shared desktop platform navigation cluster. */
-export const LandingDesktopNav = () => {
+export const LandingDesktopNav = ({ transparentMode = false }: { transparentMode?: boolean }) => {
   const navButtonRadius = { base: '8px', lg: '10px' }
   const navButtonSize = { base: 'md', lg: 'lg' }
   const navButtonFontSize = { lg: 'sm', xl: 'md' }
   const navButtonPaddingX = { lg: 2, xl: 4 }
 
-  const buttonColor = useColorModeValue('black', 'white')
-  const buttonHoverBackground = useColorModeValue('blackAlpha.50', 'neutral1.3')
-  const buttonActiveBackground = useColorModeValue('blackAlpha.100', 'neutral1.2')
-  const menuBorderColor = useColorModeValue('neutral1.5', 'neutral1.6')
-  const menuBackgroundColor = useColorModeValue('white', 'neutral1.3')
-  const menuHoverColor = useColorModeValue('gray.50', 'neutral1.2')
-  const mutedColor = useColorModeValue('gray.700', 'neutral1.10')
-  const disabledColor = useColorModeValue('blackAlpha.400', 'neutral1.8')
-  const newBadgeTextColor = useColorModeValue('gray.900', 'gray.900')
-  const newBadgeBackgroundColor = useColorModeValue('primary1.4', 'primary1.5')
-  const soonBadgeBackgroundColor = useColorModeValue('neutral1.4', 'neutral1.5')
-  const soonBadgeTextColor = useColorModeValue('neutral1.10', 'neutral1.11')
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const defaultButtonColor = useColorModeValue('black', 'white')
+  const buttonColor = transparentMode ? 'white' : defaultButtonColor
+  const defaultButtonHoverBackground = useColorModeValue('blackAlpha.50', 'neutral1.3')
+  const buttonHoverBackground = transparentMode ? 'whiteAlpha.200' : defaultButtonHoverBackground
+  const defaultButtonActiveBackground = useColorModeValue('blackAlpha.100', 'neutral1.2')
+  const buttonActiveBackground = transparentMode ? 'whiteAlpha.300' : defaultButtonActiveBackground
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [showSearchContent, setShowSearchContent] = useState(false)
-  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const searchRevealTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  const clearCloseTimeout = useCallback(() => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current)
-      closeTimeoutRef.current = null
-    }
-  }, [])
 
   const clearSearchRevealTimeout = useCallback(() => {
     if (searchRevealTimeoutRef.current) {
@@ -78,185 +54,53 @@ export const LandingDesktopNav = () => {
 
   useEffect(() => {
     return () => {
-      clearCloseTimeout()
       clearSearchRevealTimeout()
     }
-  }, [clearCloseTimeout, clearSearchRevealTimeout])
+  }, [clearSearchRevealTimeout])
 
-  const handleMenuOpen = useCallback(() => {
-    clearCloseTimeout()
-    onOpen()
-  }, [clearCloseTimeout, onOpen])
-
-  const handleMenuClose = useCallback(() => {
-    clearCloseTimeout()
-    closeTimeoutRef.current = setTimeout(() => {
-      onClose()
-      closeTimeoutRef.current = null
-    }, 120)
-  }, [clearCloseTimeout, onClose])
-
-  const donateItems = [
-    {
-      title: t('Fundraisers'),
-      description: t('Browse ongoing causes and initiatives.'),
-      to: getPath('discoveryFundraisers'),
-    },
-    {
-      title: t('Impact Funds'),
-      description: t('Fund a category through curated funds.'),
-      to: getPath('discoveryImpactFunds'),
-      badge: { label: t('new'), backgroundColor: newBadgeBackgroundColor, textColor: newBadgeTextColor },
-    },
-    {
-      title: t('Campaigns'),
-      description: t('Browse time-bound campaigns.'),
-      to: getPath('discoveryCampaigns'),
-    },
-    {
-      title: t('Micro-Lending'),
-      description: t('Browse loans supporting small businesses.'),
-      disabled: true,
-      badge: { label: t('soon'), backgroundColor: soonBadgeBackgroundColor, textColor: soonBadgeTextColor },
-    },
-  ]
+  const donateItems = getDonateNavDropdownItems(t)
+  const fundraiseItems = getFundraiseNavDropdownItems(t)
 
   return (
     <HStack flex={1} spacing={0} minWidth={0} justify="center">
       <HStack spacing={{ lg: 0.5, xl: 1 }} align="center" justify="center" flexShrink={0}>
-        <Menu isOpen={isOpen} onClose={onClose} placement="bottom" strategy="fixed">
-          <MenuButton
-            as={Button}
-            variant="ghost"
-            size={navButtonSize}
-            color={buttonColor}
-            borderRadius={navButtonRadius}
-            fontSize={navButtonFontSize}
-            fontWeight={600}
-            rightIcon={<PiCaretDown />}
-            paddingX={navButtonPaddingX}
-            _hover={{ backgroundColor: buttonHoverBackground }}
-            _active={{ backgroundColor: buttonActiveBackground }}
-            _expanded={{ backgroundColor: buttonHoverBackground }}
-            onMouseEnter={handleMenuOpen}
-            onMouseLeave={handleMenuClose}
-            onClick={isOpen ? onClose : handleMenuOpen}
-          >
-            {t('Donate')}
-          </MenuButton>
-          <Portal>
-            <MenuList
-              borderRadius="9px"
-              overflow="hidden"
-              py={5}
-              px={8}
-              width="fit-content"
-              maxWidth="calc(100vw - 32px)"
-              borderColor={menuBorderColor}
-              backgroundColor={menuBackgroundColor}
-              onMouseEnter={handleMenuOpen}
-              onMouseLeave={handleMenuClose}
-            >
-              <SimpleGrid templateColumns="repeat(2, max-content)" columnGap={8} rowGap={3}>
-                {donateItems.map((item) => {
-                  const content = (
-                    <VStack align="stretch" spacing={1.5} width="100%">
-                      <HStack align="center" justify="flex-start" spacing={2.5}>
-                        <Body
-                          size="md"
-                          dark={!item.disabled}
-                          color={item.disabled ? disabledColor : undefined}
-                          fontWeight={400}
-                          lineHeight={1.2}
-                        >
-                          {item.title}
-                        </Body>
-                        {item.badge ? (
-                          <Badge
-                            px={2.5}
-                            py={0.5}
-                            minWidth="54px"
-                            textAlign="center"
-                            borderRadius="5px"
-                            textTransform="lowercase"
-                            fontSize="xs"
-                            fontWeight={600}
-                            backgroundColor={item.badge.backgroundColor}
-                            color={item.badge.textColor}
-                          >
-                            {item.badge.label}
-                          </Badge>
-                        ) : null}
-                      </HStack>
-                      <Body
-                        size="sm"
-                        color={item.disabled ? disabledColor : mutedColor}
-                        fontWeight={300}
-                        lineHeight={1.4}
-                      >
-                        {item.description}
-                      </Body>
-                    </VStack>
-                  )
+        <NavDropdownMenu
+          label={t('Donate')}
+          items={donateItems}
+          mode="desktop"
+          triggerIcon={<PiCaretDown />}
+          triggerProps={{
+            variant: 'ghost',
+            size: navButtonSize,
+            color: buttonColor,
+            borderRadius: navButtonRadius,
+            fontSize: navButtonFontSize,
+            fontWeight: 600,
+            paddingX: navButtonPaddingX,
+            _hover: { backgroundColor: buttonHoverBackground },
+            _active: { backgroundColor: buttonActiveBackground },
+            _expanded: { backgroundColor: buttonHoverBackground },
+          }}
+        />
 
-                  if (item.disabled) {
-                    return (
-                      <Box
-                        key={item.title}
-                        paddingY={3.5}
-                        paddingX={3}
-                        backgroundColor="transparent"
-                        display="flex"
-                        alignItems="flex-start"
-                        justifyContent="flex-start"
-                        cursor="not-allowed"
-                        borderRadius="6px"
-                      >
-                        {content}
-                      </Box>
-                    )
-                  }
-
-                  return (
-                    <Box
-                      key={item.title}
-                      as={Link}
-                      to={item.to}
-                      paddingY={3.5}
-                      paddingX={3}
-                      display="flex"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
-                      backgroundColor="transparent"
-                      borderRadius="6px"
-                      _hover={{ backgroundColor: menuHoverColor }}
-                      _focusVisible={{ backgroundColor: menuHoverColor }}
-                      transition="background-color 0.15s ease"
-                    >
-                      {content}
-                    </Box>
-                  )
-                })}
-              </SimpleGrid>
-            </MenuList>
-          </Portal>
-        </Menu>
-
-        <Button
-          as={Link}
-          to={getPath('discoveryImpactFunds')}
-          variant="ghost"
-          size={navButtonSize}
-          color={buttonColor}
-          borderRadius={navButtonRadius}
-          fontSize={navButtonFontSize}
-          fontWeight={600}
-          paddingX={navButtonPaddingX}
-          _hover={{ backgroundColor: buttonHoverBackground }}
-          _active={{ backgroundColor: buttonActiveBackground }}
-        >
-          {t('Impact')}
-        </Button>
+        <NavDropdownMenu
+          label={t('Fundraise')}
+          items={fundraiseItems}
+          mode="desktop"
+          triggerIcon={<PiCaretDown />}
+          triggerProps={{
+            variant: 'ghost',
+            size: navButtonSize,
+            color: buttonColor,
+            borderRadius: navButtonRadius,
+            fontSize: navButtonFontSize,
+            fontWeight: 600,
+            paddingX: navButtonPaddingX,
+            _hover: { backgroundColor: buttonHoverBackground },
+            _active: { backgroundColor: buttonActiveBackground },
+            _expanded: { backgroundColor: buttonHoverBackground },
+          }}
+        />
 
         <Button
           as={Link}
@@ -313,6 +157,7 @@ export const LandingDesktopNav = () => {
               compact={!isSearchOpen}
               onBlur={() => setIsSearchOpen(false)}
               showContent={showSearchContent}
+              transparentMode={transparentMode}
               width="full"
             />
           </Box>
