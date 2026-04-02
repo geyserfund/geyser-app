@@ -5,7 +5,9 @@ import Confetti from 'react-confetti'
 import { Link } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
+import { useProjectMatchingPreview } from '@/modules/project/funding/hooks/useProjectMatchingPreview.ts'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
+import { recurringFundingModes } from '@/modules/project/recurring/graphql'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -20,8 +22,22 @@ import { SafeToDeleteRefund } from '../components/SafeToDeleteRefund.tsx'
 
 export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
   const { project, formState } = useFundingFormAtom()
+  const matchingPreview = useProjectMatchingPreview()
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
+
+  const matchedAmountOverride =
+    !isPending && fundingContribution.matching
+      ? {
+          sats: fundingContribution.matchedAmountSats,
+          usdCents: fundingContribution.matchedAmountUsdCent,
+        }
+      : project.activeMatching && matchingPreview.hasActiveMatching
+      ? {
+          sats: matchingPreview.matchedAmountSats,
+          usdCents: matchingPreview.matchedAmountUsdCents,
+        }
+      : null
 
   return (
     <FundingLayout
@@ -55,21 +71,25 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
           <VStack w="full" alignItems="start">
             <SuccessImageComponent isPending={isPending} />
           </VStack>
-          {formState.subscription.cost > 0 && (
+          {formState.fundingMode !== recurringFundingModes.oneTime && (
             <VStack w="full" alignItems="start" spacing={6}>
               <H2 size={{ base: 'xl', lg: '2xl' }} bold>
-                {t('Manage Subscription')}
+                {t('Manage Recurring Payment')}
               </H2>
               <Body size="sm" light>
                 {fundingContribution.isAnonymous
-                  ? t('To manage your subscription in the future, please login to stripe with your provided email.')
-                  : t('Please check your profile to manage your subscription.')}
+                  ? t('Use the email associated with this payment to manage it in the future.')
+                  : t('Please check your recurring payments settings to manage this payment.')}
               </Body>
             </VStack>
           )}
           <SafeToDeleteRefund />
           <Divider />
-          <ProjectFundingSummary disableCollapse referenceCode={fundingContribution.uuid} />
+          <ProjectFundingSummary
+            disableCollapse
+            referenceCode={fundingContribution.uuid}
+            matchedAmountOverride={matchedAmountOverride}
+          />
           <DownloadInvoice project={project} contributionId={fundingContribution.id} isPending={isPending} />
           <SuggestedProjects
             id={'suggested-projects-funding-success'}

@@ -72,17 +72,37 @@ export const DashboardLayout = ({
         alignItems={'start'}
       >
         {currentDashboardItem && (
-          <HStack w="full" h="32px" justifyContent={'start'} spacing={2} display={{ base: 'flex', lg: 'none' }}>
-            <currentDashboardItem.icon size={24} />
-            <H1 size="2xl" dark bold>
-              {t(currentDashboardItem.label)} {titleRightComponent}
-            </H1>
+          <HStack
+            w="full"
+            h="32px"
+            justifyContent="space-between"
+            spacing={4}
+            paddingX={6}
+            display={{ base: 'flex', lg: 'none' }}
+          >
+            <HStack minW={0} spacing={2}>
+              <currentDashboardItem.icon size={24} />
+              <H1 size="2xl" dark bold>
+                {t(currentDashboardItem.label)}
+              </H1>
+            </HStack>
+            {titleRightComponent}
           </HStack>
         )}
         {desktopTitle && (
-          <H1 size="2xl" medium paddingX={6} display={{ base: 'none', lg: 'block' }}>
-            {desktopTitle} {titleRightComponent}
-          </H1>
+          <HStack
+            w="full"
+            justifyContent="space-between"
+            alignItems="center"
+            spacing={4}
+            paddingX={6}
+            display={{ base: 'none', lg: 'flex' }}
+          >
+            <H1 size="2xl" medium>
+              {desktopTitle}
+            </H1>
+            {titleRightComponent}
+          </HStack>
         )}
         {children}
       </VStack>

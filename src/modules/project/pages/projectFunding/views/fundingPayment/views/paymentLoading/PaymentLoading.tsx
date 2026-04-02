@@ -34,6 +34,8 @@ export const PaymentLoading = () => {
   const [currentContributionId, setCurrentContributionId] = useState('')
   const hasStripePaymentMethod =
     project?.fundingStrategy === ProjectFundingStrategy.TakeItAll && Boolean(project?.paymentMethods?.fiat?.stripe)
+  const shouldUseProtectedPaymentLoading =
+    isAllOrNothing(project) || (isPrismEnabled && intendedPaymentMethod !== PaymentMethods.fiatSwap)
 
   const handleNext = (contributionId?: string, forceCardRoute?: boolean) => {
     const paymentPath =
@@ -67,7 +69,7 @@ export const PaymentLoading = () => {
     return null
   }
 
-  if (isAllOrNothing(project) || isPrismEnabled) {
+  if (shouldUseProtectedPaymentLoading) {
     if (user?.id && !passwordConfirmed) {
       return <PaymentPassword onComplete={() => setPasswordConfirmed(true)} />
     }

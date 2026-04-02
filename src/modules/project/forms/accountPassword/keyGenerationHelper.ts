@@ -392,6 +392,22 @@ export type AccountKeys = {
   publicKey: string
 }
 
+export const isValidRskPrivateKey = (privateKey?: string) => {
+  if (!privateKey) return false
+
+  return /^(0x)?[0-9a-fA-F]{64}$/.test(privateKey)
+}
+
+export const hasValidRskAccountKeys = (
+  accountKeys?: Partial<Pick<AccountKeys, 'publicKey' | 'address' | 'privateKey'>>,
+): accountKeys is Pick<AccountKeys, 'publicKey' | 'address' | 'privateKey'> => {
+  if (!accountKeys?.publicKey || !accountKeys.address || !isValidRskPrivateKey(accountKeys.privateKey)) {
+    return false
+  }
+
+  return /^(0x)?[0-9a-fA-F]+$/.test(accountKeys.publicKey) && /^0x[0-9a-fA-F]{40}$/.test(accountKeys.address)
+}
+
 export const generatePreImageHash = () => {
   const preimage = new Uint8Array(32)
   window.crypto.getRandomValues(preimage)

@@ -16,6 +16,9 @@ const initialFundingContribution: FundingContributionFragment = {
   createdAt: '',
   isAnonymous: false,
   isSubscription: false,
+  matchedAmountSats: 0,
+  matchedAmountUsdCent: 0,
+  matching: null,
   funder: {
     id: '',
     user: {

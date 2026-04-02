@@ -603,6 +603,13 @@ export const platformRoutes: RouteObject[] = [
                 },
               },
               {
+                path: getPath('dashboardMatching', PathName.projectName),
+                async lazy() {
+                  const projectDashboardPages = await loadProjectDashboardPages()
+                  return { Component: projectDashboardPages.ProjectDashboardMatching }
+                },
+              },
+              {
                 path: getPath('dashboardRewards', PathName.projectName),
                 async lazy() {
                   const ProjectDashboardRewards = await loadProjectDashboardPages().then(

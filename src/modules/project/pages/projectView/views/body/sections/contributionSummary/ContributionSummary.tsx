@@ -1,7 +1,7 @@
 import { HStack, SkeletonCircle, SkeletonText, StackProps, VStack } from '@chakra-ui/react'
 
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom.ts'
-import { CardLayout } from '@/shared/components/layouts/CardLayout'
+import { ProjectMatchingPublicBadge } from '@/modules/project/matching/components/ProjectMatchingPublicBadge.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout'
 import {
   BitcoinLightingPaymentImageUrl,
@@ -31,16 +31,33 @@ export const ContributionSummary = ({ isWidget, ...props }: ContributionSummaryP
   const { isFundingDisabled } = useProjectToolkit(project)
 
   return (
-    <CardLayout w="100%" p={6} spacing={6} minHeight="fit-content" flexShrink={0} {...props}>
-      <ProjectBalanceDisplay />
-
-      {!isFundingDisabled() && (
-        <VStack w="full">
-          <ContributeButton w="full" isWidget={isWidget} paymentMethods={paymentMethods} />
-          <ProjectPaymentMethodsHint justifyContent="center" />
-        </VStack>
+    <VStack
+      w="100%"
+      spacing={0}
+      minHeight="fit-content"
+      flexShrink={0}
+      backgroundColor="utils.pbg"
+      border="1px solid"
+      borderColor="neutral1.6"
+      borderRadius="8px"
+      overflow="hidden"
+      {...props}
+    >
+      {project.activeMatching && (
+        <ProjectMatchingPublicBadge matching={project.activeMatching} showTooltip variant="summaryBanner" />
       )}
-    </CardLayout>
+
+      <VStack w="full" spacing={5} px={6} pt={5} pb={5}>
+        <ProjectBalanceDisplay />
+
+        {!isFundingDisabled() && (
+          <VStack w="full" spacing={4}>
+            <ContributeButton w="full" isWidget={isWidget} paymentMethods={paymentMethods} />
+            <ProjectPaymentMethodsHint justifyContent="center" />
+          </VStack>
+        )}
+      </VStack>
+    </VStack>
   )
 }
 

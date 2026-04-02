@@ -1,11 +1,13 @@
 import { gql } from '@apollo/client'
 
+import { FRAGMENT_PROJECT_MATCHING } from '@/modules/project/graphql/fragments/projectMatchingFragment.ts'
 import { FRAGMENT_PROJECT_REVIEW } from '@/modules/project/graphql/fragments/projectReviewFragment.ts'
 
 import { FRAGMENT_PROJECT_AON_GOAL_FOR_LANDING_PAGE } from './aonGoalFragment.ts'
 
 export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
   ${FRAGMENT_PROJECT_AON_GOAL_FOR_LANDING_PAGE}
+  ${FRAGMENT_PROJECT_MATCHING}
   fragment ProjectForLandingPage on Project {
     id
     name
@@ -32,6 +34,9 @@ export const FRAGMENT_PROJECT_FOR_LANDING_PAGE = gql`
     }
     aonGoal {
       ...ProjectAonGoalForLandingPage
+    }
+    activeMatching {
+      ...ProjectMatching
     }
     launchedAt
     owners {

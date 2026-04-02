@@ -51,7 +51,7 @@ export const profileSettingsItems: ProfileSettingsItem[] = [
     icon: PiBell,
   },
   {
-    label: 'Subscriptions',
+    label: 'Recurring Payments',
     path: 'userProfileSettingsSubscriptions',
     type: ProfileSettingsType.subscriptions,
     icon: PiRepeat,
