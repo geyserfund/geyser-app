@@ -6,12 +6,12 @@ import { PiHeartFill } from 'react-icons/pi'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { isRecurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
-import { useRewardsAtom } from '@/modules/project/hooks/useProjectAtom.ts'
 import { recurringFundingModes, recurringIntervals } from '@/modules/project/recurring/graphql'
 import { AmountInput } from '@/shared/components/form/AmountInput.tsx'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body, H1 } from '@/shared/components/typography'
 import { darkModeColors, lightModeColors } from '@/shared/styles/colors.ts'
+import { ProjectFundingStrategy } from '@/types/index.ts'
 
 import { commaFormatted } from '../../../../../../../utils'
 import {
@@ -31,11 +31,11 @@ export const DonationInput = () => {
 
   const {
     canUseRecurringFunding,
+    project,
     formState: { donationAmount, donationAmountUsdCent, fundingMode },
     setState,
   } = useFundingFormAtom()
 
-  const { hasRewards } = useRewardsAtom()
   const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
   const isRecurringRenewal = useAtomValue(isRecurringContributionRenewalAtom)
   const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
@@ -82,6 +82,8 @@ export const DonationInput = () => {
   const unselectedTextColor = useColorModeValue('neutral1.11', 'neutral1.12')
   const satoshiBadgeBg = useColorModeValue(lightModeColors.primary1[4], darkModeColors.primary1[7])
   const satoshiBadgeColor = useColorModeValue('primary1.12', 'neutral1.12')
+  const donationTitle =
+    project.fundingStrategy === ProjectFundingStrategy.AllOrNothing ? t('Make a pledge') : t('Make a donation')
   const recurringHelperCopy = !hasFiatPaymentMethod
     ? t('Bitcoin recurring payments are manual. We will email you when the next payment is due.')
     : intendedPaymentMethod === PaymentMethods.fiatSwap
@@ -122,191 +124,181 @@ export const DonationInput = () => {
   }
 
   return (
-    <>
-      {hasRewards && fundingMode === recurringFundingModes.oneTime && (
-        <H1 size="3xl" bold alignSelf="start">
-          {t('Select a product')}
-        </H1>
-      )}
-      <CardLayout w="full" spacing={4} alignItems="stretch">
-        <H1 size="xl" bold alignSelf="start">
-          {hasRewards && fundingMode === recurringFundingModes.oneTime
-            ? t('Contribute without a product')
-            : t('Make a donation')}
-        </H1>
+    <CardLayout w="full" spacing={4} alignItems="stretch">
+      <H1 size="xl" bold alignSelf="start">
+        {donationTitle}
+      </H1>
 
-        {canUseRecurringFunding && (
-          <VStack alignItems="stretch" spacing={2}>
-            <HStack spacing={3} alignItems="stretch">
-              <Box
-                flex={1}
-                p="1px"
-                borderRadius="xl"
-                bg={!isRecurringMode ? selectedBorderColor : unselectedBorderColor}
-              >
-                <Button
-                  w="full"
-                  h="calc(3.5rem - 2px)"
-                  fontSize="lg"
-                  fontWeight="700"
-                  borderRadius="calc(var(--chakra-radii-xl) - 1px)"
-                  variant="ghost"
-                  bgGradient={!isRecurringMode ? selectedInnerGradient : unselectedInnerGradient}
-                  color={!isRecurringMode ? selectedTextColor : unselectedTextColor}
-                  boxShadow={!isRecurringMode ? 'sm' : 'none'}
-                  _hover={{
-                    bgGradient: !isRecurringMode ? selectedHoverGradient : unselectedHoverGradient,
-                  }}
-                  _active={{
-                    bgGradient: !isRecurringMode ? selectedHoverGradient : unselectedActiveGradient,
-                  }}
-                  isDisabled={isRecurringRenewal}
-                  onClick={() => {
-                    setState('fundingMode', recurringFundingModes.oneTime)
-                    setIntendedPaymentMethod(undefined)
-                  }}
-                >
-                  {t('Give once')}
-                </Button>
-              </Box>
-
-              <Box
-                flex={1}
-                p="1px"
-                borderRadius="xl"
-                bg={isRecurringMode ? selectedBorderColor : unselectedBorderColor}
-              >
-                <Button
-                  w="full"
-                  h="calc(3.5rem - 2px)"
-                  fontSize="lg"
-                  fontWeight="700"
-                  borderRadius="calc(var(--chakra-radii-xl) - 1px)"
-                  variant="ghost"
-                  leftIcon={<Icon as={PiHeartFill} color="primary1.9" boxSize={4} />}
-                  bgGradient={isRecurringMode ? selectedInnerGradient : unselectedInnerGradient}
-                  color={isRecurringMode ? selectedTextColor : unselectedTextColor}
-                  boxShadow={isRecurringMode ? 'sm' : 'none'}
-                  _hover={{
-                    bgGradient: isRecurringMode ? selectedHoverGradient : unselectedHoverGradient,
-                  }}
-                  _active={{
-                    bgGradient: isRecurringMode ? selectedHoverGradient : unselectedActiveGradient,
-                  }}
-                  isDisabled={isRecurringRenewal}
-                  onClick={() => {
-                    setState('fundingMode', recurringFundingModes.recurringDonation)
-                    setState('recurringInterval', recurringIntervals.monthly)
-                    setIntendedPaymentMethod(undefined)
-                  }}
-                >
-                  {t('Make it monthly')}
-                </Button>
-              </Box>
-            </HStack>
-          </VStack>
-        )}
-
-        {(!hasRewards || isRecurringMode) && (
-          <HStack w="full" justifyContent="space-between" flexWrap="wrap" spacing={2} alignItems="flex-start">
-            {PRESET_AMOUNTS.slice(0, 1).map((amount) => (
-              <Button
-                key={amount}
-                size="md"
-                variant="outline"
-                colorScheme="neutral.9"
-                isDisabled={isRecurringRenewal}
-                onClick={() => handleDefaultAmountButtonClick(amount)}
-                flexGrow={1}
-                minWidth="80px"
-              >
-                {`$${commaFormatted(amount)}`}
-              </Button>
-            ))}
-
-            <VStack spacing={0} flexGrow={1} minWidth="80px" position="relative" alignItems="stretch">
-              <Button
-                key={PRESET_AMOUNTS[1]}
-                size="md"
-                variant="outline"
-                colorScheme="neutral.9"
-                isDisabled={isRecurringRenewal}
-                onClick={() => handleDefaultAmountButtonClick(highlightedPresetAmount)}
-                w="full"
-                zIndex={1}
-              >
-                {`$${commaFormatted(highlightedPresetAmount)}`}
-              </Button>
-              <Body
-                fontSize="8px"
-                bg={satoshiBadgeBg}
-                color={satoshiBadgeColor}
-                fontWeight="bold"
-                px={2}
-                py={0.2}
-                borderRadius="md"
-                position="absolute"
-                bottom="-8px"
-                left="50%"
-                transform="translateX(-50%)"
-                zIndex={2}
-                whiteSpace="nowrap"
-              >
-                {t('SATOSHI AMOUNT')}
-              </Body>
-            </VStack>
-
-            {PRESET_AMOUNTS.slice(2, 4).map((amount) => (
-              <Button
-                key={amount}
-                size="md"
-                variant="outline"
-                colorScheme="neutral.9"
-                isDisabled={isRecurringRenewal}
-                onClick={() => handleDefaultAmountButtonClick(amount)}
-                flexGrow={1}
-                minWidth="80px"
-              >
-                {`$${commaFormatted(amount)}`}
-              </Button>
-            ))}
-
-            <Button
-              key={finalPresetAmount}
-              size="md"
-              variant="outline"
-              colorScheme="neutral.9"
-              isDisabled={isRecurringRenewal}
-              onClick={() => handleDefaultAmountButtonClick(finalPresetAmount)}
-              flexGrow={1}
-              minWidth="80px"
-              display={{ base: 'none', md: 'inline-flex' }}
+      {canUseRecurringFunding && (
+        <VStack alignItems="stretch" spacing={2}>
+          <HStack spacing={3} alignItems="stretch">
+            <Box
+              flex={1}
+              p="1px"
+              borderRadius="xl"
+              bg={!isRecurringMode ? selectedBorderColor : unselectedBorderColor}
             >
-              {`$${commaFormatted(finalPresetAmount)}`}
-            </Button>
+              <Button
+                w="full"
+                h="calc(3.5rem - 2px)"
+                fontSize="lg"
+                fontWeight="700"
+                borderRadius="calc(var(--chakra-radii-xl) - 1px)"
+                variant="ghost"
+                bgGradient={!isRecurringMode ? selectedInnerGradient : unselectedInnerGradient}
+                color={!isRecurringMode ? selectedTextColor : unselectedTextColor}
+                boxShadow={!isRecurringMode ? 'sm' : 'none'}
+                _hover={{
+                  bgGradient: !isRecurringMode ? selectedHoverGradient : unselectedHoverGradient,
+                }}
+                _active={{
+                  bgGradient: !isRecurringMode ? selectedHoverGradient : unselectedActiveGradient,
+                }}
+                isDisabled={isRecurringRenewal}
+                onClick={() => {
+                  setState('fundingMode', recurringFundingModes.oneTime)
+                  setIntendedPaymentMethod(undefined)
+                }}
+              >
+                {t('Give once')}
+              </Button>
+            </Box>
+
+            <Box
+              flex={1}
+              p="1px"
+              borderRadius="xl"
+              bg={isRecurringMode ? selectedBorderColor : unselectedBorderColor}
+            >
+              <Button
+                w="full"
+                h="calc(3.5rem - 2px)"
+                fontSize="lg"
+                fontWeight="700"
+                borderRadius="calc(var(--chakra-radii-xl) - 1px)"
+                variant="ghost"
+                leftIcon={<Icon as={PiHeartFill} color="primary1.9" boxSize={4} />}
+                bgGradient={isRecurringMode ? selectedInnerGradient : unselectedInnerGradient}
+                color={isRecurringMode ? selectedTextColor : unselectedTextColor}
+                boxShadow={isRecurringMode ? 'sm' : 'none'}
+                _hover={{
+                  bgGradient: isRecurringMode ? selectedHoverGradient : unselectedHoverGradient,
+                }}
+                _active={{
+                  bgGradient: isRecurringMode ? selectedHoverGradient : unselectedActiveGradient,
+                }}
+                isDisabled={isRecurringRenewal}
+                onClick={() => {
+                  setState('fundingMode', recurringFundingModes.recurringDonation)
+                  setState('recurringInterval', recurringIntervals.monthly)
+                  setIntendedPaymentMethod(undefined)
+                }}
+              >
+                {t('Make it monthly')}
+              </Button>
+            </Box>
           </HStack>
-        )}
-        <AmountInput
-          inputRef={inputRef}
-          satoshi={satoshi}
-          dollar={dollar}
-          isSatoshi={isSatoshi}
-          handleInput={handleInput}
-          handleKeyDown={handleKeyDown}
-          onToggle={onToggle}
-          size={hasRewards ? 'md' : 'lg'}
+        </VStack>
+      )}
+
+      <HStack w="full" justifyContent="space-between" flexWrap="wrap" spacing={2} alignItems="flex-start">
+        {PRESET_AMOUNTS.slice(0, 1).map((amount) => (
+          <Button
+            key={amount}
+            size="md"
+            variant="outline"
+            colorScheme="neutral.9"
+            isDisabled={isRecurringRenewal}
+            onClick={() => handleDefaultAmountButtonClick(amount)}
+            flexGrow={1}
+            minWidth="80px"
+          >
+            {`$${commaFormatted(amount)}`}
+          </Button>
+        ))}
+
+        <VStack spacing={0} flexGrow={1} minWidth="80px" position="relative" alignItems="stretch">
+          <Button
+            key={PRESET_AMOUNTS[1]}
+            size="md"
+            variant="outline"
+            colorScheme="neutral.9"
+            isDisabled={isRecurringRenewal}
+            onClick={() => handleDefaultAmountButtonClick(highlightedPresetAmount)}
+            w="full"
+            zIndex={1}
+          >
+            {`$${commaFormatted(highlightedPresetAmount)}`}
+          </Button>
+          <Body
+            fontSize="8px"
+            bg={satoshiBadgeBg}
+            color={satoshiBadgeColor}
+            fontWeight="bold"
+            px={2}
+            py={0.2}
+            borderRadius="md"
+            position="absolute"
+            bottom="-8px"
+            left="50%"
+            transform="translateX(-50%)"
+            zIndex={2}
+            whiteSpace="nowrap"
+          >
+            {t('SATOSHI AMOUNT')}
+          </Body>
+        </VStack>
+
+        {PRESET_AMOUNTS.slice(2, 4).map((amount) => (
+          <Button
+            key={amount}
+            size="md"
+            variant="outline"
+            colorScheme="neutral.9"
+            isDisabled={isRecurringRenewal}
+            onClick={() => handleDefaultAmountButtonClick(amount)}
+            flexGrow={1}
+            minWidth="80px"
+          >
+            {`$${commaFormatted(amount)}`}
+          </Button>
+        ))}
+
+        <Button
+          key={finalPresetAmount}
+          size="md"
+          variant="outline"
+          colorScheme="neutral.9"
           isDisabled={isRecurringRenewal}
-        />
+          onClick={() => handleDefaultAmountButtonClick(finalPresetAmount)}
+          flexGrow={1}
+          minWidth="80px"
+          display={{ base: 'none', md: 'inline-flex' }}
+        >
+          {`$${commaFormatted(finalPresetAmount)}`}
+        </Button>
+      </HStack>
+      <AmountInput
+        inputRef={inputRef}
+        satoshi={satoshi}
+        dollar={dollar}
+        isSatoshi={isSatoshi}
+        handleInput={handleInput}
+        handleKeyDown={handleKeyDown}
+        onToggle={onToggle}
+        size="lg"
+        isDisabled={isRecurringRenewal}
+      />
 
-        <FundingMatchingBanner isSatoshi={isSatoshi} size={hasRewards ? 'md' : 'lg'} />
+      <FundingMatchingBanner isSatoshi={isSatoshi} size="lg" />
 
-        {isRecurringMode && recurringHelperCopy && (
-          <VStack alignItems="start" spacing={2}>
-            <Body size="sm" light>
-              {recurringHelperCopy}
-            </Body>
-          </VStack>
-        )}
+      {isRecurringMode && recurringHelperCopy && (
+        <VStack alignItems="start" spacing={2}>
+          <Body size="sm" light>
+            {recurringHelperCopy}
+          </Body>
+        </VStack>
+      )}
 
         {/* <HStack w="full" position="relative">
         <InputGroup>
@@ -370,7 +362,6 @@ export const DonationInput = () => {
           {isSatoshi ? 'sats' : '$'}
         </Body>
       </HStack> */}
-      </CardLayout>
-    </>
+    </CardLayout>
   )
 }

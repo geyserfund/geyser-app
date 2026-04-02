@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Checkbox,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -43,6 +44,7 @@ type MatchingFormState = {
   sponsorUrl: string
   referenceCurrency: ProjectMatchingCurrency
   maxCapAmount: string
+  sponsorRepresentationConfirmed: boolean
 }
 
 const defaultCreateState: MatchingFormState = {
@@ -50,6 +52,7 @@ const defaultCreateState: MatchingFormState = {
   sponsorUrl: '',
   referenceCurrency: ProjectMatchingCurrency.Usdcent,
   maxCapAmount: '',
+  sponsorRepresentationConfirmed: false,
 }
 
 type MatchingCardProps = {
@@ -119,6 +122,7 @@ export const ProjectDashboardMatching = () => {
 
   const [createState, setCreateState] = useState<MatchingFormState>(defaultCreateState)
   const [createError, setCreateError] = useState<string | null>(null)
+  const [createConfirmationError, setCreateConfirmationError] = useState(false)
   const [editAmount, setEditAmount] = useState('')
   const [editError, setEditError] = useState<string | null>(null)
   const [selectedMatching, setSelectedMatching] = useState<ProjectMatchingFragment | null>(null)
@@ -148,6 +152,7 @@ export const ProjectDashboardMatching = () => {
   const resetCreateState = () => {
     setCreateState(defaultCreateState)
     setCreateError(null)
+    setCreateConfirmationError(false)
   }
 
   function handleCreateOpen() {
@@ -193,14 +198,20 @@ export const ProjectDashboardMatching = () => {
       return t('Enter a valid sponsor URL.')
     }
 
+    if (!createState.sponsorRepresentationConfirmed) {
+      setCreateConfirmationError(true)
+      return null
+    }
+
     return null
   }
 
   const handleCreateRequest = () => {
+    setCreateConfirmationError(false)
     const nextError = validateCreateState()
     setCreateError(nextError)
 
-    if (!nextError) {
+    if (!nextError && createState.sponsorRepresentationConfirmed) {
       createConfirmModal.onOpen()
     }
   }
@@ -440,6 +451,29 @@ export const ProjectDashboardMatching = () => {
               onChange={(event) => setCreateState((current) => ({ ...current, maxCapAmount: event.target.value }))}
             />
             {createError && <FormErrorMessage>{createError}</FormErrorMessage>}
+          </FormControl>
+
+          <FormControl isRequired isInvalid={createConfirmationError}>
+            <Checkbox
+              isChecked={createState.sponsorRepresentationConfirmed}
+              onChange={(event) => {
+                setCreateState((current) => ({
+                  ...current,
+                  sponsorRepresentationConfirmed: event.target.checked,
+                }))
+                setCreateConfirmationError(false)
+              }}
+              alignItems="start"
+            >
+              <Body size="sm">
+                {t(
+                  'By submitting this match, I confirm that the matching sponsor’s intentions are accurately and truthfully represented. Misrepresentation constitutes a violation of Geyser’s terms.',
+                )}
+              </Body>
+            </Checkbox>
+            {createConfirmationError && (
+              <FormErrorMessage>{t('You must confirm the sponsor representation statement.')}</FormErrorMessage>
+            )}
           </FormControl>
 
           <HStack w="full" justifyContent="flex-end" spacing={3}>
