@@ -13,6 +13,10 @@ export const CreatorWelcomeSection = () => {
   const sectionBackground = useColorModeValue('utils.pbg', 'utils.pbg')
   const videoCardBackground = useColorModeValue('neutral1.1', 'neutral1.3')
   const videoCardBorderColor = useColorModeValue('neutral1.6', 'neutral1.7')
+  const videoCaptionBackground = useColorModeValue(
+    'linear(to-t, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2), transparent)',
+    'linear(to-t, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.28), transparent)',
+  )
   const missionBadgeBackground = useColorModeValue('primary1.2', 'primary1.3')
   const missionBadgeTextColor = useColorModeValue('primary1.10', 'primary1.10')
   const quoteColor = useColorModeValue('neutral1.11', 'neutral1.11')
@@ -39,7 +43,8 @@ export const CreatorWelcomeSection = () => {
               borderWidth="1px"
               borderColor={videoCardBorderColor}
               backgroundColor={videoCardBackground}
-              minH={{ base: '280px', lg: '420px' }}
+              aspectRatio={{ base: '16 / 10', lg: '16 / 10' }}
+              boxShadow="0 28px 70px rgba(0,0,0,0.2)"
             >
               <ReactPlayer
                 url={creatorWelcomeVideoUrl}
@@ -48,6 +53,18 @@ export const CreatorWelcomeSection = () => {
                 controls={true}
                 style={{ position: 'absolute', top: 0, left: 0 }}
               />
+              <Box pointerEvents="none" position="absolute" inset={0} bgGradient={videoCaptionBackground} />
+              <Box pointerEvents="none" position="absolute" left={0} right={0} bottom={0} px={6} py={4}>
+                <Body
+                  fontSize="xs"
+                  fontWeight={700}
+                  color="whiteAlpha.850"
+                  letterSpacing="0.04em"
+                  textTransform="uppercase"
+                >
+                  {t('Our story • 3 min')}
+                </Body>
+              </Box>
             </Box>
 
             <VStack flex={1} align="start" spacing={4} justify="center">

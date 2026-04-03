@@ -1,15 +1,35 @@
-import { Button, HStack, Link, VStack } from '@chakra-ui/react'
+import { Box, Button, Flex, HStack, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { Fragment, useMemo } from 'react'
+import { PiRocket } from 'react-icons/pi'
 
-import { H1, H2 } from '@/shared/components/typography/Heading.tsx'
-import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { Body } from '@/shared/components/typography/Body.tsx'
+import { H1 } from '@/shared/components/typography/Heading.tsx'
 
-import { CreationLayoutCard } from '../components/CreationLayoutCard.tsx'
+import { PlaybookCard } from '../components/PlaybookCard.tsx'
+import { StartPageSectionShell } from '../components/StartPageSectionShell.tsx'
 import { useLaunchNow } from '../utils/useLaunchNow.tsx'
 
-/** Hero section with title, subtitle, and navigation links */
+/** Hero section for the How to Crowdfund on Geyser start page. */
 export const HeroSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
+
+  const accentSurface = useColorModeValue('primary1.50', 'primary1.900')
+  const accentBorder = useColorModeValue('primary1.200', 'primary1.700')
+  const stepNumberBg = useColorModeValue('primary1.9', 'primary1.8')
+  const stepConnectorColor = useColorModeValue('neutral1.5', 'neutral1.6')
+  const heroStripCardBg = useColorModeValue('white', 'neutral1.2')
+
+  const stepItems = useMemo(
+    () => [
+      t('Build your page'),
+      t('Choose your fundraiser type'),
+      t('Add goals and rewards'),
+      t('Configure payouts'),
+      t('Launch strong'),
+    ],
+    [],
+  )
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
@@ -18,61 +38,97 @@ export const HeroSection = () => {
 
   return (
     <>
-      <CreationLayoutCard maxWidth={dimensions.maxWidth} paddingY={4}>
-        <VStack spacing={0}>
-          <H1 size={{ base: 'xl', lg: '4xl' }} textAlign="center" bold>
-            {t('The crowdfunding platform built by Bitcoiners, for Bitcoiners.')}
-          </H1>
-          <H2 size={{ base: 'md', lg: 'xl' }} textAlign="center">
-            {' '}
-            {t('Bring your idea to life and tap into a global community ready to back you.')}
-          </H2>
+      <StartPageSectionShell
+        id="crowdfund-hero"
+        sectionBg={accentSurface}
+        borderBottom="1px solid"
+        borderColor={accentBorder}
+      >
+        <VStack alignItems="flex-start" spacing={6}>
+          <VStack alignItems="flex-start" spacing={3}>
+            <H1 size={{ base: '2xl', lg: '4xl' }} bold>
+              {t('How to fundraise on Geyser')}
+            </H1>
+            <Body size={{ base: 'md', lg: 'lg' }}>
+              {t(
+                'A clear playbook for launching, getting funded, and building momentum with the tools Geyser gives creators.',
+              )}
+            </Body>
+          </VStack>
+
+          <HStack spacing={3} flexWrap="wrap">
+            <Button size="lg" colorScheme="primary1" onClick={handleLauchNowClick} leftIcon={<PiRocket />}>
+              {t('Launch your project')}
+            </Button>
+            <Button size="lg" variant="outline" colorScheme="neutral1" onClick={() => scrollToSection('creator-tools')}>
+              {t('Explore tools')}
+            </Button>
+          </HStack>
+
+          <PlaybookCard width="100%" backgroundColor={heroStripCardBg}>
+            <Body size="xs" bold muted textTransform="uppercase" marginBottom={3}>
+              {t('How it works')}
+            </Body>
+
+            <VStack display={{ base: 'flex', md: 'none' }} alignItems="stretch" spacing={0}>
+              {stepItems.map((label, index) => (
+                <Fragment key={label}>
+                  <HStack alignItems="center" spacing={3} paddingY={2}>
+                    <Flex
+                      width="28px"
+                      height="28px"
+                      borderRadius="full"
+                      alignItems="center"
+                      justifyContent="center"
+                      backgroundColor={stepNumberBg}
+                      color="utils.blackContrast"
+                      fontWeight={700}
+                      fontSize="xs"
+                    >
+                      {index + 1}
+                    </Flex>
+                    <Body size="sm" lineHeight="1.3">
+                      {label}
+                    </Body>
+                  </HStack>
+                  {index < stepItems.length - 1 ? (
+                    <Box height="1px" marginY={1} marginLeft="14px" backgroundColor={stepConnectorColor} />
+                  ) : null}
+                </Fragment>
+              ))}
+            </VStack>
+
+            <HStack display={{ base: 'none', md: 'flex' }} alignItems="flex-start" spacing={0} width="100%">
+              {stepItems.map((label, index) => (
+                <Fragment key={label}>
+                  <VStack alignItems="center" spacing={2} minWidth={0}>
+                    <Flex
+                      width="28px"
+                      height="28px"
+                      borderRadius="full"
+                      alignItems="center"
+                      justifyContent="center"
+                      backgroundColor={stepNumberBg}
+                      color="utils.blackContrast"
+                      fontWeight={700}
+                      fontSize="xs"
+                    >
+                      {index + 1}
+                    </Flex>
+                    <Body size="xs" lineHeight="1.3" textAlign="center">
+                      {label}
+                    </Body>
+                  </VStack>
+                  {index < stepItems.length - 1 ? (
+                    <Box flex={1} height="1px" marginTop="14px" marginX={3} backgroundColor={stepConnectorColor} />
+                  ) : null}
+                </Fragment>
+              ))}
+            </HStack>
+          </PlaybookCard>
         </VStack>
+      </StartPageSectionShell>
 
-        <Button
-          variant="solid"
-          colorScheme="primary1"
-          paddingY={{ base: 6, lg: 8 }}
-          paddingX={{ base: 6, lg: 8 }}
-          borderRadius={{ base: '12px', lg: '18px' }}
-          _hover={{ backgroundColor: 'primary1.9', color: 'utils.blackContrast', shadow: 'lg' }}
-          onClick={handleLauchNowClick}
-        >
-          <H1 size="2xl" textAlign="center" bold>
-            {t('Launch your project')}
-          </H1>
-        </Button>
-
-        <HStack spacing={6}>
-          <Link
-            onClick={() => scrollToSection('about-geyser')}
-            cursor="pointer"
-            fontSize="md"
-            fontWeight="medium"
-            textDecoration="underline"
-          >
-            {t('About Geyser')}
-          </Link>
-          <Link
-            onClick={() => scrollToSection('how-it-works')}
-            cursor="pointer"
-            fontSize="md"
-            fontWeight="medium"
-            textDecoration="underline"
-          >
-            {t('How it works')}
-          </Link>
-          <Link
-            onClick={() => scrollToSection('how-to-launch')}
-            cursor="pointer"
-            fontSize="md"
-            fontWeight="medium"
-            textDecoration="underline"
-          >
-            {t('How to launch')}
-          </Link>
-        </HStack>
-      </CreationLayoutCard>
       {renderModal()}
     </>
   )
