@@ -8,51 +8,35 @@ import { H1 } from '@/shared/components/typography/Heading.tsx'
 
 import { PlaybookCard } from '../components/PlaybookCard.tsx'
 import { StartPageSectionShell } from '../components/StartPageSectionShell.tsx'
+import { getHeroSteps } from '../utils/startPageContent.ts'
 import { useLaunchNow } from '../utils/useLaunchNow.tsx'
 
-/** Hero section for the How to Crowdfund on Geyser start page. */
+/** Hero section for the launch start page with conversion CTA and flow preview. */
 export const HeroSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
 
   const accentSurface = useColorModeValue('primary1.50', 'primary1.900')
-  const accentBorder = useColorModeValue('primary1.200', 'primary1.700')
   const stepNumberBg = useColorModeValue('primary1.9', 'primary1.8')
   const stepConnectorColor = useColorModeValue('neutral1.5', 'neutral1.6')
   const heroStripCardBg = useColorModeValue('white', 'neutral1.2')
 
-  const stepItems = useMemo(
-    () => [
-      t('Build your page'),
-      t('Choose your fundraiser type'),
-      t('Add goals and rewards'),
-      t('Configure payouts'),
-      t('Launch strong'),
-    ],
-    [],
-  )
+  const stepItems = useMemo(() => getHeroSteps(t), [])
 
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId)
-    element?.scrollIntoView({ behavior: 'smooth' })
+  const onExploreToolsClick = () => {
+    const section = document.getElementById('creator-tools')
+    section?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
     <>
-      <StartPageSectionShell
-        id="crowdfund-hero"
-        sectionBg={accentSurface}
-        borderBottom="1px solid"
-        borderColor={accentBorder}
-      >
+      <StartPageSectionShell id="crowdfund-hero" sectionBg={accentSurface}>
         <VStack alignItems="flex-start" spacing={6}>
           <VStack alignItems="flex-start" spacing={3}>
             <H1 size={{ base: '2xl', lg: '4xl' }} bold>
               {t('How to fundraise on Geyser')}
             </H1>
-            <Body size={{ base: 'md', lg: 'lg' }}>
-              {t(
-                'A clear playbook for launching, getting funded, and building momentum with the tools Geyser gives creators.',
-              )}
+            <Body size={{ base: 'md', lg: 'lg' }} maxWidth="840px">
+              {t('Start with your idea, build a clear page, then launch with momentum using tools made for creators.')}
             </Body>
           </VStack>
 
@@ -60,7 +44,7 @@ export const HeroSection = () => {
             <Button size="lg" colorScheme="primary1" onClick={handleLauchNowClick} leftIcon={<PiRocket />}>
               {t('Launch your project')}
             </Button>
-            <Button size="lg" variant="outline" colorScheme="neutral1" onClick={() => scrollToSection('creator-tools')}>
+            <Button size="lg" variant="outline" colorScheme="neutral1" onClick={onExploreToolsClick}>
               {t('Explore tools')}
             </Button>
           </HStack>

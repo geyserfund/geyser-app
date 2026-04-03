@@ -26,6 +26,9 @@ const getAlphaColor = (hexColor: string, alpha: number) => {
 /** Possibility section helping visitors imagine what they can build on Geyser. */
 export const CreatorPossibilitySection = () => {
   const sectionBackground = useColorModeValue('utils.pbg', 'utils.pbg')
+  const cardBackground = useColorModeValue('neutral1.2', 'neutral1.2')
+  const cardBorderColor = useColorModeValue('neutral1.6', 'neutral1.6')
+  const iconBadgeBackground = useColorModeValue('utils.pbg', 'neutral1.1')
   const quoteBackground = useColorModeValue(
     'linear(135deg, rgba(0,245,220,0.06) 0%, rgba(0,245,220,0.02) 100%)',
     'linear(135deg, rgba(0,245,220,0.1) 0%, rgba(0,245,220,0.05) 100%)',
@@ -52,7 +55,6 @@ export const CreatorPossibilitySection = () => {
 
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
             {creatorPossibilities.map((possibility) => {
-              const iconBadgeBackground = getAlphaColor(possibility.iconColor, 0.2)
               const iconBadgeBorderColor = getAlphaColor(possibility.iconColor, 0.35)
 
               return (
@@ -60,9 +62,9 @@ export const CreatorPossibilitySection = () => {
                   key={possibility.title}
                   p={6}
                   borderWidth="1px"
-                  borderColor={possibility.borderColor}
+                  borderColor={cardBorderColor}
                   borderRadius="xl"
-                  backgroundColor={possibility.surfaceColor}
+                  backgroundColor={cardBackground}
                   transition="transform 0.2s ease"
                   _hover={{ transform: 'translateY(-3px)' }}
                 >

@@ -1,171 +1,154 @@
-import { Box, Button, Link as ChakraLink, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Button, Link as ChakraLink, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
-import { PiCheckCircle, PiRocket, PiSparkle, PiStar, PiTrendUp } from 'react-icons/pi'
+import { PiArrowUpRight, PiCheckCircle } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2, H3 } from '@/shared/components/typography/Heading.tsx'
+import { GuideUrl } from '@/shared/constants/index.ts'
 
 import { PlaybookCard } from '../components/PlaybookCard.tsx'
 import { StartPageSectionShell } from '../components/StartPageSectionShell.tsx'
-import { useLaunchNow } from '../utils/useLaunchNow.tsx'
 
-/** Step 5 section presenting launch support plans and pricing. */
+type LaunchPlan = {
+  title: string
+  subtitle: string
+  price: string
+  points: string[]
+  badge: string
+  cardVariant: 'default' | 'growth' | 'pro'
+  footerNote?: string
+}
+
+/** Launch plans section matching the new launchStart design and copy hierarchy. */
 export const LaunchPlansSection = () => {
-  const { handleLauchNowClick, renderModal } = useLaunchNow()
+  const growthBorder = useColorModeValue('primary1.300', 'primary1.700')
+  const proBorder = useColorModeValue('primary1.500', 'primary1.600')
+  const badgeBg = useColorModeValue('neutral1.2', 'neutral1.4')
+  const badgeFg = useColorModeValue('neutral1.9', 'neutral1.11')
 
-  const highlightedBorder = useColorModeValue('primary1.400', 'primary1.600')
-  const badgeBackground = useColorModeValue('primary1.9', 'primary1.7')
-  const iconBackground = useColorModeValue('primary1.100', 'primary1.900')
-
-  const plans = useMemo(
+  const plans = useMemo<LaunchPlan[]>(
     () => [
       {
-        icon: PiRocket,
+        badge: t('Starter'),
         title: t('Starter Launch'),
-        subtitle: t('do it yourself, get the basic exposure'),
+        subtitle: t('Do it yourself, get the basic exposure'),
         price: t('$25'),
-        points: [t('Access to all Geyser tooling and get discovered through the Geyser platform')],
-        badge: '',
+        points: [t('Access to all Geyser tooling'), t('Get discovered on platform')],
+        cardVariant: 'default',
       },
       {
-        icon: PiTrendUp,
+        badge: t('Growth'),
         title: t('Growth Launch'),
         subtitle: t('Visibility boost'),
         price: t('$60'),
         points: [
-          `${t('Landing Page Feature')}: ${t('1 week front-page spotlight')}`,
-          `${t('Geyser Newsletter feature')}: ${t(
-            'get featured at the top of our monthly newsletter going out to 5000+ subscribers',
-          )}`,
-          `${t('Social Media post')}: ${t('1 social media post on Geyser’s X account with 15k+ followers')}`,
+          t('1 week front-page spotlight'),
+          t('Newsletter feature (5000+ subscribers)'),
+          t('1 social media post (15k+ followers)'),
         ],
-        badge: t('Popular'),
+        cardVariant: 'growth',
       },
       {
-        icon: PiStar,
+        badge: t('Pro'),
         title: t('Pro Launch'),
-        subtitle: t('Maximum visibility + product feedback'),
+        subtitle: t('Maximum visibility + feedback'),
         price: t('$90'),
         points: [
-          t('Limited to 5 per month, subject to selection'),
           t('Everything in Growth'),
-          `${t('Spotlight Email')}: ${t(
-            'Your project featured in a dedicated email sent to Geyser users most interested in your category',
-          )}`,
-          `${t('Project feedback')}: ${t(
-            'Geyser Team Expert provides 1-time feedback on your project story and structure',
-          )}`,
-          t('Picked by 40% of Top 100 projects on Geyser'),
+          t('Spotlight email to interested users'),
+          t('Project feedback from Geyser Team'),
+          t('Picked by 40% of Top 100 projects'),
         ],
-        badge: t('Best Value'),
+        cardVariant: 'pro',
+        footerNote: t('Limited to 5 per month'),
       },
       {
-        icon: PiSparkle,
+        badge: t('Partnership'),
         title: t('Geyser Partnership'),
-        subtitle: t('hands on support + network amplification'),
-        price: t('starting at $1,000'),
-        points: [
-          t('Geyser becomes your partner providing personalized launch strategy, project feedback, marketing support'),
-        ],
-        badge: t('Premium'),
+        subtitle: t('Hands-on support + network amplification'),
+        price: t('$1,000+'),
+        points: [t('Personalized launch strategy'), t('Project feedback'), t('Marketing support')],
+        cardVariant: 'default',
       },
     ],
     [],
   )
 
   return (
-    <>
-      <StartPageSectionShell id="launch-plans" sectionBg={useColorModeValue('neutral1.1', 'neutral1.2')}>
-        <VStack alignItems="flex-start" spacing={3}>
-          <H2 bold>{t('Choose your Launch Plan')}</H2>
-          <Body size="lg" maxWidth="850px" muted>
-            {t('Different support levels to match your project ambition and launch strategy.')}
-          </Body>
-        </VStack>
+    <StartPageSectionShell id="launch-plans">
+      <VStack alignItems="flex-start" spacing={3}>
+        <H2 bold>{t('Pick the level of support that fits your launch')}</H2>
+        <Body size="lg" maxWidth="820px" muted>
+          {t('Optional support to help you launch stronger.')}
+        </Body>
+      </VStack>
 
-        <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} spacing={5}>
-          {plans.map((plan) => {
-            const isHighlighted = plan.badge === t('Best Value')
-            const isPartnership = plan.title === t('Geyser Partnership')
+      <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} spacing={5}>
+        {plans.map((plan) => {
+          const cardBorderColor =
+            plan.cardVariant === 'growth' ? growthBorder : plan.cardVariant === 'pro' ? proBorder : undefined
 
-            return (
-              <PlaybookCard
-                key={plan.title}
-                height="100%"
-                borderColor={isHighlighted ? highlightedBorder : undefined}
-                borderWidth={isHighlighted ? '2px' : '1px'}
-              >
-                <VStack alignItems="flex-start" spacing={4} height="100%">
-                  {plan.badge ? (
-                    <VStack borderRadius="999px" backgroundColor={badgeBackground} paddingX={3} paddingY={1}>
-                      <Body size="xs" bold>
-                        {plan.badge}
-                      </Body>
-                    </VStack>
-                  ) : null}
-
-                  <Box
-                    width="42px"
-                    height="42px"
-                    borderRadius="10px"
-                    backgroundColor={iconBackground}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <plan.icon size={20} />
-                  </Box>
-
-                  <VStack alignItems="flex-start" spacing={1}>
-                    <H3 bold>{plan.title}</H3>
-                    <Body size="sm" muted>
-                      {plan.subtitle}
-                    </Body>
-                    <H3 size="xl" bold color="primary1.9" marginTop={2}>
-                      {plan.price}
-                    </H3>
-                  </VStack>
-
-                  <VStack alignItems="flex-start" spacing={2} flex={1}>
-                    {plan.points.map((point) => (
-                      <Box key={point}>
-                        <Body size="sm">
-                          <PiCheckCircle style={{ display: 'inline', marginRight: '8px' }} />
-                          {point}
-                        </Body>
-                      </Box>
-                    ))}
-                  </VStack>
-
-                  {isPartnership ? (
-                    <Button
-                      as={ChakraLink}
-                      isExternal
-                      href="https://cal.com/metamick/geyser-partnership-hands-on-support-network-amplification?overlayCalendar=true"
-                      width="100%"
-                      variant="outline"
-                      colorScheme="neutral1"
-                    >
-                      {t('Contact us')}
-                    </Button>
-                  ) : (
-                    <Button
-                      width="100%"
-                      colorScheme={isHighlighted ? 'primary1' : 'neutral1'}
-                      variant={isHighlighted ? 'solid' : 'outline'}
-                      onClick={handleLauchNowClick}
-                    >
-                      {t('Select plan')}
-                    </Button>
-                  )}
+          return (
+            <PlaybookCard
+              key={plan.title}
+              height="100%"
+              borderColor={cardBorderColor}
+              borderWidth={cardBorderColor ? '2px' : '1px'}
+            >
+              <VStack alignItems="flex-start" spacing={4} height="100%">
+                <VStack borderRadius="999px" backgroundColor={badgeBg} paddingX={3} paddingY={1}>
+                  <Body size="xs" bold color={badgeFg}>
+                    {plan.badge}
+                  </Body>
                 </VStack>
-              </PlaybookCard>
-            )
-          })}
-        </SimpleGrid>
-      </StartPageSectionShell>
-      {renderModal()}
-    </>
+
+                <VStack alignItems="flex-start" spacing={1}>
+                  <H3 bold>{plan.title}</H3>
+                  <Body size="sm" muted>
+                    {plan.subtitle}
+                  </Body>
+                  <H3 size="xl" bold color="primary1.9" marginTop={2}>
+                    {plan.price}
+                  </H3>
+                </VStack>
+
+                <VStack alignItems="flex-start" spacing={2} flex={1}>
+                  {plan.points.map((point, index) => {
+                    const isHighlight = plan.cardVariant === 'pro' && index === plan.points.length - 1
+
+                    return (
+                      <Body key={point} size="sm" fontStyle={isHighlight ? 'italic' : 'normal'}>
+                        <PiCheckCircle style={{ display: 'inline', marginRight: '8px' }} />
+                        {point}
+                      </Body>
+                    )
+                  })}
+                </VStack>
+
+                {plan.footerNote ? (
+                  <Body size="xs" muted>
+                    {plan.footerNote}
+                  </Body>
+                ) : null}
+              </VStack>
+            </PlaybookCard>
+          )
+        })}
+      </SimpleGrid>
+
+      <VStack alignItems="center" justifyContent="center" width="100%">
+        <Button
+          as={ChakraLink}
+          href={GuideUrl}
+          isExternal
+          variant="link"
+          colorScheme="primary1"
+          rightIcon={<PiArrowUpRight />}
+        >
+          {t('Learn about launch modes')}
+        </Button>
+      </VStack>
+    </StartPageSectionShell>
   )
 }

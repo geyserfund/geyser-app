@@ -1,17 +1,17 @@
 import { VStack } from '@chakra-ui/react'
 
 import { ProjectCreationReferralCapture } from '../../components/ProjectCreationReferralCapture.tsx'
-import { BuildPageSection } from './sections/BuildPageSection.tsx'
 import { CreatorToolsSection } from './sections/CreatorToolsSection.tsx'
 import { FAQSection } from './sections/FAQSection.tsx'
 import { FinalCTASection } from './sections/FinalCTASection.tsx'
+import { FundamentalsSection } from './sections/FundamentalsSection.tsx'
 import { FundraiserTypeSection } from './sections/FundraiserTypeSection.tsx'
 import { HeroSection } from './sections/HeroSection.tsx'
-import { LaunchChecklistSection } from './sections/LaunchChecklistSection.tsx'
-import { LaunchStrongSection } from './sections/LaunchStrongSection.tsx'
+import { LaunchPlansSection } from './sections/LaunchPlansSection.tsx'
 import { MomentumSection } from './sections/MomentumSection.tsx'
-import { OverviewSection } from './sections/OverviewSection.tsx'
-import { PaymentSetupSection } from './sections/PaymentSetupSection.tsx'
+import { ResourcesSection } from './sections/ResourcesSection.tsx'
+import { StorySection } from './sections/StorySection.tsx'
+import { TrustPayoutSection } from './sections/TrustPayoutSection.tsx'
 
 /** How to crowdfund playbook page for the project creation start route. */
 export const LaunchStart = () => {
@@ -20,14 +20,14 @@ export const LaunchStart = () => {
       <ProjectCreationReferralCapture />
       <VStack spacing={0} width="100%" align="center" paddingBottom={{ base: 10, lg: 20 }}>
         <HeroSection />
-        <OverviewSection />
-        <BuildPageSection />
+        <FundamentalsSection />
+        <StorySection />
         <FundraiserTypeSection />
-        <PaymentSetupSection />
+        <TrustPayoutSection />
         <CreatorToolsSection />
-        <LaunchChecklistSection />
-        <LaunchStrongSection />
         <MomentumSection />
+        <LaunchPlansSection />
+        <ResourcesSection />
         <FAQSection />
         <FinalCTASection />
       </VStack>
