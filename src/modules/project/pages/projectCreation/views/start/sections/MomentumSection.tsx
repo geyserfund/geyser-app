@@ -14,7 +14,7 @@ import { getMomentumSteps } from '../utils/startPageContent.ts'
 
 /** Momentum section for first-launch actions after the page is published. */
 export const MomentumSection = () => {
-  const iconBackground = useColorModeValue('primary1.1', 'primary1.9')
+  const iconBackground = 'primary1.9'
   const primaryContentColor = 'utils.blackContrast'
   const stepSurface = useColorModeValue('white', 'neutral1.3')
 

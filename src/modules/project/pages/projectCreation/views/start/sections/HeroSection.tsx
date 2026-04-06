@@ -16,7 +16,7 @@ export const HeroSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
 
   const heroSurface = useColorModeValue('white', 'neutral1.2')
-  const stepNumberBg = useColorModeValue('primary1.9', 'primary1.8')
+  const stepNumberBg = 'primary1.9'
   const stepConnectorColor = useColorModeValue('neutral1.5', 'neutral1.6')
   const heroStripCardBg = useColorModeValue('white', 'neutral1.2')
 

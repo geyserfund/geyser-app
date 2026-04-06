@@ -1,4 +1,4 @@
-import { HStack, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { HStack, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { ComponentType, useMemo } from 'react'
 import { PiBookOpen, PiChartLine, PiShieldCheck, PiTarget } from 'react-icons/pi'
@@ -14,7 +14,7 @@ type FundamentalIcon = ComponentType<{ size?: string | number }>
 
 /** Intro fundamentals section that frames the page in simple terms. */
 export const FundamentalsSection = () => {
-  const iconBackground = useColorModeValue('primary1.1', 'primary1.9')
+  const iconBackground = 'primary1.9'
   const primaryContentColor = 'utils.blackContrast'
 
   const cards = useMemo(

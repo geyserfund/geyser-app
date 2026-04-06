@@ -1,4 +1,4 @@
-import { HStack, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { HStack, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { ComponentType, useMemo } from 'react'
 import {
@@ -28,8 +28,8 @@ type Tool = {
 
 /** Step 4 section showcasing tooling that drives conversion and momentum. */
 export const CreatorToolsSection = () => {
-  const iconBackground = useColorModeValue('primary1.1', 'primary1.9')
-  const benefitBackground = useColorModeValue('primary1.1', 'primary1.9')
+  const iconBackground = 'primary1.9'
+  const benefitBackground = 'primary1.9'
   const primaryContentColor = 'utils.blackContrast'
 
   const tools = useMemo<Tool[]>(

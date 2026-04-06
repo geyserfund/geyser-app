@@ -14,7 +14,7 @@ import { useLaunchNow } from '../utils/useLaunchNow.tsx'
 export const LaunchChecklistSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
 
-  const iconBackground = useColorModeValue('primary1.1', 'primary1.9')
+  const iconBackground = 'primary1.9'
   const primaryContentColor = 'utils.blackContrast'
   const checklistItemBg = useColorModeValue('neutral1.2', 'neutral1.4')
 

@@ -1,4 +1,4 @@
-import { Button, HStack, Link as ChakraLink, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Button, HStack, Link as ChakraLink, SimpleGrid, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
 import { PiArrowUpRight, PiCheckCircle, PiInfinity, PiTarget } from 'react-icons/pi'
@@ -12,8 +12,8 @@ import { StartPageSectionShell } from '../components/StartPageSectionShell.tsx'
 
 /** Fundraiser type section for choosing between open and goal-based launch models. */
 export const FundraiserTypeSection = () => {
-  const badgeBackground = useColorModeValue('primary1.1', 'primary1.9')
-  const iconBackground = useColorModeValue('primary1.1', 'primary1.9')
+  const badgeBackground = 'primary1.9'
+  const iconBackground = 'primary1.9'
   const primaryContentColor = 'utils.blackContrast'
 
   const openPoints = useMemo(
