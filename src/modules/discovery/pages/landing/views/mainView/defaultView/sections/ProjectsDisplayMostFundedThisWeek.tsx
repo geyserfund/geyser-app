@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 import { DiscoverMoreButton } from '@/modules/discovery/components/DiscoverMoreButton.tsx'
+import { filterPostsByUniqueProjects } from '@/helpers/filterPostsByUniqueProjects.ts'
 import { getPath } from '@/shared/constants/index.ts'
 import { ProjectCategoryLabel, ProjectSubCategoryLabel } from '@/shared/constants/platform/projectCategory.ts'
 
@@ -27,6 +28,7 @@ interface ProjectDisplayProps {
 }
 
 const NO_OF_ITEMS_TO_LOAD = 3
+const NO_OF_POSTS_TO_FETCH = 10
 
 export const ProjectsDisplayMostFundedThisWeek = ({
   title,
@@ -70,7 +72,7 @@ export const ProjectsDisplayMostFundedThisWeek = ({
           publishedAt: OrderByOptions.Desc,
         },
         pagination: {
-          take: NO_OF_ITEMS_TO_LOAD,
+          take: NO_OF_POSTS_TO_FETCH,
         },
         where: {
           category,
@@ -92,7 +94,10 @@ export const ProjectsDisplayMostFundedThisWeek = ({
   }
 
   const projects = useMemo(() => data?.projectsGet.projects ?? [], [data?.projectsGet.projects])
-  const posts = useMemo(() => postsQueryData?.posts ?? [], [postsQueryData?.posts])
+  const posts = useMemo(
+    () => filterPostsByUniqueProjects(postsQueryData?.posts ?? [], NO_OF_ITEMS_TO_LOAD),
+    [postsQueryData?.posts],
+  )
 
   if (loading) {
     return <ProjectDisplayBodySkeleton />
