@@ -15,6 +15,7 @@ export const LaunchChecklistSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
 
   const iconBackground = useColorModeValue('primary1.1', 'primary1.9')
+  const primaryContentColor = 'utils.blackContrast'
   const checklistItemBg = useColorModeValue('neutral1.2', 'neutral1.4')
 
   const checklistItems = useMemo(
@@ -46,6 +47,7 @@ export const LaunchChecklistSection = () => {
                 height="48px"
                 borderRadius="12px"
                 backgroundColor={iconBackground}
+                color={primaryContentColor}
                 display="flex"
                 alignItems="center"
                 justifyContent="center"

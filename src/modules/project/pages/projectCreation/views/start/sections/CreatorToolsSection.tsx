@@ -30,6 +30,7 @@ type Tool = {
 export const CreatorToolsSection = () => {
   const iconBackground = useColorModeValue('primary1.1', 'primary1.9')
   const benefitBackground = useColorModeValue('primary1.1', 'primary1.9')
+  const primaryContentColor = 'utils.blackContrast'
 
   const tools = useMemo<Tool[]>(
     () => [
@@ -101,6 +102,7 @@ export const CreatorToolsSection = () => {
             justifyContent="center"
             alignItems="center"
             backgroundColor={iconBackground}
+            color={primaryContentColor}
             flexShrink={0}
           >
             <tool.icon size={20} />
@@ -121,8 +123,9 @@ export const CreatorToolsSection = () => {
           paddingX={3}
           paddingY={1}
           alignSelf="flex-start"
+          color={primaryContentColor}
         >
-          <Body size="xs" bold>
+          <Body size="xs" bold color={primaryContentColor}>
             {tool.benefit}
           </Body>
         </VStack>

@@ -14,6 +14,7 @@ import { StartPageSectionShell } from '../components/StartPageSectionShell.tsx'
 export const FundraiserTypeSection = () => {
   const badgeBackground = useColorModeValue('primary1.1', 'primary1.9')
   const iconBackground = useColorModeValue('primary1.1', 'primary1.9')
+  const primaryContentColor = 'utils.blackContrast'
 
   const openPoints = useMemo(
     () => [
@@ -59,13 +60,20 @@ export const FundraiserTypeSection = () => {
               justifyContent="center"
               alignItems="center"
               backgroundColor={iconBackground}
+              color={primaryContentColor}
             >
               <PiInfinity size={22} />
             </HStack>
             <VStack alignItems="flex-start" spacing={1}>
               <H3 bold>{t('Open Fundraiser')}</H3>
-              <VStack borderRadius="999px" backgroundColor={badgeBackground} paddingX={3} paddingY={1}>
-                <Body size="xs" bold>
+              <VStack
+                borderRadius="999px"
+                backgroundColor={badgeBackground}
+                paddingX={3}
+                paddingY={1}
+                color={primaryContentColor}
+              >
+                <Body size="xs" bold color={primaryContentColor}>
                   {t('Flexible model')}
                 </Body>
               </VStack>
@@ -85,13 +93,20 @@ export const FundraiserTypeSection = () => {
               justifyContent="center"
               alignItems="center"
               backgroundColor={iconBackground}
+              color={primaryContentColor}
             >
               <PiTarget size={22} />
             </HStack>
             <VStack alignItems="flex-start" spacing={1}>
               <H3 bold>{t('All-or-Nothing Campaign')}</H3>
-              <VStack borderRadius="999px" backgroundColor={badgeBackground} paddingX={3} paddingY={1}>
-                <Body size="xs" bold>
+              <VStack
+                borderRadius="999px"
+                backgroundColor={badgeBackground}
+                paddingX={3}
+                paddingY={1}
+                color={primaryContentColor}
+              >
+                <Body size="xs" bold color={primaryContentColor}>
                   {t('Goal-based model')}
                 </Body>
               </VStack>

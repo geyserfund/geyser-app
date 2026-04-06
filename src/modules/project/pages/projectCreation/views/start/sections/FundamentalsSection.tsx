@@ -15,6 +15,7 @@ type FundamentalIcon = ComponentType<{ size?: string | number }>
 /** Intro fundamentals section that frames the page in simple terms. */
 export const FundamentalsSection = () => {
   const iconBackground = useColorModeValue('primary1.1', 'primary1.9')
+  const primaryContentColor = 'utils.blackContrast'
 
   const cards = useMemo(
     () =>
@@ -50,6 +51,7 @@ export const FundamentalsSection = () => {
                 justifyContent="center"
                 alignItems="center"
                 backgroundColor={iconBackground}
+                color={primaryContentColor}
               >
                 <card.icon size={22} />
               </HStack>

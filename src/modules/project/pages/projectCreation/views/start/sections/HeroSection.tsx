@@ -15,7 +15,7 @@ import { useLaunchNow } from '../utils/useLaunchNow.tsx'
 export const HeroSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
 
-  const accentSurface = useColorModeValue('primary1.1', 'primary1.9')
+  const heroSurface = useColorModeValue('white', 'neutral1.2')
   const stepNumberBg = useColorModeValue('primary1.9', 'primary1.8')
   const stepConnectorColor = useColorModeValue('neutral1.5', 'neutral1.6')
   const heroStripCardBg = useColorModeValue('white', 'neutral1.2')
@@ -29,7 +29,7 @@ export const HeroSection = () => {
 
   return (
     <>
-      <StartPageSectionShell id="crowdfund-hero" sectionBg={accentSurface}>
+      <StartPageSectionShell id="crowdfund-hero" sectionBg={heroSurface}>
         <VStack alignItems="flex-start" spacing={6}>
           <VStack alignItems="flex-start" spacing={3}>
             <H1 size={{ base: '2xl', lg: '4xl' }} bold>
