@@ -36,6 +36,10 @@ const ViewContributionStatusButton = ({ isPending }: { isPending: boolean }) => 
     return null
   }
 
+  if (!isPending) {
+    return null
+  }
+
   return (
     <Button
       as={RouterLink}
@@ -45,7 +49,7 @@ const ViewContributionStatusButton = ({ isPending }: { isPending: boolean }) => 
       colorScheme="primary1"
       width="310px"
     >
-      {isPending ? t('View contribution status') : t('Go to project')}
+      {t('View contribution status')}
     </Button>
   )
 }

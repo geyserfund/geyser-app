@@ -23,7 +23,7 @@ import {
   VITE_APP_ROOTSTOCK_GEYSER_OPERATIONAL_ADDRESS,
   VITE_APP_ROOTSTOCK_PRISM_CONTRACT_ADDRESS,
 } from '@/shared/constants/config/env.ts'
-import { __development__ } from '@/shared/constants/index.ts'
+import { __development__, getPath } from '@/shared/constants/index.ts'
 import {
   ContributionCreateInput,
   ContributionCreateMutation,
@@ -223,7 +223,7 @@ export const useFundingAPI = () => {
             ...input.paymentsInput.fiat,
             stripe: {
               ...input.paymentsInput.fiat.stripe,
-              returnUrl: `${ORIGIN}/project/${project.name}/funding/success`,
+              returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', project.name)}`,
               theme: stripeEmbeddedTheme,
             },
           },
@@ -512,7 +512,7 @@ export const useFundingAPI = () => {
         project?.name &&
         paymentsInputToPrepare?.fiat?.stripe
       ) {
-        paymentsInputToPrepare.fiat.stripe.returnUrl = `${ORIGIN}/project/${project.name}/funding/success`
+        paymentsInputToPrepare.fiat.stripe.returnUrl = `${ORIGIN}${getPath('fundingAwaitingSuccess', project.name)}`
         paymentsInputToPrepare.fiat.stripe.theme = stripeEmbeddedTheme
       }
 

@@ -332,12 +332,12 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) =
   }
 
   return {
-    fiat: {
-      create: true,
-      stripe: {
-        returnUrl: `${ORIGIN}/project/${fundingProject?.name}/funding/success`,
+      fiat: {
+        create: true,
+        stripe: {
+          returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', fundingProject?.name)}`,
+        },
       },
-    },
   }
 })
 
@@ -397,7 +397,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
       paymentsInput.fiat = {
         create: true,
         stripe: {
-          returnUrl: `${ORIGIN}/project/${fundingProject?.name}/funding/success`,
+          returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', fundingProject?.name)}`,
         },
       }
     }

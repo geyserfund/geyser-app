@@ -1,4 +1,4 @@
-import { Button, Divider, VStack } from '@chakra-ui/react'
+import { Button, Divider, HStack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import Confetti from 'react-confetti'
@@ -75,9 +75,22 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
           </VStack>
           {formState.fundingMode !== recurringFundingModes.oneTime && (
             <VStack w="full" alignItems="start" spacing={6}>
-              <H2 size={{ base: 'xl', lg: '2xl' }} bold>
-                {t('Manage Recurring Payment')}
-              </H2>
+              <HStack w="full" justifyContent="space-between" alignItems="center" gap={4}>
+                <H2 size={{ base: 'xl', lg: '2xl' }} bold>
+                  {t('Manage Recurring Payment')}
+                </H2>
+                {user?.id && (
+                  <Button
+                    as={Link}
+                    to={getPath('userProfileSettingsSubscriptions', user.id)}
+                    size="lg"
+                    variant="outline"
+                    colorScheme="neutral1"
+                  >
+                    {t('Manage recurring payments')}
+                  </Button>
+                )}
+              </HStack>
               <Body size="sm" light>
                 {user?.id
                   ? t('You can manage this recurring payment from your recurring payments settings.')
@@ -85,17 +98,6 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
                   ? t('Use the email associated with this payment to manage it in the future.')
                   : t('Please check your recurring payments settings to manage this payment.')}
               </Body>
-              {user?.id && (
-                <Button
-                  as={Link}
-                  to={getPath('userProfileSettingsSubscriptions', user.id)}
-                  size="lg"
-                  variant="solid"
-                  colorScheme="primary1"
-                >
-                  {t('Manage recurring payments')}
-                </Button>
-              )}
             </VStack>
           )}
           <SafeToDeleteRefund />
@@ -105,7 +107,9 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
             referenceCode={fundingContribution.uuid}
             matchedAmountOverride={matchedAmountOverride}
           />
-          <DownloadInvoice project={project} contributionId={fundingContribution.id} isPending={isPending} />
+          <HStack w="full" justifyContent="flex-end">
+            <DownloadInvoice project={project} contributionId={fundingContribution.id} isPending={isPending} />
+          </HStack>
           <SuggestedProjects
             id={'suggested-projects-funding-success'}
             subCategory={project.subCategory}
