@@ -40,7 +40,7 @@ const CONTENT_IMAGE_URL =
 const BITCOIN_IMAGE_URL =
   'https://images.unsplash.com/photo-1761740533449-b8d4385e60b0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhcnRpZmljaWFsJTIwaW50ZWxsaWdlbmNlJTIwdGVjaG5vbG9neSUyMGdsb3dpbmclMjBuZXVyYWx8ZW58MXx8fHwxNzc1MDY1MDM0fDA&ixlib=rb-4.1.0&q=80&w=900'
 
-const INTERVAL_MS = 5000
+const INTERVAL_MS = 10000
 
 type CreatorTypeCategory = {
   id: string
@@ -86,17 +86,13 @@ const SideCard = ({
   category,
   isActive,
   onClick,
-  floatDelay,
   panelBackground,
   borderColor,
   textColor,
   mutedTextColor,
-}: CategoryCardProps & { floatDelay: number }) => {
+}: CategoryCardProps) => {
   return (
-    <motion.div
-      animate={{ y: [0, -5, 0] }}
-      transition={{ duration: 3.5, delay: floatDelay, repeat: Infinity, ease: 'easeInOut' }}
-    >
+    <motion.div>
       <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.2 }}>
         <Box
           as="button"
@@ -124,24 +120,6 @@ const SideCard = ({
           overflow="hidden"
           _focusVisible={{ outline: '2px solid', outlineColor: 'primary1.8', outlineOffset: '2px' }}
         >
-          {isActive ? (
-            <motion.div
-              animate={{ scale: [1, 1.6], opacity: [0.4, 0] }}
-              transition={{ duration: 1.8, repeat: Infinity }}
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: 14,
-                width: 32,
-                height: 32,
-                borderRadius: '50%',
-                border: `1.5px solid ${category.color}`,
-                transform: 'translate(-50%, -50%)',
-                pointerEvents: 'none',
-              }}
-            />
-          ) : null}
-
           <Box
             flexShrink={0}
             w="32px"
@@ -461,7 +439,6 @@ export const CreatorTypesSection = () => {
                   category={category}
                   isActive={activeIndex === index}
                   onClick={() => setActiveIndex(index)}
-                  floatDelay={index * 0.18}
                   panelBackground={panelBackground}
                   borderColor={panelBorderColor}
                   textColor={panelTextColor}

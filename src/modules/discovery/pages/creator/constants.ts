@@ -2,11 +2,13 @@ import type { IconType } from 'react-icons'
 import {
   FaBolt,
   FaBuilding,
+  FaBullhorn,
   FaCalendarAlt,
   FaCode,
   FaFilm,
   FaFlask,
   FaGraduationCap,
+  FaHandsHelping,
   FaHeart,
   FaMicrophone,
   FaPalette,
@@ -57,6 +59,7 @@ export type CreatorPossibility = {
 export type CreatorCommunityPillar = {
   title: string
   body: string
+  icon: IconType
   accentColor: string
 }
 
@@ -311,18 +314,21 @@ export const creatorPossibilities: CreatorPossibility[] = [
 
 export const creatorCommunityPillars: CreatorCommunityPillar[] = [
   {
-    title: 'Bitcoiners back builders they believe in',
-    body: 'Your first supporters are often mission-aligned and ready to champion what you are creating.',
+    title: 'Exposure to the Bitcoiner community',
+    body: 'Get discovered by mission-aligned Bitcoiners ready to back, share, and champion your campaign.',
+    icon: FaUsers,
     accentColor: '#00f5dc',
   },
   {
-    title: 'We help your project reach farther',
-    body: 'Strong campaigns get extra lift through Geyser social channels and partner distribution.',
+    title: "Promotion through Geyser's network",
+    body: 'Strong campaigns are amplified across Geyser channels, partner media, and trusted ecosystem voices.',
+    icon: FaBullhorn,
     accentColor: '#a78bfa',
   },
   {
-    title: 'Promotion that goes beyond your own network',
-    body: 'From Bitcoin news platforms to podcasters and trusted voices, we help open bigger doors.',
+    title: 'Hands-on support for your launch',
+    body: 'From campaign framing to launch execution, Geyser helps you build momentum and run a stronger fundraiser.',
+    icon: FaHandsHelping,
     accentColor: '#34d399',
   },
 ]

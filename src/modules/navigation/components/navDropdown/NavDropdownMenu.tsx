@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   HStack,
+  Icon,
   Link as ChakraLink,
   Menu,
   MenuButton,
@@ -17,6 +18,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { type ReactNode, useCallback, useEffect, useRef } from 'react'
+import { PiArrowUpRight } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -149,6 +151,13 @@ export const NavDropdownMenu = ({
             >
               {item.badge.label}
             </Badge>
+          ) : null}
+          {item.href ? (
+            <Icon
+              as={PiArrowUpRight}
+              boxSize={isDesktop ? 3.5 : 3}
+              color={item.disabled ? disabledColor : isCta ? ctaTextColor : mutedColor}
+            />
           ) : null}
         </HStack>
         {item.description ? (

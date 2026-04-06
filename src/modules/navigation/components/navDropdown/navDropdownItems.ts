@@ -41,15 +41,15 @@ export const getFundraiseNavDropdownItems = (t: TFunction): NavDropdownMenuItem[
       to: getPath('discoveryCreator'),
     },
     {
-      title: t('How to launch on Geyser'),
-      description: t('Follow the guided start flow to set up your project.'),
-      to: getPath('launchStart'),
-    },
-    {
       title: t('Launch Now'),
       description: t('Go straight to your project details and begin launching now.'),
       to: getPath('launchProjectDetails'),
-      emphasis: 'cta',
+      badge: { label: t('start'), tone: 'new' },
+    },
+    {
+      title: t('How to launch on Geyser'),
+      description: t('Follow the guided start flow to set up your project.'),
+      to: getPath('launchStart'),
     },
     {
       title: t('Look at our Guides'),

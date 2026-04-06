@@ -1,4 +1,4 @@
-import { Box, HStack, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, HStack, Icon, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -6,6 +6,19 @@ import { H2, H3 } from '@/shared/components/typography/Heading.tsx'
 
 import { creatorCommunityMainImageUrl, creatorCommunityPillars } from '../constants.ts'
 import { CreatorSectionContainer } from './CreatorSectionContainer.tsx'
+
+const getAlphaColor = (hexColor: string, alpha: number) => {
+  const color = hexColor.trim().replace('#', '')
+
+  if (color.length !== 6) {
+    return `rgba(255, 255, 255, ${alpha})`
+  }
+
+  const red = Number.parseInt(color.slice(0, 2), 16)
+  const green = Number.parseInt(color.slice(2, 4), 16)
+  const blue = Number.parseInt(color.slice(4, 6), 16)
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`
+}
 
 /** Community belonging section focused on why launching on Geyser feels different. */
 export const CreatorCommunitySection = () => {
@@ -47,44 +60,57 @@ export const CreatorCommunitySection = () => {
               </H2>
               <Body size="md" color="neutral1.10">
                 {t(
-                  'On Geyser, creators are supported by people who care about the mission, not just the transaction. That shared conviction helps projects start, survive, and scale.',
+                  'Geyser helps creators launch successful fundraisers and campaigns with audience, distribution, and hands-on support from day one.',
                 )}
               </Body>
               <Body size="md" color="neutral1.10">
                 {t(
-                  'Whether you are building culture, education, open-source tools, stories, or local impact, this is where ideas find their people.',
+                  "From exposure to the Bitcoiner community, to promotion through Geyser's network, to direct launch support, we help projects turn attention into momentum.",
                 )}
               </Body>
 
               <SimpleGrid columns={1} spacing={4} w="full" mt={2}>
-                {creatorCommunityPillars.map((pillar) => (
-                  <HStack
-                    key={pillar.title}
-                    align="start"
-                    spacing={4}
-                    p={5}
-                    borderWidth="1px"
-                    borderColor={cardBorderColor}
-                    borderRadius="xl"
-                    backgroundColor={cardBackground}
-                  >
-                    <Box
-                      width="4px"
-                      minH={{ base: '54px', lg: '48px' }}
-                      borderRadius="full"
-                      backgroundColor={pillar.accentColor}
-                      flexShrink={0}
-                    />
-                    <VStack align="start" spacing={2}>
-                      <H3 size="md" bold>
-                        {t(pillar.title)}
-                      </H3>
-                      <Body size="sm" color="neutral1.10">
-                        {t(pillar.body)}
-                      </Body>
-                    </VStack>
-                  </HStack>
-                ))}
+                {creatorCommunityPillars.map((pillar) => {
+                  const iconBadgeBackground = getAlphaColor(pillar.accentColor, 0.18)
+                  const iconBadgeBorderColor = getAlphaColor(pillar.accentColor, 0.35)
+
+                  return (
+                    <HStack
+                      key={pillar.title}
+                      align="start"
+                      spacing={4}
+                      p={5}
+                      borderWidth="1px"
+                      borderColor={cardBorderColor}
+                      borderRadius="xl"
+                      backgroundColor={cardBackground}
+                    >
+                      <Box
+                        w="42px"
+                        h="42px"
+                        borderRadius="12px"
+                        backgroundColor={iconBadgeBackground}
+                        borderWidth="1px"
+                        borderColor={iconBadgeBorderColor}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        color={pillar.accentColor}
+                        flexShrink={0}
+                      >
+                        <Icon as={pillar.icon} fontSize="20px" />
+                      </Box>
+                      <VStack align="start" spacing={2}>
+                        <H3 size="md" bold>
+                          {t(pillar.title)}
+                        </H3>
+                        <Body size="sm" color="neutral1.10">
+                          {t(pillar.body)}
+                        </Body>
+                      </VStack>
+                    </HStack>
+                  )
+                })}
               </SimpleGrid>
             </VStack>
           </SimpleGrid>

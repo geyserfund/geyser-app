@@ -1,4 +1,14 @@
-import { Box, Grid, GridItem, HStack, Image, Link as ChakraLink, useColorModeValue, VStack } from '@chakra-ui/react'
+import {
+  Badge,
+  Box,
+  Grid,
+  GridItem,
+  HStack,
+  Image,
+  Link as ChakraLink,
+  useColorModeValue,
+  VStack,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiArrowUpRight } from 'react-icons/pi'
 
@@ -57,8 +67,6 @@ export const CreatorSuccessStoriesSection = () => {
           <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, minmax(0, 1fr))' }} gap={{ base: 4, lg: 5 }}>
             {creatorStories.map((story) => {
               const accentBorderColor = getAlphaColor(story.accentColor, 0.5)
-              const tagBackground = getAlphaColor(story.accentColor, 0.2)
-              const outcomeBackground = getAlphaColor(story.accentColor, 0.18)
 
               return (
                 <ChakraLink
@@ -90,42 +98,33 @@ export const CreatorSuccessStoriesSection = () => {
                         _groupHover={{ transform: 'scale(1.05)' }}
                       />
                       <Box position="absolute" inset={0} bgGradient="linear(to-t, rgba(0,0,0,0.6), rgba(0,0,0,0.1))" />
-                      <Box
-                        position="absolute"
-                        left={4}
-                        top={4}
-                        px={3}
-                        py={1}
-                        borderRadius="full"
-                        backgroundColor={tagBackground}
-                        borderWidth="1px"
-                        borderColor={accentBorderColor}
-                      >
-                        <Body
-                          fontSize="xs"
-                          fontWeight={700}
-                          color={story.accentColor}
+                      <HStack position="absolute" left={3} bottom={3} spacing={2} alignItems="center">
+                        <Badge
+                          variant="surface"
+                          colorScheme="primary1"
+                          size="sm"
+                          borderColor={accentBorderColor}
                           textTransform="uppercase"
-                          letterSpacing="0.06em"
+                          fontSize="10px"
+                          px={2}
+                          py={0.5}
+                          lineHeight={1.1}
                         >
                           {t(story.tag)}
-                        </Body>
-                      </Box>
-                      <Box
-                        position="absolute"
-                        right={4}
-                        bottom={4}
-                        px={3}
-                        py={1.5}
-                        borderRadius="md"
-                        backgroundColor={outcomeBackground}
-                        borderWidth="1px"
-                        borderColor={accentBorderColor}
-                      >
-                        <Body fontSize="xs" fontWeight={700} color="white">
+                        </Badge>
+                        <Badge
+                          variant="surface"
+                          colorScheme="neutral1"
+                          size="sm"
+                          borderColor={accentBorderColor}
+                          fontSize="10px"
+                          px={2}
+                          py={0.5}
+                          lineHeight={1.1}
+                        >
                           {t(story.outcomeLabel)}
-                        </Body>
-                      </Box>
+                        </Badge>
+                      </HStack>
                     </Box>
                     <VStack align="start" spacing={3} p={5}>
                       <Body size="lg" fontWeight={700}>
@@ -179,7 +178,7 @@ export const CreatorSuccessStoriesSection = () => {
                         {t(miniStory.title)}
                       </Body>
                       {miniStory.subtitle ? (
-                        <Body fontSize="xs" color="neutral1.10" noOfLines={2}>
+                        <Body fontSize="xs" color="neutral1.10" noOfLines={1}>
                           {t(miniStory.subtitle)}
                         </Body>
                       ) : null}
