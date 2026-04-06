@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { AiFillApple } from 'react-icons/ai'
 import { FaBitcoin, FaCreditCard } from 'react-icons/fa'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { recurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
@@ -38,6 +38,7 @@ const getIsApplePayVisible = () => {
 }
 
 export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButtonsProps) => {
+  const location = useLocation()
   const navigate = useNavigate()
   const isMobile = useMobileMode()
   const { project } = useFundingFormAtom()
@@ -66,7 +67,10 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           ? getPath('fundingPaymentFiatStripe', project.name)
           : getPath('fundingPaymentFiatBanxa', project.name)
         : getPath('fundingStart', project.name)
-      navigate(paymentPath)
+      navigate({
+        pathname: paymentPath,
+        search: location.search,
+      })
     }
   }
 
@@ -77,14 +81,20 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
       const paymentPath = hasFiatPaymentMethod
         ? getPath('fundingPaymentFiatBanxaApplePay', project.name)
         : getPath('fundingStart', project.name)
-      navigate(paymentPath)
+      navigate({
+        pathname: paymentPath,
+        search: location.search,
+      })
     }
   }
 
   const handleBitcoinClick = () => {
     setIntendedPaymentMethod(PaymentMethods.lightning)
     if (!useFormSubmit) {
-      navigate(getPath('fundingStart', project.name))
+      navigate({
+        pathname: getPath('fundingStart', project.name),
+        search: location.search,
+      })
     }
   }
 

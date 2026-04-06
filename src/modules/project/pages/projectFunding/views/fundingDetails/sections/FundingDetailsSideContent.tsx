@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { FormEvent, useRef } from 'react'
 import { UseFormReturn } from 'react-hook-form'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useAuthContext } from '@/context'
 import { useAuthModal } from '@/modules/auth/hooks'
@@ -55,6 +55,7 @@ export const FundingDetailsSideContent = ({ handleSubmit, addressForm }: Funding
 }
 
 export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDetailsSummaryProps) => {
+  const location = useLocation()
   const navigate = useNavigate()
   const toast = useNotification()
 
@@ -71,7 +72,7 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
   const selectedPaymentOptionRef = useRef<SelectedPaymentOption | null>(null)
 
   const hasRecurringSelection = formState.fundingMode !== recurringFundingModes.oneTime
-  const shouldShowPaymentMethodButtons = hasRecurringSelection || !isLoggedIn
+  const shouldShowPaymentMethodButtons = true
   const getSelectedPaymentOption = (e?: FormEvent<HTMLDivElement>): SelectedPaymentOption | null => {
     const submitter = (e?.nativeEvent as SubmitEvent | undefined)?.submitter as HTMLButtonElement | null
     const selectedPaymentMethod = submitter?.dataset.paymentMethod as PaymentMethods | undefined
@@ -142,9 +143,15 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
   const handleGoNext = (selectedPaymentOption?: SelectedPaymentOption | null) => {
     const nextPaymentMethod = selectedPaymentOption?.intendedPaymentMethod || intendedPaymentMethod
     const nextFiatPaymentMethod = selectedPaymentOption?.fiatPaymentMethod || fiatPaymentMethod
+    const navigationTarget = {
+      search: location.search,
+    }
 
     if (isLoggedIn && isOneTimeFundingMode && !nextPaymentMethod) {
-      navigate(getPath('fundingGuardians', project.name))
+      navigate({
+        pathname: getPath('fundingGuardians', project.name),
+        ...navigationTarget,
+      })
     } else {
       if (nextPaymentMethod === PaymentMethods.fiatSwap && hasFiatPaymentMethod) {
         const paymentPath = hasStripePaymentMethod
@@ -152,11 +159,17 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
           : nextFiatPaymentMethod === fiatCheckoutMethods.applePay
           ? getPath('fundingPaymentFiatBanxaApplePay', project.name)
           : getPath('fundingPaymentFiatBanxa', project.name)
-        navigate(paymentPath)
+        navigate({
+          pathname: paymentPath,
+          ...navigationTarget,
+        })
         return
       }
 
-      navigate(getPath('fundingStart', project.name))
+      navigate({
+        pathname: getPath('fundingStart', project.name),
+        ...navigationTarget,
+      })
     }
   }
 

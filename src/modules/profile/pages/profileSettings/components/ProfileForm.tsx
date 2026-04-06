@@ -10,6 +10,8 @@ import { useUserProfileAtom } from '../../../state'
 import { EditableAvatar } from '../../profilePage/components'
 import { useEditProfile } from '../hooks/useEditProfile'
 import { DeleteUserProfile } from './DeleteUserProfile'
+import { UpdateVerifyEmail } from './UpdateVerifyEmail'
+import { IdentityVerification } from '../views/ProfileSettingsVerification/views/IdentityVerification'
 
 export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
   const { t } = useTranslation()
@@ -80,6 +82,10 @@ export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
         </VStack>
       </form>
 
+      <UpdateVerifyEmail />
+
+      <IdentityVerification />
+
       <DeleteUserProfile />
     </>
   )
@@ -106,9 +112,19 @@ export const ProfileFormSkeleton = () => {
         </VStack>
       </VStack>
 
-      <DeleteUserProfile />
+      <VStack w="full" align="start" spacing={4}>
+        <H3 size="lg">{t('Email')}</H3>
+        <SkeletonLayout height="74px" />
+      </VStack>
+
+      <VStack w="full" align="start" spacing={4}>
+        <H3 size="lg">{t('Identity')}</H3>
+        <SkeletonLayout height="82px" />
+      </VStack>
 
       <SkeletonLayout height="40px" />
+
+      <DeleteUserProfile />
     </VStack>
   )
 }

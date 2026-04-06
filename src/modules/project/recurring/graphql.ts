@@ -62,6 +62,7 @@ export type RecurringContribution = {
   id: string
   projectId: string
   userId?: string | null
+  managementNonce?: string | null
   uuid: string
   kind: RecurringContributionKind
   status: RecurringContributionStatus
@@ -188,6 +189,30 @@ export type RecurringContributionRenewalCreateMutation = {
   recurringContributionRenewalCreate: RecurringContributionCheckoutPayload
 }
 
+export type RecurringContributionCancelMutationVariables = {
+  input: {
+    id: string
+  }
+}
+
+export type RecurringContributionCancelMutation = {
+  recurringContributionCancel: RecurringContribution
+}
+
+export type RecurringContributionPortalSessionCreateMutationVariables = {
+  input: {
+    id: string
+    returnUrl: string
+  }
+}
+
+export type RecurringContributionPortalSessionCreateMutation = {
+  recurringContributionPortalSessionCreate: {
+    __typename?: 'RecurringContributionPortalSession'
+    url: string
+  }
+}
+
 export type CreateProjectSubscriptionPlanMutationVariables = {
   input: {
     projectId: number
@@ -268,6 +293,7 @@ export const QUERY_RECURRING_CONTRIBUTIONS = gql`
       recurringContributions {
         id
         uuid
+        managementNonce
         kind
         status
         paymentMethod
@@ -428,6 +454,25 @@ export const MUTATION_RECURRING_CONTRIBUTION_RENEWAL_CREATE = gql`
       payments {
         ...FundingContributionPaymentDetails
       }
+    }
+  }
+`
+
+export const MUTATION_RECURRING_CONTRIBUTION_CANCEL = gql`
+  mutation RecurringContributionCancel($input: RecurringContributionCancelInput!) {
+    recurringContributionCancel(input: $input) {
+      id
+      uuid
+      status
+      canceledAt
+    }
+  }
+`
+
+export const MUTATION_RECURRING_CONTRIBUTION_PORTAL_SESSION_CREATE = gql`
+  mutation RecurringContributionPortalSessionCreate($input: RecurringContributionPortalSessionCreateInput!) {
+    recurringContributionPortalSessionCreate(input: $input) {
+      url
     }
   }
 `

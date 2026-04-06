@@ -1,7 +1,7 @@
 import { useBreakpointValue, VStack } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingAPI } from '@/modules/project/funding/hooks/useFundingAPI'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
@@ -34,6 +34,7 @@ export const PaymentLoadingContribution = ({
 
   const qrSize = useBreakpointValue(QRCodeSizeMap)
 
+  const location = useLocation()
   const navigate = useNavigate()
 
   const intendedPaymentMethod = useAtomValue(intendedPaymentMethodAtom)
@@ -92,10 +93,13 @@ export const PaymentLoadingContribution = ({
               }
             }
 
+            const searchParams = new URLSearchParams(location.search)
+            searchParams.set('transactionId', contributionId)
+
             navigate(
               {
                 pathname: paymentPath,
-                search: `?transactionId=${contributionId}`,
+                search: `?${searchParams.toString()}`,
               },
               { replace: true },
             )

@@ -26,6 +26,8 @@ import {
 import { commaFormatted, convertAmount, isProjectAnException, toInt, validateEmail } from '@/utils'
 
 import {
+  fiatCheckoutMethods,
+  fiatPaymentMethodAtom,
   intendedPaymentMethodAtom,
   paymentMethodAtom,
   PaymentMethods,
@@ -847,6 +849,8 @@ export const resetFundingFormAtom = atom(null, (_, set) => {
   set(fundingFormStateAtom, initialState)
   set(fundingInputAfterRequestAtom, null)
   set(recurringContributionRenewalAtom, null)
+  set(intendedPaymentMethodAtom, undefined)
+  set(fiatPaymentMethodAtom, fiatCheckoutMethods.creditCard)
   set(fundingFormErrorAtom, {} as { [key in keyof FundFormType]: string })
   set(fundingFormWarningAtom, {} as { [key in keyof FundFormType]: string })
   set(launchContributionProjectIdAtom, '')

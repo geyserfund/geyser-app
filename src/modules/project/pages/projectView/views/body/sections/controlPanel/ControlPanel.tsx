@@ -354,7 +354,9 @@ export const ControlPanel = () => {
             isStripeConnectIncomplete
               ? stripeConnectDisabledReasonLabel ||
                 t('Open Stripe Connect to finish your configuration and enable fiat contributions.')
-              : t('Connect Stripe and get paid in fiat straight to your bank account, alongside Bitcoin funding.')
+              : t(
+                  'Connect Stripe to receive fiat payments straight to your bank account and enable auto-renewing recurring contributions for contributors.',
+                )
           }
           actionButton={
             <Button

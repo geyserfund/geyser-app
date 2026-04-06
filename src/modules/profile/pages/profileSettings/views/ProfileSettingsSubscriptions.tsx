@@ -1,14 +1,27 @@
-import { useQuery } from '@apollo/client'
-import { Box, Card, CardBody, HStack, Stack, VStack } from '@chakra-ui/react'
+import { useMutation, useQuery } from '@apollo/client'
+import { Avatar, Box, Button, Card, CardBody, HStack, Icon, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
+import { useState } from 'react'
+import { PiInfo } from 'react-icons/pi'
 
+import { useAuthContext } from '@/context'
 import {
+  MUTATION_RECURRING_CONTRIBUTION_CANCEL,
+  MUTATION_RECURRING_CONTRIBUTION_PORTAL_SESSION_CREATE,
   QUERY_RECURRING_CONTRIBUTIONS,
   RecurringContribution,
+  RecurringContributionCancelMutation,
+  RecurringContributionCancelMutationVariables,
+  RecurringContributionPortalSessionCreateMutation,
+  RecurringContributionPortalSessionCreateMutationVariables,
   RecurringContributionsQuery,
 } from '@/modules/project/recurring/graphql'
+import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts'
-import { Body } from '@/shared/components/typography'
+import { Body, H2 } from '@/shared/components/typography'
+import { useModal } from '@/shared/hooks'
+import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
+import { useNotification } from '@/utils'
 import { centsToDollars, commaFormatted } from '@/utils'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout.tsx'
@@ -22,15 +35,7 @@ const statusTitle: Record<string, string> = {
   ACTIVE: 'Active recurring payments',
   PAUSED: 'Paused recurring payments',
   CANCELED: 'Canceled recurring payments',
-  PENDING: 'Pending recurring payments',
 }
-
-const RecurringDetail = ({ label, value }: { label: string; value: string }) => (
-  <HStack flexWrap="wrap">
-    <Body color="neutralAlpha.9">{label}</Body>
-    <Body color="black">{value}</Body>
-  </HStack>
-)
 
 const formatAmount = (item: RecurringContribution) => {
   if (item.currency.toUpperCase().includes('USD')) {
@@ -40,34 +45,134 @@ const formatAmount = (item: RecurringContribution) => {
   return `${commaFormatted(item.amount)} sats`
 }
 
-const railLabel: Record<string, string> = {
-  STRIPE: 'Card',
-  BANXA: 'Card / Bank Transfer',
-  BITCOIN: 'Bitcoin',
+const renewalLabel: Record<string, string> = {
+  STRIPE: 'Automated',
+  BANXA: 'Manual',
+  BITCOIN: 'Manual',
 }
 
-const RecurringContributionCard = ({ item }: { item: RecurringContribution }) => {
-  const title = item.project?.title || t('Recurring donation')
+type RecurringContributionCardProps = {
+  item: RecurringContribution
+  onManageBilling(item: RecurringContribution): void
+  onCancel(item: RecurringContribution): void
+  isManagingBilling: boolean
+  isCanceling: boolean
+}
+
+const RecurringContributionCard = ({
+  item,
+  onManageBilling,
+  onCancel,
+  isManagingBilling,
+  isCanceling,
+}: RecurringContributionCardProps) => {
+  const projectTitle = item.project?.title || t('Recurring donation')
+  const cadence = (intervalLabel[item.interval] || item.interval).toLowerCase()
+  const title = `${projectTitle} - ${formatAmount(item)} ${cadence}`
+  const canManageBilling =
+    item.paymentMethod === 'STRIPE' && item.status !== 'CANCELED' && item.status !== 'PENDING'
+  const canCancel = item.status !== 'CANCELED'
 
   return (
-    <Card variant="outline" borderRadius="xl" borderColor="neutralAlpha.6">
+    <Card variant="outline" borderRadius="xl" borderColor="neutralAlpha.6" bg="neutralAlpha.1">
       <CardBody>
-        <VStack alignItems="start" spacing={3}>
-          <Body size="lg">{title}</Body>
-          <Stack direction={{ base: 'column', md: 'row' }} spacing={4} color="neutralAlpha.11">
-            <RecurringDetail label={t('Status:')} value={item.status.toLowerCase()} />
-            <RecurringDetail label={t('Amount:')} value={formatAmount(item)} />
-            <RecurringDetail label={t('Interval:')} value={intervalLabel[item.interval] || item.interval} />
-            <RecurringDetail label={t('Rail:')} value={t(railLabel[item.paymentMethod] || item.paymentMethod)} />
-            {item.nextBillingAt && (
-              <RecurringDetail label={t('Next billing:')} value={new Date(item.nextBillingAt).toLocaleDateString()} />
+        <VStack alignItems="start" spacing={4}>
+          <HStack
+            w="full"
+            alignItems={{ base: 'start', md: 'center' }}
+            justifyContent="space-between"
+            spacing={4}
+            flexDirection={{ base: 'column', md: 'row' }}
+          >
+            <HStack alignItems="center" spacing={3} w="full" minW={0}>
+              <Avatar
+                size="md"
+                name={projectTitle}
+                src={item.project?.thumbnailImage || undefined}
+                borderRadius="lg"
+              />
+              <VStack alignItems="start" spacing={1} flex={1} minW={0}>
+                <Body size="md" medium>
+                  {title}
+                </Body>
+              </VStack>
+            </HStack>
+            {(canManageBilling || canCancel) && (
+              <HStack
+                spacing={3}
+                w={{ base: 'full', md: 'auto' }}
+                justifyContent={{ base: 'stretch', md: 'flex-end' }}
+                alignItems="center"
+              >
+                {canManageBilling && (
+                  <Button
+                    size="md"
+                    minH="42px"
+                    px={5}
+                    variant="solid"
+                    colorScheme="primary1"
+                    onClick={() => onManageBilling(item)}
+                    isLoading={isManagingBilling}
+                    flex={{ base: 1, md: 'unset' }}
+                  >
+                    {t('Manage Billing')}
+                  </Button>
+                )}
+                {canCancel && (
+                  <Button
+                    size="md"
+                    minH="42px"
+                    px={5}
+                    variant="outline"
+                    colorScheme="neutral1"
+                    onClick={() => onCancel(item)}
+                    isLoading={isCanceling}
+                    flex={{ base: 1, md: 'unset' }}
+                  >
+                    {t('Cancel')}
+                  </Button>
+                )}
+              </HStack>
             )}
-          </Stack>
+          </HStack>
           {item.lastChargeFailureMessage && (
             <Body size="sm" color="secondary.red1">
               {item.lastChargeFailureMessage}
             </Body>
           )}
+          <HStack
+            w="full"
+            alignItems="flex-start"
+            justifyContent="flex-start"
+            spacing={8}
+            flexDirection={{ base: 'column', md: 'row' }}
+          >
+            <VStack alignItems="start" spacing={1}>
+              <HStack h="24px" alignItems="center">
+                <Body size="xs" color="neutralAlpha.9" lineHeight="short">
+                  {t('Next billing')}
+                </Body>
+              </HStack>
+              <Body>{item.nextBillingAt ? new Date(item.nextBillingAt).toLocaleDateString() : t('Not scheduled')}</Body>
+            </VStack>
+            <VStack alignItems="start" spacing={1}>
+              <HStack spacing={1} alignItems="center" h="24px">
+                <Body size="xs" color="neutralAlpha.9" lineHeight="short">
+                  {t('Renewal method')}
+                </Body>
+                <TooltipPopover
+                  text={t(
+                    'Automated renewals are charged automatically. Manual renewals require you to come back and complete each payment yourself before the due date.',
+                  )}
+                >
+                  <Box as="span" color="neutralAlpha.9" cursor="help">
+                    <Icon as={PiInfo} boxSize={3.5} />
+                  </Box>
+                </TooltipPopover>
+              </HStack>
+              <Body>{t(renewalLabel[item.paymentMethod] || 'Renewal')}</Body>
+            </VStack>
+          </HStack>
         </VStack>
       </CardBody>
     </Card>
@@ -75,11 +180,27 @@ const RecurringContributionCard = ({ item }: { item: RecurringContribution }) =>
 }
 
 export const ProfileSettingsSubscriptions = () => {
-  const { data, loading } = useQuery<RecurringContributionsQuery>(QUERY_RECURRING_CONTRIBUTIONS, {
+  const { user } = useAuthContext()
+  const toast = useNotification()
+  const cancelModal = useModal()
+  const [selectedRecurringContribution, setSelectedRecurringContribution] = useState<RecurringContribution | null>(null)
+  const [managingBillingId, setManagingBillingId] = useState<string | null>(null)
+
+  const { data, loading, refetch } = useQuery<RecurringContributionsQuery>(QUERY_RECURRING_CONTRIBUTIONS, {
     fetchPolicy: 'cache-and-network',
   })
+  const [cancelRecurringContribution, cancelRecurringContributionOptions] = useMutation<
+    RecurringContributionCancelMutation,
+    RecurringContributionCancelMutationVariables
+  >(MUTATION_RECURRING_CONTRIBUTION_CANCEL)
+  const [createPortalSession, createPortalSessionOptions] = useMutation<
+    RecurringContributionPortalSessionCreateMutation,
+    RecurringContributionPortalSessionCreateMutationVariables
+  >(MUTATION_RECURRING_CONTRIBUTION_PORTAL_SESSION_CREATE)
 
-  const recurringContributions = (data?.me?.recurringContributions ?? []).filter((item) => item.kind === 'DONATION')
+  const recurringContributions = (data?.me?.recurringContributions ?? []).filter(
+    (item) => item.kind === 'DONATION' && item.status !== 'PENDING'
+  )
   const grouped = recurringContributions.reduce<Record<string, RecurringContribution[]>>((accumulator, item) => {
     const bucket = accumulator[item.status] || []
     bucket.push(item)
@@ -87,10 +208,73 @@ export const ProfileSettingsSubscriptions = () => {
     return accumulator
   }, {})
 
+  const handleManageBilling = async (item: RecurringContribution) => {
+    try {
+      setManagingBillingId(item.id)
+      const { data } = await createPortalSession({
+        variables: {
+          input: {
+            id: item.id,
+            returnUrl: window.location.href,
+          },
+        },
+      })
+
+      const url = data?.recurringContributionPortalSessionCreate?.url
+      if (!url) {
+        toast.error({
+          title: t('Unable to open billing portal.'),
+          description: t('Please try again.'),
+        })
+        return
+      }
+
+      window.open(url, '_blank', 'noopener,noreferrer')
+    } catch (error) {
+      toast.error({
+        title: t('Unable to open billing portal.'),
+        description: error instanceof Error ? error.message : t('Please try again.'),
+      })
+    } finally {
+      setManagingBillingId(null)
+    }
+  }
+
+  const openCancelModal = (item: RecurringContribution) => {
+    setSelectedRecurringContribution(item)
+    cancelModal.onOpen()
+  }
+
+  const handleCancelRecurringContribution = async () => {
+    if (!selectedRecurringContribution) return
+
+    try {
+      await cancelRecurringContribution({
+        variables: {
+          input: {
+            id: selectedRecurringContribution.id,
+          },
+        },
+      })
+
+      cancelModal.onClose()
+      setSelectedRecurringContribution(null)
+      await refetch()
+      toast.success({
+        title: t('Recurring payment canceled.'),
+      })
+    } catch (error) {
+      toast.error({
+        title: t('Unable to cancel recurring payment.'),
+        description: error instanceof Error ? error.message : t('Please try again.'),
+      })
+    }
+  }
+
   return (
     <ProfileSettingsLayout desktopTitle={t('Recurring Payments')}>
       <Stack spacing={8} px={{ base: 0, lg: 6 }} w="full">
-        <Body size="sm" color="neutralAlpha.11" regular>
+        <Body size="md" color="neutralAlpha.11" regular>
           {t('View the recurring donations you have started across Geyser.')}
         </Body>
 
@@ -115,12 +299,21 @@ export const ProfileSettingsSubscriptions = () => {
           <Stack spacing={8}>
             {Object.entries(grouped).map(([status, items]) => (
               <Box key={status}>
-                <Body size="md" mb={2}>
+                <H2 size="lg" mb={2}>
                   {t(statusTitle[status] || status)}
-                </Body>
+                </H2>
                 <Stack spacing={4}>
                   {items.map((item) => (
-                    <RecurringContributionCard key={item.id} item={item} />
+                    <RecurringContributionCard
+                      key={item.id}
+                      item={item}
+                      onManageBilling={handleManageBilling}
+                      onCancel={openCancelModal}
+                      isManagingBilling={createPortalSessionOptions.loading && managingBillingId === item.id}
+                      isCanceling={
+                        cancelRecurringContributionOptions.loading && selectedRecurringContribution?.id === item.id
+                      }
+                    />
                   ))}
                 </Stack>
               </Box>
@@ -128,6 +321,38 @@ export const ProfileSettingsSubscriptions = () => {
           </Stack>
         )}
       </Stack>
+      <AlertDialogue
+        isOpen={cancelModal.isOpen}
+        onClose={() => {
+          cancelModal.onClose()
+          setSelectedRecurringContribution(null)
+        }}
+        title={t('Cancel recurring payment')}
+        description={t(
+          'This will stop future renewals for this recurring payment. You can still manage active card billing in Stripe before canceling.',
+        )}
+        hasCancel
+        negativeButtonProps={{
+          onClick: handleCancelRecurringContribution,
+          isLoading: cancelRecurringContributionOptions.loading,
+          children: t('Cancel recurring payment'),
+        }}
+      >
+        {selectedRecurringContribution && (
+          <VStack alignItems="start" spacing={1}>
+            <Body size="sm">{selectedRecurringContribution.project?.title || t('Recurring donation')}</Body>
+            <Body size="sm" color="neutralAlpha.11">
+              {formatAmount(selectedRecurringContribution)} ·{' '}
+              {t(intervalLabel[selectedRecurringContribution.interval] || selectedRecurringContribution.interval)}
+            </Body>
+            {user?.id && selectedRecurringContribution.paymentMethod === 'STRIPE' && (
+              <Body size="sm" color="neutralAlpha.11">
+                {t('You can also update payment details from Manage billing.')}
+              </Body>
+            )}
+          </VStack>
+        )}
+      </AlertDialogue>
     </ProfileSettingsLayout>
   )
 }

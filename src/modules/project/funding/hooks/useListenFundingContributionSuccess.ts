@@ -30,7 +30,11 @@ export const useListenFundingContributionSuccess = () => {
   const { project } = useFundingFormAtom()
 
   const { refetch } = useFundingContributionPolling()
-  useFundingContributionSubscription({ onComplete: () => refetch })
+  useFundingContributionSubscription({
+    onComplete: () => {
+      void refetch()
+    },
+  })
 
   const fundingContribution = useAtomValue(fundingContributionAtom)
 

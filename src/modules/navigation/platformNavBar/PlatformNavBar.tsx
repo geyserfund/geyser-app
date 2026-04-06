@@ -27,6 +27,7 @@ import { ProjectLogo } from './components/ProjectLogo'
 import { ProjectSelectMenu } from './components/ProjectSelectMenu'
 import {
   isDiscoveryRoutesAtom,
+  isPlatformNavShadowRouteAtom,
   isProjectDashboardRoutesAtom,
   isProjectFundingRoutesAtom,
   isProjectRoutesAtom,
@@ -63,6 +64,7 @@ export const PlatformNavBar = () => {
   const isAmbassadorProgramPage = useIsAmbassadorProgramPage()
 
   const isPlatformRoutes = useAtomValue(isDiscoveryRoutesAtom)
+  const isPlatformNavShadowRoute = useAtomValue(isPlatformNavShadowRouteAtom)
   const isProjectRoutes = useAtomValue(isProjectRoutesAtom)
   const isProjectDashboardRoutes = useAtomValue(isProjectDashboardRoutesAtom)
   const isProjectFundingRoutes = useAtomValue(isProjectFundingRoutesAtom)
@@ -150,9 +152,7 @@ export const PlatformNavBar = () => {
     !isProjectFundingRoutes &&
     !isProjectDashboardRoutes &&
     !isMobileMode
-  const isCreatorTransparentNav = isCreatorPage && !creatorNavScrolled
-  const navShadow = isCreatorTransparentNav || isProjectRoutes || isProfilePage ? 'none' : defaultNavShadow
-  const navBackgroundColor = isCreatorTransparentNav ? 'transparent' : 'utils.pbg'
+  const navShadow = isPlatformNavShadowRoute ? defaultNavShadow : 'none'
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {

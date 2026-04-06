@@ -132,12 +132,7 @@ export const DonationInput = () => {
       {canUseRecurringFunding && (
         <VStack alignItems="stretch" spacing={2}>
           <HStack spacing={3} alignItems="stretch">
-            <Box
-              flex={1}
-              p="1px"
-              borderRadius="xl"
-              bg={!isRecurringMode ? selectedBorderColor : unselectedBorderColor}
-            >
+            <Box flex={1} p="1px" borderRadius="xl" bg={!isRecurringMode ? selectedBorderColor : unselectedBorderColor}>
               <Button
                 w="full"
                 h="calc(3.5rem - 2px)"
@@ -164,12 +159,7 @@ export const DonationInput = () => {
               </Button>
             </Box>
 
-            <Box
-              flex={1}
-              p="1px"
-              borderRadius="xl"
-              bg={isRecurringMode ? selectedBorderColor : unselectedBorderColor}
-            >
+            <Box flex={1} p="1px" borderRadius="xl" bg={isRecurringMode ? selectedBorderColor : unselectedBorderColor}>
               <Button
                 w="full"
                 h="calc(3.5rem - 2px)"
@@ -300,7 +290,7 @@ export const DonationInput = () => {
         </VStack>
       )}
 
-        {/* <HStack w="full" position="relative">
+      {/* <HStack w="full" position="relative">
         <InputGroup>
           <Input
             ref={inputRef}

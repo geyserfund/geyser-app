@@ -4,6 +4,7 @@ import { useAtomValue } from 'jotai'
 import Confetti from 'react-confetti'
 import { Link } from 'react-router'
 
+import { useAuthContext } from '@/context'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useProjectMatchingPreview } from '@/modules/project/funding/hooks/useProjectMatchingPreview.ts'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
@@ -21,6 +22,7 @@ import { SuccessImageComponent } from '../components/index.ts'
 import { SafeToDeleteRefund } from '../components/SafeToDeleteRefund.tsx'
 
 export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
+  const { user } = useAuthContext()
   const { project, formState } = useFundingFormAtom()
   const matchingPreview = useProjectMatchingPreview()
 
@@ -77,10 +79,23 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
                 {t('Manage Recurring Payment')}
               </H2>
               <Body size="sm" light>
-                {fundingContribution.isAnonymous
+                {user?.id
+                  ? t('You can manage this recurring payment from your recurring payments settings.')
+                  : fundingContribution.isAnonymous
                   ? t('Use the email associated with this payment to manage it in the future.')
                   : t('Please check your recurring payments settings to manage this payment.')}
               </Body>
+              {user?.id && (
+                <Button
+                  as={Link}
+                  to={getPath('userProfileSettingsSubscriptions', user.id)}
+                  size="lg"
+                  variant="solid"
+                  colorScheme="primary1"
+                >
+                  {t('Manage recurring payments')}
+                </Button>
+              )}
             </VStack>
           )}
           <SafeToDeleteRefund />

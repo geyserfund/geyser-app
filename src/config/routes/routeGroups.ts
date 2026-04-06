@@ -222,6 +222,34 @@ export const discoveryRoutes = [
   getPath('discoveryNews'),
 ]
 
+export const platformNavBarShadowRoutes = [
+  getPath('discoveryLanding'),
+  getPath('discoveryProjects'),
+  getPath('discoveryProjectsInYourRegion'),
+  getPath('discoveryProjectsCategory', PathName.categoryName),
+  getPath('discoveryProjectsSubCategory', PathName.subCategoryName),
+  getPath('discoveryProjectCategory', PathName.categoryName),
+  getPath('discoveryProjectSubCategory', PathName.subCategoryName),
+  getPath('discoveryProducts'),
+  getPath('discoveryProductsCategory', PathName.categoryName),
+  getPath('discoveryCampaigns'),
+  getPath('discoveryAllOrNothing'),
+  getPath('discoveryCampaignsAlmostFunded'),
+  getPath('discoveryCampaignsAlmostOver'),
+  getPath('discoveryCampaignsLatest'),
+  getPath('discoveryCampaignsInYourRegion'),
+  getPath('discoveryCampaignsCategory', PathName.categoryName),
+  getPath('discoveryCampaignsSubCategory', PathName.subCategoryName),
+  getPath('discoveryFundraisers'),
+  getPath('discoveryFundraisersLatest'),
+  getPath('discoveryFundraisersInYourRegion'),
+  getPath('discoveryFundraisersCategory', PathName.categoryName),
+  getPath('discoveryFundraisersSubCategory', PathName.subCategoryName),
+  getPath('discoveryImpactFunds'),
+  getPath('discoveryNews'),
+  getPath('ambassadorProgram'),
+]
+
 export const profileSettingsRoutes = [
   getPath('userProfileSettings', PathName.userId),
   getPath('userProfileSettingsGeneral', PathName.userId),
