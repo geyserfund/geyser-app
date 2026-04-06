@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  GridItem,
-  HStack,
-  Image,
-  Link as ChakraLink,
-  useColorModeValue,
-  VStack,
-} from '@chakra-ui/react'
+import { Box, Grid, GridItem, HStack, Image, Link as ChakraLink, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { PiArrowUpRight } from 'react-icons/pi'
 
@@ -189,7 +179,7 @@ export const CreatorSuccessStoriesSection = () => {
                         {t(miniStory.title)}
                       </Body>
                       {miniStory.subtitle ? (
-                        <Body fontSize="xs" color="neutral1.10">
+                        <Body fontSize="xs" color="neutral1.10" noOfLines={2}>
                           {t(miniStory.subtitle)}
                         </Body>
                       ) : null}
@@ -200,23 +190,32 @@ export const CreatorSuccessStoriesSection = () => {
             ))}
 
             <GridItem>
-              <Button
-                as={ChakraLink}
+              <ChakraLink
                 href={successStoriesGuideUrl}
                 isExternal={true}
                 rel="noopener noreferrer"
-                rightIcon={<PiArrowUpRight />}
+                display="block"
                 h="full"
-                minH="72px"
-                px={5}
-                borderRadius="xl"
-                backgroundColor={ctaSurface}
-                borderWidth="1px"
-                borderColor={ctaBorderColor}
-                _hover={{ backgroundColor: ctaSurface, opacity: 0.9 }}
+                _hover={{ textDecoration: 'none' }}
               >
-                {t('See all success stories')}
-              </Button>
+                <HStack
+                  spacing={2}
+                  justify="space-between"
+                  p={4}
+                  h="full"
+                  minH="72px"
+                  borderRadius="xl"
+                  borderWidth="1px"
+                  borderColor={ctaBorderColor}
+                  backgroundColor={ctaSurface}
+                  color="primary1.11"
+                >
+                  <Body size="sm" fontWeight={700} color="inherit">
+                    {t('See all success stories')}
+                  </Body>
+                  <PiArrowUpRight size={16} />
+                </HStack>
+              </ChakraLink>
             </GridItem>
           </Grid>
         </VStack>

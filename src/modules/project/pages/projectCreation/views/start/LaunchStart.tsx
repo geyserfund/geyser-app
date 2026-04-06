@@ -10,7 +10,6 @@ import { HeroSection } from './sections/HeroSection.tsx'
 import { LaunchPlansSection } from './sections/LaunchPlansSection.tsx'
 import { MomentumSection } from './sections/MomentumSection.tsx'
 import { ResourcesSection } from './sections/ResourcesSection.tsx'
-import { StorySection } from './sections/StorySection.tsx'
 import { TrustPayoutSection } from './sections/TrustPayoutSection.tsx'
 
 /** How to crowdfund playbook page for the project creation start route. */
@@ -21,7 +20,6 @@ export const LaunchStart = () => {
       <VStack spacing={0} width="100%" align="center" paddingBottom={{ base: 10, lg: 20 }}>
         <HeroSection />
         <FundamentalsSection />
-        <StorySection />
         <FundraiserTypeSection />
         <TrustPayoutSection />
         <CreatorToolsSection />

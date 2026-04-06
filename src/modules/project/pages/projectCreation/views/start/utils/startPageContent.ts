@@ -44,14 +44,6 @@ export const getFundamentals = (translate: TFunction): KeyValueRow[] => [
   },
 ]
 
-export const getStoryChecklist = (translate: TFunction): string[] => [
-  translate('Say what you are making'),
-  translate('Explain why it matters now'),
-  translate('Show proof with visuals or progress'),
-  translate('Make support options obvious'),
-  translate('Describe what backing unlocks'),
-]
-
 export const getTrustPayoutCards = (translate: TFunction): KeyValueRow[] => [
   {
     title: translate('Complete your project profile'),

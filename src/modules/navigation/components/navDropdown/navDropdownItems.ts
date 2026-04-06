@@ -1,6 +1,6 @@
 import type { TFunction } from 'i18next'
 
-import { getPath } from '@/shared/constants/index.ts'
+import { getPath, GuideUrl } from '@/shared/constants/index.ts'
 
 import type { NavDropdownMenuItem } from './NavDropdownMenu.tsx'
 
@@ -36,35 +36,25 @@ export const getDonateNavDropdownItems = (t: TFunction): NavDropdownMenuItem[] =
 export const getFundraiseNavDropdownItems = (t: TFunction): NavDropdownMenuItem[] => {
   return [
     {
-      title: t('How to raise funds on Geyser'),
-      description: t('Explore the creator page and begin your fundraising journey.'),
+      title: t('Who is Geyser for'),
+      description: t('See who launches on Geyser and what they can build here.'),
       to: getPath('discoveryCreator'),
     },
     {
-      title: t('Fundraising Categories'),
-      description: t('Find the category that best matches your initiative.'),
-      href: 'https://guide.geyser.fund/geyser-docs/guides/geyser-for-___',
+      title: t('How to launch on Geyser'),
+      description: t('Follow the guided start flow to set up your project.'),
+      to: getPath('launchStart'),
     },
     {
       title: t('Launch Now'),
-      description: t('Start setting up your project and launch details now.'),
+      description: t('Go straight to your project details and begin launching now.'),
       to: getPath('launchProjectDetails'),
       emphasis: 'cta',
     },
     {
-      title: t('Fundraising tips'),
-      description: t('Review practical step-by-step advice before launching.'),
-      href: 'https://guide.geyser.fund/geyser-docs/guides/step-by-step-tutorials',
-    },
-    {
-      title: t('Success Stories'),
-      description: t('Learn from creators who have already delivered impact.'),
-      href: 'https://guide.geyser.fund/geyser-docs/guides/success-stories',
-    },
-    {
-      title: t('Funding mechanisms'),
-      description: t('Understand the mechanisms available on Geyser.'),
-      href: 'https://guide.geyser.fund/geyser-docs/product-features/launch-a-project',
+      title: t('Look at our Guides'),
+      description: t('Browse practical guides, walkthroughs, and launch resources.'),
+      href: GuideUrl,
     },
   ]
 }

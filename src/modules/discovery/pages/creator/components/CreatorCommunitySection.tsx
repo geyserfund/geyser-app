@@ -89,45 +89,6 @@ export const CreatorCommunitySection = () => {
               </SimpleGrid>
             </VStack>
           </SimpleGrid>
-
-          <SimpleGrid columns={{ base: 1, lg: 3 }} spacing={4}>
-            {creatorCommunityTestimonials.map((testimonial) => (
-              <VStack
-                key={testimonial.author}
-                align="start"
-                spacing={4}
-                p={6}
-                borderWidth="1px"
-                borderColor={cardBorderColor}
-                borderRadius="xl"
-                backgroundColor={cardBackground}
-                position="relative"
-                overflow="hidden"
-              >
-                <Box
-                  position="absolute"
-                  top={0}
-                  left={0}
-                  right={0}
-                  height="3px"
-                  borderTopRadius="xl"
-                  backgroundColor={testimonial.accentColor}
-                />
-                <Icon as={FaQuoteLeft} boxSize={5} color={testimonial.accentColor} opacity={0.8} />
-                <Body size="md" color="neutral1.11" fontStyle="italic">
-                  {t('"{{quote}}"', { quote: testimonial.quote })}
-                </Body>
-                <VStack align="start" spacing={0.5}>
-                  <Body size="sm" fontWeight={700}>
-                    {t(testimonial.author)}
-                  </Body>
-                  <Body fontSize="xs" color="neutral1.10">
-                    {t(testimonial.role)}
-                  </Body>
-                </VStack>
-              </VStack>
-            ))}
-          </SimpleGrid>
         </VStack>
       </CreatorSectionContainer>
     </Box>
