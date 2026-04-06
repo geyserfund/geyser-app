@@ -2019,6 +2019,15 @@
       }
     }
   },
+  "social": {
+    "geyser_on_discord": "Geyser on Discord",
+    "geyser_on_github": "Geyser on GitHub",
+    "geyser_on_instagram": "Geyser on Instagram",
+    "geyser_on_telegram": "Geyser on Telegram",
+    "geyser_on_tiktok": "Geyser on TikTok",
+    "geyser_on_x": "Geyser on X",
+    "geyser_on_youtube": "Geyser on YouTube"
+  },
   "impactFunds": {
     "flow": {
       "fundGrowth": {

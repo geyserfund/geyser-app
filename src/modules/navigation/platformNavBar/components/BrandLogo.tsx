@@ -53,8 +53,10 @@ export const BrandLogo = ({ showOutline = false }: { showOutline?: boolean }) =>
   )
 }
 
-export const BrandLogoFull = () => {
-  const imageUrl = useColorModeValue(LogoNameDark, LogoNameLight)
+export const BrandLogoFull = ({ forceLightLogo = false }: { forceLightLogo?: boolean }) => {
+  const themedImageUrl = useColorModeValue(LogoNameDark, LogoNameLight)
+  const imageUrl = forceLightLogo ? LogoNameLight : themedImageUrl
+
   return (
     <Link to={getPath('landingPage')} style={{ height: '100%' }}>
       <HStack h="100%" spacing={0}>

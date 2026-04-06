@@ -1,32 +1,33 @@
 import { VStack } from '@chakra-ui/react'
 
 import { ProjectCreationReferralCapture } from '../../components/ProjectCreationReferralCapture.tsx'
-
-import { FundingStyleSection } from './sections/FundingStyleSection.tsx'
-import { GetDiscoveredSection } from './sections/GetDiscoveredSection.tsx'
+import { CreatorToolsSection } from './sections/CreatorToolsSection.tsx'
+import { FAQSection } from './sections/FAQSection.tsx'
+import { FinalCTASection } from './sections/FinalCTASection.tsx'
+import { FundamentalsSection } from './sections/FundamentalsSection.tsx'
+import { FundraiserTypeSection } from './sections/FundraiserTypeSection.tsx'
 import { HeroSection } from './sections/HeroSection.tsx'
-import { HowToLaunchSection } from './sections/HowToLaunchSection.tsx'
-import { LaunchToolsSection } from './sections/LaunchToolsSection.tsx'
-import { SocialFooterSection } from './sections/SocialFooterSection.tsx'
-import { SuccessStoriesSection } from './sections/SuccessStoriesSection.tsx'
-import { TipsStoriesSection } from './sections/TipsStoriesSection.tsx'
-import { WelcomeSection } from './sections/WelcomeSection.tsx'
+import { LaunchPlansSection } from './sections/LaunchPlansSection.tsx'
+import { MomentumSection } from './sections/MomentumSection.tsx'
+import { ResourcesSection } from './sections/ResourcesSection.tsx'
+import { TrustPayoutSection } from './sections/TrustPayoutSection.tsx'
 
-/** Launch your project landing page component */
+/** How to crowdfund playbook page for the project creation start route. */
 export const LaunchStart = () => {
   return (
     <>
       <ProjectCreationReferralCapture />
-      <VStack spacing={0} paddingBottom={20} width="100%" align="center">
+      <VStack spacing={0} width="100%" align="center" paddingBottom={{ base: 10, lg: 20 }}>
         <HeroSection />
-        <WelcomeSection />
-        <SuccessStoriesSection />
-        <FundingStyleSection />
-        <GetDiscoveredSection />
-        <HowToLaunchSection />
-        <LaunchToolsSection />
-        <TipsStoriesSection />
-        <SocialFooterSection />
+        <FundamentalsSection />
+        <FundraiserTypeSection />
+        <TrustPayoutSection />
+        <CreatorToolsSection />
+        <MomentumSection />
+        <LaunchPlansSection />
+        <ResourcesSection />
+        <FAQSection />
+        <FinalCTASection />
       </VStack>
     </>
   )
