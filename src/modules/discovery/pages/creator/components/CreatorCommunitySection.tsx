@@ -1,11 +1,10 @@
-import { Box, HStack, Icon, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, HStack, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { FaQuoteLeft } from 'react-icons/fa'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2, H3 } from '@/shared/components/typography/Heading.tsx'
 
-import { creatorCommunityMainImageUrl, creatorCommunityPillars, creatorCommunityTestimonials } from '../constants.ts'
+import { creatorCommunityMainImageUrl, creatorCommunityPillars } from '../constants.ts'
 import { CreatorSectionContainer } from './CreatorSectionContainer.tsx'
 
 /** Community belonging section focused on why launching on Geyser feels different. */
