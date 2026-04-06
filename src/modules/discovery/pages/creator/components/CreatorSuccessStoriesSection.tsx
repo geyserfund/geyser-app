@@ -53,9 +53,6 @@ export const CreatorSuccessStoriesSection = () => {
             <H2 size={{ base: '2xl', lg: '4xl' }} bold textAlign={{ base: 'left', lg: 'center' }}>
               {t('Real creators. Real results.')}
             </H2>
-            <Body size="md" color="neutral1.10" maxW="620px" textAlign={{ base: 'left', lg: 'center' }}>
-              {t("These aren't outliers. They are what happens when a creator meets the right community.")}
-            </Body>
           </VStack>
 
           <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, minmax(0, 1fr))' }} gap={{ base: 4, lg: 5 }}>

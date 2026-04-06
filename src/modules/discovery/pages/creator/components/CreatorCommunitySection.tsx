@@ -57,11 +57,6 @@ export const CreatorCommunitySection = () => {
                   'Geyser helps creators launch successful fundraisers and campaigns with audience, distribution, and hands-on support from day one.',
                 )}
               </Body>
-              <Body size="md" color="neutral1.10">
-                {t(
-                  "From exposure to the Bitcoiner community, to promotion through Geyser's network, to direct launch support, we help projects turn attention into momentum.",
-                )}
-              </Body>
 
               <SimpleGrid columns={1} spacing={4} w="full" mt={2}>
                 {creatorCommunityPillars.map((pillar) => {

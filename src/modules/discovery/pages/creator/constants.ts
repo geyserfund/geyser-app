@@ -78,7 +78,7 @@ export const creatorHeroImageUrl =
 export const creatorWelcomeVideoUrl = 'https://www.youtube.com/watch?v=D6NwCQ0uLic'
 
 export const creatorCommunityMainImageUrl =
-  'https://images.unsplash.com/photo-1760992003927-96ac55e57296?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1400'
+  'https://storage.googleapis.com/geyser-projects-media/app/creatorPage/customer-self-service-1680x1120-1.webp'
 
 const CREATOR_IMAGE_BASE = 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage'
 
