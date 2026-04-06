@@ -14,7 +14,7 @@ type TrustIcon = ComponentType<{ size?: string | number }>
 
 /** Trust setup section to keep key launch readiness signals in one place. */
 export const TrustPayoutSection = () => {
-  const iconBackground = useColorModeValue('primary1.100', 'primary1.900')
+  const iconBackground = useColorModeValue('primary1.1', 'primary1.9')
 
   const cards = useMemo(
     () =>

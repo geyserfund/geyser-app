@@ -48,11 +48,11 @@ export const PlatformNavBar = () => {
   const landingButtonBorder = useColorModeValue('black', 'neutral1.6')
   const landingButtonHover = useColorModeValue('gray.50', 'neutral1.2')
   const landingButtonActive = useColorModeValue('gray.100', 'neutral1.2')
-  const transparentButtonSurface = useColorModeValue('whiteAlpha.220', 'whiteAlpha.220')
-  const transparentButtonForeground = useColorModeValue('white', 'white')
-  const transparentButtonBorder = useColorModeValue('whiteAlpha.500', 'whiteAlpha.500')
-  const transparentButtonHover = useColorModeValue('whiteAlpha.320', 'whiteAlpha.320')
-  const transparentButtonActive = useColorModeValue('whiteAlpha.420', 'whiteAlpha.420')
+  const transparentButtonSurface = 'whiteAlpha.220'
+  const transparentButtonForeground = 'white'
+  const transparentButtonBorder = 'whiteAlpha.500'
+  const transparentButtonHover = 'whiteAlpha.320'
+  const transparentButtonActive = 'whiteAlpha.420'
   const landingNavMaxWidth = `${dimensions.maxWidth + 24 * 2}px`
 
   const isMobileMode = useMobileMode()

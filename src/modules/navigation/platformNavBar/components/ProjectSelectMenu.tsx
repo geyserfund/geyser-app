@@ -1,4 +1,4 @@
-import { Box, Button, useColorModeValue } from '@chakra-ui/react'
+import { Box, Button } from '@chakra-ui/react'
 import { useAtomValue } from 'jotai'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
@@ -22,9 +22,9 @@ export const ProjectSelectMenu = ({ transparentMode = false }: { transparentMode
   const isProjectCreationRoute = useAtomValue(isProjectCreationRouteAtom)
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
-  const transparentBackground = useColorModeValue('whiteAlpha.220', 'whiteAlpha.220')
-  const transparentBorderColor = useColorModeValue('whiteAlpha.500', 'whiteAlpha.500')
-  const transparentHoverBackground = useColorModeValue('whiteAlpha.320', 'whiteAlpha.320')
+  const transparentBackground = 'whiteAlpha.220'
+  const transparentBorderColor = 'whiteAlpha.500'
+  const transparentHoverBackground = 'whiteAlpha.320'
 
   // For funding flow and creation flow, we don't want to show the project select menu
   if (isProjectFundingRoute || isProjectCreationRoute) {

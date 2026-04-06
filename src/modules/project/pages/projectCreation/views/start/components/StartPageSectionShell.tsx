@@ -1,4 +1,4 @@
-import { Box, BoxProps, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, BoxProps, VStack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
@@ -12,7 +12,7 @@ type StartPageSectionShellProps = {
 
 /** Shared wrapper for each section of the launch start playbook page. */
 export const StartPageSectionShell = ({ children, id, sectionBg, ...boxProps }: StartPageSectionShellProps) => {
-  const defaultBackground = useColorModeValue('utils.pbg', 'utils.pbg')
+  const defaultBackground = 'utils.pbg'
 
   return (
     <Box as="section" id={id} width="100%" backgroundColor={sectionBg ?? defaultBackground} {...boxProps}>

@@ -28,8 +28,8 @@ type Tool = {
 
 /** Step 4 section showcasing tooling that drives conversion and momentum. */
 export const CreatorToolsSection = () => {
-  const iconBackground = useColorModeValue('primary1.100', 'primary1.900')
-  const benefitBackground = useColorModeValue('primary1.50', 'primary1.900')
+  const iconBackground = useColorModeValue('primary1.1', 'primary1.9')
+  const benefitBackground = useColorModeValue('primary1.1', 'primary1.9')
 
   const tools = useMemo<Tool[]>(
     () => [

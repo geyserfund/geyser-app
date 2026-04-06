@@ -9,31 +9,24 @@ import { H2 } from '@/shared/components/typography/Heading.tsx'
 import { creatorPossibilities } from '../constants.ts'
 import { CreatorSectionContainer } from './CreatorSectionContainer.tsx'
 
-const getAlphaColor = (hexColor: string, alpha: number) => {
-  const color = hexColor.trim().replace('#', '')
-
-  if (color.length !== 6) {
-    return `rgba(255, 255, 255, ${alpha})`
-  }
-
-  const red = Number.parseInt(color.slice(0, 2), 16)
-  const green = Number.parseInt(color.slice(2, 4), 16)
-  const blue = Number.parseInt(color.slice(4, 6), 16)
-  return `rgba(${red}, ${green}, ${blue}, ${alpha})`
-}
+const getColorFamily = (colorToken: string) => colorToken.split('.')[0]
+const getAlphaToken = (colorToken: string, alphaStep: number) => `${getColorFamily(colorToken)}Alpha.${alphaStep}`
 
 /** Possibility section helping visitors imagine what they can build on Geyser. */
 export const CreatorPossibilitySection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
 
-  const sectionBackground = useColorModeValue('utils.pbg', 'utils.pbg')
-  const cardBackground = useColorModeValue('white', 'white')
-  const cardShadow = useColorModeValue('0 8px 20px rgba(16, 24, 40, 0.08)', '0 10px 24px rgba(0, 0, 0, 0.3)')
-  const quoteBackground = useColorModeValue(
-    'linear(135deg, rgba(0,245,220,0.06) 0%, rgba(0,245,220,0.02) 100%)',
-    'linear(135deg, rgba(0,245,220,0.1) 0%, rgba(0,245,220,0.05) 100%)',
+  const sectionBackground = 'utils.pbg'
+  const cardBackground = useColorModeValue('neutral1.1', 'neutral1.2')
+  const cardShadow = useColorModeValue(
+    '0 8px 20px var(--chakra-colors-overlay-black-3)',
+    '0 10px 24px var(--chakra-colors-overlay-white-5)',
   )
-  const quoteBorderColor = useColorModeValue('rgba(0,245,220,0.2)', 'rgba(0,245,220,0.25)')
+  const quoteBackground = useColorModeValue(
+    'linear(135deg, var(--chakra-colors-geyserAlpha-3) 0%, var(--chakra-colors-geyserAlpha-2) 100%)',
+    'linear(135deg, var(--chakra-colors-geyserAlpha-4) 0%, var(--chakra-colors-geyserAlpha-3) 100%)',
+  )
+  const quoteBorderColor = useColorModeValue('geyserAlpha.6', 'geyserAlpha.7')
 
   return (
     <>
@@ -56,8 +49,8 @@ export const CreatorPossibilitySection = () => {
 
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
               {creatorPossibilities.map((possibility) => {
-                const iconBadgeBackground = getAlphaColor(possibility.iconColor, 0.2)
-                const iconBadgeBorderColor = getAlphaColor(possibility.iconColor, 0.35)
+                const iconBadgeBackground = getAlphaToken(possibility.iconColor, 2)
+                const iconBadgeBorderColor = getAlphaToken(possibility.iconColor, 4)
 
                 return (
                   <Box

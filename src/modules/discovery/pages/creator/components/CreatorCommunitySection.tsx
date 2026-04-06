@@ -7,24 +7,18 @@ import { H2, H3 } from '@/shared/components/typography/Heading.tsx'
 import { creatorCommunityMainImageUrl, creatorCommunityPillars } from '../constants.ts'
 import { CreatorSectionContainer } from './CreatorSectionContainer.tsx'
 
-const getAlphaColor = (hexColor: string, alpha: number) => {
-  const color = hexColor.trim().replace('#', '')
-
-  if (color.length !== 6) {
-    return `rgba(255, 255, 255, ${alpha})`
-  }
-
-  const red = Number.parseInt(color.slice(0, 2), 16)
-  const green = Number.parseInt(color.slice(2, 4), 16)
-  const blue = Number.parseInt(color.slice(4, 6), 16)
-  return `rgba(${red}, ${green}, ${blue}, ${alpha})`
-}
+const getColorFamily = (colorToken: string) => colorToken.split('.')[0]
+const getAlphaToken = (colorToken: string, alphaStep: number) => `${getColorFamily(colorToken)}Alpha.${alphaStep}`
 
 /** Community belonging section focused on why launching on Geyser feels different. */
 export const CreatorCommunitySection = () => {
-  const sectionBackground = useColorModeValue('utils.pbg', 'utils.pbg')
-  const cardBackground = useColorModeValue('neutral1.2', 'neutral1.2')
-  const cardBorderColor = useColorModeValue('neutral1.6', 'neutral1.6')
+  const sectionBackground = 'utils.pbg'
+  const cardBackground = 'neutral1.2'
+  const cardBorderColor = 'neutral1.6'
+  const imageOverlayGradient = useColorModeValue(
+    'linear(to-t, var(--chakra-colors-overlay-black-7), var(--chakra-colors-overlay-black-1))',
+    'linear(to-t, var(--chakra-colors-overlay-white-7), var(--chakra-colors-overlay-white-1))',
+  )
 
   return (
     <Box as="section" w="full" py={{ base: 14, lg: 20 }} backgroundColor={sectionBackground}>
@@ -47,7 +41,7 @@ export const CreatorCommunitySection = () => {
                   h="full"
                   objectFit="cover"
                 />
-                <Box position="absolute" inset={0} bgGradient="linear(to-t, rgba(0,0,0,0.55), rgba(0,0,0,0.05))" />
+                <Box position="absolute" inset={0} bgGradient={imageOverlayGradient} />
               </Box>
             </Box>
 
@@ -71,8 +65,8 @@ export const CreatorCommunitySection = () => {
 
               <SimpleGrid columns={1} spacing={4} w="full" mt={2}>
                 {creatorCommunityPillars.map((pillar) => {
-                  const iconBadgeBackground = getAlphaColor(pillar.accentColor, 0.18)
-                  const iconBadgeBorderColor = getAlphaColor(pillar.accentColor, 0.35)
+                  const iconBadgeBackground = getAlphaToken(pillar.accentColor, 3)
+                  const iconBadgeBorderColor = getAlphaToken(pillar.accentColor, 5)
 
                   return (
                     <HStack

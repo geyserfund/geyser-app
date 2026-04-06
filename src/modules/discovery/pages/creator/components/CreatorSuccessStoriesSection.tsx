@@ -20,26 +20,20 @@ import { CreatorSectionContainer } from './CreatorSectionContainer.tsx'
 
 const successStoriesGuideUrl = 'https://guide.geyser.fund/geyser-docs/guides/success-stories'
 
-const getAlphaColor = (hexColor: string, alpha: number) => {
-  const color = hexColor.trim().replace('#', '')
-
-  if (color.length !== 6) {
-    return `rgba(255, 255, 255, ${alpha})`
-  }
-
-  const red = Number.parseInt(color.slice(0, 2), 16)
-  const green = Number.parseInt(color.slice(2, 4), 16)
-  const blue = Number.parseInt(color.slice(4, 6), 16)
-  return `rgba(${red}, ${green}, ${blue}, ${alpha})`
-}
+const getColorFamily = (colorToken: string) => colorToken.split('.')[0]
+const getAlphaToken = (colorToken: string, alphaStep: number) => `${getColorFamily(colorToken)}Alpha.${alphaStep}`
 
 /** Success stories section showcasing social proof and outcomes. */
 export const CreatorSuccessStoriesSection = () => {
-  const sectionBackground = useColorModeValue('neutral1.2', 'neutral1.2')
+  const sectionBackground = 'neutral1.2'
   const cardBackground = useColorModeValue('utils.pbg', 'neutral1.3')
-  const cardBorderColor = useColorModeValue('neutral1.6', 'neutral1.6')
+  const cardBorderColor = 'neutral1.6'
   const ctaSurface = useColorModeValue('primary1.1', 'primary1.2')
   const ctaBorderColor = useColorModeValue('primary1.5', 'primary1.6')
+  const imageOverlayGradient = useColorModeValue(
+    'linear(to-t, var(--chakra-colors-overlay-black-7), var(--chakra-colors-overlay-black-2))',
+    'linear(to-t, var(--chakra-colors-overlay-white-7), var(--chakra-colors-overlay-white-2))',
+  )
 
   return (
     <Box
@@ -66,7 +60,7 @@ export const CreatorSuccessStoriesSection = () => {
 
           <Grid templateColumns={{ base: '1fr', lg: 'repeat(2, minmax(0, 1fr))' }} gap={{ base: 4, lg: 5 }}>
             {creatorStories.map((story) => {
-              const accentBorderColor = getAlphaColor(story.accentColor, 0.5)
+              const accentBorderColor = getAlphaToken(story.accentColor, 8)
 
               return (
                 <ChakraLink
@@ -97,7 +91,7 @@ export const CreatorSuccessStoriesSection = () => {
                         transition="transform 0.35s ease"
                         _groupHover={{ transform: 'scale(1.05)' }}
                       />
-                      <Box position="absolute" inset={0} bgGradient="linear(to-t, rgba(0,0,0,0.6), rgba(0,0,0,0.1))" />
+                      <Box position="absolute" inset={0} bgGradient={imageOverlayGradient} />
                       <HStack position="absolute" left={3} bottom={3} spacing={2} alignItems="center">
                         <Badge
                           variant="surface"
@@ -126,19 +120,29 @@ export const CreatorSuccessStoriesSection = () => {
                         </Badge>
                       </HStack>
                     </Box>
-                    <VStack align="start" spacing={3} p={5}>
-                      <Body size="lg" fontWeight={700}>
-                        {t(story.title)}
-                      </Body>
+                    <VStack align="start" spacing={2} p={5}>
+                      <HStack w="full" spacing={3} align="flex-start" justify="space-between">
+                        <Body size="lg" fontWeight={700}>
+                          {t(story.title)}
+                        </Body>
+                        <HStack
+                          spacing={1.5}
+                          color={story.accentColor}
+                          opacity={0}
+                          transform="translateX(-4px)"
+                          transition="all 0.2s ease"
+                          _groupHover={{ opacity: 1, transform: 'translateX(0)' }}
+                          _groupFocusWithin={{ opacity: 1, transform: 'translateX(0)' }}
+                        >
+                          <Body size="sm" fontWeight={700} color={story.accentColor} whiteSpace="nowrap">
+                            {t('Read story')}
+                          </Body>
+                          <PiArrowUpRight size={14} />
+                        </HStack>
+                      </HStack>
                       <Body size="sm" color="neutral1.10">
                         {t(story.description)}
                       </Body>
-                      <HStack spacing={1.5} color={story.accentColor}>
-                        <Body size="sm" fontWeight={700} color={story.accentColor}>
-                          {t('Read story')}
-                        </Body>
-                        <PiArrowUpRight size={14} />
-                      </HStack>
                     </VStack>
                   </Box>
                 </ChakraLink>

@@ -12,8 +12,8 @@ import { StartPageSectionShell } from '../components/StartPageSectionShell.tsx'
 
 /** Fundraiser type section for choosing between open and goal-based launch models. */
 export const FundraiserTypeSection = () => {
-  const badgeBackground = useColorModeValue('primary1.50', 'primary1.900')
-  const iconBackground = useColorModeValue('primary1.100', 'primary1.900')
+  const badgeBackground = useColorModeValue('primary1.1', 'primary1.9')
+  const iconBackground = useColorModeValue('primary1.1', 'primary1.9')
 
   const openPoints = useMemo(
     () => [

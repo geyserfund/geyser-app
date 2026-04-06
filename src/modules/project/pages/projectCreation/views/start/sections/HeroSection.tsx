@@ -15,7 +15,7 @@ import { useLaunchNow } from '../utils/useLaunchNow.tsx'
 export const HeroSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
 
-  const accentSurface = useColorModeValue('primary1.50', 'primary1.900')
+  const accentSurface = useColorModeValue('primary1.1', 'primary1.9')
   const stepNumberBg = useColorModeValue('primary1.9', 'primary1.8')
   const stepConnectorColor = useColorModeValue('neutral1.5', 'neutral1.6')
   const heroStripCardBg = useColorModeValue('white', 'neutral1.2')

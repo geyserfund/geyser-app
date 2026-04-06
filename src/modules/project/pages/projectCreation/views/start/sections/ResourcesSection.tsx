@@ -19,7 +19,7 @@ import { getResources } from '../utils/startPageContent.ts'
 
 /** Optional deeper resources section shown after core launch decisions. */
 export const ResourcesSection = () => {
-  const hoverBorder = useColorModeValue('primary1.300', 'primary1.700')
+  const hoverBorder = useColorModeValue('primary1.3', 'primary1.7')
 
   const resources = useMemo(() => {
     const content = getResources(t)

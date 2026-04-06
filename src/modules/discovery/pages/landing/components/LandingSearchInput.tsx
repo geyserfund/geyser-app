@@ -95,7 +95,7 @@ export const LandingSearchInput = ({
     updateSearchFilterDebounced(event.target.value)
   }
 
-  const defaultIconColor = useColorModeValue('neutral1.9', 'neutral1.9')
+  const defaultIconColor = 'neutral1.9'
   const defaultInputBorderColor = useColorModeValue('gray.300', 'neutral1.6')
   const defaultInputBackground = useColorModeValue('utils.surface', 'neutral1.3')
   const styleTokens = getLandingSearchInputStyleTokens({

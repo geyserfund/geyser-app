@@ -22,8 +22,8 @@ type LaunchPlan = {
 
 /** Launch plans section matching the new launchStart design and copy hierarchy. */
 export const LaunchPlansSection = () => {
-  const growthBorder = useColorModeValue('primary1.300', 'primary1.700')
-  const proBorder = useColorModeValue('primary1.500', 'primary1.600')
+  const growthBorder = useColorModeValue('primary1.3', 'primary1.7')
+  const proBorder = useColorModeValue('primary1.5', 'primary1.6')
   const badgeBg = useColorModeValue('neutral1.2', 'neutral1.4')
   const badgeFg = useColorModeValue('neutral1.9', 'neutral1.11')
 

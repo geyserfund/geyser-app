@@ -5,13 +5,19 @@ import { PiRocketLaunch } from 'react-icons/pi'
 import { useLaunchNow } from '@/modules/project/pages/projectCreation/views/start/utils/useLaunchNow.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
+import { useProjectsSummaryQuery } from '@/types'
+import { getBitcoinAmount } from '@/utils'
 
 import { creatorHeroImageUrl } from '../constants.ts'
 import { CreatorSectionContainer } from './CreatorSectionContainer.tsx'
 
+const STATIC_CREATORS_WORLDWIDE = '900+'
+const STATIC_COUNTRIES_REPRESENTED = '100+'
+
 /** Hero section that introduces the creator community and primary call to action. */
 export const CreatorHeroSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
+  const { data } = useProjectsSummaryQuery()
 
   const overlayGradient = useColorModeValue(
     {
@@ -52,17 +58,19 @@ export const CreatorHeroSection = () => {
     },
   )
   const creatorTitleGradient = useColorModeValue(
-    'linear(to-r, #00f5dc 0%, #00ead2 50%, #4ade80 100%)',
-    'linear(to-r, #00f5dc 0%, #00ead2 50%, #4ade80 100%)',
+    'linear(to-r, var(--chakra-colors-geyser-9) 0%, var(--chakra-colors-geyser-10) 50%, var(--chakra-colors-grass-8) 100%)',
+    'linear(to-r, var(--chakra-colors-geyser-9) 0%, var(--chakra-colors-geyser-10) 50%, var(--chakra-colors-grass-8) 100%)',
   )
-  const secondaryButtonBackground = useColorModeValue('whiteAlpha.260', 'whiteAlpha.260')
-  const secondaryButtonBorderColor = useColorModeValue('whiteAlpha.500', 'whiteAlpha.500')
-  const secondaryButtonHoverBackground = useColorModeValue('whiteAlpha.320', 'whiteAlpha.320')
+  const secondaryButtonBackground = 'whiteAlpha.260'
+  const secondaryButtonBorderColor = 'whiteAlpha.500'
+  const secondaryButtonHoverBackground = 'whiteAlpha.320'
+
+  const raisedSats = Number(data?.projectsSummary?.fundedTotal || 0)
 
   const heroStats = [
-    { value: '10,000+', label: t('Creators worldwide') },
-    { value: '80+', label: t('Countries represented') },
-    { value: '$5M+', label: t('Raised by creators') },
+    { value: STATIC_CREATORS_WORLDWIDE, label: t('Creators worldwide') },
+    { value: STATIC_COUNTRIES_REPRESENTED, label: t('Countries represented') },
+    { value: `${getBitcoinAmount(raisedSats, true)} ₿`, label: t('Raised by creators') },
   ]
   const handleExploreSuccessStories = () => {
     const successStoriesSection = document.getElementById('creator-success-stories')

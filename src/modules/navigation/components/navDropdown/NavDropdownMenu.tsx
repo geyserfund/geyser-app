@@ -63,13 +63,13 @@ export const NavDropdownMenu = ({
   const menuHoverColor = useColorModeValue('gray.50', 'neutral1.2')
   const mutedColor = useColorModeValue('gray.700', 'neutral1.10')
   const disabledColor = useColorModeValue('blackAlpha.400', 'neutral1.8')
-  const newBadgeTextColor = useColorModeValue('gray.900', 'gray.900')
+  const newBadgeTextColor = 'gray.900'
   const newBadgeBackgroundColor = useColorModeValue('primary1.4', 'primary1.5')
   const soonBadgeBackgroundColor = useColorModeValue('neutral1.4', 'neutral1.5')
   const soonBadgeTextColor = useColorModeValue('neutral1.10', 'neutral1.11')
-  const ctaBackgroundColor = useColorModeValue('primary1.9', 'primary1.9')
-  const ctaHoverBackgroundColor = useColorModeValue('primary1.10', 'primary1.10')
-  const ctaTextColor = useColorModeValue('white', 'white')
+  const ctaBackgroundColor = 'primary1.9'
+  const ctaHoverBackgroundColor = 'primary1.10'
+  const ctaTextColor = 'white'
   const { isOpen, onOpen, onClose } = useDisclosure()
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -100,6 +100,11 @@ export const NavDropdownMenu = ({
       closeTimeoutRef.current = null
     }, 120)
   }, [clearCloseTimeout, isDesktop, onClose])
+
+  const handleItemSelect = useCallback(() => {
+    clearCloseTimeout()
+    onClose()
+  }, [clearCloseTimeout, onClose])
 
   useEffect(() => {
     return () => {
@@ -210,42 +215,44 @@ export const NavDropdownMenu = ({
 
     if (item.href) {
       return (
-        <Box
+        <MenuItem
           key={item.title}
           as={ChakraLink}
           href={item.href}
           isExternal={true}
           rel="noopener noreferrer"
-          paddingY={3.5}
-          paddingX={3}
-          display="flex"
           alignItems="flex-start"
-          justifyContent="flex-start"
           borderRadius="6px"
+          paddingX={3}
+          paddingY={3.5}
+          height="auto"
+          whiteSpace="normal"
           transition="background-color 0.15s ease"
+          onClick={handleItemSelect}
           {...ctaStyles}
         >
           {getItemContent(item)}
-        </Box>
+        </MenuItem>
       )
     }
 
     return (
-      <Box
+      <MenuItem
         key={item.title}
         as={RouterLink}
         to={item.to}
-        paddingY={3.5}
-        paddingX={3}
-        display="flex"
         alignItems="flex-start"
-        justifyContent="flex-start"
         borderRadius="6px"
+        paddingX={3}
+        paddingY={3.5}
+        height="auto"
+        whiteSpace="normal"
         transition="background-color 0.15s ease"
+        onClick={handleItemSelect}
         {...ctaStyles}
       >
         {getItemContent(item)}
-      </Box>
+      </MenuItem>
     )
   }
 
@@ -296,6 +303,7 @@ export const NavDropdownMenu = ({
           paddingY={3}
           height="auto"
           whiteSpace="normal"
+          onClick={handleItemSelect}
           {...ctaStyles}
         >
           {getItemContent(item)}
@@ -314,6 +322,7 @@ export const NavDropdownMenu = ({
         paddingY={3}
         height="auto"
         whiteSpace="normal"
+        onClick={handleItemSelect}
         {...ctaStyles}
       >
         {getItemContent(item)}

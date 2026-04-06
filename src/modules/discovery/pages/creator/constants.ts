@@ -1,32 +1,38 @@
 import type { IconType } from 'react-icons'
 import {
-  FaBolt,
-  FaBuilding,
-  FaBullhorn,
-  FaCalendarAlt,
-  FaCode,
-  FaFilm,
-  FaFlask,
-  FaGraduationCap,
-  FaHandsHelping,
-  FaHeart,
-  FaMicrophone,
-  FaPalette,
-  FaPenFancy,
-  FaRocket,
-  FaUsers,
-  FaVideo,
-} from 'react-icons/fa'
+  PiBuildingOffice,
+  PiCode,
+  PiFilmSlate,
+  PiFlask,
+  PiGraduationCap,
+  PiHandshake,
+  PiHeart,
+  PiMegaphoneSimple,
+  PiMicrophone,
+  PiPalette,
+  PiPenNibStraight,
+  PiRocket,
+  PiUsers,
+} from 'react-icons/pi'
 
-export type CreatorCategorySize = 'large' | 'medium' | 'small'
-
-export type CreatorCategory = {
-  title: string
+export type CreatorShowcaseProject = {
+  subcategory: string
+  projectName: string
+  creatorName: string
   description: string
   imageUrl: string
+  projectUrl: string
+  creatorUrl?: string
+  testimonial?: string
+}
+
+export type CreatorShowcaseCategory = {
+  id: string
+  name: string
+  description: string
   icon: IconType
-  iconColor: string
-  size: CreatorCategorySize
+  color: string
+  projects: CreatorShowcaseProject[]
 }
 
 export type CreatorStory = {
@@ -78,87 +84,265 @@ export const creatorWelcomeVideoUrl = 'https://www.youtube.com/watch?v=D6NwCQ0uL
 export const creatorCommunityMainImageUrl =
   'https://images.unsplash.com/photo-1760992003927-96ac55e57296?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1400'
 
-export const creatorCategories: CreatorCategory[] = [
+const CREATOR_IMAGE_BASE = 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage'
+
+export const creatorShowcaseCategories: CreatorShowcaseCategory[] = [
   {
-    title: 'Filmmakers',
-    description: 'Stories that deserve a wide audience.',
-    icon: FaFilm,
-    iconColor: '#ff6b6b',
-    size: 'large',
-    imageUrl:
-      'https://images.unsplash.com/photo-1758788506109-8ed33e99d3a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900',
+    id: 'educators',
+    name: 'Educators',
+    description: 'Creators turning knowledge into understanding, from courses and journalism to books and shows.',
+    icon: PiGraduationCap,
+    color: 'blue.8',
+    projects: [
+      {
+        subcategory: 'Courses & Workshops',
+        projectName: 'Mi Primer Bitcoin',
+        creatorName: 'Mi Primer Bitcoin',
+        description: 'Non-profit on a mission to educate 100,000 students about Bitcoin.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/MiPrimerBitcoin.png`,
+        projectUrl: 'https://geyser.fund/project/miprimerbitcoin',
+      },
+      {
+        subcategory: 'Journalism',
+        projectName: 'The Rage',
+        creatorName: 'L0la L33tz',
+        description: 'An independent publication covering financial surveillance. Privacy is not a crime.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/TheRage.png`,
+        projectUrl: 'https://geyser.fund/project/therage',
+        creatorUrl: 'https://geyser.fund/user/12416',
+      },
+      {
+        subcategory: 'Books',
+        projectName: 'Bushido of Bitcoin',
+        creatorName: 'Alex Svetski',
+        description: 'Founder of Bushido of Bitcoin and The Spirit of Satoshi.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/BushidoOfBitcoin.png`,
+        projectUrl: 'https://geyser.fund/project/bushidoofbitcoin',
+      },
+      {
+        subcategory: 'Podcasts',
+        projectName: 'Efrat Fenigson',
+        creatorName: 'Efrat Fenigson',
+        description: 'Podcaster, independent journalist, Twitter Spaces host & marketer.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/EfratFenigson.png`,
+        projectUrl: 'https://geyser.fund/project/efenigson?hero=geyserpromotion',
+      },
+    ],
   },
   {
-    title: 'Content creators',
-    description: 'Channels and projects that build loyal communities.',
-    icon: FaVideo,
-    iconColor: '#00f5dc',
-    size: 'large',
-    imageUrl:
-      'https://images.unsplash.com/photo-1617899516937-54fb61f7d3d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900',
+    id: 'community-leaders',
+    name: 'Community Leaders',
+    description: 'Organizers building local momentum through meetups, hubs, and circular economies.',
+    icon: PiUsers,
+    color: 'jade.8',
+    projects: [
+      {
+        subcategory: 'Circular Economies',
+        projectName: 'BTC Isla',
+        creatorName: 'Isabella',
+        description: 'Building a living Bitcoin circular economy on the ground.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/Isabella.png`,
+        projectUrl: 'https://geyser.fund/project/btcisla?hero=geyserpromotion',
+      },
+      {
+        subcategory: 'Community Hubs',
+        projectName: 'Bitcoin House Bali',
+        creatorName: 'Diana',
+        description: 'Created the first Bitcoin center in Bali.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/BitcoinHouse.png`,
+        projectUrl: 'https://geyser.fund/project/bitcoinhousebali',
+        creatorUrl: 'https://geyser.fund/user/10763',
+      },
+      {
+        subcategory: 'Events',
+        projectName: 'Nostr Booth at BTC Prague',
+        creatorName: 'Derek Ross',
+        description: 'Organized a Nostr presence at one of Europe\u2019s biggest Bitcoin conferences.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/DerekRoss.png`,
+        projectUrl: 'https://geyser.fund/project/nostrboothbtcprague?hero=geyserpromotion',
+        creatorUrl: 'https://geyser.fund/user/2973',
+      },
+    ],
   },
   {
-    title: 'Podcasters',
-    description: 'Long-form conversations with lasting impact.',
-    icon: FaMicrophone,
-    iconColor: '#ffd93d',
-    size: 'medium',
-    imageUrl:
-      'https://images.unsplash.com/photo-1668606144327-837f2d8eac94?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900',
+    id: 'cause-organizers',
+    name: 'Cause Organizers',
+    description: 'Missions that rally supporters around urgent relief, legal defense, and public good.',
+    icon: PiHeart,
+    color: 'pink.8',
+    projects: [
+      {
+        subcategory: 'Direct Aid & Disaster Response',
+        projectName: 'Emergency Recovery Fund for Aceh Flood Victims',
+        creatorName: 'Pengepul\u26a1Satoshi',
+        description: 'Rapid relief for flood victims in Indonesia, powered by Bitcoin.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/BitcoinIndonesia.png`,
+        projectUrl: 'https://geyser.fund/project/fundforacehfloodvictims',
+        creatorUrl: 'https://geyser.fund/user/7214',
+      },
+      {
+        subcategory: 'Legal Defense Funds',
+        projectName: 'Free Roman Storm',
+        creatorName: 'Free Pertsev & Storm',
+        description: 'Global legal defense for privacy and open-source rights.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/LegalDefense.png`,
+        projectUrl: 'https://geyser.fund/project/freeromanstorm?hero=geyserpromotion',
+        creatorUrl: 'https://geyser.fund/user/19504',
+      },
+      {
+        subcategory: 'Advocacy Campaigns',
+        projectName: 'Orange Pilling the US Congress',
+        creatorName: 'Orange Pill App',
+        description: 'An advocacy campaign that raised 25M sats to educate lawmakers.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/OrangePillApp.png`,
+        projectUrl: 'https://geyser.fund/project/orangepillappsaifedean?hero=geyserpromotion',
+        creatorUrl: 'https://geyser.fund/user/659',
+      },
+      {
+        subcategory: 'Health & Medical Support',
+        projectName: 'Beat Cancer with Becca',
+        creatorName: 'bitcoinSailing',
+        description: 'A community-backed fundraiser to help Becca fight cancer.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/bitcoinSailing.png`,
+        projectUrl: 'https://geyser.fund/project/beatcancerwithbecca',
+        creatorUrl: 'https://geyser.fund/user/13391',
+      },
+    ],
   },
   {
-    title: 'Open source builders',
-    description: 'Public infrastructure and tools for everyone.',
-    icon: FaCode,
-    iconColor: '#6bcb77',
-    size: 'medium',
-    imageUrl:
-      'https://images.unsplash.com/photo-1555066931-bf19f8fd1085?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900',
+    id: 'creatives',
+    name: 'Creatives',
+    description: 'Films, art, music, and stories funded by people who want culture with conviction.',
+    icon: PiPalette,
+    color: 'orange.8',
+    projects: [
+      {
+        subcategory: 'Filmmakers',
+        projectName: 'Dirty Coin',
+        creatorName: 'Halana Mediavilla',
+        description: 'The documentary about Bitcoin mining.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/DirtyCoin.png`,
+        projectUrl: 'https://geyser.fund/project/dirtycointhecontroversybehindbitcoinmining',
+        creatorUrl: 'https://geyser.fund/user/913',
+      },
+      {
+        subcategory: 'Content Creators',
+        projectName: "Peru's Bitcoin Revolution",
+        creatorName: 'Julian Figueroa',
+        description: 'Raised 0.27 BTC to film a documentary following Bitcoin adoption across Peru.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/JulianFigueroa.png`,
+        projectUrl: 'https://geyser.fund/project/kineticperu?hero=geyserpromotion',
+        creatorUrl: 'https://geyser.fund/user/654',
+        testimonial:
+          'One reason I loved Geyser is that it stretched my imagination and creativity in terms of figuring out how to give something to the donors that would make it worth their while to help fund a documentary that was ultimately going to be free to watch.',
+      },
+      {
+        subcategory: 'Musicians',
+        projectName: 'TIP_NZ MUSIC',
+        creatorName: 'TIP_NZ',
+        description: 'Independent music funded directly by fans.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/TipNz.png`,
+        projectUrl: 'https://geyser.fund/project/tipnzmusic',
+        creatorUrl: 'https://geyser.fund/user/2269',
+      },
+      {
+        subcategory: 'Artists',
+        projectName: 'Bitcoin: The Art of Revolution',
+        creatorName: 'StreetCyber.Art',
+        description: 'Art that captures the spirit of the Bitcoin movement.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/cyberstreetArt.png`,
+        projectUrl: 'https://geyser.fund/project/bitcointheartofrevolution',
+      },
+      {
+        subcategory: 'Comic Books',
+        projectName: 'Ratel',
+        creatorName: 'Ratel',
+        description: 'The first Bitcoiner superhero comic.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/Ratel.png`,
+        projectUrl: 'https://geyser.fund/project/ratel?hero=geyserpromotion',
+      },
+      {
+        subcategory: 'Illustrators & Writers',
+        projectName: 'The NoGood Book',
+        creatorName: 'NoGood',
+        description: 'An art book that raised 10M satoshis.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/NoGood.png`,
+        projectUrl: 'https://geyser.fund/project/nogoodartbook?hero=geyserpromotion',
+        creatorUrl: 'https://geyser.fund/user/3118',
+      },
+    ],
   },
   {
-    title: 'Startups',
-    description: 'Early ideas finding early believers.',
-    icon: FaRocket,
-    iconColor: '#a78bfa',
-    size: 'small',
-    imageUrl:
-      'https://images.unsplash.com/photo-1758873268933-e0765262e58d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900',
+    id: 'makers',
+    name: 'Makers',
+    description: 'Hardware, games, tools, and independent products backed by early supporters.',
+    icon: PiRocket,
+    color: 'violet.8',
+    projects: [
+      {
+        subcategory: 'Hardware Builders',
+        projectName: 'Seedhammer II',
+        creatorName: 'SeedHammer',
+        description: 'Next-generation seed backup hardware launched on Geyser.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/SeedHammer.png`,
+        projectUrl: 'https://geyser.fund/project/seedhammerii',
+        creatorUrl: 'https://geyser.fund/user/10645',
+      },
+      {
+        subcategory: 'Bitaxe Builders',
+        projectName: 'WallAxe',
+        creatorName: 'omgitsgio',
+        description: 'A wall-plugged Bitaxe \u2014 decentralize mining, stick it everywhere.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/wallaxe.png`,
+        projectUrl: 'https://geyser.fund/project/wallaxe?hero=metamick',
+        creatorUrl: 'https://geyser.fund/user/21199',
+      },
+      {
+        subcategory: 'Game Developers',
+        projectName: 'Hero of Bitcoin \u2014 The Game',
+        creatorName: 'Hero of \u20bfitcoin',
+        description: 'A Bitcoin-themed game built by and for the community.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/HeroOfBitcoin.png`,
+        projectUrl: 'https://geyser.fund/project/heroofbitcoin?hero=geyserpromotion',
+        creatorUrl: 'https://geyser.fund/user/697',
+      },
+    ],
   },
   {
-    title: 'Writers',
-    description: 'Books, essays, research, and journalism.',
-    icon: FaPenFancy,
-    iconColor: '#f97316',
-    size: 'small',
-    imageUrl:
-      'https://images.unsplash.com/photo-1432821596592-e2c18b78144f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900',
-  },
-  {
-    title: 'Social causes',
-    description: 'Grassroots missions powered by people who care.',
-    icon: FaHeart,
-    iconColor: '#f472b6',
-    size: 'medium',
-    imageUrl:
-      'https://images.unsplash.com/photo-1595702700955-dbbc28a59da5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900',
-  },
-  {
-    title: 'Event organizers',
-    description: 'Meetups and gatherings that grow local momentum.',
-    icon: FaCalendarAlt,
-    iconColor: '#34d399',
-    size: 'small',
-    imageUrl:
-      'https://images.unsplash.com/photo-1760992003927-96ac55e57296?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900',
-  },
-  {
-    title: 'Bitcoin communities',
-    description: 'Builders shaping open financial culture.',
-    icon: FaBolt,
-    iconColor: '#f59e0b',
-    size: 'medium',
-    imageUrl:
-      'https://images.unsplash.com/photo-1694286067026-a8aa654481f7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=900',
+    id: 'open-source-builders',
+    name: 'Open-Source Builders',
+    description: 'Public software and infrastructure created in the open and sustained by communities.',
+    icon: PiCode,
+    color: 'grass.8',
+    projects: [
+      {
+        subcategory: 'Protocol Builders',
+        projectName: 'RGB Protocol Development',
+        creatorName: 'LNP/BP Standards Association',
+        description: 'Raising funds for the development of the RGB protocol.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/RGB.png`,
+        projectUrl: 'https://geyser.fund/project/rgb?hero=geyserpromotion',
+        creatorUrl: 'https://geyser.fund/user/1652',
+      },
+      {
+        subcategory: 'Indie Developers',
+        projectName: 'Noderunners Radio',
+        creatorName: 'Noderunners Radio',
+        description: 'Community-supported independent development and broadcasting.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/Noderunners.png`,
+        projectUrl: 'https://geyser.fund/project/noderunnersradio?hero=geyserpromotion',
+        creatorUrl: 'https://geyser.fund/user/2468',
+      },
+      {
+        subcategory: 'Nostr Developers',
+        projectName: 'GitCitadel',
+        creatorName: 'GitCitadel',
+        description: 'Building open-source tooling on the Nostr protocol.',
+        imageUrl: `${CREATOR_IMAGE_BASE}/GitCitadel.png`,
+        projectUrl: 'https://geyser.fund/project/gitcitadel?hero=geyserpromotion',
+        creatorUrl: 'https://geyser.fund/user/13323',
+      },
+    ],
   },
 ]
 
@@ -166,7 +350,7 @@ export const creatorStories: CreatorStory[] = [
   {
     category: 'Collectibles',
     tag: 'Collectibles',
-    accentColor: '#f59e0b',
+    accentColor: 'amber.10',
     title: 'BTC Trading Cards',
     description:
       'BTC Trading Cards turned Bitcoin education into collectible culture, launching Series 1 exclusively on Geyser and rallying a global collector community.',
@@ -178,7 +362,7 @@ export const creatorStories: CreatorStory[] = [
   {
     category: 'Documentary',
     tag: 'Documentary',
-    accentColor: '#f97316',
+    accentColor: 'orange.9',
     title: "Peru's Bitcoin Revolution",
     description:
       "Julian's documentary follows MOTIV across the Andes and Amazon, showing real Bitcoin impact and drawing worldwide backers behind the mission.",
@@ -190,7 +374,7 @@ export const creatorStories: CreatorStory[] = [
   {
     category: 'Community',
     tag: 'Community',
-    accentColor: '#34d399',
+    accentColor: 'jade.8',
     title: "BTC Isla by Satoshi's Legacy",
     description:
       'BTC Isla turns weekly proof-of-work into visible adoption, onboarding merchants and training locals to build a living Bitcoin circular economy.',
@@ -202,7 +386,7 @@ export const creatorStories: CreatorStory[] = [
   {
     category: 'Hardware',
     tag: 'Hardware',
-    accentColor: '#a78bfa',
+    accentColor: 'violet.8',
     title: 'Bitcoinize',
     description:
       'Bitcoinize built a dedicated Lightning POS and used Geyser momentum to ship devices worldwide, helping circular economies accept Bitcoin with ease.',
@@ -241,74 +425,74 @@ export const creatorPossibilities: CreatorPossibility[] = [
   {
     title: 'A documentary',
     description: 'Tell the story only you can tell.',
-    icon: FaFilm,
-    iconColor: '#ff6b6b',
-    surfaceColor: 'rgba(255, 107, 107, 0.08)',
-    borderColor: 'rgba(255, 107, 107, 0.25)',
+    icon: PiFilmSlate,
+    iconColor: 'red.9',
+    surfaceColor: 'redAlpha.3',
+    borderColor: 'redAlpha.6',
   },
   {
     title: 'A local meetup series',
     description: 'Create recurring spaces for your community.',
-    icon: FaUsers,
-    iconColor: '#34d399',
-    surfaceColor: 'rgba(52, 211, 153, 0.08)',
-    borderColor: 'rgba(52, 211, 153, 0.25)',
+    icon: PiUsers,
+    iconColor: 'green.9',
+    surfaceColor: 'greenAlpha.3',
+    borderColor: 'greenAlpha.6',
   },
   {
     title: 'A podcast',
     description: 'Build long-form trust with your audience.',
-    icon: FaMicrophone,
-    iconColor: '#ffd93d',
-    surfaceColor: 'rgba(255, 217, 61, 0.08)',
-    borderColor: 'rgba(255, 217, 61, 0.25)',
+    icon: PiMicrophone,
+    iconColor: 'yellow.9',
+    surfaceColor: 'yellowAlpha.3',
+    borderColor: 'yellowAlpha.6',
   },
   {
     title: 'An education initiative',
     description: 'Help people gain practical skills.',
-    icon: FaGraduationCap,
-    iconColor: '#60a5fa',
-    surfaceColor: 'rgba(96, 165, 250, 0.08)',
-    borderColor: 'rgba(96, 165, 250, 0.25)',
+    icon: PiGraduationCap,
+    iconColor: 'blue.8',
+    surfaceColor: 'blueAlpha.3',
+    borderColor: 'blueAlpha.6',
   },
   {
     title: 'An open-source tool',
     description: 'Build infrastructure in public.',
-    icon: FaCode,
-    iconColor: '#00f5dc',
-    surfaceColor: 'rgba(0, 245, 220, 0.08)',
-    borderColor: 'rgba(0, 245, 220, 0.25)',
+    icon: PiCode,
+    iconColor: 'geyser.9',
+    surfaceColor: 'geyserAlpha.3',
+    borderColor: 'geyserAlpha.6',
   },
   {
     title: 'A cultural project',
     description: 'Translate values into art, music, and media.',
-    icon: FaPalette,
-    iconColor: '#f472b6',
-    surfaceColor: 'rgba(244, 114, 182, 0.08)',
-    borderColor: 'rgba(244, 114, 182, 0.25)',
+    icon: PiPalette,
+    iconColor: 'pink.8',
+    surfaceColor: 'pinkAlpha.3',
+    borderColor: 'pinkAlpha.6',
   },
   {
     title: 'A community hub',
     description: 'Give your people a place to gather.',
-    icon: FaBuilding,
-    iconColor: '#a78bfa',
-    surfaceColor: 'rgba(167, 139, 250, 0.08)',
-    borderColor: 'rgba(167, 139, 250, 0.25)',
+    icon: PiBuildingOffice,
+    iconColor: 'violet.8',
+    surfaceColor: 'violetAlpha.3',
+    borderColor: 'violetAlpha.6',
   },
   {
     title: 'A startup experiment',
     description: 'Validate bold ideas with aligned supporters.',
-    icon: FaFlask,
-    iconColor: '#f59e0b',
-    surfaceColor: 'rgba(245, 158, 11, 0.08)',
-    borderColor: 'rgba(245, 158, 11, 0.25)',
+    icon: PiFlask,
+    iconColor: 'amber.10',
+    surfaceColor: 'amberAlpha.3',
+    borderColor: 'amberAlpha.6',
   },
   {
     title: 'A writing project',
     description: 'Publish work with depth and staying power.',
-    icon: FaPenFancy,
-    iconColor: '#fb923c',
-    surfaceColor: 'rgba(251, 146, 60, 0.08)',
-    borderColor: 'rgba(251, 146, 60, 0.25)',
+    icon: PiPenNibStraight,
+    iconColor: 'orange.8',
+    surfaceColor: 'orangeAlpha.3',
+    borderColor: 'orangeAlpha.6',
   },
 ]
 
@@ -316,20 +500,20 @@ export const creatorCommunityPillars: CreatorCommunityPillar[] = [
   {
     title: 'Exposure to the Bitcoiner community',
     body: 'Get discovered by mission-aligned Bitcoiners ready to back, share, and champion your campaign.',
-    icon: FaUsers,
-    accentColor: '#00f5dc',
+    icon: PiUsers,
+    accentColor: 'geyser.9',
   },
   {
     title: "Promotion through Geyser's network",
     body: 'Strong campaigns are amplified across Geyser channels, partner media, and trusted ecosystem voices.',
-    icon: FaBullhorn,
-    accentColor: '#a78bfa',
+    icon: PiMegaphoneSimple,
+    accentColor: 'violet.8',
   },
   {
     title: 'Hands-on support for your launch',
     body: 'From campaign framing to launch execution, Geyser helps you build momentum and run a stronger fundraiser.',
-    icon: FaHandsHelping,
-    accentColor: '#34d399',
+    icon: PiHandshake,
+    accentColor: 'green.9',
   },
 ]
 
@@ -339,21 +523,21 @@ export const creatorCommunityTestimonials: CreatorCommunityTestimonial[] = [
       'I launched thinking a small circle of friends might show up. Within two weeks, 200 people from 14 countries were backing the project.',
     author: 'Maria S.',
     role: 'Filmmaker, Brazil',
-    accentColor: '#00f5dc',
+    accentColor: 'geyser.9',
   },
   {
     quote:
       'People shared the project, posted about it, and brought others in. The community momentum kept the campaign alive.',
     author: 'Kofi A.',
     role: 'Open Source Developer, Ghana',
-    accentColor: '#a78bfa',
+    accentColor: 'violet.8',
   },
   {
     quote:
       "On day one we had a dozen backers. That was enough to keep building, and now we've reached hundreds of learners.",
     author: 'Isabella M.',
     role: 'Community Educator, El Salvador',
-    accentColor: '#34d399',
+    accentColor: 'green.9',
   },
 ]
 

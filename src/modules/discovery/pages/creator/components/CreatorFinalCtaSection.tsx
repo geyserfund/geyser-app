@@ -1,4 +1,4 @@
-import { Box, Button, HStack, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Box, Button, HStack, Icon, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { FaBolt } from 'react-icons/fa'
 import { PiRocketLaunch } from 'react-icons/pi'
@@ -14,10 +14,26 @@ import { CreatorSectionContainer } from './CreatorSectionContainer.tsx'
 export const CreatorFinalCtaSection = () => {
   const { handleLauchNowClick, renderModal } = useLaunchNow()
 
-  const sectionBackground = useColorModeValue('#080c0b', '#080c0b')
+  const sectionBackground = useColorModeValue('neutral1.12', 'neutral1.1')
   const primaryGradient = useColorModeValue(
-    'linear(to-r, #00f5dc 0%, #4ade80 100%)',
-    'linear(to-r, #00f5dc 0%, #4ade80 100%)',
+    'linear(to-r, var(--chakra-colors-geyser-9) 0%, var(--chakra-colors-grass-8) 100%)',
+    'linear(to-r, var(--chakra-colors-geyser-9) 0%, var(--chakra-colors-grass-8) 100%)',
+  )
+  const centerGlowBackground = useColorModeValue(
+    'radial-gradient(ellipse at center, var(--chakra-colors-geyserAlpha-3) 0%, transparent 70%)',
+    'radial-gradient(ellipse at center, var(--chakra-colors-geyserAlpha-4) 0%, transparent 70%)',
+  )
+  const imageOverlayBackground = useColorModeValue(
+    'linear-gradient(180deg, var(--chakra-colors-overlay-black-6) 0%, var(--chakra-colors-overlay-black-4) 50%, var(--chakra-colors-overlay-black-6) 100%)',
+    'linear-gradient(180deg, var(--chakra-colors-overlay-white-6) 0%, var(--chakra-colors-overlay-white-4) 50%, var(--chakra-colors-overlay-white-6) 100%)',
+  )
+  const leftAmbientGlowBackground = useColorModeValue(
+    'radial-gradient(ellipse, var(--chakra-colors-geyserAlpha-4) 0%, transparent 70%)',
+    'radial-gradient(ellipse, var(--chakra-colors-geyserAlpha-5) 0%, transparent 70%)',
+  )
+  const rightAmbientGlowBackground = useColorModeValue(
+    'radial-gradient(ellipse, var(--chakra-colors-violetAlpha-4) 0%, transparent 70%)',
+    'radial-gradient(ellipse, var(--chakra-colors-violetAlpha-5) 0%, transparent 70%)',
   )
 
   return (
@@ -43,13 +59,9 @@ export const CreatorFinalCtaSection = () => {
           <Box
             position="absolute"
             inset={0}
-            background="radial-gradient(ellipse at center, rgba(0,245,220,0.06) 0%, transparent 70%)"
+            background={centerGlowBackground}
           />
-          <Box
-            position="absolute"
-            inset={0}
-            background="linear-gradient(180deg, rgba(8,12,11,0.6) 0%, rgba(8,12,11,0.3) 50%, rgba(8,12,11,0.6) 100%)"
-          />
+          <Box position="absolute" inset={0} background={imageOverlayBackground} />
         </Box>
 
         <Box
@@ -59,7 +71,7 @@ export const CreatorFinalCtaSection = () => {
           width={{ base: '220px', lg: '400px' }}
           height={{ base: '160px', lg: '300px' }}
           borderRadius="50%"
-          background="radial-gradient(ellipse, rgba(0,245,220,0.1) 0%, transparent 70%)"
+          background={leftAmbientGlowBackground}
           filter="blur(60px)"
           pointerEvents="none"
         />
@@ -70,7 +82,7 @@ export const CreatorFinalCtaSection = () => {
           width={{ base: '220px', lg: '350px' }}
           height={{ base: '160px', lg: '250px' }}
           borderRadius="50%"
-          background="radial-gradient(ellipse, rgba(167,139,250,0.08) 0%, transparent 70%)"
+          background={rightAmbientGlowBackground}
           filter="blur(50px)"
           pointerEvents="none"
         />
@@ -82,12 +94,12 @@ export const CreatorFinalCtaSection = () => {
               px={4}
               py={2}
               borderRadius="full"
-              backgroundColor="rgba(0,245,220,0.1)"
+              backgroundColor="geyserAlpha.4"
               borderWidth="1px"
-              borderColor="rgba(0,245,220,0.25)"
+              borderColor="geyserAlpha.6"
             >
-              <FaBolt size={14} color="#00f5dc" />
-              <Body size="xs" color="#00f5dc" fontWeight={600} letterSpacing="0.06em" textTransform="uppercase">
+              <Icon as={FaBolt} boxSize={3.5} color="geyser.9" />
+              <Body size="xs" color="geyser.9" fontWeight={600} letterSpacing="0.06em" textTransform="uppercase">
                 {t('Join the Geyser creator community')}
               </Body>
             </HStack>
@@ -122,7 +134,7 @@ export const CreatorFinalCtaSection = () => {
             <HStack spacing={{ base: 4, md: 6 }} flexWrap="wrap" justify="center" pt={2}>
               {creatorFinalCtaTrustPoints.map((item) => (
                 <HStack key={item} spacing={2}>
-                  <Box w="6px" h="6px" borderRadius="full" backgroundColor="#00f5dc" opacity={0.75} />
+                  <Box w="6px" h="6px" borderRadius="full" backgroundColor="geyser.9" opacity={0.75} />
                   <Body fontSize="sm" color="whiteAlpha.600">
                     {t(item)}
                   </Body>

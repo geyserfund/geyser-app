@@ -10,16 +10,20 @@ import { CreatorSectionContainer } from './CreatorSectionContainer.tsx'
 
 /** Welcome section with introduction copy and a featured video container. */
 export const CreatorWelcomeSection = () => {
-  const sectionBackground = useColorModeValue('utils.pbg', 'utils.pbg')
+  const sectionBackground = 'utils.pbg'
   const videoCardBackground = useColorModeValue('neutral1.1', 'neutral1.3')
   const videoCardBorderColor = useColorModeValue('neutral1.6', 'neutral1.7')
   const videoCaptionBackground = useColorModeValue(
-    'linear(to-t, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.2), transparent)',
-    'linear(to-t, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0.28), transparent)',
+    'linear(to-t, var(--chakra-colors-overlay-black-8), var(--chakra-colors-overlay-black-3), transparent)',
+    'linear(to-t, var(--chakra-colors-overlay-white-8), var(--chakra-colors-overlay-white-3), transparent)',
+  )
+  const videoCardShadow = useColorModeValue(
+    '0 28px 70px var(--chakra-colors-overlay-black-4)',
+    '0 28px 70px var(--chakra-colors-overlay-white-5)',
   )
   const missionBadgeBackground = useColorModeValue('primary1.2', 'primary1.3')
-  const missionBadgeTextColor = useColorModeValue('primary1.10', 'primary1.10')
-  const quoteColor = useColorModeValue('neutral1.11', 'neutral1.11')
+  const missionBadgeTextColor = 'primary1.10'
+  const quoteColor = 'neutral1.11'
 
   return (
     <Box as="section" w="full" py={{ base: 14, lg: 20 }} backgroundColor={sectionBackground}>
@@ -44,7 +48,7 @@ export const CreatorWelcomeSection = () => {
               borderColor={videoCardBorderColor}
               backgroundColor={videoCardBackground}
               aspectRatio={{ base: '16 / 10', lg: '16 / 10' }}
-              boxShadow="0 28px 70px rgba(0,0,0,0.2)"
+              boxShadow={videoCardShadow}
             >
               <ReactPlayer
                 url={creatorWelcomeVideoUrl}

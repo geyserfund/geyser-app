@@ -6,8 +6,8 @@ import { Link, useLocation } from 'react-router'
 import {
   getDonateNavDropdownItems,
   getFundraiseNavDropdownItems,
-  NavDropdownMenu,
-} from '@/modules/navigation/components/navDropdown/index.ts'
+} from '@/modules/navigation/components/navDropdown/navDropdownItems.ts'
+import { NavDropdownMenu } from '@/modules/navigation/components/navDropdown/NavDropdownMenu.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { getPath } from '@/shared/constants/index.ts'
 
