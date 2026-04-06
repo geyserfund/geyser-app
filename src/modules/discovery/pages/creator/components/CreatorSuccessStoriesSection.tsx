@@ -81,7 +81,7 @@ export const CreatorSuccessStoriesSection = () => {
                     transition="all 0.25s ease"
                     _hover={{ transform: 'translateY(-4px)', borderColor: accentBorderColor }}
                   >
-                    <Box position="relative" h={{ base: '220px', lg: '250px' }}>
+                    <Box position="relative" h={{ base: '220px', lg: '250px' }} overflow="hidden">
                       <Image
                         src={story.imageUrl}
                         alt={t(story.title)}

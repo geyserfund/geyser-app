@@ -1,4 +1,5 @@
 import type { TFunction } from 'i18next'
+import { PiRocketLaunch } from 'react-icons/pi'
 
 import { getPath, GuideUrl } from '@/shared/constants/index.ts'
 
@@ -36,15 +37,16 @@ export const getDonateNavDropdownItems = (t: TFunction): NavDropdownMenuItem[] =
 export const getFundraiseNavDropdownItems = (t: TFunction): NavDropdownMenuItem[] => {
   return [
     {
-      title: t('Who is Geyser for'),
-      description: t('See who launches on Geyser and what they can build here.'),
+      title: t('Who Geyser is for'),
+      description: t('Look at the community of creators having impact'),
       to: getPath('discoveryCreator'),
     },
     {
       title: t('Launch Now'),
-      description: t('Go straight to your project details and begin launching now.'),
+      description: t('Learn how simple it is to launch a project on Geyser'),
       to: getPath('launchProjectDetails'),
-      badge: { label: t('start'), tone: 'new' },
+      emphasis: 'cta',
+      leadingIcon: PiRocketLaunch,
     },
     {
       title: t('How to launch on Geyser'),

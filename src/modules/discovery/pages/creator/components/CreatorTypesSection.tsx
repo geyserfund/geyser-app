@@ -86,7 +86,7 @@ const ProjectCard = ({ project, categoryColor, panelBorderColor, index }: Projec
     'linear-gradient(180deg, transparent 20%, var(--chakra-colors-overlay-black-8) 65%, var(--chakra-colors-overlay-black-11) 100%)',
     'linear-gradient(180deg, transparent 20%, var(--chakra-colors-overlay-white-8) 65%, var(--chakra-colors-overlay-white-11) 100%)',
   )
-  const pillBg = useColorModeValue('white', 'neutral1.2')
+  const pillBg = 'blackAlpha.700'
 
   return (
     <motion.div
@@ -128,16 +128,17 @@ const ProjectCard = ({ project, categoryColor, panelBorderColor, index }: Projec
               <Box position="absolute" top={3} left={3}>
                 <Box
                   borderRadius="full"
-                  px={2.5}
-                  py={0.5}
-                  fontSize="11px"
-                  fontWeight={600}
-                  color={categoryColor}
+                  px={3}
+                  py={1}
+                  fontSize="xs"
+                  fontWeight={700}
+                  color="white"
                   bg={pillBg}
                   borderWidth="1px"
-                  borderColor={getAlphaToken(categoryColor, 6)}
-                  boxShadow="sm"
-                  letterSpacing="0.02em"
+                  borderColor={getAlphaToken(categoryColor, 8)}
+                  boxShadow="md"
+                  letterSpacing="0.03em"
+                  lineHeight={1}
                 >
                   {project.subcategory}
                 </Box>
@@ -183,7 +184,6 @@ export const CreatorTypesSection = () => {
   const panelBorderColor = useColorModeValue('neutral1.6', 'neutral1.5')
   const panelTextColor = useColorModeValue('neutral1.12', 'neutral1.11')
   const headingAccentColor = useColorModeValue('primary1.9', 'primary1.8')
-  const introTextColor = useColorModeValue('neutral1.10', 'neutral1.9')
   const tabBorderColor = useColorModeValue('neutral1.5', 'neutral1.4')
 
   const handleTabClick = useCallback((index: number) => {
@@ -287,10 +287,6 @@ export const CreatorTypesSection = () => {
                 transition={{ duration: 0.25 }}
               >
                 <VStack align="start" spacing={{ base: 4, lg: 5 }}>
-                  <Body size="md" color={introTextColor} maxW="640px">
-                    {activeCategory.description}
-                  </Body>
-
                   <Grid
                     role="tabpanel"
                     templateColumns={{ base: '1fr', lg: 'repeat(2, 1fr)' }}

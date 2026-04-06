@@ -18,7 +18,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { type ReactNode, useCallback, useEffect, useRef } from 'react'
-import { PiArrowUpRight } from 'react-icons/pi'
+import { PiArrowUpRightBold } from 'react-icons/pi'
+import type { IconType } from 'react-icons'
 import { Link as RouterLink } from 'react-router'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -32,6 +33,7 @@ export type NavDropdownMenuItem = {
   href?: string
   disabled?: boolean
   emphasis?: 'default' | 'cta'
+  leadingIcon?: IconType
   badge?: {
     label: string
     tone: NavDropdownMenuItemBadgeTone
@@ -67,9 +69,11 @@ export const NavDropdownMenu = ({
   const newBadgeBackgroundColor = useColorModeValue('primary1.4', 'primary1.5')
   const soonBadgeBackgroundColor = useColorModeValue('neutral1.4', 'neutral1.5')
   const soonBadgeTextColor = useColorModeValue('neutral1.10', 'neutral1.11')
-  const ctaBackgroundColor = 'primary1.9'
-  const ctaHoverBackgroundColor = 'primary1.10'
-  const ctaTextColor = 'white'
+  const ctaBackgroundColor = useColorModeValue('primary1.1', 'primary1.3')
+  const ctaHoverBackgroundColor = useColorModeValue('primary1.2', 'primary1.4')
+  const ctaBorderColor = useColorModeValue('primary1.6', 'primary1.7')
+  const ctaTitleColor = 'primary1.11'
+  const ctaDescriptionColor = 'primary1.10'
   const { isOpen, onOpen, onClose } = useDisclosure()
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -128,14 +132,17 @@ export const NavDropdownMenu = ({
 
   const getItemContent = (item: NavDropdownMenuItem) => {
     const isCta = item.emphasis === 'cta'
+    const titleColor = item.disabled ? disabledColor : isCta ? ctaTitleColor : 'utils.text'
+    const descriptionColor = item.disabled ? disabledColor : isCta ? ctaDescriptionColor : mutedColor
 
     return (
       <VStack align="stretch" spacing={isDesktop ? 1.5 : 1} width="100%">
         <HStack align="center" justify="flex-start" spacing={2.5}>
+          {item.leadingIcon ? <Icon as={item.leadingIcon} boxSize={isDesktop ? 4 : 3.5} color={titleColor} /> : null}
           <Body
             size={isDesktop ? 'md' : 'sm'}
             dark={!item.disabled}
-            color={item.disabled ? disabledColor : isCta ? ctaTextColor : undefined}
+            color={titleColor}
             fontWeight={isCta ? 600 : 400}
             lineHeight={1.2}
           >
@@ -159,9 +166,9 @@ export const NavDropdownMenu = ({
           ) : null}
           {item.href ? (
             <Icon
-              as={PiArrowUpRight}
+              as={PiArrowUpRightBold}
               boxSize={isDesktop ? 3.5 : 3}
-              color={item.disabled ? disabledColor : isCta ? ctaTextColor : mutedColor}
+              color={titleColor}
             />
           ) : null}
         </HStack>
@@ -169,7 +176,7 @@ export const NavDropdownMenu = ({
           <Body
             size={isDesktop ? 'sm' : undefined}
             fontSize={isDesktop ? undefined : 'xs'}
-            color={item.disabled ? disabledColor : isCta ? ctaTextColor : mutedColor}
+            color={descriptionColor}
             opacity={isCta ? 0.92 : 1}
             fontWeight={300}
             lineHeight={1.4}
@@ -186,6 +193,8 @@ export const NavDropdownMenu = ({
     const ctaStyles = isCta
       ? {
           backgroundColor: ctaBackgroundColor,
+          borderWidth: '1px',
+          borderColor: ctaBorderColor,
           _hover: { backgroundColor: ctaHoverBackgroundColor },
           _focusVisible: { backgroundColor: ctaHoverBackgroundColor },
         }
@@ -261,6 +270,8 @@ export const NavDropdownMenu = ({
     const ctaStyles = isCta
       ? {
           backgroundColor: ctaBackgroundColor,
+          borderWidth: '1px',
+          borderColor: ctaBorderColor,
           _hover: { backgroundColor: ctaHoverBackgroundColor },
           _active: { backgroundColor: ctaHoverBackgroundColor },
           _focusVisible: { backgroundColor: ctaHoverBackgroundColor },

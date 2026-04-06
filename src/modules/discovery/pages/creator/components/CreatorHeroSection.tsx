@@ -123,9 +123,7 @@ export const CreatorHeroSection = () => {
               lineHeight={1.6}
               maxW={{ base: 'full', lg: '620px' }}
             >
-              {t(
-                'A place where creators, organizers, educators, builders, and storytellers rally community support to bring meaningful ideas to life.',
-              )}
+              {t('The place where Bitcoin creators rally the community to bring meaningful projects to life.')}
             </Body>
 
             <HStack spacing={3} flexWrap="wrap">
