@@ -37,7 +37,7 @@ export const ResourcesSection = () => {
     <StartPageSectionShell id="resources" sectionBg={useColorModeValue('neutral1.1', 'neutral1.2')}>
       <VStack alignItems="flex-start" spacing={3}>
         <H2 bold>{t('Go deeper when you are ready')}</H2>
-        <Body size="lg" maxWidth="760px" muted>
+        <Body size="lg" maxWidth="760px" light>
           {t('Keep moving with short guides for setup, launch, and optimization.')}
         </Body>
       </VStack>
@@ -54,7 +54,7 @@ export const ResourcesSection = () => {
               <H3 size="md" bold>
                 {resource.title}
               </H3>
-              <Body size="sm" muted>
+              <Body size="sm" light>
                 {resource.description}
               </Body>
               <Button

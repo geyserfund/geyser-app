@@ -1,4 +1,4 @@
-import { HStack, SimpleGrid, VStack } from '@chakra-ui/react'
+import { HStack, Icon, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { ComponentType, useMemo } from 'react'
 import {
@@ -23,14 +23,17 @@ type Tool = {
   title: string
   description: string
   benefit: string
+  accentColor: string
   size: ToolSize
 }
+const getColorFamily = (colorToken: string) => colorToken.split('.')[0]
+const getAlphaToken = (colorToken: string, alphaStep: number) => `${getColorFamily(colorToken)}Alpha.${alphaStep}`
 
 /** Step 4 section showcasing tooling that drives conversion and momentum. */
 export const CreatorToolsSection = () => {
-  const iconBackground = 'primary1.9'
-  const benefitBackground = 'primary1.9'
-  const primaryContentColor = 'utils.blackContrast'
+  const cardBorderColor = useColorModeValue('neutral1.4', 'neutral1.5')
+  const benefitBackground = useColorModeValue('neutral1.1', 'neutral1.2')
+  const benefitBorder = useColorModeValue('neutral1.5', 'neutral1.6')
 
   const tools = useMemo<Tool[]>(
     () => [
@@ -39,13 +42,15 @@ export const CreatorToolsSection = () => {
         title: t('Goals'),
         description: t('Set visible milestones that show what each funding threshold unlocks'),
         benefit: t('Create momentum with clear targets'),
+        accentColor: 'geyser.8',
         size: 'large' as ToolSize,
       },
       {
         icon: PiShoppingBag,
         title: t('Products and Rewards'),
-        description: t('Offer pre-orders, merch, memberships, recognition, and other supporter perks'),
+        description: t('Offer pre-orders, merch, memberships, recognition, and other perks'),
         benefit: t('Turn contributions into tangible value'),
+        accentColor: 'grass.8',
         size: 'large' as ToolSize,
       },
       {
@@ -53,6 +58,7 @@ export const CreatorToolsSection = () => {
         title: t('Posts and Updates'),
         description: t('Share progress updates and milestones to keep supporters engaged'),
         benefit: t('Build trust through consistency'),
+        accentColor: 'blue.8',
         size: 'medium' as ToolSize,
       },
       {
@@ -60,6 +66,15 @@ export const CreatorToolsSection = () => {
         title: t('Affiliates'),
         description: t('Incentivize others to share your project through distribution loops'),
         benefit: t('Expand reach through community advocates'),
+        accentColor: 'amber.9',
+        size: 'small' as ToolSize,
+      },
+      {
+        icon: PiCreditCard,
+        title: t('Fiat contribution support'),
+        description: t('Accept card and Apple Pay so anyone can back your project.'),
+        benefit: t('Increase conversion from mixed audiences'),
+        accentColor: 'pink.8',
         size: 'medium' as ToolSize,
       },
       {
@@ -67,6 +82,7 @@ export const CreatorToolsSection = () => {
         title: t('Insights'),
         description: t('Measure what is working and optimize conversion decisions'),
         benefit: t('Make data-driven launch decisions'),
+        accentColor: 'violet.8',
         size: 'small' as ToolSize,
       },
       {
@@ -74,44 +90,40 @@ export const CreatorToolsSection = () => {
         title: t('Delivery and Accounting'),
         description: t('Manage order fulfillment, payouts, and exports in one flow'),
         benefit: t('Stay organized as support grows'),
-        size: 'small' as ToolSize,
-      },
-      {
-        icon: PiCreditCard,
-        title: t('Fiat contribution support'),
-        description: t('Reduce checkout friction for supporters who prefer familiar payment methods'),
-        benefit: t('Increase conversion from mixed audiences'),
+        accentColor: 'orange.8',
         size: 'small' as ToolSize,
       },
     ],
     [],
   )
 
-  const largeTools = useMemo(() => tools.filter((tool) => tool.size === 'large'), [tools])
+  const featuredTools = useMemo(() => tools.filter((tool) => tool.size === 'large'), [tools])
   const mediumTools = useMemo(() => tools.filter((tool) => tool.size === 'medium'), [tools])
   const smallTools = useMemo(() => tools.filter((tool) => tool.size === 'small'), [tools])
 
   const renderToolCard = (tool: Tool) => (
-    <PlaybookCard key={tool.title} height="100%">
-      <VStack alignItems="flex-start" spacing={4} height="100%">
+    <PlaybookCard key={tool.title} height="100%" borderColor={cardBorderColor}>
+      <VStack alignItems="flex-start" spacing={{ base: 3, md: 4 }} height="100%">
         <HStack alignItems="flex-start" spacing={3} width="100%">
           <VStack
-            width="44px"
-            height="44px"
-            borderRadius="12px"
+            width="52px"
+            height="52px"
+            borderRadius="14px"
             justifyContent="center"
             alignItems="center"
-            backgroundColor={iconBackground}
-            color={primaryContentColor}
+            backgroundColor={getAlphaToken(tool.accentColor, 2)}
+            borderWidth="1px"
+            borderColor={getAlphaToken(tool.accentColor, 4)}
+            color={tool.accentColor}
             flexShrink={0}
           >
-            <tool.icon size={20} />
+            <Icon as={tool.icon} boxSize={6} />
           </VStack>
           <VStack alignItems="flex-start" spacing={1}>
             <H3 size="md" bold>
               {tool.title}
             </H3>
-            <Body size="sm" muted>
+            <Body size="sm" light>
               {tool.description}
             </Body>
           </VStack>
@@ -120,12 +132,13 @@ export const CreatorToolsSection = () => {
         <VStack
           borderRadius="999px"
           backgroundColor={benefitBackground}
+          borderWidth="1px"
+          borderColor={benefitBorder}
           paddingX={3}
           paddingY={1}
           alignSelf="flex-start"
-          color={primaryContentColor}
         >
-          <Body size="xs" bold color={primaryContentColor}>
+          <Body size="xs" bold>
             {tool.benefit}
           </Body>
         </VStack>
@@ -137,21 +150,21 @@ export const CreatorToolsSection = () => {
     <StartPageSectionShell id="creator-tools">
       <VStack alignItems="flex-start" spacing={3}>
         <H2 bold>{t('Use the tools that turn interest into funding')}</H2>
-        <Body size="lg" maxWidth="850px" muted>
+        <Body size="lg" maxWidth="850px" light>
           {t('Geyser gives creators a complete fundraising toolkit, not just a project page builder.')}
         </Body>
       </VStack>
 
-      <VStack alignItems="stretch" spacing={5}>
-        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={5}>
-          {largeTools.map(renderToolCard)}
+      <VStack alignItems="stretch" spacing={{ base: 4, md: 5 }}>
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 5 }}>
+          {featuredTools.map(renderToolCard)}
         </SimpleGrid>
 
-        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={5}>
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 5 }}>
           {mediumTools.map(renderToolCard)}
         </SimpleGrid>
 
-        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={5}>
+        <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={{ base: 4, md: 5 }}>
           {smallTools.map(renderToolCard)}
         </SimpleGrid>
       </VStack>

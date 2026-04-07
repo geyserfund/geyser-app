@@ -89,7 +89,9 @@ export const PlatformNavBar = () => {
   } = useDisclosure()
 
   const creatorRoute = getPath('discoveryCreator')
+  const launchStartRoute = getPath('launchStart')
   const isCreatorPage = location.pathname === creatorRoute || location.pathname.startsWith(`${creatorRoute}/`)
+  const isLaunchStartPage = location.pathname === launchStartRoute
 
   useEffect(() => {
     if (!isCreatorPage) {
@@ -146,7 +148,12 @@ export const PlatformNavBar = () => {
   }, [creatorNavScrolled, isCreatorPage, isProjectFundingRoutes])
 
   const shouldShowPlatformNav =
-    (isPlatformRoutes || isProjectRoutes || isGuardiansPage || isProfilePage || isAmbassadorProgramPage) &&
+    (isPlatformRoutes ||
+      isProjectRoutes ||
+      isGuardiansPage ||
+      isProfilePage ||
+      isAmbassadorProgramPage ||
+      isLaunchStartPage) &&
     !isProjectFundingRoutes &&
     !isProjectDashboardRoutes &&
     !isMobileMode

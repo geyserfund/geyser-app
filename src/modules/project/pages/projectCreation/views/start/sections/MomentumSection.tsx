@@ -14,8 +14,9 @@ import { getMomentumSteps } from '../utils/startPageContent.ts'
 
 /** Momentum section for first-launch actions after the page is published. */
 export const MomentumSection = () => {
-  const iconBackground = 'primary1.9'
-  const primaryContentColor = 'utils.blackContrast'
+  const iconBackground = 'primary1Alpha.2'
+  const iconBorder = 'primary1Alpha.5'
+  const iconColor = useColorModeValue('primary1.11', 'primary1.8')
   const stepSurface = useColorModeValue('white', 'neutral1.3')
 
   const steps = useMemo(() => getMomentumSteps(t), [])
@@ -27,7 +28,7 @@ export const MomentumSection = () => {
     <StartPageSectionShell id="momentum" sectionBg={useColorModeValue('neutral1.1', 'neutral1.2')}>
       <VStack alignItems="flex-start" spacing={3}>
         <H2 bold>{t('Launch momentum without overcomplicating it')}</H2>
-        <Body size="lg" maxWidth="820px" muted>
+        <Body size="lg" maxWidth="820px" light>
           {t('Your first week should focus on clear asks, direct outreach, and visible progress.')}
         </Body>
       </VStack>
@@ -39,20 +40,22 @@ export const MomentumSection = () => {
             <PlaybookCard key={step.title} backgroundColor={stepSurface} height="100%">
               <VStack alignItems="flex-start" spacing={3}>
                 <HStack
-                  width="40px"
-                  height="40px"
+                  width="44px"
+                  height="44px"
                   borderRadius="12px"
                   justifyContent="center"
                   alignItems="center"
                   backgroundColor={iconBackground}
-                  color={primaryContentColor}
+                  color={iconColor}
+                  borderWidth="1px"
+                  borderColor={iconBorder}
                 >
-                  <Icon size={20} />
+                  <Icon size={24} />
                 </HStack>
                 <H3 size="md" bold>
                   {step.title}
                 </H3>
-                <Body size="sm" muted>
+                <Body size="sm" light>
                   {step.description}
                 </Body>
               </VStack>

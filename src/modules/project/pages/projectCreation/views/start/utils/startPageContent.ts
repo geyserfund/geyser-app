@@ -18,44 +18,45 @@ export type LaunchPlanRow = {
   badge?: string
 }
 
-export const getHeroSteps = (translate: TFunction): string[] => [
-  translate('Explain about your project'),
-  translate('Choose your fundraiser type'),
-  translate('Add goals and rewards'),
-  translate('Launch strong'),
-]
-
 export const getFundamentals = (translate: TFunction): KeyValueRow[] => [
   {
-    title: translate('Clear idea'),
-    description: translate('Know what you are building and why it matters.'),
+    title: translate('A meaningful idea'),
+    description: translate(
+      'Show that you have thought clearly about the issue, and that your fundraiser or campaign idea is how you solve it.',
+    ),
   },
   {
-    title: translate('Believable story'),
-    description: translate('Help supporters connect with your vision quickly.'),
+    title: translate('Proof of Work'),
+    description: translate(
+      "Show the time, money and effort you've put into this idea or project already. You're not waiting for money or permission to build this.",
+    ),
   },
   {
-    title: translate('Build trust'),
-    description: translate('Show clear setup, proof of intent, and transparency.'),
-  },
-  {
-    title: translate('Launch momentum'),
-    description: translate('Start strong and keep supporters engaged after day one.'),
+    title: translate('Reputation'),
+    description: translate(
+      "Show that you are connected to the Bitcoin community's trust network. And make sure that those Bitcoiners around you are ready to vouch for you.",
+    ),
   },
 ]
 
 export const getTrustPayoutCards = (translate: TFunction): KeyValueRow[] => [
   {
-    title: translate('Complete your project profile'),
-    description: translate('A complete page with strong basics helps supporters trust your launch.'),
+    title: translate('Connect your social profile'),
+    description: translate(
+      'Show strong proof of work and visible ties to the Bitcoin community, so supporters know who is behind the project.',
+    ),
   },
   {
-    title: translate('Verification and trust signals'),
-    description: translate('A complete profile and verification help supporters say yes.'),
+    title: translate('Complete your project story'),
+    description: translate(
+      'Tell a clear story, add video, and bring personal context. People support people when they can feel the mission.',
+    ),
   },
   {
-    title: translate('Flexible contribution rails'),
-    description: translate('Support Lightning, on-chain, and fiat checkout options.'),
+    title: translate('Verify your profile'),
+    description: translate(
+      'Verified identity signals credibility and helps your page convert trust into real funding momentum.',
+    ),
   },
 ]
 

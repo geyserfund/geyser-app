@@ -13,16 +13,17 @@ type StartPageSectionShellProps = {
 /** Shared wrapper for each section of the launch start playbook page. */
 export const StartPageSectionShell = ({ children, id, sectionBg, ...boxProps }: StartPageSectionShellProps) => {
   const defaultBackground = 'utils.pbg'
+  const startPageMaxWidth = `${dimensions.maxWidth + 24 * 2}px`
 
   return (
     <Box as="section" id={id} width="100%" backgroundColor={sectionBg ?? defaultBackground} {...boxProps}>
       <VStack
         width="100%"
-        maxWidth={dimensions.maxWidth}
+        maxWidth={startPageMaxWidth}
         marginX="auto"
         paddingX={standardPadding}
-        paddingY={{ base: 10, lg: 16 }}
-        spacing={{ base: 6, lg: 8 }}
+        paddingY={{ base: 8, md: 12, lg: 16 }}
+        spacing={{ base: 5, md: 6, lg: 8 }}
         alignItems="stretch"
       >
         {children}
