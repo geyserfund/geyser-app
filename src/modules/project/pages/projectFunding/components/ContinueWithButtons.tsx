@@ -138,6 +138,11 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
           {isMobile ? creditCardIcon : t('Continue with Card or Bank Transfer')}
         </Button>
       )}
+      {showOnlyFiat && !hasFiatPaymentMethod && (
+        <Button size="lg" w="full" variant="solid" colorScheme="primary1" type="button" isDisabled>
+          {t('Fiat renewal unavailable')}
+        </Button>
+      )}
       {!showOnlyFiat && (
         <Button
           id="continue-with-bitcoin"

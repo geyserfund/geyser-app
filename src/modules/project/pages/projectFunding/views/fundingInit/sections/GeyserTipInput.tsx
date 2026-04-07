@@ -6,7 +6,7 @@ import { PiQuestion } from 'react-icons/pi'
 import { Tooltip } from '@/components/ui/Tooltip.tsx'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
 import { isRecurringContributionRenewalAtom } from '@/modules/project/funding/state/recurringContributionRenewalAtom.ts'
-import { recurringFundingModes } from '@/modules/project/recurring/graphql'
+import { recurringFundingModes } from '@/modules/project/recurring/graphql.ts'
 import { H3 } from '@/shared/components/typography'
 import { useGetUserIpCountryQuery } from '@/types/index.ts'
 
@@ -29,9 +29,8 @@ export const GeyserTipInput = () => {
 
   const [tipOptions, setTipOptions] = useAtom(tipsAtom)
 
-  if (isRecurringRenewal) return null
-
   useGetUserIpCountryQuery({
+    skip: isRecurringRenewal,
     onCompleted(data) {
       if (data.userIpCountry === 'US' || data.userIpCountry === 'CA') {
         setTipOptions([0, 5, 15, 18, 21])
@@ -46,6 +45,8 @@ export const GeyserTipInput = () => {
       setGeyserTipPercent(DEFAULT_TIP_PERCENT)
     },
   })
+
+  if (isRecurringRenewal) return null
 
   if (!tipOptions) return null
 

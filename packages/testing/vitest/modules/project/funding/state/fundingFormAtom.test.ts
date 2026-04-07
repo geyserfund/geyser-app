@@ -5,7 +5,7 @@ import { shippingCountryAtom } from '@/modules/project/funding/state/shippingAdd
 import { SATOSHIS_IN_BTC } from '@/shared/constants' // Import constant
 import { usdRateAtom } from '@/shared/state/btcRateAtom' // Correct import for usdRateAtom
 // Import types needed here
-import { RewardCurrency, UserSubscriptionInterval } from '@/types'
+import { RewardCurrency } from '@/types'
 import { dollarsToCents } from '@/utils/index.ts'
 
 // Import atoms under test
@@ -23,6 +23,7 @@ import {
   updateFundingFormRewardAtom,
   updateFundingFormSubscriptionAtom,
 } from '../../../../../../../src/modules/project/funding/state/fundingFormAtom.ts'
+import { recurringIntervals } from '../../../../../../../src/modules/project/recurring/graphql.ts'
 // Import dependent source atoms
 import { projectAtom, ProjectState } from '../../../../../../../src/modules/project/state/projectAtom.ts'
 import { rewardsAtom } from '../../../../../../../src/modules/project/state/rewardsAtom.ts'
@@ -592,7 +593,7 @@ describe('fundingFormAtom Tests', () => {
       expect(state.subscription.subscriptionId).toBe(201)
       expect(state.subscription.amountUsdCent).toBe(expectedSubCostUsdCent)
       expect(state.subscription.amountBtcSat).toBe(expectedSubCostSats)
-      expect(state.subscription.interval).toBe(UserSubscriptionInterval.Monthly)
+      expect(state.subscription.interval).toBe(recurringIntervals.monthly)
       expect(state.subscription.name).toBe('Monthly USD Supporter')
       expect(derivedSubCosts).toEqual({ sats: expectedSubCostSats, usdCents: expectedSubCostUsdCent, base: 500 })
       expect(totalSats).toBe(state.donationAmount + derivedSubCosts.sats + tip.sats)
@@ -613,7 +614,7 @@ describe('fundingFormAtom Tests', () => {
       expect(state.subscription.subscriptionId).toBe(202)
       expect(state.subscription.amountUsdCent).toBe(expectedSubCostUsdCent)
       expect(state.subscription.amountBtcSat).toBe(expectedSubCostSats)
-      expect(state.subscription.interval).toBe(UserSubscriptionInterval.Yearly)
+      expect(state.subscription.interval).toBe(recurringIntervals.yearly)
       expect(state.subscription.name).toBe('Annual SATS Backer')
       expect(derivedSubCosts).toEqual({ sats: expectedSubCostSats, usdCents: expectedSubCostUsdCent, base: 2500 })
       expect(totalSats).toBe(state.donationAmount + derivedSubCosts.sats + tip.sats)

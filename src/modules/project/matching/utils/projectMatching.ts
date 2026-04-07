@@ -108,22 +108,6 @@ export const calculateProjectMatchingPreview = ({
   subscriptionCostSats,
   subscriptionCostUsdCents,
 }: CalculateProjectMatchingPreviewProps) => {
-  const emptyResponse = {
-    hasActiveMatching: false,
-    eligibleAmountSats: 0,
-    eligibleAmountUsdCents: 0,
-    matchedAmountSats: 0,
-    matchedAmountUsdCents: 0,
-    totalImpactSats: donationAmountSats,
-    totalImpactUsdCents: donationAmountUsdCent,
-    remainingMatchingSats: 0,
-    remainingMatchingUsdCents: 0,
-  }
-
-  if (!activeMatching || activeMatching.matchingType !== ProjectMatchingType.OneToOne) {
-    return emptyResponse
-  }
-
   let eligibleAmountSats = 0
   let eligibleAmountUsdCents = 0
 
@@ -136,6 +120,22 @@ export const calculateProjectMatchingPreview = ({
   } else if (fundingMode === recurringFundingModes.membership) {
     eligibleAmountSats = subscriptionCostSats
     eligibleAmountUsdCents = subscriptionCostUsdCents
+  }
+
+  const emptyResponse = {
+    hasActiveMatching: false,
+    eligibleAmountSats: 0,
+    eligibleAmountUsdCents: 0,
+    matchedAmountSats: 0,
+    matchedAmountUsdCents: 0,
+    totalImpactSats: eligibleAmountSats,
+    totalImpactUsdCents: eligibleAmountUsdCents,
+    remainingMatchingSats: 0,
+    remainingMatchingUsdCents: 0,
+  }
+
+  if (!activeMatching || activeMatching.matchingType !== ProjectMatchingType.OneToOne) {
+    return emptyResponse
   }
 
   const remainingBreakdown = getProjectMatchingAmountBreakdown({

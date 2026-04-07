@@ -1,4 +1,6 @@
 import { Link, VStack } from '@chakra-ui/react'
+import { Trans } from 'react-i18next'
+import { t } from 'i18next'
 
 import { Body } from '@/shared/components/typography'
 import { ProjectMatchingFragment } from '@/types'
@@ -19,20 +21,22 @@ export const ProjectMatchingTooltipContent = ({
   return (
     <VStack alignItems="start" spacing={4}>
       <Body size="sm" light whiteSpace="normal">
-        Contributions on this project are being matched by{' '}
-        {sponsorUrl ? (
-          <Link href={sponsorUrl} isExternal textDecoration="underline">
-            {matching.sponsorName}
-          </Link>
-        ) : (
-          <Body as="span" size="sm" light textDecoration="underline">
-            {matching.sponsorName}
-          </Body>
-        )}
-        .
+        <Trans
+          i18nKey="Contributions on this project are being matched by <sponsor>{{sponsorName}}</sponsor>."
+          values={{ sponsorName: matching.sponsorName }}
+          components={{
+            sponsor: sponsorUrl ? (
+              <Link href={sponsorUrl} isExternal textDecoration="underline" />
+            ) : (
+              <Body as="span" size="sm" light textDecoration="underline" />
+            ),
+          }}
+        />
       </Body>
       <Body size="sm" light whiteSpace="normal">
-        The sponsor has committed to doubling every contribution up to a total of {committedAmountLabel}.
+        {t('The sponsor has committed to doubling every contribution up to a total of {{committedAmountLabel}}.', {
+          committedAmountLabel,
+        })}
       </Body>
     </VStack>
   )

@@ -13,7 +13,6 @@ import {
   QuoteCurrency,
   RewardCurrency,
   ShippingDestination,
-  UserSubscriptionInterval,
   WalletState,
 } from '../../../../../../../src/types'
 
@@ -211,7 +210,7 @@ export const mockSubscriptionsMinimal: ProjectSubscriptionPlan[] = [
     name: 'Monthly USD Supporter',
     amountUsdCent: 500,
     amountBtcSat: 20000,
-    interval: UserSubscriptionInterval.Monthly,
+    interval: recurringIntervals.monthly,
     projectId: '1',
   },
   {
@@ -219,7 +218,7 @@ export const mockSubscriptionsMinimal: ProjectSubscriptionPlan[] = [
     name: 'Annual SATS Backer',
     amountUsdCent: 2500,
     amountBtcSat: 100000,
-    interval: UserSubscriptionInterval.Yearly,
+    interval: recurringIntervals.yearly,
     projectId: '1',
   },
 ]
@@ -271,7 +270,7 @@ export const initialTestState: FundFormType = {
   rewardsByIDAndCount: undefined,
   subscription: {
     subscriptionId: undefined,
-    interval: UserSubscriptionInterval.Monthly,
+    interval: recurringIntervals.monthly,
     name: '',
     amountUsdCent: 0,
     amountBtcSat: 0,

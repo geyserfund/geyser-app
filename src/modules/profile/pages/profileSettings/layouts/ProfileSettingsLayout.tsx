@@ -55,5 +55,3 @@ export const ProfileSettings = () => {
     </VStack>
   )
 }
-
-export default ProfileSettings

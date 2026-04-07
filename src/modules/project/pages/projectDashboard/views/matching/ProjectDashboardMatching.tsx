@@ -14,11 +14,10 @@ import {
 import { t } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
 
-import { useAuthContext } from '@/context/auth.tsx'
 import { useProjectAtom } from '@/modules/project/hooks/useProjectAtom'
 import {
-  normalizeProjectMatchingUrl,
   formatProjectMatchingFormAmount,
+  normalizeProjectMatchingUrl,
   parseProjectMatchingFormAmount,
 } from '@/modules/project/matching/utils/projectMatching'
 import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
@@ -29,6 +28,7 @@ import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { useCurrencyFormatter } from '@/shared/utils/hooks/useCurrencyFormatter.ts'
 import {
   ProjectMatchingCurrency,
+  ProjectMatchingDashboardFragment,
   ProjectMatchingFragment,
   ProjectMatchingStatus,
   useProjectDashboardMatchingsGetQuery,
@@ -47,6 +47,8 @@ type MatchingFormState = {
   sponsorRepresentationConfirmed: boolean
 }
 
+type DashboardMatching = ProjectMatchingDashboardFragment | ProjectMatchingFragment
+
 const defaultCreateState: MatchingFormState = {
   sponsorName: '',
   sponsorUrl: '',
@@ -57,7 +59,7 @@ const defaultCreateState: MatchingFormState = {
 
 type MatchingCardProps = {
   title: string
-  matching: ProjectMatchingFragment
+  matching: DashboardMatching
   canEdit?: boolean
   onEdit?: () => void
 }
@@ -67,7 +69,15 @@ const MatchingCard = ({ title, matching, canEdit, onEdit }: MatchingCardProps) =
   const sponsorUrl = normalizeProjectMatchingUrl(matching.sponsorUrl)
 
   return (
-    <VStack w="full" alignItems="start" spacing={4} border="1px solid" borderColor="neutral1.6" borderRadius="12px" p={5}>
+    <VStack
+      w="full"
+      alignItems="start"
+      spacing={4}
+      border="1px solid"
+      borderColor="neutral1.6"
+      borderRadius="12px"
+      p={5}
+    >
       <HStack w="full" justifyContent="space-between" alignItems="start" spacing={4}>
         <VStack alignItems="start" spacing={1}>
           <Body size="lg" bold>
@@ -89,9 +99,7 @@ const MatchingCard = ({ title, matching, canEdit, onEdit }: MatchingCardProps) =
       </HStack>
 
       <VStack alignItems="start" spacing={1}>
-        <Body size="sm">
-          {`${t('Amount')}: ${formatAmount(matching.maxCapAmount, matching.referenceCurrency)}`}
-        </Body>
+        <Body size="sm">{`${t('Amount')}: ${formatAmount(matching.maxCapAmount, matching.referenceCurrency)}`}</Body>
         <Body size="sm">
           {`${t('Matched contributions (total)')}: ${formatAmount(
             matching.totalMatchedAmount,
@@ -99,10 +107,7 @@ const MatchingCard = ({ title, matching, canEdit, onEdit }: MatchingCardProps) =
           )}`}
         </Body>
         <Body size="sm">
-          {`${t('Remaining matching funds')}: ${formatAmount(
-            matching.remainingCapAmount,
-            matching.referenceCurrency,
-          )}`}
+          {`${t('Remaining matching funds')}: ${formatAmount(matching.remainingCapAmount, matching.referenceCurrency)}`}
         </Body>
       </VStack>
     </VStack>
@@ -111,8 +116,7 @@ const MatchingCard = ({ title, matching, canEdit, onEdit }: MatchingCardProps) =
 
 export const ProjectDashboardMatching = () => {
   const toast = useNotification()
-  const { user } = useAuthContext()
-  const { project, partialUpdateProject } = useProjectAtom()
+  const { project, partialUpdateProject, isProjectOwner } = useProjectAtom()
   const { formatAmount } = useCurrencyFormatter()
 
   const createModal = useModal()
@@ -125,9 +129,9 @@ export const ProjectDashboardMatching = () => {
   const [createConfirmationError, setCreateConfirmationError] = useState(false)
   const [editAmount, setEditAmount] = useState('')
   const [editError, setEditError] = useState<string | null>(null)
-  const [selectedMatching, setSelectedMatching] = useState<ProjectMatchingFragment | null>(null)
+  const [selectedMatching, setSelectedMatching] = useState<DashboardMatching | null>(null)
 
-  const { data, loading, refetch } = useProjectDashboardMatchingsGetQuery({
+  const { data, loading, error, refetch } = useProjectDashboardMatchingsGetQuery({
     variables: { where: { id: project.id } },
     skip: !project.id,
     fetchPolicy: 'cache-and-network',
@@ -141,12 +145,11 @@ export const ProjectDashboardMatching = () => {
 
   const [createMatching, createMatchingState] = useProjectMatchingCreateMutation()
   const [updateMatching, updateMatchingState] = useProjectMatchingUpdateMutation()
-
   const activeMatching = data?.projectGet?.activeMatching ?? project.activeMatching
-  const matchings = data?.projectGet?.matchings ?? []
+  const dashboardActiveMatching = data?.projectGet?.activeMatching
   const completedMatchings = useMemo(
-    () => matchings.filter((matching) => matching.status === ProjectMatchingStatus.Completed),
-    [matchings],
+    () => (data?.projectGet?.matchings ?? []).filter((matching) => matching.status === ProjectMatchingStatus.Completed),
+    [data?.projectGet?.matchings],
   )
 
   const resetCreateState = () => {
@@ -156,16 +159,26 @@ export const ProjectDashboardMatching = () => {
   }
 
   function handleCreateOpen() {
+    if (!isProjectOwner) return
     resetCreateState()
     createModal.onOpen()
   }
 
   const renderCreateButton = () => {
+    const activeMatching = data?.projectGet?.activeMatching ?? project.activeMatching
     const button = (
-      <Button colorScheme="primary1" onClick={handleCreateOpen} isDisabled={Boolean(activeMatching)}>
+      <Button colorScheme="primary1" onClick={handleCreateOpen} isDisabled={!isProjectOwner || Boolean(activeMatching)}>
         {t('Create matching')}
       </Button>
     )
+
+    if (!isProjectOwner) {
+      return (
+        <TooltipPopover text={t('Only project owners can manage matchings')}>
+          <Box display="inline-flex">{button}</Box>
+        </TooltipPopover>
+      )
+    }
 
     if (!activeMatching) {
       return button
@@ -216,6 +229,13 @@ export const ProjectDashboardMatching = () => {
     }
   }
 
+  const handleRefetchFailure = () => {
+    toast.warning({
+      title: t('Matching saved, but the dashboard could not be refreshed'),
+      description: t('Please refresh the page.'),
+    })
+  }
+
   const submitCreate = async () => {
     const normalizedSponsorUrl =
       createState.sponsorUrl.trim().length > 0 ? normalizeProjectMatchingUrl(createState.sponsorUrl) : null
@@ -240,16 +260,22 @@ export const ProjectDashboardMatching = () => {
       createConfirmModal.onClose()
       createModal.onClose()
       resetCreateState()
-      await refetch()
     } catch (error) {
       toast.error({
         title: t('Unable to create matching'),
         description: error instanceof Error ? error.message : t('Please try again.'),
       })
+      return
+    }
+
+    try {
+      await refetch()
+    } catch {
+      handleRefetchFailure()
     }
   }
 
-  const openEditModal = (matching: ProjectMatchingFragment) => {
+  const openEditModal = (matching: DashboardMatching) => {
     setSelectedMatching(matching)
     setEditAmount(
       formatProjectMatchingFormAmount({
@@ -286,7 +312,7 @@ export const ProjectDashboardMatching = () => {
       return
     }
 
-    void submitEdit()
+    submitEdit()
   }
 
   const submitEdit = async () => {
@@ -310,18 +336,55 @@ export const ProjectDashboardMatching = () => {
       editModal.onClose()
       setSelectedMatching(null)
       setEditAmount('')
-      await refetch()
     } catch (error) {
       toast.error({
         title: t('Unable to update matching'),
         description: error instanceof Error ? error.message : t('Please try again.'),
       })
+      return
+    }
+
+    try {
+      await refetch()
+    } catch {
+      handleRefetchFailure()
     }
   }
 
-  const canEditActiveMatching = Boolean(
-    activeMatching && user.id && String(activeMatching.ownerUserId) === String(user.id),
-  )
+  if (error) {
+    return (
+      <DashboardLayout desktopTitle={t('Matching')} titleRightComponent={renderCreateButton()}>
+        <VStack width="100%" alignItems="flex-start" spacing={6} paddingX={{ base: 0, lg: 6 }}>
+          <VStack
+            w="full"
+            alignItems="start"
+            spacing={3}
+            border="1px solid"
+            borderColor="neutral1.6"
+            borderRadius="12px"
+            p={5}
+          >
+            <Body size="md" bold>
+              {t('Unable to load matchings')}
+            </Body>
+            <Body size="sm" light>
+              {t('Please try again.')}
+            </Body>
+            <Button
+              colorScheme="primary1"
+              onClick={() => {
+                refetch()
+              }}
+            >
+              {t('Retry')}
+            </Button>
+          </VStack>
+        </VStack>
+      </DashboardLayout>
+    )
+  }
+
+  const canEditActiveMatching = Boolean(activeMatching && isProjectOwner)
 
   return (
     <>
@@ -347,7 +410,7 @@ export const ProjectDashboardMatching = () => {
                     title={t('Live now')}
                     matching={activeMatching}
                     canEdit={canEditActiveMatching}
-                    onEdit={() => openEditModal(activeMatching)}
+                    onEdit={dashboardActiveMatching ? () => openEditModal(dashboardActiveMatching) : undefined}
                   />
                 ) : (
                   <VStack
@@ -403,7 +466,9 @@ export const ProjectDashboardMatching = () => {
             />
           </FormControl>
 
-          <FormControl isInvalid={Boolean(createState.sponsorUrl.trim()) && !normalizeProjectMatchingUrl(createState.sponsorUrl)}>
+          <FormControl
+            isInvalid={Boolean(createState.sponsorUrl.trim()) && !normalizeProjectMatchingUrl(createState.sponsorUrl)}
+          >
             <FormLabel>{t('Sponsor social / website URL')}</FormLabel>
             <Input
               value={createState.sponsorUrl}
@@ -503,7 +568,8 @@ export const ProjectDashboardMatching = () => {
             <Input type="number" min={0} value={editAmount} onChange={(event) => setEditAmount(event.target.value)} />
             {selectedMatching && (
               <Body size="sm" light>
-                {t('Matched to date')}: {formatAmount(selectedMatching.totalMatchedAmount, selectedMatching.referenceCurrency)}
+                {t('Matched to date')}:{' '}
+                {formatAmount(selectedMatching.totalMatchedAmount, selectedMatching.referenceCurrency)}
               </Body>
             )}
             {editError && <FormErrorMessage>{editError}</FormErrorMessage>}
@@ -528,7 +594,9 @@ export const ProjectDashboardMatching = () => {
         hasCancel
         positiveButtonProps={{
           children: t('Continue'),
-          onClick: () => void submitCreate(),
+          onClick() {
+            submitCreate()
+          },
           isLoading: createMatchingState.loading,
         }}
       />
@@ -543,7 +611,9 @@ export const ProjectDashboardMatching = () => {
         hasCancel
         positiveButtonProps={{
           children: t('Continue'),
-          onClick: () => void submitEdit(),
+          onClick() {
+            submitEdit()
+          },
           isLoading: updateMatchingState.loading,
         }}
       />

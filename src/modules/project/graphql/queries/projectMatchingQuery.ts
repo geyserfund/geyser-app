@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 import {
   FRAGMENT_PROJECT_ACTIVE_MATCHING,
   FRAGMENT_PROJECT_DASHBOARD_MATCHINGS,
-} from '../fragments/projectMatchingFragment'
+} from '../fragments/projectMatchingFragment.ts'
 
 export const QUERY_PROJECT_ACTIVE_MATCHING = gql`
   ${FRAGMENT_PROJECT_ACTIVE_MATCHING}

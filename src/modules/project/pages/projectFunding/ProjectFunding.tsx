@@ -1,3 +1,4 @@
+import { HStack, Spinner } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 
@@ -30,11 +31,15 @@ export const ProjectFunding = () => {
     }
   }, [resetFundingFlow])
 
-  if (!project || !project.name) {
-    return null
+  if (isRenewalBootstrapLoading) {
+    return (
+      <HStack w="full" minH="240px" justifyContent="center" alignItems="center">
+        <Spinner />
+      </HStack>
+    )
   }
 
-  if (isRenewalBootstrapLoading) {
+  if (!project || !project.name) {
     return null
   }
 

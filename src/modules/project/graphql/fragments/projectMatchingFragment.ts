@@ -4,7 +4,6 @@ export const FRAGMENT_PROJECT_MATCHING = gql`
   fragment ProjectMatching on ProjectMatching {
     id
     projectId
-    ownerUserId
     sponsorName
     sponsorUrl
     referenceCurrency
@@ -19,6 +18,14 @@ export const FRAGMENT_PROJECT_MATCHING = gql`
   }
 `
 
+export const FRAGMENT_PROJECT_MATCHING_DASHBOARD = gql`
+  ${FRAGMENT_PROJECT_MATCHING}
+  fragment ProjectMatchingDashboard on ProjectMatching {
+    ...ProjectMatching
+    ownerUserId
+  }
+`
+
 export const FRAGMENT_PROJECT_ACTIVE_MATCHING = gql`
   ${FRAGMENT_PROJECT_MATCHING}
   fragment ProjectActiveMatching on Project {
@@ -30,14 +37,14 @@ export const FRAGMENT_PROJECT_ACTIVE_MATCHING = gql`
 `
 
 export const FRAGMENT_PROJECT_DASHBOARD_MATCHINGS = gql`
-  ${FRAGMENT_PROJECT_MATCHING}
+  ${FRAGMENT_PROJECT_MATCHING_DASHBOARD}
   fragment ProjectDashboardMatchings on Project {
     id
     activeMatching {
-      ...ProjectMatching
+      ...ProjectMatchingDashboard
     }
     matchings {
-      ...ProjectMatching
+      ...ProjectMatchingDashboard
     }
   }
 `

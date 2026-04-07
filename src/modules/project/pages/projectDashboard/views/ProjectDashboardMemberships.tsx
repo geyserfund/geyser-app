@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client'
 import {
   Button,
   FormControl,
@@ -25,20 +24,18 @@ import {
   useRecurringContributionSupportAtom,
   useSubscriptionsAtom,
 } from '@/modules/project/hooks/useProjectAtom'
-import {
-  CreateProjectSubscriptionPlanMutation,
-  CreateProjectSubscriptionPlanMutationVariables,
-  MUTATION_PROJECT_SUBSCRIPTION_PLAN_CREATE,
-  MUTATION_PROJECT_SUBSCRIPTION_PLAN_DELETE,
-  MUTATION_PROJECT_SUBSCRIPTION_PLAN_UPDATE,
-  ProjectSubscriptionPlan,
-  recurringIntervals,
-  UpdateProjectSubscriptionPlanMutation,
-  UpdateProjectSubscriptionPlanMutationVariables,
-} from '@/modules/project/recurring/graphql'
+import { ProjectSubscriptionPlan, recurringIntervals } from '@/modules/project/recurring/graphql.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography'
+import { useModal } from '@/shared/hooks'
+import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { standardPadding } from '@/shared/styles/reponsiveValues.ts'
+import {
+  RecurringInterval,
+  useProjectSubscriptionPlanCreateMutation,
+  useProjectSubscriptionPlanDeleteMutation,
+  useProjectSubscriptionPlanUpdateMutation,
+} from '@/types/index.ts'
 import { centsToDollars, commaFormatted, toInt, useNotification } from '@/utils'
 
 import { DashboardLayout } from '../common/DashboardLayout.tsx'
@@ -46,7 +43,7 @@ import { DashboardLayout } from '../common/DashboardLayout.tsx'
 type PlanFormState = {
   name: string
   description: string
-  interval: 'MONTHLY' | 'YEARLY'
+  interval: RecurringInterval
   amountUsdCent: number
   amountBtcSat: number
   isHidden: boolean
@@ -55,7 +52,7 @@ type PlanFormState = {
 const defaultPlanFormState: PlanFormState = {
   name: '',
   description: '',
-  interval: recurringIntervals.monthly,
+  interval: RecurringInterval.Monthly,
   amountUsdCent: 1000,
   amountBtcSat: 40000,
   isHidden: false,
@@ -67,20 +64,16 @@ export const ProjectDashboardMemberships = () => {
   const { subscriptions } = useSubscriptionsAtom()
   const { recurringContributionSupport } = useRecurringContributionSupportAtom()
   const { queryProjectSubscriptions } = useProjectSubscriptionsAPI(true)
+  const deleteModal = useModal()
 
   const [selectedPlan, setSelectedPlan] = useState<ProjectSubscriptionPlan | null>(null)
+  const [planToDelete, setPlanToDelete] = useState<ProjectSubscriptionPlan | null>(null)
   const [formState, setFormState] = useState<PlanFormState>(defaultPlanFormState)
   const [isOpen, setIsOpen] = useState(false)
 
-  const [createPlan, createPlanState] = useMutation<
-    CreateProjectSubscriptionPlanMutation,
-    CreateProjectSubscriptionPlanMutationVariables
-  >(MUTATION_PROJECT_SUBSCRIPTION_PLAN_CREATE)
-  const [updatePlan, updatePlanState] = useMutation<
-    UpdateProjectSubscriptionPlanMutation,
-    UpdateProjectSubscriptionPlanMutationVariables
-  >(MUTATION_PROJECT_SUBSCRIPTION_PLAN_UPDATE)
-  const [deletePlan, deletePlanState] = useMutation(MUTATION_PROJECT_SUBSCRIPTION_PLAN_DELETE)
+  const [createPlan, createPlanState] = useProjectSubscriptionPlanCreateMutation()
+  const [updatePlan, updatePlanState] = useProjectSubscriptionPlanUpdateMutation()
+  const [deletePlan, deletePlanState] = useProjectSubscriptionPlanDeleteMutation()
 
   const { loading } = queryProjectSubscriptions
 
@@ -111,7 +104,7 @@ export const ProjectDashboardMemberships = () => {
     setFormState({
       name: plan.name,
       description: plan.description || '',
-      interval: plan.interval,
+      interval: plan.interval === recurringIntervals.yearly ? RecurringInterval.Yearly : RecurringInterval.Monthly,
       amountUsdCent: plan.amountUsdCent,
       amountBtcSat: plan.amountBtcSat,
       isHidden: Boolean(plan.isHidden),
@@ -157,10 +150,14 @@ export const ProjectDashboardMemberships = () => {
     }
   }
 
-  const handleDelete = async (plan: ProjectSubscriptionPlan) => {
+  const handleDelete = async () => {
+    if (!planToDelete) return
+
     try {
-      await deletePlan({ variables: { id: toInt(plan.id) } })
+      await deletePlan({ variables: { id: toInt(planToDelete.id) } })
       toast.success({ title: t('Membership plan deleted') })
+      deleteModal.onClose()
+      setPlanToDelete(null)
       refetchPlans()
     } catch (error) {
       toast.error({
@@ -228,7 +225,15 @@ export const ProjectDashboardMemberships = () => {
                   <Button size="sm" colorScheme="primary1" onClick={() => openEditModal(plan)}>
                     {t('Edit')}
                   </Button>
-                  <Button size="sm" variant="outline" colorScheme="neutral1" onClick={() => handleDelete(plan)}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    colorScheme="neutral1"
+                    onClick={() => {
+                      setPlanToDelete(plan)
+                      deleteModal.onOpen()
+                    }}
+                  >
                     {t('Delete')}
                   </Button>
                 </HStack>
@@ -294,14 +299,14 @@ export const ProjectDashboardMemberships = () => {
                     <Button
                       variant={formState.interval === recurringIntervals.monthly ? 'solid' : 'outline'}
                       colorScheme="primary1"
-                      onClick={() => setFormState((current) => ({ ...current, interval: recurringIntervals.monthly }))}
+                      onClick={() => setFormState((current) => ({ ...current, interval: RecurringInterval.Monthly }))}
                     >
                       {t('Monthly')}
                     </Button>
                     <Button
                       variant={formState.interval === recurringIntervals.yearly ? 'solid' : 'outline'}
                       colorScheme="primary1"
-                      onClick={() => setFormState((current) => ({ ...current, interval: recurringIntervals.yearly }))}
+                      onClick={() => setFormState((current) => ({ ...current, interval: RecurringInterval.Yearly }))}
                     >
                       {t('Yearly')}
                     </Button>
@@ -331,6 +336,24 @@ export const ProjectDashboardMemberships = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      <AlertDialogue
+        title={t('Delete membership plan')}
+        description={t('Are you sure you want to delete this membership plan?')}
+        isOpen={deleteModal.isOpen}
+        onClose={() => {
+          deleteModal.onClose()
+          setPlanToDelete(null)
+        }}
+        negativeButtonProps={{
+          onClick() {
+            handleDelete()
+          },
+          isLoading: deletePlanState.loading,
+          children: t('Delete'),
+        }}
+        hasCancel
+      />
     </DashboardLayout>
   )
 }

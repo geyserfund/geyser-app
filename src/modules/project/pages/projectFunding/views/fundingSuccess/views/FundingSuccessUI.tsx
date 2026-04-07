@@ -8,7 +8,7 @@ import { useAuthContext } from '@/context'
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { useProjectMatchingPreview } from '@/modules/project/funding/hooks/useProjectMatchingPreview.ts'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
-import { recurringFundingModes } from '@/modules/project/recurring/graphql'
+import { recurringFundingModes } from '@/modules/project/recurring/graphql.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
@@ -34,7 +34,10 @@ export const FundingSuccessUI = ({ isPending }: { isPending: boolean }) => {
           sats: fundingContribution.matchedAmountSats,
           usdCents: fundingContribution.matchedAmountUsdCent,
         }
-      : project.activeMatching && matchingPreview.hasActiveMatching
+      : isPending &&
+        project.activeMatching &&
+        matchingPreview.hasActiveMatching &&
+        (matchingPreview.matchedAmountSats > 0 || matchingPreview.matchedAmountUsdCents > 0)
       ? {
           sats: matchingPreview.matchedAmountSats,
           usdCents: matchingPreview.matchedAmountUsdCents,

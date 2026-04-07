@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/react'
 import { useAtomValue, useSetAtom } from 'jotai'
-import React, { PropsWithChildren, useEffect } from 'react'
+import React, { PropsWithChildren, useEffect, useRef } from 'react'
 import { useLocation } from 'react-router'
 
 import { useProjectGoalsAPI } from '../API/useProjectGoalsAPI'
@@ -18,15 +18,26 @@ interface FundingProviderProps extends PropsWithChildren {
 // Used if the project context is not available
 export const FundingProvider = ({ children, project }: FundingProviderProps) => {
   const resetFundingFlow = useResetFundingFlow()
+  const previousProjectKeyRef = useRef<string | null>(project.id ? String(project.id) : project.name)
 
   useEffect(() => {
     return () => {
-      console.log('==================================')
-      console.log('========FUNDING FLOW RESET===========')
-      console.log('==================================')
       resetFundingFlow()
     }
   }, [resetFundingFlow])
+
+  useEffect(() => {
+    const currentProjectKey = project.id ? String(project.id) : project.name
+    if (
+      previousProjectKeyRef.current &&
+      currentProjectKey &&
+      previousProjectKeyRef.current !== currentProjectKey
+    ) {
+      resetFundingFlow()
+    }
+
+    previousProjectKeyRef.current = currentProjectKey
+  }, [project.id, project.name, resetFundingFlow])
 
   return <>{children}</>
 }

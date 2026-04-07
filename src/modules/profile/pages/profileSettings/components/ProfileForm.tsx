@@ -9,9 +9,9 @@ import { useNotification } from '../../../../../utils'
 import { useUserProfileAtom } from '../../../state'
 import { EditableAvatar } from '../../profilePage/components'
 import { useEditProfile } from '../hooks/useEditProfile'
-import { DeleteUserProfile } from './DeleteUserProfile'
-import { UpdateVerifyEmail } from './UpdateVerifyEmail'
-import { IdentityVerification } from '../views/ProfileSettingsVerification/views/IdentityVerification'
+import { DeleteUserProfile } from './DeleteUserProfile.tsx'
+import { UpdateVerifyEmail } from './UpdateVerifyEmail.tsx'
+import { IdentityVerification } from '../views/ProfileSettingsVerification/views/IdentityVerification.tsx'
 
 export const ProfileForm = ({ isLoading }: { isLoading?: boolean }) => {
   const { t } = useTranslation()
@@ -123,8 +123,7 @@ export const ProfileFormSkeleton = () => {
       </VStack>
 
       <SkeletonLayout height="40px" />
-
-      <DeleteUserProfile />
+      <SkeletonLayout height="40px" />
     </VStack>
   )
 }

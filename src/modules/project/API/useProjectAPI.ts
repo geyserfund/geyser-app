@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/react'
 import { useSetAtom } from 'jotai'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 
 import { getPath } from '../../../shared/constants'
@@ -55,6 +55,7 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
 
   const [queryProject, queryProjectOptions] = useProjectPageBodyLazyQuery()
   const [queryProjectActiveMatching] = useProjectActiveMatchingGetLazyQuery()
+  const activeMatchingRequestIdRef = useRef(0)
 
   const queryProjectMethod = useCallback(() => {
     queryProject({
@@ -90,6 +91,7 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
         const { projectGet: project } = data
         setProject(normalizeProjectState(project as ProjectState))
 
+        const activeMatchingRequestId = ++activeMatchingRequestIdRef.current
         queryProjectActiveMatching({
           variables: {
             where: { name: projectName || projectNameParam, id: projectId },
@@ -97,11 +99,19 @@ export const useProjectAPI = (props?: UseInitProjectProps) => {
           fetchPolicy: 'cache-and-network',
           errorPolicy: 'all',
           onCompleted(activeMatchingData) {
+            if (activeMatchingRequestIdRef.current !== activeMatchingRequestId) {
+              return
+            }
+
             if (activeMatchingData?.projectGet) {
               partialUpdateProject({ activeMatching: activeMatchingData.projectGet.activeMatching })
             }
           },
           onError(error) {
+            if (activeMatchingRequestIdRef.current !== activeMatchingRequestId) {
+              return
+            }
+
             captureException(error, {
               tags: {
                 'project-matching': 'projectGet.activeMatching',

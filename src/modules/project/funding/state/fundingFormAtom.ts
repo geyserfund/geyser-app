@@ -1,3 +1,4 @@
+import { t } from 'i18next'
 import { atom } from 'jotai'
 
 import { guardianRewardsAtom } from '@/modules/guardians/state/guardianRewards.ts'
@@ -8,7 +9,7 @@ import {
   recurringFundingModes,
   RecurringInterval,
   recurringIntervals,
-} from '@/modules/project/recurring/graphql'
+} from '@/modules/project/recurring/graphql.ts'
 import { bitcoinQuoteAtom } from '@/shared/state/btcRateAtom'
 import {
   ContributionFeesFragment,
@@ -21,7 +22,6 @@ import {
   ProjectShippingConfigType,
   RewardCurrency,
   ShippingDestination,
-  UserSubscriptionInterval,
 } from '@/types'
 import { commaFormatted, convertAmount, isProjectAnException, toInt, validateEmail } from '@/utils'
 
@@ -90,7 +90,7 @@ export type FundFormType = {
   subscribeToGeyserEmails: boolean
   subscription: {
     subscriptionId?: number
-    interval: UserSubscriptionInterval
+    interval: RecurringInterval
     name?: string
     amountUsdCent: number
     amountBtcSat: number
@@ -114,7 +114,7 @@ const initialState: FundFormType = {
   rewardsByIDAndCount: undefined,
   subscription: {
     subscriptionId: undefined,
-    interval: UserSubscriptionInterval.Monthly,
+    interval: recurringIntervals.monthly,
     name: '',
     amountUsdCent: 0,
     amountBtcSat: 0,
@@ -236,7 +236,6 @@ export const shippingCostAtom = atom((get) => {
 export const subscriptionCostAtoms = atom((get): { sats: number; usdCents: number; base: number } => {
   const { subscription } = get(fundingFormStateAtom)
   const { subscriptions } = get(fundingProjectAtom)
-  const bitcoinQuote = get(bitcoinQuoteAtom)
   const intendedPaymentMethod = get(intendedPaymentMethodAtom)
   const paymentMethod = get(paymentMethodAtom)
 
@@ -255,8 +254,8 @@ export const subscriptionCostAtoms = atom((get): { sats: number; usdCents: numbe
   const base = shouldUseUsd ? usdCents : sats
 
   return {
-    sats: shouldUseUsd ? convertAmount.usdCentsToSats({ usdCents, bitcoinQuote }) : sats,
-    usdCents: shouldUseUsd ? usdCents : convertAmount.satsToUsdCents({ sats, bitcoinQuote }),
+    sats,
+    usdCents,
     base,
   }
 })
@@ -441,7 +440,6 @@ export const setFundFormStateAtom = atom(null, (get, set, name: keyof FundFormTy
         ...newState,
         donationAmount: 0,
         donationAmountUsdCent: 0,
-        geyserTipPercent: 0,
       }
     }
 
@@ -450,7 +448,7 @@ export const setFundFormStateAtom = atom(null, (get, set, name: keyof FundFormTy
         ...newState,
         subscription: {
           subscriptionId: undefined,
-          interval: UserSubscriptionInterval.Monthly,
+          interval: recurringIntervals.monthly,
           name: '',
           amountUsdCent: 0,
           amountBtcSat: 0,
@@ -615,11 +613,10 @@ export const updateFundingFormSubscriptionAtom = atom(null, (get, set, { id }: {
       donationAmountUsdCent: 0,
       rewardsByIDAndCount: {},
       needsShipping: false,
-      geyserTipPercent: 0,
       guardianBadges: [],
       subscription: {
         subscriptionId: selectedSubscription ? toInt(selectedSubscription.id) : undefined,
-        interval: (selectedSubscription?.interval as UserSubscriptionInterval | undefined) || UserSubscriptionInterval.Monthly,
+        interval: (selectedSubscription?.interval as RecurringInterval | undefined) || recurringIntervals.monthly,
         name: selectedSubscription?.name,
         amountUsdCent: selectedSubscription?.amountUsdCent ?? 0,
         amountBtcSat: selectedSubscription?.amountBtcSat ?? 0,
@@ -707,8 +704,8 @@ export const isFundingInputAmountValidAtom = atom((get) => {
 
   if (fundingMode === recurringFundingModes.membership && !subscription.subscriptionId) {
     return {
-      title: 'Select a membership plan.',
-      description: 'Choose a plan before continuing.',
+      title: t('Select a membership plan.'),
+      description: t('Choose a plan before continuing.'),
       valid: false,
     }
   }
@@ -718,8 +715,8 @@ export const isFundingInputAmountValidAtom = atom((get) => {
     fundingProjectState.fundingStrategy !== ProjectFundingStrategy.TakeItAll
   ) {
     return {
-      title: 'Recurring contributions are only available on Take-it-all projects.',
-      description: 'Choose a one-time contribution instead.',
+      title: t('Recurring contributions are only available on Take-it-all projects.'),
+      description: t('Choose a one-time contribution instead.'),
       valid: false,
     }
   }
@@ -730,32 +727,34 @@ export const isFundingInputAmountValidAtom = atom((get) => {
     donationAmountUsdCent + rewardsCosts.usdCents < MIN_AMOUNT_FOR_ALL_OR_NOTHING_PROJECT
   ) {
     return {
-      title: `Amount less than $10.`,
-      description: 'The minimum amount for an All-or-Nothing project is $10.',
+      title: t('Amount less than $10.'),
+      description: t('The minimum amount for an All-or-Nothing project is $10.'),
       valid: false,
     }
   }
 
   if (totalAmount < 1000) {
     return {
-      title: `The payment minimum is 1000 satoshi.`,
-      description: 'Please update the amount.',
+      title: t('The payment minimum is 1000 satoshi.'),
+      description: t('Please update the amount.'),
       valid: false,
     }
   }
 
   if (!isException && walletLimits?.max && totalAmount >= walletLimits.max) {
     return {
-      title: `Amount above the project wallet limit: ${commaFormatted(walletLimits.max)} sats.`,
-      description: 'Please update the amount, or contact us for donating a higher amount.',
+      title: t('Amount above the project wallet limit: {{amount}} sats.', {
+        amount: commaFormatted(walletLimits.max),
+      }),
+      description: t('Please update the amount, or contact us for donating a higher amount.'),
       valid: false,
     }
   }
 
   if (walletLimits?.min && totalAmount < walletLimits.min) {
     return {
-      title: `The payment minimum is ${walletLimits.min} satoshi.`,
-      description: 'Please update the amount.',
+      title: t('The payment minimum is {{amount}} satoshi.', { amount: walletLimits.min }),
+      description: t('Please update the amount.'),
       valid: false,
     }
   }
@@ -776,8 +775,8 @@ export const isFundingUserInfoValidAtom = atom((get) => {
 
   if (hasSelectedRewards && !formState.email) {
     return {
-      title: 'Email is required when purchasing a product.',
-      description: 'Please enter an email.',
+      title: t('Email is required when purchasing a product.'),
+      description: t('Please enter an email.'),
       error: FundingUserInfoError.EMAIL,
       valid: false,
     }
@@ -789,8 +788,8 @@ export const isFundingUserInfoValidAtom = atom((get) => {
     !formState.email
   ) {
     return {
-      title: 'Email is required for recurring payments.',
-      description: 'Please enter an email.',
+      title: t('Email is required for recurring payments.'),
+      description: t('Please enter an email.'),
       error: FundingUserInfoError.EMAIL,
       valid: false,
     }
@@ -798,21 +797,24 @@ export const isFundingUserInfoValidAtom = atom((get) => {
 
   if ((formState.followProject || formState.subscribeToGeyserEmails) && !formState.email) {
     return {
-      title: 'Email is required when subscribing to updates.',
-      description: 'Please enter an email.',
+      title: t('Email is required when subscribing to updates.'),
+      description: t('Please enter an email.'),
       error: FundingUserInfoError.EMAIL,
       valid: false,
     }
   }
 
-  if (
-    !renewalContext &&
-    (hasSelectedRewards || hasSubscription || formState.fundingMode === recurringFundingModes.recurringDonation) &&
-    !validateEmail(formState.email)
-  ) {
+  const requiresEmailValidation =
+    hasSelectedRewards ||
+    hasSubscription ||
+    formState.fundingMode === recurringFundingModes.recurringDonation ||
+    formState.followProject ||
+    formState.subscribeToGeyserEmails
+
+  if (!renewalContext && requiresEmailValidation && !validateEmail(formState.email)) {
     return {
-      title: 'A valid email is required.',
-      description: 'Please enter a valid email.',
+      title: t('A valid email is required.'),
+      description: t('Please enter a valid email.'),
       error: FundingUserInfoError.EMAIL,
       valid: false,
     }
@@ -820,8 +822,8 @@ export const isFundingUserInfoValidAtom = atom((get) => {
 
   if (hasRewardsThatRequirePrivateComment && !formState.privateComment) {
     return {
-      title: 'Private message is required.',
-      description: 'Please enter a private message.',
+      title: t('Private message is required.'),
+      description: t('Please enter a private message.'),
       error: FundingUserInfoError.PRIVATE_COMMENT,
       valid: false,
     }

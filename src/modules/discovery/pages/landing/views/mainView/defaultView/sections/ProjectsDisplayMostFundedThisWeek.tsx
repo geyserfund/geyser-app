@@ -97,7 +97,6 @@ export const ProjectsDisplayMostFundedThisWeek = ({
         ],
         where: {
           category,
-          categories,
           status: ProjectsGetWhereInputStatus.Active,
           subCategory,
         },
@@ -137,7 +136,6 @@ export const ProjectsDisplayMostFundedThisWeek = ({
         },
         where: {
           category,
-          categories,
         },
       },
     },

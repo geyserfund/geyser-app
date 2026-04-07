@@ -1,28 +1,34 @@
-import { useMutation, useQuery } from '@apollo/client'
-import { Avatar, Box, Button, Card, CardBody, HStack, Icon, LinkBox, LinkOverlay, Stack, VStack } from '@chakra-ui/react'
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardBody,
+  HStack,
+  Icon,
+  LinkBox,
+  LinkOverlay,
+  Stack,
+  VStack,
+} from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
-import { Link } from 'react-router'
 import { PiInfo } from 'react-icons/pi'
+import { Link } from 'react-router'
 
 import { useAuthContext } from '@/context'
-import {
-  MUTATION_RECURRING_CONTRIBUTION_CANCEL,
-  MUTATION_RECURRING_CONTRIBUTION_PORTAL_SESSION_CREATE,
-  QUERY_RECURRING_CONTRIBUTIONS,
-  RecurringContribution,
-  RecurringContributionCancelMutation,
-  RecurringContributionCancelMutationVariables,
-  RecurringContributionPortalSessionCreateMutation,
-  RecurringContributionPortalSessionCreateMutationVariables,
-  RecurringContributionsQuery,
-} from '@/modules/project/recurring/graphql'
 import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
 import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
+import {
+  RecurringContributionsQuery,
+  useRecurringContributionCancelMutation,
+  useRecurringContributionPortalSessionCreateMutation,
+  useRecurringContributionsQuery,
+} from '@/types/index.ts'
 import { useNotification } from '@/utils'
 import { centsToDollars, commaFormatted } from '@/utils'
 
@@ -39,7 +45,7 @@ const statusTitle: Record<string, string> = {
   CANCELED: 'Canceled recurring payments',
 }
 
-const formatAmount = (item: RecurringContribution) => {
+const formatAmount = (item: RecurringContributionItem) => {
   if (item.currency.toUpperCase().includes('USD')) {
     return `${centsToDollars(item.amount)} USD`
   }
@@ -54,12 +60,16 @@ const renewalLabel: Record<string, string> = {
 }
 
 type RecurringContributionCardProps = {
-  item: RecurringContribution
-  onManageBilling(item: RecurringContribution): void
-  onCancel(item: RecurringContribution): void
+  item: RecurringContributionItem
+  onManageBilling(item: RecurringContributionItem): void
+  onCancel(item: RecurringContributionItem): void
   isManagingBilling: boolean
   isCanceling: boolean
 }
+
+type RecurringContributionItem = NonNullable<
+  NonNullable<RecurringContributionsQuery['me']>['recurringContributions']
+>[number]
 
 const RecurringContributionCard = ({
   item,
@@ -72,8 +82,7 @@ const RecurringContributionCard = ({
   const projectPath = item.project?.name ? getPath('project', item.project.name) : null
   const cadence = (intervalLabel[item.interval] || item.interval).toLowerCase()
   const title = `${projectTitle} - ${formatAmount(item)} ${cadence}`
-  const canManageBilling =
-    item.paymentMethod === 'STRIPE' && item.status !== 'CANCELED' && item.status !== 'PENDING'
+  const canManageBilling = item.paymentMethod === 'STRIPE' && item.status !== 'CANCELED' && item.status !== 'PENDING'
   const canCancel = item.status !== 'CANCELED'
 
   return (
@@ -103,12 +112,7 @@ const RecurringContributionCard = ({
             flexDirection={{ base: 'column', md: 'row' }}
           >
             <HStack alignItems="center" spacing={3} w="full" minW={0}>
-              <Avatar
-                size="md"
-                name={projectTitle}
-                src={item.project?.thumbnailImage || undefined}
-                borderRadius="lg"
-              />
+              <Avatar size="md" name={projectTitle} src={item.project?.thumbnailImage || undefined} borderRadius="lg" />
               <VStack alignItems="start" spacing={1} flex={1} minW={0}>
                 <Body size="md" medium>
                   {projectPath ? (
@@ -209,32 +213,28 @@ export const ProfileSettingsSubscriptions = () => {
   const { user } = useAuthContext()
   const toast = useNotification()
   const cancelModal = useModal()
-  const [selectedRecurringContribution, setSelectedRecurringContribution] = useState<RecurringContribution | null>(null)
+  const [selectedRecurringContribution, setSelectedRecurringContribution] = useState<RecurringContributionItem | null>(
+    null,
+  )
   const [managingBillingId, setManagingBillingId] = useState<string | null>(null)
 
-  const { data, loading, refetch } = useQuery<RecurringContributionsQuery>(QUERY_RECURRING_CONTRIBUTIONS, {
+  const { data, loading, error, refetch } = useRecurringContributionsQuery({
     fetchPolicy: 'cache-and-network',
   })
-  const [cancelRecurringContribution, cancelRecurringContributionOptions] = useMutation<
-    RecurringContributionCancelMutation,
-    RecurringContributionCancelMutationVariables
-  >(MUTATION_RECURRING_CONTRIBUTION_CANCEL)
-  const [createPortalSession, createPortalSessionOptions] = useMutation<
-    RecurringContributionPortalSessionCreateMutation,
-    RecurringContributionPortalSessionCreateMutationVariables
-  >(MUTATION_RECURRING_CONTRIBUTION_PORTAL_SESSION_CREATE)
+  const [cancelRecurringContribution, cancelRecurringContributionOptions] = useRecurringContributionCancelMutation()
+  const [createPortalSession, createPortalSessionOptions] = useRecurringContributionPortalSessionCreateMutation()
 
   const recurringContributions = (data?.me?.recurringContributions ?? []).filter(
-    (item) => item.kind === 'DONATION' && item.status !== 'PENDING'
+    (item) => item.kind === 'DONATION' && item.status !== 'PENDING',
   )
-  const grouped = recurringContributions.reduce<Record<string, RecurringContribution[]>>((accumulator, item) => {
+  const grouped = recurringContributions.reduce<Record<string, RecurringContributionItem[]>>((accumulator, item) => {
     const bucket = accumulator[item.status] || []
     bucket.push(item)
     accumulator[item.status] = bucket
     return accumulator
   }, {})
 
-  const handleManageBilling = async (item: RecurringContribution) => {
+  const handleManageBilling = async (item: RecurringContributionItem) => {
     try {
       setManagingBillingId(item.id)
       const { data } = await createPortalSession({
@@ -266,7 +266,7 @@ export const ProfileSettingsSubscriptions = () => {
     }
   }
 
-  const openCancelModal = (item: RecurringContribution) => {
+  const openCancelModal = (item: RecurringContributionItem) => {
     setSelectedRecurringContribution(item)
     cancelModal.onOpen()
   }
@@ -313,6 +313,27 @@ export const ProfileSettingsSubscriptions = () => {
               </Box>
             ))}
           </Stack>
+        ) : error ? (
+          <Card variant="outline" borderRadius="xl" borderColor="neutralAlpha.6">
+            <CardBody>
+              <VStack alignItems="start" spacing={4}>
+                <Body size="md" bold>
+                  {t('Unable to load recurring payments')}
+                </Body>
+                <Body size="sm" light>
+                  {t('Please try again.')}
+                </Body>
+                <Button
+                  colorScheme="primary1"
+                  onClick={() => {
+                    refetch()
+                  }}
+                >
+                  {t('Retry')}
+                </Button>
+              </VStack>
+            </CardBody>
+          </Card>
         ) : recurringContributions.length === 0 ? (
           <Card variant="outline" borderRadius="xl" borderColor="neutralAlpha.6">
             <CardBody>

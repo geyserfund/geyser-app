@@ -7,16 +7,14 @@ import { useLocation, useNavigate } from 'react-router'
 
 import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom'
 import { selectedGoalIdAtom } from '@/modules/project/funding/state/selectedGoalAtom'
+import { recurringIntervals } from '@/modules/project/recurring/graphql.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout'
 import { Body, H2 } from '@/shared/components/typography'
-import { UserSubscriptionInterval } from '@/types'
 import { centsToDollars, commaFormatted } from '@/utils'
 
 export const PaymentIntervalLabelMap = {
-  [UserSubscriptionInterval.Monthly]: 'month',
-  [UserSubscriptionInterval.Yearly]: 'year',
-  [UserSubscriptionInterval.Weekly]: 'week',
-  [UserSubscriptionInterval.Quarterly]: 'quarter',
+  [recurringIntervals.monthly]: 'month',
+  [recurringIntervals.yearly]: 'year',
 }
 
 interface LocationState {
