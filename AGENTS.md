@@ -1,9 +1,31 @@
 # Agent Notes
 
+## Governance Baseline (2026-04-01)
+
+- Treat these as the active source of truth for architecture and UI consistency:
+  - `docs/ARCHITECTURE.md`
+  - `docs/AGENTIC_DEVELOPMENT_GUARDRAILS.md`
+  - `.cursor/rules/architecture-design-system-guardrails.mdc`
+  - `.cursor/rules/contribution.mdc`
+  - `.cursor/rules/graphql.mdc`
+  - `.cursor/rules/typescript.mdc`
+- Before implementation, load and follow applicable `.cursor/rules/*.mdc` files.
+- For UI/architecture tasks, load and follow `.cursor/skills/ui_architecture_enforcement/SKILL.md`.
+- Intentional module domains include: `auth`, `discovery`, `embed`, `general`, `grants`, `guardians`, `hackathon`, `impactFunds`, `navigation`, `notification`, `profile`, `project`, `widget`.
+- Hard rule: do not create new barrel exports (`index.ts` / `index.tsx`).
+- Hard rule: do not add new components to legacy `src/components/*`; use `src/modules/*` or `src/shared/*`.
+- Hard rule: for new module/shared work, avoid new imports from legacy `@/components/*`.
+- Gradients: raw gradients are acceptable when intentional.
+- Shadows: prefer theme/shared shadow tokens and avoid new one-off `boxShadow` literals in feature UI.
+- Existing non-`pi` icon usage is acceptable; prefer `react-icons/pi` for new icon additions.
+- Payment behavior currently accepted as-is unless explicitly requested otherwise:
+  - `hasFiatPaymentMethodAtom` current behavior remains unchanged.
+  - Apple Pay capability check with `ApplePaySession.canMakePayments()` remains unchanged.
+
 ## Internationalization
 
 - For translatable strings with dynamic values, never use template literals in `t(...)`; use interpolation (`t('... {{var}} ...', { var: value })`) or `Trans`.
-- When writing texts inside `t()` function, make sure to keep end punctuations like `:`,`?`,  outside the function so that the translation itself is clean text.
+- Prefer keeping end punctuations like `:`,`?` outside `t()` so that translation keys stay clean text (soft preference, non-blocking).
 - Prefer `import { t } from 'i18next'` for simple static translations (instead of `useTranslation`), and use explicit `.ts`/`.tsx` extensions on local alias imports when lint requires it.
 - If translated arrays/objects are used in rendered UI, build them inside the component or a `useMemo`; do not call `t()` at module scope for UI content that must react to language changes.
 - Do not split one user-visible sentence across multiple JSX nodes when it should be translated as a whole; use a single `t(...)` call with interpolation for dynamic parts (for example project name and creator metadata lines).
@@ -29,14 +51,16 @@
 
 - In `*loader*.ts` files, keep dynamic imports plain (`import('./index.ts')`); do not add webpack-specific magic comments such as `webpackChunkName`.
 - Use `import type` for type-only imports.
-- Use explicit `.ts`/`.tsx` extensions on local alias and relative imports when lint/CI requires it, and prefer direct file imports over barrels when that avoids ambiguity.
+- Use explicit `.ts`/`.tsx` extensions on local alias and relative imports when lint/CI requires it.
+- Use direct file imports instead of barrels for new work.
 
 ## Dark Mode Standard
 
 - Do not hardcode surface/background colors like `bg="white"` or `bg="gray.50"` in feature UI.
 - Use `useColorModeValue(...)` or semantic tokens for all container/card/surface backgrounds.
 - For paired surfaces, prefer a primary surface token (e.g., `white`/`gray.800`) and a muted surface token (e.g., `gray.50`/`gray.700`) defined once per component.
-- Apply the same rule to gradients, shadows, badge fills/text, borders, overlays, and CTA hover/active states; avoid raw hex/rgba values in feature UI when a palette token or color-mode token can be used.
+- Raw gradients are allowed when intentional.
+- For shadows, badge fills/text, borders, overlays, and CTA hover/active states, avoid one-off raw hex/rgba values when an existing palette token or `useColorModeValue(...)` pair already covers the pattern.
 - Respect the existing dark mode design system: do not invent local one-off colors for borders, dividers, badges, shadows, or states when an existing semantic token or established `useColorModeValue(...)` pair already covers that UI pattern.
 - Validate palette token names against `src/shared/styles/colors.ts` before introducing new ones; do not use non-existent aliases (for example `primary1Alpha.*`), use the defined token namespace (for example `primaryAlpha.*`).
 - When a reviewer flags a theme deviation, audit the whole component in both light and dark mode instead of fixing only the commented line. Check cards, pills, promotional banners, nav buttons, and any “special” surfaces for token drift.
