@@ -1,7 +1,7 @@
 import { Box, Button, HStack, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useMemo } from 'react'
-import { PiChartLine, PiRocket } from 'react-icons/pi'
+import { PiChartLine, PiRocketLaunch } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2 } from '@/shared/components/typography/Heading.tsx'
@@ -32,13 +32,20 @@ export const FinalCTASection = () => {
       >
         <VStack alignItems="center" spacing={6} textAlign="center">
           <H2 bold>{t('Ready to launch your project')}?</H2>
-          <Body size="lg" maxWidth="760px" muted>
+          <Body size="lg" maxWidth="760px" light>
             {t('You do not need perfect conditions to begin. Start with clarity, then improve through momentum.')}
           </Body>
 
-          <HStack spacing={3} flexWrap="wrap" justifyContent="center">
-            <Button size="lg" colorScheme="primary1" onClick={handleLauchNowClick} leftIcon={<PiRocket />}>
-              {t('Launch your project')}
+          <HStack spacing={3} flexWrap="wrap" justifyContent="center" width="100%">
+            <Button
+              size="lg"
+              colorScheme="primary1"
+              onClick={handleLauchNowClick}
+              rightIcon={<PiRocketLaunch />}
+              borderRadius="12px"
+              width={{ base: '100%', sm: 'auto' }}
+            >
+              {t('Start your project')}
             </Button>
             <Button
               size="lg"
@@ -46,6 +53,7 @@ export const FinalCTASection = () => {
               colorScheme="neutral1"
               onClick={onExploreToolsClick}
               leftIcon={<PiChartLine />}
+              width={{ base: '100%', sm: 'auto' }}
             >
               {t('Explore tools')}
             </Button>
@@ -58,7 +66,7 @@ export const FinalCTASection = () => {
                   <Body size="xl" bold color="primary1.9">
                     {stat.title}
                   </Body>
-                  <Body size="xs" muted>
+                  <Body size="xs" light>
                     {stat.description}
                   </Body>
                 </VStack>
@@ -67,7 +75,7 @@ export const FinalCTASection = () => {
           </PlaybookCard>
 
           <Box>
-            <Body size="sm" muted fontStyle="italic" maxWidth="680px">
+            <Body size="sm" light fontStyle="italic" maxWidth="680px">
               {t('Join creators building with tools, visibility, and support from the Geyser ecosystem.')}
             </Body>
           </Box>

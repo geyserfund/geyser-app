@@ -22,10 +22,9 @@ type LaunchPlan = {
 
 /** Launch plans section matching the new launchStart design and copy hierarchy. */
 export const LaunchPlansSection = () => {
-  const growthBorder = useColorModeValue('primary1.3', 'primary1.7')
-  const proBorder = useColorModeValue('primary1.5', 'primary1.6')
   const badgeBg = useColorModeValue('neutral1.2', 'neutral1.4')
   const badgeFg = useColorModeValue('neutral1.9', 'neutral1.11')
+  const priceColor = useColorModeValue('primary1.11', 'primary1.8')
 
   const plans = useMemo<LaunchPlan[]>(
     () => [
@@ -79,23 +78,15 @@ export const LaunchPlansSection = () => {
     <StartPageSectionShell id="launch-plans">
       <VStack alignItems="flex-start" spacing={3}>
         <H2 bold>{t('Pick the level of support that fits your launch')}</H2>
-        <Body size="lg" maxWidth="820px" muted>
+        <Body size="lg" maxWidth="820px" light>
           {t('Optional support to help you launch stronger.')}
         </Body>
       </VStack>
 
       <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} spacing={5}>
         {plans.map((plan) => {
-          const cardBorderColor =
-            plan.cardVariant === 'growth' ? growthBorder : plan.cardVariant === 'pro' ? proBorder : undefined
-
           return (
-            <PlaybookCard
-              key={plan.title}
-              height="100%"
-              borderColor={cardBorderColor}
-              borderWidth={cardBorderColor ? '2px' : '1px'}
-            >
+            <PlaybookCard key={plan.title} height="100%">
               <VStack alignItems="flex-start" spacing={4} height="100%">
                 <VStack borderRadius="999px" backgroundColor={badgeBg} paddingX={3} paddingY={1}>
                   <Body size="xs" bold color={badgeFg}>
@@ -105,10 +96,10 @@ export const LaunchPlansSection = () => {
 
                 <VStack alignItems="flex-start" spacing={1}>
                   <H3 bold>{plan.title}</H3>
-                  <Body size="sm" muted>
+                  <Body size="sm" light>
                     {plan.subtitle}
                   </Body>
-                  <H3 size="xl" bold color="primary1.9" marginTop={2}>
+                  <H3 size="xl" bold color={priceColor} marginTop={2}>
                     {plan.price}
                   </H3>
                 </VStack>
@@ -127,7 +118,7 @@ export const LaunchPlansSection = () => {
                 </VStack>
 
                 {plan.footerNote ? (
-                  <Body size="xs" muted>
+                  <Body size="xs" light>
                     {plan.footerNote}
                   </Body>
                 ) : null}

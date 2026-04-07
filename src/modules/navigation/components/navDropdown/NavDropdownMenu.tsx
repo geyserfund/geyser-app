@@ -18,8 +18,8 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { type ReactNode, useCallback, useEffect, useRef } from 'react'
-import { PiArrowUpRightBold } from 'react-icons/pi'
 import type { IconType } from 'react-icons'
+import { PiArrowUpRightBold } from 'react-icons/pi'
 import { Link as RouterLink } from 'react-router'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -34,6 +34,7 @@ export type NavDropdownMenuItem = {
   disabled?: boolean
   emphasis?: 'default' | 'cta'
   leadingIcon?: IconType
+  trailingIcon?: IconType
   badge?: {
     label: string
     tone: NavDropdownMenuItemBadgeTone
@@ -63,17 +64,13 @@ export const NavDropdownMenu = ({
   const menuBorderColor = useColorModeValue('neutral1.5', 'neutral1.6')
   const menuBackgroundColor = useColorModeValue('white', 'neutral1.3')
   const menuHoverColor = useColorModeValue('gray.50', 'neutral1.2')
-  const mutedColor = useColorModeValue('gray.700', 'neutral1.10')
   const disabledColor = useColorModeValue('blackAlpha.400', 'neutral1.8')
   const newBadgeTextColor = 'gray.900'
   const newBadgeBackgroundColor = useColorModeValue('primary1.4', 'primary1.5')
   const soonBadgeBackgroundColor = useColorModeValue('neutral1.4', 'neutral1.5')
   const soonBadgeTextColor = useColorModeValue('neutral1.10', 'neutral1.11')
-  const ctaBackgroundColor = useColorModeValue('primary1.1', 'primary1.3')
-  const ctaHoverBackgroundColor = useColorModeValue('primary1.2', 'primary1.4')
   const ctaBorderColor = useColorModeValue('primary1.6', 'primary1.7')
   const ctaTitleColor = 'primary1.11'
-  const ctaDescriptionColor = 'primary1.10'
   const { isOpen, onOpen, onClose } = useDisclosure()
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -132,11 +129,17 @@ export const NavDropdownMenu = ({
 
   const getItemContent = (item: NavDropdownMenuItem) => {
     const isCta = item.emphasis === 'cta'
+    const hasDescription = Boolean(item.description)
     const titleColor = item.disabled ? disabledColor : isCta ? ctaTitleColor : 'utils.text'
-    const descriptionColor = item.disabled ? disabledColor : isCta ? ctaDescriptionColor : mutedColor
+    const descriptionColor = titleColor
 
     return (
-      <VStack align="stretch" spacing={isDesktop ? 1.5 : 1} width="100%">
+      <VStack
+        align="stretch"
+        justify={hasDescription ? 'flex-start' : 'center'}
+        spacing={isDesktop ? 1.5 : 1}
+        width="100%"
+      >
         <HStack align="center" justify="flex-start" spacing={2.5}>
           {item.leadingIcon ? <Icon as={item.leadingIcon} boxSize={isDesktop ? 4 : 3.5} color={titleColor} /> : null}
           <Body
@@ -164,20 +167,14 @@ export const NavDropdownMenu = ({
               {item.badge.label}
             </Badge>
           ) : null}
-          {item.href ? (
-            <Icon
-              as={PiArrowUpRightBold}
-              boxSize={isDesktop ? 3.5 : 3}
-              color={titleColor}
-            />
-          ) : null}
+          {item.trailingIcon ? <Icon as={item.trailingIcon} boxSize={isDesktop ? 4 : 3.5} color={titleColor} /> : null}
+          {item.href ? <Icon as={PiArrowUpRightBold} boxSize={isDesktop ? 3.5 : 3} color={titleColor} /> : null}
         </HStack>
         {item.description ? (
           <Body
             size={isDesktop ? 'sm' : undefined}
             fontSize={isDesktop ? undefined : 'xs'}
             color={descriptionColor}
-            opacity={isCta ? 0.92 : 1}
             fontWeight={300}
             lineHeight={1.4}
           >
@@ -190,13 +187,14 @@ export const NavDropdownMenu = ({
 
   const getDesktopItemElement = (item: NavDropdownMenuItem) => {
     const isCta = item.emphasis === 'cta'
+    const hasDescription = Boolean(item.description)
     const ctaStyles = isCta
       ? {
-          backgroundColor: ctaBackgroundColor,
+          backgroundColor: 'transparent',
           borderWidth: '1px',
           borderColor: ctaBorderColor,
-          _hover: { backgroundColor: ctaHoverBackgroundColor },
-          _focusVisible: { backgroundColor: ctaHoverBackgroundColor },
+          _hover: { backgroundColor: 'transparent' },
+          _focusVisible: { backgroundColor: 'transparent' },
         }
       : {
           backgroundColor: 'transparent',
@@ -230,7 +228,7 @@ export const NavDropdownMenu = ({
           href={item.href}
           isExternal={true}
           rel="noopener noreferrer"
-          alignItems="flex-start"
+          alignItems={hasDescription ? 'flex-start' : 'center'}
           borderRadius="6px"
           paddingX={3}
           paddingY={3.5}
@@ -250,7 +248,7 @@ export const NavDropdownMenu = ({
         key={item.title}
         as={RouterLink}
         to={item.to}
-        alignItems="flex-start"
+        alignItems={hasDescription ? 'flex-start' : 'center'}
         borderRadius="6px"
         paddingX={3}
         paddingY={3.5}
@@ -267,14 +265,15 @@ export const NavDropdownMenu = ({
 
   const getMobileItemElement = (item: NavDropdownMenuItem) => {
     const isCta = item.emphasis === 'cta'
+    const hasDescription = Boolean(item.description)
     const ctaStyles = isCta
       ? {
-          backgroundColor: ctaBackgroundColor,
+          backgroundColor: 'transparent',
           borderWidth: '1px',
           borderColor: ctaBorderColor,
-          _hover: { backgroundColor: ctaHoverBackgroundColor },
-          _active: { backgroundColor: ctaHoverBackgroundColor },
-          _focusVisible: { backgroundColor: ctaHoverBackgroundColor },
+          _hover: { backgroundColor: 'transparent' },
+          _active: { backgroundColor: 'transparent' },
+          _focusVisible: { backgroundColor: 'transparent' },
         }
       : {
           backgroundColor: 'transparent',
@@ -308,7 +307,7 @@ export const NavDropdownMenu = ({
           href={item.href}
           isExternal={true}
           rel="noopener noreferrer"
-          alignItems="flex-start"
+          alignItems={hasDescription ? 'flex-start' : 'center'}
           borderRadius="8px"
           paddingX={3}
           paddingY={3}
@@ -327,7 +326,7 @@ export const NavDropdownMenu = ({
         key={item.title}
         as={RouterLink}
         to={item.to}
-        alignItems="flex-start"
+        alignItems={hasDescription ? 'flex-start' : 'center'}
         borderRadius="8px"
         paddingX={3}
         paddingY={3}

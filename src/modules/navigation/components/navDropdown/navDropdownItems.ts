@@ -42,11 +42,10 @@ export const getFundraiseNavDropdownItems = (t: TFunction): NavDropdownMenuItem[
       to: getPath('discoveryCreator'),
     },
     {
-      title: t('Launch Now'),
-      description: t('Learn how simple it is to launch a project on Geyser'),
+      title: t('Start your project'),
       to: getPath('launchProjectDetails'),
       emphasis: 'cta',
-      leadingIcon: PiRocketLaunch,
+      trailingIcon: PiRocketLaunch,
     },
     {
       title: t('How to launch on Geyser'),
@@ -55,7 +54,6 @@ export const getFundraiseNavDropdownItems = (t: TFunction): NavDropdownMenuItem[
     },
     {
       title: t('Look at our Guides'),
-      description: t('Browse practical guides, walkthroughs, and launch resources.'),
       href: GuideUrl,
     },
   ]

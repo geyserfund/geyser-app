@@ -80,13 +80,12 @@ type ProjectCardProps = {
   index: number
 }
 
-/** Landscape project showcase card with subcategory pill. */
+/** Landscape project showcase card prioritizing subcategory as the primary label. */
 const ProjectCard = ({ project, categoryColor, panelBorderColor, index }: ProjectCardProps) => {
   const scrimGradient = useColorModeValue(
     'linear-gradient(180deg, transparent 20%, var(--chakra-colors-overlay-black-8) 65%, var(--chakra-colors-overlay-black-11) 100%)',
     'linear-gradient(180deg, transparent 20%, var(--chakra-colors-overlay-white-8) 65%, var(--chakra-colors-overlay-white-11) 100%)',
   )
-  const pillBg = 'blackAlpha.700'
 
   return (
     <motion.div
@@ -125,41 +124,32 @@ const ProjectCard = ({ project, categoryColor, panelBorderColor, index }: Projec
 
               <Box position="absolute" inset={0} background={scrimGradient} />
 
-              <Box position="absolute" top={3} left={3}>
-                <Box
-                  borderRadius="full"
-                  px={3}
-                  py={1}
-                  fontSize="xs"
-                  fontWeight={700}
-                  color="white"
-                  bg={pillBg}
-                  borderWidth="1px"
-                  borderColor={getAlphaToken(categoryColor, 8)}
-                  boxShadow="md"
-                  letterSpacing="0.03em"
-                  lineHeight={1}
-                >
-                  {project.subcategory}
-                </Box>
-              </Box>
-
               <VStack
                 position="absolute"
                 bottom={0}
                 left={0}
-                right={0}
                 align="start"
-                spacing={0.5}
+                spacing={1}
                 px={4}
                 pb={3}
-                pt={6}
+                pt={10}
+                maxW="100%"
               >
-                <Body size="sm" fontWeight={700} color="white" lineHeight={1.2} noOfLines={1}>
-                  {project.projectName}
+                <Body
+                  fontSize={{ base: 'lg', lg: 'xl' }}
+                  fontWeight={800}
+                  color={categoryColor}
+                  lineHeight={1.1}
+                  letterSpacing="0.01em"
+                  noOfLines={1}
+                >
+                  {project.subcategory}
                 </Body>
-                <Body size="xs" color="whiteAlpha.700" lineHeight={1.3} noOfLines={1}>
-                  {t('by {{creator}}', { creator: project.creatorName })}
+                <Body fontSize="14px" color="white" lineHeight={1.3} noOfLines={1}>
+                  {t('{{projectName}} · by {{creator}}', {
+                    projectName: project.projectName,
+                    creator: project.creatorName,
+                  })}
                 </Body>
               </VStack>
             </Box>

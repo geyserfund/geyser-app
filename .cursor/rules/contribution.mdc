@@ -26,6 +26,8 @@ You are an expert in TypeScript, Node.js, React, Vite, Apollo Graphql Client, Re
 - Wrap all user-facing text in t() function calls, even for button labels and titles
 - When displaying app values like currencies or numbers, place them outside the t() function
 - Always wrap the actual raw texts, do not wrap variables.
+- For metadata lines with dynamic pieces (for example project name + creator), keep the entire sentence in a single `t()` call and interpolate values instead of splitting copy across JSX nodes.
+- Do not memoize translated arrays/objects with `useMemo([])`; build inline or include active language in dependencies.
 
 
 ## Dark/Light Mode
@@ -75,6 +77,7 @@ Syntax and Formatting
 - For all icons only use the 'react-icons/pi' package.
 - Nest components in a consistent way: HStack/VStack containing related elements, properly grouped.
 - Only use colors from our color palette, defined in [colors.ts](mdc:src/shared/styles/colors.ts).
+- Validate token names against [colors.ts](mdc:src/shared/styles/colors.ts) and avoid undefined aliases (for example `primary1Alpha.*`); use defined tokens such as `primaryAlpha.*`.
 - To check for mobile mode use useMobileMode from [useMobileMode.ts](mdc:src/utils/info/useMobileMode.ts)](mdc:src/utils/info/useMobileMode.ts)
 
 

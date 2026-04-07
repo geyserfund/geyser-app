@@ -6,6 +6,8 @@
 - When writing texts inside `t()` function, make sure to keep end punctuations like `:`,`?`,  outside the function so that the translation itself is clean text.
 - Prefer `import { t } from 'i18next'` for simple static translations (instead of `useTranslation`), and use explicit `.ts`/`.tsx` extensions on local alias imports when lint requires it.
 - If translated arrays/objects are used in rendered UI, build them inside the component or a `useMemo`; do not call `t()` at module scope for UI content that must react to language changes.
+- Do not split one user-visible sentence across multiple JSX nodes when it should be translated as a whole; use a single `t(...)` call with interpolation for dynamic parts (for example project name and creator metadata lines).
+- Do not wrap translated UI content in `useMemo` with an empty dependency array; either build it inline or include active language in dependencies.
 - Icon-only interactive elements must include a localized `aria-label` (for example, `aria-label={t('Close')}`).
 - For dates/times coming from API data, interpolate formatted values in `t(...)`; do not hardcode date text in copy.
 
@@ -36,6 +38,7 @@
 - For paired surfaces, prefer a primary surface token (e.g., `white`/`gray.800`) and a muted surface token (e.g., `gray.50`/`gray.700`) defined once per component.
 - Apply the same rule to gradients, shadows, badge fills/text, borders, overlays, and CTA hover/active states; avoid raw hex/rgba values in feature UI when a palette token or color-mode token can be used.
 - Respect the existing dark mode design system: do not invent local one-off colors for borders, dividers, badges, shadows, or states when an existing semantic token or established `useColorModeValue(...)` pair already covers that UI pattern.
+- Validate palette token names against `src/shared/styles/colors.ts` before introducing new ones; do not use non-existent aliases (for example `primary1Alpha.*`), use the defined token namespace (for example `primaryAlpha.*`).
 - When a reviewer flags a theme deviation, audit the whole component in both light and dark mode instead of fixing only the commented line. Check cards, pills, promotional banners, nav buttons, and any “special” surfaces for token drift.
 - For theme-heavy components, define the light/dark tokens once near the top of the component and reuse them across all related elements so card/button states stay visually consistent.
 

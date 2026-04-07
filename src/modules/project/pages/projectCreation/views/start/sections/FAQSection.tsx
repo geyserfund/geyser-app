@@ -30,7 +30,7 @@ export const FAQSection = () => {
     <StartPageSectionShell id="faq">
       <VStack alignItems="flex-start" spacing={3}>
         <H2 bold>{t('Questions creators usually ask')}</H2>
-        <Body size="lg" maxWidth="760px" muted>
+        <Body size="lg" maxWidth="760px" light>
           {t('Quick answers before you publish your project.')}
         </Body>
       </VStack>
@@ -55,7 +55,7 @@ export const FAQSection = () => {
                 </AccordionButton>
               </h3>
               <AccordionPanel paddingTop={0} paddingBottom={5}>
-                <Body size="sm" muted>
+                <Body size="sm" light>
                   {item.answer}
                 </Body>
               </AccordionPanel>
@@ -65,7 +65,7 @@ export const FAQSection = () => {
       </Accordion>
 
       <HStack spacing={3} alignItems="center" flexWrap="wrap">
-        <Body size="sm" muted>
+        <Body size="sm" light>
           {t('Need more help')}
           {'?'}
         </Body>
@@ -74,7 +74,7 @@ export const FAQSection = () => {
             {t('Visit Help Center')}
           </Body>
         </Link>
-        <Body size="sm" muted>
+        <Body size="sm" light>
           {'•'}
         </Body>
         <Link href="mailto:support@geyser.fund">
