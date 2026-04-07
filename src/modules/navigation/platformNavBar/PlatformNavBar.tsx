@@ -152,7 +152,9 @@ export const PlatformNavBar = () => {
     !isProjectFundingRoutes &&
     !isProjectDashboardRoutes &&
     !isMobileMode
-  const navShadow = isPlatformNavShadowRoute ? defaultNavShadow : 'none'
+  const isCreatorTransparentNav = isCreatorPage && !creatorNavScrolled
+  const navShadow = isCreatorTransparentNav ? 'none' : isPlatformNavShadowRoute ? defaultNavShadow : 'none'
+  const navBackgroundColor = isCreatorTransparentNav ? 'transparent' : 'utils.pbg'
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {

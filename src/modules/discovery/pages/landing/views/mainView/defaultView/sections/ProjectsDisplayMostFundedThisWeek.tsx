@@ -242,19 +242,11 @@ export const ProjectsDisplayMostFundedThisWeek = ({
     return null
   }
 
-  let sectionLabel = ''
-  if (category) {
-    sectionLabel = ProjectCategoryLabel[category] || ''
-  } else if (subCategory) {
-    sectionLabel = ProjectSubCategoryLabel[subCategory] || ''
-  }
-
-  const titleContent = title || (sectionLabel ? t("What's happening in {{label}}", { label: sectionLabel }) : t('Recent Projects'))
   const discoverMoreId = category ? `discovery-see-all-${category}` : subCategory ? `discovery-see-all-${subCategory}` : ''
 
   return (
     <ProjectDisplayBody
-      title={titleContent}
+      title={sectionTitle}
       projects={projects}
       posts={posts}
       rightContent={
