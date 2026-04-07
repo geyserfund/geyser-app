@@ -10,13 +10,6 @@ import {
   LinkOverlay,
   Stack,
   VStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
@@ -37,12 +30,6 @@ import {
   useRecurringContributionsQuery,
 } from '@/types/index.ts'
 import { centsToDollars, commaFormatted } from '@/utils'
-  useCancelUserSubscriptionMutation,
-  UserSubscriptionFragment,
-  UserSubscriptionInterval,
-  UserSubscriptionStatus,
-  useUserSubscriptionsQuery,
-} from '@/types/generated/graphql'
 import { useNotification } from '@/utils/tools/Notification.tsx'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout.tsx'
