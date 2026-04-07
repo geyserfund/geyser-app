@@ -90,6 +90,7 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
       fiatPaymentMethod: selectedFiatPaymentMethod,
     }
   }
+
   const onSubmitFunction = (e: FormEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
@@ -116,6 +117,7 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
     if (selectedPaymentOption) {
       selectedPaymentOptionRef.current = selectedPaymentOption
     }
+
     const { title, description, error, valid } = isFundingUserInfoValid
 
     if (valid) {
@@ -211,7 +213,7 @@ export const FundingDetailsSummary = ({ handleSubmit, addressForm }: FundingDeta
         <AlertDialogue
           {...warningModal}
           title={t('Continuing anonymously')}
-          description={t('You would not be able to manage this recurring payment through geyser.')}
+          description={t('You will not be able to manage this recurring payment through geyser.')}
           positiveButtonProps={{
             onClick() {
               warningModal.onClose()

@@ -305,14 +305,14 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             title={
               isStripeConnectIncomplete
                 ? t('Complete your Stripe Connect configuration')
-                : t('Receive fiat payments directly')
+                : t('Enable fiat payments and recurring contributions')
             }
             description={
               isStripeConnectIncomplete
                 ? stripeConnectDisabledReasonLabel ||
                   t('Open Stripe Connect to finish your configuration and enable fiat contributions.')
                 : t(
-                    'Connect Stripe to receive fiat payments straight to your bank account and enable auto-renewing recurring contributions for contributors.',
+                    'Connect Stripe to receive fiat payments directly to your bank account and allow contributors to set up auto-renewing support.',
                   )
             }
             actionButton={

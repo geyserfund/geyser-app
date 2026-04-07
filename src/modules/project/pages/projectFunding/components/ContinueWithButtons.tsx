@@ -54,8 +54,8 @@ export const ContinueWithButtons = ({ useFormSubmit = false }: ContinueWithButto
   )
   const applePayButtonBg = useColorModeValue('neutral.1000', 'neutral.1000')
   const applePayButtonText = useColorModeValue('neutral.0', 'neutral.0')
-  const creditCardIcon = <Icon as={FaCreditCard} color="utils.text" />
-  const bitcoinIcon = <Icon as={FaBitcoin} color="utils.text" />
+  const creditCardIcon = <Icon as={FaCreditCard} color="currentColor" />
+  const bitcoinIcon = <Icon as={FaBitcoin} color="currentColor" />
   const applePayIcon = <Icon as={AiFillApple} />
 
   const handleCreditCardClick = () => {

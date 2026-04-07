@@ -1,7 +1,8 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { Avatar, Box, Button, Card, CardBody, HStack, Icon, Stack, VStack } from '@chakra-ui/react'
+import { Avatar, Box, Button, Card, CardBody, HStack, Icon, LinkBox, LinkOverlay, Stack, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
+import { Link } from 'react-router'
 import { PiInfo } from 'react-icons/pi'
 
 import { useAuthContext } from '@/context'
@@ -19,6 +20,7 @@ import {
 import { TooltipPopover } from '@/shared/components/feedback/TooltipPopover.tsx'
 import { SkeletonLayout } from '@/shared/components/layouts'
 import { Body, H2 } from '@/shared/components/typography'
+import { getPath } from '@/shared/constants'
 import { useModal } from '@/shared/hooks'
 import { AlertDialogue } from '@/shared/molecules/AlertDialogue'
 import { useNotification } from '@/utils'
@@ -67,6 +69,7 @@ const RecurringContributionCard = ({
   isCanceling,
 }: RecurringContributionCardProps) => {
   const projectTitle = item.project?.title || t('Recurring donation')
+  const projectPath = item.project?.name ? getPath('project', item.project.name) : null
   const cadence = (intervalLabel[item.interval] || item.interval).toLowerCase()
   const title = `${projectTitle} - ${formatAmount(item)} ${cadence}`
   const canManageBilling =
@@ -74,7 +77,22 @@ const RecurringContributionCard = ({
   const canCancel = item.status !== 'CANCELED'
 
   return (
-    <Card variant="outline" borderRadius="xl" borderColor="neutralAlpha.6" bg="neutralAlpha.1">
+    <Card
+      as={LinkBox}
+      variant="outline"
+      borderRadius="xl"
+      borderColor="neutralAlpha.6"
+      bg="neutralAlpha.1"
+      transition="border-color 0.2s ease, box-shadow 0.2s ease"
+      _hover={
+        projectPath
+          ? {
+              borderColor: 'primary1.9',
+              boxShadow: 'md',
+            }
+          : undefined
+      }
+    >
       <CardBody>
         <VStack alignItems="start" spacing={4}>
           <HStack
@@ -93,7 +111,13 @@ const RecurringContributionCard = ({
               />
               <VStack alignItems="start" spacing={1} flex={1} minW={0}>
                 <Body size="md" medium>
-                  {title}
+                  {projectPath ? (
+                    <LinkOverlay as={Link} to={projectPath}>
+                      {title}
+                    </LinkOverlay>
+                  ) : (
+                    title
+                  )}
                 </Body>
               </VStack>
             </HStack>
@@ -103,6 +127,8 @@ const RecurringContributionCard = ({
                 w={{ base: 'full', md: 'auto' }}
                 justifyContent={{ base: 'stretch', md: 'flex-end' }}
                 alignItems="center"
+                position="relative"
+                zIndex={1}
               >
                 {canManageBilling && (
                   <Button

@@ -619,7 +619,12 @@ export const useFundingAPI = () => {
         if (result.data?.recurringDonationCreate?.contribution) {
           const recurringCheckoutPayload = result.data.recurringDonationCreate
           if (!hasAnyPaymentDetails(recurringCheckoutPayload.payments)) {
-            throw new Error('Could not create an initial payment for this recurring contribution')
+            setFundingRequestErrored(true)
+            toast.error({
+              title: 'Unable to create recurring payment',
+              description: 'Please refresh the page and try again',
+            })
+            return
           }
 
           handleFundingCompleted(recurringCheckoutPayload)
@@ -642,7 +647,12 @@ export const useFundingAPI = () => {
         if (result.data?.projectSubscriptionStart?.contribution) {
           const recurringCheckoutPayload = result.data.projectSubscriptionStart
           if (!hasAnyPaymentDetails(recurringCheckoutPayload.payments)) {
-            throw new Error('Could not create an initial payment for this recurring contribution')
+            setFundingRequestErrored(true)
+            toast.error({
+              title: 'Unable to create recurring payment',
+              description: 'Please refresh the page and try again',
+            })
+            return
           }
 
           handleFundingCompleted(recurringCheckoutPayload)
