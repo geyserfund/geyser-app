@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { PiClockCountdown, PiMapPin } from 'react-icons/pi'
 import { useNavigate } from 'react-router'
 
+import { ProjectMatchingPublicBadge } from '@/modules/project/matching/components/ProjectMatchingPublicBadge.tsx'
 import { NonProjectProjectIcon } from '@/modules/project/pages/projectView/views/body/sections/header/components/NonProjectProjectIcon.tsx'
 import { AnimatedFire } from '@/shared/components/display/AnimatedFire.tsx'
 import { ImageWithReload } from '@/shared/components/display/ImageWithReload'
@@ -38,6 +39,7 @@ export interface LandingCardBaseProps extends CardLayoutProps {
   hideContributionContent?: boolean
   noMobile?: boolean
   hasSubscribe?: boolean
+  statusPillLabel?: string
   trendingAmountLabel?: string
 }
 
@@ -56,17 +58,38 @@ const ImagePill = ({ children }: { children: React.ReactNode }) => (
   </HStack>
 )
 
+const StatusPill = ({ label }: { label: string }) => (
+  <HStack
+    bg="primary1.3"
+    color="primary1.12"
+    borderRadius="md"
+    px={2}
+    py={1}
+    spacing={1}
+    boxShadow="sm"
+    alignItems="center"
+    flexShrink={0}
+    maxW="100%"
+  >
+    <Body size="xs" fontWeight="semibold" color="inherit" isTruncated>
+      {label}
+    </Body>
+  </HStack>
+)
+
 /** AON campaign status line (time left, percentage funded, failed). */
 const AonStatusDisplay = ({
   percentage,
   timeLeft,
   isFailed,
+  isEndedFunded,
   size = 'sm',
   wrap = true,
 }: {
   percentage: number
   timeLeft: ReturnType<typeof aonProjectTimeLeft>
   isFailed: boolean
+  isEndedFunded: boolean
   size?: 'xs' | 'sm'
   wrap?: boolean
 }) => {
@@ -82,6 +105,14 @@ const AonStatusDisplay = ({
     return (
       <Body size={size} bold color={statusColor} isTruncated>
         {t('Campaign Failed')}
+      </Body>
+    )
+  }
+
+  if (isEndedFunded) {
+    return (
+      <Body size={size} bold color="neutral1.12" isTruncated>
+        {t('Ended')} - {percentage}% {t('funded')}
       </Body>
     )
   }
@@ -140,6 +171,7 @@ const CardFooter = ({
   project,
   isAonProject,
   isAonFailed,
+  isAonEndedFunded,
   percentage,
   timeLeft,
   formattedAmount,
@@ -151,6 +183,7 @@ const CardFooter = ({
   project: ProjectForLandingPageFragment
   isAonProject: boolean
   isAonFailed: boolean
+  isAonEndedFunded: boolean
   percentage: number
   timeLeft: ReturnType<typeof aonProjectTimeLeft>
   formattedAmount: string
@@ -180,10 +213,28 @@ const CardFooter = ({
   )
 
   if (isAonProject) {
+    if (isAonEndedFunded) {
+      return (
+        <HStack width="100%" alignItems="center" spacing={3} marginTop="auto">
+          <AonStatusDisplay
+            percentage={percentage}
+            timeLeft={timeLeft}
+            isFailed={isAonFailed}
+            isEndedFunded={isAonEndedFunded}
+          />
+        </HStack>
+      )
+    }
+
     return (
       <HStack width="100%" alignItems="center" spacing={3} marginTop="auto">
         <VStack flex={1} spacing={1} alignItems="start" justifyContent="center">
-          <AonStatusDisplay percentage={percentage} timeLeft={timeLeft} isFailed={isAonFailed} />
+          <AonStatusDisplay
+            percentage={percentage}
+            timeLeft={timeLeft}
+            isFailed={isAonFailed}
+            isEndedFunded={isAonEndedFunded}
+          />
           <AonProgressBar project={project} height="8px" />
         </VStack>
         {contributeButton}
@@ -204,11 +255,13 @@ const CardImage = ({
   project,
   countryName,
   categoryLabel,
+  statusPillLabel,
   compact,
 }: {
   project: ProjectForLandingPageFragment
   countryName?: string
   categoryLabel?: string
+  statusPillLabel?: string
   compact?: boolean
 }) => (
   <Box
@@ -232,7 +285,7 @@ const CardImage = ({
       <AllOrNothingIcon project={project} />
     </Box>
 
-    {!compact && (countryName || categoryLabel) && (
+    {!compact && (countryName || categoryLabel || statusPillLabel || project.activeMatching) && (
       <HStack position="absolute" bottom={4} left={4} spacing={1} overflow="hidden" maxWidth="calc(100% - 32px)">
         {countryName && (
           <ImagePill>
@@ -249,6 +302,8 @@ const CardImage = ({
             </Body>
           </ImagePill>
         )}
+        {statusPillLabel && <StatusPill label={statusPillLabel} />}
+        {project.activeMatching && <ProjectMatchingPublicBadge matching={project.activeMatching} variant="discovery" />}
       </HStack>
     )}
   </Box>
@@ -266,6 +321,7 @@ export const LandingCardBase = ({
   hasSubscribe,
   noMobile,
   hideContributionContent,
+  statusPillLabel,
   trendingAmountLabel,
   ...rest
 }: LandingCardBaseProps) => {
@@ -284,6 +340,7 @@ export const LandingCardBase = ({
   const contributionAmount = trendingContributionUsd ?? getProjectBalance().usd
   const percentage = getAonGoalPercentage()
   const timeLeft = aonProjectTimeLeft(project.aonGoal)
+  const isAonEndedFunded = isAonProject && !isAonFailed && !timeLeft && percentage >= 100
   const hasFire = (hasTrendingContribution && contributionAmount > 100) || contributionAmount > 1000
   const contributionLabel = hasTrendingContribution ? trendingAmountLabel ?? t('this week') : t('raised')
 
@@ -338,7 +395,13 @@ export const LandingCardBase = ({
         />
       )}
 
-      <CardImage project={project} countryName={countryName} categoryLabel={categoryLabel} compact={useCompactLayout} />
+      <CardImage
+        project={project}
+        countryName={countryName}
+        categoryLabel={categoryLabel}
+        statusPillLabel={statusPillLabel}
+        compact={useCompactLayout}
+      />
 
       <VStack
         flex={1}
@@ -358,6 +421,15 @@ export const LandingCardBase = ({
               {project.title}
             </H3>
 
+            {(statusPillLabel || project.activeMatching) && (
+              <HStack spacing={1} flexWrap="wrap">
+                {statusPillLabel && <StatusPill label={statusPillLabel} />}
+                {project.activeMatching && (
+                  <ProjectMatchingPublicBadge matching={project.activeMatching} variant="discovery" />
+                )}
+              </HStack>
+            )}
+
             <Body
               size="sm"
               dark
@@ -372,34 +444,36 @@ export const LandingCardBase = ({
             </Body>
           </VStack>
         ) : (
-          <HStack width="100%" alignItems="baseline" spacing={2} overflow="hidden">
-            <H3 size="md" medium flex={1} isTruncated>
-              {project.title}
-            </H3>
-            <HStack spacing={1} flexShrink={0}>
-              <Body size="xs" muted>
-                {t('by')}
-              </Body>
-              <ProfileAvatar
-                guardian={projectOwner?.guardianType}
-                src={projectOwner?.imageUrl || ''}
-                height="16px"
-                width="16px"
-                wrapperProps={{ padding: '1px', height: '18px', width: '18px' }}
-                onClick={hasProjectOwner ? handleProfileClick : undefined}
-              />
-              <ProfileText
-                size="xs"
-                guardian={projectOwner?.guardianType}
-                _hover={hasProjectOwner ? { textDecoration: 'underline' } : undefined}
-                onClick={hasProjectOwner ? handleProfileClick : undefined}
-                maxWidth="120px"
-                isTruncated
-              >
-                {projectOwner?.username}
-              </ProfileText>
+          <VStack width="100%" alignItems="start" spacing={2}>
+            <HStack width="100%" alignItems="baseline" spacing={2} overflow="hidden">
+              <H3 size="md" medium flex={1} isTruncated>
+                {project.title}
+              </H3>
+              <HStack spacing={1} flexShrink={0}>
+                <Body size="xs" muted>
+                  {t('by')}
+                </Body>
+                <ProfileAvatar
+                  guardian={projectOwner?.guardianType}
+                  src={projectOwner?.imageUrl || ''}
+                  height="16px"
+                  width="16px"
+                  wrapperProps={{ padding: '1px', height: '18px', width: '18px' }}
+                  onClick={hasProjectOwner ? handleProfileClick : undefined}
+                />
+                <ProfileText
+                  size="xs"
+                  guardian={projectOwner?.guardianType}
+                  _hover={hasProjectOwner ? { textDecoration: 'underline' } : undefined}
+                  onClick={hasProjectOwner ? handleProfileClick : undefined}
+                  maxWidth="120px"
+                  isTruncated
+                >
+                  {projectOwner?.username}
+                </ProfileText>
+              </HStack>
             </HStack>
-          </HStack>
+          </VStack>
         )}
 
         {!useCompactLayout && (
@@ -425,6 +499,7 @@ export const LandingCardBase = ({
                 percentage={percentage}
                 timeLeft={timeLeft}
                 isFailed={isAonFailed}
+                isEndedFunded={isAonEndedFunded}
                 size="xs"
                 wrap={false}
               />
@@ -441,6 +516,7 @@ export const LandingCardBase = ({
               project={project}
               isAonProject={isAonProject}
               isAonFailed={isAonFailed}
+              isAonEndedFunded={isAonEndedFunded}
               percentage={percentage}
               timeLeft={timeLeft}
               formattedAmount={formatAmount(contributionAmount || 0, 'USD')}

@@ -2,16 +2,22 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { useCallback } from 'react'
 
 import {
+  canUseRecurringFundingAtom,
   fundingFiatSwapAmountWarningAtom,
   fundingFormErrorAtom,
   fundingFormHasRewardsAtom,
   fundingFormStateAtom,
   fundingFormWarningAtom,
+  fundingModeAtom,
   fundingOnchainAmountWarningAtom,
   fundingProjectAtom,
   guardianBadgesCostAtoms,
   isFundingInputAmountValidAtom,
   isFundingUserInfoValidAtom,
+  isMembershipFundingModeAtom,
+  isOneTimeFundingModeAtom,
+  isRecurringDonationModeAtom,
+  resetFundingFormAtom,
   resetFundingFormRewardsAtom,
   rewardsCostAtoms,
   setErrorStateAtom,
@@ -32,6 +38,11 @@ export const useFundingFormAtom = () => {
   const project = useAtomValue(fundingProjectAtom)
 
   const hasSelectedRewards = useAtomValue(fundingFormHasRewardsAtom)
+  const fundingMode = useAtomValue(fundingModeAtom)
+  const isOneTimeFundingMode = useAtomValue(isOneTimeFundingModeAtom)
+  const isRecurringDonationMode = useAtomValue(isRecurringDonationModeAtom)
+  const isMembershipFundingMode = useAtomValue(isMembershipFundingModeAtom)
+  const canUseRecurringFunding = useAtomValue(canUseRecurringFundingAtom)
 
   const onChainAmountWarning = useAtomValue(fundingOnchainAmountWarningAtom)
 
@@ -66,7 +77,7 @@ export const useFundingFormAtom = () => {
 
   const updateSubscription = useSetAtom(updateFundingFormSubscriptionAtom)
 
-  const resetForm = useSetAtom(resetFundingFormRewardsAtom)
+  const resetForm = useSetAtom(resetFundingFormAtom)
 
   const setGeyserTipPercent = useCallback(
     (percent: number) => {
@@ -77,8 +88,13 @@ export const useFundingFormAtom = () => {
 
   return {
     formState,
+    fundingMode,
     project,
     hasSelectedRewards,
+    isOneTimeFundingMode,
+    isRecurringDonationMode,
+    isMembershipFundingMode,
+    canUseRecurringFunding,
     rewardsCosts,
     subscriptionCosts,
     tip,

@@ -98,12 +98,19 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
         {window.nostr && (
           <Button
             size="lg"
-            variant="soft"
-            colorScheme="nostr"
+            variant="solid"
+            bg="whiteAlpha.800"
+            color={lightModeColors.neutral1[11]}
+            border="1px solid"
+            borderColor={lightModeColors.neutral1[7]}
+            borderRadius={8}
             rightIcon={<PiArrowClockwiseBold />}
             w="full"
             isLoading={isPublishingNostrEvent || isPosting}
             onClick={handleNostrPost}
+            _hover={{
+              bg: 'whiteAlpha.900',
+            }}
           >
             {t('Post on Nostr')}
           </Button>
@@ -136,7 +143,7 @@ const LinkActionsSection = ({ heroLink, heroId, twitterShareText, handleCopy }: 
           onClick={handleCopy}
           w="full"
         >
-          {heroId ? t('Copy hero link') : t('Copy link')}
+          {t('Copy link')}
         </Button>
       </HStack>
     </>
@@ -197,7 +204,7 @@ const AmbassadorCard = ({
         </H2>
       </HStack>
       <Body color="black">
-        {t('Become an Ambassador for this project by spreading the word using your Hero link.')}{' '}
+        {t('Become an Ambassador for this project by spreading the word using your ambassador link.')}{' '}
         {t('You will earn {{rate}} of each contribution you enable.', {
           rate: effectiveContributionPayout,
         })}{' '}
@@ -252,7 +259,7 @@ export const BecomeAnAmbassador = () => {
     onCopy()
     toast.success({
       title: t('Copied!'),
-      description: heroId ? t('Hero link copied to clipboard') : t('Link copied to clipboard'),
+      description: t('Link copied to clipboard'),
     })
   }
 

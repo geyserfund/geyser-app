@@ -1,8 +1,16 @@
-/* eslint-disable complexity */
 import { atom } from 'jotai'
 
 import { authUserAtom } from '@/modules/auth/state/authAtom.ts'
+import {
+  ProjectSubscriptionStartMutationVariables,
+  RecurringContributionRenewalCreateMutationVariables,
+  RecurringDonationCreateMutationVariables,
+  recurringFundingModes,
+  recurringIntervals,
+  recurringPaymentMethods,
+} from '@/modules/project/recurring/graphql'
 import { ORIGIN } from '@/shared/constants/config/env.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import { usdRateAtom } from '@/shared/state/btcRateAtom'
 import { referrerHeroIdAtom } from '@/shared/state/referralAtom.ts'
 import { isPrismEnabled } from '@/shared/utils/project/isPrismEnabled.ts'
@@ -37,6 +45,7 @@ import { fundingFormHasRewardsAtom, fundingFormStateAtom } from './fundingFormAt
 import type { FundFormType, FundingProjectState } from './fundingFormAtom.ts'
 import { selectedGoalIdAtom } from './selectedGoalAtom'
 import { shippingAddressAtom } from './shippingAddressAtom.ts'
+import { recurringContributionRenewalAtom } from './recurringContributionRenewalAtom.ts'
 
 type BuildContributionCreateInputArgs = {
   formState: FundFormType
@@ -80,9 +89,9 @@ const buildContributionCreateInput = ({
     privateComment,
     followProject,
     subscribeToGeyserEmails,
-    subscription,
     geyserTipPercent,
     guardianBadges,
+    fundingMode,
   } = formState
 
   const anonymous = !user || !user.id
@@ -98,14 +107,6 @@ const buildContributionCreateInput = ({
           quantity: rewardQuantity,
         })
       }
-    })
-  }
-
-  if (subscription && subscription.cost) {
-    orderItemInputs.push({
-      itemId: toInt(subscription.subscriptionId),
-      itemType: OrderItemType.ProjectSubscriptionPlan,
-      quantity: 1,
     })
   }
 
@@ -149,6 +150,10 @@ const buildContributionCreateInput = ({
     paymentsInput,
   }
 
+  if (fundingMode !== recurringFundingModes.oneTime && input.orderInput) {
+    input.orderInput.items = []
+  }
+
   return input
 }
 
@@ -188,15 +193,106 @@ export const formattedFundingInputAtom = atom((get) => {
   })
 })
 
+const recurringMetadataInputAtom = atom((get) => {
+  const { email, media, comment, privateComment, followProject, subscribeToGeyserEmails } = get(fundingFormStateAtom)
+
+  return {
+    ...(email && { email }),
+    ...(media && { media }),
+    ...(comment && { comment }),
+    ...(privateComment && { privateComment }),
+    ...(followProject && { followProject }),
+    ...(subscribeToGeyserEmails && { subscribeToGeyserEmails }),
+  }
+})
+
+export const formattedRecurringDonationInputAtom = atom<RecurringDonationCreateMutationVariables>((get) => {
+  const fundingProject = get(fundingProjectAtom)
+  const formState = get(fundingFormStateAtom)
+  const user = get(authUserAtom)
+  const intendedPaymentMethod = get(intendedPaymentMethodAtom)
+  const metadataInput = get(recurringMetadataInputAtom)
+  const paymentsInput = get(recurringPaymentsInputAtom)
+  const stripeEnabled = Boolean(fundingProject.paymentMethods?.fiat?.stripe)
+
+  const paymentMethod =
+    intendedPaymentMethod === PaymentMethods.fiatSwap
+      ? stripeEnabled
+        ? recurringPaymentMethods.stripe
+        : recurringPaymentMethods.banxa
+      : recurringPaymentMethods.bitcoin
+  const amount = paymentMethod === recurringPaymentMethods.bitcoin ? formState.donationAmount : formState.donationAmountUsdCent
+
+  return {
+    input: {
+      projectId: toInt(fundingProject.id),
+      paymentMethod,
+      interval: formState.recurringInterval || recurringIntervals.monthly,
+      amount,
+      ...(formState.geyserTipPercent > 0 && { geyserTipPercentage: formState.geyserTipPercent }),
+      anonymous: !user || !user.id,
+      paymentsInput,
+      metadataInput,
+    },
+  }
+})
+
+export const formattedProjectSubscriptionStartInputAtom = atom<ProjectSubscriptionStartMutationVariables>((get) => {
+  const formState = get(fundingFormStateAtom)
+  const fundingProject = get(fundingProjectAtom)
+  const user = get(authUserAtom)
+  const intendedPaymentMethod = get(intendedPaymentMethodAtom)
+  const metadataInput = get(recurringMetadataInputAtom)
+  const paymentsInput = get(recurringPaymentsInputAtom)
+  const stripeEnabled = Boolean(fundingProject.paymentMethods?.fiat?.stripe)
+
+  return {
+    input: {
+      projectSubscriptionPlanId: toInt(formState.subscription.subscriptionId),
+      paymentMethod:
+        intendedPaymentMethod === PaymentMethods.fiatSwap
+          ? stripeEnabled
+            ? recurringPaymentMethods.stripe
+            : recurringPaymentMethods.banxa
+          : recurringPaymentMethods.bitcoin,
+      anonymous: !user || !user.id,
+      paymentsInput,
+      metadataInput,
+    },
+  }
+})
+
+export const formattedRecurringContributionRenewalInputAtom = atom<RecurringContributionRenewalCreateMutationVariables | null>(
+  (get) => {
+    const renewal = get(recurringContributionRenewalAtom)
+    const paymentsInput = get(recurringPaymentsInputAtom)
+
+    if (!renewal) {
+      return null
+    }
+
+    return {
+      input: {
+        managementNonce: renewal.managementNonce,
+        anonymous: !renewal.userId,
+        paymentsInput,
+      },
+    }
+  },
+)
+
 /** Funding Input after request */
 export const fundingInputAfterRequestAtom = atom<
-  | (ContributionCreateInput & { user: UserMeFragment; lightningPreImageHex?: string; onChainPreImageHex?: string })
+  | ({ user?: UserMeFragment | null; lightningPreImageHex?: string; onChainPreImageHex?: string } & Record<
+      string,
+      unknown
+    >)
   | null
 >(null)
 
 export const setFundingInputAfterRequestAtom = atom(
   null,
-  (get, set, input: ContributionCreateInput & { lightningPreImageHex?: string; onChainPreImageHex?: string }) => {
+  (get, set, input: Record<string, unknown> & { lightningPreImageHex?: string; onChainPreImageHex?: string }) => {
     const user = get(authUserAtom)
     set(fundingInputAfterRequestAtom, { ...input, user })
   },
@@ -236,13 +332,52 @@ export const fiatOnlyPaymentsInputAtom = atom<ContributionPaymentsInput>((get) =
   }
 
   return {
-    fiat: {
-      create: true,
-      stripe: {
-        returnUrl: `${ORIGIN}/project/${fundingProject?.name}/funding/success`,
+      fiat: {
+        create: true,
+        stripe: {
+          returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', fundingProject?.name)}`,
+        },
       },
-    },
   }
+})
+
+const recurringPaymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
+  const fundingProject = get(fundingProjectAtom)
+  const intendedPaymentMethod = get(intendedPaymentMethodAtom)
+  const stripeEnabled = Boolean(fundingProject.paymentMethods?.fiat?.stripe)
+
+  if (intendedPaymentMethod === PaymentMethods.fiatSwap) {
+    if (stripeEnabled) {
+      return get(fiatOnlyPaymentsInputAtom)
+    }
+
+    const userAccountKeys = get(userAccountKeysAtom)
+    const claimPublicKey = userAccountKeys?.rskKeyPair?.publicKey || ''
+    const claimAddress = userAccountKeys?.rskKeyPair?.address || ''
+    const usePrism = isPrismEnabled(fundingProject)
+
+    return {
+      fiatToLightningSwap: {
+        create: true,
+        banxa: {
+          fiatCurrency: 'USD',
+          returnUrl: `${ORIGIN}${getPath('fundingCallback', fundingProject.name)}`,
+        },
+      },
+      ...(usePrism && {
+        lightningToRskSwap: {
+          create: true,
+          boltz: {
+            claimPublicKey,
+            claimAddress,
+            preimageHash: '',
+          },
+        },
+      }),
+    }
+  }
+
+  return get(paymentsInputAtom)
 })
 
 const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
@@ -262,7 +397,7 @@ const paymentsInputAtom = atom<ContributionPaymentsInput>((get) => {
       paymentsInput.fiat = {
         create: true,
         stripe: {
-          returnUrl: `${ORIGIN}/project/${fundingProject?.name}/funding/success`,
+          returnUrl: `${ORIGIN}${getPath('fundingAwaitingSuccess', fundingProject?.name)}`,
         },
       }
     }

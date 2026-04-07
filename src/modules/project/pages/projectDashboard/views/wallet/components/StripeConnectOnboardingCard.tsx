@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { useEffect } from 'react'
 import { PiClock, PiWarningFill } from 'react-icons/pi'
 
-import { useStripeConnectStatus, type StripeStatusType } from '@/modules/project/hooks/useStripeConnectStatus.ts'
+import { type StripeStatusType, useStripeConnectStatus } from '@/modules/project/hooks/useStripeConnectStatus.ts'
 import { CardLayout } from '@/shared/components/layouts/CardLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { useCreateStripeConnectAccountMutation, useRefreshStripeConnectOnboardingLinkMutation } from '@/types'
@@ -161,7 +161,7 @@ function StripeCompactContent({
     <VStack w="full" alignItems="start" spacing={4}>
       <HStack w="full" justifyContent="space-between" alignItems="start">
         <Body size="lg" medium>
-          {t('Receive in your bank account')}
+          {t('Accept fiat and recurring contributions')}
         </Body>
         <StripeStatusIndicator statusType={statusType} />
       </HStack>
@@ -173,7 +173,7 @@ function StripeCompactContent({
       {isTiaProject && (
         <Body size="md" light>
           {t(
-            'Contributions will be charged an additional processing fee of 3.5% + 30c per contribution. Payout time is dependent on card issuers.',
+            'Contributions are subject to a processing fee of 3.5% + $0.30 per payment. Fees may vary depending on card issuer and location.',
           )}
         </Body>
       )}
@@ -443,7 +443,9 @@ export const useStripeConnectOnboardingState = ({
     actionLabel: getCardActionLabel(isTiaProject, isReady, statusType, hasAccount),
     minimalActionLabel: getMinimalActionLabel(statusType, hasAccount, isReady),
     compactIntroCopy: isTiaProject
-      ? t('Configure Stripe Connect to receive fiat payments directly in your bank account.')
+      ? t(
+          'Connect Stripe to receive fiat payments directly in your bank account and allow contributors to set up recurring, auto-renewing support.',
+        )
       : t('Stripe Connect is only available for take-it-all projects.'),
     minimalStatusMessage: getMinimalStatusMessage(statusType, disabledReasonLabel),
   }

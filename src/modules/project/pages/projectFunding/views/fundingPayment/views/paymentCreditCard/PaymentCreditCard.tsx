@@ -13,6 +13,7 @@ import { useListenFundingContributionSuccess } from '@/modules/project/funding/h
 import { useResetContribution } from '@/modules/project/funding/hooks/useResetContribution.ts'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
 import { fundingInputAfterRequestAtom } from '@/modules/project/funding/state/fundingContributionCreateInputAtom.ts'
+import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
 import { SkeletonLayout } from '@/shared/components/layouts/SkeletonLayout.tsx'
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H1 } from '@/shared/components/typography/Heading.tsx'
@@ -23,7 +24,11 @@ import { useNotification } from '@/utils/index.ts'
 import { FundingDisclaimer } from '../../components/FundingDisclaimer.tsx'
 import { ReachOutForHelpButton } from '../../components/ReachOutForHelpButton.tsx'
 import { fiatCheckoutMethods, fiatPaymentMethodAtom, hasFiatPaymentMethodAtom } from '../../state/paymentMethodAtom.ts'
-import { fiatSwapStatusAtom } from '../paymentFiatSwap/atom/fiatSwapStatusAtom.ts'
+import {
+  fiatFailureReasonAtom,
+  FiatSwapStatus,
+  fiatSwapStatusAtom,
+} from '../paymentFiatSwap/atom/fiatSwapStatusAtom.ts'
 import { BitcoinPurchaseNotice } from '../paymentFiatSwap/components/BitcoinPurchaseNotice.tsx'
 import { FiatSwapAwaitingPayment } from '../paymentFiatSwap/components/FiatSwapAwaitingPayment.tsx'
 import { FiatSwapFailed } from '../paymentFiatSwap/components/FiatSwapFailed.tsx'
@@ -55,16 +60,33 @@ export const PaymentCreditCard = ({ provider, banxaCheckoutMode = 'creditCard' }
 
   const fundingInputAfterRequest = useAtomValue(fundingInputAfterRequestAtom)
   const fundingContribution = useAtomValue(fundingContributionAtom)
+  const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
   const contributionUUID = fundingContribution?.uuid
+  const existingFiatSwapCheckoutUrl = fundingPaymentDetails.fiatToLightningSwap?.checkoutUrl
+  const hasExistingFiatSwapFlow = Boolean(
+    fundingContribution?.id || existingFiatSwapCheckoutUrl || fundingPaymentDetails.lightningToRskSwap?.paymentId,
+  )
+  const existingCheckoutAutoOpenKey = useMemo(() => {
+    if (!existingFiatSwapCheckoutUrl) {
+      return null
+    }
+
+    return contributionUUID
+      ? `banxa-checkout-opened:${contributionUUID}`
+      : `banxa-checkout-opened:${existingFiatSwapCheckoutUrl}`
+  }, [contributionUUID, existingFiatSwapCheckoutUrl])
 
   const fiatSwapStatus = useAtomValue(fiatSwapStatusAtom)
   const setFiatPaymentMethod = useSetAtom(fiatPaymentMethodAtom)
+  const setFiatSwapStatus = useSetAtom(fiatSwapStatusAtom)
+  const setFiatFailureReason = useSetAtom(fiatFailureReasonAtom)
   const hasFiatPaymentMethod = useAtomValue(hasFiatPaymentMethodAtom)
 
   const [selectedCurrency, setSelectedCurrency] = useState('')
 
   const hasContribution = Boolean(fundingContribution?.id)
   const hasRequestedContribution = useRef(false)
+  const hasOpenedExistingCheckout = useRef(false)
 
   const isStripeProvider = provider === 'stripe'
   const isBanxaApplePay = !isStripeProvider && banxaCheckoutMode === 'applePay'
@@ -82,10 +104,14 @@ export const PaymentCreditCard = ({ provider, banxaCheckoutMode = 'creditCard' }
   useFiatSwapPaymentSubscription({ contributionUUID: isStripeProvider ? undefined : contributionUUID })
 
   useEffect(() => {
+    if (hasExistingFiatSwapFlow) {
+      return
+    }
+
     resetContribution()
     hasRequestedContribution.current = false
     setSelectedCurrency('')
-  }, [provider, banxaCheckoutMode, resetContribution])
+  }, [provider, banxaCheckoutMode, resetContribution, hasExistingFiatSwapFlow])
 
   useEffect(() => {
     if (isStripeProvider) {
@@ -107,7 +133,7 @@ export const PaymentCreditCard = ({ provider, banxaCheckoutMode = 'creditCard' }
   }, [hasFiatPaymentMethod, project.name, navigate, provider])
 
   useEffect(() => {
-    if (hasContribution) {
+    if (hasExistingFiatSwapFlow) {
       return
     }
 
@@ -117,27 +143,16 @@ export const PaymentCreditCard = ({ provider, banxaCheckoutMode = 'creditCard' }
 
     if (isFundingInputAmountValid.valid && isFundingUserInfoValid.valid && !hasRequestedContribution.current) {
       hasRequestedContribution.current = true
-      requestFiatOnlyFundingFromContext((data) => {
-        const contributionId = data.contributionCreate.contribution.uuid
-
-        if (contributionId && data.contributionCreate.contribution.isSubscription) {
-          navigate(
-            {
-              pathname: getPath('fundingSubscription', project.name),
-              search: `?transactionId=${contributionId}`,
-            },
-            { replace: true },
-          )
-        }
-      })
+      requestFiatOnlyFundingFromContext()
     }
     // NOTE: adding request funding callbacks to dependencies causes rerender loops, do not add until resolved
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isFundingInputAmountValid,
     isFundingUserInfoValid,
     navigate,
     project.name,
-    hasContribution,
+    hasExistingFiatSwapFlow,
     hasFiatPaymentMethod,
     isStripeProvider,
   ])
@@ -148,8 +163,38 @@ export const PaymentCreditCard = ({ provider, banxaCheckoutMode = 'creditCard' }
     }
   }, [requestFundingOptions.error, project.name, navigate])
 
+  useEffect(() => {
+    if (
+      isStripeProvider ||
+      !existingFiatSwapCheckoutUrl ||
+      fiatSwapStatus !== FiatSwapStatus.initial ||
+      hasOpenedExistingCheckout.current ||
+      !existingCheckoutAutoOpenKey
+    ) {
+      return
+    }
+
+    if (window.sessionStorage.getItem(existingCheckoutAutoOpenKey)) {
+      hasOpenedExistingCheckout.current = true
+      return
+    }
+
+    hasOpenedExistingCheckout.current = true
+    window.sessionStorage.setItem(existingCheckoutAutoOpenKey, '1')
+    window.open(existingFiatSwapCheckoutUrl, '_blank')
+    setFiatSwapStatus(FiatSwapStatus.pending)
+    setFiatFailureReason(null)
+  }, [
+    existingCheckoutAutoOpenKey,
+    existingFiatSwapCheckoutUrl,
+    fiatSwapStatus,
+    isStripeProvider,
+    setFiatFailureReason,
+    setFiatSwapStatus,
+  ])
+
   const renderContent = () => {
-    if (!hasContribution) {
+    if (!hasContribution && !hasExistingFiatSwapFlow) {
       return <PaymentCreditCardLoading />
     }
 
@@ -167,7 +212,11 @@ export const PaymentCreditCard = ({ provider, banxaCheckoutMode = 'creditCard' }
 
     return (
       <FiatSwapStatusView
-        status={fiatSwapStatus}
+        status={
+          existingFiatSwapCheckoutUrl && fiatSwapStatus === FiatSwapStatus.initial
+            ? FiatSwapStatus.pending
+            : fiatSwapStatus
+        }
         renderInitial={() => (
           <FiatPaymentForm
             isApplePay={isBanxaApplePay}

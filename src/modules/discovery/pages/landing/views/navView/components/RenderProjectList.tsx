@@ -1,5 +1,5 @@
 import { GridItem, SimpleGrid } from '@chakra-ui/react'
-import { MutableRefObject } from 'react'
+import { MutableRefObject, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ScrollInvoke } from '@/helpers/ScrollInvoke.tsx'
@@ -26,6 +26,7 @@ export const RenderProjectList = ({
   projectRows,
   trendingAmountLabel,
   hideTrendingBelowUsd,
+  emptyState,
 }: {
   projects: (ProjectForLandingPageFragment & {
     contributionSummary?: Pick<ContributionsSummary, 'contributionsTotalUsd' | 'contributionsTotal'>
@@ -37,8 +38,14 @@ export const RenderProjectList = ({
   projectRows?: GlobalProjectLeaderboardRow[]
   trendingAmountLabel?: string
   hideTrendingBelowUsd?: number
+  emptyState?: ReactNode
 }) => {
   const isMobile = useMobileMode()
+  const hasNoResults = !loading && !isLoadingMore?.current && !projects.length && !projectRows?.length
+
+  if (hasNoResults && emptyState) {
+    return <>{emptyState}</>
+  }
 
   const renderBody = () => {
     if (loading) {

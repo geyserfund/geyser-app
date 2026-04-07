@@ -19,7 +19,7 @@ import {
   initialRewardsLoadingAtom,
   rewardsAtom,
 } from '../state/rewardsAtom'
-import { hasSubscriptionsAtom, subscriptionsAtom } from '../state/subscriptionAtom'
+import { hasSubscriptionsAtom, recurringContributionSupportAtom, subscriptionsAtom } from '../state/subscriptionAtom'
 import { walletAtom, walletConnectionDetailsAtom, walletLoadingAtom } from '../state/walletAtom'
 
 export const useProjectAtom = () => {
@@ -64,6 +64,12 @@ export const useSubscriptionsAtom = () => {
   const hasSubscriptions = useAtomValue(hasSubscriptionsAtom)
 
   return { subscriptions, hasSubscriptions }
+}
+
+export const useRecurringContributionSupportAtom = () => {
+  const recurringContributionSupport = useAtomValue(recurringContributionSupportAtom)
+
+  return { recurringContributionSupport }
 }
 
 export const usePostsAtom = () => {

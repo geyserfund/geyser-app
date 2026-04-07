@@ -5,10 +5,13 @@ import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'
 import { createUseStyles } from 'react-jss'
+import { useLocation, useNavigate } from 'react-router'
 
 import { AppTheme } from '@/context'
+import { useFundingFormAtom } from '@/modules/project/funding/hooks/useFundingFormAtom.ts'
 import { useListenFundingContributionSuccess } from '@/modules/project/funding/hooks/useListenFundingContributionSuccess'
 import { fundingPaymentDetailsAtom } from '@/modules/project/funding/state/fundingPaymentAtom.ts'
+import { getPath } from '@/shared/constants'
 import { Body } from '@/shared/components/typography'
 import { VITE_APP_STRIPE_API_KEY } from '@/shared/constants/config/env'
 
@@ -33,11 +36,14 @@ const useStyles = createUseStyles(({ colors }: AppTheme) => ({
 
 export const PaymentStripe = () => {
   const classes = useStyles()
+  const navigate = useNavigate()
+  const location = useLocation()
 
   useListenFundingContributionSuccess()
 
   const [isCompleted, setIsCompleted] = useState(false)
 
+  const { project } = useFundingFormAtom()
   const fundingPaymentDetails = useAtomValue(fundingPaymentDetailsAtom)
   const stripeAccountId = fundingPaymentDetails.fiat?.stripeAccountId || ''
   const stripeClientSecret = useMemo(() => {
@@ -54,7 +60,8 @@ export const PaymentStripe = () => {
 
   const handleStripeComplete = useCallback(() => {
     setIsCompleted(true)
-  }, [])
+    navigate({ pathname: getPath('fundingAwaitingSuccess', project.name), search: location.search }, { replace: true })
+  }, [location.search, navigate, project.name])
 
   const stripeOptions = useMemo(() => {
     if (!stripeClientSecret) return undefined

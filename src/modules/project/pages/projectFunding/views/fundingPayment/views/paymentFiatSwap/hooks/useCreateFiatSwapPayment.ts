@@ -5,6 +5,7 @@ import { userAccountKeyPairAtom, userAccountKeysAtom } from '@/modules/auth/stat
 import {
   generateAccountKeys,
   generatePreImageHash,
+  hasValidRskAccountKeys,
 } from '@/modules/project/forms/accountPassword/keyGenerationHelper.ts'
 import { useGenerateTransactionDataForClaimingRBTCToContract } from '@/modules/project/funding/hooks/useFundingAPI.ts'
 import { fundingContributionAtom } from '@/modules/project/funding/state/fundingContributionAtom.ts'
@@ -53,7 +54,7 @@ export const useCreateFiatSwapPayment = () => {
       privateKey: userAccountKeyPair?.privateKey || '',
     }
 
-    if (existingAccountKeys.publicKey && existingAccountKeys.address && existingAccountKeys.privateKey) {
+    if (hasValidRskAccountKeys(existingAccountKeys)) {
       return existingAccountKeys
     }
 
@@ -67,7 +68,7 @@ export const useCreateFiatSwapPayment = () => {
   }
 
   const assertAccountKeysAreAvailable = (accountKeys: { publicKey: string; address: string; privateKey: string }) => {
-    if (accountKeys.publicKey && accountKeys.address && accountKeys.privateKey) {
+    if (hasValidRskAccountKeys(accountKeys)) {
       return
     }
 

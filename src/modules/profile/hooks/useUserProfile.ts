@@ -1,5 +1,6 @@
+import { t } from 'i18next'
 import { useAtom } from 'jotai'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { toInt, useNotification } from '@/utils'
 
@@ -15,33 +16,67 @@ export const useUserProfile = ({ userId, heroId }: { userId?: string; heroId?: s
 
   const [isLoading, setIsLoading] = useAtom(userProfileLoadingAtom)
   const { user: currentAppUser } = useAuthContext()
+  const shouldFetch = Boolean(userId || heroId)
+  const requestedUserId = userId ? toInt(userId) : undefined
+  const hasShownError = useRef(false)
 
-  const whereVariable = userId ? { id: toInt(userId) } : { heroId }
+  const whereVariable = userId ? { id: requestedUserId } : { heroId }
 
   useEffect(() => {
+    const isSameProfile =
+      (requestedUserId !== undefined && userProfile?.id === requestedUserId) ||
+      (Boolean(heroId) && userProfile?.heroId === heroId)
+
+    if (!shouldFetch) {
+      setIsLoading(false)
+      return
+    }
+
+    if (isSameProfile) {
+      setIsLoading(false)
+      return
+    }
+
     setIsLoading(true)
     setUserProfile(defaultUser)
-  }, [userId, heroId, setIsLoading, setUserProfile])
+  }, [heroId, requestedUserId, setIsLoading, setUserProfile, shouldFetch, userProfile?.heroId, userProfile?.id])
 
-  const { error } = useUserForProfilePageQuery({
+  useEffect(() => {
+    hasShownError.current = false
+  }, [heroId, requestedUserId])
+
+  const { data, error, loading } = useUserForProfilePageQuery({
     variables: {
       where: whereVariable,
     },
-    skip: !userId && !heroId,
-    onCompleted(data) {
-      if (data.user) {
-        setUserProfile(data.user)
-        setIsLoading(false)
-      }
-    },
-    onError() {
-      setIsLoading(false)
-      toast.error({
-        title: 'Error fetching user profile',
-        description: 'Please refresh the page and try again.',
-      })
-    },
+    skip: !shouldFetch,
   })
+
+  useEffect(() => {
+    if (!shouldFetch) {
+      setIsLoading(false)
+      return
+    }
+
+    if (data?.user) {
+      setUserProfile(data.user)
+    }
+
+    if (!loading) {
+      setIsLoading(false)
+    }
+  }, [data, loading, setIsLoading, setUserProfile, shouldFetch])
+
+  useEffect(() => {
+    if (!error || hasShownError.current) return
+
+    hasShownError.current = true
+    setIsLoading(false)
+    toast.error({
+      title: t('Error fetching user profile'),
+      description: t('Please refresh the page and try again.'),
+    })
+  }, [error, setIsLoading, toast])
 
   useEffect(() => {
     if (isViewingOwnProfile) {
