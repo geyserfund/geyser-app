@@ -37,7 +37,7 @@ export const DiscoveryBottomNav = () => {
   const bottomNavLabelFontSize = 'sm'
   const bottomNavLabelFontWeight = 600
   const donateItems = getDonateNavDropdownItems(t)
-  const fundraiseItems = getFundraiseNavDropdownItems(t)
+  const fundraiseItems = getFundraiseNavDropdownItems(t, 'mobile')
 
   const bottomNavItems: BottomNavItem[] = [
     {
@@ -52,7 +52,9 @@ export const DiscoveryBottomNav = () => {
     {
       label: t('Fundraise'),
       key: BottomNavItemKey.fundraise,
-      isActive: matchesRoute(location.pathname, getPath('discoveryCreator')),
+      isActive:
+        matchesRoute(location.pathname, getPath('discoveryCreator')) ||
+        matchesRoute(location.pathname, getPath('launchStart')),
     },
     {
       label: t('Earn'),

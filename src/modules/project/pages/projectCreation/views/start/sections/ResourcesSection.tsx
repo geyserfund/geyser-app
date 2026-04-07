@@ -1,6 +1,5 @@
-import { Button, Link as ChakraLink, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
+import { Link as ChakraLink, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useMemo } from 'react'
 import { PiArrowUpRight } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -21,17 +20,14 @@ import { getResources } from '../utils/startPageContent.ts'
 export const ResourcesSection = () => {
   const hoverBorder = useColorModeValue('primary1.3', 'primary1.7')
 
-  const resources = useMemo(() => {
-    const content = getResources(t)
-
-    return [
-      { ...content[0], href: GuideUrl },
-      { ...content[1], href: GuideStepByStepUrl },
-      { ...content[2], href: GeyserConfigureWalletGuideUrl },
-      { ...content[3], href: GeyserRewardsGuideLink },
-      { ...content[4], href: FAQUrl },
-    ]
-  }, [])
+  const content = getResources(t)
+  const resources = [
+    { ...content[0], href: GuideUrl },
+    { ...content[1], href: GuideStepByStepUrl },
+    { ...content[2], href: GeyserConfigureWalletGuideUrl },
+    { ...content[3], href: GeyserRewardsGuideLink },
+    { ...content[4], href: FAQUrl },
+  ]
 
   return (
     <StartPageSectionShell id="resources" sectionBg={useColorModeValue('neutral1.1', 'neutral1.2')}>
@@ -52,22 +48,18 @@ export const ResourcesSection = () => {
           >
             <VStack alignItems="flex-start" spacing={3} height="100%">
               <H3 size="md" bold>
-                {resource.title}
+                <ChakraLink
+                  href={resource.href}
+                  isExternal
+                  display="inline-flex"
+                  alignItems="center"
+                  gap={2}
+                  _hover={{ textDecoration: 'none' }}
+                >
+                  {resource.title}
+                  <PiArrowUpRight aria-hidden />
+                </ChakraLink>
               </H3>
-              <Body size="sm" light>
-                {resource.description}
-              </Body>
-              <Button
-                as={ChakraLink}
-                href={resource.href}
-                isExternal
-                variant="link"
-                colorScheme="primary1"
-                rightIcon={<PiArrowUpRight />}
-                padding={0}
-              >
-                {t('Read guide')}
-              </Button>
             </VStack>
           </PlaybookCard>
         ))}

@@ -34,27 +34,37 @@ export const getDonateNavDropdownItems = (t: TFunction): NavDropdownMenuItem[] =
 }
 
 /** Returns dropdown items for the new Fundraise navigation menu. */
-export const getFundraiseNavDropdownItems = (t: TFunction): NavDropdownMenuItem[] => {
-  return [
-    {
-      title: t('Who Geyser is for'),
-      description: t('Look at the community of creators having impact'),
-      to: getPath('discoveryCreator'),
-    },
-    {
-      title: t('Start your project'),
-      to: getPath('launchProjectDetails'),
-      emphasis: 'cta',
-      trailingIcon: PiRocketLaunch,
-    },
-    {
-      title: t('How to launch on Geyser'),
-      description: t('Follow the guided start flow to set up your project.'),
-      to: getPath('launchStart'),
-    },
-    {
-      title: t('Look at our Guides'),
-      href: GuideUrl,
-    },
-  ]
+export const getFundraiseNavDropdownItems = (
+  t: TFunction,
+  mode: 'desktop' | 'mobile' = 'desktop',
+): NavDropdownMenuItem[] => {
+  const whoGeyserIsForItem: NavDropdownMenuItem = {
+    title: t('Who Geyser is for'),
+    description: t('Look at the community of creators having impact'),
+    to: getPath('discoveryCreator'),
+  }
+
+  const startYourProjectItem: NavDropdownMenuItem = {
+    title: t('Start your project'),
+    to: getPath('launchProjectDetails'),
+    emphasis: 'cta',
+    trailingIcon: PiRocketLaunch,
+  }
+
+  const howToLaunchItem: NavDropdownMenuItem = {
+    title: t('How to launch on Geyser'),
+    description: t('Follow the guided start flow to set up your project.'),
+    to: getPath('launchStart'),
+  }
+
+  const lookAtGuidesItem: NavDropdownMenuItem = {
+    title: t('Look at our Guides'),
+    href: GuideUrl,
+  }
+
+  if (mode === 'mobile') {
+    return [whoGeyserIsForItem, howToLaunchItem, lookAtGuidesItem, startYourProjectItem]
+  }
+
+  return [whoGeyserIsForItem, startYourProjectItem, howToLaunchItem, lookAtGuidesItem]
 }
