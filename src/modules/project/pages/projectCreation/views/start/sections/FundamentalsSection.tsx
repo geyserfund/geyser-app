@@ -15,8 +15,8 @@ type FundamentalIcon = ComponentType<{ size?: string | number }>
 /** Intro fundamentals section that frames the page in simple terms. */
 export const FundamentalsSection = () => {
   const cardBorderColor = useColorModeValue('neutral1.4', 'neutral1.5')
-  const iconBackground = 'primary1Alpha.2'
-  const iconBorder = 'primary1Alpha.5'
+  const iconBackground = 'primaryAlpha.2'
+  const iconBorder = 'primaryAlpha.5'
   const iconColor = useColorModeValue('primary1.11', 'primary1.8')
 
   const cards = useMemo(

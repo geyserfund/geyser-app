@@ -1,6 +1,5 @@
 import { Box, Button, HStack, Image, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
-import { useMemo } from 'react'
 import { PiRocketLaunch } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
@@ -15,23 +14,20 @@ export const HeroSection = () => {
 
   const heroSurface = useColorModeValue('white', 'neutral1.2')
 
-  const highlightCards = useMemo(
-    () => [
-      {
-        title: t('Bitcoin is not required to start'),
-        imageSrc: 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage/launchWithoutBitcoin.png',
-      },
-      {
-        title: t('5 minutes to launch'),
-        imageSrc: 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage/launchWithin5Minutes.png',
-      },
-      {
-        title: t('Accessible in 120+ countries'),
-        imageSrc: 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage/launchFromAnywhere.png',
-      },
-    ],
-    [],
-  )
+  const highlightCards = [
+    {
+      title: t('Bitcoin is not required to start'),
+      imageSrc: 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage/launchStartNow.png',
+    },
+    {
+      title: t('5 minutes to launch'),
+      imageSrc: 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage/launchTimer.png',
+    },
+    {
+      title: t('Accessible in 120+ countries'),
+      imageSrc: 'https://storage.googleapis.com/geyser-projects-media/app/creatorPage/launchWorldWide.png',
+    },
+  ]
 
   const onExploreToolsClick = () => {
     const section = document.getElementById('creator-tools')

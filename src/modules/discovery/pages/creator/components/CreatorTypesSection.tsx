@@ -146,12 +146,10 @@ const ProjectCard = ({ project, categoryColor, panelBorderColor, index }: Projec
                   {project.subcategory}
                 </Body>
                 <Body fontSize="14px" color="white" lineHeight={1.3} noOfLines={1}>
-                  <Box as="span" fontWeight={600}>
-                    {project.projectName}
-                  </Box>{' '}
-                  <Box as="span" fontWeight={500}>
-                    · {t('by {{creator}}', { creator: project.creatorName })}
-                  </Box>
+                  {t('{{projectName}} · by {{creator}}', {
+                    projectName: project.projectName,
+                    creator: project.creatorName,
+                  })}
                 </Body>
               </VStack>
             </Box>

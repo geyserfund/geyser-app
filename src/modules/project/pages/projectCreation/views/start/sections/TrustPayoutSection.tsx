@@ -16,8 +16,8 @@ type TrustIcon = ComponentType<{ size?: string | number }>
 export const TrustPayoutSection = () => {
   const sectionBg = useColorModeValue('neutral1.1', 'neutral1.2')
   const cardBorderColor = useColorModeValue('neutral1.4', 'neutral1.5')
-  const iconBackground = 'primary1Alpha.2'
-  const iconBorder = 'primary1Alpha.5'
+  const iconBackground = 'primaryAlpha.2'
+  const iconBorder = 'primaryAlpha.5'
   const iconColor = useColorModeValue('primary1.11', 'primary1.8')
 
   const cards = useMemo(

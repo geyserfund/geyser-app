@@ -12,8 +12,8 @@ import { StartPageSectionShell } from '../components/StartPageSectionShell.tsx'
 
 /** Fundraiser type section for choosing between open and goal-based launch models. */
 export const FundraiserTypeSection = () => {
-  const iconBackground = 'primary1Alpha.2'
-  const iconBorder = 'primary1Alpha.5'
+  const iconBackground = 'primaryAlpha.2'
+  const iconBorder = 'primaryAlpha.5'
   const iconColor = 'primary1.9'
   const tagBackground = 'neutral1.2'
   const tagBorder = 'neutral1.6'
