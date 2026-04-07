@@ -12,7 +12,7 @@ import { useMobileMode } from '@/utils/index.ts'
 import { isProjectFundingRoutesAtom } from '../platformNavBarAtom.ts'
 import { CreateProjectButton } from './CreateProjectButton'
 
-export const ProjectSelectMenu = () => {
+export const ProjectSelectMenu = ({ transparentMode = false }: { transparentMode?: boolean }) => {
   const { t } = useTranslation()
   const isMobile = useMobileMode()
 
@@ -22,6 +22,9 @@ export const ProjectSelectMenu = () => {
   const isProjectCreationRoute = useAtomValue(isProjectCreationRouteAtom)
 
   const myProjectActivityDot = useAtomValue(myProjectsActivityDotAtom)
+  const transparentBackground = 'whiteAlpha.220'
+  const transparentBorderColor = 'whiteAlpha.500'
+  const transparentHoverBackground = 'whiteAlpha.320'
 
   // For funding flow and creation flow, we don't want to show the project select menu
   if (isProjectFundingRoute || isProjectCreationRoute) {
@@ -43,6 +46,11 @@ export const ProjectSelectMenu = () => {
       size={{ base: 'md', lg: 'lg' }}
       variant="outline"
       colorScheme="neutral1"
+      color={transparentMode ? 'white' : undefined}
+      bg={transparentMode ? transparentBackground : undefined}
+      borderColor={transparentMode ? transparentBorderColor : undefined}
+      _hover={transparentMode ? { backgroundColor: transparentHoverBackground } : undefined}
+      _active={transparentMode ? { backgroundColor: transparentHoverBackground } : undefined}
       borderRadius={{ base: '8px', lg: '10px' }}
       position="relative"
     >

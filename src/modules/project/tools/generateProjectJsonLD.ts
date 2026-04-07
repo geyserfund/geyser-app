@@ -1,15 +1,47 @@
 import { ProjectPageBodyFragment, ProjectPostViewFragment, ProjectRewardFragment } from '@/types/generated/graphql.ts'
 import { toInt } from '@/utils/index.ts'
 
+export const getProjectUrl = (projectName: string): string => {
+  return `https://geyser.fund/project/${projectName}`
+}
+
+export const getProjectPostViewUrl = (projectName: string, postId: string | number): string => {
+  return `https://geyser.fund/project/${projectName}/posts/view/${postId}`
+}
+
 export const buildProjectJsonLd = (project: ProjectPageBodyFragment, rewards: ProjectRewardFragment[]): string => {
+  const projectUrl = getProjectUrl(project.name)
+  const normalizedCategory = String(project.category || '').toUpperCase()
+  const normalizedSubCategory = String(project.subCategory || '').toUpperCase()
+  const isHumanitarianProject =
+    normalizedCategory === 'CAUSE' ||
+    normalizedSubCategory === 'HUMANITARIAN' ||
+    normalizedSubCategory === 'FUNDRAISER' ||
+    normalizedSubCategory === 'MEDICAL'
+  const keywords = [
+    'bitcoin crowdfunding',
+    'bitcoin fundraising',
+    'bitcoin project ideas',
+    'upcoming bitcoin projects',
+    ...(isHumanitarianProject ? ['bitcoin humanitarian causes', 'humanitarian fundraiser'] : []),
+  ]
   const schema: any = {
     '@context': 'https://schema.org',
     '@type': 'CrowdfundingCampaign',
     name: project.title || project.name,
-    url: `https://geyser.fund/project/${project.name}`,
+    url: projectUrl,
     description: project.shortDescription || project.description?.slice(0, 200),
     startDate: project.launchedAt || project.createdAt,
     image: project.thumbnailImage || undefined,
+    inLanguage: 'en',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': projectUrl,
+    },
+    about: isHumanitarianProject
+      ? ['Bitcoin adoption', 'Crowdfunding', 'Humanitarian support']
+      : ['Bitcoin adoption', 'Crowdfunding', 'Early-stage project launches'],
+    keywords: keywords.join(', '),
     creator: {
       '@type': 'Person',
       name: project.owners[0]?.user?.username || 'Project Creator',
@@ -48,6 +80,7 @@ export const buildProjectJsonLd = (project: ProjectPageBodyFragment, rewards: Pr
 
 export const generatePostJsonLd = (post: ProjectPostViewFragment, project: ProjectPageBodyFragment): string => {
   const projectOwner = project.owners?.[0]?.user
+  const postUrl = getProjectPostViewUrl(project.name, post.id)
 
   const schema = {
     '@context': 'https://schema.org',
@@ -55,7 +88,10 @@ export const generatePostJsonLd = (post: ProjectPostViewFragment, project: Proje
     headline: post.title,
     description: post.description,
     image: post.image || project.thumbnailImage || '',
+    inLanguage: 'en',
     datePublished: post.createdAt ? new Date(toInt(post.createdAt)).toISOString() : undefined,
+    about: ['Bitcoin project update', 'Crowdfunding progress'],
+    keywords: 'bitcoin project updates, bitcoin crowdfunding, creator updates',
     author: projectOwner
       ? {
           '@type': 'Person',
@@ -79,9 +115,9 @@ export const generatePostJsonLd = (post: ProjectPostViewFragment, project: Proje
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://geyser.fund/project/${project.name}/posts/view/${post.id}`,
+      '@id': postUrl,
     },
-    url: `https://geyser.fund/project/${project.name}/posts/view/${post.id}`,
+    url: postUrl,
   }
 
   return JSON.stringify(schema)

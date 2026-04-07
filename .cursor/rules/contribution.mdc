@@ -26,6 +26,8 @@ You are an expert in TypeScript, Node.js, React, Vite, Apollo Graphql Client, Re
 - Wrap all user-facing text in t() function calls, even for button labels and titles
 - When displaying app values like currencies or numbers, place them outside the t() function
 - Always wrap the actual raw texts, do not wrap variables.
+- For metadata lines with dynamic pieces (for example project name + creator), keep the entire sentence in a single `t()` call and interpolate values instead of splitting copy across JSX nodes.
+- Do not memoize translated arrays/objects with `useMemo([])`; build inline or include active language in dependencies.
 
 
 ## Dark/Light Mode
@@ -72,9 +74,11 @@ Syntax and Formatting
 - Favour using the components props to pass in style configuration to chakra components.
 - Go through [theme.ts](mdc:src/config/theme/theme.ts) and all the theme component it exports to know more about the variants. Specially when building something based off a wireframe or design image.
 - For icon components, use "as" prop to specify the icon component: <Icon as={IconComponent} />
-- For all icons only use the 'react-icons/pi' package.
+- Prefer the `react-icons/pi` package for new icons.
+- Existing non-`pi` icon usage is allowed and should only be migrated when touching that area for other reasons.
 - Nest components in a consistent way: HStack/VStack containing related elements, properly grouped.
 - Only use colors from our color palette, defined in [colors.ts](mdc:src/shared/styles/colors.ts).
+- Validate token names against [colors.ts](mdc:src/shared/styles/colors.ts) and avoid undefined aliases (for example `primary1Alpha.*`); use defined tokens such as `primaryAlpha.*`.
 - To check for mobile mode use useMobileMode from [useMobileMode.ts](mdc:src/utils/info/useMobileMode.ts)](mdc:src/utils/info/useMobileMode.ts)
 
 

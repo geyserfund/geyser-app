@@ -1,7 +1,7 @@
 import { Box, HStack, IconButton, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useAtomValue } from 'jotai'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { PiX } from 'react-icons/pi'
 import { Location, useLocation, useNavigate } from 'react-router'
 
@@ -10,6 +10,8 @@ import { NotificationPromptModal } from '@/modules/auth/components/NotificationP
 import { useEmailPromptModal } from '@/modules/auth/hooks/useEmailPromptModal'
 import { useNotificationPromptModal } from '@/modules/auth/hooks/useNotificationPromptModal'
 import { dimensions } from '@/shared/constants/components/dimensions.ts'
+import { ID } from '@/shared/constants/components/id.ts'
+import { getPath } from '@/shared/constants/index.ts'
 import { standardPadding } from '@/shared/styles/index.ts'
 import { useMobileMode } from '@/utils/index.ts'
 
@@ -37,6 +39,7 @@ import { ProfileNav } from './profileNav/ProfileNav'
 
 /** Renders the fixed top platform navigation shared across platform pages. */
 export const PlatformNavBar = () => {
+  const creatorNavScrollThreshold = 20
   const { isLoggedIn, isUserAProjectCreator, logout, queryCurrentUser } = useAuthContext()
   const { loginIsOpen, loginOnClose, loginModalAdditionalProps } = useAuthModal()
   const defaultNavShadow = useColorModeValue('0 2px 12px rgba(15, 23, 42, 0.08)', '0 2px 14px rgba(0, 0, 0, 0.28)')
@@ -45,6 +48,11 @@ export const PlatformNavBar = () => {
   const landingButtonBorder = useColorModeValue('black', 'neutral1.6')
   const landingButtonHover = useColorModeValue('gray.50', 'neutral1.2')
   const landingButtonActive = useColorModeValue('gray.100', 'neutral1.2')
+  const transparentButtonSurface = 'whiteAlpha.220'
+  const transparentButtonForeground = 'white'
+  const transparentButtonBorder = 'whiteAlpha.500'
+  const transparentButtonHover = 'whiteAlpha.320'
+  const transparentButtonActive = 'whiteAlpha.420'
   const landingNavMaxWidth = `${dimensions.maxWidth + 24 * 2}px`
 
   const isMobileMode = useMobileMode()
@@ -72,12 +80,49 @@ export const PlatformNavBar = () => {
     }
   } = useLocation()
   const { state } = location
+  const [creatorNavScrolled, setCreatorNavScrolled] = useState(false)
 
   const {
     isOpen: isLoginAlertModalOpen,
     onOpen: onLoginAlertModalOpen,
     onClose: onLoginAlertModalClose,
   } = useDisclosure()
+
+  const creatorRoute = getPath('discoveryCreator')
+  const launchStartRoute = getPath('launchStart')
+  const isCreatorPage = location.pathname === creatorRoute || location.pathname.startsWith(`${creatorRoute}/`)
+  const isLaunchStartPage = location.pathname === launchStartRoute
+
+  useEffect(() => {
+    if (!isCreatorPage) {
+      setCreatorNavScrolled(false)
+      return
+    }
+
+    const rootElement = document.getElementById(ID.root)
+
+    const getScrollTop = () => {
+      if (rootElement) {
+        return rootElement.scrollTop
+      }
+
+      return window.scrollY || document.scrollingElement?.scrollTop || 0
+    }
+
+    const handleScroll = () => {
+      setCreatorNavScrolled(getScrollTop() > creatorNavScrollThreshold)
+    }
+
+    handleScroll()
+
+    rootElement?.addEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      rootElement?.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [creatorNavScrollThreshold, isCreatorPage])
 
   useEffect(() => {
     if (state && state.loggedOut) {
@@ -99,15 +144,22 @@ export const PlatformNavBar = () => {
       return <ProjectLogo />
     }
 
-    return <BrandLogoFull />
-  }, [isProjectFundingRoutes])
+    return <BrandLogoFull forceLightLogo={isCreatorPage && !creatorNavScrolled} />
+  }, [creatorNavScrolled, isCreatorPage, isProjectFundingRoutes])
 
   const shouldShowPlatformNav =
-    (isPlatformRoutes || isProjectRoutes || isGuardiansPage || isProfilePage || isAmbassadorProgramPage) &&
+    (isPlatformRoutes ||
+      isProjectRoutes ||
+      isGuardiansPage ||
+      isProfilePage ||
+      isAmbassadorProgramPage ||
+      isLaunchStartPage) &&
     !isProjectFundingRoutes &&
     !isProjectDashboardRoutes &&
     !isMobileMode
-  const navShadow = isProjectRoutes || isProfilePage ? 'none' : defaultNavShadow
+  const isCreatorTransparentNav = isCreatorPage && !creatorNavScrolled
+  const navShadow = isCreatorTransparentNav || isProjectRoutes || isProfilePage ? 'none' : defaultNavShadow
+  const navBackgroundColor = isCreatorTransparentNav ? 'transparent' : 'utils.pbg'
 
   const renderRightSide = useCallback(() => {
     if (isManifestoPage) {
@@ -116,6 +168,12 @@ export const PlatformNavBar = () => {
 
     const shouldShowLandingCreateButton = shouldShowPlatformNav && (!isLoggedIn || !isUserAProjectCreator)
     const shouldShowProjectSelectMenu = isLoggedIn && (!shouldShowPlatformNav || isUserAProjectCreator)
+
+    const actionButtonSurface = isCreatorTransparentNav ? transparentButtonSurface : landingButtonSurface
+    const actionButtonForeground = isCreatorTransparentNav ? transparentButtonForeground : landingButtonForeground
+    const actionButtonBorder = isCreatorTransparentNav ? transparentButtonBorder : landingButtonBorder
+    const actionButtonHover = isCreatorTransparentNav ? transparentButtonHover : landingButtonHover
+    const actionButtonActive = isCreatorTransparentNav ? transparentButtonActive : landingButtonActive
 
     const landingCreateButton = shouldShowLandingCreateButton ? (
       <>
@@ -128,12 +186,12 @@ export const PlatformNavBar = () => {
           minWidth="40px"
           paddingX={0}
           variant="outline"
-          bg={landingButtonSurface}
-          color={landingButtonForeground}
-          borderColor={landingButtonBorder}
+          bg={actionButtonSurface}
+          color={actionButtonForeground}
+          borderColor={actionButtonBorder}
           borderWidth="1px"
-          _hover={{ bg: landingButtonHover }}
-          _active={{ bg: landingButtonActive }}
+          _hover={{ bg: actionButtonHover }}
+          _active={{ bg: actionButtonActive }}
           borderRadius="8px"
         />
         <CreateProjectButton
@@ -143,12 +201,12 @@ export const PlatformNavBar = () => {
           size={{ base: 'md', lg: 'lg' }}
           minWidth="190px"
           variant="outline"
-          bg={landingButtonSurface}
-          color={landingButtonForeground}
-          borderColor={landingButtonBorder}
+          bg={actionButtonSurface}
+          color={actionButtonForeground}
+          borderColor={actionButtonBorder}
           borderWidth="1px"
-          _hover={{ bg: landingButtonHover }}
-          _active={{ bg: landingButtonActive }}
+          _hover={{ bg: actionButtonHover }}
+          _active={{ bg: actionButtonActive }}
           borderRadius={{ base: '8px', lg: '10px' }}
         />
       </>
@@ -159,7 +217,11 @@ export const PlatformNavBar = () => {
         {!isLoggedIn ? (
           <>
             {landingCreateButton}
-            <LoginButton />
+            <LoginButton
+              color={isCreatorTransparentNav ? 'white' : undefined}
+              _hover={isCreatorTransparentNav ? { backgroundColor: 'whiteAlpha.220' } : undefined}
+              _active={isCreatorTransparentNav ? { backgroundColor: 'whiteAlpha.320' } : undefined}
+            />
             {!shouldShowPlatformNav && (
               <CreateProjectButton display={{ base: 'none', lg: 'flex' }} label={t('Creator')} noIcon />
             )}
@@ -167,7 +229,7 @@ export const PlatformNavBar = () => {
         ) : (
           <>
             {landingCreateButton}
-            {shouldShowProjectSelectMenu ? <ProjectSelectMenu /> : null}
+            {shouldShowProjectSelectMenu ? <ProjectSelectMenu transparentMode={isCreatorTransparentNav} /> : null}
           </>
         )}
         <ProfileNav />
@@ -175,6 +237,7 @@ export const PlatformNavBar = () => {
     )
   }, [
     isLoggedIn,
+    isCreatorTransparentNav,
     isManifestoPage,
     isUserAProjectCreator,
     landingButtonActive,
@@ -183,6 +246,11 @@ export const PlatformNavBar = () => {
     landingButtonHover,
     landingButtonSurface,
     shouldShowPlatformNav,
+    transparentButtonActive,
+    transparentButtonBorder,
+    transparentButtonForeground,
+    transparentButtonHover,
+    transparentButtonSurface,
   ])
 
   return (
@@ -192,8 +260,9 @@ export const PlatformNavBar = () => {
       top={0}
       justifyContent={'center'}
       zIndex={99}
-      bgColor="utils.pbg"
+      bgColor={navBackgroundColor}
       boxShadow={navShadow}
+      transition="background-color 0.25s ease, box-shadow 0.25s ease"
     >
       <VStack
         paddingTop={{ base: 3, lg: 5 }}
@@ -201,9 +270,10 @@ export const PlatformNavBar = () => {
         paddingX={{ base: 3, lg: 6, xl: 12 }}
         maxWidth={dimensions.guardians.maxWidth}
         width="100%"
-        backgroundColor="utils.pbg"
+        backgroundColor={navBackgroundColor}
         justifySelf={'center'}
         spacing={4}
+        transition="background-color 0.25s ease"
       >
         <VStack w="100%" spacing={0} position="relative">
           <HStack
@@ -239,7 +309,7 @@ export const PlatformNavBar = () => {
                 justifyContent="center"
               >
                 <Box pointerEvents="auto">
-                  <LandingDesktopNav />
+                  <LandingDesktopNav transparentMode={isCreatorTransparentNav} />
                 </Box>
               </HStack>
             </HStack>
