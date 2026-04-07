@@ -34,7 +34,7 @@ export const LaunchChecklistSection = () => {
       <StartPageSectionShell id="launch-plans" sectionBg={useColorModeValue('neutral1.1', 'neutral1.2')}>
         <VStack alignItems="flex-start" spacing={3}>
           <H2 bold>{t('Launch Checklist')}</H2>
-          <Body size="lg" maxWidth="850px" muted>
+          <Body size="lg" maxWidth="850px" light>
             {t('Use this quick checklist before you launch so your page is ready to convert support with confidence.')}
           </Body>
         </VStack>
@@ -58,7 +58,7 @@ export const LaunchChecklistSection = () => {
                 <H3 size="lg" bold>
                   {t('Ready to go live')}
                 </H3>
-                <Body size="sm" muted>
+                <Body size="sm" light>
                   {t('Confirm each item before publishing')}
                 </Body>
               </VStack>
@@ -82,7 +82,7 @@ export const LaunchChecklistSection = () => {
             </VStack>
 
             <Button colorScheme="primary1" onClick={handleLauchNowClick} alignSelf="flex-start">
-              {t('Launch project')}
+              {t('Start your project')}
             </Button>
           </VStack>
         </PlaybookCard>

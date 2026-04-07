@@ -231,12 +231,15 @@ Use i18next for all translations following these rules:
 1. Wrap all user-facing strings in `t()` function
 2. Import from `i18next` directly (preferred) or from `useTranslation` hook
 3. Use `<Trans>` component for translations with variables or nested formatting
-4. Run the language server to auto-capture translation keys and add them to en.json:
+4. Keep complete user-visible sentences in one `t()` call with interpolation; do not split one sentence across multiple JSX nodes
+5. Do not memoize translated UI content with `useMemo([])`; build it inline or include active language in dependencies
+6. Validate palette token names against `src/shared/styles/colors.ts` when styling translated UI (for example use `primaryAlpha.*`, not undefined aliases such as `primary1Alpha.*`)
+7. Run the language server to auto-capture translation keys and add them to en.json:
    ```bash
    make language
    ```
 
-5. Remove unused translations by running:
+8. Remove unused translations by running:
    ```bash
    node scripts/clean-translations
    ```

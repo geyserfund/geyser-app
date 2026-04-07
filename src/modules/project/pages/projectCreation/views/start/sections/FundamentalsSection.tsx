@@ -1,7 +1,7 @@
-import { HStack, SimpleGrid, VStack } from '@chakra-ui/react'
+import { HStack, Icon, SimpleGrid, useColorModeValue, VStack } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { ComponentType, useMemo } from 'react'
-import { PiBookOpen, PiChartLine, PiShieldCheck, PiTarget } from 'react-icons/pi'
+import { PiChartLine, PiHandshake, PiLightbulb } from 'react-icons/pi'
 
 import { Body } from '@/shared/components/typography/Body.tsx'
 import { H2, H3 } from '@/shared/components/typography/Heading.tsx'
@@ -14,14 +14,15 @@ type FundamentalIcon = ComponentType<{ size?: string | number }>
 
 /** Intro fundamentals section that frames the page in simple terms. */
 export const FundamentalsSection = () => {
-  const iconBackground = 'primary1.9'
-  const primaryContentColor = 'utils.blackContrast'
+  const cardBorderColor = useColorModeValue('neutral1.4', 'neutral1.5')
+  const iconBackground = 'primaryAlpha.2'
+  const iconBorder = 'primaryAlpha.5'
+  const iconColor = useColorModeValue('primary1.11', 'primary1.8')
 
   const cards = useMemo(
     () =>
       getFundamentals(t).map((item, index) => {
-        const icon: FundamentalIcon =
-          index === 0 ? PiTarget : index === 1 ? PiBookOpen : index === 2 ? PiShieldCheck : PiChartLine
+        const icon: FundamentalIcon = index === 0 ? PiLightbulb : index === 1 ? PiChartLine : PiHandshake
 
         return {
           ...item,
@@ -35,31 +36,32 @@ export const FundamentalsSection = () => {
     <StartPageSectionShell id="fundamentals">
       <VStack alignItems="flex-start" spacing={3}>
         <H2 bold>{t('A great fundraiser is simpler than you think')}</H2>
-        <Body size="lg" maxWidth="760px" muted>
+        <Body size="lg" maxWidth="760px" light>
           {t('Most successful launches are built on a few basics done clearly and consistently.')}
         </Body>
       </VStack>
 
-      <SimpleGrid columns={{ base: 1, md: 2, xl: 4 }} spacing={5}>
+      <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={{ base: 4, md: 5 }}>
         {cards.map((card) => (
-          <PlaybookCard key={card.title} height="100%">
-            <VStack alignItems="flex-start" spacing={4}>
+          <PlaybookCard key={card.title} height="100%" borderColor={cardBorderColor}>
+            <VStack alignItems="flex-start" spacing={{ base: 3, md: 4 }}>
               <HStack
-                width="44px"
-                height="44px"
-                borderRadius="12px"
+                width="58px"
+                height="58px"
+                borderRadius="14px"
                 justifyContent="center"
                 alignItems="center"
                 backgroundColor={iconBackground}
-                color={primaryContentColor}
+                borderWidth="1px"
+                borderColor={iconBorder}
               >
-                <card.icon size={22} />
+                <Icon as={card.icon} boxSize={7} color={iconColor} />
               </HStack>
               <VStack alignItems="flex-start" spacing={1}>
                 <H3 size="md" bold>
                   {card.title}
                 </H3>
-                <Body size="sm" muted>
+                <Body size="sm" light>
                   {card.description}
                 </Body>
               </VStack>

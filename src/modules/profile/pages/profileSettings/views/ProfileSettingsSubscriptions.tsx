@@ -10,6 +10,13 @@ import {
   LinkOverlay,
   Stack,
   VStack,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
 } from '@chakra-ui/react'
 import { t } from 'i18next'
 import { useState } from 'react'
@@ -29,8 +36,14 @@ import {
   useRecurringContributionPortalSessionCreateMutation,
   useRecurringContributionsQuery,
 } from '@/types/index.ts'
-import { useNotification } from '@/utils'
 import { centsToDollars, commaFormatted } from '@/utils'
+  useCancelUserSubscriptionMutation,
+  UserSubscriptionFragment,
+  UserSubscriptionInterval,
+  UserSubscriptionStatus,
+  useUserSubscriptionsQuery,
+} from '@/types/generated/graphql'
+import { useNotification } from '@/utils/tools/Notification.tsx'
 
 import { ProfileSettingsLayout } from '../common/ProfileSettingsLayout.tsx'
 
@@ -221,6 +234,7 @@ export const ProfileSettingsSubscriptions = () => {
   const { data, loading, error, refetch } = useRecurringContributionsQuery({
     fetchPolicy: 'cache-and-network',
   })
+  
   const [cancelRecurringContribution, cancelRecurringContributionOptions] = useRecurringContributionCancelMutation()
   const [createPortalSession, createPortalSessionOptions] = useRecurringContributionPortalSessionCreateMutation()
 

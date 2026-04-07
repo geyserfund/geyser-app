@@ -1,0 +1,45 @@
+---
+description: Architecture and design-system guardrails for module placement and UI consistency
+globs: src/**/*.ts,src/**/*.tsx,docs/**/*.md
+alwaysApply: true
+---
+
+# Architecture and Design-System Guardrails
+
+## Module Placement (Hard)
+- New domain code must live under `src/modules/<domain>`.
+- Cross-domain reusable UI must live under `src/shared`.
+- Do not add new components under legacy `src/components/*`.
+- For new components in module code, do not import from legacy `@/components/*`.
+
+## Barrel Exports (Hard)
+- Do not create new barrel files (`index.ts` / `index.tsx`) for exports.
+- Prefer direct file imports with explicit local extensions when required by lint/CI.
+- When touching a folder that has a barrel, do not add new barrel dependencies; prefer direct imports.
+
+## Design-System Usage
+- Use existing design-system tokens/patterns first.
+- Raw gradients are allowed when intentional.
+- For `boxShadow`, avoid one-off literals (`rgba`, hex, custom px shadow strings) in feature UI.
+- Prefer theme shadow tokens or established reusable shadow constants/patterns.
+- For surfaces/cards/backgrounds and paired states, prefer semantic tokens or `useColorModeValue(...)` patterns already used in the codebase.
+
+## Reusability Decision Rule
+- If a visual/state pattern is used in more than one place, update the design system/shared layer first.
+- Only keep local one-off styles when they are intentionally unique and unlikely to be reused.
+
+## i18n Preference
+- Prefer punctuation outside `t()` where practical.
+- This punctuation rule is advisory (non-blocking) unless explicitly requested for strict cleanup.
+
+## GraphQL Hook Rule
+- Use generated hooks from `@/types`.
+- Do not use Apollo base hooks (`useQuery`, `useMutation`, `useLazyQuery`) in feature code.
+
+## Icon Package Rule
+- Prefer `react-icons/pi` for new icon additions.
+- Do not churn existing non-`pi` icon imports unless the file is already being updated for functional reasons.
+
+## Existing Behavior
+- Preserve current behavior unless the task explicitly requires behavior changes.
+- If docs and implementation differ, either align docs to accepted behavior or document a deliberate migration plan before changing runtime behavior.

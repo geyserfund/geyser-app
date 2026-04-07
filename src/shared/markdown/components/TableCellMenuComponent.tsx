@@ -13,6 +13,7 @@ export const TableCellMenuComponent = () => {
         mr="5px"
         size="sm"
         as={IconButton}
+        aria-label={t('Table cell actions')}
         icon={<ChevronDownIcon />}
         border="1px solid"
         borderRadius="4px"
