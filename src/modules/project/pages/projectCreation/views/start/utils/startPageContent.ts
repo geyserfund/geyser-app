@@ -133,23 +133,23 @@ export const getLaunchPlans = (translate: TFunction): LaunchPlanRow[] => [
 
 export const getResources = (translate: TFunction): KeyValueRow[] => [
   {
-    title: translate('Launch a project'),
+    title: translate('Launch on Geyser'),
     description: translate('Complete guide to getting started on Geyser.'),
   },
   {
-    title: translate('Project checklist'),
+    title: translate('Pre-launch checklist'),
     description: translate('Use a practical checklist before going live.'),
   },
   {
-    title: translate('Wallet setup and withdrawals'),
+    title: translate('Wallets and withdrawals'),
     description: translate('Configure payouts and manage withdrawals safely.'),
   },
   {
-    title: translate('Rewards playbook'),
+    title: translate('Design your rewards'),
     description: translate('Structure rewards so supporters have clear options.'),
   },
   {
-    title: translate('Frequently asked questions'),
+    title: translate('Launch FAQs'),
     description: translate('Get quick answers before launch day.'),
   },
 ]

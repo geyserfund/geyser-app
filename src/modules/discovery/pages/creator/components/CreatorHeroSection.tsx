@@ -79,7 +79,7 @@ export const CreatorHeroSection = () => {
 
   return (
     <>
-      <Box as="section" w="full" position="relative" overflow="hidden" minH="578px">
+      <Box as="section" display="flex" alignItems="center" w="full" position="relative" overflow="hidden" minH="578px">
         <Box
           position="absolute"
           inset={0}
@@ -95,7 +95,7 @@ export const CreatorHeroSection = () => {
           position="relative"
           zIndex={1}
           h="full"
-          pt={{ base: 30, lg: 40 }}
+          pt={{ base: 12, lg: 20 }}
           pb={{ base: 10, lg: 10 }}
           display="flex"
           alignItems="center"

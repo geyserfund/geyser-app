@@ -1,5 +1,7 @@
 import { VStack } from '@chakra-ui/react'
 
+import { DiscoveryBottomNav } from '@/modules/navigation/discoveryNav/DiscoveryBottomNav.tsx'
+
 import { ProjectCreationReferralCapture } from '../../components/ProjectCreationReferralCapture.tsx'
 import { CreatorToolsSection } from './sections/CreatorToolsSection.tsx'
 import { FAQSection } from './sections/FAQSection.tsx'
@@ -17,18 +19,19 @@ export const LaunchStart = () => {
   return (
     <>
       <ProjectCreationReferralCapture />
-      <VStack spacing={0} width="100%" align="center" paddingBottom={{ base: 10, lg: 20 }}>
+      <VStack spacing={0} width="100%" align="center" paddingBottom={{ base: 28, lg: 20 }}>
         <HeroSection />
         <FundamentalsSection />
         <FundraiserTypeSection />
+        <LaunchPlansSection />
         <TrustPayoutSection />
         <CreatorToolsSection />
         <MomentumSection />
-        <LaunchPlansSection />
         <ResourcesSection />
         <FAQSection />
         <FinalCTASection />
       </VStack>
+      <DiscoveryBottomNav />
     </>
   )
 }

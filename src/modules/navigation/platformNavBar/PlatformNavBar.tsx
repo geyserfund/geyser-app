@@ -102,11 +102,11 @@ export const PlatformNavBar = () => {
     const rootElement = document.getElementById(ID.root)
 
     const getScrollTop = () => {
-      if (rootElement) {
+      if (!isMobileMode && rootElement) {
         return rootElement.scrollTop
       }
 
-      return window.scrollY || document.scrollingElement?.scrollTop || 0
+      return window.scrollY || window.pageYOffset || document.scrollingElement?.scrollTop || 0
     }
 
     const handleScroll = () => {
